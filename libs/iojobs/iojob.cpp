@@ -36,7 +36,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_export.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "album.h"
 #include "coredbaccess.h"
 #include "dbengineparameters.h"

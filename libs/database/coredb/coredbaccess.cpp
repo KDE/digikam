@@ -38,7 +38,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "collectionscannerobserver.h"
 #include "imageinfodata.h"
 #include "imageinfocache.h"
@@ -73,7 +73,7 @@ public:
 public:
 
     CoreDbBackend*      backend;
-    AlbumDB*            db;
+    CoreDB*            db;
     CoreDbWatch*        databaseWatch;
     DbEngineParameters  parameters;
     DbEngineLocking     lock;
@@ -141,7 +141,7 @@ CoreDbAccess::CoreDbAccess(bool)
     d->lock.lockCount++;
 }
 
-AlbumDB* CoreDbAccess::db() const
+CoreDB* CoreDbAccess::db() const
 {
     return d->db;
 }
@@ -243,7 +243,7 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
         delete d->backend;
         d->backend = new CoreDbBackend(&d->lock);
         d->backend->setCoreDbWatch(d->databaseWatch);
-        d->db = new AlbumDB(d->backend);
+        d->db = new CoreDB(d->backend);
         TagsCache::instance()->initialize();
     }
 

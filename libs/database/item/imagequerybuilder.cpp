@@ -44,7 +44,7 @@
 #include "metaengine.h"
 #include "digikam_debug.h"
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "geodetictools.h"
 
 namespace Digikam
@@ -417,7 +417,7 @@ public:
             QList<int> values  = reader.valueToIntList();
             bool searchForNull = values.removeAll(-1);
             sql               += QLatin1String(" (") + name + QLatin1String(" IN (");
-            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            CoreDB::addBoundValuePlaceholders(sql, values.size());
 
             if (searchForNull)
             {
@@ -447,7 +447,7 @@ public:
         {
             QList<qlonglong> values = reader.valueToLongLongList();
             sql += QLatin1String(" (") + name + QLatin1String(" IN (");
-            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            CoreDB::addBoundValuePlaceholders(sql, values.size());
             sql += QLatin1String(") ");
 
             foreach(const qlonglong& v, values)
@@ -543,7 +543,7 @@ public:
             {
                 firstCondition =  false;
                 sql            += name + QLatin1String(" IN (");
-                AlbumDB::addBoundValuePlaceholders(sql, simpleValues.size());
+                CoreDB::addBoundValuePlaceholders(sql, simpleValues.size());
 
                 foreach(const QString& value, simpleValues)
                 {
@@ -793,7 +793,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         }
         else if (relation == SearchXml::InTree)
         {
-            // see also: AlbumDB::getItemNamesInAlbum
+            // see also: CoreDB::getItemNamesInAlbum
             QList<int> ids = reader.valueToIntOrIntList();
 
             if (ids.isEmpty())
@@ -1088,7 +1088,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             }
 
             sql += QString::fromUtf8("(VideoMetadata.aspectRatio IN (");
-            AlbumDB::addBoundValuePlaceholders(sql, values.size());
+            CoreDB::addBoundValuePlaceholders(sql, values.size());
             sql += QString::fromUtf8(") ");
             QString query = QString::fromUtf8("abs((CAST(VideoMetadata.aspectRatio as REAL) - ?)  < 0.1) ");
 
@@ -1162,7 +1162,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             }
 
             sql += QString::fromUtf8("(VideoMetadata.audioChannelType IN (");
-            AlbumDB::addBoundValuePlaceholders(sql, boundValues->size());
+            CoreDB::addBoundValuePlaceholders(sql, boundValues->size());
             sql += QString::fromUtf8(")) ");
         }
         else
@@ -1180,7 +1180,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             }
 
             sql += QString::fromUtf8("(VideoMetadata.audioChannelType IN (");
-            AlbumDB::addBoundValuePlaceholders(sql, boundValues->size());
+            CoreDB::addBoundValuePlaceholders(sql, boundValues->size());
             sql += QString::fromUtf8(")) ");
         }
     }

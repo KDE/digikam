@@ -45,7 +45,7 @@
 #include "coredbchangesets.h"
 #include "imagelister.h"
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "imageinfo.h"
 #include "thumbnailloadthread.h"
 #include "thumbsdbaccess.h"

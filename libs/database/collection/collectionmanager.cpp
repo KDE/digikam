@@ -50,7 +50,7 @@
 #include "coredbaccess.h"
 #include "coredbchangesets.h"
 #include "coredbtransaction.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "collectionscanner.h"
 #include "collectionlocation.h"
 

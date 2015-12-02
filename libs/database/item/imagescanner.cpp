@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "coredburl.h"
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "facetagseditor.h"
@@ -621,7 +621,7 @@ static bool hasValidField(const QVariantList& list)
 
 static MetadataFields allImageMetadataFields()
 {
-    // This list must reflect the order required by AlbumDB::addImageMetadata
+    // This list must reflect the order required by CoreDB::addImageMetadata
     MetadataFields fields;
     fields << MetadataInfo::Make
            << MetadataInfo::Model
@@ -660,7 +660,7 @@ void ImageScanner::commitImageMetadata()
 
 void ImageScanner::scanImagePosition()
 {
-    // This list must reflect the order required by AlbumDB::addImagePosition
+    // This list must reflect the order required by CoreDB::addImagePosition
     MetadataFields fields;
     fields << MetadataInfo::Latitude
            << MetadataInfo::LatitudeNumber
@@ -1444,7 +1444,7 @@ void ImageScanner::sortByProximity(QList<ImageInfo>& list, const ImageInfo& subj
 
 static MetadataFields allVideoMetadataFields()
 {
-    // This list must reflect the order required by AlbumDB::addVideoMetadata
+    // This list must reflect the order required by CoreDB::addVideoMetadata
     MetadataFields fields;
     fields << MetadataInfo::AspectRatio
            << MetadataInfo::AudioBitRate

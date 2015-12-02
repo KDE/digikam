@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbaccess.h"
 #include "imagescanner.h"
 #include "template.h"
@@ -120,7 +120,7 @@ void ImageCopyright::replaceFrom(const ImageCopyright& source)
     foreach(const CopyrightInfo& info, infos)
     {
         access.db()->setImageCopyrightProperty(m_id, info.property, info.value,
-                                               info.extraValue, AlbumDB::PropertyNoConstraint);
+                                               info.extraValue, CoreDB::PropertyNoConstraint);
     }
 }
 
@@ -139,15 +139,15 @@ QStringList ImageCopyright::creator() const
 
 void ImageCopyright::setCreator(const QString& creator, ReplaceMode mode)
 {
-    AlbumDB::CopyrightPropertyUnique uniqueness;
+    CoreDB::CopyrightPropertyUnique uniqueness;
 
     if (mode == ReplaceAllEntries)
     {
-        uniqueness = AlbumDB::PropertyUnique;
+        uniqueness = CoreDB::PropertyUnique;
     }
     else
     {
-        uniqueness = AlbumDB::PropertyNoConstraint;
+        uniqueness = CoreDB::PropertyNoConstraint;
     }
 
     CoreDbAccess().db()->setImageCopyrightProperty(m_id, ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreCreator),
@@ -410,7 +410,7 @@ QString ImageCopyright::readSimpleProperty(const QString& property) const
 
 void ImageCopyright::setSimpleProperty(const QString& property, const QString& value)
 {
-    CoreDbAccess().db()->setImageCopyrightProperty(m_id, property, value, QString(), AlbumDB::PropertyUnique);
+    CoreDbAccess().db()->setImageCopyrightProperty(m_id, property, value, QString(), CoreDB::PropertyUnique);
 }
 
 QString ImageCopyright::readLanguageProperty(const QString& property, const QString& languageCode)
@@ -444,19 +444,19 @@ MetaEngine::AltLangMap ImageCopyright::readLanguageProperties(const QString& pro
 void ImageCopyright::setLanguageProperty(const QString& property, const QString& value,
                                          const QString& languageCode, ReplaceMode mode)
 {
-    AlbumDB::CopyrightPropertyUnique uniqueness;
+    CoreDB::CopyrightPropertyUnique uniqueness;
 
     if (mode == ReplaceAllEntries)
     {
-        uniqueness = AlbumDB::PropertyUnique;
+        uniqueness = CoreDB::PropertyUnique;
     }
     else if (mode == ReplaceLanguageEntry)
     {
-        uniqueness = AlbumDB::PropertyExtraValueUnique;
+        uniqueness = CoreDB::PropertyExtraValueUnique;
     }
     else
     {
-        uniqueness = AlbumDB::PropertyNoConstraint;
+        uniqueness = CoreDB::PropertyNoConstraint;
     }
 
     QString language = languageCode;

@@ -49,7 +49,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbchangesets.h"
 #include "coredbwatch.h"
 #include "ddragobjects.h"

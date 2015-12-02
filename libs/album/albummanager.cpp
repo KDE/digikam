@@ -73,7 +73,7 @@ extern "C"
 // Local includes
 
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "album.h"
 #include "applicationsettings.h"
 #include "albumwatch.h"

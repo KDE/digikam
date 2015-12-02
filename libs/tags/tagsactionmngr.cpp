@@ -41,7 +41,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummanager.h"
 #include "coredbaccess.h"
 #include "coredbconstants.h"

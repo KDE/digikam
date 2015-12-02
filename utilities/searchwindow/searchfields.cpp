@@ -54,7 +54,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "squeezedcombobox.h"
 #include "albummanager.h"
 #include "albummodel.h"

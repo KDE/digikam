@@ -38,7 +38,7 @@
 // Local includes
 
 #include "daboutdata.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "applicationsettings.h"
 #include "coredbaccess.h"
 #include "digikam_config.h"

@@ -41,7 +41,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "applicationsettings.h"
 #include "contextmenuhelper.h"
 #include "imagefiltermodel.h"

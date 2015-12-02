@@ -42,7 +42,7 @@
 // Local includes
 
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummanager.h"
 #include "albumselectors.h"
 #include "coredbaccess.h"

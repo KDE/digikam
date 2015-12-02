@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbalbuminfo.h"
 #include "imageinfo.h"
 #include "imageinfolist.h"

@@ -42,7 +42,7 @@
 #include "imagelister.h"
 #include "statesavingobject.h"
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "colorlabelfilter.h"
 #include "picklabelfilter.h"
 #include "tagscache.h"

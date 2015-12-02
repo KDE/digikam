@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMDB_H
-#define ALBUMDB_H
+#ifndef _CORE_DATABASE_H_
+#define _CORE_DATABASE_H_
 
 // Qt includes
 
@@ -51,7 +51,7 @@ namespace Digikam
 
 class CoreDbBackend;
 
-class DIGIKAM_DATABASE_EXPORT AlbumDB
+class DIGIKAM_DATABASE_EXPORT CoreDB
 {
 public:
 
@@ -1238,12 +1238,12 @@ public:
     /**
      * Constructor
      */
-    explicit AlbumDB(CoreDbBackend* const backend);
+    explicit CoreDB(CoreDbBackend* const backend);
 
     /**
      * Destructor
      */
-    ~AlbumDB();
+    ~CoreDB();
 
 protected:
 
@@ -1263,4 +1263,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* ALBUMDB_H */
+#endif /* _CORE_DATABASE_H_ */

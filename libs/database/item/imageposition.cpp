@@ -26,7 +26,7 @@
 // Local includes
 
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbfields.h"
 #include "dmetadata.h"
 #include "metadatainfo.h"

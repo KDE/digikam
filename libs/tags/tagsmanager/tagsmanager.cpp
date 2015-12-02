@@ -54,7 +54,7 @@
 #include "ddragobjects.h"
 #include "searchtextbar.h"
 #include "tageditdlg.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "sidebar.h"
 #include "dlogoaction.h"
 #include "metadatasynchronizer.h"

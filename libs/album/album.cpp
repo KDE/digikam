@@ -32,7 +32,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummanager.h"
 #include "collectionmanager.h"
 #include "coredbaccess.h"

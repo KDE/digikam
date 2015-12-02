@@ -36,7 +36,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_globals.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbaccess.h"
 #include "coredbinfocontainers.h"
 #include "coredboperationgroup.h"

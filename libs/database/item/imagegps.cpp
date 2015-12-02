@@ -27,7 +27,7 @@
 // Local includes
 
 #include "imageposition.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "tagscache.h"
 
 namespace Digikam

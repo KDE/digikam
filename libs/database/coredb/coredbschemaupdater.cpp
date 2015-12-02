@@ -95,7 +95,7 @@ public:
     QVariant                currentRequiredVersion;
 
     CoreDbBackend*          backend;
-    AlbumDB*                albumDB;
+    CoreDB*                albumDB;
     DbEngineParameters      parameters;
 
     // legacy
@@ -105,7 +105,7 @@ public:
     InitializationObserver* observer;
 };
 
-CoreDbSchemaUpdater::CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters)
+CoreDbSchemaUpdater::CoreDbSchemaUpdater(CoreDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters)
     : d(new Private)
 {
     d->backend    = backend;

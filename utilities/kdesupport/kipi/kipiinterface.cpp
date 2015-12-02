@@ -44,7 +44,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "applicationsettings.h"
 #include "drawdecoderwidget.h"
 #include "imageinfo.h"

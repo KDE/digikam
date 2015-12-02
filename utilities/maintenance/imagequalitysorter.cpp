@@ -36,7 +36,7 @@
 
 #include "digikam_globals.h"
 #include "dimg.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummanager.h"
 #include "coredbaccess.h"
 #include "tagscache.h"

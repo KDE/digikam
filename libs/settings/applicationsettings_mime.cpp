@@ -31,7 +31,7 @@
 #include "applicationsettings.h"
 #include "applicationsettings_p.h"
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 
 using namespace RawEngine;
 

@@ -48,7 +48,7 @@
 #include "tagscache.h"
 #include "taggingactionfactory.h"
 #include "coredbaccess.h"
-#include "albumdb.h"
+#include "coredb.h"
 
 namespace Digikam
 {

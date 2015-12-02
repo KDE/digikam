@@ -40,7 +40,7 @@
 
 #include "digikam_debug.h"
 #include "albummanager.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "advancedrenamedialog.h"
 #include "advancedrenameprocessdialog.h"
 #include "applicationsettings.h"

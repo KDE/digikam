@@ -44,7 +44,7 @@
 
 #include "recognitiondatabase.h"
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "album.h"
 #include "albummanager.h"
 #include "facepipeline.h"

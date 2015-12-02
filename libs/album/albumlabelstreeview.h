@@ -193,11 +193,11 @@ private:
     QString createXMLForCurrentSelection(const QHash<AlbumLabelsTreeView::Labels, QList<int> >& selectedLabels);
 
     /**
-     * @brief Passes the generated XML to AlbumDB class
+     * @brief Passes the generated XML to CoreDB class
      *        search methods
      *
      * @param xml generated from @see createXMLForCurrentSelection
-     * @return A pointer of the search album created by the AlbumDB
+     * @return A pointer of the search album created by the CoreDB
      */
     SAlbum* search(const QString& xml) const;
 

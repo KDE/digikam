@@ -32,7 +32,7 @@
 // Local includes
 
 #include "dmetadata.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "collectionscanner.h"

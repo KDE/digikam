@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbaccess.h"
 #include "coredbbackend.h"
 #include "dbengineparameters.h"
@@ -53,7 +53,7 @@ public:
 
 public:
 
-    CoreDbSchemaUpdater(AlbumDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters);
+    CoreDbSchemaUpdater(CoreDB* const albumDB, CoreDbBackend* const backend, DbEngineParameters parameters);
     ~CoreDbSchemaUpdater();
 
     bool  update();

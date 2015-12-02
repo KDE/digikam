@@ -40,7 +40,7 @@
 #include "imageinfo.h"
 #include "applicationsettings.h"
 #include "albummanager.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "album.h"
 #include "dmetadata.h"
 #include "imagelister.h"

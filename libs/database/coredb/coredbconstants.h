@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-04-21
- * Description : Structures for use in AlbumDB
+ * Description : Structures for use in CoreDB
  *
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>

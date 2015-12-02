@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "albumdb.h"
+#include "coredb.h"
 #include "ddragobjects.h"
 #include "dimg.h"
 #include "dimgpreviewitem.h"

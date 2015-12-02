@@ -37,7 +37,7 @@
 // Local includes
 
 #include "dimg.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummanager.h"
 #include "coredbaccess.h"
 #include "maintenancethread.h"

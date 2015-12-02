@@ -66,7 +66,7 @@
 #include "facesdetector.h"
 #include "tagsmanager.h"
 #include "albumlabelstreeview.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "dexpanderbox.h"
 
 namespace Digikam

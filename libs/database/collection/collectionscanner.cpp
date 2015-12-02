@@ -46,7 +46,7 @@
 
 #include "rawfiles.h"
 #include "digikam_debug.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 #include "collectionscannerhints.h"
@@ -1368,7 +1368,7 @@ void CollectionScanner::copyFileProperties(const ImageInfo& source, const ImageI
     // Copy color and pick label
     dest.setPickLabel(source.pickLabel());
     dest.setColorLabel(source.colorLabel());
-    // important: skip other internal tags, such a history tags. Therefore AlbumDB::copyImageTags is not to be used.
+    // important: skip other internal tags, such a history tags. Therefore CoreDB::copyImageTags is not to be used.
 
     // GPS data
     QVariantList positionData = CoreDbAccess().db()->getImagePosition(source.id(), DatabaseFields::ImagePositionsAll);

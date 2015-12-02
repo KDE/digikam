@@ -27,7 +27,7 @@
 
 #include "coredbaccess.h"
 #include "dbengineparameters.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "imagelister.h"
 #include "digikam_export.h"
 #include "digikam_debug.h"

@@ -48,7 +48,7 @@
 #include "imageinfo.h"
 #include "coredbaccess.h"
 #include "coredbtransaction.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbbackend.h"
 #include "coredbsearchxml.h"
 #include "dbenginesqlquery.h"

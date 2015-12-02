@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "albumdb.h"
+#include "coredb.h"
 #include "coredbaccess.h"
 #include "imagescanner.h"
 

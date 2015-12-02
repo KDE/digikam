@@ -70,7 +70,7 @@
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummodel.h"
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"

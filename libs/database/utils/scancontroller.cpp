@@ -56,7 +56,7 @@
 #include "dprogressdlg.h"
 #include "dmetadata.h"
 #include "applicationsettings.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "albummanager.h"
 #include "album.h"
 #include "coredbschemaupdater.h"

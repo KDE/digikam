@@ -35,7 +35,7 @@
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "applicationsettings.h"
 #include "albumtreeview.h"
 #include "monthwidget.h"

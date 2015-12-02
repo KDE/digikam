@@ -51,7 +51,7 @@ public:
     /**
      * The ImageComments class shall provide short-lived objects that provide read/write access
      * to the comments stored in the database. It is a mere wrapper around the less
-     * convenient access methods in AlbumDB.
+     * convenient access methods in CoreDB.
      * Database results are cached, but the object will not listen to database changes from other places.
      *
      * Changes are applied to the database only after calling apply(), which you can call any time

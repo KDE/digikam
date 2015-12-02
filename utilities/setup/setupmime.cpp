@@ -44,7 +44,7 @@
 // Local includes
 
 #include "dwidgetutils.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "applicationsettings.h"
 #include "coredbaccess.h"
 

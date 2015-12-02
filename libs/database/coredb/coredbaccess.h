@@ -35,7 +35,7 @@ namespace Digikam
 {
 
 class CoreDbBackend;
-class AlbumDB;
+class CoreDB;
 class CoreDbWatch;
 class InitializationObserver;
 class CoreDbAccessStaticPriv;
@@ -70,7 +70,7 @@ public:
     /**
       * Retrieve a pointer to the album database
       */
-    AlbumDB* db() const;
+    CoreDB* db() const;
 
     /**
       * Retrieve a pointer to the database backend

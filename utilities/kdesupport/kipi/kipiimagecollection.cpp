@@ -34,7 +34,7 @@
 // Local includes
 
 #include "album.h"
-#include "albumdb.h"
+#include "coredb.h"
 #include "applicationsettings.h"
 #include "collectionmanager.h"
 #include "coredbaccess.h"
@@ -203,25 +203,25 @@ QList<QUrl> KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) 
 {
     // get the images from the database and return the items found
 
-    AlbumDB::ItemSortOrder sortOrder = AlbumDB::NoItemSorting;
+    CoreDB::ItemSortOrder sortOrder = CoreDB::NoItemSorting;
 
     switch (ApplicationSettings::instance()->getImageSortOrder())
     {
         default:
         case ImageSortSettings::SortByFileName:
-            sortOrder = AlbumDB::ByItemName;
+            sortOrder = CoreDB::ByItemName;
             break;
 
         case ImageSortSettings::SortByFilePath:
-            sortOrder = AlbumDB::ByItemPath;
+            sortOrder = CoreDB::ByItemPath;
             break;
 
         case ImageSortSettings::SortByCreationDate:
-            sortOrder = AlbumDB::ByItemDate;
+            sortOrder = CoreDB::ByItemDate;
             break;
 
         case ImageSortSettings::SortByRating:
-            sortOrder = AlbumDB::ByItemRating;
+            sortOrder = CoreDB::ByItemRating;
             break;
             // ByISize not supported
     }
