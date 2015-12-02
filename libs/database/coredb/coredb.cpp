@@ -517,9 +517,17 @@ void CoreDB::setAlbumDate(int albumID, const QDate& date)
 
 void CoreDB::setAlbumIcon(int albumID, qlonglong iconID)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Albums SET icon=? WHERE id=?;"),
-                   iconID,
-                   albumID);
+    if (iconID == 0)
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Albums SET icon=NULL WHERE id=?;"),
+                       albumID);
+    }
+    else
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Albums SET icon=? WHERE id=?;"),
+                       iconID,
+                       albumID);
+    }
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::PropertiesChanged));
 }
 
@@ -605,6 +613,11 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
                        iconKDE,
                        id.toInt());
     }
+    else if (iconID == 0)
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET icon=NULL WHERE id=?;"),
+                       id.toInt());
+    }
     else
     {
         d->db->execSql(QString::fromUtf8("UPDATE Tags SET icon=? WHERE id=?;"),
@@ -639,8 +652,16 @@ void CoreDB::setTagIcon(int tagID, const QString& iconKDE, qlonglong iconID)
         _iconKDE.clear();
     }
 
-    d->db->execSql(QString::fromUtf8("UPDATE Tags SET iconkde=?, icon=? WHERE id=?;"),
-                   _iconKDE, _iconID, tagID);
+    if (_iconID == 0)
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET iconkde=?, icon=NULL WHERE id=?;"),
+                       _iconKDE, tagID);
+    }
+    else
+    {
+        d->db->execSql(QString::fromUtf8("UPDATE Tags SET iconkde=?, icon=? WHERE id=?;"),
+                       _iconKDE, _iconID, tagID);
+    }
 
     d->db->recordChangeset(TagChangeset(tagID, TagChangeset::IconChanged));
 }
