@@ -795,9 +795,6 @@ void ImportUI::setupCameraController(const QString& model, const QString& port, 
     connect(d->controller, SIGNAL(signalFolderList(QStringList)),
             this, SLOT(slotFolderList(QStringList)));
 
-    connect(d->controller, SIGNAL(signalFileList(CamItemInfoList)),
-            this, SLOT(slotFileList(CamItemInfoList)));
-
     connect(d->controller, SIGNAL(signalDownloaded(QString,QString,int)),
             this, SLOT(slotDownloaded(QString,QString,int)));
 
@@ -1192,22 +1189,6 @@ void ImportUI::slotFolderList(const QStringList& folderList)
         d->controller->listFiles(*it, useMetadata);
         d->controller->listFolders(*it);
     }
-}
-
-// FIXME d->filesToBeAdded seems to be unused...
-void ImportUI::slotFileList(const CamItemInfoList& fileList)
-{
-    if (d->closed)
-    {
-        return;
-    }
-
-    if (fileList.empty())
-    {
-        return;
-    }
-
-    d->filesToBeAdded << fileList;
 }
 
 void ImportUI::setFilter(Filter *filter)

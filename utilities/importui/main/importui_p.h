@@ -155,7 +155,6 @@ public:
     QStringList                   autoRotateItemsList;
     QStringList                   currentlyDeleting;
     QSet<QString>                 foldersToScan;
-    CamItemInfoList               filesToBeAdded;
 
     QMenu*                        downloadMenu;
     QMenu*                        deleteMenu;

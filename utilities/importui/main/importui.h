@@ -172,7 +172,6 @@ private Q_SLOTS:
     void slotHistoryEntryClicked(const QVariant&);
 
     void slotFolderList(const QStringList& folderList);
-    void slotFileList(const CamItemInfoList& fileList);
 
     void slotZoomSliderChanged(int size);
     void slotZoomChanged(double zoom);
