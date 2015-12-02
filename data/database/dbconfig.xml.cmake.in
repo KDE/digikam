@@ -593,7 +593,9 @@
 
             <!-- SQlite Migration Statements -->
 
-            <!-- NOTE: Migrate_Cleanup_DB now it's done by the program -->
+            <!-- NOTE: Migrate_Cleanup_DB now it's done by the program except for cleanup prepare -->
+            <dbaction name="Migrate_Cleanup_Prepare">
+            </dbaction>
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -602,11 +604,20 @@
                 INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
             </statement></dbaction>
 
+            <!-- Note Albums with an icon set are setup after population of the Images table. -->
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
-                SELECT id, albumRoot, relativePath, date, caption, collection, icon FROM Albums;
+                SELECT id, albumRoot, relativePath, date, caption, collection FROM Albums;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums"><statement mode="query">
-                INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
+                INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
+            </statement></dbaction>
+
+            <!-- Populate the Albums icon where set. -->
+            <dbaction name="Migrate_Read_AlbumsExtra"><statement mode="query">
+                SELECT id, icon FROM Albums where icon IS NOT NULL;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_AlbumsExtra"><statement mode="query">
+                UPDATE Albums set icon = :icon WHERE id = :id;
             </statement></dbaction>
 
             <dbaction name="Migrate_Read_Images"><statement mode="query">
@@ -889,16 +900,10 @@
 
             <!-- Mysql check privileges rules -->
 
-            <dbaction name="CheckPriv_CREATE_TRIGGER"><statement mode="plain">
-                CREATE TRIGGER privcheck_trigger AFTER DELETE ON PrivCheck
-                  FOR EACH ROW BEGIN
-                  END;
-            </statement>
+            <dbaction name="CheckPriv_CREATE_TRIGGER">
             </dbaction>
 
-            <dbaction name="CheckPriv_DROP_TRIGGER"><statement mode="plain">
-                DROP TRIGGER privcheck_trigger;
-            </statement>
+            <dbaction name="CheckPriv_DROP_TRIGGER">
             </dbaction>
 
             <dbaction name="CheckPriv_CREATE_TABLE"><statement mode="plain">
@@ -944,6 +949,7 @@
                             caption LONGTEXT CHARACTER SET utf8,
                             collection LONGTEXT CHARACTER SET utf8,
                             icon INTEGER,
+                            CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE(albumRoot, relativePath(255)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Images
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -954,12 +960,16 @@
                             modificationDate DATETIME,
                             fileSize INTEGER,
                             uniqueHash VARCHAR(128),
+                            CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE (album, name(255)));</statement>
+            <statement mode="plain">ALTER TABLE Albums
+                            ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
                             (imageid INTEGER PRIMARY KEY,
                             modificationDate DATETIME,
                             uniqueHash LONGTEXT CHARACTER SET utf8,
-                            matrix LONGBLOB);</statement>
+                            matrix LONGBLOB,
+                            CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                             rating INTEGER,
@@ -970,7 +980,8 @@
                             height INTEGER,
                             format LONGTEXT CHARACTER SET utf8,
                             colorDepth INTEGER,
-                            colorModel INTEGER);</statement>
+                            colorModel INTEGER,
+                            CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageMetadata
                             (imageid INTEGER PRIMARY KEY,
                             make LONGTEXT CHARACTER SET utf8,
@@ -988,7 +999,8 @@
                             whiteBalanceColorTemperature INTEGER,
                             meteringMode INTEGER,
                             subjectDistance REAL,
-                            subjectDistanceCategory INTEGER);</statement>
+                            subjectDistanceCategory INTEGER,
+                            CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
                             (imageid INTEGER PRIMARY KEY,
                             aspectRatio TEXT,
@@ -998,7 +1010,8 @@
                             duration TEXT,
                             frameRate TEXT,
                             exposureProgram INTEGER,
-                            videoCodec TEXT);</statement>
+                            videoCodec TEXT,
+                            CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
                             (imageid INTEGER PRIMARY KEY,
                             latitude LONGTEXT CHARACTER SET utf8,
@@ -1010,7 +1023,8 @@
                             tilt REAL,
                             roll REAL,
                             accuracy REAL,
-                            description LONGTEXT CHARACTER SET utf8);</statement>
+                            description LONGTEXT CHARACTER SET utf8,
+                            CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             imageid INTEGER,
@@ -1019,6 +1033,7 @@
                             author LONGTEXT CHARACTER SET utf8,
                             date DATETIME,
                             comment LONGTEXT CHARACTER SET utf8,
+                            CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE(imageid, type, language, author(202)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -1026,6 +1041,7 @@
                             property LONGTEXT CHARACTER SET utf8,
                             value LONGTEXT CHARACTER SET utf8,
                             extraValue LONGTEXT CHARACTER SET utf8,
+                            CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE(imageid, property(110), value(111), extraValue(111)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -1034,16 +1050,20 @@
                             icon INTEGER,
                             iconkde LONGTEXT CHARACTER SET utf8,
                             lft INT NOT NULL,
-                            rgt INT NOT NULL
+                            rgt INT NOT NULL,
+                            CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE
                             );</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
                             tagid INTEGER NOT NULL,
+                            CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                            CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE (imageid, tagid));</statement>
             <statement mode="plain"> CREATE TABLE IF NOT EXISTS ImageProperties
                             (imageid  INTEGER NOT NULL,
                             property LONGTEXT CHARACTER SET utf8    NOT NULL,
                             value    LONGTEXT CHARACTER SET utf8    NOT NULL,
+                            CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE (imageid, property(255)));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Searches
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -1064,21 +1084,27 @@
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
                             (imageid INTEGER PRIMARY KEY,
                              uuid VARCHAR(128),
-                             history LONGTEXT CHARACTER SET utf8);</statement>
+                             history LONGTEXT CHARACTER SET utf8,
+                             CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
                             (subject INTEGER,
                              object INTEGER,
                              type INTEGER,
+                             CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                             CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                              UNIQUE(subject, object, type));</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
                             (tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
-                             value LONGTEXT CHARACTER SET utf8);</statement>
+                             value LONGTEXT CHARACTER SET utf8,
+                             CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
                             (imageid INTEGER,
                              tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
-                             value LONGTEXT CHARACTER SET utf8);</statement>
+                             value LONGTEXT CHARACTER SET utf8,
+                             CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
+                             CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
             <statement mode="plain">
                             CREATE OR REPLACE VIEW TagsTree 
                             AS
@@ -1140,34 +1166,9 @@
             <!-- Mysql Core Triggers -->
 
             <dbaction name="CreateTriggers" mode="transaction">
-            <statement mode="plain">DROP TRIGGER IF EXISTS delete_image;</statement>
-            <statement mode="plain">CREATE TRIGGER delete_image AFTER DELETE ON Images
-                    FOR EACH ROW BEGIN
-                        DELETE FROM ImageTags          WHERE imageid=OLD.id;
-                        DELETE From ImageHaarMatrix    WHERE imageid=OLD.id;
-                        DELETE From ImageInformation   WHERE imageid=OLD.id;
-                        DELETE From ImageMetadata      WHERE imageid=OLD.id;
-                        DELETE From VideoMetadata      WHERE imageid=OLD.id;
-                        DELETE From ImagePositions     WHERE imageid=OLD.id;
-                        DELETE From ImageComments      WHERE imageid=OLD.id;
-                        DELETE From ImageCopyright     WHERE imageid=OLD.id;
-                        DELETE From ImageProperties    WHERE imageid=OLD.id;
-                        DELETE From ImageHistory       WHERE imageid=OLD.id;
-                        DELETE FROM ImageRelations     WHERE subject=OLD.id OR object=OLD.id;
-                        DELETE FROM ImageTagProperties WHERE imageid=OLD.id;
-                        UPDATE Albums SET icon=null    WHERE icon=OLD.id;
-                        UPDATE Tags SET icon=null      WHERE icon=OLD.id;
-                    END;
-            </statement>
-            <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
-            <statement mode="plain">CREATE TRIGGER delete_tag AFTER DELETE ON Tags
-            FOR EACH ROW BEGIN
-                DELETE FROM ImageTags          WHERE tagid=OLD.id;
-                DELETE FROM TagProperties      WHERE tagid=OLD.id;
-                DELETE FROM ImageTagProperties WHERE tagid=OLD.id;
-            END;
-            </statement>
+<!-- Note move_tagstree does not exist for mysql
             <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
+-->
 
             <statement mode="plain">SELECT 
                     @minLeft := IF(ISNULL(MIN(lft)), 1, MIN(lft)-1),
@@ -1179,7 +1180,7 @@
             <statement mode="plain">REPLACE INTO Tags
                 (id, pid, name, icon, iconkde, lft, rgt)
                 VALUES
-                (0, -1, '_Digikam_root_tag_', 0, NULL, @minLeft, @maxRight )
+                (0, -1, '_Digikam_root_tag_', NULL, NULL, @minLeft, @maxRight )
             </statement>
             <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
             </dbaction>
@@ -1562,7 +1563,10 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <!-- Mysql Migration Statements -->
 
-            <!-- NOTE: Migrate_Cleanup_DB now it's done by the program -->
+            <!-- NOTE: Migrate_Cleanup_DB now it's done by the program except for cleanup prepare -->
+            <dbaction name="Migrate_Cleanup_Prepare"><statement mode="transaction">
+                ALTER TABLE Albums DROP FOREIGN KEY Albums_Images;
+            </statement></dbaction>
 
             <dbaction name="Migrate_Read_AlbumRoots"><statement mode="query">
                 SELECT id, label, status, type, identifier, specificPath FROM AlbumRoots;
@@ -1570,11 +1574,19 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="Migrate_Write_AlbumRoots" mode="transaction"><statement mode="query">
                 INSERT INTO AlbumRoots (id, label, status, type, identifier, specificPath) VALUES (:id, :label, :status, :type, :identifier, :specificPath);
             </statement></dbaction>
+            <!-- Note Albums with an icon set are setup after population of the Images table. -->
             <dbaction name="Migrate_Read_Albums"><statement mode="query">
-                SELECT id, albumRoot, relativePath, date, caption, collection, icon FROM Albums;
+                SELECT id, albumRoot, relativePath, date, caption, collection FROM Albums;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Albums" mode="transaction"><statement mode="query">
-                INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, :icon);
+                INSERT INTO Albums (id, albumRoot, relativePath, date, caption, collection, icon) VALUES (:id, :albumRoot, :relativePath, :date, :caption, :collection, NULL);
+            </statement></dbaction>
+            <!-- Populate the Albums icon where set. -->
+            <dbaction name="Migrate_Read_AlbumsExtra"><statement mode="query">
+                SELECT id, icon FROM Albums where icon IS NOT NULL;
+            </statement></dbaction>
+            <dbaction name="Migrate_Write_AlbumsExtra" mode="transaction"><statement mode="query">
+                UPDATE Albums set icon = :icon WHERE id = :id;
             </statement></dbaction>
             <dbaction name="Migrate_Read_Images"><statement mode="query">
                 SELECT id, album, name, status, category, modificationDate, fileSize, uniqueHash FROM Images;

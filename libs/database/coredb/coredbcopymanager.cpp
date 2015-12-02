@@ -87,6 +87,8 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
         << QLatin1String("AlbumRoots")
         << QLatin1String("Albums")
         << QLatin1String("Images")
+        // Virtual table used to allow population of Albums.icon after Images migration
+        << QLatin1String("AlbumsExtra")
         << QLatin1String("ImageHaarMatrix")
         << QLatin1String("ImageInformation")
         << QLatin1String("ImageMetadata")
@@ -110,6 +112,16 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
     const int tablesSize = tables.size();
 
     QMap<QString, QVariant> bindingMap;
+
+    // Run any database specific preparatory cleanup prior to dropping tables.
+
+    DbEngineAction action                        = toDBbackend.getDBAction(QString::fromUtf8("Migrate_Cleanup_Prepare"));
+    BdEngineBackend::QueryState queryStateResult = toDBbackend.execDBAction(action);
+    // Accept SQL error because the foreign key may not exist.
+    if (queryStateResult == BdEngineBackend::ConnectionError)
+    {
+        emit finished(CoreDbCopyManager::failed, i18n("Error while preparing the target database."));
+    }
 
     // Delete all tables
 
