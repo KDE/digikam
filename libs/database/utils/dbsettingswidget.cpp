@@ -462,9 +462,11 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
 {
-    QString sql = QString::fromLatin1("CREATE DATABASE %1; "
-                                      "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\' IDENTIFIED BY \'password\'; "
-                                      "FLUSH PRIVILEGES;\n")
+    QString sql = QString::fromLatin1("GRANT USAGE ON *.* TO \'%1\'@\'localhost\' IDENTIFIED BY \'password\';\n")
+                                      .arg(d->userName->text());
+
+    sql += QString::fromLatin1("CREATE DATABASE %1; "
+                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';\n")
                                       .arg(d->dbNameCore->text())
                                       .arg(d->dbNameCore->text())
                                       .arg(d->userName->text());
@@ -472,22 +474,22 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
     if (d->dbNameThumbs->text() != d->dbNameCore->text())
     {
         sql += QString::fromLatin1("CREATE DATABASE %1; "
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\' IDENTIFIED BY \'password\'; "
-                                   "FLUSH PRIVILEGES;\n")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';\n")
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->userName->text());
     }
 
-    if (d->dbNameFace->text() != d->dbNameCore->text())
+    if ((d->dbNameFace->text() != d->dbNameCore->text()) &&
+        (d->dbNameFace->text() != d->dbNameThumbs->text()))
     {
         sql += QString::fromLatin1("CREATE DATABASE %1; "
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\' IDENTIFIED BY \'password\'; "
-                                   "FLUSH PRIVILEGES;\n")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';\n")
                                    .arg(d->dbNameFace->text())
                                    .arg(d->dbNameFace->text())
                                    .arg(d->userName->text());
     }
+    sql += QString::fromLatin1("FLUSH PRIVILEGES;\n");
 
     d->sqlInit->setText(sql);
 }
