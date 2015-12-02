@@ -83,4 +83,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 049 ==> 355552 - Use the 1st item in "Open with..." if digiKam does not have embedded support for "preview".
 050 ==> 356080 - digiKam does not open preview for LZW non-stripped TIFFs created by ScanTailor.
 051 ==> 354887 - ISO speed rating missing after DNG conversion.
-052 ==> 
+052 ==> 331628 - MYSQL : digiKam talk's uncompatible SQL with TokuDB database engine.
+053 ==> 281838 - THUMBDB : thumbnail tables are always created in images database.
+054 ==> 

@@ -911,7 +911,7 @@
                 (
                    id   INT,
                    name VARCHAR(35)
-                );
+                ) ENGINE InnoDB;
             </statement>
             </dbaction>
 
@@ -940,7 +940,8 @@
             type INTEGER NOT NULL,
             identifier LONGTEXT,
             specificPath LONGTEXT,
-            UNIQUE(identifier(127), specificPath(128)));</statement>
+            UNIQUE(identifier(127), specificPath(128)))
+            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Albums
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             albumRoot INTEGER NOT NULL,
@@ -950,7 +951,8 @@
                             collection LONGTEXT CHARACTER SET utf8,
                             icon INTEGER,
                             CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(albumRoot, relativePath(255)));</statement>
+                            UNIQUE(albumRoot, relativePath(255)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Images
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             album INTEGER,
@@ -961,7 +963,8 @@
                             fileSize INTEGER,
                             uniqueHash VARCHAR(128),
                             CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE (album, name(255)));</statement>
+                            UNIQUE (album, name(255)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">ALTER TABLE Albums
                             ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHaarMatrix
@@ -969,7 +972,8 @@
                             modificationDate DATETIME,
                             uniqueHash LONGTEXT CHARACTER SET utf8,
                             matrix LONGBLOB,
-                            CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                            CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageInformation
                             (imageid INTEGER PRIMARY KEY,
                             rating INTEGER,
@@ -981,7 +985,8 @@
                             format LONGTEXT CHARACTER SET utf8,
                             colorDepth INTEGER,
                             colorModel INTEGER,
-                            CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                            CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageMetadata
                             (imageid INTEGER PRIMARY KEY,
                             make LONGTEXT CHARACTER SET utf8,
@@ -1000,7 +1005,8 @@
                             meteringMode INTEGER,
                             subjectDistance REAL,
                             subjectDistanceCategory INTEGER,
-                            CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                            CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS VideoMetadata
                             (imageid INTEGER PRIMARY KEY,
                             aspectRatio TEXT,
@@ -1011,7 +1017,8 @@
                             frameRate TEXT,
                             exposureProgram INTEGER,
                             videoCodec TEXT,
-                            CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                            CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImagePositions
                             (imageid INTEGER PRIMARY KEY,
                             latitude LONGTEXT CHARACTER SET utf8,
@@ -1024,7 +1031,8 @@
                             roll REAL,
                             accuracy REAL,
                             description LONGTEXT CHARACTER SET utf8,
-                            CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                            CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageComments
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             imageid INTEGER,
@@ -1034,7 +1042,8 @@
                             date DATETIME,
                             comment LONGTEXT CHARACTER SET utf8,
                             CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(imageid, type, language, author(202)));</statement>
+                            UNIQUE(imageid, type, language, author(202)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageCopyright
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             imageid INTEGER,
@@ -1042,7 +1051,8 @@
                             value LONGTEXT CHARACTER SET utf8,
                             extraValue LONGTEXT CHARACTER SET utf8,
                             CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE(imageid, property(110), value(111), extraValue(111)));</statement>
+                            UNIQUE(imageid, property(110), value(111), extraValue(111)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Tags
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             pid INTEGER,
@@ -1052,59 +1062,68 @@
                             lft INT NOT NULL,
                             rgt INT NOT NULL,
                             CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE
-                            );</statement>
+                            ) ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
                             tagid INTEGER NOT NULL,
                             CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE (imageid, tagid));</statement>
+                            UNIQUE (imageid, tagid))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain"> CREATE TABLE IF NOT EXISTS ImageProperties
                             (imageid  INTEGER NOT NULL,
                             property LONGTEXT CHARACTER SET utf8    NOT NULL,
                             value    LONGTEXT CHARACTER SET utf8    NOT NULL,
                             CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                            UNIQUE (imageid, property(255)));</statement>
+                            UNIQUE (imageid, property(255)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Searches
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             type INTEGER,
                             name LONGTEXT CHARACTER SET utf8 NOT NULL,
-                            query LONGTEXT CHARACTER SET utf8 NOT NULL);</statement>
+                            query LONGTEXT CHARACTER SET utf8 NOT NULL)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS DownloadHistory
                             (id  INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             identifier LONGTEXT CHARACTER SET utf8,
                             filename LONGTEXT CHARACTER SET utf8,
                             filesize INTEGER,
                             filedate DATETIME,
-                            UNIQUE(identifier(164), filename(165), filesize, filedate));</statement>
+                            UNIQUE(identifier(164), filename(165), filesize, filedate))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Settings
                             (keyword LONGTEXT CHARACTER SET utf8 NOT NULL,
                             value LONGTEXT CHARACTER SET utf8,
-                            UNIQUE(keyword(255)));</statement>
+                            UNIQUE(keyword(255)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageHistory
                             (imageid INTEGER PRIMARY KEY,
                              uuid VARCHAR(128),
                              history LONGTEXT CHARACTER SET utf8,
-                             CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                             CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageRelations
                             (subject INTEGER,
                              object INTEGER,
                              type INTEGER,
                              CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                              CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                             UNIQUE(subject, object, type));</statement>
+                             UNIQUE(subject, object, type))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS TagProperties
                             (tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8,
-                             CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                             CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTagProperties
                             (imageid INTEGER,
                              tagid INTEGER,
                              property TEXT CHARACTER SET utf8,
                              value LONGTEXT CHARACTER SET utf8,
                              CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
-                             CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE);</statement>
+                             CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE)
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">
                             CREATE OR REPLACE VIEW TagsTree 
                             AS
