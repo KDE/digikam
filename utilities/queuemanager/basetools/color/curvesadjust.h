@@ -63,11 +63,12 @@ private Q_SLOTS:
     void slotChannelChanged();
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
+    void slotSettingsLoad();
 
 private:
 
-    QComboBox*      m_channelCB;
     DImg            m_preview;
+    QComboBox*      m_channelCB;
     CurvesSettings* m_settingsView;
 };
 

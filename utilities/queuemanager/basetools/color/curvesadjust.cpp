@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QComboBox>
+#include <QPushButton>
 
 // KDE includes
 
@@ -62,18 +63,29 @@ CurvesAdjust::~CurvesAdjust()
 
 void CurvesAdjust::registerSettingsWidget()
 {
-    DVBox* vbox          = new DVBox;
-    DHBox* hbox          = new DHBox(vbox);
-    QLabel* channelLabel = new QLabel(hbox);
+    DVBox* const vbox          = new DVBox;
+    DHBox* const hbox          = new DHBox(vbox);
+    QLabel* const channelLabel = new QLabel(hbox);
     channelLabel->setText(i18n("Channel:"));
-    m_channelCB          = new QComboBox(hbox);
+
+    m_channelCB                = new QComboBox(hbox);
     m_channelCB->addItem(i18n("Luminosity"), QVariant(LuminosityChannel));
     m_channelCB->addItem(i18n("Red"),        QVariant(RedChannel));
     m_channelCB->addItem(i18n("Green"),      QVariant(GreenChannel));
     m_channelCB->addItem(i18n("Blue"),       QVariant(BlueChannel));
     m_channelCB->addItem(i18n("Alpha"),      QVariant(AlphaChannel));
 
-    m_settingsView      = new CurvesSettings(vbox, &m_preview);
+    m_settingsView             = new CurvesSettings(vbox, &m_preview);
+
+    DHBox* const hbox1         = new DHBox(vbox);
+
+    QPushButton* const loadBt  = new QPushButton(i18n("Load..."), hbox1);
+    loadBt->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
+    loadBt->setToolTip(i18n("Load all parameters from settings text file."));
+
+    QLabel* const load         = new QLabel(hbox1);
+    load->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
@@ -84,6 +96,9 @@ void CurvesAdjust::registerSettingsWidget()
 
     connect(m_channelCB, SIGNAL(activated(int)),
             this, SLOT(slotChannelChanged()));
+
+    connect(loadBt, SIGNAL(clicked()),
+            this, SLOT(slotSettingsLoad()));
 
     BatchTool::registerSettingsWidget();
 }
@@ -146,6 +161,12 @@ void CurvesAdjust::slotSettingsChanged()
     prm.insert(QLatin1String("values[AlphaChannel]"),      currentPrm.values[AlphaChannel]);
 
     BatchTool::slotSettingsChanged(prm);
+}
+
+void CurvesAdjust::slotSettingsLoad()
+{
+    m_settingsView->loadSettings();
+    slotSettingsChanged();
 }
 
 bool CurvesAdjust::toolOperations()

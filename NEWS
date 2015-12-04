@@ -86,5 +86,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 052 ==> 331628 - MYSQL : digiKam talk's uncompatible SQL with TokuDB database engine.
 053 ==> 281838 - THUMBDB : thumbnail tables are always created in images database.
 054 ==> 323507 - digitaglinktree : usage with mysql instead of sqlite [patch].
-055 ==> 
-
+055 ==> 287405 - BQM AdjustCurves tool : Load curves settings file.
+056 ==> 
