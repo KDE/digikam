@@ -1,31 +1,6 @@
 TODO List
 ---------
 
-- Because digiKam use function declaration, Mysql server need to be prepared before to be used,
-  especially to create database and user with grant privileges.
-
-  * For a common Mysql database storage :
-
-  CREATE DATABASE digikamdb; GRANT ALL PRIVILEGES ON digikamdb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
-
-  with:
-
-  digikamdb       : the common database name (storing Core, Thumbnails, and Face databases).
-  digikam/digikam : the name/password of user account used by digiKam to access on mysql server.
-
-  * For separated Mysql database storages :
-
-  CREATE DATABASE digikamcoredb; GRANT ALL PRIVILEGES ON digikamcoredb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
-  CREATE DATABASE digikamthumbsdb; GRANT ALL PRIVILEGES ON digikamthumbsdb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
-  CREATE DATABASE digikamfacedb; GRANT ALL PRIVILEGES ON digikamfacedb.* TO 'digikam'@'localhost' IDENTIFIED BY 'digikam'; FLUSH PRIVILEGES;
-
-  with:
-
-  digikamcoredb   : the Core database name.
-  digikamthumbsdb : the Thumbnails database name.
-  digikamfacedb   : the Face database name.
-  digikam/digikam : the name/password of user account used by digiKam to access on mysql server.
-
 - To re-init mysql database server under Linux with a clean intall, process as below :
 
   # su
