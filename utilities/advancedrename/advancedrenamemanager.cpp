@@ -132,8 +132,10 @@ void AdvancedRenameManager::setSortAction(SortAction action)
 
     QList<QUrl> list;
 
-    foreach(QString file, d->files)
+    foreach(const QString& file, d->files)
+    {
         list << QUrl::fromLocalFile(file);
+    }
 
     emit signalSortingChanged(list);
 }
@@ -150,8 +152,10 @@ void AdvancedRenameManager::setSortDirection(SortDirection direction)
 
     QList<QUrl> list;
 
-    foreach(QString file, d->files)
+    foreach(const QString& file, d->files)
+    {
         list << QUrl::fromLocalFile(file);
+    }
 
     emit signalSortingChanged(list);
 }
@@ -461,7 +465,7 @@ int AdvancedRenameManager::indexOfFileGroup(const QString& filename)
     return d->fileGroupIndexMap.value(fileGroupKey(filename), -1);
 }
 
-QString AdvancedRenameManager::newName(const QString& filename)
+QString AdvancedRenameManager::newName(const QString& filename) const
 {
     return d->renamedFiles.value(filename, filename);
 }
