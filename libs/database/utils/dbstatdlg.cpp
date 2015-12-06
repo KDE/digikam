@@ -74,13 +74,32 @@ DBStatDlg::DBStatDlg(QWidget* const parent)
     new QTreeWidgetItem(listView(), QStringList() << i18n("Tags") << QString::number(tags));
 
     // Database Backend information
-    QString dbBe = ApplicationSettings::instance()->getDbEngineParameters().databaseType;
+    new QTreeWidgetItem(listView(), QStringList());
+    DbEngineParameters prm = ApplicationSettings::instance()->getDbEngineParameters();
+    QString dbBe           = prm.databaseType;
     new QTreeWidgetItem(listView(), QStringList() << i18n("Database backend") << dbBe);
 
-    if (dbBe != QLatin1String("QSQLITE"))
+    if (dbBe == QLatin1String("QSQLITE"))
     {
-        QString internal = ApplicationSettings::instance()->getDbEngineParameters().internalServer ? i18n("Yes") : i18n("No");
-        new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server") << internal);
+        new QTreeWidgetItem(listView(), QStringList() << i18n("Database Path") << prm.getCoreDatabaseNameOrDir());
+    }
+    else
+    {
+        if (prm.internalServer)
+        {
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server")      << i18n("Yes"));
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Database internal server Path") << prm.internalServerDBPath);
+        }
+        else
+        {
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Host Name")       << prm.hostName);
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Host Port")       << QString::number(prm.port));
+            new QTreeWidgetItem(listView(), QStringList() << i18n("User account")    << prm.userName);
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Connect options") << prm.connectOptions);
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Core Db name")    << prm.databaseNameCore);
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Thumbs Db name")  << prm.databaseNameThumbnails);
+            new QTreeWidgetItem(listView(), QStringList() << i18n("Face Db name")    << prm.databaseNameFace);
+        }
     }
 
     qApp->restoreOverrideCursor();
@@ -125,7 +144,6 @@ int DBStatDlg::generateItemsList(DatabaseItem::Category category, const QString&
     ti->setFont(1, ft);
 
     // Add space.
-    new QTreeWidgetItem(listView(), QStringList());
     new QTreeWidgetItem(listView(), QStringList());
 
     return total;
