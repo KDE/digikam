@@ -439,12 +439,10 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
     if (databaseType == QLatin1String("QMYSQL") && internalServer)
     {
         const QString miscDir  = internalServerPrivatePath() + QLatin1String("db_misc");
-        databaseType           = QLatin1String("QMYSQL");
         databaseNameCore       = QLatin1String("digikam");
         databaseNameThumbnails = QLatin1String("digikam");
         databaseNameFace       = QLatin1String("digikam");
         internalServer         = true;
-        internalServerDBPath   = internalServerPrivatePath();
         hostName.clear();
         port                   = -1;
         userName               = QLatin1String("root");

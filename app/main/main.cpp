@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
 
         // parameters are written to config
         firstAlbumPath = firstRun.firstAlbumPath();
-        
+
         if (firstRun.getDbEngineParameters().isSQLite())
         {
             AlbumManager::checkDatabaseDirsAfterFirstRun(firstRun.getDbEngineParameters().getCoreDatabaseNameOrDir(), firstAlbumPath);
