@@ -467,9 +467,6 @@ void AdvancedRenameWidget::writeSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    // remove duplicate entries and save pattern history, omit empty strings
-    QString pattern = d->renameInput->text();
-
     if (d->layoutStyle == LayoutNormal)
     {
         group.writeEntry(d->configExpandedStateEntry, d->optionsLabel

@@ -232,7 +232,7 @@ QString Parser::parse(ParseSettings& settings)
     settings.results          = results;
 
     // remove invalid modifiers from the new name
-    foreach(const Rule* const mod, d->modifiers)
+    foreach(Rule* const mod, d->modifiers)
     {
         newName.remove(mod->regExp());
     }

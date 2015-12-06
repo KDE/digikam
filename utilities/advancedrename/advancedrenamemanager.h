@@ -78,9 +78,9 @@ public:
     void reset();
 
     void parseFiles();
-    void parseFiles(const ParseSettings &settings);
+    void parseFiles(const ParseSettings& settings);
     void parseFiles(const QString& parseString);
-    void parseFiles(const QString& parseString, const ParseSettings &settings);
+    void parseFiles(const QString& parseString, const ParseSettings& settings);
 
     void setParserType(ParserType type);
     Parser* getParser() const;
@@ -98,7 +98,7 @@ public:
     int indexOfFile(const QString& filename);
     int indexOfFolder(const QString& filename);
     int indexOfFileGroup(const QString& filename);
-    QString newName(const QString& filename);
+    QString newName(const QString& filename) const;
 
     QStringList            fileList() const;
     QMap<QString, QString> newFileList() const;
