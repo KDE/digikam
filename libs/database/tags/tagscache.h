@@ -39,12 +39,10 @@ class DIGIKAM_DATABASE_EXPORT TagsCache : public QObject
 
 public:
 
-    static TagsCache* instance();
-
     enum LeadingSlashPolicy
     {
-        NoLeadingSlash,      /// "Places/Cities/Paris"
-        IncludeLeadingSlash  /// "/Places/Cities/Paris"
+        NoLeadingSlash,      /// Ex: "Places/Cities/Paris"
+        IncludeLeadingSlash  /// Ex: "/Places/Cities/Paris"
     };
 
     enum HiddenTagsPolicy
@@ -52,6 +50,8 @@ public:
         NoHiddenTags,
         IncludeHiddenTags
     };
+
+public:
 
     /**
      * Returns the name of the tag with the given id.
@@ -264,10 +264,6 @@ public:
                                 Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive,
                                 HiddenTagsPolicy hiddenTagsPolicy = NoHiddenTags);
 
-    static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
-    static QLatin1String propertyNameDigikamInternalTag();
-    static QLatin1String propertyNameExcludedFromWriting();
-
     /**
      * Utility method.
      * Orders the given tag paths. If tags begin with the same path (parent tags),
@@ -283,12 +279,20 @@ public:
                                   LeadingSlashPolicy slashPolicy = IncludeLeadingSlash,
                                   HiddenTagsPolicy hiddenTagsPolicy = IncludeHiddenTags) const;
 
+public:
+
+    static TagsCache* instance();
+
+    static QLatin1String tagPathOfDigikamInternalTags(LeadingSlashPolicy slashPolicy = IncludeLeadingSlash);
+    static QLatin1String propertyNameDigikamInternalTag();
+    static QLatin1String propertyNameExcludedFromWriting();
+
 Q_SIGNALS:
 
     /** These signals are provided for convenience; for finer grained information
-        use CoreDbWatch. Use a queued connection if you carry out
-        longer operations from slots connected to these signals.
-    */
+     *  use CoreDbWatch. Use a queued connection if you carry out
+     *  longer operations from slots connected to these signals.
+     */
     void tagAdded(int tagId);
     void tagDeleted(int tagId);
     void tagAboutToBeDeleted(QString name);
@@ -310,8 +314,8 @@ private:
     friend class TagsCacheCreator;
     friend class ChangingDB;
 
-    class TagsCachePriv;
-    TagsCachePriv* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
