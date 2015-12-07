@@ -59,6 +59,7 @@
 #include "border.h"
 #include "removemetadata.h"
 #include "convert2dng.h"
+#include "userscript.h"
 
 #ifdef HAVE_JASPER
 #include "convert2jp2.h"
@@ -156,6 +157,9 @@ BatchToolsManager::BatchToolsManager()
     // Filters
     registerTool(new FilmGrain(this));
     registerTool(new ColorFX(this));
+
+    // Custom
+    registerTool(new UserScript(this));
 }
 
 BatchToolsManager::~BatchToolsManager()

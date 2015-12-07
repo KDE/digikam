@@ -87,4 +87,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 053 ==> 281838 - THUMBDB : thumbnail tables are always created in images database.
 054 ==> 323507 - digitaglinktree : usage with mysql instead of sqlite [patch].
 055 ==> 287405 - BQM AdjustCurves tool : Load curves settings file.
-056 ==> 
+056 ==> 220402 - Add a new BQM tool to call an external program [patch].
+057 ==> 

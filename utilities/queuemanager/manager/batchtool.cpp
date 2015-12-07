@@ -89,6 +89,8 @@ public:
 
     DImg                          image;
 
+    ImageInfo                     imageinfo;
+
     DRawDecoderSettings           rawDecodingSettings;
 
     IOFileSettings                ioFileSettings;
@@ -242,6 +244,16 @@ void BatchTool::setImageData(const DImg& img)
 DImg BatchTool::imageData() const
 {
     return d->image;
+}
+
+void BatchTool::setImageInfo(const ImageInfo& info)
+{
+    d->imageinfo = info;
+}
+
+ImageInfo BatchTool::imageInfo() const
+{
+    return d->imageinfo;
 }
 
 void BatchTool::setNeedResetExifOrientation(bool set)

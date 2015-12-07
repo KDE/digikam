@@ -136,6 +136,9 @@ void Task::run()
     DImg        tmpImage;
     QString     errMsg;
 
+    // ImageInfo must be tread-safe.
+    ImageInfo source = ImageInfo::fromUrl(d->tools.m_itemUrl);
+
     foreach (const BatchToolSet& set, d->tools.m_toolsList)
     {
         d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
@@ -148,6 +151,7 @@ void Task::run()
                  << " :: wurl= "     << workUrl;
 
         d->tool->setImageData(tmpImage);
+        d->tool->setImageInfo(source);
         d->tool->setInputUrl(inUrl);
         d->tool->setWorkingUrl(workUrl);
         d->tool->setSettings(set.settings);
@@ -155,7 +159,22 @@ void Task::run()
         d->tool->setRawLoadingRules(d->settings.rawLoadingRule);
         d->tool->setDRawDecoderSettings(d->settings.rawDecodingSettings);
         d->tool->setResetExifOrientationAllowed(d->settings.exifSetOrientation);
-        d->tool->setLastChainedTool(index == d->tools.m_toolsList.count());
+
+        if (index == d->tools.m_toolsList.count())
+        {
+            d->tool->setLastChainedTool(true);
+        }
+        // If the next tool is under the custom group (user script)
+        // treat as the last chained tool, i.e. save image to file
+        else if (d->tools.m_toolsList[index].group == BatchTool::CustomTool)
+        {
+            d->tool->setLastChainedTool(true);
+        }
+        else
+        {
+            d->tool->setLastChainedTool(false);
+        }
+
         d->tool->setOutputUrlFromInputUrl();
         d->tool->setBranchHistory(true);
 
@@ -255,8 +274,6 @@ void Task::run()
         {
             // -- Now copy the digiKam attributes from original file to the new file ------------
 
-            // ImageInfo must be tread-safe.
-            ImageInfo source = ImageInfo::fromUrl(d->tools.m_itemUrl);
             FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
 
             emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);

@@ -27,6 +27,7 @@ set(libqueuemanager_SRCS
     basetools/convert/convert2png.cpp
     basetools/convert/convert2tiff.cpp
     basetools/convert/convert2dng.cpp
+    basetools/custom/userscript.cpp
     basetools/decorate/border.cpp
     basetools/decorate/watermark.cpp
     basetools/enhance/antivignetting.cpp

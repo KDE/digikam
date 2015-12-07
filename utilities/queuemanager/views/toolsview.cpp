@@ -77,6 +77,7 @@ ToolsView::ToolsView(QWidget* const parent)
     new ToolListViewGroup(d->baseTools, BatchTool::FiltersTool);
     new ToolListViewGroup(d->baseTools, BatchTool::ConvertTool);
     new ToolListViewGroup(d->baseTools, BatchTool::MetadataTool);
+    new ToolListViewGroup(d->baseTools, BatchTool::CustomTool);
     insertTab(TOOLS, d->baseTools, QIcon::fromTheme(QLatin1String("digikam")), i18n("Base Tools"));
 
     // --------------------------------------------------------
@@ -140,6 +141,7 @@ void ToolsView::addTool(BatchTool* const tool)
         case BatchTool::FiltersTool:
         case BatchTool::ConvertTool:
         case BatchTool::MetadataTool:
+        case BatchTool::CustomTool:
             d->baseTools->addTool(tool);
             break;
 
@@ -163,6 +165,7 @@ bool ToolsView::removeTool(BatchTool* const tool)
             case BatchTool::FiltersTool:
             case BatchTool::ConvertTool:
             case BatchTool::MetadataTool:
+            case BatchTool::CustomTool:
                 ret = d->baseTools->removeTool(tool);
                 break;
 

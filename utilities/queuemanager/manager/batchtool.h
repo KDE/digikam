@@ -32,6 +32,7 @@
 
 #include "drawdecodersettings.h"
 #include "dimg.h"
+#include "imageinfo.h"
 #include "queuesettings.h"
 #include "iofilesettings.h"
 
@@ -123,6 +124,11 @@ public:
      */
     void setImageData(const DImg& img);
     DImg imageData() const;
+
+    /** Manage instance of current image info loaded by this tool.
+     */
+    void setImageInfo(const ImageInfo& info);
+    ImageInfo imageInfo() const;
 
     /** Manage flag properties to indicate if this tool is last one to process on current item.
      */
