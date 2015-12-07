@@ -12,6 +12,7 @@
   <name xml:lang="de">Showfoto</name>
   <name xml:lang="en-GB">Showfoto</name>
   <name xml:lang="es">Showfoto</name>
+  <name xml:lang="fi">Showfoto</name>
   <name xml:lang="fr">Showfoto</name>
   <name xml:lang="gl">Showfoto</name>
   <name xml:lang="it">Showfoto</name>
@@ -38,6 +39,7 @@
     <p xml:lang="de">Showfoto ist eine schnelle Bildbearbeitung mit einigen mächtigen Basiswerkzeugen. Sie können es benutzen, um Ihre Fotos anzusehen und Korrekturen und Änderungen durchzuführen. Showfoto ist das eigenständige Bildbearbeitungsprogramm des Digikam-Projekts.</p>
     <p xml:lang="en-GB">Showfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them. Showfoto is the standalone image editor of the digiKam project.</p>
     <p xml:lang="es">Showfoto es un rápido editor de imágenes con potentes herramientas de edición de imágenes. Puede usarlo para ver sus fotografías y mejorarlas. Showfoto es el editor de imágenes independiente del proyecto digiKam.</p>
+    <p xml:lang="fi">Showfoto on nopea kuvamuokkain, jossa on tehokkaat kuvankäsittelytyökalut. Voit käyttää sitä kuviesi katseluun ja paranteluun. Showfoto on digiKam-projektista erilleen irrotettu kuvamuokkain.</p>
     <p xml:lang="fr">Showfoto est un éditeur d'image rapide comprenant de puissants outils d'édition d'image. Vous pouvez l'utiliser pour afficher des photographies et les améliorer. Showfoto est l'éditeur d'image autonome du projet digiKam.</p>
     <p xml:lang="gl">Showfoto é un editor de imaxes rápido con potentes ferramentas de edición. Pode usalo para ver as súas fotografías e melloralas. Showfoto é o editor de imaxes independente do proxecto digiKam.</p>
     <p xml:lang="it">Showfoto è un editor di immagini veloce, con strumenti di modifica potenti. Puoi usarlo per visualizzare le tue fotografie e migliorarle. Showfoto è un editor di immagini autonomo all'interno del progetto digiKam.</p>
@@ -71,6 +73,7 @@
   <developer_name xml:lang="de">digiKam-Projekt</developer_name>
   <developer_name xml:lang="en-GB">digiKam Project</developer_name>
   <developer_name xml:lang="es">Proyecto digiKam</developer_name>
+  <developer_name xml:lang="fi">digiKam-projekti</developer_name>
   <developer_name xml:lang="fr">projet digiKam</developer_name>
   <developer_name xml:lang="gl">Proxecto digiKam</developer_name>
   <developer_name xml:lang="it">Progetto digiKam</developer_name>
