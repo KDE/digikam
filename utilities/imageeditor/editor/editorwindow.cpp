@@ -1479,7 +1479,7 @@ bool EditorWindow::promptUserDelete(const QUrl& url)
         }
 
         QString boxMessage = i18nc("@info",
-                                   "The image <b>%1</b> has been modified.<nl/>"
+                                   "The image <b>%1</b> has been modified.<br>"
                                    "All changes will be lost.", url.fileName());
 
         int result = DMessageBox::showContinueCancel(QMessageBox::Warning,
