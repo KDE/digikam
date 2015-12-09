@@ -1074,7 +1074,17 @@ void CameraController::slotLockFailed(const QString& folder, const QString& file
 void CameraController::addCommand(CameraCommand* const cmd)
 {
     QMutexLocker lock(&d->mutex);
-    d->commands << cmd;
+
+    // New thumbnails commands at first, for a faster view.
+    if (cmd->action == CameraCommand::cam_thumbsinfo)
+    {
+        d->commands.prepend(cmd);
+    }
+    else
+    {
+        d->commands << cmd;
+    }
+
     d->condVar.wakeAll();
 }
 
