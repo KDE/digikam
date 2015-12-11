@@ -62,7 +62,7 @@ Lut3DFilter::~Lut3DFilter()
 {
     if (m_lutTable != NULL)
     {
-        delete []m_lutTable;
+        delete [] m_lutTable;
     }
 
     cancelFilter();

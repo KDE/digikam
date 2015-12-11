@@ -61,6 +61,7 @@ public:
     void findLuts();
 
     void startPreviewFilters();
+
 Q_SIGNALS:
 
     void signalSettingsChanged();

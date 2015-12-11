@@ -79,7 +79,7 @@ BatchToolSettings Lut3D::defaultSettings()
     Lut3DContainer defaultPrm = m_settingsView->defaultSettings();
 
     prm.insert(QLatin1String("path"),      defaultPrm.path);
-    prm.insert(QLatin1String("intensity"), defaultPrm.intensity);
+    prm.insert(QLatin1String("intensity"), (int)defaultPrm.intensity);
 
     return prm;
 }
@@ -100,7 +100,7 @@ void Lut3D::slotSettingsChanged()
     Lut3DContainer currentPrm = m_settingsView->settings();
 
     prm.insert(QLatin1String("path"),      currentPrm.path);
-    prm.insert(QLatin1String("intensity"), currentPrm.intensity);
+    prm.insert(QLatin1String("intensity"), (int)currentPrm.intensity);
 
     BatchTool::slotSettingsChanged(prm);
 }

@@ -30,7 +30,6 @@
 #include <QDirIterator>
 #include <QGridLayout>
 #include <QStringList>
-#include <QString>
 #include <QLabel>
 #include <QIcon>
 
@@ -41,7 +40,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dexpanderbox.h"
 #include "previewlist.h"
 #include "imageiface.h"
 #include "dnuminput.h"
@@ -76,7 +74,6 @@ Lut3DSettings::Lut3DSettings(QWidget* const parent, bool useGenericImg)
     : QWidget(parent),
       d(new Private)
 {
-    int idx;
     DImg thumbImage;
 
     findLuts();
@@ -93,9 +90,9 @@ Lut3DSettings::Lut3DSettings(QWidget* const parent, bool useGenericImg)
 
     d->correctionTools = new PreviewList(this);
 
-    for (idx = 0; idx < d->luts.count(); idx++)
+    for (int idx = 0; idx < d->luts.count(); idx++)
     {
-        const QString &path = d->luts[idx];
+        const QString& path = d->luts[idx];
         QFileInfo fi(path);
 
         d->correctionTools->addItem(new Lut3DFilter(&thumbImage, Lut3DContainer(path)),

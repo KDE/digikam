@@ -24,7 +24,6 @@
 // Local includes
 
 #include "lut3dcontainer.h"
-#include "imagecurves.h"
 #include "filteraction.h"
 
 namespace Digikam

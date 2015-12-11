@@ -42,7 +42,7 @@ class DIGIKAM_EXPORT Lut3DContainer
 
 public:
     Lut3DContainer();
-    Lut3DContainer(const QString &path, int intensity = 100);
+    Lut3DContainer(const QString& path, int intensity = 100);
 
     bool operator==(const Lut3DContainer& other) const;
 
@@ -54,7 +54,6 @@ public:
     QString path;
     int     intensity;
 };
-
 
 }  // namespace Digikam
 
