@@ -49,6 +49,7 @@
 #include "bwconvert.h"
 #include "whitebalance.h"
 #include "curvesadjust.h"
+#include "lut3d.h"
 #include "filmgrain.h"
 #include "colorfx.h"
 #include "localcontrast.h"
@@ -150,6 +151,7 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new BWConvert(this));
     registerTool(new WhiteBalance(this));
     registerTool(new CurvesAdjust(this));
+    registerTool(new Lut3D(this));
     registerTool(new Invert(this));
     registerTool(new Convert8to16(this));
     registerTool(new Convert16to8(this));

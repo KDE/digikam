@@ -56,6 +56,7 @@
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
 #include "filmtool.h"
+#include "lut3dtool.h"
 
 namespace DigikamColorImagePlugin
 {
@@ -81,6 +82,7 @@ public:
         curvesAction(0),
         levelsAction(0),
         filmAction(0),
+        lut3DAction(0),
         profileMenuAction(0)
     {}
 
@@ -97,6 +99,7 @@ public:
     QAction*               curvesAction;
     QAction*               levelsAction;
     QAction*               filmAction;
+    QAction*               lut3DAction;
 
     IccProfilesMenuAction* profileMenuAction;
 };
@@ -190,6 +193,11 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->curvesAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCurvesAdjust()));
 
+     d->lut3DAction = new QAction(QIcon::fromTheme(QLatin1String("draw-cuboid")), i18n("Lut3D..."), this);
+     ac->addAction(QLatin1String("imageplugin_lut3d"), d->lut3DAction);
+     connect(d->lut3DAction, SIGNAL(triggered(bool)),
+             this, SLOT(slotLut3D()));
+
     d->levelsAction  = new QAction(QIcon::fromTheme(QLatin1String("adjustlevels")), i18n("Levels Adjust..."), this);
     ac->addAction(QLatin1String("imageplugin_adjustlevels"), d->levelsAction);
     ac->setDefaultShortcut(d->levelsAction, Qt::CTRL+Qt::Key_L);
@@ -232,6 +240,7 @@ void ImagePlugin_Color::setEnabledActions(bool b)
     d->channelMixerAction->setEnabled(b);
     d->curvesAction->setEnabled(b);
     d->levelsAction->setEnabled(b);
+    d->lut3DAction->setEnabled(b);
     d->filmAction->setEnabled(b);
 }
 
@@ -401,6 +410,11 @@ void ImagePlugin_Color::slotCurvesAdjust()
 void ImagePlugin_Color::slotLevelsAdjust()
 {
     loadTool(new AdjustLevelsTool(this));
+}
+
+void ImagePlugin_Color::slotLut3D()
+{
+    loadTool(new Lut3DTool(this));
 }
 
 void ImagePlugin_Color::slotFilm()
