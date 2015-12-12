@@ -16,11 +16,13 @@ Database           : Fully integration of face recognition database with Mysql s
 Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.
 Database           : Mysql internal/remote server is now configurable with first run assistant.
 
-Batch Queue Manager: New BQM tool to convert RAW to DNG.
+Batch Queue Manager: Add a new tool to convert RAW files to DNG.
+Image Editor       : Add a new Lut3D tool.
 
 Image Editor       : Add a new option to import images from a digital scanner.
 Image Editor       : Add a new option to edit metadata.
 Image Editor       : Add a new option to edit geolocation.
+Image Editor       : Add a new Lut3D tool.
 
 Light Table        : Add a new option to import images from a digital scanner.
 Light Table        : Add a new option to edit metadata.
