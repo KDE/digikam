@@ -30,12 +30,14 @@ namespace Digikam
 {
 
 Lut3DContainer::Lut3DContainer()
-    : path(QString()), intensity(0)
+    : path(QString()),
+      intensity(0)
 {
 }
 
 Lut3DContainer::Lut3DContainer(const QString& _path, int _intensity)
-    : path(_path), intensity(_intensity)
+    : path(_path),
+      intensity(_intensity)
 {
 }
 
@@ -46,14 +48,14 @@ bool Lut3DContainer::operator==(const Lut3DContainer& other) const
 
 void Lut3DContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
 {
-    action.addParameter(prefix + QLatin1String("path"), path);
+    action.addParameter(prefix + QLatin1String("path"),      path);
     action.addParameter(prefix + QLatin1String("intensity"), intensity);
 }
 
 Lut3DContainer Lut3DContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
 {
     Lut3DContainer settings;
-    settings.path = action.parameter(prefix + QLatin1String("path"), settings.path);
+    settings.path      = action.parameter(prefix + QLatin1String("path"), settings.path);
     settings.intensity = action.parameter(prefix + QLatin1String("intensity"), settings.intensity);
 
     return settings;

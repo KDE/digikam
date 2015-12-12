@@ -51,7 +51,7 @@ Lut3DFilter::Lut3DFilter(DImg* const orgImage,
                          const Lut3DContainer& par,
                          QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("Lut3DFilter")),
-    m_intensity(par.intensity)
+      m_intensity(par.intensity)
 {
     initFilter();
 
@@ -75,9 +75,9 @@ void Lut3DFilter::filterImage()
 }
 
 #define Lut3DSetPixel(table, w, x, y, p) \
-    table[((y) * (w) + (x)) * 4 + 0] = qRed(p) * 65535 / 255; \
+    table[((y) * (w) + (x)) * 4 + 0] = qRed(p)   * 65535 / 255; \
     table[((y) * (w) + (x)) * 4 + 1] = qGreen(p) * 65535 / 255; \
-    table[((y) * (w) + (x)) * 4 + 2] = qBlue(p) * 65535 / 255;
+    table[((y) * (w) + (x)) * 4 + 2] = qBlue(p)  * 65535 / 255;
 
 void Lut3DFilter::loadLut3D(const QString& path)
 {
@@ -93,6 +93,7 @@ void Lut3DFilter::loadLut3D(const QString& path)
     else
     {
         QImage img(path);
+
         if (img.isNull())
         {
             qCDebug(DIGIKAM_DIMG_LOG) << "Format of " << path << " unknown!";
@@ -105,6 +106,7 @@ void Lut3DFilter::loadLut3D(const QString& path)
             int w = img.width();
 
             m_lutTableSize = int(pow(pow(w, 1 / 3.0), 2) + 0.1);
+
             if ((w / m_lutTableSize) * m_lutTableSize != w)
             {
                 qCDebug(DIGIKAM_DIMG_LOG) << "Format of " << path << " unknown (bad dimensions)!";
@@ -130,7 +132,7 @@ void Lut3DFilter::loadLut3D(const QString& path)
             int x;
             int xOff;
             int oz, y1, y2;
-            int iRow = 0, iCol;
+            int iRow        = 0, iCol;
             const int zSize = w / m_lutTableSize;
 
             for (oz = 0; oz < m_lutTableSize; oz++)
@@ -140,17 +142,20 @@ void Lut3DFilter::loadLut3D(const QString& path)
                 for (y1 = 0; y1 < zSize; y1++)
                 {
                     iCol = 0;
+
                     for (y2 = 0; y2 < zSize; y2++)
                     {
                         for (x = 0; x < m_lutTableSize; x++, iCol++)
                         {
                             QRgb p = img.pixel(iCol, iRow);
-                            Lut3DSetPixel(
-                                m_lutTable, m_lutTableSize * m_lutTableSize,
-                                xOff + x, y1 * zSize + y2, p
-                            );
+                            Lut3DSetPixel(m_lutTable,
+                                          m_lutTableSize * m_lutTableSize,
+                                          xOff + x,
+                                          y1 * zSize + y2,
+                                          p);
                         }
                     }
+
                     iRow++;
                 }
             }
@@ -160,8 +165,8 @@ void Lut3DFilter::loadLut3D(const QString& path)
             int x, y, w;
             // LUT (like Android's Gallery2 uses)
             m_lutTableSize = img.height();
-            m_lutTable = new quint16[img.width() * img.height() * 4];
-            w = img.width();
+            m_lutTable     = new quint16[img.width() * img.height() * 4];
+            w              = img.width();
 
             for (y = 0; y < m_lutTableSize; y++)
             {
@@ -182,9 +187,7 @@ void Lut3DFilter::loadLut3D(const QString& path)
 
 /* TODO: using liblcms would be fancier... */
 /* Tetrahedral interpolation, taken from AOSP Gallery2 app */
-static __inline__ int interp(
-    const quint16 *src, int p, int *off ,float dr, float dg, float db
-)
+static __inline__ int interp(const quint16* src, int p, int* off ,float dr, float dg, float db)
 {
     float fr00 = (src[p+off[0]])*(1-dr)+(src[p+off[1]])*dr;
     float fr01 = (src[p+off[2]])*(1-dr)+(src[p+off[3]])*dr;
@@ -212,18 +215,17 @@ static __inline__ int clamp(int from, int maxVal)
 }
 
 template<typename T>
-static void ImageFilterFx(
-    const quint16 *lutrgb, int lutTableSize,
-    T *rgb, uint start, uint end, int maxVal, int intensity
-)
+static void ImageFilterFx(const quint16* lutrgb, int lutTableSize,
+                          T* rgb, uint start, uint end, int maxVal, int intensity)
 {
-    int lutdim_r   = lutTableSize;
-    int lutdim_g   = lutTableSize;
-    int lutdim_b   = lutTableSize;
-    int STEP = 4;
+    int lutdim_r  = lutTableSize;
+    int lutdim_g  = lutTableSize;
+    int lutdim_b  = lutTableSize;
+    int STEP      = 4;
     const int RED = 2, GREEN = 1, BLUE = 0;
 
-    int off[8] =  {
+    int off[8] =
+    {
             0,
             STEP*1,
             STEP*lutdim_r,
@@ -243,21 +245,21 @@ static void ImageFilterFx(
 
     for (i = start; i < end; i++)
     {
-        int r = rgb[RED], rn;
-        int g = rgb[GREEN], gn;
-        int b = rgb[BLUE], bn;
+        int r      = rgb[RED], rn;
+        int g      = rgb[GREEN], gn;
+        int b      = rgb[BLUE], bn;
 
-        float fb = b*scale_B;
-        float fg = g*scale_G;
-        float fr = r*scale_R;
-        int lut_b = (int)fb;
-        int lut_g = (int)fg;
-        int lut_r = (int)fr;
-        int p = lut_r+lut_b*lutdim_r+lut_g*lutdim_r*lutdim_b;
-        p*=STEP;
-        float dr = fr-lut_r;
-        float dg = fg-lut_g;
-        float db = fb-lut_b;
+        float fb   = b*scale_B;
+        float fg   = g*scale_G;
+        float fr   = r*scale_R;
+        int lut_b  = (int)fb;
+        int lut_g  = (int)fg;
+        int lut_r  = (int)fr;
+        int p      = lut_r+lut_b*lutdim_r+lut_g*lutdim_r*lutdim_b;
+        p         *= STEP;
+        float dr   = fr-lut_r;
+        float dg   = fg-lut_g;
+        float db   = fb-lut_b;
         rn         = clamp(interp(lutrgb,p  ,off,dr,dg,db), maxVal);
         gn         = clamp(interp(lutrgb,p+1,off,dr,dg,db), maxVal);
         bn         = clamp(interp(lutrgb,p+2,off,dr,dg,db), maxVal);
@@ -266,7 +268,7 @@ static void ImageFilterFx(
         rgb[GREEN] = (T)(((100-intensity) * g + intensity * gn) / 100);
         rgb[BLUE]  = (T)(((100-intensity) * b + intensity * bn) / 100);
 
-        rgb += 4;
+        rgb       += 4;
     }
 }
 
@@ -280,7 +282,7 @@ void Lut3DFilter::applyLut3D()
     if (!m_lutTable)
         return;
 
-    maxI = m_orgImage.width() * m_orgImage.height();
+    maxI  = m_orgImage.width() * m_orgImage.height();
     stepI = maxI / steps;
 
     for (progress = 0, i = 0;
@@ -289,19 +291,15 @@ void Lut3DFilter::applyLut3D()
     {
         if (!m_orgImage.sixteenBit())
         {
-            ImageFilterFx(
-                m_lutTable, m_lutTableSize, m_orgImage.bits(),
-                i, min(i + stepI, maxI),
-                255, m_intensity
-            );
+            ImageFilterFx(m_lutTable, m_lutTableSize, m_orgImage.bits(),
+                          i, min(i + stepI, maxI),
+                          255, m_intensity);
         }
         else
         {
-            ImageFilterFx(
-                m_lutTable, m_lutTableSize, reinterpret_cast<unsigned short*>(m_orgImage.bits()),
-                i, min(i + stepI, maxI),
-                65535, m_intensity
-            );
+            ImageFilterFx(m_lutTable, m_lutTableSize, reinterpret_cast<unsigned short*>(m_orgImage.bits()),
+                          i, min(i + stepI, maxI),
+                          65535, m_intensity);
         }
 
         postProgress(progress);

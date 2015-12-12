@@ -41,6 +41,7 @@ class DIGIKAM_EXPORT Lut3DFilter : public DImgThreadedFilter
 {
 
 public:
+
     explicit Lut3DFilter(QObject* const parent = 0);
     Lut3DFilter(DImg* const orgImage, const Lut3DContainer& par, QObject* const parent=0);
     virtual ~Lut3DFilter();
@@ -82,9 +83,10 @@ private:
     void initToIdentity();
 
 private:
-    quint16 *m_lutTable; // RGBA, A is unused
-    int m_lutTableSize; // all axis are of this size
-    int m_intensity;
+
+    quint16* m_lutTable;     // RGBA, A is unused
+    int      m_lutTableSize; // all axis are of this size
+    int      m_intensity;
 };
 
 }  // namespace Digikam
