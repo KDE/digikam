@@ -84,9 +84,9 @@ private:
 
 private:
 
-    quint16* m_lutTable;     // RGBA, A is unused
-    int      m_lutTableSize; // all axis are of this size
-    int      m_intensity;
+    Lut3DContainer m_settings;
+    quint16*       m_lutTable;     // RGBA, A is unused
+    int            m_lutTableSize; // all axis are of this size
 };
 
 }  // namespace Digikam

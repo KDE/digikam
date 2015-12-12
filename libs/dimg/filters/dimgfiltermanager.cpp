@@ -83,6 +83,7 @@
 #include "unsharpmaskfilter.h"
 #include "wbfilter.h"
 #include "filmfilter_p.h"
+#include "lut3dfilter.h"
 
 #ifdef HAVE_LIBLQR_1
 #include "contentawarefilter.h"
@@ -165,6 +166,7 @@ void DImgFilterManager::Private::setupCoreGenerators()
 #endif // HAVE_LENSFUN
             << ImgFilterPtr(new BasicDImgFilterGenerator<LevelsFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<LocalContrastFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<Lut3DFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<MixerFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<NormalizeFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<NRFilter>())
@@ -212,6 +214,7 @@ void DImgFilterManager::Private::setupFilterIcons()
     //filterIcons.insert(QLatin1String("digikam:LensFunFilter"),        QLatin1String(""));         //FIXME
     filterIcons.insert(QLatin1String("digikam:LevelsFilter"),         QLatin1String("adjustlevels"));
     filterIcons.insert(QLatin1String("digikam:LocalContrastFilter"),  QLatin1String("contrast"));
+    filterIcons.insert(QLatin1String("digikam:Lut3DFilter"),          QLatin1String("draw-cuboid"));
     filterIcons.insert(QLatin1String("digikam:MixerFilter"),          QLatin1String("channelmixer"));
     filterIcons.insert(QLatin1String("digikam:NoiseReductionFilter"), QLatin1String("noisereduction"));
     filterIcons.insert(QLatin1String("digikam:NormalizeFilter"),      QLatin1String("autocorrection"));

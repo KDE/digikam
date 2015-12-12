@@ -44,23 +44,21 @@ namespace Digikam
 Lut3DFilter::Lut3DFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       m_lutTable(0),
-      m_lutTableSize(0),
-      m_intensity(100)
+      m_lutTableSize(0)
 {
     initFilter();
 }
 
-Lut3DFilter::Lut3DFilter(DImg* const orgImage,
-                         const Lut3DContainer& par,
-                         QObject* const parent)
+Lut3DFilter::Lut3DFilter(DImg* const orgImage, const Lut3DContainer& settings, QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("Lut3DFilter")),
       m_lutTable(0),
-      m_lutTableSize(0),
-      m_intensity(par.intensity)
+      m_lutTableSize(0)
 {
+    m_settings = settings;
+
     initFilter();
 
-    loadLut3D(par.path);
+    loadLut3D(m_settings.path);
 }
 
 Lut3DFilter::~Lut3DFilter()
@@ -298,13 +296,13 @@ void Lut3DFilter::applyLut3D()
         {
             ImageFilterFx(m_lutTable, m_lutTableSize, m_orgImage.bits(),
                           i, min(i + stepI, maxI),
-                          255, m_intensity);
+                          255, m_settings.intensity);
         }
         else
         {
             ImageFilterFx(m_lutTable, m_lutTableSize, reinterpret_cast<unsigned short*>(m_orgImage.bits()),
                           i, min(i + stepI, maxI),
-                          65535, m_intensity);
+                          65535, m_settings.intensity);
         }
 
         postProgress(progress);
@@ -313,12 +311,14 @@ void Lut3DFilter::applyLut3D()
 
 FilterAction Lut3DFilter::filterAction()
 {
-    return DefaultFilterAction<Lut3DFilter>();
+    DefaultFilterAction<Lut3DFilter> action;
+    m_settings.writeToFilterAction(action);
+    return action;
 }
 
-void Lut3DFilter::readParameters(const FilterAction& /*action*/)
+void Lut3DFilter::readParameters(const FilterAction& action)
 {
-    return;
+    m_settings = Lut3DContainer::fromFilterAction(action);
 }
 
 }  // namespace Digikam
