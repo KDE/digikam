@@ -56,6 +56,7 @@ public:
 
     Private() :
         previewWidget(0),
+        settingsView(0),
         gboxSettings(0)
     {
     }
@@ -157,7 +158,7 @@ void Lut3DTool::preparePreview()
 
     ImageIface iface;
 
-    DImg preview = d->previewWidget->getOriginalRegionImage(true);
+    DImg preview            = d->previewWidget->getOriginalRegionImage(true);
     applyCorrection(&preview, settings);
 }
 
