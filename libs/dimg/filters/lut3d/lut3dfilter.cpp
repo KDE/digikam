@@ -42,7 +42,10 @@ namespace Digikam
 {
 
 Lut3DFilter::Lut3DFilter(QObject* const parent)
-    : DImgThreadedFilter(parent)
+    : DImgThreadedFilter(parent),
+      m_lutTable(0),
+      m_lutTableSize(0),
+      m_intensity(100)
 {
     initFilter();
 }
@@ -51,6 +54,8 @@ Lut3DFilter::Lut3DFilter(DImg* const orgImage,
                          const Lut3DContainer& par,
                          QObject* const parent)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("Lut3DFilter")),
+      m_lutTable(0),
+      m_lutTableSize(0),
       m_intensity(par.intensity)
 {
     initFilter();
@@ -60,7 +65,7 @@ Lut3DFilter::Lut3DFilter(DImg* const orgImage,
 
 Lut3DFilter::~Lut3DFilter()
 {
-    if (m_lutTable != NULL)
+    if (m_lutTable)
     {
         delete [] m_lutTable;
     }
