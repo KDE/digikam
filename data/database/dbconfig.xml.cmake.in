@@ -1129,16 +1129,6 @@
                             AS
                             SELECT id, pid
                             FROM Tags;</statement>
-            <statement mode="plain">DROP TABLE IF EXISTS `TagsTree2`;</statement>
-            <statement mode="plain">CREATE TABLE `TagsTree2` (
-                            `id` int(11) NOT NULL AUTO_INCREMENT,
-                            `pid` int(11) DEFAULT NULL,
-                            `lft` int(11) DEFAULT NULL,
-                            `rgt` int(11) DEFAULT NULL,
-                            PRIMARY KEY (`id`),
-                            CONSTRAINT `TT2_id` FOREIGN KEY (`id`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-                            CONSTRAINT `TT2_pid` FOREIGN KEY (`pid`) REFERENCES `Tags` (`id`) ON DELETE CASCADE ON UPDATE SET NULL
-                          ) ENGINE=InnoDB;</statement>
             </dbaction>
 
             <!-- Mysql Core Indexes -->
@@ -1190,12 +1180,14 @@
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_index','imageid, tagid');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_imageid_index','imageid');</statement>
                 <statement mode="plain">CALL create_index_if_not_exists('ImageTagProperties','imagetagproperties_tagid_index','tagid');</statement>
-                <statement mode="plain">CALL create_index_if_not_exists('TagsTree2','tagstree_left_index','lft');</statement>
             </dbaction>
 
             <!-- Mysql Core Triggers -->
 
             <dbaction name="CreateTriggers" mode="transaction">
+<!-- Note move_tagstree does not exist for mysql
+            <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
+-->
 
             <statement mode="plain">SELECT 
                     @minLeft := IF(ISNULL(MIN(lft)), 1, MIN(lft)-1),
@@ -1210,93 +1202,6 @@
                 (0, -1, '_Digikam_root_tag_', NULL, NULL, @minLeft, @maxRight )
             </statement>
             <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
-
-            <statement mode="plain">
-                DROP VIEW IF EXISTS TagsTreeOrphans;
-            </statement>
-
-            <statement mode="plain">
-                CREATE VIEW TagsTreeOrphans AS
-                  SELECT id, pid
-                    FROM TagsTree2
-                    WHERE TagsTree2.lft IS NULL
-                      AND TagsTree2.rgt IS NULL
-                      AND TagsTree2.pid in (SELECT tt2a.id FROM TagsTree2 AS tt2a
-                                            WHERE tt2a.lft IS NOT NULL AND tt2a.rgt IS NOT NULL);
-            </statement>
-
-            <statement mode="plain">
-                DROP PROCEDURE IF EXISTS updateOneTag;
-            </statement>
-
-            <statement mode="plain">
-                CREATE PROCEDURE updateOneTag(t_id INT, t_pid INT)
-                BEGIN
-                  SELECT CASE WHEN lft IS NULL THEN 0 ELSE lft END
-                  INTO @myLeft
-                  FROM TagsTree2 WHERE id = t_pid;
-                  UPDATE TagsTree2 SET rgt = rgt + 2 WHERE rgt > @myLeft;
-                  UPDATE TagsTree2 SET lft = lft + 2 WHERE lft > @myLeft;
-                  UPDATE TagsTree2 SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE id = t_id;
-                END;
-            </statement>
-
-            <statement mode="plain">
-                DROP PROCEDURE IF EXISTS updateTagsEntries;
-            </statement>
-
-            <statement mode="plain">
-                CREATE PROCEDURE updateTagsEntries()
-                BEGIN
-                  SELECT COUNT(*) INTO @max_loop FROM TagsTree2;
-                  WHILE (((SELECT COUNT(*) FROM TagsTreeOrphans) > 0) AND (@max_loop > 0))
-                  DO
-                    SELECT id, pid
-                    INTO @tt_id, @tt_pid
-                        FROM TagsTreeOrphans
-                        LIMIT 1;
-                    CALL updateOneTag(@tt_id, @tt_pid);
-                        SET @max_loop = @max_loop - 1;
-                  END WHILE;
-                END;
-            </statement>
-
-            <statement mode="plain">
-                DROP PROCEDURE IF EXISTS updateTagsTree;
-            </statement>
-
-            <statement mode="plain">
-                CREATE PROCEDURE updateTagsTree()
-                BEGIN
-                  DELETE FROM TagsTree2
-                    WHERE pid != (SELECT pid FROM Tags WHERE Tags.id = TagsTree2.id) AND (pid IS NOT NULL);
-                  INSERT INTO TagsTree2 (id, pid)
-                    SELECT Tags.id, Tags.pid
-                        FROM Tags
-                    WHERE Tags.id NOT IN (Select TagsTree2.id from TagsTree2) AND (Tags.id != 0);
-                  CALL updateTagsEntries;
-                END;
-            </statement>
-
-            <statement mode="plain">
-                DROP PROCEDURE IF EXISTS rebuildTagsTree;
-            </statement>
-
-            <statement mode="plain">
-                CREATE PROCEDURE rebuildTagsTree()
-                BEGIN
-                  DELETE FROM TagsTree2;
-                  SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
-                  INSERT INTO TagsTree2 (id, pid, lft, rgt) values (0, null, 1, 2);
-                  SET SQL_MODE=@OLD_SQL_MODE;
-                  CALL updateTagsTree;
-                END;
-            </statement>
-
-            <statement mode="plain">
-                CALL rebuildTagsTree;
-            </statement>
-
             </dbaction>
 
             <dbaction name="checkIfDatabaseExists">
@@ -1335,23 +1240,24 @@
             </dbaction>
 
             <dbaction name="InsertTag" mode="transaction">
+                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :tagPID;</statement>
                 <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
                 <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
                 <statement mode="query">INSERT INTO Tags(name, pid, lft, rgt) VALUES(:tagname, :tagPID, @myLeft + 1, @myLeft + 2);</statement>
-                <statement mode="query">CALL updateTagsTree;</statement>
+                <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
             <dbaction name="DeleteTag" mode="transaction">
+            <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
             <statement mode="query">SELECT @myLeft := lft, @myRight := rgt, @myWidth := rgt - lft + 1
                                     FROM Tags
                                     WHERE id = :tagID;</statement>
             <statement mode="query">DELETE FROM Tags WHERE lft BETWEEN @myLeft AND @myRight;</statement>
             <statement mode="query">UPDATE Tags SET rgt = rgt - @myWidth WHERE rgt > @myRight;</statement>
             <statement mode="query">UPDATE Tags SET lft = lft - @myWidth WHERE lft > @myRight;</statement>
-            <statement mode="query">CALL updateTagsTree;</statement>
-            </dbaction>
+            <statement mode="plain">UNLOCK TABLES;</statement></dbaction>
 
             <dbaction name="deleteAlbumRoot" mode="transaction">
                 <statement mode="query">SELECT @albumID:=id FROM Albums WHERE albumRoot=:albumRoot;</statement>
@@ -1381,8 +1287,8 @@ FROM (
   JOIN ImageTags AS ita
     ON ita.imageid = img.id
 ) JOIN (
-  TagsTree2 As tp
-  JOIN TagsTree2 As tc
+  Tags As tp
+  JOIN Tags As tc
     ON tc.lft BETWEEN tp.lft AND tp.rgt
 )
 ON tc.id = ita.tagID
@@ -1415,8 +1321,8 @@ FROM (
   JOIN ImageTags AS ita
     ON ita.imageid = img.id
 ) JOIN (
-  TagsTree2 As tp
-  JOIN TagsTree2 As tc
+  Tags As tp
+  JOIN Tags As tc
     ON tc.lft BETWEEN tp.lft AND tp.rgt
 )
 ON tc.id = ita.tagID
@@ -1451,8 +1357,8 @@ FROM (
   JOIN ImageTags AS ita
     ON ita.imageid = img.id
 ) JOIN (
-  TagsTree2 As tp
-  JOIN TagsTree2 As tc
+  Tags As tp
+  JOIN Tags As tc
     ON tc.lft BETWEEN tp.lft AND tp.rgt
 )
 ON tc.id = ita.tagID
@@ -1775,12 +1681,13 @@ ORDER BY inf.rating DESC, img.name ASC
                 SELECT  id, IF(Tags.pid = 0, -1, Tags.pid) AS pid, name, CASE WHEN icon = 0 THEN NULL ELSE icon END AS icon, iconkde FROM Tags WHERE id != 0;
             </statement></dbaction>
             <dbaction name="Migrate_Write_Tags" mode="transaction">
+                <statement mode="plain">LOCK TABLE Tags WRITE;</statement>
                 <statement mode="query">SELECT @myLeft := lft FROM Tags WHERE id = :pid;</statement>
                 <statement mode="query">SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);</statement>
                 <statement mode="query">UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;</statement>
                 <statement mode="query">UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;</statement>
                 <statement mode="query">INSERT INTO Tags(id, pid, name, icon, iconkde, lft, rgt) VALUES(:id, :pid, :name, :icon, :iconkde, @myLeft + 1, @myLeft + 2);</statement>
-                <statement mode="query">CALL updateTagsTree;</statement>
+                <statement mode="plain">UNLOCK TABLES;</statement>
             </dbaction>
 
             <dbaction name="Migrate_Read_ImageTags"><statement mode="query">
