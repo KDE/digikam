@@ -318,11 +318,13 @@ TagInfo CoreDB::getTagInfo(int tagId)
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id, pid, name, icon, iconkde WHERE id=? FROM Tags;"), tagId, &values);
 
-    for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
-    {
-        TagInfo info;
+    TagInfo info;
 
-        info.id     = (*it).toInt();
+    if (!values.isEmpty() && values.size() == 5)
+    {
+        QList<QVariant>::const_iterator it = values.constBegin();
+
+        info.id = (*it).toInt();
         ++it;
         info.pid    = (*it).toInt();
         ++it;
@@ -332,11 +334,9 @@ TagInfo CoreDB::getTagInfo(int tagId)
         ++it;
         info.icon   = (*it).toString();
         ++it;
-
-        return info;
     }
 
-    return TagInfo();
+    return info;
 }
 
 SearchInfo::List CoreDB::scanSearches()
