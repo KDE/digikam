@@ -881,17 +881,45 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
                 sql += QString::fromUtf8(" (Images.id NOT IN ");
             }
 
-            sql += QString::fromUtf8("   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                   "    WHERE ");
+            CoreDbAccess access;
+            bool isSQLite = access.parameters().isSQLite();
+
+            if (isSQLite)
+            {
+                sql += QString::fromUtf8("   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                       "    WHERE ");
+            }
+            else
+            {
+                sql += QString::fromUtf8("   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree2 ON ImageTags.tagid = TagsTree2.id "
+                       "    WHERE ");
+            }
 
             bool firstCondition = true;
+
+            if (!isSQLite)
+            {
+                sql += QString::fromUtf8(" TagsTree2.id IN (SELECT ttt.id FROM TagsTree2 AS ttt WHERE ");
+            }
 
             foreach(int tagID, ids)
             {
                 addSqlOperator(sql, SearchXml::Or, firstCondition);
                 firstCondition = false;
-                sql += QString::fromUtf8(" (TagsTree.pid = ? OR ImageTags.tagid = ? ) ");
+                if (isSQLite)
+                {
+                    sql += QString::fromUtf8(" (TagsTree.pid = ? OR ImageTags.tagid = ? ) ");
+                }
+                else
+                {
+                    sql += QString::fromUtf8(" (ttt.lft >= (SELECT ttl.lft FROM TagsTree2 AS ttl WHERE ttl.id = ?) AND rgt <= (SELECT ttr.rgt FROM TagsTree2 AS ttr WHERE ttr.id = ?)) ");
+                }
                 *boundValues << tagID << tagID;
+            }
+
+            if (!isSQLite)
+            {
+                sql += QString::fromUtf8(" )");
             }
 
             sql += QString::fromUtf8(" )) ");
@@ -919,19 +947,59 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         }
         else if (relation == SearchXml::InTree)
         {
-            sql += QString::fromUtf8(" (Images.id IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
-                   "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ");
-            *boundValues << tagname << tagname;
+            CoreDbAccess access;
+            bool isSQLite = access.parameters().isSQLite();
+            if (isSQLite)
+            {
+                sql += QString::fromUtf8(" (Images.id IN "
+                       "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                       "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                       "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ");
+                *boundValues << tagname << tagname;
+            }
+            else
+            {
+                sql += QString::fromUtf8(" (Images.id IN "
+                       "   (SELECT ImageTags.imageid FROM ImageTags "
+                       "    WHERE ImageTags.tagid IN "
+                       "      (SELECT tt2b.id "
+                       "       FROM "
+                       "       (SELECT tt2a.lft, tt2a.rgt "
+                       "        FROM TagsTree2 AS tt2a "
+                       "        WHERE tt2a.id IN (SELECT id FROM Tags WHERE name LIKE ?)) AS src, "
+                       "       TagsTree2 as tt2b "
+                       "       WHERE "
+                       "       tt2b.lft >= src.lft AND tt2b.lft <= src.rgt)");
+                *boundValues << tagname;
+            }
         }
         else if (relation == SearchXml::NotInTree)
         {
-            sql += QString::fromUtf8(" (Images.id NOT IN "
-                   "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
-                   "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
-                   "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ");
-            *boundValues << tagname << tagname;
+            CoreDbAccess access;
+            bool isSQLite = access.parameters().isSQLite();
+            if (isSQLite)
+            {
+                sql += QString::fromUtf8(" (Images.id NOT IN "
+                       "   (SELECT ImageTags.imageid FROM ImageTags INNER JOIN TagsTree ON ImageTags.tagid = TagsTree.id "
+                       "    WHERE TagsTree.pid = (SELECT id FROM Tags WHERE name LIKE ?) "
+                       "    or ImageTags.tagid = (SELECT id FROM Tags WHERE name LIKE ?) )) ");
+                *boundValues << tagname << tagname;
+            }
+            else
+            {
+                sql += QString::fromUtf8(" (Images.id NOT IN "
+                       "   (SELECT ImageTags.imageid FROM ImageTags "
+                       "    WHERE ImageTags.tagid IN "
+                       "      (SELECT tt2b.id "
+                       "       FROM "
+                       "       (SELECT tt2a.lft, tt2a.rgt "
+                       "        FROM TagsTree2 AS tt2a "
+                       "        WHERE tt2a.id IN (SELECT id FROM Tags WHERE name LIKE ?)) AS src, "
+                       "       TagsTree2 as tt2b "
+                       "       WHERE "
+                       "       tt2b.lft >= src.lft AND tt2b.lft <= src.rgt)");
+                *boundValues << tagname;
+            }
         }
     }
     else if (name == QLatin1String("notag"))

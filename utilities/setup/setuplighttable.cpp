@@ -55,7 +55,8 @@ public:
         autoLoadOnRightPanel(0),
         clearOnClose(0),
         fullScreenSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configAutoSyncPreviewEntry;

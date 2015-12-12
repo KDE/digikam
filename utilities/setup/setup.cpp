@@ -452,7 +452,7 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
 
 bool Setup::execMetadataFilters(QWidget* const parent, int tab)
 {
-    QPointer<Setup> setup = new Setup(parent);
+    QPointer<Setup> setup       = new Setup(parent);
     setup->showPage(MetadataPage);
     setup->setFaceType(Plain);
 

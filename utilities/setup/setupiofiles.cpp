@@ -63,8 +63,8 @@ public:
 #endif // HAVE_JASPER
         PGFOptions(0),
         showImageSettingsDialog(0)
-    {}
-
+    {
+    }
 
     QWidget* createGroupBox(QWidget* const w) const
     {
@@ -87,7 +87,7 @@ public:
     static const QString configPGFCompressionEntry;
     static const QString configPGFLossLessEntry;
     static const QString configShowImageSettingsDialog;
-    
+
     JPEGSettings*        JPEGOptions;
     PNGSettings*         PNGOptions;
     TIFFSettings*        TIFFOptions;
@@ -95,7 +95,7 @@ public:
     JP2KSettings*        JPEG2000Options;
 #endif // HAVE_JASPER
     PGFSettings*         PGFOptions;
-    
+
     QCheckBox*           showImageSettingsDialog;
 };
 

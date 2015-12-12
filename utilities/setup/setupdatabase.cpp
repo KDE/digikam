@@ -153,7 +153,7 @@ void SetupDatabase::applySettings()
     {
         return;
     }
-        
+
     switch(d->databaseWidget->databaseType())
     {
         case DatabaseSettingsWidget::SQlite:
@@ -164,6 +164,7 @@ void SetupDatabase::applySettings()
 
             if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
             {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to SQlite DB config...";
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
                 DatabaseServerStarter::stopServerManagerProcess();
@@ -178,6 +179,7 @@ void SetupDatabase::applySettings()
 
             if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
             {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql Internal DB config...";
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
                 DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
@@ -186,9 +188,13 @@ void SetupDatabase::applySettings()
         }
         default: // DatabaseSettingsWidget::MysqlServer
         {
-            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
-            settings->saveSettings();
-            DatabaseServerStarter::stopServerManagerProcess();
+            if (d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql server DB config...";
+                settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+                settings->saveSettings();
+                DatabaseServerStarter::stopServerManagerProcess();
+            }
             break;
         }
     }
