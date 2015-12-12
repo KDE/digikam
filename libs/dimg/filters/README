@@ -10,6 +10,7 @@ hsl           : Hue / Saturation / Lightness.
 icc           : Color Management.
 levels        : Histogram Levels Correction.
 lens          : Misc lens correction filters.
+lut3d         : 3D LUT color filters.
 lc            : Local Contrast (LDR Tonemapping).
 nr            : Wavelets Noise Reduction.
 sharp         : Sharp / Unsharp Mask / Refocus
