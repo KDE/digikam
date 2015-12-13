@@ -7,7 +7,7 @@
  * Description : user script batch tool.
  *
  * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2014 by Hubert Law <hhclaw dot eb at gmail dot com>
+ * Copyright (C) 2014      by Hubert Law <hhclaw dot eb at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,7 +55,7 @@ public:
         Input = 0,
         JPEG,
         PNG,
-        TIFF  
+        TIFF
     };
 
 public:
@@ -141,8 +141,8 @@ void UserScript::slotAssignSettings2Widget()
     d->changeSettings = false;
     d->comboBox->setCurrentIndex(settings()[QLatin1String("Output filetype")].toInt());
 
-    QString txt = settings()[QLatin1String("Script")].toString();
-    
+    QString txt       = settings()[QLatin1String("Script")].toString();
+
     if (d->textEdit->toPlainText() != txt)
     {
         d->textEdit->setPlainText(txt);
