@@ -227,6 +227,8 @@ void Lut3DSettings::findLuts()
             }
         }
     }
+
+    d->luts.sort();
 }
 
 }  // namespace Digikam
