@@ -79,21 +79,21 @@ target_link_libraries(databasefieldstest
 # add_executable(databasetagstest ${databasetagstest_srcs})
 # add_test(databasetagstest databasetagstest)
 # ecm_mark_as_test(databasetagstest)
-# 
+#
 # target_link_libraries(databasetagstest
-# 
+#
 #                       digikamgui
-# 
+#
 #                       libdng
-# 
+#
 #                       Qt5::DBus
 #                       Qt5::Core
 #                       Qt5::Gui
 #                       Qt5::Test
 #                       Qt5::Sql
-# 
+#
 #                       KF5::I18n
 #                       KF5::XmlGui
 #                       KF5::KIOCore
 #                       KF5::Notifications
-)
+#)
