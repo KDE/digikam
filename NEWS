@@ -92,4 +92,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 056 ==> 220402 - Add a new BQM tool to call an external program [patch].
 057 ==> 339801 - Thumbnails are not displayed properly on 10-bit/channel monitors.
 058 ==> 353789 - Add new tool to apply Lut3D on image [patch].
-059 ==> 
+059 ==> 356672 - digikam 4.14.0 failed to build against lensfun 0.3.2.
+060 ==> 
+
