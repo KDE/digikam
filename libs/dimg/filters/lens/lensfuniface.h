@@ -24,10 +24,7 @@
 
 // Lib LensFun includes
 
-extern "C"
-{
 #include <lensfun.h>
-}
 
 // Local includes
 
