@@ -52,13 +52,11 @@ public:
 
     Private() :
         stack(0),
-        effectTypeLabel(0),
-        levelLabel(0),
-        iterationLabel(0),
         effectType(0),
         levelInput(0),
         iterationInput(0),
         intensityInput(0),
+        iterationLabel(0),
         correctionTools(0)
     {}
 
@@ -70,15 +68,13 @@ public:
 
     QStackedWidget* stack;
 
-    QLabel*         effectTypeLabel;
-    QLabel*         levelLabel;
-    QLabel*         iterationLabel;
-
     DComboBox*      effectType;
 
     DIntNumInput*   levelInput;
     DIntNumInput*   iterationInput;
     DIntNumInput*   intensityInput;
+
+    QLabel*         iterationLabel;
 
     PreviewList*    correctionTools;
 
@@ -115,9 +111,9 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QGridLayout* const grid = new QGridLayout(parent);
+    QGridLayout* const grid       = new QGridLayout(parent);
 
-    d->effectTypeLabel      = new QLabel(i18n("Type:"), parent);
+    QLabel* const effectTypeLabel = new QLabel(i18n("Type:"), parent);
     d->effectType           = new DComboBox(parent);
     d->effectType->addItem(i18n("Solarize"));
     d->effectType->addItem(i18n("Vivid"));
@@ -136,7 +132,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
 
     d->stack = new QStackedWidget(parent);
 
-    grid->addWidget(d->effectTypeLabel,                      0, 0, 1, 1);
+    grid->addWidget(effectTypeLabel,                         0, 0, 1, 1);
     grid->addWidget(d->effectType,                           1, 0, 1, 1);
     grid->addWidget(new DLineWidget(Qt::Horizontal, parent), 2, 0, 1, 1);
     grid->addWidget(d->stack,                                3, 0, 1, 1);
@@ -149,20 +145,20 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
     QWidget* const solarizeSettings = new QWidget(d->stack);
     QGridLayout* const grid1        = new QGridLayout(solarizeSettings);
 
-    d->levelLabel = new QLabel(i18nc("level of the effect", "Level:"), solarizeSettings);
+    QLabel* const levelLabel        = new QLabel(i18nc("level of the effect", "Level:"), solarizeSettings);
     d->levelInput = new DIntNumInput(solarizeSettings);
     d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setDefaultValue(0);
+    d->levelInput->setDefaultValue(3);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
 
     d->iterationLabel               = new QLabel(i18n("Iteration:"), solarizeSettings);
     d->iterationInput               = new DIntNumInput(solarizeSettings);
     d->iterationInput->setRange(0, 100, 1);
-    d->iterationInput->setDefaultValue(0);
+    d->iterationInput->setDefaultValue(2);
     d->iterationInput->setWhatsThis(i18n("This value controls the number of iterations "
                                          "to use with the Neon and Find Edges effects."));
 
-    grid1->addWidget(d->levelLabel,     0, 0, 1, 1);
+    grid1->addWidget(levelLabel,        0, 0, 1, 1);
     grid1->addWidget(d->levelInput,     1, 0, 1, 1);
     grid1->addWidget(d->iterationLabel, 2, 0, 1, 1);
     grid1->addWidget(d->iterationInput, 3, 0, 1, 1);
@@ -236,21 +232,17 @@ void ColorFXSettings::startPreviewFilters()
 
 void ColorFXSettings::slotEffectTypeChanged(int type)
 {
-    d->levelInput->setEnabled(true);
-    d->levelLabel->setEnabled(true);
-
-    d->levelInput->blockSignals(true);
     d->iterationInput->blockSignals(true);
-    d->levelInput->setRange(0, 100, 1);
-    d->levelInput->setValue(25);
+    d->levelInput->blockSignals(true);
 
-    d->stack->setCurrentWidget(d->stack->widget(type == ColorFXFilter::Lut3D ? 1 : 0));
+    int w = (type == ColorFXFilter::Lut3D ? 1 : 0);
+    d->stack->setCurrentWidget(d->stack->widget(w));
 
     switch (type)
     {
         case ColorFXFilter::Solarize:
             d->levelInput->setRange(0, 100, 1);
-            d->levelInput->setValue(0);
+            d->levelInput->setValue(20);
             d->iterationInput->setEnabled(false);
             d->iterationLabel->setEnabled(false);
             break;
@@ -273,12 +265,11 @@ void ColorFXSettings::slotEffectTypeChanged(int type)
             break;
     }
 
-    d->levelInput->blockSignals(false);
     d->iterationInput->blockSignals(false);
+    d->levelInput->blockSignals(false);
 
     emit signalSettingsChanged();
 }
-
 
 ColorFXContainer ColorFXSettings::settings() const
 {
@@ -349,41 +340,6 @@ void ColorFXSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configIterationAdjustmentEntry, prm.iterations);
     group.writeEntry(d->configLut3DIntensityEntry,      prm.intensity);
     group.writeEntry(d->configLut3DFilterEntry,         prm.path);
-}
-
-void ColorFXSettings::enable()
-{
-    d->effectTypeLabel->setEnabled(true);
-    d->effectType->setEnabled(true);
-    d->levelInput->setEnabled(true);
-    d->levelLabel->setEnabled(true);
-    d->iterationInput->setEnabled(true);
-    d->iterationLabel->setEnabled(true);
-
-    switch (d->effectType->currentIndex())
-    {
-        case ColorFXFilter::Solarize:
-        case ColorFXFilter::Vivid:
-            d->iterationInput->setEnabled(false);
-            d->iterationLabel->setEnabled(false);
-            break;
-
-        case ColorFXFilter::Neon:
-        case ColorFXFilter::FindEdges:
-            d->iterationInput->setEnabled(true);
-            d->iterationLabel->setEnabled(true);
-            break;
-    }
-}
-
-void ColorFXSettings::disable()
-{
-    d->effectTypeLabel->setEnabled(false);
-    d->effectType->setEnabled(false);
-    d->levelInput->setEnabled(false);
-    d->levelLabel->setEnabled(false);
-    d->iterationInput->setEnabled(false);
-    d->iterationLabel->setEnabled(false);
 }
 
 void ColorFXSettings::findLuts()

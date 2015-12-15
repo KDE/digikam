@@ -58,12 +58,8 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    void enable();
-    void disable();
-
-    void findLuts();
-
     void startPreviewFilters();
+    void findLuts();
 
 Q_SIGNALS:
 

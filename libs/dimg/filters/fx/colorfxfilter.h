@@ -39,7 +39,6 @@
 namespace Digikam
 {
 
-
 class DIGIKAM_EXPORT ColorFXContainer
 {
 

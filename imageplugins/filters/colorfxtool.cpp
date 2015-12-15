@@ -177,8 +177,6 @@ void ColorFxTool::slotColorSelectedFromTarget(const DColor& color)
 
 void ColorFxTool::preparePreview()
 {
-    d->settingsView->disable();
-
     ColorFXContainer prm    = d->settingsView->settings();
     bool useDownscaledImage = true;
 
@@ -206,7 +204,6 @@ void ColorFxTool::setPreviewImage()
 
 void ColorFxTool::prepareFinal()
 {
-    d->settingsView->disable();
     ColorFXContainer prm = d->settingsView->settings();
 
     ImageIface iface;
@@ -244,11 +241,6 @@ void ColorFxTool::setFinalImage()
     }
 
     iface.setOriginal(name, filter()->filterAction(), filter()->getTargetImage());
-}
-
-void ColorFxTool::renderingFinished()
-{
-    d->settingsView->enable();
 }
 
 }  // namespace DigikamFxFiltersImagePlugin

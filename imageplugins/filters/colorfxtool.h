@@ -57,7 +57,6 @@ private:
     void prepareFinal();
     void setPreviewImage();
     void setFinalImage();
-    void renderingFinished();
 
 private Q_SLOTS:
 
