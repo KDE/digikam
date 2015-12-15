@@ -21,7 +21,6 @@ set(libqueuemanager_SRCS
     basetools/color/hslcorrection.cpp
     basetools/color/iccconvert.cpp
     basetools/color/invert.cpp
-    basetools/color/lut3d.cpp
     basetools/color/whitebalance.cpp
     basetools/convert/convert2jpeg.cpp
     basetools/convert/convert2pgf.cpp

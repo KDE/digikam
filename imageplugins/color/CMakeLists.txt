@@ -17,7 +17,6 @@ set(digikamimageplugin_color_PART_SRCS autocorrectiontool.cpp
                                        adjustlevelstool.cpp
                                        imageplugin_color.cpp
                                        filmtool.cpp
-                                       lut3dtool.cpp
 )
 
 

@@ -108,9 +108,6 @@ set(libdimgfilters_SRCS
     filters/lens/antivignettingsettings.cpp
     filters/lens/lensdistortionfilter.cpp
     filters/lens/pixelaccess.cpp
-    filters/lut3d/lut3dfilter.cpp
-    filters/lut3d/lut3dcontainer.cpp
-    filters/lut3d/lut3dsettings.cpp
 )
 
 # ==================================================================================================

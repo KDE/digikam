@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="51" name="digikamimageplugin_color" >
+<gui version="52" name="digikamimageplugin_color" >
 
  <MenuBar>
 
@@ -12,7 +12,6 @@
       <Separator />
       <Action name="imageplugin_adjustlevels" />
       <Action name="imageplugin_adjustcurves" />
-      <Action name="imageplugin_lut3d" />
       <Separator />
       <Action name="imageplugin_invert" />
       <Action name="imageplugin_film" />

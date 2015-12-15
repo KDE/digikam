@@ -74,7 +74,6 @@ private Q_SLOTS:
     void slotCurvesAdjust();
     void slotLevelsAdjust();
     void slotFilm();
-    void slotLut3D();
 
     void slotUpdateColorSpaceMenu();
     void slotSetupICC();

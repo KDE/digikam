@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT ColorFXSettings : public QWidget
 
 public:
 
-    explicit ColorFXSettings(QWidget* const parent);
+    explicit ColorFXSettings(QWidget* const parent, bool useGenericImg = true);
     ~ColorFXSettings();
 
     ColorFXContainer defaultSettings() const;
@@ -60,6 +60,10 @@ public:
 
     void enable();
     void disable();
+
+    void findLuts();
+
+    void startPreviewFilters();
 
 Q_SIGNALS:
 

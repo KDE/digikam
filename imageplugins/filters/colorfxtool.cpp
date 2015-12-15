@@ -112,7 +112,7 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->settingsView = new ColorFXSettings(d->gboxSettings->plainPage());
+    d->settingsView = new ColorFXSettings(d->gboxSettings->plainPage(), false);
     setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
@@ -130,6 +130,12 @@ ColorFxTool::ColorFxTool(QObject* const parent)
 ColorFxTool::~ColorFxTool()
 {
     delete d;
+}
+
+void ColorFxTool::slotInit()
+{
+    EditorToolThreaded::slotInit();
+    d->settingsView->startPreviewFilters();
 }
 
 void ColorFxTool::readSettings()
@@ -230,6 +236,10 @@ void ColorFxTool::setFinalImage()
 
         case ColorFXFilter::FindEdges:
             name = i18n("Find Edges");
+            break;
+
+        case ColorFXFilter::Lut3D:
+            name = i18n("Lut3D");
             break;
     }
 

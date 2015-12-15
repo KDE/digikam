@@ -51,6 +51,7 @@ void ColorFX::registerSettingsWidget()
 {
     m_settingsWidget = new QWidget;
     m_settingsView   = new ColorFXSettings(m_settingsWidget);
+    m_settingsView->startPreviewFilters();
     m_settingsView->resetToDefault();
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
@@ -70,6 +71,8 @@ BatchToolSettings ColorFX::defaultSettings()
     prm.insert(QLatin1String("colorFXType"), (int)defaultPrm.colorFXType);
     prm.insert(QLatin1String("level"),       (int)defaultPrm.level);
     prm.insert(QLatin1String("iterations"),  (int)defaultPrm.iterations);
+    prm.insert(QLatin1String("intensity"),   (int)defaultPrm.intensity);
+    prm.insert(QLatin1String("path"),        defaultPrm.path);
 
     return prm;
 }
@@ -77,9 +80,13 @@ BatchToolSettings ColorFX::defaultSettings()
 void ColorFX::slotAssignSettings2Widget()
 {
     ColorFXContainer prm;
+
     prm.colorFXType = settings()[QLatin1String("colorFXType")].toInt();
     prm.level       = settings()[QLatin1String("level")].toInt();
     prm.iterations  = settings()[QLatin1String("iterations")].toInt();
+    prm.intensity   = settings()[QLatin1String("intensity")].toInt();
+    prm.path        = settings()[QLatin1String("path")].toString();
+
     m_settingsView->setSettings(prm);
 }
 
@@ -91,6 +98,8 @@ void ColorFX::slotSettingsChanged()
     prm.insert(QLatin1String("colorFXType"), (int)currentPrm.colorFXType);
     prm.insert(QLatin1String("level"),       (int)currentPrm.level);
     prm.insert(QLatin1String("iterations"),  (int)currentPrm.iterations);
+    prm.insert(QLatin1String("intensity"),   (int)currentPrm.intensity);
+    prm.insert(QLatin1String("path"),        currentPrm.path);
 
     BatchTool::slotSettingsChanged(prm);
 }
@@ -106,6 +115,8 @@ bool ColorFX::toolOperations()
     prm.colorFXType = settings()[QLatin1String("colorFXType")].toInt();
     prm.level       = settings()[QLatin1String("level")].toInt();
     prm.iterations  = settings()[QLatin1String("iterations")].toInt();
+    prm.intensity   = settings()[QLatin1String("intensity")].toInt();
+    prm.path        = settings()[QLatin1String("path")].toString();
 
     ColorFXFilter fg(&image(), 0L, prm);
     applyFilter(&fg);

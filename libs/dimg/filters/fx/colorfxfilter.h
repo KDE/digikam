@@ -9,6 +9,7 @@
  * Copyright 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright 2015      by Andrej Krutak <dev at andree dot sk>
  *
  * Original Blur algorithms copyrighted 2004 by
  * Pieter Z. Voloshyn <pieter dot voloshyn at gmail dot com>.
@@ -49,6 +50,8 @@ public:
         colorFXType = 0; // ColorFXFilter::Solarize
         level       = 0;
         iterations  = 2;
+        intensity   = 100;
+        path        = QString();
     };
 
     ~ColorFXContainer()
@@ -57,9 +60,11 @@ public:
 
 public:
 
-    int colorFXType;
-    int level;
-    int iterations;
+    int     colorFXType;
+    int     level;
+    int     iterations;
+    int     intensity;
+    QString path;
 };
 
 // ----------------------------------------------------------------------------------------------
@@ -74,17 +79,15 @@ public:
         Solarize = 0,
         Vivid,
         Neon,
-        FindEdges
+        FindEdges,
+        Lut3D
     };
 
 public:
 
     explicit ColorFXFilter(QObject* const parent = 0);
     explicit ColorFXFilter(DImg* const orgImage, QObject* const parent, const ColorFXContainer& settings=ColorFXContainer());
-
-    ~ColorFXFilter()
-    {
-    };
+    ~ColorFXFilter();
 
     static QString          FilterIdentifier()
     {
@@ -124,10 +127,14 @@ private:
     void neon(DImg* const orgImage, DImg* const destImage, int Intensity, int BW);
     void findEdges(DImg* const orgImage, DImg* const destImage, int Intensity, int BW);
     void neonFindEdges(DImg* const orgImage, DImg* const destImage, bool neon, int Intensity, int BW);
+    void loadLut3D(const QString& path);
+    void applyLut3D();
 
 private:
 
     ColorFXContainer m_settings;
+    quint16*         m_lutTable;     // RGBA, A is unused
+    int              m_lutTableSize; // all axis are of this size
 };
 
 }  // namespace Digikam
