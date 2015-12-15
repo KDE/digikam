@@ -44,7 +44,6 @@ class CollectionManagerPrivate;
 
 class DIGIKAM_DATABASE_EXPORT CollectionManager : public QObject
 {
-
     Q_OBJECT
 
 public:
@@ -103,7 +102,7 @@ public:
     LocationCheckResult checkLocation(const QUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
                                       QString* message = 0, QString* suggestedMessageIconName = 0);
     LocationCheckResult checkNetworkLocation(const QUrl& fileUrl, QList<CollectionLocation> assumeDeleted,
-            QString* message = 0, QString* suggestedMessageIconName = 0);
+                                             QString* message = 0, QString* suggestedMessageIconName = 0);
 
     /**
      * Removes the given location. This means that all images contained on the
@@ -140,9 +139,9 @@ public:
      * to where the given location may have been moved.
      */
     void migrationCandidates(const CollectionLocation& disappearedLocation,
-                             QString* technicalDescription,
-                             QStringList* candidateIdentifiers,
-                             QStringList* candidateDescriptions);
+                             QString* const technicalDescription,
+                             QStringList* const candidateIdentifiers,
+                             QStringList* const candidateDescriptions);
 
     /**
      * Migrates the existing collection to a new volume, identified by an internal identifier
@@ -268,18 +267,18 @@ private:
 
     CollectionManager();
     ~CollectionManager();
+
     static CollectionManager* m_instance;
     void updateLocations();
 
-    friend class CoreDbWatch;
-    friend class CoreDbAccess;
-
     void clear_locked();
+
+    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
 
     CollectionManagerPrivate* const d;
     friend class CollectionManagerPrivate;
-
-    Q_PRIVATE_SLOT(d, void slotTriggerUpdateVolumesList())
+    friend class CoreDbWatch;
+    friend class CoreDbAccess;
 
 Q_SIGNALS: // private
 

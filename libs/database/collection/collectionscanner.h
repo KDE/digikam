@@ -236,7 +236,7 @@ Q_SIGNALS:
      * Emitted when the observer told to cancel the scan
      */
     void cancelled();
-    
+
 protected:
 
     void completeScanCleanupPart();
@@ -265,7 +265,7 @@ protected:
     void loadNameFilters();
     int countItemsInFolder(const QString& directory);
     DatabaseItem::Category category(const QFileInfo& info);
-    
+
     qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
     qlonglong scanNewFile(const QFileInfo& info, int albumId);
     qlonglong scanNewFileFullScan(const QFileInfo& info, int albumId);

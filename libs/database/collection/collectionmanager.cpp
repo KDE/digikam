@@ -145,11 +145,15 @@ public:
         m_label = label;
     }
 
+public:
+
     QString identifier;
     QString specificPath;
     bool    available;
     bool    hidden;
 };
+
+// -------------------------------------------------
 
 class SolidVolumeInfo
 {
@@ -163,18 +167,20 @@ public:
     {
     }
 
-    QString udi;  // Solid device UDI of the StorageAccess device
-    QString path; // mount path of volume, with trailing slash
-    QString uuid; // UUID as from Solid
-    QString label; // volume label (think of CDs)
-    bool isRemovable; // may be removed
-    bool isOpticalDisc;
-    bool isMounted;
-
     bool isNull() const
     {
         return path.isNull();
     }
+
+public:
+
+    QString udi;            // Solid device UDI of the StorageAccess device
+    QString path;           // mount path of volume, with trailing slash
+    QString uuid;           // UUID as from Solid
+    QString label;          // volume label (think of CDs)
+    bool    isRemovable;    // may be removed
+    bool    isOpticalDisc;  // is an optical disk device as CD/DVD/BR
+    bool    isMounted;      // is mounted on File System.
 };
 
 // -------------------------------------------------
@@ -185,11 +191,6 @@ class CollectionManagerPrivate
 public:
 
     explicit CollectionManagerPrivate(CollectionManager* s);
-
-    QMap<int, AlbumRootLocation*> locations;
-    bool                          changingDB;
-    QStringList                   udisToWatch;
-    bool                          watchEnabled;
 
     // hack for Solid's threading problems
     QList<SolidVolumeInfo> actuallyListVolumes();
@@ -236,8 +237,16 @@ public:
     /// Make a user presentable description, regardless of current location status
     QString technicalDescription(const AlbumRootLocation* location);
 
-    CollectionManager* s;
+public:
+
+    QMap<int, AlbumRootLocation*> locations;
+    bool                          changingDB;
+    QStringList                   udisToWatch;
+    bool                          watchEnabled;
+    CollectionManager*            s;
 };
+
+// -------------------------------------------------
 
 class ChangingDB
 {
@@ -254,6 +263,8 @@ public:
         d->changingDB = false;
     }
 
+public:
+
     CollectionManagerPrivate* const d;
 };
 
@@ -266,7 +277,9 @@ namespace Digikam
 {
 
 CollectionManagerPrivate::CollectionManagerPrivate(CollectionManager* s)
-    : changingDB(false), watchEnabled(false), s(s)
+    : changingDB(false),
+      watchEnabled(false),
+      s(s)
 {
     QObject::connect(s, SIGNAL(triggerUpdateVolumesList()),
                      s, SLOT(slotTriggerUpdateVolumesList()),
@@ -1055,7 +1068,9 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const QU
 }
 
 CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(const QUrl& fileUrl,
-        QList<CollectionLocation> assumeDeleted, QString* message, QString* iconName)
+                                                                               QList<CollectionLocation> assumeDeleted,
+                                                                               QString* message,
+                                                                               QString* iconName)
 {
     if (!fileUrl.isLocalFile())
     {
@@ -1171,9 +1186,10 @@ QList<CollectionLocation> CollectionManager::checkHardWiredLocations()
     return disappearedLocations;
 }
 
-
-void CollectionManager::migrationCandidates(const CollectionLocation& location, QString* description,
-                                            QStringList* candidateIdentifiers, QStringList* candidateDescriptions)
+void CollectionManager::migrationCandidates(const CollectionLocation& location,
+                                            QString* const description,
+                                            QStringList* const candidateIdentifiers,
+                                            QStringList* const candidateDescriptions)
 {
     description->clear();
     candidateIdentifiers->clear();
@@ -1183,7 +1199,7 @@ void CollectionManager::migrationCandidates(const CollectionLocation& location, 
 
     CoreDbAccess access;
 
-    AlbumRootLocation* albumLoc = d->locations.value(location.id());
+    AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
     if (!albumLoc)
     {
@@ -1212,7 +1228,7 @@ void CollectionManager::migrateToVolume(const CollectionLocation& location, cons
 {
     CoreDbAccess access;
 
-    AlbumRootLocation* albumLoc = d->locations.value(location.id());
+    AlbumRootLocation* const albumLoc = d->locations.value(location.id());
 
     if (!albumLoc)
     {
@@ -1318,7 +1334,7 @@ QStringList CollectionManager::allAvailableAlbumRootPaths()
 CollectionLocation CollectionManager::locationForAlbumRootId(int id)
 {
     CoreDbAccess access;
-    AlbumRootLocation* location = d->locations.value(id);
+    AlbumRootLocation* const location = d->locations.value(id);
 
     if (location)
     {
@@ -1633,8 +1649,8 @@ void CollectionManager::updateLocations()
                 foreach(const QString& path, d->networkShareMountPathsFromIdentifier(location))
                 {
                     QDir dir(path);
-                    available = dir.isReadable() &&
-                                dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
+                    available    = dir.isReadable() &&
+                                   dir.entryList(QDir::Dirs | QDir::Files | QDir::NoDotAndDotDot).count() > 0;
                     absolutePath = path;
 
                     if (available)
@@ -1664,7 +1680,7 @@ void CollectionManager::updateLocations()
 
                     if (!path.isNull())
                     {
-                        available = true;
+                        available    = true;
                         // Here we have the absolute path as definition of the volume.
                         // specificPath is "/" as per convention, but ignored,
                         // absolute path shall not have a trailing slash.
