@@ -63,7 +63,6 @@ public:
 
 Q_SIGNALS:
 
-    void signalLevelOrIterationChanged();
     void signalSettingsChanged();
 
 private Q_SLOTS:

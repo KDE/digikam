@@ -208,10 +208,10 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
             this, SLOT(slotEffectTypeChanged(int)));
 
     connect(d->levelInput, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalLevelOrIterationChanged()));
+            this, SIGNAL(signalSettingsChanged()));
 
     connect(d->iterationInput, SIGNAL(valueChanged(int)),
-            this, SIGNAL(signalLevelOrIterationChanged()));
+            this, SIGNAL(signalSettingsChanged()));
 
     connect(d->correctionTools, SIGNAL(itemSelectionChanged()),
             this, SIGNAL(signalSettingsChanged()));

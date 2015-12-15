@@ -57,9 +57,6 @@ void ColorFX::registerSettingsWidget()
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
 
-    connect(m_settingsView, SIGNAL(signalLevelOrIterationChanged()),
-            this, SLOT(slotSettingsChanged()));
-
     BatchTool::registerSettingsWidget();
 }
 

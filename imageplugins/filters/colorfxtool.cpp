@@ -121,9 +121,6 @@ ColorFxTool::ColorFxTool(QObject* const parent)
             this, SLOT(slotColorSelectedFromTarget(Digikam::DColor)));
 */
     connect(d->settingsView, SIGNAL(signalSettingsChanged()),
-            this, SLOT(slotPreview()));
-
-    connect(d->settingsView, SIGNAL(signalLevelOrIterationChanged()),
             this, SLOT(slotTimer()));
 }
 
