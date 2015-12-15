@@ -59,11 +59,15 @@ public:
     void writeSettings(KConfigGroup& group);
 
     void startPreviewFilters();
-    void findLuts();
 
 Q_SIGNALS:
 
     void signalSettingsChanged();
+
+private:
+
+    void findLuts();
+    QString translateLuts(const QString& name) const;
 
 private Q_SLOTS:
 

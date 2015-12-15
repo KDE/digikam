@@ -184,7 +184,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
         QFileInfo fi(prm.path);
 
         d->correctionTools->addItem(new ColorFXFilter(&thumbImage, lut3DSettings, prm),
-                                                      fi.baseName(), idx);
+                                                      translateLuts(fi.baseName()), idx);
     }
 
     QLabel* const intensityLabel = new QLabel(i18n("Intensity:"), lut3DSettings);
@@ -365,6 +365,52 @@ void ColorFXSettings::findLuts()
     }
 
     d->luts.sort();
+}
+
+QString ColorFXSettings::translateLuts(const QString& name) const
+{
+    if (name.toLower() == QLatin1String("bleach"))
+    {
+        return i18n("Bleach");
+    }
+    else if (name.toLower() == QLatin1String("blue_crush"))
+    {
+        return i18n("Blue Crush");
+    }
+    else if (name.toLower() == QLatin1String("bw_contrast"))
+    {
+        return i18n("BW Contrast");
+    }
+    else if (name.toLower() == QLatin1String("instant"))
+    {
+        return i18n("Instant");
+    }
+    else if (name.toLower() == QLatin1String("original"))
+    {
+        return i18n("Original");
+    }
+    else if (name.toLower() == QLatin1String("punch"))
+    {
+        return i18n("Punch");
+    }
+    else if (name.toLower() == QLatin1String("vintage"))
+    {
+        return i18n("Vintage");
+    }
+    else if (name.toLower() == QLatin1String("washout"))
+    {
+        return i18n("Washout");
+    }
+    else if (name.toLower() == QLatin1String("washout_color"))
+    {
+        return i18n("Washout Color");
+    }
+    else if (name.toLower() == QLatin1String("x_process"))
+    {
+        return i18n("X Process");
+    }
+
+    return name;
 }
 
 }  // namespace Digikam
