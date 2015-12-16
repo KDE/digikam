@@ -114,7 +114,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
     QGridLayout* const grid       = new QGridLayout(parent);
 
     QLabel* const effectTypeLabel = new QLabel(i18n("Type:"), parent);
-    d->effectType           = new DComboBox(parent);
+    d->effectType                 = new DComboBox(parent);
     d->effectType->addItem(i18n("Solarize"));
     d->effectType->addItem(i18n("Vivid"));
     d->effectType->addItem(i18n("Neon"));
@@ -130,7 +130,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
                                      "and their strength.</p>"
                                      "<p><b>Lut3D</b>: coloring images with Lut3D filters</p>"));
 
-    d->stack = new QStackedWidget(parent);
+    d->stack                      = new QStackedWidget(parent);
 
     grid->addWidget(effectTypeLabel,                         0, 0, 1, 1);
     grid->addWidget(d->effectType,                           1, 0, 1, 1);
@@ -146,7 +146,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
     QGridLayout* const grid1        = new QGridLayout(solarizeSettings);
 
     QLabel* const levelLabel        = new QLabel(i18nc("level of the effect", "Level:"), solarizeSettings);
-    d->levelInput = new DIntNumInput(solarizeSettings);
+    d->levelInput                   = new DIntNumInput(solarizeSettings);
     d->levelInput->setRange(0, 100, 1);
     d->levelInput->setDefaultValue(3);
     d->levelInput->setWhatsThis( i18n("Set here the level of the effect."));
@@ -173,7 +173,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
     QWidget* const lut3DSettings = new QWidget(d->stack);
     QGridLayout* const grid2     = new QGridLayout(lut3DSettings);
 
-    d->correctionTools = new PreviewList(lut3DSettings);
+    d->correctionTools           = new PreviewList(lut3DSettings);
 
     for (int idx = 0; idx < d->luts.count(); idx++)
     {
