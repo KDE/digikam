@@ -43,7 +43,7 @@ public:
     QString              fragment;
     int                  parentTagId;
     NameMatchMode        nameMatchMode;
-    ConstraintInterface *constraintInterface;
+    ConstraintInterface* constraintInterface;
 
     int                  defaultIndex; // use if valid is true
     QList<TaggingAction> actions;      // use if valid is true
@@ -82,6 +82,7 @@ void TaggingActionFactory::setFragment(const QString& fragment)
     {
         return;
     }
+
     d->fragment = fragment;
     d->invalidate();
 }
@@ -97,6 +98,7 @@ void TaggingActionFactory::setParentTag(int parentTagId)
     {
         return;
     }
+
     d->parentTagId = parentTagId;
     d->invalidate();
 }
@@ -107,6 +109,7 @@ void TaggingActionFactory::setConstraintInterface(ConstraintInterface* iface)
     {
         return;
     }
+
     d->constraintInterface = iface;
     d->invalidate();
 }
@@ -122,6 +125,7 @@ void TaggingActionFactory::setNameMatchMode(NameMatchMode mode)
     {
         return;
     }
+
     d->nameMatchMode = mode;
     d->invalidate();
 }
@@ -147,6 +151,7 @@ QList<TaggingAction> TaggingActionFactory::actions() const
     {
         return d->actions;
     }
+
     QList<TaggingAction> actions;
     int defaultActionIndex = 0;
 
@@ -154,13 +159,16 @@ QList<TaggingAction> TaggingActionFactory::actions() const
     TaggingAction defaultAction = defaultTaggingAction();
 
     TaggingAction newUnderParent;
+
     if (d->parentTagId)
     {
         newUnderParent = TaggingAction(d->fragment, d->parentTagId);
     }
+
     TaggingAction newToplevel(d->fragment, 0);
 
     QList<int> completionEntries;
+
     if (d->nameMatchMode == MatchStartingWithFragment)
     {
         completionEntries = TagsCache::instance()->tagsStartingWith(d->fragment);
@@ -171,12 +179,14 @@ QList<TaggingAction> TaggingActionFactory::actions() const
     }
 
     QList<TaggingAction> assignActions;
+
     foreach(int id, completionEntries)
     {
         if (d->constraintInterface && !d->constraintInterface->matches(id))
         {
             continue;
         }
+
         assignActions << TaggingAction(id);
     }
 
@@ -313,6 +323,7 @@ QString TaggingActionFactory::suggestedUIString(const TaggingAction& action) con
     {
         return QString();
     }
+
     if (action.shallAssignTag())
     {
         QString tagName = TagsCache::instance()->tagName(action.tagId());

@@ -123,6 +123,7 @@ void TagCompleter::setTagFilterModel(AlbumFilterModel* filterModel)
 {
     d->filterModel = filterModel;
     d->factory.setConstraintInterface(d->filterModel ? d : 0);
+    d->factory.setNameMatchMode(TaggingActionFactory::MatchContainingFragment);
 }
 
 void TagCompleter::setSupportingTagModel(TagModel* model)
@@ -165,6 +166,7 @@ void TagCompleter::update(const QString& fragment)
         {
             item->setData(TagsCache::instance()->tagName(action.tagId()), CompletionRole);
             QModelIndex index = d->indexForAlbum(action.tagId());
+
             if (index.isValid())
             {
                 item->setData(index.data(Qt::DecorationRole), Qt::DecorationRole);

@@ -76,6 +76,7 @@ ModelCompleter::ModelCompleter(QObject* parent)
     setCaseSensitivity(Qt::CaseInsensitive);
     setCompletionMode(PopupCompletion);
     setCompletionRole(Qt::DisplayRole);
+    setFilterMode(Qt::MatchContains);
     setMaxVisibleItems(10);
     setCompletionColumn(0);
 }
@@ -222,7 +223,7 @@ void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelInd
             continue;
         }
 
-        QModelIndex index = d->model->index(row, topLeft.column(), topLeft.parent());
+        QModelIndex index  = d->model->index(row, topLeft.column(), topLeft.parent());
 
         if (!index.isValid())
         {
@@ -230,8 +231,8 @@ void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelInd
             continue;
         }
 
-        int id           = index.data(d->uniqueIdRole).toInt();
-        QString itemName = index.data(d->displayRole).toString();
+        int id             = index.data(d->uniqueIdRole).toInt();
+        QString itemName   = index.data(d->displayRole).toString();
 
         d->idToTextMap[id] = itemName;
 
