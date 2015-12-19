@@ -106,7 +106,7 @@ Optional:
 libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi                                          To support Kipi-plugins.
 libksane          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libksane                                         To support digital scanner.
 libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble                                                     To support geolocation maps.
-libakonadicontact >= 5.x                        https://projects.kde.org/projects/kde/kdepimlibs/repository/revisions/master/show/akonadi-contact       To support KDE Address Book entries.
+libakonadicontact >= 4.89.0                     https://projects.kde.org/projects/kde/kdepimlibs/repository/revisions/master/show/akonadi-contact       To support KDE Address Book entries.
 libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/kfilemetadata                                              To support KDE files indexing support.
 libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                                                                  To support JPEG2000.
 liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                                                          To support LensCorrection tool.
