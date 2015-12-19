@@ -7,7 +7,7 @@
  * @date   2011-12-28
  * @brief  Low level threads management for batch processing on multi-core
  *
- * @author Copyright (C) 2011-2015 by Gilles Caulier
+ * @author Copyright (C) 2011-2016 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2014 by Veaceslav Munteanu
  *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
@@ -64,7 +64,7 @@ void ActionJob::cancel()
 }
 
 // -----------------------------------------------------------------
-    
+
 class Q_DECL_HIDDEN ActionThreadBase::Private
 {
 public:
@@ -201,7 +201,7 @@ void ActionThreadBase::run()
             for (ActionJobCollection::iterator it = d->todo.begin() ; it != d->todo.end(); ++it)
             {
                 ActionJob* const job = it.key();
-                int priority         =  it.value();
+                int priority         = it.value();
 
                 connect(job, SIGNAL(signalDone()),
                         this, SLOT(slotJobFinished()));
