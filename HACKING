@@ -7,7 +7,7 @@ digiKam project.
 
 Before to contribute to digiKam project, please take a look to this link:
 
-http://schlitt.info/applications/blog/index.php?/archives/541-10-golden-rules-for-starting-with-open-source.html
+http://schlitt.info/opensource/blog/0541_10_golden_rules_for_starting_with_open_source.html
 
 ========================================================================
 Source code formatting:
@@ -142,7 +142,8 @@ Use whitespaces liberally to improve readability. Add blank lines between logica
 sections of the code.
 
 Comment as much as possible. Position comments at the beginning of the
-section/line you want to comment, NEVER at the end of the line
+section/line you want to comment, NEVER at the end of the line, excepted for special
+cases for ex to describe enum values.
 
 // put your comments here
 a = (b == foobar) ? 1 : -1;
@@ -233,8 +234,9 @@ digiKam project : http://techbase.kde.org/Contribute
 
 Use the same .cpp/.h header than the rest of digiKam project.
 
-Use a decent editor which does auto-indentation/syntax-highlighting for you.
-I personally use Kate (Gilles).
+Use a decent editor which does auto-indentation/syntax-highlighting for you, 
+as Kate or QtCreator
+
 There are excellent initializer scripts in the kdesdk
 package for xemacs and vim which can substantially increase your productivity.
 
@@ -316,12 +318,15 @@ Unit Testing / Automated Testing
 Unit Testing is great way to ensure that software units (in OOP this normally
 means classes) work as expected. Wikipedia gives a good introduction to
 Unit Testing:
+
 http://en.wikipedia.org/wiki/Unit_testing
-It is also worth to follow most of these rules while writing unit tests:
-http://geosoft.no/development/unittesting.html
+
+It is also worth to follow most of QTTest API rules with digiKam:
+
+http://doc.qt.io/qt-5/qtest-tutorial.html
 
 The digiKam test suite is located under tests and will be compiled if
-KDE4_BUILD_TESTS is set to ON in the CMake call. After compiling the source code
+BUILD_TESTING is turned ON at cmake configuration time. After compiling the source code
 the tests can be executed via
 
 make test
@@ -417,19 +422,6 @@ LD_LIBRARY_PATH=${KDE_BUILD}/extragear/graphics/lib:${LD_LIBRARY_PATH}  gdb ${KD
 
 This allows you to run digikam after compiling without the need of a "make install", even
 if you changed code in the libraries.
-
-========================================================================
-Working with branches from Subversion repository
-========================================================================
-
-To implement new feature it usual to use a dedicated developement branche from svn and let the
-trunk code as stable for production. To synchronize branche with trunk, use these commands into your
-local branch checkout:
-
-$> svn merge -r_COMMIT_ID_:HEAD svn+ssh://_YOUR_ACCOUNT_@svn.kde.org/home/kde/trunk/extragear/graphics/digikam
-
-_COMMIT_ID_    is the last revision from trunk which have been synchronized to your development branche.
-_YOUR_ACCOUNT_ is your subversion login name.
 
 ========================================================================
 Working with branches from Git repository
