@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2015 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2016 by Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
 # Copyright (c) 2015      by Mohamed Anwer, <m dot anwer at gmx dot com>
 #
@@ -62,6 +62,7 @@ set(KSANE_MIN_VERSION   "5.0.0")
 set(PGF_MIN_VERSION     "6.12.24")
 set(LENSFUN_MIN_VERSION "0.2.6.0")
 set(EXIV2_MIN_VERSION   "0.24")
+set(AKONADI_MIN_VERSION "4.89.0")        # Akonadi Contact dependency
 
 cmake_minimum_required(VERSION ${CMAKE_MIN_VERSION})
 
@@ -161,8 +162,12 @@ find_package(KF5 ${KF5_MIN_VERSION}
              OPTIONAL_COMPONENTS
              ItemModels             # For geolocation support (mandatory).
              Bookmarks              # For geolocation support (optional).
-             AkonadiContact         # For KDE Mail Contacts support.
              FileMetaData           # For KDE file indexer support.
+)
+
+find_package(KF5 ${AKONADI_MIN_VERSION}
+             OPTIONAL_COMPONENTS
+             AkonadiContact         # For KDE Mail Contacts support.
 )
 
 if(ENABLE_AKONADICONTACTSUPPORT AND NOT KF5AkonadiContact_FOUND)
@@ -434,7 +439,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkipi"           "https://projects.kde.org/proj
 PRINT_OPTIONAL_LIBRARY_STATUS("libmarble"         "https://projects.kde.org/projects/kde/kdeedu/marble"             "(version >= 0.22.0)"                 "digiKam will be compiled without geolocation maps support."                  MARBLE_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libksane"          "https://projects.kde.org/projects/kde/kdegraphics/libs/libksane" "(version >= ${KSANE_MIN_VERSION})"   "digiKam will be compiled without libksane support."                          KF5Sane_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/projects/kde/kdelibs/baloo"             "(version >= ${KF5_MIN_VERSION})"     "digiKam will be compiled without KDE file metadata support."                 KF5FileMetaData_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${KF5_MIN_VERSION})"     "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${AKONADI_MIN_VERSION})" "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                  "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"        "http://lensfun.sourceforge.net"                                  "(version >= 0.2.6)"                  "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"                                       "(version >= 0.4.1)"                  "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)
