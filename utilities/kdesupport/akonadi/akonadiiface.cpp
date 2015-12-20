@@ -25,10 +25,10 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QAction>
 #include <QString>
 #include <QMenu>
-#include <QApplication>
 #include <QIcon>
 
 // KDE includes
@@ -82,7 +82,7 @@ AkonadiIface::AkonadiIface(QMenu* const parent)
     nothingFound->setEnabled(false);
 
     Akonadi::ContactSearchJob* const job = new Akonadi::ContactSearchJob();
-    job->setQuery(Akonadi::ContactSearchJob::ContactUid, "");
+    job->setQuery(Akonadi::ContactSearchJob::ContactUid, QLatin1String(""));
 
     connect(job, SIGNAL(result(KJob*)),
             this, SLOT(slotABCSearchResult(KJob*)));
@@ -106,7 +106,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
     }
 
     Akonadi::ContactSearchJob* const searchJob = qobject_cast<Akonadi::ContactSearchJob*>(job);
-    const KContacts::Addressee::List contacts       = searchJob->contacts();
+    const KContacts::Addressee::List contacts  = searchJob->contacts();
 
     if (contacts.isEmpty())
     {
@@ -135,7 +135,7 @@ void AkonadiIface::slotABCSearchResult(KJob* job)
 
     m_ABCmenu->clear();
 
-    foreach (const QString& name, names)
+    foreach(const QString& name, names)
     {
         m_ABCmenu->addAction(name);
     }
