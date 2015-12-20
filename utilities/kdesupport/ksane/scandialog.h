@@ -51,6 +51,7 @@ public:
 
     void setTargetDir(const QString& targetDir);
     void setConfigGroupName(const QString& name);
+    void restoreScanDialogSize();
 
 protected:
 
@@ -69,7 +70,6 @@ private Q_SLOTS:
 
 private:
 
-    void readSettings();
     void saveSettings();
 
 private:

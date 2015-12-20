@@ -40,7 +40,6 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // LibKSane includes
 
@@ -51,6 +50,7 @@
 #include "digikam_debug.h"
 #include "saveimgthread.h"
 #include "statusprogressbar.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -79,7 +79,6 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
     setModal(false);
  
     d->saneWidget = saneWdg;
-    d->saneWidget->show();
 
     d->progress = new StatusProgressBar(this);
     d->progress->setProgressBarMode(StatusProgressBar::ProgressBarMode);
@@ -91,10 +90,6 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
     vbx->addWidget(d->saneWidget);
     vbx->addWidget(d->progress);
     setLayout(vbx);
-
-    // ------------------------------------------------------------------------
-
-    readSettings();
 
     // ------------------------------------------------------------------------
 
@@ -120,18 +115,19 @@ void ScanDialog::setConfigGroupName(const QString& config)
     d->configGroupName = config;
 }
 
-void ScanDialog::readSettings()
+void ScanDialog::restoreScanDialogSize()
 {
     KConfig config(d->configGroupName);
     KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
 }
 
 void ScanDialog::saveSettings()
 {
     KConfig config(d->configGroupName);
     KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     config.sync();
 }
 

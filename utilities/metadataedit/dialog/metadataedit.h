@@ -26,17 +26,13 @@
 
 // Qt includes
 
-#include <QObject>
-#include <QUrl>
+#include <QCloseEvent>
 #include <QDialog>
+#include <QUrl>
 
 // Local includes
 
 #include "digikam_export.h"
-
-class QObject;
-class QCloseEvent;
-class Event;
 
 namespace Digikam
 {

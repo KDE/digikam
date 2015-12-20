@@ -192,8 +192,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     }
 
     Digikam::DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
-
-    show();
+    resize(windowHandle()->size());
 }
 
 Setup::~Setup()

@@ -57,6 +57,10 @@ KSaneAction::KSaneAction(QObject* const parent)
 
 KSaneAction::~KSaneAction()
 {
+    if (m_saneWidget)
+    {
+        delete m_saneWidget;
+    }
 }
 
 void KSaneAction::activate(const QString& targetDir, const QString& config)
@@ -86,6 +90,9 @@ void KSaneAction::activate(const QString& targetDir, const QString& config)
         dlg->setTargetDir(targetDir);
         dlg->setConfigGroupName(config);
         dlg->show();
+
+        // Call this function after show() otherwise is windowHandle() null.
+        dlg->restoreScanDialogSize();
 
         connect(dlg, SIGNAL(signalImportedImage(QUrl)),
                 this, SIGNAL(signalImportedImage(QUrl)));

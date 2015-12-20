@@ -46,7 +46,6 @@
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Local includes
 
@@ -54,6 +53,7 @@
 #include "iptceditwidget.h"
 #include "xmpeditwidget.h"
 #include "thumbnailloadthread.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -285,9 +285,10 @@ void MetadataEditDialog::slotPrevious()
 void MetadataEditDialog::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group = config->group(QLatin1String("Metadata Edit Dialog"));
+    KConfigGroup group        = config->group(QLatin1String("Metadata Edit Dialog"));
     d->tabWidget->setCurrentIndex(group.readEntry(QLatin1String("Tab Index"), 0));
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
 }
 
 void MetadataEditDialog::saveSettings()
@@ -295,7 +296,7 @@ void MetadataEditDialog::saveSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Metadata Edit Dialog"));
     group.writeEntry(QLatin1String("Tab Index"), d->tabWidget->currentIndex());
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 
     d->tabExif->saveSettings();
     d->tabIptc->saveSettings();

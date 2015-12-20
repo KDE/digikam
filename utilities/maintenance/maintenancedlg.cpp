@@ -377,6 +377,7 @@ void MaintenanceDlg::readSettings()
     }
 
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
 }
 
 void MaintenanceDlg::writeSettings()

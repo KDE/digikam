@@ -63,7 +63,6 @@
 
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Local includes
 
@@ -88,6 +87,7 @@
 #include "backend-rg.h"
 #include "gpsimagedetails.h"
 #include "gpsgeoifacemodelhelper.h"
+#include "dxmlguiwindow.h"
 
 #ifdef HAVE_KBOOKMARKS
 #include "gpsbookmarkowner.h"
@@ -667,7 +667,8 @@ void GeolocationEdit::readSettings()
     d->rgWidget->readSettingsFromGroup(&groupRGWidget);
 
     const KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
-    KWindowConfig::restoreWindowSize(windowHandle(), groupDialog);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), groupDialog);
+    resize(windowHandle()->size());
 
     // --------------------------
 
@@ -756,7 +757,7 @@ void GeolocationEdit::saveSettings()
     d->rgWidget->saveSettingsToGroup(&groupRGWidget);
 
     KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
-    KWindowConfig::saveWindowSize(windowHandle(), groupDialog);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), groupDialog);
 
     // --------------------------
 
