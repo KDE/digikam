@@ -89,7 +89,10 @@ CaptureDlg::CaptureDlg(QWidget* const parent, CameraController* const controller
     setLayout(vbx);
 
     KConfigGroup group = KSharedConfig::openConfig()->group("Capture Tool Dialog");
+
+    winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
 
     // -------------------------------------------------------------
 
