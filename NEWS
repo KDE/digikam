@@ -95,4 +95,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 059 ==> 356672 - digikam 4.14.0 failed to build against lensfun 0.3.2.
 060 ==> 355980 - Showfotosetup link errors - undefined reference to `Digikam::Setup*.
 061 ==> 262644 - When typing names to unconfirmed faces, only tags beginning with "name" are shown.
-062 ==> 
+062 ==> 356975 - Nikon 5300 12bit RAW/NEF: wrong white/black level.
+063 ==> 
