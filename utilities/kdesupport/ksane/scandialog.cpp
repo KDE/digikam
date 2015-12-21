@@ -115,8 +115,10 @@ void ScanDialog::setConfigGroupName(const QString& config)
     d->configGroupName = config;
 }
 
-void ScanDialog::restoreScanDialogSize()
+void ScanDialog::show()
 {
+    QDialog::show();
+
     KConfig config(d->configGroupName);
     KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);

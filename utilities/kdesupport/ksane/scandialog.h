@@ -51,7 +51,8 @@ public:
 
     void setTargetDir(const QString& targetDir);
     void setConfigGroupName(const QString& name);
-    void restoreScanDialogSize();
+
+    virtual void show();
 
 protected:
 

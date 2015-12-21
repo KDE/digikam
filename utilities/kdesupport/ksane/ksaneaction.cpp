@@ -91,9 +91,6 @@ void KSaneAction::activate(const QString& targetDir, const QString& config)
         dlg->setConfigGroupName(config);
         dlg->show();
 
-        // Call this function after show() otherwise is windowHandle() null.
-        dlg->restoreScanDialogSize();
-
         connect(dlg, SIGNAL(signalImportedImage(QUrl)),
                 this, SIGNAL(signalImportedImage(QUrl)));
     }
