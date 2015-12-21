@@ -46,13 +46,10 @@ class ScanDialog : public QDialog
 
 public:
 
-    ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent=0);
+    ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidget* const parent=0);
     ~ScanDialog();
 
     void setTargetDir(const QString& targetDir);
-    void setConfigGroupName(const QString& name);
-
-    virtual void show();
 
 protected:
 
@@ -71,6 +68,7 @@ private Q_SLOTS:
 
 private:
 
+    void readSettings();
     void saveSettings();
 
 private:

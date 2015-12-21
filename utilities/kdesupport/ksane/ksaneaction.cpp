@@ -86,9 +86,8 @@ void KSaneAction::activate(const QString& targetDir, const QString& config)
             return;
         }
 
-        ScanDialog* const dlg = new ScanDialog(m_saneWidget);
+        ScanDialog* const dlg = new ScanDialog(m_saneWidget, config);
         dlg->setTargetDir(targetDir);
-        dlg->setConfigGroupName(config);
         dlg->show();
 
         connect(dlg, SIGNAL(signalImportedImage(QUrl)),

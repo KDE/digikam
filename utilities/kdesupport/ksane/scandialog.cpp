@@ -71,14 +71,15 @@ public:
     KSaneWidget*       saneWidget;
 };
 
-ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
+ScanDialog::ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidget* const parent)
     : QDialog(parent),
       d(new Private)
 {
     setWindowTitle(i18n("Scan Image"));
     setModal(false);
  
-    d->saneWidget = saneWdg;
+    d->saneWidget      = saneWdg;
+    d->configGroupName = config;
 
     d->progress = new StatusProgressBar(this);
     d->progress->setProgressBarMode(StatusProgressBar::ProgressBarMode);
@@ -90,6 +91,10 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, QWidget* const parent)
     vbx->addWidget(d->saneWidget, 10);
     vbx->addWidget(d->progress);
     setLayout(vbx);
+
+    // ------------------------------------------------------------------------
+
+    readSettings();
 
     // ------------------------------------------------------------------------
 
@@ -110,17 +115,12 @@ void ScanDialog::setTargetDir(const QString& targetDir)
     d->targetDir = targetDir;
 }
 
-void ScanDialog::setConfigGroupName(const QString& config)
+void ScanDialog::readSettings()
 {
-    d->configGroupName = config;
-}
-
-void ScanDialog::show()
-{
-    QDialog::show();
-
     KConfig config(d->configGroupName);
     KConfigGroup group = config.group(QLatin1String("Scan Tool Dialog"));
+
+    winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
 }
