@@ -287,6 +287,8 @@ void MetadataEditDialog::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Metadata Edit Dialog"));
     d->tabWidget->setCurrentIndex(group.readEntry(QLatin1String("Tab Index"), 0));
+
+    winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
 }

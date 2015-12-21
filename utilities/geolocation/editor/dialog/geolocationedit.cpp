@@ -667,6 +667,8 @@ void GeolocationEdit::readSettings()
     d->rgWidget->readSettingsFromGroup(&groupRGWidget);
 
     const KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
+
+    winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), groupDialog);
     resize(windowHandle()->size());
 

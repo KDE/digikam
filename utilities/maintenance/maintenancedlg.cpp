@@ -376,6 +376,7 @@ void MaintenanceDlg::readSettings()
         slotItemToggled(i, d->expanderBox->isChecked(i));
     }
 
+    winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
 }

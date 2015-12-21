@@ -331,6 +331,8 @@ Setup::Setup(QWidget* const parent)
 
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("Setup Dialog"));
+
+    winId();
     DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
 }
