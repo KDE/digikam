@@ -96,4 +96,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 060 ==> 355980 - Showfotosetup link errors - undefined reference to `Digikam::Setup*.
 061 ==> 262644 - When typing names to unconfirmed faces, only tags beginning with "name" are shown.
 062 ==> 356975 - Nikon 5300 12bit RAW/NEF: wrong white/black level.
-063 ==> 
+063 ==> 356639 - Digikam crash when i create a new folder.
+064 ==> 
+
