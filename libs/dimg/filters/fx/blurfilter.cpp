@@ -27,8 +27,8 @@
 
 // Qt includes
 
-#include <QtMath>
 #include <QtConcurrent>
+#include <QtMath>
 #include <QMutex>
 
 // Local includes
@@ -88,22 +88,27 @@ BlurFilter::~BlurFilter()
 
 void BlurFilter::blurMultithreaded(uint start, uint stop)
 {
-    int  oldProgress=0, progress=0;
+    bool sixteenBit  = m_orgImage.sixteenBit();
+    int  h           = m_orgImage.height();
+    int  w           = m_orgImage.width();
+    int  radius      = d->radius;
+    int  oldProgress = 0;
+    int  progress    = 0;
     int  a, r, g, b;
     int  mx;
     int  my;
     int  mw;
     int  mh;
     int  mt;
-    int* as = new int[m_orgImage.width()];
-    int* rs = new int[m_orgImage.width()];
-    int* gs = new int[m_orgImage.width()];
-    int* bs = new int[m_orgImage.width()];
+    int* as = new int[w];
+    int* rs = new int[w];
+    int* gs = new int[w];
+    int* bs = new int[w];
 
     for (uint y = start ; runningFlag() && (y < stop) ; ++y)
     {
-        my = y - d->radius;
-        mh = (d->radius << 1) + 1;
+        my = y - radius;
+        mh = (radius << 1) + 1;
 
         if (my < 0)
         {
@@ -111,25 +116,27 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             my = 0;
         }
 
-        if ((my + mh) > (int)m_orgImage.height())
-            mh = m_orgImage.height() - my;
+        if ((my + mh) > h)
+        {
+            mh = h - my;
+        }
 
         uchar* pDst8           = m_destImage.scanLine(y);
         unsigned short* pDst16 = reinterpret_cast<unsigned short*>(m_destImage.scanLine(y));
 
-        memset(as, 0, m_orgImage.width() * sizeof(int));
-        memset(rs, 0, m_orgImage.width() * sizeof(int));
-        memset(gs, 0, m_orgImage.width() * sizeof(int));
-        memset(bs, 0, m_orgImage.width() * sizeof(int));
+        memset(as, 0, w * sizeof(int));
+        memset(rs, 0, w * sizeof(int));
+        memset(gs, 0, w * sizeof(int));
+        memset(bs, 0, w * sizeof(int));
 
         for (int yy = 0; yy < mh; yy++)
         {
             uchar* pSrc8           = m_orgImage.scanLine(yy + my);
             unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
 
-            for (int x = 0; x < (int)m_orgImage.width(); x++)
+            for (int x = 0; x < w; x++)
             {
-                if (m_orgImage.sixteenBit())
+                if (sixteenBit)
                 {  
                     bs[x]  += pSrc16[0];
                     gs[x]  += pSrc16[1];
@@ -148,13 +155,13 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             }
         }
 
-        if ((int)m_orgImage.width() > ((d->radius << 1) + 1))
+        if (w > ((radius << 1) + 1))
         {
-            for (int x = 0; x < (int)m_orgImage.width(); x++)
+            for (int x = 0; x < w; x++)
             {
                 a  = r = g = b = 0;
-                mx = x - d->radius;
-                mw = (d->radius << 1) + 1;
+                mx = x - radius;
+                mw = (radius << 1) + 1;
 
                 if (mx < 0)
                 {
@@ -162,8 +169,10 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
                     mx = 0;
                 }
 
-                if ((mx + mw) > (int)m_orgImage.width())
-                    mw = m_orgImage.width() - mx;
+                if ((mx + mw) > w)
+                {
+                    mw = w - mx;
+                }
 
                 mt = mw * mh;
 
@@ -180,7 +189,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
                 g = g / mt;
                 b = b / mt;
 
-                if (m_orgImage.sixteenBit())
+                if (sixteenBit)
                 {
                     pDst16[0] = b;
                     pDst16[1] = g;
@@ -200,7 +209,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
         }
         else
         {
-            qCDebug(DIGIKAM_DIMG_LOG) << "Radius too small..."; 
+            qCDebug(DIGIKAM_DIMG_LOG) << "Radius too small...";
         }
 
         progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
@@ -225,7 +234,8 @@ void BlurFilter::filterImage()
 {
     if (d->radius < 1)
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Radius out of range..."; 
+        qCDebug(DIGIKAM_DIMG_LOG) << "Radius out of range...";
+        m_destImage = m_orgImage;
         return;
     }
 
