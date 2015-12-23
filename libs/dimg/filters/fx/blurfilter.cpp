@@ -89,8 +89,8 @@ BlurFilter::~BlurFilter()
 void BlurFilter::blurMultithreaded(uint start, uint stop)
 {
     bool sixteenBit  = m_orgImage.sixteenBit();
-    int  h           = m_orgImage.height();
-    int  w           = m_orgImage.width();
+    int  height      = m_orgImage.height();
+    int  width       = m_orgImage.width();
     int  radius      = d->radius;
     int  oldProgress = 0;
     int  progress    = 0;
@@ -100,10 +100,10 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
     int  mw;
     int  mh;
     int  mt;
-    int* as = new int[w];
-    int* rs = new int[w];
-    int* gs = new int[w];
-    int* bs = new int[w];
+    int* as = new int[width];
+    int* rs = new int[width];
+    int* gs = new int[width];
+    int* bs = new int[width];
 
     for (uint y = start ; runningFlag() && (y < stop) ; ++y)
     {
@@ -116,25 +116,25 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             my = 0;
         }
 
-        if ((my + mh) > h)
+        if ((my + mh) > height)
         {
-            mh = h - my;
+            mh = height - my;
         }
 
         uchar* pDst8           = m_destImage.scanLine(y);
         unsigned short* pDst16 = reinterpret_cast<unsigned short*>(m_destImage.scanLine(y));
 
-        memset(as, 0, w * sizeof(int));
-        memset(rs, 0, w * sizeof(int));
-        memset(gs, 0, w * sizeof(int));
-        memset(bs, 0, w * sizeof(int));
+        memset(as, 0, width * sizeof(int));
+        memset(rs, 0, width * sizeof(int));
+        memset(gs, 0, width * sizeof(int));
+        memset(bs, 0, width * sizeof(int));
 
         for (int yy = 0; yy < mh; yy++)
         {
             uchar* pSrc8           = m_orgImage.scanLine(yy + my);
             unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
 
-            for (int x = 0; x < w; x++)
+            for (int x = 0; x < width; x++)
             {
                 if (sixteenBit)
                 {  
@@ -155,9 +155,9 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             }
         }
 
-        if (w > ((radius << 1) + 1))
+        if (width > ((radius << 1) + 1))
         {
-            for (int x = 0; x < w; x++)
+            for (int x = 0; x < width; x++)
             {
                 a  = r = g = b = 0;
                 mx = x - radius;
@@ -169,9 +169,9 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
                     mx = 0;
                 }
 
-                if ((mx + mw) > w)
+                if ((mx + mw) > width)
                 {
-                    mw = w - mx;
+                    mw = width - mx;
                 }
 
                 mt = mw * mh;
