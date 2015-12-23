@@ -94,7 +94,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
     int  radius      = d->radius;
     int  oldProgress = 0;
     int  progress    = 0;
-    int  a, r, g, b;
+    uint a, r, g, b;
     int  mx;
     int  my;
     int  mw;
