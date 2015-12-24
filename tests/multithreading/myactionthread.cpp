@@ -34,7 +34,6 @@
 
 // Local includes
 
-#include "actionthreadbase.h"
 #include "drawdecoder.h"
 
 class Mytask : public ActionJob
@@ -119,8 +118,8 @@ void MyActionThread::convertRAWtoPNG(const QList<QUrl>& list, const DRawDecoderS
     foreach (const QUrl& url, list)
     {
         Mytask* const job = new Mytask();
-        job->fileUrl    = url;
-        job->settings   = settings;
+        job->fileUrl      = url;
+        job->settings     = settings;
 
         connect(job, SIGNAL(signalStarted()),
                 this, SLOT(slotJobStarted()));

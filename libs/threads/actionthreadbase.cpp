@@ -32,10 +32,8 @@
 // Qt includes
 
 #include <QMutexLocker>
-#include <QObject>
 #include <QWaitCondition>
 #include <QMutex>
-#include <QList>
 #include <QThreadPool>
 
 // Local includes

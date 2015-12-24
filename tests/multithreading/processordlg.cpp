@@ -7,7 +7,7 @@
  * @date  : 2014-10-17
  * @brief : test for implementation of threadWeaver api
  *
- * @author Copyright (C) 2011-2015 by Gilles Caulier
+ * @author Copyright (C) 2011-2016 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2014 by Veaceslav Munteanu
  *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>
@@ -96,8 +96,8 @@ ProcessorDlg::ProcessorDlg(const QList<QUrl>& list)
 
     int cpu                  = d->thread->maximumNumberOfThreads();
     QGridLayout* const grid  = new QGridLayout(d->page);
-    QLabel* const pid        = new QLabel(QString::fromUtf8("PID: %1").arg(QCoreApplication::applicationPid()),  this);
-    QLabel* const core       = new QLabel(QString::fromUtf8("CPU Cores: %1").arg(cpu), this);
+    QLabel* const pid        = new QLabel(QString::fromUtf8("Main PID: %1").arg(QCoreApplication::applicationPid()),  this);
+    QLabel* const core       = new QLabel(QString::fromUtf8("CPU cores available: %1").arg(cpu), this);
     QWidget* const hbox      = new QWidget(this);
     d->items                 = new QLabel(this);
 

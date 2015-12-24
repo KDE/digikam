@@ -27,7 +27,7 @@
 #ifndef PROCESSOR_DLG_H
 #define PROCESSOR_DLG_H
 
-// KDE includes
+// Qt includes
 
 #include <QList>
 #include <QUrl>
