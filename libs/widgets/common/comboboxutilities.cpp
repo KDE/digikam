@@ -60,6 +60,9 @@ ProxyLineEdit::ProxyLineEdit(QWidget* const parent)
 
     // unset clear button per default
     setClearButtonShown(false);
+
+    connect(this, SIGNAL(textChanged(QString)),
+            this, SLOT(slotTextChanged(QString)));
 }
 
 void ProxyLineEdit::setWidget(QWidget* widget)
@@ -76,9 +79,18 @@ void ProxyLineEdit::setWidget(QWidget* widget)
 
 void ProxyLineEdit::setClearButtonShown(bool show)
 {
-    QLineEdit::setClearButtonEnabled(show);
-    //int rightMargin = show ? clearButtonUsedSize().width() : 0;
-    //m_layout->setContentsMargins(0, 0, rightMargin, 0);
+    setClearButtonEnabled(show);
+
+    int rightMargin = show ? height() : 0;
+    m_layout->setContentsMargins(0, 0, rightMargin, 0);
+}
+
+void ProxyLineEdit::slotTextChanged(const QString& text)
+{
+    if (text.isEmpty() && isClearButtonEnabled())
+    {
+        emit signalClearButtonPressed();
+    }
 }
 
 // NOTE: see bug #326718: We need to use QLineEdit parent class with these methods

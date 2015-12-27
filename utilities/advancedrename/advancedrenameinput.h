@@ -133,6 +133,7 @@ protected:
 private Q_SLOTS:
 
     void slotClearButtonPressed();
+    void slotTextChanged(const QString& text);
 
 private:
 

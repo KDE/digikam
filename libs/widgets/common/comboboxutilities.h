@@ -63,10 +63,17 @@ public:
     /// After constructing, set the actual widget here
     virtual void setWidget(QWidget* widget);
 
-    virtual void setClearButtonShown(bool show);
+    void setClearButtonShown(bool show);
+
+Q_SIGNALS:
+
+    void signalClearButtonPressed();
+
+private Q_SLOTS:
+
+    void slotTextChanged(const QString& text);
 
 protected:
-
 
     QSize minimumSizeHint() const;
     QSize sizeHint()        const;
