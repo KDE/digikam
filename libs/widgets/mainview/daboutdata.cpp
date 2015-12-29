@@ -68,7 +68,7 @@ const QString DAboutData::digiKamSlogan()
 
 const QString DAboutData::copyright()
 {
-    return i18n("(c) 2002-2015, digiKam developers team");
+    return i18n("(c) 2002-2016, digiKam developers team");
 }
 
 const QUrl DAboutData::webProjectUrl()
