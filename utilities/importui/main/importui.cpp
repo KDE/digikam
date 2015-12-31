@@ -1652,13 +1652,14 @@ void ImportUI::slotUpdateDownloadName()
     bool hasNoSelection       = selected.count() == 0;
     CamItemInfoList list      = d->view->allItems();
     DownloadSettings settings = downloadSettings();
+    QString newName;
 
     foreach (CamItemInfo info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
+        // qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
 
-        QString newName = info.name;
+        newName = info.name;
 
         if (hasNoSelection || selected.contains(info.url()))
         {
@@ -1709,8 +1710,7 @@ void ImportUI::slotUpdateDownloadName()
         }
 
         refInfo.downloadName = newName;
-
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
+        // qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, new: " << refInfo.downloadName;
     }
 
     d->view->updateIconView();
