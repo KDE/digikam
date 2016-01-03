@@ -16,6 +16,7 @@ set(detect_SRCS detect.cpp)
 add_executable(detect ${detect_SRCS})
 target_link_libraries(detect
                       digikamcore
+                      digikamgui
                       digikamfacesengine
                       digikamdatabase
                       libdng
@@ -31,6 +32,7 @@ set(recognize_SRCS recognize.cpp)
 add_executable(recognize ${recognize_SRCS})
 target_link_libraries(recognize
                       digikamcore
+                      digikamgui
                       digikamfacesengine
                       digikamdatabase
                       libdng
@@ -48,6 +50,7 @@ set(align_SRCS align.cpp
 add_executable(align ${align_SRCS})
 target_link_libraries(align
                       digikamcore
+                      digikamgui
                       digikamfacesengine
                       digikamdatabase
                       libdng
@@ -64,6 +67,7 @@ set(preprocess_SRCS preprocess.cpp)
 add_executable(preprocess ${preprocess_SRCS})
 target_link_libraries(preprocess
                       digikamcore
+                      digikamgui
                       digikamfacesengine
                       digikamdatabase
                       libdng
@@ -79,6 +83,7 @@ set(traindb_SRCS traindb.cpp)
 add_executable(traindb ${traindb_SRCS})
 target_link_libraries(traindb
                       digikamcore
+                      digikamgui
                       digikamfacesengine
                       digikamdatabase
                       libdng
@@ -103,6 +108,7 @@ add_executable(facesenginedemo ${facesenginedemo_SRCS})
 
 target_link_libraries(facesenginedemo
                       digikamcore
+                      digikamgui
                       digikamfacesengine
                       digikamdatabase
                       libdng
