@@ -345,7 +345,7 @@ QIcon DFileIconProvider::icon(IconType type) const
 {
     return QFileIconProvider::icon(type);
 }
-    
+
 QIcon DFileIconProvider::icon(const QFileInfo& info) const
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "request thumb icon for " << info.absoluteFilePath();
@@ -355,9 +355,9 @@ QIcon DFileIconProvider::icon(const QFileInfo& info) const
     m_catcher->enqueue();
     QList<QImage> images = m_catcher->waitForThumbnails();
     QIcon icon(QPixmap::fromImage(images.first()));
-   
+
     m_catcher->setActive(false);
-   
+
     return icon;
 }
 
@@ -387,11 +387,12 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     dlg->setWindowTitle(caption);
     dlg->setDirectoryUrl(url);
     dlg->setNameFilters(d->fileFormats);
+    dlg->selectNameFilter(d->fileFormats.last());
     dlg->setIconProvider(new DFileIconProvider());
-    dlg->setOption(QFileDialog::DontUseNativeDialog);
     dlg->setAcceptMode(QFileDialog::AcceptOpen);
+    dlg->setOption(QFileDialog::DontUseNativeDialog);
     dlg->setFileMode(singleSelect ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
-    
+
     dlg->exec();
     d->urls = dlg->selectedUrls();
 
