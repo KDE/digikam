@@ -1885,11 +1885,11 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     QStringList list                       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
     QFileDialog* const imageFileSaveDialog = new QFileDialog(this);
     imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
-    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
-    imageFileSaveDialog->setDirectoryUrl(initialUrl.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash));
-    imageFileSaveDialog->setNameFilters(list);
+    imageFileSaveDialog->setDirectoryUrl(initialUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash));
     imageFileSaveDialog->setOption(QFileDialog::DontUseNativeDialog);
+    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
     imageFileSaveDialog->setFileMode(QFileDialog::AnyFile);
+    imageFileSaveDialog->setNameFilters(list);
 
     // restore old settings for the dialog
     KSharedConfig::Ptr config         = KSharedConfig::openConfig();
@@ -1897,16 +1897,17 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     const QString optionLastExtension = QLatin1String("LastSavedImageExtension");
     QString ext                       = group.readEntry(optionLastExtension, "png");
 
-    Q_FOREACH(QString s, list)
+    foreach(const QString& s, list)
     {
         if (s.contains(QString::fromLatin1("*.%1").arg(ext)))
         {
             imageFileSaveDialog->selectNameFilter(s);
+            break;
         }
     }
 
     // adjust extension of proposed filename
-    QString fileName                  = initialUrl.fileName();
+    QString fileName             = initialUrl.fileName();
 
     if (!fileName.isNull())
     {
@@ -1959,7 +1960,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     const QString configShowImageSettingsDialog = QLatin1String("ShowImageSettingsDialog");
     bool showDialog                             = group.readEntry(configShowImageSettingsDialog, true);
     FileSaveOptionsBox* const options           = new FileSaveOptionsBox();
-    
+
     if (showDialog && options->discoverFormat(newURL.fileName(), DImg::NONE) != DImg::NONE)
     {
         FileSaveOptionsDlg* const fileSaveOptionsDialog = new FileSaveOptionsDlg(this, options);
