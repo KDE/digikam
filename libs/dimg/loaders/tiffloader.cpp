@@ -452,7 +452,142 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                 }
             }
         }
-        else       // Non 16 bits images ==> get it on BGRA 8 bits.
+        else if (bits_per_sample == 32 && samples_per_pixel == 3)          // 32 bits image.
+        {
+            m_sixteenBit = true;
+            data.reset(new_failureTolerant(w, h, 8));
+            QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
+
+            if (!data || strip.isNull())
+            {
+                qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to allocate memory for TIFF image" << filePath;
+                TIFFClose(tif);
+                loadingFailed();
+                return false;
+            }
+
+            long  offset     = 0;
+            long  bytesRead  = 0;
+
+            uint  checkpoint = 0;
+            float maxValue   = 1.0F;
+
+            for (tstrip_t st = 0; st < num_of_strips; ++st)
+            {
+                if (observer && !observer->continueQuery(m_image))
+                {
+                    TIFFClose(tif);
+                    loadingFailed();
+                    return false;
+                }
+
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
+
+                if (bytesRead == -1)
+                {
+                    qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to read strip";
+                    TIFFClose(tif);
+                    loadingFailed();
+                    return false;
+                }
+
+                float* stripPtr = reinterpret_cast<float*>(strip.data());
+
+                for (int i = 0; i < bytesRead / 4; ++i)
+                {
+                    maxValue = qMax(maxValue, *stripPtr++);
+                }
+            }
+
+            if (maxValue > 1.0F)
+            {
+                qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "TIFF image cannot be converted lossless from 32 bits to 16 bits" << filePath;
+            }
+
+            maxValue = (maxValue > 2.8F) ? log(maxValue) : 1.0F;
+
+            for (tstrip_t st = 0; st < num_of_strips; ++st)
+            {
+                if (observer && st == checkpoint)
+                {
+                    checkpoint += granularity(observer, num_of_strips, 0.8F);
+
+                    if (!observer->continueQuery(m_image))
+                    {
+                        TIFFClose(tif);
+                        loadingFailed();
+                        return false;
+                    }
+
+                    observer->progressInfo(m_image, 0.1 + (0.8 * (((float)st) / ((float)num_of_strips))));
+                }
+
+                bytesRead = TIFFReadEncodedStrip(tif, st, strip.data(), strip_size);
+
+                if (bytesRead == -1)
+                {
+                    qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Failed to read strip";
+                    TIFFClose(tif);
+                    loadingFailed();
+                    return false;
+                }
+
+                if ((planar_config == PLANARCONFIG_SEPARATE) &&
+                    (st % (num_of_strips / samples_per_pixel)) == 0)
+                {
+                    offset = 0;
+                }
+
+                float*  stripPtr = reinterpret_cast<float*>(strip.data());
+                ushort* dataPtr  = reinterpret_cast<ushort*>(data.data() + offset);
+                ushort* p;
+
+                if (planar_config == PLANARCONFIG_CONTIG)
+                {
+                    for (int i = 0; i < bytesRead / 12; ++i)
+                    {
+                        p = dataPtr;
+
+                        p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                        p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                        p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                        p[3] = 0xFFFF;
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead / 12 * 8;
+                }
+                else if (planar_config == PLANARCONFIG_SEPARATE)
+                {
+                    for (int i = 0; i < bytesRead / 4; ++i)
+                    {
+                        p = dataPtr;
+
+                        switch ((st / (num_of_strips / samples_per_pixel)))
+                        {
+                            case 0:
+                                p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                                p[3] = 0xFFFF;
+                                break;
+
+                            case 1:
+                                p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                                break;
+
+                            case 2:
+                                p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                                break;
+                        }
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead / 4 * 8;
+                }
+            }
+        }
+        else       // Non 16 or 32 bits images ==> get it on BGRA 8 bits.
         {
             data.reset(new_failureTolerant(w, h, 4));
             QScopedArrayPointer<uchar> strip(new_failureTolerant(w, rows_per_strip, 4));
