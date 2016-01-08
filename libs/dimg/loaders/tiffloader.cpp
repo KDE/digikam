@@ -182,7 +182,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         photometric != PHOTOMETRIC_MINISWHITE &&
         photometric != PHOTOMETRIC_MINISBLACK &&
         ((photometric != PHOTOMETRIC_YCBCR) | (bits_per_sample != 8)) &&
-        ((photometric != PHOTOMETRIC_SEPARATED) | (bits_per_sample != 8)) &&        
+        ((photometric != PHOTOMETRIC_SEPARATED) | (bits_per_sample != 8)) &&
         (m_loadFlags & LoadImageData))
     {
         qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "Can not handle image without RGB color-space: "
@@ -242,7 +242,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
         m_hasAlpha = false;
     }
 
-    if (bits_per_sample == 16)
+    if (bits_per_sample == 16 || bits_per_sample == 32)
     {
         m_sixteenBit = true;
     }
@@ -452,9 +452,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                 }
             }
         }
-        else if (bits_per_sample == 32 && samples_per_pixel == 3)          // 32 bits image.
+        else if (bits_per_sample == 32)          // 32 bits image.
         {
-            m_sixteenBit = true;
             data.reset(new_failureTolerant(w, h, 8));
             QScopedArrayPointer<uchar> strip(new_failureTolerant(strip_size));
 
@@ -470,7 +469,8 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             long  bytesRead  = 0;
 
             uint  checkpoint = 0;
-            float maxValue   = 1.0F;
+            uint  minCount   = 0;
+            uint  maxCount   = 0;
 
             for (tstrip_t st = 0; st < num_of_strips; ++st)
             {
@@ -495,16 +495,24 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 for (int i = 0; i < bytesRead / 4; ++i)
                 {
-                    maxValue = qMax(maxValue, *stripPtr++);
+                    if (*stripPtr++ > 1.0F)
+                    {
+                        maxCount++;
+                    }
+                    else
+                    {
+                        minCount++;
+                    }
                 }
             }
 
-            if (maxValue > 1.0F)
-            {
-                qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "TIFF image cannot be converted lossless from 32 bits to 16 bits" << filePath;
-            }
+            minCount     = (minCount == 0) ? maxCount : minCount;
+            float factor = (float)maxCount / (float)minCount * 3.0F + 1.0F;
 
-            maxValue = (maxValue > 2.8F) ? log(maxValue) : 1.0F;
+            if (factor > 1.1F)
+            {
+                qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "TIFF image cannot be converted lossless from 32 to 16 bits" << filePath;
+            }
 
             for (tstrip_t st = 0; st < num_of_strips; ++st)
             {
@@ -542,15 +550,15 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                 ushort* dataPtr  = reinterpret_cast<ushort*>(data.data() + offset);
                 ushort* p;
 
-                if (planar_config == PLANARCONFIG_CONTIG)
+                if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_CONTIG))
                 {
                     for (int i = 0; i < bytesRead / 12; ++i)
                     {
                         p = dataPtr;
 
-                        p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
-                        p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
-                        p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                        p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                        p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                        p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
                         p[3] = 0xFFFF;
 
                         dataPtr += 4;
@@ -558,7 +566,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                     offset += bytesRead / 12 * 8;
                 }
-                else if (planar_config == PLANARCONFIG_SEPARATE)
+                else if ((samples_per_pixel == 3) && (planar_config == PLANARCONFIG_SEPARATE))
                 {
                     for (int i = 0; i < bytesRead / 4; ++i)
                     {
@@ -567,16 +575,62 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         switch ((st / (num_of_strips / samples_per_pixel)))
                         {
                             case 0:
-                                p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                                p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
                                 p[3] = 0xFFFF;
                                 break;
 
                             case 1:
-                                p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                                p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
                                 break;
 
                             case 2:
-                                p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / maxValue, 65535.0F);
+                                p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                break;
+                        }
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead / 4 * 8;
+                }
+                else if ((samples_per_pixel == 4) && (planar_config == PLANARCONFIG_CONTIG))
+                {
+                    for (int i = 0; i < bytesRead / 16; ++i)
+                    {
+                        p = dataPtr;
+
+                        p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                        p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                        p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                        p[3] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F, 65535.0F);
+
+                        dataPtr += 4;
+                    }
+
+                    offset += bytesRead / 16 * 8;
+                }
+                else if ((samples_per_pixel == 4) && (planar_config == PLANARCONFIG_SEPARATE))
+                {
+                    for (int i = 0; i < bytesRead / 4; ++i)
+                    {
+                        p = dataPtr;
+
+                        switch ((st / (num_of_strips / samples_per_pixel)))
+                        {
+                            case 0:
+                                p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                break;
+
+                            case 1:
+                                p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                break;
+
+                            case 2:
+                                p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                break;
+
+                            case 3:
+                                p[3] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F, 65535.0F);
                                 break;
                         }
 
