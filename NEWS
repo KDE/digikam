@@ -92,11 +92,12 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 056 ==> 220402 - Add a new BQM tool to call an external program [patch].
 057 ==> 339801 - Thumbnails are not displayed properly on 10-bit/channel monitors.
 058 ==> 353789 - Add new tool to apply Lut3D on image [patch].
-059 ==> 356672 - digikam 4.14.0 failed to build against lensfun 0.3.2.
+059 ==> 356672 - digiKam 4.14.0 failed to build against lensfun 0.3.2.
 060 ==> 355980 - Showfotosetup link errors - undefined reference to `Digikam::Setup*.
 061 ==> 262644 - When typing names to unconfirmed faces, only tags beginning with "name" are shown.
 062 ==> 356975 - Nikon 5300 12bit RAW/NEF: wrong white/black level.
-063 ==> 356639 - Digikam crash when i create a new folder.
+063 ==> 356639 - digiKam crash when i create a new folder.
 064 ==> 357301 - Album view is not updated automatically anymore.
-065 ==> 357168 - digikam goes reset.
-066 ==> 
+065 ==> 357168 - digiKam goes reset.
+066 ==> 354745 - Thumbnails not shown in album view after startup.
+067 ==> 
