@@ -469,8 +469,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             long  bytesRead  = 0;
 
             uint  checkpoint = 0;
-            uint  minCount   = 0;
-            uint  maxCount   = 0;
+            float maxValue   = 0.0;
 
             for (tstrip_t st = 0; st < num_of_strips; ++st)
             {
@@ -495,21 +494,14 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 
                 for (int i = 0; i < bytesRead / 4; ++i)
                 {
-                    if (*stripPtr++ > 1.0F)
-                    {
-                        maxCount++;
-                    }
-                    else
-                    {
-                        minCount++;
-                    }
+                    maxValue = qMax(maxValue, *stripPtr++);
                 }
             }
 
-            minCount     = (minCount == 0) ? maxCount : minCount;
-            float factor = (float)maxCount / (float)minCount * 3.0F + 1.0F;
+            double factor = (maxValue > 10.0) ? log10(maxValue) * 1.5 : 1.0;
+            double scale  = (factor > 1.0) ? 0.5 : 1.0;
 
-            if (factor > 1.1F)
+            if (factor > 1.0)
             {
                 qCWarning(DIGIKAM_DIMG_LOG_TIFF) << "TIFF image cannot be converted lossless from 32 to 16 bits" << filePath;
             }
@@ -556,9 +548,9 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     {
                         p = dataPtr;
 
-                        p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
-                        p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
-                        p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                        p[2] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
+                        p[1] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
+                        p[0] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                         p[3] = 0xFFFF;
 
                         dataPtr += 4;
@@ -575,16 +567,16 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         switch ((st / (num_of_strips / samples_per_pixel)))
                         {
                             case 0:
-                                p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                p[2] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                                 p[3] = 0xFFFF;
                                 break;
 
                             case 1:
-                                p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                p[1] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                                 break;
 
                             case 2:
-                                p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                p[0] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                                 break;
                         }
 
@@ -599,10 +591,10 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                     {
                         p = dataPtr;
 
-                        p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
-                        p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
-                        p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
-                        p[3] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F, 65535.0F);
+                        p[2] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
+                        p[1] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
+                        p[0] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
+                        p[3] = (ushort)qBound(0.0, (double)*stripPtr++ * 65535.0, 65535.0);
 
                         dataPtr += 4;
                     }
@@ -618,19 +610,19 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
                         switch ((st / (num_of_strips / samples_per_pixel)))
                         {
                             case 0:
-                                p[2] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                p[2] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                                 break;
 
                             case 1:
-                                p[1] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                p[1] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                                 break;
 
                             case 2:
-                                p[0] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F / factor, 65535.0F);
+                                p[0] = (ushort)qBound(0.0, pow((double)*stripPtr++ / factor, scale) * 65535.0, 65535.0);
                                 break;
 
                             case 3:
-                                p[3] = (ushort)qBound(0.0F, *stripPtr++ * 65535.0F, 65535.0F);
+                                p[3] = (ushort)qBound(0.0, (double)*stripPtr++ * 65535.0, 65535.0);
                                 break;
                         }
 
