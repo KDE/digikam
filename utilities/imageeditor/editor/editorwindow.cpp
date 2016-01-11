@@ -362,14 +362,12 @@ void EditorWindow::setupStandardActions()
     connect(m_saveNewVersionAction, SIGNAL(triggered()), this, SLOT(saveNewVersion()));
     ac->addAction(QLatin1String("editorwindow_savenewversion"), m_saveNewVersionAction);
 
-#pragma "Check this action which is not plugged to action collection"
     QAction* const m_saveNewVersionAsAction = new QAction(QIcon::fromTheme(QLatin1String("document-save-as")),
                                                     i18nc("@action Save changes to a newly created version, specifying the filename and format",
                                                           "Save New Version As..."), this);
     m_saveNewVersionAsAction->setToolTip(i18nc("@info:tooltip", "Save the current modifications to a new version of the file, "
                                                "specifying the filename and format"));
     connect(m_saveNewVersionAsAction, SIGNAL(triggered()), this, SLOT(saveNewVersionAs()));
-    //ac->addAction(QLatin1String("editorwindow_savenewversionas"), m_saveNewVersionAsAction);
 
     m_saveNewVersionInFormatAction = new QMenu(i18nc("@action Save As New Version...Save in format...",
                                                      "Save in Format"), this);
