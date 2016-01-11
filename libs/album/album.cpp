@@ -386,7 +386,7 @@ PAlbum::PAlbum(const QString& parentPath, int albumRoot)
     : Album(Album::PHYSICAL, m_uniqueTrashId--, false),
       m_iconId(0)
 {
-    setTitle(QLatin1String("Trash"));
+    setTitle(i18n("Trash"));
 
     m_albumRootId      = albumRoot;
     m_isAlbumRootAlbum = false;
