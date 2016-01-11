@@ -477,13 +477,13 @@ void AlbumManager::checkDatabaseDirsAfterFirstRun(const QString& dbPath, const Q
                                     QDir::toNativeSeparators(albumDir.path())),
                                QMessageBox::Yes | QMessageBox::No,
                                qApp->activeWindow());
-            
+
             msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
             msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
             msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
             msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
             msgBox.setDefaultButton(QMessageBox::Yes);
-            
+
             int result = msgBox.exec();
 
             if (result == QMessageBox::Yes)
@@ -535,7 +535,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                             QDir::toNativeSeparators(newDir.path())),
                                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                                        qApp->activeWindow());
-            
+
                     msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
                     msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
                     msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
@@ -543,7 +543,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                     msgBox.button(QMessageBox::Cancel)->setText(i18n("Copy Current Database"));
                     msgBox.button(QMessageBox::Cancel)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
                     msgBox.setDefaultButton(QMessageBox::Yes);
-                    
+
                     result = msgBox.exec();
                 }
                 else
@@ -556,13 +556,13 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                             QDir::toNativeSeparators(newDir.path())),
                                        QMessageBox::Yes | QMessageBox::No,
                                        qApp->activeWindow());
-            
+
                     msgBox.button(QMessageBox::Yes)->setText(i18n("Upgrade Database"));
                     msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
                     msgBox.button(QMessageBox::No)->setText(i18n("Create New Database"));
                     msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
                     msgBox.setDefaultButton(QMessageBox::Yes);
-                    
+
                     result = msgBox.exec();
                 }
 
@@ -605,13 +605,13 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                             QDir::toNativeSeparators(newDir.path())),
                                        QMessageBox::Yes | QMessageBox::No,
                                        qApp->activeWindow());
-            
+
                     msgBox.button(QMessageBox::Yes)->setText(i18n("Create New Database"));
                     msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("document-new")));
                     msgBox.button(QMessageBox::No)->setText(i18n("Copy Current Database"));
                     msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
                     msgBox.setDefaultButton(QMessageBox::Yes);
-                    
+
                     result = msgBox.exec();
                 }
 
@@ -638,13 +638,13 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
                                         QDir::toNativeSeparators(newDir.path())),
                                    QMessageBox::Yes | QMessageBox::No,
                                    qApp->activeWindow());
-        
+
                 msgBox.button(QMessageBox::Yes)->setText(i18n("Copy Current Database"));
                 msgBox.button(QMessageBox::Yes)->setIcon(QIcon::fromTheme(QLatin1String("edit-copy")));
                 msgBox.button(QMessageBox::No)->setText(i18n("Use Existing File"));
                 msgBox.button(QMessageBox::No)->setIcon(QIcon::fromTheme(QLatin1String("document-open")));
                 msgBox.setDefaultButton(QMessageBox::Yes);
-                
+
                 result = msgBox.exec();
             }
 
@@ -960,14 +960,14 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
         groupBox->setLayout(layout);
         widget->setLayout(mainLayout);
-        
+
         QVBoxLayout* const vbx          = new QVBoxLayout(dialog);
         QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, dialog);
         vbx->addWidget(widget);
         vbx->addWidget(buttons);
         dialog->setLayout(vbx);
         dialog->setWindowTitle(i18n("Collection not found"));
-        
+
         connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
                 dialog, SLOT(accept()));
 
@@ -1961,7 +1961,7 @@ QList<TAlbum*> AlbumManager::currentTAlbums() const
     for(it = d->currentAlbums.begin(); it != d->currentAlbums.end(); ++it)
     {
         TAlbum* const temp = dynamic_cast<TAlbum*>(*it);
-        
+
         if(temp)
             talbums.push_back(temp);
     }
