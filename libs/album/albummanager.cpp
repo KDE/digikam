@@ -1218,10 +1218,6 @@ void AlbumManager::addAlbumRoot(const CollectionLocation& location)
         // insert album root created into hash
         d->albumRootAlbumHash.insert(location.id(), album);
     }
-
-    // Inserting virtual Trash PAlbum for AlbumsRootAlbum using special constructor
-    PAlbum* trashAlbum = new PAlbum(album->title(), album->id());
-    insertPAlbum(trashAlbum, album);
 }
 
 void AlbumManager::removeAlbumRoot(const CollectionLocation& location)
@@ -1332,7 +1328,9 @@ void AlbumManager::scanPAlbums()
     foreach(PAlbum* const album, oldAlbums)
     {
         if (album->isTrashAlbum())
+        {
             continue;
+        }
 
         if (!album->parent() || !oldAlbums.contains(album->parent()->id()))
         {
@@ -1411,6 +1409,13 @@ void AlbumManager::scanPAlbums()
         album->m_iconId   = info.iconId;
 
         insertPAlbum(album, parent);
+
+        if (album->isAlbumRoot())
+        {
+            // Inserting virtual Trash PAlbum for AlbumsRootAlbum using special constructor
+            PAlbum* trashAlbum = new PAlbum(album->title(), album->id());
+            insertPAlbum(trashAlbum, album);
+        }
     }
 
     if (!topMostOldAlbums.isEmpty() || !newAlbums.isEmpty())

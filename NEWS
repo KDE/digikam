@@ -100,4 +100,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 064 ==> 357301 - Album view is not updated automatically anymore.
 065 ==> 357168 - digiKam goes reset.
 066 ==> 354745 - Thumbnails not shown in album view after startup.
-067 ==> 
+067 ==> 357577 - Crashes after splash screen with ASSERT failure in QVector [patch].
+068 ==> 
