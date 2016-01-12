@@ -286,7 +286,7 @@ void AdvancedRenameDialog::setupWidgets()
     vbx->addWidget(mainWidget);
     vbx->addWidget(d->buttons);
     setLayout(vbx);
-    
+
     setMinimumWidth(d->advancedRenameWidget->minimumWidth());
 }
 
@@ -309,7 +309,7 @@ void AdvancedRenameDialog::setupConnections()
 
     connect(d->sortGroupDirections, SIGNAL(triggered(QAction*)),
             this, SLOT(slotSortDirectionTriggered(QAction*)));
-    
+
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(accept()));
 
@@ -346,10 +346,10 @@ void AdvancedRenameDialog::initDialog()
     if (d->singleFileMode)
     {
         QFileInfo info(fileList.first());
-        d->advancedRenameWidget->setParseString(info.fileName());
-        d->advancedRenameWidget->focusLineEdit();
-        d->advancedRenameWidget->highlightLineEdit(info.completeBaseName());
+        d->advancedRenameWidget->setParseString(info.completeBaseName());
         d->advancedRenameWidget->setParseTimerDuration(50);
+        d->advancedRenameWidget->focusLineEdit();
+        d->advancedRenameWidget->highlightLineEdit();
         d->singleFileModeOldFilename = info.fileName();
     }
 
@@ -455,7 +455,8 @@ void AdvancedRenameDialog::slotParseStringChanged(const QString& parseString)
 
     // generate new file names
     ParseSettings settings;
-    settings.useOriginalFileExtension = d->singleFileMode ? false : true;
+    settings.useOriginalFileExtension = true;
+    // settings.useOriginalFileExtension = d->singleFileMode ? false : true;
     d->advancedRenameManager->parseFiles(parseString, settings);
 
     // fill the tree widget with the updated files
@@ -581,5 +582,5 @@ void AdvancedRenameDialog::slotHelp()
 {
     DXmlGuiWindow::openHandbook(QLatin1String("advancedrename.anchor"), QLatin1String("digikam"));
 }
-    
+
 }  // namespace Digikam

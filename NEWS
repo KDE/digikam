@@ -102,4 +102,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 066 ==> 354745 - Thumbnails not shown in album view after startup.
 067 ==> 357577 - Crashes after splash screen with ASSERT failure in QVector [patch].
 068 ==> 357738 - Item // Edit Geolocation window does not remember its size.
-069 ==> 
+069 ==> 357504 - File might get invisible in album after rename (by removing file extension).
+070 ==> 
