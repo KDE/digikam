@@ -499,7 +499,7 @@ bool TIFFLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             }
 
             double factor = (maxValue > 10.0) ? log10(maxValue) * 1.5 : 1.0;
-            double scale  = (factor > 1.0) ? 0.5 : 1.0;
+            double scale  = (factor > 1.0) ? 0.75 : 1.0;
 
             if (factor > 1.0)
             {
