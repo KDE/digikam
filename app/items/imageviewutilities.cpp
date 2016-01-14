@@ -103,9 +103,38 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
         return false;
     }
 
-    QList<QUrl> urlList;
+    QList<ImageInfo> deleteInfos = infos;
 
     foreach(const ImageInfo& info, infos)
+    {
+        if (info.hasGroupedImages())
+        {
+            QList<ImageInfo> groupedInfos;
+            bool infosGrouped = true;
+
+            foreach(const ImageInfo& group, info.groupedImages())
+            {
+                if (infos.contains(group))
+                {
+                    infosGrouped = false;
+                    break;
+                }
+                else
+                {
+                    groupedInfos << group;
+                }
+            }
+
+            if (infosGrouped)
+            {
+                deleteInfos << groupedInfos;
+            }
+        }
+    }
+
+    QList<QUrl> urlList;
+
+    foreach(const ImageInfo& info, deleteInfos)
     {
         urlList << info.fileUrl();
     }
@@ -125,7 +154,7 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     }
 
     const bool useTrash = !dialog.shouldDelete();
-    DIO::del(infos, useTrash);
+    DIO::del(deleteInfos, useTrash);
 
     return true;
 }

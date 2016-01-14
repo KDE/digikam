@@ -105,4 +105,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 069 ==> 357504 - File might get invisible in album after rename (by removing file extension).
 070 ==> 357952 - Problem with conversion from ‘int’ to ‘boolean’ when using libjpeg 9a.
 071 ==> 357972 - Video Thumbnails are not produced anymore.
-072 ==> 
+072 ==> 307303 - GROUP : delete group of photos problem [patch].
+073 ==> 
