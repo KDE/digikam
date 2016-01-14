@@ -177,7 +177,7 @@ void DngDecoderSlices::decodeSlice(DngDecoderThread* t) {
         CHECKSIZE(e.byteOffset+e.byteCount);
         JPEG_MEMSRC(&dinfo, (unsigned char*)mFile->getData(e.byteOffset), e.byteCount);
 
-        if (JPEG_HEADER_OK != jpeg_read_header(&dinfo, TRUE))
+        if (JPEG_HEADER_OK != jpeg_read_header(&dinfo, (boolean)TRUE))
           ThrowRDE("DngDecoderSlices: Unable to read JPEG header");
 
         jpeg_start_decompress(&dinfo);
