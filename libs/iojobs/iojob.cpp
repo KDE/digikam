@@ -125,6 +125,16 @@ void CopyJob::run()
 
             if (!srcDir.rename(srcDir.path(), destenation))
             {
+                // If QDir::rename fails, try copy and remove.
+                if (copyFolderRecursively(srcDir.path(), dstDir.path()))
+                {
+                    if (srcDir.removeRecursively())
+                    {
+                        emit signalDone();
+                        return;
+                    }
+                }
+
                 error(i18n("Could not move folder %1 to album %2",
                            srcDir.path(), dstDir.path()));
             }
