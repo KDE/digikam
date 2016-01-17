@@ -112,12 +112,12 @@ void TagList::saveSettings()
     QList<ListItem*> currentItems = d->tagListModel->allItems();
     group.writeEntry(QLatin1String("Size"), currentItems.count()-1);
 
-    for(int it = 1; it < currentItems.size(); it++)
+    for (int it = 1; it < currentItems.size(); it++)
     {
         QList<int> ids = currentItems.at(it)->getTagIds();
         QString saveData;
 
-        for(int jt = 0; jt < ids.size(); jt++)
+        for (int jt = 0; jt < ids.size(); jt++)
         {
             saveData.append(QString::number(ids.at(jt)) + QLatin1String(" "));
         }
@@ -139,7 +139,7 @@ void TagList::restoreSettings()
      */
     d->tagListModel->addItem(QList<QVariant>() << QBrush(Qt::cyan, Qt::Dense2Pattern));
 
-    if(size == 0 || size < 0)
+    if (size == 0 || size < 0)
     {
         return;
     }
@@ -185,8 +185,10 @@ void TagList::slotAddPressed()
 {
     QModelIndexList selected = d->treeView->selectionModel()->selectedIndexes();
 
-    if(selected.isEmpty())
+    if (selected.isEmpty())
+    {
         return;
+    }
 
     QList<QVariant> itemData;
     itemData << QBrush(Qt::cyan, Qt::Dense2Pattern);
@@ -196,6 +198,7 @@ void TagList::slotAddPressed()
         TAlbum* const album = static_cast<TAlbum*>(d->treeView->albumForIndex(index));
         itemData << album->id();
     }
+
     ListItem* listItem = d->tagListModel->addItem(itemData);
 
     /** Use this map to find all List Items that contain specific tag
@@ -209,20 +212,20 @@ void TagList::slotAddPressed()
 
 void TagList::slotSelectionChanged()
 {
-    QModelIndexList indexList= d->tagList->mySelectedIndexes();
+    QModelIndexList indexList = d->tagList->mySelectedIndexes();
     QSet<int> mySet;
 
-    Q_FOREACH(QModelIndex index, indexList)
+    foreach(const QModelIndex& index, indexList)
     {
         ListItem* const item = static_cast<ListItem*>(index.internalPointer());
 
-        if(item->getTagIds().isEmpty())
+        if (item->getTagIds().isEmpty())
         {
             mySet.clear();
             break;
         }
 
-        Q_FOREACH(int tagId, item->getTagIds())
+        foreach(int tagId, item->getTagIds())
         {
             mySet.insert(tagId);
         }
@@ -236,8 +239,10 @@ void TagList::slotTagDeleted(Album* album)
 {
     TAlbum* const talbum = dynamic_cast<TAlbum*>(album);
 
-    if(!talbum)
+    if (!talbum)
+    {
         return;
+    }
 
     int delId = talbum->id();
 
@@ -247,7 +252,7 @@ void TagList::slotTagDeleted(Album* album)
     {
         item->removeTagId(delId);
 
-        if(item->getTagIds().isEmpty())
+        if (item->getTagIds().isEmpty())
         {
             d->tagListModel->deleteItem(item);
             d->tagMap[delId].removeOne(item);
@@ -260,8 +265,10 @@ void TagList::slotDeleteSelected()
 {
     QModelIndexList sel = d->tagList->selectionModel()->selectedIndexes();
 
-    if(sel.isEmpty())
+    if (sel.isEmpty())
+    {
         return;
+    }
 
     foreach(const QModelIndex& index, sel)
     {
