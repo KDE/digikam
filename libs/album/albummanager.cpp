@@ -2605,7 +2605,6 @@ bool AlbumManager::updateTAlbumIcon(TAlbum* album, const QString& iconKDE,
         CoreDbAccess access;
         ChangingDB changing(d);
         access.db()->setTagIcon(album->id(), iconKDE, iconID);
-        QString albumRelativePath, iconKDE;
         album->m_icon   = iconKDE;
         album->m_iconId = iconID;
     }
