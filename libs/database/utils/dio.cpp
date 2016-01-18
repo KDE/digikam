@@ -49,6 +49,8 @@
 #include "thumbnailloadthread.h"
 #include "iojobsmanager.h"
 #include "collectionmanager.h"
+#include "dnotificationwrapper.h"
+#include "digikamapp.h"
 
 namespace Digikam
 {
@@ -328,7 +330,9 @@ void DIO::slotResult()
     IOJobsThread *jobThread = dynamic_cast<IOJobsThread*>(sender());
 
     if (!jobThread)
+    {
         return;
+    }
 
     if (jobThread->hasErrors())
     {
@@ -351,8 +355,13 @@ void DIO::slotResult()
             return;
         }
 
-// TODO: Is DNotificationWrapper the suitable way?
-//        job->ui()->showErrorMessage();
+        if (jobThread->hasErrors())
+        {
+            // Pop-up a message about the error.
+            QString errors = jobThread->errorsList().join(QLatin1String("\n"));
+            DNotificationWrapper(QString(),  errors, DigikamApp::instance(),
+                                 DigikamApp::instance()->windowTitle());
+        }
     }
 }
 

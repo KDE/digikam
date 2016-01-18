@@ -30,9 +30,7 @@
 
 #include "iojobsthread.h"
 #include "iojob.h"
-#include "dnotificationwrapper.h"
 #include "digikam_debug.h"
-#include "digikamapp.h"
 #include "dtrashiteminfo.h"
 
 namespace Digikam

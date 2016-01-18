@@ -35,11 +35,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_export.h"
-#include "coredb.h"
-#include "album.h"
-#include "coredbaccess.h"
-#include "dbengineparameters.h"
 #include "dtrash.h"
 
 namespace Digikam
@@ -126,17 +121,16 @@ void CopyJob::run()
             if (!srcDir.rename(srcDir.path(), destenation))
             {
                 // If QDir::rename fails, try copy and remove.
-                if (copyFolderRecursively(srcDir.path(), dstDir.path()))
+                if (!copyFolderRecursively(srcDir.path(), dstDir.path()))
                 {
-                    if (srcDir.removeRecursively())
-                    {
-                        emit signalDone();
-                        return;
-                    }
+                    error(i18n("Could not move folder %1 to album %2",
+                               srcDir.path(), dstDir.path()));
                 }
-
-                error(i18n("Could not move folder %1 to album %2",
-                           srcDir.path(), dstDir.path()));
+                else if (!srcDir.removeRecursively())
+                {
+                    error(i18n("Could not move folder %1 only copied to album %2",
+                               srcDir.path(), dstDir.path()));
+                }
             }
         }
         else
