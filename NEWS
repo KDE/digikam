@@ -107,4 +107,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 071 ==> 357972 - Video Thumbnails are not produced anymore.
 072 ==> 307303 - GROUP : delete group of photos problem [patch].
 073 ==> 358053 - Drag and drop across local collections does not do anything.
-074 ==> 
+074 ==> 358149 - Duplicate entry in JPEG2000 image extensions.
+075 ==> 

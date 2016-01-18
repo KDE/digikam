@@ -127,8 +127,8 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
 #ifdef HAVE_JASPER
     if (jp2k)
     {
-        formats.append(i18n("JPEG2000 Image (*.jp2 *.j2k *.jpx *.jpx *.pgx)"));
-        allTypes.append(QLatin1String("*.jp2 *.j2k *.jpx *.jpx *.pgx "));
+        formats.append(i18n("JPEG2000 Image (*.jp2 *.j2k *.jpx *.pgx)"));
+        allTypes.append(QLatin1String("*.jp2 *.j2k *.jpx *.pgx "));
     }
 #endif // HAVE_JASPER
 
