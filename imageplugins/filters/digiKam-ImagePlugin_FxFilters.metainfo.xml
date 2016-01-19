@@ -26,6 +26,7 @@
   <name xml:lang="sv">Bildinsticksprogrammet Filtereffekter</name>
   <name xml:lang="uk">ImagePlugin-FxFilters</name>
   <name xml:lang="x-test">xxImagePlugin-FxFiltersxx</name>
+  <name xml:lang="zh-CN">图片插件-Fx 过滤器</name>
   <summary>Special effect filters plugin for digiKam</summary>
   <summary xml:lang="bs">Dodatak filtera specijalnih efekata za digiKam</summary>
   <summary xml:lang="ca">Connector amb filtres d'efectes especials pel digiKam</summary>
@@ -49,6 +50,7 @@
   <summary xml:lang="sv">Insticksprogram för Digikam med specialeffektfilter</summary>
   <summary xml:lang="uk">Додаток фільтрів спеціальних ефектів до digiKam</summary>
   <summary xml:lang="x-test">xxSpecial effect filters plugin for digiKamxx</summary>
+  <summary xml:lang="zh-CN">digiKam 的特殊效果过滤器</summary>
   <developer_name>digiKam Project</developer_name>
   <developer_name xml:lang="ast">Proyeutu digiKam</developer_name>
   <developer_name xml:lang="bs">digiKam Projekt</developer_name>
@@ -73,5 +75,6 @@
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>
   <url type="homepage">http://www.digikam.org/</url>
 </component>

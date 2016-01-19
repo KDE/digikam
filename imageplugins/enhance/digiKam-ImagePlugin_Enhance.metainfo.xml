@@ -26,6 +26,7 @@
   <name xml:lang="sv">Bildinsticksprogrammet Förbättra</name>
   <name xml:lang="uk">ImagePlugin-Enhance</name>
   <name xml:lang="x-test">xxImagePlugin-Enhancexx</name>
+  <name xml:lang="zh-CN">图片插件-增强</name>
   <summary>digiKam plugin to enhance photographs</summary>
   <summary xml:lang="bs">dodatak digiKam-a za poboljšanje fotografija</summary>
   <summary xml:lang="ca">Connector d'imatge per a millorar les fotografies</summary>
@@ -49,6 +50,7 @@
   <summary xml:lang="sv">Digikam-Insticksprogram för att förbättra fotografier</summary>
   <summary xml:lang="uk">Додаток до digiKam для покращення вигляду фотографій</summary>
   <summary xml:lang="x-test">xxdigiKam plugin to enhance photographsxx</summary>
+  <summary xml:lang="zh-CN">增强相片的 digiKam 插件</summary>
   <developer_name>digiKam Project</developer_name>
   <developer_name xml:lang="ast">Proyeutu digiKam</developer_name>
   <developer_name xml:lang="bs">digiKam Projekt</developer_name>
@@ -73,5 +75,6 @@
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>
   <url type="homepage">http://www.digikam.org/</url>
 </component>

@@ -26,6 +26,7 @@
   <name xml:lang="sv">Bildinsticksprogrammet Dekorera</name>
   <name xml:lang="uk">ImagePlugin-Decorate</name>
   <name xml:lang="x-test">xxImagePlugin-Decoratexx</name>
+  <name xml:lang="zh-CN">图片插件-装饰</name>
   <summary>A tool to decorate an image</summary>
   <summary xml:lang="ast">Una ferramienta pa decorar una imaxe</summary>
   <summary xml:lang="bs">Alat za dekoraciju slika</summary>
@@ -50,6 +51,7 @@
   <summary xml:lang="sv">Ett verktyg för att dekorera en bild</summary>
   <summary xml:lang="uk">Інструмент для декорування зображення</summary>
   <summary xml:lang="x-test">xxA tool to decorate an imagexx</summary>
+  <summary xml:lang="zh-CN">装饰图片的工具</summary>
   <developer_name>digiKam Project</developer_name>
   <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
@@ -73,5 +75,6 @@
   <developer_name xml:lang="sv">Digikam-projektet</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
+  <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>
   <url type="homepage">http://www.digikam.org/</url>
 </component>
