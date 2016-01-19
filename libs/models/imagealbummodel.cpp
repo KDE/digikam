@@ -421,10 +421,12 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
 
 void ImageAlbumModel::slotResult()
 {
-    if(d->jobThread != sender())
+    if (d->jobThread != sender())
+    {
         return;
+    }
 
-    if(d->jobThread->hasErrors())
+    if (d->jobThread->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list url: "
                                        << d->jobThread->errorsList().first();

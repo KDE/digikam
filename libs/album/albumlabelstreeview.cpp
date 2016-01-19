@@ -926,7 +926,9 @@ void AlbumLabelsSearchHandler::slotSetCurrentAlbum()
 void AlbumLabelsSearchHandler::slotResult()
 {
     if (d->dbJobThread != sender())
+    {
         return;
+    }
 
     if (d->dbJobThread->hasErrors())
     {

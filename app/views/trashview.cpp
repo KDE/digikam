@@ -196,7 +196,9 @@ void TrashView::slotDeleteSelectedItems()
     int result = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
+    {
         return;
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
 
@@ -214,7 +216,9 @@ void TrashView::slotDeleteSelectedItems()
 void TrashView::slotRemoveItemsFromModel()
 {
     if (d->selectedIndexesToRemove.isEmpty())
+    {
         return;
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Removing deleted items from view";
 
@@ -230,7 +234,9 @@ void TrashView::slotRemoveAllItemsFromModel()
 void TrashView::slotDeleteAllItems()
 {
     if (d->model->isEmpty())
+    {
         return;
+    }
 
     QString title = i18n("Confirm Deletion");
     QString msg = i18n("Are you sure you want to delete ALL items permanently?");
@@ -245,18 +251,20 @@ void TrashView::slotDeleteAllItems()
     IOJobsThread* const thread =
             IOJobsManager::instance()->startDeletingDTrashItems(d->model->allItems());
 
-    connect(thread,SIGNAL(finished()),
+    connect(thread, SIGNAL(finished()),
             this, SLOT(slotRemoveAllItemsFromModel()));
 }
 
 void TrashView::slotDataChanged()
 {
     selectLastSelected();
+
     if (d->model->isEmpty())
     {
         d->deleteAllButton->setEnabled(false);
         return;
     }
+
     d->deleteAllButton->setEnabled(true);
 }
 
@@ -296,6 +304,7 @@ void TrashView::selectLastSelected()
         d->tableView->selectRow(d->lastSelectedIndex.row());
         d->tableView->scrollTo(d->lastSelectedIndex, QAbstractItemView::EnsureVisible);
     }
+
     emit selectionChanged();
 }
 

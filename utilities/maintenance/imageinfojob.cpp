@@ -138,7 +138,7 @@ bool ImageInfoJob::isRunning() const
 
 void ImageInfoJob::slotResult()
 {
-    if (!d->jobThread)
+    if (d->jobThread != sender())
     {
         return;
     }
