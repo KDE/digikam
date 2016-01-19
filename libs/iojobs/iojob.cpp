@@ -86,14 +86,14 @@ void CopyJob::run()
 
     if (!srcInfo.exists())
     {
-        error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
+        emit error(i18n("File/Folder %1 does not exist anymore", srcInfo.baseName()));
         emit signalDone();
         return;
     }
 
     if (!dstDir.exists())
     {
-        error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
+        emit error(i18n("Album %1 does not exist anymore", dstDir.dirName()));
         emit signalDone();
         return;
     }
@@ -105,8 +105,8 @@ void CopyJob::run()
 
     if (fileInfoForDestination.exists())
     {
-        error(i18n("A file or folder named %1 already exists in %2",
-                   srcInfo.baseName(), dstDir.path()));
+        emit error(i18n("A file or folder named %1 already exists in %2",
+                        srcInfo.baseName(), dstDir.path()));
 
         emit signalDone();
         return;
@@ -123,13 +123,13 @@ void CopyJob::run()
                 // If QDir::rename fails, try copy and remove.
                 if (!copyFolderRecursively(srcDir.path(), dstDir.path()))
                 {
-                    error(i18n("Could not move folder %1 to album %2",
-                               srcDir.path(), dstDir.path()));
+                    emit error(i18n("Could not move folder %1 to album %2",
+                                    srcDir.path(), dstDir.path()));
                 }
                 else if (!srcDir.removeRecursively())
                 {
-                    error(i18n("Could not move folder %1 only copied to album %2",
-                               srcDir.path(), dstDir.path()));
+                    emit error(i18n("Could not move folder %1 only copied to album %2",
+                                    srcDir.path(), dstDir.path()));
                 }
             }
         }
@@ -139,8 +139,8 @@ void CopyJob::run()
 
             if (!srcFile.rename(destenation))
             {
-                error(i18n("Could not move file %1 to album %2",
-                           srcInfo.filePath(), dstDir.path()));
+                emit error(i18n("Could not move file %1 to album %2",
+                                srcInfo.filePath(), dstDir.path()));
             }
         }
     }
@@ -152,16 +152,16 @@ void CopyJob::run()
 
             if (!copyFolderRecursively(srcDir.path(), dstDir.path()))
             {
-                error(i18n("Could not copy folder %1 to album %2",
-                           srcDir.path(), dstDir.path()));
+                emit error(i18n("Could not copy folder %1 to album %2",
+                                srcDir.path(), dstDir.path()));
             }
         }
         else
         {
             if (!QFile::copy(srcInfo.filePath(), destenation))
             {
-                error(i18n("Could not copy file %1 to album %2",
-                           srcInfo.path(), dstDir.path()));
+                emit error(i18n("Could not copy file %1 to album %2",
+                                srcInfo.path(), dstDir.path()));
             }
         }
     }
@@ -186,7 +186,7 @@ void DeleteJob::run()
 
     if (!fileInfo.exists())
     {
-        error(i18n("File/Folder %1 does not exist", fileInfo.filePath()));
+        emit error(i18n("File/Folder %1 does not exist", fileInfo.filePath()));
         emit signalDone();
         return;
     }
@@ -197,14 +197,14 @@ void DeleteJob::run()
         {
             if (!DTrash::deleteDirRecursivley(m_srcToDelete.path()))
             {
-                error(i18n("Couldn't move Dir %1 to collection trash", fileInfo.path()));
+                emit error(i18n("Couldn't move Dir %1 to collection trash", fileInfo.path()));
             }
         }
         else
         {
             if (!DTrash::deleteImage(m_srcToDelete.path()))
             {
-                error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
+                emit error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
             }
         }
     }
@@ -216,7 +216,7 @@ void DeleteJob::run()
 
             if (!dir.removeRecursively())
             {
-                error(i18n("Album %1 could not be removed", fileInfo.path()));
+                emit error(i18n("Album %1 could not be removed", fileInfo.path()));
             }
         }
         else
@@ -225,7 +225,7 @@ void DeleteJob::run()
 
             if (!file.remove())
             {
-                error(i18n("Image %1 could not be removed", fileInfo.filePath()));
+                emit error(i18n("Image %1 could not be removed", fileInfo.filePath()));
             }
         }
     }
@@ -255,7 +255,7 @@ void RenameFileJob::run()
     if (QFileInfo(m_newUrl.path()).exists())
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
-        error(i18n("Image with the same name %1 already there", m_newUrl.path()));
+        emit error(i18n("Image with the same name %1 already there", m_newUrl.path()));
         emit signalDone();
         return;
     }
@@ -269,7 +269,7 @@ void RenameFileJob::run()
     if (!file.rename(m_newUrl.path()))
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
-        error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
+        emit error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
         emit signalDone();
         return;
     }
