@@ -54,7 +54,6 @@ private:
      *  These ones will by used internally by ImgQSort through OpenCV API.
      */
     void readImage() const;
-    bool runningFlag() const volatile;
 
     /**
      * @function CannyThreshold

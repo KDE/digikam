@@ -56,7 +56,7 @@ class ImgQSort::Private
 public:
 
     Private() :
-        clusterCount(30),       //used for k-means clustering algorithm in noise detection
+        clusterCount(30),                   //used for k-means clustering algorithm in noise detection
         size(512)
     {
         for (int c = 0 ; c < 3; c++)
@@ -81,22 +81,22 @@ public:
 
     float*               fimg[3];
     const uint           clusterCount;
-    const uint           size;   // Size of squared original image.
+    const uint           size;              // Size of squared original image.
 
-    Mat                  src;                      // Matrix of the original source image
-    Mat                  src_gray;                 // Matrix of the grayscaled source image
-    Mat                  detected_edges;           // Matrix containing only edges in the image
+    Mat                  src;               // Matrix of the original source image
+    Mat                  src_gray;          // Matrix of the grayscaled source image
+    Mat                  detected_edges;    // Matrix containing only edges in the image
 
-    int                  edgeThresh;       // threshold above which we say that edges are present at a point
-    int                  ratio;            // lower:upper threshold for canny edge detector algorithm
+    int                  edgeThresh;        // threshold above which we say that edges are present at a point
+    int                  ratio;             // lower:upper threshold for canny edge detector algorithm
     int                  kernel_size;
     // kernel size for for the Sobel operations to be performed internally
     // by the edge detector
 
     double               lowThreshold;
 
-    DImg                 image;            // original image
-    DImg                 neimage;          // noise estimation image[ for color]
+    DImg                 image;             // original image
+    DImg                 neimage;           // noise estimation image[ for color]
 
     ImageQualitySettings imq;
 
@@ -107,34 +107,34 @@ public:
     double               pendingThreshold;
     double               rejectedThreshold;
 
-    QString              path;             // Path to host result file
+    QString              path;              // Path to host result file
 
     PickLabel*           label;
 
-    bool                 running;
+    volatile bool        running;
 };
 
 ImgQSort::ImgQSort(const DImg& img, const ImageQualitySettings& imq, PickLabel* const label)
     : d(new Private)
 {
     // Reading settings from GUI
-    d->imq.detectBlur        = imq.detectBlur;
-    d->imq.detectNoise       = imq.detectNoise;
-    d->imq.detectCompression = imq.detectCompression;
-    d->imq.detectOverexposure= imq.detectOverexposure;
-    d->imq.lowQRejected      = imq.lowQRejected;
-    d->imq.mediumQPending    = imq.mediumQPending;
-    d->imq.highQAccepted     = imq.highQAccepted;
-    d->imq.speed             = imq.speed;
-    d->imq.rejectedThreshold = imq.rejectedThreshold;
-    d->imq.pendingThreshold  = imq.pendingThreshold;
-    d->imq.acceptedThreshold = imq.acceptedThreshold;
-    d->imq.blurWeight        = imq.blurWeight;
-    d->imq.noiseWeight       = imq.noiseWeight;
-    d->imq.compressionWeight = imq.compressionWeight;
-    d->image                 = img;
-    d->neimage               = img;
-    d->label                 = label;
+    d->imq.detectBlur         = imq.detectBlur;
+    d->imq.detectNoise        = imq.detectNoise;
+    d->imq.detectCompression  = imq.detectCompression;
+    d->imq.detectOverexposure = imq.detectOverexposure;
+    d->imq.lowQRejected       = imq.lowQRejected;
+    d->imq.mediumQPending     = imq.mediumQPending;
+    d->imq.highQAccepted      = imq.highQAccepted;
+    d->imq.speed              = imq.speed;
+    d->imq.rejectedThreshold  = imq.rejectedThreshold;
+    d->imq.pendingThreshold   = imq.pendingThreshold;
+    d->imq.acceptedThreshold  = imq.acceptedThreshold;
+    d->imq.blurWeight         = imq.blurWeight;
+    d->imq.noiseWeight        = imq.noiseWeight;
+    d->imq.compressionWeight  = imq.compressionWeight;
+    d->image                  = img;
+    d->neimage                = img;
+    d->label                  = label;
 }
 
 ImgQSort::~ImgQSort()
@@ -150,15 +150,15 @@ void ImgQSort::startAnalyse()
 
     readImage();
 
-    double blur              = 0.0;
-    short  blur2             = 0;
-    double noise             = 0.0;
-    int    compressionlevel  = 0;
-    float  finalquality      = 0.0;
-    int    exposurelevel     = 0;
+    double blur             = 0.0;
+    short  blur2            = 0;
+    double noise            = 0.0;
+    int    compressionlevel = 0;
+    float  finalquality     = 0.0;
+    int    exposurelevel    = 0;
 
     // If blur option is selected in settings, run the blur detection algorithms
-    if (runningFlag() && d->imq.detectBlur)
+    if (d->running && d->imq.detectBlur)
     {
         // Returns blur value between 0 and 1.
         // If NaN is returned just assign NoPickLabel
@@ -171,7 +171,7 @@ void ImgQSort::startAnalyse()
         qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of Blur present in image [using LoG Filter] is : " << blur2;
     }
 
-    if (runningFlag() && d->imq.detectNoise)
+    if (d->running && d->imq.detectNoise)
     {
         // Some images give very low noise value. Assign NoPickLabel in that case.
         // Returns noise value between 0 and 1.
@@ -179,14 +179,14 @@ void ImgQSort::startAnalyse()
         qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of Noise present in image is : " << noise;
     }
 
-    if (runningFlag() && d->imq.detectCompression)
+    if (d->running && d->imq.detectCompression)
     {
         // Returns number of blocks in the image.
         compressionlevel = compressiondetector();
         qCDebug(DIGIKAM_DATABASE_LOG) << "Amount of compression artifacts present in image is : " << compressionlevel;
     }
 
-    if (runningFlag() && d->imq.detectOverexposure)
+    if (d->running && d->imq.detectOverexposure)
     {
         // Returns if there is overexposure in the image
         exposurelevel = exposureamount();
@@ -229,7 +229,7 @@ void ImgQSort::startAnalyse()
     // Calculating finalquality
 
     // All the results to have a range of 1 to 100.
-    if (runningFlag())
+    if (d->running)
     {
         float finalblur        = (blur*100)  + ((blur2/32767)*100);
         float finalnoise       = noise*100;
@@ -293,16 +293,16 @@ void ImgQSort::readImage() const
     {
         DColor col;
 
-        for (int c = 0; runningFlag() && (c < 3); c++)
+        for (int c = 0; d->running && (c < 3); c++)
         {
             d->fimg[c] = new float[d->neimage.numPixels()];
         }
 
         int j = 0;
 
-        for (uint y = 0; runningFlag() && (y < d->neimage.height()); y++)
+        for (uint y = 0; d->running && (y < d->neimage.height()); y++)
         {
-            for (uint x = 0; runningFlag() && (x < d->neimage.width()); x++)
+            for (uint x = 0; d->running && (x < d->neimage.width()); x++)
             {
                 col           = d->neimage.getPixelColor(x, y);
                 d->fimg[0][j] = col.red();
@@ -312,11 +312,6 @@ void ImgQSort::readImage() const
             }
         }
     }
-}
-
-bool ImgQSort::runningFlag() const volatile
-{
-    return d->running;
 }
 
 void ImgQSort::CannyThreshold(int, void*) const
@@ -408,9 +403,9 @@ double ImgQSort::noisedetector() const
     // Pointer variable to handle the CvMat* points (the image in CvMat format).
     float* pointsPtr = reinterpret_cast<float*>(points->data.ptr);
 
-    for (uint x=0 ; runningFlag() && (x < d->neimage.numPixels()) ; x++)
+    for (uint x=0 ; d->running && (x < d->neimage.numPixels()) ; x++)
     {
-        for (int y=0 ; runningFlag() && (y < 3) ; y++)
+        for (int y=0 ; d->running && (y < 3) ; y++)
         {
             *pointsPtr++ = (float)d->fimg[y][x];
         }
@@ -423,7 +418,7 @@ double ImgQSort::noisedetector() const
 
     //-- KMEANS ---------------------------------------------------------------------------------------------
 
-    if (runningFlag())
+    if (d->running)
     {
         cvKMeans2(points, d->clusterCount, clusters,
                   cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
@@ -437,7 +432,7 @@ double ImgQSort::noisedetector() const
 
     // The row position array would just make the hold the number of elements in each cluster.
 
-    for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i=0 ; d->running && (i < d->clusterCount) ; i++)
     {
         // Initializing the cluster count array.
         rowPosition[i] = 0;
@@ -445,7 +440,7 @@ double ImgQSort::noisedetector() const
 
     int rowIndex, columnIndex;
 
-    for (uint i=0 ; runningFlag() && (i < d->neimage.numPixels()) ; i++)
+    for (uint i=0 ; d->running && (i < d->neimage.numPixels()) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowPosition[columnIndex]++;
@@ -457,7 +452,7 @@ double ImgQSort::noisedetector() const
 
     int max = rowPosition[0];
 
-    for (uint i=1 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i=1 ; d->running && (i < d->clusterCount) ; i++)
     {
         if (rowPosition[i] > max)
         {
@@ -474,7 +469,7 @@ double ImgQSort::noisedetector() const
 
     CvMat* sd = 0;
 
-    if (runningFlag())
+    if (d->running)
     {
         sd = cvCreateMat(max, (d->clusterCount * points->cols), CV_32FC1);
     }
@@ -483,7 +478,7 @@ double ImgQSort::noisedetector() const
 
     QScopedArrayPointer<int> rPosition(new int[d->clusterCount]);
 
-    for (uint i=0 ; runningFlag() && (i < d->clusterCount) ; i++)
+    for (uint i=0 ; d->running && (i < d->clusterCount) ; i++)
     {
         rPosition[i] = 0;
     }
@@ -492,7 +487,7 @@ double ImgQSort::noisedetector() const
 
     qCDebug(DIGIKAM_DATABASE_LOG) << "The rowPosition array is ready!";
 
-    for (uint i=0 ; runningFlag() && (i < d->neimage.numPixels()) ; i++)
+    for (uint i=0 ; d->running && (i < d->neimage.numPixels()) ; i++)
     {
         columnIndex = clusters->data.i[i];
         rowIndex    = rPosition[columnIndex];
@@ -503,15 +498,15 @@ double ImgQSort::noisedetector() const
 
         // Moving to the right column.
 
-        for (int j=0 ; runningFlag() && (j < columnIndex) ; j++)
+        for (int j=0 ; d->running && (j < columnIndex) ; j++)
         {
-            for (int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
+            for (int z=0 ; d->running && (z < (points->cols)) ; z++)
             {
                 ptr++;
             }
         }
 
-        for (int z=0 ; runningFlag() && (z < (points->cols)) ; z++)
+        for (int z=0 ; d->running && (z < (points->cols)) ; z++)
         {
             *ptr++ = cvGet2D(points, i, z).val[0];
         }
@@ -531,7 +526,7 @@ double ImgQSort::noisedetector() const
     float*   stdStorePtr  = 0;
     int      totalcount   = 0; // Number of non-empty clusters.
 
-    if (runningFlag())
+    if (d->running)
     {
         meanStore    = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
         stdStore     = cvCreateMat(d->clusterCount, points->cols, CV_32FC1);
@@ -539,14 +534,14 @@ double ImgQSort::noisedetector() const
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
-    for (int i=0 ; runningFlag() && (i < sd->cols) ; i++)
+    for (int i=0 ; d->running && (i < sd->cols) ; i++)
     {
-        if (runningFlag() && (rowPosition[(i/points->cols)] >= 1))
+        if (d->running && (rowPosition[(i/points->cols)] >= 1))
         {
             CvMat* workingArr = cvCreateMat(rowPosition[(i / points->cols)], 1, CV_32FC1);
             ptr               = reinterpret_cast<float*>(workingArr->data.ptr);
 
-            for (int j=0 ; runningFlag() && (j < rowPosition[(i / (points->cols))]) ; j++)
+            for (int j=0 ; d->running && (j < rowPosition[(i / (points->cols))]) ; j++)
             {
                 *ptr++ = cvGet2D(sd, j, i).val[0];
             }
@@ -563,7 +558,7 @@ double ImgQSort::noisedetector() const
 
     // -----------------------------------------------------------------------------------------------------------------
 
-    if (runningFlag())
+    if (d->running)
     {
         meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
@@ -578,7 +573,7 @@ double ImgQSort::noisedetector() const
     float   weightedStd  = 0.0F;
     float   datasd[3]    = {0.0F, 0.0F, 0.0F};
 
-    for (int j=0 ; runningFlag() && (j < points->cols) ; j++)
+    for (int j=0 ; d->running && (j < points->cols) ; j++)
     {
         meanStorePtr = reinterpret_cast<float*>(meanStore->data.ptr);
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
@@ -616,7 +611,7 @@ double ImgQSort::noisedetector() const
 
     // -- adaptation ---------------------------------------------------------------------------------------
 
-    if (runningFlag())
+    if (d->running)
     {
         // For 16 bits images only.
 
@@ -667,7 +662,7 @@ int ImgQSort::compressiondetector() const
     // Go through 8 blocks at a time horizontally
     // iterating through columns.
 
-    for (int i = 0; runningFlag() && i < d->src_gray.rows; i++)
+    for (int i = 0; d->running && i < d->src_gray.rows; i++)
     {
         // Calculating intensity of top column.
 
@@ -733,7 +728,7 @@ int ImgQSort::compressiondetector() const
 
     // Iterating through rows.
 
-    for (int j = 0; runningFlag() && j < d->src_gray.cols; j++)
+    for (int j = 0; d->running && j < d->src_gray.cols; j++)
     {
         // Calculating intensity of top row.
 

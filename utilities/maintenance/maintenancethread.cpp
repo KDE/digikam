@@ -148,7 +148,9 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
 void MaintenanceThread::cancel()
 {
     if (isRunning())
+    {
         emit signalCanceled();
+    }
 
     ActionThreadBase::cancel();
 }

@@ -49,6 +49,9 @@ public:
     QString              path;
     ImageQualitySettings quality;
     ImgQSort*            imgqsort;
+
+    QMutex               mutex;
+    QWaitCondition       condVar;
 };
 
 // -------------------------------------------------------
@@ -62,6 +65,14 @@ ImageQualityTask::ImageQualityTask()
 ImageQualityTask::~ImageQualityTask()
 {
     slotCancel();
+
+    while (d->imgqsort)
+    {
+        d->mutex.lock();
+        d->condVar.wait(&d->mutex, 500);
+        d->mutex.unlock();
+    }
+
     delete d;
 }
 
@@ -107,11 +118,8 @@ void ImageQualityTask::run()
             ImageInfo info = ImageInfo::fromLocalFile(d->path);
             info.setPickLabel(pick);
 
-            if (d->imgqsort)
-            {
-                delete d->imgqsort; //delete image data after setting label
-                d->imgqsort = 0;
-            }
+            delete d->imgqsort; //delete image data after setting label
+            d->imgqsort = 0;
         }
         // Dispatch progress to Progress Manager
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
@@ -119,4 +127,5 @@ void ImageQualityTask::run()
         emit signalDone();
     }
 }
+
 }  // namespace Digikam
