@@ -350,9 +350,8 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
     connect(d->progressCancelButton, SIGNAL(clicked()),
             this, SLOT(slotProgressCancelButtonClicked()));
-    
+
     d->buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Close, hbox);
-    d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
 
     connect(d->buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked,
             this, &GeolocationEdit::slotApplyClicked);
