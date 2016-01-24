@@ -49,9 +49,6 @@ public:
     QString              path;
     ImageQualitySettings quality;
     ImgQSort*            imgqsort;
-
-    QMutex               mutex;
-    QWaitCondition       condVar;
 };
 
 // -------------------------------------------------------
@@ -65,14 +62,6 @@ ImageQualityTask::ImageQualityTask()
 ImageQualityTask::~ImageQualityTask()
 {
     slotCancel();
-
-    while (d->imgqsort)
-    {
-        d->mutex.lock();
-        d->condVar.wait(&d->mutex, 500);
-        d->mutex.unlock();
-    }
-
     delete d;
 }
 

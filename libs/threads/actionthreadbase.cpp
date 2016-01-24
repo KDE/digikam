@@ -99,15 +99,24 @@ ActionThreadBase::~ActionThreadBase()
     // wait for the thread to finish
     wait();
 
+    //wait for the jobs to finish
+    d->pool->waitForDone();
+
     // Cleanup all jobs from memory
     foreach(ActionJob* const job, d->todo.keys())
+    {
         delete(job);
+    }
 
     foreach(ActionJob* const job, d->pending.keys())
+    {
         delete(job);
+    }
 
     foreach(ActionJob* const job, d->processed.keys())
+    {
         delete(job);
+    }
 
     delete d;
 }
@@ -132,7 +141,11 @@ void ActionThreadBase::defaultMaximumNumberOfThreads()
 void ActionThreadBase::slotJobFinished()
 {
     ActionJob* const job = dynamic_cast<ActionJob*>(sender());
-    if (!job) return;
+
+    if (!job)
+    {
+        return;
+    }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "One job is done";
 
@@ -163,8 +176,9 @@ void ActionThreadBase::cancel()
     }
 
     d->pending.clear();
-    d->condVarJobs.wakeAll();
     d->running = false;
+
+    d->condVarJobs.wakeAll();
 }
 
 bool ActionThreadBase::isEmpty() const
