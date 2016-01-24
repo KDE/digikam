@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2004-2005 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2004-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -581,19 +581,23 @@ public:
         return( decoder.loadRawPreview(image, url.toLocalFile()) );
     }
 
-    bool decodeRawImage(const QUrl& url, QByteArray& imageData, int& width, int& height, int& rgbmax)
+    uint decodeRawImage(const QUrl& url, QByteArray& imageData, int& width, int& height, int& rgbmax)
     {
         DRawDecoderSettings settings;
         KSharedConfig::Ptr config = KSharedConfig::openConfig();
         KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
         DRawDecoderWidget::readSettings(settings, group);
-        return( decoder.decodeRAWImage(url.toLocalFile(), settings, imageData, width, height, rgbmax) );
+
+        if (decoder.decodeRAWImage(url.toLocalFile(), settings, imageData, width, height, rgbmax))
+            return settings.sixteenBitsImage;
+
+        return false;
     }
 
     void cancel()
     {
     }
-    
+
     bool isRawFile(const QUrl& url)
     {
         QString   rawFilesExt(rawFiles());
@@ -601,7 +605,7 @@ public:
 
         return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
     }
-    
+
     QString rawFiles()
     {
         return QLatin1String(decoder.rawFiles());
