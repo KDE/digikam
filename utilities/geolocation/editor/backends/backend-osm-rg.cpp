@@ -117,19 +117,19 @@ void BackendOsmRG::nextPhoto()
     if (d->jobs.isEmpty())
         return;
 
-    QUrl jobUrl(QStringLiteral("http://nominatim.openstreetmap.org/reverse"));
+    QUrl jobUrl(QLatin1String("http://nominatim.openstreetmap.org/reverse"));
 
     QUrlQuery q(jobUrl);
-    q.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
-    q.addQueryItem(QStringLiteral("lat"), d->jobs.first().request.first().coordinates.latString());
-    q.addQueryItem(QStringLiteral("lon"), d->jobs.first().request.first().coordinates.lonString());
-    q.addQueryItem(QStringLiteral("zoom"), QStringLiteral("18"));
-    q.addQueryItem(QStringLiteral("addressdetails"), QStringLiteral("1"));
-    q.addQueryItem(QStringLiteral("accept-language"), d->jobs.first().language);
+    q.addQueryItem(QLatin1String("format"), QLatin1String("xml"));
+    q.addQueryItem(QLatin1String("lat"), d->jobs.first().request.first().coordinates.latString());
+    q.addQueryItem(QLatin1String("lon"), d->jobs.first().request.first().coordinates.lonString());
+    q.addQueryItem(QLatin1String("zoom"), QLatin1String("18"));
+    q.addQueryItem(QLatin1String("addressdetails"), QLatin1String("1"));
+    q.addQueryItem(QLatin1String("accept-language"), d->jobs.first().language);
     jobUrl.setQuery(q);
 
     d->jobs.first().kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-    d->jobs.first().kioJob->addMetaData(QStringLiteral("User-Agent"), getUserAgentName());
+    d->jobs.first().kioJob->addMetaData(QLatin1String("User-Agent"), getUserAgentName());
 
     connect(d->jobs.first().kioJob, SIGNAL(data(KIO::Job*,QByteArray)), 
             this, SLOT(dataIsHere(KIO::Job*,QByteArray)));
@@ -207,19 +207,19 @@ QMap<QString,QString> BackendOsmRG::makeQMapFromXML(const QString& xmlData)
 
         if (!e.isNull())
         {
-            if ((e.tagName() == QStringLiteral("country"))         ||
-                (e.tagName() == QStringLiteral("state"))           ||
-                (e.tagName() == QStringLiteral("state_district"))  ||
-                (e.tagName() == QStringLiteral("county"))          ||
-                (e.tagName() == QStringLiteral("city"))            ||
-                (e.tagName() == QStringLiteral("city_district"))   ||
-                (e.tagName() == QStringLiteral("suburb"))          ||
-                (e.tagName() == QStringLiteral("town"))            ||
-                (e.tagName() == QStringLiteral("village"))         ||
-                (e.tagName() == QStringLiteral("hamlet"))          ||
-                (e.tagName() == QStringLiteral("place"))           ||
-                (e.tagName() == QStringLiteral("road"))            ||
-                (e.tagName() == QStringLiteral("house_number")))
+            if ((e.tagName() == QLatin1String("country"))         ||
+                (e.tagName() == QLatin1String("state"))           ||
+                (e.tagName() == QLatin1String("state_district"))  ||
+                (e.tagName() == QLatin1String("county"))          ||
+                (e.tagName() == QLatin1String("city"))            ||
+                (e.tagName() == QLatin1String("city_district"))   ||
+                (e.tagName() == QLatin1String("suburb"))          ||
+                (e.tagName() == QLatin1String("town"))            ||
+                (e.tagName() == QLatin1String("village"))         ||
+                (e.tagName() == QLatin1String("hamlet"))          ||
+                (e.tagName() == QLatin1String("place"))           ||
+                (e.tagName() == QLatin1String("road"))            ||
+                (e.tagName() == QLatin1String("house_number")))
             {
                 mappedData.insert(e.tagName(), e.text());
                 resultString.append(e.tagName() + QLatin1Char(':') + e.text() + QLatin1Char('\n'));
@@ -245,7 +245,7 @@ QString BackendOsmRG::getErrorMessage()
  */
 QString BackendOsmRG::backendName()
 {
-    return QStringLiteral("OSM");
+    return QLatin1String("OSM");
 }
 
 void BackendOsmRG::slotResult(KJob* kJob)
@@ -267,7 +267,7 @@ void BackendOsmRG::slotResult(KJob* kJob)
         {
             QString dataString;
             dataString = QString::fromUtf8(d->jobs[i].data.constData(),qstrlen(d->jobs[i].data.constData()));
-            int pos    = dataString.indexOf(QStringLiteral("<reversegeocode"));
+            int pos    = dataString.indexOf(QLatin1String("<reversegeocode"));
             dataString.remove(0,pos);
 
             QMap<QString, QString> resultMap = makeQMapFromXML(dataString);

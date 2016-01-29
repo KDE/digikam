@@ -77,9 +77,9 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* 
 
     // TODO: where do we save the bookmarks? right now, they are application-specific
     const QString bookmarksFileName = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-                                      QLatin1Char('/') + QStringLiteral("digikam/geobookmarks.xml");
+                                      QLatin1Char('/') + QLatin1String("digikam/geobookmarks.xml");
     d->actionCollection             = new KActionCollection(this);
-    d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QStringLiteral("digikamgeobookmarks"));
+    d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QLatin1String("digikamgeobookmarks"));
     d->bookmarkManager->setUpdate(true);
     d->bookmarkMenu                 = new QMenu(parent);
     d->bookmarkMenuController       = new KBookmarkMenu(d->bookmarkManager, this, d->bookmarkMenu, d->actionCollection);

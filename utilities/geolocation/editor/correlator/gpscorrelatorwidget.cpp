@@ -205,46 +205,46 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     // See list of time zones over the world :
     // http://en.wikipedia.org/wiki/List_of_time_zones
     // NOTE: Combobox strings are not i18n.
-    d->timeZoneCB->addItem(QStringLiteral("GMT-12:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-11:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-10:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-09:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-09:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-08:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-07:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-06:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-05:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-05:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-04:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-04:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-03:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-03:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-02:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT-01:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+00:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+01:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+02:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+03:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+03:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+04:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+05:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+05:30"));    // See bug # 149491
-    d->timeZoneCB->addItem(QStringLiteral("GMT+05:45"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+06:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+06:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+07:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+08:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+08:45"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+09:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+09:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+10:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+10:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+11:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+11:30"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+12:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+12:45"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+13:00"));
-    d->timeZoneCB->addItem(QStringLiteral("GMT+14:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-12:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-11:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-10:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-09:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-09:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-08:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-07:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-06:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-05:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-05:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-04:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-04:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-03:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-03:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-02:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT-01:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+00:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+01:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+02:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+03:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+03:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+04:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+05:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+05:30"));    // See bug # 149491
+    d->timeZoneCB->addItem(QLatin1String("GMT+05:45"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+06:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+06:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+07:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+08:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+08:45"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+09:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+09:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+10:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+10:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+11:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+11:30"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+12:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+12:45"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+13:00"));
+    d->timeZoneCB->addItem(QLatin1String("GMT+14:00"));
     d->timeZoneCB->setWhatsThis(i18n("<p>Sets the time zone the camera was set to "
                     "during photo shooting, so that the time stamps of the images "
                     "can be converted to GMT to match the GPS time reference.</p>"
@@ -262,8 +262,8 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
 
     QWidget* const offsetWidget = new QWidget(this);
     d->offsetSign               = new QComboBox(offsetWidget);
-    d->offsetSign->addItem(QStringLiteral("+"));
-    d->offsetSign->addItem(QStringLiteral("-"));
+    d->offsetSign->addItem(QLatin1String("+"));
+    d->offsetSign->addItem(QLatin1String("-"));
     d->offsetSign->setWhatsThis(i18n("Set whether the camera offset "
         "is negative or positive."));
 
@@ -385,7 +385,7 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
     for (int i = 0; i < loadErrorFiles.count(); ++i)
     {
         const QPair<QUrl, QString> currentError = loadErrorFiles.at(i);
-        const QString fileErrorString = QStringLiteral("%1: %2")
+        const QString fileErrorString = QString::fromLatin1("%1: %2")
             .arg(currentError.first.toLocalFile())
             .arg(currentError.second);
 
@@ -480,7 +480,7 @@ void GPSCorrelatorWidget::slotCorrelate()
     {
         int userOffset = d->offsetMin->value() * 60 + d->offsetSec->value();
 
-        if (d->offsetSign->currentText() == QStringLiteral("-"))
+        if (d->offsetSign->currentText() == QLatin1String("-"))
         {
             userOffset = (-1) * userOffset;
         }

@@ -311,7 +311,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
 #ifdef HAVE_KBOOKMARKS
     d->actionBookmarkVisibility = new QAction(this);
-    d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
+    d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QLatin1String("user-trash")));
     d->actionBookmarkVisibility->setToolTip(i18n("Display bookmarked positions on the map."));
     d->actionBookmarkVisibility->setCheckable(true);
 
@@ -346,7 +346,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->progressCancelButton = new QPushButton(hbox);
     d->progressCancelButton->setVisible(false);
     d->progressCancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-    d->progressCancelButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
+    d->progressCancelButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
 
     connect(d->progressCancelButton, SIGNAL(clicked()),
             this, SLOT(slotProgressCancelButtonClicked()));
@@ -957,7 +957,7 @@ void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
             for (int i = 0; i < errorList.count(); ++i)
             {
                 // TODO: how to do kurl->qstring?
-                errorStrings << QStringLiteral("%1: %2")
+                errorStrings << QString::fromLatin1("%1: %2")
                     .arg(errorList.at(i).first.toLocalFile())
                     .arg(errorList.at(i).second);
             }
