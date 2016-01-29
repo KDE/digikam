@@ -76,19 +76,19 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
     d->errorMessage.clear();
     d->results.clear();
 
-    if (backendName == QStringLiteral("osm"))
+    if (backendName == QString::fromLatin1("osm"))
     {
         d->runningBackend = backendName;
 
-        QUrl jobUrl(QStringLiteral("http://nominatim.openstreetmap.org/search"));
+        QUrl jobUrl(QString::fromLatin1("http://nominatim.openstreetmap.org/search"));
         
         QUrlQuery q(jobUrl);
-        q.addQueryItem(QStringLiteral("format"), QStringLiteral("xml"));
-        q.addQueryItem(QStringLiteral("q"), searchTerm);
+        q.addQueryItem(QString::fromLatin1("format"), QString::fromLatin1("xml"));
+        q.addQueryItem(QString::fromLatin1("q"), searchTerm);
         jobUrl.setQuery(q);
         
         d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-        d->kioJob->addMetaData(QStringLiteral("User-Agent"), getUserAgentName());
+        d->kioJob->addMetaData(QString::fromLatin1("User-Agent"), getUserAgentName());
 
         connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
                 this, SLOT(slotData(KIO::Job*,QByteArray)));
@@ -99,21 +99,21 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         return true;
     }
 
-    if (backendName == QStringLiteral("geonames.org"))
+    if (backendName == QString::fromLatin1("geonames.org"))
     {
         d->runningBackend = backendName;
 
         // documentation: http://www.geonames.org/export/geonames-search.html
 
-        QUrl jobUrl(QStringLiteral("http://ws.geonames.org/search"));
+        QUrl jobUrl(QString::fromLatin1("http://ws.geonames.org/search"));
         
         QUrlQuery q(jobUrl);
-        q.addQueryItem(QStringLiteral("type"), QStringLiteral("xml"));
-        q.addQueryItem(QStringLiteral("q"), searchTerm);
+        q.addQueryItem(QString::fromLatin1("type"), QString::fromLatin1("xml"));
+        q.addQueryItem(QString::fromLatin1("q"), searchTerm);
         jobUrl.setQuery(q);
 
         d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-        d->kioJob->addMetaData(QStringLiteral("User-Agent"), getUserAgentName());
+        d->kioJob->addMetaData(QString::fromLatin1("User-Agent"), getUserAgentName());
 
         connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
                 this, SLOT(slotData(KIO::Job*,QByteArray)));
@@ -150,7 +150,7 @@ void SearchBackend::slotResult(KJob* kJob)
 
     const QString resultString = QString::fromUtf8(d->searchData.constData(), d->searchData.count());
 
-    if (d->runningBackend == QStringLiteral("osm"))
+    if (d->runningBackend == QString::fromLatin1("osm"))
     {
         QDomDocument doc;
         doc.setContent(resultString); // error-handling
@@ -165,16 +165,16 @@ void SearchBackend::slotResult(KJob* kJob)
                 continue;
             }
 
-            if (resultElement.tagName() != QStringLiteral("place"))
+            if (resultElement.tagName() != QString::fromLatin1("place"))
             {
                 continue;
             }
 
-            const QString boundingBoxString = resultElement.attribute(QStringLiteral("boundingbox"));
-            const QString latString         = resultElement.attribute(QStringLiteral("lat"));
-            const QString lonString         = resultElement.attribute(QStringLiteral("lon"));
-            const QString displayName       = resultElement.attribute(QStringLiteral("display_name"));
-            const QString placeId           = resultElement.attribute(QStringLiteral("place_id"));
+            const QString boundingBoxString = resultElement.attribute(QString::fromLatin1("boundingbox"));
+            const QString latString         = resultElement.attribute(QString::fromLatin1("lat"));
+            const QString lonString         = resultElement.attribute(QString::fromLatin1("lon"));
+            const QString displayName       = resultElement.attribute(QString::fromLatin1("display_name"));
+            const QString placeId           = resultElement.attribute(QString::fromLatin1("place_id"));
 
             if (latString.isEmpty() || lonString.isEmpty() || displayName.isEmpty())
             {
@@ -203,7 +203,7 @@ void SearchBackend::slotResult(KJob* kJob)
 
             if (!placeId.isEmpty())
             {
-                result.internalId = QStringLiteral("osm-") + placeId;
+                result.internalId = QString::fromLatin1("osm-") + placeId;
             }
 
             // TODO: parse bounding box
@@ -211,7 +211,7 @@ void SearchBackend::slotResult(KJob* kJob)
             d->results << result;
         }
     }
-    else if (d->runningBackend == QStringLiteral("geonames.org"))
+    else if (d->runningBackend == QString::fromLatin1("geonames.org"))
     {
         QDomDocument doc;
         doc.setContent(resultString); // error-handling
@@ -228,7 +228,7 @@ void SearchBackend::slotResult(KJob* kJob)
                 continue;
             }
 
-            if (resultElement.tagName() != QStringLiteral("geoname"))
+            if (resultElement.tagName() != QString::fromLatin1("geoname"))
             {
                 continue;
             }
@@ -247,19 +247,19 @@ void SearchBackend::slotResult(KJob* kJob)
                     continue;
                 }
 
-                if (resultSubElement.tagName() == QStringLiteral("lat"))
+                if (resultSubElement.tagName() == QString::fromLatin1("lat"))
                 {
                     latString = resultSubElement.text();
                 }
-                else if (resultSubElement.tagName() == QStringLiteral("lng"))
+                else if (resultSubElement.tagName() == QString::fromLatin1("lng"))
                 {
                     lonString = resultSubElement.text();
                 }
-                else if (resultSubElement.tagName() == QStringLiteral("name"))
+                else if (resultSubElement.tagName() == QString::fromLatin1("name"))
                 {
                     displayName = resultSubElement.text();
                 }
-                else if (resultSubElement.tagName() == QStringLiteral("geonameId"))
+                else if (resultSubElement.tagName() == QString::fromLatin1("geonameId"))
                 {
                     geoNameId = resultSubElement.text();
                 }
@@ -292,7 +292,7 @@ void SearchBackend::slotResult(KJob* kJob)
 
             if (!geoNameId.isEmpty())
             {
-                result.internalId = QStringLiteral("geonames.org-") + geoNameId;
+                result.internalId = QString::fromLatin1("geonames.org-") + geoNameId;
             }
 
             d->results << result;
@@ -315,8 +315,8 @@ QString SearchBackend::getErrorMessage() const
 QList<QPair<QString, QString> > SearchBackend::getBackends() const
 {
     QList<QPair<QString, QString> > resultList;
-    resultList << QPair<QString, QString>(i18n("GeoNames"), QStringLiteral("geonames.org"));
-    resultList << QPair<QString, QString>(i18n("OSM"), QStringLiteral("osm"));
+    resultList << QPair<QString, QString>(i18n("GeoNames"), QString::fromLatin1("geonames.org"));
+    resultList << QPair<QString, QString>(i18n("OSM"), QString::fromLatin1("osm"));
 
     return resultList;
 }

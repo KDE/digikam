@@ -118,9 +118,9 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList
     d->imagesList                   = imagesList;
 
     d->actionCopy                   = new QAction(i18n("Copy coordinates"),                this);
-    d->actionCopy->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+    d->actionCopy->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-copy")));
     d->actionPaste                  = new QAction(i18n("Paste coordinates"),               this);
-    d->actionPaste->setIcon(QIcon::fromTheme(QStringLiteral("edit-paste")));
+    d->actionPaste->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-paste")));
     d->actionRemoveCoordinates      = new QAction(i18n("Remove coordinates"),              this);
     d->actionRemoveAltitude         = new QAction(i18n("Remove altitude"),                 this);
     d->actionRemoveUncertainty      = new QAction(i18n("Remove uncertainty"),              this);
@@ -233,7 +233,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
         {
             QClipboard* const clipboard = QApplication::clipboard();
             const QMimeData* mimedata   = clipboard->mimeData();
-            pasteAvailable              = mimedata->hasFormat(QStringLiteral("application/gpx+xml")) || mimedata->hasText();
+            pasteAvailable              = mimedata->hasFormat(QString::fromLatin1("application/gpx+xml")) || mimedata->hasText();
         }
 
         d->actionPaste->setEnabled(pasteAvailable);
@@ -332,14 +332,14 @@ void GPSImageListContextMenu::pasteActionTriggered()
     GPSDataContainer gpsData;
     bool foundData       = false;
 
-    if (mimedata->hasFormat(QStringLiteral("application/gpx+xml")))
+    if (mimedata->hasFormat(QString::fromLatin1("application/gpx+xml")))
     {
-        const QByteArray data = mimedata->data(QStringLiteral("application/gpx+xml"));
+        const QByteArray data = mimedata->data(QString::fromLatin1("application/gpx+xml"));
         bool xmlOkay          = true;
         bool foundDoubleData  = false;
 
         // code adapted from gpsdataparser.cpp
-        QDomDocument gpxDoc(QStringLiteral("gpx"));
+        QDomDocument gpxDoc(QString::fromLatin1("gpx"));
 
         if (!gpxDoc.setContent(data))
         {
@@ -350,7 +350,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
         {
             const QDomElement gpxDocElem = gpxDoc.documentElement();
 
-            if (gpxDocElem.tagName() != QStringLiteral("gpx"))
+            if (gpxDocElem.tagName() != QString::fromLatin1("gpx"))
             {
                 xmlOkay = false;
             }
@@ -366,7 +366,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
                         continue;
                     }
 
-                    if (wptElem.tagName() != QStringLiteral("wpt"))
+                    if (wptElem.tagName() != QString::fromLatin1("wpt"))
                     {
                         continue;
                     }
@@ -377,8 +377,8 @@ void GPSImageListContextMenu::pasteActionTriggered()
                     bool haveAltitude     = false;
 
                     // Get GPS position. If not available continue to next point.
-                    const QString lat = wptElem.attribute(QStringLiteral("lat"));
-                    const QString lon = wptElem.attribute(QStringLiteral("lon"));
+                    const QString lat = wptElem.attribute(QString::fromLatin1("lat"));
+                    const QString lon = wptElem.attribute(QString::fromLatin1("lon"));
 
                     if (lat.isEmpty() || lon.isEmpty())
                     {
@@ -404,7 +404,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
                             continue;
                         }
 
-                        if (wptMetaElem.tagName() == QStringLiteral("ele"))
+                        if (wptMetaElem.tagName() == QString::fromLatin1("ele"))
                         {
                             // Get GPS point altitude. If not available continue to next point.
                             QString ele = wptMetaElem.text();
@@ -702,7 +702,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
         return;
     }
 
-    d->altitudeLookup = GeoIface::LookupFactory::getAltitudeLookup(QStringLiteral("geonames"), this);
+    d->altitudeLookup = GeoIface::LookupFactory::getAltitudeLookup(QString::fromLatin1("geonames"), this);
 
     connect(d->altitudeLookup, SIGNAL(signalRequestsReady(QList<int>)),
             this, SLOT(slotAltitudeLookupReady(QList<int>)));

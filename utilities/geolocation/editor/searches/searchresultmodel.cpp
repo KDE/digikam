@@ -186,7 +186,7 @@ QVariant SearchResultModel::headerData(int section, Qt::Orientation orientation,
         return false;
     }
 
-    return QVariant(QStringLiteral("Name"));
+    return QVariant(QString::fromLatin1("Name"));
 }
 
 Qt::ItemFlags SearchResultModel::flags(const QModelIndex& index) const

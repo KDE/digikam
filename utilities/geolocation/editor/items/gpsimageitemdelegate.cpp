@@ -84,7 +84,7 @@ void GPSImageItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& 
     {
         // TODO: paint some default logo
         // TODO: cache this logo
-        itemPixmap = QIcon::fromTheme(QStringLiteral("image-x-generic"))
+        itemPixmap = QIcon::fromTheme(QString::fromLatin1("image-x-generic"))
                                       .pixmap(d->thumbnailSize, QIcon::Disabled);
     }
 

@@ -327,7 +327,7 @@ void GPSImageDetails::displayGPSDataContainer(const GPSDataContainer* const gpsD
 
         if (haveDop)
         {
-            d->leDop->setText(QStringLiteral("%1").arg(gpsData->getDop(), 0, 'f', 2));
+            d->leDop->setText(QString::fromLatin1("%1").arg(gpsData->getDop(), 0, 'f', 2));
         }
     }
 

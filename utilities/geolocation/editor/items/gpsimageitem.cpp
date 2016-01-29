@@ -64,7 +64,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
             {
                 long num, den;
                 meta->convertToRationalSmallDenominator(value.toDouble(), &num, &den);
-                success = meta->setXmpTagString(xmpTagName, QStringLiteral("%1/%2").arg(num).arg(den));
+                success = meta->setXmpTagString(xmpTagName, QString::fromLatin1("%1/%2").arg(num).arg(den));
                 break;
             }
             case QVariant::List:
@@ -78,7 +78,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
                 if (list.size() >= 2)
                     den = list[1].toInt();
 
-                success = meta->setXmpTagString(xmpTagName, QStringLiteral("%1/%2").arg(num).arg(den));
+                success = meta->setXmpTagString(xmpTagName, QString::fromLatin1("%1/%2").arg(num).arg(den));
                 break;
             }
 
@@ -93,7 +93,7 @@ bool setExifXmpTagDataVariant(DMetadata* const meta, const char* const exifTagNa
                     break;
                 }
 
-                success = meta->setXmpTagString(xmpTagName, dateTime.toString(QStringLiteral("yyyy:MM:dd hh:mm:ss")));
+                success = meta->setXmpTagString(xmpTagName, dateTime.toString(QString::fromLatin1("yyyy:MM:dd hh:mm:ss")));
                 break;
             }
 
@@ -349,21 +349,21 @@ QVariant GPSImageItem::data(const int column, const int role) const
         if (!m_gpsData.getCoordinates().hasLatitude())
             return QString();
 
-        return QStringLiteral("%1").arg(m_gpsData.getCoordinates().lat(), 7);
+        return QString::fromLatin1("%1").arg(m_gpsData.getCoordinates().lat(), 7);
     }
     else if ((column == ColumnLongitude) && (role == Qt::DisplayRole))
     {
         if (!m_gpsData.getCoordinates().hasLongitude())
             return QString();
 
-        return QStringLiteral("%1").arg(m_gpsData.getCoordinates().lon(), 7);
+        return QString::fromLatin1("%1").arg(m_gpsData.getCoordinates().lon(), 7);
     }
     else if ((column == ColumnAltitude) && (role == Qt::DisplayRole))
     {
         if (!m_gpsData.getCoordinates().hasAltitude())
             return QString();
 
-        return QStringLiteral("%1").arg(m_gpsData.getCoordinates().alt(), 7);
+        return QString::fromLatin1("%1").arg(m_gpsData.getCoordinates().alt(), 7);
     }
     else if (column == ColumnAccuracy)
     {
@@ -454,14 +454,14 @@ QVariant GPSImageItem::data(const int column, const int role) const
 
                 for (int j = 0; j < m_tagList[i].count(); ++j)
                 {
-                    myTag.append(QStringLiteral("/") + m_tagList[i].at(j).tagName);
+                    myTag.append(QString::fromLatin1("/") + m_tagList[i].at(j).tagName);
 
                     if (j == 0)
                         myTag.remove(0,1);
                 }
 
                 if (!myTagsList.isEmpty())
-                    myTagsList.append(QStringLiteral(", "));
+                    myTagsList.append(QString::fromLatin1(", "));
 
                 myTagsList.append(myTag);
             }
@@ -717,7 +717,7 @@ QString GPSImageItem::saveChanges()
                 success = setExifXmpTagDataVariant(meta.data(),
                                                    "Exif.GPSInfo.GPSSpeedRef",
                                                    "Xmp.exif.GPSSpeedRef",
-                                                   QVariant(QStringLiteral("K")));
+                                                   QVariant(QString::fromLatin1("K")));
 
                 if (success)
                 {
@@ -787,7 +787,7 @@ QString GPSImageItem::saveChanges()
 
                 for (int j=0; j<currentTagList.count(); ++j)
                 {
-                    tag.append(QStringLiteral("/") + currentTagList[j].tagName);
+                    tag.append(QString::fromLatin1("/") + currentTagList[j].tagName);
                 }
 
                 tag.remove(0,1);

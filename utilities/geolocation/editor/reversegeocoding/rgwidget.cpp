@@ -229,39 +229,39 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     d->tagTreeView->setSelectionModel(d->tagSelectionModel);
 
     d->actionAddCountry          = new QAction(i18n("Add country tag"), this);
-    d->actionAddCountry->setData(QStringLiteral("{Country}"));
+    d->actionAddCountry->setData(QString::fromLatin1("{Country}"));
     d->actionAddState            = new QAction(i18n("Add state tag"), this);
-    d->actionAddState->setData(QStringLiteral("{State}"));
+    d->actionAddState->setData(QString::fromLatin1("{State}"));
     d->actionAddStateDistrict    = new QAction(i18n("Add state district tag"), this);
-    d->actionAddStateDistrict->setData(QStringLiteral("{State district}"));
+    d->actionAddStateDistrict->setData(QString::fromLatin1("{State district}"));
     d->actionAddCounty           = new QAction(i18n("Add county tag"), this);
-    d->actionAddCounty->setData(QStringLiteral("{County}"));
+    d->actionAddCounty->setData(QString::fromLatin1("{County}"));
     d->actionAddCity             = new QAction(i18n("Add city tag"), this);
-    d->actionAddCity->setData(QStringLiteral("{City}"));
+    d->actionAddCity->setData(QString::fromLatin1("{City}"));
     d->actionAddCityDistrict     = new QAction(i18n("Add city district tag"), this);
-    d->actionAddCityDistrict->setData(QStringLiteral("{City district}"));
+    d->actionAddCityDistrict->setData(QString::fromLatin1("{City district}"));
     d->actionAddSuburb           = new QAction(i18n("Add suburb tag"), this);
-    d->actionAddSuburb->setData(QStringLiteral("{Suburb}"));
+    d->actionAddSuburb->setData(QString::fromLatin1("{Suburb}"));
     d->actionAddTown             = new QAction(i18n("Add town tag"), this);
-    d->actionAddTown->setData(QStringLiteral("{Town}"));
+    d->actionAddTown->setData(QString::fromLatin1("{Town}"));
     d->actionAddVillage          = new QAction(i18n("Add village tag"), this);
-    d->actionAddVillage->setData(QStringLiteral("{Village}"));
+    d->actionAddVillage->setData(QString::fromLatin1("{Village}"));
     d->actionAddHamlet           = new QAction(i18n("Add hamlet tag"), this);
-    d->actionAddHamlet->setData(QStringLiteral("{Hamlet}"));
+    d->actionAddHamlet->setData(QString::fromLatin1("{Hamlet}"));
     d->actionAddStreet           = new QAction(i18n("Add street"), this);
-    d->actionAddStreet->setData(QStringLiteral("{Street}"));
+    d->actionAddStreet->setData(QString::fromLatin1("{Street}"));
     d->actionAddHouseNumber      = new QAction(i18n("Add house number tag"), this);
-    d->actionAddHouseNumber->setData(QStringLiteral("{House number}"));
+    d->actionAddHouseNumber->setData(QString::fromLatin1("{House number}"));
     d->actionAddPlace            = new QAction(i18n("Add place"), this);
-    d->actionAddPlace->setData(QStringLiteral("{Place}"));
+    d->actionAddPlace->setData(QString::fromLatin1("{Place}"));
     d->actionAddLAU2             = new QAction(i18n("Add Local Administrative Area 2"), this);
-    d->actionAddLAU2->setData(QStringLiteral("{LAU2}"));
+    d->actionAddLAU2->setData(QString::fromLatin1("{LAU2}"));
     d->actionAddLAU1             = new QAction(i18n("Add Local Administrative Area 1"), this);
-    d->actionAddLAU1->setData(QStringLiteral("{LAU1}"));
+    d->actionAddLAU1->setData(QString::fromLatin1("{LAU1}"));
     d->actionAddCustomizedSpacer = new QAction(i18n("Add new tag"), this);
     d->actionRemoveTag           = new QAction(i18n("Remove selected tag"), this);
     d->actionRemoveAllSpacers    = new QAction(i18n("Remove all control tags below this tag"), this);
-    d->actionRemoveAllSpacers->setData(QStringLiteral("Remove all spacers"));
+    d->actionRemoveAllSpacers->setData(QString::fromLatin1("Remove all spacers"));
 
     d->actionAddAllAddressElementsToTag = new QAction(i18n("Add all address elements"), this);
     QGridLayout* const gridLayout       = new QGridLayout(d->UGridContainer);
@@ -520,17 +520,17 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
         {
             QString addressElementsWantedFormat;
 
-            if (d->currentBackend->backendName() == QStringLiteral("Geonames"))
+            if (d->currentBackend->backendName() == QString::fromLatin1("Geonames"))
             {
-                addressElementsWantedFormat.append(QStringLiteral("/{Country}/{Place}"));
+                addressElementsWantedFormat.append(QString::fromLatin1("/{Country}/{Place}"));
             }
-            else if (d->currentBackend->backendName() == QStringLiteral("GeonamesUS"))
+            else if (d->currentBackend->backendName() == QString::fromLatin1("GeonamesUS"))
             {
-                addressElementsWantedFormat.append(QStringLiteral("/{LAU2}/{LAU1}/{City}"));
+                addressElementsWantedFormat.append(QString::fromLatin1("/{LAU2}/{LAU1}/{City}"));
             }
             else
             {
-                addressElementsWantedFormat.append(QStringLiteral("/{Country}/{State}/{State district}/{County}/{City}/{City district}/{Suburb}/{Town}/{Village}/{Hamlet}/{Street}/{House number}"));
+                addressElementsWantedFormat.append(QString::fromLatin1("/{Country}/{State}/{State district}/{County}/{City}/{City district}/{Suburb}/{Town}/{Village}/{Hamlet}/{Street}/{House number}"));
             }
 
             QStringList combinedResult = makeTagString(returnedRGList[i], addressElementsWantedFormat, d->currentBackend->backendName());
@@ -622,7 +622,7 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
             d->currentTagTreeIndex        = d->tagTreeView->indexAt(e->pos());
             const Type tagType            = d->tagModel->getTagType(d->currentTagTreeIndex);
 
-            if ( backendName == QStringLiteral("OSM"))
+            if ( backendName == QString::fromLatin1("OSM"))
             {
                 menu->addAction(d->actionAddAllAddressElementsToTag);
                 menu->addSeparator(); 
@@ -639,13 +639,13 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
                 menu->addAction(d->actionAddStreet);
                 menu->addAction(d->actionAddHouseNumber);
             }
-            else if ( backendName == QStringLiteral("Geonames"))
+            else if ( backendName == QString::fromLatin1("Geonames"))
             {
                 menu->addAction(d->actionAddAllAddressElementsToTag); 
                 menu->addAction(d->actionAddCountry);
                 menu->addAction(d->actionAddPlace);
             }
-            else if ( backendName == QStringLiteral("GeonamesUS"))
+            else if ( backendName == QString::fromLatin1("GeonamesUS"))
             {
                 menu->addAction(d->actionAddAllAddressElementsToTag); 
                 menu->addAction(d->actionAddLAU2);
@@ -689,9 +689,9 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
     for (int i = 0; i < currentSpacerList.count(); ++i)
     {
         QString spacerName;
-        spacerName.append(QStringLiteral("Spacerlistname %1").arg(i));
+        spacerName.append(QString::fromLatin1("Spacerlistname %1").arg(i));
         QString spacerType;
-        spacerType.append(QStringLiteral("Spacerlisttype %1").arg(i));
+        spacerType.append(QString::fromLatin1("Spacerlisttype %1").arg(i));
 
         QStringList spacerTagNames;
         QStringList spacerTypes;
@@ -702,15 +702,15 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
 
             if (currentSpacerList[i].at(j).tagType == TypeSpacer)
             {
-                spacerTypes.append(QStringLiteral("Spacer"));
+                spacerTypes.append(QString::fromLatin1("Spacer"));
             }
             else if (currentSpacerList[i].at(j).tagType == TypeNewChild)
             {
-                spacerTypes.append(QStringLiteral("NewChild"));
+                spacerTypes.append(QString::fromLatin1("NewChild"));
             }
             else
             {
-                spacerTypes.append(QStringLiteral("OldChild"));
+                spacerTypes.append(QString::fromLatin1("OldChild"));
             }
         }
 
@@ -730,8 +730,8 @@ void RGWidget::readSettingsFromGroup(const KConfigGroup* const group)
 
     for (int i = 0; i < spacerCount; ++i)
     {
-        QStringList spacerTagNames = group->readEntry(QStringLiteral("Spacerlistname %1").arg(i), QStringList());
-        QStringList spacerTypes    = group->readEntry(QStringLiteral("Spacerlisttype %1").arg(i), QStringList());
+        QStringList spacerTagNames = group->readEntry(QString::fromLatin1("Spacerlistname %1").arg(i), QStringList());
+        QStringList spacerTypes    = group->readEntry(QString::fromLatin1("Spacerlisttype %1").arg(i), QStringList());
         QList<TagData> currentSpacerAddress;
 
         for (int j = 0; j < spacerTagNames.count(); ++j)
@@ -740,11 +740,11 @@ void RGWidget::readSettingsFromGroup(const KConfigGroup* const group)
             currentTagData.tagName = spacerTagNames.at(j);
             QString currentTagType = spacerTypes.at(j);
 
-            if (currentTagType == QStringLiteral("Spacer"))
+            if (currentTagType == QString::fromLatin1("Spacer"))
                 currentTagData.tagType = TypeSpacer;
-            else if (currentTagType == QStringLiteral("NewChild"))
+            else if (currentTagType == QString::fromLatin1("NewChild"))
                 currentTagData.tagType = TypeNewChild;
-            else if (currentTagType == QStringLiteral("OldChild"))
+            else if (currentTagType == QString::fromLatin1("OldChild"))
                 currentTagData.tagType = TypeChild;
 
             currentSpacerAddress.append(currentTagData);
@@ -827,7 +827,7 @@ void RGWidget::slotRemoveTag()
  */
 void RGWidget::slotRemoveAllSpacers()
 {
-    QString whatShouldRemove = QStringLiteral("Spacers");
+    QString whatShouldRemove = QString::fromLatin1("Spacers");
     QModelIndex baseIndex;
 
     if (!d->currentTagTreeIndex.isValid())
@@ -889,32 +889,32 @@ void RGWidget::slotAddAllAddressElementsToTag()
 
     QStringList spacerList;
 
-    if (d->currentBackend->backendName() == QStringLiteral("OSM"))
+    if (d->currentBackend->backendName() == QString::fromLatin1("OSM"))
     {
         /// @todo Why are these wrapped in QString?
-        spacerList.append(QStringLiteral("{Country}"));
-        spacerList.append(QStringLiteral("{State}"));
-        spacerList.append(QStringLiteral("{State district}"));
-        spacerList.append(QStringLiteral("{County}"));
-        spacerList.append(QStringLiteral("{City}"));
-        spacerList.append(QStringLiteral("{City district}"));
-        spacerList.append(QStringLiteral("{Suburb}"));
-        spacerList.append(QStringLiteral("{Town}"));
-        spacerList.append(QStringLiteral("{Village}"));
-        spacerList.append(QStringLiteral("{Hamlet}"));
-        spacerList.append(QStringLiteral("{Street}"));
-        spacerList.append(QStringLiteral("{House number}"));
+        spacerList.append(QString::fromLatin1("{Country}"));
+        spacerList.append(QString::fromLatin1("{State}"));
+        spacerList.append(QString::fromLatin1("{State district}"));
+        spacerList.append(QString::fromLatin1("{County}"));
+        spacerList.append(QString::fromLatin1("{City}"));
+        spacerList.append(QString::fromLatin1("{City district}"));
+        spacerList.append(QString::fromLatin1("{Suburb}"));
+        spacerList.append(QString::fromLatin1("{Town}"));
+        spacerList.append(QString::fromLatin1("{Village}"));
+        spacerList.append(QString::fromLatin1("{Hamlet}"));
+        spacerList.append(QString::fromLatin1("{Street}"));
+        spacerList.append(QString::fromLatin1("{House number}"));
     }
-    else if (d->currentBackend->backendName() == QStringLiteral("Geonames"))
+    else if (d->currentBackend->backendName() == QString::fromLatin1("Geonames"))
     {
-        spacerList.append(QStringLiteral("{Country}"));
-        spacerList.append(QStringLiteral("{Place}"));
+        spacerList.append(QString::fromLatin1("{Country}"));
+        spacerList.append(QString::fromLatin1("{Place}"));
     }
     else
     {
-        spacerList.append(QStringLiteral("{LAU1}"));
-        spacerList.append(QStringLiteral("{LAU2}"));
-        spacerList.append(QStringLiteral("{City}"));
+        spacerList.append(QString::fromLatin1("{LAU1}"));
+        spacerList.append(QString::fromLatin1("{LAU2}"));
+        spacerList.append(QString::fromLatin1("{City}"));
     }
 
     d->tagModel->addAllSpacersToTag(baseIndex, spacerList,0);
