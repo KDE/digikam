@@ -58,7 +58,7 @@ void TestGPXParsing::testNoOp()
 void TestGPXParsing::testCorrelator1()
 {
     QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
-    
+
     QList<QUrl> fileList;
     fileList << testDataDir;
 
@@ -66,7 +66,7 @@ void TestGPXParsing::testCorrelator1()
 
     QSignalSpy spyTrackFiles(&myParser, SIGNAL(signalTracksChanged(const QList<TrackManager::TrackChanges>)));
     QSignalSpy spyAllDone(&myParser, SIGNAL(signalAllTrackFilesReady()));
-    
+
     myParser.loadTrackFiles(fileList);
 
     // wait until the files are loaded:
@@ -74,7 +74,7 @@ void TestGPXParsing::testCorrelator1()
     {
         QTest::qWait(100);
     }
-    
+
     QCOMPARE(spyAllDone.count(), 1);
     QCOMPARE(spyTrackFiles.count(), 1);
 
@@ -85,7 +85,7 @@ void TestGPXParsing::testCorrelator1()
     TrackCorrelator::Correlation::List itemsToCorrelate;
     {
         TrackCorrelator::Correlation myItem;
-        myItem.dateTime = TrackReader::ParseTime(QStringLiteral("2009-07-26T18:00:00Z"));
+        myItem.dateTime = TrackReader::ParseTime(QLatin1String("2009-07-26T18:00:00Z"));
         itemsToCorrelate << myItem;
     }
 
@@ -108,7 +108,7 @@ void TestGPXParsing::testCorrelator1()
 
     Digikam::TrackCorrelator::Correlation::List myCorrelatedItems = spyItemsCorrelated.first().first().value<Digikam::TrackCorrelator::Correlation::List>();
     QCOMPARE(myCorrelatedItems.count(), 1);
-    QCOMPARE(myCorrelatedItems.first().coordinates, GeoCoordinates::fromGeoUrl(QStringLiteral("geo:18,7,0")));
+    QCOMPARE(myCorrelatedItems.first().coordinates, GeoCoordinates::fromGeoUrl(QLatin1String("geo:18,7,0")));
     QCOMPARE(myCorrelatedItems.first().nSatellites, 3);
     QCOMPARE(myCorrelatedItems.first().hDop, 2.5);
     QCOMPARE(myCorrelatedItems.first().speed, 3.14);
@@ -147,7 +147,7 @@ void TestGPXParsing::testInterpolation()
     TrackCorrelator::Correlation::List itemsToCorrelate;
     {
         TrackCorrelator::Correlation myItem;
-        myItem.dateTime = TrackReader::ParseTime(QStringLiteral("2009-11-29T17:00:30Z"));
+        myItem.dateTime = TrackReader::ParseTime(QLatin1String("2009-11-29T17:00:30Z"));
         itemsToCorrelate << myItem;
     }
 
@@ -173,7 +173,7 @@ void TestGPXParsing::testInterpolation()
 
     Digikam::TrackCorrelator::Correlation::List myCorrelatedItems = spyItemsCorrelated.first().first().value<Digikam::TrackCorrelator::Correlation::List>();
     QCOMPARE(myCorrelatedItems.count(), 1);
-    QCOMPARE(myCorrelatedItems.first().coordinates, GeoCoordinates::fromGeoUrl(QStringLiteral("geo:17.5,0.5,3")));
+    QCOMPARE(myCorrelatedItems.first().coordinates, GeoCoordinates::fromGeoUrl(QLatin1String("geo:17.5,0.5,3")));
     QCOMPARE(myCorrelatedItems.first().nSatellites, -1);
     QCOMPARE(myCorrelatedItems.first().hDop, -1.0);
 }

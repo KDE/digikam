@@ -245,7 +245,7 @@ void TestRGTagModel::testModelSpacerTags()
     // add some items before the tagModel is created:
     SimpleTreeModel::Item* const treeItem1 = treeModel->addItem();
     QPersistentModelIndex treeItem1Index = treeModel->itemToIndex(treeItem1);
-    treeItem1->data = QStringLiteral("oldChildren");
+    treeItem1->data = QLatin1String("oldChildren");
  
     SimpleTreeModel::Item* const treeItem11 = treeModel->addItem(treeItem1);
     QPersistentModelIndex treeItem11Index = treeModel->itemToIndex(treeItem11);
@@ -260,8 +260,8 @@ void TestRGTagModel::testModelSpacerTags()
     qDebug()<<"Worked before adding spacers";
 
     //insert spacer below ti21
-    tagModel->addSpacerTag(QModelIndex(), QStringLiteral("{Country}"));
-    tagModel->addNewTag(QModelIndex(), QStringLiteral("New Tag"));
+    tagModel->addSpacerTag(QModelIndex(), QLatin1String("{Country}"));
+    tagModel->addNewTag(QModelIndex(), QLatin1String("New Tag"));
 
     qDebug()<<"Added the spacers.";
  
