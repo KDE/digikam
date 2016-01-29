@@ -190,7 +190,7 @@ void ThemeManager::populateThemeMenu()
 
     Q_FOREACH (const QString& dir, dirs)
     {
-        QDirIterator it(dir, QStringList() << QStringLiteral("*.colors"));
+        QDirIterator it(dir, QStringList() << QLatin1String("*.colors"));
 
         while (it.hasNext())
         {

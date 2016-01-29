@@ -96,7 +96,7 @@ QString ImageGPS::saveChanges()
     {
         pos.remove();
     }
-    
+
     pos.apply();
 
     if (!m_tagList.isEmpty())
@@ -112,7 +112,7 @@ QString ImageGPS::saveChanges()
 
             for (int j = 0; j < currentTagPath.count(); ++j)
             {
-                singleTagPath.append(QStringLiteral("/") + currentTagPath[j].tagName);
+                singleTagPath.append(QLatin1String("/") + currentTagPath[j].tagName);
 
                 if (j == 0)
                 {

@@ -133,7 +133,7 @@ SetupKipi::SetupKipi(QWidget* const parent)
     QByteArray byteArray;
     QBuffer    buffer(&byteArray);
     QImage img = QImage(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                               QStringLiteral("kf5/kipi/pics/kipi-plugins_logo.png")))
+                                               QLatin1String("kf5/kipi/pics/kipi-plugins_logo.png")))
                  .scaledToHeight(r.height()*3, Qt::SmoothTransformation);
     img.save(&buffer, "PNG");
     d->kipiLogoLabel->setText(QString::fromLatin1("<a href=\"https://projects.kde.org/projects/extragear/graphics/kipi-plugins\">%1</a>")
