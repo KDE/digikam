@@ -109,4 +109,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 073 ==> 358053 - Drag and drop across local collections does not do anything.
 074 ==> 358149 - Duplicate entry in JPEG2000 image extensions.
 075 ==> 358486 - Pressing ENTER while in Search Box of Geolocation closes the window instead of searching the location.
-076 ==> 
+076 ==> 358193 - Color labels exported from LightRoom not recognized by digiKam.
+077 ==> 

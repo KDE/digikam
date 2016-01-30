@@ -519,6 +519,32 @@ int DMetadata::getImageColorLabel() const
                 return colorId;
             }
         }
+
+        // LightRoom use this tag to store color name as string.
+        // Values are limited : see bug #358193.
+
+        value = getXmpTagString("Xmp.xmp.Label", false);
+
+        if (value == QLatin1String("Blue"))
+        {
+            return BlueLabel;
+        }
+        else if (value == QLatin1String("Green"))
+        {
+            return GreenLabel;
+        }
+        else if (value == QLatin1String("Red"))
+        {
+            return RedLabel;
+        }
+        else if (value == QLatin1String("Yellow"))
+        {
+            return YellowLabel;
+        }
+        else if (value == QLatin1String("Purple"))
+        {
+            return MagentaLabel;
+        }
     }
 
     return -1;
@@ -758,6 +784,38 @@ bool DMetadata::setImageColorLabel(int colorId) const
         if (!setXmpTagString("Xmp.photoshop.Urgency", QString::number(colorId)))
         {
             return false;
+        }
+
+        // LightRoom use this XMP tags to store Color Labels name
+        // Values are limited : see bug #358193.
+
+        QString LRLabel;
+
+        switch(colorId)
+        {
+            case BlueLabel:
+                LRLabel = QLatin1String("Blue");
+                break;
+            case GreenLabel:
+                LRLabel = QLatin1String("Green");
+                break;
+            case RedLabel:
+                LRLabel = QLatin1String("Red");
+                break;
+            case YellowLabel:
+                LRLabel = QLatin1String("Yellow");
+                break;
+            case MagentaLabel:
+                LRLabel = QLatin1String("Purple");
+                break;
+        }
+
+        if (!LRLabel.isEmpty())
+        {
+            if (!setXmpTagString("Xmp.xmp.Label", LRLabel))
+            {
+                return false;
+            }
         }
     }
 
