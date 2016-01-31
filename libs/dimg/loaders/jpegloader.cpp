@@ -736,9 +736,9 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
     switch (subsampling)
     {
-        case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Medium
+        case 1:  // 2x1, 1x1, 1x1 (4:2:2) : Low
         {
-            qCDebug(DIGIKAM_DIMG_LOG_JPEG) << "Using LibJPEG medium chroma-subsampling (4:2:2)";
+            qCDebug(DIGIKAM_DIMG_LOG_JPEG) << "Using LibJPEG low chroma-subsampling (4:2:2)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
@@ -748,11 +748,23 @@ bool JPEGLoader::save(const QString& filePath, DImgLoaderObserver* const observe
             break;
         }
 
-        case 2:  // 2x2, 1x1, 1x1 (4:1:1) : High
+        case 2:  // 2x2, 1x1, 1x1 (4:2:0) : Medium
         {
-            qCDebug(DIGIKAM_DIMG_LOG_JPEG) << "Using LibJPEG high chroma-subsampling (4:1:1)";
+            qCDebug(DIGIKAM_DIMG_LOG_JPEG) << "Using LibJPEG medium chroma-subsampling (4:2:0)";
             cinfo.comp_info[0].h_samp_factor = 2;
             cinfo.comp_info[0].v_samp_factor = 2;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+            break;
+        }
+
+        case 3:  // 4x1, 1x1, 1x1 (4:1:1) : High
+        {
+            qCDebug(DIGIKAM_DIMG_LOG_JPEG) << "Using LibJPEG high chroma-subsampling (4:1:1)";
+            cinfo.comp_info[0].h_samp_factor = 4;
+            cinfo.comp_info[0].v_samp_factor = 1;
             cinfo.comp_info[1].h_samp_factor = 1;
             cinfo.comp_info[1].v_samp_factor = 1;
             cinfo.comp_info[2].h_samp_factor = 1;
