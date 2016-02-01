@@ -107,23 +107,23 @@ JPEGSettings::JPEGSettings(QWidget* const parent)
     d->labelSubSampling = new QLabel(i18n("Chroma subsampling:"), this);
 
     d->subSamplingCB = new QComboBox(this);
-    d->subSamplingCB->insertItem(0, i18n("None"));    // 1x1, 1x1, 1x1 (4:4:4)
-    d->subSamplingCB->insertItem(1, i18n("Low"));     // 2x1, 1x1, 1x1 (4:2:2)
-    d->subSamplingCB->insertItem(2, i18n("Medium"));  // 2x2, 1x1, 1x1 (4:2:0)
-    d->subSamplingCB->insertItem(3, i18n("High"));    // 4x1, 1x1, 1x1 (4:1:1)
-    d->subSamplingCB->setWhatsThis(i18n("<p>JPEG Chroma subsampling level \n(color is saved with less resolution "
-                                        "than luminance):</p>"
-                                        "<p><b>None</b>=best: uses 4:4:4 ratio. Does not employ chroma "
-                                        "subsampling at all. This preserves edges and contrasting "
-                                        "colors, whilst adding no additional compression.</p>"
-                                        "<p><b>Low</b>: uses 4:2:2 ratio. Low compression: reduces "
-                                        "the horizontal color resolution by half with little to "
-                                        "no visual difference.</p>"
-                                        "<p><b>Medium</b>: uses 4:2:0 ratio. Medium compression: reduces "
-                                        "the horizontal and vertical color resolution by half.</p>"
-                                        "<p><b>High</b>: use 4:1:1 ratio. High compression: reduces "
-                                        "the horizontal color resolution by one quarter. Created "
-                                        "images with soft edges but tends to alter colors.</p>"
+    d->subSamplingCB->insertItem(0, i18n("4:4:4 (best quality)")); // 1x1, 1x1, 1x1 (4:4:4)
+    d->subSamplingCB->insertItem(1, i18n("4:2:2 (good quality)")); // 2x1, 1x1, 1x1 (4:2:2)
+    d->subSamplingCB->insertItem(2, i18n("4:2:0 (low quality)"));  // 2x2, 1x1, 1x1 (4:2:0)
+    d->subSamplingCB->insertItem(3, i18n("4:1:1 (low quality)"));  // 4x1, 1x1, 1x1 (4:1:1)
+    d->subSamplingCB->setWhatsThis(i18n("<p>Chroma subsampling reduces file size by taking advantage of the "
+                                        "eye's lesser sensitivity to color resolution. How perceptible the "
+                                        "difference is depends on the image - large photos will generally "
+                                        "show no difference, while sharp, down-scaled pixel graphics may "
+                                        "lose fine color detail.</p>"
+                                        "<p><b>4:4:4</b> - No chroma subsampling, highest "
+                                        "quality but lowest compression.</p>"
+                                        "<p><b>4:2:2</b> - Chroma halved horizontally, average "
+                                        "compression, average quality.</p>"
+                                        "<p><b>4:2:0</b> - Chroma quartered in 2x2 blocks, "
+                                        "high compression but low quality.</p>"
+                                        "<p><b>4:1:1</b> - Chroma quartered in 4x1 blocks, "
+                                        "high compression but low quality.</p>"
                                         "<p><b>Note: JPEG always uses lossy compression.</b></p>"));
 
     d->JPEGGrid->addWidget(d->labelJPEGcompression, 0, 0, 1, 2);
