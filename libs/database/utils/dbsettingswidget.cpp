@@ -107,6 +107,8 @@ public:
     DFileSelector*     dbPathEdit;
 
     DbEngineParameters orgPrms;
+
+    QMap<int, int>     dbTypeMap;
 };
 
 DatabaseSettingsWidget::DatabaseSettingsWidget(QWidget* const parent)
@@ -139,16 +141,19 @@ void DatabaseSettingsWidget::setupMainArea()
     databaseTypeLabel->setText(i18n("Type:"));
 
     // --------- fill with default values ---------------------
-
+    int dbTypeIdx = 0;
     d->dbType->addItem(i18n("SQLite"),                        SQlite);
+    d->dbTypeMap[SQlite] = dbTypeIdx++;
 
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
     d->dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
+    d->dbTypeMap[MysqlInternal] = dbTypeIdx++;
 #   endif
 
     d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
+    d->dbTypeMap[MysqlServer] = dbTypeIdx++;
 #endif
 
     d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
@@ -187,7 +192,7 @@ void DatabaseSettingsWidget::setupMainArea()
     // --------------------------------------------------------
 
     d->tab = new QTabWidget(this);
-    
+
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     d->hostName                                      = new QLineEdit();
     d->hostName->setPlaceholderText(i18n("Set the host computer name"));
@@ -226,7 +231,7 @@ void DatabaseSettingsWidget::setupMainArea()
     // Only accept printable Ascii char for database names.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
     QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
-    
+
     QLabel* const dbNameCoreLabel                    = new QLabel(i18n("Core Db Name:"));
     d->dbNameCore                                    = new QLineEdit();
     d->dbNameCore->setPlaceholderText(i18n("Set the core database name"));
@@ -247,7 +252,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                    "This one can use quickly a lots of space, especially\nif you a lots of image with people faces detected "
                                    "and tagged."));
     d->dbNameFace->setValidator(asciiValidator);
-    
+
     QPushButton* const defaultValuesBtn              = new QPushButton(i18n("Default Settings"));
     defaultValuesBtn->setToolTip(i18n("Reset database names settings to common default values."));
 
@@ -350,7 +355,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     connect(defaultValuesBtn, SIGNAL(clicked()),
             this, SLOT(slotResetMysqlServerDBNames()));
-    
+
     connect(d->dbNameCore, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
@@ -368,7 +373,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
 int DatabaseSettingsWidget::databaseType() const
 {
-    return d->dbType->currentIndex();
+    return d->dbType->currentData().toInt();
 }
 
 QString DatabaseSettingsWidget::databasePath() const
@@ -380,7 +385,7 @@ void DatabaseSettingsWidget::setDatabasePath(const QString& path)
 {
     d->dbPathEdit->lineEdit()->setText(path);
 }
-    
+
 DbEngineParameters DatabaseSettingsWidget::orgDatabasePrm() const
 {
     return d->orgPrms;
@@ -411,8 +416,9 @@ void DatabaseSettingsWidget::slotResetMysqlServerDBNames()
 
 void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
 {
-    setDatabaseInputFields(index);
-    handleInternalServer(index);
+    int dbType = d->dbType->itemData(index).toInt();
+    setDatabaseInputFields(dbType);
+    handleInternalServer(dbType);
     slotUpdateSqlInit();
 }
 
@@ -590,7 +596,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     if (d->orgPrms.databaseType == DbEngineParameters::SQLiteDatabaseType())
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.getCoreDatabaseNameOrDir());
-        d->dbType->setCurrentIndex(SQlite);
+        d->dbType->setCurrentIndex(d->dbTypeMap[SQlite]);
         slotResetMysqlServerDBNames();
     }
 #ifdef HAVE_MYSQLSUPPORT
@@ -599,13 +605,13 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     else if (d->orgPrms.databaseType == DbEngineParameters::MySQLDatabaseType() && d->orgPrms.internalServer)
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
-        d->dbType->setCurrentIndex(MysqlInternal);
+        d->dbType->setCurrentIndex(d->dbTypeMap[MysqlInternal]);
         slotResetMysqlServerDBNames();
     }
 #   endif
     else
     {
-        d->dbType->setCurrentIndex(MysqlServer);
+        d->dbType->setCurrentIndex(d->dbTypeMap[MysqlServer]);
         d->dbNameCore->setText(d->orgPrms.databaseNameCore);
         d->dbNameThumbs->setText(d->orgPrms.databaseNameThumbnails);
         d->dbNameFace->setText(d->orgPrms.databaseNameFace);
