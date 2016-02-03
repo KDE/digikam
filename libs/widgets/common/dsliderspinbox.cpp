@@ -307,7 +307,6 @@ void DAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
 
 void DAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
 {
-
     Q_D(DAbstractSliderSpinBox);
 
     int step = d->fastSliderStep;
@@ -327,6 +326,16 @@ void DAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
     }
 
     update();
+    e->accept();
+}
+
+void DAbstractSliderSpinBox::focusInEvent(QFocusEvent* e)
+{
+    if (e->reason() == Qt::TabFocusReason)
+    {
+        showEdit();
+    }
+
     e->accept();
 }
 

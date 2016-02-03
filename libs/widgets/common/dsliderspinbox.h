@@ -74,7 +74,8 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent* e);
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
-    virtual void wheelEvent(QWheelEvent *);
+    virtual void wheelEvent(QWheelEvent* e);
+    virtual void focusInEvent(QFocusEvent* e);
     virtual bool eventFilter(QObject* recv, QEvent* e);
 
     virtual QSize sizeHint()        const;
