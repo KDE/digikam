@@ -163,14 +163,15 @@ void ThumbsGenerator::slotStart()
         }
     }
 
-    // remove non-image files from the list
+    // remove non-image or video files from the list
     QStringList::iterator it = d->allPicturesPath.begin();
 
     while (it != d->allPicturesPath.end())
     {
         ImageInfo info = ImageInfo::fromLocalFile(*it);
 
-        if (info.category() != DatabaseItem::Image)
+        if (info.category() != DatabaseItem::Image &&
+            info.category() != DatabaseItem::Video)
         {
             it = d->allPicturesPath.erase(it);
         }
