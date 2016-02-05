@@ -121,12 +121,13 @@ void BackendGeonamesUSRG::nextPhoto()
     if (d->jobs.isEmpty())
         return;
 
-    QUrl jobUrl(QLatin1String("http://ws.geonames.org/findNearestAddress"));
-    
+    QUrl jobUrl(QLatin1String("http://api.geonames.org/findNearestAddress"));
+
     QUrlQuery q(jobUrl);
     q.addQueryItem(QLatin1String("lat"), d->jobs.first().request.first().coordinates.latString());
     q.addQueryItem(QLatin1String("lng"), d->jobs.first().request.first().coordinates.lonString());
-//  q.addQueryItem(QLatin1String("lang"), d->jobs.first().language);
+    q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
+    // q.addQueryItem(QLatin1String("lang"), d->jobs.first().language);
     jobUrl.setQuery(q);
 
     d->jobs.first().kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
@@ -177,7 +178,7 @@ void BackendGeonamesUSRG::callRGBackend(const QList<RGInfo>& rgList, const QStri
     nextPhoto();
 }
 
-void BackendGeonamesUSRG::dataIsHere(KIO::Job* job, const QByteArray & data)
+void BackendGeonamesUSRG::dataIsHere(KIO::Job* job, const QByteArray& data)
 {
     for (int i = 0; i < d->jobs.count(); ++i)
     {
@@ -200,7 +201,7 @@ QMap<QString,QString> BackendGeonamesUSRG::makeQMapFromXML(const QString& xmlDat
     QDomDocument doc;
     doc.setContent(xmlData);
 
-    QDomElement docElem =  doc.documentElement();
+    QDomElement docElem = doc.documentElement();
     QDomNode n          = docElem.firstChild().firstChild();
 
     while (!n.isNull())

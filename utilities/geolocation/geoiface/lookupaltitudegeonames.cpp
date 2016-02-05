@@ -181,12 +181,13 @@ void LookupAltitudeGeonames::startNextRequest()
         lonString += requestCoordinates.lonString();
     }
 
-    QUrl jobUrl(QLatin1String("http://ws.geonames.org/srtm3"));
-    QUrlQuery jobQuery;
-    jobQuery.addQueryItem(QLatin1String("lats"), latString);
-    jobQuery.addQueryItem(QLatin1String("lngs"), lonString);
+    QUrl jobUrl(QLatin1String("http://api.geonames.org/srtm3"));
 
-    jobUrl.setQuery(jobQuery);
+    QUrlQuery q(jobUrl);
+    q.addQueryItem(QLatin1String("lats"), latString);
+    q.addQueryItem(QLatin1String("lngs"), lonString);
+    q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
+    jobUrl.setQuery(q);
 
     d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
 

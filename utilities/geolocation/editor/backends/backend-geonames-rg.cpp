@@ -120,12 +120,13 @@ void BackendGeonamesRG::nextPhoto()
     if (d->jobs.isEmpty())
         return;
 
-    QUrl jobUrl(QLatin1String("http://ws.geonames.org/findNearbyPlaceName"));
-    
+    QUrl jobUrl(QLatin1String("http://api.geonames.org/findNearbyPlaceName"));
+
     QUrlQuery q(jobUrl);
     q.addQueryItem(QLatin1String("lat"),  d->jobs.first().request.first().coordinates.latString());
     q.addQueryItem(QLatin1String("lng"),  d->jobs.first().request.first().coordinates.lonString());
     q.addQueryItem(QLatin1String("lang"), d->jobs.first().language);
+    q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     jobUrl.setQuery(q);
 
     d->jobs.first().kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
@@ -174,7 +175,7 @@ void BackendGeonamesRG::callRGBackend(const QList<RGInfo>& rgList, const QString
     nextPhoto();
 }
 
-void BackendGeonamesRG::dataIsHere(KIO::Job* job, const QByteArray & data)
+void BackendGeonamesRG::dataIsHere(KIO::Job* job, const QByteArray& data)
 {
     for (int i = 0; i < d->jobs.count(); ++i)
     {
@@ -198,7 +199,7 @@ QMap<QString,QString> BackendGeonamesRG::makeQMapFromXML(const QString& xmlData)
 
     doc.setContent(xmlData);
 
-    QDomElement docElem =  doc.documentElement();
+    QDomElement docElem = doc.documentElement();
     QDomNode n          = docElem.firstChild().firstChild();
 
     while (!n.isNull())
