@@ -268,9 +268,7 @@ QUrl KipiImageCollection::url()
 
         if (p)
         {
-            QUrl url;
-            url.setPath(p->folderPath());
-            return url;
+            return QUrl::fromLocalFile(p->folderPath());
         }
     }
 
@@ -286,9 +284,7 @@ QUrl KipiImageCollection::uploadUrl()
 
         if (p)
         {
-            QUrl url;
-            url.setPath(p->folderPath());
-            return url;
+            return QUrl::fromLocalFile(p->folderPath());
         }
     }
 
