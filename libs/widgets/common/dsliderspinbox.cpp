@@ -353,9 +353,11 @@ bool DAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
             case Qt::Key_Return:
                 setInternalValue(QLocale::system().toDouble(d->edit->text()) * d->factor);
                 hideEdit();
+                setFocus();
                 return true;
             case Qt::Key_Escape:
                 hideEdit();
+                setFocus();
                 return true;
             default:
                 break;
