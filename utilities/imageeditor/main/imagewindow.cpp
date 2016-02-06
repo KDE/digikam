@@ -1587,9 +1587,7 @@ void ImageWindow::slotOpenOriginal()
 
     foreach(const HistoryImageId& id, originals)
     {
-        QUrl url;
-        url = url.adjusted(QUrl::StripTrailingSlash);
-        url.setPath(url.path() + QLatin1Char('/') + (id.m_filePath));
+        QUrl url = QUrl::fromLocalFile(id.m_filePath);
         url = url.adjusted(QUrl::StripTrailingSlash);
         url.setPath(url.path() + QLatin1Char('/') + (id.m_fileName));
         imageInfos << ImageInfo::fromUrl(url);
