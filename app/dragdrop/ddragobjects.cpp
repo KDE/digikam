@@ -193,7 +193,6 @@ bool DAlbumDrag::canDecode(const QMimeData* e)
 
 bool DAlbumDrag::decode(const QMimeData* e, QList<QUrl>& kioUrls, int& albumID)
 {
-    QUrl url;
     albumID = -1;
 
     QByteArray albumarray = e->data(QLatin1String("digikam/album-ids"));
@@ -210,7 +209,6 @@ bool DAlbumDrag::decode(const QMimeData* e, QList<QUrl>& kioUrls, int& albumID)
             albumID = ids.first();
         }
 
-        QUrl u;
         QDataStream dsKio(kioarray);
 
         if (!dsKio.atEnd())

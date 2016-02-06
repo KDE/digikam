@@ -362,8 +362,6 @@ void BatchTool::setOutputUrlFromInputUrl()
     temp.open();
     qCDebug(DIGIKAM_GENERAL_LOG) << "path: " << temp.fileName();
 
-    QUrl url;
-    url.setPath(path);
     setOutputUrl(QUrl::fromLocalFile(temp.fileName()));
 }
 
