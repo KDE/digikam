@@ -49,6 +49,7 @@
 // Local includes
 
 #include "kiowrapper.h"
+#include "digikam_debug.h"
 
 namespace DigikamEnhanceImagePlugin
 {
@@ -77,7 +78,7 @@ void BlackFrameParser::parseHotPixels(const QString& file)
 void BlackFrameParser::parseBlackFrame(const QUrl& url)
 {
     QString localFile;
-    
+
     if (url.isLocalFile())
     {
         // file protocol. We do not need the network
@@ -92,7 +93,12 @@ void BlackFrameParser::parseBlackFrame(const QUrl& url)
 
         QTemporaryFile tmpFile;
         tmpFile.setAutoRemove(false);
-        tmpFile.open();
+
+        if (!tmpFile.open())
+        {
+            qCDebug(DIGIKAM_IMAGEPLUGINS_LOG) << "Cannot open temporary file";
+            return;
+        }
 
         localFile      = tmpFile.fileName();
         m_tempFilePath = localFile;
