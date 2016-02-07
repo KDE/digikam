@@ -81,9 +81,11 @@ bool CoreDbPrivilegesChecker::checkPrivileges(QStringList& insufficientRights)
         insufficientRights.append(QLatin1String("DROP TABLE"));
         result = false;
     }
-
-    // Try to delete this table in any case
-    checkPriv(fromDBbackend, QLatin1String("CheckPriv_Cleanup"));
+    else if (!checkPriv(fromDBbackend, QLatin1String("CheckPriv_Cleanup")))
+    {
+        insufficientRights.append(QLatin1String("DROP TABLE PrivCheck"));
+        result = false;
+    }
 
     return result;
 }
