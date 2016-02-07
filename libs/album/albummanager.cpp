@@ -3034,7 +3034,9 @@ void AlbumManager::notifyAlbumDeletion(Album* album)
 void AlbumManager::slotAlbumsJobResult()
 {
     if (!d->albumListJob)
+    {
         return;
+    }
 
     if (d->albumListJob->hasErrors())
     {
@@ -3061,6 +3063,11 @@ void AlbumManager::slotAlbumsJobData(const QMap<int, int> &albumsStatMap)
 
 void AlbumManager::slotPeopleJobResult()
 {
+    if (!d->personListJob)
+    {
+        return;
+    }
+
     if (d->personListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
@@ -3099,6 +3106,11 @@ void AlbumManager::slotPeopleJobData(const QMap<QString,QMap<int,int> >& facesSt
 
 void AlbumManager::slotTagsJobResult()
 {
+    if (!d->tagListJob)
+    {
+        return;
+    }
+
     if (d->tagListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list face tags";
@@ -3124,6 +3136,11 @@ void AlbumManager::slotTagsJobData(const QMap<int,int>& tagsStatMap)
 
 void AlbumManager::slotDatesJobResult()
 {
+    if (!d->dateListJob)
+    {
+        return;
+    }
+
     if (d->dateListJob->hasErrors())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to list dates";
