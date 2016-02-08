@@ -99,6 +99,8 @@ public:
 
     qlonglong             scrollToItemId;
 
+    QUrl                  unknownCurrentUrl;
+
     QTimer*               delayedEnterTimer;
 
     QMouseEvent*          currentMouseEvent;
@@ -458,6 +460,29 @@ void ImageCategorizedView::setCurrentWhenAvailable(qlonglong imageId)
     d->scrollToItemId = imageId;
 }
 
+void ImageCategorizedView::setCurrentUrlWhenAvailable(const QUrl& url)
+{
+    if (url.isEmpty())
+    {
+        clearSelection();
+        setCurrentIndex(QModelIndex());
+        return;
+    }
+
+    QString path      = url.toLocalFile();
+    QModelIndex index = d->filterModel->indexForPath(path);
+
+    if (!index.isValid())
+    {
+        d->unknownCurrentUrl = url;
+        return;
+    }
+
+    clearSelection();
+    setCurrentIndex(index);
+    d->unknownCurrentUrl.clear();
+}
+
 void ImageCategorizedView::setCurrentUrl(const QUrl& url)
 {
     if (url.isEmpty())
@@ -611,6 +636,16 @@ void ImageCategorizedView::slotImageInfosAdded()
     {
         scrollToStoredItem();
     }
+    else if (!d->unknownCurrentUrl.isEmpty())
+    {
+        QTimer::singleShot(100, this, SLOT(slotCurrentUrlTimer()));
+    }
+}
+
+void ImageCategorizedView::slotCurrentUrlTimer()
+{
+    setCurrentUrl(d->unknownCurrentUrl);
+    d->unknownCurrentUrl.clear();
 }
 
 void ImageCategorizedView::slotFileChanged(const QString& filePath)

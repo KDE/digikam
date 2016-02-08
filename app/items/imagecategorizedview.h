@@ -135,6 +135,10 @@ public Q_SLOTS:
      */
     void setCurrentWhenAvailable(qlonglong imageId);
 
+    /** Set as current item when it becomes available, the item identified by its file url.
+     */
+    void setCurrentUrlWhenAvailable(const QUrl& url);
+
     /** Set as current item the item identified by its file url.
      */
     void setCurrentUrl(const QUrl& url);
@@ -176,6 +180,7 @@ Q_SIGNALS:
 protected Q_SLOTS:
 
     void slotImageInfosAdded();
+    void slotCurrentUrlTimer();
 
 protected:
 

@@ -116,4 +116,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 080 ==> 359097 - Crash after processing a batch queue.
 081 ==> 359098 - Edited images are sorted before originals.
 082 ==> 359088 - With "Show a count of items in Tree Views" Trash always shows count of 0 [patch].
-083 ==> 
+083 ==> 358913 - Using Versionning, after returning from edit mode wrong image is selected, image itself is not updated [patch].
+084 ==> 
