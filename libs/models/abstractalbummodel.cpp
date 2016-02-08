@@ -29,6 +29,7 @@
 
 #include <QPainter>
 #include <QIcon>
+#include <QDir>
 
 // KDE includes
 
@@ -783,11 +784,27 @@ QVariant AbstractCountingAlbumModel::albumData(Album* album, int role) const
 {
     if (role == Qt::DisplayRole && d->showCount && !album->isRoot())
     {
-        QHash<int, int>::const_iterator it = d->countHashReady.constFind(album->id());
-
-        if (it != d->countHashReady.constEnd())
+        if (album->isTrashAlbum())
         {
-            return QString::fromUtf8("%1 (%2)").arg(albumName(album)).arg(it.value());
+            PAlbum* const palbum = AlbumManager::instance()->findPAlbum(album->parent()->id());
+
+            if (palbum)
+            {
+                QString path = palbum->folderPath();
+                path.append(QLatin1String(".dtrash/files"));
+                QDir dir(path, QLatin1String(""), QDir::Unsorted, QDir::Files);
+
+                return QString::fromUtf8("%1 (%2)").arg(albumName(album)).arg(dir.count());
+            }
+        }
+        else
+        {
+            QHash<int, int>::const_iterator it = d->countHashReady.constFind(album->id());
+
+            if (it != d->countHashReady.constEnd())
+            {
+                return QString::fromUtf8("%1 (%2)").arg(albumName(album)).arg(it.value());
+            }
         }
     }
 
