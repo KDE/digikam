@@ -46,6 +46,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to correct colors of image
+Comment[ar]=أداة لتصحيح ألوان الصّور
 Comment[ast]=Una ferramienta pa iguar colores de la imaxe
 Comment[bg]=Инструмент за поправяне на цветове в снимките
 Comment[bs]=Alat za ispravljanje boja na slici

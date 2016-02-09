@@ -46,6 +46,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=A tool to decorate image
+Comment[ar]=أداة لتزيين الصّور
 Comment[ast]=Una ferramienta pa decorar la imaxe
 Comment[bg]=Инструмент за украсяване на снимки
 Comment[bs]=Alat za ukrašavanje slike

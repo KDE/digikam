@@ -46,6 +46,7 @@ Type=Service
 ServiceTypes=Digikam/ImagePlugin
 Encoding=UTF-8
 Comment=Special effect filters plugin for digiKam
+Comment[ar]=ملحقة مرشّحات تأثيرات خاصّة ل‍«دِجي‌كام»
 Comment[ast]=Complementu de peñeres d'efeutos especiales pa digiKam
 Comment[bg]=Приставка на digiKam с филтри за специални ефекти
 Comment[bs]=Dodatak filtera specijalnih efekata za digiKam
