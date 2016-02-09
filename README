@@ -87,6 +87,7 @@ Name              Version                       URL                             
 Required:
 
 CMake             >= 3.0.0                      http://www.cmake.org
+ECM               >= 1.7.0                      https://projects.kde.org/projects/kdesupport/extra-cmake-modules
 libqt             >= 5.1.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
 kdelibs           >= 5.1.0                      http://www.kde.org
 libexiv2          >= 0.24                       http://www.exiv2.org                                              Exiv2 0.25 recommended
