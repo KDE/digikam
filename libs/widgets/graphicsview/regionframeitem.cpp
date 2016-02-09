@@ -406,7 +406,12 @@ RegionFrameItem::RegionFrameItem(QGraphicsItem* const item)
 
 RegionFrameItem::~RegionFrameItem()
 {
-    delete d->hudWidget;
+    if (d->hudWidget)
+    {
+        d->hudWidget->hide();
+        delete d->hudWidget;
+    }
+
     delete d;
 }
 
