@@ -52,9 +52,14 @@ public:
     TagPropWidget(QWidget* const parent);
     ~TagPropWidget();
 
+Q_SIGNALS:
+
+    void signalTitleEditReady();
+
 public Q_SLOTS:
 
     void slotSelectionChanged(QList<Album*> albums);
+    void slotFocusTitleEdit();
 
 private Q_SLOTS:
 
@@ -63,6 +68,7 @@ private Q_SLOTS:
     void slotDataChanged();
     void slotSaveChanges();
     void slotDiscardChanges();
+    void slotReturnPressed();
 
 private:
 

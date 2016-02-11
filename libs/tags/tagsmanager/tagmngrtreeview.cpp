@@ -109,9 +109,9 @@ void TagMngrTreeView::setAlbumFilterModel(TagsManagerFilterModel* const filtered
 
 void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> albums)
 {
-
     bool isRoot = false;
-    if(albums.size() == 1)
+
+    if (albums.size() == 1)
     {
         TAlbum* const tag = dynamic_cast<TAlbum*> (albums.first());
 
@@ -120,12 +120,15 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
             return;
         }
 
-        if(tag->isRoot())
+        if (tag->isRoot())
+        {
             isRoot = true;
+        }
+
         cmh.addActionNewTag(tagModificationHelper(), tag);
     }
 
-    if(!isRoot)
+    if (!isRoot)
     {
         cmh.addActionDeleteTags(tagModificationHelper(),albums);
     }
@@ -137,7 +140,12 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
         cmh.addAction(deleteTagsAction);
         deleteTagsAction->setEnabled(false);
     }
+
     cmh.addSeparator();
+
+    QAction* const titleEdit     = new QAction(QIcon::fromTheme(QLatin1String("document-edit")),
+                                               i18n("Edit tag Title"), this);
+    titleEdit->setShortcut(QKeySequence(Qt::Key_F2));
 
     QAction* const resetIcon     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),
                                                i18n("Reset tag Icon"), this);
@@ -154,18 +162,26 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
     QAction* const delTagFromImg = new QAction(QIcon::fromTheme(QLatin1String("tag-delete")),
                                                i18n("Remove Tag from Images"), this);
 
+    cmh.addAction(titleEdit,     d->tagMngr, SLOT(slotEditTagTitle()),       false);
     cmh.addAction(resetIcon,     d->tagMngr, SLOT(slotResetTagIcon()),       false);
     cmh.addAction(invSel,        d->tagMngr, SLOT(slotInvertSel()),          false);
     cmh.addAction(expandTree,    this,       SLOT(slotExpandTree()),         false);
     cmh.addAction(expandSel,     this ,      SLOT(slotExpandSelected()),     false);
     cmh.addAction(delTagFromImg, d->tagMngr, SLOT(slotRemoveTagsFromImgs()), false);
 
-    if(isRoot)
+    if (isRoot)
     {
+        titleEdit->setEnabled(false);
         resetIcon->setEnabled(false);
         delTagFromImg->setEnabled(false);
     }
+
+    if (albums.size() != 1)
+    {
+        titleEdit->setEnabled(false);
+    }
 }
+
 void TagMngrTreeView::slotExpandSelected()
 {
     QModelIndexList list = selectionModel()->selectedIndexes();
@@ -186,23 +202,23 @@ void TagMngrTreeView::slotExpandTree()
 
     greyNodes.append(root);
 
-    while(!greyNodes.isEmpty())
+    while (!greyNodes.isEmpty())
     {
         QModelIndex current = greyNodes.dequeue();
 
-        if(!(current.isValid()))
+        if (!(current.isValid()))
         {
             continue;
         }
 
-        if(this->isExpanded(current))
+        if (this->isExpanded(current))
         {
             int it            = 0;
             QModelIndex child = current.child(it++, 0);
 
-            while(child.isValid())
+            while (child.isValid())
             {
-                if(this->isExpanded(child))
+                if (this->isExpanded(child))
                 {
                     greyNodes.enqueue(child);
                 }

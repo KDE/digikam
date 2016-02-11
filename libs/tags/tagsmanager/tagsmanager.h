@@ -101,6 +101,16 @@ private Q_SLOTS:
     void slotResetTagIcon();
 
     /**
+     * @brief slotEditTagTitle - view Tag Properties and set focus to title edit
+     */
+     void slotEditTagTitle();
+
+    /**
+     * @brief slotTitleEditReady - title edit from Tag Properties was return button pressed
+     */
+     void slotTitleEditReady();
+
+    /**
      * @brief slotCreateTagAddr - connected to createTagAddr action and
      *                            will create tags from Addressbook
      */

@@ -84,10 +84,12 @@ public:
         tagProperties    = 0;
         addAction        = 0;
         delAction        = 0;
+        titleEdit        = 0;
         listView         = 0;
         tagPropWidget    = 0;
         tagMngrView      = 0;
         tagModel         = 0;
+        tagPropVisible   = false;
     }
 
     TagMngrTreeView* tagMngrView;
@@ -104,12 +106,15 @@ public:
     QAction*         tagProperties;
     QAction*         addAction;
     QAction*         delAction;
+    QAction*         titleEdit;
     /** Options unavailable for root tag **/
     QList<QAction*>  rootDisabledOptions;
 
     TagList*         listView;
     TagPropWidget*   tagPropWidget;
     TagModel*        tagModel;
+
+    bool             tagPropVisible;
 };
 
 TagsManager::TagsManager()
@@ -200,6 +205,9 @@ void TagsManager::setupUi(KMainWindow* const Dialog)
      d->splitter->addWidget(d->tagPropWidget);
      d->tagPropWidget->hide();
 
+     connect(d->tagPropWidget, SIGNAL(signalTitleEditReady()),
+             this, SLOT(slotTitleEditReady()));
+
      d->splitter->setStretchFactor(0,0);
      d->splitter->setStretchFactor(1,1);
      d->splitter->setStretchFactor(2,0);
@@ -225,13 +233,15 @@ void TagsManager::slotOpenProperties()
     {
         d->tagPropWidget->hide();
     }
+
+    d->tagPropVisible = d->tagPropWidget->isVisible();
 }
 
 void TagsManager::slotSelectionChanged()
 {
     QList<Album*> selectedTags = d->tagMngrView->selectedTags();
 
-    if(selectedTags.isEmpty() || (selectedTags.size() == 1 && selectedTags.at(0)->isRoot()))
+    if (selectedTags.isEmpty() || (selectedTags.size() == 1 && selectedTags.at(0)->isRoot()))
     {
         enableRootTagActions(false);
         d->listView->enableAddButton(false);
@@ -240,6 +250,7 @@ void TagsManager::slotSelectionChanged()
     {
         enableRootTagActions(true);
         d->listView->enableAddButton(true);
+        d->titleEdit->setEnabled((selectedTags.size() == 1));
     }
 
     d->tagPropWidget->slotSelectionChanged(selectedTags);
@@ -255,7 +266,7 @@ void TagsManager::slotAddAction()
     QString       title, icon;
     QKeySequence  ks;
 
-    if(!parent)
+    if (!parent)
     {
         parent = static_cast<TAlbum*>(d->tagMngrView->albumForIndex(d->tagMngrView->model()->index(0,0)));
     }
@@ -361,7 +372,7 @@ void TagsManager::slotDeleteAction()
                                                        tagsWithChildren.count(),
                                                        JoinTagNamesToList(tagsWithChildren),
                                                 QMessageBox::Yes | QMessageBox::Cancel));
-        
+
         if (result != QMessageBox::Yes)
         {
             return;
@@ -395,7 +406,7 @@ void TagsManager::slotDeleteAction()
 
     const int result = QMessageBox::warning(this, i18np("Delete tag", "Delete tags", tagNames.count()),
                                             message, QMessageBox::Yes | QMessageBox::Cancel);
-    
+
     if (result == QMessageBox::Yes)
     {
         QMultiMap<int, TAlbum*>::iterator it;
@@ -414,6 +425,30 @@ void TagsManager::slotDeleteAction()
             }
         }
     }
+}
+
+void TagsManager::slotEditTagTitle()
+{
+    QList<Album*> selectedTags = d->tagMngrView->selectedTags();
+    d->tagPropVisible          = d->tagPropWidget->isVisible();
+
+    if (selectedTags.size() == 1 && !selectedTags.at(0)->isRoot())
+    {
+        d->tagPropWidget->show();
+        d->tagPropWidget->slotFocusTitleEdit();
+        d->rightToolBar->tab(0)->setChecked(true);
+    }
+}
+
+void TagsManager::slotTitleEditReady()
+{
+    if (!d->tagPropVisible)
+    {
+        d->tagPropWidget->hide();
+        d->rightToolBar->tab(0)->setChecked(false);
+    }
+
+    d->tagMngrView->setFocus();
 }
 
 void TagsManager::slotResetTagIcon()
@@ -454,11 +489,11 @@ void TagsManager::slotInvertSel()
 
     model->clearSelection();
 
-    while(!greyNodes.isEmpty())
+    while (!greyNodes.isEmpty())
     {
         QModelIndex current = greyNodes.dequeue();
 
-        if(!(current.isValid()))
+        if (!(current.isValid()))
         {
             continue;
         }
@@ -466,7 +501,7 @@ void TagsManager::slotInvertSel()
         int it            = 0;
         QModelIndex child = current.child(it++,0);
 
-        while(child.isValid())
+        while (child.isValid())
         {
             if(!selected.contains(child))
             {
@@ -483,7 +518,7 @@ void TagsManager::slotInvertSel()
                 model->select(child, model->Select);
             }
 
-            if(d->tagMngrView->isExpanded(child))
+            if (d->tagMngrView->isExpanded(child))
             {
                 greyNodes.enqueue(child);
             }
@@ -501,7 +536,7 @@ void TagsManager::slotWriteToImg()
                                            "read tags before (by calling Read Tags from Image).<br> "
                                            "Do you want to continue?<qt>"),
                                       QMessageBox::Yes | QMessageBox::Cancel);
-    
+
     if (result != QMessageBox::Yes)
     {
         return;
@@ -552,7 +587,7 @@ void TagsManager::slotWipeAll()
                                                  "you must choose write metadata to file later.\n"
                                                  "Do you want to continue?"),
                                             QMessageBox::Yes | QMessageBox::Cancel);
-    
+
     if (result != QMessageBox::Yes)
     {
         return;
@@ -664,29 +699,33 @@ void TagsManager::setupActions()
     d->delAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), QLatin1String(""), d->treeWindow);
 
     /** organize group **/
-    d->organizeAction            = new QMenu(i18nc("@title:menu", "Organize"),this);
+    d->organizeAction            = new QMenu(i18nc("@title:menu", "Organize"), this);
     d->organizeAction->setIcon(QIcon::fromTheme(QLatin1String("autocorrection")));
 
+    d->titleEdit                 = new QAction(QIcon::fromTheme(QLatin1String("document-edit")),
+                                               i18n("Edit tag Title"), this);
+    d->titleEdit->setShortcut(QKeySequence(Qt::Key_F2));
+
     QAction* const resetIcon     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),
-                                         i18n("Reset tag Icon"), this);
+                                               i18n("Reset tag Icon"), this);
 
     QAction* const createTagAddr = new QAction(QIcon::fromTheme(QLatin1String("tag-addressbook")),
-                                         i18n("Create Tag from Address Book"),
-                                         this);
+                                               i18n("Create Tag from Address Book"), this);
+
     QAction* const invSel        = new QAction(QIcon::fromTheme(QLatin1String("tag-reset")),
-                                         i18n("Invert Selection"), this);
+                                               i18n("Invert Selection"), this);
 
     QAction* const expandTree    = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
-                                         i18n("Expand Tag Tree"), this);
+                                               i18n("Expand Tag Tree"), this);
 
     QAction* const expandSel     = new QAction(QIcon::fromTheme(QLatin1String("format-indent-more")),
-                                         i18n("Expand Selected Nodes"), this);
+                                               i18n("Expand Selected Nodes"), this);
     QAction* const delTagFromImg = new QAction(QIcon::fromTheme(QLatin1String("tag-delete")),
-                                         i18n("Remove Tag from Images"), this);
+                                               i18n("Remove Tag from Images"), this);
 
     QAction* const deleteUnused  = new QAction(QIcon::fromTheme(QLatin1String("draw-eraser")),
-                                         i18n("Delete Unassigned Tags"), this);
-    
+                                               i18n("Delete Unassigned Tags"), this);
+
     /** Tool tips  **/
     setHelpText(d->addAction, i18n("Add new tag to current tag. "
                                    "Current tag is last clicked tag."));
@@ -695,8 +734,10 @@ void TagsManager::setupActions()
                                    "Also work with multiple items, "
                                    "but won't delete the root tag."));
 
+    setHelpText(d->titleEdit, i18n("Edit title from selected tag."));
+
     setHelpText(resetIcon, i18n("Reset icon to selected tags. "
-                                "Works with multiple selection." ));
+                                "Works with multiple selection."));
 
     setHelpText(invSel, i18n("Invert selection. "
                              "Only visible items will be selected"));
@@ -710,6 +751,9 @@ void TagsManager::setupActions()
 
     setHelpText(deleteUnused, i18n("Delete all tags that are not assigned to images. "
                                    "Use with caution."));
+
+    connect(d->titleEdit, SIGNAL(triggered()),
+            this, SLOT(slotEditTagTitle()));
 
     connect(resetIcon, SIGNAL(triggered()),
             this, SLOT(slotResetTagIcon()));
@@ -731,7 +775,8 @@ void TagsManager::setupActions()
 
     connect(deleteUnused, SIGNAL(triggered()),
             this, SLOT(slotRemoveNotAssignedTags()));
-    
+
+    d->organizeAction->addAction(d->titleEdit);
     d->organizeAction->addAction(resetIcon);
     d->organizeAction->addAction(createTagAddr);
     d->organizeAction->addAction(invSel);
@@ -793,6 +838,7 @@ void TagsManager::setupActions()
             this, SLOT(slotOpenProperties()));
 
     d->rootDisabledOptions.append(d->delAction);
+    d->rootDisabledOptions.append(d->titleEdit);
     d->rootDisabledOptions.append(resetIcon);
     d->rootDisabledOptions.append(delTagFromImg);
 }
@@ -802,8 +848,8 @@ void TagsManager::setHelpText(QAction *action, const QString &text)
 {
     action->setStatusTip(text);
     action->setToolTip(text);
-    
-    if(action->whatsThis().isEmpty())
+
+    if (action->whatsThis().isEmpty())
     {
         action->setWhatsThis(text);
     }
@@ -811,9 +857,9 @@ void TagsManager::setHelpText(QAction *action, const QString &text)
 
 void TagsManager::enableRootTagActions(bool value)
 {
-    Q_FOREACH(QAction* const action, d->rootDisabledOptions)
+    foreach(QAction* const action, d->rootDisabledOptions)
     {
-        if(value)
+        if (value)
             action->setEnabled(true);
         else
             action->setEnabled(false);
@@ -934,7 +980,7 @@ void TagsManager::slotRemoveNotAssignedTags()
         }
     }
 
-    foreach (TAlbum* const elem, toRemove)
+    foreach(TAlbum* const elem, toRemove)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << elem->title();
         QString errMsg;

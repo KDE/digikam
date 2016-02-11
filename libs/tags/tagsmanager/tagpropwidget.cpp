@@ -177,6 +177,9 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     connect(d->titleEdit, SIGNAL(textEdited(QString)),
             this, SLOT(slotDataChanged()));
 
+    connect(d->titleEdit, SIGNAL(returnPressed()),
+            this, SLOT(slotReturnPressed()));
+
     connect(d->resetIconButton, SIGNAL(clicked()),
             this,SLOT(slotIconResetClicked()));
 
@@ -274,9 +277,15 @@ void TagPropWidget::slotSelectionChanged(QList<Album*> albums)
     d->changed = false;
 }
 
+void TagPropWidget::slotFocusTitleEdit()
+{
+    d->titleEdit->selectAll();
+    d->titleEdit->setFocus();
+}
+
 void TagPropWidget::slotIconResetClicked()
 {
-    if(d->icon.isEmpty() || d->icon == QLatin1String("tag"))
+    if (d->icon.isEmpty() || d->icon == QLatin1String("tag"))
     {
         return;
     }
@@ -309,7 +318,7 @@ void TagPropWidget::slotDataChanged()
 
 void TagPropWidget::slotSaveChanges()
 {
-    if(d->selectedAlbums.size() == 1)
+    if (d->selectedAlbums.size() == 1)
     {
         QString title     = d->titleEdit->text();
         TAlbum* const tag = d->selectedAlbums.first();
@@ -345,7 +354,7 @@ void TagPropWidget::slotSaveChanges()
     {
         QList<TAlbum*>::iterator it;
 
-        for(it = d->selectedAlbums.begin(); it != d->selectedAlbums.end(); ++it)
+        for (it = d->selectedAlbums.begin(); it != d->selectedAlbums.end(); ++it)
         {
             TAlbum* const tag = *it;
 
@@ -366,7 +375,7 @@ void TagPropWidget::slotSaveChanges()
 
 void TagPropWidget::slotDiscardChanges()
 {
-    if(d->selectedAlbums.size() == 1)
+    if (d->selectedAlbums.size() == 1)
     {
         TAlbum* const album = d->selectedAlbums.first();
         QString Seq         = album->property(TagPropertyName::tagKeyboardShortcut());
@@ -384,24 +393,30 @@ void TagPropWidget::slotDiscardChanges()
     d->changed = false;
 }
 
+void TagPropWidget::slotReturnPressed()
+{
+    slotSaveChanges();
+    emit signalTitleEditReady();
+}
+
 void TagPropWidget::enableItems(TagPropWidget::ItemsEnable value)
 {
     bool val        = false;
     bool iconEnable = false;
 
-    if(value == TagPropWidget::DisabledAll)
+    if (value == TagPropWidget::DisabledAll)
     {
         val        = false;
         iconEnable = false;
     }
 
-    if(value == TagPropWidget::EnabledAll)
+    if (value == TagPropWidget::EnabledAll)
     {
         val        = true;
         iconEnable = true;
     }
 
-    if(value == TagPropWidget::IconOnly)
+    if (value == TagPropWidget::IconOnly)
     {
         val        = false;
         iconEnable = true;
