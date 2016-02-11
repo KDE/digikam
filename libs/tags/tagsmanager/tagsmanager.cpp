@@ -430,7 +430,6 @@ void TagsManager::slotDeleteAction()
 void TagsManager::slotEditTagTitle()
 {
     QList<Album*> selectedTags = d->tagMngrView->selectedTags();
-    d->tagPropVisible          = d->tagPropWidget->isVisible();
 
     if (selectedTags.size() == 1 && !selectedTags.at(0)->isRoot())
     {
