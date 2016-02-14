@@ -121,4 +121,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 085 ==> 359196 - Digikam segfaults when tagging a face.
 086 ==> 358081 - Tags Manager - selecting tags from tree-view do not focus tags title field in right sidebar.
 087 ==> 234546 - Preview fails for some images [patch].
-088 ==> 
+088 ==> 357224 - Add ability to change icon theme.
+089 ==> 

@@ -55,6 +55,7 @@ public:
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
+        iconThemeLabel(0),
         showSplashCheck(0),
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
@@ -62,13 +63,15 @@ public:
         scrollItemToCenterCheck(0),
         sidebarType(0),
         stringComparisonType(0),
-        applicationStyle(0)
+        applicationStyle(0),
+        iconTheme(0)
     {
     }
 
     QLabel*    sidebarTypeLabel;
     QLabel*    stringComparisonTypeLabel;
     QLabel*    applicationStyleLabel;
+    QLabel*    iconThemeLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
@@ -79,6 +82,7 @@ public:
     QComboBox* sidebarType;
     QComboBox* stringComparisonType;
     QComboBox* applicationStyle;
+    QComboBox* iconTheme;
 };
 
 SetupMisc::SetupMisc(QWidget* const parent)
@@ -140,6 +144,37 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    DHBox* const iconThemeHbox = new DHBox(panel);
+    d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
+    d->iconTheme               = new QComboBox(iconThemeHbox);
+    d->iconTheme->setToolTip(i18n("Set this option to choose the default icon theme."));
+
+    d->iconTheme->addItem(i18n("Use Icon Theme From System"), QString());
+
+    const QString indexTheme = QLatin1String("/index.theme");
+    const QString breezeDark = QLatin1String("/breeze-dark");
+    const QString breeze     = QLatin1String("/breeze");
+
+    bool foundBreezeDark     = false;
+    bool foundBreeze         = false;
+
+    foreach(const QString& path, QIcon::themeSearchPaths())
+    {
+        if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
+        {
+            d->iconTheme->addItem(i18n("Breeze"), breeze.mid(1));
+            foundBreeze = true;
+        }
+
+        if (!foundBreezeDark && QFile::exists(path + breezeDark + indexTheme))
+        {
+            d->iconTheme->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
+            foundBreezeDark = true;
+        }
+    }
+
+    // --------------------------------------------------------
+
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);
     layout->addWidget(d->showTrashDeleteDialogCheck);
@@ -149,6 +184,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->addWidget(d->showSplashCheck);
     layout->addWidget(tabStyleHbox);
     layout->addWidget(appStyleHbox);
+    layout->addWidget(iconThemeHbox);
     layout->addWidget(stringComparisonHbox);
     layout->addStretch();
 
@@ -175,6 +211,7 @@ void SetupMisc::applySettings()
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
     settings->setApplicationStyle(d->applicationStyle->currentText());
+    settings->setIconTheme(d->iconTheme->currentData().toString());
     settings->saveSettings();
 }
 
@@ -190,6 +227,7 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle()));
+    d->iconTheme->setCurrentIndex(d->iconTheme->findData(settings->getIconTheme()));
 }
 
 }  // namespace Digikam

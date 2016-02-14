@@ -390,6 +390,9 @@ public:
     void setApplicationStyle(const QString& style);
     QString getApplicationStyle() const;
 
+    void setIconTheme(const QString& theme);
+    QString getIconTheme() const;
+
     void setShowSplashScreen(bool val);
     bool getShowSplashScreen() const;
 

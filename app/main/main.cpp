@@ -142,6 +142,7 @@ int main(int argc, char* argv[])
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(QLatin1String("General Settings"));
     QString version           = group.readEntry(QLatin1String("Version"), QString());
+    QString iconTheme         = group.readEntry(QLatin1String("Icon Theme"), QString());
     KConfigGroup mainConfig   = config->group(QLatin1String("Album Settings"));
 
     QString            firstAlbumPath;
@@ -192,6 +193,11 @@ int main(int argc, char* argv[])
 
     // initialize database
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
+
+    if (!iconTheme.isEmpty())
+    {
+        QIcon::setThemeName(iconTheme);
+    }
 
     // create main window
     DigikamApp* const digikam = new DigikamApp();

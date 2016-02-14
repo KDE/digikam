@@ -132,6 +132,7 @@ public:
     static const QString                      configStringComparisonTypeEntry;
     static const QString                      configFaceDetectionAccuracyEntry;
     static const QString                      configApplicationStyleEntry;
+    static const QString                      configIconThemeEntry;
 
     // start up setting
     bool                                      showSplash;
@@ -255,6 +256,7 @@ public:
     //misc
     ApplicationSettings::StringComparisonType stringComparisonType;
     QString                                   applicationStyle;
+    QString                                   iconTheme;
 
 private :
 

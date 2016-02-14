@@ -134,6 +134,7 @@ const QString ApplicationSettings::Private::configSyncDigikamtoBalooEntry(QLatin
 const QString ApplicationSettings::Private::configStringComparisonTypeEntry(QLatin1String("String Comparison Type"));
 const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry(QLatin1String("Detection Accuracy"));
 const QString ApplicationSettings::Private::configApplicationStyleEntry(QLatin1String("Application Style"));
+const QString ApplicationSettings::Private::configIconThemeEntry(QLatin1String("Icon Theme"));
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
@@ -320,6 +321,7 @@ void ApplicationSettings::Private::init()
 
     stringComparisonType                = ApplicationSettings::Natural;
     applicationStyle                    = qApp->style()->objectName();
+    iconTheme                           = QString();
 
     q->connect(q, SIGNAL(balooSettingsChanged()),
                q, SLOT(applyBalooSettings()));

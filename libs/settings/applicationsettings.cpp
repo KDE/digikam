@@ -235,6 +235,7 @@ void ApplicationSettings::readSettings()
     d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
+    d->iconTheme                        = group.readEntry(d->configIconThemeEntry,                                   QString());
 
     // ---------------------------------------------------------------------
 
@@ -383,6 +384,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
     group.writeEntry(d->configStringComparisonTypeEntry,               (int) d->stringComparisonType);
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
+    group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
 
     // ---------------------------------------------------------------------
 

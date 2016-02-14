@@ -161,6 +161,16 @@ QString ApplicationSettings::getApplicationStyle() const
     return d->applicationStyle;
 }
 
+void ApplicationSettings::setIconTheme(const QString& theme)
+{
+    d->iconTheme = theme;
+}
+
+QString ApplicationSettings::getIconTheme() const
+{
+    return d->iconTheme;
+}
+
 void ApplicationSettings::setShowThumbbar(bool val)
 {
     d->showThumbbar = val;
