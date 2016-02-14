@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSISTANT_DLG_PAGE_H
-#define ASSISTANT_DLG_PAGE_H
+#ifndef FIRSTRUN_DLG_PAGE_H
+#define FIRSTRUN_DLG_PAGE_H
 
 // Qt includes
 
@@ -32,18 +32,18 @@
 
 // Local includes
 
-#include "assistantdlg.h"
+#include "firstrundlg.h"
 
 namespace Digikam
 {
 
-class AssistantDlgPage : public QWizardPage
+class FirstRunDlgPage : public QWizardPage
 {
 
 public:
 
-    AssistantDlgPage(AssistantDlg* const dlg, const QString& title);
-    virtual ~AssistantDlgPage();
+    FirstRunDlgPage(FirstRunDlg* const dlg, const QString& title);
+    virtual ~FirstRunDlgPage();
 
     void setPageWidget(QWidget* const w);
     void setLeftBottomPix(const QIcon& icon);
@@ -56,4 +56,4 @@ private:
 
 }   // namespace Digikam
 
-#endif /* ASSISTANT_DLG_PAGE_H */
+#endif /* FIRSTRUN_DLG_PAGE_H */

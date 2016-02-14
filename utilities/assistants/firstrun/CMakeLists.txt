@@ -10,8 +10,8 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libfirstrun_SRCS
-    assistantdlg.cpp
-    assistantdlgpage.cpp
+    firstrundlg.cpp
+    firstrundlgpage.cpp
     welcomepage.cpp
     collectionpage.cpp
     databasepage.cpp

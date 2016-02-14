@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 namespace Digikam
 {
 
-class TooltipsPage : public AssistantDlgPage
+class TooltipsPage : public FirstRunDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit TooltipsPage(AssistantDlg* const dlg);
+    explicit TooltipsPage(FirstRunDlg* const dlg);
     ~TooltipsPage();
 
     void saveSettings();

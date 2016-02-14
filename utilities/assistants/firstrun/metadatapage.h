@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 namespace Digikam
 {
 
-class MetadataPage : public AssistantDlgPage
+class MetadataPage : public FirstRunDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit MetadataPage(AssistantDlg* const dlg);
+    explicit MetadataPage(FirstRunDlg* const dlg);
     ~MetadataPage();
 
     void saveSettings();

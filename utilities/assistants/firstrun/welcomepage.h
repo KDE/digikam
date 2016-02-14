@@ -26,16 +26,16 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 namespace Digikam
 {
 
-class WelcomePage : public AssistantDlgPage
+class WelcomePage : public FirstRunDlgPage
 {
 public:
 
-    explicit WelcomePage(AssistantDlg* const dlg);
+    explicit WelcomePage(FirstRunDlg* const dlg);
     ~WelcomePage();
 };
 

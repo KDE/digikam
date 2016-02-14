@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 // Qt includes
 
@@ -35,13 +35,13 @@
 // Local includes
 
 #include "dwidgetutils.h"
-#include "assistantdlg.h"
+#include "firstrundlg.h"
 #include "dexpanderbox.h"
 
 namespace Digikam
 {
 
-class AssistantDlgPage::Private
+class FirstRunDlgPage::Private
 {
 public:
 
@@ -61,7 +61,7 @@ public:
     QHBoxLayout* hlay;
 };
 
-AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title)
+FirstRunDlgPage::FirstRunDlgPage(FirstRunDlg* const dlg, const QString& title)
     : QWizardPage(dlg),
       d(new Private)
 {
@@ -86,33 +86,33 @@ AssistantDlgPage::AssistantDlgPage(AssistantDlg* const dlg, const QString& title
     vbox->setStretchFactor(space, 10);
     vbox->setContentsMargins(spacing, spacing, spacing, spacing);
     vbox->setSpacing(spacing);
-    
+
     DLineWidget* const line = new DLineWidget(Qt::Vertical, panel);
 
     d->hlay->addWidget(vbox);
     d->hlay->addWidget(line);
     d->hlay->setContentsMargins(spacing, spacing, spacing, spacing);
     d->hlay->setSpacing(spacing);
-    
+
     QVBoxLayout* const layout = new QVBoxLayout;
     layout->addWidget(sv);
     setLayout(layout);
-     
+
     dlg->addPage(this);
 }
 
-AssistantDlgPage::~AssistantDlgPage()
+FirstRunDlgPage::~FirstRunDlgPage()
 {
     delete d;
 }
 
-void AssistantDlgPage::setPageWidget(QWidget* const w)
+void FirstRunDlgPage::setPageWidget(QWidget* const w)
 {
     d->hlay->addWidget(w);
     d->hlay->setStretchFactor(w, 10);
 }
 
-void AssistantDlgPage::setLeftBottomPix(const QIcon& icon)
+void FirstRunDlgPage::setLeftBottomPix(const QIcon& icon)
 {
     d->leftBottomPix->setPixmap(icon.pixmap(d->iconSize));
 }

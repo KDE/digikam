@@ -31,18 +31,18 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 namespace Digikam
 {
 
-class CollectionPage : public AssistantDlgPage
+class CollectionPage : public FirstRunDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit CollectionPage(AssistantDlg* const dlg);
+    explicit CollectionPage(FirstRunDlg* const dlg);
     ~CollectionPage();
 
     bool checkSettings();

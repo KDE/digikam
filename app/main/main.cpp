@@ -47,7 +47,7 @@
 #include "digikam_debug.h"
 #include "dmessagebox.h"
 #include "albummanager.h"
-#include "assistantdlg.h"
+#include "firstrundlg.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
 #include "daboutdata.h"
@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
     // Run the first run assistant if we have no or very old config
     if (!mainConfig.exists() || (version.startsWith(QLatin1String("0.5"))))
     {
-        AssistantDlg firstRun;
+        FirstRunDlg firstRun;
         firstRun.show();
 
         if (firstRun.exec() == QDialog::Rejected)

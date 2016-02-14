@@ -31,19 +31,19 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 #include "dbengineparameters.h"
 
 namespace Digikam
 {
 
-class DatabasePage : public AssistantDlgPage
+class DatabasePage : public FirstRunDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabasePage(AssistantDlg* const dlg);
+    explicit DatabasePage(FirstRunDlg* const dlg);
     ~DatabasePage();
 
     bool checkSettings();

@@ -57,8 +57,8 @@ public:
     DatabaseSettingsWidget* dbsettingswidget;
 };
 
-DatabasePage::DatabasePage(AssistantDlg* const dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure where you will store databases</b>")),
+DatabasePage::DatabasePage(FirstRunDlg* const dlg)
+    : FirstRunDlgPage(dlg, i18n("<b>Configure where you will store databases</b>")),
       d(new Private)
 {
     d->dbsettingswidget = new DatabaseSettingsWidget(this);

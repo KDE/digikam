@@ -66,8 +66,8 @@ public:
     DFileSelector* rootAlbumPathRequester;
 };
 
-CollectionPage::CollectionPage(AssistantDlg* const dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure where you keep your images</b>")),
+CollectionPage::CollectionPage(FirstRunDlg* const dlg)
+    : FirstRunDlgPage(dlg, i18n("<b>Configure where you keep your images</b>")),
       d(new Private)
 {
     QWidget* const widget      = new QWidget(this);

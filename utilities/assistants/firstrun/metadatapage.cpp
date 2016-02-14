@@ -61,8 +61,8 @@ public:
     QButtonGroup* metadataStorage;
 };
 
-MetadataPage::MetadataPage(AssistantDlg* const dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
+MetadataPage::MetadataPage(FirstRunDlg* const dlg)
+    : FirstRunDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
       d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);

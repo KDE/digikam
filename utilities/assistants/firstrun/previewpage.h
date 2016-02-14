@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 namespace Digikam
 {
 
-class PreviewPage : public AssistantDlgPage
+class PreviewPage : public FirstRunDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit PreviewPage(AssistantDlg* const dlg);
+    explicit PreviewPage(FirstRunDlg* const dlg);
     ~PreviewPage();
 
     void saveSettings();

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ASSISTANT_DLG_H
-#define ASSISTANT_DLG_H
+#ifndef FIRSTRUN_DLG_H
+#define FIRSTRUN_DLG_H
 
 // Qt includes
 
@@ -38,14 +38,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT AssistantDlg : public QWizard
+class DIGIKAM_EXPORT FirstRunDlg : public QWizard
 {
     Q_OBJECT
 
 public:
 
-    explicit AssistantDlg(QWidget* const parent = 0);
-    ~AssistantDlg();
+    explicit FirstRunDlg(QWidget* const parent = 0);
+    ~FirstRunDlg();
 
     QString firstAlbumPath() const;
     DbEngineParameters getDbEngineParameters() const;
@@ -67,4 +67,4 @@ private:
 
 }   // namespace Digikam
 
-#endif /* ASSISTANT_DLG_H */
+#endif /* FIRSTRUN_DLG_H */

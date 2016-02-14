@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "assistantdlg.h"
+#include "firstrundlg.h"
 
 // Qt includes
 
@@ -47,7 +47,7 @@
 namespace Digikam
 {
 
-class AssistantDlg::Private
+class FirstRunDlg::Private
 {
 public:
 
@@ -75,13 +75,16 @@ public:
     StartScanPage*  startScanPage;
 };
 
-AssistantDlg::AssistantDlg(QWidget* const parent)
+FirstRunDlg::FirstRunDlg(QWidget* const parent)
     : QWizard(parent),
       d(new Private)
 {
     setWizardStyle(QWizard::ClassicStyle);
-    setButtonLayout(QList<QWizard::WizardButton>() << QWizard::HelpButton << QWizard::BackButton << QWizard::CancelButton
-                                                   << QWizard::NextButton << QWizard::FinishButton);
+    setButtonLayout(QList<QWizard::WizardButton>() << QWizard::HelpButton
+                                                   << QWizard::BackButton
+                                                   << QWizard::CancelButton
+                                                   << QWizard::NextButton
+                                                   << QWizard::FinishButton);
 
     d->welcomePage    = new WelcomePage(this);    // First assistant page
     d->collectionPage = new CollectionPage(this);
@@ -97,7 +100,7 @@ AssistantDlg::AssistantDlg(QWidget* const parent)
     d->startScanPage  = new StartScanPage(this);  // Last assistant page
 
     resize(600, 600);
-    
+
     connect(button(QWizard::FinishButton), SIGNAL(clicked()),
             this, SLOT(slotFinishPressed()));
 
@@ -105,27 +108,27 @@ AssistantDlg::AssistantDlg(QWidget* const parent)
             this, SLOT(slotHelp()));
 }
 
-AssistantDlg::~AssistantDlg()
+FirstRunDlg::~FirstRunDlg()
 {
     delete d;
 }
 
-void AssistantDlg::slotHelp()
+void FirstRunDlg::slotHelp()
 {
     DXmlGuiWindow::openHandbook(QLatin1String("firstrundialog.anchor"), QLatin1String("digikam"));
 }
 
-QString AssistantDlg::firstAlbumPath() const
+QString FirstRunDlg::firstAlbumPath() const
 {
     return d->collectionPage->firstAlbumPath();
 }
 
-DbEngineParameters AssistantDlg::getDbEngineParameters() const
+DbEngineParameters FirstRunDlg::getDbEngineParameters() const
 {
     return d->databasePage->getDbEngineParameters();
 }
 
-bool AssistantDlg::validateCurrentPage()
+bool FirstRunDlg::validateCurrentPage()
 {
     if (currentPage() == d->collectionPage)
     {
@@ -139,7 +142,6 @@ bool AssistantDlg::validateCurrentPage()
         }
     }
 
-    
     if (currentPage() == d->databasePage)
     {
         if (!d->databasePage->checkSettings())
@@ -151,7 +153,7 @@ bool AssistantDlg::validateCurrentPage()
     return true;
 }
 
-void AssistantDlg::slotFinishPressed()
+void FirstRunDlg::slotFinishPressed()
 {
     // Save settings to rc files.
     d->collectionPage->saveSettings();

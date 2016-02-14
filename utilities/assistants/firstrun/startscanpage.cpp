@@ -39,8 +39,8 @@
 namespace Digikam
 {
 
-StartScanPage::StartScanPage(AssistantDlg* const dlg)
-    : AssistantDlgPage(dlg, i18n("Scan Your Collection"))
+StartScanPage::StartScanPage(FirstRunDlg* const dlg)
+    : FirstRunDlgPage(dlg, i18n("Scan Your Collection"))
 {
     DVBox* const vbox  = new DVBox(this);
     QLabel* const text = new QLabel(vbox);

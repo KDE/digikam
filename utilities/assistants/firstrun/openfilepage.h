@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "assistantdlgpage.h"
+#include "firstrundlgpage.h"
 
 namespace Digikam
 {
 
-class OpenFilePage : public AssistantDlgPage
+class OpenFilePage : public FirstRunDlgPage
 {
     Q_OBJECT
 
 public:
 
-    explicit OpenFilePage(AssistantDlg* const dlg);
+    explicit OpenFilePage(FirstRunDlg* const dlg);
     ~OpenFilePage();
 
     void saveSettings();

@@ -62,8 +62,8 @@ public:
     QButtonGroup* openFileBehavior;
 };
 
-OpenFilePage::OpenFilePage(AssistantDlg* const dlg)
-    : AssistantDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
+OpenFilePage::OpenFilePage(FirstRunDlg* const dlg)
+    : FirstRunDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
       d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
