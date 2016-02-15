@@ -600,10 +600,7 @@ public:
 
     bool isRawFile(const QUrl& url)
     {
-        QString   rawFilesExt(rawFiles());
-        QFileInfo fileInfo(url.toLocalFile());
-
-        return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
+        return (decoder.isRawFile(url));
     }
 
     QString rawFiles()

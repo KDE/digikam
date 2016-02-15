@@ -155,6 +155,8 @@ public:
      */
     static int librawUseRawSpeed();
 
+    static bool isRawFile(const QUrl& url);
+
 public:
 
     /** Extract Raw image data undemosaiced and without post processing from 'filePath' picture file.

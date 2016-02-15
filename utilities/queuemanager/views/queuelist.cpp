@@ -286,7 +286,7 @@ public:
 
     QueueListViewItem*          toolTipItem;
 
-    DWorkingPixmap  progressPix;
+    DWorkingPixmap              progressPix;
 };
 
 QueueListView::QueueListView(QWidget* const parent)

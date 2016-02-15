@@ -35,6 +35,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QStringList>
+#include <QUrl>
 
 // LibRaw includes
 
@@ -529,6 +530,14 @@ int DRawDecoder::librawUseRawSpeed()
 #else
     return false;
 #endif
+}
+
+bool DRawDecoder::isRawFile(const QUrl& url)
+{
+    QString   rawFilesExt = QLatin1String(rawFiles());
+    QFileInfo fileInfo(url.toLocalFile());
+
+    return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
 }
 
 }  // namespace RawEngine
