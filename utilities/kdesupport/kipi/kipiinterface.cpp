@@ -589,9 +589,9 @@ public:
         DRawDecoderWidget::readSettings(settings, group);
 
         if (decoder.decodeRAWImage(url.toLocalFile(), settings, imageData, width, height, rgbmax))
-            return settings.sixteenBitsImage;
+            return settings.sixteenBitsImage ? 16 : 8;
 
-        return false;
+        return 0;
     }
 
     void cancel()
