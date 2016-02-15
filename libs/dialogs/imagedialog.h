@@ -89,7 +89,7 @@ private:
     QIcon icon(const QFileInfo& info) const;
     
 private:
-    
+
     ThumbnailImageCatcher* m_catcher;
 };
 
