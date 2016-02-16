@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="505" name="digikam" >
+<gui version="506" name="digikam" >
 
  <MenuBar>
 
@@ -127,6 +127,7 @@
       <Separator/>
         <DefineGroup name="kipi_album_group" append="kipi_album_group" />
       <Separator/>
+        <Action name="expoblending" />
         <DefineGroup name="kipi_tool_group" append="kipi_tool_group" />
       <Separator/>
         <DefineGroup name="kipi_batch_group" append="kipi_batch_group" />

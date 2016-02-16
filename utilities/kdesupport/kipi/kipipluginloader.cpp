@@ -6,7 +6,7 @@
  * Date        : 2012-10-03
  * Description : kipi Loader Implementation
  *
- * Copyright (C) 2004-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Victor Dodon <dodonvictor at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -132,6 +132,7 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("AcquireImages"));  // Moved to digiKam core
     ignores.append(QLatin1String("MetadataEdit"));   // Moved to digiKam core
     ignores.append(QLatin1String("GeoLocator"));     // Moved to digiKam core
+    ignores.append(QLatin1String("ExpoBlending"));   // Moved to digiKam core
 
     // List of obsolete tool actions to not load
 

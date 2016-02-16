@@ -122,6 +122,7 @@
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
 #include "geolocationedit.h"
+#include "expoblendingmanager.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -1309,6 +1310,12 @@ void DigikamApp::setupActions()
     d->maintenanceAction = new QAction(QIcon::fromTheme(QLatin1String("run-build-prune")), i18n("Maintenance..."), this);
     connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
     ac->addAction(QLatin1String("maintenance"), d->maintenanceAction);
+
+    d->expoBendingAction = new QAction(QIcon::fromTheme(QLatin1String("expoblending")),
+                                       i18nc("@action", "Blend Bracketed or Focus Stack Images..."),
+                                       this);
+    connect(d->expoBendingAction, SIGNAL(triggered(bool)), this, SLOT(slotExpoBlending()));
+    ac->addAction(QLatin1String("expoblending"), d->expoBendingAction);
 
     // -----------------------------------------------------------
 
@@ -2538,6 +2545,20 @@ void DigikamApp::slotMaintenanceDone()
     {
         QueueMgrWindow::queueManagerWindow()->refreshView();
     }
+}
+
+void DigikamApp::slotExpoBlending()
+{
+    QList<QUrl> urls = view()->selectedUrls();
+
+    if ( urls.isEmpty() )
+        return;
+
+    ExpoBlendingManager* const manager = new ExpoBlendingManager(this);
+
+    manager->checkBinaries();
+    manager->setItemsList(urls);
+    manager->run();
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)

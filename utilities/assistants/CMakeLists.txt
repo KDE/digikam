@@ -5,5 +5,5 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 add_subdirectory(firstrun)
-#add_subdirectory(common)
-#add_subdirectory(expoblending)
+add_subdirectory(common)
+add_subdirectory(expoblending)
