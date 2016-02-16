@@ -128,16 +128,16 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
+    d->buttonBox                     = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
 
-    d->startButton = new QPushButton(this);
+    d->startButton                   = new QPushButton(this);
     d->startButton->setText(i18nc("@action:button", "&Save"));
     d->startButton->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->startButton->setToolTip(i18nc("@info:tooltip", "Process and save selected items."));
     d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
 
-    d->previewButton = new QPushButton(this);
+    d->previewButton                 = new QPushButton(this);
     d->previewButton->setText(i18nc("@action:button", "&Preview"));
     d->previewButton->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
     d->previewButton->setToolTip(i18nc("@info:tooltip", "Process a preview of bracketed images stack with current settings."));
@@ -151,50 +151,50 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
 
     // ---------------------------------------------------------------
 
-    d->previewWidget                = new DPreviewManager(this);
+    d->previewWidget                 = new DPreviewManager(this);
     d->previewWidget->setButtonText(i18nc("@action:button", "Details..."));
 
     // ---------------------------------------------------------------
 
-    QScrollArea* const rightColumn  = new QScrollArea(this);
-    QWidget* const rightPanel       = new QWidget(rightColumn->viewport());
+    QScrollArea* const rightColumn   = new QScrollArea(this);
+    QWidget* const rightPanel        = new QWidget(rightColumn->viewport());
     rightColumn->setWidget(rightPanel);
     rightColumn->setWidgetResizable(true);
 
-    QVBoxLayout* const panel        = new QVBoxLayout(rightPanel);
+    QVBoxLayout* const panel         = new QVBoxLayout(rightPanel);
 
-    d->bracketStack                 = new BracketStackList(rightPanel);
+    d->bracketStack                  = new BracketStackList(rightPanel);
     panel->addWidget(d->bracketStack, 1);
 
     // ---------------------------------------------------------------
 
-    QGroupBox* const enfuse = new QGroupBox(rightPanel);
+    QGroupBox* const enfuse          = new QGroupBox(rightPanel);
     enfuse->setTitle(i18n("Enfuse Settings"));
-    QVBoxLayout* const elay = new QVBoxLayout(enfuse);
+    QVBoxLayout* const elay          = new QVBoxLayout(enfuse);
     enfuse->setLayout(elay);
 
-    d->enfuseSettingsBox            = new EnfuseSettingsWidget(enfuse);
+    d->enfuseSettingsBox             = new EnfuseSettingsWidget(enfuse);
     elay->addWidget(d->enfuseSettingsBox);
 
     panel->addWidget(enfuse, 1);
 
     // ---------------------------------------------------------------
 
-    QGroupBox* const save = new QGroupBox(rightPanel);
+    QGroupBox* const save            = new QGroupBox(rightPanel);
     save->setTitle(i18n("Save Settings"));
     QVBoxLayout* const slay = new QVBoxLayout(save);
     save->setLayout(slay);
 
-    d->saveSettingsBox              = new DSaveSettingsWidget(save);
+    d->saveSettingsBox               = new DSaveSettingsWidget(save);
     slay->addWidget(d->saveSettingsBox);
 
-    QHBoxLayout* const hbox         = new QHBoxLayout(save);
+    QHBoxLayout* const hbox          = new QHBoxLayout(save);
 
-    QLabel* const customLabel       = new QLabel(save);
+    QLabel* const customLabel        = new QLabel(save);
     customLabel->setText(i18nc("@label:textbox", "File Name Template: "));
     hbox->addWidget(customLabel);
 
-    d->templateFileName             = new QLineEdit(save);
+    d->templateFileName              = new QLineEdit(save);
     d->templateFileName->setClearButtonEnabled(true);
     hbox->addWidget(d->templateFileName);
 
