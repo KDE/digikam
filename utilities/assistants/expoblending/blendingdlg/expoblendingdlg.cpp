@@ -160,6 +160,7 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     QWidget* const rightPanel        = new QWidget(rightColumn->viewport());
     rightColumn->setWidget(rightPanel);
     rightColumn->setWidgetResizable(true);
+    rightColumn->setFrameStyle(QFrame::NoFrame);
 
     QVBoxLayout* const panel         = new QVBoxLayout(rightPanel);
 
@@ -209,6 +210,7 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     panel->addWidget(d->enfuseStack, 1);
 
     rightPanel->setLayout(panel);
+    panel->setContentsMargins(QMargins());
 
     // ---------------------------------------------------------------
 
