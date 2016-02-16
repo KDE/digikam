@@ -126,6 +126,8 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     setModal(false);
     setWindowTitle(i18n("Exposure Blending"));
 
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
 
@@ -155,15 +157,18 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     // ---------------------------------------------------------------
 
     QScrollArea* const rightColumn  = new QScrollArea(this);
+    QWidget* const rightPanel       = new QWidget(rightColumn->viewport());
+    rightColumn->setWidget(rightPanel);
     rightColumn->setWidgetResizable(true);
-    QVBoxLayout* const panel        = new QVBoxLayout();
 
-    d->bracketStack                 = new BracketStackList(rightColumn->viewport());
+    QVBoxLayout* const panel        = new QVBoxLayout(rightPanel);
+
+    d->bracketStack                 = new BracketStackList(rightPanel);
     panel->addWidget(d->bracketStack, 1);
 
     // ---------------------------------------------------------------
 
-    QGroupBox* const enfuse = new QGroupBox(rightColumn);
+    QGroupBox* const enfuse = new QGroupBox(rightPanel);
     enfuse->setTitle(i18n("Enfuse Settings"));
     QVBoxLayout* const elay = new QVBoxLayout(enfuse);
     enfuse->setLayout(elay);
@@ -175,15 +180,15 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
 
     // ---------------------------------------------------------------
 
-    QGroupBox* const save = new QGroupBox(rightColumn);
+    QGroupBox* const save = new QGroupBox(rightPanel);
     save->setTitle(i18n("Save Settings"));
-    QVBoxLayout* const slay = new QVBoxLayout(enfuse);
+    QVBoxLayout* const slay = new QVBoxLayout(save);
     save->setLayout(slay);
 
     d->saveSettingsBox              = new DSaveSettingsWidget(save);
     slay->addWidget(d->saveSettingsBox);
 
-    QHBoxLayout* const hbox         = new QHBoxLayout();
+    QHBoxLayout* const hbox         = new QHBoxLayout(save);
 
     QLabel* const customLabel       = new QLabel(save);
     customLabel->setText(i18nc("@label:textbox", "File Name Template: "));
@@ -200,10 +205,10 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
 
     // ---------------------------------------------------------------
 
-    d->enfuseStack = new EnfuseStackList(rightColumn->viewport());
+    d->enfuseStack = new EnfuseStackList(rightPanel);
     panel->addWidget(d->enfuseStack, 1);
 
-    rightColumn->setLayout(panel);
+    rightPanel->setLayout(panel);
 
     // ---------------------------------------------------------------
 
@@ -211,7 +216,8 @@ ExpoBlendingDlg::ExpoBlendingDlg(ExpoBlendingManager* const mngr, QWidget* const
     grid->addWidget(d->previewWidget, 0, 0, 3, 1);
     grid->addWidget(rightColumn,      0, 1, 3, 1);
     grid->addWidget(d->buttonBox,     4, 0, 1, 2);
-    grid->setContentsMargins(QMargins());
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
     grid->setColumnStretch(0, 10);
     grid->setColumnStretch(1, 5);
     setLayout(grid);
