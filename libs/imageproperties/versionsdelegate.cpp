@@ -228,12 +228,16 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem* option, const QMode
     option->state &= ~QStyle::State_HasFocus;
 
     if (!index.data(ImageHistoryGraphModel::IsImageItemRole).toBool())
+    {
         return;
-
+    }
+/*
     if (index.data(ImageHistoryGraphModel::IsSubjectImageRole).toBool())
     {
         option->font.setWeight(QFont::Bold);
     }
+*/
+    option->font.setWeight(QFont::Bold);
 
     if (QStyleOptionViewItemV4* v4 = qstyleoption_cast<QStyleOptionViewItemV4*>(option))
     {

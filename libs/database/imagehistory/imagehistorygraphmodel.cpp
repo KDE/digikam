@@ -761,12 +761,14 @@ QVariant ImageHistoryGraphModel::data(const QModelIndex& index, int role) const
                 {
                     if (vertexItem->category & HistoryImageId::Original)
                     {
-                        return i18nc("@item filename", "<qt>%1<br>(Original Image)</qt>", data.toString());
+                        return i18nc("@item filename", "%1\n(Original Image)", data.toString());
                     }
+
                     if (vertexItem->category & HistoryImageId::Source)
                     {
-                        return i18nc("@item filename", "<qt>%1<br>(Source Image)</qt>", data.toString());
+                        return i18nc("@item filename", "%1\n(Source Image)", data.toString());
                     }
+
                     break;
                 }
             }
