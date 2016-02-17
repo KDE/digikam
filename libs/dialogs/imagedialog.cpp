@@ -411,6 +411,11 @@ QStringList ImageDialog::fileFormats() const
 
 QUrl ImageDialog::url() const
 {
+    if (d->urls.isEmpty())
+    {
+        return QUrl();
+    }
+
     return d->urls.first();
 }
 
