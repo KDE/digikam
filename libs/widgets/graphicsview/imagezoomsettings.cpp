@@ -65,7 +65,7 @@ void ImageZoomSettings::setImageSize(const QSize& size, const QSize& originalSiz
 
 double ImageZoomSettings::zoomFactor() const
 {
-    return m_zoom * m_zoomConst;
+    return m_zoom;
 }
 
 QSizeF ImageZoomSettings::imageSize() const
@@ -80,7 +80,7 @@ QSizeF ImageZoomSettings::originalImageSize() const
 
 QSizeF ImageZoomSettings::zoomedSize() const
 {
-    return m_size * m_zoom;
+    return m_size / m_zoomConst * m_zoom;
 }
 
 QRectF ImageZoomSettings::sourceRect(const QRectF& imageRect) const
@@ -95,7 +95,7 @@ bool ImageZoomSettings::isFitToSize(const QSizeF& frameSize) const
 
 void ImageZoomSettings::setZoomFactor(double zoom)
 {
-    m_zoom = zoom / m_zoomConst;
+    m_zoom = zoom;
 }
 
 void ImageZoomSettings::fitToSize(const QSizeF& frameSize, FitToSizeMode mode)
