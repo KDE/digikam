@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-11-13
- * Description : a template to create wizzard page.
+ * Description : a template to create wizard page.
  *
  * Copyright (C) 2009-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

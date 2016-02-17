@@ -7,3 +7,7 @@
 add_subdirectory(firstrun)
 add_subdirectory(common)
 add_subdirectory(expoblending)
+
+if(KF5CalendarCore_FOUND)
+    add_subdirectory(calendar)
+endif()

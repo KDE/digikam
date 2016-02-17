@@ -4,9 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2011-05-23
- * Description : stand alone test application for expoblending tool.
+ * Description : stand alone test application for calendar tool.
  *
- * Copyright (C) 2011-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
  * Copyright (C) 2009-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -32,7 +31,7 @@
 // Local includes
 
 #include "metaengine.h"
-#include "expoblendingmanager.h"
+#include "calwizard.h"
 
 using namespace Digikam;
 
@@ -55,11 +54,9 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    ExpoBlendingManager mngr;
-    mngr.setItemsList(urlList);
-    mngr.run();
+    CalWizard wzrd(urlList, 0);
+    wzrd.exec();
 
-    app.exec();
     MetaEngine::cleanupExiv2();
 
     return 0;

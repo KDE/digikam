@@ -123,6 +123,7 @@
 #include "metadataedit.h"
 #include "geolocationedit.h"
 #include "expoblendingmanager.h"
+#include "calwizard.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -1316,6 +1317,12 @@ void DigikamApp::setupActions()
                                        this);
     connect(d->expoBendingAction, SIGNAL(triggered(bool)), this, SLOT(slotExpoBlending()));
     ac->addAction(QLatin1String("expoblending"), d->expoBendingAction);
+
+    d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-pim-calendar")),
+                                    i18nc("@action", "Create Calendar..."),
+                                    this);
+    connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));
+    ac->addAction(QLatin1String("calendar"), d->calendarAction);
 
     // -----------------------------------------------------------
 
@@ -2559,6 +2566,17 @@ void DigikamApp::slotExpoBlending()
     manager->checkBinaries();
     manager->setItemsList(urls);
     manager->run();
+}
+
+void DigikamApp::slotCalendar()
+{
+    QList<QUrl> urls = view()->selectedUrls();
+
+    if ( urls.isEmpty() )
+        return;
+
+    CalWizard w(urls, this);
+    w.exec();
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)

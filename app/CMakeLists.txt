@@ -65,6 +65,13 @@ if(KF5Sane_FOUND)
     )
 endif()
 
+if(KF5CalendarCore_FOUND)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:calendar_src>
+    )
+endif()
+
 include_directories(
     $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
 
@@ -185,10 +192,12 @@ if(KF5Sane_FOUND)
 endif()
 
 if(KF5AkonadiContact_FOUND)
-    target_link_libraries(digikamcore
-                          PUBLIC
-                          KF5::AkonadiContact
+    target_link_libraries(digikamcore PUBLIC KF5::AkonadiContact
     )
+endif()
+
+if(KF5CalendarCore_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::CalendarCore)
 endif()
 
 if(APPLE)
@@ -454,7 +463,7 @@ target_link_libraries(digikam
 
                       digikamcore
                       digikamgui
-                      
+
                       libdng
 
                       Qt5::Core

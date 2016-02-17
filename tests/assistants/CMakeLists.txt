@@ -28,9 +28,20 @@ target_link_libraries(expoblending
                       digikamcore
                       libdng
 
-                      Qt5::Test
                       Qt5::Gui
                       Qt5::Xml
 
                       KF5::KIOCore
+)
+
+set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)
+
+add_executable(calendar ${calendar_SRCS})
+
+target_link_libraries(calendar
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
 )

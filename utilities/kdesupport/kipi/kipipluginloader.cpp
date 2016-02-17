@@ -133,6 +133,7 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("MetadataEdit"));   // Moved to digiKam core
     ignores.append(QLatin1String("GeoLocator"));     // Moved to digiKam core
     ignores.append(QLatin1String("ExpoBlending"));   // Moved to digiKam core
+    ignores.append(QLatin1String("Calendar"));       // Moved to digiKam core
 
     // List of obsolete tool actions to not load
 

@@ -403,6 +403,17 @@ void DSelectionItem::updateAnchors()
 
 class DPreviewImage::Private
 {
+public:
+
+    enum
+    {
+        NONE,
+        LOOKAROUND,
+        DRAWSELECTION,
+        EXPANDORSHRINK,
+        MOVESELECTION
+    }
+    mouseDragAction;
 
 public:
 
@@ -426,16 +437,6 @@ public:
           highLightArea(0)
     {
     }
-
-    enum
-    {
-        NONE,
-        LOOKAROUND,
-        DRAWSELECTION,
-        EXPANDORSHRINK,
-        MOVESELECTION
-    }
-    mouseDragAction;
 
     int                         lastdx;
     int                         lastdy;
@@ -461,7 +462,8 @@ public:
 };
 
 DPreviewImage::DPreviewImage(QWidget* const parent)
-    : QGraphicsView(parent), d(new Private)
+    : QGraphicsView(parent),
+      d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

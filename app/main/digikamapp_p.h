@@ -169,6 +169,7 @@ public:
         bqmAction(0),
         maintenanceAction(0),
         expoBendingAction(0),
+        calendarAction(0),
         slideShowQmlAction(0),
         qualityAction(0),
         kipiHelpAction(0),
@@ -296,6 +297,7 @@ public:
     QAction*                            bqmAction;
     QAction*                            maintenanceAction;
     QAction*                            expoBendingAction;
+    QAction*                            calendarAction;
     QAction*                            slideShowQmlAction;
     QAction*                            qualityAction;
 
