@@ -2556,26 +2556,16 @@ void DigikamApp::slotMaintenanceDone()
 
 void DigikamApp::slotExpoBlending()
 {
-    QList<QUrl> urls = view()->selectedUrls();
-
-    if ( urls.isEmpty() )
-        return;
-
     ExpoBlendingManager* const manager = new ExpoBlendingManager(this);
 
     manager->checkBinaries();
-    manager->setItemsList(urls);
+    manager->setItemsList(view()->selectedUrls());
     manager->run();
 }
 
 void DigikamApp::slotCalendar()
 {
-    QList<QUrl> urls = view()->selectedUrls();
-
-    if ( urls.isEmpty() )
-        return;
-
-    CalWizard w(urls, this);
+    CalWizard w(view()->selectedUrls(), this);
     w.exec();
 }
 
