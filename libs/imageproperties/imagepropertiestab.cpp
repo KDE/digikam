@@ -886,9 +886,9 @@ void ImagePropertiesTab::shortenedModelInfo(QString& model)
  */
 double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, long* den, long maxden)
 {
+    double x = val;
     long   m[2][2];
     long   ai;
-    double x = val;
 
     // Initialize matrix
 
@@ -897,7 +897,7 @@ double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, 
 
     // Loop finding terms until denominator gets too big
 
-    while (m[1][0] *  ( ai = (long)x ) + m[1][1] <= maxden)
+    while (m[1][0] * (ai = (long)x) + m[1][1] <= maxden)
     {
         long t  = m[0][0] * ai + m[0][1];
         m[0][1] = m[0][0];
@@ -907,12 +907,16 @@ double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, 
         m[1][0] = t;
 
         if (x == (double)ai)
+        {
             break;     // division by zero
+        }
 
-        x       = 1/(x - (double) ai);
+        x       = 1 / (x - (double)ai);
 
         if (x > (double)0x7FFFFFFF)
+        {
             break;     // representation failure
+        }
     }
 
     // Now remaining x is between 0 and 1/ai
@@ -923,35 +927,28 @@ double ImagePropertiesTab::doubleToHumanReadableFraction(double val, long* num, 
 
     // Return approximation error
 
-    return (val - ((double) m[0][0] / (double) m[1][0]));
+    return (val - ((double)m[0][0] / (double)m[1][0]));
 }
 
 bool ImagePropertiesTab::aspectRatioToString(int width, int height, QString& arString)
 {
-    if ( (width == 0) || (height == 0) )
+    if ((width == 0) || (height == 0))
     {
         return false;
     }
 
-    int nw = width;
-    int nh = height;
+    double ratio  = (double)qMax(width, height) / (double)qMin(width, height);
+    long   num    = 0;
+    long   den    = 0;
 
-    // Always show ratio with and image horizontally oriented, for better readability
-    if (height > width)
-    {
-        nw = height;
-        nh = width;
-    }
+    doubleToHumanReadableFraction(ratio, &num, &den, 10);
 
-    long   num=0, den=0;
-    doubleToHumanReadableFraction((double)nw / (double)nh, &num, &den, 10);
-
-    const QString awidth  = QString::number(num);
-    const QString aheight = QString::number(den);
-    const QString aratio  = QLocale().toString((double)num/(double)den, 'g', 2);
+    double aratio = (double)qMax(num, den) / (double)qMin(num, den);
 
     arString = i18nc("width : height (Aspect Ratio)", "%1:%2 (%3)",
-                     awidth, aheight, aratio);
+                     (width > height) ? num : den,
+                     (width > height) ? den : num,
+                     QLocale().toString(aratio, 'g', 2));
 
     return true;
 }
