@@ -125,4 +125,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 089 ==> 359386 - Import from SD forgets downloaded images, but remembers marked as downloaded.
 090 ==> 359429 - Image history: original image's entry contains markup.
 091 ==> 355836 - Aspect ratio incorrect.
-092 ==> 
+092 ==> 359608 - Digikam does not decode 16 bit grayscale jp2.
+093 ==> 

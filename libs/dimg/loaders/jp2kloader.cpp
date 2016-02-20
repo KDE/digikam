@@ -374,14 +374,29 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
             {
                 case 1: // Grayscale.
                 {
-                    for (x = 0 ; x < (long)imageWidth() ; ++x)
+                    if (!m_sixteenBit)   // 8 bits image.
                     {
-                        dst[0] = (uchar)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
-                        dst[1] = dst[0];
-                        dst[2] = dst[0];
-                        dst[3] = 0xFF;
+                        for (x = 0 ; x < (long)imageWidth() ; ++x)
+                        {
+                            dst[0] = (uchar)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
+                            dst[1] = dst[0];
+                            dst[2] = dst[0];
+                            dst[3] = 0xFF;
 
-                        dst += 4;
+                            dst += 4;
+                        }
+                    }
+                    else                // 16 bits image.
+                    {
+                        for (x = 0 ; x < (long)imageWidth() ; ++x)
+                        {
+                            dst16[0] = (unsigned short)(scale[0] * jas_matrix_getv(pixels[0], x / x_step[0]));
+                            dst16[1] = dst16[0];
+                            dst16[2] = dst16[0];
+                            dst16[3] = 0xFFFF;
+
+                            dst16 += 4;
+                        }
                     }
 
                     break;
