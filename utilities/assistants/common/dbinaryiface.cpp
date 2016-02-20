@@ -7,7 +7,7 @@
  * Description : Autodetect binary program and version
  *
  * Copyright (C) 2009-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2012      by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2012-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,10 +42,36 @@
 namespace Digikam
 {
 
+DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName, const QString& url,
+                             const QString& pluginName, const QStringList& args)
+    : m_checkVersion(false),
+      m_headerStarts(QLatin1String("")),
+      m_headerLine(0),
+      m_minimalVersion(QLatin1String("")),
+      m_configGroup(pluginName + QLatin1String(" Settings")),
+      m_binaryBaseName(goodBaseName(binaryName)),
+      m_binaryArguments(args),
+      m_projectName(projectName),
+      m_url(QUrl(url)),
+      m_isFound(false),
+      m_developmentVersion(false),
+      m_version(QLatin1String("")),
+      m_pathDir(QLatin1String("")),
+      m_pathWidget(0),
+      m_binaryLabel(0),
+      m_versionLabel(0),
+      m_pathButton(0),
+      m_downloadButton(0),
+      m_lineEdit(0),
+      m_statusIcon(0)
+{
+}
+
 DBinaryIface::DBinaryIface(const QString& binaryName, const QString& minimalVersion, const QString& header,
                              const int headerLine, const QString& projectName, const QString& url,
                              const QString& pluginName, const QStringList& args)
-    : m_headerStarts(header),
+    : m_checkVersion(true),
+      m_headerStarts(header),
       m_headerLine(headerLine),
       m_minimalVersion(minimalVersion),
       m_configGroup(pluginName + QLatin1String(" Settings")), 
@@ -78,6 +104,9 @@ const QString& DBinaryIface::version() const
 
 bool DBinaryIface::versionIsRight() const
 {
+    if (!m_checkVersion)
+        return true;
+
     QRegExp reg(QLatin1String("^(\\d*[.]\\d*)"));
     version().indexOf(reg);
     float floatVersion = reg.capturedTexts()[0].toFloat();
@@ -85,6 +114,20 @@ bool DBinaryIface::versionIsRight() const
     return (!version().isNull() &&
             isFound()           &&
             floatVersion >= minimalVersion().toFloat());
+}
+
+bool DBinaryIface::versionIsRight(const float customVersion) const
+{
+    if (!m_checkVersion)
+        return true;
+
+    QRegExp reg(QLatin1String("^(\\d*[.]\\d*)"));
+    version().indexOf(reg);
+    float floatVersion = reg.capturedTexts()[0].toFloat();
+
+    return (!version().isNull() &&
+            isFound()           &&
+            floatVersion >= customVersion);
 }
 
 QString DBinaryIface::findHeader(const QStringList& output, const QString& header) const
@@ -180,14 +223,14 @@ void DBinaryIface::slotAddSearchDirectory(const QString& dir)
 
 QString DBinaryIface::readConfig()
 {
-    KConfig config(QLatin1String("kipirc"));
+    KConfig config;
     KConfigGroup group = config.group(m_configGroup);
     return group.readPathEntry(QString::fromUtf8("%1Binary").arg(m_binaryBaseName), QLatin1String(""));
 }
 
 void DBinaryIface::writeConfig()
 {
-    KConfig config(QLatin1String("kipirc"));
+    KConfig config;
     KConfigGroup group = config.group(m_configGroup);
     group.writePathEntry(QString::fromUtf8("%1Binary").arg(m_binaryBaseName), m_pathDir);
 }
@@ -230,19 +273,30 @@ bool DBinaryIface::checkDir(const QString& possibleDir)
     {
         m_isFound = true;
 
-        QString stdOut = QString::fromUtf8(process.readAllStandardOutput());
+        if (m_checkVersion)
+        {
+            QString stdOut = QString::fromUtf8(process.readAllStandardOutput());
 
-        if (parseHeader(stdOut))
+            if (parseHeader(stdOut))
+            {
+                m_pathDir = possibleDir;
+                writeConfig();
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
+                ret = true;
+            }
+            else
+            {
+                // TODO: do something if the version is not right or not found
+            }
+        }
+        else
         {
             m_pathDir = possibleDir;
             writeConfig();
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path() << " version: " << version();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << path();
             ret = true;
-        }
-        else
-        {
-            // TODO: do something if the version is not right or not found
         }
     }
 
