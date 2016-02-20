@@ -172,8 +172,10 @@ public:
                                      Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive)
     {
         QCollator collator;
+        collator.setNumericMode(true);
+        collator.setIgnorePunctuation(true);
         collator.setCaseSensitivity(caseSensitive);
-        return (compareByOrder(collator.compare(a, b),sortOrder));
+        return (compareByOrder(collator.compare(a, b), sortOrder));
     }
 };
 
