@@ -44,7 +44,7 @@ SlideHelp::SlideHelp()
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok, this);
     buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-    
+
     // -------------------------------------------------------------------------------------------------------------------
 
     QLabel* const label = new QLabel(this);
@@ -90,6 +90,9 @@ SlideHelp::SlideHelp()
     setLayout(vbx);
 
     // ---------------------------------------------------------------------------------------------------------------------
+
+    connect(buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
+            this, SLOT(accept()));
 
     adjustSize();
 }
