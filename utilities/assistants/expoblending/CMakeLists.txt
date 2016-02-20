@@ -18,11 +18,11 @@ set(libexpoblending_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/expoblendingmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/expoblendingthread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/enfusebinary.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/importwizarddlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/intropage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/itemspage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/preprocessingpage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/lastpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingintropage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingitemspage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingpreprocesspage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendinglastpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/enfusesettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/bracketstack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/enfusestack.cpp

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMPORTWIZARD_DLG_H
-#define IMPORTWIZARD_DLG_H
+#ifndef EXPOBLENDINGWIZARD_H
+#define EXPOBLENDINGWIZARD_H
 
 // Qt includes
 
@@ -39,14 +39,14 @@ namespace Digikam
 
 class ExpoBlendingManager;
 
-class ImportWizardDlg : public QWizard
+class ExpoBlendingWizard : public QWizard
 {
     Q_OBJECT
 
 public:
 
-    explicit ImportWizardDlg(ExpoBlendingManager* const mngr, QWidget* const parent = 0);
-    ~ImportWizardDlg();
+    explicit ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent = 0);
+    ~ExpoBlendingWizard();
 
     QList<QUrl> itemUrls() const;
 
@@ -57,16 +57,16 @@ public:
 private Q_SLOTS:
 
     void slotCurrentIdChanged(int);
-    void slotIntroPageIsValid(bool);
+    void slotExpoBlendingIntroPageIsValid(bool);
     void slotItemsPageIsValid(bool);
     void slotPreProcessed(const ItemUrlsMap&);
 
 private:
 
-    class ImportWizardDlgPriv;
-    ImportWizardDlgPriv* const d;
+    class Provate;
+    Provate* const d;
 };
 
 }   // namespace Digikam
 
-#endif /* IMPORTWIZARD_DLG_H */
+#endif /* EXPOBLENDINGWIZARD_H */

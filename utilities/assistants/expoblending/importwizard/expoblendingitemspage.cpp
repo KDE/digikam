@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "itemspage.h"
+#include "expoblendingitemspage.h"
 
 // Qt includes
 

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "intropage.h"
+#include "expoblendingintropage.h"
 
 // Qt includes
 
@@ -47,7 +47,7 @@ using namespace Digikam;
 namespace Digikam
 {
 
-class IntroPage::Private
+class ExpoBlendingIntroPage::Private
 {
 public:
 
@@ -61,7 +61,7 @@ public:
     DBinarySearch* binariesWidget;
 };
 
-IntroPage::IntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
+ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
     : DWizardPage(dlg, i18nc("@title:window", "Welcome to Exposure Blending Tool")),
       d(new Private(mngr))
 {
@@ -102,9 +102,9 @@ IntroPage::IntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
 #endif
 
     connect(d->binariesWidget, SIGNAL(signalBinariesFound(bool)),
-            this, SIGNAL(signalIntroPageIsValid(bool)));
+            this, SIGNAL(signalExpoBlendingIntroPageIsValid(bool)));
 
-    emit signalIntroPageIsValid(d->binariesWidget->allBinariesFound());
+    emit signalExpoBlendingIntroPageIsValid(d->binariesWidget->allBinariesFound());
 
     setPageWidget(vbox);
 
@@ -112,11 +112,11 @@ IntroPage::IntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 
-IntroPage::~IntroPage()
+ExpoBlendingIntroPage::~ExpoBlendingIntroPage()
 {
 }
 
-bool IntroPage::binariesFound()
+bool ExpoBlendingIntroPage::binariesFound()
 {
     return d->binariesWidget->allBinariesFound();
 }

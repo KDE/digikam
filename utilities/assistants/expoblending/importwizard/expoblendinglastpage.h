@@ -20,34 +20,24 @@
  *
  * ============================================================ */
 
-#ifndef INTRO_PAGE_H
-#define INTRO_PAGE_H
+#ifndef EXPOBLENDINGLAST_PAGE_H
+#define EXPOBLENDINGLAST_PAGE_H
 
 // Local includes
 
 #include "dwizardpage.h"
 
-#include "expoblendingmanager.h"
-
-using namespace Digikam;
-
 namespace Digikam
 {
 
-class IntroPage : public DWizardPage
-{
-    Q_OBJECT
+class ExpoBlendingManager;
 
+class ExpoBlendingLastPage : public DWizardPage
+{
 public:
 
-    IntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
-    ~IntroPage();
-
-    bool binariesFound();
-
-Q_SIGNALS:
-
-    void signalIntroPageIsValid(bool);
+    ExpoBlendingLastPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
+    ~ExpoBlendingLastPage();
 
 private:
 
@@ -57,4 +47,4 @@ private:
 
 }   // namespace Digikam
 
-#endif /* INTRO_PAGE_H */
+#endif /* EXPOBLENDINGLAST_PAGE_H */

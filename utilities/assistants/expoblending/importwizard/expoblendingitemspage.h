@@ -21,47 +21,44 @@
  *
  * ============================================================ */
 
-#ifndef PREPROCESSING_PAGE_H
-#define PREPROCESSING_PAGE_H
+#ifndef EXPOBLENDINGITEMS_PAGE_H
+#define EXPOBLENDINGITEMS_PAGE_H
 
 // Local includes
 
 #include "dwizardpage.h"
-
 #include "expoblendingactions.h"
-
-using namespace Digikam;
 
 namespace Digikam
 {
 
 class ExpoBlendingManager;
 
-class PreProcessingPage : public DWizardPage
+class ItemsPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    PreProcessingPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
-    ~PreProcessingPage();
+    ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
+    ~ItemsPage();
 
-    void process();
-    void cancel();
+    QList<QUrl> itemUrls() const;
 
 Q_SIGNALS:
 
-    void signalPreProcessed(const ItemUrlsMap&);
-
-private Q_SLOTS:
-
-    void slotProgressTimerDone();
-    void slotExpoBlendingAction(const Digikam::ExpoBlendingActionData&);
-    void slotShowDetails();
+    void signalItemsPageIsValid(bool);
 
 private:
 
-    void resetTitle();
+    void setIdentity(const QUrl& url, const QString& identity);
+
+private Q_SLOTS:
+
+    void slotSetupList();
+    void slotImageListChanged();
+    void slotAddItems(const QList<QUrl>&);
+    void slotExpoBlendingAction(const Digikam::ExpoBlendingActionData&);
 
 private:
 
@@ -71,4 +68,4 @@ private:
 
 }   // namespace Digikam
 
-#endif /* PREPROCESSING_PAGE_H */
+#endif /* EXPOBLENDINGITEMS_PAGE_H */

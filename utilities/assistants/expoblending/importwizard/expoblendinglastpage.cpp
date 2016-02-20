@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "lastpage.h"
+#include "expoblendinglastpage.h"
 
 // Qt includes
 
@@ -42,7 +42,7 @@
 namespace Digikam
 {
 
-class LastPage::Private
+class ExpoBlendingLastPage::Private
 {
 public:
 
@@ -54,7 +54,7 @@ public:
     ExpoBlendingManager* mngr;
 };
 
-LastPage::LastPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
+ExpoBlendingLastPage::ExpoBlendingLastPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
         : DWizardPage(dlg, i18nc("@title:window", "Pre-Processing is Complete")),
           d(new Private)
 {
@@ -82,7 +82,7 @@ LastPage::LastPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
     setLeftBottomPix(leftPix.scaledToWidth(128, Qt::SmoothTransformation));
 }
 
-LastPage::~LastPage()
+ExpoBlendingLastPage::~ExpoBlendingLastPage()
 {
     delete d;
 }

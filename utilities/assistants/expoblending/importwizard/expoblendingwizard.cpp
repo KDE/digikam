@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "importwizarddlg.h"
+#include "expoblendingwizard.h"
 
 // Qt includes
 
@@ -35,18 +35,18 @@
 
 // Locale incudes
 
-#include "intropage.h"
-#include "itemspage.h"
-#include "lastpage.h"
+#include "expoblendingintropage.h"
+#include "expoblendingitemspage.h"
+#include "expoblendinglastpage.h"
 #include "expoblendingmanager.h"
-#include "preprocessingpage.h"
+#include "expoblendingpreprocesspage.h"
 
 namespace Digikam
 {
 
-struct ImportWizardDlg::ImportWizardDlgPriv
+struct ExpoBlendingWizard::Provate
 {
-    ImportWizardDlgPriv()
+    Provate()
         : mngr(0),
           introPage(0),
           itemsPage(0),
@@ -56,19 +56,19 @@ struct ImportWizardDlg::ImportWizardDlgPriv
     {
     }
 
-    ExpoBlendingManager* mngr;
+    ExpoBlendingManager*        mngr;
 
-    IntroPage*           introPage;
-    ItemsPage*           itemsPage;
-    PreProcessingPage*   preProcessingPage;
-    LastPage*            lastPage;
+    ExpoBlendingIntroPage*      introPage;
+    ItemsPage*                  itemsPage;
+    ExpoBlendingPreProcessPage* preProcessingPage;
+    ExpoBlendingLastPage*       lastPage;
 
-    bool                 preProcessed;
+    bool                        preProcessed;
 };
 
-ImportWizardDlg::ImportWizardDlg(ExpoBlendingManager* const mngr, QWidget* const parent)
+ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent)
     : QWizard(parent),
-      d(new ImportWizardDlgPriv)
+      d(new Provate)
 {
     setModal(false);
     setWindowTitle(i18nc("@title:window", "Exposure Blending Import Wizard"));
@@ -78,10 +78,10 @@ ImportWizardDlg::ImportWizardDlg(ExpoBlendingManager* const mngr, QWidget* const
                                                    << QWizard::NextButton
                                                    << QWizard::FinishButton);
     d->mngr              = mngr;
-    d->introPage         = new IntroPage(d->mngr, this);
+    d->introPage         = new ExpoBlendingIntroPage(d->mngr, this);
     d->itemsPage         = new ItemsPage(d->mngr, this);
-    d->preProcessingPage = new PreProcessingPage(d->mngr, this);
-    d->lastPage          = new LastPage(d->mngr, this);
+    d->preProcessingPage = new ExpoBlendingPreProcessPage(d->mngr, this);
+    d->lastPage          = new ExpoBlendingLastPage(d->mngr, this);
 
     // ---------------------------------------------------------------
 
@@ -93,8 +93,8 @@ ImportWizardDlg::ImportWizardDlg(ExpoBlendingManager* const mngr, QWidget* const
 
     // ---------------------------------------------------------------
 
-    connect(d->introPage, SIGNAL(signalIntroPageIsValid(bool)),
-            this, SLOT(slotIntroPageIsValid(bool)));
+    connect(d->introPage, SIGNAL(signalExpoBlendingIntroPageIsValid(bool)),
+            this, SLOT(slotExpoBlendingIntroPageIsValid(bool)));
 
     connect(d->itemsPage, SIGNAL(signalItemsPageIsValid(bool)),
             this, SLOT(slotItemsPageIsValid(bool)));
@@ -108,22 +108,22 @@ ImportWizardDlg::ImportWizardDlg(ExpoBlendingManager* const mngr, QWidget* const
     d->introPage->setComplete(d->introPage->binariesFound());
 }
 
-ImportWizardDlg::~ImportWizardDlg()
+ExpoBlendingWizard::~ExpoBlendingWizard()
 {
     delete d;
 }
 
-ExpoBlendingManager* ImportWizardDlg::manager() const
+ExpoBlendingManager* ExpoBlendingWizard::manager() const
 {
     return d->mngr;
 }
 
-QList<QUrl> ImportWizardDlg::itemUrls() const
+QList<QUrl> ExpoBlendingWizard::itemUrls() const
 {
     return d->itemsPage->itemUrls();
 }
 
-bool ImportWizardDlg::validateCurrentPage()
+bool ExpoBlendingWizard::validateCurrentPage()
 {
     if (currentPage() == d->itemsPage)
     {
@@ -142,7 +142,7 @@ bool ImportWizardDlg::validateCurrentPage()
     return true;
 }
 
-void ImportWizardDlg::slotCurrentIdChanged(int id)
+void ExpoBlendingWizard::slotCurrentIdChanged(int id)
 {
     if (page(id) != d->lastPage && d->preProcessed)
     {
@@ -152,12 +152,12 @@ void ImportWizardDlg::slotCurrentIdChanged(int id)
     }
 }
 
-void ImportWizardDlg::slotIntroPageIsValid(bool binariesFound)
+void ExpoBlendingWizard::slotExpoBlendingIntroPageIsValid(bool binariesFound)
 {
     d->introPage->setComplete(binariesFound);
 }
 
-void ImportWizardDlg::slotPreProcessed(const ItemUrlsMap& map)
+void ExpoBlendingWizard::slotPreProcessed(const ItemUrlsMap& map)
 {
     if (map.isEmpty())
     {
@@ -173,7 +173,7 @@ void ImportWizardDlg::slotPreProcessed(const ItemUrlsMap& map)
     }
 }
 
-void ImportWizardDlg::slotItemsPageIsValid(bool valid)
+void ExpoBlendingWizard::slotItemsPageIsValid(bool valid)
 {
     d->itemsPage->setComplete(valid);
 }

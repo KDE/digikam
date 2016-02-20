@@ -25,7 +25,7 @@
 
 // Local includes
 
-#include "importwizarddlg.h"
+#include "expoblendingwizard.h"
 #include "expoblendingdlg.h"
 #include "expoblendingthread.h"
 #include "alignbinary.h"
@@ -54,7 +54,7 @@ public:
     AlignBinary            alignBinary;
     EnfuseBinary           enfuseBinary;
 
-    ImportWizardDlg*       wizard;
+    ExpoBlendingWizard*       wizard;
     ExpoBlendingDlg*       dlg;
 };
 
@@ -140,7 +140,7 @@ void ExpoBlendingManager::cleanUp()
 void ExpoBlendingManager::startWizard()
 {
     delete d->wizard;
-    d->wizard = new ImportWizardDlg(this);
+    d->wizard = new ExpoBlendingWizard(this);
     d->wizard->show();
 
     connect(d->wizard, SIGNAL(accepted()),

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "preprocessingpage.h"
+#include "expoblendingpreprocesspage.h"
 
 // Qt includes
 
@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class PreProcessingPage::Private
+class ExpoBlendingPreProcessPage::Private
 {
 public:
 
@@ -86,7 +86,7 @@ public:
     ExpoBlendingManager*                   mngr;
 };
 
-PreProcessingPage::PreProcessingPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
+ExpoBlendingPreProcessPage::ExpoBlendingPreProcessPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
     : DWizardPage(dlg, i18nc("@title:window", "<b>Pre-Processing Bracketed Images</b>")),
       d(new Private)
 {
@@ -134,7 +134,7 @@ PreProcessingPage::PreProcessingPage(ExpoBlendingManager* const mngr, QWizard* c
             this, SLOT(slotShowDetails()));
 }
 
-PreProcessingPage::~PreProcessingPage()
+ExpoBlendingPreProcessPage::~ExpoBlendingPreProcessPage()
 {
     KConfig config(QLatin1String("kipirc"));
     KConfigGroup group = config.group("ExpoBlending Settings");
@@ -144,7 +144,7 @@ PreProcessingPage::~PreProcessingPage()
     delete d;
 }
 
-void PreProcessingPage::resetTitle()
+void ExpoBlendingPreProcessPage::resetTitle()
 {
     d->title->setText(i18n("<qt>"
                            "<p>Now, we will pre-process bracketed images before fusing them.</p>"
@@ -163,7 +163,7 @@ void PreProcessingPage::resetTitle()
     d->alignCheckBox->show();
 }
 
-void PreProcessingPage::process()
+void ExpoBlendingPreProcessPage::process()
 {
     d->title->setText(i18n("<qt>"
                            "<p>Pre-processing is under progress, please wait.</p>"
@@ -183,7 +183,7 @@ void PreProcessingPage::process()
         d->mngr->thread()->start();
 }
 
-void PreProcessingPage::cancel()
+void ExpoBlendingPreProcessPage::cancel()
 {
     disconnect(d->mngr->thread(), SIGNAL(finished(Digikam::ExpoBlendingActionData)),
                this, SLOT(slotExpoBlendingAction(Digikam::ExpoBlendingActionData)));
@@ -194,7 +194,7 @@ void PreProcessingPage::cancel()
     resetTitle();
 }
 
-void PreProcessingPage::slotProgressTimerDone()
+void ExpoBlendingPreProcessPage::slotProgressTimerDone()
 {
     d->progressLabel->setPixmap(d->progressPix.frameAt(d->progressCount));
 
@@ -206,7 +206,7 @@ void PreProcessingPage::slotProgressTimerDone()
     d->progressTimer->start(300);
 }
 
-void PreProcessingPage::slotShowDetails()
+void ExpoBlendingPreProcessPage::slotShowDetails()
 {
     DOutputDlg dlg(QApplication::activeWindow(),
                    i18nc("@title:window", "Pre-Processing Messages"),
@@ -215,7 +215,7 @@ void PreProcessingPage::slotShowDetails()
     dlg.exec();
 }
 
-void PreProcessingPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad)
+void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad)
 {
     QString text;
 
