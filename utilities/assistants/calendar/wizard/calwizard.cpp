@@ -255,7 +255,7 @@ void CalWizard::slotPageSelected(int curr)
 
         // PageSize
         d->printer->setPageSize(params.pageSize);
-        
+
         QPrintDialog* const printDialog = new QPrintDialog(d->printer, this);
         printDialog->setWindowTitle(i18n("Print Calendar"));
 
