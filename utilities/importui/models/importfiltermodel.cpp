@@ -336,6 +336,13 @@ void ImportFilterModel::setSortOrder(CamItemSortSettings::SortOrder order)
     setCamItemSortSettings(d->sorter);
 }
 
+void ImportFilterModel::setStringTypeNatural(bool natural)
+{
+    Q_D(ImportFilterModel);
+    d->sorter.setStringTypeNatural(natural);
+    setCamItemSortSettings(d->sorter);
+}
+
 void ImportFilterModel::setFilter(Digikam::Filter* filter)
 {
     Q_D(ImportFilterModel);

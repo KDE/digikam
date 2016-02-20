@@ -811,6 +811,13 @@ void ImageFilterModel::setSortOrder(ImageSortSettings::SortOrder order)
     setImageSortSettings(d->sorter);
 }
 
+void ImageFilterModel::setStringTypeNatural(bool natural)
+{
+    Q_D(ImageFilterModel);
+    d->sorter.setStringTypeNatural(natural);
+    setImageSortSettings(d->sorter);
+}
+
 int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {
     // source indexes

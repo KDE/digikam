@@ -126,4 +126,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 090 ==> 359429 - Image history: original image's entry contains markup.
 091 ==> 355836 - Aspect ratio incorrect.
 092 ==> 359608 - Digikam does not decode 16 bit grayscale jp2.
-093 ==> 
+093 ==> 276050 - Setting "string comparison type" is not evaluated in icon-view.
+094 ==> 

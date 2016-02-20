@@ -37,6 +37,7 @@ CamItemSortSettings::CamItemSortSettings()
     categorizationCaseSensitivity  = Qt::CaseSensitive;
     sortRole                       = SortByFileName;
     sortOrder                      = DefaultOrder;
+    strTypeNatural                 = true;
     sortCaseSensitivity            = Qt::CaseSensitive;
     currentCategorizationSortOrder = Qt::AscendingOrder;
     currentSortOrder               = Qt::AscendingOrder;
@@ -104,6 +105,11 @@ void CamItemSortSettings::setSortOrder(SortOrder order)
     }
 }
 
+void CamItemSortSettings::setStringTypeNatural(bool natural)
+{
+    strTypeNatural = natural;
+}
+
 Qt::SortOrder CamItemSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
 {
     switch (mode)
@@ -143,9 +149,9 @@ int CamItemSortSettings::compareCategories(const CamItemInfo& left, const CamIte
     {
         case NoCategories:
         case CategoryByFolder:
-            return naturalCompare(left.folder, right.folder, currentCategorizationSortOrder, categorizationCaseSensitivity);
+            return naturalCompare(left.folder, right.folder, currentCategorizationSortOrder, categorizationCaseSensitivity, strTypeNatural);
         case CategoryByFormat:
-            return naturalCompare(left.mime, right.mime, currentCategorizationSortOrder, categorizationCaseSensitivity);
+            return naturalCompare(left.mime, right.mime, currentCategorizationSortOrder, categorizationCaseSensitivity, strTypeNatural);
         case CategoryByDate:
             return compareByOrder(left.ctime.date(), right.ctime.date(), currentCategorizationSortOrder);
         default:
@@ -210,9 +216,9 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
     switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFilePath:
-            return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFileSize:
             return compareByOrder(left.size, right.size, currentSortOrder);
             //FIXME: Change it to creation date instead of modification date.
@@ -277,7 +283,7 @@ bool CamItemSortSettings::lessThan(const QVariant& left, const QVariant& right) 
             }
         }
         default:
-            return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
     }
 }
 

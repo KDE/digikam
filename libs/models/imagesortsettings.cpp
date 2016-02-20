@@ -44,6 +44,7 @@ ImageSortSettings::ImageSortSettings()
     categorizationCaseSensitivity  = Qt::CaseSensitive;
     sortRole                       = SortByFileName;
     sortOrder                      = DefaultOrder;
+    strTypeNatural                 = true;
     sortCaseSensitivity            = Qt::CaseSensitive;
     currentCategorizationSortOrder = Qt::AscendingOrder;
     currentSortOrder               = Qt::AscendingOrder;
@@ -106,6 +107,11 @@ void ImageSortSettings::setSortOrder(SortOrder order)
     {
         currentSortOrder = (Qt::SortOrder)order;
     }
+}
+
+void ImageSortSettings::setStringTypeNatural(bool natural)
+{
+    strTypeNatural = natural;
 }
 
 Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
@@ -172,7 +178,7 @@ int ImageSortSettings::compareCategories(const ImageInfo& left, const ImageInfo&
         case CategoryByFormat:
         {
             return naturalCompare(left.format(), right.format(),
-                                  currentCategorizationSortOrder, categorizationCaseSensitivity);
+                                  currentCategorizationSortOrder, categorizationCaseSensitivity, strTypeNatural);
         }
         default:
             return 0;
@@ -233,9 +239,9 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
     switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFilePath:
-            return naturalCompare(left.filePath(), right.filePath(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.filePath(), right.filePath(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFileSize:
             return compareByOrder(left.fileSize(), right.fileSize(), currentSortOrder);
         case SortByModificationDate:
@@ -317,7 +323,7 @@ bool ImageSortSettings::lessThan(const QVariant& left, const QVariant& right) co
             // FIXME: fall through?? If not, add "break" here
         }
         default:
-            return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity);
+            return naturalCompare(left.toString(), right.toString(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
     }
 }
 

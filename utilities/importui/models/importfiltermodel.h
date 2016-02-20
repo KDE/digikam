@@ -143,6 +143,7 @@ public Q_SLOTS:
     void setCategorizationMode(CamItemSortSettings::CategorizationMode mode);
     void setSortRole(CamItemSortSettings::SortRole role);
     void setSortOrder(CamItemSortSettings::SortOrder order);
+    void setStringTypeNatural(bool natural);
     void setFilter(Filter*);
     void setCameraThumbsController(CameraThumbsCtrl* const thumbsCtrl);
 

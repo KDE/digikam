@@ -187,6 +187,7 @@ public Q_SLOTS:
     void setCategorizationSortOrder(ImageSortSettings::SortOrder order);
     void setSortRole(ImageSortSettings::SortRole role);
     void setSortOrder(ImageSortSettings::SortOrder order);
+    void setStringTypeNatural(bool natural);
     void setUrlWhitelist(const QList<QUrl> urlList, const QString& id);
     void setIdWhitelist(const QList<qlonglong>& idList, const QString& id);
 

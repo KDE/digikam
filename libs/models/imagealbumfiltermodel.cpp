@@ -143,7 +143,8 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
 
             return ImageSortSettings::naturalCompare(leftAlbum->albumPath(), rightAlbum->albumPath(),
                                                      d->sorter.currentCategorizationSortOrder,
-                                                     d->sorter.categorizationCaseSensitivity);
+                                                     d->sorter.categorizationCaseSensitivity,
+                                                     d->sorter.strTypeNatural);
         }
         default:
         {
