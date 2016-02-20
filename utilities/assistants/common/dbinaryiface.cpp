@@ -325,4 +325,13 @@ bool DBinaryIface::recheckDirectories()
     return false;
 }
 
+QString DBinaryIface::goodBaseName(const QString& b)
+{
+#ifdef Q_OS_WIN
+    return b + ".exe";
+#else
+    return b;
+#endif // Q_OS_WIN
+}
+
 }  // namespace Digikam

@@ -80,14 +80,7 @@ public:
     virtual QUrl        url()                       const { return m_url;                           }
     virtual QString     projectName()               const { return m_projectName;                   }
 
-    static QString      goodBaseName(const QString& b)
-                        {
-#ifdef Q_OS_WIN
-                            return b + ".exe";
-#else
-                            return b;
-#endif // Q_OS_WIN
-                        }
+    static QString      goodBaseName(const QString& b);
 
 public Q_SLOTS:
 
