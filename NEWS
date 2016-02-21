@@ -129,4 +129,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 093 ==> 276050 - Setting "string comparison type" is not evaluated in icon-view.
 094 ==> 351433 - pto2mk not found with Hugin 2015.0.
 095 ==> 325830 - Panorama Stitcher returns an error after pre-processing, as a result of attempting to invoke Hugin commands.
-096 ==> 
+096 ==> 359107 - 5 beta 3: panorama tools does not work with latest Hugin PanoTool (2015)
+097 ==> 
+
