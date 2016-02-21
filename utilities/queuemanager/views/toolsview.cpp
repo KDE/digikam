@@ -183,11 +183,11 @@ void ToolsView::addHistoryEntry(const QString& msg, DHistoryView::EntryType type
     {
         QList<QVariant> list;
         list << queueId << itemId;
-        d->historyView->addedEntry(msg, type, QVariant(list));
+        d->historyView->addEntry(msg, type, QVariant(list));
     }
     else
     {
-        d->historyView->addedEntry(msg, type, QVariant());
+        d->historyView->addEntry(msg, type);
     }
 }
 
