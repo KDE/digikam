@@ -387,6 +387,8 @@ public:
      */
     StringComparisonType getStringComparisonType() const;
 
+    bool isStringTypeNatural() const;
+
     void setApplicationStyle(const QString& style);
     QString getApplicationStyle() const;
 

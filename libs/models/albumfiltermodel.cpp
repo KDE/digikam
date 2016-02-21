@@ -390,26 +390,15 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         return QSortFilterProxyModel::lessThan(left, right);
     }
 
-    ApplicationSettings::StringComparisonType strComparisonType = ApplicationSettings::instance()->getStringComparisonType();
+    bool natural = ApplicationSettings::instance()->isStringTypeNatural();
 
     if ((valLeft.type() == QVariant::String) && (valRight.type() == QVariant::String))
     {
-        switch (strComparisonType)
-        {
-            case ApplicationSettings::Natural:
-            {
-                QCollator collator;
-                collator.setNumericMode(true);
-                collator.setIgnorePunctuation(true);
-                collator.setCaseSensitivity(sortCaseSensitivity());
-                return (collator.compare(valLeft.toString(), valRight.toString()) < 0);
-            }
-            case ApplicationSettings::Normal:
-            default:
-            {
-                return (QString::compare(valLeft.toString(), valRight.toString(), sortCaseSensitivity()) < 0);
-            }
-        }
+        QCollator collator;
+        collator.setNumericMode(natural);
+        collator.setIgnorePunctuation(true);
+        collator.setCaseSensitivity(sortCaseSensitivity());
+        return (collator.compare(valLeft.toString(), valRight.toString()) < 0);
     }
     else if((valLeft.type() == QVariant::Date) && (valRight.type() == QVariant::Date))
     {

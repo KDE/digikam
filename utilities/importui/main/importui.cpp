@@ -212,7 +212,7 @@ void ImportUI::setupUserArea()
     DVBox* const vbox   = new DVBox(d->splitter);
     d->view             = new ImportView(this, vbox);
     d->view->importFilterModel()->setCameraThumbsController(d->camThumbsCtrl);
-    d->view->importFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->getStringComparisonType() == ApplicationSettings::Natural);
+    d->view->importFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     d->historyView      = new DHistoryView(vbox);
     d->rightSideBar     = new ImagePropertiesSideBarCamGui(widget, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("CameraGui Sidebar Right"));
@@ -2618,7 +2618,7 @@ void ImportUI::toogleShowBar()
 
 void ImportUI::slotSetupChanged()
 {
-    d->view->importFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->getStringComparisonType() == ApplicationSettings::Natural);
+    d->view->importFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     // Load full-screen options
     KConfigGroup group = KSharedConfig::openConfig()->group(ApplicationSettings::instance()->generalConfigGroupName());
     readFullScreenSettings(group);

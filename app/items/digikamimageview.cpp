@@ -106,9 +106,9 @@ DigikamImageView::DigikamImageView(QWidget* const parent)
     setDropIndicatorShown(false);
 
     setToolTipEnabled(settings->showToolTipsIsValid());
+    imageFilterModel()->setStringTypeNatural(settings->isStringTypeNatural());
     imageFilterModel()->setSortRole((ImageSortSettings::SortRole)settings->getImageSortOrder());
     imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder)settings->getImageSorting());
-    imageFilterModel()->setStringTypeNatural(settings->getStringComparisonType() == ApplicationSettings::Natural);
     imageFilterModel()->setCategorizationMode((ImageSortSettings::CategorizationMode)settings->getImageGroupMode());
     imageFilterModel()->setCategorizationSortOrder((ImageSortSettings::SortOrder) settings->getImageGroupSortOrder());
 
@@ -185,7 +185,7 @@ int DigikamImageView::fitToWidthIcons()
 
 void DigikamImageView::slotSetupChanged()
 {
-    imageFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->getStringComparisonType() == ApplicationSettings::Natural);
+    imageFilterModel()->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     setToolTipEnabled(ApplicationSettings::instance()->showToolTipsIsValid());
     setFont(ApplicationSettings::instance()->getIconViewFont());
 
