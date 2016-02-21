@@ -66,6 +66,9 @@
 /* Define to 1 if you have KCalendar core shared libraries installed */
 #cmakedefine HAVE_KCALENDAR 1
 
+/* Define to 1 if Panorama tool is supported */
+#cmakedefine HAVE_PANORAMA 1
+
 /* Define to 1 if we support mysql database */
 #cmakedefine HAVE_MYSQLSUPPORT 1
 

@@ -378,23 +378,31 @@ else()
     set(LENSFUN_FOUND FALSE)
 endif()
 
+# -- Check dependencies for Panorama tool -------------------------------------
+
+if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
+    set(HAVE_PANORAMA 1)
+else()
+    set(HAVE_PANORAMA 0)
+endif()
+
 # -- compilation options definitions -----------------------------------------------------------
 
-MACRO_BOOL_TO_01(KF5Kipi_FOUND            HAVE_KIPI)
-MACRO_BOOL_TO_01(KF5Sane_FOUND            HAVE_KSANE)
-MACRO_BOOL_TO_01(KF5FileMetaData_FOUND    HAVE_KFILEMETADATA)
-MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND  HAVE_AKONADICONTACT)
-MACRO_BOOL_TO_01(KF5Bookmarks_FOUND       HAVE_KBOOKMARKS)
-MACRO_BOOL_TO_01(KF5CalendarCore_FOUND    HAVE_KCALENDAR)
-MACRO_BOOL_TO_01(LENSFUN_FOUND            HAVE_LENSFUN)
-MACRO_BOOL_TO_01(LQR-1_FOUND              HAVE_LIBLQR_1)
-MACRO_BOOL_TO_01(GPHOTO2_FOUND            HAVE_GPHOTO2)
-MACRO_BOOL_TO_01(JASPER_FOUND             HAVE_JASPER)
-MACRO_BOOL_TO_01(EIGEN3_FOUND             HAVE_EIGEN3)
-MACRO_BOOL_TO_01(MARBLE_FOUND             HAVE_MARBLE)
-MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT      HAVE_MYSQLSUPPORT)
-MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL     HAVE_INTERNALMYSQL)
-MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER       HAVE_VIDEOPLAYER)
+MACRO_BOOL_TO_01(KF5Kipi_FOUND                                          HAVE_KIPI)
+MACRO_BOOL_TO_01(KF5Sane_FOUND                                          HAVE_KSANE)
+MACRO_BOOL_TO_01(KF5FileMetaData_FOUND                                  HAVE_KFILEMETADATA)
+MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND                                HAVE_AKONADICONTACT)
+MACRO_BOOL_TO_01(KF5Bookmarks_FOUND                                     HAVE_KBOOKMARKS)
+MACRO_BOOL_TO_01(KF5CalendarCore_FOUND                                  HAVE_KCALENDAR)
+MACRO_BOOL_TO_01(LENSFUN_FOUND                                          HAVE_LENSFUN)
+MACRO_BOOL_TO_01(LQR-1_FOUND                                            HAVE_LIBLQR_1)
+MACRO_BOOL_TO_01(GPHOTO2_FOUND                                          HAVE_GPHOTO2)
+MACRO_BOOL_TO_01(JASPER_FOUND                                           HAVE_JASPER)
+MACRO_BOOL_TO_01(EIGEN3_FOUND                                           HAVE_EIGEN3)
+MACRO_BOOL_TO_01(MARBLE_FOUND                                           HAVE_MARBLE)
+MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT                                    HAVE_MYSQLSUPPORT)
+MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL                                   HAVE_INTERNALMYSQL)
+MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER                                     HAVE_VIDEOPLAYER)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina

@@ -123,7 +123,10 @@
 #include "metadataedit.h"
 #include "geolocationedit.h"
 #include "expoblendingmanager.h"
-#include "panomanager.h"
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
 
 #ifdef HAVE_KIPI
 #   include "kipipluginloader.h"
@@ -1322,11 +1325,13 @@ void DigikamApp::setupActions()
     connect(d->expoBendingAction, SIGNAL(triggered(bool)), this, SLOT(slotExpoBlending()));
     ac->addAction(QLatin1String("expoblending"), d->expoBendingAction);
 
+#ifdef HAVE_PANORAMA
     d->panoramaAction = new QAction(QIcon::fromTheme(QLatin1String("panorama")),
                                        i18nc("@action", "Create panorama..."),
                                        this);
     connect(d->panoramaAction, SIGNAL(triggered(bool)), this, SLOT(slotPanorama()));
     ac->addAction(QLatin1String("panorama"), d->panoramaAction);
+#endif
 
 #ifdef HAVE_KCALENDAR
     d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-pim-calendar")),
@@ -2569,7 +2574,6 @@ void DigikamApp::slotMaintenanceDone()
 void DigikamApp::slotExpoBlending()
 {
     ExpoBlendingManager* const manager = new ExpoBlendingManager(this);
-
     manager->checkBinaries();
     manager->setItemsList(view()->selectedUrls());
     manager->run();
@@ -2577,11 +2581,12 @@ void DigikamApp::slotExpoBlending()
 
 void DigikamApp::slotPanorama()
 {
+#ifdef HAVE_PANORAMA
     PanoManager* const manager = new PanoManager(this);
-
     manager->checkBinaries();
     manager->setItemsList(view()->selectedUrls());
     manager->run();
+#endif
 }
 
 void DigikamApp::slotCalendar()
