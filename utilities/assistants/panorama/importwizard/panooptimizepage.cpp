@@ -142,13 +142,11 @@ PanoOptimizePage::PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg)
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
-    QHBoxLayout* const hbox = new QHBoxLayout();
-
-    d->detailsBtn           = new QPushButton(vbox);
+    DHBox* const hbox       = new DHBox(vbox);
+    d->detailsBtn           = new QPushButton(hbox);
     d->detailsBtn->setText(i18nc("@action:button", "Details..."));
     d->detailsBtn->hide();
-    hbox->addWidget(d->detailsBtn);
-    hbox->addStretch(10);
+    hbox->setStretchFactor(new QWidget(hbox), 10);
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
