@@ -124,14 +124,17 @@
 #include "geolocationedit.h"
 #include "expoblendingmanager.h"
 #include "panomanager.h"
-#include "calwizard.h"
 
 #ifdef HAVE_KIPI
-#include "kipipluginloader.h"
+#   include "kipipluginloader.h"
 #endif
 
 #ifdef HAVE_KFILEMETADATA
-#include "baloowrap.h"
+#   include "baloowrap.h"
+#endif
+
+#ifdef HAVE_KCALENDAR
+#   include "calwizard.h"
 #endif
 
 namespace Digikam
@@ -2581,8 +2584,10 @@ void DigikamApp::slotPanorama()
 
 void DigikamApp::slotCalendar()
 {
+#ifdef HAVE_KCALENDAR
     CalWizard w(view()->selectedUrls(), this);
     w.exec();
+#endif
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)
