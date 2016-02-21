@@ -265,7 +265,7 @@ DigikamApp::DigikamApp()
     readFullScreenSettings(group);
 
 #ifdef HAVE_KFILEMETADATA
-    //Create BalooWrap object, because it need to register a listener
+    // Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
     BalooWrap* const baloo = BalooWrap::instance();
     Q_UNUSED(baloo);
@@ -1328,11 +1328,13 @@ void DigikamApp::setupActions()
     connect(d->panoramaAction, SIGNAL(triggered(bool)), this, SLOT(slotPanorama()));
     ac->addAction(QLatin1String("panorama"), d->panoramaAction);
 
+#ifdef HAVE_KCALENDAR
     d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-pim-calendar")),
                                     i18nc("@action", "Create Calendar..."),
                                     this);
     connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));
     ac->addAction(QLatin1String("calendar"), d->calendarAction);
+#endif
 
     // -----------------------------------------------------------
 
