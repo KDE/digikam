@@ -450,10 +450,10 @@ void ExpoBlendingThread::run()
 
                     if (d->meta.load(t->urls[0].toLocalFile()))
                     {
-                        result = result & d->meta.setXmpTagString("Xmp.kipi.EnfuseInputFiles",
+                        result = result & d->meta.setXmpTagString("Xmp.digiKam.EnfuseInputFiles",
                                                                   t->enfuseSettings.inputImagesList());
 
-                        result = result & d->meta.setXmpTagString("Xmp.kipi.EnfuseSettings",
+                        result = result & d->meta.setXmpTagString("Xmp.digiKam.EnfuseSettings",
                                                                   t->enfuseSettings.asCommentString().
                                                                   replace(QChar::fromLatin1('\n'),
                                                                   QLatin1String(" ; ")));
@@ -555,7 +555,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
     delete d->preprocessingTmpDir;
 
     QString prefix = QDir::tempPath() + QLatin1Char('/') +
-                     QLatin1String("kipi-expoblending-tmp-XXXXXX");
+                     QLatin1String("digiKam-expoblending-tmp-XXXXXX");
 
     d->preprocessingTmpDir = new QTemporaryDir(prefix);
 
@@ -784,7 +784,7 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
         comp = QLatin1String("--compression=DEFLATE");
     }
 
-    outUrl.setPath(outUrl.adjusted(QUrl::RemoveFilename).path() + QLatin1String(".kipi-expoblending-tmp-") + QString::number(QDateTime::currentDateTime().toTime_t()) + ext);
+    outUrl.setPath(outUrl.adjusted(QUrl::RemoveFilename).path() + QLatin1String(".digiKam-expoblending-tmp-") + QString::number(QDateTime::currentDateTime().toTime_t()) + ext);
 
     d->enfuseProcess.reset(new QProcess());
     d->enfuseProcess->setWorkingDirectory(d->preprocessingTmpDir->path());
