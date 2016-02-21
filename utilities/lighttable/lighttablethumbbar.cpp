@@ -190,6 +190,7 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
     d->imageInfoModel->setThumbnailLoadThread(ThumbnailLoadThread::defaultIconViewThread());
 
     d->imageFilterModel->setCategorizationMode(ImageSortSettings::NoCategories);
+    d->imageFilterModel->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
     d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
     d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
     d->imageFilterModel->setAllGroupsOpen(true); // disable filtering out by group, see bug #308948
@@ -207,6 +208,9 @@ LightTableThumbBar::LightTableThumbBar(QWidget* const parent)
 
     connect(d->imageInfoModel, SIGNAL(imageInfosAdded(QList<ImageInfo>)),
             this, SIGNAL(signalContentChanged()));
+
+    connect(ApplicationSettings::instance(), SIGNAL(setupChanged()),
+            this, SLOT(slotSetupChanged()));
 }
 
 LightTableThumbBar::~LightTableThumbBar()
@@ -466,6 +470,11 @@ void LightTableThumbBar::paintEvent(QPaintEvent* e)
     }
 
     ImageThumbnailBar::paintEvent(e);
+}
+
+void LightTableThumbBar::slotSetupChanged()
+{
+    d->imageFilterModel->setStringTypeNatural(ApplicationSettings::instance()->isStringTypeNatural());
 }
 
 }  // namespace Digikam

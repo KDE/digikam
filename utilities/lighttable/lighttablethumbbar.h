@@ -88,6 +88,10 @@ private:
     void assignRating(const ImageInfo& info, int rating);
     void toggleTag(const ImageInfo& info, int tagID);
 
+private Q_SLOTS:
+
+    void slotSetupChanged();
+
 private:
 
     class Private;
