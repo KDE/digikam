@@ -99,6 +99,18 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("LibKipi support"), i18n("no"));
 #endif /* HAVE_KIPI */
 
+#ifdef HAVE_PANORAMA
+    list.insert(i18n("Panorama support"), i18n("yes"));
+#else
+    list.insert(i18n("Panorama support"), i18n("no"));
+#endif /* HAVE_PANORAMA */
+
+#ifdef HAVE_KCALENDAR
+    list.insert(i18n("Calendar support"), i18n("yes"));
+#else
+    list.insert(i18n("Calendar support"), i18n("no"));
+#endif /* HAVE_KCALENDAR */
+
     list.insert(i18n("LibOpenCV"),    QLatin1String(CV_VERSION));
 
     // Database Backend information
