@@ -147,7 +147,7 @@ void ItemsPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad
     {
         switch (ad.action)
         {
-            case(IDENTIFY):
+            case(EXPOBLENDING_IDENTIFY):
             {
                 setIdentity(ad.inUrls[0], ad.message);
                 break;

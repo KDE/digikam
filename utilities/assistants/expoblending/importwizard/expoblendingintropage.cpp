@@ -41,9 +41,6 @@
 #include "enfusebinary.h"
 #include "dwidgetutils.h"
 
-
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -57,8 +54,8 @@ public:
     {
     }
 
-    ExpoBlendingManager*        mngr;
-    DBinarySearch* binariesWidget;
+    ExpoBlendingManager* mngr;
+    DBinarySearch*       binariesWidget;
 };
 
 ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)

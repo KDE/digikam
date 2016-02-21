@@ -212,7 +212,7 @@ void ExpoBlendingThread::identifyFiles(const QList<QUrl>& urlList)
     foreach(const QUrl& url, urlList)
     {
         Private::Task* const t = new Private::Task;
-        t->action              = IDENTIFY;
+        t->action              = EXPOBLENDING_IDENTIFY;
         t->urls.append(url);
 
         QMutexLocker lock(&d->mutex);
@@ -224,7 +224,7 @@ void ExpoBlendingThread::identifyFiles(const QList<QUrl>& urlList)
 void ExpoBlendingThread::loadProcessed(const QUrl& url)
 {
     Private::Task* const t = new Private::Task;
-    t->action              = LOAD;
+    t->action              = EXPOBLENDING_LOAD;
     t->urls.append(url);
 
     QMutexLocker lock(&d->mutex);
@@ -235,7 +235,7 @@ void ExpoBlendingThread::loadProcessed(const QUrl& url)
 void ExpoBlendingThread::preProcessFiles(const QList<QUrl>& urlList, const QString& alignPath)
 {
     Private::Task* const t = new Private::Task;
-    t->action              = PREPROCESSING;
+    t->action              = EXPOBLENDING_PREPROCESSING;
     t->urls                = urlList;
     t->align               = d->align;
     t->binaryPath          = alignPath;
@@ -249,7 +249,7 @@ void ExpoBlendingThread::enfusePreview(const QList<QUrl>& alignedUrls, const QUr
                                        const EnfuseSettings& settings, const QString& enfusePath)
 {
     Private::Task* const t = new Private::Task;
-    t->action              = ENFUSEPREVIEW;
+    t->action              = EXPOBLENDING_ENFUSEPREVIEW;
     t->urls                = alignedUrls;
     t->outputUrl           = outputUrl;
     t->enfuseSettings      = settings;
@@ -264,7 +264,7 @@ void ExpoBlendingThread::enfuseFinal(const QList<QUrl>& alignedUrls, const QUrl&
                                      const EnfuseSettings& settings, const QString& enfusePath)
 {
     Private::Task* const t = new Private::Task;
-    t->action              = ENFUSEFINAL;
+    t->action              = EXPOBLENDING_ENFUSEFINAL;
     t->urls                = alignedUrls;
     t->outputUrl           = outputUrl;
     t->enfuseSettings      = settings;
@@ -310,7 +310,7 @@ void ExpoBlendingThread::run()
         {
             switch (t->action)
             {
-                case IDENTIFY:
+                case EXPOBLENDING_IDENTIFY:
                 {
                     // Identify Exposure.
 
@@ -333,10 +333,10 @@ void ExpoBlendingThread::run()
                     break;
                 }
 
-                case PREPROCESSING:
+                case EXPOBLENDING_PREPROCESSING:
                 {
                     ExpoBlendingActionData ad1;
-                    ad1.action   = PREPROCESSING;
+                    ad1.action   = EXPOBLENDING_PREPROCESSING;
                     ad1.inUrls   = t->urls;
                     ad1.starting = true;
                     emit starting(ad1);
@@ -346,7 +346,7 @@ void ExpoBlendingThread::run()
                     bool result  = startPreProcessing(t->urls, t->align, t->binaryPath, errors);
 
                     ExpoBlendingActionData ad2;
-                    ad2.action              = PREPROCESSING;
+                    ad2.action              = EXPOBLENDING_PREPROCESSING;
                     ad2.inUrls              = t->urls;
                     ad2.preProcessedUrlsMap = d->preProcessedUrlsMap;
                     ad2.success             = result;
@@ -355,10 +355,10 @@ void ExpoBlendingThread::run()
                     break;
                 }
 
-                case LOAD:
+                case EXPOBLENDING_LOAD:
                 {
                     ExpoBlendingActionData ad1;
-                    ad1.action   = LOAD;
+                    ad1.action   = EXPOBLENDING_LOAD;
                     ad1.inUrls   = t->urls;
                     ad1.starting = true;
                     emit starting(ad1);
@@ -375,7 +375,7 @@ void ExpoBlendingThread::run()
                     }
 
                     ExpoBlendingActionData ad2;
-                    ad2.action         = LOAD;
+                    ad2.action         = EXPOBLENDING_LOAD;
                     ad2.inUrls         = t->urls;
                     ad2.success        = result;
                     ad2.image          = image;
@@ -383,10 +383,10 @@ void ExpoBlendingThread::run()
                     break;
                 }
 
-                case ENFUSEPREVIEW:
+                case EXPOBLENDING_ENFUSEPREVIEW:
                 {
                     ExpoBlendingActionData ad1;
-                    ad1.action         = ENFUSEPREVIEW;
+                    ad1.action         = EXPOBLENDING_ENFUSEPREVIEW;
                     ad1.inUrls         = t->urls;
                     ad1.starting       = true;
                     ad1.enfuseSettings = t->enfuseSettings;
@@ -421,7 +421,7 @@ void ExpoBlendingThread::run()
                     d->enfuseTmpUrls << destUrl;
 
                     ExpoBlendingActionData ad2;
-                    ad2.action         = ENFUSEPREVIEW;
+                    ad2.action         = EXPOBLENDING_ENFUSEPREVIEW;
                     ad2.inUrls         = t->urls;
                     ad2.outUrls        = QList<QUrl>() << destUrl;
                     ad2.success        = result;
@@ -431,10 +431,10 @@ void ExpoBlendingThread::run()
                     break;
                 }
 
-                case ENFUSEFINAL:
+                case EXPOBLENDING_ENFUSEFINAL:
                 {
                     ExpoBlendingActionData ad1;
-                    ad1.action         = ENFUSEFINAL;
+                    ad1.action         = EXPOBLENDING_ENFUSEFINAL;
                     ad1.inUrls         = t->urls;
                     ad1.starting       = true;
                     ad1.enfuseSettings = t->enfuseSettings;
@@ -476,7 +476,7 @@ void ExpoBlendingThread::run()
                     d->enfuseTmpUrls << destUrl;
 
                     ExpoBlendingActionData ad2;
-                    ad2.action         = ENFUSEFINAL;
+                    ad2.action         = EXPOBLENDING_ENFUSEFINAL;
                     ad2.inUrls         = t->urls;
                     ad2.outUrls        = QList<QUrl>() << destUrl;
                     ad2.success        = result;
@@ -526,7 +526,7 @@ void ExpoBlendingThread::preProcessingMultithreaded(const QUrl& url, volatile bo
         d->lock.lock();
         d->mixedUrls.append(preprocessedUrl);
         // In case of alignment is not performed.
-        d->preProcessedUrlsMap.insert(url, ItemPreprocessedUrls(preprocessedUrl, previewUrl));
+        d->preProcessedUrlsMap.insert(url, ExpoBlendingItemPreprocessedUrls(preprocessedUrl, previewUrl));
         d->lock.unlock();
     }
     else
@@ -543,7 +543,7 @@ void ExpoBlendingThread::preProcessingMultithreaded(const QUrl& url, volatile bo
         d->lock.lock();
         d->mixedUrls.append(url);
         // In case of alignment is not performed.
-        d->preProcessedUrlsMap.insert(url, ItemPreprocessedUrls(url, previewUrl));
+        d->preProcessedUrlsMap.insert(url, ExpoBlendingItemPreprocessedUrls(url, previewUrl));
         d->lock.unlock();
     }
 }
@@ -641,7 +641,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
                 return false;
             }
 
-            d->preProcessedUrlsMap.insert(url, ItemPreprocessedUrls(alignedUrl, previewUrl));
+            d->preProcessedUrlsMap.insert(url, ExpoBlendingItemPreprocessedUrls(alignedUrl, previewUrl));
             i++;
         }
 

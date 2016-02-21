@@ -40,33 +40,37 @@ namespace Digikam
 
 enum ExpoBlendingAction
 {
-    NONE = 0,
-    IDENTIFY,
-    PREPROCESSING,
-    ENFUSEPREVIEW,
-    ENFUSEFINAL,
-    LOAD
+    EXPOBLENDING_NONE = 0,
+    EXPOBLENDING_IDENTIFY,
+    EXPOBLENDING_PREPROCESSING,
+    EXPOBLENDING_ENFUSEPREVIEW,
+    EXPOBLENDING_ENFUSEFINAL,
+    EXPOBLENDING_LOAD
 };
 
-class ItemPreprocessedUrls
+class ExpoBlendingItemPreprocessedUrls
 {
 public:
 
-    ItemPreprocessedUrls()
-    {};
+    ExpoBlendingItemPreprocessedUrls()
+    {
+    };
 
-    ItemPreprocessedUrls(const QUrl& preprocessed, const QUrl& preview)
+    ExpoBlendingItemPreprocessedUrls(const QUrl& preprocessed, const QUrl& preview)
         : preprocessedUrl(preprocessed),
           previewUrl(preview)
-    {};
+    {
+    };
 
-    virtual ~ItemPreprocessedUrls(){};
+    virtual ~ExpoBlendingItemPreprocessedUrls()
+    {
+    };
 
     QUrl preprocessedUrl;              // Can be original file or aligned version, depending of user choice.
     QUrl previewUrl;                   // The JPEG preview version, accordingly of preprocessedUrl constent.
 };
 
-typedef QMap<QUrl, ItemPreprocessedUrls> ItemUrlsMap;   // Map between original Url and processed temp Urls.
+typedef QMap<QUrl, ExpoBlendingItemPreprocessedUrls> ItemUrlsMap;   // Map between original Url and processed temp Urls.
 
 class ExpoBlendingActionData
 {
@@ -76,8 +80,9 @@ public:
     ExpoBlendingActionData()
         : starting(false),
           success(false),
-          action(NONE)
-    {}
+          action(EXPOBLENDING_NONE)
+    {
+    }
 
     bool               starting;
     bool               success;
@@ -99,6 +104,6 @@ public:
 }  // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::ExpoBlendingActionData)
-Q_DECLARE_METATYPE(Digikam::ItemPreprocessedUrls)
+Q_DECLARE_METATYPE(Digikam::ExpoBlendingItemPreprocessedUrls)
 
 #endif /* EXPOBLENDINGACTIONS_H */

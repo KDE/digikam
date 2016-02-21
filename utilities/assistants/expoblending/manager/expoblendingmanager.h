@@ -38,10 +38,8 @@ namespace Digikam
 {
 
 class ExpoBlendingThread;
-class ExpoBlendingAboutData;
 class AlignBinary;
 class EnfuseBinary;
-class ExpoBlendingManagerPriv;
 
 class DIGIKAM_EXPORT ExpoBlendingManager : public QObject
 {
@@ -61,7 +59,7 @@ public:
     ItemUrlsMap& preProcessedMap() const;
 
     ExpoBlendingThread* thread() const;
-    AlignBinary&  alignBinary() const;
+    AlignBinary&  alignBinary()  const;
     EnfuseBinary& enfuseBinary() const;
 
     void run();

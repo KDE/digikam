@@ -411,7 +411,7 @@ void ExpoBlendingDlg::slotPreview()
 
     foreach(const QUrl& url, selectedUrl)
     {
-        ItemPreprocessedUrls preprocessedUrls = map.value(url);
+        ExpoBlendingItemPreprocessedUrls preprocessedUrls = map.value(url);
         preprocessedList.append(preprocessedUrls.previewUrl);
     }
 
@@ -440,7 +440,7 @@ void ExpoBlendingDlg::slotProcess()
 
         foreach(const QUrl& url, settings.inputUrls)
         {
-            ItemPreprocessedUrls preprocessedUrls = map.value(url);
+            ExpoBlendingItemPreprocessedUrls preprocessedUrls = map.value(url);
             preprocessedList.append(preprocessedUrls.preprocessedUrl);
         }
 
@@ -527,22 +527,22 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
     {
         switch (ad.action)
         {
-            case(IDENTIFY):
+            case(EXPOBLENDING_IDENTIFY):
             {
                 break;
             }
-            case(LOAD):
+            case(EXPOBLENDING_LOAD):
             {
                 busy(true);
                 break;
             }
-            case(ENFUSEPREVIEW):
+            case(EXPOBLENDING_ENFUSEPREVIEW):
             {
                 busy(true);
                 d->previewWidget->setBusy(true, i18n("Processing preview of bracketed images..."));
                 break;
             }
-            case(ENFUSEFINAL):
+            case(EXPOBLENDING_ENFUSEFINAL):
             {
                 busy(true);
                 d->previewWidget->setBusy(true, i18n("Processing output of bracketed images..."));
@@ -562,19 +562,19 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
         {
             switch (ad.action)
             {
-                case(IDENTIFY):
+                case(EXPOBLENDING_IDENTIFY):
                 {
                     setIdentity(ad.inUrls[0], ad.message);
                     busy(false);
                     break;
                 }
-                case(LOAD):
+                case(EXPOBLENDING_LOAD):
                 {
                     d->previewWidget->setText(i18n("Failed to load processed image."), Qt::red);
                     busy(false);
                     break;
                 }
-                case(ENFUSEPREVIEW):
+                case(EXPOBLENDING_ENFUSEPREVIEW):
                 {
                     d->output = ad.message;
                     d->previewWidget->setBusy(false);
@@ -583,7 +583,7 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
                     busy(false);
                     break;
                 }
-                case(ENFUSEFINAL):
+                case(EXPOBLENDING_ENFUSEFINAL):
                 {
                     slotCancelClicked();
                     d->output = ad.message;
@@ -606,13 +606,13 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
         {
             switch (ad.action)
             {
-                case(IDENTIFY):
+                case(EXPOBLENDING_IDENTIFY):
                 {
                     setIdentity(ad.inUrls[0], ad.message);
                     busy(false);
                     break;
                 }
-                case(LOAD):
+                case(EXPOBLENDING_LOAD):
                 {
                     d->previewWidget->setImage(ad.image, !d->firstImageDisplayed);
                     d->firstImageDisplayed |= true;
@@ -620,13 +620,13 @@ void ExpoBlendingDlg::slotExpoBlendingAction(const Digikam::ExpoBlendingActionDa
                     busy(false);
                     break;
                 }
-                case(ENFUSEPREVIEW):
+                case(EXPOBLENDING_ENFUSEPREVIEW):
                 {
                     d->enfuseStack->addItem(ad.outUrls[0], ad.enfuseSettings);
                     busy(false);
                     break;
                 }
-                case(ENFUSEFINAL):
+                case(EXPOBLENDING_ENFUSEFINAL):
                 {
                     d->enfuseStack->processingItem(ad.enfuseSettings.previewUrl, false);
                     saveItem(ad.outUrls[0], ad.enfuseSettings);

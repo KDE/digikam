@@ -225,7 +225,7 @@ void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlend
         {
             switch (ad.action)
             {
-                case(PREPROCESSING):
+                case(EXPOBLENDING_PREPROCESSING):
                 {
                     d->title->setText(i18n("<qt>"
                                            "<p>Pre-processing has failed.</p>"
@@ -251,7 +251,7 @@ void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlend
         {
             switch (ad.action)
             {
-                case(PREPROCESSING):
+                case(EXPOBLENDING_PREPROCESSING):
                 {
                     d->progressTimer->stop();
                     d->progressLabel->clear();
