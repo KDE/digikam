@@ -55,8 +55,8 @@ public:
     void setItemsList(const QList<QUrl>& urls);
     QList<QUrl>& itemsList() const;
 
-    void setPreProcessedMap(const ItemUrlsMap& urls);
-    ItemUrlsMap& preProcessedMap() const;
+    void setPreProcessedMap(const ExpoBlendingItemUrlsMap& urls);
+    ExpoBlendingItemUrlsMap& preProcessedMap() const;
 
     ExpoBlendingThread* thread() const;
     AlignBinary&  alignBinary()  const;

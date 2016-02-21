@@ -406,7 +406,7 @@ void ExpoBlendingDlg::slotPreview()
     if (selectedUrl.isEmpty())
         return;
 
-    ItemUrlsMap map = d->mngr->preProcessedMap();
+    ExpoBlendingItemUrlsMap map = d->mngr->preProcessedMap();
     QList<QUrl> preprocessedList;
 
     foreach(const QUrl& url, selectedUrl)
@@ -431,7 +431,7 @@ void ExpoBlendingDlg::slotProcess()
     if (list.isEmpty())
         return;
 
-    ItemUrlsMap map = d->mngr->preProcessedMap();
+    ExpoBlendingItemUrlsMap map = d->mngr->preProcessedMap();
     QList<QUrl> preprocessedList;
 
     foreach(const EnfuseSettings& settings, list)

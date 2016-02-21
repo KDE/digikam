@@ -70,7 +70,7 @@ public:
     QUrl previewUrl;                   // The JPEG preview version, accordingly of preprocessedUrl constent.
 };
 
-typedef QMap<QUrl, ExpoBlendingItemPreprocessedUrls> ItemUrlsMap;   // Map between original Url and processed temp Urls.
+typedef QMap<QUrl, ExpoBlendingItemPreprocessedUrls> ExpoBlendingItemUrlsMap;   // Map between original Url and processed temp Urls.
 
 class ExpoBlendingActionData
 {
@@ -96,7 +96,7 @@ public:
 
     EnfuseSettings     enfuseSettings;
 
-    ItemUrlsMap        preProcessedUrlsMap;
+    ExpoBlendingItemUrlsMap        preProcessedUrlsMap;
 
     ExpoBlendingAction action;
 };

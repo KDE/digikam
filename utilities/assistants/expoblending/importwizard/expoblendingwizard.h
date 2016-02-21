@@ -59,7 +59,7 @@ private Q_SLOTS:
     void slotCurrentIdChanged(int);
     void slotExpoBlendingIntroPageIsValid(bool);
     void slotItemsPageIsValid(bool);
-    void slotPreProcessed(const ItemUrlsMap&);
+    void slotPreProcessed(const ExpoBlendingItemUrlsMap&);
 
 private:
 

@@ -99,8 +99,8 @@ ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget*
     connect(d->itemsPage, SIGNAL(signalItemsPageIsValid(bool)),
             this, SLOT(slotItemsPageIsValid(bool)));
 
-    connect(d->preProcessingPage, SIGNAL(signalPreProcessed(ItemUrlsMap)),
-            this, SLOT(slotPreProcessed(ItemUrlsMap)));
+    connect(d->preProcessingPage, SIGNAL(signalPreProcessed(ExpoBlendingItemUrlsMap)),
+            this, SLOT(slotPreProcessed(ExpoBlendingItemUrlsMap)));
 
     connect(this, SIGNAL(currentIdChanged(int)),
             this, SLOT(slotCurrentIdChanged(int)));
@@ -157,7 +157,7 @@ void ExpoBlendingWizard::slotExpoBlendingIntroPageIsValid(bool binariesFound)
     d->introPage->setComplete(binariesFound);
 }
 
-void ExpoBlendingWizard::slotPreProcessed(const ItemUrlsMap& map)
+void ExpoBlendingWizard::slotPreProcessed(const ExpoBlendingItemUrlsMap& map)
 {
     if (map.isEmpty())
     {

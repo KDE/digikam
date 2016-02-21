@@ -128,7 +128,7 @@ public:
 
     // Preprocessing
     QList<QUrl>                     mixedUrls;     // Original non-RAW + Raw converted urls to align.
-    ItemUrlsMap                     preProcessedUrlsMap;
+    ExpoBlendingItemUrlsMap                     preProcessedUrlsMap;
 
     MetaEngine                      meta;
 };

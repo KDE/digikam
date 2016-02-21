@@ -47,7 +47,7 @@ public:
 
     QList<QUrl>            inputUrls;
 
-    ItemUrlsMap            preProcessedUrlsMap;
+    ExpoBlendingItemUrlsMap            preProcessedUrlsMap;
 
     ExpoBlendingThread*    thread;
 
@@ -112,12 +112,12 @@ QList<QUrl>& ExpoBlendingManager::itemsList() const
     return d->inputUrls;
 }
 
-void ExpoBlendingManager::setPreProcessedMap(const ItemUrlsMap& urls)
+void ExpoBlendingManager::setPreProcessedMap(const ExpoBlendingItemUrlsMap& urls)
 {
     d->preProcessedUrlsMap = urls;
 }
 
-ItemUrlsMap& ExpoBlendingManager::preProcessedMap() const
+ExpoBlendingItemUrlsMap& ExpoBlendingManager::preProcessedMap() const
 {
     return d->preProcessedUrlsMap;
 }

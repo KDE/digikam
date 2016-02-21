@@ -48,7 +48,7 @@ public:
 
 Q_SIGNALS:
 
-    void signalPreProcessed(const ItemUrlsMap&);
+    void signalPreProcessed(const ExpoBlendingItemUrlsMap&);
 
 private Q_SLOTS:
 

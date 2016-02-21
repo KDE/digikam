@@ -237,7 +237,7 @@ void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlend
                     d->detailsBtn->show();
                     d->progressLabel->clear();
                     d->output = ad.message;
-                    emit signalPreProcessed(ItemUrlsMap());
+                    emit signalPreProcessed(ExpoBlendingItemUrlsMap());
                     break;
                 }
                 default:
