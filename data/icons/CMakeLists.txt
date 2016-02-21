@@ -6,3 +6,4 @@
 
 add_subdirectory(apps)
 add_subdirectory(expoblending)
+add_subdirectory(panorama)

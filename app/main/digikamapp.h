@@ -196,6 +196,7 @@ private Q_SLOTS:
     void slotMaintenance();
     void slotMaintenanceDone();
     void slotExpoBlending();
+    void slotPanorama();
     void slotCalendar();
 
     void slotDatabaseMigration();

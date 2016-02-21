@@ -134,6 +134,7 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("GeoLocator"));     // Moved to digiKam core
     ignores.append(QLatin1String("ExpoBlending"));   // Moved to digiKam core
     ignores.append(QLatin1String("Calendar"));       // Moved to digiKam core
+    ignores.append(QLatin1String("Panorama"));       // Moved to digiKam core
 
     // List of obsolete tool actions to not load
 
@@ -353,12 +354,14 @@ void KipiPluginLoader::slotKipiPluginPlug()
         if (plugin->objectName() == QLatin1String("AdvancedSlideshow"))
         {
             QAction* const action = plugin->actionCollection()->action(QLatin1String("advancedslideshow"));
+
             if (action)
             {
                 QAction* const _action = plugin->actionCollection()->takeAction(action);
                 d->app->slideShowMenu()->addAction(_action);
             }
         }
+
         d->app->guiFactory()->addClient(plugin);
     }
 

@@ -1,0 +1,34 @@
+NOTE: this tool was originally developped during the GoSC2011.
+
+-- Dependencies --
+
+ * Various tools from the hugin project (developement is based on version 2011.0, FIXME: may work with earlier versions).
+ * Enblend
+
+-- Data Input --
+
+This plugin takes several images taken from the same point of view, either RAW images, TIFF images or JPEG images.
+
+Throughout the process, project files (i.e. dot pto files) are analyzed and modified with GNU Flex and GNU Bison.
+
+-- Processing --
+
+The panorama workflow is the following:
+
+ 1) RAW images are converted to TIFF images
+ 2) A pto file (hugin project file) is generated with parameters to be optimized
+ 3) Control points are calculated to match overlaps between images (using cpfind from the hugin project)
+ 4) Then C.P. that are clearly wrong matches are deleted (using cpclean from the hugin project)
+ 5) Optimization of positions and photometric parameters are performed (using autooptimise from the hugin project)
+ 6) A Makefile which will perform the stitching is generated (using pto2mk from the hugin project)
+ 7) The Makefile is run (uses nona from the hugin project, and enblend)
+
+All images are supposed to be taken from the same point of view, and with the same camera and lens.
+
+-- Preview --
+
+-- Stitching Parameters --
+
+ * Celeste Filter (cpfind): detects clouds and dismiss control points associated to those
+
+-- Final Rendering --

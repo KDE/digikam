@@ -115,7 +115,7 @@ void DProgressWdg::progressScheduled(const QString& title, bool canBeCanceled, b
     if (canBeCanceled)
     {
         connect(item, SIGNAL(progressItemCanceled(QString)),
-                this, SIGNAL(slotProgressCanceled(QString)));
+                this, SIGNAL(slotProgressCanceled()));
     }
 
     d->progressId = item->id();

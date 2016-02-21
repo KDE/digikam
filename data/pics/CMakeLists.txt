@@ -61,6 +61,7 @@ install(FILES splash-digikam.png
               colors-chromared.png
               sample-aix.png
               process-working.png
+              assistant-hugin.png
               assistant-enfuse.png
               assistant-preprocessing.png
               assistant-stack.png

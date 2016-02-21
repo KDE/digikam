@@ -11,3 +11,7 @@ add_subdirectory(expoblending)
 if(KF5CalendarCore_FOUND)
     add_subdirectory(calendar)
 endif()
+
+if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
+    add_subdirectory(panorama)
+endif()

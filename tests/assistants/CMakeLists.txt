@@ -6,7 +6,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # =======================================================
-# Stand alone version of ExpoBlending plugin
+# Stand alone version of ExpoBlending tool
 
 if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
@@ -34,14 +34,49 @@ target_link_libraries(expoblending
                       KF5::KIOCore
 )
 
-set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)
+# =======================================================
+# Stand alone version of Calendar tool
 
-add_executable(calendar ${calendar_SRCS})
+if(KF5CalendarCore_FOUND)
+    set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)
 
-target_link_libraries(calendar
-                      digikamcore
-                      libdng
+    add_executable(calendar ${calendar_SRCS})
 
-                      Qt5::Gui
-                      Qt5::Xml
-)
+    target_link_libraries(calendar
+                        digikamcore
+                        libdng
+
+                        Qt5::Gui
+                        Qt5::Xml
+    )
+endif()
+
+
+# =======================================================
+# Stand alone version of Panorama tool plus test code
+
+if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
+    set(panorama_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/panorama.cpp)
+
+    add_executable(panorama ${panorama_SRCS})
+
+    target_link_libraries(panorama
+                          digikamcore
+                          libdng
+
+                          Qt5::Gui
+                          Qt5::Xml
+    )
+
+    set(panoparser_test_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/panoparser_test.cpp)
+
+    add_executable(panoparser_test ${panoparser_test_SRCS})
+
+    target_link_libraries(panoparser_test
+                          digikamcore
+                          libdng
+
+                          Qt5::Gui
+                          Qt5::Xml
+    )
+endif()
