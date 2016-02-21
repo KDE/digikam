@@ -160,7 +160,7 @@ void DHistoryView::slotCopy2ClipBoard()
     QApplication::clipboard()->setMimeData(mimeData, QClipboard::Clipboard);
 }
 
-void DHistoryView::addedEntry(const QString& msg, EntryType type, const QVariant& metadata)
+void DHistoryView::addEntry(const QString& msg, EntryType type, const QVariant& metadata)
 {
     DHistoryViewItem* const item = new DHistoryViewItem(this, msg, type, metadata);
     // Dispatch events to Qt loop in case of bombarding of messages. See bug #338629
