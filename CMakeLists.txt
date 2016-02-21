@@ -20,7 +20,7 @@ set(DIGIKAM_MINOR_VERSION "0")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2016-02-14")
+set(DIGIKAM_RELEASE_DATE "2016-02-28")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -453,8 +453,8 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/proj
 PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${AKONADI_MIN_VERSION})"  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkcalcore"       "https://projects.kde.org/projects/kde/pim/kcalcore"              "(version >= ${CALENDAR_MIN_VERSION})" "digiKam will be compiled without libkcalcore support."                       KF5CalendarCore_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libthreadweaver"   "https://projects.kde.org/projects/frameworks/threadweaver"       "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without Panorama support."                          KF5ThreadWeaver_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("flex"              "http://flex.sourceforge.net/"                                    "(version >= 2.6.0)"                   "digiKam will be compiled without Panorama support."                          FLEX_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("bison"             "https://www.gnu.org/software/bison/"                             "(version >= 3.0.0)"                   "digiKam will be compiled without Panorama support."                          BISON_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("flex"              "http://flex.sourceforge.net/"                                    "(version >= 2.5.0)"                   "digiKam will be compiled without Panorama support."                          FLEX_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("bison"             "https://www.gnu.org/software/bison/"                             "(version >= 2.5.0)"                   "digiKam will be compiled without Panorama support."                          BISON_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libjasper"         "http://www.ece.uvic.ca/~mdadams/jasper"                          "(version >= 1.7.0)"                   "digiKam will be compiled without JPEG2000 support."                          JASPER_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblensfun"        "http://lensfun.sourceforge.net"                                  "(version >= 0.2.6)"                   "digiKam will be compiled without Lens Auto Correction tool support."         LENSFUN_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"                                       "(version >= 0.4.1)"                   "digiKam will be compiled without Contents Aware Resizer tool support."       LQR-1_FOUND)

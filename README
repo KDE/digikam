@@ -117,8 +117,15 @@ libeigen3         >= 3.0.0                      http://eigen.tuxfamily.org      
 libgphoto2        >= 2.4.0                      http://www.gphoto.org                                                                                   To support Gphoto2 Cameras drivers.
 libusb            >= 1.0.0                      http://www.libusb.org                                                                                   Required by Gphoto2 as linking dependency. See details in bug #268267.
 doxygen           >= 1.8.0                      http://www.doxygen.org                                                                                  To support API documentation building (This does not affect building digiKam in any way).
+flex              >= 2.5.0                      http://flex.sourceforge.net
+bison             >= 2.5.0                      http://www.gnu.org/software/bison/bison.html
 
 Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
+
+Runtime dependencies:
+
+Hugin           >= 2013.0                       http://hugin.sourceforge.net
+Enblend         >= 3.0.0                        http://enblend.sourceforge.net
 
 CMake compilation options to custom digiKam:
 
