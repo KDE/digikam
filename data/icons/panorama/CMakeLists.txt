@@ -6,10 +6,10 @@
 
 ecm_install_icons(
     ICONS
-        16-apps-kipi-panorama.png
-        22-apps-kipi-panorama.png
-        32-apps-kipi-panorama.png
-        48-apps-kipi-panorama.png
-        sc-apps-kipi-panorama.svgz
+        16-apps-panorama.png
+        22-apps-panorama.png
+        32-apps-panorama.png
+        48-apps-panorama.png
+        sc-apps-panorama.svgz
     DESTINATION ${ICON_INSTALL_DIR}
 )
