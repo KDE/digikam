@@ -127,4 +127,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 091 ==> 355836 - Aspect ratio incorrect.
 092 ==> 359608 - Digikam does not decode 16 bit grayscale jp2.
 093 ==> 276050 - Setting "string comparison type" is not evaluated in icon-view.
-094 ==> 
+094 ==> 351433 - pto2mk not found with Hugin 2015.0.
+095 ==> 325830 - Panorama Stitcher returns an error after pre-processing, as a result of attempting to invoke Hugin commands.
+096 ==> 
