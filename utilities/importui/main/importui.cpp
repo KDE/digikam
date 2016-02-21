@@ -2519,7 +2519,7 @@ void ImportUI::slotLogMsg(const QString& msg, DHistoryView::EntryType type,
     d->statusProgressBar->setProgressText(msg);
     QStringList meta;
     meta << folder << file;
-    d->historyView->addedEntry(msg, type, QVariant(meta));
+    d->historyView->addEntry(msg, type, QVariant(meta));
 }
 
 void ImportUI::slotShowLog()
