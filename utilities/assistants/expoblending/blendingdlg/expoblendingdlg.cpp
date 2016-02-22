@@ -68,7 +68,7 @@ extern "C"
 #include "enfusebinary.h"
 #include "enfusesettings.h"
 #include "enfusestack.h"
-#include "doutputdlg.h"
+#include "dmessagebox.h"
 #include "dpreviewmanager.h"
 #include "dsavesettingswidget.h"
 #include "expoblendingmanager.h"
@@ -101,7 +101,7 @@ struct ExpoBlendingDlg::Private
 
     EnfuseSettingsWidget* enfuseSettingsBox;
 
-    DSaveSettingsWidget* saveSettingsBox;
+    DSaveSettingsWidget*  saveSettingsBox;
 
     BracketStackList*     bracketStack;
     EnfuseStackList*      enfuseStack;
@@ -307,11 +307,11 @@ void ExpoBlendingDlg::slotFileFormatChanged()
 
 void ExpoBlendingDlg::slotPreviewButtonClicked()
 {
-    DOutputDlg dlg(QApplication::activeWindow(),
-                   i18nc("@title:window", "Enfuse Processing Messages"),
-                   d->output);
-
-    dlg.exec();
+    DMessageBox::showInformationList(QMessageBox::Information,
+                                     qApp->activeWindow(),
+                                     qApp->applicationName(),
+                                     i18nc("@title:window", "Enfuse Processing Messages"),
+                                     d->output.split(QLatin1String("\n")));
 }
 
 void ExpoBlendingDlg::loadItems(const QList<QUrl>& urls)

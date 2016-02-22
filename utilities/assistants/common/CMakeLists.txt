@@ -16,7 +16,6 @@ set(libassistants_SRCS dwizardpage.cpp
                        dpreviewmanager.cpp
                        dpreviewimage.cpp
                        dimageslist.cpp
-                       doutputdlg.cpp
 )
 
 include_directories(
