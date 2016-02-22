@@ -65,7 +65,7 @@ struct PanoWizard::Private
     PanoManager*           mngr;
     PanoIntroPage*         introPage;
     PanoItemsPage*         itemsPage;
-    PanoPreProcessPage* preProcessingPage;
+    PanoPreProcessPage*    preProcessingPage;
     PanoOptimizePage*      optimizePage;
     PanoPreviewPage*       previewPage;
     PanoLastPage*          lastPage;
