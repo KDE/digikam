@@ -79,6 +79,8 @@ void CalPrinter::run()
         }
     }
 
+    painter_->end();
+
     emit pageChanged(currPage);
 }
 
