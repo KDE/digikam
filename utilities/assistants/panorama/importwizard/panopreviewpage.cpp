@@ -226,6 +226,7 @@ void PanoPreviewPage::startStitching()
     d->progressBar->progressScheduled(i18nc("@title:group", "Panorama Post-Processing"), true, true);
     d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QString::fromLatin1("panorama")).pixmap(22, 22));
     d->progressBar->show();
+    d->postProcessing->show();
 
     d->mngr->resetPanoPto();
     d->mngr->resetMkUrl();
@@ -251,7 +252,8 @@ void PanoPreviewPage::preInitializePage()
     d->previewWidget->show();
     d->progressBar->progressCompleted();
     d->progressBar->hide();
-
+    d->postProcessing->hide();
+    
     setComplete(true);
     emit completeChanged();
 }
@@ -575,6 +577,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     d->progressBar->setMaximum(d->totalProgress);
                     d->progressBar->progressCompleted();
                     d->progressBar->hide();
+                    d->postProcessing->hide();
                     d->stitchingDone = true;
 
                     emit signalStitchingFinished();
