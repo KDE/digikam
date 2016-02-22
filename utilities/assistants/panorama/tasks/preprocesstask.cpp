@@ -133,7 +133,7 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
     if (img.load(inUrl.toLocalFile()))
     {
         DImg preview = img.smoothScale(1280, 1024, Qt::KeepAspectRatio);
-        bool saved   = preview.save(outUrl.toLocalFile(), "JPG");
+        bool saved   = preview.save(outUrl.toLocalFile(), DImg::JPEG);
 
         // save exif information also to preview image for auto rotation
         if (saved)
