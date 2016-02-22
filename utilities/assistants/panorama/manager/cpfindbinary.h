@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 

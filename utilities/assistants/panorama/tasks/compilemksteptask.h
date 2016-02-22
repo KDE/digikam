@@ -34,24 +34,24 @@ class CompileMKStepTask : public CommandTask
 {
 public:
 
+    CompileMKStepTask(const QString& workDirPath, int id, const QUrl& mkUrl,
+                      const QString& nonaPath, const QString& enblendPath,
+                      const QString& makePath, bool preview);
+    ~CompileMKStepTask();
+
+public:
+
     const int                           id;
+
+protected:
+
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
 
 private:
 
     const QUrl&                         mkUrl;
     const QString                       nonaPath;
     const QString                       enblendPath;
-
-public:
-
-    CompileMKStepTask(const QString& workDirPath, int id, const QUrl& mkUrl,
-                      const QString& nonaPath, const QString& enblendPath,
-                      const QString& makePath, bool preview);
-    ~CompileMKStepTask();
-
-protected:
-
-    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
 };
 
 }  // namespace Digikam

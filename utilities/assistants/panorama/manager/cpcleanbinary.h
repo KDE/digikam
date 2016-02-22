@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,14 +37,14 @@ public:
 
     CPCleanBinary()
         : DBinaryIface(QStringLiteral("cpclean"),
-                        QStringLiteral("2010.4"),
-                        QStringLiteral("cpclean version "),
-                        1, 
-                        QStringLiteral("Hugin"),
-                        QStringLiteral("http://hugin.sourceforge.net"),
-                        QStringLiteral("Panorama"),
-                        QStringList(QStringLiteral("-h"))
-                       )
+                       QStringLiteral("2010.4"),
+                       QStringLiteral("cpclean version "),
+                       1, 
+                       QStringLiteral("Hugin"),
+                       QStringLiteral("http://hugin.sourceforge.net"),
+                       QStringLiteral("Panorama"),
+                       QStringList(QStringLiteral("-h"))
+                      )
         { 
             setup();
         }

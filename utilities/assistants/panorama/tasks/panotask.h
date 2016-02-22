@@ -42,6 +42,14 @@ class PanoTask : public ThreadWeaver::Job
 {
 public:
 
+    PanoTask(PanoAction action, const QString& workDirPath);
+    ~PanoTask();
+
+    bool success() const;
+    void requestAbort();
+
+public:
+
     QString          errString;
     const PanoAction action;
     bool             isAbortedFlag;
@@ -50,14 +58,6 @@ protected:
 
     bool             successFlag;
     const QUrl       tmpDir;
-
-public:
-
-    PanoTask(PanoAction action, const QString& workDirPath);
-    ~PanoTask();
-
-    bool success() const;
-    void requestAbort();
 };
 
 }  // namespace Digikam

@@ -36,15 +36,6 @@ namespace Digikam
 
 class CommandTask : public PanoTask
 {
-protected:
-
-    QString                             output;
-
-private:
-
-    QSharedPointer<QProcess>            process;
-    QString                             commandPath;
-
 public:
 
     CommandTask(PanoAction action, const QString& workDirPath, const QString& commandPath);
@@ -54,11 +45,20 @@ public:
 
 protected:
 
+    QString                             output;
+
+protected:
+
     void    runProcess(QStringList& args);
     QString getProgram();
     QString getCommandLine();
     QString getProcessError();
     void    printDebug(const QString& binaryName);
+    
+private:
+
+    QSharedPointer<QProcess>            process;
+    QString                             commandPath;
 };
 
 }  // namespace Digikam

@@ -32,13 +32,6 @@ namespace Digikam
 
 class OptimisationTask : public CommandTask
 {
-private:
-
-    QUrl&                               autoOptimiserPtoUrl;
-    const QUrl&                         ptoUrl;
-    const bool                          levelHorizon;
-    const bool                          buildGPano;
-
 public:
 
     OptimisationTask(const QString& workDirPath, const QUrl& input,
@@ -49,6 +42,13 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
+
+private:
+
+    QUrl&                               autoOptimiserPtoUrl;
+    const QUrl&                         ptoUrl;
+    const bool                          levelHorizon;
+    const bool                          buildGPano;
 };
 
 }  // namespace Digikam

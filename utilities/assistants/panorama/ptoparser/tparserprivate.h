@@ -23,7 +23,6 @@
  *
  * ============================================================ */
 
-
 #ifndef TPARSERPRIVATE_H
 #define TPARSERPRIVATE_H
 
@@ -45,5 +44,4 @@ void panoScriptParserError(char const* errorstring, ...);
 void yyerror(char const* st);
 void* panoScriptReAlloc(void** ptr, size_t size, int* count);
 
-
-#endif
+#endif // TPARSERPRIVATE_H

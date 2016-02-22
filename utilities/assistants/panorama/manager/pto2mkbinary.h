@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,14 +37,14 @@ public:
 
     Pto2MkBinary()
         : DBinaryIface(QStringLiteral("pto2mk"),
-                        QStringLiteral("2010.4"), 
-                        QStringLiteral("pto2mk version "),
-                        2, 
-                        QStringLiteral("Hugin"),
-                        QStringLiteral("http://hugin.sourceforge.net"),
-                        QStringLiteral("Panorama"),
-                        QStringList(QStringLiteral("-h"))
-                       )
+                       QStringLiteral("2010.4"), 
+                       QStringLiteral("pto2mk version "),
+                       2, 
+                       QStringLiteral("Hugin"),
+                       QStringLiteral("http://hugin.sourceforge.net"),
+                       QStringLiteral("Panorama"),
+                       QStringList(QStringLiteral("-h"))
+                      )
         { 
             setup(); 
         }

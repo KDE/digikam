@@ -32,13 +32,6 @@ namespace Digikam
 
 class CreateMKTask : public CommandTask
 {
-private:
-
-    const QUrl&                         ptoUrl;
-    QUrl&                               mkUrl;
-    QUrl&                               panoUrl;
-    const PanoramaFileType              fileType;
-
 public:
 
     CreateMKTask(const QString& workDirPath, const QUrl& input, QUrl& mkUrl,
@@ -49,6 +42,13 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
+
+private:
+
+    const QUrl&                         ptoUrl;
+    QUrl&                               mkUrl;
+    QUrl&                               panoUrl;
+    const PanoramaFileType              fileType;
 };
 
 }  // namespace Digikam

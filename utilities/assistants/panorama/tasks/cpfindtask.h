@@ -32,12 +32,6 @@ namespace Digikam
 
 class CpFindTask : public CommandTask
 {
-private:
-
-    QUrl&                               cpFindPtoUrl;
-    const bool                          celeste;
-    const QUrl&                         ptoUrl;
-
 public:
 
     CpFindTask(const QString& workDirPath, const QUrl& input,
@@ -47,6 +41,12 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
+
+private:
+
+    QUrl&                               cpFindPtoUrl;
+    const bool                          celeste;
+    const QUrl&                         ptoUrl;
 };
 
 }  // namespace Digikam

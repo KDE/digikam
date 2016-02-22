@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,13 +37,13 @@ public:
 
     AutoOptimiserBinary()
         : DBinaryIface(QStringLiteral("autooptimiser"), 
-                        QStringLiteral("2010.4"), 
-                        QStringLiteral("autooptimiser version "),
-                        1, 
-                        QStringLiteral("Hugin"), 
-                        QStringLiteral("http://hugin.sourceforge.net"), 
-                        QStringLiteral("Panorama")
-                       )
+                       QStringLiteral("2010.4"), 
+                       QStringLiteral("autooptimiser version "),
+                       1, 
+                       QStringLiteral("Hugin"), 
+                       QStringLiteral("http://hugin.sourceforge.net"), 
+                       QStringLiteral("Panorama")
+                      )
         { 
             setup();
         }

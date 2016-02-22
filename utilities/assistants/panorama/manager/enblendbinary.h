@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,14 +37,14 @@ public:
 
     EnblendBinary()
         : DBinaryIface(QStringLiteral("enblend"), 
-                        QStringLiteral("4.0"), 
-                        QStringLiteral("enblend "),
-                        0,
-                        QStringLiteral("Hugin"), 
-                        QStringLiteral("http://hugin.sourceforge.net"),
-                        QStringLiteral("Panorama"),
-                        QStringList(QStringLiteral("-V"))
-                       )
+                       QStringLiteral("4.0"), 
+                       QStringLiteral("enblend "),
+                       0,
+                       QStringLiteral("Hugin"), 
+                       QStringLiteral("http://hugin.sourceforge.net"),
+                       QStringLiteral("Panorama"),
+                       QStringList(QStringLiteral("-V"))
+                      )
         { 
             setup(); 
         }

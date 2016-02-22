@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,14 +37,14 @@ public:
 
     MakeBinary()
         : DBinaryIface(QStringLiteral("make"),
-                        QStringLiteral("3.80"),
-                        QStringLiteral("GNU Make "),
-                        0,
-                        QStringLiteral("GNU"),
-                        QStringLiteral("http://www.gnu.org/software/make/"),
-                        QStringLiteral("Panorama"),
-                        QStringList(QStringLiteral("-v"))
-                       )
+                       QStringLiteral("3.80"),
+                       QStringLiteral("GNU Make "),
+                       0,
+                       QStringLiteral("GNU"),
+                       QStringLiteral("http://www.gnu.org/software/make/"),
+                       QStringLiteral("Panorama"),
+                       QStringList(QStringLiteral("-v"))
+                      )
         {
             setup();
         }

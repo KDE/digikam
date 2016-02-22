@@ -28,8 +28,6 @@
 #include "dwizardpage.h"
 #include "panoactions.h"
 
-
-
 class QMutexLocker;
 
 namespace Digikam

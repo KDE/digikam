@@ -45,13 +45,13 @@ public:
     PTOFile(const QString& huginVersion);
     ~PTOFile();
 
-    bool        openFile(const QString& path);
-    PTOType*    getPTO();
+    bool     openFile(const QString& path);
+    PTOType* getPTO();
 
 private:
 
     struct Private;
-    Private* d;
+    Private* const d;
 };
 
 } // namespace Digikam

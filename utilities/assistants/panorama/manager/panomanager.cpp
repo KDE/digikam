@@ -56,23 +56,22 @@ namespace Digikam
 struct PanoManager::Private
 {
     Private()
-    : basePtoData(0),
-      cpFindPtoData(0),
-      cpCleanPtoData(0),
-      autoOptimisePtoData(0),
-      viewAndCropOptimisePtoData(0),
-      previewPtoData(0),
-      panoPtoData(0),
-      hugin2015(false),
-      thread(0),
-      wizard(0),
-      group(config.group("Panorama Settings"))
+      : basePtoData(0),
+        cpFindPtoData(0),
+        cpCleanPtoData(0),
+        autoOptimisePtoData(0),
+        viewAndCropOptimisePtoData(0),
+        previewPtoData(0),
+        panoPtoData(0),
+        hugin2015(false),
+        thread(0),
+        wizard(0),
+        group(config.group("Panorama Settings"))
     {
         gPano    = group.readEntry("GPano", false);
 //      hdr      = group.readEntry("HDR", false);
         fileType = (PanoramaFileType) group.readEntry("File Type", (int) JPEG);
     }
-
 
     ~Private()
     {

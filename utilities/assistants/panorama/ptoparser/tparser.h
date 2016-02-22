@@ -26,7 +26,6 @@
 #ifndef TPARSER_H
 #define TPARSER_H
 
-
 /* Maximum size for an input token */
 #define PARSER_MAX_LINE 1000
 #define PT_TOKEN_MAX_LEN PARSER_MAX_LINE
@@ -222,11 +221,9 @@ typedef struct
     char** endingComments;
 }  pt_script;
 
-
-
 void    panoScriptParserSetDefaults(pt_script* ptr);
 int     panoScriptParse(const char* const filename, pt_script* scriptOut);
 void    panoScriptFree(pt_script* ptr);
 
-#endif
+#endif // TPARSER_H
 

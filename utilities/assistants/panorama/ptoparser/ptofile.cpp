@@ -51,19 +51,19 @@ namespace Digikam
 
 struct PTOFile::Private
 {
-    pt_script*      script;
-    const QString&  huginVersion;
-
     Private(const QString& huginVersion)
         : script(NULL),
           huginVersion(huginVersion)
     {
     }
+
+    pt_script*     script;
+    const QString& huginVersion;
 };
 
 PTOFile::PTOFile(const QString& huginVersion)
+    : d(new Private(huginVersion))
 {
-    d = new Private(huginVersion);
 }
 
 PTOFile::~PTOFile()
@@ -107,7 +107,7 @@ PTOType* PTOFile::getPTO()
         return NULL;
     }
 
-    PTOType* out = new PTOType(d->huginVersion);
+    PTOType* const out = new PTOType(d->huginVersion);
 
     // Project data conversion
     for (int c = 0; c < panoScriptGetPanoPrevCommentsCount(d->script); c++)
@@ -214,139 +214,250 @@ PTOType* PTOFile::getPTO()
         image.roll = panoScriptGetImageRoll(d->script, i);
         tmpRef = panoScriptGetImageCoefARef(d->script, i);
 
-        if (tmpRef == -1) {
+        if (tmpRef == -1)
+        {
             image.lensBarrelCoefficientA.value = panoScriptGetImageCoefA(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensBarrelCoefficientA.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageCoefBRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.lensBarrelCoefficientB.value = panoScriptGetImageCoefB(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensBarrelCoefficientB.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageCoefCRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.lensBarrelCoefficientC.value = panoScriptGetImageCoefC(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensBarrelCoefficientC.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageCoefDRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.lensCenterOffsetX.value = panoScriptGetImageCoefD(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensCenterOffsetX.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageCoefERef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.lensCenterOffsetY.value = panoScriptGetImageCoefE(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensCenterOffsetY.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageSheerXRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.lensShearX.value = panoScriptGetImageSheerX(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensShearX.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageSheerYRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.lensShearY.value = panoScriptGetImageSheerY(d->script, i);
-        } else {
+        }
+        else
+        {
             image.lensShearY.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageExposureRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.exposure.value = panoScriptGetImageExposure(d->script, i);
-        } else {
+        }
+        else
+        {
             image.exposure.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageWBRedRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.whiteBalanceRed.value = panoScriptGetImageWBRed(d->script, i);
-        } else {
+        }
+        else
+        {
             image.whiteBalanceRed.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageWBBlueRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.whiteBalanceBlue.value = panoScriptGetImageWBBlue(d->script, i);
-        } else {
+        }
+        else
+        {
             image.whiteBalanceBlue.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingModeRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingMode.value = PTOType::Image::VignettingMode(panoScriptGetImageVignettingMode(d->script, i));
-        } else {
+        }
+        else
+        {
             image.vignettingMode.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingCoeffARef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingCorrectionI.value = panoScriptGetImageVignettingCoeffA(d->script, i);
-        } else {
+        }
+        else
+        {
             image.vignettingCorrectionI.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingCoeffBRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingCorrectionJ.value = panoScriptGetImageVignettingCoeffB(d->script, i);
-        } else {
+        }
+        else
+        {
             image.vignettingCorrectionJ.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingCoeffCRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingCorrectionK.value = panoScriptGetImageVignettingCoeffC(d->script, i);
-        } else {
+        }
+        else
+        {
             image.vignettingCorrectionK.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingCoeffDRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingCorrectionL.value = panoScriptGetImageVignettingCoeffD(d->script, i);
-        } else {
+        }
+        else
+        {
             image.vignettingCorrectionL.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingCoeffXRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingOffsetX.value = panoScriptGetImageVignettingCoeffX(d->script, i);
-        } else {
+        }
+        else
+        {
             image.vignettingOffsetX.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImageVignettingCoeffYRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.vignettingOffsetY.value = panoScriptGetImageVignettingCoeffY(d->script, i);
-        } else {
+        }
+        else
+        {
             image.vignettingOffsetY.referenceId = tmpRef;
         }
-        char* flatfield = panoScriptGetImageVignettingFlatField(d->script, i);
-        if (flatfield != NULL) {
+        
+        char* const flatfield = panoScriptGetImageVignettingFlatField(d->script, i);
+        
+        if (flatfield != NULL)
+        {
             image.vignettingFlatfieldImageName = QString::fromLocal8Bit(flatfield);
         }
+        
         tmpRef = panoScriptGetImagePhotometricCoeffARef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.photometricEMoRA.value = panoScriptGetImagePhotometricCoeffA(d->script, i);
-        } else {
+        }
+        else
+        {
             image.photometricEMoRA.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImagePhotometricCoeffBRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.photometricEMoRB.value = panoScriptGetImagePhotometricCoeffB(d->script, i);
-        } else {
+        }
+        else
+        {
             image.photometricEMoRB.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImagePhotometricCoeffCRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.photometricEMoRC.value = panoScriptGetImagePhotometricCoeffC(d->script, i);
-        } else {
+        }
+        else
+        {
             image.photometricEMoRC.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImagePhotometricCoeffDRef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.photometricEMoRD.value = panoScriptGetImagePhotometricCoeffD(d->script, i);
-        } else {
+        }
+        else
+        {
             image.photometricEMoRD.referenceId = tmpRef;
         }
+        
         tmpRef = panoScriptGetImagePhotometricCoeffERef(d->script, i);
-        if (tmpRef == -1) {
+        
+        if (tmpRef == -1)
+        {
             image.photometricEMoRE.value = panoScriptGetImagePhotometricCoeffE(d->script, i);
-        } else {
+        }
+        else
+        {
             image.photometricEMoRE.referenceId = tmpRef;
         }
 
@@ -361,9 +472,12 @@ PTOType* PTOFile::getPTO()
         image.crop.setBottom(panoScriptGetImageCropBottom(d->script, i));
         tmpRef = panoScriptGetImageStackRef(d->script, i);
 
-        if (tmpRef == -1) {
+        if (tmpRef == -1)
+        {
             image.stackNumber.value = panoScriptGetImageStack(d->script, i);
-        } else {
+        }
+        else
+        {
             image.stackNumber.referenceId = tmpRef;
         }
 
@@ -373,7 +487,7 @@ PTOType* PTOFile::getPTO()
     // Masks
     for (int m = 0; m < panoScriptGetMaskCount(d->script); m++)
     {
-        int image = panoScriptGetMaskImage(d->script, m);
+        int image           = panoScriptGetMaskImage(d->script, m);
         out->images[image].masks.push_back(PTOType::Mask());
         PTOType::Mask& mask = out->images[image].masks.last();
 
@@ -395,7 +509,7 @@ PTOType* PTOFile::getPTO()
     // Variable optimization
     for (int v = 0; v < panoScriptGetVarsToOptimizeCount(d->script); v++)
     {
-        int image = panoScriptGetVarsToOptimizeImageId(d->script, v);
+        int image                = panoScriptGetVarsToOptimizeImageId(d->script, v);
         out->images[image].optimisationParameters.push_back(PTOType::Optimisation());
         PTOType::Optimisation& o = out->images[image].optimisationParameters.last();
 
@@ -420,10 +534,10 @@ PTOType* PTOFile::getPTO()
 
         ctrlPoint.image1Id = panoScriptGetCtrlPointImage1(d->script, cp);
         ctrlPoint.image2Id = panoScriptGetCtrlPointImage2(d->script, cp);
-        ctrlPoint.p1_x = panoScriptGetCtrlPointX1(d->script, cp);
-        ctrlPoint.p1_y = panoScriptGetCtrlPointY1(d->script, cp);
-        ctrlPoint.p2_x = panoScriptGetCtrlPointX2(d->script, cp);
-        ctrlPoint.p2_y = panoScriptGetCtrlPointY2(d->script, cp);
+        ctrlPoint.p1_x     = panoScriptGetCtrlPointX1(d->script,     cp);
+        ctrlPoint.p1_y     = panoScriptGetCtrlPointY1(d->script,     cp);
+        ctrlPoint.p2_x     = panoScriptGetCtrlPointX2(d->script,     cp);
+        ctrlPoint.p2_y     = panoScriptGetCtrlPointY2(d->script,     cp);
     }
 
     // Ending comments

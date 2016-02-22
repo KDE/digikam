@@ -27,20 +27,11 @@
 
 #include "commandtask.h"
 
-
-
 namespace Digikam
 {
 
 class CompileMKTask : public CommandTask
 {
-private:
-
-//    const QUrl* const                   panoUrl;
-    const QUrl&                         mkUrl;
-    const QString                       nonaPath;
-    const QString                       enblendPath;
-
 public:
 
     CompileMKTask(const QString& workDirPath,
@@ -52,6 +43,13 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
+
+private:
+
+//    const QUrl* const                   panoUrl;
+    const QUrl&                         mkUrl;
+    const QString                       nonaPath;
+    const QString                       enblendPath;
 };
 
 }  // namespace Digikam

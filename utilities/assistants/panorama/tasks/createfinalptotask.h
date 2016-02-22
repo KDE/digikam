@@ -33,12 +33,6 @@ namespace Digikam
 
 class CreateFinalPtoTask : public PanoTask
 {
-private:
-
-    PTOType                 ptoData;
-    QUrl&                   finalPtoUrl;
-    const QRect             crop;
-
 public:
 
     CreateFinalPtoTask(const QString& workDirPath, QSharedPointer<const PTOType> ptoData, QUrl& finalPtoUrl, const QRect& crop);
@@ -47,6 +41,12 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
+
+private:
+
+    PTOType                 ptoData;
+    QUrl&                   finalPtoUrl;
+    const QRect             crop;
 };
 
 }  // namespace Digikam

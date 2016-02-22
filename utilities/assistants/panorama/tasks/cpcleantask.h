@@ -31,12 +31,6 @@ namespace Digikam
 {
 class CpCleanTask : public CommandTask
 {
-
-private:
-
-    QUrl&                               cpCleanPtoUrl;
-    const QUrl&                         cpFindPtoUrl;
-
 public:
 
     CpCleanTask(const QString& workDirPath, const QUrl& input,
@@ -46,6 +40,11 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
+
+private:
+
+    QUrl&                               cpCleanPtoUrl;
+    const QUrl&                         cpFindPtoUrl;
 };
 
 }  // namespace Digikam

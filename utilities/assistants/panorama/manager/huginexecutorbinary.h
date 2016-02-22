@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,11 +37,11 @@ public:
 
     HuginExecutorBinary()
         : DBinaryIface(QStringLiteral("hugin_executor"),
-                        QStringLiteral("Hugin"),
-                        QStringLiteral("http://hugin.sourceforge.net"),
-                        QStringLiteral("Panorama"),
-                        QStringList(QStringLiteral("-h"))
-                       )
+                       QStringLiteral("Hugin"),
+                       QStringLiteral("http://hugin.sourceforge.net"),
+                       QStringLiteral("Panorama"),
+                       QStringList(QStringLiteral("-h"))
+                      )
         {
             setup(); 
         }

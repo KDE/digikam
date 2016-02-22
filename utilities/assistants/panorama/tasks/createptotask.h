@@ -37,7 +37,6 @@ namespace Digikam
 
 class CreatePtoTask : public PanoTask
 {
-
 public:
 
     CreatePtoTask(const QString& workDirPath, PanoramaFileType fileType,
@@ -51,13 +50,13 @@ protected:
 
 private:
 
-    QUrl&                       ptoUrl;
-    const PanoramaItemUrlsMap* const    preProcessedMap;
-    const PanoramaFileType      fileType;
-    const QList<QUrl>&          inputFiles;
-    const bool                  addGPlusMetadata;
-    const QString&              huginVersion;
-    MetaEngine                  m_meta;
+    QUrl&                            ptoUrl;
+    const PanoramaItemUrlsMap* const preProcessedMap;
+    const PanoramaFileType           fileType;
+    const QList<QUrl>&               inputFiles;
+    const bool                       addGPlusMetadata;
+    const QString&                   huginVersion;
+    MetaEngine                       m_meta;
 };
 
 }  // namespace Digikam

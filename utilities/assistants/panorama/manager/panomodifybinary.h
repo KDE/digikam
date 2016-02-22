@@ -27,8 +27,6 @@
 
 #include "dbinaryiface.h"
 
-
-
 namespace Digikam
 {
 
@@ -39,14 +37,14 @@ public:
 
     PanoModifyBinary()
         : DBinaryIface(QStringLiteral("pano_modify"),
-                        QStringLiteral("2012.0"),
-                        QStringLiteral("pano_modify version "),
-                        1, 
-                        QStringLiteral("Hugin"),
-                        QStringLiteral("http://hugin.sourceforge.net"),
-                        QStringLiteral("Panorama"), 
-                        QStringList(QStringLiteral("-h"))
-                       )
+                       QStringLiteral("2012.0"),
+                       QStringLiteral("pano_modify version "),
+                       1, 
+                       QStringLiteral("Hugin"),
+                       QStringLiteral("http://hugin.sourceforge.net"),
+                       QStringLiteral("Panorama"), 
+                       QStringList(QStringLiteral("-h"))
+                      )
         { 
             setup();
         }

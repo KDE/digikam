@@ -52,7 +52,7 @@ private:
 
     QUrl&                               previewPtoUrl;
     QSharedPointer<const PTOType>       ptoData;
-    const PanoramaItemUrlsMap                   preProcessedUrlsMap;
+    const PanoramaItemUrlsMap           preProcessedUrlsMap;
     MetaEngine                          m_meta;
 };
 

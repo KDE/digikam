@@ -32,12 +32,6 @@ namespace Digikam
 
 class HuginExecutorTask : public CommandTask
 {
-private:
-
-    const QUrl&                         ptoUrl;
-    QUrl&                               panoUrl;
-    const PanoramaFileType              fileType;
-
 public:
 
     HuginExecutorTask(const QString& workDirPath, const QUrl& input,
@@ -48,6 +42,12 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
+
+private:
+
+    const QUrl&                         ptoUrl;
+    QUrl&                               panoUrl;
+    const PanoramaFileType              fileType;
 };
 
 }  // namespace Digikam
