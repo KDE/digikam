@@ -36,6 +36,7 @@
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QTextBrowser>
 
 // KDE includes
 
@@ -46,7 +47,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "doutputdlg.h"
 #include "autooptimiserbinary.h"
 #include "panomodifybinary.h"
 #include "panomanager.h"
@@ -68,7 +68,7 @@ struct PanoOptimizePage::Private
 //        preprocessResults(0),
           horizonCheckbox(0),
 //        projectionAndSizeCheckbox(0),
-          detailsBtn(0),
+          detailsText(0),
           progressPix(DWorkingPixmap()),
           mngr(0)
     {
@@ -87,13 +87,11 @@ struct PanoOptimizePage::Private
     QCheckBox*                 horizonCheckbox;
 //  QCheckBox*                 projectionAndSizeCheckboxs;
 
-    QString                    output;
+    QTextBrowser*              detailsText;
 
-    QPushButton*               detailsBtn;
+    DWorkingPixmap             progressPix;
 
-    DWorkingPixmap progressPix;
-
-    PanoManager*                   mngr;
+    PanoManager*               mngr;
 };
 
 PanoOptimizePage::PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg)
@@ -142,11 +140,8 @@ PanoOptimizePage::PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg)
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
-    DHBox* const hbox       = new DHBox(vbox);
-    d->detailsBtn           = new QPushButton(hbox);
-    d->detailsBtn->setText(i18nc("@action:button", "Details..."));
-    d->detailsBtn->hide();
-    hbox->setStretchFactor(new QWidget(hbox), 10);
+    d->detailsText    = new QTextBrowser(vbox);
+    d->detailsText->hide();
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
@@ -162,9 +157,6 @@ PanoOptimizePage::PanoOptimizePage(PanoManager* const mngr, QWizard* const dlg)
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
-
-    connect(d->detailsBtn, SIGNAL(clicked()),
-            this, SLOT(slotShowDetails()));
 }
 
 PanoOptimizePage::~PanoOptimizePage()
@@ -221,7 +213,7 @@ void PanoOptimizePage::initializePage()
 
 //  QPair<double, int> result = d->mngr->cpFindUrlData().standardDeviation();
 //  d->preprocessResults->setText(i18n("Alignment error: %1px", result.first / ((double) result.second)));
-    d->detailsBtn->hide();
+    d->detailsText->hide();
     d->horizonCheckbox->show();
 //  d->projectionAndSizeCheckbox->show();
 
@@ -268,19 +260,11 @@ void PanoOptimizePage::slotProgressTimerDone()
     d->progressLabel->setPixmap(d->progressPix.frameAt(d->progressCount));
 
     d->progressCount++;
+
     if (d->progressCount == 8)
         d->progressCount = 0;
 
     d->progressTimer->start(300);
-}
-
-void PanoOptimizePage::slotShowDetails()
-{
-    DOutputDlg dlg(QApplication::activeWindow(),
-                       i18nc("@title:window", "Pre-Processing Messages"),
-                       d->output);
-
-    dlg.exec();
 }
 
 void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
@@ -311,18 +295,19 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
                                this, SLOT(slotPanoAction(Digikam::PanoActionData)));
 
                     qCWarning(DIGIKAM_GENERAL_LOG) << "Job failed (optimize): " << ad.action;
-                    if (d->detailsBtn->isHidden())
+
+                    if (d->detailsText->isHidden())
                     {
                         d->title->setText(i18n("<qt>"
                                             "<h1>Optimization has failed.</h1>"
-                                            "<p>Press \"Details\" to show processing messages.</p>"
+                                            "<p>See processing messages below.</p>"
                                             "</qt>"));
                         d->progressTimer->stop();
                         d->horizonCheckbox->hide();
 //                      d->projectionAndSizeCheckbox->hide();
-                        d->detailsBtn->show();
+                        d->detailsText->show();
                         d->progressLabel->clear();
-                        d->output = ad.message;
+                        d->detailsText->setText(ad.message);
 
                         setComplete(false);
                         emit completeChanged();

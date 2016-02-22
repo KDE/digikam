@@ -57,7 +57,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotProgressTimerDone();
-    void slotShowDetails();
     void slotPanoAction(const Digikam::PanoActionData&);
 
 private:
