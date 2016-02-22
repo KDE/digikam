@@ -337,6 +337,13 @@ DigikamApp::~DigikamApp()
         delete ExpoBlendingManager::internalPtr;
     }
 
+#ifdef HAVE_PANORAMA
+    if (PanoManager::isCreated())
+    {
+        delete PanoManager::internalPtr;
+    }
+#endif
+
     delete d->view;
 
     ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
@@ -2586,10 +2593,9 @@ void DigikamApp::slotExpoBlending()
 void DigikamApp::slotPanorama()
 {
 #ifdef HAVE_PANORAMA
-    PanoManager* const manager = new PanoManager(this);
-    manager->checkBinaries();
-    manager->setItemsList(view()->selectedUrls());
-    manager->run();
+    PanoManager::instance()->checkBinaries();
+    PanoManager::instance()->setItemsList(view()->selectedUrls());
+    PanoManager::instance()->run();
 #endif
 }
 

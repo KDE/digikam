@@ -163,11 +163,13 @@ void ExpoBlendingManager::startWizard()
     if (d->wizard && (d->wizard->isMinimized() || !d->wizard->isHidden()))
     {
         d->wizard->showNormal();
+        d->wizard->activateWindow();
         d->wizard->raise();
     }
     else if (d->dlg && (d->dlg->isMinimized() || !d->dlg->isHidden()))
     {
         d->dlg->showNormal();
+        d->dlg->activateWindow();
         d->dlg->raise();
     }
     else

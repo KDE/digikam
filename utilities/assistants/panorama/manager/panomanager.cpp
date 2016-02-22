@@ -109,7 +109,7 @@ struct PanoManager::Private
 
     PanoramaFileType               fileType;
 
-    PanoramaItemUrlsMap                    preProcessedUrlsMap;
+    PanoramaItemUrlsMap            preProcessedUrlsMap;
 
     PanoActionThread*              thread;
 
@@ -131,6 +131,8 @@ private:
     KConfigGroup                   group;
 };
 
+QPointer<PanoManager> PanoManager::internalPtr = QPointer<PanoManager>();
+
 PanoManager::PanoManager(QObject* const parent)
     : QObject(parent),
       d(new Private)
@@ -143,6 +145,21 @@ PanoManager::~PanoManager()
     delete d->thread;
     delete d->wizard;
     delete d;
+}
+
+PanoManager* PanoManager::instance()
+{
+    if (PanoManager::internalPtr.isNull())
+    {
+        PanoManager::internalPtr = new PanoManager();
+    }
+
+    return PanoManager::internalPtr;
+}
+
+bool PanoManager::isCreated()
+{
+    return (!internalPtr.isNull());
 }
 
 bool PanoManager::checkBinaries()
@@ -599,8 +616,19 @@ void PanoManager::run()
 
 void PanoManager::startWizard()
 {
-    d->wizard = new PanoWizard(this);
-    d->wizard->show();
+    if (d->wizard && (d->wizard->isMinimized() || !d->wizard->isHidden()))
+    {
+        d->wizard->showNormal();
+        d->wizard->activateWindow();
+        d->wizard->raise();
+    }
+    else
+    {
+        delete d->wizard;
+
+        d->wizard = new PanoWizard(this);
+        d->wizard->show();
+    }
 }
 
 } // namespace Digikam

@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QPointer>
 
 // Local includes
 
@@ -57,6 +58,10 @@ public:
 
     explicit PanoManager(QObject* const parent = 0);
     ~PanoManager();
+
+    static QPointer<PanoManager> internalPtr;
+    static PanoManager*          instance();
+    static bool                  isCreated();
 
     bool checkBinaries();
 
@@ -107,7 +112,7 @@ public:
     QUrl&                   panoUrl() const;
     void                    resetPanoUrl();
 
-    PanoramaItemUrlsMap&            preProcessedMap()     const;
+    PanoramaItemUrlsMap&    preProcessedMap()     const;
     PanoActionThread*       thread()              const;
     AutoOptimiserBinary&    autoOptimiserBinary() const;
     CPCleanBinary&          cpCleanBinary()       const;
