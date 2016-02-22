@@ -34,10 +34,9 @@ namespace Digikam
 
 class CompileMKTask : public CommandTask
 {
-
 private:
 
-//    const KUrl* const                   panoUrl;
+//    const QUrl* const                   panoUrl;
     const QUrl&                         mkUrl;
     const QString                       nonaPath;
     const QString                       enblendPath;
@@ -52,8 +51,7 @@ public:
 
 protected:
 
-    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
-
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 };
 
 }  // namespace Digikam

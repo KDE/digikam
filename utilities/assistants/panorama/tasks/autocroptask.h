@@ -32,7 +32,6 @@ namespace Digikam
 
 class AutoCropTask : public CommandTask
 {
-
 private:
 
     const QUrl&                         autoOptimiserPtoUrl;
@@ -48,7 +47,7 @@ public:
 
 protected:
 
-    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread *thread) override;
+    void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 };
 
 }  // namespace Digikam
