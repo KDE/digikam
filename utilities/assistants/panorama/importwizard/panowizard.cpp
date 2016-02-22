@@ -28,6 +28,7 @@
 
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QWindow>
 
 // KDE includes
 
@@ -92,7 +93,9 @@ PanoWizard::PanoWizard(PanoManager* const mngr, QWidget* const parent)
 
     if (group.exists())
     {
+        winId();
         KWindowConfig::restoreWindowSize(windowHandle(), group);
+        resize(windowHandle()->size());
     }
     else
     {
