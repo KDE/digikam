@@ -54,7 +54,6 @@ private Q_SLOTS:
 
     void slotProgressTimerDone();
     void slotExpoBlendingAction(const Digikam::ExpoBlendingActionData&);
-    void slotShowDetails();
 
 private:
 

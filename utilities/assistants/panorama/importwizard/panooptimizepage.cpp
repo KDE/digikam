@@ -284,6 +284,7 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
             {
                 return;
             }
+
             switch (ad.action)
             {
                 case PANO_OPTIMIZE:
@@ -299,9 +300,9 @@ void PanoOptimizePage::slotPanoAction(const Digikam::PanoActionData& ad)
                     if (d->detailsText->isHidden())
                     {
                         d->title->setText(i18n("<qt>"
-                                            "<h1>Optimization has failed.</h1>"
-                                            "<p>See processing messages below.</p>"
-                                            "</qt>"));
+                                               "<h1>Optimization has failed.</h1>"
+                                               "<p>See processing messages below.</p>"
+                                               "</qt>"));
                         d->progressTimer->stop();
                         d->horizonCheckbox->hide();
 //                      d->projectionAndSizeCheckbox->hide();

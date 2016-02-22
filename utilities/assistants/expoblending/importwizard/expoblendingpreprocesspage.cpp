@@ -34,6 +34,7 @@
 #include <QCheckBox>
 #include <QStyle>
 #include <QApplication>
+#include <QTextBrowser>
 
 // KDE includes
 
@@ -48,7 +49,6 @@
 #include "expoblendingmanager.h"
 #include "expoblendingthread.h"
 #include "dwidgetutils.h"
-#include "doutputdlg.h"
 
 namespace Digikam
 {
@@ -66,7 +66,7 @@ public:
         mngr          = 0;
         title         = 0;
         alignCheckBox = 0;
-        detailsBtn    = 0;
+        detailsText   = 0;
     }
 
     int                        progressCount;
@@ -77,13 +77,11 @@ public:
 
     QCheckBox*                 alignCheckBox;
 
-    QString                    output;
+    QTextBrowser*              detailsText;
 
-    QPushButton*               detailsBtn;
+    DWorkingPixmap             progressPix;
 
-    DWorkingPixmap progressPix;
-
-    ExpoBlendingManager*                   mngr;
+    ExpoBlendingManager*       mngr;
 };
 
 ExpoBlendingPreProcessPage::ExpoBlendingPreProcessPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
@@ -104,15 +102,12 @@ ExpoBlendingPreProcessPage::ExpoBlendingPreProcessPage(ExpoBlendingManager* cons
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
-    DHBox* const hbox       = new DHBox(vbox);
-    d->detailsBtn           = new QPushButton(hbox);
-    d->detailsBtn->setText(i18nc("@action:button", "Details..."));
-    d->detailsBtn->hide();
-    hbox->setStretchFactor(new QWidget(hbox), 10);
+    d->detailsText     = new QTextBrowser(vbox);
+    d->detailsText->hide();
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
-    d->progressLabel = new QLabel(vbox);
+    d->progressLabel   = new QLabel(vbox);
     d->progressLabel->setAlignment(Qt::AlignCenter);
 
     vbox->setStretchFactor(new QWidget(vbox), 10);
@@ -129,9 +124,6 @@ ExpoBlendingPreProcessPage::ExpoBlendingPreProcessPage(ExpoBlendingManager* cons
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
-
-    connect(d->detailsBtn, SIGNAL(clicked()),
-            this, SLOT(slotShowDetails()));
 }
 
 ExpoBlendingPreProcessPage::~ExpoBlendingPreProcessPage()
@@ -159,7 +151,7 @@ void ExpoBlendingPreProcessPage::resetTitle()
                            QDir::toNativeSeparators(d->mngr->alignBinary().path()),
                            d->mngr->alignBinary().url().url(),
                            d->mngr->alignBinary().projectName()));
-    d->detailsBtn->hide();
+    d->detailsText->hide();
     d->alignCheckBox->show();
 }
 
@@ -206,15 +198,6 @@ void ExpoBlendingPreProcessPage::slotProgressTimerDone()
     d->progressTimer->start(300);
 }
 
-void ExpoBlendingPreProcessPage::slotShowDetails()
-{
-    DOutputDlg dlg(QApplication::activeWindow(),
-                   i18nc("@title:window", "Pre-Processing Messages"),
-                   d->output);
-
-    dlg.exec();
-}
-
 void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad)
 {
     QString text;
@@ -230,13 +213,13 @@ void ExpoBlendingPreProcessPage::slotExpoBlendingAction(const Digikam::ExpoBlend
                     d->title->setText(i18n("<qt>"
                                            "<p>Pre-processing has failed.</p>"
                                            "<p>Please check your bracketed images stack...</p>"
-                                           "<p>Press \"Details\" to show processing messages.</p>"
+                                           "<p>See processing messages below.</p>"
                                            "</qt>"));
                     d->progressTimer->stop();
                     d->alignCheckBox->hide();
-                    d->detailsBtn->show();
+                    d->detailsText->show();
                     d->progressLabel->clear();
-                    d->output = ad.message;
+                    d->detailsText->setText(ad.message);
                     emit signalPreProcessed(ExpoBlendingItemUrlsMap());
                     break;
                 }
