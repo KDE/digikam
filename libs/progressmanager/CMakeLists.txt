@@ -10,6 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libprogressmanager_SRCS
+    dprogresswdg.cpp
     overlaywidget.cpp
     progressview.cpp
     progressmanager.cpp
