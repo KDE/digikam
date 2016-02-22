@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-01-26
- * Description : a progress bar with progress information dispatched to progress manager
+ * Description : a progress bar with information dispatched to progress manager
  *
  * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
