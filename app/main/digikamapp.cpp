@@ -332,6 +332,11 @@ DigikamApp::~DigikamApp()
     }
 #endif
 
+    if (ExpoBlendingManager::isCreated())
+    {
+        delete ExpoBlendingManager::internalPtr;
+    }
+
     delete d->view;
 
     ApplicationSettings::instance()->setRecurseAlbums(d->recurseAlbumsAction->isChecked());
@@ -2573,10 +2578,9 @@ void DigikamApp::slotMaintenanceDone()
 
 void DigikamApp::slotExpoBlending()
 {
-    ExpoBlendingManager* const manager = new ExpoBlendingManager(this);
-    manager->checkBinaries();
-    manager->setItemsList(view()->selectedUrls());
-    manager->run();
+    ExpoBlendingManager::instance()->checkBinaries();
+    ExpoBlendingManager::instance()->setItemsList(view()->selectedUrls());
+    ExpoBlendingManager::instance()->run();
 }
 
 void DigikamApp::slotPanorama()

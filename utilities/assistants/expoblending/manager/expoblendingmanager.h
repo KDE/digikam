@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QPointer>
 #include <QUrl>
 
 // Local includes
@@ -49,6 +50,10 @@ public:
 
     explicit ExpoBlendingManager(QObject* const parent = 0);
     ~ExpoBlendingManager();
+
+    static QPointer<ExpoBlendingManager> internalPtr;
+    static ExpoBlendingManager*          instance();
+    static bool                          isCreated();
 
     bool checkBinaries();
 

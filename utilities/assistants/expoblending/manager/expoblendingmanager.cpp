@@ -45,18 +45,20 @@ public:
     {
     }
 
-    QList<QUrl>            inputUrls;
+    QList<QUrl>             inputUrls;
 
-    ExpoBlendingItemUrlsMap            preProcessedUrlsMap;
+    ExpoBlendingItemUrlsMap preProcessedUrlsMap;
 
-    ExpoBlendingThread*    thread;
+    ExpoBlendingThread*     thread;
 
-    AlignBinary            alignBinary;
-    EnfuseBinary           enfuseBinary;
+    AlignBinary             alignBinary;
+    EnfuseBinary            enfuseBinary;
 
-    ExpoBlendingWizard*       wizard;
-    ExpoBlendingDlg*       dlg;
+    ExpoBlendingWizard*     wizard;
+    ExpoBlendingDlg*        dlg;
 };
+
+QPointer<ExpoBlendingManager> ExpoBlendingManager::internalPtr = QPointer<ExpoBlendingManager>();
 
 ExpoBlendingManager::ExpoBlendingManager(QObject* const parent)
     : QObject(parent),
@@ -81,13 +83,32 @@ ExpoBlendingManager::~ExpoBlendingManager()
     delete d;
 }
 
+ExpoBlendingManager* ExpoBlendingManager::instance()
+{
+    if (ExpoBlendingManager::internalPtr.isNull())
+    {
+        ExpoBlendingManager::internalPtr = new ExpoBlendingManager();
+    }
+
+    return ExpoBlendingManager::internalPtr;
+}
+
+bool ExpoBlendingManager::isCreated()
+{
+    return (!internalPtr.isNull());
+}
+
 bool ExpoBlendingManager::checkBinaries()
 {
     if (!d->alignBinary.recheckDirectories())
+    {
         return false;
+    }
 
     if (!d->enfuseBinary.recheckDirectories())
+    {
         return false;
+    }
 
     return true;
 }
@@ -139,19 +160,35 @@ void ExpoBlendingManager::cleanUp()
 
 void ExpoBlendingManager::startWizard()
 {
-    delete d->wizard;
-    d->wizard = new ExpoBlendingWizard(this);
-    d->wizard->show();
+    if (d->wizard && (d->wizard->isMinimized() || !d->wizard->isHidden()))
+    {
+        d->wizard->showNormal();
+        d->wizard->raise();
+    }
+    else if (d->dlg && (d->dlg->isMinimized() || !d->dlg->isHidden()))
+    {
+        d->dlg->showNormal();
+        d->dlg->raise();
+    }
+    else
+    {
+        delete d->wizard;
+        delete d->dlg;
+        d->dlg = 0;
 
-    connect(d->wizard, SIGNAL(accepted()),
-            this, SLOT(slotStartDialog()));
+        d->wizard = new ExpoBlendingWizard(this);
+
+        connect(d->wizard, SIGNAL(accepted()),
+                this, SLOT(slotStartDialog()));
+
+        d->wizard->show();
+    }
 }
 
 void ExpoBlendingManager::slotStartDialog()
 {
     d->inputUrls = d->wizard->itemUrls();
 
-    delete d->dlg;
     d->dlg = new ExpoBlendingDlg(this);
     d->dlg->show();
 }
