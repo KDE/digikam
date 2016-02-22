@@ -39,6 +39,7 @@
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QTextBrowser>
 
 // #include <QList>
 
@@ -51,7 +52,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "doutputdlg.h"
 #include "cpcleanbinary.h"
 #include "cpfindbinary.h"
 #include "panomanager.h"
@@ -72,7 +72,7 @@ struct PanoPreProcessPage::Private
           nbFilesProcessed(0),
           title(0),
           celesteCheckBox(0),
-          detailsBtn(0),
+          detailsText(0),
           progressPix(DWorkingPixmap()),
           mngr(0)
     {
@@ -92,13 +92,11 @@ struct PanoPreProcessPage::Private
 
     QCheckBox*                 celesteCheckBox;
 
-    QString                    output;
+    QTextBrowser*              detailsText;
 
-    QPushButton*               detailsBtn;
+    DWorkingPixmap             progressPix;
 
-    DWorkingPixmap progressPix;
-
-    PanoManager*                   mngr;
+    PanoManager*               mngr;
 };
 
 PanoPreProcessPage::PanoPreProcessPage(PanoManager* const mngr, QWizard* const dlg)
@@ -125,11 +123,8 @@ PanoPreProcessPage::PanoPreProcessPage(PanoManager* const mngr, QWizard* const d
                                            "process."));
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
-    DHBox* const hbox       = new DHBox(vbox);
-    d->detailsBtn           = new QPushButton(hbox);
-    d->detailsBtn->setText(i18nc("@action:button", "Details..."));
-    d->detailsBtn->hide();
-    hbox->setStretchFactor(new QWidget(hbox), 10);
+    d->detailsText    = new QTextBrowser(vbox);
+    d->detailsText->hide();
 
     vbox->setStretchFactor(new QWidget(vbox), 2);
 
@@ -145,9 +140,6 @@ PanoPreProcessPage::PanoPreProcessPage(PanoManager* const mngr, QWizard* const d
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimerDone()));
-
-    connect(d->detailsBtn, SIGNAL(clicked()),
-            this, SLOT(slotShowDetails()));
 }
 
 PanoPreProcessPage::~PanoPreProcessPage()
@@ -211,10 +203,10 @@ void PanoPreProcessPage::initializePage()
                            d->mngr->cpFindBinary().url().url(),
                            d->mngr->cpFindBinary().projectName()));
 
-    d->detailsBtn->hide();
+    d->detailsText->hide();
     d->celesteCheckBox->show();
 
-    d->canceled = false;
+    d->canceled          = false;
     d->preprocessingDone = false;
 
     setComplete(true);
@@ -259,14 +251,6 @@ void PanoPreProcessPage::slotProgressTimerDone()
     d->progressTimer->start(300);
 }
 
-void PanoPreProcessPage::slotShowDetails()
-{
-    DOutputDlg dlg(QApplication::activeWindow(),
-                       i18nc("@title:window", "Pre-Processing Messages"),
-                       d->output);
-    dlg.exec();
-}
-
 void PanoPreProcessPage::slotPanoAction(const Digikam::PanoActionData& ad)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "SlotPanoAction (preprocessing)";
@@ -297,17 +281,18 @@ void PanoPreProcessPage::slotPanoAction(const Digikam::PanoActionData& ad)
                                this, SLOT(slotPanoAction(Digikam::PanoActionData)));
 
                     qCWarning(DIGIKAM_GENERAL_LOG) << "Job failed (preprocessing): " << ad.action;
-                    if (d->detailsBtn->isHidden())  // Ensures only the first failed task is shown
+
+                    if (d->detailsText->isHidden())  // Ensures only the first failed task is shown
                     {
                         d->title->setText(i18n("<qt>"
                                                 "<h1>Pre-processing has failed.</h1>"
-                                                "<p>Press \"Details\" to show processing messages.</p>"
+                                                "<p>See processing messages below.</p>"
                                                 "</qt>"));
                         d->progressTimer->stop();
                         d->celesteCheckBox->hide();
-                        d->detailsBtn->show();
+                        d->detailsText->show();
                         d->progressLabel->clear();
-                        d->output = ad.message;
+                        d->detailsText->setText(ad.message);
 
                         setComplete(false);
                         emit completeChanged();
