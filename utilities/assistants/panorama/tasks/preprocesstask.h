@@ -60,9 +60,8 @@ private:
 
 private:
 
-    const QUrl                  fileUrl;
-    PanoramaPreprocessedUrls&       preProcessedUrl;
-    DMetadata                   m_meta;
+    class Private;
+    Private* const d;
 };
 
 }  // namespace Digikam

@@ -47,17 +47,36 @@ using namespace RawEngine;
 namespace Digikam
 {
 
-class RawObserver : public DImgLoaderObserver
+class PanoObserver;
+
+class PreProcessTask::Private
 {
 public:
 
-    explicit RawObserver(PreProcessTask* const p)
+    Private(PanoramaPreprocessedUrls& urls, const QUrl& url)
+        : fileUrl(url),
+          preProcessedUrl(urls),
+          observer(0)
+    {
+    }
+
+    const QUrl                fileUrl;
+    PanoramaPreprocessedUrls& preProcessedUrl;
+    DMetadata                 meta;
+    PanoObserver*             observer;
+};
+
+class PanoObserver : public DImgLoaderObserver
+{
+public:
+
+    explicit PanoObserver(PreProcessTask* const p)
         : DImgLoaderObserver(),
           parent(p)
     {
     }
 
-    ~RawObserver()
+    ~PanoObserver()
     {
     }
 
@@ -73,12 +92,11 @@ private:
 
 PreProcessTask::PreProcessTask(const QString& workDirPath, int id, PanoramaPreprocessedUrls& targetUrls,
                                const QUrl& sourceUrl)
-    : PanoTask(PANO_PREPROCESS_INPUT,
-      workDirPath),
+    : PanoTask(PANO_PREPROCESS_INPUT, workDirPath),
       id(id),
-      fileUrl(sourceUrl),
-      preProcessedUrl(targetUrls)
+      d(new Private(targetUrls, sourceUrl))
 {
+    d->observer        = new PanoObserver(this);
 }
 
 PreProcessTask::~PreProcessTask()
@@ -93,9 +111,9 @@ void PreProcessTask::requestAbort()
 void PreProcessTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     // check if its a RAW file.
-    if (DRawDecoder::isRawFile(fileUrl))
+    if (DRawDecoder::isRawFile(d->fileUrl))
     {
-        preProcessedUrl.preprocessedUrl = tmpDir;
+        d->preProcessedUrl.preprocessedUrl = tmpDir;
 
         if (!convertRaw())
         {
@@ -106,12 +124,12 @@ void PreProcessTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     else
     {
         // NOTE: in this case, preprocessed Url is the original file Url.
-        preProcessedUrl.preprocessedUrl = fileUrl;
+        d->preProcessedUrl.preprocessedUrl = d->fileUrl;
     }
 
-    preProcessedUrl.previewUrl = tmpDir;
+    d->preProcessedUrl.previewUrl = tmpDir;
 
-    if (!computePreview(preProcessedUrl.preprocessedUrl))
+    if (!computePreview(d->preProcessedUrl.preprocessedUrl))
     {
         successFlag = false;
         return;
@@ -123,7 +141,7 @@ void PreProcessTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
 bool PreProcessTask::computePreview(const QUrl& inUrl)
 {
-    QUrl& outUrl = preProcessedUrl.previewUrl;
+    QUrl& outUrl = d->preProcessedUrl.previewUrl;
 
     QFileInfo fi(inUrl.toLocalFile());
     outUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName().replace(QLatin1String("."), QLatin1String("_")) + QStringLiteral("-preview.jpg")));
@@ -138,13 +156,13 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
         // save exif information also to preview image for auto rotation
         if (saved)
         {
-            m_meta.load(inUrl.toLocalFile());
-            MetaEngine::ImageOrientation orientation = m_meta.getImageOrientation();
+            d->meta.load(inUrl.toLocalFile());
+            MetaEngine::ImageOrientation orientation = d->meta.getImageOrientation();
 
-            m_meta.load(outUrl.toLocalFile());
-            m_meta.setImageOrientation(orientation);
-            m_meta.setImageDimensions(QSize(preview.width(), preview.height()));
-            m_meta.applyChanges();
+            d->meta.load(outUrl.toLocalFile());
+            d->meta.setImageOrientation(orientation);
+            d->meta.setImageDimensions(QSize(preview.width(), preview.height()));
+            d->meta.applyChanges();
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Preview Image url: " << outUrl << ", saved: " << saved;
@@ -161,35 +179,34 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
 
 bool PreProcessTask::convertRaw()
 {
-    const QUrl& inUrl = fileUrl;
-    QUrl& outUrl      = preProcessedUrl.preprocessedUrl;
+    const QUrl& inUrl = d->fileUrl;
+    QUrl& outUrl      = d->preProcessedUrl.preprocessedUrl;
     DImg img;
 
     DRawDecoding settings;
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    KSharedConfig::Ptr config   = KSharedConfig::openConfig();
+    KConfigGroup group          = config->group(QLatin1String("ImageViewer Settings"));
     DRawDecoderWidget::readSettings(settings.rawPrm, group);
-    RawObserver observer(this);
 
-    if (img.load(inUrl.toLocalFile(), &observer, settings))
+    if (img.load(inUrl.toLocalFile(), d->observer, settings))
     {
-        m_meta.load(inUrl.toLocalFile());
+        d->meta.load(inUrl.toLocalFile());
 
-        DMetadata::MetaDataMap m = m_meta.getExifTagsDataList(QStringList() << QLatin1String("Photo"));
+        DMetadata::MetaDataMap m = d->meta.getExifTagsDataList(QStringList() << QLatin1String("Photo"));
 
         if (!m.isEmpty())
         {
             for (DMetadata::MetaDataMap::iterator it = m.begin(); it != m.end(); ++it)
             {
-                m_meta.removeExifTag(it.key().toLatin1().constData());
+                d->meta.removeExifTag(it.key().toLatin1().constData());
             }
         }
 
-        QByteArray exif = m_meta.getExifEncoded();
-        QByteArray iptc = m_meta.getIptc();
-        QByteArray xmp  = m_meta.getXmp();
-        QString make    = m_meta.getExifTagString("Exif.Image.Make");
-        QString model   = m_meta.getExifTagString("Exif.Image.Model");
+        QByteArray exif = d->meta.getExifEncoded();
+        QByteArray iptc = d->meta.getIptc();
+        QByteArray xmp  = d->meta.getXmp();
+        QString make    = d->meta.getExifTagString("Exif.Image.Make");
+        QString model   = d->meta.getExifTagString("Exif.Image.Model");
 
         QFileInfo fi(inUrl.toLocalFile());
         outUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName().replace(QLatin1String("."), QLatin1String("_")) + QStringLiteral(".tif")));
@@ -200,16 +217,16 @@ bool PreProcessTask::convertRaw()
             return false;
         }
 
-        m_meta.load(outUrl.toLocalFile());
-        m_meta.setExif(exif);
-        m_meta.setIptc(iptc);
-        m_meta.setXmp(xmp);
-        m_meta.setImageDimensions(QSize(img.width(), img.height()));
-        m_meta.setExifTagString("Exif.Image.DocumentName", inUrl.fileName());
-        m_meta.setXmpTagString("Xmp.tiff.Make",  make);
-        m_meta.setXmpTagString("Xmp.tiff.Model", model);
-        m_meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
-        m_meta.applyChanges();
+        d->meta.load(outUrl.toLocalFile());
+        d->meta.setExif(exif);
+        d->meta.setIptc(iptc);
+        d->meta.setXmp(xmp);
+        d->meta.setImageDimensions(QSize(img.width(), img.height()));
+        d->meta.setExifTagString("Exif.Image.DocumentName", inUrl.fileName());
+        d->meta.setXmpTagString("Xmp.tiff.Make",  make);
+        d->meta.setXmpTagString("Xmp.tiff.Model", model);
+        d->meta.setImageOrientation(DMetadata::ORIENTATION_NORMAL);
+        d->meta.applyChanges();
     }
     else
     {
