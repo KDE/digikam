@@ -32,6 +32,8 @@
 #include <QPaintDevice>
 #include <QRect>
 #include <QString>
+#include <QUrl>
+#include <QImage>
 
 // KDE includes
 

@@ -64,12 +64,8 @@ public Q_SLOTS:
 
 private:
 
-    bool             cancelled_;
-
-    QMap<int, QUrl>  months_;
-    QPrinter*        printer_;
-
-    CalPainter*      painter_;
+    class Private;
+    Private* const d;
 };
 
 }  // Namespace Digikam

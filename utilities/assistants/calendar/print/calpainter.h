@@ -27,10 +27,8 @@
 
 // Qt includes
 
-#include <QImage>
 #include <QObject>
 #include <QPainter>
-#include <QUrl>
 
 class QPaintDevice;
 

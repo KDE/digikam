@@ -33,61 +33,82 @@
 namespace Digikam
 {
 
+class CalPrinter::Private
+{
+public:
+
+    Private() :
+        cancelled(false),
+        printer(0),
+        painter(0)
+    {
+    }
+
+    bool             cancelled;
+
+    QMap<int, QUrl>  months;
+    QPrinter*        printer;
+
+    CalPainter*      painter;
+};
+
 CalPrinter::CalPrinter(QPrinter* const printer,
                        QMap<int, QUrl>& months,
                        QObject* const parent)
-    : QThread(parent)
+    : QThread(parent),
+      d(new Private)
 {
-    printer_   = printer;
-    painter_   = new CalPainter(printer_);
-    months_    = months;
-    cancelled_ = false;
+    d->printer   = printer;
+    d->painter   = new CalPainter(d->printer);
+    d->months    = months;
+    d->cancelled = false;
 }
 
 CalPrinter::~CalPrinter()
 {
-    delete painter_;
+    delete d->painter;
+    delete d;
 }
 
 void CalPrinter::run()
 {
-    connect(painter_, SIGNAL(signalTotal(int)),
+    connect(d->painter, SIGNAL(signalTotal(int)),
             this, SIGNAL(totalBlocks(int)));
 
-    connect(painter_, SIGNAL(signalProgress(int)),
+    connect(d->painter, SIGNAL(signalProgress(int)),
             this, SIGNAL(blocksFinished(int)));
 
     int currPage = 0;
 
-    foreach(const int month, months_.keys())
+    foreach(const int month, d->months.keys())
     {
         emit pageChanged(currPage);
 
         if (currPage)
         {
-            printer_->newPage();
+            d->printer->newPage();
         }
 
         ++currPage;
 
-        painter_->setImage(months_.value(month));
-        painter_->paint(month);
+        d->painter->setImage(d->months.value(month));
+        d->painter->paint(month);
 
-        if (cancelled_)
+        if (d->cancelled)
         {
             break;
         }
     }
 
-    painter_->end();
+    d->painter->end();
 
     emit pageChanged(currPage);
 }
 
 void CalPrinter::cancel()
 {
-    painter_->cancel();
-    cancelled_ = true;
+    d->painter->cancel();
+    d->cancelled = true;
 }
 
 }  // Namespace Digikam
