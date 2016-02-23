@@ -38,19 +38,11 @@
 
 #include "enfusesettings.h"
 
-namespace KIPI
-{
-class Interface;
-}
-
-using namespace KIPI;
-
 namespace Digikam
 {
 
 class EnfuseStackItem : public QTreeWidgetItem
 {
-
 public:
 
     explicit EnfuseStackItem(QTreeWidget* const parent);

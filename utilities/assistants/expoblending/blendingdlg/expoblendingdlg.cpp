@@ -76,8 +76,10 @@ extern "C"
 namespace Digikam
 {
 
-struct ExpoBlendingDlg::Private
+class ExpoBlendingDlg::Private
 {
+public:
+
     Private()
         : templateFileName(0),
           previewWidget(0),

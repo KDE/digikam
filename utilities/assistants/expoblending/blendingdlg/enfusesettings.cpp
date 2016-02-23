@@ -74,8 +74,10 @@ QString EnfuseSettings::inputImagesList() const
     return ret;
 }
 
-struct EnfuseSettingsWidget::Private
+class EnfuseSettingsWidget::Private
 {
+public:
+
     Private()
         : autoLevelsCB(0),
           hardMaskCB(0),
@@ -90,6 +92,8 @@ struct EnfuseSettingsWidget::Private
           contrastInput(0)
     {
     }
+
+public:
 
     QCheckBox*       autoLevelsCB;
     QCheckBox*       hardMaskCB;

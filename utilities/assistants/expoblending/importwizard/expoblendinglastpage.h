@@ -29,7 +29,6 @@
 
 namespace Digikam
 {
-
 class ExpoBlendingManager;
 
 class ExpoBlendingLastPage : public DWizardPage

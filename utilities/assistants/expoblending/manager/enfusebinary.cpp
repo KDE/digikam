@@ -43,6 +43,7 @@ bool EnfuseBinary::parseHeader(const QString& output)
     QString firstLine = output.section(QChar::fromLatin1('\n'), m_headerLine, m_headerLine);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << path() << " help header line: \n" << firstLine;
+
     if (firstLine.startsWith(m_headerStarts))
     {
         setVersion(firstLine.remove(0, m_headerStarts.length()));

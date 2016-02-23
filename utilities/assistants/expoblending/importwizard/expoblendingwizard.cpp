@@ -44,9 +44,11 @@
 namespace Digikam
 {
 
-struct ExpoBlendingWizard::Provate
+class ExpoBlendingWizard::Private
 {
-    Provate()
+public:
+
+    Private()
         : mngr(0),
           introPage(0),
           itemsPage(0),
@@ -68,7 +70,7 @@ struct ExpoBlendingWizard::Provate
 
 ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent)
     : QWizard(parent),
-      d(new Provate)
+      d(new Private)
 {
     setModal(false);
     setWindowTitle(i18nc("@title:window", "Exposure Blending Import Wizard"));

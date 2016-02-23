@@ -33,7 +33,6 @@
 
 #include <klocalizedstring.h>
 
-
 // local includes
 
 #include "dbinarysearch.h"
@@ -111,6 +110,7 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
 
 ExpoBlendingIntroPage::~ExpoBlendingIntroPage()
 {
+    delete d;
 }
 
 bool ExpoBlendingIntroPage::binariesFound()

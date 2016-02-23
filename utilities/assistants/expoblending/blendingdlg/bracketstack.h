@@ -41,7 +41,6 @@ namespace Digikam
 
 class BracketStackItem : public QTreeWidgetItem
 {
-
 public:
 
     explicit BracketStackItem(QTreeWidget* const parent);
@@ -88,11 +87,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThumbnail(const LoadingDescription&, const QPixmap& pix);
-
-private:
-
-    class Private;
-    Private* const d;
 };
 
 }  // namespace Digikam

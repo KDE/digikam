@@ -55,8 +55,8 @@ public:
 };
 
 ExpoBlendingLastPage::ExpoBlendingLastPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
-        : DWizardPage(dlg, i18nc("@title:window", "Pre-Processing is Complete")),
-          d(new Private)
+    : DWizardPage(dlg, i18nc("@title:window", "Pre-Processing is Complete")),
+      d(new Private)
 {
     d->mngr                 = mngr;
     DVBox* const vbox      = new DVBox(this);

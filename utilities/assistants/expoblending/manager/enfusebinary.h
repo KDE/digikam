@@ -41,17 +41,17 @@ public:
 
     EnfuseBinary()
     : DBinaryIface(QLatin1String("enfuse"),
-                    QLatin1String("3.2"),
-                    QLatin1String("enfuse "),
-                    0, 
-                    QLatin1String("Enblend"),
-                    QLatin1String("http://enblend.sourceforge.net"),
-                    QLatin1String("ExpoBlending"),
-                    QStringList(QLatin1String("-V"))),
-      versionDouble(0)
-        {
-            setup();
-        }
+                   QLatin1String("3.2"),
+                   QLatin1String("enfuse "),
+                   0, 
+                   QLatin1String("Enblend"),
+                   QLatin1String("http://enblend.sourceforge.net"),
+                   QLatin1String("ExpoBlending"),
+                   QStringList(QLatin1String("-V"))),
+                   versionDouble(0)
+    {
+        setup();
+    }
 
     ~EnfuseBinary()
     {

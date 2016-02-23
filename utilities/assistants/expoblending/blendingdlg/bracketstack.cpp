@@ -100,19 +100,8 @@ bool BracketStackItem::operator< (const QTreeWidgetItem& other) const
 
 // -------------------------------------------------------------------------
 
-struct BracketStackList::Private
-{
-    Private()
-    {
-        thumbLoadThread = ThumbnailLoadThread::defaultThread();
-    }
-
-    ThumbnailLoadThread* thumbLoadThread;
-};
-
 BracketStackList::BracketStackList(QWidget* const parent)
-    : QTreeWidget(parent),
-      d(new Private)
+    : QTreeWidget(parent)
 {
     setIconSize(QSize(64, 64));
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -131,7 +120,7 @@ BracketStackList::BracketStackList(QWidget* const parent)
     labels.append( i18nc("@title:column Input image exposure", "Exposure (EV)") );
     setHeaderLabels(labels);
 
-    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+    connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
     sortItems(2, Qt::DescendingOrder);
@@ -139,7 +128,6 @@ BracketStackList::BracketStackList(QWidget* const parent)
 
 BracketStackList::~BracketStackList()
 {
-    delete d;
 }
 
 QList<QUrl> BracketStackList::urls()
@@ -217,7 +205,7 @@ void BracketStackList::addItems(const QList<QUrl>& list)
 
     foreach(QUrl url, urls)
     {
-        d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()));
+        ThumbnailLoadThread::defaultThread()->find(ThumbnailIdentifier(url.toLocalFile()));
     }
 
     emit signalAddItems(urls);
@@ -234,9 +222,13 @@ void BracketStackList::slotThumbnail(const LoadingDescription& desc, const QPixm
         if (item->url() == QUrl::fromLocalFile(desc.filePath))
         {
             if (pix.isNull())
+            {
                 item->setThumbnail(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(iconSize().width(), QIcon::Disabled));
+            }
             else
+            {
                 item->setThumbnail(pix.scaled(iconSize().width(), iconSize().height(), Qt::KeepAspectRatio));
+            }
 
             return;
         }

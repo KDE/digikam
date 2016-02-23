@@ -53,9 +53,8 @@ struct ItemsPage::Private
     {
     }
 
-    DImagesList* list;
-
-    ExpoBlendingManager*      mngr;
+    DImagesList*         list;
+    ExpoBlendingManager* mngr;
 };
 
 ItemsPage::ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
@@ -113,6 +112,7 @@ void ItemsPage::slotAddItems(const QList<QUrl>& urls)
     if (!urls.empty())
     {
         d->mngr->thread()->identifyFiles(urls);
+
         if (!d->mngr->thread()->isRunning())
             d->mngr->thread()->start();
     }
@@ -128,6 +128,7 @@ QList<QUrl> ItemsPage::itemUrls() const
 void ItemsPage::setIdentity(const QUrl& url, const QString& identity)
 {
     DImagesListViewItem* item = d->list->listView()->findItem(url);
+
     if (item)
     {
         item->setText(DImagesListView::User1, identity);

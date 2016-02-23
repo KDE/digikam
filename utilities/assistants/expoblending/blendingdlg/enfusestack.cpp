@@ -46,8 +46,10 @@
 namespace Digikam
 {
 
-struct EnfuseStackItem::Private
+class EnfuseStackItem::Private
 {
+public:
+
     Private()
         : asValidThumb(false)
     {
@@ -138,8 +140,10 @@ void EnfuseStackItem::setOn(bool b)
 
 // -------------------------------------------------------------------------
 
-struct EnfuseStackList::Private
+class EnfuseStackList::Private
 {
+public:
+
     Private()
         : outputFormat(DSaveSettingsWidget::OUTPUT_PNG),
           progressCount(0),
@@ -151,12 +155,12 @@ struct EnfuseStackList::Private
 
     DSaveSettingsWidget::OutputFormat outputFormat;
 
-    QString                            templateFileName;
+    QString                           templateFileName;
 
-    int                                progressCount;
-    QTimer*                            progressTimer;
-    DWorkingPixmap         progressPix;
-    EnfuseStackItem*                   processItem;
+    int                               progressCount;
+    QTimer*                           progressTimer;
+    DWorkingPixmap                    progressPix;
+    EnfuseStackItem*                  processItem;
 };
 
 EnfuseStackList::EnfuseStackList(QWidget* const parent)
@@ -235,8 +239,11 @@ QList<EnfuseSettings> EnfuseStackList::settingsList()
     while (*it)
     {
         EnfuseStackItem* const item = dynamic_cast<EnfuseStackItem*>(*it);
+
         if (item && item->isOn())
+        {
             list.append(item->enfuseSettings());
+        }
 
         ++it;
     }

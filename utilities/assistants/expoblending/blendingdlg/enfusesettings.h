@@ -40,8 +40,10 @@ class KConfigGroup;
 namespace Digikam
 {
 
-struct EnfuseSettings
+class EnfuseSettings
 {
+public:
+    
     EnfuseSettings()
         : autoLevels(true),
           hardMask(false),
@@ -62,20 +64,22 @@ struct EnfuseSettings
 
     QString inputImagesList() const;
 
-    bool                               autoLevels;
-    bool                               hardMask;
-    bool                               ciecam02;
+public:
 
-    int                                levels;
+    bool                              autoLevels;
+    bool                              hardMask;
+    bool                              ciecam02;
 
-    double                             exposure;
-    double                             saturation;
-    double                             contrast;
+    int                               levels;
 
-    QString                            targetFileName;
+    double                            exposure;
+    double                            saturation;
+    double                            contrast;
 
-    QList<QUrl>                        inputUrls;
-    QUrl                               previewUrl;
+    QString                           targetFileName;
+
+    QList<QUrl>                       inputUrls;
+    QUrl                              previewUrl;
 
     DSaveSettingsWidget::OutputFormat outputFormat;
 };

@@ -36,7 +36,6 @@
 
 namespace Digikam
 {
-
 class ExpoBlendingManager;
 
 class ExpoBlendingWizard : public QWizard
@@ -63,8 +62,8 @@ private Q_SLOTS:
 
 private:
 
-    class Provate;
-    Provate* const d;
+    class Private;
+    Private* const d;
 };
 
 }   // namespace Digikam
