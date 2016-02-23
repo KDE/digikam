@@ -1029,15 +1029,19 @@ void DImagesList::slotSaveItems()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "file url " << saveLevelsFile.toDisplayString();
 
-    if ( saveLevelsFile.isEmpty() )
+    if (saveLevelsFile.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "empty url ";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "empty url";
         return;
     }
 
-    QFile file(saveLevelsFile.path() /*.prettyUrl().toAscii()*/);
-    file.open(QIODevice::WriteOnly);
-//  file.open(stdout, QIODevice::WriteOnly);
+    QFile file(saveLevelsFile.path());
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open target file";
+        return;
+    }
 
     QXmlStreamWriter xmlWriter;
     xmlWriter.setDevice(&file);
@@ -1059,10 +1063,10 @@ void DImagesList::slotSaveItems()
 
             xmlWriter.writeAttribute(QString::fromLatin1("url"), lvItem->url().toDisplayString());
 
-            //emit xmlWriter, item?
+            // emit xmlWriter, item?
             emit signalXMLSaveItem(xmlWriter, lvItem);
 
-            xmlWriter.writeEndElement(); //Image
+            xmlWriter.writeEndElement(); // Image
         }
 
         ++it;
@@ -1070,9 +1074,9 @@ void DImagesList::slotSaveItems()
 
     emit signalXMLCustomElements(xmlWriter);
 
-    xmlWriter.writeEndElement(); // Images
+    xmlWriter.writeEndElement();  // Images
 
-    xmlWriter.writeEndDocument(); //end document
+    xmlWriter.writeEndDocument(); // end document
 }
 
 void DImagesList::removeItemByUrl(const QUrl& url)
