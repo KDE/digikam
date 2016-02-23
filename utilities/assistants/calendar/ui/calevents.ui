@@ -89,7 +89,7 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="text" >
-         <string>You can create such a calendar using program which support <a href='https://en.wikipedia.org/wiki/ICalendar'>iCalendar format</a>.
+         <string>You can create such a calendar using program which support &lt;a href="https://en.wikipedia.org/wiki/ICalendar">iCalendar format&lt;/a>.
 This is fully optional. All the events from this calendar will be printed in green.</string>
      </property>
      <property name="alignment" >
