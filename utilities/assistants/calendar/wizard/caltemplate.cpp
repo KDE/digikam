@@ -10,6 +10,7 @@
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -41,43 +42,56 @@
 #include "calpainter.h"
 #include "digikam_debug.h"
 
-#define MAX_MONTHS (13)
-
 namespace Digikam
 {
 
-CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
-    : QWidget(parent)
+class CalTemplate::Private
 {
-    m_ui.setupUi(this);
+public:
+
+    Private() :
+        MAX_MONTHS(13)
+    {
+    }
+    
+    const int                MAX_MONTHS;
+    Ui::CalTemplate          ui;
+    QVector<CalMonthWidget*> wVector;
+};
+    
+CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
+    : QWidget(parent),
+      d(new Private)
+{
+    d->ui.setupUi(this);
 
     CalSettings* const settings = CalSettings::instance();
 
     // set initial settings
-    settings->setPaperSize(m_ui.paperSizeCombo->currentText());
-    settings->setDrawLines(m_ui.drawLinesCheckBox->isChecked());
-    settings->setRatio(m_ui.ratioSlider->value());
-    settings->setFont(m_ui.fontCombo->currentText());
-    settings->setResolution(m_ui.resolutionCombo->currentText());
+    settings->setPaperSize(d->ui.paperSizeCombo->currentText());
+    settings->setDrawLines(d->ui.drawLinesCheckBox->isChecked());
+    settings->setRatio(d->ui.ratioSlider->value());
+    settings->setFont(d->ui.fontCombo->currentText());
+    settings->setResolution(d->ui.resolutionCombo->currentText());
 
-    m_ui.calendarWidget->recreate();
+    d->ui.calendarWidget->recreate();
 
-    connect(m_ui.yearSpin, SIGNAL(valueChanged(int)),
+    connect(d->ui.yearSpin, SIGNAL(valueChanged(int)),
             this, SLOT(yearChanged(int)));
 
     const KCalendarSystem* const cal = KLocale::global()->calendar();
     int currentYear                  = cal->year(QDate::currentDate());
 
-    QDate d;
-    cal->setDate(d, currentYear, 1, 1);
-    int months     = cal->monthsInYear(d);
+    QDate date;
+    cal->setDate(date, currentYear, 1, 1);
+    int months        = cal->monthsInYear(date);
     // span the monthWidgets over 2 rows. inRow should usually be 6 or 7 (for 12 or 13 months)
-    int inRow      = (months / 2) + ((months % 2) != 0);
+    int inRow         = (months / 2) + ((months % 2) != 0);
     CalMonthWidget* w = 0;
 
-    for (int i = 0; i < MAX_MONTHS; ++i)
+    for (int i = 0; i < d->MAX_MONTHS; ++i)
     {
-        w = new CalMonthWidget(m_ui.monthBox, i + 1);
+        w = new CalMonthWidget(d->ui.monthBox, i + 1);
 
         connect(w, SIGNAL(monthSelected(int)),
                 this, SLOT(monthChanged(int)));
@@ -89,73 +103,74 @@ CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
 
         if (i < months)
         {
-            m_ui.monthBoxLayout->addWidget(w, i / inRow, i % inRow);
+            d->ui.monthBoxLayout->addWidget(w, i / inRow, i % inRow);
         }
         else
         {
             w->hide();
         }
 
-        m_wVector.insert(i, w);
+        d->wVector.insert(i, w);
     }
 
-    m_ui.yearSpin->setRange(cal->year(cal->earliestValidDate()) + 1, cal->year(cal->latestValidDate()) - 1);
-    m_ui.yearSpin->setValue(currentYear);
+    d->ui.yearSpin->setRange(cal->year(cal->earliestValidDate()) + 1, cal->year(cal->latestValidDate()) - 1);
+    d->ui.yearSpin->setValue(currentYear);
     
-    QButtonGroup* const btnGrp = new QButtonGroup(m_ui.imagePosButtonGroup);
-    btnGrp->addButton(m_ui.topRadio,   CalParams::Top);
-    btnGrp->addButton(m_ui.leftRadio,  CalParams::Left);
-    btnGrp->addButton(m_ui.rightRadio, CalParams::Right);
+    QButtonGroup* const btnGrp = new QButtonGroup(d->ui.imagePosButtonGroup);
+    btnGrp->addButton(d->ui.topRadio,   CalParams::Top);
+    btnGrp->addButton(d->ui.leftRadio,  CalParams::Left);
+    btnGrp->addButton(d->ui.rightRadio, CalParams::Right);
     btnGrp->setExclusive(true);
 
-    connect(m_ui.paperSizeCombo, SIGNAL(currentIndexChanged(QString)),
+    connect(d->ui.paperSizeCombo, SIGNAL(currentIndexChanged(QString)),
             settings, SLOT(setPaperSize(QString)));
 
-    connect(m_ui.resolutionCombo, SIGNAL(currentIndexChanged(QString)),
+    connect(d->ui.resolutionCombo, SIGNAL(currentIndexChanged(QString)),
             settings, SLOT(setResolution(QString)));
 
     connect(btnGrp, SIGNAL(buttonClicked(int)),
             settings, SLOT(setImagePos(int)));
 
-    connect(m_ui.drawLinesCheckBox, SIGNAL(toggled(bool)),
+    connect(d->ui.drawLinesCheckBox, SIGNAL(toggled(bool)),
             settings, SLOT(setDrawLines(bool)));
 
-    connect(m_ui.ratioSlider, SIGNAL(valueChanged(int)),
+    connect(d->ui.ratioSlider, SIGNAL(valueChanged(int)),
             settings, SLOT(setRatio(int)));
 
-    connect(m_ui.fontCombo, SIGNAL(currentIndexChanged(QString)),
+    connect(d->ui.fontCombo, SIGNAL(currentIndexChanged(QString)),
             settings, SLOT(setFont(QString)));
 
     connect(settings, SIGNAL(settingsChanged()),
-            m_ui.calendarWidget, SLOT(recreate()));
+            d->ui.calendarWidget, SLOT(recreate()));
 }
 
 CalTemplate::~CalTemplate()
 {
+    delete d;
 }
 
 void CalTemplate::monthChanged(int m)
 {
-  m_ui.calendarWidget->setCurrent(m);
+  d->ui.calendarWidget->setCurrent(m);
 }
 
 void CalTemplate::yearChanged(int year)
 {
     int months;
-    QDate d, oldD;
+    QDate date, oldD;
     const KCalendarSystem* const cal = KLocale::global()->calendar();
-    cal->setDate(d, year, 1, 1);
+    cal->setDate(date, year, 1, 1);
     cal->setDate(oldD, CalSettings::instance()->year(), 1, 1);
-    months = cal->monthsInYear(d);
+    months = cal->monthsInYear(date);
 
-    if ((cal->monthsInYear(oldD) != months) && !m_wVector.isEmpty())
+    if ((cal->monthsInYear(oldD) != months) && !d->wVector.isEmpty())
     {
         int i;
 
         // hide the last months that are not present on the current year
-        for (i = months; (i < cal->monthsInYear(oldD)) && (i < m_wVector.count()); ++i)
+        for (i = months; (i < cal->monthsInYear(oldD)) && (i < d->wVector.count()); ++i)
         {
-            m_wVector.at(i)->hide();
+            d->wVector.at(i)->hide();
         }
 
         // span the monthWidgets over 2 rows. inRow should usually be 6 or 7 (for 12 or 13 months)
@@ -164,19 +179,19 @@ void CalTemplate::yearChanged(int year)
         // remove all the monthWidgets, then readd the needed ones
         for (i = 0; i < cal->monthsInYear(oldD); ++i)
         {
-            m_ui.monthBoxLayout->removeWidget(m_wVector.at(i));
+            d->ui.monthBoxLayout->removeWidget(d->wVector.at(i));
         }
 
-        for (i = 0; (i < months) && (i < m_wVector.count()); ++i)
+        for (i = 0; (i < months) && (i < d->wVector.count()); ++i)
         {
-            m_ui.monthBoxLayout->addWidget(m_wVector.at(i), i / inRow, i % inRow);
+            d->ui.monthBoxLayout->addWidget(d->wVector.at(i), i / inRow, i % inRow);
 
-            if (m_wVector.at(i)->isHidden())
+            if (d->wVector.at(i)->isHidden())
             {
-                m_wVector.at(i)->show();
+                d->wVector.at(i)->show();
             }
 
-            m_wVector.at(i)->update();
+            d->wVector.at(i)->update();
         }
     }
 
