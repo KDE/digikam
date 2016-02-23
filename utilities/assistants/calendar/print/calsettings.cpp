@@ -10,6 +10,7 @@
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,10 +44,23 @@
 namespace Digikam
 {
 
+class CalSettings::Private
+{
+public:
+
+    Private()
+    {
+    }
+
+    QMap<int, QUrl>  monthMap;
+    QMap<QDate, Day> special;
+};
+
 QPointer<CalSettings> CalSettings::s_instance;
 
 CalSettings::CalSettings(QObject* const parent)
-    : QObject(parent)
+    : QObject(parent),
+      d(new Private)
 {
     params.year = KLocale::global()->calendar()->earliestValidDate().year() + 1;
     setPaperSize(QString::fromLatin1("A4"));
@@ -56,6 +70,7 @@ CalSettings::CalSettings(QObject* const parent)
 
 CalSettings::~CalSettings()
 {
+    delete d;
 }
 
 CalSettings* CalSettings::instance(QObject* const parent)
@@ -81,12 +96,12 @@ int CalSettings::year() const
 
 void CalSettings::setImage(int month, const QUrl& path)
 {
-    m_monthMap.insert(month, path);
+    d->monthMap.insert(month, path);
 }
 
 QUrl CalSettings::image(int month) const
 {
-    return m_monthMap.contains(month) ? m_monthMap[month] : QUrl();
+    return d->monthMap.contains(month) ? d->monthMap[month] : QUrl();
 }
 
 void CalSettings::setPaperSize(const QString& paperSize)
@@ -193,18 +208,18 @@ void CalSettings::setFont(const QString& font)
 
 void CalSettings::clearSpecial()
 {
-    m_special.clear();
+    d->special.clear();
 }
 
 void CalSettings::addSpecial(const QDate& date, const Day& info)
 {
-    if (m_special.contains(date))
+    if (d->special.contains(date))
     {
-        m_special[date].second.append(QString::fromLatin1("; ")).append(info.second);
+        d->special[date].second.append(QString::fromLatin1("; ")).append(info.second);
     }
     else
     {
-        m_special[date] = info;
+        d->special[date] = info;
     }
 }
 
@@ -272,14 +287,14 @@ bool CalSettings::isPrayDay(const QDate& date) const
 }
 
 /*!
-    \returns true if m_special formatting is to be applied to the particular day
+    \returns true if d->special formatting is to be applied to the particular day
  */
 bool CalSettings::isSpecial(int month, int day) const
 {
     QDate dt;
     KLocale::global()->calendar()->setDate(dt, params.year, month, day);
 
-    return (isPrayDay(dt) || m_special.contains(dt));
+    return (isPrayDay(dt) || d->special.contains(dt));
 }
 
 /*!
@@ -295,9 +310,9 @@ QColor CalSettings::getDayColor(int month, int day) const
         return Qt::red;
     }
 
-    if (m_special.contains(dt))
+    if (d->special.contains(dt))
     {
-        return m_special[dt].first;
+        return d->special[dt].first;
     }
 
     //default
@@ -314,9 +329,9 @@ QString CalSettings::getDayDescr(int month, int day) const
 
     QString ret;
 
-    if (m_special.contains(dt))
+    if (d->special.contains(dt))
     {
-        ret = m_special[dt].second;
+        ret = d->special[dt].second;
     }
 
     return ret;
