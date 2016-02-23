@@ -10,6 +10,7 @@
  * Copyright (C) 2006      by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -30,7 +31,6 @@
 
 #include <QPixmap>
 #include <QPushButton>
-#include <QSize>
 #include <QUrl>
 
 // Local includes
@@ -83,12 +83,9 @@ private:
     Q_PROPERTY(QPixmap thumb READ thumb WRITE setThumb)
 
 private:
-
-    const QSize          thumbSize;
-    QPixmap              thumb_;
-    int                  month_;
-    QUrl                 imagePath_;
-    ThumbnailLoadThread* thumbLoadThread_;
+    
+    class Private;
+    Private* const d;
 };
 
 }  // Namespace Digikam

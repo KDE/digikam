@@ -10,6 +10,7 @@
  * Copyright (C) 2006      by Tom Albers <tomalbers@kde.nl>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,6 +39,7 @@
 #include <QStandardPaths>
 #include <QMimeData>
 #include <QUrl>
+#include <QSize>
 
 // KDE includes
 
@@ -53,20 +55,36 @@
 namespace Digikam
 {
 
+class CalMonthWidget::Private
+{
+public:
+
+    Private() :
+        thumbSize(QSize(64, 64)),
+        month(0),
+        thumbLoadThread(ThumbnailLoadThread::defaultThread())
+    {
+    }
+
+    const QSize          thumbSize;
+    QPixmap              thumb;
+    int                  month;
+    QUrl                 imagePath;
+    ThumbnailLoadThread* thumbLoadThread;
+};
+    
 CalMonthWidget::CalMonthWidget(QWidget* const parent, int month)
     : QPushButton(parent),
-      thumbSize(64, 64)
+      d(new Private)
 {
     setAcceptDrops(true);
     setFixedSize(QSize(74, 94));
-    month_     = month;
-    imagePath_ = QUrl();
+    d->month     = month;
+    d->imagePath = QUrl();
     setThumb(QPixmap(QIcon::fromTheme(QString::fromLatin1("image-x-generic"))
              .pixmap(32, QIcon::Disabled)));
 
-    thumbLoadThread_ = ThumbnailLoadThread::defaultThread();
-
-    connect(thumbLoadThread_, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+    connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
     connect(this, SIGNAL(pressed()), 
@@ -75,11 +93,12 @@ CalMonthWidget::CalMonthWidget(QWidget* const parent, int month)
 
 CalMonthWidget::~CalMonthWidget()
 {
+    delete d;
 }
 
 QUrl CalMonthWidget::imagePath() const
 {
-    return imagePath_;
+    return d->imagePath;
 }
 
 void CalMonthWidget::paintEvent(QPaintEvent* event)
@@ -89,13 +108,13 @@ void CalMonthWidget::paintEvent(QPaintEvent* event)
     QPushButton::paintEvent(event);
     QPainter painter(this);
     QString name = KLocale::global()->calendar()->monthName(
-                   month_, CalSettings::instance()->year(), KCalendarSystem::ShortName);
+                   d->month, CalSettings::instance()->year(), KCalendarSystem::ShortName);
 
     cr = contentsRect();
     cr.setBottom(70);
-    painter.drawPixmap(cr.width()  / 2 - thumb_.width()  / 2,
-                       cr.height() / 2 - thumb_.height() / 2,
-                       thumb_);
+    painter.drawPixmap(cr.width()  / 2 - d->thumb.width()  / 2,
+                       cr.height() / 2 - d->thumb.height() / 2,
+                       d->thumb);
 
     cr = contentsRect();
     cr.setTop(70);
@@ -112,17 +131,17 @@ void CalMonthWidget::dragEnterEvent(QDragEnterEvent* event)
 
 QPixmap CalMonthWidget::thumb() const
 {
-    return thumb_;
+    return d->thumb;
 }
 
 int CalMonthWidget::month()
 {
-  return month_;
+  return d->month;
 }
 
 void CalMonthWidget::setThumb(const QPixmap& pic)
 {
-    thumb_ = pic.scaled(thumbSize, Qt::KeepAspectRatio);
+    d->thumb = pic.scaled(d->thumbSize, Qt::KeepAspectRatio);
     update();
 }
 
@@ -133,10 +152,10 @@ void CalMonthWidget::setImage(const QUrl& url)
         return;
     }
 
-    imagePath_ = url;
-    CalSettings::instance()->setImage(month_, imagePath_);
+    d->imagePath = url;
+    CalSettings::instance()->setImage(d->month, d->imagePath);
 
-    thumbLoadThread_->find(ThumbnailIdentifier(url.toLocalFile()), thumbSize.width());
+    d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()), d->thumbSize.width());
 }
 
 void CalMonthWidget::dropEvent(QDropEvent* event)
@@ -154,12 +173,12 @@ void CalMonthWidget::dropEvent(QDropEvent* event)
 
 void CalMonthWidget::slotMonthSelected()
 {
-    emit monthSelected(month_);
+    emit monthSelected(d->month);
 }
 
 void CalMonthWidget::slotThumbnail(const LoadingDescription& desc, const QPixmap& pix)
 {
-    if (QUrl::fromLocalFile(desc.filePath) != imagePath_)
+    if (QUrl::fromLocalFile(desc.filePath) != d->imagePath)
     {
         return;
     }
@@ -183,8 +202,8 @@ void CalMonthWidget::mouseReleaseEvent(QMouseEvent* event)
     }
     else if (event->button() == Qt::RightButton)
     {
-        imagePath_ = QUrl();
-        CalSettings::instance()->setImage(month_, imagePath_);
+        d->imagePath = QUrl();
+        CalSettings::instance()->setImage(d->month, d->imagePath);
         setThumb(QPixmap(QIcon::fromTheme(QString::fromLatin1("image-x-generic")).pixmap(32, QIcon::Disabled)));
     }
 }
