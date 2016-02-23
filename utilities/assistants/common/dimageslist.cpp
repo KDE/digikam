@@ -913,7 +913,10 @@ void DImagesList::slotMoveUpItems()
     QTreeWidgetItem* const temp = listView()->takeTopLevelItem(aboveIndex.row());
     listView()->insertTopLevelItem(curIndex.row(), temp);
     // this is a quick fix. We loose the extra tags in flickr upload, but at list we don't get a crash
-    dynamic_cast<Digikam::DImagesListViewItem*>(temp)->updateItemWidgets();
+    DImagesListViewItem* const uw = dynamic_cast<DImagesListViewItem*>(temp);
+
+    if (uw)
+        uw->updateItemWidgets();
 
     emit signalImageListChanged();
     emit signalMoveUpItem();
@@ -940,7 +943,7 @@ void DImagesList::slotMoveDownItems()
     listView()->insertTopLevelItem(curIndex.row(), temp);
 
     // This is a quick fix. We can loose extra tags in uploader, but at least we don't get a crash
-    Digikam::DImagesListViewItem* const uw = dynamic_cast<Digikam::DImagesListViewItem*>(temp);
+    DImagesListViewItem* const uw = dynamic_cast<DImagesListViewItem*>(temp);
 
     if (uw)
         uw->updateItemWidgets();
@@ -1264,7 +1267,7 @@ void DImagesList::slotThumbnail(const LoadingDescription& desc, const QPixmap& p
     }
 }
 
-Digikam::DImagesListViewItem* Digikam::DImagesListView::getCurrentItem() const
+DImagesListViewItem* DImagesListView::getCurrentItem() const
 {
     QTreeWidgetItem* const currentTreeItem = currentItem();
 
@@ -1276,7 +1279,7 @@ Digikam::DImagesListViewItem* Digikam::DImagesListView::getCurrentItem() const
     return dynamic_cast<DImagesListViewItem*>(currentTreeItem);
 }
 
-QUrl Digikam::DImagesList::getCurrentUrl() const
+QUrl DImagesList::getCurrentUrl() const
 {
     DImagesListViewItem* const currentItem = d->listView->getCurrentItem();
 
