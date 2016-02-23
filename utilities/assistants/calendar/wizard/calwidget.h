@@ -9,6 +9,7 @@
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -43,8 +44,8 @@ public:
     explicit CalWidget(QWidget* const parent);
     ~CalWidget();
 
-    void setCurrent(int curr) {_current = curr;}
-    int current()             {return _current;}
+    void setCurrent(int curr);
+    int current() const;
 
 public Q_SLOTS:
 
@@ -56,7 +57,7 @@ protected:
 
 protected:
 
-    int _current;
+    int m_current;
 };
 
 }  // Namespace Digikam

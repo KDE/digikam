@@ -10,6 +10,7 @@
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,7 +37,7 @@ namespace Digikam
 
 CalWidget::CalWidget(QWidget* const parent)
     : QWidget(parent, 0),
-      _current(1)
+      m_current(1)
 {
     setAttribute(Qt::WA_NoBackground);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -46,9 +47,19 @@ CalWidget::~CalWidget()
 {
 }
 
+void CalWidget::setCurrent(int curr)
+{
+    m_current = curr;
+}
+
+int CalWidget::current() const
+{
+    return m_current;
+}
+
 void CalWidget::paintEvent(QPaintEvent* e)
 {
-    int month       = _current;
+    int month       = m_current;
     CalPainter painter(this);
 
     QUrl imgUrl     = CalSettings::instance()->image(month);
