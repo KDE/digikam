@@ -144,11 +144,11 @@ void TagMngrTreeView::setContexMenuItems(ContextMenuHelper& cmh, QList<TAlbum*> 
     cmh.addSeparator();
 
     QAction* const titleEdit     = new QAction(QIcon::fromTheme(QLatin1String("document-edit")),
-                                               i18n("Edit tag Title"), this);
+                                               i18n("Edit Tag Title"), this);
     titleEdit->setShortcut(QKeySequence(Qt::Key_F2));
 
     QAction* const resetIcon     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),
-                                               i18n("Reset tag Icon"), this);
+                                               i18n("Reset Tag Icon"), this);
 
     QAction* const invSel        = new QAction(QIcon::fromTheme(QLatin1String("tag-reset")),
                                                i18n("Invert Selection"), this);

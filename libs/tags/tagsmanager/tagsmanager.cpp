@@ -702,11 +702,11 @@ void TagsManager::setupActions()
     d->organizeAction->setIcon(QIcon::fromTheme(QLatin1String("autocorrection")));
 
     d->titleEdit                 = new QAction(QIcon::fromTheme(QLatin1String("document-edit")),
-                                               i18n("Edit tag Title"), this);
+                                               i18n("Edit Tag Title"), this);
     d->titleEdit->setShortcut(QKeySequence(Qt::Key_F2));
 
     QAction* const resetIcon     = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),
-                                               i18n("Reset tag Icon"), this);
+                                               i18n("Reset Tag Icon"), this);
 
     QAction* const createTagAddr = new QAction(QIcon::fromTheme(QLatin1String("tag-addressbook")),
                                                i18n("Create Tag from Address Book"), this);
