@@ -969,13 +969,20 @@ void DImagesList::slotLoadItems()
 
     if ( loadLevelsFile.isEmpty() )
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "empty url";
         return;
     }
 
     QFile file(loadLevelsFile.path());
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "file path " << loadLevelsFile.path();
-    file.open(QIODevice::ReadOnly);
+
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open file";
+        return;
+    }
+
     QXmlStreamReader xmlReader;
     xmlReader.setDevice(&file);
 
