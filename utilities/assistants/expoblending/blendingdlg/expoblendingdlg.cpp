@@ -89,7 +89,9 @@ public:
           enfuseStack(0),
           mngr(0),
           firstImageDisplayed(false),
+          buttonBox(0),
           previewButton(0),
+          startButton(0),
           propagateReject(true)
     {
     }
