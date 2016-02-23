@@ -61,13 +61,8 @@ public Q_SLOTS:
 
 private:
 
-    bool       cancelled_;
-
-    int        orientation_;
-
-    QImage     image_;
-
-    QUrl       imagePath_;
+    class Private;
+    Private* const d;
 };
 
 }  // Namespace Digikam

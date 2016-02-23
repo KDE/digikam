@@ -49,27 +49,46 @@
 namespace Digikam
 {
 
-CalPainter::CalPainter(QPaintDevice* const pd)
-    : QPainter(pd)
+class CalPainter::Private
 {
-    orientation_ = MetaEngine::ORIENTATION_UNSPECIFIED;
-    cancelled_   = false;
+public:
+
+    Private() :
+        cancelled(false),
+        orientation(MetaEngine::ORIENTATION_UNSPECIFIED)
+    {
+    }
+
+    bool       cancelled;
+
+    int        orientation;
+
+    QImage     image;
+
+    QUrl       imagePath;
+};
+
+CalPainter::CalPainter(QPaintDevice* const pd)
+    : QPainter(pd),
+      d(new Private)
+{
 }
 
 CalPainter::~CalPainter()
 {
+    delete d;
 }
 
 void CalPainter::cancel()
 {
-    cancelled_ = true;
+    d->cancelled = true;
 }
 
 void CalPainter::setImage(const QUrl& imagePath)
 {
-    imagePath_   = imagePath;
-    MetaEngine meta(imagePath_.toLocalFile());
-    orientation_ = (int)meta.getImageOrientation();
+    d->imagePath   = imagePath;
+    MetaEngine meta(d->imagePath.toLocalFile());
+    d->orientation = (int)meta.getImageOrientation();
 }
 
 void CalPainter::paint(int month)
@@ -95,16 +114,16 @@ void CalPainter::paint(int month)
         days[i] = -1;
     }
 
-    QDate d;
-    KLocale::global()->calendar()->setDate(d, params.year, month, 1);
-    int s = d.dayOfWeek();
+    QDate date;
+    KLocale::global()->calendar()->setDate(date, params.year, month, 1);
+    int s = date.dayOfWeek();
 
     if (s + 7 - startDayOffset >= 7)
     {
         s = s - 7;
     }
 
-    for (int i = s; i < (s + KLocale::global()->calendar()->daysInMonth(d)); ++i)
+    for (int i = s; i < (s + KLocale::global()->calendar()->daysInMonth(date)); ++i)
     {
         days[i + (7 - startDayOffset)] = i - s + 1;
     }
@@ -310,41 +329,41 @@ void CalPainter::paint(int month)
         }
     }
 
-    image_ = PreviewLoadThread::loadHighQualitySynchronously(imagePath_.toLocalFile()).copyQImage();
+    d->image = PreviewLoadThread::loadHighQualitySynchronously(d->imagePath.toLocalFile()).copyQImage();
 
-    if (image_.isNull())
+    if (d->image.isNull())
     {
         fillRect(rImage, Qt::blue);
     }
     else
     {
-        if ( orientation_ != MetaEngine::ORIENTATION_UNSPECIFIED )
+        if ( d->orientation != MetaEngine::ORIENTATION_UNSPECIFIED )
         {
             MetaEngine meta;
-            meta.rotateExifQImage(image_, (MetaEngine::ImageOrientation)orientation_);
+            meta.rotateExifQImage(d->image, (MetaEngine::ImageOrientation)d->orientation);
         }
 
         emit signalProgress(0);
 
-        image_ = image_.scaled(rImage.width(), rImage.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        d->image = d->image.scaled(rImage.width(), rImage.height(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-        emit signalTotal(image_.height());
+        emit signalTotal(d->image.height());
 
-        int h = image_.height();
-        int x = rImage.bottomLeft().x() + (rImage.width() - image_.width()) / 2;
+        int h = d->image.height();
+        int x = rImage.bottomLeft().x() + (rImage.width() - d->image.width()) / 2;
         int y = (rImage.height() - h) / 2;
 
         int blockSize = 10;
         int block     = 0;
 
-        while (block < h && !cancelled_)
+        while (block < h && !d->cancelled)
         {
             if (block + blockSize > h)
             {
                 blockSize = h - block;
             }
 
-            drawImage(x, y + block, image_, 0, block, image_.width(), blockSize);
+            drawImage(x, y + block, d->image, 0, block, d->image.width(), blockSize);
             block += blockSize;
             emit signalProgress(block);
         }
