@@ -144,7 +144,7 @@ bool PreProcessTask::computePreview(const QUrl& inUrl)
     QUrl& outUrl = d->preProcessedUrl.previewUrl;
 
     QFileInfo fi(inUrl.toLocalFile());
-    outUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName().replace(QLatin1String("."), QLatin1String("_")) + QStringLiteral("-preview.jpg")));
+    outUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName().replace(QLatin1String("."), QLatin1String("_")) + QLatin1String("-preview.jpg")));
 
     DImg img;
 
@@ -209,7 +209,7 @@ bool PreProcessTask::convertRaw()
         QString model   = d->meta.getExifTagString("Exif.Image.Model");
 
         QFileInfo fi(inUrl.toLocalFile());
-        outUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName().replace(QLatin1String("."), QLatin1String("_")) + QStringLiteral(".tif")));
+        outUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName().replace(QLatin1String("."), QLatin1String("_")) + QLatin1String(".tif")));
 
         if (!img.save(outUrl.toLocalFile(), QLatin1String("TIF")))
         {

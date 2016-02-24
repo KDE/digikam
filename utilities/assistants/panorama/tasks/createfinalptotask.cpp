@@ -6,7 +6,7 @@
  * Date        : 2012-12-05
  * Description : a plugin to create panorama by fusion of several images.
  *
- * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2012-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -47,7 +47,7 @@ CreateFinalPtoTask::~CreateFinalPtoTask()
 
 void CreateFinalPtoTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    finalPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QStringLiteral("final.pto")));
+    finalPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("final.pto")));
 
     QFile pto(finalPtoUrl.toLocalFile());
 

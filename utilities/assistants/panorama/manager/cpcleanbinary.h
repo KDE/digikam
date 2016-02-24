@@ -6,7 +6,7 @@
  * Date        : 2011-05-23
  * Description : Autodetects cpclean binary program and version
  *
- * Copyright (C) 2011-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,16 +36,16 @@ class CPCleanBinary : public DBinaryIface
 public:
 
     CPCleanBinary()
-        : DBinaryIface(QStringLiteral("cpclean"),
-                       QStringLiteral("2010.4"),
-                       QStringLiteral("cpclean version "),
-                       1, 
-                       QStringLiteral("Hugin"),
-                       QStringLiteral("http://hugin.sourceforge.net"),
-                       QStringLiteral("Panorama"),
-                       QStringList(QStringLiteral("-h"))
+        : DBinaryIface(QLatin1String("cpclean"),
+                       QLatin1String("2010.4"),
+                       QLatin1String("cpclean version "),
+                       1,
+                       QLatin1String("Hugin"),
+                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-h"))
                       )
-        { 
+        {
             setup();
         }
 };

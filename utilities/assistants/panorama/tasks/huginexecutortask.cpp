@@ -51,19 +51,19 @@ void HuginExecutorTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
     switch (fileType)
     {
         case JPEG:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".jpg")));
+            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".jpg")));
             break;
         case TIFF:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".tif")));
+            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".tif")));
             break;
         case HDR:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".hdr")));
+            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".hdr")));
             break;
     }
 
     QStringList args;
-    args << QStringLiteral("-s");
-    args << QStringLiteral("-p");
+    args << QLatin1String("-s");
+    args << QLatin1String("-p");
     args << fi.completeBaseName();
     args << ptoUrl.toLocalFile();
 
@@ -78,7 +78,7 @@ void HuginExecutorTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         errString = getProcessError();
     }
 
-    printDebug(QStringLiteral("hugin_executor"));
+    printDebug(QLatin1String("hugin_executor"));
 }
 
 }  // namespace Digikam

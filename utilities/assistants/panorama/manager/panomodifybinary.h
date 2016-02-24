@@ -6,7 +6,7 @@
  * Date        : 2013-05-16
  * Description : Autodetects pano_modify binary program and version
  *
- * Copyright (C) 2013-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2013-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,16 +36,16 @@ class PanoModifyBinary : public DBinaryIface
 public:
 
     PanoModifyBinary()
-        : DBinaryIface(QStringLiteral("pano_modify"),
-                       QStringLiteral("2012.0"),
-                       QStringLiteral("pano_modify version "),
-                       1, 
-                       QStringLiteral("Hugin"),
-                       QStringLiteral("http://hugin.sourceforge.net"),
-                       QStringLiteral("Panorama"), 
-                       QStringList(QStringLiteral("-h"))
+        : DBinaryIface(QLatin1String("pano_modify"),
+                       QLatin1String("2012.0"),
+                       QLatin1String("pano_modify version "),
+                       1,
+                       QLatin1String("Hugin"),
+                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-h"))
                       )
-        { 
+        {
             setup();
         }
 };

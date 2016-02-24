@@ -6,7 +6,7 @@
  * Date        : 2012-03-15
  * Description : a plugin to create panorama by fusion of several images.
  *
- * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2012-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,10 +48,10 @@ CompileMKTask::~CompileMKTask()
 void CompileMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     QStringList args;
-    args << QStringLiteral("-f");
+    args << QLatin1String("-f");
     args << mkUrl.toLocalFile();
-    args << QStringLiteral("ENBLEND='%1'").arg(enblendPath);
-    args << QStringLiteral("NONA='%1'").arg(nonaPath);
+    args << QString::fromLatin1("ENBLEND='%1'").arg(enblendPath);
+    args << QString::fromLatin1("NONA='%1'").arg(nonaPath);
 
     runProcess(args);
 

@@ -112,7 +112,7 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
 {
     QString prefix = QDir::tempPath() +
                      QChar::fromLatin1('/') +
-                     QStringLiteral("digiKam-panorama-tmp-") +
+                     QLatin1String("digiKam-panorama-tmp-") +
                      QString::number(QDateTime::currentDateTime().toTime_t());
 
     d->preprocessingTmpDir = QSharedPointer<QTemporaryDir>(new QTemporaryDir(prefix));

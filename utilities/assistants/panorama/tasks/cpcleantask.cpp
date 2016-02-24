@@ -43,10 +43,10 @@ CpCleanTask::~CpCleanTask()
 
 void CpCleanTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    cpCleanPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QStringLiteral("cp_pano_clean.pto")));
+    cpCleanPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("cp_pano_clean.pto")));
 
     QStringList args;
-    args << QStringLiteral("-o");
+    args << QLatin1String("-o");
     args << cpCleanPtoUrl.toLocalFile();
     args << cpFindPtoUrl.toLocalFile();
 
@@ -60,7 +60,7 @@ void CpCleanTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         errString = getProcessError();
     }
 
-    printDebug(QStringLiteral("cpclean"));
+    printDebug(QLatin1String("cpclean"));
 }
 
 }  // namespace Digikam

@@ -6,7 +6,7 @@
  * Date        : 2012-03-15
  * Description : a plugin to create panorama by fusion of several images.
  *
- * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2012-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -51,25 +51,25 @@ CreateMKTask::~CreateMKTask()
 void CreateMKTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     QFileInfo fi(ptoUrl.toLocalFile());
-    mkUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".mk")));
+    mkUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".mk")));
 
     switch (fileType)
     {
         case JPEG:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".jpg")));
+            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".jpg")));
             break;
         case TIFF:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".tif")));
+            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".tif")));
             break;
         case HDR:
-            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".hdr")));
+            panoUrl = tmpDir.resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".hdr")));
             break;
     }
 
     QStringList args;
-    args << QStringLiteral("-o");
+    args << QLatin1String("-o");
     args << mkUrl.toLocalFile();
-    args << QStringLiteral("-p");
+    args << QLatin1String("-p");
     args << fi.completeBaseName();
     args << ptoUrl.toLocalFile();
 

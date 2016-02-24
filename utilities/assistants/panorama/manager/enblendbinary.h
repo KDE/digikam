@@ -6,7 +6,7 @@
  * Date        : 2011-05-23
  * Description : Autodetect enblend binary program and version
  *
- * Copyright (C) 2011-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,20 +36,20 @@ class EnblendBinary : public DBinaryIface
 public:
 
     EnblendBinary()
-        : DBinaryIface(QStringLiteral("enblend"), 
-                       QStringLiteral("4.0"), 
-                       QStringLiteral("enblend "),
+        : DBinaryIface(QLatin1String("enblend"),
+                       QLatin1String("4.0"),
+                       QLatin1String("enblend "),
                        0,
-                       QStringLiteral("Hugin"), 
-                       QStringLiteral("http://hugin.sourceforge.net"),
-                       QStringLiteral("Panorama"),
-                       QStringList(QStringLiteral("-V"))
+                       QLatin1String("Hugin"),
+                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-V"))
                       )
-        { 
-            setup(); 
+        {
+            setup();
         }
 
-    ~EnblendBinary() 
+    ~EnblendBinary()
     {
     }
 };

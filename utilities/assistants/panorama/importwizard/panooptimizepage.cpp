@@ -258,12 +258,10 @@ void PanoOptimizePage::cleanupPage()
 void PanoOptimizePage::slotProgressTimerDone()
 {
     d->progressLabel->setPixmap(d->progressPix.frameAt(d->progressCount));
-
-    d->progressCount++;
-
-    if (d->progressCount == 8)
-        d->progressCount = 0;
-
+    if (d->progressPix.frameCount())
+    {
+        d->progressCount = (d->progressCount + 1) % d->progressPix.frameCount();
+    }
     d->progressTimer->start(300);
 }
 

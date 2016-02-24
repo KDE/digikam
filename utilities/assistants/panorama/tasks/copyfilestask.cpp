@@ -64,7 +64,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     QFileInfo fi(finalPanoUrl.toLocalFile());
     QUrl      finalPTOUrl = finalPanoUrl.adjusted(QUrl::RemoveFilename)
-                                        .resolved(QUrl::fromLocalFile(fi.completeBaseName() + QStringLiteral(".pto")));
+                                        .resolved(QUrl::fromLocalFile(fi.completeBaseName() + QLatin1String(".pto")));
 
     QFile     ptoFile(ptoUrl.toLocalFile());
     QFile     finalPTOFile(finalPTOUrl.toLocalFile());

@@ -45,14 +45,14 @@ AutoCropTask::~AutoCropTask()
 
 void AutoCropTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    viewCropPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QStringLiteral("view_crop_pano.pto")));
+    viewCropPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("view_crop_pano.pto")));
 
     QStringList args;
-    args << QStringLiteral("-c");               // Center the panorama
-    args << QStringLiteral("-s");               // Straighten the panorama
-    args << QStringLiteral("--canvas=AUTO");    // Automatic size
-    args << QStringLiteral("--crop=AUTO");      // Automatic crop
-    args << QStringLiteral("-o");
+    args << QLatin1String("-c");               // Center the panorama
+    args << QLatin1String("-s");               // Straighten the panorama
+    args << QLatin1String("--canvas=AUTO");    // Automatic size
+    args << QLatin1String("--crop=AUTO");      // Automatic crop
+    args << QLatin1String("-o");
     args << viewCropPtoUrl.toLocalFile();
     args << autoOptimiserPtoUrl.toLocalFile();
 
@@ -66,7 +66,7 @@ void AutoCropTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         errString = getProcessError();
     }
 
-    printDebug(QStringLiteral("pano_modify"));
+    printDebug(QLatin1String("pano_modify"));
 }
 
 }  // namespace Digikam

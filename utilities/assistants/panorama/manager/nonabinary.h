@@ -6,7 +6,7 @@
  * Date        : 2011-05-23
  * Description : Autodetect nona binary program and version
  *
- * Copyright (C) 2011-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,17 +38,17 @@ class NonaBinary : public DBinaryIface
 public:
 
     NonaBinary()
-        : DBinaryIface(QStringLiteral("nona"), 
-                        QStringLiteral("2010.4"),
-                        QStringLiteral("nona version "),
-                        2, 
-                        QStringLiteral("Hugin"), 
-                        QStringLiteral("http://hugin.sourceforge.net"),
-                        QStringLiteral("Panorama"), 
-                        QStringList(QStringLiteral("-h"))
-                       )
-        { 
-            setup(); 
+        : DBinaryIface(QLatin1String("nona"),
+                       QLatin1String("2010.4"),
+                       QLatin1String("nona version "),
+                       2,
+                       QLatin1String("Hugin"),
+                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-h"))
+                      )
+        {
+            setup();
         }
 
     ~NonaBinary()

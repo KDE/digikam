@@ -36,14 +36,14 @@ class HuginExecutorBinary : public DBinaryIface
 public:
 
     HuginExecutorBinary()
-        : DBinaryIface(QStringLiteral("hugin_executor"),
-                       QStringLiteral("Hugin"),
-                       QStringLiteral("http://hugin.sourceforge.net"),
-                       QStringLiteral("Panorama"),
-                       QStringList(QStringLiteral("-h"))
+        : DBinaryIface(QLatin1String("hugin_executor"),
+                       QLatin1String("Hugin"),
+                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-h"))
                       )
         {
-            setup(); 
+            setup();
         }
 
     ~HuginExecutorBinary()

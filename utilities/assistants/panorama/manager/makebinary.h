@@ -6,7 +6,7 @@
  * Date        : 2011-05-23
  * Description : Autodetect make binary program
  *
- * Copyright (C) 2011-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2011-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,14 +36,14 @@ class MakeBinary : public DBinaryIface
 public:
 
     MakeBinary()
-        : DBinaryIface(QStringLiteral("make"),
-                       QStringLiteral("3.80"),
-                       QStringLiteral("GNU Make "),
+        : DBinaryIface(QLatin1String("make"),
+                       QLatin1String("3.80"),
+                       QLatin1String("GNU Make "),
                        0,
-                       QStringLiteral("GNU"),
-                       QStringLiteral("http://www.gnu.org/software/make/"),
-                       QStringLiteral("Panorama"),
-                       QStringList(QStringLiteral("-v"))
+                       QLatin1String("GNU"),
+                       QLatin1String("http://www.gnu.org/software/make/"),
+                       QLatin1String("Panorama"),
+                       QStringList(QLatin1String("-v"))
                       )
         {
             setup();

@@ -247,7 +247,10 @@ void PanoPreProcessPage::cleanupPage()
 void PanoPreProcessPage::slotProgressTimerDone()
 {
     d->progressLabel->setPixmap(d->progressPix.frameAt(d->progressCount));
-    d->progressCount = (d->progressCount + 1) % d->progressPix.frameCount();
+    if (d->progressPix.frameCount())
+    {
+        d->progressCount = (d->progressCount + 1) % d->progressPix.frameCount();
+    }
     d->progressTimer->start(300);
 }
 

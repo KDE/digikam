@@ -45,12 +45,12 @@ CpFindTask::~CpFindTask()
 void CpFindTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
     // Run CPFind to get control points and order the images
-    cpFindPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QStringLiteral("cp_pano.pto")));
+    cpFindPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("cp_pano.pto")));
 
     QStringList args;
     if (celeste)
-        args << QStringLiteral("--celeste");
-    args << QStringLiteral("-o");
+        args << QLatin1String("--celeste");
+    args << QLatin1String("-o");
     args << cpFindPtoUrl.toLocalFile();
     args << ptoUrl.toLocalFile();
 
@@ -64,7 +64,7 @@ void CpFindTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         errString = getProcessError();
     }
 
-    printDebug(QStringLiteral("cpfind"));
+    printDebug(QLatin1String("cpfind"));
 }
 
 }  // namespace Digikam

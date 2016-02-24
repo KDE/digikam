@@ -6,7 +6,7 @@
  * Date        : 2012-03-15
  * Description : a plugin to create panorama by fusion of several images.
  *
- * Copyright (C) 2012-2015 by Benjamin Girault <benjamin dot girault at gmail dot com>
+ * Copyright (C) 2012-2016 by Benjamin Girault <benjamin dot girault at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -105,10 +105,10 @@ void CreatePreviewTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     // Add two commented line for a JPEG output
     data.lastComments.clear();
-    data.lastComments << QStringLiteral("#hugin_outputImageType jpg");
-    data.lastComments << QStringLiteral("#hugin_outputJPEGQuality 90");
+    data.lastComments << QLatin1String("#hugin_outputImageType jpg");
+    data.lastComments << QLatin1String("#hugin_outputJPEGQuality 90");
 
-    previewPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QStringLiteral("preview.pto")));
+    previewPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("preview.pto")));
     data.createFile(previewPtoUrl.toLocalFile());
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Preview PTO File created: " << previewPtoUrl.fileName();

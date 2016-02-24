@@ -46,18 +46,18 @@ OptimisationTask::~OptimisationTask()
 
 void OptimisationTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 {
-    autoOptimiserPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QStringLiteral("auto_op_pano.pto")));
+    autoOptimiserPtoUrl = tmpDir.resolved(QUrl::fromLocalFile(QLatin1String("auto_op_pano.pto")));
 
     QStringList args;
-    args << QStringLiteral("-am");
+    args << QLatin1String("-am");
 
     if (levelHorizon)
-        args << QStringLiteral("-l");
+        args << QLatin1String("-l");
 
     if (!buildGPano)
-       args << QStringLiteral("-s");
+       args << QLatin1String("-s");
 
-    args << QStringLiteral("-o");
+    args << QLatin1String("-o");
     args << autoOptimiserPtoUrl.toLocalFile();
     args << ptoUrl.toLocalFile();
 
@@ -72,7 +72,7 @@ void OptimisationTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
         errString = getProcessError();
     }
 
-    printDebug(QStringLiteral("autooptimiser"));
+    printDebug(QLatin1String("autooptimiser"));
 }
 
 }  // namespace Digikam

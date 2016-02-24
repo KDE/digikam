@@ -101,7 +101,7 @@ QString CommandTask::getProcessError()
 void CommandTask::printDebug(const QString& binaryName)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "command line: " << getCommandLine();
-    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QStringLiteral(" >>\t") + output.replace(QStringLiteral("\n"), QStringLiteral("\n >>\t")));
+    qCDebug(DIGIKAM_GENERAL_LOG) << binaryName << "output:" << endl << qPrintable(QLatin1String(" >>\t") + output.replace(QLatin1String("\n"), QLatin1String("\n >>\t")));
 }
 
 }  // namespace Digikam
