@@ -91,6 +91,8 @@ private Q_SLOTS:
     void durationChanged(qint64 duration);
     void setPosition(int position);
     void handlePlayerError();
+    void slotSliderPressed();
+    void slotSliderReleased();
 
 private:
 

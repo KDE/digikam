@@ -141,8 +141,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),  i18nc("go to previous image", "Back"), this);
-    d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),      i18nc("go to next image", "Forward"),  this);
+    d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")), i18nc("go to previous image", "Back"), this);
+    d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),     i18nc("go to next image", "Forward"),  this);
 
     d->errorView           = new QFrame(this);
     QLabel* const errorMsg = new QLabel(i18n("An error has occurred with the media player...."), this);
@@ -167,12 +167,12 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     d->playerView  = new QFrame(this);
     d->videoWidget = new QVideoWidget(this);
-    d->player      = new QMediaPlayer(this,QMediaPlayer::VideoSurface);
+    d->player      = new QMediaPlayer(this, QMediaPlayer::VideoSurface);
     d->player->setVideoOutput(d->videoWidget);
     d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
-    d->player->setNotifyInterval(100);
+    d->player->setNotifyInterval(250);
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     d->playerView->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
@@ -215,6 +215,15 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
+
+    connect(d->slider, SIGNAL(sliderPressed()),
+            this, SLOT(slotSliderPressed()));
+
+    connect(d->slider, SIGNAL(sliderReleased()),
+            this, SLOT(slotSliderReleased()));
+
+    connect(d->slider, SIGNAL(sliderMoved(int)),
+            this, SLOT(setPosition(int)));
 
     connect(d->player, SIGNAL(positionChanged(qint64)),
             this, SLOT(positionChanged(qint64)));
@@ -332,7 +341,10 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
 
 void MediaPlayerView::positionChanged(qint64 position)
 {
-    d->slider->setValue(position);
+    if (!d->slider->isSliderDown())
+    {
+        d->slider->setValue(position);
+    }
 }
 
 void MediaPlayerView::durationChanged(qint64 duration)
@@ -342,12 +354,31 @@ void MediaPlayerView::durationChanged(qint64 duration)
 
 void MediaPlayerView::setPosition(int position)
 {
-    d->player->setPosition(position);
+    if (d->player->isSeekable())
+    {
+        d->player->setPosition((qint64)position);
+    }
+}
+
+void MediaPlayerView::slotSliderPressed()
+{
+    if (d->player->state() == QMediaPlayer::PlayingState ||
+        d->player->mediaStatus() == QMediaPlayer::EndOfMedia)
+    {
+        d->player->pause();
+    }
+}
+
+void MediaPlayerView::slotSliderReleased()
+{
+    if (d->player->mediaStatus() != QMediaPlayer::EndOfMedia)
+    {
+        d->player->play();
+    }
 }
 
 void MediaPlayerView::handlePlayerError()
 {
-
     setPreviewMode(Private::ErrorView);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << d->player->errorString();
 }
