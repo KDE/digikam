@@ -74,11 +74,7 @@ ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget*
 {
     setModal(false);
     setWindowTitle(i18nc("@title:window", "Exposure Blending Import Wizard"));
-    setWizardStyle(QWizard::ClassicStyle);
-    setButtonLayout(QList<QWizard::WizardButton>() << QWizard::BackButton
-                                                   << QWizard::CancelButton
-                                                   << QWizard::NextButton
-                                                   << QWizard::FinishButton);
+
     d->mngr              = mngr;
     d->introPage         = new ExpoBlendingIntroPage(d->mngr, this);
     d->itemsPage         = new ItemsPage(d->mngr, this);
