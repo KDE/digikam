@@ -110,7 +110,6 @@ public:
         prevAction(0),
         nextAction(0),
         toolBar(0),
-        grid(0),
         videoWidget(0),
         player(0), 
         slider(0)
@@ -125,8 +124,6 @@ public:
 
     QToolBar*            toolBar;
 
-    QGridLayout*         grid;
-
     QVideoWidget*        videoWidget;
     QMediaPlayer*        player;
     QSlider*             slider;
@@ -138,6 +135,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
       d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -148,18 +146,18 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     QLabel* const errorMsg = new QLabel(i18n("An error has occurred with the media player...."), this);
 
     errorMsg->setAlignment(Qt::AlignCenter);
-    d->errorView->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
+    d->errorView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->errorView->setLineWidth(1);
 
-    QGridLayout* const grid = new QGridLayout;
-    grid->addWidget(errorMsg, 1, 0, 1, 3 );
-    grid->setColumnStretch(0, 10);
-    grid->setColumnStretch(2, 10);
-    grid->setRowStretch(0, 10);
-    grid->setRowStretch(2, 10);
-    grid->setContentsMargins(spacing, spacing, spacing, spacing);
-    grid->setSpacing(spacing);
-    d->errorView->setLayout(grid);
+    QGridLayout* const grid1 = new QGridLayout;
+    grid1->addWidget(errorMsg, 1, 0, 1, 3);
+    grid1->setColumnStretch(0, 10);
+    grid1->setColumnStretch(2, 10);
+    grid1->setRowStretch(0, 10);
+    grid1->setRowStretch(2, 10);
+    grid1->setContentsMargins(spacing, 0, spacing, spacing);
+    grid1->setSpacing(spacing);
+    d->errorView->setLayout(grid1);
 
     insertWidget(Private::ErrorView, d->errorView);
 
@@ -169,30 +167,33 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->videoWidget = new QVideoWidget(this);
     d->player      = new QMediaPlayer(this, QMediaPlayer::VideoSurface);
     d->player->setVideoOutput(d->videoWidget);
+
     d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
     d->player->setNotifyInterval(250);
+    d->videoWidget->setStyleSheet(QLatin1String("background-color:black;"));
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    d->playerView->setFrameStyle(QFrame::StyledPanel|QFrame::Plain);
+    d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->playerView->setLineWidth(1);
 
-    d->grid = new QGridLayout;
-    d->grid->addWidget(d->videoWidget, 0, 0, 1, 3);
-    d->grid->addWidget(d->slider,      1, 0, 1, 3);
-    d->grid->setColumnStretch(0, 10);
-    d->grid->setColumnStretch(2, 10);
-    d->grid->setRowStretch(0, 10);
-    d->grid->setContentsMargins(spacing, spacing, spacing, spacing);
-    d->grid->setSpacing(spacing);
-    d->playerView->setLayout(d->grid);
+    QGridLayout* const grid2 = new QGridLayout;
+    grid2->addWidget(d->videoWidget, 0, 0, 1, 3);
+    grid2->addWidget(d->slider,      1, 0, 1, 3);
+    grid2->setColumnStretch(0, 10);
+    grid2->setColumnStretch(2, 10);
+    grid2->setRowStretch(0, 10);
+    grid2->setContentsMargins(spacing, 0, spacing, spacing);
+    grid2->setSpacing(spacing);
+    d->playerView->setLayout(grid2);
 
     insertWidget(Private::PlayerView, d->playerView);
 
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
+    d->toolBar->setAutoFillBackground(true);
 
     setPreviewMode(Private::PlayerView);
 
@@ -253,8 +254,8 @@ void MediaPlayerView::reload()
 
 void MediaPlayerView::slotPlayerFinished()
 {
-    if ( d->player->state() == QMediaPlayer::StoppedState  && 
-         d->player->error() != QMediaPlayer::NoError)
+    if (d->player->state() == QMediaPlayer::StoppedState  &&
+        d->player->error() != QMediaPlayer::NoError)
     {
         setPreviewMode(Private::ErrorView);
     }
@@ -262,8 +263,8 @@ void MediaPlayerView::slotPlayerFinished()
 
 void MediaPlayerView::slotPlayerStateChanged(QMediaPlayer::State newState)
 {
-    if ( newState           == QMediaPlayer::StoppedState  && 
-         d->player->error() != QMediaPlayer::NoError )
+    if (newState           == QMediaPlayer::StoppedState  &&
+        d->player->error() != QMediaPlayer::NoError)
     {
         setPreviewMode(Private::ErrorView);
     }
@@ -310,6 +311,8 @@ void MediaPlayerView::setPreviewMode(int mode)
     }
 
     setCurrentIndex(mode);
+
+    d->toolBar->adjustSize();
     d->toolBar->raise();
 }
 
