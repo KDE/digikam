@@ -197,8 +197,6 @@ void PanoPreviewPage::startStitching()
         d->totalProgress = d->mngr->preProcessedMap().size() + 1;
     }
 
-    d->previewWidget->hide();
-
     QSize panoSize      = d->mngr->viewAndCropOptimisePtoData()->project.size;
     QRect panoSelection = d->mngr->viewAndCropOptimisePtoData()->project.crop;
 
@@ -218,6 +216,8 @@ void PanoPreviewPage::startStitching()
                               proportionSelection.width()  * panoSize.width(),
                               proportionSelection.height() * panoSize.height());
     }
+
+    d->previewWidget->hide();
 
     d->title->setText(i18n("<qt>"
                            "<p><h1>Panorama Post-Processing</h1></p>"
