@@ -188,6 +188,7 @@ void PanoOptimizePage::process()
             this, SLOT(slotPanoAction(Digikam::PanoActionData)));
 
     d->mngr->resetAutoOptimisePto();
+    d->mngr->resetViewAndCropOptimisePto();
     d->mngr->thread()->optimizeProject(d->mngr->cpCleanPtoUrl(),
                                        d->mngr->autoOptimisePtoUrl(),
                                        d->mngr->viewAndCropOptimisePtoUrl(),

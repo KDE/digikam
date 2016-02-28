@@ -174,6 +174,7 @@ void PanoPreProcessPage::process()
     d->mngr->resetBasePto();
     d->mngr->resetCpFindPto();
     d->mngr->resetCpCleanPto();
+    d->mngr->preProcessedMap().clear();
     d->mngr->thread()->preProcessFiles(d->mngr->itemsList(),
                                        d->mngr->preProcessedMap(),
                                        d->mngr->basePtoUrl(),

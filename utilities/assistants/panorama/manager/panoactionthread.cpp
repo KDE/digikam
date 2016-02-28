@@ -29,10 +29,9 @@
 
 // Qt includes
 
-#include <QDateTime>
 #include <QSharedPointer>
-#include <QString>
 #include <QTemporaryDir>
+#include <QString>
 
 // KDE includes
 
@@ -112,8 +111,7 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
 {
     QString prefix = QDir::tempPath() +
                      QChar::fromLatin1('/') +
-                     QLatin1String("digiKam-panorama-tmp-") +
-                     QString::number(QDateTime::currentDateTime().toTime_t());
+                     QLatin1String("digiKam-panorama-tmp-XXXXXX");
 
     d->preprocessingTmpDir = QSharedPointer<QTemporaryDir>(new QTemporaryDir(prefix));
 
