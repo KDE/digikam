@@ -86,8 +86,7 @@ public:
         : cancel(false),
           align(false),
           enfuseVersion4x(true),
-          rawObserver(0),
-          preprocessingTmpDir(0)
+          rawObserver(0)
     {
     }
 
