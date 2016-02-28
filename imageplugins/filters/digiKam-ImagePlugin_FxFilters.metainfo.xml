@@ -5,6 +5,7 @@
   <id>digiKam-ImagePlugin_FxFilters</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-FxFilters</name>
+  <name xml:lang="ast">ImagePlugin-FxFilters</name>
   <name xml:lang="bs">ImagePlugin-FxFilters</name>
   <name xml:lang="ca">Connector d'imatge pels filtres d'efectes especials</name>
   <name xml:lang="ca-valencia">Connector d'imatge pels filtres d'efectes especials</name>
@@ -28,6 +29,7 @@
   <name xml:lang="x-test">xxImagePlugin-FxFiltersxx</name>
   <name xml:lang="zh-CN">图片插件-Fx 过滤器</name>
   <summary>Special effect filters plugin for digiKam</summary>
+  <summary xml:lang="ast">Complementu de filtros d'efeutos especiales pa digiKam</summary>
   <summary xml:lang="bs">Dodatak filtera specijalnih efekata za digiKam</summary>
   <summary xml:lang="ca">Connector amb filtres d'efectes especials pel digiKam</summary>
   <summary xml:lang="ca-valencia">Connector amb filtres d'efectes especials pel digiKam</summary>

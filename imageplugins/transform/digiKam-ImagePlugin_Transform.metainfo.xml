@@ -5,6 +5,7 @@
   <id>digiKam-ImagePlugin_Transform</id>
   <extends>digikam.desktop</extends>
   <name>ImagePlugin-Transform</name>
+  <name xml:lang="ast">ImagePlugin-Transform</name>
   <name xml:lang="bs">ImagePlugin-Transform</name>
   <name xml:lang="ca">Connector d'imatge per a transformar</name>
   <name xml:lang="ca-valencia">Connector d'imatge per a transformar</name>
@@ -28,6 +29,7 @@
   <name xml:lang="x-test">xxImagePlugin-Transformxx</name>
   <name xml:lang="zh-CN">图片插件-变换</name>
   <summary>A tool to transform image geometry</summary>
+  <summary xml:lang="ast">Una ferramienta pa tresformar la xeometría d'imáxenes</summary>
   <summary xml:lang="bs">Alat za preoblikovanje geometrije slike</summary>
   <summary xml:lang="ca">Una eina per a transformar la geometria d'una imatge</summary>
   <summary xml:lang="ca-valencia">Una eina per a transformar la geometria d'una imatge</summary>
