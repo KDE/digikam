@@ -374,6 +374,7 @@ void PanoPreviewPage::slotPanoAction(const Digikam::PanoActionData& ad)
                     {
                         return;
                     }
+
                     disconnect(d->mngr->thread(), SIGNAL(starting(Digikam::PanoActionData)),
                                this, SLOT(slotPanoAction(Digikam::PanoActionData)));
 

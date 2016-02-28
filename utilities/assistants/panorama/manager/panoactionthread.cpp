@@ -109,8 +109,7 @@ void PanoActionThread::preProcessFiles(const QList<QUrl>& urlList, PanoramaItemU
                                    const QString& huginVersion,
                                    const QString& cpCleanPath, const QString& cpFindPath)
 {
-    QString prefix = QDir::tempPath() +
-                     QChar::fromLatin1('/') +
+    QString prefix = QDir::tempPath() + QLatin1Char('/') +
                      QLatin1String("digiKam-panorama-tmp-XXXXXX");
 
     d->preprocessingTmpDir = QSharedPointer<QTemporaryDir>(new QTemporaryDir(prefix));

@@ -788,19 +788,23 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
     d->enfuseProcess->setProcessEnvironment(QProcessEnvironment::systemEnvironment());
 
     QStringList args;
+
     if (!settings.autoLevels)
     {
         args << QLatin1String("-l");
         args << QString::number(settings.levels);
     }
+
     if (settings.ciecam02)
     {
         args << QLatin1String("-c");
     }
+
     if (!comp.isEmpty())
     {
         args << comp;
     }
+
     if (settings.hardMask)
     {
         if (d->enfuseVersion4x)
@@ -808,6 +812,7 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
         else
             args << QLatin1String("--HardMask");
     }
+
     if (d->enfuseVersion4x)
     {
         args << QString::fromUtf8("--exposure-weight=%1").arg(settings.exposure);
@@ -820,6 +825,7 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
         args << QString::fromUtf8("--wSaturation=%1").arg(settings.saturation);
         args << QString::fromUtf8("--wContrast=%1").arg(settings.contrast);
     }
+
     args << QLatin1String("-v");
     args << QLatin1String("-o");
     args << outUrl.toLocalFile();
