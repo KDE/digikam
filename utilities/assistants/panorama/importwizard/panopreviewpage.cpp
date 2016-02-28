@@ -187,6 +187,7 @@ void PanoPreviewPage::startStitching()
     d->canceled      = false;
     d->stitchingBusy = true;
     d->curProgress   = 0;
+
     if (d->mngr->hugin2015())
     {
         d->totalProgress = 1;
@@ -195,6 +196,7 @@ void PanoPreviewPage::startStitching()
     {
         d->totalProgress = d->mngr->preProcessedMap().size() + 1;
     }
+
     d->previewWidget->hide();
 
     QSize panoSize      = d->mngr->viewAndCropOptimisePtoData()->project.size;
@@ -224,7 +226,7 @@ void PanoPreviewPage::startStitching()
     d->progressBar->reset();
     d->progressBar->setMaximum(d->totalProgress);
     d->progressBar->progressScheduled(i18nc("@title:group", "Panorama Post-Processing"), true, true);
-    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QString::fromLatin1("panorama")).pixmap(22, 22));
+    d->progressBar->progressThumbnailChanged(QIcon::fromTheme(QLatin1String("panorama")).pixmap(22, 22));
     d->progressBar->show();
     d->postProcessing->show();
 
@@ -253,7 +255,7 @@ void PanoPreviewPage::preInitializePage()
     d->progressBar->progressCompleted();
     d->progressBar->hide();
     d->postProcessing->hide();
-    
+
     setComplete(true);
     emit completeChanged();
 }
