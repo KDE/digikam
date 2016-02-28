@@ -112,12 +112,11 @@ public:
 
     QList<Task*>                    todo;
 
+    QSharedPointer<QTemporaryDir>   preprocessingTmpDir;
     QSharedPointer<QProcess>        enfuseProcess;
     QSharedPointer<QProcess>        alignProcess;
 
     RawObserver*                    rawObserver;
-
-    QTemporaryDir*                  preprocessingTmpDir;
 
     /**
      * List of results files produced by enfuse that may need cleaning.
@@ -128,7 +127,7 @@ public:
 
     // Preprocessing
     QList<QUrl>                     mixedUrls;     // Original non-RAW + Raw converted urls to align.
-    ExpoBlendingItemUrlsMap                     preProcessedUrlsMap;
+    ExpoBlendingItemUrlsMap         preProcessedUrlsMap;
 
     MetaEngine                      meta;
 };
@@ -179,7 +178,6 @@ ExpoBlendingThread::~ExpoBlendingThread()
 
     cleanUpResultFiles();
 
-    delete d->preprocessingTmpDir;
     delete d;
 }
 
@@ -552,12 +550,10 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
                                             bool align,
                                             const QString& alignPath, QString& errors)
 {
-    delete d->preprocessingTmpDir;
-
     QString prefix = QDir::tempPath() + QLatin1Char('/') +
                      QLatin1String("digiKam-expoblending-tmp-XXXXXX");
 
-    d->preprocessingTmpDir = new QTemporaryDir(prefix);
+    d->preprocessingTmpDir = QSharedPointer<QTemporaryDir>(new QTemporaryDir(prefix));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Temp dir : " << d->preprocessingTmpDir;
 
