@@ -554,7 +554,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
 
     d->preprocessingTmpDir = QSharedPointer<QTemporaryDir>(new QTemporaryDir(prefix));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Temp dir : " << d->preprocessingTmpDir;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Temp dir : " << d->preprocessingTmpDir->path();
 
     // Parallelized pre-process RAW files if necessary.
     d->mixedUrls.clear();
