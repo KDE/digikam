@@ -131,4 +131,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 095 ==> 325830 - Panorama Stitcher returns an error after pre-processing, as a result of attempting to invoke Hugin commands.
 096 ==> 359107 - 5 beta 3: panorama tools does not work with latest Hugin PanoTool (2015)
 097 ==> 359658 - Compilation of preprocesstask.cpp fails if QT_NO_CAST_FROM_ASCII is defined.
-098 ==> 
+098 ==> 359116 - Video preview not scaling and slider not working.
+099 ==> 
