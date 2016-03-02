@@ -133,4 +133,9 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 097 ==> 359658 - Compilation of preprocesstask.cpp fails if QT_NO_CAST_FROM_ASCII is defined.
 098 ==> 359116 - Video preview not scaling and slider not working.
 099 ==> 359897 - Compilation failure - conflicting return type decodeRawImage().
-100 ==> 
+100 ==> 181708 - HUB : add fast tagging feature that only write to database.
+101 ==> 227814 - HUB : new option to synchronize immediately files metadata or when application is closed.
+102 ==> 265880 - HUB : extend metadata configuration panel to improve metadata handling while importing from file to database (and vis-versa).
+103 ==> 244224 - Ignore case when importing tags from metadata.
+104 ==> 
+
