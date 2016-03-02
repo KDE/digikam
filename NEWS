@@ -140,4 +140,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 104 ==> 359963 - In the Albums treeview, clicking an album which has a sub-album does not show its thumbnails.
 105 ==> 359967 - Edit slider values as text.
 106 ==> 359966 - Clicking and holding a spinbox arrow doesn't keep increasing the value.
-107 ==> 
+107 ==> 359969 - BQM claims it finished processing instantly.
+108 ==> 

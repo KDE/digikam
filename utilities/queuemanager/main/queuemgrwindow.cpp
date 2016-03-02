@@ -920,6 +920,15 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             break;
         }
     }
+
+    if (d->queuePool->totalPendingTasks() == 0)
+    {
+        // Pop-up a message to bring user when all is done.
+        DNotificationWrapper(QLatin1String("batchqueuecompleted"), i18n("Batch queue finished"),
+                             this, windowTitle());
+
+        processingAborted();
+    }
 }
 
 void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
@@ -954,16 +963,7 @@ void QueueMgrWindow::slotQueueProcessed()
 
     d->currentQueueToProcess++;
 
-    if (d->currentQueueToProcess == d->queuePool->count())
-    {
-        // Pop-up a message to bring user when all is done.
-        DNotificationWrapper(QLatin1String("batchqueuecompleted"), i18n("Batch queue finished"),
-                             this, windowTitle());
-
-        processingAborted();
-        return;
-    }
-    else
+    if (d->currentQueueToProcess < d->queuePool->count())
     {
         // We will process next queue from the pool.
         processOneQueue();
