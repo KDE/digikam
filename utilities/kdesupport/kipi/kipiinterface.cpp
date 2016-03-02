@@ -581,23 +581,6 @@ public:
         return( decoder.loadRawPreview(image, url.toLocalFile()) );
     }
 
-    uint decodeRawImage(const QUrl& url, QByteArray& imageData, int& width, int& height, int& rgbmax)
-    {
-        DRawDecoderSettings settings;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig();
-        KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
-        DRawDecoderWidget::readSettings(settings, group);
-
-        if (decoder.decodeRAWImage(url.toLocalFile(), settings, imageData, width, height, rgbmax))
-            return settings.sixteenBitsImage ? 16 : 8;
-
-        return 0;
-    }
-
-    void cancel()
-    {
-    }
-
     bool isRawFile(const QUrl& url)
     {
         return (decoder.isRawFile(url));
