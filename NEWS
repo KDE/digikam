@@ -132,4 +132,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 096 ==> 359107 - 5 beta 3: panorama tools does not work with latest Hugin PanoTool (2015)
 097 ==> 359658 - Compilation of preprocesstask.cpp fails if QT_NO_CAST_FROM_ASCII is defined.
 098 ==> 359116 - Video preview not scaling and slider not working.
-099 ==> 
+099 ==> 359897 - Compilation failure - conflicting return type decodeRawImage().
+100 ==> 
