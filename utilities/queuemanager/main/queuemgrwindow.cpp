@@ -866,7 +866,27 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
 
 void QueueMgrWindow::slotAction(const ActionData& ad)
 {
-    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(ad.fileUrl);
+    QueueListViewItem* cItem = d->queuePool->currentQueue()->findItemByUrl(ad.fileUrl);
+    int queueId              = d->queuePool->currentIndex();
+
+    if (!cItem)
+    {
+        for (int i = 0; i < d->queuePool->count(); ++i)
+        {
+            QueueListView* const view = d->queuePool->findQueueByIndex(i);
+
+            if (view)
+            {
+                cItem = view->findItemByUrl(ad.fileUrl);
+
+                if (cItem)
+                {
+                    queueId = i;
+                    break;
+                }
+            }
+        }
+    }
 
     switch (ad.status)
     {
@@ -875,20 +895,23 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             if (cItem)
             {
                 cItem->reset();
-                d->queuePool->currentQueue()->setCurrentItem(cItem);
-                d->queuePool->currentQueue()->scrollToItem(cItem);
+                d->queuePool->findQueueByIndex(queueId)->setCurrentItem(cItem);
+                d->queuePool->findQueueByIndex(queueId)->scrollToItem(cItem);
                 d->queuePool->setItemBusy(cItem->info().id());
-                addHistoryMessage(cItem, i18n("Processing..."), DHistoryView::StartingEntry);
+                addHistoryMessage(queueId, cItem, i18n("Processing..."), DHistoryView::StartingEntry);
             }
             break;
         }
 
         case ActionData::BatchDone:
         {
-            cItem->setDestFileName(ad.destUrl.fileName());
-            cItem->setDone();
-            addHistoryMessage(cItem, ad.message, DHistoryView::SuccessEntry);
-            d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
+            if (cItem)
+            {
+                cItem->setDestFileName(ad.destUrl.fileName());
+                cItem->setDone();
+                addHistoryMessage(queueId, cItem, ad.message, DHistoryView::SuccessEntry);
+                d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
+            }
             break;
         }
 
@@ -897,8 +920,8 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             if (cItem)
             {
                 cItem->setFailed();
-                addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
-                addHistoryMessage(cItem, ad.message, DHistoryView::ErrorEntry);
+                addHistoryMessage(queueId, cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+                addHistoryMessage(queueId, cItem, ad.message, DHistoryView::ErrorEntry);
                 d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
@@ -909,7 +932,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             if (cItem)
             {
                 cItem->setCanceled();
-                addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+                addHistoryMessage(queueId, cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
                 d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
@@ -931,11 +954,10 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
     }
 }
 
-void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
+void QueueMgrWindow::addHistoryMessage(int queueId, QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
 {
     if (cItem)
     {
-        int queueId  = d->queuePool->currentIndex();
         int itemId   = cItem->info().id();
         QString text = i18n("Item \"%1\" from queue \"%2\": %3", cItem->info().name(),
                             d->queuePool->queueTitle(queueId), msg);

@@ -103,7 +103,7 @@ private:
     void refreshStatusBar();
     void populateToolsList();
     void setup(Setup::Page page);
-    void addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type);
+    void addHistoryMessage(int queueId, QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type);
 
     bool checkTargetAlbum(int queueId);
     void busy(bool busy);
