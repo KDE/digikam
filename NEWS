@@ -138,4 +138,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 102 ==> 265880 - HUB : extend metadata configuration panel to improve metadata handling while importing from file to database (and vis-versa).
 103 ==> 244224 - Ignore case when importing tags from metadata.
 104 ==> 359963 - In the Albums treeview, clicking an album which has a sub-album does not show its thumbnails.
-105 ==> 
+105 ==> 359967 - Edit slider values as text.
+106 ==> 359966 - Clicking and holding a spinbox arrow doesn't keep increasing the value.
+107 ==> 
