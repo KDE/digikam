@@ -596,6 +596,10 @@ void AbstractAlbumTreeView::slotSelectionChanged()
 
 void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
 {
+    const QModelIndex currentBefor = currentIndex();
+
+    QTreeView::mousePressEvent(e);
+
     if ((d->expandOnSingleClick || d->expandNewCurrent) && e->button() == Qt::LeftButton)
     {
         const QModelIndex index = indexVisuallyAt(e->pos());
@@ -615,7 +619,7 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
             }
             else
             {
-                if (index != currentIndex())
+                if (currentBefor != currentIndex())
                 {
                     expand(index);
                 }
@@ -631,8 +635,6 @@ void AbstractAlbumTreeView::mousePressEvent(QMouseEvent* e)
             middleButtonPressed(a);
         }
     }
-
-    QTreeView::mousePressEvent(e);
 }
 
 void AbstractAlbumTreeView::middleButtonPressed(Album*)
