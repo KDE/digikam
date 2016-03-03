@@ -866,27 +866,7 @@ void QueueMgrWindow::slotHistoryEntryClicked(int queueId, qlonglong itemId)
 
 void QueueMgrWindow::slotAction(const ActionData& ad)
 {
-    QueueListViewItem* cItem = d->queuePool->currentQueue()->findItemByUrl(ad.fileUrl);
-    int queueId              = d->queuePool->currentIndex();
-
-    if (!cItem)
-    {
-        for (int i = 0; i < d->queuePool->count(); ++i)
-        {
-            QueueListView* const view = d->queuePool->findQueueByIndex(i);
-
-            if (view)
-            {
-                cItem = view->findItemByUrl(ad.fileUrl);
-
-                if (cItem)
-                {
-                    queueId = i;
-                    break;
-                }
-            }
-        }
-    }
+    QueueListViewItem* const cItem = d->queuePool->currentQueue()->findItemByUrl(ad.fileUrl);
 
     switch (ad.status)
     {
@@ -895,10 +875,10 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             if (cItem)
             {
                 cItem->reset();
-                d->queuePool->findQueueByIndex(queueId)->setCurrentItem(cItem);
-                d->queuePool->findQueueByIndex(queueId)->scrollToItem(cItem);
+                d->queuePool->currentQueue()->setCurrentItem(cItem);
+                d->queuePool->currentQueue()->scrollToItem(cItem);
                 d->queuePool->setItemBusy(cItem->info().id());
-                addHistoryMessage(queueId, cItem, i18n("Processing..."), DHistoryView::StartingEntry);
+                addHistoryMessage(cItem, i18n("Processing..."), DHistoryView::StartingEntry);
             }
             break;
         }
@@ -909,7 +889,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             {
                 cItem->setDestFileName(ad.destUrl.fileName());
                 cItem->setDone();
-                addHistoryMessage(queueId, cItem, ad.message, DHistoryView::SuccessEntry);
+                addHistoryMessage(cItem, ad.message, DHistoryView::SuccessEntry);
                 d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
@@ -920,8 +900,8 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             if (cItem)
             {
                 cItem->setFailed();
-                addHistoryMessage(queueId, cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
-                addHistoryMessage(queueId, cItem, ad.message, DHistoryView::ErrorEntry);
+                addHistoryMessage(cItem, i18n("Failed to process item..."), DHistoryView::ErrorEntry);
+                addHistoryMessage(cItem, ad.message, DHistoryView::ErrorEntry);
                 d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
@@ -932,7 +912,7 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
             if (cItem)
             {
                 cItem->setCanceled();
-                addHistoryMessage(queueId, cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
+                addHistoryMessage(cItem, i18n("Process Cancelled..."), DHistoryView::CancelEntry);
                 d->statusProgressBar->setProgressValue(d->statusProgressBar->progressValue() + 1);
             }
             break;
@@ -954,11 +934,12 @@ void QueueMgrWindow::slotAction(const ActionData& ad)
     }
 }
 
-void QueueMgrWindow::addHistoryMessage(int queueId, QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
+void QueueMgrWindow::addHistoryMessage(QueueListViewItem* const cItem, const QString& msg, DHistoryView::EntryType type)
 {
     if (cItem)
     {
         int itemId   = cItem->info().id();
+        int queueId  = d->queuePool->currentIndex();
         QString text = i18n("Item \"%1\" from queue \"%2\": %3", cItem->info().name(),
                             d->queuePool->queueTitle(queueId), msg);
         d->toolsView->addHistoryEntry(text, type, queueId, itemId);
@@ -985,7 +966,16 @@ void QueueMgrWindow::slotQueueProcessed()
 
     d->currentQueueToProcess++;
 
-    if (d->currentQueueToProcess < d->queuePool->count())
+    if (d->currentQueueToProcess == d->queuePool->count())
+    {
+        // Pop-up a message to bring user when all is done.
+        DNotificationWrapper(QLatin1String("batchqueuecompleted"), i18n("Batch queue finished"),
+                             this, windowTitle());
+
+        processingAborted();
+        return;
+    }
+    else
     {
         // We will process next queue from the pool.
         processOneQueue();

@@ -71,7 +71,7 @@ ActionThread::~ActionThread()
 void ActionThread::setSettings(const QueueSettings& settings)
 {
     d->settings = settings;
-    
+
     if (!d->settings.useMultiCoreCPU)
     {
         setMaximumNumberOfThreads(1);
@@ -119,6 +119,8 @@ void ActionThread::slotThreadFinished()
 {
     if (isEmpty())
     {
+        waitJobsForDone();
+
         qCDebug(DIGIKAM_GENERAL_LOG) << "List of Pending Jobs is empty";
         emit signalQueueProcessed();
     }

@@ -130,6 +130,10 @@ protected:
      */
     void appendJobs(const ActionJobCollection& jobs);
 
+    /** Wait for all jobs is done in the QThreadPool.
+     */
+    void waitJobsForDone();
+
     /** Return true if list of pending jobs to process is empty.
      */
     bool isEmpty() const;
