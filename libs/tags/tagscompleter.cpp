@@ -71,13 +71,8 @@ public:
           filterModel(0)
     {
     }
+
     ~Private() {}
-
-    QStandardItemModel*  model;
-    TaggingActionFactory factory;
-
-    TagModel*            supportingModel;
-    AlbumFilterModel*    filterModel;
 
     QModelIndex indexForAlbum(int id)
     {
@@ -94,9 +89,17 @@ public:
         TAlbum* const talbum = AlbumManager::instance()->findTAlbum(id);
         return filterModel->indexForAlbum(talbum).isValid();
     }
+
+public:
+
+    QStandardItemModel*  model;
+    TaggingActionFactory factory;
+
+    TagModel*            supportingModel;
+    AlbumFilterModel*    filterModel;
 };
 
-TagCompleter::TagCompleter(QObject* parent)
+TagCompleter::TagCompleter(QObject* const parent)
     : QCompleter(parent),
       d(new Private)
 {
@@ -147,15 +150,18 @@ void TagCompleter::update(const QString& fragment)
     d->model->clear();
 
     QList<TaggingAction> actions = d->factory.actions();
-
     QList<QStandardItem*> items;
+
     foreach (const TaggingAction& action, actions)
     {
         QStandardItem* item = new QStandardItem;
+
         // Text, implemented by TaggingActionFactory
         item->setText(d->factory.suggestedUIString(action));
+
         // Action, via user data
         item->setData(QVariant::fromValue(action), TaggingActionRole);
+
         // Icon and completion role
         if (action.shallCreateNewTag())
         {

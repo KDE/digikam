@@ -49,7 +49,7 @@ public:
 
     /** A completion object operating on a TagModel
      */
-    TagCompleter(QObject* parent = 0);
+    TagCompleter(QObject* const parent = 0);
     ~TagCompleter();
 
     // Update the completer for the given fragment
@@ -72,8 +72,11 @@ private Q_SLOTS:
     void slotActivated(const QModelIndex& index);
     void slotHighlighted(const QModelIndex& index);
     void slotTextEdited(const QString& text);
-    /*void slotInsertRows(QModelIndex index, int start, int end);
-    void slotDeleteRows(QModelIndex index, int start, int end);*/
+
+/*
+    void slotInsertRows(QModelIndex index, int start, int end);
+    void slotDeleteRows(QModelIndex index, int start, int end);
+*/
 
 private:
 
