@@ -65,8 +65,6 @@
 #include "track_listmodel.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 
@@ -414,7 +412,7 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
     }
 
     emit(signalAllTrackFilesReady());
-    
+
     setUIEnabledInternal(true);
 }
 
@@ -669,7 +667,7 @@ void GPSCorrelatorWidget::slotCorrelationCanceled()
 QList<GeoIface::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates() const
 {
     QList<GeoIface::GeoCoordinates::List> trackList;
-  
+
     for (int i = 0; i < d->trackManager->trackCount(); ++i)
     {
         const GeoIface::TrackManager::Track& gpxData = d->trackManager->getTrack(i);
@@ -686,7 +684,7 @@ QList<GeoIface::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates()
 
     return trackList;
 }
-  
+
 void GPSCorrelatorWidget::slotShowTracksStateChanged(int state)
 {
     const bool doShowTracks = (state == Qt::Checked);
