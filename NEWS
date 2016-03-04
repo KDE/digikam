@@ -141,4 +141,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 105 ==> 359967 - Edit slider values as text.
 106 ==> 359966 - Clicking and holding a spinbox arrow doesn't keep increasing the value.
 107 ==> 359969 - BQM claims it finished processing instantly.
-108 ==> 
+108 ==> 360040 - Information in metadata and geolocation sidebar is inconsistent.
+109 ==> 
+
