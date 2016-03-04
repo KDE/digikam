@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include <kiowrapper.h>
+#include "kiowrapper.h"
 
 using namespace Digikam;
 
