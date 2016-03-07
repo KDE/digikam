@@ -142,5 +142,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 106 ==> 359966 - Clicking and holding a spinbox arrow doesn't keep increasing the value.
 107 ==> 359969 - BQM claims it finished processing instantly.
 108 ==> 360040 - Information in metadata and geolocation sidebar is inconsistent.
-109 ==> 
+109 ==> 357753 - Picture preview in geotagging window is possibily rotated.
+110 ==> 
 
