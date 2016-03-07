@@ -143,5 +143,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 107 ==> 359969 - BQM claims it finished processing instantly.
 108 ==> 360040 - Information in metadata and geolocation sidebar is inconsistent.
 109 ==> 357753 - Picture preview in geotagging window is possibily rotated.
-110 ==> 
-
+110 ==> 353530 - Captions no longer saved to XMP : ACDSee namespace not supported by Exiv2 0.24.
+111 ==> 355256 - Failed to load image if file path contains non-ascii characters.
+112 ==> 
