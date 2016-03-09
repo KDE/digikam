@@ -112,7 +112,6 @@ void Task::emitActionData(ActionData::ActionStatus st, const QString& mess, cons
     ad.message = mess;
     ad.destUrl = dest;
     emit signalFinished(ad);
-    emit signalDone();
 }
 
 void Task::run()
@@ -187,6 +186,7 @@ void Task::run()
         if (d->cancel)
         {
             emitActionData(ActionData::BatchCanceled);
+            emit signalDone();
             delete d->tool;
             d->tool = 0;
             return;
@@ -283,6 +283,8 @@ void Task::run()
     {
         emitActionData(ActionData::BatchFailed, i18n("Failed to create file..."), dest);
     }
+
+    emit signalDone();
 }
 
 }  // namespace Digikam

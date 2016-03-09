@@ -119,8 +119,6 @@ void ActionThread::slotThreadFinished()
 {
     if (isEmpty())
     {
-        waitJobsForDone();
-
         qCDebug(DIGIKAM_GENERAL_LOG) << "List of Pending Jobs is empty";
         emit signalQueueProcessed();
     }

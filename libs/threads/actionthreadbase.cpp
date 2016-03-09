@@ -198,11 +198,6 @@ void ActionThreadBase::appendJobs(const ActionJobCollection& jobs)
     d->condVarJobs.wakeAll();
 }
 
-void ActionThreadBase::waitJobsForDone()
-{
-    d->pool->waitForDone();
-}
-
 void ActionThreadBase::run()
 {
     d->running = true;
