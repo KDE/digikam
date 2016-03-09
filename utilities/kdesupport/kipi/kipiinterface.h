@@ -82,8 +82,8 @@ public:
     void thumbnail(const QUrl& url, int size);
     void thumbnails(const QList<QUrl>& list, int size);
 
-    QImage preview(const QUrl& url, int minSize);
-    void   preview(const QUrl& url, int minSize, int resizedTo);
+    QImage preview(const QUrl& url);
+    void   preview(const QUrl& url, int resizedTo);
 
     bool saveImage(const QUrl& url, const QString& format,
                    const QByteArray& data, uint width, uint height,

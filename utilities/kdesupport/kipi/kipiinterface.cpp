@@ -339,14 +339,14 @@ void KipiInterface::slotCurrentAlbumChanged(QList<Album*> albums)
     emit currentAlbumChanged(!(albums.isEmpty()));
 }
 
-QImage KipiInterface::preview(const QUrl& url, int minSize)
+QImage KipiInterface::preview(const QUrl& url)
 {
-    return (PreviewLoadThread::loadFastButLargeSynchronously(url.toLocalFile(), minSize).copyQImage());
+    return (PreviewLoadThread::loadHighQualitySynchronously(url.toLocalFile()).copyQImage());
 }
 
-void KipiInterface::preview(const QUrl& url, int minSize, int /*TODO resizedTo*/)
+void KipiInterface::preview(const QUrl& url, int /*TODO resizedTo*/)
 {
-    d->previewThread->loadFastButLarge(url.toLocalFile(), minSize);
+    d->previewThread->loadHighQuality(url.toLocalFile());
 }
 
 bool KipiInterface::saveImage(const QUrl& url, const QString& format,
