@@ -90,17 +90,17 @@ DTrashItemModel::~DTrashItemModel()
     delete d->thumbnailThread;
 }
 
-int DTrashItemModel::rowCount(const QModelIndex &) const
+int DTrashItemModel::rowCount(const QModelIndex&) const
 {
     return d->data.count();
 }
 
-int DTrashItemModel::columnCount(const QModelIndex &) const
+int DTrashItemModel::columnCount(const QModelIndex&) const
 {
     return 3;
 }
 
-QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
+QVariant DTrashItemModel::data(const QModelIndex& index, int role) const
 {
     if ( role != Qt::DisplayRole &&
          role != Qt::DecorationRole &&
@@ -176,7 +176,7 @@ void DTrashItemModel::sort(int column, Qt::SortOrder order)
     dataChanged(topLeft, bottomRight);
 }
 
-bool DTrashItemModel::pixmapForItem(const QString &path, QPixmap &pix) const
+bool DTrashItemModel::pixmapForItem(const QString& path, QPixmap& pix) const
 {
     return d->thumbnailThread->find(ThumbnailIdentifier(path), pix, d->thumbSize);
 }
@@ -248,7 +248,7 @@ void DTrashItemModel::clearCurrentData()
     emit dataChange();
 }
 
-void DTrashItemModel::loadItemsForCollection(const QString &colPath)
+void DTrashItemModel::loadItemsForCollection(const QString& colPath)
 {
     clearCurrentData();
 
@@ -260,7 +260,7 @@ void DTrashItemModel::loadItemsForCollection(const QString &colPath)
             Qt::QueuedConnection);
 }
 
-DTrashItemInfo DTrashItemModel::itemForIndex(const QModelIndex &index)
+DTrashItemInfo DTrashItemModel::itemForIndex(const QModelIndex& index)
 {
     if (!index.isValid())
         return DTrashItemInfo();
