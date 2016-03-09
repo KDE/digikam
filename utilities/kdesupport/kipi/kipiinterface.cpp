@@ -155,7 +155,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
                                                              currAlbum,
-                                                             hostSetting(QLatin1String("FileExtensions")).toString()));
+                                                             filesExtensions()));
     }
     else
     {
@@ -176,7 +176,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
                                                              currAlbum,
-                                                             hostSetting(QLatin1String("FileExtensions")).toString()));
+                                                             filesExtensions()));
     }
     else
     {
@@ -187,7 +187,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
-    QString fileFilter(hostSetting(QLatin1String("FileExtensions")).toString());
+    QString fileFilter(filesExtensions());
 
     const AlbumList palbumList = d->albumManager->allPAlbums();
 
@@ -414,46 +414,19 @@ QAbstractItemModel* KipiInterface::getTagTree() const
     return d->tagModel;
 }
 
-QVariant KipiInterface::hostSetting(const QString& settingName)
+QString KipiInterface::filesExtensions() const
 {
-    MetadataSettings* const mSettings    = MetadataSettings::instance();
     ApplicationSettings* const aSettings = ApplicationSettings::instance();
 
-    if (!mSettings || !aSettings)
-    {
-        return QVariant();
-    }
+    return QString((aSettings->getImageFileFilter()) + QLatin1Char(' ') +
+                   (aSettings->getMovieFileFilter()) + QLatin1Char(' ') +
+                   (aSettings->getAudioFileFilter()) + QLatin1Char(' ') +
+                   (aSettings->getRawFileFilter()));
+}
 
-    MetadataSettingsContainer set = mSettings->settings();
-
-    if (settingName == QLatin1String("FileExtensions"))
-    {
-        // NOTE : do not save type mime settings into a local variable, as this
-        // might change in the main app
-
-        return QString((aSettings->getImageFileFilter()) + QLatin1Char(' ') +
-                       (aSettings->getMovieFileFilter()) + QLatin1Char(' ') +
-                       (aSettings->getAudioFileFilter()) + QLatin1Char(' ') +
-                       (aSettings->getRawFileFilter()));
-    }
-    else if (settingName == QLatin1String("ImagesExtensions"))
-    {
-        return aSettings->getImageFileFilter();
-    }
-    else if (settingName == QLatin1String("RawExtensions"))
-    {
-        return aSettings->getRawFileFilter();
-    }
-    else if (settingName == QLatin1String("VideoExtensions"))
-    {
-        return aSettings->getMovieFileFilter();
-    }
-    else if (settingName == QLatin1String("AudioExtensions"))
-    {
-        return aSettings->getAudioFileFilter();
-    }
-
-    return QVariant();
+QString KipiInterface::rawFile()
+{
+    return ApplicationSettings::instance()->getRawFileFilter();
 }
 
 QString KipiInterface::progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const

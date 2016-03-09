@@ -91,7 +91,7 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 
     if (d->iface)
     {
-        QString ext                = d->iface->hostSetting(QLatin1String("FileExtensions")).toString();
+        QString ext                = d->iface->filesExtensions();
         PAlbum* const currentAlbum = d->albumSel->currentAlbum();
 
         if (currentAlbum)

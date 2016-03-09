@@ -68,6 +68,8 @@ public:
     explicit KipiInterface(QObject* const parent, const QString& name);
     ~KipiInterface();
 
+    QString filesExtensions() const;
+
     KIPI::ImageCollection        currentAlbum();
     KIPI::ImageCollection        currentSelection();
     QList<KIPI::ImageCollection> allAlbums();
@@ -94,7 +96,7 @@ public:
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
     QAbstractItemModel*            getTagTree() const;
 
-    QVariant hostSetting(const QString& settingName);
+    QString rawFile();
 
     QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
     void    progressValueChanged(const QString& id, float percent);

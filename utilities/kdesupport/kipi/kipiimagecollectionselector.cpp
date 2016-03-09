@@ -278,7 +278,7 @@ KipiImageCollectionSelector::~KipiImageCollectionSelector()
 
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
 {
-    QString ext = d->iface->hostSetting(QLatin1String("FileExtensions")).toString();
+    QString ext = d->iface->filesExtensions();
     QList<KIPI::ImageCollection> list;
 
     d->fillCollectionsFromCheckedModel(list,  d->albumModel,  ext);
