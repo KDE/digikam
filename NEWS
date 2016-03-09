@@ -146,5 +146,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 110 ==> 353530 - Captions no longer saved to XMP : ACDSee namespace not supported by Exiv2 0.24.
 111 ==> 355256 - Failed to load image if file path contains non-ascii characters.
 112 ==> 331261 - Import not using Date/Time Original or create date EXIF data.
-113 ==> 
-
+113 ==> 359516 - Trash not sortable by deletion time.
+114 ==> 

@@ -99,6 +99,8 @@ public:
     QVariant data(const QModelIndex& index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+    virtual void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
 public Q_SLOTS:
 
     /**

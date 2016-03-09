@@ -51,6 +51,8 @@ public:
 
     Private() :
         thumbSize(ThumbnailSize::Large),
+        sortColumn(2),
+        sortOrder(Qt::DescendingOrder),
         itemsLoadingThread(0),
         thumbnailThread(0),
         timer(0)
@@ -60,6 +62,8 @@ public:
 public:
 
     int                  thumbSize;
+    int                  sortColumn;
+    Qt::SortOrder        sortOrder;
     IOJobsThread*        itemsLoadingThread;
     ThumbnailLoadThread* thumbnailThread;
     QTimer*              timer;
@@ -133,6 +137,45 @@ QVariant DTrashItemModel::data(const QModelIndex &index, int role) const
     };
 }
 
+void DTrashItemModel::sort(int column, Qt::SortOrder order)
+{
+    d->sortColumn = column;
+    d->sortOrder  = order;
+
+    if (d->data.count() < 2)
+    {
+        return;
+    }
+
+    qSort(d->data.begin(), d->data.end(),
+            [column, order](const DTrashItemInfo& a, const DTrashItemInfo& b)
+            {
+                if (column == 2 && a.deletionTimestamp != b.deletionTimestamp)
+                {
+                    if (order == Qt::DescendingOrder)
+                    {
+                        return a.deletionTimestamp > b.deletionTimestamp;
+                    }
+                    else
+                    {
+                        return a.deletionTimestamp < b.deletionTimestamp;
+                    }
+                }
+
+                if (order == Qt::DescendingOrder)
+                {
+                    return a.collectionRelativePath > b.collectionRelativePath;
+                }
+
+                return a.collectionRelativePath < b.collectionRelativePath;
+            });
+
+    const QModelIndex topLeft     = index(0, 0, QModelIndex());
+    const QModelIndex bottomRight = index(rowCount(QModelIndex())-1,
+                                          columnCount(QModelIndex())-1, QModelIndex());
+    dataChanged(topLeft, bottomRight);
+}
+
 bool DTrashItemModel::pixmapForItem(const QString &path, QPixmap &pix) const
 {
     return d->thumbnailThread->find(ThumbnailIdentifier(path), pix, d->thumbSize);
@@ -160,7 +203,9 @@ void DTrashItemModel::append(const DTrashItemInfo& itemInfo)
     beginInsertRows(QModelIndex(), d->data.count(), d->data.count());
     d->data.append(itemInfo);
     endInsertRows();
-    dataChange();
+
+    sort(d->sortColumn, d->sortOrder);
+    emit dataChange();
 }
 
 void DTrashItemModel::removeItems(const QModelIndexList& indexes)
@@ -186,7 +231,7 @@ void DTrashItemModel::removeItems(const QModelIndexList& indexes)
     }
 
     layoutChanged();
-    dataChange();
+    emit dataChange();
 }
 
 void DTrashItemModel::refreshLayout()
@@ -200,7 +245,7 @@ void DTrashItemModel::clearCurrentData()
     beginResetModel();
     d->data.clear();
     endResetModel();
-    dataChange();
+    emit dataChange();
 }
 
 void DTrashItemModel::loadItemsForCollection(const QString &colPath)
@@ -255,7 +300,7 @@ void DTrashItemModel::changeThumbSize(int size)
     if (isEmpty())
         return;
 
-    const QModelIndex topLeft = index(0, 0, QModelIndex());
+    const QModelIndex topLeft     = index(0, 0, QModelIndex());
     const QModelIndex bottomRight = index(rowCount(QModelIndex())-1, 0, QModelIndex());
     dataChanged(topLeft, bottomRight);
 

@@ -91,8 +91,8 @@ TrashView::TrashView(QWidget* parent)
     d->btnsLayout = new QHBoxLayout();
 
     // View and plugins
-    d->tableView = new QTableView(this);
-    d->model = new DTrashItemModel(this);
+    d->tableView     = new QTableView(this);
+    d->model         = new DTrashItemModel(this);
     d->thumbDelegate = new ThumbnailAligningDelegate(this);
 
     // Table view settings
@@ -104,6 +104,8 @@ TrashView::TrashView(QWidget* parent)
     d->tableView->verticalHeader()->hide();
     d->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->tableView->setShowGrid(false);
+    d->tableView->setSortingEnabled(true);
+    d->tableView->sortByColumn(2, Qt::DescendingOrder);
 
     // Action Buttons
     d->restoreButton   = new QPushButton(i18n("Restore"));
