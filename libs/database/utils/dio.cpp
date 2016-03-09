@@ -356,8 +356,8 @@ void DIO::slotResult()
         }
 
         // Pop-up a message about the error.
-        QString errors = jobThread->errorsList().join(QLatin1String("\n"));
-        DNotificationWrapper(QString(),  errors, DigikamApp::instance(),
+        QString errors = QStringList(jobThread->errorsList()).join(QLatin1String("\n"));
+        DNotificationWrapper(QString(), errors, DigikamApp::instance(),
                              DigikamApp::instance()->windowTitle());
     }
 }
