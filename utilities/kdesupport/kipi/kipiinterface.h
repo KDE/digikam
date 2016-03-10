@@ -94,7 +94,7 @@ public:
     KIPI::UploadWidget*            uploadWidget(QWidget* parent);
     QAbstractItemModel*            getTagTree() const;
 
-    QString rawFile();
+    QString rawFiles();
 
     QString progressScheduled(const QString& title, bool canBeCanceled, bool hasThumb) const;
     void    progressValueChanged(const QString& id, float percent);

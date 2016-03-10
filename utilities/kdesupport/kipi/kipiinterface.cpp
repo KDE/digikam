@@ -414,7 +414,7 @@ QAbstractItemModel* KipiInterface::getTagTree() const
     return d->tagModel;
 }
 
-QString KipiInterface::rawFile()
+QString KipiInterface::rawFiles()
 {
     return ApplicationSettings::instance()->getRawFileFilter();
 }
