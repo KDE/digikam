@@ -527,45 +527,6 @@ KIPI::FileReadWriteLock* KipiInterface::createReadWriteLock(const QUrl& url) con
 
 // ---------------------------------------------------------------------------------------
 
-class KipiInterfaceRawProcessor : public KIPI::RawProcessor
-{
-public:
-
-    KipiInterfaceRawProcessor()
-    {
-    }
-
-    ~KipiInterfaceRawProcessor()
-    {
-    }
-
-    bool loadRawPreview(const QUrl& url, QImage& image)
-    {
-        return( decoder.loadRawPreview(image, url.toLocalFile()) );
-    }
-
-    bool isRawFile(const QUrl& url)
-    {
-        return (decoder.isRawFile(url));
-    }
-
-    QString rawFiles()
-    {
-        return QLatin1String(decoder.rawFiles());
-    }
-
-private:
-
-    RawEngine::DRawDecoder decoder;
-};
-
-KIPI::RawProcessor* KipiInterface::createRawProcessor() const
-{
-    return new KipiInterfaceRawProcessor;
-}
-
-// ---------------------------------------------------------------------------------------
-
 class KipiInterfaceMatadataProcessor : public KIPI::MetadataProcessor
 {
 public:

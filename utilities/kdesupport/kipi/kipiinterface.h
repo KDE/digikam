@@ -103,7 +103,6 @@ public:
     void    progressCompleted(const QString& id);
 
     KIPI::FileReadWriteLock* createReadWriteLock(const QUrl& url) const;
-    KIPI::RawProcessor*      createRawProcessor()                 const;
     KIPI::MetadataProcessor* createMetadataProcessor()            const;
 
     void aboutToEdit(const QUrl& url, KIPI::EditHints hints);
