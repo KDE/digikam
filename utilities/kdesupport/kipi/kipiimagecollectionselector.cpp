@@ -7,7 +7,7 @@
  * Description : a widget to select image collections using
  *               digiKam album folder views
  *
- * Copyright (C) 2008-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
@@ -48,8 +48,6 @@
 #include "kipiimagecollection.h"
 #include "kipiinterface.h"
 #include "albumlabelstreeview.h"
-
-
 
 namespace Digikam
 {
@@ -278,7 +276,7 @@ KipiImageCollectionSelector::~KipiImageCollectionSelector()
 
 QList<KIPI::ImageCollection> KipiImageCollectionSelector::selectedImageCollections() const
 {
-    QString ext = d->iface->filesExtensions();
+    QString ext = ApplicationSettings::instance()->getAllFileFilter();
     QList<KIPI::ImageCollection> list;
 
     d->fillCollectionsFromCheckedModel(list,  d->albumModel,  ext);

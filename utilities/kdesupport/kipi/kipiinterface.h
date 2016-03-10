@@ -68,8 +68,6 @@ public:
     explicit KipiInterface(QObject* const parent, const QString& name);
     ~KipiInterface();
 
-    QString filesExtensions() const;
-
     KIPI::ImageCollection        currentAlbum();
     KIPI::ImageCollection        currentSelection();
     QList<KIPI::ImageCollection> allAlbums();

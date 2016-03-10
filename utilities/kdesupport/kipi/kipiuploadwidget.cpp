@@ -7,7 +7,7 @@
  * Description : a widget to select an image collection
  *               to upload new items using digiKam album folder views
  *
- * Copyright (C) 2008-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Luka Renko <lure at kubuntu dot org>
  *
  * This program is free software; you can redistribute it
@@ -46,6 +46,7 @@
 #include "albumselectwidget.h"
 #include "kipiinterface.h"
 #include "kipiimagecollection.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -91,7 +92,7 @@ KIPI::ImageCollection KipiUploadWidget::selectedImageCollection() const
 
     if (d->iface)
     {
-        QString ext                = d->iface->filesExtensions();
+        QString ext                = ApplicationSettings::instance()->getAllFileFilter();
         PAlbum* const currentAlbum = d->albumSel->currentAlbum();
 
         if (currentAlbum)

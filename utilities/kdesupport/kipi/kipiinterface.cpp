@@ -155,7 +155,7 @@ KIPI::ImageCollection KipiInterface::currentAlbum()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::AllItems,
                                                              currAlbum,
-                                                             filesExtensions()));
+                                                             ApplicationSettings::instance()->getAllFileFilter()));
     }
     else
     {
@@ -176,7 +176,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
     {
         return KIPI::ImageCollection(new KipiImageCollection(KipiImageCollection::SelectedItems,
                                                              currAlbum,
-                                                             filesExtensions()));
+                                                             ApplicationSettings::instance()->getAllFileFilter()));
     }
     else
     {
@@ -187,7 +187,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 QList<KIPI::ImageCollection> KipiInterface::allAlbums()
 {
     QList<KIPI::ImageCollection> result;
-    QString fileFilter(filesExtensions());
+    QString fileFilter(ApplicationSettings::instance()->getAllFileFilter());
 
     const AlbumList palbumList = d->albumManager->allPAlbums();
 
@@ -412,16 +412,6 @@ QAbstractItemModel* KipiInterface::getTagTree() const
     }
 
     return d->tagModel;
-}
-
-QString KipiInterface::filesExtensions() const
-{
-    ApplicationSettings* const aSettings = ApplicationSettings::instance();
-
-    return QString((aSettings->getImageFileFilter()) + QLatin1Char(' ') +
-                   (aSettings->getMovieFileFilter()) + QLatin1Char(' ') +
-                   (aSettings->getAudioFileFilter()) + QLatin1Char(' ') +
-                   (aSettings->getRawFileFilter()));
 }
 
 QString KipiInterface::rawFile()
