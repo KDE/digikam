@@ -85,9 +85,9 @@
 #include "tagsactionmngr.h"
 #include "kiowrapper.h"
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
 #include "mediaplayerview.h"
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
@@ -285,9 +285,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     d->addPageUpDownActions(this, d->stackedview->mediaPlayerView());
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     d->rightSideBar = new ImagePropertiesSideBarDB(this, d->splitter, Qt::RightEdge, true);
     d->rightSideBar->setObjectName(QLatin1String("Digikam Right Sidebar"));
@@ -1345,11 +1345,11 @@ void DigikamView::slotRefresh()
         case StackedView::PreviewImageMode:
             d->stackedview->imagePreviewView()->reload();
             break;
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
         case StackedView::MediaPlayerMode:
             d->stackedview->mediaPlayerView()->reload();
             break;
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
         default:
             Album* const album = d->iconView->currentAlbum();
             if (!album) return;

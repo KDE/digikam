@@ -58,9 +58,9 @@ public:
         mapWidgetView       = 0;
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
         mediaPlayerView     = 0;
-#endif // HAVE_VIDEOPLAYER
+#endif // HAVE_MEDIAPLAYER
 
         syncingSelection    = false;
     }
@@ -77,9 +77,9 @@ public:
     MapWidgetView*      mapWidgetView;
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     MediaPlayerView*    mediaPlayerView; // Reuse of albumgui mediaplayer view.
-#endif // HAVE_VIDEOPLAYER
+#endif // HAVE_MEDIAPLAYER
 
     bool                syncingSelection;
 };
@@ -107,9 +107,9 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     d->mapWidgetView->setObjectName(QLatin1String("import_mapwidgetview"));
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     d->mediaPlayerView   = new MediaPlayerView(this);
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     insertWidget(PreviewCameraMode, d->importIconView);
     insertWidget(PreviewImageMode,  d->importPreviewView);
@@ -118,9 +118,9 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     insertWidget(MapWidgetMode,     d->mapWidgetView);
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     insertWidget(MediaPlayerMode,   d->mediaPlayerView);
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -192,7 +192,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
     connect(d->importPreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
@@ -201,7 +201,7 @@ ImportStackedView::ImportStackedView(QWidget* const parent)
 
     connect(d->mediaPlayerView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 }
 
 ImportStackedView::~ImportStackedView()
@@ -237,12 +237,12 @@ ImportThumbnailBar* ImportStackedView::thumbBar() const
 
 void ImportStackedView::slotEscapePreview()
 {
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     if (viewMode() == MediaPlayerMode)
     {
         d->mediaPlayerView->escapePreview();
     }
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 }
 
 ImportIconView* ImportStackedView::importIconView() const
@@ -262,12 +262,12 @@ MapWidgetView* ImportStackedView::mapWidgetView() const
 }
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
 MediaPlayerView* ImportStackedView::mediaPlayerView() const
 {
     return d->mediaPlayerView;
 }
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 bool ImportStackedView::isInSingleFileMode() const
 {
@@ -285,9 +285,9 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
     {
         if (viewMode() == MediaPlayerMode)
         {
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
             d->mediaPlayerView->setCurrentItem();
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
         }
         else if (viewMode() == PreviewImageMode)
         {
@@ -303,19 +303,19 @@ void ImportStackedView::setPreviewItem(const CamItemInfo& info, const CamItemInf
             {
                 d->importPreviewView->setCamItemInfo();
             }
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
             setViewMode(MediaPlayerMode);
             d->mediaPlayerView->setCurrentItem(info.url(), !previous.isNull(), !next.isNull());
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
         }
         else
         {
             // Stop media player if running...
             if (viewMode() == MediaPlayerMode)
             {
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
                 d->mediaPlayerView->setCurrentItem();
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
             }
 
             d->importPreviewView->setCamItemInfo(info, previous, next);

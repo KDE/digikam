@@ -145,9 +145,9 @@ ImportView::ImportView(ImportUI* const ui, QWidget* const parent)
     d->addPageUpDownActions(this, d->stackedView->importPreviewView());
     d->addPageUpDownActions(this, d->stackedView->thumbBar());
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     d->addPageUpDownActions(this, d->stackedView->mediaPlayerView());
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     d->selectionTimer = new QTimer(this);
     d->selectionTimer->setSingleShot(true);

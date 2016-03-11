@@ -53,9 +53,9 @@
 #include "tableview.h"
 #include "trashview.h"
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
 #include "mediaplayerview.h"
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
@@ -83,9 +83,9 @@ public:
         tableView          = 0;
         trashView          = 0;
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
         mediaPlayerView    = 0;
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
         mapWidgetView      = 0;
@@ -106,9 +106,9 @@ public:
     TableView*         tableView;
     TrashView*         trashView;
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     MediaPlayerView*   mediaPlayerView;
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
     MapWidgetView*     mapWidgetView;
@@ -142,9 +142,9 @@ StackedView::StackedView(QWidget* const parent)
     d->mapWidgetView->setObjectName(QLatin1String("mainwindow_mapwidgetview"));
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     d->mediaPlayerView = new MediaPlayerView(this);
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     insertWidget(IconViewMode,     d->imageIconView);
     insertWidget(PreviewImageMode, d->imagePreviewView);
@@ -156,9 +156,9 @@ StackedView::StackedView(QWidget* const parent)
     insertWidget(MapWidgetMode,    d->mapWidgetView);
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     insertWidget(MediaPlayerMode,  d->mediaPlayerView);
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     setViewMode(IconViewMode);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -227,7 +227,7 @@ StackedView::StackedView(QWidget* const parent)
     connect(d->imagePreviewView, SIGNAL(signalPreviewLoaded(bool)),
             this, SLOT(slotPreviewLoaded(bool)));
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     connect(d->mediaPlayerView, SIGNAL(signalNextItem()),
             this, SIGNAL(signalNextItem()));
 
@@ -236,7 +236,7 @@ StackedView::StackedView(QWidget* const parent)
 
     connect(d->mediaPlayerView, SIGNAL(signalEscapePreview()),
             this, SIGNAL(signalEscapePreview()));
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 }
 
 StackedView::~StackedView()
@@ -272,12 +272,12 @@ ImageThumbnailBar* StackedView::thumbBar() const
 
 void StackedView::slotEscapePreview()
 {
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     if (viewMode() == MediaPlayerMode)
     {
         d->mediaPlayerView->escapePreview();
     }
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 }
 
 DigikamImageView* StackedView::imageIconView() const
@@ -307,12 +307,12 @@ TrashView* StackedView::trashView() const
     return d->trashView;
 }
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
 MediaPlayerView* StackedView::mediaPlayerView() const
 {
     return d->mediaPlayerView;
 }
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 bool StackedView::isInSingleFileMode() const
 {
@@ -337,9 +337,9 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     {
         if (viewMode() == MediaPlayerMode)
         {
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
             d->mediaPlayerView->setCurrentItem();
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
         }
         else if (viewMode() == PreviewImageMode)
         {
@@ -356,19 +356,19 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
                 d->imagePreviewView->setImageInfo();
             }
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
             setViewMode(MediaPlayerMode);
             d->mediaPlayerView->setCurrentItem(info.fileUrl(), !previous.isNull(), !next.isNull());
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
         }
         else
         {
             // Stop media player if running...
             if (viewMode() == MediaPlayerMode)
             {
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
                 d->mediaPlayerView->setCurrentItem();
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
             }
 
             d->imagePreviewView->setImageInfo(info, previous, next);

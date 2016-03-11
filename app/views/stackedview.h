@@ -48,9 +48,9 @@ class ImagePreviewView;
 class TableView;
 class ImageThumbnailBar;
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
 class MediaPlayerView;
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
 class MapWidgetView;
@@ -90,9 +90,9 @@ public:
     TableView*         tableView()        const;
     TrashView*         trashView()        const;
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     MediaPlayerView*   mediaPlayerView()  const;
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
     MapWidgetView*     mapWidgetView()    const;

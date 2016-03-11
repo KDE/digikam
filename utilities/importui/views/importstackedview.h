@@ -40,9 +40,9 @@
 #include "importiconview.h"
 #include "digikam_export.h"
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
 #include "mediaplayerview.h"
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
 #ifdef HAVE_MARBLE
 #include "mapwidgetview.h"
@@ -86,9 +86,9 @@ public:
     MapWidgetView*      mapWidgetView()     const;
 #endif // HAVE_MARBLE
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     MediaPlayerView*    mediaPlayerView()   const;
-#endif //HAVE_VIDEOPLAYER
+#endif //HAVE_MEDIAPLAYER
 
     bool isInSingleFileMode()   const;
     bool isInMultipleFileMode() const;

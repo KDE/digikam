@@ -86,11 +86,11 @@ static inline void showDigikamComponentsInfo()
     list.insert(i18n("AkonadiContact support"), i18n("no"));
 #endif /* HAVE_AKONADICONTACT */
 
-#ifdef HAVE_VIDEOPLAYER
+#ifdef HAVE_MEDIAPLAYER
     list.insert(i18n("QtMultimedia support"), i18n("Yes"));
 #else
     list.insert(i18n("QtMultimedia support"), i18n("no"));
-#endif /* HAVE_VIDEOPLAYER */
+#endif /* HAVE_MEDIAPLAYER */
 
 #ifdef HAVE_KIPI
     list.insert(i18n("LibKipi"),      KIPI::Interface::version());
