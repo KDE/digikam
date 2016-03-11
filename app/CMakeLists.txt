@@ -101,6 +101,12 @@ if(ENABLE_MEDIAPLAYER)
     )
 endif()
 
+if(HAVE_OPENGL)
+    include_directories(
+        $<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>
+    )
+endif()
+
 if(KF5Kipi_FOUND)
     include_directories(
         $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
@@ -196,6 +202,14 @@ endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamcore PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
+
+if(HAVE_OPENGL)
+    target_link_libraries(digikamcore
+                          PUBLIC
+                          Qt5::OpenGL
+                          ${OPENGL_LIBRARIES}
+    )
 endif()
 
 if(KF5Sane_FOUND)
@@ -423,6 +437,14 @@ endif()
 
 if(ENABLE_MEDIAPLAYER)
     target_link_libraries(digikamgui PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
+endif()
+
+if(HAVE_OPENGL)
+    target_link_libraries(digikamgui
+                          PUBLIC
+                          Qt5::OpenGL
+                          ${OPENGL_LIBRARIES}
+    )
 endif()
 
 if(NOT WIN32)

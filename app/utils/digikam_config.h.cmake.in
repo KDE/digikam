@@ -78,6 +78,9 @@
 /* Define to 1 if preview of video files is supported */
 #cmakedefine HAVE_MEDIAPLAYER
 
+/* Define to 1 if system use OpenGL */
+#cmakedefine HAVE_OPENGL 1
+
 /* Define to 1 if you want Qt to scale the preview images */
 #cmakedefine USE_QT_SCALING 1
 

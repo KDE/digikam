@@ -167,7 +167,7 @@ KIPI::ImageCollection KipiInterface::currentSelection()
 {
     if (d->albumManager->currentAlbums().isEmpty())
     {
-            return KIPI::ImageCollection(0);
+        return KIPI::ImageCollection(0);
     }
 
     Album* const currAlbum = d->albumManager->currentAlbums().first();

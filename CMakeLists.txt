@@ -131,6 +131,7 @@ find_package(Qt5 ${QT_MIN_VERSION}
              OPTIONAL_COMPONENTS
              Multimedia
              MultimediaWidgets
+             OpenGL
 )
 
 if(ENABLE_MEDIAPLAYER)
@@ -260,7 +261,8 @@ endif()
 
 find_package(PkgConfig)
 find_package(Jasper)
-find_package(Eigen3)
+find_package(Eigen3)                               # For Refocus tool.
+find_package(OpenGL)                               # For Presentation tool.
 
 # For Monitor Profiles management with LCMS
 find_package(X11)
@@ -272,6 +274,13 @@ if(X11_FOUND)
     set(HAVE_X11 TRUE)
 else()
     set(HAVE_X11 FALSE)
+endif()
+
+# decide if Presentation tool can be built with OpenGL
+if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND Qt5OpenGL_FOUND)
+    set(HAVE_OPENGL TRUE)
+elseif()
+    set(HAVE_OPENGL FALSE)
 endif()
 
 # -- To link under Solaris (see bug #274484) ------------------------------------------------------
@@ -469,6 +478,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"   
 PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"                                      "(version >= 3.0.0)"                   "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                   "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                   "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpneGL support."                            HAVE_OPENGL)
 
 if(ENABLE_MEDIAPLAYER)
     PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 Multimedia"        Qt5Multimedia_FOUND)

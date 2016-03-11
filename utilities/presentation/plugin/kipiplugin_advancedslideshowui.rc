@@ -1,0 +1,16 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!-- NOTE: don't forget to increase version ID when this file is modified -->
+<gui version="2" name="kipiplugin_advancedslideshow" >
+
+    <MenuBar>
+
+        <Menu name="View"><text>&amp;View</text>
+            <Action name="advancedslideshow" group="kipi_tool_group" />
+        </Menu>
+
+    </MenuBar>
+
+    <ToolBar name="mainToolBar"><text>Main Toolbar</text>
+    </ToolBar>
+
+</gui>
