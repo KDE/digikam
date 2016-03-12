@@ -38,7 +38,7 @@ PresentationContainer::PresentationContainer()
     captionPage                   = 0;
     advancedPage                  = 0;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     soundtrackPage                = 0;
 #endif
 

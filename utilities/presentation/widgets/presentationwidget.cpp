@@ -59,7 +59,7 @@
 #include "presentationctrlwidget.h"
 #include "presentationloader.h"
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 #   include "presentationaudiowidget.h"
 #endif
 
@@ -77,7 +77,7 @@ public:
         cacheSize           = 0;
         imageLoader         = 0;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
         playbackWidget      = 0;
 #endif
 
@@ -128,7 +128,7 @@ public:
     PresentationLoader*         imageLoader;
     QPixmap                     currImage;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     PresentationAudioWidget*    playbackWidget;
 #endif
 
@@ -203,7 +203,7 @@ PresentationWidget::PresentationWidget(const QStringList& fileList, const QStrin
         d->slidePresentationAudioWidget->setEnabledPrev( false );
     }
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 
     // -- playback widget -------------------------------
 
@@ -674,7 +674,7 @@ void PresentationWidget::keyPressEvent(QKeyEvent* event)
     if (!event)
         return;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->keyPressEvent(event);
 #endif
 
@@ -707,7 +707,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
     d->mouseMoveTimer->start( 1000 );
 
     if (!d->slidePresentationAudioWidget->canHide()
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
         || !d->playbackWidget->canHide()
 #endif
        )
@@ -719,7 +719,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
         ( pos.y() < ( d->deskY + d->deskHeight - 20 - 1 ) ) )
     {
         if (!d->slidePresentationAudioWidget->canHide()
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
             || !d->playbackWidget->canHide()
 #endif
            )
@@ -729,7 +729,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
         else
         {
             d->slidePresentationAudioWidget->hide();
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
             d->playbackWidget->hide();
 #endif
         }
@@ -760,7 +760,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
 //    }
 
     d->slidePresentationAudioWidget->show();
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->show();
 #endif
 }

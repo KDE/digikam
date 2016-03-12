@@ -63,7 +63,7 @@
 #include "presentationctrlwidget.h"
 #include "presentationloader.h"
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 #   include "presentationaudiowidget.h"
 #endif
 
@@ -98,7 +98,7 @@ public:
         dir                 = 0;
         slidePresentationAudioWidget = 0;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
         playbackWidget      = 0;
 #endif
 
@@ -142,7 +142,7 @@ public:
 
     PresentationCtrlWidget*              slidePresentationAudioWidget;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     PresentationAudioWidget*                   playbackWidget;
 #endif
 
@@ -197,7 +197,7 @@ PresentationGL::PresentationGL(const QStringList& fileList,
     connect(d->slidePresentationAudioWidget, SIGNAL(signalClose()),
             this, SLOT(slotClose()));
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 
     d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
     d->playbackWidget->hide();
@@ -361,7 +361,7 @@ void PresentationGL::keyPressEvent(QKeyEvent* event)
         return;
 
     d->slidePresentationAudioWidget->keyPressEvent(event);
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->keyPressEvent(event);
 #endif
 }
@@ -392,7 +392,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
     d->mouseMoveTimer->start(1000);
 
     if (!d->slidePresentationAudioWidget->canHide()
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
         || !d->playbackWidget->canHide()
 #endif
        )
@@ -404,7 +404,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
             (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
     {
         if (d->slidePresentationAudioWidget->isHidden()
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
             || d->playbackWidget->isHidden()
 #endif
            )
@@ -414,7 +414,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
         else
         {
             d->slidePresentationAudioWidget->hide();
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
             d->playbackWidget->hide();
 #endif
         }
@@ -423,7 +423,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
     }
 
     d->slidePresentationAudioWidget->show();
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->show();
 #endif
 }

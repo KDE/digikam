@@ -40,7 +40,7 @@ class PresentationMainPage;
 class PresentationCaptionPage;
 class PresentationAdvPage;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 class PresentationAudioPage;
 #endif
 
@@ -64,7 +64,7 @@ public:
     PresentationMainPage*    mainPage;
     PresentationCaptionPage* captionPage;
 
-    #ifdef HAVE_AUDIO
+    #ifdef HAVE_MEDIAPLAYER
     PresentationAudioPage*   soundtrackPage;
 #endif
 

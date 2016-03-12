@@ -62,7 +62,7 @@
 #include "kbeffect.h"
 #include "presentationkb_p.h"
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 #   include "presentationaudiowidget.h"
 #endif
 
@@ -303,7 +303,7 @@ PresentationKB::PresentationKB(const QStringList& fileList,
 
     // -- playback widget -------------------------------
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
 
     d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
     d->playbackWidget->hide();
@@ -658,7 +658,7 @@ void PresentationKB::keyPressEvent(QKeyEvent* event)
     if (!event)
         return;
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->keyPressEvent(event);
 #endif
 
@@ -681,7 +681,7 @@ void PresentationKB::mouseMoveEvent(QMouseEvent* e)
     d->mouseMoveTimer->start(1000);
     d->mouseMoveTimer->setSingleShot(true);
 
-#ifdef HAVE_AUDIO
+#ifdef HAVE_MEDIAPLAYER
     if (!d->playbackWidget->canHide())
         return;
 
