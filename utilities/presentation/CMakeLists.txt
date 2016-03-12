@@ -9,7 +9,8 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 if(HAVE_MEDIAPLAYER)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/audio)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/audio
+    )
 endif()
 
 if(HAVE_OPENGL)
@@ -19,7 +20,6 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dialogs
                     ${CMAKE_CURRENT_SOURCE_DIR}/widgets
-                    ${CMAKE_CURRENT_SOURCE_DIR}/plugin
                     ${CMAKE_CURRENT_SOURCE_DIR}/common
 )
 

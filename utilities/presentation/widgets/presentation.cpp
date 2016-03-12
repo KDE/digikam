@@ -58,7 +58,10 @@
 #include "presentationcontainer.h"
 #include "presentationctrlwidget.h"
 #include "presentationloader.h"
-#include "presentationaudiowidget.h"
+
+#ifdef HAVE_AUDIO
+#   include "presentationaudiowidget.h"
+#endif
 
 namespace Digikam
 {

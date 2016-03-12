@@ -56,12 +56,15 @@
 // Local includes
 
 #include "digikam_config.h"
+#include "digikam_debug.h"
 #include "presentationcontainer.h"
 #include "kbimageloader.h"
 #include "kbeffect.h"
-#include "presentationaudiowidget.h"
-#include "digikam_debug.h"
 #include "presentationkb_p.h"
+
+#ifdef HAVE_AUDIO
+#   include "presentationaudiowidget.h"
+#endif
 
 namespace Digikam
 {

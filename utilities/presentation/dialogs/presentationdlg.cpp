@@ -45,9 +45,12 @@
 #include "presentationcontainer.h"
 #include "presentation_mainpage.h"
 #include "presentation_captionpage.h"
-#include "presentation_audiopage.h"
 #include "presentation_advpage.h"
 #include "thumbnailloadthread.h"
+
+#ifdef HAVE_AUDIO
+#   include "presentation_audiopage.h"
+#endif
 
 namespace Digikam
 {
@@ -86,7 +89,7 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
     d->startButton->setText(i18n("Start Slideshow"));
     d->startButton->setDefault(true);
     d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
-    
+
     setModal(true);
 
     // --- Pages settings ---
