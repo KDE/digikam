@@ -23,6 +23,7 @@ add_subdirectory(filters)
 add_subdirectory(timestampupdate)
 add_subdirectory(widgets)
 add_subdirectory(rawengine)
+add_subdirectory(presentation)
 
 if(ENABLE_DIGIKAM_MODELTEST)
     message(STATUS "Modeltest enabled")

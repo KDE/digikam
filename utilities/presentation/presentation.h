@@ -32,12 +32,16 @@
 #include <QObject>
 #include <QList>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
 class PresentationContainer;
 
-class Presentation : public QObject
+class DIGIKAM_EXPORT Presentation : public QObject
 {
     Q_OBJECT
 

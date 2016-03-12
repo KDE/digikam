@@ -43,11 +43,11 @@ if(KF5CalendarCore_FOUND)
     add_executable(calendar ${calendar_SRCS})
 
     target_link_libraries(calendar
-                        digikamcore
-                        libdng
+                          digikamcore
+                          libdng
 
-                        Qt5::Gui
-                        Qt5::Xml
+                          Qt5::Gui
+                          Qt5::Xml
     )
 endif()
 
