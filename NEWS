@@ -22,6 +22,7 @@ Image Editor       : Add a new Lut3D tool.
 Image Editor       : Add a new option to import images from a digital scanner.
 Image Editor       : Add a new option to edit metadata.
 Image Editor       : Add a new option to edit geolocation.
+Image Editor       : Add a new option to run presentation tool.
 Image Editor       : Add a new Lut3D tool.
 
 Light Table        : Add a new option to import images from a digital scanner.
@@ -31,6 +32,7 @@ Light Table        : Add a new option to edit geolocation.
 Showfoto           : Add a new option to import images from a digital scanner.
 Showfoto           : Add a new option to edit metadata.
 Showfoto           : Add a new option to edit geolocation.
+Showfoto           : Add a new option to run presentation tool.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
