@@ -97,24 +97,24 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
 
     d->tab = new QTabWidget(this);
 
-    d->sharedData->mainPage  = new PresentationMainPage(this, d->sharedData);
+    d->sharedData->mainPage = new PresentationMainPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->mainPage,
                    QIcon::fromTheme(QString::fromLatin1("view-presentation")),
                    i18n("Main Settings"));
 
-    d->sharedData->captionPage  = new PresentationCaptionPage(this, d->sharedData);
+    d->sharedData->captionPage = new PresentationCaptionPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->captionPage,
                    QIcon::fromTheme(QString::fromLatin1("draw-freehand")),
                    i18nc("captions for the slideshow", "Caption"));
 
 #ifdef HAVE_MEDIAPLAYER
-    d->sharedData->soundtrackPage  = new PresentationAudioPage(this, d->sharedData);
+    d->sharedData->soundtrackPage = new PresentationAudioPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->soundtrackPage,
                    QIcon::fromTheme(QString::fromLatin1("speaker")),
                    i18n("Soundtrack"));
 #endif
 
-    d->sharedData->advancedPage  = new PresentationAdvPage(this, d->sharedData);
+    d->sharedData->advancedPage = new PresentationAdvPage(this, d->sharedData);
     d->tab->addTab(d->sharedData->advancedPage,
                    QIcon::fromTheme(QString::fromLatin1("configure")),
                    i18n("Advanced"));
@@ -161,7 +161,7 @@ void PresentationDlg::readSettings()
     d->sharedData->delayMsLineStep   = 100;
 
     // Comments tab settings
-    QFont *savedFont = new QFont();
+    QFont* const savedFont = new QFont();
     savedFont->setFamily(    grp.readEntry("Comments Font Family"));
     savedFont->setPointSize( grp.readEntry("Comments Font Size", 10 ));
     savedFont->setBold(      grp.readEntry("Comments Font Bold", false));
@@ -177,7 +177,6 @@ void PresentationDlg::readSettings()
     d->sharedData->commentsBgColor     = grp.readEntry("Comments Bg Color", 0x000000);
     d->sharedData->commentsDrawOutline = grp.readEntry("Comments Text Outline", true);
     d->sharedData->bgOpacity           = grp.readEntry("Background Opacity", 10);
-
     d->sharedData->commentsLinesLength = grp.readEntry("Comments Lines Length", 72);
 
 #ifdef HAVE_MEDIAPLAYER
@@ -209,6 +208,7 @@ void PresentationDlg::readSettings()
         {
             QUrl file(playlistFile);
             QFileInfo fi(file.toLocalFile());
+
             if (fi.isFile())
             {
                 d->sharedData->soundtrackUrls << file;
