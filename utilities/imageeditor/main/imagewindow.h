@@ -117,6 +117,7 @@ private:
     void removeCurrent();
 
     void slideShow(SlideShowSettings& settings);
+    void presentation();
 
     void assignPickLabel(const ImageInfo& info, int pickId);
     void assignColorLabel(const ImageInfo& info, int colorId);

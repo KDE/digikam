@@ -234,6 +234,7 @@ protected:
     virtual Sidebar* rightSideBar() const = 0;
 
     virtual void slideShow(SlideShowSettings& settings) = 0;
+    virtual void presentation() = 0;
 
     virtual void setupConnections() = 0;
     virtual void setupActions() = 0;
@@ -312,6 +313,7 @@ private Q_SLOTS:
     void slotUpdateSoftProofingState();
     void slotSavingFinished(const QString& filename, bool success);
     void slotToggleSlideShow();
+    void slotPresentation();
     void slotZoomTo100Percents();
     void slotZoomChanged(bool isMax, bool isMin, double zoom);
     void slotSelectionChanged(const QRect& sel);

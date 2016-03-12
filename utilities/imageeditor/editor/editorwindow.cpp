@@ -533,6 +533,11 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
+    d->presentationAction = new QAction(QIcon::fromTheme(QLatin1String("presentation_section")), i18n("Presentation..."), this);
+    connect(d->presentationAction, SIGNAL(triggered()), this, SLOT(slotPresentation()));
+    ac->addAction(QLatin1String("editorwindow_presentation"), d->presentationAction);
+    ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
+
     d->viewUnderExpoAction = new QAction(QIcon::fromTheme(QLatin1String("underexposure")), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setCheckable(true);
     d->viewUnderExpoAction->setWhatsThis(i18n("Set this option to display black "
@@ -2536,6 +2541,11 @@ void EditorWindow::slotToggleSlideShow()
     SlideShowSettings settings;
     settings.readFromConfig();
     slideShow(settings);
+}
+
+void EditorWindow::slotPresentation()
+{
+    presentation();
 }
 
 void EditorWindow::slotSelectionChanged(const QRect& sel)

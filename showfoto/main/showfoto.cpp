@@ -99,6 +99,7 @@ extern "C"
 #include "loadingcacheinterface.h"
 #include "metadatasettings.h"
 #include "metadataedit.h"
+#include "presentationmngr.h"
 #include "savingcontext.h"
 #include "showfotosetup.h"
 #include "showfotosetupmisc.h"
@@ -1087,6 +1088,13 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 
         slide->show();
     }
+}
+
+void ShowFoto::presentation()
+{
+    Digikam::PresentationMngr* const mngr = new Digikam::PresentationMngr(this);
+    mngr->setItems(d->thumbBar->urls());
+    mngr->showConfigDialog();
 }
 
 void ShowFoto::slotRevert()

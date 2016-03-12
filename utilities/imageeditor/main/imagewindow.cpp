@@ -107,6 +107,7 @@
 #include "metadataedit.h"
 #include "colorlabelwidget.h"
 #include "picklabelwidget.h"
+#include "presentationmngr.h"
 #include "ratingwidget.h"
 #include "savingcontext.h"
 #include "scancontroller.h"
@@ -1213,7 +1214,7 @@ void ImageWindow::removeCurrent()
     {
         return;
     }
-    
+
     if (m_canvas->interface()->undoState().hasChanges)
     {
         m_canvas->slotRestore();
@@ -1346,6 +1347,21 @@ void ImageWindow::slotCollectionImageChange(const CollectionImageChangeset& chan
 void ImageWindow::slotFilePrint()
 {
     printImage(d->currentUrl());
+}
+
+void ImageWindow::presentation()
+{
+    QList<QUrl> urls;
+
+    foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
+    {
+        urls << info.fileUrl();
+        qApp->processEvents();
+    }
+
+    PresentationMngr* const mngr = new PresentationMngr(this);
+    mngr->setItems(urls);
+    mngr->showConfigDialog();
 }
 
 void ImageWindow::slideShow(SlideShowSettings& settings)

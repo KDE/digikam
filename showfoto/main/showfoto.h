@@ -91,6 +91,7 @@ private:
     void saveVersionIsComplete();
 
     void slideShow(Digikam::SlideShowSettings& settings);
+    void presentation();
 
     void openFolder(const QUrl& url);
     void openUrls(const QList<QUrl>& urls);
