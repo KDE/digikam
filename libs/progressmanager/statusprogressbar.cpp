@@ -91,7 +91,7 @@ StatusProgressBar::StatusProgressBar(QWidget* const parent)
     QHBoxLayout* const hBox = new QHBoxLayout(d->progressWidget);
     d->progressBar          = new QProgressBar(d->progressWidget);
     d->cancelButton         = new QPushButton(d->progressWidget);
-    d->cancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    d->cancelButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->cancelButton->setFocusPolicy(Qt::NoFocus);
     d->cancelButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
     setProgressTotalSteps(100);
@@ -220,13 +220,13 @@ void StatusProgressBar::setProgressBarMode(int mode, const QString& text)
             ProgressItem* const item = ProgressManager::createProgressItem(d->title, QString(), false, !d->icon.isNull());
             item->setTotalItems(d->progressBar->maximum());
             item->setCompletedItems(d->progressBar->value());
-            
+
             if (!d->icon.isNull())
                 item->setThumbnail(d->icon);
-            
+
             connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                     this, SIGNAL(signalCancelButtonPressed()));
-            
+
             d->progressId = item->id();
         }
     }
@@ -241,13 +241,13 @@ void StatusProgressBar::setProgressBarMode(int mode, const QString& text)
             ProgressItem* const item = ProgressManager::createProgressItem(d->title, QString(), true, !d->icon.isNull());
             item->setTotalItems(d->progressBar->maximum());
             item->setCompletedItems(d->progressBar->value());
-            
+
             if (!d->icon.isNull())
                 item->setThumbnail(d->icon);
-            
+
             connect(item, SIGNAL(progressItemCanceled(ProgressItem*)),
                     this, SIGNAL(signalCancelButtonPressed()));
-            
+
             d->progressId = item->id();
         }
     }
