@@ -274,6 +274,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(i18n("Geolocation Editor"));
     setMinimumSize(300, 400);
+    resize(800, 600);
 
     d->imageModel     = new GPSImageModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
@@ -311,7 +312,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
 #ifdef HAVE_KBOOKMARKS
     d->actionBookmarkVisibility = new QAction(this);
-    d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QLatin1String("user-trash")));
+    d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QLatin1String("bookmarks")));
     d->actionBookmarkVisibility->setToolTip(i18n("Display bookmarked positions on the map."));
     d->actionBookmarkVisibility->setCheckable(true);
 
@@ -323,7 +324,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     setLayout(mainLayout);
 
     DHBox* const hboxMain = new DHBox(this);
-    mainLayout->addWidget(hboxMain);
+    mainLayout->addWidget(hboxMain, 10);
 
     d->HSplitter          = new QSplitter(Qt::Horizontal, hboxMain);
     d->HSplitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -337,7 +338,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     d->cbMapLayout->addItem(i18n("Two maps - horizontal"), QVariant::fromValue(MapLayoutHorizontal));
     d->cbMapLayout->addItem(i18n("Two maps - vertical"),   QVariant::fromValue(MapLayoutVertical));
     labelMapLayout->setBuddy(d->cbMapLayout);
-   
+
     d->progressBar          = new StatusProgressBar(hbox);
     d->progressBar->setVisible(false);
     d->progressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
@@ -345,7 +346,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
     d->progressCancelButton = new QPushButton(hbox);
     d->progressCancelButton->setVisible(false);
-    d->progressCancelButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+    d->progressCancelButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->progressCancelButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-cancel")));
 
     connect(d->progressCancelButton, SIGNAL(clicked()),
@@ -359,7 +360,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     connect(d->buttonBox->button(QDialogButtonBox::Close), &QPushButton::clicked,
             this, &GeolocationEdit::close);
 
-    mainLayout->addWidget(hbox);
+    mainLayout->addWidget(hbox, 0);
 
     // ------------------------------------------------------------------------------------------------
 
@@ -503,7 +504,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
     connect(d->bookmarkOwner->bookmarkModelHelper(), SIGNAL(signalUndoCommand(GPSUndoCommand*)),
             this, SLOT(slotGPSUndoCommand(GPSUndoCommand*)));
 #endif
-    
+
     connect(d->detailsWidget, SIGNAL(signalUndoCommand(GPSUndoCommand*)),
             this, SLOT(slotGPSUndoCommand(GPSUndoCommand*)));
 
@@ -772,7 +773,7 @@ void GeolocationEdit::saveSettings()
 #ifdef HAVE_KBOOKMARKS
     group.writeEntry("Bookmarks visible",         d->actionBookmarkVisibility->isChecked());
 #endif
-    
+
     config->sync();
 }
 
