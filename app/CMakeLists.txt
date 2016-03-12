@@ -44,6 +44,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:metadataedit_src>
             $<TARGET_OBJECTS:expoblending_src>
             $<TARGET_OBJECTS:assistants_src>
+            $<TARGET_OBJECTS:presentation_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
 
             utils/digikam_debug.cpp

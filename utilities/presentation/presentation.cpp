@@ -62,7 +62,7 @@ extern "C"
 
 #include "digikam_debug.h"
 #include "presentationdlg.h"
-#include "presentation.h"
+#include "presentationwidget.h"
 #include "presentationcontainer.h"
 
 

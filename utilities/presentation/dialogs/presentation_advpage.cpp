@@ -26,7 +26,7 @@
 
 #include "digikam_config.h"
 #include "presentationcontainer.h"
-#include "presentation.h"
+#include "presentationwidget.h"
 
 #ifdef HAVE_OPENGL
 #   include "presentationgl.h"

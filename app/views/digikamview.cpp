@@ -609,7 +609,7 @@ void DigikamView::setupConnections()
 
     connect(d->stackedview, SIGNAL(signalSlideShowCurrent()),
             this, SLOT(slotSlideShowManualFromCurrent()));
-    
+
     connect(d->stackedview, SIGNAL(signalZoomFactorChanged(double)),
             this, SLOT(slotZoomFactorChanged(double)));
 
@@ -2122,7 +2122,7 @@ void DigikamView::slotSlideShowRecursive()
 
         connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
                 this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
-        
+
         builder->run();
     }
 }
@@ -2143,14 +2143,14 @@ void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
 
    builder->run();
 }
- 
+
 void DigikamView::slideShow(const ImageInfoList& infoList)
 {
     SlideShowBuilder* const builder = new SlideShowBuilder(infoList);
 
     connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
             this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
-    
+
     builder->run();
 }
 

@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "presentation.h"
+#include "presentationwidget.h"
 
 // C++ includes
 
@@ -66,7 +66,7 @@
 namespace Digikam
 {
 
-class Presentation::Private
+class PresentationWidget::Private
 {
 
 public:
@@ -178,7 +178,7 @@ public:
     int                         deskHeight;
 };
 
-Presentation::Presentation(const QStringList& fileList, const QStringList& commentsList, PresentationContainer* const sharedData)
+PresentationWidget::PresentationWidget(const QStringList& fileList, const QStringList& commentsList, PresentationContainer* const sharedData)
     : QWidget(0, Qt::WindowStaysOnTopHint | Qt::Popup | Qt::X11BypassWindowManagerHint),
       d(new Private)
 {
@@ -290,7 +290,7 @@ Presentation::Presentation(const QStringList& fileList, const QStringList& comme
     slotMouseMoveTimeOut();
 }
 
-Presentation::~Presentation()
+PresentationWidget::~PresentationWidget()
 {
     d->timer->stop();
     delete d->timer;
@@ -304,28 +304,28 @@ Presentation::~Presentation()
     delete d;
 }
 
-void Presentation::readSettings()
+void PresentationWidget::readSettings()
 {
 }
 
-void Presentation::registerEffects()
+void PresentationWidget::registerEffects()
 {
-    d->Effects.insert( QString::fromLatin1("None"),             &Presentation::effectNone );
-    d->Effects.insert( QString::fromLatin1("Chess Board"),      &Presentation::effectChessboard );
-    d->Effects.insert( QString::fromLatin1("Melt Down"),        &Presentation::effectMeltdown );
-    d->Effects.insert( QString::fromLatin1("Sweep"),            &Presentation::effectSweep );
-    d->Effects.insert( QString::fromLatin1("Mosaic"),           &Presentation::effectMosaic );
-    d->Effects.insert( QString::fromLatin1("Cubism"),           &Presentation::effectCubism );
-    d->Effects.insert( QString::fromLatin1("Growing"),          &Presentation::effectGrowing );
-    d->Effects.insert( QString::fromLatin1("Horizontal Lines"), &Presentation::effectHorizLines );
-    d->Effects.insert( QString::fromLatin1("Vertical Lines"),   &Presentation::effectVertLines );
-    d->Effects.insert( QString::fromLatin1("Circle Out"),       &Presentation::effectCircleOut );
-    d->Effects.insert( QString::fromLatin1("MultiCircle Out"),  &Presentation::effectMultiCircleOut );
-    d->Effects.insert( QString::fromLatin1("Spiral In"),        &Presentation::effectSpiralIn );
-    d->Effects.insert( QString::fromLatin1("Blobs"),            &Presentation::effectBlobs );
+    d->Effects.insert( QString::fromLatin1("None"),             &PresentationWidget::effectNone );
+    d->Effects.insert( QString::fromLatin1("Chess Board"),      &PresentationWidget::effectChessboard );
+    d->Effects.insert( QString::fromLatin1("Melt Down"),        &PresentationWidget::effectMeltdown );
+    d->Effects.insert( QString::fromLatin1("Sweep"),            &PresentationWidget::effectSweep );
+    d->Effects.insert( QString::fromLatin1("Mosaic"),           &PresentationWidget::effectMosaic );
+    d->Effects.insert( QString::fromLatin1("Cubism"),           &PresentationWidget::effectCubism );
+    d->Effects.insert( QString::fromLatin1("Growing"),          &PresentationWidget::effectGrowing );
+    d->Effects.insert( QString::fromLatin1("Horizontal Lines"), &PresentationWidget::effectHorizLines );
+    d->Effects.insert( QString::fromLatin1("Vertical Lines"),   &PresentationWidget::effectVertLines );
+    d->Effects.insert( QString::fromLatin1("Circle Out"),       &PresentationWidget::effectCircleOut );
+    d->Effects.insert( QString::fromLatin1("MultiCircle Out"),  &PresentationWidget::effectMultiCircleOut );
+    d->Effects.insert( QString::fromLatin1("Spiral In"),        &PresentationWidget::effectSpiralIn );
+    d->Effects.insert( QString::fromLatin1("Blobs"),            &PresentationWidget::effectBlobs );
 }
 
-QStringList Presentation::effectNames()
+QStringList PresentationWidget::effectNames()
 {
     QStringList effects;
 
@@ -347,7 +347,7 @@ QStringList Presentation::effectNames()
     return effects;
 }
 
-QMap<QString, QString> Presentation::effectNamesI18N()
+QMap<QString, QString> PresentationWidget::effectNamesI18N()
 {
     QMap<QString, QString> effects;
 
@@ -369,7 +369,7 @@ QMap<QString, QString> Presentation::effectNamesI18N()
     return effects;
 }
 
-void Presentation::slotTimeOut()
+void PresentationWidget::slotTimeOut()
 {
     if ( !d->effect ) return;                       // No effect -> bye !
 
@@ -412,7 +412,7 @@ void Presentation::slotTimeOut()
     d->timer->start( tmout );
 }
 
-void Presentation::loadNextImage()
+void PresentationWidget::loadNextImage()
 {
     if ( !d->currImage.isNull() )
     {
@@ -460,7 +460,7 @@ void Presentation::loadNextImage()
     d->currImage = QPixmap( pixmap );
 }
 
-void Presentation::loadPrevImage()
+void PresentationWidget::loadPrevImage()
 {
     d->fileIndex--;
     d->imageLoader->prev();
@@ -497,7 +497,7 @@ void Presentation::loadPrevImage()
     d->currImage = QPixmap( pixmap );
 }
 
-void Presentation::showCurrentImage()
+void PresentationWidget::showCurrentImage()
 {
     if ( d->currImage.isNull() )
         return;
@@ -507,7 +507,7 @@ void Presentation::showCurrentImage()
     repaint();
 }
 
-void Presentation::printFilename()
+void PresentationWidget::printFilename()
 {
     if ( d->currImage.isNull() )
         return;
@@ -529,7 +529,7 @@ void Presentation::printFilename()
     p.drawText( 10, height() - 30, d->imageLoader->currFileName() );
 }
 
-void Presentation::printComments()
+void PresentationWidget::printComments()
 {
     if (d->currImage.isNull())
         return;
@@ -620,7 +620,7 @@ void Presentation::printComments()
     }
 }
 
-void Presentation::printProgress()
+void PresentationWidget::printProgress()
 {
     if ( d->currImage.isNull() )
         return;
@@ -646,7 +646,7 @@ void Presentation::printProgress()
     p.drawText( width() - stringLength - 10, 20, progress );
 }
 
-Presentation::EffectMethod Presentation::getRandomEffect()
+PresentationWidget::EffectMethod PresentationWidget::getRandomEffect()
 {
     QStringList effs = d->Effects.keys();
     effs.removeAt( effs.indexOf(QString::fromLatin1("None")));
@@ -659,7 +659,7 @@ Presentation::EffectMethod Presentation::getRandomEffect()
     return d->Effects[key];
 }
 
-void Presentation::showEndOfShow()
+void PresentationWidget::showEndOfShow()
 {
     m_endOfShow = true;
     update();
@@ -669,7 +669,7 @@ void Presentation::showEndOfShow()
     d->slidePresentationAudioWidget->setEnabledPrev( false );
 }
 
-void Presentation::keyPressEvent(QKeyEvent* event)
+void PresentationWidget::keyPressEvent(QKeyEvent* event)
 {
     if (!event)
         return;
@@ -681,7 +681,7 @@ void Presentation::keyPressEvent(QKeyEvent* event)
     d->slidePresentationAudioWidget->keyPressEvent(event);
 }
 
-void Presentation::mousePressEvent( QMouseEvent* e )
+void PresentationWidget::mousePressEvent( QMouseEvent* e )
 {
     if ( m_endOfShow )
         slotClose();
@@ -700,7 +700,7 @@ void Presentation::mousePressEvent( QMouseEvent* e )
     }
 }
 
-void Presentation::mouseMoveEvent( QMouseEvent* e )
+void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
 {
     setCursor( QCursor( Qt::ArrowCursor ) );
     d->mouseMoveTimer->setSingleShot( true );
@@ -765,7 +765,7 @@ void Presentation::mouseMoveEvent( QMouseEvent* e )
 #endif
 }
 
-void Presentation::wheelEvent( QWheelEvent* e )
+void PresentationWidget::wheelEvent( QWheelEvent* e )
 {
     if ( !d->sharedData->enableMouseWheel ) 
         return;
@@ -789,7 +789,7 @@ void Presentation::wheelEvent( QWheelEvent* e )
     }
 }
 
-void Presentation::slotMouseMoveTimeOut()
+void PresentationWidget::slotMouseMoveTimeOut()
 {
     QPoint pos( QCursor::pos() );
 
@@ -800,13 +800,13 @@ void Presentation::slotMouseMoveTimeOut()
     setCursor( QCursor( Qt::BlankCursor ) );
 }
 
-int Presentation::effectNone( bool /* aInit */ )
+int PresentationWidget::effectNone( bool /* aInit */ )
 {
     showCurrentImage();
     return -1;
 }
 
-int Presentation::effectChessboard( bool aInit )
+int PresentationWidget::effectChessboard( bool aInit )
 {
     if ( aInit )
     {
@@ -847,7 +847,7 @@ int Presentation::effectChessboard( bool aInit )
     return d->wait;
 }
 
-int Presentation::effectMeltdown( bool aInit )
+int PresentationWidget::effectMeltdown( bool aInit )
 {
     int i;
 
@@ -903,7 +903,7 @@ int Presentation::effectMeltdown( bool aInit )
     return 15;
 }
 
-int Presentation::effectSweep( bool aInit )
+int PresentationWidget::effectSweep( bool aInit )
 {
     if ( aInit )
     {
@@ -980,7 +980,7 @@ int Presentation::effectSweep( bool aInit )
     return 20;
 }
 
-int Presentation::effectMosaic( bool aInit )
+int PresentationWidget::effectMosaic( bool aInit )
 {
     int dim    = 10; // Size of a cell (dim x dim)
     int margin = dim + ( int )( dim/4 );
@@ -1043,7 +1043,7 @@ int Presentation::effectMosaic( bool aInit )
     return 20;
 }
 
-int Presentation::effectCubism( bool aInit )
+int PresentationWidget::effectCubism( bool aInit )
 {
     if ( aInit )
     {
@@ -1083,14 +1083,14 @@ int Presentation::effectCubism( bool aInit )
     return 10;
 }
 
-int Presentation::effectRandom( bool /*aInit*/ )
+int PresentationWidget::effectRandom( bool /*aInit*/ )
 {
     d->fileIndex--;
 
     return -1;
 }
 
-int Presentation::effectGrowing( bool aInit )
+int PresentationWidget::effectGrowing( bool aInit )
 {
     if ( aInit )
     {
@@ -1126,7 +1126,7 @@ int Presentation::effectGrowing( bool aInit )
     return 20;
 }
 
-int Presentation::effectHorizLines( bool aInit )
+int PresentationWidget::effectHorizLines( bool aInit )
 {
     static int iyPos[] = { 0, 4, 2, 6, 1, 5, 3, 7, -1 };
 
@@ -1162,7 +1162,7 @@ int Presentation::effectHorizLines( bool aInit )
     return -1;
 }
 
-int Presentation::effectVertLines( bool aInit )
+int PresentationWidget::effectVertLines( bool aInit )
 {
     static int ixPos[] = { 0, 4, 2, 6, 1, 5, 3, 7, -1 };
 
@@ -1198,7 +1198,7 @@ int Presentation::effectVertLines( bool aInit )
     return -1;
 }
 
-int Presentation::effectMultiCircleOut( bool aInit )
+int PresentationWidget::effectMultiCircleOut( bool aInit )
 {
     int x, y, i;
     double alpha;
@@ -1251,7 +1251,7 @@ int Presentation::effectMultiCircleOut( bool aInit )
     return d->wait;
 }
 
-int Presentation::effectSpiralIn( bool aInit )
+int PresentationWidget::effectSpiralIn( bool aInit )
 {
     if ( aInit )
     {
@@ -1324,7 +1324,7 @@ int Presentation::effectSpiralIn( bool aInit )
     return 8;
 }
 
-int Presentation::effectCircleOut( bool aInit )
+int PresentationWidget::effectCircleOut( bool aInit )
 {
     int x, y;
 
@@ -1367,7 +1367,7 @@ int Presentation::effectCircleOut( bool aInit )
     return 20;
 }
 
-int Presentation::effectBlobs( bool aInit )
+int PresentationWidget::effectBlobs( bool aInit )
 {
     int r;
 
@@ -1405,7 +1405,7 @@ int Presentation::effectBlobs( bool aInit )
     return 10;
 }
 
-void Presentation::paintEvent( QPaintEvent* )
+void PresentationWidget::paintEvent( QPaintEvent* )
 {
 
     QPainter p( this );
@@ -1459,13 +1459,13 @@ void Presentation::paintEvent( QPaintEvent* )
     p.drawPixmap( 0,0, m_buffer );
 }
 
-void Presentation::startPainter()
+void PresentationWidget::startPainter()
 {
     m_startPainter = true;
     repaint();
 }
 
-void Presentation::slotPause()
+void PresentationWidget::slotPause()
 {
     d->timer->stop();
 
@@ -1477,13 +1477,13 @@ void Presentation::slotPause()
     }
 }
 
-void Presentation::slotPlay()
+void PresentationWidget::slotPlay()
 {
     d->slidePresentationAudioWidget->hide();
     slotTimeOut();
 }
 
-void Presentation::slotPrev()
+void PresentationWidget::slotPrev()
 {
     loadPrevImage();
 
@@ -1498,7 +1498,7 @@ void Presentation::slotPrev()
     showCurrentImage();
 }
 
-void Presentation::slotNext()
+void PresentationWidget::slotNext()
 {
     loadNextImage();
 
@@ -1513,7 +1513,7 @@ void Presentation::slotNext()
     showCurrentImage();
 }
 
-void Presentation::slotClose()
+void PresentationWidget::slotClose()
 {
     close();
 }

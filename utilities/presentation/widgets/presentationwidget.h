@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_H
-#define PRESENTATION_H
+#ifndef PRESENTATION_WIDGET_H
+#define PRESENTATION_WIDGET_H
 
 // Qt includes
 
@@ -47,18 +47,20 @@ namespace Digikam
 
 class PresentationContainer;
 
-class Presentation : public QWidget
+class PresentationWidget : public QWidget
 {
     Q_OBJECT
 
-    typedef int (Presentation::*EffectMethod)(bool);
+public:
+
+    typedef int (PresentationWidget::*EffectMethod)(bool);
 
 public:
 
-    Presentation(const QStringList& fileList,
-                 const QStringList& commentsList,
-                 PresentationContainer* const sharedData);
-    ~Presentation();
+    PresentationWidget(const QStringList& fileList,
+                       const QStringList& commentsList,
+                       PresentationContainer* const sharedData);
+    ~PresentationWidget();
 
     void registerEffects();
 
@@ -132,4 +134,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* PRESENTATION_H */
+#endif /* PRESENTATION_WIDGET_H */

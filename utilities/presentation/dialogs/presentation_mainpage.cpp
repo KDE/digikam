@@ -43,20 +43,19 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "presentationcontainer.h"
 #include "presentation_advpage.h"
 #include "presentation_captionpage.h"
 #include "thumbnailloadthread.h"
 #include "dimageslist.h"
-#include "presentation.h"
+#include "presentationwidget.h"
 
 #ifdef HAVE_OPENGL
 #   include "presentationgl.h"
 #   include "presentationkb.h"
 #endif
-
-
 
 namespace Digikam
 {
@@ -172,7 +171,7 @@ void PresentationMainPage::saveSettings()
     {
 
         QString effect;
-        QMap<QString, QString> effectNames = Presentation::effectNamesI18N();
+        QMap<QString, QString> effectNames = PresentationWidget::effectNamesI18N();
         QMap<QString, QString>::ConstIterator it;
 
         for (it = effectNames.constBegin(); it != effectNames.constEnd(); ++it)
@@ -259,7 +258,7 @@ void PresentationMainPage::loadEffectNames()
 {
     m_effectsComboBox->clear();
 
-    QMap<QString, QString> effectNames = Presentation::effectNamesI18N();
+    QMap<QString, QString> effectNames = PresentationWidget::effectNamesI18N();
     QStringList effects;
 
     QMap<QString, QString>::Iterator it;

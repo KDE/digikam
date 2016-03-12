@@ -36,7 +36,7 @@ set(libpresentation_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_captio
                          ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_advpage.cpp
 
                          ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationctrlwidget.cpp
-                         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentation.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/widgets/presentationwidget.cpp
 
                          ${CMAKE_CURRENT_SOURCE_DIR}/common/presentationcontainer.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/common/presentationloader.cpp
