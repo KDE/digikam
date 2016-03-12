@@ -17,7 +17,6 @@ Database           : Mysql internal server is now configurable as Sqlite to stor
 Database           : Mysql internal/remote server is now configurable with first run assistant.
 
 Batch Queue Manager: Add a new tool to convert RAW files to DNG.
-Image Editor       : Add a new Lut3D tool.
 
 Image Editor       : Add a new option to import images from a digital scanner.
 Image Editor       : Add a new option to edit metadata.
@@ -28,6 +27,7 @@ Image Editor       : Add a new Lut3D tool.
 Light Table        : Add a new option to import images from a digital scanner.
 Light Table        : Add a new option to edit metadata.
 Light Table        : Add a new option to edit geolocation.
+Light Table        : Add a new option to run presentation tool.
 
 Showfoto           : Add a new option to import images from a digital scanner.
 Showfoto           : Add a new option to edit metadata.

@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="503" name="lighttablewindow" >
+<gui version="504" name="lighttablewindow" >
 
 <MenuBar>
 
@@ -30,6 +30,7 @@
     <Menu name="View" ><text>&amp;View</text>
         <Action name="lighttable_fullscreen" />
         <Action name="lighttable_slideshow" />
+        <Action name="lighttable_presentation" />
         <Separator/>
         <Action name="lighttable_syncpreview" />
         <Action name="lighttable_navigatebypair" />

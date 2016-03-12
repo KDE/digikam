@@ -61,6 +61,7 @@
 #include "imagewindow.h"
 #include "imagegps.h"
 #include "imagedescedittab.h"
+#include "presentationmngr.h"
 #include "slideshowbuilder.h"
 #include "slideshow.h"
 #include "setup.h"
@@ -393,7 +394,7 @@ void LightTableWindow::setupConnections()
 
     connect(d->previewView, SIGNAL(signalSlideShow()),
             this, SLOT(slotSlideShowAll()));
-    
+
     connect(d->previewView, SIGNAL(signalLeftSlideShowCurrent()),
             this, SLOT(slotLeftSlideShowManualFromCurrent()));
 
@@ -552,6 +553,11 @@ void LightTableWindow::setupActions()
     connect(d->slideShowAction, SIGNAL(triggered()), this, SLOT(slotSlideShowAll()));
     ac->addAction(QLatin1String("lighttable_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
+
+    d->presentationAction = new QAction(QIcon::fromTheme(QLatin1String("presentation_section")), i18n("Presentation..."), this);
+    connect(d->presentationAction, SIGNAL(triggered()), this, SLOT(slotPresentation()));
+    ac->addAction(QLatin1String("lighttable_presentation"), d->presentationAction);
+    ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
 
     // Left Panel Zoom Actions
 
@@ -1386,6 +1392,21 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
     }
 
     im->setFocus();
+}
+
+void LightTableWindow::slotPresentation()
+{
+    QList<QUrl> urls;
+
+    foreach(const ImageInfo& info, d->thumbView->imageInfos())
+    {
+        urls << info.fileUrl();
+        qApp->processEvents();
+    }
+
+    PresentationMngr* const mngr = new PresentationMngr(this);
+    mngr->setItems(urls);
+    mngr->showConfigDialog();
 }
 
 void LightTableWindow::slotSlideShowAll()

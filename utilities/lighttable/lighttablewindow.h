@@ -142,6 +142,7 @@ private Q_SLOTS:
 
     void slotThumbbarDroppedItems(const QList<ImageInfo>&);
 
+    void slotPresentation();
     void slotSlideShowAll();
     void slotSetup();
     void slotColorManagementOptionsChanged();
