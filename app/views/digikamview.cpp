@@ -70,6 +70,7 @@
 #include "sidebar.h"
 #include "slideshow.h"
 #include "slideshowbuilder.h"
+#include "presentation.h"
 #include "statusprogressbar.h"
 #include "filtersidebarwidget.h"
 #include "tagmodificationhelper.h"
@@ -483,7 +484,7 @@ void DigikamView::setupConnections()
 
     connect(d->iconView, SIGNAL(fullscreenRequested(ImageInfo)),
             this, SLOT(slotSlideShowManualFrom(ImageInfo)));
-    
+
     connect(d->iconView, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)),
             this, SLOT(slotGotoAlbumAndItem(ImageInfo)));
 
@@ -2142,6 +2143,13 @@ void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
 
    builder->run();
+}
+
+void DigikamView::slotPresentation()
+{
+    Presentation* const mngr = new Presentation(this);
+    mngr->setItems(selectedUrls());
+    mngr->showConfigDialog();
 }
 
 void DigikamView::slideShow(const ImageInfoList& infoList)

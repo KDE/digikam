@@ -64,7 +64,7 @@ public:
     PresentationMainPage*    mainPage;
     PresentationCaptionPage* captionPage;
 
-    #ifdef HAVE_MEDIAPLAYER
+#ifdef HAVE_MEDIAPLAYER
     PresentationAudioPage*   soundtrackPage;
 #endif
 

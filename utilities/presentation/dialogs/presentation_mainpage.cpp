@@ -149,6 +149,8 @@ void PresentationMainPage::readSettings()
     slotOpenGLToggled();
     slotPrintCommentsToggled();
     slotEffectChanged();
+
+    addItems(d->sharedData->urlList);
 }
 
 void PresentationMainPage::saveSettings()

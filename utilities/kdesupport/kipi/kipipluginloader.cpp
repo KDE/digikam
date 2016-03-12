@@ -126,15 +126,16 @@ void KipiPluginLoader::Private::loadPlugins()
     ignores.append(QLatin1String("Google Drive Export"));
 
     // These plugins have been managed with 5.0.0
-    ignores.append(QLatin1String("FlickrExport"));   // Renamed as Flickr
-    ignores.append(QLatin1String("GPSSync"));        // Renamed as GeoLocator
-    ignores.append(QLatin1String("DNGConverter"));   // Moved to digiKam core
-    ignores.append(QLatin1String("AcquireImages"));  // Moved to digiKam core
-    ignores.append(QLatin1String("MetadataEdit"));   // Moved to digiKam core
-    ignores.append(QLatin1String("GeoLocator"));     // Moved to digiKam core
-    ignores.append(QLatin1String("ExpoBlending"));   // Moved to digiKam core
-    ignores.append(QLatin1String("Calendar"));       // Moved to digiKam core
-    ignores.append(QLatin1String("Panorama"));       // Moved to digiKam core
+    ignores.append(QLatin1String("FlickrExport"));       // Renamed as Flickr
+    ignores.append(QLatin1String("GPSSync"));            // Renamed as GeoLocator
+    ignores.append(QLatin1String("DNGConverter"));       // Moved to digiKam core
+    ignores.append(QLatin1String("AcquireImages"));      // Moved to digiKam core
+    ignores.append(QLatin1String("MetadataEdit"));       // Moved to digiKam core
+    ignores.append(QLatin1String("GeoLocator"));         // Moved to digiKam core
+    ignores.append(QLatin1String("Expo Blending"));      // Moved to digiKam core
+    ignores.append(QLatin1String("Calendar"));           // Moved to digiKam core
+    ignores.append(QLatin1String("Panorama"));           // Moved to digiKam core
+    ignores.append(QLatin1String("Advanced Slideshow")); // Moved to digiKam core
 
     // List of obsolete tool actions to not load
 
@@ -257,13 +258,6 @@ QList<QAction*> KipiPluginLoader::kipiActionsByCategory(Category cat) const
 
 void KipiPluginLoader::slotKipiPluginPlug()
 {
-    // Ugly hack. Remove "advancedslideshow" action from Slideshow menu
-    foreach(QAction* const action, d->app->slideShowMenu()->actions())
-    {
-        if (action->objectName() == QLatin1String("advancedslideshow"))
-            d->app->slideShowMenu()->removeAction(action);
-    }
-
     // Delete all action categories
     for (QMap<int, KActionCategory*>::iterator it = d->kipiCategoryMap.begin();
          it != d->kipiCategoryMap.end();
@@ -347,19 +341,6 @@ void KipiPluginLoader::slotKipiPluginPlug()
         if (!plugin || !dynamic_cast<KXMLGUIClient*>(plugin) || !(*it)->shouldLoad())
         {
             continue;
-        }
-
-        // Ugly hack. Remove "advancedslideshow action from AdvancedSlideshow plugin
-        // actionCollection() and add it to the Slideshow menu
-        if (plugin->objectName() == QLatin1String("AdvancedSlideshow"))
-        {
-            QAction* const action = plugin->actionCollection()->action(QLatin1String("advancedslideshow"));
-
-            if (action)
-            {
-                QAction* const _action = plugin->actionCollection()->takeAction(action);
-                d->app->slideShowMenu()->addAction(_action);
-            }
         }
 
         d->app->guiFactory()->addClient(plugin);

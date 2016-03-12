@@ -135,6 +135,7 @@ public Q_SLOTS:
     void slotSlideShowRecursive();
     void slotSlideShowManualFromCurrent();
     void slotSlideShowManualFrom(const ImageInfo& info);
+    void slotPresentation();
 
     // Album action slots
     void slotRefresh();
@@ -164,7 +165,6 @@ public Q_SLOTS:
     void slotEditTag();
     void slotOpenTagsManager();
     void slotAssignTag();
-
 
     // Search action slots
     void slotNewKeywordSearch();

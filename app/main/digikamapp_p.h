@@ -166,6 +166,7 @@ public:
         slideShowAllAction(0),
         slideShowSelectionAction(0),
         slideShowRecursiveAction(0),
+        presentationAction(0),
         bqmAction(0),
         maintenanceAction(0),
         expoBendingAction(0),
@@ -295,6 +296,7 @@ public:
     QAction*                            slideShowAllAction;
     QAction*                            slideShowSelectionAction;
     QAction*                            slideShowRecursiveAction;
+    QAction*                            presentationAction;
     QAction*                            bqmAction;
     QAction*                            maintenanceAction;
     QAction*                            expoBendingAction;

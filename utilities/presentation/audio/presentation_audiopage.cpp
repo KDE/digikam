@@ -170,7 +170,6 @@ PresentationAudioPage::PresentationAudioPage(QWidget* const parent, Presentation
 
 PresentationAudioPage::~PresentationAudioPage()
 {
-    delete d->sharedData;
     delete d->tracksTime;
     delete d->soundItems;
     delete d->timeMutex;

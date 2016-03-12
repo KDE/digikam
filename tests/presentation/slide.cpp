@@ -55,7 +55,9 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    Presentation mngr(urlList, &app);
+    Presentation mngr(&app);
+    mngr.setItems(urlList);
+    mngr.showConfigDialog();
     app.exec();
 
     MetaEngine::cleanupExiv2();

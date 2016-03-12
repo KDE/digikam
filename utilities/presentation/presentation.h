@@ -47,8 +47,11 @@ class DIGIKAM_EXPORT Presentation : public QObject
 
 public:
 
-    Presentation(const QList<QUrl>& urls, QObject* const parent);
+    Presentation(QObject* const parent);
     ~Presentation();
+
+    void setItems(const QList<QUrl>& urls);
+    void showConfigDialog();
 
 private Q_SLOTS:
 
@@ -56,7 +59,6 @@ private Q_SLOTS:
 
 private:
 
-    QList<QUrl>            m_urlList;
     PresentationContainer* m_sharedData;
 };
 

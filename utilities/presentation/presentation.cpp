@@ -67,18 +67,10 @@ extern "C"
 namespace Digikam
 {
 
-Presentation::Presentation(const QList<QUrl>& urls, QObject* const parent)
+Presentation::Presentation(QObject* const parent)
     : QObject(parent)
 {
-    m_sharedData          = new PresentationContainer();
-    m_sharedData->urlList = urls;
-
-    PresentationDlg* const slideShowConfig = new PresentationDlg(QApplication::activeWindow(), m_sharedData);
-
-    connect(slideShowConfig, SIGNAL(buttonStartClicked()),
-            this, SLOT(slotSlideShow()));
-
-    slideShowConfig->show();
+    m_sharedData = new PresentationContainer();
 }
 
 Presentation::~Presentation()
@@ -86,23 +78,20 @@ Presentation::~Presentation()
     delete m_sharedData;
 }
 
-/*
-void Presentation::setupActions()
+void Presentation::setItems(const QList<QUrl>& urls)
 {
-    setDefaultCategory(ToolsPlugin);
-
-    m_actionSlideShow = new QAction(this);
-    m_actionSlideShow->setText(i18n("Advanced Slideshow..."));
-    m_actionSlideShow->setIcon(QIcon::fromTheme(QString::fromLatin1("kipi-slideshow")));
-    m_actionSlideShow->setShortcut(QKeySequence(Qt::ALT + Qt::SHIFT + Qt::Key_F9));
-    m_actionSlideShow->setEnabled(false);
-
-    connect(m_actionSlideShow, SIGNAL(triggered(bool)),
-            this, SLOT(slotActivate()));
-
-    addAction(QString::fromLatin1("advancedslideshow"), m_actionSlideShow);
+    m_sharedData->urlList = urls;
 }
-*/
+
+void Presentation::showConfigDialog()
+{
+    PresentationDlg* const dlg = new PresentationDlg(QApplication::activeWindow(), m_sharedData);
+
+    connect(dlg, SIGNAL(buttonStartClicked()),
+            this, SLOT(slotSlideShow()));
+
+    dlg->show();
+}
 
 void Presentation::slotSlideShow()
 {
@@ -111,9 +100,9 @@ void Presentation::slotSlideShow()
     bool opengl      = grp.readEntry("OpenGL",  false);
     bool shuffle     = grp.readEntry("Shuffle", false);
     bool wantKB      = grp.readEntry("Effect Name (OpenGL)") == QString::fromLatin1("Ken Burns");
-    m_urlList        = m_sharedData->urlList;
+    QList<QUrl> urls = m_sharedData->urlList;
 
-    if (m_urlList.isEmpty())
+    if (urls.isEmpty())
     {
         QMessageBox::information(QApplication::activeWindow(), QString(), i18n("There are no images to show."));
         return;
@@ -122,13 +111,13 @@ void Presentation::slotSlideShow()
     QStringList fileList;
     QStringList commentsList;
 
-    for (QList<QUrl>::ConstIterator urlIt = m_urlList.constBegin(); urlIt != m_urlList.constEnd(); ++urlIt)
+    for (QList<QUrl>::ConstIterator urlIt = urls.constBegin(); urlIt != urls.constEnd(); ++urlIt)
     {
         fileList.append((*urlIt).toLocalFile());
         commentsList.append(QString());
     }
 
-    m_urlList.clear();
+    urls.clear();
 
     if (shuffle)
     {
@@ -167,7 +156,7 @@ void Presentation::slotSlideShow()
 #ifdef HAVE_OPENGL
         if (!QGLFormat::hasOpenGL())
         {
-            QMessageBox::critical(QApplication::activeWindow(), QString(), 
+            QMessageBox::critical(QApplication::activeWindow(), QString(),
                                   i18n("OpenGL support is not available on your system."));
         }
         else

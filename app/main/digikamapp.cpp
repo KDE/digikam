@@ -1273,6 +1273,13 @@ void DigikamApp::setupActions()
     ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
+    d->presentationAction = new QAction(i18n("Presentation..."), this);
+    d->presentationAction->setIcon(QIcon::fromTheme(QString::fromLatin1("presentation_section")));
+    connect(d->presentationAction, SIGNAL(triggered()), d->view, SLOT(slotPresentation()));
+    ac->addAction(QLatin1String("presentation"), d->presentationAction);
+    ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
+    d->slideShowAction->addAction(d->presentationAction);
+
     // -----------------------------------------------------------
 
     d->viewCMViewAction = new QAction(QIcon::fromTheme(QLatin1String("video-display")), i18n("Color-Managed View"), this);
