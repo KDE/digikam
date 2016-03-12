@@ -90,6 +90,8 @@ PresentationMainPage::PresentationMainPage(QWidget* const parent, PresentationCo
     QVBoxLayout* const listBoxContainerLayout = new QVBoxLayout;
     d->imagesFilesListBox                     = new DImagesList(m_ImagesFilesListBoxContainer, 32);
     d->imagesFilesListBox->listView()->header()->hide();
+    d->imagesFilesListBox->enableControlButtons(true);
+    d->imagesFilesListBox->enableDragAndDrop(true);
 
     listBoxContainerLayout->addWidget(d->imagesFilesListBox);
     listBoxContainerLayout->setContentsMargins(QMargins());
@@ -122,6 +124,7 @@ void PresentationMainPage::readSettings()
     m_openGlFullScale->setChecked(d->sharedData->openGlFullScale);
     m_openGlFullScale->setEnabled(d->sharedData->opengl);
 #endif
+
     m_delaySpinBox->setValue(d->sharedData->delay);
     m_printNameCheckBox->setChecked(d->sharedData->printFileName);
     m_printProgressCheckBox->setChecked(d->sharedData->printProgress);
@@ -129,21 +132,12 @@ void PresentationMainPage::readSettings()
     m_loopCheckBox->setChecked(d->sharedData->loop);
     m_shuffleCheckBox->setChecked(d->sharedData->shuffle);
 
-    if (d->sharedData->showSelectedFilesOnly && m_selectedFilesButton->isEnabled() )
-        m_selectedFilesButton->setChecked(true);
-    else
-        m_allFilesButton->setChecked(true);
-
     // Host application images has comments
     if ( ! d->sharedData->ImagesHasComments )
     {
         m_printCommentsCheckBox->setEnabled(false);
         m_printCommentsCheckBox->setChecked(false);
     }
-
-    // Switch to selected files only (it depends on showSelectedFilesOnly)
-
-    m_selectedFilesButton->setEnabled( d->sharedData->showSelectedFilesOnly );
 
     m_delaySpinBox->setValue(d->sharedData->useMilliseconds ? d->sharedData->delay
                                                             : d->sharedData->delay / 1000 );
@@ -156,7 +150,6 @@ void PresentationMainPage::readSettings()
     slotOpenGLToggled();
     slotPrintCommentsToggled();
     slotEffectChanged();
-    slotSelection();
 }
 
 void PresentationMainPage::saveSettings()
@@ -165,6 +158,7 @@ void PresentationMainPage::saveSettings()
     d->sharedData->opengl                = m_openglCheckBox->isChecked();
     d->sharedData->openGlFullScale       = m_openGlFullScale->isChecked();
 #endif
+
     d->sharedData->delay                 = d->sharedData->useMilliseconds ? m_delaySpinBox->value()
                                                                           : m_delaySpinBox->value() * 1000;
 
@@ -173,7 +167,6 @@ void PresentationMainPage::saveSettings()
     d->sharedData->printFileComments     = m_printCommentsCheckBox->isChecked();
     d->sharedData->loop                  = m_loopCheckBox->isChecked();
     d->sharedData->shuffle               = m_shuffleCheckBox->isChecked();
-    d->sharedData->showSelectedFilesOnly = m_selectedFilesButton->isChecked();
 
     if (!m_openglCheckBox->isChecked())
     {
@@ -450,46 +443,6 @@ void PresentationMainPage::slotUseMillisecondsToggled()
     m_delaySpinBox->setValue(delay);
 }
 
-void PresentationMainPage::slotSelection()
-{
-    QList<QUrl> urlList;
-
-    if (m_selectedFilesButton->isChecked())
-    {
-        d->imagesFilesListBox->listView()->clear();
-        urlList = d->sharedData->iface()->currentSelection().images();
-    }
-    else if (m_allFilesButton->isChecked())
-    {
-        QUrl currentPath = d->sharedData->iface()->currentAlbum().url();
-        QList<KIPI::ImageCollection> albumList;
-        albumList        = d->sharedData->iface()->allAlbums();
-
-        d->imagesFilesListBox->listView()->clear();
-        urlList          = d->sharedData->iface()->currentAlbum().images();
-
-        QList<KIPI::ImageCollection>::iterator it;
-
-        for (it = albumList.begin(); it != albumList.end(); ++it)
-        {
-            if (currentPath.isParentOf((*it).url()) && !((*it).url() == currentPath))
-            {
-                urlList += (*it).images();
-            }
-        }
-    }
-
-    bool customize = m_customButton->isChecked();
-
-    if (!urlList.isEmpty() && !customize)
-    {
-        addItems(urlList);
-    }
-
-    d->imagesFilesListBox->enableControlButtons(customize);
-    d->imagesFilesListBox->enableDragAndDrop(customize);
-}
-
 void PresentationMainPage::slotPortfolioDurationChanged(int)
 {
     showNumberImages();
@@ -534,9 +487,6 @@ void PresentationMainPage::setupConnections()
     connect(m_openglCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotOpenGLToggled()));
 
-    connect(m_allFilesButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotSelection()));
-
     connect(m_delaySpinBox, SIGNAL(valueChanged(int)),
             this, SLOT(slotDelayChanged(int)));
 
@@ -548,12 +498,6 @@ void PresentationMainPage::setupConnections()
 
     connect(d->imagesFilesListBox, SIGNAL(signalItemClicked(QTreeWidgetItem*)),
             this, SLOT(slotImagesFilesSelected(QTreeWidgetItem*)));
-
-    if (d->sharedData->showSelectedFilesOnly)
-    {
-        connect(m_selectedFilesButton, SIGNAL(toggled(bool)),
-                this, SLOT(slotSelection()));
-    }
 }
 
 }  // namespace Digikam

@@ -693,12 +693,13 @@ void PresentationGL::printComments(QImage& layer)
 {
 //    QString comments = d->commentsList[d->fileIndex];
 
-    Digikam::KPImageInfo info(d->imageLoader->currPath());
-    QString comments = info.description();
+//FIXME    KPImageInfo info(d->imageLoader->currPath());
+    QString comments;// = info.description();
 
     int yPos = 5; // Text Y coordinate
 
-    if (d->sharedData->printFileName) yPos += 20;
+    if (d->sharedData->printFileName)
+        yPos += 20;
 
     QStringList commentsByLines;
 
@@ -792,10 +793,10 @@ void PresentationGL::showEndOfShow()
     p.drawText(20, 50, i18n("Slideshow Completed"));
     p.drawText(20, 100, i18n("Click to Exit..."));
 
-    QPixmap kipiLogoPixmap = KPSvgPixmapRenderer(width() / 6, width() / 6).getPixmap();
-    p.drawPixmap(width()-(width()/12)-kipiLogoPixmap.width(),
-                 height()-(height()/12)-kipiLogoPixmap.height(),
-                 kipiLogoPixmap);
+//     QPixmap kipiLogoPixmap = KPSvgPixmapRenderer(width() / 6, width() / 6).getPixmap();
+//     p.drawPixmap(width()-(width()/12)-kipiLogoPixmap.width(),
+//                  height()-(height()/12)-kipiLogoPixmap.height(),
+//                  kipiLogoPixmap);
 
     p.end();
 

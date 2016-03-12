@@ -37,11 +37,6 @@ class QTreeWidgetItem;
 
 namespace Digikam
 {
-    class KPImagesList;
-}
-
-namespace Digikam
-{
 
 class PresentationContainer;
 class LoadingDescription;
@@ -70,9 +65,8 @@ private Q_SLOTS:
     void slotEffectChanged();
     void slotDelayChanged(int);
     void slotPrintCommentsToggled();
-    void slotSelection();
     void slotUseMillisecondsToggled();
-    void slotThumbnail(LoadingDescription,QPixmap);
+    void slotThumbnail(const LoadingDescription&, const QPixmap&);
     void slotImageListChanged();
 
     void slotPortfolioDurationChanged(int);

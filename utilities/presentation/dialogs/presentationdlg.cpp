@@ -28,6 +28,7 @@
 
 #include <QFileInfo>
 #include <QFont>
+#include <QCloseEvent>
 #include <QIcon>
 #include <QMenu>
 #include <QTabWidget>

@@ -54,57 +54,58 @@ public:
 
 public:
 
-    int                  delayMsMaxValue;
-    int                  delayMsMinValue;
-    int                  delayMsLineStep;
+    int                      delayMsMaxValue;
+    int                      delayMsMinValue;
+    int                      delayMsLineStep;
 
-    bool                 ImagesHasComments;
-    QList<QUrl>          urlList;
+    bool                     ImagesHasComments;
+    QList<QUrl>              urlList;
 
-    PresentationMainPage*            mainPage;
-    PresentationCaptionPage*         captionPage;
-#ifdef HAVE_AUDIO
-    PresentationAudioPage*      soundtrackPage;
+    PresentationMainPage*    mainPage;
+    PresentationCaptionPage* captionPage;
+
+    #ifdef HAVE_AUDIO
+    PresentationAudioPage*   soundtrackPage;
 #endif
-    PresentationAdvPage*        advancedPage;
+
+    PresentationAdvPage*     advancedPage;
 
     // Config file data
 
     // --> Main page
-    bool                 opengl;
-    bool                 openGlFullScale;
-    int                  delay;
-    bool                 printFileName;
-    bool                 printProgress;
-    bool                 printFileComments;
-    bool                 loop;
-    bool                 shuffle;
-    bool                 showSelectedFilesOnly;
-    QString              effectName;
-    QString              effectNameGL;
+    bool                     opengl;
+    bool                     openGlFullScale;
+    int                      delay;
+    bool                     printFileName;
+    bool                     printProgress;
+    bool                     printFileComments;
+    bool                     loop;
+    bool                     shuffle;
+    QString                  effectName;
+    QString                  effectNameGL;
 
     // --> Captions page
-    uint                 commentsFontColor;
-    uint                 commentsBgColor;
-    bool                 commentsDrawOutline;
-    uint                 bgOpacity;
-    int                  commentsLinesLength;
-    QFont*               captionFont;
+    uint                     commentsFontColor;
+    uint                     commentsBgColor;
+    bool                     commentsDrawOutline;
+    uint                     bgOpacity;
+    int                      commentsLinesLength;
+    QFont*                   captionFont;
 
     // --> Soundtrack page
-    bool                 soundtrackLoop;
-    bool                 soundtrackRememberPlaylist;
-    bool                 soundtrackPlayListNeedsUpdate;
-    QUrl                 soundtrackPath;
-    QList<QUrl>          soundtrackUrls;
+    bool                     soundtrackLoop;
+    bool                     soundtrackRememberPlaylist;
+    bool                     soundtrackPlayListNeedsUpdate;
+    QUrl                     soundtrackPath;
+    QList<QUrl>              soundtrackUrls;
 
     // --> Advanced page
-    bool                 useMilliseconds;
-    bool                 enableMouseWheel;
-    bool                 enableCache;
-    bool                 kbDisableFadeInOut;
-    bool                 kbDisableCrossFade;
-    uint                 cacheSize;
+    bool                     useMilliseconds;
+    bool                     enableMouseWheel;
+    bool                     enableCache;
+    bool                     kbDisableFadeInOut;
+    bool                     kbDisableCrossFade;
+    uint                     cacheSize;
 };
 
 } // namespace Digikam

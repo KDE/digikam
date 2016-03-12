@@ -50,7 +50,6 @@ PresentationContainer::PresentationContainer()
     printFileComments             = false;
     loop                          = false;
     shuffle                       = false;
-    showSelectedFilesOnly         = false;
     commentsFontColor             = 0;
     commentsBgColor               = 0;
     commentsDrawOutline           = false;

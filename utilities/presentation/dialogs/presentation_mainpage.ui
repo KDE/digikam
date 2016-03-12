@@ -6,44 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
+    <width>792</width>
     <height>569</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
-   <item>
-    <widget class="QGroupBox" name="m_fileSrcButtonGroup">
-     <property name="title">
-      <string/>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QRadioButton" name="m_allFilesButton">
-        <property name="text">
-         <string>Show all images in current al&amp;bum</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="m_selectedFilesButton">
-        <property name="text">
-         <string>Show onl&amp;y selected images</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="m_customButton">
-        <property name="text">
-         <string>Cu&amp;stom</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
    <item>
     <widget class="QGroupBox" name="m_ImagesFilesGroup">
      <property name="whatsThis">
@@ -327,8 +294,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
- </customwidgets>
  <resources/>
  <connections>
   <connection>

@@ -31,11 +31,6 @@
 #include <QMatrix>
 #include <QFileInfo>
 
-
-
-
-
-
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -44,8 +39,8 @@
 
 #include "digikam_debug.h"
 #include "presentationkb.h"
-
-
+#include "previewloadthread.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -199,19 +194,7 @@ void KBImageLoader::run()
 bool KBImageLoader::loadImage()
 {
     QString path = d->fileList[d->fileIndex];
-    QImage  image;
-
-    PluginLoader* const pl = PluginLoader::instance();
-
-    if (pl)
-    {
-        Interface* const iface = pl->interface();
-
-        if (iface)
-        {
-            image = iface->preview(QUrl::fromLocalFile(path));  
-        }
-    }
+    QImage  image = PreviewLoadThread::loadHighQualitySynchronously(path).copyQImage();
 
     if (image.isNull())
     {
