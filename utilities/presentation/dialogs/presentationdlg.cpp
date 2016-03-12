@@ -87,7 +87,7 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
     d->buttonBox   = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->startButton = new QPushButton(i18nc("@action:button", "&Start"), this);
     d->startButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")));
-    d->startButton->setText(i18n("Start Slideshow"));
+    d->startButton->setText(i18n("Start Presentation"));
     d->startButton->setDefault(true);
     d->buttonBox->addButton(d->startButton, QDialogButtonBox::ActionRole);
 
@@ -145,16 +145,16 @@ void PresentationDlg::readSettings()
     KConfig config;
     KConfigGroup grp = config.group(objectName());
 
-    d->sharedData->opengl            = grp.readEntry("OpenGL", false);
-    d->sharedData->openGlFullScale   = grp.readEntry("OpenGLFullScale", false);
-    d->sharedData->delay             = grp.readEntry("Delay", 1500);
-    d->sharedData->printFileName     = grp.readEntry("Print Filename", true);
+    d->sharedData->opengl            = grp.readEntry("OpenGL",                   false);
+    d->sharedData->openGlFullScale   = grp.readEntry("OpenGLFullScale",          false);
+    d->sharedData->delay             = grp.readEntry("Delay",                    1500);
+    d->sharedData->printFileName     = grp.readEntry("Print Filename",           true);
     d->sharedData->printProgress     = grp.readEntry("Print Progress Indicator", true);
-    d->sharedData->printFileComments = grp.readEntry("Print Comments", false);
-    d->sharedData->loop              = grp.readEntry("Loop", false);
-    d->sharedData->shuffle           = grp.readEntry("Shuffle", false);
-    d->sharedData->effectName        = grp.readEntry("Effect Name", "Random");
-    d->sharedData->effectNameGL      = grp.readEntry("Effect Name (OpenGL)", "Random");
+    d->sharedData->printFileComments = grp.readEntry("Print Comments",           false);
+    d->sharedData->loop              = grp.readEntry("Loop",                     false);
+    d->sharedData->shuffle           = grp.readEntry("Shuffle",                  false);
+    d->sharedData->effectName        = grp.readEntry("Effect Name",              "Random");
+    d->sharedData->effectNameGL      = grp.readEntry("Effect Name (OpenGL)",     "Random");
 
     d->sharedData->delayMsMaxValue   = 120000;
     d->sharedData->delayMsMinValue   = 100;
@@ -163,38 +163,38 @@ void PresentationDlg::readSettings()
     // Comments tab settings
     QFont* const savedFont = new QFont();
     savedFont->setFamily(    grp.readEntry("Comments Font Family"));
-    savedFont->setPointSize( grp.readEntry("Comments Font Size", 10 ));
-    savedFont->setBold(      grp.readEntry("Comments Font Bold", false));
-    savedFont->setItalic(    grp.readEntry("Comments Font Italic", false));
-    savedFont->setUnderline( grp.readEntry("Comments Font Underline", false));
-    savedFont->setOverline(  grp.readEntry("Comments Font Overline", false));
-    savedFont->setStrikeOut( grp.readEntry("Comments Font StrikeOut", false));
-    savedFont->setFixedPitch(grp.readEntry("Comments Font FixedPitch", false));
+    savedFont->setPointSize( grp.readEntry("Comments Font Size",        10 ));
+    savedFont->setBold(      grp.readEntry("Comments Font Bold",        false));
+    savedFont->setItalic(    grp.readEntry("Comments Font Italic",      false));
+    savedFont->setUnderline( grp.readEntry("Comments Font Underline",   false));
+    savedFont->setOverline(  grp.readEntry("Comments Font Overline",    false));
+    savedFont->setStrikeOut( grp.readEntry("Comments Font StrikeOut",   false));
+    savedFont->setFixedPitch(grp.readEntry("Comments Font FixedPitch",  false));
 
     d->sharedData->captionFont = savedFont;
 
-    d->sharedData->commentsFontColor   = grp.readEntry("Comments Font Color", 0xffffff);
-    d->sharedData->commentsBgColor     = grp.readEntry("Comments Bg Color", 0x000000);
+    d->sharedData->commentsFontColor   = grp.readEntry("Comments Font Color",   0xffffff);
+    d->sharedData->commentsBgColor     = grp.readEntry("Comments Bg Color",     0x000000);
     d->sharedData->commentsDrawOutline = grp.readEntry("Comments Text Outline", true);
-    d->sharedData->bgOpacity           = grp.readEntry("Background Opacity", 10);
+    d->sharedData->bgOpacity           = grp.readEntry("Background Opacity",    10);
     d->sharedData->commentsLinesLength = grp.readEntry("Comments Lines Length", 72);
 
 #ifdef HAVE_MEDIAPLAYER
     // Soundtrack tab
-    d->sharedData->soundtrackLoop             = grp.readEntry("Soundtrack Loop", false);
+    d->sharedData->soundtrackLoop             = grp.readEntry("Soundtrack Loop",                     false);
     d->sharedData->soundtrackPath             = QUrl::fromLocalFile(grp.readEntry("Soundtrack Path", "" ));
-    d->sharedData->soundtrackRememberPlaylist = grp.readEntry("Soundtrack Remember Playlist", false);
+    d->sharedData->soundtrackRememberPlaylist = grp.readEntry("Soundtrack Remember Playlist",        false);
 #endif
 
     // Advanced tab
-    d->sharedData->useMilliseconds     = grp.readEntry("Use Milliseconds", false);
-    d->sharedData->enableMouseWheel    = grp.readEntry("Enable Mouse Wheel", true);
+    d->sharedData->useMilliseconds     = grp.readEntry("Use Milliseconds",      false);
+    d->sharedData->enableMouseWheel    = grp.readEntry("Enable Mouse Wheel",    true);
 
-    d->sharedData->kbDisableFadeInOut  = grp.readEntry("KB Disable FadeInOut", false);
-    d->sharedData->kbDisableCrossFade  = grp.readEntry("KB Disable Crossfade", false);
+    d->sharedData->kbDisableFadeInOut  = grp.readEntry("KB Disable FadeInOut",  false);
+    d->sharedData->kbDisableCrossFade  = grp.readEntry("KB Disable Crossfade",  false);
 
-    d->sharedData->enableCache         = grp.readEntry("Enable Cache", false);
-    d->sharedData->cacheSize           = grp.readEntry("Cache Size", 5);
+    d->sharedData->enableCache         = grp.readEntry("Enable Cache",          false);
+    d->sharedData->cacheSize           = grp.readEntry("Cache Size",            5);
 
     if (d->sharedData->soundtrackRememberPlaylist)
     {
