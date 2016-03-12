@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "presentation.h"
+#include "presentationmngr.h"
 
 // C ANSI includes
 
@@ -67,23 +67,23 @@ extern "C"
 namespace Digikam
 {
 
-Presentation::Presentation(QObject* const parent)
+PresentationMngr::PresentationMngr(QObject* const parent)
     : QObject(parent)
 {
     m_sharedData = new PresentationContainer();
 }
 
-Presentation::~Presentation()
+PresentationMngr::~PresentationMngr()
 {
     delete m_sharedData;
 }
 
-void Presentation::setItems(const QList<QUrl>& urls)
+void PresentationMngr::setItems(const QList<QUrl>& urls)
 {
     m_sharedData->urlList = urls;
 }
 
-void Presentation::showConfigDialog()
+void PresentationMngr::showConfigDialog()
 {
     PresentationDlg* const dlg = new PresentationDlg(QApplication::activeWindow(), m_sharedData);
 
@@ -93,10 +93,10 @@ void Presentation::showConfigDialog()
     dlg->show();
 }
 
-void Presentation::slotSlideShow()
+void PresentationMngr::slotSlideShow()
 {
     KConfig config;
-    KConfigGroup grp = config.group("Presentation Settings");
+    KConfigGroup grp = config.group("PresentationMngr Settings");
     bool opengl      = grp.readEntry("OpenGL",  false);
     bool shuffle     = grp.readEntry("Shuffle", false);
     bool wantKB      = grp.readEntry("Effect Name (OpenGL)") == QString::fromLatin1("Ken Burns");

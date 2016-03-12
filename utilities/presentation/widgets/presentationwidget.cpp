@@ -1407,18 +1407,17 @@ int PresentationWidget::effectBlobs( bool aInit )
 
 void PresentationWidget::paintEvent( QPaintEvent* )
 {
+    QPainter p(this);
 
-    QPainter p( this );
-
-    if ( m_simplyShow == true )
+    if (m_simplyShow)
     {
-        if ( d->sharedData->printFileName )
+        if (d->sharedData->printFileName)
             printFilename();
 
-        if ( d->sharedData->printProgress )
+        if (d->sharedData->printProgress)
             printProgress();
 
-        if ( d->sharedData->printFileComments && d->sharedData->ImagesHasComments )
+        if (d->sharedData->printFileComments)
             printComments();
 
         p.drawPixmap( 0, 0, d->currImage,
@@ -1431,8 +1430,7 @@ void PresentationWidget::paintEvent( QPaintEvent* )
         return;
     }
 
-
-    if ( m_endOfShow == true )
+    if (m_endOfShow)
     {
         p.fillRect( 0, 0, width(), height(), Qt::black );
 
@@ -1456,7 +1454,7 @@ void PresentationWidget::paintEvent( QPaintEvent* )
     }
 
     // If execution reach this line, an effect is running
-    p.drawPixmap( 0,0, m_buffer );
+    p.drawPixmap(0, 0, m_buffer);
 }
 
 void PresentationWidget::startPainter()

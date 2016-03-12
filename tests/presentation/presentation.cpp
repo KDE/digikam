@@ -32,7 +32,7 @@
 // Local includes
 
 #include "metaengine.h"
-#include "presentation.h"
+#include "presentationmngr.h"
 
 using namespace Digikam;
 
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    Presentation mngr(&app);
+    PresentationMngr mngr(&app);
     mngr.setItems(urlList);
     mngr.showConfigDialog();
     app.exec();

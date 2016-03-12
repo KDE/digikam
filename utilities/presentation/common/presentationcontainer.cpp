@@ -32,7 +32,6 @@ PresentationContainer::PresentationContainer()
     delayMsMaxValue               = 0;
     delayMsMinValue               = 0;
     delayMsLineStep               = 0;
-    ImagesHasComments             = false;
     urlList                       = QList<QUrl>();
     mainPage                      = 0;
     captionPage                   = 0;

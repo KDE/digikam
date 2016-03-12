@@ -18,11 +18,11 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-set(slide_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/slide.cpp)
+set(presentation_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/presentation.cpp)
 
-add_executable(slide ${slide_SRCS})
+add_executable(presentation ${presentation_SRCS})
 
-target_link_libraries(slide
+target_link_libraries(presentation
                       digikamcore
                       libdng
 

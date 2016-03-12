@@ -610,7 +610,7 @@ void PresentationGL::loadImage()
         if (d->sharedData->printProgress)
             printProgress(black);
 
-        if ( d->sharedData->printFileComments && d->sharedData->ImagesHasComments)
+        if (d->sharedData->printFileComments)
             printComments(black);
 
         QImage t = convertToGLFormat(black);

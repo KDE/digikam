@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-/** This class contain the information of one picture to slide
+/** This class contains the information of one picture to slide
  */
 class DIGIKAM_EXPORT SlidePictureInfo
 {
@@ -70,7 +70,6 @@ public:
 
     /** Picture Title
      */
-
     QString            title;
 
     /** Picture Tag names
@@ -156,7 +155,7 @@ public:
     /** Delay in seconds
      */
     int                          delay;
-    
+
     /** Whether to enable the auto-move feature.
      */
     bool                         autoPlayEnabled;
@@ -180,7 +179,7 @@ public:
     /** Map of pictures information to slide
      */
     QMap<QUrl, SlidePictureInfo> pictInfoMap;
-    
+
     /** URL of the first image to show if requested
      */
     QUrl                         imageUrl;

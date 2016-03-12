@@ -44,7 +44,7 @@ set(libpresentation_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_captio
                          ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentationdlg.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_mainpage.cpp
 
-                         ${CMAKE_CURRENT_SOURCE_DIR}/presentation.cpp
+                         ${CMAKE_CURRENT_SOURCE_DIR}/presentationmngr.cpp
 )
 
 if(HAVE_OPENGL)

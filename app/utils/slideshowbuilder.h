@@ -47,7 +47,7 @@ public:
     /** Contructor to work on recursive mode from album
      */
     explicit SlideShowBuilder(Album* const album);
-    
+
     ~SlideShowBuilder();
 
     /**
@@ -60,8 +60,8 @@ public:
     void setOverrideStartFrom(const ImageInfo& info);
     void setAutoPlayEnabled(bool enable);
 
-    void run();    
-    
+    void run();
+
 Q_SIGNALS:
 
     void signalComplete(const SlideShowSettings&);

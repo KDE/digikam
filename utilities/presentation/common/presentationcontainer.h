@@ -58,7 +58,6 @@ public:
     int                      delayMsMinValue;
     int                      delayMsLineStep;
 
-    bool                     ImagesHasComments;
     QList<QUrl>              urlList;
 
     PresentationMainPage*    mainPage;

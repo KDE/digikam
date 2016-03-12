@@ -70,7 +70,7 @@
 #include "sidebar.h"
 #include "slideshow.h"
 #include "slideshowbuilder.h"
-#include "presentation.h"
+#include "presentationmngr.h"
 #include "statusprogressbar.h"
 #include "filtersidebarwidget.h"
 #include "tagmodificationhelper.h"
@@ -2147,7 +2147,7 @@ void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
 
 void DigikamView::slotPresentation()
 {
-    Presentation* const mngr = new Presentation(this);
+    PresentationMngr* const mngr = new PresentationMngr(this);
     mngr->setItems(selectedUrls());
     mngr->showConfigDialog();
 }

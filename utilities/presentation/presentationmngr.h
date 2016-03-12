@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef PRESENTATION_H
-#define PRESENTATION_H
+#ifndef PRESENTATION_MNGR_H
+#define PRESENTATION_MNGR_H
 
 // Qt includes
 
@@ -41,14 +41,14 @@ namespace Digikam
 
 class PresentationContainer;
 
-class DIGIKAM_EXPORT Presentation : public QObject
+class DIGIKAM_EXPORT PresentationMngr : public QObject
 {
     Q_OBJECT
 
 public:
 
-    Presentation(QObject* const parent);
-    ~Presentation();
+    PresentationMngr(QObject* const parent);
+    ~PresentationMngr();
 
     void setItems(const QList<QUrl>& urls);
     void showConfigDialog();
@@ -64,4 +64,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // PRESENTATION_H
+#endif  // PRESENTATION_MNGR_H
