@@ -24,6 +24,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "presentationcontainer.h"
 #include "presentation.h"
 
