@@ -23,61 +23,39 @@
  *
  * ============================================================ */
 
-#ifndef PLUGIN_ADVANCEDSLIDESHOW_H
-#define PLUGIN_ADVANCEDSLIDESHOW_H
+#ifndef PRESENTATION_H
+#define PRESENTATION_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
-
-
-
-#include <KIPI/Plugin>
-
-class QAction;
-
-namespace KIPI
-{
-    class Interface;
-}
+#include <QObject>
+#include <QList>
 
 namespace Digikam
 {
 
 class PresentationContainer;
 
-class Plugin_AdvancedSlideshow : public KIPI::Plugin
+class Presentation : public QObject
 {
     Q_OBJECT
 
 public:
 
-    Plugin_AdvancedSlideshow(QObject* const parent, const QVariantList& args);
-    ~Plugin_AdvancedSlideshow();
-
-    void setup(QWidget* const);
-
-public Q_SLOTS:
-
-    void slotActivate();
+    Presentation(const QList<QUrl>& urls, QObject* const parent);
+    ~Presentation();
 
 private Q_SLOTS:
 
-    void slotAlbumChanged(bool anyAlbum);
     void slotSlideShow();
 
 private:
 
-    void setupActions();
-
-private:
-
-    QAction *         m_actionSlideShow;
-    KIPI::Interface* m_interface;
-    QList<QUrl>       m_urlList;
+    QList<QUrl>            m_urlList;
     PresentationContainer* m_sharedData;
 };
 
 }  // namespace Digikam
 
-#endif  // PLUGIN_ADVANCEDSLIDESHOW_H
+#endif  // PRESENTATION_H

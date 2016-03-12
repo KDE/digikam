@@ -123,7 +123,7 @@ PresentationDlg::PresentationDlg(QWidget* const parent, PresentationContainer* c
     mainLayout->addWidget(d->tab);
     mainLayout->addWidget(d->buttonBox);
     setLayout(mainLayout);
-    
+
     // Slot connections
 
     connect(d->startButton, &QPushButton::clicked,

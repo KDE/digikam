@@ -23,7 +23,7 @@
  *
  * ============================================================ */
 
-#include "plugin_advancedslideshow.h"
+#include "presentation.h"
 
 // C ANSI includes
 
@@ -48,23 +48,16 @@ extern "C"
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kactioncollection.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kpluginfactory.h>
-
-
-
-
-
 
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "presentationdlg.h"
 #include "presentationwidget.h"
 #include "presentationcontainer.h"
-
 
 #ifdef HAVE_OPENGL
 #   include "presentationgl.h"
@@ -74,46 +67,27 @@ extern "C"
 namespace Digikam
 {
 
-K_PLUGIN_FACTORY( AdvancedSlideshowFactory, registerPlugin<Plugin_AdvancedSlideshow>(); )
-
-Plugin_AdvancedSlideshow::Plugin_AdvancedSlideshow(QObject* const parent, const QVariantList &/*args*/)
-    : KIPI::Plugin(parent, "AdvancedSlideshow")
+Presentation::Presentation(const QList<QUrl>& urls, QObject* const parent)
+    : QObject(parent)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Plugin_AdvancedSlideshow plugin loaded" ;
-    m_actionSlideShow = 0;
-    m_sharedData      = 0;
-    m_interface       = 0;
+    m_sharedData          = new PresentationContainer();
+    m_sharedData->urlList = urls;
 
-    setUiBaseName("kipiplugin_advancedslideshowui.rc");
-    setupXML();
+    PresentationDlg* const slideShowConfig = new PresentationDlg(QApplication::activeWindow(), m_sharedData);
+
+    connect(slideShowConfig, SIGNAL(buttonStartClicked()),
+            this, SLOT(slotSlideShow()));
+
+    slideShowConfig->show();
 }
 
-Plugin_AdvancedSlideshow::~Plugin_AdvancedSlideshow()
+Presentation::~Presentation()
 {
+    delete m_sharedData;
 }
 
-void Plugin_AdvancedSlideshow::setup(QWidget* const widget)
-{
-    KIPI::Plugin::setup(widget);
-    setupActions();
-
-    m_interface = interface();
-
-    if (!m_interface)
-    {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "KIPI interface is null!";
-        return;
-    }
-
-    m_urlList = QList<QUrl>();
-
-    connect(m_interface, SIGNAL(currentAlbumChanged(bool)),
-            this, SLOT(slotAlbumChanged(bool)));
-
-    slotAlbumChanged(m_interface->currentAlbum().isValid());
-}
-
-void Plugin_AdvancedSlideshow::setupActions()
+/*
+void Presentation::setupActions()
 {
     setDefaultCategory(ToolsPlugin);
 
@@ -128,75 +102,12 @@ void Plugin_AdvancedSlideshow::setupActions()
 
     addAction(QString::fromLatin1("advancedslideshow"), m_actionSlideShow);
 }
+*/
 
-void Plugin_AdvancedSlideshow::slotActivate()
+void Presentation::slotSlideShow()
 {
-    if (!interface())
-    {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Kipi m_interface is null!";
-        return;
-    }
-
-    m_sharedData = new PresentationContainer();
-
-    m_sharedData->setIface(m_interface);
-    m_sharedData->showSelectedFilesOnly = true;
-    m_sharedData->ImagesHasComments     = m_interface->hasFeature(KIPI::ImagesHasComments);
-    m_sharedData->urlList               = m_urlList;
-    KIPI::ImageCollection currSel       = m_interface->currentSelection();
-
-    if (!currSel.isValid() || currSel.images().count() <= 1)
-    {
-        m_sharedData->showSelectedFilesOnly = false;
-    }
-
-    PresentationDlg* const slideShowConfig = new PresentationDlg(QApplication::activeWindow(), m_sharedData);
-
-    connect(slideShowConfig, SIGNAL(buttonStartClicked()),
-            this, SLOT(slotSlideShow()));
-
-    slideShowConfig->show();
-}
-
-void Plugin_AdvancedSlideshow::slotAlbumChanged(bool anyAlbum)
-{
-    if (!anyAlbum)
-    {
-        m_actionSlideShow->setEnabled(false);
-        return;
-    }
-
-    KIPI::Interface* const m_interface = dynamic_cast<KIPI::Interface*> (parent());
-
-    if (!m_interface)
-    {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Kipi m_interface is null!";
-        m_actionSlideShow->setEnabled(false);
-        return;
-    }
-
-    KIPI::ImageCollection currAlbum = m_interface->currentAlbum();
-
-    if (!currAlbum.isValid())
-    {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Current image collection is not valid.";
-        m_actionSlideShow->setEnabled(false);
-        return;
-    }
-
-    m_actionSlideShow->setEnabled(true);
-}
-
-void Plugin_AdvancedSlideshow::slotSlideShow()
-{
-    if (!m_interface)
-    {
-        qCCritical(DIGIKAM_GENERAL_LOG) << "Kipi m_interface is null!";
-        return;
-    }
-
-    KConfig config(QString::fromLatin1("kipirc"));
-    KConfigGroup grp = config.group("Advanced Slideshow Settings");
+    KConfig config;
+    KConfigGroup grp = config.group("Presentation Settings");
     bool opengl      = grp.readEntry("OpenGL",  false);
     bool shuffle     = grp.readEntry("Shuffle", false);
     bool wantKB      = grp.readEntry("Effect Name (OpenGL)") == QString::fromLatin1("Ken Burns");
@@ -248,8 +159,8 @@ void Plugin_AdvancedSlideshow::slotSlideShow()
 
     if (!opengl)
     {
-        Presentation* const presentation = new Presentation(fileList, commentsList, m_sharedData);
-        presentation->show();
+        PresentationWidget* const slide = new PresentationWidget(fileList, commentsList, m_sharedData);
+        slide->show();
     }
     else
     {
@@ -263,13 +174,13 @@ void Plugin_AdvancedSlideshow::slotSlideShow()
         {
             if (wantKB)
             {
-                PresentationKB* const slideShow = new PresentationKB(fileList, commentsList, m_sharedData);
-                slideShow->show();
+                PresentationKB* const slide = new PresentationKB(fileList, commentsList, m_sharedData);
+                slide->show();
             }
             else
             {
-                PresentationGL* const slideShow = new PresentationGL(fileList, commentsList, m_sharedData);
-                slideShow->show();
+                PresentationGL* const slide = new PresentationGL(fileList, commentsList, m_sharedData);
+                slide->show();
             }
         }
 #else
@@ -279,5 +190,3 @@ void Plugin_AdvancedSlideshow::slotSlideShow()
 }
 
 }  // namespace Digikam
-
-#include "plugin_advancedslideshow.moc"
