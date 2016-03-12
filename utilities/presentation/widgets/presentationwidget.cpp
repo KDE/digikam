@@ -73,48 +73,48 @@ public:
 
     Private()
     {
-        sharedData          = 0;
-        cacheSize           = 0;
-        imageLoader         = 0;
+        sharedData                   = 0;
+        cacheSize                    = 0;
+        imageLoader                  = 0;
 
 #ifdef HAVE_MEDIAPLAYER
-        playbackWidget      = 0;
+        playbackWidget               = 0;
 #endif
 
-        timer               = 0;
-        fileIndex           = 0;
-        effect              = 0;
-        effectRunning       = false;
-        x                   = 0;
-        y                   = 0;
-        w                   = 0;
-        h                   = 0;
-        dx                  = 0;
-        dy                  = 0;
-        ix                  = 0;
-        iy                  = 0;
-        i                   = 0;
-        j                   = 0;
-        subType             = 0;
-        x0                  = 0;
-        y0                  = 0;
-        x1                  = 0;
-        y1                  = 0;
-        wait                = 0;
-        fx                  = 0;
-        fy                  = 0;
-        alpha               = 0;
-        fd                  = 0;
-        intArray            = 0;
-        pdone               = 0;
-        pixelMatrix         = 0;
+        timer                        = 0;
+        fileIndex                    = 0;
+        effect                       = 0;
+        effectRunning                = false;
+        x                            = 0;
+        y                            = 0;
+        w                            = 0;
+        h                            = 0;
+        dx                           = 0;
+        dy                           = 0;
+        ix                           = 0;
+        iy                           = 0;
+        i                            = 0;
+        j                            = 0;
+        subType                      = 0;
+        x0                           = 0;
+        y0                           = 0;
+        x1                           = 0;
+        y1                           = 0;
+        wait                         = 0;
+        fx                           = 0;
+        fy                           = 0;
+        alpha                        = 0;
+        fd                           = 0;
+        intArray                     = 0;
+        pdone                        = 0;
+        pixelMatrix                  = 0;
 
         slidePresentationAudioWidget = 0;
-        mouseMoveTimer      = 0;
-        deskX               = 0;
-        deskY               = 0;
-        deskWidth           = 0;
-        deskHeight          = 0;
+        mouseMoveTimer               = 0;
+        deskX                        = 0;
+        deskY                        = 0;
+        deskWidth                    = 0;
+        deskHeight                   = 0;
     }
 
     PresentationContainer*      sharedData;
