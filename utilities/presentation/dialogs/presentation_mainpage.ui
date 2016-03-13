@@ -17,7 +17,7 @@
       <string>Preview the currently selected image.</string>
      </property>
      <property name="title">
-      <string>Image Files in Slideshow</string>
+      <string>Image List</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3" columnstretch="10,0">
       <item row="0" column="0">
@@ -133,19 +133,19 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QCheckBox" name="m_printProgressCheckBox">
-            <property name="text">
-             <string>Progress indicator</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
          <widget class="QCheckBox" name="m_printCommentsCheckBox">
           <property name="text">
            <string>Pr&amp;int captions </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="m_printProgressCheckBox">
+          <property name="text">
+           <string>Progress indicator</string>
           </property>
          </widget>
         </item>
@@ -158,42 +158,6 @@
            <size>
             <width>20</width>
             <height>17</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>Video</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QCheckBox" name="m_openglCheckBox">
-          <property name="text">
-           <string>Use Open&amp;GL slideshow transitions</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="m_openGlFullScale">
-          <property name="text">
-           <string>Use full screen resolution (slower)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>14</height>
            </size>
           </property>
          </spacer>
@@ -223,6 +187,13 @@
         </item>
         <item>
          <layout class="QGridLayout" name="gridLayout">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Effect :</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="m_delayLabel">
             <property name="text">
@@ -249,15 +220,15 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
+          <item row="2" column="1" colspan="2">
+           <widget class="QComboBox" name="m_effectsComboBox"/>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="m_openglCheckBox">
             <property name="text">
-             <string>Transition effect:</string>
+             <string>Use Open&amp;GL transitions</string>
             </property>
            </widget>
-          </item>
-          <item row="1" column="1" colspan="2">
-           <widget class="QComboBox" name="m_effectsComboBox"/>
           </item>
          </layout>
         </item>
@@ -295,22 +266,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>m_openglCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>m_openGlFullScale</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>158</x>
-     <y>389</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>65</x>
-     <y>412</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

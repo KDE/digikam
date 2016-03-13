@@ -45,6 +45,12 @@ PresentationAdvPage::PresentationAdvPage(QWidget* const parent, PresentationCont
 
     connect(m_useMillisecondsCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotUseMillisecondsToggled()));
+
+#ifdef HAVE_OPENGL
+    m_openGlFullScale->setEnabled(true);
+#else
+    m_openGlFullScale->setEnabled(false);
+#endif
 }
 
 PresentationAdvPage::~PresentationAdvPage()
@@ -57,12 +63,18 @@ void PresentationAdvPage::readSettings()
     m_useMillisecondsCheckBox->setChecked(m_sharedData->useMilliseconds);
     m_kbDisableFadeCheckBox->setChecked(m_sharedData->kbDisableFadeInOut);
     m_kbDisableCrossfadeCheckBox->setChecked(m_sharedData->kbDisableCrossFade);
+    m_openGlFullScale->setChecked(m_sharedData->openGlFullScale);
+    m_openGlFullScale->setEnabled(m_sharedData->opengl);
 
     slotUseMillisecondsToggled();
 }
 
 void PresentationAdvPage::saveSettings()
 {
+#ifdef HAVE_OPENGL
+    m_sharedData->openGlFullScale    = m_openGlFullScale->isChecked();
+#endif
+
     m_sharedData->useMilliseconds    = m_useMillisecondsCheckBox->isChecked();
     m_sharedData->enableMouseWheel   = m_enableMouseWheelCheckBox->isChecked();
     m_sharedData->kbDisableFadeInOut = m_kbDisableFadeCheckBox->isChecked();

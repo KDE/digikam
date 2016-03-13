@@ -32,7 +32,8 @@ namespace Digikam
 
 class PresentationContainer;
 
-class PresentationAdvPage : public QWidget, Ui::PresentationAdvPage
+class PresentationAdvPage : public QWidget,
+                            public Ui::PresentationAdvPage
 {
     Q_OBJECT
 

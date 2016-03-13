@@ -104,10 +104,8 @@ PresentationMainPage::PresentationMainPage(QWidget* const parent, PresentationCo
 
 #ifdef HAVE_OPENGL
     m_openglCheckBox->setEnabled(true);
-    m_openGlFullScale->setEnabled(true);
 #else
     m_openglCheckBox->setEnabled(false);
-    m_openGlFullScale->setEnabled(false);
 #endif
 }
 
@@ -120,8 +118,6 @@ void PresentationMainPage::readSettings()
 {
 #ifdef HAVE_OPENGL
     m_openglCheckBox->setChecked(d->sharedData->opengl);
-    m_openGlFullScale->setChecked(d->sharedData->openGlFullScale);
-    m_openGlFullScale->setEnabled(d->sharedData->opengl);
 #endif
 
     m_delaySpinBox->setValue(d->sharedData->delay);
@@ -152,7 +148,6 @@ void PresentationMainPage::saveSettings()
 {
 #ifdef HAVE_OPENGL
     d->sharedData->opengl                = m_openglCheckBox->isChecked();
-    d->sharedData->openGlFullScale       = m_openGlFullScale->isChecked();
 #endif
 
     d->sharedData->delay                 = d->sharedData->useMilliseconds ? m_delaySpinBox->value()
@@ -235,10 +230,14 @@ void PresentationMainPage::showNumberImages()
 
     if (numberOfImages != 0)
     {
-        if ( d->sharedData->useMilliseconds )
+        if (d->sharedData->useMilliseconds)
+        {
             totalDuration = totalDuration.addMSecs(numberOfImages * m_delaySpinBox->text().toInt());
+        }
         else
+        {
             totalDuration = totalDuration.addSecs(numberOfImages * m_delaySpinBox->text().toInt());
+        }
 
         totalDuration = totalDuration.addMSecs((numberOfImages - 1) * transitionDuration);
     }
@@ -402,7 +401,7 @@ void PresentationMainPage::slotEffectChanged()
     m_printProgressCheckBox->setEnabled(!isKB);
     m_printCommentsCheckBox->setEnabled(!isKB);
 #ifdef HAVE_OPENGL
-    m_openGlFullScale->setEnabled(!isKB && m_openglCheckBox->isChecked());
+    d->sharedData->advancedPage->m_openGlFullScale->setEnabled(!isKB && m_openglCheckBox->isChecked());
 #endif
     d->sharedData->captionPage->setEnabled((!isKB) && m_printCommentsCheckBox->isChecked());
 }

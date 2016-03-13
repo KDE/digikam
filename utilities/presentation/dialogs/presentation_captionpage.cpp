@@ -84,8 +84,6 @@ void PresentationCaptionPage::saveSettings()
     m_sharedData->bgOpacity           = m_commentsBgTransparency->value();
 }
 
-// --- Slots
-
 void PresentationCaptionPage::slotCommentsBgColorChanged()
 {
     QPalette palette = m_fontSampleLbl->palette();
