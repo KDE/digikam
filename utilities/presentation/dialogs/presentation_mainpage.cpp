@@ -326,15 +326,14 @@ bool PresentationMainPage::updateUrlList()
         if (!item)
             continue;
 
-        QString url = item->url().toLocalFile();
-
-        if (!QFile::exists(url))
+        if (!QFile::exists(item->url().toLocalFile()))
         {
-            QMessageBox::critical(this, i18n("Error"), i18n("Cannot access file %1. Please check the path is correct.", url));
+            QMessageBox::critical(this, i18n("Error"), i18n("Cannot access file %1. Please check the path is correct.",
+                                                            item->url().toLocalFile()));
             return false;
         }
 
-        d->sharedData->urlList.append(QUrl::fromLocalFile(url));  // Input images files.
+        d->sharedData->urlList.append(item->url());  // Input images files.
         ++it;
     }
 
@@ -345,7 +344,8 @@ void PresentationMainPage::slotImagesFilesSelected(QTreeWidgetItem* item)
 {
     if (!item || d->imagesFilesListBox->imageUrls().isEmpty())
     {
-        m_label7->setText(QString::fromLatin1(""));
+        m_previewLabel->setText(QLatin1String(""));
+        m_label7->setText(QLatin1String(""));
         return;
     }
 
@@ -446,7 +446,7 @@ void PresentationMainPage::slotThumbnail(const LoadingDescription& /*desc*/, con
 {
     if (pix.isNull())
     {
-        m_previewLabel->setPixmap(QIcon::fromTheme(QString::fromLatin1("image-x-generic")).pixmap(ICONSIZE, QIcon::Disabled));
+        m_previewLabel->setPixmap(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(ICONSIZE, QIcon::Disabled));
     }
     else
     {
