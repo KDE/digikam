@@ -407,9 +407,9 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
                                                          , d->bookmarkOwner
 #endif
                                                         );
-    d->HSplitter->setCollapsible(1, true);
     d->HSplitter->addWidget(d->stackedWidget);
-    d->splitterSize        = 0;
+    d->HSplitter->setCollapsible(1, true);
+    d->splitterSize  = 0;
 
     DVBox* const vboxTabBar = new DVBox(hboxMain);
     vboxTabBar->layout()->setContentsMargins(QMargins());
