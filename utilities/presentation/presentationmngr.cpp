@@ -96,7 +96,7 @@ void PresentationMngr::showConfigDialog()
 void PresentationMngr::slotSlideShow()
 {
     KConfig config;
-    KConfigGroup grp = config.group("PresentationMngr Settings");
+    KConfigGroup grp = config.group("Presentation Settings");
     bool opengl      = grp.readEntry("OpenGL",  false);
     bool shuffle     = grp.readEntry("Shuffle", false);
     bool wantKB      = grp.readEntry("Effect Name (OpenGL)") == QString::fromLatin1("Ken Burns");
