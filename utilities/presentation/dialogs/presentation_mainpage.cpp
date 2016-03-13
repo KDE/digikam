@@ -344,7 +344,7 @@ void PresentationMainPage::slotImagesFilesSelected(QTreeWidgetItem* item)
 {
     if (!item || d->imagesFilesListBox->imageUrls().isEmpty())
     {
-        m_previewLabel->setText(QLatin1String(""));
+        m_previewLabel->setPixmap(QPixmap());
         m_label7->setText(QLatin1String(""));
         return;
     }
@@ -471,8 +471,8 @@ void PresentationMainPage::slotImageListChanged()
 
 void PresentationMainPage::setupConnections()
 {
-    connect(d->sharedData->advancedPage, SIGNAL(useMillisecondsToggled()), this,
-            SLOT(slotUseMillisecondsToggled()));
+    connect(d->sharedData->advancedPage, SIGNAL(useMillisecondsToggled()),
+            this, SLOT(slotUseMillisecondsToggled()));
 
     connect(m_printCommentsCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotPrintCommentsToggled()));
