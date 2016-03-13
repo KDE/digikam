@@ -181,7 +181,10 @@ void StatusProgressBar::setProgressTotalSteps(int v)
 
 void StatusProgressBar::setProgressText(const QString& text)
 {
-    d->progressBar->setFormat(text + QLatin1String("%p%"));
+    QString percent = (!text.isEmpty()) ? QLatin1String(" - %p%") :
+                                          QLatin1String("%p%");
+
+    d->progressBar->setFormat(text + percent);
     d->progressBar->update();
 
     if (d->notify)
