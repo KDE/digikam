@@ -152,5 +152,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 114 ==> 360329 - Digikam 5 beta 4 build breaks.
 115 ==> 360434 - Geolocation Editor messed up size and contents.
 116 ==> 360437 - Crash during the face detection.
-117 ==> 
+117 ==> 360460 - No date for pics during import but for movies.
+118 ==> 
 
