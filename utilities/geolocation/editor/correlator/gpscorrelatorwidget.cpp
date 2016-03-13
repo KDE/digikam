@@ -158,12 +158,8 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     connect(d->trackCorrelator, SIGNAL(signalCorrelationCanceled()),
             this, SLOT(slotCorrelationCanceled()));
 
-    QVBoxLayout* const vboxlayout = new QVBoxLayout(this);
-    setLayout(vboxlayout);
-
     QGridLayout* const settingsLayout = new QGridLayout(this);
-    vboxlayout->addLayout(settingsLayout);
-    vboxlayout->addStretch(10);
+    setLayout(settingsLayout);
 
     d->gpxLoadFilesButton = new QPushButton(i18n("Load GPX files..."), this);
 
