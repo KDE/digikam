@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>467</width>
-    <height>596</height>
+    <width>536</width>
+    <height>618</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -279,7 +279,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string comment="KDE::DoNotExtract">TextLabel</string>
+           <string comment="KDE::DoNotExtract"/>
           </property>
          </widget>
         </item>
@@ -370,7 +370,7 @@
           <item row="0" column="1">
            <widget class="QLabel" name="m_slideTimeLabel">
             <property name="text">
-             <string comment="KDE::DoNotExtract">TextLabel</string>
+             <string comment="KDE::DoNotExtract"/>
             </property>
            </widget>
           </item>
@@ -384,7 +384,7 @@
           <item row="1" column="1">
            <widget class="QLabel" name="m_soundtrackTimeLabel">
             <property name="text">
-             <string comment="KDE::DoNotExtract">TextLabel</string>
+             <string comment="KDE::DoNotExtract"/>
             </property>
            </widget>
           </item>

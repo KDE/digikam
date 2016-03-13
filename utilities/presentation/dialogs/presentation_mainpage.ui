@@ -53,7 +53,7 @@
            </size>
           </property>
           <property name="text">
-           <string comment="KDE::DoNotExtract">TextLabel</string>
+           <string comment="KDE::DoNotExtract"/>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -87,7 +87,7 @@
          <string>Total number of images in the portfolio and sequence duration.</string>
         </property>
         <property name="text">
-         <string>None</string>
+         <string/>
         </property>
         <property name="wordWrap">
          <bool>false</bool>
@@ -106,7 +106,7 @@
          <string>Currently selected image in the portfolio list.</string>
         </property>
         <property name="text">
-         <string>None</string>
+         <string/>
         </property>
         <property name="wordWrap">
          <bool>false</bool>

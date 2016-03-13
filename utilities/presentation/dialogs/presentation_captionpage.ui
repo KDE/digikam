@@ -14,7 +14,7 @@
    <item>
     <widget class="QPushButton" name="m_fontselectBtn">
      <property name="text">
-      <string>Requested Font</string>
+      <string>Select Font...</string>
      </property>
     </widget>
    </item>

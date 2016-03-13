@@ -51,7 +51,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotUseMillisecondsToggled();
-    void slotCacheToggled();
 
 private:
 

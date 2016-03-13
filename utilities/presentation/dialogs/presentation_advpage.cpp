@@ -45,9 +45,6 @@ PresentationAdvPage::PresentationAdvPage(QWidget* const parent, PresentationCont
 
     connect(m_useMillisecondsCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotUseMillisecondsToggled()));
-
-    connect(m_cacheCheckBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotCacheToggled()));
 }
 
 PresentationAdvPage::~PresentationAdvPage()
@@ -60,10 +57,8 @@ void PresentationAdvPage::readSettings()
     m_useMillisecondsCheckBox->setChecked(m_sharedData->useMilliseconds);
     m_kbDisableFadeCheckBox->setChecked(m_sharedData->kbDisableFadeInOut);
     m_kbDisableCrossfadeCheckBox->setChecked(m_sharedData->kbDisableCrossFade);
-    m_cacheCheckBox->setChecked(m_sharedData->enableCache);
 
     slotUseMillisecondsToggled();
-    slotCacheToggled();
 }
 
 void PresentationAdvPage::saveSettings()
@@ -72,25 +67,12 @@ void PresentationAdvPage::saveSettings()
     m_sharedData->enableMouseWheel   = m_enableMouseWheelCheckBox->isChecked();
     m_sharedData->kbDisableFadeInOut = m_kbDisableFadeCheckBox->isChecked();
     m_sharedData->kbDisableCrossFade = m_kbDisableCrossfadeCheckBox->isChecked();
-    m_sharedData->cacheSize          = m_cacheSizeSpinBox->value();
-    m_sharedData->enableCache        = m_cacheCheckBox->isChecked();
 }
-
-// --- Slots
 
 void PresentationAdvPage::slotUseMillisecondsToggled()
 {
     m_sharedData->useMilliseconds = m_useMillisecondsCheckBox->isChecked();
     emit useMillisecondsToggled();
-}
-
-void PresentationAdvPage::slotCacheToggled()
-{
-    bool isEnabled = m_cacheCheckBox->isChecked();
-
-    m_cacheSizeLabel1->setEnabled(isEnabled);
-    m_cacheSizeLabel2->setEnabled(isEnabled);
-    m_cacheSizeSpinBox->setEnabled(isEnabled);
 }
 
 }  // namespace Digikam
