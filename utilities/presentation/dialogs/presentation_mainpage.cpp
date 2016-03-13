@@ -354,13 +354,10 @@ void PresentationMainPage::slotImagesFilesSelected(QTreeWidgetItem* item)
     if (!pitem)
         return;
 
-    QUrl url;
-    url.setPath(pitem->url().path());
-
     connect(ThumbnailLoadThread::defaultThread(), SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
-    ThumbnailLoadThread::defaultThread()->find(ThumbnailIdentifier(url.toLocalFile()));
+    ThumbnailLoadThread::defaultThread()->find(ThumbnailIdentifier(pitem->url().toLocalFile()));
 
     QModelIndex index = d->imagesFilesListBox->listView()->currentIndex();
 
@@ -457,7 +454,7 @@ void PresentationMainPage::slotThumbnail(const LoadingDescription& /*desc*/, con
     }
 
     disconnect(ThumbnailLoadThread::defaultThread(), 0,
-            this, 0);
+               this, 0);
 }
 
 void PresentationMainPage::slotPrintCommentsToggled()
