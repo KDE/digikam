@@ -36,11 +36,6 @@
 #include <QMenu>
 #include <QIcon>
 
-// KDE includes
-
-#include <kio/job.h>
-#include <kio/jobuidelegate.h>
-
 // Local includes
 
 #include "digikam_debug.h"
