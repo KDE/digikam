@@ -154,6 +154,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 116 ==> 360437 - Crash during the face detection.
 117 ==> 360460 - No date for pics during import but for movies.
 118 ==> 360470 - Import - unchecking "build sub-directories from prefix" lead to klauncher-error "no call kio_digikamdates".
-119 ==> 
-
-
+119 ==> 360474 - Initial setup: Splash shows "Loading tools..." but it is scanning images.
+120 ==> 

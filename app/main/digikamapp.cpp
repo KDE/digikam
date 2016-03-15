@@ -277,6 +277,11 @@ DigikamApp::DigikamApp()
     setAutoSaveSettings(group, true);
 
     // Now, enable finished the collection scan as deferred process
+    if (d->splashScreen)
+    {
+        d->splashScreen->message(i18n("Search for new items..."));
+    }
+
     NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
     tool->start();
 
