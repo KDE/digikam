@@ -54,8 +54,6 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kwindowsystem.h>
-//#include <kio/job.h>
-//#include <kio/jobuidelegate.h>
 
 // Local includes
 
