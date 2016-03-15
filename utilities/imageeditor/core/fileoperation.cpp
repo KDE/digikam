@@ -178,7 +178,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
         KRun::run(*it.key(), it.value(), parentWidget);
 #else
         KRun::runService(*it.key(), it.value(), parentWidget);
-#endif        
+#endif
     }
 }
 

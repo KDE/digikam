@@ -1239,7 +1239,6 @@ bool EditorWindow::promptForOverWrite()
         // in this case kio handles the overwrite request
         return true;
     }
-
 }
 
 void EditorWindow::slotUndoStateChanged()
