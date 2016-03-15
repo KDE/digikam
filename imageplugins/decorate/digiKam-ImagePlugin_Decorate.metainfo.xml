@@ -18,6 +18,7 @@
   <name xml:lang="it">ImagePlugin-Decora</name>
   <name xml:lang="ko">그림 플러그인-장식</name>
   <name xml:lang="nl">ImagePlugin-Decorate</name>
+  <name xml:lang="nn">ImagePlugin-Decorate</name>
   <name xml:lang="pl">WtyczkaObrazu-dekoracja</name>
   <name xml:lang="pt">ImagePlugin-Decorate</name>
   <name xml:lang="pt-BR">ImagePlugin-Decorate</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="it">Strumento per decorare un'immagine</summary>
   <summary xml:lang="ko">그림을 장식하는 도구</summary>
   <summary xml:lang="nl">Een hulpmiddel voor het decoreren van een afbeelding</summary>
+  <summary xml:lang="nn">Verktøy for å dekorera bilete</summary>
   <summary xml:lang="pl">Narzędzie do dekorowania obrazu</summary>
   <summary xml:lang="pt">Uma ferramenta para decorar uma imagem</summary>
   <summary xml:lang="pt-BR">Ferramenta para decoração de imagens</summary>
@@ -67,6 +69,7 @@
   <developer_name xml:lang="it">Progetto digiKam</developer_name>
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="nn">digiKam-prosjektet</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>

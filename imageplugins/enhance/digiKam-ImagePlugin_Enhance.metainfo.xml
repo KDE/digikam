@@ -18,6 +18,7 @@
   <name xml:lang="it">ImagePlugin-Migliora</name>
   <name xml:lang="ko">그림 플러그인-향상</name>
   <name xml:lang="nl">ImagePlugin-Enhance</name>
+  <name xml:lang="nn">ImagePlugin-Enhance</name>
   <name xml:lang="pl">WtyczkaObrazu-polepszanie</name>
   <name xml:lang="pt">ImagePlugin-Enhance</name>
   <name xml:lang="pt-BR">ImagePlugin-Enhance</name>
@@ -42,6 +43,7 @@
   <summary xml:lang="it">Estensione di digiKam per migliorare le fotografie</summary>
   <summary xml:lang="ko">사진을 보기 좋게 변경하는 도구</summary>
   <summary xml:lang="nl">digiKam-plugin voor het verbeteren van foto's</summary>
+  <summary xml:lang="nn">digiKam-tillegg for å forbetra fotografi</summary>
   <summary xml:lang="pl">Wtyczka digiKam do polepszania fotografii</summary>
   <summary xml:lang="pt">'Plugin' do digiKam para realçar fotografias</summary>
   <summary xml:lang="pt-BR">Plugin do digiKam para melhorar as fotografias</summary>
@@ -67,6 +69,7 @@
   <developer_name xml:lang="it">Progetto digiKam</developer_name>
   <developer_name xml:lang="ko">digiKam 프로젝트</developer_name>
   <developer_name xml:lang="nl">digiKam-project</developer_name>
+  <developer_name xml:lang="nn">digiKam-prosjektet</developer_name>
   <developer_name xml:lang="pl">Projekt digiKam</developer_name>
   <developer_name xml:lang="pt">Projecto digiKam</developer_name>
   <developer_name xml:lang="pt-BR">Projeto digiKam</developer_name>
