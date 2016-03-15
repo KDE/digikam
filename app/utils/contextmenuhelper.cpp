@@ -331,7 +331,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     {
         service = d->servicesMap[name];
     }
-    
+
 #if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
     KRun::run(*service, list, d->parent);
 #else
@@ -526,7 +526,7 @@ void ContextMenuHelper::addCreateTagFromAddressbookMenu()
 
     connect(abc, SIGNAL(signalContactTriggered(QString)),
             this, SIGNAL(signalAddNewTagFromABCMenu(QString)));
-    
+
     // AkonadiIface instance will be deleted with d->parent.
 }
 
@@ -768,7 +768,7 @@ void ContextMenuHelper::addAlbumCheckUncheckActions(Album* album)
     bool     enabled   = false;
     QString  allString = i18n("All Albums");
     QVariant albumData;
-    
+
     if (album)
     {
         enabled   = true;
