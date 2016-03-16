@@ -3619,7 +3619,7 @@ void CoreDB::updateItem(qlonglong imageID, DatabaseItem::Category category,
                          qlonglong fileSize, const QString& uniqueHash)
 {
     QVariantList boundValues;
-    boundValues << category << modificationDate << fileSize << uniqueHash << imageID;
+    boundValues << (int)category << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash << imageID;
     d->db->execSql(QString::fromUtf8("UPDATE Images SET category=?, modificationDate=?, fileSize=?, uniqueHash=? WHERE id=?;"),
                    boundValues);
     d->db->recordChangeset(ImageChangeset(imageID, DatabaseFields::Category
