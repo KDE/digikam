@@ -110,13 +110,13 @@ void CalSettings::setPaperSize(const QString& paperSize)
     {
         params.paperWidth  = 210;
         params.paperHeight = 297;
-        params.paperSize   = QPrinter::A4;
+        params.pageSize    = QPageSize::A4;
     }
     else if (paperSize == QString::fromLatin1("US Letter"))
     {
         params.paperWidth  = 216;
         params.paperHeight = 279;
-        params.paperSize   = QPrinter::Letter;
+        params.pageSize    = QPageSize::Letter;
     }
 
     emit settingsChanged();

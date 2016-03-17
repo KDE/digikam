@@ -253,8 +253,8 @@ void CalWizard::slotPageSelected(int curr)
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "printing...";
 
-        // PaperSize
-        d->printer->setPaperSize(params.paperSize);
+        // PageSize
+        d->printer->setPageSize(QPageSize(params.pageSize));
 
         QPrintDialog* const printDialog = new QPrintDialog(d->printer, this);
         printDialog->setWindowTitle(i18n("Print Calendar"));

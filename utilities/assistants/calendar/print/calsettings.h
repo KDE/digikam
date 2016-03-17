@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QUrl>
 #include <QMap>
 #include <QDate>
 #include <QFont>
@@ -38,7 +39,6 @@
 #include <QString>
 #include <QPointer>
 #include <QPrinter>
-#include <QUrl>
 
 namespace Digikam
 {
@@ -58,7 +58,7 @@ public:
 
 public:
 
-    QPrinter::PaperSize   paperSize;
+    QPageSize::PageSizeId pageSize;
     QPrinter::PrinterMode printResolution;
     int                   paperWidth;
     int                   paperHeight;
