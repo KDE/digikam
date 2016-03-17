@@ -58,7 +58,7 @@ public:
 
 public:
 
-    QPrinter::PageSize    pageSize;
+    QPrinter::PaperSize   paperSize;
     QPrinter::PrinterMode printResolution;
     int                   paperWidth;
     int                   paperHeight;
