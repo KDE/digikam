@@ -53,12 +53,12 @@ public:
         MAX_MONTHS(13)
     {
     }
-    
+
     const int                MAX_MONTHS;
     Ui::CalTemplate          ui;
     QVector<CalMonthWidget*> wVector;
 };
-    
+
 CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
     : QWidget(parent),
       d(new Private)
@@ -115,7 +115,7 @@ CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
 
     d->ui.yearSpin->setRange(cal->year(cal->earliestValidDate()) + 1, cal->year(cal->latestValidDate()) - 1);
     d->ui.yearSpin->setValue(currentYear);
-    
+
     QButtonGroup* const btnGrp = new QButtonGroup(d->ui.imagePosButtonGroup);
     btnGrp->addButton(d->ui.topRadio,   CalParams::Top);
     btnGrp->addButton(d->ui.leftRadio,  CalParams::Left);
