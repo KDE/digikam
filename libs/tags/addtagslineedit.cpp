@@ -28,27 +28,15 @@
 
 #include "addtagslineedit.h"
 
-// Qt includes
-
-#include <QKeyEvent>
-
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "tagscompleter.h"
-#include "tageditdlg.h"
 #include "album.h"
 #include "albummodel.h"
 #include "albumfiltermodel.h"
 #include "albumtreeview.h"
-#include "tagscache.h"
 #include "taggingactionfactory.h"
-#include "coredbaccess.h"
-#include "coredb.h"
 
 namespace Digikam
 {
@@ -107,18 +95,18 @@ AddTagsLineEdit::~AddTagsLineEdit()
     delete d;
 }
 
-void AddTagsLineEdit::setSupportingTagModel(TagModel* model)
+void AddTagsLineEdit::setSupportingTagModel(TagModel* const model)
 {
     d->completer->setSupportingTagModel(model);
 }
 
-void AddTagsLineEdit::setFilterModel(AlbumFilterModel* model)
+void AddTagsLineEdit::setFilterModel(AlbumFilterModel* const model)
 {
     d->tagFilterModel = model;
     d->completer->setTagFilterModel(d->tagFilterModel);
 }
 
-void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel)
+void AddTagsLineEdit::setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, AlbumFilterModel* const filterModel)
 {
     if (filterModel)
     {
@@ -132,7 +120,7 @@ void AddTagsLineEdit::setModel(TagModel* model, TagPropertiesFilterModel* filter
     setSupportingTagModel(model);
 }
 
-void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
+void AddTagsLineEdit::setTagTreeView(TagTreeView* const view)
 {
     if (d->tagView)
     {
@@ -148,13 +136,13 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView* view)
     }
 }
 
-void AddTagsLineEdit::setCurrentTag(TAlbum* album)
+void AddTagsLineEdit::setCurrentTag(TAlbum* const album)
 {
     setCurrentTaggingAction(album ? TaggingAction(album->id()) : TaggingAction());
     setText(album ? album->title() : QString());
 }
 
-void AddTagsLineEdit::setParentTag(Album* album)
+void AddTagsLineEdit::setParentTag(Album* const album)
 {
     d->parentTagId = album ? album->id() : 0;
     d->completer->setContextParentTag(d->parentTagId);
@@ -189,7 +177,7 @@ void AddTagsLineEdit::slotEditingFinished()
     d->currentTaggingAction = TaggingAction();
 }
 
-void AddTagsLineEdit::slotTextChanged(const QString &text)
+void AddTagsLineEdit::slotTextChanged(const QString& text)
 {
     if (text.isEmpty())
     {
@@ -225,7 +213,7 @@ TaggingAction AddTagsLineEdit::currentTaggingAction() const
     {
         return d->currentTaggingAction;
     }
-    else if(!text().isEmpty())
+    else if (!text().isEmpty())
     {
         return TaggingActionFactory::defaultTaggingAction(text(), d->parentTagId);
     }

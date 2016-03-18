@@ -28,16 +28,12 @@
 
 #include "addtagscombobox.h"
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "addtagslineedit.h"
-#include "albummodel.h"
 #include "albumtreeview.h"
+#include "albummodel.h"
 
 namespace Digikam
 {
@@ -87,7 +83,7 @@ AddTagsComboBox::~AddTagsComboBox()
     delete d;
 }
 
-void AddTagsComboBox::setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, CheckableAlbumFilterModel* filterModel)
+void AddTagsComboBox::setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel)
 {
     TagTreeViewSelectComboBox::setModel(model, filteredModel, filterModel);
 
@@ -100,18 +96,12 @@ AddTagsLineEdit* AddTagsComboBox::lineEdit() const
     return d->lineEdit;
 }
 
-void AddTagsComboBox::setTagTreeView(TagTreeView* view)
-{
-    // this is a completely different view! Remove this functionality?
-    d->lineEdit->setTagTreeView(view);
-}
-
-void AddTagsComboBox::setParentTag(TAlbum* album)
+void AddTagsComboBox::setParentTag(TAlbum* const album)
 {
     d->lineEdit->setParentTag(album);
 }
 
-void AddTagsComboBox::setCurrentTag(TAlbum* album)
+void AddTagsComboBox::setCurrentTag(TAlbum* const album)
 {
     view()->setCurrentAlbums(QList<Album*>() << album);
     slotViewIndexActivated(view()->currentIndex());

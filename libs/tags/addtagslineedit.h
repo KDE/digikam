@@ -24,6 +24,8 @@
 #ifndef ADDTAGSLINEEDIT_H
 #define ADDTAGSLINEEDIT_H
 
+// Qt includes
+
 #include <QLineEdit>
 
 // Local includes
@@ -39,7 +41,6 @@ class TAlbum;
 class TagModel;
 class TagPropertiesFilterModel;
 class TagTreeView;
-class TagCompleter;
 
 class AddTagsLineEdit : public QLineEdit
 {
@@ -53,25 +54,25 @@ public:
     /**
      * Optional: set a model for additional information, like tag icons
      */
-    void setSupportingTagModel(TagModel* model);
+    void setSupportingTagModel(TagModel* const model);
     /**
      * Set a tag filter model. Completion suggestions will be limited to tags contained in the filter model.
      */
-    void setFilterModel(AlbumFilterModel* model);
+    void setFilterModel(AlbumFilterModel* const model);
     /**
      * Convenience: Will call setSupportingTagModel() and setFilterModel()
      */
-    void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel, AlbumFilterModel* filterModel);
+    void setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, AlbumFilterModel* const filterModel);
 
     /** Reads a tag treeview and takes the currently selected tag into account
      *  when suggesting a parent tag for a new tag, and a default action.
      */
-    void setTagTreeView(TagTreeView* treeView);
+    void setTagTreeView(TagTreeView* const treeView);
 
     /**
      * Adjusts the current default tagging action to assign the given tag
      */
-    void setCurrentTag(TAlbum* tag);
+    void setCurrentTag(TAlbum* const tag);
 
     void setAllowExceedBound(bool value);
 
@@ -84,7 +85,7 @@ public Q_SLOTS:
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action.
      *  If you set a tag tree view, this is taken care for automatically.
      */
-    void setParentTag(Album* album);
+    void setParentTag(Album* const album);
 
 Q_SIGNALS:
 

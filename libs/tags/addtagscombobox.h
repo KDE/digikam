@@ -53,7 +53,7 @@ public:
     /** You must call this after construction.
      *  If filtered/filterModel is 0, a default one is constructed
      */
-    void setModel(TagModel* model, TagPropertiesFilterModel* filteredModel = 0, CheckableAlbumFilterModel* filterModel = 0);
+    void setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel = 0, CheckableAlbumFilterModel* const filterModel = 0);
 
     /** Returns the currently set tagging action.
      *  This is the last action emitted by either taggingActionActivated()
@@ -64,12 +64,7 @@ public:
     /**
      * Sets the currently selected tag
      */
-    void setCurrentTag(TAlbum* album);
-
-    /** Reads a tag treeview and takes the currently selected tag into account
-     *  when suggesting a parent tag for a new tag, and a default action.
-     */
-    void setTagTreeView(TagTreeView* treeView);
+    void setCurrentTag(TAlbum* const album);
 
     void setPlaceholderText(const QString& message);
 
@@ -81,7 +76,7 @@ public:
 public Q_SLOTS:
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
-    void setParentTag(TAlbum* album);
+    void setParentTag(TAlbum* const album);
 
 Q_SIGNALS:
 

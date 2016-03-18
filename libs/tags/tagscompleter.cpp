@@ -30,25 +30,17 @@
 
 // Qt includes
 
-#include <QComboBox>
-#include <QDebug>
-#include <QLineEdit>
 #include <QStandardItemModel>
 #include <QStandardItem>
-
-// KDE includes
-
-#include <klocalizedstring.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "album.h"
-#include "albumfiltermodel.h"
-#include "albummanager.h"
 #include "albummodel.h"
+#include "albummanager.h"
+#include "albumfiltermodel.h"
 #include "albumthumbnailloader.h"
-#include "albumtreeview.h"
 #include "taggingactionfactory.h"
 #include "tagscache.h"
 
@@ -122,14 +114,14 @@ TagCompleter::~TagCompleter()
     delete d;
 }
 
-void TagCompleter::setTagFilterModel(AlbumFilterModel* filterModel)
+void TagCompleter::setTagFilterModel(AlbumFilterModel* const filterModel)
 {
     d->filterModel = filterModel;
     d->factory.setConstraintInterface(d->filterModel ? d : 0);
     d->factory.setNameMatchMode(TaggingActionFactory::MatchContainingFragment);
 }
 
-void TagCompleter::setSupportingTagModel(TagModel* model)
+void TagCompleter::setSupportingTagModel(TagModel* const model)
 {
     d->supportingModel = model;
 }

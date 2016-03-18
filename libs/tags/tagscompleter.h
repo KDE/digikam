@@ -32,13 +32,10 @@
 
 #include "taggingaction.h"
 
-class QLineEdit;
-
 namespace Digikam
 {
 
 class AlbumFilterModel;
-class TAlbum;
 class TagModel;
 
 class TagCompleter : public QCompleter
@@ -59,8 +56,8 @@ public:
     void setContextParentTag(int parentTagId);
 
     // Set a supporting model from which the completer may get data for its display. Optional.
-    void setSupportingTagModel(TagModel* supportingModel);
-    void setTagFilterModel(AlbumFilterModel* supportingModel);
+    void setSupportingTagModel(TagModel* const supportingModel);
+    void setTagFilterModel(AlbumFilterModel* const supportingModel);
 
 Q_SIGNALS:
 
@@ -72,11 +69,6 @@ private Q_SLOTS:
     void slotActivated(const QModelIndex& index);
     void slotHighlighted(const QModelIndex& index);
     void slotTextEdited(const QString& text);
-
-/*
-    void slotInsertRows(QModelIndex index, int start, int end);
-    void slotDeleteRows(QModelIndex index, int start, int end);
-*/
 
 private:
 
