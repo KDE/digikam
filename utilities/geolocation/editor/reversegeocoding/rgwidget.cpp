@@ -467,7 +467,7 @@ void RGWidget::slotButtonRGSelected()
         d->requestedRGCount = photoList.count();
 
         emit(signalSetUIEnabled(false, this, QString::fromUtf8(SLOT(slotRGCanceled()))));
-        emit(signalProgressSetup(d->requestedRGCount, i18n("Retrieving RG info")));
+        emit(signalProgressSetup(d->requestedRGCount, i18n("Retrieving RG info -")));
 
         d->currentBackend->callRGBackend(photoList, wantedLanguage);
     }

@@ -510,7 +510,7 @@ void GPSCorrelatorWidget::slotCorrelate()
     d->correlationTriedCount      = 0;
     d->correlationUndoCommand     = new GPSUndoCommand;
 
-    emit(signalProgressSetup(imageCount, i18n("Correlating images")));
+    emit(signalProgressSetup(imageCount, i18n("Correlating images -")));
 
     d->trackCorrelator->correlate(itemList, options);
 

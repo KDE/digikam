@@ -275,7 +275,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
 void ScanDialog::slotThreadProgress(const QUrl& url, int percent)
 {
-    d->progress->setProgressText(i18n("Saving file %1 - ", url.fileName()));
+    d->progress->setProgressText(i18n("Saving file %1 -", url.fileName()));
     d->progress->setProgressValue(percent);
 }
 

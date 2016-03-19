@@ -285,7 +285,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     vbox->addWidget(d->treeWidget);
 
     d->progressBar = new QProgressBar();
-    d->progressBar->setFormat(i18n("Loading images"));
+    d->progressBar->setFormat(i18n("Loading images -"));
 
     d->splitter->addWidget(dummyWidget);
 

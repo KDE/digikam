@@ -1582,7 +1582,7 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
     setCursor(Qt::WaitCursor);
     toggleActions(false);
     m_animLogo->start();
-    m_nameLabel->setProgressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading: "));
+    m_nameLabel->setProgressBarMode(StatusProgressBar::ProgressBarMode, i18n("Loading:"));
 }
 
 void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
@@ -1699,7 +1699,7 @@ void EditorWindow::slotSavingStarted(const QString& /*filename*/)
     emit signalNoCurrentItem();
     toggleActions(false);
 
-    m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving: "));
+    m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode, i18n("Saving:"));
 }
 
 void EditorWindow::slotSavingFinished(const QString& filename, bool success)
@@ -2568,7 +2568,7 @@ void EditorWindow::setToolStartProgress(const QString& toolName)
 {
     m_animLogo->start();
     m_nameLabel->setProgressValue(0);
-    m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode, QString::fromUtf8("%1: ").arg(toolName));
+    m_nameLabel->setProgressBarMode(StatusProgressBar::CancelProgressBarMode, QString::fromUtf8("%1:").arg(toolName));
 }
 
 void EditorWindow::setToolProgress(int progress)

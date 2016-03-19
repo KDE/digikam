@@ -617,7 +617,7 @@ void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
     }
 
     slotSetUIEnabled(false);
-    slotProgressSetup(imagesToLoad.count(), i18n("Loading metadata"));
+    slotProgressSetup(imagesToLoad.count(), i18n("Loading metadata -"));
 
     // initiate the saving
     d->fileIOCountDone     = 0;
@@ -916,7 +916,7 @@ void GeolocationEdit::saveChanges(const bool closeAfterwards)
 
     // TODO: disable the UI and provide progress and cancel information
     slotSetUIEnabled(false);
-    slotProgressSetup(dirtyImages.count(), i18n("Saving changes"));
+    slotProgressSetup(dirtyImages.count(), i18n("Saving changes -"));
 
     // initiate the saving
     d->fileIOCountDone        = 0;
