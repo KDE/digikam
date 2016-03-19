@@ -103,7 +103,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     DHBox* const hbox1 = new DHBox(panel);
-    QLabel* const lbl1 = new QLabel(i18n("&Delay between images:"), hbox1);
+    QLabel* const lbl1 = new QLabel(i18n("Delay between images:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->delayInput      = new DIntNumInput(hbox1);
     d->delayInput->setDefaultValue(5);
