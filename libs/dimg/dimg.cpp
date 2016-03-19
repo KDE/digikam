@@ -547,20 +547,22 @@ bool DImg::load(const QString& filePath, int loadFlagsInt, DImgLoaderObserver* c
             break;
     }
 
-    if (observer && observer->continueQuery(0))
+    if (observer && !observer->continueQuery(0))
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : QIMAGE file identified";
-        QImageLoader loader(this);
-        loader.setLoadFlags(loadFlags);
+        return false;
+    }
 
-        if (loader.load(filePath, observer))
-        {
-            m_priv->null       = !loader.hasLoadedData();
-            m_priv->alpha      = loader.hasAlpha();
-            m_priv->sixteenBit = loader.sixteenBit();
-            setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
-            return true;
-        }
+    qCDebug(DIGIKAM_DIMG_LOG) << filePath << " : QIMAGE file identified";
+    QImageLoader loader(this);
+    loader.setLoadFlags(loadFlags);
+
+    if (loader.load(filePath, observer))
+    {
+        m_priv->null       = !loader.hasLoadedData();
+        m_priv->alpha      = loader.hasAlpha();
+        m_priv->sixteenBit = loader.sixteenBit();
+        setAttribute(QLatin1String("isreadonly"), loader.isReadOnly());
+        return true;
     }
 
     return false;
