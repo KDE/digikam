@@ -156,5 +156,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 118 ==> 360470 - Import - unchecking "build sub-directories from prefix" lead to klauncher-error "no call kio_digikamdates".
 119 ==> 360474 - Initial setup: Splash shows "Loading tools..." but it is scanning images.
 120 ==> 360566 - Crash or hang when adding a tag.
-121 ==> 
- 
+121 ==> 360436 - Crash after running gps correlation.
+122 ==> 
