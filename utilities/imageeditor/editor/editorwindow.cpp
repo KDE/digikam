@@ -1955,6 +1955,21 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     }
 
     newURL = urls.first();
+    QFileInfo fi(newURL.fileName());
+
+    if (fi.suffix().isEmpty())
+    {
+        ext = imageFileSaveDialog->selectedNameFilter().section(QLatin1String("*."), 1, 1);
+        ext = ext.left(ext.length() - 1);
+
+        if (ext.isEmpty())
+        {
+            ext = QLatin1String("jpg");
+        }
+
+        newURL.setPath(newURL.path() + QLatin1Char('.') + ext);
+    }
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writing file to " << newURL;
 
     //-- Show Settings Dialog ----------------------------------------------
