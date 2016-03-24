@@ -10,7 +10,7 @@
     <height>569</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="m_ImagesFilesGroup">
      <property name="whatsThis">
@@ -118,7 +118,7 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="1" column="0">
+     <item row="0" column="0">
       <widget class="QGroupBox" name="groupBox_2">
        <property name="title">
         <string>Content</string>
@@ -165,7 +165,7 @@
        </layout>
       </widget>
      </item>
-     <item row="0" column="1" rowspan="2">
+     <item row="0" column="1">
       <widget class="QGroupBox" name="groupBox_3">
        <property name="title">
         <string>Playback</string>
