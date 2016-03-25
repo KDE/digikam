@@ -474,7 +474,7 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("lighttable_setitemright"), d->setItemRightAction);
     ac->setDefaultShortcut(d->setItemRightAction, Qt::CTRL + Qt::Key_R);
 
-    d->editItemAction = new QAction(QIcon::fromTheme(QLatin1String("image-stack")), i18n("Edit"), this);
+    d->editItemAction = new QAction(QIcon::fromTheme(QLatin1String("editimage")), i18n("Edit"), this);
     d->editItemAction->setEnabled(false);
     connect(d->editItemAction, SIGNAL(triggered()), this, SLOT(slotEditItem()));
     ac->addAction(QLatin1String("lighttable_edititem"), d->editItemAction);

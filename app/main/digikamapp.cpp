@@ -924,19 +924,19 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
     ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
 
-    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("image-stack")), i18n("Image Editor"), this);
+    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("editimage")), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
     connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
     ac->addAction(QLatin1String("imageeditor"), ieAction);
 
     // -----------------------------------------------------------
 
-    QAction* const ltAction = new QAction(QIcon::fromTheme(QLatin1String("image-stack-open")), i18n("Light Table"), this);
+    QAction* const ltAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Light Table"), this);
     connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
     ac->addAction(QLatin1String("light_table"), ltAction);
     ac->setDefaultShortcut(ltAction, Qt::Key_L);
 
-    d->imageLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("image-stack-open")), i18n("Place onto Light Table"), this);
+    d->imageLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Place onto Light Table"), this);
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
     connect(d->imageLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageLightTable()));
     ac->addAction(QLatin1String("image_lighttable"), d->imageLightTableAction);

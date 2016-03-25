@@ -237,7 +237,7 @@ Setup::Setup(QWidget* const parent)
     d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
     d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
                                    "<i>Customize the image editor window</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("image-stack")));
+    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("editimage")));
 
     d->versioningPage  = new SetupVersioning();
     d->page_versioning = addPage(d->versioningPage, i18n("Editing Images"));
@@ -267,7 +267,7 @@ Setup::Setup(QWidget* const parent)
     d->page_lighttable = addPage(d->lighttablePage, i18n("Light Table"));
     d->page_lighttable->setHeader(i18n("<qt>Light Table Settings<br/>"
                                        "<i>Customize tool used to compare images</i></qt>"));
-    d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("image-stack-open")));
+    d->page_lighttable->setIcon(QIcon::fromTheme(QLatin1String("lighttable")));
 
     d->slideshowPage  = new SetupSlideShow();
     d->page_slideshow = addPage(d->slideshowPage, i18n("Slide Show"));

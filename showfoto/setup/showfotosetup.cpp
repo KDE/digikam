@@ -111,7 +111,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_editor    = addPage(d->editorPage, i18n("Image Editor"));
     d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
                                    "<i>Customize image editor behavior</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("image-stack")));
+    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("editimage")));
 
     d->metadataPage   = new SetupMetadata();
     d->page_metadata  = addPage(d->metadataPage, i18n("Metadata"));
