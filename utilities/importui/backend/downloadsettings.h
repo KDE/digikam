@@ -43,12 +43,13 @@ public:
 
     DownloadSettings()
     {
-        autoRotate  = true;
-        fixDateTime = false;
-        convertJpeg = false;
-        rating      = NoRating;
-        pickLabel   = NoPickLabel;
-        colorLabel  = NoColorLabel;
+        autoRotate   = true;
+        fixDateTime  = false;
+        convertJpeg  = false;
+        documentName = false;
+        rating       = NoRating;
+        pickLabel    = NoPickLabel;
+        colorLabel   = NoColorLabel;
     };
 
     ~DownloadSettings()
@@ -61,6 +62,7 @@ public:
     bool       autoRotate;
     bool       fixDateTime;
     bool       convertJpeg;
+    bool       documentName;
 
     QDateTime  newDateTime;
 

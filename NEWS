@@ -157,4 +157,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 119 ==> 360474 - Initial setup: Splash shows "Loading tools..." but it is scanning images.
 120 ==> 360566 - Crash or hang when adding a tag.
 121 ==> 360436 - Crash after running gps correlation.
-122 ==> 
+122 ==> 361052 - When importing picture file dates are all from importing time. Not creation date.
+123 ==> 

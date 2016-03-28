@@ -163,7 +163,7 @@ CameraController::CameraController(QWidget* const parent,
             {
                 QString usbport = x.cap(1);
                 qCDebug(DIGIKAM_IMPORTUI_LOG) << "USB " << xport << " " << usbport;
-                
+
                 //if ((xport == usbport) || ((count == 1) && (xport == "usb:")))
                 //{
                 //   model = xmodel;
@@ -598,6 +598,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QString   folder         = cmd->map[QLatin1String("folder")].toString();
             QString   file           = cmd->map[QLatin1String("file")].toString();
             QString   dest           = cmd->map[QLatin1String("dest")].toString();
+            bool      documentName   = cmd->map[QLatin1String("documentName")].toBool();
             bool      fixDateTime    = cmd->map[QLatin1String("fixDateTime")].toBool();
             QDateTime newDateTime    = cmd->map[QLatin1String("newDateTime")].toDateTime();
             QString   templateTitle  = cmd->map[QLatin1String("template")].toString();
@@ -635,12 +636,18 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 qCDebug(DIGIKAM_IMPORTUI_LOG) << "Set metadata from: " << file << " using (" << tempURL << ")";
                 DMetadata metadata(tempURL.toLocalFile());
+                bool applyChanges = false;
 
-                metadata.setExifTagString("Exif.Image.DocumentName", QFileInfo(dest).fileName());
+                if (documentName)
+                {
+                    metadata.setExifTagString("Exif.Image.DocumentName", file);
+                    applyChanges = true;
+                }
 
                 if (fixDateTime)
                 {
                     metadata.setImageDateTime(newDateTime, true);
+                    applyChanges = true;
                 }
 
                 // TODO: Set image tags using DMetadata.
@@ -648,16 +655,19 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 if (colorLabel > NoColorLabel)
                 {
                     metadata.setImageColorLabel(colorLabel);
+                    applyChanges = true;
                 }
-                 
+
                 if (pickLabel > NoPickLabel)
                 {
                     metadata.setImagePickLabel(pickLabel);
+                    applyChanges = true;
                 }
 
                 if (rating > RatingMin)
-                { 
+                {
                     metadata.setImageRating(rating);
+                    applyChanges = true;
                 }
 
                 if (!templateTitle.isNull() && !templateTitle.isEmpty())
@@ -668,15 +678,20 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     if (tm && templateTitle == Template::removeTemplateTitle())
                     {
                         metadata.removeMetadataTemplate();
+                        applyChanges = true;
                     }
                     else if (tm)
                     {
                         metadata.removeMetadataTemplate();
                         metadata.setMetadataTemplate(tm->findByTitle(templateTitle));
+                        applyChanges = true;
                     }
                 }
 
-                metadata.applyChanges();
+                if (applyChanges)
+                {
+                    metadata.applyChanges();
+                }
 
                 // Convert JPEG file to lossless format if wanted,
                 // and move converted image to destination.
@@ -692,7 +707,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                     // When converting a file, we need to set the new format extension..
                     // The new extension is already set in importui.cpp.
-                    
+
                     qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
 
                     if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
@@ -1223,6 +1238,7 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->map.insert(QLatin1String("folder"),            QVariant(downloadSettings.folder));
     cmd->map.insert(QLatin1String("file"),              QVariant(downloadSettings.file));
     cmd->map.insert(QLatin1String("dest"),              QVariant(downloadSettings.dest));
+    cmd->map.insert(QLatin1String("documentName"),      QVariant(downloadSettings.documentName));
     cmd->map.insert(QLatin1String("fixDateTime"),       QVariant(downloadSettings.fixDateTime));
     cmd->map.insert(QLatin1String("newDateTime"),       QVariant(downloadSettings.newDateTime));
     cmd->map.insert(QLatin1String("template"),          QVariant(downloadSettings.templateTitle));

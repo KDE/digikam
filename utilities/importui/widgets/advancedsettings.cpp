@@ -58,6 +58,7 @@ public:
           autoRotateCheck(0),
           convertJpegCheck(0),
           fixDateTimeCheck(0),
+          documentNameCheck(0),
           losslessFormat(0),
           dateTimeEdit(0),
           templateSelector(0)
@@ -69,6 +70,7 @@ public:
     QCheckBox*        autoRotateCheck;
     QCheckBox*        convertJpegCheck;
     QCheckBox*        fixDateTimeCheck;
+    QCheckBox*        documentNameCheck;
 
     QComboBox*        losslessFormat;
 
@@ -84,6 +86,7 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
 
     QVBoxLayout* const onFlyVlay = new QVBoxLayout(this);
     d->templateSelector          = new TemplateSelector(this);
+    d->documentNameCheck         = new QCheckBox(i18nc("@option:check", "Write the document name to EXIF"), this);
     d->fixDateTimeCheck          = new QCheckBox(i18nc("@option:check", "Fix internal date && time"), this);
     d->dateTimeEdit              = new DDateTimeEdit(this, QLatin1String("datepicker"));
     d->autoRotateCheck           = new QCheckBox(i18nc("@option:check", "Auto-rotate/flip image"), this);
@@ -99,6 +102,7 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
 #endif // HAVE_JASPER
 
     onFlyVlay->addWidget(d->templateSelector);
+    onFlyVlay->addWidget(d->documentNameCheck);
     onFlyVlay->addWidget(d->fixDateTimeCheck);
     onFlyVlay->addWidget(d->dateTimeEdit);
     onFlyVlay->addWidget(d->autoRotateCheck);
@@ -114,6 +118,8 @@ AdvancedSettings::AdvancedSettings(QWidget* const parent)
                                           "rotated or flipped using EXIF information provided by the camera."));
     d->templateSelector->setWhatsThis(i18n("Select here which metadata template you want to apply "
                                            "to images."));
+    d->documentNameCheck->setWhatsThis(i18n("Enable this option to write the document name to the EXIF metadata. "
+                                            "The document name is the original file name of the imported file."));
     d->fixDateTimeCheck->setWhatsThis(i18n("Enable this option to set date and time metadata "
                                            "tags to the right values if your camera does not set "
                                            "these tags correctly when pictures are taken. The values will "
@@ -151,6 +157,7 @@ void AdvancedSettings::readSettings(KConfigGroup& group)
 {
     d->autoRotateCheck->setChecked(group.readEntry(QLatin1String("AutoRotate"),         true));
     d->fixDateTimeCheck->setChecked(group.readEntry(QLatin1String("FixDateTime"),       false));
+    d->documentNameCheck->setChecked(group.readEntry(QLatin1String("DocumentName"),     false));
     d->templateSelector->setTemplateIndex(group.readEntry(QLatin1String("Template"),    0));
     d->convertJpegCheck->setChecked(group.readEntry(QLatin1String("ConvertJpeg"),       false));
     d->losslessFormat->setCurrentIndex(group.readEntry(QLatin1String("LossLessFormat"), 0));      // PNG by default
@@ -164,6 +171,7 @@ void AdvancedSettings::saveSettings(KConfigGroup& group)
 {
     group.writeEntry(QLatin1String("AutoRotate"),     d->autoRotateCheck->isChecked());
     group.writeEntry(QLatin1String("FixDateTime"),    d->fixDateTimeCheck->isChecked());
+    group.writeEntry(QLatin1String("DocumentName"),   d->documentNameCheck->isChecked());
     group.writeEntry(QLatin1String("Template"),       d->templateSelector->getTemplateIndex());
     group.writeEntry(QLatin1String("ConvertJpeg"),    d->convertJpegCheck->isChecked());
     group.writeEntry(QLatin1String("LossLessFormat"), d->losslessFormat->currentIndex());
@@ -177,6 +185,7 @@ DownloadSettings AdvancedSettings::settings() const
     settings.fixDateTime    = d->fixDateTimeCheck->isChecked();
     settings.convertJpeg    = d->convertJpegCheck->isChecked();
     settings.newDateTime    = d->dateTimeEdit->dateTime();
+    settings.documentName   = d->documentNameCheck->isChecked();
     settings.losslessFormat = d->losslessFormat->currentText();
     settings.templateTitle  = d->templateSelector->getTemplate().templateTitle();
 
