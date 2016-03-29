@@ -865,12 +865,12 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
     if (mimeType.isValid())
     {
-        pix = QIcon::fromTheme(mimeType.iconName()).pixmap(128);
+        pix = QIcon::fromTheme(mimeType.genericIconName()).pixmap(128);
     }
 
     if (pix.isNull())
     {
-        pix = QIcon::fromTheme(QLatin1String("image-missing")).pixmap(128);
+        pix = QIcon::fromTheme(QLatin1String("unknown")).pixmap(128);
     }
 
     if (pix.isNull())
