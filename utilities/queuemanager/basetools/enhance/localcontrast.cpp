@@ -47,7 +47,7 @@ LocalContrast::LocalContrast(QObject* const parent)
 {
     setToolTitle(i18n("Local Contrast"));
     setToolDescription(i18n("Emulate tone mapping."));
-    setToolIconName(QLatin1String("tonemap"));
+    setToolIconName(QLatin1String("contrast"));
 }
 
 LocalContrast::~LocalContrast()

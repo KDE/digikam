@@ -105,7 +105,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
 
     if (icon.isNull())
     {
-        icon = QPixmap(QIcon::fromTheme(QLatin1String("image-jp2")).pixmap(32));
+        icon = QPixmap(QIcon::fromTheme(QLatin1String("image-jpeg2000")).pixmap(32));
     }
 
     if (qMax(icon.width(), icon.height()) > 64)

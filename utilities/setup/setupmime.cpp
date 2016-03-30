@@ -108,7 +108,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel* const logoLabel1 = new QLabel(imageFileFilterBox);
-    logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("image-jp2")).pixmap(48));
+    logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("image-jpeg2000")).pixmap(48));
 
     d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
@@ -144,7 +144,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
-    logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-mpeg")).pixmap(48));
+    logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-x-generic")).pixmap(48));
 
     d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
@@ -182,7 +182,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel* const logoLabel3 = new QLabel(audioFileFilterBox);
-    logoLabel3->setPixmap(QIcon::fromTheme(QLatin1String("audio-basic")).pixmap(48));
+    logoLabel3->setPixmap(QIcon::fromTheme(QLatin1String("audio-x-generic")).pixmap(48));
 
     d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));

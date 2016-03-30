@@ -225,7 +225,7 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:ShearFilter"),          QLatin1String("shear"));
     filterIcons.insert(QLatin1String("digikam:StretchFilter"),        QLatin1String("autocorrection"));
     filterIcons.insert(QLatin1String("digikam:TextureFilter"),        QLatin1String("texture"));
-    filterIcons.insert(QLatin1String("digikam:TonalityFilter"),       QLatin1String("tonemap"));
+    filterIcons.insert(QLatin1String("digikam:TonalityFilter"),       QLatin1String("contrast"));
     filterIcons.insert(QLatin1String("digikam:UnsharpMaskFilter"),    QLatin1String("sharpenimage"));
     filterIcons.insert(QLatin1String("digikam:WhiteBalanceFilter"),   QLatin1String("format-stroke-color"));
 
