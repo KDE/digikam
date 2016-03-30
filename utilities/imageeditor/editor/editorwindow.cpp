@@ -339,7 +339,7 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcuts(m_lastAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
     m_lastAction->setEnabled(false);
 
-    m_openVersionAction = new QAction(QIcon::fromTheme(QLatin1String("image-loading")),
+    m_openVersionAction = new QAction(QIcon::fromTheme(QLatin1String("image-x-generic")),
                                       i18nc("@action", "Open Original"), this);
     connect(m_openVersionAction, SIGNAL(triggered()), this, SLOT(slotOpenOriginal()));
     ac->addAction(QLatin1String("editorwindow_openversion"), m_openVersionAction);

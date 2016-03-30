@@ -230,7 +230,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QVBoxLayout* const vlayMismatch = new QVBoxLayout(d->mismatchGB);
 
     QLabel* const behaviorIcon  = new QLabel;
-    behaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("image-loading")).pixmap(32));
+    behaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(32));
     QLabel* const behaviorLabel = new QLabel(i18n("When the profile of an image does not match the working color space"));
     behaviorLabel->setWordWrap(true);
 
@@ -262,7 +262,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QVBoxLayout* const vlayMissing = new QVBoxLayout(d->missingGB);
 
     QLabel* const  missingIcon  = new QLabel;
-    missingIcon->setPixmap(QIcon::fromTheme(QLatin1String("image-missing")).pixmap(32));
+    missingIcon->setPixmap(QIcon::fromTheme(QLatin1String("paint-unknown")).pixmap(32));
     QLabel* const missingLabel = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
 
