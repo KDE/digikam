@@ -798,7 +798,9 @@ void ThumbnailLoadThread::startKdePreviewJob()
     d->kdeTodo.clear();
 
     if (d->previewPlugins.isEmpty())
-      d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
+    {
+        d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
+    }
 
     d->kioWrapper = new KIOWrapper();
 

@@ -257,7 +257,7 @@ void UMSCamera::getItemInfo(const QString& folder, const QString& itemName, CamI
 
     // if we have an image, allow previews
     // TODO allow video previews at some point?
-    if(info.mime.startsWith(QLatin1String("image/")))
+    if (info.mime.startsWith(QLatin1String("image/")))
     {
         info.previewPossible = true;
     }
@@ -292,7 +292,7 @@ bool UMSCamera::getThumbnail(const QString& folder, const QString& itemName, QIm
     bool turnHighQualityThumbs = group.readEntry(QLatin1String("TurnHighQualityThumbs"), false);
 
     // Try to get thumbnail from Exif data (poor quality).
-    if(!turnHighQualityThumbs)
+    if (!turnHighQualityThumbs)
     {
         thumbnail = metadata.getExifThumbnail(true);
 
