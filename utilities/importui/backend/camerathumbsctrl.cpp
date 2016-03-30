@@ -81,6 +81,7 @@ public:
     QList<CamItemInfo>       kdeTodo;
     QHash<QUrl, CamItemInfo> kdeJobHash;
     KIOWrapper*              kioWrapper;
+    QStringList              previewPlugins;
 };
 
 // --------------------------------------------------------
@@ -206,16 +207,14 @@ void CameraThumbsCtrl::startKdePreviewJob()
 
     d->kdeTodo.clear();
 
-    KFileItemList items;
-
-    for (QList<QUrl>::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
+    if (d->previewPlugins.isEmpty())
     {
-        if ((*it).isValid())
-            items.append(KFileItem(*it));
+        d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
     }
 
     d->kioWrapper = new KIOWrapper();
-    d->kioWrapper->filePreview(list, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge));
+
+    d->kioWrapper->filePreview(list, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge), &d->previewPlugins);
 
     connect(d->kioWrapper, SIGNAL(gotPreview(QUrl,QPixmap)),
             this, SLOT(slotGotKDEPreview(QUrl,QPixmap)));
