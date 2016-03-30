@@ -177,6 +177,7 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
     shutDown();
+    delete d->kioWrapper;
     delete d->creator;
     delete d;
 }
@@ -853,7 +854,9 @@ void ThumbnailLoadThread::failedKDEPreview(const QUrl& item)
 
 void ThumbnailLoadThread::kdePreviewFinished()
 {
+    delete d->kioWrapper;
     d->kioWrapper = 0;
+
     startKdePreviewJob();
 }
 

@@ -229,6 +229,7 @@ ShowFoto::~ShowFoto()
     delete d->thumbBar;
     delete d->rightSideBar;
     delete d->thumbLoadThread;
+    delete d->kioWrapper;
     delete d;
 }
 
@@ -989,6 +990,7 @@ void ShowFoto::slotDeleteCurrentItem()
         }
         else
         {
+            delete d->kioWrapper;
             d->kioWrapper = new KIOWrapper();
             d->kioWrapper->del(urlCurrent);
 
@@ -997,7 +999,8 @@ void ShowFoto::slotDeleteCurrentItem()
         }
     }
     else
-    {   
+    {
+        delete d->kioWrapper;
         d->kioWrapper = new KIOWrapper();
         d->kioWrapper->trash(urlCurrent);
 

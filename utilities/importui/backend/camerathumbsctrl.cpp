@@ -104,6 +104,7 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
     clearCache();
+    delete d->kioWrapper;
 }
 
 CameraController* CameraThumbsCtrl::cameraController() const
@@ -268,7 +269,9 @@ void CameraThumbsCtrl::procressKDEPreview(const QUrl& item, const QPixmap& pix)
 
 void CameraThumbsCtrl::slotKdePreviewFinished()
 {
+    delete d->kioWrapper;
     d->kioWrapper = 0;
+
     startKdePreviewJob();
 }
 

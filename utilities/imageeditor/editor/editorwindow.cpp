@@ -186,7 +186,7 @@ EditorWindow::EditorWindow(const QString& name)
     d->exposureSettings            = new ExposureSettingsContainer();
     d->toolIface                   = new EditorToolIface(this);
     m_IOFileSettings               = new IOFileSettings();
-    d->waitingLoop                 = new QEventLoop(this);
+    //d->waitingLoop                 = new QEventLoop(this);
 }
 
 EditorWindow::~EditorWindow()
@@ -195,6 +195,7 @@ EditorWindow::~EditorWindow()
     delete m_IOFileSettings;
     delete d->toolIface;
     delete d->exposureSettings;
+    delete d->kioWrapper;
     delete d;
 }
 
@@ -2424,6 +2425,7 @@ void EditorWindow::moveFile()
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "moving a remote file via KIO";
 
+        delete d->kioWrapper;
         d->kioWrapper = new KIOWrapper();
 
         if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
@@ -2435,7 +2437,8 @@ void EditorWindow::moveFile()
         }
 
         d->kioWrapper->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
-                                 m_savingContext.destinationURL);
+                            m_savingContext.destinationURL);
+
         connect(d->kioWrapper, SIGNAL(error(QString)),
                 this, SLOT(slotKioMoveFinished(QString)));
     }
