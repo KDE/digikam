@@ -226,7 +226,7 @@ void SetupMisc::readSettings()
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
-    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle()));
+    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(), Qt::MatchFixedString));
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(settings->getIconTheme()));
 }
 

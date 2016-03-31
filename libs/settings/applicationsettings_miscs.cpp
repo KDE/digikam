@@ -154,7 +154,7 @@ void ApplicationSettings::setFaceDetectionAccuracy(double value)
 
 void ApplicationSettings::setApplicationStyle(const QString& style)
 {
-    if (d->applicationStyle != style)
+    if (d->applicationStyle.compare(style, Qt::CaseInsensitive) != 0)
     {
         d->applicationStyle = style;
         qApp->setStyle(d->applicationStyle);

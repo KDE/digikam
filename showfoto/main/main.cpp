@@ -87,12 +87,12 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(url));
     }
 
+    parser.clearPositionalArguments();
+
     if (!iconTheme.isEmpty())
     {
         QIcon::setThemeName(iconTheme);
     }
-
-    parser.clearPositionalArguments();
 
     ShowFoto::ShowFoto* const w = new ShowFoto::ShowFoto(urlList);
 

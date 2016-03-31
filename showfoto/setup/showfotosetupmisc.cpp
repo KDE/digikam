@@ -230,7 +230,7 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
     d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
     d->sortReverse->setChecked(d->settings->getReverseSort());
-    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle()));
+    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle(), Qt::MatchFixedString));
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(d->settings->getIconTheme()));
 }
 

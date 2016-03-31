@@ -471,7 +471,7 @@ void ShowFoto::applySettings()
     QString currentStyle = qApp->style()->objectName();
     QString newStyle     = d->settings->getApplicationStyle();
 
-    if (newStyle != currentStyle)
+    if (currentStyle.compare(newStyle, Qt::CaseInsensitive) != 0)
     {
         qApp->setStyle(newStyle);
     }
