@@ -529,11 +529,11 @@ void ItemViewImageDelegate::drawGroupIndicator(QPainter* p, const QRect& r,
 
         if (open)
         {
-            icon = QIcon::fromTheme(QLatin1String("image-stack-open"));
+            icon = QIcon::fromTheme(QLatin1String("folder-open")); //image-stack-open
         }
         else
         {
-            icon = QIcon::fromTheme(QLatin1String("image-stack"));
+            icon = QIcon::fromTheme(QLatin1String("folder")); //image-stack
         }
 
         qreal op     = p->opacity();
