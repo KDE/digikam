@@ -62,6 +62,9 @@ public:
     QString getApplicationStyle() const;
     void setApplicationStyle(const QString& style);
 
+    QString getIconTheme() const;
+    void setIconTheme(const QString& theme);
+
     bool getShowFormatOverThumbnail() const;
     void setShowFormatOverThumbnail(bool show);
 
@@ -70,7 +73,7 @@ public:
 
     bool getItemCenter() const;
     void setItemCenter(bool item);
-    
+
     bool getShowSplash() const;
     void setShowSplash(bool show);
 

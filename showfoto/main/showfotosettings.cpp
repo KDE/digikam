@@ -81,6 +81,7 @@ public:
     static const QString configCurrentTheme;
     static const QString configRightSideBarStyle;
     static const QString configApplicationStyle;
+    static const QString configIconTheme;
     static const QString configShowFormatOverThumbnail;
     static const QString configShowCoordinates;
     static const QString configItemCenter;
@@ -137,6 +138,7 @@ public:
     QString              lastOpenedDir;
     QString              theme;
     QString              applicationStyle;
+    QString              iconTheme;
 
     KSharedConfigPtr     config;
     KConfigGroup         group;
@@ -151,6 +153,7 @@ const QString ShowfotoSettings::Private::configDeleteItem2Trash(QLatin1String("D
 const QString ShowfotoSettings::Private::configCurrentTheme(QLatin1String("Theme"));
 const QString ShowfotoSettings::Private::configRightSideBarStyle(QLatin1String("Sidebar Title Style"));
 const QString ShowfotoSettings::Private::configApplicationStyle(QLatin1String("Application Style"));
+const QString ShowfotoSettings::Private::configIconTheme(QLatin1String("Icon Theme"));
 const QString ShowfotoSettings::Private::configShowFormatOverThumbnail(QLatin1String("ShowMimeOverImage"));
 const QString ShowfotoSettings::Private::configShowCoordinates(QLatin1String("Show Coordinates"));
 const QString ShowfotoSettings::Private::configItemCenter(QLatin1String("Item To Center"));
@@ -240,6 +243,8 @@ void ShowfotoSettings::init()
     d->showPhotoWB             = false;
     d->showPhotoDate           = true;
     d->showPhotoMode           = true;
+    d->applicationStyle        = qApp->style()->objectName();
+    d->iconTheme               = QString();
 }
 
 void ShowfotoSettings::readSettings()
@@ -251,6 +256,7 @@ void ShowfotoSettings::readSettings()
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
+    d->iconTheme               = group.readEntry(d->configIconTheme, QString());
     d->itemCenter              = group.readEntry(d->configItemCenter, false);
     d->showSplash              = group.readEntry(d->configShowSplash, true);
     d->sortOrder               = group.readEntry(d->configSortOrder, 0);
@@ -312,6 +318,11 @@ QString ShowfotoSettings::getApplicationStyle() const
     return d->applicationStyle;
 }
 
+QString ShowfotoSettings::getIconTheme() const
+{
+    return d->iconTheme;
+}
+
 bool ShowfotoSettings::getItemCenter() const
 {
     return d->itemCenter;
@@ -323,7 +334,7 @@ bool ShowfotoSettings::getShowSplash() const
 }
 
 int ShowfotoSettings::getSortRole() const
-{    
+{
     return d->sortOrder;
 }
 
@@ -495,6 +506,11 @@ void ShowfotoSettings::setRightSideBarStyle(int style)
 void ShowfotoSettings::setApplicationStyle(const QString& style)
 {
     d->group.writeEntry(d->configApplicationStyle, style);
+}
+
+void ShowfotoSettings::setIconTheme(const QString& theme)
+{
+    d->group.writeEntry(d->configIconTheme, theme);
 }
 
 void ShowfotoSettings::setShowFormatOverThumbnail(bool show)

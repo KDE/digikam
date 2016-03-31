@@ -58,6 +58,7 @@ public:
     Private() :
         sidebarTypeLabel(0),
         applicationStyleLabel(0),
+        iconThemeLabel(0),
         itemCenter(0),
         showSplash(0),
         showMimeOverImage(0),
@@ -67,12 +68,14 @@ public:
         sidebarType(0),
         sortOrderComboBox(0),
         applicationStyle(0),
+        iconTheme(0),
         settings(0)
     {
     }
 
     QLabel*              sidebarTypeLabel;
     QLabel*              applicationStyleLabel;
+    QLabel*              iconThemeLabel;
 
     QCheckBox*           itemCenter;
     QCheckBox*           showSplash;
@@ -84,6 +87,7 @@ public:
     QComboBox*           sidebarType;
     QComboBox*           sortOrderComboBox;
     QComboBox*           applicationStyle;
+    QComboBox*           iconTheme;
 
     ShowfotoSettings*    settings;
 };
@@ -134,6 +138,36 @@ SetupMisc::SetupMisc(QWidget* const parent)
         d->applicationStyle->addItem(styleList.at(i));
     }
 
+    DHBox* const iconThemeHbox = new DHBox(panel);
+    d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
+    d->iconTheme               = new QComboBox(iconThemeHbox);
+    d->iconTheme->setToolTip(i18n("Set this option to choose the default icon theme."));
+
+    d->iconTheme->addItem(i18n("Use Icon Theme From System"), QString());
+
+    const QString indexTheme = QLatin1String("/index.theme");
+    const QString breezeDark = QLatin1String("/breeze-dark");
+    const QString breeze     = QLatin1String("/breeze");
+
+    bool foundBreezeDark     = false;
+    bool foundBreeze         = false;
+
+    foreach(const QString& path, QIcon::themeSearchPaths())
+    {
+        if (!foundBreeze && QFile::exists(path + breeze + indexTheme))
+        {
+            d->iconTheme->addItem(i18n("Breeze"), breeze.mid(1));
+            foundBreeze = true;
+        }
+
+        if (!foundBreezeDark && QFile::exists(path + breezeDark + indexTheme))
+        {
+            d->iconTheme->addItem(i18n("Breeze Dark"), breezeDark.mid(1));
+            foundBreezeDark = true;
+        }
+    }
+
+
     gLayout5->addWidget(d->useTrash);
     gLayout5->addWidget(d->itemCenter);
     gLayout5->addWidget(d->showSplash);
@@ -141,6 +175,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     gLayout5->addWidget(d->showCoordinates);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
+    gLayout5->addWidget(iconThemeHbox);
     miscOptionsGroup->setLayout(gLayout5);
 
     // -- Sort Order Options --------------------------------------------------------
@@ -196,6 +231,7 @@ void SetupMisc::readSettings()
     d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
     d->sortReverse->setChecked(d->settings->getReverseSort());
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle()));
+    d->iconTheme->setCurrentIndex(d->iconTheme->findData(d->settings->getIconTheme()));
 }
 
 void SetupMisc::applySettings()
@@ -209,6 +245,7 @@ void SetupMisc::applySettings()
     d->settings->setSortRole(d->sortOrderComboBox->currentIndex());
     d->settings->setReverseSort(d->sortReverse->isChecked());
     d->settings->setApplicationStyle(d->applicationStyle->currentText());
+    d->settings->setIconTheme(d->iconTheme->currentData().toString());
     d->settings->syncConfig();
 }
 

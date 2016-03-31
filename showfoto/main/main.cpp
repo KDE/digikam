@@ -35,6 +35,8 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -71,6 +73,10 @@ int main(int argc, char* argv[])
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(QLatin1String("ImageViewer Settings"));
+    QString iconTheme         = group.readEntry(QLatin1String("Icon Theme"), QString());
+
     MetaEngine::initializeExiv2();
 
     QList<QUrl> urlList;
@@ -79,6 +85,11 @@ int main(int argc, char* argv[])
     Q_FOREACH(const QString& url, urls)
     {
         urlList.append(QUrl::fromLocalFile(url));
+    }
+
+    if (!iconTheme.isEmpty())
+    {
+        QIcon::setThemeName(iconTheme);
     }
 
     parser.clearPositionalArguments();
