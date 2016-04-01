@@ -138,22 +138,24 @@ double ImageZoomSettings::fitToSizeZoomFactor(const QSizeF& frameSize, FitToSize
 
 QRectF ImageZoomSettings::mapZoomToImage(const QRectF& zoomedRect) const
 {
-    return QRectF(zoomedRect.topLeft() / m_zoom, zoomedRect.size() / m_zoom);
+    return QRectF(zoomedRect.topLeft() / (m_zoom / m_zoomConst),
+                  zoomedRect.size()    / (m_zoom / m_zoomConst));
 }
 
 QRectF ImageZoomSettings::mapImageToZoom(const QRectF& imageRect) const
 {
-    return QRectF(imageRect.topLeft() * m_zoom, imageRect.size() * m_zoom);
+    return QRectF(imageRect.topLeft() * (m_zoom / m_zoomConst),
+                  imageRect.size()    * (m_zoom / m_zoomConst));
 }
 
 QPointF ImageZoomSettings::mapZoomToImage(const QPointF& zoomedPoint) const
 {
-    return zoomedPoint / m_zoom;
+    return zoomedPoint / (m_zoom / m_zoomConst);
 }
 
 QPointF ImageZoomSettings::mapImageToZoom(const QPointF& imagePoint) const
 {
-    return imagePoint * m_zoom;
+    return imagePoint * (m_zoom / m_zoomConst);
 }
 
 inline static bool lessThanLimitedPrecision(double a, double b)
