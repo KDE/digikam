@@ -20,16 +20,16 @@ if(WIN32)
     add_definitions(-DDJGPP)
 endif()
 
-while(CMAKE_CPP_FLAGS MATCHES "-Werror")
-    string(REPLACE "-Werror" "" CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS}")
+while(CMAKE_CXX_FLAGS MATCHES "-Werror")
+    string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endwhile()
 
-while(CMAKE_CPP_FLAGS MATCHES "-Wreturn-type")
-    string(REPLACE "-Wreturn-type" "" CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS}")
+while(CMAKE_CXX_FLAGS MATCHES "-Wreturn-type")
+    string(REPLACE "-Wreturn-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endwhile()
 
-while(CMAKE_CPP_FLAGS MATCHES "-Wc++11-narrowing")
-    string(REPLACE "-Wc++11-narrowing" "" CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS}")
+while(CMAKE_CXX_FLAGS MATCHES "-Wc++11-narrowing")
+    string(REPLACE "-Wc++11-narrowing" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endwhile()
 
 # We always use LCMS version 2
