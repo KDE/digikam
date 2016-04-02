@@ -47,7 +47,7 @@ target_link_libraries(testdatabase
 )
 
 if(KF5Notifications_FOUND)
-    target_link_libraries(testdatabase PUBLIC KF5::Notifications)
+    target_link_libraries(testdatabase KF5::Notifications)
 endif()
 
 if(KF5Kipi_FOUND)
@@ -79,7 +79,7 @@ target_link_libraries(databasefieldstest
 )
 
 if(KF5Notifications_FOUND)
-    target_link_libraries(databasefieldstest PUBLIC KF5::Notifications)
+    target_link_libraries(databasefieldstest KF5::Notifications)
 endif()
 
 #------------------------------------------------------------------------
@@ -107,5 +107,5 @@ endif()
 #)
 #
 #if(KF5Notifications_FOUND)
-#    target_link_libraries(databasetagstest PUBLIC KF5::Notifications)
+#    target_link_libraries(databasetagstest KF5::Notifications)
 #endif()
