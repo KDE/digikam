@@ -20,6 +20,8 @@ if(WIN32)
     add_definitions(-DDJGPP)
 endif()
 
+# Remove uncompatible Clang compiler options
+ 
 while(CMAKE_CXX_FLAGS MATCHES "-Werror")
     string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endwhile()

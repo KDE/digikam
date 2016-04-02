@@ -87,14 +87,14 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     d->binariesWidget->addBinary(d->mngr->enfuseBinary());
 
 #ifdef Q_OS_MAC
-    d->binariesWidget->addDirectory("/Applications/Hugin/HuginTools");    // Hugin bundle PKG install
-    d->binariesWidget->addDirectory("/opt/local/bin");                    // Std Macports install
-    d->binariesWidget->addDirectory("/opt/digikam/bin");                  // digiKam Bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));    // Hugin bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
 #endif
 
 #ifdef Q_WS_WIN
-    d->binariesWidget->addDirectory("C:/Program Files/Hugin/bin");
-    d->binariesWidget->addDirectory("C:/Program Files (x86)/Hugin/bin");
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/Hugin/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/Hugin/bin"));
 #endif
 
     connect(d->binariesWidget, SIGNAL(signalBinariesFound(bool)),
