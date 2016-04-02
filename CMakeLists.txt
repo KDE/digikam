@@ -584,6 +584,8 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # for config headers digikam_version.h gitversion.h digikam_config.h digikam_dbconfig.h libopencv.h
     include_directories(${CMAKE_CURRENT_BINARY_DIR}/app/utils)
 
+    include_directories(${OpenCV_INCLUDE_DIRS})
+
     # ==================================================================================================
     # Common targets parts
 
