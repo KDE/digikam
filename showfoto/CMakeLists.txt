@@ -86,6 +86,10 @@ if(KF5Notifications_FOUND)
     target_link_libraries(showfoto PUBLIC KF5::Notifications)
 endif()
 
+if(KF5NotifyConfig_FOUND)
+    target_link_libraries(showfoto PUBLIC KF5::NotifyConfig)
+endif()
+
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)
     target_link_libraries(showfoto PUBLIC ${MATH_LIBRARY})

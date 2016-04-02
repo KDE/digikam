@@ -66,6 +66,9 @@
 /* Define to 1 if you have KNotifications shared libraries installed */
 #cmakedefine HAVE_KNOTIFICATIONS 1
 
+/* Define to 1 if you have KNotifyConfig shared libraries installed */
+#cmakedefine HAVE_KNOTIFYCONFIG 1
+
 /* Define to 1 if you have KCalendar core shared libraries installed */
 #cmakedefine HAVE_KCALENDAR 1
 

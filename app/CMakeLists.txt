@@ -139,7 +139,6 @@ target_link_libraries(digikamcore
 
                       KF5::Solid
                       KF5::KIOCore
-                      KF5::NotifyConfig
                       KF5::WindowSystem
                       KF5::CoreAddons
                       KF5::Service
@@ -164,6 +163,14 @@ target_link_libraries(digikamcore
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::Kipi)
+endif()
+
+if(KF5Notifications_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::Notifications)
+endif()
+
+if(KF5NotifyConfig_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::NotifyConfig)
 endif()
 
 if(MARBLE_FOUND)
@@ -414,7 +421,6 @@ target_link_libraries(digikamgui
                       KF5::Solid
                       KF5::KIOCore
                       KF5::KIOWidgets
-                      KF5::NotifyConfig
                       KF5::Service
                       KF5::WindowSystem
                       KF5::IconThemes
@@ -425,10 +431,6 @@ target_link_libraries(digikamgui
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::Kipi)
-endif()
-
-if(KF5Notifications_FOUND)
-    target_link_libraries(digikamgui PUBLIC KF5::Notifications)
 endif()
 
 if(${MARBLE_FOUND})

@@ -53,9 +53,12 @@
 #include <khelpclient.h>
 #include <kwindowconfig.h>
 #include <ksharedconfig.h>
-#include <knotifyconfigwidget.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
+
+#ifdef HAVE_KNOTIFYCONFIG
+#   include <knotifyconfigwidget.h>
+#endif
 
 // Local includes
 
@@ -261,10 +264,13 @@ void DXmlGuiWindow::createSidebarActions()
 void DXmlGuiWindow::createSettingsActions()
 {
     d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()),       actionCollection());
-    KStandardAction::configureNotifications(this,             SLOT(slotConfNotifications()), actionCollection());
     KStandardAction::keyBindings(this,                        SLOT(slotEditKeys()),          actionCollection());
     KStandardAction::preferences(this,                        SLOT(slotSetup()),             actionCollection());
     KStandardAction::configureToolbars(this,                  SLOT(slotConfToolbars()),      actionCollection());
+
+#ifdef HAVE_KNOTIFYCONFIG
+    KStandardAction::configureNotifications(this,             SLOT(slotConfNotifications()), actionCollection());
+#endif
 }
 
 QAction* DXmlGuiWindow::showMenuBarAction() const
@@ -279,7 +285,9 @@ void DXmlGuiWindow::slotShowMenuBar()
 
 void DXmlGuiWindow::slotConfNotifications()
 {
+#ifdef HAVE_KNOTIFYCONFIG
     KNotifyConfigWidget::configure(this);
+#endif
 }
 
 void DXmlGuiWindow::editKeyboardShortcuts(KActionCollection* const extraac, const QString& actitle)

@@ -39,8 +39,8 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "dlogoaction.h"
 #include "digikam_config.h"
+#include "dlogoaction.h"
 
 #ifdef HAVE_KSANE
 #include "ksaneaction.h"
