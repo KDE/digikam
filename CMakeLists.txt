@@ -164,8 +164,8 @@ find_package(KF5 ${KF5_MIN_VERSION}
              Bookmarks              # For geolocation support (optional).
              FileMetaData           # For KDE file indexer support.
              ThreadWeaver           # For Panorama tool.
-             NotifyConfig           # KDE desktop integration.
-             Notifications          # KDE desktop integration.
+             NotifyConfig           # KDE desktop application notify configuration.
+             Notifications          # KDE desktop notifications integration.
 )
 
 find_package(KF5 ${AKONADI_MIN_VERSION}
