@@ -61,7 +61,7 @@ set(KIPI_MIN_VERSION     "5.0.0")
 set(KSANE_MIN_VERSION    "5.0.0")
 set(PGF_MIN_VERSION      "6.12.24")
 set(LENSFUN_MIN_VERSION  "0.2.6.0")
-set(EXIV2_MIN_VERSION    "0.24")
+set(EXIV2_MIN_VERSION    "0.25")
 set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
 set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
 
