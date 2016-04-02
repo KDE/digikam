@@ -31,13 +31,13 @@
 
 // KDE includes
 
-#include <kpassivepopup.h>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dnotificationpopup.h"
 #include "restorationtool.h"
 #include "blurtool.h"
 #include "sharpentool.h"
@@ -60,12 +60,13 @@ namespace DigikamEnhanceImagePlugin
 
 K_PLUGIN_FACTORY( EnhanceFactory, registerPlugin<ImagePlugin_Enhance>(); )
 
-class EditorToolPassivePopup : public KPassivePopup
+class EditorToolPassivePopup : public DNotificationPopup
 {
 public:
 
     explicit EditorToolPassivePopup(QWidget* const parent)
-        : KPassivePopup(parent), m_parent(parent)
+        : DNotificationPopup(parent),
+          m_parent(parent)
     {
     }
 
@@ -260,7 +261,7 @@ void ImagePlugin_Enhance::slotRedEye()
 
     if (iface.selectionRect().size().isNull())
     {
-        EditorToolPassivePopup* popup = new EditorToolPassivePopup(qApp->activeWindow());
+        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
         popup->setView(i18n("Red-Eye Correction Tool"),
                        i18n("You need to select a region including the eyes to use "
                             "the red-eye correction tool"));
@@ -279,7 +280,7 @@ void ImagePlugin_Enhance::slotInPainting()
 
     if (iface.selectionRect().size().isNull())
     {
-        EditorToolPassivePopup* popup = new EditorToolPassivePopup(qApp->activeWindow());
+        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
         popup->setView(i18n("In-Painting Photograph Tool"),
                        i18n("To use this tool, you need to select a region "
                             "to in-paint."));

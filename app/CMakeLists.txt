@@ -36,6 +36,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:digikamdialogscore_src>
             $<TARGET_OBJECTS:imageproperties_src>
             $<TARGET_OBJECTS:digikamgenericmodels_src>
+            $<TARGET_OBJECTS:notificationmanager_src>
 
             # utilities
             $<TARGET_OBJECTS:slideshow_src>
@@ -362,7 +363,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:fileactionmanager_src>
             $<TARGET_OBJECTS:digikamtags_src>
             $<TARGET_OBJECTS:digikamsettings_src>
-            $<TARGET_OBJECTS:notificationmanager_src>
             $<TARGET_OBJECTS:filters_src>
             $<TARGET_OBJECTS:importuibackend_src>
             $<TARGET_OBJECTS:imagehistorywidgets_src>
@@ -414,7 +414,6 @@ target_link_libraries(digikamgui
                       KF5::Solid
                       KF5::KIOCore
                       KF5::KIOWidgets
-                      KF5::Notifications
                       KF5::NotifyConfig
                       KF5::Service
                       KF5::WindowSystem
@@ -426,6 +425,10 @@ target_link_libraries(digikamgui
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::Kipi)
+endif()
+
+if(KF5Notifications_FOUND)
+    target_link_libraries(digikamgui PUBLIC KF5::Notifications)
 endif()
 
 if(${MARBLE_FOUND})

@@ -29,11 +29,10 @@ target_link_libraries(digikamimageplugin_color
 
                       Qt5::Core
                       Qt5::Gui
-                      
+
                       KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
-                      KF5::Notifications
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})

@@ -18,8 +18,11 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(KF5Notifications_FOUND)
+    include_directories($<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 set(testdatabase_SRCS testdatabase.cpp)
 add_executable(testdatabase ${testdatabase_SRCS})
@@ -39,10 +42,13 @@ target_link_libraries(testdatabase
                       KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
-                      KF5::Notifications
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(KF5Notifications_FOUND)
+    target_link_libraries(testdatabase PUBLIC KF5::Notifications)
+endif()
 
 if(KF5Kipi_FOUND)
     target_link_libraries(testdatabase KF5::Kipi)
@@ -70,8 +76,11 @@ target_link_libraries(databasefieldstest
                       KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
-                      KF5::Notifications
 )
+
+if(KF5Notifications_FOUND)
+    target_link_libraries(databasefieldstest PUBLIC KF5::Notifications)
+endif()
 
 #------------------------------------------------------------------------
 
@@ -95,5 +104,8 @@ target_link_libraries(databasefieldstest
 #                       KF5::I18n
 #                       KF5::XmlGui
 #                       KF5::KIOCore
-#                       KF5::Notifications
 #)
+#
+#if(KF5Notifications_FOUND)
+#    target_link_libraries(databasetagstest PUBLIC KF5::Notifications)
+#endif()

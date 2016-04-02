@@ -80,8 +80,11 @@ target_link_libraries(showfoto
                       KF5::I18n
                       KF5::KIOCore
                       KF5::XmlGui
-                      KF5::Notifications
 )
+
+if(KF5Notifications_FOUND)
+    target_link_libraries(showfoto PUBLIC KF5::Notifications)
+endif()
 
 if(NOT WIN32)
     # To link under Solaris (see bug #274484)

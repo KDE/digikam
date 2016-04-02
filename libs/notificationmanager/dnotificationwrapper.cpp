@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "dnotificationwrapper.h"
+#include "digikam_config.h"
 
 // Qt includes
 
@@ -35,27 +36,30 @@
 
 // KDE includes
 
-#include <knotification.h>
-#include <kpassivepopup.h>
+#ifdef HAVE_KNOTIFICATIONS
+#    include <knotification.h>
+#endif
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dnotificationpopup.h"
 
 namespace Digikam
 {
 
-/** Re-implementation of KPassivePopup to move pop-up notification
+/** Re-implementation of DNotificationPopup to move pop-up notification
     window on the bottom right corner of parent window. The goal is to simulate
     the position of KDE notifier pop-up from task bar if this one is not available,
     as for ex under Windows, Gnome, or using a remote connection through ssh.
  */
-class NotificationPassivePopup : public KPassivePopup
+class NotificationPassivePopup : public DNotificationPopup
 {
 public:
 
     explicit NotificationPassivePopup(QWidget* const parent)
-        : KPassivePopup(parent), m_parent(parent)
+        : DNotificationPopup(parent),
+          m_parent(parent)
     {
     }
 
@@ -112,6 +116,8 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
         }
     }
 
+#ifdef HAVE_KNOTIFICATIONS
+
     // NOTE: This detection of KDE desktop is not perfect because KNotify may never be started.
     //       But in a regular KDE session, KNotify should be running already.
 
@@ -129,22 +135,30 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
             KNotification::event(eventId, message, logoPixmap, parent);
         }
     }
+    else
+
+#else
+
+    Q_UNUSED(eventId);
+
+#endif
 
 #ifdef Q_OS_DARWIN
 
     // OSX support
 
-    else if (MacNativeDispatchNotify(windowTitle, message))
+    if (MacNativeDispatchNotify(windowTitle, message))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to OSX desktop notifier";
         return;
     }
+    else
 
 #endif // Q_OS_DARWIN
 
     // Other Linux Desktops
 
-    else if (QProcess::execute(QLatin1String("notify-send"),
+    if (QProcess::execute(QLatin1String("notify-send"),
                                QStringList() << windowTitle
                                              << message
                                              << QLatin1String("-a")
