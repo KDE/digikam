@@ -389,7 +389,7 @@ Identity RecognitionDatabase::addIdentity(const QMap<QString, QString>& attribut
 
     Identity identity;
     {
-        FaceDbOperationGroup group();
+        FaceDbOperationGroup group;
         int id = FaceDbAccess().db()->addIdentity();
         identity.setId(id);
         identity.setAttributesMap(attributes);

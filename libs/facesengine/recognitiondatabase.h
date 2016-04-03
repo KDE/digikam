@@ -203,9 +203,13 @@ public:
      */
     void deleteIdentity(const Identity& identityToBeDeleted);
 
+public:
+
+    // Declared as public to please with CLang compiler, due to use as argument with static methods.
+    class Private;
+
 private:
 
-    class Private;
     Private* const d;
 };
 
