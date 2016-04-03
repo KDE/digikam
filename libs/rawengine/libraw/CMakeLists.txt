@@ -24,9 +24,9 @@ endif()
 
 if(APPLE)
  
-	while(CMAKE_CXX_FLAGS MATCHES "-Werror")
-    	string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-	endwhile()
+#	while(CMAKE_CXX_FLAGS MATCHES "-Werror")
+#    	string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+#	endwhile()
 
 #	while(CMAKE_CXX_FLAGS MATCHES "-Wreturn-type")
 #    	string(REPLACE "-Wreturn-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
