@@ -207,7 +207,7 @@ void DDoubleNumInput::setDecimals(int p)
 
 void DDoubleNumInput::setRange(double min, double max, double step)
 {
-    d->input->setRange(min, max, (int)std::abs(floor(log10(step))));
+    d->input->setRange(min, max, (int)qAbs(floor(log10(step))));
     d->input->setFastSliderStep(5 * step);
     d->input->setSingleStep(step);
 }

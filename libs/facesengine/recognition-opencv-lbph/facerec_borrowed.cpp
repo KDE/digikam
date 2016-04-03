@@ -135,7 +135,7 @@ inline void elbp_(InputArray _src, OutputArray _dst, int radius, int neighbors)
                 // calculate interpolated value
                 float t                         = static_cast<float>(w1*src.at<_Tp>(i+fy,j+fx) + w2*src.at<_Tp>(i+fy,j+cx) + w3*src.at<_Tp>(i+cy,j+fx) + w4*src.at<_Tp>(i+cy,j+cx));
                 // floating point precision, so check some machine-dependent epsilon
-                dst.at<int>(i-radius,j-radius) += ((t > src.at<_Tp>(i,j)) || (std::abs(t-src.at<_Tp>(i,j)) < std::numeric_limits<float>::epsilon())) << n;
+                dst.at<int>(i-radius,j-radius) += ((t > src.at<_Tp>(i,j)) || (qAbs(t-src.at<_Tp>(i,j)) < std::numeric_limits<float>::epsilon())) << n;
             }
         }
     }
