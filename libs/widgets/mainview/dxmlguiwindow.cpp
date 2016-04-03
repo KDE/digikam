@@ -497,7 +497,7 @@ bool DXmlGuiWindow::fullScreenIsActive() const
 
 bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
 {
-    if (this && (obj == this))
+    if (obj == this)
     {
         if (ev && (ev->type() == QEvent::HoverMove) && fullScreenIsActive())
         {
