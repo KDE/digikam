@@ -380,7 +380,7 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
 
         for (it2 = it + 1; it2 != groupingList.end(); ++it2)
         {
-            if (abs(time.secsTo(it2->dateTime())) < 2)
+            if (std::abs(time.secsTo(it2->dateTime())) < 2)
             {
                 group << *it2;
             }
