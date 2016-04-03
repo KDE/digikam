@@ -28,7 +28,7 @@ if(APPLE)
     	string(REPLACE "-Werror=return-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	endwhile()
 
-	while(CMAKE_CXX_FLAGS MATCHES "-std=c++0x")
+	while(CMAKE_C_FLAGS MATCHES "-std=c++0x")
     	string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	endwhile()
 
