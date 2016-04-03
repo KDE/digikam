@@ -24,16 +24,12 @@ endif()
 
 if(APPLE)
  
-#	while(CMAKE_CXX_FLAGS MATCHES "-Werror")
-#    	string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-#	endwhile()
+	while(CMAKE_CXX_FLAGS MATCHES "-Werror=return-type")
+    	string(REPLACE "-Werror=return-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+	endwhile()
 
-#	while(CMAKE_CXX_FLAGS MATCHES "-Wreturn-type")
-#    	string(REPLACE "-Wreturn-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-#	endwhile()
-
-	while(CMAKE_CXX_FLAGS MATCHES "-Wc++11-narrowing")
-    	string(REPLACE "-Wc++11-narrowing" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+	while(CMAKE_CXX_FLAGS MATCHES "-std=c++0x")
+    	string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	endwhile()
 
 endif()
