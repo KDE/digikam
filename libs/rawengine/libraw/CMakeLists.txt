@@ -8,12 +8,6 @@
 
 # To prevent warnings from M$ compiler
 
-message(STATUS "CMAKE_CXX_FLAGS : ${CMAKE_CXX_FLAGS}")
-message(STATUS "CMAKE_CXX_STANDARD : ${CMAKE_CXX_STANDARD}")
-message(STATUS "CMAKE_CXX_STANDARD_REQUIRED : ${CMAKE_CXX_STANDARD_REQUIRED}")
-message(STATUS "CMAKE_CXX_EXTENSIONS : ${CMAKE_CXX_EXTENSIONS}")
-message(STATUS "CMAKE_CXX_COMPILE_FEATURES : ${CMAKE_CXX_COMPILE_FEATURES}")
-
 if(WIN32 AND MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_definitions(-D_ATL_SECURE_NO_WARNINGS)
@@ -26,7 +20,7 @@ if(WIN32)
     add_definitions(-DDJGPP)
 endif()
 
-# Under OSX, remove unwanted Clang compiler options
+# Under OSX, remove unwanted Clang compiler options to compile fine.
 
 if(APPLE)
 
@@ -35,10 +29,6 @@ if(APPLE)
     endwhile()
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing" )
-
-#    while(CMAKE_CXX_FLAGS MATCHES "-std=c++0x")
-#        string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-#    endwhile()
 
 endif()
 
