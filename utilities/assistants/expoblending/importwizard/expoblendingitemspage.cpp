@@ -45,8 +45,10 @@
 namespace Digikam
 {
 
-struct ItemsPage::Private
+class ItemsPage::Private
 {
+public:
+
     Private()
         : list(0),
           mngr(0)
