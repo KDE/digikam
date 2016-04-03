@@ -34,9 +34,11 @@ if(APPLE)
         string(REPLACE "-Werror=return-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
 
-    while(CMAKE_CXX_FLAGS MATCHES "-std=c++0x")
-        string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    endwhile()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-narrowing" )
+
+#    while(CMAKE_CXX_FLAGS MATCHES "-std=c++0x")
+#        string(REPLACE "-std=c++0x" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+#    endwhile()
 
 endif()
 
