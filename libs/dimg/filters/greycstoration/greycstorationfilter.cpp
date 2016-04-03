@@ -236,7 +236,7 @@ void GreycstorationFilter::cancelFilter()
 
 void GreycstorationFilter::filterImage()
 {
-    register int x, y;
+   int x, y;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Initialization...";
 
@@ -372,7 +372,7 @@ void GreycstorationFilter::inpainting()
     {
         // Copy the inpainting image data into a CImg type image with three channels and no alpha.
 
-        register int x, y;
+       int x, y;
 
         d->mask    = CImg<uchar>(d->inPaintingMask.width(), d->inPaintingMask.height(), 1, 3);
         uchar* ptr = d->inPaintingMask.bits();

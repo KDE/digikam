@@ -105,7 +105,7 @@ void CharcoalFilter::filterImage()
 
     // -- Applying Edge effect -----------------------------------------------
 
-    register long i = 0;
+   long i = 0;
     int kernelWidth = getOptimalKernelWidth(d->pencil, d->smooth);
 
     if ((int)m_orgImage.width() < kernelWidth)
@@ -314,7 +314,7 @@ int CharcoalFilter::getOptimalKernelWidth(double radius, double sigma)
 {
     double        normalize, value;
     long          kernelWidth;
-    register long u;
+   long u;
 
     if (radius > 0.0)
     {

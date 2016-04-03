@@ -103,7 +103,7 @@ QSize ShearFilter::getNewSize() const
 void ShearFilter::filterImage()
 {
     int          progress;
-    register int x, y, p = 0, pt;
+   int x, y, p = 0, pt;
     int          new_width, new_height;
     double       nx, ny, dx, dy;
     double       horz_factor, vert_factor;

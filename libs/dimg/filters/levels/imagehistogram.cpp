@@ -171,7 +171,7 @@ void ImageHistogram::calculate()
         return;
     }
 
-    register uint  i;
+   uint  i;
     int            max;
 
     emit calculationStarted();

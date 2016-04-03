@@ -831,7 +831,7 @@ int getJpegQuality(const QString& file)
 
     long value;
     long sum = 0;
-    register long i, j;
+   long i, j;
     struct jpeg_decompress_struct   jpeg_info;
     struct jpegutils_jpeg_error_mgr jerr;
 

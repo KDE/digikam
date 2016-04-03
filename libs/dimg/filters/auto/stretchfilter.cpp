@@ -79,7 +79,7 @@ void StretchFilter::stretchContrastImage()
 
     struct double_packet high, low, intensity;
     long long            number_pixels;
-    register long        i;
+   long        i;
     int                  progress;
     unsigned long        threshold_intensity;
 

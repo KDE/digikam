@@ -67,7 +67,7 @@ void MixerFilter::filterImage()
     uint size = width * height;
     int  progress;
 
-    register uint i;
+   uint i;
     double   rnorm = 1;    // red channel normalizer use in RGB mode.
     double   mnorm = 1;    // monochrome normalizer used in Monochrome mode.
 

@@ -69,7 +69,7 @@ namespace Digikam
 // Debug methods.
 void print_refocus_c_mat(const CMat* const mat)
 {
-    register int x, y;
+   int x, y;
 
     for (y = -mat->radius; y <= mat->radius; ++y)
     {
@@ -183,7 +183,7 @@ inline double RefocusMatrix::c_mat_elt(const CMat* const mat, const int col, con
 
 void RefocusMatrix::convolve_mat(CMat* const result, const CMat* const mata, const CMat* const matb)
 {
-    register int xr, yr, xa, ya;
+   int xr, yr, xa, ya;
 
     for (yr = -result->radius; yr <= result->radius; ++yr)
     {
@@ -193,7 +193,7 @@ void RefocusMatrix::convolve_mat(CMat* const result, const CMat* const mata, con
             const int ya_high = qMin(mata->radius, yr + matb->radius);
             const int xa_low  = qMax(-mata->radius, xr - matb->radius);
             const int xa_high = qMin(mata->radius, xr + matb->radius);
-            register double val = 0.0;
+           double val = 0.0;
 
             for (ya = ya_low; ya <= ya_high; ++ya)
             {
@@ -211,7 +211,7 @@ void RefocusMatrix::convolve_mat(CMat* const result, const CMat* const mata, con
 
 void RefocusMatrix::convolve_star_mat(CMat* const result, const CMat* const mata, const CMat* const matb)
 {
-    register int xr, yr, xa, ya;
+   int xr, yr, xa, ya;
 
     for (yr = -result->radius; yr <= result->radius; ++yr)
     {
@@ -221,7 +221,7 @@ void RefocusMatrix::convolve_star_mat(CMat* const result, const CMat* const mata
             const int ya_high   = qMin(mata->radius, matb->radius - yr);
             const int xa_low    = qMax(-mata->radius, -matb->radius - xr);
             const int xa_high   = qMin(mata->radius, matb->radius - xr);
-            register double val = 0.0;
+           double val = 0.0;
 
             for (ya = ya_low; ya <= ya_high; ++ya)
             {
@@ -253,7 +253,7 @@ Mat* RefocusMatrix::make_s_matrix(CMat* const mat, int m, double noise_factor)
 {
     const int mat_size = SQR(2 * m + 1);
     Mat* const result  = allocate_matrix(mat_size, mat_size);
-    register int yr, yc, xr, xc;
+   int yr, yc, xr, xc;
 
     for (yr = -m; yr <= m; ++yr)
     {
@@ -281,7 +281,7 @@ Mat* RefocusMatrix::make_s_cmatrix(CMat* const mat, int m, double noise_factor)
 {
     const int mat_size = as_cidx(m + 1, 0);
     Mat* const result  = allocate_matrix(mat_size, mat_size);
-    register int yr, yc, xr, xc;
+   int yr, yc, xr, xc;
 
     for (yr = 0; yr <= m; ++yr)
     {
@@ -313,7 +313,7 @@ double RefocusMatrix::correlation(const int x, const int y, const double gamma, 
 Mat* RefocusMatrix::copy_vec(const CMat* const mat, const int m)
 {
     Mat* const result        = allocate_matrix(SQR(2 * m + 1), 1);
-    register int x, y, index = 0;
+   int x, y, index = 0;
 
     for (y = -m; y <= m; ++y)
     {
@@ -332,7 +332,7 @@ Mat* RefocusMatrix::copy_vec(const CMat* const mat, const int m)
 Mat* RefocusMatrix::copy_cvec(const CMat* const mat, const int m)
 {
     Mat* const result        = allocate_matrix(as_cidx(m + 1, 0), 1);
-    register int x, y, index = 0;
+   int x, y, index = 0;
 
     for (y = 0; y <= m; ++y)
     {
@@ -351,7 +351,7 @@ Mat* RefocusMatrix::copy_cvec(const CMat* const mat, const int m)
 CMat* RefocusMatrix::copy_cvec2mat(const Mat* const cvec, const int m)
 {
     CMat* const result = allocate_c_mat(m);
-    register int x, y;
+   int x, y;
 
     for (y = -m; y <= m; ++y)
     {
@@ -367,7 +367,7 @@ CMat* RefocusMatrix::copy_cvec2mat(const Mat* const cvec, const int m)
 CMat* RefocusMatrix::copy_vec2mat(const Mat* const cvec, const int m)
 {
     CMat* const result = allocate_c_mat(m);
-    register int x, y;
+   int x, y;
 
     for (y = -m; y <= m; ++y)
     {
@@ -492,7 +492,7 @@ void RefocusMatrix::fill_matrix(CMat* const matrix, const int m,
                                 double f(const int, const int, const double),
                                 const double fun_arg)
 {
-    register int x, y;
+   int x, y;
     init_c_mat(matrix, m);
 
     for (y = -m; y <= m; ++y)
@@ -508,7 +508,7 @@ void RefocusMatrix::fill_matrix2(CMat* const matrix, const int m,
                                  double f(const int, const int, const double, const double),
                                  const double fun_arg1, const double fun_arg2)
 {
-    register int x, y;
+   int x, y;
     init_c_mat(matrix, m);
 
     for (y = -m; y <= m; ++y)
@@ -522,7 +522,7 @@ void RefocusMatrix::fill_matrix2(CMat* const matrix, const int m,
 
 void RefocusMatrix::make_gaussian_convolution(const double gradius, CMat* const convolution, const int m)
 {
-    register int x, y;
+   int x, y;
 
 #ifdef RF_DEBUG
     qCDebug(DIGIKAM_DIMG_LOG) << "gauss: " << gradius;
@@ -598,9 +598,9 @@ double RefocusMatrix::circle_intensity(const int x, const int y, const double ra
     }
     else
     {
-        register double xlo = qAbs(x) - 0.5, xhi = qAbs(x) + 0.5,
+       double xlo = qAbs(x) - 0.5, xhi = qAbs(x) + 0.5,
                         ylo = qAbs(y) - 0.5, yhi = qAbs(y) + 0.5;
-        register double symmetry_factor = 1, xc1, xc2;
+       double symmetry_factor = 1, xc1, xc2;
 
         if (xlo < 0)
         {

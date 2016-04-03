@@ -255,7 +255,7 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
 {
     if (CanBeDropped(Width, Height, pStatusBits, X, Y, DropSize, bLimitRange))
     {
-        register int w, h, nw1, nh1, nw2, nh2;
+       int w, h, nw1, nh1, nw2, nh2;
         int          nBright;
         double       lfRadius, lfOldRadius, lfAngle;
         DColor       imageData;
@@ -483,7 +483,7 @@ bool RainDropFilter::CreateRainDrop(uchar* const pBits, int Width, int Height, b
 bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* const pStatusBits, int X, int Y,
                                   int DropSize, bool bLimitRange)
 {
-    register int w, h, i = 0;
+   int w, h, i = 0;
     int          nHalfSize = DropSize / 2;
 
     if (!pStatusBits)
@@ -520,7 +520,7 @@ bool RainDropFilter::CanBeDropped(int Width, int Height, uchar* const pStatusBit
 bool RainDropFilter::SetDropStatusBits(int Width, int Height, uchar* const pStatusBits,
                                        int X, int Y, int DropSize)
 {
-    register int w, h, i = 0;
+   int w, h, i = 0;
     int nHalfSize = DropSize / 2;
 
     if (!pStatusBits)

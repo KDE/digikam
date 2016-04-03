@@ -85,7 +85,7 @@ void EqualizeFilter::equalizeImage()
     }
 
     struct double_packet  high, low, intensity;
-    register int          i;
+   int          i;
     int                   progress;
 
     // Create an histogram of the reference image.

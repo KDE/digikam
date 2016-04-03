@@ -114,7 +114,7 @@ bool JP2KLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Initialize JPEG 2000 API.
 
-    register long  i, x, y;
+   long  i, x, y;
     int            components[4];
     unsigned int   maximum_component_depth, scale[4], x_step[4], y_step[4];
     unsigned long  number_components;
@@ -584,7 +584,7 @@ bool JP2KLoader::save(const QString& filePath, DImgLoaderObserver* const observe
     // -------------------------------------------------------------------
     // Initialize JPEG 2000 API.
 
-    register long  i, x, y;
+   long  i, x, y;
     unsigned long  number_components;
 
     jas_image_t*          jp2_image   = 0;

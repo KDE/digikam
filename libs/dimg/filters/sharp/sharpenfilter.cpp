@@ -114,7 +114,7 @@ void SharpenFilter::sharpenImage(double radius, double sigma)
     }
 
     double        alpha, normalize = 0.0;
-    register long i = 0, u, v;
+   long i = 0, u, v;
 
     int kernelWidth     = getOptimalKernelWidth(radius, sigma);
     int halfKernelWidth = kernelWidth / 2;
@@ -269,7 +269,7 @@ int SharpenFilter::getOptimalKernelWidth(double radius, double sigma)
 {
     double        normalize, value;
     long          kernelWidth;
-    register long u;
+   long u;
 
     if (radius > 0.0)
     {

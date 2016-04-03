@@ -131,7 +131,7 @@ double FreeRotationFilter::calculateAngle(const QPoint& p1, const QPoint& p2)
 void FreeRotationFilter::filterImage()
 {
     int          progress;
-    register int w, h, nw, nh, j, i = 0;
+   int w, h, nw, nh, j, i = 0;
     int          nNewHeight, nNewWidth;
     int          nhdx, nhdy, nhsx, nhsy;
     double       lfSin, lfCos, lfx, lfy;
