@@ -28,9 +28,9 @@ if(APPLE)
     	string(REPLACE "-Werror" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 	endwhile()
 
-	while(CMAKE_CXX_FLAGS MATCHES "-Wreturn-type")
-    	string(REPLACE "-Wreturn-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-	endwhile()
+#	while(CMAKE_CXX_FLAGS MATCHES "-Wreturn-type")
+#    	string(REPLACE "-Wreturn-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+#	endwhile()
 
 	while(CMAKE_CXX_FLAGS MATCHES "-Wc++11-narrowing")
     	string(REPLACE "-Wc++11-narrowing" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
