@@ -65,7 +65,6 @@
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
-#include <kmessagewidget.h>
 
 // Local includes
 
@@ -113,8 +112,6 @@
 #include "thumbnailsize.h"
 #include "importthumbnailmodel.h"
 #include "kiowrapper.h"
-
-
 
 namespace Digikam
 {
@@ -223,12 +220,12 @@ void ImportUI::setupUserArea()
     d->splitter->setStretchFactor(0, 10);      // set iconview default size to max.
 
     vbox->setStretchFactor(d->view, 10);
-    vbox->setStretchFactor(d->historyView,  2);
+    vbox->setStretchFactor(d->historyView, 2);
     vbox->setContentsMargins(QMargins());
     vbox->setSpacing(0);
 
-    d->errorWidget = new KMessageWidget(vbox);
-    d->errorWidget->setMessageType(KMessageWidget::Error);
+    d->errorWidget = new DNotificationWidget(vbox);
+    d->errorWidget->setMessageType(DNotificationWidget::Error);
     d->errorWidget->setCloseButtonVisible(false);
     d->errorWidget->hide();
 
@@ -281,7 +278,7 @@ void ImportUI::setupActions()
     connect(d->cameraCancelAction, SIGNAL(triggered()), this, SLOT(slotCancelButton()));
     ac->addAction(QLatin1String("importui_cancelprocess"), d->cameraCancelAction);
     d->cameraCancelAction->setEnabled(false);
-    
+
     // -----------------------------------------------------------------
 
     d->cameraInfoAction = new QAction(QIcon::fromTheme(QLatin1String("camera-photo")), i18nc("@action Information about camera", "Information"), this);

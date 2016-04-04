@@ -55,8 +55,7 @@
 #include "filterstatusbar.h"
 #include "statusprogressbar.h"
 #include "importview.h"
-
-class KMessageWidget;
+#include "dnotificationwidget.h"
 
 namespace Digikam
 {
@@ -240,7 +239,7 @@ public:
 
     CHUpdateItemMap               map;
 
-    KMessageWidget*               errorWidget;
+    DNotificationWidget*          errorWidget;
 };
 
 const QString ImportUI::Private::configGroupName(QLatin1String("Camera Settings"));

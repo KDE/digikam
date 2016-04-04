@@ -12,6 +12,8 @@ endif (POLICY CMP0063)
 set(libnotificationmanager_SRCS
     dnotificationwrapper.cpp
     dnotificationpopup.cpp
+    dnotificationwidget.cpp
+    dnotificationwidget_p.cpp
 )
 
 if(APPLE)

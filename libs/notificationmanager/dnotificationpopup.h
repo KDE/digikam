@@ -63,6 +63,8 @@ public:
         Balloon,           ///< Information will appear in a comic-alike balloon
     };
 
+public:
+
     /**
      * Creates a popup for the specified widget.
      */
