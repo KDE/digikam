@@ -38,6 +38,10 @@
 #include <QPainter>
 #include <QStyle>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "ddatetable_p.h"
@@ -62,9 +66,8 @@ DDatePicker::DDatePicker(const QDate& dt, QWidget* const parent)
 
 void DDatePicker::initWidget(const QDate& dt)
 {
-    const int spacingHint = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
-    QBoxLayout *topLayout = new QVBoxLayout(this);
+    const int spacingHint       = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    QBoxLayout* const topLayout = new QVBoxLayout(this);
     topLayout->setSpacing(0);
     topLayout->setMargin(0);
 
@@ -73,10 +76,10 @@ void DDatePicker::initWidget(const QDate& dt)
     d->navigationLayout->setMargin(0);
     topLayout->addLayout(d->navigationLayout);
     d->navigationLayout->addStretch();
-    d->yearBackward = new QToolButton(this);
+    d->yearBackward     = new QToolButton(this);
     d->yearBackward->setAutoRaise(true);
     d->navigationLayout->addWidget(d->yearBackward);
-    d->monthBackward = new QToolButton(this);
+    d->monthBackward    = new QToolButton(this);
     d->monthBackward ->setAutoRaise(true);
     d->navigationLayout->addWidget(d->monthBackward);
     d->navigationLayout->addSpacing(spacingHint);
@@ -84,7 +87,7 @@ void DDatePicker::initWidget(const QDate& dt)
     d->selectMonth = new QToolButton(this);
     d->selectMonth ->setAutoRaise(true);
     d->navigationLayout->addWidget(d->selectMonth);
-    d->selectYear = new QToolButton(this);
+    d->selectYear  = new QToolButton(this);
     d->selectYear->setCheckable(true);
     d->selectYear->setAutoRaise(true);
     d->navigationLayout->addWidget(d->selectYear);
@@ -93,13 +96,13 @@ void DDatePicker::initWidget(const QDate& dt)
     d->monthForward = new QToolButton(this);
     d->monthForward ->setAutoRaise(true);
     d->navigationLayout->addWidget(d->monthForward);
-    d->yearForward = new QToolButton(this);
+    d->yearForward  = new QToolButton(this);
     d->yearForward ->setAutoRaise(true);
     d->navigationLayout->addWidget(d->yearForward);
     d->navigationLayout->addStretch();
 
-    d->line = new QLineEdit(this);
-    d->val = new DatePickerValidator(this);
+    d->line  = new QLineEdit(this);
+    d->val   = new DatePickerValidator(this);
     d->table = new DDateTable(this);
     setFocusProxy(d->table);
 
@@ -112,19 +115,19 @@ void DDatePicker::initWidget(const QDate& dt)
 
     d->fontsize++; // Make a little bigger
 
-    d->selectWeek = new QComboBox(this);    // read only week selection
+    d->selectWeek  = new QComboBox(this);    // read only week selection
     d->selectWeek->setFocusPolicy(Qt::NoFocus);
     d->todayButton = new QToolButton(this);
-    d->todayButton->setIcon(QIcon::fromTheme(QStringLiteral("go-jump-today")));
+    d->todayButton->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
 
-    d->yearForward->setToolTip(tr("Next year"));
-    d->yearBackward->setToolTip(tr("Previous year"));
-    d->monthForward->setToolTip(tr("Next month"));
-    d->monthBackward->setToolTip(tr("Previous month"));
-    d->selectWeek->setToolTip(tr("Select a week"));
-    d->selectMonth->setToolTip(tr("Select a month"));
-    d->selectYear->setToolTip(tr("Select a year"));
-    d->todayButton->setToolTip(tr("Select the current day"));
+    d->yearForward->setToolTip(i18n("Next year"));
+    d->yearBackward->setToolTip(i18n("Previous year"));
+    d->monthForward->setToolTip(i18n("Next month"));
+    d->monthBackward->setToolTip(i18n("Previous month"));
+    d->selectWeek->setToolTip(i18n("Select a week"));
+    d->selectMonth->setToolTip(i18n("Select a month"));
+    d->selectYear->setToolTip(i18n("Select a year"));
+    d->todayButton->setToolTip(i18n("Select the current day"));
 
     // -----
 
@@ -134,17 +137,17 @@ void DDatePicker::initWidget(const QDate& dt)
 
     if (QApplication::isRightToLeft())
     {
-        d->yearForward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-left-double")));
-        d->yearBackward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right-double")));
-        d->monthForward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-left")));
-        d->monthBackward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
+        d->yearForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left-double")));
+        d->yearBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right-double")));
+        d->monthForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left")));
+        d->monthBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
     }
     else
     {
-        d->yearForward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right-double")));
-        d->yearBackward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-left-double")));
-        d->monthForward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
-        d->monthBackward->setIcon(QIcon::fromTheme(QStringLiteral("arrow-left")));
+        d->yearForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right-double")));
+        d->yearBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left-double")));
+        d->monthForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
+        d->monthBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left")));
     }
 
     connect(d->table, SIGNAL(dateChanged(QDate)),
@@ -182,7 +185,7 @@ void DDatePicker::initWidget(const QDate& dt)
 
     topLayout->addWidget(d->table);
 
-    QBoxLayout *bottomLayout = new QHBoxLayout();
+    QBoxLayout* const bottomLayout = new QHBoxLayout();
     bottomLayout->setMargin(0);
     bottomLayout->setSpacing(0);
     topLayout->addLayout(bottomLayout);
@@ -204,7 +207,7 @@ bool DDatePicker::eventFilter(QObject* o, QEvent* e)
 {
     if (e->type() == QEvent::KeyPress)
     {
-        QKeyEvent *k = (QKeyEvent *)e;
+        QKeyEvent* const k = (QKeyEvent *)e;
 
         if ((k->key() == Qt::Key_PageUp)   ||
             (k->key() == Qt::Key_PageDown) ||
@@ -220,27 +223,27 @@ bool DDatePicker::eventFilter(QObject* o, QEvent* e)
     return QFrame::eventFilter(o, e);
 }
 
-void DDatePicker::resizeEvent(QResizeEvent *e)
+void DDatePicker::resizeEvent(QResizeEvent* e)
 {
     QWidget::resizeEvent(e);
 }
 
-void DDatePicker::dateChangedSlot(const QDate &date_)
+void DDatePicker::dateChangedSlot(const QDate& dt)
 {
-    d->line->setText(locale().toString(date_, QLocale::ShortFormat));
-    d->selectMonth->setText(locale().standaloneMonthName(date_.month(), QLocale::LongFormat));
+    d->line->setText(locale().toString(dt, QLocale::ShortFormat));
+    d->selectMonth->setText(locale().standaloneMonthName(dt.month(), QLocale::LongFormat));
     d->fillWeeksCombo();
 
     // calculate the item num in the week combo box; normalize selected day so as if 1.1. is the first day of the week
-    QDate firstDay(date_.year(), 1, 1);
+    QDate firstDay(dt.year(), 1, 1);
     // If we cannot successfully create the 1st of the year, this can only mean that
     // the 1st is before the earliest valid date in the current calendar system, so use
     // the earliestValidDate as the first day.
     // In particular covers the case of Gregorian where 1/1/-4713 is not a valid QDate
-    d->selectWeek->setCurrentIndex((date_.dayOfYear() + firstDay.dayOfWeek() - 2) / 7);
-    d->selectYear->setText(QString::number(date_.year()).rightJustified(4, QLatin1Char('0')));
+    d->selectWeek->setCurrentIndex((dt.dayOfYear() + firstDay.dayOfWeek() - 2) / 7);
+    d->selectYear->setText(QString::number(dt.year()).rightJustified(4, QLatin1Char('0')));
 
-    emit(dateChanged(date_));
+    emit(dateChanged(dt));
 }
 
 void DDatePicker::tableClickedSlot()
@@ -328,7 +331,7 @@ void DDatePicker::selectMonthClicked()
         popup.addAction(locale().standaloneMonthName(m))->setData(m);
     }
 
-    QAction *item = popup.actions()[ thisDate.month() - 1 ];
+    QAction* item = popup.actions()[ thisDate.month() - 1 ];
 
     // if this happens the above should already given an assertion
     if (item)
@@ -366,7 +369,7 @@ void DDatePicker::selectYearClicked()
 
     QDate thisDate(date());
 
-    DPopupFrame* const popup          = new DPopupFrame(this);
+    DPopupFrame* const popup             = new DPopupFrame(this);
     DatePickerYearSelector* const picker = new DatePickerYearSelector(date(), popup);
     picker->resize(picker->sizeHint());
     picker->setYear(thisDate.year());
@@ -406,9 +409,9 @@ void DDatePicker::uncheckYearSelector()
     d->selectYear->update();
 }
 
-void DDatePicker::changeEvent(QEvent *event)
+void DDatePicker::changeEvent(QEvent* e)
 {
-    if (event && event->type() == QEvent::EnabledChange)
+    if (e && e->type() == QEvent::EnabledChange)
     {
         if (isEnabled())
         {
@@ -537,8 +540,8 @@ void DDatePicker::setCloseButton(bool enable)
         const int spacingHint = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
         d->navigationLayout->addSpacing(spacingHint);
         d->navigationLayout->addWidget(d->closeButton);
-        d->closeButton->setToolTip(tr("Close", "@action:button"));
-        d->closeButton->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
+        d->closeButton->setToolTip(i18nc("Close", "@action:button"));
+        d->closeButton->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
 
         connect(d->closeButton, &QAbstractButton::clicked,
                 topLevelWidget(), &QWidget::close);

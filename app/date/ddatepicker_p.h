@@ -67,7 +67,7 @@ class DatePickerYearSelector : public QLineEdit
 public:
 
     DatePickerYearSelector(const QDate& currentDate, QWidget* const parent = 0);
-    int year();
+    int year() const;
     void setYear(int year);
 
 public Q_SLOTS:

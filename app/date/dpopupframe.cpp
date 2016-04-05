@@ -69,7 +69,6 @@ public:
         : QObject(parent),
           m_popup(0)
     {
-
     }
 
     ~OutsideClickCatcher()

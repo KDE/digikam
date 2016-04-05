@@ -38,7 +38,7 @@ namespace Digikam
 {
 
 /**
- * This is a support class for the DDatePicker class.  It just
+ * This is a support class for the DDatePicker class. It just
  * draws the calendar table without titles, but could theoretically
  * be used as a standalone.
  *
@@ -63,19 +63,8 @@ public:
 
 public:
 
-    /**
-     * The constructor.
-     */
     explicit DDateTable(QWidget* const parent = 0);
-
-    /**
-     * The constructor.
-     */
-    explicit DDateTable(const QDate&, QWidget* const parent = 0);
-
-    /**
-     * The destructor.
-     */
+    explicit DDateTable(const QDate& dt, QWidget* const parent = 0);
     ~DDateTable();
 
     /**
@@ -126,7 +115,7 @@ public:
     /**
      * Unsets the custom painting of a date so that the date is painted as usual.
      */
-    void unsetCustomDatePainting(const QDate& date);
+    void unsetCustomDatePainting(const QDate& dt);
 
 protected:
 
@@ -134,7 +123,7 @@ protected:
      * calculate the position of the cell in the matrix for the given date.
      * The result is the 0-based index.
      */
-    virtual int posFromDate(const QDate& date);
+    virtual int posFromDate(const QDate& dt);
 
     /**
      * calculate the date that is displayed at a given cell in the matrix. pos is the
@@ -183,11 +172,11 @@ Q_SIGNALS:
      * right clicks on that date and the popup menu is enabled). Connect
      * the slot where you fill the menu to this signal.
      */
-    void aboutToShowContextMenu(QMenu *menu, const QDate &date);
+    void aboutToShowContextMenu(QMenu* menu, const QDate& dt);
 
 private:
 
-    void initWidget(const QDate& date);
+    void initWidget(const QDate& dt);
     void initAccels();
     void paintCell(QPainter* painter, int row, int col);
 

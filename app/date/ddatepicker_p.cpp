@@ -31,6 +31,10 @@
 #include <QFontDatabase>
 #include <QApplication>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 namespace Digikam
 {
 
@@ -115,7 +119,7 @@ void DatePickerYearSelector::yearEnteredSlot()
     }
 }
 
-int DatePickerYearSelector::year()
+int DatePickerYearSelector::year() const
 {
     return result;
 }
@@ -158,9 +162,9 @@ void DDatePicker::Private::fillWeeksCombo()
     {
         // Get the ISO week number for the current day and what year that week is in
         // e.g. 1st day of this year may fall in week 53 of previous year
-        int weekYear = thisYear;
-        const int week = day.weekNumber(&weekYear);
-        QString weekString = tr("Week %1").arg(QString::number(week));
+        int weekYear       = thisYear;
+        const int week     = day.weekNumber(&weekYear);
+        QString weekString = i18n("Week %1", QString::number(week));
 
         // show that this is a week from a different year
         if (weekYear != thisYear)

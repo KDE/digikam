@@ -24,6 +24,9 @@
  *
  * ============================================================ */
 
+#ifndef DDATE_TABLE_P_H
+#define DDATE_TABLE_P_H
+
 #include "ddatetable.h"
 
 // C++ includes
@@ -40,8 +43,6 @@
 
 namespace Digikam
 {
-
-class DDateTable;
 
 class DDateTable::Private : public QObject
 {
@@ -119,3 +120,5 @@ public:
 };
 
 }  // namespace Digikam
+
+#endif // DDATE_TABLE_P_H

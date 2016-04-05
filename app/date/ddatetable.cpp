@@ -81,7 +81,7 @@ void DDateTable::initWidget(const QDate& date)
 void DDateTable::initAccels()
 {
     QAction* const next = new QAction(this);
-    next->setObjectName(QStringLiteral("next"));
+    next->setObjectName(QLatin1String("next"));
     next->setShortcuts(QKeySequence::keyBindings(QKeySequence::Forward));
     next->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
@@ -89,7 +89,7 @@ void DDateTable::initAccels()
             d, SLOT(nextMonth()));
 
     QAction* const prior = new QAction(this);
-    prior->setObjectName(QStringLiteral("prior"));
+    prior->setObjectName(QLatin1String("prior"));
     prior->setShortcuts(QKeySequence::keyBindings(QKeySequence::Back));
     prior->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
@@ -97,7 +97,7 @@ void DDateTable::initAccels()
             d, SLOT(previousMonth()));
 
     QAction* const beginMonth = new QAction(this);
-    beginMonth->setObjectName(QStringLiteral("beginMonth"));
+    beginMonth->setObjectName(QLatin1String("beginMonth"));
     beginMonth->setShortcuts(QKeySequence::keyBindings(QKeySequence::MoveToStartOfDocument));
     beginMonth->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
@@ -105,7 +105,7 @@ void DDateTable::initAccels()
             d, SLOT(beginningOfMonth()));
 
     QAction* const endMonth = new QAction(this);
-    endMonth->setObjectName(QStringLiteral("endMonth"));
+    endMonth->setObjectName(QLatin1String("endMonth"));
     endMonth->setShortcuts(QKeySequence::keyBindings(QKeySequence::MoveToEndOfDocument));
     endMonth->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
@@ -113,7 +113,7 @@ void DDateTable::initAccels()
             d, SLOT(endOfMonth()));
 
     QAction* const beginWeek = new QAction(this);
-    beginWeek->setObjectName(QStringLiteral("beginWeek"));
+    beginWeek->setObjectName(QLatin1String("beginWeek"));
     beginWeek->setShortcuts(QKeySequence::keyBindings(QKeySequence::MoveToStartOfLine));
     beginWeek->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
@@ -121,7 +121,7 @@ void DDateTable::initAccels()
             d, SLOT(beginningOfWeek()));
 
     QAction* const endWeek = new QAction(this);
-    endWeek->setObjectName(QStringLiteral("endWeek"));
+    endWeek->setObjectName(QLatin1String("endWeek"));
     endWeek->setShortcuts(QKeySequence::keyBindings(QKeySequence::MoveToEndOfLine));
     endWeek->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
@@ -476,8 +476,10 @@ void DDateTable::setFontSize(int size)
 {
     QFontMetricsF metrics(fontMetrics());
     QRectF rect;
+
     // ----- store rectangles:
     d->fontsize = size;
+
     // ----- find largest day name:
     d->maxCell.setWidth(0);
     d->maxCell.setHeight(0);
@@ -490,7 +492,7 @@ void DDateTable::setFontSize(int size)
     }
 
     // ----- compare with a real wide number and add some space:
-    rect = metrics.boundingRect(QStringLiteral("88"));
+    rect = metrics.boundingRect(QLatin1String("88"));
     d->maxCell.setWidth(qMax(d->maxCell.width() + 2, rect.width()));
     d->maxCell.setHeight(qMax(d->maxCell.height() + 4, rect.height()));
 }

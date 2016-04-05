@@ -38,13 +38,9 @@ namespace Digikam
 {
 
 /**
- * @class DDateTimeEdit
- * This class is basically the same as the KDateTime class
+ * This class is basically the same as the KDE Date Time widget
  * with the exception that a QTimeEdit is placed directly
  * besides it.
- *
- * @image html kdatetimeedit.png "This is how it looks"
- * @author Tom Albers
  */
 class DIGIKAM_EXPORT DDateTimeEdit : public DHBox
 {
