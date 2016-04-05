@@ -54,7 +54,6 @@ DNotificationWidget::Private::Private(DNotificationWidget* const q_ptr)
     textLabel   = 0;
     closeButton = 0;
     timeLine    = 0;
-    icon        = 0;
     messageType = DNotificationWidget::Information;
     wordWrap    = false;
 }
