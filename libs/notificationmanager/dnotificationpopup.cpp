@@ -54,7 +54,7 @@ class DNotificationPopup::Private
 {
 public:
 
-    Private(DNotificationPopup* q, WId winId)
+    Private(DNotificationPopup* const q, WId winId)
         : q(q),
           popupStyle(DEFAULT_POPUP_TYPE),
           window(winId),
@@ -62,6 +62,9 @@ public:
           topLayout(0),
           hideDelay(DEFAULT_POPUP_TIME),
           hideTimer(new QTimer(q)),
+          ttlIcon(0),
+          ttl(0),
+          msg(0),
           autoDelete(false)
     {
         q->setWindowFlags(POPUP_FLAGS);
@@ -130,7 +133,7 @@ public:
         }
 
         bool bottom = (anchor.y() + height) > ((deskRect.y() + deskRect.height() - 48));
-        bool right  = (anchor.x() + width) > ((deskRect.x() + deskRect.width() - 48));
+        bool right  = (anchor.x() + width)  > ((deskRect.x() + deskRect.width()  - 48));
 
         QPoint corners[4] =
         {
@@ -156,6 +159,7 @@ public:
             QPolygon corner = path.toFillPolygon().toPolygon();
 
             surround.resize(z + corner.count() - 1);
+
             for (int s = 1; s < corner.count() - 1; s++, z++)
             {
                 surround.setPoint(z, corner[s]);
@@ -211,7 +215,7 @@ public:
     /**
      * Calculates the position to place the popup near the specified rectangle.
      */
-    QPoint calculateNearbyPoint(const QRect &target)
+    QPoint calculateNearbyPoint(const QRect& target)
     {
         QPoint pos = target.topLeft();
         int x      = pos.x();
@@ -270,7 +274,7 @@ public:
         return QPoint(x, y);
     }
 
-    QRect desktopRectForPoint(const QPoint &point)
+    QRect desktopRectForPoint(const QPoint& point)
     {
         QList<QScreen*> screens = QGuiApplication::screens();
 
@@ -287,7 +291,7 @@ public:
     }
 };
 
-DNotificationPopup::DNotificationPopup(QWidget *parent, Qt::WindowFlags f)
+DNotificationPopup::DNotificationPopup(QWidget* parent, Qt::WindowFlags f)
     : QFrame(0, f ? f : POPUP_FLAGS),
       d(new Private(this, parent ? parent->effectiveWinId() : 0L))
 {
@@ -324,7 +328,7 @@ void DNotificationPopup::setPopupStyle(int popupstyle)
     }
 }
 
-void DNotificationPopup::setView(QWidget *child)
+void DNotificationPopup::setView(QWidget* child)
 {
     delete d->msgView;
     d->msgView = child;
@@ -342,19 +346,19 @@ void DNotificationPopup::setView(QWidget *child)
     d->topLayout->activate();
 }
 
-void DNotificationPopup::setView(const QString &caption, const QString &text,
-                                 const QPixmap &icon)
+void DNotificationPopup::setView(const QString & caption, const QString& text,
+                                 const QPixmap& icon)
 {
     // qCDebug(LOG_KNOTIFICATIONS) << "DNotificationPopup::setView " << caption << ", " << text;
     setView(standardView(caption, text, icon, this));
 }
 
-QWidget *DNotificationPopup::standardView(const QString &caption,
-                                          const QString &text,
-                                          const QPixmap &icon,
-                                          QWidget *parent)
+QWidget* DNotificationPopup::standardView(const QString& caption,
+                                          const QString& text,
+                                          const QPixmap& icon,
+                                          QWidget* parent)
 {
-    QWidget *top = new QWidget(parent ? parent : this);
+    QWidget* top = new QWidget(parent ? parent : this);
     QVBoxLayout *vb = new QVBoxLayout(top);
     vb->setMargin(0);
     top->setLayout(vb);
@@ -403,12 +407,12 @@ QWidget *DNotificationPopup::standardView(const QString &caption,
     return top;
 }
 
-void DNotificationPopup::setView(const QString &caption, const QString &text)
+void DNotificationPopup::setView(const QString& caption, const QString& text)
 {
     setView(caption, text, QPixmap());
 }
 
-QWidget *DNotificationPopup::view() const
+QWidget* DNotificationPopup::view() const
 {
     return d->msgView;
 }
@@ -445,7 +449,7 @@ void DNotificationPopup::setAutoDelete(bool autoDelete)
     d->autoDelete = autoDelete;
 }
 
-void DNotificationPopup::mouseReleaseEvent(QMouseEvent *e)
+void DNotificationPopup::mouseReleaseEvent(QMouseEvent* e)
 {
     emit clicked();
     emit clicked(e->pos());
@@ -495,13 +499,13 @@ void DNotificationPopup::setVisible(bool visible)
     }
 }
 
-void DNotificationPopup::show(const QPoint &p)
+void DNotificationPopup::show(const QPoint& p)
 {
     d->fixedPosition = p;
     show();
 }
 
-void DNotificationPopup::hideEvent(QHideEvent *)
+void DNotificationPopup::hideEvent(QHideEvent*)
 {
     d->hideTimer->stop();
 
@@ -584,48 +588,48 @@ void DNotificationPopup::paintEvent(QPaintEvent* pe)
     }
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &caption, const QString &text,
-                                                const QPixmap &icon, QWidget *parent, int timeout, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(const QString& caption, const QString& text,
+                                                const QPixmap& icon, QWidget* parent, int timeout, const QPoint& p)
 {
     return message(DEFAULT_POPUP_TYPE, caption, text, icon, parent, timeout, p);
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &text, QWidget *parent, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(const QString& text, QWidget* parent, const QPoint& p)
 {
     return message(DEFAULT_POPUP_TYPE, QString(), text, QPixmap(), parent, -1, p);
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &caption, const QString &text,
-                                                QWidget *parent, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(const QString& caption, const QString& text,
+                                                QWidget* parent, const QPoint& p)
 {
     return message(DEFAULT_POPUP_TYPE, caption, text, QPixmap(), parent, -1, p);
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &caption, const QString &text,
-                                                const QPixmap &icon, WId parent, int timeout, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(const QString& caption, const QString& text,
+                                                const QPixmap& icon, WId parent, int timeout, const QPoint& p)
 {
     return message(DEFAULT_POPUP_TYPE, caption, text, icon, parent, timeout, p);
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &caption, const QString &text,
-                                                const QPixmap &icon, QSystemTrayIcon *parent, int timeout)
+DNotificationPopup* DNotificationPopup::message(const QString& caption, const QString& text,
+                                                const QPixmap& icon, QSystemTrayIcon* parent, int timeout)
 {
     return message(DEFAULT_POPUP_TYPE, caption, text, icon, parent, timeout);
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &text, QSystemTrayIcon *parent)
+DNotificationPopup* DNotificationPopup::message(const QString& text, QSystemTrayIcon* parent)
 {
     return message(DEFAULT_POPUP_TYPE, QString(), text, QPixmap(), parent);
 }
 
-DNotificationPopup *DNotificationPopup::message(const QString &caption, const QString &text,
-                                                QSystemTrayIcon *parent)
+DNotificationPopup* DNotificationPopup::message(const QString& caption, const QString& text,
+                                                QSystemTrayIcon* parent)
 {
     return message(DEFAULT_POPUP_TYPE, caption, text, QPixmap(), parent);
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &caption, const QString &text,
-                                                const QPixmap &icon, QWidget *parent, int timeout, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& caption, const QString& text,
+                                                const QPixmap& icon, QWidget* parent, int timeout, const QPoint& p)
 {
     DNotificationPopup* const pop = new DNotificationPopup(parent);
     pop->setPopupStyle(popupStyle);
@@ -645,19 +649,19 @@ DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &c
     return pop;
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &text, QWidget *parent, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& text, QWidget* parent, const QPoint& p)
 {
     return message(popupStyle, QString(), text, QPixmap(), parent, -1, p);
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &caption, const QString &text,
-                                                QWidget *parent, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& caption, const QString& text,
+                                                QWidget* parent, const QPoint& p)
 {
     return message(popupStyle, caption, text, QPixmap(), parent, -1, p);
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &caption, const QString &text,
-                                                const QPixmap &icon, WId parent, int timeout, const QPoint &p)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& caption, const QString& text,
+                                                const QPixmap& icon, WId parent, int timeout, const QPoint& p)
 {
     DNotificationPopup* const pop = new DNotificationPopup(parent);
     pop->setPopupStyle(popupStyle);
@@ -677,8 +681,8 @@ DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &c
     return pop;
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &caption, const QString &text,
-                                                const QPixmap &icon, QSystemTrayIcon *parent, int timeout)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& caption, const QString& text,
+                                                const QPixmap& icon, QSystemTrayIcon* parent, int timeout)
 {
     DNotificationPopup* const pop = new DNotificationPopup();
     pop->setPopupStyle(popupStyle);
@@ -692,13 +696,13 @@ DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &c
     return pop;
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &text, QSystemTrayIcon *parent)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& text, QSystemTrayIcon* parent)
 {
     return message(popupStyle, QString(), text, QPixmap(), parent);
 }
 
-DNotificationPopup *DNotificationPopup::message(int popupStyle, const QString &caption, const QString &text,
-                                                QSystemTrayIcon *parent)
+DNotificationPopup* DNotificationPopup::message(int popupStyle, const QString& caption, const QString& text,
+                                                QSystemTrayIcon* parent)
 {
     return message(popupStyle, caption, text, QPixmap(), parent);
 }
