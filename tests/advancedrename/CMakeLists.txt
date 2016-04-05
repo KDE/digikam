@@ -32,17 +32,17 @@ target_link_libraries(renamecustomizertest
 
                       digikamcore
                       digikamgui
-                      
+
                       libdng
 
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Test
 
+                      KF5::I18n
                       KF5::XmlGui
                       KF5::KIOCore
                       KF5::KIOWidgets
-                      KF5::I18n
 
                       ${OpenCV_LIBRARIES}
 )
@@ -65,7 +65,7 @@ target_link_libraries(cameranamehelpertest
                       digikamdatabase
                       digikamcore
                       importui
-                      
+
                       libdng
 
                       Qt5::Core
@@ -88,18 +88,16 @@ set(advancedrenametest_SRCS
     advancedrenametest.cpp
 )
 
-add_executable(advancedrenametest ${advancedrenametest_SRCS}
-)
+add_executable(advancedrenametest ${advancedrenametest_SRCS})
 add_test(advancedrenametest advancedrenametest)
 ecm_mark_as_test(advancedrenametest)
 
 target_link_libraries(advancedrenametest
 
-                      advancedrename
                       digikamdatabase
                       digikamcore
                       digikamgui
-                      
+
                       libdng
 
                       Qt5::Core
@@ -107,10 +105,10 @@ target_link_libraries(advancedrenametest
                       Qt5::Test
 
                       KF5::I18n
-                      KF5::KIOCore
-                      KF5::KIOWidgets
                       KF5::Solid
                       KF5::XmlGui
+                      KF5::KIOCore
+                      KF5::KIOWidgets
 
                       ${OpenCV_LIBRARIES}
 )

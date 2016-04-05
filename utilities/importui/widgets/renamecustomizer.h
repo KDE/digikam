@@ -33,6 +33,10 @@
 #include <QRegExp>
 #include <QWidget>
 
+// Local includes
+
+#include "digikam_export.h"
+
 class QDateTime;
 
 namespace Digikam
@@ -40,7 +44,7 @@ namespace Digikam
 
 class AdvancedRenameManager;
 
-class RenameCustomizer : public QWidget
+class DIGIKAM_EXPORT RenameCustomizer : public QWidget
 {
     Q_OBJECT
 
