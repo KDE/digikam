@@ -28,7 +28,7 @@
 
 #include <QDateTimeEdit>
 
-// KDE includes
+// Local includes
 
 #include "ddateedit.h"
 

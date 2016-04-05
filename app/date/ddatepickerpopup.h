@@ -6,8 +6,8 @@
  * Date        : 2004-04-21
  * Description : a menu widget to pick a date.
  *
- * Copyright (C) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
- * Copyright (C) 2006 Mikolaj Machowski <mikmach@wp.pl>
+ * Copyright (C) 2004      by Bram Schoenmakers <bramschoenmakers at kde dot nl>
+ * Copyright (C) 2006      by Mikolaj Machowski <mikmach at wp dot pl>
  * Copyright (C) 2011-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
