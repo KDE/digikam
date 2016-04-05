@@ -41,7 +41,7 @@ class DDatePickerAction : public QWidgetAction
 {
 public:
 
-    DDatePickerAction(KDatePicker* const widget, QObject* const parent)
+    DDatePickerAction(DDatePicker* const widget, QObject* const parent)
         : QWidgetAction(parent),
           m_datePicker(widget),
           m_originalParent(widget->parentWidget())
@@ -50,7 +50,7 @@ public:
 
 protected:
 
-    QWidget* createWidget(QWidget* parent) 
+    QWidget* createWidget(QWidget* const parent)
     {
         m_datePicker->setParent(parent);
         return m_datePicker;
@@ -68,7 +68,7 @@ protected:
 
 private:
 
-    KDatePicker* m_datePicker;
+    DDatePicker* m_datePicker;
     QWidget*     m_originalParent;
 };
 
@@ -83,7 +83,7 @@ public:
     {
     }
 
-    KDatePicker* datePicker;
+    DDatePicker* datePicker;
     Items        items;
 };
 
@@ -92,13 +92,13 @@ DDatePickerPopup::DDatePickerPopup(Items items, const QDate& date, QWidget* cons
       d(new Private)
 {
     d->items      = items;
-    d->datePicker = new KDatePicker(this);
+    d->datePicker = new DDatePicker(this);
     d->datePicker->setCloseButton(false);
 
-    connect(d->datePicker, &KDatePicker::dateEntered,
+    connect(d->datePicker, &DDatePicker::dateEntered,
             this, &DDatePickerPopup::slotDateChanged);
 
-    connect(d->datePicker, &KDatePicker::dateSelected,
+    connect(d->datePicker, &DDatePicker::dateSelected,
             this, &DDatePickerPopup::slotDateChanged);
 
     d->datePicker->setDate(date);
@@ -113,49 +113,48 @@ DDatePickerPopup::~DDatePickerPopup()
 
 void DDatePickerPopup::buildMenu()
 {
-    if ( isVisible() )
+    if (isVisible())
     {
         return;
     }
 
     clear();
 
-    if ( d->items & DatePicker )
+    if (d->items & DatePicker)
     {
-        addAction( new DDatePickerAction( d->datePicker, this ) );
+        addAction(new DDatePickerAction(d->datePicker, this));
 
-        if ( ( d->items & NoDate ) || ( d->items & Words ) )
+        if ((d->items & NoDate ) || (d->items & Words))
         {
             addSeparator();
         }
     }
 
-    if ( d->items & Words )
+    if (d->items & Words)
     {
-        addAction( i18n("&Today"),       this, SLOT(slotToday()) );
-        addAction( i18n("To&morrow"),    this, SLOT(slotTomorrow()) );
-        addAction( i18n("Next &Week"),   this, SLOT(slotNextWeek()) );
-        addAction( i18n("Next M&onth"),  this, SLOT(slotNextMonth()) );
+        addAction(i18n("&Today"),       this, SLOT(slotToday()));
+        addAction(i18n("To&morrow"),    this, SLOT(slotTomorrow()));
+        addAction(i18n("Next &Week"),   this, SLOT(slotNextWeek()));
+        addAction(i18n("Next M&onth"),  this, SLOT(slotNextMonth()));
+        addAction(i18n("Y&esterday"),   this, SLOT(slotYesterday()));
+        addAction(i18n("Last &Monday"), this, SLOT(slotPrevMonday()));
+        addAction(i18n("Last &Friday"), this, SLOT(slotPrevFriday()));
+        addAction(i18n("Last &Week"),   this, SLOT(slotPrevWeek()));
+        addAction(i18n("Last M&onth"),  this, SLOT(slotPrevMonth()));
 
-        addAction( i18n("Y&esterday"),   this, SLOT(slotYesterday()) );
-        addAction( i18n("Last &Monday"), this, SLOT(slotPrevMonday()) );
-        addAction( i18n("Last &Friday"), this, SLOT(slotPrevFriday()) );
-        addAction( i18n("Last &Week"),   this, SLOT(slotPrevWeek()) );
-        addAction( i18n("Last M&onth"),  this, SLOT(slotPrevMonth()) );
-
-        if ( d->items & NoDate )
+        if (d->items & NoDate)
         {
             addSeparator();
         }
     }
 
-    if ( d->items & NoDate )
+    if (d->items & NoDate)
     {
-        addAction( i18n("No Date"), this, SLOT(slotNoDate()) );
+        addAction(i18n("No Date"), this, SLOT(slotNoDate()));
     }
 }
 
-KDatePicker* DDatePickerPopup::datePicker() const
+DDatePicker* DDatePickerPopup::datePicker() const
 {
     return d->datePicker;
 }
@@ -166,7 +165,7 @@ void DDatePickerPopup::setDate(const QDate& date)
 }
 
 #if 0
-void DDatePickerPopup::setItems( int items )
+void DDatePickerPopup::setItems(int items)
 {
     d->items = items;
     buildMenu();
@@ -178,40 +177,40 @@ int DDatePickerPopup::items() const
     return d->items;
 }
 
-void DDatePickerPopup::slotDateChanged( const QDate& date )
+void DDatePickerPopup::slotDateChanged(const QDate& date)
 {
-    emit dateChanged( date );
+    emit dateChanged(date);
     hide();
 }
 
 void DDatePickerPopup::slotToday()
 {
-    emit dateChanged( QDate::currentDate() );
+    emit dateChanged(QDate::currentDate());
 }
 
 void DDatePickerPopup::slotTomorrow()
 {
-    emit dateChanged( QDate::currentDate().addDays( 1 ) );
+    emit dateChanged(QDate::currentDate().addDays(1));
 }
 
 void DDatePickerPopup::slotNoDate()
 {
-    emit dateChanged( QDate() );
+    emit dateChanged(QDate());
 }
 
 void DDatePickerPopup::slotNextWeek()
 {
-    emit dateChanged( QDate::currentDate().addDays( 7 ) );
+    emit dateChanged(QDate::currentDate().addDays(7));
 }
 
 void DDatePickerPopup::slotNextMonth()
 {
-    emit dateChanged( QDate::currentDate().addMonths( 1 ) );
+    emit dateChanged(QDate::currentDate().addMonths(1));
 }
 
 void DDatePickerPopup::slotYesterday()
 {
-    emit dateChanged( QDate::currentDate().addDays( -1 ) );
+    emit dateChanged(QDate::currentDate().addDays(-1));
 }
 
 void DDatePickerPopup::slotPrevFriday()
@@ -219,32 +218,32 @@ void DDatePickerPopup::slotPrevFriday()
     QDate date = QDate::currentDate();
     int day    = date.dayOfWeek();
 
-    if ( day < 6 )
+    if (day < 6)
     {
-        date = date.addDays( 5 - 7 - day );
+        date = date.addDays(5 - 7 - day);
     }
     else
     {
-        date = date.addDays( 5 - day );
+        date = date.addDays(5 - day);
     }
 
-    emit dateChanged( date );
+    emit dateChanged(date);
 }
 
 void DDatePickerPopup::slotPrevMonday()
 {
     QDate date = QDate::currentDate();
-    emit dateChanged( date.addDays( 1 - date.dayOfWeek() ) );
+    emit dateChanged(date.addDays(1 - date.dayOfWeek()));
 }
 
 void DDatePickerPopup::slotPrevWeek()
 {
-    emit dateChanged( QDate::currentDate().addDays( -7 ) );
+    emit dateChanged(QDate::currentDate().addDays(-7));
 }
 
 void DDatePickerPopup::slotPrevMonth()
 {
-    emit dateChanged( QDate::currentDate().addMonths( -1 ) );
+    emit dateChanged(QDate::currentDate().addMonths(-1));
 }
 
 }  // namespace Digikam
