@@ -132,12 +132,22 @@ void DatePickerYearSelector::setYear(int year)
 // ------------------------------------------------------------------------------
 
 DDatePicker::Private::Private(DDatePicker* const q)
-    : q(q),
-      closeButton(0L),
-      selectWeek(0L),
-      todayButton(0),
-      navigationLayout(0)
+    : q(q)
 {
+    closeButton      = 0;
+    selectWeek       = 0;
+    todayButton      = 0;
+    navigationLayout = 0;
+    yearForward      = 0;
+    yearBackward     = 0;
+    monthForward     = 0;
+    monthBackward    = 0;
+    selectMonth      = 0;
+    selectYear       = 0;
+    line             = 0;
+    val              = 0;
+    table            = 0;
+    fontsize         = 0;
 }
 
 void DDatePicker::Private::fillWeeksCombo()
