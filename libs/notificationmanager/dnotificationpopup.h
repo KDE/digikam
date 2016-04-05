@@ -68,7 +68,7 @@ public:
     /**
      * Creates a popup for the specified widget.
      */
-    explicit DNotificationPopup(QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit DNotificationPopup(QWidget* parent = 0, Qt::WindowFlags f = 0);
 
     /**
      * Creates a popup for the specified window.
@@ -88,12 +88,12 @@ public:
     /**
      * Creates a standard view then calls setView(QWidget*) .
      */
-    void setView(const QString& caption, const QString &text = QString());
+    void setView(const QString& caption, const QString& text = QString());
 
     /**
      * Creates a standard view then calls setView(QWidget*) .
      */
-    virtual void setView(const QString& caption, const QString &text, const QPixmap &icon);
+    virtual void setView(const QString& caption, const QString& text, const QPixmap& icon);
 
     /**
      * Returns a widget that is used as standard view if one of the
@@ -116,8 +116,8 @@ public:
      * @see setView( const QString&, const QString& )
      * @see setView( const QString&, const QString&, const QPixmap& )
      */
-    QWidget* standardView(const QString &caption, const QString &text,
-                          const QPixmap &icon, QWidget *parent = 0L);
+    QWidget* standardView(const QString& caption, const QString& text,
+                          const QPixmap& icon, QWidget* parent = 0L);
 
     /**
      * Returns the main view.
@@ -154,7 +154,7 @@ public:
      *
      * The popup is placed near to the anchor.
      */
-    void setAnchor(const QPoint &anchor);
+    void setAnchor(const QPoint& anchor);
 
     /**
      * Convenience method that displays popup with the specified  message  beside the
@@ -162,8 +162,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString &text, QWidget *parent,
-                                       const QPoint &p = QPoint());
+    static DNotificationPopup *message(const QString& text, QWidget* parent,
+                                       const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified  message  beside the
@@ -171,7 +171,7 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString &text, QSystemTrayIcon *parent);
+    static DNotificationPopup *message(const QString& text, QSystemTrayIcon* parent);
 
     /**
      * Convenience method that displays popup with the specified caption and message
@@ -179,8 +179,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup* message(const QString &caption, const QString &text,
-                                       QWidget *parent, const QPoint &p = QPoint());
+    static DNotificationPopup* message(const QString& caption, const QString& text,
+                                       QWidget* parent, const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified caption and message
@@ -188,8 +188,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString &caption, const QString &text,
-                                  QSystemTrayIcon *parent);
+    static DNotificationPopup* message(const QString& caption, const QString& text,
+                                       QSystemTrayIcon* parent);
 
     /**
      * Convenience method that displays popup with the specified icon, caption and
@@ -197,9 +197,9 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString &caption, const QString &text,
-                                  const QPixmap &icon, QWidget *parent, int timeout = -1,
-                                  const QPoint &p = QPoint());
+    static DNotificationPopup* message(const QString& caption, const QString& text,
+                                       const QPixmap& icon, QWidget* parent, int timeout = -1,
+                                       const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified icon, caption and
@@ -207,8 +207,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString &caption, const QString &text,
-                                  const QPixmap &icon, QSystemTrayIcon *parent, int timeout = -1);
+    static DNotificationPopup* message(const QString& caption, const QString& text,
+                                       const QPixmap& icon, QSystemTrayIcon* parent, int timeout = -1);
 
     /**
      * Convenience method that displays popup with the specified icon, caption and
@@ -216,9 +216,9 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(const QString &caption, const QString &text,
-                                  const QPixmap &icon, WId parent,
-                                  int timeout = -1, const QPoint &p = QPoint());
+    static DNotificationPopup* message(const QString& caption, const QString& text,
+                                       const QPixmap& icon, WId parent,
+                                       int timeout = -1, const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified popup-style and message beside the
@@ -226,7 +226,7 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &text, QWidget *parent, const QPoint &p = QPoint());
+    static DNotificationPopup* message(int popupStyle, const QString& text, QWidget* parent, const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified popup-style and message beside the
@@ -234,7 +234,7 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &text, QSystemTrayIcon *parent);
+    static DNotificationPopup* message(int popupStyle, const QString& text, QSystemTrayIcon* parent);
 
     /**
      * Convenience method that displays popup with the specified popup-style, caption and message
@@ -242,8 +242,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &caption, const QString &text,
-                                  QSystemTrayIcon *parent);
+    static DNotificationPopup* message(int popupStyle, const QString& caption, const QString& text,
+                                       QSystemTrayIcon* parent);
 
     /**
      * Convenience method that displays popup with the specified popup-style, caption and message
@@ -251,8 +251,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &caption, const QString &text,
-                                  QWidget *parent, const QPoint &p = QPoint());
+    static DNotificationPopup* message(int popupStyle, const QString& caption, const QString& text,
+                                       QWidget* parent, const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified popup-style, icon, caption and
@@ -260,9 +260,9 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &caption, const QString &text,
-                                  const QPixmap &icon, QWidget *parent, int timeout = -1,
-                                  const QPoint &p = QPoint());
+    static DNotificationPopup* message(int popupStyle, const QString& caption, const QString& text,
+                                  const QPixmap& icon, QWidget* parent, int timeout = -1,
+                                  const QPoint& p = QPoint());
 
     /**
      * Convenience method that displays popup with the specified popup-style, icon, caption and
@@ -270,8 +270,8 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &caption, const QString &text,
-                                  const QPixmap &icon, QSystemTrayIcon *parent, int timeout = -1);
+    static DNotificationPopup* message(int popupStyle, const QString& caption, const QString& text,
+                                       const QPixmap& icon, QSystemTrayIcon* parent, int timeout = -1);
 
     /**
      * Convenience method that displays popup with the specified popup-style, icon, caption and
@@ -279,9 +279,9 @@ public:
      * Note that the returned object is destroyed when it is hidden.
      * @see setAutoDelete
      */
-    static DNotificationPopup *message(int popupStyle, const QString &caption, const QString &text,
-                                       const QPixmap &icon, WId parent, int timeout = -1,
-                                       const QPoint &p = QPoint());
+    static DNotificationPopup *message(int popupStyle, const QString& caption, const QString& text,
+                                       const QPixmap& icon, WId parent, int timeout = -1,
+                                       const QPoint& p = QPoint());
 
     // we create an overloaded version of show()
     using QFrame::show;
@@ -307,7 +307,7 @@ public Q_SLOTS:
     /**
      * Shows the popup in the given point
      */
-    void show(const QPoint &p);
+    void show(const QPoint& p);
 
     /** @reimp */
     void setVisible(bool visible) Q_DECL_OVERRIDE;
@@ -322,7 +322,7 @@ Q_SIGNALS:
     /**
      * Emitted when the popup is clicked.
      */
-    void clicked(const QPoint &pos);
+    void clicked(const QPoint& pos);
 
 protected:
 
@@ -356,16 +356,16 @@ protected:
      * Reimplementations of positionSelf() can use this to actually
      * position the popup.
      */
-    void moveNear(const QRect &target);
+    void moveNear(const QRect& target);
 
     /** @reimp */
-    void hideEvent(QHideEvent *) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent*) Q_DECL_OVERRIDE;
 
     /** @reimp */
-    void mouseReleaseEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent* e) Q_DECL_OVERRIDE;
 
     /** @reimp */
-    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent* pe) Q_DECL_OVERRIDE;
 
 private:
 
