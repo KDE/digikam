@@ -48,9 +48,14 @@ DDateTable::Private::Private(DDateTable* const q)
     : QObject(q),
       q(q)
 {
-    popupMenuEnabled = false;
-    useCustomColors  = false;
-    hoveredPos       = -1;
+    weekDayFirstOfMonth = 0;
+    numDaysThisMonth    = 0;
+    numWeekRows         = 0;
+    numDayColumns       = 0;
+    fontsize            = 0;
+    popupMenuEnabled    = false;
+    useCustomColors     = false;
+    hoveredPos          = -1;
     setDate(QDate::currentDate());
 }
 
