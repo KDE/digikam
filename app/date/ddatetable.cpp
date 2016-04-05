@@ -7,9 +7,9 @@
  * Description : Date selection table.
  *
  * Copyright (C) 2011-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 1997      by Tim D. Gilman (tdgilman@best.org)
- * Copyright (C) 1998-2001 by Mirko Boehm (mirko@kde.org)
- * Copyright (C) 2007      by John Layt <john@layt.net
+ * Copyright (C) 1997      by Tim D. Gilman <tdgilman at best dot org>
+ * Copyright (C) 1998-2001 by Mirko Boehm <mirko at kde dot org>
+ * Copyright (C) 2007      by John Layt <john at layt dot net>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,7 +86,7 @@ void DDateTable::initAccels()
     next->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     connect(next, SIGNAL(triggered(bool)),
-            this, SLOT(nextMonth()));
+            d, SLOT(nextMonth()));
 
     QAction* const prior = new QAction(this);
     prior->setObjectName(QStringLiteral("prior"));
@@ -94,7 +94,7 @@ void DDateTable::initAccels()
     prior->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     connect(prior, SIGNAL(triggered(bool)),
-            this, SLOT(previousMonth()));
+            d, SLOT(previousMonth()));
 
     QAction* const beginMonth = new QAction(this);
     beginMonth->setObjectName(QStringLiteral("beginMonth"));
@@ -102,7 +102,7 @@ void DDateTable::initAccels()
     beginMonth->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     connect(beginMonth, SIGNAL(triggered(bool)),
-            this, SLOT(beginningOfMonth()));
+            d, SLOT(beginningOfMonth()));
 
     QAction* const endMonth = new QAction(this);
     endMonth->setObjectName(QStringLiteral("endMonth"));
@@ -110,7 +110,7 @@ void DDateTable::initAccels()
     endMonth->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     connect(endMonth, SIGNAL(triggered(bool)),
-            this, SLOT(endOfMonth()));
+            d, SLOT(endOfMonth()));
 
     QAction* const beginWeek = new QAction(this);
     beginWeek->setObjectName(QStringLiteral("beginWeek"));
@@ -118,7 +118,7 @@ void DDateTable::initAccels()
     beginWeek->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     connect(beginWeek, SIGNAL(triggered(bool)),
-            this, SLOT(beginningOfWeek()));
+            d, SLOT(beginningOfWeek()));
 
     QAction* const endWeek = new QAction(this);
     endWeek->setObjectName(QStringLiteral("endWeek"));
@@ -126,7 +126,7 @@ void DDateTable::initAccels()
     endWeek->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
     connect(endWeek, SIGNAL(triggered(bool)),
-            this, SLOT(endOfWeek()));
+            d, SLOT(endOfWeek()));
 }
 
 int DDateTable::posFromDate(const QDate& date)
