@@ -5,7 +5,6 @@
  *
  * Date        : 2004-04-21
  * Description : a menu widget to pick a date.
- *               this widget come from libkdepim.
  *
  * Copyright (C) 2004 Bram Schoenmakers <bramschoenmakers@kde.nl>
  * Copyright (C) 2006 Mikolaj Machowski <mikmach@wp.pl>

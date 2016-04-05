@@ -47,7 +47,6 @@
 
 // KDE includes
 
-#include <kdatepicker.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -60,21 +59,22 @@
 #include "coredbaccess.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
+#include "ddatepicker.h"
 
 namespace Digikam
 {
 
-class DDatePicker : public KDatePicker
+class AlbumDatePicker : public DDatePicker
 {
 
 public:
 
-    explicit DDatePicker(QWidget* const widget)
-        : KDatePicker(widget)
+    explicit AlbumDatePicker(QWidget* const widget)
+        : DDatePicker(widget)
     {
     }
 
-    ~DDatePicker()
+    ~AlbumDatePicker()
     {
     }
 
@@ -109,7 +109,7 @@ public:
     QLineEdit*        titleEdit;
     QTextEdit*        commentsEdit;
 
-    DDatePicker*      datePicker;
+    AlbumDatePicker*  datePicker;
 
     PAlbum*           album;
 };
@@ -121,7 +121,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     setModal(true);
     setWindowTitle(create ? i18n("New Album") : i18n("Edit Album"));
 
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons          = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->album            = album;
@@ -185,7 +185,7 @@ AlbumPropsEdit::AlbumPropsEdit(PAlbum* const album, bool create)
     QLabel* const dateLabel = new QLabel(page);
     dateLabel->setText(i18n("Album &date:"));
 
-    d->datePicker = new DDatePicker(page);
+    d->datePicker = new AlbumDatePicker(page);
     dateLabel->setBuddy(d->datePicker);
 
     DHBox* const buttonRow            = new DHBox(page);

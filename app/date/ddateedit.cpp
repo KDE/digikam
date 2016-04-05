@@ -54,13 +54,13 @@ class DateValidator : public QValidator
 {
 public:
 
-    DateValidator( const QStringList& keywords, QWidget* const parent )
-        : QValidator( parent ),
-          mKeywords( keywords )
+    DateValidator(const QStringList& keywords, QWidget* const parent)
+        : QValidator(parent),
+          mKeywords(keywords)
     {
     }
 
-    virtual State validate( QString& str, int& ) const
+    virtual State validate(QString& str, int&) const
     {
         int length = str.length();
 
@@ -163,9 +163,9 @@ DDateEdit::~DDateEdit()
     delete d;
 }
 
-void DDateEdit::setDate( const QDate& date )
+void DDateEdit::setDate(const QDate& date)
 {
-    assignDate( date );
+    assignDate(date);
     updateView();
 }
 
@@ -174,7 +174,7 @@ QDate DDateEdit::date() const
     return d->date;
 }
 
-void DDateEdit::setReadOnly( bool readOnly )
+void DDateEdit::setReadOnly(bool readOnly)
 {
     d->readOnly = readOnly;
     lineEdit()->setReadOnly( readOnly );
@@ -250,12 +250,12 @@ void DDateEdit::showPopup()
     }
 }
 
-void DDateEdit::dateSelected( const QDate& date )
+void DDateEdit::dateSelected(const QDate& date)
 {
-    if (assignDate( date ) )
+    if (assignDate(date) )
     {
         updateView();
-        emit dateChanged( date );
+        emit dateChanged(date);
 
         if ( date.isValid() )
         {
@@ -264,12 +264,12 @@ void DDateEdit::dateSelected( const QDate& date )
     }
 }
 
-void DDateEdit::dateEntered( const QDate& date )
+void DDateEdit::dateEntered(const QDate& date)
 {
-    if (assignDate( date ) )
+    if (assignDate(date) )
     {
         updateView();
-        emit dateChanged( date );
+        emit dateChanged(date);
     }
 }
 
@@ -277,20 +277,20 @@ void DDateEdit::lineEnterPressed()
 {
     bool replaced = false;
 
-    QDate date = parseDate( &replaced );
+    QDate date = parseDate(&replaced);
 
-    if (assignDate( date ) )
+    if (assignDate(date) )
     {
-        if ( replaced )
+        if (replaced)
         {
             updateView();
         }
 
-        emit dateChanged( date );
+        emit dateChanged(date);
     }
 }
 
-QDate DDateEdit::parseDate( bool* replaced ) const
+QDate DDateEdit::parseDate(bool* replaced) const
 {
     QString text = currentText();
     QDate   result;
@@ -430,24 +430,24 @@ bool DDateEdit::eventFilter( QObject* object, QEvent* event )
     return false;
 }
 
-void DDateEdit::mousePressEvent( QMouseEvent* event )
+void DDateEdit::mousePressEvent(QMouseEvent* e)
 {
-    if ( event->button() == Qt::LeftButton && d->discardNextMousePress )
+    if ( e->button() == Qt::LeftButton && d->discardNextMousePress )
     {
         d->discardNextMousePress = false;
         return;
     }
 
-    QComboBox::mousePressEvent( event );
+    QComboBox::mousePressEvent(e);
 }
 
-void DDateEdit::slotTextChanged( const QString& )
+void DDateEdit::slotTextChanged(const QString&)
 {
     QDate date = parseDate();
 
-    if ( assignDate( date ) )
+    if ( assignDate(date) )
     {
-        emit dateChanged( date );
+        emit dateChanged(date);
     }
 
     d->textChanged = true;
@@ -457,8 +457,8 @@ void DDateEdit::setupKeywords()
 {
     // Create the keyword list. This will be used to match against when the user
     // enters information.
-    d->keywordMap.insert( i18n( "tomorrow" ), 1 );
-    d->keywordMap.insert( i18n( "today" ), 0 );
+    d->keywordMap.insert( i18n( "tomorrow" ),  1 );
+    d->keywordMap.insert( i18n( "today" ),     0 );
     d->keywordMap.insert( i18n( "yesterday" ), -1 );
 
     QString dayName;
@@ -470,7 +470,7 @@ void DDateEdit::setupKeywords()
     }
 }
 
-bool DDateEdit::assignDate( const QDate& date )
+bool DDateEdit::assignDate(const QDate& date)
 {
     d->date        = date;
     d->textChanged = false;
@@ -481,7 +481,7 @@ void DDateEdit::updateView()
 {
     QString dateString;
 
-    if ( d->date.isValid() )
+    if (d->date.isValid())
     {
         dateString = QLocale().toString(d->date, QLocale::ShortFormat);
     }
@@ -489,10 +489,10 @@ void DDateEdit::updateView()
     // We do not want to generate a signal here,
     // since we explicitly setting the date
     bool blocked = signalsBlocked();
-    blockSignals( true );
-    removeItem( 0 );
-    insertItem( 0, dateString );
-    blockSignals( blocked );
+    blockSignals(true);
+    removeItem(0);
+    insertItem(0, dateString);
+    blockSignals(blocked);
 }
 
 }  // namespace Digikam

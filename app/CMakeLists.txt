@@ -252,7 +252,12 @@ qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamap
 set(libdigikamgui_SRCS
     main/digikamapp.cpp
 
+    date/dpopupframe.cpp
     date/ddateedit.cpp
+    date/ddatetable.cpp
+    date/ddatetable_p.cpp
+    date/ddatepicker.cpp
+    date/ddatepicker_p.cpp
     date/ddatetimeedit.cpp
     date/ddatepickerpopup.cpp
     date/datefolderview.cpp

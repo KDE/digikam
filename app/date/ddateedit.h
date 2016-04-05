@@ -75,7 +75,7 @@ public:
 
       @param readOnly True to set the widget read-only, false to set it read-write.
      */
-    void setReadOnly( bool readOnly );
+    void setReadOnly(bool readOnly);
 
     /**
       @return True if the widget is read-only, false if read-write.
@@ -85,32 +85,34 @@ public:
     virtual void showPopup();
 
 Q_SIGNALS:
+
     /**
       This signal is emitted whenever the user modifies the date.
       The passed date can be invalid.
      */
-    void dateChanged( const QDate& date );
+    void dateChanged(const QDate& date);
 
 public Q_SLOTS:
+
     /**
       Sets the date.
 
       @param date The new date to display. This date must be valid or
                   it will not be set
      */
-    void setDate( const QDate& date );
+    void setDate(const QDate& date);
 
 protected Q_SLOTS:
 
     void lineEnterPressed();
-    void slotTextChanged( const QString& );
-    void dateEntered( const QDate& );
-    void dateSelected( const QDate& );
+    void slotTextChanged(const QString&);
+    void dateEntered(const QDate&);
+    void dateSelected(const QDate&);
 
 protected:
 
-    virtual bool eventFilter( QObject*, QEvent* );
-    virtual void mousePressEvent( QMouseEvent* );
+    virtual bool eventFilter(QObject*, QEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
 
     /**
       Sets the date, without altering the display.
@@ -123,7 +125,7 @@ protected:
       @return True if the date was set, false if it was considered invalid and
               remains unchanged.
      */
-    virtual bool assignDate( const QDate& date );
+    virtual bool assignDate(const QDate& date);
 
     /**
       Fills the keyword map. Re-implement it if you want additional
@@ -133,7 +135,7 @@ protected:
 
 private:
 
-    QDate parseDate( bool* = 0 ) const;
+    QDate parseDate(bool* = 0) const;
     void updateView();
 
 private:

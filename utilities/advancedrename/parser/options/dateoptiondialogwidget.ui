@@ -106,7 +106,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="KDatePicker" name="datePicker"/>
+          <widget class="Digikam::DDatePicker" name="datePicker"/>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
@@ -132,9 +132,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KDatePicker</class>
+   <class>Digikam::DDatePicker</class>
    <extends>QFrame</extends>
-   <header>kdatepicker.h</header>
+   <header>ddatepicker.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
