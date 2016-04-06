@@ -160,4 +160,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 122 ==> 361052 - When importing picture file dates are all from importing time. Not creation date.
 123 ==> 359108 - 5 beta 3: interface problem, icons not showing up.
 124 ==> 361275 - Compile time error: undefined reference while linking renamecustomizertest.
-125 ==> 
+125 ==> 361440 - Panorama Tool can`t find a pto2mk.
+126 ==> 
