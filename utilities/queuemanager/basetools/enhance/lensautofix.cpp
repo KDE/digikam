@@ -221,9 +221,9 @@ bool LensAutoFix::toolOperations()
         prm.aperture        = settings()[QLatin1String("aperture")].toDouble();
         prm.subjectDistance = settings()[QLatin1String("subjectDistance")].toDouble();
 
-        QString cameraMake  = settings()[QLatin1String("cameraMake")].toString();
-        QString cameraModel = settings()[QLatin1String("cameraModel")].toString();
-        QString lensModel   = settings()[QLatin1String("lensModel")].toString();
+        prm.cameraMake      = settings()[QLatin1String("cameraMake")].toString();
+        prm.cameraModel     = settings()[QLatin1String("cameraModel")].toString();
+        prm.lensModel       = settings()[QLatin1String("lensModel")].toString();
     }
 
     LensFunFilter filter(&image(), 0L, prm);
