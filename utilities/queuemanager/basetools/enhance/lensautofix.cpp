@@ -55,12 +55,15 @@ public:
 
     Private()
         : settingsView(0),
-          cameraSelector(0)
+          cameraSelector(0),
+          changeSettings(true)
     {
     }
 
     LensFunSettings*       settingsView;
     LensFunCameraSelector* cameraSelector;
+
+    bool                   changeSettings;
 };
 
 LensAutoFix::LensAutoFix(QObject* const parent)
@@ -135,6 +138,8 @@ BatchToolSettings LensAutoFix::defaultSettings()
 
 void LensAutoFix::slotAssignSettings2Widget()
 {
+    d->changeSettings = false;
+
     d->cameraSelector->setUseMetadata(settings()[QLatin1String("UseMetadata")].toBool());
     LensFunContainer lfPrm;
 
@@ -153,36 +158,43 @@ void LensAutoFix::slotAssignSettings2Widget()
     lfPrm.lensModel       = settings()[QLatin1String("lensModel")].toString();
 
     d->cameraSelector->setSettings(lfPrm);
-}
+    d->settingsView->setFilterSettings(lfPrm);
 
-void LensAutoFix::slotSettingsChanged()
-{
     // Update checkbox options about Lens corrections available.
     d->settingsView->setEnabledCCA(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsCCA());
     d->settingsView->setEnabledVig(d->cameraSelector->useMetadata()  ? true : d->cameraSelector->iface()->supportsVig());
     d->settingsView->setEnabledDist(d->cameraSelector->useMetadata() ? true : d->cameraSelector->iface()->supportsDistortion());
     d->settingsView->setEnabledGeom(d->cameraSelector->useMetadata() ? true : d->cameraSelector->iface()->supportsDistortion());
 
-    BatchToolSettings prm;
-    LensFunContainer  settings = d->cameraSelector->settings();
+    d->changeSettings = true;
+}
 
-    prm.insert(QLatin1String("UseMetadata"),     (bool)d->cameraSelector->useMetadata());
+void LensAutoFix::slotSettingsChanged()
+{
+    if (d->changeSettings)
+    {
+        BatchToolSettings prm;
+        LensFunContainer  camSettings    = d->cameraSelector->settings();
+        LensFunContainer  filterSettings = d->settingsView->settings();
 
-    prm.insert(QLatin1String("filterCCA"),       (bool)settings.filterCCA);
-    prm.insert(QLatin1String("filterVIG"),       (bool)settings.filterVIG);
-    prm.insert(QLatin1String("filterDST"),       (bool)settings.filterDST);
-    prm.insert(QLatin1String("filterGEO"),       (bool)settings.filterGEO);
+        prm.insert(QLatin1String("UseMetadata"),     (bool)d->cameraSelector->useMetadata());
 
-    prm.insert(QLatin1String("cropFactor"),      (double)settings.cropFactor);
-    prm.insert(QLatin1String("focalLength"),     (double)settings.focalLength);
-    prm.insert(QLatin1String("aperture"),        (double)settings.aperture);
-    prm.insert(QLatin1String("subjectDistance"), (double)settings.subjectDistance);
+        prm.insert(QLatin1String("filterCCA"),       (bool)filterSettings.filterCCA);
+        prm.insert(QLatin1String("filterVIG"),       (bool)filterSettings.filterVIG);
+        prm.insert(QLatin1String("filterDST"),       (bool)filterSettings.filterDST);
+        prm.insert(QLatin1String("filterGEO"),       (bool)filterSettings.filterGEO);
 
-    prm.insert(QLatin1String("cameraMake"),      settings.cameraMake);
-    prm.insert(QLatin1String("cameraModel"),     settings.cameraModel);
-    prm.insert(QLatin1String("lensModel"),       settings.lensModel);
+        prm.insert(QLatin1String("cropFactor"),      (double)camSettings.cropFactor);
+        prm.insert(QLatin1String("focalLength"),     (double)camSettings.focalLength);
+        prm.insert(QLatin1String("aperture"),        (double)camSettings.aperture);
+        prm.insert(QLatin1String("subjectDistance"), (double)camSettings.subjectDistance);
 
-    BatchTool::slotSettingsChanged(prm);
+        prm.insert(QLatin1String("cameraMake"),      camSettings.cameraMake);
+        prm.insert(QLatin1String("cameraModel"),     camSettings.cameraModel);
+        prm.insert(QLatin1String("lensModel"),       camSettings.lensModel);
+
+        BatchTool::slotSettingsChanged(prm);
+    }
 }
 
 bool LensAutoFix::toolOperations()

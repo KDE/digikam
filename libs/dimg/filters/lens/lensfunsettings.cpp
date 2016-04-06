@@ -180,6 +180,16 @@ LensFunContainer LensFunSettings::defaultSettings() const
     return prm;
 }
 
+LensFunContainer LensFunSettings::settings() const
+{
+    LensFunContainer prm;
+    prm.filterCCA = d->filterCCA->isChecked();
+    prm.filterVIG = d->filterVIG->isChecked();
+    prm.filterDST = d->filterDST->isChecked();
+    prm.filterGEO = d->filterGEO->isChecked();
+    return prm;
+}
+
 void LensFunSettings::readSettings(KConfigGroup& group)
 {
     LensFunContainer prm;

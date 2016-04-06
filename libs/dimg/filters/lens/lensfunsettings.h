@@ -51,6 +51,7 @@ public:
     void setEnabledGeom(bool b);
 
     LensFunContainer defaultSettings() const;
+    LensFunContainer settings() const;
     void resetToDefault();
 
     void assignFilterSettings(LensFunContainer& prm);
