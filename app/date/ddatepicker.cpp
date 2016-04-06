@@ -540,7 +540,7 @@ void DDatePicker::setCloseButton(bool enable)
         const int spacingHint = style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
         d->navigationLayout->addSpacing(spacingHint);
         d->navigationLayout->addWidget(d->closeButton);
-        d->closeButton->setToolTip(i18nc("Close", "@action:button"));
+        d->closeButton->setToolTip(i18nc("@action:button", "Close"));
         d->closeButton->setIcon(QIcon::fromTheme(QLatin1String("window-close")));
 
         connect(d->closeButton, &QAbstractButton::clicked,
