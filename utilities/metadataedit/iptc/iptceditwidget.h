@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-14
- * Description : a KPageWidget to edit IPTC metadata
+ * Description : a #include "dconfigdlgwdgWidget to edit IPTC metadata
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Victor Dodon <dodon dot victor at gmail dot com>
@@ -24,16 +24,16 @@
 #ifndef IPTCEDITWIDGET_H
 #define IPTCEDITWIDGET_H
 
-// KDE includes
+// Local includes
 
-#include <kpagedialog.h>
+#include "dconfigdlgwidgets.h"
 
 namespace Digikam
 {
 
 class MetadataEditDialog;
 
-class IPTCEditWidget : public KPageWidget
+class IPTCEditWidget : public DConfigDlgWdg
 {
     Q_OBJECT
 

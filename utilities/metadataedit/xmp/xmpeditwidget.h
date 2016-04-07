@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-14
- * Description : a KPageWidget to edit XMP metadata
+ * Description : a Widget to edit XMP metadata
  *
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Victor Dodon <dodon dot victor at gmail dot com>
@@ -24,16 +24,16 @@
 #ifndef ALLXMPEDITWIDGET_H
 #define ALLXMPEDITWIDGET_H
 
-// KDE includes
+// Local includes
 
-#include <kpagedialog.h>
+#include "dconfigdlgwidgets.h"
 
 namespace Digikam
 {
 
 class MetadataEditDialog;
 
-class XMPEditWidget : public KPageWidget
+class XMPEditWidget : public DConfigDlgWdg
 {
     Q_OBJECT
 

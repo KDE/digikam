@@ -25,21 +25,18 @@
 #ifndef SETUP_H
 #define SETUP_H
 
-// KDE includes
-
-#include <kpagedialog.h>
-
 // Local includes
 
 #include "digikam_config.h"
 #include "setuptemplate.h"
 #include "template.h"
 #include "searchtextbar.h"
+#include "dconfigdlg.h"
 
 namespace Digikam
 {
 
-class Setup : public KPageDialog
+class Setup : public DConfigDlg
 {
     Q_OBJECT
 

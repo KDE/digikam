@@ -73,14 +73,14 @@ public:
     {
     }
 
-    KPageWidgetItem*         page_editor;
-    KPageWidgetItem*         page_metadata;
-    KPageWidgetItem*         page_tooltip;
-    KPageWidgetItem*         page_raw;
-    KPageWidgetItem*         page_iofiles;
-    KPageWidgetItem*         page_slideshow;
-    KPageWidgetItem*         page_icc;
-    KPageWidgetItem*         page_misc;
+    DConfigDlgWdgItem*       page_editor;
+    DConfigDlgWdgItem*       page_metadata;
+    DConfigDlgWdgItem*       page_tooltip;
+    DConfigDlgWdgItem*       page_raw;
+    DConfigDlgWdgItem*       page_iofiles;
+    DConfigDlgWdgItem*       page_slideshow;
+    DConfigDlgWdgItem*       page_icc;
+    DConfigDlgWdgItem*       page_misc;
 
     SetupMetadata*           metadataPage;
     SetupToolTip*            toolTipPage;
@@ -94,17 +94,17 @@ public:
 
 public:
 
-    KPageWidgetItem* pageItem(Setup::Page page) const;
+    DConfigDlgWdgItem* pageItem(Setup::Page page) const;
 };
 
 Setup::Setup(QWidget* const parent, Setup::Page page)
-    : KPageDialog(parent),
+    : DConfigDlg(parent),
       d(new Private)
 {
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     button(QDialogButtonBox::Ok)->setDefault(true);
-    setFaceType(KPageDialog::List);
+    setFaceType(DConfigDlg::List);
     setModal(true);
 
     d->editorPage     = new Digikam::SetupEditor();
@@ -157,7 +157,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
-        KPageWidgetItem* const item = d->pageItem((Page)i);
+        DConfigDlgWdgItem* const item = d->pageItem((Page)i);
 
         if (!item)
         {
@@ -256,7 +256,7 @@ void Setup::showPage(Setup::Page page)
 
 Setup::Page Setup::activePageIndex()
 {
-    KPageWidgetItem* const cur = currentPage();
+    DConfigDlgWdgItem* const cur = currentPage();
 
     if (cur == d->page_tooltip)
     {
@@ -296,7 +296,7 @@ Setup::Page Setup::activePageIndex()
     return EditorPage;
 }
 
-KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
+DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 {
     switch (page)
     {
@@ -327,7 +327,7 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
     setup->showPage(MetadataPage);
     setup->setFaceType(Plain);
 
-    KPageWidgetItem* const cur  = setup->currentPage();
+    DConfigDlgWdgItem* const cur  = setup->currentPage();
 
     if (!cur)
         return false;
@@ -339,7 +339,7 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
 
     widget->setActiveTab((SetupMetadata::MetadataTab)tab);
 
-    bool success                = setup->KPageDialog::exec() == QDialog::Accepted;
+    bool success                = setup->DConfigDlg::exec() == QDialog::Accepted;
     delete setup;
     return success;
 }

@@ -83,7 +83,7 @@ public:
     QTabWidget*            tabWidget;
 
     QDialogButtonBox*      buttons;
-    
+
     EXIFEditWidget*        tabExif;
     IPTCEditWidget*        tabIptc;
     XMPEditWidget*         tabXmp;
@@ -97,7 +97,7 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 {
     setWindowTitle(i18n("Metadata Editor"));
     setModal(true);
-    
+
     ThumbnailLoadThread* const thread = ThumbnailLoadThread::defaultThread();
     thread->setThumbnailSize(48);
     thread->setPixmapRequested(false);

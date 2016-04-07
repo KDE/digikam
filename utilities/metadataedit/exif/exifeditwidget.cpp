@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-14
- * Description : a KPageWidget to edit EXIF metadata
+ * Description : a widget to edit EXIF metadata
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Victor Dodon <dodon dot victor at gmail dot com>
@@ -83,12 +83,12 @@ public:
     QByteArray           iptcData;
     QByteArray           xmpData;
 
-    KPageWidgetItem*     page_caption;
-    KPageWidgetItem*     page_datetime;
-    KPageWidgetItem*     page_lens;
-    KPageWidgetItem*     page_device;
-    KPageWidgetItem*     page_light;
-    KPageWidgetItem*     page_adjust;
+    DConfigDlgWdgItem*     page_caption;
+    DConfigDlgWdgItem*     page_datetime;
+    DConfigDlgWdgItem*     page_lens;
+    DConfigDlgWdgItem*     page_device;
+    DConfigDlgWdgItem*     page_light;
+    DConfigDlgWdgItem*     page_adjust;
 
     EXIFCaption*         captionPage;
     EXIFDateTime*        datetimePage;
@@ -101,7 +101,7 @@ public:
 };
 
 EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent),
+    : DConfigDlgWdg(parent),
       d(new Private)
 {
     d->dlg           = parent;
@@ -281,7 +281,7 @@ void EXIFEditWidget::showPage(int page)
 
 int EXIFEditWidget::activePageIndex() const
 {
-    KPageWidgetItem* const cur = currentPage();
+    DConfigDlgWdgItem* const cur = currentPage();
 
     if (cur == d->page_caption)  return 0;
     if (cur == d->page_datetime) return 1;

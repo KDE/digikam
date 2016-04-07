@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-14
- * Description : a KPageWidget to edit IPTC metadata
+ * Description : a DConfigDlgWdg to edit IPTC metadata
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Victor Dodon <dodon dot victor at gmail dot com>
@@ -91,15 +91,15 @@ public:
     QByteArray            exifData;
     QByteArray            iptcData;
 
-    KPageWidgetItem*     page_content;
-    KPageWidgetItem*     page_properties;
-    KPageWidgetItem*     page_subjects;
-    KPageWidgetItem*     page_keywords;
-    KPageWidgetItem*     page_categories;
-    KPageWidgetItem*     page_credits;
-    KPageWidgetItem*     page_status;
-    KPageWidgetItem*     page_origin;
-    KPageWidgetItem*     page_envelope;
+    DConfigDlgWdgItem*     page_content;
+    DConfigDlgWdgItem*     page_properties;
+    DConfigDlgWdgItem*     page_subjects;
+    DConfigDlgWdgItem*     page_keywords;
+    DConfigDlgWdgItem*     page_categories;
+    DConfigDlgWdgItem*     page_credits;
+    DConfigDlgWdgItem*     page_status;
+    DConfigDlgWdgItem*     page_origin;
+    DConfigDlgWdgItem*     page_envelope;
 
     IPTCContent*         contentPage;
     IPTCProperties*      propertiesPage;
@@ -115,7 +115,7 @@ public:
 };
 
 IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent),
+    : DConfigDlgWdg(parent),
       d(new Private)
 {
     d->dlg           = parent;
@@ -339,7 +339,7 @@ void IPTCEditWidget::showPage(int page)
 
 int IPTCEditWidget::activePageIndex() const
 {
-    KPageWidgetItem* const cur = currentPage();
+    DConfigDlgWdgItem* const cur = currentPage();
 
     if (cur == d->page_content)    return 0;
     if (cur == d->page_origin)     return 1;

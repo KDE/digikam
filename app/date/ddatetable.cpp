@@ -42,6 +42,10 @@
 #include <QApplication>
 #include <QMenu>
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
@@ -652,7 +656,7 @@ QSize DDateTable::sizeHint() const
     }
     else
     {
-        //qDebug() << "DDateTable::sizeHint: obscure failure - " << endl;
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "DDateTable::sizeHint: obscure failure - " << endl;
         return QSize(-1, -1);
     }
 }

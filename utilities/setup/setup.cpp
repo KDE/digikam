@@ -122,29 +122,29 @@ public:
     {
     }
 
-    KPageWidgetItem*         page_database;
-    KPageWidgetItem*         page_collections;
-    KPageWidgetItem*         page_albumView;
-    KPageWidgetItem*         page_tooltip;
-    KPageWidgetItem*         page_metadata;
-    KPageWidgetItem*         page_template;
-    KPageWidgetItem*         page_category;
-    KPageWidgetItem*         page_mime;
-    KPageWidgetItem*         page_lighttable;
-    KPageWidgetItem*         page_editor;
-    KPageWidgetItem*         page_raw;
-    KPageWidgetItem*         page_iofiles;
-    KPageWidgetItem*         page_slideshow;
-    KPageWidgetItem*         page_imagequalitysorter;
-    KPageWidgetItem*         page_icc;
-    KPageWidgetItem*         page_camera;
-    KPageWidgetItem*         page_misc;
+    DConfigDlgWdgItem*       page_database;
+    DConfigDlgWdgItem*       page_collections;
+    DConfigDlgWdgItem*       page_albumView;
+    DConfigDlgWdgItem*       page_tooltip;
+    DConfigDlgWdgItem*       page_metadata;
+    DConfigDlgWdgItem*       page_template;
+    DConfigDlgWdgItem*       page_category;
+    DConfigDlgWdgItem*       page_mime;
+    DConfigDlgWdgItem*       page_lighttable;
+    DConfigDlgWdgItem*       page_editor;
+    DConfigDlgWdgItem*       page_raw;
+    DConfigDlgWdgItem*       page_iofiles;
+    DConfigDlgWdgItem*       page_slideshow;
+    DConfigDlgWdgItem*       page_imagequalitysorter;
+    DConfigDlgWdgItem*       page_icc;
+    DConfigDlgWdgItem*       page_camera;
+    DConfigDlgWdgItem*       page_misc;
 
 #ifdef HAVE_KIPI
-    KPageWidgetItem*         page_plugins;
+    DConfigDlgWdgItem*       page_plugins;
 #endif /* HAVE_KIPI */
 
-    KPageWidgetItem*         page_versioning;
+    DConfigDlgWdgItem*       page_versioning;
 
     SetupDatabase*           databasePage;
     SetupCollections*        collectionsPage;
@@ -172,11 +172,11 @@ public:
 
 public:
 
-    KPageWidgetItem* pageItem(Setup::Page page) const;
+    DConfigDlgWdgItem* pageItem(Setup::Page page) const;
 };
 
 Setup::Setup(QWidget* const parent)
-    : KPageDialog(parent),
+    : DConfigDlg(parent),
       d(new Private)
 {
     setWindowTitle(i18n("Configure"));
@@ -313,7 +313,7 @@ Setup::Setup(QWidget* const parent)
 
     for (int i = 0; i != SetupPageEnumLast; ++i)
     {
-        KPageWidgetItem* const item = d->pageItem((Page)i);
+        DConfigDlgWdgItem* const item = d->pageItem((Page)i);
 
         if (!item)
         {
@@ -366,7 +366,7 @@ QSize Setup::sizeHint() const
     // that some important tabs get a scroll bar, although the dialog could be larger
     // on a normal display (QScrollArea size hint does not take widget into account)
     // Adjust size hint here so that certain selected tabs are display full per default.
-    QSize hint          = KPageDialog::sizeHint();
+    QSize hint          = DConfigDlg::sizeHint();
     int maxHintHeight   = 0;
     int maxWidgetHeight = 0;
 
@@ -383,7 +383,7 @@ QSize Setup::sizeHint() const
             page == RawPage         ||
             page == MiscellaneousPage)
         {
-            KPageWidgetItem* const item   = d->pageItem((Page)page);
+            DConfigDlgWdgItem* const item   = d->pageItem((Page)page);
 
             if (!item)
             {
@@ -420,7 +420,7 @@ bool Setup::execDialog(QWidget* const parent, Page page)
 {
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
-    bool success          = (setup->KPageDialog::exec() == QDialog::Accepted);
+    bool success          = (setup->DConfigDlg::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -435,7 +435,7 @@ bool Setup::execSinglePage(QWidget* const parent, Page page)
     QPointer<Setup> setup = new Setup(parent);
     setup->showPage(page);
     setup->setFaceType(Plain);
-    bool success          = (setup->KPageDialog::exec() == QDialog::Accepted);
+    bool success          = (setup->DConfigDlg::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -446,7 +446,7 @@ bool Setup::execTemplateEditor(QWidget* const parent, const Template& t)
     setup->showPage(TemplatePage);
     setup->setFaceType(Plain);
     setup->setTemplate(t);
-    bool success          = (setup->KPageDialog::exec() == QDialog::Accepted);
+    bool success          = (setup->DConfigDlg::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -457,7 +457,7 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
     setup->showPage(MetadataPage);
     setup->setFaceType(Plain);
 
-    KPageWidgetItem* const cur  = setup->currentPage();
+    DConfigDlgWdgItem* const cur  = setup->currentPage();
     if (!cur) return false;
 
     SetupMetadata* const widget = dynamic_cast<SetupMetadata*>(cur->widget());
@@ -466,7 +466,7 @@ bool Setup::execMetadataFilters(QWidget* const parent, int tab)
     widget->setActiveMainTab(SetupMetadata::Display);
     widget->setActiveSubTab(tab);
 
-    bool success                = (setup->KPageDialog::exec() == QDialog::Accepted);
+    bool success                = (setup->DConfigDlg::exec() == QDialog::Accepted);
     delete setup;
     return success;
 }
@@ -533,7 +533,7 @@ void Setup::slotOkClicked()
 
 void Setup::showPage(Setup::Page page)
 {
-    KPageWidgetItem* item = 0;
+    DConfigDlgWdgItem* item = 0;
 
     if (page == LastPageUsed)
     {
@@ -557,7 +557,7 @@ void Setup::showPage(Setup::Page page)
 
 Setup::Page Setup::activePageIndex() const
 {
-    KPageWidgetItem* const cur = currentPage();
+    DConfigDlgWdgItem* const cur = currentPage();
 
     if (cur == d->page_collections)
     {
@@ -654,7 +654,7 @@ Setup::Page Setup::activePageIndex() const
     return DatabasePage;
 }
 
-KPageWidgetItem* Setup::Private::pageItem(Setup::Page page) const
+DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 {
     switch (page)
     {

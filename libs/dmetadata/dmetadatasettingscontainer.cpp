@@ -102,14 +102,14 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
         if (!group.hasGroup(QLatin1String("read") + str + QLatin1String("Namespaces")))
         {
             valid = false;
-            qDebug() << "Does not contain " << str << " Namespace";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Does not contain " << str << " Namespace";
             break;
         }
 
         if (!group.hasGroup(QLatin1String("write") + str + QLatin1String("Namespaces")))
         {
             valid = false;
-            qDebug() << "Does not contain " << str << " Namespace";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Does not contain " << str << " Namespace";
             break;
         }
     }

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-10-11
- * Description : a KPageWidget to edit XMP metadata
+ * Description : a DConfigDlgWdg to edit XMP metadata
  *
  * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Victor Dodon <dodon dot victor at gmail dot com>
@@ -89,14 +89,14 @@ public:
     QByteArray            iptcData;
     QByteArray            xmpData;
 
-    KPageWidgetItem*      page_content;
-    KPageWidgetItem*      page_origin;
-    KPageWidgetItem*      page_subjects;
-    KPageWidgetItem*      page_keywords;
-    KPageWidgetItem*      page_categories;
-    KPageWidgetItem*      page_credits;
-    KPageWidgetItem*      page_status;
-    KPageWidgetItem*      page_properties;
+    DConfigDlgWdgItem*      page_content;
+    DConfigDlgWdgItem*      page_origin;
+    DConfigDlgWdgItem*      page_subjects;
+    DConfigDlgWdgItem*      page_keywords;
+    DConfigDlgWdgItem*      page_categories;
+    DConfigDlgWdgItem*      page_credits;
+    DConfigDlgWdgItem*      page_status;
+    DConfigDlgWdgItem*      page_properties;
 
     QList<QUrl>           urls;
 
@@ -115,7 +115,7 @@ public:
 };
 
 XMPEditWidget::XMPEditWidget(MetadataEditDialog* const parent)
-    : KPageWidget(parent),
+    : DConfigDlgWdg(parent),
       d(new Private)
 {
     d->dlg           = parent;
@@ -329,7 +329,7 @@ void XMPEditWidget::showPage(int page)
 
 int XMPEditWidget::activePageIndex() const
 {
-    KPageWidgetItem* const cur = currentPage();
+    DConfigDlgWdgItem* const cur = currentPage();
 
     if (cur == d->page_content)    return 0;
     if (cur == d->page_origin)     return 1;

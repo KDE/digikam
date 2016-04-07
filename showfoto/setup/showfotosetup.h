@@ -24,14 +24,16 @@
 #ifndef SHOWFOTOSETUP_H
 #define SHOWFOTOSETUP_H
 
-// KDE includes
+// Local includes
 
-#include <kpagedialog.h>
+#include "dconfigdlg.h"
+
+using namespace Digikam;
 
 namespace ShowFoto
 {
 
-class Setup : public KPageDialog
+class Setup : public DConfigDlg
 {
     Q_OBJECT
 

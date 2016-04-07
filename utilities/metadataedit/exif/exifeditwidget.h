@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-03-14
- * Description : a KPageWidget to edit EXIF metadata
+ * Description : a Widget to edit EXIF metadata
  *
  * Copyright (C) 2006-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011 by Victor Dodon <dodon dot victor at gmail dot com>
@@ -24,16 +24,16 @@
 #ifndef EXIFEDITWIDGET_H
 #define EXIFEDITWIDGET_H
 
-// KDE includes
+// Local includes
 
-#include <kpagewidget.h>
+#include "dconfigdlgwidgets.h"
 
 namespace Digikam
 {
 
 class MetadataEditDialog;
 
-class EXIFEditWidget : public KPageWidget
+class EXIFEditWidget : public DConfigDlgWdg
 {
     Q_OBJECT
 

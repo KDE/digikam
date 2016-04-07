@@ -18,6 +18,11 @@ set(libdialogs_SRCS
     infodlg.cpp
     libsinfodlg.cpp
     rawcameradlg.cpp
+    dconfigdlg.cpp
+    dconfigdlgmodels.cpp
+    dconfigdlgview.cpp
+    dconfigdlgview_p.cpp
+    dconfigdlgwidgets.cpp
 )
 
 set(libdeletedialog_SRCS
