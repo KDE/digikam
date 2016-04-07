@@ -47,10 +47,6 @@
 namespace Digikam
 {
 
-const int ImageCurves::NUM_POINTS       = 17;
-const int ImageCurves::NUM_CHANNELS     = 5;
-const int ImageCurves::MULTIPLIER_16BIT = 255;
-
 class ImageCurves::Private : public QSharedData
 {
 
