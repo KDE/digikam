@@ -134,3 +134,23 @@ target_link_libraries(testdimgloader
 
                       ${OpenCV_LIBRARIES}
 )
+
+#------------------------------------------------------------------------
+
+set(testequalizefilter_SRCS testequalizefilter.cpp)
+add_executable(testequalizefilter ${testequalizefilter_SRCS})
+ecm_mark_nongui_executable(testequalizefilter)
+
+target_link_libraries(testequalizefilter
+
+                      digikamcore
+                      libdng
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::I18n
+                      KF5::XmlGui
+
+                      ${OpenCV_LIBRARIES}
+)
