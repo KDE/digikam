@@ -328,7 +328,7 @@ bool DBinaryIface::recheckDirectories()
 QString DBinaryIface::goodBaseName(const QString& b)
 {
 #ifdef Q_OS_WIN
-    return b + ".exe";
+    return b + QLatin1String(".exe");
 #else
     return b;
 #endif // Q_OS_WIN
