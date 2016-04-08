@@ -245,7 +245,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif
 
 #ifdef Q_OS_HPUX
-    data->platform = QString("HPUX");
+    data->platform = QLatin1String("HPUX");
 
     if((pagesize = sysconf(_SC_PAGESIZE)) == -1)
     {
@@ -275,7 +275,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // Q_OS_HPUX
 
 #ifdef Q_OS_SOLARIS
-    data->platform = QString("SOLARIS");
+    data->platform = QLatin1String("SOLARIS");
 
     if((pagesize = sysconf(_SC_PAGESIZE)) == -1)
     {
@@ -361,7 +361,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_LINUX) || defined(Q_OS_CYGWIN)
 
 #if defined(Q_OS_FREEBSD)
-    data->platform = QString("FREEBSD");
+    data->platform = QLatin1String("FREEBSD");
 
     /* Returns bytes */
     mib[0] = CTL_HW;
@@ -418,7 +418,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_FREEBSD)
 
 #if defined(Q_OS_NETBSD)
-    data->platform = QString("NETBSD");
+    data->platform = QLatin1String("NETBSD");
 
     if ((uvm = sg_get_uvmexp()) == NULL)
     {
@@ -434,7 +434,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_NETBSD)
 
 #if defined(Q_OS_OPENBSD)
-    data->platform = QString("OPENBSD");
+    data->platform = QLatin1String("OPENBSD");
 
     /* The code in this section is based on the code in the OpenBSD
      * top utility, located at src/usr.bin/top/machine.c in the
@@ -488,7 +488,7 @@ int get_mem_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #endif // defined(Q_OS_OPENBSD)
 
 #ifdef Q_OS_WIN
-    data->platform = QString("WINDOWS");
+    data->platform = QLatin1String("WINDOWS");
 
     memstats.dwLength = sizeof(memstats);
 
