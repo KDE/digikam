@@ -128,7 +128,7 @@ void CopyJob::run()
                 }
                 else if (!srcDir.removeRecursively())
                 {
-                    emit error(i18n("Could not move folder %1 to album %2, "
+                    emit error(i18n("Could not move folder %1 to album %2. "
                                     "The folder %1 was copied as well to album %2",
                                     srcDir.path(), dstDir.path()));
                 }
