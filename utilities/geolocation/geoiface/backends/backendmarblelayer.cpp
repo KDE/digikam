@@ -30,7 +30,7 @@
 
 #include <marble/GeoPainter.h>
 
-// local includes
+// Local includes
 
 #include "backendmarble.h"
 

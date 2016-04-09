@@ -2044,7 +2044,7 @@ QString EditorWindow::selectValidSavingFormat(const QUrl& targetUrl)
 
     QStringList validTypes = all.split(QLatin1String("*."), QString::SkipEmptyParts);
     validTypes.replaceInStrings(QLatin1String(" "), QString());
-    
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Writable formats: " << validTypes;
 
     // determine the format to use the format provided in the filename

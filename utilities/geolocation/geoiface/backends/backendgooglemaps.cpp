@@ -42,7 +42,7 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "htmlwidget.h"
 #include "mapwidget.h"

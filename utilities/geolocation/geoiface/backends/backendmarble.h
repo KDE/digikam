@@ -29,7 +29,7 @@
 #ifndef BACKEND_MAP_MARBLE_H
 #define BACKEND_MAP_MARBLE_H
 
-// local includes
+// Local includes
 
 #include "mapbackend.h"
 #include "tracks.h"

@@ -31,13 +31,13 @@
 
 // Qt includes
 
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 
 // Marble Widget includes
 
 #include <marble/GeoDataLatLonBox.h>
 
-// local includes
+// Local includes
 
 #include "geoiface_common.h"
 

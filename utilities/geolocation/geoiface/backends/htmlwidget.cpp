@@ -35,7 +35,7 @@
 #include <QWebView>
 #include <QWebFrame>
 
-// local includes
+// Local includes
 
 #include "geoiface_common.h"
 #include "geoiface_types.h"
@@ -237,9 +237,9 @@ void HTMLWidget::mouseMoveEvent(QMouseEvent *e)
     QWebView::mouseMoveEvent(e);
 }
 
-void HTMLWidget::slotScanForJSMessages(QString message)
+void HTMLWidget::slotScanForJSMessages(const QString& message)
 {
-    if (message!=QLatin1String("(event)"))
+    if (message != QLatin1String("(event)"))
         return;
 
 //    qCDebug(DIGIKAM_GEOIFACE_LOG) << message;
@@ -249,7 +249,7 @@ void HTMLWidget::slotScanForJSMessages(QString message)
     if (eventBufferString.isEmpty())
         return;
 
-    const QStringList events = eventBufferString.split(QLatin1Char( '|' ));
+    const QStringList events = eventBufferString.split(QLatin1Char('|'));
 
     emit(signalHTMLEvents(events));
 }
@@ -280,10 +280,10 @@ bool HTMLWidget::runScript2Coordinates(const QString& scriptCode, GeoCoordinates
 
 bool HTMLWidget::eventFilter(QObject* object, QEvent* event)
 {
-    if (d->parent && object==d->parent)
+    if (d->parent && object == d->parent)
     {
 
-        if (event->type()==QEvent::Resize)
+        if (event->type() == QEvent::Resize)
         {
             QResizeEvent* const resizeEvent = dynamic_cast<QResizeEvent*>(event);
 

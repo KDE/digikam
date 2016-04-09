@@ -29,11 +29,11 @@
 #ifndef HTML_WIDGET_H
 #define HTML_WIDGET_H
 
-// KDE includes
+// Qt includes
 
 #include <QWebView>
 
-// local includes
+// Local includes
 
 #include "geoiface_types.h"
 #include "geocoordinates.h"
@@ -66,12 +66,12 @@ protected:
     bool eventFilter(QObject* object, QEvent* event);
     void mousePressEvent(QMouseEvent* e);
     void mouseReleaseEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent* e);
 
 protected Q_SLOTS:
 
     void slotHTMLCompleted(bool ok);
-    void slotScanForJSMessages(QString message);
+    void slotScanForJSMessages(const QString& message);
     void progress(int progress);
 
 Q_SIGNALS:

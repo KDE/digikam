@@ -29,7 +29,7 @@
 #ifndef BACKEND_MAP_GOOGLEMAPS_H
 #define BACKEND_MAP_GOOGLEMAPS_H
 
-// local includes
+// Local includes
 
 #include "mapbackend.h"
 #include "tracks.h"
@@ -126,7 +126,7 @@ private:
     void updateZoomMinMaxCache();
     static void deleteInfoFunction(GeoIfaceInternalWidgetInfo* const info);
     void addPointsToTrack(const quint64 trackId, TrackManager::TrackPoint::List const& track, const int firstPoint, const int nPoints);
-  
+
 private:
 
     class Private;

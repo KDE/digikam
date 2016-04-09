@@ -50,7 +50,7 @@
 #include <marble/MarbleWidget.h>
 #include <marble/ViewportParams.h>
 
-// local includes
+// Local includes
 
 #ifdef GEOIFACE_MARBLE_ADD_LAYER
 #include "backendmarblelayer.h"
