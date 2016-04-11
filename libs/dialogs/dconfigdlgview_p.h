@@ -188,29 +188,29 @@ class DConfigDlgTabbedView : public QAbstractItemView
 
 public:
 
-    DConfigDlgTabbedView(QWidget *parent = 0);
+    DConfigDlgTabbedView(QWidget* parent = 0);
     virtual ~DConfigDlgTabbedView();
 
-    void setModel(QAbstractItemModel *model)                                 Q_DECL_OVERRIDE;
-    QModelIndex indexAt(const QPoint& point) const                           Q_DECL_OVERRIDE;
-    void scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible) Q_DECL_OVERRIDE;
-    QRect visualRect(const QModelIndex& index) const                         Q_DECL_OVERRIDE;
-    QSize minimumSizeHint() const                                            Q_DECL_OVERRIDE;
+    void setModel(QAbstractItemModel* model)                                            Q_DECL_OVERRIDE;
+    QModelIndex indexAt(const QPoint& point) const                                      Q_DECL_OVERRIDE;
+    void scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible)            Q_DECL_OVERRIDE;
+    QRect visualRect(const QModelIndex& index) const                                    Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const                                                       Q_DECL_OVERRIDE;
 
 protected:
 
-    QModelIndex moveCursor(QAbstractItemView::CursorAction, Qt::KeyboardModifiers) Q_DECL_OVERRIDE;
-    int horizontalOffset() const                                                   Q_DECL_OVERRIDE;
-    int verticalOffset() const                                                     Q_DECL_OVERRIDE;
-    bool isIndexHidden(const QModelIndex&) const                                   Q_DECL_OVERRIDE;
-    void setSelection(const QRect& , QFlags<QItemSelectionModel::SelectionFlag>)   Q_DECL_OVERRIDE;
-    QRegion visualRegionForSelection(const QItemSelection&) const                  Q_DECL_OVERRIDE;
+    QModelIndex moveCursor(QAbstractItemView::CursorAction, Qt::KeyboardModifiers)      Q_DECL_OVERRIDE;
+    int horizontalOffset() const                                                        Q_DECL_OVERRIDE;
+    int verticalOffset() const                                                          Q_DECL_OVERRIDE;
+    bool isIndexHidden(const QModelIndex&) const                                        Q_DECL_OVERRIDE;
+    void setSelection(const QRect& , QFlags<QItemSelectionModel::SelectionFlag>)        Q_DECL_OVERRIDE;
+    QRegion visualRegionForSelection(const QItemSelection&) const                       Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
 
     void currentPageChanged(int);
     void layoutChanged();
-    void dataChanged(const QModelIndex& , const QModelIndex& , const QVector<int>& roles) Q_DECL_OVERRIDE;
+    void dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>& roles) Q_DECL_OVERRIDE;
 
 private:
 
@@ -225,7 +225,7 @@ class DConfigDlgListViewDelegate : public QAbstractItemDelegate
 
 public:
 
-    DConfigDlgListViewDelegate(QObject *parent = 0);
+    DConfigDlgListViewDelegate(QObject* parent = 0);
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const Q_DECL_OVERRIDE;
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const                Q_DECL_OVERRIDE;

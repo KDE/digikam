@@ -105,7 +105,7 @@ DConfigDlgWdgItem::DConfigDlgWdgItem(QWidget* widget)
     }
 }
 
-DConfigDlgWdgItem::DConfigDlgWdgItem(QWidget *widget, const QString &name)
+DConfigDlgWdgItem::DConfigDlgWdgItem(QWidget* widget, const QString& name)
     : QObject(0),
       d(new Private)
 {
@@ -150,7 +150,7 @@ QWidget* DConfigDlgWdgItem::widget() const
     return d->widget;
 }
 
-void DConfigDlgWdgItem::setName(const QString &name)
+void DConfigDlgWdgItem::setName(const QString& name)
 {
     d->name = name;
 
@@ -162,7 +162,7 @@ QString DConfigDlgWdgItem::name() const
     return d->name;
 }
 
-void DConfigDlgWdgItem::setHeader(const QString &header)
+void DConfigDlgWdgItem::setHeader(const QString& header)
 {
     d->header = header;
 
@@ -174,7 +174,7 @@ QString DConfigDlgWdgItem::header() const
     return d->header;
 }
 
-void DConfigDlgWdgItem::setIcon(const QIcon &icon)
+void DConfigDlgWdgItem::setIcon(const QIcon& icon)
 {
     d->icon = icon;
 
@@ -409,7 +409,7 @@ bool DConfigDlgWdgModel::setData(const QModelIndex& index, const QVariant& value
     return true;
 }
 
-Qt::ItemFlags DConfigDlgWdgModel::flags(const QModelIndex &index) const
+Qt::ItemFlags DConfigDlgWdgModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
@@ -433,7 +433,7 @@ Qt::ItemFlags DConfigDlgWdgModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-QModelIndex DConfigDlgWdgModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex DConfigDlgWdgModel::index(int row, int column, const QModelIndex& parent) const
 {
     PageItem* parentItem = 0;
 
@@ -458,7 +458,7 @@ QModelIndex DConfigDlgWdgModel::index(int row, int column, const QModelIndex &pa
     }
 }
 
-QModelIndex DConfigDlgWdgModel::parent(const QModelIndex &index) const
+QModelIndex DConfigDlgWdgModel::parent(const QModelIndex& index) const
 {
     if (!index.isValid())
     {
@@ -478,7 +478,7 @@ QModelIndex DConfigDlgWdgModel::parent(const QModelIndex &index) const
     }
 }
 
-int DConfigDlgWdgModel::rowCount(const QModelIndex &parent) const
+int DConfigDlgWdgModel::rowCount(const QModelIndex& parent) const
 {
     PageItem* parentItem = 0;
 
@@ -536,7 +536,7 @@ DConfigDlgWdgItem* DConfigDlgWdgModel::insertPage(DConfigDlgWdgItem* before, QWi
     return item;
 }
 
-void DConfigDlgWdgModel::insertPage(DConfigDlgWdgItem *before, DConfigDlgWdgItem *item)
+void DConfigDlgWdgModel::insertPage(DConfigDlgWdgItem* before, DConfigDlgWdgItem* item)
 {
     PageItem* const beforePageItem = d_func()->rootItem->findChild(before);
 
@@ -584,7 +584,7 @@ DConfigDlgWdgItem* DConfigDlgWdgModel::addSubPage(DConfigDlgWdgItem* parent, QWi
     return item;
 }
 
-void DConfigDlgWdgModel::addSubPage(DConfigDlgWdgItem *parent, DConfigDlgWdgItem *item)
+void DConfigDlgWdgModel::addSubPage(DConfigDlgWdgItem* parent, DConfigDlgWdgItem* item)
 {
     PageItem* const parentPageItem = d_func()->rootItem->findChild(parent);
 
@@ -667,7 +667,7 @@ void DConfigDlgWdgModel::removePage(DConfigDlgWdgItem* item)
     emit layoutChanged();
 }
 
-DConfigDlgWdgItem* DConfigDlgWdgModel::item(const QModelIndex &index) const
+DConfigDlgWdgItem* DConfigDlgWdgModel::item(const QModelIndex& index) const
 {
     if (!index.isValid())
     {

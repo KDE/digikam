@@ -40,7 +40,7 @@
 namespace Digikam
 {
 
-DConfigDlgWdgPrivate::DConfigDlgWdgPrivate(DConfigDlgWdg* q)
+DConfigDlgWdgPrivate::DConfigDlgWdgPrivate(DConfigDlgWdg* const q)
     : DConfigDlgViewPrivate(q)
 {
 }

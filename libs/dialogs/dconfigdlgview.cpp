@@ -253,7 +253,7 @@ void DConfigDlgViewPrivate::_k_modelChanged()
     /**
      * Set the stack to the minimum size of the largest widget.
      */
-    QSize size = stack->size();
+    QSize size                    = stack->size();
     const QList<QWidget*> widgets = collectPages();
 
     for (int i = 0; i < widgets.count(); ++i)
@@ -271,7 +271,7 @@ void DConfigDlgViewPrivate::_k_modelChanged()
     updateSelection();
 }
 
-void DConfigDlgViewPrivate::_k_pageSelected(const QItemSelection &index, const QItemSelection &previous)
+void DConfigDlgViewPrivate::_k_pageSelected(const QItemSelection& index, const QItemSelection& previous)
 {
     if (!model)
     {
@@ -409,7 +409,7 @@ DConfigDlgView::~DConfigDlgView()
     delete d_ptr;
 }
 
-void DConfigDlgView::setModel(QAbstractItemModel *model)
+void DConfigDlgView::setModel(QAbstractItemModel* model)
 {
     Q_D(DConfigDlgView);
 

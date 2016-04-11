@@ -94,8 +94,6 @@ protected:
         rootItem = 0;
     }
 
-    PageItem* rootItem = 0;
-
     void _k_itemChanged()
     {
         Q_Q(DConfigDlgWdgModel);
@@ -128,6 +126,10 @@ protected:
 
         emit q->toggled(item, checked);
     }
+
+protected:
+
+    PageItem* rootItem = 0;
 };
 
 }  // namespace Digikam

@@ -82,7 +82,7 @@ bool DConfigDlgPlainView::isIndexHidden(const QModelIndex&) const
     return false;
 }
 
-void DConfigDlgPlainView::setSelection(const QRect& , QFlags<QItemSelectionModel::SelectionFlag>)
+void DConfigDlgPlainView::setSelection(const QRect&, QFlags<QItemSelectionModel::SelectionFlag>)
 {
 }
 
@@ -111,15 +111,16 @@ DConfigDlgListView::~DConfigDlgListView()
 {
 }
 
-void DConfigDlgListView::setModel(QAbstractItemModel *model)
+void DConfigDlgListView::setModel(QAbstractItemModel* model)
 {
-    /*
-      DConfigDlgListViewProxy *proxy = new DConfigDlgListViewProxy( this );
+/*
+      DConfigDlgListViewProxy* const proxy = new DConfigDlgListViewProxy( this );
       proxy->setSourceModel( model );
       proxy->rebuildMap();
 
-      connect( model, SIGNAL(layoutChanged()), proxy, SLOT(rebuildMap()) );
-    */
+      connect(model, SIGNAL(layoutChanged()),
+              proxy, SLOT(rebuildMap()) );
+*/
     connect(model, &QAbstractItemModel::layoutChanged,
             this, &DConfigDlgListView::updateWidth);
 
@@ -159,7 +160,7 @@ DConfigDlgTreeView::DConfigDlgTreeView(QWidget* parent)
     header()->hide();
 }
 
-void DConfigDlgTreeView::setModel(QAbstractItemModel *model)
+void DConfigDlgTreeView::setModel(QAbstractItemModel* model)
 {
     connect(model, &QAbstractItemModel::layoutChanged,
             this, &DConfigDlgTreeView::updateWidth);
@@ -249,7 +250,7 @@ DConfigDlgTabbedView::~DConfigDlgTabbedView()
     }
 }
 
-void DConfigDlgTabbedView::setModel(QAbstractItemModel *model)
+void DConfigDlgTabbedView::setModel(QAbstractItemModel* model)
 {
     QAbstractItemView::setModel(model);
 
@@ -371,7 +372,7 @@ void DConfigDlgTabbedView::layoutChanged()
     mTabWidget->setCurrentIndex(pos);
 }
 
-void DConfigDlgTabbedView::dataChanged(const QModelIndex& index, const QModelIndex& , const QVector<int>& roles)
+void DConfigDlgTabbedView::dataChanged(const QModelIndex& index, const QModelIndex&, const QVector<int>& roles)
 {
     if (!index.isValid())
     {

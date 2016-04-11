@@ -219,8 +219,8 @@ protected:
      * \param widget The DConfigDlgWdg object will be reparented to this object, so you can create
      * it without parent and you are not allowed to delete it.
      */
-    DConfigDlg(DConfigDlgWdg *widget, QWidget *parent, Qt::WindowFlags flags = 0);
-    DConfigDlg(DConfigDlgPrivate &dd, DConfigDlgWdg *widget, QWidget *parent, Qt::WindowFlags flags = 0);
+    DConfigDlg(DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags = 0);
+    DConfigDlg(DConfigDlgPrivate& dd, DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags = 0);
 
     /**
      * Returns the page widget of the dialog or 0 if no page widget is set.

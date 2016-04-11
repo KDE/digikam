@@ -42,7 +42,7 @@ class DConfigDlgPrivate
 
 protected:
 
-    DConfigDlgPrivate(DConfigDlg* parent)
+    DConfigDlgPrivate(DConfigDlg* const parent)
         : q_ptr(parent),
           mPageWidget(0),
           mButtonBox(0)
@@ -52,10 +52,6 @@ protected:
     virtual ~DConfigDlgPrivate()
     {
     }
-
-    DConfigDlg* const q_ptr;
-    DConfigDlgWdg*    mPageWidget;
-    QDialogButtonBox* mButtonBox;
 
     void init()
     {
@@ -91,6 +87,12 @@ protected:
             layout->addWidget(mButtonBox);
         }
     }
+
+protected:
+
+    DConfigDlg* const q_ptr;
+    DConfigDlgWdg*    mPageWidget;
+    QDialogButtonBox* mButtonBox;
 };
 
 // ------------------------------------------------------------------------
@@ -110,7 +112,7 @@ DConfigDlg::DConfigDlg(QWidget* parent, Qt::WindowFlags flags)
     d->init();
 }
 
-DConfigDlg::DConfigDlg(DConfigDlgWdg *widget, QWidget *parent, Qt::WindowFlags flags)
+DConfigDlg::DConfigDlg(DConfigDlgWdg* widget, QWidget* parent, Qt::WindowFlags flags)
     : QDialog(parent, flags),
       d_ptr(new DConfigDlgPrivate(this))
 {
@@ -157,12 +159,12 @@ void DConfigDlg::setFaceType(FaceType faceType)
     d_func()->mPageWidget->setFaceType(static_cast<DConfigDlgWdg::FaceType>(faceType));
 }
 
-DConfigDlgWdgItem* DConfigDlg::addPage(QWidget *widget, const QString &name)
+DConfigDlgWdgItem* DConfigDlg::addPage(QWidget* widget, const QString& name)
 {
     return d_func()->mPageWidget->addPage(widget, name);
 }
 
-void DConfigDlg::addPage(DConfigDlgWdgItem *item)
+void DConfigDlg::addPage(DConfigDlgWdgItem* item)
 {
     d_func()->mPageWidget->addPage(item);
 }
