@@ -49,13 +49,12 @@ int main(int argc, char* argv[])
     PresentationMngr mngr(&app);
 
     const QStringList args = parser.positionalArguments();
-    int fileNumber         = 1;
+    int fileNumber         = 0;
 
     for (auto& arg : args)
     {
         mngr.addFile(QUrl::fromLocalFile(arg),
-                     QString::fromLatin1("Test file %1").arg(fileNumber));
-        fileNumber++;
+                     QString::fromLatin1("File %1").arg(++fileNumber));
     }
 
     mngr.showConfigDialog();

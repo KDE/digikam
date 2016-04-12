@@ -1098,15 +1098,16 @@ void ShowFoto::presentation()
     Digikam::PresentationMngr* const mngr = new Digikam::PresentationMngr(this);
     Digikam::DMetadata meta;
 
+    QList<QUrl> urlList = d->thumbBar->urls();
     int i               = 0;
-    float cnt           = d->thumbBar->urls().count();
+    float cnt           = urlList.count();
     m_cancelSlideShow   = false;
 
     m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
                                  i18n("Preparing presentation. Please wait..."));
 
-    for (QList<QUrl>::ConstIterator it = d->thumbBar->urls().constBegin() ;
-         !m_cancelSlideShow && (it != d->thumbBar->urls().constEnd()) ; ++it)
+    for (QList<QUrl>::ConstIterator it = urlList.constBegin() ;
+         !m_cancelSlideShow && (it != urlList.constEnd()) ; ++it)
     {
         meta.load((*it).toLocalFile());
         mngr->addFile(*it, meta.getImageComments()[QLatin1String("x-default")].caption);
