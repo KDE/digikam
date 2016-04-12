@@ -126,8 +126,6 @@ void PresentationMainPage::readSettings()
     m_printCommentsCheckBox->setChecked(d->sharedData->printFileComments);
     m_loopCheckBox->setChecked(d->sharedData->loop);
     m_shuffleCheckBox->setChecked(d->sharedData->shuffle);
-    m_printCommentsCheckBox->setEnabled(false);
-    m_printCommentsCheckBox->setChecked(false);
 
     m_delaySpinBox->setValue(d->sharedData->useMilliseconds ? d->sharedData->delay
                                                             : d->sharedData->delay / 1000 );

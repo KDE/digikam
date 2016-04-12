@@ -28,6 +28,7 @@
 #include <QString>
 #include <QFont>
 #include <QUrl>
+#include <QMap>
 
 // Local includes
 
@@ -90,6 +91,7 @@ public:
     uint                     bgOpacity;
     int                      commentsLinesLength;
     QFont*                   captionFont;
+    QMap<QUrl, QString>      commentsMap;
 
     // --> Soundtrack page
     bool                     soundtrackLoop;

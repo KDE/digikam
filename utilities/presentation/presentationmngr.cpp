@@ -78,9 +78,10 @@ PresentationMngr::~PresentationMngr()
     delete m_sharedData;
 }
 
-void PresentationMngr::setItems(const QList<QUrl>& urls)
+void PresentationMngr::addFile(const QUrl& url, const QString& comment)
 {
-    m_sharedData->urlList = urls;
+    m_sharedData->commentsMap.insert(url, comment);
+    m_sharedData->urlList << url;
 }
 
 void PresentationMngr::showConfigDialog()
@@ -100,24 +101,12 @@ void PresentationMngr::slotSlideShow()
     bool opengl      = grp.readEntry("OpenGL",  false);
     bool shuffle     = grp.readEntry("Shuffle", false);
     bool wantKB      = grp.readEntry("Effect Name (OpenGL)") == QString::fromLatin1("Ken Burns");
-    QList<QUrl> urls = m_sharedData->urlList;
 
-    if (urls.isEmpty())
+    if (m_sharedData->urlList.isEmpty())
     {
         QMessageBox::information(QApplication::activeWindow(), QString(), i18n("There are no images to show."));
         return;
     }
-
-    QStringList fileList;
-    QStringList commentsList;
-
-    for (QList<QUrl>::ConstIterator urlIt = urls.constBegin(); urlIt != urls.constEnd(); ++urlIt)
-    {
-        fileList.append((*urlIt).toLocalFile());
-        commentsList.append(QString());
-    }
-
-    urls.clear();
 
     if (shuffle)
     {
@@ -125,30 +114,23 @@ void PresentationMngr::slotSlideShow()
         gettimeofday(&tv, 0);
         srand(tv.tv_sec);
 
-        QStringList::iterator it    = fileList.begin();
-        QStringList::iterator it1;
+        QList<QUrl>::iterator it = m_sharedData->urlList.begin();
+        QList<QUrl>::iterator it1;
 
-        QStringList::iterator itcom = commentsList.begin();
-        QStringList::iterator itcom1;
-
-        for (uint i = 0; i < (uint) fileList.size(); ++i)
+        for (uint i = 0; i < (uint) m_sharedData->urlList.size(); ++i)
         {
-            int inc = (int) (float(fileList.count()) * qrand() / (RAND_MAX + 1.0));
+            int inc = (int) (float(m_sharedData->urlList.count()) * qrand() / (RAND_MAX + 1.0));
 
-            it1  = fileList.begin();
+            it1  = m_sharedData->urlList.begin();
             it1 += inc;
 
-            itcom1  = commentsList.begin();
-            itcom1 += inc;
-
             qSwap(*(it++), *(it1));
-            qSwap(*(itcom++), *(itcom1));
         }
     }
 
     if (!opengl)
     {
-        PresentationWidget* const slide = new PresentationWidget(fileList, commentsList, m_sharedData);
+        PresentationWidget* const slide = new PresentationWidget(m_sharedData);
         slide->show();
     }
     else
@@ -163,12 +145,12 @@ void PresentationMngr::slotSlideShow()
         {
             if (wantKB)
             {
-                PresentationKB* const slide = new PresentationKB(fileList, commentsList, m_sharedData);
+                PresentationKB* const slide = new PresentationKB(m_sharedData);
                 slide->show();
             }
             else
             {
-                PresentationGL* const slide = new PresentationGL(fileList, commentsList, m_sharedData);
+                PresentationGL* const slide = new PresentationGL(m_sharedData);
                 slide->show();
             }
         }

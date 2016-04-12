@@ -46,17 +46,18 @@ int main(int argc, char* argv[])
     parser.process(app);
 
     MetaEngine::initializeExiv2();
+    PresentationMngr mngr(&app);
 
-    QList<QUrl> urlList;
     const QStringList args = parser.positionalArguments();
+    int fileNumber         = 1;
 
     for (auto& arg : args)
     {
-        urlList.append(QUrl::fromLocalFile(arg));
+        mngr.addFile(QUrl::fromLocalFile(arg),
+                     QString::fromLatin1("Test file %1").arg(fileNumber));
+        fileNumber++;
     }
 
-    PresentationMngr mngr(&app);
-    mngr.setItems(urlList);
     mngr.showConfigDialog();
     app.exec();
 

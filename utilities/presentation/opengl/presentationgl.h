@@ -53,9 +53,7 @@ class PresentationGL : public QGLWidget
 
 public:
 
-    PresentationGL(const QStringList& fileList,
-                   const QStringList& commentsList,
-                   PresentationContainer* const sharedData);
+    PresentationGL(PresentationContainer* const sharedData);
     ~PresentationGL();
 
     void registerEffects();

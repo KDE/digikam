@@ -1349,16 +1349,14 @@ void ImageWindow::slotFilePrint()
 
 void ImageWindow::presentation()
 {
-    QList<QUrl> urls;
+    PresentationMngr* const mngr = new PresentationMngr(this);
 
     foreach(const ImageInfo& info, d->imageInfoModel->imageInfos())
     {
-        urls << info.fileUrl();
+        mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
     }
 
-    PresentationMngr* const mngr = new PresentationMngr(this);
-    mngr->setItems(urls);
     mngr->showConfigDialog();
 }
 

@@ -223,9 +223,7 @@ KBImage::~KBImage()
 
 // -------------------------------------------------------------------------
  
-PresentationKB::PresentationKB(const QStringList& fileList,
-                         const QStringList& commentsList,
-                         PresentationContainer* const sharedData)
+PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     : QGLWidget(),
       d(new Private)
 {
@@ -242,10 +240,6 @@ PresentationKB::PresentationKB(const QStringList& fileList,
     resize(d->deskWidth, d->deskHeight);
 
     d->sharedData   = sharedData;
-
-    // Avoid boring compile time "unused parameter" warning :P
-    // These parameters could be useful for future implementations
-    d->commentsList = commentsList;
 
     srand(QTime::currentTime().msec());
     readSettings();
@@ -280,8 +274,7 @@ PresentationKB::PresentationKB(const QStringList& fileList,
     d->image[0]        = new KBImage(0);
     d->image[1]        = new KBImage(0);
     d->step            = 1.0 / ((float) (d->delay * frameRate));
-    QStringList fList  = fileList;
-    d->imageLoadThread = new KBImageLoader(fList, width(), height(), d->sharedData->loop);
+    d->imageLoadThread = new KBImageLoader(d->sharedData, width(), height());
     d->timer           = new QTimer;
 
     connect(d->timer, SIGNAL(timeout()),

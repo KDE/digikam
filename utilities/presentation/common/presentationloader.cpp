@@ -26,18 +26,19 @@
 
 // Qt includes
 
+#include <QList>
 #include <QImage>
 #include <QMatrix>
 #include <QPainter>
-#include <QList>
+
 #include <QFileInfo>
 
 // Local includes
 
-#include "previewloadthread.h"
 #include "dimg.h"
-#include "presentationcontainer.h"
 #include "digikam_debug.h"
+#include "previewloadthread.h"
+#include "presentationcontainer.h"
 
 namespace Digikam
 {
@@ -100,6 +101,7 @@ public:
 
     Private()
     {
+        sharedData     = 0;
         loadingThreads = 0;
         loadedImages   = 0;
         imageLock      = 0;
@@ -109,27 +111,26 @@ public:
         swidth         = 0;
         sheight        = 0;
     }
+    PresentationContainer* sharedData;
+    LoadingThreads*        loadingThreads;
+    LoadedImages*          loadedImages;
 
-    LoadingThreads*  loadingThreads;
-    LoadedImages*    loadedImages;
-    QStringList      pathList;
+    QMutex*                imageLock;
+    QMutex*                threadLock;
 
-    QMutex*          imageLock;
-    QMutex*          threadLock;
-
-    uint             cacheSize;
-    int              currIndex;
-    int              swidth;
-    int              sheight;
+    uint                   cacheSize;
+    int                    currIndex;
+    int                    swidth;
+    int                    sheight;
 };
 
-PresentationLoader::PresentationLoader(const QStringList& pathList, uint cacheSize, int width, int height,
-                                 int beginAtIndex)
+PresentationLoader::PresentationLoader(PresentationContainer* const sharedData, int width, int height,
+                                       int beginAtIndex)
     : d(new Private)
 {
+    d->sharedData     = sharedData;
     d->currIndex      = beginAtIndex;
-    d->cacheSize      = cacheSize;
-    d->pathList       = pathList;
+    d->cacheSize      = d->sharedData->enableCache ? d->sharedData->cacheSize : 1;
     d->swidth         = width;
     d->sheight        = height;
     d->loadingThreads = new LoadingThreads();
@@ -139,9 +140,9 @@ PresentationLoader::PresentationLoader(const QStringList& pathList, uint cacheSi
 
     QUrl filePath;
 
-    for (uint i = 0; i < uint(d->cacheSize / 2) && i < uint(d->pathList.count()); ++i)
+    for (uint i = 0; i < uint(d->cacheSize / 2) && i < uint(d->sharedData->urlList.count()); ++i)
     {
-        filePath                    = QUrl::fromLocalFile(d->pathList[i]);
+        filePath                    = d->sharedData->urlList[i];
         LoadThread* const newThread = new LoadThread(d->loadedImages, d->imageLock,
                                                      filePath, d->swidth, d->sheight);
         d->threadLock->lock();
@@ -152,8 +153,8 @@ PresentationLoader::PresentationLoader(const QStringList& pathList, uint cacheSi
 
     for (uint i = 0; i < (d->cacheSize % 2 == 0 ? (d->cacheSize % 2) : uint(d->cacheSize / 2) + 1); ++i)
     {
-        int toLoad                  = (d->currIndex - i) % d->pathList.count();
-        filePath                    = QUrl::fromLocalFile(d->pathList[toLoad]);
+        int toLoad                  = (d->currIndex - i) % d->sharedData->urlList.count();
+        filePath                    = d->sharedData->urlList[toLoad];
         LoadThread* const newThread = new LoadThread(d->loadedImages, d->imageLock,
                                                      filePath, d->swidth, d->sheight);
         d->threadLock->lock();
@@ -191,30 +192,30 @@ PresentationLoader::~PresentationLoader()
 void PresentationLoader::next()
 {
     int victim   = (d->currIndex - (d->cacheSize % 2 == 0 ? (d->cacheSize / 2) - 1
-                                                          :  int(d->cacheSize / 2))) % d->pathList.count();
+                                                          :  int(d->cacheSize / 2))) % d->sharedData->urlList.count();
 
-    int newBorn  = (d->currIndex + int(d->cacheSize / 2) + 1) % d->pathList.count();
-    d->currIndex = (d->currIndex + 1) % d->pathList.count();
+    int newBorn  = (d->currIndex + int(d->cacheSize / 2) + 1) % d->sharedData->urlList.count();
+    d->currIndex = (d->currIndex + 1) % d->sharedData->urlList.count();
 
     if (victim == newBorn)
         return;
 
     d->threadLock->lock();
 
-    LoadThread* const oldThread = d->loadingThreads->value(QUrl::fromLocalFile(d->pathList[victim]));
+    LoadThread* const oldThread = d->loadingThreads->value(d->sharedData->urlList[victim]);
 
     if (oldThread)
         oldThread->wait();
 
     delete oldThread;
 
-    d->loadingThreads->remove(QUrl::fromLocalFile(d->pathList[victim]));
+    d->loadingThreads->remove(d->sharedData->urlList[victim]);
     d->imageLock->lock();
-    d->loadedImages->remove(QUrl::fromLocalFile(d->pathList[victim]));
+    d->loadedImages->remove(d->sharedData->urlList[victim]);
     d->imageLock->unlock();
     d->threadLock->unlock();
 
-    QUrl filePath               = QUrl::fromLocalFile((d->pathList[newBorn]));
+    QUrl filePath               = d->sharedData->urlList[newBorn];
     LoadThread* const newThread = new LoadThread(d->loadedImages, d->imageLock, filePath, d->swidth, d->sheight);
 
     d->threadLock->lock();
@@ -227,11 +228,11 @@ void PresentationLoader::next()
 
 void PresentationLoader::prev()
 {
-    int victim   = (d->currIndex + int(d->currIndex / 2)) % d->pathList.count();
+    int victim   = (d->currIndex + int(d->currIndex / 2)) % d->sharedData->urlList.count();
     int newBorn  = (d->currIndex - ((d->cacheSize & 2) == 0 ? (d->cacheSize / 2)
-                                                            : int(d->cacheSize / 2) + 1)) % d->pathList.count();
+                                                            : int(d->cacheSize / 2) + 1)) % d->sharedData->urlList.count();
 
-    d->currIndex = d->currIndex > 0 ? d->currIndex - 1 : d->pathList.count() - 1;
+    d->currIndex = d->currIndex > 0 ? d->currIndex - 1 : d->sharedData->urlList.count() - 1;
 
     if (victim == newBorn)
         return;
@@ -239,20 +240,20 @@ void PresentationLoader::prev()
     d->threadLock->lock();
     d->imageLock->lock();
 
-    LoadThread* const oldThread = d->loadingThreads->value(QUrl::fromLocalFile(d->pathList[victim]));
+    LoadThread* const oldThread = d->loadingThreads->value(d->sharedData->urlList[victim]);
 
     if (oldThread)
         oldThread->wait();
 
     delete oldThread;
 
-    d->loadingThreads->remove(QUrl::fromLocalFile(d->pathList[victim]));
-    d->loadedImages->remove(QUrl::fromLocalFile(d->pathList[victim]));
+    d->loadingThreads->remove(d->sharedData->urlList[victim]);
+    d->loadedImages->remove(d->sharedData->urlList[victim]);
 
     d->imageLock->unlock();
     d->threadLock->unlock();
 
-    QUrl filePath               = QUrl::fromLocalFile(d->pathList[newBorn]);
+    QUrl filePath               = d->sharedData->urlList[newBorn];
     LoadThread* const newThread = new LoadThread(d->loadedImages, d->imageLock, filePath, d->swidth, d->sheight);
 
     d->threadLock->lock();
@@ -267,7 +268,7 @@ QImage PresentationLoader::getCurrent() const
 {
     checkIsIn(d->currIndex);
     d->imageLock->lock();
-    QImage returned = (*d->loadedImages)[QUrl::fromLocalFile(d->pathList[d->currIndex])];
+    QImage returned = (*d->loadedImages)[d->sharedData->urlList[d->currIndex]];
     d->imageLock->unlock();
 
     return returned;
@@ -275,33 +276,33 @@ QImage PresentationLoader::getCurrent() const
 
 QString PresentationLoader::currFileName() const
 {
-    return QUrl::fromLocalFile(d->pathList[d->currIndex]).fileName();
+    return d->sharedData->urlList[d->currIndex].fileName();
 }
 
 QUrl PresentationLoader::currPath() const
 {
-    return QUrl::fromLocalFile(d->pathList[d->currIndex]);
+    return d->sharedData->urlList[d->currIndex];
 }
 
 void PresentationLoader::checkIsIn(int index) const
 {
     d->threadLock->lock();
 
-    if (d->loadingThreads->contains(QUrl::fromLocalFile(d->pathList[index])))
+    if (d->loadingThreads->contains(d->sharedData->urlList[index]))
     {
-        if ((*d->loadingThreads)[QUrl::fromLocalFile(d->pathList[index])]->isRunning())
-            (*d->loadingThreads)[QUrl::fromLocalFile(d->pathList[index])]->wait();
+        if ((*d->loadingThreads)[d->sharedData->urlList[index]]->isRunning())
+            (*d->loadingThreads)[d->sharedData->urlList[index]]->wait();
 
         d->threadLock->unlock();
     }
     else
     {
-        QUrl filePath               = QUrl::fromLocalFile(d->pathList[index]);
+        QUrl filePath               = d->sharedData->urlList[index];
         LoadThread* const newThread = new LoadThread(d->loadedImages, d->imageLock, filePath, d->swidth, d->sheight);
 
-        d->loadingThreads->insert(QUrl::fromLocalFile(d->pathList[index]), newThread);
+        d->loadingThreads->insert(d->sharedData->urlList[index], newThread);
         newThread->start();
-        (*d->loadingThreads)[QUrl::fromLocalFile(d->pathList[index])]->wait();
+        (*d->loadingThreads)[d->sharedData->urlList[index]]->wait();
         d->threadLock->unlock();
     }
 }

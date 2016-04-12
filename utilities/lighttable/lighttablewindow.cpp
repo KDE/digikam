@@ -1396,16 +1396,14 @@ void LightTableWindow::slotEditItem(const ImageInfo& info)
 
 void LightTableWindow::slotPresentation()
 {
-    QList<QUrl> urls;
+    PresentationMngr* const mngr = new PresentationMngr(this);
 
     foreach(const ImageInfo& info, d->thumbView->imageInfos())
     {
-        urls << info.fileUrl();
+        mngr->addFile(info.fileUrl(), info.comment());
         qApp->processEvents();
     }
 
-    PresentationMngr* const mngr = new PresentationMngr(this);
-    mngr->setItems(urls);
     mngr->showConfigDialog();
 }
 

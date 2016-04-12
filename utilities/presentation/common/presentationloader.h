@@ -45,8 +45,9 @@ class PresentationLoader
 {
 public:
 
-    PresentationLoader(const QStringList& pathList, uint cacheSize, int width, int height,
-                    int beginAtIndex = 0);
+    PresentationLoader(PresentationContainer* const sharedData, int width, int height,
+                       int beginAtIndex = 0);
+
     ~PresentationLoader();
 
     void    next();

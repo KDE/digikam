@@ -77,7 +77,6 @@ public:
 
     Private()
     {
-        cacheSize           = 0;
         timer               = 0;
         fileIndex           = 0;
         imageLoader         = 0;
@@ -110,16 +109,12 @@ public:
         sharedData          = 0;
     }
 
-    uint                              cacheSize;
-
     QMap<QString, EffectMethod>       effects;
 
-    QStringList                       fileList;
-    QStringList                       commentsList;
     QTimer*                           timer;
     int                               fileIndex;
 
-    PresentationLoader*                  imageLoader;
+    PresentationLoader*               imageLoader;
     GLuint                            texture[2];
     bool                              tex1First;
     int                               curr;
@@ -140,10 +135,10 @@ public:
     int                               dir;
     float                             points[40][40][3];
 
-    PresentationCtrlWidget*              slidePresentationAudioWidget;
+    PresentationCtrlWidget*           slidePresentationAudioWidget;
 
 #ifdef HAVE_MEDIAPLAYER
-    PresentationAudioWidget*                   playbackWidget;
+    PresentationAudioWidget*          playbackWidget;
 #endif
 
     QTimer*                           mouseMoveTimer;
@@ -153,12 +148,10 @@ public:
     int                               deskWidth;
     int                               deskHeight;
 
-    PresentationContainer*                  sharedData;
+    PresentationContainer*            sharedData;
 };
-    
-PresentationGL::PresentationGL(const QStringList& fileList,
-                         const QStringList& commentsList,
-                         PresentationContainer* const sharedData)
+
+PresentationGL::PresentationGL(PresentationContainer* const sharedData)
     : QGLWidget(0, 0, Qt::WindowStaysOnTopHint | Qt::Popup | Qt::X11BypassWindowManagerHint),
       d(new Private)
 {
@@ -218,16 +211,10 @@ PresentationGL::PresentationGL(const QStringList& fileList,
     d->xMargin      = int (d->deskWidth / d->width);
     d->yMargin      = int (d->deskWidth / d->height);
 
-    // --------------------------------------------------
-
-    d->fileList     = fileList;
-    d->commentsList = commentsList;
-    d->cacheSize    = d->sharedData->enableCache ? d->sharedData->cacheSize : 1;
-
     // ------------------------------------------------------------------
 
     d->timeout      = d->sharedData->delay;
-    d->imageLoader  = new PresentationLoader(d->fileList, d->cacheSize, width(), height());
+    d->imageLoader  = new PresentationLoader(d->sharedData, width(), height());
 
     // --------------------------------------------------
 
@@ -518,7 +505,7 @@ void PresentationGL::advanceFrame()
 {
     d->fileIndex++;
     d->imageLoader->next();
-    int num = d->fileList.count();
+    int num = d->sharedData->urlList.count();
 
     if (d->fileIndex >= num)
     {
@@ -550,7 +537,7 @@ void PresentationGL::previousFrame()
 {
     d->fileIndex--;
     d->imageLoader->prev();
-    int num = d->fileList.count();
+    int num = d->sharedData->urlList.count();
 
     if (d->fileIndex < 0)
     {
@@ -665,7 +652,7 @@ void PresentationGL::montage(QImage& top, QImage& bot)
 
 void PresentationGL::printFilename(QImage& layer)
 {
-    QFileInfo fileinfo(d->fileList[d->fileIndex]);
+    QFileInfo fileinfo(d->sharedData->urlList[d->fileIndex].toLocalFile());
     QString filename = fileinfo.fileName();
     QPixmap pix      = generateOutlinedTextPixmap(filename);
 
@@ -679,7 +666,7 @@ void PresentationGL::printFilename(QImage& layer)
 
 void PresentationGL::printProgress(QImage& layer)
 {
-    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') + QString::number(d->fileList.count()));
+    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') + QString::number(d->sharedData->urlList.count()));
 
     QPixmap pix = generateOutlinedTextPixmap(progress);
 
@@ -691,10 +678,7 @@ void PresentationGL::printProgress(QImage& layer)
 
 void PresentationGL::printComments(QImage& layer)
 {
-//    QString comments = d->commentsList[d->fileIndex];
-
-//FIXME    KPImageInfo info(d->imageLoader->currPath());
-    QString comments;// = info.description();
+    QString comments = d->sharedData->commentsMap.value(d->imageLoader->currPath(), QString());
 
     int yPos = 5; // Text Y coordinate
 

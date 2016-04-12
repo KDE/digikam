@@ -37,10 +37,11 @@
 
 // Local includes
 
+#include "dimg.h"
 #include "digikam_debug.h"
 #include "presentationkb.h"
 #include "previewloadthread.h"
-#include "dimg.h"
+#include "presentationcontainer.h"
 
 namespace Digikam
 {
@@ -52,6 +53,7 @@ public:
 
     Private()
     {
+        sharedData    = 0;
         fileIndex     = 0;
         width         = 0;
         height        = 0;
@@ -59,38 +61,35 @@ public:
         needImage     = true;
         haveImages    = false;
         quitRequested = false;
-        loop          = false;
         textureAspect = 0.0;
     }
 
-    int            fileIndex;
-    QStringList    fileList;
+    PresentationContainer* sharedData;
+    int                    fileIndex;
 
-    int            width;
-    int            height;
+    int                    width;
+    int                    height;
 
-    QWaitCondition imageRequest;
-    QMutex         condLock;
-    QMutex         imageLock;
+    QWaitCondition         imageRequest;
+    QMutex                 condLock;
+    QMutex                 imageLock;
 
-    bool           initialized;
-    bool           needImage;
-    bool           haveImages;
-    bool           quitRequested;
-    bool           loop;
+    bool                   initialized;
+    bool                   needImage;
+    bool                   haveImages;
+    bool                   quitRequested;
 
-    float          textureAspect;
-    QImage         texture;
+    float                  textureAspect;
+    QImage                 texture;
 };
 
-KBImageLoader::KBImageLoader(const QStringList& fileList, int width, int height, bool loop)
+KBImageLoader::KBImageLoader(PresentationContainer* const sharedData, int width, int height)
     : QThread(),
       d(new Private)
 {
-    d->fileList = fileList;
-    d->width    = width;
-    d->height   = height;
-    d->loop     = loop;
+    d->sharedData = sharedData;
+    d->width      = width;
+    d->height     = height;
 }
 
 KBImageLoader::~KBImageLoader()
@@ -131,9 +130,9 @@ void KBImageLoader::run()
 
         if (d->needImage)
         {
-            if ( d->fileIndex == (int)d->fileList.count() )
+            if ( d->fileIndex == (int)d->sharedData->urlList.count() )
             {
-                if ( d->loop )
+                if (d->sharedData->loop)
                 {
                     d->fileIndex = 0;
                 }
@@ -156,9 +155,9 @@ void KBImageLoader::run()
                 if ( !ok)
                     invalidateCurrentImageName();
             }
-            while ( !ok && d->fileIndex < (int)d->fileList.count());
+            while ( !ok && d->fileIndex < (int)d->sharedData->urlList.count());
 
-            if ( d->fileIndex == (int)d->fileList.count() )
+            if ( d->fileIndex == (int)d->sharedData->urlList.count() )
             {
 
                 emit(signalEndOfShow());
@@ -193,7 +192,7 @@ void KBImageLoader::run()
 
 bool KBImageLoader::loadImage()
 {
-    QString path = d->fileList[d->fileIndex];
+    QString path  = d->sharedData->urlList[d->fileIndex].toLocalFile();
     QImage  image = PreviewLoadThread::loadHighQualitySynchronously(path).copyQImage();
 
     if (image.isNull())
@@ -225,7 +224,7 @@ bool KBImageLoader::loadImage()
 
 void KBImageLoader::invalidateCurrentImageName()
 {
-    d->fileList.removeAll(d->fileList[d->fileIndex]);
+    d->sharedData->urlList.removeAll(d->sharedData->urlList[d->fileIndex]);
     d->fileIndex++;
 }
 

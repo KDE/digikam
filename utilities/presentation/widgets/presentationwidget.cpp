@@ -74,7 +74,6 @@ public:
     Private()
     {
         sharedData                   = 0;
-        cacheSize                    = 0;
         imageLoader                  = 0;
 
 #ifdef HAVE_MEDIAPLAYER
@@ -119,8 +118,6 @@ public:
 
     PresentationContainer*      sharedData;
 
-    uint                        cacheSize;
-
     // -------------------------
 
     QMap<QString, EffectMethod> Effects;
@@ -132,8 +129,6 @@ public:
     PresentationAudioWidget*    playbackWidget;
 #endif
 
-    QStringList                 fileList;
-    QStringList                 commentsList;
     QTimer*                     timer;
     int                         fileIndex;
 
@@ -178,7 +173,7 @@ public:
     int                         deskHeight;
 };
 
-PresentationWidget::PresentationWidget(const QStringList& fileList, const QStringList& commentsList, PresentationContainer* const sharedData)
+PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     : QWidget(0, Qt::WindowStaysOnTopHint | Qt::Popup | Qt::X11BypassWindowManagerHint),
       d(new Private)
 {
@@ -194,7 +189,7 @@ PresentationWidget::PresentationWidget(const QStringList& fileList, const QStrin
     move( d->deskX, d->deskY );
     resize( d->deskWidth, d->deskHeight );
 
-    d->slidePresentationAudioWidget = new PresentationCtrlWidget( this );
+    d->slidePresentationAudioWidget = new PresentationCtrlWidget(this);
     d->slidePresentationAudioWidget->hide();
     d->slidePresentationAudioWidget->move(d->deskWidth - d->slidePresentationAudioWidget->width(), d->deskY);
 
@@ -246,15 +241,7 @@ PresentationWidget::PresentationWidget(const QStringList& fileList, const QStrin
     m_buffer = QPixmap( size() );
     m_buffer.fill( Qt::black );
 
-    d->fileList     = fileList;
-    d->commentsList = commentsList;
-
-    if ( d->sharedData->enableCache )
-        d->cacheSize = d->sharedData->cacheSize;
-    else
-        d->cacheSize = 1;
-
-    d->imageLoader = new PresentationLoader(d->fileList, d->cacheSize, width(), height(), d->fileIndex);
+    d->imageLoader = new PresentationLoader(d->sharedData, width(), height(), d->fileIndex);
 
     // --------------------------------------------------
 
@@ -283,10 +270,10 @@ PresentationWidget::PresentationWidget(const QStringList& fileList, const QStrin
 
     d->mouseMoveTimer = new QTimer;
 
-    connect( d->mouseMoveTimer, SIGNAL(timeout()),
-             SLOT(slotMouseMoveTimeOut()) );
+    connect(d->mouseMoveTimer, SIGNAL(timeout()),
+             SLOT(slotMouseMoveTimeOut()));
 
-    setMouseTracking( true );
+    setMouseTracking(true);
     slotMouseMoveTimeOut();
 }
 
@@ -383,7 +370,7 @@ void PresentationWidget::slotTimeOut()
     {
         loadNextImage();
 
-        if ( d->currImage.isNull() || d->fileList.isEmpty() ) // End of slideshow ?
+        if (d->currImage.isNull() || d->sharedData->urlList.isEmpty()) // End of slideshow ?
         {
             showEndOfShow();
             return;
@@ -427,7 +414,7 @@ void PresentationWidget::loadNextImage()
     d->fileIndex++;
 
     d->imageLoader->next();
-    int num = d->fileList.count();
+    int num = d->sharedData->urlList.count();
 
     if ( d->fileIndex >= num )
     {
@@ -465,7 +452,7 @@ void PresentationWidget::loadPrevImage()
     d->fileIndex--;
     d->imageLoader->prev();
 
-    int num = d->fileList.count();
+    int num = d->sharedData->urlList.count();
 
     if ( d->fileIndex < 0 )
     {
@@ -534,8 +521,7 @@ void PresentationWidget::printComments()
     if (d->currImage.isNull())
         return;
 
-//FIXME    Digikam::KPImageInfo info(d->imageLoader->currPath());
-    QString comments;// = info.description();
+    QString comments = d->sharedData->commentsMap.value(d->imageLoader->currPath(), QString());
 
     int yPos = 30; // Text Y coordinate
 
@@ -628,7 +614,7 @@ void PresentationWidget::printProgress()
     QPainter p;
     p.begin( &d->currImage );
 
-    QString progress( QString::number( d->fileIndex + 1 ) + QLatin1Char('/') + QString::number( d->fileList.count() ) );
+    QString progress(QString::number(d->fileIndex + 1) + QLatin1Char('/') + QString::number(d->sharedData->urlList.count()));
 
     int stringLength = p.fontMetrics().width( progress ) * progress.length();
 
@@ -1485,7 +1471,7 @@ void PresentationWidget::slotPrev()
 {
     loadPrevImage();
 
-    if ( d->currImage.isNull() || d->fileList.isEmpty() )
+    if (d->currImage.isNull() || d->sharedData->urlList.isEmpty())
     {
         showEndOfShow();
         return;
@@ -1500,7 +1486,7 @@ void PresentationWidget::slotNext()
 {
     loadNextImage();
 
-    if ( d->currImage.isNull() || d->fileList.isEmpty() )
+    if (d->currImage.isNull() || d->sharedData->urlList.isEmpty())
     {
         showEndOfShow();
         return;

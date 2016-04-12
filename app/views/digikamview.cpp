@@ -2148,7 +2148,13 @@ void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
 void DigikamView::slotPresentation()
 {
     PresentationMngr* const mngr = new PresentationMngr(this);
-    mngr->setItems(selectedUrls());
+
+    foreach(const ImageInfo& info, selectedInfoList())
+    {
+        mngr->addFile(info.fileUrl(), info.comment());
+        qApp->processEvents();
+    }
+
     mngr->showConfigDialog();
 }
 

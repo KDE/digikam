@@ -57,9 +57,7 @@ public:
 
 public:
 
-    PresentationWidget(const QStringList& fileList,
-                       const QStringList& commentsList,
-                       PresentationContainer* const sharedData);
+    PresentationWidget(PresentationContainer* const sharedData);
     ~PresentationWidget();
 
     void registerEffects();

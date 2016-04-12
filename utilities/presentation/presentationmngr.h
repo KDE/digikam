@@ -28,9 +28,9 @@
 
 // Qt includes
 
-#include <QUrl>
 #include <QObject>
 #include <QList>
+#include <QUrl>
 
 // Local includes
 
@@ -50,7 +50,7 @@ public:
     PresentationMngr(QObject* const parent);
     ~PresentationMngr();
 
-    void setItems(const QList<QUrl>& urls);
+    void addFile(const QUrl& url, const QString& comment);
     void showConfigDialog();
 
 private Q_SLOTS:

@@ -40,13 +40,15 @@
 namespace Digikam
 {
 
+class PresentationContainer;
+
 class KBImageLoader : public QThread
 {
     Q_OBJECT
 
 public:
 
-    KBImageLoader(const QStringList& fileList, int width, int height, bool loop);
+    KBImageLoader(PresentationContainer* const sharedData, int width, int height);
     ~KBImageLoader();
 
     void  quit();

@@ -162,4 +162,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 124 ==> 361275 - Compile time error: undefined reference while linking renamecustomizertest.
 125 ==> 361440 - Panorama Tool can`t find a pto2mk.
 126 ==> 361339 - Creates nameless subalbums and corrupts album hierarchy.
-127 ==> 
+127 ==> 361611 - Plugin 'Advanced Slide Show' - "Print Caption" does not work.
+128 ==> 

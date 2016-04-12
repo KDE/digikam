@@ -1096,7 +1096,25 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
 void ShowFoto::presentation()
 {
     Digikam::PresentationMngr* const mngr = new Digikam::PresentationMngr(this);
-    mngr->setItems(d->thumbBar->urls());
+    Digikam::DMetadata meta;
+
+    int i               = 0;
+    float cnt           = d->thumbBar->urls().count();
+    m_cancelSlideShow   = false;
+
+    m_nameLabel->setProgressBarMode(Digikam::StatusProgressBar::CancelProgressBarMode,
+                                 i18n("Preparing presentation. Please wait..."));
+
+    for (QList<QUrl>::ConstIterator it = d->thumbBar->urls().constBegin() ;
+         !m_cancelSlideShow && (it != d->thumbBar->urls().constEnd()) ; ++it)
+    {
+        meta.load((*it).toLocalFile());
+        mngr->addFile(*it, meta.getImageComments()[QLatin1String("x-default")].caption);
+
+        m_nameLabel->setProgressValue((int)((i++/cnt)*100.0f));
+        qApp->processEvents();
+    }
+
     mngr->showConfigDialog();
 }
 

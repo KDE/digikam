@@ -114,9 +114,7 @@ class PresentationKB : public QGLWidget
 
 public:
 
-    PresentationKB(const QStringList& fileList,
-                   const QStringList& commentsList,
-                   PresentationContainer* const sharedData);
+    PresentationKB(PresentationContainer* const sharedData);
 
     ~PresentationKB();
 
