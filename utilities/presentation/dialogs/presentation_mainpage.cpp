@@ -50,6 +50,7 @@
 #include "presentation_captionpage.h"
 #include "thumbnailloadthread.h"
 #include "dimageslist.h"
+#include "dmetadata.h"
 #include "presentationwidget.h"
 
 #ifdef HAVE_OPENGL
@@ -328,6 +329,12 @@ bool PresentationMainPage::updateUrlList()
             QMessageBox::critical(this, i18n("Error"), i18n("Cannot access file %1. Please check the path is correct.",
                                                             item->url().toLocalFile()));
             return false;
+        }
+
+        if (!d->sharedData->commentsMap.contains(item->url()))
+        {
+            DMetadata meta(item->url().toLocalFile());
+            d->sharedData->commentsMap.insert(item->url(), meta.getImageComments()[QLatin1String("x-default")].caption);
         }
 
         d->sharedData->urlList.append(item->url());  // Input images files.
