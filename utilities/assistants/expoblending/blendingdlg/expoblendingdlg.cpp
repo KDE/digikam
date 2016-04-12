@@ -57,7 +57,6 @@ extern "C"
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kio/renamedialog.h>
 #include <kwindowconfig.h>
 
 // Local includes
@@ -72,6 +71,7 @@ extern "C"
 #include "dpreviewmanager.h"
 #include "dsavesettingswidget.h"
 #include "expoblendingmanager.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -464,16 +464,19 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
     {
         if (fi.exists())
         {
-            KIO::RenameDialog dlg(this,
-                                  i18n("A file named \"%1\" already exists. Are you sure you want to overwrite it?", newUrl.fileName()),
-                                  temp,
-                                  newUrl,
-                                  KIO::RenameDialog_Mode(KIO::M_OVERWRITE | KIO::M_SKIP));
+            QPair<int, QString> resultAndDest =
+                    KIOWrapper::renameDlg(this,
+                                          i18n("A file named \"%1\" already exists. Are you sure you want to overwrite it?", newUrl.fileName()),
+                                          temp,
+                                          newUrl);
+                    
+            int result   = resultAndDest.first;
+            QString dest = resultAndDest.second;
 
-            switch (dlg.exec())
+            switch (result)
             {
-                case KIO::R_CANCEL:
-                case KIO::R_SKIP:
+                case KIOWrapper::Cancel:
+                case KIOWrapper::Skip:
                 {
                     newUrl.clear();
                     d->enfuseStack->setOnItem(settings.previewUrl, false);
@@ -481,12 +484,13 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
 
                     break;
                 }
-                case KIO::R_RENAME:
+                case KIOWrapper::Overwrite:
                 {
-                    newUrl = dlg.newDestUrl();
+                    // Nothing to do.
                     break;
                 }
-                default:    // Overwrite.
+                default:    // rename.
+                    newUrl = QUrl::fromLocalFile(dest);
                     break;
             }
         }
