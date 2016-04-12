@@ -19,6 +19,7 @@ set(libcommonwidgets_SRCS
     common/dcombobox.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
+    common/dfontproperties.cpp
     common/dfontselect.cpp
     common/dgradientslider.cpp
     common/dragdropimplementations.cpp

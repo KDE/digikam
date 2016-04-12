@@ -47,7 +47,6 @@
 
 // KDE includes
 
-#include <kfontchooser.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
 
@@ -58,6 +57,7 @@
 #include "editortoolsettings.h"
 #include "imageiface.h"
 #include "inserttextwidget.h"
+#include "dfontproperties.h"
 
 namespace DigikamDecorateImagePlugin
 {
@@ -102,7 +102,7 @@ public:
 
     QComboBox*           textRotation;
     DColorSelector*      fontColorButton;
-    KFontChooser*        fontChooserWidget;
+    DFontProperties*     fontChooserWidget;
     QTextEdit*           textEdit;
 
     InsertTextWidget*    previewWidget;
@@ -150,7 +150,7 @@ InsertTextTool::InsertTextTool(QObject* const parent)
 
     // -------------------------------------------------------------
 
-    d->fontChooserWidget = new KFontChooser(0, KFontChooser::NoDisplayFlags);
+    d->fontChooserWidget = new DFontProperties(0, DFontProperties::NoDisplayFlags);
     d->fontChooserWidget->setSampleBoxVisible(false);
     d->fontChooserWidget->setWhatsThis(i18n("Here you can choose the font to be used."));
 
@@ -224,15 +224,15 @@ InsertTextTool::InsertTextTool(QObject* const parent)
     const int spacing = d->gboxSettings->spacingHint();
 
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->textEdit,             0, 0, 3,-1);
-    mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1,-1);
-    mainLayout->addWidget(alignBox,                4, 0, 1,-1);
-    mainLayout->addWidget(label1,                  5, 0, 1, 1);
-    mainLayout->addWidget(d->textRotation,         5, 1, 1, 1);
-    mainLayout->addWidget(label2,                  6, 0, 1, 1);
-    mainLayout->addWidget(d->fontColorButton,      6, 1, 1, 1);
-    mainLayout->addWidget(d->borderText,           7, 0, 1,-1);
-    mainLayout->addWidget(d->transparentText,      8, 0, 1,-1);
+    mainLayout->addWidget(d->textEdit,             0, 0, 3, -1);
+    mainLayout->addWidget(d->fontChooserWidget,    3, 0, 1, -1);
+    mainLayout->addWidget(alignBox,                4, 0, 1, -1);
+    mainLayout->addWidget(label1,                  5, 0, 1,  1);
+    mainLayout->addWidget(d->textRotation,         5, 1, 1,  1);
+    mainLayout->addWidget(label2,                  6, 0, 1,  1);
+    mainLayout->addWidget(d->fontColorButton,      6, 1, 1,  1);
+    mainLayout->addWidget(d->borderText,           7, 0, 1, -1);
+    mainLayout->addWidget(d->transparentText,      8, 0, 1, -1);
     mainLayout->setRowStretch(9, 10);
     mainLayout->setColumnStretch(2, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
