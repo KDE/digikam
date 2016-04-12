@@ -213,8 +213,9 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
     // ------------------------------------------------------------------
 
+    d->fileIndex    = -1; // start with -1
     d->timeout      = d->sharedData->delay;
-    d->imageLoader  = new PresentationLoader(d->sharedData, width(), height());
+    d->imageLoader  = new PresentationLoader(d->sharedData, width(), height(), d->fileIndex);
 
     // --------------------------------------------------
 
@@ -243,8 +244,7 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
             this, SLOT(slotTimeOut()));
 
     d->timer->setSingleShot(true);
-
-    d->timer->start(d->timeout);
+    d->timer->start(10);
 
     // -- hide cursor when not moved --------------------
 
@@ -303,10 +303,6 @@ void PresentationGL::initializeGL()
 
     d->width  = qMin( maxTexVal, d->width );
     d->height = qMin( maxTexVal, d->height );
-
-    // load the first image
-
-    loadImage();
 }
 
 void PresentationGL::paintGL()

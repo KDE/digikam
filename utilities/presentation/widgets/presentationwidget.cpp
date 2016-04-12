@@ -271,7 +271,7 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     d->mouseMoveTimer = new QTimer;
 
     connect(d->mouseMoveTimer, SIGNAL(timeout()),
-             SLOT(slotMouseMoveTimeOut()));
+            this, SLOT(slotMouseMoveTimeOut()));
 
     setMouseTracking(true);
     slotMouseMoveTimeOut();
