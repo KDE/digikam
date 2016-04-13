@@ -2194,6 +2194,9 @@ void DigikamView::slotSlideShowBuilderComplete(const SlideShowSettings& settings
     connect(slide, SIGNAL(signalToggleTag(QUrl,int)),
             this, SLOT(slotToggleTag(QUrl,int)));
 
+    connect(slide, SIGNAL(signalLastItemUrl(QUrl)),
+            d->iconView, SLOT(setCurrentUrl(QUrl)));
+
     slide->show();
 }
 

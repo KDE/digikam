@@ -1423,11 +1423,13 @@ void LightTableWindow::slotSlideShowAll()
 void LightTableWindow::slotLeftSlideShowManualFromCurrent()
 {
     slotSlideShowManualFrom(d->previewView->leftImageInfo());
+    d->fromLeftPreview = true;
 }
 
 void LightTableWindow::slotRightSlideShowManualFromCurrent()
 {
     slotSlideShowManualFrom(d->previewView->rightImageInfo());
+    d->fromLeftPreview = false;
 }
 
 void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
@@ -1462,19 +1464,37 @@ void LightTableWindow::slotSlideShowBuilderComplete(const SlideShowSettings& set
         slide->setCurrentItem(d->thumbView->currentInfo().fileUrl());
     }
 
-    connect(slide, SIGNAL(signalRatingChanged(KUrl,int)),
-            d->thumbView, SLOT(slotRatingChanged(KUrl,int)));
+    connect(slide, SIGNAL(signalRatingChanged(QUrl,int)),
+            d->thumbView, SLOT(slotRatingChanged(QUrl,int)));
 
-    connect(slide, SIGNAL(signalColorLabelChanged(KUrl,int)),
-            d->thumbView, SLOT(slotColorLabelChanged(KUrl,int)));
+    connect(slide, SIGNAL(signalColorLabelChanged(QUrl,int)),
+            d->thumbView, SLOT(slotColorLabelChanged(QUrl,int)));
 
-    connect(slide, SIGNAL(signalPickLabelChanged(KUrl,int)),
-            d->thumbView, SLOT(slotPickLabelChanged(KUrl,int)));
+    connect(slide, SIGNAL(signalPickLabelChanged(QUrl,int)),
+            d->thumbView, SLOT(slotPickLabelChanged(QUrl,int)));
 
-    connect(slide, SIGNAL(signalToggleTag(KUrl,int)),
-            d->thumbView, SLOT(slotToggleTag(KUrl,int)));
+    connect(slide, SIGNAL(signalToggleTag(QUrl,int)),
+            d->thumbView, SLOT(slotToggleTag(QUrl,int)));
+
+    connect(slide, SIGNAL(signalLastItemUrl(QUrl)),
+            this, SLOT(slotSlideShowLastItemUrl(QUrl)));
 
     slide->show();
+}
+
+void LightTableWindow::slotSlideShowLastItemUrl(const QUrl& url)
+{
+    if (d->fromLeftPreview && !d->navigateByPairAction->isChecked())
+    {
+        d->thumbView->blockSignals(true);
+        d->thumbView->setCurrentUrl(url);
+        d->thumbView->blockSignals(false);
+        slotSetItemLeft();
+    }
+    else
+    {
+        d->thumbView->setCurrentUrl(url);
+    }
 }
 
 void LightTableWindow::slotSetup()

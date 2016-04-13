@@ -118,6 +118,7 @@ private Q_SLOTS:
     void slotLeftSlideShowManualFromCurrent();
     void slotRightSlideShowManualFromCurrent();
 
+    void slotSlideShowLastItemUrl(const QUrl&);
     void slotSlideShowManualFrom(const ImageInfo&);
     void slotSlideShowBuilderComplete(const SlideShowSettings&);
 
