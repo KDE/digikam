@@ -174,6 +174,8 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
 SlideShow::~SlideShow()
 {
+    emit signalLastItemUrl(currentItem());
+
     allowScreenSaver();
 
     d->mouseMoveTimer->stop();

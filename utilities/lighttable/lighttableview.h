@@ -93,7 +93,7 @@ Q_SIGNALS:
 
     void signalLeftPopupTagsView();
     void signalRightPopupTagsView();
-    
+
     void signalLeftSlideShowCurrent();
     void signalRightSlideShowCurrent();
 

@@ -52,6 +52,7 @@ public:
     Private() :
         autoLoadOnRightPanel(true),
         autoSyncPreview(true),
+        fromLeftPreview(true),
         setItemLeftAction(0),
         setItemRightAction(0),
         clearListAction(0),
@@ -98,6 +99,7 @@ public:
 
     bool                      autoLoadOnRightPanel;
     bool                      autoSyncPreview;
+    bool                      fromLeftPreview;
 
     QAction*                  setItemLeftAction;
     QAction*                  setItemRightAction;
