@@ -188,6 +188,8 @@ void ThemeManager::populateThemeMenu()
     QStringList schemeFiles;
     const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("color-schemes"), QStandardPaths::LocateDirectory);
 
+    qCDebug(DIGIKAM_WIDGETS_LOG) << "Paths to color theme : " << dirs;
+        
     Q_FOREACH (const QString& dir, dirs)
     {
         QDirIterator it(dir, QStringList() << QLatin1String("*.colors"));
