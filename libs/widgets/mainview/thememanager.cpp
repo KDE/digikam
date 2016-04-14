@@ -37,21 +37,19 @@
 #include <QAction>
 #include <QStandardPaths>
 #include <QDirIterator>
-#include <QMessageBox>
 #include <QMenu>
 
-// KDE includes
+// Desktop includes
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <ktoolinvocation.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "dxmlguiwindow.h"
-#include <schememanager.h>
+#include "schememanager.h"
 
 namespace Digikam
 {
@@ -109,7 +107,9 @@ QString ThemeManager::defaultThemeName() const
 QString ThemeManager::currentThemeName() const
 {
     if (!d->themeMenuAction || !d->themeMenuActionGroup)
+    {
         return defaultThemeName();
+    }
 
     QAction* const action = d->themeMenuActionGroup->checkedAction();
 
@@ -120,7 +120,9 @@ QString ThemeManager::currentThemeName() const
 void ThemeManager::setCurrentTheme(const QString& name)
 {
     if (!d->themeMenuAction || !d->themeMenuActionGroup)
+    {
         return;
+    }
 
     QList<QAction*> list = d->themeMenuActionGroup->actions();
 
@@ -136,12 +138,14 @@ void ThemeManager::setCurrentTheme(const QString& name)
 
 void ThemeManager::slotChangePalette()
 {
-    updateCurrentKDEdefaultThemePreview();
+    updateCurrentDesktopDefaultThemePreview();
 
     QString theme(currentThemeName());
 
     if (theme == defaultThemeName() || theme.isEmpty())
-        theme = currentKDEdefaultTheme();
+    {
+        theme = currentDesktopdefaultTheme();
+    }
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
@@ -158,18 +162,22 @@ void ThemeManager::setThemeMenuAction(QMenu* const action)
     populateThemeMenu();
 }
 
-void ThemeManager::registerThemeActions(DXmlGuiWindow* const kwin)
+void ThemeManager::registerThemeActions(DXmlGuiWindow* const win)
 {
-    if (!d->themeMenuAction)
+    if (!d->themeMenuAction || !win)
+    {
         return;
+    }
 
-    kwin->actionCollection()->addAction(QLatin1String("theme_menu"), d->themeMenuAction->menuAction());
+    win->actionCollection()->addAction(QLatin1String("theme_menu"), d->themeMenuAction->menuAction());
 }
 
 void ThemeManager::populateThemeMenu()
 {
     if (!d->themeMenuAction)
+    {
         return;
+    }
 
     QString theme(currentThemeName());
 
@@ -186,9 +194,20 @@ void ThemeManager::populateThemeMenu()
     d->themeMenuAction->addAction(action);
 
     QStringList schemeFiles;
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QLatin1String("color-schemes"), QStandardPaths::LocateDirectory);
+    QStringList dirs;
 
-    qCDebug(DIGIKAM_WIDGETS_LOG) << "Paths to color theme : " << dirs;
+    // digiKam colors scheme
+    dirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                      QString::fromLatin1("digikam/colorschemes"),
+                                      QStandardPaths::LocateDirectory);
+
+    // Desktop color-schemes
+    dirs << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                      QLatin1String("color-schemes"),
+                                      QStandardPaths::LocateDirectory);
+    
+
+    qCDebug(DIGIKAM_WIDGETS_LOG) << "Paths to color scheme : " << dirs;
         
     Q_FOREACH (const QString& dir, dirs)
     {
@@ -226,31 +245,11 @@ void ThemeManager::populateThemeMenu()
         d->themeMenuAction->addAction(actionMap.value(name));
     }
 
-    updateCurrentKDEdefaultThemePreview();
+    updateCurrentDesktopDefaultThemePreview();
     setCurrentTheme(theme);
-
-    d->themeMenuAction->addSeparator();
-    QAction* const config = new QAction(i18n("Configuration..."), d->themeMenuAction);
-    config->setIcon(QIcon::fromTheme(QLatin1String("preferences-desktop-theme")));
-    d->themeMenuAction->addAction(config);
-
-    connect(config, SIGNAL(triggered()),
-            this, SLOT(slotConfigColors()));
 }
 
-void ThemeManager::slotConfigColors()
-{
-    int ret = KToolInvocation::kdeinitExec(QLatin1String("kcmshell5"), QStringList() << QLatin1String("colors"));
-
-    if (ret > 0)
-    {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                              i18n("Cannot start Colors Settings panel from KDE Control Center. "
-                                   "Please check your system..."));
-    }
-}
-
-void ThemeManager::updateCurrentKDEdefaultThemePreview()
+void ThemeManager::updateCurrentDesktopDefaultThemePreview()
 {
     QList<QAction*> list = d->themeMenuActionGroup->actions();
 
@@ -258,7 +257,7 @@ void ThemeManager::updateCurrentKDEdefaultThemePreview()
     {
         if (action->text().remove(QLatin1Char('&')) == defaultThemeName())
         {
-            KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentKDEdefaultTheme()));
+            KSharedConfigPtr config = KSharedConfig::openConfig(d->themeMap.value(currentDesktopdefaultTheme()));
             QIcon icon              = createSchemePreviewIcon(config);
             action->setIcon(icon);
         }
@@ -267,7 +266,6 @@ void ThemeManager::updateCurrentKDEdefaultThemePreview()
 
 QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) const
 {
-    // code taken from kdebase/workspace/kcontrol/colors/colorscm.cpp
     const uchar bits1[] = { 0xff, 0xff, 0xff, 0x2c, 0x16, 0x0b };
     const uchar bits2[] = { 0x68, 0x34, 0x1a, 0xff, 0xff, 0xff };
     const QSize bitsSize(24, 2);
@@ -284,28 +282,28 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) co
     p.fillRect(2,  2, 5, 2, QBrush(windowScheme.foreground().color(), b1));
 
     SchemeManager buttonScheme(QPalette::Active, SchemeManager::Button, config);
-    p.fillRect(8,  1, 7, 7, buttonScheme.background());
-    p.fillRect(9,  2, 5, 2, QBrush(buttonScheme.foreground().color(), b1));
+    p.fillRect(8,   1, 7, 7, buttonScheme.background());
+    p.fillRect(9,   2, 5, 2, QBrush(buttonScheme.foreground().color(), b1));
 
     p.fillRect(15,  1, 7, 7, group.readEntry(QLatin1String("activeBackground"),        QColor(96, 148, 207)));
     p.fillRect(16,  2, 5, 2, QBrush(group.readEntry(QLatin1String("activeForeground"), QColor(255, 255, 255)), b1));
 
     SchemeManager viewScheme(QPalette::Active, SchemeManager::View, config);
-    p.fillRect(1,  8, 7, 7, viewScheme.background());
-    p.fillRect(2, 12, 5, 2, QBrush(viewScheme.foreground().color(), b2));
+    p.fillRect(1,   8, 7, 7, viewScheme.background());
+    p.fillRect(2,  12, 5, 2, QBrush(viewScheme.foreground().color(), b2));
 
     SchemeManager selectionScheme(QPalette::Active, SchemeManager::Selection, config);
-    p.fillRect(8,  8, 7, 7, selectionScheme.background());
-    p.fillRect(9, 12, 5, 2, QBrush(selectionScheme.foreground().color(), b2));
+    p.fillRect(8,   8, 7, 7, selectionScheme.background());
+    p.fillRect(9,  12, 5, 2, QBrush(selectionScheme.foreground().color(), b2));
 
     p.fillRect(15,  8, 7, 7, group.readEntry(QLatin1String("inactiveBackground"),        QColor(224, 223, 222)));
-    p.fillRect(16, 12, 5, 2, QBrush(group.readEntry(QLatin1String("inactiveForeground"), QColor(20, 19, 18)), b2));
+    p.fillRect(16, 12, 5, 2, QBrush(group.readEntry(QLatin1String("inactiveForeground"), QColor(20,  19,  18)), b2));
 
     p.end();
     return pixmap;
 }
 
-QString ThemeManager::currentKDEdefaultTheme() const
+QString ThemeManager::currentDesktopdefaultTheme() const
 {
     KSharedConfigPtr config = KSharedConfig::openConfig(QLatin1String("kdeglobals"));
     KConfigGroup group(config, "General");

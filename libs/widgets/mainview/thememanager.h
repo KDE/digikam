@@ -61,7 +61,7 @@ public:
     QString defaultThemeName() const;
 
     void    setThemeMenuAction(QMenu* const action);
-    void    registerThemeActions(DXmlGuiWindow* const kwin);
+    void    registerThemeActions(DXmlGuiWindow* const win);
 
 Q_SIGNALS:
 
@@ -70,7 +70,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotChangePalette();
-    void slotConfigColors();
     void slotSettingsChanged();
 
 private:
@@ -79,8 +78,8 @@ private:
 
     void    populateThemeMenu();
     QPixmap createSchemePreviewIcon(const KSharedConfigPtr& config) const;
-    QString currentKDEdefaultTheme() const;
-    void    updateCurrentKDEdefaultThemePreview();
+    QString currentDesktopdefaultTheme() const;
+    void    updateCurrentDesktopDefaultThemePreview();
 
 private:
 
@@ -92,4 +91,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* THEMEMANAGER_H */
+#endif // THEMEMANAGER_H
