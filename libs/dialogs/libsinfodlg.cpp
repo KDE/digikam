@@ -33,7 +33,7 @@
 
 // KDE includes
 
-#include <kcoreaddons_version.h>
+#include <kxmlgui_version.h>
 #include <klocalizedstring.h>
 
 // C ANSI includes
@@ -93,7 +93,7 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
     QMap<QString, QString> list;
     list.insert(i18nc(CONTEXT, "Qt"),                          QLatin1String(qVersion()));
-    list.insert(i18nc(CONTEXT, "KDE"),                         QLatin1String(KCOREADDONS_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "KDE"),                         QLatin1String(KXMLGUI_VERSION_STRING));
     list.insert(i18nc(CONTEXT, "LibRaw"),                      DRawDecoder::librawVersion());
 
     list.insert(i18nc(CONTEXT, "Parallelized demosaicing"),    checkTriState(DRawDecoder::librawUseGomp()));
