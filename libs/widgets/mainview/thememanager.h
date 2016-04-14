@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : theme manager
+ * Description : colors theme manager
  *
  * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

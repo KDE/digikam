@@ -60,6 +60,7 @@ set(libmainview_SRCS
     mainview/dcursortracker.cpp
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
+    mainview/schememanager.cpp
     mainview/sidebar.cpp
     mainview/dmessagebox.cpp
     ../../app/utils/digikam_globals.cpp

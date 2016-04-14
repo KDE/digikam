@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-02
- * Description : theme manager
+ * Description : colors theme manager
  *
  * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -43,7 +43,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcolorscheme.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
 #include <ktoolinvocation.h>
@@ -52,6 +51,7 @@
 
 #include "digikam_debug.h"
 #include "dxmlguiwindow.h"
+#include <schememanager.h>
 
 namespace Digikam
 {
@@ -145,7 +145,7 @@ void ThemeManager::slotChangePalette()
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
-    qApp->setPalette(KColorScheme::createApplicationPalette(config));
+    qApp->setPalette(SchemeManager::createApplicationPalette(config));
 
     qCDebug(DIGIKAM_WIDGETS_LOG) << theme << " :: " << filename;
 
@@ -279,22 +279,22 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config) co
 
     KConfigGroup group(config, QLatin1String("WM"));
     QPainter p(&pixmap);
-    KColorScheme windowScheme(QPalette::Active, KColorScheme::Window, config);
+    SchemeManager windowScheme(QPalette::Active, SchemeManager::Window, config);
     p.fillRect(1,  1, 7, 7, windowScheme.background());
     p.fillRect(2,  2, 5, 2, QBrush(windowScheme.foreground().color(), b1));
 
-    KColorScheme buttonScheme(QPalette::Active, KColorScheme::Button, config);
+    SchemeManager buttonScheme(QPalette::Active, SchemeManager::Button, config);
     p.fillRect(8,  1, 7, 7, buttonScheme.background());
     p.fillRect(9,  2, 5, 2, QBrush(buttonScheme.foreground().color(), b1));
 
     p.fillRect(15,  1, 7, 7, group.readEntry(QLatin1String("activeBackground"),        QColor(96, 148, 207)));
     p.fillRect(16,  2, 5, 2, QBrush(group.readEntry(QLatin1String("activeForeground"), QColor(255, 255, 255)), b1));
 
-    KColorScheme viewScheme(QPalette::Active, KColorScheme::View, config);
+    SchemeManager viewScheme(QPalette::Active, SchemeManager::View, config);
     p.fillRect(1,  8, 7, 7, viewScheme.background());
     p.fillRect(2, 12, 5, 2, QBrush(viewScheme.foreground().color(), b2));
 
-    KColorScheme selectionScheme(QPalette::Active, KColorScheme::Selection, config);
+    SchemeManager selectionScheme(QPalette::Active, SchemeManager::Selection, config);
     p.fillRect(8,  8, 7, 7, selectionScheme.background());
     p.fillRect(9, 12, 5, 2, QBrush(selectionScheme.foreground().color(), b2));
 
