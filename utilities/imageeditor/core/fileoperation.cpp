@@ -42,14 +42,13 @@
 
 // KDE includes
 
-#include <krun.h>
 #include <kmimetypetrader.h>
-#include <kio_version.h>
 
 // Local includes
 
 #include "digikam_debug.h"
 #include "metadatasettings.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -174,11 +173,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
     {
         // Run the dedicated app to open the item.
 
-#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
-        KRun::run(*it.key(), it.value(), parentWidget);
-#else
-        KRun::runService(*it.key(), it.value(), parentWidget);
-#endif
+        KIOWrapper::run(*it.key(), it.value(), parentWidget);
     }
 }
 

@@ -28,16 +28,14 @@
 
 #include <QMenu>
 
-// KDE includes
-
-#include <kactioncollection.h>
-
 // Local includes
 
 #include "camiteminfo.h"
 #include "importfiltermodel.h"
 
 class QAction;
+
+class KActionCollection;
 
 namespace Digikam
 {

@@ -42,8 +42,6 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 #include <kopenwithdialog.h>
-#include <krun.h>
-#include <kio_version.h>
 
 // Local includes
 
@@ -70,6 +68,7 @@
 #include "dimg.h"
 #include "dxmlguiwindow.h"
 #include "akonadiiface.h"
+#include "kiowrapper.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -318,7 +317,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KRun::run(dlg->text(), list, d->parent);
+                KIOWrapper::run(dlg->text(), list, d->parent);
             }
 
             delete dlg;
@@ -332,11 +331,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
-#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
-    KRun::run(*service, list, d->parent);
-#else
-    KRun::runService(*service, list, d->parent);
-#endif
+    KIOWrapper::run(*service, list, d->parent);
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

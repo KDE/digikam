@@ -25,7 +25,6 @@
 
 // Qt includes
 
-#include <QUrl>
 #include <QPair>
 #include <QPointer>
 
@@ -39,6 +38,8 @@
 #include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
 #include <kio/previewjob.h>
+#include <krun.h>
+#include <kio_version.h>
 #include <KIOWidgets/kio/renamedialog.h>
 
 namespace Digikam
@@ -199,6 +200,20 @@ QPair<int, QString> KIOWrapper::renameDlg(QWidget* widget, const QString& captio
     delete dlg;
 
     return pair;
+}
+
+bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* const window)
+{
+#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
+    return KRun::run(service, urls, window);
+#else
+    return KRun::runService(service, urls, window);
+#endif
+}
+
+bool KIOWrapper::run(const QString& exec, const QList<QUrl>& urls, QWidget* const window)
+{
+    return KRun::run(exec, urls, window);
 }
 
 } // namespace Digikam

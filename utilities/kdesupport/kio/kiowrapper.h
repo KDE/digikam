@@ -27,10 +27,14 @@
 // Qt includes
 
 #include <QObject>
+#include <QUrl>
+#include <QStringList>
+#include <QList>
+#include <QPixmap>
+#include <QWidget>
 
 // KDE includes
 
-#include <kio/previewjob.h>
 #include <KIOWidgets/kio/renamedialog.h>
 
 // Local includes
@@ -38,6 +42,8 @@
 #include "digikam_export.h"
 
 class KJob;
+class KService;
+class KFileItem;
 
 namespace Digikam
 {
@@ -80,6 +86,9 @@ public:
     void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
     static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
+
+    static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
+    static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
 
 Q_SIGNALS:
 

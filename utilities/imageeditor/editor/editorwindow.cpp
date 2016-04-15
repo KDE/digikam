@@ -74,10 +74,8 @@
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
 #include <ktoolbarpopupaction.h>
-#include <krun.h>
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
-#include <kio_version.h>
 
 // Local includes
 
@@ -2856,7 +2854,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KRun::run(dlg->text(), QList<QUrl>() << url, this);
+                KIOWrapper::run(dlg->text(), QList<QUrl>() << url, this);
             }
 
             delete dlg;
@@ -2870,11 +2868,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
-#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
-    KRun::run(*service, QList<QUrl>() << url, this);
-#else
-    KRun::runService(*service, QList<QUrl>() << url, this);
-#endif
+    KIOWrapper::run(*service, QList<QUrl>() << url, this);
 }
 
 }  // namespace Digikam

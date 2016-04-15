@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILEMANAGEMENT_H
-#define FILEMANAGEMENT_H
+#ifndef FILE_OPERATION_H
+#define FILE_OPERATION_H
 
 // Qt includes
 
@@ -63,4 +63,4 @@ namespace FileOperation
 
 } // namespace Digikam
 
-#endif /* FILEMANAGEMENT_H */
+#endif /* FILE_OPERATION_H */

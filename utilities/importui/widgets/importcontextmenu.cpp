@@ -34,9 +34,8 @@
 
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
-#include <krun.h>
 #include <klocalizedstring.h>
-#include <kio_version.h>
+#include <kactioncollection.h>
 
 // Local includes
 
@@ -47,6 +46,7 @@
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 #include "fileactionmngr.h"
+#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -278,7 +278,7 @@ void ImportContextMenuHelper::slotOpenWith(QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KRun::run(dlg->text(), list, d->parent);
+                KIOWrapper::run(dlg->text(), list, d->parent);
             }
 
             delete dlg;
@@ -292,11 +292,7 @@ void ImportContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
-#if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
-    KRun::run(*service, list, d->parent);
-#else
-    KRun::runService(*service, list, d->parent);
-#endif
+    KIOWrapper::run(*service, list, d->parent);
 }
 
 void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)
