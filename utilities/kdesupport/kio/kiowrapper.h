@@ -86,6 +86,7 @@ public:
     
     static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
+    static bool run(const QUrl& url, QWidget* const window);
 
 Q_SIGNALS:
 

@@ -28,6 +28,7 @@
 
 #include <QPair>
 #include <QPointer>
+#include <QMimeDatabase>
 
 // KDE includes
 
@@ -234,6 +235,11 @@ bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* 
 bool KIOWrapper::run(const QString& exec, const QList<QUrl>& urls, QWidget* const window)
 {
     return KRun::run(exec, urls, window);
+}
+
+bool KIOWrapper::run(const QUrl& url, QWidget* const window)
+{
+    return KRun::runUrl(url, QMimeDatabase().mimeTypeForUrl(url).name(), window);
 }
 
 } // namespace Digikam

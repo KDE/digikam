@@ -37,7 +37,6 @@
 // KDE includes
 
 #include <ktoolinvocation.h>
-#include <krun.h>
 
 // Local includes
 
@@ -1299,8 +1298,7 @@ void DigikamView::slotAlbumOpenInFileManager()
 
     if (palbum)
     {
-        // NOTE: KRun will delete itself.
-        new KRun(QUrl::fromLocalFile(palbum->folderPath()), this);
+        KIOWrapper::run(QUrl::fromLocalFile(palbum->folderPath()), this);
     }
 }
 
