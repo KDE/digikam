@@ -6,7 +6,8 @@
  * Date        : 2015-07-10
  * Description : A wrapper to isolate KIO Jobs calls
  *
- * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2015-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,7 +32,6 @@
 // KDE includes
 
 #include <kio/statjob.h>
-#include <kjobwidgets.h>
 #include <kio/job.h>
 #include <kio/global.h>
 #include <kio/copyjob.h>
@@ -40,6 +40,7 @@
 #include <kio/previewjob.h>
 #include <krun.h>
 #include <kio_version.h>
+#include <kjobwidgets.h>
 #include <KIOWidgets/kio/renamedialog.h>
 
 namespace Digikam
@@ -194,14 +195,33 @@ QPair<int, QString> KIOWrapper::renameDlg(QWidget* widget, const QString& captio
                                                             KIO::M_OVERWRITE |
                                                             KIO::M_SKIP));
     QPair<int, QString> pair;
-    pair.first  = dlg->exec();
+
+    switch (dlg->exec())
+    {
+        case KIO::Result_Cancel:
+            pair.first = Cancel;
+            break;
+        case KIO::Result_Skip:
+            pair.first = Skip;
+            break;
+        case KIO::Result_AutoSkip:
+            pair.first = SkipAll;
+            break;
+        case KIO::Result_Overwrite:
+            pair.first = Overwrite;
+            break;
+        default: // OverwriteAll
+            pair.first = OverwriteAll;
+            break;
+    }
+
     pair.second = dlg->newDestUrl().toLocalFile();
 
     delete dlg;
 
     return pair;
 }
-
+        
 bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* const window)
 {
 #if KIO_VERSION < QT_VERSION_CHECK(5,6,0)

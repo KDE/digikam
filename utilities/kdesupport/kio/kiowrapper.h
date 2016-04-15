@@ -6,7 +6,8 @@
  * Date        : 2015-07-10
  * Description : A wrapper to isolate KIO Jobs calls
  *
- * Copyright (C) 2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2015-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,10 +34,6 @@
 #include <QPixmap>
 #include <QWidget>
 
-// KDE includes
-
-#include <KIOWidgets/kio/renamedialog.h>
-
 // Local includes
 
 #include "digikam_export.h"
@@ -56,11 +53,11 @@ public:
 
     enum RenameDlgResults
     {
-        Cancel       = KIO::Result_Cancel,
-        Skip         = KIO::Result_Skip,
-        SkipAll      = KIO::Result_AutoSkip,
-        Overwrite    = KIO::Result_Overwrite,
-        OverwriteAll = KIO::Result_OverwriteAll
+        Cancel = 0,
+        Skip,
+        SkipAll,
+        Overwrite,
+        OverwriteAll
     };
 
 public:
@@ -86,7 +83,7 @@ public:
     void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
     static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
-
+    
     static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
 
