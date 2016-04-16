@@ -26,12 +26,12 @@
 
 // Qt includes
 
+#include <QNetworkAccessManager>
 #include <QDomDocument>
 #include <QUrlQuery>
 
 // KDE includes
 
-#include <kio/job.h>
 #include <klocalizedstring.h>
 
 // local includes
@@ -44,9 +44,10 @@ namespace Digikam
 class SearchBackend::Private
 {
 public:
+
     Private()
       : results(),
-        kioJob(0),
+        netReply(0),
         runningBackend(),
         searchData(),
         errorMessage()
@@ -54,14 +55,15 @@ public:
     }
 
     SearchBackend::SearchResult::List results;
-    KIO::Job*                         kioJob;
+    QNetworkReply*                    netReply;
     QString                           runningBackend;
     QByteArray                        searchData;
     QString                           errorMessage;
 };
 
 SearchBackend::SearchBackend(QObject* const parent)
-    : QObject(parent), d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
 }
 
@@ -80,21 +82,23 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
     {
         d->runningBackend = backendName;
 
-        QUrl jobUrl(QLatin1String("http://nominatim.openstreetmap.org/search"));
+        QUrl netUrl(QLatin1String("http://nominatim.openstreetmap.org/search"));
 
-        QUrlQuery q(jobUrl);
+        QUrlQuery q(netUrl);
         q.addQueryItem(QLatin1String("format"), QLatin1String("xml"));
         q.addQueryItem(QLatin1String("q"), searchTerm);
-        jobUrl.setQuery(q);
+        netUrl.setQuery(q);
 
-        d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-        d->kioJob->addMetaData(QLatin1String("User-Agent"), getUserAgentName());
+        QNetworkAccessManager* const mngr = new QNetworkAccessManager();
 
-        connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
-                this, SLOT(slotData(KIO::Job*,QByteArray)));
+        connect(mngr, SIGNAL(finished(QNetworkReply*)),
+                this, SLOT(slotFinished(QNetworkReply*)));
 
-        connect(d->kioJob, SIGNAL(result(KJob*)),
-                this, SLOT(slotResult(KJob*)));
+        QNetworkRequest netRequest;
+        netRequest.setUrl(netUrl);
+        netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
+
+        d->netReply = mngr->get(netRequest);
 
         return true;
     }
@@ -105,22 +109,24 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
 
         // documentation: http://www.geonames.org/export/geonames-search.html
 
-        QUrl jobUrl(QLatin1String("http://api.geonames.org/search"));
+        QUrl netUrl(QLatin1String("http://api.geonames.org/search"));
 
-        QUrlQuery q(jobUrl);
+        QUrlQuery q(netUrl);
         q.addQueryItem(QLatin1String("type"), QLatin1String("xml"));
         q.addQueryItem(QLatin1String("q"), searchTerm);
         q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
-        jobUrl.setQuery(q);
+        netUrl.setQuery(q);
 
-        d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-        d->kioJob->addMetaData(QLatin1String("User-Agent"), getUserAgentName());
+        QNetworkAccessManager* const mngr = new QNetworkAccessManager();
 
-        connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
-                this, SLOT(slotData(KIO::Job*,QByteArray)));
+        connect(mngr, SIGNAL(finished(QNetworkReply*)),
+                this, SLOT(slotFinished(QNetworkReply*)));
 
-        connect(d->kioJob, SIGNAL(result(KJob*)),
-                this, SLOT(slotResult(KJob*)));
+        QNetworkRequest netRequest;
+        netRequest.setUrl(netUrl);
+        netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
+
+        d->netReply = mngr->get(netRequest);
 
         return true;
     }
@@ -128,26 +134,21 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
     return false;
 }
 
-void SearchBackend::slotData(KIO::Job* kioJob, const QByteArray& data)
+void SearchBackend::slotFinished(QNetworkReply* reply)
 {
-    Q_UNUSED(kioJob)
-
-    d->searchData.append(data);
-}
-
-void SearchBackend::slotResult(KJob* kJob)
-{
-    if (kJob != d->kioJob)
+    if (reply != d->netReply)
     {
         return;
     }
 
-    if (d->kioJob->error())
+    if (reply->error() != QNetworkReply::NoError)
     {
-        d->errorMessage = d->kioJob->errorString();
+        d->errorMessage = reply->errorString();
         emit(signalSearchCompleted());
         return;
     }
+
+    d->searchData.append(reply->readAll());
 
     const QString resultString = QString::fromUtf8(d->searchData.constData(), d->searchData.count());
 

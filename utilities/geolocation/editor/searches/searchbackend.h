@@ -28,6 +28,7 @@
 // Qt includes
 
 #include <QObject>
+#include <QNetworkReply>
 
 // Local includes
 
@@ -36,13 +37,6 @@
 // Local includes
 
 #include "rgwidget.h"
-
-namespace KIO
-{
-    class Job;
-}
-
-class KJob;
 
 namespace Digikam
 {
@@ -61,11 +55,11 @@ public:
         {
         }
 
-        typedef QList<SearchResult>   List;
+        typedef QList<SearchResult>    List;
         GeoIface::GeoCoordinates       coordinates;
-        QString                       name;
+        QString                        name;
         GeoIface::GeoCoordinates::Pair boundingBox;
-        QString                       internalId;
+        QString                        internalId;
     };
 
     explicit SearchBackend(QObject* const parent = 0);
@@ -82,8 +76,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void slotData(KIO::Job* kioJob, const QByteArray& data);
-    void slotResult(KJob* kJob);
+    void slotFinished(QNetworkReply* reply);
 
 private:
 

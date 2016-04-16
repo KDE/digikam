@@ -124,6 +124,7 @@ find_package(Qt5 ${QT_MIN_VERSION}
              Xml
              PrintSupport
              WebKitWidgets
+             Network
              DBus
 )
 

@@ -70,7 +70,7 @@ public:
     Private()
       : status(StatusSuccess),
         currentMergedRequestIndex(0),
-        netReplay(0)
+        netReply(0)
 
     {
     }
@@ -82,7 +82,7 @@ public:
 
     int                  currentMergedRequestIndex;
 
-    QNetworkReply*       netReplay;
+    QNetworkReply*       netReply;
 };
 
 LookupAltitudeGeonames::LookupAltitudeGeonames(QObject* const parent)
@@ -197,12 +197,12 @@ void LookupAltitudeGeonames::startNextRequest()
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     netUrl.setQuery(q);
 
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager();
 
     connect(mngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
-    d->netReplay = mngr->get(QNetworkRequest(netUrl));
+    d->netReply = mngr->get(QNetworkRequest(netUrl));
 }
 
 void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
@@ -272,9 +272,9 @@ QString LookupAltitudeGeonames::errorMessage() const
 
 void LookupAltitudeGeonames::cancel()
 {
-    if (d->netReplay && !d->netReplay->isFinished())
+    if (d->netReply && !d->netReply->isFinished())
     {
-        d->netReplay->abort();
+        d->netReply->abort();
     }
 
     d->status = StatusCanceled;
