@@ -56,7 +56,10 @@ public:
 
 public:
 
-    qreal h, c, y, a;
+    qreal h;
+    qreal c;
+    qreal y;
+    qreal a;
 
 private:
 
@@ -73,6 +76,7 @@ namespace ColorTools
 static inline qreal wrap(qreal a, qreal d = 1.0)
 {
     qreal r = fmod(a, d);
+
     return (r < 0.0 ? d + r : (r > 0.0 ? r : 0.0));
 }
 
@@ -87,7 +91,7 @@ static inline qreal normalize(qreal a)
 
 static inline qreal mixQreal(qreal a, qreal b, qreal bias)
 {
-    return a + (b - a) * bias;
+    return (a + (b - a) * bias);
 }
 
 /**
@@ -138,10 +142,8 @@ static qreal contrastRatioForLuma(qreal y1, qreal y2)
     {
         return (y1 + 0.05) / (y2 + 0.05);
     }
-    else
-    {
-        return (y2 + 0.05) / (y1 + 0.05);
-    }
+
+    return (y2 + 0.05) / (y1 + 0.05);
 }
 
 qreal contrastRatio(const QColor& c1, const QColor& c2)
@@ -157,6 +159,7 @@ QColor lighten(const QColor& color, qreal ky = 0.5, qreal kc = 1.0)
     HCYColorSpace c(color);
     c.y = 1.0 - ColorTools::normalize((1.0 - c.y) * (1.0 - ky));
     c.c = 1.0 - ColorTools::normalize((1.0 - c.c) * kc);
+
     return c.qColor();
 }
 
@@ -168,6 +171,7 @@ QColor darken(const QColor& color, qreal ky = 0.5, qreal kc = 1.0)
     HCYColorSpace c(color);
     c.y = ColorTools::normalize(c.y * (1.0 - ky));
     c.c = ColorTools::normalize(c.c * kc);
+
     return c.qColor();
 }
 
@@ -180,6 +184,7 @@ QColor shade(const QColor& color, qreal ky, qreal kc = 0.0)
     HCYColorSpace c(color);
     c.y = ColorTools::normalize(c.y + ky);
     c.c = ColorTools::normalize(c.c + kc);
+
     return c.qColor();
 }
 
@@ -256,8 +261,8 @@ QColor tint(const QColor& base, const QColor& color, qreal amount = 0.3)
 
     for (int i = 12; i; --i)
     {
-        double a = 0.5 * (l + u);
-        result = tintHelper(base, baseLuma, color, a);
+        double a  = 0.5 * (l + u);
+        result    = tintHelper(base, baseLuma, color, a);
         double ra = contrastRatioForLuma(baseLuma, luma(result));
 
         if (ra > rg)
@@ -294,6 +299,7 @@ QColor overlayColors(const QColor& base, const QColor& paint,
     p.setCompositionMode(comp);
     p.fillRect(0, 0, 1, 1, paint);
     p.end();
+
     return img.pixel(0, 0);
 }
 
@@ -303,11 +309,11 @@ QColor overlayColors(const QColor& base, const QColor& paint,
 
 #define HCY_REC 709 // use 709 for now
 #if   HCY_REC == 601
-static const qreal yc[3] = { 0.299, 0.587, 0.114 };
+static const qreal yc[3] = {0.299,   0.587,  0.114  };
 #elif HCY_REC == 709
-static const qreal yc[3] = {0.2126, 0.7152, 0.0722};
+static const qreal yc[3] = {0.2126,  0.7152, 0.0722 };
 #else // use Qt values
-static const qreal yc[3] = { 0.34375, 0.5, 0.15625 };
+static const qreal yc[3] = {0.34375, 0.5,    0.15625};
 #endif
 
 qreal HCYColorSpace::gamma(qreal n)
@@ -468,13 +474,13 @@ qreal HCYColorSpace::luma(const QColor& color)
 }
 
 // -------------------------------------------------------------------------------------
-    
+
 class StateEffects
 {
 public:
 
     explicit StateEffects(QPalette::ColorGroup state, const KSharedConfigPtr&);
-    ~StateEffects(){}
+    ~StateEffects() {}
 
     QBrush brush(const QBrush& background) const;
     QBrush brush(const QBrush& foreground, const QBrush& background) const;
@@ -528,23 +534,24 @@ StateEffects::StateEffects(QPalette::ColorGroup state, const KSharedConfigPtr& c
     _effects[1] = 0;
     _effects[2] = 0;
 
-    if (! group.isEmpty())
+    if (!group.isEmpty())
     {
         KConfigGroup cfg(config, group);
         const bool enabledByDefault = (state == QPalette::Disabled);
 
         if (cfg.readEntry("Enable", enabledByDefault))
         {
-            _effects[Intensity] = cfg.readEntry("IntensityEffect", (int)(state == QPalette::Disabled ?  IntensityDarken : IntensityNoEffect));
-            _effects[Color]     = cfg.readEntry("ColorEffect",     (int)(state == QPalette::Disabled ?  ColorNoEffect : ColorDesaturate));
-            _effects[Contrast]  = cfg.readEntry("ContrastEffect",  (int)(state == QPalette::Disabled ?  ContrastFade : ContrastTint));
-            _amount[Intensity]  = cfg.readEntry("IntensityAmount", state == QPalette::Disabled ? 0.10 :  0.0);
-            _amount[Color]      = cfg.readEntry("ColorAmount",     state == QPalette::Disabled ?  0.0 : -0.9);
-            _amount[Contrast]   = cfg.readEntry("ContrastAmount",  state == QPalette::Disabled ? 0.65 :  0.25);
-        
+            _effects[Intensity] = cfg.readEntry("IntensityEffect", (int)((state == QPalette::Disabled) ?  IntensityDarken : IntensityNoEffect));
+            _effects[Color]     = cfg.readEntry("ColorEffect",     (int)((state == QPalette::Disabled) ?  ColorNoEffect   : ColorDesaturate));
+            _effects[Contrast]  = cfg.readEntry("ContrastEffect",  (int)((state == QPalette::Disabled) ?  ContrastFade    : ContrastTint));
+            _amount[Intensity]  = cfg.readEntry("IntensityAmount", (state == QPalette::Disabled) ? 0.10 :  0.0);
+            _amount[Color]      = cfg.readEntry("ColorAmount",     (state == QPalette::Disabled) ?  0.0 : -0.9);
+            _amount[Contrast]   = cfg.readEntry("ContrastAmount",  (state == QPalette::Disabled) ? 0.65 :  0.25);
+
             if (_effects[Color] > ColorNoEffect)
             {
-                _color = cfg.readEntry("Color", state == QPalette::Disabled ?  QColor(56, 56, 56) : QColor(112, 111, 110));
+                _color = cfg.readEntry("Color", (state == QPalette::Disabled) ? QColor(56, 56, 56) 
+                                                                              : QColor(112, 111, 110));
             }
         }
     }
@@ -566,7 +573,7 @@ QBrush StateEffects::brush(const QBrush& background) const
             color = ColorTools::lighten(color, _amount[Intensity]);
             break;
     }
-    
+
     switch (_effects[Color])
     {
         case ColorDesaturate:
@@ -585,8 +592,8 @@ QBrush StateEffects::brush(const QBrush& background) const
 
 QBrush StateEffects::brush(const QBrush& foreground, const QBrush& background) const
 {
-    QColor color = foreground.color(); // TODO - actually work on brushes
-    QColor bg = background.color();
+    QColor color = foreground.color();
+    QColor bg    = background.color();
 
     // Apply the foreground effects
 
@@ -627,7 +634,7 @@ struct DecoDefaultColors
     int Focus[3];
 };
 
-// these numbers come from the Breeze color scheme ([breeze]/colors/Breeze.colors)
+// these numbers come from the Breeze color scheme
 static const SetDefaultColors defaultViewColors =
 {
     { 252, 252, 252 }, // Background
@@ -735,6 +742,10 @@ public:
 
 private:
 
+    void init(const KSharedConfigPtr&, QPalette::ColorGroup, const char*, SetDefaultColors);
+
+private:
+
     struct
     {
         QBrush fg[8],
@@ -743,8 +754,6 @@ private:
     } _brushes;
 
     qreal _contrast;
-
-    void init(const KSharedConfigPtr&, QPalette::ColorGroup, const char*, SetDefaultColors);
 };
 
 #define DEFAULT(c)      QColor( c[0], c[1], c[2] )
@@ -757,7 +766,7 @@ SchemeManagerPrivate::SchemeManagerPrivate(const KSharedConfigPtr& config,
                                            SetDefaultColors defaults)
 {
     KConfigGroup cfg(config, group);
-    _contrast = SchemeManager::contrastF(config);
+    _contrast      = SchemeManager::contrastF(config);
 
     // loaded-from-config colors (no adjustment)
     _brushes.bg[0] = cfg.readEntry("BackgroundNormal",    SET_DEFAULT(NormalBackground));
@@ -796,17 +805,16 @@ void SchemeManagerPrivate::init(const KSharedConfigPtr& config,
     KConfigGroup cfg(config, group);
 
     // loaded-from-config colors
-    _brushes.fg[0] = cfg.readEntry("ForegroundNormal",   SET_DEFAULT(NormalText));
-    _brushes.fg[1] = cfg.readEntry("ForegroundInactive", SET_DEFAULT(InactiveText));
-    _brushes.fg[2] = cfg.readEntry("ForegroundActive",   SET_DEFAULT(ActiveText));
-    _brushes.fg[3] = cfg.readEntry("ForegroundLink",     SET_DEFAULT(LinkText));
-    _brushes.fg[4] = cfg.readEntry("ForegroundVisited",  SET_DEFAULT(VisitedText));
-    _brushes.fg[5] = cfg.readEntry("ForegroundNegative", SET_DEFAULT(NegativeText));
-    _brushes.fg[6] = cfg.readEntry("ForegroundNeutral",  SET_DEFAULT(NeutralText));
-    _brushes.fg[7] = cfg.readEntry("ForegroundPositive", SET_DEFAULT(PositiveText));
-
-    _brushes.deco[0] = cfg.readEntry("DecorationHover",  DECO_DEFAULT(Hover));
-    _brushes.deco[1] = cfg.readEntry("DecorationFocus",  DECO_DEFAULT(Focus));
+    _brushes.fg[0]   = cfg.readEntry("ForegroundNormal",   SET_DEFAULT(NormalText));
+    _brushes.fg[1]   = cfg.readEntry("ForegroundInactive", SET_DEFAULT(InactiveText));
+    _brushes.fg[2]   = cfg.readEntry("ForegroundActive",   SET_DEFAULT(ActiveText));
+    _brushes.fg[3]   = cfg.readEntry("ForegroundLink",     SET_DEFAULT(LinkText));
+    _brushes.fg[4]   = cfg.readEntry("ForegroundVisited",  SET_DEFAULT(VisitedText));
+    _brushes.fg[5]   = cfg.readEntry("ForegroundNegative", SET_DEFAULT(NegativeText));
+    _brushes.fg[6]   = cfg.readEntry("ForegroundNeutral",  SET_DEFAULT(NeutralText));
+    _brushes.fg[7]   = cfg.readEntry("ForegroundPositive", SET_DEFAULT(PositiveText));
+    _brushes.deco[0] = cfg.readEntry("DecorationHover",    DECO_DEFAULT(Hover));
+    _brushes.deco[1] = cfg.readEntry("DecorationFocus",    DECO_DEFAULT(Focus));
 
     // apply state adjustments
 
@@ -942,7 +950,7 @@ SchemeManager::SchemeManager(QPalette::ColorGroup state, ColorSet set, KSharedCo
                 else if (state == QPalette::Inactive)
                 {
                     d = new SchemeManagerPrivate(config, state, "Colors:Window", defaultWindowColors,
-                                                SchemeManager(QPalette::Active, Selection, config).background());
+                                                 SchemeManager(QPalette::Active, Selection, config).background());
                 }
                 else
                 {
@@ -965,6 +973,7 @@ SchemeManager::SchemeManager(QPalette::ColorGroup state, ColorSet set, KSharedCo
 int SchemeManager::contrast()
 {
     KConfigGroup g(KSharedConfig::openConfig(), "KDE");
+
     return g.readEntry("contrast", 7);
 }
 
@@ -973,6 +982,7 @@ qreal SchemeManager::contrastF(const KSharedConfigPtr& config)
     if (config)
     {
         KConfigGroup g(config, "KDE");
+
         return 0.1 * g.readEntry("contrast", 7);
     }
 
@@ -1007,8 +1017,11 @@ QColor SchemeManager::shade(const QColor& color, ShadeRole role)
 QColor SchemeManager::shade(const QColor& color, ShadeRole role, qreal contrast, qreal chromaAdjust)
 {
     // nan -> 1.0
-    contrast = (1.0 > contrast ? (-1.0 < contrast ? contrast : -1.0) : 1.0);
-    qreal y = ColorTools::luma(color), yi = 1.0 - y;
+    contrast = ((1.0 > contrast) ? ((-1.0 < contrast) ? contrast
+                                                      : -1.0)
+                                 : 1.0);
+    qreal y  = ColorTools::luma(color);
+    qreal yi = 1.0 - y;
 
     // handle very dark colors (base, mid, dark, shadow == midlight, light)
     if (y < 0.006)
@@ -1044,7 +1057,7 @@ QColor SchemeManager::shade(const QColor& color, ShadeRole role, qreal contrast,
 
     // handle everything else
     qreal lightAmount = (0.05 + y * 0.55) * (0.25 + contrast * 0.75);
-    qreal darkAmount  = (- y) * (0.55 + contrast * 0.35);
+    qreal darkAmount  = (- y)             * (0.55 + contrast * 0.35);
 
     switch (role)
     {
@@ -1083,8 +1096,8 @@ QPalette SchemeManager::createApplicationPalette(const KSharedConfigPtr& config)
 
     static const QPalette::ColorGroup states[3] =
     {
-        QPalette::Active, 
-        QPalette::Inactive, 
+        QPalette::Active,
+        QPalette::Inactive,
         QPalette::Disabled
     };
 
