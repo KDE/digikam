@@ -28,16 +28,13 @@
 
 // Qt includes
 
+#include <QNetworkAccessManager>
 #include <QDomDocument>
 #include <QMap>
 #include <QPointer>
 #include <QTimer>
 #include <QUrl>
 #include <QUrlQuery>
-
-// KDE includes
-
-#include <kio/job.h>
 
 // Local includes
 
@@ -55,20 +52,20 @@ public:
       : language(),
         request(),
         data(),
-        kioJob(0)
+        netReply(0)
     {
     }
 
     ~OsmInternalJobs()
     {
-        if (kioJob)
-            kioJob->deleteLater();
+        if (netReply)
+            netReply->deleteLater();
     }
 
     QString            language;
     QList<RGInfo>      request;
     QByteArray         data;
-    QPointer<KIO::Job> kioJob;
+    QNetworkReply*     netReply;
 };
 
 class BackendOsmRG::Private
@@ -117,25 +114,27 @@ void BackendOsmRG::nextPhoto()
     if (d->jobs.isEmpty())
         return;
 
-    QUrl jobUrl(QLatin1String("http://nominatim.openstreetmap.org/reverse"));
+    QUrl netUrl(QLatin1String("http://nominatim.openstreetmap.org/reverse"));
 
-    QUrlQuery q(jobUrl);
+    QUrlQuery q(netUrl);
     q.addQueryItem(QLatin1String("format"), QLatin1String("xml"));
     q.addQueryItem(QLatin1String("lat"), d->jobs.first().request.first().coordinates.latString());
     q.addQueryItem(QLatin1String("lon"), d->jobs.first().request.first().coordinates.lonString());
     q.addQueryItem(QLatin1String("zoom"), QLatin1String("18"));
     q.addQueryItem(QLatin1String("addressdetails"), QLatin1String("1"));
     q.addQueryItem(QLatin1String("accept-language"), d->jobs.first().language);
-    jobUrl.setQuery(q);
+    netUrl.setQuery(q);
 
-    d->jobs.first().kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-    d->jobs.first().kioJob->addMetaData(QLatin1String("User-Agent"), getUserAgentName());
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager();
 
-    connect(d->jobs.first().kioJob, SIGNAL(data(KIO::Job*,QByteArray)), 
-            this, SLOT(dataIsHere(KIO::Job*,QByteArray)));
+    connect(mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 
-    connect(d->jobs.first().kioJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));    
+    QNetworkRequest netRequest;
+    netRequest.setUrl(netUrl);
+    netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
+
+    d->jobs.first().netReply = mngr->get(netRequest);
 }
 
 /**
@@ -167,24 +166,12 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
             OsmInternalJobs newJob;
             newJob.request << rgList.at(i);
             newJob.language = language;
-            d->jobs<<newJob;
+            d->jobs << newJob;
         }
     }
 
     if (!d->jobs.empty())
         nextPhoto();
-}
-
-void BackendOsmRG::dataIsHere(KIO::Job* job, const QByteArray & data)
-{
-    for (int i = 0; i < d->jobs.count(); ++i)
-    {
-        if (d->jobs.at(i).kioJob == job)
-        {
-            d->jobs[i].data.append(data);
-            break;
-        }
-    }
 }
 
 /**
@@ -198,7 +185,7 @@ QMap<QString,QString> BackendOsmRG::makeQMapFromXML(const QString& xmlData)
     QDomDocument doc;
     doc.setContent(xmlData);
 
-    QDomElement docElem =  doc.documentElement();
+    QDomElement docElem = doc.documentElement();
     QDomNode n          = docElem.lastChild().firstChild();
 
     while (!n.isNull())
@@ -248,13 +235,11 @@ QString BackendOsmRG::backendName()
     return QLatin1String("OSM");
 }
 
-void BackendOsmRG::slotResult(KJob* kJob)
+void BackendOsmRG::slotFinished(QNetworkReply* reply)
 {
-    KIO::Job* const kioJob = qobject_cast<KIO::Job*>(kJob);
-
-    if (kioJob->error())
+    if (reply->error())
     {
-        d->errorMessage = kioJob->errorString();
+        d->errorMessage = reply->errorString();
         emit(signalRGReady(d->jobs.first().request));
         d->jobs.clear();
 
@@ -263,7 +248,16 @@ void BackendOsmRG::slotResult(KJob* kJob)
 
     for (int i = 0; i < d->jobs.count(); ++i)
     {
-        if (d->jobs.at(i).kioJob == kioJob)
+        if (d->jobs.at(i).netReply == reply)
+        {
+            d->jobs[i].data.append(reply->readAll());
+            break;
+        }
+    }
+
+    for (int i = 0; i < d->jobs.count(); ++i)
+    {
+        if (d->jobs.at(i).netReply == reply)
         {
             QString dataString;
             dataString = QString::fromUtf8(d->jobs[i].data.constData(),qstrlen(d->jobs[i].data.constData()));

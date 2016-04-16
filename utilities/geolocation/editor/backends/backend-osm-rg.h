@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QNetworkReply>
 #include <QUrl>
 #include <QList>
 #include <QMap>
@@ -36,13 +37,6 @@
 // Local includes
 
 #include "backend-rg.h"
-
-namespace KIO
-{
-    class Job;
-}
-
-class KJob;
 
 namespace Digikam
 {
@@ -66,8 +60,7 @@ public:
 private Q_SLOTS:
 
     void nextPhoto(); 
-    void dataIsHere(KIO::Job* kJob, const QByteArray &); 
-    void slotResult(KJob* kJob);
+    void slotFinished(QNetworkReply* reply);
 
 private:
 
