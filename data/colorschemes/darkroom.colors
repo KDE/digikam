@@ -87,7 +87,8 @@ ForegroundPositive=128,255,128
 ForegroundVisited=192,128,255
 
 [General]
-Name=digiKam High Dark
+Name=DarkRoom
+# https://en.wikipedia.org/wiki/Darkroom
 
 [WM]
 activeBackground=0,49,110

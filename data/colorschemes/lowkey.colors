@@ -85,7 +85,8 @@ ForegroundPositive=145,221,100
 ForegroundVisited=64,128,255
 
 [General]
-Name=digiKam Low Dark
+Name=LowKey
+# https://en.wikipedia.org/wiki/Low-key_lighting
 
 [WM]
 activeBackground=138,151,166
