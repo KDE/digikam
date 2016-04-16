@@ -27,17 +27,14 @@
 #ifndef LOOKUP_ALTITUDE_GEONAMES_H
 #define LOOKUP_ALTITUDE_GEONAMES_H
 
+// Qt includes
+
+#include <QNetworkReply>
+
 // local includes
 
 #include "lookupaltitude.h"
 #include "digikam_export.h"
-
-namespace KIO
-{
-    class Job;
-}
-
-class KJob;
 
 namespace GeoIface
 {
@@ -65,8 +62,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotData(KIO::Job* kioJob, const QByteArray& data);
-    void slotResult(KJob* kJob);
+    void slotFinished(QNetworkReply* reply);
 
 private:
 

@@ -31,10 +31,10 @@
 
 #include <QPointer>
 #include <QUrlQuery>
+#include <QNetworkAccessManager>
 
 // KDE includes
 
-#include <kio/job.h>
 #include <klocalizedstring.h>
 
 namespace GeoIface
@@ -67,14 +67,22 @@ class Q_DECL_HIDDEN LookupAltitudeGeonames::Private
 {
 public:
 
+    Private()
+      : status(StatusSuccess),
+        currentMergedRequestIndex(0),
+        netReplay(0)
+
+    {
+    }
+
     Request::List        requests;
     MergedRequests::List mergedRequests;
     Status               status;
     QString              errorMessage;
 
-    QByteArray           data;
-    QPointer<KIO::Job>   kioJob;
     int                  currentMergedRequestIndex;
+
+    QNetworkReply*       netReplay;
 };
 
 LookupAltitudeGeonames::LookupAltitudeGeonames(QObject* const parent)
@@ -181,35 +189,27 @@ void LookupAltitudeGeonames::startNextRequest()
         lonString += requestCoordinates.lonString();
     }
 
-    QUrl jobUrl(QLatin1String("http://api.geonames.org/srtm3"));
+    QUrl netUrl(QLatin1String("http://api.geonames.org/srtm3"));
 
-    QUrlQuery q(jobUrl);
+    QUrlQuery q(netUrl);
     q.addQueryItem(QLatin1String("lats"), latString);
     q.addQueryItem(QLatin1String("lngs"), lonString);
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
-    jobUrl.setQuery(q);
+    netUrl.setQuery(q);
 
-    d->kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
 
-    connect(d->kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(slotData(KIO::Job*,QByteArray)));
+    connect(mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 
-    connect(d->kioJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    d->netReplay = mngr->get(QNetworkRequest(netUrl));
 }
 
-void LookupAltitudeGeonames::slotData(KIO::Job* kioJob, const QByteArray& data)
+void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
 {
-    Q_UNUSED(kioJob)
-
-    d->data.append(data);
-}
-
-void LookupAltitudeGeonames::slotResult(KJob* kJob)
-{
-    if (kJob->error()!=0)
+    if (reply->error() != QNetworkReply::NoError)
     {
-        d->errorMessage = kJob->errorString();
+        d->errorMessage = reply->errorString();
         d->status       = StatusError;
 
         // after an error, we abort:
@@ -217,7 +217,8 @@ void LookupAltitudeGeonames::slotResult(KJob* kJob)
         return;
     }
 
-    const QStringList altitudes                = QString::fromLatin1(d->data).split(QRegExp(QLatin1String("\\s+")));
+    QByteArray data                            = reply->readAll();
+    const QStringList altitudes                = QString::fromLatin1(data).split(QRegExp(QLatin1String("\\s+")));
     const MergedRequests& currentMergedRequest = d->mergedRequests.at(d->currentMergedRequestIndex);
     QIntList readyRequests;
 
@@ -235,7 +236,7 @@ void LookupAltitudeGeonames::slotResult(KJob* kJob)
 
         const QIntList& currentRequestIndexes = currentMergedRequest.groupedRequestIndices.at(i).second;
 
-        Q_FOREACH(const int requestIndex, currentRequestIndexes)
+        foreach(const int requestIndex, currentRequestIndexes)
         {
             if (haveAltitude)
             {
@@ -255,7 +256,6 @@ void LookupAltitudeGeonames::slotResult(KJob* kJob)
     }
 
     emit(signalRequestsReady(readyRequests));
-    /// @todo who gets to delete the KIO::Job?
 
     startNextRequest();
 }
@@ -272,10 +272,9 @@ QString LookupAltitudeGeonames::errorMessage() const
 
 void LookupAltitudeGeonames::cancel()
 {
-    if (d->kioJob)
+    if (d->netReplay && !d->netReplay->isFinished())
     {
-        // killing a job quietly means that the 'result' signal will not be emitted
-        d->kioJob->kill(KJob::Quietly);
+        d->netReplay->abort();
     }
 
     d->status = StatusCanceled;
