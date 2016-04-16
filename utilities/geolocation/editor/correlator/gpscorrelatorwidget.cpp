@@ -40,6 +40,7 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <QUrl>
+#include <QFileInfo>
 #include <QApplication>
 #include <QComboBox>
 #include <QMenu>
@@ -50,7 +51,6 @@
 
 // KDE includes
 
-#include <kio/global.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
@@ -102,7 +102,7 @@ public:
     {
     }
 
-    QUrl                    gpxFileOpenLastDirectory;
+    QString                 gpxFileOpenLastDirectory;
     QPushButton*            gpxLoadFilesButton;
     QTreeView*              gpxFileList;
     QLabel*                 maxTimeLabel;
@@ -291,7 +291,7 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
 
     connect(d->showTracksOnMap, SIGNAL(stateChanged(int)),
             this, SLOT(slotShowTracksStateChanged(int)));
-    
+
     d->maxTimeLabel = new QLabel(i18n("Difference in min.:"), this);
     d->maxTimeInput = new QSpinBox(this);
     d->maxTimeInput->setRange(0, 240);
@@ -355,19 +355,24 @@ GPSCorrelatorWidget::~GPSCorrelatorWidget()
 
 void GPSCorrelatorWidget::slotLoadTrackFiles()
 {
-    const QList<QUrl> gpxFiles = QFileDialog::getOpenFileUrls(this,
-                                                              i18nc("@title:window", "Select GPX File to Load"),
-                                                              d->gpxFileOpenLastDirectory,
-                                                              i18n("GPS Exchange Format (*.gpx)"));
+    const QStringList gpxFiles = QFileDialog::getOpenFileNames(this,
+                                                               i18nc("@title:window", "Select GPX File to Load"),
+                                                               d->gpxFileOpenLastDirectory,
+                                                               i18n("GPS Exchange Format (*.gpx)"));
 
     if (gpxFiles.isEmpty())
         return;
 
-    d->gpxFileOpenLastDirectory = KIO::upUrl(gpxFiles.first());
+    d->gpxFileOpenLastDirectory = QFileInfo(gpxFiles.first()).path();
 
     setUIEnabledInternal(false);
 
-    d->trackManager->loadTrackFiles(gpxFiles);
+    QList<QUrl> list;
+
+    foreach(QString str, gpxFiles)
+        list << QUrl::fromLocalFile(str);
+
+    d->trackManager->loadTrackFiles(list);
 }
 
 void GPSCorrelatorWidget::slotAllTrackFilesReady()
@@ -623,7 +628,7 @@ void GPSCorrelatorWidget::saveSettingsToGroup(KConfigGroup* const group)
     group->writeEntry("Offset Sign",                  d->offsetSign->currentIndex());
     group->writeEntry("Offset Min",                   d->offsetMin->value());
     group->writeEntry("Offset Sec",                   d->offsetSec->value());
-    group->writeEntry("GPX File Open Last Directory", d->gpxFileOpenLastDirectory.toLocalFile());
+    group->writeEntry("GPX File Open Last Directory", d->gpxFileOpenLastDirectory);
 }
 
 void GPSCorrelatorWidget::readSettingsFromGroup(const KConfigGroup* const group)
@@ -639,7 +644,7 @@ void GPSCorrelatorWidget::readSettingsFromGroup(const KConfigGroup* const group)
     d->offsetSign->setCurrentIndex(group->readEntry("Offset Sign", 0));
     d->offsetMin->setValue(group->readEntry("Offset Min", 0));
     d->offsetSec->setValue(group->readEntry("Offset Sec", 0));
-    d->gpxFileOpenLastDirectory = group->readEntry("GPX File Open Last Directory", QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+    d->gpxFileOpenLastDirectory = group->readEntry("GPX File Open Last Directory", QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     d->maxTimeLabel->setEnabled(d->interpolateBox->isChecked());
     d->maxTimeInput->setEnabled(d->interpolateBox->isChecked());
 
