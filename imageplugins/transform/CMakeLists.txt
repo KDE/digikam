@@ -35,7 +35,6 @@ target_link_libraries(digikamimageplugin_transform
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOCore
 )
 
 # NOTE: no need to link with lqr-1 library here. DImg is already linked in core.

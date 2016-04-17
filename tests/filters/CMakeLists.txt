@@ -16,7 +16,6 @@ include_directories(
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(testautocrop_SRCS testautocrop.cpp)
@@ -52,7 +51,6 @@ if(LENSFUN_FOUND)
                           Qt5::Core
 
                           KF5::I18n
-                          KF5::KIOCore
 
                           ${LENSFUN_LIBRARIES}
                           ${OpenCV_LIBRARIES}
@@ -76,7 +74,6 @@ add_executable (testnrestimate ${testnrestimate_SRCS})
 ecm_mark_nongui_executable(testnrestimate)
 
 target_link_libraries(testnrestimate
-                      digikamcore
                       digikamdatabase
                       digikamcore
                       libdng
@@ -86,7 +83,6 @@ target_link_libraries(testnrestimate
                       Qt5::Test
 
                       KF5::I18n
-                      KF5::KIOCore
 
                       ${OpenCV_LIBRARIES}
 )

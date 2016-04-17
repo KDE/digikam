@@ -16,7 +16,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -30,8 +29,6 @@ target_link_libraries(expoblending
 
                       Qt5::Gui
                       Qt5::Xml
-
-                      KF5::KIOCore
 )
 
 # =======================================================

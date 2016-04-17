@@ -174,7 +174,6 @@ target_link_libraries(digikamdatabase
                       Qt5::Sql
                       Qt5::DBus
 
-                      KF5::KIOCore
                       KF5::Solid
                       KF5::I18n
 
