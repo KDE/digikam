@@ -32,7 +32,6 @@
 #include <QDomDocument>
 #include <QUrlQuery>
 #include <QTimer>
-#include <QMap>
 
 // Local includes
 
@@ -148,7 +147,7 @@ void BackendOsmRG::callRGBackend(const QList<RGInfo>& rgList, const QString& lan
     {
         bool foundIt = false;
 
-        for ( int j=0; j < d->jobs.count(); ++j)
+        for ( int j = 0; j < d->jobs.count(); ++j)
         {
             if (d->jobs[j].request.first().coordinates.sameLonLatAs(rgList[i].coordinates))
             {
@@ -181,6 +180,7 @@ QMap<QString,QString> BackendOsmRG::makeQMapFromXML(const QString& xmlData)
     QString resultString;
     QMap<QString, QString> mappedData;
     QDomDocument doc;
+
     doc.setContent(xmlData);
 
     QDomElement docElem = doc.documentElement();

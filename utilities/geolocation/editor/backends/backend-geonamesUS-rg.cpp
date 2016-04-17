@@ -28,16 +28,10 @@
 
 // Qt includes
 
+#include <QNetworkAccessManager>
 #include <QDomDocument>
-#include <QMap>
-#include <QPointer>
-#include <QTimer>
 #include <QUrlQuery>
-#include <QUrl>
-
-// KDE includes
-
-#include <kio/job.h>
+#include <QTimer>
 
 // Local includes
 
@@ -61,20 +55,20 @@ public:
       : language(),
         request(),
         data(),
-        kioJob(0)
+        netReply(0)
     {
     }
 
     ~GeonamesUSInternalJobs()
     {
-        if (kioJob)
-            kioJob->deleteLater();
+        if (netReply)
+            netReply->deleteLater();
     }
 
     QString            language;
     QList<RGInfo>      request;
     QByteArray         data;
-    QPointer<KIO::Job> kioJob;
+    QNetworkReply*     netReply;
 };
 
 class BackendGeonamesUSRG::Private
@@ -121,23 +115,25 @@ void BackendGeonamesUSRG::nextPhoto()
     if (d->jobs.isEmpty())
         return;
 
-    QUrl jobUrl(QLatin1String("http://api.geonames.org/findNearestAddress"));
+    QUrl netUrl(QLatin1String("http://api.geonames.org/findNearestAddress"));
 
-    QUrlQuery q(jobUrl);
+    QUrlQuery q(netUrl);
     q.addQueryItem(QLatin1String("lat"), d->jobs.first().request.first().coordinates.latString());
     q.addQueryItem(QLatin1String("lng"), d->jobs.first().request.first().coordinates.lonString());
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     // q.addQueryItem(QLatin1String("lang"), d->jobs.first().language);
-    jobUrl.setQuery(q);
+    netUrl.setQuery(q);
 
-    d->jobs.first().kioJob = KIO::get(jobUrl, KIO::NoReload, KIO::HideProgressInfo);
-    d->jobs.first().kioJob->addMetaData(QLatin1String("User-Agent"), getUserAgentName());
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager();
 
-    connect(d->jobs.first().kioJob, SIGNAL(data(KIO::Job*,QByteArray)),
-            this, SLOT(dataIsHere(KIO::Job*,QByteArray)));
+    connect(mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 
-    connect(d->jobs.first().kioJob, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    QNetworkRequest netRequest;
+    netRequest.setUrl(netUrl);
+    netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
+
+    d->jobs.first().netReply = mngr->get(netRequest);
 }
 
 /**
@@ -153,7 +149,7 @@ void BackendGeonamesUSRG::callRGBackend(const QList<RGInfo>& rgList, const QStri
     {
         bool foundIt = false;
 
-        for (int j=0; j < d->jobs.count(); ++j)
+        for (int j = 0; j < d->jobs.count(); ++j)
         {
             if (d->jobs[j].request.first().coordinates.sameLonLatAs(rgList[i].coordinates))
             {
@@ -178,18 +174,6 @@ void BackendGeonamesUSRG::callRGBackend(const QList<RGInfo>& rgList, const QStri
     nextPhoto();
 }
 
-void BackendGeonamesUSRG::dataIsHere(KIO::Job* job, const QByteArray& data)
-{
-    for (int i = 0; i < d->jobs.count(); ++i)
-    {
-        if (d->jobs.at(i).kioJob == job)
-        {
-            d->jobs[i].data.append(data);
-            break;
-        }
-    }
-}
-
 /**
  * The data is returned from Open Street Map in a XML. This function translates the XML into a QMap.
  * @param xmlData The returned XML.
@@ -199,6 +183,7 @@ QMap<QString,QString> BackendGeonamesUSRG::makeQMapFromXML(const QString& xmlDat
     QMap<QString, QString> mappedData;
     QString resultString;
     QDomDocument doc;
+
     doc.setContent(xmlData);
 
     QDomElement docElem = doc.documentElement();
@@ -210,10 +195,9 @@ QMap<QString,QString> BackendGeonamesUSRG::makeQMapFromXML(const QString& xmlDat
 
         if (!e.isNull())
         {
-
             if ((e.tagName().compare(QLatin1String("adminName2")) == 0) ||
-               (e.tagName().compare(QLatin1String("adminName1"))  == 0) ||
-               (e.tagName().compare(QLatin1String("placeName"))   == 0))
+                (e.tagName().compare(QLatin1String("adminName1")) == 0) ||
+                (e.tagName().compare(QLatin1String("placename"))  == 0))
             {
                 mappedData.insert(e.tagName(), e.text());
                 resultString.append(e.tagName() + QLatin1Char(':') + e.text() + QLatin1Char('\n'));
@@ -243,34 +227,40 @@ QString BackendGeonamesUSRG::backendName()
     return QLatin1String("GeonamesUS");
 }
 
-void BackendGeonamesUSRG::slotResult(KJob* kJob)
+void BackendGeonamesUSRG::slotFinished(QNetworkReply* reply)
 {
-    KIO::Job* const kioJob = qobject_cast<KIO::Job*>(kJob);
-
-    if (kioJob->error())
+    if (reply->error() != QNetworkReply::NoError)
     {
-        d->errorMessage = kioJob->errorString();
+        d->errorMessage = reply->errorString();
         emit(signalRGReady(d->jobs.first().request));
         d->jobs.clear();
         return;
     }
 
-    for (int i = 0;i < d->jobs.count(); ++i)
+    for (int i = 0; i < d->jobs.count(); ++i)
     {
-        if (d->jobs.at(i).kioJob == kioJob)
+        if (d->jobs.at(i).netReply == reply)
+        {
+            d->jobs[i].data.append(reply->readAll());
+            break;
+        }
+    }
+
+    for (int i = 0; i < d->jobs.count(); ++i)
+    {
+        if (d->jobs.at(i).netReply == reply)
         {
             QString dataString;
             dataString = QString::fromUtf8(d->jobs[i].data.constData(),qstrlen(d->jobs[i].data.constData()));
             int pos    = dataString.indexOf(QLatin1String("<geonames"));
             dataString.remove(0,pos);
             dataString.chop(1);
+
             QMap<QString,QString> resultMap = makeQMapFromXML(dataString);
 
             for (int j = 0; j < d->jobs[i].request.count(); ++j)
             {
-
                 d->jobs[i].request[j].rgData =  resultMap;
-
             }
 
             emit(signalRGReady(d->jobs[i].request));

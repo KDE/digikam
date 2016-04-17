@@ -165,5 +165,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 127 ==> 361611 - Plugin 'Advanced Slide Show' - "Print Caption" does not work.
 128 ==> 361686 - When returning from full screen to preview mode the same image should be selected/shown.
 129 ==> 360922 - Unable to change or manage themes in digikam (and showfoto).
-130 ==>
-
+130 ==> 354687 - Unable to search for GeoNames or OSM in Geolocation editor.
+131 ==> 333624 - "Lookup missing altitude values" in the geolocation dialog is broken [patch].
+132 ==> 

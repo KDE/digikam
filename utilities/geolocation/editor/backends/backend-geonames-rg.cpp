@@ -32,7 +32,6 @@
 #include <QDomDocument>
 #include <QUrlQuery>
 #include <QTimer>
-#include <QMap>
 
 // Local includes
 
@@ -149,7 +148,7 @@ void BackendGeonamesRG::callRGBackend(const QList<RGInfo>& rgList, const QString
     {
             bool foundIt = false;
 
-            for ( int j=0; j < d->jobs.count(); ++j)
+            for ( int j = 0; j < d->jobs.count(); ++j)
             {
                 if (d->jobs[j].request.first().coordinates.sameLonLatAs(rgList[i].coordinates))
                 {
@@ -242,7 +241,7 @@ void BackendGeonamesRG::slotFinished(QNetworkReply* reply)
         }
     }
 
-    for (int i = 0;i < d->jobs.count(); ++i)
+    for (int i = 0; i < d->jobs.count(); ++i)
     {
         if (d->jobs.at(i).netReply == reply)
         {

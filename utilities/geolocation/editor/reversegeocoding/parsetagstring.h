@@ -202,9 +202,9 @@ QStringList makeTagString(const RGInfo& info,const QString& inputFormat,const QS
 
             else if (humanTag == QLatin1String("City"))
             {
-                if (!info.rgData[QLatin1String("placeName")].isEmpty())
+                if (!info.rgData[QLatin1String("placename")].isEmpty())
                 {
-                    result    = info.rgData[QLatin1String("placeName")];
+                    result    = info.rgData[QLatin1String("placename")];
                     returnedFormat.append(QLatin1String("/{City}"));
                     dataAdded = true;
                 }
