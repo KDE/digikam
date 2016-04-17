@@ -19,8 +19,6 @@ include_directories(
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -41,8 +39,6 @@ target_link_libraries(renamecustomizertest
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOCore
-                      KF5::KIOWidgets
 
                       ${OpenCV_LIBRARIES}
 )
@@ -107,8 +103,6 @@ target_link_libraries(advancedrenametest
                       KF5::I18n
                       KF5::Solid
                       KF5::XmlGui
-                      KF5::KIOCore
-                      KF5::KIOWidgets
 
                       ${OpenCV_LIBRARIES}
 )

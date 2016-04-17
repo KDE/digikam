@@ -32,11 +32,7 @@
 
 #include <QFileInfo>
 #include <QTest>
-#include <QUrl>
-
-// Local includes
-
-#include "kiowrapper.h"
+#include <QDir>
 
 using namespace Digikam;
 
@@ -196,10 +192,16 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
     QTest::addColumn<QString>("result");
 
     // The main directory of digikam can have different names, depending on how the
-    // user named it. Therefore we have to detect the name here:
-    const QUrl dir2up          = KIOWrapper::upUrl(QUrl::fromLocalFile(QFINDTESTDATA(imagesDir)));
-    const QString dir2upString = dir2up.url();
-    QString digikamDir         = dir2upString.right(dir2upString.size() - KIOWrapper::upUrl(dir2up).url().size());
+    // user named it. Therefore we have to detect the name here.
+    QDir dir(QFINDTESTDATA(imagesDir));
+    dir.cdUp();
+    const QString dir2up = dir.path();
+    QDir dir2 = dir;
+    dir2.cdUp();
+    QString digikamDir   = dir2up.right(dir2up.size() - dir2.path().size() -1) + 
+                           QLatin1Char('/');
+    qDebug() << "digikamDir: " << digikamDir;
+
     digikamDir.chop(1);
 
     QTest::newRow("[dir]")
