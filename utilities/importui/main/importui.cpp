@@ -1352,13 +1352,13 @@ void ImportUI::slotUploaded(const CamItemInfo& /*itemInfo*/)
 
 void ImportUI::slotDownloadNew()
 {
-    slotNewSelection(d->view->selectedUrls().count() > 0);
+    slotSelectNew();
     QTimer::singleShot(0, this, SLOT(slotDownloadSelected()));
 }
 
 void ImportUI::slotDownloadAndDeleteNew()
 {
-    slotNewSelection(d->view->selectedUrls().count() > 0);
+    slotSelectNew();
     QTimer::singleShot(0, this, SLOT(slotDownloadAndDeleteSelected()));
 }
 
