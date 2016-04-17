@@ -65,7 +65,6 @@ public:
     KIOWrapper();
 
     static QUrl mostLocalUrl(const QUrl& url);
-    static QUrl upUrl(const QUrl& url);
 
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool fileMove(const QUrl& src, const QUrl& dest);
@@ -83,7 +82,7 @@ public:
     void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
     static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
-    
+
     static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QUrl& url, QWidget* const window);

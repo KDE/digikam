@@ -60,11 +60,6 @@ QUrl KIOWrapper::mostLocalUrl(const QUrl& url)
     return job->mostLocalUrl();
 }
 
-QUrl KIOWrapper::upUrl(const QUrl& url)
-{
-    return KIO::upUrl(url);
-}
-
 bool KIOWrapper::fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget, QWidget* const widget)
 {
     KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(src, dest, KIO::Overwrite);

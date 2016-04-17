@@ -57,7 +57,6 @@
 #include "digikam_globals.h"
 #include "scancontroller.h"
 #include "tagscache.h"
-#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -186,7 +185,7 @@ QMap<QString, QVariant> KipiImageInfo::attributes()
 
 void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 {
-    PAlbum* p = d->parentAlbum();
+    PAlbum* const p = d->parentAlbum();
 
     if (p)
     {
@@ -195,13 +194,17 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
         // Here we get informed that a plugin has renamed item
         if (attributes.contains(QLatin1String("name")))
         {
-            PAlbum* p = d->parentAlbum();
             QString newName = attributes[QLatin1String("name")].toString();
 
             if (p && !newName.isEmpty())
             {
                 CoreDbAccess().db()->moveItem(p->id(), _url.fileName(), p->id(), newName);
-                _url = KIOWrapper::upUrl(_url);
+
+                QUrl u(_url);
+                u    = u.adjusted(QUrl::StripTrailingSlash);
+                u.adjusted(QUrl::RemoveFilename);
+
+                _url = u;
                 _url.setPath(newName);
             }
 
@@ -410,7 +413,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
 void KipiImageInfo::delAttributes(const QStringList& res)
 {
-    PAlbum* p = d->parentAlbum();
+    PAlbum* const p = d->parentAlbum();
 
     if (p)
     {

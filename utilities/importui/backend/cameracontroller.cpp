@@ -614,9 +614,10 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
             // TODO clean-up up and generalize temporary file creation
-            QUrl tempURL = QUrl::fromLocalFile(dest);
-            tempURL = KIOWrapper::upUrl(tempURL);
-            tempURL = tempURL.adjusted(QUrl::StripTrailingSlash);
+            QDir dir(dest);
+            dir.cdUp();
+            QUrl tempURL = QUrl::fromLocalFile(dir.path());
+            tempURL      = tempURL.adjusted(QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();
@@ -699,11 +700,12 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 if (convertJpeg)
                 {
                     // TODO clean-up up and generalize temporary file creation
-                    QUrl tempURL2 = QUrl::fromLocalFile(dest);
-                    tempURL2 = KIOWrapper::upUrl(tempURL2);
-                    tempURL2 = tempURL2.adjusted(QUrl::StripTrailingSlash);
+                    QDir dir(dest);
+                    dir.cdUp();
+                    QUrl tempURL2 = QUrl::fromLocalFile(dir.path());
+                    tempURL2      = tempURL2.adjusted(QUrl::StripTrailingSlash);
                     tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
-                    temp     = tempURL2.toLocalFile();
+                    temp          = tempURL2.toLocalFile();
 
                     // When converting a file, we need to set the new format extension..
                     // The new extension is already set in importui.cpp.
