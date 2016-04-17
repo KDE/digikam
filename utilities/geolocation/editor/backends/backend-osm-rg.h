@@ -30,8 +30,8 @@
 // Qt includes
 
 #include <QNetworkReply>
-#include <QUrl>
 #include <QList>
+#include <QUrl>
 #include <QMap>
 
 // Local includes

@@ -145,6 +145,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
     {
         d->errorMessage = reply->errorString();
         emit(signalSearchCompleted());
+        reply->deleteLater();
         return;
     }
 
@@ -302,6 +303,8 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
     }
 
     emit(signalSearchCompleted());
+
+    reply->deleteLater();
 }
 
 SearchBackend::SearchResult::List SearchBackend::getResults() const
