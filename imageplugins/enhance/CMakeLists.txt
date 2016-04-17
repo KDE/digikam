@@ -43,6 +43,7 @@ target_link_libraries(digikamimageplugin_enhance
                       Qt5::Gui
 
                       KF5::XmlGui
+                      KF5::KIOCore
                       KF5::ConfigCore
                       KF5::I18n
 )

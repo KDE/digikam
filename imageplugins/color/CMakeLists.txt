@@ -32,6 +32,7 @@ target_link_libraries(digikamimageplugin_color
 
                       KF5::I18n
                       KF5::XmlGui
+                      KF5::KIOCore
                      )
 
 install(TARGETS digikamimageplugin_color             DESTINATION ${PLUGIN_INSTALL_DIR})
