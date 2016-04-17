@@ -109,11 +109,11 @@ public:
     /** Write a string with apect ratio information formated
      */
     static bool aspectRatioToString(int width, int height, QString& arString);
-    
+
     /** Return file permissions string.
      */
     static QString permissionsString(const QFileInfo& fi);
-    
+
     /** Return human readable string of file size in bytes.
      */
     static QString humanReadableBytesCount(qint64 bytes, bool si=false);

@@ -111,7 +111,7 @@
 #include "thememanager.h"
 #include "thumbnailsize.h"
 #include "importthumbnailmodel.h"
-#include "kiowrapper.h"
+#include "imagepropertiestab.h"
 
 namespace Digikam
 {
@@ -1268,8 +1268,8 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
                                         "to upload pictures.\n\n"
                                         "Space require: %1\n"
                                         "Available free space: %2",
-                                        KIOWrapper::convertSizeFromKiB(totalKbSize),
-                                        KIOWrapper::convertSizeFromKiB(d->cameraFreeSpace->kBAvail())));
+                                        ImagePropertiesTab::humanReadableBytesCount(totalKbSize),
+                                        ImagePropertiesTab::humanReadableBytesCount(d->cameraFreeSpace->kBAvail())));
             return;
         }
     }
@@ -1978,8 +1978,8 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
                                                     "Estimated space required: %1\n"
                                                     "Available free space: %2\n\n"
                                                     "Try Anyway?",
-                                                    KIOWrapper::convertSizeFromKiB(dSize),
-                                                    KIOWrapper::convertSizeFromKiB(kBAvail)),
+                                                    ImagePropertiesTab::humanReadableBytesCount(dSize),
+                                                    ImagePropertiesTab::humanReadableBytesCount(kBAvail)),
                                               QMessageBox::Yes | QMessageBox::No);
 
         if (result == QMessageBox::No)

@@ -73,8 +73,6 @@ public:
     void del(const QUrl& url);
     void trash(const QUrl& url);
 
-    static QString convertSizeFromKiB(quint64 KbSize);
-
     static QStringList previewJobAvailablePlugins();
     void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
