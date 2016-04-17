@@ -122,13 +122,12 @@ void BackendOsmRG::nextPhoto()
     q.addQueryItem(QLatin1String("accept-language"), d->jobs.first().language);
     netUrl.setQuery(q);
 
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager();
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
 
     connect(mngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));
 
-    QNetworkRequest netRequest;
-    netRequest.setUrl(netUrl);
+    QNetworkRequest netRequest(netUrl);
     netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
     d->jobs.first().netReply = mngr->get(netRequest);

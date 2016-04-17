@@ -196,7 +196,7 @@ void LookupAltitudeGeonames::startNextRequest()
     q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
     netUrl.setQuery(q);
 
-    QNetworkAccessManager* const mngr = new QNetworkAccessManager();
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
 
     connect(mngr, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(slotFinished(QNetworkReply*)));

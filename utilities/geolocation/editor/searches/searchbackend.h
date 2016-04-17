@@ -62,10 +62,10 @@ public:
         QString                        internalId;
     };
 
-    explicit SearchBackend(QObject* const parent = 0);
+    explicit SearchBackend(QObject* const parent);
     ~SearchBackend();
 
-    bool search(const QString& backendName, const QString& searchTerm) const;
+    bool search(const QString& backendName, const QString& searchTerm);
     SearchResult::List getResults() const;
     QString getErrorMessage() const;
     QList<QPair<QString, QString> >  getBackends() const;

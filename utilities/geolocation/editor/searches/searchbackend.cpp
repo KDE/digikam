@@ -72,11 +72,16 @@ SearchBackend::~SearchBackend()
     delete d;
 }
 
-bool SearchBackend::search(const QString& backendName, const QString& searchTerm) const
+bool SearchBackend::search(const QString& backendName, const QString& searchTerm)
 {
     d->searchData.clear();
     d->errorMessage.clear();
     d->results.clear();
+
+    QNetworkAccessManager* const mngr = new QNetworkAccessManager(this);
+
+    connect(mngr, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(slotFinished(QNetworkReply*)));
 
     if (backendName == QLatin1String("osm"))
     {
@@ -89,13 +94,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         q.addQueryItem(QLatin1String("q"), searchTerm);
         netUrl.setQuery(q);
 
-        QNetworkAccessManager* const mngr = new QNetworkAccessManager();
-
-        connect(mngr, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(slotFinished(QNetworkReply*)));
-
-        QNetworkRequest netRequest;
-        netRequest.setUrl(netUrl);
+        QNetworkRequest netRequest(netUrl);
         netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
         d->netReply = mngr->get(netRequest);
@@ -117,13 +116,7 @@ bool SearchBackend::search(const QString& backendName, const QString& searchTerm
         q.addQueryItem(QLatin1String("username"), QLatin1String("digikam"));
         netUrl.setQuery(q);
 
-        QNetworkAccessManager* const mngr = new QNetworkAccessManager();
-
-        connect(mngr, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(slotFinished(QNetworkReply*)));
-
-        QNetworkRequest netRequest;
-        netRequest.setUrl(netUrl);
+        QNetworkRequest netRequest(netUrl);
         netRequest.setRawHeader("User-Agent", getUserAgentName().toLatin1());
 
         d->netReply = mngr->get(netRequest);
