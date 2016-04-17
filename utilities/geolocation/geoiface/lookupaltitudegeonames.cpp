@@ -29,9 +29,8 @@
 
 // Qt includes
 
-#include <QPointer>
-#include <QUrlQuery>
 #include <QNetworkAccessManager>
+#include <QUrlQuery>
 
 // KDE includes
 
@@ -213,6 +212,7 @@ void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
         d->status       = StatusError;
 
         // after an error, we abort:
+        reply->deleteLater();
         emit(signalDone());
         return;
     }
@@ -256,6 +256,8 @@ void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
     }
 
     emit(signalRequestsReady(readyRequests));
+
+    reply->deleteLater();
 
     startNextRequest();
 }

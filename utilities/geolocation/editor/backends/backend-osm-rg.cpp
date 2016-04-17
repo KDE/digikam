@@ -30,11 +30,9 @@
 
 #include <QNetworkAccessManager>
 #include <QDomDocument>
-#include <QMap>
-#include <QPointer>
-#include <QTimer>
-#include <QUrl>
 #include <QUrlQuery>
+#include <QTimer>
+#include <QMap>
 
 // Local includes
 
@@ -237,7 +235,7 @@ QString BackendOsmRG::backendName()
 
 void BackendOsmRG::slotFinished(QNetworkReply* reply)
 {
-    if (reply->error())
+    if (reply->error() != QNetworkReply::NoError)
     {
         d->errorMessage = reply->errorString();
         emit(signalRGReady(d->jobs.first().request));
