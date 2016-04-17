@@ -64,17 +64,20 @@ public:
 
     KIOWrapper();
 
-    static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
-    static bool fileMove(const QUrl& src, const QUrl& dest);
-    static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
-    static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
+    void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
     void move(const QUrl& src, const QUrl& dest);
     void del(const QUrl& url);
     void trash(const QUrl& url);
 
+public:
+
+    static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
+    static bool fileMove(const QUrl& src, const QUrl& dest);
+    static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
+    static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
+
     static QStringList previewJobAvailablePlugins();
-    void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
 
     static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
 
@@ -84,18 +87,24 @@ public:
 
 Q_SIGNALS:
 
-    void error(const QString& errMsg);
-
+    // send by slotGotPreview()
     void gotPreview(const QUrl& itemUrl, const QPixmap& pix);
+
+    // send by slotGotPreview()
     void previewJobFinished();
+
+    // send by slotPreviewJobFailed()
     void previewJobFailed(const QUrl& itemUrl);
+
+    // Internale use only : used by slotKioJobResult()
+    void error(const QString& errMsg);
 
 private Q_SLOTS:
 
-    void kioJobResult(KJob* job);
+    void slotKioJobResult(KJob* job);
 
-    void gotPreview(const KFileItem& item, const QPixmap& pix);
-    void previewJobFailed(const KFileItem& item);
+    void slotGotPreview(const KFileItem& item, const QPixmap& pix);
+    void slotPreviewJobFailed(const KFileItem& item);
 };
 
 } // namespace Digikam

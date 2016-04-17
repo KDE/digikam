@@ -93,7 +93,7 @@ void KIOWrapper::move(const QUrl& src, const QUrl& dest)
     KIO::Job* const job = KIO::move(src, dest);
 
     connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(kioJobResult(KJob*)));
+            this, SLOT(slotKioJobResult(KJob*)));
 }
 
 void KIOWrapper::del(const QUrl& url)
@@ -101,7 +101,7 @@ void KIOWrapper::del(const QUrl& url)
     KIO::Job* const job = KIO::del(url);
 
     connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(kioJobResult(KJob*)));
+            this, SLOT(slotKioJobResult(KJob*)));
 }
 
 void KIOWrapper::trash(const QUrl& url)
@@ -109,7 +109,7 @@ void KIOWrapper::trash(const QUrl& url)
     KIO::Job* const job = KIO::trash(url);
 
     connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(kioJobResult(KJob*)) );
+            this, SLOT(slotKioJobResult(KJob*)) );
 }
 
 QStringList KIOWrapper::previewJobAvailablePlugins()
@@ -130,16 +130,16 @@ void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize& size, cons
     KIO::PreviewJob* const job = KIO::filePreview(items, size, enabledPlugins);
 
     connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
-            this, SLOT(gotPreview(KFileItem,QPixmap)));
+            this, SLOT(slotGotPreview(KFileItem,QPixmap)));
 
     connect(job, SIGNAL(failed(KFileItem)),
-            this, SLOT(previewJobFailed(KFileItem)));
+            this, SLOT(slotPreviewJobFailed(KFileItem)));
 
     connect(job, SIGNAL(finished(KJob*)),
             this, SIGNAL(previewJobFinished()));
 }
 
-void KIOWrapper::kioJobResult(KJob* job)
+void KIOWrapper::slotKioJobResult(KJob* job)
 {
     if (job->error() != 0)
     {
@@ -151,12 +151,12 @@ void KIOWrapper::kioJobResult(KJob* job)
     }
 }
 
-void KIOWrapper::previewJobFailed(const KFileItem& item)
+void KIOWrapper::slotPreviewJobFailed(const KFileItem& item)
 {
     emit previewJobFailed(item.url());
 }
 
-void KIOWrapper::gotPreview(const KFileItem& item, const QPixmap& pix)
+void KIOWrapper::slotGotPreview(const KFileItem& item, const QPixmap& pix)
 {
     emit gotPreview(item.url(), pix);
 }
