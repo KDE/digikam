@@ -64,8 +64,6 @@ public:
 
     KIOWrapper();
 
-    static QUrl mostLocalUrl(const QUrl& url);
-
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool fileMove(const QUrl& src, const QUrl& dest);
     static bool fileDelete(const QUrl& url);

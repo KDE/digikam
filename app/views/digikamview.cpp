@@ -1324,17 +1324,7 @@ void DigikamView::slotAlbumOpenInTerminal()
         return;
     }
 
-    QString dir(palbum->folderPath());
-
-    QUrl url = KIOWrapper::mostLocalUrl(QUrl::fromLocalFile(dir));
-
-    //If the URL is local after the above conversion, set the directory.
-    if (url.isLocalFile())
-    {
-        dir = url.toLocalFile();
-    }
-
-    KToolInvocation::invokeTerminal(QString(), dir);
+    KToolInvocation::invokeTerminal(QString(), palbum->folderPath());
 }
 
 void DigikamView::slotRefresh()

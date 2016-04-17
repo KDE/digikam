@@ -32,9 +32,7 @@
 
 // KDE includes
 
-#include <kio/statjob.h>
 #include <kio/job.h>
-#include <kio/global.h>
 #include <kio/copyjob.h>
 #include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
@@ -49,15 +47,6 @@ namespace Digikam
 
 KIOWrapper::KIOWrapper()
 {
-}
-
-QUrl KIOWrapper::mostLocalUrl(const QUrl& url)
-{
-    // If the given directory is not local, it can still be the URL of an
-    // ioslave using UDS_LOCAL_PATH which to be converted first.
-    KIO::StatJob* const job = KIO::mostLocalUrl(url, KIO::HideProgressInfo);
-    job->exec();
-    return job->mostLocalUrl();
 }
 
 bool KIOWrapper::fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget, QWidget* const widget)
@@ -217,7 +206,7 @@ QPair<int, QString> KIOWrapper::renameDlg(QWidget* widget, const QString& captio
 
     return pair;
 }
-        
+
 bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* const window)
 {
 #if KIO_VERSION < QT_VERSION_CHECK(5,6,0)
