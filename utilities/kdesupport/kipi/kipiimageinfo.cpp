@@ -202,7 +202,7 @@ void KipiImageInfo::addAttributes(const QMap<QString, QVariant>& res)
 
                 QUrl u(_url);
                 u    = u.adjusted(QUrl::StripTrailingSlash);
-                u.adjusted(QUrl::RemoveFilename);
+                u    = u.adjusted(QUrl::RemoveFilename);
 
                 _url = u;
                 _url.setPath(newName);
