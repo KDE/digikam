@@ -90,7 +90,7 @@ target_link_libraries(dimghistorytest
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOWidgets # for previewjob
+
                       ${OpenCV_LIBRARIES}
 )
 
