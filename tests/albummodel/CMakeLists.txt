@@ -16,7 +16,6 @@ include_directories(
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(albummodeltest_SRCS
@@ -31,7 +30,7 @@ ecm_mark_as_test(albummodeltest)
 target_link_libraries(albummodeltest
                       digikamcore
                       digikamgui
-                      
+
                       libdng
 
                       Qt5::Gui
@@ -41,7 +40,6 @@ target_link_libraries(albummodeltest
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOCore
 
                       ${OpenCV_LIBRARIES}
 )

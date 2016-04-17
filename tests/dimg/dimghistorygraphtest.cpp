@@ -48,7 +48,6 @@
 #include "imagehistorygraphmodel.h"
 #include "iofilesettings.h"
 #include "tagscache.h"
-#include "kiowrapper.h"
 #include "../modeltest/modeltest.h"
 
 using namespace Digikam;
@@ -106,11 +105,10 @@ void DImgHistoryGraphTest::cleanupTestCase()
 
     QFile(dbFile).remove();
 
-    QUrl deleteUrl = QUrl::fromLocalFile(collectionDir.path());
+    QDir dir(collectionDir.path());
+    dir.removeRecursively();
 
-    KIOWrapper::fileDelete(deleteUrl);
-
-    qDebug() << "deleted test folder " << deleteUrl;
+    qDebug() << "deleted test folder " << collectionDir.path();
 }
 
 void DImgHistoryGraphTest::rescan()

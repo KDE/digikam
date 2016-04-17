@@ -66,7 +66,6 @@ public:
 
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool fileMove(const QUrl& src, const QUrl& dest);
-    static bool fileDelete(const QUrl& url);
     static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 

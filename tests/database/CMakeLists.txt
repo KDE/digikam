@@ -17,7 +17,6 @@ include_directories(
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 if(KF5Notifications_FOUND)
@@ -41,7 +40,6 @@ target_link_libraries(testdatabase
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOCore
 
                       ${OpenCV_LIBRARIES}
 )
@@ -75,7 +73,6 @@ target_link_libraries(databasefieldstest
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOCore
 )
 
 if(KF5Notifications_FOUND)
@@ -103,7 +100,6 @@ endif()
 #
 #                       KF5::I18n
 #                       KF5::XmlGui
-#                       KF5::KIOCore
 #)
 #
 #if(KF5Notifications_FOUND)

@@ -69,12 +69,6 @@ bool KIOWrapper::fileMove(const QUrl& src, const QUrl& dest)
     return job->exec();
 }
 
-bool KIOWrapper::fileDelete(const QUrl& url)
-{
-    KIO::SimpleJob* const job = KIO::file_delete(url);
-    return job->exec();
-}
-
 bool KIOWrapper::mkdir(const QUrl& url, bool withKJobWidget, QWidget* const widget)
 {
     KIO::Job* const job = KIO::mkdir(url);

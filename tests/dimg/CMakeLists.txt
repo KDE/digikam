@@ -10,7 +10,6 @@ endif (POLICY CMP0063)
 
 include_directories(
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
@@ -36,7 +35,6 @@ target_link_libraries(dimgfilteractiontest
                       Qt5::Gui
                       Qt5::Test
 
-                      KF5::KIOCore
                       KF5::XmlGui
                       KF5::I18n
 
@@ -67,7 +65,6 @@ target_link_libraries(dimghistorygraphtest
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOWidgets # for previewjob
 
                       ${OpenCV_LIBRARIES}
 )
@@ -87,7 +84,7 @@ target_link_libraries(dimghistorytest
 
                       digikamcore
                       libdng
-                      
+
                       Qt5::Gui
                       Qt5::Test
 
@@ -125,7 +122,7 @@ target_link_libraries(testdimgloader
 
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
                       Qt5::Gui
 

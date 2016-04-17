@@ -40,7 +40,6 @@
 #include "loadingcacheinterface.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
-#include "kiowrapper.h"
 
 using namespace Digikam;
 
@@ -129,11 +128,10 @@ void DatabaseTagsTest::cleanupTestCase()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 
-    QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
+    QDir dir(dbPath);
+    dir.removeRecursively();
 
-    KIOWrapper::fileDelete(deleteUrl);
-
-    qDebug() << "deleted test folder " << deleteUrl;
+    qDebug() << "deleted test folder " << dbPath;
 }
 
 // Qt test doesn't use exceptions, so using assertion macros in methods called
@@ -420,11 +418,8 @@ void DatabaseTagsTest::slotStartModelDataChanged(const QModelIndex& topLeft, con
 
 void DatabaseTagsTest::deletePAlbum(PAlbum* album)
 {
-    QUrl u;
-    u.setScheme(QLatin1String("file"));
-    u.setPath(album->folderPath());
-
-    KIOWrapper::fileDelete(u);
+    QDir dir(album->folderPath());
+    dir.removeRecursively();
 }
 
 void DatabaseTagsTest::setLastPAlbumCountMap(const QMap<int, int> &map)

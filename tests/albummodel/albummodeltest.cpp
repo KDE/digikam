@@ -42,7 +42,6 @@
 #include "loadingcacheinterface.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
-#include "kiowrapper.h"
 #include "../modeltest/modeltest.h"
 
 using namespace Digikam;
@@ -114,7 +113,7 @@ void AlbumModelTest::initTestCase()
 
     AlbumList all = AlbumManager::instance()->allPAlbums();
     qDebug() << "PAlbum registered : " << all.size();
-    
+
     Q_FOREACH(Album* const a, all)
     {
         if (a)
@@ -136,11 +135,10 @@ void AlbumModelTest::cleanupTestCase()
     AlbumThumbnailLoader::instance()->cleanUp();
     LoadingCacheInterface::cleanUp();
 
-    QUrl deleteUrl = QUrl::fromLocalFile(dbPath);
+    QDir dir(dbPath);
+    dir.removeRecursively();
 
-    KIOWrapper::fileDelete(deleteUrl);
-
-    qDebug() << "deleted test folder " << deleteUrl;
+    qDebug() << "deleted test folder " << dbPath;
 }
 
 // Qt test doesn't use exceptions, so using assertion macros in methods called
@@ -384,11 +382,8 @@ void AlbumModelTest::slotStartModelDataChanged(const QModelIndex& topLeft, const
 
 void AlbumModelTest::deletePAlbum(PAlbum* album)
 {
-    QUrl u;
-    u.setScheme(QLatin1String("file"));
-    u.setPath(album->folderPath());
-
-    KIOWrapper::fileDelete(u);
+    QDir dir(album->folderPath());
+    dir.removeRecursively();
 }
 
 void AlbumModelTest::setLastPAlbumCountMap(const QMap<int, int> &map)
