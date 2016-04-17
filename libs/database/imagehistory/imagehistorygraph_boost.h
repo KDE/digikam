@@ -1441,7 +1441,7 @@ protected:
         void depth_first_search_sorted(const IncidenceGraph& g, Vertex u,
                                        DFSVisitor& vis, ColorMap color, LessThan lessThan)
         {
-            typedef std::pair<Vertex, QList<Edge> > VertexInfo;
+            //typedef std::pair<Vertex, QList<Edge> > VertexInfo;
 
             typedef typename boost::graph_traits<IncidenceGraph>::edge_descriptor edge_descriptor;
             QList<edge_descriptor> outEdges;
