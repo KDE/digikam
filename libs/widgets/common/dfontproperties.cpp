@@ -114,10 +114,22 @@ public:
     {
         palette.setColor(QPalette::Active, QPalette::Text, Qt::black);
         palette.setColor(QPalette::Active, QPalette::Base, Qt::white);
-        signalsAllowed = true;
-        selectedSize   = -1;
-        customSizeRow  = -1;
-        usingFixed     = true;
+        signalsAllowed         = true;
+        selectedSize           = -1;
+        customSizeRow          = -1;
+        usingFixed             = true;
+        sizeOfFont             = 0;
+        sampleEdit             = 0;
+        familyLabel            = 0;
+        styleLabel             = 0;
+        familyCheckbox         = 0;
+        styleCheckbox          = 0;
+        sizeCheckbox           = 0;
+        sizeLabel              = 0;
+        familyListBox          = 0;
+        styleListBox           = 0;
+        sizeListBox            = 0;
+        sizeIsRelativeCheckBox = 0;
     }
 
     void    setFamilyBoxItems(const QStringList& fonts);
@@ -126,7 +138,7 @@ public:
     qreal   fillSizeList(const QList<qreal>& sizes = QList<qreal>());
     qreal   setupSizeListBox(const QString& family, const QString& style);
     void    setupDisplay();
-    QString styleIdentifier(const QFont & font);
+    QString styleIdentifier(const QFont& font);
 
     /**
      * Split the compound raw font name into family and foundry.
@@ -135,7 +147,7 @@ public:
      * @param family the storage for family name
      * @param foundry the storage for foundry name
      */
-    void splitFontString(const QString &name, QString *family, QString *foundry = 0);
+    void splitFontString(const QString& name, QString* family, QString* foundry = 0);
 
     /**
      * Translate the font name for the user.
@@ -144,7 +156,7 @@ public:
      * @param name the raw font name reported by Qt
      * @return translated font name
      */
-    QString translateFontName(const QString &name);
+    QString translateFontName(const QString& name);
 
     /**
      * Compose locale-aware sorted list of translated font names,
@@ -155,13 +167,13 @@ public:
      * @param trToRawNames storage for mapping of translated to raw names
      * @return sorted list of translated font names
      */
-    QStringList translateFontNameList(const QStringList &names, QHash<QString, QString>* trToRawNames = 0); 
+    QStringList translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames = 0); 
     
     void _k_toggled_checkbox();
-    void _k_family_chosen_slot(const QString &);
-    void _k_size_chosen_slot(const QString &);
-    void _k_style_chosen_slot(const QString &);
-    void _k_displaySample(const QFont &font);
+    void _k_family_chosen_slot(const QString&);
+    void _k_size_chosen_slot(const QString&);
+    void _k_style_chosen_slot(const QString&);
+    void _k_displaySample(const QFont& font);
     void _k_size_value_slot(double);
 
 public:
@@ -169,9 +181,7 @@ public:
     DFontProperties*        q;
 
     QPalette                palette;
-
     QDoubleSpinBox*         sizeOfFont;
-
     QTextEdit*              sampleEdit;
 
     QLabel*                 familyLabel;
@@ -194,7 +204,6 @@ public:
     int                     customSizeRow;
 
     bool                    signalsAllowed;
-
     bool                    usingFixed;
 
     // Mappings of translated to Qt originated family and style strings.
@@ -205,11 +214,11 @@ public:
     QHash<QString, QString> styleIDs;
 };
 
-DFontProperties::DFontProperties(QWidget *parent,
-                                 const DisplayFlags &flags,
-                                 const QStringList &fontList,
+DFontProperties::DFontProperties(QWidget* const parent,
+                                 const DisplayFlags& flags,
+                                 const QStringList& fontList,
                                  int visibleListSize,
-                                 Qt::CheckState *sizeIsRelativeState)
+                                 Qt::CheckState* const sizeIsRelativeState)
     : QWidget(parent),
       d(new DFontProperties::Private(this))
 {
@@ -1259,7 +1268,7 @@ QString DFontProperties::Private::styleIdentifier(const QFont& font)
 {
     const QChar comma(QLatin1Char(','));
 
-    return (QString::number(font.weight()) + comma + 
+    return (QString::number(font.weight())     + comma + 
             QString::number((int)font.style()) + comma +
             QString::number(font.stretch())
            );
