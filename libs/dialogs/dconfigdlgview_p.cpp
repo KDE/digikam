@@ -42,7 +42,7 @@ namespace Digikam
 
 using namespace DConfigDlgInternal;
 
-DConfigDlgPlainView::DConfigDlgPlainView(QWidget* parent)
+DConfigDlgPlainView::DConfigDlgPlainView(QWidget* const parent)
     : QAbstractItemView(parent)
 {
     hide();
@@ -93,7 +93,7 @@ QRegion DConfigDlgPlainView::visualRegionForSelection(const QItemSelection&) con
 
 // ------------------------------------------------------------------------------------------------------
 
-DConfigDlgListView::DConfigDlgListView(QWidget* parent)
+DConfigDlgListView::DConfigDlgListView(QWidget* const parent)
     : QListView(parent)
 {
     setViewMode(QListView::ListMode);
@@ -154,7 +154,7 @@ void DConfigDlgListView::updateWidth()
 
 // -------------------------------------------------------------------------------------------
 
-DConfigDlgTreeView::DConfigDlgTreeView(QWidget* parent)
+DConfigDlgTreeView::DConfigDlgTreeView(QWidget* const parent)
     : QTreeView(parent)
 {
     header()->hide();
@@ -209,7 +209,7 @@ void DConfigDlgTreeView::expandItems(const QModelIndex& index)
 
 // ---------------------------------------------------------------------------
 
-DConfigDlgTabbedView::DConfigDlgTabbedView(QWidget* parent)
+DConfigDlgTabbedView::DConfigDlgTabbedView(QWidget* const parent)
     : QAbstractItemView(parent)
 {
     // hide the viewport of the QAbstractScrollArea
@@ -396,7 +396,7 @@ void DConfigDlgTabbedView::dataChanged(const QModelIndex& index, const QModelInd
 
 // -----------------------------------------------------------------------------------------------
 
-DConfigDlgListViewDelegate::DConfigDlgListViewDelegate(QObject* parent)
+DConfigDlgListViewDelegate::DConfigDlgListViewDelegate(QObject* const parent)
     : QAbstractItemDelegate(parent)
 {
 }
@@ -554,7 +554,7 @@ void DConfigDlgListViewDelegate::drawFocus(QPainter* painter, const QStyleOption
 
 // ------------------------------------------------------------------------------------------------------
 
-DConfigDlgListViewProxy::DConfigDlgListViewProxy(QObject* parent)
+DConfigDlgListViewProxy::DConfigDlgListViewProxy(QObject* const parent)
     : QAbstractProxyModel(parent)
 {
 }
@@ -675,7 +675,7 @@ void DConfigDlgListViewProxy::addMapEntry(const QModelIndex& index)
 
 // ---------------------------------------------------------------------------------------
 
-SelectionModel::SelectionModel(QAbstractItemModel* model, QObject* parent)
+SelectionModel::SelectionModel(QAbstractItemModel* const model, QObject* const parent)
     : QItemSelectionModel(model, parent)
 {
 }

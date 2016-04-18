@@ -49,7 +49,7 @@ class DConfigDlgStackedWidget : public QStackedWidget
 {
 public:
 
-    DConfigDlgStackedWidget(QWidget* parent = 0)
+    DConfigDlgStackedWidget(QWidget* const parent = 0)
         : QStackedWidget(parent)
     {
     }
@@ -77,7 +77,7 @@ class DConfigDlgViewPrivate
 
 protected:
 
-    DConfigDlgViewPrivate(DConfigDlgView*);
+    DConfigDlgViewPrivate(DConfigDlgView* const);
 
     void updateTitleWidget(const QModelIndex& index);
 
@@ -125,7 +125,7 @@ class DConfigDlgPlainView : public QAbstractItemView
 {
 public:
 
-    DConfigDlgPlainView(QWidget* parent = 0);
+    DConfigDlgPlainView(QWidget* const parent = 0);
 
     QModelIndex indexAt(const QPoint& point) const                           Q_DECL_OVERRIDE;
     void scrollTo(const QModelIndex& index, ScrollHint hint = EnsureVisible) Q_DECL_OVERRIDE;
@@ -149,7 +149,7 @@ class DConfigDlgListView : public QListView
 
 public:
 
-    DConfigDlgListView(QWidget* parent = 0);
+    DConfigDlgListView(QWidget* const parent = 0);
     virtual ~DConfigDlgListView();
 
     void setModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
@@ -167,7 +167,7 @@ class DConfigDlgTreeView : public QTreeView
 
 public:
 
-    DConfigDlgTreeView(QWidget* parent = 0);
+    DConfigDlgTreeView(QWidget* const parent = 0);
 
     void setModel(QAbstractItemModel* model) Q_DECL_OVERRIDE;
 
@@ -188,7 +188,7 @@ class DConfigDlgTabbedView : public QAbstractItemView
 
 public:
 
-    DConfigDlgTabbedView(QWidget* parent = 0);
+    DConfigDlgTabbedView(QWidget* const parent = 0);
     virtual ~DConfigDlgTabbedView();
 
     void setModel(QAbstractItemModel* model)                                            Q_DECL_OVERRIDE;
@@ -225,7 +225,7 @@ class DConfigDlgListViewDelegate : public QAbstractItemDelegate
 
 public:
 
-    DConfigDlgListViewDelegate(QObject* parent = 0);
+    DConfigDlgListViewDelegate(QObject* const parent = 0);
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const Q_DECL_OVERRIDE;
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const                Q_DECL_OVERRIDE;
@@ -247,7 +247,7 @@ class DConfigDlgListViewProxy : public QAbstractProxyModel
 
 public:
 
-    DConfigDlgListViewProxy(QObject* parent = 0);
+    DConfigDlgListViewProxy(QObject* const parent = 0);
     virtual ~DConfigDlgListViewProxy();
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const                           Q_DECL_OVERRIDE;
@@ -279,7 +279,7 @@ class SelectionModel : public QItemSelectionModel
 
 public:
 
-    SelectionModel(QAbstractItemModel* model, QObject* parent);
+    SelectionModel(QAbstractItemModel* const model, QObject* const parent);
 
 public Q_SLOTS:
 

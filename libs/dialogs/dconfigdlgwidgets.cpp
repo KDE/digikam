@@ -65,7 +65,7 @@ void DConfigDlgWdgPrivate::_k_slotCurrentPageChanged(const QModelIndex& current,
     emit q->currentPageChanged(currentItem, beforeItem);
 }
 
-DConfigDlgWdg::DConfigDlgWdg(DConfigDlgWdgPrivate& dd, QWidget* parent)
+DConfigDlgWdg::DConfigDlgWdg(DConfigDlgWdgPrivate& dd, QWidget* const parent)
     : DConfigDlgView(dd, parent)
 {
     Q_D(DConfigDlgWdg);
@@ -86,7 +86,7 @@ DConfigDlgWdg::DConfigDlgWdg(DConfigDlgWdgPrivate& dd, QWidget* parent)
             this, &DConfigDlgWdg::pageToggled);
 }
 
-DConfigDlgWdg::DConfigDlgWdg(QWidget* parent)
+DConfigDlgWdg::DConfigDlgWdg(QWidget* const parent)
     : DConfigDlgView(*new DConfigDlgWdgPrivate(this), parent)
 {
     Q_D(DConfigDlgWdg);
@@ -149,6 +149,7 @@ void DConfigDlgWdg::removePage(DConfigDlgWdgItem* item)
 void DConfigDlgWdg::setCurrentPage(DConfigDlgWdgItem* item)
 {
     const QModelIndex index = d_func()->model()->index(item);
+
     if (!index.isValid())
     {
         return;
@@ -171,7 +172,7 @@ DConfigDlgWdgItem* DConfigDlgWdg::currentPage() const
 
 // -----------------------------------------------------------------------------------------
 
-DConfigDlgTitle::DConfigDlgTitle(QWidget* parent)
+DConfigDlgTitle::DConfigDlgTitle(QWidget* const parent)
     : QWidget(parent),
       d(new Private(this))
 {
@@ -234,7 +235,7 @@ bool DConfigDlgTitle::eventFilter(QObject* object, QEvent* event)
     return QWidget::eventFilter(object, event);
 }
 
-void DConfigDlgTitle::setWidget(QWidget* widget)
+void DConfigDlgTitle::setWidget(QWidget* const widget)
 {
     d->headerLayout->addWidget(widget, 2, 0, 1, 2);
 }
@@ -254,7 +255,7 @@ const QPixmap *DConfigDlgTitle::pixmap() const
     return d->imageLabel->pixmap();
 }
 
-void DConfigDlgTitle::setBuddy(QWidget* buddy)
+void DConfigDlgTitle::setBuddy(QWidget* const buddy)
 {
     d->textLabel->setBuddy(buddy);
 }

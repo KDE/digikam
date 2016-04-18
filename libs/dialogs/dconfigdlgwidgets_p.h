@@ -44,7 +44,7 @@ class DConfigDlgWdgPrivate : public DConfigDlgViewPrivate
 
 protected:
 
-    DConfigDlgWdgPrivate(DConfigDlgWdg* q);
+    DConfigDlgWdgPrivate(DConfigDlgWdg* const q);
 
     DConfigDlgWdgModel* model() const
     {
@@ -60,8 +60,12 @@ class DConfigDlgTitle::Private
 {
 public:
 
-    Private(DConfigDlgTitle* parent)
+    Private(DConfigDlgTitle* const parent)
         : q(parent),
+          headerLayout(0),
+          imageLabel(0),
+          textLabel(0),
+          commentLabel(0),
           autoHideTimeout(0),
           messageType(InfoMessage)
     {
@@ -70,6 +74,7 @@ public:
     QString textStyleSheet() const
     {
         const int fontSize = qRound(QApplication::font().pointSize() * 1.4);
+
         return QString::fromLatin1("QLabel { font-size: %1pt; color: %2 }")
                .arg(QString::number(fontSize), q->palette().color(QPalette::WindowText).name());
     }

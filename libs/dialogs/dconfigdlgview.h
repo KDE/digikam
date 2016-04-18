@@ -93,7 +93,7 @@ public:
     /**
      * Creates a page view with given parent.
      */
-    explicit DConfigDlgView(QWidget* parent = 0);
+    explicit DConfigDlgView(QWidget* const parent = 0);
 
     /**
      * Destroys the page view.
@@ -187,7 +187,7 @@ protected:
      */
     virtual Qt::Alignment viewPosition() const;
 
-    DConfigDlgView(DConfigDlgViewPrivate& dd, QWidget* parent);
+    DConfigDlgView(DConfigDlgViewPrivate& dd, QWidget* const parent);
 
 protected:
 

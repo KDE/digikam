@@ -356,13 +356,14 @@ void DConfigDlgViewPrivate::_k_dataChanged(const QModelIndex&, const QModelIndex
     updateTitleWidget(index);
 }
 
-DConfigDlgViewPrivate::DConfigDlgViewPrivate(DConfigDlgView* _parent)
+DConfigDlgViewPrivate::DConfigDlgViewPrivate(DConfigDlgView* const _parent)
     : q_ptr(_parent),
       model(0),
       faceType(DConfigDlgView::Auto),
       layout(0),
       stack(0),
       titleWidget(0),
+      defaultWidget(0),
       view(0)
 {
 }
@@ -387,17 +388,16 @@ void DConfigDlgViewPrivate::init()
     layout->setRowStretch(2, 1);
 }
 
-/**
- * DConfigDlgView Implementation
- */
-DConfigDlgView::DConfigDlgView(QWidget* parent)
+// ---------------------------------------------------------------------------------------
+
+DConfigDlgView::DConfigDlgView(QWidget* const parent)
     : QWidget(parent),
       d_ptr(new DConfigDlgViewPrivate(this))
 {
     d_ptr->init();
 }
 
-DConfigDlgView::DConfigDlgView(DConfigDlgViewPrivate& dd, QWidget* parent)
+DConfigDlgView::DConfigDlgView(DConfigDlgViewPrivate& dd, QWidget* const parent)
     : QWidget(parent),
       d_ptr(&dd)
 {

@@ -55,7 +55,7 @@ public:
      *
      * @param parent The parent widget.
      */
-    explicit DConfigDlgWdg(QWidget* parent = 0);
+    explicit DConfigDlgWdg(QWidget* const parent = 0);
 
     /**
      * Destroys the page widget.
@@ -161,7 +161,7 @@ Q_SIGNALS:
 
 protected:
 
-    DConfigDlgWdg(DConfigDlgWdgPrivate& dd, QWidget* parent);
+    DConfigDlgWdg(DConfigDlgWdgPrivate& dd, QWidget* const parent);
 
 private:
 
@@ -219,14 +219,14 @@ public:
     /**
      * Constructs a title widget with the given @param parent.
      */
-    explicit DConfigDlgTitle(QWidget* parent = 0);
+    explicit DConfigDlgTitle(QWidget* const parent = 0);
 
     virtual ~DConfigDlgTitle();
 
     /**
      * @param widget Widget displayed on the title widget.
      */
-    void setWidget(QWidget* widget);
+    void setWidget(QWidget* const widget);
 
     /**
      * @return the text displayed in the title
@@ -253,7 +253,7 @@ public:
      * widget.
      * @param buddy the widget to activate when the shortcut key is activated
      */
-    void setBuddy(QWidget* buddy);
+    void setBuddy(QWidget* const buddy);
 
     /**
      * Get the current timeout value in milliseconds
