@@ -91,7 +91,7 @@ ecm_mark_as_test(filesaveoptionsboxtest)
 target_link_libraries(filesaveoptionsboxtest
                       digikamcore
                       digikamdatabase
-                      
+
                       libdng
 
                       Qt5::Test
@@ -122,3 +122,18 @@ target_link_libraries(statesavingobjecttest
 if(GPHOTO2_FOUND)
     target_link_libraries(statesavingobjecttest ${GPHOTO2_LIBRARIES})
 endif()
+
+#------------------------------------------------------------------------
+
+include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
+
+set(loadvideothumb_SRCS loadvideothumb.cpp ${pgfutils_SRCS})
+add_executable(loadvideothumb ${loadvideothumb_SRCS})
+ecm_mark_nongui_executable(loadvideothumb)
+
+target_link_libraries(loadvideothumb
+
+                      Qt5::Core
+                      Qt5::Widgets
+                      Qt5::Multimedia
+)
