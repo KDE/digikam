@@ -161,41 +161,6 @@ void KIOWrapper::slotGotPreview(const KFileItem& item, const QPixmap& pix)
     emit gotPreview(item.url(), pix);
 }
 
-QPair<int, QString> KIOWrapper::renameDlg(QWidget* widget, const QString& caption, const QUrl& src, const QUrl& dest)
-{
-    QPointer<KIO::RenameDialog> dlg = new KIO::RenameDialog(widget, caption,
-                                                            src, dest,
-                                                            KIO::RenameDialog_Mode(KIO::M_MULTI |
-                                                            KIO::M_OVERWRITE |
-                                                            KIO::M_SKIP));
-    QPair<int, QString> pair;
-
-    switch (dlg->exec())
-    {
-        case KIO::Result_Cancel:
-            pair.first = Cancel;
-            break;
-        case KIO::Result_Skip:
-            pair.first = Skip;
-            break;
-        case KIO::Result_AutoSkip:
-            pair.first = SkipAll;
-            break;
-        case KIO::Result_Overwrite:
-            pair.first = Overwrite;
-            break;
-        default: // OverwriteAll
-            pair.first = OverwriteAll;
-            break;
-    }
-
-    pair.second = dlg->newDestUrl().toLocalFile();
-
-    delete dlg;
-
-    return pair;
-}
-
 bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* const window)
 {
 #if KIO_VERSION < QT_VERSION_CHECK(5,6,0)

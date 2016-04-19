@@ -223,27 +223,7 @@ void Task::run()
     {
         if (d->settings.conflictRule != QueueSettings::OVERWRITE)
         {
-            int i          = 0;
-            bool fileFound = false;
-
-            do
-            {
-                QFileInfo nfi(dest.toLocalFile());
-
-                if (!nfi.exists())
-                {
-                    fileFound = false;
-                }
-                else
-                {
-                    i++;
-                    dest = dest.adjusted(QUrl::RemoveFilename);
-                    dest.setPath(dest.path() + fi.completeBaseName() + QString::fromUtf8("_%1.").arg(i) + fi.completeSuffix());
-                    fileFound = true;
-                }
-            }
-            while (fileFound);
-
+            dest       = FileOperation::getUniqueFileUrl(dest);
             renameMess = i18n("(renamed to %1)", dest.fileName());
         }
         else

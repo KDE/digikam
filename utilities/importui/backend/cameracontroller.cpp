@@ -70,7 +70,7 @@ extern "C"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
-#include "kiowrapper.h"
+#include "fileoperation.h"
 
 namespace Digikam
 {
@@ -823,96 +823,24 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                                        const QString& script)
 {
     // this is the direct continuation of executeCommand, case CameraCommand::cam_download
-    bool skip      = false;
-    bool cancel    = false;
-    bool overwrite = d->overwriteAll;
-    QString dest   = destination;
-
-    // Check if dest file already exist, unless we overwrite anyway
+    bool newurl  = false;
+    QString dest = FileOperation::getUniqueFileUrl(QUrl::fromLocalFile(destination), &newurl).toLocalFile();
 
     QFileInfo info(dest);
 
-    if (!d->overwriteAll)
+    if (newurl)
     {
-
-        while (info.exists())
-        {
-            if (d->skipAll)
-            {
-                skip = true;
-                break;
-            }
-
-            QPair<int, QString> resultAndDest =
-                    KIOWrapper::renameDlg(d->parent,
-                                          i18nc("@title:window", "Rename File"),
-                                          QUrl::fromLocalFile(folder + QLatin1String("/") + file),
-                                          QUrl::fromLocalFile(dest));
-
-            int result = resultAndDest.first;
-            dest       = resultAndDest.second;
-            info       = QFileInfo(dest);
-
-            switch (result)
-            {
-                case KIOWrapper::Cancel:
-                {
-                    cancel = true;
-                    break;
-                }
-
-                case KIOWrapper::Skip:
-                {
-                    skip = true;
-                    break;
-                }
-
-                case KIOWrapper::SkipAll:
-                {
-                    d->skipAll = true;
-                    skip       = true;
-                    break;
-                }
-
-                case KIOWrapper::Overwrite:
-                {
-                    overwrite = true;
-                    break;
-                }
-
-                case KIOWrapper::OverwriteAll:
-                {
-                    d->overwriteAll = true;
-                    overwrite       = true;
-                    break;
-                }
-
-                default:
-                    break;
-            }
-
-            if (cancel || skip || overwrite)
-            {
-                break;
-            }
-        }
+        sendLogMsg(xi18n("Rename file to <filename>%1</filename>", info.fileName()), DHistoryView::WarningEntry, folder, file);
     }
-
-    if (cancel)
-    {
-        unlink(QFile::encodeName(temp).constData());
-        slotCancel();
-        emit signalSkipped(folder, file);
-        return;
-    }
-    else if (skip)
+/*
+    if (skip)
     {
         unlink(QFile::encodeName(temp).constData());
         sendLogMsg(xi18n("Skipped file <filename>%1</filename>", file), DHistoryView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
     }
-
+*/
     // move the file to the destination file
     if (DMetadata::hasSidecar(temp))
     {

@@ -177,6 +177,44 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
     }
 }
 
+QUrl FileOperation::getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl)
+{
+    QUrl destUrl(orgUrl);
+
+    if (newurl)
+        *newurl = false;
+
+    QFileInfo fi(destUrl.toLocalFile());
+
+    if (fi.exists())
+    {
+        int i          = 0;
+        bool fileFound = false;
+
+        do
+        {
+            QFileInfo nfi(destUrl.toLocalFile());
+
+            if (!nfi.exists())
+            {
+                fileFound = false;
+
+                if (newurl)
+                    *newurl = true;
+            }
+            else
+            {
+                destUrl = destUrl.adjusted(QUrl::RemoveFilename);
+                destUrl.setPath(destUrl.path() + fi.completeBaseName() + QString::fromUtf8("_%1.").arg(++i) + fi.completeSuffix());
+                fileFound = true;
+            }
+        }
+        while (fileFound);
+    }
+
+    return destUrl;
+}
+
 KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
 {
     // This code is inspired by KonqMenuActions:

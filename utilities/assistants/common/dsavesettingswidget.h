@@ -51,7 +51,7 @@ public:
     enum ConflictRule
     {
         OVERWRITE = 0,
-        ASKTOUSER
+        DIFFNAME
     };
 
 public:
@@ -63,8 +63,6 @@ public:
 
     OutputFormat fileFormat() const;
     void setFileFormat(OutputFormat f);
-
-    void setPromptButtonText(const QString&);
 
     ConflictRule conflictRule() const;
     void setConflictRule(ConflictRule r);

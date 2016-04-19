@@ -51,17 +51,6 @@ class DIGIKAM_EXPORT KIOWrapper : public QObject
 
 public:
 
-    enum RenameDlgResults
-    {
-        Cancel = 0,
-        Skip,
-        SkipAll,
-        Overwrite,
-        OverwriteAll
-    };
-
-public:
-
     KIOWrapper();
 
     void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
@@ -78,8 +67,6 @@ public:
     static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 
     static QStringList previewJobAvailablePlugins();
-
-    static QPair<int, QString> renameDlg(QWidget* const widget, const QString& caption, const QUrl& src, const QUrl& dest);
 
     static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);

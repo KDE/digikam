@@ -55,6 +55,10 @@ namespace FileOperation
      */
     DIGIKAM_EXPORT void openFilesWithDefaultApplication(const QList<QUrl>& urls, QWidget* const parentWidget);
 
+    /** Get unique file url if file exist by appending a counter suffix or return original url.
+     */
+    DIGIKAM_EXPORT QUrl getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl = 0);
+
     /** Return list of service available on desktop to open files.
      */
     DIGIKAM_EXPORT KService::List servicesForOpenWith(const QList<QUrl>& urls);

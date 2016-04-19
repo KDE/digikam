@@ -71,7 +71,7 @@ extern "C"
 #include "dpreviewmanager.h"
 #include "dsavesettingswidget.h"
 #include "expoblendingmanager.h"
-#include "kiowrapper.h"
+#include "fileoperation.h"
 
 namespace Digikam
 {
@@ -458,42 +458,10 @@ void ExpoBlendingDlg::slotProcess()
 void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
 {
     QUrl newUrl = QUrl::fromLocalFile(temp.adjusted(QUrl::RemoveFilename).path() + settings.targetFileName);
-    QFileInfo fi(newUrl.toLocalFile());
 
     if (d->saveSettingsBox->conflictRule() != DSaveSettingsWidget::OVERWRITE)
     {
-        if (fi.exists())
-        {
-            QPair<int, QString> resultAndDest =
-                    KIOWrapper::renameDlg(this,
-                                          i18n("A file named \"%1\" already exists. Are you sure you want to overwrite it?", newUrl.fileName()),
-                                          temp,
-                                          newUrl);
-                    
-            int result   = resultAndDest.first;
-            QString dest = resultAndDest.second;
-
-            switch (result)
-            {
-                case KIOWrapper::Cancel:
-                case KIOWrapper::Skip:
-                {
-                    newUrl.clear();
-                    d->enfuseStack->setOnItem(settings.previewUrl, false);
-                    d->enfuseStack->processedItem(settings.previewUrl, false);
-
-                    break;
-                }
-                case KIOWrapper::Overwrite:
-                {
-                    // Nothing to do.
-                    break;
-                }
-                default:    // rename.
-                    newUrl = QUrl::fromLocalFile(dest);
-                    break;
-            }
-        }
+        newUrl = FileOperation::getUniqueFileUrl(newUrl);
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming " << temp << " to " << newUrl;

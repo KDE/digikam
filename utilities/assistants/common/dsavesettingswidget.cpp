@@ -51,8 +51,8 @@ public:
         conflictLabel       = 0;
         conflictButtonGroup = 0;
         formatComboBox      = 0;
+        storeDiffButton     = 0;
         overwriteButton     = 0;
-        promptButton        = 0;
         grid                = 0;
     }
 
@@ -65,8 +65,8 @@ public:
 
     QComboBox*    formatComboBox;
 
+    QRadioButton* storeDiffButton;
     QRadioButton* overwriteButton;
-    QRadioButton* promptButton;
 };
 
 DSaveSettingsWidget::DSaveSettingsWidget(QWidget* const parent)
@@ -100,17 +100,17 @@ DSaveSettingsWidget::DSaveSettingsWidget(QWidget* const parent)
     QWidget* const conflictBox = new QWidget(this);
     QVBoxLayout* const vlay    = new QVBoxLayout(conflictBox);
     d->conflictButtonGroup     = new QButtonGroup(conflictBox);
-    d->overwriteButton         = new QRadioButton(i18n("Overwrite automatically"), conflictBox);
-    d->promptButton            = new QRadioButton(i18n("Open rename-file dialog"), conflictBox);
+    d->storeDiffButton         = new QRadioButton(i18n("Store as a different name"), conflictBox);
+    d->overwriteButton         = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
     d->conflictButtonGroup->addButton(d->overwriteButton, OVERWRITE);
-    d->conflictButtonGroup->addButton(d->promptButton,    ASKTOUSER);
+    d->conflictButtonGroup->addButton(d->storeDiffButton, DIFFNAME);
     d->conflictButtonGroup->setExclusive(true);
-    d->overwriteButton->setChecked(true);
+    d->storeDiffButton->setChecked(true);
 
     vlay->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay->setSpacing(spacing);
+    vlay->addWidget(d->storeDiffButton);
     vlay->addWidget(d->overwriteButton);
-    vlay->addWidget(d->promptButton);
 
     d->grid->addWidget(d->formatLabel,    0, 0, 1, 1);
     d->grid->addWidget(d->formatComboBox, 0, 1, 1, 1);
@@ -153,11 +153,6 @@ void DSaveSettingsWidget::setFileFormat(OutputFormat f)
     d->formatComboBox->setCurrentIndex((int)f);
 }
 
-void DSaveSettingsWidget::setPromptButtonText(const QString& str)
-{
-    d->promptButton->setText(str);
-}
-
 DSaveSettingsWidget::ConflictRule DSaveSettingsWidget::conflictRule() const
 {
     return((ConflictRule)(d->conflictButtonGroup->checkedId()));
@@ -171,7 +166,7 @@ void DSaveSettingsWidget::setConflictRule(ConflictRule r)
 void DSaveSettingsWidget::readSettings(KConfigGroup& group)
 {
     setFileFormat((DSaveSettingsWidget::OutputFormat)group.readEntry("Output Format", (int)(DSaveSettingsWidget::OUTPUT_PNG)));
-    setConflictRule((DSaveSettingsWidget::ConflictRule)group.readEntry("Conflict",    (int)(DSaveSettingsWidget::OVERWRITE)));
+    setConflictRule((DSaveSettingsWidget::ConflictRule)group.readEntry("Conflict",    (int)(DSaveSettingsWidget::DIFFNAME)));
 }
 
 void DSaveSettingsWidget::writeSettings(KConfigGroup& group)
