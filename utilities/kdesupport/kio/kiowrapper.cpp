@@ -40,7 +40,6 @@
 #include <krun.h>
 #include <kio_version.h>
 #include <kjobwidgets.h>
-#include <KIOWidgets/kio/renamedialog.h>
 
 namespace Digikam
 {
