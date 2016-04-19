@@ -125,15 +125,20 @@ endif()
 
 #------------------------------------------------------------------------
 
-include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
+if(ENABLE_MEDIAPLAYER)
 
-set(loadvideothumb_SRCS loadvideothumb.cpp ${pgfutils_SRCS})
-add_executable(loadvideothumb ${loadvideothumb_SRCS})
-ecm_mark_nongui_executable(loadvideothumb)
+    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
 
-target_link_libraries(loadvideothumb
+    set(loadvideothumb_SRCS loadvideothumb.cpp ${pgfutils_SRCS})
+    add_executable(loadvideothumb ${loadvideothumb_SRCS})
+    ecm_mark_nongui_executable(loadvideothumb)
 
-                      Qt5::Core
-                      Qt5::Widgets
-                      Qt5::Multimedia
-)
+    target_link_libraries(loadvideothumb
+
+                          Qt5::Core
+                          Qt5::Widgets
+                          Qt5::Multimedia
+    )
+
+endif()
+
