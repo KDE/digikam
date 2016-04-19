@@ -39,13 +39,18 @@ public:
     ~VideoThumbnailer();
 
     bool getThumbnail(const QString& file);
-    
+
+Q_SIGNALS:
+
+    void signalVideoThumbDone();
+
 private Q_SLOTS:
 
     void slotProcessframe(QVideoFrame);
 
 private:
-    
+
     QMediaPlayer* m_player;
     QVideoProbe*  m_probe;
+    QString       m_videoFile;
 };

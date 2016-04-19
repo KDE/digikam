@@ -42,20 +42,22 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
 
 bool VideoThumbnailer::getThumbnail(const QString& file)
 {
+    m_videoFile = file;
+
     if (m_probe->setSource(m_player))
     {
         qDebug() << "Monitoring is not available.";
         return false;
     }
-        
-    m_player->setMedia(QUrl::fromLocalFile(file));
+
+    m_player->setMedia(QUrl::fromLocalFile(m_videoFile));
     m_player->setPosition(1000);
 
     qDebug() << "Trying to get thumbnail from " << file << "...";
 
     return true;
 }
-    
+
 VideoThumbnailer::~VideoThumbnailer()
 {
 }
@@ -64,10 +66,12 @@ void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
 {
     frm.map(QAbstractVideoBuffer::ReadOnly);
     QImage img(frm.bits(), frm.width(), frm.height(), QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat()));
-    img.save(QLatin1String("videothumb.png"), "PNG");
+    img.save(QString::fromUtf8("%1-thumb.png").arg(m_videoFile), "PNG");
     frm.unmap();
-    
-    qDebug() << "Tthumbnail extracted.";
+
+    qDebug() << "Video thumbnail from " << m_videoFile <<" extracted.";
+
+    emit signalVideoThumbDone();
 }
 
 // --------------------------------------------------------------------------
@@ -83,6 +87,9 @@ int main(int argc, char** argv)
 
     QApplication app(argc, argv);
     VideoThumbnailer* const vthumb = new VideoThumbnailer(&app);
+
+    QObject::connect(vthumb, SIGNAL(signalVideoThumbDone()),
+                     &app, SLOT(quit()));
 
     if (!vthumb->getThumbnail(QString::fromUtf8(argv[1])))
         return -1;
