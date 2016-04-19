@@ -143,6 +143,7 @@ public:
     static const QString          configUseDefaultTargetAlbum;
     static const QString          configLastTargetAlbum;
     static const QString          configDefaultTargetAlbumId;
+    static const QString          configFileSaveConflictRule;
     static const QString          importFiltersConfigGroupName;
 
     bool                          deleteAfter;
@@ -247,6 +248,7 @@ const QString ImportUI::Private::configUseFileMetadata(QLatin1String("UseFileMet
 const QString ImportUI::Private::configUseDefaultTargetAlbum(QLatin1String("UseDefaultTargetAlbum"));
 const QString ImportUI::Private::configLastTargetAlbum(QLatin1String("LastTargetAlbum"));
 const QString ImportUI::Private::configDefaultTargetAlbumId(QLatin1String("DefaultTargetAlbumId"));
+const QString ImportUI::Private::configFileSaveConflictRule(QLatin1String("FileSaveConflictRule"));
 const QString ImportUI::Private::importFiltersConfigGroupName(QLatin1String("Import Filters"));
 
 }  // namespace Digikam

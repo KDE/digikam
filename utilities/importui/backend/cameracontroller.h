@@ -35,12 +35,14 @@
 // Local includes
 
 #include "downloadsettings.h"
+#include "setupcamera.h"
 #include "camiteminfo.h"
 #include "dmetadata.h"
 #include "dkcamera.h"
 #include "dhistoryview.h"
 #include "thumbnailsize.h"
 #include "digikam_export.h"
+
 
 namespace Digikam
 {
@@ -87,7 +89,7 @@ public:
      */
     void getThumbsInfo(const CamItemInfoList& infoList, int thumbSize);
 
-    void downloadPrep();
+    void downloadPrep(const SetupCamera::ConflictRule& rule);
     void download(const DownloadSettings& downloadSettings);
     void download(const DownloadSettingsList& list);
     void upload(const QFileInfo& srcFileInfo, const QString& destFile, const QString& destFolder);

@@ -42,6 +42,15 @@ class SetupCamera : public QScrollArea
 
 public:
 
+    enum ConflictRule
+    {
+        OVERWRITE = 0,
+        DIFFNAME,
+        SKIPFILE
+    };
+
+public:
+
     explicit SetupCamera(QWidget* const parent = 0);
     ~SetupCamera();
 
@@ -51,9 +60,9 @@ public:
     bool useFileMetadata();
 
 Q_SIGNALS:
-    
+
     void signalUseFileMetadataChanged(bool);
-    
+
 private Q_SLOTS:
 
     void slotSelectionChanged();

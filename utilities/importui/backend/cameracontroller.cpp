@@ -109,34 +109,33 @@ public:
 
     Private() :
         close(false),
-        overwriteAll(false),
-        skipAll(false),
         canceled(false),
         running(false),
+        conflictRule(SetupCamera::DIFFNAME),
         parent(0),
         timer(0),
         camera(0)
     {
     }
 
-    bool                  close;
-    bool                  overwriteAll;
-    bool                  skipAll;
-    bool                  canceled;
-    bool                  running;
+    bool                      close;
+    bool                      canceled;
+    bool                      running;
 
-    QStringList           folderList;
+    SetupCamera::ConflictRule conflictRule;
 
-    QWidget*              parent;
+    QStringList               folderList;
 
-    QTimer*               timer;
+    QWidget*                  parent;
 
-    DKCamera*             camera;
+    QTimer*                   timer;
 
-    QMutex                mutex;
-    QWaitCondition        condVar;
+    DKCamera*                 camera;
 
-    QList<CameraCommand*> commands;
+    QMutex                    mutex;
+    QWaitCondition            condVar;
+
+    QList<CameraCommand*>     commands;
 };
 
 CameraController::CameraController(QWidget* const parent,
@@ -823,24 +822,28 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
                                        const QString& script)
 {
     // this is the direct continuation of executeCommand, case CameraCommand::cam_download
-    bool newurl  = false;
-    QString dest = FileOperation::getUniqueFileUrl(QUrl::fromLocalFile(destination), &newurl).toLocalFile();
-
+    QString dest = destination;
     QFileInfo info(dest);
 
-    if (newurl)
-    {
-        sendLogMsg(xi18n("Rename file to <filename>%1</filename>", info.fileName()), DHistoryView::WarningEntry, folder, file);
-    }
-/*
-    if (skip)
+    if (info.exists() && d->conflictRule == SetupCamera::SKIPFILE)
     {
         unlink(QFile::encodeName(temp).constData());
         sendLogMsg(xi18n("Skipped file <filename>%1</filename>", file), DHistoryView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
     }
-*/
+    else if (d->conflictRule != SetupCamera::OVERWRITE)
+    {
+        bool newurl = false;
+        dest        = FileOperation::getUniqueFileUrl(QUrl::fromLocalFile(dest), &newurl).toLocalFile();
+        info        = QFileInfo(dest);
+
+        if (newurl)
+        {
+            sendLogMsg(xi18n("Rename file to <filename>%1</filename>", info.fileName()), DHistoryView::WarningEntry, folder, file);
+        }
+    }
+
     // move the file to the destination file
     if (DMetadata::hasSidecar(temp))
     {
@@ -1146,10 +1149,9 @@ void CameraController::upload(const QFileInfo& srcFileInfo, const QString& destF
                           << "' (" << destFile << ")";
 }
 
-void CameraController::downloadPrep()
+void CameraController::downloadPrep(const SetupCamera::ConflictRule& rule)
 {
-    d->overwriteAll  = false;
-    d->skipAll       = false;
+    d->conflictRule = rule;
 }
 
 void CameraController::download(const DownloadSettingsList& list)

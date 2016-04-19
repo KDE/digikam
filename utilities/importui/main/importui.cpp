@@ -1992,7 +1992,12 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
 
 bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool deleteAfter)
 {
-    d->controller->downloadPrep();
+    KSharedConfig::Ptr config      = KSharedConfig::openConfig();
+    KConfigGroup group             = config->group(d->configGroupName);
+    SetupCamera::ConflictRule rule = (SetupCamera::ConflictRule)group.readEntry(d->configFileSaveConflictRule,
+                                                                                (int)SetupCamera::DIFFNAME);
+
+    d->controller->downloadPrep(rule);
 
     QString              downloadName;
     DownloadSettingsList allItems;
