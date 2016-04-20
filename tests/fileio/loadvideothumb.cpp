@@ -36,6 +36,9 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     m_player = new QMediaPlayer(this);
     m_probe  = new QVideoProbe(this);
 
+    connect(m_player, SIGNAL(error(QMediaPlayer::Error)),
+            this, SLOT(slotHandlePlayerError()));
+
     connect(m_probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
 }
@@ -67,6 +70,14 @@ bool VideoThumbnailer::getThumbnail(const QString& file)
 
 VideoThumbnailer::~VideoThumbnailer()
 {
+}
+
+void VideoThumbnailer::slotHandlePlayerError()
+{
+    qDebug() << "Problrm while video data extraction from " << m_videoFile;
+    qDebug() << "Error : " << m_player->errorString();
+
+    emit signalVideoThumbDone();
 }
 
 void VideoThumbnailer::slotProcessframe(QVideoFrame frm)

@@ -47,6 +47,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotProcessframe(QVideoFrame);
+    void slotHandlePlayerError();
 
 private:
 
