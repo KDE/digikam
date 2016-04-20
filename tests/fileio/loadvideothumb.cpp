@@ -44,13 +44,20 @@ bool VideoThumbnailer::getThumbnail(const QString& file)
 {
     m_videoFile = file;
 
-    if (m_probe->setSource(m_player))
+    if (!m_probe->setSource(m_player))
     {
-        qDebug() << "Monitoring is not available.";
+        qDebug() << "Video monitoring is not available.";
         return false;
     }
 
     m_player->setMedia(QUrl::fromLocalFile(m_videoFile));
+
+    if (!m_player->isSeekable())
+    {
+        qDebug() << "Video seek is not available.";
+        return false;
+    }
+
     m_player->setPosition(1000);
 
     qDebug() << "Trying to get thumbnail from " << file << "...";
