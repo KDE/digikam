@@ -102,12 +102,29 @@ void VideoThumbnailer::slotHandlePlayerError()
 
 void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
 {
-    frm.map(QAbstractVideoBuffer::ReadOnly);
-    QImage img(frm.bits(), frm.width(), frm.height(), QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat()));
-    img.save(QString::fromUtf8("%1-thumb.png").arg(m_videoFile), "PNG");
-    frm.unmap();
+    qDebug() << "Video frame extraction from " << m_videoFile 
+             << " at position " << m_player->position();
 
-    qDebug() << "Video thumbnail from " << m_videoFile << " extracted.";
+    if (!frm.isValid())
+    {
+        qDebug() << "Error : Video frame is not valid.";
+        emit signalVideoThumbDone();
+    }
+        
+    frm.map(QAbstractVideoBuffer::ReadOnly);
+    
+    if (frm.isReadable())
+    {
+        QImage img(frm.bits(), frm.width(), frm.height(), QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat()));
+        img.save(QString::fromUtf8("%1-thumb.png").arg(m_videoFile), "PNG");
+        qDebug() << "Video frame extracted with size " << img.size();
+    }    
+    else
+    {
+        qDebug() << "Error : Video frame is not readable.";
+    }
+
+    frm.unmap();
 
     emit signalVideoThumbDone();
 }
