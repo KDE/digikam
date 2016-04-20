@@ -54,5 +54,6 @@ private:
 
     QMediaPlayer* m_player;
     QVideoProbe*  m_probe;
-    QString       m_videoFile;
+    QMediaContent m_media;
+    qint64        m_position;
 };
