@@ -85,6 +85,7 @@ void VideoThumbnailer::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)
             m_position = (qint64)(m_player->duration() * 0.2);
 
             m_player->setPosition(m_position);    // Seek to 20% of the media to take a thumb.
+            m_player->pause();
 
             qDebug() << "Trying to get thumbnail from " << m_media.canonicalUrl().fileName() << " at position " << m_position;
             break;
@@ -109,6 +110,9 @@ void VideoThumbnailer::slotHandlePlayerError()
 
 void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
 {
+    if (m_player->mediaStatus() != QMediaPlayer::BufferedMedia)
+        return;
+
     if (m_player->position() != m_position)
         return;
 
