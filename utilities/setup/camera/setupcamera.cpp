@@ -33,6 +33,8 @@
 #include <QPixmap>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QRadioButton>
+#include <QButtonGroup>
 #include <QTreeWidget>
 #include <QTreeWidgetItemIterator>
 #include <QVBoxLayout>
@@ -172,6 +174,10 @@ public:
         importAddButton(0),
         importRemoveButton(0),
         importEditButton(0),
+        storeDiffButton(0),
+        overwriteButton(0),
+        skipFileButton(0),
+        conflictButtonGroup(0),
         useFileMetadata(0),
         turnHighQualityThumbs(0),
         useDefaultTargetAlbum(0),
@@ -204,6 +210,7 @@ public:
     static const QString configTrunHighQualityThumbs;
     static const QString configUseDefaultTargetAlbum;
     static const QString configDefaultTargetAlbumId;
+    static const QString configFileSaveConflictRule;
     static const QString importFiltersConfigGroupName;
 
     QPushButton*         addButton;
@@ -213,6 +220,12 @@ public:
     QPushButton*         importAddButton;
     QPushButton*         importRemoveButton;
     QPushButton*         importEditButton;
+
+    QRadioButton*        storeDiffButton;
+    QRadioButton*        overwriteButton;
+    QRadioButton*        skipFileButton;
+
+    QButtonGroup*        conflictButtonGroup;
 
     QCheckBox*           useFileMetadata;
     QCheckBox*           turnHighQualityThumbs;
@@ -256,6 +269,7 @@ const QString SetupCamera::Private::configUseFileMetadata(QLatin1String("UseFile
 const QString SetupCamera::Private::configTrunHighQualityThumbs(QLatin1String("TurnHighQualityThumbs"));
 const QString SetupCamera::Private::configUseDefaultTargetAlbum(QLatin1String("UseDefaultTargetAlbum"));
 const QString SetupCamera::Private::configDefaultTargetAlbumId(QLatin1String("DefaultTargetAlbumId"));
+const QString SetupCamera::Private::configFileSaveConflictRule(QLatin1String("FileSaveConflictRule"));
 const QString SetupCamera::Private::importFiltersConfigGroupName(QLatin1String("Import Filters"));
 
 SetupCamera::SetupCamera(QWidget* const parent)
@@ -349,6 +363,31 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->useDefaultTargetAlbum  = new QCheckBox(i18n("Use a default target album to download from camera"), panel2);
     d->target1AlbumSelector   = new AlbumSelectWidget(panel2);
 
+    QGroupBox* const conflictBox = new QGroupBox(panel2);
+    QLabel* const conflictIcon   = new QLabel(conflictBox);
+    conflictIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-save-as")).pixmap(32));
+    QLabel* const conflictLabel  = new QLabel(i18n("If target file exists when downloaded"), conflictBox);
+    QGridLayout* const boxLayout = new QGridLayout(conflictBox);
+    d->conflictButtonGroup       = new QButtonGroup(conflictBox);
+    d->storeDiffButton           = new QRadioButton(i18n("Store as a different name"), conflictBox);
+    d->overwriteButton           = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
+    d->skipFileButton            = new QRadioButton(i18n("Skip automatically"),        conflictBox);
+    d->conflictButtonGroup->addButton(d->overwriteButton, OVERWRITE);
+    d->conflictButtonGroup->addButton(d->storeDiffButton, DIFFNAME);
+    d->conflictButtonGroup->addButton(d->skipFileButton,  SKIPFILE);
+    d->conflictButtonGroup->setExclusive(true);
+    d->storeDiffButton->setChecked(true);
+
+    boxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    boxLayout->setSpacing(spacing);
+    boxLayout->addWidget(conflictIcon,       0, 0);
+    boxLayout->addWidget(conflictLabel,      0, 1);
+    boxLayout->addWidget(d->storeDiffButton, 1, 0, 1, 3);
+    boxLayout->addWidget(d->overwriteButton, 2, 0, 1, 3);
+    boxLayout->addWidget(d->skipFileButton,  3, 0, 1, 3);
+    boxLayout->setColumnStretch(2, 1);
+    conflictBox->setLayout(boxLayout);
+
     d->tab->insertTab(1, panel2, i18n("Behavior"));
 
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -357,6 +396,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     layout->addWidget(d->turnHighQualityThumbs);
     layout->addWidget(d->useDefaultTargetAlbum);
     layout->addWidget(d->target1AlbumSelector);
+    layout->addWidget(conflictBox);
     layout->addStretch();
 
     // -------------------------------------------------------------
@@ -610,6 +650,7 @@ void SetupCamera::readSettings()
     PAlbum* const album = AlbumManager::instance()->findPAlbum(group.readEntry(d->configDefaultTargetAlbumId, 0));
     d->target1AlbumSelector->setCurrentAlbum(album);
     d->target1AlbumSelector->setEnabled(d->useDefaultTargetAlbum->isChecked());
+    d->conflictButtonGroup->button(group.readEntry(d->configFileSaveConflictRule, (int)DIFFNAME))->setChecked(true);
 
     d->fullScreenSettings->readSettings(group);
 
@@ -708,6 +749,7 @@ void SetupCamera::applySettings()
     group.writeEntry(d->configUseDefaultTargetAlbum, d->useDefaultTargetAlbum->isChecked());
     PAlbum* const album = d->target1AlbumSelector->currentAlbum();
     group.writeEntry(d->configDefaultTargetAlbumId, album ? album->id() : 0);
+    group.writeEntry(d->configFileSaveConflictRule, d->conflictButtonGroup->checkedId());
 
     d->fullScreenSettings->saveSettings(group);
 
