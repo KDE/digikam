@@ -25,8 +25,8 @@
 #include <QVideoFrame>
 #include <QObject>
 #include <QString>
+#include <QMediaPlayer>
 
-class QMediaPlayer;
 class QVideoProbe;
 
 class VideoThumbnailer : public QObject
@@ -47,6 +47,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotProcessframe(QVideoFrame);
+    void slotMediaStatusChanged(QMediaPlayer::MediaStatus);
     void slotHandlePlayerError();
 
 private:

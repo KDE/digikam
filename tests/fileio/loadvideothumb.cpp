@@ -38,9 +38,16 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
 
     connect(m_player, SIGNAL(error(QMediaPlayer::Error)),
             this, SLOT(slotHandlePlayerError()));
+    
+    connect(m_player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
+            this, SLOT(slotMediaStatusChanged(QMediaPlayer::MediaStatus)));
 
     connect(m_probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
+}
+
+VideoThumbnailer::~VideoThumbnailer()
+{
 }
 
 bool VideoThumbnailer::getThumbnail(const QString& file)
@@ -55,26 +62,39 @@ bool VideoThumbnailer::getThumbnail(const QString& file)
 
     m_player->setMedia(QUrl::fromLocalFile(m_videoFile));
 
-    if (!m_player->isSeekable())
-    {
-        qDebug() << "Video seek is not available.";
-        return false;
-    }
-
-    m_player->setPosition(1000);
-
-    qDebug() << "Trying to get thumbnail from " << file << "...";
-
     return true;
 }
 
-VideoThumbnailer::~VideoThumbnailer()
+void VideoThumbnailer::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)    
 {
+    switch (state)
+    {
+        case QMediaPlayer::LoadedMedia:
+        {
+            if (!m_player->isSeekable())
+            {
+                qDebug() << "Video seek is not available for " << m_videoFile;
+                emit signalVideoThumbDone();                
+            }
+
+            m_player->setPosition(1000);
+
+            qDebug() << "Trying to get thumbnail from " << m_videoFile;
+            break;
+        }
+        case QMediaPlayer::InvalidMedia:
+        {
+            qDebug() << "Video cannot be decoded for " << m_videoFile;
+            emit signalVideoThumbDone(); 
+        }
+        default:
+            break;
+    }
 }
 
 void VideoThumbnailer::slotHandlePlayerError()
 {
-    qDebug() << "Problrm while video data extraction from " << m_videoFile;
+    qDebug() << "Problem while video data extraction from " << m_videoFile;
     qDebug() << "Error : " << m_player->errorString();
 
     emit signalVideoThumbDone();
@@ -87,7 +107,7 @@ void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
     img.save(QString::fromUtf8("%1-thumb.png").arg(m_videoFile), "PNG");
     frm.unmap();
 
-    qDebug() << "Video thumbnail from " << m_videoFile <<" extracted.";
+    qDebug() << "Video thumbnail from " << m_videoFile << " extracted.";
 
     emit signalVideoThumbDone();
 }
