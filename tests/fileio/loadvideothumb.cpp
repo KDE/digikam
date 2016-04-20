@@ -77,9 +77,13 @@ void VideoThumbnailer::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)
                 emit signalVideoThumbDone();                
             }
 
-            m_player->setPosition(1000);
+            qDebug() << "Video duration for " << m_videoFile << "is " << m_player->duration() << " seconds";
+            
+            qint64 seek = (qint64)(m_player->duration() * 0.2);
+            
+            m_player->setPosition(seek);    // Seek to 20% of the media to take a thumb.
 
-            qDebug() << "Trying to get thumbnail from " << m_videoFile;
+            qDebug() << "Trying to get thumbnail from " << m_videoFile << " at position " << seek;
             break;
         }
         case QMediaPlayer::InvalidMedia:
