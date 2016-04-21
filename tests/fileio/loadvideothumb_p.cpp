@@ -532,7 +532,9 @@ QImage VideoThumbnailer::Private::imageFromVideoFrame(const QVideoFrame& f) cons
 void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)
 {
     if (player->currentMedia() != media)
+    {
         return;
+    }
 
     switch (state)
     {
@@ -557,7 +559,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         case QMediaPlayer::InvalidMedia:
         {
             qDebug() << "Video cannot be decoded for " << fileName();
-            dd->emit signalVideoThumbDone(); 
+            dd->emit signalVideoThumbDone();
         }
         default:
             break;
@@ -574,11 +576,11 @@ void VideoThumbnailer::Private::slotHandlePlayerError()
 
 void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
 {
-    if (player->mediaStatus() != QMediaPlayer::BufferedMedia)
+    if (player->mediaStatus() != QMediaPlayer::BufferedMedia ||
+        player->position()    != position)
+    {
         return;
-
-    if (player->position() != position)
-        return;
+    }
 
     qDebug() << "Video frame extraction from " << fileName()
              << " at position " << position;

@@ -41,7 +41,7 @@ VideoThumbnailer::~VideoThumbnailer()
 
 void VideoThumbnailer::setThumbnailSize(int size)
 {
-    d->thumbSize = size;    
+    d->thumbSize = size;
 }
 
 bool VideoThumbnailer::getThumbnail(const QString& file)
