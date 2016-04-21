@@ -22,12 +22,10 @@
 
 // Qt includes
 
+#include <QMediaPlayer>
 #include <QVideoFrame>
 #include <QObject>
 #include <QString>
-#include <QMediaPlayer>
-
-class QVideoProbe;
 
 class VideoThumbnailer : public QObject
 {
@@ -52,8 +50,6 @@ private Q_SLOTS:
 
 private:
 
-    QMediaPlayer* m_player;
-    QVideoProbe*  m_probe;
-    QMediaContent m_media;
-    qint64        m_position;
+    class Private;
+    Private* const d;    
 };

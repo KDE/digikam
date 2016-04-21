@@ -25,74 +25,103 @@
 // Qt includes
 
 #include <QApplication>
-#include <QMediaPlayer>
 #include <QVideoProbe>
 #include <QImage>
 #include <QDebug>
 
-VideoThumbnailer::VideoThumbnailer(QObject* const parent)
-    : QObject(parent)
+class VideoThumbnailer::Private
 {
-    m_position = 0;
-    m_player   = new QMediaPlayer(this);
-    m_probe    = new QVideoProbe(this);
+public:
 
-    connect(m_player, SIGNAL(error(QMediaPlayer::Error)),
+    Private()
+        : player(0),
+          probe(0),
+          media(0),
+          position(0)
+    {
+    }
+
+    QString fileName() const;
+    
+public:
+    
+    QMediaPlayer* player;
+    QVideoProbe*  probe;
+    QMediaContent media;
+    qint64        position;
+};
+
+QString VideoThumbnailer::Private::fileName() const
+{
+    return media.canonicalUrl().fileName();
+}
+
+// ----------------------------------------------------------------
+
+VideoThumbnailer::VideoThumbnailer(QObject* const parent)
+    : QObject(parent),
+      d(new Private)
+{
+    d->player = new QMediaPlayer(this);
+    d->probe  = new QVideoProbe(this);
+
+    connect(d->player, SIGNAL(error(QMediaPlayer::Error)),
             this, SLOT(slotHandlePlayerError()));
 
-    connect(m_player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
+    connect(d->player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
             this, SLOT(slotMediaStatusChanged(QMediaPlayer::MediaStatus)));
 
-    connect(m_probe, SIGNAL(videoFrameProbed(QVideoFrame)),
+    connect(d->probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
 }
 
 VideoThumbnailer::~VideoThumbnailer()
 {
+    delete d;
 }
 
 bool VideoThumbnailer::getThumbnail(const QString& file)
 {
-    if (!m_probe->setSource(m_player))
+    if (!d->probe->setSource(d->player))
     {
         qDebug() << "Video monitoring is not available.";
         return false;
     }
 
-    m_media = QMediaContent(QUrl::fromLocalFile(file));
-    m_player->setMedia(m_media);
+    d->media = QMediaContent(QUrl::fromLocalFile(file));
+    d->player->setMedia(d->media);
 
     return true;
 }
 
 void VideoThumbnailer::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)
 {
-    if (m_player->currentMedia() != m_media)
+    if (d->player->currentMedia() != d->media)
         return;
 
     switch (state)
     {
         case QMediaPlayer::LoadedMedia:
         {
-            if (!m_player->isSeekable())
+            if (!d->player->isSeekable())
             {
-                qDebug() << "Video seek is not available for " << m_media.canonicalUrl().fileName();
+                qDebug() << "Video seek is not available for " << d->fileName();
                 emit signalVideoThumbDone();
             }
 
-            qDebug() << "Video duration for " << m_media.canonicalUrl().fileName() << "is " << m_player->duration() << " seconds";
+            qDebug() << "Video duration for " << d->fileName() << "is " << d->player->duration() << " seconds";
 
-            m_position = (qint64)(m_player->duration() * 0.2);
+            d->position = (qint64)(d->player->duration() * 0.2);
 
-            m_player->setPosition(m_position);    // Seek to 20% of the media to take a thumb.
-            m_player->pause();
+            d->player->setPosition(d->position);    // Seek to 20% of the media to take a thumb.
+            d->player->pause();
 
-            qDebug() << "Trying to get thumbnail from " << m_media.canonicalUrl().fileName() << " at position " << m_position;
+            qDebug() << "Trying to get thumbnail from " << d->fileName() << " at position " << d->position;
             break;
         }
         case QMediaPlayer::InvalidMedia:
         {
-            qDebug() << "Video cannot be decoded for " << m_media.canonicalUrl().fileName();
+            qDebug() << "Video cannot be decoded for " << d->fileName();
             emit signalVideoThumbDone(); 
         }
         default:
@@ -102,22 +131,22 @@ void VideoThumbnailer::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)
 
 void VideoThumbnailer::slotHandlePlayerError()
 {
-    qDebug() << "Problem while video data extraction from " << m_media.canonicalUrl().fileName();
-    qDebug() << "Error : " << m_player->errorString();
+    qDebug() << "Problem while video data extraction from " << d->fileName();
+    qDebug() << "Error : " << d->player->errorString();
 
     emit signalVideoThumbDone();
 }
 
 void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
 {
-    if (m_player->mediaStatus() != QMediaPlayer::BufferedMedia)
+    if (d->player->mediaStatus() != QMediaPlayer::BufferedMedia)
         return;
 
-    if (m_player->position() != m_position)
+    if (d->player->position() != d->position)
         return;
 
-    qDebug() << "Video frame extraction from " << m_media.canonicalUrl().fileName()
-             << " at position " << m_position;
+    qDebug() << "Video frame extraction from " << d->fileName()
+             << " at position " << d->position;
 
     if (!frm.isValid())
     {
@@ -135,7 +164,7 @@ void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
         {
             // Frame pixels data can be imported to QImage as well.
             QImage img(frm.bits(), frm.width(), frm.height(), QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat()));
-            img.save(QString::fromUtf8("%1-thumb.png").arg(m_media.canonicalUrl().fileName()), "PNG");
+            img.save(QString::fromUtf8("%1-thumb.png").arg(d->fileName()), "PNG");
             qDebug() << "Video frame extracted with size " << img.size();
         }
         else
