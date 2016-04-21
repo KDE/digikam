@@ -29,6 +29,8 @@
 /**
  * Private helper conversion methods from QVideoFrame to QImage taken from Qt 5.7
  * Copyright (C) 2016 The Qt Company Ltd.
+ * For future update, see file qvideoframeconversionhelper.cpp from
+ * https://github.com/qtproject/qtmultimedia/tree/dev/src/multimedia/video
  */
 
 #define FETCH_INFO_PACKED(frame) \
