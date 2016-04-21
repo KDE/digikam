@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-04-21
- * Description : Qt Multimedia based video thumbnailer 
+ * Description : Video thumbnailer CLI test tool
  *
  * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,35 +20,30 @@
  *
  * ============================================================ */
 
-#include "loadvideothumb_p.h"
+#include "loadvideothumb.h"
 
 // Qt includes
 
 #include <QApplication>
-#include <QImage>
 #include <QDebug>
 
-VideoThumbnailer::VideoThumbnailer(QObject* const parent)
-    : QObject(parent),
-      d(new Private(this))
+int main(int argc, char** argv)
 {
-}
-
-VideoThumbnailer::~VideoThumbnailer()
-{
-    // No need to delete d container, it's based on QObject.
-}
-
-bool VideoThumbnailer::getThumbnail(const QString& file)
-{
-    if (!d->probe->setSource(d->player))
+    if (argc != 2)
     {
-        qDebug() << "Video monitoring is not available.";
-        return false;
+        qDebug() << "loadvideothumb - Load video file to extract thumbnail";
+        qDebug() << "Usage: <videofile>";
+        return -1;
     }
 
-    d->media = QMediaContent(QUrl::fromLocalFile(file));
-    d->player->setMedia(d->media);
+    QApplication app(argc, argv);
+    VideoThumbnailer* const vthumb = new VideoThumbnailer(&app);
 
-    return true;
+    QObject::connect(vthumb, SIGNAL(signalVideoThumbDone()),
+                     &app, SLOT(quit()));
+
+    if (!vthumb->getThumbnail(QString::fromUtf8(argv[1])))
+        return -1;
+
+    return app.exec();
 }
