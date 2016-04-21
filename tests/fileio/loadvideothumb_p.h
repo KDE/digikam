@@ -40,6 +40,8 @@ public:
 
     QString fileName() const;
     
+    QImage imageFromVideoFrame(const QVideoFrame& f) const;
+    
 public:
     
     QMediaPlayer* player;
