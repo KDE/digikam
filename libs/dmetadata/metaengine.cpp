@@ -375,9 +375,9 @@ bool MetaEngine::save(const QString& imageFilePath) const
     if (givenFileInfo.isSymLink())
     {
         qCDebug(DIGIKAM_METAENGINE_LOG) << "filePath" << imageFilePath << "is a symlink."
-                               << "Using target" << givenFileInfo.canonicalPath();
+                               << "Using target" << givenFileInfo.canonicalFilePath();
 
-        regularFilePath = givenFileInfo.canonicalPath();// Walk all the symlinks
+        regularFilePath = givenFileInfo.canonicalFilePath();// Walk all the symlinks
     }
 
     // NOTE: see B.K.O #137770 & #138540 : never touch the file if is read only.
