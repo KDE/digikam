@@ -129,9 +129,21 @@ void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
 
     if (frm.isReadable())
     {
-        QImage img(frm.bits(), frm.width(), frm.height(), QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat()));
-        img.save(QString::fromUtf8("%1-thumb.png").arg(m_media.canonicalUrl().fileName()), "PNG");
-        qDebug() << "Video frame extracted with size " << img.size();
+        QImage::Format format = QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat());
+
+        if (format != QImage::Format_Invalid)
+        {
+            // Frame pixels data can be imported to QImage as well.
+            QImage img(frm.bits(), frm.width(), frm.height(), QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat()));
+            img.save(QString::fromUtf8("%1-thumb.png").arg(m_media.canonicalUrl().fileName()), "PNG");
+            qDebug() << "Video frame extracted with size " << img.size();
+        }
+        else
+        {
+            // TODO : convert frame pixels data from unsuported format (YUV for ex) to QImage supported format (RGB)
+            //        See OpenCV API for this kind of conversions.
+            qDebug() << "Video frame format is not supported. Video frame not extracted.";
+        }
     }
     else
     {
