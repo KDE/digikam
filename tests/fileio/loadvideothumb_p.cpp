@@ -550,6 +550,12 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
                 dd->emit signalVideoThumbDone();
             }
 
+            if (player->duration() <= 0)
+            {
+                qDebug() << "Video has no valid duration for " << fileName();
+                dd->emit signalVideoThumbDone();
+            }
+
             qDebug() << "Video duration for " << fileName() << "is " << player->duration() << " seconds";
 
             position = (qint64)(player->duration() * 0.2);
