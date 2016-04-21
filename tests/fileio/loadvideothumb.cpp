@@ -142,7 +142,8 @@ void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
         {
             // TODO : convert frame pixels data from unsuported format (YUV for ex) to QImage supported format (RGB)
             //        See OpenCV API for this kind of conversions.
-            qDebug() << "Video frame format is not supported. Video frame not extracted.";
+            qDebug() << "Video frame format is not supported: " << frm;
+            qDebug() << "Video frame is not extracted.";
         }
     }
     else
