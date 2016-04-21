@@ -39,7 +39,7 @@ public:
 
     void setCreateStrip(bool strip);
     void setThumbnailSize(int size);
-    
+
     bool getThumbnail(const QString& file);
 
 Q_SIGNALS:

@@ -150,7 +150,7 @@ inline void planarYUV420_to_ARGB32(const uchar *y, int yStride,
     }
 }
 
-void QT_FASTCALL qt_convert_YUV420P_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_YUV420P_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_TRIPLANAR(frame)
     planarYUV420_to_ARGB32(plane1, plane1Stride,
@@ -161,7 +161,7 @@ void QT_FASTCALL qt_convert_YUV420P_to_ARGB32(const QVideoFrame &frame, uchar *o
                            width, height);
 }
 
-void QT_FASTCALL qt_convert_YV12_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_YV12_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_TRIPLANAR(frame)
     planarYUV420_to_ARGB32(plane1, plane1Stride,
@@ -172,7 +172,7 @@ void QT_FASTCALL qt_convert_YV12_to_ARGB32(const QVideoFrame &frame, uchar *outp
                            width, height);
 }
 
-void QT_FASTCALL qt_convert_AYUV444_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_AYUV444_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 4)
@@ -197,7 +197,7 @@ void QT_FASTCALL qt_convert_AYUV444_to_ARGB32(const QVideoFrame &frame, uchar *o
     }
 }
 
-void QT_FASTCALL qt_convert_YUV444_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_YUV444_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 3)
@@ -221,7 +221,7 @@ void QT_FASTCALL qt_convert_YUV444_to_ARGB32(const QVideoFrame &frame, uchar *ou
     }
 }
 
-void QT_FASTCALL qt_convert_UYVY_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_UYVY_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 2)
@@ -247,7 +247,7 @@ void QT_FASTCALL qt_convert_UYVY_to_ARGB32(const QVideoFrame &frame, uchar *outp
     }
 }
 
-void QT_FASTCALL qt_convert_YUYV_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_YUYV_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 2)
@@ -273,7 +273,7 @@ void QT_FASTCALL qt_convert_YUYV_to_ARGB32(const QVideoFrame &frame, uchar *outp
     }
 }
 
-void QT_FASTCALL qt_convert_NV12_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_NV12_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_BIPLANAR(frame)
     planarYUV420_to_ARGB32(plane1, plane1Stride,
@@ -284,7 +284,7 @@ void QT_FASTCALL qt_convert_NV12_to_ARGB32(const QVideoFrame &frame, uchar *outp
                            width, height);
 }
 
-void QT_FASTCALL qt_convert_NV21_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_NV21_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_BIPLANAR(frame)
     planarYUV420_to_ARGB32(plane1, plane1Stride,
@@ -295,7 +295,7 @@ void QT_FASTCALL qt_convert_NV21_to_ARGB32(const QVideoFrame &frame, uchar *outp
                            width, height);
 }
 
-void QT_FASTCALL qt_convert_BGRA32_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_BGRA32_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 4)
@@ -321,7 +321,7 @@ void QT_FASTCALL qt_convert_BGRA32_to_ARGB32(const QVideoFrame &frame, uchar *ou
     }
 }
 
-void QT_FASTCALL qt_convert_BGR24_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_BGR24_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 3)
@@ -353,7 +353,7 @@ void QT_FASTCALL qt_convert_BGR24_to_ARGB32(const QVideoFrame &frame, uchar *out
     }
 }
 
-void QT_FASTCALL qt_convert_BGR565_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_BGR565_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 2)
@@ -379,7 +379,7 @@ void QT_FASTCALL qt_convert_BGR565_to_ARGB32(const QVideoFrame &frame, uchar *ou
     }
 }
 
-void QT_FASTCALL qt_convert_BGR555_to_ARGB32(const QVideoFrame &frame, uchar *output)
+void QT_FASTCALL qt_convert_BGR555_to_ARGB32(const QVideoFrame& frame, uchar* output)
 {
     FETCH_INFO_PACKED(frame)
     MERGE_LOOPS(width, height, stride, 2)
@@ -405,7 +405,7 @@ void QT_FASTCALL qt_convert_BGR555_to_ARGB32(const QVideoFrame &frame, uchar *ou
     }
 }
 
-typedef void (QT_FASTCALL *VideoFrameConvertFunc)(const QVideoFrame &frame, uchar *output);
+typedef void (QT_FASTCALL *VideoFrameConvertFunc)(const QVideoFrame& frame, uchar* output);
 
 void QT_FASTCALL qt_convert_BGRA32_to_ARGB32(const QVideoFrame&, uchar*);
 void QT_FASTCALL qt_convert_BGR24_to_ARGB32(const QVideoFrame&, uchar*);
@@ -420,7 +420,7 @@ void QT_FASTCALL qt_convert_YUYV_to_ARGB32(const QVideoFrame&, uchar*);
 void QT_FASTCALL qt_convert_NV12_to_ARGB32(const QVideoFrame&, uchar*);
 void QT_FASTCALL qt_convert_NV21_to_ARGB32(const QVideoFrame&, uchar*);
 
-static VideoFrameConvertFunc qConvertFuncs[QVideoFrame::NPixelFormats] = {
+static VideoFrameConvertFunc qConvertFuncs[QVideoFrame::Format_AdobeDng + 1] = {
     /* Format_Invalid */                Q_NULLPTR, // Not needed
     /* Format_ARGB32 */                 Q_NULLPTR, // Not needed
     /* Format_ARGB32_Premultiplied */   Q_NULLPTR, // Not needed
@@ -479,7 +479,7 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
 
     connect(probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
-    
+
     strip = QImage(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/sprocket-large.png")));
 }
 
