@@ -32,22 +32,31 @@
 #include <QVideoProbe>
 #include <QString>
 
-class VideoThumbnailer::Private
+class VideoThumbnailer::Private : public QObject
 {
+    Q_OBJECT
+
 public:
 
-    Private();
+    Private(VideoThumbnailer* const p);
 
     QString fileName() const;
 
     QImage imageFromVideoFrame(const QVideoFrame& f) const;
 
+public Q_SLOTS:
+
+    void slotMediaStatusChanged(QMediaPlayer::MediaStatus);
+    void slotHandlePlayerError();
+    void slotProcessframe(QVideoFrame);
+
 public:
 
-    QMediaPlayer* player;
-    QVideoProbe*  probe;
-    QMediaContent media;
-    qint64        position;
+    QMediaPlayer*     player;
+    QVideoProbe*      probe;
+    QMediaContent     media;
+    qint64            position;
+    VideoThumbnailer* dd;
 };
 
 #endif /* VIDEOTHUMBNAILER_P_H */

@@ -30,24 +30,13 @@
 
 VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     : QObject(parent),
-      d(new Private)
+      d(new Private(this))
 {
-    d->player = new QMediaPlayer(this);
-    d->probe  = new QVideoProbe(this);
-
-    connect(d->player, SIGNAL(error(QMediaPlayer::Error)),
-            this, SLOT(slotHandlePlayerError()));
-
-    connect(d->player, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
-            this, SLOT(slotMediaStatusChanged(QMediaPlayer::MediaStatus)));
-
-    connect(d->probe, SIGNAL(videoFrameProbed(QVideoFrame)),
-            this, SLOT(slotProcessframe(QVideoFrame)));
 }
 
 VideoThumbnailer::~VideoThumbnailer()
 {
-    delete d;
+    // No need to delete d container, it's based on QObject.
 }
 
 bool VideoThumbnailer::getThumbnail(const QString& file)
@@ -62,82 +51,6 @@ bool VideoThumbnailer::getThumbnail(const QString& file)
     d->player->setMedia(d->media);
 
     return true;
-}
-
-void VideoThumbnailer::slotMediaStatusChanged(QMediaPlayer::MediaStatus state)
-{
-    if (d->player->currentMedia() != d->media)
-        return;
-
-    switch (state)
-    {
-        case QMediaPlayer::LoadedMedia:
-        {
-            if (!d->player->isSeekable())
-            {
-                qDebug() << "Video seek is not available for " << d->fileName();
-                emit signalVideoThumbDone();
-            }
-
-            qDebug() << "Video duration for " << d->fileName() << "is " << d->player->duration() << " seconds";
-
-            d->position = (qint64)(d->player->duration() * 0.2);
-
-            d->player->setPosition(d->position);    // Seek to 20% of the media to take a thumb.
-            d->player->pause();
-
-            qDebug() << "Trying to get thumbnail from " << d->fileName() << " at position " << d->position;
-            break;
-        }
-        case QMediaPlayer::InvalidMedia:
-        {
-            qDebug() << "Video cannot be decoded for " << d->fileName();
-            emit signalVideoThumbDone(); 
-        }
-        default:
-            break;
-    }
-}
-
-void VideoThumbnailer::slotHandlePlayerError()
-{
-    qDebug() << "Problem while video data extraction from " << d->fileName();
-    qDebug() << "Error : " << d->player->errorString();
-
-    emit signalVideoThumbDone();
-}
-
-void VideoThumbnailer::slotProcessframe(QVideoFrame frm)
-{
-    if (d->player->mediaStatus() != QMediaPlayer::BufferedMedia)
-        return;
-
-    if (d->player->position() != d->position)
-        return;
-
-    qDebug() << "Video frame extraction from " << d->fileName()
-             << " at position " << d->position;
-
-    if (!frm.isValid())
-    {
-        qDebug() << "Error : Video frame is not valid.";
-        emit signalVideoThumbDone();
-    }
-
-    QImage img = d->imageFromVideoFrame(frm);
-
-    if (!img.isNull())
-    {
-        img.save(QString::fromUtf8("%1-thumb.png").arg(d->fileName()), "PNG");
-        qDebug() << "Video frame extracted with size " << img.size();
-    }
-    else
-    {
-        qDebug() << "Video frame format is not supported: " << frm;
-        qDebug() << "Video frame is not extracted.";
-    }
-
-    emit signalVideoThumbDone();
 }
 
 // --------------------------------------------------------------------------

@@ -25,8 +25,6 @@
 
 // Qt includes
 
-#include <QMediaPlayer>
-#include <QVideoFrame>
 #include <QObject>
 #include <QString>
 
@@ -44,12 +42,6 @@ public:
 Q_SIGNALS:
 
     void signalVideoThumbDone();
-
-private Q_SLOTS:
-
-    void slotProcessframe(QVideoFrame);
-    void slotMediaStatusChanged(QMediaPlayer::MediaStatus);
-    void slotHandlePlayerError();
 
 private:
 
