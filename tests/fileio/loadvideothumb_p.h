@@ -52,6 +52,7 @@ public Q_SLOTS:
 
 public:
 
+    int               thumbSize;
     QMediaPlayer*     player;
     QVideoProbe*      probe;
     QMediaContent     media;

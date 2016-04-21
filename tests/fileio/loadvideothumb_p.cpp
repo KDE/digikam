@@ -459,6 +459,7 @@ static VideoFrameConvertFunc qConvertFuncs[QVideoFrame::NPixelFormats] = {
 
 VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     : QObject(parent),
+      thumbSize(256),
       player(0),
       probe(0),
       media(0),
@@ -489,7 +490,9 @@ QImage VideoThumbnailer::Private::imageFromVideoFrame(const QVideoFrame& f) cons
     QImage result;
 
     if (!frame.isValid() || !frame.map(QAbstractVideoBuffer::ReadOnly))
+    {
         return result;
+    }
 
     // Formats supported by QImage don't need conversion
     QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
@@ -590,7 +593,10 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
 
     if (!img.isNull())
     {
+        img = img.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
         img.save(QString::fromUtf8("%1-thumb.png").arg(fileName()), "PNG");
+
         qDebug() << "Video frame extracted with size " << img.size();
     }
     else

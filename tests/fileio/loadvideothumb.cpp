@@ -39,6 +39,11 @@ VideoThumbnailer::~VideoThumbnailer()
     // No need to delete d container, it's based on QObject.
 }
 
+void VideoThumbnailer::setThumbnailSize(int size)
+{
+    d->thumbSize = size;    
+}
+
 bool VideoThumbnailer::getThumbnail(const QString& file)
 {
     if (!d->probe->setSource(d->player))
