@@ -52,11 +52,13 @@ public Q_SLOTS:
 
 public:
 
+    bool              createStrip;
     int               thumbSize;
     QMediaPlayer*     player;
     QVideoProbe*      probe;
     QMediaContent     media;
     qint64            position;
+    QImage            strip;
     VideoThumbnailer* dd;
 };
 

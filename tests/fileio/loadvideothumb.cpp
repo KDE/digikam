@@ -44,6 +44,11 @@ void VideoThumbnailer::setThumbnailSize(int size)
     d->thumbSize = size;
 }
 
+void VideoThumbnailer::setCreateStrip(bool strip)
+{
+    d->createStrip = strip;
+}
+
 bool VideoThumbnailer::getThumbnail(const QString& file)
 {
     if (!d->probe->setSource(d->player))

@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QStandardPaths>
 #include <QDebug>
 
 /**
@@ -459,6 +460,7 @@ static VideoFrameConvertFunc qConvertFuncs[QVideoFrame::NPixelFormats] = {
 
 VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     : QObject(parent),
+      createStrip(false),
       thumbSize(256),
       player(0),
       probe(0),
@@ -477,6 +479,8 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
 
     connect(probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
+    
+    strip = QImage(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/sprocket-large.png")));
 }
 
 QString VideoThumbnailer::Private::fileName() const
@@ -501,16 +505,16 @@ QImage VideoThumbnailer::Private::imageFromVideoFrame(const QVideoFrame& f) cons
     {
         result = QImage(frame.bits(), frame.width(), frame.height(), imageFormat).copy();
     }
-
-    // Load from JPG
     else if (frame.pixelFormat() == QVideoFrame::Format_Jpeg)
     {
+        // Load from JPG
+
         result.loadFromData(frame.bits(), frame.mappedBytes(), "JPG");
     }
-
-    // Need conversion
     else
     {
+        // Need conversion
+
         VideoFrameConvertFunc convert = qConvertFuncs[frame.pixelFormat()];
 
         if (!convert)
@@ -596,6 +600,24 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     if (!img.isNull())
     {
         img = img.scaled(thumbSize, thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+        if (createStrip && img.width() > strip.width() && img.height() > strip.height())
+        {
+            // Add a video strip on the left side of video thumb.
+
+            for (int y = 0; y < img.height(); y += strip.height())
+            {
+                for (int ys = 0 ; ys < strip.height() ; ys++)
+                {
+                    int pos = y + ys;
+
+                    if (pos < img.height())
+                    {
+                        memcpy((void*)img.constScanLine(pos), (void*)strip.constScanLine(ys), strip.bytesPerLine());
+                    }
+                }
+            }
+        }
 
         img.save(QString::fromUtf8("%1-thumb.png").arg(fileName()), "PNG");
 

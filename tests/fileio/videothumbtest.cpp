@@ -39,6 +39,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
     VideoThumbnailer* const vthumb = new VideoThumbnailer(&app);
     vthumb->setThumbnailSize(256);
+    vthumb->setCreateStrip(false);
     
     QObject::connect(vthumb, SIGNAL(signalVideoThumbDone()),
                      &app, SLOT(quit()));

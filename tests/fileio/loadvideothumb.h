@@ -37,7 +37,9 @@ public:
     VideoThumbnailer(QObject* const parent=0);
     ~VideoThumbnailer();
 
+    void setCreateStrip(bool strip);
     void setThumbnailSize(int size);
+    
     bool getThumbnail(const QString& file);
 
 Q_SIGNALS:
