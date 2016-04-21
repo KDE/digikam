@@ -129,7 +129,7 @@ if(ENABLE_MEDIAPLAYER)
 
     include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
 
-    set(loadvideothumb_SRCS loadvideothumb.cpp ${pgfutils_SRCS})
+    set(loadvideothumb_SRCS loadvideothumb.cpp loadvideothumb_p.cpp)
     add_executable(loadvideothumb ${loadvideothumb_SRCS})
     ecm_mark_nongui_executable(loadvideothumb)
 

@@ -20,41 +20,32 @@
  *
  * ============================================================ */
 
-#ifndef VIDEOTHUMBNAILER_H
-#define VIDEOTHUMBNAILER_H
+#ifndef VIDEOTHUMBNAILER_P_H
+#define VIDEOTHUMBNAILER_P_H
+
+#include "loadvideothumb.h"
 
 // Qt includes
 
 #include <QMediaPlayer>
 #include <QVideoFrame>
-#include <QObject>
+#include <QVideoProbe>
 #include <QString>
 
-class VideoThumbnailer : public QObject
+class VideoThumbnailer::Private
 {
-    Q_OBJECT
-
 public:
 
-    VideoThumbnailer(QObject* const parent=0);
-    ~VideoThumbnailer();
+    Private();
 
-    bool getThumbnail(const QString& file);
-
-Q_SIGNALS:
-
-    void signalVideoThumbDone();
-
-private Q_SLOTS:
-
-    void slotProcessframe(QVideoFrame);
-    void slotMediaStatusChanged(QMediaPlayer::MediaStatus);
-    void slotHandlePlayerError();
-
-private:
-
-    class Private;
-    Private* const d;    
+    QString fileName() const;
+    
+public:
+    
+    QMediaPlayer* player;
+    QVideoProbe*  probe;
+    QMediaContent media;
+    qint64        position;
 };
 
-#endif /* VIDEOTHUMBNAILER_H */
+#endif /* VIDEOTHUMBNAILER_P_H */

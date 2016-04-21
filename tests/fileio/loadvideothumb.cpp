@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-02-04
- * Description : a command line tool to load video thumbnail
+ * Date        : 2016-04-21
+ * Description : Qt Multimedia based video thumbnailer 
  *
  * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,43 +20,13 @@
  *
  * ============================================================ */
 
-#include "loadvideothumb.h"
+#include "loadvideothumb_p.h"
 
 // Qt includes
 
 #include <QApplication>
-#include <QVideoProbe>
 #include <QImage>
 #include <QDebug>
-
-class VideoThumbnailer::Private
-{
-public:
-
-    Private()
-        : player(0),
-          probe(0),
-          media(0),
-          position(0)
-    {
-    }
-
-    QString fileName() const;
-    
-public:
-    
-    QMediaPlayer* player;
-    QVideoProbe*  probe;
-    QMediaContent media;
-    qint64        position;
-};
-
-QString VideoThumbnailer::Private::fileName() const
-{
-    return media.canonicalUrl().fileName();
-}
-
-// ----------------------------------------------------------------
 
 VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     : QObject(parent),
