@@ -522,7 +522,7 @@ static uchar sprocket_large_png[] =
 static int sprocket_large_png_len = 701;
 
 VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
-    : QObject(parent),
+    : QThread(parent),
       createStrip(false),
       thumbSize(256),
       player(0),
@@ -659,12 +659,19 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
              << " at position " << position;
 
     if (!frm.isValid())
-    {
+    { 
         qDebug() << "Error : Video frame is not valid.";
         dd->emit signalVideoThumbDone();
     }
+    
+    frame = frm;
 
-    QImage img = imageFromVideoFrame(frm);
+    start();
+}
+
+void VideoThumbnailer::Private::run()
+{
+    QImage img = imageFromVideoFrame(frame);
 
     if (!img.isNull())
     {
@@ -694,7 +701,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     }
     else
     {
-        qDebug() << "Video frame format is not supported: " << frm;
+        qDebug() << "Video frame format is not supported: " << frame;
         qDebug() << "Video frame is not extracted.";
     }
 

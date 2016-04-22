@@ -27,12 +27,13 @@
 
 // Qt includes
 
+#include <QThread>
 #include <QMediaPlayer>
 #include <QVideoFrame>
 #include <QVideoProbe>
 #include <QString>
 
-class VideoThumbnailer::Private : public QObject
+class VideoThumbnailer::Private : public QThread
 {
     Q_OBJECT
 
@@ -50,6 +51,10 @@ public Q_SLOTS:
     void slotHandlePlayerError();
     void slotProcessframe(QVideoFrame);
 
+private:
+    
+    void run();
+    
 public:
 
     bool              createStrip;
@@ -59,6 +64,7 @@ public:
     QMediaContent     media;
     qint64            position;
     QImage            strip;
+    QVideoFrame       frame;
     VideoThumbnailer* dd;
 };
 
