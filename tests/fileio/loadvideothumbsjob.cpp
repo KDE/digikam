@@ -39,7 +39,9 @@ public:
 
     Private()
     {
-        vthumb = 0;
+        cancel  = false;
+        running = false;
+        vthumb  = 0;
     }
 
     bool              canceled;
