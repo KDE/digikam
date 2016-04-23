@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <QDateTime>
-#include <QDir>
-#include <QFileInfo>
 #include <QFileSystemWatcher>
+#include <QDateTime>
+#include <QFileInfo>
+#include <QDir>
 
 // Local includes
 
@@ -48,13 +48,11 @@ class AlbumWatch::Private
 {
 public:
 
-    explicit Private(AlbumWatch* const q)
-        : dirWatch(0),
-          q(q)
+    Private() :
+        dirWatch(0)
     {
     }
 
-    void             determineMode();
     bool             inBlackList(const QString& path) const;
     bool             inDirWatchParametersBlackList(const QFileInfo& info, const QString& path);
     QList<QDateTime> buildDirectoryModList(const QFileInfo& dbFile) const;
@@ -62,13 +60,10 @@ public:
 public:
 
     QFileSystemWatcher* dirWatch;
-    QStringList         dirWatchAddedDirs;
 
     DbEngineParameters  params;
     QStringList         fileNameBlackList;
     QList<QDateTime>    dbPathModificationDateList;
-
-    AlbumWatch* const   q;
 };
 
 bool AlbumWatch::Private::inBlackList(const QString& path) const
@@ -101,12 +96,6 @@ bool AlbumWatch::Private::inDirWatchParametersBlackList(const QFileInfo& info, c
         }
 
         QFileInfo dbFile(params.SQLiteDatabaseFile());
-
-        // Workaround for broken KDirWatch in KDE 4.2.4
-        if (path.startsWith(dbFile.filePath()))
-        {
-            return true;
-        }
 
         // is the signal for the directory containing the database file?
         if (dbFile.dir() == dir)
@@ -156,9 +145,17 @@ QList<QDateTime> AlbumWatch::Private::buildDirectoryModList(const QFileInfo& dbF
 
 AlbumWatch::AlbumWatch(AlbumManager* const parent)
     : QObject(parent),
-      d(new Private(this))
+      d(new Private)
 {
-    connectToQFSWatcher();
+    d->dirWatch = new QFileSystemWatcher(this);
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use QFileSystemWatcher";
+
+    connect(d->dirWatch, SIGNAL(directoryChanged(QString)),
+            this, SLOT(slotQFSWatcherDirty(QString)));
+
+    connect(d->dirWatch, SIGNAL(fileChanged(QString)),
+            this, SLOT(slotQFSWatcherDirty(QString)));
 
     connect(parent, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
@@ -176,12 +173,7 @@ void AlbumWatch::clear()
 {
     if (d->dirWatch)
     {
-        foreach(const QString& addedDirectory, d->dirWatchAddedDirs)
-        {
-            d->dirWatch->removePath(addedDirectory);
-        }
-
-        d->dirWatchAddedDirs.clear();
+        d->dirWatch->removePaths(d->dirWatch->directories());
     }
 }
 
@@ -195,6 +187,7 @@ void AlbumWatch::setDbEngineParameters(const DbEngineParameters& params)
     if (params.isSQLite())
     {
         d->fileNameBlackList << QLatin1String("thumbnails-digikam.db") << QLatin1String("thumbnails-digikam.db-journal");
+        d->fileNameBlackList << QLatin1String("recognition.db") << QLatin1String("recognition.db-journal");
 
         QFileInfo dbFile(params.SQLiteDatabaseFile());
         d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + QLatin1String("-journal");
@@ -206,7 +199,7 @@ void AlbumWatch::setDbEngineParameters(const DbEngineParameters& params)
 
 void AlbumWatch::slotAlbumAdded(Album* a)
 {
-    if (a->isRoot() || a->type() != Album::PHYSICAL)
+    if (a->isRoot() || a->isTrashAlbum() || a->type() != Album::PHYSICAL)
     {
         return;
     }
@@ -228,14 +221,13 @@ void AlbumWatch::slotAlbumAdded(Album* a)
 
     if (!d->dirWatch->directories().contains(dir))
     {
-        d->dirWatchAddedDirs << dir;
         d->dirWatch->addPath(dir);
     }
 }
 
 void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
 {
-    if (a->isRoot() || a->type() != Album::PHYSICAL)
+    if (a->isRoot() || a->isTrashAlbum() || a->type() != Album::PHYSICAL)
     {
         return;
     }
@@ -248,12 +240,13 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
         return;
     }
 
-    d->dirWatch->removePath(album->folderPath());
+    d->dirWatch->removePath(dir);
 }
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of" << dir;
+
     ScanController::instance()->scheduleCollectionScanRelaxed(dir);
 }
 
@@ -271,8 +264,6 @@ void AlbumWatch::slotQFSWatcherDirty(const QString& path)
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected change at" << path;
-
     if (info.isDir())
     {
         rescanDirectory(path);
@@ -281,24 +272,6 @@ void AlbumWatch::slotQFSWatcherDirty(const QString& path)
     {
         rescanDirectory(info.path());
     }
-}
-
-void AlbumWatch::connectToQFSWatcher()
-{
-    if (d->dirWatch)
-    {
-        return;
-    }
-
-    d->dirWatch = new QFileSystemWatcher(this);
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "AlbumWatch use QFileSystemWatcher";
-
-    connect(d->dirWatch, SIGNAL(directoryChanged(QString)),
-            this, SLOT(slotQFSWatcherDirty(QString)));
-    
-    connect(d->dirWatch, SIGNAL(fileChanged(QString)),
-            this, SLOT(slotQFSWatcherDirty(QString)));
 }
 
 } // namespace Digikam
