@@ -97,12 +97,6 @@ bool AlbumWatch::Private::inDirWatchParametersBlackList(const QFileInfo& info, c
 
         QFileInfo dbFile(params.SQLiteDatabaseFile());
 
-        // Workaround for broken KDirWatch in KDE 4.2.4
-        if (path.startsWith(dbFile.filePath()))
-        {
-            return true;
-        }
-
         // is the signal for the directory containing the database file?
         if (dbFile.dir() == dir)
         {
@@ -193,6 +187,7 @@ void AlbumWatch::setDbEngineParameters(const DbEngineParameters& params)
     if (params.isSQLite())
     {
         d->fileNameBlackList << QLatin1String("thumbnails-digikam.db") << QLatin1String("thumbnails-digikam.db-journal");
+        d->fileNameBlackList << QLatin1String("recognition.db") << QLatin1String("recognition.db-journal");
 
         QFileInfo dbFile(params.SQLiteDatabaseFile());
         d->fileNameBlackList << dbFile.fileName() << dbFile.fileName() + QLatin1String("-journal");
@@ -245,7 +240,7 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
         return;
     }
 
-    d->dirWatch->removePath(album->folderPath());
+    d->dirWatch->removePath(dir);
 }
 
 void AlbumWatch::rescanDirectory(const QString& dir)
