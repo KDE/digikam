@@ -731,7 +731,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!fileInfo.exists())
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "File \"" << filePath << "\" does not exist";
+        qCDebug(DIGIKAM_DIMG_LOG) << "File " << filePath << " does not exist";
         return NONE;
     }
 
@@ -775,7 +775,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (!f)
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Failed to open file \"" << filePath << "\"";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Failed to open file " << filePath;
         return NONE;
     }
 
@@ -785,7 +785,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
 
     if (fread(&header, headerLen, 1, f) != 1)
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Failed to read header of file \"" << filePath << "\"";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Failed to read header of file " << filePath;
         fclose(f);
         return NONE;
     }
