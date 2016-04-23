@@ -173,6 +173,6 @@ void LoadVideoThumbsJob::slotThumbnailDone(const QString& file, const QImage& im
 void LoadVideoThumbsJob::slotThumbnailFailed(const QString& file)
 {
     emit signalThumbnailFailed(file);
-    qDebug() << "Video thumbnail failed for " << file;
+    qDebug() << "Failed to extract video thumbnail for " << file;
     processOne();
 }

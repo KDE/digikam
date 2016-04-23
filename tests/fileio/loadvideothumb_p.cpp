@@ -697,8 +697,6 @@ void VideoThumbnailer::Private::run()
             }
         }
 
-        uchar* const data = new uchar[img.byteCount()];
-        memcpy(data, img.bits(), img.byteCount());
         qDebug() << "Video frame extracted with size " << img.size();
 
         dd->emit signalThumbnailDone(fileName(), img.copy());
@@ -706,7 +704,7 @@ void VideoThumbnailer::Private::run()
     else
     {
         qDebug() << "Video frame format is not supported: " << frame;
-        qDebug() << "Video frame is not extracted.";
+
         dd->emit signalThumbnailFailed(fileName());
     }
 }
