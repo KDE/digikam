@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QThread>
+#include <QObject>
 #include <QString>
 #include <QUrl>
 
@@ -59,8 +59,6 @@ protected Q_SLOTS:
 private:
 
     void rescanDirectory(const QString& dir);
-    void rescanPath(const QString& path);
-    void connectToQFSWatcher();
 
 private:
 
