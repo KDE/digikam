@@ -7,6 +7,7 @@
  * Description : history updater thread for importui
  *
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
+ * Copyright (C) 2009-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -49,12 +50,11 @@ public:
 public:
 
     Private() :
-        close(false),
         canceled(false),
         running(false)
-    {}
+    {
+    }
 
-    bool              close;
     bool              canceled;
     bool              running;
 
@@ -83,6 +83,7 @@ CameraHistoryUpdater::~CameraHistoryUpdater()
         d->running = false;
         d->condVar.wakeAll();
     }
+
     wait();
 
     delete d;
@@ -99,23 +100,21 @@ void CameraHistoryUpdater::run()
 {
     while (d->running)
     {
+        CHUpdateItem item;
+
+        QMutexLocker lock(&d->mutex);
+
+        if (!d->updateItems.isEmpty())
         {
-            CHUpdateItem item;
-
-            QMutexLocker lock(&d->mutex);
-
-            if (!d->updateItems.isEmpty())
-            {
-                item = d->updateItems.takeFirst();
-                sendBusy(true);
-                proccessMap(item.first, item.second);
-            }
-            else
-            {
-                sendBusy(false);
-                d->condVar.wait(&d->mutex);
-                continue;
-            }
+            item = d->updateItems.takeFirst();
+            sendBusy(true);
+            proccessMap(item.first, item.second);
+        }
+        else
+        {
+            sendBusy(false);
+            d->condVar.wait(&d->mutex);
+            continue;
         }
     }
 
