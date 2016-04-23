@@ -245,7 +245,8 @@ void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)
 
 void AlbumWatch::rescanDirectory(const QString& dir)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of directory" << dir;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Detected change, triggering rescan of" << dir;
+
     ScanController::instance()->scheduleCollectionScanRelaxed(dir);
 }
 
@@ -262,8 +263,6 @@ void AlbumWatch::slotQFSWatcherDirty(const QString& path)
     {
         return;
     }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "QFileSystemWatcher detected change at" << path;
 
     if (info.isDir())
     {
