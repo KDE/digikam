@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-04-21
- * Description : Qt Multimedia based video thumbnailer 
+ * Description : a class to manage video thumbnails extraction
  *
  * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,35 +20,53 @@
  *
  * ============================================================ */
 
-#ifndef VIDEOTHUMBNAILER_H
-#define VIDEOTHUMBNAILER_H
+#ifndef LOADVIDEOTHUMBSJOB_H
+#define LOADVIDEOTHUMBSJOB_H
 
 // Qt includes
 
-#include <QObject>
-#include <QString>
+#include <QStringList>
 #include <QImage>
+#include <QList>
+#include <QThread>
+#include <QObject>
 
-class VideoThumbnailer : public QObject
+class LoadVideoThumbsJob : public QThread
 {
     Q_OBJECT
 
 public:
 
-    VideoThumbnailer(QObject* const parent=0);
-    ~VideoThumbnailer();
+    explicit LoadVideoThumbsJob(QObject* const parent);
+    virtual ~LoadVideoThumbsJob();
 
-    void setCreateStrip(bool strip);
-    void setThumbnailSize(int size);
+    void setCreateStrip(bool);
+    void setThumbnailSize(int);
+
+    void addItems(const QStringList&);
 
 Q_SIGNALS:
+
+    void signalGetThumbnail(const QString&);
 
     void signalThumbnailDone(const QString&, const QImage&);
     void signalThumbnailFailed(const QString&);
 
+    void signalComplete();
+
 public Q_SLOTS:
 
-    void slotGetThumbnail(const QString&);
+    void slotCancel();
+
+private Q_SLOTS:
+
+    void slotThumbnailDone(const QString&, const QImage&);
+    void slotThumbnailFailed(const QString&);
+
+private:
+
+    void run();
+    void processOne();
 
 private:
 
@@ -56,4 +74,4 @@ private:
     Private* const d;
 };
 
-#endif /* VIDEOTHUMBNAILER_H */
+#endif /* LOADVIDEOTHUMBSJOB_H */

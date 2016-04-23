@@ -52,9 +52,9 @@ public Q_SLOTS:
     void slotProcessframe(QVideoFrame);
 
 private:
-    
+
     void run();
-    
+
 public:
 
     bool              createStrip;

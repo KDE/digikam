@@ -131,7 +131,7 @@ if(ENABLE_MEDIAPLAYER)
 
     set(videothumbtest_SRCS loadvideothumb.cpp
                             loadvideothumb_p.cpp
-                            loadvideothumbthread.cpp
+                            loadvideothumbsjob.cpp
                             videothumbtest.cpp
                             )
     add_executable(videothumbtest ${videothumbtest_SRCS})

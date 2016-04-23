@@ -49,16 +49,15 @@ void VideoThumbnailer::setCreateStrip(bool strip)
     d->createStrip = strip;
 }
 
-bool VideoThumbnailer::getThumbnail(const QString& file)
+void VideoThumbnailer::slotGetThumbnail(const QString& file)
 {
     if (!d->probe->setSource(d->player))
     {
         qDebug() << "Video monitoring is not available.";
-        return false;
+        emit signalThumbnailFailed(file);
+        return;
     }
 
     d->media = QMediaContent(QUrl::fromLocalFile(file));
     d->player->setMedia(d->media);
-
-    return true;
 }

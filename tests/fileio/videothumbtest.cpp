@@ -20,32 +20,41 @@
  *
  * ============================================================ */
 
-#include "loadvideothumb.h"
-
 // Qt includes
 
 #include <QApplication>
 #include <QDebug>
 
+// Local includes
+
+#include "loadvideothumbsjob.h"
+
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    if (argc <= 1)
     {
-        qDebug() << "loadvideothumb - Load video file to extract thumbnail";
-        qDebug() << "Usage: <videofile>";
+        qDebug() << "loadvideothumb - Load video files to extract thumbnails";
+        qDebug() << "Usage: <videofiles>";
         return -1;
     }
 
     QApplication app(argc, argv);
-    VideoThumbnailer* const vthumb = new VideoThumbnailer(&app);
-    vthumb->setThumbnailSize(256);
-    vthumb->setCreateStrip(true);
 
-    QObject::connect(vthumb, SIGNAL(signalVideoThumbDone()),
+    QStringList files;
+
+    for (int i = 1 ; i < argc ; i++)
+        files.append(QString::fromLocal8Bit(argv[i]));
+
+    LoadVideoThumbsJob* const vthumbs = new LoadVideoThumbsJob(&app);
+    vthumbs->setThumbnailSize(256);
+    vthumbs->setCreateStrip(true);
+
+    QObject::connect(vthumbs, SIGNAL(signalComplete()),
                      &app, SLOT(quit()));
 
-    if (!vthumb->getThumbnail(QString::fromUtf8(argv[1])))
-        return -1;
+    qDebug() << "Video files to process : " << files;
+
+    vthumbs->addItems(files);
 
     return app.exec();
 }
