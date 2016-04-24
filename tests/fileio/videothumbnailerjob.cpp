@@ -142,7 +142,8 @@ void VideoThumbnailerJob::processOne()
     }
     else
     {
-        emit signalComplete();
+        slotCancel();
+        emit signalThumbnailJobFinished();
     }
 }
 
@@ -165,7 +166,7 @@ void VideoThumbnailerJob::run()
         }
     }
 
-    emit signalComplete();
+    emit signalThumbnailJobFinished();
 }
 
 void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& img)

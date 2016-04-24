@@ -50,14 +50,13 @@ int main(int argc, char** argv)
     vthumbs->setThumbnailSize(256);
     vthumbs->setCreateStrip(true);
 
-    QObject::connect(vthumbs, SIGNAL(signalComplete()),
+    QObject::connect(vthumbs, SIGNAL(signalThumbnailJobFinished()),
                      &app, SLOT(quit()));
 
     qDebug() << "Video files to process : " << files;
 
     vthumbs->addItems(files);
     int ret = app.exec();
-    vthumbs->slotCancel();
 
     return ret;
 }

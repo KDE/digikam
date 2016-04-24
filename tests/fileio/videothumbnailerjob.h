@@ -69,7 +69,7 @@ Q_SIGNALS:
 
     /* Emit when the pending list is empty
      */
-    void signalComplete();
+    void signalThumbnailJobFinished();
 
     /// Internal use only.
     void signalGetThumbnail(const QString&);
