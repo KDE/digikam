@@ -45,8 +45,9 @@ public:
     Private(VideoThumbnailer* const p);
 
     QString fileName() const;
+    QString filePath() const;
 
-    QImage imageFromVideoFrame(const QVideoFrame& f) const;
+    QImage imageFromVideoFrame(const QVideoFrame&) const;
 
 public Q_SLOTS:
 

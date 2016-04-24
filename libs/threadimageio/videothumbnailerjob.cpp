@@ -132,17 +132,15 @@ void VideoThumbnailerJob::addItems(const QStringList& files)
 
 void VideoThumbnailerJob::processOne()
 {
-    QMutexLocker lock(&d->mutex);
-
     if (!d->todo.isEmpty())
     {
+        QMutexLocker lock(&d->mutex);
         d->currentFile = d->todo.takeFirst();
         qDebug() << "Add " << d->currentFile << " to the todo list";
         d->condVar.wakeAll();
     }
     else
     {
-        slotCancel();
         emit signalThumbnailJobFinished();
     }
 }

@@ -558,6 +558,11 @@ QString VideoThumbnailer::Private::fileName() const
     return media.canonicalUrl().fileName();
 }
 
+QString VideoThumbnailer::Private::filePath() const
+{
+    return media.canonicalUrl().toLocalFile();
+}
+
 QImage VideoThumbnailer::Private::imageFromVideoFrame(const QVideoFrame& f) const
 {
     QVideoFrame& frm = const_cast<QVideoFrame&>(f);
@@ -618,13 +623,13 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             if (!player->isSeekable())
             {
                 qDebug() << "Video seek is not available for " << fileName();
-                dd->emit signalThumbnailFailed(fileName());
+                dd->emit signalThumbnailFailed(filePath());
             }
 
             if (player->duration() <= 0)
             {
                 qDebug() << "Video has no valid duration for " << fileName();
-                dd->emit signalThumbnailFailed(fileName());
+                dd->emit signalThumbnailFailed(filePath());
             }
 
             qDebug() << "Video duration for " << fileName() << "is " << player->duration() << " seconds";
@@ -640,7 +645,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         case QMediaPlayer::InvalidMedia:
         {
             qDebug() << "Video cannot be decoded for " << fileName();
-            dd->emit signalThumbnailFailed(fileName());
+            dd->emit signalThumbnailFailed(filePath());
         }
         default:
             break;
@@ -652,7 +657,7 @@ void VideoThumbnailer::Private::slotHandlePlayerError()
     qDebug() << "Problem while video data extraction from " << fileName();
     qDebug() << "Error : " << player->errorString();
 
-    dd->emit signalThumbnailFailed(fileName());
+    dd->emit signalThumbnailFailed(filePath());
 }
 
 void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
@@ -669,7 +674,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     if (!frm.isValid())
     { 
         qDebug() << "Error : Video frame is not valid.";
-        dd->emit signalThumbnailFailed(fileName());
+        dd->emit signalThumbnailFailed(filePath());
     }
 
     frame = frm;
@@ -705,13 +710,13 @@ void VideoThumbnailer::Private::run()
 
         qDebug() << "Video frame extracted with size " << img.size();
 
-        dd->emit signalThumbnailDone(fileName(), img.copy());
+        dd->emit signalThumbnailDone(filePath(), img.copy());
     }
     else
     {
         qDebug() << "Video frame format is not supported: " << frame;
 
-        dd->emit signalThumbnailFailed(fileName());
+        dd->emit signalThumbnailFailed(filePath());
     }
 }
 
