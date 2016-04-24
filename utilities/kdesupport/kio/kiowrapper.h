@@ -83,11 +83,12 @@ Q_SIGNALS:
     // send by slotPreviewJobFailed()
     void previewJobFailed(const QUrl& itemUrl);
 
-    // Internale use only : used by slotKioJobResult()
+    // Internal use only : used by slotKioJobResult()
     void error(const QString& errMsg);
 
 private Q_SLOTS:
 
+    // Used by move, del, trash methods
     void slotKioJobResult(KJob* job);
 
     void slotGotPreview(const KFileItem& item, const QPixmap& pix);
