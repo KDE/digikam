@@ -56,11 +56,11 @@ public Q_SLOTS:
 
 public:
 
+    bool              createStrip;
+    int               thumbSize;
     QMediaPlayer*     player;
     QVideoProbe*      probe;
     QMediaContent     media;
-    bool              createStrip;
-    int               thumbSize;
 
 private:
 

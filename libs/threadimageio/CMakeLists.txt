@@ -28,6 +28,18 @@ set(libthreadimageio_SRCS
     thumbnailsize.cpp
 )
 
+if(ENABLE_MEDIAPLAYER)
+
+    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
+
+    set(libthreadimageio_SRCS
+        ${libthreadimageio_SRCS}
+        videothumbnailer.cpp
+        videothumbnailer_p.cpp
+        videothumbnailerjob.cpp
+       )
+endif()
+
 include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
