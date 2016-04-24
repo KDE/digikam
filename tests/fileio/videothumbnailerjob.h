@@ -40,22 +40,39 @@ class VideoThumbnailerJob : public QThread
 
 public:
 
+    /** Standard constructor and destructor
+     */
     explicit VideoThumbnailerJob(QObject* const parent);
     virtual ~VideoThumbnailerJob();
 
+    /** Add a film strip on the left side of video thumnails
+     */
     void setCreateStrip(bool);
+
+    /** Set size of thumbnails to generate
+     */
     void setThumbnailSize(int);
 
+    /** Add new video files to process on the pending list
+     */
     void addItems(const QStringList&);
 
 Q_SIGNALS:
 
-    void signalGetThumbnail(const QString&);
-
+    /** Emit when thumnail is generated and ready to use.
+     */
     void signalThumbnailDone(const QString&, const QImage&);
+
+    /** Emit when thumbnail cannot be generated for a video file
+     */
     void signalThumbnailFailed(const QString&);
 
+    /* Emit when the pending list is empty
+     */
     void signalComplete();
+
+    /// Internal use only.
+    void signalGetThumbnail(const QString&);
 
 public Q_SLOTS:
 

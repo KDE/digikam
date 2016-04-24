@@ -171,7 +171,7 @@ void VideoThumbnailerJob::run()
 void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& img)
 {
     emit signalThumbnailDone(file, img);
-    qDebug() << "Video thumbnail extracted for " << file;
+    qDebug() << "Video thumbnail extracted for " << file << " :: " << img;
     processOne();
 }
 
