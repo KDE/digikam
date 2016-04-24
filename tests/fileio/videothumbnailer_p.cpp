@@ -20,11 +20,14 @@
  *
  * ============================================================ */
 
-#include "loadvideothumb_p.h"
+#include "videothumbnailer_p.h"
 
 // Qt includes
 
 #include <QDebug>
+
+namespace Digikam
+{
 
 /**
  * Private helper conversion methods from QVideoFrame to QImage taken from Qt 5.7
@@ -553,47 +556,46 @@ QString VideoThumbnailer::Private::fileName() const
 
 QImage VideoThumbnailer::Private::imageFromVideoFrame(const QVideoFrame& f) const
 {
-    QVideoFrame& frame = const_cast<QVideoFrame&>(f);
+    QVideoFrame& frm = const_cast<QVideoFrame&>(f);
     QImage result;
 
-    if (!frame.isValid() || !frame.map(QAbstractVideoBuffer::ReadOnly))
+    if (!frm.isValid() || !frm.map(QAbstractVideoBuffer::ReadOnly))
     {
         return result;
     }
 
-
-    QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(frame.pixelFormat());
+    QImage::Format imageFormat = QVideoFrame::imageFormatFromPixelFormat(frm.pixelFormat());
 
     if (imageFormat != QImage::Format_Invalid)
     {
         // Formats supported by QImage don't need conversion
 
-        result = QImage(frame.bits(), frame.width(), frame.height(), imageFormat).copy();
+        result = QImage(frm.bits(), frm.width(), frm.height(), imageFormat).copy();
     }
-    else if (frame.pixelFormat() == QVideoFrame::Format_Jpeg)
+    else if (frm.pixelFormat() == QVideoFrame::Format_Jpeg)
     {
         // Load from JPG
 
-        result.loadFromData(frame.bits(), frame.mappedBytes(), "JPG");
+        result.loadFromData(frm.bits(), frm.mappedBytes(), "JPG");
     }
     else
     {
         // Need conversion
 
-        VideoFrameConvertFunc convert = qConvertFuncs[frame.pixelFormat()];
+        VideoFrameConvertFunc convert = qConvertFuncs[frm.pixelFormat()];
 
         if (!convert)
         {
-            qDebug() << "Unsupported frame pixel format" << frame.pixelFormat();
+            qDebug() << "Unsupported frame pixel format" << frm.pixelFormat();
         }
         else
         {
-            result = QImage(frame.width(), frame.height(), QImage::Format_ARGB32);
-            convert(frame, result.bits());
+            result = QImage(frm.width(), frm.height(), QImage::Format_ARGB32);
+            convert(frm, result.bits());
         }
     }
 
-    frame.unmap();
+    frm.unmap();
 
     return result;
 }
@@ -708,3 +710,5 @@ void VideoThumbnailer::Private::run()
         dd->emit signalThumbnailFailed(fileName());
     }
 }
+
+}  // namespace Digikam

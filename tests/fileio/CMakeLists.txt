@@ -129,9 +129,9 @@ if(ENABLE_MEDIAPLAYER)
 
     include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
 
-    set(videothumbtest_SRCS loadvideothumb.cpp
-                            loadvideothumb_p.cpp
-                            loadvideothumbsjob.cpp
+    set(videothumbtest_SRCS videothumbnailer.cpp
+                            videothumbnailer_p.cpp
+                            videothumbnailerjob.cpp
                             videothumbtest.cpp
                             )
     add_executable(videothumbtest ${videothumbtest_SRCS})

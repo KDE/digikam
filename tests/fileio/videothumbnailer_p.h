@@ -23,7 +23,7 @@
 #ifndef VIDEOTHUMBNAILER_P_H
 #define VIDEOTHUMBNAILER_P_H
 
-#include "loadvideothumb.h"
+#include "videothumbnailer.h"
 
 // Qt includes
 
@@ -32,6 +32,9 @@
 #include <QVideoFrame>
 #include <QVideoProbe>
 #include <QString>
+
+namespace Digikam
+{
 
 class VideoThumbnailer::Private : public QThread
 {
@@ -51,21 +54,26 @@ public Q_SLOTS:
     void slotHandlePlayerError();
     void slotProcessframe(QVideoFrame);
 
+public:
+
+    QMediaPlayer*     player;
+    QVideoProbe*      probe;
+    QMediaContent     media;
+    bool              createStrip;
+    int               thumbSize;
+
 private:
 
     void run();
 
-public:
+private:
 
-    bool              createStrip;
-    int               thumbSize;
-    QMediaPlayer*     player;
-    QVideoProbe*      probe;
-    QMediaContent     media;
     qint64            position;
     QImage            strip;
     QVideoFrame       frame;
     VideoThumbnailer* dd;
 };
+
+}  // namespace Digikam
 
 #endif /* VIDEOTHUMBNAILER_P_H */

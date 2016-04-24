@@ -27,25 +27,26 @@
 
 // Local includes
 
-#include "loadvideothumbsjob.h"
+#include "videothumbnailerjob.h"
+
+using namespace Digikam;
 
 int main(int argc, char** argv)
 {
     if (argc <= 1)
     {
-        qDebug() << "loadvideothumb - Load video files to extract thumbnails";
+        qDebug() << "videothumbtest - Load video files to extract thumbnails";
         qDebug() << "Usage: <videofiles>";
         return -1;
     }
 
     QApplication app(argc, argv);
-
     QStringList files;
 
     for (int i = 1 ; i < argc ; i++)
         files.append(QString::fromLocal8Bit(argv[i]));
 
-    LoadVideoThumbsJob* const vthumbs = new LoadVideoThumbsJob(&app);
+    VideoThumbnailerJob* const vthumbs = new VideoThumbnailerJob(&app);
     vthumbs->setThumbnailSize(256);
     vthumbs->setCreateStrip(true);
 
@@ -55,6 +56,8 @@ int main(int argc, char** argv)
     qDebug() << "Video files to process : " << files;
 
     vthumbs->addItems(files);
+    int ret = app.exec();
+    vthumbs->slotCancel();
 
-    return app.exec();
+    return ret;
 }

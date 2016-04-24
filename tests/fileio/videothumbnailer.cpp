@@ -20,13 +20,16 @@
  *
  * ============================================================ */
 
-#include "loadvideothumb_p.h"
+#include "videothumbnailer_p.h"
 
 // Qt includes
 
 #include <QApplication>
 #include <QImage>
 #include <QDebug>
+
+namespace Digikam
+{
 
 VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     : QObject(parent),
@@ -61,3 +64,5 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file)
     d->media = QMediaContent(QUrl::fromLocalFile(file));
     d->player->setMedia(d->media);
 }
+
+}  // namespace Digikam

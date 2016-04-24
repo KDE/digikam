@@ -20,7 +20,7 @@
  *
  * ============================================================ */
 
-#include "loadvideothumbsjob.h"
+#include "videothumbnailerjob.h"
 
 // Qt includes
 
@@ -31,9 +31,12 @@
 
 // Local includes
 
-#include "loadvideothumb.h"
+#include "videothumbnailer.h"
 
-class LoadVideoThumbsJob::Private
+namespace Digikam
+{
+
+class VideoThumbnailerJob::Private
 {
 public:
 
@@ -55,7 +58,7 @@ public:
     VideoThumbnailer* vthumb;
 };
 
-LoadVideoThumbsJob::LoadVideoThumbsJob(QObject* const parent)
+VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
@@ -71,7 +74,7 @@ LoadVideoThumbsJob::LoadVideoThumbsJob(QObject* const parent)
             this, SLOT(slotThumbnailFailed(const QString&)));
 }
 
-LoadVideoThumbsJob::~LoadVideoThumbsJob()
+VideoThumbnailerJob::~VideoThumbnailerJob()
 {
     // clear updateItems, stop processing
     slotCancel();
@@ -88,17 +91,17 @@ LoadVideoThumbsJob::~LoadVideoThumbsJob()
     delete d;
 }
 
-void LoadVideoThumbsJob::setThumbnailSize(int size)
+void VideoThumbnailerJob::setThumbnailSize(int size)
 {
     d->vthumb->setThumbnailSize(size);
 }
 
-void LoadVideoThumbsJob::setCreateStrip(bool strip)
+void VideoThumbnailerJob::setCreateStrip(bool strip)
 {
     d->vthumb->setCreateStrip(strip);
 }
 
-void LoadVideoThumbsJob::slotCancel()
+void VideoThumbnailerJob::slotCancel()
 {
     d->running = false;
     QMutexLocker lock(&d->mutex);
@@ -106,7 +109,7 @@ void LoadVideoThumbsJob::slotCancel()
     d->currentFile.clear();
 }
 
-void LoadVideoThumbsJob::addItems(const QStringList& files)
+void VideoThumbnailerJob::addItems(const QStringList& files)
 {
     if (files.isEmpty())
     {
@@ -127,7 +130,7 @@ void LoadVideoThumbsJob::addItems(const QStringList& files)
     processOne();
 }
 
-void LoadVideoThumbsJob::processOne()
+void VideoThumbnailerJob::processOne()
 {
     QMutexLocker lock(&d->mutex);
 
@@ -143,7 +146,7 @@ void LoadVideoThumbsJob::processOne()
     }
 }
 
-void LoadVideoThumbsJob::run()
+void VideoThumbnailerJob::run()
 {
     while (d->running)
     {
@@ -165,16 +168,18 @@ void LoadVideoThumbsJob::run()
     emit signalComplete();
 }
 
-void LoadVideoThumbsJob::slotThumbnailDone(const QString& file, const QImage& img)
+void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& img)
 {
     emit signalThumbnailDone(file, img);
     qDebug() << "Video thumbnail extracted for " << file;
     processOne();
 }
 
-void LoadVideoThumbsJob::slotThumbnailFailed(const QString& file)
+void VideoThumbnailerJob::slotThumbnailFailed(const QString& file)
 {
     emit signalThumbnailFailed(file);
     qDebug() << "Failed to extract video thumbnail for " << file;
     processOne();
 }
+
+}  // namespace Digikam
