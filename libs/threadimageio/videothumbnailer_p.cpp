@@ -620,16 +620,25 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
     {
         case QMediaPlayer::LoadedMedia:
         {
+            if (!player->isVideoAvailable())
+            {
+                qDebug() << "Video stream is not available for " << fileName();
+                dd->emit signalThumbnailFailed(filePath());
+                return;
+            }
+
             if (!player->isSeekable())
             {
                 qDebug() << "Video seek is not available for " << fileName();
                 dd->emit signalThumbnailFailed(filePath());
+                return;
             }
 
             if (player->duration() <= 0)
             {
                 qDebug() << "Video has no valid duration for " << fileName();
                 dd->emit signalThumbnailFailed(filePath());
+                return;
             }
 
             qDebug() << "Video duration for " << fileName() << "is " << player->duration() << " seconds";
