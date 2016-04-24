@@ -31,10 +31,14 @@
 #include <QThread>
 #include <QObject>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class VideoThumbnailerJob : public QThread
+class DIGIKAM_EXPORT VideoThumbnailerJob : public QThread
 {
     Q_OBJECT
 
