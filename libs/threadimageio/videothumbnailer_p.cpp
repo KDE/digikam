@@ -665,6 +665,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     if (player->mediaStatus() != QMediaPlayer::BufferedMedia ||
         player->position()    != position)
     {
+        player->setPosition(++position);
         return;
     }
 

@@ -44,11 +44,13 @@ public:
     {
         canceled = false;
         running  = false;
+        jobDone  = true;
         vthumb   = 0;
     }
 
     bool              canceled;
     bool              running;
+    bool              jobDone;
 
     QMutex            mutex;
     QWaitCondition    condVar;
@@ -134,10 +136,14 @@ void VideoThumbnailerJob::processOne()
 {
     if (!d->todo.isEmpty())
     {
-        QMutexLocker lock(&d->mutex);
-        d->currentFile = d->todo.takeFirst();
-        qDebug() << "Add " << d->currentFile << " to the todo list";
-        d->condVar.wakeAll();
+        if (d->jobDone)
+        {
+            QMutexLocker lock(&d->mutex);
+            d->currentFile = d->todo.takeFirst();
+            qDebug() << "Add " << d->currentFile << " to the todo list";
+            d->jobDone = false;
+            d->condVar.wakeAll();
+        }
     }
     else
     {
@@ -171,6 +177,7 @@ void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& i
 {
     emit signalThumbnailDone(file, img);
     qDebug() << "Video thumbnail extracted for " << file << " :: " << img;
+    d->jobDone = true;
     processOne();
 }
 
@@ -178,6 +185,7 @@ void VideoThumbnailerJob::slotThumbnailFailed(const QString& file)
 {
     emit signalThumbnailFailed(file);
     qDebug() << "Failed to extract video thumbnail for " << file;
+    d->jobDone = true;
     processOne();
 }
 
