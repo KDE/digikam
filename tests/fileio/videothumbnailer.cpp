@@ -44,6 +44,12 @@ VideoThumbnailer::~VideoThumbnailer()
 
 void VideoThumbnailer::setThumbnailSize(int size)
 {
+    if (size <= 0)
+    {
+        qDebug() << "Invalid video thumbnail size : " << size;
+        return;
+    }
+
     d->thumbSize = size;
 }
 
