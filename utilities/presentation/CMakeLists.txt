@@ -29,8 +29,11 @@ include_directories(
 
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(ENABLE_MEDIAPLAYER)
+    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 set(libpresentation_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_captionpage.cpp
                          ${CMAKE_CURRENT_SOURCE_DIR}/dialogs/presentation_advpage.cpp
