@@ -26,6 +26,10 @@
 
 #include <QDebug>
 
+// Local includes
+
+#include "thumbnailsize.h"
+
 namespace Digikam
 {
 
@@ -527,7 +531,7 @@ static int sprocket_large_png_len = 701;
 VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     : QThread(parent),
       createStrip(false),
-      thumbSize(256),
+      thumbSize(ThumbnailSize::Huge),
       player(0),
       probe(0),
       media(0),
