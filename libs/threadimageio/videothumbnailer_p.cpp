@@ -625,6 +625,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             {
                 qDebug() << "Video stream is not available for " << fileName();
                 dd->emit signalThumbnailFailed(filePath());
+                player->setMedia(QMediaContent());
                 return;
             }
 
@@ -641,6 +642,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             {
                 qDebug() << "Video seek is not available for " << fileName();
                 dd->emit signalThumbnailFailed(filePath());
+                player->setMedia(QMediaContent());
                 return;
             }
 
@@ -648,6 +650,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             {
                 qDebug() << "Video has no valid duration for " << fileName();
                 dd->emit signalThumbnailFailed(filePath());
+                player->setMedia(QMediaContent());
                 return;
             }
 
@@ -665,6 +668,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         {
             qDebug() << "Video cannot be decoded for " << fileName();
             dd->emit signalThumbnailFailed(filePath());
+            player->setMedia(QMediaContent());
         }
         default:
             break;
@@ -677,17 +681,19 @@ void VideoThumbnailer::Private::slotHandlePlayerError()
     qDebug() << "Error : " << player->errorString();
 
     dd->emit signalThumbnailFailed(filePath());
+    player->setMedia(QMediaContent());
 }
 
 void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
 {
     if (player->mediaStatus() != QMediaPlayer::BufferedMedia ||
-        player->position()    != position)
+        player->position()    <= 0)
     {
         if (++errorCount > 1000)
         {
             qDebug() << "Error : Video data are corrupted from " << fileName();
             dd->emit signalThumbnailFailed(filePath());
+            player->setMedia(QMediaContent());
             return;
         }
         else
@@ -704,10 +710,11 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     { 
         qDebug() << "Error : Video frame is not valid.";
         dd->emit signalThumbnailFailed(filePath());
+        player->setMedia(QMediaContent());
         return;
     }
 
-    player->stop();
+    player->setMedia(QMediaContent());
 
     frame = frm;
 

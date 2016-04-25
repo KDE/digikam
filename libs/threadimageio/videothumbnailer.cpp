@@ -79,6 +79,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file)
 
     d->media = QMediaContent(QUrl::fromLocalFile(file));
     d->player->setMedia(d->media);
+    d->player->setMuted(true);
 }
 
 }  // namespace Digikam
