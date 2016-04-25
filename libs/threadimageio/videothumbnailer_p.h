@@ -69,6 +69,7 @@ private:
 
 private:
 
+    int               errorCount;
     qint64            position;
     QImage            strip;
     QVideoFrame       frame;

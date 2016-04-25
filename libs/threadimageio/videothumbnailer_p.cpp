@@ -535,6 +535,7 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
       player(0),
       probe(0),
       media(0),
+      errorCount(0),
       position(0),
       dd(parent)
 {
@@ -627,6 +628,15 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
                 return;
             }
 
+            errorCount =  0;
+            position   = -1;
+
+            player->pause();
+
+            break;
+        }
+        case QMediaPlayer::BufferedMedia:
+        {
             if (!player->isSeekable())
             {
                 qDebug() << "Video seek is not available for " << fileName();
@@ -646,9 +656,9 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             position = (qint64)(player->duration() * 0.2);
 
             player->setPosition(position);    // Seek to 20% of the media to take a thumb.
-            player->pause();
 
             qDebug() << "Trying to get thumbnail from " << fileName() << " at position " << position;
+
             break;
         }
         case QMediaPlayer::InvalidMedia:
@@ -674,8 +684,17 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     if (player->mediaStatus() != QMediaPlayer::BufferedMedia ||
         player->position()    != position)
     {
-        player->setPosition(++position);
-        return;
+        if (++errorCount > 1000)
+        {
+            qDebug() << "Error : Video data are corrupted from " << fileName();
+            dd->emit signalThumbnailFailed(filePath());
+            return;
+        }
+        else
+        {
+            player->setPosition(++position);
+            return;
+        }
     }
 
     qDebug() << "Video frame extraction from " << fileName()
@@ -685,7 +704,10 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     { 
         qDebug() << "Error : Video frame is not valid.";
         dd->emit signalThumbnailFailed(filePath());
+        return;
     }
+
+    player->stop();
 
     frame = frm;
 

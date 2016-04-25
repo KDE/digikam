@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QMimeDatabase>
 #include <QApplication>
 #include <QImage>
 #include <QDebug>
@@ -63,6 +64,15 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file)
     if (!d->probe->setSource(d->player))
     {
         qDebug() << "Video monitoring is not available.";
+        emit signalThumbnailFailed(file);
+        return;
+    }
+
+    QMimeDatabase mimeDB;
+
+    if (!mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video")))
+    {
+        qDebug() << "Mime type is not a video from " << file;
         emit signalThumbnailFailed(file);
         return;
     }
