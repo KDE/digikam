@@ -678,10 +678,6 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
 void VideoThumbnailer::Private::slotHandlePlayerError()
 {
     qDebug() << "Problem while video data extraction from " << fileName();
-    qDebug() << "Error : " << player->errorString();
-
-    dd->emit signalThumbnailFailed(filePath());
-    player->setMedia(QMediaContent());
 }
 
 void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
@@ -691,7 +687,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     {
         if (++errorCount > 1000)
         {
-            qDebug() << "Error : Video data are corrupted from " << fileName();
+            qDebug() << "Error: Video data are corrupted from " << fileName();
             dd->emit signalThumbnailFailed(filePath());
             player->setMedia(QMediaContent());
             return;
@@ -708,7 +704,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
 
     if (!frm.isValid())
     { 
-        qDebug() << "Error : Video frame is not valid.";
+        qDebug() << "Error: Video frame is not valid.";
         dd->emit signalThumbnailFailed(filePath());
         player->setMedia(QMediaContent());
         return;
