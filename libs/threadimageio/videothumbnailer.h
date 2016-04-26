@@ -29,8 +29,14 @@
 #include <QString>
 #include <QImage>
 
+// Local includes 
+
+#include "digikam_config.h"
+
 namespace Digikam
 {
+
+#ifdef HAVE_MEDIAPLAYER
 
 class VideoThumbnailer : public QObject
 {
@@ -38,8 +44,8 @@ class VideoThumbnailer : public QObject
 
 public:
 
-    VideoThumbnailer(QObject* const parent=0);
-    ~VideoThumbnailer();
+    explicit VideoThumbnailer(QObject* const parent=0);
+    virtual ~VideoThumbnailer();
 
     void setCreateStrip(bool strip);
     void setThumbnailSize(int size);
@@ -58,6 +64,35 @@ private:
     class Private;
     Private* const d;
 };
+
+#else // HAVE_MEDIAPLAYER
+
+class VideoThumbnailer : public QObject
+{
+    Q_OBJECT
+
+public:
+
+    explicit VideoThumbnailer(QObject* const) {};
+    virtual ~VideoThumbnailer()               {};
+
+    void setCreateStrip(bool)  {};
+    void setThumbnailSize(int) {};
+
+Q_SIGNALS:
+
+    void signalThumbnailDone(const QString&, const QImage&);
+    void signalThumbnailFailed(const QString&);
+
+public Q_SLOTS:
+
+    void slotGetThumbnail(const QString& f)
+    {
+        emit signalThumbnailFailed(f);
+    };
+};
+
+#endif // HAVE_MEDIAPLAYER
 
 }  // namespace Digikam
 
