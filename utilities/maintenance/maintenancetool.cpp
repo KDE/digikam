@@ -86,7 +86,7 @@ void MaintenanceTool::slotStart()
 
 void MaintenanceTool::slotDone()
 {
-    QTime now, t = now.addMSecs(d->duration.elapsed());
+    QTime t = QTime::fromMSecsSinceStartOfDay(d->duration.elapsed());
 
     if (d->notification)
     {

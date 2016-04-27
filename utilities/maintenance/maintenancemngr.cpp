@@ -326,7 +326,7 @@ void MaintenanceMngr::stage7()
 void MaintenanceMngr::done()
 {
     d->running   = false;
-    QTime now, t = now.addMSecs(d->duration.elapsed());
+    QTime t = QTime::fromMSecsSinceStartOfDay(d->duration.elapsed());
 
     // Pop-up a message to bring user when all is done.
     DNotificationWrapper(QLatin1String("digiKam Maintenance"), // not i18n
