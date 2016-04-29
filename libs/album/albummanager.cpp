@@ -412,10 +412,9 @@ static bool moveToBackup(const QFileInfo& info)
     {
         QFileInfo backup(info.dir(), info.fileName() + QLatin1String("-backup-") + QDateTime::currentDateTime().toString(Qt::ISODate));
 
-        bool jobExecution = KIOWrapper::fileMove(QUrl::fromLocalFile(info.filePath()),
-                                                 QUrl::fromLocalFile(backup.filePath()));
+        bool ret = QDir().rename(info.filePath(), backup.filePath());
 
-        if (!jobExecution)
+        if (!ret)
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
                                   i18n("Failed to backup the existing database file (\"%1\"). "

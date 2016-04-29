@@ -59,14 +59,6 @@ bool KIOWrapper::fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget
     return fileCopyJob->exec();
 }
 
-bool KIOWrapper::fileMove(const QUrl& src, const QUrl& dest)
-{
-    KIO::Job* const job = KIO::file_move(src, dest, -1,
-                                         KIO::Overwrite | KIO::HideProgressInfo);
-
-    return job->exec();
-}
-
 bool KIOWrapper::mkdir(const QUrl& url, bool withKJobWidget, QWidget* const widget)
 {
     KIO::Job* const job = KIO::mkdir(url);
