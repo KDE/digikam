@@ -51,22 +51,18 @@ class DIGIKAM_EXPORT KIOWrapper : public QObject
 
 public:
 
+    // TODO : how to drop these one ?
+    
     KIOWrapper();
 
+    // Used by editorwindow.cpp
     void move(const QUrl& src, const QUrl& dest);
+
+    // Used by showfoto.cpp
     void del(const QUrl& url);
+
+    // Used by showfoto.cpp
     void trash(const QUrl& url);
-
-public:
-
-    static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
-    static bool fileMove(const QUrl& src, const QUrl& dest);
-    static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
-    static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
-
-    static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
-    static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
-    static bool run(const QUrl& url, QWidget* const window);
 
 Q_SIGNALS:
 
@@ -77,6 +73,34 @@ private Q_SLOTS:
 
     // Used by move, del, trash methods
     void slotKioJobResult(KJob* job);
+    
+public: // ------------------------------------------------------------------------------------------------------------
+
+    // TODO : find non KIO equivalents.
+    
+    // Used by albummanager.cpp and showfoto.cpp
+    static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
+
+    // Used by albummanager.cpp
+    static bool fileMove(const QUrl& src, const QUrl& dest);
+
+    // Used by albummanager.cpp
+    static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
+
+    // Used by albummanager.cpp
+    static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
+
+public: // ------------------------------------------------------------------------------------------------------------
+
+    // TODO: Move these methods in a specific Desktop service wrapper.
+    // Typically, found equivalent methods to run service under OSX and Windows without to use KDE API.
+    // Probably we will need native implementations instead.
+    
+    // Used by contextmenuhelpher.cpp, digikamview.cpp, fileoperation.cpp, editorwindow.cpp, importcontextmenu.cpp
+
+    static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
+    static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
+    static bool run(const QUrl& url, QWidget* const window);
 };
 
 } // namespace Digikam
