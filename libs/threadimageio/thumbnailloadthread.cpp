@@ -52,7 +52,7 @@
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
-#include "kiowrapper.h"
+#include "videothumbnailerjob.h"
 
 namespace Digikam
 {
@@ -63,7 +63,8 @@ class ThumbnailResult
 public:
 
     ThumbnailResult(const LoadingDescription& description, const QImage& image)
-        : loadingDescription(description), image(image)
+        : loadingDescription(description),
+          image(image)
     {
     }
 
@@ -115,28 +116,26 @@ public:
         highlight          = true;
         sendSurrogate      = true;
         creator            = 0;
-        kioWrapper         = 0;
+        videoThumbs        = 0;
         notifiedForResults = false;
     }
 
-    bool                            wantPixmap;
-    bool                            highlight;
-    bool                            sendSurrogate;
-    bool                            notifiedForResults;
+    bool                               wantPixmap;
+    bool                               highlight;
+    bool                               sendSurrogate;
+    bool                               notifiedForResults;
 
-    int                             size;
+    int                                size;
 
-    ThumbnailCreator*               creator;
+    ThumbnailCreator*                  creator;
 
-    QHash<QString, ThumbnailResult> collectedResults;
-    QMutex                          resultsMutex;
+    QHash<QString, ThumbnailResult>    collectedResults;
+    QMutex                             resultsMutex;
 
-    QList<LoadingDescription>       kdeTodo;
-    QHash<QUrl, LoadingDescription> kdeJobHash;
-    KIOWrapper*                     kioWrapper;
+    QHash<QString, LoadingDescription> videoJobHash;
+    VideoThumbnailerJob*               videoThumbs;
 
-    QList<LoadingDescription>       lastDescriptions;
-    QStringList                     previewPlugins;
+    QList<LoadingDescription>          lastDescriptions;
 
 public:
 
@@ -172,12 +171,24 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
 
     connect(this, SIGNAL(thumbnailsAvailable()),
             this, SLOT(slotThumbnailsAvailable()));
+
+    d->videoThumbs               = new VideoThumbnailerJob(this);
+    d->videoThumbs->setCreateStrip(true);
+
+    connect(d->videoThumbs, SIGNAL(signalThumbnailDone(QString,QImage)),
+            this, SLOT(slotVideoThumbnailDone(QString,QImage)));
+
+    connect(d->videoThumbs, SIGNAL(signalThumbnailFailed(QString)),
+            this, SLOT(slotVideoThumbnailFailed(QString)));
+
+    connect(d->videoThumbs, SIGNAL(signalThumbnailJobFinished()),
+            this, SLOT(slotVideoThumbnailFinished()));
 }
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
     shutDown();
-    delete d->kioWrapper;
+    delete d->videoThumbs;
     delete d->creator;
     delete d;
 }
@@ -207,8 +218,8 @@ void ThumbnailLoadThread::initializeThumbnailDatabase(const DbEngineParameters& 
     if (static_d->firstThreadCreated)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Call initializeThumbnailDatabase at application start. "
-                 "There are already thumbnail loading threads created, "
-                 "and these will not be switched to use the database. ";
+                                        "There are already thumbnail loading threads created, "
+                                        "and these will not be switched to use the database. ";
     }
 
     ThumbsDbAccess::setParameters(params);
@@ -680,7 +691,7 @@ bool ThumbnailLoadThread::checkSize(int size)
     else if (size > ThumbnailSize::maxThumbsSize())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "ThumbnailLoadThread::load: Thumbnail size " << size
-                 << " is larger than " << ThumbnailSize::maxThumbsSize() << ". Refusing to load.";
+                                     << " is larger than " << ThumbnailSize::maxThumbsSize() << ". Refusing to load.";
         return false;
     }
 
@@ -737,7 +748,7 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 {
     if (thumb.isNull())
     {
-        loadWithKDE(description);
+        loadVideoThumbnail(description);
     }
 
     QPixmap pix;
@@ -770,73 +781,35 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
     emit signalThumbnailLoaded(description, pix);
 }
 
-// --- KDE thumbnails ---
+// --- Video thumbnails ---
 
-void ThumbnailLoadThread::loadWithKDE(const LoadingDescription& description)
+void ThumbnailLoadThread::loadVideoThumbnail(const LoadingDescription& description)
 {
-    d->kdeTodo << description;
-    startKdePreviewJob();
+    d->videoJobHash.insert(description.filePath, description);
+    d->videoThumbs->setThumbnailSize(d->creator->storedSize());
+    d->videoThumbs->addItems(QStringList() << description.filePath);
 }
 
-void ThumbnailLoadThread::startKdePreviewJob()
+void ThumbnailLoadThread::slotVideoThumbnailDone(const QString& item, const QImage& img)
 {
-    if (d->kioWrapper || d->kdeTodo.isEmpty())
+    if (!d->videoJobHash.contains(item))
     {
         return;
     }
 
-    d->kdeJobHash.clear();
-    QList<QUrl> list;
-
-    foreach(const LoadingDescription& description, d->kdeTodo)
-    {
-        QUrl url = QUrl::fromLocalFile(description.filePath);
-        list << url;
-        d->kdeJobHash[url] = description;
-    }
-
-    d->kdeTodo.clear();
-
-    if (d->previewPlugins.isEmpty())
-    {
-        d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
-    }
-
-    d->kioWrapper = new KIOWrapper();
-
-    // FIXME: do not know if size 0 is allowed
-    d->kioWrapper->filePreview(list, QSize(d->creator->storedSize(), d->creator->storedSize()), &d->previewPlugins);
-
-    connect(d->kioWrapper, SIGNAL(gotPreview(QUrl,QPixmap)),
-            this, SLOT(gotKDEPreview(QUrl,QPixmap)));
-
-    connect(d->kioWrapper, SIGNAL(previewJobFailed(QUrl)),
-            this, SLOT(failedKDEPreview(QUrl)));
-
-    connect(d->kioWrapper, SIGNAL(previewJobFinished()),
-            this, SLOT(kdePreviewFinished()));
-}
-
-void ThumbnailLoadThread::gotKDEPreview(const QUrl& item, const QPixmap& kdepix)
-{
-    if (!d->kdeJobHash.contains(item))
-    {
-        return;
-    }
-
-    LoadingDescription description = d->kdeJobHash.value(item);
+    LoadingDescription description = d->videoJobHash.value(item);
     QPixmap pix;
 
-    if (kdepix.isNull())
+    if (img.isNull())
     {
         // third and last attempt - load a mimetype specific icon
         pix = surrogatePixmap(description);
     }
     else
     {
-        d->creator->store(description.filePath, kdepix.toImage());
-        pix = kdepix.scaled(description.previewParameters.size, description.previewParameters.size,
-                            Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        d->creator->store(description.filePath, img);
+        pix = QPixmap::fromImage(img.scaled(description.previewParameters.size, description.previewParameters.size,
+                                 Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 
     // put into cache
@@ -846,20 +819,18 @@ void ThumbnailLoadThread::gotKDEPreview(const QUrl& item, const QPixmap& kdepix)
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
 
+    d->videoJobHash.remove(description.filePath);
+
     emit signalThumbnailLoaded(description, pix);
 }
 
-void ThumbnailLoadThread::failedKDEPreview(const QUrl& item)
+void ThumbnailLoadThread::slotVideoThumbnailFailed(const QString& item)
 {
-    gotKDEPreview(item, QPixmap());
+    slotVideoThumbnailDone(item, QImage());
 }
 
-void ThumbnailLoadThread::kdePreviewFinished()
+void ThumbnailLoadThread::slotVideoThumbnailFinished()
 {
-    delete d->kioWrapper;
-    d->kioWrapper = 0;
-
-    startKdePreviewJob();
 }
 
 QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& description)
@@ -957,12 +928,15 @@ public:
     public:
 
         CatcherResult(const LoadingDescription& d)
-            : description(d), received(false)
+            : description(d),
+              received(false)
         {
         }
 
         CatcherResult(const LoadingDescription& d, const QImage& image)
-            : image(image), description(d), received(true)
+            : image(image),
+              description(d),
+              received(true)
         {
         }
 
@@ -1039,12 +1013,14 @@ void ThumbnailImageCatcher::Private::harvest(const LoadingDescription& descripti
 }
 
 ThumbnailImageCatcher::ThumbnailImageCatcher(QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
 }
 
 ThumbnailImageCatcher::ThumbnailImageCatcher(ThumbnailLoadThread* const thread, QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     setThumbnailLoadThread(thread);
 }

@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QThread>
+#include <QObject>
 #include <QMediaPlayer>
 #include <QVideoFrame>
 #include <QVideoProbe>
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class VideoThumbnailer::Private : public QThread
+class VideoThumbnailer::Private : public QObject
 {
     Q_OBJECT
 
@@ -59,20 +59,16 @@ public:
 
     bool              createStrip;
     int               thumbSize;
+    volatile bool     isReady;
     QMediaPlayer*     player;
     QVideoProbe*      probe;
     QMediaContent     media;
 
 private:
 
-    void run();
-
-private:
-
     int               errorCount;
     qint64            position;
     QImage            strip;
-    QVideoFrame       frame;
     VideoThumbnailer* dd;
 };
 

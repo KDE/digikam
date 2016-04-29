@@ -76,7 +76,7 @@ Q_SIGNALS:
     void signalThumbnailJobFinished();
 
     /// Internal use only.
-    void signalGetThumbnail(const QString&);
+    void signalGetThumbnail(const QString&, int size, bool strip);
 
 public Q_SLOTS:
 

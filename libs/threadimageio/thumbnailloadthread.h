@@ -28,14 +28,12 @@
 // Qt includes
 
 #include <QPixmap>
+#include <QImage>
 
 // Local includes
 
 #include "managedloadsavethread.h"
 #include "thumbnailinfo.h"
-
-class KFileItem;
-class KJob;
 
 namespace Digikam
 {
@@ -249,8 +247,7 @@ private:
 
     bool find(const ThumbnailIdentifier& identifier, int size, QPixmap* retPixmap, bool emitSignal, const QRect& detailRect);
     void load(const LoadingDescription& description, bool pregenerate);
-    void loadWithKDE(const LoadingDescription& description);
-    void startKdePreviewJob();
+    void loadVideoThumbnail(const LoadingDescription& description);
     bool checkSize(int size);
     QPixmap surrogatePixmap(const LoadingDescription& loadingDescription);
 
@@ -258,15 +255,15 @@ Q_SIGNALS:
 
     // For internal use
     void thumbnailsAvailable();
-    void ThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& thumb);
+    void ThumbnailLoaded(const LoadingDescription&, const QImage&);
 
 private Q_SLOTS:
 
     void slotThumbnailsAvailable();
-    void slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QImage& thumb);
-    void gotKDEPreview(const QUrl &, const QPixmap& pix);
-    void failedKDEPreview(const QUrl&);
-    void kdePreviewFinished();
+    void slotThumbnailLoaded(const LoadingDescription&, const QImage&);
+    void slotVideoThumbnailDone(const QString&, const QImage&);
+    void slotVideoThumbnailFailed(const QString&);
+    void slotVideoThumbnailFinished();
 
 private:
 

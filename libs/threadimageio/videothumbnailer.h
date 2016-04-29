@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QPointer>
 #include <QObject>
 #include <QString>
 #include <QImage>
@@ -32,13 +33,14 @@
 // Local includes 
 
 #include "digikam_config.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
 #ifdef HAVE_MEDIAPLAYER
 
-class VideoThumbnailer : public QObject
+class DIGIKAM_EXPORT VideoThumbnailer : public QObject
 {
     Q_OBJECT
 
@@ -47,8 +49,11 @@ public:
     explicit VideoThumbnailer(QObject* const parent=0);
     virtual ~VideoThumbnailer();
 
-    void setCreateStrip(bool strip);
-    void setThumbnailSize(int size);
+    static QPointer<VideoThumbnailer> internalPtr;
+    static VideoThumbnailer*          instance();
+    static bool                       isCreated();
+
+    bool isReady() const;
 
 Q_SIGNALS:
 
@@ -57,7 +62,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-    void slotGetThumbnail(const QString&);
+    void slotGetThumbnail(const QString&, int size, bool strip);
 
 private:
 

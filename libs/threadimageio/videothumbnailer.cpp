@@ -29,8 +29,14 @@
 #include <QImage>
 #include <QDebug>
 
+// Local includes
+
+#include "thumbnailsize.h"
+
 namespace Digikam
 {
+
+QPointer<VideoThumbnailer> VideoThumbnailer::internalPtr = QPointer<VideoThumbnailer>();
 
 VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     : QObject(parent),
@@ -43,27 +49,45 @@ VideoThumbnailer::~VideoThumbnailer()
     // No need to delete d container, it's based on QObject.
 }
 
-void VideoThumbnailer::setThumbnailSize(int size)
+VideoThumbnailer* VideoThumbnailer::instance()
 {
+    if (VideoThumbnailer::internalPtr.isNull())
+    {
+        VideoThumbnailer::internalPtr = new VideoThumbnailer();
+    }
+
+    return VideoThumbnailer::internalPtr;
+}
+
+bool VideoThumbnailer::isCreated()
+{
+    return (!internalPtr.isNull());
+}
+
+bool VideoThumbnailer::isReady() const
+{
+    return d->isReady;
+}
+
+void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool strip)
+{
+    d->isReady     = false;
+    d->createStrip = strip;
+
     if (size <= 0)
     {
         qDebug() << "Invalid video thumbnail size : " << size;
-        return;
+        d->thumbSize = ThumbnailSize::Huge;
+    }
+    else
+    {
+        d->thumbSize = size;
     }
 
-    d->thumbSize = size;
-}
-
-void VideoThumbnailer::setCreateStrip(bool strip)
-{
-    d->createStrip = strip;
-}
-
-void VideoThumbnailer::slotGetThumbnail(const QString& file)
-{
     if (!d->probe->setSource(d->player))
     {
         qDebug() << "Video monitoring is not available.";
+        d->isReady = true;
         emit signalThumbnailFailed(file);
         return;
     }
@@ -73,6 +97,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file)
     if (!mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video")))
     {
         qDebug() << "Mime type is not a video from " << file;
+        d->isReady = true;
         emit signalThumbnailFailed(file);
         return;
     }
