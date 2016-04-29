@@ -36,7 +36,6 @@
 #include <kio/copyjob.h>
 #include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
-#include <kio/previewjob.h>
 #include <krun.h>
 #include <kio_version.h>
 #include <kjobwidgets.h>
@@ -111,33 +110,6 @@ void KIOWrapper::trash(const QUrl& url)
             this, SLOT(slotKioJobResult(KJob*)) );
 }
 
-QStringList KIOWrapper::previewJobAvailablePlugins()
-{
-    return KIO::PreviewJob::availablePlugins();
-}
-
-void KIOWrapper::filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins)
-{
-    KFileItemList items;
-
-    for (QList<QUrl>::ConstIterator it = urlList.constBegin() ; it != urlList.constEnd() ; ++it)
-    {
-        if ((*it).isValid())
-            items.append(KFileItem(*it));
-    }
-
-    KIO::PreviewJob* const job = KIO::filePreview(items, size, enabledPlugins);
-
-    connect(job, SIGNAL(gotPreview(KFileItem,QPixmap)),
-            this, SLOT(slotGotPreview(KFileItem,QPixmap)));
-
-    connect(job, SIGNAL(failed(KFileItem)),
-            this, SLOT(slotPreviewJobFailed(KFileItem)));
-
-    connect(job, SIGNAL(finished(KJob*)),
-            this, SIGNAL(previewJobFinished()));
-}
-
 void KIOWrapper::slotKioJobResult(KJob* job)
 {
     if (job->error() != 0)
@@ -148,16 +120,6 @@ void KIOWrapper::slotKioJobResult(KJob* job)
     {
         emit error(QString());
     }
-}
-
-void KIOWrapper::slotPreviewJobFailed(const KFileItem& item)
-{
-    emit previewJobFailed(item.url());
-}
-
-void KIOWrapper::slotGotPreview(const KFileItem& item, const QPixmap& pix)
-{
-    emit gotPreview(item.url(), pix);
 }
 
 bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* const window)

@@ -53,8 +53,6 @@ public:
 
     KIOWrapper();
 
-    void filePreview(const QList<QUrl>& urlList, const QSize& size, const QStringList* const enabledPlugins = 0);
-
     void move(const QUrl& src, const QUrl& dest);
     void del(const QUrl& url);
     void trash(const QUrl& url);
@@ -66,22 +64,11 @@ public:
     static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
     static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 
-    static QStringList previewJobAvailablePlugins();
-
     static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QUrl& url, QWidget* const window);
 
 Q_SIGNALS:
-
-    // send by slotGotPreview()
-    void gotPreview(const QUrl& itemUrl, const QPixmap& pix);
-
-    // send by slotGotPreview()
-    void previewJobFinished();
-
-    // send by slotPreviewJobFailed()
-    void previewJobFailed(const QUrl& itemUrl);
 
     // Internal use only : used by slotKioJobResult()
     void error(const QString& errMsg);
@@ -90,9 +77,6 @@ private Q_SLOTS:
 
     // Used by move, del, trash methods
     void slotKioJobResult(KJob* job);
-
-    void slotGotPreview(const KFileItem& item, const QPixmap& pix);
-    void slotPreviewJobFailed(const KFileItem& item);
 };
 
 } // namespace Digikam

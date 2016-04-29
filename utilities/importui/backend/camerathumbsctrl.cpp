@@ -38,7 +38,6 @@
 #include "iccsettings.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
-#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -67,8 +66,7 @@ class CameraThumbsCtrl::Private
 public:
 
     Private()
-        : controller(0),
-          kioWrapper(0)
+        : controller(0)
     {
     }
 
@@ -77,11 +75,6 @@ public:
     QList<QUrl>              pendingItems;
 
     CameraController*        controller;
-
-    QList<CamItemInfo>       kdeTodo;
-    QHash<QUrl, CamItemInfo> kdeJobHash;
-    KIOWrapper*              kioWrapper;
-    QStringList              previewPlugins;
 };
 
 // --------------------------------------------------------
@@ -105,7 +98,6 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
     clearCache();
-    delete d->kioWrapper;
 }
 
 CameraController* CameraThumbsCtrl::cameraController() const
@@ -168,110 +160,10 @@ void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const 
 
 void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QString& file, const CamItemInfo& info)
 {
-    if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
-    {
-        putItemToCache(info.url(), info, QPixmap());
-        loadWithKDE(info);
-    }
-    else
-    {
-        QPixmap pix = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
-        putItemToCache(info.url(), info, pix);
-        d->pendingItems.removeAll(info.url());
-        emit signalThumbInfoReady(info);
-    }
-}
-
-void CameraThumbsCtrl::loadWithKDE(const CamItemInfo& info)
-{
-    d->kdeTodo << info;
-    startKdePreviewJob();
-}
-
-void CameraThumbsCtrl::startKdePreviewJob()
-{
-    if (d->kioWrapper || d->kdeTodo.isEmpty())
-    {
-        return;
-    }
-
-    d->kdeJobHash.clear();
-    QList<QUrl> list;
-
-    foreach(const CamItemInfo& info, d->kdeTodo)
-    {
-        QUrl url = info.url();
-        list << url;
-        d->kdeJobHash[url] = info;
-    }
-
-    d->kdeTodo.clear();
-
-    if (d->previewPlugins.isEmpty())
-    {
-        d->previewPlugins = KIOWrapper::previewJobAvailablePlugins();
-    }
-
-    d->kioWrapper = new KIOWrapper();
-
-    d->kioWrapper->filePreview(list, QSize(ThumbnailSize::Huge, ThumbnailSize::Huge), &d->previewPlugins);
-
-    connect(d->kioWrapper, SIGNAL(gotPreview(QUrl,QPixmap)),
-            this, SLOT(slotGotKDEPreview(QUrl,QPixmap)));
-
-    connect(d->kioWrapper, SIGNAL(previewJobFailed(QUrl)),
-            this, SLOT(slotFailedKDEPreview(QUrl)));
-
-    connect(d->kioWrapper, SIGNAL(previewJobFinished()),
-            this, SLOT(slotKdePreviewFinished()));
-}
-
-void CameraThumbsCtrl::slotGotKDEPreview(const QUrl& item, const QPixmap& pix)
-{
-    procressKDEPreview(item, pix);
-}
-
-void CameraThumbsCtrl::slotFailedKDEPreview(const QUrl& item)
-{
-    procressKDEPreview(item, QPixmap());
-}
-
-void CameraThumbsCtrl::procressKDEPreview(const QUrl& item, const QPixmap& pix)
-{
-    CamItemInfo info = d->kdeJobHash.value(item);
-    QUrl url         = info.url();
-
-    if (info.isNull())
-    {
-        return;
-    }
-
-    QString file = item.fileName();
-    QPixmap thumb;
-
-    if (pix.isNull())
-    {
-        // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed thumb from KDE Preview : " << item;
-    }
-    else
-    {
-        thumb = pix;
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got thumb from KDE Preview : " << item;
-    }
-
-    putItemToCache(url, info, thumb);
-    d->pendingItems.removeAll(url);
+    QPixmap pix = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
+    putItemToCache(info.url(), info, pix);
+    d->pendingItems.removeAll(info.url());
     emit signalThumbInfoReady(info);
-}
-
-void CameraThumbsCtrl::slotKdePreviewFinished()
-{
-    delete d->kioWrapper;
-    d->kioWrapper = 0;
-
-    startKdePreviewJob();
 }
 
 // -- Cache management methods ------------------------------------------------------------
