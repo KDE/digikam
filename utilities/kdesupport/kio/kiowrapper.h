@@ -78,7 +78,7 @@ public: // ---------------------------------------------------------------------
 
     // TODO : find non KIO equivalents.
 
-    // Used by albummanager.cpp and showfoto.cpp
+    // Used by showfoto.cpp
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
 
     // Used by albummanager.cpp

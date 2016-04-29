@@ -433,15 +433,17 @@ static bool copyToNewLocation(const QFileInfo& oldFile, const QFileInfo& newFile
     QString message = otherMessage;
 
     if (message.isNull())
+    {
         message = i18n("Failed to copy the old database file (\"%1\") "
                        "to its new location (\"%2\"). "
                        "Starting with an empty database.",
-                       QDir::toNativeSeparators(oldFile.filePath()), QDir::toNativeSeparators(newFile.filePath()));
+                       QDir::toNativeSeparators(oldFile.filePath()),
+                       QDir::toNativeSeparators(newFile.filePath()));
+    }
 
-    bool jobExecution = KIOWrapper::fileCopy(QUrl::fromLocalFile(oldFile.filePath()),
-                                                         QUrl::fromLocalFile(newFile.filePath()));
+    bool ret = QFile::copy(oldFile.filePath(), newFile.filePath());
 
-    if (!jobExecution)
+    if (!ret)
     {
         QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), message);
         return false;
