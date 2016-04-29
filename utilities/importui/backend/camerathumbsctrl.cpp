@@ -38,6 +38,7 @@
 #include "iccsettings.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
+#include "videothumbnailerjob.h"
 
 namespace Digikam
 {
@@ -66,7 +67,8 @@ class CameraThumbsCtrl::Private
 public:
 
     Private()
-        : controller(0)
+        : controller(0),
+          videoThumbs(0)
     {
     }
 
@@ -75,6 +77,9 @@ public:
     QList<QUrl>              pendingItems;
 
     CameraController*        controller;
+
+    QHash<QUrl, CamItemInfo> videoJobHash;
+    VideoThumbnailerJob*     videoThumbs;
 };
 
 // --------------------------------------------------------
@@ -93,11 +98,25 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
             this, SLOT(slotThumbInfoFailed(QString,QString,CamItemInfo)));
 
     setCacheSize(200);
+
+    d->videoThumbs    = new VideoThumbnailerJob(this);
+    d->videoThumbs->setThumbnailSize(ThumbnailSize::Huge);
+    d->videoThumbs->setCreateStrip(true);
+
+    connect(d->videoThumbs, SIGNAL(signalThumbnailDone(QString,QImage)),
+            this, SLOT(slotVideoThumbnailDone(QString,QImage)));
+
+    connect(d->videoThumbs, SIGNAL(signalThumbnailFailed(QString)),
+            this, SLOT(slotVideoThumbnailFailed(QString)));
+
+    connect(d->videoThumbs, SIGNAL(signalThumbnailJobFinished()),
+            this, SLOT(slotVideoThumbnailFinished()));
 }
 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
     clearCache();
+    delete d->videoThumbs;
 }
 
 CameraController* CameraThumbsCtrl::cameraController() const
@@ -160,10 +179,63 @@ void CameraThumbsCtrl::slotThumbInfo(const QString&, const QString& file, const 
 
 void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QString& file, const CamItemInfo& info)
 {
-    QPixmap pix = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
-    putItemToCache(info.url(), info, pix);
-    d->pendingItems.removeAll(info.url());
+    if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
+    {
+        putItemToCache(info.url(), info, QPixmap());
+        d->videoJobHash.insert(info.url(), info);
+        d->videoThumbs->addItems(QStringList() << info.url().toLocalFile());
+    }
+    else
+    {
+        QPixmap pix = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
+        putItemToCache(info.url(), info, pix);
+        d->pendingItems.removeAll(info.url());
+        emit signalThumbInfoReady(info);
+    }
+}
+
+void CameraThumbsCtrl::slotVideoThumbnailDone(const QString& item, const QImage& img)
+{
+    procressVideoPreview(QUrl::fromLocalFile(item), QPixmap::fromImage(img));
+}
+
+void CameraThumbsCtrl::slotVideoThumbnailFailed(const QString& item)
+{
+    procressVideoPreview(QUrl::fromLocalFile(item), QPixmap());
+}
+
+void CameraThumbsCtrl::procressVideoPreview(const QUrl& item, const QPixmap& pix)
+{
+    CamItemInfo info = d->videoJobHash.value(item);
+    QUrl url         = info.url();
+
+    if (info.isNull())
+    {
+        return;
+    }
+
+    QString file = item.fileName();
+    QPixmap thumb;
+
+    if (pix.isNull())
+    {
+        // This call must be run outside Camera Controller thread.
+        thumb = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed video thumb Preview : " << item;
+    }
+    else
+    {
+        thumb = pix;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got video thumb Preview : " << item;
+    }
+
+    putItemToCache(url, info, thumb);
+    d->pendingItems.removeAll(url);
     emit signalThumbInfoReady(info);
+}
+
+void CameraThumbsCtrl::slotVideoThumbnailFinished()
+{
 }
 
 // -- Cache management methods ------------------------------------------------------------

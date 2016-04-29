@@ -82,8 +82,13 @@ private Q_SLOTS:
 
     void slotThumbInfo(const QString&, const QString&, const CamItemInfo&, const QImage&);
     void slotThumbInfoFailed(const QString&, const QString&, const CamItemInfo&);
+    void slotVideoThumbnailDone(const QString&, const QImage&);
+    void slotVideoThumbnailFailed(const QString&);
+    void slotVideoThumbnailFinished();
 
 private:
+
+    void procressVideoPreview(const QUrl& item, const QPixmap& pix);
 
     /// Cache management methods.
     void removeItemFromCache(const QUrl& url);
