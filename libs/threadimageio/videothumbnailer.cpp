@@ -32,6 +32,7 @@
 // Local includes
 
 #include "thumbnailsize.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -76,7 +77,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     if (size <= 0)
     {
-        qDebug() << "Invalid video thumbnail size : " << size;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid video thumbnail size : " << size;
         d->thumbSize = ThumbnailSize::Huge;
     }
     else
@@ -86,7 +87,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     if (!d->probe->setSource(d->player))
     {
-        qDebug() << "Video monitoring is not available.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video monitoring is not available.";
         d->isReady = true;
         emit signalThumbnailFailed(file);
         return;
@@ -96,7 +97,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     if (!mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video")))
     {
-        qDebug() << "Mime type is not a video from " << file;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not a video from " << file;
         d->isReady = true;
         emit signalThumbnailFailed(file);
         return;
