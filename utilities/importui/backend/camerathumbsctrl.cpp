@@ -6,7 +6,7 @@
  * Date        : 2011-08-03
  * Description : digital camera thumbnails controller
  *
- * Copyright (C) 2011-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2011-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
  * This program is free software; you can redistribute it
@@ -28,17 +28,20 @@
 
 #include <QCache>
 #include <QPair>
-#include <QUrl>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "cameracontroller.h"
 #include "thumbnailsize.h"
 #include "iccsettings.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
-#include "videothumbnailerjob.h"
+
+#ifdef HAVE_MEDIAPLAYER   
+#   include "videothumbnailerjob.h"
+#endif
 
 namespace Digikam
 {
@@ -67,8 +70,11 @@ class CameraThumbsCtrl::Private
 public:
 
     Private()
-        : controller(0),
-          videoThumbs(0)
+        :
+#ifdef HAVE_MEDIAPLAYER   
+          videoThumbs(0),
+#endif
+          controller(0)
     {
     }
 
@@ -76,10 +82,13 @@ public:
 
     QList<QUrl>              pendingItems;
 
+#ifdef HAVE_MEDIAPLAYER   
+    VideoThumbnailerJob*     videoThumbs;
+#endif
+
     CameraController*        controller;
 
     QHash<QUrl, CamItemInfo> videoJobHash;
-    VideoThumbnailerJob*     videoThumbs;
 };
 
 // --------------------------------------------------------
@@ -99,6 +108,8 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
 
     setCacheSize(200);
 
+#ifdef HAVE_MEDIAPLAYER 
+
     d->videoThumbs    = new VideoThumbnailerJob(this);
     d->videoThumbs->setThumbnailSize(ThumbnailSize::Huge);
     d->videoThumbs->setCreateStrip(true);
@@ -111,12 +122,17 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
 
     connect(d->videoThumbs, SIGNAL(signalThumbnailJobFinished()),
             this, SLOT(slotVideoThumbnailFinished()));
+
+#endif    
 }
 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
     clearCache();
+
+#ifdef HAVE_MEDIAPLAYER 
     delete d->videoThumbs;
+#endif
 }
 
 CameraController* CameraThumbsCtrl::cameraController() const
@@ -182,8 +198,15 @@ void CameraThumbsCtrl::slotThumbInfoFailed(const QString& /*folder*/, const QStr
     if (d->controller->cameraDriverType() == DKCamera::UMSDriver)
     {
         putItemToCache(info.url(), info, QPixmap());
+
+#ifdef HAVE_MEDIAPLAYER
         d->videoJobHash.insert(info.url(), info);
         d->videoThumbs->addItems(QStringList() << info.url().toLocalFile());
+#else
+        qDebug(DIGIKAM_IMPORTUI_LOG) << "Cannot get video thumb for " << info.url().toLocalFile();
+        qDebug(DIGIKAM_IMPORTUI_LOG) << "Video support is not available";
+        slotVideoThumbnailFailed(info.url().toLocalFile());
+#endif
     }
     else
     {

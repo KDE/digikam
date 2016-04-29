@@ -43,6 +43,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "dbengineparameters.h"
 #include "iccmanager.h"
 #include "iccprofile.h"
@@ -52,7 +53,10 @@
 #include "thumbnailsize.h"
 #include "thumbnailtask.h"
 #include "thumbnailcreator.h"
-#include "videothumbnailerjob.h"
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "videothumbnailerjob.h"
+#endif
 
 namespace Digikam
 {
@@ -115,9 +119,12 @@ public:
         wantPixmap         = true;
         highlight          = true;
         sendSurrogate      = true;
-        creator            = 0;
-        videoThumbs        = 0;
         notifiedForResults = false;
+        creator            = 0;
+
+#ifdef HAVE_MEDIAPLAYER 
+        videoThumbs        = 0;
+#endif
     }
 
     bool                               wantPixmap;
@@ -133,7 +140,10 @@ public:
     QMutex                             resultsMutex;
 
     QHash<QString, LoadingDescription> videoJobHash;
+
+#ifdef HAVE_MEDIAPLAYER    
     VideoThumbnailerJob*               videoThumbs;
+#endif
 
     QList<LoadingDescription>          lastDescriptions;
 
@@ -172,6 +182,8 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
     connect(this, SIGNAL(thumbnailsAvailable()),
             this, SLOT(slotThumbnailsAvailable()));
 
+#ifdef HAVE_MEDIAPLAYER    
+
     d->videoThumbs               = new VideoThumbnailerJob(this);
     d->videoThumbs->setCreateStrip(true);
 
@@ -183,12 +195,18 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
 
     connect(d->videoThumbs, SIGNAL(signalThumbnailJobFinished()),
             this, SLOT(slotVideoThumbnailFinished()));
+
+#endif
 }
 
 ThumbnailLoadThread::~ThumbnailLoadThread()
 {
     shutDown();
+
+#ifdef HAVE_MEDIAPLAYER
     delete d->videoThumbs;
+#endif
+
     delete d->creator;
     delete d;
 }
@@ -785,9 +803,15 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 
 void ThumbnailLoadThread::loadVideoThumbnail(const LoadingDescription& description)
 {
+#ifdef HAVE_MEDIAPLAYER
     d->videoJobHash.insert(description.filePath, description);
     d->videoThumbs->setThumbnailSize(d->creator->storedSize());
     d->videoThumbs->addItems(QStringList() << description.filePath);
+#else
+    qDebug(DIGIKAM_GENERAL_LOG) << "Cannot get video thumb for " << description.filePath;
+    qDebug(DIGIKAM_GENERAL_LOG) << "Video support is not available";
+    slotVideoThumbnailFailed(description.filePath);
+#endif
 }
 
 void ThumbnailLoadThread::slotVideoThumbnailDone(const QString& item, const QImage& img)
