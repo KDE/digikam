@@ -140,7 +140,7 @@ void VideoThumbnailerJob::processOne()
 {
     if (!d->todo.isEmpty() && d->jobDone)
     {
-       d->condVar.wakeAll();
+        d->condVar.wakeAll();
     }
     else if (d->todo.isEmpty())
     {
@@ -154,15 +154,12 @@ void VideoThumbnailerJob::run()
     {
         QMutexLocker lock(&d->mutex);
 
-        if (d->vthumb->isReady() && d->jobDone)
+        if (d->vthumb->isReady() && d->jobDone && !d->todo.isEmpty())
         {
-            if (!d->todo.isEmpty())
-            {
-                d->jobDone = false;
-                d->currentFile = d->todo.takeFirst();
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
-                emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
-            }
+            d->jobDone = false;
+            d->currentFile = d->todo.takeFirst();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
+            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
         }
         else
         {

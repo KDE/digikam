@@ -75,7 +75,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     d->isReady     = false;
     d->createStrip = strip;
 
-    if (size <= 0)
+    if (size < ThumbnailSize::Step || size > ThumbnailSize::HD)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid video thumbnail size : " << size;
         d->thumbSize = ThumbnailSize::Huge;
@@ -95,9 +95,9 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     QMimeDatabase mimeDB;
 
-    if (!mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video")))
+    if (!mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video/")))
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not a video from " << file;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video from " << file;
         d->isReady = true;
         emit signalThumbnailFailed(file);
         return;

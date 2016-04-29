@@ -529,7 +529,7 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     : QObject(parent),
       createStrip(false),
       thumbSize(ThumbnailSize::Huge),
-      isReady(true),
+      isReady(false),
       player(0),
       probe(0),
       media(0),
@@ -549,7 +549,9 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     connect(probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
 
-    strip = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
+    strip   = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
+
+    isReady = true;
 }
 
 QString VideoThumbnailer::Private::fileName() const
