@@ -885,6 +885,61 @@ void ShowFoto::slotSavingStarted(const QString& filename)
     d->fileOpenAction->setEnabled(false);
 }
 
+void ShowFoto::moveFile()
+{
+    /*
+     *            / -> moveLocalFile()                           \
+     * moveFile()                                                 ->     movingSaveFileFinished()
+     *            \ -> KIOWrapper::move() -> slotKioMoveFinished /        |                   |
+     *
+     *                                                          finishSaving(true)  save...IsComplete()
+     */
+
+    qCDebug(DIGIKAM_SHOWFOTO_LOG) << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
+
+    // how to move a file depends on if the file is on a local system or not.
+
+    if (m_savingContext.destinationURL.isLocalFile())
+    {
+        qCDebug(DIGIKAM_SHOWFOTO_LOG) << "moving a local file";
+        EditorWindow::moveFile();
+    }
+    else
+    {
+        // for remote destinations use kio to move the temp file over there
+        // do not care for versioning here, atm not supported
+
+        qCDebug(DIGIKAM_SHOWFOTO_LOG) << "moving a remote file via KIO";
+
+        delete d->kioWrapper;
+        d->kioWrapper = new KIOWrapper();
+
+        if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
+        {
+            d->kioWrapper->move(DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
+                                DMetadata::sidecarUrl(m_savingContext.destinationURL)
+            );
+        }
+
+        d->kioWrapper->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
+                            m_savingContext.destinationURL);
+
+        connect(d->kioWrapper, SIGNAL(signalError(QString)),
+                this, SLOT(slotKioMoveFinished(QString)));
+    }
+}
+
+void ShowFoto::slotKioMoveFinished(const QString &errMsg)
+{
+    if (!errMsg.isEmpty())
+    {
+        QMessageBox::critical(this, i18n("Error Saving File"),
+                              i18n("Failed to save file: %1", errMsg));
+    }
+
+    movingSaveFileFinished(!errMsg.isEmpty());
+}
+
 void ShowFoto::finishSaving(bool success)
 {
     Digikam::EditorWindow::finishSaving(success);

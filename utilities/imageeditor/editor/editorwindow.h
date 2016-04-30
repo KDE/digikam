@@ -198,7 +198,7 @@ protected:
     bool checkPermissions(const QUrl& url);
     bool checkOverwrite(const QUrl& url);
     bool moveLocalFile(const QString& src, const QString& dest);
-    void moveFile();
+    void movingSaveFileFinished(bool successful);
     void colorManage();
     void execSavingProgressDialog();
 
@@ -216,10 +216,10 @@ protected:
     VersionFileOperation saveAsVersionFileOperation(const QUrl& url, const QUrl& saveLocation, const QString& format);
     VersionFileOperation saveInFormatVersionFileOperation(const QUrl& url, const QString& format);
 
-
     virtual bool hasOriginalToRestore();
     virtual DImageHistory resolvedImageHistory(const DImageHistory& history);
 
+    virtual void moveFile();
     virtual void finishSaving(bool success);
 
     virtual void readSettings();
@@ -321,7 +321,6 @@ private Q_SLOTS:
     void slotDecreaseZoom();
     void slotCloseTool();
     void slotApplyTool();
-    void slotKioMoveFinished(const QString& errMsg);
     void slotUndoStateChanged();
     void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
@@ -371,8 +370,6 @@ private:
      * @return The valid extension which could be found, or a null string
      */
     QString selectValidSavingFormat(const QUrl& targetUrl);
-
-    void movingSaveFileFinished(bool successful);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);
 

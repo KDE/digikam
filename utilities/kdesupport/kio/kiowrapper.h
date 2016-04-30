@@ -40,7 +40,6 @@
 
 class KJob;
 class KService;
-class KFileItem;
 
 namespace Digikam
 {
@@ -51,17 +50,13 @@ class DIGIKAM_EXPORT KIOWrapper : public QObject
 
 public:
 
-    // TODO : how to drop these one ?
+    // Only used by Showfoto.cpp
+    //TODO : how to drop these one ?
 
     KIOWrapper();
 
-    // Used by editorwindow.cpp
     void move(const QUrl& src, const QUrl& dest);
-
-    // Used by showfoto.cpp
     void del(const QUrl& url);
-
-    // Used by showfoto.cpp
     void trash(const QUrl& url);
 
 Q_SIGNALS:

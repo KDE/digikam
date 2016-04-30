@@ -79,6 +79,7 @@ private:
 
     bool save();
     bool saveAs();
+    void moveFile();
     void finishSaving(bool success);
     QUrl saveDestinationUrl();
     bool saveNewVersion();
@@ -116,6 +117,7 @@ private Q_SLOTS:
     void slotOpenFilesInFolder();
     void slotDroppedUrls(const QList<QUrl>& droppedUrls);
     void slotDeleteCurrentItem();
+    void slotKioMoveFinished(const QString& errMsg);
 
     void slotChanged();
     void slotUpdateItemInfo();

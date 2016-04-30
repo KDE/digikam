@@ -193,7 +193,6 @@ EditorWindow::~EditorWindow()
     delete m_IOFileSettings;
     delete d->toolIface;
     delete d->exposureSettings;
-    delete d->kioWrapper;
     delete d;
 }
 
@@ -1235,7 +1234,7 @@ bool EditorWindow::promptForOverWrite()
     }
     else
     {
-        // in this case kio handles the overwrite request
+        // in this case wil will handles the overwrite request
         return true;
     }
 }
@@ -1726,13 +1725,6 @@ void EditorWindow::slotSavingFinished(const QString& filename, bool success)
             return;
         }
 
-        /*
-         *            / -> moveLocalFile()                           \
-         * moveFile()                                                 ->     movingSaveFileFinished()
-         *            \ -> KIOWrapper::move() -> slotKioMoveFinished /        |              |
-         *
-         *                                                    finishSaving(true)  save...IsComplete()
-         */
         moveFile();
 
     }
@@ -2379,78 +2371,37 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
 
 void EditorWindow::moveFile()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
+    // Move local file.
 
-    // how to move a file depends on if the file is on a local system or not.
-    if (m_savingContext.destinationURL.isLocalFile())
+    if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "moving a local file";
-
-        if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
+        // check if we need to move the current file to an intermediate name
+        if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
         {
-            // check if we need to move the current file to an intermediate name
-            if (m_savingContext.versionFileOperation.tasks & VersionFileOperation::MoveToIntermediate)
-            {
-                //qCDebug(DIGIKAM_GENERAL_LOG) << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to" <<
-                //       m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath() <<
-                moveLocalFile(m_savingContext.srcURL.toLocalFile(),
-                              m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath());
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "MoveToIntermediate: Moving " << m_savingContext.srcURL.toLocalFile() << "to"
+            //                             << m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath()
+            moveLocalFile(m_savingContext.srcURL.toLocalFile(),
+                          m_savingContext.versionFileOperation.intermediateForLoadedFile.filePath());
 
-                LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
-                ThumbnailLoadThread::deleteThumbnail(m_savingContext.destinationURL.toLocalFile());
-            }
+            LoadingCacheInterface::fileChanged(m_savingContext.destinationURL.toLocalFile());
+            ThumbnailLoadThread::deleteThumbnail(m_savingContext.destinationURL.toLocalFile());
         }
-
-        bool moveSuccessful = moveLocalFile(m_savingContext.saveTempFileName,
-                                            m_savingContext.destinationURL.toLocalFile());
-
-        if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
-        {
-            if (moveSuccessful &&
-                m_savingContext.versionFileOperation.tasks & VersionFileOperation::SaveAndDelete)
-            {
-                QFile file(m_savingContext.versionFileOperation.loadedFile.filePath());
-                file.remove();
-            }
-        }
-
-        movingSaveFileFinished(moveSuccessful);
-    }
-    else
-    {
-        // for remote destinations use kio to move the temp file over there
-        // do not care for versioning here, atm not supported
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "moving a remote file via KIO";
-
-        delete d->kioWrapper;
-        d->kioWrapper = new KIOWrapper();
-
-        if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
-        {
-            d->kioWrapper->move(
-                    DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
-                    DMetadata::sidecarUrl(m_savingContext.destinationURL)
-            );
-        }
-
-        d->kioWrapper->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
-                            m_savingContext.destinationURL);
-
-        connect(d->kioWrapper, SIGNAL(signalError(QString)),
-                this, SLOT(slotKioMoveFinished(QString)));
-    }
-}
-
-void EditorWindow::slotKioMoveFinished(const QString &errMsg)
-{
-    if (!errMsg.isEmpty())
-    {
-        QMessageBox::critical(this, i18n("Error Saving File"),
-                              i18n("Failed to save file: %1", errMsg));
     }
 
-    movingSaveFileFinished(!errMsg.isEmpty());
+    bool moveSuccessful = moveLocalFile(m_savingContext.saveTempFileName,
+                                        m_savingContext.destinationURL.toLocalFile());
+
+    if (m_savingContext.executedOperation == SavingContext::SavingStateVersion)
+    {
+        if (moveSuccessful &&
+            m_savingContext.versionFileOperation.tasks & VersionFileOperation::SaveAndDelete)
+        {
+            QFile file(m_savingContext.versionFileOperation.loadedFile.filePath());
+            file.remove();
+        }
+    }
+
+    movingSaveFileFinished(moveSuccessful);
 }
 
 void EditorWindow::slotDiscardChanges()

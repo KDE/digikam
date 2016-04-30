@@ -34,11 +34,10 @@
 
 #include <kio/job.h>
 #include <kio/copyjob.h>
-#include <kio/mkdirjob.h>
 #include <kio/deletejob.h>
-#include <krun.h>
 #include <kio_version.h>
 #include <kjobwidgets.h>
+#include <krun.h>
 
 namespace Digikam
 {

@@ -42,7 +42,6 @@
 #include "digikam_globals.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
-#include "kiowrapper.h"
 
 class QAction;
 class QDialog;
@@ -109,8 +108,7 @@ public:
         zoomBar(0),
         previewToolBar(0),
         exposureSettings(0),
-        toolIface(0),
-        kioWrapper(0)
+        toolIface(0)
     {
     }
 
@@ -204,7 +202,6 @@ public:
     QList<int>                   fullscreenSizeBackup;
 
     QMap<QString, KService::Ptr> servicesMap;
-    KIOWrapper*                  kioWrapper;
 };
 
 const QString EditorWindow::Private::configAutoZoomEntry(QLatin1String("AutoZoom"));
