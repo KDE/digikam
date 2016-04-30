@@ -11,6 +11,7 @@ General            : Welcome Page view re-writed to support selected best backgr
 General            : Replacing annoying KIOSlave listing and scanning methods with new threads based implementation.
 General            : Isolating KIO calls in KIOWrapper to be able to create a pure Qt digiKam in the future.
 General            : Add embedded trash support for each collection instead desktop trash.
+General            : Thumbs and preview video support is now delegate to QT5Multimedia.
 
 Database           : Fully integration of face recognition database with Mysql support.
 Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.
