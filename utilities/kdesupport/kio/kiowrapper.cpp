@@ -32,11 +32,7 @@
 
 // KDE includes
 
-#include <kio/job.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
 #include <kio_version.h>
-#include <kjobwidgets.h>
 #include <krun.h>
 
 namespace Digikam
