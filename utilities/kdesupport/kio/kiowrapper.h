@@ -67,7 +67,7 @@ public:
 Q_SIGNALS:
 
     // Emitted by slotKioJobResult()
-    void error(const QString& errMsg);
+    void signalError(const QString& errMsg);
 
 private Q_SLOTS:
 

@@ -994,7 +994,7 @@ void ShowFoto::slotDeleteCurrentItem()
             d->kioWrapper = new KIOWrapper();
             d->kioWrapper->del(urlCurrent);
 
-            connect(d->kioWrapper, SIGNAL(error(QString)),
+            connect(d->kioWrapper, SIGNAL(signalError(QString)),
                     this, SLOT(slotDeleteCurrentItemResult(QString)));
         }
     }
@@ -1004,7 +1004,7 @@ void ShowFoto::slotDeleteCurrentItem()
         d->kioWrapper = new KIOWrapper();
         d->kioWrapper->trash(urlCurrent);
 
-        connect(d->kioWrapper, SIGNAL(error(QString)),
+        connect(d->kioWrapper, SIGNAL(signalError(QString)),
                 this, SLOT(slotDeleteCurrentItemResult(QString)));
     }
 }

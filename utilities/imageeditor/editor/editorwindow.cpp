@@ -2437,7 +2437,7 @@ void EditorWindow::moveFile()
         d->kioWrapper->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
                             m_savingContext.destinationURL);
 
-        connect(d->kioWrapper, SIGNAL(error(QString)),
+        connect(d->kioWrapper, SIGNAL(signalError(QString)),
                 this, SLOT(slotKioMoveFinished(QString)));
     }
 }

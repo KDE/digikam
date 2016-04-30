@@ -87,11 +87,11 @@ void KIOWrapper::slotKioJobResult(KJob* job)
 {
     if (job->error() != 0)
     {
-        emit error(job->errorString());
+        emit signalError(job->errorString());
     }
     else
     {
-        emit error(QString());
+        emit signalError(QString());
     }
 }
 
