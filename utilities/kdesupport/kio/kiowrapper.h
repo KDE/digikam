@@ -81,9 +81,6 @@ public: // ---------------------------------------------------------------------
     // Used by showfoto.cpp
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
 
-    // Used by albummanager.cpp
-    static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
-
 public: // ------------------------------------------------------------------------------------------------------------
 
     // TODO: Move these methods in a specific Desktop service wrapper.
