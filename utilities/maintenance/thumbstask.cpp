@@ -38,10 +38,14 @@ public:
 
     Private()
     {
+        cancel  = false;
         catcher = 0;
     }
 
     QString                path;
+
+    bool                   cancel;
+
     ThumbnailImageCatcher* catcher;
 };
 
@@ -60,6 +64,9 @@ ThumbsTask::ThumbsTask()
 ThumbsTask::~ThumbsTask()
 {
     slotCancel();
+
+    delete d->catcher->thread();
+    delete d->catcher;
     delete d;
 }
 
@@ -73,10 +80,16 @@ void ThumbsTask::slotCancel()
 {
     d->catcher->thread()->stopAllTasks();
     d->catcher->cancel();
+    d->cancel = true;
 }
 
 void ThumbsTask::run()
 {
+    if (d->cancel)
+    {
+        return;
+    }
+
     d->catcher->setActive(true);
 
     d->catcher->thread()->find(ThumbnailIdentifier(d->path));

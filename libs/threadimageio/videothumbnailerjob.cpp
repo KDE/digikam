@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QImage>
-#include <QDebug>
 #include <QMutex>
 #include <QWaitCondition>
 
@@ -33,6 +32,7 @@
 
 #include "videothumbnailer.h"
 #include "thumbnailsize.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -140,7 +140,7 @@ void VideoThumbnailerJob::processOne()
 {
     if (!d->todo.isEmpty() && d->jobDone)
     {
-       d->condVar.wakeAll();
+        d->condVar.wakeAll();
     }
     else if (d->todo.isEmpty())
     {
@@ -154,15 +154,12 @@ void VideoThumbnailerJob::run()
     {
         QMutexLocker lock(&d->mutex);
 
-        if (d->vthumb->isReady() && d->jobDone)
+        if (d->vthumb->isReady() && d->jobDone && !d->todo.isEmpty())
         {
-            if (!d->todo.isEmpty())
-            {
-                d->jobDone = false;
-                d->currentFile = d->todo.takeFirst();
-                qDebug() << "Request to get thumbnail for " << d->currentFile;
-                emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
-            }
+            d->jobDone = false;
+            d->currentFile = d->todo.takeFirst();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
+            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
         }
         else
         {
@@ -178,7 +175,7 @@ void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& i
         return;
     }
 
-    qDebug() << "Video thumbnail extracted for " << file << " :: " << img;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
     emit signalThumbnailDone(file, img);
     QMutexLocker lock(&d->mutex);
     d->jobDone = true;
@@ -192,7 +189,7 @@ void VideoThumbnailerJob::slotThumbnailFailed(const QString& file)
         return;
     }
 
-    qDebug() << "Failed to extract video thumbnail for " << file;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
     emit signalThumbnailFailed(file);
     QMutexLocker lock(&d->mutex);
     d->jobDone = true;

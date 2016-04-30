@@ -22,13 +22,10 @@
 
 #include "videothumbnailer_p.h"
 
-// Qt includes
-
-#include <QDebug>
-
 // Local includes
 
 #include "thumbnailsize.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -532,7 +529,7 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     : QObject(parent),
       createStrip(false),
       thumbSize(ThumbnailSize::Huge),
-      isReady(true),
+      isReady(false),
       player(0),
       probe(0),
       media(0),
@@ -552,7 +549,9 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     connect(probe, SIGNAL(videoFrameProbed(QVideoFrame)),
             this, SLOT(slotProcessframe(QVideoFrame)));
 
-    strip = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
+    strip   = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
+
+    isReady = true;
 }
 
 QString VideoThumbnailer::Private::fileName() const
@@ -597,7 +596,7 @@ QImage VideoThumbnailer::Private::imageFromVideoFrame(const QVideoFrame& f) cons
 
         if (!convert)
         {
-            qDebug() << "Unsupported frame pixel format" << frm.pixelFormat();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Unsupported frame pixel format" << frm.pixelFormat();
         }
         else
         {
@@ -624,7 +623,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         {
             if (!player->isVideoAvailable())
             {
-                qDebug() << "Video stream is not available for " << fileName();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Video stream is not available for " << fileName();
                 isReady = true;
                 player->setMedia(QMediaContent());
                 dd->emit signalThumbnailFailed(filePath());
@@ -642,7 +641,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         {
             if (!player->isSeekable())
             {
-                qDebug() << "Video seek is not available for " << fileName();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Video seek is not available for " << fileName();
                 isReady = true;
                 player->setMedia(QMediaContent());
                 dd->emit signalThumbnailFailed(filePath());
@@ -651,26 +650,26 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
 
             if (player->duration() <= 0)
             {
-                qDebug() << "Video has no valid duration for " << fileName();
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Video has no valid duration for " << fileName();
                 isReady = true;
                 player->setMedia(QMediaContent());
                 dd->emit signalThumbnailFailed(filePath());
                 return;
             }
 
-            qDebug() << "Video duration for " << fileName() << "is " << player->duration() << " seconds";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Video duration for " << fileName() << "is " << player->duration() << " seconds";
 
             position = (qint64)(player->duration() * 0.2);
 
             player->setPosition(position);    // Seek to 20% of the media to take a thumb.
 
-            qDebug() << "Trying to get thumbnail from " << fileName() << " at position " << position;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << fileName() << " at position " << position;
 
             break;
         }
         case QMediaPlayer::InvalidMedia:
         {
-            qDebug() << "Video cannot be decoded for " << fileName();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Video cannot be decoded for " << fileName();
             isReady = true;
             player->setMedia(QMediaContent());
             dd->emit signalThumbnailFailed(filePath());
@@ -682,7 +681,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
 
 void VideoThumbnailer::Private::slotHandlePlayerError()
 {
-    qDebug() << "Problem while video data extraction from " << fileName();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Problem while video data extraction from " << fileName();
 }
 
 void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
@@ -692,7 +691,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     {
         if (++errorCount > 1000)
         {
-            qDebug() << "Error: Video data are corrupted from " << fileName();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video data are corrupted from " << fileName();
             isReady = true;
             player->setMedia(QMediaContent());
             dd->emit signalThumbnailFailed(filePath());
@@ -705,12 +704,12 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
         }
     }
 
-    qDebug() << "Video frame extraction from " << fileName()
-             << " at position " << position;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame extraction from " << fileName()
+                                 << " at position " << position;
 
     if (!frm.isValid())
     { 
-        qDebug() << "Error: Video frame is not valid.";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video frame is not valid.";
         isReady = true;
         player->setMedia(QMediaContent());
         dd->emit signalThumbnailFailed(filePath());
@@ -741,7 +740,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
             }
         }
 
-        qDebug() << "Video frame extracted with size " << img.size();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame extracted with size " << img.size();
 
         isReady = true;
         player->setMedia(QMediaContent());
@@ -749,7 +748,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     }
     else
     {
-        qDebug() << "Video frame format is not supported: " << frm;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame format is not supported: " << frm;
 
         isReady = true;
         player->setMedia(QMediaContent());

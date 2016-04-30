@@ -81,7 +81,7 @@ void MetadataTask::slotCancel()
 
 void MetadataTask::run()
 {
-    if(d->cancel)
+    if (d->cancel)
     {
         return;
     }
