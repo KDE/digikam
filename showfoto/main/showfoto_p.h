@@ -40,7 +40,6 @@
 #include "showfotodelegate.h"
 #include "showfotosettings.h"
 #include "showfotodragdrophandler.h"
-#include "kiowrapper.h"
 
 namespace ShowFoto
 {
@@ -50,7 +49,6 @@ class ShowFoto::Private
 public:
 
     Private() :
-        deleteItem2Trash(true),
         validIccPath(true),
         droppedUrls(false),
         imagePluginsLoaded(false),
@@ -63,7 +61,6 @@ public:
         dDHandler(0),
         filterModel(0),
         thumbLoadThread(0),
-        kioWrapper(0),
         thumbBar(0),
         thumbBarDock(0),
         normalDelegate(0),
@@ -73,7 +70,6 @@ public:
     {
     }
 
-    bool                             deleteItem2Trash;
     bool                             validIccPath;
     bool                             droppedUrls;
     bool                             imagePluginsLoaded;
@@ -84,7 +80,6 @@ public:
     QAction*                         fileOpenAction;
     QUrl                             currentLoadedUrl;
     QUrl                             lastOpenedDirectory;
-    QString                          tempFilePath;
     QAction*                         openFilesInFolderAction;
     QAction*                         first;
     QDir                             dir;
@@ -94,7 +89,6 @@ public:
     ShowfotoDragDropHandler*         dDHandler;
     ShowfotoFilterModel*             filterModel;
     Digikam::ThumbnailLoadThread*    thumbLoadThread;
-    Digikam::KIOWrapper*             kioWrapper;
     ShowfotoThumbnailBar*            thumbBar;
     Digikam::ThumbBarDock*           thumbBarDock;
     ShowfotoNormalDelegate*          normalDelegate;

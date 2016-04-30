@@ -42,58 +42,6 @@
 namespace Digikam
 {
 
-KIOWrapper::KIOWrapper()
-{
-}
-
-bool KIOWrapper::fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget, QWidget* const widget)
-{
-    KIO::FileCopyJob* const fileCopyJob = KIO::file_copy(src, dest, KIO::Overwrite);
-
-    if (withKJobWidget)
-    {
-        KJobWidgets::setWindow(fileCopyJob, widget);
-    }
-
-    return fileCopyJob->exec();
-}
-
-void KIOWrapper::move(const QUrl& src, const QUrl& dest)
-{
-    KIO::Job* const job = KIO::move(src, dest);
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotKioJobResult(KJob*)));
-}
-
-void KIOWrapper::del(const QUrl& url)
-{
-    KIO::Job* const job = KIO::del(url);
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotKioJobResult(KJob*)));
-}
-
-void KIOWrapper::trash(const QUrl& url)
-{
-    KIO::Job* const job = KIO::trash(url);
-
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotKioJobResult(KJob*)) );
-}
-
-void KIOWrapper::slotKioJobResult(KJob* job)
-{
-    if (job->error() != 0)
-    {
-        emit signalError(job->errorString());
-    }
-    else
-    {
-        emit signalError(QString());
-    }
-}
-
 bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* const window)
 {
 #if KIO_VERSION < QT_VERSION_CHECK(5,6,0)

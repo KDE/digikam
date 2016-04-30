@@ -116,7 +116,6 @@ extern "C"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
 #include "showfoto_p.h"
-#include "kiowrapper.h"
 #include "dexpanderbox.h"
 
 namespace ShowFoto
@@ -210,11 +209,6 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
 ShowFoto::~ShowFoto()
 {
-    if (!d->tempFilePath.isEmpty())
-    {
-        QFile::remove(d->tempFilePath);
-    }
-
     unLoadImagePlugins();
 
     delete m_canvas;
@@ -229,7 +223,6 @@ ShowFoto::~ShowFoto()
     delete d->thumbBar;
     delete d->rightSideBar;
     delete d->thumbLoadThread;
-    delete d->kioWrapper;
     delete d;
 }
 
@@ -476,19 +469,8 @@ void ShowFoto::applySettings()
         qApp->setStyle(newStyle);
     }
 
-    // Current image deleted go to trash ?
-    d->deleteItem2Trash = d->settings->getDeleteItem2Trash();
-
-    if (d->deleteItem2Trash)
-    {
-        m_fileDeleteAction->setIcon(QIcon::fromTheme(QLatin1String("user-trash")));
-        m_fileDeleteAction->setText(i18nc("Non-pluralized", "Move to Trash"));
-    }
-    else
-    {
-        m_fileDeleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
-        m_fileDeleteAction->setText(i18n("Delete File"));
-    }
+    m_fileDeleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));
+    m_fileDeleteAction->setText(i18n("Delete File"));
 
     d->thumbBar->setToolTipEnabled(d->settings->getShowToolTip());
 
@@ -502,7 +484,7 @@ void ShowFoto::slotOpenFile()
         return;
     }
 
-    QList<QUrl> urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);    
+    QList<QUrl> urls = Digikam::ImageDialog::getImageURLs(this, d->lastOpenedDirectory);
     openUrls(urls);
 }
 
@@ -571,19 +553,12 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
     }
     else
     {
-        if (!d->tempFilePath.isEmpty())
-        {
-            QFile::remove(d->tempFilePath);
-        }
-
-        QTemporaryFile tmpFile;
-        tmpFile.setAutoRemove(false);
-        tmpFile.open();
-
-        localFile       = tmpFile.fileName();
-        d->tempFilePath = localFile;
-
-        KIOWrapper::fileCopy(info.url, QUrl::fromLocalFile(localFile), true, this);
+        QMessageBox::critical(this, i18n("Error Loading File"),
+                              i18n("Failed to load file: %1\n"
+                                   "Remote file handling is not supported",
+                                   info.url.fileName())
+                             );
+        return;
     }
 
     d->currentLoadedUrl = info.url;
@@ -888,16 +863,12 @@ void ShowFoto::slotSavingStarted(const QString& filename)
 void ShowFoto::moveFile()
 {
     /*
-     *            / -> moveLocalFile()                           \
-     * moveFile()                                                 ->     movingSaveFileFinished()
-     *            \ -> KIOWrapper::move() -> slotKioMoveFinished /        |                   |
-     *
-     *                                                          finishSaving(true)  save...IsComplete()
+     * moveFile() -> moveLocalFile() ->  movingSaveFileFinished()
+     *                                     |               |
+     *                            finishSaving(true)  save...IsComplete()
      */
 
     qCDebug(DIGIKAM_SHOWFOTO_LOG) << m_savingContext.destinationURL << m_savingContext.destinationURL.isLocalFile();
-
-    // how to move a file depends on if the file is on a local system or not.
 
     if (m_savingContext.destinationURL.isLocalFile())
     {
@@ -906,38 +877,11 @@ void ShowFoto::moveFile()
     }
     else
     {
-        // for remote destinations use kio to move the temp file over there
-        // do not care for versioning here, atm not supported
-
-        qCDebug(DIGIKAM_SHOWFOTO_LOG) << "moving a remote file via KIO";
-
-        delete d->kioWrapper;
-        d->kioWrapper = new KIOWrapper();
-
-        if (DMetadata::hasSidecar(m_savingContext.saveTempFileName))
-        {
-            d->kioWrapper->move(DMetadata::sidecarUrl(m_savingContext.saveTempFileName),
-                                DMetadata::sidecarUrl(m_savingContext.destinationURL)
-            );
-        }
-
-        d->kioWrapper->move(QUrl::fromLocalFile(m_savingContext.saveTempFileName),
-                            m_savingContext.destinationURL);
-
-        connect(d->kioWrapper, SIGNAL(signalError(QString)),
-                this, SLOT(slotKioMoveFinished(QString)));
-    }
-}
-
-void ShowFoto::slotKioMoveFinished(const QString &errMsg)
-{
-    if (!errMsg.isEmpty())
-    {
         QMessageBox::critical(this, i18n("Error Saving File"),
-                              i18n("Failed to save file: %1", errMsg));
+                              i18n("Failed to save file: %1",
+                              i18n("Remote file handling is not supported")
+                            ));
     }
-
-    movingSaveFileFinished(!errMsg.isEmpty());
 }
 
 void ShowFoto::finishSaving(bool success)
@@ -1033,63 +977,43 @@ void ShowFoto::slotDeleteCurrentItem()
 {
     QUrl urlCurrent(d->thumbBar->currentUrl());
 
-    if (!d->deleteItem2Trash)
-    {
-        QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?",
-                             urlCurrent.fileName()));
+    QString warnMsg(i18n("About to delete file \"%1\"\nAre you sure?",
+                         urlCurrent.fileName()));
 
-        if (QMessageBox::warning(this, qApp->applicationName(), warnMsg, QMessageBox::Apply | QMessageBox::Abort)
-            !=  QMessageBox::Apply)
+    if (QMessageBox::warning(this, qApp->applicationName(), warnMsg, QMessageBox::Apply | QMessageBox::Abort)
+        !=  QMessageBox::Apply)
+    {
+        return;
+    }
+    else
+    {
+        bool ret = QFile::remove(urlCurrent.toLocalFile());
+
+        if (!ret)
         {
+            QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot delete \"%1\"", urlCurrent.fileName()));
             return;
+        }
+
+        // No error, remove item in thumbbar.
+        d->model->removeIndex(d->thumbBar->currentIndex());
+
+        // Disable menu actions and SideBar if no current image.
+
+        d->itemsNb = d->thumbBar->showfotoItemInfos().size();
+
+        if ( d->itemsNb == 0 )
+        {
+            slotUpdateItemInfo();
+            toggleActions(false);
+            m_canvas->load(QString(), m_IOFileSettings);
         }
         else
         {
-            delete d->kioWrapper;
-            d->kioWrapper = new KIOWrapper();
-            d->kioWrapper->del(urlCurrent);
+            // If there is an image after the deleted one, make that selected.
 
-            connect(d->kioWrapper, SIGNAL(signalError(QString)),
-                    this, SLOT(slotDeleteCurrentItemResult(QString)));
+            slotOpenUrl(d->thumbBar->currentInfo());
         }
-    }
-    else
-    {
-        delete d->kioWrapper;
-        d->kioWrapper = new KIOWrapper();
-        d->kioWrapper->trash(urlCurrent);
-
-        connect(d->kioWrapper, SIGNAL(signalError(QString)),
-                this, SLOT(slotDeleteCurrentItemResult(QString)));
-    }
-}
-
-void ShowFoto::slotDeleteCurrentItemResult(const QString& errMsg)
-{
-    if (!errMsg.isEmpty())
-    {
-        QMessageBox::critical(this, qApp->applicationName(), errMsg);
-        return;
-    }
-
-    // No error, remove item in thumbbar.
-    d->model->removeIndex(d->thumbBar->currentIndex());
-
-    // Disable menu actions and SideBar if no current image.
-
-    d->itemsNb = d->thumbBar->showfotoItemInfos().size();
-
-    if ( d->itemsNb == 0 )
-    {
-        slotUpdateItemInfo();
-        toggleActions(false);
-        m_canvas->load(QString(), m_IOFileSettings);
-    }
-    else
-    {
-        // If there is an image after the deleted one, make that selected.
-
-        slotOpenUrl(d->thumbBar->currentInfo());
     }
 }
 

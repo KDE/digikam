@@ -117,12 +117,9 @@ private Q_SLOTS:
     void slotOpenFilesInFolder();
     void slotDroppedUrls(const QList<QUrl>& droppedUrls);
     void slotDeleteCurrentItem();
-    void slotKioMoveFinished(const QString& errMsg);
 
     void slotChanged();
     void slotUpdateItemInfo();
-
-    void slotDeleteCurrentItemResult(const QString &errMsg);
 
     void slotPrepareToLoad();
     void slotLoadingStarted(const QString& filename);

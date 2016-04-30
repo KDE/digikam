@@ -38,45 +38,15 @@
 
 #include "digikam_export.h"
 
-class KJob;
 class KService;
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT KIOWrapper : public QObject
+class DIGIKAM_EXPORT KIOWrapper
 {
-    Q_OBJECT
 
 public:
-
-    // Only used by Showfoto.cpp
-    //TODO : how to drop these one ?
-
-    KIOWrapper();
-
-    void move(const QUrl& src, const QUrl& dest);
-    void del(const QUrl& url);
-    void trash(const QUrl& url);
-
-Q_SIGNALS:
-
-    // Emitted by slotKioJobResult()
-    void signalError(const QString& errMsg);
-
-private Q_SLOTS:
-
-    // Used by move, del, trash methods
-    void slotKioJobResult(KJob* job);
-
-public: // ------------------------------------------------------------------------------------------------------------
-
-    // TODO : find non KIO equivalents.
-
-    // Used by showfoto.cpp
-    static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
-
-public: // ------------------------------------------------------------------------------------------------------------
 
     // TODO: Move these methods in a specific Desktop service wrapper.
     // Typically, found equivalent methods to run service under OSX and Windows without to use KDE API.

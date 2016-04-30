@@ -64,7 +64,6 @@ public:
         showMimeOverImage(0),
         showCoordinates(0),
         sortReverse(0),
-        useTrash(0),
         sidebarType(0),
         sortOrderComboBox(0),
         applicationStyle(0),
@@ -82,7 +81,6 @@ public:
     QCheckBox*           showMimeOverImage;
     QCheckBox*           showCoordinates;
     QCheckBox*           sortReverse;
-    QCheckBox*           useTrash;
 
     QComboBox*           sidebarType;
     QComboBox*           sortOrderComboBox;
@@ -111,7 +109,6 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* const miscOptionsGroup = new QGroupBox(i18n("Behavior"), panel);
     QVBoxLayout* const gLayout5       = new QVBoxLayout();
 
-    d->useTrash          = new QCheckBox(i18n("&Deleted items should go to the trash"), miscOptionsGroup);
     d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), miscOptionsGroup);
     d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
     d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"), miscOptionsGroup);
@@ -167,8 +164,6 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
-
-    gLayout5->addWidget(d->useTrash);
     gLayout5->addWidget(d->itemCenter);
     gLayout5->addWidget(d->showSplash);
     gLayout5->addWidget(d->showMimeOverImage);
@@ -222,7 +217,6 @@ void SetupMisc::readSettings()
 {
     d->settings = ShowfotoSettings::instance();
 
-    d->useTrash->setChecked(d->settings->getDeleteItem2Trash());
     d->itemCenter->setChecked(d->settings->getItemCenter());
     d->showSplash->setChecked(d->settings->getShowSplash());
     d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());
@@ -236,7 +230,6 @@ void SetupMisc::readSettings()
 
 void SetupMisc::applySettings()
 {
-    d->settings->setDeleteItem2Trash(d->useTrash->isChecked());
     d->settings->setItemCenter(d->itemCenter->isChecked());
     d->settings->setShowSplash(d->showSplash->isChecked());
     d->settings->setShowFormatOverThumbnail(d->showMimeOverImage->isChecked());
