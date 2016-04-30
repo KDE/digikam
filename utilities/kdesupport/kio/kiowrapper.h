@@ -82,9 +82,6 @@ public: // ---------------------------------------------------------------------
     static bool fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget = false, QWidget* const widget = 0);
 
     // Used by albummanager.cpp
-    static bool mkdir(const QUrl& url, bool withKJobWidget = false, QWidget* const widget = 0);
-
-    // Used by albummanager.cpp
     static bool rename(const QUrl& oldUrl, const QUrl& newUrl);
 
 public: // ------------------------------------------------------------------------------------------------------------

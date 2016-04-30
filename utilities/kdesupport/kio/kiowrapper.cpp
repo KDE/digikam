@@ -59,18 +59,6 @@ bool KIOWrapper::fileCopy(const QUrl& src, const QUrl& dest, bool withKJobWidget
     return fileCopyJob->exec();
 }
 
-bool KIOWrapper::mkdir(const QUrl& url, bool withKJobWidget, QWidget* const widget)
-{
-    KIO::Job* const job = KIO::mkdir(url);
-
-    if (withKJobWidget)
-    {
-        KJobWidgets::setWindow(job, widget);
-    }
-
-    return job->exec();
-}
-
 bool KIOWrapper::rename(const QUrl& oldUrl, const QUrl& newUrl)
 {
     KIO::Job* const job = KIO::rename(oldUrl, newUrl, KIO::HideProgressInfo);
