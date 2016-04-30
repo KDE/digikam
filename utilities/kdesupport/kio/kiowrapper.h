@@ -66,7 +66,7 @@ public:
 
 Q_SIGNALS:
 
-    // Internal use only : used by slotKioJobResult()
+    // Emitted by slotKioJobResult()
     void error(const QString& errMsg);
 
 private Q_SLOTS:
