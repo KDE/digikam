@@ -102,7 +102,6 @@ public:
         viewSoftProofAction(0),
         viewUnderExpoAction(0),
         viewOverExpoAction(0),
-        showMenuBarAction(0),
         selectToolsActionView(0),
         ICCSettings(0),
         zoomBar(0),
@@ -184,7 +183,6 @@ public:
     QAction*                     viewSoftProofAction;
     QAction*                     viewUnderExpoAction;
     QAction*                     viewOverExpoAction;
-    QAction*                     showMenuBarAction;
 
     ActionCategorizedView*       selectToolsActionView;
 

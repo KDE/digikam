@@ -2727,7 +2727,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
 
     statusBarMenuAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
-    d->showMenuBarAction->setEnabled(!set);
+    showMenuBarAction()->setEnabled(!set);
     m_showBarAction->setEnabled(!set);
 }
 
