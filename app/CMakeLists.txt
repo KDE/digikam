@@ -80,39 +80,32 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     )
 endif()
 
-include_directories(
-    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 if(ENABLE_MEDIAPLAYER)
-    include_directories(
-        $<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
-        $<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
+                        $<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>
     )
 endif()
 
 if(HAVE_OPENGL)
-    include_directories(
-        $<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 if(KF5Kipi_FOUND)
-    include_directories(
-        $<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>
-    )
+    include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 if(GPHOTO2_FOUND)
@@ -140,7 +133,6 @@ target_link_libraries(digikamcore
                       Qt5::Concurrent
 
                       KF5::Solid
-                      KF5::KIOCore
                       KF5::KIOWidgets
                       KF5::WindowSystem
                       KF5::CoreAddons
@@ -422,7 +414,7 @@ target_link_libraries(digikamgui
                       Qt5::DBus
 
                       KF5::Solid
-                      KF5::KIOCore
+                      KF5::KIOWidgets
                       KF5::Service
                       KF5::WindowSystem
                       KF5::IconThemes
@@ -519,7 +511,7 @@ target_link_libraries(digikam
                       Qt5::Widgets
                       Qt5::DBus
 
-                      KF5::KIOCore
+                      KF5::KIOWidgets
                       KF5::WindowSystem
                       KF5::IconThemes
                       KF5::I18n
