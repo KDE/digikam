@@ -11,6 +11,14 @@ endif (POLICY CMP0063)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/wizard
                     ${CMAKE_CURRENT_SOURCE_DIR}/print
+
+                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+
+                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::CalendarCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(libcalendar_SRCS
@@ -29,13 +37,5 @@ ki18n_wrap_ui(libcalendar_SRCS
               ui/calprogress.ui
 )
 
-include_directories($<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::CalendarCore,INTERFACE_INCLUDE_DIRECTORIES>
-
-                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
-)
 
 add_library(calendar_src OBJECT ${libcalendar_SRCS})
