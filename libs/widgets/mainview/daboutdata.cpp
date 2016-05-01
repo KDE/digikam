@@ -25,13 +25,13 @@
 
 // Qt includes
 
-#include <QString>
 #include <QIcon>
 #include <QAction>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kaboutdata.h>
 
 // Local includes
 

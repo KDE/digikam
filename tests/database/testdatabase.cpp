@@ -34,6 +34,10 @@
 #include <QCommandLineParser>
 #include <QDebug>
 
+// KDE includes
+
+#include <kaboutdata.h>
+
 // Local includes
 
 #include "daboutdata.h"
@@ -56,7 +60,7 @@ int main(int argc, char** argv)
     KAboutData aboutData(QString::fromLatin1("digikam"),
                          QString::fromLatin1("digiKam"), // No need i18n here.
                          digiKamVersion());
-    
+
     QApplication app(argc, argv);
     QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);

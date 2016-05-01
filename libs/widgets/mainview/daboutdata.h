@@ -28,14 +28,13 @@
 
 #include <QObject>
 #include <QUrl>
-
-// KDE includes
-
-#include <kaboutdata.h>
+#include <QString>
 
 // Local includes
 
 #include "digikam_export.h"
+
+class KAboutData;
 
 namespace Digikam
 {
