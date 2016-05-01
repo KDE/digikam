@@ -26,7 +26,6 @@ target_link_libraries(digikamimageplugin_fxfilters
 
                       KF5::I18n
                       KF5::XmlGui
-                      KF5::KIOCore
 )
 
 install(TARGETS digikamimageplugin_fxfilters             DESTINATION ${PLUGIN_INSTALL_DIR})
