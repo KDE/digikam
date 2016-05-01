@@ -37,8 +37,6 @@
 
 #include "digikam_export.h"
 
-class QWidget;
-
 namespace Digikam
 {
 

@@ -36,10 +36,10 @@
 #include <QByteArray>
 #include <QProcess>
 #include <QDir>
-#include <QWidget>
 #include <QFile>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QDesktopServices>
 
 // KDE includes
 
@@ -141,39 +141,9 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls)
         return;
     }
 
-    // Create a map of service depending of type mimes to route and start only one instance of relevant application with all same type mime files.
-
-    QMap<KService::Ptr, QList<QUrl>> servicesMap;
-
     foreach (const QUrl& url, urls)
     {
-        const QString mimeType = QMimeDatabase().mimeTypeForFile(url.path(), QMimeDatabase::MatchExtension).name();
-        KService::List offers  = KMimeTypeTrader::self()->query(mimeType, QLatin1String("Application"));
-
-        if (offers.isEmpty())
-        {
-            return;
-        }
-
-        KService::Ptr ptr                                   = offers.first();
-        QMap<KService::Ptr, QList<QUrl>>::const_iterator it = servicesMap.constFind(ptr);
-
-        if (it != servicesMap.constEnd())
-        {
-            servicesMap[ptr] << url;
-        }
-        else
-        {
-            servicesMap.insert(ptr, QList<QUrl>() << url);
-        }
-    }
-
-    for (QMap<KService::Ptr, QList<QUrl>>::const_iterator it = servicesMap.constBegin();
-         it != servicesMap.constEnd(); ++it)
-    {
-        // Run the dedicated app to open the item.
-
-        runFiles(*it.key(), it.value());
+        QDesktopServices::openUrl(url);
     }
 }
 
