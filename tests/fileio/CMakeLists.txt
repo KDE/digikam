@@ -15,7 +15,6 @@ include_directories(
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(pgfscaled_SRCS pgfscaled.cpp ${pgfutils_SRCS})
@@ -25,10 +24,11 @@ ecm_mark_nongui_executable(pgfscaled)
 target_link_libraries(pgfscaled
                       digikamcore
                       libdng
+
                       Qt5::Core
                       Qt5::Gui
+
                       KF5::I18n
-                      KF5::KIOCore
 )
 
 #------------------------------------------------------------------------
@@ -40,9 +40,10 @@ ecm_mark_nongui_executable(qtpgftest)
 target_link_libraries(qtpgftest
                       digikamcore
                       libdng
+
                       Qt5::Core
                       Qt5::Gui
-                      KF5::KIOCore
+
                       KF5::I18n
 )
 
@@ -59,7 +60,6 @@ target_link_libraries(loadpgfdata
                       Qt5::Core
                       Qt5::Gui
 
-                      KF5::KIOCore
                       KF5::I18n
 )
 

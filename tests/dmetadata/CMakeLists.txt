@@ -47,7 +47,7 @@ ecm_mark_nongui_executable(commentReadWriteTest)
 target_link_libraries(commentReadWriteTest
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
                       Qt5::Test
 
@@ -60,7 +60,7 @@ ecm_mark_nongui_executable(setiptcpreview)
 target_link_libraries(setiptcpreview
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
@@ -72,7 +72,7 @@ ecm_mark_nongui_executable(loadfromba)
 target_link_libraries(loadfromba
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
@@ -84,7 +84,7 @@ ecm_mark_nongui_executable(erasetag)
 target_link_libraries(erasetag
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
@@ -96,7 +96,7 @@ ecm_mark_nongui_executable(printtagslist)
 target_link_libraries(printtagslist
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
@@ -108,7 +108,7 @@ ecm_mark_nongui_executable(usexmpsidecar)
 target_link_libraries(usexmpsidecar
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
@@ -120,7 +120,7 @@ ecm_mark_nongui_executable(readimagewritexmpsidecar)
 target_link_libraries(readimagewritexmpsidecar
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
@@ -132,7 +132,7 @@ ecm_mark_nongui_executable(setxmpface)
 target_link_libraries(setxmpface
                       digikamcore
                       libdng
-                      
+
                       Qt5::Core
 
                       KF5::I18n
