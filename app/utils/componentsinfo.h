@@ -32,13 +32,11 @@
 #include <QMap>
 #include <QApplication>
 
-#ifdef HAVE_KIPI
-
 // Libkipi includes
 
-#include <KIPI/Interface>
-#include <KIPI/PluginLoader>
-
+#ifdef HAVE_KIPI
+#    include <KIPI/Interface>
+#    include <KIPI/PluginLoader>
 #endif /* HAVE_KIPI */
 
 // Local includes
