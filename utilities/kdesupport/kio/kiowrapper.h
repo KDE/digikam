@@ -28,11 +28,9 @@
 // Qt includes
 
 #include <QObject>
-#include <QUrl>
-#include <QStringList>
-#include <QList>
-#include <QPixmap>
 #include <QWidget>
+#include <QList>
+#include <QUrl>
 
 // Local includes
 
@@ -56,7 +54,6 @@ public:
 
     static bool run(const KService& service, const QList<QUrl>& urls, QWidget* const window);
     static bool run(const QString& exec, const QList<QUrl>& urls, QWidget* const window);
-    static bool run(const QUrl& url, QWidget* const window);
 };
 
 } // namespace Digikam

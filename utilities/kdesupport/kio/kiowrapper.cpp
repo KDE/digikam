@@ -24,12 +24,6 @@
 
 #include "kiowrapper.h"
 
-// Qt includes
-
-#include <QPair>
-#include <QPointer>
-#include <QMimeDatabase>
-
 // KDE includes
 
 #include <kio_version.h>
@@ -50,11 +44,6 @@ bool KIOWrapper::run(const KService& service, const QList<QUrl>& urls, QWidget* 
 bool KIOWrapper::run(const QString& exec, const QList<QUrl>& urls, QWidget* const window)
 {
     return KRun::run(exec, urls, window);
-}
-
-bool KIOWrapper::run(const QUrl& url, QWidget* const window)
-{
-    return KRun::runUrl(url, QMimeDatabase().mimeTypeForUrl(url).name(), window);
 }
 
 } // namespace Digikam

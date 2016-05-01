@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QShortcut>
 #include <QApplication>
+#include <QDesktopServices>
 
 // KDE includes
 
@@ -83,7 +84,6 @@
 #include "thumbsgenerator.h"
 #include "albumlabelstreeview.h"
 #include "tagsactionmngr.h"
-#include "kiowrapper.h"
 
 #ifdef HAVE_MEDIAPLAYER
 #include "mediaplayerview.h"
@@ -1298,7 +1298,7 @@ void DigikamView::slotAlbumOpenInFileManager()
 
     if (palbum)
     {
-        KIOWrapper::run(QUrl::fromLocalFile(palbum->folderPath()), this);
+        QDesktopServices::openUrl(QUrl::fromLocalFile(palbum->folderPath()));
     }
 }
 
