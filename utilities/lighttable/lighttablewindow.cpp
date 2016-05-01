@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

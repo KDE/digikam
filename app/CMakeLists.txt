@@ -294,6 +294,7 @@ set(libdigikamgui_SRCS
     utils/slideshowbuilder.cpp
     utils/digikammodelcollection.cpp
     utils/digikam_debug.cpp
+    utils/componentsinfo.cpp
 
     views/tableview/tableview.cpp
     views/tableview/tableview_treeview.cpp

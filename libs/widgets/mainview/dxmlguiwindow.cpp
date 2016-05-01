@@ -43,7 +43,6 @@
 
 // KDE includes
 
-#include <kxmlguiwindow.h>
 #include <ktogglefullscreenaction.h>
 #include <ktoolbar.h>
 #include <ktoggleaction.h>
@@ -63,8 +62,8 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "daboutdata.h"
-#include "componentsinfo.h"
 
 namespace Digikam
 {

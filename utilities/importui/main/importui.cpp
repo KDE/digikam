@@ -60,6 +60,7 @@
 #include <QIcon>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QApplication>
 
 // KDE includes
 

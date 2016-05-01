@@ -48,6 +48,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QApplication>
 
 // KDE includes
 
@@ -1742,7 +1743,7 @@ void ImageWindow::slotEditGeolocation()
 
     if ( inf.isNull() )
         return;
-    
+
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
     dialog->setItems(ImageGPS::infosToItems(ImageInfoList() << inf));
     dialog->exec();

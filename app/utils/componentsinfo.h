@@ -24,120 +24,16 @@
 #ifndef COMPONENTS_INFO_H
 #define COMPONENTS_INFO_H
 
-#include "digikam_config.h"
-
-// Qt includes
-
-#include <QString>
-#include <QMap>
-#include <QApplication>
-
-// Libkipi includes
-
-#ifdef HAVE_KIPI
-#    include <KIPI/Interface>
-#    include <KIPI/PluginLoader>
-#endif /* HAVE_KIPI */
-
 // Local includes
 
-#include "libsinfodlg.h"
-#include "rawcameradlg.h"
-#include "dbstatdlg.h"
-#include "applicationsettings.h"
-#include "libopencv.h"
-
-#ifdef HAVE_GPHOTO2
-
-// LibGphoto2 includes
-
-extern "C"
-{
-#include <gphoto2-version.h>
-}
-
-#endif /* HAVE_GPHOTO2 */
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-static inline void showDigikamComponentsInfo()
-{
-    // Set digiKam specific components info list.
-    QMap<QString, QString> list;
+DIGIKAM_EXPORT void showDigikamComponentsInfo();
 
-#ifdef HAVE_GPHOTO2
-    list.insert(i18n("LibGphoto2"), QLatin1String(gp_library_version(GP_VERSION_SHORT)[0]));
-#else
-    list.insert(i18n("LibGphoto2 support"), i18n("no"));
-#endif /* HAVE_GPHOTO2 */
-
-#ifdef HAVE_KFILEMETADATA
-    list.insert(i18n("Baloo support"), i18n("Yes"));
-#else
-    list.insert(i18n("Baloo support"), i18n("no"));
-#endif /* HAVE_KFILEMETADATA */
-
-#ifdef HAVE_AKONADICONTACT
-    list.insert(i18n("AkonadiContact support"), i18n("Yes"));
-#else
-    list.insert(i18n("AkonadiContact support"), i18n("no"));
-#endif /* HAVE_AKONADICONTACT */
-
-#ifdef HAVE_MEDIAPLAYER
-    list.insert(i18n("QtMultimedia support"), i18n("Yes"));
-#else
-    list.insert(i18n("QtMultimedia support"), i18n("no"));
-#endif /* HAVE_MEDIAPLAYER */
-
-#ifdef HAVE_KIPI
-    list.insert(i18n("LibKipi"),      KIPI::Interface::version());
-    list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());
-#else
-    list.insert(i18n("LibKipi support"), i18n("no"));
-#endif /* HAVE_KIPI */
-
-#ifdef HAVE_PANORAMA
-    list.insert(i18n("Panorama support"), i18n("yes"));
-#else
-    list.insert(i18n("Panorama support"), i18n("no"));
-#endif /* HAVE_PANORAMA */
-
-#ifdef HAVE_KCALENDAR
-    list.insert(i18n("Calendar support"), i18n("yes"));
-#else
-    list.insert(i18n("Calendar support"), i18n("no"));
-#endif /* HAVE_KCALENDAR */
-
-    list.insert(i18n("LibOpenCV"),    QLatin1String(CV_VERSION));
-
-    // Database Backend information
-
-    QString dbBe = ApplicationSettings::instance()->getDbEngineParameters().databaseType;
-    list.insert(i18n("Database backend"), dbBe);
-
-    if (dbBe != QLatin1String("QSQLITE"))
-    {
-        QString internal = ApplicationSettings::instance()->getDbEngineParameters().internalServer? i18n("Yes") : i18n("No");
-        list.insert(i18n("Database internal server"), internal);
-    }
-
-    LibsInfoDlg* const dlg = new LibsInfoDlg(qApp->activeWindow());
-    dlg->setInfoMap(list);
-    dlg->show();
-}
-
-static inline void showDigikamDatabaseStat()
-{
-    DBStatDlg* const dlg = new DBStatDlg(qApp->activeWindow());
-    dlg->show();
-}
-
-static inline void showRawCameraList()
-{
-    RawCameraDlg* const dlg = new RawCameraDlg(qApp->activeWindow());
-    dlg->show();
-}
+DIGIKAM_EXPORT void showDigikamDatabaseStat();
 
 }  // namespace Digikam
 

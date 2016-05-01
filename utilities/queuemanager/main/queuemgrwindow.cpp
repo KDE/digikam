@@ -39,6 +39,7 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QMessageBox>
+#include <QApplication>
 
 // KDE includes
 

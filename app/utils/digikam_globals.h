@@ -156,6 +156,8 @@ DIGIKAM_EXPORT QShortcut* defineShortcut(QWidget* const w, const QKeySequence& k
  */
 DIGIKAM_EXPORT QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTypes);
 
+DIGIKAM_EXPORT void showRawCameraList();
+
 } // namespace Digikam
 
 #endif /* DIGIKAMGLOBALS_H */

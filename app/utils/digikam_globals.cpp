@@ -31,6 +31,7 @@
 #include <QImageWriter>
 #include <QByteArray>
 #include <QShortcut>
+#include <QApplication>
 
 // KDE includes
 
@@ -39,6 +40,7 @@
 // Local includes
 
 #include "drawdecoder.h"
+#include "rawcameradlg.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
 
@@ -143,6 +145,12 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
     }
 
     return formats;
+}
+
+void showRawCameraList()
+{
+    RawCameraDlg* const dlg = new RawCameraDlg(qApp->activeWindow());
+    dlg->show();
 }
 
 } // namespace Digikam
