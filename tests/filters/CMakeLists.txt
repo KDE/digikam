@@ -52,7 +52,6 @@ if(LENSFUN_FOUND)
                           Qt5::Core
 
                           KF5::I18n
-                          KF5::KIOCore
 
                           ${LENSFUN_LIBRARIES}
                           ${OpenCV_LIBRARIES}
@@ -86,7 +85,6 @@ target_link_libraries(testnrestimate
                       Qt5::Test
 
                       KF5::I18n
-                      KF5::KIOCore
 
                       ${OpenCV_LIBRARIES}
 )
