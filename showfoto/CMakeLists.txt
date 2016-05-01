@@ -18,10 +18,10 @@ include_directories(BEFORE
 )
 
 include_directories(
-    $<TARGET_PROPERTY:KF5::KIOCore,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(showfoto_SRCS
@@ -78,7 +78,6 @@ target_link_libraries(showfoto
                       Qt5::Core
 
                       KF5::I18n
-                      KF5::KIOCore
                       KF5::XmlGui
 )
 
