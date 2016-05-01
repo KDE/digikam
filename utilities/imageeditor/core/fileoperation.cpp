@@ -34,6 +34,7 @@
 
 #include <QFileInfo>
 #include <QByteArray>
+#include <QProcess>
 #include <QDir>
 #include <QWidget>
 #include <QFile>
@@ -48,7 +49,6 @@
 
 #include "digikam_debug.h"
 #include "metadatasettings.h"
-#include "kiowrapper.h"
 
 namespace Digikam
 {
@@ -134,7 +134,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     return true;
 }
 
-void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWidget* const parentWidget)
+void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls)
 {
     if (urls.isEmpty())
     {
@@ -173,7 +173,7 @@ void FileOperation::openFilesWithDefaultApplication(const QList<QUrl>& urls, QWi
     {
         // Run the dedicated app to open the item.
 
-        KIOWrapper::run(*it.key(), it.value(), parentWidget);
+        runFiles(*it.key(), it.value());
     }
 }
 
@@ -213,6 +213,30 @@ QUrl FileOperation::getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl)
     }
 
     return destUrl;
+}
+
+bool FileOperation::runFiles(const KService& service, const QList<QUrl>& urls)
+{
+    return (runFiles(service.exec().section(QLatin1Char(' '), 0, 0), urls));
+}
+
+bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls)
+{
+    QString cmd(appCmd);
+
+    if (cmd.isEmpty())
+    {
+        return false;
+    }
+
+    foreach(const QUrl& url, urls)
+    {
+        cmd.append(QLatin1String(" \""));
+        cmd.append(url.toLocalFile());
+        cmd.append(QLatin1Char('"'));
+    }
+
+    return (QProcess::startDetached(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << cmd));
 }
 
 KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)

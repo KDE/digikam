@@ -100,7 +100,6 @@ extern "C"
 #include "dbjobinfo.h"
 #include "dbjobsmanager.h"
 #include "dbjobsthread.h"
-#include "kiowrapper.h"
 
 namespace Digikam
 {

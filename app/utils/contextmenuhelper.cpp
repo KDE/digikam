@@ -68,7 +68,6 @@
 #include "dimg.h"
 #include "dxmlguiwindow.h"
 #include "akonadiiface.h"
-#include "kiowrapper.h"
 
 #ifdef HAVE_KIPI
 #include "kipipluginloader.h"
@@ -317,7 +316,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KIOWrapper::run(dlg->text(), list, d->parent);
+                FileOperation::runFiles(dlg->text(), list);
             }
 
             delete dlg;
@@ -331,7 +330,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
-    KIOWrapper::run(*service, list, d->parent);
+    FileOperation::runFiles(*service, list);
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

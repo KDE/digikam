@@ -53,11 +53,19 @@ namespace FileOperation
 
     /** Open file urls to default application relevant of file type-mimes desktop configration.
      */
-    DIGIKAM_EXPORT void openFilesWithDefaultApplication(const QList<QUrl>& urls, QWidget* const parentWidget);
+    DIGIKAM_EXPORT void openFilesWithDefaultApplication(const QList<QUrl>& urls);
 
     /** Get unique file url if file exist by appending a counter suffix or return original url.
      */
     DIGIKAM_EXPORT QUrl getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl = 0);
+
+    /** Open file urls with the service.
+     */
+    DIGIKAM_EXPORT bool runFiles(const KService& service, const QList<QUrl>& urls);
+
+    /** Open file urls with the application command.
+     */
+    DIGIKAM_EXPORT bool runFiles(const QString& appCmd, const QList<QUrl>& urls);
 
     /** Return list of service available on desktop to open files.
      */

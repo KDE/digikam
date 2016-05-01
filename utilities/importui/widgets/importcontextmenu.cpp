@@ -46,7 +46,7 @@
 #include "tagmodificationhelper.h"
 #include "tagspopupmenu.h"
 #include "fileactionmngr.h"
-#include "kiowrapper.h"
+#include "fileoperation.h"
 
 namespace Digikam
 {
@@ -278,7 +278,7 @@ void ImportContextMenuHelper::slotOpenWith(QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KIOWrapper::run(dlg->text(), list, d->parent);
+                FileOperation::runFiles(dlg->text(), list);
             }
 
             delete dlg;
@@ -292,7 +292,7 @@ void ImportContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
-    KIOWrapper::run(*service, list, d->parent);
+    FileOperation::runFiles(*service, list);
 }
 
 void ImportContextMenuHelper::addRotateMenu(itemIds& /*ids*/)

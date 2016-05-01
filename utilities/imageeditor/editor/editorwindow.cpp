@@ -128,7 +128,6 @@
 #include "versioningpromptusersavedlg.h"
 #include "undostate.h"
 #include "versionmanager.h"
-#include "kiowrapper.h"
 #include "dexpanderbox.h"
 
 namespace Digikam
@@ -2805,7 +2804,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                KIOWrapper::run(dlg->text(), QList<QUrl>() << url, this);
+                FileOperation::runFiles(dlg->text(), QList<QUrl>() << url);
             }
 
             delete dlg;
@@ -2819,7 +2818,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
-    KIOWrapper::run(*service, QList<QUrl>() << url, this);
+    FileOperation::runFiles(*service, QList<QUrl>() << url);
 }
 
 }  // namespace Digikam

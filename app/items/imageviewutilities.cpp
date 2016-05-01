@@ -341,7 +341,7 @@ void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>&
         urls << inf.fileUrl();
     }
 
-    FileOperation::openFilesWithDefaultApplication(urls, m_widget);
+    FileOperation::openFilesWithDefaultApplication(urls);
 }
 
 namespace

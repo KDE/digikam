@@ -28,7 +28,6 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:versionmanager_src>
             $<TARGET_OBJECTS:kmemoryinfo_src>
             $<TARGET_OBJECTS:dngwriter_src>
-            $<TARGET_OBJECTS:kiowrapper_src>
             $<TARGET_OBJECTS:rawengine_srcs>
 
             # widgets

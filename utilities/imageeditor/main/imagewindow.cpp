@@ -1687,7 +1687,7 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
 
 void ImageWindow::slotFileWithDefaultApplication()
 {
-    FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->currentUrl(), this);
+    FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->currentUrl());
 }
 
 void ImageWindow::addServicesMenu()

@@ -1683,7 +1683,7 @@ void LightTableWindow::slotFileWithDefaultApplication()
 {
     if (!d->thumbView->currentInfo().isNull())
     {
-        FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl(), this);
+        FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl());
     }
 }
 
