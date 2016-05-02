@@ -25,13 +25,21 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QString>
 #include <QMap>
-#include <QApplication>
 
 // KDE includes
 
 #include <klocalizedstring.h>
+
+// Local includes
+
+#include "applicationsettings.h"
+#include "digikam_config.h"
+#include "libsinfodlg.h"
+#include "dbstatdlg.h"
+#include "libopencv.h"
 
 // Libkipi includes
 
@@ -40,16 +48,9 @@
 #    include <KIPI/PluginLoader>
 #endif /* HAVE_KIPI */
 
-// Local includes
-
-#include "libsinfodlg.h"
-#include "dbstatdlg.h"
-#include "applicationsettings.h"
-#include "libopencv.h"
+// LibGphoto2 includes
 
 #ifdef HAVE_GPHOTO2
-
-// LibGphoto2 includes
 
 extern "C"
 {
