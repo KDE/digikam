@@ -366,7 +366,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     QGroupBox* const conflictBox = new QGroupBox(panel2);
     QLabel* const conflictIcon   = new QLabel(conflictBox);
     conflictIcon->setPixmap(QIcon::fromTheme(QLatin1String("document-save-as")).pixmap(32));
-    QLabel* const conflictLabel  = new QLabel(i18n("If target file exists when downloaded"), conflictBox);
+    QLabel* const conflictLabel  = new QLabel(i18n("If target file exists when downloaded from camera"), conflictBox);
     QGridLayout* const boxLayout = new QGridLayout(conflictBox);
     d->conflictButtonGroup       = new QButtonGroup(conflictBox);
     d->storeDiffButton           = new QRadioButton(i18n("Store as a different name"), conflictBox);
