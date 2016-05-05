@@ -169,5 +169,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 130 ==> 354687 - Unable to search for GeoNames or OSM in Geolocation editor.
 131 ==> 333624 - "Lookup missing altitude values" in the geolocation dialog is broken [patch].
 132 ==> 361882 - "Download new" tries to only download selected images.
-133 ==> 
-
+133 ==> 302583 - Convert do DNG while importing [patch].
+134 ==> 

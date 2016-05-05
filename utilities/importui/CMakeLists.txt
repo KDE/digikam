@@ -61,6 +61,7 @@ set(libimportui_SRCS
     widgets/filter.cpp
     widgets/filtercombo.cpp
     widgets/importcontextmenu.cpp
+    widgets/dngconvertsettings.cpp
 
     models/importimagemodel.cpp
     models/importthumbnailmodel.cpp

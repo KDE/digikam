@@ -253,11 +253,17 @@ void ImportUI::setupUserArea()
     d->advBox->addItem(d->advancedSettings, QIcon::fromTheme(QLatin1String("system-run")), i18n("On the Fly Operations (JPEG only)"),
                        QLatin1String("OnFlyBox"), true);
 
-    // -- Scripting options ---------------------------------------------------
+    // -- DNG convert options --------------------------------------------------
+
+    d->dngConvertSettings = new DNGConvertSettings(d->advBox);
+    d->advBox->addItem(d->dngConvertSettings, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")), i18n("DNG Convert Options"),
+                       QLatin1String("DNGSettings"), false);
+
+    // -- Scripting options ----------------------------------------------------
 
     d->scriptingSettings = new ScriptingSettings(d->advBox);
     d->advBox->addItem(d->scriptingSettings, QIcon::fromTheme(QLatin1String("utilities-terminal")), i18n("Scripting"),
-                       QLatin1String("ScriptingBox"), true);
+                       QLatin1String("ScriptingBox"), false);
     d->advBox->addStretch();
 
     d->rightSideBar->appendTab(d->advBox, QIcon::fromTheme(QLatin1String("configure")), i18n("Settings"));
@@ -672,6 +678,9 @@ void ImportUI::setupConnections()
     connect(d->advancedSettings, SIGNAL(signalDownloadNameChanged()),
             this, SLOT(slotUpdateDownloadName()));
 
+    connect(d->dngConvertSettings, SIGNAL(signalDownloadNameChanged()),
+            this, SLOT(slotUpdateDownloadName()));
+
     connect(d->historyView, SIGNAL(signalEntryClicked(QVariant)),
             this, SLOT(slotHistoryEntryClicked(QVariant)));
 
@@ -870,6 +879,7 @@ void ImportUI::readSettings()
     d->showLogAction->setChecked(group.readEntry(QLatin1String("ShowLog"), false));
     d->albumCustomizer->readSettings(group);
     d->advancedSettings->readSettings(group);
+    d->dngConvertSettings->readSettings(group);
     d->scriptingSettings->readSettings(group);
 
     d->advBox->readSettings(group);
@@ -889,6 +899,7 @@ void ImportUI::saveSettings()
     group.writeEntry(QLatin1String("ShowLog"), d->showLogAction->isChecked());
     d->albumCustomizer->saveSettings(group);
     d->advancedSettings->saveSettings(group);
+    d->dngConvertSettings->saveSettings(group);
     d->scriptingSettings->saveSettings(group);
 
     d->advBox->writeSettings(group);
@@ -923,6 +934,7 @@ QString ImportUI::cameraTitle() const
 DownloadSettings ImportUI::downloadSettings() const
 {
     DownloadSettings settings = d->advancedSettings->settings();
+    d->dngConvertSettings->settings(&settings);
     d->scriptingSettings->settings(&settings);
     return settings;
 }
@@ -1706,6 +1718,33 @@ void ImportUI::slotUpdateDownloadName()
                     newName = newName + QLatin1Char('.') + settings.losslessFormat.toLower();
                 }
             }
+            else if (settings.convertDng && info.mime == QLatin1String("image/x-raw"))
+            {
+                QFileInfo     fi(newName);
+                QString ext = fi.suffix();
+
+                if (!ext.isEmpty())
+                {
+                    if (ext[0].isUpper() && (ext[ext.length()-1].isUpper() || ext[ext.length()-1].isDigit()))
+                    {
+                        ext = QLatin1String("DNG");
+                    }
+                    else if (ext[0].isUpper())
+                    {
+                        ext = QLatin1String("Dng");
+                    }
+                    else
+                    {
+                        ext = QLatin1String("dng");
+                    }
+
+                    newName = fi.completeBaseName() + QLatin1Char('.') + ext;
+                }
+                else
+                {
+                    newName = newName + QLatin1Char('.') + QLatin1String("dng");
+                }
+            }
         }
 
         refInfo.downloadName = newName;
@@ -1855,6 +1894,11 @@ void ImportUI::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSi
                     // Real file size is added.
                     dSize += size;
                 }
+            }
+            else if (settings.convertDng && info.mime == QLatin1String("image/x-raw"))
+            {
+                // Estimated size is around 2 x original size when RAW=>DNG.
+                dSize += size * 2;
             }
             else
             {
@@ -2021,6 +2065,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 
         settings.folder     = info.folder;
         settings.file       = info.name;
+        settings.mime       = info.mime;
         settings.pickLabel  = info.pickLabel;
         settings.colorLabel = info.colorLabel;
         settings.rating     = info.rating;
