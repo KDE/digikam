@@ -28,7 +28,9 @@
 
 #include <QApplication>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QCheckBox>
+#include <QLabel>
 #include <QStyle>
 
 // KDE includes
@@ -64,16 +66,25 @@ DNGConvertSettings::DNGConvertSettings(QWidget* const parent)
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QVBoxLayout* const mainVlay = new QVBoxLayout(this);
-    QVBoxLayout* const convVlay = new QVBoxLayout(this);
+    QHBoxLayout* const convHlay = new QHBoxLayout(this);
 
-    d->convertDng               = new QCheckBox(i18nc("@option:check", "Convert RAW images to DNG container"), this);
+    d->convertDng               = new QCheckBox(i18nc("@option:check", "Convert RAW images to"), this);
     d->dngSettings              = new DNGSettings(this);
 
-    convVlay->addWidget(d->convertDng);
-    convVlay->setContentsMargins(spacing, spacing, spacing, spacing);
-    convVlay->setSpacing(0);
+    QLabel* const dngLinkLabel  = new QLabel(this);
+    dngLinkLabel->setText(i18n("<p><a href='http://en.wikipedia.org/wiki/Digital_Negative_(file_format)'>"
+                               "DNG container</a></p>"));
+    dngLinkLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    dngLinkLabel->setOpenExternalLinks(true);
+    dngLinkLabel->setWordWrap(false);
 
-    mainVlay->addLayout(convVlay);
+    convHlay->addWidget(d->convertDng);
+    convHlay->addWidget(dngLinkLabel);
+    convHlay->addStretch(10);
+    convHlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    convHlay->setSpacing(0);
+
+    mainVlay->addLayout(convHlay);
     mainVlay->addWidget(d->dngSettings);
     mainVlay->setContentsMargins(QMargins());
     mainVlay->setSpacing(0);

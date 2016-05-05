@@ -77,13 +77,6 @@ DNGSettings::DNGSettings(QWidget* const parent)
 
     QGridLayout* const settingsBoxLayout = new QGridLayout(this);
 
-    QLabel* const dngLinkLabel           = new QLabel(this);
-    dngLinkLabel->setText(i18n("<p><a href='http://en.wikipedia.org/wiki/Digital_Negative_(file_format)'>"
-                               "DNG - Digital Negative</a></p>"));
-    dngLinkLabel->setAlignment(Qt::AlignHCenter);
-    dngLinkLabel->setOpenExternalLinks(true);
-    dngLinkLabel->setWordWrap(false);
-
     // ------------------------------------------------------------------------
 
     d->backupOriginalRawFile = new QCheckBox(i18n("Embed Original File"), this);
@@ -98,11 +91,10 @@ DNGSettings::DNGSettings(QWidget* const parent)
     d->previewModeCB->insertItem(DNGWriter::FULLSIZE, i18nc("embedded preview type in dng file", "Full size"));
     d->previewModeCB->setDefaultIndex(DNGWriter::MEDIUM);
 
-    settingsBoxLayout->addWidget(dngLinkLabel,             0, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->backupOriginalRawFile, 1, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->compressLossLess,      2, 0, 1, 1);
-    settingsBoxLayout->addWidget(d->previewModeLabel,      4 ,0, 1, 1);
-    settingsBoxLayout->addWidget(d->previewModeCB,         5 ,0 ,1, 1);
+    settingsBoxLayout->addWidget(d->backupOriginalRawFile, 0, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->compressLossLess,      1, 0, 1, 1);
+    settingsBoxLayout->addWidget(d->previewModeLabel,      3 ,0, 1, 1);
+    settingsBoxLayout->addWidget(d->previewModeCB,         4 ,0 ,1, 1);
     settingsBoxLayout->setRowStretch(9, 10);
     settingsBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     settingsBoxLayout->setSpacing(spacing);
