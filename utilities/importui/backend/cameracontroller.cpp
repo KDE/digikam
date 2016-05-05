@@ -26,18 +26,6 @@
 
 #include "cameracontroller.h"
 
-// C ANSI includes
-
-extern "C"
-{
-#include <unistd.h>
-}
-
-// C++ includes
-
-#include <typeinfo>
-#include <cstdio>
-
 // Qt includes
 
 #include <QMutex>
@@ -617,17 +605,19 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
-            // TODO clean-up up and generalize temporary file creation
-            QUrl tempURL = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
-            tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
-            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using (" << tempURL << ")";
-            QString temp = tempURL.toLocalFile();
+            QUrl tempURL     = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
+            QString tempFile = tempURL.path() + QLatin1String("/.digikam-camera-tmp%1-");
+            tempFile.append(QString::number(QCoreApplication::applicationPid()));
+            tempFile.append(QLatin1Char('-') + file);
+            QString temp     = tempFile.arg(1);
 
-            bool result  = d->camera->downloadItem(folder, file, tempURL.toLocalFile());
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using " << temp;
+
+            bool result  = d->camera->downloadItem(folder, file, temp);
 
             if (!result)
             {
-                unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
+                QFile::remove(temp);
                 sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry, folder, file);
                 emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 break;
@@ -635,9 +625,9 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             else if (mime == QLatin1String("image/jpeg"))
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
+                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Set metadata from: " << file << " using " << temp;
 
-                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Set metadata from: " << file << " using (" << tempURL << ")";
-                DMetadata metadata(tempURL.toLocalFile());
+                DMetadata metadata(temp);
                 bool applyChanges = false;
 
                 if (documentName)
@@ -700,43 +690,38 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (convertJpeg)
                 {
-                    // TODO clean-up up and generalize temporary file creation
-                    QUrl tempURL2 = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
-                    tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
-                    temp          = tempURL2.toLocalFile();
+                    QString temp2 = tempFile.arg(2);
 
                     // When converting a file, we need to set the new format extension..
                     // The new extension is already set in importui.cpp.
 
-                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to LossLess: " << file << " using (" << tempURL << ")  destination: " << dest;
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert to LossLess: " << file << " using " << temp << " destination: " << temp2;
 
-                    if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
+                    if (!JPEGUtils::jpegConvert(temp, temp2, file, losslessFormat))
                     {
                         qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert failed to JPEG!";
                         // convert failed. delete the temp file
-                        unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
-                        unlink(QFile::encodeName(tempURL2.toLocalFile()).constData());
+                        QFile::remove(temp);
+                        QFile::remove(temp2);
                         sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to JPEG", file), DHistoryView::ErrorEntry, folder, file);
                     }
                     else
                     {
-                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << tempURL;
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << temp;
                         // Else remove only the first temp file.
-                        unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
+                        QFile::remove(temp);
+                        temp = temp2;
                     }
                 }
             }
             else if (convertDng && mime == QLatin1String("image/x-raw"))
             {
-                // TODO clean-up up and generalize temporary file creation
-                QUrl tempURL2 = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
-                tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
-                temp          = tempURL2.toLocalFile();
+                QString temp2 = tempFile.arg(2);
 
                 DNGWriter dngWriter;
 
-                dngWriter.setInputFile(tempURL.toLocalFile());
-                dngWriter.setOutputFile(tempURL2.toLocalFile());
+                dngWriter.setInputFile(temp);
+                dngWriter.setOutputFile(temp2);
                 dngWriter.setBackupOriginalRawFile(backupRaw);
                 dngWriter.setCompressLossLess(compressDng);
                 dngWriter.setPreviewMode(previewMode);
@@ -745,15 +730,16 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 {
                     qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert failed to DNG!";
                     // convert failed. delete the temp file
-                    unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
-                    unlink(QFile::encodeName(tempURL2.toLocalFile()).constData());
+                    QFile::remove(temp);
+                    QFile::remove(temp2);
                     sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to DNG", file), DHistoryView::ErrorEntry, folder, file);
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << tempURL;
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << temp;
                     // Else remove only the first temp file.
-                    unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
+                    QFile::remove(temp);
+                    temp = temp2;
                 }
             }
 
@@ -856,7 +842,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
     if (info.exists() && d->conflictRule == SetupCamera::SKIPFILE)
     {
-        unlink(QFile::encodeName(temp).constData());
+        QFile::remove(temp);
         sendLogMsg(xi18n("Skipped file <filename>%1</filename>", file), DHistoryView::WarningEntry, folder, file);
         emit signalSkipped(folder, file);
         return;
@@ -903,7 +889,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     {
         qCDebug(DIGIKAM_IMPORTUI_LOG) << "Renaming " << temp << " to " << dest << " failed";
         // rename failed. delete the temp file
-        unlink(QFile::encodeName(temp).constData());
+        QFile::remove(temp);
         emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
         sendLogMsg(xi18n("Failed to download <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
     }
