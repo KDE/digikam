@@ -63,18 +63,26 @@ DNGConvertSettings::DNGConvertSettings(QWidget* const parent)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QVBoxLayout* const dngVlay = new QVBoxLayout(this);
-    d->convertDng              = new QCheckBox(i18nc("@option:check", "Convert RAW images to DNG container"), this);
-    d->dngSettings             = new DNGSettings(this);
+    QVBoxLayout* const mainVlay = new QVBoxLayout(this);
+    QVBoxLayout* const convVlay = new QVBoxLayout(this);
 
-    dngVlay->addWidget(d->convertDng);
-    dngVlay->addWidget(d->dngSettings);
-    dngVlay->setContentsMargins(spacing, spacing, spacing, spacing);
-    dngVlay->setSpacing(spacing);
+    d->convertDng               = new QCheckBox(i18nc("@option:check", "Convert RAW images to DNG container"), this);
+    d->dngSettings              = new DNGSettings(this);
+
+    convVlay->addWidget(d->convertDng);
+    convVlay->setContentsMargins(spacing, spacing, spacing, spacing);
+    convVlay->setSpacing(0);
+
+    mainVlay->addLayout(convVlay);
+    mainVlay->addWidget(d->dngSettings);
+    mainVlay->setContentsMargins(QMargins());
+    mainVlay->setSpacing(0);
 
     setWhatsThis(i18n("Set here all options to convert RAW images to DNG container automatically "
                       "as they are downloaded."));
     d->convertDng->setWhatsThis(i18n("Enable this option to convert RAW images to DNG container automatically."));
+
+    setLayout(mainVlay);
 
     // ---------------------------------------------------------------------------------------
 
