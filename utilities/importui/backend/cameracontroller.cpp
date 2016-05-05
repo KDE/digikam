@@ -596,6 +596,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
         {
             QString   folder         = cmd->map[QLatin1String("folder")].toString();
             QString   file           = cmd->map[QLatin1String("file")].toString();
+            QString   mime           = cmd->map[QLatin1String("mime")].toString();
             QString   dest           = cmd->map[QLatin1String("dest")].toString();
             bool      documentName   = cmd->map[QLatin1String("documentName")].toBool();
             bool      fixDateTime    = cmd->map[QLatin1String("fixDateTime")].toBool();
@@ -603,6 +604,10 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             QString   templateTitle  = cmd->map[QLatin1String("template")].toString();
             bool      convertJpeg    = cmd->map[QLatin1String("convertJpeg")].toBool();
             QString   losslessFormat = cmd->map[QLatin1String("losslessFormat")].toString();
+            bool      backupRaw      = cmd->map[QLatin1String("backupRaw")].toBool();
+            bool      convertDng     = cmd->map[QLatin1String("convertDng")].toBool();
+            bool      compressDng    = cmd->map[QLatin1String("compressDng")].toBool();
+            int       previewMode    = cmd->map[QLatin1String("previewMode")].toInt();
             QString   script         = cmd->map[QLatin1String("script")].toString();
             int       pickLabel      = cmd->map[QLatin1String("pickLabel")].toInt();
             int       colorLabel     = cmd->map[QLatin1String("colorLabel")].toInt();
@@ -613,10 +618,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
             // TODO clean-up up and generalize temporary file creation
-            QDir dir(dest);
-            dir.cdUp();
-            QUrl tempURL = QUrl::fromLocalFile(dir.path());
-            tempURL      = tempURL.adjusted(QUrl::StripTrailingSlash);
+            QUrl tempURL = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
             tempURL.setPath(tempURL.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp1-%1").arg(getpid()).append(file)));
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using (" << tempURL << ")";
             QString temp = tempURL.toLocalFile();
@@ -630,7 +632,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 emit signalDownloaded(folder, file, CamItemInfo::DownloadFailed);
                 break;
             }
-            else if (JPEGUtils::isJpegImage(tempURL.toLocalFile()))
+            else if (mime == QLatin1String("image/jpeg"))
             {
                 // Possible modification operations. Only apply it to JPEG for the moment.
 
@@ -699,10 +701,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                 if (convertJpeg)
                 {
                     // TODO clean-up up and generalize temporary file creation
-                    QDir dir(dest);
-                    dir.cdUp();
-                    QUrl tempURL2 = QUrl::fromLocalFile(dir.path());
-                    tempURL2      = tempURL2.adjusted(QUrl::StripTrailingSlash);
+                    QUrl tempURL2 = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
                     tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
                     temp          = tempURL2.toLocalFile();
 
@@ -713,7 +712,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                     if (!JPEGUtils::jpegConvert(tempURL.toLocalFile(), tempURL2.toLocalFile(), file, losslessFormat))
                     {
-                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Convert failed?! eh";
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert failed to JPEG!";
                         // convert failed. delete the temp file
                         unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                         unlink(QFile::encodeName(tempURL2.toLocalFile()).constData());
@@ -721,10 +720,40 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                     }
                     else
                     {
-                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "  Done, removing the temp file: " << tempURL;
+                        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << tempURL;
                         // Else remove only the first temp file.
                         unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                     }
+                }
+            }
+            else if (convertDng && mime == QLatin1String("image/x-raw"))
+            {
+                // TODO clean-up up and generalize temporary file creation
+                QUrl tempURL2 = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
+                tempURL2.setPath(tempURL2.path() + QLatin1Char('/') + (QString::fromUtf8(".digikam-camera-tmp2-%1").arg(getpid()).append(file)));
+                temp          = tempURL2.toLocalFile();
+
+                DNGWriter dngWriter;
+
+                dngWriter.setInputFile(tempURL.toLocalFile());
+                dngWriter.setOutputFile(tempURL2.toLocalFile());
+                dngWriter.setBackupOriginalRawFile(backupRaw);
+                dngWriter.setCompressLossLess(compressDng);
+                dngWriter.setPreviewMode(previewMode);
+
+                if (dngWriter.convert() != DNGWriter::PROCESSCOMPLETE)
+                {
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Convert failed to DNG!";
+                    // convert failed. delete the temp file
+                    unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
+                    unlink(QFile::encodeName(tempURL2.toLocalFile()).constData());
+                    sendLogMsg(xi18n("Failed to convert file <filename>%1</filename> to DNG", file), DHistoryView::ErrorEntry, folder, file);
+                }
+                else
+                {
+                    qCDebug(DIGIKAM_IMPORTUI_LOG) << "Done, removing the temp file: " << tempURL;
+                    // Else remove only the first temp file.
+                    unlink(QFile::encodeName(tempURL.toLocalFile()).constData());
                 }
             }
 
@@ -1169,6 +1198,7 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->action              = CameraCommand::cam_download;
     cmd->map.insert(QLatin1String("folder"),            QVariant(downloadSettings.folder));
     cmd->map.insert(QLatin1String("file"),              QVariant(downloadSettings.file));
+    cmd->map.insert(QLatin1String("mime"),              QVariant(downloadSettings.mime));
     cmd->map.insert(QLatin1String("dest"),              QVariant(downloadSettings.dest));
     cmd->map.insert(QLatin1String("documentName"),      QVariant(downloadSettings.documentName));
     cmd->map.insert(QLatin1String("fixDateTime"),       QVariant(downloadSettings.fixDateTime));
@@ -1176,6 +1206,10 @@ void CameraController::download(const DownloadSettings& downloadSettings)
     cmd->map.insert(QLatin1String("template"),          QVariant(downloadSettings.templateTitle));
     cmd->map.insert(QLatin1String("convertJpeg"),       QVariant(downloadSettings.convertJpeg));
     cmd->map.insert(QLatin1String("losslessFormat"),    QVariant(downloadSettings.losslessFormat));
+    cmd->map.insert(QLatin1String("backupRaw"),         QVariant(downloadSettings.backupRaw));
+    cmd->map.insert(QLatin1String("convertDng"),        QVariant(downloadSettings.convertDng));
+    cmd->map.insert(QLatin1String("compressDng"),       QVariant(downloadSettings.compressDng));
+    cmd->map.insert(QLatin1String("previewMode"),       QVariant(downloadSettings.previewMode));
     cmd->map.insert(QLatin1String("script"),            QVariant(downloadSettings.script));
     cmd->map.insert(QLatin1String("pickLabel"),         QVariant(downloadSettings.pickLabel));
     cmd->map.insert(QLatin1String("colorLabel"),        QVariant(downloadSettings.colorLabel));

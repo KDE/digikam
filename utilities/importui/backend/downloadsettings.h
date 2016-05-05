@@ -32,6 +32,7 @@
 // Local includes
 
 #include "digikam_globals.h"
+#include "dngwriter.h"
 
 namespace Digikam
 {
@@ -47,6 +48,10 @@ public:
         fixDateTime  = false;
         convertJpeg  = false;
         documentName = false;
+        backupRaw    = false;
+        convertDng   = false;
+        compressDng  = true;
+        previewMode  = DNGWriter::MEDIUM;
         rating       = NoRating;
         pickLabel    = NoPickLabel;
         colorLabel   = NoColorLabel;
@@ -58,7 +63,7 @@ public:
 
 public:
 
-    // -- Settings from AdvancedSettings widget ---------------
+    // -- Settings from AdvancedSettings widget -----------
     bool       autoRotate;
     bool       fixDateTime;
     bool       convertJpeg;
@@ -72,13 +77,21 @@ public:
     // Metadata template title.
     QString    templateTitle;
 
-    // -- File path to download ------------------------------
-
+    // -- File path to download ---------------------------
     QString    folder;
     QString    file;
     QString    dest;
 
-    // -- Settings from ScriptingSettings widget ---------------
+    // -- Mime type from file to download -----------------
+    QString    mime;
+
+    // -- Settings from DNG convert widget ----------------
+    bool       backupRaw;
+    bool       convertDng;
+    bool       compressDng;
+    int        previewMode;
+
+    // -- Settings from ScriptingSettings widget ----------
     QString    script;
 
     // -- Pre-rating of each camera file.

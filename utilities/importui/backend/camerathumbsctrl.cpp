@@ -39,7 +39,7 @@
 #include "iccmanager.h"
 #include "iccprofile.h"
 
-#ifdef HAVE_MEDIAPLAYER   
+#ifdef HAVE_MEDIAPLAYER
 #   include "videothumbnailerjob.h"
 #endif
 
@@ -71,7 +71,7 @@ public:
 
     Private()
         :
-#ifdef HAVE_MEDIAPLAYER   
+#ifdef HAVE_MEDIAPLAYER
           videoThumbs(0),
 #endif
           controller(0)
@@ -82,7 +82,7 @@ public:
 
     QList<QUrl>              pendingItems;
 
-#ifdef HAVE_MEDIAPLAYER   
+#ifdef HAVE_MEDIAPLAYER
     VideoThumbnailerJob*     videoThumbs;
 #endif
 
@@ -108,7 +108,7 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
 
     setCacheSize(200);
 
-#ifdef HAVE_MEDIAPLAYER 
+#ifdef HAVE_MEDIAPLAYER
 
     d->videoThumbs    = new VideoThumbnailerJob(this);
     d->videoThumbs->setThumbnailSize(ThumbnailSize::Huge);
@@ -123,14 +123,14 @@ CameraThumbsCtrl::CameraThumbsCtrl(CameraController* const ctrl, QWidget* const 
     connect(d->videoThumbs, SIGNAL(signalThumbnailJobFinished()),
             this, SLOT(slotVideoThumbnailFinished()));
 
-#endif    
+#endif
 }
 
 CameraThumbsCtrl::~CameraThumbsCtrl()
 {
     clearCache();
 
-#ifdef HAVE_MEDIAPLAYER 
+#ifdef HAVE_MEDIAPLAYER
     delete d->videoThumbs;
 #endif
 }
@@ -230,30 +230,28 @@ void CameraThumbsCtrl::slotVideoThumbnailFailed(const QString& item)
 void CameraThumbsCtrl::procressVideoPreview(const QUrl& item, const QPixmap& pix)
 {
     CamItemInfo info = d->videoJobHash.value(item);
-    QUrl url         = info.url();
 
     if (info.isNull())
     {
         return;
     }
 
-    QString file = item.fileName();
     QPixmap thumb;
 
     if (pix.isNull())
     {
         // This call must be run outside Camera Controller thread.
-        thumb = d->controller->mimeTypeThumbnail(file).pixmap(ThumbnailSize::maxThumbsSize());
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed video thumb Preview : " << item;
+        thumb = d->controller->mimeTypeThumbnail(info.name).pixmap(ThumbnailSize::maxThumbsSize());
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Failed video thumb Preview : " << item.toLocalFile();
     }
     else
     {
         thumb = pix;
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got video thumb Preview : " << item;
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Got video thumb Preview : " << item.toLocalFile();
     }
 
-    putItemToCache(url, info, thumb);
-    d->pendingItems.removeAll(url);
+    putItemToCache(info.url(), info, thumb);
+    d->pendingItems.removeAll(info.url());
     emit signalThumbInfoReady(info);
 }
 

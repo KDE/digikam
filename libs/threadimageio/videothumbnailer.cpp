@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QImage>
 #include <QDebug>
+#include <QFile>
 
 // Local includes
 
@@ -88,6 +89,14 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     if (!d->probe->setSource(d->player))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video monitoring is not available.";
+        d->isReady = true;
+        emit signalThumbnailFailed(file);
+        return;
+    }
+
+    if (!QFile::exists(file))
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video file " << file << " does not exist.";
         d->isReady = true;
         emit signalThumbnailFailed(file);
         return;

@@ -50,6 +50,7 @@
 #include "renamecustomizer.h"
 #include "albumcustomizer.h"
 #include "advancedsettings.h"
+#include "dngconvertsettings.h"
 #include "scriptingsettings.h"
 #include "sidebar.h"
 #include "filterstatusbar.h"
@@ -123,6 +124,7 @@ public:
         renameCustomizer(0),
         albumCustomizer(0),
         advancedSettings(0),
+        dngConvertSettings(0),
         scriptingSettings(0),
         filterStatusBar(0),
         rightSideBar(0),
@@ -220,6 +222,7 @@ public:
     RenameCustomizer*             renameCustomizer;
     AlbumCustomizer*              albumCustomizer;
     AdvancedSettings*             advancedSettings;
+    DNGConvertSettings*           dngConvertSettings;
     ScriptingSettings*            scriptingSettings;
 
     FilterStatusBar*              filterStatusBar;
