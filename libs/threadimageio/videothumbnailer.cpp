@@ -26,9 +26,9 @@
 
 #include <QMimeDatabase>
 #include <QApplication>
-#include <QFileInfo>
 #include <QImage>
 #include <QDebug>
+#include <QFile>
 
 // Local includes
 
@@ -94,7 +94,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
         return;
     }
 
-    if (!QFileInfo::exists(file))
+    if (!QFile::exists(file))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video file " << file << " does not exist.";
         d->isReady = true;
