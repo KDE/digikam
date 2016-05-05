@@ -168,8 +168,7 @@ if(KF5NotifyConfig_FOUND)
 endif()
 
 if(MARBLE_FOUND)
-    target_link_libraries(digikamcore PUBLIC ${MARBLE_LIBRARIES}
-                                             KF5::ItemModels)
+    target_link_libraries(digikamcore PUBLIC ${MARBLE_LIBRARIES})
 
     if(KF5Bookmarks_FOUND)
         target_link_libraries(digikamcore PRIVATE KF5::Bookmarks)

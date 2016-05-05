@@ -161,7 +161,6 @@ find_package(KF5 ${KF5_MIN_VERSION}
 
 find_package(KF5 ${KF5_MIN_VERSION}
              OPTIONAL_COMPONENTS
-             ItemModels             # For geolocation support (mandatory).
              Bookmarks              # For geolocation support (optional).
              FileMetaData           # For KDE file indexer support.
              ThreadWeaver           # For Panorama tool.
@@ -250,15 +249,6 @@ DETECT_LIBKIPI(${KIPI_MIN_VERSION})
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})
 
 find_package(Marble)
-
-if(MARBLE_FOUND)
-    # For geolocation : only KItemModels is mandatory, KBookmarks is optional in geolocation editor source code
-    if(KF5ItemModels_FOUND)
-        set(MARBLE_FOUND TRUE)
-    else()
-        set(MARBLE_FOUND FALSE)
-    endif()
-endif()
 
 find_package(PkgConfig)
 find_package(Jasper)

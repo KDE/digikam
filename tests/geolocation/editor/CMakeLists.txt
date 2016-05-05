@@ -13,7 +13,6 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
 
-    $<TARGET_PROPERTY:KF5::ItemModels,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
@@ -28,8 +27,6 @@ target_link_libraries(geolocationedit_test_correlator
                       Qt5::Test
                       Qt5::Gui
                       Qt5::Xml
-
-                      KF5::ItemModels
                      )
 
 # ----------------------------------------------------------------
@@ -46,8 +43,6 @@ if(NOT WIN32)
 
                           Qt5::Test
                           Qt5::Gui
-
-                          KF5::ItemModels
                          )
 
 endif()
@@ -65,7 +60,6 @@ target_link_libraries(geolocationedit_test_gpsrgtagmodel
                       Qt5::Test
                       Qt5::Gui
 
-                      KF5::ItemModels
                       KF5::I18n
                      )
 
@@ -82,7 +76,6 @@ target_link_libraries(geolocationedit_test_gpsimageitem
                       Qt5::Test
                       Qt5::Gui
 
-                      KF5::ItemModels
                       KF5::I18n
                      )
 
