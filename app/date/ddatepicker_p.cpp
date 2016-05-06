@@ -131,8 +131,8 @@ void DatePickerYearSelector::setYear(int year)
 
 // ------------------------------------------------------------------------------
 
-DDatePicker::Private::Private(DDatePicker* const q)
-    : q(q)
+DDatePicker::Private::Private(DDatePicker* const qq)
+    : q(qq)
 {
     closeButton      = 0;
     selectWeek       = 0;

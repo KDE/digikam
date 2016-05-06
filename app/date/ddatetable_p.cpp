@@ -44,9 +44,9 @@
 namespace Digikam
 {
 
-DDateTable::Private::Private(DDateTable* const q)
-    : QObject(q),
-      q(q)
+DDateTable::Private::Private(DDateTable* const qq)
+    : QObject(qq),
+      q(qq)
 {
     weekDayFirstOfMonth = 0;
     numDaysThisMonth    = 0;

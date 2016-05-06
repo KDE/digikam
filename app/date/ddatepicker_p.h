@@ -96,7 +96,7 @@ class DDatePicker::Private
 {
 public:
 
-    Private(DDatePicker* const q);
+    Private(DDatePicker* const qq);
 
     void fillWeeksCombo();
     QDate validDateInYearMonth(int year, int month);

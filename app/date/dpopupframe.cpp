@@ -40,7 +40,7 @@ class DPopupFrame::Private
 {
 public:
 
-    Private(DPopupFrame* const q);
+    Private(DPopupFrame* const qq);
     ~Private();
 
 public:
@@ -103,8 +103,8 @@ public:
     DPopupFrame* m_popup;
 };
 
-DPopupFrame::Private::Private(DPopupFrame* const q)
-    : q(q),
+DPopupFrame::Private::Private(DPopupFrame* const qq)
+    : q(qq),
       result(0),   // rejected
       main(0),
       outsideClickCatcher(new OutsideClickCatcher)
