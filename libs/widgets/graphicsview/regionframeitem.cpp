@@ -128,8 +128,8 @@ public:
     const int              HUD_TIMER_ANIMATION_INTERVAL;
 };
 
-RegionFrameItem::Private::Private(RegionFrameItem* const q)
-    : q(q),
+RegionFrameItem::Private::Private(RegionFrameItem* const qq)
+    : q(qq),
       HUD_TIMER_MAX_PIXELS_PER_UPDATE(20),
       HUD_TIMER_ANIMATION_INTERVAL(20)
 {

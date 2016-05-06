@@ -50,8 +50,8 @@
 namespace Digikam
 {
 
-DCategorizedView::Private::Private(DCategorizedView* const listView)
-    : listView(listView),
+DCategorizedView::Private::Private(DCategorizedView* const lv)
+    : listView(lv),
       categoryDrawer(0),
       biggestItemSize(QSize(0, 0)),
       mouseButtonPressed(false),
