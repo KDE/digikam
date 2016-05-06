@@ -6,7 +6,7 @@
  * Date        : 2007-10-24
  * Description : XMP origin settings page.
  *
- * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -330,15 +330,20 @@ void XMPOrigin::readMetadata(QByteArray& xmpData)
 
     if (dateTimeStr.isEmpty())
         dateTimeStr = meta.getXmpTagString("Xmp.xmp.CreateDate", false);
-    else if (dateTimeStr.isEmpty())
+
+    if (dateTimeStr.isEmpty())
         dateTimeStr = meta.getXmpTagString("Xmp.xmp.ModifyDate", false);
-    else if (dateTimeStr.isEmpty())
+
+    if (dateTimeStr.isEmpty())
         dateTimeStr = meta.getXmpTagString("Xmp.exif.DateTimeOriginal", false);
-    else if (dateTimeStr.isEmpty())
+
+    if (dateTimeStr.isEmpty())
         dateTimeStr = meta.getXmpTagString("Xmp.tiff.DateTime", false);
-    else if (dateTimeStr.isEmpty())
+
+    if (dateTimeStr.isEmpty())
         dateTimeStr = meta.getXmpTagString("Xmp.xmp.ModifyDate", false);
-    else if (dateTimeStr.isEmpty())
+
+    if (dateTimeStr.isEmpty())
         dateTimeStr = meta.getXmpTagString("Xmp.xmp.MetadataDate", false);
 
     d->dateCreatedSel->setDateTime(QDateTime::currentDateTime());
@@ -494,8 +499,8 @@ void XMPOrigin::applyMetadata(QByteArray& exifData, QByteArray& xmpData)
     if (d->dateDigitalizedCheck->isChecked())
     {
         meta.setXmpTagString("Xmp.exif.DateTimeDigitized",
-                                   d->dateDigitalizedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
-                                   d->zoneDigitalizedSel->getTimeZone());
+                             d->dateDigitalizedSel->dateTime().toString(QLatin1String("yyyy:MM:ddThh:mm:ss")) +
+                             d->zoneDigitalizedSel->getTimeZone());
     }
     else
     {
