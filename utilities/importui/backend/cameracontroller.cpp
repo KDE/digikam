@@ -35,9 +35,6 @@
 #include <QFile>
 #include <QRegExp>
 #include <QFileInfo>
-#include <QtConcurrent>
-#include <QFuture>
-#include <QFutureWatcher>
 #include <QUrl>
 #include <QDir>
 #include <QMessageBox>
@@ -53,8 +50,6 @@
 #include "digikam_config.h"
 #include "template.h"
 #include "templatemanager.h"
-#include "thumbnailsize.h"
-#include "imagewindow.h"
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
@@ -605,9 +600,10 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
-            QUrl tempURL     = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
-            QString tempFile = QLatin1String("/.digikam-camera-tmp%1-");
-            tempFile.append(QString::number(QCoreApplication::applicationPid()));
+            QString tempFile = QLatin1String("/.digikam-camera-tmp%1-") +
+                               QString::number(QCoreApplication::applicationPid());
+            QUrl tempURL     = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename |
+                                                                  QUrl::StripTrailingSlash);
             QString temp     = tempURL.path() + tempFile.arg(1) + file;
 
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using " << temp;
