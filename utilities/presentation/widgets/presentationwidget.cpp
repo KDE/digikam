@@ -798,14 +798,14 @@ int PresentationWidget::effectChessboard( bool aInit )
     {
         d->w    = width();
         d->h    = height();
-        d->dx   = 8;                         // width of one tile
-        d->dy   = 8;                         // height of one tile
-        d->j    = ( d->w + d->dx - 1 ) / d->dx; // number of tiles
-        d->x    = d->j * d->dx;                // shrinking x-offset from screen border
-        d->ix   = 0;                         // growing x-offset from screen border
-        d->iy   = 0;                         // 0 or d->dy for growing tiling effect
-        d->y    = d->j & 1 ? 0 : d->dy;        // 0 or d->dy for shrinking tiling effect
-        d->wait = 800 / d->j;                 // timeout between effects
+        d->dx   = 8;                             // width of one tile
+        d->dy   = 8;                             // height of one tile
+        d->j    = ( d->w + d->dx - 1 ) / d->dx;  // number of tiles
+        d->x    = d->j * d->dx;                  // shrinking x-offset from screen border
+        d->ix   = 0;                             // growing x-offset from screen border
+        d->iy   = 0;                             // 0 or d->dy for growing tiling effect
+        d->y    = (d->j & 1) ? 0 : d->dy;        // 0 or d->dy for shrinking tiling effect
+        d->wait = 800 / d->j;                    // timeout between effects
     }
 
     if ( d->ix >= d->w )

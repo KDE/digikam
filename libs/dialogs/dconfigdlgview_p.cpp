@@ -453,8 +453,8 @@ void DConfigDlgListViewDelegate::paint(QPainter* painter, const QStyleOptionView
     layoutText(&iconTextLayout, maxWidth);
 
     QPen pen                = painter->pen();
-    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
-                              ? QPalette::Normal : QPalette::Disabled;
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled) ? QPalette::Normal
+                                                                     : QPalette::Disabled;
 
     if (cg == QPalette::Normal && !(option.state & QStyle::State_Active))
     {
