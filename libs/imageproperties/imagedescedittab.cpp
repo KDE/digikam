@@ -205,23 +205,23 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->captionsEdit = new CaptionEdit(captionTagsArea);
 
-    DHBox* const dateBox  = new DHBox(captionTagsArea);
+    DHBox* const dateBox = new DHBox(captionTagsArea);
     new QLabel(i18n("Date:"), dateBox);
-    d->dateTimeEdit = new DDateTimeEdit(dateBox, QLatin1String("datepicker"));
+    d->dateTimeEdit      = new DDateTimeEdit(dateBox, QLatin1String("datepicker"));
 
-    DHBox* const pickBox       = new DHBox(captionTagsArea);
+    DHBox* const pickBox = new DHBox(captionTagsArea);
     new QLabel(i18n("Pick Label:"), pickBox);
     d->pickLabelSelector = new PickLabelSelector(pickBox);
     pickBox->layout()->setAlignment(d->pickLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
 
-    DHBox* const colorBox       = new DHBox(captionTagsArea);
+    DHBox* const colorBox = new DHBox(captionTagsArea);
     new QLabel(i18n("Color Label:"), colorBox);
     d->colorLabelSelector = new ColorLabelSelector(colorBox);
     colorBox->layout()->setAlignment(d->colorLabelSelector, Qt::AlignVCenter|Qt::AlignRight);
 
     DHBox* const rateBox  = new DHBox(captionTagsArea);
     new QLabel(i18n("Rating:"), rateBox);
-    d->ratingWidget = new RatingWidget(rateBox);
+    d->ratingWidget       = new RatingWidget(rateBox);
     rateBox->layout()->setAlignment(d->ratingWidget, Qt::AlignVCenter|Qt::AlignRight);
 
     // Buttons -----------------------------------------
@@ -229,16 +229,16 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
     DHBox* const applyButtonBox = new DHBox(this);
     applyButtonBox->setSpacing(spacing);
 
-    d->applyBtn           = new QPushButton(i18n("Apply"), applyButtonBox);
+    d->applyBtn = new QPushButton(i18n("Apply"), applyButtonBox);
     d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->applyBtn->setEnabled(false);
     d->applyBtn->setToolTip( i18n("Apply all changes to images"));
     //buttonsBox->setStretchFactor(d->applyBtn, 10);
 
-    DHBox* const buttonsBox     = new DHBox(this);
+    DHBox* const buttonsBox = new DHBox(this);
     buttonsBox->setSpacing(spacing);
 
-    d->revertBtn          = new QToolButton(buttonsBox);
+    d->revertBtn = new QToolButton(buttonsBox);
     d->revertBtn->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->revertBtn->setToolTip( i18n("Revert all changes"));
     d->revertBtn->setEnabled(false);
@@ -284,7 +284,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     d->openTagMngr = new QPushButton( i18n("Open Tag Manager"));
 
-    d->newTagEdit   = new AddTagsLineEdit(tagsArea);
+    d->newTagEdit  = new AddTagsLineEdit(tagsArea);
     d->newTagEdit->setSupportingTagModel(d->tagModel);
     d->newTagEdit->setTagTreeView(d->tagCheckView);
     //, "ImageDescEditTabNewTagEdit",
@@ -410,8 +410,7 @@ ImageDescEditTab::ImageDescEditTab(QWidget* const parent)
 
     connect(this, SIGNAL(askToApplyChanges(QList<ImageInfo>,DisjointMetadata*)),
             this, SLOT(slotAskToApplyChanges(QList<ImageInfo>,DisjointMetadata*)),
-            Qt::QueuedConnection
-           );
+            Qt::QueuedConnection);
 
     // Initialize ---------------------------------------------
 
@@ -595,40 +594,40 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Disj
     {
         if (hub->commentsChanged())
             text = i18np("You have edited the image caption. ",
-                        "You have edited the captions of %1 images. ",
-                        infos.count());
+                         "You have edited the captions of %1 images. ",
+                         infos.count());
         else if (hub->titlesChanged())
             text = i18np("You have edited the image title. ",
-                        "You have edited the titles of %1 images. ",
-                        infos.count());
+                         "You have edited the titles of %1 images. ",
+                         infos.count());
         else if (hub->dateTimeChanged())
             text = i18np("You have edited the date of the image. ",
-                        "You have edited the date of %1 images. ",
-                        infos.count());
+                         "You have edited the date of %1 images. ",
+                         infos.count());
         else if (hub->pickLabelChanged())
             text = i18np("You have edited the pick label of the image. ",
-                        "You have edited the pick label of %1 images. ",
-                        infos.count());
+                         "You have edited the pick label of %1 images. ",
+                         infos.count());
         else if (hub->colorLabelChanged())
             text = i18np("You have edited the color label of the image. ",
-                        "You have edited the color label of %1 images. ",
-                        infos.count());
+                         "You have edited the color label of %1 images. ",
+                         infos.count());
         else if (hub->ratingChanged())
             text = i18np("You have edited the rating of the image. ",
-                        "You have edited the rating of %1 images. ",
-                        infos.count());
+                         "You have edited the rating of %1 images. ",
+                         infos.count());
         else if (hub->tagsChanged())
             text = i18np("You have edited the tags of the image. ",
-                        "You have edited the tags of %1 images. ",
-                        infos.count());
+                         "You have edited the tags of %1 images. ",
+                         infos.count());
 
         text += i18n("Do you want to apply your changes?");
     }
     else
     {
         text = i18np("<p>You have edited the metadata of the image: </p><p><ul>",
-                    "<p>You have edited the metadata of %1 images: </p><p><ul>",
-                    infos.count());
+                     "<p>You have edited the metadata of %1 images: </p><p><ul>",
+                     infos.count());
 
         if (hub->titlesChanged())
         {
@@ -670,7 +669,6 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Disj
         text += i18n("<p>Do you want to apply your changes?</p>");
     }
 
-    bool alwaysApply            = false;
     QCheckBox* const alwaysCBox = new QCheckBox(i18n("Always apply changes without confirmation"));
 
     QMessageBox msgBox(QMessageBox::Information,
@@ -686,8 +684,8 @@ void ImageDescEditTab::slotAskToApplyChanges(const QList<ImageInfo>& infos, Disj
     DNotificationWrapper(QString(), i18n("Apply changes?"),
                          DigikamApp::instance(), DigikamApp::instance()->windowTitle());
 
-    int returnCode = msgBox.exec();
-    alwaysApply    = msgBox.checkBox()->isChecked();
+    int returnCode   = msgBox.exec();
+    bool alwaysApply = msgBox.checkBox()->isChecked();
 
     if (alwaysApply)
     {
@@ -923,6 +921,7 @@ void ImageDescEditTab::slotTagStateChanged(Album* album, Qt::CheckState checkSta
             d->hub.setTag(tag->id(), DisjointMetadata::MetadataInvalid);
             break;
     }
+
     slotModified();
 }
 
@@ -1091,6 +1090,7 @@ void ImageDescEditTab::updateTagsView()
 
     // then update checked state for all tags of the currently selected images
     const QMap<int, DisjointMetadata::Status> hubMap = d->hub.tags();
+
     for (QMap<int, DisjointMetadata::Status>::const_iterator it = hubMap.begin(); it != hubMap.end(); ++it)
     {
         TAlbum* tag = AlbumManager::instance()->findTAlbum(it.key());

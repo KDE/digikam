@@ -44,8 +44,6 @@
 #include "addtagslineedit.h"
 #include "disjointmetadata.h"
 
-
-
 namespace Digikam
 {
 class ImageInfo;
@@ -152,7 +150,7 @@ private Q_SLOTS:
     void slotReadFromFileMetadataToDatabase();
     void slotWriteToFileMetadataFromDatabase();
 
-    void slotAskToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata *hub);
+    void slotAskToApplyChanges(const QList<ImageInfo>& infos, DisjointMetadata* hub);
 
 private:
 
