@@ -42,10 +42,9 @@ IccTransformFilter::IccTransformFilter(QObject* const parent)
 }
 
 IccTransformFilter::IccTransformFilter(DImg* const orgImage, QObject* const parent, const IccTransform& transform)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("ICC Transform"))
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("ICC Transform")),
+      m_transform(transform)
 {
-    m_transform = transform;
-    // initialize filter
     initFilter();
 }
 

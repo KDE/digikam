@@ -106,8 +106,8 @@ DImg::DImg(const QString& filePath, DImgLoaderObserver* const observer,
 }
 
 DImg::DImg(const DImg& image)
+    : m_priv(image.m_priv)
 {
-    m_priv = image.m_priv;
 }
 
 DImg::DImg(uint width, uint height, bool sixteenBit, bool alpha, uchar* const data, bool copyData)
@@ -280,9 +280,9 @@ void DImg::resetMetaData()
 
 uchar* DImg::stripImageData()
 {
-    uchar* data  = m_priv->data;
-    m_priv->data = 0;
-    m_priv->null = true;
+    uchar* const data  = m_priv->data;
+    m_priv->data       = 0;
+    m_priv->null       = true;
     return data;
 }
 
@@ -638,6 +638,7 @@ bool DImg::save(const QString& filePath, FORMAT frm, DImgLoaderObserver* const o
 bool DImg::save(const QString& filePath, const QString& format, DImgLoaderObserver* const observer)
 {
     qCDebug(DIGIKAM_DIMG_LOG) << "Saving to " << filePath << " with format: " << format;
+
     if (isNull())
     {
         return false;
@@ -900,7 +901,7 @@ uchar* DImg::scanLine(uint i) const
         return 0;
     }
 
-    uchar* data = bits() + (width() * bytesDepth() * i);
+    uchar* const data = bits() + (width() * bytesDepth() * i);
     return data;
 }
 
@@ -1177,10 +1178,10 @@ DColor DImg::getPixelColor(uint x, uint y) const
         return DColor();
     }
 
-    int depth   = bytesDepth();
-    uchar* data = m_priv->data + x * depth + (m_priv->width * y * depth);
+    int depth         = bytesDepth();
+    uchar* const data = m_priv->data + x * depth + (m_priv->width * y * depth);
 
-    return(DColor(data, m_priv->sixteenBit));
+    return (DColor(data, m_priv->sixteenBit));
 }
 
 void DImg::prepareSubPixelAccess()
@@ -1280,9 +1281,9 @@ DColor DImg::getSubPixelColor(float x, float y) const
 
 #ifdef LANCZOS_DATA_FLOAT
 
-    float xs = ::ceilf(x) - LANCZOS_SUPPORT;
+    float xs = ::ceilf(x)  - LANCZOS_SUPPORT;
     float xe = ::floorf(x) + LANCZOS_SUPPORT;
-    float ys = ::ceilf(y) - LANCZOS_SUPPORT;
+    float ys = ::ceilf(y)  - LANCZOS_SUPPORT;
     float ye = ::floorf(y) + LANCZOS_SUPPORT;
 
     if (xs >= 0 && ys >= 0 && xe < width() && ye < height())
@@ -1300,9 +1301,9 @@ DColor DImg::getSubPixelColor(float x, float y) const
 
             for (xc = xs; xc <= xe; xc += 1.0, dx -= 1.0)
             {
-                uchar* data = bits() + (int)(xs * bytesDepth()) + (int)(width() * ys * bytesDepth());
-                DColor src  = DColor(data, sixteenBit());
-                float d     = dx * dx + dy * dy;
+                uchar* const data = bits() + (int)(xs * bytesDepth()) + (int)(width() * ys * bytesDepth());
+                DColor src        = DColor(data, sixteenBit());
+                float d           = dx * dx + dy * dy;
 
                 if (d >= LANCZOS_SUPPORT * LANCZOS_SUPPORT)
                 {
@@ -1349,7 +1350,7 @@ DColor DImg::getSubPixelColor(float x, float y) const
 
             if (xc >= 0 && ys >= 0 && xc < (int)width() && ys < (int)height())
             {
-                uchar* data = bits() + xc * bytesDepth() + width() * ys * bytesDepth();
+                uchar* const data = bits() + xc * bytesDepth() + width() * ys * bytesDepth();
                 src.setColor(data, sixteenBit());
             }
 
@@ -1388,11 +1389,11 @@ DColor DImg::getSubPixelColorFast(float x, float y) const
     x = qBound(0.0f, x, (float)width()  - 1);
     y = qBound(0.0f, y, (float)height() - 1);
 
-    int xx    = (int)x;
-    int yy    = (int)y;
-    float d_x = x - (int)x;
-    float d_y = y - (int)y;
-    uchar* data;
+    int xx      = (int)x;
+    int yy      = (int)y;
+    float d_x   = x - (int)x;
+    float d_y   = y - (int)y;
+    uchar* data = 0;
 
     DColor d00, d01, d10, d11;
     DColor col;
@@ -1459,8 +1460,8 @@ void DImg::setPixelColor(uint x, uint y, const DColor& color)
         return;
     }
 
-    int depth   = bytesDepth();
-    uchar* data = m_priv->data + x * depth + (m_priv->width * y * depth);
+    int depth         = bytesDepth();
+    uchar* const data = m_priv->data + x * depth + (m_priv->width * y * depth);
     color.setPixel(data);
 }
 
@@ -1715,19 +1716,13 @@ void DImg::bitBlt(const uchar* const src, uchar* const dest,
         return;
     }
 
-    const uchar* sptr;
-
-    uchar* dptr;
-
+    const uchar* sptr  = 0;
+    uchar* dptr        = 0;
     uint   slinelength = swidth * sdepth;
-
     uint   dlinelength = dwidth * ddepth;
-
-    int scurY        = sy;
-
-    int dcurY        = dy;
-
-    int sdepthlength = w * sdepth;
+    int scurY          = sy;
+    int dcurY          = dy;
+    int sdepthlength   = w * sdepth;
 
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
@@ -1775,19 +1770,17 @@ void DImg::bitBlend(DColorComposer* const composer, uchar* const src, uchar* con
         return;
     }
 
-    uchar* sptr = 0;
-    uchar* dptr = 0;
-
-    uint   slinelength = swidth * sdepth;
-    uint   dlinelength = dwidth * ddepth;
-
-    int scurY = sy;
-    int dcurY = dy;
+    uchar* sptr      = 0;
+    uchar* dptr      = 0;
+    uint slinelength = swidth * sdepth;
+    uint dlinelength = dwidth * ddepth;
+    int scurY        = sy;
+    int dcurY        = dy;
 
     for (int j = 0 ; j < h ; ++j, ++scurY, ++dcurY)
     {
-        sptr  = &src [ scurY * slinelength ] + sx * sdepth;
-        dptr  = &dest[ dcurY * dlinelength ] + dx * ddepth;
+        sptr = &src [ scurY * slinelength ] + sx * sdepth;
+        dptr = &dest[ dcurY * dlinelength ] + dx * ddepth;
 
         // blend src and destination
         for (int i = 0 ; i < w ; ++i, sptr += sdepth, dptr += ddepth)
@@ -1811,7 +1804,7 @@ void DImg::bitBlendImageOnColor(const DColor& color)
 void DImg::bitBlendImageOnColor(const DColor& color, int x, int y, int w, int h)
 {
     // get composer for compositing rule
-    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    DColorComposer* const composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
     // flags would be MultiplicationFlagsDImg for anything but PorterDuffNone
     bitBlendImageOnColor(composer, color, x, y, w, h, DColorComposer::NoMultiplication);
 
@@ -1853,15 +1846,13 @@ void DImg::bitBlendOnColor(DColorComposer* const composer, const DColor& color,
         return;
     }
 
-    uchar* ptr;
-
-    uint   linelength = width * depth;
-
-    int curY = y;
+    uchar* ptr      = 0;
+    uint linelength = width * depth;
+    int curY        = y;
 
     for (int j = 0 ; j < h ; ++j, ++curY)
     {
-        ptr  = &data[ curY * linelength ] + x * depth;
+        ptr = &data[ curY * linelength ] + x * depth;
 
         // blend src and destination
         for (int i = 0 ; i < w ; ++i, ptr += depth)
@@ -2005,8 +1996,7 @@ QPixmap DImg::convertToPixmap() const
 
         uchar* sptr = bits();
         uint*  dptr = reinterpret_cast<uint*>(img.bits());
-
-        uint dim = width() * height();
+        uint dim    = width() * height();
 
         for (uint i = 0; i < dim; ++i)
         {
@@ -2090,10 +2080,10 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
 
     // --------------------------------------------------------
 
-    uint   dim  = m_priv->width * m_priv->height;
-    uchar* dptr = bits;
+    uint   dim   = m_priv->width * m_priv->height;
+    uchar* dptr  = bits;
     int    s_blue, s_green, s_red;
-    bool   match;
+    bool   match = false;
 
     if (sixteenBit())
     {
@@ -2106,7 +2096,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
             s_red   = *sptr++;
             sptr++;
             match = pure ? (s_red <= min) && (s_green <= min) && (s_blue <= min)
-                    : (s_red <= min) || (s_green <= min) || (s_blue <= min);
+                         : (s_red <= min) || (s_green <= min) || (s_blue <= min);
 
             if (under && match)
             {
@@ -2127,7 +2117,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
             }
 
             match = pure ? (s_red >= max) && (s_green >= max) && (s_blue >= max)
-                    : (s_red >= max) || (s_green >= max) || (s_blue >= max);
+                         : (s_red >= max) || (s_green >= max) || (s_blue >= max);
 
             if (over && match)
             {
@@ -2161,7 +2151,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
             s_red   = *sptr++;
             sptr++;
             match = pure ? (s_red <= min) && (s_green <= min) && (s_blue <= min)
-                    : (s_red <= min) || (s_green <= min) || (s_blue <= min);
+                         : (s_red <= min) || (s_green <= min) || (s_blue <= min);
 
             if (under && match)
             {
@@ -2182,7 +2172,7 @@ QImage DImg::pureColorMask(ExposureSettingsContainer* const expoSettings) const
             }
 
             match = pure ? (s_red >= max) && (s_green >= max) && (s_blue >= max)
-                    : (s_red >= max) || (s_green >= max) || (s_blue >= max);
+                         : (s_red >= max) || (s_green >= max) || (s_blue >= max);
 
             if (over && match)
             {
@@ -2287,9 +2277,8 @@ void DImg::rotate(ANGLE angle)
             if (sixteenBit())
             {
                 ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
-
-                ullong* from = reinterpret_cast<ullong*>(m_priv->data);
-                ullong* to   = 0;
+                ullong* from    = reinterpret_cast<ullong*>(m_priv->data);
+                ullong* to      = 0;
 
                 for (int y = w - 1; y >= 0; --y)
                 {
@@ -2310,9 +2299,8 @@ void DImg::rotate(ANGLE angle)
             else
             {
                 uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
-
-                uint* from = reinterpret_cast<uint*>(m_priv->data);
-                uint* to   = 0;
+                uint* from    = reinterpret_cast<uint*>(m_priv->data);
+                uint* to      = 0;
 
                 for (int y = w - 1; y >= 0; --y)
                 {
@@ -2336,9 +2324,8 @@ void DImg::rotate(ANGLE angle)
 
         case (ROT180):
         {
-            uint w  = width();
-            uint h  = height();
-
+            uint w          = width();
+            uint h          = height();
             int middle_line = -1;
 
             if (h % 2)
@@ -2348,10 +2335,9 @@ void DImg::rotate(ANGLE angle)
 
             if (sixteenBit())
             {
-                ullong* line1;
-                ullong* line2;
-
-                ullong* data = reinterpret_cast<ullong*>(bits());
+                ullong* line1 = 0;
+                ullong* line2 = 0;
+                ullong* data  = reinterpret_cast<ullong*>(bits());
                 ullong  tmp;
 
                 // can be done inplace
@@ -2382,8 +2368,7 @@ void DImg::rotate(ANGLE angle)
             {
                 uint* line1 = 0;
                 uint* line2 = 0;
-
-                uint* data = reinterpret_cast<uint*>(bits());
+                uint* data  = reinterpret_cast<uint*>(bits());
                 uint  tmp;
 
                 // can be done inplace
@@ -2422,9 +2407,8 @@ void DImg::rotate(ANGLE angle)
             if (sixteenBit())
             {
                 ullong* newData = DImgLoader::new_failureTolerant<ullong>(w * h);
-
-                ullong* from = reinterpret_cast<ullong*>(m_priv->data);
-                ullong* to   = 0;
+                ullong* from    = reinterpret_cast<ullong*>(m_priv->data);
+                ullong* to      = 0;
 
                 for (uint y = 0; y < w; ++y)
                 {
@@ -2445,9 +2429,8 @@ void DImg::rotate(ANGLE angle)
             else
             {
                 uint* newData = DImgLoader::new_failureTolerant<uint>(w * h);
-
-                uint* from = reinterpret_cast<uint*>(m_priv->data);
-                uint* to   = 0;
+                uint* from    = reinterpret_cast<uint*>(m_priv->data);
+                uint* to      = 0;
 
                 for (uint y = 0; y < w; ++y)
                 {
@@ -2505,9 +2488,8 @@ void DImg::flip(FLIP direction)
             if (sixteenBit())
             {
                 unsigned short  tmp[4];
-                unsigned short* beg = 0;
-                unsigned short* end = 0;
-
+                unsigned short* beg  = 0;
+                unsigned short* end  = 0;
                 unsigned short* data = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
@@ -2532,9 +2514,8 @@ void DImg::flip(FLIP direction)
             else
             {
                 uchar  tmp[4];
-                uchar* beg;
-                uchar* end;
-
+                uchar* beg  = 0;
+                uchar* end  = 0;
                 uchar* data = bits();
 
                 // can be done inplace
@@ -2570,8 +2551,7 @@ void DImg::flip(FLIP direction)
                 unsigned short  tmp[4];
                 unsigned short* line1 = 0;
                 unsigned short* line2 = 0;
-
-                unsigned short* data = reinterpret_cast<unsigned short*>(bits());
+                unsigned short* data  = reinterpret_cast<unsigned short*>(bits());
 
                 // can be done inplace
                 uint hHalf = (h / 2);
@@ -2595,10 +2575,9 @@ void DImg::flip(FLIP direction)
             else
             {
                 uchar  tmp[4];
-                uchar* line1;
-                uchar* line2;
-
-                uchar* data = bits();
+                uchar* line1 = 0;
+                uchar* line2 = 0;
+                uchar* data  = bits();
 
                 // can be done inplace
                 uint hHalf = (h / 2);
@@ -2754,8 +2733,7 @@ void DImg::convertDepth(int depth)
         uchar*  data = new uchar[width()*height() * 4];
         uchar*  dptr = data;
         ushort* sptr = reinterpret_cast<ushort*>(bits());
-
-        uint dim = width() * height() * 4;
+        uint dim     = width() * height() * 4;
 
         for (uint i = 0; i < dim; ++i)
         {
@@ -2795,7 +2773,7 @@ void DImg::convertDepth(int depth)
         }
 
         delete [] m_priv->data;
-        m_priv->data = data;
+        m_priv->data       = data;
         m_priv->sixteenBit = true;
     }
 }
@@ -2820,7 +2798,7 @@ void DImg::fill(const DColor& color)
 
         for (uint i = 0 ; i < dim ; i += 4)
         {
-            imgData16[ i ] = blue;
+            imgData16[i    ] = blue;
             imgData16[i + 1] = green;
             imgData16[i + 2] = red;
             imgData16[i + 3] = alpha;
@@ -2836,7 +2814,7 @@ void DImg::fill(const DColor& color)
 
         for (uint i = 0 ; i < dim ; i += 4)
         {
-            imgData[ i ] = blue;
+            imgData[i    ] = blue;
             imgData[i + 1] = green;
             imgData[i + 2] = red;
             imgData[i + 3] = alpha;
@@ -2910,7 +2888,7 @@ QByteArray DImg::createImageUniqueId() const
 {
     NonDeterministicRandomData randomData(16);
     QByteArray imageUUID = randomData.toHex();
-    imageUUID            += getUniqueHashV2();
+    imageUUID           += getUniqueHashV2();
     return imageUUID;
 }
 

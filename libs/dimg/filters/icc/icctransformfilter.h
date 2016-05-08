@@ -33,7 +33,8 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT IccTransformFilter : public DImgThreadedFilter, public DImgLoaderObserver
+class DIGIKAM_EXPORT IccTransformFilter : public DImgThreadedFilter,
+                                          public DImgLoaderObserver
 {
 
 public:

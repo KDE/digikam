@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Antivignetting threaded image filter.
  *
- * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Julien Narboux <julien at narboux dot fr>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
@@ -50,9 +50,9 @@ AntiVignettingFilter::AntiVignettingFilter(QObject* const parent)
 
 AntiVignettingFilter::AntiVignettingFilter(DImg* const orgImage, QObject* const parent,
                                            const AntiVignettingContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("AntiVignettingFilter"))
+    : DImgThreadedFilter(orgImage, parent, QLatin1String("AntiVignettingFilter")),
+      m_settings(settings)
 {
-    m_settings = settings;
     initFilter();
 }
 
@@ -219,12 +219,12 @@ FilterAction AntiVignettingFilter::filterAction()
 void AntiVignettingFilter::readParameters(const Digikam::FilterAction& action)
 {
     m_settings.addvignetting = action.parameter(QLatin1String("addvignetting")).toBool();
-    m_settings.density = action.parameter(QLatin1String("density")).toDouble();
-    m_settings.innerradius = action.parameter(QLatin1String("innerradius")).toDouble();
-    m_settings.outerradius = action.parameter(QLatin1String("outerradius")).toDouble();
-    m_settings.power = action.parameter(QLatin1String("power")).toDouble();
-    m_settings.xshift = action.parameter(QLatin1String("xshift")).toDouble();
-    m_settings.yshift = action.parameter(QLatin1String("yshift")).toDouble();
+    m_settings.density       = action.parameter(QLatin1String("density")).toDouble();
+    m_settings.innerradius   = action.parameter(QLatin1String("innerradius")).toDouble();
+    m_settings.outerradius   = action.parameter(QLatin1String("outerradius")).toDouble();
+    m_settings.power         = action.parameter(QLatin1String("power")).toDouble();
+    m_settings.xshift        = action.parameter(QLatin1String("xshift")).toDouble();
+    m_settings.yshift        = action.parameter(QLatin1String("yshift")).toDouble();
 }
 
 }  // namespace Digikam
