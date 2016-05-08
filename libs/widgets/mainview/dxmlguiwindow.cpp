@@ -39,6 +39,8 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QMenu>
+#include <QUrl>
+#include <QUrlQuery>
 #include <QDesktopServices>
 
 // KDE includes
@@ -49,7 +51,6 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <khelpclient.h>
 #include <kwindowconfig.h>
 #include <ksharedconfig.h>
 #include <kshortcutsdialog.h>
@@ -329,9 +330,9 @@ void DXmlGuiWindow::createGeolocationEditAction()
 
     connect(m_geolocationEditAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEditGeolocation()));
-#endif    
+#endif
 }
-    
+
 void DXmlGuiWindow::createMetadataEditAction()
 {
     m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("text-xml")), i18n("Edit Metadata..."), this);
@@ -352,7 +353,7 @@ void DXmlGuiWindow::createKSaneAction()
             this, SLOT(slotImportFromScanner()));
 #endif // HAVE_KSANE
 }
- 
+
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
 {
     d->fullScreenAction = KStandardAction::fullScreen(0, 0, this, this);
@@ -662,7 +663,16 @@ bool DXmlGuiWindow::thumbbarVisibility() const
 
 void DXmlGuiWindow::openHandbook(const QString& anchor, const QString& appname)
 {
-    KHelpClient::invokeHelp(anchor, appname);
+    QUrl url = QUrl(QString::fromUtf8("help:/%1/index.html").arg(appname));
+
+    if (!anchor.isEmpty())
+    {
+        QUrlQuery query(url);
+        query.addQueryItem(QStringLiteral("anchor"), anchor);
+        url.setQuery(query);
+    }
+
+    QDesktopServices::openUrl(url);
 }
 
 void DXmlGuiWindow::restoreWindowSize(QWindow* const win, const KConfigGroup& group)

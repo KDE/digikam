@@ -43,7 +43,7 @@
 #include "dlogoaction.h"
 
 #ifdef HAVE_KSANE
-#include "ksaneaction.h"
+#   include "ksaneaction.h"
 #endif
 
 class QEvent;
