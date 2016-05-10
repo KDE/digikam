@@ -107,11 +107,27 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
+    QString dateTimeFormat  = QLocale().dateTimeFormat(QLocale::ShortFormat);
+
+    if (!dateTimeFormat.contains(QLatin1String("yyyy")))
+    {
+        dateTimeFormat.replace(QLatin1String("yy"),
+                               QLatin1String("yyyy"));
+    }
+
+    if (!dateTimeFormat.contains(QLatin1String("ss")))
+    {
+        dateTimeFormat.replace(QLatin1String("mm"),
+                               QLatin1String("mm:ss"));
+    }
+
     // --------------------------------------------------------
 
     d->dateDigitalizedCheck   = new QCheckBox(i18n("Digitization date"), this);
     d->zoneDigitalizedSel     = new TimeZoneComboBox(this);
+
     d->dateDigitalizedSel     = new QDateTimeEdit(this);
+    d->dateDigitalizedSel->setDisplayFormat(dateTimeFormat);
 
     d->setTodayDigitalizedBtn = new QPushButton();
     d->setTodayDigitalizedBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
@@ -128,7 +144,10 @@ XMPOrigin::XMPOrigin(QWidget* const parent)
 
     d->dateCreatedCheck   = new QCheckBox(i18n("Creation date"), this);
     d->zoneCreatedSel     = new TimeZoneComboBox(this);
+
     d->dateCreatedSel     = new QDateTimeEdit(this);
+    d->dateCreatedSel->setDisplayFormat(dateTimeFormat);
+
     d->syncEXIFDateCheck  = new QCheckBox(i18n("Sync EXIF creation date"), this);
 
     d->setTodayCreatedBtn = new QPushButton();

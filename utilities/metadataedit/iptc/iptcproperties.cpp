@@ -129,13 +129,27 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
     QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
+    QString dateFormat  = QLocale().dateFormat(QLocale::ShortFormat);
+
+    if (!dateFormat.contains(QLatin1String("yyyy")))
+    {
+        dateFormat.replace(QLatin1String("yy"),
+                           QLatin1String("yyyy"));
+    }
+
+    QString timeFormat = QLatin1String("hh:mm:ss");
+
     // --------------------------------------------------------
 
     d->dateReleasedCheck   = new QCheckBox(i18n("Release date"), this);
     d->timeReleasedCheck   = new QCheckBox(i18n("Release time"), this);
     d->zoneReleasedSel     = new TimeZoneComboBox(this);
+
     d->dateReleasedSel     = new QDateEdit(this);
+    d->dateReleasedSel->setDisplayFormat(dateFormat);
+
     d->timeReleasedSel     = new QTimeEdit(this);
+    d->timeReleasedSel->setDisplayFormat(timeFormat);
 
     d->setTodayReleasedBtn = new QPushButton();
     d->setTodayReleasedBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
@@ -155,8 +169,12 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
     d->dateExpiredCheck   = new QCheckBox(i18n("Expiration date"), this);
     d->timeExpiredCheck   = new QCheckBox(i18n("Expiration time"), this);
     d->zoneExpiredSel     = new TimeZoneComboBox(this);
+
     d->dateExpiredSel     = new QDateEdit(this);
+    d->dateExpiredSel->setDisplayFormat(dateFormat);
+
     d->timeExpiredSel     = new QTimeEdit(this);
+    d->timeExpiredSel->setDisplayFormat(timeFormat);
 
     d->setTodayExpiredBtn = new QPushButton();
     d->setTodayExpiredBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));

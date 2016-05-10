@@ -164,6 +164,16 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
     QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
+    QString dateFormat  = QLocale().dateFormat(QLocale::ShortFormat);
+
+    if (!dateFormat.contains(QLatin1String("yyyy")))
+    {
+        dateFormat.replace(QLatin1String("yy"),
+                           QLatin1String("yyyy"));
+    }
+
+    QString timeFormat = QLatin1String("hh:mm:ss");
+
     // --------------------------------------------------------
 
     d->destinationCheck = new QCheckBox(i18n("Destination:"), this);
@@ -253,8 +263,12 @@ IPTCEnvelope::IPTCEnvelope(QWidget* const parent)
     d->dateSentCheck   = new QCheckBox(i18n("Sent date:"), this);
     d->timeSentCheck   = new QCheckBox(i18n("Sent time:"), this);
     d->zoneSentSel     = new TimeZoneComboBox(this);
+
     d->dateSentSel     = new QDateEdit(this);
+    d->dateSentSel->setDisplayFormat(dateFormat);
+
     d->timeSentSel     = new QTimeEdit(this);
+    d->timeSentSel->setDisplayFormat(timeFormat);
 
     d->setTodaySentBtn = new QPushButton();
     d->setTodaySentBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));

@@ -100,11 +100,28 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
 {
     QGridLayout* const grid = new QGridLayout(this);
 
+    QString dateTimeFormat  = QLocale().dateTimeFormat(QLocale::ShortFormat);
+
+    if (!dateTimeFormat.contains(QLatin1String("yyyy")))
+    {
+        dateTimeFormat.replace(QLatin1String("yy"),
+                               QLatin1String("yyyy"));
+    }
+
+    if (!dateTimeFormat.contains(QLatin1String("ss")))
+    {
+        dateTimeFormat.replace(QLatin1String("mm"),
+                               QLatin1String("mm:ss"));
+    }
+
     // --------------------------------------------------------
 
     d->dateCreatedCheck       = new QCheckBox(i18n("Creation date and time"), this);
     d->dateCreatedSubSecCheck = new QCheckBox(i18n("Creation sub-second"), this);
+
     d->dateCreatedSel         = new QDateTimeEdit(this);
+    d->dateCreatedSel->setDisplayFormat(dateTimeFormat);
+
     d->dateCreatedSubSecEdit  = new QSpinBox(this);
     d->dateCreatedSubSecEdit->setMinimum(0);
     d->dateCreatedSubSecEdit->setMaximum(999);
@@ -132,7 +149,10 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
 
     d->dateOriginalCheck       = new QCheckBox(i18n("Original date and time"), this);
     d->dateOriginalSubSecCheck = new QCheckBox(i18n("Original sub-second"), this);
+
     d->dateOriginalSel         = new QDateTimeEdit(this);
+    d->dateOriginalSel->setDisplayFormat(dateTimeFormat);
+
     d->dateOriginalSubSecEdit  = new QSpinBox(this);
     d->dateOriginalSubSecEdit->setMinimum(0);
     d->dateOriginalSubSecEdit->setMaximum(999);
@@ -155,7 +175,10 @@ EXIFDateTime::EXIFDateTime(QWidget* const parent)
 
     d->dateDigitalizedCheck       = new QCheckBox(i18n("Digitization date and time"), this);
     d->dateDigitalizedSubSecCheck = new QCheckBox(i18n("Digitization sub-second"), this);
+
     d->dateDigitalizedSel         = new QDateTimeEdit(this);
+    d->dateDigitalizedSel->setDisplayFormat(dateTimeFormat);
+
     d->dateDigitalizedSubSecEdit  = new QSpinBox(this);
     d->dateDigitalizedSubSecEdit->setMinimum(0);
     d->dateDigitalizedSubSecEdit->setMaximum(999);

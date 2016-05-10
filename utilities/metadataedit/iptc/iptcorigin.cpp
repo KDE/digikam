@@ -127,13 +127,27 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
     QValidator* const asciiValidator = new QRegExpValidator(asciiRx, this);
 
+    QString dateFormat  = QLocale().dateFormat(QLocale::ShortFormat);
+
+    if (!dateFormat.contains(QLatin1String("yyyy")))
+    {
+        dateFormat.replace(QLatin1String("yy"),
+                           QLatin1String("yyyy"));
+    }
+
+    QString timeFormat = QLatin1String("hh:mm:ss");
+
     // --------------------------------------------------------
 
     d->dateDigitalizedCheck   = new QCheckBox(i18n("Digitization date"), this);
     d->timeDigitalizedCheck   = new QCheckBox(i18n("Digitization time"), this);
     d->zoneDigitalizedSel     = new TimeZoneComboBox(this);
+
     d->dateDigitalizedSel     = new QDateEdit(this);
+    d->dateDigitalizedSel->setDisplayFormat(dateFormat);
+
     d->timeDigitalizedSel     = new QTimeEdit(this);
+    d->timeDigitalizedSel->setDisplayFormat(timeFormat);
 
     d->setTodayDigitalizedBtn = new QPushButton();
     d->setTodayDigitalizedBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
@@ -153,8 +167,13 @@ IPTCOrigin::IPTCOrigin(QWidget* const parent)
     d->dateCreatedCheck   = new QCheckBox(i18n("Creation date"), this);
     d->timeCreatedCheck   = new QCheckBox(i18n("Creation time"), this);
     d->zoneCreatedSel     = new TimeZoneComboBox(this);
+
     d->dateCreatedSel     = new QDateEdit(this);
+    d->dateCreatedSel->setDisplayFormat(dateFormat);
+
     d->timeCreatedSel     = new QTimeEdit(this);
+    d->timeCreatedSel->setDisplayFormat(timeFormat);
+
     d->syncEXIFDateCheck  = new QCheckBox(i18n("Sync EXIF creation date"), this);
 
     d->setTodayCreatedBtn = new QPushButton();
