@@ -58,6 +58,8 @@ DDateTimeEdit::DDateTimeEdit(QWidget* const parent, const QString& name)
     d->datePopUp = new DDateEdit(this, QLatin1String("datepopup"));
     d->timePopUp = new QTimeEdit(QTime::currentTime(), this);
 
+    d->timePopUp->setDisplayFormat(QLatin1String("hh:mm:ss"));
+
     connect(d->datePopUp, &DDateEdit::dateChanged,
             this, &DDateTimeEdit::slotDateTimeChanged);
 
