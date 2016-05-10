@@ -170,4 +170,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 131 ==> 333624 - "Lookup missing altitude values" in the geolocation dialog is broken [patch].
 132 ==> 361882 - "Download new" tries to only download selected images.
 133 ==> 302583 - Convert do DNG while importing [patch].
-134 ==> 
+134 ==> 315740 - Date is incorrectly completed to day in future.
+135 ==> 362441 - Caption and Tags - use 4 digit year format instead of 2 digit year format (additionally add seconds).
+136 ==> 
