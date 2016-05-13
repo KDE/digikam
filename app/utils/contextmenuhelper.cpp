@@ -70,8 +70,8 @@
 #include "akonadiiface.h"
 
 #ifdef HAVE_KIPI
-#include "kipipluginloader.h"
-#endif /* HAVE_KIPI */
+#    include "kipipluginloader.h"
+#endif
 
 namespace Digikam
 {
@@ -297,7 +297,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
 {
     KService::Ptr service;
     QList<QUrl> list = d->selectedItems;
-    QString name    = action ? action->data().toString() : QString();
+    QString name     = action ? action->data().toString() : QString();
 
     if (name.isEmpty())
     {
