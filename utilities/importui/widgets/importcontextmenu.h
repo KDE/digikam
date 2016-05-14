@@ -6,7 +6,8 @@
  * Date        : 2012-07-13
  * Description : Modified context menu helper for import tool
  *
- * Copyright (C) 2012 by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012      by Islam Wazery <wazery at ubuntu dot com>
+ * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ImportContextMenu_H
-#define ImportContextMenu_H
+#ifndef IMPORTCONTEXTMENU_H
+#define IMPORTCONTEXTMENU_H
 
 // Qt includes
 
@@ -30,6 +31,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "camiteminfo.h"
 #include "importfiltermodel.h"
 
@@ -52,7 +54,7 @@ Q_SIGNALS:
 
     //void signalAssignTag(int);
     //void signalRemoveTag(int);
-  //  void signalPopupTagsView();
+    //void signalPopupTagsView();
     void signalAssignPickLabel(int);
     void signalAssignColorLabel(int);
     void signalAssignRating(int);
@@ -249,4 +251,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMPORTImportContextMenu_H
+#endif // IMPORTIMPORTCONTEXTMENU_H

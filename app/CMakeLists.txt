@@ -89,10 +89,13 @@ include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIREC
 
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::Solid,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::CoreAddons,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::WindowSystem,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(KF5KIO_FOUND)
+    include_directories($<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 if(ENABLE_MEDIAPLAYER)
     include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
@@ -133,7 +136,6 @@ target_link_libraries(digikamcore
                       Qt5::Concurrent
 
                       KF5::Solid
-                      KF5::KIOWidgets
                       KF5::WindowSystem
                       KF5::CoreAddons
                       KF5::Service
@@ -154,6 +156,10 @@ target_link_libraries(digikamcore
                       libdng
                       libraw
 )
+
+if(KF5KIO_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::KIOWidgets)
+endif()
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::Kipi)
@@ -414,7 +420,6 @@ target_link_libraries(digikamgui
                       Qt5::DBus
 
                       KF5::Solid
-                      KF5::KIOWidgets
                       KF5::Service
                       KF5::WindowSystem
                       KF5::IconThemes
@@ -422,6 +427,10 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(KF5KIO_FOUND)
+    target_link_libraries(digikamgui PUBLIC KF5::KIOWidgets)
+endif()
 
 if(KF5Kipi_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::Kipi)
@@ -511,11 +520,14 @@ target_link_libraries(digikam
                       Qt5::Widgets
                       Qt5::DBus
 
-                      KF5::KIOWidgets
                       KF5::WindowSystem
                       KF5::IconThemes
                       KF5::I18n
 )
+
+if(KF5KIO_FOUND)
+    target_link_libraries(digikam PUBLIC KF5::KIOWidgets)
+endif()
 
 install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 

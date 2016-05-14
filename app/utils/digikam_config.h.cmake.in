@@ -33,6 +33,9 @@
 /* Define to 1 if an external lensfun shared library have been found */
 #cmakedefine HAVE_LENSFUN 1
 
+/* Define to 1 if an external KIO shared library have been found */
+#cmakedefine HAVE_KIO 1
+
 /* Define to 1 if an external Kipi shared library have been found */
 #cmakedefine HAVE_KIPI 1
 

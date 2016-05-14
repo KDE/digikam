@@ -41,7 +41,10 @@
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
-#include <kopenwithdialog.h>
+
+#ifdef HAVE_KIO
+#   include <kopenwithdialog.h>
+#endif
 
 // Local includes
 
@@ -269,6 +272,7 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
             d->servicesMap[name]  = service;
         }
 
+#ifdef HAVE_KIO
         servicesMenu->addSeparator();
         servicesMenu->addAction(i18n("Other..."));
 
@@ -284,6 +288,7 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 
         connect(serviceAction, SIGNAL(triggered()),
                 this, SLOT(slotOpenWith()));
+#endif // HAVE_KIO
     }
 }
 
@@ -299,6 +304,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
     QList<QUrl> list = d->selectedItems;
     QString name     = action ? action->data().toString() : QString();
 
+#ifdef HAVE_KIO
     if (name.isEmpty())
     {
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(list);
@@ -326,6 +332,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         delete dlg;
     }
     else
+#endif // HAVE_KIO
     {
         service = d->servicesMap[name];
     }

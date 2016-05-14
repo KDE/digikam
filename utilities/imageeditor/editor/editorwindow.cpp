@@ -69,7 +69,6 @@
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <kopenwithdialog.h>
 #include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
@@ -77,10 +76,13 @@
 #include <kwindowsystem.h>
 #include <kxmlguifactory.h>
 
+#ifdef HAVE_KIO
+#   include <kopenwithdialog.h>
+#endif
+
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "digikam_globals.h"
 #include "dmessagebox.h"
 #include "applicationsettings.h"
@@ -2764,6 +2766,7 @@ void EditorWindow::addServicesMenuForUrl(const QUrl& url)
             d->servicesMap[name]  = service;
         }
 
+#ifdef HAVE_KIO
         m_servicesMenu->addSeparator();
         m_servicesMenu->addAction(i18n("Other..."));
 
@@ -2779,6 +2782,7 @@ void EditorWindow::addServicesMenuForUrl(const QUrl& url)
 
         connect(m_servicesMenu, SIGNAL(triggered()),
                 this, SLOT(slotOpenWith()));
+#endif // HAVE_KIO
     }
 }
 
@@ -2787,6 +2791,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
     KService::Ptr service;
     QString name = action ? action->data().toString() : QString();
 
+#ifdef HAVE_KIO
     if (name.isEmpty())
     {
         QPointer<KOpenWithDialog> dlg = new KOpenWithDialog(QList<QUrl>() << url);
@@ -2814,6 +2819,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         delete dlg;
     }
     else
+#endif // HAVE_KIO
     {
         service = d->servicesMap[name];
     }

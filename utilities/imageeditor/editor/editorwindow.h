@@ -38,6 +38,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "digikam_config.h"
 #include "thumbbardock.h"
 #include "previewtoolbar.h"
 #include "savingcontext.h"
