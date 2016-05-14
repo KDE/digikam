@@ -139,7 +139,6 @@ target_link_libraries(digikamcore
                       KF5::WindowSystem
                       KF5::CoreAddons
                       KF5::Service
-                      KF5::IconThemes
                       KF5::I18n
 
                       # Required by CImg which use pthread internally.
@@ -156,6 +155,10 @@ target_link_libraries(digikamcore
                       libdng
                       libraw
 )
+
+if(KF5IconThemes_FOUND)
+    target_link_libraries(digikamcore PUBLIC KF5::IconThemes)
+endif()
 
 if(KF5KIO_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::KIOWidgets)
@@ -422,11 +425,14 @@ target_link_libraries(digikamgui
                       KF5::Solid
                       KF5::Service
                       KF5::WindowSystem
-                      KF5::IconThemes
                       KF5::I18n
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(KF5IconThemes_FOUND)
+    target_link_libraries(digikamgui PUBLIC KF5::IconThemes)
+endif()
 
 if(KF5KIO_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::KIOWidgets)
@@ -521,9 +527,12 @@ target_link_libraries(digikam
                       Qt5::DBus
 
                       KF5::WindowSystem
-                      KF5::IconThemes
                       KF5::I18n
 )
+
+if(KF5IconThemes_FOUND)
+    target_link_libraries(digikam PUBLIC KF5::IconThemes)
+endif()
 
 if(KF5KIO_FOUND)
     target_link_libraries(digikam PUBLIC KF5::KIOWidgets)

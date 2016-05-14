@@ -29,6 +29,10 @@
 
 #include <QWidget>
 
+// Local includes
+
+#include "digikam_config.h"
+
 namespace Digikam
 {
 

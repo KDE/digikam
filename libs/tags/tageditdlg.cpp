@@ -40,8 +40,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kicondialog.h>
 #include <kkeysequencewidget.h>
+
+#ifdef HAVE_KICONTHEMES
+#   include <kicondialog.h>
+#endif
 
 // Local includes
 
@@ -103,7 +106,8 @@ public:
 };
 
 TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     setModal(true);
 
@@ -182,12 +186,11 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
 
     d->iconButton               = new QPushButton(page);
     d->iconButton->setFixedSize(40, 40);
+    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
     iconTextLabel->setBuddy(d->iconButton);
 
     // In create mode, by default assign the icon of the parent (if not root) to this new tag.
     d->icon = album->icon();
-
-    d->iconButton->setIcon(SyncJob::getTagThumbnail(album));
 
     d->resetIconButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset"), page);
 
@@ -195,6 +198,12 @@ TagEditDlg::TagEditDlg(QWidget* const parent, TAlbum* const album, bool create)
     {
         d->resetIconButton->hide();
     }
+
+#ifndef HAVE_KICONTHEMES
+    iconTextLabel->hide();
+    d->iconButton->hide();
+    d->resetIconButton->hide();
+#endif
 
     // --------------------------------------------------------
 
@@ -302,6 +311,8 @@ void TagEditDlg::slotIconResetClicked()
 
 void TagEditDlg::slotIconChanged()
 {
+#ifdef HAVE_KICONTHEMES
+
     KIconDialog dlg(this);
     dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
     QString icon = dlg.openDialog();
@@ -313,6 +324,8 @@ void TagEditDlg::slotIconChanged()
 
     d->icon = icon;
     d->iconButton->setIcon(QIcon::fromTheme(d->icon));
+
+#endif
 }
 
 void TagEditDlg::slotTitleChanged(const QString& newtitle)

@@ -35,6 +35,7 @@
 // Local includes
 
 #include "albummanager.h"
+#include "digikam_config.h"
 
 namespace Digikam
 {

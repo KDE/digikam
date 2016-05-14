@@ -37,7 +37,10 @@
 // KDE includes
 
 #include <kkeysequencewidget.h>
-#include <kicondialog.h>
+
+#ifdef HAVE_KICONTHEMES
+#   include <kicondialog.h>
+#endif
 
 // Local includes
 
@@ -84,7 +87,8 @@ public:
 };
 
 TagPropWidget::TagPropWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private())
+    : QWidget(parent),
+      d(new Private())
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     const int cmargin = QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
@@ -117,6 +121,8 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     tipLabel->setIndent(spacing);
 
+    // ----------------------------------------------------------------------
+
     QLabel* const iconTextLabel = new QLabel(this);
     iconTextLabel->setText(i18n("&Icon:"));
     iconTextLabel->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
@@ -127,6 +133,14 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     iconTextLabel->setBuddy(d->iconButton);
 
     d->resetIconButton = new QPushButton(QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Reset"), this);
+
+#ifndef HAVE_KICONTHEMES
+    iconTextLabel->hide();
+    d->iconButton->hide();
+    d->resetIconButton->hide();
+#endif
+
+    // ----------------------------------------------------------------------
 
     QLabel* const kscTextLabel = new QLabel(this);
     kscTextLabel->setText(i18n("&Shortcut:"));
@@ -145,7 +159,7 @@ TagPropWidget::TagPropWidget(QWidget* const parent)
     tipLabel2->setContentsMargins(cmargin, cmargin, cmargin, cmargin);
     tipLabel2->setIndent(spacing);
 
-    d->saveButton = new QPushButton(i18n("Save"));
+    d->saveButton    = new QPushButton(i18n("Save"));
     d->discardButton = new QPushButton(i18n("Discard"));
 
     // --------------------------------------------------------
@@ -297,6 +311,8 @@ void TagPropWidget::slotIconResetClicked()
 
 void TagPropWidget::slotIconChanged()
 {
+#ifdef HAVE_KICONTHEMES
+
     d->changed   = true;
     KIconDialog dlg(this);
     dlg.setup(KIconLoader::NoGroup, KIconLoader::Application, false, 20, false, false, false);
@@ -309,6 +325,8 @@ void TagPropWidget::slotIconChanged()
 
     d->icon = icon;
     d->iconButton->setIcon(QIcon::fromTheme(d->icon));
+
+#endif
 }
 
 void TagPropWidget::slotDataChanged()
