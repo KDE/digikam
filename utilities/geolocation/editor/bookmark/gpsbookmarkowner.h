@@ -64,9 +64,9 @@ public:
 
 public:
 
-    virtual bool supportsTabs() const;
+    virtual bool    supportsTabs() const;
     virtual QString currentTitle() const;
-    virtual QUrl    currentUrl() const;
+    virtual QUrl    currentUrl()   const Q_DECL_OVERRIDE;
     virtual bool enableOption(BookmarkOption option) const;
     virtual void openBookmark(const KBookmark&, Qt::MouseButtons, Qt::KeyboardModifiers);
 

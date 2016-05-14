@@ -50,7 +50,7 @@
 #include "lookupfactory.h"
 
 #ifdef HAVE_KBOOKMARKS
-#include "gpsbookmarkowner.h"
+#   include "gpsbookmarkowner.h"
 #endif
 
 namespace Digikam

@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2016, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -43,10 +43,14 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dialog/gpsundocommand.cpp
                             dialog/geolocationedit.cpp
                             dialog/gpsgeoifacemodelhelper.cpp
-
-                            bookmark/gpsbookmarkowner.cpp
-                            bookmark/gpsbookmarkmodelhelper.cpp
    )
+
+if(KF5Bookmarks_FOUND)
+    set(libgeolocationedit_SRCS ${libgeolocationedit_SRCS}
+                                bookmark/gpsbookmarkowner.cpp
+                                bookmark/gpsbookmarkmodelhelper.cpp
+    )
+endif()
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
