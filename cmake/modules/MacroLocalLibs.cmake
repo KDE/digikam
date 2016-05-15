@@ -10,7 +10,7 @@ macro(DETECT_LIBKIPI MIN_VERSION)
     if (NOT DIGIKAMSC_COMPILE_LIBKIPI)
 
         message(STATUS "libkipi : search system based library")
-        find_package(KF5Kipi ${MIN_VERSION} CONFIG REQUIRED)
+        find_package(KF5Kipi ${MIN_VERSION})
 
         if(KF5Kipi_FOUND)
             set(KF5Kipi_LIBRARIES KF5::Kipi)
