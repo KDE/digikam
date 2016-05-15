@@ -150,7 +150,6 @@ target_link_libraries(digikamcore
                       ${TIFF_LIBRARIES}
                       ${PNG_LIBRARIES}
                       ${EXIV2_LIBRARIES}
-                      ${PGF_LIBRARIES}
 
                       libdng
                       libraw

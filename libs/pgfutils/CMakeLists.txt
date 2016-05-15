@@ -9,14 +9,17 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-# Libpgf require C++ Exceptions.
-kde_enable_exceptions()
-
-set(libpgfutils_SRCS pgfutils.cpp)
+set(libpgfutils_SRCS
+    pgfutils.cpp
+    Decoder.cpp
+    Encoder.cpp
+    PGFimage.cpp
+    PGFstream.cpp
+    Subband.cpp
+    WaveletTransform.cpp
+)
 
 include_directories(
-    ${PGF_INCLUDE_DIRS}
-
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 )

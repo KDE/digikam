@@ -59,7 +59,6 @@ set(KF5_MIN_VERSION      "5.1.0")
 set(QT_MIN_VERSION       "5.2.0")
 set(KIPI_MIN_VERSION     "5.0.0")
 set(KSANE_MIN_VERSION    "5.0.0")
-set(PGF_MIN_VERSION      "6.12.24")
 set(LENSFUN_MIN_VERSION  "0.2.6.0")
 set(EXIV2_MIN_VERSION    "0.25")
 set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
@@ -196,7 +195,6 @@ set(DIGIKAM_LIBJPEG_DIR libjpeg-${JPEG_LIB_VERSION})
 
 find_package(TIFF                       REQUIRED)
 find_package(PNG                        REQUIRED)
-find_package(PGF ${PGF_MIN_VERSION}     REQUIRED)
 find_package(Boost                      REQUIRED)
 find_package(LCMS2                      REQUIRED)
 find_package(EXPAT                      REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
@@ -451,7 +449,6 @@ PRINT_LIBRARY_STATUS("libtiff"                "http://www.remotesensing.org/libt
 PRINT_LIBRARY_STATUS("libpng"                 "http://www.libpng.org/pub/png/libpng.html"                        "(version >= 1.2.7)"                 PNG_FOUND)
 PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"                                         "(version >= 1.0.0)"                 LCMS2_FOUND)
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
-PRINT_LIBRARY_STATUS("libpgf"                 "http://www.libpgf.org"                                            "(version >= ${PGF_MIN_VERSION})"    PGF_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
 PRINT_LIBRARY_STATUS("libpthread"             "http://www.gnu.org/software/hurd/libpthread.html"                 "(version >= 2.0.0)"                 CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
@@ -495,7 +492,6 @@ if(Qt5_FOUND       AND
    LCMS2_FOUND     AND
    Boost_FOUND     AND
    EXIV2_FOUND     AND
-   PGF_FOUND       AND
    OpenCV_FOUND    AND
    EXPAT_FOUND     AND
    (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
@@ -551,7 +547,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
-    # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h)
+    # NOTE: with libpgf 6.11.24 OpenMP is not very well supported. We disable it to be safe.
+    # See B.K.O #273765 for details.
+    add_definitions(-DLIBPGF_DISABLE_OPENMP)
+
+    # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h) and PGF codec
     kde_enable_exceptions()
 
     # ==================================================================================================

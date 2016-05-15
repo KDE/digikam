@@ -176,8 +176,6 @@ target_link_libraries(digikamdatabase
 
                       KF5::Solid
                       KF5::I18n
-
-                      ${PGF_LIBRARIES}
 )
 
 if(KF5FileMetaData_FOUND)
