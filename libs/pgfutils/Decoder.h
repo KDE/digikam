@@ -54,7 +54,9 @@ class CDecoder {
 		/// Constructor: Initializes new macro block.
 		CMacroBlock()
 		: m_header(0)								// makes sure that IsCompletelyRead() returns true for an empty macro block
-#pragma warning( suppress : 4351 )
+#ifdef _MSC_VER
+#    pragma warning( suppress : 4351 )
+#endif
 		, m_value()
 		, m_codeBuffer()
 		, m_valuePos(0)
