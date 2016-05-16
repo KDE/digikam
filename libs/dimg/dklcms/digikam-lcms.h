@@ -27,8 +27,12 @@
 
 #include "digikam_export.h"
 
-#ifndef CMS_DLL
-#define CMS_DLL
+#if defined (__MINGW32__)
+#  define CMS_IS_WINDOWS_ 1
+#else
+#   ifndef CMS_DLL
+#       define CMS_DLL
+#   endif
 #endif
 
 #include <lcms2.h>
