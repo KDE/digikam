@@ -21,6 +21,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+#define UNUSED(x) (void)(x)
+
 //////////////////////////////////////////////////////////////////////
 /// @file Subband.cpp
 /// @brief PGF wavelet subband class implementation
@@ -186,7 +188,11 @@ void CSubband::ExtractTile(CEncoder& encoder, bool tile /*= false*/, UINT32 tile
 	} else 
 #endif
 	{
-		tileX; tileY; tile; // prevents from unreferenced formal parameter warning
+        // prevents from unreferenced formal parameter warning
+        UNUSED(tileX);
+        UNUSED(tileY);
+        UNUSED(tile); 
+
 		// write values into buffer using partitiong scheme
 		encoder.Partition(this, m_width, m_height, 0, m_width);
 	}
@@ -226,7 +232,11 @@ void CSubband::PlaceTile(CDecoder& decoder, int quantParam, bool tile /*= false*
 	} else 
 #endif
 	{
-		tileX; tileY; tile; // prevents from unreferenced formal parameter warning
+        // prevents from unreferenced formal parameter warning
+        UNUSED(tileX);
+        UNUSED(tileY);
+        UNUSED(tile);
+
 		// read values into buffer using partitiong scheme
 		decoder.Partition(this, quantParam, m_width, m_height, 0, m_width);
 	}
