@@ -106,7 +106,15 @@ public:
 	/// @param level A valid subband level.
 	/// @param tileX x-index of the given tile
 	/// @param tileY y-index of the given tile
+
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wignored-qualifiers"
+#endif
 	const bool TileIsRelevant(int level, UINT32 tileX, UINT32 tileY) const { ASSERT(m_indices); ASSERT(level >= 0 && level < m_nLevels); return m_indices[level].IsInside(tileX, tileY); }
+#if not defined(__APPLE__) && defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get number of tiles in x- or y-direction at given level. 
