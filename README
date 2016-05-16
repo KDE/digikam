@@ -131,7 +131,6 @@ Enblend         >= 3.0.0                        http://enblend.sourceforge.net
 
 CMake compilation options to custom digiKam:
 
-Use CMake "-DENABLE_KINOTIFY=on"              flag to compile digiKam with embeded Inotify wrapper for Linux                         (disabled by default).
 Use CMake "-DENABLE_KFILEMETADATASUPPORT=on"  flag to compile digiKam with KDE files indexer support                                 (disabled by default).
 Use CMake "-DENABLE_AKONADICONTACTSUPPORT=on" flag to compile digiKam with KDE Mail Contacts support                                 (disabled by default).
 Use CMake "-DENABLE_MEDIAPLAYER=on"           flag to compile digiKam with QtMultimedia support                                      (disabled by default).
