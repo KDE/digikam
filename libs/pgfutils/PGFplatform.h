@@ -122,7 +122,7 @@
 //-------------------------------------------------------------------------------
 // WINDOWS 
 //-------------------------------------------------------------------------------
-#if defined(WIN32) || defined(WINCE) || defined(WIN64)
+#if defined(WIN32) || defined(WINCE) || defined(WIN64) || defined(__MINGW32__)
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
 //-------------------------------------------------------------------------------
