@@ -38,8 +38,8 @@ CSubband::CSubband()
 , m_size(0)
 , m_level(0)
 , m_orientation(LL)
-, m_data(0)
 , m_dataPos(0)
+, m_data(0)
 #ifdef __PGFROISUPPORT__
 , m_nTiles(0)
 #endif
