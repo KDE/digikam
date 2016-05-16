@@ -96,7 +96,6 @@ libtiff           >= 3.8.2                      http://www.remotesensing.org/lib
 libpng            >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
 liblcms           >= 2.x                        http://www.littlecms.com
 libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
-libpgf            >= 6.11.24                    http://www.libpgf.org
 libexpat          >= 2.0.0                      http://expat.sourceforge.net
 libopencv         >= 2.4.9                      http://opencv.willowgarage.com
 
