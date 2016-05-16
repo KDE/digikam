@@ -134,12 +134,12 @@ private:
 	void InterleavedToSubbands(int destLevel, DataT* loRow, DataT* hiRow, UINT32 width);
 	void SubbandsToInterleaved(int srcLevel, DataT* loRow, DataT* hiRow, UINT32 width);
 
-#ifdef __PGFROISUPPORT__
-	PGFRect *m_indices;							///< array of length m_nLevels of tile indices
-#endif //__PGFROISUPPORT__
-
 	int			m_nLevels;						///< number of LL levels: one more than header.nLevels in PGFimage
 	CSubband	(*m_subband)[NSubbands];		///< quadtree of subbands: LL HL LH HH
+
+#ifdef __PGFROISUPPORT__
+    PGFRect *m_indices;                         ///< array of length m_nLevels of tile indices
+#endif //__PGFROISUPPORT__
 };
 
 #endif //PGF_WAVELETTRANSFORM_H
