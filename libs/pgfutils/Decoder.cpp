@@ -149,7 +149,8 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 				size -= count;
 
 				// read/skip user data
-				UserdataPolicy policy = (UserdataPolicy)((userDataPolicy <= MaxUserDataSize) ? UP_CachePrefix : 0xFFFFFFFF - userDataPolicy);
+				UserdataPolicy policy = (userDataPolicy <= (UINT32)MaxUserDataSize) ? (UserdataPolicy)UP_CachePrefix 
+                                                                                    : (UserdataPolicy)(0xFFFFFFFF - userDataPolicy);
 				userDataPos = m_stream->GetPos();
 				postHeader.userDataLen = size;
 
