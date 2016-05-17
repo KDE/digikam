@@ -1,6 +1,6 @@
 # Some useful macros to detect local or system based libraries
 #
-# Copyright (c) 2010-2015, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2016, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -23,13 +23,12 @@ macro(DETECT_LIBKIPI MIN_VERSION)
     else()
 
         message(STATUS "libkipi : use local library from ${CMAKE_SOURCE_DIR}/extra/libkipi/")
-        find_file(KF5Kipi_FOUND CMakeLists.txt PATHS ${CMAKE_SOURCE_DIR}/extra/libkipi/)
 
-        if(NOT KF5Kipi_FOUND)
-            message(ERROR "libkipi : local library not found")
-            set(KF5Kipi_FOUND FALSE)
-        else()
+        if(EXISTS "${CMAKE_SOURCE_DIR}/extra/libkipi/CMakeLists.txt")
             set(KF5Kipi_FOUND TRUE)
+        else()
+            message(WARNING "libkipi : local library not found")
+            set(KF5Kipi_FOUND FALSE)
         endif()
 
         set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi)
@@ -83,13 +82,12 @@ macro(DETECT_LIBKSANE MIN_VERSION)
     else()
 
         message(STATUS "libksane : use local library from ${CMAKE_SOURCE_DIR}/extra/libksane/")
-        find_file(KF5Sane_FOUND CMakeLists.txt PATHS ${CMAKE_SOURCE_DIR}/extra/libksane/)
 
-        if(NOT KF5Sane_FOUND)
-            message(ERROR "libksane : local library not found")
-            set(KF5Sane_FOUND FALSE)
-        else()
+        if(EXISTS "${CMAKE_SOURCE_DIR}/extra/libksane/CMakeLists.txt")
             set(KF5Sane_FOUND TRUE)
+        else()
+            message(WARNING "libksane : local library not found")
+            set(KF5Sane_FOUND FALSE)
         endif()
 
         set(LIBKSANE_INCLUDES ${CMAKE_SOURCE_DIR}/extra/libksane/src ${CMAKE_BINARY_DIR}/extra/libksane)
