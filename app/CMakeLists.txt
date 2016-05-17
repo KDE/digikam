@@ -247,6 +247,10 @@ if(APPLE)
     target_link_libraries(digikamcore PUBLIC /System/Library/Frameworks/AppKit.framework)
 endif()
 
+if(WIN32)
+  target_link_libraries(digikamcore PUBLIC wsock32 ws2_32)
+endif()
+
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})

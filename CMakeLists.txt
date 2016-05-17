@@ -272,6 +272,12 @@ elseif()
     set(HAVE_OPENGL FALSE)
 endif()
 
+# For LibRaw
+if(WIN32)
+    find_library(WSOCK32_LIBRARY wsock32)
+    find_library(WS2_32_LIBRARY ws2_32)
+endif()
+
 # -- To link under Solaris (see bug #274484) ------------------------------------------------------
 
 if(NOT WIN32)
