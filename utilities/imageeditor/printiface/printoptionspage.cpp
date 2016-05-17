@@ -42,7 +42,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikamconfig.h"
+#include "printconfig.h"
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "iccmanager.h"
@@ -184,7 +184,7 @@ PrintOptionsPage::PrintOptionsPage(QWidget* const parent, const QSize& imageSize
     d->setupUi(this);
     d->mParent              = parent;
     d->mImageSize           = imageSize;
-    d->mConfigDialogManager = new KConfigDialogManager(this, DigikamConfig::self());
+    d->mConfigDialogManager = new KConfigDialogManager(this, PrintConfig::self());
 
     d->initPositionFrame();
 
@@ -291,7 +291,7 @@ void PrintOptionsPage::adjustHeightToRatio()
 
 void PrintOptionsPage::loadConfig()
 {
-    QAbstractButton* button = d->mPositionGroup.button(DigikamConfig::printPosition());
+    QAbstractButton* button = d->mPositionGroup.button(PrintConfig::printPosition());
 
     if (button)
     {
@@ -302,7 +302,7 @@ void PrintOptionsPage::loadConfig()
         qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown button for position group";
     }
 
-    button = d->mScaleGroup.button(DigikamConfig::printScaleMode());
+    button = d->mScaleGroup.button(PrintConfig::printScaleMode());
 
     if (button)
     {
@@ -320,7 +320,7 @@ void PrintOptionsPage::loadConfig()
         adjustHeightToRatio();
     }
 
-    d->colorManaged->setChecked(DigikamConfig::printColorManaged());
+    d->colorManaged->setChecked(PrintConfig::printColorManaged());
     ICCSettingsContainer settings = IccSettings::instance()->settings();
     d->outputProfile              = settings.defaultProofProfile;
     d->cmEnabled                  = settings.enableCM;
@@ -329,14 +329,14 @@ void PrintOptionsPage::loadConfig()
 void PrintOptionsPage::saveConfig()
 {
     int position        = d->mPositionGroup.checkedId();
-    DigikamConfig::setPrintPosition(position);
+    PrintConfig::setPrintPosition(position);
 
     ScaleMode scaleMode = ScaleMode(d->mScaleGroup.checkedId());
-    DigikamConfig::setPrintScaleMode(scaleMode);
+    PrintConfig::setPrintScaleMode(scaleMode);
 
     d->mConfigDialogManager->updateSettings();
 
-    DigikamConfig::self()->save();
+    PrintConfig::self()->save();
 }
 
 void PrintOptionsPage::slotAlertSettings(bool t)

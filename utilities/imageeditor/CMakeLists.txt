@@ -79,15 +79,12 @@ set(libeditorcore_SRCS
 set(libeditorprintiface_SRCS
     printiface/printhelper.cpp
     printiface/printoptionspage.cpp
+    printiface/printconfig.cpp
 )
 
 
 ki18n_wrap_ui(libeditorprintiface_SRCS
               printiface/printoptionspage.ui
-)
-
-kconfig_add_kcfg_files(libeditorprintiface_SRCS
-                       printiface/digikamconfig.kcfgc
 )
 
 set(libeditorrawimport_SRCS
