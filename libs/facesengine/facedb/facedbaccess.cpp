@@ -61,7 +61,7 @@ public:
 public:
 
     FaceDbBackend*     backend;
-    FaceDb*        db;
+    FaceDb*            db;
     DbEngineParameters parameters;
     DbEngineLocking    lock;
     QString            lastError;
