@@ -7,7 +7,7 @@
  * @date   2009-05-07
  * @brief  Context menu for GPS list view.
  *
- * @author Copyright (C) 2009-2011,2014 by Michael G. Hansen
+ * @author Copyright (C) 2009-2014 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
  *
  * This program is free software; you can redistribute it
@@ -80,7 +80,6 @@ public:
         altitudeRequestedCount(0),
         altitudeReceivedCount(0)
     {
-
     }
 
     bool                              enabled;
@@ -224,7 +223,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
             d->bookmarkOwner->setPositionAndTitle(position.getCoordinates(), itemFileName);
         }
 #endif
-        
+
         // "paste" is only available if there is geo data in the clipboard
         // and at least one photo is selected:
         bool pasteAvailable = (nSelected >= 1);
@@ -528,6 +527,8 @@ void GPSImageListContextMenu::slotBookmarkSelected(GPSDataContainer position)
 {
 #ifdef HAVE_KBOOKMARKS
     setGPSDataForSelectedItems(position, i18n("Bookmark selected"));
+#else
+    Q_UNUSED(position);
 #endif
 }
 
