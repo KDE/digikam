@@ -465,7 +465,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
         // atomic rename
 
-#ifndef Q_OS_WIN
+#ifndef Q_CC_MSVC
         if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
 #else
         if (::MoveFileEx(tempFile.utf16(), dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
