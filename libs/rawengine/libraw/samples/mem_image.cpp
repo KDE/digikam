@@ -25,7 +25,7 @@ it under the terms of the one of three licenses as you choose:
 
 #include "libraw/libraw.h"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__MINGW32__)
 #define snprintf _snprintf
 #include <winsock2.h>
 #pragma comment(lib, "ws2_32.lib")

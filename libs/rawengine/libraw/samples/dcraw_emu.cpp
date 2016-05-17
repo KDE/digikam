@@ -49,7 +49,6 @@ it under the terms of the one of three licenses as you choose:
 #define O_BINARY 0
 #endif
 
-
 void usage(const char *prog)
 {
     printf("dcraw_emu: almost complete dcraw emulator\n");
@@ -400,7 +399,7 @@ int main(int argc, char *argv[])
             
       timerstart();
             
-#ifndef WIN32
+#if !defined(WIN32) && !defined(__MINGW32__)
       if(use_mmap)
         {
           int file = open(argv[arg],O_RDONLY);
@@ -523,7 +522,7 @@ int main(int argc, char *argv[])
       if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
         fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));
 
-#ifndef WIN32
+#if !defined(WIN32) && !defined(__MINGW32__)
       if(use_mmap && iobuffer)
         {
           munmap(iobuffer,msize);

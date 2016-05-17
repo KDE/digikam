@@ -25,7 +25,7 @@ it under the terms of the one of three licenses as you choose:
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#ifndef WIN32
+#if !defined(WIN32) && !defined(__MINGW32__)
 #include <netinet/in.h>
 #else
 #include <winsock2.h>

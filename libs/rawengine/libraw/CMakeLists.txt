@@ -201,7 +201,7 @@ LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
 # C sample files which must be compiled only if LCMS v2 is detected, to prevent broken compilation
 
 if(LCMS2_FOUND)
-   if(WIN32)
+   if(MSVC)
         LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
    else()
         LIBRAW_BUILD_SAMPLES(dcraw_half.c)
