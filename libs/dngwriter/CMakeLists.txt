@@ -21,7 +21,7 @@ kde_enable_exceptions()
 # NOTE: see bug #195735: do not enable Mac flags provided by Adobe.
 #       Sounds like all compile fine like under Linux.
 
-if(WIN32)
+if(MSVC)
     add_definitions(
                     # XMP SDK
                     -DWIN_ENV=1
@@ -53,7 +53,7 @@ endif()
 
 # Thread safe support under Mac and Linux using pthread library
 
-if(NOT WIN32)
+if(NOT MSVC)
     add_definitions(-DqDNGThreadSafe=1)
 endif()
 
