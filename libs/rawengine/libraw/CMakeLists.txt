@@ -62,11 +62,6 @@ else()
     message(STATUS "RawEngine will not be compiled with RedCine codec")
 endif()
 
-# For RawSpeed Codec Support
-
-message(STATUS "Looking for LibXml2")
-find_package(LibXml2)
-
 # JPEG library check
 
 message(STATUS "Looking for LibJpeg")
