@@ -1128,7 +1128,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
             temp.close();
 
-#ifndef Q_OS_WIN
+#ifndef Q_CC_MSVC
             // remove thumbPath file if it exist
             if (tempFileName != thumbPath && QFile::exists(tempFileName) && QFile::exists(thumbPath))
             {

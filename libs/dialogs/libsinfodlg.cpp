@@ -36,6 +36,23 @@
 #include <kxmlgui_version.h>
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "drawdecoder.h"
+#include "greycstorationfilter.h"
+#include "pgfutils.h"
+#include "digikam-lcms.h"
+#include "metaengine.h"
+
+#ifdef HAVE_LENSFUN
+#include "lensfuniface.h"
+#endif // HAVE_LENSFUN
+
+#ifdef HAVE_MARBLE
+#include "mapwidget.h"
+using namespace GeoIface;
+#endif // HAVE_MARBLE
+
 // C ANSI includes
 
 #ifndef Q_CC_MSVC
@@ -58,23 +75,6 @@ extern "C"
 #ifndef Q_CC_MSVC
 }
 #endif // Q_CC_MSVC
-
-// Local includes
-
-#include "drawdecoder.h"
-#include "greycstorationfilter.h"
-#include "pgfutils.h"
-#include "digikam-lcms.h"
-#include "metaengine.h"
-
-#ifdef HAVE_LENSFUN
-#include "lensfuniface.h"
-#endif // HAVE_LENSFUN
-
-#ifdef HAVE_MARBLE
-#include "mapwidget.h"
-using namespace GeoIface;
-#endif // HAVE_MARBLE
 
 namespace Digikam
 {
