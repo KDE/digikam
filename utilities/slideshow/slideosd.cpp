@@ -112,9 +112,9 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 #ifdef Q_OS_WIN32
     // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
     // adds an extra ugly shadow.
-    int ex_style = GetWindowLong(winId(), GWL_EXSTYLE);
+    int ex_style = GetWindowLong((HWND)winId(), GWL_EXSTYLE);
     ex_style    |= WS_EX_NOACTIVATE;
-    SetWindowLong(winId(), GWL_EXSTYLE, ex_style);
+    SetWindowLong((HWND)winId(), GWL_EXSTYLE, ex_style);
 #endif
 
     d->settings   = settings;
