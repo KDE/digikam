@@ -31,7 +31,7 @@ macro(DETECT_LIBKIPI MIN_VERSION)
             set(KF5Kipi_FOUND FALSE)
         endif()
 
-        set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi)
+        set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src/ ${CMAKE_SOURCE_DIR}/extra/libkipi/src/ ${CMAKE_BINARY_DIR}/extra/libkipi/)
         set(KF5Kipi_LIBRARIES KF5Kipi)
 
     endif()
@@ -45,8 +45,14 @@ macro(DETECT_LIBKIPI MIN_VERSION)
         # Detect libkipi so version used to compile kipi tool to identify if plugin can be loaded in memory by libkipi.
         # This will be used to populate plugin desktop files.
 
-        find_file(KF5KipiConfig_FOUND libkipi_config.h PATHS ${KF5Kipi_INCLUDE_DIRS})
-        file(READ "${KF5KipiConfig_FOUND}" KIPI_CONFIG_H_CONTENT)
+        foreach(var ${KF5Kipi_INCLUDE_DIRS})
+            if(EXISTS "${var}libkipi_config.h")
+                set(KF5KipiConfig_FOUND "${var}libkipi_config.h")
+                message(STATUS "${KF5KipiConfig_FOUND}")
+            endif()
+        endforeach()
+
+        file(READ ${KF5KipiConfig_FOUND} KIPI_CONFIG_H_CONTENT)
 
         string(REGEX REPLACE
                ".*static +const +int +kipi_binary_version += ([^ ;]+).*"
