@@ -130,6 +130,7 @@ target_link_libraries(digikamcore
 
                       Qt5::Core
                       Qt5::Gui
+                      Qt5::Xml
                       Qt5::Widgets
                       Qt5::Sql
                       Qt5::WebKitWidgets
@@ -139,8 +140,10 @@ target_link_libraries(digikamcore
 
                       KF5::Solid
                       KF5::WindowSystem
+                      KF5::ConfigGui
                       KF5::CoreAddons
                       KF5::Service
+                      KF5::XmlGui
                       KF5::I18n
 
                       # Required by CImg which use pthread internally.
