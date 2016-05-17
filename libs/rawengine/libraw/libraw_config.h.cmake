@@ -35,7 +35,4 @@
 /* Define to 1 if LibRaw have been compiled with RedCine codec support */
 #cmakedefine LIBRAW_USE_REDCINECODEC 1
 
-/* Define to 1 if LibRaw have been compiled with RawSpeed codec support */
-#cmakedefine LIBRAW_USE_RAWSPEED 1
-
 #endif // LIBRAW_CONFIG_H
