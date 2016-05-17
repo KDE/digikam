@@ -551,6 +551,13 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # See B.K.O #273765 for details.
     add_definitions(-DLIBPGF_DISABLE_OPENMP)
 
+    # To force to declare as exported classes in all sub components.
+    # This will only done near to library declaration in Cmake files.
+    if(WIN32)
+        add_definitions(-Ddigikamcore_EXPORTS)
+        add_definitions(-Ddigikamdatabase_EXPORTS)
+    endif()
+
     # Enable C++ Exceptions support, require by Greycstoration algorithm (CImg.h) and PGF codec
     kde_enable_exceptions()
 
