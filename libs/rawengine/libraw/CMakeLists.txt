@@ -112,7 +112,11 @@ add_definitions(-DLIBRAW_NOTHREADS)
 
 # Flag to export library symbols
 if(WIN32)
-    add_definitions(-DLIBRAW_BUILDLIB)
+    if(MSVC)
+        add_definitions(-DLIBRAW_BUILDLIB)
+    else()
+        add_definitions(-DLIBRAW_NODLL)
+    endif()
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/
