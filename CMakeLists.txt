@@ -158,7 +158,7 @@ find_package(KF5 ${KF5_MIN_VERSION}
 
 find_package(KF5 ${KF5_MIN_VERSION}
              OPTIONAL_COMPONENTS
-             KIO                    # For Desktop integration.
+             KIO                    # For Desktop integration (Widgets only).
              IconThemes             # For Desktop integration.
              Bookmarks              # For geolocation editor.
              FileMetaData           # For KDE file indexer support.
@@ -183,6 +183,17 @@ endif()
 
 if(ENABLE_KFILEMETADATASUPPORT AND NOT KF5FileMetaData_FOUND)
     set(ENABLE_KFILEMETADATASUPPORT OFF)
+endif()
+
+# Check if KIO have been compiled with KIOWidgets. digiKam only needs this one.
+if(KF5KIO_FOUND)
+    get_target_property(KIOWidgets_INCLUDE_DIRS KF5::KIOWidgets INTERFACE_INCLUDE_DIRECTORIES)
+    message(STATUS "KF5::KIOWidgets include dirs: ${KIOWidgets_INCLUDE_DIRS}")
+
+    if(NOT KIOWidgets_INCLUDE_DIRS)
+        message(STATUS "KF5::KIOWidgets not available in shared KIO library. KIO support disabled.")
+        set(KF5KIO_FOUND FALSE)
+    endif()
 endif()
 
 # ==================================================================================================
