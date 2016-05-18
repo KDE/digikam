@@ -41,14 +41,3 @@ include_directories(
 )
 
 add_library(advancedrename_src OBJECT ${libadvancedrename_SRCS})
-add_library(advancedrename STATIC $<TARGET_OBJECTS:advancedrename_src>)
-
-target_link_libraries(advancedrename
-                      PRIVATE
-                      digikamdatabase
-
-                      Qt5::Widgets
-                      Qt5::Sql
-
-                      KF5::I18n
-)

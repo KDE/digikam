@@ -60,7 +60,7 @@ target_link_libraries(cameranamehelpertest
 
                       digikamdatabase
                       digikamcore
-                      importui
+                      digikamgui
 
                       libdng
 

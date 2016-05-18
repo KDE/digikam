@@ -388,6 +388,9 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:iojobs_src>
             $<TARGET_OBJECTS:dtrash_src>
             $<TARGET_OBJECTS:facemanagement_src>
+            $<TARGET_OBJECTS:queuemanager_src>
+            $<TARGET_OBJECTS:importui_src>
+            $<TARGET_OBJECTS:advancedrename_src>
 )
 
 if(KF5Kipi_FOUND)
@@ -417,10 +420,6 @@ target_link_libraries(digikamgui
 
                       digikamdatabase
                       digikamcore
-
-                      queuemanager
-                      advancedrename
-                      importui
 
                       Qt5::Core
                       Qt5::Gui
