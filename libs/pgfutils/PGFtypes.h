@@ -239,7 +239,7 @@ struct PGFRect {
 		return *this;
 	}
 	operator RECT() {
-		RECT rect = { left, top, right, bottom };
+		RECT rect = { (LONG)left, (LONG)top, (LONG)right, (LONG)bottom };
 		return rect;
 	}
 #endif
