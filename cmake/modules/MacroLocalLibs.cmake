@@ -31,11 +31,10 @@ macro(DETECT_LIBKIPI MIN_VERSION)
             set(KF5Kipi_FOUND FALSE)
         endif()
 
-        set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src/ ${CMAKE_SOURCE_DIR}/extra/libkipi/src/ ${CMAKE_BINARY_DIR}/extra/libkipi/)
+        set(KF5Kipi_INCLUDE_DIRS ${CMAKE_BINARY_DIR}/extra/libkipi/src ${CMAKE_SOURCE_DIR}/extra/libkipi/src ${CMAKE_BINARY_DIR}/extra/libkipi)
         set(KF5Kipi_LIBRARIES KF5Kipi)
 
     endif()
-
 
     if(${KF5Kipi_FOUND})
 
@@ -43,14 +42,14 @@ macro(DETECT_LIBKIPI MIN_VERSION)
         # This will be used to populate plugin desktop files.
 
         foreach(var ${KF5Kipi_INCLUDE_DIRS})
-            if(EXISTS "${var}libkipi_config.h")
-                set(KF5KipiConfig_FOUND "${var}libkipi_config.h")
-                message(STATUS "${KF5KipiConfig_FOUND}")
+            if(EXISTS "${var}/libkipi_config.h")
+                set(KF5KipiConfig_FOUND "${var}/libkipi_config.h")
+                message(STATUS "Libkipi config header: ${KF5KipiConfig_FOUND}")
                 break()
             endif()
         endforeach()
 
-        if(${KF5KipiConfig_FOUND})
+        if(KF5KipiConfig_FOUND)
             file(READ ${KF5KipiConfig_FOUND} KIPI_CONFIG_H_CONTENT)
 
             string(REGEX REPLACE
