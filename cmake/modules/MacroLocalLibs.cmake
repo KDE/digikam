@@ -36,9 +36,6 @@ macro(DETECT_LIBKIPI MIN_VERSION)
 
     endif()
 
-    message(STATUS "libkipi found         : ${KF5Kipi_FOUND}")
-    message(STATUS "libkipi library       : ${KF5Kipi_LIBRARIES}")
-    message(STATUS "libkipi includes      : ${KF5Kipi_INCLUDE_DIRS}")
 
     if(${KF5Kipi_FOUND})
 
@@ -49,20 +46,30 @@ macro(DETECT_LIBKIPI MIN_VERSION)
             if(EXISTS "${var}libkipi_config.h")
                 set(KF5KipiConfig_FOUND "${var}libkipi_config.h")
                 message(STATUS "${KF5KipiConfig_FOUND}")
+                break()
             endif()
         endforeach()
 
-        file(READ ${KF5KipiConfig_FOUND} KIPI_CONFIG_H_CONTENT)
+        if(${KF5KipiConfig_FOUND})
+            file(READ ${KF5KipiConfig_FOUND} KIPI_CONFIG_H_CONTENT)
 
-        string(REGEX REPLACE
-               ".*static +const +int +kipi_binary_version += ([^ ;]+).*"
-               "\\1"
-               KIPI_LIB_SO_CUR_VERSION_FOUND
-               "${KIPI_CONFIG_H_CONTENT}"
-              )
+            string(REGEX REPLACE
+                   ".*static +const +int +kipi_binary_version += ([^ ;]+).*"
+                   "\\1"
+                   KIPI_LIB_SO_CUR_VERSION_FOUND
+                   "${KIPI_CONFIG_H_CONTENT}"
+            )
 
-        set(KIPI_LIB_SO_CUR_VERSION ${KIPI_LIB_SO_CUR_VERSION_FOUND} CACHE STRING "libkipi so version")
-        message(STATUS "libkipi SO version  : ${KIPI_LIB_SO_CUR_VERSION}")
+            set(KIPI_LIB_SO_CUR_VERSION ${KIPI_LIB_SO_CUR_VERSION_FOUND} CACHE STRING "libkipi so version")
+        else()
+            message(STATUS "Cannot found libkipi SO version")
+            set(KF5Kipi_FOUND FALSE)
+        endif()
+
+        message(STATUS "libkipi found         : ${KF5Kipi_FOUND}")
+        message(STATUS "libkipi library       : ${KF5Kipi_LIBRARIES}")
+        message(STATUS "libkipi includes      : ${KF5Kipi_INCLUDE_DIRS}")
+        message(STATUS "libkipi SO version    : ${KIPI_LIB_SO_CUR_VERSION}")
 
     endif()
 
