@@ -95,7 +95,7 @@ Q_SIGNALS:
     void signalLastDestination(const QUrl&);
     void signalWindowHasMoved();
     void signalEscapePressed();
-    void signalPreviewRequested(CamItemInfo, bool);
+    void signalPreviewRequested(const CamItemInfo&, bool);
     void signalNewSelection(bool);
 
 public Q_SLOTS:

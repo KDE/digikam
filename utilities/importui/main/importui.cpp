@@ -654,7 +654,7 @@ void ImportUI::updateActions()
         // selected image has not been downloaded
         bool haveNotDownloadedItem = false;
 
-        foreach(CamItemInfo info, list)
+        foreach(const CamItemInfo& info, list)
         {
             haveNotDownloadedItem = !(info.downloaded == CamItemInfo::DownloadedYes);
 
@@ -1596,7 +1596,7 @@ void ImportUI::slotMarkAsDownloaded()
 {
     CamItemInfoList list = d->view->selectedCamItemInfos();
 
-    foreach(CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         setDownloaded(d->view->camItemInfoRef(info.folder, info.name), CamItemInfo::DownloadedYes);
 
@@ -1619,7 +1619,7 @@ void ImportUI::slotToggleLock()
         d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
     }
 
-    foreach(CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         QString folder = info.folder;
         QString file   = info.name;
@@ -1665,7 +1665,7 @@ void ImportUI::slotUpdateDownloadName()
     DownloadSettings settings = downloadSettings();
     QString newName;
 
-    foreach (CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         CamItemInfo& refInfo = d->view->camItemInfoRef(info.folder, info.name);
         // qCDebug(DIGIKAM_IMPORTUI_LOG) << "slotDownloadNameChanged, old: " << refInfo.downloadName;
@@ -1760,7 +1760,7 @@ void ImportUI::slotSelectNew()
     CamItemInfoList infos = d->view->allItems();
     CamItemInfoList toBeSelected;
 
-    foreach (CamItemInfo info, infos)
+    foreach(const CamItemInfo& info, infos)
     {
         if (info.downloaded == CamItemInfo::DownloadedNo)
         {
@@ -1776,7 +1776,7 @@ void ImportUI::slotSelectLocked()
     CamItemInfoList allItems = d->view->allItems();
     CamItemInfoList toBeSelected;
 
-    foreach(CamItemInfo info, allItems)
+    foreach(const CamItemInfo& info, allItems)
     {
         if(info.writePermissions == 0)
         {
@@ -1789,7 +1789,7 @@ void ImportUI::slotSelectLocked()
 
 void ImportUI::toggleLock(CamItemInfo& info)
 {
-    if(!info.isNull())
+    if (!info.isNull())
     {
         if (info.writePermissions == 0)
         {
@@ -1811,7 +1811,7 @@ QMap<QString, int> ImportUI::countItemsByFolders() const
 
     CamItemInfoList infos = d->view->allItems();
 
-    foreach(CamItemInfo info, infos)
+    foreach(const CamItemInfo& info, infos)
     {
         path = info.folder;
 
@@ -1864,7 +1864,7 @@ void ImportUI::itemsSelectionSizeInfo(unsigned long& fSizeKB, unsigned long& dSi
     CamItemInfoList list      = d->view->allItems();
     DownloadSettings settings = downloadSettings();
 
-    foreach (CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         if (selected.contains(info.url()))
         {
@@ -1937,7 +1937,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     CamItemInfoList lockedList;
     CamItemInfoList list = onlySelected ? d->view->selectedCamItemInfos() : d->view->allItems();
 
-    foreach(CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         if (onlyDownloaded)
         {
@@ -2056,7 +2056,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
     CamItemInfoList list = d->view->allItems();
     QSet<QString> usedDownloadPaths;
 
-    foreach(CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         if (onlySelected && !(selected.contains(info.url())))
         {
@@ -2299,7 +2299,7 @@ void ImportUI::slotNewSelection(bool hasSelection)
     QList<ParseSettings> renameFiles;
     CamItemInfoList list = hasSelection ? d->view->selectedCamItemInfos() : d->view->allItems();
 
-    foreach(CamItemInfo info, list)
+    foreach(const CamItemInfo& info, list)
     {
         ParseSettings parseSettings;
 
