@@ -28,12 +28,14 @@
 
 #include <QString>
 
-class QAction;
+// Local includes
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class CameraNameHelper
+class DIGIKAM_EXPORT CameraNameHelper
 {
 
 public:
