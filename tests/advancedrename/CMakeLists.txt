@@ -49,10 +49,7 @@ set(cameranamehelper_SRCS
     cameranamehelpertest.cpp
 )
 
-add_executable(cameranamehelpertest
-              ${cameranamehelper_SRCS}
-              $<TARGET_OBJECTS:digikamsettings_src>
-)
+add_executable(cameranamehelpertest ${cameranamehelper_SRCS})
 add_test(cameranamehelpertest cameranamehelpertest)
 ecm_mark_as_test(cameranamehelpertest)
 
