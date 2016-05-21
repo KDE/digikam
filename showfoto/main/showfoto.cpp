@@ -337,7 +337,15 @@ void ShowFoto::setupUserArea()
     m_canvas                         = new Digikam::Canvas(m_stackView);
     viewContainer->setCentralWidget(m_stackView);
 
+    m_splitter->setFrameStyle(QFrame::NoFrame);
+    m_splitter->setFrameShape(QFrame::NoFrame);
+    m_splitter->setFrameShadow(QFrame::Plain);
     m_splitter->setStretchFactor(1, 10);      // set Canvas default size to max.
+    m_splitter->setOpaqueResize(false);
+
+    m_canvas->makeDefaultEditingCanvas();
+    m_stackView->setCanvas(m_canvas);
+    m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
 
     d->rightSideBar = new Digikam::ImagePropertiesSideBar(widget, m_splitter, Qt::RightEdge);
     d->rightSideBar->setObjectName(QLatin1String("ShowFoto Sidebar Right"));
@@ -346,15 +354,6 @@ void ShowFoto::setupUserArea()
     hlay->addWidget(d->rightSideBar);
     hlay->setContentsMargins(QMargins());
     hlay->setSpacing(0);
-
-    m_canvas->makeDefaultEditingCanvas();
-    m_stackView->setCanvas(m_canvas);
-    m_stackView->setViewMode(Digikam::EditorStackView::CanvasMode);
-
-    m_splitter->setFrameStyle(QFrame::NoFrame);
-    m_splitter->setFrameShadow(QFrame::Plain);
-    m_splitter->setFrameShape(QFrame::NoFrame);
-    m_splitter->setOpaqueResize(false);
 
     // Code to check for the now depreciated HorizontalThumbar directive. It
     // is found, it is honored and deleted. The state will from than on be saved
