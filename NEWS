@@ -12,7 +12,7 @@ General            : Replacing annoying KIOSlave listing and scanning methods wi
 General            : Isolating KIO calls in KIOWrapper to be able to create a pure Qt digiKam in the future.
 General            : Add embedded trash support for each collection instead desktop trash.
 General            : Thumbs and preview video support is now delegate to QT5Multimedia.
-General            : Add support of MXE/MinGw cross compiler to create Windows target.
+General            : Add support of MXE/MinGw cross-compiler to create Windows target automatically without Windows OS..
 
 Database           : Fully integration of face recognition database with Mysql support.
 Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.
@@ -173,4 +173,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 133 ==> 302583 - Convert do DNG while importing [patch].
 134 ==> 315740 - Date is incorrectly completed to day in future.
 135 ==> 362441 - Caption and Tags - use 4 digit year format instead of 2 digit year format (additionally add seconds).
-136 ==> 
+136 ==> 361922 - Data lost.
+137 ==> 327957 - MYSQL : text filter returns all videos regardless of string.
+138 ==> 
+
+
