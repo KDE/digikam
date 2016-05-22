@@ -289,23 +289,20 @@ bool TimeAdjust::toolOperations()
                                   dt.time().toString(Qt::ISODate));
         }
 
-        if (prm.updXMPDate)
+        if (prm.updXMPDate && meta.supportXmp())
         {
-            if (meta.supportXmp())
-            {
-                meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
-                                     dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                meta.setXmpTagString("Xmp.photoshop.DateCreated",
-                                     dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                meta.setXmpTagString("Xmp.tiff.DateTime",
-                                     dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                meta.setXmpTagString("Xmp.xmp.CreateDate",
-                                     dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                meta.setXmpTagString("Xmp.xmp.MetadataDate",
-                                     dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-                meta.setXmpTagString("Xmp.xmp.ModifyDate",
-                                     dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
-            }
+            meta.setXmpTagString("Xmp.exif.DateTimeOriginal",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.photoshop.DateCreated",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.tiff.DateTime",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.xmp.CreateDate",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.xmp.MetadataDate",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
+            meta.setXmpTagString("Xmp.xmp.ModifyDate",
+                                 dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
         }
 
         image().setMetadata(meta.data());
