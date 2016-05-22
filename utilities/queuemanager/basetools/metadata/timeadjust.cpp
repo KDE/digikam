@@ -221,10 +221,9 @@ bool TimeAdjust::toolOperations()
                                                         QLatin1String("yyyy:MM:dd hh:mm:ss"));
                     break;
                 case TimeAdjustContainer::IPTCCREATED:
-                    // we have to truncate the timezone from the time, otherwise it cannot be converted to a QTime
                     orgDateTime = QDateTime(QDate::fromString(meta.getIptcTagString("Iptc.Application2.DateCreated"),
                                                               Qt::ISODate),
-                                            QTime::fromString(meta.getIptcTagString("Iptc.Application2.TimeCreated").left(8),
+                                            QTime::fromString(meta.getIptcTagString("Iptc.Application2.TimeCreated"),
                                                               Qt::ISODate));
                     break;
                 case TimeAdjustContainer::XMPCREATED:
