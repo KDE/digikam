@@ -60,6 +60,7 @@
 #include "removemetadata.h"
 #include "convert2dng.h"
 #include "userscript.h"
+#include "timeadjust.h"
 
 #ifdef HAVE_JASPER
 #include "convert2jp2.h"
@@ -128,6 +129,7 @@ BatchToolsManager::BatchToolsManager()
     // Metadata
     registerTool(new AssignTemplate(this));
     registerTool(new RemoveMetadata(this));
+    registerTool(new TimeAdjust(this));
 
     // Enhance
     registerTool(new Blur(this));

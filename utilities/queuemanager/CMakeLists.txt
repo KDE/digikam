@@ -40,6 +40,10 @@ set(libqueuemanager_SRCS
     basetools/filters/colorfx.cpp
     basetools/metadata/assigntemplate.cpp
     basetools/metadata/removemetadata.cpp
+    basetools/metadata/timeadjust.cpp
+    basetools/metadata/timeadjustcontainer.cpp
+    basetools/metadata/timeadjustsettings.cpp
+    basetools/metadata/clockphotodialog.cpp
     basetools/transform/flip.cpp
     basetools/transform/resize.cpp
     basetools/transform/rotate.cpp
