@@ -51,6 +51,10 @@ using namespace Digikam;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+
+    // if we have some local breeze icon resource, prefer it
+    DXmlGuiWindow::setupIconTheme();
+
     KLocalizedString::setApplicationDomain("digikam");
 
     KAboutData aboutData(QString::fromLatin1("showfoto"), // component name

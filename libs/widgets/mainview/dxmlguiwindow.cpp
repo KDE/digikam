@@ -42,6 +42,9 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QDesktopServices>
+#include <QIcon>
+#include <QResource>
+#include <QStandardPaths>
 
 // KDE includes
 
@@ -752,6 +755,27 @@ void DXmlGuiWindow::slotRecipesBook()
 void DXmlGuiWindow::slotContribute()
 {
     QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=contrib")));
+}
+
+void DXmlGuiWindow::setupIconTheme()
+{
+    /**
+     * let QStandardPaths handle this, it will look for app local stuff
+     * this means e.g. for mac: "<APPDIR>/../Resources" and for win: "<APPDIR>/data"
+     */
+    const QString breezeIcons = QStandardPaths::locate(QStandardPaths::DataLocation, QStringLiteral("breeze.rcc"));
+
+    if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons) && QResource::registerResource(breezeIcons))
+    {
+        // tell qt about the theme
+        QIcon::setThemeSearchPaths(QStringList() << QStringLiteral(":/icons"));
+        QIcon::setThemeName(QStringLiteral("breeze"));
+
+        // Tell icons loader an co. about the theme
+        KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
+        cg.writeEntry("Theme", "breeze");
+        cg.sync();
+    }
 }
 
 } // namespace Digikam

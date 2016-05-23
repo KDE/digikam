@@ -57,6 +57,7 @@
 #include "coredbaccess.h"
 #include "thumbsdbaccess.h"
 #include "facedbaccess.h"
+#include "dxmlguiwindow.h"
 #include "digikam_version.h"
 
 using namespace Digikam;
@@ -65,6 +66,11 @@ using namespace FacesEngine;
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
+
+
+    // if we have some local breeze icon resource, prefer it
+    DXmlGuiWindow::setupIconTheme();
+
     KLocalizedString::setApplicationDomain("digikam");
     KLocalizedString::setApplicationDomain("kipiplugins");
 

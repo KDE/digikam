@@ -153,6 +153,11 @@ public:
 
     static QAction* buildStdAction(StdActionType type, const QObject* const recvr, const char* const slot, QObject* const parent);
 
+    /**
+     * If we have some local breeze icon resource, prefer it.
+     */
+    static void setupIconTheme();
+
 protected:
 
     QAction*     m_metadataEditAction;
