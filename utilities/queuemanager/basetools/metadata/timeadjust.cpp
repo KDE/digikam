@@ -167,9 +167,18 @@ void TimeAdjust::slotSettingsChanged()
 
 bool TimeAdjust::toolOperations()
 {
-    if (!loadToDImg())
+    DMetadata meta;
+
+    if (image().isNull())
     {
-        return false;
+        if (!meta.load(inputUrl().toLocalFile()))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        meta.setData(image().getMetadata());
     }
 
     TimeAdjustContainer prm;
@@ -197,7 +206,6 @@ bool TimeAdjust::toolOperations()
                            prm.updEXIFDigDate || prm.updEXIFThmDate ||
                            prm.updIPTCDate    || prm.updXMPDate;
 
-    DMetadata meta(image().getMetadata());
     QDateTime orgDateTime;
 
     switch (prm.dateSource)
@@ -303,11 +311,29 @@ bool TimeAdjust::toolOperations()
             meta.setXmpTagString("Xmp.xmp.ModifyDate",
                                  dt.toString(QLatin1String("yyyy:MM:ddThh:mm:ss")));
         }
-
-        image().setMetadata(meta.data());
     }
 
-    bool ret = savefromDImg();
+    bool ret = true;
+
+    if (image().isNull())
+    {
+        QFile::remove(outputUrl().toLocalFile());
+        ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
+
+        if (ret && metadataChanged)
+        {
+            ret = meta.save(outputUrl().toLocalFile());
+        }
+    }
+    else
+    {
+        if (metadataChanged)
+        {
+            image().setMetadata(meta.data());
+        }
+
+        ret = savefromDImg();
+    }
 
     if (ret && prm.updFileModDate)
     {
