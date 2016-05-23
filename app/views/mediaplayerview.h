@@ -27,8 +27,8 @@
 // Qt includes
 
 #include <QStackedWidget>
-#include <QUrl>
 #include <QMediaPlayer>
+#include <QUrl>
 
 class QEvent;
 

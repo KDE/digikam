@@ -25,18 +25,17 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QApplication>
+#include <QVideoWidget>
+#include <QVBoxLayout>
+#include <QMouseEvent>
+#include <QToolBar>
+#include <QAction>
+#include <QSlider>
 #include <QLabel>
 #include <QFrame>
-#include <QGridLayout>
-#include <QToolBar>
 #include <QEvent>
-#include <QMouseEvent>
-#include <QApplication>
 #include <QStyle>
-#include <QAction>
-#include <QVideoWidget>
-#include <QSlider>
 
 // KDE includes
 
@@ -111,7 +110,7 @@ public:
         nextAction(0),
         toolBar(0),
         videoWidget(0),
-        player(0), 
+        player(0),
         slider(0)
     {
     }
@@ -138,6 +137,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    QMargins margins(spacing, 0, spacing, spacing);
 
     d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")), i18nc("go to previous image", "Back"), this);
     d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),     i18nc("go to next image", "Forward"),  this);
@@ -149,15 +149,10 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->errorView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->errorView->setLineWidth(1);
 
-    QGridLayout* const grid1 = new QGridLayout;
-    grid1->addWidget(errorMsg, 1, 0, 1, 3);
-    grid1->setColumnStretch(0, 10);
-    grid1->setColumnStretch(2, 10);
-    grid1->setRowStretch(0, 10);
-    grid1->setRowStretch(2, 10);
-    grid1->setContentsMargins(spacing, 0, spacing, spacing);
-    grid1->setSpacing(spacing);
-    d->errorView->setLayout(grid1);
+    QVBoxLayout* const vbox1 = new QVBoxLayout(d->errorView);
+    vbox1->addWidget(errorMsg, 10);
+    vbox1->setContentsMargins(margins);
+    vbox1->setSpacing(spacing);
 
     insertWidget(Private::ErrorView, d->errorView);
 
@@ -166,27 +161,21 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->playerView  = new QFrame(this);
     d->videoWidget = new QVideoWidget(this);
     d->player      = new QMediaPlayer(this, QMediaPlayer::VideoSurface);
+
     d->player->setVideoOutput(d->videoWidget);
+    d->player->setNotifyInterval(250);
 
     d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
-    d->player->setNotifyInterval(250);
-    d->videoWidget->setStyleSheet(QLatin1String("background-color:black;"));
-    d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->playerView->setLineWidth(1);
 
-    QGridLayout* const grid2 = new QGridLayout;
-    grid2->addWidget(d->videoWidget, 0, 0, 1, 3);
-    grid2->addWidget(d->slider,      1, 0, 1, 3);
-    grid2->setColumnStretch(0, 10);
-    grid2->setColumnStretch(2, 10);
-    grid2->setRowStretch(0, 10);
-    grid2->setContentsMargins(spacing, 0, spacing, spacing);
-    grid2->setSpacing(spacing);
-    d->playerView->setLayout(grid2);
+    QVBoxLayout* const vbox2 = new QVBoxLayout(d->playerView);
+    vbox2->addWidget(d->videoWidget, 10);
+    vbox2->addWidget(d->slider,       0);
+    vbox2->setContentsMargins(margins);
+    vbox2->setSpacing(spacing);
 
     insertWidget(Private::PlayerView, d->playerView);
 
@@ -313,8 +302,8 @@ void MediaPlayerView::setPreviewMode(int mode)
     setCurrentIndex(mode);
 
     // Workaround for no video frame in the QVideoWidget, possible Qt-5.6.0 bug?
-    d->videoWidget->resize(0, 0);
-    d->videoWidget->resize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+    d->videoWidget->setMaximumSize(0, 0);
+    d->videoWidget->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 
     d->toolBar->adjustSize();
     d->toolBar->raise();
