@@ -162,11 +162,14 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->videoWidget = new QVideoWidget(this);
     d->player      = new QMediaPlayer(this, QMediaPlayer::VideoSurface);
 
+    d->slider      = new QSlider(Qt::Horizontal, this);
+    d->slider->setRange(0, 0);
+
     d->player->setVideoOutput(d->videoWidget);
     d->player->setNotifyInterval(250);
 
-    d->slider      = new QSlider(Qt::Horizontal, this);
-    d->slider->setRange(0, 0);
+    d->videoWidget->setAspectRatioMode(Qt::KeepAspectRatio);
+    d->videoWidget->setStyleSheet(QLatin1String("background-color:black;"));
 
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->playerView->setLineWidth(1);
