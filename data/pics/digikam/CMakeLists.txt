@@ -4,7 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-add_subdirectory(borderpatterns)
-add_subdirectory(texturepatterns)
-add_subdirectory(digikam)
-add_subdirectory(showfoto)
+file(GLOB _files *.png)
+
+install(FILES ${_files}
+        DESTINATION ${DATA_INSTALL_DIR}/digikam/data
+)
