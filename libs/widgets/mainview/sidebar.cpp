@@ -166,7 +166,7 @@ QList<DMultiTabBarTab*>* DMultiTabBarFrame::tabs()
 // -------------------------------------------------------------------------------------
 
 DMultiTabBarButton::DMultiTabBarButton(const QPixmap& pic, const QString& text,
-                                       int id, QWidget *parent)
+                                       int id, QWidget* const parent)
     : QPushButton(QIcon(pic), text, parent),
       m_id(id)
 {
@@ -177,6 +177,8 @@ DMultiTabBarButton::DMultiTabBarButton(const QPixmap& pic, const QString& text,
     // If keyboard navigation is wanted, then only the bar should take focus,
     // and arrows could change the focused button; but generally, tabbars don't take focus anyway.
     setFocusPolicy(Qt::NoFocus);
+    // See RB #128005
+    setAttribute(Qt::WA_LayoutUsesWidgetRect);
 }
 
 DMultiTabBarButton::~DMultiTabBarButton()
