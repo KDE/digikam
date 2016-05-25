@@ -19,6 +19,7 @@ Database           : Mysql internal server is now configurable as Sqlite to stor
 Database           : Mysql internal/remote server is now configurable with first run assistant.
 
 Batch Queue Manager: Add a new tool to convert RAW files to DNG.
+Batch Queue Manager: Add a new tool to adjust time and date metadata.
 
 Image Editor       : Add a new option to import images from a digital scanner.
 Image Editor       : Add a new option to edit metadata.
@@ -175,6 +176,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 135 ==> 362441 - Caption and Tags - use 4 digit year format instead of 2 digit year format (additionally add seconds).
 136 ==> 361922 - Data lost.
 137 ==> 327957 - MYSQL : text filter returns all videos regardless of string.
-138 ==> 
-
-
+138 ==> 273852 - MYSQL : showing only one tag results in photos where this tag is not set.
+139 ==> 
