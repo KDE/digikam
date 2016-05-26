@@ -71,8 +71,8 @@ bool DTrash::deleteImage(const QString& imageToDelete)
     QFileInfo imageFileInfo(imageToDelete);
     QFile imageFile(imageToDelete);
 
-    QString destinationInTrash = collection + QDir::separator() + TRASH_FOLDER +
-                                 QDir::separator() + FILES_FOLDER + QDir::separator() +
+    QString destinationInTrash = collection + QLatin1Char('/') + TRASH_FOLDER +
+                                 QLatin1Char('/') + FILES_FOLDER + QLatin1Char('/') +
                                  baseNameForMovingIntoTrash + QLatin1String(".") +
                                  imageFileInfo.completeSuffix();
 
@@ -106,8 +106,8 @@ bool DTrash::deleteDirRecursivley(const QString& dirToDelete)
 
 void DTrash::extractJsonForItem(const QString &collPath, const QString &baseName, DTrashItemInfo &itemInfo)
 {
-    QString jsonFilePath = collPath + QDir::separator() + TRASH_FOLDER +
-                           QDir::separator() + INFO_FOLDER + QDir::separator() +
+    QString jsonFilePath = collPath + QLatin1Char('/') + TRASH_FOLDER +
+                           QLatin1Char('/') + INFO_FOLDER + QLatin1Char('/') +
                            baseName + INFO_FILE_EXTENSION;
 
     QFile jsonFile(jsonFilePath);
@@ -133,7 +133,7 @@ void DTrash::extractJsonForItem(const QString &collPath, const QString &baseName
 
 bool DTrash::prepareCollectionTrash(const QString& collectionPath)
 {
-    QString trashFolder = collectionPath + QDir::separator() + TRASH_FOLDER;
+    QString trashFolder = collectionPath + QLatin1Char('/') + TRASH_FOLDER;
     QDir trashDir(trashFolder);
 
     if (!trashDir.exists())
@@ -141,8 +141,8 @@ bool DTrash::prepareCollectionTrash(const QString& collectionPath)
         bool isCreated = true;
 
         isCreated &= trashDir.mkpath(trashFolder);
-        isCreated &= trashDir.mkpath(trashFolder + QDir::separator() + FILES_FOLDER);
-        isCreated &= trashDir.mkpath(trashFolder + QDir::separator() + INFO_FOLDER);
+        isCreated &= trashDir.mkpath(trashFolder + QLatin1Char('/') + FILES_FOLDER);
+        isCreated &= trashDir.mkpath(trashFolder + QLatin1Char('/') + INFO_FOLDER);
 
         if(!isCreated)
         {
@@ -187,9 +187,9 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 
 QString DTrash::getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version)
 {
-    QString pathToCreateJsonFile = collectionPath + QDir::separator() +
-                                   TRASH_FOLDER + QDir::separator() +
-                                   INFO_FOLDER + QDir::separator() +
+    QString pathToCreateJsonFile = collectionPath + QLatin1Char('/') +
+                                   TRASH_FOLDER + QLatin1Char('/') +
+                                   INFO_FOLDER + QLatin1Char('/') +
                                    baseName +
                                    (version ? QString::number(version) : QLatin1String("")) +
                                    INFO_FILE_EXTENSION;

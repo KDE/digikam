@@ -253,7 +253,7 @@ QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColP
 
     if (version != 0)
     {
-        QString dir      = fileInfo.dir().path() + QDir::separator();
+        QString dir      = fileInfo.dir().path() + QLatin1Char('/');
         QString baseName = fileInfo.baseName() + QString::number(version);
         QString suffix   = QLatin1String(".") + fileInfo.completeSuffix();
         fileInfo.setFile(dir + baseName + suffix);

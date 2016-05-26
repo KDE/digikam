@@ -56,7 +56,7 @@ CopyJob::CopyJob(const QUrl& src, const QUrl& dest, bool isMove)
 bool CopyJob::copyFolderRecursively(const QString& srcPath, const QString& dstPath)
 {
     QDir srcDir(srcPath);
-    QString newCopyPath = dstPath + QDir::separator() + srcDir.dirName();
+    QString newCopyPath = dstPath + QLatin1Char('/') + srcDir.dirName();
 
     if (!srcDir.mkpath(newCopyPath))
     {
@@ -65,7 +65,7 @@ bool CopyJob::copyFolderRecursively(const QString& srcPath, const QString& dstPa
 
     foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Files))
     {
-        QString copyPath = newCopyPath + QDir::separator() + fileInfo.fileName();
+        QString copyPath = newCopyPath + QLatin1Char('/') + fileInfo.fileName();
 
         if (!QFile::copy(fileInfo.filePath(), copyPath))
             return false;
@@ -100,7 +100,7 @@ void CopyJob::run()
 
     // Checking if there is a file with the same name in destination folder
     QString destenationName = srcInfo.isFile() ? srcInfo.fileName() : srcInfo.dir().dirName();
-    QString destenation     = dstDir.path() + QDir::separator() + destenationName;
+    QString destenation     = dstDir.path() + QLatin1Char('/') + destenationName;
     QFileInfo fileInfoForDestination(destenation);
 
     if (fileInfoForDestination.exists())
@@ -180,7 +180,7 @@ DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash)
 
 void DeleteJob::run()
 {
-    QFileInfo fileInfo(m_srcToDelete.path());
+    QFileInfo fileInfo(m_srcToDelete.toLocalFile());
     qCDebug(DIGIKAM_IOJOB_LOG) << "DELETING: "    << fileInfo.filePath() << "\n"
                                << "FILE EXISTS? " << fileInfo.exists()   << "\n"
                                << "IS TO TRASH? " << m_useTrash;
@@ -196,14 +196,14 @@ void DeleteJob::run()
     {
         if (fileInfo.isDir())
         {
-            if (!DTrash::deleteDirRecursivley(m_srcToDelete.path()))
+            if (!DTrash::deleteDirRecursivley(m_srcToDelete.toLocalFile()))
             {
                 emit error(i18n("Couldn't move Dir %1 to collection trash", fileInfo.path()));
             }
         }
         else
         {
-            if (!DTrash::deleteImage(m_srcToDelete.path()))
+            if (!DTrash::deleteImage(m_srcToDelete.toLocalFile()))
             {
                 emit error(i18n("Couldn't move image %1 to collection trash", fileInfo.filePath()));
             }
@@ -251,26 +251,26 @@ void RenameFileJob::run()
     }
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "Destination Url: "      << m_newUrl << "\n"
-                               << "Destination Url path: " << m_newUrl.path();
+                               << "Destination Url path: " << m_newUrl.toLocalFile();
 
-    if (QFileInfo(m_newUrl.path()).exists())
+    if (QFileInfo(m_newUrl.toLocalFile()).exists())
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File with the same name exists!";
-        emit error(i18n("Image with the same name %1 already there", m_newUrl.path()));
+        emit error(i18n("Image with the same name %1 already there", m_newUrl.toLocalFile()));
         emit signalDone();
         return;
     }
 
-    QFile file(m_srcToRename.path());
+    QFile file(m_srcToRename.toLocalFile());
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "Trying to rename"
                                << m_srcToRename.toLocalFile() << "\nto "
-                               << m_newUrl.path();
+                               << m_newUrl.toLocalFile();
 
-    if (!file.rename(m_newUrl.path()))
+    if (!file.rename(m_newUrl.toLocalFile()))
     {
         qCDebug(DIGIKAM_IOJOB_LOG) << "File couldn't be renamed!";
-        emit error(i18n("Image %1 could not be renamed", m_srcToRename.path()));
+        emit error(i18n("Image %1 could not be renamed", m_srcToRename.toLocalFile()));
         emit signalDone();
         return;
     }
@@ -290,8 +290,8 @@ void DTrashItemsListingJob::run()
 {
     DTrashItemInfo itemInfo;
 
-    QString collectionTrashFilesPath = m_collectionPath + QDir::separator() + DTrash::TRASH_FOLDER +
-                                       QDir::separator() + DTrash::FILES_FOLDER;
+    QString collectionTrashFilesPath = m_collectionPath + QLatin1Char('/') + DTrash::TRASH_FOLDER +
+                                       QLatin1Char('/') + DTrash::FILES_FOLDER;
 
     qCDebug(DIGIKAM_IOJOB_LOG) << "collectionTrashFilesPath: " << collectionTrashFilesPath;
 

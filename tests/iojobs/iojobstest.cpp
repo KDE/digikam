@@ -47,29 +47,29 @@ const QString filePath       = QFINDTESTDATA(testFileName);
 const QString srcFolderName  = QLatin1String("src");
 const QString dstFolderPath  = QLatin1String("dst");
 const QString testFolderName = QLatin1String("test");
-const QString testFilePath   = (QDir::currentPath() + QDir::separator() + srcFolderName + QDir::separator() + testFileName);
-const QString testFolderPath = (QDir::currentPath() + QDir::separator() + srcFolderName + QDir::separator() + testFolderName + QDir::separator());
-const QString destPath       = (QDir::currentPath() + QDir::separator() + dstFolderPath + QDir::separator());
+const QString testFilePath   = (QDir::currentPath() + QLatin1Char('/') + srcFolderName + QLatin1Char('/') + testFileName);
+const QString testFolderPath = (QDir::currentPath() + QLatin1Char('/') + srcFolderName + QLatin1Char('/') + testFolderName + QLatin1Char('/'));
+const QString destPath       = (QDir::currentPath() + QLatin1Char('/') + dstFolderPath + QLatin1Char('/'));
 
 void IOJobsTest::init()
 {
     QFile f(filePath);
 
     QDir d;
-    d.mkpath(QDir::currentPath() + QDir::separator() + srcFolderName + QDir::separator() + testFolderName);
-    d.mkpath(QDir::currentPath() + QDir::separator() + dstFolderPath);
+    d.mkpath(QDir::currentPath() + QLatin1Char('/') + srcFolderName + QLatin1Char('/') + testFolderName);
+    d.mkpath(QDir::currentPath() + QLatin1Char('/') + dstFolderPath);
 
-    QVERIFY2(f.copy(QDir::currentPath() + QDir::separator() + srcFolderName + QDir::separator() + testFileName),
+    QVERIFY2(f.copy(QDir::currentPath() + QLatin1Char('/') + srcFolderName + QLatin1Char('/') + testFileName),
              qPrintable(QLatin1String("Could not copy the test target to src folder")));
 
-    QVERIFY2(f.copy(QDir::currentPath() + QDir::separator() + srcFolderName + QDir::separator() + testFolderName + QDir::separator() + testFileName),
+    QVERIFY2(f.copy(QDir::currentPath() + QLatin1Char('/') + srcFolderName + QLatin1Char('/') + testFolderName + QLatin1Char('/') + testFileName),
              qPrintable(QLatin1String("Could not copy the test target to src folder")));
 }
 
 void IOJobsTest::cleanup()
 {
-    QDir src(QDir::currentPath() + QDir::separator() + srcFolderName);
-    QDir dst(QDir::currentPath() + QDir::separator() + dstFolderPath);
+    QDir src(QDir::currentPath() + QLatin1Char('/') + srcFolderName);
+    QDir dst(QDir::currentPath() + QLatin1Char('/') + dstFolderPath);
 
     QVERIFY2(src.removeRecursively() && dst.removeRecursively(),
              qPrintable(QLatin1String("Could not cleanup")));
@@ -130,14 +130,14 @@ void IOJobsTest::copyAndMove_data()
             << destPath
             << false
             << true
-            << (destPath + testFolderName + QDir::separator() + testFileName);
+            << (destPath + testFolderName + QLatin1Char('/') + testFileName);
 
     QTest::newRow(qPrintable(QLatin1String("Moving Folder")))
             << testFolderPath
             << destPath
             << true
             << true
-            << (destPath + testFolderName + QDir::separator() + testFileName);
+            << (destPath + testFolderName + QLatin1Char('/') + testFileName);
 }
 
 void IOJobsTest::permanentDel()
