@@ -306,9 +306,7 @@ QUrl CoreDbUrl::albumRoot() const
 
     if (!albumRoot.isNull())
     {
-        QUrl albumRootUrl;
-        albumRootUrl.setPath(albumRoot);
-        return albumRootUrl;
+        return QUrl::fromLocalFile(albumRoot);
     }
 
     return QUrl();
@@ -341,9 +339,7 @@ QString CoreDbUrl::name() const
 
 QUrl CoreDbUrl::fileUrl() const
 {
-    QUrl fileUrl = QUrl::fromLocalFile(albumRoot().toString() + path());
-
-    return fileUrl;
+    return QUrl::fromLocalFile(albumRoot().toLocalFile() + path());
 }
 
 // --- Tag URL ------------------------------------------------------------------------
