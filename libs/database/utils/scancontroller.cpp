@@ -352,7 +352,8 @@ void ScanController::createProgressDialog()
     connect(this, SIGNAL(incrementProgressDialog(int)),
             d->progressDialog, SLOT(incrementMaximum(int)));
 
-    connect(d->progressDialog, &DProgressDlg::signalCancelPressed, this, &ScanController::slotCancelPressed);
+    connect(d->progressDialog, SIGNAL(signalCancelPressed()),
+            this, SLOT(slotCancelPressed()));
 }
 
 void ScanController::slotCancelPressed()
@@ -786,26 +787,26 @@ void ScanController::connectCollectionScanner(CollectionScanner* const scanner)
 {
     scanner->setSignalsEnabled(true);
 
-    connect(scanner, &CollectionScanner::startCompleteScan,
-            this, &ScanController::slotStartCompleteScan);
+    connect(scanner, SIGNAL(startCompleteScan()),
+            this, SLOT(slotStartCompleteScan()));
 
-    connect(scanner, &CollectionScanner::totalFilesToScan,
-            this, &ScanController::slotTotalFilesToScan);
+    connect(scanner, SIGNAL(totalFilesToScan(int)),
+            this, SLOT(slotTotalFilesToScan(int)));
 
-    connect(scanner, &CollectionScanner::startScanningAlbum,
-            this, &ScanController::slotStartScanningAlbum);
+    connect(scanner, SIGNAL(startScanningAlbum(QString,QString)),
+            this, SLOT(slotStartScanningAlbum(QString,QString)));
 
-    connect(scanner, &CollectionScanner::scannedFiles,
-            this, &ScanController::slotScannedFiles);
+    connect(scanner, SIGNAL(scannedFiles(int)),
+            this, SLOT(slotScannedFiles(int)));
 
-    connect(scanner, &CollectionScanner::startScanningAlbumRoot,
-            this, &ScanController::slotStartScanningAlbumRoot);
+    connect(scanner, SIGNAL(startScanningAlbumRoot(QString)),
+            this, SLOT(slotStartScanningAlbumRoot(QString)));
 
-    connect(scanner, &CollectionScanner::startScanningForStaleAlbums,
-            this, &ScanController::slotStartScanningForStaleAlbums);
+    connect(scanner, SIGNAL(startScanningForStaleAlbums()),
+            this, SLOT(slotStartScanningForStaleAlbums()));
 
-    connect(scanner, &CollectionScanner::startScanningAlbumRoots,
-            this, &ScanController::slotStartScanningAlbumRoots);
+    connect(scanner, SIGNAL(startScanningAlbumRoots()),
+            this, SLOT(slotStartScanningAlbumRoots()));
 }
 
 void ScanController::slotTotalFilesToScan(int count)
@@ -1130,7 +1131,8 @@ ScanControllerLoadingCacheFileWatch::ScanControllerLoadingCacheFileWatch()
     CoreDbWatch* const dbwatch = CoreDbAccess::databaseWatch();
 
     // we opt for a queued connection to make stuff a bit relaxed
-    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)), this, SLOT(slotImageChanged(ImageChangeset)),
+    connect(dbwatch, SIGNAL(imageChange(ImageChangeset)),
+            this, SLOT(slotImageChanged(ImageChangeset)),
             Qt::QueuedConnection);
 }
 
