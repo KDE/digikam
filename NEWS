@@ -202,4 +202,13 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 161 ==> 338561 - "Add Image" crashes everytime.
 162 ==> 333575 - Crash on complete maintenance.
 163 ==> 327781 - App crashed after first use.
-164 ==> 
+164 ==> 327169 - digiKam crash during load database.
+165 ==> 335814 - Failing to save a new version due to unrecognized.
+166 ==> 230401 - MSVC++ Runtime error on large TIFs with layers.
+167 ==> 240142 - If I press Copy Here while attempting to Drag and drop of a file, the original is deleted.
+168 ==> 303992 - digiKam is closing after opening any file dialog.
+169 ==> 330509 - The "properties", "captions & tags" & "colors" sidebars all cause digikam to freeze when a picture is selected.
+170 ==> 262000 - Kioslave crashes during batch rename.
+171 ==> 308149 - digiKam - building with KDE fails due to link files not being supported by windows.
+172 ==> 240139 - If I press Cancel while attempting to Drag and drop of a file, the file is deleted from its original directory.
+173 ==> 
