@@ -178,5 +178,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 137 ==> 327957 - MYSQL : text filter returns all videos regardless of string.
 138 ==> 273852 - MYSQL : showing only one tag results in photos where this tag is not set.
 139 ==> 345671 - Dialog is too small under Microsoft Windows.
-140 ==> 
-
+140 ==> 361955 - digiKam hangs after start.
+141 ==> 
