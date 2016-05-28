@@ -182,5 +182,24 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 141 ==> 348760 - Old and not secure VLC version.
 142 ==> 342481 - Provide Build Instructions for Windows.
 143 ==> 351654 - Windows 7: Digikam (4.12) keeps hanging at startup (no crash or crash report).
-144 ==> 
-
+144 ==> 327627 - version 2.9 dk I have added a tag...bring up pictures with the tag and adding a second tag and it crashes multiple times.
+145 ==> 305191 - digiKam closed when loading cameras.
+146 ==> 321338 - Work on win8 x64?
+147 ==> 180747 - digiKam crashes if flickr upload failed and "Start uploading" button was pressed again.
+148 ==> 215647 - Opengl viewer does not work.
+149 ==> 350923 - Previous Drag and Drop bug not fixed (but reportedly fixed).
+150 ==> 288183 - Folder navigation/selection hangs when adding new album collection.
+151 ==> 345245 - digiKam hangs on startup.
+152 ==> 240140 - If I press Move Here while attempting to Drag and drop of a file, I receive an error "The file or folder xxx does not exist".
+153 ==> 355196 - Crash if I transform a raw (CR2) in black & white.
+154 ==> 333182 - Freezes/Hangs when resizing panes.
+155 ==> 240226 - Save As feature crash the application if ~ character is inserted in the file name.
+156 ==> 347672 - digikam.exe do not work.
+157 ==> 344911 - Screen freezes frequently while tagging images.
+158 ==> 240212 - Problem changing toolbar icons.
+159 ==> 326106 - Crash on startup.
+160 ==> 192257 - directory with new photo's not shown.
+161 ==> 338561 - "Add Image" crashes everytime.
+162 ==> 333575 - Crash on complete maintenance.
+163 ==> 327781 - App crashed after first use.
+164 ==> 
