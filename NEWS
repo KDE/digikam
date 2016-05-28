@@ -181,4 +181,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 140 ==> 361955 - digiKam hangs after start.
 141 ==> 348760 - Old and not secure VLC version.
 142 ==> 342481 - Provide Build Instructions for Windows.
-143 ==> 
+143 ==> 351654 - Windows 7: Digikam (4.12) keeps hanging at startup (no crash or crash report).
+144 ==> 
+
