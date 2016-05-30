@@ -955,7 +955,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkLocation(const QU
 
                 if (iconName)
                 {
-                    *iconName = QLatin1String("drive-removable-media-usb");
+                    *iconName = QLatin1String("drive-removable-media");
                 }
             }
             else

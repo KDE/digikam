@@ -396,7 +396,7 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->uploadAction = new QAction(QIcon::fromTheme(QLatin1String("media-flash-smart-media")), i18nc("@action", "Upload..."), this);
+    d->uploadAction = new QAction(QIcon::fromTheme(QLatin1String("media-flash-sd-mmc")), i18nc("@action", "Upload..."), this);
     connect(d->uploadAction, SIGNAL(triggered()), this, SLOT(slotUpload()));
     ac->addAction(QLatin1String("importui_imageupload"), d->uploadAction);
     ac->setDefaultShortcut(d->uploadAction, Qt::CTRL + Qt::Key_U);

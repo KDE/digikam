@@ -1688,9 +1688,9 @@ void DigikamApp::loadCameras()
     d->cameraMenu->setTitle(i18n("Cameras"));
     d->cameraMenu->setIcon(QIcon::fromTheme(QLatin1String("camera-photo")));
     d->usbMediaMenu->setTitle(i18n("USB Storage Devices"));
-    d->usbMediaMenu->setIcon(QIcon::fromTheme(QLatin1String("drive-removable-media-usb")));
+    d->usbMediaMenu->setIcon(QIcon::fromTheme(QLatin1String("drive-removable-media")));
     d->cardReaderMenu->setTitle(i18n("Card Readers"));
-    d->cardReaderMenu->setIcon(QIcon::fromTheme(QLatin1String("media-flash-smart-media")));
+    d->cardReaderMenu->setIcon(QIcon::fromTheme(QLatin1String("media-flash-sd-mmc")));
 
     ac->addAction(QLatin1String("cameras"),     d->cameraMenu->menuAction());
     ac->addAction(QLatin1String("usb_media"),   d->usbMediaMenu->menuAction());

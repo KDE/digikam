@@ -155,7 +155,7 @@ bool ImportDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDr
 
         QMenu popMenu(view);
         popMenu.addSection(QIcon::fromTheme(QLatin1String("digikam")), i18n("Exporting"));
-        QAction* const upAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("media-flash-smart-media")),
+        QAction* const upAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("media-flash-sd-mmc")),
                                                     i18n("Upload to Camera"));
         popMenu.addSeparator();
         popMenu.addAction(QIcon::fromTheme(QLatin1String("dialog-cancel")), i18n("C&ancel"));

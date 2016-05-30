@@ -734,7 +734,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                             return QIcon::fromTheme(QLatin1String("drive-harddisk"));
 
                         case CategoryRemovable:
-                            return QIcon::fromTheme(QLatin1String("drive-removable-media-usb"));
+                            return QIcon::fromTheme(QLatin1String("drive-removable-media"));
 
                         case CategoryRemote:
                             return QIcon::fromTheme(QLatin1String("network-wired"));
