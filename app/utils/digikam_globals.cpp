@@ -110,7 +110,7 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
         }
 #endif // HAVE_JASPER
 
-        formats.append(i18n("%1 Image (%2)").arg(QString::fromLatin1(frm).toUpper()).arg(QLatin1String("*.") + QLatin1String(frm)));
+        formats.append(i18n("%1 Image (%2)", QString::fromLatin1(frm).toUpper(), QLatin1String("*.") + QLatin1String(frm)));
         allTypes.append(QString::fromLatin1("*.%1 ").arg(QLatin1String(frm)));
     }
 
@@ -139,9 +139,9 @@ QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTy
 
     if (mode != QIODevice::WriteOnly)
     {
-        formats << i18n("Raw Images (%1)").arg(QLatin1String(RawEngine::DRawDecoder::rawFiles()));
+        formats << i18n("Raw Images (%1)", QLatin1String(RawEngine::DRawDecoder::rawFiles()));
         allTypes.append(QLatin1String(RawEngine::DRawDecoder::rawFiles()));
-        formats << i18n("All supported files (%1)").arg(allTypes);
+        formats << i18n("All supported files (%1)", allTypes);
     }
 
     return formats;
