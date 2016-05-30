@@ -211,4 +211,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 170 ==> 262000 - Kioslave crashes during batch rename.
 171 ==> 308149 - digiKam - building with KDE fails due to link files not being supported by windows.
 172 ==> 240139 - If I press Cancel while attempting to Drag and drop of a file, the file is deleted from its original directory.
-173 ==> 
+173 ==> 359505 - Image deleted after applying tag.
+174 ==> 
+
