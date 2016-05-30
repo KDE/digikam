@@ -808,20 +808,20 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->deleteAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-user-trash")), i18n("Delete Album"), this);
+    d->deleteAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Album"), this);
     connect(d->deleteAction, SIGNAL(triggered()), d->view, SLOT(slotDeleteAlbum()));
     ac->addAction(QLatin1String("album_delete"), d->deleteAction);
 
     // -----------------------------------------------------------------
 
-    d->renameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename..."), this);
+    d->renameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Rename..."), this);
     connect(d->renameAction, SIGNAL(triggered()), d->view, SLOT(slotRenameAlbum()));
     ac->addAction(QLatin1String("album_rename"), d->renameAction);
     ac->setDefaultShortcut(d->renameAction, Qt::SHIFT + Qt::Key_F2);
 
     // -----------------------------------------------------------------
 
-    d->propsEditAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-properties")), i18n("Properties"), this);
+    d->propsEditAction = new QAction(QIcon::fromTheme(QLatin1String("configure")), i18n("Properties"), this);
     d->propsEditAction->setWhatsThis(i18n("Edit album properties and collection information."));
     connect(d->propsEditAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumPropsEdit()));
     ac->addAction(QLatin1String("album_propsEdit"), d->propsEditAction);
@@ -958,7 +958,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("image_lighttable"), d->imageLightTableAction);
     ac->setDefaultShortcut(d->imageLightTableAction, Qt::CTRL+Qt::Key_L);
 
-    d->imageAddLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("lighttableadd")), i18n("Add to Light Table"), this);
+    d->imageAddLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")), i18n("Add to Light Table"), this);
     d->imageAddLightTableAction->setWhatsThis(i18n("Add selected items to the light table thumbbar."));
     connect(d->imageAddLightTableAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToLightTable()));
     ac->addAction(QLatin1String("image_add_to_lighttable"), d->imageAddLightTableAction);
@@ -1031,7 +1031,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->imageRenameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-rename")), i18n("Rename..."), this);
+    d->imageRenameAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Rename..."), this);
     d->imageRenameAction->setWhatsThis(i18n("Change the filename of the currently selected item."));
     connect(d->imageRenameAction, SIGNAL(triggered()), d->view, SLOT(slotImageRename()));
     ac->addAction(QLatin1String("image_rename"), d->imageRenameAction);
@@ -1698,7 +1698,7 @@ void DigikamApp::loadCameras()
 
     // -----------------------------------------------------------------
 
-    d->addImagesAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-importimages")), i18n("Add Images..."), this);
+    d->addImagesAction = new QAction(QIcon::fromTheme(QLatin1String("document-import")), i18n("Add Images..."), this);
     d->addImagesAction->setWhatsThis(i18n("Adds new items to an Album."));
     connect(d->addImagesAction, SIGNAL(triggered()), this, SLOT(slotImportAddImages()));
     ac->addAction(QLatin1String("import_addImages"), d->addImagesAction);
@@ -1706,7 +1706,7 @@ void DigikamApp::loadCameras()
 
     // -----------------------------------------------------------------
 
-    d->addFoldersAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-importdir")), i18n("Add Folders..."), this);
+    d->addFoldersAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Add Folders..."), this);
     d->addFoldersAction->setWhatsThis(i18n("Adds new folders to Album library."));
     connect(d->addFoldersAction, SIGNAL(triggered()), this, SLOT(slotImportAddFolders()));
     ac->addAction(QLatin1String("import_addFolders"), d->addFoldersAction);

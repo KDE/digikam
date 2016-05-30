@@ -108,11 +108,11 @@ EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)
 
     d->captionPage   = new EXIFCaption(this);
     d->page_caption  = addPage(d->captionPage, i18nc("image caption", "Caption"));
-    d->page_caption->setIcon(QIcon::fromTheme(QLatin1String("edit-rename")));
+    d->page_caption->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
 
     d->datetimePage  = new EXIFDateTime(this);
     d->page_datetime = addPage(d->datetimePage, i18n("Date & Time"));
-    d->page_datetime->setIcon(QIcon::fromTheme(QLatin1String("view-calendar-day")));
+    d->page_datetime->setIcon(QIcon::fromTheme(QLatin1String("view-calendar")));
 
     d->lensPage      = new EXIFLens(this);
     d->page_lens     = addPage(d->lensPage, i18n("Lens"));
