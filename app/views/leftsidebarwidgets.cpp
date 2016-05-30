@@ -163,7 +163,7 @@ void AlbumFolderViewSideBarWidget::setCurrentAlbum(PAlbum* album)
 
 const QIcon AlbumFolderViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme(QLatin1String("folder-image"));
+    return QIcon::fromTheme(QLatin1String("folder-pictures"));
 }
 
 const QString AlbumFolderViewSideBarWidget::getCaption()
@@ -490,7 +490,7 @@ void LabelsSideBarWidget::doSaveState()
 
 const QIcon LabelsSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme(QLatin1String("favorites"));
+    return QIcon::fromTheme(QLatin1String("folder-favorites"));
 }
 
 const QString LabelsSideBarWidget::getCaption()

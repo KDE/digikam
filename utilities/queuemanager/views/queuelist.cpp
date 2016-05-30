@@ -395,7 +395,7 @@ void QueueListView::startDrag(Qt::DropActions /*supportedActions*/)
         return;
     }
 
-    QPixmap icon(QIcon::fromTheme(QLatin1String("image-jpeg2000")).pixmap(48));
+    QPixmap icon(QIcon::fromTheme(QLatin1String("image-jpeg")).pixmap(48));
     int w = icon.width();
     int h = icon.height();
 

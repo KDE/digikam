@@ -520,13 +520,13 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
 
     // --------------------------------------------------------
 
-    d->addButton      = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("list-add")).pixmap(16, 16),        this);
-    d->removeButton   = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("list-remove")).pixmap(16, 16),     this);
-    d->moveUpButton   = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("arrow-up")).pixmap(16, 16),        this);
-    d->moveDownButton = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("arrow-down")).pixmap(16, 16),      this);
-    d->clearButton    = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("edit-clear-list")).pixmap(16, 16), this);
-    d->loadButton     = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("document-open")).pixmap(16, 16),   this);
-    d->saveButton     = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("document-save")).pixmap(16, 16),   this);
+    d->addButton      = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("list-add")).pixmap(16, 16),      this);
+    d->removeButton   = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("list-remove")).pixmap(16, 16),   this);
+    d->moveUpButton   = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("arrow-up")).pixmap(16, 16),      this);
+    d->moveDownButton = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("arrow-down")).pixmap(16, 16),    this);
+    d->clearButton    = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("edit-clear")).pixmap(16, 16),    this);
+    d->loadButton     = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("document-open")).pixmap(16, 16), this);
+    d->saveButton     = new CtrlButton(QIcon::fromTheme(QString::fromLatin1("document-save")).pixmap(16, 16), this);
 
     d->addButton->setToolTip(i18n("Add new images to the list"));
     d->removeButton->setToolTip(i18n("Remove selected images from the list"));

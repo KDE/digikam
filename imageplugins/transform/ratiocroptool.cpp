@@ -214,7 +214,7 @@ RatioCropTool::RatioCropTool(QObject* const parent)
 {
     setObjectName(QLatin1String("aspectratiocrop"));
     setToolName(i18n("Aspect Ratio Crop"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("ratiocrop")));
+    setToolIcon(QIcon::fromTheme(QLatin1String("transform-crop")));
     setToolHelp(QLatin1String("ratiocroptool.anchor"));
 
     // -------------------------------------------------------------

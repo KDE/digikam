@@ -161,7 +161,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     d->useOrgAlbum           = new QCheckBox(i18n("Use original Album"), vbox3);
     d->albumSel              = new AlbumSelectWidget(vbox3);
-    insertTab(Private::TARGET, sv3, QIcon::fromTheme(QLatin1String("folder-image")), i18n("Target"));
+    insertTab(Private::TARGET, sv3, QIcon::fromTheme(QLatin1String("folder-pictures")), i18n("Target"));
 
     // --------------------------------------------------------
 
@@ -257,7 +257,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     d->rawSettings = new DRawDecoderWidget(panel, DRawDecoderWidget::SIXTEENBITS | DRawDecoderWidget::COLORSPACE);
     d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
-    d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("format-stroke-color")));
+    d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("bordertool")));
     d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("zoom-draw")));
 
     insertTab(Private::RAW, d->rawSettings, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")), i18n("Raw Decoding"));

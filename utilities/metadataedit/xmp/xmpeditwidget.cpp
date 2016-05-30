@@ -126,7 +126,7 @@ XMPEditWidget::XMPEditWidget(MetadataEditDialog* const parent)
 
     d->originPage  = new XMPOrigin(this);
     d->page_origin = addPage(d->originPage, i18n("Origin"));
-    d->page_origin->setIcon(QIcon::fromTheme(QLatin1String("document-properties")));
+    d->page_origin->setIcon(QIcon::fromTheme(QLatin1String("configure")));
 
     d->creditsPage  = new XMPCredits(this);
     d->page_credits = addPage(d->creditsPage, i18n("Credits"));

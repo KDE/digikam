@@ -45,7 +45,7 @@ namespace Digikam
 FilePropertiesOption::FilePropertiesOption()
     : Option(i18n("File"),
              i18n("Add file properties"),
-             QLatin1String("folder-image"))
+             QLatin1String("folder-pictures"))
 {
     setUseTokenMenu(true);
 

@@ -101,7 +101,7 @@ DistortionFXTool::DistortionFXTool(QObject* const parent)
 {
     setObjectName(QLatin1String("distortionfx"));
     setToolName(i18n("Distortion Effects"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("distortionfx")));
+    setToolIcon(QIcon::fromTheme(QLatin1String("draw-spiral")));
 
     d->previewWidget = new ImageRegionWidget;
     d->previewWidget->setWhatsThis(i18n("This is the preview of the distortion effect "

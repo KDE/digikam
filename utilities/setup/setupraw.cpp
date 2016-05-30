@@ -139,7 +139,7 @@ SetupRaw::SetupRaw(QWidget* const parent)
 
     d->dcrawSettings = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
     d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
-    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("format-stroke-color")));
+    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("bordertool")));
     d->dcrawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
 
     settingsLayout->addWidget(d->dcrawSettings);

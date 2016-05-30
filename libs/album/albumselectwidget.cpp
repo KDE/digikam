@@ -69,7 +69,7 @@ AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* const model, AlbumModificat
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
-    d->newAlbumAction          = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-new")), i18n("Create New Album"), this);
+    d->newAlbumAction          = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Create New Album"), this);
 }
 
 AlbumSelectTreeView::~AlbumSelectTreeView()
@@ -166,7 +166,7 @@ AlbumSelectWidget::AlbumSelectWidget(QWidget* const parent, PAlbum* const albumT
 
     d->newAlbumBtn = new QPushButton(i18n("&New Album"), this);
     d->newAlbumBtn->setToolTip(i18n("Create new album"));
-    d->newAlbumBtn->setIcon(QIcon::fromTheme(QLatin1String("albumfolder-new")));
+    d->newAlbumBtn->setIcon(QIcon::fromTheme(QLatin1String("folder-new")));
 
     grid->addWidget(d->albumTreeView, 0, 0, 1, 2);
     grid->addWidget(d->searchBar,     1, 0, 1, 1);

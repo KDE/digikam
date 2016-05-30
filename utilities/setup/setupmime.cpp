@@ -108,7 +108,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid1            = new QGridLayout(imageFileFilterBox);
 
     QLabel* const logoLabel1 = new QLabel(imageFileFilterBox);
-    logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("image-jpeg2000")).pixmap(48));
+    logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("image-jpeg")).pixmap(48));
 
     d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));

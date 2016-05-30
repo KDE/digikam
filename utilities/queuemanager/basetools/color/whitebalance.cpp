@@ -47,7 +47,7 @@ WhiteBalance::WhiteBalance(QObject* const parent)
 
     setToolTitle(i18n("White Balance"));
     setToolDescription(i18n("Adjust White Balance."));
-    setToolIconName(QLatin1String("format-stroke-color"));
+    setToolIconName(QLatin1String("bordertool"));
 }
 
 WhiteBalance::~WhiteBalance()

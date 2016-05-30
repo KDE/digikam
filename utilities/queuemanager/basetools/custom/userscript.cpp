@@ -79,7 +79,7 @@ UserScript::UserScript(QObject* parent)
 {
     setToolTitle(i18n("User Shell Script"));
     setToolDescription(i18n("Execute a custom shell script"));
-    setToolIconName(QLatin1String("application-x-shellscript"));
+    setToolIconName(QLatin1String("text-x-script"));
 }
 
 UserScript::~UserScript()

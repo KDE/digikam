@@ -199,15 +199,15 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:ColorFX"),              QLatin1String("colorfx"));
     //filterIcons.insert(QLatin1String("digikam:ContentAwareFilter"),   QLatin1String(""));         //FIXME
     filterIcons.insert(QLatin1String("digikam:CurvesFilter"),         QLatin1String("adjustcurves"));
-    filterIcons.insert(QLatin1String("digikam:DistortionFXFilter"),   QLatin1String("distortionfx"));
+    filterIcons.insert(QLatin1String("digikam:DistortionFXFilter"),   QLatin1String("draw-spiral"));
     filterIcons.insert(QLatin1String("digikam:EmbossFilter"),         QLatin1String("embosstool"));
     filterIcons.insert(QLatin1String("digikam:EqualizeFilter"),       QLatin1String("autocorrection"));
     filterIcons.insert(QLatin1String("digikam:FilmFilter"),           QLatin1String("colorneg"));
     filterIcons.insert(QLatin1String("digikam:FilmGrainFilter"),      QLatin1String("filmgrain"));
-    filterIcons.insert(QLatin1String("digikam:FreeRotationFilter"),   QLatin1String("freerotation"));
+    filterIcons.insert(QLatin1String("digikam:FreeRotationFilter"),   QLatin1String("transform-rotate"));
     //filterIcons.insert(QLatin1String("digikam:GreycstorationFilter"), QLatin1String(""));         //FIXME
     filterIcons.insert(QLatin1String("digikam:HSLFilter"),            QLatin1String("adjusthsl"));
-    filterIcons.insert(QLatin1String("digikam:InvertFilter"),         QLatin1String("invertimage"));
+    filterIcons.insert(QLatin1String("digikam:InvertFilter"),         QLatin1String("edit-select-invert"));
     filterIcons.insert(QLatin1String("digikam:LensDistortionFilter"), QLatin1String("lensdistortion"));
     //filterIcons.insert(QLatin1String("digikam:LensFunFilter"),        QLatin1String(""));         //FIXME
     filterIcons.insert(QLatin1String("digikam:LevelsFilter"),         QLatin1String("adjustlevels"));
@@ -217,17 +217,17 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:NormalizeFilter"),      QLatin1String("autocorrection"));
     filterIcons.insert(QLatin1String("digikam:OilPaintFilter"),       QLatin1String("oilpaint"));
     filterIcons.insert(QLatin1String("digikam:RainDropFilter"),       QLatin1String("raindrop"));
-    filterIcons.insert(QLatin1String("digikam:RatioCrop"),            QLatin1String("ratiocrop"));
+    filterIcons.insert(QLatin1String("digikam:RatioCrop"),            QLatin1String("transform-crop"));
     filterIcons.insert(QLatin1String("digikam:RefocusFilter"),        QLatin1String("sharpenimage"));
     filterIcons.insert(QLatin1String("digikam:Rotate90"),             QLatin1String("object-rotate-right"));
     filterIcons.insert(QLatin1String("digikam:Rotate270"),            QLatin1String("object-rotate-left"));
     filterIcons.insert(QLatin1String("digikam:SharpenFilter"),        QLatin1String("sharpenimage"));
-    filterIcons.insert(QLatin1String("digikam:ShearFilter"),          QLatin1String("shear"));
+    filterIcons.insert(QLatin1String("digikam:ShearFilter"),          QLatin1String("transform-shear-left"));
     filterIcons.insert(QLatin1String("digikam:StretchFilter"),        QLatin1String("autocorrection"));
     filterIcons.insert(QLatin1String("digikam:TextureFilter"),        QLatin1String("texture"));
     filterIcons.insert(QLatin1String("digikam:TonalityFilter"),       QLatin1String("contrast"));
     filterIcons.insert(QLatin1String("digikam:UnsharpMaskFilter"),    QLatin1String("sharpenimage"));
-    filterIcons.insert(QLatin1String("digikam:WhiteBalanceFilter"),   QLatin1String("format-stroke-color"));
+    filterIcons.insert(QLatin1String("digikam:WhiteBalanceFilter"),   QLatin1String("bordertool"));
 
     filterIcons.insert(QLatin1String("digikam:RawConverter"),         QLatin1String("image-x-adobe-dng"));
 }

@@ -145,7 +145,7 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
 
     if (d->mode == FreeSpaceWidget::AlbumLibrary)
     {
-        d->iconPix = QIcon::fromTheme(QLatin1String("folder-image")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+        d->iconPix = QIcon::fromTheme(QLatin1String("folder-pictures")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }
     else 
     {

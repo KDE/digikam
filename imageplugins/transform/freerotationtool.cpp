@@ -103,7 +103,7 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
 {
     setObjectName(QLatin1String("freerotation"));
     setToolName(i18n("Free Rotation"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("freerotation")));
+    setToolIcon(QIcon::fromTheme(QLatin1String("transform-rotate")));
 
     d->previewWidget = new ImageGuideWidget(0, true, ImageGuideWidget::HVGuideMode);
     d->previewWidget->setWhatsThis(i18n("This is the free rotation operation preview. "
@@ -213,9 +213,9 @@ FreeRotationTool::FreeRotationTool(QObject* const parent)
     d->settingsView          = new FreeRotationSettings(d->gboxSettings->plainPage());
     d->expanderBox           = new DExpanderBox;
     d->expanderBox->setObjectName(QLatin1String("FreeRotationTool Expander"));
-    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Automatic Adjustment"),
+    d->expanderBox->addItem(autoAdjustContainer, QIcon::fromTheme(QLatin1String("transform-rotate")), i18n("Automatic Adjustment"),
                             QLatin1String("AutoAdjustContainer"), true);
-    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme(QLatin1String("freerotation")), i18n("Settings"),
+    d->expanderBox->addItem(d->settingsView, QIcon::fromTheme(QLatin1String("transform-rotate")), i18n("Settings"),
                             QLatin1String("SettingsContainer"), true);
     d->expanderBox->addStretch();
 

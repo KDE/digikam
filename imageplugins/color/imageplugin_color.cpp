@@ -140,7 +140,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
             this, SLOT(slotAutoCorrection()));
 
     // NOTE: Photoshop 7 use CTRL+I.
-    d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("invertimage")), i18n("Invert"), this);
+    d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("edit-select-invert")), i18n("Invert"), this);
     ac->addAction(QLatin1String("imageplugin_invert"), d->invertAction);
     ac->setDefaultShortcut(d->invertAction, Qt::CTRL+Qt::Key_I);
     connect(d->invertAction, SIGNAL(triggered(bool)),
@@ -171,7 +171,7 @@ ImagePlugin_Color::ImagePlugin_Color(QObject* const parent, const QVariantList&)
     connect(d->BWAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBW()));
 
-    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("format-stroke-color")), i18n("White Balance..."), this);
+    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("White Balance..."), this);
     ac->addAction(QLatin1String("imageplugin_whitebalance"), d->whitebalanceAction);
     ac->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
     connect(d->whitebalanceAction, SIGNAL(triggered(bool)),

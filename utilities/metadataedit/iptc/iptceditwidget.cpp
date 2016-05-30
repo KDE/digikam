@@ -142,7 +142,7 @@ IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
 
     d->categoriesPage  = new IPTCCategories(this);
     d->page_categories = addPage(d->categoriesPage, i18n("Categories"));
-    d->page_categories->setIcon(QIcon::fromTheme(QLatin1String("folder-image")));
+    d->page_categories->setIcon(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
     d->statusPage  = new IPTCStatus(this);
     d->page_status = addPage(d->statusPage, i18n("Status"));

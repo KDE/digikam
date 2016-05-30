@@ -157,7 +157,7 @@ ImagePlugin_Enhance::ImagePlugin_Enhance(QObject* const parent, const QVariantLi
     connect(d->redeyeAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRedEye()));
 
-    d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("inpainting")), i18n("In-painting..."), this);
+    d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("select-rectangular")), i18n("In-painting..."), this);
     ac->addAction(QLatin1String("imageplugin_inpainting"), d->inPaintingAction);
     ac->setDefaultShortcut(d->inPaintingAction, Qt::CTRL+Qt::Key_E);
     d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "

@@ -50,7 +50,7 @@ Convert2PGF::Convert2PGF(QObject* const parent)
 
     setToolTitle(i18n("Convert To PGF"));
     setToolDescription(i18n("Convert images to PGF format."));
-    setToolIconName(QLatin1String("image-jpeg2000"));
+    setToolIconName(QLatin1String("image-jpeg"));
 }
 
 Convert2PGF::~Convert2PGF()

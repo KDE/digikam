@@ -331,7 +331,7 @@ void ImportUI::setupActions()
 
     // -----------------------------------------------------------
 
-    d->selectNewItemsAction = new QAction(QIcon::fromTheme(QLatin1String("favorites")), i18nc("@action:inmenu", "Select New Items"), this);
+    d->selectNewItemsAction = new QAction(QIcon::fromTheme(QLatin1String("folder-favorites")), i18nc("@action:inmenu", "Select New Items"), this);
     connect(d->selectNewItemsAction, SIGNAL(triggered()), this, SLOT(slotSelectNew()));
     ac->addAction(QLatin1String("importui_selectnewitems"), d->selectNewItemsAction);
     d->cameraActions->addAction(d->selectNewItemsAction);
@@ -351,7 +351,7 @@ void ImportUI::setupActions()
     ac->addAction(QLatin1String("importui_imagedownload"), d->downloadAction->menuAction());
     d->cameraActions->addAction(d->downloadAction->menuAction());
 
-    d->downloadNewAction = new QAction(QIcon::fromTheme(QLatin1String("favorites")), i18nc("@action", "Download New"), this);
+    d->downloadNewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-favorites")), i18nc("@action", "Download New"), this);
     connect(d->downloadNewAction, SIGNAL(triggered()), this, SLOT(slotDownloadNew()));
     ac->addAction(QLatin1String("importui_imagedownloadnew"), d->downloadNewAction);
     ac->setDefaultShortcut(d->downloadNewAction, Qt::CTRL + Qt::Key_N);

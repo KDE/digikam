@@ -188,14 +188,14 @@ ImportPreviewView::ImportPreviewView(QWidget* const parent, Mode mode)
 
     // ------------------------------------------------------------
 
-    d->escapePreviewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-image")),             i18n("Escape preview"),                 this);
+    d->escapePreviewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")),          i18n("Escape preview"),                 this);
     d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),              i18nc("go to previous image", "Back"),  this);
     d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),                  i18nc("go to next image", "Forward"),   this);
     d->rotLeftAction       = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-left")),       i18nc("@info:tooltip", "Rotate Left"),  this);
     d->rotRightAction      = new QAction(QIcon::fromTheme(QLatin1String("object-rotate-right")),      i18nc("@info:tooltip", "Rotate Right"), this);
     //FIXME: d->addPersonAction    = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")),    i18n("Add a Face Tag"),                 this);
     //FIXME: d->forgetFacesAction  = new QAction(QIcon::fromTheme(QLatin1String("list-remove-user")), i18n("Clear all faces on this image"),  this);
-    //FIXME: d->peopleToggleAction = new Qaction(QIcon::fromTheme(QLatin1String("user-identity")),    i18n("Show Face Tags"),                 this);
+    //FIXME: d->peopleToggleAction = new Qaction(QIcon::fromTheme(QLatin1String("im-user")),          i18n("Show Face Tags"),                 this);
     //FIXME: d->peopleToggleAction->setCheckable(true);
 
     d->toolBar = new QToolBar(this);

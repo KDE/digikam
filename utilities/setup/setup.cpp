@@ -189,13 +189,13 @@ Setup::Setup(QWidget* const parent)
     d->page_database    = addPage(d->databasePage, i18n("Database"));
     d->page_database->setHeader(i18n("<qt>Database Settings<br/>"
                                      "<i>Customize database settings</i></qt>"));
-    d->page_database->setIcon(QIcon::fromTheme(QLatin1String("server-database")));
+    d->page_database->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 
     d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
     d->page_collections->setHeader(i18n("<qt>Collections Settings<br/>"
                                         "<i>Set root albums and database locations</i></qt>"));
-    d->page_collections->setIcon(QIcon::fromTheme(QLatin1String("folder-image")));
+    d->page_collections->setIcon(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
     d->albumViewPage  = new SetupAlbumView();
     d->page_albumView = addPage(d->albumViewPage, i18n("Album View"));
@@ -225,7 +225,7 @@ Setup::Setup(QWidget* const parent)
     d->page_template = addPage(d->templatePage, i18n("Templates"));
     d->page_template->setHeader(i18n("<qt>Metadata templates<br/>"
                                      "<i>Manage your collection of metadata templates</i></qt>"));
-    d->page_template->setIcon(QIcon::fromTheme(QLatin1String("user-identity")));
+    d->page_template->setIcon(QIcon::fromTheme(QLatin1String("im-user")));
 
     d->mimePage  = new SetupMime();
     d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
@@ -237,7 +237,7 @@ Setup::Setup(QWidget* const parent)
     d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
     d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
                                    "<i>Customize the image editor window</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("editimage")));
+    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
 
     d->versioningPage  = new SetupVersioning();
     d->page_versioning = addPage(d->versioningPage, i18n("Editing Images"));

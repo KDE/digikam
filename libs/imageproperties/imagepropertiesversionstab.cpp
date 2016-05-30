@@ -167,7 +167,7 @@ void ImagePropertiesVersionsTab::addOpenImageAction()
 
 void ImagePropertiesVersionsTab::addOpenAlbumAction(const ImageModel* referenceModel)
 {
-    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("folder-image")),
+    ActionVersionsOverlay* const overlay = d->versionsWidget->addActionOverlay(QIcon::fromTheme(QLatin1String("folder-pictures")),
                                                                                i18n("Go To Albums"),
                                                                                i18nc("@info:tooltip", "Go to the album of this image"));
     overlay->setReferenceModel(referenceModel);

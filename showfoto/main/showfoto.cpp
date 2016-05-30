@@ -402,7 +402,7 @@ void ShowFoto::setupActions()
     d->fileOpenAction = buildStdAction(StdOpenAction, this, SLOT(slotOpenFile()), this);
     actionCollection()->addAction(QLatin1String("showfoto_open_file"), d->fileOpenAction);
 
-    d->openFilesInFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-image")), i18n("Open folder"), this);
+    d->openFilesInFolderAction = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")), i18n("Open folder"), this);
     actionCollection()->setDefaultShortcut(d->openFilesInFolderAction, Qt::CTRL+Qt::SHIFT+Qt::Key_O);
 
     connect(d->openFilesInFolderAction, &QAction::triggered,

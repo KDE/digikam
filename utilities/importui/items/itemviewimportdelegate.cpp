@@ -454,7 +454,7 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
 
     if (itemType == CamItemInfo::DownloadedNo) // TODO: CamItemInfo::NewPicture
     {
-        icon = QIcon::fromTheme(QLatin1String("favorites"));
+        icon = QIcon::fromTheme(QLatin1String("folder-favorites"));
     }
 
     if (itemType == CamItemInfo::DownloadedYes)

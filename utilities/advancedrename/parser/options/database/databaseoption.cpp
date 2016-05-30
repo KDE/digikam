@@ -80,7 +80,7 @@ DatabaseOptionDialog::~DatabaseOptionDialog()
 DatabaseOption::DatabaseOption()
     : Option(i18n("Database..."),
              i18n("Add information from the database"),
-             QLatin1String("server-database"))
+             QLatin1String("network-server-database"))
 {
     addToken(QLatin1String("[db:||key||]"), i18n("Add database information"));
     QRegExp reg(QLatin1String("\\[db(:(.*))\\]"));

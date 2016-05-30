@@ -786,7 +786,7 @@ void TagsManager::setupActions()
 
     /** Sync & Export Group **/
     d->syncexportAction     = new QMenu(i18n("Sync &Export"), this);
-    d->syncexportAction->setIcon(QIcon::fromTheme(QLatin1String("server-database")));
+    d->syncexportAction->setIcon(QIcon::fromTheme(QLatin1String("network-server-database")));
 
     QAction* const wrDbImg  = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")),
                                           i18n("Write Tags from Database "

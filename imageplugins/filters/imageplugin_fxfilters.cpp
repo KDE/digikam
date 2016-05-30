@@ -109,7 +109,7 @@ ImagePlugin_FxFilters::ImagePlugin_FxFilters(QObject* const parent, const QVaria
     connect(d->blurfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlurFX()));
 
-    d->distortionfxAction = new QAction(QIcon::fromTheme(QLatin1String("distortionfx")), i18n("Distortion Effects..."), this);
+    d->distortionfxAction = new QAction(QIcon::fromTheme(QLatin1String("draw-spiral")), i18n("Distortion Effects..."), this);
     actionCollection()->addAction(QLatin1String("imageplugin_distortionfx"), d->distortionfxAction );
     connect(d->distortionfxAction, SIGNAL(triggered(bool)),
             this, SLOT(slotDistortionFX()));

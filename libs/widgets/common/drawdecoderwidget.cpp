@@ -601,7 +601,7 @@ void DRawDecoderWidget::setup(int advSettings)
     whiteBalanceLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     whiteBalanceLayout->setSpacing(spacing);
 
-    addItem(d->whiteBalanceSettings, QIcon::fromTheme(QLatin1String("format-stroke-color")).pixmap(16, 16), i18nc("@label", "White Balance"), QLatin1String("whitebalance"), true);
+    addItem(d->whiteBalanceSettings, QIcon::fromTheme(QLatin1String("bordertool")).pixmap(16, 16), i18nc("@label", "White Balance"), QLatin1String("whitebalance"), true);
 
     // ---------------------------------------------------------------
     // CORRECTIONS Settings panel

@@ -207,7 +207,7 @@ void QueuePool::slotAddQueue()
     if (!queue)
         return;
 
-    int index = addTab(queue, QIcon::fromTheme(QLatin1String("bqm-diff")), QString::fromUtf8("#%1").arg(count() + 1));
+    int index = addTab(queue, QIcon::fromTheme(QLatin1String("run-build")), QString::fromUtf8("#%1").arg(count() + 1));
 
     connect(queue, SIGNAL(signalQueueContentsChanged()),
             this, SIGNAL(signalQueueContentsChanged()));

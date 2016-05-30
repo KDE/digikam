@@ -320,7 +320,7 @@ SetupCamera::SetupCamera(QWidget* const parent)
     d->editButton->setText(i18n("&Edit..."));
     d->editButton->setIcon(QIcon::fromTheme(QLatin1String("configure")));
     d->autoDetectButton->setText(i18n("Auto-&Detect"));
-    d->autoDetectButton->setIcon(QIcon::fromTheme(QLatin1String("system-search")));
+    d->autoDetectButton->setIcon(QIcon::fromTheme(QLatin1String("edit-find")));
     d->removeButton->setEnabled(false);
     d->editButton->setEnabled(false);
 

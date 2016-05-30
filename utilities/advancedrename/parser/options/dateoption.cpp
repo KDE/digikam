@@ -246,7 +246,7 @@ void DateOptionDialog::updateExampleLabel()
 DateOption::DateOption()
     : Option(i18n("Date && Time..."),
              i18n("Add date and time information"),
-             QLatin1String("view-pim-calendar"))
+             QLatin1String("view-calendar"))
 {
     addToken(QLatin1String("[date]"),            i18n("Date and time (standard format)"));
     addToken(QLatin1String("[date:||key||]"),    i18n("Date and time (||key|| = Standard|ISO|UnixTimeStamp|Text)"));

@@ -246,9 +246,9 @@ QMimeData* WorkflowList::mimeData(const QList<QTreeWidgetItem*> items) const
 void WorkflowList::slotContextMenu()
 {
     QMenu popmenu(this);
-    QAction* const assignAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-add")),             i18n("Assign Workflow to current queue"), this);
-    QAction* const propAction   = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18n("Edit Workflow"),                    this);
-    QAction* const delAction    = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")),         i18n("Delete Workflow"),                  this);
+    QAction* const assignAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")),    i18n("Assign Workflow to current queue"), this);
+    QAction* const propAction   = new QAction(QIcon::fromTheme(QLatin1String("configure")),   i18n("Edit Workflow"),                    this);
+    QAction* const delAction    = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Workflow"),                  this);
 
     popmenu.addAction(assignAction);
     popmenu.addAction(propAction);

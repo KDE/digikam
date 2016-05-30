@@ -59,7 +59,7 @@ TimeAdjust::TimeAdjust(QObject* const parent)
 
     setToolTitle(i18n("Time Adjust"));
     setToolDescription(i18n("Adjust Date Time Stamp of Image"));
-    setToolIconName(QLatin1String("clock"));
+    setToolIconName(QLatin1String("appointment-new"));
 }
 
 TimeAdjust::~TimeAdjust()

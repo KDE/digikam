@@ -658,7 +658,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
         return;
     }
 
-    d->gotoAlbumAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-image")),        i18n("Album"), this);
+    d->gotoAlbumAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")),     i18n("Album"), this);
     d->gotoDateAction     = new QAction(QIcon::fromTheme(QLatin1String("view-calendar-month")), i18n("Date"),  this);
     QMenu* const gotoMenu = new QMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
@@ -718,7 +718,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
 void ContextMenuHelper::addQueueManagerMenu()
 {
     QMenu* const bqmMenu = new QMenu(i18n("Batch Queue Manager"), d->parent);
-    bqmMenu->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("bqm-diff")));
+    bqmMenu->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
     bqmMenu->addAction(d->stdActionCollection->action(QLatin1String("image_add_to_current_queue")));
     bqmMenu->addAction(d->stdActionCollection->action(QLatin1String("image_add_to_new_queue")));
 

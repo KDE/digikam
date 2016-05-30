@@ -920,7 +920,7 @@ void MapWidget::slotUpdateActionsEnabled()
 
     /// @todo Only set the icons if they have to be changed!
     d->actionStickyMode->setIcon(QIcon::fromTheme( QLatin1String( d->actionStickyMode->isChecked()?"object-locked":"object-unlocked" )));
-    d->actionShowThumbnails->setIcon(d->actionShowThumbnails->isChecked()?QIcon::fromTheme( QLatin1String("folder-image") ):GeoIfaceGlobalObject::instance()->getMarkerPixmap(QLatin1String("marker-icon-16x16" )));
+    d->actionShowThumbnails->setIcon(d->actionShowThumbnails->isChecked()?QIcon::fromTheme( QLatin1String("folder-pictures") ):GeoIfaceGlobalObject::instance()->getMarkerPixmap(QLatin1String("marker-icon-16x16" )));
 
     // make sure the action for the current mouse mode is checked
     const QList<QAction*> mouseModeActions = d->mouseModeActionGroup->actions();

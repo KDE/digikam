@@ -187,7 +187,7 @@ SearchWidget::SearchWidget(
     d->mainVBox->addWidget(actionHBox);
 
     d->actionClearResultsList = new QAction(this);
-    d->actionClearResultsList->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-clear-list")));
+    d->actionClearResultsList->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-clear")));
     d->actionClearResultsList->setToolTip(i18n("Clear the search results."));
     QToolButton* const tbClearResultsList = new QToolButton(actionHBox);
     tbClearResultsList->setDefaultAction(d->actionClearResultsList);

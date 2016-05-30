@@ -244,7 +244,7 @@ void QueueMgrWindow::setupStatusBar()
     d->statusProgressBar->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->statusProgressBar->setMaximumHeight(fontMetrics().height() + 2);
     d->statusProgressBar->setNotify(true);
-    d->statusProgressBar->setNotificationTitle(i18n("Batch Queue Manager"), QIcon::fromTheme(QLatin1String("bqm-diff")));
+    d->statusProgressBar->setNotificationTitle(i18n("Batch Queue Manager"), QIcon::fromTheme(QLatin1String("run-build")));
     statusBar()->addWidget(d->statusProgressBar, 60);
 
     d->statusLabel = new QLabel(statusBar());
@@ -336,11 +336,11 @@ void QueueMgrWindow::setupActions()
     ac->addAction(QLatin1String("queuemgr_stop"), d->stopAction);
     ac->setDefaultShortcut(d->stopAction, Qt::CTRL + Qt::Key_S);
 
-    d->newQueueAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-addqueue")), i18n("New Queue"), this);
+    d->newQueueAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")), i18n("New Queue"), this);
     connect(d->newQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotAddQueue()));
     ac->addAction(QLatin1String("queuemgr_newqueue"), d->newQueueAction);
 
-    d->removeQueueAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-rmqueue")), i18n("Remove Queue"), this);
+    d->removeQueueAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Remove Queue"), this);
     connect(d->removeQueueAction, SIGNAL(triggered()), d->queuePool, SLOT(slotRemoveCurrentQueue()));
     ac->addAction(QLatin1String("queuemgr_removequeue"), d->removeQueueAction);
 
@@ -371,19 +371,19 @@ void QueueMgrWindow::setupActions()
 
     // -- 'Tools' menu actions -----------------------------------------------------
 
-    d->moveUpToolAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-commit")), i18n("Move up"), this);
+    d->moveUpToolAction = new QAction(QIcon::fromTheme(QLatin1String("go-up")), i18n("Move up"), this);
     connect(d->moveUpToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolUp()));
     ac->addAction(QLatin1String("queuemgr_toolup"), d->moveUpToolAction);
 
-    d->moveDownToolAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-update")), i18n("Move down"), this);
+    d->moveDownToolAction = new QAction(QIcon::fromTheme(QLatin1String("go-down")), i18n("Move down"), this);
     connect(d->moveDownToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotMoveCurrentToolDown()));
     ac->addAction(QLatin1String("queuemgr_tooldown"), d->moveDownToolAction);
 
-    d->removeToolAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-remove")), i18n("Remove tool"), this);
+    d->removeToolAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove tool"), this);
     connect(d->removeToolAction, SIGNAL(triggered()), d->assignedList, SLOT(slotRemoveCurrentTool()));
     ac->addAction(QLatin1String("queuemgr_toolremove"), d->removeToolAction);
 
-    d->clearToolsAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clear-list")), i18n("Clear List"), this);
+    d->clearToolsAction = new QAction(QIcon::fromTheme(QLatin1String("edit-clear")), i18n("Clear List"), this);
     connect(d->clearToolsAction, SIGNAL(triggered()), d->assignedList, SLOT(slotClearToolsList()));
     ac->addAction(QLatin1String("queuemgr_toolsclear"), d->clearToolsAction);
 

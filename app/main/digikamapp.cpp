@@ -793,7 +793,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->newAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-new")), i18n("&New..."), this);
+    d->newAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("&New..."), this);
     d->newAction->setWhatsThis(i18n("Creates a new empty Album in the collection."));
     connect(d->newAction, SIGNAL(triggered()), d->view, SLOT(slotNewAlbum()));
     ac->addAction(QLatin1String("album_new"), d->newAction);
@@ -801,7 +801,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->moveSelectionToAlbumAction = new QAction(QIcon::fromTheme(QLatin1String("albumfolder-new")), i18n("&Move to Album..."), this);
+    d->moveSelectionToAlbumAction = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("&Move to Album..."), this);
     d->moveSelectionToAlbumAction->setWhatsThis(i18n("Move selected images into an album."));
     connect(d->moveSelectionToAlbumAction, SIGNAL(triggered()), d->view, SLOT(slotMoveSelectionToAlbum()));
     ac->addAction(QLatin1String("move_selection_to_album"), d->moveSelectionToAlbumAction);
@@ -940,7 +940,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
     ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
 
-    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("editimage")), i18n("Image Editor"), this);
+    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Image Editor"), this);
     ieAction->setWhatsThis(i18n("Open the image editor."));
     connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
     ac->addAction(QLatin1String("imageeditor"), ieAction);
@@ -966,18 +966,18 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->bqmAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-diff")), i18n("Batch Queue Manager"), this);
+    d->bqmAction = new QAction(QIcon::fromTheme(QLatin1String("run-build")), i18n("Batch Queue Manager"), this);
     connect(d->bqmAction, SIGNAL(triggered()), d->view, SLOT(slotQueueMgr()));
     ac->addAction(QLatin1String("queue_manager"), d->bqmAction);
     ac->setDefaultShortcut(d->bqmAction, Qt::Key_B);
 
-    d->imageAddCurrentQueueAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-commit")), i18n("Add to Current Queue"), this);
+    d->imageAddCurrentQueueAction = new QAction(QIcon::fromTheme(QLatin1String("go-up")), i18n("Add to Current Queue"), this);
     d->imageAddCurrentQueueAction->setWhatsThis(i18n("Add selected items to current queue from batch manager."));
     connect(d->imageAddCurrentQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToCurrentQueue()));
     ac->addAction(QLatin1String("image_add_to_current_queue"), d->imageAddCurrentQueueAction);
     ac->setDefaultShortcut(d->imageAddCurrentQueueAction, Qt::CTRL+Qt::Key_B);
 
-    d->imageAddNewQueueAction = new QAction(QIcon::fromTheme(QLatin1String("bqm-add")), i18n("Add to New Queue"), this);
+    d->imageAddNewQueueAction = new QAction(QIcon::fromTheme(QLatin1String("list-add")), i18n("Add to New Queue"), this);
     d->imageAddNewQueueAction->setWhatsThis(i18n("Add selected items to a new queue from batch manager."));
     connect(d->imageAddNewQueueAction, SIGNAL(triggered()), d->view, SLOT(slotImageAddToNewQueue()));
     ac->addAction(QLatin1String("image_add_to_new_queue"), d->imageAddNewQueueAction);
@@ -1326,14 +1326,14 @@ void DigikamApp::setupActions()
 
     //------------------------------------------------------------
 
-    QAction* const findAction = new QAction(QIcon::fromTheme(QLatin1String("system-search")), i18n("Search..."), this);
+    QAction* const findAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Search..."), this);
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
     ac->addAction(QLatin1String("search_quick"), findAction);
     ac->setDefaultShortcut(findAction, Qt::CTRL+Qt::Key_F);
 
     // -----------------------------------------------------------
 
-    QAction* const advFindAction = new QAction(QIcon::fromTheme(QLatin1String("system-search")), i18n("Advanced Search..."), this);
+    QAction* const advFindAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Advanced Search..."), this);
     connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
     ac->addAction(QLatin1String("search_advanced"), advFindAction);
     ac->setDefaultShortcut(advFindAction, Qt::CTRL+Qt::ALT+Qt::Key_F);
@@ -1348,7 +1348,7 @@ void DigikamApp::setupActions()
     // -----------------------------------------------------------
 
 #ifdef HAVE_MYSQLSUPPORT
-    QAction* const databaseMigrationAction = new QAction(QIcon::fromTheme(QLatin1String("server-database")), i18n("Database Migration..."), this);
+    QAction* const databaseMigrationAction = new QAction(QIcon::fromTheme(QLatin1String("network-server-database")), i18n("Database Migration..."), this);
     connect(databaseMigrationAction, SIGNAL(triggered()), this, SLOT(slotDatabaseMigration()));
     ac->addAction(QLatin1String("database_migration"), databaseMigrationAction);
 #endif
@@ -1374,7 +1374,7 @@ void DigikamApp::setupActions()
 #endif
 
 #ifdef HAVE_KCALENDAR
-    d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-pim-calendar")),
+    d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
                                     i18nc("@action", "Create Calendar..."),
                                     this);
     connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));

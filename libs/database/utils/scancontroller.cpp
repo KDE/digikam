@@ -174,7 +174,7 @@ public:
     {
         if (albumPix.isNull())
         {
-            albumPix = QIcon::fromTheme(QLatin1String("folder-image")).pixmap(32);
+            albumPix = QIcon::fromTheme(QLatin1String("folder-pictures")).pixmap(32);
         }
 
         return albumPix;

@@ -114,7 +114,7 @@ PresentationAudioPage::PresentationAudioPage(QWidget* const parent, Presentation
     m_SoundFilesButtonDelete->setIcon(QIcon::fromTheme(QString::fromLatin1("list-remove")));
     m_SoundFilesButtonLoad->setIcon(QIcon::fromTheme(QString::fromLatin1("document-open")));
     m_SoundFilesButtonSave->setIcon(QIcon::fromTheme(QString::fromLatin1("document-save")));
-    m_SoundFilesButtonReset->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-clear-list")));
+    m_SoundFilesButtonReset->setIcon(QIcon::fromTheme(QString::fromLatin1("edit-clear")));
 
     m_SoundFilesButtonUp->setText(QString());
     m_SoundFilesButtonDown->setText(QString());

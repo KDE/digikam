@@ -172,7 +172,7 @@ QPixmap AlbumThumbnailLoader::getStandardAlbumTrashIcon(RelativeSize relativeSiz
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumRootIcon(RelativeSize relativeSize)
 {
-    return loadIcon(QLatin1String("folder-image"), computeIconSize(relativeSize));
+    return loadIcon(QLatin1String("folder-pictures"), computeIconSize(relativeSize));
 }
 
 QPixmap AlbumThumbnailLoader::getStandardAlbumIcon(PAlbum* const album, RelativeSize relativeSize)

@@ -85,7 +85,7 @@ TableViewColumnDescription ColumnPhotoProperties::getDescription()
     description.addSubColumn(TableViewColumnDescription(QLatin1String("sensitivity"),  i18n("Sensitivity")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("modeprogram"),  i18n("Mode/program")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("flash"),        i18n("Flash")));
-    description.addSubColumn(TableViewColumnDescription(QLatin1String("format-stroke-color"), i18n("White balance")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("bordertool"),   i18n("White balance")));
 
     return description;
 }

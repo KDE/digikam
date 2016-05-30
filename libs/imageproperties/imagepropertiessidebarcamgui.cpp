@@ -92,7 +92,7 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     d->cameraItemTab = new CameraItemPropertiesTab(parent);
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
 
-    appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("document-properties")),   i18n("Properties"));
+    appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("configure")),             i18n("Properties"));
     appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("text-xml")),              i18n("Metadata")); // krazy:exclude=iconnames
 
 #ifdef HAVE_MARBLE

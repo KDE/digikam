@@ -159,7 +159,7 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
 
     d->addPersonAction     = new QAction(QIcon::fromTheme(QLatin1String("list-add-user")),       i18n("Add a Face Tag"),                 this);
     d->forgetFacesAction   = new QAction(QIcon::fromTheme(QLatin1String("list-remove-user")),    i18n("Clear all faces on this image"),  this);
-    d->peopleToggleAction  = new QAction(QIcon::fromTheme(QLatin1String("user-identity")),       i18n("Show Face Tags"),                 this);
+    d->peopleToggleAction  = new QAction(QIcon::fromTheme(QLatin1String("im-user")),             i18n("Show Face Tags"),                 this);
     d->peopleToggleAction->setCheckable(true);
 
     d->fullscreenAction    = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Show Fullscreen"), this);

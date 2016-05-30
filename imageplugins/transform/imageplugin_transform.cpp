@@ -88,7 +88,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(d->perspectiveAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPerspective()));
 
-    d->sheartoolAction = new QAction(QIcon::fromTheme(QLatin1String("shear")), i18n("Shear..."), this);
+    d->sheartoolAction = new QAction(QIcon::fromTheme(QLatin1String("transform-shear-left")), i18n("Shear..."), this);
     ac->addAction(QLatin1String("imageplugin_sheartool"), d->sheartoolAction);
     connect(d->sheartoolAction, SIGNAL(triggered(bool)),
             this, SLOT(slotShearTool()));
@@ -98,7 +98,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
     connect(d->resizeAction, SIGNAL(triggered()),
             this, SLOT(slotResize()));
 
-    d->aspectRatioCropAction = new QAction(QIcon::fromTheme(QLatin1String("ratiocrop")), i18n("Aspect Ratio Crop..."), this);
+    d->aspectRatioCropAction = new QAction(QIcon::fromTheme(QLatin1String("transform-crop")), i18n("Aspect Ratio Crop..."), this);
     ac->addAction(QLatin1String("imageplugin_ratiocrop"), d->aspectRatioCropAction);
     connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
             this, SLOT(slotRatioCrop()));
@@ -115,7 +115,7 @@ ImagePlugin_Transform::ImagePlugin_Transform(QObject* const parent, const QVaria
 
     //-----------------------------------------------------------------------------------
 
-    d->freerotationAction = new QAction(QIcon::fromTheme(QLatin1String("freerotation")), i18n("Free Rotation..."), this);
+    d->freerotationAction = new QAction(QIcon::fromTheme(QLatin1String("transform-rotate")), i18n("Free Rotation..."), this);
     ac->addAction(QLatin1String("imageplugin_freerotation"), d->freerotationAction );
     connect(d->freerotationAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFreeRotation()));

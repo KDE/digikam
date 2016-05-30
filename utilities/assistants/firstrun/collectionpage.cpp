@@ -110,7 +110,7 @@ CollectionPage::CollectionPage(FirstRunDlg* const dlg)
     vlayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(widget);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-image")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
 }
 
 CollectionPage::~CollectionPage()

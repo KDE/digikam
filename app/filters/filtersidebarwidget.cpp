@@ -196,7 +196,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     lay4->setContentsMargins(QMargins());
     lay4->setSpacing(0);
 
-    d->expbox->addItem(box4, QIcon::fromTheme(QLatin1String("favorites")), i18n("Labels Filter"), QLatin1String("LabelsFilter"), true);
+    d->expbox->addItem(box4, QIcon::fromTheme(QLatin1String("folder-favorites")), i18n("Labels Filter"), QLatin1String("LabelsFilter"), true);
 
     d->expanderVlay = dynamic_cast<QVBoxLayout*>(dynamic_cast<QScrollArea*>(d->expbox)->widget()->layout());
     d->space        = new QWidget();
