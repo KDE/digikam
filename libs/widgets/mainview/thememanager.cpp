@@ -112,7 +112,6 @@ QString ThemeManager::currentThemeName() const
     }
 
     QAction* const action = d->themeMenuActionGroup->checkedAction();
-
     return (!action ? defaultThemeName()
                     : action->text().remove(QLatin1Char('&')));
 }
@@ -149,6 +148,8 @@ void ThemeManager::slotChangePalette()
 
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
+    // hint for the style to synchronize the color scheme with the window manager/compositor
+    qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
     qApp->setPalette(SchemeManager::createApplicationPalette(config));
 
     qCDebug(DIGIKAM_WIDGETS_LOG) << theme << " :: " << filename;
