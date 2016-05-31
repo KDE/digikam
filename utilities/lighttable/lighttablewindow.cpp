@@ -461,14 +461,14 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("lighttable_last"), d->lastAction);
     ac->setDefaultShortcuts(d->lastAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
 
-    d->setItemLeftAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-left")), i18n("On left"), this);
+    d->setItemLeftAction = new QAction(QIcon::fromTheme(QLatin1String("go-previous")), i18n("On left"), this);
     d->setItemLeftAction->setEnabled(false);
     d->setItemLeftAction->setWhatsThis(i18n("Show item on left panel"));
     connect(d->setItemLeftAction, SIGNAL(triggered()), this, SLOT(slotSetItemLeft()));
     ac->addAction(QLatin1String("lighttable_setitemleft"), d->setItemLeftAction);
     ac->setDefaultShortcut(d->setItemLeftAction, Qt::CTRL + Qt::Key_L);
 
-    d->setItemRightAction = new QAction(QIcon::fromTheme(QLatin1String("arrow-right")), i18n("On right"), this);
+    d->setItemRightAction = new QAction(QIcon::fromTheme(QLatin1String("go-next")), i18n("On right"), this);
     d->setItemRightAction->setEnabled(false);
     d->setItemRightAction->setWhatsThis(i18n("Show item on right panel"));
     connect(d->setItemRightAction, SIGNAL(triggered()), this, SLOT(slotSetItemRight()));

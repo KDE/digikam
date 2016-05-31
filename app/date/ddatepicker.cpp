@@ -139,15 +139,15 @@ void DDatePicker::initWidget(const QDate& dt)
     {
         d->yearForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left-double")));
         d->yearBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right-double")));
-        d->monthForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left")));
-        d->monthBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
+        d->monthForward->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
+        d->monthBackward->setIcon(QIcon::fromTheme(QLatin1String("go-next")));
     }
     else
     {
         d->yearForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right-double")));
         d->yearBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left-double")));
-        d->monthForward->setIcon(QIcon::fromTheme(QLatin1String("arrow-right")));
-        d->monthBackward->setIcon(QIcon::fromTheme(QLatin1String("arrow-left")));
+        d->monthForward->setIcon(QIcon::fromTheme(QLatin1String("go-next")));
+        d->monthBackward->setIcon(QIcon::fromTheme(QLatin1String("go-previous")));
     }
 
     connect(d->table, SIGNAL(dateChanged(QDate)),

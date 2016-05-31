@@ -496,14 +496,14 @@ void ItemViewImageDelegate::drawPanelSideIcon(QPainter* p, bool left, bool right
     if (left)
     {
         QRect r(3, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = QIcon::fromTheme(QLatin1String("arrow-left"));
+        QIcon icon = QIcon::fromTheme(QLatin1String("go-previous"));
         icon.paint(p, r);
     }
 
     if (right)
     {
         QRect r(d->rect.width() - 3 - iconSize, d->rect.height()/2 - iconSize/2, iconSize, iconSize);
-        QIcon icon = QIcon::fromTheme(QLatin1String("arrow-right"));
+        QIcon icon = QIcon::fromTheme(QLatin1String("go-next"));
         icon.paint(p, r);
     }
 }
