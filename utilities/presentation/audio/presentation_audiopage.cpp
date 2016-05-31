@@ -108,8 +108,8 @@ PresentationAudioPage::PresentationAudioPage(QWidget* const parent, Presentation
 
     // --------------------------------------------------------
 
-    m_SoundFilesButtonUp->setIcon(QIcon::fromTheme(QString::fromLatin1("arrow-up")));
-    m_SoundFilesButtonDown->setIcon(QIcon::fromTheme(QString::fromLatin1("arrow-down")));
+    m_SoundFilesButtonUp->setIcon(QIcon::fromTheme(QString::fromLatin1("go-up")));
+    m_SoundFilesButtonDown->setIcon(QIcon::fromTheme(QString::fromLatin1("go-down")));
     m_SoundFilesButtonAdd->setIcon(QIcon::fromTheme(QString::fromLatin1("list-add")));
     m_SoundFilesButtonDelete->setIcon(QIcon::fromTheme(QString::fromLatin1("list-remove")));
     m_SoundFilesButtonLoad->setIcon(QIcon::fromTheme(QString::fromLatin1("document-open")));

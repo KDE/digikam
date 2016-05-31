@@ -50,7 +50,7 @@ ShowfotoDragDropHandler::ShowfotoDragDropHandler(ShowfotoImageModel* const model
 
 QAction* ShowfotoDragDropHandler::addGroupAction(QMenu* const menu)
 {
-    return menu->addAction(QIcon::fromTheme(QLatin1String("arrow-down-double")),
+    return menu->addAction(QIcon::fromTheme(QLatin1String("go-bottom")),
                            i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 

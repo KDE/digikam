@@ -65,7 +65,7 @@ enum DropAction
 
 static QAction* addGroupAction(QMenu* const menu)
 {
-    return menu->addAction( QIcon::fromTheme(QLatin1String("arrow-down-double")), i18nc("@action:inmenu Group images with this image", "Group here"));
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image", "Group here"));
 }
 
 static QAction* addCancelAction(QMenu* const menu)

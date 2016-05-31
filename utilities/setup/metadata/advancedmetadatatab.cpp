@@ -342,10 +342,10 @@ void AdvancedMetadataTab::setUi()
     d->deleteButton   = new QPushButton(QIcon::fromTheme(QLatin1String("window-close")),
                                         i18n("Delete"));
 
-    d->moveUpButton   = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-up")),
+    d->moveUpButton   = new QPushButton(QIcon::fromTheme(QLatin1String("go-up")),
                                         i18n("Move Up"));
 
-    d->moveDownButton = new QPushButton(QIcon::fromTheme(QLatin1String("arrow-down")),
+    d->moveDownButton = new QPushButton(QIcon::fromTheme(QLatin1String("go-down")),
                                         i18n("Move Down"));
 
     d->revertChanges  = new QPushButton(QIcon::fromTheme(QLatin1String("edit-undo")),
