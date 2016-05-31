@@ -223,5 +223,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 182 ==> 252700 - Font color for icons in toolbar does not change for darker Themes.
 183 ==> 172632 - Album item tooltip doesn't use colors of themes properly.
 184 ==> 257031 - SCAN : rename folder outside of digikam, F5 and it's gone.
-185 ==> 
+185 ==> 294346 - Bug reporter borked - multibug.
+186 ==> 
+
 
