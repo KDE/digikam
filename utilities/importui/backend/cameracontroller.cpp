@@ -921,7 +921,15 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Running: " << s;
 
-            if (process.execute(s) != 0)
+            process.start(s);
+
+            if (!process.waitForFinished(60000))
+            {
+                sendLogMsg(xi18n("Timeout from script for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
+                process.kill();
+            }
+
+            if (process.exitCode() != 0)
             {
                 sendLogMsg(xi18n("Failed to run script for <filename>%1</filename>", file), DHistoryView::ErrorEntry,  folder, file);
             }
