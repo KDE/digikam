@@ -230,7 +230,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 189 ==> 308956 - Failed to load image preview on all but tiny images.
 190 ==> 330779 - digiKam crashed while finding new items.
 191 ==> 238510 - Crash when adding images to album.
-192 ==> 
-
-
-
+192 ==> 363638 - bootstrap does not detect libgphoto2.
+193 ==> 
