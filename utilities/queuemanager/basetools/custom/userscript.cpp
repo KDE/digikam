@@ -26,6 +26,7 @@
 
 // Qt includes
 
+#include <QDir>
 #include <QLabel>
 #include <QWidget>
 #include <QProcess>
@@ -199,54 +200,63 @@ bool UserScript::toolOperations()
     }
 
     // Replace all occurences of $INPUT and $OUTPUT in script to file names. Case sensitive.
+#ifndef Q_OS_WIN
     script.replace(QLatin1String("$INPUT"),  QLatin1Char('"') + inputUrl().toLocalFile()  + QLatin1Char('"'));
     script.replace(QLatin1String("$OUTPUT"), QLatin1Char('"') + outputUrl().toLocalFile() + QLatin1Char('"'));
-
-    QString shellScript;
-
-#ifndef WIN32
-    QString envCmd  = QLatin1String("export ");
 #else
-    QString envCmd  = QLatin1String("set ");
-#endif // WIN32
-
-    QString tagPath = TagsCache::instance()->tagPaths(imageInfo().tagIds(), TagsCache::NoLeadingSlash,
-                                                      TagsCache::NoHiddenTags).join(QLatin1Char(';'));
-
-    // Populate env variables from metadata
-    shellScript.append(envCmd + QString::fromUtf8("COLORLABEL=\"%1\"\n").arg(imageInfo().colorLabel()));
-    shellScript.append(envCmd + QString::fromUtf8("PICKLABEL=\"%1\"\n") .arg(imageInfo().pickLabel()));
-    shellScript.append(envCmd + QString::fromUtf8("COMMENTS=\"%1\"\n")  .arg(imageInfo().comment()));
-    shellScript.append(envCmd + QString::fromUtf8("RATING=\"%1\"\n")    .arg(imageInfo().rating()));
-    shellScript.append(envCmd + QString::fromUtf8("TITLE=\"%1\"\n")     .arg(imageInfo().title()));
-    shellScript.append(envCmd + QString::fromUtf8("TAGSPATH=\"%1\"\n")  .arg(tagPath));
-    shellScript.append(script);
+    script.replace(QLatin1String("$INPUT"),  QLatin1Char('"') + QDir::toNativeSeparators(inputUrl().toLocalFile())  + QLatin1Char('"'));
+    script.replace(QLatin1String("$OUTPUT"), QLatin1Char('"') + QDir::toNativeSeparators(outputUrl().toLocalFile()) + QLatin1Char('"'));
+#endif // Q_OS_WIN
 
     // Empties d->image, not to pass it to the next tool in chain
     setImageData(DImg());
 
     QProcess process(this);
 
-    // call the shell script
-#ifndef WIN32
-    int returncode = process.execute(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << shellScript);
-#else
-    int returncode = process.execute(QLatin1String("cmd.exe"), QStringList() << QLatin1String("/c") << shellScript);
-#endif // WIN32
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
-    if (returncode == -2)
+    QString tagPath = TagsCache::instance()->tagPaths(imageInfo().tagIds(), TagsCache::NoLeadingSlash,
+                                                      TagsCache::NoHiddenTags).join(QLatin1Char(';'));
+
+    // Populate env variables from metadata
+    env.insert(QLatin1String("COLORLABEL"), QString::number(imageInfo().colorLabel()));
+    env.insert(QLatin1String("PICKLABEL"),  QString::number(imageInfo().pickLabel()));
+    env.insert(QLatin1String("RATING"),     QString::number(imageInfo().rating()));
+    env.insert(QLatin1String("COMMENTS"),   imageInfo().comment());
+    env.insert(QLatin1String("TITLE"),      imageInfo().title());
+    env.insert(QLatin1String("TAGSPATH"),   tagPath);
+
+    process.setProcessEnvironment(env);
+
+    // call the shell script
+#ifndef Q_OS_WIN
+    process.start(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << script);
+#else
+    script.replace(QLatin1String("\n"), QLatin1String(" & "));
+
+    process.setNativeArguments(QLatin1String("/C ") + script);
+
+    process.start(QLatin1String("cmd.exe"));
+#endif // Q_OS_WIN
+
+    if (!process.waitForFinished(60000))
+    {
+        setErrorDescription(i18n("User Script: Timeout from script."));
+        process.kill();
+        return false;
+    }
+
+    if (process.exitCode() == -2)
     {
         setErrorDescription(i18n("User Script: Failed to start script."));
         return false;
     }
-
-    if (returncode == -1)
+    else if (process.exitCode() == -1)
     {
         setErrorDescription(i18n("User Script: Script process crashed."));
         return false;
     }
-
-    if (returncode == 127)
+    else if (process.exitCode() == 127)
     {
         setErrorDescription(i18n("User Script: Command not found."));
         return false;
