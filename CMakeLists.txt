@@ -344,10 +344,12 @@ find_package(Lqr-1)
 # -- libgphoto2 rules --------------------------------------------------------------------------
 
 find_package(Gphoto2)
+message(STATUS "libgphoto2 version found: ${GPHOTO2_VERSION}")
 
 if(NOT WIN32 AND GPHOTO2_FOUND)
     # See bug #268267 : digiKam need to be linked to libusb1.x to prevent crash at gphoto2 init if opencv is linked with libdc1394
     find_package(LibUSB1)
+    message(STATUS "libusb1 found: ${LibUSB1_FOUND}")
     message(WARNING "Libgphoto2 is found but libusb1 cannot be found on your system. Libgphoto2 support will be disabled.")
 endif()
 
@@ -369,8 +371,10 @@ if(GPHOTO2_FOUND)
 
     if("${GPHOTO2_VERSION}" VERSION_GREATER "2.5.0")
         set(VERSION_GPHOTO25 true)
+        message(STATUS "libgphoto2 API version >= 2.5")
     else()
         set(VERSION_GPHOTO25 false)
+        message(STATUS "libgphoto2 API version < 2.5")
     endif()
 
     if(VERSION_GPHOTO25)
@@ -379,6 +383,8 @@ if(GPHOTO2_FOUND)
         set(HAVE_GPHOTO25 0)
     endif()
 endif()
+
+message(STATUS "libgphoto2 API version found: ${GPHOTO2_VERSION}")
 
 # -- Check LensFun library for Lens auto-correction tool --------------------------------------
 
