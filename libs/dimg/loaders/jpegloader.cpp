@@ -91,7 +91,6 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
 {
     readMetadata(filePath, DImg::JPEG);
 
-    int colorModel   = DImg::COLORMODELUNKNOWN;
     FILE* const file = fopen(QFile::encodeName(filePath).constData(), "rb");
 
     if (!file)
@@ -249,6 +248,8 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     // Libjpeg handles the following conversions:
     // YCbCr => GRAYSCALE, YCbCr => RGB, GRAYSCALE => RGB, YCCK => CMYK
     // So we cannot get RGB from CMYK or YCCK, CMYK conversion is handled below
+    int colorModel = DImg::COLORMODELUNKNOWN;
+
     switch (cinfo.jpeg_color_space)
     {
         case JCS_UNKNOWN:
