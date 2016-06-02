@@ -38,6 +38,7 @@
 #include <QSqlError>
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
+#include <QDBusAbstractAdaptor>
 #include <QDBusMetaType>
 #include <QDBusInterface>
 #include <QDBusVariant>

@@ -27,7 +27,6 @@
 
 #include <QtTest>
 #include <QFileInfo>
-#include <QDBusConnection>
 
 // Local includes
 
