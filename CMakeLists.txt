@@ -348,7 +348,7 @@ find_package(Gphoto2)
 if(NOT WIN32 AND GPHOTO2_FOUND)
     # See bug #268267 : digiKam need to be linked to libusb1.x to prevent crash at gphoto2 init if opencv is linked with libdc1394
     find_package(LibUSB1)
-    message(WARNING "libgphoto is found but libusb1 is cannot be found on your system. libgphoto2 support will be disabled.")
+    message(WARNING "Libgphoto2 is found but libusb1 cannot be found on your system. Libgphoto2 support will be disabled.")
 endif()
 
 if(GPHOTO2_FOUND)
