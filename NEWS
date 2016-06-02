@@ -231,4 +231,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 190 ==> 330779 - digiKam crashed while finding new items.
 191 ==> 238510 - Crash when adding images to album.
 192 ==> 363638 - bootstrap does not detect libgphoto2.
-193 ==> 
+193 ==> 363510 - Wrong filename shown in album view.
+194 ==> 
+
