@@ -344,16 +344,26 @@ find_package(Lqr-1)
 # -- libgphoto2 rules --------------------------------------------------------------------------
 
 find_package(Gphoto2)
-message(STATUS "libgphoto2 version found: ${GPHOTO2_VERSION}")
+message(STATUS "libgphoto2 found: ${GPHOTO2_FOUND}")
 
 if(NOT WIN32 AND GPHOTO2_FOUND)
+
     # See bug #268267 : digiKam need to be linked to libusb1.x to prevent crash at gphoto2 init if opencv is linked with libdc1394
     find_package(LibUSB1)
     message(STATUS "libusb1 found: ${LibUSB1_FOUND}")
-    message(WARNING "Libgphoto2 is found but libusb1 cannot be found on your system. Libgphoto2 support will be disabled.")
+
+    if(LibUSB1_FOUND)
+        set(GPHOTO2_FOUND true)
+        message(WARNING "Libgphoto2 and libusb1 have been found.")
+    else()
+        set(GPHOTO2_FOUND false)
+        message(WARNING "Libgphoto2 is found but libusb1 cannot be found on your system. Libgphoto2 support will be disabled.")
+    endif()
+
 endif()
 
 if(GPHOTO2_FOUND)
+
     exec_program(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
     string(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
 
@@ -361,12 +371,6 @@ if(GPHOTO2_FOUND)
         set(VERSION_GPHOTO2 true)
     else()
         set(VERSION_GPHOTO2 false)
-    endif()
-
-    if(VERSION_GPHOTO2 AND LibUSB1_FOUND)
-        set(GPHOTO2_FOUND true)
-    else()
-        set(GPHOTO2_FOUND false)
     endif()
 
     if("${GPHOTO2_VERSION}" VERSION_GREATER "2.5.0")
@@ -382,9 +386,10 @@ if(GPHOTO2_FOUND)
     else()
         set(HAVE_GPHOTO25 0)
     endif()
-endif()
 
-message(STATUS "libgphoto2 API version found: ${GPHOTO2_VERSION}")
+    message(STATUS "libgphoto2 API version found: ${GPHOTO2_VERSION}")
+
+endif()
 
 # -- Check LensFun library for Lens auto-correction tool --------------------------------------
 
