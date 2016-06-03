@@ -234,4 +234,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 193 ==> 363510 - Wrong filename shown in album view.
 194 ==> 322464 - Change default window size.
 195 ==> 266781 - FACTORING : allow to use Import/Export tool dialogs on small screen.
-196 ==> 
+196 ==> 363887 - Mouse hover notifications are yellow background with white font, completely unreadable. Can not find option to configure this.
+197 ==> 
+
