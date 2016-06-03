@@ -38,7 +38,7 @@ public:
     HuginExecutorBinary()
         : DBinaryIface(QLatin1String("hugin_executor"),
                        QLatin1String("Hugin"),
-                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("http://hugin.sourceforge.net/download/"),
                        QLatin1String("Panorama"),
                        QStringList(QLatin1String("-h"))
                       )

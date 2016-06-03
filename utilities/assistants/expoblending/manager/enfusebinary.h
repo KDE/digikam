@@ -45,7 +45,7 @@ public:
                    QLatin1String("enfuse "),
                    0, 
                    QLatin1String("Enblend"),
-                   QLatin1String("http://enblend.sourceforge.net"),
+                   QLatin1String("http://enblend.sourceforge.net/download/"),
                    QLatin1String("ExpoBlending"),
                    QStringList(QLatin1String("-V"))),
                    versionDouble(0)

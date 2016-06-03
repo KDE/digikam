@@ -41,7 +41,7 @@ public:
                        QLatin1String("autooptimiser version "),
                        1,
                        QLatin1String("Hugin"),
-                       QLatin1String("http://hugin.sourceforge.net"),
+                       QLatin1String("http://hugin.sourceforge.net/download/"),
                        QLatin1String("Panorama")
                       )
         {

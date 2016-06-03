@@ -41,7 +41,11 @@ public:
                        QLatin1String("GNU Make "),
                        0,
                        QLatin1String("GNU"),
+#ifdef Q_OS_WIN
+                       QLatin1String("http://gnuwin32.sourceforge.net/packages/make.htm"),
+#else
                        QLatin1String("http://www.gnu.org/software/make/"),
+#endif
                        QLatin1String("Panorama"),
                        QStringList(QLatin1String("-v"))
                       )
