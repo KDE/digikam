@@ -232,5 +232,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 191 ==> 238510 - Crash when adding images to album.
 192 ==> 363638 - bootstrap does not detect libgphoto2.
 193 ==> 363510 - Wrong filename shown in album view.
-194 ==> 
-
+194 ==> 322464 - Change default window size.
+195 ==> 266781 - FACTORING : allow to use Import/Export tool dialogs on small screen.
+196 ==> 
