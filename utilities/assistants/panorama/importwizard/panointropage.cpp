@@ -121,7 +121,9 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
     d->binariesWidget->addBinary(d->mngr->nonaBinary());
     d->binariesWidget->addBinary(d->mngr->panoModifyBinary());
 
-    if (d->mngr->checkBinaries() && d->mngr->hugin2015())
+    d->mngr->checkForHugin2015();
+
+    if (d->mngr->hugin2015())
     {
         d->binariesWidget->addBinary(d->mngr->huginExecutorBinary());
     }
@@ -129,6 +131,8 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
     {
         d->binariesWidget->addBinary(d->mngr->pto2MkBinary());
     }
+
+    d->mngr->checkBinaries();
 
 #ifdef Q_OS_MAC
     d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));    // Hugin bundle PKG install

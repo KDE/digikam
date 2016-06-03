@@ -162,9 +162,19 @@ bool PanoManager::isCreated()
     return (!internalPtr.isNull());
 }
 
+void PanoManager::checkForHugin2015()
+{
+    if (d->autoOptimiserBinary.recheckDirectories())
+    {
+        d->hugin2015 = d->autoOptimiserBinary.versionIsRight(2015.0);
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Hugin >= 2015.0 : " << d->hugin2015;
+}
+
 bool PanoManager::checkBinaries()
 {
-    bool result = d->autoOptimiserBinary.recheckDirectories() &&
+    bool result = d->autoOptimiserBinary.recheckDirectories() && 
                   d->cpCleanBinary.recheckDirectories()       &&
                   d->cpFindBinary.recheckDirectories()        &&
                   d->enblendBinary.recheckDirectories()       &&
@@ -173,10 +183,6 @@ bool PanoManager::checkBinaries()
 
     if (result)
     {
-        d->hugin2015 = d->autoOptimiserBinary.versionIsRight(2015.0);
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Hugin >= 2015.0 detected";
-
         if (d->hugin2015)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Check for Hugin Executor";

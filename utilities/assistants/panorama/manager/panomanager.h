@@ -65,6 +65,7 @@ public:
 
     bool checkBinaries();
 
+    void checkForHugin2015();
     bool hugin2015() const;
 
     void setGPano(bool gPano);
