@@ -175,12 +175,16 @@ bool PanoManager::checkBinaries()
     {
         d->hugin2015 = d->autoOptimiserBinary.versionIsRight(2015.0);
 
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Hugin >= 2015.0 detected";
+
         if (d->hugin2015)
         {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Check for Hugin Executor";
             result = d->huginExecutorBinary.recheckDirectories();
         }
         else
         {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Check for Hugin Pto2Mk";
             result = d->pto2MkBinary.recheckDirectories();
         }
     }
