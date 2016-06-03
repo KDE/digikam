@@ -124,6 +124,7 @@ bool DBinaryIface::versionIsRight(const float customVersion) const
     QRegExp reg(QLatin1String("^(\\d*[.]\\d*)"));
     version().indexOf(reg);
     float floatVersion = reg.capturedTexts()[0].toFloat();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Version : " << version() << "(" << floatVersion << ")  [" << customVersion << "]";
 
     return (!version().isNull() &&
             isFound()           &&
