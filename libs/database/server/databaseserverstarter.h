@@ -28,7 +28,6 @@
 
 #include <QProcess>
 #include <QString>
-#include <QDBusAbstractAdaptor>
 #include <QCoreApplication>
 
 // Local includes

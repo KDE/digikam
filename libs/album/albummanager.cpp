@@ -46,8 +46,6 @@ extern "C"
 
 #include <QApplication>
 #include <QByteArray>
-#include <QDBusInterface>
-#include <QDBusReply>
 #include <QDir>
 #include <QFile>
 #include <QGroupBox>

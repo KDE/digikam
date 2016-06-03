@@ -829,9 +829,6 @@ int getJpegQuality(const QString& file)
         return quality;
     }
 
-    long value;
-    long sum = 0;
-   long i, j;
     struct jpeg_decompress_struct   jpeg_info;
     struct jpegutils_jpeg_error_mgr jerr;
 
@@ -855,6 +852,10 @@ int getJpegQuality(const QString& file)
 
     // https://subversion.imagemagick.org/subversion/ImageMagick/trunk/coders/jpeg.c
     // Determine the JPEG compression quality from the quantization tables.
+
+    long value;
+    long i, j;
+    long sum = 0;
 
     for (i = 0; i < NUM_QUANT_TBLS; ++i)
     {
