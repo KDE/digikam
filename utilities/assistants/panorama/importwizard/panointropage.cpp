@@ -139,6 +139,8 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
 #ifdef Q_OS_WIN
     d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/Hugin/bin"));
     d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/Hugin/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/GnuWin32/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/GnuWin32/bin"));
 #endif
 
 /*
