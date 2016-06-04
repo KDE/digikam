@@ -3171,7 +3171,9 @@ void DigikamApp::slotSwitchedToTrashView()
 
 void DigikamApp::customizedFullScreenMode(bool set)
 {
-    statusBarMenuAction()->setEnabled(!set);
+    QAction* const ac = statusBarMenuAction();
+    if (ac) ac->setEnabled(!set);
+
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)

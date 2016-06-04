@@ -641,6 +641,8 @@ QAction* DXmlGuiWindow::statusBarMenuAction() const
             return act;
     }
 
+    qCWarning(DIGIKAM_WIDGETS_LOG) << "Status bar menu action cannot be found in action collection";
+
     return 0;
 }
 
