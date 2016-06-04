@@ -802,21 +802,21 @@ int CoreDB::addSearch(DatabaseSearch::Type type, const QString& name, const QStr
 void CoreDB::updateSearch(int searchID, DatabaseSearch::Type type,
                            const QString& name, const QString& query)
 {
-    d->db->execSql(QString::fromUtf8("UPDATE Searches SET type=?, name=?, query=? WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("UPDATE Searches SET type=?, name=?, query=? WHERE id=?;"),
                    type, name, query, searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Changed));
 }
 
 void CoreDB::deleteSearch(int searchID)
 {
-    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE id=?;"),
                    searchID);
     d->db->recordChangeset(SearchChangeset(searchID, SearchChangeset::Deleted));
 }
 
 void CoreDB::deleteSearches(DatabaseSearch::Type type)
 {
-    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE type=?"),
+    d->db->execSql(QString::fromUtf8("DELETE FROM Searches WHERE type=?;"),
                    type);
     d->db->recordChangeset(SearchChangeset(0, SearchChangeset::Deleted));
 }
@@ -1541,6 +1541,28 @@ QVariantList CoreDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageMe
         d->db->execSql(query, imageID, &values);
 
         // For some reason, if REAL values may be required from variables stored as QString QVariants. Convert code will come here.
+        if (values.size() == fieldNames.size() &&
+            ((fields & DatabaseFields::Aperture) ||
+             (fields & DatabaseFields::FocalLength) ||
+             (fields & DatabaseFields::FocalLength35) ||
+             (fields & DatabaseFields::ExposureTime) ||
+             (fields & DatabaseFields::SubjectDistance))
+           )
+        {
+            for (int i = 0; i < values.size(); ++i)
+            {
+                if (values.at(i).type() == QVariant::String &&
+                    (fieldNames.at(i) == QLatin1String("aperture") ||
+                     fieldNames.at(i) == QLatin1String("focalLength") ||
+                     fieldNames.at(i) == QLatin1String("focalLength35") ||
+                     fieldNames.at(i) == QLatin1String("exposureTime") ||
+                     fieldNames.at(i) == QLatin1String("subjectDistance"))
+                   )
+                {
+                    values[i] = values.at(i).toDouble();
+                }
+            }
+        }
     }
 
     return values;
@@ -1561,21 +1583,21 @@ QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMe
 
         // For some reason REAL values may come as QString QVariants. Convert here.
         if (values.size() == fieldNames.size() &&
-            ((fields & DatabaseFields::Aperture) ||
-             (fields & DatabaseFields::FocalLength) ||
-             (fields & DatabaseFields::FocalLength35) ||
-             (fields & DatabaseFields::ExposureTime) ||
-             (fields & DatabaseFields::SubjectDistance))
+            ((fields & DatabaseFields::AspectRatio) ||
+             (fields & DatabaseFields::AudioBitRate) ||
+             (fields & DatabaseFields::AudioChannelType) ||
+             (fields & DatabaseFields::Duration) ||
+             (fields & DatabaseFields::VideoCodec))
            )
         {
             for (int i = 0; i < values.size(); ++i)
             {
                 if (values.at(i).type() == QVariant::String &&
-                    (fieldNames.at(i) == QLatin1String("aperture") ||
-                     fieldNames.at(i) == QLatin1String("focalLength") ||
-                     fieldNames.at(i) == QLatin1String("focalLength35") ||
-                     fieldNames.at(i) == QLatin1String("exposureTime") ||
-                     fieldNames.at(i) == QLatin1String("subjectDistance"))
+                    (fieldNames.at(i) == QLatin1String("aspectRatio") ||
+                     fieldNames.at(i) == QLatin1String("audioBitRate") ||
+                     fieldNames.at(i) == QLatin1String("audioChannelType") ||
+                     fieldNames.at(i) == QLatin1String("duration") ||
+                     fieldNames.at(i) == QLatin1String("videoCodec"))
                    )
                 {
                     values[i] = values.at(i).toDouble();
@@ -3244,7 +3266,7 @@ QStringList CoreDB::getItemNamesInAlbum(int albumID, bool recursive)
     {
         d->db->execSql(QString::fromUtf8("SELECT Images.name "
                                "FROM Images "
-                               "WHERE Images.album=?"),
+                               "WHERE Images.album=?;"),
                        albumID, &values);
     }
 
@@ -3342,7 +3364,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInAlbums()
 
     // initialize allAbumIDs with all existing albums from db to prevent
     // wrong album image counters
-    d->db->execSql(QString::fromUtf8("SELECT id from Albums"), &allAbumIDs);
+    d->db->execSql(QString::fromUtf8("SELECT id from Albums;"), &allAbumIDs);
 
     for (QList<QVariant>::const_iterator it = allAbumIDs.constBegin(); it != allAbumIDs.constEnd(); ++it)
     {
@@ -3380,7 +3402,7 @@ QMap<int, int> CoreDB::getNumberOfImagesInTags()
 
     // initialize allTagIDs with all existing tags from db to prevent
     // wrong tag counters
-    d->db->execSql(QString::fromUtf8("SELECT id from Tags"), &allTagIDs);
+    d->db->execSql(QString::fromUtf8("SELECT id from Tags;"), &allTagIDs);
 
     for (QList<QVariant>::const_iterator it = allTagIDs.constBegin(); it != allTagIDs.constEnd(); ++it)
     {
@@ -4207,7 +4229,7 @@ QString CoreDB::getAlbumPath(int albumID)
 QString CoreDB::getAlbumRelativePath(int albumID)
 {
     QList<QVariant> values;
-    d->db->execSql(QString::fromUtf8("SELECT relativePath from Albums WHERE id=?"),
+    d->db->execSql(QString::fromUtf8("SELECT relativePath from Albums WHERE id=?;"),
                    albumID, &values);
 
     if (!values.isEmpty())
@@ -4644,7 +4666,7 @@ bool CoreDB::copyAlbumProperties(int srcAlbumID, int dstAlbumID)
 
     //shouldn't we have a ; at the end of the query?
     d->db->execSql(QString::fromUtf8("UPDATE Albums SET date=?, caption=?, "
-                           "collection=?, icon=? WHERE id=?"),
+                           "collection=?, icon=? WHERE id=?;"),
                    boundValues);
     return true;
 }
