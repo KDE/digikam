@@ -229,7 +229,7 @@ void FaceDb::updateLBPHFaceModel(LBPHFaceModel& model)
 LBPHFaceModel FaceDb::lbphFaceModel() const
 {
     QVariantList values;
-    //qCDebug(DIGIKAM_FACEDB_LOG) << "Loading LBPH model";
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Loading LBPH model";
     d->db->execSql(QString::fromLatin1("SELECT id, version, radius, neighbors, grid_x, grid_y FROM OpenCVLBPHRecognizer;"), &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd();)
@@ -237,7 +237,7 @@ LBPHFaceModel FaceDb::lbphFaceModel() const
         LBPHFaceModel model;
         model.databaseId = it->toInt();
         ++it;
-        //qCDebug(DIGIKAM_FACEDB_LOG) << "Found model id" << model.databaseId;
+        qCDebug(DIGIKAM_FACEDB_LOG) << "Found model id" << model.databaseId;
 
         int version      = it->toInt();
         ++it;
