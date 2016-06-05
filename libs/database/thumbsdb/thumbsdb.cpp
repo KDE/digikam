@@ -73,6 +73,7 @@ bool ThumbsDb::setSetting(const QString& keyword, const QString& value )
     parameters.insert(QLatin1String(":keyword"), keyword);
     parameters.insert(QLatin1String(":value"), value);
     BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("ReplaceThumbnailSetting")), parameters);
+
     return (queryStateResult == BdEngineBackend::NoErrors);
 }
 
@@ -83,7 +84,7 @@ QString ThumbsDb::getSetting(const QString& keyword)
     QList<QVariant> values;
     // TODO Should really check return status here
     BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailSetting")), parameters, &values);
-    qCDebug(DIGIKAM_THUMBSDB_LOG) << queryStateResult;
+    qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailSetting val ret = " << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
     if (values.isEmpty())
     {
@@ -102,7 +103,7 @@ QString ThumbsDb::getLegacySetting(const QString& keyword)
     QList<QVariant> values;
     // TODO Should really check return status here
     BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailLegacySetting")), parameters, &values);
-    qCDebug(DIGIKAM_THUMBSDB_LOG) << queryStateResult;
+    qCDebug(DIGIKAM_THUMBSDB_LOG) << "ThumbDB SelectThumbnailLegacySetting val ret = " << (BdEngineBackend::QueryStateEnum)queryStateResult;
 
     if (values.isEmpty())
     {
@@ -155,6 +156,7 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path)
 
     ThumbsDbInfo info;
     fillThumbnailInfo(values, info);
+
     return info;
 }
 
@@ -190,6 +192,7 @@ ThumbsDbInfo ThumbsDb::findByFilePath(const QString& path, const QString& unique
                 return info;
             }
         }
+
         return ThumbsDbInfo();
     }
 }
@@ -257,6 +260,7 @@ BdEngineBackend::QueryState ThumbsDb::removeByUniqueHash(const QString& uniqueHa
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":uniqueHash"), uniqueHash);
     parameters.insert(QLatin1String(":filesize"),   fileSize);
+
     return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByUniqueHashId")), parameters);
 }
 
@@ -265,6 +269,7 @@ BdEngineBackend::QueryState ThumbsDb::removeByFilePath(const QString& path)
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":path"), path);
+
     return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByPath")), parameters);
 }
 
@@ -273,6 +278,7 @@ BdEngineBackend::QueryState ThumbsDb::removeByCustomIdentifier(const QString& id
     // UniqueHashes + FilePaths entries are removed by trigger
     QMap<QString, QVariant> parameters;
     parameters.insert(QLatin1String(":identifier"), id);
+
     return d->db->execDBAction(d->db->getDBAction(QLatin1String("Delete_Thumbnail_ByCustomIdentifier")), parameters);
 }
 
@@ -308,7 +314,7 @@ BdEngineBackend::QueryState ThumbsDb::updateModificationDate(int thumbId, const 
 }
 
 void ThumbsDb::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
-                                    const QString& newUniqueHash, int newFileSize)
+                                 const QString& newUniqueHash, int newFileSize)
 {
     d->db->execSql(QLatin1String("UPDATE UniqueHashes SET uniqueHash=?, fileSize=? WHERE uniqueHash=? AND fileSize=?;"),
                    newUniqueHash, newFileSize, oldUniqueHash, oldFileSize);
