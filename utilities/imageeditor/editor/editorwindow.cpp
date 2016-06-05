@@ -2726,7 +2726,9 @@ void EditorWindow::customizedFullScreenMode(bool set)
     set ? m_canvas->setBackgroundBrush(QBrush(Qt::black))
         : m_canvas->setBackgroundBrush(QBrush(m_bgColor));
 
-    statusBarMenuAction()->setEnabled(!set);
+    QAction* const ac = statusBarMenuAction();
+    if (ac) ac->setEnabled(!set);
+
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
     m_showBarAction->setEnabled(!set);
