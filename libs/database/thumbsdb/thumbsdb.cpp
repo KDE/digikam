@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "collectionmanager.h"
 #include "collectionlocation.h"
 
@@ -81,7 +82,8 @@ QString ThumbsDb::getSetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailSetting")), parameters, &values);
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailSetting")), parameters, &values);
+    qCDebug(DIGIKAM_THUMBSDB_LOG) << queryStateResult;
 
     if (values.isEmpty())
     {
@@ -99,7 +101,8 @@ QString ThumbsDb::getLegacySetting(const QString& keyword)
     parameters.insert(QLatin1String(":keyword"), keyword);
     QList<QVariant> values;
     // TODO Should really check return status here
-    d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailLegacySetting")), parameters, &values);
+    BdEngineBackend::QueryState queryStateResult = d->db->execDBAction(d->db->getDBAction(QLatin1String("SelectThumbnailLegacySetting")), parameters, &values);
+    qCDebug(DIGIKAM_THUMBSDB_LOG) << queryStateResult;
 
     if (values.isEmpty())
     {
@@ -232,19 +235,19 @@ QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
 
 BdEngineBackend::QueryState ThumbsDb::insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId)
 {
-    return d->db->execSql(QLatin1String("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?)"),
+    return d->db->execSql(QLatin1String("REPLACE INTO UniqueHashes (uniqueHash, fileSize, thumbId) VALUES (?,?,?);"),
                           uniqueHash, fileSize, thumbId);
 }
 
 BdEngineBackend::QueryState ThumbsDb::insertFilePath(const QString& path, int thumbId)
 {
-    return d->db->execSql(QLatin1String("REPLACE INTO FilePaths (path, thumbId) VALUES (?,?)"),
+    return d->db->execSql(QLatin1String("REPLACE INTO FilePaths (path, thumbId) VALUES (?,?);"),
                           path, thumbId);
 }
 
 BdEngineBackend::QueryState ThumbsDb::insertCustomIdentifier(const QString& path, int thumbId)
 {
-    return d->db->execSql(QLatin1String("REPLACE INTO CustomIdentifiers (identifier, thumbId) VALUES (?,?)"),
+    return d->db->execSql(QLatin1String("REPLACE INTO CustomIdentifiers (identifier, thumbId) VALUES (?,?);"),
                           path, thumbId);
 }
 
@@ -307,7 +310,7 @@ BdEngineBackend::QueryState ThumbsDb::updateModificationDate(int thumbId, const 
 void ThumbsDb::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
                                     const QString& newUniqueHash, int newFileSize)
 {
-    d->db->execSql(QLatin1String("UPDATE UniqueHashes SET uniqueHash=?, fileSize=? WHERE uniqueHash=? AND fileSize=?"),
+    d->db->execSql(QLatin1String("UPDATE UniqueHashes SET uniqueHash=?, fileSize=? WHERE uniqueHash=? AND fileSize=?;"),
                    newUniqueHash, newFileSize, oldUniqueHash, oldFileSize);
 }
 
