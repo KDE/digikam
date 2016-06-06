@@ -19,7 +19,7 @@ set(libjpegutils_SRCS
     ${DIGIKAM_LIBJPEG_DIR}/transupp.c
 )
 
-if(MSVC)
+if(WIN32)
     set(libjpegutils_SRCS
         ${libjpegutils_SRCS}
         jpegwin.cpp
