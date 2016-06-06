@@ -364,7 +364,8 @@ bool KipiInterface::saveImage(const QUrl& url, const QString& format,
 void KipiInterface::thumbnail(const QUrl& url, int /*size*/)
 {
     // NOTE: size is not used here. Cache use the max pixmap size to store thumbs.
-    d->thumbLoadThread->find(ImageInfo::fromUrl(url).thumbnailIdentifier());
+
+    d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()));
 }
 
 void KipiInterface::thumbnails(const QList<QUrl>& list, int size)

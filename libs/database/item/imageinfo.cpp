@@ -328,7 +328,7 @@ ImageInfo ImageInfo::fromLocalFile(const QString& path)
         return ImageInfo();
     }
 
-    QUrl url = QUrl::fromLocalFile(path);
+    QUrl url      = QUrl::fromLocalFile(path);
     QString album = CollectionManager::instance()->album(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
     QString name  = url.fileName();
 
@@ -343,13 +343,14 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
     }
 
     ImageInfo info;
-    // Cached?
+    
+    // Cached ?
     info.m_data = ImageInfoStatic::cache()->infoForPath(locationId, album, name);
 
     if (!info.m_data)
     {
 
-        ItemShortInfo shortInfo = CoreDbAccess().db()->getItemShortInfo(locationId, album, name);
+        ItemShortInfo shortInfo  = CoreDbAccess().db()->getItemShortInfo(locationId, album, name);
 
         if (!shortInfo.id)
         {
@@ -358,7 +359,7 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
             return info;
         }
 
-        info.m_data         = ImageInfoStatic::cache()->infoForId(shortInfo.id);
+        info.m_data              = ImageInfoStatic::cache()->infoForId(shortInfo.id);
 
         ImageInfoWriteLocker lock;
 
@@ -368,6 +369,7 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
 
         ImageInfoStatic::cache()->cacheByName(info.m_data);
     }
+
     return info;
 }
 
