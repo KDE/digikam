@@ -236,4 +236,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 195 ==> 266781 - FACTORING : allow to use Import/Export tool dialogs on small screen.
 196 ==> 363887 - Mouse hover notifications are yellow background with white font, completely unreadable. Can not find option to configure this.
 197 ==> 363939 - digiKam crashes when going to full screen.
-198 ==> 
+198 ==> 364009 - Cannot use batch processing to resize images.
+199 ==> 
