@@ -169,10 +169,7 @@ QString MetaEngine::sidecarFilePathForFile(const QString& path)
 
 QUrl MetaEngine::sidecarUrl(const QUrl& url)
 {
-    QString sidecarPath = sidecarFilePathForFile(url.path());
-    QUrl sidecarUrl(url);
-    sidecarUrl.setPath(sidecarPath);
-    return sidecarUrl;
+    return sidecarUrl(url.toLocalFile());
 }
 
 QUrl MetaEngine::sidecarUrl(const QString& path)
