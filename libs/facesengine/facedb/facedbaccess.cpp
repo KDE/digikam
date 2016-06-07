@@ -203,11 +203,13 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
-    //retrieving DB settings from config file
+    // Retrieving DB settings from config file
+
     DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
-    
-    //checking for QSQLITE driver
-    if(internalServerParameters.SQLiteDatabaseType() == "QSQLITE")
+
+    // Checking for QSQLITE driver
+
+    if(internalServerParameters.SQLiteDatabaseType() == QLatin1String("QSQLITE"))
     {
         if (!drivers.contains(QLatin1String("QSQLITE")))
         {
@@ -219,8 +221,10 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
             return false;
         }
     }
-    //checking for QMYSQL driver
-    else if(internalServerParameters.MySQLDatabaseType() == "QMYSQL")
+
+    // Checking for QMYSQL driver
+
+    else if(internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
     {
         if (!drivers.contains(QLatin1String("QMYSQL")))
         {
@@ -238,9 +242,9 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
         d->lastError = QLatin1String("No valid database type available.");
         return false;
     }
-    
 
-    // create an object with private shortcut constructor
+    // Create an object with private shortcut constructor
+
     FaceDbAccess access(false);
 
     if (!d->backend)
@@ -265,10 +269,12 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
         }
     }
 
-    // avoid endless loops (if called methods create new FaceDbAccess objects)
+    // Avoid endless loops (if called methods create new FaceDbAccess objects)
+
     d->initializing = true;
 
-    // update schema
+    // Update schema
+
     FaceDbSchemaUpdater updater(&access);
     updater.setObserver(observer);
 
