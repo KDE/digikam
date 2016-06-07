@@ -63,7 +63,8 @@ public:
 };
 
 DItemDelegate::DItemDelegate(QObject* const parent)
-    : QAbstractItemDelegate(parent), d(new Private)
+    : QAbstractItemDelegate(parent),
+      d(new Private)
 {
 }
 
@@ -202,67 +203,6 @@ QString DItemDelegate::squeezedText(const QFontMetrics& fm, int width, const QSt
     QString fullText(text);
     fullText.replace(QLatin1Char('\n'), QLatin1Char(' '));
     return fm.elidedText(text, Qt::ElideRight, width);
-
-/*
-    // Home-brewn implementation
-
-    int textWidth  = fm.width(fullText);
-    QString result = fullText;
-
-    if (textWidth > width)
-    {
-        // start with the dots only
-        QString squeezedText = "...";
-        int squeezedWidth    = fm.width(squeezedText);
-
-        // estimate how many letters we can add to the dots on both sides
-        int letters          = fullText.length() * (width - squeezedWidth) / textWidth;
-
-        if (width < squeezedWidth)
-        {
-            letters=1;
-        }
-
-        squeezedText  = fullText.left(letters) + "...";
-        squeezedWidth = fm.width(squeezedText);
-
-        if (squeezedWidth < width)
-        {
-            // we estimated too short
-            // add letters while text < label
-            do
-            {
-                ++letters;
-                squeezedText  = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-            }
-            while (squeezedWidth < width);
-
-            --letters;
-            squeezedText = fullText.left(letters) + "...";
-        }
-        else if (squeezedWidth > width)
-        {
-            // we estimated too long
-            // remove letters while text > label
-            do
-            {
-                --letters;
-                squeezedText  = fullText.left(letters) + "...";
-                squeezedWidth = fm.width(squeezedText);
-            }
-            while (letters && squeezedWidth > width);
-        }
-
-        if (letters >= 5)
-        {
-
-            result = squeezedText;
-        }
-    }
-
-    return result;
-*/
 }
 
 } // namespace Digikam
