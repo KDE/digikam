@@ -138,7 +138,7 @@ XMPEditWidget::XMPEditWidget(MetadataEditDialog* const parent)
 
     d->keywordsPage  = new XMPKeywords(this);
     d->page_keywords = addPage(d->keywordsPage, i18n("Keywords"));
-    d->page_keywords->setIcon(QIcon::fromTheme(QLatin1String("bookmarks")));
+    d->page_keywords->setIcon(QIcon::fromTheme(QLatin1String("bookmark-new")));
 
     d->categoriesPage  = new XMPCategories(this);
     d->page_categories = addPage(d->categoriesPage, i18n("Categories"));

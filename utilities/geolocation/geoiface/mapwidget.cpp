@@ -309,7 +309,7 @@ void MapWidget::createActions()
     d->actionSetZoomIntoGroupMode = new QAction(d->mouseModeActionGroup);
     d->actionSetZoomIntoGroupMode->setCheckable(true);
     d->actionSetZoomIntoGroupMode->setToolTip(i18n("Zoom into a group"));
-    d->actionSetZoomIntoGroupMode->setIcon(QIcon::fromTheme( QLatin1String("page-zoom") ));
+    d->actionSetZoomIntoGroupMode->setIcon(QIcon::fromTheme( QLatin1String("zoom-fit-best") ));
     d->actionSetZoomIntoGroupMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModeZoomIntoGroup));
 
     d->actionSetRegionSelectionFromIconMode = new QAction(d->mouseModeActionGroup);

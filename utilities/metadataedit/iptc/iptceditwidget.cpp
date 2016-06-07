@@ -138,7 +138,7 @@ IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
 
     d->keywordsPage  = new IPTCKeywords(this);
     d->page_keywords = addPage(d->keywordsPage, i18n("Keywords"));
-    d->page_keywords->setIcon(QIcon::fromTheme(QLatin1String("bookmarks")));
+    d->page_keywords->setIcon(QIcon::fromTheme(QLatin1String("bookmark-new")));
 
     d->categoriesPage  = new IPTCCategories(this);
     d->page_categories = addPage(d->categoriesPage, i18n("Categories"));
