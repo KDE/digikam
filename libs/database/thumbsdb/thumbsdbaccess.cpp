@@ -204,11 +204,13 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
-    //retrieving DB settings from config file
+    // Retrieving DB settings from config file
+
     DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
-    
-    //checking for QSQLITE driver
-    if(internalServerParameters.SQLiteDatabaseType() == "QSQLITE")
+
+    // Checking for QSQLITE driver
+
+    if (internalServerParameters.SQLiteDatabaseType() == QLatin1String("QSQLITE"))
     {
         if (!drivers.contains(QLatin1String("QSQLITE")))
         {
@@ -220,8 +222,10 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
             return false;
         }
     }
-    //checking for QMYSQL driver
-    else if(internalServerParameters.MySQLDatabaseType() == "QMYSQL")
+
+    // Checking for QMYSQL driver
+
+    else if (internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
     {
         if (!drivers.contains(QLatin1String("QMYSQL")))
         {
