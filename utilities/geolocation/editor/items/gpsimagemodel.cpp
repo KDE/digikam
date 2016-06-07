@@ -261,7 +261,7 @@ QPixmap GPSImageModel::getPixmapForIndex(const QPersistentModelIndex& itemIndex,
 
     QPixmap thumbnail;
 
-    if (d->thumbnailLoadThread->find(ThumbnailIdentifier(imageItem->url().path()), thumbnail, size))
+    if (d->thumbnailLoadThread->find(ThumbnailIdentifier(imageItem->url().toLocalFile()), thumbnail, size))
     {
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
     }

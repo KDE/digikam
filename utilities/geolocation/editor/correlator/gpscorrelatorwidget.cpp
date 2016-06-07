@@ -369,8 +369,10 @@ void GPSCorrelatorWidget::slotLoadTrackFiles()
 
     QList<QUrl> list;
 
-    foreach(QString str, gpxFiles)
+    foreach(const QString& str, gpxFiles)
+    {
         list << QUrl::fromLocalFile(str);
+    }
 
     d->trackManager->loadTrackFiles(list);
 }
