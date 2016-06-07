@@ -211,7 +211,8 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
     {
         if (!drivers.contains(QLatin1String("QSQLITE")))
         {
-            qCDebug(DIGIKAM_FACEDB_LOG) << "Core database: no Sqlite3 driver available. List of QSqlDatabase drivers: " << drivers;
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Core database: no Sqlite3 driver available.\n"
+                                           "List of QSqlDatabase drivers: " << drivers;
 
             d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
                             "digiKam depends on the drivers provided by the Qt::SQL module.");
@@ -223,7 +224,8 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
     {
         if (!drivers.contains(QLatin1String("QMYSQL")))
         {
-            qCDebug(DIGIKAM_FACEDB_LOG) << "Core database: no MySQL driver available. List of QSqlDatabase drivers: " << drivers;
+            qCDebug(DIGIKAM_FACEDB_LOG) << "Core database: no MySQL driver available.\n"
+                                           "List of QSqlDatabase drivers: " << drivers;
 
             d->lastError = i18n("The driver \"MYSQL\" for MySQL databases is not available.\n"
                             "digiKam depends on the drivers provided by the Qt::SQL module.");
