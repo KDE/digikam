@@ -138,7 +138,7 @@ DMetadata* GPSImageItem::getMetadataForFile() const
 {
     QScopedPointer<DMetadata> meta(new DMetadata);
 
-    if (!meta->load(m_url.path()))
+    if (!meta->load(m_url.toLocalFile()))
     {
         return 0;
     }
@@ -679,7 +679,7 @@ SaveProperties GPSImageItem::saveProperties() const
     {
         p.shouldRemoveCoordinates = true;
     }
-    
+
     return p;
 }
 
@@ -902,9 +902,9 @@ QDateTime GPSImageItem::dateTime() const
     return m_dateTime;
 }
 
-GeoCoordinates GPSImageItem::coordinates() const                 
+GeoCoordinates GPSImageItem::coordinates() const
 {
-    return m_gpsData.getCoordinates();                        
+    return m_gpsData.getCoordinates();
 }
 
 GPSDataContainer GPSImageItem::gpsData() const

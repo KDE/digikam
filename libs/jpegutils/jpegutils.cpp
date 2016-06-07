@@ -92,7 +92,8 @@ extern "C"
 #include "metadatasettings.h"
 #include "filereadwritelock.h"
 
-#ifdef Q_CC_MSVC
+#ifdef Q_OS_WIN32
+#include "windows.h"
 #include "jpegwin.h"
 #endif
 
@@ -179,7 +180,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     jpeg_create_decompress(&cinfo);
 
-#ifdef Q_CC_MSVC
+#ifdef Q_OS_WIN32
 
     QFile inFile(path);
     QByteArray buffer;
@@ -192,11 +193,11 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
 
-#else  // Q_CC_MSVC
+#else  // Q_OS_WIN32
 
     jpeg_stdio_src(&cinfo, inputFile);
 
-#endif // Q_CC_MSVC
+#endif // Q_OS_WIN32
 
     jpeg_read_header(&cinfo, true);
 
@@ -422,7 +423,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
         if (!performJpegTransform(actions[i], src, tempFile))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "JPEG lossless transform failed for" << src;
-            
+
              // See bug 320107 : if lossless transform cannot be achieve, do lossy transform.
             DImg srcImg;
 
@@ -440,7 +441,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
             }
 
             srcImg.setAttribute(QLatin1String("quality"), getJpegQuality(src));
-            
+
             if (!srcImg.save(tempFile, DImg::JPEG))
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Lossy transform failed for" << src;
@@ -448,7 +449,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
                 ::unlink(QFile::encodeName(tempFile).constData());
                 return false;
             }
-            
+
             qCDebug(DIGIKAM_GENERAL_LOG) << "Lossy transform done for " << src;
         }
 
@@ -465,10 +466,10 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
         // atomic rename
 
-#ifndef Q_CC_MSVC
+#ifndef Q_OS_WIN32
         if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
 #else
-        if (::MoveFileEx(tempFile.utf16(), dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
+        if (::MoveFileEx((LPCWSTR)tempFile.utf16(), (LPCWSTR)dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
 #endif
         {
             unlinkLater << tempFile;

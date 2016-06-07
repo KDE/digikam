@@ -59,7 +59,7 @@ extern "C"
 #include <png.h>
 }
 
-#ifdef Q_CC_MSVC
+#ifdef Q_OS_WIN32
 void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int size)
 {
     FILE* const file_handle = (FILE*)png_get_io_ptr(png_ptr);
@@ -111,8 +111,8 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     unsigned char buf[PNG_BYTES_TO_CHECK];
 
     size_t membersRead = fread(buf, 1, PNG_BYTES_TO_CHECK, f);
-#if PNG_LIBPNG_VER >= 10400
 
+#if PNG_LIBPNG_VER >= 10400
     if ((membersRead != PNG_BYTES_TO_CHECK) || png_sig_cmp(buf, 0, PNG_BYTES_TO_CHECK))
 #else
     if ((membersRead != PNG_BYTES_TO_CHECK) || !png_check_sig(buf, PNG_BYTES_TO_CHECK))
@@ -216,7 +216,6 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
     cleanupData->setFile(f);
 
 #if PNG_LIBPNG_VER >= 10400
-
     if (setjmp(png_jmpbuf(png_ptr)))
 #else
     if (setjmp(png_ptr->jmpbuf))
@@ -229,7 +228,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         return false;
     }
 
-#ifdef Q_CC_MSVC
+#ifdef Q_OS_WIN32
     png_set_read_fn(png_ptr, f, _ReadProc);
 #else
     png_init_io(png_ptr, f);

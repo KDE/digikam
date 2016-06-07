@@ -55,7 +55,7 @@ using namespace GeoIface;
 
 // C ANSI includes
 
-#ifndef Q_CC_MSVC
+#ifndef Q_OS_WIN32
 extern "C"
 {
 #endif
@@ -72,9 +72,9 @@ extern "C"
 #undef HAVE_STDDEF_H
 #include <jpeglib.h>
 
-#ifndef Q_CC_MSVC
+#ifndef Q_OS_WIN32
 }
-#endif // Q_CC_MSVC
+#endif
 
 namespace Digikam
 {
