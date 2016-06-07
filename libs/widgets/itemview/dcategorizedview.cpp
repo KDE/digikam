@@ -440,8 +440,8 @@ QRect DCategorizedView::Private::categoryVisualRect(const QString& category)
 QSize DCategorizedView::Private::contentsSize()
 {
     // find the last index in the last category
-    QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex() :
-                            proxyModel->index(categoriesIndexes[categories.last()].last(), 0);
+    QModelIndex lastIndex = categoriesIndexes.isEmpty() ? QModelIndex()
+                                                        : proxyModel->index(categoriesIndexes[categories.last()].last(), 0);
 
     int lastItemBottom    = cachedRectIndex(lastIndex).top() +
                             listView->spacing() +
@@ -451,8 +451,7 @@ QSize DCategorizedView::Private::contentsSize()
     return QSize(listView->viewport()->width(), lastItemBottom);
 }
 
-void DCategorizedView::Private::drawNewCategory(const QModelIndex& index, int sortRole,
-                                                       const QStyleOption& option, QPainter* painter)
+void DCategorizedView::Private::drawNewCategory(const QModelIndex& index, int sortRole, const QStyleOption& option, QPainter* painter)
 {
     if (!index.isValid())
     {
@@ -508,7 +507,8 @@ void DCategorizedView::Private::updateScrollbars()
 void DCategorizedView::Private::drawDraggedItems(QPainter* painter)
 {
     QStyleOptionViewItemV4 option = listView->viewOptions();
-    option.state                  &= ~QStyle::State_MouseOver;
+    option.state                 &= ~QStyle::State_MouseOver;
+
     foreach(const QModelIndex& index, listView->selectionModel()->selectedIndexes())
     {
         const int dx = mousePosition.x() - initialPressPosition.x() + listView->horizontalOffset();
@@ -549,7 +549,8 @@ void DCategorizedView::Private::drawDraggedItems()
 // ------------------------------------------------------------------------------------------------
 
 DCategorizedView::DCategorizedView(QWidget* const parent)
-    : QListView(parent), d(new Private(this))
+    : QListView(parent),
+      d(new Private(this))
 {
 }
 
@@ -1000,8 +1001,7 @@ QItemSelection DCategorizedView::Private::selectionForRect(const QRect& rect)
     return selection;
 }
 
-void DCategorizedView::setSelection(const QRect& rect,
-                                           QItemSelectionModel::SelectionFlags command)
+void DCategorizedView::setSelection(const QRect& rect, QItemSelectionModel::SelectionFlags command)
 {
     if (!d->proxyModel || !d->categoryDrawer || !d->proxyModel->isCategorizedModel())
     {
@@ -1466,9 +1466,9 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction,
         Qt::KeyboardModifiers modifiers)
 {
     if ((viewMode() != DCategorizedView::IconMode) ||
-        !d->proxyModel ||
-        !d->categoryDrawer ||
-        d->categories.isEmpty() ||
+        !d->proxyModel                             ||
+        !d->categoryDrawer                         ||
+        d->categories.isEmpty()                    ||
         !d->proxyModel->isCategorizedModel())
     {
         return QListView::moveCursor(cursorAction, modifiers);
@@ -1552,23 +1552,26 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction,
             // We need to reimplemt PageUp/Down as well because
             // default QListView implementation will not work properly with our custom layout
             QModelIndexList visibleIndexes = d->intersectionSet(viewport()->rect());
+
             if (!visibleIndexes.isEmpty())
             {
                 int indexToMove = qMax(current.row() - visibleIndexes.size(), 0);
                 return d->proxyModel->index(indexToMove, 0);
             }
+
             break;
         }
-            // fall through
+
+        // fall through
 
         case QAbstractItemView::MoveUp:
         {
             if (d->elementsInfo[current.row()].relativeOffsetToCategory >= elementsPerRow)
             {
                 int indexToMove = current.row();
-                indexToMove     -= qMin(((d->elementsInfo[current.row()].relativeOffsetToCategory) +
-                                   d->forcedSelectionPosition), elementsPerRow - d->forcedSelectionPosition +
-                                   (d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow));
+                indexToMove    -= qMin(((d->elementsInfo[current.row()].relativeOffsetToCategory) +
+                                  d->forcedSelectionPosition), elementsPerRow - d->forcedSelectionPosition +
+                                  (d->elementsInfo[current.row()].relativeOffsetToCategory % elementsPerRow));
 
                 return d->proxyModel->index(indexToMove, 0);
             }
@@ -1594,20 +1597,23 @@ QModelIndex DCategorizedView::moveCursor(CursorAction cursorAction,
         case QAbstractItemView::MovePageDown:
         {
             QModelIndexList visibleIndexes = d->intersectionSet(viewport()->rect());
+
             if (!visibleIndexes.isEmpty())
             {
                 int indexToMove = qMin(current.row() + visibleIndexes.size(), d->elementsInfo.size() - 1);
                 return d->proxyModel->index(indexToMove, 0);
             }
         }
+
         // fall through
+
         case QAbstractItemView::MoveDown:
         {
             if (d->elementsInfo[current.row()].relativeOffsetToCategory < (d->categoriesIndexes[theCategory].count() - 1 - ((d->categoriesIndexes[theCategory].count() - 1) % elementsPerRow)))
             {
                 int indexToMove = current.row();
-                indexToMove     += qMin(elementsPerRow, d->categoriesIndexes[theCategory].count() - 1 -
-                                        d->elementsInfo[current.row()].relativeOffsetToCategory);
+                indexToMove    += qMin(elementsPerRow, d->categoriesIndexes[theCategory].count() - 1 -
+                                       d->elementsInfo[current.row()].relativeOffsetToCategory);
 
                 return d->proxyModel->index(indexToMove, 0);
             }
@@ -1703,8 +1709,7 @@ void DCategorizedView::rowsInserted(const QModelIndex& parent, int start, int en
     rowsInsertedArtifficial(parent, start, end);
 }
 
-int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelIndexList,
-                                                         int begin, int averageSize)
+int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelIndexList, int begin, int averageSize)
 {
     int end            = modelIndexList.size();
     QString category   = proxyModel->data(modelIndexList[begin],
@@ -1770,7 +1775,7 @@ int DCategorizedView::Private::categoryUpperBound(SparseModelIndexVector& modelI
         else
         {
             begin = middle + 1;
-            n     -= half + 1;
+            n    -= half + 1;
         }
     }
 
@@ -1821,11 +1826,11 @@ void DCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent, int st
     {
         QStyleOptionViewItem option = viewOptions();
 
-        for (int k = 0; k < rowCount; ++k)
+        for (int k = 0 ; k < rowCount ; ++k)
         {
             QModelIndex indexSize = (sortColumn == 0) ? modelIndexList[k] : d->proxyModel->index(k, 0);
             QSize hint            = itemDelegate(indexSize)->sizeHint(option, indexSize);
-            d->biggestItemSize    = QSize(qMax(hint.width(), d->biggestItemSize.width()),
+            d->biggestItemSize    = QSize(qMax(hint.width(),  d->biggestItemSize.width()),
                                           qMax(hint.height(), d->biggestItemSize.height()));
         }
     }
@@ -1834,12 +1839,12 @@ void DCategorizedView::rowsInsertedArtifficial(const QModelIndex& parent, int st
     {
         lastCategory   = d->proxyModel->data(modelIndexList[k], DCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
         int upperBound = d->categoryUpperBound(modelIndexList, k, categorySizes / ++categoryCounts);
-        categorySizes  += upperBound - k;
+        categorySizes += upperBound - k;
         offset         = 0;
 
         QVector<int> rows(upperBound - k);
 
-        for (int i=k; i<upperBound; ++i, ++offset)
+        for (int i = k ; i < upperBound ; ++i, ++offset)
         {
             rows[offset]                             = i;
             struct Private::ElementInfo& elementInfo = d->elementsInfo[i];
