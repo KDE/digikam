@@ -258,12 +258,14 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
 bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
     QStringList drivers = QSqlDatabase::drivers();
-    
-    //retrieving DB settings from config file
+
+    // Retrieving DB settings from config file
+
     DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
-    
-    //checking for QSQLITE driver
-    if(internalServerParameters.SQLiteDatabaseType() == "QSQLITE")
+
+    // Checking for QSQLITE driver
+
+    if(internalServerParameters.SQLiteDatabaseType() == QLatin1String("QSQLITE"))
     {
         if (!drivers.contains(QLatin1String("QSQLITE")))
         {
@@ -274,8 +276,10 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
             return false;
         }
     }
-    //checking for QMYSQL driver
-    else if(internalServerParameters.MySQLDatabaseType() == "QMYSQL")
+
+    // Checking for QMYSQL driver
+
+    else if(internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
     {
         if (!drivers.contains(QLatin1String("QMYSQL")))
         {
@@ -292,7 +296,6 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
         d->lastError = QLatin1String("No valid database type available.");
         return false;
     }
-    
 
     if (!DbEngineConfig::checkReadyForUse())
     {
@@ -313,7 +316,7 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
     if (!d->backend)
     {
         qCWarning(DIGIKAM_COREDB_LOG) << "Core database: no database backend available in checkReadyForUse. "
-                                           "Did you call setParameters before?";
+                                         "Did you call setParameters before?";
         return false;
     }
 
