@@ -1478,7 +1478,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.bpp == m_header.channels*16);
 			ASSERT(bpp%16 == 0);
 
-			UINT16 *buff16 = (UINT16 *)buff;
+			UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
 			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
@@ -1542,7 +1542,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.bpp == m_header.channels*16);
 			ASSERT(bpp%16 == 0);
 
-			UINT16 *buff16 = (UINT16 *)buff;
+			UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
 			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
@@ -1617,7 +1617,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.bpp == m_header.channels*16);
 			ASSERT(bpp%16 == 0);
 
-			UINT16 *buff16 = (UINT16 *)buff;
+			UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 			const int pitch16 = pitch/2;
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
 			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
@@ -1661,7 +1661,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 			DataT* y = m_channel[0]; ASSERT(y);
 
-			UINT32 *buff32 = (UINT32 *)buff;
+			UINT32 *buff32 = reinterpret_cast<UINT32*>(buff);
 			const int pitch32 = pitch/4;
 			const int shift = 31 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 			const DataT yuvOffset31 = 1 << (UsedBitsPerChannel() - 1);
@@ -1738,7 +1738,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
 
-			UINT16 *buff16 = (UINT16 *)buff;
+			UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 			UINT16 rgb, b, g, r;
 			const int pitch16 = pitch/2;
 
@@ -1924,7 +1924,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 			if (bpp%16 == 0) {
 				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
-				UINT16 *buff16 = (UINT16 *)buff;
+				UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
 
@@ -2059,7 +2059,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 			if (bpp >= 48 && bpp%16 == 0) {
 				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
-				UINT16 *buff16 = (UINT16 *)buff;
+				UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
 
@@ -2171,7 +2171,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 			if (bpp%16 == 0) {
 				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
-				UINT16 *buff16 = (UINT16 *)buff;
+				UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
 
@@ -2287,7 +2287,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 			if (bpp%16 == 0) {
 				const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
-				UINT16 *buff16 = (UINT16 *)buff;
+				UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 				int pitch16 = pitch/2;
 				channels = bpp/16; ASSERT(channels >= m_header.channels);
 
@@ -2364,7 +2364,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 
 			if (bpp == 32) {
 				const int shift = 31 - UsedBitsPerChannel(); ASSERT(shift >= 0);
-				UINT32 *buff32 = (UINT32 *)buff;
+				UINT32 *buff32 = reinterpret_cast<UINT32*>(buff);
 				int pitch32 = pitch/4;
 
 				for (i=0; i < h; i++) {
@@ -2382,7 +2382,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				}
 			} else if (bpp == 16) {
 				const int usedBits = UsedBitsPerChannel();
-				UINT16 *buff16 = (UINT16 *)buff;
+				UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 				int pitch16 = pitch/2;
 
 				if (usedBits < 16) {
@@ -2491,7 +2491,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
 			UINT16 yval;
-			UINT16 *buff16 = (UINT16 *)buff;
+			UINT16 *buff16 = reinterpret_cast<UINT16*>(buff);
 			int pitch16 = pitch/2;
 
 			for (i=0; i < h; i++) {
