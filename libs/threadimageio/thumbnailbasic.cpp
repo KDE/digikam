@@ -132,15 +132,12 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
 {
     png_uint_32  w32, h32;
     int          w, h;
-    bool         has_alpha;
-    bool         has_grey;
-    png_structp  png_ptr  = NULL;
-    png_infop    info_ptr = NULL;
+    bool         has_alpha = 0;
+    png_structp  png_ptr   = NULL;
+    png_infop    info_ptr  = NULL;
     int          bit_depth, color_type, interlace_type;
     QImage       qimage;
 
-    has_alpha     = 0;
-    has_grey      = 0;
     FILE* const f = fopen(path.toLatin1().constData(), "rb");
 
     if (!f)
@@ -199,9 +196,10 @@ QImage ThumbnailCreator::loadPNG(const QString& path) const
                  (png_uint_32*) (&h32), &bit_depth, &color_type,
                  &interlace_type, NULL, NULL);
 
-    w      = w32;
-    h      = h32;
-    qimage = QImage(w, h, QImage::Format_ARGB32);
+    bool  has_grey = 0;
+    w              = w32;
+    h              = h32;
+    qimage         = QImage(w, h, QImage::Format_ARGB32);
 
     if (color_type == PNG_COLOR_TYPE_PALETTE)
     {
