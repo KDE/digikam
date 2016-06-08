@@ -35,7 +35,12 @@
 #   endif
 #endif
 
-#include <lcms2.h>
+// Turn off the specific compiler warnings with LCMS header.
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundef"
+#    include <lcms2.h>
+#pragma GCC diagnostic pop
 
 #define LCMS_DESC_MAX                    512
 
