@@ -9,7 +9,8 @@
 #define __OPENCV_FACEREC_HPP__
 
 #include "face.hpp"
-#include <opencv2/core.hpp>
+
+#include "libopencv.h
 
 namespace cv { namespace face {
 
