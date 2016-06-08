@@ -238,4 +238,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 197 ==> 363939 - digiKam crashes when going to full screen.
 198 ==> 364009 - Cannot use batch processing to resize images.
 199 ==> 364035 - GPS correlation fails to save coordinates back to files.
-200 ==> 
+200 ==> 364065 - image editor doesn't open at double click.
+201 ==> 
