@@ -1187,7 +1187,7 @@ void DImagesList::processed(const QUrl& url, bool success)
     if (item)
     {
         d->processItems.removeAll(url);
-        item->setProcessedIcon(QIcon::fromTheme(success ? QString::fromLatin1("dialog-ok")
+        item->setProcessedIcon(QIcon::fromTheme(success ? QString::fromLatin1("dialog-ok-apply")
                                                         : QString::fromLatin1("dialog-cancel")).pixmap(16, 16));
         item->setState(success ? DImagesListViewItem::Success
                                : DImagesListViewItem::Failed);

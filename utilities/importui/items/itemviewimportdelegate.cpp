@@ -459,7 +459,7 @@ void ItemViewImportDelegate::drawDownloadIndicator(QPainter* p, const QRect& r, 
 
     if (itemType == CamItemInfo::DownloadedYes)
     {
-        icon = QIcon::fromTheme(QLatin1String("dialog-ok"));
+        icon = QIcon::fromTheme(QLatin1String("dialog-ok-apply"));
     }
 
     qreal op = p->opacity();

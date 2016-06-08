@@ -244,7 +244,7 @@ void AssignNameWidget::Private::checkWidgets()
 
             if (!confirmButton)
             {
-                confirmButton = createToolButton(QIcon::fromTheme(QLatin1String("dialog-ok")), i18n("Ok"));
+                confirmButton = createToolButton(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("Ok"));
 
                 if (mode == UnconfirmedEditMode)
                 {

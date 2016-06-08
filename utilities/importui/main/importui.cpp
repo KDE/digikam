@@ -412,7 +412,7 @@ void ImportUI::setupActions()
 
     // -------------------------------------------------------------------------
 
-    d->markAsDownloadedAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok")), i18nc("@action", "Mark as downloaded"), this);
+    d->markAsDownloadedAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18nc("@action", "Mark as downloaded"), this);
     connect(d->markAsDownloadedAction, SIGNAL(triggered()), this, SLOT(slotMarkAsDownloaded()));
     ac->addAction(QLatin1String("importui_imagemarkasdownloaded"), d->markAsDownloadedAction);
     d->cameraActions->addAction(d->markAsDownloadedAction);

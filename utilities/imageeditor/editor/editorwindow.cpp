@@ -652,7 +652,7 @@ void EditorWindow::setupStandardActions()
 
     // NOTE: setup is done after image plugins are loaded
 
-    m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok")), i18n("Ok"), this);
+    m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("Ok"), this);
     ac->addAction(QLatin1String("editorwindow_applytool"), m_applyToolAction);
     ac->setDefaultShortcut(m_applyToolAction, Qt::Key_Return);
     connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));

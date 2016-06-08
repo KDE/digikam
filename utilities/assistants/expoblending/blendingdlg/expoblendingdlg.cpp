@@ -623,7 +623,7 @@ void ExpoBlendingDlg::setRejectButtonMode(QDialogButtonBox::StandardButton butto
     if (button == QDialogButtonBox::Close)
     {
         d->buttonBox->button(QDialogButtonBox::Close)->setText(i18n("Close"));
-        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QString::fromLatin1("dialog-close")));
+        d->buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon::fromTheme(QString::fromLatin1("window-close")));
         d->buttonBox->button(QDialogButtonBox::Close)->setToolTip(i18n("Close window"));
         d->propagateReject = true;
     }

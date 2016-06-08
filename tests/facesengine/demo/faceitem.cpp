@@ -158,12 +158,12 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
 
     //---------------------
 
-    QPixmap rejectPix  = QIcon::fromTheme(QString::fromLatin1("dialog-close")).pixmap(16, 16);
+    QPixmap rejectPix  = QIcon::fromTheme(QString::fromLatin1("window-close")).pixmap(16, 16);
     d->rejectButton    = new Button( rejectPix, rejectPix);
     scene->addItem(d->rejectButton);
     d->rejectButton->show();
 
-    QPixmap acceptPix  = QIcon::fromTheme(QString::fromLatin1("dialog-ok")).pixmap(16, 16);
+    QPixmap acceptPix  = QIcon::fromTheme(QString::fromLatin1("dialog-ok-apply")).pixmap(16, 16);
     d->acceptButton    = new Button( acceptPix, acceptPix);
     scene->addItem(d->acceptButton);
     //d->acceptButton->show();
