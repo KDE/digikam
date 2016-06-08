@@ -10,7 +10,7 @@
 
 #include "face.hpp"
 
-#include "libopencv.h
+#include "libopencv.h"
 
 namespace cv { namespace face {
 

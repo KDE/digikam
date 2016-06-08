@@ -47,7 +47,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 */
 
-#include "libopencv.h
+#include "libopencv.h"
 
 #include <map>
 
