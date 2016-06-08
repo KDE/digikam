@@ -37,10 +37,10 @@
 
 // Turn off the specific compiler warnings with LCMS header.
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wundef"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundef"
 #    include <lcms2.h>
-#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 
 #define LCMS_DESC_MAX                    512
 
