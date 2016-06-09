@@ -40,6 +40,7 @@
 #include "thumbsdb.h"
 #include "thumbsdbchemaupdater.h"
 #include "dbengineparameters.h"
+#include "dbengineaccess.h"
 
 namespace Digikam
 {
@@ -202,7 +203,10 @@ void ThumbsDbAccess::setParameters(const DbEngineParameters& parameters)
 
 bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
-    QStringList drivers = QSqlDatabase::drivers();
+    DbEngineAccess dbaccess;
+    dbaccess.checkReadyForUse();
+    /*
+     * QStringList drivers = QSqlDatabase::drivers();
 
     // Retrieving DB settings from config file
 
@@ -243,7 +247,7 @@ bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
         d->lastError = QLatin1String("No valid database type available.");
         return false;
     }
-    
+    */
 
     // create an object with private shortcut constructor
     ThumbsDbAccess access(false);

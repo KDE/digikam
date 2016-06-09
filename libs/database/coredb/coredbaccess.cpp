@@ -49,6 +49,7 @@
 #include "dbengineerrorhandler.h"
 #include "tagscache.h"
 #include "dbengineparameters.h"
+#include "dbengineaccess.h"
 
 namespace Digikam
 {
@@ -257,7 +258,10 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
 
 bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
-    QStringList drivers = QSqlDatabase::drivers();
+    DbEngineAccess dbaccess;
+    dbaccess.checkReadyForUse();
+   /* 
+    * QStringList drivers = QSqlDatabase::drivers();
 
     // Retrieving DB settings from config file
 
@@ -298,6 +302,7 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
         d->lastError = QLatin1String("No valid database type available.");
         return false;
     }
+    */
 
     if (!DbEngineConfig::checkReadyForUse())
     {
