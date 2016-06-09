@@ -62,6 +62,8 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wcast-align"
+#pragma clang diagnostic ignored "-Wshift-negative-value"
+#pragma clang diagnostic ignored "-Wunused-local-typedef"
 #endif
 
 // CImg includes

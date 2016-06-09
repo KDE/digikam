@@ -410,7 +410,7 @@ void AltLangStrEdit::loadLangAltListEntries()
         foreach(const QString& item, list)
         {
               d->languageCB->addItem(item);
-              d->languageCB->setItemIcon(d->languageCB->count()-1, QIcon::fromTheme(QString::fromLatin1("dialog-ok")).pixmap(16, 16));
+              d->languageCB->setItemIcon(d->languageCB->count()-1, QIcon::fromTheme(QString::fromLatin1("dialog-ok-apply")).pixmap(16, 16));
         }
 
         d->languageCB->insertSeparator(d->languageCB->count());

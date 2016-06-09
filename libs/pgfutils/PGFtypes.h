@@ -130,7 +130,18 @@ struct PGFPreHeader : PGFMagicVersion {
 /// @author C. Stamm
 /// @brief version number stored in header since major version 7 
 struct PGFVersionNumber {
-	PGFVersionNumber(UINT8 _major, UINT8 _year, UINT8 _week) : major(_major), year(_year), week(_week) {}
+	PGFVersionNumber(UINT8 _major, UINT8 _year, UINT8 _week)
+#ifdef PGF_USE_BIG_ENDIAN
+	 : week(_week),
+	   year(_year),
+	   major(_major)
+#else
+	 : major(_major),
+	   year(_year),
+	   week(_week)
+#endif // PGF_USE_BIG_ENDIAN
+	{
+	}
 
 #ifdef PGF_USE_BIG_ENDIAN
 	UINT16 week  : 6;	///< week number in a year

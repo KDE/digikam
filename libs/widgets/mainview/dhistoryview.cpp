@@ -59,7 +59,7 @@ public:
                 setIcon(0, QIcon::fromTheme(QLatin1String("system-run")));
                 break;
             case DHistoryView::SuccessEntry:
-                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-ok")));
+                setIcon(0, QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
                 break;
             case DHistoryView::WarningEntry:
                 setIcon(0, QIcon::fromTheme(QLatin1String("dialog-warning")));

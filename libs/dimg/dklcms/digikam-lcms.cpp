@@ -30,10 +30,6 @@
 
 #include "digikam_debug.h"
 
-// LCMS includes
-
-#include <lcms2.h>
-
 #include "digikam-lcms.h"
 
 #include <lcms2_plugin.h>

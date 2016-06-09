@@ -35,7 +35,18 @@
 #   endif
 #endif
 
+// Turn off the specific compiler warnings with LCMS header.
+
+#if defined(__APPLE__) && defined(__clang__)
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wundef"
+#endif
+
 #include <lcms2.h>
+
+#if defined(__APPLE__) && defined(__clang__)
+#    pragma clang diagnostic pop
+#endif
 
 #define LCMS_DESC_MAX                    512
 

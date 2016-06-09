@@ -188,7 +188,7 @@ void QueueListViewItem::setFailed()
 void QueueListViewItem::setDone()
 {
     setPixmap(d->preview);
-    setIcon(1, QIcon::fromTheme(QLatin1String("dialog-ok")));
+    setIcon(1, QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->done          = true;
     d->isBusy        = false;
     d->progressIndex = 0;

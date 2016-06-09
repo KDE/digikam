@@ -312,7 +312,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
 #ifdef HAVE_KBOOKMARKS
     d->actionBookmarkVisibility = new QAction(this);
-    d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QLatin1String("bookmarks")));
+    d->actionBookmarkVisibility->setIcon(QIcon::fromTheme(QLatin1String("bookmark-new")));
     d->actionBookmarkVisibility->setToolTip(i18n("Display bookmarked positions on the map."));
     d->actionBookmarkVisibility->setCheckable(true);
 

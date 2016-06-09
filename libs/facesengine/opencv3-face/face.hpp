@@ -47,7 +47,8 @@ the use of this software, even if advised of the possibility of such damage.
 
 */
 
-#include <opencv2/core.hpp>
+#include "libopencv.h"
+
 #include <map>
 
 namespace cv { namespace face {

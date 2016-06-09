@@ -90,14 +90,14 @@ static inline bool detectKDEDesktopIsRunning()
     if (!xdgCurrentDesktop.isEmpty())
     {
         return (xdgCurrentDesktop.toUpper() == "KDE");
-	}
+    }
 
     // Classic fallbacks
 
     if (!qgetenv("KDE_FULL_SESSION").isEmpty())
     {
         return true;
-	}
+    }
 
     return false;
 }

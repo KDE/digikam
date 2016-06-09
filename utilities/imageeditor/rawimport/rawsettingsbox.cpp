@@ -320,7 +320,7 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     button(Default)->setToolTip(i18n("Reset all settings to default values."));
 
     button(Ok)->setText(i18n("Import"));
-    button(Ok)->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok")));
+    button(Ok)->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     button(Ok)->setToolTip(i18n("Import image to editor using current settings."));
 
     button(Cancel)->setText(i18n("Use Default"));

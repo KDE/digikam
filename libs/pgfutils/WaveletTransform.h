@@ -107,13 +107,24 @@ public:
 	/// @param tileX x-index of the given tile
 	/// @param tileY y-index of the given tile
 
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
 #endif
+
+#if defined(__APPLE__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wignored-qualifiers"
+#endif
+
 	const bool TileIsRelevant(int level, UINT32 tileX, UINT32 tileY) const { ASSERT(m_indices); ASSERT(level >= 0 && level < m_nLevels); return m_indices[level].IsInside(tileX, tileY); }
-#if not defined(__APPLE__) && defined(__GNUC__)
+
+#if defined(__GNUC__)
 #pragma GCC diagnostic pop
+#endif
+
+#if defined(__APPLE__)
+#pragma clang diagnostic pop
 #endif
 
 	//////////////////////////////////////////////////////////////////////

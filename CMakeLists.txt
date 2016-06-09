@@ -366,30 +366,40 @@ if(NOT WIN32)
 
     if(GPHOTO2_FOUND)
 
-        exec_program(gphoto2-config ARGS --version RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
-        string(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+        execute_process(COMMAND gphoto2-config --version RESULT_VARIABLE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
 
-        if("${GPHOTO2_VERSION}" VERSION_GREATER "2.4.0")
-            set(VERSION_GPHOTO2 true)
+        if(NOT "${_return_VALUE}" STREQUAL "0")
+
+            message(STATUS "Command gphoto2-config not found. Cannot identify GPhoto2 API version.")
+            set(GPHOTO2_FOUND false)
+
         else()
-            set(VERSION_GPHOTO2 false)
-        endif()
 
-        if("${GPHOTO2_VERSION}" VERSION_GREATER "2.5.0")
-            set(VERSION_GPHOTO25 true)
-            message(STATUS "libgphoto2 API version >= 2.5")
-        else()
-            set(VERSION_GPHOTO25 false)
-            message(STATUS "libgphoto2 API version < 2.5")
-        endif()
+            string(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
 
-        if(VERSION_GPHOTO25)
-            set(HAVE_GPHOTO25 1)
-        else()
-            set(HAVE_GPHOTO25 0)
-        endif()
+            if("${GPHOTO2_VERSION}" VERSION_GREATER "2.4.0")
+                set(VERSION_GPHOTO2 true)
+            else()
+                set(VERSION_GPHOTO2 false)
+            endif()
 
-        message(STATUS "libgphoto2 API version found: ${GPHOTO2_VERSION}")
+            if("${GPHOTO2_VERSION}" VERSION_GREATER "2.5.0")
+                set(VERSION_GPHOTO25 true)
+                message(STATUS "libgphoto2 API version >= 2.5")
+            else()
+                set(VERSION_GPHOTO25 false)
+                message(STATUS "libgphoto2 API version < 2.5")
+            endif()
+
+            if(VERSION_GPHOTO25)
+                set(HAVE_GPHOTO25 1)
+            else()
+                set(HAVE_GPHOTO25 0)
+            endif()
+
+            message(STATUS "libgphoto2 API version found: ${GPHOTO2_VERSION}")
+
+        endif()
 
     endif()
 
