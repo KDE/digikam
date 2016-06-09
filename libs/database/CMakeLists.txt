@@ -22,6 +22,7 @@ set(libdatabasecore_SRCS
     engine/dbengineparameters.cpp
     engine/dbenginebackend.cpp
     engine/dbenginesqlquery.cpp
+    engine/dbengineaccess.cpp
 
     tags/tagregion.cpp
 
