@@ -24,35 +24,32 @@
 #ifndef DATABASE_ENGINE_ACCESS_H
 #define DATABASE_ENGINE_ACCESS_H
 
-//Local includes
+// Qt includes
+
+#include <QString>
+
+// Local includes
 
 #include "digikam_export.h"
 
 namespace Digikam 
 {
 
-class DbEngineAccessStaticPriv;
-
 /** 
  * The DbEngineAccess class provides access to the database:
  * Create an instance of this class on the stack to retrieve a pointer to the database.
  */
-class DIGIKAM_DATABASE_EXPORT DbEngineAccess
+class DIGIKAM_EXPORT DbEngineAccess
 {
 public:
 
-    /// Create a default DbEngineAccess object.
-    explicit DbEngineAccess();
-    virtual ~DbEngineAccess();
-
-    /// Checks the availability of drivers
-    virtual bool checkReadyForUse();
-
-private:
-
-    static DbEngineAccessStaticPriv* d;
+    /** Checks the availability of drivers. Must be used in children class.
+     *  Return true if low level drivers are ready to use, else false with
+     *  an error string of the problem.
+     */
+    static bool checkReadyForUse(QString& error);
 };
 
 } // namespace Digikam
 
-#endif //DATABASE_ENGINE_ACCESS_H
+#endif // DATABASE_ENGINE_ACCESS_H

@@ -39,46 +39,12 @@
 #include "digikam_debug.h"
 #include "dbengineparameters.h"
 #include "dbenginebackend.h"
-#include "dbengineaccess.h"
 #include "dbengineerrorhandler.h"
 
 namespace Digikam 
 {
 
-class DbEngineAccessStaticPriv
-{
-public:
-
-    DbEngineAccessStaticPriv()
-        : backend(0),
-          initializing(false)
-    {
-    }
-
-    ~DbEngineAccessStaticPriv()
-    {
-    };
-
-public:
-
-    BdEngineBackend* backend;
-    QString          lastError;
-    bool             initializing;
-};
-
-DbEngineAccessStaticPriv* DbEngineAccess::d = 0;
-
-// -----------------------------------------------------------------------------
-
-DbEngineAccess::DbEngineAccess()
-{
-}
-
-DbEngineAccess::~DbEngineAccess()
-{
-}
-
-bool DbEngineAccess::checkReadyForUse()
+bool DbEngineAccess::checkReadyForUse(QString& error)
 {
     QStringList drivers = QSqlDatabase::drivers();
 
@@ -95,8 +61,8 @@ bool DbEngineAccess::checkReadyForUse()
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: no Sqlite3 driver available.\n"
                                            "List of QSqlDatabase drivers: " << drivers;
 
-            d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
-                                "digiKam depends on the drivers provided by the Qt::SQL module.");
+            error = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
+                         "digiKam depends on the drivers provided by the Qt::SQL module.");
             return false;
         }
     }
@@ -110,19 +76,19 @@ bool DbEngineAccess::checkReadyForUse()
             qCDebug(DIGIKAM_COREDB_LOG) << "Core database: no MySQL driver available.\n"
                                            "List of QSqlDatabase drivers: " << drivers;
 
-            d->lastError = i18n("The driver \"MYSQL\" for MySQL databases is not available.\n"
-                                "digiKam depends on the drivers provided by the Qt::SQL module.");
+            error = i18n("The driver \"MYSQL\" for MySQL databases is not available.\n"
+                         "digiKam depends on the drivers provided by the Qt::SQL module.");
             return false;
         }
     }
     else
     {
         qCDebug(DIGIKAM_COREDB_LOG) << "Database could not be found";
-        d->lastError = QLatin1String("No valid database type available.");
+        error = QLatin1String("No valid database type available.");
         return false;
     }
 
     return true;
 }
 
-} //namespace Digikam
+} // namespace Digikam

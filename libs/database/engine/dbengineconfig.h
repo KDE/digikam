@@ -37,7 +37,7 @@ class DIGIKAM_EXPORT DbEngineConfig
 {
 public:
 
-    static bool                  checkReadyForUse();
+    static bool                   checkReadyForUse();
     static QString                errorMessage();
     static DbEngineConfigSettings element(const QString& databaseType);
 };

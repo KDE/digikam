@@ -203,51 +203,8 @@ void ThumbsDbAccess::setParameters(const DbEngineParameters& parameters)
 
 bool ThumbsDbAccess::checkReadyForUse(InitializationObserver* const observer)
 {
-    DbEngineAccess dbaccess;
-    dbaccess.checkReadyForUse();
-    /*
-     * QStringList drivers = QSqlDatabase::drivers();
-
-    // Retrieving DB settings from config file
-
-    DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
-
-    // Checking for QSQLITE driver
-
-    if (internalServerParameters.SQLiteDatabaseType() == QLatin1String("QSQLITE"))
-    {
-        if (!drivers.contains(QLatin1String("QSQLITE")))
-        {
-            qCDebug(DIGIKAM_THUMBSDB_LOG) << "Core database: no Sqlite3 driver available.\n"
-                                             "List of QSqlDatabase drivers: " << drivers;
-
-            d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the Qt::SQL module.");
-            return false;
-        }
-    }
-
-    // Checking for QMYSQL driver
-
-    else if (internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
-    {
-        if (!drivers.contains(QLatin1String("QMYSQL")))
-        {
-            qCDebug(DIGIKAM_THUMBSDB_LOG) << "Core database: no MySQL driver available.\n"
-                                             "List of QSqlDatabase drivers: " << drivers;
-
-            d->lastError = i18n("The driver \"MYSQL\" for MySQL databases is not available.\n"
-                            "digiKam depends on the drivers provided by the Qt::SQL module.");
-            return false;
-        }
-    }
-    else
-    {
-        qCDebug(DIGIKAM_THUMBSDB_LOG) << "Database could not be found";
-        d->lastError = QLatin1String("No valid database type available.");
+    if (!DbEngineAccess::checkReadyForUse(d->lastError))
         return false;
-    }
-    */
 
     // create an object with private shortcut constructor
     ThumbsDbAccess access(false);
