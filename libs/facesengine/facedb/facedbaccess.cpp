@@ -246,10 +246,7 @@ bool FaceDbAccess::checkReadyForUse(InitializationObserver* const observer)
         d->lastError = QLatin1String("No valid database type available.");
         return false;
     }
-<<<<<<< HEAD
     */
-=======
->>>>>>> df4f6bdd17aab3460dd9af7a0041f50d9c2a420d
 
     // Create an object with private shortcut constructor
 
