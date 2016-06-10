@@ -38,6 +38,7 @@
 #pragma clang diagnostic ignored "-Wundef"
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wcast-align"
+#pragma clanf diagnostic ignored "-Wunused-local-typedefs"
 #endif
 
 // Boost includes
