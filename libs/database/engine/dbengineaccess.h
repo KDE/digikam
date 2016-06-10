@@ -27,35 +27,32 @@
 //Local includes
 
 #include "digikam_export.h"
-#include "dbengineparameters.h"
-#include "dbengineerrorhandler.h"
 
 namespace Digikam 
 {
 
-class InitializationObserver;
 class DbEngineAccessStaticPriv;
 
+/** 
+ * The DbEngineAccess class provides access to the database:
+ * Create an instance of this class on the stack to retrieve a pointer to the database.
+ */
 class DIGIKAM_DATABASE_EXPORT DbEngineAccess
 {
 public:
-    /** A parent class for factoring common code in 3 analogous DB files.
-     * The DbEngineAccess provides access to the database:
-     * Create an instance of this class on the stack to retrieve a pointer to the database.
-     */
-    
-    // Create a default DbEngineAccess object.
+
+    /// Create a default DbEngineAccess object.
     explicit DbEngineAccess();
     virtual ~DbEngineAccess();
-    
-    //checks the availability of drivers
+
+    /// Checks the availability of drivers
     virtual bool checkReadyForUse();
-    
+
 private:
-    
+
     static DbEngineAccessStaticPriv* d;
 };
 
-} //namespace Digikam
+} // namespace Digikam
 
 #endif //DATABASE_ENGINE_ACCESS_H

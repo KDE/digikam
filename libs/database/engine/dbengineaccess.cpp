@@ -44,22 +44,23 @@
 
 namespace Digikam 
 {
-    
+
 class DbEngineAccessStaticPriv
 {
 public:
+
     DbEngineAccessStaticPriv()
-    : backend(0),
-      initializing(false)
-      {
-      }
-      
+        : backend(0),
+          initializing(false)
+    {
+    }
+
     ~DbEngineAccessStaticPriv()
     {
     };
-    
+
 public:
-    
+
     BdEngineBackend* backend;
     QString          lastError;
     bool             initializing;
@@ -95,7 +96,7 @@ bool DbEngineAccess::checkReadyForUse()
                                            "List of QSqlDatabase drivers: " << drivers;
 
             d->lastError = i18n("The driver \"SQLITE\" for Sqlite3 databases is not available.\n"
-                            "digiKam depends on the drivers provided by the Qt::SQL module.");
+                                "digiKam depends on the drivers provided by the Qt::SQL module.");
             return false;
         }
     }
@@ -110,7 +111,7 @@ bool DbEngineAccess::checkReadyForUse()
                                            "List of QSqlDatabase drivers: " << drivers;
 
             d->lastError = i18n("The driver \"MYSQL\" for MySQL databases is not available.\n"
-                            "digiKam depends on the drivers provided by the Qt::SQL module.");
+                                "digiKam depends on the drivers provided by the Qt::SQL module.");
             return false;
         }
     }
@@ -120,9 +121,8 @@ bool DbEngineAccess::checkReadyForUse()
         d->lastError = QLatin1String("No valid database type available.");
         return false;
     }
-    
+
     return true;
-    
 }
-    
+
 } //namespace Digikam
