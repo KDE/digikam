@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef KSCAN_IFACE_H
 #define KSCAN_IFACE_H
 

@@ -41,10 +41,10 @@ int main(int ac, char *av[])
 {
     int  i, ret;
     int autoscale=0,black_subtraction=1, use_gamma=0;
-    char outfn[1024]; 
+    char outfn[1024];
 
     LibRaw RawProcessor;
-    if(ac<2) 
+    if(ac<2)
         {
           usage:
             printf(
@@ -59,7 +59,7 @@ int main(int ac, char *av[])
                 av[0]);
             return 0;
         }
-    
+
 #define P1 RawProcessor.imgdata.idata
 #define S RawProcessor.imgdata.sizes
 #define C RawProcessor.imgdata.color
@@ -96,7 +96,7 @@ int main(int ac, char *av[])
                 }
             if(!use_gamma)
                 OUT.gamm[0] = OUT.gamm[1] = 1;
-                
+
             int c;
             printf("Processing file %s\n",av[i]);
             if( (ret = RawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
@@ -126,7 +126,7 @@ int main(int ac, char *av[])
                     for(int j=0; j<S.iheight*S.iwidth; j++)
                         for(int c = 0; c< 4; c++)
                             if(max < RawProcessor.imgdata.image[j][c])
-                                max = RawProcessor.imgdata.image[j][c]; 
+                                max = RawProcessor.imgdata.image[j][c];
                     if (max >0 && max< 1<<15)
                         {
                             scale = (1<<16)/max;
@@ -168,7 +168,7 @@ int main(int ac, char *av[])
                         snprintf(outfn,sizeof(outfn),"%s-%d.%s.tiff",av[i],OUT.shot_select,lname);
                     else
                         snprintf(outfn,sizeof(outfn),"%s.%s.tiff",av[i],lname);
-                    
+
                     printf("Writing file %s\n",outfn);
                     if( LIBRAW_SUCCESS != (ret = RawProcessor.dcraw_ppm_tiff_writer(outfn)))
                         fprintf(stderr,"Cannot write %s: %s\n",outfn,libraw_strerror(ret));

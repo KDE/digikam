@@ -147,7 +147,7 @@ void FreeSpaceWidget::setMode(FreeSpaceMode mode)
     {
         d->iconPix = QIcon::fromTheme(QLatin1String("folder-pictures")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }
-    else 
+    else
     {
         d->iconPix = QIcon::fromTheme(QLatin1String("camera-photo")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
     }

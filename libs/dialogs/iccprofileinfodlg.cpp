@@ -48,8 +48,8 @@ ICCProfileInfoDlg::ICCProfileInfoDlg(QWidget* const parent, const QString& profi
     setWindowTitle(i18n("Color Profile Info - %1", profilePath));
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok, this);
-    buttons->button(QDialogButtonBox::Ok)->setDefault(true);    
-    
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
+
     ICCProfileWidget* const profileWidget = new ICCProfileWidget(this, 340, 256);
 
     if (profile.isNull())

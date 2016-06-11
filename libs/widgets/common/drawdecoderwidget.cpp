@@ -304,7 +304,7 @@ void DRawDecoderWidget::setup(int advSettings)
     demosaicingLayout->addWidget(dcrawVersion, 0, 2, 1, 1);
 
     d->dontStretchPixelsCheckBox  = new QCheckBox(i18nc("@option:check", "Do not stretch or rotate pixels"), d->demosaicingSettings);
-    d->dontStretchPixelsCheckBox->setWhatsThis(i18nc("@info:whatsthis", 
+    d->dontStretchPixelsCheckBox->setWhatsThis(i18nc("@info:whatsthis",
                                 "<title>Do not stretch or rotate pixels</title>"
                                 "<para>For Fuji Super CCD cameras, show the image tilted 45 degrees. "
                                 "For cameras with non-square pixels, do not stretch the image to "

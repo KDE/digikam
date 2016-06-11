@@ -249,7 +249,7 @@ int PanIconFrame::exec(int x, int y)
 }
 
 // -------------------------------------------------------------------
-    
+
 class PanIconWidget::Private
 {
 

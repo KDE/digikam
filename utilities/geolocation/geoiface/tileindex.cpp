@@ -29,7 +29,7 @@
 
 namespace GeoIface
 {
-    
+
 TileIndex::TileIndex()
     : m_indicesCount(0)
 {
@@ -42,7 +42,7 @@ TileIndex::TileIndex()
 TileIndex::~TileIndex()
 {
 }
-    
+
 int TileIndex::indexCount() const
 {
     return m_indicesCount;

@@ -761,7 +761,7 @@ void AdjustLevelsTool::readSettings()
     d->levelsHistogramWidget->reset();
     d->gboxSettings->histogramBox()->histogram()->reset();
 
-    ChannelType ch = (ChannelType)group.readEntry(d->configHistogramChannelEntry, 
+    ChannelType ch = (ChannelType)group.readEntry(d->configHistogramChannelEntry,
             (int)LuminosityChannel);
 
     // restore the previous channel

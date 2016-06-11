@@ -155,7 +155,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
         d->pipeline.plugRecognitionBenchmarker();
         d->pipeline.construct();
     }
-    else if ((settings.task == FaceScanSettings::DetectAndRecognize) || 
+    else if ((settings.task == FaceScanSettings::DetectAndRecognize) ||
              (settings.task == FaceScanSettings::Detect))
     {
         FacePipeline::FilterMode filterMode;

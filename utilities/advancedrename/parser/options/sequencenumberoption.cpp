@@ -75,7 +75,7 @@ SequenceNumberOption::SequenceNumberOption()
 SequenceNumberOption::~SequenceNumberOption()
 {
 }
-    
+
 void SequenceNumberOption::slotTokenTriggered(const QString& token)
 {
     Q_UNUSED(token)

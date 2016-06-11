@@ -445,7 +445,7 @@ QSize DCategorizedView::Private::contentsSize()
 
     int lastItemBottom    = cachedRectIndex(lastIndex).top() +
                             listView->spacing() +
-                            (listView->gridSize().isEmpty() ? biggestItemSize.height() 
+                            (listView->gridSize().isEmpty() ? biggestItemSize.height()
                                                             : listView->gridSize().height()) - listView->viewport()->height();
 
     return QSize(listView->viewport()->width(), lastItemBottom);

@@ -70,7 +70,7 @@ public:
      *  but paints nothing.
      *  If stayVisible is false, setVisible(false) is called,
      *  which removes the widget for layouting etc.
-     *  Default: false 
+     *  Default: false
      */
     void stayVisibleWhenAnimatedOut(bool stayVisible);
 
@@ -193,7 +193,7 @@ public:
      */
     void enableFractionMagic(const QString& prefix);
 
-    /** Resets to minimum value 
+    /** Resets to minimum value
      */
     void reset();
 

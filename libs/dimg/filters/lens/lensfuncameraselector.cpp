@@ -439,7 +439,7 @@ void LensFunCameraSelector::refreshSettingsView()
     d->make->blockSignals(true);
     d->model->blockSignals(true);
     d->lens->blockSignals(true);
-    
+
     d->makeLabel->setStyleSheet(qApp->styleSheet());
     d->modelLabel->setStyleSheet(qApp->styleSheet());
     d->lensLabel->setStyleSheet(qApp->styleSheet());
@@ -617,7 +617,7 @@ void LensFunCameraSelector::refreshSettingsView()
             d->distLabel->setStyleSheet(d->orangeStyle);
         }
     }
-    
+
     d->make->blockSignals(false);
     d->model->blockSignals(false);
     d->lens->blockSignals(false);

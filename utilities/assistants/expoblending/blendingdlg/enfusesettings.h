@@ -43,7 +43,7 @@ namespace Digikam
 class EnfuseSettings
 {
 public:
-    
+
     EnfuseSettings()
         : autoLevels(true),
           hardMask(false),

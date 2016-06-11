@@ -71,7 +71,7 @@ private:
          // Do nothing.
     };
 
-    QString filterIdentifier() const 
+    QString filterIdentifier() const
     {
         // return null object
         return QString();

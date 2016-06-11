@@ -41,7 +41,7 @@ public:
         : DBinaryIface(QLatin1String("align_image_stack"),
                        QLatin1String("0.8"),
                        QLatin1String("align_image_stack version "),
-                       1, 
+                       1,
                        QLatin1String("Hugin"),
                        QLatin1String("http://hugin.sourceforge.net/download/"),
                        QLatin1String("ExpoBlending"),

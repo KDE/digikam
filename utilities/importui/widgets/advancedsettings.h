@@ -29,7 +29,7 @@
 #include <QWidget>
 #include <QDateTime>
 
-// KDE includes 
+// KDE includes
 
 #include <kconfiggroup.h>
 

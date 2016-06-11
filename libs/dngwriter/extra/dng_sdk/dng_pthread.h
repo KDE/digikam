@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_pthread.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_pthread.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */

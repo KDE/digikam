@@ -213,7 +213,7 @@ void ImportView::setupConnections()
 
     connect(d->iconView, SIGNAL(zoomInStep()),
             this, SLOT(slotZoomIn()));
-    
+
     // -- Preview image widget Connections ------------------------
 
     connect(d->stackedView, SIGNAL(signalNextItem()),

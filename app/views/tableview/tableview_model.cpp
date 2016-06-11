@@ -901,7 +901,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
             {
                 newRowIndex = findChildSortedPosition(item, groupedItem);
             }
-            
+
             item->insertChild(newRowIndex, groupedItem);
         }
 

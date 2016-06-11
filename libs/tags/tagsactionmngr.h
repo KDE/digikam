@@ -47,7 +47,7 @@ public:
     ~TagsActionMngr();
 
     /** Register all tag actions to collections managed with keyboard shorcuts.
-     *  Because Tags shortcuts are stored in database this method must be called after 
+     *  Because Tags shortcuts are stored in database this method must be called after
      *  database initialization and after that all root window instances have been created.
      */
     void registerTagsActionCollections();

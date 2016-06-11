@@ -489,7 +489,7 @@ DeleteDialog::DeleteDialog(QWidget* const parent)
       d(new Private)
 {
     setModal(true);
-    
+
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Apply)->setDefault(true);
 
@@ -503,7 +503,7 @@ DeleteDialog::DeleteDialog(QWidget* const parent)
 
     setMinimumSize(410, 326);
     adjustSize();
-    
+
     slotShouldDelete(shouldDelete());
 
     connect(d->page->d->shouldDelete, SIGNAL(toggled(bool)),
@@ -589,7 +589,7 @@ void DeleteDialog::slotShouldDelete(bool shouldDelete)
     // This is called once from constructor, and then when the user changed the checkbox state.
     // In that case, save the user's preference.
     d->saveShouldDeleteUserPreference = true;
-    
+
     d->buttons->button(QDialogButtonBox::Apply)->setText(shouldDelete ? i18n("&Delete")
                                                                       : i18n("&Move to Trash"));
     d->buttons->button(QDialogButtonBox::Apply)->setIcon(shouldDelete ? QIcon::fromTheme(QLatin1String("edit-delete"))

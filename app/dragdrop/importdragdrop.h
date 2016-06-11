@@ -64,7 +64,7 @@ private:
         GroupAction,
         AssignTagAction
     };
-    
+
 private:
 
     QAction*   addGroupAction(QMenu* const menu);

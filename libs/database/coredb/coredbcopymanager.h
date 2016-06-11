@@ -69,7 +69,7 @@ public Q_SLOTS:
 
 private:
 
-    bool copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName, 
+    bool copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName,
                    CoreDbBackend& toDBbackend, const QString &toActionName);
 
     void handleClosing(bool isstopThread, CoreDbBackend& fromDBbackend, CoreDbBackend& toDBbackend);

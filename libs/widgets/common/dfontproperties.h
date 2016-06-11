@@ -61,7 +61,7 @@ public:
     {
         FamilyList = 0x01,
         StyleList  = 0x02,
-        SizeList   = 0x04        
+        SizeList   = 0x04
     };
 
     /**
@@ -112,7 +112,7 @@ public:
     };
 
 public:
-    
+
     /**
      * Constructs a font picker widget.
      * It normally comes up with all font families present on the system; the

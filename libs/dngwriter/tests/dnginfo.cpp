@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 
         if(argc == 1)
         {
-            qDebug() << 
+            qDebug() <<
                     "\n"
                     "dnginfo - DNG information tool\n"
                     "Usage: %s [options] dngfile\n"
@@ -126,13 +126,13 @@ int main(int argc, char** argv)
 
                     QFile originalFile(dngFileInfo.absolutePath() + QLatin1Char('/') + originalFileName);
                     qDebug() << "extracting embedded original to " << dngFileInfo.fileName();
-                    
+
                     if (!originalFile.open(QIODevice::WriteOnly))
                     {
                         qDebug() << "Cannot open file. Aborted...";
                         return 1;
                     }
-                    
+
                     QDataStream originalDataStream(&originalFile);
 
                     for (quint32 block = 0; block < forkBlocks; ++block)

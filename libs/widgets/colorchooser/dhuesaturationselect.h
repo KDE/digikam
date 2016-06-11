@@ -139,15 +139,15 @@ protected:
     void valuesFromPosition(int x, int y, int& xVal, int& yVal) const;
 
 private:
-    
+
     void setPosition(int xp, int yp);
 
 private:
-    
+
     class Private;
     friend class Private;
     Private* const d;
-    
+
     Q_DISABLE_COPY(DPointSelect)
 };
 
@@ -172,14 +172,14 @@ public:
     /**
      * Sets the chooser mode. The allowed modes are defined
      * in DColorChooserMode.
-     * 
+     *
      * @param    The chooser mode as defined in DColorChooserMode
      */
     void setChooserMode(DColorChooserMode chooserMode);
 
     /**
      * Returns the chooser mode.
-     * 
+     *
      * @return   The chooser mode (defined in DColorChooserMode)
      */
     DColorChooserMode chooserMode() const;
@@ -187,42 +187,42 @@ public:
 
     /**
      * Returns the hue value
-     * 
+     *
      * @return   The hue value (0-360)
      */
     int hue() const;
 
     /**
      * Sets the hue value (0-360)
-     * 
+     *
      * @param  hue  The hue value (0-360)
      */
     void setHue(int hue);
 
     /**
      * Returns the saturation (0-255)
-     * 
+     *
      * @return The saturation (0-255)
      */
     int saturation() const;
 
     /**
      * Sets the saturation (0-255)
-     * 
+     *
      * @param  saturation   The saturation (0-255)
      */
     void setSaturation(int saturation);
 
     /**
      * Returns the color value (also known as lumniousity, 0-255)
-     * 
+     *
      * @return  The color value (0-255)
      */
     int colorValue() const;
 
     /**
      * Sets the color value (0-255)
-     * 
+     *
      * @param  colorValue  The color value (0-255)
      */
     void setColorValue(int color);

@@ -49,7 +49,7 @@ public:
      */
 
     TagProperties();
-    /** Access the properties of the given tag 
+    /** Access the properties of the given tag
      */
     explicit TagProperties(int tagId);
 

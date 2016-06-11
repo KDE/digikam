@@ -78,7 +78,7 @@ public:
 
     void clear();
     void appendLinearIndex(const int newIndex);
-    
+
     QPoint latLonIndex(const int getLevel) const;
 
     void latLonIndex(const int getLevel, int* const latIndex, int* const lonIndex) const;

@@ -97,7 +97,7 @@ public:
 
     bool open()
     {
-        return open(QIODevice::ReadWrite); 
+        return open(QIODevice::ReadWrite);
     }
 
 protected:

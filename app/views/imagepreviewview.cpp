@@ -113,7 +113,7 @@ public:
     QAction*               peopleToggleAction;
     QAction*               addPersonAction;
     QAction*               forgetFacesAction;
-    
+
     QAction*               fullscreenAction;
 };
 
@@ -128,13 +128,13 @@ ImagePreviewView::ImagePreviewView(QWidget* const parent, Mode mode)
     d->faceGroup = new FaceGroup(this);
     d->faceGroup->setShowOnHover(true);
     d->item->setFaceGroup(d->faceGroup);
-   
+
     connect(d->item, SIGNAL(loaded()),
             this, SLOT(imageLoaded()));
 
     connect(d->item, SIGNAL(loadingFailed()),
             this, SLOT(imageLoadingFailed()));
-    
+
     connect(d->item, SIGNAL(imageChanged()),
             this, SLOT(slotUpdateFaces()));
 

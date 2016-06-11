@@ -38,7 +38,7 @@
 
 namespace Digikam
 {
-    
+
 class DCategoryDrawer::Private
 {
 public:

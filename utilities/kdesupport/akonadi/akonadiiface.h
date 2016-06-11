@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
- 
+
 #ifndef AKONADI_IFACE_H
 #define AKONADI_IFACE_H
 

@@ -367,7 +367,7 @@ void ImagePlugin_Color::slotProfileConversionTool()
 {
     ProfileConversionTool* const tool = new ProfileConversionTool(this);
 
-    connect(tool, SIGNAL(okClicked()), 
+    connect(tool, SIGNAL(okClicked()),
             this, SLOT(slotUpdateColorSpaceMenu()));
 
     loadTool(tool);

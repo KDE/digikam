@@ -273,7 +273,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 
     for (IPTCProperties::CountryCodeMap::Iterator it = map.begin(); it != map.end(); ++it)
     {
-        
+
         d->languageEdit->addItem(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()), it.key().toLower());
     }
 
@@ -287,7 +287,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
     int row = 0;
     gridLayout->addWidget(d->serviceLabel,row,0,1,2);
     row++;
-    gridLayout->addWidget(d->serviceComboBox,row,0,1,2); 
+    gridLayout->addWidget(d->serviceComboBox,row,0,1,2);
     row++;
     gridLayout->addWidget(d->languageLabel,row,0,1,1);
     gridLayout->addWidget(d->languageEdit,row,1,1,1);
@@ -396,7 +396,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
                 this, SLOT(slotRGReady(QList<RGInfo>&)));
     }
 
-    int currentServiceIndex = d->serviceComboBox->currentIndex(); 
+    int currentServiceIndex = d->serviceComboBox->currentIndex();
     d->currentBackend       = d->backendRGList[currentServiceIndex];
 }
 
@@ -431,7 +431,7 @@ void RGWidget::slotButtonRGSelected()
 {
     // get the selected images:
     const QModelIndexList selectedItems = d->selectionModel->selectedRows();
-    int currentServiceIndex             = d->serviceComboBox->currentIndex(); 
+    int currentServiceIndex             = d->serviceComboBox->currentIndex();
     d->currentBackend                   = d->backendRGList[currentServiceIndex];
     d->undoCommand                      = new GPSUndoCommand();
     d->undoCommand->setText(i18n("Image tags are changed."));
@@ -559,7 +559,7 @@ void RGWidget::slotRGReady(QList<RGInfo>& returnedRGList)
                 }
             }
 
-            QList<QList<TagData> > returnedTags = d->tagModel->addNewData(elements, resultedData);   
+            QList<QList<TagData> > returnedTags = d->tagModel->addNewData(elements, resultedData);
             GPSImageItem* const currentItem     = d->imageModel->itemFromIndex(currentImageIndex);
 
             GPSUndoCommand::UndoInfo undoInfo(currentImageIndex);
@@ -612,10 +612,10 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == d->tagTreeView)
     {
-        if ((event->type() == QEvent::ContextMenu) && d->UIEnabled) 
+        if ((event->type() == QEvent::ContextMenu) && d->UIEnabled)
         {
             QMenu* const menu             = new QMenu(d->tagTreeView);
-            const int currentServiceIndex = d->serviceComboBox->currentIndex(); 
+            const int currentServiceIndex = d->serviceComboBox->currentIndex();
             d->currentBackend             = d->backendRGList[currentServiceIndex];
             QString backendName           = d->currentBackend->backendName();
             QContextMenuEvent* const e    = static_cast<QContextMenuEvent*>(event);
@@ -625,7 +625,7 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
             if ( backendName == QString::fromLatin1("OSM"))
             {
                 menu->addAction(d->actionAddAllAddressElementsToTag);
-                menu->addSeparator(); 
+                menu->addSeparator();
                 menu->addAction(d->actionAddCountry);
                 menu->addAction(d->actionAddState);
                 menu->addAction(d->actionAddStateDistrict);
@@ -641,13 +641,13 @@ bool RGWidget::eventFilter(QObject* watched, QEvent* event)
             }
             else if ( backendName == QString::fromLatin1("Geonames"))
             {
-                menu->addAction(d->actionAddAllAddressElementsToTag); 
+                menu->addAction(d->actionAddAllAddressElementsToTag);
                 menu->addAction(d->actionAddCountry);
                 menu->addAction(d->actionAddPlace);
             }
             else if ( backendName == QString::fromLatin1("GeonamesUS"))
             {
-                menu->addAction(d->actionAddAllAddressElementsToTag); 
+                menu->addAction(d->actionAddAllAddressElementsToTag);
                 menu->addAction(d->actionAddLAU2);
                 menu->addAction(d->actionAddLAU1);
                 menu->addAction(d->actionAddCity);
@@ -679,7 +679,7 @@ void RGWidget::saveSettingsToGroup(KConfigGroup* const group)
 {
     group->writeEntry("RG Backend",   d->serviceComboBox->currentIndex());
     group->writeEntry("Language",     d->languageEdit->currentIndex());
-    group->writeEntry("Hide options", d->hideOptions); 
+    group->writeEntry("Hide options", d->hideOptions);
     group->writeEntry("XMP location", d->xmpLoc->isChecked());
 
     QList<QList<TagData> > currentSpacerList = d->tagModel->getSpacers();
@@ -864,7 +864,7 @@ void RGWidget::slotReaddNewTags()
  */
 void RGWidget::slotRegenerateNewTags()
 {
-    QModelIndex baseIndex = QModelIndex(); 
+    QModelIndex baseIndex = QModelIndex();
     d->tagModel->deleteAllSpacersOrNewTags(baseIndex, TypeNewChild);
 
     slotReaddNewTags();

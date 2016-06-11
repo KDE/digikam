@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -95,7 +95,7 @@ class CEncoder {
 		UINT32 RLESigns(UINT32 codePos, UINT32* signBits, UINT32 signLen);
 		UINT32 DecomposeBitplane(UINT32 bufferSize, UINT32 planeMask, UINT32 codePos, UINT32* sigBits, UINT32* refBits, UINT32* signBits, UINT32& signLen, UINT32& codeLen);
 		UINT8  NumberOfBitplanes();
-		bool   GetBitAtPos(UINT32 pos, UINT32 planeMask) const	{ return (abs(m_value[pos]) & planeMask) > 0; }	
+		bool   GetBitAtPos(UINT32 pos, UINT32 planeMask) const	{ return (abs(m_value[pos]) & planeMask) > 0; }
 
 		CEncoder *m_encoder;						// encoder instance
 		bool	m_sigFlagVector[BufferSize+1];		// see paper from Malvar, Fast Progressive Wavelet Coder
@@ -111,7 +111,7 @@ public:
 	/// @param postHeader [in] An already filled in PGF post-header (containing color table, user data, ...)
 	/// @param userDataPos [out] File position of user data
 	/// @param useOMP If true, then the encoder will use multi-threading based on openMP
-	CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader, 
+	CEncoder(CPGFStream* stream, PGFPreHeader preHeader, PGFHeader header, const PGFPostHeader& postHeader,
 		UINT64& userDataPos, bool useOMP); // throws IOException
 
 	/////////////////////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ public:
 	void Partition(CSubband* band, int width, int height, int startPos, int pitch);
 
 	/////////////////////////////////////////////////////////////////////
-	/// Informs the encoder about the encoded level. 
+	/// Informs the encoder about the encoded level.
 	/// @param currentLevel encoded level [0, nLevels)
 	void SetEncodedLevel(int currentLevel) { ASSERT(currentLevel >= 0); m_currentBlock->m_lastLevelIndex = m_nLevels - currentLevel - 1; m_forceWriting = true; }
 

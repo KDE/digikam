@@ -82,7 +82,7 @@ public:
 
     QWidget*        hbox;
     QLabel*         kipiLogoLabel;
-    
+
     SearchTextBar*  pluginFilter;
     ConfigWidget*   pluginsList;
 };
@@ -122,7 +122,7 @@ SetupKipi::SetupKipi(QWidget* const parent)
     labels.append(i18n("Description"));
     labels.append(i18n("Author"));
     d->pluginsList->setHeaderLabels(labels);
-    
+
     d->kipiLogoLabel = new QLabel(panel);
     d->kipiLogoLabel->setFocusPolicy(Qt::NoFocus);
     d->kipiLogoLabel->setTextFormat(Qt::RichText);
@@ -165,18 +165,18 @@ SetupKipi::SetupKipi(QWidget* const parent)
     connect(d->checkAllBtn, SIGNAL(clicked()),
             this, SLOT(slotCheckAll()));
 
-    connect(d->clearBtn, SIGNAL(clicked()), 
+    connect(d->clearBtn, SIGNAL(clicked()),
             this, SLOT(slotClearList()));
 
-    connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*, int)), 
+    connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotItemClicked()));
 
     connect(d->pluginsList, SIGNAL(signalSearchResult(int)),
             this, SLOT(slotSearchResult(int)));
-    
+
     connect(d->pluginFilter, SIGNAL(signalSearchTextSettings(SearchTextSettings)),
             this, SLOT(slotSearchTextChanged(SearchTextSettings)));
-    
+
     // --------------------------------------------------------
 
     updateInfo();

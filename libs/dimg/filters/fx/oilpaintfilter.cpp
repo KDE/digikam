@@ -150,7 +150,7 @@ void OilPaintFilter::filterImage()
     }
 
     foreach(QFuture<void> t, tasks)
-        t.waitForFinished();    
+        t.waitForFinished();
 }
 
 /** Function to determine the most frequent color in a matrix

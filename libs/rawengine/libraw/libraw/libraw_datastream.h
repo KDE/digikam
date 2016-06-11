@@ -116,12 +116,12 @@ class DllDef  LibRaw_file_datastream: public LibRaw_abstract_datastream
     virtual INT64       tell();
     virtual INT64	size() { return _fsize;}
     virtual int         get_char()
-        { 
+        {
             if(substream) return substream->get_char();
-            return f->sbumpc();  
+            return f->sbumpc();
         }
-    virtual char*       gets(char *str, int sz); 
-    virtual int         scanf_one(const char *fmt, void*val); 
+    virtual char*       gets(char *str, int sz);
+    virtual int         scanf_one(const char *fmt, void*val);
     virtual const char* fname();
 #if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
     virtual const wchar_t* wfname();
@@ -148,7 +148,7 @@ class DllDef  LibRaw_buffer_datastream : public LibRaw_abstract_datastream
     virtual char*       gets(char *s, int sz);
     virtual int         scanf_one(const char *fmt, void* val);
     virtual int         get_char()
-    { 
+    {
         if(substream) return substream->get_char();
         if(streampos>=streamsize)
             return -1;
@@ -172,7 +172,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual int         jpeg_src(void *jpegdata);
     virtual void        *make_jas_stream();
 
-    virtual int         read(void * ptr,size_t size, size_t nmemb); 
+    virtual int         read(void * ptr,size_t size, size_t nmemb);
     virtual int         eof();
     virtual int         seek(INT64 o, int whence);
     virtual INT64       tell();
@@ -187,7 +187,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual int         subfile_open(const char *fn);
     virtual void        subfile_close();
     virtual int         get_char()
-    { 
+    {
 #if !defined(_WIN32) && !defined(__MINGW32__)
         return substream?substream->get_char():getc_unlocked(f);
 #else
@@ -205,7 +205,7 @@ protected:
 };
 
 #ifdef WIN32
-class DllDef  LibRaw_windows_datastream : public LibRaw_buffer_datastream 
+class DllDef  LibRaw_windows_datastream : public LibRaw_buffer_datastream
 {
 public:
     /* ctor: high level constructor opens a file by name */

@@ -155,7 +155,7 @@ ImportFilters::ImportFilters(QWidget* const parent)
     connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             this, SLOT(reject()));
 
-    connect(d->mimeCheckBox, SIGNAL(clicked(bool)), 
+    connect(d->mimeCheckBox, SIGNAL(clicked(bool)),
             d->mimeButton, SLOT(setEnabled(bool)));
 
     connect(d->mimeButton, SIGNAL(clicked(bool)),

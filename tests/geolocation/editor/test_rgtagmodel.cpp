@@ -164,17 +164,17 @@ void TestRGTagModel::testModel1()
     Digikam::RGTagModel* const tagModel = new Digikam::RGTagModel(treeModel, this);
     // TODO: make sure the ModelTest does not find any errors, currently it does find errors ;-)
     //new ModelTest(tagModel, this);
-    
+
     // simple tests
     Q_ASSERT(tagModel->rowCount()==treeModel->rowCount());
 
     const QPersistentModelIndex tagItem1Index = tagModel->fromSourceIndex(treeItem1Index);
     Q_ASSERT(tagItem1Index.isValid());
     qDebug()<<tagItem1Index;
-    
+
     Q_ASSERT(tagModel->rowCount(tagItem1Index)==treeModel->rowCount(treeItem1Index));
-    
-    
+
+
     // make sure the tagModel handles items inserted after it was created
     // - both top level
     SimpleTreeModel::Item* const treeItem2 = treeModel->addItem();
@@ -187,10 +187,10 @@ void TestRGTagModel::testModel1()
     Q_ASSERT(tagItem2Index.isValid());
 
     Q_ASSERT(tagModel->rowCount(tagItem2Index)==treeModel->rowCount(treeItem2Index));
- 
+
     const QPersistentModelIndex tagItem11Index = tagModel->fromSourceIndex(treeItem11Index);
     Q_ASSERT(tagItem11Index.isValid());
-    
+
     QPersistentModelIndex treeItem21Index = treeModel->itemToIndex(treeItem21);
     const QPersistentModelIndex tagItem21Index = tagModel->fromSourceIndex(treeItem21Index);
     Q_ASSERT(tagItem21Index.isValid());
@@ -203,15 +203,15 @@ void TestRGTagModel::testModel1()
     // descends level 1 row 0
     const QModelIndex ti11 = tagModel->index(0, 0, ti1);
     Q_ASSERT(ti11.isValid());
-    Q_ASSERT(ti11 == tagItem11Index); 
+    Q_ASSERT(ti11 == tagItem11Index);
 
     qDebug()<<"----------------------_";
 
     // descends level 0 row 1
     const QModelIndex ti2 = tagModel->index(1, 0);
     Q_ASSERT(ti2.isValid());
-    Q_ASSERT(ti2 == tagItem2Index); 
-    
+    Q_ASSERT(ti2 == tagItem2Index);
+
     // descends level 1 row 0
     QModelIndex ti21 = tagModel->index(0, 0, ti2);
     Q_ASSERT(ti21.isValid());
@@ -228,8 +228,8 @@ void TestRGTagModel::testModel1()
     //checks parent of tagItem11
     const QModelIndex parent_ti11 = tagModel->parent(ti11);
     Q_ASSERT(parent_ti11 == tagItem1Index);
-   
-    //checks parent of tagItem2 
+
+    //checks parent of tagItem2
     const QModelIndex parent_ti2 = tagModel->parent(ti2);
     Q_ASSERT(!parent_ti2.isValid());
 
@@ -246,7 +246,7 @@ void TestRGTagModel::testModelSpacerTags()
     SimpleTreeModel::Item* const treeItem1 = treeModel->addItem();
     QPersistentModelIndex treeItem1Index = treeModel->itemToIndex(treeItem1);
     treeItem1->data = QLatin1String("oldChildren");
- 
+
     SimpleTreeModel::Item* const treeItem11 = treeModel->addItem(treeItem1);
     QPersistentModelIndex treeItem11Index = treeModel->itemToIndex(treeItem11);
 
@@ -264,16 +264,16 @@ void TestRGTagModel::testModelSpacerTags()
     tagModel->addNewTag(QModelIndex(), QLatin1String("New Tag"));
 
     qDebug()<<"Added the spacers.";
- 
-    const QModelIndex index11 = tagModel->index(0,0);  
+
+    const QModelIndex index11 = tagModel->index(0,0);
     const QModelIndex index12 = tagModel->index(1,0);
     const QModelIndex index13 = tagModel->index(2,0);
-    
+
     qDebug()<<tagModel->data(index11, Qt::DisplayRole);
     qDebug()<<tagModel->data(index12, Qt::DisplayRole);
     qDebug()<<tagModel->data(index13, Qt::DisplayRole);
 //  qDebug()<<tagModel->data(2,0,QModelIndex());
-   
+
 /*
     qDebug()<<"VERIFY IF NEW TAG EXISTS:";
     QModelIndex ti211Spacer = tagModel->index(0,0,ti21);

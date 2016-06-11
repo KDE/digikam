@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-06-11 10:56:17 +0200 (Mo, 11 Jun 2007) $
  * $Revision: 299 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -69,7 +69,7 @@
 #define PGF32				4					///< 32 bit values are used -> allows at maximum 31 bits, otherwise 16 bit values are used -> allows at maximum 15 bits
 #define PGFROI				8					///< supports Regions Of Interest
 #define Version5			16					///< new coding scheme since major version 5
-#define Version6			32					///< hSize in PGFPreHeader uses 32 bits instead of 16 bits 
+#define Version6			32					///< hSize in PGFPreHeader uses 32 bits instead of 16 bits
 #define Version7			64					///< Codec major and minor version number stored in PGFHeader
 // version numbers
 #ifdef __PGF32SUPPORT__
@@ -128,7 +128,7 @@ struct PGFPreHeader : PGFMagicVersion {
 /////////////////////////////////////////////////////////////////////
 /// Version number since major version 7
 /// @author C. Stamm
-/// @brief version number stored in header since major version 7 
+/// @brief version number stored in header since major version 7
 struct PGFVersionNumber {
 	PGFVersionNumber(UINT8 _major, UINT8 _year, UINT8 _week)
 #ifdef PGF_USE_BIG_ENDIAN
@@ -186,7 +186,7 @@ struct PGFPostHeader {
 /////////////////////////////////////////////////////////////////////
 /// ROI block header is used with ROI coding scheme. It contains block size and tile end flag
 /// @author C. Stamm
-/// @brief Block header used with ROI coding scheme 
+/// @brief Block header used with ROI coding scheme
 union ROIBlockHeader {
 	/// Constructor
 	/// @param v Buffer size
@@ -195,7 +195,7 @@ union ROIBlockHeader {
 	/// @param size Buffer size
 	/// @param end 0/1 Flag; 1: last part of a tile
 	ROIBlockHeader(UINT32 size, bool end)	{ ASSERT(size < (1 << RLblockSizeLen)); rbh.bufferSize = size; rbh.tileEnd = end; }
-	
+
 	UINT16 val; ///< unstructured union value
 	/// @brief Named ROI block header (part of the union)
 	struct RBH {
@@ -213,7 +213,7 @@ union ROIBlockHeader {
 #pragma pack()
 
 /////////////////////////////////////////////////////////////////////
-/// PGF I/O exception 
+/// PGF I/O exception
 /// @author C. Stamm
 /// @brief PGF exception
 struct IOException {
@@ -259,7 +259,7 @@ struct PGFRect {
 	UINT32 Width() const					{ return right - left; }
 	/// @return Rectangle height
 	UINT32 Height() const					{ return bottom - top; }
-	
+
 	/// Test if point (x,y) is inside this rectangle (inclusive top-left edges, exclusive bottom-right edges)
 	/// @param x Point coordinate x
 	/// @param y Point coordinate y

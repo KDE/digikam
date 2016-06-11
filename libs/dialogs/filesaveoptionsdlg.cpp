@@ -43,7 +43,7 @@ FileSaveOptionsDlg::FileSaveOptionsDlg(QWidget* const parent, FileSaveOptionsBox
     setWindowTitle(i18n("Settings for Saving Image File"));
 
     QDialogButtonBox* const buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-    buttons->button(QDialogButtonBox::Ok)->setDefault(true);    
+    buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(options);

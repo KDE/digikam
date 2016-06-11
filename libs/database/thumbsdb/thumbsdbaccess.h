@@ -62,7 +62,7 @@ public:
     static DbEngineParameters parameters();
 
 public:
-    
+
     static void initDbEngineErrorHandler(DbEngineErrorHandler* const errorhandler);
     static void setParameters(const DbEngineParameters& parameters);
     static bool checkReadyForUse(InitializationObserver* const observer);

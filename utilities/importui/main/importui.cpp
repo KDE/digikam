@@ -1243,7 +1243,7 @@ void ImportUI::slotUpload()
 
     QList<QUrl> urls = ImageDialog::getImageURLs(this,
                                                  QUrl::fromLocalFile(CollectionManager::instance()->oneAlbumRootPath()),
-                                                 i18nc("@title:window", "Select Image to Upload"));    
+                                                 i18nc("@title:window", "Select Image to Upload"));
 
     if (!urls.isEmpty())
     {
@@ -1334,7 +1334,7 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
             QString msg(i18nc("@info", "<qt>Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<br>"
                              "Please enter a new filename (without extension):</qt>",
                              cameraFolder, fi.fileName()));
-            uploadInfo.name = QInputDialog::getText(this, 
+            uploadInfo.name = QInputDialog::getText(this,
                                                     i18nc("@title:window", "File already exists"),
                                                     msg,
                                                     QLineEdit::Normal,
@@ -1400,7 +1400,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     if (d->albumCustomizer->folderDateFormat() == AlbumCustomizer::CustomDateFormat &&
         !d->albumCustomizer->customDateFormatIsValid())
     {
-        QMessageBox::information(this, qApp->applicationName(), 
+        QMessageBox::information(this, qApp->applicationName(),
                                  i18nc("@info", "Your custom target album date format is not valid. Please check your settings..."));
         return;
     }
@@ -1438,7 +1438,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
 
                 if (!cl.isAvailable() || cl.isNull())
                 {
-                    QMessageBox::information(this,qApp->applicationName(), 
+                    QMessageBox::information(this,qApp->applicationName(),
                                              i18nc("@info", "Collection which host your default target album set to process "
                                                    "download from camera device is not available. Please select another one from "
                                                    "camera configuration dialog."));
@@ -1447,7 +1447,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
             else
             {
-                QMessageBox::information(this, qApp->applicationName(), 
+                QMessageBox::information(this, qApp->applicationName(),
                                          i18nc("@info", "Your default target album set to process download "
                                                "from camera device is not available. Please select another one from "
                                                "camera configuration dialog."));
@@ -1974,7 +1974,7 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
                           "Are you sure?",
                           deleteList.count()));
 
-    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl, 
+    if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
                                                     this,
                                                     i18n("Warning"),
                                                     warnMsg,
@@ -2159,7 +2159,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
 bool ImportUI::createSubAlbums(QUrl& downloadUrl, const CamItemInfo& info)
 {
     bool success = true;
- 
+
     if (d->albumCustomizer->autoAlbumDateEnabled())
     {
         success &= createDateBasedSubAlbum(downloadUrl, info);

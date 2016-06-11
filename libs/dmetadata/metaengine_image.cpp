@@ -701,9 +701,9 @@ QDateTime MetaEngine::getImageDateTime() const
                     }
                 }
             }
-            
+
             // Video files support
-            
+
             {
                 Exiv2::XmpKey key("Xmp.video.DateTimeOriginal");
                 Exiv2::XmpData::iterator it = xmpData.findKey(key);
@@ -748,7 +748,7 @@ QDateTime MetaEngine::getImageDateTime() const
                         return dateTime;
                     }
                 }
-            }            
+            }
             {
                 Exiv2::XmpKey key("Xmp.video.DateTimeDigitized");
                 Exiv2::XmpData::iterator it = xmpData.findKey(key);
@@ -763,7 +763,7 @@ QDateTime MetaEngine::getImageDateTime() const
                         return dateTime;
                     }
                 }
-            }  
+            }
         }
 
 #endif // _XMP_SUPPORT_
@@ -967,7 +967,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
                         return dateTime;
                     }
                 }
-            }           
+            }
             {
                 Exiv2::XmpKey key("Xmp.video.DateTimeDigitized");
                 Exiv2::XmpData::iterator it = xmpData.findKey(key);
@@ -982,11 +982,11 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
                         return dateTime;
                     }
                 }
-            }  
+            }
         }
-        
+
 #endif // _XMP_SUPPORT_
-        
+
         // In third, trying to get Date & time from Iptc tags.
 
         if (!d->iptcMetadata().empty())

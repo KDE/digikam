@@ -2222,7 +2222,7 @@ void DigikamView::slotImageChangeFailed(const QString& message, const QStringLis
         return;
     }
 
-    DMessageBox::showInformationList(QMessageBox::Critical, 
+    DMessageBox::showInformationList(QMessageBox::Critical,
                                      qApp->activeWindow(),
                                      qApp->applicationName(),
                                      message,

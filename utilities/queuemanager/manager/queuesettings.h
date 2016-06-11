@@ -76,7 +76,7 @@ public:
 public:
 
     bool                useMultiCoreCPU;
-    
+
     /// Setting managed through Metadata control panel.
     bool                exifSetOrientation;
 

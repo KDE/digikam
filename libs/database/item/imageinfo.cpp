@@ -343,7 +343,7 @@ ImageInfo ImageInfo::fromLocationAlbumAndName(int locationId, const QString& alb
     }
 
     ImageInfo info;
-    
+
     // Cached ?
     info.m_data = ImageInfoStatic::cache()->infoForPath(locationId, album, name);
 

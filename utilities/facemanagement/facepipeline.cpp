@@ -566,7 +566,7 @@ QList<QImage> FaceImageRetriever::getThumbnails(const QString& filePath, const Q
 
     QList<QImage> images = catcher->waitForThumbnails();
     thumbnailCatcher()->setActive(false);
-    
+
     return images;
 }
 

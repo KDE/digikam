@@ -136,7 +136,7 @@ bool GroupIndicatorOverlay::checkIndex(const QModelIndex& index) const
         }
 
         m_widget->setToolTip(tip);
-        
+
         return true;
     }
 

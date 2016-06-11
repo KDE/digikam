@@ -32,10 +32,10 @@
 
 #include "digikam_export.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
-/** 
+/**
  * The DbEngineAccess class provides access to the database:
  * Create an instance of this class on the stack to retrieve a pointer to the database.
  */

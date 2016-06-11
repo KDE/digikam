@@ -598,7 +598,7 @@ void ShowfotoNormalDelegate::updateRects()
     int y                                      = d->margin;
     d->pixmapRect                              = QRect(d->margin, y, d->contentWidth, d->contentWidth);
     y                                          = d->pixmapRect.bottom();
-    d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);        
+    d->imageInformationRect                    = QRect(d->margin, y, d->contentWidth, 0);
 
     d->imageInformationRect.setBottom(y);
 

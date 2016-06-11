@@ -69,7 +69,7 @@ public:
     virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
     virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);
 
-    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers, 
+    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
                                 const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
 
     void addUngroupedModelHelper(ModelHelper* const newModelHelper);

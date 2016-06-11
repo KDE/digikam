@@ -52,7 +52,7 @@ namespace Digikam
 
 /**
  * Frame with popup menu behavior to host PanIconWidget.
- */    
+ */
 class DIGIKAM_EXPORT PanIconFrame : public QFrame
 {
     Q_OBJECT

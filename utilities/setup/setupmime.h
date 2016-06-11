@@ -63,4 +63,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUPMIME_H 
+#endif // SETUPMIME_H

@@ -188,6 +188,6 @@ private:
     Private* const d;
 };
 
-} // namespace Showfoto 
+} // namespace Showfoto
 
 #endif // SHOWFOTOCATEGORIZEDVIEW_H

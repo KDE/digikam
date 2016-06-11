@@ -72,7 +72,7 @@ public:
     {
     };
 
-    /** Read values from QColor, convert to sixteenBit of sixteenBit is true 
+    /** Read values from QColor, convert to sixteenBit of sixteenBit is true
      */
     explicit DColor(const QColor& color, bool sixteenBit=false);
 

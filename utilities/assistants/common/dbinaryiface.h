@@ -49,13 +49,13 @@ public:
                   const QString& url,
                   const QString& pluginName,
                   const QStringList& args = QStringList());
-    DBinaryIface(const QString& binaryName, 
-                  const QString& minimalVersion, 
+    DBinaryIface(const QString& binaryName,
+                  const QString& minimalVersion,
                   const QString& header,
-                  const int headerLine, 
-                  const QString& projectName, 
+                  const int headerLine,
+                  const QString& projectName,
                   const QString& url,
-                  const QString& pluginName, 
+                  const QString& pluginName,
                   const QStringList& args = QStringList());
     virtual ~DBinaryIface();
 

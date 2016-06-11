@@ -78,8 +78,8 @@ public:
                              DImg* const img = 0, const DImageHistory& history = DImageHistory());
 
     virtual void itemChanged(const ImageInfoList& infos);
-    
-    
+
+
 #ifdef HAVE_MARBLE
 
     static bool GPSImageInfofromImageInfo(const ImageInfo&, GPSImageInfo* const);

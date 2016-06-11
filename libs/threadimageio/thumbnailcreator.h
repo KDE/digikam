@@ -163,7 +163,7 @@ public:
      */
     void deleteThumbnailsFromDisk(const QString& filePath) const;
 
-    /** Creates a default ThumbnailInfo for the given path using QFileInfo only 
+    /** Creates a default ThumbnailInfo for the given path using QFileInfo only
      */
     static ThumbnailInfo fileThumbnailInfo(const QString& path);
 

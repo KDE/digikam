@@ -142,7 +142,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
                              << QString::fromLatin1("dcr")
                              << QString::fromLatin1("erf")
                              << QString::fromLatin1("k25")
-                             << QString::fromLatin1("kdc") 
+                             << QString::fromLatin1("kdc")
                              << QString::fromLatin1("mos")
                              << QString::fromLatin1("raw")
                              << QString::fromLatin1("sr2")
@@ -485,9 +485,9 @@ bool MetaEngine::Private::isUtf8(const char* const buffer) const
 
     static const unsigned char text_chars[256] =
     {
-            //                  BEL BS HT LF    FF CR    
+            //                  BEL BS HT LF    FF CR
             F, F, F, F, F, F, F, T, T, T, T, F, T, T, F, F,  // 0x0X
-            //                              ESC          
+            //                              ESC
             F, F, F, F, F, F, F, F, F, F, F, T, F, F, F, F,  // 0x1X
             T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x2X
             T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x3X
@@ -495,7 +495,7 @@ bool MetaEngine::Private::isUtf8(const char* const buffer) const
             T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x5X
             T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x6X
             T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, F,  // 0x7X
-            //            NEL                            
+            //            NEL
             X, X, X, X, X, T, X, X, X, X, X, X, X, X, X, X,  // 0x8X
             X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,  // 0x9X
             I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xaX
@@ -569,7 +569,7 @@ bool MetaEngine::Private::isUtf8(const char* const buffer) const
                 if ((c & 0x80) == 0 || (c & 0x40))
                     return false;
             }
-            
+
             gotone = true;
         }
     }

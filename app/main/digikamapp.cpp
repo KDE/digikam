@@ -178,7 +178,7 @@ DigikamApp::DigikamApp()
 
     new DigikamAdaptor(this);
     QDBusConnection::sessionBus().registerObject(QLatin1String("/Digikam"), this);
-    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam-") + 
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam-") +
                                                   QString::number(QCoreApplication::instance()->applicationPid()));
 
     // collection scan
@@ -670,8 +670,8 @@ void DigikamApp::setupAccelerators()
     ac->addAction(QLatin1String("last_image"), lastImageAction);
     ac->setDefaultShortcuts(lastImageAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
     connect(lastImageAction, SIGNAL(triggered()), this, SIGNAL(signalLastItem()));
-    
-    d->cutItemsAction = new QAction(i18n("Cu&t"), this); 
+
+    d->cutItemsAction = new QAction(i18n("Cu&t"), this);
     d->cutItemsAction->setIcon(QIcon::fromTheme(QLatin1String("edit-cut")));
     d->cutItemsAction->setWhatsThis(i18n("Cut selection to clipboard"));
     ac->addAction(QLatin1String("cut_album_selection"), d->cutItemsAction);
@@ -1635,7 +1635,7 @@ void DigikamApp::slotSelectionChanged(int selectionCount)
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(selectionCount > 0);
 #endif
-    
+
     if (selectionCount > 0)
     {
         d->imageWriteMetadataAction->setText(i18np("Write Metadata to Image",
@@ -2055,7 +2055,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "fillSolidMenus: Found Camera "
                                  << QString::fromUtf8("%1 %1").arg(cameraDevice.vendor()).arg(cameraDevice.product())
-                                 << " protocols " << camera->supportedProtocols() 
+                                 << " protocols " << camera->supportedProtocols()
                                  << " drivers " << camera->supportedDrivers(QLatin1String("ptp"));
 
     // We handle gphoto2 cameras in this loop
@@ -2711,7 +2711,7 @@ void DigikamApp::slotImportAddFolders()
     {
         t->setSelectionMode(QAbstractItemView::MultiSelection);
     }
-    
+
     if (dlg->exec() != QDialog::Accepted)
     {
         delete dlg;
@@ -3018,7 +3018,7 @@ void DigikamApp::setupImageTransformActions()
 
     d->imageFlipActionMenu = new QMenu(i18n("Flip"), this);
     d->imageFlipActionMenu->setIcon(QIcon::fromTheme(QLatin1String("flip-horizontal")));
-    
+
     QAction* const hori = ac->addAction(QLatin1String("flip_horizontal"));
     hori->setText(i18n("Horizontally"));
     ac->setDefaultShortcut(hori, Qt::CTRL+Qt::Key_Asterisk);

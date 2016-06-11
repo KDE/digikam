@@ -507,7 +507,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             }
 
             // TODO would it be okay to pass this to the ImportImageModel and let it filter it for us?
-            for (CamItemInfoList::iterator it = itemsList.begin() ; it != itemsList.end() ; ) 
+            for (CamItemInfoList::iterator it = itemsList.begin() ; it != itemsList.end() ; )
             {
                 CamItemInfo &info = (*it);
 

@@ -230,7 +230,7 @@ void XMPEditWidget::slotItemChanged()
                     "<i>Use this panel to record workflow information</i></qt>")));
     d->page_properties->setHeader(d->dlg->currentItemTitleHeader(i18n("<qt>Status Properties<br/>"
                       "<i>Use this panel to record workflow properties</i></qt>")));
-    
+
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 

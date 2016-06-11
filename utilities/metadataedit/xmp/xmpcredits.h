@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // XMP_CREDITS_H 
+#endif // XMP_CREDITS_H

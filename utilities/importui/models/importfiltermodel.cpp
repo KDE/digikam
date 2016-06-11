@@ -511,7 +511,7 @@ QString ImportFilterModel::categoryIdentifier(const CamItemInfo& info) const
 bool ImportFilterModel::filterAcceptsRow(int source_row, const QModelIndex& source_parent) const
 {
     Q_D(const ImportFilterModel);
-    
+
     if(!d->filter) {
         return true;
     }

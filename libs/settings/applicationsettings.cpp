@@ -86,7 +86,7 @@ QString ApplicationSettings::generalConfigGroupName() const
 {
     return d->configGroupGeneral;
 }
-    
+
 KConfigGroup ApplicationSettings::generalConfigGroup() const
 {
     return d->config->group(generalConfigGroupName());

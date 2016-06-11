@@ -153,7 +153,7 @@ int main(int argc, char** argv)
     }
 
     int elapsed = time.elapsed();
-    qDebug() << "Preprocessing took " << elapsed << " for " << images.size() << " , " 
+    qDebug() << "Preprocessing took " << elapsed << " for " << images.size() << " , "
                           << ((float)elapsed/images.size()) << " per image";
 
     display.show();

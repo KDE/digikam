@@ -314,7 +314,7 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
         d->specialOptsCombo->addItem(QLatin1String("COMMENT_XMP"),         NamespaceEntry::COMMENT_XMP);
         d->specialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"),        NamespaceEntry::COMMENT_JPEG);
     }
-    
+
     if (entry.nsType == NamespaceEntry::TAGS)
     {
         d->specialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
@@ -340,14 +340,14 @@ void NamespaceEditDlg::setupTagGui(NamespaceEntry& entry)
         d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_XMP"),         NamespaceEntry::COMMENT_XMP);
         d->altSpecialOptsCombo->addItem(QLatin1String("COMMENT_JPEG"),        NamespaceEntry::COMMENT_JPEG);
     }
-    
+
     if (entry.nsType == NamespaceEntry::TAGS)
     {
         d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPBAG"), NamespaceEntry::TAG_XMPBAG);
         d->altSpecialOptsCombo->addItem(QLatin1String("TAG_XMPSEQ"), NamespaceEntry::TAG_XMPSEQ);
         d->altSpecialOptsCombo->addItem(QLatin1String("TAG_ACDSEE"), NamespaceEntry::TAG_ACDSEE);
     }
-    
+
     // --------------------------------------------------------
 
     d->separatorLabel     = new QLabel(d->page);
@@ -505,7 +505,7 @@ void NamespaceEditDlg::setType(NamespaceEntry::NamespaceType type)
             d->nameSpaceSeparator->hide();
             d->ratingMappings->hide();
             break;
-        
+
         default:
             break;
     }
@@ -548,13 +548,13 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
     switch (d->subspaceCombo->currentData().toInt())
     {
         case NamespaceEntry::EXIF:
-            
+
             if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
             {
                 errMsg = i18n("EXIF namespace name must start with \"Exif\".");
                 return false;
             }
-            
+
             if (!d->alternativeName->text().isEmpty() &&
                 d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Exif"))
             {
@@ -565,13 +565,13 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
             break;
 
         case NamespaceEntry::IPTC:
-            
+
             if (d->namespaceName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
             {
                 errMsg = i18n("IPTC namespace name must start with \"Iptc\".");
                 return false;
             }
-            
+
             if(!d->alternativeName->text().isEmpty() &&
                d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Iptc"))
             {
@@ -588,7 +588,7 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
                 errMsg = i18n("XMP namespace name must start with \"Xmp\".");
                 return false;
             }
-            
+
             if (!d->alternativeName->text().isEmpty() &&
                 d->alternativeName->text().split(QLatin1String(".")).first() != QLatin1String("Xmp"))
             {
@@ -611,7 +611,7 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
                 errMsg = i18n("Tag Path separator is required");
                 return false;
             }
-            
+
             if (d->nameSpaceSeparator->text().size() > 1)
             {
                 errMsg = i18n("Only one character is now supported as tag path separator");
@@ -625,7 +625,7 @@ bool NamespaceEditDlg::validifyCheck(QString& errMsg)
 
         case NamespaceEntry::COMMENT:
             break;
-            
+
         default:
             break;
     }

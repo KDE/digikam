@@ -88,7 +88,7 @@ void DigikamImageView::Private::updateOverlays()
             overlaysActive = true;
         }
     }
-    
+
     if (fullscreenActive)
     {
         if (!settings->getIconShowFullscreen())

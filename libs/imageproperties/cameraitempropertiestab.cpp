@@ -303,7 +303,7 @@ CameraItemPropertiesTab::CameraItemPropertiesTab(QWidget* const parent)
     addItem(w2, QIcon::fromTheme(QLatin1String("camera-photo")),
             i18n("Photograph Properties"), QLatin1String("PhotographProperties"), true);
 
-    // -------------------------------------------------- 
+    // --------------------------------------------------
 
     QWidget* const w3             = new QWidget(this);
     QGridLayout* const glay3      = new QGridLayout(w3);

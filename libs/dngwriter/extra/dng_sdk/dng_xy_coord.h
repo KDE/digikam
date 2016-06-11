@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_xy_coord.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_xy_coord.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -25,32 +25,32 @@
 
 class dng_xy_coord
 	{
-	
+
 	public:
-	
+
 		real64 x;
 		real64 y;
-		
+
 	public:
-	
+
 		dng_xy_coord ()
 			:	x (0.0)
 			,	y (0.0)
 			{
 			}
-			
+
 		dng_xy_coord (real64 xx, real64 yy)
 			:	x (xx)
 			,	y (yy)
 			{
 			}
-			
+
 		void Clear ()
 			{
 			x = 0.0;
 			y = 0.0;
 			}
-			
+
 		bool IsValid () const
 			{
 			return x > 0.0 &&
@@ -80,55 +80,55 @@ class dng_xy_coord
 inline dng_xy_coord operator+ (const dng_xy_coord &A,
 							   const dng_xy_coord &B)
 	{
-	
+
 	dng_xy_coord C;
-	
+
 	C.x = A.x + B.x;
 	C.y = A.y + B.y;
-	
+
 	return C;
-	
+
 	}
-			
+
 /*****************************************************************************/
 
 inline dng_xy_coord operator- (const dng_xy_coord &A,
 							   const dng_xy_coord &B)
 	{
-	
+
 	dng_xy_coord C;
-	
+
 	C.x = A.x - B.x;
 	C.y = A.y - B.y;
-	
+
 	return C;
-	
+
 	}
-			
+
 /*****************************************************************************/
 
 inline dng_xy_coord operator* (real64 scale,
 							   const dng_xy_coord &A)
 	{
-	
+
 	dng_xy_coord B;
-	
+
 	B.x = A.x * scale;
 	B.y = A.y * scale;
-	
+
 	return B;
-	
+
 	}
-			
+
 /******************************************************************************/
 
 inline real64 operator* (const dng_xy_coord &A,
 						 const dng_xy_coord &B)
 	{
-	
+
 	return A.x * B.x +
 		   A.y * B.y;
-	
+
 	}
 
 /*****************************************************************************/
@@ -179,5 +179,5 @@ dng_vector_3 PCStoXYZ ();
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

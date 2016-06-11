@@ -427,7 +427,7 @@ void ScanController::completeCollectionScan(SplashScreen* const splash, bool def
 {
     d->splash = splash;
     createProgressDialog();
-    
+
     // we only need to count the files in advance
     // if we show a progress percentage in progress dialog
     completeCollectionScanCore(!d->splash || !CollectionScanner::databaseInitialScanDone(), defer);
@@ -446,7 +446,7 @@ void ScanController::completeCollectionScanInBackground(bool defer)
 void ScanController::completeCollectionScanCore(bool needTotalFiles, bool defer)
 {
     d->needTotalFiles = needTotalFiles;
-    
+
     {
         QMutexLocker lock(&d->mutex);
         d->needsCompleteScan = true;
@@ -456,7 +456,7 @@ void ScanController::completeCollectionScanCore(bool needTotalFiles, bool defer)
 
     // loop is quit by signal
     d->eventLoop->exec();
-    
+
     d->needTotalFiles = false;
 }
 

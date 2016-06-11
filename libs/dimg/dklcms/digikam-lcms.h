@@ -50,7 +50,7 @@
 
 #define LCMS_DESC_MAX                    512
 
-#if !defined FAR 
+#if !defined FAR
 #  define FAR
 #endif
 

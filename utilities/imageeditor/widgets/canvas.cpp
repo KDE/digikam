@@ -473,7 +473,7 @@ void Canvas::slotSelected()
     }
 
     d->core->setSelectedArea(sel);
-    emit signalSelectionChanged(sel);    
+    emit signalSelectionChanged(sel);
 }
 
 void Canvas::slotSelectionMoved()

@@ -1,7 +1,7 @@
 /* -*- C++ -*-
  * File: libraw_version.h
  * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
- * Created: Mon Sept  8, 2008 
+ * Created: Mon Sept  8, 2008
  *
  * LibRaw C++ interface
  *

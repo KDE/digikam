@@ -99,7 +99,7 @@ private:
     };
 
 private:
-    
+
     void connectButtons();
     /**
      * @brief setModelData for one model

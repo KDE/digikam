@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -40,7 +40,7 @@ class CreatePreviewTask : public PanoTask
 {
 public:
 
-    CreatePreviewTask(const QString& workDirPath, QSharedPointer<const PTOType> inputPTO, 
+    CreatePreviewTask(const QString& workDirPath, QSharedPointer<const PTOType> inputPTO,
                       QUrl& previewPtoUrl, const PanoramaItemUrlsMap& preProcessedUrlsMap);
     ~CreatePreviewTask();
 

@@ -58,9 +58,9 @@ public:
 
     bool isFree() const
     {
-        return readers.isEmpty() && 
-               !writer           && 
-               !waitingReaders   && 
+        return readers.isEmpty() &&
+               !writer           &&
+               !waitingReaders   &&
                !waitingWriters;
     }
 
@@ -87,7 +87,7 @@ public:
     QWaitCondition         writerWait;
 
     QMutex                 tempFileMutex;
-    
+
     QHash<QString, Entry*> entries;
 
 public:

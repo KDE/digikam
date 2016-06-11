@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-06-12 19:27:47 +0200 (Di, 12 Jun 2007) $
  * $Revision: 307 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -120,7 +120,7 @@
 
 
 //-------------------------------------------------------------------------------
-// WINDOWS 
+// WINDOWS
 //-------------------------------------------------------------------------------
 #if defined(WIN32) || defined(WINCE) || defined(WIN64) || defined(__MINGW32__)
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
@@ -145,10 +145,10 @@
 #include <windows.h>
 #include <ole2.h>
 
-#endif // _MFC_VER 
+#endif // _MFC_VER
 //-------------------------------------------------------------------------------
 
-#define DllExport   __declspec( dllexport ) 
+#define DllExport   __declspec( dllexport )
 
 //-------------------------------------------------------------------------------
 // unsigned number type definitions
@@ -160,8 +160,8 @@ typedef unsigned short      WORD;
 typedef	unsigned int		UINT32;
 typedef unsigned long       DWORD;
 typedef unsigned long       ULONG;
-typedef unsigned __int64	UINT64; 
-typedef unsigned __int64	ULONGLONG; 
+typedef unsigned __int64	UINT64;
+typedef unsigned __int64	ULONGLONG;
 
 //-------------------------------------------------------------------------------
 // signed number type definitions
@@ -192,8 +192,8 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 		#define ASSERT(x)	assert(x)
 	#else
 		#if defined(__GNUC__)
-			#define ASSERT(ignore)((void) 0) 
-		#elif defined(_MSC_VER) && (_MSC_VER >= 1300) 
+			#define ASSERT(ignore)((void) 0)
+		#elif defined(_MSC_VER) && (_MSC_VER >= 1300)
 			#define ASSERT		__noop
 		#else
 			#define ASSERT ((void)0)
@@ -232,7 +232,7 @@ typedef bool (__cdecl *CallbackPtr)(double percent, bool escapeAllowed, void *da
 #define InsufficientMemory	0x20000001			///< memory allocation was not successfull
 #define InvalidStreamPos	0x20000002			///< invalid memory stream position
 #define EscapePressed		0x20000003			///< user break by ESC
-#define WrongVersion		0x20000004			///< wrong PGF version 
+#define WrongVersion		0x20000004			///< wrong PGF version
 #define FormatCannotRead	0x20000005			///< wrong data file format
 #define ImageTooSmall		0x20000006			///< image is too small
 #define ZlibError			0x20000007			///< error in zlib functions
@@ -313,7 +313,7 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 // Apple OSX
 //-------------------------------------------------------------------------------
 #ifdef __APPLE__
-#define __POSIX__ 
+#define __POSIX__
 #endif // __APPLE__
 
 
@@ -337,17 +337,17 @@ inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 // *BSD
 //-------------------------------------------------------------------------------
 #if defined(__NetBSD__) || defined(__OpenBSD__) || defined(__FreeBSD__)
-#ifndef __POSIX__ 
-#define __POSIX__ 
-#endif 
+#ifndef __POSIX__
+#define __POSIX__
+#endif
 
-#ifndef off64_t 
-#define off64_t off_t 
-#endif 
+#ifndef off64_t
+#define off64_t off_t
+#endif
 
-#ifndef lseek64 
-#define lseek64 lseek 
-#endif 
+#ifndef lseek64
+#define lseek64 lseek
+#endif
 
 #endif // __NetBSD__ or __OpenBSD__ or __FreeBSD__
 
@@ -394,7 +394,7 @@ typedef int64_t				LONGLONG;
 // other types
 //-------------------------------------------------------------------------------
 typedef int					OSError;
-typedef int					HANDLE;	
+typedef int					HANDLE;
 typedef unsigned long		ULONG_PTR;
 typedef void*				PVOID;
 typedef char*				LPTSTR;
@@ -437,8 +437,8 @@ typedef union _LARGE_INTEGER {
 //-------------------------------------------------------------------------------
 // methods
 //-------------------------------------------------------------------------------
-/* The MulDiv function multiplies two 32-bit values and then divides the 64-bit 
- * result by a third 32-bit value. The return value is rounded up or down to 
+/* The MulDiv function multiplies two 32-bit values and then divides the 64-bit
+ * result by a third 32-bit value. The return value is rounded up or down to
  * the nearest integer.
  * http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winprog/winprog/muldiv.asp
  * */
@@ -458,7 +458,7 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 	#ifdef _DEBUG
 		#define ASSERT(x)	assert(x)
 	#else
-		#define ASSERT(x)	
+		#define ASSERT(x)
 	#endif //_DEBUG
 #endif //ASSERT
 
@@ -495,7 +495,7 @@ __inline int MulDiv(int nNumber, int nNumerator, int nDenominator) {
 #define InsufficientMemory		0x2001			///< memory allocation wasn't successfull
 #define InvalidStreamPos		0x2002			///< invalid memory stream position
 #define EscapePressed			0x2003			///< user break by ESC
-#define WrongVersion			0x2004			///< wrong pgf version 
+#define WrongVersion			0x2004			///< wrong pgf version
 #define FormatCannotRead		0x2005			///< wrong data file format
 #define ImageTooSmall			0x2006			///< image is too small
 #define ZlibError				0x2007			///< error in zlib functions
@@ -567,7 +567,7 @@ __inline OSError SetFPos(HANDLE hFile, int posMode, INT64 posOff) {
 //-------------------------------------------------------------------------------
 //	Big Endian
 //-------------------------------------------------------------------------------
-#ifdef PGF_USE_BIG_ENDIAN 
+#ifdef PGF_USE_BIG_ENDIAN
 
 #ifndef _lrotl
 	#define _lrotl(x,n)	(((x) << ((UINT32)(n))) | ((x) >> (32 - (UINT32)(n))))
@@ -577,19 +577,19 @@ __inline UINT16 ByteSwap(UINT16 wX) {
 	return ((wX & 0xFF00) >> 8) | ((wX & 0x00FF) << 8);
 }
 
-__inline UINT32 ByteSwap(UINT32 dwX) { 
-#ifdef _X86_     
-	_asm mov eax, dwX     
+__inline UINT32 ByteSwap(UINT32 dwX) {
+#ifdef _X86_
+	_asm mov eax, dwX
 	_asm bswap eax
-	_asm mov dwX, eax      
-	return dwX; 
-#else     
-	return _lrotl(((dwX & 0xFF00FF00) >> 8) | ((dwX & 0x00FF00FF) << 8), 16); 
-#endif 
+	_asm mov dwX, eax
+	return dwX;
+#else
+	return _lrotl(((dwX & 0xFF00FF00) >> 8) | ((dwX & 0x00FF00FF) << 8), 16);
+#endif
 }
 
 #if defined(WIN32) || defined(WIN64)
-__inline UINT64 ByteSwap(UINT64 ui64) { 
+__inline UINT64 ByteSwap(UINT64 ui64) {
 	return _byteswap_uint64(ui64);
 }
 #endif
@@ -601,7 +601,7 @@ __inline UINT64 ByteSwap(UINT64 ui64) {
 	#define __VAL(x) (x)
 
 #endif //PGF_USE_BIG_ENDIAN
- 
+
 // OpenMP rules (inspired from libraw project)
 // NOTE: Use LIBPGF_DISABLE_OPENMP to disable OpenMP support in whole libpgf
 #ifndef LIBPGF_DISABLE_OPENMP

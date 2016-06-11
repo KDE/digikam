@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-02-03 13:04:21 +0100 (Sa, 03 Feb 2007) $
  * $Revision: 280 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -125,7 +125,7 @@ void CPGFImage::Destroy() {
 	for (int i = 0; i < m_header.channels; i++) {
 		delete m_wtChannel[i]; // also deletes m_channel
 	}
-	delete[] m_postHeader.userData; 
+	delete[] m_postHeader.userData;
 	delete[] m_levelLength;
 	delete m_decoder;
 	delete m_encoder;
@@ -142,7 +142,7 @@ void CPGFImage::Open(CPGFStream *stream) {
 	ASSERT(stream);
 
 	// create decoder and read PGFPreHeader PGFHeader PGFPostHeader LevelLengths
-	m_decoder = new CDecoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength, 
+	m_decoder = new CDecoder(stream, m_preHeader, m_header, m_postHeader, m_levelLength,
 		m_userDataPos, m_useOMPinDecoder, m_userDataPolicy);
 
 	if (m_header.nLevels > MaxLevel) ReturnWithError(FormatCannotRead);
@@ -158,13 +158,13 @@ void CPGFImage::Open(CPGFStream *stream) {
 	if (!CompleteHeader()) ReturnWithError(FormatCannotRead);
 
 	// interpret quant parameter
-	if (m_header.quality > DownsampleThreshold && 
-		(m_header.mode == ImageModeRGBColor || 
-		 m_header.mode == ImageModeRGBA || 
-		 m_header.mode == ImageModeRGB48 || 
-		 m_header.mode == ImageModeCMYKColor || 
-		 m_header.mode == ImageModeCMYK64 || 
-		 m_header.mode == ImageModeLabColor || 
+	if (m_header.quality > DownsampleThreshold &&
+		(m_header.mode == ImageModeRGBColor ||
+		 m_header.mode == ImageModeRGBA ||
+		 m_header.mode == ImageModeRGB48 ||
+		 m_header.mode == ImageModeCMYKColor ||
+		 m_header.mode == ImageModeCMYK64 ||
+		 m_header.mode == ImageModeLabColor ||
 		 m_header.mode == ImageModeLab48)) {
 		m_downsample = true;
 		m_quant = m_header.quality - 1;
@@ -235,7 +235,7 @@ bool CPGFImage::CompleteHeader() {
 	if (!m_header.bpp) {
 		// undefined bpp
 		switch(m_header.mode) {
-		case ImageModeBitmap: 
+		case ImageModeBitmap:
 			m_header.bpp = 1;
 			break;
 		case ImageModeIndexedColor:
@@ -269,7 +269,7 @@ bool CPGFImage::CompleteHeader() {
 			ASSERT(false);
 			m_header.bpp = 24;
 		}
-	} 
+	}
 	if (m_header.mode == ImageModeRGBColor && m_header.bpp == 32) {
 		// change mode
 		m_header.mode = ImageModeRGBA;
@@ -292,12 +292,12 @@ bool CPGFImage::CompleteHeader() {
 	// set number of channels
 	if (!m_header.channels) {
 		switch(m_header.mode) {
-		case ImageModeBitmap: 
+		case ImageModeBitmap:
 		case ImageModeIndexedColor:
 		case ImageModeGrayScale:
 		case ImageModeGray16:
 		case ImageModeGray32:
-			m_header.channels = 1; 
+			m_header.channels = 1;
 			break;
 		case ImageModeRGBColor:
 		case ImageModeRGB12:
@@ -368,7 +368,7 @@ void CPGFImage::Reconstruct(int level /*= 0*/) {
 			for (int i=0; i < m_header.channels; i++) {
 				ASSERT(m_wtChannel[i]);
 				// dequantize subbands
-				if (currentLevel == m_header.nLevels) { 
+				if (currentLevel == m_header.nLevels) {
 					// last level also has LL band
 					m_wtChannel[i]->GetSubband(currentLevel, LL)->Dequantize(m_quant);
 				}
@@ -431,7 +431,7 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= nullptr*/, void *data
 				ASSERT(wtChannel);
 
 				// decode file and write stream to m_wtChannel
-				if (m_currentLevel == m_header.nLevels) { 
+				if (m_currentLevel == m_header.nLevels) {
 					// last level also has LL band
 					wtChannel->GetSubband(m_currentLevel, LL)->PlaceTile(*m_decoder, m_quant);
 				}
@@ -448,12 +448,12 @@ void CPGFImage::Read(int level /*= 0*/, CallbackPtr cb /*= nullptr*/, void *data
 
 			volatile OSError error = NoError; // volatile prevents optimizations
 #ifdef LIBPGF_USE_OPENMP
-			#pragma omp parallel for default(shared) 
+			#pragma omp parallel for default(shared)
 #endif
 			for (int i=0; i < m_header.channels; i++) {
 				// inverse transform from m_wtChannel to m_channel
 				if (error == NoError) {
-					OSError err = m_wtChannel[i]->InverseTransform(m_currentLevel, &m_width[i], &m_height[i], &m_channel[i]);	
+					OSError err = m_wtChannel[i]->InverseTransform(m_currentLevel, &m_width[i], &m_height[i], &m_channel[i]);
 					if (err != NoError) error = err;
 				}
 				ASSERT(m_channel[i]);
@@ -505,7 +505,7 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= nullpt
 
 		const int levelDiff = m_currentLevel - level;
 		double percent = (m_progressMode == PM_Relative) ? pow(0.25, levelDiff) : m_percent;
-		
+
 		// check level difference
 		if (levelDiff <= 0) {
 			// it is a new read call, probably with a new ROI
@@ -548,7 +548,7 @@ void CPGFImage::Read(PGFRect& rect, int level /*= 0*/, CallbackPtr cb /*= nullpt
 
 			volatile OSError error = NoError; // volatile prevents optimizations
 #ifdef LIBPGF_USE_OPENMP
-			#pragma omp parallel for default(shared) 
+			#pragma omp parallel for default(shared)
 #endif
 			for (int i=0; i < m_header.channels; i++) {
 				// inverse transform from m_wtChannel to m_channel
@@ -645,9 +645,9 @@ void CPGFImage::SetROI(PGFRect rect) {
 /// Return the length of all encoded headers in bytes.
 /// Precondition: The PGF image has been opened with a call of Open(...).
 /// @return The length of all encoded headers in bytes
-UINT32 CPGFImage::GetEncodedHeaderLength() const { 
-	ASSERT(m_decoder); 
-	return m_decoder->GetEncodedHeaderLength(); 
+UINT32 CPGFImage::GetEncodedHeaderLength() const {
+	ASSERT(m_decoder);
+	return m_decoder->GetEncodedHeaderLength();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -676,7 +676,7 @@ UINT32 CPGFImage::ReadEncodedHeader(UINT8* target, UINT32 targetLen) const {
 }
 
 ////////////////////////////////////////////////////////////////////
-/// Reset stream position to start of PGF pre-header or start of data. Must not be called before Open() or before Write(). 
+/// Reset stream position to start of PGF pre-header or start of data. Must not be called before Open() or before Write().
 /// Use this method after Read() if you want to read the same image several times, e.g. reading different ROIs.
 /// @param startOfData true: you want to read the same image several times. false: resets stream position to the initial position
 void CPGFImage::ResetStreamPos(bool startOfData) {
@@ -695,7 +695,7 @@ void CPGFImage::ResetStreamPos(bool startOfData) {
 }
 
 //////////////////////////////////////////////////////////////////////
-/// Reads the data of an encoded PGF level and copies it to a target buffer 
+/// Reads the data of an encoded PGF level and copies it to a target buffer
 /// without decoding.
 /// Precondition: The PGF image has been opened with a call of Open(...).
 /// It might throw an IOException.
@@ -826,7 +826,7 @@ void CPGFImage::Downsample(int ch) {
 			loPos += 2; hiPos += 2;
 			sampledPos++;
 		}
-		if (oddW) { 
+		if (oddW) {
 			buff[sampledPos] = (buff[loPos] + buff[hiPos]) >> 1;
 			loPos++; hiPos++;
 			sampledPos++;
@@ -894,7 +894,7 @@ void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, const UINT
 	ASSERT(!m_decoder);	// current image must be closed
 	ASSERT(header.quality <= MaxQuality);
 	ASSERT(userDataLength <= MaxUserDataSize);
-	
+
 	// init state
 #ifdef __PGFROISUPPORT__
 	m_streamReinitialized = false;
@@ -918,12 +918,12 @@ void CPGFImage::SetHeader(const PGFHeader& header, BYTE flags /*=0*/, const UINT
 	ComputeLevels();
 
 	// check for downsample
-	if (m_header.quality > DownsampleThreshold &&  (m_header.mode == ImageModeRGBColor || 
-													m_header.mode == ImageModeRGBA || 
-													m_header.mode == ImageModeRGB48 || 
-													m_header.mode == ImageModeCMYKColor || 
-													m_header.mode == ImageModeCMYK64 || 
-													m_header.mode == ImageModeLabColor || 
+	if (m_header.quality > DownsampleThreshold &&  (m_header.mode == ImageModeRGBColor ||
+													m_header.mode == ImageModeRGBA ||
+													m_header.mode == ImageModeRGB48 ||
+													m_header.mode == ImageModeCMYKColor ||
+													m_header.mode == ImageModeCMYK64 ||
+													m_header.mode == ImageModeLabColor ||
 													m_header.mode == ImageModeLab48)) {
 		m_downsample = true;
 		m_quant = m_header.quality - 1;
@@ -1011,8 +1011,8 @@ UINT32 CPGFImage::WriteHeader(CPGFStream* stream) {
 					#ifdef __PGFROISUPPORT__
 						m_wtChannel[i]->SetROI(PGFRect(0, 0, m_width[i], m_height[i]));
 					#endif
-					
-						// wavelet subband decomposition 
+
+						// wavelet subband decomposition
 						for (int l=0; error == NoError && l < m_header.nLevels; l++) {
 							OSError err = m_wtChannel[i]->ForwardTransform(l, m_quant);
 							if (err != NoError) error = err;
@@ -1098,12 +1098,12 @@ void CPGFImage::WriteLevel() {
 				}
 			}
 		}
-	} else 
+	} else
 #endif
 	{
 		for (int i=0; i < m_header.channels; i++) {
 			ASSERT(m_wtChannel[i]);
-			if (m_currentLevel == m_header.nLevels) { 
+			if (m_currentLevel == m_header.nLevels) {
 				// last level also has LL band
 				m_wtChannel[i]->GetSubband(m_currentLevel, LL)->ExtractTile(*m_encoder);
 			}
@@ -1137,9 +1137,9 @@ UINT32 CPGFImage::UpdatePostHeaderSize() {
 
 //////////////////////////////////////////////////////////////////////
 /// Encode and write an image at current stream position.
-/// Call this method after WriteHeader(). 
-/// In case you want to write uncached metadata, 
-/// then do that after WriteHeader() and before WriteImage(). 
+/// Call this method after WriteHeader().
+/// In case you want to write uncached metadata,
+/// then do that after WriteHeader() and before WriteImage().
 /// This method is called inside of Write(stream, ...).
 /// It might throw an IOException.
 /// @param stream A PGF stream
@@ -1194,7 +1194,7 @@ UINT32 CPGFImage::WriteImage(CPGFStream* stream, CallbackPtr cb /*= nullptr*/, v
 	}
 
 	// update level lengths
-	nWrittenBytes += m_encoder->UpdateLevelLength(); // return written image bytes 
+	nWrittenBytes += m_encoder->UpdateLevelLength(); // return written image bytes
 
 	// delete encoder
 	delete m_encoder; m_encoder = nullptr;
@@ -1211,7 +1211,7 @@ UINT32 CPGFImage::WriteImage(CPGFStream* stream, CallbackPtr cb /*= nullptr*/, v
 /// as all other levels, but in a different size (width, height).
 /// The image size at level i is double the size (width, height) of the image at level i+1.
 /// The image at level 0 contains the original size.
-/// Precondition: the PGF image contains a valid header (see also SetHeader(...)). 
+/// Precondition: the PGF image contains a valid header (see also SetHeader(...)).
 /// It might throw an IOException.
 /// @param stream A PGF stream
 /// @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
@@ -1400,7 +1400,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.channels == 1);
 			ASSERT(m_header.bpp == 1);
 			ASSERT(bpp == 1);
-			
+
 			const UINT32 w = m_header.width;
 			const UINT32 w2 = (m_header.width + 7)/8;
 			DataT* y = m_channel[0]; ASSERT(y);
@@ -1467,7 +1467,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 					yPos++;
 				}
-				buff += pitch;	
+				buff += pitch;
 			}
 		}
 		break;
@@ -1533,7 +1533,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff += pitch;
-			}	
+			}
 		}
 		break;
 	case ImageModeRGB48:
@@ -1572,7 +1572,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff16 += pitch16;
-			}	
+			}
 		}
 		break;
 	case ImageModeRGBA:
@@ -1608,7 +1608,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff += pitch;
-			}	
+			}
 		}
 		break;
 	case ImageModeCMYK64:
@@ -1622,7 +1622,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			const int channels = bpp/16; ASSERT(channels >= m_header.channels);
 			const int shift = 16 - UsedBitsPerChannel(); ASSERT(shift >= 0);
 			const DataT yuvOffset16 = 1 << (UsedBitsPerChannel() - 1);
-			
+
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
@@ -1648,7 +1648,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					cnt += channels;
 				}
 				buff16 += pitch16;
-			}	
+			}
 		}
 		break;
 #ifdef __PGF32SUPPORT__
@@ -1725,7 +1725,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					yPos++;
 				}
 				buff += pitch;
-			}	
+			}
 		}
 		break;
 	case ImageModeRGB16:
@@ -1733,7 +1733,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 16);
 			ASSERT(bpp == 16);
-			
+
 			DataT* y = m_channel[0]; ASSERT(y);
 			DataT* u = m_channel[1]; ASSERT(u);
 			DataT* v = m_channel[2]; ASSERT(v);
@@ -1748,7 +1748,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 					percent += dP;
 				}
 				for (UINT32 w=0; w < m_header.width; w++) {
-					rgb = buff16[w]; 
+					rgb = buff16[w];
 					r = (rgb & 0xF800) >> 10;	// highest 5 bits
 					g = (rgb & 0x07E0) >> 5;	// middle 6 bits
 					b = (rgb & 0x001F) << 1;	// lowest 5 bits
@@ -1760,7 +1760,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 				}
 
 				buff16 += pitch16;
-			}	
+			}
 		}
 		break;
 	default:
@@ -1770,7 +1770,7 @@ void CPGFImage::RgbToYuv(int pitch, UINT8* buff, BYTE bpp, int channelMap[], Cal
 
 //////////////////////////////////////////////////////////////////
 // Get image data in interleaved format: (ordering of RGB data is BGR[A])
-// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number 
+// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number
 // of passes over the data.
 // The absolute value of pitch is the number of bytes of an image row of the given image buffer.
 // If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
@@ -1800,11 +1800,11 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 	const PGFRect& roi = GetAlignedROI(); // in pixels, roi is usually larger than levelRoi
 	ASSERT(w == roi.Width() && h == roi.Height());
 	const PGFRect levelRoi = ComputeLevelROI();
-	ASSERT(roi.left <= levelRoi.left && levelRoi.right <= roi.right); 
-	ASSERT(roi.top <= levelRoi.top && levelRoi.bottom <= roi.bottom); 
+	ASSERT(roi.left <= levelRoi.left && levelRoi.right <= roi.right);
+	ASSERT(roi.top <= levelRoi.top && levelRoi.bottom <= roi.bottom);
 
 	if (ROIisSupported() && (levelRoi.Width() < w || levelRoi.Height() < h)) {
-		// ROI is used 
+		// ROI is used
 		w = levelRoi.Width();
 		h = levelRoi.Height();
 		roiOffsetX = levelRoi.left - roi.left;
@@ -1950,7 +1950,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 				ASSERT(bpp%8 == 0);
 				const int shift = __max(0, UsedBitsPerChannel() - 8);
 				channels = bpp/8; ASSERT(channels >= m_header.channels);
-				
+
 				for (i=0; i < h; i++) {
 					UINT32 yPos = yOffset;
 					cnt = 0;
@@ -2102,7 +2102,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						vAvg = v[uPos];
 						// Yuv
 						g = y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2); // must be logical shift operator
-						buff[cnt + channelMap[1]] = Clamp8(g >> shift); 
+						buff[cnt + channelMap[1]] = Clamp8(g >> shift);
 						buff[cnt + channelMap[2]] = Clamp8((uAvg + g) >> shift);
 						buff[cnt + channelMap[0]] = Clamp8((vAvg + g) >> shift);
 						cnt += channels;
@@ -2140,7 +2140,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 					uAvg = a[uPos];
 					vAvg = b[uPos];
 					buff[cnt + channelMap[0]] = Clamp8(l[yPos] + YUVoffset8);
-					buff[cnt + channelMap[1]] = Clamp8(uAvg + YUVoffset8); 
+					buff[cnt + channelMap[1]] = Clamp8(uAvg + YUVoffset8);
 					buff[cnt + channelMap[2]] = Clamp8(vAvg + YUVoffset8);
 					cnt += channels;
 					if (!m_downsample || (j & 1)) uPos++;
@@ -2271,7 +2271,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
-	case ImageModeCMYK64: 
+	case ImageModeCMYK64:
 		{
 			ASSERT(m_header.channels == 4);
 			ASSERT(m_header.bpp == 64);
@@ -2333,7 +2333,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 						aAvg = a[uPos] + yuvOffset16;
 						// Yuv
 						g = y[yPos] + yuvOffset16 - ((uAvg + vAvg ) >> 2); // must be logical shift operator
-						buff[cnt + channelMap[1]] = Clamp8(g >> shift); 
+						buff[cnt + channelMap[1]] = Clamp8(g >> shift);
 						buff[cnt + channelMap[2]] = Clamp8((uAvg + g) >> shift);
 						buff[cnt + channelMap[0]] = Clamp8((vAvg + g) >> shift);
 						buff[cnt + channelMap[3]] = Clamp8(aAvg >> shift);
@@ -2419,7 +2419,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			} else {
 				ASSERT(bpp == 8);
 				const int shift = __max(0, UsedBitsPerChannel() - 8);
-				
+
 				for (i=0; i < h; i++) {
 					UINT32 yPos = yOffset;
 					for (j = 0; j < w; j++) {
@@ -2434,10 +2434,10 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 					}
 				}
 			}
-			break;	
+			break;
 		}
 #endif
-	case ImageModeRGB12: 
+	case ImageModeRGB12:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == m_header.channels*4);
@@ -2480,7 +2480,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 			}
 			break;
 		}
-	case ImageModeRGB16: 
+	case ImageModeRGB16:
 		{
 			ASSERT(m_header.channels == 3);
 			ASSERT(m_header.bpp == 16);
@@ -2530,7 +2530,7 @@ void CPGFImage::GetBitmap(int pitch, UINT8* buff, BYTE bpp, int channelMap[] /*=
 	}
 #endif
 
-}			
+}
 
 //////////////////////////////////////////////////////////////////////
 /// Get YUV image data in interleaved format: (ordering is YUV[A])
@@ -2563,7 +2563,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= nu
 	double percent = 0;
 	UINT32 i, j;
 
-	if (m_header.channels == 3) { 
+	if (m_header.channels == 3) {
 		ASSERT(bpp%dataBits == 0);
 
 		DataT* y = m_channel[0]; ASSERT(y);
@@ -2586,7 +2586,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= nu
 				buff[cnt + channelMap[0]] = y[yPos];
 				buff[cnt + channelMap[1]] = uAvg;
 				buff[cnt + channelMap[2]] = vAvg;
-				yPos++; 
+				yPos++;
 				cnt += channels;
 				if (j%2) sampledPos++;
 			}
@@ -2628,7 +2628,7 @@ void CPGFImage::GetYUV(int pitch, DataT* buff, BYTE bpp, int channelMap[] /*= nu
 				buff[cnt + channelMap[1]] = uAvg;
 				buff[cnt + channelMap[2]] = vAvg;
 				buff[cnt + channelMap[3]] = aAvg;
-				yPos++; 
+				yPos++;
 				cnt += channels;
 				if (j%2) sampledPos++;
 			}
@@ -2693,7 +2693,7 @@ void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*=
 				cnt += channels;
 			}
 			buff += pitch2;
-		}	
+		}
 	} else if (m_header.channels == 4) {
 		ASSERT(bpp%dataBits == 0);
 
@@ -2719,7 +2719,7 @@ void CPGFImage::ImportYUV(int pitch, DataT *buff, BYTE bpp, int channelMap[] /*=
 				cnt += channels;
 			}
 			buff += pitch2;
-		}	
+		}
 	}
 
 	if (m_downsample) {

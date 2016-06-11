@@ -150,7 +150,7 @@ int main(int argc, char** argv)
     }
 
     int elapsed = time.elapsed();
-    qDebug() << "Alignment took " << elapsed << " for " << images.size() << " , " 
+    qDebug() << "Alignment took " << elapsed << " for " << images.size() << " , "
              << ((float)elapsed/images.size()) << " per image";
 
     display.show();

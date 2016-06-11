@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -38,12 +38,12 @@
 static const UINT32 Filled = 0xFFFFFFFF;
 
 /// @brief Make 64 bit unsigned integer from two 32 bit unsigned integers
-#define MAKEU64(a, b) ((UINT64) (((UINT32) (a)) | ((UINT64) ((UINT32) (b))) << 32)) 
+#define MAKEU64(a, b) ((UINT64) (((UINT32) (a)) | ((UINT64) ((UINT32) (b))) << 32))
 
 /*
 static UINT8 lMask[] = {
 	0x00,                       // 00000000
-	0x80,                       // 10000000 
+	0x80,                       // 10000000
 	0xc0,                       // 11000000
 	0xe0,                       // 11100000
 	0xf0,                       // 11110000
@@ -68,7 +68,7 @@ inline void SetBit(UINT32* stream, UINT32 pos) {
 /// @param stream A bit stream stored in array of unsigned integers
 /// @param pos A valid zero-based position in the bit stream
 inline void ClearBit(UINT32* stream, UINT32 pos) {
-	stream[pos >> WordWidthLog] &= ~(1 << (pos%WordWidth)); 
+	stream[pos >> WordWidthLog] &= ~(1 << (pos%WordWidth));
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ inline UINT32 GetValueBlock(UINT32* stream, UINT32 pos, UINT32 k) {
 	const UINT32 iHiInt = (pos + k - 1) >> WordWidthLog;		// integer of last bit
 	const UINT32 loMask = Filled << (pos%WordWidth);
 	const UINT32 hiMask = Filled >> (WordWidth - 1 - ((pos + k - 1)%WordWidth));
-	
+
 	if (iLoInt == iHiInt) {
 		// inside integer boundary
 		count = stream[iLoInt] & (loMask & hiMask);
@@ -223,14 +223,14 @@ inline UINT32 SeekBitRange(UINT32* stream, UINT32 pos, UINT32 len) {
 	UINT32* word = stream + (pos >> WordWidthLog);
 
 	while (((*word & testMask) == 0) && (count < len)) {
-		count++; 
+		count++;
 		testMask <<= 1;
 		if (!testMask) {
 			word++; testMask = 1;
 
 			// fast steps if all bits in a word are zero
 			while ((count + WordWidth <= len) && (*word == 0)) {
-				word++; 
+				word++;
 				count += WordWidth;
 			}
 		}
@@ -252,14 +252,14 @@ inline UINT32 SeekBit1Range(UINT32* stream, UINT32 pos, UINT32 len) {
 	UINT32* word = stream + (pos >> WordWidthLog);
 
 	while (((*word & testMask) != 0) && (count < len)) {
-		count++; 
+		count++;
 		testMask <<= 1;
 		if (!testMask) {
 			word++; testMask = 1;
 
 			// fast steps if all bits in a word are one
 			while ((count + WordWidth <= len) && (*word == Filled)) {
-				word++; 
+				word++;
 				count += WordWidth;
 			}
 		}

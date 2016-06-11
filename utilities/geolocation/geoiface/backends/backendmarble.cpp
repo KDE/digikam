@@ -1685,7 +1685,7 @@ void BackendMarble::centerOn(const Marble::GeoDataLatLonBox& box, const bool use
     if (boxTooSmall)
     {
         d->marbleWidget->centerOn(box.center());
-        d->marbleWidget->zoomView(useSaneZoomLevel ? qMin(3400, d->marbleWidget->maximumZoom()) 
+        d->marbleWidget->zoomView(useSaneZoomLevel ? qMin(3400, d->marbleWidget->maximumZoom())
                                                    : d->marbleWidget->maximumZoom());
     }
     else

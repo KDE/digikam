@@ -326,7 +326,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 
     connect(&cmHelper, SIGNAL(signalCreateGroupByTime()),
             this, SLOT(slotCreateGroupByTimeFromSelection()));
-    
+
     connect(&cmHelper, SIGNAL(signalCreateGroupByType()),
             this, SLOT(slotCreateGroupByTypeFromSelection()));
 

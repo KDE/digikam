@@ -47,7 +47,7 @@ bool ImageGPS::loadImageData()
 {
     // In first, we try to get GPS info from database.
     ImagePosition pos = m_info.imagePosition();
-    
+
     if (!pos.isEmpty() && pos.hasCoordinates())
     {
         m_gpsData.setLatLon(pos.latitudeNumber(), pos.longitudeNumber());
@@ -67,9 +67,9 @@ bool ImageGPS::loadImageData()
 
         return true;
     }
-    
+
     // If item do not have any GPS data in databse, we will try to load it from file using standar implementation from GPSImageItem.
-    
+
     return GPSImageItem::loadImageData();
 }
 
@@ -126,7 +126,7 @@ QString ImageGPS::saveChanges()
         QList<int> tagIds = TagsCache::instance()->getOrCreateTags(tagsPath);
         CoreDbAccess().db()->addTagsToItems(QList<qlonglong>() << m_info.id(), tagIds);
     }
-    
+
     // Save info to file.
 
     return GPSImageItem::saveChanges();
@@ -140,7 +140,7 @@ QList<GPSImageItem*> ImageGPS::infosToItems(const ImageInfoList& infos)
     {
         items << new ImageGPS(inf);
     }
-    
+
     return items;
 }
 

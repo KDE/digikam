@@ -69,7 +69,7 @@ public:
     int           minX;
     int           maxX;
     int           minY;
-    int           maxY;  
+    int           maxY;
     QColor        m_markerColor;
 };
 
@@ -91,7 +91,7 @@ void DPointSelect::Private::setValues(int _xPos, int _yPos)
 
     Q_ASSERT(maxX != minX);
     int xp = w + (q->width() - 2 * w) * xPos / (maxX - minX);
-    
+
     Q_ASSERT(maxY != minY);
     int yp = q->height() - w - (q->height() - 2 * w) * yPos / (maxY - minY);
 
@@ -126,7 +126,7 @@ void DPointSelect::setRange(int _minX, int _minY, int _maxX, int _maxY)
         qCWarning(DIGIKAM_GENERAL_LOG) << "DPointSelect::setRange invalid range: " << _maxX << " == " << _minX << " (for X) ";
         return;
     }
-    
+
     if (_maxY == _minY)
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "DPointSelect::setRange invalid range: " << _maxY << " == " << _minY << " (for Y) ";

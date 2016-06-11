@@ -67,4 +67,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // XMP_CONTENT_H 
+#endif // XMP_CONTENT_H

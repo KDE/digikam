@@ -52,7 +52,7 @@ public:
     bool initSchema(ThumbsDbSchemaUpdater* const updater);
 
 private:
-    
+
     Q_DECLARE_PRIVATE(BdEngineBackend)
 };
 

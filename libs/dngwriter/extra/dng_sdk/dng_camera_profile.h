@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /******************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_camera_profile.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_camera_profile.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -19,10 +19,10 @@
  *  profiles made under different illumination.
  *
  *  Profiling information is optionally separated into two parts. One part represents
- *  a profile for a reference camera. (ColorMatrix1 and ColorMatrix2 here.) The 
+ *  a profile for a reference camera. (ColorMatrix1 and ColorMatrix2 here.) The
  *  second is a per-camera calibration that takes into account unit-to-unit variation.
  *  This is designed to allow replacing the reference color matrix with one of one's
- *  own construction while maintaining any unit-specific calibration the camera 
+ *  own construction while maintaining any unit-specific calibration the camera
  *  manufacturer may have provided.
  *
  * See Appendix 6 of the \ref spec_dng "DNG 1.1.0 specification" for more information.
@@ -52,46 +52,46 @@ extern const char * kAdobeCalibrationSignature;
 
 class dng_camera_profile_id
 	{
-	
+
 	private:
-	
+
 		dng_string fName;
-		
+
 		dng_fingerprint fFingerprint;
-		
+
 	public:
-	
+
 		dng_camera_profile_id ()
-		
+
 			:	fName        ()
 			,	fFingerprint ()
-			
+
 			{
 			}
-			
+
 		dng_camera_profile_id (const char *name)
-			
+
 			:	fName		 ()
 			,	fFingerprint ()
-			
+
 			{
 			fName.Set (name);
 			}
 
 		dng_camera_profile_id (const dng_string &name)
-			
+
 			:	fName		 (name)
 			,	fFingerprint ()
-			
+
 			{
 			}
 
 		dng_camera_profile_id (const char *name,
 							   const dng_fingerprint &fingerprint)
-			
+
 			:	fName		 ()
 			,	fFingerprint (fingerprint)
-			
+
 			{
 			fName.Set (name);
 			DNG_ASSERT (!fFingerprint.IsValid () || fName.NotEmpty (),
@@ -100,10 +100,10 @@ class dng_camera_profile_id
 
 		dng_camera_profile_id (const dng_string &name,
 							   const dng_fingerprint &fingerprint)
-			
+
 			:	fName		 (name)
 			,	fFingerprint (fingerprint)
-			
+
 			{
 			DNG_ASSERT (!fFingerprint.IsValid () || fName.NotEmpty (),
 						"Cannot have profile fingerprint without name");
@@ -113,12 +113,12 @@ class dng_camera_profile_id
 			{
 			return fName;
 			}
-			
+
 		const dng_fingerprint & Fingerprint () const
 			{
 			return fFingerprint;
 			}
-			
+
 		bool operator== (const dng_camera_profile_id &id) const
 			{
 			return fName        == id.fName &&
@@ -129,47 +129,47 @@ class dng_camera_profile_id
 			{
 			return !(*this == id);
 			}
-			
+
 		bool IsValid () const
 			{
 			return fName.NotEmpty ();		// Fingerprint is optional.
 			}
-			
+
 		void Clear ()
 			{
 			*this = dng_camera_profile_id ();
 			}
 
 	};
-	
+
 /******************************************************************************/
 
 /// \brief Container for DNG camera color profile and calibration data.
 
 class dng_camera_profile
 	{
-	
+
 	protected:
-	
+
 		// Name of this camera profile.
-		
+
 		dng_string fName;
-	
+
 		// Light sources for up to two calibrations. These use the EXIF
 		// encodings for illuminant and are used to distinguish which
 		// matrix to use.
-		
+
 		uint32 fCalibrationIlluminant1;
 		uint32 fCalibrationIlluminant2;
-		
+
 		// Color matrices for up to two calibrations.
-		
-		// These matrices map XYZ values to non-white balanced camera values. 
+
+		// These matrices map XYZ values to non-white balanced camera values.
 		// Adobe needs to go that direction in order to determine the clipping
 		// points for highlight recovery logic based on the white point.  If
 		// cameras were all 3-color, the matrix could be stored as a forward matrix,
 		// but we need the backwards matrix to deal with 4-color cameras.
-		
+
 		dng_matrix fColorMatrix1;
 		dng_matrix fColorMatrix2;
 
@@ -177,18 +177,18 @@ class dng_camera_profile
 		// adapted to D50 (the ICC profile PCS white point).  If the matrices
 		// exist, then this implies that white balancing should be done by scaling
 		// camera values with a diagonal matrix.
-		
+
 		dng_matrix fForwardMatrix1;
 		dng_matrix fForwardMatrix2;
-	
+
 		// Dimensionality reduction hints for more than three color cameras.
 		// This is an optional matrix that maps the camera's color components
 		// to 3 components.  These are only used if the forward matrices don't
 		// exist, and are used invert the color matrices.
-		
+
 		dng_matrix fReductionMatrix1;
 		dng_matrix fReductionMatrix2;
-		
+
 		// MD5 hash for all data bits of the profile.
 
 		mutable dng_fingerprint fFingerprint;
@@ -196,30 +196,30 @@ class dng_camera_profile
 		// Copyright notice from creator of profile.
 
 		dng_string fCopyright;
-		
+
 		// Rules for how this profile can be embedded and/or copied.
 
 		uint32 fEmbedPolicy;
-		
+
 		// 2-D (or 3-D) hue/sat tables to modify colors.
 
 		dng_hue_sat_map fHueSatDeltas1;
 		dng_hue_sat_map fHueSatDeltas2;
-		
+
 		// 3-D hue/sat table to apply a "look".
-		
+
 		dng_hue_sat_map fLookTable;
-		
-		// The "as shot" tone curve for this profile.  Check IsValid method 
+
+		// The "as shot" tone curve for this profile.  Check IsValid method
 		// to tell if one exists in profile.
 
 		dng_tone_curve fToneCurve;
-		
+
 		// If this string matches the fCameraCalibrationSignature of the
 		// negative, then use the calibration matrix values from the negative.
 
 		dng_string fProfileCalibrationSignature;
-		
+
 		// If non-empty, only allow use of this profile with camera having
 		// same unique model name.
 
@@ -228,20 +228,20 @@ class dng_camera_profile
 		// Was this profile read from inside a DNG file? (If so, we wnat
 		// to be sure to include it again when writing out an updated
 		// DNG file)
-		
+
 		bool fWasReadFromDNG;
-		
+
 		// Was this profile stubbed to save memory (and no longer valid
 		// for building color conversion tables)?
-		
+
 		bool fWasStubbed;
 
 	public:
-	
+
 		dng_camera_profile ();
-		
+
 		virtual ~dng_camera_profile ();
-		
+
 		// API for profile name:
 
 		/// Setter for camera profile name.
@@ -260,7 +260,7 @@ class dng_camera_profile
 			{
 			return fName;
 			}
-		
+
 		/// Test if this name is embedded.
 		/// \retval true if the name matches the name of the embedded camera profile.
 
@@ -268,10 +268,10 @@ class dng_camera_profile
 			{
 			return fName.Matches (kProfileName_Embedded, true);
 			}
-			
+
 		// API for calibration illuminants:
-		
-		/// Setter for first of up to two light sources used for calibration. 
+
+		/// Setter for first of up to two light sources used for calibration.
 		/// Uses the EXIF encodings for illuminant and is used to distinguish which
 		/// matrix to use.
 		/// Corresponds to the DNG CalibrationIlluminant1 tag.
@@ -281,8 +281,8 @@ class dng_camera_profile
 			fCalibrationIlluminant1 = light;
 			ClearFingerprint ();
 			}
-			
-		/// Setter for second of up to two light sources used for calibration. 
+
+		/// Setter for second of up to two light sources used for calibration.
 		/// Uses the EXIF encodings for illuminant and is used to distinguish which
 		/// matrix to use.
 		/// Corresponds to the DNG CalibrationIlluminant2 tag.
@@ -292,8 +292,8 @@ class dng_camera_profile
 			fCalibrationIlluminant2 = light;
 			ClearFingerprint ();
 			}
-			
-		/// Getter for first of up to two light sources used for calibration. 
+
+		/// Getter for first of up to two light sources used for calibration.
 		/// Uses the EXIF encodings for illuminant and is used to distinguish which
 		/// matrix to use.
 		/// Corresponds to the DNG CalibrationIlluminant1 tag.
@@ -302,8 +302,8 @@ class dng_camera_profile
 			{
 			return fCalibrationIlluminant1;
 			}
-			
-		/// Getter for second of up to two light sources used for calibration. 
+
+		/// Getter for second of up to two light sources used for calibration.
 		/// Uses the EXIF encodings for illuminant and is used to distinguish which
 		/// matrix to use.
 		/// Corresponds to the DNG CalibrationIlluminant2 tag.
@@ -312,7 +312,7 @@ class dng_camera_profile
 			{
 			return fCalibrationIlluminant2;
 			}
-		
+
 		/// Getter for first of up to two light sources used for calibration, returning
 		/// result as color temperature.
 
@@ -328,13 +328,13 @@ class dng_camera_profile
 			{
 			return IlluminantToTemperature (CalibrationIlluminant2 ());
 			}
-			
+
 		// API for color matrices:
-		
+
 		/// Utility function to normalize the scale of the color matrix.
-		
+
 		static void NormalizeColorMatrix (dng_matrix &m);
-		
+
 		/// Setter for first of up to two color matrices used for reference camera calibrations.
 		/// These matrices map XYZ values to camera values.  The DNG SDK needs to map colors
 		/// that direction in order to determine the clipping points for
@@ -352,7 +352,7 @@ class dng_camera_profile
 		/// The inverse matrix is requried to support four-color cameras.
 
 		void SetColorMatrix2 (const dng_matrix &m);
-						    		    
+
 		/// Predicate to test if first camera matrix is set
 
 		bool HasColorMatrix1 () const;
@@ -360,27 +360,27 @@ class dng_camera_profile
 		/// Predicate to test if second camera matrix is set
 
 		bool HasColorMatrix2 () const;
-		
+
 		/// Getter for first of up to two color matrices used for calibrations.
 
 		const dng_matrix & ColorMatrix1 () const
 			{
 			return fColorMatrix1;
 			}
-			
+
 		/// Getter for second of up to two color matrices used for calibrations.
 
 		const dng_matrix & ColorMatrix2 () const
 			{
 			return fColorMatrix2;
 			}
-			
+
 		// API for forward matrices:
-		
+
 		/// Utility function to normalize the scale of the forward matrix.
-		
+
 		static void NormalizeForwardMatrix (dng_matrix &m);
-		
+
 		/// Setter for first of up to two forward matrices used for calibrations.
 
 		void SetForwardMatrix1 (const dng_matrix &m);
@@ -395,16 +395,16 @@ class dng_camera_profile
 			{
 			return fForwardMatrix1;
 			}
-			
+
 		/// Getter for second of up to two forward matrices used for calibrations.
 
 		const dng_matrix & ForwardMatrix2 () const
 			{
 			return fForwardMatrix2;
 			}
-		
+
 		// API for reduction matrices:
-		
+
 		/// Setter for first of up to two dimensionality reduction hints for four-color cameras.
 		/// This is an optional matrix that maps four components to three.
 		/// See Appendix 6 of the \ref spec_dng "DNG 1.1.0 specification."
@@ -416,23 +416,23 @@ class dng_camera_profile
 		/// See Appendix 6 of the \ref spec_dng "DNG 1.1.0 specification."
 
 		void SetReductionMatrix2 (const dng_matrix &m);
-		
+
 		/// Getter for first of up to two dimensionality reduction hints for four color cameras.
 
 		const dng_matrix & ReductionMatrix1 () const
 			{
 			return fReductionMatrix1;
 			}
-			
+
 		/// Getter for second of up to two dimensionality reduction hints for four color cameras.
 
 		const dng_matrix & ReductionMatrix2 () const
 			{
 			return fReductionMatrix2;
 			}
-			
+
 		/// Getter function from profile fingerprint.
-			
+
 		const dng_fingerprint &Fingerprint () const
 			{
 
@@ -450,7 +450,7 @@ class dng_camera_profile
 			{
 			return dng_camera_profile_id (Name (), Fingerprint ());
 			}
-		
+
 		/// Setter for camera profile copyright.
 		/// \param copyright Copyright string to use for this camera profile.
 
@@ -467,7 +467,7 @@ class dng_camera_profile
 			{
 			return fCopyright;
 			}
-			
+
 		// Accessors for embed policy.
 
 		void SetEmbedPolicy (uint32 policy)
@@ -480,7 +480,7 @@ class dng_camera_profile
 			{
 			return fEmbedPolicy;
 			}
-			
+
 		bool IsLegalToEmbed () const
 			{
 			return WasReadFromDNG () ||
@@ -488,7 +488,7 @@ class dng_camera_profile
 				   EmbedPolicy () == pepEmbedIfUsed  ||
 				   EmbedPolicy () == pepNoRestrictions;
 			}
-			
+
 		// Accessors for hue sat maps.
 
 		bool HasHueSatDeltas () const
@@ -509,19 +509,19 @@ class dng_camera_profile
 			}
 
 		void SetHueSatDeltas2 (const dng_hue_sat_map &deltas2);
-		
+
 		// Accessors for look table.
-		
+
 		bool HasLookTable () const
 			{
 			return fLookTable.IsValid ();
 			}
-			
+
 		const dng_hue_sat_map & LookTable () const
 			{
 			return fLookTable;
 			}
-			
+
 		void SetLookTable (const dng_hue_sat_map &table);
 
 		// Accessors for tone curve.
@@ -567,14 +567,14 @@ class dng_camera_profile
 			{
 			return fUniqueCameraModelRestriction;
 			}
-			
+
 		// Accessors for was read from DNG flag.
-		
+
 		void SetWasReadFromDNG (bool state = true)
 			{
 			fWasReadFromDNG = state;
 			}
-			
+
 		bool WasReadFromDNG () const
 			{
 			return fWasReadFromDNG;
@@ -584,47 +584,47 @@ class dng_camera_profile
 		/// \retval true if the profile is valid.
 
 		bool IsValid (uint32 channels) const;
-		
+
 		/// Predicate to check if two camera profiles are colorwise equal, thus ignores
 		/// the profile name.
 		/// \param profile Camera profile to compare to.
 
 		bool EqualData (const dng_camera_profile &profile) const;
-		
+
 		/// Parse profile from dng_camera_profile_info data.
 
 		void Parse (dng_stream &stream,
 					dng_camera_profile_info &profileInfo);
-					
+
 		/// Parse from an extended profile stream, which is similar to stand alone
 		/// TIFF file.
-					
+
 		bool ParseExtended (dng_stream &stream);
 
 		/// Convert from a three-color to a four-color Bayer profile.
 
 		virtual void SetFourColorBayer ();
-		
+
 		/// Find the hue/sat table to use for a given white point, if any.
 		/// The calling routine owns the resulting table.
-		
+
 		dng_hue_sat_map * HueSatMapForWhite (const dng_xy_coord &white) const;
-		
+
 		/// Stub out the profile (free memory used by large tables).
-		
+
 		void Stub ();
-		
+
 		/// Was this profile stubbed?
-		
+
 		bool WasStubbed () const
 			{
 			return fWasStubbed;
 			}
 
 	protected:
-	
+
 		static real64 IlluminantToTemperature (uint32 light);
-		
+
 		void ClearFingerprint ()
 			{
 			fFingerprint.Clear ();
@@ -640,7 +640,7 @@ class dng_camera_profile
 								   uint32 sats,
 								   uint32 vals,
 								   bool skipSat0);
-								   
+
 	};
 
 /******************************************************************************/
@@ -648,7 +648,7 @@ class dng_camera_profile
 void SplitCameraProfileName (const dng_string &name,
 							 dng_string &baseName,
 							 int32 &version);
-							
+
 /******************************************************************************/
 
 #endif

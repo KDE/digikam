@@ -320,7 +320,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     connect(d->useMutiCoreCPU, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
-        
+
     connect(d->albumSel, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSettingsChanged()));
 

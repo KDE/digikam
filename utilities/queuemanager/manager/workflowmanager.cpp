@@ -230,7 +230,7 @@ bool WorkflowManager::save()
             data = doc.createElement(QString::fromLatin1("usemulticorecpu"));
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.useMultiCoreCPU);
             elm.appendChild(data);
-            
+
             data = doc.createElement(QString::fromLatin1("workingurl"));
             data.setAttribute(QString::fromLatin1("value"), q.qSettings.workingUrl.path());
             elm.appendChild(data);
@@ -541,7 +541,7 @@ bool WorkflowManager::load(QStringList& failed)
             }
         }
         return true;
-    } 
+    }
     else
     {
         return false;

@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_1d_function.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_1d_function.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -33,9 +33,9 @@
 
 class dng_1d_function
 	{
-	
+
 	public:
-	
+
 		virtual ~dng_1d_function ();
 
 		/// Returns true if this function is the map x -> y such that x == y for all x . That is if Evaluate(x) == x for all x.
@@ -57,7 +57,7 @@ class dng_1d_function
 		/// \retval A value x such that Evaluate(x) == y (to very close approximation).
 
 		virtual real64 EvaluateInverse (real64 y) const;
-	
+
 	};
 
 /*****************************************************************************/
@@ -66,16 +66,16 @@ class dng_1d_function
 
 class dng_1d_identity: public dng_1d_function
 	{
-	
+
 	public:
 		/// Always returns true for this class.
 
 		virtual bool IsIdentity () const;
-	
+
 		/// Always returns x for this class.
 
 		virtual real64 Evaluate (real64 x) const;
-		
+
 		/// Always returns y for this class.
 
 		virtual real64 EvaluateInverse (real64 y) const;
@@ -83,7 +83,7 @@ class dng_1d_identity: public dng_1d_function
 		/// This class is a singleton, and is entirely threadsafe. Use this method to get an instance of the class.
 
 		static const dng_1d_function & Get ();
-	
+
 	};
 
 /*****************************************************************************/
@@ -92,15 +92,15 @@ class dng_1d_identity: public dng_1d_function
 
 class dng_1d_concatenate: public dng_1d_function
 	{
-	
+
 	protected:
-	
+
 		const dng_1d_function &fFunction1;
-		
+
 		const dng_1d_function &fFunction2;
-	
+
 	public:
-	
+
 		/// Create a dng_1d_function which computes y = function2.Evaluate(function1.Evaluate(x)).
 		/// Compose function1 and function2 to compute y = function2.Evaluate(function1.Evaluate(x)). The range of function1.Evaluate must be a subset of 0.0 to 1.0 inclusive,
 		/// otherwise the result of function1(x) will be pinned (clipped) to 0.0 if <0.0 and to 1.0 if > 1.0 .
@@ -109,24 +109,24 @@ class dng_1d_concatenate: public dng_1d_function
 
 		dng_1d_concatenate (const dng_1d_function &function1,
 							const dng_1d_function &function2);
-	
+
 		/// Only true if both function1 and function2 have IsIdentity equal to true.
 
 		virtual bool IsIdentity () const;
-	
+
 		/// Return the composed mapping for value x.
 		/// \param x A value between 0.0 and 1.0 (inclusive).
 		/// \retval function2.Evaluate(function1.Evaluate(x)).
 
 		virtual real64 Evaluate (real64 x) const;
-	
+
 		/// Return the reverse mapped value for y.
 		/// Be careful using this method with compositions where the inner function does not have a range 0.0 to 1.0 . (Or better yet, do not use such functions.)
 		/// \param y A value to reverse map. Should be within the range of function2.Evaluate.
 		/// \retval A value x such that function2.Evaluate(function1.Evaluate(x)) == y (to very close approximation).
 
 		virtual real64 EvaluateInverse (real64 y) const;
-	
+
 	};
 
 /*****************************************************************************/
@@ -135,25 +135,25 @@ class dng_1d_concatenate: public dng_1d_function
 
 class dng_1d_inverse: public dng_1d_function
 	{
-	
+
 	protected:
-	
+
 		const dng_1d_function &fFunction;
-	
+
 	public:
-	
+
 		dng_1d_inverse (const dng_1d_function &f);
-	
+
 		virtual bool IsIdentity () const;
-	
+
 		virtual real64 Evaluate (real64 x) const;
-	
+
 		virtual real64 EvaluateInverse (real64 y) const;
-	
+
 	};
 
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_hue_sat_map.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_hue_sat_map.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -41,7 +41,7 @@ class dng_hue_sat_map
 		uint32 fHueDivisions;
 		uint32 fSatDivisions;
 		uint32 fValDivisions;
-		
+
 		uint32 fHueStep;
 		uint32 fValStep;
 
@@ -64,12 +64,12 @@ class dng_hue_sat_map
 
 		bool IsValid () const
 			{
-			
+
 			return fHueDivisions > 0 &&
 				   fSatDivisions > 1 &&
 				   fValDivisions > 0 &&
 				   fDeltas.Buffer ();
-				   
+
 			}
 
 		void SetInvalid ()
@@ -78,7 +78,7 @@ class dng_hue_sat_map
 			fHueDivisions = 0;
 			fSatDivisions = 0;
 			fValDivisions = 0;
-			
+
 			fHueStep = 0;
 			fValStep = 0;
 
@@ -94,10 +94,10 @@ class dng_hue_sat_map
 			satDivisions = fSatDivisions;
 			valDivisions = fValDivisions;
 			}
-			
+
 		void SetDivisions (uint32 hueDivisions,
 						   uint32 satDivisions,
-						   uint32 valDivisions = 1);	
+						   uint32 valDivisions = 1);
 
 		void GetDelta (uint32 hueDiv,
 					   uint32 satDiv,
@@ -108,14 +108,14 @@ class dng_hue_sat_map
 					   uint32 satDiv,
 					   uint32 valDiv,
 					   const HSBModify &modify);
-		
+
 		uint32 DeltasCount () const
 			{
 			return fValDivisions *
 				   fHueDivisions *
 				   fSatDivisions;
 			}
-		
+
 		HSBModify *GetDeltas ()
 			{
 			return (HSBModify *) fDeltas.Buffer_real32 ();
@@ -127,7 +127,7 @@ class dng_hue_sat_map
 			}
 
                 bool operator== (const dng_hue_sat_map &rhs) const;
-		
+
 		static dng_hue_sat_map * Interpolate (const dng_hue_sat_map &map1,
 											  const dng_hue_sat_map &map2,
 											  real64 weight1);

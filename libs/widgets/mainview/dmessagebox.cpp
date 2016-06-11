@@ -59,14 +59,14 @@ bool DMessageBox::readMsgBoxShouldBeShown(const QString& dontShowAgainName)
 
     return value;
 }
-    
+
 void DMessageBox::saveMsgBoxShouldBeShown(const QString& dontShowAgainName, bool value)
 {
     if (dontShowAgainName.isEmpty()) return;
 
     KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup group      = config->group("Notification Messages");
-    
+
     group.writeEntry(dontShowAgainName, value);
     config->sync();
 }
@@ -158,7 +158,7 @@ int DMessageBox::showContinueCancelWidget(QMessageBox::Icon icon,
     buttons->button(QDialogButtonBox::Yes)->setDefault(true);
     buttons->button(QDialogButtonBox::Yes)->setText(i18n("Continue"));
     buttons->button(QDialogButtonBox::Cancel)->setShortcut(Qt::Key_Escape);
-    
+
     QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
                      dialog, SLOT(accept()));
 
@@ -225,13 +225,13 @@ int DMessageBox::showYesNoWidget(QMessageBox::Icon icon,
     QSignalMapper* const signalMapper = new QSignalMapper(buttons);
     signalMapper->setMapping(buttons->button(QDialogButtonBox::Yes), QDialogButtonBox::Yes);
     signalMapper->setMapping(buttons->button(QDialogButtonBox::No),  QDialogButtonBox::No);
-    
+
     QObject::connect(buttons->button(QDialogButtonBox::Yes), SIGNAL(clicked()),
                      signalMapper, SLOT(map()));
-    
+
     QObject::connect(buttons->button(QDialogButtonBox::No), SIGNAL(clicked()),
                      signalMapper, SLOT(map()));
-    
+
     QObject::connect(signalMapper, SIGNAL(mapped(int)),
                      dialog, SLOT(done(int)));
 
@@ -239,7 +239,7 @@ int DMessageBox::showYesNoWidget(QMessageBox::Icon icon,
     int result          = createMessageBox(dialog, buttons, createIcon(icon), text, listWidget,
                                            dontAskAgainName.isEmpty() ? QString() : i18n("Do not ask again"),
                                            &checkboxResult);
-    
+
     if (result == QDialogButtonBox::Yes)
     {
         saveMsgBoxShouldBeShown(dontAskAgainName, checkboxResult);
@@ -308,7 +308,7 @@ int DMessageBox::createMessageBox(QDialog* const dialog,
         listWidget->setParent(mainWidget);
         mainLayout->addWidget(listWidget, 50);
     }
-   
+
     //--------------------------------------------------------------------------------
 
     QPointer<QCheckBox> checkbox = 0;
@@ -370,7 +370,7 @@ QIcon DMessageBox::createIcon(QMessageBox::Icon icon)
             tmpIcon = qApp->style()->standardIcon(QStyle::SP_MessageBoxInformation, 0, qApp->activeWindow());
             break;
     }
-    
+
     int iconSize = qApp->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, 0, qApp->activeWindow());
 
     return tmpIcon.pixmap(iconSize);
@@ -386,7 +386,7 @@ QListWidget* DMessageBox::createWidgetList(const QStringList& items)
         listWidget = new QListWidget();
         listWidget->addItems(items);
     }
-    
+
     return listWidget;
 }
 

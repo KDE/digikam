@@ -74,14 +74,14 @@ DBinaryIface::DBinaryIface(const QString& binaryName, const QString& minimalVers
       m_headerStarts(header),
       m_headerLine(headerLine),
       m_minimalVersion(minimalVersion),
-      m_configGroup(pluginName + QLatin1String(" Settings")), 
+      m_configGroup(pluginName + QLatin1String(" Settings")),
       m_binaryBaseName(goodBaseName(binaryName)),
-      m_binaryArguments(args), 
-      m_projectName(projectName), 
+      m_binaryArguments(args),
+      m_projectName(projectName),
       m_url(QUrl(url)),
-      m_isFound(false), 
+      m_isFound(false),
       m_developmentVersion(false),
-      m_version(QLatin1String("")), 
+      m_version(QLatin1String("")),
       m_pathDir(QLatin1String("")),
       m_pathWidget(0),
       m_binaryLabel(0),
@@ -124,9 +124,9 @@ bool DBinaryIface::versionIsRight(const float customVersion) const
     QRegExp reg(QLatin1String("^(\\d*[.]\\d*)"));
     version().indexOf(reg);
     float floatVersion = reg.capturedTexts()[0].toFloat();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Found (" << isFound() 
-                                 << ") :: Version : " << version() 
-                                 << "(" << floatVersion 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Found (" << isFound()
+                                 << ") :: Version : " << version()
+                                 << "(" << floatVersion
                                  << ")  [" << customVersion << "]";
 
     return (!version().isNull() &&

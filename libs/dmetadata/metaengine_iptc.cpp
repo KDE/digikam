@@ -176,7 +176,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
             {
                 value = QString::fromLatin1(iptcData.detectCharset());
             }
-            else 
+            else
             {
                 value = QString::fromUtf8(os.str().c_str());
             }

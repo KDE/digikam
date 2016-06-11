@@ -72,7 +72,7 @@ class ImageTagPairPrivSharedNull : public ImageTagPairPrivSharedPointer
 {
 public:
 
-    ImageTagPairPrivSharedNull() 
+    ImageTagPairPrivSharedNull()
         : QSharedDataPointer<ImageTagPairPriv>(new ImageTagPairPriv)
     {
     }

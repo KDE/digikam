@@ -49,7 +49,7 @@ namespace Digikam
 {
 
 /**
- * A widget to show an horizontal or vertical line separator 
+ * A widget to show an horizontal or vertical line separator
  **/
 class DIGIKAM_EXPORT DLineWidget : public QFrame
 {

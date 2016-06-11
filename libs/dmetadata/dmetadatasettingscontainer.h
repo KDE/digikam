@@ -174,7 +174,7 @@ public:
 
     bool unifyReadWrite() const;
     void setUnifyReadWrite(bool b);
-    
+
     void addMapping(const QLatin1String key);
 
     QList<NamespaceEntry>& getReadMapping(const QLatin1String& key) const;

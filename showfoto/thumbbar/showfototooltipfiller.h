@@ -37,7 +37,7 @@ namespace ShowfotoToolTipFiller
 {
     QString ShowfotoItemInfoTipContents(const ShowfotoItemInfo& info);
 
-} // namespace ShowfotoToolTipFiller  
+} // namespace ShowfotoToolTipFiller
 
 } // namespace ShowFoto
 

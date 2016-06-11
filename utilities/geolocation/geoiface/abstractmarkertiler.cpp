@@ -226,7 +226,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
     initializeNextBounds();
 }
 
-AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* const model, const int level, 
+AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* const model, const int level,
                                                         const TileIndex& startIndex, const TileIndex& endIndex)
     : d(new Private())
 {
@@ -241,7 +241,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
     initializeNextBounds();
 }
 
-AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* const model, const int level, 
+AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* const model, const int level,
                                                         const GeoCoordinates::PairList& normalizedMapBounds)
     : d(new Private())
 {

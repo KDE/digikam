@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // EXIF_LENS_H 
+#endif // EXIF_LENS_H

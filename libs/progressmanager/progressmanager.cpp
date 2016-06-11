@@ -191,7 +191,7 @@ void ProgressItem::setThumbnail(const QIcon& icon)
     if (!hasThumbnail()) return;
 
     int iconSize = qApp->style()->pixelMetric(QStyle::PM_SmallIconSize);
-    
+
     if (icon.isNull())
     {
         emit progressItemThumbnail(this, QIcon::fromTheme(QLatin1String("image-missing")).pixmap(iconSize));
@@ -388,7 +388,7 @@ ProgressManager::ProgressManager()
     }
 
     d->waitingLoop = new QEventLoop(this);
-    
+
     connect(this, SIGNAL(completeTransactionDeferred(ProgressItem*)),
             this, SLOT(slotTransactionCompletedDeferred(ProgressItem*)));
 }

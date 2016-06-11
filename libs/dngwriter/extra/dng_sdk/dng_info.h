@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_info.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_info.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -38,39 +38,39 @@
 
 class dng_info
 	{
-	
+
 	public:
-	
+
 		uint64 fTIFFBlockOffset;
-		
+
 		uint64 fTIFFBlockOriginalOffset;
-	
+
 		bool fBigEndian;
-		
+
 		uint32 fMagic;
-		
+
 		AutoPtr<dng_exif> fExif;
-	
+
 		AutoPtr<dng_shared> fShared;
-		
+
 		int32 fMainIndex;
-			
+
 		uint32 fIFDCount;
-		
+
 		AutoPtr<dng_ifd> fIFD [kMaxSubIFDs + 1];
-		
+
 		uint32 fChainedIFDCount;
-		
+
 		AutoPtr<dng_ifd> fChainedIFD [kMaxChainedIFDs];
-		
+
 	protected:
-	
+
 		uint32 fMakerNoteNextIFD;
-		
+
 	public:
-	
+
 		dng_info ();
-		
+
 		virtual ~dng_info ();
 
 		/// Read dng_info from a dng_stream
@@ -88,9 +88,9 @@ class dng_info
 		/// \retval true if stream provided a valid DNG.
 
 		virtual bool IsValidDNG ();
-		
+
 	protected:
-		
+
 		virtual void ValidateMagic ();
 
 		virtual void ParseTag (dng_host &host,
@@ -134,28 +134,28 @@ class dng_info
 							   		 int64 offsetDelta,
 							   		 uint64 minOffset,
 							   		 uint64 maxOffset);
-							   		 
+
 		virtual void ParseSonyPrivateData (dng_host &host,
 										   dng_stream &stream,
 										   uint32 count,
 										   uint64 oldOffset,
 										   uint64 newOffset);
-							   		 
+
 		virtual void ParseDNGPrivateData (dng_host &host,
 										  dng_stream &stream);
 
 	private:
-	
+
 		// Hidden copy constructor and assignment operator.
-	
+
 		dng_info (const dng_info &info);
-		
+
 		dng_info & operator= (const dng_info &info);
-		
+
 	};
-	
+
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

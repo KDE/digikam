@@ -1058,7 +1058,7 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
 		imgdata.sizes.left_margin++;
 		imgdata.sizes.width--;
 	}
-	if(!imgdata.idata.dng_version && !strcmp(imgdata.idata.make,"Fujifilm") 
+	if(!imgdata.idata.dng_version && !strcmp(imgdata.idata.make,"Fujifilm")
            && (!strncmp(imgdata.idata.model,"S20Pro",6) || !strncmp(imgdata.idata.model,"F700",4))
            )
 	{
@@ -1337,13 +1337,13 @@ int LibRaw::unpack(void)
 	if(imgdata.idata.dng_version && libraw_internal_data.unpacker_data.tiff_samples == 2)
 		rawspeed_enabled = 0;
 	// Disable rawspeed for double-sized Oly files
-	if(!strncasecmp(imgdata.idata.make,"Olympus",7) && 
+	if(!strncasecmp(imgdata.idata.make,"Olympus",7) &&
 		( (!strncasecmp(imgdata.idata.model,"E-M5MarkII",10) && imgdata.sizes.raw_width == 9280) || !strncasecmp(imgdata.idata.model,"SH-2",4) || !strncasecmp(imgdata.idata.model,"TG-4",4))
 		)
 		rawspeed_enabled = 0;
 
-	if(!strncasecmp(imgdata.idata.make,"Canon",5) 
- 		&& !strncasecmp(imgdata.idata.model,"EOS 5DS",7) 
+	if(!strncasecmp(imgdata.idata.make,"Canon",5)
+ 		&& !strncasecmp(imgdata.idata.model,"EOS 5DS",7)
 		&& (load_raw == &LibRaw::canon_sraw_load_raw))
 		rawspeed_enabled = 0;
 

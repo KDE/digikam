@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_pthread.cpp#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_pthread.cpp#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -85,7 +85,7 @@ struct dng_pthread_cond_impl
 {
 	dng_pthread_mutex_impl lock;		// Mutual exclusion on next two variables
 	waiter *head_waiter;			// List of threads waiting on this condition
-	waiter *tail_waiter;			// Used to get FIFO, rather than LIFO, behavior for pthread_cond_signal 
+	waiter *tail_waiter;			// Used to get FIFO, rather than LIFO, behavior for pthread_cond_signal
 	unsigned int broadcast_generation;	// Used as sort of a separator on broadcasts
 										// saves having to walk the waiters list setting
 										// each one's "chosen_by_signal" flag while the condition is locked
@@ -221,7 +221,7 @@ namespace
 		delete args_ptr;
 
 		GetThreadSemaphore();
-		
+
 		void *result = args.func(args.arg);
 
 		{
@@ -655,7 +655,7 @@ int dng_pthread_cond_wait(dng_pthread_cond_t *cond, dng_pthread_mutex_t *mutex)
 {
 	ValidateCond(cond);
 
-	return cond_wait_internal(cond, mutex, INFINITE);	
+	return cond_wait_internal(cond, mutex, INFINITE);
 }
 
 /*****************************************************************************/
@@ -663,20 +663,20 @@ int dng_pthread_cond_wait(dng_pthread_cond_t *cond, dng_pthread_mutex_t *mutex)
 int dng_pthread_cond_timedwait(dng_pthread_cond_t *cond, dng_pthread_mutex_t *mutex, struct dng_timespec *latest_time)
 {
 	ValidateCond(cond);
-	
+
 	struct dng_timespec sys_timespec;
-	
+
 	dng_pthread_now (&sys_timespec);
 
 	__int64 sys_time  = (__int64)sys_timespec.tv_sec * 1000000000 + sys_timespec.tv_nsec;
 	__int64 lock_time = (__int64)latest_time->tv_sec * 1000000000 + latest_time->tv_nsec;
 
 	int wait_millisecs = (int)((lock_time - sys_time + 500000) / 1000000);
-	
+
 	if (wait_millisecs < 0)
 		wait_millisecs = 0;
 
-	return cond_wait_internal(cond, mutex, wait_millisecs);	
+	return cond_wait_internal(cond, mutex, wait_millisecs);
 }
 
 /*****************************************************************************/
@@ -817,10 +817,10 @@ namespace {
 struct dng_pthread_rwlock_impl
 {
 	dng_pthread_mutex_impl mutex;
-	
+
 	rw_waiter *head_waiter;
 	rw_waiter *tail_waiter;
-	
+
 	unsigned long readers_active;
 	unsigned long writers_waiting;
 	bool writer_active;
@@ -1099,10 +1099,10 @@ void dng_pthread_terminate()
 
 int dng_pthread_now (struct timespec *now)
 	{
-	
+
 	if (now == NULL)
 		return -1; // EINVAL
-		
+
 	#if qWinOS
 
 	FILETIME ft;
@@ -1111,16 +1111,16 @@ int dng_pthread_now (struct timespec *now)
 	__int64 sys_time = ((__int64)ft.dwHighDateTime << 32) + ft.dwLowDateTime;
 
 	#define SecsFrom1601To1970 11644473600LL
-	
+
 	sys_time -= SecsFrom1601To1970 * 10000000LL;
-	
+
 	sys_time *= 100;	// Convert from 100ns to 1ns units
 
 	now->tv_sec  = (long)(sys_time / 1000000000);
 	now->tv_nsec = (long)(sys_time % 1000000000);
-	
+
 	#else
-	
+
 	struct timeval tv;
 
 	if (gettimeofday (&tv, NULL) != 0)
@@ -1132,7 +1132,7 @@ int dng_pthread_now (struct timespec *now)
 	#endif
 
 	return 0;
-	
+
 	}
 
 /*****************************************************************************/

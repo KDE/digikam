@@ -89,7 +89,7 @@ static int minimumListHeight(const QListWidget* list, int numVisibleEntry)
     {
         w = 10;
     }
-    
+
     if (numVisibleEntry <= 0)
     {
         numVisibleEntry = 4;
@@ -167,8 +167,8 @@ public:
      * @param trToRawNames storage for mapping of translated to raw names
      * @return sorted list of translated font names
      */
-    QStringList translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames = 0); 
-    
+    QStringList translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames = 0);
+
     void _k_toggled_checkbox();
     void _k_family_chosen_slot(const QString&);
     void _k_size_chosen_slot(const QString&);
@@ -177,7 +177,7 @@ public:
     void _k_size_value_slot(double);
 
 public:
-    
+
     DFontProperties*        q;
 
     QPalette                palette;
@@ -315,10 +315,10 @@ DFontProperties::DFontProperties(QWidget* const parent,
     if (flags & ShowDifferences)
     {
         d->sizeCheckbox = new QCheckBox(i18n("Size"), page);
-    
+
         connect(d->sizeCheckbox, SIGNAL(toggled(bool)),
                 this, SLOT(_k_toggled_checkbox()));
-        
+
         sizeLayout->addWidget(d->sizeCheckbox, 0, Qt::AlignLeft);
         d->sizeCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font size settings."));
         d->sizeCheckbox->setToolTip(i18n("Change font size?"));
@@ -460,7 +460,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
             this, SLOT(_k_size_chosen_slot(QString)));
 
     row ++;
-    
+
     // Completed the font attribute grid.
     // Add the font preview into the lower part of the splitter.
 
@@ -597,7 +597,7 @@ void DFontProperties::enableColumn(int column, bool state)
     {
         d->styleListBox->setEnabled(state);
     }
-    
+
     if (column & SizeList)
     {
         d->sizeListBox->setEnabled(state);
@@ -673,7 +673,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     if (family.isEmpty())
     {
         Q_ASSERT(familyListBox->currentItem());
-    
+
         if (familyListBox->currentItem())
         {
             currentFamily = qtFamilies[familyListBox->currentItem()->text()];
@@ -685,17 +685,17 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     }
 
     // Get the list of styles available in this family.
-    
+
     QFontDatabase dbase;
     QStringList styles = dbase.styles(currentFamily);
-    
+
     if (styles.isEmpty())
     {
         styles.append(i18n("Normal"));
     }
 
     // Filter style strings and add to the listbox.
-    
+
     QString pureFamily;
     splitFontString(family, &pureFamily);
     QStringList filteredStyles;
@@ -708,7 +708,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
         // that falls back back to another when set.
         // Remove such styles, by checking set/get round-trip.
         QFont testFont = dbase.font(currentFamily, style, 10);
-    
+
         if (dbase.styleString(testFont) != style)
         {
             styles.removeAll(style);
@@ -716,7 +716,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
         }
 
         QString fstyle = style;
-        
+
         if (!filteredStyles.contains(fstyle))
         {
             filteredStyles.append(fstyle);
@@ -731,23 +731,23 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     // Try to set the current style in the listbox to that previous.
     int listPos = filteredStyles.indexOf(selectedStyle.isEmpty() ?  i18n("Normal") : selectedStyle);
 
-    if (listPos < 0) 
+    if (listPos < 0)
     {
         // Make extra effort to have Italic selected when Oblique was chosen,
         // and vice versa, as that is what the user would probably want.
         QString styleIt = i18n("Italic");
         QString styleOb = i18n("Oblique");
-    
+
         for (int i = 0; i < 2; ++i)
         {
             int pos = selectedStyle.indexOf(styleIt);
-        
+
             if (pos >= 0)
             {
                 QString style = selectedStyle;
                 style.replace(pos, styleIt.length(), styleOb);
                 listPos       = filteredStyles.indexOf(style);
-            
+
                 if (listPos >= 0)
                 {
                     break;
@@ -762,17 +762,17 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     QString currentStyle = qtStyles[styleListBox->currentItem()->text()];
 
     // Recompute the size listbox for this family/style.
-    
+
     qreal currentSize = setupSizeListBox(currentFamily, currentStyle);
     sizeOfFont->setValue(currentSize);
 
     selFont = dbase.font(currentFamily, currentStyle, int(currentSize));
-    
+
     if (dbase.isSmoothlyScalable(currentFamily, currentStyle) && selFont.pointSize() == floor(currentSize))
     {
         selFont.setPointSizeF(currentSize);
     }
-    
+
     emit q->fontSelected(selFont);
 
     signalsAllowed = true;
@@ -801,17 +801,17 @@ void DFontProperties::Private::_k_style_chosen_slot(const QString& style)
     }
 
     // Recompute the size listbox for this family/style.
-    
+
     qreal currentSize = setupSizeListBox(currentFamily, currentStyle);
     sizeOfFont->setValue(currentSize);
 
     selFont           = dbase.font(currentFamily, currentStyle, int(currentSize));
-    
+
     if (dbase.isSmoothlyScalable(currentFamily, currentStyle) && selFont.pointSize() == floor(currentSize))
     {
         selFont.setPointSizeF(currentSize);
     }
-    
+
     emit q->fontSelected(selFont);
 
     if (!style.isEmpty())
@@ -843,7 +843,7 @@ void DFontProperties::Private::_k_size_chosen_slot(const QString& size)
     }
 
     // Reset the customized size slot in the list if not needed.
-    
+
     if (customSizeRow >= 0 && selFont.pointSizeF() != currentSize)
     {
         sizeListBox->item(customSizeRow)->setText(standardSizeAtCustom);
@@ -965,7 +965,7 @@ int DFontProperties::Private::nearestSizeRow(qreal val, bool customize)
     }
 
     // For Qt-bad-sizes workaround: ignore value of customize, use true
-    
+
     if (customize && diff > 0)
     {
         customSizeRow        = row;
@@ -1075,7 +1075,7 @@ void DFontProperties::Private::setupDisplay()
     QString family  = selFont.family().toLower();
     QString styleID = styleIdentifier(selFont);
     qreal size      = selFont.pointSizeF();
-    
+
     if (size == -1)
     {
         size = QFontInfo(selFont).pointSizeF();
@@ -1084,9 +1084,9 @@ void DFontProperties::Private::setupDisplay()
     int numEntries, i;
 
     // Direct family match.
-    
+
     numEntries = familyListBox->count();
-    
+
     for (i = 0; i < numEntries; ++i)
     {
         if (family == qtFamilies[familyListBox->item(i)->text()].toLower())
@@ -1120,7 +1120,7 @@ void DFontProperties::Private::setupDisplay()
     if (i == numEntries)
     {
         QString fallback = family + QLatin1String(" [");
-        
+
         for (i = 0; i < numEntries; ++i)
         {
             if (qtFamilies[familyListBox->item(i)->text()].toLower().startsWith(fallback))
@@ -1157,9 +1157,9 @@ void DFontProperties::Private::setupDisplay()
     // Try now to set the current items in the style and size boxes.
 
     // Set current style in the listbox.
-    
+
     numEntries = styleListBox->count();
-    
+
     for (i = 0; i < numEntries; ++i)
     {
         if (styleID == styleIDs[styleListBox->item(i)->text()])
@@ -1168,7 +1168,7 @@ void DFontProperties::Private::setupDisplay()
             break;
         }
     }
-    
+
     if (i == numEntries)
     {
         // Style not found, fallback.
@@ -1195,7 +1195,7 @@ void DFontProperties::getFontList(QStringList& list, uint fontListCriteria)
     QStringList lstSys(dbase.families());
 
     // if we have criteria; then check fonts before adding
-    
+
     if (fontListCriteria)
     {
         QStringList lstFonts;
@@ -1212,7 +1212,7 @@ void DFontProperties::getFontList(QStringList& list, uint fontListCriteria)
             {
                 continue;
             }
-            
+
             if ((fontListCriteria & SmoothScalableFonts) > 0 && !dbase.isSmoothlyScalable(*it))
             {
                 continue;
@@ -1225,7 +1225,7 @@ void DFontProperties::getFontList(QStringList& list, uint fontListCriteria)
         {
             // Fallback.. if there are no fixed fonts found, it's probably a
             // bug in the font server or Qt.  In this case, just use 'fixed'
-        
+
             if (lstFonts.count() == 0)
             {
                 lstFonts.append(QLatin1String("fixed"));
@@ -1268,7 +1268,7 @@ QString DFontProperties::Private::styleIdentifier(const QFont& font)
 {
     const QChar comma(QLatin1Char(','));
 
-    return (QString::number(font.weight())     + comma + 
+    return (QString::number(font.weight())     + comma +
             QString::number((int)font.style()) + comma +
             QString::number(font.stretch())
            );
@@ -1284,7 +1284,7 @@ void DFontProperties::Private::splitFontString(const QString& name, QString* fam
         {
             *family = name.trimmed();
         }
-        
+
         if (foundry)
         {
             foundry->clear();
@@ -1294,12 +1294,12 @@ void DFontProperties::Private::splitFontString(const QString& name, QString* fam
     {
         int p2 = name.indexOf(QLatin1Char(']'), p1);
         p2     = p2 > p1 ? p2 : name.length();
-        
+
         if (family)
         {
             *family = name.left(p1).trimmed();
         }
-        
+
         if (foundry)
         {
             *foundry = name.mid(p1 + 1, p2 - p1 - 1).trimmed();
@@ -1325,7 +1325,7 @@ QString DFontProperties::Private::translateFontName(const QString& name)
     // Assemble full translation.
 
     QString trfont;
-    
+
     if (foundry.isEmpty())
     {
         // i18n: Filter by which the translators can translate, or otherwise
@@ -1339,7 +1339,7 @@ QString DFontProperties::Private::translateFontName(const QString& name)
         trfont = QCoreApplication::translate("FontHelpers", "%1 [%2]", "@item Font name [foundry]")
                  .arg(trFamily).arg(trFoundry);
     }
-    
+
     return trfont;
 }
 
@@ -1359,12 +1359,12 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
     Q_FOREACH (const QString &name, names)
     {
         QString trName = translateFontName(name);
-    
+
         if (!genericNames.contains(name))
         {
             trNames.append(trName);
         }
-        
+
         trMap.insert(trName, name);
     }
 
@@ -1377,7 +1377,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
     Q_FOREACH (const QString &genericName, genericNames)
     {
         QString trGenericName = translateFontName(genericName);
-        
+
         if (trMap.contains(trGenericName))
         {
             trNames.prepend(trGenericName);
@@ -1388,7 +1388,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
     {
         *trToRawNames = trMap;
     }
-    
+
     return trNames;
 }
 

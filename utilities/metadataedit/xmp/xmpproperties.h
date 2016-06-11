@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // XMP_PROPERTIES_H 
+#endif // XMP_PROPERTIES_H

@@ -283,7 +283,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(TableViewMode
             const int widthA                      = infoA.dimensions().width();
             const int widthB                      = infoB.dimensions().width();
             const ColumnCompareResult widthResult = compareHelper<int>(widthA, widthB);
-            
+
             if (widthResult!=CmpEqual)
             {
                 return widthResult;

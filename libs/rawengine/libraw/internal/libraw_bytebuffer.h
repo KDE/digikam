@@ -66,7 +66,7 @@ class LibRaw_bit_buffer
             int m = vbits >> 3;
             switch(m)
                 {
-                case 2:	
+                case 2:
                     c1 = buf->get_ljpeg_byte();
                     bitbuf = (bitbuf <<8) | (c1);
                     vbits+=8;
@@ -75,7 +75,7 @@ class LibRaw_bit_buffer
                     c1 = buf->get_ljpeg_byte();
                     c2 = buf->get_ljpeg_byte();
                     bitbuf = (bitbuf <<16) | (c1<<8) | c2;
-                    vbits+=16;		
+                    vbits+=16;
                     break;
                 case 0:
                     c1 = buf->get_ljpeg_byte();

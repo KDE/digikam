@@ -91,7 +91,7 @@ public:
      * Scan Whole collection without to display a progress dialog or to manage splashscreen, as for NewItemsFinder tool.
      */
     void completeCollectionScanInBackground(bool defer);
-    
+
     /**
      * Carries out a complete collection scan, at the same time updating
      * the unique hash in the database and thumbnail database.
@@ -199,7 +199,7 @@ public:
      */
     void beginFileMetadataWrite(const ImageInfo& info);
     void finishFileMetadataWrite(const ImageInfo& info, bool changed);
-    
+
 Q_SIGNALS:
 
     void databaseInitialized(bool success);

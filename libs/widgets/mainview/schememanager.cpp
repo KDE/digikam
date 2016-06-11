@@ -550,7 +550,7 @@ StateEffects::StateEffects(QPalette::ColorGroup state, const KSharedConfigPtr& c
 
             if (_effects[Color] > ColorNoEffect)
             {
-                _color = cfg.readEntry("Color", (state == QPalette::Disabled) ? QColor(56, 56, 56) 
+                _color = cfg.readEntry("Color", (state == QPalette::Disabled) ? QColor(56, 56, 56)
                                                                               : QColor(112, 111, 110));
             }
         }

@@ -63,7 +63,7 @@ public:
                        const QString& _password = QString(),
                        const QString& _databaseNameThumbnails = QString(),
                        const QString& _databaseNameFace = QString(),
-                       const QString& _internalServerDBPath = QString() 
+                       const QString& _internalServerDBPath = QString()
                       );
 
     DbEngineParameters();
@@ -122,7 +122,7 @@ public:
     QString getCoreDatabaseNameOrDir()   const;
     QString getThumbsDatabaseNameOrDir() const;
     QString getFaceDatabaseNameOrDir()   const;
-    
+
     /// Use these methods if you set a file or a folder.
     void setCoreDatabasePath(const QString& folderOrFileOrName);
     void setThumbsDatabasePath(const QString& folderOrFileOrName);

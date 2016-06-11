@@ -137,7 +137,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
             for (int x = 0; x < width; x++)
             {
                 if (sixteenBit)
-                {  
+                {
                     bs[x]  += pSrc16[0];
                     gs[x]  += pSrc16[1];
                     rs[x]  += pSrc16[2];
@@ -145,7 +145,7 @@ void BlurFilter::blurMultithreaded(uint start, uint stop)
                     pSrc16 += 4;
                 }
                 else
-                {  
+                {
                     bs[x] += pSrc8[0];
                     gs[x] += pSrc8[1];
                     rs[x] += pSrc8[2];

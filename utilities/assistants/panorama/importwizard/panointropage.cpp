@@ -205,7 +205,7 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
             break;
         case TIFF:
             d->tiffRadioButton->setChecked(true);
-            break; 
+            break;
         case HDR:
             // TODO HDR
 //             d->hdrRadioButton->setChecked(true);

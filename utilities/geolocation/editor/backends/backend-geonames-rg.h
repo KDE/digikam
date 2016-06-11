@@ -60,7 +60,7 @@ public:
 
 private Q_SLOTS:
 
-    void nextPhoto(); 
+    void nextPhoto();
     void slotFinished(QNetworkReply* reply);
 
 private:

@@ -175,7 +175,7 @@ void PrintHelper::print(DImg& doc)
     PrintOptionsPage* const optionsPage = new PrintOptionsPage(dialog, doc.size());
     optionsPage->loadConfig();
     dialog->setOptionTabs(QList<QWidget*>() << optionsPage);
-    
+
     bool wantToPrint = (dialog->exec() == QDialog::Accepted);
 
     optionsPage->saveConfig();

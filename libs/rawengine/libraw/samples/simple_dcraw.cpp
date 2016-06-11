@@ -50,10 +50,10 @@ int main(int ac, char *av[])
     int  i, ret, verbose=0, output_thumbs=0;
 
     // don't use fixed size buffers in real apps!
-    char outfn[1024],thumbfn[1024]; 
+    char outfn[1024],thumbfn[1024];
 
     LibRaw RawProcessor;
-    if(ac<2) 
+    if(ac<2)
         {
             printf(
                 "simple_dcraw - LibRaw %s sample. Emulates dcraw [-D] [-T] [-v] [-e] [-E]\n"
@@ -68,7 +68,7 @@ int main(int ac, char *av[])
                 av[0]);
             return 0;
         }
-    
+
     putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
 
 #define P1 RawProcessor.imgdata.idata
@@ -102,7 +102,7 @@ int main(int ac, char *av[])
                             printf("%s\n",*cc);
                             cc++;
                           }
-                        
+
                         exit(0);
                       }
                     continue;
@@ -115,7 +115,7 @@ int main(int ac, char *av[])
                     fprintf(stderr,"Cannot open_file %s: %s\n",av[i],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
                 }
-            
+
             if(!output_thumbs) // No unpack for thumb extraction
               if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
@@ -143,20 +143,20 @@ int main(int ac, char *av[])
                                 {
                                     fprintf(stderr,"Cannot write %s: %s\n",thumbfn,libraw_strerror(ret));
                                     if(LIBRAW_FATAL_ERROR(ret))
-                                        continue; 
+                                        continue;
                                 }
                         }
                     continue;
                 }
-            
+
             ret = RawProcessor.dcraw_process();
-                
+
             if(LIBRAW_SUCCESS !=ret)
                 {
                     fprintf(stderr,"Cannot do postpocessing on %s: %s\n",
                             av[i],libraw_strerror(ret));
                     if(LIBRAW_FATAL_ERROR(ret))
-                        continue; 
+                        continue;
                 }
             snprintf(outfn,sizeof(outfn),
                      "%s.%s",

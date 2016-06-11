@@ -173,13 +173,13 @@ void DatabaseServerStarter::stopServerManagerProcess()
     {
         QDBusInterface dbus_iface(QLatin1String("org.kde.digikam.DatabaseServer"), QLatin1String("/DatabaseServer"));
         QDBusMessage stateMsg = dbus_iface.call(QLatin1String("isRunning"));
-        
+
         if (stateMsg.arguments().at(0).toBool())
         {
             dbus_iface.call(QLatin1String("stopDatabaseProcess"));
         }
     }
-    
+
     sem.release();
 }
 

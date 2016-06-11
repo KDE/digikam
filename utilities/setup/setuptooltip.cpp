@@ -479,7 +479,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
             d->albumSettingBox, SLOT(setEnabled(bool)));
 
     connect(d->showImportToolTipsBox, SIGNAL(toggled(bool)),
-            this, SLOT(slotImportToolTipsChanged()));    
+            this, SLOT(slotImportToolTipsChanged()));
 
     // --------------------------------------------------------
 

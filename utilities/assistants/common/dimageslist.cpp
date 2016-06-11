@@ -391,7 +391,7 @@ QModelIndex DImagesListView::indexFromItem(DImagesListViewItem* item, int column
 {
   return QTreeWidget::indexFromItem(item, column);
 }
- 
+
 void DImagesListView::contextMenuEvent(QContextMenuEvent* e)
 {
     QTreeWidget::contextMenuEvent(e);
@@ -552,10 +552,10 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(d->listView, &DImagesListView::signalItemClicked, 
+    connect(d->listView, &DImagesListView::signalItemClicked,
             this, &DImagesList::signalItemClicked);
 
-    connect(d->listView, &DImagesListView::signalContextMenuRequested, 
+    connect(d->listView, &DImagesListView::signalContextMenuRequested,
             this, &DImagesList::signalContextMenuRequested);
 
     // queue this connection because itemSelectionChanged is emitted
@@ -569,28 +569,28 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
 
     // --------------------------------------------------------
 
-    connect(d->addButton, &CtrlButton::clicked, 
+    connect(d->addButton, &CtrlButton::clicked,
             this, &DImagesList::slotAddItems);
 
-    connect(d->removeButton, &CtrlButton::clicked, 
+    connect(d->removeButton, &CtrlButton::clicked,
             this, &DImagesList::slotRemoveItems);
 
-    connect(d->moveUpButton, &CtrlButton::clicked, 
+    connect(d->moveUpButton, &CtrlButton::clicked,
             this, &DImagesList::slotMoveUpItems);
 
-    connect(d->moveDownButton, &CtrlButton::clicked, 
+    connect(d->moveDownButton, &CtrlButton::clicked,
             this, &DImagesList::slotMoveDownItems);
 
-    connect(d->clearButton, &CtrlButton::clicked, 
+    connect(d->clearButton, &CtrlButton::clicked,
             this, &DImagesList::slotClearItems);
 
-    connect(d->loadButton, &CtrlButton::clicked, 
+    connect(d->loadButton, &CtrlButton::clicked,
             this, &DImagesList::slotLoadItems);
 
-    connect(d->saveButton, &CtrlButton::clicked, 
+    connect(d->saveButton, &CtrlButton::clicked,
             this, &DImagesList::slotSaveItems);
 
-    connect(d->progressTimer, &QTimer::timeout, 
+    connect(d->progressTimer, &QTimer::timeout,
             this, &DImagesList::slotProgressTimerDone);
 
     // --------------------------------------------------------
@@ -1008,7 +1008,7 @@ void DImagesList::slotLoadItems()
             {
                 //allow plugins to append a new file
                 slotAddImages(urls);
-                // read plugin Image custom attributes and children element  
+                // read plugin Image custom attributes and children element
                 emit signalXMLLoadImageElement(xmlReader);
             }
         }

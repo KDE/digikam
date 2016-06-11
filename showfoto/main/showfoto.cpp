@@ -1135,7 +1135,7 @@ void ShowFoto::openFolder(const QUrl& url)
     }
 
     // Parse image IO mime types registration to get files filter pattern.
-    
+
     QString filter;
     QStringList mimeTypes = supportedImageMimeTypes(QIODevice::ReadOnly, filter);
 
@@ -1305,7 +1305,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
         {
             slotOpenUrl(d->infoList.at(0));
         }
-        else 
+        else
         {
             QMessageBox::information(this, qApp->applicationName(), i18n("There is no dropped item to process."));
             qWarning(DIGIKAM_SHOWFOTO_LOG) << "infolist is empty..";

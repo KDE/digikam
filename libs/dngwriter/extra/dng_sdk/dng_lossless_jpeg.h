@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_lossless_jpeg.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_lossless_jpeg.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -29,20 +29,20 @@
 
 class dng_spooler
 	{
-	
+
 	protected:
-	
+
 		virtual ~dng_spooler ()
 			{
 			}
-	
+
 	public:
-	
+
 		virtual void Spool (const void *data,
 							uint32 count) = 0;
-	
+
 	};
-						   
+
 /*****************************************************************************/
 
 void DecodeLosslessJPEG (dng_stream &stream,
@@ -50,7 +50,7 @@ void DecodeLosslessJPEG (dng_stream &stream,
 					     uint32 minDecodedSize,
 					     uint32 maxDecodedSize,
 						 bool bug16);
-						   
+
 /*****************************************************************************/
 
 void EncodeLosslessJPEG (const uint16 *srcData,
@@ -61,9 +61,9 @@ void EncodeLosslessJPEG (const uint16 *srcData,
 						 int32 srcRowStep,
 						 int32 srcColStep,
 						 dng_stream &stream);
-						 
+
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

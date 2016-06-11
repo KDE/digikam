@@ -44,7 +44,7 @@ int main (int /*argc*/, char** /*argv*/)
     {
         QString     key    = it.key();
         QStringList values = it.value();
-        QString     name   = values[0]; 
+        QString     name   = values[0];
         QString     title  = values[1];
         QString     desc   = values[2];
         qDebug() << key << " :: " << name << " :: " << title << " :: " << desc;

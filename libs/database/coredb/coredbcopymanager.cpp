@@ -196,7 +196,7 @@ void CoreDbCopyManager::copyDatabases(const DbEngineParameters& fromDBParameters
     emit finished(CoreDbCopyManager::success, QString());
 }
 
-bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName, 
+bool CoreDbCopyManager::copyTable(CoreDbBackend& fromDBbackend, const QString& fromActionName,
                                   CoreDbBackend& toDBbackend, const QString& toActionName)
 {
     qCDebug(DIGIKAM_COREDB_LOG) << "Core database: trying to copy contents from DB with ActionName: [" << fromActionName

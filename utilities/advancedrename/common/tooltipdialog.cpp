@@ -62,7 +62,7 @@ TooltipDialog::TooltipDialog(QWidget* const parent)
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Close, this);
     d->buttons->button(QDialogButtonBox::Close)->setDefault(true);
-    
+
     d->textBrowser = new QTextBrowser(this);
     d->textBrowser->setFrameStyle(QFrame::NoFrame);
     d->textBrowser->setOpenLinks(true);

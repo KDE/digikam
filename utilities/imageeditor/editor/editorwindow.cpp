@@ -2275,7 +2275,7 @@ bool EditorWindow::startingSaveVersion(const QUrl& url, bool fork, bool saveAs, 
         }*/
 
         // check for overwrite, unless the operation explicitly tells us to overwrite
-        if (!(m_savingContext.versionFileOperation.tasks & VersionFileOperation::Replace) && 
+        if (!(m_savingContext.versionFileOperation.tasks & VersionFileOperation::Replace) &&
             !checkOverwrite(newURL))
         {
             return false;

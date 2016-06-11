@@ -13,7 +13,7 @@
 #include <cstring>
 #include <cstdio>
 
-namespace DngXmpSdk { 
+namespace DngXmpSdk {
 // ! Can't include XMP..._Impl.hpp - used by both Core and Files.
 #define XMP_LitNMatch(s,l,n)	(std::strncmp((s),(l),(n)) == 0)
 
@@ -88,7 +88,7 @@ XMP_StringPtr XML_Node::GetAttrValue ( XMP_StringPtr attrName ) const
 		if ( ! attrPtr->ns.empty() ) continue;	// This form of GetAttrValue is for attrs in no namespace.
 		if ( attrPtr->name == attrName ) return attrPtr->value.c_str();
 	}
-	
+
 	return 0;	// Not found.
 
 }	// XML_Node::GetAttrValue
@@ -99,7 +99,7 @@ XMP_StringPtr XML_Node::GetAttrValue ( XMP_StringPtr attrName ) const
 
 void XML_Node::SetAttrValue ( XMP_StringPtr attrName, XMP_StringPtr attrValue )
 {
-	
+
 	for ( size_t i = 0, aLim = this->attrs.size(); i < aLim; ++i ) {
 		XML_Node * attrPtr = this->attrs[i];
 		if ( ! attrPtr->ns.empty() ) continue;	// This form of SetAttrValue is for attrs in no namespace.
@@ -130,7 +130,7 @@ XMP_StringPtr XML_Node::GetLeafContentValue() const
 void XML_Node::SetLeafContentValue ( XMP_StringPtr newValue )
 {
 	XML_Node * valueNode;
-	
+
 	if ( ! this->content.empty() ) {
 		valueNode = this->content[0];
 	} else {
@@ -149,16 +149,16 @@ void XML_Node::SetLeafContentValue ( XMP_StringPtr newValue )
 size_t XML_Node::CountNamedElements ( XMP_StringPtr nsURI, XMP_StringPtr localName ) const
 {
 	size_t count = 0;
-	
+
 	for ( size_t i = 0, vLim = this->content.size(); i < vLim; ++i ) {
 		const XML_Node & child = *this->content[i];
 		if ( child.ns != nsURI ) continue;
 		if ( strcmp ( localName, child.name.c_str()+child.nsPrefixLen ) != 0 ) continue;
 		++count;
 	}
-	
+
 	return count;
-	
+
 }	// XML_Node::CountNamedElements
 
 // =================================================================================================
@@ -175,7 +175,7 @@ XML_NodePtr XML_Node::GetNamedElement ( XMP_StringPtr nsURI, XMP_StringPtr local
 		if ( which == 0 ) return childPtr;
 		--which;
 	}
-	
+
 	return 0;	/// Not found.
 
 }	// XML_Node::GetNamedElement
@@ -192,7 +192,7 @@ static void DumpNodeList ( std::string * buffer, const XML_NodeVector & list, in
 	for ( size_t i = 0, limit = list.size(); i < limit; ++i ) {
 
 		const XML_Node * node = list[i];
-		
+
 		for ( int t = indent; t > 0; --t ) *buffer += "  ";
 		if ( node->IsWhitespaceNode() ) {
 			*buffer += "-- whitespace --\n";
@@ -219,13 +219,13 @@ static void DumpNodeList ( std::string * buffer, const XML_NodeVector & list, in
 			*buffer += numBuf;
 		}
 		*buffer += "\n";
-	
+
 		if ( ! node->attrs.empty() ) {
 			for ( int t = indent+1; t > 0; --t ) *buffer += "  ";
 			*buffer += "attrs:\n";
 			DumpNodeList ( buffer, node->attrs, indent+2 );
 		}
-		
+
 		if ( ! node->content.empty() ) {
 			DumpNodeList ( buffer, node->content, indent+1 );
 		}
@@ -252,13 +252,13 @@ void XML_Node::Dump ( std::string * buffer )
 	*buffer += "\", kind=";
 	*buffer += kNodeKinds[this->kind];
 	*buffer += "\n";
-	
+
 	if ( ! this->attrs.empty() ) {
 		*buffer += "  attrs:\n";
 		DumpNodeList ( buffer, this->attrs, 2 );
 	}
 	*buffer += "\n";
-	
+
 	DumpNodeList ( buffer, this->content, 0 );
 
 }	// XML_Node::Dump
@@ -274,7 +274,7 @@ static void SerializeOneNode ( std::string * buffer, const XML_Node & node )
 	if ( XMP_LitNMatch ( namePtr, "_dflt_:", 7 ) ) namePtr += 7;	// Hack for default namespaces.
 
 	switch ( node.kind ) {
-	
+
 		case kElemNode:
 			*buffer += '<';
 			*buffer += namePtr;
@@ -293,7 +293,7 @@ static void SerializeOneNode ( std::string * buffer, const XML_Node & node )
 				*buffer += '>';
 			}
 			break;
-	
+
 		case kAttrNode:
 			*buffer += ' ';
 			*buffer += namePtr;
@@ -301,15 +301,15 @@ static void SerializeOneNode ( std::string * buffer, const XML_Node & node )
 			*buffer += node.value;
 			*buffer += '"';
 			break;
-	
+
 		case kCDataNode:
 			*buffer += node.value;
 			break;
-	
+
 		case kPINode:
 			*buffer += node.value;	// *** Note that we're dropping PIs during the Expat parse.
 			break;
-	
+
 	}
 
 }	// SerializeOneNode
@@ -330,7 +330,7 @@ static void CollectNamespaceDecls ( NamespaceMap * nsMap, const XML_Node & node 
 		std::string prefix = node.name.substr ( 0, nameMid );
 		(*nsMap)[prefix] = node.ns;
 	}
-	
+
 	if ( node.kind == kElemNode ) {
 
 		for ( i = 0, limit = node.attrs.size(); i < limit; ++i ) {
@@ -343,7 +343,7 @@ static void CollectNamespaceDecls ( NamespaceMap * nsMap, const XML_Node & node 
 		}
 
 	}
-	
+
 }	// CollectNamespaceDecls
 
 // =================================================================================================
@@ -353,13 +353,13 @@ static void CollectNamespaceDecls ( NamespaceMap * nsMap, const XML_Node & node 
 void XML_Node::Serialize ( std::string * buffer )
 {
 	buffer->erase();
-	
+
 	if ( this->kind != kRootNode ) {
 
 		SerializeOneNode ( buffer, *this );
 
 	} else {
-	
+
 		// Do the outermost level here, in order to add the XML version and namespace declarations.
 
 		*buffer += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
@@ -379,7 +379,7 @@ void XML_Node::Serialize ( std::string * buffer )
 
 				*buffer += '<';
 				*buffer += namePtr;
-				
+
 				NamespaceMap nsMap;
 				CollectNamespaceDecls ( &nsMap, node );
 				NamespaceMap::iterator nsDecl = nsMap.begin();
@@ -412,9 +412,9 @@ void XML_Node::Serialize ( std::string * buffer )
 			}
 
 		}
-		
+
 	}
-	
+
 
 }	// XML_Node::Serialize
 

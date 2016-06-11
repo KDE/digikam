@@ -43,7 +43,7 @@ public:
     : DBinaryIface(QLatin1String("enfuse"),
                    QLatin1String("3.2"),
                    QLatin1String("enfuse "),
-                   0, 
+                   0,
                    QLatin1String("Enblend"),
                    QLatin1String("http://enblend.sourceforge.net/download/"),
                    QLatin1String("ExpoBlending"),

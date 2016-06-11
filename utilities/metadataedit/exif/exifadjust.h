@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // EXIF_ADJUST_H 
+#endif // EXIF_ADJUST_H

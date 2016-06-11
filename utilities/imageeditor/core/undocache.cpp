@@ -116,9 +116,9 @@ bool UndoCache::putData(int level, const DImg& img) const
     qint64 fspace = (info.bytesAvailable()/1024.0/1024.0);
     qCDebug(DIGIKAM_GENERAL_LOG) << "Free space available in Editor cache [" << d->cacheDir << "] in Mbytes: " << fspace;
 
-    if (file.exists() || 
-        !file.open(QIODevice::WriteOnly) || 
-        fspace < 1024) // Check if free space is over 1 Gb to put data in cache. 
+    if (file.exists() ||
+        !file.open(QIODevice::WriteOnly) ||
+        fspace < 1024) // Check if free space is over 1 Gb to put data in cache.
     {
         return false;
     }

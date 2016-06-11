@@ -122,9 +122,9 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
     // Load subject codes provided by IPTC/NAA as xml file.
     // See http://iptc.cms.apa.at/std/topicset/topicset.iptc-subjectcode.xml for details.
 
-    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation, 
+    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                           QString::fromLatin1("digikam/metadata/topicset.iptc-subjectcode.xml"));
-    
+
     if (!loadSubjectCodesFromXML(QUrl::fromLocalFile(path)))
         qCDebug(DIGIKAM_WIDGETS_LOG) << "Cannot load IPTC/NAA subject codes XML database";
 

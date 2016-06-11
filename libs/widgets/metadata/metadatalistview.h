@@ -85,4 +85,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // METADATALISTVIEW_H 
+#endif // METADATALISTVIEW_H

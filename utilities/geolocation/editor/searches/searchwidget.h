@@ -61,7 +61,7 @@ public:
 
     SearchWidget(
 #ifdef HAVE_KBOOKMARKS
-                 GPSBookmarkOwner* const gpsBookmarkOwner, 
+                 GPSBookmarkOwner* const gpsBookmarkOwner,
 #endif
                  GPSImageModel* const gpsImageModel,
                  QItemSelectionModel* const gpsImageSelectionModel,

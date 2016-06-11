@@ -345,7 +345,7 @@ public:
             ybPrev = yb;
         }
 
-        curveRed.lineTo(wWidth - 2, wHeight - 1);        
+        curveRed.lineTo(wWidth - 2, wHeight - 1);
         curveRed.lineTo(1, wHeight - 1);
         curveRed.closeSubpath();
         curveGreen.lineTo(wWidth - 2, wHeight - 1);

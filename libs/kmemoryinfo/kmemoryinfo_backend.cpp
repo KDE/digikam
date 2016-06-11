@@ -559,7 +559,7 @@ int get_swap_stats(Digikam::KMemoryInfo::KMemoryInfoData* const data)
 #ifdef Q_OS_MAC
     Q_UNUSED(data);
 #endif
-    
+
 #ifdef Q_OS_HPUX
     struct pst_swapinfo pstat_swapinfo[SWAP_BATCH];
     int                 swapidx = 0;

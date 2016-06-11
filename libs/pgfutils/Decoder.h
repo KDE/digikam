@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -103,7 +103,7 @@ public:
 	/// @param useOMP If true, then the decoder will use multi-threading based on openMP
 	/// @param userDataPolicy Policy of user data (meta-data) handling while reading PGF headers.
 	CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header,
-		     PGFPostHeader& postHeader, UINT32*& levelLength, UINT64& userDataPos, 
+		     PGFPostHeader& postHeader, UINT32*& levelLength, UINT64& userDataPos,
 			 bool useOMP, UINT32 userDataPolicy); // throws IOException
 
 	/////////////////////////////////////////////////////////////////////

@@ -464,7 +464,7 @@ void RatingWidget::applyFading(QPixmap& pix)
         QPixmap alphaMask(pix.width(), pix.height());
         const QColor color(d->fadingValue, d->fadingValue, d->fadingValue);
         alphaMask.fill(color);
-        
+
         /* NOTE : old Qt4 code ported to Qt5 due to deprecated QPixmap::setAlphaChannel()
          *        clusterPixmap.setAlphaChannel(alphaPixmap);
          */

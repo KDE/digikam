@@ -246,7 +246,7 @@ QVariant ColumnDigikamProperties::data(TableViewModel::Item* const item, const i
         case SubColumnRating:
         {
             const int itemRating = info.rating();
-            
+
             if (itemRating <= 0)
             {
                 // no rating

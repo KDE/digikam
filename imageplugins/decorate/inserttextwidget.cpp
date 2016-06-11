@@ -229,7 +229,7 @@ DImg InsertTextWidget::makeInsertText()
     {
         // convert from widget to image coordinates, then to original size
         x = qRound((d->textRect.x() - d->rect.x()) * ratioW);
-        y = qRound((d->textRect.y() - d->rect.y()) * ratioH);        
+        y = qRound((d->textRect.y() - d->rect.y()) * ratioH);
     }
     else
     {
@@ -289,7 +289,7 @@ void InsertTextWidget::makePixmap()
     // prepare painter for use by compose image
     p.setClipRect(d->rect);
     p.translate(d->rect.x(), d->rect.y());
-    
+
     int borderWidth = qMax(1, qRound(ratioW));
 
     // compose image and draw result directly on pixmap, with correct offset
@@ -328,7 +328,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
         cannot be done with QPixmap.
         The current solution cuts out the text area, lets Qt do its drawing, converts back and blits to original.
     */
-    
+
     int maxWidth, maxHeight;
 
     if (x == -1 && y == -1)
@@ -343,7 +343,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
     }
 
     fontScale = qMax(0.01f, fontScale);
-    
+
     // find out size of the area that we are drawing to
     font.setPointSizeF(pointSize);
     QFontMetrics fontMt(font);
@@ -483,7 +483,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
 
     // compose semi-transparent background over textArea
     DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-    
+
     if (transparentBackground)
     {
         DImg transparentLayer(textAreaBackgroundRect.width(), textAreaBackgroundRect.height(), textArea.sixteenBit(), true);
@@ -568,7 +568,7 @@ QRect InsertTextWidget::composeImage(DImg* const image, QPainter* const destPain
 
     // paint on pixmap
     QPainter p(&pixmap);
-    
+
     p.drawPixmap(textAreaTextRect, textPixmap.scaled(fontWidth,
                                                      fontHeight,
                                                      Qt::IgnoreAspectRatio,

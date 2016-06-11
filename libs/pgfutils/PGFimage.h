@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2007-02-03 13:04:21 +0100 (Sa, 03 Feb 2007) $
  * $Revision: 280 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -52,7 +52,7 @@ class CWaveletTransform;
 /// @brief PGF main class
 class CPGFImage {
 public:
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Standard constructor
 	CPGFImage();
@@ -119,7 +119,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Get image data in interleaved format: (ordering of RGB data is BGR[A])
-	/// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number 
+	/// Upsampling, YUV to RGB transform and interleaving are done here to reduce the number
 	/// of passes over the data.
 	/// The absolute value of pitch is the number of bytes of an image row of the given image buffer.
 	/// If pitch is negative, then the image buffer must point to the last row of a bottom-up image (first byte on last row).
@@ -195,7 +195,7 @@ public:
 	/// as all other levels, but in a different size (width, height).
 	/// The image size at level i is double the size (width, height) of the image at level i+1.
 	/// The image at level 0 contains the original size.
-	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)). 
+	/// Precondition: the PGF image contains a valid header (see also SetHeader(...)).
 	/// It might throw an IOException.
 	/// @param stream A PGF stream
 	/// @param nWrittenBytes [in-out] The number of bytes written into stream are added to the input value.
@@ -214,8 +214,8 @@ public:
 
 	//////////////////////////////////////////////////////////////////////
 	/// Encode and write an image at current stream position.
-	/// Call this method after WriteHeader(). In case you want to write uncached metadata, 
-	/// then do that after WriteHeader() and before WriteImage(). 
+	/// Call this method after WriteHeader(). In case you want to write uncached metadata,
+	/// then do that after WriteHeader() and before WriteImage().
 	/// This method is called inside of Write(stream, ...).
 	/// It might throw an IOException.
 	/// @param stream A PGF stream
@@ -232,7 +232,7 @@ public:
 	/// as all other levels, but in a different size (width, height).
 	/// The image size at level i is double the size (width, height) of the image at level i+1.
 	/// The image at level 0 contains the original size.
-	/// Preconditions: the PGF image contains a valid header (see also SetHeader(...)) and 
+	/// Preconditions: the PGF image contains a valid header (see also SetHeader(...)) and
 	/// WriteHeader() has been called before. Levels() > 0.
 	/// The ROI encoding scheme must be used (see also SetHeader(...)).
 	/// It might throw an IOException.
@@ -252,15 +252,15 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	/// Configures the decoder.
 	/// @param useOMP Use parallel threading with Open MP during decoding. Default value: true. Influences the decoding only if the codec has been compiled with OpenMP support.
-	/// @param policy The file might contain user data (e.g. metadata). The policy defines the behaviour during Open(). 
+	/// @param policy The file might contain user data (e.g. metadata). The policy defines the behaviour during Open().
 	///               UP_CacheAll:    User data is read and stored completely in a new allocated memory block. It can be accessed by GetUserData().
 	///               UP_CachePrefix: Only prefixSize bytes at the beginning of the user data are stored in a new allocated memory block. It can be accessed by GetUserData().
-	///               UP_Skip:        User data is skipped and nothing is cached. 
+	///               UP_Skip:        User data is skipped and nothing is cached.
 	/// @param prefixSize Is only used in combination with UP_CachePrefix. It defines the number of bytes cached.
 	void ConfigureDecoder(bool useOMP = true, UserdataPolicy policy = UP_CacheAll, UINT32 prefixSize = 0) { ASSERT(prefixSize <= MaxUserDataSize);  m_useOMPinDecoder = useOMP; m_userDataPolicy = (UP_CachePrefix) ? prefixSize : 0xFFFFFFFF - policy; }
 
 	////////////////////////////////////////////////////////////////////
-	/// Reset stream position to start of PGF pre-header or start of data. Must not be called before Open() or before Write(). 
+	/// Reset stream position to start of PGF pre-header or start of data. Must not be called before Open() or before Write().
 	/// Use this method after Read() if you want to read the same image several times, e.g. reading different ROIs.
 	/// @param startOfData true: you want to read the same image several times. false: resets stream position to the initial position
 	void ResetStreamPos(bool startOfData);
@@ -343,7 +343,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Return the stream position of the user data or 0.
 	/// Precondition: The PGF image has been opened with a call of Open(...).
-	UINT64 GetUserDataPos() const									{ return m_userDataPos; }									
+	UINT64 GetUserDataPos() const									{ return m_userDataPos; }
 
 	//////////////////////////////////////////////////////////////////////
 	/// Return user data and size of user data.
@@ -376,7 +376,7 @@ public:
 	UINT32 ReadEncodedHeader(UINT8* target, UINT32 targetLen) const;
 
 	//////////////////////////////////////////////////////////////////////
-	/// Reads the data of an encoded PGF level and copies it to a target buffer 
+	/// Reads the data of an encoded PGF level and copies it to a target buffer
 	/// without decoding.
 	/// Precondition: The PGF image has been opened with a call of Open(...).
 	/// It might throw an IOException.
@@ -420,19 +420,19 @@ public:
 	UINT32 Height(int level = 0) const								{ ASSERT(level >= 0); return LevelSizeL(m_header.height, level); }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return current image level. 
+	/// Return current image level.
 	/// Since Read(...) can be used to read each image level separately, it is
 	/// helpful to know the current level. The current level immediately after Open(...) is Levels().
 	/// @return Current image level
 	BYTE Level() const												{ return (BYTE)m_currentLevel; }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return the number of image levels. 
+	/// Return the number of image levels.
 	/// @return Number of image levels
 	BYTE Levels() const												{ return m_header.nLevels; }
 
 	//////////////////////////////////////////////////////////////////////
-	/// Return true if all levels have been read 
+	/// Return true if all levels have been read
 	bool IsFullyRead() const										{ return m_currentLevel == 0; }
 
 	//////////////////////////////////////////////////////////////////////
@@ -446,7 +446,7 @@ public:
 	/// An image of type RGB contains 3 image channels (B, G, R).
 	/// @return Number of image channels
 	BYTE Channels() const											{ return m_header.channels; }
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Return the image mode.
 	/// An image mode is a predefined constant value (see also PGFtypes.h) compatible with Adobe Photoshop.
@@ -541,7 +541,7 @@ protected:
 	PGFRect m_roi;					///< region of interest
 #endif
 
-private:	
+private:
 	RefreshCB m_cb;					///< pointer to refresh callback procedure
 	void *m_cbArg;					///< refresh callback argument
 	double m_percent;				///< progress [0..1]
@@ -562,20 +562,20 @@ private:
 
 	UINT8 Clamp4(DataT v) const {
 		if (v & 0xFFFFFFF0) return (v < 0) ? (UINT8)0: (UINT8)15; else return (UINT8)v;
-	}	
+	}
 	UINT16 Clamp6(DataT v) const {
 		if (v & 0xFFFFFFC0) return (v < 0) ? (UINT16)0: (UINT16)63; else return (UINT16)v;
-	}	
+	}
 	UINT8 Clamp8(DataT v) const {
 		// needs only one test in the normal case
 		if (v & 0xFFFFFF00) return (v < 0) ? (UINT8)0 : (UINT8)255; else return (UINT8)v;
 	}
 	UINT16 Clamp16(DataT v) const {
 		if (v & 0xFFFF0000) return (v < 0) ? (UINT16)0: (UINT16)65535; else return (UINT16)v;
-	}	
+	}
 	UINT32 Clamp31(DataT v) const {
 		return (v < 0) ? 0 : (UINT32)v;
-	}	
+	}
 };
 
 #endif //PGF_PGFIMAGE_H

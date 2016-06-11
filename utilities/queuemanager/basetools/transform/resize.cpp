@@ -83,8 +83,8 @@ public:
     DIntNumInput* customLength;
 
     QComboBox*    comboBox;
-    
-    bool          changeSettings; 
+
+    bool          changeSettings;
 };
 
 int Resize::Private::presetLengthValue(WidthPreset preset)

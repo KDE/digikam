@@ -59,7 +59,7 @@ GeoCoordinates::GeoCoordinates(const double inLat, const double inLon, const dou
 
 GeoCoordinates::~GeoCoordinates()
 {
-}   
+}
 
 bool GeoCoordinates::operator==(const GeoCoordinates& other) const
 {
@@ -71,8 +71,8 @@ bool GeoCoordinates::operator==(const GeoCoordinates& other) const
         ( hasAltitude() == other.hasAltitude() ) &&
         ( hasAltitude() ? ( alt() == other.alt() )
                         : true );
-}    
-   
+}
+
 double GeoCoordinates::lat() const
 {
     return m_lat;
@@ -95,7 +95,7 @@ bool GeoCoordinates::hasCoordinates() const
 
 bool GeoCoordinates::hasLatitude() const
 {
-    return m_hasFlags.testFlag(HasLatitude);  
+    return m_hasFlags.testFlag(HasLatitude);
 }
 
 bool GeoCoordinates::hasLongitude() const
@@ -244,7 +244,7 @@ Marble::GeoDataCoordinates GeoCoordinates::toMarbleCoordinates() const
     Marble::GeoDataCoordinates marbleCoordinates;
     marbleCoordinates.setLongitude(lon(), Marble::GeoDataCoordinates::Degree);
     marbleCoordinates.setLatitude(lat(),  Marble::GeoDataCoordinates::Degree);
-    
+
     if (hasAltitude())
     {
         marbleCoordinates.setAltitude(alt());

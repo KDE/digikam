@@ -65,9 +65,9 @@ public:
 
     QColor backgroundColor;
 
-    QSize  newSize;    
-};    
-    
+    QSize  newSize;
+};
+
 ShearFilter::ShearFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
       d(new Private)
@@ -78,7 +78,7 @@ ShearFilter::ShearFilter(QObject* const parent)
 ShearFilter::ShearFilter(DImg* const orgImage, QObject* const parent, float hAngle, float vAngle,
                          bool antialiasing, const QColor& backgroundColor, int orgW, int orgH)
     : DImgThreadedFilter(orgImage, parent, QLatin1String("sheartool")),
-      d(new Private)    
+      d(new Private)
 {
     d->hAngle          = hAngle;
     d->vAngle          = vAngle;
@@ -99,7 +99,7 @@ QSize ShearFilter::getNewSize() const
 {
     return d->newSize;
 }
-    
+
 void ShearFilter::filterImage()
 {
     int          progress;

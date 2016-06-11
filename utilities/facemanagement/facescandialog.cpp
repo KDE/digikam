@@ -370,7 +370,7 @@ void FaceScanDialog::setupUi()
     mainLayout->setColumnStretch(1, 1);
     mainLayout->setRowStretch(2, 1);
     mainWidget->setLayout(mainLayout);
-    
+
     // --- Tab Widget ---
 
     d->tabWidget = new QTabWidget;
@@ -489,7 +489,7 @@ void FaceScanDialog::setupConnections()
 
     connect(d->benchmarkRecognitionButton, SIGNAL(toggled(bool)),
             this, SLOT(benchmarkButtonToggled(bool)));
-    
+
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(accept()));
 
@@ -552,7 +552,7 @@ FaceScanSettings FaceScanDialog::settings() const
     }
     else if(d->detectButton->isChecked())
     {
-        settings.task = FaceScanSettings::Detect;    
+        settings.task = FaceScanSettings::Detect;
     }
     else
     {

@@ -170,7 +170,7 @@ void SaveImgThread::run()
         emit signalComplete(d->newUrl, success);
         return;
     }
- 
+
     DMetadata meta(d->newUrl.toLocalFile());
     meta.setExifTagString("Exif.Image.DocumentName", QLatin1String("Scanned Image")); // not i18n
     meta.setExifTagString("Exif.Image.Make",  d->make);

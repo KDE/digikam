@@ -30,7 +30,7 @@
 
 int main(int argc, char **argv)
 {
-    if(argc != 2) 
+    if(argc != 2)
     {
         qDebug() << "raw2dng - RAW Camera Image to DNG Converter";
         qDebug() << "Usage: <rawfile>";

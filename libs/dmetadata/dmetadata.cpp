@@ -1310,7 +1310,7 @@ bool DMetadata::getImageTagsPath(QStringList& tagsPath, const DMetadataSettingsC
                 // do not support UTF-8 and have strings size limitation. But we will
                 // let the capability to import it for interworking issues.
                 tagsPath = getIptcKeywords();
- 
+
                 if (!tagsPath.isEmpty())
                 {
                     // Work around to Imach tags path list hosted in IPTC with '.' as separator.

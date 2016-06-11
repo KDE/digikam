@@ -102,7 +102,7 @@ AdvancedMetadataTab::AdvancedMetadataTab(QWidget* const parent)
     connectButtons();
 
     d->unifyReadWrite->setChecked(d->container.unifyReadWrite());
-    
+
     connect(d->unifyReadWrite, SIGNAL(toggled(bool)),
             this, SLOT(slotUnifyChecked(bool)));
 
@@ -203,7 +203,7 @@ void AdvancedMetadataTab::slotEditNamespace()
     {
         return;
     }
-    
+
     QStandardItem* const root = d->models.at(getModelIndex())->invisibleRootItem();
     QStandardItem* const item = root->child(d->namespaceView->currentIndex().row());
 
@@ -263,19 +263,19 @@ void AdvancedMetadataTab::connectButtons()
 
     connect(d->editButton, SIGNAL(clicked()),
             this, SLOT(slotEditNamespace()));
-    
+
     connect(d->deleteButton, SIGNAL(clicked()),
             d->namespaceView, SLOT(slotDeleteSelected()));
-    
+
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotResetToDefault()));
-    
+
     connect(d->revertChanges, SIGNAL(clicked()),
             this, SLOT(slotRevertChanges()));
-    
+
     connect(d->moveUpButton, SIGNAL(clicked()),
             d->namespaceView, SLOT(slotMoveItemUp()));
-    
+
     connect(d->moveDownButton, SIGNAL(clicked()),
             d->namespaceView, SLOT(slotMoveItemDown()));
 }

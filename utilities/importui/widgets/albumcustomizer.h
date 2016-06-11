@@ -29,7 +29,7 @@
 
 #include <QWidget>
 
-// KDE includes 
+// KDE includes
 
 #include <kconfiggroup.h>
 

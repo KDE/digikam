@@ -1,4 +1,4 @@
-/* 
+/*
   Copyright 2008-2013 LibRaw LLC (info@libraw.org)
 
 LibRaw is free software; you can redistribute it and/or modify
@@ -85,7 +85,7 @@ void CLASS refinement() {}
 // fallback to AHD and no correction
 void CLASS CA_correct_RT(float,float){}
 void CLASS amaze_demosaic_RT() { ahd_interpolate();}
-void CLASS green_equilibrate(float thresh) {} 
+void CLASS green_equilibrate(float thresh) {}
 void CLASS cfa_linedn(float linenoise){}
 void CLASS cfa_impulse_gauss(float lclean, float cclean){}
 #endif

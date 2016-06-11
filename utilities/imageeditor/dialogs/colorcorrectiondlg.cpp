@@ -122,7 +122,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
     d->buttons->button(QDialogButtonBox::Cancel)->setText(i18n("Don't know"));
     d->buttons->button(QDialogButtonBox::Cancel)->setToolTip(i18n("Take the safest and most appropriate action"));
-    
+
     d->mode                          = mode;
     d->preview                       = preview;
     d->filePath                      = file;
@@ -154,7 +154,7 @@ ColorCorrectionDlg::ColorCorrectionDlg(Mode mode, const DImg& preview,
 
     QWidget* const page     = new QWidget(this);
     QGridLayout* const grid = new QGridLayout(page);
-        
+
     if (d->mode == ProfileMismatch)
     {
         grid->addLayout(createHeading(),       0, 0, 1, 2);

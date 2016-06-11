@@ -80,7 +80,7 @@ static QString findFileInDirs(const QStringList& dirs, const QString& fileName)
 {
     foreach (const QString& dir, dirs)
     {
-        const QString file = dir + (dir.endsWith(QString::fromLatin1("/")) ? QString::fromLatin1("") 
+        const QString file = dir + (dir.endsWith(QString::fromLatin1("/")) ? QString::fromLatin1("")
                                                                            : QString::fromLatin1("/"))
                                  + fileName;
 

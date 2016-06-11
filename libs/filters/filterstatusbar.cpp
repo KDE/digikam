@@ -211,7 +211,7 @@ void FilterStatusBar::slotFilterMatches(bool match)
         default: // Private::None
             break;
     }
- 
+
     d->info->setPalette(pal);
 
     update();

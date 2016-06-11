@@ -62,4 +62,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // XMP_KEYWORDS_H 
+#endif // XMP_KEYWORDS_H

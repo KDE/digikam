@@ -405,7 +405,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     /** Emitted when the check state of an album changes.
-     *  checkState contains the new Qt::CheckState of album 
+     *  checkState contains the new Qt::CheckState of album
      */
     void checkStateChanged(Album* album, Qt::CheckState checkState);
 

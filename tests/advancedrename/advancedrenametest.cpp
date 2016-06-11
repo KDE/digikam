@@ -198,7 +198,7 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
     const QString dir2up = dir.path();
     QDir dir2 = dir;
     dir2.cdUp();
-    QString digikamDir   = dir2up.right(dir2up.size() - dir2.path().size() -1) + 
+    QString digikamDir   = dir2up.right(dir2up.size() - dir2.path().size() -1) +
                            QLatin1Char('/');
     qDebug() << "digikamDir: " << digikamDir;
 

@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // EXIF_CAPTION_H 
+#endif // EXIF_CAPTION_H

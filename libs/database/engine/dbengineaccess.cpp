@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dbengineaccess.h" 
+#include "dbengineaccess.h"
 
 // Qt includes
 
@@ -41,7 +41,7 @@
 #include "dbenginebackend.h"
 #include "dbengineerrorhandler.h"
 
-namespace Digikam 
+namespace Digikam
 {
 
 bool DbEngineAccess::checkReadyForUse(QString& error)

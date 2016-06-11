@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-05-18 16:03:32 +0200 (Do, 18 Mai 2006) $
  * $Revision: 194 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -67,7 +67,7 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	/// Destructor
 	~CWaveletTransform() { Destroy(); }
-	
+
 	//////////////////////////////////////////////////////////////////////
 	/// Compute fast forward wavelet transform of LL subband at given level and
 	/// stores result in all 4 subbands of level + 1.
@@ -94,7 +94,7 @@ public:
 		ASSERT(level >= 0 && level < m_nLevels);
 		return &m_subband[level][orientation];
 	}
-	
+
 #ifdef __PGFROISUPPORT__
 	//////////////////////////////////////////////////////////////////////
 	/// Compute and store ROIs for nLevels
@@ -128,7 +128,7 @@ public:
 #endif
 
 	//////////////////////////////////////////////////////////////////////
-	/// Get number of tiles in x- or y-direction at given level. 
+	/// Get number of tiles in x- or y-direction at given level.
 	/// This number is independent of the given ROI.
 	/// @param level A valid subband level.
 	UINT32 GetNofTiles(int level) const { ASSERT(level >= 0 && level < m_nLevels); return 1 << (m_nLevels - level - 1); }
@@ -141,7 +141,7 @@ public:
 #endif // __PGFROISUPPORT__
 
 private:
-	void Destroy() { 
+	void Destroy() {
 		delete[] m_subband; m_subband = nullptr;
 	#ifdef __PGFROISUPPORT__
 		delete[] m_indices; m_indices = nullptr;

@@ -112,14 +112,14 @@ bool checkSidecarSettings()
                                                                 " This means that any metadata stored in the sidecar files will be overwritten here.\n"
                                                                 "Please enable reading of sidecar files in the host application or continue at your own risk.")
                                                           );
-        
+
         if (result != QMessageBox::Yes)
         {
             return false;
         }
     }
-    
+
     return true;
 }
-    
+
 } /* namespace Digikam */

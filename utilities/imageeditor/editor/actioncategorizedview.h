@@ -43,7 +43,7 @@ public:
 
     explicit ActionCategorizedView(QWidget* const parent = 0);
     ~ActionCategorizedView();
-    
+
     void setupIconMode();
     void adjustGridSize();
 

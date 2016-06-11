@@ -77,7 +77,7 @@ ScanDialog::ScanDialog(KSaneWidget* const saneWdg, const QString& config, QWidge
 {
     setWindowTitle(i18n("Scan Image"));
     setModal(false);
- 
+
     d->saneWidget      = saneWdg;
     d->configGroupName = config;
 
@@ -215,7 +215,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
         if (!imgExtList.contains(format))
         {
-            QMessageBox::critical(0, i18n("Unsupported Format"), 
+            QMessageBox::critical(0, i18n("Unsupported Format"),
                                   i18n("The target image file format \"%1\" is unsupported.",
                                        QLatin1String(format)));
             qCWarning(DIGIKAM_GENERAL_LOG) << "target image file format " << format << " is unsupported!";
@@ -226,7 +226,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
 
     if (!newURL.isValid())
     {
-        QMessageBox::critical(0, i18n("Cannot Save File"), 
+        QMessageBox::critical(0, i18n("Cannot Save File"),
                               i18n("Failed to save file\n\"%1\" to\n\"%2\".",
                               newURL.fileName(),
                               newURL.path().section(QLatin1Char('/'), -2, -2)));

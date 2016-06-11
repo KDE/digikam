@@ -498,7 +498,7 @@ public:
         restoringSelectionFromHistory(0),
         currentXmlIsEmpty(0),
         albumForSelectedItems(0)
-    {  
+    {
     }
 
     AlbumLabelsTreeView*  treeWidget;

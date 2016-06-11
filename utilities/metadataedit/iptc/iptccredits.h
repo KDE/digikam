@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // IPTC_CREDITS_H 
+#endif // IPTC_CREDITS_H

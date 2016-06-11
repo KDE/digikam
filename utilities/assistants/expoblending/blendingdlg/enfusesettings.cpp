@@ -145,7 +145,7 @@ EnfuseSettingsWidget::EnfuseSettingsWidget(QWidget* const parent)
     d->hardMaskCB = new QCheckBox(i18nc("@option:check", "Hard Mask"), this);
     d->hardMaskCB->setToolTip(i18nc("@info:tooltip",
                                     "Useful only for focus stack to improve sharpness."));
-    d->hardMaskCB->setWhatsThis(i18nc("@info:whatsthis", 
+    d->hardMaskCB->setWhatsThis(i18nc("@info:whatsthis",
                                       "Force hard blend masks without averaging on finest "
                                       "scale. This is only useful for focus "
                                       "stacks with thin and high contrast features. "

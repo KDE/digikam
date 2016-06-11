@@ -181,7 +181,7 @@ int ShowfotoItemSortSettings::compare(const ShowfotoItemInfo& left, const Showfo
     switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity);        
+            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity);
         case SortByFileSize:
             return compareByOrder(left.size, right.size, currentSortOrder);
             //FIXME: Change it to creation date instead of modification date.

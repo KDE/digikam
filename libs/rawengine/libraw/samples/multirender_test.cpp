@@ -46,12 +46,12 @@ int process_once(LibRaw& RawProcessor, int half_mode, int camera_wb, int auto_wb
     RawProcessor.imgdata.params.user_flip = user_flip;
 
     int ret = RawProcessor.dcraw_process();
-                
+
     if(LIBRAW_SUCCESS !=ret)
         {
             fprintf(stderr,"Cannot do postpocessing on %s: %s\n",
                     fname,libraw_strerror(ret));
-            return ret; 
+            return ret;
         }
     snprintf(outfn,sizeof(outfn),"%s.%d.%s", fname, suffix, (RawProcessor.imgdata.idata.colors>1?"ppm":"pgm"));
 
@@ -69,7 +69,7 @@ int main(int ac, char *av[])
     int  i, ret;
 
     LibRaw RawProcessor;
-    if(ac<2) 
+    if(ac<2)
         {
             printf(
                 "multirender_test - LibRaw %s sample. Performs 4 different renderings of one file\n"
@@ -79,7 +79,7 @@ int main(int ac, char *av[])
                 av[0]);
             return 0;
         }
-    
+
     for (i=1;i<ac;i++)
         {
 
@@ -90,7 +90,7 @@ int main(int ac, char *av[])
                     fprintf(stderr,"Cannot open_file %s: %s\n",av[i],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
                 }
-            
+
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));

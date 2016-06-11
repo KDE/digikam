@@ -531,7 +531,7 @@ void ImagePropertiesSideBarDB::setImagePropertiesInformation(const QUrl& url)
             QString str;
             QString unavailable(i18n("<i>unavailable</i>"));
             QFileInfo fileInfo(url.toLocalFile());
-            
+
             // -- File system information -----------------------------------------
 
             ImageCommonContainer commonInfo  = info.imageCommonContainer();

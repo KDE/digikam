@@ -89,7 +89,7 @@ protected:
 
 protected:
 
-    ShowfotoSortFilterModel* m_chainedModel;    
+    ShowfotoSortFilterModel* m_chainedModel;
 };
 
 // ------------------------------------------------------------------------------------------

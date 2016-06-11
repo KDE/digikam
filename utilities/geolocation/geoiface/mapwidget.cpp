@@ -778,7 +778,7 @@ QWidget* MapWidget::getControlWidget()
         vline1->setMinimumSize(2, 0);
         vline1->updateGeometry();
         controlWidgetHBoxLayout->addWidget(vline1);
-        
+
         QToolButton* const increaseThumbnailSizeButton = new QToolButton(d->controlWidget);
         controlWidgetHBoxLayout->addWidget(increaseThumbnailSizeButton);
         increaseThumbnailSizeButton->setDefaultAction(d->actionIncreaseThumbnailSize);
@@ -1724,7 +1724,7 @@ QPixmap MapWidget::getDecoratedPixmapForCluster(const int clusterId, const Group
                 /* NOTE : old Qt4 code ported to Qt5 due to deprecated QPixmap::setAlphaChannel()
                 clusterPixmap.setAlphaChannel(alphaPixmap);
                 */
-                
+
                 QPainter p(&clusterPixmap);
                 p.setOpacity(0.2);
                 p.drawPixmap(0, 0, alphaPixmap);
@@ -2289,7 +2289,7 @@ void MapWidget::setMouseMode(const MouseModes mouseMode)
 void MapWidget::setTrackManager(TrackManager* const trackManager)
 {
     s->trackManager = trackManager;
-    
+
     // Some backends track the track manager activity even when not active
     // therefore they have to be notified.
     Q_FOREACH(MapBackend* const backend, d->loadedBackends)

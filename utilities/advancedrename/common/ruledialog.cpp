@@ -70,7 +70,7 @@ RuleDialog::RuleDialog(Rule* const parent)
 {
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-    
+
     d->dialogTitle       = new QLabel(this);
     d->dialogDescription = new QLabel(this);
     d->dialogIcon        = new QLabel(this);
@@ -107,9 +107,9 @@ RuleDialog::RuleDialog(Rule* const parent)
     vbx->addWidget(d->container);
     vbx->addWidget(d->buttons);
     setLayout(vbx);
-    
+
     setMinimumWidth(300);
-    
+
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(accept()));
 

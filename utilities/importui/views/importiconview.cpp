@@ -63,7 +63,7 @@ ImportIconView::ImportIconView(QWidget* const parent)
     filterModel->sort(0); // an initial sorting is necessary
 
     setModels(model, filterModel);
-    
+
     d->normalDelegate              = new ImportNormalDelegate(this);
 
     setItemDelegate(d->normalDelegate);

@@ -56,7 +56,7 @@ public:
     ~QueuePoolBar();
 
 Q_SIGNALS:
-    
+
     void signalTestCanDecode(const QDragMoveEvent*, bool&);
 
 private:
@@ -90,7 +90,7 @@ public:
     void setBusy(bool b);
     void setItemBusy(qlonglong id);
 
-    /** Apply settings changes to all queues settings container when something have been changed in 
+    /** Apply settings changes to all queues settings container when something have been changed in
      *  digiKam setup dialog.
      */
     void applySettings();

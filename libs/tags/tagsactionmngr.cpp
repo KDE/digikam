@@ -298,7 +298,7 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
     QIcon     icon(SyncJob::getTagThumbnail(talbum));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Create Shortcut " << ks.toString()
-                                 << " to Tag " << talbum->title() 
+                                 << " to Tag " << talbum->title()
                                  << " (" << tagId << ")";
 
     foreach(KActionCollection* const ac, d->actionCollectionList)
@@ -342,7 +342,7 @@ void TagsActionMngr::slotTagActionChanged()
 
     if (!lst.isEmpty())
         ks = QKeySequence(lst.first());
-    
+
     updateTagShortcut(tagId, ks);
 }
 

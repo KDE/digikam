@@ -62,7 +62,7 @@ DatabasePage::DatabasePage(FirstRunDlg* const dlg)
       d(new Private)
 {
     d->dbsettingswidget = new DatabaseSettingsWidget(this);
-    
+
     setPageWidget(d->dbsettingswidget);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("network-server-database")));
 }

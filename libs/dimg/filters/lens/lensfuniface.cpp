@@ -337,7 +337,7 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
                         {
                             setUsedLens(exact);
                         }
-                        else 
+                        else
                         {
                             exactMatch &= false;
                         }

@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     DbEngineParameters prm    = DbEngineParameters::parametersFromConfig(config);
     CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);
-    
+
     MainWindow w;
     w.show();
     return a.exec();

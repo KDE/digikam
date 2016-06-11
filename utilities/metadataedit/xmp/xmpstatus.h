@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // XMP_STATUS_H 
+#endif // XMP_STATUS_H

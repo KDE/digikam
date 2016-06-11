@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // EXIF_DEVICE_H 
+#endif // EXIF_DEVICE_H

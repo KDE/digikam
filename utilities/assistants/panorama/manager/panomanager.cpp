@@ -174,7 +174,7 @@ void PanoManager::checkForHugin2015()
 
 bool PanoManager::checkBinaries()
 {
-    bool result = d->autoOptimiserBinary.recheckDirectories() && 
+    bool result = d->autoOptimiserBinary.recheckDirectories() &&
                   d->cpCleanBinary.recheckDirectories()       &&
                   d->cpFindBinary.recheckDirectories()        &&
                   d->enblendBinary.recheckDirectories()       &&
@@ -217,7 +217,7 @@ bool PanoManager::gPano() const
 // {
 //     d->hdr = hdr;
 // }
-// 
+//
 // bool PanoManager::hdr() const
 // {
 //     return d->hdr;

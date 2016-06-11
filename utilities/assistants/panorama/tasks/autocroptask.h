@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -43,7 +43,7 @@ public:
 protected:
 
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
-    
+
 private:
 
     const QUrl&                         autoOptimiserPtoUrl;

@@ -102,7 +102,7 @@ public:
     virtual ~DFileSelector();
 
     QLineEdit* lineEdit()   const;
-    
+
     void setFileDlgMode(QFileDialog::FileMode mode);
     void setFileDlgFilter(const QString& filter);
     void setFileDlgTitle(const QString& title);
@@ -156,7 +156,7 @@ public:
 
     explicit DColorSelector(QWidget* const parent=0);
     virtual ~DColorSelector();
-    
+
     void setColor(const QColor& color);
     QColor color() const;
 
@@ -171,7 +171,7 @@ private Q_SLOTS:
 private:
 
     void paintEvent(QPaintEvent*);
-    
+
 private:
 
     class Private;

@@ -198,7 +198,7 @@ IPTCProperties::IPTCProperties(QWidget* const parent)
 
     for (CountryCodeMap::Iterator it = map.begin(); it != map.end(); ++it)
     {
-        
+
         d->languageBtn->addItem(QString::fromUtf8("%1 - %2").arg(it.key()).arg(it.value()), it.key());
     }
 

@@ -312,7 +312,7 @@ void RestorationTool::slotResetSettings()
             settings.nbIter    = 2;
             break;
         }
-        
+
         default: // Custom
             break;
     }
@@ -353,7 +353,7 @@ void RestorationTool::setFinalImage()
 
 void RestorationTool::slotLoadSettings()
 {
-    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Load"), 
+    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Load"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 

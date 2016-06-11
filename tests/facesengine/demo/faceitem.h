@@ -52,7 +52,7 @@ class FaceItem : public QGraphicsObject
 
 public:
 
-    explicit FaceItem(QGraphicsItem* const parent = 0, QGraphicsScene* const scene = 0, 
+    explicit FaceItem(QGraphicsItem* const parent = 0, QGraphicsScene* const scene = 0,
                       const QRect& rect = QRect(0, 0, 0, 0),
                       double scale = 1, const QString& name = QString(), double originalscale = 1);
     ~FaceItem();

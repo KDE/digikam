@@ -120,12 +120,12 @@ private:
     class Private;
     friend class Private;
     Private* const d;
-  
+
     Q_DISABLE_COPY(DSelector)
 };
 
 // -----------------------------------------------------------------------------------
-    
+
 class DIGIKAM_EXPORT DColorValueSelector : public DSelector
 {
     Q_OBJECT
@@ -146,7 +146,7 @@ public:
 
     /**
      * Returns the current hue value.
-     *  
+     *
      * @return The hue value (0-359)
      */
     int hue() const;
@@ -154,29 +154,29 @@ public:
     /**
      * Sets the hue value. Doesn't automatically update the widget;
      * you have to call updateContents manually.
-     * 
+     *
      * @param hue Sets the hue value (0-359)
      */
     void setHue(int hue);
 
     /**
      * Returns the current saturation value.
-     * 
+     *
      * @return The saturation value (0-255)
-     */  
+     */
     int saturation() const;
 
     /**
      * Sets the saturation value. Doesn't automatically update the widget;
      * you have to call updateContents manually.
-     * 
+     *
      * @param saturation Sets the saturation value (0-255)
      */
     void setSaturation(int saturation);
 
     /**
      * Returns the current color value.
-     * 
+     *
      * @return The color value (0-255)
      */
     int colorValue() const;
@@ -184,7 +184,7 @@ public:
     /**
      * Sets the color value. Doesn't automatically update the widget;
      * you have to call updateContents manually.
-     * 
+     *
      * @param colorValue Sets the color value (0-255)
      */
     void setColorValue(int colorValue);
@@ -199,7 +199,7 @@ public:
 
     /**
      * Returns the current chooser mode.
-     * 
+     *
      * @return The chooser mode (one of the DColorChooserMode constants)
      */
     DColorChooserMode chooserMode() const;

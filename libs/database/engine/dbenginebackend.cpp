@@ -666,7 +666,7 @@ BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& 
 
         if (result != BdEngineBackend::NoErrors)
         {
-            qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while executing DBAction [" 
+            qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while executing DBAction ["
                                           << action.name << "] Statement ["
                                           << actionElement.statement << "]";
             returnResult = result;
@@ -726,7 +726,7 @@ QSqlQuery BdEngineBackend::execDBActionQuery(const DbEngineAction& action, const
         if (result.lastError().isValid() && result.lastError().number())
         {
             qCDebug(DIGIKAM_DBENGINE_LOG) << "Error while executing DBAction [" <<  action.name
-                                          << "] Statement [" << actionElement.statement 
+                                          << "] Statement [" << actionElement.statement
                                           << "] Errornr. [" << result.lastError() << "]";
             break;
         }

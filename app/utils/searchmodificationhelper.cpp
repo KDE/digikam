@@ -83,7 +83,7 @@ void SearchModificationHelper::slotSearchDelete(SAlbum* searchAlbum)
                                            "delete the selected search "
                                            "\"%1\"?", searchAlbum->title()),
                                       QMessageBox::Yes | QMessageBox::Cancel);
-   
+
 
     if (result != QMessageBox::Yes)
     {
@@ -147,7 +147,7 @@ void SearchModificationHelper::slotSearchRename(SAlbum* searchAlbum)
 
     QString oldName(searchAlbum->title());
     bool    ok;
-    QString name = QInputDialog::getText(d->dialogParent, 
+    QString name = QInputDialog::getText(d->dialogParent,
                                          i18n("Rename Album (%1)", oldName),
                                          i18n("Enter new album name:"),
                                          QLineEdit::Normal,

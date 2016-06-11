@@ -1392,7 +1392,7 @@ void AlbumManager::scanPAlbums()
             if (!parent)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) <<  "Could not find parent with url: "
-                                             << QDir::toNativeSeparators(parentPath) << " for: " 
+                                             << QDir::toNativeSeparators(parentPath) << " for: "
                                              << QDir::toNativeSeparators(info.relativePath);
                 continue;
             }

@@ -89,7 +89,7 @@ void FileActionProgressItemContainer::dbFinished()
     //checkFinish(firstItem);
 }
 
-void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, const QString& action, 
+void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, const QString& action,
                                                          FileActionProgressItemCreator* const creator)
 {
     scheduleOnProgressItem(secondItem, numberOfInfos, action, creator);

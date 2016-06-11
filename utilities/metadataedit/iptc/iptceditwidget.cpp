@@ -237,7 +237,7 @@ void IPTCEditWidget::slotItemChanged()
                       "<i>Use this panel to record workflow properties</i></qt>")));
     d->page_envelope->setHeader(d->dlg->currentItemTitleHeader(i18n("<qt>Envelope Information<br/>"
                       "<i>Use this panel to record editorial details</i></qt>")));
-    
+
     DMetadata meta;
     meta.load((*d->dlg->currentItem()).path());
 

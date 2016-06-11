@@ -229,7 +229,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->labelContactWebUrl->setOpenExternalLinks(true);
     d->labelContactWebUrl->setTextFormat(Qt::RichText);
     d->labelContactWebUrl->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
-    
+
     d->contactAddress->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactPostalCode->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->contactCity->setAlignment(Qt::AlignLeft | Qt::AlignTop);

@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_auto_ptr.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_auto_ptr.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -32,17 +32,17 @@
 template<class T>
 class AutoPtr
 	{
-	
+
 	private:
-	
+
 		T *p_;
-		
+
 	public:
 
 		/// Construct an AutoPtr with no referent.
 
 		AutoPtr () : p_ (0) { }
-	
+
 		/// Construct an AutoPtr which owns the argument pointer.
 		/// \param p pointer which constructed AutoPtr takes ownership of. p will be deleted on destruction or Reset unless Release is called first.
 
@@ -52,7 +52,7 @@ class AutoPtr
 
 		~AutoPtr ();
 
-		/// Call Reset with a pointer from new. Uses T's default constructor. 
+		/// Call Reset with a pointer from new. Uses T's default constructor.
 
 		void Alloc ();
 
@@ -79,17 +79,17 @@ class AutoPtr
 		/// Returns a reference to the object that the owned pointer points to.  It is an error to call this if the AutoPtr has NULL as its value.
 
 		T &operator* () const { return *p_; }
-		
+
 	private:
-	
+
 		// Hidden copy constructor and assignment operator.  I don't
 		// think the STL "feature" of grabbing ownership of the pointer
 		// is a good idea.
-	
+
 		AutoPtr (AutoPtr<T> &rhs);
 
 		AutoPtr<T> & operator= (AutoPtr<T> &rhs);
-		
+
 	};
 
 /*****************************************************************************/
@@ -97,10 +97,10 @@ class AutoPtr
 template<class T>
 AutoPtr<T>::~AutoPtr ()
 	{
-	
+
 	delete p_;
 	p_ = 0;
-	
+
 	}
 
 /*****************************************************************************/
@@ -118,14 +118,14 @@ T *AutoPtr<T>::Release ()
 template<class T>
 void AutoPtr<T>::Reset (T *p)
 	{
-	
+
 	if (p_ != p)
 		{
 		if (p_ != 0)
 			delete p_;
 		p_ = p;
 		}
-	
+
 	}
 
 /*****************************************************************************/
@@ -133,13 +133,13 @@ void AutoPtr<T>::Reset (T *p)
 template<class T>
 void AutoPtr<T>::Reset ()
 	{
-	
+
 	if (p_ != 0)
 		{
 		delete p_;
 		p_ = 0;
 		}
-	
+
 	}
 
 /*****************************************************************************/

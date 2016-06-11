@@ -36,7 +36,7 @@
 #include "dmetadatasettingscontainer.h"
 
 namespace Digikam
-{    
+{
 
 class NamespaceEditDlg : public QDialog
 {

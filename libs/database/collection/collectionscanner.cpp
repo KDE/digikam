@@ -2028,7 +2028,7 @@ void CollectionScanner::addItem(Digikam::CoreDbAccess& access, int albumID,
 
     access.db()->addItem(albumID, fileName, datetime, comment, rating, keywords);
 }
- 
+
 void CollectionScanner::updateItemDate(int albumID, const QString& albumRoot, const QString& album, const QString& fileName)
 {
     CoreDbAccess access;

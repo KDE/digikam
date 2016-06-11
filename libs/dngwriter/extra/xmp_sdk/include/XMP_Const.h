@@ -641,7 +641,7 @@ enum {
 
 	/// Omit all formatting whitespace.
     kXMP_OmitAllFormatting   = 0x0800UL,
-    
+
     /// Omit the x:xmpmeta element surrounding the rdf:RDF element.
     kXMP_OmitXMPMetaElement  = 0x1000UL,
 
@@ -718,7 +718,7 @@ enum {
 /// Option bit flags for \c TXMPUtils::CatenateArrayItems() and \c TXMPUtils::SeparateArrayItems().
 /// These option bits are shared with the accessor functions:
 ///   \li \c #kXMP_PropValueIsArray,
-///   \li \c #kXMP_PropArrayIsOrdered, 
+///   \li \c #kXMP_PropArrayIsOrdered,
 ///   \li \c #kXMP_PropArrayIsAlternate,
 ///   \li \c #kXMP_PropArrayIsAltText
 enum {
@@ -751,7 +751,7 @@ enum {
 
 /// File format constants for use with XMPFiles.
 enum {
-    
+
     // ! Hex used to avoid gcc warnings. Leave the constants so the text reads big endian. There
     // ! seems to be no decent way on UNIX to determine the target endianness at compile time.
     // ! Forcing it on the client isn't acceptable.
@@ -1096,7 +1096,7 @@ enum {
 
 	/// Only packet scan files "known" to need scanning.
     kXMPFiles_OpenLimitedScanning   = 0x00000080,
-    
+
     /// Attempt to repair a file opened for update, default is to not open (throw an exception).
     kXMPFiles_OpenRepairFile        = 0x00000100,
 
@@ -1164,7 +1164,7 @@ enum {
 
 	// --------------------
     // Generic error codes.
-   
+
 	/// Generic unknown error
     kXMPErr_Unknown          =   0,
 	/// Generic undefined error

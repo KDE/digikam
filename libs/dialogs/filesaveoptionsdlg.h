@@ -46,7 +46,7 @@ public:
 
     FileSaveOptionsDlg(QWidget* const parent, FileSaveOptionsBox* const options);
     ~FileSaveOptionsDlg();
-    
+
     /**
      * Tries to discover a file format that has options to change based on a
      * filename.

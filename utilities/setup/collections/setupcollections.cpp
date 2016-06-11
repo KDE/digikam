@@ -99,7 +99,7 @@ SetupCollections::SetupCollections(QWidget* const parent)
                                               albumPathBox);
 #endif
     albumPathLabel->setWordWrap(true);
-    
+
     d->collectionView  = new SetupCollectionTreeView(albumPathBox);
     d->collectionModel = new SetupCollectionModel(panel);
     d->collectionView->setModel(d->collectionModel);

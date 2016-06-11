@@ -27,7 +27,7 @@
 
 // C++ includes
 
-#include <cmath>  
+#include <cmath>
 
 // Qt includes
 
@@ -278,7 +278,7 @@ void ImportDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, cons
 
 /*
     // If there is ImageHistory present, paint a small icon over the thumbnail to indicate that this is derived image
- 
+
  if (info.hasImageHistory())
     {
         p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, QIcon::fromTheme(QLatin1String("svn_switch")).pixmap(22));

@@ -110,7 +110,7 @@ QRect DSelector::contentsRect() const
     else
     {
         // Qt::Horizontal
-        
+
         if (arrowDirection() == Qt::UpArrow)
         {
             return QRect(iw, w,
@@ -335,7 +335,7 @@ void DSelector::drawArrow(QPainter* painter, const QPoint& pos)
                         d->arrowsize, d->arrowsize );
 
     }
-    
+
     style()->drawPrimitive(d->arrowPE, &o, painter, this);
 }
 
@@ -472,7 +472,7 @@ void DColorValueSelector::drawPalette(QPixmap* pixmap)
     }
 
     const int steps = componentValueSteps(chooserMode());
- 
+
     for (int v = 0; v <= steps; ++v)
     {
         setComponentValue(color, chooserMode(), v * (1.0 / steps));

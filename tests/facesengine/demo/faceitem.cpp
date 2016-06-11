@@ -97,7 +97,7 @@ public:
     Button*            suggestionAcceptButton;
 };
 
-FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, const QRect& rect, 
+FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, const QRect& rect,
                    double scale, const QString& name, double originalscale)
         : QGraphicsObject(parent), d(new Private)
 {

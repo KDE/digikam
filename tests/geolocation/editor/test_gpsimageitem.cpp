@@ -57,7 +57,7 @@ void TestGPSImageItem::cleanupTestCase()
 QString GetTestDataDirectory()
 {
     return QString(QFINDTESTDATA("data/"));
-}    
+}
 
 GPSImageItem* ItemFromFile(const QUrl& url)
 {

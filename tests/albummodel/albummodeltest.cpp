@@ -220,7 +220,7 @@ void AlbumModelTest::init()
     safeCreatePAlbum(palbumRoot1, sameName, palbumChild0Root1);
 
     qDebug() << "AlbumManager now knows these PAlbums:";
-    
+
     foreach(Album* const a, AlbumManager::instance()->allPAlbums())
     {
         qDebug() << "\t" << a->title();

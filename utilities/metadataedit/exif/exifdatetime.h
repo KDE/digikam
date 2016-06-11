@@ -70,4 +70,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // EXIF_DATETIME_H 
+#endif // EXIF_DATETIME_H

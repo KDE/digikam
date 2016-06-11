@@ -86,7 +86,7 @@ int main(int argc, char** argv)
     app.setApplicationName(QString::fromLatin1("digikam"));          // for DB init.
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     DbEngineParameters prm    = DbEngineParameters::parametersFromConfig(config);
-    CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);    
+    CoreDbAccess::setParameters(prm, CoreDbAccess::MainApplication);
     RecognitionDatabase db;
 
     if (QString::fromLatin1(argv[1]) == QString::fromLatin1("identify"))

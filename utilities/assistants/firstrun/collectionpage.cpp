@@ -153,7 +153,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
     if (rootAlbumFolder.isEmpty())
     {
-        QMessageBox::information(this, qApp->applicationName(), 
+        QMessageBox::information(this, qApp->applicationName(),
                                  i18n("You must select a folder for digiKam to "
                                       "use as the root album. All of your images will go there."));
         return false;
@@ -171,7 +171,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 /*
     if (QUrl::fromLocalFile(rootAlbumFolder).equals(QUrl::fromLocalFile(QDir::homePath()), QUrl::CompareWithoutFragment))
     {
-        QMessageBox::information(this, qApp->applicationName(), 
+        QMessageBox::information(this, qApp->applicationName(),
                                  i18n("digiKam will not use your home folder as the "
                                       "root album. Please select another location."));
         return false;
@@ -215,7 +215,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     if (!path.isWritable())
 #endif
     {
-        QMessageBox::information(this, qApp->applicationName(), 
+        QMessageBox::information(this, qApp->applicationName(),
                                  i18n("You do not seem to have write access for the folder "
                                       "selected to be the root album.\n"
                                       "Warning: Without write access, items cannot be edited."));

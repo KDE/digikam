@@ -160,7 +160,7 @@ void NREstimate::startAnalyse()
 
     if (runningFlag())
     {
-        cvKMeans2(points, d->clusterCount, clusters, 
+        cvKMeans2(points, d->clusterCount, clusters,
                   cvTermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 10, 1.0), 3, 0, 0, centers, 0);
     }
 

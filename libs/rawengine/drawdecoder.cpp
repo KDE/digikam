@@ -207,7 +207,7 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QString& path)
 
     QBuffer buffer(&imgData);
     buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "JPEG"); 
+    image.save(&buffer, "JPEG");
 
     return true;
 }
@@ -237,7 +237,7 @@ bool DRawDecoder::loadHalfPreview(QByteArray& imgData, const QBuffer& inBuffer)
 
     QBuffer buffer(&imgData);
     buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "JPG"); 
+    image.save(&buffer, "JPG");
 
     return true;
 }

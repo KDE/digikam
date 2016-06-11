@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_exif.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_exif.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -40,9 +40,9 @@
 
 class dng_exif
 	{
-	
+
 	public:
-	
+
 		dng_string fImageDescription;
 		dng_string fMake;
 		dng_string fModel;
@@ -51,20 +51,20 @@ class dng_exif
 		dng_string fCopyright;
 		dng_string fCopyright2;
 		dng_string fUserComment;
-		
+
 		dng_date_time_info         fDateTime;
 		dng_date_time_storage_info fDateTimeStorageInfo;
-		
+
 		dng_date_time_info		   fDateTimeOriginal;
 		dng_date_time_storage_info fDateTimeOriginalStorageInfo;
 
 		dng_date_time_info 		   fDateTimeDigitized;
 		dng_date_time_storage_info fDateTimeDigitizedStorageInfo;
-		
+
 		uint32 fTIFF_EP_StandardID;
 		uint32 fExifVersion;
 		uint32 fFlashPixVersion;
-		
+
 		dng_urational fExposureTime;
 		dng_urational fFNumber;
 		dng_srational fShutterSpeedValue;
@@ -77,10 +77,10 @@ class dng_exif
 		dng_urational fExposureIndex;
 		dng_urational fSubjectDistance;
 		dng_urational fGamma;
-		
+
 		dng_urational fBatteryLevelR;
 		dng_string    fBatteryLevelA;
-		
+
 		uint32 fExposureProgram;
 		uint32 fMeteringMode;
 		uint32 fLightSource;
@@ -103,31 +103,31 @@ class dng_exif
 		uint32 fImageNumber;
 
 		uint32 fFocalLengthIn35mmFilm;
-		
+
 		uint32 fISOSpeedRatings [3];
-		
+
 		uint32 fSubjectAreaCount;
 		uint32 fSubjectArea [4];
-		
+
 		uint32 fComponentsConfiguration;
-		
+
 		dng_urational fCompresssedBitsPerPixel;
-		
+
 		uint32 fPixelXDimension;
 		uint32 fPixelYDimension;
-		
+
 		dng_urational fFocalPlaneXResolution;
 		dng_urational fFocalPlaneYResolution;
-		
+
 		uint32 fFocalPlaneResolutionUnit;
-		
+
 		uint32 fCFARepeatPatternRows;
 		uint32 fCFARepeatPatternCols;
-		
+
 		uint8 fCFAPattern [kMaxCFAPattern] [kMaxCFAPattern];
-		
+
 		dng_fingerprint fImageUniqueID;
-		
+
 		uint32 	      fGPSVersionID;
 		dng_string    fGPSLatitudeRef;
 		dng_urational fGPSLatitude [3];
@@ -159,52 +159,52 @@ class dng_exif
 		dng_string    fGPSAreaInformation;
 		dng_string    fGPSDateStamp;
 		uint32 	      fGPSDifferential;
-		
+
 		dng_string fInteroperabilityIndex;
-		
+
 		uint32 fInteroperabilityVersion;
-		
+
 		dng_string fRelatedImageFileFormat;
-		
-		uint32 fRelatedImageWidth;	
+
+		uint32 fRelatedImageWidth;
 		uint32 fRelatedImageLength;
 
 		dng_string fCameraSerialNumber;
-		
+
 		dng_urational fLensInfo [4];
-		
+
 		dng_string fLensID;
 		dng_string fLensName;
 		dng_string fLensSerialNumber;
-	
+
 		dng_srational fFlashCompensation;
-		
+
 		dng_string fOwnerName;
 		dng_string fFirmware;
-		
+
 	public:
-	
+
 		dng_exif ();
-		
+
 		virtual ~dng_exif ();
-		
+
 		virtual dng_exif * Clone () const;
-		
+
 		static real64 SnapExposureTime (real64 et);
-		
+
 		void SetExposureTime (real64 et,
 							  bool snap = true);
-		
+
 		void SetShutterSpeedValue (real64 ss);
-		
+
 		static dng_urational EncodeFNumber (real64 fs);
-		
+
 		void SetFNumber (real64 fs);
-		
+
 		void SetApertureValue (real64 av);
-		
+
 		void UpdateDateTime (const dng_date_time_info &dt);
-		
+
 		virtual bool ParseTag (dng_stream &stream,
 							   dng_shared &shared,
 							   uint32 parentCode,
@@ -213,12 +213,12 @@ class dng_exif
 							   uint32 tagType,
 							   uint32 tagCount,
 							   uint64 tagOffset);
-							   
+
 		virtual void PostParse (dng_host &host,
 								dng_shared &shared);
-							   
+
 	protected:
-		
+
 		virtual bool Parse_ifd0 (dng_stream &stream,
 							     dng_shared &shared,
 							 	 uint32 parentCode,
@@ -226,7 +226,7 @@ class dng_exif
 							 	 uint32 tagType,
 							 	 uint32 tagCount,
 							 	 uint64 tagOffset);
-							 		 
+
 		virtual bool Parse_ifd0_main (dng_stream &stream,
 							          dng_shared &shared,
 						 		 	  uint32 parentCode,
@@ -242,7 +242,7 @@ class dng_exif
 						 		 	  uint32 tagType,
 						 		 	  uint32 tagCount,
 						 		 	  uint64 tagOffset);
-	
+
 		virtual bool Parse_gps (dng_stream &stream,
 							    dng_shared &shared,
 						 		uint32 parentCode,
@@ -250,7 +250,7 @@ class dng_exif
 						 		uint32 tagType,
 						 		uint32 tagCount,
 						 		uint64 tagOffset);
-	
+
 		virtual bool Parse_interoperability (dng_stream &stream,
 							    			 dng_shared &shared,
 						 					 uint32 parentCode,
@@ -258,11 +258,11 @@ class dng_exif
 											 uint32 tagType,
 											 uint32 tagCount,
 											 uint64 tagOffset);
-	
+
 	};
-	
+
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

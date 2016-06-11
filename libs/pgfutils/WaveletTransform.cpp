@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-05-18 16:03:32 +0200 (Do, 18 Mai 2006) $
  * $Revision: 194 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -37,7 +37,7 @@
 // @param height The height of the original image (at level 0) in pixels
 // @param levels The number of levels (>= 0)
 // @param data Input data of subband LL at level 0
-CWaveletTransform::CWaveletTransform(UINT32 width, UINT32 height, int levels, DataT* data) 
+CWaveletTransform::CWaveletTransform(UINT32 width, UINT32 height, int levels, DataT* data)
 : m_nLevels(levels + 1) // m_nLevels in CPGFImage determines the number of FWT steps; this.m_nLevels determines the number subband-planes
 , m_subband(nullptr)
 #ifdef __PGFROISUPPORT__
@@ -184,7 +184,7 @@ void CWaveletTransform::ForwardRow(DataT* src, UINT32 width) {
 		// left border handling
 		src[1] -= ((src[0] + src[2] + c1) >> 1); // high pass
 		src[0] += ((src[1] + c1) >> 1); // low pass
-		
+
 		// middle part
 		for (; i < width-1; i += 2) {
 			src[i] -= ((src[i-1] + src[i+1] + c1) >> 1); // high pass
@@ -249,12 +249,12 @@ OSError CWaveletTransform::InverseTransform(int srcLevel, UINT32* w, UINT32* h, 
 	CSubband* destBand = &m_subband[destLevel][LL];
 	UINT32 width, height;
 
-	// allocate memory for the results of the inverse transform 
+	// allocate memory for the results of the inverse transform
 	if (!destBand->AllocMemory()) return InsufficientMemory;
 	DataT *origin = destBand->GetBuffer(), *row0, *row1, *row2, *row3;
 
 #ifdef __PGFROISUPPORT__
-	PGFRect destROI = destBand->GetAlignedROI();	
+	PGFRect destROI = destBand->GetAlignedROI();
 	const UINT32 destWidth  = destROI.Width();  // destination buffer width
 	const UINT32 destHeight = destROI.Height(); // destination buffer height
 	width = destWidth;		// destination working width
@@ -454,10 +454,10 @@ void CWaveletTransform::SubbandsToInterleaved(int srcLevel, DataT* loRow, DataT*
 
 		if (storePos) {
 			// save current src buffer positions
-			llPos = ll.GetBuffPos(); 
-			hlPos = hl.GetBuffPos(); 
-			lhPos = lh.GetBuffPos(); 
-			hhPos = hh.GetBuffPos(); 
+			llPos = ll.GetBuffPos();
+			hlPos = hl.GetBuffPos();
+			lhPos = lh.GetBuffPos();
+			hhPos = hh.GetBuffPos();
 		}
 	#endif
 
@@ -476,10 +476,10 @@ void CWaveletTransform::SubbandsToInterleaved(int srcLevel, DataT* loRow, DataT*
 	#ifdef __PGFROISUPPORT__
 		if (storePos) {
 			// increment src buffer positions
-			ll.IncBuffRow(llPos); 
-			hl.IncBuffRow(hlPos); 
-			lh.IncBuffRow(lhPos); 
-			hh.IncBuffRow(hhPos); 
+			ll.IncBuffRow(llPos);
+			hl.IncBuffRow(hlPos);
+			lh.IncBuffRow(lhPos);
+			hh.IncBuffRow(hhPos);
 		}
 	#endif
 
@@ -490,8 +490,8 @@ void CWaveletTransform::SubbandsToInterleaved(int srcLevel, DataT* loRow, DataT*
 
 		if (storePos) {
 			// save current src buffer positions
-			llPos = ll.GetBuffPos(); 
-			hlPos = hl.GetBuffPos(); 
+			llPos = ll.GetBuffPos();
+			hlPos = hl.GetBuffPos();
 		}
 	#endif
 
@@ -504,8 +504,8 @@ void CWaveletTransform::SubbandsToInterleaved(int srcLevel, DataT* loRow, DataT*
 	#ifdef __PGFROISUPPORT__
 		if (storePos) {
 			// increment src buffer positions
-			ll.IncBuffRow(llPos); 
-			hl.IncBuffRow(hlPos); 
+			ll.IncBuffRow(llPos);
+			hl.IncBuffRow(hlPos);
 		}
 	#endif
 	}
@@ -525,8 +525,8 @@ void CWaveletTransform::SetROI(PGFRect roi) {
 	// enlarge rect: add margin
 	roi.left = (roi.left > delta) ? roi.left - delta : 0;
 	roi.top  = (roi.top  > delta) ? roi.top  - delta : 0;
-	roi.right += delta; 
-	roi.bottom += delta; 
+	roi.right += delta;
+	roi.bottom += delta;
 
 	for (int l = 0; l < m_nLevels; l++) {
 		PGFRect alignedROI;

@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_spline.cpp#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_spline.cpp#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -25,28 +25,28 @@ dng_spline_solver::dng_spline_solver ()
 	:	X ()
 	,	Y ()
 	,	S ()
-	
+
 	{
-	
+
 	}
 
 /******************************************************************************/
 
 dng_spline_solver::~dng_spline_solver ()
 	{
-	
+
 	}
 
 /******************************************************************************/
 
 void dng_spline_solver::Reset ()
 	{
-	
+
 	X.clear ();
 	Y.clear ();
-	
+
 	S.clear ();
-	
+
 	}
 
 /******************************************************************************/
@@ -67,21 +67,21 @@ void dng_spline_solver::Solve ()
 	// This code computes the unique curve such that:
 	//		It is C0, C1, and C2 continuous
 	//		The second derivative is zero at the end points
-	
+
 	int32 count = (int32) X.size ();
-	
+
 	DNG_ASSERT (count >= 2, "Too few points");
-	
+
 	int32 start = 0;
 	int32 end   = count;
-	
+
 	real64 A =  X [start+1] - X [start];
 	real64 B = (Y [start+1] - Y [start]) / A;
-	
+
 	S.resize (count);
 
 	S [start] = B;
-	
+
 	int32 j;
 
 	// Slopes here are a weighted average of the slopes
@@ -109,7 +109,7 @@ void dng_spline_solver::Solve ()
 		std::vector<real64> E;
 		std::vector<real64> F;
 		std::vector<real64> G;
-		
+
 		E.resize (count);
 		F.resize (count);
 		G.resize (count);
@@ -155,18 +155,18 @@ void dng_spline_solver::Solve ()
 
 bool dng_spline_solver::IsIdentity () const
 	{
-	
+
 	int32 count = (int32) X.size ();
-	
+
 	if (count != 2)
 		return false;
-		
+
 	if (X [0] != 0.0 || X [1] != 1.0 ||
 		Y [0] != 0.0 || Y [1] != 1.0)
 		return false;
-		
+
 	return true;
-	
+
 	}
 
 /******************************************************************************/
@@ -175,9 +175,9 @@ real64 dng_spline_solver::Evaluate (real64 x) const
 	{
 
 	int32 count = (int32) X.size ();
-	
+
 	// Check for off each end of point list.
-	
+
 	if (x <= X [0])
 		return Y [0];
 
@@ -185,31 +185,31 @@ real64 dng_spline_solver::Evaluate (real64 x) const
 		return Y [count-1];
 
 	// Binary search for the index.
-	
+
 	int32 lower = 1;
 	int32 upper = count - 1;
-	
+
 	while (upper > lower)
 		{
-		
+
 		int32 mid = (lower + upper) >> 1;
-		
+
 		if (x == X [mid])
 			{
 			return Y [mid];
 			}
-			
+
 		if (x > X [mid])
 			lower = mid + 1;
 		else
 			upper = mid;
-		
+
 		}
-		
+
 	DNG_ASSERT (upper == lower, "Binary search error in point list");
 
 	int32 j = lower;
-		
+
 	// X [j - 1] < x <= X [j]
 	// A is the distance between the X [j] and X [j - 1]
 	// B and C describe the fractional distance to either side. B + C = 1.
@@ -219,7 +219,7 @@ real64 dng_spline_solver::Evaluate (real64 x) const
 	// with control values:
 	//
 	//		Y[j-1], Y[j-1] + S[j-1]*A, Y[j]-S[j]*A, Y[j]
-	
+
 	return EvaluateSplineSegment (x,
 								  X [j - 1],
 								  Y [j - 1],
@@ -229,5 +229,5 @@ real64 dng_spline_solver::Evaluate (real64 x) const
 								  S [j    ]);
 
 	}
-		
+
 /*****************************************************************************/

@@ -1,21 +1,21 @@
 /*
  * The Progressive Graphics File; http://www.libpgf.org
- * 
+ *
  * $Date: 2006-06-04 22:05:59 +0200 (So, 04 Jun 2006) $
  * $Revision: 229 $
- * 
+ *
  * This file Copyright (C) 2006 xeraina GmbH, Switzerland
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
  * as published by the Free Software Foundation; either version 2.1
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -52,7 +52,7 @@
 //                   m_value	[BufferSize]
 //                      |
 //                   subband
-//  
+//
 
 // Constants
 #define CodeBufferBitLen		(CodeBufferLen*WordWidth)	///< max number of bits in m_codeBuffer
@@ -70,7 +70,7 @@
 /// @param userDataPos The stream position of the user data (metadata)
 /// @param useOMP If true, then the decoder will use multi-threading based on openMP
 /// @param userDataPolicy Policy of user data (meta-data) handling while reading PGF headers.
-CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header, 
+CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& header,
 				   PGFPostHeader& postHeader, UINT32*& levelLength, UINT64& userDataPos,
 				   bool useOMP, UINT32 userDataPolicy)
 : m_stream(stream)
@@ -149,7 +149,7 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 				size -= count;
 
 				// read/skip user data
-				UserdataPolicy policy = (userDataPolicy <= (UINT32)MaxUserDataSize) ? (UserdataPolicy)UP_CachePrefix 
+				UserdataPolicy policy = (userDataPolicy <= (UINT32)MaxUserDataSize) ? (UserdataPolicy)UP_CachePrefix
                                                                                     : (UserdataPolicy)(0xFFFFFFFF - userDataPolicy);
 				userDataPos = m_stream->GetPos();
 				postHeader.userDataLen = size;
@@ -185,7 +185,7 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 		m_stream->Read(&count, levelLength);
 		if (count != expected) ReturnWithError(MissingData);
 
-#ifdef PGF_USE_BIG_ENDIAN 
+#ifdef PGF_USE_BIG_ENDIAN
 		// make sure the values are correct read
 		for (int i=0; i < header.nLevels; i++) {
 			levelLength[i] = __VAL(levelLength[i]);
@@ -196,14 +196,14 @@ CDecoder::CDecoder(CPGFStream* stream, PGFPreHeader& preHeader, PGFHeader& heade
 		for (int i=0; i < header.nLevels; i++) {
 			m_streamSizeEstimation += levelLength[i];
 		}
-		
+
 	}
 
 	// store current stream position
 	m_encodedHeaderLength = UINT32(m_stream->GetPos() - m_startPos);
 
 	// set number of threads
-#ifdef LIBPGF_USE_OPENMP 
+#ifdef LIBPGF_USE_OPENMP
 	m_macroBlockLen = omp_get_num_procs();
 #else
 	m_macroBlockLen = 1;
@@ -299,7 +299,7 @@ void CDecoder::Partition(CSubband* band, int quantParam, int width, int height, 
 			base += pitch;
 		}
 	}
-	// main width 
+	// main width
 	base2 = base;
 	for (int j=0; j < ww.quot; j++) {
 		// rest of height
@@ -394,7 +394,7 @@ void CDecoder::DecodeInterleaved(CWaveletTransform* wtChannel, int level, int qu
 			lhBase += lhBand->GetWidth();
 		}
 	}
-	// main width 
+	// main width
 	hlBase2 = hlBase;
 	lhBase2 = lhBase;
 	for (int j=0; j < hlW.quot; j++) {
@@ -453,7 +453,7 @@ void CDecoder::Skip(UINT64 offset) {
 
 //////////////////////////////////////////////////////////////////////
 /// Dequantization of a single value at given position in subband.
-/// If encoded data is available, then stores dequantized band value into 
+/// If encoded data is available, then stores dequantized band value into
 /// buffer m_value at position m_valuePos.
 /// Otherwise reads encoded data block and decodes it.
 /// It might throw an IOException.
@@ -467,7 +467,7 @@ void CDecoder::DequantizeValue(CSubband* band, UINT32 bandPos, int quantParam) {
 		// all data of current macro block has been read --> prepare next macro block
 		GetNextMacroBlock();
 	}
-	
+
 	band->SetData(bandPos, m_currentBlock->m_value[m_currentBlock->m_valuePos] << quantParam);
 	m_currentBlock->m_valuePos++;
 }
@@ -523,7 +523,7 @@ void CDecoder::DecodeBuffer() {
 		for (int i=0; i < m_macroBlocksAvailable; i++) {
 			m_macroBlocks[i]->BitplaneDecode();
 		}
-		
+
 		// prepare current macro block
 		m_currentBlockIndex = 0;
 		m_currentBlock = m_macroBlocks[m_currentBlockIndex];
@@ -547,7 +547,7 @@ void CDecoder::ReadMacroBlock(CMacroBlock* block) {
 
 	// read wordLen
 	count = expected = sizeof(UINT16);
-	m_stream->Read(&count, &wordLen); 
+	m_stream->Read(&count, &wordLen);
 	if (count != expected) ReturnWithError(MissingData);
 	wordLen = __VAL(wordLen); // convert wordLen
 	if (wordLen > BufferSize) ReturnWithError(FormatCannotRead);
@@ -569,7 +569,7 @@ void CDecoder::ReadMacroBlock(CMacroBlock* block) {
 	m_stream->Read(&count, block->m_codeBuffer);
 	if (count != expected) ReturnWithError(MissingData);
 
-#ifdef PGF_USE_BIG_ENDIAN 
+#ifdef PGF_USE_BIG_ENDIAN
 	// convert data
 	count /= WordBytes;
 	for (int i=0; i < count; i++) {
@@ -610,7 +610,7 @@ void CDecoder::SkipTileBuffer() {
 		ASSERT(m_currentBlock->m_header.rbh.tileEnd);
 		return;
 	}
-	
+
 	ASSERT(m_macroBlocksAvailable <= 0);
 	m_macroBlocksAvailable = 0;
 	UINT16 wordLen;
@@ -641,11 +641,11 @@ void CDecoder::SkipTileBuffer() {
 //////////////////////////////////////////////////////////////////////
 // Decodes macro block into buffer of given size using bit plane coding.
 // A buffer contains bufferLen UINT32 values, thus, bufferSize bits per bit plane.
-// Following coding scheme is used: 
-//		Buffer		::= <nPlanes>(5 bits) foreach(plane i): Plane[i]  
+// Following coding scheme is used:
+//		Buffer		::= <nPlanes>(5 bits) foreach(plane i): Plane[i]
 //		Plane[i]	::= [ Sig1 | Sig2 ] [DWORD alignment] refBits
-//		Sig1		::= 1 <codeLen>(15 bits) codedSigAndSignBits 
-//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] [DWORD alignment] sigBits 
+//		Sig1		::= 1 <codeLen>(15 bits) codedSigAndSignBits
+//		Sig2		::= 0 <sigLen>(15 bits) [Sign1 | Sign2 ] [DWORD alignment] sigBits
 //		Sign1		::= 1 <codeLen>(15 bits) codedSignBits
 //		Sign2		::= 0 <signLen>(15 bits) [DWORD alignment] signBits
 void CDecoder::CMacroBlock::BitplaneDecode() {
@@ -664,7 +664,7 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 
 	// read number of bit planes
 	// <nPlanes>
-	UINT32 nPlanes = GetValueBlock(m_codeBuffer, 0, MaxBitPlanesLog); 
+	UINT32 nPlanes = GetValueBlock(m_codeBuffer, 0, MaxBitPlanesLog);
 	UINT32 codePos = MaxBitPlanesLog;
 
 	// loop through all bit planes
@@ -688,9 +688,9 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 			UINT32 sigPos = codePos + RLblockSizeLen; ASSERT(sigPos < CodeBufferBitLen);
 
 			// refinement bits
-			codePos = AlignWordPos(sigPos + codeLen); ASSERT(codePos < CodeBufferBitLen); 
+			codePos = AlignWordPos(sigPos + codeLen); ASSERT(codePos < CodeBufferBitLen);
 
-			// run-length decode significant bits and signs from m_codeBuffer and 
+			// run-length decode significant bits and signs from m_codeBuffer and
 			// read refinement bits from m_codeBuffer and compose bit plane
 			sigLen = ComposeBitplaneRLD(bufferSize, planeMask, sigPos, &m_codeBuffer[codePos >> WordWidthLog]);
 
@@ -714,7 +714,7 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 
 				// sign bits
 				UINT32 signPos = codePos + RLblockSizeLen; ASSERT(signPos < CodeBufferBitLen);
-				
+
 				// significant bits
 				UINT32 sigPos = AlignWordPos(signPos + codeLen); ASSERT(sigPos < CodeBufferBitLen);
 
@@ -723,7 +723,7 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 
 				// read significant and refinement bitset from m_codeBuffer
 				sigLen = ComposeBitplaneRLD(bufferSize, planeMask, &m_codeBuffer[sigPos >> WordWidthLog], &m_codeBuffer[codePos >> WordWidthLog], signPos);
-			
+
 			} else {
 				// RL coding of signBits was not efficient and therefore not used
 				// <0><signLen>_<signBits>_<sigBits>_<refBits>
@@ -731,7 +731,7 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 
 				// read signLen
 				UINT32 signLen = GetValueBlock(m_codeBuffer, codePos, RLblockSizeLen); ASSERT(signLen <= MaxCodeLen);
-				
+
 				// sign bits
 				UINT32 signPos = AlignWordPos(codePos + RLblockSizeLen); ASSERT(signPos < CodeBufferBitLen);
 
@@ -747,8 +747,8 @@ void CDecoder::CMacroBlock::BitplaneDecode() {
 		}
 
 		// start of next chunk
-		codePos = AlignWordPos(codePos + bufferSize - sigLen); ASSERT(codePos < CodeBufferBitLen); 
-		
+		codePos = AlignWordPos(codePos + bufferSize - sigLen); ASSERT(codePos < CodeBufferBitLen);
+
 		// next plane
 		planeMask >>= 1;
 	}
@@ -787,11 +787,11 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplane(UINT32 bufferSize, DataT planeMask
 				SetBitAtPos(valPos, planeMask);
 
 				// copy sign bit
-				SetSign(valPos, GetBit(signBits, signPos++)); 
+				SetSign(valPos, GetBit(signBits, signPos++));
 
 				// update significance flag vector
 				m_sigFlagVector[valPos++] = true;
-				sigPos++; 
+				sigPos++;
 			}
 		}
 		// refinement bit
@@ -851,7 +851,7 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 					// extract counter and generate zero run of length count
 					if (k > 0) {
 						// extract counter
-						count = GetValueBlock(m_codeBuffer, codePos, k); 
+						count = GetValueBlock(m_codeBuffer, codePos, k);
 						codePos += k;
 						if (count > 0) {
 							sigPos += count;
@@ -886,7 +886,7 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 					SetBitAtPos(valPos, planeMask);
 
 					// set sign bit
-					SetSign(valPos, GetBit(m_codeBuffer, codePos++)); 
+					SetSign(valPos, GetBit(m_codeBuffer, codePos++));
 
 					// update significance flag vector
 					m_sigFlagVector[valPos++] = true;
@@ -968,21 +968,21 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 							// generate 1's run of length 2^k
 							count = runlen - 1;
 							signBit = true;
-			
+
 							// adapt k (double run-length interval)
 							if (k < WordWidth) {
-								k++; 
+								k++;
 								runlen <<= 1;
 							}
 						} else {
 							// extract counter and generate 1's run of length count
 							if (k > 0) {
 								// extract counter
-								count = GetValueBlock(m_codeBuffer, signPos, k); 
+								count = GetValueBlock(m_codeBuffer, signPos, k);
 								signPos += k;
 
 								// adapt k (half run-length interval)
-								k--; 
+								k--;
 								runlen >>= 1;
 							}
 							if (count > 0) {
@@ -1001,11 +1001,11 @@ UINT32 CDecoder::CMacroBlock::ComposeBitplaneRLD(UINT32 bufferSize, DataT planeM
 				}
 
 				// copy sign bit
-				SetSign(valPos, signBit); 
+				SetSign(valPos, signBit);
 
 				// update significance flag vector
 				m_sigFlagVector[valPos++] = true;
-				sigPos++; 
+				sigPos++;
 			}
 		}
 

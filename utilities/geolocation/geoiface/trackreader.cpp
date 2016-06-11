@@ -57,8 +57,8 @@ public:
     QString                  currentText;
     TrackManager::TrackPoint currentDataPoint;
     bool                     verifyFoundGPXElement;
-};    
-    
+};
+
 TrackReader::TrackReader(TrackReadResult* const dataTarget)
     : QXmlDefaultHandler(),
       d(new Private)

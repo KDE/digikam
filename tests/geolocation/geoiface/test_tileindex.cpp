@@ -137,7 +137,7 @@ void TestTileIndex::testMovable()
 //         {
 //             i1.appendLinearIndex(i);
 //         }
-// 
+//
 //         TileIndex::List l1;
 //
 //         for (int i = 0; i < 100000; ++i)

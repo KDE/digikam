@@ -107,8 +107,8 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     d->currItem = d->urls.begin();
     updatePreview();
 
-    QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok    | 
-                                             QDialogButtonBox::Apply | 
+    QDialogButtonBox::StandardButtons btns = QDialogButtonBox::Ok    |
+                                             QDialogButtonBox::Apply |
                                              QDialogButtonBox::Close |
                                              QDialogButtonBox::No    |   // NextPrevious item
                                              QDialogButtonBox::Yes;      // Previous item
@@ -203,7 +203,7 @@ void MetadataEditDialog::updatePreview()
     d->catcher->thread()->find(ThumbnailIdentifier(d->currItem->path()));
     d->catcher->enqueue();
     QList<QImage> images = d->catcher->waitForThumbnails();
-    
+
     QImage img(48, 48, QImage::Format_ARGB32);
     QImage thm = images.first();
     QPainter p(&img);
@@ -211,7 +211,7 @@ void MetadataEditDialog::updatePreview()
     p.setPen(Qt::black);
     p.drawRect(img.rect().left(), img.rect().top(), img.rect().right()-1, img.rect().bottom()-1);
     p.drawImage((img.width() - thm.width())/2, (img.height() - thm.height())/2, thm);
-    
+
     QByteArray byteArray;
     QBuffer    buffer(&byteArray);
     img.save(&buffer, "PNG");

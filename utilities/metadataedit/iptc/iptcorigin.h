@@ -67,4 +67,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // IPTC_ORIGIN_H 
+#endif // IPTC_ORIGIN_H

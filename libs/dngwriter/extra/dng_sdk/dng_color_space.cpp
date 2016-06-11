@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_color_space.cpp#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_color_space.cpp#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -28,10 +28,10 @@ real64 dng_function_GammaEncode_sRGB::Evaluate (real64 x) const
 
 	if (x <= 0.0031308)
 		return x * 12.92;
-		
+
 	else
 		return 1.055 * pow (x, 1.0 / 2.4) - 0.055;
-	
+
 	}
 
 /*****************************************************************************/
@@ -41,38 +41,38 @@ real64 dng_function_GammaEncode_sRGB::EvaluateInverse (real64 y) const
 
 	if (y <= 0.0031308 * 12.92)
 		return y * (1.0 / 12.92);
-		
+
 	else
 		return pow ((y + 0.055) * (1.0 / 1.055), 2.4);
-	
+
 	}
 
 /*****************************************************************************/
 
 const dng_1d_function & dng_function_GammaEncode_sRGB::Get ()
 	{
-	
+
 	static dng_function_GammaEncode_sRGB static_function;
-	
+
 	return static_function;
-	
+
 	}
 
 /*****************************************************************************/
 
 real64 dng_function_GammaEncode_1_8::Evaluate (real64 x) const
 	{
-	
+
 	const real64 gamma = 1.0 / 1.8;
-	
+
 	const real64 slope0 = 32.0;
-	
+
 	const real64 x1 = 8.2118790552e-4; 		// pow (slope0, 1.0 / (gamma - 1.0)) * 2.0
-	
+
 	const real64 y1 = 0.019310851;			// pow (x1, gamma)
-	
+
 	const real64 slope1 = 13.064306598;		// gamma * pow (x1, gamma - 1.0)
-	
+
 	if (x <= x1)
 		return EvaluateSplineSegment (x,
 									  0.0,
@@ -81,54 +81,54 @@ real64 dng_function_GammaEncode_1_8::Evaluate (real64 x) const
 									  x1,
 									  y1,
 									  slope1);
-							
+
 	else
 		return pow (x, gamma);
-	
+
 	}
-			
+
 /*****************************************************************************/
 
 real64 dng_function_GammaEncode_1_8::EvaluateInverse (real64 y) const
 	{
-	
+
 	if (y > 0.0 && y < 0.019310851)
 		{
-		
+
 		return dng_1d_function::EvaluateInverse (y);
-		
+
 		}
-	
+
 	return pow (y, 1.8);
-	
+
 	}
 
 /*****************************************************************************/
 
 const dng_1d_function & dng_function_GammaEncode_1_8::Get ()
 	{
-	
+
 	static dng_function_GammaEncode_1_8 static_function;
-	
+
 	return static_function;
-	
+
 	}
 
 /*****************************************************************************/
 
 real64 dng_function_GammaEncode_2_2::Evaluate (real64 x) const
 	{
-	
+
 	const real64 gamma = 1.0 / 2.2;
-	
+
 	const real64 slope0 = 32.0;
-	
+
 	const real64 x1 = 0.0034800731; 		// pow (slope0, 1.0 / (gamma - 1.0)) * 2.0
-	
+
 	const real64 y1 = 0.0763027458;			// pow (x1, gamma)
-	
+
 	const real64 slope1 = 9.9661890075;		// gamma * pow (x1, gamma - 1.0)
-	
+
 	if (x <= x1)
 		return EvaluateSplineSegment (x,
 									  0.0,
@@ -137,37 +137,37 @@ real64 dng_function_GammaEncode_2_2::Evaluate (real64 x) const
 									  x1,
 									  y1,
 									  slope1);
-							
+
 	else
 		return pow (x, gamma);
-	
+
 	}
 
 /*****************************************************************************/
 
 real64 dng_function_GammaEncode_2_2::EvaluateInverse (real64 y) const
 	{
-	
+
 	if (y > 0.0 && y < 0.0763027458)
 		{
-		
+
 		return dng_1d_function::EvaluateInverse (y);
-		
+
 		}
-	
+
 	return pow (y, 2.2);
-	
+
 	}
 
 /*****************************************************************************/
 
 const dng_1d_function & dng_function_GammaEncode_2_2::Get ()
 	{
-	
+
 	static dng_function_GammaEncode_2_2 static_function;
-	
+
 	return static_function;
-	
+
 	}
 
 /*****************************************************************************/
@@ -176,89 +176,89 @@ dng_color_space::dng_color_space ()
 
 	:	fMatrixToPCS   ()
 	,	fMatrixFromPCS ()
-	
+
 	{
-	
+
 	}
 
 /*****************************************************************************/
 
 dng_color_space::~dng_color_space ()
 	{
-	
+
 	}
 
 /*****************************************************************************/
 
 void dng_color_space::SetMonochrome ()
 	{
-	
+
 	fMatrixToPCS = PCStoXYZ ().AsColumn ();
-	
+
 	dng_matrix m (1, 3);
-	
+
 	m [0] [0] = 0.0;
 	m [0] [1] = 1.0;
 	m [0] [2] = 0.0;
-	
+
 	fMatrixFromPCS = m;
-	
+
 	}
 
 /*****************************************************************************/
 
 void dng_color_space::SetMatrixToPCS (const dng_matrix_3by3 &M)
 	{
-	
+
 	// The matrix values are often rounded, so adjust to
 	// get them to convert device white exactly to the PCS.
-	
+
 	dng_vector_3 W1 = M * dng_vector_3 (1.0, 1.0, 1.0);
 	dng_vector_3 W2 = PCStoXYZ ();
-	
+
 	real64 s0 = W2 [0] / W1 [0];
 	real64 s1 = W2 [1] / W1 [1];
 	real64 s2 = W2 [2] / W1 [2];
-	
+
 	dng_matrix_3by3 S (s0,  0,  0,
 				   		0, s1,  0,
 				   		0,  0, s2);
-	
+
 	fMatrixToPCS = S * M;
-	
+
 	// Find reverse matrix.
-	
+
 	fMatrixFromPCS = Invert (fMatrixToPCS);
-	
+
 	}
-		
+
 /*****************************************************************************/
 
 const dng_1d_function & dng_color_space::GammaFunction () const
 	{
-	
+
 	return dng_1d_identity::Get ();
-	
+
 	}
-		
+
 /*****************************************************************************/
 
 bool dng_color_space::ICCProfile (uint32 &size,
 								  const uint8 *&data) const
 	{
-	
+
 	size = 0;
 	data = NULL;
-	
+
 	return false;
-	
+
 	}
-		
+
 /*****************************************************************************/
 
 dng_space_sRGB::dng_space_sRGB ()
 	{
-	
+
 	SetMatrixToPCS (dng_matrix_3by3 (0.4361, 0.3851, 0.1431,
 									 0.2225, 0.7169, 0.0606,
 									 0.0139, 0.0971, 0.7141));
@@ -269,18 +269,18 @@ dng_space_sRGB::dng_space_sRGB ()
 
 const dng_1d_function & dng_space_sRGB::GammaFunction () const
 	{
-	
+
 	return dng_function_GammaEncode_sRGB::Get ();
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_space_sRGB::ICCProfile (uint32 &size,
 								 const uint8 *&data) const
-		
+
 	{
-	
+
 	static const uint8 ksRGBProfileData [] =
 	    {
 	    0x00, 0x00, 0x0C, 0x48, 0x4C, 0x69, 0x6E, 0x6F, 0x02, 0x10, 0x00, 0x00,
@@ -549,27 +549,27 @@ bool dng_space_sRGB::ICCProfile (uint32 &size,
 
 	size = sizeof (ksRGBProfileData);
 	data = ksRGBProfileData;
-	
+
 	return true;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 const dng_color_space & dng_space_sRGB::Get ()
 	{
-	
+
 	static dng_space_sRGB static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 dng_space_AdobeRGB::dng_space_AdobeRGB ()
 	{
-	
+
 	SetMatrixToPCS (dng_matrix_3by3 (0.6097, 0.2053, 0.1492,
 				  				 	 0.3111, 0.6257, 0.0632,
 				  				 	 0.0195, 0.0609, 0.7446));
@@ -580,18 +580,18 @@ dng_space_AdobeRGB::dng_space_AdobeRGB ()
 
 const dng_1d_function & dng_space_AdobeRGB::GammaFunction () const
 	{
-	
+
 	return dng_function_GammaEncode_2_2::Get ();
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_space_AdobeRGB::ICCProfile (uint32 &size,
 								 	 const uint8 *&data) const
-		
+
 	{
-	
+
 	static const uint8 kAdobeRGBProfileData [] =
 	    {
 	    0x00, 0x00, 0x02, 0x30, 0x41, 0x44, 0x42, 0x45, 0x02, 0x10, 0x00, 0x00,
@@ -645,27 +645,27 @@ bool dng_space_AdobeRGB::ICCProfile (uint32 &size,
 
 	size = sizeof (kAdobeRGBProfileData);
 	data = kAdobeRGBProfileData;
-	
+
 	return true;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 const dng_color_space & dng_space_AdobeRGB::Get ()
 	{
-	
+
 	static dng_space_AdobeRGB static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 dng_space_ColorMatch::dng_space_ColorMatch ()
 	{
-	
+
 	SetMatrixToPCS (dng_matrix_3by3 (0.5094, 0.3208, 0.1339,
 				  				 	 0.2749, 0.6581, 0.0670,
 				  				 	 0.0243, 0.1087, 0.6919));
@@ -676,18 +676,18 @@ dng_space_ColorMatch::dng_space_ColorMatch ()
 
 const dng_1d_function & dng_space_ColorMatch::GammaFunction () const
 	{
-	
+
 	return dng_function_GammaEncode_1_8::Get ();
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_space_ColorMatch::ICCProfile (uint32 &size,
 								 	   const uint8 *&data) const
-		
+
 	{
-	
+
 	static const uint8 kColorMatchProfileData [] =
 	    {
 	    0x00, 0x00, 0x02, 0x30, 0x41, 0x44, 0x42, 0x45, 0x02, 0x10, 0x00, 0x00,
@@ -741,27 +741,27 @@ bool dng_space_ColorMatch::ICCProfile (uint32 &size,
 
 	size = sizeof (kColorMatchProfileData);
 	data = kColorMatchProfileData;
-	
+
 	return true;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 const dng_color_space & dng_space_ColorMatch::Get ()
 	{
-	
+
 	static dng_space_ColorMatch static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 dng_space_ProPhoto::dng_space_ProPhoto ()
 	{
-	
+
 	SetMatrixToPCS (dng_matrix_3by3 (0.7977, 0.1352, 0.0313,
 				  				 	 0.2880, 0.7119, 0.0001,
 				  				 	 0.0000, 0.0000, 0.8249));
@@ -772,18 +772,18 @@ dng_space_ProPhoto::dng_space_ProPhoto ()
 
 const dng_1d_function & dng_space_ProPhoto::GammaFunction () const
 	{
-	
+
 	return dng_function_GammaEncode_1_8::Get ();
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_space_ProPhoto::ICCProfile (uint32 &size,
 								 	 const uint8 *&data) const
-		
+
 	{
-	
+
 	static const uint8 kProPhotoProfileData [] =
 	    {
 		0x00, 0x00, 0x03, 0xAC, 0x4B, 0x43, 0x4D, 0x53, 0x02, 0x10, 0x00, 0x00,
@@ -869,27 +869,27 @@ bool dng_space_ProPhoto::ICCProfile (uint32 &size,
 
 	size = sizeof (kProPhotoProfileData);
 	data = kProPhotoProfileData;
-	
+
 	return true;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 const dng_color_space & dng_space_ProPhoto::Get ()
 	{
-	
+
 	static dng_space_ProPhoto static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 dng_space_GrayGamma18::dng_space_GrayGamma18 ()
 	{
-	
+
 	SetMonochrome ();
 
 	}
@@ -898,18 +898,18 @@ dng_space_GrayGamma18::dng_space_GrayGamma18 ()
 
 const dng_1d_function & dng_space_GrayGamma18::GammaFunction () const
 	{
-	
+
 	return dng_function_GammaEncode_1_8::Get ();
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_space_GrayGamma18::ICCProfile (uint32 &size,
 								 	    const uint8 *&data) const
-		
+
 	{
-	
+
 	static const uint8 kGamma18ProfileData [] =
 	    {
 	    0x00, 0x00, 0x01, 0x98, 0x41, 0x44, 0x42, 0x45, 0x02, 0x10, 0x00, 0x00,
@@ -950,27 +950,27 @@ bool dng_space_GrayGamma18::ICCProfile (uint32 &size,
 
 	size = sizeof (kGamma18ProfileData);
 	data = kGamma18ProfileData;
-	
+
 	return true;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 const dng_color_space & dng_space_GrayGamma18::Get ()
 	{
-	
+
 	static dng_space_GrayGamma18 static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 dng_space_GrayGamma22::dng_space_GrayGamma22 ()
 	{
-	
+
 	SetMonochrome ();
 
 	}
@@ -979,18 +979,18 @@ dng_space_GrayGamma22::dng_space_GrayGamma22 ()
 
 const dng_1d_function & dng_space_GrayGamma22::GammaFunction () const
 	{
-	
+
 	return dng_function_GammaEncode_2_2::Get ();
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_space_GrayGamma22::ICCProfile (uint32 &size,
 								 	    const uint8 *&data) const
-		
+
 	{
-	
+
 	static const uint8 kGamma22ProfileData [] =
 	    {
 	    0x00, 0x00, 0x01, 0x98, 0x41, 0x44, 0x42, 0x45, 0x02, 0x10, 0x00, 0x00,
@@ -1031,27 +1031,27 @@ bool dng_space_GrayGamma22::ICCProfile (uint32 &size,
 
 	size = sizeof (kGamma22ProfileData);
 	data = kGamma22ProfileData;
-	
+
 	return true;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 const dng_color_space & dng_space_GrayGamma22::Get ()
 	{
-	
+
 	static dng_space_GrayGamma22 static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/
 
 dng_space_fakeRGB::dng_space_fakeRGB ()
 	{
-	
+
 	SetMatrixToPCS (dng_matrix_3by3 (0.6097, 0.2053, 0.1492,
 				  				 	 0.3111, 0.6257, 0.0632,
 				  				 	 0.0195, 0.0609, 0.7446));
@@ -1062,11 +1062,11 @@ dng_space_fakeRGB::dng_space_fakeRGB ()
 
 const dng_color_space & dng_space_fakeRGB::Get ()
 	{
-	
+
 	static dng_space_fakeRGB static_space;
-	
+
 	return static_space;
-	
+
 	}
-	
+
 /*****************************************************************************/

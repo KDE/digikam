@@ -324,7 +324,7 @@ void RefocusFilter::convolveImage(const Args& prm)
                                            &RefocusFilter::convolveImageMultithreaded,
                                            vals[j],
                                            vals[j+1],
-                                           y1, 
+                                           y1,
                                            prm
                                           ));
         }

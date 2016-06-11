@@ -104,7 +104,7 @@ public:
     virtual void regionSelectionChanged();
     virtual void mouseModeChanged();
 
-    virtual void centerOn(const Marble::GeoDataLatLonBox& box, const bool useSaneZoomLevel); 
+    virtual void centerOn(const Marble::GeoDataLatLonBox& box, const bool useSaneZoomLevel);
     virtual void setActive(const bool state);
 
 public Q_SLOTS:

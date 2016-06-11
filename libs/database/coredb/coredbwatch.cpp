@@ -69,7 +69,7 @@ public:
                            QString::fromUtf8(dbusSignal),
                            obj, slot);
     }
-    
+
 public:
 
 

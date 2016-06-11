@@ -601,7 +601,7 @@ void BWSepiaSettings::loadSettings()
 
 void BWSepiaSettings::saveAsSettings()
 {
-    QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Save"), 
+    QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Save"),
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                 QLatin1String("*"));
 

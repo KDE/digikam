@@ -173,7 +173,7 @@ protected:
     QAction* statusBarMenuAction() const;
     QAction* showMenuBarAction()   const;
 
-    /** Call this method from your main window to show keyboard shortcut config dialog 
+    /** Call this method from your main window to show keyboard shortcut config dialog
      *  with an extra action collection to configure. This method is called by slotEditKeys()
      *  which can be re-implement in child class for cutomization.
      */

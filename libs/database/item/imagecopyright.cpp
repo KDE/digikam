@@ -498,10 +498,10 @@ int ImageCopyright::languageMatch(const QList<CopyrightInfo> infos, const QStrin
     if (languageCode.isNull())
     {
         // find local language
-        
+
         QString spec     = QLocale().name().toLower();
         QString langCode = spec.left(spec.indexOf(QLatin1Char('_'))) + QLatin1Char('-');
-        QString fullCode = spec.replace(QLatin1Char('_'), QLatin1Char('-'));        
+        QString fullCode = spec.replace(QLatin1Char('_'), QLatin1Char('-'));
     }
     else if (languageCode == QLatin1String("x-default"))
     {

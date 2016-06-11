@@ -144,7 +144,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
     vbx->addWidget(page);
     vbx->addWidget(d->buttons);
     setLayout(vbx);
-    
+
     if (create)
     {
         d->titleEdit->setText(i18n("New Workflow"));
@@ -159,7 +159,7 @@ WorkflowDlg::WorkflowDlg(const Workflow& wf, bool create)
 
     connect(d->titleEdit, SIGNAL(textChanged(QString)),
             this, SLOT(slotTitleChanged(QString)));
-    
+
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(accept()));
 

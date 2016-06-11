@@ -69,7 +69,7 @@ bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoord
             droppedIndices << itemIndex;
         }
     }
-    
+
     gpsGeoIfaceModelHelper->onIndicesMoved(droppedIndices, dropCoordinates, QPersistentModelIndex());
 
     return true;

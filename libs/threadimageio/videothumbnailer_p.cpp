@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-04-21
- * Description : Qt Multimedia based video thumbnailer 
+ * Description : Qt Multimedia based video thumbnailer
  *
  * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -708,7 +708,7 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
                                  << " at position " << position;
 
     if (!frm.isValid())
-    { 
+    {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video frame is not valid.";
         isReady = true;
         player->setMedia(QMediaContent());

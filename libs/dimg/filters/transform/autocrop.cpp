@@ -5,7 +5,7 @@
  *
  * Date        : 2012-10-18
  * Description : Auto Crop analyser
- * 
+ *
  * Algorithm based on black point detection on the basis of spiral
  * traversal
  *
@@ -673,7 +673,7 @@ void AutoCrop::startAnalyse()
     int ni, nj;
 
     qCDebug(DIGIKAM_DIMG_LOG) << "Outer Crop area:";
-    qCDebug(DIGIKAM_DIMG_LOG) << "From "<< crop.top()  << " to " << crop.bottom() 
+    qCDebug(DIGIKAM_DIMG_LOG) << "From "<< crop.top()  << " to " << crop.bottom()
              << " & "  << crop.left() << " to " << crop.right();
 
     for(i=crop.top(), ni=0; i <= crop.bottom(); i++, ni++)
@@ -996,7 +996,7 @@ void AutoCrop::startAnalyse()
             d->cropArea.setTopLeft(icp1);
             d->cropArea.setBottomRight(icp2);
         }
-        
+
         delete [] blackpointCount;
     }
 

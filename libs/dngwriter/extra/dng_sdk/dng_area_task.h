@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_area_task.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_area_task.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -32,21 +32,21 @@
 
 class dng_area_task
 	{
-	
+
 	protected:
-	
+
 		uint32 fMaxThreads;
-	
+
 		uint32 fMinTaskArea;
-		
+
 		dng_point fUnitCell;
-		
+
 		dng_point fMaxTileSize;
-		
+
 	public:
-	
+
 		dng_area_task ();
-		
+
 		virtual ~dng_area_task ();
 
 		/// Getter for the maximum number of threads (resources) that can be used for processing
@@ -101,7 +101,7 @@ class dng_area_task
 		/// be a multiple of UnitCell in size for all constraints of the partitionerr to be met.
 
 		virtual dng_rect RepeatingTile1 () const;
-		
+
 		/// Getter for RepeatingTile2.
 		/// RepeatingTile1, RepeatingTile2, and RepeatingTile3 are used to establish a set of 0 to 3 tile patterns for which
 		/// the resulting partitions that the final Process method is called on will not cross tile boundaries in any of the
@@ -119,7 +119,7 @@ class dng_area_task
 		/// such that all the tiles are aligned and sized in a certain way. A RepeatingTile value is valid if it is non-empty.
 		/// Higher numbered RepeatingTile patterns are only used if all lower ones are non-empty. A RepeatingTile pattern must
 		/// be a multiple of UnitCell in size for all constraints of the partitionerr to be met.
-		
+
 		virtual dng_rect RepeatingTile3 () const;
 
 		/// Task startup method called before any processing is done on partitions.
@@ -148,7 +148,7 @@ class dng_area_task
 		virtual void Process (uint32 threadIndex,
 							  const dng_rect &tile,
 							  dng_abort_sniffer *sniffer) = 0;
-		
+
 		/// Task computation finalization and teardown method.
 		/// Called after all resources have completed processing. Can be overridden to accumulate results and free resources allocated in Start.
 		///
@@ -162,7 +162,7 @@ class dng_area_task
 
 		dng_point FindTileSize (const dng_rect &area) const;
 
-		/// Handle one resource's worth of partitioned tiles. 
+		/// Handle one resource's worth of partitioned tiles.
 		/// Called after thread partitioning has already been done. Area may be further subdivided to handle maximum tile size, etc.
 		/// It will be rare to override this method.
 		///
@@ -194,5 +194,5 @@ class dng_area_task
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

@@ -131,7 +131,7 @@ public:
             cmh.addAction(QLatin1String("album_openinfilemanager"));
             cmh.addAction(QLatin1String("album_openinterminal"));
             return;
-        } 
+        }
 
         // --------------------------------------------------------
         cmh.addActionNewAlbum(d->albumModificationHelper, album);
@@ -224,7 +224,7 @@ void AlbumSelectionTreeView::slotRebuildThumbs()
     {
         NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan,
                                                         QStringList() << static_cast<PAlbum*>(album)->folderPath());
-            
+
         tool->start();
     }
 }

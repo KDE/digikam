@@ -494,7 +494,7 @@ void ShowfotoSettings::setDeleteItem2Trash(bool D2t)
 }
 
 void ShowfotoSettings::setCurrentTheme(const QString& theme)
-{    
+{
     d->group.writeEntry(d->configCurrentTheme, theme);
 }
 
@@ -535,7 +535,7 @@ void ShowfotoSettings::setShowSplash(bool show)
 
 void ShowfotoSettings::setSortRole(int order)
 {
-    d->group.writeEntry(d->configSortOrder, order);   
+    d->group.writeEntry(d->configSortOrder, order);
 }
 
 void ShowfotoSettings::setReverseSort(bool reverse)

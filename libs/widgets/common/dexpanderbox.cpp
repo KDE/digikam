@@ -79,7 +79,7 @@ DLineWidget::~DLineWidget()
 }
 
 // ------------------------------------------------------------------------------------
-    
+
 class Q_DECL_HIDDEN DAdjustableLabel::Private
 {
 public:
@@ -119,7 +119,7 @@ QSize DAdjustableLabel::minimumSizeHint() const
 
 QSize DAdjustableLabel::sizeHint() const
 {
-    QFontMetrics fm(fontMetrics());    
+    QFontMetrics fm(fontMetrics());
     int maxW     = QApplication::desktop()->screenGeometry(this).width() * 3 / 4;
     int currentW = fm.width(d->ajdText);
 

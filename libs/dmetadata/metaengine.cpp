@@ -100,7 +100,7 @@ bool MetaEngine::cleanupExiv2()
     unregisterXmpNameSpace(QString::fromLatin1("http://ns.microsoft.com/photo/1.2/"));
     unregisterXmpNameSpace(QString::fromLatin1("http://ns.acdsee.com/iptc/1.0/"));
     unregisterXmpNameSpace(QString::fromLatin1("http://www.video"));
-    
+
     Exiv2::XmpParser::terminate();
 
 #endif // _XMP_SUPPORT_

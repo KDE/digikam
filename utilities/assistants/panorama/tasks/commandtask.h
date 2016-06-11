@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -54,7 +54,7 @@ protected:
     QString getCommandLine();
     QString getProcessError();
     void    printDebug(const QString& binaryName);
-    
+
 private:
 
     QSharedPointer<QProcess>            process;

@@ -59,4 +59,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // IPTC_ENVELOPE_H 
+#endif // IPTC_ENVELOPE_H

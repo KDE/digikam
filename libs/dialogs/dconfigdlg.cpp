@@ -215,7 +215,7 @@ QPushButton* DConfigDlg::button(QDialogButtonBox::StandardButton which) const
 }
 
 void DConfigDlg::addActionButton(QAbstractButton* button)
-{ 
+{
     d_func()->mButtonBox->addButton(button, QDialogButtonBox::ActionRole);
 }
 

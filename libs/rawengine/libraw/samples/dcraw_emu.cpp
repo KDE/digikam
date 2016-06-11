@@ -107,7 +107,7 @@ void usage(const char *prog)
 #ifdef LIBRAW_DEMOSAIC_PACK_GPL3
 //"-amazeca  Use AMaZE chromatic aberrations refine (only if q=10)\n"
 "-acae <r b>Use chromatic aberrations correction\n" //modifJD
-"-aline <l> reduction of line noise\n" 
+"-aline <l> reduction of line noise\n"
 "-aclean <l c> clean CFA\n"
 "-agreen <g> equilibrate green\n"
 #endif
@@ -141,9 +141,9 @@ int my_progress_callback(void *d,enum LibRaw_progress p,int iteration, int expec
     printf("Starting %s (expecting %d iterations)\n", libraw_strprogress(p),expected);
   else if (iteration == expected-1)
     printf("%s finished\n",libraw_strprogress(p));
-  
+
   ///    if(++cnt>10) return 1; // emulate user termination on 10-th callback call
-    
+
     return 0; // always return 0 to continue processing
 }
 
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
     int use_bigfile=0, use_timing=0,use_mem=0;
 #ifndef WIN32
     int msize = 0,use_mmap=0;
-    
+
 #endif
 	void *iobuffer=0;
 #ifdef OUT
@@ -196,22 +196,22 @@ int main(int argc, char *argv[])
 #endif
 
 #define OUT RawProcessor.imgdata.params
-    
+
         argv[argc] = (char*)"";
-        for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
+        for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; )
           {
             char *optstr = argv[arg];
             opt = argv[arg++][1];
             if ((cp = strchr (sp=(char*)"cnbrkStqmHABCgU", opt))!=0)
               for (i=0; i < "111411111144221"[cp-sp]-'0'; i++)
-                if (!isdigit(argv[arg+i][0]) && !optstr[2]) 
+                if (!isdigit(argv[arg+i][0]) && !optstr[2])
                   {
                     fprintf (stderr,"Non-numeric argument to \"-%c\"\n", opt);
                     return 1;
                   }
             if(!strchr("ftdeam",opt) && argv[arg-1][2])
               fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
-            switch (opt) 
+            switch (opt)
               {
               case 'v':  verbosity++;  break;
               case 'G':  OUT.green_matching = 1; break;
@@ -222,24 +222,24 @@ int main(int argc, char *argv[])
               case 'P':  OUT.bad_pixels  = argv[arg++];        break;
               case 'K':  OUT.dark_frame  = argv[arg++];        break;
               case 'r':
-                for(c=0;c<4;c++) 
-                  OUT.user_mul[c] = (float)atof(argv[arg++]);  
+                for(c=0;c<4;c++)
+                  OUT.user_mul[c] = (float)atof(argv[arg++]);
                 break;
-              case 'C':  
+              case 'C':
                 OUT.aber[0] = 1 / atof(argv[arg++]);
-                OUT.aber[2] = 1 / atof(argv[arg++]);  
+                OUT.aber[2] = 1 / atof(argv[arg++]);
                 break;
-              case 'g':  
+              case 'g':
                 OUT.gamm[0] = 1 / atof(argv[arg++]);
-                OUT.gamm[1] =     atof(argv[arg++]);  
+                OUT.gamm[1] =     atof(argv[arg++]);
                 break;
               case 'k':  OUT.user_black  = atoi(argv[arg++]);  break;
               case 'S':  OUT.user_sat    = atoi(argv[arg++]);  break;
-              case 't':  
+              case 't':
                 if(!strcmp(optstr,"-timing"))
                   use_timing=1;
                 else if(!argv[arg-1][2])
-                  OUT.user_flip   = atoi(argv[arg++]);  
+                  OUT.user_flip   = atoi(argv[arg++]);
                 else
                   fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
                 break;
@@ -255,14 +255,14 @@ int main(int argc, char *argv[])
                   else
                     {
                       if(!argv[arg-1][2])
-                        OUT.med_passes  = atoi(argv[arg++]);  
+                        OUT.med_passes  = atoi(argv[arg++]);
                       else
                         fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
                     }
                 break;
               case 'H':  OUT.highlight   = atoi(argv[arg++]);  break;
               case 's':  OUT.shot_select = abs(atoi(argv[arg++])); break;
-              case 'o':  
+              case 'o':
                 if(isdigit(argv[arg][0]) && !isdigit(argv[arg][1]))
                   OUT.output_color = atoi(argv[arg++]);
 #ifndef NO_LCMS
@@ -272,16 +272,16 @@ int main(int argc, char *argv[])
               case 'p':  OUT.camera_profile = argv[arg++];
 #endif
                 break;
-              case 'h':  
-                OUT.half_size         = 1;		
+              case 'h':
+                OUT.half_size         = 1;
                 break;
-              case 'f':  
+              case 'f':
                 if(!strcmp(optstr,"-fbdd"))
                   OUT.fbdd_noiserd = atoi(argv[arg++]);
                 else
                   {
-                    if(!argv[arg-1][2])    
-                      OUT.four_color_rgb    = 1;  
+                    if(!argv[arg-1][2])
+                      OUT.four_color_rgb    = 1;
                     else
                       fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
                   }
@@ -289,40 +289,40 @@ int main(int argc, char *argv[])
               case 'A':  for(c=0; c<4;c++) OUT.greybox[c]  = atoi(argv[arg++]); break;
               case 'B':  for(c=0; c<4;c++) OUT.cropbox[c]  = atoi(argv[arg++]); break;
               case 'a':
-                if(!strcmp(optstr,"-aexpo"))			  
+                if(!strcmp(optstr,"-aexpo"))
                   {
                     OUT.exp_correc = 1;
                     OUT.exp_shift = (float)atof(argv[arg++]);
                     OUT.exp_preser = (float)atof(argv[arg++]);
-                  }	
+                  }
                 else
 #ifdef LIBRAW_DEMOSAIC_PACK_GPL3
-                  if(!strcmp(optstr,"-acae")) 
+                  if(!strcmp(optstr,"-acae"))
                     {
                       OUT.ca_correc = 1;
                       OUT.cared       = (float)atof(argv[arg++]);
                       OUT.cablue      = (float)atof(argv[arg++]);
                     }
-                  else if(!strcmp(optstr,"-aline"))			  
+                  else if(!strcmp(optstr,"-aline"))
                     {
                       OUT.cfaline = 1;
                       OUT.linenoise = (float)atof(argv[arg++]);
-                    }	
-                  else if(!strcmp(optstr,"-aclean"))			  
+                    }
+                  else if(!strcmp(optstr,"-aclean"))
                     {
                       OUT.cfa_clean = 1;
                       OUT.lclean = (float)atof(argv[arg++]);
                       OUT.cclean = (float)atof(argv[arg++]);
-                    }								  
-                  else if(!strcmp(optstr,"-agreen"))			  
+                    }
+                  else if(!strcmp(optstr,"-agreen"))
                     {
                       OUT.cfa_green = 1;
                       OUT.green_thresh =(float)atof(argv[arg++]);
-                    }								  
+                    }
                   else
 #endif
-                    if(!argv[arg-1][2])    
-                      OUT.use_auto_wb       = 1;  
+                    if(!argv[arg-1][2])
+                      OUT.use_auto_wb       = 1;
                     else
                       fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
                 break;
@@ -390,15 +390,15 @@ int main(int argc, char *argv[])
   if(verbosity)
     printf ("Using %d threads\n", omp_get_max_threads());
 #endif
-  
+
   for ( ; arg < argc; arg++)
     {
       char outfn[1024];
 
       if(verbosity) printf("Processing file %s\n",argv[arg]);
-            
+
       timerstart();
-            
+
 #if !defined(WIN32) && !defined(__MINGW32__)
       if(use_mmap)
         {
@@ -478,7 +478,7 @@ int main(int argc, char *argv[])
               ret = RawProcessor.open_file(argv[arg],1);
             else
               ret = RawProcessor.open_file(argv[arg]);
-                        
+
             if( ret  != LIBRAW_SUCCESS)
               {
                 fprintf(stderr,"Cannot open %s: %s\n",argv[arg],libraw_strerror(ret));
@@ -505,7 +505,7 @@ int main(int argc, char *argv[])
         {
           fprintf(stderr,"Cannot do postpocessing on %s: %s\n",argv[arg],libraw_strerror(ret));
           if(LIBRAW_FATAL_ERROR(ret))
-            continue; 
+            continue;
         }
       if(use_timing)
         timerprint("LibRaw::dcraw_process()",argv[arg]);
@@ -534,7 +534,7 @@ int main(int argc, char *argv[])
           free(iobuffer);
           iobuffer = 0;
         }
-            
+
       RawProcessor.recycle(); // just for show this call
     }
   return 0;

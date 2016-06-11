@@ -92,7 +92,7 @@ void DMetadataSettingsContainer::setUnifyReadWrite(bool b)
 {
     d->unifyReadWrite = b;
 }
-    
+
 void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     bool valid = true;
@@ -434,7 +434,7 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
         {
             ns.convertRatio.append(str.toInt());
         }
-        
+
         container.append(ns);
     }
 

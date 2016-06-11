@@ -266,7 +266,7 @@ void ThumbsDbAccess::cleanUpDatabase()
     if (d)
     {
         ThumbsDbAccessMutexLocker locker(d);
-        
+
         if (d->backend)
         {
             d->backend->close();

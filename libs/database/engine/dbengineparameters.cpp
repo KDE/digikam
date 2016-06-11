@@ -72,7 +72,7 @@ namespace Digikam
 
 QString DbEngineParameters::internalServerPrivatePath()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + 
+    return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
                                             QLatin1String("/digikam/");
 }
 
@@ -660,7 +660,7 @@ QDebug operator<<(QDebug dbg, const DbEngineParameters& p)
     dbg.nospace() << "   Host Name:            " << p.hostName                                          << endl;
     dbg.nospace() << "   Host port:            " << p.port                                              << endl;
     dbg.nospace() << "   Internal Server:      " << p.internalServer                                    << endl;
-    dbg.nospace() << "   Internal Server Path: " << p.internalServerDBPath                              << endl; 
+    dbg.nospace() << "   Internal Server Path: " << p.internalServerDBPath                              << endl;
     dbg.nospace() << "   Username:             " << p.userName                                          << endl;
     dbg.nospace() << "   Password:             " << QString().fill(QLatin1Char('X'), p.password.size()) << endl;
 

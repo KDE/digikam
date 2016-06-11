@@ -62,4 +62,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // IPTC_KEYWORDS_H 
+#endif // IPTC_KEYWORDS_H

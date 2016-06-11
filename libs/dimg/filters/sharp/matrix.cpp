@@ -426,7 +426,7 @@ CMat* RefocusMatrix::compute_g(const CMat* const convolution, const int m, const
     // Those are mappings, ie 'eigen' views of the data, there is NO
     // copy involved. Digikam and Eigen both default to column-major.
     Eigen::Map<Eigen::MatrixXd> A(s->data,s->rows, s->rows);
-    Eigen::Map<Eigen::VectorXd> B(b->data,b->rows);   
+    Eigen::Map<Eigen::VectorXd> B(b->data,b->rows);
     // there's no "solveinplace" for lu in Eigen, use a temporary matrix
     Eigen::VectorXd X(b->rows);
     X = A.lu().solve(B);

@@ -128,7 +128,7 @@ void Task::run()
     bool        success = false;
     int         index   = 0;
     QUrl        outUrl  = d->tools.m_itemUrl;
-    QUrl        workUrl = !d->settings.useOrgAlbum ? d->settings.workingUrl 
+    QUrl        workUrl = !d->settings.useOrgAlbum ? d->settings.workingUrl
                                                    : d->tools.m_itemUrl.adjusted(QUrl::RemoveFilename);
     QUrl        inUrl;
     QList<QUrl> tmp2del;
@@ -244,7 +244,7 @@ void Task::run()
             }
         }
 
-        if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(), 
+        if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                            outUrl.toLocalFile(),
                                            dest.toLocalFile()))
         {

@@ -407,7 +407,7 @@ void GPSCorrelatorWidget::slotAllTrackFilesReady()
                 invalidFiles.count()
             );
 
-        DMessageBox::showInformationList(QMessageBox::Critical, 
+        DMessageBox::showInformationList(QMessageBox::Critical,
                                          this,
                                          errorTitleString,
                                          errorString,

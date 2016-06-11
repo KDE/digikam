@@ -125,7 +125,7 @@ QPixmap DItemDelegate::makeDragPixmap(const QStyleOptionViewItem& option,
     QPixmap pix(rect.size());
     QPainter p(&pix);
 
-/* 
+/*
     // border
     p.fillRect(0, 0, pix.width()-1, pix.height()-1, QColor(Qt::white));
     p.setPen(QPen(Qt::black, 1));

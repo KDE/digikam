@@ -61,7 +61,7 @@ private:
     class Private;
     Private* d;
 };
-    
+
 } // namespace Digikam
 
 #endif // METADATAHUBMNGR_H

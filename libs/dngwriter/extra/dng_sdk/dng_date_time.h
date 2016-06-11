@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_date_time.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_date_time.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -33,18 +33,18 @@
 
 class dng_date_time
 	{
-	
+
 	public:
-		
+
 		uint32 fYear;
 		uint32 fMonth;
 		uint32 fDay;
 		uint32 fHour;
 		uint32 fMinute;
 		uint32 fSecond;
-		
+
 	public:
-	
+
 		/// Construct an invalid date/time
 
 		dng_date_time ();
@@ -68,7 +68,7 @@ class dng_date_time
 		/// \retval true if all fields are within range.
 
 		bool IsValid () const;
-		
+
 		/// Predicate to determine if a date is invalid.
 		/// \retval true if any field is out of range.
 
@@ -76,7 +76,7 @@ class dng_date_time
 			{
 			return !IsValid ();
 			}
-			
+
 		/// Equal operator.
 
 		bool operator== (const dng_date_time &dt) const
@@ -88,14 +88,14 @@ class dng_date_time
 				   fMinute == dt.fMinute &&
 				   fSecond == dt.fSecond;
 			}
-			
+
 		// Not-equal operator.
-		
+
 		bool operator!= (const dng_date_time &dt) const
 			{
 			return !(*this == dt);
 			}
-			
+
 		/// Set date to an invalid value.
 
 		void Clear ();
@@ -105,58 +105,58 @@ class dng_date_time
 		/// \retval true if date was parsed successfully and date is valid.
 
 		bool Parse (const char *s);
-			
+
 	};
-	
+
 /*****************************************************************************/
 
 /// \brief Class for holding a time zone.
 
 class dng_time_zone
 	{
-	
+
 	private:
-	
+
 		enum
 			{
-			
+
 			kMaxOffsetHours = 15,
 			kMinOffsetHours = -kMaxOffsetHours,
-			
+
 			kMaxOffsetMinutes = kMaxOffsetHours * 60,
 			kMinOffsetMinutes = kMinOffsetHours * 60,
-			
+
 			kInvalidOffset = kMinOffsetMinutes - 1
-			
+
 			};
-			
+
 		// Offset from GMT in minutes.  Positive numbers are
 		// ahead of GMT, negative number are behind GMT.
-	
+
 		int32 fOffsetMinutes;
-		
+
 	public:
-	
+
 		dng_time_zone ()
 			:	fOffsetMinutes (kInvalidOffset)
 			{
 			}
-			
+
 		void Clear ()
 			{
 			fOffsetMinutes = kInvalidOffset;
 			}
-			
+
 		void SetOffsetHours (int32 offset)
 			{
 			fOffsetMinutes = offset * 60;
 			}
-			
+
 		void SetOffsetMinutes (int32 offset)
 			{
 			fOffsetMinutes = offset;
 			}
-			
+
 		void SetOffsetSeconds (int32 offset)
 			{
 			fOffsetMinutes = (offset > 0) ? ((offset + 30) / 60)
@@ -168,29 +168,29 @@ class dng_time_zone
 			return fOffsetMinutes >= kMinOffsetMinutes &&
 				   fOffsetMinutes <= kMaxOffsetMinutes;
 			}
-			
+
 		bool NotValid () const
 			{
 			return !IsValid ();
 			}
-			
+
 		int32 OffsetMinutes () const
 			{
 			return fOffsetMinutes;
 			}
-			
+
 		bool IsExactHourOffset () const
 			{
 			return IsValid () && ((fOffsetMinutes % 60) == 0);
 			}
-			
+
 		int32 ExactHourOffset () const
 			{
 			return fOffsetMinutes / 60;
 			}
-			
+
 		dng_string Encode_ISO_8601 () const;
-			
+
 	};
 
 /*****************************************************************************/
@@ -199,94 +199,94 @@ class dng_time_zone
 
 class dng_date_time_info
 	{
-	
+
 	private:
-	
-		// Is only the date valid and not the time? 
-	
+
+		// Is only the date valid and not the time?
+
 		bool fDateOnly;
-		
+
 		// Date and time.
-		
+
 		dng_date_time fDateTime;
-		
+
 		// Subseconds string (stored in a separate tag in EXIF).
-		
+
 		dng_string fSubseconds;
-		
+
 		// Time zone, if known.
-		
+
 		dng_time_zone fTimeZone;
-		
+
 	public:
-	
+
 		dng_date_time_info ();
-		
+
 		bool IsValid () const;
-		
+
 		bool NotValid () const
 			{
 			return !IsValid ();
 			}
-			
+
 		void Clear ()
 			{
 			*this = dng_date_time_info ();
 			}
-			
+
 		const dng_date_time & DateTime () const
 			{
 			return fDateTime;
 			}
-			
+
 		void SetDateTime (const dng_date_time &dt)
 			{
 			fDateOnly = false;
 			fDateTime = dt;
 			}
-			
+
 		const dng_string & Subseconds () const
 			{
 			return fSubseconds;
 			}
-			
+
 		void SetSubseconds (const dng_string &s)
 			{
 			fSubseconds = s;
 			}
-			
+
 		const dng_time_zone & TimeZone () const
 			{
 			return fTimeZone;
 			}
-			
+
 		void SetZone (const dng_time_zone &zone)
 			{
 			fTimeZone = zone;
 			}
-			
+
 		void Decode_ISO_8601 (const char *s);
-		
+
 		dng_string Encode_ISO_8601 () const;
-		
+
 		void Decode_IPTC_Date (const char *s);
-		
+
 		dng_string Encode_IPTC_Date () const;
-	
+
 		void Decode_IPTC_Time (const char *s);
-		
+
 		dng_string Encode_IPTC_Time () const;
-		
+
 	private:
-	
+
 		void SetDate (uint32 year,
 					  uint32 month,
 					  uint32 day);
-					  
+
 		void SetTime (uint32 hour,
 					  uint32 minute,
 					  uint32 second);
-					  
+
 	};
 
 /*****************************************************************************/
@@ -305,7 +305,7 @@ void DecodeUnixTime (uint32 unixTime, dng_date_time &dt);
 /*****************************************************************************/
 
 /// Return timezone of current location at a given date.
-/// \param dt Date at which to compute timezone difference. (For example, used 
+/// \param dt Date at which to compute timezone difference. (For example, used
 /// to determine Daylight Savings, etc.)
 /// \retval Time zone for date/time dt.
 
@@ -332,29 +332,29 @@ enum dng_date_time_format
 
 class dng_date_time_storage_info
 	{
-	
+
 	private:
-	
+
 		uint64 fOffset;
-		
+
 		dng_date_time_format fFormat;
-	
+
 	public:
-	
+
 		/// The default constructor initializes to an invalid state.
 
 		dng_date_time_storage_info ();
-		
+
 		/// Construct with file offset and date format.
 
 		dng_date_time_storage_info (uint64 offset,
 									dng_date_time_format format);
-		
+
 		/// Predicate to determine if an offset is valid.
 		/// \retval true if offset is valid.
 
 		bool IsValid () const;
-		
+
 		// The accessors throw if the data is not valid.
 
 		/// Getter for offset in file.
@@ -362,18 +362,18 @@ class dng_date_time_storage_info
 		/// if offset is not valid.
 
 		uint64 Offset () const;
-			
-		/// Get for format date was originally stored in file. Throws a 
+
+		/// Get for format date was originally stored in file. Throws a
 		/// dng_error_unknown exception if offset is invalid.
 		/// \exception dng_exception with fErrorCode equal to dng_error_unknown
 		/// if offset is not valid.
 
 		dng_date_time_format Format () const;
-	
+
 	};
 
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

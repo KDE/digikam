@@ -47,7 +47,7 @@ public:
 
     void setLabel(const QString& text);
     void setTitle(const QString& text);
-    
+
     int  value() const;
 
 Q_SIGNALS:

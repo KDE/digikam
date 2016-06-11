@@ -73,7 +73,7 @@ public:
     /** If a cache is kept, lookup by file path is fast,
      *  without a cache it is O(n). Default is false.
      */
-    void setKeepsFileUrlCache(bool keepCache);   
+    void setKeepsFileUrlCache(bool keepCache);
 
     /**
      *  Returns the ShowfotoItemInfo object, reference from the underlying data pointed to by the index.

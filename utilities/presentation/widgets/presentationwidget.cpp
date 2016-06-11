@@ -753,7 +753,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
 
 void PresentationWidget::wheelEvent( QWheelEvent* e )
 {
-    if ( !d->sharedData->enableMouseWheel ) 
+    if ( !d->sharedData->enableMouseWheel )
         return;
 
     if ( m_endOfShow )

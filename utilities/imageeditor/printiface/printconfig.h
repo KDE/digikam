@@ -153,7 +153,7 @@ class DIGIKAM_EXPORT PrintConfig : public KConfigSkeleton
             return static_cast<PrintOptionsPage::Unit>(self()->mPrintUnit);
         }
 
-        /** 
+        /**
          * Set PrintKeepRatio
          */
         static void setPrintKeepRatio( bool v )

@@ -84,13 +84,13 @@ void TestGeoCoordinates::testMovable()
 //                 benchList << GeoCoordinates(double(i)/50.0, double(j)/50.0);
 //             }
 //         }
-// 
+//
 // //         QBENCHMARK
 //         {
 //             for (int i=0; i<benchSize*10; ++i)
 //             {
 //                 GeoCoordinates::List benchListCopied = benchList;
-// 
+//
 //                 // force a deep copy to occur:
 //                 benchListCopied[0] = GeoCoordinates();
 //                 benchListCopied << GeoCoordinates();

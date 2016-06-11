@@ -103,7 +103,7 @@ public:
     // See FaceRecognizer::save.
     void save(FileStorage& fs) const;
 
-/*    
+/*
     CV_IMPL_PROPERTY(int, GridX, _grid_x)
     CV_IMPL_PROPERTY(int, GridY, _grid_y)
     CV_IMPL_PROPERTY(int, Radius, _radius)
@@ -111,7 +111,7 @@ public:
     CV_IMPL_PROPERTY(double, Threshold, _threshold)
     CV_IMPL_PROPERTY_RO(std::vector<cv::Mat>, Histograms, _histograms)
     CV_IMPL_PROPERTY_RO(cv::Mat, Labels, _labels)
-*/    
+*/
 };
 
 

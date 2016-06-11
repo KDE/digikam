@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_1d_table.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_1d_table.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -33,9 +33,9 @@
 
 class dng_1d_table
 	{
-	
+
 	public:
-	
+
 		/// Constants denoting size of table.
 
 		enum
@@ -43,17 +43,17 @@ class dng_1d_table
 			kTableBits = 12,				//< Table is always a power of 2 in size. This is log2(kTableSize).
 			kTableSize = (1 << kTableBits)	//< Number of entries in table.
 			};
-			
+
 	protected:
-	
+
 		AutoPtr<dng_memory_block> fBuffer;
-		
+
 		real32 *fTable;
-	
+
 	public:
-	
+
 		dng_1d_table ();
-			
+
 		virtual ~dng_1d_table ();
 
 		/// Set up table, initialize entries using functiion.
@@ -72,51 +72,51 @@ class dng_1d_table
 
 		real32 Interpolate (real32 x) const
 			{
-			
+
 			real32 y = x * (real32) kTableSize;
-			
+
 			int32 index = (int32) y;
-			
+
 			DNG_ASSERT (index >= 0 && index <= kTableSize,
 						"dng_1d_table::Interpolate parameter out of range");
-					
+
 			real32 z = (real32) index;
-						
+
 			real32 fract = y - z;
-			
+
 			return fTable [index    ] * (1.0f - fract) +
 				   fTable [index + 1] * (       fract);
-			
+
 			}
-			
+
 		/// Direct access function for table data.
-			
+
 		const real32 * Table () const
 			{
 			return fTable;
 			}
-			
+
 		/// Expand the table to a 16-bit to 16-bit table.
-		
+
 		void Expand16 (uint16 *table16) const;
-			
+
 	private:
-	
+
 		void SubDivide (const dng_1d_function &function,
 						uint32 lower,
 						uint32 upper,
 						real32 maxDelta);
-	
+
 		// Hidden copy constructor and assignment operator.
-	
+
 		dng_1d_table (const dng_1d_table &table);
-		
+
 		dng_1d_table & operator= (const dng_1d_table &table);
-	
+
 	};
 
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

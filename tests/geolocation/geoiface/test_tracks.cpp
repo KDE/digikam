@@ -132,7 +132,7 @@ void TestTracks::testCustomDateTimeParsing()
 void TestTracks::testFileLoading()
 {
     QUrl testDataDir = QUrl::fromLocalFile(GetTestDataDirectory() + QLatin1Char('/') + QLatin1String("gpxfile-1.gpx"));
-    
+
     QList<QUrl> fileList;
     fileList << testDataDir;
 

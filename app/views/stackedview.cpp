@@ -196,7 +196,7 @@ StackedView::StackedView(QWidget* const parent)
 
     connect(d->imagePreviewView, SIGNAL(signalSlideShow()),
             this, SIGNAL(signalSlideShow()));
-    
+
     connect(d->imagePreviewView, SIGNAL(signalSlideShowCurrent()),
             this, SIGNAL(signalSlideShowCurrent()));
 

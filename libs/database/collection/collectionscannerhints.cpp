@@ -307,7 +307,7 @@ ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint()
 {
 }
 
-ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint(qlonglong id, AdjustmentStatus status, 
+ItemMetadataAdjustmentHint::ItemMetadataAdjustmentHint(qlonglong id, AdjustmentStatus status,
                                                        const QDateTime& modificationDateOnDisk, qlonglong fileSize)
     : m_id(id),
       m_status(status),

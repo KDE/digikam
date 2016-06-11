@@ -72,7 +72,7 @@ public:
     QUrl                 imagePath;
     ThumbnailLoadThread* thumbLoadThread;
 };
-    
+
 CalMonthWidget::CalMonthWidget(QWidget* const parent, int month)
     : QPushButton(parent),
       d(new Private)
@@ -87,7 +87,7 @@ CalMonthWidget::CalMonthWidget(QWidget* const parent, int month)
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnail(LoadingDescription,QPixmap)));
 
-    connect(this, SIGNAL(pressed()), 
+    connect(this, SIGNAL(pressed()),
             this, SLOT(slotMonthSelected()));
 }
 
@@ -195,7 +195,7 @@ void CalMonthWidget::mouseReleaseEvent(QMouseEvent* event)
 
     if (event->button() == Qt::LeftButton)
     {
-        ImageDialog dlg(this, 
+        ImageDialog dlg(this,
                         QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)),
                         true);
         setImage(dlg.url());

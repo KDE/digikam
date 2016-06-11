@@ -760,7 +760,7 @@ public:
     bool                          minimizedDefault;
     bool                          minimized;
     bool                          isMinimized;      // Backup of shrinked status before backup(), restored by restore()
-                                                    // NOTE: when sidebar is hidden, only icon bar is affected. If sidebar view is 
+                                                    // NOTE: when sidebar is hidden, only icon bar is affected. If sidebar view is
                                                     // visible, this one must be shrink and restored accordingly.
 
     int                           tabs;
@@ -863,7 +863,7 @@ void Sidebar::backup()
     // backup preview state of sidebar view (shrink or not)
     d->isMinimized = d->minimized;
 
-    // In all case, shrink sidebar view 
+    // In all case, shrink sidebar view
     shrink();
 
     DMultiTabBar::hide();

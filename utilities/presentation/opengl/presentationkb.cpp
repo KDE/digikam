@@ -222,7 +222,7 @@ KBImage::~KBImage()
 }
 
 // -------------------------------------------------------------------------
- 
+
 PresentationKB::PresentationKB(PresentationContainer* const sharedData)
     : QGLWidget(),
       d(new Private)
@@ -471,7 +471,7 @@ void PresentationKB::paintGL()
 
     // only clear the color buffer, if none of the active images is fully opaque
 
-    if (!((d->image[0]->m_paint && d->image[0]->m_opacity == 1.0) || 
+    if (!((d->image[0]->m_paint && d->image[0]->m_opacity == 1.0) ||
         (d->image[1]->m_paint && d->image[1]->m_opacity == 1.0)))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -65,7 +65,7 @@ class TagPropertiesPrivSharedNull : public TagPropertiesPrivSharedPointer
 {
 public:
 
-    TagPropertiesPrivSharedNull() 
+    TagPropertiesPrivSharedNull()
         : TagPropertiesPrivSharedPointer(new TagProperties::TagPropertiesPriv)
     {
     }

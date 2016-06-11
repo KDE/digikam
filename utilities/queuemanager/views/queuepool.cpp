@@ -59,7 +59,7 @@ QueuePoolBar::QueuePoolBar(QWidget* const parent)
 
 QueuePoolBar::~QueuePoolBar()
 {
-}    
+}
 
 void QueuePoolBar::dragEnterEvent(QDragEnterEvent* e)
 {

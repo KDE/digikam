@@ -563,7 +563,7 @@ int ImageDelegate::calculatethumbSizeToFit(int ws)
         {
             rs1 = nrs;
         }
-        else 
+        else
         {
             break;
         }

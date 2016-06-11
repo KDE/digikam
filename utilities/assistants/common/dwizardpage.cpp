@@ -107,11 +107,11 @@ DWizardPage::DWizardPage(QWizard* const dlg, const QString& title)
     d->hlay->addWidget(vline);
     d->hlay->setContentsMargins(QMargins());
     d->hlay->setSpacing(spacing);
-    
+
     QVBoxLayout* const layout = new QVBoxLayout;
     layout->addWidget(sv);
     setLayout(layout);
-    
+
     d->dlg = dlg;
     d->id  = d->dlg->addPage(this);
 }

@@ -448,7 +448,7 @@ void SetupCollectionModel::apply()
             failedPaths << QDir::toNativeSeparators(item.path);
         }
 
-        DMessageBox::showInformationList(QMessageBox::Critical, 
+        DMessageBox::showInformationList(QMessageBox::Critical,
                                          m_dialogParentWidget,
                                          qApp->applicationName(),
                                          i18n("It was not possible to add a collection for the following paths:"),
@@ -528,7 +528,7 @@ void SetupCollectionModel::addCollection(int category)
                                                               &messageFromManager, &deviceIcon);
 
     QString path = QDir::fromNativeSeparators(curl.toDisplayString(QUrl::PreferLocalFile ));
-        
+
     // If there are other added collections then CollectionManager does not know about them. Check here.
     foreach(const Item& item, m_collections)
     {
@@ -859,7 +859,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                 break;
 
             case ColumnDeleteButton:
- 
+
                 switch (role)
                 {
                     case Qt::ToolTipRole:

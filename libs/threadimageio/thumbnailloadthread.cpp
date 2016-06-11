@@ -122,7 +122,7 @@ public:
         notifiedForResults = false;
         creator            = 0;
 
-#ifdef HAVE_MEDIAPLAYER 
+#ifdef HAVE_MEDIAPLAYER
         videoThumbs        = 0;
 #endif
     }
@@ -141,7 +141,7 @@ public:
 
     QHash<QString, LoadingDescription> videoJobHash;
 
-#ifdef HAVE_MEDIAPLAYER    
+#ifdef HAVE_MEDIAPLAYER
     VideoThumbnailerJob*               videoThumbs;
 #endif
 
@@ -182,7 +182,7 @@ ThumbnailLoadThread::ThumbnailLoadThread(QObject* const parent)
     connect(this, SIGNAL(thumbnailsAvailable()),
             this, SLOT(slotThumbnailsAvailable()));
 
-#ifdef HAVE_MEDIAPLAYER    
+#ifdef HAVE_MEDIAPLAYER
 
     d->videoThumbs               = new VideoThumbnailerJob(this);
     d->videoThumbs->setCreateStrip(true);

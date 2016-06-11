@@ -71,7 +71,7 @@ public:
     DAdjustableLabel* actionLabel;
 
     QProgressBar*     progress;
-    
+
     QDialogButtonBox* buttons;
 };
 
@@ -116,7 +116,7 @@ DProgressDlg::DProgressDlg(QWidget* const parent, const QString& caption)
 
     connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             this, SLOT(slotCancel()));
-    
+
     adjustSize();
     reset();
 }

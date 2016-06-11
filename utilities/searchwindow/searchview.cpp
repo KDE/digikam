@@ -394,7 +394,7 @@ void SearchView::setTheme()
         fontSizeSmaller = QString::number(f.pointSizeF() - 2) + QLatin1String("pt");
     }
 
-    QString sheet = 
+    QString sheet =
         QLatin1String("#SearchGroupLabel_MainLabel "
                       " { font-weight: bold; font-size: ")
         + fontSizeLarger + QLatin1Char(';') +

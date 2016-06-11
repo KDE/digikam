@@ -168,10 +168,10 @@ public:
         fdMode    = QFileDialog::ExistingFile;
         fdOptions = QFileDialog::DontUseNativeDialog;
     }
- 
+
     QLineEdit*            edit;
     QPushButton*          btn;
-    
+
     QFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
@@ -185,7 +185,7 @@ DFileSelector::DFileSelector(QWidget* const parent)
     d->edit    = new QLineEdit(this);
     d->btn     = new QPushButton(i18n("Browse..."), this);
     setStretchFactor(d->edit, 10);
-    
+
     connect(d->btn, SIGNAL(clicked()),
             this, SLOT(slotBtnClicked()));
 }
@@ -340,7 +340,7 @@ public:
     Private()
     {
     }
- 
+
     QColor color;
 };
 
@@ -364,12 +364,12 @@ void DColorSelector::setColor(const QColor& color)
         d->color = color;
         update();
     }
-}    
+}
 
 QColor DColorSelector::color() const
 {
     return d->color;
-}    
+}
 
 void DColorSelector::slotBtnClicked()
 {
@@ -411,11 +411,11 @@ void DColorSelector::paintEvent(QPaintEvent*)
 
     QColor fillCol = isEnabled() ? d->color : palette().color(backgroundRole());
     qDrawShadePanel(&painter, x, y, w, h, palette(), true, 1, 0);
-    
+
     if (fillCol.isValid())
     {
         const QRect rect(x + 1, y + 1, w - 2, h - 2);
-        
+
         if (fillCol.alpha() < 255)
         {
             QPixmap chessboardPattern(16, 16);

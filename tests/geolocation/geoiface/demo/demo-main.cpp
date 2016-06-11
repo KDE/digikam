@@ -8,7 +8,7 @@
  *
  * @author Copyright (C) 2009-2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
- * 
+ *
  * @author Copyright (C) 2011 by Justus Schwartz
  *         <a href="mailto:justus at gmx dot li">justus at gmx dot li</a>
  *

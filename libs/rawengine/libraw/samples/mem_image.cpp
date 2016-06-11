@@ -94,8 +94,8 @@ int main(int ac, char *av[])
     // don't use fixed size buffers in real apps!
 
     LibRaw RawProcessor;
-    
-    if(ac<2) 
+
+    if(ac<2)
         {
             printf(
                 "mem_image - LibRaw sample, to illustrate work for memory buffers. Emulates dcraw [-4] [-1] [-e] [-h]\n"
@@ -108,7 +108,7 @@ int main(int ac, char *av[])
         }
 
     putenv ((char*)"TZ=UTC"); // dcraw compatibility, affects TIFF datestamp field
-    
+
 #define P1 RawProcessor.imgdata.idata
 #define S RawProcessor.imgdata.sizes
 #define C RawProcessor.imgdata.color
@@ -140,7 +140,7 @@ int main(int ac, char *av[])
                     fprintf(stderr,"Cannot open %s: %s\n",av[i],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
                 }
-            
+
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",av[i],libraw_strerror(ret));
@@ -153,13 +153,13 @@ int main(int ac, char *av[])
 
 
             ret = RawProcessor.dcraw_process();
-                
+
             if(LIBRAW_SUCCESS !=ret)
                 {
                     fprintf(stderr,"Cannot do postpocessing on %s: %s\n",
                             av[i],libraw_strerror(ret));
                     if(LIBRAW_FATAL_ERROR(ret))
-                        continue; 
+                        continue;
                 }
             libraw_processed_image_t *image = RawProcessor.dcraw_make_mem_image(&ret);
             if(image)
@@ -192,7 +192,7 @@ int main(int ac, char *av[])
                         }
 
                 }
-                    
+
             RawProcessor.recycle(); // just for show this call
         }
     return 0;

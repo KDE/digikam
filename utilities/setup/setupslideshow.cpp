@@ -167,7 +167,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     d->screenPlacement->addItems(choices);
 
     // Disable and uncheck the "Show captions if no title" checkbox if the "Show comment" checkbox enabled
-    connect(d->showComment, SIGNAL(stateChanged(int)), 
+    connect(d->showComment, SIGNAL(stateChanged(int)),
             this, SLOT(slotSetUnchecked(int)));
 
     connect(d->showComment, SIGNAL(toggled(bool)),

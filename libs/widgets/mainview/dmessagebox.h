@@ -54,7 +54,7 @@ public:
      * time the message box was shown.
      */
     static bool readMsgBoxShouldBeShown(const QString& dontShowAgainName);
-    
+
     /**
      * Save the fact that the message box should not be shown again.
      * @param dontShowAgainName the name that identify the message box. If
@@ -73,7 +73,7 @@ public:
                                     const QString& text,
                                     const QStringList& items,
                                     const QString& dontShowAgainName = QString());
-    
+
     /** Show widget into an informative message box.
      */
     static void showInformationWidget(QMessageBox::Icon icon,
@@ -93,7 +93,7 @@ public:
                                   const QString& caption,
                                   const QString& text,
                                   const QString& dontAskAgainName = QString());
-   
+
     /** Show List of items to processs into a message box with Continue and Cancel buttons,
      *  and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel.
@@ -104,7 +104,7 @@ public:
                                       const QString& text,
                                       const QStringList& items,
                                       const QString& dontAskAgainName = QString());
-           
+
     /** Show widget into a message box with Continue and Cancel buttons,
      *  and wait user feedback.
      *  Return QMessageBox::Yes or QMessageBox::Cancel.
@@ -158,7 +158,7 @@ private:
                                 QWidget* const listWidget,
                                 const QString& ask,
                                 bool* checkboxReturn);
-    
+
     static QIcon createIcon(QMessageBox::Icon icon);
 
     static QListWidget* createWidgetList(const QStringList& items);

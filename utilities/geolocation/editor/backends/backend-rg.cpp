@@ -37,7 +37,7 @@ namespace Digikam
 
 /**
  * Constructor
- */ 
+ */
 RGBackend::RGBackend(QObject* const parent)
     : QObject(parent)
 {

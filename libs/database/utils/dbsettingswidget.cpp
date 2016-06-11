@@ -691,7 +691,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
 
             if (dbFolder.isEmpty())
             {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(), 
+                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
                                         i18n("You must select a folder for digiKam to "
                                              "store information and metadata in a database file."));
                 return false;

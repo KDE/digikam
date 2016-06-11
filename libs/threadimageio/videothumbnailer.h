@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-04-21
- * Description : Qt Multimedia based video thumbnailer 
+ * Description : Qt Multimedia based video thumbnailer
  *
  * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -30,7 +30,7 @@
 #include <QString>
 #include <QImage>
 
-// Local includes 
+// Local includes
 
 #include "digikam_config.h"
 #include "digikam_export.h"

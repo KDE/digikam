@@ -56,7 +56,7 @@ public:
         }
 
         QString data;
-        
+
     private:
 
         QList<QMap<int, QVariant> > dataColumns;

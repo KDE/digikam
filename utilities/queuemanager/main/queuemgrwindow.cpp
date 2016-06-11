@@ -402,7 +402,7 @@ void QueueMgrWindow::setupActions()
     // -- Standard 'Help' menu actions ---------------------------------------------
 
     createHelpActions();
-        
+
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 

@@ -52,7 +52,7 @@ ItemViewShowfotoDelegatePrivate::ItemViewShowfotoDelegatePrivate()
 
     // painting constants
     radius        = 3;
-    margin        = 5;    
+    margin        = 5;
 }
 
 void ItemViewShowfotoDelegatePrivate::init(ItemViewShowfotoDelegate* const _q)

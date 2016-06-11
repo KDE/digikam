@@ -136,9 +136,9 @@ void RawCameraDlg::updateHeader(int results)
     if (!results)
     {
         d->header->setText(i18np("Using LibRaw version %2<br/>"
-                                 "1 model on the list</p>",                                 
+                                 "1 model on the list</p>",
                                  "Using LibRaw version %2<br/>"
-                                 "%1 models on the list</p>",                                 
+                                 "%1 models on the list</p>",
                                  list.count(),
                                  librawVer
                                  ));

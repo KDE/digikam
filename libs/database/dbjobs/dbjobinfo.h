@@ -160,7 +160,7 @@ public:
     QList<int> tagsIds() const;
 
 public:
-    
+
     bool       m_duplicates;
     int        m_searchId;
     double     m_threshold;

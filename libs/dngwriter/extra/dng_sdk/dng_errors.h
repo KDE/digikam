@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_errors.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_errors.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -49,9 +49,9 @@ enum
 	dng_error_image_too_big_dng,				//< Image is too big to save as DNG.
 	dng_error_image_too_big_tiff				//< Image is too big to save as TIFF.
 	};
-	
+
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

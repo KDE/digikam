@@ -62,7 +62,7 @@ public:
 };
 
 DCursorTracker::DCursorTracker(const QString& txt, QWidget* const parent, Qt::Alignment align)
-    : QLabel(txt, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget), 
+    : QLabel(txt, parent, Qt::ToolTip | Qt::BypassGraphicsProxyWidget),
       d(new Private)
 {
     setForegroundRole(QPalette::ToolTipText);

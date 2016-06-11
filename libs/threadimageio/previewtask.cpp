@@ -129,8 +129,8 @@ void PreviewLoadingTask::execute()
                 m_usedProcess->addListener(this);
 
                 // break loop when either the loading has completed, or this task is being stopped
-                while (m_loadingTaskStatus != LoadingTaskStatusStopping && 
-                       m_usedProcess                                    && 
+                while (m_loadingTaskStatus != LoadingTaskStatusStopping &&
+                       m_usedProcess                                    &&
                        !m_usedProcess->completed())
                 {
                     lock.timedWait();
@@ -275,7 +275,7 @@ void PreviewLoadingTask::execute()
                         {
                             break;
                         }
-                        
+
                         if (loadLibRawPreview())
                         {
                             break;
@@ -376,7 +376,7 @@ void PreviewLoadingTask::execute()
         }
 
         // Scale if hinted, Store previews rotated in the cache
-        
+
         if (MetadataSettings::instance()->settings().exifRotate)
         {
             LoadSaveThread::exifRotate(m_img, m_loadingDescription.filePath);

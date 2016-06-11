@@ -83,7 +83,7 @@ private:
     Q_PROPERTY(QPixmap thumb READ thumb WRITE setThumb)
 
 private:
-    
+
     class Private;
     Private* const d;
 };

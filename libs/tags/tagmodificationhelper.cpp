@@ -246,7 +246,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
     // ask for deletion of children
     if (children)
     {
-        int result = QMessageBox::warning(d->dialogParent, qApp->applicationName(), 
+        int result = QMessageBox::warning(d->dialogParent, qApp->applicationName(),
                                           i18np("Tag '%2' has one subtag. "
                                                 "Deleting this will also delete "
                                                 "the subtag.\n"
@@ -258,8 +258,8 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
                                                 children,
                                                 tag->title()),
                                           QMessageBox::Yes | QMessageBox::Cancel);
-       
-        
+
+
 
         if (result != QMessageBox::Yes || !tag)
         {
@@ -286,7 +286,7 @@ void TagModificationHelper::slotTagDelete(TAlbum* t)
     int result = QMessageBox::warning(qApp->activeWindow(), i18n("Delete Tag"),
                                       message,
                                       QMessageBox::Yes | QMessageBox::Cancel);
-    
+
     if (result == QMessageBox::Yes && tag)
     {
         emit aboutToDeleteTag(tag);
@@ -368,7 +368,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
                                                "Do you want to continue?",
                                                tagWithChildrens),
                                           QMessageBox::Yes | QMessageBox::Cancel);
-        
+
         if (result != QMessageBox::Yes)
         {
             return;

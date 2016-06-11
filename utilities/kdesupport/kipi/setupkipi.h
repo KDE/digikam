@@ -58,7 +58,7 @@ private Q_SLOTS:
 private:
 
     void updateInfo();
-    
+
 private:
 
     class Private;

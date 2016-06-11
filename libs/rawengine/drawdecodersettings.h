@@ -51,7 +51,7 @@ public:
     /** RAW decoding Interpolation methods
      *
      * NOTE: from original dcraw demosaic
-     * 
+     *
      *  Bilinear: use high-speed but low-quality bilinear
      *            interpolation (default - for slow computer). In this method,
      *            the red value of a non-red pixel is computed as the average of
@@ -67,9 +67,9 @@ public:
      *  AHD:      use Adaptive Homogeneity-Directed interpolation.
      *            This method selects the direction of interpolation so as to
      *            maximize a homogeneity metric, thus typically minimizing color artifacts.
-     * 
+     *
      * NOTE: from GPL2 demosaic pack.
-     * 
+     *
      *  DCB:      DCB interpolation (see http://www.linuxphoto.org/html/dcb.html for details)
      *  PL_AHD:   modified AHD interpolation (see http://sites.google.com/site/demosaicalgorithms/modified-dcraw
      *            for details).
@@ -77,9 +77,9 @@ public:
      *  VCD:      VCD interpolation.
      *  VCD_AHD:  mixed demosaicing between VCD and AHD.
      *  LMMSE:    LMMSE interpolation from PerfectRaw.
-     * 
+     *
      * NOTE: from GPL3 demosaic pack.
-     * 
+     *
      *  AMAZE:    AMaZE interpolation and color aberration removal from RawTherapee project.
      */
     enum DecodingQuality
@@ -350,7 +350,7 @@ public:
 
     /** Amount of highlight preservation for exposure correction before interpolation in E.V.
      *  Usable range is from 0.0 (linear exposure shift, highlights may blow) to 1.0 (maximum highlights preservation)
-     *  This settings can only take effect if expoCorrectionShift > 1.0. 
+     *  This settings can only take effect if expoCorrectionShift > 1.0.
      */
     double expoCorrectionHighlight;
 };

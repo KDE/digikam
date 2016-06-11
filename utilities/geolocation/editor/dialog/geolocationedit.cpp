@@ -592,7 +592,7 @@ void GeolocationEdit::setCurrentTab(int index)
 void GeolocationEdit::setImages(const QList<QUrl>& images)
 {
     QList<GPSImageItem*> items;
-    
+
     foreach(QUrl u, images)
     {
         items << new GPSImageItem(u);
@@ -608,7 +608,7 @@ void GeolocationEdit::setItems(const QList<GPSImageItem*>& items)
         newItem->loadImageData();
         d->imageModel->addItem(newItem);
     }
-    
+
     QList<QPersistentModelIndex> imagesToLoad;
 
     for (int i = 0; i < d->imageModel->rowCount(); ++i)
@@ -963,7 +963,7 @@ void GeolocationEdit::slotFileChangesSaved(int beginIndex, int endIndex)
                     .arg(errorList.at(i).second);
             }
 
-            DMessageBox::showInformationList(QMessageBox::Critical, 
+            DMessageBox::showInformationList(QMessageBox::Critical,
                                              this,
                                              i18n("Error"),
                                              i18n("Failed to save some information:"),

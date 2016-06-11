@@ -67,4 +67,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // XMP_ORIGIN_H 
+#endif // XMP_ORIGIN_H

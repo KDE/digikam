@@ -66,7 +66,7 @@ public:
     static const QString configAntiAliasingEntry;
 
 public:
-    
+
     QCheckBox*       antialiasInput;
 
     DIntNumInput*    angleInput;

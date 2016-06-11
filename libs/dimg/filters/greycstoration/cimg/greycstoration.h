@@ -321,7 +321,7 @@ protected:
     CImg<T>*                   source;
     const CImg<unsigned char> *mask;
     CImg<T>                   *temporary;
-    
+
     CImg<unsigned char> *empty_mask;
 
     QList<GreycstorationWorkingThread*> threads;

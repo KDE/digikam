@@ -108,7 +108,7 @@ public:
 
     /**
      * Sets a selection area and show it
-     * 
+     *
      * @param rectangle This rectangle should have height and width of 1.0
      */
     void setSelectionArea(const QRectF& rectangle);

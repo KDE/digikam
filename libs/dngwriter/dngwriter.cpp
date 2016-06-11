@@ -924,7 +924,7 @@ int DNGWriter::convert()
 
             str = meta.getExifTagString("Exif.Pentax.LensType");
 
-            if (str.length()) 
+            if (str.length())
             {
                 exif->fLensName.Set_ASCII(str.trimmed().toLatin1().constData());
                 exif->fLensName.TrimLeadingBlanks();
@@ -934,7 +934,7 @@ int DNGWriter::convert()
             long pentaxLensId1 = 0;
             long pentaxLensId2 = 0;
 
-            if ((meta.getExifTagLong("Exif.Pentax.LensType", pentaxLensId1, 0)) && 
+            if ((meta.getExifTagLong("Exif.Pentax.LensType", pentaxLensId1, 0)) &&
                 (meta.getExifTagLong("Exif.Pentax.LensType", pentaxLensId2, 1)))
             {
                 exif->fLensID.Set_ASCII(QString::fromUtf8("%1").arg(pentaxLensId1, pentaxLensId2).toLatin1().constData());

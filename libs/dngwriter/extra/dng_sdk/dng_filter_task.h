@@ -6,14 +6,14 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_filter_task.h#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_filter_task.h#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
 
 /** \file
  * Specialization of dng_area_task for processing an area from one dng_image to an area of another.
- */ 
+ */
 
 /*****************************************************************************/
 
@@ -34,35 +34,35 @@
 
 class dng_filter_task: public dng_area_task
 	{
-	
+
 	protected:
-	
+
 		const dng_image &fSrcImage;
-		
+
 		dng_image &fDstImage;
-		
+
 		uint32 fSrcPlane;
 		uint32 fSrcPlanes;
 		uint32 fSrcPixelType;
-		
+
 		uint32 fDstPlane;
 		uint32 fDstPlanes;
 		uint32 fDstPixelType;
-		
+
 		dng_point fSrcRepeat;
-		
+
 		AutoPtr<dng_memory_block> fSrcBuffer [kMaxMPThreads];
 		AutoPtr<dng_memory_block> fDstBuffer [kMaxMPThreads];
-		
+
 	public:
-	
+
 		/// Construct a filter task given a source and destination images.
 		/// \param srcImage Image from which source pixels are read.
 		/// \param dstImage Image to which result pixels are written.
 
 		dng_filter_task (const dng_image &srcImage,
 						 dng_image &dstImage);
-							   
+
 		virtual ~dng_filter_task ();
 
 		/// Compute the source area needed for a given destination area.
@@ -107,7 +107,7 @@ class dng_filter_task: public dng_area_task
 							const dng_point &tileSize,
 							dng_memory_allocator *allocator,
 							dng_abort_sniffer *sniffer);
-							
+
 		/// Process one tile or partitioned area.
 		/// Should not be overridden. Instead, override ProcessArea, which is where to implement filter processing for a specific type of dng_filter_task.
 		/// There is no allocator parameter as all allocation should be done in Start.
@@ -119,11 +119,11 @@ class dng_filter_task: public dng_area_task
 		virtual void Process (uint32 threadIndex,
 							  const dng_rect &area,
 							  dng_abort_sniffer *sniffer);
-							  
+
 	};
 
 /*****************************************************************************/
 
 #endif
-	
+
 /*****************************************************************************/

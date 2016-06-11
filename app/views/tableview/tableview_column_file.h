@@ -85,7 +85,7 @@ class ColumnFileConfigurationWidget : public TableViewColumnConfigurationWidget
     Q_OBJECT
 
 public:
-    
+
     explicit ColumnFileConfigurationWidget(TableViewShared* const sharedObject,
                                            const TableViewColumnConfiguration& columnConfiguration,
                                            QWidget* const parentWidget);

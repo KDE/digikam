@@ -69,7 +69,7 @@ public:
 
 public:
 
-    /** Load all Workflow from XML settings file. Fill 'failed' list with incompatible Worflow 
+    /** Load all Workflow from XML settings file. Fill 'failed' list with incompatible Worflow
      *  title/description not loaded.
      */
     bool load(QStringList& failed);

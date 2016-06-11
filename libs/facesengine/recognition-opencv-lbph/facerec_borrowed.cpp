@@ -425,7 +425,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         // Create map "label -> vector of distances to all histograms for this label"
         std::map<int, std::vector<int> > distancesMap;
 
-        for (size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++) 
+        for (size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++)
         {
             double dist                 = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
             std::vector<int>& distances = distancesMap[m_labels.at<int>((int) sampleIdx)];
@@ -465,7 +465,7 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         // map "label -> number of histograms"
         std::map<int, int> countMap;
 
-        for (size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++) 
+        for (size_t sampleIdx = 0; sampleIdx < m_histograms.size(); sampleIdx++)
         {
             int label   = m_labels.at<int>((int) sampleIdx);
             double dist = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);

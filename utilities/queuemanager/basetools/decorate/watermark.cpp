@@ -117,7 +117,7 @@ public:
     DIntNumInput*   xMarginInput;
     DIntNumInput*   yMarginInput;
     DIntNumInput*   waterMarkSizePercent;
-    
+
     bool            changeSettings;
 };
 

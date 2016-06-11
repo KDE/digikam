@@ -6,7 +6,7 @@
 // accordance with the terms of the Adobe license agreement accompanying it.
 /*****************************************************************************/
 
-/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_fingerprint.cpp#1 $ */ 
+/* $Id: //mondo/dng_sdk_1_3/dng_sdk/source/dng_fingerprint.cpp#1 $ */
 /* $DateTime: 2009/06/22 05:04:49 $ */
 /* $Change: 578634 $ */
 /* $Author: tknoll $ */
@@ -22,83 +22,83 @@
 
 dng_fingerprint::dng_fingerprint ()
 	{
-	
+
 	for (uint32 j = 0; j < 16; j++)
 		{
-		
+
 		data [j] = 0;
-		
+
 		}
-		
+
 	}
 
 /*****************************************************************************/
 
 bool dng_fingerprint::IsNull () const
 	{
-	
+
 	for (uint32 j = 0; j < 16; j++)
 		{
-		
+
 		if (data [j] != 0)
 			{
-			
+
 			return false;
-			
+
 			}
-			
+
 		}
-		
+
 	return true;
-	
+
 	}
 
 /*****************************************************************************/
 
 bool dng_fingerprint::operator== (const dng_fingerprint &print) const
 	{
-	
+
 	for (uint32 j = 0; j < 16; j++)
 		{
-		
+
 		if (data [j] != print.data [j])
 			{
-			
+
 			return false;
-			
+
 			}
-			
+
 		}
-		
+
 	return true;
-	
+
 	}
-		
+
 /******************************************************************************/
 
 uint32 dng_fingerprint::Collapse32 () const
 	{
-	
+
 	uint32 x = 0;
-	
+
 	for (uint32 j = 0; j < 4; j++)
 		{
-		
+
 		uint32 y = 0;
-		
+
 		for (uint32 k = 0; k < 4; k++)
 			{
-			
+
 			y = (y << 8) + (uint32) data [j * 4 + k];
-			
+
 			}
-			
+
 		x = x ^ y;
-		
+
 		}
-		
+
 	return x;
-	
+
 	}
 
 /******************************************************************************/
@@ -107,22 +107,22 @@ uint32 dng_fingerprint::Collapse32 () const
 
 // Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
 // rights reserved.
-// 
+//
 // License to copy and use this software is granted provided that it
 // is identified as the "RSA Data Security, Inc. MD5 Message-Digest
 // Algorithm" in all material mentioning or referencing this software
 // or this function.
-// 
+//
 // License is also granted to make and use derivative works provided
 // that such works are identified as "derived from the RSA Data
 // Security, Inc. MD5 Message-Digest Algorithm" in all material
 // mentioning or referencing the derived work.
-// 
+//
 // RSA Data Security, Inc. makes no representations concerning either
 // the merchantability of this software or the suitability of this
 // software for any particular purpose. It is provided "as is"
 // without express or implied warranty of any kind.
-// 
+//
 // These notices must be retained in any copies of any part of this
 // documentation and/or software.
 
@@ -132,20 +132,20 @@ dng_md5_printer::dng_md5_printer ()
 
 	:	final  (false)
 	,	result ()
-	
+
 	{
-	
+
 	Reset ();
-	
+
 	}
-								
+
 /******************************************************************************/
 
 void dng_md5_printer::Reset ()
 	{
-	
+
 	// No bits processed yet.
-	
+
 	count [0] = 0;
 	count [1] = 0;
 
@@ -157,9 +157,9 @@ void dng_md5_printer::Reset ()
 	state [3] = 0x10325476;
 
 	// Not finalized yet.
-	
+
 	final = false;
-	
+
 	}
 
 /******************************************************************************/
@@ -167,66 +167,66 @@ void dng_md5_printer::Reset ()
 void dng_md5_printer::Process (const void *data,
 					  		   uint32 inputLen)
 	{
-	
+
 	DNG_ASSERT (!final, "Fingerprint already finalized!");
-	
+
 	const uint8 *input = (const uint8 *) data;
-	
+
 	// Compute number of bytes mod 64
-	
+
 	uint32 index = (count [0] >> 3) & 0x3F;
 
 	// Update number of bits
-	
+
 	if ((count [0] += inputLen << 3) < (inputLen << 3))
 		{
 		count [1]++;
 		}
-		
+
 	count [1] += inputLen >> 29;
 
 	// Transform as many times as possible.
-	
+
 	uint32 i = 0;
 
 	uint32 partLen = 64 - index;
 
 	if (inputLen >= partLen)
 		{
-		
+
 		memcpy (&buffer [index],
 				input,
 				partLen);
-				
+
 		MD5Transform (state, buffer);
 
 		for (i = partLen; i + 63 < inputLen; i += 64)
 			{
-			
+
 			MD5Transform (state, &input [i]);
-			
+
 			}
 
 		index = 0;
-		
+
 		}
-		
+
 	// Buffer remaining input
-	
+
 	memcpy (&buffer [index],
 			&input [i],
 			inputLen - i);
-	
+
 	}
-		
+
 /******************************************************************************/
 
 const dng_fingerprint & dng_md5_printer::Result ()
 	{
-	
+
 	if (!final)
 		{
-		
+
 		static uint8 PADDING [64] =
 			{
 			0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -235,17 +235,17 @@ const dng_fingerprint & dng_md5_printer::Result ()
 			};
 
 		// Save number of bits
-		
+
 		uint8 bits [8];
 
 		Encode (bits, count, 8);
 
 		// Pad out to 56 mod 64.
-		
+
 		uint32 index = (count [0] >> 3) & 0x3f;
-		
+
 		uint32 padLen = (index < 56) ? (56 - index) : (120 - index);
-		
+
 		Process (PADDING, padLen);
 
 		// Append length (before padding)
@@ -253,15 +253,15 @@ const dng_fingerprint & dng_md5_printer::Result ()
 		Process (bits, 8);
 
 		// Store state in digest
-		
+
 		Encode (result.data, state, 16);
 
 		// We are now finalized.
-		
+
 		final = true;
-		
+
 		}
-	
+
 	return result;
 
 	}
@@ -277,7 +277,7 @@ void dng_md5_printer::Encode (uint8 *output,
 	{
 
 	uint32 i, j;
-	
+
 	for (i = 0, j = 0; j < len; i++, j += 4)
 		{
 		output [j  ] = (uint8) ((input [i]      ) & 0xff);
@@ -297,61 +297,61 @@ void dng_md5_printer::Decode (uint32 *output,
 							  const uint8 *input,
 							  uint32 len)
 	{
-	
+
 	// Check for non-aligned case.
-	
+
 	if (((uintptr) input) & 3)
 		{
 
 		uint32 i, j;
-	
+
 		for (i = 0, j = 0; j < len; i++, j += 4)
 			{
-			
+
 	 		output [i] = (((uint32) input [j  ])      ) |
 	 					 (((uint32) input [j+1]) <<  8) |
 	   					 (((uint32) input [j+2]) << 16) |
 	   					 (((uint32) input [j+3]) << 24);
-	   
+
 	   		}
-	   		
+
 	   	}
-	   	
+
 	// Else use optimized code for aligned case.
-	   	
+
 	else
 		{
-		
+
 		len = len >> 2;
-		
+
 		const uint32 *sPtr = (const uint32 *) input;
-		
+
 		uint32 *dPtr = output;
-		
+
 		while (len--)
 			{
-			
+
 			#if qDNGBigEndian
-			
+
 			uint32 data = *(sPtr++);
-			
+
 			data = (data >> 24) |
 				   ((data >> 8) & 0x0000FF00) |
 				   ((data << 8) & 0x00FF0000) |
 				   (data << 24);
-				   
+
 			*(dPtr++) = data;
-			
+
 			#else
-			
+
 			*(dPtr++) = *(sPtr++);
-			
+
 			#endif
 
 			}
-				
+
 		}
-   
+
 	}
 
 /******************************************************************************/
@@ -361,7 +361,7 @@ void dng_md5_printer::Decode (uint32 *output,
 void dng_md5_printer::MD5Transform (uint32 state [4],
 								    const uint8 block [64])
 	{
-	
+
 	enum
 		{
 		S11 = 7,
@@ -381,38 +381,38 @@ void dng_md5_printer::MD5Transform (uint32 state [4],
 		S43 = 15,
 		S44 = 21
 		};
-		
+
 	#if qDNGBigEndian
 
 	uint32 x [16];
 
 	Decode (x, block, 64);
-	
+
 	#else
 
 	uint32 temp [16];
 
 	const uint32 *x;
-	
+
 	if (((uintptr) block) & 3)
 		{
-		
+
 		Decode (temp, block, 64);
-		
+
 		x = temp;
-		
+
 		}
-		
+
 	else
 		x = (const uint32 *) block;
-		
+
 	#endif
 
 	uint32 a = state [0];
 	uint32 b = state [1];
 	uint32 c = state [2];
 	uint32 d = state [3];
-	
+
 	/* Round 1 */
 	FF (a, b, c, d, x[ 0], S11, 0xd76aa478); /* 1 */
 	FF (d, a, b, c, x[ 1], S12, 0xe8c7b756); /* 2 */

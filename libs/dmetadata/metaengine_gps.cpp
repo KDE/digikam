@@ -593,7 +593,7 @@ bool MetaEngine::removeGPSInfo(const bool setProgramName)
     return false;
 }
 
-void MetaEngine::convertToRational(const double number, long int* const numerator, 
+void MetaEngine::convertToRational(const double number, long int* const numerator,
                                long int* const denominator, const int rounding)
 {
     // This function converts the given decimal number

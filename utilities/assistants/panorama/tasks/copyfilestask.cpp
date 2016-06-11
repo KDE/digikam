@@ -1,5 +1,5 @@
 /* ============================================================
- * 
+ *
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
@@ -103,7 +103,7 @@ void CopyFilesTask::run(ThreadWeaver::JobPointer, ThreadWeaver::Thread*)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Copying GPS info...";
 
-    // Find first src image which contain geolocation and save it to target pano file. 
+    // Find first src image which contain geolocation and save it to target pano file.
 
     double lat, lng, alt;
 
