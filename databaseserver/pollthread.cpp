@@ -83,7 +83,7 @@ bool PollThread::checkDigikamInstancesRunning()
 
         foreach(const QString& service, serviceNames)
         {
-            if (service.startsWith(digikamStartupService) || service.startsWith(digikamService)
+            if (service.startsWith(digikamStartupService) || service.startsWith(digikamService))
             {
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "At least service [" << service << "] is using the database server";
 
