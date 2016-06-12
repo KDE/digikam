@@ -242,6 +242,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 201 ==> 307337 - Add versioning support to libkipi interface.
 202 ==> 363505 - 4.x crash on start under Windows - Need a new 5.0 installer.
 203 ==> 364116 - Uninstaller doesn't remove C:\Program Files.
-204 ==> 
-
+204 ==> 351016 - Crash in Windows when building finger-prints.
+205 ==> 
 
