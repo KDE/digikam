@@ -125,7 +125,7 @@ bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& e
 {
     if (dbType == DbEngineParameters::MySQLDatabaseType())
     {
-        //        return QVariant::fromValue(startMYSQLDatabaseProcess());
+        // return QVariant::fromValue(startMYSQLDatabaseProcess());
         error = QDBusVariant(QVariant::fromValue(startMYSQLDatabaseProcess()));
         return false;
     }
@@ -153,7 +153,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     d->pollThread->stop = false;
 
-    //TODO Move the database command outside of the code to the dbconfig.xml file
+    // TODO: move the database command outside of the code to the dbconfig.xml file
     const QString mysqldPath(DbEngineConfig::element(dbType).dbServerCmd);
 
     if ( mysqldPath.isEmpty() || (mysqldPath.compare(QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
@@ -162,7 +162,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration."));
     }
 
-    // create the database directories if they don't exists
+    // Create the database directories if they don't exists
 
     QString defaultAkDir = DbEngineParameters::internalServerPrivatePath();
     QString akDir        = defaultAkDir;
@@ -183,10 +183,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString fileDataDir = defaultAkDir + QLatin1String("file_db_data");
 
     /*
-    * TODO Move the database command outside of the code to the dbconfig.xml file.
-    * Offer a variable to the datadir. E.g. the command definition in the config file has to be:
-    * /usr/bin/mysql_install_db --user=$USER --datadir=$dataDir$
-    */
+     * TODO Move the database command outside of the code to the dbconfig.xml file.
+     * Offer a variable to the datadir. E.g. the command definition in the config file has to be:
+     * /usr/bin/mysql_install_db --user=$USER --datadir=$dataDir$
+     */
     const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
                                .arg(DbEngineConfig::element(dbType).dbInitCmd)
                                .arg(getcurrentAccountUserName())
@@ -231,7 +231,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     bool confUpdate = false;
     QFile actualFile ( actualConfig );
 
-    // update conf only if either global (or local) is newer than actual
+    // Update conf only if either global (or local) is newer than actual
+
     if ( (QFileInfo( globalConfig ).lastModified() > QFileInfo( actualFile ).lastModified()) ||
          (QFileInfo( localConfig ).lastModified()  > QFileInfo( actualFile ).lastModified()) )
     {
@@ -270,6 +271,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // MySQL doesn't like world writeable config files (which makes sense), but
     // our config file somehow ends up being world-writable on some systems for no
     // apparent reason nevertheless, so fix that
+
     const QFile::Permissions allowedPerms = actualFile.permissions() &
                                             (QFile::ReadOwner | QFile::WriteOwner |
                                              QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther);
@@ -300,7 +302,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
-    // move mysql error log file out of the way
+    // Move mysql error log file out of the way
+
     const QFileInfo errorLog( dataDir + QDir::separator() + QString::fromLatin1( "mysql.err" ) );
 
     if ( errorLog.exists() )
@@ -321,20 +324,23 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         }
     }
 
-    // clear mysql ib_logfile's in case innodb_log_file_size option changed in last confUpdate
+    // Clear mysql ib_logfile's in case innodb_log_file_size option changed in last confUpdate
+
     if ( confUpdate )
     {
         QFile(dataDir + QDir::separator() + QString::fromLatin1( "ib_logfile0" )).remove();
         QFile(dataDir + QDir::separator() + QString::fromLatin1( "ib_logfile1" )).remove();
     }
 
-    // synthesize the mysqld command
+    // Synthesize the mysqld command
+
     QStringList arguments;
     arguments << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( defaultAkDir );
     arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
     arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 
-    // init db
+    // Initialize the database
+
     if (!QFile(dataDir + QDir::separator() + QLatin1String("mysql")).exists())
     {
         QProcess initProcess;
@@ -456,12 +462,14 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                 }
             }
 
-            // make sure query is destroyed before we close the db
+            // Make sure query is destroyed before we close the db
+
             db.close();
         }
     }
 
     QSqlDatabase::removeDatabase( initCon );
+
     return result;
 }
 
@@ -474,6 +482,7 @@ DatabaseServerError DatabaseServer::createDatabase()
     QSqlDatabase db = QSqlDatabase::addDatabase( QLatin1String("MYSQL"), initCon );
 
     // Might not exist yet, then connecting to the actual db will fail.
+
     db.setDatabaseName( QString() );
 
     if ( !db.isValid() )
@@ -510,11 +519,13 @@ DatabaseServerError DatabaseServer::createDatabase()
             }
         }
 
-        // make sure query is destroyed before we close the db
+        // Make sure query is destroyed before we close the db
+
         db.close();
     }
 
     QSqlDatabase::removeDatabase( initCon );
+
     return DatabaseServerError(DatabaseServerError::NoErrors, QString());
 }
 

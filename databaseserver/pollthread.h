@@ -54,7 +54,7 @@ Q_SIGNALS:
 
 private:
 
-    int waitTime;
+    int m_waitTime;
 };
 
 } // namespace Digikam

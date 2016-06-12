@@ -51,7 +51,7 @@ namespace Digikam
 PollThread::PollThread(QObject* const parent)
     : QThread(parent),
       stop(false),
-      waitTime(10)
+      m_waitTime(10)
 {
 }
 
@@ -59,8 +59,8 @@ void PollThread::run()
 {
     do
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Waiting " << waitTime << " seconds...stop: [" << stop << "]";
-        sleep(waitTime);
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Waiting " << m_waitTime << " seconds...stop: [" << stop << "]";
+        sleep(m_waitTime);
     }
     while (!stop && checkDigikamInstancesRunning());
 
@@ -80,24 +80,23 @@ bool PollThread::checkDigikamInstancesRunning()
         QStringList serviceNames = reply.value();
         QLatin1String digikamStartupService("org.kde.digikam.startup-");
         QLatin1String digikamService("org.kde.digikam-");
-        QLatin1String digikamKioService("org.kde.digikam.KIO-");
 
         foreach(const QString& service, serviceNames)
         {
-            if (service.startsWith(digikamStartupService) ||
-                service.startsWith(digikamService)        ||
-                service.startsWith(digikamKioService))
+            if (service.startsWith(digikamStartupService) || service.startsWith(digikamService)
             {
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "At least service ["<< service <<"] is using the database server";
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "At least service [" << service << "] is using the database server";
 
-                // At least one digikam/kio service was found
+                // At least one digikam service was found
                 sem.release(1);
+
                 return true;
             }
         }
     }
 
     sem.release(1);
+
     return false;
 }
 
