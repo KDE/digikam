@@ -27,14 +27,9 @@
 
 // Qt includes
 
-#include <QList>
-#include <QMap>
-#include <QMutex>
+#include <QString>
 #include <QImage>
-#include <QThread>
-#include <QPair>
 #include <QUrl>
-#include <QStringList>
 
 namespace Digikam
 {
