@@ -26,11 +26,12 @@
 
 // Qt includes
 
-#include <QList>
+#include <QMap>
 #include <QImage>
 #include <QMatrix>
 #include <QPainter>
-
+#include <QThread>
+#include <QMutex>
 #include <QFileInfo>
 
 // Local includes
@@ -111,6 +112,7 @@ public:
         swidth         = 0;
         sheight        = 0;
     }
+
     PresentationContainer* sharedData;
     LoadingThreads*        loadingThreads;
     LoadedImages*          loadedImages;
