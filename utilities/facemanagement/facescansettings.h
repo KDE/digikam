@@ -59,7 +59,7 @@ public:
 
     FaceScanSettings()
     {
-        useFullCpu             = true;
+        useFullCpu             = false;
         accuracy               = 80;
         task                   = Detect;
         alreadyScannedHandling = Skip;

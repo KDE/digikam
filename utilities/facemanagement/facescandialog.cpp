@@ -65,12 +65,14 @@ class ButtonExtendedLabel : public QLabel
 public:
 
     explicit ButtonExtendedLabel(QWidget* const parent = 0)
-        : QLabel(parent), m_button(0)
+        : QLabel(parent),
+          m_button(0)
     {
     }
 
     ButtonExtendedLabel(const QString& text, QWidget* const parent = 0)
-        : QLabel(text, parent), m_button(0)
+        : QLabel(text, parent),
+          m_button(0)
     {
     }
 
@@ -227,7 +229,7 @@ void FaceScanDialog::doLoadState()
 
     d->albumSelectors->loadState();
 
-    d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), true));
+    d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), false));
 
     // do not load retrainAllButton and benchmarkDetectionButton state from config, dangerous
 
@@ -238,6 +240,7 @@ void FaceScanDialog::doLoadState()
 void FaceScanDialog::doSaveState()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << getConfigGroup().name();
+
     KConfigGroup group = getConfigGroup();
 
     QString mainTask;
@@ -274,11 +277,10 @@ void FaceScanDialog::doSaveState()
     group.writeEntry(entryName(d->configAlreadyScannedHandling), handling);
 
     ApplicationSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
-
     d->albumSelectors->saveState();
 
-    group.writeEntry(entryName(d->configUseFullCpu), d->useFullCpuButton->isChecked());
-    group.writeEntry(entryName(d->configSettingsVisible), d->tabWidget->isVisible());
+    group.writeEntry(entryName(d->configUseFullCpu),             d->useFullCpuButton->isChecked());
+    group.writeEntry(entryName(d->configSettingsVisible),        d->tabWidget->isVisible());
 }
 
 void FaceScanDialog::setupUi()
@@ -419,11 +421,12 @@ void FaceScanDialog::setupUi()
     cpuExplanation->setText(i18nc("@info",
                                   "Face detection is a time-consuming task. "
                                   "You can choose if you wish to employ all processor cores "
-                                  "on your system, or work in the background only on one core."));
+                                  "on your system, or work in the background only on one core. "
+                                  "Warning: this features still experimental and it's disabled by default."));
     cpuExplanation->setWordWrap(true);
 
     d->useFullCpuButton = new QCheckBox(advancedTab);
-    d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores"));
+    d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores (experimental)"));
 
     d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
@@ -451,12 +454,12 @@ void FaceScanDialog::setupUi()
     benchmarkGroup->addButton(d->benchmarkDetectionButton);
     benchmarkGroup->addButton(d->benchmarkRecognitionButton);
 
-    advancedLayout->addWidget(cpuExplanation,                 0, 0);
-    advancedLayout->addWidget(d->useFullCpuButton,            1, 0);
+    advancedLayout->addWidget(cpuExplanation,                  0, 0);
+    advancedLayout->addWidget(d->useFullCpuButton,             1, 0);
     advancedLayout->addWidget(new DLineWidget(Qt::Horizontal), 2, 0);
-    advancedLayout->addWidget(d->retrainAllButton,            3, 0);
-    advancedLayout->addWidget(d->benchmarkDetectionButton,    4, 0);
-    advancedLayout->addWidget(d->benchmarkRecognitionButton,  5, 0);
+    advancedLayout->addWidget(d->retrainAllButton,             3, 0);
+    advancedLayout->addWidget(d->benchmarkDetectionButton,     4, 0);
+    advancedLayout->addWidget(d->benchmarkRecognitionButton,   5, 0);
     parametersLayout->setRowStretch(5, 10);
 
     d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
