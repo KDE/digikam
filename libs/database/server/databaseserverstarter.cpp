@@ -77,7 +77,7 @@ bool DatabaseServerStarter::init()
     return true;
 }
 
-bool DatabaseServerStarter::__init=DatabaseServerStarter::init();
+bool DatabaseServerStarter::__init = DatabaseServerStarter::init();
 
 DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString& dbType)
 {
@@ -116,6 +116,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
     // wait until the server has successfully registered on DBUS
     // TODO Use another way for that! Sleep isn't good :-/
+
     for (int i = 0; i < 30; ++i)
     {
         if (!isServerRegistered())
@@ -152,7 +153,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
         {
             arguments                = reply.arguments();
             QDBusVariant dbusVariant = qvariant_cast<QDBusVariant>(arguments.at(1));
-            // retrieve the actual value stored in the D-Bus variant
+            // Retrieve the actual value stored in the D-Bus variant
             QVariant dbusArgument    = dbusVariant.variant();
             DatabaseServerError item = qdbus_cast<DatabaseServerError>(dbusArgument);
             result                   = item;
@@ -191,6 +192,7 @@ bool DatabaseServerStarter::isServerRegistered()
     if (reply.isValid())
     {
         QStringList serviceNames = reply.value();
+
         return serviceNames.contains(QLatin1String("org.kde.digikam.DatabaseServer"));
     }
 
@@ -199,7 +201,7 @@ bool DatabaseServerStarter::isServerRegistered()
 
 void DatabaseServerStarter::cleanUp()
 {
-    // for now, do nothing, the server will terminate on itself
+    // For now, do nothing, the server will terminate on itself
 }
 
 }  // namespace Digikam

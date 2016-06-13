@@ -47,7 +47,7 @@ public:
         /**
          * No errors occurred while starting the dbms
          */
-        NoErrors=0,
+        NoErrors = 0,
 
         /**
          * The requested dbms type is not supported.
@@ -62,13 +62,18 @@ public:
 
 public:
 
-    explicit DatabaseServerError(DatabaseServerErrorEnum errorType=NoErrors, const QString& errorText = QString());
+    explicit DatabaseServerError(DatabaseServerErrorEnum errorType = NoErrors, const QString& errorText = QString());
     DatabaseServerError(const DatabaseServerError& dbServerError);
     ~DatabaseServerError();
 
-    // Marshall the DatabaseServerError data into a D-BUS argument
+    /**
+     * Marshall the DatabaseServerError data into a D-BUS argument
+     */
     DatabaseServerError& operator<<(const QDBusArgument& argument);
-    // Retrieve the DatabaseServerError data from the D-BUS argument
+
+    /**
+     * Retrieve the DatabaseServerError data from the D-BUS argument
+     */
     const DatabaseServerError& operator>>(QDBusArgument& argument) const;
 
     int     getErrorType() const;
@@ -78,8 +83,8 @@ public:
 
 private:
 
-    QString                     m_ErrorText;
-    int                         m_ErrorType;
+    QString m_ErrorText;
+    int     m_ErrorType;
 };
 
 } // namespace Digikam

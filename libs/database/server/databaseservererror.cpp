@@ -42,7 +42,6 @@ DatabaseServerError::~DatabaseServerError()
 {
 }
 
-// Marshall the DatabaseServerError data into a D-BUS argument
 DatabaseServerError& DatabaseServerError::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -51,7 +50,6 @@ DatabaseServerError& DatabaseServerError::operator<<(const QDBusArgument& argume
     return *this;
 }
 
-// Retrieve the DatabaseServerError data from the D-BUS argument
 const DatabaseServerError& DatabaseServerError::operator>>(QDBusArgument& argument) const
 {
     argument.beginStructure();
