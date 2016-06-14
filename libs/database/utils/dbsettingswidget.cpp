@@ -761,7 +761,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
                 return false;
             }
 
-            if (QProcess::execute(mysqlServer, QStringList() << QLatin1String("--version")) == -2)
+            if (QProcess::execute(mysqlServer, QStringList() << QLatin1String("--help")) == -2)
             {
                 QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
                                          i18n("Cannot find MySQL server \"%1\". Please fix it.", mysqlServer));

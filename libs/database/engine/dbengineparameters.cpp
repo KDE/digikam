@@ -673,11 +673,11 @@ DbEngineParameters DbEngineParameters::parametersForSQLiteDefaultFile(const QStr
 
 QString DbEngineParameters::defaultMysqlServerCmd()
 {
-    QString servName = QLatin1String("mysqld"); // For Linux
+    QString servName = QLatin1String("mysqld_safe"); // For Linux
 
 #ifdef Q_OS_WIN32
-    // Under windows... TODO
-    //servName = QLatin1String("mysqld");
+    // Under windows
+    servName = QLatin1String("mysqld");
 #endif
 
 #ifdef Q_OS_MAC
