@@ -115,23 +115,7 @@ DbEngineConfigSettings DbEngineConfigSettingsLoader::readDatabase(QDomElement& d
     }
 
     configElement.connectOptions = element.text();
-    element                      = databaseElement.namedItem(QLatin1String("dbservercmd")).toElement();
-
-    if (element.isNull())
-    {
-        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <dbservercmd>.";
-    }
-
-    configElement.dbServerCmd = element.text();
-    element                   = databaseElement.namedItem(QLatin1String("dbinitcmd")).toElement();
-
-    if (element.isNull())
-    {
-        qCDebug(DIGIKAM_DBENGINE_LOG) << "Missing element <dbinitcmd>.";
-    }
-
-    configElement.dbInitCmd = element.text();
-    element                 = databaseElement.namedItem(QLatin1String("dbactions")).toElement();
+    element                      = databaseElement.namedItem(QLatin1String("dbactions")).toElement();
 
     if (element.isNull())
     {

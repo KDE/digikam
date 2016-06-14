@@ -49,8 +49,6 @@
         <password>Password</password>
         <port>Port</port>
         <connectoptions>ConnectOptions</connectoptions>
-        <dbservercmd></dbservercmd>
-        <dbinitcmd></dbinitcmd>
 
         <dbactions>
 
@@ -893,8 +891,6 @@
         <password></password>
         <port>-1</port>
         <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
-        <dbservercmd></dbservercmd>
-        <dbinitcmd></dbinitcmd>
 
         <dbactions>
 

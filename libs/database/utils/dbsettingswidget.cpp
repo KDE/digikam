@@ -197,25 +197,25 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbPathLabel->setWordWrap(true);
     d->dbPathEdit  = new DFileSelector(dbConfigBox);
     d->dbPathEdit->setFileDlgMode(QFileDialog::Directory);
-    
+
     // --------------------------------------------------------
 
     d->mysqlCmdBox = new DVBox(dbConfigBox);
     d->mysqlCmdBox->layout()->setMargin(0);
-    
+
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
 
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where Mysql binaries tools are located. "
-                                                       "These run-time dependencies are only used by Mysql Internal backend.</p>"
-                                                       "<p>Note : if executable are included in default system PATH environnement variable, "
-                                                       "you don't need to set the complete path to the tools.</p>"
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where MySQL binaries tools are located. "
+                                                       "These run-time dependencies are only used by MySQL Internal backend.</p>"
+                                                       "<p>Note : if executables are included in default system PATH environnement variable, "
+                                                       "you don't need to set the full pathes to run these tools.</p>"
                                                        "<p></p>"),
                                                   d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);
-    
+
     QWidget* const mysqlCmdSpace      = new QWidget(d->mysqlCmdBox);
     d->mysqlCmdBox->setStretchFactor(mysqlCmdSpace, 10);
-    
+
     QLabel* const mysqlServerCmdLabel = new QLabel(d->mysqlCmdBox);
     mysqlServerCmdLabel->setText(i18n("Path to Mysql database server:")); 
     d->mysqlServerCmdEdit = new DFileSelector(d->mysqlCmdBox);
@@ -750,7 +750,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
         {
             if (!checkDatabasePath())
                 return false;
-            
+
             QString mysqlServer = d->mysqlServerCmdEdit->lineEdit()->text();
             qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL server path : " << mysqlServer;
 
@@ -784,9 +784,9 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
                                          i18n("Cannot find MySQL initialization script \"%1\". Please fix it.", mysqlInit));
                 return false;
             }
-            
+
             return true;
-            
+
             break;
         }
 
@@ -828,7 +828,7 @@ bool DatabaseSettingsWidget::checkDatabasePath()
     {
         QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
                                 i18n("You must select a folder for digiKam to "
-                                    "store information and metadata in a database file."));
+                                     "store information and metadata in a database file."));
         return false;
     }
 
@@ -838,8 +838,8 @@ bool DatabaseSettingsWidget::checkDatabasePath()
     {
         int rc = QMessageBox::question(qApp->activeWindow(), i18n("Create Database Folder?"),
                                     i18n("<p>The folder to put your database in does not seem to exist:</p>"
-                                        "<p><b>%1</b></p>"
-                                        "Would you like digiKam to create it for you?", dbFolder));
+                                         "<p><b>%1</b></p>"
+                                         "Would you like digiKam to create it for you?", dbFolder));
 
         if (rc == QMessageBox::No)
         {
@@ -850,8 +850,8 @@ bool DatabaseSettingsWidget::checkDatabasePath()
         {
             QMessageBox::information(qApp->activeWindow(), i18n("Create Database Folder Failed"),
                                     i18n("<p>digiKam could not create the folder to host your database file.\n"
-                                        "Please select a different location.</p>"
-                                        "<p><b>%1</b></p>", dbFolder));
+                                         "Please select a different location.</p>"
+                                         "<p><b>%1</b></p>", dbFolder));
             return false;
         }
     }
@@ -870,12 +870,12 @@ bool DatabaseSettingsWidget::checkDatabasePath()
     {
         QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
                                 i18n("<p>You do not seem to have write access "
-                                        "for the folder to host the database file.<br/>"
-                                        "Please select a different location.</p>"
-                                        "<p><b>%1</b></p>", dbFolder));
+                                     "for the folder to host the database file.<br/>"
+                                     "Please select a different location.</p>"
+                                     "<p><b>%1</b></p>", dbFolder));
         return false;
     }
-    
+
     return true;
 }
 

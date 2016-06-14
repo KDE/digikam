@@ -48,8 +48,8 @@ public:
     QString                       databaseName;
     QString                       userName;
     QString                       password;
-    QString                       dbServerCmd;
-    QString                       dbInitCmd;
+//    QString                       dbServerCmd;
+//    QString                       dbInitCmd;
     QMap<QString, DbEngineAction> sqlStatements;
 };
 
