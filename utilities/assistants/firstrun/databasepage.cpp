@@ -85,8 +85,6 @@ DbEngineParameters DatabasePage::getDbEngineParameters() const
 void DatabasePage::saveSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group("General Settings");
-
     DbEngineParameters params = d->dbsettingswidget->getDbEngineParameters();
     params.writeToConfig(config);
 

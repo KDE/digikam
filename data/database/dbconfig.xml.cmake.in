@@ -893,8 +893,8 @@
         <password></password>
         <port>-1</port>
         <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
-        <dbservercmd>${SERVERCMD_MYSQL}</dbservercmd>
-        <dbinitcmd>${INITCMD_MYSQL}</dbinitcmd>
+        <dbservercmd></dbservercmd>
+        <dbinitcmd></dbinitcmd>
 
         <dbactions>
 

@@ -43,6 +43,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QStandardPaths>
+#include <QProcess>
 #include <QDir>
 #include <QUrl>
 
@@ -68,23 +69,28 @@ public:
 
     Private()
     {
-        dbType         = 0;
-        dbPathLabel    = 0;
-        expertSettings = 0;
-        dbNoticeBox    = 0;
-        sqlInit        = 0;
-        dbNameCore     = 0;
-        dbNameThumbs   = 0;
-        dbNameFace     = 0;
-        hostName       = 0;
-        connectOpts    = 0;
-        userName       = 0;
-        password       = 0;
-        hostPort       = 0;
-        dbPathEdit     = 0;
-        tab            = 0;
-        dbDetailsBox   = 0;
+        mysqlCmdBox         = 0;
+        dbType              = 0;
+        dbPathLabel         = 0;
+        expertSettings      = 0;
+        dbNoticeBox         = 0;
+        sqlInit             = 0;
+        dbNameCore          = 0;
+        dbNameThumbs        = 0;
+        dbNameFace          = 0;
+        hostName            = 0;
+        connectOpts         = 0;
+        userName            = 0;
+        password            = 0;
+        hostPort            = 0;
+        dbPathEdit          = 0;
+        mysqlServerCmdEdit  = 0;
+        mysqlInitCmdEdit    = 0;
+        tab                 = 0;
+        dbDetailsBox        = 0;
     }
+
+    DVBox*             mysqlCmdBox;
 
     QLineEdit*         dbNameCore;
     QLineEdit*         dbNameThumbs;
@@ -105,6 +111,8 @@ public:
     QTabWidget*        tab;
 
     DFileSelector*     dbPathEdit;
+    DFileSelector*     mysqlServerCmdEdit;
+    DFileSelector*     mysqlInitCmdEdit;
 
     DbEngineParameters orgPrms;
 
@@ -141,6 +149,7 @@ void DatabaseSettingsWidget::setupMainArea()
     databaseTypeLabel->setText(i18n("Type:"));
 
     // --------- fill with default values ---------------------
+
     int dbTypeIdx = 0;
     d->dbType->addItem(i18n("SQLite"),                        SQlite);
     d->dbTypeMap[SQlite] = dbTypeIdx++;
@@ -188,6 +197,36 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbPathLabel->setWordWrap(true);
     d->dbPathEdit  = new DFileSelector(dbConfigBox);
     d->dbPathEdit->setFileDlgMode(QFileDialog::Directory);
+    
+    // --------------------------------------------------------
+
+    d->mysqlCmdBox = new DVBox(dbConfigBox);
+    d->mysqlCmdBox->layout()->setMargin(0);
+    
+    new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
+
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where Mysql binaries tools are located. "
+                                                       "These run-time dependencies are only used by Mysql Internal backend.</p>"
+                                                       "<p>Note : if executable are included in default system PATH environnement variable, "
+                                                       "you don't need to set the complete path to the tools.</p>"
+                                                       "<p></p>"),
+                                                  d->mysqlCmdBox);
+    mysqlBinariesLabel->setWordWrap(true);
+    
+    QWidget* const mysqlCmdSpace      = new QWidget(d->mysqlCmdBox);
+    d->mysqlCmdBox->setStretchFactor(mysqlCmdSpace, 10);
+    
+    QLabel* const mysqlServerCmdLabel = new QLabel(d->mysqlCmdBox);
+    mysqlServerCmdLabel->setText(i18n("Path to Mysql database server:")); 
+    d->mysqlServerCmdEdit = new DFileSelector(d->mysqlCmdBox);
+    d->mysqlServerCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
+    d->mysqlServerCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlServerCmd());
+
+    QLabel* const mysqlInitCmdLabel   = new QLabel(d->mysqlCmdBox);
+    mysqlInitCmdLabel->setText(i18n("Path to Mysql database initialization Perl script:"));
+    d->mysqlInitCmdEdit = new DFileSelector(d->mysqlCmdBox);
+    d->mysqlInitCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
+    d->mysqlInitCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlInitCmd());
 
     // --------------------------------------------------------
 
@@ -334,6 +373,7 @@ void DatabaseSettingsWidget::setupMainArea()
     vlay->addWidget(new DLineWidget(Qt::Horizontal));
     vlay->addWidget(d->dbPathLabel);
     vlay->addWidget(d->dbPathEdit);
+    vlay->addWidget(d->mysqlCmdBox);
     vlay->addWidget(d->tab);
     vlay->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay->setSpacing(spacing);
@@ -426,11 +466,23 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 {
     switch(index)
     {
-        case MysqlInternal:
         case SQlite:
         {
             d->dbPathLabel->setVisible(true);
             d->dbPathEdit->setVisible(true);
+            d->mysqlCmdBox->setVisible(false);
+            d->tab->setVisible(false);
+
+            connect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
+                    this, SLOT(slotDatabasePathEditedDelayed()));
+
+            break;
+        }
+        case MysqlInternal:
+        {
+            d->dbPathLabel->setVisible(true);
+            d->dbPathEdit->setVisible(true);
+            d->mysqlCmdBox->setVisible(true);
             d->tab->setVisible(false);
 
             connect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
@@ -442,6 +494,7 @@ void DatabaseSettingsWidget::setDatabaseInputFields(int index)
         {
             d->dbPathLabel->setVisible(false);
             d->dbPathEdit->setVisible(false);
+            d->mysqlCmdBox->setVisible(false);
             d->tab->setVisible(true);
 
             disconnect(d->dbPathEdit->lineEdit(), SIGNAL(textChanged(QString)),
@@ -605,6 +658,8 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     else if (d->orgPrms.databaseType == DbEngineParameters::MySQLDatabaseType() && d->orgPrms.internalServer)
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
+        d->mysqlServerCmdEdit->lineEdit()->setText(d->orgPrms.internalServerMysqlServCmd);
+        d->mysqlInitCmdEdit->lineEdit()->setText(d->orgPrms.internalServerMysqlInitCmd);
         d->dbType->setCurrentIndex(d->dbTypeMap[MysqlInternal]);
         slotResetMysqlServerDBNames();
     }
@@ -639,6 +694,8 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
         case MysqlInternal:
             prm = DbEngineParameters::defaultParameters(databaseBackend());
             prm.setInternalServerPath(databasePath());
+            prm.internalServerMysqlServCmd = d->mysqlServerCmdEdit->lineEdit()->text();
+            prm.internalServerMysqlInitCmd = d->mysqlInitCmdEdit->lineEdit()->text();
             break;
 
         default: // MysqlServer
@@ -684,63 +741,52 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
     switch (databaseType())
     {
         case SQlite:
+        {
+            return checkDatabasePath();
+            break;
+        }
+
         case MysqlInternal:
         {
-            QString dbFolder = databasePath();
-            qCDebug(DIGIKAM_DATABASE_LOG) << "Database directory is : " << dbFolder;
+            if (!checkDatabasePath())
+                return false;
+            
+            QString mysqlServer = d->mysqlServerCmdEdit->lineEdit()->text();
+            qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL server path : " << mysqlServer;
 
-            if (dbFolder.isEmpty())
+            if (mysqlServer.isEmpty())
             {
                 QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                        i18n("You must select a folder for digiKam to "
-                                             "store information and metadata in a database file."));
+                                         i18n("MySQL server path is empty. Please fix it."));
                 return false;
             }
 
-            QDir targetPath(dbFolder);
-
-            if (!targetPath.exists())
+            if (QProcess::execute(mysqlServer, QStringList() << QLatin1String("--version")) == -2)
             {
-                int rc = QMessageBox::question(qApp->activeWindow(), i18n("Create Database Folder?"),
-                                            i18n("<p>The folder to put your database in does not seem to exist:</p>"
-                                                 "<p><b>%1</b></p>"
-                                                 "Would you like digiKam to create it for you?", dbFolder));
-
-                if (rc == QMessageBox::No)
-                {
-                    return false;
-                }
-
-                if (!targetPath.mkpath(dbFolder))
-                {
-                    QMessageBox::information(qApp->activeWindow(), i18n("Create Database Folder Failed"),
-                                            i18n("<p>digiKam could not create the folder to host your database file.\n"
-                                                 "Please select a different location.</p>"
-                                                 "<p><b>%1</b></p>", dbFolder));
-                    return false;
-                }
-            }
-
-            QFileInfo path(dbFolder);
-
-#ifdef _WIN32
-            // Work around bug #189168
-            QTemporaryFile temp;
-            temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
-
-            if (!temp.open())
-#else
-            if (!path.isWritable())
-#endif
-            {
-                QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
-                                        i18n("<p>You do not seem to have write access "
-                                             "for the folder to host the database file.<br/>"
-                                             "Please select a different location.</p>"
-                                             "<p><b>%1</b></p>", dbFolder));
+                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
+                                         i18n("Cannot find MySQL server \"%1\". Please fix it.", mysqlServer));
                 return false;
             }
 
+            QString mysqlInit = d->mysqlInitCmdEdit->lineEdit()->text();
+            qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL init path : " << mysqlInit;
+
+            if (mysqlInit.isEmpty())
+            {
+                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
+                                         i18n("MySQL initialization script path is empty. Please fix it."));
+                return false;
+            }
+
+            if (QProcess::execute(mysqlInit, QStringList() << QLatin1String("--help")) == -2)
+            {
+                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
+                                         i18n("Cannot find MySQL initialization script \"%1\". Please fix it.", mysqlInit));
+                return false;
+            }
+            
+            return true;
+            
             break;
         }
 
@@ -770,6 +816,66 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
         }
     }
 
+    return true;
+}
+
+bool DatabaseSettingsWidget::checkDatabasePath()
+{
+    QString dbFolder = databasePath();
+    qCDebug(DIGIKAM_DATABASE_LOG) << "Database directory is : " << dbFolder;
+
+    if (dbFolder.isEmpty())
+    {
+        QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
+                                i18n("You must select a folder for digiKam to "
+                                    "store information and metadata in a database file."));
+        return false;
+    }
+
+    QDir targetPath(dbFolder);
+
+    if (!targetPath.exists())
+    {
+        int rc = QMessageBox::question(qApp->activeWindow(), i18n("Create Database Folder?"),
+                                    i18n("<p>The folder to put your database in does not seem to exist:</p>"
+                                        "<p><b>%1</b></p>"
+                                        "Would you like digiKam to create it for you?", dbFolder));
+
+        if (rc == QMessageBox::No)
+        {
+            return false;
+        }
+
+        if (!targetPath.mkpath(dbFolder))
+        {
+            QMessageBox::information(qApp->activeWindow(), i18n("Create Database Folder Failed"),
+                                    i18n("<p>digiKam could not create the folder to host your database file.\n"
+                                        "Please select a different location.</p>"
+                                        "<p><b>%1</b></p>", dbFolder));
+            return false;
+        }
+    }
+
+    QFileInfo path(dbFolder);
+
+#ifdef _WIN32
+    // Work around bug #189168
+    QTemporaryFile temp;
+    temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
+
+    if (!temp.open())
+#else
+    if (!path.isWritable())
+#endif
+    {
+        QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
+                                i18n("<p>You do not seem to have write access "
+                                        "for the folder to host the database file.<br/>"
+                                        "Please select a different location.</p>"
+                                        "<p><b>%1</b></p>", dbFolder));
+        return false;
+    }
+    
     return true;
 }
 

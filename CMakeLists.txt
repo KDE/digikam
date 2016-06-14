@@ -299,42 +299,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
     find_library(KVM_LIBRARY kvm)
 endif()
 
-# -- Mysql rules ----------------------------------------------------------------------------------
-
-if(ENABLE_MYSQLSUPPORT AND ENABLE_INTERNALMYSQL)
-
-    # Check MySQL executables
-
-    find_program(SERVERCMD_MYSQL mysqld
-                 PATHS /usr/sbin
-                       /usr/local/sbin
-                       /usr/libexec
-                       /usr/local/libexec
-                       /opt/local/libexec
-                       /opt/mysql/libexec
-                       /usr/mysql/bin
-                       /opt/mysql/sbin
-                       ${MYSQLD_PATH}
-                 ENV MYSQLD_PATH )
-    message(STATUS "Found MySQL server executable at: ${SERVERCMD_MYSQL}")
-
-    # NOTE: under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
-    #       under MACOS-X, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
-
-    find_program(INITCMD_MYSQL mysql_install_db mysql_install_db5 mysql_install_db.pl
-                 PATHS /usr/sbin
-                       /usr/local/sbin
-                       /usr/libexec
-                       /usr/local/libexec
-                       /opt/mysql/libexec
-                       /usr/mysql/bin
-                       /opt/mysql/bin
-                       /usr/share/mysql/scripts
-                       ${MYSQL_TOOLS_PATH}
-                 ENV MYSQL_TOOLS_PATH)
-    message(STATUS "Found MySQL install_db executable at: ${INITCMD_MYSQL}")
-endif()
-
 # ==================================================================================================
 # More Optional Dependencies
 
@@ -469,19 +433,8 @@ message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http:
 message(STATUS "")
 
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support" ENABLE_INTERNALMYSQL)
 
-if(ENABLE_MYSQLSUPPORT)
-
-    if (ENABLE_INTERNALMYSQL)
-        PRINT_EXECUTABLE_STATUS("MySQL Server" mysqld MYSQLD_PATH SERVERCMD_MYSQL)
-        if (NOT WIN32)
-            PRINT_EXECUTABLE_STATUS("MySQL install_db tool" mysql_install_db MYSQL_TOOLS_PATH INITCMD_MYSQL)
-        endif()
-    else()
-        message(STATUS " MySQL server found....................... NO  (optional - disabled by user)")
-    endif()
-
-endif()
 
 # ================================================================
 

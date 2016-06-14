@@ -149,17 +149,16 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString dbType(DbEngineParameters::MySQLDatabaseType());
     DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig(QLatin1String("digikamrc")));
 
-    //qCDebug(DIGIKAM_DATABASESERVER_LOG) << internalServerParameters;
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << internalServerParameters;
 
     d->pollThread->stop = false;
 
-    // TODO: move the database command outside of the code to the dbconfig.xml file
-    const QString mysqldPath(DbEngineConfig::element(dbType).dbServerCmd);
+    const QString mysqldPath = internalServerParameters.internalServerMysqlServCmd;
 
-    if ( mysqldPath.isEmpty() || (mysqldPath.compare(QLatin1String( "SERVERCMD_MYSQL-NOTFOUND" )) == 0))
+    if ( mysqldPath.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysqld set in server configuration!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysqld set in server configuration."));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server comand set in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server comand set in configuration file!"));
     }
 
     // Create the database directories if they don't exists
@@ -178,17 +177,20 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal Server data path: " << akDir;
 
-    const QString dataDir     = akDir        + QLatin1String("db_data");
-    const QString miscDir     = defaultAkDir + QLatin1String("db_misc");
-    const QString fileDataDir = defaultAkDir + QLatin1String("file_db_data");
+    const QString dataDir        = akDir        + QLatin1String("db_data");
+    const QString miscDir        = defaultAkDir + QLatin1String("db_misc");
+    const QString fileDataDir    = defaultAkDir + QLatin1String("file_db_data");
 
-    /*
-     * TODO Move the database command outside of the code to the dbconfig.xml file.
-     * Offer a variable to the datadir. E.g. the command definition in the config file has to be:
-     * /usr/bin/mysql_install_db --user=$USER --datadir=$dataDir$
-     */
+    const QString mysqldInitPath = internalServerParameters.internalServerMysqlInitCmd;
+    
+    if ( mysqldInitPath.isEmpty() )
+    {
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initalization command set in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initalization command set in configuration file!."));
+    }
+    
     const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
-                               .arg(DbEngineConfig::element(dbType).dbInitCmd)
+                               .arg(mysqldInitPath)
                                .arg(getcurrentAccountUserName())
                                .arg(dataDir));
 

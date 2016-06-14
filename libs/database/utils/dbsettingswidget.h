@@ -91,6 +91,7 @@ private:
     bool checkMysqlServerConnection(QString& error);
     bool checkMysqlServerConnectionConfig(QString& error);
     bool checkMysqlServerDbNamesConfig(QString& error);
+    bool checkDatabasePath();
 
 private Q_SLOTS:
 

@@ -45,7 +45,7 @@ namespace Digikam
 
 /**
  * This class encapsulates all parameters needed to establish
- * a connection to a database (inspired by the API of QT4::Sql).
+ * a connection to a database (inspired by the API of Qt::Sql).
  * The values can be read from and written to a QUrl.
  */
 class DIGIKAM_EXPORT DbEngineParameters
@@ -63,7 +63,9 @@ public:
                        const QString& _password = QString(),
                        const QString& _databaseNameThumbnails = QString(),
                        const QString& _databaseNameFace = QString(),
-                       const QString& _internalServerDBPath = QString()
+                       const QString& _internalServerDBPath = QString(),
+                       const QString& _internalServerMysqlServCmd = QString(),
+                       const QString& _internalServerMysqlInitCmd = QString()
                       );
 
     DbEngineParameters();
@@ -167,7 +169,17 @@ public:
      * data used by internal Mysql server.
      */
     static QString internalServerPrivatePath();
+    
+    /**
+     * Return the default Mysql server command name (Internal server only).
+     */
+    static QString defaultMysqlServerCmd();
 
+    /**
+     * Return the default Mysql initialization command name (Internal server only).
+     */
+    static QString defaultMysqlInitCmd();
+    
 public:
 
     QString databaseType;
@@ -182,6 +194,10 @@ public:
     QString databaseNameThumbnails;
     QString databaseNameFace;
     QString internalServerDBPath;
+
+    /// Settings stored in config file and used only with internal server at runtime to start server instance or init database tables.
+    QString internalServerMysqlServCmd;
+    QString internalServerMysqlInitCmd;
 };
 
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const DbEngineParameters& t);

@@ -408,7 +408,7 @@ void ApplicationSettings::saveSettings()
 
     group = config->group(d->configGroupFaceDetection);
 
-    group.writeEntry(d->configFaceDetectionAccuracyEntry,             d->faceDetectionAccuracy);
+    group.writeEntry(d->configFaceDetectionAccuracyEntry,              d->faceDetectionAccuracy);
 
     config->sync();
 }
