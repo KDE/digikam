@@ -116,57 +116,51 @@ public:
     {
     }
 
-    bool                      running;
-    bool                      needsInitialization;
-    bool                      needsCompleteScan;
-    bool                      needsUpdateUniqueHash;
-    bool                      idle;
+    bool                            running;
+    bool                            needsInitialization;
+    bool                            needsCompleteScan;
+    bool                            needsUpdateUniqueHash;
+    bool                            idle;
 
-    int                       scanSuspended;
+    int                             scanSuspended;
 
-    QStringList               scanTasks;
+    QStringList                     scanTasks;
 
-    QStringList               completeScanDeferredAlbums;
-    bool                      deferFileScanning;
-    bool                      finishScanAllowed;
+    QStringList                     completeScanDeferredAlbums;
+    bool                            deferFileScanning;
+    bool                            finishScanAllowed;
 
-    QMutex                    mutex;
-    QWaitCondition            condVar;
+    QMutex                          mutex;
+    QWaitCondition                  condVar;
 
-    bool                      continueInitialization;
-    bool                      continueScan;
-    bool                      continuePartialScan;
+    bool                            continueInitialization;
+    bool                            continueScan;
+    bool                            continuePartialScan;
 
-    bool                      fileWatchInstalled;
+    bool                            fileWatchInstalled;
 
-    QEventLoop*               eventLoop;
+    QEventLoop*                     eventLoop;
 
-    QTimer*                   showTimer;
-    QTimer*                   relaxedTimer;
+    QTimer*                         showTimer;
+    QTimer*                         relaxedTimer;
 
-    QPixmap                   albumPix;
-    QPixmap                   rootPix;
-    QPixmap                   actionPix;
-    QPixmap                   errorPix;
+    QPixmap                         albumPix;
+    QPixmap                         rootPix;
+    QPixmap                         actionPix;
+    QPixmap                         errorPix;
 
-    /* Lists only needed for inter-process / network-wide communication, all DBUS-able
-    QList<AlbumCopyMoveHint>  albumHints;
-    QList<ItemCopyMoveHint>   itemHints;
-    QList<ItemChangeHint>     itemChangeHints;
-    QList<ItemMetadataAdjustmentHint> itemMetadataAdjustmentHints;
-    */
     CollectionScannerHintContainer* hints;
 
-    QDateTime                 lastHintAdded;
+    QDateTime                       lastHintAdded;
 
-    DProgressDlg*             progressDialog;
+    DProgressDlg*                   progressDialog;
 
-    SplashScreen*             splash;
+    SplashScreen*                   splash;
 
-    ScanController::Advice    advice;
+    ScanController::Advice          advice;
 
-    bool                      needTotalFiles;
-    int                       totalFilesToScan;
+    bool                            needTotalFiles;
+    int                             totalFilesToScan;
 
 public:
 
@@ -228,12 +222,6 @@ public:
             lastHintAdded.isValid() &&
             lastHintAdded.secsTo(current) > (5*60))
         {
-/*
-            itemHints.clear();
-            albumHints.clear();
-            itemChangeHints.clear();
-            itemMetadataAdjustmentHints.clear();
-*/
             hints->clear();
         }
 
@@ -571,10 +559,9 @@ void ScanController::scanFileDirectlyNormal(const ImageInfo& info)
 }
 
 /*
-
-    /// This variant shall be used when a new file is created which is a version
-    /// of another image, and all relevant attributes shall be copied.
-    void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
+/// This variant shall be used when a new file is created which is a version
+/// of another image, and all relevant attributes shall be copied.
+void scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion);
 
 void ScanController::scanFileDirectlyCopyAttributes(const QString& filePath, qlonglong parentVersion)
 {
