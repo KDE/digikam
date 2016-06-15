@@ -207,8 +207,8 @@ void DatabaseSettingsWidget::setupMainArea()
 
     QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where MySQL binaries tools are located. "
                                                        "These run-time dependencies are only used by MySQL Internal backend.</p>"
-                                                       "<p>Note: if executables are included in default system PATH environnement variable, "
-                                                       "you don't need to set the full pathes to run these tools.</p>"
+                                                       "<p>Note: if executables are included in default system PATH environment variable, "
+                                                       "you don't need to set the full paths to run these tools.</p>"
                                                        "<p></p>"),
                                                   d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);

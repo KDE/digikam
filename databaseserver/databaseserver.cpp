@@ -185,8 +185,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     
     if ( mysqldInitPath.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initalization command is registered in configuration file!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initalization command is registered in configuration file!."));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initialization command is registered in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initialization command is registered in configuration file!"));
     }
     
     const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
