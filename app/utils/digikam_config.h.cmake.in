@@ -84,7 +84,7 @@
 /* Define to 1 if we support mysql database */
 #cmakedefine HAVE_MYSQLSUPPORT 1
 
-/* Define to 1 if we know how to start mysqld */
+/* Define to 1 if we support mysql internal database server */
 #cmakedefine HAVE_INTERNALMYSQL 1
 
 /* Define to 1 if preview of video files is supported */
