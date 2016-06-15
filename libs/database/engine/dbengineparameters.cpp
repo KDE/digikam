@@ -676,13 +676,13 @@ QString DbEngineParameters::defaultMysqlServerCmd()
     QString servName = QLatin1String("mysqld_safe"); // For Linux
 
 #ifdef Q_OS_WIN32
-    // Under windows
+    // Under windows, mysqld_safe do not exists.
     servName = QLatin1String("mysqld");
 #endif
 
 #ifdef Q_OS_MAC
-    // Under MAC OSX... TODO
-    //servName = QLatin1String("mysqld");
+    // Under MAC OSX, mysqld_safe tool exists as under Linux
+    servName = QLatin1String("mysqld_safe");
 #endif
 
     return servName;
