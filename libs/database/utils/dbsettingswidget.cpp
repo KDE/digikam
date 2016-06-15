@@ -207,7 +207,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where MySQL binaries tools are located. "
                                                        "These run-time dependencies are only used by MySQL Internal backend.</p>"
-                                                       "<p>Note : if executables are included in default system PATH environnement variable, "
+                                                       "<p>Note: if executables are included in default system PATH environnement variable, "
                                                        "you don't need to set the full pathes to run these tools.</p>"
                                                        "<p></p>"),
                                                   d->mysqlCmdBox);
@@ -217,16 +217,22 @@ void DatabaseSettingsWidget::setupMainArea()
     d->mysqlCmdBox->setStretchFactor(mysqlCmdSpace, 10);
 
     QLabel* const mysqlServerCmdLabel = new QLabel(d->mysqlCmdBox);
-    mysqlServerCmdLabel->setText(i18n("Path to Mysql database server:")); 
+    mysqlServerCmdLabel->setText(i18n("Path to Mysql database server:"));
     d->mysqlServerCmdEdit = new DFileSelector(d->mysqlCmdBox);
     d->mysqlServerCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->mysqlServerCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlServerCmd());
+    d->mysqlServerCmdEdit->setToolTip(i18n("This binary file is used to start a dedicated instance of MySQL server.\n"
+                                           "It's usually named \"%1\" in your MySQL installation.",
+                                           DbEngineParameters::defaultMysqlServerCmd()));
 
     QLabel* const mysqlInitCmdLabel   = new QLabel(d->mysqlCmdBox);
     mysqlInitCmdLabel->setText(i18n("Path to Mysql database initialization Perl script:"));
     d->mysqlInitCmdEdit = new DFileSelector(d->mysqlCmdBox);
     d->mysqlInitCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->mysqlInitCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlInitCmd());
+    d->mysqlInitCmdEdit->setToolTip(i18n("This binary file is used to initialize the MySQL data files for the database.\n"
+                                         "It's usually named \"%1\" in your MySQL installation.",
+                                         DbEngineParameters::defaultMysqlInitCmd()));
 
     // --------------------------------------------------------
 
