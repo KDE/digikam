@@ -244,5 +244,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 202 ==> 363505 - 4.x crash on start under Windows - Need a new 5.0 installer.
 203 ==> 364116 - Uninstaller doesn't remove C:\Program Files.
 204 ==> 351016 - Crash in Windows when building finger-prints.
-205 ==> 
-
+205 ==> 123455 - Add support of Image Editor actions through DBUS.
+206 ==> 
