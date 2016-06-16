@@ -99,8 +99,7 @@ protected:
 
 protected Q_SLOTS:
 
-    //NOTE:
-    // The full qualification with "Digikam::" for the changeset types in the following
+    // NOTE: The full qualification with "Digikam::" for the changeset types in the following
     // signals and slots are required to make moc pick them up.
     // If moc does not get the namespace in its literal, DBus connections will silently break.
 
