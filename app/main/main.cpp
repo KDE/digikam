@@ -22,19 +22,24 @@
  *
  * ============================================================ */
 
+#include "digikam_config.h"
+
 // Qt includes
 
 #include <QFile>
 #include <QDir>
 #include <QFileInfo>
 #include <QSqlDatabase>
-#include <QDBusConnection>
 #include <QString>
 #include <QStringList>
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 #include <QMessageBox>
+
+#ifdef HAVE_DBUS
+#   include <QDBusConnection>
+#endif
 
 // KDE includes
 
@@ -119,7 +124,7 @@ int main(int argc, char* argv[])
             DMessageBox::showInformationList(QMessageBox::Warning,
                                              qApp->activeWindow(),
                                              qApp->applicationName(),
-                                             i18n("Run-time Qt SQLite or MySQL database plugin is not available. "
+                                             i18n("Run-time Qt SQLite or MySQL database plugin are not available. "
                                                   "Please install it.\n"
                                                   "Database plugins installed on your computer are listed below."),
                                              QSqlDatabase::drivers());
@@ -187,6 +192,8 @@ int main(int argc, char* argv[])
         params.writeToConfig(config);
     }
 
+#ifdef HAVE_DBUS
+    
     /*
      * Register a dummy service on dbus.
      * This is needed for the internal database server, which checks if at least one
@@ -195,8 +202,11 @@ int main(int argc, char* argv[])
      * so we create a service on dbus which is unregistered after initialization the application.
      */
     QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.startup-") +
-                     QString::number(QCoreApplication::instance()->applicationPid()));
+        QString::number(QCoreApplication::instance()->applicationPid()));
 
+#endif
+
+    
     // initialize database
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
 
@@ -229,9 +239,13 @@ int main(int argc, char* argv[])
     QObject::connect(digikam, SIGNAL(destroyed(QObject*)),
                      &app, SLOT(quit()));
 
+#ifdef HAVE_DBUS
+    
     // Unregister the dummy service
     QDBusConnection::sessionBus().unregisterService(QLatin1String("org.kde.digikam.startup-") +
-                     QString::number(QCoreApplication::instance()->applicationPid()));
+        QString::number(QCoreApplication::instance()->applicationPid()));
+
+#endif
 
     digikam->restoreSession();
     digikam->show();

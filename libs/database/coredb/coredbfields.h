@@ -26,6 +26,8 @@
 #ifndef COREDATABASEFIELDS_H
 #define COREDATABASEFIELDS_H
 
+#include "digikam_config.h"
+
 // C++ includes
 
 #include <stdint.h>
@@ -39,7 +41,9 @@
 
 #include "digikam_export.h"
 
+#ifdef HAVE_DBUS
 class QDBusArgument;
+#endif
 
 namespace Digikam
 {
@@ -462,9 +466,11 @@ public:
         return customEnum.operator&(f);
     }
 
+#ifdef HAVE_DBUS
     // databasechangesets.cpp
     Set& operator<<(const QDBusArgument& argument);
     const Set& operator>>(QDBusArgument& argument) const;
+#endif
 
 private:
 

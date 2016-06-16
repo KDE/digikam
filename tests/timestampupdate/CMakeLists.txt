@@ -11,12 +11,15 @@ endif (POLICY CMP0063)
 include_directories(
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
-    $<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(ENABLE_DBUS)
+    include_directories($<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 set(timestampupdatetest_SRCS timestampupdatetest.cpp)
 add_executable(timestampupdatetest ${timestampupdatetest_SRCS})
@@ -30,9 +33,12 @@ target_link_libraries(timestampupdatetest
 
                       Qt5::Gui
                       Qt5::Test
-                      Qt5::DBus
                       Qt5::Sql
 
                       KF5::ConfigCore
                       KF5::I18n
                      )
+
+if(ENABLE_DBUS)
+    target_link_libraries(timestampupdatetest Qt5::DBus)
+endif()

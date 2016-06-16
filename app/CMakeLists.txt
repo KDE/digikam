@@ -136,7 +136,6 @@ target_link_libraries(digikamcore
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
                       Qt5::Concurrent
-                      Qt5::DBus
 
                       KF5::Solid
                       KF5::WindowSystem
@@ -159,6 +158,10 @@ target_link_libraries(digikamcore
                       libdng
                       libraw
 )
+
+if(ENABLE_DBUS)
+    target_link_libraries(digikamcore PUBLIC Qt5::DBus)
+endif()
 
 if(KF5IconThemes_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::IconThemes)
@@ -257,7 +260,9 @@ install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########################## digiKam GUI sources #############################
 
-qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
+if(ENABLE_DBUS)
+    qt5_add_dbus_adaptor(digikamadaptor_SRCS main/org.kde.digikam.xml main/digikamapp.h Digikam::DigikamApp)
+endif()
 
 set(libdigikamgui_SRCS
     main/digikamapp.cpp
@@ -427,7 +432,6 @@ target_link_libraries(digikamgui
                       Qt5::Sql
                       Qt5::WebKitWidgets
                       Qt5::PrintSupport
-                      Qt5::DBus
 
                       KF5::Solid
                       KF5::Service
@@ -436,6 +440,10 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(ENABLE_DBUS)
+    target_link_libraries(digikamgui PUBLIC Qt5::DBus)
+endif()
 
 if(KF5IconThemes_FOUND)
     target_link_libraries(digikamgui PUBLIC KF5::IconThemes)
@@ -531,11 +539,14 @@ target_link_libraries(digikam
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Widgets
-                      Qt5::DBus
 
                       KF5::WindowSystem
                       KF5::I18n
 )
+
+if(ENABLE_DBUS)
+    target_link_libraries(digikam PUBLIC Qt5::DBus)
+endif()
 
 if(KF5IconThemes_FOUND)
     target_link_libraries(digikam PUBLIC KF5::IconThemes)

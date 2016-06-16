@@ -13,6 +13,7 @@ General            : Isolating KIO calls in KIOWrapper to be able to create a pu
 General            : Add embedded trash support for each collection instead desktop trash.
 General            : Thumbs and preview video support is now delegate to QT5Multimedia.
 General            : Add support of MXE/MinGw cross-compiler to create Windows target automatically without Windows OS..
+General            : Dbus dependency is now optional for non Linux Desktop.
 
 Database           : Fully integration of face recognition database with Mysql support.
 Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.

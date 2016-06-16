@@ -103,6 +103,7 @@ option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                       OFF)
 option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                       OFF)
 option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                            OFF)
+option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                     ON)
 
 # Mysql support options (experimental):
 option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                          OFF)
@@ -124,13 +125,13 @@ find_package(Qt5 ${QT_MIN_VERSION}
              PrintSupport
              WebKitWidgets
              Network
-             DBus
 )
 
 find_package(Qt5 ${QT_MIN_VERSION}
              OPTIONAL_COMPONENTS
              Multimedia
              MultimediaWidgets
+             DBus
              OpenGL
 )
 
@@ -138,6 +139,17 @@ if(ENABLE_MEDIAPLAYER)
     if(NOT Qt5Multimedia_FOUND OR NOT Qt5MultimediaWidgets_FOUND)
         set(ENABLE_MEDIAPLAYER OFF)
     endif()
+endif()
+
+if(ENABLE_DBUS)
+    if(NOT Qt5DBus_FOUND)
+        set(ENABLE_DBUS OFF)
+    endif()
+endif()
+
+if(NOT ENABLE_DBUS)
+    # As Internal database server is based on DBUS, it cannot be compiled without.
+    set(ENABLE_INTERNALMYSQL OFF)
 endif()
 
 if(BUILD_TESTING)
@@ -412,6 +424,7 @@ MACRO_BOOL_TO_01(MARBLE_FOUND                                           HAVE_MAR
 MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT                                    HAVE_MYSQLSUPPORT)
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL                                   HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER                                     HAVE_MEDIAPLAYER)
+MACRO_BOOL_TO_01(ENABLE_DBUS                                            HAVE_DBUS)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -434,6 +447,7 @@ message(STATUS "")
 
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support" ENABLE_INTERNALMYSQL)
+PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"           ENABLE_DBUS)
 
 
 # ================================================================

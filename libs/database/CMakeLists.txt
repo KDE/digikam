@@ -32,6 +32,14 @@ set(libdatabasecore_SRCS
     thumbsdb/thumbsdbaccess.cpp
 )
 
+if(ENABLE_DBUS)
+    set(libdatabasecore_SRCS
+        ${libdatabasecore_SRCS}
+        server/databaseserverstarter.cpp
+        server/databaseservererror.cpp
+    )
+endif()
+    
 set(libdatabaseutils_SRCS
     utils/dbstatdlg.cpp
     utils/dbsettingswidget.cpp
@@ -60,7 +68,6 @@ set(libdatabase_SRCS
     coredb/coredboperationgroup.cpp
     coredb/coredbbackend.cpp
     coredb/coredbwatch.cpp
-    coredb/coredbwatchadaptor.cpp
     coredb/coredburl.cpp
     coredb/coredbaccess.cpp
     coredb/coredbnamefilter.cpp
@@ -96,6 +103,13 @@ set(libdatabase_SRCS
     imagehistory/imagehistorygraphmodel.cpp
 )
 
+if(ENABLE_DBUS)
+    set(libdatabase_SRCS
+        ${libdatabase_SRCS}
+        coredb/coredbwatchadaptor.cpp
+       )
+endif()
+
 if(MARBLE_FOUND)
     set(libdatabase_SRCS
         ${libdatabase_SRCS}
@@ -125,7 +139,6 @@ set(digikamdatabase_LIB_SRCS
 )
 
 include_directories(
-    $<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -138,6 +151,10 @@ include_directories(
     $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(ENABLE_DBUS)
+    include_directories($<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 add_library(digikamdatabase_src     OBJECT ${digikamdatabase_LIB_SRCS})
 add_library(digikamdatabasemain_src OBJECT ${libdatabaseutils_SRCS} ${libimgqsort_SRCS})
@@ -160,10 +177,13 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
-                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
 )
+
+if(ENABLE_DBUS)
+    target_include_directories(digikamdatabase PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>)
+endif()
 
 target_link_libraries(digikamdatabase
 
@@ -173,11 +193,14 @@ target_link_libraries(digikamdatabase
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Sql
-                      Qt5::DBus
 
                       KF5::Solid
                       KF5::I18n
 )
+
+if(ENABLE_DBUS)
+    target_link_libraries(digikamdatabase PRIVATE Qt5::DBus)
+endif()
 
 if(KF5FileMetaData_FOUND)
     target_link_libraries(digikamdatabase PRIVATE baloowrap)

@@ -41,6 +41,7 @@
 #include <QKeySequence>
 #include <QMenu>
 #include <QMenuBar>
+#include <QTimer>
 #include <QIcon>
 #include <QMessageBox>
 #include <QStatusBar>
@@ -82,7 +83,6 @@
 #include "collectionmanager.h"
 #include "componentsinfo.h"
 #include "coredbthumbinfoprovider.h"
-#include "digikamadaptor.h"
 #include "dio.h"
 #include "dlogoaction.h"
 #include "fileactionmngr.h"
@@ -123,6 +123,10 @@
 #include "metadataedit.h"
 #include "geolocationedit.h"
 #include "expoblendingmanager.h"
+
+#ifdef HAVE_DBUS
+#   include "digikamadaptor.h"
+#endif
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
@@ -176,10 +180,14 @@ DigikamApp::DigikamApp()
         d->splashScreen->message(i18n("Scanning Albums..."));
     }
 
+#ifdef HAVE_DBUS
+
     new DigikamAdaptor(this);
     QDBusConnection::sessionBus().registerObject(QLatin1String("/Digikam"), this);
     QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam-") +
                                                   QString::number(QCoreApplication::instance()->applicationPid()));
+
+#endif
 
     // collection scan
     if (group.readEntry("Scan At Start", true) ||

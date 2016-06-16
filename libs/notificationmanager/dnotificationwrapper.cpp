@@ -27,12 +27,15 @@
 
 // Qt includes
 
-#include <QDBusConnection>
-#include <QDBusConnectionInterface>
 #include <QProcess>
 #include <QApplication>
 #include <QStandardPaths>
 #include <QIcon>
+
+#ifdef HAVE_DBUS
+#   include <QDBusConnection>
+#   include <QDBusConnectionInterface>
+#endif
 
 // KDE includes
 
@@ -124,7 +127,7 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
         }
     }
 
-#ifdef HAVE_KNOTIFICATIONS
+#if defined HAVE_KNOTIFICATIONS && defined HAVE_DBUS
 
     // NOTE: This detection of KDE desktop is not perfect because KNotify may never be started.
     //       But in a regular KDE session, KNotify should be running already.

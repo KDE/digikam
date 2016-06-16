@@ -9,7 +9,6 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 include_directories(
-    $<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
@@ -18,6 +17,10 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(ENABLE_DBUS)
+    include_directories($<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 if(KF5Notifications_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>)
@@ -32,7 +35,6 @@ target_link_libraries(testdatabase
 
                       libdng
 
-                      Qt5::DBus
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Test
@@ -43,6 +45,10 @@ target_link_libraries(testdatabase
 
                       ${OpenCV_LIBRARIES}
 )
+
+if(ENABLE_DBUS)
+    target_link_libraries(testdatabase Qt5::DBus)
+endif()
 
 if(KF5Notifications_FOUND)
     target_link_libraries(testdatabase KF5::Notifications)
@@ -65,7 +71,6 @@ target_link_libraries(databasefieldstest
 
                       libdng
 
-                      Qt5::DBus
                       Qt5::Core
                       Qt5::Gui
                       Qt5::Test
@@ -74,6 +79,10 @@ target_link_libraries(databasefieldstest
                       KF5::I18n
                       KF5::XmlGui
 )
+
+if(ENABLE_DBUS)
+    target_link_libraries(databasefieldstest Qt5::DBus)
+endif()
 
 if(KF5Notifications_FOUND)
     target_link_libraries(databasefieldstest KF5::Notifications)
@@ -92,7 +101,6 @@ endif()
 #
 #                       libdng
 #
-#                       Qt5::DBus
 #                       Qt5::Core
 #                       Qt5::Gui
 #                       Qt5::Test
@@ -101,6 +109,10 @@ endif()
 #                       KF5::I18n
 #                       KF5::XmlGui
 #)
+#
+#if(ENABLE_DBUS)
+#    target_link_libraries(databasetagstest Qt5::DBus)
+#endif()
 #
 #if(KF5Notifications_FOUND)
 #    target_link_libraries(databasetagstest KF5::Notifications)

@@ -24,16 +24,21 @@
 #ifndef COLLECTIONSCANNERHINTS_H
 #define COLLECTIONSCANNERHINTS_H
 
+#include "digikam_config.h"
+
 // Qt includes
 
 #include <QDateTime>
 #include <QList>
 #include <QStringList>
+
+#ifdef HAVE_DBUS
 #include <QDBusArgument>
+#include "dbenginedbusutils.h"
+#endif
 
 // Local includes
 
-#include "dbenginedbusutils.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -158,8 +163,10 @@ public:
         return dst == m_dst;
     }
 
+#ifdef HAVE_DBUS
     AlbumCopyMoveHint& operator<<(const QDBusArgument& argument);
     const AlbumCopyMoveHint& operator>>(QDBusArgument& argument) const;
+#endif
 
     operator const CollectionScannerHints::Album& () const
     {
@@ -210,8 +217,10 @@ public:
         return dst == m_dst;
     }
 
+#ifdef HAVE_DBUS
     ItemCopyMoveHint& operator<<(const QDBusArgument& argument);
     const ItemCopyMoveHint& operator>>(QDBusArgument& argument) const;
+#endif
 
     operator const CollectionScannerHints::Album& () const
     {
@@ -260,8 +269,10 @@ public:
         return changeType() == ItemRescan;
     }
 
+#ifdef HAVE_DBUS
     ItemChangeHint& operator<<(const QDBusArgument& argument);
     const ItemChangeHint& operator>>(QDBusArgument& argument) const;
+#endif
 
 protected:
 
@@ -314,8 +325,10 @@ public:
         return adjustmentStatus() == MetadataEditingAborted;
     }
 
+#ifdef HAVE_DBUS
     ItemMetadataAdjustmentHint& operator<<(const QDBusArgument& argument);
     const ItemMetadataAdjustmentHint& operator>>(QDBusArgument& argument) const;
+#endif
 
 protected:
 
@@ -332,8 +345,10 @@ inline uint qHash(const Digikam::AlbumCopyMoveHint& hint)
 
 } // namespace Digikam
 
+#ifdef HAVE_DBUS
 DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumCopyMoveHint)
 DECLARE_METATYPE_FOR_DBUS(Digikam::ItemCopyMoveHint)
 DECLARE_METATYPE_FOR_DBUS(Digikam::ItemChangeHint)
+#endif
 
 #endif // COLLECTIONSCANNERHINTS_H

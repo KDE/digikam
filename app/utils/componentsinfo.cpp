@@ -91,6 +91,12 @@ void showDigikamComponentsInfo()
     list.insert(i18n("QtMultimedia support"), i18n("no"));
 #endif /* HAVE_MEDIAPLAYER */
 
+#ifdef HAVE_DBUS
+    list.insert(i18n("DBus support"), i18n("Yes"));
+#else
+    list.insert(i18n("DBus support"), i18n("no"));
+#endif /* HAVE_DBUS */
+
 #ifdef HAVE_KIPI
     list.insert(i18n("LibKipi"),      KIPI::Interface::version());
     list.insert(i18n("Kipi-Plugins"), KIPI::PluginLoader::instance()->kipiPluginsVersion());

@@ -88,7 +88,10 @@
 #cmakedefine HAVE_INTERNALMYSQL 1
 
 /* Define to 1 if preview of video files is supported */
-#cmakedefine HAVE_MEDIAPLAYER
+#cmakedefine HAVE_MEDIAPLAYER 1
+
+/* Define to 1 if DBUS is supported */
+#cmakedefine HAVE_DBUS 1
 
 /* Define to 1 if system use OpenGL */
 #cmakedefine HAVE_OPENGL 1

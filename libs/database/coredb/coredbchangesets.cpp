@@ -57,6 +57,7 @@ DatabaseFields::Set ImageChangeset::changes() const
     return m_changes;
 }
 
+#ifdef HAVE_DBUS
 ImageChangeset& ImageChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -72,6 +73,7 @@ const ImageChangeset& ImageChangeset::operator>>(QDBusArgument& argument) const
     argument.endStructure();
     return *this;
 }
+#endif
 
 // ---------------------------------------------------------------------------------
 
@@ -114,6 +116,8 @@ ImageTagChangeset& ImageTagChangeset::operator<<(const ImageTagChangeset& other)
     return *this;
 }
 
+#ifdef HAVE_DBUS
+
 ImageTagChangeset& ImageTagChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -131,6 +135,8 @@ const ImageTagChangeset& ImageTagChangeset::operator>>(QDBusArgument& argument) 
     argument.endStructure();
     return *this;
 }
+
+#endif
 
 QList<qlonglong> ImageTagChangeset::ids() const
 {
@@ -198,6 +204,8 @@ CollectionImageChangeset& CollectionImageChangeset::operator<<(const CollectionI
     return *this;
 }
 
+#ifdef HAVE_DBUS
+
 CollectionImageChangeset& CollectionImageChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -215,6 +223,8 @@ const CollectionImageChangeset& CollectionImageChangeset::operator>>(QDBusArgume
     argument.endStructure();
     return *this;
 }
+
+#endif
 
 QList<qlonglong> CollectionImageChangeset::ids() const
 {
@@ -265,6 +275,8 @@ AlbumChangeset::Operation AlbumChangeset::operation() const
     return m_operation;
 }
 
+#ifdef HAVE_DBUS
+
 AlbumChangeset& AlbumChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -282,6 +294,8 @@ const AlbumChangeset& AlbumChangeset::operator>>(QDBusArgument& argument) const
     argument.endStructure();
     return *this;
 }
+
+#endif
 
 // ---------------------------------------------------------------------------------
 
@@ -307,6 +321,8 @@ TagChangeset::Operation TagChangeset::operation() const
     return m_operation;
 }
 
+#ifdef HAVE_DBUS
+
 TagChangeset& TagChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -324,6 +340,8 @@ const TagChangeset& TagChangeset::operator>>(QDBusArgument& argument) const
     argument.endStructure();
     return *this;
 }
+
+#endif
 
 // ---------------------------------------------------------------------------------
 
@@ -349,6 +367,8 @@ AlbumRootChangeset::Operation AlbumRootChangeset::operation() const
     return m_operation;
 }
 
+#ifdef HAVE_DBUS
+
 AlbumRootChangeset& AlbumRootChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -366,6 +386,8 @@ const AlbumRootChangeset& AlbumRootChangeset::operator>>(QDBusArgument& argument
     argument.endStructure();
     return *this;
 }
+
+#endif
 
 // ---------------------------------------------------------------------------------
 
@@ -391,6 +413,8 @@ SearchChangeset::Operation SearchChangeset::operation() const
     return m_operation;
 }
 
+#ifdef HAVE_DBUS
+
 SearchChangeset& SearchChangeset::operator<<(const QDBusArgument& argument)
 {
     argument.beginStructure();
@@ -409,7 +433,11 @@ const SearchChangeset& SearchChangeset::operator>>(QDBusArgument& argument) cons
     return *this;
 }
 
+#endif
+
 // ---------------------------------------------------------------------------------
+
+#ifdef HAVE_DBUS
 
 DatabaseFields::Set& DatabaseFields::Set::operator<<(const QDBusArgument& argument)
 {
@@ -450,5 +478,7 @@ const DatabaseFields::Set& DatabaseFields::Set::operator>>(QDBusArgument& argume
     argument.endStructure();
     return *this;
 }
+
+#endif
 
 } // namespace Digikam

@@ -24,6 +24,8 @@
 #ifndef COREDATABASEWATCH_H
 #define COREDATABASEWATCH_H
 
+#include "digikam_config.h"
+
 // Qt includes
 
 #include <QObject>
@@ -97,7 +99,10 @@ protected:
 
     ~CoreDbWatch();
 
+#ifdef HAVE_DBUS
+
 protected Q_SLOTS:
+
 
     // NOTE: The full qualification with "Digikam::" for the changeset types in the following
     // signals and slots are required to make moc pick them up.
@@ -150,6 +155,7 @@ Q_SIGNALS:
     void searchChange(const QString& databaseIdentifier,
                       const QString& applicationIdentifier,
                       const Digikam::SearchChangeset& changeset);
+#endif
 
 public:
 
@@ -159,6 +165,8 @@ private:
 
     Private* const d;
 };
+
+#ifdef HAVE_DBUS
 
 // ------------------------------------------------------------------------------------
 
@@ -178,6 +186,8 @@ private:
     CoreDbWatch*          q;
     CoreDbWatch::Private* d;
 };
+
+#endif
 
 } // namespace Digikam
 

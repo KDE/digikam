@@ -23,6 +23,7 @@
  * ============================================================ */
 
 #include "slideshow.h"
+#include "digikam_config.h"
 
 // Qt includes
 
@@ -36,9 +37,12 @@
 #include <QTimer>
 #include <QWheelEvent>
 #include <QApplication>
-#include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusReply>
+
+#ifdef HAVE_DBUS
+#   include <QDBusConnection>
+#   include <QDBusMessage>
+#   include <QDBusReply>
+#endif
 
 // KDE includes
 
@@ -47,7 +51,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "slidetoolbar.h"
 #include "slideosd.h"
 #include "slideimage.h"
@@ -378,6 +381,7 @@ void SlideShow::slotMouseMoveTimeOut()
 // TODO: Add OSX and Windows support
 void SlideShow::inhibitScreenSaver()
 {
+#ifdef HAVE_DBUS    
     QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.ScreenSaver"),
                                                           QLatin1String("/ScreenSaver"),
                                                           QLatin1String("org.freedesktop.ScreenSaver"),
@@ -391,10 +395,12 @@ void SlideShow::inhibitScreenSaver()
     {
         d->screenSaverCookie = reply.value();
     }
+#endif    
 }
 
 void SlideShow::allowScreenSaver()
 {
+#ifdef HAVE_DBUS
     if (d->screenSaverCookie != -1)
     {
         QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.ScreenSaver"),
@@ -404,6 +410,7 @@ void SlideShow::allowScreenSaver()
         message << (uint)d->screenSaverCookie;
         QDBusConnection::sessionBus().send(message);
     }
+#endif
 }
 
 void SlideShow::slotAssignRating(int rating)

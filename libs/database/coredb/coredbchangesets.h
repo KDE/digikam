@@ -24,15 +24,20 @@
 #ifndef COREDATABASECHANGESETS_H
 #define COREDATABASECHANGESETS_H
 
+#include "digikam_config.h"
+
 // Qt includes
 
 #include <QList>
 #include <QMetaType>
-#include <QDBusArgument>
+
+#ifdef HAVE_DBUS
+#   include <QDBusArgument>
+#   include "dbenginedbusutils.h"
+#endif
 
 // Local includes
 
-#include "dbenginedbusutils.h"
 #include "digikam_export.h"
 #include "coredbfields.h"
 
@@ -57,8 +62,10 @@ public:
     bool containsImage(qlonglong id) const;
     DatabaseFields::Set changes() const;
 
+#ifdef HAVE_DBUS
     ImageChangeset& operator<<(const QDBusArgument& argument);
     const ImageChangeset& operator>>(QDBusArgument& argument) const;
+#endif
 
 private:
 
@@ -103,8 +110,10 @@ public:
      */
     ImageTagChangeset& operator<<(const ImageTagChangeset& other);
 
+#ifdef HAVE_DBUS
     ImageTagChangeset& operator<<(const QDBusArgument& argument);
     const ImageTagChangeset& operator>>(QDBusArgument& argument) const;
+#endif
 
     QList<qlonglong> ids()           const;
     bool containsImage(qlonglong id) const;
@@ -208,9 +217,11 @@ public:
      */
     CollectionImageChangeset& operator<<(const CollectionImageChangeset& other);
 
+#ifdef HAVE_DBUS
     CollectionImageChangeset& operator<<(const QDBusArgument& argument);
     const CollectionImageChangeset& operator>>(QDBusArgument& argument) const;
-
+#endif
+    
     /** Specification of this changeset.
      *  All special cases where the returned list may be empty are noted above.
      *  The lists are valid unless such a case is explicitly mentioned.
@@ -251,8 +262,10 @@ public:
     int albumId() const;
     Operation operation() const;
 
+#ifdef HAVE_DBUS
     AlbumChangeset& operator<<(const QDBusArgument& argument);
     const AlbumChangeset& operator>>(QDBusArgument& argument) const;
+#endif
 
 private:
 
@@ -285,8 +298,10 @@ public:
     int tagId() const;
     Operation operation() const;
 
+#ifdef HAVE_DBUS
     TagChangeset& operator<<(const QDBusArgument& argument);
     const TagChangeset& operator>>(QDBusArgument& argument) const;
+#endif
 
 private:
 
@@ -316,8 +331,10 @@ public:
     int albumRootId() const;
     Operation operation() const;
 
+#ifdef HAVE_DBUS
     AlbumRootChangeset& operator<<(const QDBusArgument& argument);
     const AlbumRootChangeset& operator>>(QDBusArgument& argument) const;
+#endif
 
 private:
 
@@ -347,8 +364,10 @@ public:
     int searchId() const;
     Operation operation() const;
 
+#ifdef HAVE_DBUS
     SearchChangeset& operator<<(const QDBusArgument& argument);
     const SearchChangeset& operator>>(QDBusArgument& argument) const;
+#endif
 
 private:
 
@@ -358,6 +377,7 @@ private:
 
 } // namespace Digikam
 
+#ifdef HAVE_DBUS
 // custom macro from our dbusutilities.h
 DECLARE_METATYPE_FOR_DBUS(Digikam::ImageChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::ImageTagChangeset)
@@ -367,5 +387,6 @@ DECLARE_METATYPE_FOR_DBUS(Digikam::TagChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::SearchChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::AlbumRootChangeset)
 DECLARE_METATYPE_FOR_DBUS(Digikam::DatabaseFields::Set)
+#endif
 
 #endif // COREDATABASECHANGESETS_H
