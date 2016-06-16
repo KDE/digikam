@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.0.0-beta7 - Release date: 2016-05-28
+digiKam 5.0.0 - Release date: 2016-07-03
 
 NEW FEATURES:
 
@@ -14,6 +14,7 @@ General            : Add embedded trash support for each collection instead desk
 General            : Thumbs and preview video support is now delegate to QT5Multimedia.
 General            : Add support of MXE/MinGw cross-compiler to create Windows target automatically without Windows OS..
 General            : Dbus dependency is now optional for non Linux Desktop.
+General            : KIO dependency is now optional for non Linux Desktop.
 
 Database           : Fully integration of face recognition database with Mysql support.
 Database           : Mysql internal server is now configurable as Sqlite to store database files at a customized place.
