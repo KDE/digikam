@@ -90,7 +90,7 @@ ToolsView::ToolsView(QWidget* const parent)
 
     d->historyView = new DHistoryView(this);
     d->historyView->setWhatsThis(i18n("You can see below the history of last batch operations processed."));
-    insertTab(HISTORY, d->historyView, QIcon::fromTheme(QLatin1String("view-history")), i18n("History"));
+    insertTab(HISTORY, d->historyView, QIcon::fromTheme(QLatin1String("edit-find")), i18n("History"));
 
     // --------------------------------------------------------
 

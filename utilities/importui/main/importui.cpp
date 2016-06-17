@@ -589,7 +589,7 @@ void ImportUI::setupActions()
     createFullScreenAction(QLatin1String("importui_fullscreen"));
     createSidebarActions();
 
-    d->showLogAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18nc("@option:check", "Show History"), this);
+    d->showLogAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setCheckable(true);
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     ac->addAction(QLatin1String("importui_showlog"), d->showLogAction);
