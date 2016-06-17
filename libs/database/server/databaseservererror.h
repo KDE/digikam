@@ -7,6 +7,7 @@
  * Description : database server error reporting
  *
  * Copyright (C) 2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2016 by Swati Lodha <swatilodha27 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -28,11 +29,9 @@
 
 #include <QString>
 #include <QVariant>
-#include <QDBusArgument>
 
 // Local includes
 
-#include "dbenginedbusutils.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -66,16 +65,6 @@ public:
     DatabaseServerError(const DatabaseServerError& dbServerError);
     ~DatabaseServerError();
 
-    /**
-     * Marshall the DatabaseServerError data into a D-BUS argument
-     */
-    DatabaseServerError& operator<<(const QDBusArgument& argument);
-
-    /**
-     * Retrieve the DatabaseServerError data from the D-BUS argument
-     */
-    const DatabaseServerError& operator>>(QDBusArgument& argument) const;
-
     int     getErrorType() const;
     void    setErrorType(DatabaseServerErrorEnum errorType);
     QString getErrorText() const;
@@ -88,8 +77,5 @@ private:
 };
 
 } // namespace Digikam
-
-// custom macro from our dbusutilities.h
-DECLARE_METATYPE_FOR_DBUS(Digikam::DatabaseServerError)
 
 #endif /* DATABASE_SERVER_ERROR_H_ */

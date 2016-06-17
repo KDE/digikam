@@ -37,10 +37,6 @@
 #include <QCommandLineOption>
 #include <QMessageBox>
 
-#ifdef HAVE_DBUS
-#   include <QDBusConnection>
-#endif
-
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -192,21 +188,6 @@ int main(int argc, char* argv[])
         params.writeToConfig(config);
     }
 
-#ifdef HAVE_DBUS
-    
-    /*
-     * Register a dummy service on dbus.
-     * This is needed for the internal database server, which checks if at least one
-     * digikam instance is running on dbus.
-     * The first real dbus instance is registered within the DigikamApp() constructor,
-     * so we create a service on dbus which is unregistered after initialization the application.
-     */
-    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.startup-") +
-        QString::number(QCoreApplication::instance()->applicationPid()));
-
-#endif
-
-    
     // initialize database
     AlbumManager::instance()->setDatabase(params, !commandLineDBPath.isNull(), firstAlbumPath);
 
@@ -238,14 +219,6 @@ int main(int argc, char* argv[])
     // solution later on, just in case there are better ways to do it.
     QObject::connect(digikam, SIGNAL(destroyed(QObject*)),
                      &app, SLOT(quit()));
-
-#ifdef HAVE_DBUS
-    
-    // Unregister the dummy service
-    QDBusConnection::sessionBus().unregisterService(QLatin1String("org.kde.digikam.startup-") +
-        QString::number(QCoreApplication::instance()->applicationPid()));
-
-#endif
 
     digikam->restoreSession();
     digikam->show();

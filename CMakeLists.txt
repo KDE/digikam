@@ -147,11 +147,6 @@ if(ENABLE_DBUS)
     endif()
 endif()
 
-if(NOT ENABLE_DBUS)
-    # As Internal database server is based on DBUS, it cannot be compiled without.
-    set(ENABLE_INTERNALMYSQL OFF)
-endif()
-
 if(BUILD_TESTING)
     find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
                  Test)
@@ -609,10 +604,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
    add_subdirectory(app)
    add_subdirectory(showfoto)
    add_subdirectory(imageplugins)
-
-    if(ENABLE_INTERNALMYSQL)
-        add_subdirectory(databaseserver)
-    endif()
 
     if(BUILD_TESTING)
         add_subdirectory(tests)

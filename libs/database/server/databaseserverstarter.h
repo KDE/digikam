@@ -7,6 +7,7 @@
  * Description : database server starter
  *
  * Copyright (C) 2009-2010 by Holger Foerster <Hamsi2k at freenet dot de>
+ * Copyright (C) 2016 by Swati Lodha <swatilodha27 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,9 +27,7 @@
 
 // Qt includes
 
-#include <QProcess>
 #include <QString>
-#include <QCoreApplication>
 
 // Local includes
 
@@ -39,25 +38,32 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseServerStarter : public QObject
+class DIGIKAM_EXPORT DatabaseServerStarter
 {
-    Q_OBJECT
 
 public:
 
-    explicit DatabaseServerStarter(QObject* const parent = 0);
+    /**
+     * Global instance of internal server starter. All accessor methods are thread-safe.
+     */
+    static DatabaseServerStarter* instance();
 
-    static DatabaseServerError startServerManagerProcess(const QString& dbType = DbEngineParameters::MySQLDatabaseType());
-    static void stopServerManagerProcess();
-    static void cleanUp();
+    DatabaseServerError startServerManagerProcess(const QString& dbType = DbEngineParameters::MySQLDatabaseType());
+    void                stopServerManagerProcess();
 
 private:
 
-    static bool isServerRegistered();
-    static bool __init;
-    static bool init();
+    DatabaseServerStarter();
+    ~DatabaseServerStarter();
+
+private:
+
+    class Private;
+    Private* const d;
+
+    friend class DatabaseServerStarterCreator;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DATABASE_SERVER_STARTER_H_ */
+#endif // DATABASE_SERVER_STARTER_H_

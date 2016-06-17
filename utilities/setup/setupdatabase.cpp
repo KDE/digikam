@@ -167,7 +167,7 @@ void SetupDatabase::applySettings()
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to SQlite DB config...";
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
-                DatabaseServerStarter::stopServerManagerProcess();
+                DatabaseServerStarter::instance()->stopServerManagerProcess();
             }
             break;
         }
@@ -182,7 +182,7 @@ void SetupDatabase::applySettings()
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql Internal DB config...";
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
-                DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
+                DatabaseServerStarter::instance()->startServerManagerProcess(d->databaseWidget->databaseBackend());
             }
             break;
         }
@@ -193,7 +193,7 @@ void SetupDatabase::applySettings()
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql server DB config...";
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
-                DatabaseServerStarter::stopServerManagerProcess();
+                DatabaseServerStarter::instance()->stopServerManagerProcess();
             }
             break;
         }

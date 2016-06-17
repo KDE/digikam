@@ -391,7 +391,7 @@ DigikamApp::~DigikamApp()
     // close database server
     if (ApplicationSettings::instance()->getDbEngineParameters().internalServer)
     {
-        DatabaseServerStarter::cleanUp();
+        DatabaseServerStarter::instance()->stopServerManagerProcess();
     }
 
     m_instance = 0;

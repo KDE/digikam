@@ -13,6 +13,7 @@ endif (POLICY CMP0063)
 set(libdatabasecore_SRCS
     server/databaseserverstarter.cpp
     server/databaseservererror.cpp
+    server/databaseserver.cpp
 
     engine/dbengineconfigloader.cpp
     engine/dbengineconfig.cpp
@@ -32,14 +33,6 @@ set(libdatabasecore_SRCS
     thumbsdb/thumbsdbaccess.cpp
 )
 
-if(ENABLE_DBUS)
-    set(libdatabasecore_SRCS
-        ${libdatabasecore_SRCS}
-        server/databaseserverstarter.cpp
-        server/databaseservererror.cpp
-    )
-endif()
-    
 set(libdatabaseutils_SRCS
     utils/dbstatdlg.cpp
     utils/dbsettingswidget.cpp
@@ -50,7 +43,6 @@ set(libdatabaseutils_SRCS
 )
 
 set(libdatabase_SRCS
-
     collection/collectionscanner.cpp
     collection/collectionmanager.cpp
     collection/collectionlocation.cpp
@@ -133,9 +125,9 @@ set(libimgqsort_SRCS
 # Shared libdigikamdatabase ########################################################
 
 set(digikamdatabase_LIB_SRCS
-        ${libdatabase_SRCS}
-        ${libhaar_SRCS}
-        ${pgfutils_SRCS}
+    ${libdatabase_SRCS}
+    ${libhaar_SRCS}
+    ${pgfutils_SRCS}
 )
 
 include_directories(
@@ -177,13 +169,10 @@ target_include_directories(digikamdatabase
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/haar>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imgqsort>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/imagehistory>
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/thumbsdb>
                            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/utils>
 )
-
-if(ENABLE_DBUS)
-    target_include_directories(digikamdatabase PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/server>)
-endif()
 
 target_link_libraries(digikamdatabase
 

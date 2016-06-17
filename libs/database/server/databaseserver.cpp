@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2009-2011 by Holger Foerster <Hamsi2k at freenet dot de>
  * Copyright (C) 2010-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- *
+ * Copyright (C) 2016 by Swati Lodha <swatilodha27 at gmail dot com>
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QtGlobal>
+#include <QCoreApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QDateTime>
@@ -34,11 +35,9 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
-#include <QDBusConnection>
-#include <QDBusConnectionInterface>
-#include <QDBusReply>
 #include <QProcess>
 #include <QStandardPaths>
+#include <QThread>
 
 // KDE includes
 
@@ -48,8 +47,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "pollthread.h"
-#include "databaseserveradaptor.h"
 #include "dbengineparameters.h"
 
 namespace Digikam
@@ -63,26 +60,19 @@ public:
     {
         databaseProcess = 0;
         app             = 0;
-        pollThread      = 0;
         internalDBName  = QLatin1String("digikam");
     }
 
     QProcess*         databaseProcess;
     QString           internalDBName;
     QCoreApplication* app;
-    PollThread*       pollThread;
 };
 
 DatabaseServer::DatabaseServer(QCoreApplication* const application)
-    : QObject(application),
+    : QThread(application),
       d(new Private)
 {
     d->app = application;
-
-    if (qDBusRegisterMetaType<DatabaseServerError>() < 0)
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Error while registering DatabaseServerError class.";
-    }
 }
 
 DatabaseServer::~DatabaseServer()
@@ -90,58 +80,49 @@ DatabaseServer::~DatabaseServer()
     delete d;
 }
 
-void DatabaseServer::registerOnDBus()
+void DatabaseServer::run()
 {
-    new DatabaseServerAdaptor(this);
-    QDBusConnection::sessionBus().registerObject(QLatin1String("/DatabaseServer"), this);
-    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.DatabaseServer"));
+    int waitTime = 1;
+
+    // Loop to wait fro stopping the server.
+
+    do
+    {
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Waiting " << waitTime << " seconds...";
+        QThread::sleep(waitTime);
+    }
+    while (databaseServerStateEnum != stopped);
+
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Shutting down database server";
+    emit done();
 }
 
-void DatabaseServer::startPolling()
-{
-    d->pollThread = new PollThread(d->app);
-    d->pollThread->start();
-
-    connect(d->pollThread, SIGNAL(done()),
-            this, SLOT(stopDatabaseProcess()));
-}
-
-/*
+/**
  * Starts the database management server.
- * TODO: Ensure that no other digiKam databaseserver is running. Reusing this instance instead start a new one.
- * Maybe this can be done by DBUS communication or an PID file.
  */
-bool DatabaseServer::startDatabaseProcess(QDBusVariant& error)
+bool DatabaseServer::startDatabaseProcess()
 {
-    return startDatabaseProcess(DbEngineParameters::MySQLDatabaseType(), error);
-}
+    DatabaseServerError error;
 
-/*
- * Starts the database management server.
- * TODO: Ensure that no other digiKam databaseserver is running. Reusing this instance instead start a new one.
- * Maybe this can be done by DBUS communication or an PID file.
- */
-bool DatabaseServer::startDatabaseProcess(const QString& dbType, QDBusVariant& error)
-{
-    if (dbType == DbEngineParameters::MySQLDatabaseType())
+    if (DbEngineParameters::MySQLDatabaseType() == QLatin1String("QMYSQL"))
     {
         // return QVariant::fromValue(startMYSQLDatabaseProcess());
-        error = QDBusVariant(QVariant::fromValue(startMYSQLDatabaseProcess()));
-        return false;
+        error = startMYSQLDatabaseProcess();
+        databaseServerStateEnum = running;
+        return true;
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "DBType ["<< dbType <<"] is not supported.";
-        DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString::fromUtf8("DBType [%0] is not supported.").arg(dbType));
-        error = QDBusVariant(QVariant::fromValue(errorDetails));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "This DB type is not supported.";
+        DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString::fromUtf8("DBType is not supported."));
+        error                   = errorDetails;
+        databaseServerStateEnum = notRunning;
         return false;
     }
 }
 
-/*
- * Starts the database management server.
- * TODO: Ensure that no other digiKam databaseserver is running. Re-using this instance instead start a new one.
- * Maybe this can be done by DBUS communication or an PID file.
+/**
+ * Init and Starts Mysql server.
  */
 DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 {
@@ -151,14 +132,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << internalServerParameters;
 
-    d->pollThread->stop = false;
-
     const QString mysqldPath = internalServerParameters.internalServerMysqlServCmd;
 
     if ( mysqldPath.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server command is registered in configuration file!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server command is registered in configuration file!"));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server comand set in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server comand set in configuration file!"));
     }
 
     // Create the database directories if they don't exists
@@ -182,13 +161,13 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString fileDataDir    = defaultAkDir + QLatin1String("file_db_data");
 
     const QString mysqldInitPath = internalServerParameters.internalServerMysqlInitCmd;
-    
+
     if ( mysqldInitPath.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initialization command is registered in configuration file!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initialization command is registered in configuration file!"));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initalization command set in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initalization command set in configuration file!."));
     }
-    
+
     const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
                                .arg(mysqldInitPath)
                                .arg(getcurrentAccountUserName())
@@ -472,10 +451,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     QSqlDatabase::removeDatabase( initCon );
 
+    databaseServerStateEnum = running;
+
     return result;
 }
 
-/*
+/**
  * Creates the initial database for the internal server instance.
  */
 DatabaseServerError DatabaseServer::createDatabase()
@@ -528,13 +509,13 @@ DatabaseServerError DatabaseServer::createDatabase()
 
     QSqlDatabase::removeDatabase( initCon );
 
+    databaseServerStateEnum = started;
+
     return DatabaseServerError(DatabaseServerError::NoErrors, QString());
 }
 
-/*
+/**
  * Terminates the databaser server process.
- * TODO: Ensure that no other digikam application is using this dbms. Keep the server alive.
- * Maybe this can be done by DBUS communication or an PID file.
  */
 void DatabaseServer::stopDatabaseProcess()
 {
@@ -547,12 +528,12 @@ void DatabaseServer::stopDatabaseProcess()
     d->databaseProcess->waitForFinished();
     d->databaseProcess->~QProcess();
     d->databaseProcess  = 0;
-    d->pollThread->stop = true;
-    d->pollThread->wait();
     d->app->exit(0);
+
+    databaseServerStateEnum = stopped;
 }
 
-/*
+/**
  * Returns true if the server process is running.
  */
 bool DatabaseServer::isRunning()
@@ -562,10 +543,12 @@ bool DatabaseServer::isRunning()
         return false;
     }
 
+    databaseServerStateEnum = running;
+
     return (d->databaseProcess->state() == QProcess::Running);
 }
 
-/*
+/**
  * Return the current user account name
  */
 QString DatabaseServer::getcurrentAccountUserName() const
