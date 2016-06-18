@@ -327,7 +327,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         QProcess initProcess;
         initProcess.start( mysqlInitCmd );
 
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << initProcess.program() << initProcess.arguments();
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database initializer: " << initProcess.program() << initProcess.arguments();
 
         if ( !initProcess.waitForFinished() || initProcess.exitCode() != 0)
         {
@@ -345,10 +345,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         }
     }
 
+    // Start the database server
+
     d->databaseProcess = new QProcess();
     d->databaseProcess->start( mysqldPath, arguments );
 
-    qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->program() << d->databaseProcess->arguments();
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database server: " << d->databaseProcess->program() << d->databaseProcess->arguments();
 
     if ( !d->databaseProcess->waitForStarted() || d->databaseProcess->exitCode() != 0)
     {
