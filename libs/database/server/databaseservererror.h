@@ -44,17 +44,17 @@ public:
     enum DatabaseServerErrorEnum
     {
         /**
-         * No errors occurred while starting the dbms
+         * No errors occurred while starting the database server
          */
         NoErrors = 0,
 
         /**
-         * The requested dbms type is not supported.
+         * The requested database type is not supported.
          */
         NotSupported,
 
         /**
-         * A error has occurred while starting the dbms executable.
+         * A error has occurred while starting the database server executable.
          */
         StartError
     };

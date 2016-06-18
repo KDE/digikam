@@ -48,7 +48,7 @@ public:
      */
     static DatabaseServerStarter* instance();
 
-    DatabaseServerError startServerManagerProcess(const QString& dbType = DbEngineParameters::MySQLDatabaseType()) const;
+    DatabaseServerError startServerManagerProcess() const;
     void                stopServerManagerProcess();
 
 private:

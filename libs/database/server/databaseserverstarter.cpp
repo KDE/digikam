@@ -93,7 +93,7 @@ DatabaseServerStarter* DatabaseServerStarter::instance()
     return &databaseServerStarterCreator->object;
 }
 
-DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString& dbType) const
+DatabaseServerError DatabaseServerStarter::startServerManagerProcess() const
 {
     DatabaseServerError result;
 
@@ -104,7 +104,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
 
     result = d->internalServer->startDatabaseProcess();
 
-    if (!result.getErrorType() == DatabaseServerError::StartError)
+    if (result.getErrorType() != DatabaseServerError::StartError)
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot start internal database server";
     }

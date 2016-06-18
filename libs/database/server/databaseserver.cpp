@@ -352,7 +352,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << initProcess.readAllStandardOutput();
 
-            QString  str = i18n("Could not start database init command.\n"
+            QString  str = i18n("Could not start database initializer.\n"
                                 "Executable: %1\n"
                                 "Arguments: %2\n"
                                 "Process error: %3",

@@ -182,7 +182,7 @@ void SetupDatabase::applySettings()
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql Internal DB config...";
                 settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
                 settings->saveSettings();
-                DatabaseServerStarter::instance()->startServerManagerProcess(d->databaseWidget->databaseBackend());
+                DatabaseServerStarter::instance()->startServerManagerProcess();
             }
             break;
         }

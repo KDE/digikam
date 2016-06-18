@@ -92,7 +92,7 @@ void DatabaseTagsTest::initTestCase()
 
     DbEngineParameters params = DbEngineParameters::defaultParameters(QLatin1String("QMYSQL"));
     params.setInternalServerPath(dbPath);
-    DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
+    DatabaseServerStarter::startServerManagerProcess();
 
     bool dbChangeGood = AlbumManager::instance()->setDatabase(params, false,
                         QDir::temp().absoluteFilePath(tempSuffix));
