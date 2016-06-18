@@ -313,7 +313,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         QFile(dataDir + QDir::separator() + QString::fromLatin1( "ib_logfile1" )).remove();
     }
 
-    // Synthesize the mysqld command
+    // Synthesize the server command line arguments
 
     QStringList arguments;
     arguments << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( defaultAkDir );
