@@ -174,27 +174,47 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if (!QFile::exists(defaultAkDir))
     {
-        QDir().mkpath(defaultAkDir);
+        if (!QDir().mkpath(defaultAkDir))
+        {
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << defaultAkDir;
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", defaultAkDir));
+        }
     }
 
     if (!QFile::exists(akDir))
     {
-        QDir().mkpath(akDir);
+        if (!QDir().mkpath(akDir))
+        {
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << akDir;
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", akDir));
+        }
     }
 
     if (!QFile::exists(dataDir))
     {
-        QDir().mkpath(dataDir);
+        if (!QDir().mkpath(dataDir))
+        {
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << dataDir;
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", dataDir));
+        }
     }
 
     if (!QFile::exists(miscDir))
     {
-        QDir().mkpath(miscDir);
+        if (!QDir().mkpath(miscDir))
+        {
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << miscDir;
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", miscDir));
+        }
     }
 
     if (!QFile::exists(fileDataDir))
     {
-        QDir().mkpath(fileDataDir);
+        if (!QDir().mkpath(fileDataDir))
+        {
+            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << fileDataDir;
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", fileDataDir));
+        }
     }
 
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
