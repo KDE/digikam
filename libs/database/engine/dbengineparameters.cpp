@@ -150,7 +150,7 @@ DbEngineParameters::DbEngineParameters(const QUrl& url)
     {
         internalServerDBPath = internalServerPrivatePath();
     }
-    
+
     internalServerMysqlServCmd = QUrlQuery(url).queryItemValue(QLatin1String("internalServerMysqlServCmd"));
     internalServerMysqlInitCmd = QUrlQuery(url).queryItemValue(QLatin1String("internalServerMysqlInitCmd"));
 #else
@@ -374,7 +374,9 @@ void DbEngineParameters::setInternalServerPath(const QString& path)
 
 QString DbEngineParameters::internalServerPath() const
 {
-    return internalServerDBPath;
+    QFileInfo fileInfo(internalServerDBPath);
+
+    return QDir::cleanPath(fileInfo.filePath());
 }
 
 void DbEngineParameters::setCoreDatabasePath(const QString& folderOrFileOrName)
