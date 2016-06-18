@@ -677,7 +677,7 @@ QString DbEngineParameters::defaultMysqlServerCmd()
 
 #ifdef Q_OS_WIN32
     // Under windows, mysqld_safe do not exists.
-    servName = QLatin1String("mysqld");
+    servName = QLatin1String("mysqld.exe");
 #endif
 
 #ifdef Q_OS_MAC
