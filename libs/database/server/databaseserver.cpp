@@ -132,9 +132,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << internalServerParameters;
 
-    const QString mysqldPath = internalServerParameters.internalServerMysqlServCmd;
+    const QString mysqldCmd = internalServerParameters.internalServerMysqlServCmd;
 
-    if ( mysqldPath.isEmpty() )
+    if ( mysqldCmd.isEmpty() )
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server comand set in configuration file!";
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server comand set in configuration file!"));
@@ -168,10 +168,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initalization command set in configuration file!."));
     }
 
-    const QString mysqlInitCmd(QString::fromLatin1("%1 --user=%2 --datadir=%3")
-                               .arg(mysqldInitPath)
-                               .arg(getcurrentAccountUserName())
-                               .arg(dataDir));
+    QStringList mysqlInitCmdArgs;
+    mysqlInitCmdArgs << QString::fromLatin1( "--user=%1" ).arg( getcurrentAccountUserName() );
+    mysqlInitCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( dataDir );
 
     if (!QFile::exists(defaultAkDir))
     {
@@ -315,17 +314,17 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // Synthesize the server command line arguments
 
-    QStringList arguments;
-    arguments << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( defaultAkDir );
-    arguments << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
-    arguments << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
+    QStringList mysqldCmdArgs;
+    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( defaultAkDir );
+    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
+    mysqldCmdArgs << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
 
     // Initialize the database
 
     if (!QFile(dataDir + QDir::separator() + QLatin1String("mysql")).exists())
     {
         QProcess initProcess;
-        initProcess.start( mysqlInitCmd );
+        initProcess.start( mysqldInitPath, mysqlInitCmdArgs );
 
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database initializer: " << initProcess.program() << initProcess.arguments();
 
@@ -335,8 +334,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
             QString  str = i18n("Could not start database init command.\n"
                                 "Executable: %1\n"
-                                "Process error:%2",
-                                mysqlInitCmd,
+                                "Arguments: %2\n"
+                                "Process error: %3",
+                                initProcess.program(),
+                                initProcess.arguments().join(QLatin1Char(',')),
                                 initProcess.errorString());
 
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
@@ -348,7 +349,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Start the database server
 
     d->databaseProcess = new QProcess();
-    d->databaseProcess->start( mysqldPath, arguments );
+    d->databaseProcess->start( mysqldCmd, mysqldCmdArgs );
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database server: " << d->databaseProcess->program() << d->databaseProcess->arguments();
 
@@ -356,10 +357,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->readAllStandardOutput();
 
-        QString argumentStr = arguments.join(QLatin1String(", "));
+        QString argumentStr = mysqldCmdArgs.join(QLatin1String(", "));
         QString  str        = i18n("Could not start database server.");
-        str                += i18n("<p>Executable: %1</p>",    mysqldPath);
-        str                += i18n("<p>Arguments: %1</p>",     argumentStr);
+        str                += i18n("<p>Executable: %1</p>",    d->databaseProcess->program());
+        str                += i18n("<p>Arguments: %1</p>",     d->databaseProcess->arguments().join(QLatin1Char(',')));
         str                += i18n("<p>Process error: %1</p>", d->databaseProcess->errorString());
 
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
@@ -397,8 +398,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
             if ( d->databaseProcess->waitForFinished( 500 ) )
             {
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database process exited unexpectedly during initial connection!";
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "executable: "    << mysqldPath;
-                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "arguments: "     << arguments;
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "executable: "    << d->databaseProcess->program();
+                qCDebug(DIGIKAM_DATABASESERVER_LOG) << "arguments: "     << d->databaseProcess->arguments().join(QLatin1Char(','));
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "stdout: "        << d->databaseProcess->readAllStandardOutput();
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "stderr: "        << d->databaseProcess->readAllStandardError();
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "exit code: "     << d->databaseProcess->exitCode();
@@ -406,8 +407,10 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
                 QString str = i18n("Database process exited unexpectedly during initial connection."
                                    "<p>Executable: %1</p>”"
-                                   "<p>Process error: %2</p>",
-                                   mysqldPath,
+                                   "<p>Arguments: %2</p>”"
+                                   "<p>Process error: %3</p>",
+                                   d->databaseProcess->program(),
+                                   d->databaseProcess->arguments().join(QLatin1Char(',')),
                                    d->databaseProcess->errorString());
 
                 return DatabaseServerError(DatabaseServerError::StartError, str);
