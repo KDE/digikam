@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "digikam_export.h"
 #include "dbinaryiface.h"
 
 namespace Digikam
@@ -39,7 +40,7 @@ namespace Digikam
 /**
  * This class has nothing to do with a binary search, it is a widget to search for binaries.
  */
-class DBinarySearch : public QTreeWidget
+class DIGIKAM_EXPORT DBinarySearch : public QTreeWidget
 {
     Q_OBJECT
 

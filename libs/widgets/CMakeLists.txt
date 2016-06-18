@@ -33,6 +33,8 @@ set(libcommonwidgets_SRCS
     common/workingwidget.cpp
     common/drawdecoderwidget.cpp
     common/dwidgetutils.cpp
+    common/dbinarysearch.cpp
+    common/dbinaryiface.cpp
     common/squeezedcombobox.cpp
 )
 

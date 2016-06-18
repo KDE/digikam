@@ -35,28 +35,32 @@
 #include <QGridLayout>
 #include <QUrl>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class DBinaryIface : public QObject
+class DIGIKAM_EXPORT DBinaryIface : public QObject
 {
     Q_OBJECT
 
 public:
 
     DBinaryIface(const QString& binaryName,
-                  const QString& projectName,
-                  const QString& url,
-                  const QString& pluginName,
-                  const QStringList& args = QStringList());
+                 const QString& projectName,
+                 const QString& url,
+                 const QString& pluginName,
+                 const QStringList& args = QStringList());
     DBinaryIface(const QString& binaryName,
-                  const QString& minimalVersion,
-                  const QString& header,
-                  const int headerLine,
-                  const QString& projectName,
-                  const QString& url,
-                  const QString& pluginName,
-                  const QStringList& args = QStringList());
+                 const QString& minimalVersion,
+                 const QString& header,
+                 const int headerLine,
+                 const QString& projectName,
+                 const QString& url,
+                 const QString& pluginName,
+                 const QStringList& args = QStringList());
     virtual ~DBinaryIface();
 
     bool                isFound()                   const { return m_isFound;                       }
