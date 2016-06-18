@@ -93,37 +93,28 @@ DatabaseServerStarter* DatabaseServerStarter::instance()
     return &databaseServerStarterCreator->object;
 }
 
-DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString& dbType)
+DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QString& dbType) const
 {
     DatabaseServerError result;
 
     d->internalServer = new DatabaseServer();
 
-    if (dbType == DbEngineParameters::MySQLDatabaseType())
+    QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
+    sem.acquire();
+
+    result = d->internalServer->startDatabaseProcess();
+
+    if (!result.getErrorType() == DatabaseServerError::StartError)
     {
-        QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
-        sem.acquire();
-
-        bool processResult = d->internalServer->startDatabaseProcess();
-
-        if (!processResult)
-        {
-            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot start internal database server";
-            result.setErrorType(DatabaseServerError::StartError);
-        }
-        else
-        {
-            qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal database server started";
-            d->internalServer->start();
-            result.setErrorType(DatabaseServerError::NoErrors);
-        }
-
-        sem.release();
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot start internal database server";
     }
     else
     {
-        result.setErrorType(DatabaseServerError::NotSupported);
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal database server started";
+        d->internalServer->start();
     }
+
+    sem.release();
 
     return result;
 }

@@ -97,40 +97,33 @@ void DatabaseServer::run()
     emit done();
 }
 
-/**
- * Starts the database management server.
- */
-bool DatabaseServer::startDatabaseProcess()
+DatabaseServerError DatabaseServer::startDatabaseProcess()
 {
     DatabaseServerError error;
 
     if (DbEngineParameters::MySQLDatabaseType() == QLatin1String("QMYSQL"))
     {
-        // return QVariant::fromValue(startMYSQLDatabaseProcess());
         error = startMYSQLDatabaseProcess();
 
         if (error.getErrorType() == DatabaseServerError::StartError)
         {
             databaseServerStateEnum = notRunning;
-            return false;
         }
-
-        databaseServerStateEnum = running;
-        return true;
+        else
+        {
+            databaseServerStateEnum = running;
+        }
     }
     else
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "This DB type is not supported.";
-        DatabaseServerError errorDetails(DatabaseServerError::NotSupported, QString::fromUtf8("DBType is not supported."));
-        error                   = errorDetails;
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "This database type is not supported.";
+        error                   = DatabaseServerError(DatabaseServerError::NotSupported, QString::fromUtf8("Database type is not supported."));
         databaseServerStateEnum = notRunning;
-        return false;
     }
+
+    return error;
 }
 
-/**
- * Init and Starts Mysql server.
- */
 DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 {
     DatabaseServerError result;
@@ -488,9 +481,6 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     return result;
 }
 
-/**
- * Creates the initial database for the internal server instance.
- */
 DatabaseServerError DatabaseServer::createDatabase()
 {
     const QLatin1String initCon("initConnection");
@@ -546,9 +536,6 @@ DatabaseServerError DatabaseServer::createDatabase()
     return DatabaseServerError(DatabaseServerError::NoErrors, QString());
 }
 
-/**
- * Terminates the databaser server process.
- */
 void DatabaseServer::stopDatabaseProcess()
 {
     if ( !d->databaseProcess )
@@ -565,24 +552,16 @@ void DatabaseServer::stopDatabaseProcess()
     databaseServerStateEnum = stopped;
 }
 
-/**
- * Returns true if the server process is running.
- */
-bool DatabaseServer::isRunning()
+bool DatabaseServer::isRunning() const
 {
     if (d->databaseProcess == 0)
     {
         return false;
     }
 
-    databaseServerStateEnum = running;
-
-    return (d->databaseProcess->state() == QProcess::Running);
+    return (databaseServerStateEnum == running);
 }
 
-/**
- * Return the current user account name
- */
 QString DatabaseServer::getcurrentAccountUserName() const
 {
     QString name = QString::fromUtf8(qgetenv("USER"));   // Linux and OSX

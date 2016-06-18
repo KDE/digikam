@@ -62,25 +62,44 @@ public:
     explicit DatabaseServer(QCoreApplication* const application = 0);
     virtual ~DatabaseServer();
 
-    DatabaseServerError createDatabase();
-    DatabaseServerError startMYSQLDatabaseProcess();
+    /**
+     * Starts the database management server.
+     */
+    DatabaseServerError startDatabaseProcess();
 
-protected :
-
-    void run();
-
-public Q_SLOTS:
-
-    bool startDatabaseProcess();
+    /**
+     * Terminates the databaser server process.
+     */
     void stopDatabaseProcess();
-    bool isRunning();
+
+    /**
+     * Returns true if the server process is running.
+     */
+    bool isRunning() const;
 
 Q_SIGNALS:
 
     void done();
 
+protected :
+
+    void run();
+
 private:
 
+    /**
+     * Init and Starts Mysql server.
+     */
+    DatabaseServerError startMYSQLDatabaseProcess();
+
+    /**
+     * Creates the initial database for the internal server instance.
+     */
+    DatabaseServerError createDatabase();
+
+    /**
+     * Return the current user account name.
+     */
     QString getcurrentAccountUserName() const;
 
 private:
