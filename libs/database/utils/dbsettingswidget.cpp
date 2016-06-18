@@ -226,7 +226,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                            DbEngineParameters::defaultMysqlServerCmd()));
 
     QLabel* const mysqlInitCmdLabel   = new QLabel(d->mysqlCmdBox);
-    mysqlInitCmdLabel->setText(i18n("Path to Mysql database initialization Perl script:"));
+    mysqlInitCmdLabel->setText(i18n("Path to Mysql database initializer:"));
     d->mysqlInitCmdEdit = new DFileSelector(d->mysqlCmdBox);
     d->mysqlInitCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
     d->mysqlInitCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlInitCmd());
