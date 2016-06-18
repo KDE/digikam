@@ -108,6 +108,13 @@ bool DatabaseServer::startDatabaseProcess()
     {
         // return QVariant::fromValue(startMYSQLDatabaseProcess());
         error = startMYSQLDatabaseProcess();
+
+        if (error.getErrorType() == DatabaseServerError::StartError)
+        {
+            databaseServerStateEnum = notRunning;
+            return false;
+        }
+
         databaseServerStateEnum = running;
         return true;
     }
@@ -169,8 +176,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     }
 
     QStringList mysqlInitCmdArgs;
-    mysqlInitCmdArgs << QString::fromLatin1( "--user=%1" ).arg( getcurrentAccountUserName() );
-    mysqlInitCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( dataDir );
+    mysqlInitCmdArgs << QString::fromLatin1( "--user=\"%1\"" ).arg( getcurrentAccountUserName() );
+    mysqlInitCmdArgs << QString::fromLatin1( "--datadir=\"%1\"" ).arg( dataDir );
 
     if (!QFile::exists(defaultAkDir))
     {
@@ -335,16 +342,16 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Synthesize the server command line arguments
 
     QStringList mysqldCmdArgs;
-    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1" ).arg( QDir::cleanPath(QFileInfo(defaultAkDir + QLatin1String("/mysql.conf")).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::cleanPath(QFileInfo(dataDir + QLatin1String("/")).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--socket=%1" ).arg( QDir::cleanPath(QFileInfo(miscDir + QLatin1String("/mysql.socket")).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=\"%1\"" ).arg( QDir::cleanPath(QFileInfo(defaultAkDir + QLatin1String("/mysql.conf")).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--datadir=\"%1\"" ).arg( QDir::cleanPath(QFileInfo(dataDir + QLatin1String("/")).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--socket=\"%1\"" ).arg( QDir::cleanPath(QFileInfo(miscDir + QLatin1String("/mysql.socket")).filePath()) );
 
     // Initialize the database
 
     if (!QFile(dataDir + QDir::separator() + QLatin1String("mysql")).exists())
     {
         QProcess initProcess;
-        initProcess.start( mysqldInitPath, mysqlInitCmdArgs );
+        initProcess.start( QLatin1String("\"") + mysqldInitPath + QLatin1String("\""), mysqlInitCmdArgs );
 
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database initializer: " << initProcess.program() << initProcess.arguments();
 
@@ -369,7 +376,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Start the database server
 
     d->databaseProcess = new QProcess();
-    d->databaseProcess->start( mysqldCmd, mysqldCmdArgs );
+    d->databaseProcess->start( QLatin1String("\"") + mysqldCmd + QLatin1String("\""), mysqldCmdArgs );
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database server: " << d->databaseProcess->program() << d->databaseProcess->arguments();
 

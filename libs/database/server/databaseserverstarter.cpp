@@ -103,7 +103,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const QStri
     {
         QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
         sem.acquire();
-        
+
         bool processResult = d->internalServer->startDatabaseProcess();
 
         if (!processResult)
