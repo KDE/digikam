@@ -335,9 +335,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Synthesize the server command line arguments
 
     QStringList mysqldCmdArgs;
-    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1/mysql.conf" ).arg( defaultAkDir );
-    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1/" ).arg( dataDir );
-    mysqldCmdArgs << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( miscDir );
+    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1" ).arg( QDir::cleanPath(QFileInfo(defaultAkDir + QLatin1String("/mysql.conf")).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::cleanPath(QFileInfo(dataDir + QLatin1String("/")).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--socket=%1" ).arg( QDir::cleanPath(QFileInfo(miscDir + QLatin1String("/mysql.socket")).filePath()) );
 
     // Initialize the database
 
@@ -395,7 +395,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     {
         QSqlDatabase db = QSqlDatabase::addDatabase( DbEngineParameters::MySQLDatabaseType(), initCon );
-        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
+        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg( QDir::cleanPath(QFileInfo(miscDir + QLatin1String("/mysql.socket")).filePath()) ));
         db.setUserName(QLatin1String("root"));
         db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
 
