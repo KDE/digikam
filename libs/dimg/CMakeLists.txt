@@ -83,6 +83,7 @@ set(libdimgfilters_SRCS
     filters/sharp/sharpenfilter.cpp
     filters/sharp/unsharpmaskfilter.cpp
     filters/sharp/sharpsettings.cpp
+    filters/sharp/redeyecorrectionfilter.cpp
     filters/levels/imagelevels.cpp
     filters/levels/levelsfilter.cpp
     filters/levels/imagehistogram.cpp

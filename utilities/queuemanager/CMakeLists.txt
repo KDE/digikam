@@ -36,6 +36,7 @@ set(libqueuemanager_SRCS
     basetools/enhance/noisereduction.cpp
     basetools/enhance/restoration.cpp
     basetools/enhance/sharpen.cpp
+    basetools/enhance/redeyecorrection.cpp
     basetools/filters/filmgrain.cpp
     basetools/filters/colorfx.cpp
     basetools/metadata/assigntemplate.cpp
