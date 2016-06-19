@@ -337,7 +337,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     QStringList mysqldCmdArgs;
     mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1" ).arg( QDir::cleanPath(QFileInfo(defaultAkDir).filePath()) );
     mysqldCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::cleanPath(QFileInfo(dataDir).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--socket=%1" ).arg( QDir::cleanPath(QFileInfo(miscDir).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( QDir::cleanPath(QFileInfo(miscDir).filePath()) );
 
     // Initialize the database
 
