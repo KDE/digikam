@@ -136,8 +136,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( mysqldCmd.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server comand set in configuration file!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server comand set in configuration file!"));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server command set in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server command set in configuration file!"));
     }
 
     // Create the database directories if they don't exists
@@ -164,8 +164,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( mysqldInitPath.isEmpty() )
     {
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initalization command set in configuration file!";
-        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initalization command set in configuration file!."));
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initialization command set in configuration file!";
+        return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initialization command set in configuration file!."));
     }
 
     QStringList mysqlInitCmdArgs;
