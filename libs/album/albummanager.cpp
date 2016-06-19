@@ -2199,7 +2199,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         child = static_cast<PAlbum*>(child->m_next);
     }
 
-    CoreDbUrl url = parent->databaseUrl();
+    CoreDbUrl url   = parent->databaseUrl();
     url             = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + QLatin1Char('/') + name);
     QUrl fileUrl    = url.fileUrl();

@@ -1333,7 +1333,7 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
         {
             QString msg(i18nc("@info", "<qt>Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<br>"
                              "Please enter a new filename (without extension):</qt>",
-                             cameraFolder, fi.fileName()));
+                             QDir::toNativeSeparators(cameraFolder), fi.fileName()));
             uploadInfo.name = QInputDialog::getText(this,
                                                     i18nc("@title:window", "File already exists"),
                                                     msg,
@@ -2445,7 +2445,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
         else
         {
             errMsg = i18nc("@info", "A file with the same name (<b>%1</b>) already exists in folder <resource>%2</resource>.",
-                          sub, parentURL.toLocalFile());
+                          sub, QDir::toNativeSeparators(parentURL.toLocalFile()));
             return false;
         }
     }
@@ -2456,7 +2456,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
 
     if (!parent)
     {
-        errMsg = i18nc("@info", "Failed to find Album for path <b>%1</b>.", parentURL.toLocalFile());
+        errMsg = i18nc("@info", "Failed to find Album for path <b>%1</b>.", QDir::toNativeSeparators(parentURL.toLocalFile()));
         return false;
     }
 

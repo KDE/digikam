@@ -219,7 +219,7 @@ KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
 
     foreach(const QUrl& item, urls)
     {
-        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.path(), QMimeDatabase::MatchExtension).name();
+        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.toLocalFile(), QMimeDatabase::MatchExtension).name();
 
         if (!mimeTypes.contains(mimeType))
         {

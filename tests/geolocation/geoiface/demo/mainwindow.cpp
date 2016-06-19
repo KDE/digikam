@@ -386,7 +386,7 @@ MyImageData LoadImageData(const QUrl& urlToLoad)
 
     // TODO: error handling!
     DMetadata meta;
-    meta.load(urlToLoad.path());
+    meta.load(urlToLoad.toLocalFile());
     double lat, lon, alt;
 
     if (meta.getGPSInfo(alt, lat, lon))

@@ -329,7 +329,7 @@ ImageInfo ImageInfo::fromLocalFile(const QString& path)
     }
 
     QUrl url      = QUrl::fromLocalFile(path);
-    QString album = CollectionManager::instance()->album(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path());
+    QString album = CollectionManager::instance()->album(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile());
     QString name  = url.fileName();
 
     return fromLocationAlbumAndName(location.id(), album, name);

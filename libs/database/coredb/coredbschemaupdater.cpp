@@ -354,7 +354,7 @@ bool CoreDbSchemaUpdater::beginWrapSchemaUpdateStep()
                                 "other process has currently locked the file. "
                                 "If the problem persists you can get help from the digikam-devel@kde.org "
                                 "mailing list. As well, please have a look at what digiKam prints on the console. ",
-                                currentDBFile.filePath());
+                                QDir::toNativeSeparators(currentDBFile.filePath()));
         d->observer->error(errorMsg);
         d->observer->finishedSchemaUpdate(InitializationObserver::UpdateErrorMustAbort);
         return false;
@@ -415,7 +415,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
                                     "mailing list. As well, please have a look at what digiKam prints on the console. ",
                                     QLatin1String("digikam3.db"),
                                     QLatin1String("digikam4.db"),
-                                    currentDBFile.dir().path());
+                                    QDir::toNativeSeparators(currentDBFile.dir().path()));
 
             if (!endWrapSchemaUpdateStep(updateV4toV7(), errorMsg))
             {

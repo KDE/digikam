@@ -604,7 +604,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
                                QString::number(QCoreApplication::applicationPid());
             QUrl tempURL     = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename |
                                                                   QUrl::StripTrailingSlash);
-            QString temp     = tempURL.path() + tempFile.arg(1) + file;
+            QString temp     = tempURL.toLocalFile() + tempFile.arg(1) + file;
 
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Downloading: " << file << " using " << temp;
 
@@ -685,7 +685,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
                 if (convertJpeg)
                 {
-                    QString temp2 = tempURL.path() + tempFile.arg(2) + file;
+                    QString temp2 = tempURL.toLocalFile() + tempFile.arg(2) + file;
 
                     // When converting a file, we need to set the new format extension..
                     // The new extension is already set in importui.cpp.
@@ -711,7 +711,7 @@ void CameraController::executeCommand(CameraCommand* const cmd)
             }
             else if (convertDng && mime == QLatin1String("image/x-raw"))
             {
-                QString temp2 = tempURL.path() + tempFile.arg(2) + file;
+                QString temp2 = tempURL.toLocalFile() + tempFile.arg(2) + file;
 
                 DNGWriter dngWriter;
 

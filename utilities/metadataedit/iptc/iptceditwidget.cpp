@@ -239,7 +239,7 @@ void IPTCEditWidget::slotItemChanged()
                       "<i>Use this panel to record editorial details</i></qt>")));
 
     DMetadata meta;
-    meta.load((*d->dlg->currentItem()).path());
+    meta.load((*d->dlg->currentItem()).toLocalFile());
 
     d->exifData = meta.getExifEncoded();
     d->iptcData = meta.getIptc();
@@ -253,7 +253,7 @@ void IPTCEditWidget::slotItemChanged()
     d->propertiesPage->readMetadata(d->iptcData);
     d->envelopePage->readMetadata(d->iptcData);
 
-    d->isReadOnly = !DMetadata::canWriteIptc((*d->dlg->currentItem()).path());
+    d->isReadOnly = !DMetadata::canWriteIptc((*d->dlg->currentItem()).toLocalFile());
     emit signalSetReadOnly(d->isReadOnly);
 
     d->page_content->setEnabled(!d->isReadOnly);
@@ -283,10 +283,10 @@ void IPTCEditWidget::apply()
 
         DMetadata meta;
 
-        meta.load((*d->dlg->currentItem()).path());
+        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
-        meta.save((*d->dlg->currentItem()).path());
+        meta.save((*d->dlg->currentItem()).toLocalFile());
         d->modified = false;
     }
 }

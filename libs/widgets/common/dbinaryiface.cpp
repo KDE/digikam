@@ -180,24 +180,24 @@ void DBinaryIface::slotNavigateAndCheck()
 
     if (isValid() && !m_pathDir.isEmpty())
     {
-        start = QUrl(m_pathDir);
+        start = QUrl::fromLocalFile(m_pathDir);
     }
     else
     {
 #if defined Q_OS_MAC
-        start = QUrl(QLatin1String("/Applications/"));
+        start = QUrl::fromLocalFile(QLatin1String("/Applications/"));
 #elif defined Q_OS_WIN
-        start = QUrl(QLatin1String("C:/Program Files/"));
+        start = QUrl::fromLocalFile(QLatin1String("C:/Program Files/"));
 #else
-        start = QUrl(QLatin1String("/usr/bin/"));
+        start = QUrl::fromLocalFile(QLatin1String("/usr/bin/"));
 #endif
     }
 
     QString f = QFileDialog::getOpenFileName(0, i18n("Navigate to %1", m_binaryBaseName),
-                                             start.path(),
+                                             start.toLocalFile(),
                                              m_binaryBaseName);
 
-    QString dir = QUrl(f).adjusted(QUrl::RemoveFilename).path();
+    QString dir = QUrl::fromLocalFile(f).adjusted(QUrl::RemoveFilename).toLocalFile();
     m_searchPaths << dir;
 
     if (checkDir(dir))

@@ -350,7 +350,7 @@ void PresentationAudioPage::slotSoundFilesButtonAdd()
 {
     QPointer<QFileDialog> dlg = new QFileDialog(this,
                                                 i18n("Select sound files"),
-                                                d->sharedData->soundtrackPath.adjusted(QUrl::RemoveFilename).path());
+                                                d->sharedData->soundtrackPath.adjusted(QUrl::RemoveFilename).toLocalFile());
 
     QStringList atm;
     atm << QLatin1String("audio/mp3");

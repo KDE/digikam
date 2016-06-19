@@ -232,9 +232,9 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     }
 
     KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QString::fromLatin1("UTC")));
-    KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.path(), new KCalCore::ICalFormat));
+    KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.path();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.toLocalFile();
 
     if (!fileStorage->load())
     {

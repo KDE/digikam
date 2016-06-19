@@ -232,7 +232,7 @@ void XMPEditWidget::slotItemChanged()
                       "<i>Use this panel to record workflow properties</i></qt>")));
 
     DMetadata meta;
-    meta.load((*d->dlg->currentItem()).path());
+    meta.load((*d->dlg->currentItem()).toLocalFile());
 
     d->exifData = meta.getExifEncoded();
     d->iptcData = meta.getIptc();
@@ -247,7 +247,7 @@ void XMPEditWidget::slotItemChanged()
     d->statusPage->readMetadata(d->xmpData);
     d->propertiesPage->readMetadata(d->xmpData);
 
-    d->isReadOnly = !DMetadata::canWriteXmp((*d->dlg->currentItem()).path());
+    d->isReadOnly = !DMetadata::canWriteXmp((*d->dlg->currentItem()).toLocalFile());
     emit signalSetReadOnly(d->isReadOnly);
 
     d->page_content->setEnabled(!d->isReadOnly);
@@ -275,11 +275,11 @@ void XMPEditWidget::apply()
 
         DMetadata meta;
 
-        meta.load((*d->dlg->currentItem()).path());
+        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.setXmp(d->xmpData);
-        meta.save((*d->dlg->currentItem()).path());
+        meta.save((*d->dlg->currentItem()).toLocalFile());
         d->modified = false;
     }
 }

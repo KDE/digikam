@@ -502,7 +502,7 @@ void ImagePropertiesTab::setCurrentURL(const QUrl& url)
     setEnabled(true);
 
     d->labelFile->setAdjustedText(url.fileName());
-    d->labelFolder->setAdjustedText(QDir::toNativeSeparators(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
+    d->labelFolder->setAdjustedText(QDir::toNativeSeparators(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile()));
 }
 
 void ImagePropertiesTab::setPhotoInfoDisable(const bool b)

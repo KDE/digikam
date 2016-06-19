@@ -426,11 +426,11 @@ void DImagesListView::dropEvent(QDropEvent* e)
 
     foreach(const QUrl& url, list)
     {
-        QFileInfo fi(url.path());
+        QFileInfo fi(url.toLocalFile());
 
         if (fi.isFile() && fi.exists())
         {
-            urls.append(QUrl(url));
+            urls.append(url);
         }
     }
 
@@ -973,9 +973,9 @@ void DImagesList::slotLoadItems()
         return;
     }
 
-    QFile file(loadLevelsFile.path());
+    QFile file(loadLevelsFile.toLocalFile());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "file path " << loadLevelsFile.path();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "file path " << loadLevelsFile.toLocalFile();
 
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -1042,7 +1042,7 @@ void DImagesList::slotSaveItems()
         return;
     }
 
-    QFile file(saveLevelsFile.path());
+    QFile file(saveLevelsFile.toLocalFile());
 
     if (!file.open(QIODevice::WriteOnly))
     {

@@ -3046,7 +3046,7 @@ void DImg::prepareMetadataToSave(const QString& intendedDestPath, const QString&
         forSaving.adjustReferredImages();
 
         QUrl url         = QUrl::fromLocalFile(intendedDestPath);
-        QString filePath = url.adjusted(QUrl::RemoveFilename).path() + QLatin1String("/");
+        QString filePath = url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile() + QLatin1Char('/');
         QString fileName = url.fileName();
 
         if (!filePath.isEmpty() && !fileName.isEmpty())

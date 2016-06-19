@@ -232,7 +232,7 @@ bool WorkflowManager::save()
             elm.appendChild(data);
 
             data = doc.createElement(QString::fromLatin1("workingurl"));
-            data.setAttribute(QString::fromLatin1("value"), q.qSettings.workingUrl.path());
+            data.setAttribute(QString::fromLatin1("value"), q.qSettings.workingUrl.toLocalFile());
             elm.appendChild(data);
 
             data = doc.createElement(QString::fromLatin1("conflictrule"));

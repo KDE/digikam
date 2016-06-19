@@ -693,7 +693,7 @@ void ShowFoto::slotUpdateItemInfo()
                      "%1 (%2 of %3)", d->thumbBar->currentInfo().name,
                      index, d->itemsNb);
 
-        setCaption(QDir::toNativeSeparators(d->thumbBar->currentUrl().adjusted(QUrl::RemoveFilename).path()));
+        setCaption(QDir::toNativeSeparators(d->thumbBar->currentUrl().adjusted(QUrl::RemoveFilename).toLocalFile()));
     }
     else
     {
@@ -728,8 +728,7 @@ void ShowFoto::slotOpenFilesInFolder()
     }
 
     QUrl url = QUrl::fromLocalFile(QFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
-                                                                     d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path()));
-
+                                                                     d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile()));
     if (!url.isEmpty())
     {
         d->lastOpenedDirectory = url;
@@ -1327,7 +1326,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
     foreach(const QUrl& url, list)
     {
-        QFileInfo fi(url.path());
+        QFileInfo fi(url.toLocalFile());
 
         if (fi.exists())
         {

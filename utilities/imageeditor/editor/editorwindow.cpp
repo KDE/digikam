@@ -2185,7 +2185,7 @@ VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl& url, boo
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
     return versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
                                        currentName, resolvedHistory, history);
 }
@@ -2195,8 +2195,8 @@ VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl& url, c
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path(), url.fileName(), m_canvas->currentImageFileFormat());
-    VersionFileInfo saveLocation(saveUrl.adjusted(QUrl::RemoveFilename).path(), saveUrl.fileName(), format);
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo saveLocation(saveUrl.adjusted(QUrl::RemoveFilename).toLocalFile(), saveUrl.fileName(), format);
     return versionManager()->operationNewVersionAs(currentName, saveLocation, resolvedHistory, history);
 }
 
@@ -2205,7 +2205,7 @@ VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl& 
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
     return versionManager()->operationNewVersionInFormat(currentName, format, resolvedHistory, history);
 }
 
