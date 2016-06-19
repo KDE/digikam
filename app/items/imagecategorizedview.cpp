@@ -517,7 +517,7 @@ void ImageCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 
     for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
-        const QString path = it->path();
+        const QString path = it->toLocalFile();
         const QModelIndex index = d->filterModel->indexForPath(path);
 
         if (!index.isValid())

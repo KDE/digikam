@@ -200,7 +200,7 @@ void MetadataEditDialog::updatePreview()
 {
     d->catcher->setActive(true);
 
-    d->catcher->thread()->find(ThumbnailIdentifier(d->currItem->path()));
+    d->catcher->thread()->find(ThumbnailIdentifier(d->currItem->toLocalFile()));
     d->catcher->enqueue();
     QList<QImage> images = d->catcher->waitForThumbnails();
 
