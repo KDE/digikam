@@ -170,14 +170,14 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     QStringList mysqlInitCmdArgs;
     mysqlInitCmdArgs << QString::fromLatin1( "--user=%1" ).arg( getcurrentAccountUserName() );
-    mysqlInitCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( dataDir );
+    mysqlInitCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::toNativeSeparators(dataDir) );
 
     if (!QFile::exists(defaultAkDir))
     {
         if (!QDir().mkpath(defaultAkDir))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << defaultAkDir;
-            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", defaultAkDir));
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", QDir::toNativeSeparators(defaultAkDir)));
         }
     }
 
@@ -186,7 +186,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         if (!QDir().mkpath(akDir))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << akDir;
-            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", akDir));
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", QDir::toNativeSeparators(akDir)));
         }
     }
 
@@ -195,7 +195,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         if (!QDir().mkpath(dataDir))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << dataDir;
-            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", dataDir));
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", QDir::toNativeSeparators(dataDir)));
         }
     }
 
@@ -204,7 +204,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         if (!QDir().mkpath(miscDir))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << miscDir;
-            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", miscDir));
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", QDir::toNativeSeparators(miscDir)));
         }
     }
 
@@ -213,7 +213,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         if (!QDir().mkpath(fileDataDir))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot create directory " << fileDataDir;
-            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", fileDataDir));
+            return DatabaseServerError(DatabaseServerError::StartError, i18n("Cannot create directory %1", QDir::toNativeSeparators(fileDataDir)));
         }
     }
 
@@ -335,9 +335,9 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Synthesize the server command line arguments
 
     QStringList mysqldCmdArgs;
-    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1" ).arg( QDir::cleanPath(QFileInfo(defaultAkDir).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::cleanPath(QFileInfo(dataDir).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( QDir::cleanPath(QFileInfo(miscDir).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1" ).arg( QDir::toNativeSeparators(QFileInfo(defaultAkDir).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::toNativeSeparators(QFileInfo(dataDir).filePath()) );
+    mysqldCmdArgs << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( QDir::toNativeSeparators(QFileInfo(miscDir).filePath()) );
 
     // Initialize the database
 
@@ -395,7 +395,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     {
         QSqlDatabase db = QSqlDatabase::addDatabase( DbEngineParameters::MySQLDatabaseType(), initCon );
-        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg( QDir::cleanPath(QFileInfo(miscDir).filePath()) ));
+        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg( QDir::toNativeSeparators(QFileInfo(miscDir).filePath()) ));
         db.setUserName(QLatin1String("root"));
         db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
 
