@@ -544,7 +544,14 @@ void DatabaseServer::stopDatabaseProcess()
     }
 
     d->databaseProcess->terminate();
-    d->databaseProcess->waitForFinished();
+
+    if (!d->databaseProcess->waitForFinished(10000))
+    {
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database process will be killed now";
+        d->databaseProcess->kill();
+        d->databaseProcess->waitForFinished();
+    }
+
     d->databaseProcess->~QProcess();
     d->databaseProcess  = 0;
     d->app->exit(0);
