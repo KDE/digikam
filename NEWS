@@ -246,4 +246,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 203 ==> 364116 - Uninstaller doesn't remove C:\Program Files.
 204 ==> 351016 - Crash in Windows when building finger-prints.
 205 ==> 123455 - Add support of Image Editor actions through DBUS.
-206 ==> 
+206 ==> 364333 - Random resets of several configuration values.
+207 ==> 
