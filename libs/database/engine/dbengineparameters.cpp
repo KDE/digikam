@@ -421,7 +421,7 @@ QString DbEngineParameters::coreDatabaseFileSQLite(const QString& folderOrFile)
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(digikam4db));
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(digikam4db));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -433,7 +433,7 @@ QString DbEngineParameters::thumbnailDatabaseFileSQLite(const QString& folderOrF
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(thumbnails_digikamdb));
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(thumbnails_digikamdb));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -445,7 +445,7 @@ QString DbEngineParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(face_digikamdb));
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(face_digikamdb));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -670,7 +670,7 @@ DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databa
 
 DbEngineParameters DbEngineParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
-    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + QLatin1String(digikam4db)));
+    return parametersForSQLite(QDir::cleanPath(directory + QLatin1Char('/') + QLatin1String(digikam4db)));
 }
 
 QString DbEngineParameters::defaultMysqlServerCmd()

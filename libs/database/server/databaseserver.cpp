@@ -304,12 +304,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // Move mysql error log file out of the way
 
-    const QFileInfo errorLog( dataDir + QDir::separator() + QString::fromLatin1( "mysql.err" ) );
+    const QFileInfo errorLog( dataDir + QLatin1Char('/') + QString::fromLatin1( "mysql.err" ) );
 
     if ( errorLog.exists() )
     {
         QFile logFile( errorLog.absoluteFilePath() );
-        QFile oldLogFile( dataDir + QDir::separator() + QString::fromLatin1( "mysql.err.old" ) );
+        QFile oldLogFile( dataDir + QLatin1Char('/') + QString::fromLatin1( "mysql.err.old" ) );
 
         if ( logFile.open( QFile::ReadOnly ) && oldLogFile.open( QFile::Append ) )
         {
@@ -328,8 +328,8 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     if ( confUpdate )
     {
-        QFile(dataDir + QDir::separator() + QString::fromLatin1( "ib_logfile0" )).remove();
-        QFile(dataDir + QDir::separator() + QString::fromLatin1( "ib_logfile1" )).remove();
+        QFile(dataDir + QLatin1Char('/') + QString::fromLatin1( "ib_logfile0" )).remove();
+        QFile(dataDir + QLatin1Char('/') + QString::fromLatin1( "ib_logfile1" )).remove();
     }
 
     // Synthesize the server command line arguments
@@ -341,7 +341,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // Initialize the database
 
-    if (!QFile(dataDir + QDir::separator() + QLatin1String("mysql")).exists())
+    if (!QFile(dataDir + QLatin1Char('/') + QLatin1String("mysql")).exists())
     {
         QProcess initProcess;
         initProcess.start( mysqldInitPath, mysqlInitCmdArgs );
