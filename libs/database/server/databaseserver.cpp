@@ -32,6 +32,7 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QDir>
+#include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -48,6 +49,7 @@
 
 #include "digikam_debug.h"
 #include "dbengineparameters.h"
+#include "databaseserverstarter.h"
 
 namespace Digikam
 {
@@ -63,12 +65,12 @@ public:
         internalDBName  = QLatin1String("digikam");
     }
 
-    QProcess*         databaseProcess;
-    QString           internalDBName;
-    QCoreApplication* app;
+    QProcess*       databaseProcess;
+    QString         internalDBName;
+    QObject*  app = DatabaseServerStarter::instance(); 
 };
 
-DatabaseServer::DatabaseServer(QCoreApplication* const application)
+DatabaseServer::DatabaseServer(QObject* const application)
     : QThread(application),
       d(new Private)
 {
@@ -554,7 +556,10 @@ void DatabaseServer::stopDatabaseProcess()
 
     d->databaseProcess->~QProcess();
     d->databaseProcess  = 0;
-    d->app->exit(0);
+    
+    //to avoid "Unexpected null receiver" post event
+    if(d->app != NULL)
+        d->app->deleteLater();
 
     databaseServerStateEnum = stopped;
 }

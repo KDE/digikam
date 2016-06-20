@@ -59,7 +59,7 @@ public:
 
 public:
 
-    explicit DatabaseServer(QCoreApplication* const application = 0);
+    explicit DatabaseServer(QObject* const application = 0);
     virtual ~DatabaseServer();
 
     /**

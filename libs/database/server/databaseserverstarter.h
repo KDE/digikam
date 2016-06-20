@@ -38,8 +38,9 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DatabaseServerStarter
+class DIGIKAM_EXPORT DatabaseServerStarter : public QObject
 {
+    Q_OBJECT
 
 public:
 
