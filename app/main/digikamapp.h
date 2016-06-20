@@ -78,7 +78,6 @@ public:
     void autoDetect();
     void downloadFrom(const QString& cameraGuiPath);
     void downloadFromUdi(const QString& udi);
-    QString currentDbEngineParameters() const;
     void enableZoomPlusAction(bool val);
     void enableZoomMinusAction(bool val);
     void enableAlbumBackwardHistory(bool enable);

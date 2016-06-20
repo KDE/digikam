@@ -529,14 +529,6 @@ void DigikamApp::downloadFromUdi(const QString& udi)
     }
 }
 
-QString DigikamApp::currentDbEngineParameters() const
-{
-    DbEngineParameters parameters = CoreDbAccess::parameters();
-    QUrl url;
-    parameters.insertInUrl(url);
-    return url.url();
-}
-
 bool DigikamApp::queryClose()
 {
     bool ret = true;
