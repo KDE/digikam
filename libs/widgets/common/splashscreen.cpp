@@ -97,7 +97,7 @@ SplashScreen::SplashScreen()
 
 #if defined Q_OS_WIN
     isBeta = true;   // Windows version is always beta for the moment.
-#elif defined Q_OS_MACX
+#elif defined Q_OS_OSX
     isBeta = true;   // MAC version is always beta for the moment.
 #endif
 
