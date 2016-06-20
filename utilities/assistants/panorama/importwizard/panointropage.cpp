@@ -86,7 +86,7 @@ struct PanoIntroPage::Private
     QRadioButton*   jpegRadioButton;
     QRadioButton*   tiffRadioButton;
     QRadioButton*   hdrRadioButton;
-    DBinarySearch* binariesWidget;
+    DBinarySearch*  binariesWidget;
 };
 
 PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
