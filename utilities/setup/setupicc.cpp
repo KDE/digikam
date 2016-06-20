@@ -900,7 +900,7 @@ void SetupICC::slotShowDefaultSearchPaths()
                         QDir::rootPath(),
                         existingPaths);
 
-#elif defined (Q_OS_MAC)
+#elif defined (Q_OS_OSX)
     QString text = i18n("On Mac OS X, the default search paths include "
                         "<ul>"
                         "<li>/System/Library/ColorSync/Profiles</li>"

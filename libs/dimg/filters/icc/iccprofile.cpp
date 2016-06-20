@@ -498,7 +498,7 @@ QStringList IccProfile::defaultSearchPaths()
     candidates << QDir::rootPath() + QLatin1String("/Windows/Spool/Drivers/Color/");   // For Win2K and WinXP
     candidates << QDir::rootPath() + QLatin1String("/Windows/Color/");                 // For Win98 and WinMe
 
-#elif defined (Q_OS_MAC)
+#elif defined (Q_OS_OSX)
 
     // Use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local and the OS X standard ColorSync directories
 
