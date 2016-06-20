@@ -46,7 +46,7 @@ struct DBinarySearch::Private
         downloadLabel = 0;
     }
 
-    QVector<DBinaryIface*>   binaryIfaces;
+    QVector<DBinaryIface*>    binaryIfaces;
     QVector<QTreeWidgetItem*> items;
     QLabel*                   downloadLabel;
 };
@@ -97,7 +97,8 @@ void DBinarySearch::addBinary(DBinaryIface& binary)
     item->setIcon(Status, QIcon::fromTheme(QString::fromLatin1("dialog-cancel")).pixmap(16, 16));
     item->setText(Binary, binary.baseName());
     item->setText(Version, binary.version());
-    item->setToolTip(Status, i18n("Binary not found."));
+    item->setToolTip(Binary,  binary.description());
+    item->setToolTip(Status,  i18n("Binary not found."));
     item->setToolTip(Version, i18n("Minimal version number required for this binary is %1", binary.minimalVersion()));
     insertTopLevelItem(d->binaryIfaces.size() - 1, item);
     QPushButton* const findButton = new QPushButton(i18n("Find"));

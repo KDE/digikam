@@ -679,10 +679,10 @@ QString DbEngineParameters::defaultMysqlServerCmd()
 
 #ifdef Q_OS_WIN32
     // Under windows, mysqld_safe do not exists.
-    servName = QLatin1String("mysqld.exe");
+    servName = QLatin1String("mysqld");
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     // Under MAC OSX, mysqld_safe tool exists as under Linux
     servName = QLatin1String("mysqld_safe");
 #endif
@@ -699,7 +699,7 @@ QString DbEngineParameters::defaultMysqlInitCmd()
     initName = QLatin1String("mysql_install_db.exe");
 #endif
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     // Under MAC OSX, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
     initName = QLatin1String("mysql_install_db5");
 #endif

@@ -52,7 +52,9 @@ public:
                  const QString& projectName,
                  const QString& url,
                  const QString& pluginName,
-                 const QStringList& args = QStringList());
+                 const QStringList& args = QStringList(),
+                 const QString& desc = QString()
+                );
     DBinaryIface(const QString& binaryName,
                  const QString& minimalVersion,
                  const QString& header,
@@ -60,7 +62,9 @@ public:
                  const QString& projectName,
                  const QString& url,
                  const QString& pluginName,
-                 const QStringList& args = QStringList());
+                 const QStringList& args = QStringList(),
+                 const QString& desc = QString()
+                );
     virtual ~DBinaryIface();
 
     bool                isFound()                   const { return m_isFound;                       }
@@ -69,6 +73,7 @@ public:
     bool                versionIsRight(const float) const;
     inline bool         isValid()                   const { return (m_isFound && versionIsRight()); }
     inline bool         developmentVersion()        const { return m_developmentVersion;            }
+    const QString&      description()               const { return m_description;                   }
 
     virtual void        setup();
     virtual bool        checkDir()                        { return checkDir(m_pathDir);             }
@@ -123,6 +128,7 @@ protected:
 
     QString             m_version;
     QString             m_pathDir;
+    QString             m_description;
 
     QFrame*             m_pathWidget;
     QLabel*             m_binaryLabel;

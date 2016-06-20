@@ -43,12 +43,12 @@ namespace Digikam
 {
 
 DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName, const QString& url,
-                             const QString& pluginName, const QStringList& args)
+                           const QString& pluginName, const QStringList& args, const QString& desc)
     : m_checkVersion(false),
       m_headerStarts(QLatin1String("")),
       m_headerLine(0),
       m_minimalVersion(QLatin1String("")),
-      m_configGroup(pluginName + QLatin1String(" Settings")),
+      m_configGroup(!pluginName.isEmpty() ? QString::fromLatin1("%1 Settings").arg(pluginName) : QLatin1String("")),
       m_binaryBaseName(goodBaseName(binaryName)),
       m_binaryArguments(args),
       m_projectName(projectName),
@@ -57,6 +57,7 @@ DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName
       m_developmentVersion(false),
       m_version(QLatin1String("")),
       m_pathDir(QLatin1String("")),
+      m_description(desc),
       m_pathWidget(0),
       m_binaryLabel(0),
       m_versionLabel(0),
@@ -68,13 +69,13 @@ DBinaryIface::DBinaryIface(const QString& binaryName, const QString& projectName
 }
 
 DBinaryIface::DBinaryIface(const QString& binaryName, const QString& minimalVersion, const QString& header,
-                             const int headerLine, const QString& projectName, const QString& url,
-                             const QString& pluginName, const QStringList& args)
+                           const int headerLine, const QString& projectName, const QString& url,
+                           const QString& pluginName, const QStringList& args, const QString& desc)
     : m_checkVersion(true),
       m_headerStarts(header),
       m_headerLine(headerLine),
       m_minimalVersion(minimalVersion),
-      m_configGroup(pluginName + QLatin1String(" Settings")),
+      m_configGroup(!pluginName.isEmpty() ? QString::fromLatin1("%1 Settings").arg(pluginName) : QLatin1String("")),
       m_binaryBaseName(goodBaseName(binaryName)),
       m_binaryArguments(args),
       m_projectName(projectName),
@@ -83,6 +84,7 @@ DBinaryIface::DBinaryIface(const QString& binaryName, const QString& minimalVers
       m_developmentVersion(false),
       m_version(QLatin1String("")),
       m_pathDir(QLatin1String("")),
+      m_description(desc),
       m_pathWidget(0),
       m_binaryLabel(0),
       m_versionLabel(0),
@@ -184,7 +186,7 @@ void DBinaryIface::slotNavigateAndCheck()
     }
     else
     {
-#if defined Q_OS_MAC
+#if defined Q_OS_OSX
         start = QUrl::fromLocalFile(QLatin1String("/Applications/"));
 #elif defined Q_OS_WIN
         start = QUrl::fromLocalFile(QLatin1String("C:/Program Files/"));
@@ -227,6 +229,9 @@ void DBinaryIface::slotAddSearchDirectory(const QString& dir)
 
 QString DBinaryIface::readConfig()
 {
+    if (m_configGroup.isEmpty())
+        return QLatin1String("");
+
     KConfig config;
     KConfigGroup group = config.group(m_configGroup);
     return group.readPathEntry(QString::fromUtf8("%1Binary").arg(m_binaryBaseName), QLatin1String(""));
@@ -234,6 +239,9 @@ QString DBinaryIface::readConfig()
 
 void DBinaryIface::writeConfig()
 {
+    if (m_configGroup.isEmpty())
+        return;
+
     KConfig config;
     KConfigGroup group = config.group(m_configGroup);
     group.writePathEntry(QString::fromUtf8("%1Binary").arg(m_binaryBaseName), m_pathDir);

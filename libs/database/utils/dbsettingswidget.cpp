@@ -32,6 +32,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QLabel>
+#include <QHeaderView>
 #include <QGroupBox>
 #include <QTimer>
 #include <QTemporaryFile>
@@ -58,6 +59,9 @@
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "dbengineparameters.h"
+#include "dbinarysearch.h"
+#include "mysqlinitbinary.h"
+#include "mysqlservbinary.h"
 
 namespace Digikam
 {
@@ -84,8 +88,7 @@ public:
         password            = 0;
         hostPort            = 0;
         dbPathEdit          = 0;
-        mysqlServerCmdEdit  = 0;
-        mysqlInitCmdEdit    = 0;
+        dbBinariesWidget    = 0;
         tab                 = 0;
         dbDetailsBox        = 0;
     }
@@ -111,8 +114,11 @@ public:
     QTabWidget*        tab;
 
     DFileSelector*     dbPathEdit;
-    DFileSelector*     mysqlServerCmdEdit;
-    DFileSelector*     mysqlInitCmdEdit;
+
+    DBinarySearch*     dbBinariesWidget;
+
+    MysqlInitBinary    mysqlInitBin;
+    MysqlServBinary    mysqlServBin;
 
     DbEngineParameters orgPrms;
 
@@ -205,34 +211,46 @@ void DatabaseSettingsWidget::setupMainArea()
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
 
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where MySQL binaries tools are located. "
-                                                       "These run-time dependencies are only used by MySQL Internal backend.</p>"
-                                                       "<p>Note: if executables are included in default system PATH environment variable, "
-                                                       "you don't need to set the full paths to run these tools.</p>"
-                                                       "<p></p>"),
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binaries tools are located. "
+                                                       "digiKam will try to found these binaries automatically if there are "
+                                                       "installed on your computer.</p>"
+                                                       "<p>Note: If you use Oracle MySQL (not MariaDB), the database initializer "
+                                                       "have been merged in database server program.</p>"),
                                                   d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);
 
-    QWidget* const mysqlCmdSpace      = new QWidget(d->mysqlCmdBox);
-    d->mysqlCmdBox->setStretchFactor(mysqlCmdSpace, 10);
+    QGroupBox* const binaryBox        = new QGroupBox(d->mysqlCmdBox);
+    QGridLayout* const binaryLayout   = new QGridLayout;
+    binaryBox->setLayout(binaryLayout);
+    binaryBox->setTitle(i18nc("@title:group", "MySQL Binaries"));
+    d->dbBinariesWidget = new DBinarySearch(binaryBox);
+    d->dbBinariesWidget->header()->setSectionHidden(2, true);
 
-    QLabel* const mysqlServerCmdLabel = new QLabel(d->mysqlCmdBox);
-    mysqlServerCmdLabel->setText(i18n("Path to Mysql database server:"));
-    d->mysqlServerCmdEdit = new DFileSelector(d->mysqlCmdBox);
-    d->mysqlServerCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
-    d->mysqlServerCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlServerCmd());
-    d->mysqlServerCmdEdit->setToolTip(i18n("This binary file is used to start a dedicated instance of MySQL server.\n"
-                                           "It's usually named \"%1\" in your MySQL installation.",
-                                           DbEngineParameters::defaultMysqlServerCmd()));
+    d->dbBinariesWidget->addBinary(d->mysqlInitBin);
+    d->dbBinariesWidget->addBinary(d->mysqlServBin);
 
-    QLabel* const mysqlInitCmdLabel   = new QLabel(d->mysqlCmdBox);
-    mysqlInitCmdLabel->setText(i18n("Path to Mysql database initializer:"));
-    d->mysqlInitCmdEdit = new DFileSelector(d->mysqlCmdBox);
-    d->mysqlInitCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
-    d->mysqlInitCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlInitCmd());
-    d->mysqlInitCmdEdit->setToolTip(i18n("This binary file is used to initialize the MySQL data files for the database.\n"
-                                         "It's usually named \"%1\" in your MySQL installation.",
-                                         DbEngineParameters::defaultMysqlInitCmd()));
+#ifdef Q_OS_LINUX
+    d->dbBinariesWidget->addDirectory(QLatin1String("/usr/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/usr/sbin"));
+#endif
+
+#ifdef Q_OS_OSX
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
+#endif
+
+#ifdef Q_OS_WIN
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MySQL/MySQL Server 5.7/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/MySQL/MySQL Server 5.7/bin"));
+
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MariaDB 10.1/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86/MariaDB 10.1/bin"));
+#endif
+
+    d->mysqlInitBin.recheckDirectories();
+    d->mysqlServBin.recheckDirectories();
+
+    d->dbBinariesWidget->allBinariesFound();
 
     // --------------------------------------------------------
 
@@ -664,8 +682,6 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     else if (d->orgPrms.databaseType == DbEngineParameters::MySQLDatabaseType() && d->orgPrms.internalServer)
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
-        d->mysqlServerCmdEdit->lineEdit()->setText(d->orgPrms.internalServerMysqlServCmd);
-        d->mysqlInitCmdEdit->lineEdit()->setText(d->orgPrms.internalServerMysqlInitCmd);
         d->dbType->setCurrentIndex(d->dbTypeMap[MysqlInternal]);
         slotResetMysqlServerDBNames();
     }
@@ -700,8 +716,8 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
         case MysqlInternal:
             prm = DbEngineParameters::defaultParameters(databaseBackend());
             prm.setInternalServerPath(databasePath());
-            prm.internalServerMysqlServCmd = d->mysqlServerCmdEdit->lineEdit()->text();
-            prm.internalServerMysqlInitCmd = d->mysqlInitCmdEdit->lineEdit()->text();
+            prm.internalServerMysqlServCmd = d->mysqlServBin.path();
+            prm.internalServerMysqlInitCmd = d->mysqlInitBin.path();
             break;
 
         default: // MysqlServer
@@ -757,39 +773,8 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
             if (!checkDatabasePath())
                 return false;
 
-            QString mysqlServer = d->mysqlServerCmdEdit->lineEdit()->text();
-            qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL server path : " << mysqlServer;
-
-            if (mysqlServer.isEmpty())
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("MySQL server path is empty. Please fix it."));
+            if (!d->dbBinariesWidget->allBinariesFound())
                 return false;
-            }
-
-            if (QProcess::execute(mysqlServer, QStringList() << QLatin1String("--help")) == -2)
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("Cannot find MySQL server \"%1\". Please fix it.", mysqlServer));
-                return false;
-            }
-
-            QString mysqlInit = d->mysqlInitCmdEdit->lineEdit()->text();
-            qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL init path : " << mysqlInit;
-
-            if (mysqlInit.isEmpty())
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("MySQL initialization script path is empty. Please fix it."));
-                return false;
-            }
-
-            if (QProcess::execute(mysqlInit, QStringList() << QLatin1String("--help")) == -2)
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("Cannot find MySQL initialization script \"%1\". Please fix it.", mysqlInit));
-                return false;
-            }
 
             return true;
 
