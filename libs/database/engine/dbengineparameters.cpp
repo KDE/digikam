@@ -695,13 +695,13 @@ QString DbEngineParameters::defaultMysqlInitCmd()
     QString initName = QLatin1String("mysql_install_db"); // For Linux
 
 #ifdef Q_OS_WIN32
-    // Under windows, mysql_install_db PERL script is named "mysql_install_db.exe"
+    // Under windows, mysql_install_db tool is named "mysql_install_db.exe"
     initName = QLatin1String("mysql_install_db");
 #endif
 
 #ifdef Q_OS_OSX
-    // Under MAC OSX, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
-    initName = QLatin1String("mysql_install_db5");
+    // Under MAC OSX, mysqld_install_db tool exists as under Linux
+    initName = QLatin1String("mysql_install_db");
 #endif
 
     return initName;
