@@ -167,7 +167,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbTypeMap[MysqlInternal] = dbTypeIdx++;
 #   endif
 
-    d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
+    d->dbType->addItem(i18n("MySQL or MariaDB Server (experimental)"),   MysqlServer);
     d->dbTypeMap[MysqlServer] = dbTypeIdx++;
 #endif
 
@@ -182,7 +182,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                "<p><i>Be careful: this one still in experimental stage.</i></p>"
 #   endif
 
-                               "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
+                               "<p><b>MySQL or MAriaDB Server</b> backend is a more robust solution especially for remote and shared database storage. "
                                "It is also more efficient to manage huge collection sizes with more than 100K items.</p>"
                                "<p><i>Be careful: this one still in experimental stage.</i></p>"
 #endif
