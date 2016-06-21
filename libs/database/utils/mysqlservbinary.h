@@ -42,11 +42,11 @@ public:
 
     MysqlServBinary()
         : DBinaryIface(DbEngineParameters::defaultMysqlServerCmd(),
-                       QLatin1String("MySQL"),
-                       QLatin1String("http://dev.mysql.com/downloads/"),
+                       QLatin1String("MariaDB"),
+                       QLatin1String("https://mariadb.org/download/"),
                        QString(),
                        QStringList(QLatin1String("--help")),
-                       i18n("This binary file is used to start a dedicated instance of MySQL server.")
+                       i18n("This binary file is used to start a dedicated instance of MariaDB server.")
                       )
         {
             setup();

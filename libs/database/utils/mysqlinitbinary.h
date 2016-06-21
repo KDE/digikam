@@ -42,11 +42,11 @@ public:
 
     MysqlInitBinary()
         : DBinaryIface(DbEngineParameters::defaultMysqlInitCmd(),
-                       QLatin1String("MySQL"),
-                       QLatin1String("http://dev.mysql.com/downloads/"),
+                       QLatin1String("MariaDB"),
+                       QLatin1String("https://mariadb.org/download/"),
                        QString(),
                        QStringList(QLatin1String("--help")),
-                       i18n("This binary file is used to initialize the MySQL data files for the database.")
+                       i18n("This binary file is used to initialize the MariaDB data files for the database.")
                       )
         {
             setup();

@@ -156,19 +156,19 @@ void DatabaseSettingsWidget::setupMainArea()
 
     // --------- fill with default values ---------------------
 
-    int dbTypeIdx = 0;
-    d->dbType->addItem(i18n("SQLite"),                        SQlite);
-    d->dbTypeMap[SQlite] = dbTypeIdx++;
+    int dbTypeIdx               = 0;
+    d->dbType->addItem(i18n("SQLite"),                                 SQlite);
+    d->dbTypeMap[SQlite]        = dbTypeIdx++;
 
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-    d->dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
+    d->dbType->addItem(i18n("MariaDB Internal (experimental)"),        MysqlInternal);
     d->dbTypeMap[MysqlInternal] = dbTypeIdx++;
 #   endif
 
-    d->dbType->addItem(i18n("MySQL or MariaDB Server (experimental)"),   MysqlServer);
-    d->dbTypeMap[MysqlServer] = dbTypeIdx++;
+    d->dbType->addItem(i18n("MySQL or MariaDB Server (experimental)"), MysqlServer);
+    d->dbTypeMap[MysqlServer]   = dbTypeIdx++;
 #endif
 
     d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
@@ -177,12 +177,12 @@ void DatabaseSettingsWidget::setupMainArea()
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-                               "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
+                               "<p><b>MariaDB Internal</b> backend is for local database storage with huge collection sizes. "
                                "This backend is recommend for local collections with more than 100K items.</p>"
                                "<p><i>Be careful: this one still in experimental stage.</i></p>"
 #   endif
 
-                               "<p><b>MySQL or MAriaDB Server</b> backend is a more robust solution especially for remote and shared database storage. "
+                               "<p><b>MySQL or MariaDB Server</b> backend is a more robust solution especially for remote and shared database storage. "
                                "It is also more efficient to manage huge collection sizes with more than 100K items.</p>"
                                "<p><i>Be careful: this one still in experimental stage.</i></p>"
 #endif
@@ -211,18 +211,16 @@ void DatabaseSettingsWidget::setupMainArea()
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
 
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binaries tools are located. "
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MariaDB binaries tools are located. "
                                                        "digiKam will try to found these binaries automatically if there are "
-                                                       "installed on your computer.</p>"
-                                                       "<p>Note: If you use Oracle MySQL (not MariaDB), the database initializer "
-                                                       "have been merged in database server program.</p>"),
+                                                       "installed on your computer.</p>"),
                                                   d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);
 
     QGroupBox* const binaryBox        = new QGroupBox(d->mysqlCmdBox);
     QGridLayout* const binaryLayout   = new QGridLayout;
     binaryBox->setLayout(binaryLayout);
-    binaryBox->setTitle(i18nc("@title:group", "MySQL Binaries"));
+    binaryBox->setTitle(i18nc("@title:group", "MariaDB Binaries"));
     d->dbBinariesWidget = new DBinarySearch(binaryBox);
     d->dbBinariesWidget->header()->setSectionHidden(2, true);
 
@@ -240,9 +238,6 @@ void DatabaseSettingsWidget::setupMainArea()
 #endif
 
 #ifdef Q_OS_WIN
-    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MySQL/MySQL Server 5.7/bin"));
-    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/MySQL/MySQL Server 5.7/bin"));
-
     d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MariaDB 10.1/bin"));
     d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86/MariaDB 10.1/bin"));
 #endif
@@ -256,7 +251,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     d->hostName                                      = new QLineEdit();
     d->hostName->setPlaceholderText(i18n("Set the host computer name"));
-    d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
+    d->hostName->setToolTip(i18n("This is the computer name running MySQL server.\nThis can be \"localhost\" for a local server, "
                                  "or the network computer\n name (or IP address) in case of remote computer."));
 
     QLabel* const connectOptsLabel                   = new QLabel(i18n("<a href=\"http://doc.qt.io/qt-5/"
@@ -264,29 +259,29 @@ void DatabaseSettingsWidget::setupMainArea()
     connectOptsLabel->setOpenExternalLinks(true);
     d->connectOpts                                   = new QLineEdit();
     d->connectOpts->setPlaceholderText(i18n("Set the database connection options"));
-    d->connectOpts->setToolTip(i18n("Set the Mysql server connection options.\nFor advanced users only."));
+    d->connectOpts->setToolTip(i18n("Set the MySQL server connection options.\nFor advanced users only."));
 
     QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
     d->userName                                      = new QLineEdit();
     d->userName->setPlaceholderText(i18n("Set the database account name"));
-    d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server.\n"
-                                 "This account must be available on the remote Mysql server when database have been created."));
+    d->userName->setToolTip(i18n("Set the MySQL server account name used\nby digiKam to be connected to the server.\n"
+                                 "This account must be available on the remote MySQL server when database have been created."));
 
     QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     d->password                                      = new QLineEdit();
-    d->password->setToolTip(i18n("Set the Mysql server account password used\nby digiKam to be connected to the server.\n"
+    d->password->setToolTip(i18n("Set the MySQL server account password used\nby digiKam to be connected to the server.\n"
                                  "You can left this field empty to use an account set without password."));
     d->password->setEchoMode(QLineEdit::Password);
 
     DHBox* const phbox                               = new DHBox();
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     d->hostPort                                      = new QSpinBox(phbox);
-    d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));
+    d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, MySQL server use port number 3306 by default"));
     d->hostPort->setMaximum(65535);
     QWidget* const space                             = new QWidget(phbox);
     phbox->setStretchFactor(space, 10);
     QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
-    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if current Mysql server settings is suitable."));
+    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if current MySQL server settings is suitable."));
 
     // Only accept printable Ascii char for database names.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
@@ -365,11 +360,11 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<a href=\"https://en.wikipedia.org/wiki/MySQL\">Mysql database server</a> "
                                                "(or <a href=\"https://en.wikipedia.org/wiki/MariaDB\">MariaDB</a>) "
                                                "through a network. "
-                                               "As with Sqlite or Mysql internal server, 3 databases will be stored "
+                                               "As with Sqlite or MariaDB internal server, 3 databases will be stored "
                                                "on the remote server: one for all collections properties, "
                                                "one to store compressed thumbnails, and one to store faces "
                                                "recognition metadata.</p>"
-                                               "<p>Unlike Sqlite or Mysql internal server, you can customize the "
+                                               "<p>Unlike Sqlite or MariaDB internal server, you can customize the "
                                                "database names to simplify your backups.</p>"
                                                "<p>Databases are digiKam core engines. To prevent performance issues, "
                                                "take a care to use a fast network link between the client and the server "
