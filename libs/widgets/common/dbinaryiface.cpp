@@ -257,13 +257,22 @@ QString DBinaryIface::path(const QString& dir) const
     return QString::fromUtf8("%1%2%3").arg(dir).arg(QLatin1Char('/')).arg(baseName());
 }
 
-void DBinaryIface::setup()
+void DBinaryIface::setup(const QString& prev)
 {
-    QString previous_dir = readConfig();
-    m_searchPaths << previous_dir;
-    checkDir(previous_dir);
+    QString previousDir = prev;
 
-    if ((!previous_dir.isEmpty()) && !isValid())
+    if (!previousDir.isEmpty())
+    {
+        m_searchPaths << previousDir;
+        checkDir(previousDir);
+        return;
+    }
+
+    previousDir = readConfig();
+    m_searchPaths << previousDir;
+    checkDir(previousDir);
+
+    if ((!previousDir.isEmpty()) && !isValid())
     {
         m_searchPaths << QLatin1String("");
         checkDir(QLatin1String(""));

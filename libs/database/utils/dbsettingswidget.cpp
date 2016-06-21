@@ -247,9 +247,6 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86/MariaDB 10.1/bin"));
 #endif
 
-    d->mysqlInitBin.recheckDirectories();
-    d->mysqlServBin.recheckDirectories();
-
     d->dbBinariesWidget->allBinariesFound();
 
     // --------------------------------------------------------
@@ -683,6 +680,9 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
         d->dbType->setCurrentIndex(d->dbTypeMap[MysqlInternal]);
+        d->mysqlInitBin.setup(QFileInfo(d->orgPrms.internalServerMysqlInitCmd).absoluteFilePath());
+        d->mysqlServBin.setup(QFileInfo(d->orgPrms.internalServerMysqlServCmd).absoluteFilePath());
+        d->dbBinariesWidget->allBinariesFound();
         slotResetMysqlServerDBNames();
     }
 #   endif
@@ -716,8 +716,8 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
         case MysqlInternal:
             prm = DbEngineParameters::defaultParameters(databaseBackend());
             prm.setInternalServerPath(databasePath());
-            prm.internalServerMysqlServCmd = d->mysqlServBin.path();
             prm.internalServerMysqlInitCmd = d->mysqlInitBin.path();
+            prm.internalServerMysqlServCmd = d->mysqlServBin.path();
             break;
 
         default: // MysqlServer
