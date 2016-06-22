@@ -340,10 +340,11 @@ void DatabaseSettingsWidget::setupMainArea()
 
     d->dbNoticeBox           = new QGroupBox(i18n("Database Server Instructions"), this);
     QVBoxLayout* const vlay2 = new QVBoxLayout(d->dbNoticeBox);
-    QLabel* const notice     = new QLabel(i18n("<p>digiKam expects the above database and user account to already exists. "
-                                               "This user also require full access to the database.<br>"
+    QLabel* const notice     = new QLabel(i18n("<p>digiKam expects that database is already created with a dedicated user account. "
+                                               "This user name <i>digikam<i> will require full access to the database.<br>"
                                                "If your database is not already set up, you can use the following SQL commands "
-                                               "(after replacing the <b><i>password</i></b> with the correct one)."), d->dbNoticeBox);
+                                               "(after replacing the <b><i>password</i></b> with the correct one).<br>"),
+                                          d->dbNoticeBox);
     notice->setWordWrap(true);
 
     d->sqlInit = new QTextBrowser(d->dbNoticeBox);
@@ -351,10 +352,22 @@ void DatabaseSettingsWidget::setupMainArea()
     d->sqlInit->setOpenLinks(false);
     d->sqlInit->setReadOnly(false);
 
+    QLabel* const notice2    = new QLabel(i18n("<p>Note: with a Linux server, a database can be initialized following the commands below:</p><br>"
+                                               "<p># su</p>"
+                                               "<p># systemctl restart mysqld</p>"
+                                               "<p># mysql</p>"
+                                               "<p>...</p>"
+                                               "<p>Enter SQL code to Mysql prompt in order to init digiKam databases with grant privileges (see behind)</p>"
+                                               "<p>...</p>"
+                                               "<p>quit</p>"),
+                                          d->dbNoticeBox);
+    notice2->setWordWrap(true);
+
     vlay2->addWidget(notice);
     vlay2->addWidget(d->sqlInit);
     vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay2->setSpacing(spacing);
+    vlay2->addWidget(notice2);
 
     d->tab->addTab(d->dbNoticeBox, i18n("Requirements"));
 
