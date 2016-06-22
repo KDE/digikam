@@ -319,7 +319,7 @@ void NREstimate::startAnalyse()
         stdStorePtr  = reinterpret_cast<float*>(stdStore->data.ptr);
     }
 
-    if (!d->path.isEmpty() && runningFlag())
+    if (runningFlag() && !d->path.isEmpty())
     {
         QString logFile = d->path;
         logFile         = logFile.section(QLatin1Char('/'), -1);
@@ -370,7 +370,7 @@ void NREstimate::startAnalyse()
     QTextStream owms;
     QFile       filewms;
 
-    if (!d->path.isEmpty() && runningFlag())
+    if (runningFlag() && !d->path.isEmpty())
     {
         QString logFile2 = d->path;
         logFile2         = logFile2.section(QLatin1Char('/'), -1);
@@ -429,7 +429,7 @@ void NREstimate::startAnalyse()
         info.append(QString::number(weightedStd));
     }
 
-    if (!d->path.isEmpty() && runningFlag())
+    if (runningFlag() && !d->path.isEmpty())
     {
         filewms.close();
     }

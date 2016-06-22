@@ -171,8 +171,8 @@ void ImageHistogram::calculate()
         return;
     }
 
-   uint  i;
-    int            max;
+    uint i;
+    int  max;
 
     emit calculationStarted();
 
@@ -197,7 +197,7 @@ void ImageHistogram::calculate()
 
         // count here instead of inside the loop, because d is not optimized because it's not defined in the header
         const uint count = d->img.width() * d->img.height() * 4;
-        for (i = 0 ; i < count && runningFlag() ; i += 4)
+        for (i = 0 ; runningFlag() && (i < count) ; i += 4)
         {
             blue  = data[i    ];
             green = data[i + 1];
@@ -228,7 +228,7 @@ void ImageHistogram::calculate()
 
         // count here instead of inside the loop, because d is not optimized because it's not defined in the header
         const uint count = d->img.width() * d->img.height() * 4;
-        for (i = 0 ; i < count && runningFlag() ; i += 4)
+        for (i = 0 ; runningFlag() && (i < count) ; i += 4)
         {
             blue  = data[i    ];
             green = data[i + 1];
