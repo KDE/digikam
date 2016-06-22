@@ -343,7 +343,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Synthesize the server command line arguments
 
     QStringList mysqldCmdArgs;
-    mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1/mysql.conf").arg(defaultAkDir));
+    mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(actualConfig));
     mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
 
 #ifdef Q_OS_WIN
