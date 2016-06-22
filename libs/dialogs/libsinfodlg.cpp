@@ -55,7 +55,7 @@ using namespace GeoIface;
 
 // C ANSI includes
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
 extern "C"
 {
 #endif
@@ -72,7 +72,7 @@ extern "C"
 #undef HAVE_STDDEF_H
 #include <jpeglib.h>
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
 }
 #endif
 
