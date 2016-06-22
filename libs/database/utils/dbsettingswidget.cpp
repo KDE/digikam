@@ -352,7 +352,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->sqlInit->setOpenLinks(false);
     d->sqlInit->setReadOnly(false);
 
-    QLabel* const notice2    = new QLabel(i18n("<p>Note: with a Linux server, a database can be initialized following the commands below:</p><br>"
+    QLabel* const notice2    = new QLabel(i18n("<p>Note: with a Linux server, a database can be initialized following the commands below:</p>"
                                                "<p># su</p>"
                                                "<p># systemctl restart mysqld</p>"
                                                "<p># mysql</p>"
@@ -584,7 +584,7 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
                                    .arg(d->dbNameFace->text())
                                    .arg(d->userName->text());
     }
-    sql += QString::fromLatin1("FLUSH PRIVILEGES;<br>");
+    sql += QString::fromLatin1("FLUSH PRIVILEGES;<br><br>");
 
     d->sqlInit->setText(sql);
 }
