@@ -81,6 +81,19 @@ QStringList WelcomePageView::featuresTabContent() const
 {
     QStringList newFeatures;
     newFeatures << i18n("Port to Qt5 and KF5;");
+    newFeatures << i18n("Replacing digiKam KIOSlaves by a multi-threaded interface to query the database;");
+    newFeatures << i18n("Add embedded trash support for each collection instead desktop trash;");
+    newFeatures << i18n("Thumbs and preview video support is now delegate to QT5Multimedia framework;");
+    newFeatures << i18n("Mysql internal server is now configurable as Sqlite to store database files at a customized place;");
+    newFeatures << i18n("Mysql internal/remote server is now configurable with first run assistant;");
+    newFeatures << i18n("Add a new batch queue manager tool to convert RAW files to DNG;");
+    newFeatures << i18n("Add a new batch queue manager tool to adjust time and date metadata;");
+    newFeatures << i18n("Add a new option in editor and light table to import images from a digital scanner;");
+    newFeatures << i18n("Add a new option in editor and light table to edit metadata;");
+    newFeatures << i18n("Add a new option in editor and light table to edit geolocation;");
+    newFeatures << i18n("Add a new option in editor and light table to run presentation tool;");
+    newFeatures << i18n("Add a new editor tool to perform color change based on Lut3D;");
+    newFeatures << i18n("Add a new tool in camera import interface to convert RAW files to DNG;");
     // Add new features here...
     newFeatures << i18n("...and much more.");
 
