@@ -341,7 +341,7 @@ void DatabaseSettingsWidget::setupMainArea()
     d->dbNoticeBox           = new QGroupBox(i18n("Database Server Instructions"), this);
     QVBoxLayout* const vlay2 = new QVBoxLayout(d->dbNoticeBox);
     QLabel* const notice     = new QLabel(i18n("<p>digiKam expects that database is already created with a dedicated user account. "
-                                               "This user name <i>digikam<i> will require full access to the database.<br>"
+                                               "This user name <i>digikam</i> will require full access to the database.<br>"
                                                "If your database is not already set up, you can use the following SQL commands "
                                                "(after replacing the <b><i>password</i></b> with the correct one).<br>"),
                                           d->dbNoticeBox);
@@ -557,10 +557,10 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
 {
-    QString sql = QString::fromLatin1("GRANT USAGE ON *.* TO \'%1\'@\'localhost\' IDENTIFIED BY \'<b><i>password</i></b>\';<br>")
+    QString sql = QString::fromLatin1("GRANT USAGE ON *.* TO \'%1\'@\'localhost\' IDENTIFIED BY \'<b>password</b>\';<br>")
                                       .arg(d->userName->text());
 
-    sql += QString::fromLatin1("CREATE DATABASE %1; "
+    sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
                                "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
                                       .arg(d->dbNameCore->text())
                                       .arg(d->dbNameCore->text())
@@ -568,7 +568,7 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
 
     if (d->dbNameThumbs->text() != d->dbNameCore->text())
     {
-        sql += QString::fromLatin1("CREATE DATABASE %1; "
+        sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
                                    "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->dbNameThumbs->text())
@@ -578,13 +578,13 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
     if ((d->dbNameFace->text() != d->dbNameCore->text()) &&
         (d->dbNameFace->text() != d->dbNameThumbs->text()))
     {
-        sql += QString::fromLatin1("CREATE DATABASE %1; "
+        sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
                                    "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
                                    .arg(d->dbNameFace->text())
                                    .arg(d->dbNameFace->text())
                                    .arg(d->userName->text());
     }
-    sql += QString::fromLatin1("FLUSH PRIVILEGES;<br><br>");
+    sql += QString::fromLatin1("FLUSH PRIVILEGES;<br>");
 
     d->sqlInit->setText(sql);
 }

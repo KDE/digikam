@@ -63,7 +63,7 @@
 #include "thumbsdbbackend.h"
 #include "thumbnailsize.h"
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 #include "windows.h"
 #endif
 
@@ -1132,7 +1132,7 @@ void ThumbnailCreator::storeFreedesktop(const ThumbnailInfo& info, const Thumbna
 
             temp.close();
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
             // remove thumbPath file if it exist
             if (tempFileName != thumbPath && QFile::exists(tempFileName) && QFile::exists(thumbPath))
             {

@@ -92,7 +92,7 @@ extern "C"
 #include "metadatasettings.h"
 #include "filereadwritelock.h"
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 #include "windows.h"
 #include "jpegwin.h"
 #endif
@@ -180,7 +180,7 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     jpeg_create_decompress(&cinfo);
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 
     QFile inFile(path);
     QByteArray buffer;
@@ -193,11 +193,11 @@ bool loadJPEGScaled(QImage& image, const QString& path, int maximumSize)
 
     jpeg_memory_src(&cinfo, (JOCTET*)buffer.data(), buffer.size());
 
-#else  // Q_OS_WIN32
+#else  // Q_OS_WIN
 
     jpeg_stdio_src(&cinfo, inputFile);
 
-#endif // Q_OS_WIN32
+#endif // Q_OS_WIN
 
     jpeg_read_header(&cinfo, true);
 
@@ -466,7 +466,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
         // atomic rename
 
-#ifndef Q_OS_WIN32
+#ifndef Q_OS_WIN
         if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
 #else
         if (::MoveFileEx((LPCWSTR)tempFile.utf16(), (LPCWSTR)dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)

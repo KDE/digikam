@@ -136,7 +136,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     const QString mysqldCmd = internalServerParameters.internalServerMysqlServCmd;
 
-    if ( mysqldCmd.isEmpty() )
+    if (mysqldCmd.isEmpty())
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server command set in configuration file!";
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql server command set in configuration file!"));
@@ -164,15 +164,21 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     const QString mysqldInitPath = internalServerParameters.internalServerMysqlInitCmd;
 
-    if ( mysqldInitPath.isEmpty() )
+    if (mysqldInitPath.isEmpty())
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initialization command set in configuration file!";
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initialization command set in configuration file!."));
     }
 
     QStringList mysqlInitCmdArgs;
-    mysqlInitCmdArgs << QString::fromLatin1( "--user=%1" ).arg( getcurrentAccountUserName() );
-    mysqlInitCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::toNativeSeparators(dataDir) );
+
+#ifdef Q_OS_WIN
+    mysqlInitCmdArgs << QString::fromLatin1("--default-user=%1").arg(getcurrentAccountUserName());
+#else
+    mysqlInitCmdArgs << QString::fromLatin1("--user=%1").arg(getcurrentAccountUserName());
+#endif // Q_OS_WIN
+
+    mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
 
     if (!QFile::exists(defaultAkDir))
     {
@@ -223,7 +229,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-local.conf"));
     const QString actualConfig = defaultAkDir + QLatin1String("mysql.conf");
 
-    if ( globalConfig.isEmpty() )
+    if (globalConfig.isEmpty())
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot find MySQL server default configuration (mysql-global.conf)";
 
@@ -231,25 +237,25 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     }
 
     bool confUpdate = false;
-    QFile actualFile ( actualConfig );
+    QFile actualFile (actualConfig);
 
     // Update conf only if either global (or local) is newer than actual
 
-    if ( (QFileInfo( globalConfig ).lastModified() > QFileInfo( actualFile ).lastModified()) ||
-         (QFileInfo( localConfig ).lastModified()  > QFileInfo( actualFile ).lastModified()) )
+    if ((QFileInfo(globalConfig).lastModified() > QFileInfo(actualFile).lastModified()) ||
+        (QFileInfo(localConfig).lastModified()  > QFileInfo(actualFile).lastModified()))
     {
-        QFile globalFile( globalConfig );
-        QFile localFile ( localConfig );
+        QFile globalFile(globalConfig);
+        QFile localFile (localConfig);
 
-        if ( globalFile.open( QFile::ReadOnly ) && actualFile.open( QFile::WriteOnly ) )
+        if (globalFile.open(QFile::ReadOnly) && actualFile.open(QFile::WriteOnly))
         {
-            actualFile.write( globalFile.readAll() );
+            actualFile.write(globalFile.readAll());
 
-            if ( !localConfig.isEmpty() )
+            if (!localConfig.isEmpty())
             {
-                if ( localFile.open( QFile::ReadOnly ) )
+                if (localFile.open(QFile::ReadOnly))
                 {
-                    actualFile.write( localFile.readAll() );
+                    actualFile.write(localFile.readAll());
                     localFile.close();
                 }
             }
@@ -278,26 +284,26 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
                                             (QFile::ReadOwner | QFile::WriteOwner |
                                              QFile::ReadGroup | QFile::WriteGroup | QFile::ReadOther);
 
-    if ( allowedPerms != actualFile.permissions() )
+    if (allowedPerms != actualFile.permissions())
     {
-        actualFile.setPermissions( allowedPerms );
+        actualFile.setPermissions(allowedPerms);
     }
 
-    if ( dataDir.isEmpty() )
+    if (dataDir.isEmpty())
     {
         QString  str = i18n("digiKam server was not able to create database data directory");
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
-    if ( akDir.isEmpty() )
+    if (akDir.isEmpty())
     {
         QString  str = i18n("digiKam server was not able to create database log directory");
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
-    if ( miscDir.isEmpty() )
+    if (miscDir.isEmpty())
     {
         QString  str = i18n("digiKam server was not able to create database misc directory");
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << str;
@@ -306,16 +312,16 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // Move mysql error log file out of the way
 
-    const QFileInfo errorLog( dataDir + QLatin1Char('/') + QString::fromLatin1( "mysql.err" ) );
+    const QFileInfo errorLog(dataDir + QLatin1Char('/') + QString::fromLatin1("mysql.err"));
 
-    if ( errorLog.exists() )
+    if (errorLog.exists())
     {
-        QFile logFile( errorLog.absoluteFilePath() );
-        QFile oldLogFile( dataDir + QLatin1Char('/') + QString::fromLatin1( "mysql.err.old" ) );
+        QFile logFile(errorLog.absoluteFilePath());
+        QFile oldLogFile(dataDir + QLatin1Char('/') + QString::fromLatin1("mysql.err.old"));
 
-        if ( logFile.open( QFile::ReadOnly ) && oldLogFile.open( QFile::Append ) )
+        if (logFile.open(QFile::ReadOnly) && oldLogFile.open(QFile::Append))
         {
-            oldLogFile.write( logFile.readAll() );
+            oldLogFile.write(logFile.readAll());
             oldLogFile.close();
             logFile.close();
             logFile.remove();
@@ -328,29 +334,34 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     // Clear mysql ib_logfile's in case innodb_log_file_size option changed in last confUpdate
 
-    if ( confUpdate )
+    if (confUpdate)
     {
-        QFile(dataDir + QLatin1Char('/') + QString::fromLatin1( "ib_logfile0" )).remove();
-        QFile(dataDir + QLatin1Char('/') + QString::fromLatin1( "ib_logfile1" )).remove();
+        QFile(dataDir + QLatin1Char('/') + QString::fromLatin1("ib_logfile0")).remove();
+        QFile(dataDir + QLatin1Char('/') + QString::fromLatin1("ib_logfile1")).remove();
     }
 
     // Synthesize the server command line arguments
 
     QStringList mysqldCmdArgs;
-    mysqldCmdArgs << QString::fromLatin1( "--defaults-file=%1" ).arg( QDir::toNativeSeparators(QFileInfo(defaultAkDir).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--datadir=%1" ).arg( QDir::toNativeSeparators(QFileInfo(dataDir).filePath()) );
-    mysqldCmdArgs << QString::fromLatin1( "--socket=%1/mysql.socket" ).arg( QDir::toNativeSeparators(QFileInfo(miscDir).filePath()) );
+    mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(actualConfig));
+    mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
+
+#ifdef Q_OS_WIN
+    mysqldCmdArgs << QString::fromLatin1("--socket=MySQL-digikam");
+#else
+    mysqldCmdArgs << QString::fromLatin1("--socket=%1/mysql.socket").arg(miscDir);
+#endif // Q_OS_WIN
 
     // Initialize the database
 
     if (!QFile(dataDir + QLatin1Char('/') + QLatin1String("mysql")).exists())
     {
         QProcess initProcess;
-        initProcess.start( mysqldInitPath, mysqlInitCmdArgs );
+        initProcess.start(mysqldInitPath, mysqlInitCmdArgs);
 
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database initializer: " << initProcess.program() << initProcess.arguments();
 
-        if ( !initProcess.waitForFinished() || initProcess.exitCode() != 0)
+        if (!initProcess.waitForFinished() || initProcess.exitCode() != 0)
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << initProcess.readAllStandardOutput();
 
@@ -371,11 +382,11 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     // Start the database server
 
     d->databaseProcess = new QProcess();
-    d->databaseProcess->start( mysqldCmd, mysqldCmdArgs );
+    d->databaseProcess->start(mysqldCmd, mysqldCmdArgs);
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database server: " << d->databaseProcess->program() << d->databaseProcess->arguments();
 
-    if ( !d->databaseProcess->waitForStarted() || d->databaseProcess->exitCode() != 0)
+    if (!d->databaseProcess->waitForStarted() || d->databaseProcess->exitCode() != 0)
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->databaseProcess->readAllStandardOutput();
 
@@ -393,31 +404,37 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         return DatabaseServerError(DatabaseServerError::StartError, str);
     }
 
-    const QLatin1String initCon( "initConnection" );
+    const QLatin1String initCon("initConnection");
 
     {
-        QSqlDatabase db = QSqlDatabase::addDatabase( DbEngineParameters::MySQLDatabaseType(), initCon );
-        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg( QDir::toNativeSeparators(QFileInfo(miscDir).filePath()) ));
-        db.setUserName(QLatin1String("root"));
-        db.setDatabaseName( QString() ); // might not exist yet, then connecting to the actual db will fail
+        QSqlDatabase db = QSqlDatabase::addDatabase(DbEngineParameters::MySQLDatabaseType(), initCon);
 
-        if ( !db.isValid() )
+#ifdef Q_OS_WIN
+        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=MySQL-digikam"));
+#else
+        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
+#endif // Q_OS_WIN
+
+        db.setUserName(QLatin1String("root"));
+        db.setDatabaseName(QString()); // might not exist yet, then connecting to the actual db will fail
+
+        if (!db.isValid())
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Invalid database object during database server startup";
         }
 
         bool opened = false;
 
-        for ( int i = 0; i < 120; ++i )
+        for (int i = 0; i < 120; ++i)
         {
             opened = db.open();
 
-            if ( opened )
+            if (opened)
             {
                 break;
             }
 
-            if ( d->databaseProcess->waitForFinished( 500 ) )
+            if (d->databaseProcess->waitForFinished(500))
             {
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database process exited unexpectedly during initial connection!";
                 qCDebug(DIGIKAM_DATABASESERVER_LOG) << "executable: "    << d->databaseProcess->program();
@@ -439,19 +456,19 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
             }
         }
 
-        if ( opened )
+        if (opened)
         {
             {
-                QSqlQuery query( db );
+                QSqlQuery query(db);
 
-                if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( d->internalDBName ) ) )
+                if (!query.exec(QString::fromLatin1("USE %1").arg(d->internalDBName)))
                 {
                     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database" << d->internalDBName;
                     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"           << query.lastError().text();
                     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"        << db.lastError().text();
                     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now...";
 
-                    if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
+                    if (!query.exec(QLatin1String("CREATE DATABASE digikam")))
                     {
                         QString  str = i18n("Failed to create database"
                                             "<p>Query error: %1</p>"
@@ -476,7 +493,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         }
     }
 
-    QSqlDatabase::removeDatabase( initCon );
+    QSqlDatabase::removeDatabase(initCon);
 
     databaseServerStateEnum = running;
 
@@ -486,29 +503,29 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 DatabaseServerError DatabaseServer::createDatabase()
 {
     const QLatin1String initCon("initConnection");
-    QSqlDatabase db = QSqlDatabase::addDatabase( QLatin1String("MYSQL"), initCon );
+    QSqlDatabase db = QSqlDatabase::addDatabase(QLatin1String("MYSQL"), initCon);
 
     // Might not exist yet, then connecting to the actual db will fail.
 
-    db.setDatabaseName( QString() );
+    db.setDatabaseName(QString());
 
-    if ( !db.isValid() )
+    if (!db.isValid())
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Invalid database object during initial database connection";
     }
 
-    if ( db.open() )
+    if (db.open())
     {
-        QSqlQuery query( db );
+        QSqlQuery query(db);
 
-        if ( !query.exec( QString::fromLatin1( "USE %1" ).arg( d->internalDBName ) ) )
+        if (!query.exec(QString::fromLatin1("USE %1").arg(d->internalDBName)))
         {
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Failed to use database" << d->internalDBName;
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Query error:"           << query.lastError().text();
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database error:"        << db.lastError().text();
             qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Trying to create database now...";
 
-            if ( !query.exec( QLatin1String( "CREATE DATABASE digikam" ) ) )
+            if (!query.exec(QLatin1String("CREATE DATABASE digikam")))
             {
                 QString str = i18n("Failed to create database"
                                    "<p>Query error: %1</p>"
@@ -531,7 +548,7 @@ DatabaseServerError DatabaseServer::createDatabase()
         db.close();
     }
 
-    QSqlDatabase::removeDatabase( initCon );
+    QSqlDatabase::removeDatabase(initCon);
 
     databaseServerStateEnum = started;
 
@@ -540,7 +557,7 @@ DatabaseServerError DatabaseServer::createDatabase()
 
 void DatabaseServer::stopDatabaseProcess()
 {
-    if ( !d->databaseProcess )
+    if (!d->databaseProcess)
     {
         return;
     }
@@ -556,9 +573,9 @@ void DatabaseServer::stopDatabaseProcess()
 
     d->databaseProcess->~QProcess();
     d->databaseProcess  = 0;
-    
+
     //to avoid "Unexpected null receiver" post event
-    if(d->app != NULL)
+    if (d->app != NULL)
         d->app->deleteLater();
 
     databaseServerStateEnum = stopped;

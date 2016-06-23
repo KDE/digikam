@@ -467,7 +467,12 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         port                       = -1;
         userName                   = QLatin1String("root");
         password.clear();
+
+#ifdef Q_OS_WIN
+        connectOptions             = QString::fromLatin1("UNIX_SOCKET=MySQL-digikam");
+#else
         connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+#endif // Q_OS_WIN
     }
 
     if (databaseType.isEmpty())
@@ -677,7 +682,7 @@ QString DbEngineParameters::defaultMysqlServerCmd()
 {
     QString servName = QLatin1String("mysqld_safe"); // For Linux
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     // Under windows, mysqld_safe do not exists.
     servName = QLatin1String("mysqld");
 #endif
@@ -694,7 +699,7 @@ QString DbEngineParameters::defaultMysqlInitCmd()
 {
     QString initName = QLatin1String("mysql_install_db"); // For Linux
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     // Under windows, mysql_install_db tool is named "mysql_install_db.exe"
     initName = QLatin1String("mysql_install_db");
 #endif

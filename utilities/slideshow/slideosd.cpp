@@ -35,7 +35,7 @@
 
 // Windows includes
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
@@ -109,7 +109,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     setAttribute(Qt::WA_ShowWithoutActivating, true);
     setMouseTracking(true);
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
     // adds an extra ugly shadow.
     int ex_style = GetWindowLong((HWND)winId(), GWL_EXSTYLE);

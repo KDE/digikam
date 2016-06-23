@@ -45,7 +45,7 @@ extern "C"
 #include "digikam_debug.h"
 #include "dimgloaderobserver.h"
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 #include "jpegwin.h"
 #endif
 
@@ -216,7 +216,7 @@ bool JPEGLoader::load(const QString& filePath, DImgLoaderObserver* const observe
     jpeg_create_decompress(&cinfo);
     bool startedDecompress = false;
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     QFile inFile(filePath);
     QByteArray buffer;
 

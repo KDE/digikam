@@ -59,7 +59,7 @@ extern "C"
 #include <png.h>
 }
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
 void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int size)
 {
     FILE* const file_handle = (FILE*)png_get_io_ptr(png_ptr);
@@ -228,7 +228,7 @@ bool PNGLoader::load(const QString& filePath, DImgLoaderObserver* const observer
         return false;
     }
 
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     png_set_read_fn(png_ptr, f, _ReadProc);
 #else
     png_init_io(png_ptr, f);
