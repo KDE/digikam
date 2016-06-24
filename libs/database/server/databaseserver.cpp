@@ -65,16 +65,16 @@ public:
         internalDBName  = QLatin1String("digikam");
     }
 
-    QProcess*       databaseProcess;
-    QString         internalDBName;
-    QObject*  app = DatabaseServerStarter::instance(); 
+    QProcess*               databaseProcess;
+    QString                 internalDBName;
+    DatabaseServerStarter*  app; 
 };
 
-DatabaseServer::DatabaseServer(QObject* const application)
-    : QThread(application),
+DatabaseServer::DatabaseServer(DatabaseServerStarter* const parent)
+    : QThread(parent),
       d(new Private)
 {
-    d->app = application;
+    d->app = parent;
 }
 
 DatabaseServer::~DatabaseServer()
@@ -573,10 +573,6 @@ void DatabaseServer::stopDatabaseProcess()
 
     d->databaseProcess->~QProcess();
     d->databaseProcess  = 0;
-
-    //to avoid "Unexpected null receiver" post event
-    if (d->app != NULL)
-        d->app->deleteLater();
 
     databaseServerStateEnum = stopped;
 }

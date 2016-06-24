@@ -36,6 +36,7 @@
 // Local includes
 
 #include "databaseservererror.h"
+#include "databaseserverstarter.h"
 
 class QCoreApplication;
 
@@ -59,7 +60,7 @@ public:
 
 public:
 
-    explicit DatabaseServer(QObject* const application = 0);
+    explicit DatabaseServer(DatabaseServerStarter* const parent = DatabaseServerStarter::instance());
     virtual ~DatabaseServer();
 
     /**
