@@ -75,6 +75,7 @@ DatabaseServer::DatabaseServer(DatabaseServerStarter* const parent)
       d(new Private)
 {
     d->app = parent;
+    databaseServerStateEnum = started;
 }
 
 DatabaseServer::~DatabaseServer()
