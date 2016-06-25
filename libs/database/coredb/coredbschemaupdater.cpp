@@ -95,7 +95,7 @@ public:
     QVariant                currentRequiredVersion;
 
     CoreDbBackend*          backend;
-    CoreDB*                albumDB;
+    CoreDB*                 albumDB;
     DbEngineParameters      parameters;
 
     // legacy
@@ -111,7 +111,6 @@ CoreDbSchemaUpdater::CoreDbSchemaUpdater(CoreDB* const albumDB, CoreDbBackend* c
     d->backend    = backend;
     d->albumDB    = albumDB;
     d->parameters = parameters;
-
 }
 
 CoreDbSchemaUpdater::~CoreDbSchemaUpdater()
@@ -328,7 +327,7 @@ bool CoreDbSchemaUpdater::startUpdates()
         // No legacy handling: start with a fresh db
         if (!createDatabase() || !createFilterSettings())
         {
-            QString errorMsg   = i18n("Failed to create tables in database.\n ") + d->backend->lastError();
+            QString errorMsg    = i18n("Failed to create tables in database.\n ") + d->backend->lastError();
             d->lastErrorMessage = errorMsg;
 
             if (d->observer)
@@ -628,7 +627,6 @@ bool CoreDbSchemaUpdater::performUpdateToVersion(const QString& actionName, int 
     d->currentRequiredVersion = newRequiredVersion;
     return true;
 }
-
 
 bool CoreDbSchemaUpdater::updateToVersion(int targetVersion)
 {
@@ -1192,20 +1190,19 @@ void CoreDbSchemaUpdater::preAlpha010Update1()
 
     if ( !d->backend->execSql(
              QString::fromUtf8( "CREATE TABLE IF NOT EXISTS Searches  \n"
-                      " (id INTEGER PRIMARY KEY, \n"
-                      "  type INTEGER, \n"
-                      "  name TEXT NOT NULL, \n"
-                      "  query TEXT NOT NULL);" ) ))
+                                " (id INTEGER PRIMARY KEY, \n"
+                                "  type INTEGER, \n"
+                                "  name TEXT NOT NULL, \n"
+                                "  query TEXT NOT NULL);" ) ))
     {
         return;
     }
 
-    if (!d->backend->execSql(QString::fromUtf8(
-                                "REPLACE INTO Searches "
-                                " (id, type, name, query) "
-                                "SELECT id, ?, name, url"
-                                " FROM SearchesV3;"),
-                            DatabaseSearch::LegacyUrlSearch)
+    if (!d->backend->execSql(QString::fromUtf8( "REPLACE INTO Searches "
+                                                " (id, type, name, query) "
+                                                "SELECT id, ?, name, url"
+                                                " FROM SearchesV3;"),
+                             DatabaseSearch::LegacyUrlSearch)
        )
     {
         return;
@@ -1260,54 +1257,53 @@ void CoreDbSchemaUpdater::preAlpha010Update2()
 
     d->backend->execSql(
         QString::fromUtf8("CREATE TABLE ImagePositions\n"
-                " (imageid INTEGER PRIMARY KEY,\n"
-                "  latitude TEXT,\n"
-                "  latitudeNumber REAL,\n"
-                "  longitude TEXT,\n"
-                "  longitudeNumber REAL,\n"
-                "  altitude REAL,\n"
-                "  orientation REAL,\n"
-                "  tilt REAL,\n"
-                "  roll REAL,\n"
-                "  accuracy REAL,\n"
-                "  description TEXT);") );
+                          " (imageid INTEGER PRIMARY KEY,\n"
+                          "  latitude TEXT,\n"
+                          "  latitudeNumber REAL,\n"
+                          "  longitude TEXT,\n"
+                          "  longitudeNumber REAL,\n"
+                          "  altitude REAL,\n"
+                          "  orientation REAL,\n"
+                          "  tilt REAL,\n"
+                          "  roll REAL,\n"
+                          "  accuracy REAL,\n"
+                          "  description TEXT);") );
 
-    d->backend->execSql(QString::fromUtf8(
-                           "REPLACE INTO ImagePositions "
-                           " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
-                           "  altitude, orientation, tilt, roll, accuracy, description) "
-                           "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
-                           "  altitude, orientation, tilt, roll, 0, description "
-                           " FROM ImagePositionsTemp;"));
+    d->backend->execSql(QString::fromUtf8("REPLACE INTO ImagePositions "
+                                          " (imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
+                                          "  altitude, orientation, tilt, roll, accuracy, description) "
+                                          "SELECT imageid, latitude, latitudeNumber, longitude, longitudeNumber, "
+                                          "  altitude, orientation, tilt, roll, 0, description "
+                                          " FROM ImagePositionsTemp;"));
 
     d->backend->execSql(
         QString::fromUtf8("CREATE TABLE ImageMetadata\n"
-                " (imageid INTEGER PRIMARY KEY,\n"
-                "  make TEXT,\n"
-                "  model TEXT,\n"
-                "  lens TEXT,\n"
-                "  aperture REAL,\n"
-                "  focalLength REAL,\n"
-                "  focalLength35 REAL,\n"
-                "  exposureTime REAL,\n"
-                "  exposureProgram INTEGER,\n"
-                "  exposureMode INTEGER,\n"
-                "  sensitivity INTEGER,\n"
-                "  flash INTEGER,\n"
-                "  whiteBalance INTEGER,\n"
-                "  whiteBalanceColorTemperature INTEGER,\n"
-                "  meteringMode INTEGER,\n"
-                "  subjectDistance REAL,\n"
-                "  subjectDistanceCategory INTEGER);") );
+                          " (imageid INTEGER PRIMARY KEY,\n"
+                          "  make TEXT,\n"
+                          "  model TEXT,\n"
+                          "  lens TEXT,\n"
+                          "  aperture REAL,\n"
+                          "  focalLength REAL,\n"
+                          "  focalLength35 REAL,\n"
+                          "  exposureTime REAL,\n"
+                          "  exposureProgram INTEGER,\n"
+                          "  exposureMode INTEGER,\n"
+                          "  sensitivity INTEGER,\n"
+                          "  flash INTEGER,\n"
+                          "  whiteBalance INTEGER,\n"
+                          "  whiteBalanceColorTemperature INTEGER,\n"
+                          "  meteringMode INTEGER,\n"
+                          "  subjectDistance REAL,\n"
+                          "  subjectDistanceCategory INTEGER);") );
 
     d->backend->execSql( QString::fromUtf8("INSERT INTO ImageMetadata "
-                                " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
-                                "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
-                                "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
-                                "SELECT imageid, make, model, NULL, aperture, focalLength, focalLength35, "
-                                "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
-                                "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
-                                "FROM ImageMetadataTemp;"));
+                                           " (imageid, make, model, lens, aperture, focalLength, focalLength35, "
+                                           "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
+                                           "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory) "
+                                           "SELECT imageid, make, model, NULL, aperture, focalLength, focalLength35, "
+                                           "  exposureTime, exposureProgram, exposureMode, sensitivity, flash, whiteBalance, "
+                                           "  whiteBalanceColorTemperature, meteringMode, subjectDistance, subjectDistanceCategory "
+                                           "FROM ImageMetadataTemp;"));
 
     d->backend->execSql(QString::fromUtf8("DROP TABLE ImagePositionsTemp;"));
     d->backend->execSql(QString::fromUtf8("DROP TABLE ImageMetadataTemp;"));
@@ -1325,13 +1321,12 @@ void CoreDbSchemaUpdater::preAlpha010Update3()
     }
 
     d->backend->execSql(QString::fromUtf8("DROP TABLE ImageCopyright;"));
-    d->backend->execSql(
-        QString::fromUtf8("CREATE TABLE ImageCopyright\n"
-                " (imageid INTEGER,\n"
-                "  property TEXT,\n"
-                "  value TEXT,\n"
-                "  extraValue TEXT,\n"
-                "  UNIQUE(imageid, property, value, extraValue));")
+    d->backend->execSql(QString::fromUtf8("CREATE TABLE ImageCopyright\n"
+                                          " (imageid INTEGER,\n"
+                                          "  property TEXT,\n"
+                                          "  value TEXT,\n"
+                                          "  extraValue TEXT,\n"
+                                          "  UNIQUE(imageid, property, value, extraValue));")
     );
 
     d->albumDB->setSetting(QLatin1String("preAlpha010Update3"), QLatin1String("true"));
@@ -1348,31 +1343,29 @@ void CoreDbSchemaUpdater::beta010Update1()
 
     // if Image has been deleted
     d->backend->execSql(QString::fromUtf8("DROP TRIGGER delete_image;"));
-    d->backend->execSql(QString::fromUtf8(
-        "CREATE TRIGGER delete_image DELETE ON Images\n"
-        "BEGIN\n"
-        "  DELETE FROM ImageTags\n"
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImageHaarMatrix\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImageInformation\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImageMetadata\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImagePositions\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImageComments\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImageCopyright\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  DELETE From ImageProperties\n "
-        "    WHERE imageid=OLD.id;\n"
-        "  UPDATE Albums SET icon=null \n "
-        "    WHERE icon=OLD.id;\n"
-        "  UPDATE Tags SET icon=null \n "
-        "    WHERE icon=OLD.id;\n"
-        "END;"));
-
+    d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_image DELETE ON Images\n"
+                                          "BEGIN\n"
+                                          "  DELETE FROM ImageTags\n"
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageHaarMatrix\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageInformation\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageMetadata\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImagePositions\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageComments\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageCopyright\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageProperties\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  UPDATE Albums SET icon=null \n "
+                                          "    WHERE icon=OLD.id;\n"
+                                          "  UPDATE Tags SET icon=null \n "
+                                          "    WHERE icon=OLD.id;\n"
+                                          "END;"));
 
     d->albumDB->setSetting(QLatin1String("beta010Update1"), QLatin1String("true"));
 }
@@ -1395,75 +1388,75 @@ void CoreDbSchemaUpdater::beta010Update2()
 bool CoreDbSchemaUpdater::createTablesV3()
 {
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Albums\n"
-                                     " (id INTEGER PRIMARY KEY,\n"
-                                     "  url TEXT NOT NULL UNIQUE,\n"
-                                     "  date DATE NOT NULL,\n"
-                                     "  caption TEXT,\n"
-                                     "  collection TEXT,\n"
-                                     "  icon INTEGER);") ))
+                                                " (id INTEGER PRIMARY KEY,\n"
+                                                "  url TEXT NOT NULL UNIQUE,\n"
+                                                "  date DATE NOT NULL,\n"
+                                                "  caption TEXT,\n"
+                                                "  collection TEXT,\n"
+                                                "  icon INTEGER);") ))
     {
         return false;
     }
 
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Tags\n"
-                                     " (id INTEGER PRIMARY KEY,\n"
-                                     "  pid INTEGER,\n"
-                                     "  name TEXT NOT NULL,\n"
-                                     "  icon INTEGER,\n"
-                                     "  iconkde TEXT,\n"
-                                     "  UNIQUE (name, pid));") ))
+                                                " (id INTEGER PRIMARY KEY,\n"
+                                                "  pid INTEGER,\n"
+                                                "  name TEXT NOT NULL,\n"
+                                                "  icon INTEGER,\n"
+                                                "  iconkde TEXT,\n"
+                                                "  UNIQUE (name, pid));") ))
     {
         return false;
     }
 
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE TagsTree\n"
-                                     " (id INTEGER NOT NULL,\n"
-                                     "  pid INTEGER NOT NULL,\n"
-                                     "  UNIQUE (id, pid));") ))
+                                                " (id INTEGER NOT NULL,\n"
+                                                "  pid INTEGER NOT NULL,\n"
+                                                "  UNIQUE (id, pid));") ))
     {
         return false;
     }
 
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Images\n"
-                                     " (id INTEGER PRIMARY KEY,\n"
-                                     "  name TEXT NOT NULL,\n"
-                                     "  dirid INTEGER NOT NULL,\n"
-                                     "  caption TEXT,\n"
-                                     "  datetime DATETIME,\n"
-                                     "  UNIQUE (name, dirid));") ))
+                                                " (id INTEGER PRIMARY KEY,\n"
+                                                "  name TEXT NOT NULL,\n"
+                                                "  dirid INTEGER NOT NULL,\n"
+                                                "  caption TEXT,\n"
+                                                "  datetime DATETIME,\n"
+                                                "  UNIQUE (name, dirid));") ))
     {
         return false;
     }
 
 
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE ImageTags\n"
-                                     " (imageid INTEGER NOT NULL,\n"
-                                     "  tagid INTEGER NOT NULL,\n"
-                                     "  UNIQUE (imageid, tagid));") ))
+                                                " (imageid INTEGER NOT NULL,\n"
+                                                "  tagid INTEGER NOT NULL,\n"
+                                                "  UNIQUE (imageid, tagid));") ))
     {
         return false;
     }
 
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE ImageProperties\n"
-                                     " (imageid  INTEGER NOT NULL,\n"
-                                     "  property TEXT    NOT NULL,\n"
-                                     "  value    TEXT    NOT NULL,\n"
-                                     "  UNIQUE (imageid, property));") ))
+                                                " (imageid  INTEGER NOT NULL,\n"
+                                                "  property TEXT    NOT NULL,\n"
+                                                "  value    TEXT    NOT NULL,\n"
+                                                "  UNIQUE (imageid, property));") ))
     {
         return false;
     }
 
     if ( !d->backend->execSql( QString::fromUtf8("CREATE TABLE Searches  \n"
-                                       " (id INTEGER PRIMARY KEY, \n"
-                                       "  name TEXT NOT NULL UNIQUE, \n"
-                                       "  url  TEXT NOT NULL);") ) )
+                                                  " (id INTEGER PRIMARY KEY, \n"
+                                                  "  name TEXT NOT NULL UNIQUE, \n"
+                                                  "  url  TEXT NOT NULL);") ) )
     {
         return false;
     }
 
     if (!d->backend->execSql( QString::fromUtf8("CREATE TABLE Settings         \n"
-                                     "(keyword TEXT NOT NULL UNIQUE,\n"
-                                     " value TEXT);") ))
+                                                "(keyword TEXT NOT NULL UNIQUE,\n"
+                                                " value TEXT);") ))
     {
         return false;
     }
@@ -1478,76 +1471,76 @@ bool CoreDbSchemaUpdater::createTablesV3()
     // trigger: delete from Images/ImageTags/ImageProperties
     // if Album has been deleted
     d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_album DELETE ON Albums\n"
-                       "BEGIN\n"
-                       " DELETE FROM ImageTags\n"
-                       "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
-                       " DELETE From ImageProperties\n"
-                       "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
-                       " DELETE FROM Images\n"
-                       "   WHERE dirid = OLD.id;\n"
-                       "END;"));
+                                          "BEGIN\n"
+                                          " DELETE FROM ImageTags\n"
+                                          "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+                                          " DELETE From ImageProperties\n"
+                                          "   WHERE imageid IN (SELECT id FROM Images WHERE dirid=OLD.id);\n"
+                                          " DELETE FROM Images\n"
+                                          "   WHERE dirid = OLD.id;\n"
+                                          "END;"));
 
     // trigger: delete from ImageTags/ImageProperties
     // if Image has been deleted
     d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_image DELETE ON Images\n"
-                       "BEGIN\n"
-                       "  DELETE FROM ImageTags\n"
-                       "    WHERE imageid=OLD.id;\n"
-                       "  DELETE From ImageProperties\n "
-                       "    WHERE imageid=OLD.id;\n"
-                       "  UPDATE Albums SET icon=null \n "
-                       "    WHERE icon=OLD.id;\n"
-                       "  UPDATE Tags SET icon=null \n "
-                       "    WHERE icon=OLD.id;\n"
-                       "END;"));
+                                          "BEGIN\n"
+                                          "  DELETE FROM ImageTags\n"
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  DELETE From ImageProperties\n "
+                                          "    WHERE imageid=OLD.id;\n"
+                                          "  UPDATE Albums SET icon=null \n "
+                                          "    WHERE icon=OLD.id;\n"
+                                          "  UPDATE Tags SET icon=null \n "
+                                          "    WHERE icon=OLD.id;\n"
+                                          "END;"));
 
     // trigger: delete from ImageTags if Tag has been deleted
     d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_tag DELETE ON Tags\n"
-                       "BEGIN\n"
-                       "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
-                       "END;"));
+                                          "BEGIN\n"
+                                          "  DELETE FROM ImageTags WHERE tagid=OLD.id;\n"
+                                          "END;"));
 
     // trigger: insert into TagsTree if Tag has been added
     d->backend->execSql(QString::fromUtf8("CREATE TRIGGER insert_tagstree AFTER INSERT ON Tags\n"
-                       "BEGIN\n"
-                       "  INSERT INTO TagsTree\n"
-                       "    SELECT NEW.id, NEW.pid\n"
-                       "    UNION\n"
-                       "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
-                       "END;"));
+                                          "BEGIN\n"
+                                          "  INSERT INTO TagsTree\n"
+                                          "    SELECT NEW.id, NEW.pid\n"
+                                          "    UNION\n"
+                                          "    SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid;\n"
+                                          "END;"));
 
     // trigger: delete from TagsTree if Tag has been deleted
     d->backend->execSql(QString::fromUtf8("CREATE TRIGGER delete_tagstree DELETE ON Tags\n"
-                       "BEGIN\n"
-                       " DELETE FROM Tags\n"
-                       "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
-                       " DELETE FROM TagsTree\n"
-                       "   WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
-                       " DELETE FROM TagsTree\n"
-                       "    WHERE id=OLD.id;\n"
-                       "END;"));
+                                          "BEGIN\n"
+                                          " DELETE FROM Tags\n"
+                                          "   WHERE id  IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
+                                          " DELETE FROM TagsTree\n"
+                                          "   WHERE id IN (SELECT id FROM TagsTree WHERE pid=OLD.id);\n"
+                                          " DELETE FROM TagsTree\n"
+                                          "    WHERE id=OLD.id;\n"
+                                          "END;"));
 
     // trigger: delete from TagsTree if Tag has been deleted
     d->backend->execSql(QString::fromUtf8("CREATE TRIGGER move_tagstree UPDATE OF pid ON Tags\n"
-                       "BEGIN\n"
-                       "  DELETE FROM TagsTree\n"
-                       "    WHERE\n"
-                       "      ((id = OLD.id)\n"
-                       "        OR\n"
-                       "        id IN (SELECT id FROM TagsTree WHERE pid=OLD.id))\n"
-                       "      AND\n"
-                       "      pid IN (SELECT pid FROM TagsTree WHERE id=OLD.id);\n"
-                       "  INSERT INTO TagsTree\n"
-                       "     SELECT NEW.id, NEW.pid\n"
-                       "     UNION\n"
-                       "     SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid\n"
-                       "     UNION\n"
-                       "     SELECT id, NEW.pid FROM TagsTree WHERE pid=NEW.id\n"
-                       "     UNION\n"
-                       "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
-                       "        WHERE\n"
-                       "        A.pid = NEW.id AND B.id = NEW.pid;\n"
-                       "END;"));
+                                          "BEGIN\n"
+                                          "  DELETE FROM TagsTree\n"
+                                          "    WHERE\n"
+                                          "      ((id = OLD.id)\n"
+                                          "        OR\n"
+                                          "        id IN (SELECT id FROM TagsTree WHERE pid=OLD.id))\n"
+                                          "      AND\n"
+                                          "      pid IN (SELECT pid FROM TagsTree WHERE id=OLD.id);\n"
+                                          "  INSERT INTO TagsTree\n"
+                                          "     SELECT NEW.id, NEW.pid\n"
+                                          "     UNION\n"
+                                          "     SELECT NEW.id, pid FROM TagsTree WHERE id=NEW.pid\n"
+                                          "     UNION\n"
+                                          "     SELECT id, NEW.pid FROM TagsTree WHERE pid=NEW.id\n"
+                                          "     UNION\n"
+                                          "     SELECT A.id, B.pid FROM TagsTree A, TagsTree B\n"
+                                          "        WHERE\n"
+                                          "        A.pid = NEW.id AND B.id = NEW.pid;\n"
+                                          "END;"));
 
     return true;
 }
