@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2009-11-21
- * Description : Wavelets Noise Reduction batch tool.
+ * Date        : TBD
+ * Description : A Red-Eye tool for automatic detection and correction filter.
  *
- * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,8 +54,9 @@ RedEyeCorrection::~RedEyeCorrection()
 
 void RedEyeCorrection::registerSettingsWidget()
 {
+    // Todo: modify or delete depending on settings
+
     m_settingsWidget = new QWidget;
-    //m_settingsView   = new AntiVignettingSettings(m_settingsWidget);
 
     //connect(m_settingsView, SIGNAL(signalSettingsChanged()),
     //        this, SLOT(slotSettingsChanged()));
@@ -65,47 +66,21 @@ void RedEyeCorrection::registerSettingsWidget()
 
 BatchToolSettings RedEyeCorrection::defaultSettings()
 {
+    // Todo: modify or delete depending on settings
     BatchToolSettings prm;
-    //AntiVignettingContainer defaultPrm = m_settingsView->defaultSettings();
-
-//    prm.insert(QLatin1String("addvignetting"), (bool)defaultPrm.addvignetting);
-//    prm.insert(QLatin1String("density"), (double)defaultPrm.density);
-//    prm.insert(QLatin1String("power"), (double)defaultPrm.power);
-//    prm.insert(QLatin1String("innerradius"), (double)defaultPrm.innerradius);
-//    prm.insert(QLatin1String("outerradius"), (double)defaultPrm.outerradius);
-//    prm.insert(QLatin1String("xshift"), (double)defaultPrm.xshift);
-//    prm.insert(QLatin1String("yshift"), (double)defaultPrm.yshift);
 
     return prm;
 }
 
 void RedEyeCorrection::slotAssignSettings2Widget()
 {
-//    AntiVignettingContainer prm;
-//    prm.addvignetting = settings()[QLatin1String("addvignetting")].toBool();
-//    prm.density       = settings()[QLatin1String("density")].toDouble();
-//    prm.power         = settings()[QLatin1String("power")].toDouble();
-//    prm.innerradius   = settings()[QLatin1String("innerradius")].toDouble();
-//    prm.outerradius   = settings()[QLatin1String("outerradius")].toDouble();
-//    prm.xshift        = settings()[QLatin1String("xshift")].toDouble();
-//    prm.yshift        = settings()[QLatin1String("yshift")].toDouble();
-//    m_settingsView->setSettings(prm);
+    // Todo: modify or delete depending on settings
+
 }
 
 void RedEyeCorrection::slotSettingsChanged()
 {
-//    BatchToolSettings prm;
-//    AntiVignettingContainer currentPrm = m_settingsView->settings();
-
-//    prm.insert(QLatin1String("addvignetting"), (bool)currentPrm.addvignetting);
-//    prm.insert(QLatin1String("density"), (double)currentPrm.density);
-//    prm.insert(QLatin1String("power"), (double)currentPrm.power);
-//    prm.insert(QLatin1String("innerradius"), (double)currentPrm.innerradius);
-//    prm.insert(QLatin1String("outerradius"), (double)currentPrm.outerradius);
-//    prm.insert(QLatin1String("xshift"), (double)currentPrm.xshift);
-//    prm.insert(QLatin1String("yshift"), (double)currentPrm.yshift);
-
-//    BatchTool::slotSettingsChanged(prm);
+    // Todo: modify or delete depending on settings
 }
 
 bool RedEyeCorrection::toolOperations()
@@ -115,14 +90,6 @@ bool RedEyeCorrection::toolOperations()
         return false;
     }
 
-//    AntiVignettingContainer prm;
-//    prm.addvignetting = settings()[QLatin1String("addvignetting")].toBool();
-//    prm.density       = settings()[QLatin1String("density")].toDouble();
-//    prm.power         = settings()[QLatin1String("power")].toDouble();
-//    prm.innerradius   = settings()[QLatin1String("innerradius")].toDouble();
-//    prm.outerradius   = settings()[QLatin1String("outerradius")].toDouble();
-//    prm.xshift        = settings()[QLatin1String("xshift")].toDouble();
-//    prm.yshift        = settings()[QLatin1String("yshift")].toDouble();
 
     RedEyeCorrectionFilter vig(&image(), 0L);
     applyFilter(&vig);

@@ -3,12 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-17-07
- * Description : A Gaussian Blur threaded image filter.
+ * Date        : TBD
+ * Description : A Red-Eye automatic detection and correction filter.
  *
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,19 +24,24 @@
 
 #include "redeyecorrectionfilter.h"
 
+// OpenCV includes
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include "facedetector.h"
+
 // Qt includes
 
 #include <QtConcurrent>
 #include <QtMath>
 #include <QMutex>
+#include <iterator>
+#include <QListIterator>
 
-// OpenCV includes
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/opencv.hpp>
+
 // Local includes
-
 #include "digikam_debug.h"
+//#include "opencv"
 
 namespace Digikam
 {
@@ -48,14 +52,11 @@ public:
 
     Private()
     {
-        globalProgress = 0;
-        radius         = 3;
+
     }
 
-    int    radius;
-    int    globalProgress;
+    FacesEngine::FaceDetector facedetector;
 
-    QMutex lock;
 };
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
@@ -69,7 +70,6 @@ RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImg* const orgImage, QObject* co
     : DImgThreadedFilter(orgImage, parent, QLatin1String("RedEyeCorrection")),
       d(new Private)
 {
-    //d->radius = radius;
     initFilter();
 }
 
@@ -80,215 +80,140 @@ RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImgThreadedFilter* const parentF
                          parentFilter->filterName() + QLatin1String(": RedEyeCorrection")),
       d(new Private)
 {
-    //d->radius = radius;
     filterImage();
 }
 
 RedEyeCorrectionFilter::~RedEyeCorrectionFilter()
 {
-//    cancelFilter();
-//    delete d;
+      cancelFilter();
+      delete d;
 }
 
-void RedEyeCorrectionFilter::blurMultithreaded(uint start, uint stop)
+
+cv::Mat RedEyeCorrectionFilter::QImageToCvMat( const QImage &inImage, bool inCloneImageData )
 {
-//    bool sixteenBit  = m_orgImage.sixteenBit();
-//    int  height      = m_orgImage.height();
-//    int  width       = m_orgImage.width();
-//    int  radius      = d->radius;
-//    int  oldProgress = 0;
-//    int  progress    = 0;
-//    uint a, r, g, b;
-//    int  mx;
-//    int  my;
-//    int  mw;
-//    int  mh;
-//    int  mt;
-//    int* as = new int[width];
-//    int* rs = new int[width];
-//    int* gs = new int[width];
-//    int* bs = new int[width];
+    // Todo : Handle QImage 16 bit depth images or convert from DImg to cv::Mat directly
+    switch ( inImage.format() )
+    {
+        // 8-bit, 4 channel
+        case QImage::Format_RGB32:
+        {
+            cv::Mat  mat( inImage.height(), inImage.width(), CV_8UC4, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine() );
 
-//    for (uint y = start ; runningFlag() && (y < stop) ; ++y)
-//    {
-//        my = y - radius;
-//        mh = (radius << 1) + 1;
+            return (inCloneImageData ? mat.clone() : mat);
+        }
 
-//        if (my < 0)
-//        {
-//            mh += my;
-//            my = 0;
-//        }
+        // 8-bit, 3 channel
+        case QImage::Format_RGB888:
+        {
+            if ( !inCloneImageData )
+               qWarning() << "ASM::QImageToCvMat() - Conversion requires cloning since we use a temporary QImage";
 
-//        if ((my + mh) > height)
-//        {
-//            mh = height - my;
-//        }
+            QImage   swapped = inImage.rgbSwapped();
 
-//        uchar* pDst8           = m_destImage.scanLine(y);
-//        unsigned short* pDst16 = reinterpret_cast<unsigned short*>(m_destImage.scanLine(y));
+            return cv::Mat( swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine() ).clone();
+        }
 
-//        memset(as, 0, width * sizeof(int));
-//        memset(rs, 0, width * sizeof(int));
-//        memset(gs, 0, width * sizeof(int));
-//        memset(bs, 0, width * sizeof(int));
+         // 8-bit, 1 channel
+        case QImage::Format_Indexed8:
+        {
+            cv::Mat  mat( inImage.height(), inImage.width(), CV_8UC1, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine() );
 
-//        for (int yy = 0; yy < mh; yy++)
-//        {
-//            uchar* pSrc8           = m_orgImage.scanLine(yy + my);
-//            unsigned short* pSrc16 = reinterpret_cast<unsigned short*>(m_orgImage.scanLine(yy + my));
+            return (inCloneImageData ? mat.clone() : mat);
+        }
 
-//            for (int x = 0; x < width; x++)
-//            {
-//                if (sixteenBit)
-//                {
-//                    bs[x]  += pSrc16[0];
-//                    gs[x]  += pSrc16[1];
-//                    rs[x]  += pSrc16[2];
-//                    as[x]  += pSrc16[3];
-//                    pSrc16 += 4;
-//                }
-//                else
-//                {
-//                    bs[x] += pSrc8[0];
-//                    gs[x] += pSrc8[1];
-//                    rs[x] += pSrc8[2];
-//                    as[x] += pSrc8[3];
-//                    pSrc8 += 4;
-//                }
-//            }
-//        }
+        default:
+            qWarning() << "ASM::QImageToCvMat() - QImage format not handled in switch:" << inImage.format();
+            break;
+    }
 
-//        if (width > ((radius << 1) + 1))
-//        {
-//            for (int x = 0; x < width; x++)
-//            {
-//                a  = r = g = b = 0;
-//                mx = x - radius;
-//                mw = (radius << 1) + 1;
-
-//                if (mx < 0)
-//                {
-//                    mw += mx;
-//                    mx = 0;
-//                }
-
-//                if ((mx + mw) > width)
-//                {
-//                    mw = width - mx;
-//                }
-
-//                mt = mw * mh;
-
-//                for (int xx = mx; xx < (mw + mx); xx++)
-//                {
-//                    a += as[xx];
-//                    r += rs[xx];
-//                    g += gs[xx];
-//                    b += bs[xx];
-//                }
-
-//                a = a / mt;
-//                r = r / mt;
-//                g = g / mt;
-//                b = b / mt;
-
-//                if (sixteenBit)
-//                {
-//                    pDst16[0] = b;
-//                    pDst16[1] = g;
-//                    pDst16[2] = r;
-//                    pDst16[3] = a;
-//                    pDst16   += 4;
-//                }
-//                else
-//                {
-//                    pDst8[0] = b;
-//                    pDst8[1] = g;
-//                    pDst8[2] = r;
-//                    pDst8[3] = a;
-//                    pDst8   += 4;
-//                }
-//            }
-//        }
-//        else
-//        {
-//            qCDebug(DIGIKAM_DIMG_LOG) << "Radius too small...";
-//        }
-
-//        progress = (int)( ( (double)y * (100.0 / QThreadPool::globalInstance()->maxThreadCount()) ) / (stop-start));
-
-//        if ((progress % 5 == 0) && (progress > oldProgress))
-//        {
-//            d->lock.lock();
-//            oldProgress       = progress;
-//            d->globalProgress += 5;
-//            postProgress(d->globalProgress);
-//            d->lock.unlock();
-//        }
-//    }
-
-//    delete [] as;
-//    delete [] rs;
-//    delete [] gs;
-//    delete [] bs;
+    return cv::Mat();
 }
+
 
 void RedEyeCorrectionFilter::filterImage()
 {
+    // Deep copy
+    QImage temp = m_orgImage.copyQImage();
 
-    m_destImage = m_orgImage;
 
-    //m_orgImage.
-    //int type  = m_orgImage.sixteenBit()?cv::DataType<ushort>::type:cv::DataType<uchar>::type;
-    int type = m_orgImage.sixteenBit()?18:16; // 18 is CV_16UC3
-    type = m_orgImage.hasAlpha()?type:type+8; // 26 is CV_16UC4
+    int type = m_orgImage.sixteenBit()?CV_16UC3:CV_8UC3;
+    type = m_orgImage.hasAlpha()?type:type+8;
+    //cv::Mat intermediateImage = cv::Mat(cv::Size(m_orgImage.width(),m_orgImage.height()),
+    //                                    type,m_orgImage.bits());
+    // intermediateImage.data = m_orgImage.bits();
 
-    cv::Mat intermediateImage = cv::Mat(cv::Size(m_orgImage.width(),m_orgImage.height()),
-                                        type,m_orgImage.bits());
-    cv::rectangle(intermediateImage,
-                  cv::Rect(m_orgImage.width()/3,m_orgImage.height()/3,
-                           m_orgImage.width()/3,m_orgImage.height()/3),
-                  cv::Scalar(255,0,0));
-    //cv::imshow("Hello",intermediateImage);
-    //cv::waitKey(0);
-    m_destImage.putImageData(intermediateImage.data);
 
-//    if (d->radius < 1)
-//    {
-//        qCDebug(DIGIKAM_DIMG_LOG) << "Radius out of range...";
-//        m_destImage = m_orgImage;
-//        return;
-//    }
+    QList<QRectF> faces = d->facedetector.detectFaces(temp,temp.size());
+    QList<cv::Rect> cvfaces;
+    QRectFtocvRect(faces, cvfaces);
 
-//    QList<int> vals = multithreadedSteps(m_orgImage.height());
-//    QList <QFuture<void> > tasks;
+    // Shallow Copy
+    cv::Mat outputimage = QImageToCvMat(temp);
 
-//    for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
-//    {
-//        tasks.append(QtConcurrent::run(this,
-//                                       &BlurFilter::blurMultithreaded,
-//                                       vals[j],
-//                                       vals[j+1]
-//                                      ));
-//    }
+    // Todo : replace this code with eye detection and correction
+    drawRects(outputimage, cvfaces);
 
-//    foreach(QFuture<void> t, tasks)
-//        t.waitForFinished();
+    // Shallow Copy
+    m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+                             m_orgImage.hasAlpha(), outputimage.data, false);
+
+
 }
+
+void RedEyeCorrectionFilter::drawRects(cv::Mat &image, const QList<cv::Rect> & rects)
+{
+    QListIterator<cv::Rect> listit(rects);
+
+    while(listit.hasNext())
+    {
+        cv::Rect temp = listit.next();
+        cv::rectangle(image, temp, cv::Scalar(0,0,255));
+    }
+}
+
+void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRectF> & faces, QList<cv::Rect> & result)
+{
+    QListIterator<QRectF> listit(faces);
+
+    while(listit.hasNext())
+    {
+        QRectF  temp = listit.next();
+        result.append(cv::Rect(temp.topLeft().rx(), temp.topLeft().ry(),
+                               temp.width()       , temp.height()) );
+    }
+}
+
+void RedEyeCorrectionFilter::correctRedEye(cv::Mat & eye)
+{
+    // Todo : handle different images depth
+    for(int i = 0 ; i<eye.rows; i++)
+        for(int j = 0; j<eye.cols; j++)
+        {
+            cv::Vec3b intensity = eye.at<cv::Vec3b>(i, j);
+            float redIntensity = ((float)intensity.val[2] / ((intensity.val[1] + intensity.val[0]) / 2));
+            if (redIntensity > 2.1f)
+            {
+                // reduce red to the average of blue and green
+                intensity.val[2] = (intensity.val[1] + intensity.val[0]) / 2;
+                eye.at<cv::Vec3b>(i, j) = intensity;
+            }
+        }
+
+}
+
 
 FilterAction RedEyeCorrectionFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
     action.setDisplayableName(DisplayableName());
 
-//    action.addParameter(QLatin1String("radius"), d->radius);
     return action;
 }
 
 void RedEyeCorrectionFilter::readParameters(const FilterAction& action)
 {
-//    d->radius = action.parameter(QLatin1String("radius")).toInt();
+    // if there'll be parameters
 }
 
 }  // namespace Digikam

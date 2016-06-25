@@ -3,12 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-17-07
- * Description : A Gaussian Blur threaded image filter.
+ * Date        : TBD
+ * Description : A Red-Eye automatic detection and correction filter.
  *
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2009      by Andi Clemens <andi dot clemens at gmail dot com>
- * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -32,8 +31,13 @@
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
 
+// OpenCV Includes
+#include <opencv2/opencv.hpp>
+#include <facedetector.h>
+
 namespace Digikam
 {
+class FacesEngine::FaceDetector;
 
 class DIGIKAM_EXPORT RedEyeCorrectionFilter : public DImgThreadedFilter
 {
@@ -79,13 +83,18 @@ public:
     void                    readParameters(const FilterAction& action);
 
 private:
-
+    cv::Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
     void filterImage();
-    void blurMultithreaded(uint start, uint stop);
+    void correctRedEye(cv::Mat & eye);
+    void QRectFtocvRect(const QList<QRectF> & faces,QList<cv::Rect> & result);
+    void drawRects(cv::Mat &  image, const QList<cv::Rect> &rects);
+
+
 
 private:
 
     class Private;
+    //FacesEngine::FaceDetector facedetector;
     Private* const d;
 };
 

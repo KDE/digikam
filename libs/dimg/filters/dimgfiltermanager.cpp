@@ -74,6 +74,7 @@
 #include "normalizefilter.h"
 #include "nrfilter.h"
 #include "oilpaintfilter.h"
+#include "redeyecorrectionfilter.h"
 #include "raindropfilter.h"
 #include "sharpenfilter.h"
 #include "shearfilter.h"
@@ -83,7 +84,7 @@
 #include "unsharpmaskfilter.h"
 #include "wbfilter.h"
 #include "filmfilter_p.h"
-#include "redeyecorrectionfilter.h"
+
 
 #ifdef HAVE_LIBLQR_1
 #include "contentawarefilter.h"
