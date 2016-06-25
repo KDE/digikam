@@ -467,12 +467,7 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         port                       = -1;
         userName                   = QLatin1String("root");
         password.clear();
-
-#ifdef Q_OS_WIN
-        connectOptions             = QString::fromLatin1("UNIX_SOCKET=MySQL-digikam");
-#else
         connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
-#endif // Q_OS_WIN
     }
 
     if (databaseType.isEmpty())

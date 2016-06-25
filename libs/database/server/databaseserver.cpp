@@ -171,16 +171,6 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         return DatabaseServerError(DatabaseServerError::StartError, i18n("No path to mysql initialization command set in configuration file!."));
     }
 
-    QStringList mysqlInitCmdArgs;
-
-#ifdef Q_OS_WIN
-    mysqlInitCmdArgs << QString::fromLatin1("--default-user=%1").arg(getcurrentAccountUserName());
-#else
-    mysqlInitCmdArgs << QString::fromLatin1("--user=%1").arg(getcurrentAccountUserName());
-#endif // Q_OS_WIN
-
-    mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
-
     if (!QFile::exists(defaultAkDir))
     {
         if (!QDir().mkpath(defaultAkDir))
@@ -341,17 +331,17 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         QFile(dataDir + QLatin1Char('/') + QString::fromLatin1("ib_logfile1")).remove();
     }
 
+    // Synthesize the server initialization command line arguments
+
+    QStringList mysqlInitCmdArgs;
+    mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
+
     // Synthesize the server command line arguments
 
     QStringList mysqldCmdArgs;
     mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(actualConfig));
     mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
-
-#ifdef Q_OS_WIN
-    mysqldCmdArgs << QString::fromLatin1("--socket=MySQL-digikam");
-#else
     mysqldCmdArgs << QString::fromLatin1("--socket=%1/mysql.socket").arg(miscDir);
-#endif // Q_OS_WIN
 
     // Initialize the database
 
@@ -409,13 +399,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     {
         QSqlDatabase db = QSqlDatabase::addDatabase(DbEngineParameters::MySQLDatabaseType(), initCon);
-
-#ifdef Q_OS_WIN
-        db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=MySQL-digikam"));
-#else
         db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
-#endif // Q_OS_WIN
-
         db.setUserName(QLatin1String("root"));
         db.setDatabaseName(QString()); // might not exist yet, then connecting to the actual db will fail
 
