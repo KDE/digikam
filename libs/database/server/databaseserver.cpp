@@ -566,7 +566,7 @@ void DatabaseServer::stopDatabaseProcess()
 
     d->databaseProcess->terminate();
 
-    if (d->databaseProcess->state() == QProcess::Running && !d->databaseProcess->waitForFinished(10000))
+    if (d->databaseProcess->state() == QProcess::Running && !d->databaseProcess->waitForFinished(5000))
     {
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database process will be killed now";
         d->databaseProcess->kill();
