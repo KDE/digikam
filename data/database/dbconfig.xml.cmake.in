@@ -1306,6 +1306,7 @@ JOIN ImageTags AS it
   ON it.imageid = img.id
 WHERE img.status = 1 
   AND it.tagid = :tagID
+;
             </statement>
             </dbaction>
 
@@ -1737,7 +1738,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <dbaction name="Delete_Thumbnail_ByPath" mode="query">
                 <statement mode="query">
-                    SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path
+                    SELECT @thumbsId := thumbId FROM FilePaths WHERE path=:path;
                 </statement>
                 <statement mode="query">
                     DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
@@ -1752,7 +1753,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <dbaction name="Delete_Thumbnail_ByUniqueHashId" mode="query">
                 <statement mode="query">
-                    SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize
+                    SELECT @thumbsId := thumbId FROM UniqueHashes WHERE uniqueHash=:uniqueHash AND fileSize=:filesize;
                 </statement>
                 <statement mode="query">
                     DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
@@ -1767,7 +1768,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <dbaction name="Delete_Thumbnail_ByCustomIdentifier" mode="query">
                 <statement mode="query">
-                    SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier
+                    SELECT @thumbsId := thumbId FROM CustomIdentifiers WHERE identifier=:identifier;
                 </statement>
                 <statement mode="query">
                     DELETE FROM UniqueHashes WHERE UniqueHashes.thumbId = @thumbsId;
@@ -1882,7 +1883,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS CustomIdentifiers
                             (identifier LONGTEXT CHARACTER SET utf8,
                             thumbId INTEGER,
-                            UNIQUE(identifier(333)))
+                            UNIQUE(identifier(333)));
                 </statement>
                 <statement mode="plain">CALL create_index_if_not_exists('CustomIdentifiers','id_customIdentifiers','thumbId');</statement>
             </dbaction>
