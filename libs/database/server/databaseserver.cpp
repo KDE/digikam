@@ -216,7 +216,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         }
     }
 
+#ifdef Q_OS_WIN
+    const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-windows.conf"));
+#else
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
+#endif
+
     const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-local.conf"));
     const QString actualConfig = defaultAkDir + QLatin1String("mysql.conf");
 
@@ -341,7 +346,12 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     QStringList mysqldCmdArgs;
     mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(actualConfig));
     mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
+
+#ifdef Q_OS_WIN
+    mysqldCmdArgs << QString::fromLatin1("--port=3307");
+#else
     mysqldCmdArgs << QString::fromLatin1("--socket=%1/mysql.socket").arg(miscDir);
+#endif
 
     // Initialize the database
 
@@ -399,7 +409,14 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
 
     {
         QSqlDatabase db = QSqlDatabase::addDatabase(DbEngineParameters::MySQLDatabaseType(), initCon);
+
+#ifdef Q_OS_WIN
+        db.setHostName(QLatin1String("localhost"));
+        db.setPort(3307);
+#else
         db.setConnectOptions(QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir));
+#endif
+
         db.setUserName(QLatin1String("root"));
         db.setDatabaseName(QString()); // might not exist yet, then connecting to the actual db will fail
 

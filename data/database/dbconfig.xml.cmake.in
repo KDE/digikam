@@ -885,12 +885,12 @@
     <database name="QMYSQL">
 
         <!-- NOTE: default settings for Mysql Internal server -->
-        <hostName></hostName>
+        <hostName>$$DBHOSTNAME$$</hostName>
         <databaseName>digikam</databaseName>
         <userName>root</userName>
         <password></password>
-        <port>-1</port>
-        <connectoptions>UNIX_SOCKET=$$DBMISCPATH$$/mysql.socket</connectoptions>
+        <port>$$DBPORT$$</port>
+        <connectoptions>$$DBOPTIONS$$</connectoptions>
 
         <dbactions>
 

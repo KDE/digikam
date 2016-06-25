@@ -463,11 +463,18 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         databaseNameThumbnails     = QLatin1String("digikam");
         databaseNameFace           = QLatin1String("digikam");
         internalServer             = true;
-        hostName.clear();
-        port                       = -1;
         userName                   = QLatin1String("root");
         password.clear();
+
+#ifdef Q_OS_WIN
+        hostName                   = QLatin1String("localhost");
+        port                       = 3307;
+        connectOptions.clear();
+#else
+        hostName.clear();
+        port                       = -1;
         connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+#endif
     }
 
     if (databaseType.isEmpty())
@@ -624,19 +631,40 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseT
     parameters.databaseNameCore           = config.databaseName;
     parameters.databaseNameThumbnails     = config.databaseName;
     parameters.databaseNameFace           = config.databaseName;
-    parameters.hostName                   = config.hostName;
     parameters.userName                   = config.userName;
     parameters.password                   = config.password;
-    parameters.port                       = config.port.toInt();
     parameters.internalServer             = (databaseType == QLatin1String("QMYSQL"));
     parameters.internalServerDBPath       = (databaseType == QLatin1String("QMYSQL")) ? internalServerPrivatePath() : QString();
     parameters.internalServerMysqlServCmd = (databaseType == QLatin1String("QMYSQL")) ? defaultMysqlServerCmd()     : QString();
     parameters.internalServerMysqlInitCmd = (databaseType == QLatin1String("QMYSQL")) ? defaultMysqlInitCmd()       : QString();
 
-    const QString miscDir                 = internalServerPrivatePath() + QLatin1String("db_misc");
+    QString hostName                      = config.hostName;
+    QString port                          = config.port;
     QString connectOptions                = config.connectOptions;
-    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), (databaseType == QLatin1String("QMYSQL"))
-                                                            ? miscDir : QString());
+
+#ifdef Q_OS_WIN
+    hostName.replace(QLatin1String("$$DBHOSTNAME$$"),      (databaseType == QLatin1String("QMYSQL"))
+                                                           ? QLatin1String("localhost")
+                                                           : QString());
+
+    port.replace(QLatin1String("$$DBPORT$$"),              (databaseType == QLatin1String("QMYSQL"))
+                                                           ? QLatin1String("3307")
+                                                           : QLatin1String("-1"));
+
+    connectOptions.replace(QLatin1String("$$DBOPTIONS$$"), QString());
+#else
+    hostName.replace(QLatin1String("$$DBHOSTNAME$$"),      QString());
+
+    port.replace(QLatin1String("$$DBPORT$$"),              QLatin1String("-1"));
+
+    const QString miscDir                 = internalServerPrivatePath() + QLatin1String("db_misc");
+    connectOptions.replace(QLatin1String("$$DBOPTIONS$$"), (databaseType == QLatin1String("QMYSQL"))
+                                                           ? QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir)
+                                                           : QString());
+#endif
+
+    parameters.hostName                   = hostName;
+    parameters.port                       = port.toInt();
     parameters.connectOptions             = connectOptions;
 
     qCDebug(DIGIKAM_DBENGINE_LOG) << "ConnectOptions " << parameters.connectOptions;
