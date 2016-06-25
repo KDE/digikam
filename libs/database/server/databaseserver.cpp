@@ -577,6 +577,7 @@ void DatabaseServer::stopDatabaseProcess()
     d->databaseProcess  = 0;
 
     databaseServerStateEnum = stopped;
+    wait();
 }
 
 bool DatabaseServer::isRunning() const
