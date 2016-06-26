@@ -9,6 +9,5 @@ configure_file(dbconfig.xml.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/dbconfig.xml)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dbconfig.xml
               ${CMAKE_CURRENT_SOURCE_DIR}/mysql-global.conf
-              ${CMAKE_CURRENT_SOURCE_DIR}/mysql-windows.conf
         DESTINATION ${DATA_INSTALL_DIR}/digikam/database
 )

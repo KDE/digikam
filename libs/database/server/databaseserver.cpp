@@ -216,12 +216,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
         }
     }
 
-#ifdef Q_OS_WIN
-    const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-windows.conf"));
-#else
     const QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-global.conf"));
-#endif
-
     const QString localConfig  = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/database/mysql-local.conf"));
     const QString actualConfig = defaultAkDir + QLatin1String("mysql.conf");
 
@@ -348,6 +343,7 @@ DatabaseServerError DatabaseServer::startMYSQLDatabaseProcess()
     mysqldCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(dataDir));
 
 #ifdef Q_OS_WIN
+    mysqldCmdArgs << QString::fromLatin1("--skip-networking=0");
     mysqldCmdArgs << QString::fromLatin1("--port=3307");
 #else
     mysqldCmdArgs << QString::fromLatin1("--socket=%1/mysql.socket").arg(miscDir);
