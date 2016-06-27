@@ -432,6 +432,7 @@ void SetupAlbumView::readSettings()
     d->leftClickActionComboBox->setCurrentIndex((int)settings->getItemLeftClickAction());
 
     PreviewSettings previewSettings = settings->getPreviewSettings();
+
     if (previewSettings.quality == PreviewSettings::FastPreview)
     {
         d->previewFastPreview->setChecked(true);
@@ -439,7 +440,9 @@ void SetupAlbumView::readSettings()
     else
     {
         d->previewFullView->setChecked(true);
+        d->previewRawMode->setEnabled(true);
     }
+
     d->previewRawMode->setCurrentIndex(d->previewRawMode->findData(previewSettings.rawLoading));
 
     d->previewZoomOrgSize->setChecked(previewSettings.zoomOrgSize);
