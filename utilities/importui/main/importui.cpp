@@ -465,7 +465,7 @@ void ImportUI::setupActions()
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
 #ifdef HAVE_MARBLE
-    d->mapViewAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")),
+    d->mapViewAction = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")),
                                    i18nc("@action Switch to map view", "Map"), this);
     d->mapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("importui_map_view"), d->mapViewAction);

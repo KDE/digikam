@@ -126,7 +126,7 @@ IPTCEditWidget::IPTCEditWidget(MetadataEditDialog* const parent)
 
     d->originPage  = new IPTCOrigin(this);
     d->page_origin = addPage(d->originPage, i18n("Origin"));
-    d->page_origin->setIcon(QIcon::fromTheme(QLatin1String("applications-internet")));
+    d->page_origin->setIcon(QIcon::fromTheme(QLatin1String("internet-web-browser")));
 
     d->creditsPage  = new IPTCCredits(this);
     d->page_credits = addPage(d->creditsPage, i18n("Credits"));

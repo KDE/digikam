@@ -327,7 +327,7 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 void DXmlGuiWindow::createGeolocationEditAction()
 {
 #ifdef HAVE_MARBLE
-    m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Edit Geolocation..."), this);
+    m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Edit Geolocation..."), this);
     actionCollection()->addAction(QLatin1String("geolocation_edit"), m_geolocationEditAction);
     actionCollection()->setDefaultShortcut(m_geolocationEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_G);
 

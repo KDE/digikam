@@ -243,7 +243,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
 
     resize(512, 512);
     setWindowTitle(i18n("GeoIface demo"));
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("applications-internet")));
+    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("internet-web-browser")));
     setObjectName(QLatin1String("Demo-GeoIface" ));
 
     d->cmdLineArgs = cmdLineArgs;

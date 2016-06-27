@@ -299,7 +299,7 @@ void ItemViewShowfotoDelegate::drawGeolocationIndicator(QPainter* p, const QRect
 {
     if (!r.isNull())
     {
-        QIcon icon = QIcon::fromTheme(QLatin1String("applications-internet"));
+        QIcon icon = QIcon::fromTheme(QLatin1String("internet-web-browser"));
         qreal op   = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);

@@ -307,7 +307,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     page2->setTabOrder(d->locationSublocationEdit, d->locationProvinceStateEdit);
     page2->setTabOrder(d->locationProvinceStateEdit, d->locationCountryCodeEdit);
 
-    insertTab(LOCATION, page2, QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Location"));
+    insertTab(LOCATION, page2, QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Location"));
 
     // -- Contact Template information panel -------------------------------------------------------------
 
