@@ -249,4 +249,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 205 ==> 123455 - Add support of Image Editor actions through DBUS.
 206 ==> 364333 - Random resets of several configuration values.
 207 ==> 338229 - THUMBDB : digiKam does not recognize pictures in albums with unicode (Korean) characters.
-208 ==> 
+208 ==> 364793 - Wrong icon usage.
+209 ==> 
+
