@@ -338,7 +338,7 @@ void DXmlGuiWindow::createGeolocationEditAction()
 
 void DXmlGuiWindow::createMetadataEditAction()
 {
-    m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("text-xml")), i18n("Edit Metadata..."), this);
+    m_metadataEditAction = new QAction(QIcon::fromTheme(QLatin1String("format-text-code")), i18n("Edit Metadata..."), this);
     actionCollection()->addAction(QLatin1String("metadata_edit"), m_metadataEditAction);
     actionCollection()->setDefaultShortcut(m_metadataEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_M);
 

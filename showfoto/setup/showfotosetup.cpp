@@ -117,7 +117,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     d->page_metadata  = addPage(d->metadataPage, i18n("Metadata"));
     d->page_metadata->setHeader(i18n("<qt>Embedded Image Information Management<br/>"
                                      "<i>Setup relations between images and metadata</i></qt>"));
-    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("text-xml"))); // krazy:exclude=iconnames
+    d->page_metadata->setIcon(QIcon::fromTheme(QLatin1String("format-text-code"))); // krazy:exclude=iconnames
 
     d->toolTipPage    = new SetupToolTip();
     d->page_tooltip   = addPage(d->toolTipPage, i18n("Tool Tip"));

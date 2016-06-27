@@ -101,7 +101,7 @@ MetadataPage::MetadataPage(FirstRunDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-xml")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("format-text-code")));
 }
 
 MetadataPage::~MetadataPage()

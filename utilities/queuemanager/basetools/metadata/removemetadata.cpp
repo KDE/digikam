@@ -53,7 +53,7 @@ RemoveMetadata::RemoveMetadata(QObject* parent)
 
     setToolTitle(i18n("Remove Metadata"));
     setToolDescription(i18n("Remove Exif, Iptc, or Xmp metadata from images."));
-    setToolIconName(QLatin1String("text-xml"));
+    setToolIconName(QLatin1String("format-text-code"));
 }
 
 RemoveMetadata::~RemoveMetadata()
