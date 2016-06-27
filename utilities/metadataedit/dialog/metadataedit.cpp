@@ -98,7 +98,7 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
     setWindowTitle(i18n("Metadata Editor"));
     setModal(true);
 
-    ThumbnailLoadThread* const thread = ThumbnailLoadThread::defaultThread();
+    ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
     thread->setThumbnailSize(48);
     thread->setPixmapRequested(false);
     d->catcher                        = new ThumbnailImageCatcher(thread, this);
@@ -186,6 +186,11 @@ MetadataEditDialog::MetadataEditDialog(QWidget* const parent, const QList<QUrl>&
 
 MetadataEditDialog::~MetadataEditDialog()
 {
+    d->catcher->thread()->stopAllTasks();
+    d->catcher->cancel();
+
+    delete d->catcher->thread();
+    delete d->catcher;
     delete d;
 }
 
