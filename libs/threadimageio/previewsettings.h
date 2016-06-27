@@ -69,8 +69,9 @@ public:
 
     bool operator==(const PreviewSettings& other) const;
 
-    Quality quality;
+    Quality    quality;
     RawLoading rawLoading;
+    bool       zoomOrgSize;
 
 };
 

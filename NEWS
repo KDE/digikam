@@ -251,5 +251,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 207 ==> 338229 - THUMBDB : digiKam does not recognize pictures in albums with unicode (Korean) characters.
 208 ==> 364793 - Wrong icon usage.
 209 ==> 345956 - MYSQL : Image window, extreme unstable under dates view.
-210 ==> 
-
+210 ==> 364790 - Preview image shown too large.
+211 ==> 

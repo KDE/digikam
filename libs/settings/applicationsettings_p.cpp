@@ -120,6 +120,7 @@ const QString ApplicationSettings::Private::configToolTipsShowAlbumPreviewEntry(
 const QString ApplicationSettings::Private::configPreviewLoadFullImageSizeEntry(QLatin1String("Preview Load Full Image Size"));
 const QString ApplicationSettings::Private::configPreviewRawUseEmbeddedPreview(QLatin1String("Preview Raw Use Embedded Preview"));
 const QString ApplicationSettings::Private::configPreviewRawUseHalfSizeData(QLatin1String("Preview Raw Use Half Size Data"));
+const QString ApplicationSettings::Private::configPreviewZoomOrgSizeEntry(QLatin1String("Preview Zoom Use Original Size"));
 const QString ApplicationSettings::Private::configPreviewShowIconsEntry(QLatin1String("Preview Show Icons"));
 const QString ApplicationSettings::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
 const QString ApplicationSettings::Private::configShowFolderTreeViewItemsCountEntry(QLatin1String("Show Folder Tree View Items Count"));

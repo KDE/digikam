@@ -218,6 +218,8 @@ void ApplicationSettings::readSettings()
     {
         d->previewSettings.quality = PreviewSettings::FastPreview;
     }
+
+    d->previewSettings.zoomOrgSize      = group.readEntry(d->configPreviewZoomOrgSizeEntry,           true);
     d->previewShowIcons                 = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                     = group.readEntry(d->configShowThumbbarEntry,                 true);
 
@@ -368,6 +370,7 @@ void ApplicationSettings::saveSettings()
         group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
     }
 
+    group.writeEntry(d->configPreviewZoomOrgSizeEntry,                 d->previewSettings.zoomOrgSize);
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                       d->showThumbbar);
     group.writeEntry(d->configShowFolderTreeViewItemsCountEntry,       d->showFolderTreeViewItemsCount);
