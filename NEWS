@@ -252,5 +252,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 208 ==> 364793 - Wrong icon usage.
 209 ==> 345956 - MYSQL : Image window, extreme unstable under dates view.
 210 ==> 364790 - Preview image shown too large.
-211 ==> 364797 - after editing metadata, rename hangs.
-212 ==> 
+211 ==> 364797 - After editing metadata, rename hangs.
+212 ==> 349924 - Videos (mp4, mov, avi) do not play under OS X Yosemite when using digiKam.
+213 ==> 
