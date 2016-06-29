@@ -256,4 +256,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 212 ==> 349924 - Videos (mp4, mov, avi) do not play under OS X Yosemite when using digiKam.
 213 ==> 356254 - Search order is not alphabetical.
 214 ==> 364885 - Scanning Faces - Detect Faces should be default.
-215 ==> 
+215 ==> 364193 - Digikam5 crashed at start of the program all time. It worked fine until 2016-06-05.
+216 ==> 
