@@ -259,4 +259,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 215 ==> 364193 - digiKam 5 crashed at start of the program all time. It worked fine until 2016-06-05.
 216 ==> 351653 - Build fails, multiple unresoved refs.
 217 ==> 361889 - digiKam 5 beta 5: vertical menus (left and right) not displayed properly.
-218 ==> 
+218 ==> 363704 - preview thumbnails: Not updated when deleting an image.
+219 ==> 
+
