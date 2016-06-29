@@ -191,7 +191,7 @@ void FaceScanDialog::doLoadState()
     qCDebug(DIGIKAM_GENERAL_LOG) << getConfigGroup().name();
     KConfigGroup group = getConfigGroup();
     QString mainTask   = group.readEntry(entryName(d->configMainTask),
-                                         d->configValueDetectAndRecognize);
+                                         d->configValueDetect);
 
     if (mainTask == d->configValueRecognizedMarkedFaces)
     {
@@ -245,11 +245,15 @@ void FaceScanDialog::doSaveState()
 
     QString mainTask;
 
-    if (d->detectAndRecognizeButton->isChecked())
+    if (d->detectButton->isChecked())
+    {
+        mainTask = d->configValueDetect;
+    }
+    else if (d->detectAndRecognizeButton->isChecked())
     {
         mainTask = d->configValueDetectAndRecognize;
     }
-    else // if (d->reRecognizeButton->isChecked())
+    else // d->reRecognizeButton
     {
         mainTask = d->configValueRecognizedMarkedFaces;
     }

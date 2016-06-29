@@ -255,4 +255,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 211 ==> 364797 - After editing metadata, rename hangs.
 212 ==> 349924 - Videos (mp4, mov, avi) do not play under OS X Yosemite when using digiKam.
 213 ==> 356254 - Search order is not alphabetical.
-214 ==> 
+214 ==> 364885 - Scanning Faces - Detect Faces should be default.
+215 ==> 
