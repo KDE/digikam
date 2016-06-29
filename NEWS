@@ -261,5 +261,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 217 ==> 361889 - digiKam 5 beta 5: vertical menus (left and right) not displayed properly.
 218 ==> 363704 - preview thumbnails: Not updated when deleting an image.
 219 ==> 364762 - Invalid mysql configuration option table_cache.
-220 ==> 
-
+220 ==> 363697 - Album visible even after deletion [patch].
+221 ==> 

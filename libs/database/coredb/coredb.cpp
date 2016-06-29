@@ -573,11 +573,13 @@ void CoreDB::makeStaleAlbum(int albumID)
     }
 
     // now do our update
+    d->db->setForeignKeyChecks(false);
     d->db->execSql(QString::fromUtf8("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
                    newRelativePath, albumID);
 
     // for now, we make no distinction to deleteAlbums wrt to changeset
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
+    d->db->setForeignKeyChecks(true);
 }
 
 void CoreDB::deleteStaleAlbums()

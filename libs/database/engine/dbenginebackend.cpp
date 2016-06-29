@@ -1634,4 +1634,21 @@ int BdEngineBackend::maximumBoundValues() const
     }
 }
 
+void BdEngineBackend::setForeignKeyChecks(bool check)
+{
+    Q_D(BdEngineBackend);
+
+    if (d->parameters.isMySQL())
+    {
+        if (check)
+        {
+            execSql(QLatin1String("SET FOREIGN_KEY_CHECKS=1;"));
+        }
+        else
+        {
+            execSql(QLatin1String("SET FOREIGN_KEY_CHECKS=0;"));
+        }
+    }
+}
+
 }  // namespace Digikam
