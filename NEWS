@@ -262,4 +262,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 218 ==> 363704 - preview thumbnails: Not updated when deleting an image.
 219 ==> 364762 - Invalid mysql configuration option table_cache.
 220 ==> 363697 - Album visible even after deletion [patch].
-221 ==> 
+221 ==> 364882 - File rename dropdown box of options not saving past rename layout.
+222 ==> 
+
