@@ -60,7 +60,7 @@ extern "C"
 }
 
 #ifdef Q_OS_WIN
-void _ReadProc(struct png_struct_def* png_ptr, unsigned char* data, unsigned int size)
+void _ReadProc(struct png_struct_def* png_ptr, png_bytep data, png_size_t size)
 {
     FILE* const file_handle = (FILE*)png_get_io_ptr(png_ptr);
     fread(data, size, 1, file_handle);
