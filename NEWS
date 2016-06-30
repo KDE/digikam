@@ -266,5 +266,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 222 ==> 360017 - Build error: opencv_contrib is required but was not found.
 223 ==> 250511 - TIF Image appears corrupted in digiKam.
 224 ==> 322709 - digiKam and drkonqi crash at startup.
-225 ==> 
+225 ==> 198915 - Segfault during histogram calculation.
+226 ==> 
 
