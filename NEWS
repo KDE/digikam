@@ -264,4 +264,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 220 ==> 363697 - Album visible even after deletion [patch].
 221 ==> 364882 - File rename dropdown box of options not saving past rename layout.
 222 ==> 360017 - Build error: opencv_contrib is required but was not found.
-223 ==> 
+223 ==> 250511 - TIF Image appears corrupted in digiKam.
+224 ==> 
+
