@@ -557,11 +557,14 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
 {
-    QString sql = QString::fromLatin1("GRANT USAGE ON *.* TO \'%1\'@\'localhost\' IDENTIFIED BY \'<b>password</b>\';<br>")
+    QString sql = QString::fromLatin1("CREATE USER \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
+                                      .arg(d->userName->text());
+                                      
+    sql += QString::fromLatin1("GRANT ALL ON *.* TO \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
                                       .arg(d->userName->text());
 
     sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
+                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
                                       .arg(d->dbNameCore->text())
                                       .arg(d->dbNameCore->text())
                                       .arg(d->userName->text());
@@ -569,7 +572,7 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
     if (d->dbNameThumbs->text() != d->dbNameCore->text())
     {
         sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->userName->text());
@@ -579,7 +582,7 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
         (d->dbNameFace->text() != d->dbNameThumbs->text()))
     {
         sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
                                    .arg(d->dbNameFace->text())
                                    .arg(d->dbNameFace->text())
                                    .arg(d->userName->text());
