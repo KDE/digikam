@@ -268,4 +268,3 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 224 ==> 322709 - digiKam and drkonqi crash at startup.
 225 ==> 198915 - Segfault during histogram calculation.
 226 ==> 354234 - Crash when changing Lens selection in Lens distortion correction dialog.
-227 ==> 
