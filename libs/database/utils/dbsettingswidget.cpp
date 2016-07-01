@@ -157,17 +157,17 @@ void DatabaseSettingsWidget::setupMainArea()
     // --------- fill with default values ---------------------
 
     int dbTypeIdx               = 0;
-    d->dbType->addItem(i18n("SQLite"),                                 SQlite);
+    d->dbType->addItem(i18n("SQLite"),                        SQlite);
     d->dbTypeMap[SQlite]        = dbTypeIdx++;
 
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-    d->dbType->addItem(i18n("MariaDB Internal (experimental)"),        MysqlInternal);
+    d->dbType->addItem(i18n("Mysql Internal (experimental)"), MysqlInternal);
     d->dbTypeMap[MysqlInternal] = dbTypeIdx++;
 #   endif
 
-    d->dbType->addItem(i18n("MySQL or MariaDB Server (experimental)"), MysqlServer);
+    d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
     d->dbTypeMap[MysqlServer]   = dbTypeIdx++;
 #endif
 
@@ -177,12 +177,12 @@ void DatabaseSettingsWidget::setupMainArea()
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-                               "<p><b>MariaDB Internal</b> backend is for local database storage with huge collection sizes. "
+                               "<p><b>MySQL Internal</b> backend is for local database storage with huge collection sizes. "
                                "This backend is recommend for local collections with more than 100K items.</p>"
                                "<p><i>Be careful: this one still in experimental stage.</i></p>"
 #   endif
 
-                               "<p><b>MySQL or MariaDB Server</b> backend is a more robust solution especially for remote and shared database storage. "
+                               "<p><b>MySQL Server</b> backend is a more robust solution especially for remote and shared database storage. "
                                "It is also more efficient to manage huge collection sizes with more than 100K items.</p>"
                                "<p><i>Be careful: this one still in experimental stage.</i></p>"
 #endif
@@ -211,7 +211,7 @@ void DatabaseSettingsWidget::setupMainArea()
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
 
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MariaDB binaries tools are located. "
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binaries tools are located. "
                                                        "digiKam will try to found these binaries automatically if there are "
                                                        "installed on your computer.</p>"),
                                                   d->mysqlCmdBox);
@@ -220,7 +220,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QGroupBox* const binaryBox        = new QGroupBox(d->mysqlCmdBox);
     QGridLayout* const binaryLayout   = new QGridLayout;
     binaryBox->setLayout(binaryLayout);
-    binaryBox->setTitle(i18nc("@title:group", "MariaDB Binaries"));
+    binaryBox->setTitle(i18nc("@title:group", "MySQL Binaries"));
     d->dbBinariesWidget = new DBinarySearch(binaryBox);
     d->dbBinariesWidget->header()->setSectionHidden(2, true);
 
@@ -355,7 +355,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QLabel* const notice2    = new QLabel(i18n("<p>Note: with a Linux server, a database can be initialized following the commands below:</p>"
                                                "<p># su</p>"
                                                "<p># systemctl restart mysqld</p>"
-                                               "<p># mysql</p>"
+                                               "<p># mysql -u root</p>"
                                                "<p>...</p>"
                                                "<p>Enter SQL code to Mysql prompt in order to init digiKam databases with grant privileges (see behind)</p>"
                                                "<p>...</p>"
@@ -380,11 +380,11 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<a href=\"https://en.wikipedia.org/wiki/MySQL\">Mysql database server</a> "
                                                "(or <a href=\"https://en.wikipedia.org/wiki/MariaDB\">MariaDB</a>) "
                                                "through a network. "
-                                               "As with Sqlite or MariaDB internal server, 3 databases will be stored "
+                                               "As with Sqlite or MySQL internal server, 3 databases will be stored "
                                                "on the remote server: one for all collections properties, "
                                                "one to store compressed thumbnails, and one to store faces "
                                                "recognition metadata.</p>"
-                                               "<p>Unlike Sqlite or MariaDB internal server, you can customize the "
+                                               "<p>Unlike Sqlite or MySQL internal server, you can customize the "
                                                "database names to simplify your backups.</p>"
                                                "<p>Databases are digiKam core engines. To prevent performance issues, "
                                                "take a care to use a fast network link between the client and the server "
@@ -559,7 +559,7 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
 {
     QString sql = QString::fromLatin1("CREATE USER \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
                                       .arg(d->userName->text());
-                                      
+
     sql += QString::fromLatin1("GRANT ALL ON *.* TO \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
                                       .arg(d->userName->text());
 
@@ -764,7 +764,7 @@ void DatabaseSettingsWidget::slotDatabasePathEdited()
 {
     QString newPath = databasePath();
 
-#ifndef _WIN32
+#ifndef Q_OS_WIN
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
@@ -805,7 +805,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
 
             if (!checkMysqlServerDbNamesConfig(error))
             {
-                QMessageBox::critical(qApp->activeWindow(), i18n("Database configuration"),
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database Configuration"),
                                       i18n("The database names configuration is not valid. Error is <br/><p>%1</p><br/>"
                                            "Please check your configuration.",
                                            error));
@@ -814,7 +814,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
 
             if (!checkMysqlServerConnection(error))
             {
-                QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database Connection Test"),
                                       i18n("Testing database connection has failed with error<br/><p>%1</p><br/>"
                                            "Please check your configuration.",
                                            error));
@@ -867,7 +867,7 @@ bool DatabaseSettingsWidget::checkDatabasePath()
 
     QFileInfo path(dbFolder);
 
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     // Work around bug #189168
     QTemporaryFile temp;
     temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));
