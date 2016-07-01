@@ -97,9 +97,10 @@ Q_SIGNALS:
 protected:
 
     bool                      m_nonDestructive;
-    bool                      m_cancelSlideShow;
     bool                      m_setExifOrientationTag;
     bool                      m_editingOriginalImage;
+    bool                      m_actionEnabledState;
+    bool                      m_cancelSlideShow;
 
     DAdjustableLabel*         m_resLabel;
 

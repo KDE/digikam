@@ -177,8 +177,9 @@ EditorWindow::EditorWindow(const QString& name)
     m_vSplitter                    = 0;
     m_stackView                    = 0;
     m_setExifOrientationTag        = true;
-    m_cancelSlideShow              = false;
     m_editingOriginalImage         = true;
+    m_actionEnabledState           = false;
+    m_cancelSlideShow              = false;
 
     // Settings containers instance.
 
@@ -317,12 +318,14 @@ void EditorWindow::setupStandardActions()
 
     m_backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction(QLatin1String("editorwindow_backward"), m_backwardAction);
-    ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace);
+    ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace
+                                                                    << Qt::Key_Up << Qt::Key_Left);
     m_backwardAction->setEnabled(false);
 
     m_forwardAction = buildStdAction(StdForwardAction, this, SLOT(slotForward()), this);
     ac->addAction(QLatin1String("editorwindow_forward"), m_forwardAction);
-    ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
+    ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space
+                                                                   << Qt::Key_Down << Qt::Key_Right);
     m_forwardAction->setEnabled(false);
 
     m_firstAction = new QAction(QIcon::fromTheme(QLatin1String("go-first")), i18n("&First"), this);
@@ -640,8 +643,6 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_backward_shift_space"), altBackwardAction);
     ac->setDefaultShortcut(altBackwardAction, Qt::SHIFT + Qt::Key_Space);
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
-
-    d->addPageUpDownActions(this, this);
 
     // -- Tool control actions ---------------------------------------------------------
 
@@ -1092,6 +1093,8 @@ void EditorWindow::toggleStandardActions(bool val)
 {
     d->zoomFitToSelectAction->setEnabled(val);
     toggleZoomActions(val);
+
+    m_actionEnabledState = val;
 
     m_forwardAction->setEnabled(val);
     m_backwardAction->setEnabled(val);
@@ -1587,12 +1590,12 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
 {
     m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
-    slotUpdateItemInfo();
 
     // Enable actions as appropriate after loading
     // No need to re-enable image properties sidebar here, it's will be done
     // automatically by a signal from canvas
     toggleActions(success);
+    slotUpdateItemInfo();
     unsetCursor();
     m_animLogo->stop();
 

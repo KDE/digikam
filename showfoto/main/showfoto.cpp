@@ -794,6 +794,11 @@ void ShowFoto::slotBackward()
 
 void ShowFoto::toggleNavigation(int index)
 {
+    if (!m_actionEnabledState)
+    {
+        return;
+    }
+
     if ( d->itemsNb == 0 || d->itemsNb == 1 )
     {
         m_backwardAction->setEnabled(false);

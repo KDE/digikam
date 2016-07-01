@@ -886,6 +886,11 @@ void ImageWindow::slotUpdateItemInfo()
                          QString::number(d->imageFilterModel->rowCount()));
     m_nameLabel->setText(text);
 
+    if (!m_actionEnabledState)
+    {
+        return;
+    }
+
     if (d->imageInfoModel->rowCount() == 1)
     {
         m_backwardAction->setEnabled(false);
