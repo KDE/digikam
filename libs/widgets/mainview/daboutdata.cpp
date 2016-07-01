@@ -92,6 +92,12 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           QLatin1String("https://www.facebook.com/marcel.wiesweg")
                         );
 
+    aboutData.addAuthor ( ki18n("Maik Qualmann").toString(),
+                          ki18n("Developer").toString(),
+                          QLatin1String("metzpinguin at gmail dot com"),
+                          QLatin1String("https://plus.google.com/u/0/107171232114475191915")
+                        );
+
     aboutData.addAuthor ( ki18n("Michael G. Hansen").toString(),
                           ki18n("Developer and Mentoring").toString(),
                           QLatin1String("mike at mghansen dot de"),
@@ -102,12 +108,6 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           ki18n("Developer").toString(),
                           QLatin1String("tpr at iki dot fi"),
                           QLatin1String("https://plus.google.com/u/0/105136119348505864693")
-                        );
-
-    aboutData.addAuthor ( ki18n("Maik Qualmann").toString(),
-                          ki18n("Developer").toString(),
-                          QLatin1String("metzpinguin at gmail dot com"),
-                          QLatin1String("https://plus.google.com/u/0/107171232114475191915")
                         );
 
     // -- Contributors -----------------------------------------------------------
