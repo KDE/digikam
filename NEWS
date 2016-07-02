@@ -277,6 +277,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 233 ==> 320953 - Crash on startup.
 234 ==> 300795 - Crashed when adding name on 50 photos.
 235 ==> 329824 - digiKam crashed when importing photos from SD.
-236 ==> 
-
-
+236 ==> 297037 - digiKam crashed when moving images to a new Album.
+237 ==> 302178 - digiKam crashed while adding collection.
+238 ==> 
