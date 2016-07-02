@@ -137,8 +137,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
@@ -270,13 +269,13 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
     QGridLayout* const grid3               = new QGridLayout(interfaceOptionsGroup);
 
-    d->previewFastPreview   = new QRadioButton(i18nc("@option:radio",
-                                                     "Embedded view shows a small, quick preview"));
-    d->previewFullView      = new QRadioButton(i18nc("@option:radio",
-                                                     "Embedded view shows the full image"));
+    d->previewFastPreview         = new QRadioButton(i18nc("@option:radio",
+                                                           "Embedded view shows a small, quick preview"));
+    d->previewFullView            = new QRadioButton(i18nc("@option:radio",
+                                                           "Embedded view shows the full image"));
     QLabel* const rawPreviewLabel = new QLabel(i18nc("@label:listbox Mode of RAW preview decoding:",
-                                               "Raw images:"));
-    d->previewRawMode       = new QComboBox;
+                                                     "Raw images:"));
+    d->previewRawMode             = new QComboBox;
     d->previewRawMode->addItem(i18nc("@option:inlistbox Automatic choice of RAW image preview source",
                                      "Automatic"), PreviewSettings::RawPreviewAutomatic);
     d->previewRawMode->addItem(i18nc("@option:inlistbox Embedded preview as RAW image preview source",

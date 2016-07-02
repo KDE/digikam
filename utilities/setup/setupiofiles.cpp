@@ -44,7 +44,7 @@
 #include "tiffsettings.h"
 
 #ifdef HAVE_JASPER
-#include "jp2ksettings.h"
+#   include "jp2ksettings.h"
 #endif // HAVE_JASPER
 
 namespace Digikam

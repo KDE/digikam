@@ -154,7 +154,7 @@ void SetupDatabase::applySettings()
         qCDebug(DIGIKAM_GENERAL_LOG) << "No DB settings changes. Do nothing...";
         return;
     }
-    
+
     if (!d->databaseWidget->checkDatabaseSettings())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "DB settings check invalid. Do nothing...";

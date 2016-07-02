@@ -69,7 +69,8 @@ public:
         setBlurWeight(0),
         setNoiseWeight(0),
         setCompressionWeight(0)
-    {}
+    {
+    }
 
     DVBox*        optionsView;
     QCheckBox*    enableSorter;
@@ -116,7 +117,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     DHBox* const hbox1 = new DHBox(d->optionsView);
     QLabel* const lbl1 = new QLabel(i18n("Speed:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setSpeed    = new DIntNumInput(hbox1);
+    d->setSpeed        = new DIntNumInput(hbox1);
     d->setSpeed->setDefaultValue(5);
     d->setSpeed->setRange(1, 3, 1);
     d->setSpeed->setWhatsThis(i18n("Tradeoff between speed and accuracy of sorting algorithm"));

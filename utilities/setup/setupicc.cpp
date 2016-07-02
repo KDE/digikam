@@ -171,8 +171,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing              = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     d->dlgBtnBox                   = dlgBtnBox;
     d->tab                         = new QTabWidget(viewport());
     setWidget(d->tab);
@@ -210,12 +209,12 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
 
     QLabel* const workIcon     = new QLabel;
     workIcon->setPixmap(QIcon::fromTheme(QLatin1String("input-tablet")).pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize)));
-    d->workProfilesKC    = new IccProfilesComboBox;
+    d->workProfilesKC          = new IccProfilesComboBox;
     d->workProfilesKC->setWhatsThis(i18n("<p>This is the color space all the images will be converted to when opened "
                                          "(if you choose to convert) and the profile that will be embedded when saving. "
                                          "Good and safe choices are <b>Adobe RGB (1998)</b> and <b>sRGB IEC61966-2.1</b>"));
 
-    d->infoWorkProfiles = new QPushButton;
+    d->infoWorkProfiles        = new QPushButton;
     d->infoWorkProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoWorkProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                            "information about the selected workspace profile.</p>"));
@@ -263,7 +262,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
 
     QLabel* const  missingIcon  = new QLabel;
     missingIcon->setPixmap(QIcon::fromTheme(QLatin1String("paint-unknown")).pixmap(32));
-    QLabel* const missingLabel = new QLabel(i18n("When an image has no color profile information"));
+    QLabel* const missingLabel  = new QLabel(i18n("When an image has no color profile information"));
     missingLabel->setWordWrap(true);
 
     QHBoxLayout* const hboxMP  = new QHBoxLayout;
@@ -318,7 +317,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QLabel* const rawBehaviorLabel = new QLabel(i18n("When loading a RAW file with uncalibrated colors"));
     rawBehaviorLabel->setWordWrap(true);
 
-    QHBoxLayout* const hboxRF = new QHBoxLayout;
+    QHBoxLayout* const hboxRF      = new QHBoxLayout;
     hboxRF->addWidget(rawBehaviorIcon);
     hboxRF->addWidget(rawBehaviorLabel, 10);
 
@@ -408,7 +407,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                        "is recommended for correct conversion of RAW images in 16bit. "
                                        "Some of the options about loading behavior above refer to this profile.</p>"));
 
-    d->infoInProfiles = new QPushButton;
+    d->infoInProfiles          = new QPushButton;
     d->infoInProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoInProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                          "information about the selected input profile.</p>"));
@@ -433,7 +432,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
                                           "(usually, your printer). This profile will be used to do a soft proof, so you will "
                                           "be able to preview how an image will be rendered via an output device.</p>"));
 
-    d->infoProofProfiles   = new QPushButton;
+    d->infoProofProfiles         = new QPushButton;
     d->infoProofProfiles->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->infoProofProfiles->setWhatsThis(i18n("<p>You can use this button to get more detailed "
                                             "information about the selected proofing profile.</p>"));
