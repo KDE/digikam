@@ -322,4 +322,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 278 ==> 307775 - libkipi1 apps crash with libkipi2 plugins installed.
 279 ==> 302465 - Crash when closing digiKam.
 280 ==> 273795 - digiKam crashed almost every it is opened.
-281 ==> 
+281 ==> 248430 - digiKam crashes while rebuilding missing thumbnails.
