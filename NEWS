@@ -271,7 +271,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 227 ==> 364933 - Cannot use cursor and certain other keys inside Showfoto plugins.
 228 ==> 358886 - Application crashes upon second launch in OS X 10.11.
 229 ==> 361346 - Always hangs at startup while loading cameras or ICC profiles under OSX.
-230 ==> 340389 - digiKam crashes while editing pictures for color balancing on OSX.
+230 ==> 248430 - digiKam crashes while rebuilding missing thumbnails.
 231 ==> 338084 - MYSQL : trying to reconnect automatically.
 232 ==> 311864 - MYSQL : digiKam crash on loss of connection.
 233 ==> 320953 - Crash on startup.
@@ -322,4 +322,3 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 278 ==> 307775 - libkipi1 apps crash with libkipi2 plugins installed.
 279 ==> 302465 - Crash when closing digiKam.
 280 ==> 273795 - digiKam crashed almost every it is opened.
-281 ==> 248430 - digiKam crashes while rebuilding missing thumbnails.
