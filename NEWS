@@ -321,4 +321,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 277 ==> 294232 - digiKam crash after trying to send photo via KMail.
 278 ==> 307775 - libkipi1 apps crash with libkipi2 plugins installed.
 279 ==> 302465 - Crash when closing digiKam.
-280 ==> 
+280 ==> 273795 - digiKam crashed almost every it is opened.
+281 ==> 
