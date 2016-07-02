@@ -863,7 +863,8 @@ bool CoreDbSchemaUpdater::updateV4toV7()
         return false;
     }
 
-    CollectionLocation location = CollectionManager::instance()->addLocation(QUrl::fromLocalFile(albumLibraryPath));
+    QUrl albumLibrary(QUrl::fromLocalFile(albumLibraryPath));
+    CollectionLocation location = CollectionManager::instance()->addLocation(albumLibrary, albumLibrary.fileName());
 
     if (location.isNull())
     {

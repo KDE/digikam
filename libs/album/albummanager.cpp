@@ -1006,7 +1006,8 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
         }
         else
         {
-            CollectionManager::instance()->addLocation(QUrl::fromLocalFile(suggestedAlbumRoot));
+            QUrl albumRoot(QUrl::fromLocalFile(suggestedAlbumRoot));
+            CollectionManager::instance()->addLocation(albumRoot, albumRoot.fileName());
             // Not needed? See bug #188959
             //ScanController::instance()->completeCollectionScan();
         }
