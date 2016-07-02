@@ -311,4 +311,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 267 ==> 181316 - digiKam crashes when trying to edit geolocation coordinates.
 268 ==> 322617 - digiKam image editor crash when opening auto correction.
 269 ==> 241111 - digiKam image processing.
-270 ==> 
+270 ==> 364563 - digiKam crashes when browsing albums, only for images in portrait format.
+271 ==> 
