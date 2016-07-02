@@ -289,5 +289,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 245 ==> 253283 - digiKam crashes when renaming files/directory.
 246 ==> 272375 - Mysql driver crash.
 247 ==> 290650 - digiKam crashes while trying to display directory of photos.
-
-
+248 ==> 364131 - SCAN : same picture with different file extensions : database scan only finds one variant of the file [patch].
