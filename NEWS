@@ -318,3 +318,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 274 ==> 207887 - Pressed page down to edit next pic.
 275 ==> 297022 - Crash digiKam.
 276 ==> 302776 - digiKam crashes at startup.
+277 ==> 294232 - digiKam crash after trying to send photo via KMail.
