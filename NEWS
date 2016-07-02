@@ -314,3 +314,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 270 ==> 364563 - digiKam crashes when browsing albums, only for images in portrait format.
 271 ==> 280251 - digiKam segfaults after editing an image (levels, exposure) and then pressing Page Down to go to the next image.
 272 ==> 355719 - I have transformed a picture by ratio, then pressed "save as a new version", then digikam collapses every time.
+273 ==> 348485 - If selecting a rectangle in picture editor, digiKam crashed.
