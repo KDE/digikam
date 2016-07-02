@@ -281,4 +281,13 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 237 ==> 302178 - digiKam crashed while adding collection.
 238 ==> 249985 - digiKam crashed while downloading images from camera.
 239 ==> 181545 - digiKam crashes unexpectledly while working.
-240 ==> 
+240 ==> 254913 - digiKam falls after that welcome screen.
+241 ==> 275900 - When deleting Tag in digiKam, the Tag will be synchronized back from Nepomuk.
+242 ==> 334143 - MySql : digiKam crash when creating database connection.
+243 ==> 192374 - Severe Album and Images table corruption.
+244 ==> 335352 - SCAN : saving GPS correlation data lets digiKam hang in many cases.
+245 ==> 253283 - digiKam crashes when renaming files/directory.
+246 ==> 272375 - Mysql driver crash.
+247 ==> 290650 - digiKam crashes while trying to display directory of photos.
+
+
