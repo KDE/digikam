@@ -92,7 +92,7 @@ CollectionPage::CollectionPage(FirstRunDlg* const dlg)
                            "More folders can be added later under the <i>Settings</i> menu. "
                            "</p> ");
 
-#ifndef _WIN32
+#ifndef Q_OS_WIN
     message.append(i18n("<p><i>Note:</i> removable media (such as USB drives or DVDs) and remote file systems "
                         "(such as NFS, or Samba mounted with cifs/smbfs) are supported.</p>"));
 #endif
@@ -159,7 +159,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
         return false;
     }
 
-#ifndef _WIN32
+#ifndef Q_OS_WIN
 
     if (!QDir::isAbsolutePath(rootAlbumFolder))
     {
@@ -205,7 +205,7 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
 
     QFileInfo path(rootAlbumFolder);
 
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     // Work around bug #189168
     QTemporaryFile temp;
     temp.setFileTemplate(rootAlbumFolder + QLatin1String("XXXXXX"));
