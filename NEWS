@@ -275,4 +275,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 231 ==> 338084 - MYSQL : trying to reconnect automatically.
 232 ==> 311864 - MYSQL : digiKam crash on loss of connection.
 233 ==> 320953 - Crash on startup.
-234 ==> 
+234 ==> 300795 - Crashed when adding name on 50 photos.
+235 ==> 329824 - digiKam crashed when importing photos from SD.
+236 ==> 
+
+
