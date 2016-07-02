@@ -301,4 +301,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 257 ==> 285994 - digikam fails to open database at startup.
 258 ==> 317247 - No picture is found after update to ver 3.0.0.
 259 ==> 296767 - pick labels lost somewhere during digikam update.
-260 ==> 
+260 ==> 324134 - SCAN : Images disappear after advanced rename.
