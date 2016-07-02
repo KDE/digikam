@@ -308,3 +308,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 264 ==> 283968 - Crash when starting geotagging.
 265 ==> 352921 - Crash (or lock-up) while applying geotags to images.
 266 ==> 317342 - digiKam crashes on closing.
+267 ==> 181316 - digikam crashes when trying to edit geolocation coordinates.
