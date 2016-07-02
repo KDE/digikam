@@ -199,7 +199,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       ratingFilterCond(0),
       recursiveAlbums(false),
       recursiveTags(false),
-      sidebarTitleStyle(DMultiTabBar::ActiveIconText),
+      sidebarTitleStyle(DMultiTabBar::AllIconsText),
       albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
       imageSortOrder(0),
@@ -243,7 +243,7 @@ void ApplicationSettings::Private::init()
     thumbnailSize                       = ThumbnailSize::Medium;
     treeThumbnailSize                   = 22;
     treeviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    sidebarTitleStyle                   = DMultiTabBar::ActiveIconText;
+    sidebarTitleStyle                   = DMultiTabBar::AllIconsText;
 
     ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
 
@@ -256,18 +256,18 @@ void ApplicationSettings::Private::init()
 
     iconShowName                        = false;
     iconShowSize                        = false;
-    iconShowDate                        = true;
-    iconShowModDate                     = true;
-    iconShowTitle                       = true;
-    iconShowComments                    = true;
+    iconShowDate                        = false;
+    iconShowModDate                     = false;
+    iconShowTitle                       = false;
+    iconShowComments                    = false;
     iconShowResolution                  = false;
     iconShowAspectRatio                 = false;
     iconShowTags                        = true;
     iconShowOverlays                    = true;
     iconShowFullscreen                  = true;
     iconShowRating                      = true;
-    iconShowImageFormat                 = false;
-    iconShowCoordinates                 = false;
+    iconShowImageFormat                 = true;
+    iconShowCoordinates                 = true;
     iconviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     toolTipsFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     showToolTips                        = false;
