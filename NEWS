@@ -271,3 +271,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 227 ==> 364933 - Cannot use cursor and certain other keys inside Showfoto plugins.
 228 ==> 358886 - Application crashes upon second launch in OS X 10.11.
 229 ==> 361346 - Always hangs at startup while loading cameras or ICC profiles under OSX.
+230 ==> 340389 - digiKam crashes while editing pictures for color balancing on OSX.
