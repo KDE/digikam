@@ -290,3 +290,15 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 246 ==> 272375 - Mysql driver crash.
 247 ==> 290650 - digiKam crashes while trying to display directory of photos.
 248 ==> 364131 - SCAN : same picture with different file extensions : database scan only finds one variant of the file [patch].
+249 ==> 312794 - Error while trying to open database.
+250 ==> 251679 - Problems Accessing Database.
+251 ==> 162038 - digikam hangs and eats CPU when changing files.
+252 ==> 268912 - Rename - Delete Problem.
+253 ==> 316237 - Only one thumbnail shown in calendar month/year view.
+254 ==> 317114 - digikam searching files in wrong folder.
+255 ==> 242816 - digikam gets stuck when moving and renaming a lot of albums.
+256 ==> 331629 - No clear error messages while intsalling.
+257 ==> 285994 - digikam fails to open database at startup.
+258 ==> 317247 - No picture is found after update to ver 3.0.0.
+259 ==> 296767 - pick labels lost somewhere during digikam update.
+260 ==> 
