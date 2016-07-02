@@ -306,3 +306,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 262 ==> 326356 - Crash when building album database on removable hard drive on Windows 8.
 263 ==> 262070 - Crash while using marble view.
 264 ==> 283968 - Crash when starting geotagging.
+265 ==> 352921 - Crash (or lock-up) while applying geotags to images.
