@@ -323,3 +323,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 279 ==> 302465 - Crash when closing digiKam.
 280 ==> 273795 - digiKam crashed almost every it is opened.
 281 ==> 357944 - Wrong encoded collection paths after upgrade from digikam v4.x.
+282 ==> 300300 - THUMBDB : Building / RE-Building of thumbnails mistakeous?
+283 ==> 214440 - digikam doesn't display my images from backup.
+284 ==> 223018 - Lost Tags when replace foto's.
