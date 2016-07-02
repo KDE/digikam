@@ -303,3 +303,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 259 ==> 296767 - pick labels lost somewhere during digikam update.
 260 ==> 324134 - SCAN : Images disappear after advanced rename.
 261 ==> 326030 - V3.4.0 Crashed on startup on Windows 8 Pro.
+262 ==> 326356 - Crash when building album database on removable hard drive on Windows 8.
