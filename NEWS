@@ -316,3 +316,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 272 ==> 355719 - I have transformed a picture by ratio, then pressed "save as a new version", then digikam collapses every time.
 273 ==> 348485 - If selecting a rectangle in picture editor, digiKam crashed.
 274 ==> 207887 - Pressed page down to edit next pic.
+275 ==> 297022 - Crash digiKam.
