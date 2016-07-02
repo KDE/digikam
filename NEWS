@@ -272,3 +272,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 228 ==> 358886 - Application crashes upon second launch in OS X 10.11.
 229 ==> 361346 - Always hangs at startup while loading cameras or ICC profiles under OSX.
 230 ==> 340389 - digiKam crashes while editing pictures for color balancing on OSX.
+231 ==> 338084 - MYSQL : trying to reconnect automatically.
+232 ==> 311864 - MYSQL : digiKam crash on loss of connection.
+233 ==> 320953 - Crash on startup.
+234 ==> 
