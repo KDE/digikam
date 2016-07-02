@@ -279,4 +279,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 235 ==> 329824 - digiKam crashed when importing photos from SD.
 236 ==> 297037 - digiKam crashed when moving images to a new Album.
 237 ==> 302178 - digiKam crashed while adding collection.
-238 ==> 
+238 ==> 249985 - digiKam crashed while downloading images from camera.
+239 ==> 181545 - digiKam crashes unexpectledly while working.
+240 ==> 
