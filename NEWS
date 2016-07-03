@@ -345,3 +345,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 301 ==> 276863 - digiKam Crash on Browsing through timeline.
 302 ==> 355893 - MYSQL : Agnostic on unix filenames (upper ne lower), creates rename problems.
 303 ==> 162132 - Crash while saving tiff (possibly caused by present alpha channel).
+304 ==> 221985 - Update histogram before preview.
