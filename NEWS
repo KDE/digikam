@@ -343,3 +343,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 299 ==> 263892 - Crash when geotagging.
 300 ==> 262356 - digiKam shutdown after attempting to move a picture.
 301 ==> 276863 - digiKam Crash on Browsing through timeline.
+302 ==> 355893 - MYSQL : Agnostic on unix filenames (upper ne lower), creates rename problems.
+303 ==> 
