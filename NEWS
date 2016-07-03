@@ -332,3 +332,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 288 ==> 268099 - Batch process crash.
 289 ==> 218402 - Crash when clicking properties.
 290 ==> 203212 - Crash while moving albums and opening one of them.
+291 ==> 205250 - digiKam unknown crash without backtrace.
