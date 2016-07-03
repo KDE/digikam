@@ -334,5 +334,10 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 290 ==> 203212 - Crash while moving albums and opening one of them.
 291 ==> 205250 - digiKam unknown crash without backtrace.
 292 ==> 210775 - Crash core dump showfoto.
-293 ==> 206803 - opening jpg with Showfoto causes crash.
-294 ==> 
+293 ==> 206803 - Opening jpg with Showfoto causes crash.
+294 ==> 232852 - The aplication digikam closed.
+295 ==> 241422 - digiKam crashed while viewing pictures.
+296 ==> 250248 - Regenerating all thumbnails crashes digikam.
+297 ==> 241775 - Crash when editing tags from left hand column filter by tag.
+298 ==> 242109 - digiKam crashes on startup when scanning albums.
+299 ==> 
