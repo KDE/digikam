@@ -333,3 +333,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 289 ==> 218402 - Crash when clicking properties.
 290 ==> 203212 - Crash while moving albums and opening one of them.
 291 ==> 205250 - digiKam unknown crash without backtrace.
+292 ==> 210775 - Crash core dump showfoto.
+293 ==> 206803 - opening jpg with Showfoto causes crash.
+294 ==> 
