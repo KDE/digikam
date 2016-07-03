@@ -59,6 +59,7 @@ int main(int argc, char** argv)
     prm.blue = -55.0;
     CBFilter filter(&img, 0, prm);
     filter.startFilterDirectly();
+    img.putImageData(filter.getTargetImage().bits());
     img.save(outFilePath, QLatin1String("PNG"));
 
     MetaEngine::cleanupExiv2();
