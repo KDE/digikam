@@ -340,4 +340,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 296 ==> 250248 - Regenerating all thumbnails crashes digikam.
 297 ==> 241775 - Crash when editing tags from left hand column filter by tag.
 298 ==> 242109 - digiKam crashes on startup when scanning albums.
-299 ==> 
+299 ==> 263892 - Crash when geotagging.
+300 ==> 262356 - digiKam shutdown after attempting to move a picture.
+301 ==> 276863 - digiKam Crash on Browsing through timeline.
