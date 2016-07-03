@@ -329,3 +329,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 285 ==> 261826 - Crash in Album menu.
 286 ==> 267686 - digiKam crashed while moving pictures.
 287 ==> 216437 - Segmentation fault occured when viewing a folder.
+288 ==> 268099 - Batch process crash.
