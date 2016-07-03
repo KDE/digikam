@@ -326,3 +326,4 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 282 ==> 300300 - THUMBDB : Building / RE-Building of thumbnails mistakeous?
 283 ==> 214440 - digikam doesn't display my images from backup.
 284 ==> 223018 - Lost Tags when replace foto's.
+285 ==> 261826 - Crash in Album menu.
