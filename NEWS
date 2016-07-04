@@ -7,4 +7,6 @@ NEW FEATURES:
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 289680 - ICCProfile wastes a lot of memory (high memory footprint on startup).
-002 ==> 
+002 ==> 308063 - Sort images by file names is not always correct.
+003 ==> 
+
