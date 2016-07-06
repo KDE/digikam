@@ -424,22 +424,20 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (temp.isEmpty())
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : NOT FOUND";
-        exactMatch &= false;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : NOT FOUND : Use default value.";
+        temp = QLatin1String("1000");
     }
-    else
+
+    temp                        = temp.remove(QLatin1String(" m"));
+    bool ok;
+    d->settings.subjectDistance = temp.toDouble(&ok);
+
+    if (!ok)
     {
-        temp                        = temp.remove(QLatin1String(" m"));
-        bool ok;
-        d->settings.subjectDistance = temp.toDouble(&ok);
-
-        if(!ok)
-        {
-            d->settings.subjectDistance = -1.0;
-        }
-
-        qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : " << d->settings.subjectDistance;
+        d->settings.subjectDistance = -1.0;
     }
+
+    qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : " << d->settings.subjectDistance;
 
     // ------------------------------------------------------------------------------------------------
 
