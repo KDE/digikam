@@ -8,5 +8,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
 001 ==> 289680 - ICCProfile wastes a lot of memory (high memory footprint on startup).
 002 ==> 308063 - Sort images by file names is not always correct.
-003 ==> 
+003 ==> 358539 - can't use tags for real filtering: tag1 OR tag2 OR tag3 => all in query result = "at least one of tags 1-2-3".
+004 ==> 
 
