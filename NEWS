@@ -32,4 +32,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 024 ==> 343015 - When crop an raw image there appears a black bam on the right.
 025 ==> 352955 - digiKam crashes when I start the geolocation.
 026 ==> 359817 - digiKam crashed while scanning faces.
-027 ==> 
+027 ==> 336979 - digiKam crash during facial recognition when closed before finished.
+028 ==> 
