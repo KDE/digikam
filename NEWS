@@ -22,5 +22,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 014 ==> 213916 - digiKam crashed when building the collection.
 015 ==> 218987 - After several days idle, digiKam crashed during closing.
 016 ==> 214874 - Picture download from cf-card.
-017 ==> 
+017 ==> 215021 - Crash importing photos from SD card into digiKam.
+018 ==> 
 
