@@ -36,4 +36,14 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 028 ==> 337898 - Pictures imported from camera are not available in folder.
 029 ==> 345106 - Crash while saving.
 030 ==> 327961 - digiKam crash at video playing.
-031 ==> 
+031 ==> 307183 - Advanced Slideshow turns completely white (Open GL Transitions enabled).
+032 ==> 279969 - digiKam crash after closing the extended slideshow.
+033 ==> 348229 - Crash if I try to show slideshow in second VGA display.
+034 ==> 348484 - Extreme long saving times for settings.
+035 ==> 330133 - Crash during workflow in exporting jpeg from raw cr2.
+036 ==> 315137 - Wired color conversion with multi exposure photos.
+037 ==> 255137 - Some exif metadata are lost when converting CR2 to DNG.
+038 ==> 235683 - Metadata invalid when converting CRW
+039 ==> 245582 - When you try to save the blended image it will some times say can not save jpg such and such.
+040 ==> 262165 - Error message when saving image in exposure blending dialogue.
+041 ==> 
