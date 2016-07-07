@@ -27,4 +27,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 019 ==> 215854 - Download pictures to hd in digiKam.
 020 ==> 217532 - Crash while using Download Photos with Digikam link from Device Notifier.
 021 ==> 362108 - Crash when moving images to newly created album.
-022 ==> 
+022 ==> 354074 - Can't load most of pictures without further error messages or additional informations.
+023 ==> 
