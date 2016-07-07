@@ -15,6 +15,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 007 ==> 355212 - Crash While editing and playback.
 008 ==> 313523 - While move images from one folder to other there is an error report and the image is delete.
 009 ==> 215558 - Leaving the "THEME" area caused fatel error sig 11 sigsegv Then it crashed.
-010 ==> 218765 - Drag digikam photo to thunderbird 3.0 email attachment section.
-011 ==> 
+010 ==> 218765 - Drag digiKam photo to thunderbird 3.0 email attachment section.
+011 ==> 227123 - digiKam crashes when deleting pictures from camera.
+012 ==> 
 
