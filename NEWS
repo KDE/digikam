@@ -28,4 +28,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 020 ==> 217532 - Crash while using Download Photos with Digikam link from Device Notifier.
 021 ==> 362108 - Crash when moving images to newly created album.
 022 ==> 354074 - Can't load most of pictures without further error messages or additional informations.
-023 ==> 
+023 ==> 361317 - digiKam crash when using face recognition.
+024 ==> 
