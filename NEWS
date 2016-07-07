@@ -46,4 +46,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 038 ==> 235683 - Metadata invalid when converting CRW
 039 ==> 245582 - When you try to save the blended image it will some times say can not save jpg such and such.
 040 ==> 262165 - Error message when saving image in exposure blending dialogue.
-041 ==> 
+041 ==> 365079 - digiKam 5.0 beta 7 crashes while showing the splash image.
+042 ==> 
