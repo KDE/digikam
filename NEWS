@@ -29,4 +29,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 021 ==> 362108 - Crash when moving images to newly created album.
 022 ==> 354074 - Can't load most of pictures without further error messages or additional informations.
 023 ==> 361317 - digiKam crash when using face recognition.
-024 ==> 
+024 ==> 343015 - When crop an raw image there appears a black bam on the right.
+025 ==> 
