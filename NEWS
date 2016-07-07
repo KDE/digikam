@@ -20,5 +20,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 012 ==> 195448 - Random system hangs when handling RAW images in digiKam.
 013 ==> 211009 - digiKam batch raw converter.
 014 ==> 213916 - digiKam crashed when building the collection.
-015 ==> 
+015 ==> 218987 - After several days idle, digiKam crashed during closing.
+016 ==> 
 
