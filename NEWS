@@ -33,4 +33,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 025 ==> 352955 - digiKam crashes when I start the geolocation.
 026 ==> 359817 - digiKam crashed while scanning faces.
 027 ==> 336979 - digiKam crash during facial recognition when closed before finished.
-028 ==> 
+028 ==> 337898 - Pictures imported from camera are not available in folder.
+029 ==> 
