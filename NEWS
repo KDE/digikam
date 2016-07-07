@@ -13,5 +13,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 005 ==> 303848 - BQM LensCorrection tool : doesn't work when 'use metadata' option is turned on.
 006 ==> 364206 - Crash when moving images outside digiKam.
 007 ==> 355212 - Crash While editing and playback.
-008 ==> 
+008 ==> 313523 - while move images from one folder to other there is an error report and the image is delete.
+009 ==> 
 
