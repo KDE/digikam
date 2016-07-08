@@ -55,4 +55,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 047 ==> 170141 - Printer can't print when six collumns in the calendar.
 048 ==> 140982 - Slideshow is blurry/pixelated if opengl transitions are enabled.
 049 ==> 238598 - Advanced Slideshow Dialog too big for screen.
-050 ==> 
+050 ==> 299356 - Some pictures not editable in Image Editor as menu bar is not showing.
+051 ==> 
+
