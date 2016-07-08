@@ -58,4 +58,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 050 ==> 299356 - Some pictures not editable in Image Editor as menu bar is not showing.
 051 ==> 365125 - Win64 version cannot start.
 052 ==> 365229 - Crash during close of Digikam5.
-053 ==> 
+053 ==> 338730 - Image menu sometimes becomes disabled while downloading.
+054 ==> 
+
