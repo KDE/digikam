@@ -47,4 +47,12 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 039 ==> 245582 - When you try to save the blended image it will some times say can not save jpg such and such.
 040 ==> 262165 - Error message when saving image in exposure blending dialogue.
 041 ==> 365079 - digiKam 5.0 beta 7 crashes while showing the splash image.
-042 ==> 
+042 ==> 266778 - Unable to save blended image - Incompatible pixel type.
+043 ==> 180750 - MetadataEdit : no warning when file is read-only.
+044 ==> 224583 - MetadataEdit writes invalid EXIF data to image.
+045 ==> 201960 - Slideshow will not play mp3.
+046 ==> 269339 - Advanced Slideshow greyed out.
+047 ==> 170141 - Printer can't print when six collumns in the calendar.
+048 ==> 140982 - Slideshow is blurry/pixelated if opengl transitions are enabled.
+049 ==> 238598 - Advanced Slideshow Dialog too big for screen.
+050 ==> 
