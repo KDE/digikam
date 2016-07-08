@@ -56,5 +56,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 048 ==> 140982 - Slideshow is blurry/pixelated if opengl transitions are enabled.
 049 ==> 238598 - Advanced Slideshow Dialog too big for screen.
 050 ==> 299356 - Some pictures not editable in Image Editor as menu bar is not showing.
-051 ==> 
+051 ==> 365125 - Win64 version cannot start.
+052 ==> 
 
