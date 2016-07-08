@@ -57,5 +57,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 049 ==> 238598 - Advanced Slideshow Dialog too big for screen.
 050 ==> 299356 - Some pictures not editable in Image Editor as menu bar is not showing.
 051 ==> 365125 - Win64 version cannot start.
-052 ==> 
-
+052 ==> 365229 - Crash during close of Digikam5.
+053 ==> 
