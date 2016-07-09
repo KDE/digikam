@@ -70,6 +70,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 060 ==> 285808 - Crash at startup (probably related to scan corrupted NEF images).
 061 ==> 300808 - Crash while importing pictures.
 062 ==> 313966 - Crash when applying geolocation.
-063 ==> 
+063 ==> 217631 - Crashed when I tried to upload from camera. First time user.
+064 ==> 
 
 
