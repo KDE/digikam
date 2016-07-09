@@ -66,6 +66,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 056 ==> 299828 - Changing folder on digiKam.
 057 ==> 304733 - Crash after import new folder from USB-stick or after closing digiKam.
 058 ==> 212457 - Crash after performing batch operation on JPG images.
-059 ==> 
+059 ==> 313500 - Crash during modify of a picture.
+060 ==> 
 
 
