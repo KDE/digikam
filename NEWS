@@ -83,4 +83,9 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 073 ==> 329507 - Rename attemps leads digiKam to crash.
 074 ==> 282188 - Crash digiKam when I crop image and "save as"...
 075 ==> 297835 - digiKam crashes when starting.
-076 ==> 
+076 ==> 324956 - Opening digiKam on Ubuntu 13.04 system.
+077 ==> 234307 - Segfault trying to delete an image.
+078 ==> 335937 - Crash on start-up due to user resource limitations set in PAM configuration.
+079 ==> 305054 - Crash digiKam when selecting newly imported albums.
+080 ==> 262843 - digiKam crashes at opening openSuse 11.2.
+081 ==> 
