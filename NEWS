@@ -109,4 +109,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 099 ==> 308827 - digiKam showed error after closing.
 100 ==> 274863 - digiKam crashes on close of application.
 101 ==> 217588 - digiKam crashes on exit.
-102 ==> 
+102 ==> 297320 - digiKam crashed after I had imported photos from my camera. I shut off the camera and it crashed.
+103 ==> 343161 - Diaporama not in full screen.
+104 ==> 234850 - Enter edit mode, crop jpeg photo, go to Save As, select directory, change type to TIFF, program crashes.
+105 ==> 195610 - Memory leak in image editor.
