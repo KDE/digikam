@@ -76,5 +76,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 066 ==> 240318 - digiKam crashes on mov.
 067 ==> 298547 - digikam crashes, if pics of collections are changed externally.
 068 ==> 223177 - digiKam crashes when selecting a picture immediately after showing slideshow.
-069 ==> 
-
+069 ==> 300463 - digiKam crashing after opening, possibly related to prior GIMP crash.
+070 ==> 
