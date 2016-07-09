@@ -79,4 +79,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 069 ==> 300463 - digiKam crashing after opening, possibly related to prior GIMP crash.
 070 ==> 234746 - digiKam crashes while looking a film in HD format .avi.
 071 ==> 333508 - Crash in Digikam::DigikamApp::slotRebuildAlbumThumbnails.
-072 ==> 
+072 ==> 328239 - Image scanning.
+073 ==> 329507 - Rename attemps leads digiKam to crash.
+074 ==> 
