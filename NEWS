@@ -81,4 +81,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 071 ==> 333508 - Crash in Digikam::DigikamApp::slotRebuildAlbumThumbnails.
 072 ==> 328239 - Image scanning.
 073 ==> 329507 - Rename attemps leads digiKam to crash.
-074 ==> 
+074 ==> 282188 - Crash digiKam when I crop image and "save as"...
+075 ==> 297835 - digiKam crashes when starting.
+076 ==> 
