@@ -73,4 +73,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 063 ==> 217631 - Crashed when I tried to upload from camera. First time user.
 064 ==> 290966 - digiKam crashes after loading AVI file from Canon IXUS 75.
 065 ==> 307690 - digiKam crashed adding files to collection.
-066 ==> 
+066 ==> 240318 - digiKam crashes on mov.
+067 ==> 
