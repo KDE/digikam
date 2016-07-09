@@ -98,4 +98,15 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 088 ==> 257084 - digiKam crashed during renaming all images in album.
 089 ==> 272348 - digiKam crashed when tagging multiple pictures.
 090 ==> 232429 - Crash while tagging 800+ raw files.
-091 ==> 
+091 ==> 286961 - digiKam crashed during disk scaning (importing album).
+092 ==> 283355 - digiKam crashed while tagging an image with shortcut keys.
+093 ==> 246660 - digiKam crashes when changed from a picture to a wmv movie.
+094 ==> 278936 - digiKam crashes when I was tagging images.
+095 ==> 333937 - digiKam crashes when watching videos.
+096 ==> 264072 - digiKam crashes while searching for duplicates.
+097 ==> 330959 - digiKam crashing when play video.
+098 ==> 336275 - digiKam crashes upon simple operations.
+099 ==> 308827 - digiKam showed error after closing.
+100 ==> 274863 - digiKam crashes on close of application.
+101 ==> 217588 - digiKam crashes on exit.
+102 ==> 
