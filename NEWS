@@ -95,4 +95,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 085 ==> 215500 - Crash one camera download commences.
 086 ==> 332762 - Crash when update.
 087 ==> 324930 - Crashed updating thumbnails (fast).
-088 ==> 
+088 ==> 257084 - digiKam crashed during renaming all images in album.
+089 ==> 272348 - digiKam crashed when tagging multiple pictures.
+090 ==> 232429 - Crash while tagging 800+ raw files.
+091 ==> 
