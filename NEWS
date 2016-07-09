@@ -3,6 +3,8 @@ digiKam 5.1.0 - Release date: 2016-08-07
 
 NEW FEATURES:
 
+General : Fix broken Windows 64bits installer due to mix with 32 bits dlls.
+
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
@@ -60,5 +62,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 052 ==> 365229 - Crash during close of Digikam5.
 053 ==> 338730 - Image menu sometimes becomes disabled while downloading.
 054 ==> 329976 - SCAN : digiKam does not update database after picture renaming.
-055 ==> 
+055 ==> 304959 - Advanced slideshow.
+056 ==> 
 
