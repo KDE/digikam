@@ -63,5 +63,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 053 ==> 338730 - Image menu sometimes becomes disabled while downloading.
 054 ==> 329976 - SCAN : digiKam does not update database after picture renaming.
 055 ==> 304959 - Advanced slideshow.
-056 ==> 
+056 ==> 299828 - Changing folder on digiKam.
+057 ==> 
 
