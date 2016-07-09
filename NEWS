@@ -59,5 +59,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 051 ==> 365125 - Win64 version cannot start.
 052 ==> 365229 - Crash during close of Digikam5.
 053 ==> 338730 - Image menu sometimes becomes disabled while downloading.
-054 ==> 
+054 ==> 329976 - SCAN : digiKam does not update database after picture renaming.
+055 ==> 
 
