@@ -118,4 +118,10 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 108 ==> 254879 - Crash upon import of Collection.
 109 ==> 365319 - Immediate crash at program start.
 110 ==> 365135 - digiKam 5 fails to build with DIGIKAMSC_COMPILE_DOC=on.
-111 ==> 
+111 ==> 243373 - Image corruption after crash.
+112 ==> 284261 - digiKam hangs on startup.
+113 ==> 241193 - digiKam crashes when quitting.
+114 ==> 304288 - Crash at shutdown.
+115 ==> 306163 - digiKam crash.
+116 ==> 308268 - digiKam crashes during startup.
+117 ==> 
