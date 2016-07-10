@@ -124,4 +124,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 114 ==> 304288 - Crash at shutdown.
 115 ==> 306163 - digiKam crash.
 116 ==> 308268 - digiKam crashes during startup.
-117 ==> 
+117 ==> 362595 - It crashes on startup.
+118 ==> 209416 - digiKam slows during slide show, then crashes.
+119 ==> 291053 - ccmake claims qt compiled without -fvisibility=hidden.
+120 ==> 301026 - When working simultaneously in different branches, closing of one leads to wrong error message.
+121 ==> 
