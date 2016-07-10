@@ -117,4 +117,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 107 ==> 306431 - digiKam crashes when indexing pictures on hard drive.
 108 ==> 254879 - Crash upon import of Collection.
 109 ==> 365319 - Immediate crash at program start.
-110 ==> 
+110 ==> 365135 - digiKam 5 fails to build with DIGIKAMSC_COMPILE_DOC=on.
+111 ==> 
