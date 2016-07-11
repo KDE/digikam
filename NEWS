@@ -128,4 +128,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 118 ==> 209416 - digiKam slows during slide show, then crashes.
 119 ==> 291053 - ccmake claims qt compiled without -fvisibility=hidden.
 120 ==> 301026 - When working simultaneously in different branches, closing of one leads to wrong error message.
-121 ==> 
+121 ==> 344259 - Extend queues to work with any operation on multiple images from multiple albums.
+122 ==> 
