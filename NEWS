@@ -129,4 +129,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 119 ==> 291053 - ccmake claims qt compiled without -fvisibility=hidden.
 120 ==> 301026 - When working simultaneously in different branches, closing of one leads to wrong error message.
 121 ==> 344259 - Extend queues to work with any operation on multiple images from multiple albums.
-122 ==> 
+122 ==> 365375 - Open with... ignores parameters of Exec line in Desktop Entry.
+123 ==> 
