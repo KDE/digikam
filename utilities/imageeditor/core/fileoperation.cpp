@@ -187,10 +187,11 @@ QUrl FileOperation::getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl)
 
 bool FileOperation::runFiles(const KService& service, const QList<QUrl>& urls)
 {
-    return (runFiles(service.exec().section(QLatin1Char(' '), 0, 0), urls));
+    return (runFiles(service.exec(), urls, service.desktopEntryName(), service.icon()));
 }
 
-bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls)
+bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, const QString& name,
+                                                                             const QString& icon)
 {
     QString cmd(appCmd);
 
@@ -199,11 +200,45 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls)
         return false;
     }
 
-    foreach(const QUrl& url, urls)
+    cmd.replace(QLatin1String("%c"), name);
+    cmd.replace(QLatin1String("%i"), icon);
+
+    if (!cmd.contains(QLatin1String("%f")) &&
+        !cmd.contains(QLatin1String("%u")) &&
+        !cmd.contains(QLatin1String("%F")) &&
+        !cmd.contains(QLatin1String("%U")))
     {
-        cmd.append(QLatin1String(" \""));
-        cmd.append(url.toLocalFile());
-        cmd.append(QLatin1Char('"'));
+        cmd += QLatin1String(" %f");
+    }
+
+    if (!urls.isEmpty())
+    {
+        QString locFiles;
+
+        foreach(const QUrl& url, urls)
+        {
+            locFiles += QLatin1String(" \"");
+            locFiles += url.toLocalFile();
+            locFiles += QLatin1Char('"');
+        }
+
+        cmd.replace(QLatin1String("%f"), QLatin1Char('"') +
+                                         urls.first().toLocalFile() +
+                                         QLatin1Char('"'));
+
+        cmd.replace(QLatin1String("%u"), QLatin1Char('"') +
+                                         urls.first().toLocalFile() +
+                                         QLatin1Char('"'));
+
+        cmd.replace(QLatin1String("%F"), locFiles);
+        cmd.replace(QLatin1String("%U"), locFiles);
+    }
+    else
+    {
+        cmd.remove(QLatin1String("%f"));
+        cmd.remove(QLatin1String("%u"));
+        cmd.remove(QLatin1String("%F"));
+        cmd.remove(QLatin1String("%U"));
     }
 
     return (QProcess::startDetached(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << cmd));

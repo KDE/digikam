@@ -63,7 +63,8 @@ namespace FileOperation
 
     /** Open file urls with the application command.
      */
-    DIGIKAM_EXPORT bool runFiles(const QString& appCmd, const QList<QUrl>& urls);
+    DIGIKAM_EXPORT bool runFiles(const QString& appCmd, const QList<QUrl>& urls, const QString& name = QString(),
+                                                                                 const QString& icon = QString());
 
     /** Return list of service available on desktop to open files.
      */
