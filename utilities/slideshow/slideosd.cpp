@@ -105,10 +105,9 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     setWindowFlags(flags);
     setAttribute(Qt::WA_TranslucentBackground, true);
-    setAttribute(Qt::WA_X11NetWmWindowTypeNotification, true);
     setAttribute(Qt::WA_ShowWithoutActivating, true);
     setMouseTracking(true);
-
+/*
 #ifdef Q_OS_WIN
     // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
     // adds an extra ugly shadow.
@@ -116,7 +115,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     ex_style    |= WS_EX_NOACTIVATE;
     SetWindowLong((HWND)winId(), GWL_EXSTYLE, ex_style);
 #endif
-
+*/
     d->settings   = settings;
     d->parent     = parent;
     d->slideProps = new SlideProperties(d->settings, this);
