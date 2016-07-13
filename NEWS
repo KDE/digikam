@@ -132,4 +132,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 122 ==> 365375 - Open with... ignores parameters of Exec line in Desktop Entry.
 123 ==> 365302 - Deleted tag still present in database.
 124 ==> 365410 - Fullscreen only shows one image - no way to navigate.
-125 ==> 
+125 ==> 303546 - MYSQL : re-read metadata from images is very slow.
+126 ==> 
