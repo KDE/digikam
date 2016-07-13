@@ -9,8 +9,7 @@
 #define __OPENCV_FACEREC_HPP__
 
 #include "face.hpp"
-
-#include "libopencv.h"
+#include "opencv2/core.hpp"
 
 namespace cv { namespace face {
 
@@ -162,8 +161,6 @@ CV_EXPORTS_W Ptr<LBPHFaceRecognizer> createLBPHFaceRecognizer(int radius=1, int 
 
 //! @}
 
-}
-
-} //namespace cv::face
+}} //namespace cv::face
 
 #endif //__OPENCV_FACEREC_HPP__

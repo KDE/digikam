@@ -1,10 +1,3 @@
-// This file is part of OpenCV project.
-// It is subject to the license terms in the LICENSE file found in the top-level directory
-// of this distribution and at http://opencv.org/license.html.
-
-// Copyright (c) 2011,2012. Philipp Wagner <bytefish[at]gmx[dot]de>.
-// Third party copyrights are property of their respective owners.
-
 #ifndef __OPENCV_FACE_BASIC_HPP
 #define __OPENCV_FACE_BASIC_HPP
 
@@ -159,7 +152,6 @@ public:
             fs << LabelInfo(it->first, it->second);
         fs << "]";
     }
-
 /*
     CV_IMPL_PROPERTY(int, NumComponents, _num_components)
     CV_IMPL_PROPERTY(double, Threshold, _threshold)
@@ -169,7 +161,6 @@ public:
     CV_IMPL_PROPERTY_RO(cv::Mat, EigenVectors, _eigenvectors)
     CV_IMPL_PROPERTY_RO(cv::Mat, Mean, _mean)
 */
-
 protected:
     int _num_components;
     double _threshold;

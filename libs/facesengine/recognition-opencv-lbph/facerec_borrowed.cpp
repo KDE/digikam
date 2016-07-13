@@ -36,6 +36,8 @@
  *
  * ============================================================ */
 
+#define QT_NO_EMIT
+
 #include "facerec_borrowed.h"
 
 // C++ includes
@@ -378,7 +380,11 @@ void LBPHFaceRecognizer::train(InputArrayOfArrays _in_src, InputArray _inm_label
     }
 }
 
+#if OPENCV_TEST_VERSION(3,1,0)
 void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist) const
+#else
+void LBPHFaceRecognizer::predict(cv::InputArray _src, cv::Ptr<cv::face::PredictCollector> collector) const
+#endif
 {
     if (m_histograms.empty())
     {
@@ -397,8 +403,12 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
                                       m_grid_y,                                                          /* grid size y                 */
                                       true                                                               /* normed histograms           */
                                      );
+#if OPENCV_TEST_VERSION(3,1,0)
     minDist      = DBL_MAX;
     minClass     = -1;
+#else
+    collector->init((int)m_histograms.size());
+#endif
 
     // This is the standard method
 
@@ -409,11 +419,20 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
         {
             double dist = compareHist(m_histograms[sampleIdx], query, CV_COMP_CHISQR);
 
+#if OPENCV_TEST_VERSION(3,1,0)
             if ((dist < minDist) && (dist < m_threshold))
             {
                 minDist  = dist;
                 minClass = m_labels.at<int>((int) sampleIdx);
             }
+#else
+            int label = m_labels.at<int>((int) sampleIdx);
+
+            if (!collector->collect(label, dist))
+            {
+                return;
+            }
+#endif
         }
     }
 
@@ -448,11 +467,18 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             double mean = sum / it->second.size();
             s          += QString::fromLatin1("%1: %2 - ").arg(it->first).arg(mean);
 
+#if OPENCV_TEST_VERSION(3,1,0)
             if ((mean < minDist) && (mean < m_threshold))
             {
                 minDist = mean;
                 minClass = it->first;
             }
+#else
+            if (!collector->collect(it->first, mean))
+            {
+                return;
+            }
+#endif
         }
 
         qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
@@ -483,7 +509,9 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             scoreMap[it->second]++;
         }
 
+#if OPENCV_TEST_VERSION(3,1,0)
         minDist   = 0;
+#endif
         QString s = QString::fromLatin1("Nearest Neighbor score: ");
 
         for (std::map<int,int>::iterator it = scoreMap.begin(); it != scoreMap.end(); ++it)
@@ -491,17 +519,26 @@ void LBPHFaceRecognizer::predict(InputArray _src, int &minClass, double &minDist
             double score = double(it->second) / countMap.at(it->first);
             s           += QString::fromLatin1("%1/%2 %3  ").arg(it->second).arg(countMap.at(it->first)).arg(score);
 
+#if OPENCV_TEST_VERSION(3,1,0)
             if (score > minDist)
             {
                 minDist  = score;
                 minClass = it->first;
             }
+#else
+            // large is better thus it is -score.
+            if (!collector->collect(it->first, -score))
+            {
+                return;
+            }
+#endif
         }
 
         qCDebug(DIGIKAM_FACESENGINE_LOG) << s;
     }
 }
 
+#if OPENCV_TEST_VERSION(3,1,0)
 int LBPHFaceRecognizer::predict(InputArray _src) const
 {
     int    label;
@@ -510,6 +547,7 @@ int LBPHFaceRecognizer::predict(InputArray _src) const
 
     return label;
 }
+#endif
 
 // Static method ----------------------------------------------------
 
