@@ -166,4 +166,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 156 ==> 188323 - EXIF photograph information is lost after image transformations.
 157 ==> 245887 - Howto build digikam under 64bit.
 158 ==> 203081 - Can't open Images hosted under NTFS.
-159 ==> 
+159 ==> 297964 - FTBFS on armel and armhf due to not maintaining proper distinctions between double and qreal.
+160 ==> 203593 - Initial workflow, selecting images to delete.
+161 ==> 
