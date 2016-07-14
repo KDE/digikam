@@ -164,4 +164,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 154 ==> 235458 - Metadata parsing of multiple hierarchical subjects fails.
 155 ==> 196228 - EXIF Information reported as Unavailable.
 156 ==> 188323 - EXIF photograph information is lost after image transformations.
-157 ==> 
+157 ==> 245887 - Howto build digikam under 64bit.
+158 ==> 203081 - Can't open Images hosted under NTFS.
+159 ==> 
