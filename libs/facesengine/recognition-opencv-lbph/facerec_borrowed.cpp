@@ -36,8 +36,6 @@
  *
  * ============================================================ */
 
-#define QT_NO_EMIT
-
 #include "facerec_borrowed.h"
 
 // C++ includes
