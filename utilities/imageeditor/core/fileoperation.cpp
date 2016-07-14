@@ -193,55 +193,55 @@ bool FileOperation::runFiles(const KService& service, const QList<QUrl>& urls)
 bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, const QString& name,
                                                                              const QString& icon)
 {
-    QString cmd(appCmd);
+    QRegExp split(QLatin1String(" +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
+    QStringList cmdList = appCmd.split(split, QString::SkipEmptyParts);
 
-    if (cmd.isEmpty())
+    if (cmdList.isEmpty())
     {
         return false;
     }
 
-    cmd.replace(QLatin1String("%c"), name);
-    cmd.replace(QLatin1String("%i"), icon);
-
-    if (!cmd.contains(QLatin1String("%f")) &&
-        !cmd.contains(QLatin1String("%u")) &&
-        !cmd.contains(QLatin1String("%F")) &&
-        !cmd.contains(QLatin1String("%U")))
+    if (!appCmd.contains(QLatin1String("%f"), Qt::CaseInsensitive) &&
+        !appCmd.contains(QLatin1String("%u"), Qt::CaseInsensitive) &&
+        !appCmd.contains(QLatin1String("%d"), Qt::CaseInsensitive))
     {
-        cmd += QLatin1String(" %f");
+        cmdList << QLatin1String("%f");
     }
 
-    if (!urls.isEmpty())
+    QStringList dirs;
+    QStringList files;
+    QStringList cmdArgs;
+    QString exec = cmdList.takeFirst();
+
+    foreach(const QUrl& url, urls)
     {
-        QString locFiles;
-
-        foreach(const QUrl& url, urls)
-        {
-            locFiles += QLatin1String(" \"");
-            locFiles += url.toLocalFile();
-            locFiles += QLatin1Char('"');
-        }
-
-        cmd.replace(QLatin1String("%f"), QLatin1Char('"') +
-                                         urls.first().toLocalFile() +
-                                         QLatin1Char('"'));
-
-        cmd.replace(QLatin1String("%u"), QLatin1Char('"') +
-                                         urls.first().toLocalFile() +
-                                         QLatin1Char('"'));
-
-        cmd.replace(QLatin1String("%F"), locFiles);
-        cmd.replace(QLatin1String("%U"), locFiles);
-    }
-    else
-    {
-        cmd.remove(QLatin1String("%f"));
-        cmd.remove(QLatin1String("%u"));
-        cmd.remove(QLatin1String("%F"));
-        cmd.remove(QLatin1String("%U"));
+        dirs  << url.adjusted(QUrl::RemoveFilename).toLocalFile();
+        files << url.toLocalFile();
     }
 
-    return (QProcess::startDetached(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << cmd));
+    foreach(const QString& cmd, cmdList)
+    {
+        if (cmd == QLatin1String("%c"))
+            cmdArgs << name;
+        else if (cmd == QLatin1String("%i"))
+            cmdArgs << icon;
+        else if (cmd == QLatin1String("%f"))
+            cmdArgs << files.first();
+        else if (cmd == QLatin1String("%F"))
+            cmdArgs << files;
+        else if (cmd == QLatin1String("%u"))
+            cmdArgs << files.first();
+        else if (cmd == QLatin1String("%U"))
+            cmdArgs << files;
+        else if (cmd == QLatin1String("%d"))
+            cmdArgs << dirs.first();
+        else if (cmd == QLatin1String("%D"))
+            cmdArgs << dirs;
+        else
+            cmdArgs << cmd;
+    }
+
+    return (QProcess::startDetached(exec, cmdArgs));
 }
 
 KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
