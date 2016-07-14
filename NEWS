@@ -154,5 +154,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 144 ==> 360534 - digiKam crashes every time I try to start Editor.
 145 ==> 338516 - digiKam crash when image are downloaded from camera.
 146 ==> 318242 - Deleting a tag crashes digiKam.
-147 ==> 
+147 ==> 274179 - Crash after start of image thumbprinting.
+148 ==> 275578 - Error while to init digiKam under ubuntu natty i386.
+149 ==> 
+
 
