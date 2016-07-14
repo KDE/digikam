@@ -148,4 +148,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 138 ==> 268263 - Crash when identyfing faces from Unknown People group.
 139 ==> 279033 - Crash while scanning faces and assigning tags to unknown faces.
 140 ==> 340613 - Hanging indefinitely when clicking in the name field of a face.
-141 ==> 
+141 ==> 279327 - "Click to reject" with several photos selected => Crash.
+142 ==> 
