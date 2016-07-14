@@ -156,6 +156,10 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 146 ==> 318242 - Deleting a tag crashes digiKam.
 147 ==> 274179 - Crash after start of image thumbprinting.
 148 ==> 275578 - Error while to init digiKam under ubuntu natty i386.
-149 ==> 
+149 ==> 268255 - Crash when opening album.
+150 ==> 273374 - digiKam crashes when trying to write metadata to all images.
+151 ==> 220769 - Crashes during scanning albums.
+152 ==> 
+
 
 
