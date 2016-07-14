@@ -168,4 +168,23 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 158 ==> 203081 - Can't open Images hosted under NTFS.
 159 ==> 297964 - FTBFS on armel and armhf due to not maintaining proper distinctions between double and qreal.
 160 ==> 203593 - Initial workflow, selecting images to delete.
-161 ==> 
+161 ==> 332969 - EXCEPTION_ACCESS_VIOLATION while going through raw pictures.
+162 ==> 346321 - Crash when I add new Key words and confirm the completed Keyword by Pressing "Enter".
+163 ==> 262646 - I can NOT copy pics _from_ DK _to_ some directory - DK-integration questioned?
+164 ==> 361336 - Moving thumb to other album does not delete original after copy (drag + drop).
+165 ==> 182534 - digiKam does not remember its location with session management.
+166 ==> 287471 - Abums context doesn't refresh after moving files.
+167 ==> 299957 - Shift-selecting images in the album GUI exhibits glitches.
+168 ==> 299524 - Applying settings to multiple selected files makes changes to the wrong files.
+169 ==> 291309 - Album content not updated when deleting next album.
+170 ==> 319892 - Cnnot delete selected files in album view.
+171 ==> 346433 - There are no thumb previews anymore - worst case scenario.
+172 ==> 156187 - Show album name and comments even when empty.
+173 ==> 141940 - Image selection bugs (multiple and single selections).
+174 ==> 195891 - Failed when using "Date-based sub-albums".
+175 ==> 152615 - Changing viewport of Album when opening panels.
+176 ==> 239938 - Tags view doesn't show all images with that tag.
+177 ==> 241799 - digiKam: marked images makes scrolling slow.
+178 ==> 162809 - Bad names chosen in rename dialog at copy operations when duplicate files are found.
+179 ==> 245678 - Pick correct date from selected pictures when creating a new album.
+180 ==> 
