@@ -134,4 +134,18 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 124 ==> 365410 - Fullscreen only shows one image - no way to navigate.
 125 ==> 303546 - MYSQL : re-read metadata from images is very slow.
 126 ==> 365202 - External MySQL database faces update segfault [patch].
-127 ==> 
+127 ==> 351111 - Segmentation fault crash.
+128 ==> 330342 - digiKam crash with faces recognition.
+129 ==> 326586 - When validating a face marker digikam crash.
+130 ==> 326742 - Scanning for faces crashes.
+131 ==> 324774 - Adding tag or deleting tag in "unknown" folder causes crash.
+132 ==> 326585 - digiKam crash when rotate a picture, then enlarge face marker and confirm change.
+133 ==> 309027 - Face detection.
+134 ==> 320812 - digiKam crashed on cancelling face scan.
+135 ==> 312440 - Facial Detection.
+136 ==> 295097 - digiKam crash.
+137 ==> 301611 - digiKam crashes during facial scan.
+138 ==> 268263 - Crash when identyfing faces from Unknown People group.
+139 ==> 279033 - Crash while scanning faces and assigning tags to unknown faces.
+140 ==> 340613 - Hanging indefinitely when clicking in the name field of a face.
+141 ==> 
