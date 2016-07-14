@@ -196,7 +196,7 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
     QRegExp split(QLatin1String(" +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
     QStringList cmdList = appCmd.split(split, QString::SkipEmptyParts);
 
-    if (cmdList.isEmpty())
+    if (cmdList.isEmpty() || urls.isEmpty())
     {
         return false;
     }
