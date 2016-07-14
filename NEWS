@@ -187,4 +187,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 177 ==> 241799 - digiKam: marked images makes scrolling slow.
 178 ==> 162809 - Bad names chosen in rename dialog at copy operations when duplicate files are found.
 179 ==> 245678 - Pick correct date from selected pictures when creating a new album.
-180 ==> 
+180 ==> 238527 - Russian tags wrong after batch recompression.
+181 ==> 333555 - digiKam crashed while exporting photos.
+182 ==> 328577 - Crash when edition with auto adjust in batch manager.
+183 ==> 
