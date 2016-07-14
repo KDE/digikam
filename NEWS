@@ -149,4 +149,10 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 139 ==> 279033 - Crash while scanning faces and assigning tags to unknown faces.
 140 ==> 340613 - Hanging indefinitely when clicking in the name field of a face.
 141 ==> 279327 - "Click to reject" with several photos selected => Crash.
-142 ==> 
+142 ==> 339319 - digiKam crashes at startup.
+143 ==> 306821 - When finishing digiKam, program crashes.
+144 ==> 360534 - digiKam crashes every time I try to start Editor.
+145 ==> 338516 - digiKam crash when image are downloaded from camera.
+146 ==> 318242 - Deleting a tag crashes digiKam.
+147 ==> 
+
