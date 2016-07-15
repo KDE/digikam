@@ -212,4 +212,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 202 ==> 334160 - Wrong colors when importing CR2 with custom camera profile.
 203 ==> 324644 - FILEIO : cannot save file when an image is open in ADOBE colour space and transferring to sRGB colour space.
 204 ==> 272347 - digiKam image editor does not flash the menu on GNOME 3 desktop.
-205 ==> 
+205 ==> 313390 - RAW images cannot be decoded if selected from within the image editor.
+206 ==> 318599 - Edited files RAW to JPG have wrong EOF.
+207 ==> 
