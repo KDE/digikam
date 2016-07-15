@@ -269,4 +269,11 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 259 ==> 182128 - Duplicates search results don't refresh unless search re-run.
 260 ==> 161922 - Calendar view/digikam date does not update when exif dates changed externally.
 261 ==> 190044 - Calendar uses (sometimes ?) 'last access' date instead of exif date.
-262 ==> 
+262 ==> 228139 - Showfoto "open folder" crashes on NFS share.
+263 ==> 314547 - ShowFoto: _XIOError in QSplashScreen::finish.
+264 ==> 344631 - Crash when closing digikam.
+265 ==> 296594 - After I do a BW conversion on color photo, and then "Save As", the image save progress stays at zero.
+266 ==> 357427 - Showfoto just works in partial execution.
+267 ==> 345944 - Crash when saving.
+268 ==> 
+
