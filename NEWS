@@ -195,4 +195,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 185 ==> 187751 - Raw developer gives strange colours when using camera profiles.
 186 ==> 269627 - Mismatch between Before and After.
 187 ==> 255553 - Batch Color Space Converter Doesn't Work On 16bit TIF Files.
-188 ==> 
+188 ==> 345201 - Progress disappears in export.
+189 ==> 
