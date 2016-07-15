@@ -277,4 +277,18 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 267 ==> 345944 - Crash when saving.
 268 ==> 256361 - SlideShow use low resolution previews instead of full resolution images.
 269 ==> 170611 - Slideshow: ordering by exif date not correct.
-270 ==> 
+270 ==> 359880 - Crash when I try to send several files into trash from the main window (table view).
+271 ==> 284175 - digiKam crash closing application.
+272 ==> 266593 - Wrong thumbnails with new camera.
+273 ==> 261717 - Album previews loosen.
+274 ==> 259774 - Thumbnail slider is 0 at startup.
+275 ==> 262601 - digiKam crashes on close.
+276 ==> 275009 - digiKam crashes after building up thumbnails.
+277 ==> 302663 - Thumbnails are often shown empty.
+278 ==> 221114 - Wwhite stripes shown for some thumbnails in the album view.
+279 ==> 320253 - Crash on thumb generation, large tiff's.
+280 ==> 208266 - Crash when attributing stars.
+281 ==> 160193 - Thumbnail labels too long/redundant/cut off.
+282 ==> 311454 - Icon property shows completely wrong image data.
+283 ==> 218435 - digiKam segfaults when running 'Rebuild All Thumbnails' after 200 photos.
+284 ==> 
