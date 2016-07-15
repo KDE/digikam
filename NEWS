@@ -255,4 +255,15 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 245 ==> 309847 - Caching of next image stopped working.
 246 ==> 321755 - Fit to window after rescaling does not work properly.
 247 ==> 197396 - the screen becomes blank as soon as you click on a picture or select view from the menu. the thumbnail is visible but picture is not.
-248 ==> 
+248 ==> 254483 - Fresh installed digiKam crashes when building fingerprints.
+249 ==> 209000 - More options when converting raws.
+250 ==> 295523 - Canon Powershot S100 RAW improperly treated.
+251 ==> 279255 - White balance method "camera" does not use the camera's values.
+252 ==> 225660 - digiKam - Advanced Search - wrong results.
+253 ==> 180035 - Allow to search within past saved searches.
+254 ==> 316607 - Crash while updating fingerprints.
+255 ==> 332375 - Duplicates search.
+256 ==> 322828 - digiKam stop to work.
+257 ==> 327354 - Crashes when rebuilding Finger-Prints.
+258 ==> 190114 - Usability sort images using exif informations (e.g. focal).
+259 ==> 182128 - Duplicates search results don't refresh unless search re-run.
