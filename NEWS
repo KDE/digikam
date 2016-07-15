@@ -267,3 +267,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 257 ==> 327354 - Crashes when rebuilding Finger-Prints.
 258 ==> 190114 - Usability sort images using exif informations (e.g. focal).
 259 ==> 182128 - Duplicates search results don't refresh unless search re-run.
+260 ==> 161922 - Calendar view/digikam date does not update when exif dates changed externally.
+261 ==> 190044 - Calendar uses (sometimes ?) 'last access' date instead of exif date.
+262 ==> 
