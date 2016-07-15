@@ -230,6 +230,24 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 220 ==> 247295 - digiKam crashed while trying to copy photos from mobile-phone.
 221 ==> 332482 - Crash on right click on import from nikon.
 222 ==> 253506 - Crashes at downloading from mass storage.
-223 ==> 
+223 ==> 268831 - Interrupted-restarted import results in empty file.
+224 ==> 298429 - Import from N900 crashes when thumbnails is about to show.
+225 ==> 303170 - Auto-rotate should be loss-less while importing.
+226 ==> 153716 - digiKam does not work with Olympus C-170 CAMEDIA camera.*
+227 ==> 149635 - digiKam - Camera - Kodak C310 - Shows images but cannot delete/transfer.
+228 ==> 198233 - Cannot connect to Kodak CX7300 with digiKam.
+229 ==> 263560 - Seagate CompactFlash Photo Hard drive shows no pictures when import is attempted.
+230 ==> 116904 - Connection to camera lost after download + delete of pictures.
+231 ==> 162592 - Communication error with digital camera.
+232 ==> 167284 - Auto rotate causes zero file sizes when using network shares (CIFS).
+233 ==> 152417 - digiKam recognise Rollei dr5 automatically but does't connect it.
+234 ==> 219655 - Can't import photos from memory cards.
+235 ==> 155825 - Failed to connect Kodak C340.
+236 ==> 155602 - I have to re detect each time my canon S3IS.
+237 ==> 165829 - Failed photos during download are not consistent with actual file.
+238 ==> 310308 - digiKam crashes on import from connected Camera (detected cam and manually selected cam).
+239 ==> 221887 - digiKam leaves behind a cifsxxxx file for each image imported from a camera on CIFS mounted volume.
+240 ==> 186574 - Directly download and preview shot.
+241 ==> 
 
 
