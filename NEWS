@@ -207,4 +207,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 197 ==> 221245 - Opening a picture with showfoto does not show any of the other pictures in the folder.
 198 ==> 113330 - Remote control support (lirc).
 199 ==> 311771 - Bad symbolic link / symlink / soft link handling.
-200 ==> 
+200 ==> 308699 - Geotagged image does not show in preview window.
+201 ==> 150009 - Large print is sent to printer but is taking hours to print - when opening with gimp->print then no problems.
+202 ==> 
