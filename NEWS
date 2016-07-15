@@ -196,4 +196,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 186 ==> 269627 - Mismatch between Before and After.
 187 ==> 255553 - Batch Color Space Converter Doesn't Work On 16bit TIF Files.
 188 ==> 345201 - Progress disappears in export.
-189 ==> 
+189 ==> 146964 - Sort order by date sometimes wrong, if pictures have exactly the same timestamp.
+190 ==> 
+
