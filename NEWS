@@ -223,6 +223,13 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 213 ==> 166417 - Cannot display GeoTiff images.
 214 ==> 241728 - Aspect ratio crop image view.
 215 ==> 152400 - Wish: Simple virtual resize and crop tool.
-216 ==> 
+216 ==> 243915 - digiKam uses all memory and hangs when importing a directory from the hard drive with a large image.
+217 ==> 268920 - Crash at opening digiKam for photos from Device Notifier.
+218 ==> 300838 - AMD64 digiKam segfault on import.
+219 ==> 333095 - digiKam crashes when importing large numbers of additional pics.
+220 ==> 247295 - digiKam crashed while trying to copy photos from mobile-phone.
+221 ==> 332482 - Crash on right click on import from nikon.
+222 ==> 253506 - Crashes at downloading from mass storage.
+223 ==> 
 
 
