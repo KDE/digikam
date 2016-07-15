@@ -248,6 +248,11 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 238 ==> 310308 - digiKam crashes on import from connected Camera (detected cam and manually selected cam).
 239 ==> 221887 - digiKam leaves behind a cifsxxxx file for each image imported from a camera on CIFS mounted volume.
 240 ==> 186574 - Directly download and preview shot.
-241 ==> 
-
-
+241 ==> 359853 - Crash on mainterance with big album.
+242 ==> 332437 - digikam crashed when I use the "mantainance".
+243 ==> 349452 - Maintenance, all albums, all keywords, review previews: process is very slowly, hangs forever, does not finish.
+244 ==> 252822 - Repaint error of the toolbar in preview mode while showing a movie.
+245 ==> 309847 - Caching of next image stopped working.
+246 ==> 321755 - Fit to window after rescaling does not work properly.
+247 ==> 197396 - the screen becomes blank as soon as you click on a picture or select view from the menu. the thumbnail is visible but picture is not.
+248 ==> 
