@@ -291,4 +291,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 281 ==> 160193 - Thumbnail labels too long/redundant/cut off.
 282 ==> 311454 - Icon property shows completely wrong image data.
 283 ==> 218435 - digiKam segfaults when running 'Rebuild All Thumbnails' after 200 photos.
-284 ==> 
+284 ==> 283681 - After re-activating several collections, a huge number of raw pics cannot be opened.
+285 ==> 296934 - Crash while adding tags.
+286 ==> 
+
