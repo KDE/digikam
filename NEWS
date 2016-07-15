@@ -190,12 +190,21 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 180 ==> 238527 - Russian tags wrong after batch recompression.
 181 ==> 333555 - digiKam crashed while exporting photos.
 182 ==> 328577 - Crash when edition with auto adjust in batch manager.
-183 ==> 365631 - right tabs not visible (only geolocation).
+183 ==> 365631 - Right tabs not visible (only geolocation).
 184 ==> 251060 - digiKam crash in Color Management.
 185 ==> 187751 - Raw developer gives strange colours when using camera profiles.
 186 ==> 269627 - Mismatch between Before and After.
 187 ==> 255553 - Batch Color Space Converter Doesn't Work On 16bit TIF Files.
 188 ==> 345201 - Progress disappears in export.
 189 ==> 146964 - Sort order by date sometimes wrong, if pictures have exactly the same timestamp.
-190 ==> 
-
+190 ==> 262075 - Thumbnail size slider label is not transparent.
+191 ==> 267679 - digiKam shows no photos.
+192 ==> 351603 - Splash screen hangs and disappears when loading network albums.
+193 ==> 300307 - digiKam processing time very long.
+194 ==> 282749 - Signaal Segmentation fault (11) on exit/close/quit digiKam.
+195 ==> 231849 - digikam wakes up 107 times per second (powertop).
+196 ==> 272522 - digiKam cannot compile from source code.
+197 ==> 221245 - Opening a picture with showfoto does not show any of the other pictures in the folder.
+198 ==> 113330 - Remote control support (lirc).
+199 ==> 311771 - Bad symbolic link / symlink / soft link handling.
+200 ==> 
