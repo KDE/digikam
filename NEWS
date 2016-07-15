@@ -191,4 +191,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 181 ==> 333555 - digiKam crashed while exporting photos.
 182 ==> 328577 - Crash when edition with auto adjust in batch manager.
 183 ==> 365631 - right tabs not visible (only geolocation).
-184 ==> 
+184 ==> 251060 - digiKam crash in Color Management.
+185 ==> 
