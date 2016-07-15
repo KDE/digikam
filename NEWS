@@ -219,5 +219,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 209 ==> 195332 - digiKam raw import leaves blank instead of showing picture.
 210 ==> 248942 - Memory leak when using digikam Editor for Brightness/Contrast/Gamma.
 211 ==> 255335 - Image Editor gives option to Move selected file to trash but doesn't do anything.
-212 ==> 20626 - Cannot copy nor save images to NAS (DNS-323).
-213 ==> 
+212 ==> 220626 - Cannot copy nor save images to NAS (DNS-323).
+213 ==> 166417 - Cannot display GeoTiff images.
+214 ==> 
