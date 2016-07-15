@@ -221,4 +221,8 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 211 ==> 255335 - Image Editor gives option to Move selected file to trash but doesn't do anything.
 212 ==> 220626 - Cannot copy nor save images to NAS (DNS-323).
 213 ==> 166417 - Cannot display GeoTiff images.
-214 ==> 
+214 ==> 241728 - Aspect ratio crop image view.
+215 ==> 152400 - Wish: Simple virtual resize and crop tool.
+216 ==> 
+
+
