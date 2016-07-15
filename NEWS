@@ -275,5 +275,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 265 ==> 296594 - After I do a BW conversion on color photo, and then "Save As", the image save progress stays at zero.
 266 ==> 357427 - Showfoto just works in partial execution.
 267 ==> 345944 - Crash when saving.
-268 ==> 
-
+268 ==> 256361 - SlideShow use low resolution previews instead of full resolution images.
+269 ==> 170611 - Slideshow: ordering by exif date not correct.
+270 ==> 
