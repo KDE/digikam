@@ -190,4 +190,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 180 ==> 238527 - Russian tags wrong after batch recompression.
 181 ==> 333555 - digiKam crashed while exporting photos.
 182 ==> 328577 - Crash when edition with auto adjust in batch manager.
-183 ==> 
+183 ==> 365631 - right tabs not visible (only geolocation).
+184 ==> 
