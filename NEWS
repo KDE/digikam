@@ -293,5 +293,7 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 283 ==> 218435 - digiKam segfaults when running 'Rebuild All Thumbnails' after 200 photos.
 284 ==> 283681 - After re-activating several collections, a huge number of raw pics cannot be opened.
 285 ==> 296934 - Crash while adding tags.
-286 ==> 
-
+286 ==> 215412 - digiKam crashed while assigning keywords.
+287 ==> 272828 - Tagging images while tags are currently being written to images causes digikam to hang.
+288 ==> 234112 - digiKam crashes intermittently when doing lots of picture edits/tagging.
+289 ==> 
