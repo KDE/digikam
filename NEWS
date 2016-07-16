@@ -309,4 +309,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 299 ==> 144179 - Tag hierarchy or popups is difficult to follow/understand.
 300 ==> 309598 - "Recent Tags" menu show existing tags added and shouldn't be.
 301 ==> 269341 - After removing Album, related tags still reside in taglist.
-302 ==> 
+302 ==> 361438 - Dragging thumbnail to Tag produces wrong offer to tag.
+303 ==> 
+
