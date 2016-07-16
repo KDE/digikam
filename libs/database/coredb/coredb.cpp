@@ -60,6 +60,7 @@ extern "C"
 #include "collectionlocation.h"
 #include "dbengineactiontype.h"
 #include "tagscache.h"
+#include "album.h"
 
 namespace Digikam
 {
@@ -629,6 +630,17 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
 
     d->db->recordChangeset(TagChangeset(id.toInt(), TagChangeset::Added));
     return id.toInt();
+}
+
+void CoreDB::moveTag(TAlbum* parentTagID)
+{
+    d->db->execSql(QString::fromUtf8("LOCK TABLE Tags WRITE;"));
+    d->db->execSql(QString::fromUtf8("SELECT @myLeft := lft FROM Tags WHERE id = :parentTagID;"));
+    d->db->execSql(QString::fromUtf8("SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);"));
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;"));
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;"));
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE pid = :parentTagID;"));
+    d->db->execSql(QString::fromUtf8("UNLOCK TABLES;"));
 }
 
 void CoreDB::deleteTag(int tagID)
