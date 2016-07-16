@@ -381,7 +381,14 @@ QString TagsCache::tagPath(int id, LeadingSlashPolicy slashPolicy) const
         }
         else
         {
-            path = it->name + QLatin1Char('/') + path;
+            if ((it->name).contains(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"))))
+            {
+                continue;
+            }
+            else
+            {
+                path = it->name + QLatin1Char('/') + path;
+            }
         }
     }
 
@@ -496,7 +503,8 @@ QList<int> TagsCache::parentTags(int id) const
          it != d->infos.constEnd() && it->pid;
          it = d->find(it->pid))
     {
-        ids.prepend(it->pid);
+        if((it->pid)!= 0)
+            ids.prepend(it->pid);
     }
 
     return ids;

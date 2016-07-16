@@ -69,7 +69,14 @@ int FaceTagsHelper::findFirstTagWithProperty(const QString& property, const QStr
 QString FaceTagsHelper::tagPath(const QString& name, int parentId)
 {
     QString faceParentTagName = TagsCache::instance()->tagName(parentId);
-    return faceParentTagName + QLatin1Char('/') + name;
+    if ((faceParentTagName).contains(QRegExp(QLatin1String("(_Digikam_root_tag_/|/_Digikam_root_tag_|_Digikam_root_tag_)"))))
+        {
+            return  QLatin1Char('/') + name;
+        }
+        else
+        {
+            return faceParentTagName + QLatin1Char('/') + name;
+        }
 }
 
 void FaceTagsHelper::makeFaceTag(int tagId, const QString& fullName)

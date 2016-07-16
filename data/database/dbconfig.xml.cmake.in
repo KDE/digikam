@@ -1062,7 +1062,8 @@
                             iconkde LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
                             lft INT NOT NULL,
                             rgt INT NOT NULL,
-                            CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE
+                            CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
+                            UNIQUE(pid, name(100))
                             ) ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS ImageTags
                             (imageid INTEGER NOT NULL,
@@ -2002,6 +2003,7 @@ ORDER BY inf.rating DESC, img.name ASC
                                         ADD CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
+                <statement mode="plain">ALTER TABLE Tags ADD CONSTRAINT u_tag UNIQUE(pid, name(100));</statement>                        
             </dbaction>
 
             <dbaction name="UpdateThumbnailsDBSchemaFromV1ToV2" mode="transaction">
