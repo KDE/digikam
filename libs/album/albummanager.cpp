@@ -3337,6 +3337,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
     switch (changeset.operation())
     {
         case TagChangeset::Added:
+        case TagChangeset::Moved:    
         case TagChangeset::Deleted:
         case TagChangeset::Reparented:
 
