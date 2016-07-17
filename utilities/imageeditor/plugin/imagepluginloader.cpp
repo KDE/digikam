@@ -38,7 +38,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 
 namespace Digikam
 {
@@ -108,7 +108,7 @@ public:
 public:
 
     QStringList                  obsoleteImagePluginsList;
-    SplashScreen*                splash;
+    DSplashScreen*               splash;
 
     // a map of _loaded_ plugins
     QMap<QString, ImagePlugin*>  pluginMap;
@@ -123,7 +123,7 @@ ImagePluginLoader* ImagePluginLoader::instance()
     return m_instance;
 }
 
-ImagePluginLoader::ImagePluginLoader(QObject* const parent, SplashScreen* const splash)
+ImagePluginLoader::ImagePluginLoader(QObject* const parent, DSplashScreen* const splash)
     : QObject(parent), d(new Private)
 {
     m_instance                  = this;
@@ -163,7 +163,7 @@ void ImagePluginLoader::loadPluginsFromList(const QStringList& pluginsToLoad)
 {
     if (d->splash)
     {
-        d->splash->message(i18n("Loading Image Plugins..."));
+        d->splash->setMessage(i18n("Loading Image Plugins..."));
     }
 
     int cpt = 0;

@@ -45,7 +45,7 @@
 #include "albummanager.h"
 #include "applicationsettings.h"
 #include "cameralist.h"
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 #include "dzoombar.h"
 #include "digikamview.h"
 #include "metadatastatusbar.h"
@@ -325,7 +325,7 @@ public:
 
     MetadataStatusBar*                  metadataStatusBar;
     FilterStatusBar*                    filterStatusBar;
-    SplashScreen*                       splashScreen;
+    DSplashScreen*                      splashScreen;
     DigikamView*                        view;
     CameraList*                         cameraList;
     TagsActionMngr*                     tagsActionManager;

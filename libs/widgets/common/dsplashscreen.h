@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SPLASHSCREEN_H
-#define SPLASHSCREEN_H
+#ifndef DSPLASH_SCREEN_H
+#define DSPLASH_SCREEN_H
 
 // Qt includes
 
@@ -37,26 +37,26 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT SplashScreen : public QSplashScreen
+class DIGIKAM_EXPORT DSplashScreen : public QSplashScreen
 {
     Q_OBJECT
 
 public:
 
-    SplashScreen();
-    virtual ~SplashScreen();
+    DSplashScreen();
+    virtual ~DSplashScreen();
 
     void setAlignment(int alignment);
     void setColor(const QColor& color);
+    void setMessage(const QString& message);
 
 protected:
 
     void drawContents(QPainter*);
 
-public Q_SLOTS:
+private Q_SLOTS:
 
-    void animate();
-    void message(const QString& message);
+    void slotAnimate();
 
 private:
 

@@ -43,7 +43,7 @@ using namespace KIPI;
 namespace Digikam
 {
 
-class SplashScreen;
+class DSplashScreen;
 
 class KipiPluginLoader : public QObject
 {
@@ -54,7 +54,7 @@ public:
     /** Standard constructor. Pass parent object instance and splashscreen
      *  instance. This last one can be null.
      */
-    KipiPluginLoader(QObject* const parent, SplashScreen* const splash);
+    KipiPluginLoader(QObject* const parent, DSplashScreen* const splash);
 
     /** Return a list of all plugin actions accordingly of plugin category.
      *  See Category enum for details.

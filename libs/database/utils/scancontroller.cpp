@@ -60,7 +60,7 @@
 #include "albummanager.h"
 #include "album.h"
 #include "coredbschemaupdater.h"
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 
 namespace Digikam
 {
@@ -155,7 +155,7 @@ public:
 
     DProgressDlg*                   progressDialog;
 
-    SplashScreen*                   splash;
+    DSplashScreen*                  splash;
 
     ScanController::Advice          advice;
 
@@ -399,7 +399,7 @@ ScanController::Advice ScanController::databaseInitialization()
     return d->advice;
 }
 
-void ScanController::completeCollectionScanDeferFiles(SplashScreen* const splash)
+void ScanController::completeCollectionScanDeferFiles(DSplashScreen* const splash)
 {
     completeCollectionScan(splash, true);
 }
@@ -411,7 +411,7 @@ void ScanController::allowToScanDeferredFiles()
     d->condVar.wakeAll();
 }
 
-void ScanController::completeCollectionScan(SplashScreen* const splash, bool defer)
+void ScanController::completeCollectionScan(DSplashScreen* const splash, bool defer)
 {
     d->splash = splash;
     createProgressDialog();
@@ -816,7 +816,7 @@ void ScanController::slotStartCompleteScan()
 
     if (d->splash)
     {
-        d->splash->message(message);
+        d->splash->setMessage(message);
     }
 
     if (d->progressDialog)
@@ -863,7 +863,7 @@ void ScanController::slotStartScanningForStaleAlbums()
 
     if (d->splash)
     {
-        d->splash->message(message);
+        d->splash->setMessage(message);
     }
     else if (d->progressDialog)
     {
@@ -877,7 +877,7 @@ void ScanController::slotStartScanningAlbumRoots()
 
     if (d->splash)
     {
-        d->splash->message(message);
+        d->splash->setMessage(message);
     }
     else if (d->progressDialog)
     {
@@ -906,7 +906,7 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
 
     if (d->splash)
     {
-        d->splash->message(message);
+        d->splash->setMessage(message);
     }
     else if (d->progressDialog)
     {
@@ -954,7 +954,7 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
 
     if (d->splash)
     {
-        d->splash->message(message);
+        d->splash->setMessage(message);
     }
     else if (d->progressDialog)
     {
@@ -970,7 +970,7 @@ void ScanController::setInitializationMessage()
 
     if (d->splash)
     {
-        d->splash->message(message);
+        d->splash->setMessage(message);
     }
 
     if (d->progressDialog)

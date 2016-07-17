@@ -105,7 +105,7 @@ extern "C"
 #include "showfotosetupmisc.h"
 #include "setupicc.h"
 #include "slideshow.h"
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 #include "statusprogressbar.h"
 #include "thememanager.h"
 #include "thumbnailloadthread.h"
@@ -136,7 +136,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     if (group.readEntry(QLatin1String("ShowSplash"), true) && !qApp->isSessionRestored())
     {
-        d->splash = new Digikam::SplashScreen();
+        d->splash = new Digikam::DSplashScreen();
         d->splash->show();
     }
 
@@ -153,7 +153,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     if (d->splash)
     {
-        d->splash->message(i18n("Checking ICC repository..."));
+        d->splash->setMessage(i18n("Checking ICC repository..."));
     }
 
     d->validIccPath = Digikam::SetupICC::iccRepositoryIsValid();
@@ -162,7 +162,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     if (d->splash)
     {
-        d->splash->message(i18n("Loading themes..."));
+        d->splash->setMessage(i18n("Loading themes..."));
     }
 
     Digikam::ThemeManager::instance();

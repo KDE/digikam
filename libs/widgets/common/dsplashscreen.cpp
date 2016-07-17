@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 
 // Qt includes
 
@@ -48,7 +48,7 @@
 namespace Digikam
 {
 
-class SplashScreen::Private
+class DSplashScreen::Private
 {
 
 public:
@@ -77,7 +77,7 @@ public:
     QTime   lastStateUpdateTime;
 };
 
-SplashScreen::SplashScreen()
+DSplashScreen::DSplashScreen()
     : QSplashScreen(QPixmap()),
       d(new Private)
 {
@@ -113,27 +113,35 @@ SplashScreen::SplashScreen()
     QTimer* const timer = new QTimer(this);
 
     connect(timer, SIGNAL(timeout()),
-            this, SLOT(animate()));
+            this, SLOT(slotAnimate()));
 
     timer->start(150);
 }
 
-SplashScreen::~SplashScreen()
+DSplashScreen::~DSplashScreen()
 {
     delete d;
 }
 
-void SplashScreen::setColor(const QColor& color)
+void DSplashScreen::setColor(const QColor& color)
 {
     d->messageColor = color;
 }
 
-void SplashScreen::setAlignment(int alignment)
+void DSplashScreen::setAlignment(int alignment)
 {
     d->messageAlign = alignment;
 }
 
-void SplashScreen::animate()
+void DSplashScreen::setMessage(const QString& message)
+{
+    d->message = message;
+    QSplashScreen::showMessage(d->message, d->messageAlign, d->messageColor); // krazy:exclude=qclasses
+    slotAnimate();
+    qApp->processEvents();
+}
+
+void DSplashScreen::slotAnimate()
 {
     QTime currentTime = QTime::currentTime();
 
@@ -146,15 +154,7 @@ void SplashScreen::animate()
     update();
 }
 
-void SplashScreen::message(const QString& message)
-{
-    d->message = message;
-    QSplashScreen::showMessage(d->message, d->messageAlign, d->messageColor); // krazy:exclude=qclasses
-    animate();
-    qApp->processEvents();
-}
-
-void SplashScreen::drawContents(QPainter* p)
+void DSplashScreen::drawContents(QPainter* p)
 {
     int    position = 0;
     QColor basecolor(155, 192, 231);
