@@ -42,6 +42,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "daboutdata.h"
 #include "digikam_version.h"
 
@@ -55,13 +56,14 @@ public:
 
     Private()
     {
-        state           = 0;
-        progressBarSize = 3;
-        state           = 0;
-        messageAlign    = Qt::AlignLeft;
-        version         = QLatin1String(digikam_version_short);
-        versionColor    = Qt::white;
-        messageColor    = Qt::white;
+        state               = 0;
+        progressBarSize     = 3;
+        state               = 0;
+        messageAlign        = Qt::AlignLeft;
+        version             = QLatin1String(digikam_version_short);
+        versionColor        = Qt::white;
+        messageColor        = Qt::white;
+        lastStateUpdateTime = QTime::currentTime();
     }
 
     int     state;
@@ -147,7 +149,7 @@ void DSplashScreen::slotAnimate()
 
     if (d->lastStateUpdateTime.msecsTo(currentTime) > 100)
     {
-        d->state               = ((d->state + 1) % (2*d->progressBarSize-1));
+        d->state               = ((d->state + 1) % (2 * d->progressBarSize - 1));
         d->lastStateUpdateTime = currentTime;
     }
 
@@ -170,12 +172,14 @@ void DSplashScreen::drawContents(QPainter* p)
     p->drawEllipse(43, 6, 9, 9);
     p->setRenderHints(hints);
 
-    // Draw animated circles, increments are chosen
-    // to get close to background's color
+    // -- Draw animated circles --------------------------------------
+
+    // Increments are chosen to get close to background's color
     // (didn't work well with QColor::light function)
-    for (int i = 0; i < d->progressBarSize; ++i)
+
+    for (int i = 0 ; i < d->progressBarSize ; i++)
     {
-        position = (d->state+i)%(2*d->progressBarSize-1);
+        position = (d->state + i) % (2 * d->progressBarSize - 1);
 
         if (position < 3)
         {
@@ -196,8 +200,11 @@ void DSplashScreen::drawContents(QPainter* p)
     QRect r = rect();
     r.setCoords(r.x() + 60, r.y() + 4, r.width() - 10, r.height() - 10);
 
-    // Draw message at given position, limited to 49 chars
+    // -- Draw message --------------------------------------------------------
+
+    // Message is draw at given position, limited to 49 chars
     // If message is too long, string is truncated
+
     if (d->message.length() > 50)
     {
         d->message.truncate(49);
