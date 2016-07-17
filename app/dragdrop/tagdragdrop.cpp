@@ -43,6 +43,7 @@
 #include "ddragobjects.h"
 #include "imageinfo.h"
 #include "albumtreeview.h"
+#include "coredb.h"
 
 namespace Digikam
 {
@@ -115,6 +116,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 {
                     // move dragItem as child of dropItem
                     newParentTag = destAlbum;
+                    CoreDbAccess().db()->moveTag(newParentTag);
                 }
 
                 QString errMsg;
