@@ -632,7 +632,7 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
     return id.toInt();
 }
 
-void CoreDB::moveTag(TAlbum* parentTagID)
+void CoreDB::moveTag(TAlbum* /*parentTagID*/)
 {
     d->db->execSql(QString::fromUtf8("LOCK TABLE Tags WRITE;"));
     d->db->execSql(QString::fromUtf8("SELECT @myLeft := lft FROM Tags WHERE id = :parentTagID;"));
@@ -643,7 +643,7 @@ void CoreDB::moveTag(TAlbum* parentTagID)
     d->db->execSql(QString::fromUtf8("UNLOCK TABLES;"));
 }
 
-void CoreDB::deleteTag(int /*tagID*/)
+void CoreDB::deleteTag(int tagID)
 {
     /*
     QString("DELETE FROM Tags WHERE id=?;"), tagID
