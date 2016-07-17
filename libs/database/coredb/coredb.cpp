@@ -643,7 +643,7 @@ void CoreDB::moveTag(TAlbum* parentTagID)
     d->db->execSql(QString::fromUtf8("UNLOCK TABLES;"));
 }
 
-void CoreDB::deleteTag(int tagID)
+void CoreDB::deleteTag(int /*tagID*/)
 {
     /*
     QString("DELETE FROM Tags WHERE id=?;"), tagID
