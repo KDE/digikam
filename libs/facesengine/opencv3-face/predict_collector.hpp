@@ -50,7 +50,18 @@ the use of this software, even if advised of the possibility of such damage.
 #include <utility>
 #include <cfloat>
 
+// Pragma directives to reduce warnings from OpenCv header files.
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
 #include "opencv2/core/cvstd.hpp"
+
+// Restore warnings
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 namespace cv {
 namespace face {
