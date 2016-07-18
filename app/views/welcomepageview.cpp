@@ -56,6 +56,7 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
     setFocusPolicy(Qt::WheelFocus);
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     setRenderHint(QPainter::TextAntialiasing);
+    setContextMenuPolicy(Qt::NoContextMenu);
 
     // ------------------------------------------------------------
 
