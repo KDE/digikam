@@ -15,8 +15,20 @@
  *
  *   See <http://www.opensource.org/licenses/bsd-license>
  */
+
+// Pragma directives to reduce warnings from OpenCv header files.
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
 #include "precomp.hpp"
 #include "face.hpp"
+
+// Restore warnings
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 namespace cv
 {
