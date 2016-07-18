@@ -314,5 +314,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 304 ==> 343683 - Cropping may cause artifacts at image border.
 305 ==> 365734 - digiKam crashes when clicking on the Table button, new installation.
 306 ==> 338050 - MYSQL : nested set fields not updating when moving tag within hierarchy [patch].
-307 ==> 
-
+307 ==> 281959 - SCAN : digiKam unresponsive for >1min after startup.
+308 ==> 320359 - SCAN : digiKam should show which directories are scanned during start-up when adding collections after database deletion.
+309 ==> 
