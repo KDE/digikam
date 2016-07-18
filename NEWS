@@ -317,4 +317,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 306 ==> 338050 - MYSQL : nested set fields not updating when moving tag within hierarchy [patch].
 307 ==> 281959 - SCAN : digiKam unresponsive for >1min after startup.
 308 ==> 320359 - SCAN : digiKam should show which directories are scanned during start-up when adding collections after database deletion.
-309 ==> 
+309 ==> 283323 - MYSQL : a new label "_Digikam_root_tag_" is created every time.
+310 ==> 
