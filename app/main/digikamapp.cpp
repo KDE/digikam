@@ -157,28 +157,14 @@ DigikamApp::DigikamApp()
     : DXmlGuiWindow(0),
       d(new Private)
 {
+    setObjectName(QLatin1String("Digikam"));
     setConfigGroupName(ApplicationSettings::instance()->generalConfigGroupName());
     setFullScreenOptions(FS_ALBUMGUI);
     setXMLFile(QLatin1String("digikamui.rc"));
 
-    m_instance = this;
-    d->config  = KSharedConfig::openConfig();
-
-    setObjectName(QLatin1String("Digikam"));
-
+    m_instance         = this;
+    d->config          = KSharedConfig::openConfig();
     KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
-
-    if (group.readEntry("Show Splash", true) &&
-        !qApp->isSessionRestored())
-    {
-        d->splashScreen = new DSplashScreen();
-        d->splashScreen->show();
-    }
-
-    if (d->splashScreen)
-    {
-        d->splashScreen->setMessage(i18n("Scanning Albums..."));
-    }
 
 #ifdef HAVE_DBUS
 
@@ -190,10 +176,16 @@ DigikamApp::DigikamApp()
 #endif
 
     // collection scan
-    if (group.readEntry("Scan At Start", true) ||
-        !CollectionScanner::databaseInitialScanDone())
+    if (!CollectionScanner::databaseInitialScanDone())
     {
-        ScanController::instance()->completeCollectionScanDeferFiles(d->splashScreen);
+        ScanController::instance()->completeCollectionScanDeferFiles();
+    }
+
+    if (group.readEntry("Show Splash", true) &&
+        !qApp->isSessionRestored())
+    {
+        d->splashScreen = new DSplashScreen();
+        d->splashScreen->show();
     }
 
     if (d->splashScreen)
@@ -292,15 +284,6 @@ DigikamApp::DigikamApp()
 #endif // HAVE_MEDIAPLAYER
 
     setAutoSaveSettings(group, true);
-
-    // Now, enable finished the collection scan as deferred process
-    if (d->splashScreen)
-    {
-        d->splashScreen->setMessage(i18n("Search for new items..."));
-    }
-
-    NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
-    tool->start();
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
@@ -454,6 +437,12 @@ void DigikamApp::show()
     slotThumbSizeChanged(ApplicationSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(ApplicationSettings::instance()->getDefaultIconSize());
     d->autoShowZoomToolTip = true;
+
+    // Enable finished the collection scan as deferred process
+
+    NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+    QTimer::singleShot(1000, tool, SLOT(start()));
+
 }
 
 void DigikamApp::restoreSession()

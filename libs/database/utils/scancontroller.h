@@ -43,7 +43,6 @@ namespace Digikam
 {
 
 class CollectionScanner;
-class DSplashScreen;
 class PAlbum;
 
 class DIGIKAM_EXPORT ScanController : public QThread, public InitializationObserver
@@ -83,8 +82,8 @@ public:
      * shortening the synchronous wait. After completeCollectionScanDeferFiles, you
      * need to call allowToScanDeferredFiles() once to enable scanning the deferred files.
      */
-    void completeCollectionScan(DSplashScreen* const splash=0, bool defer = false);
-    void completeCollectionScanDeferFiles(DSplashScreen* const splash=0);
+    void completeCollectionScan(bool defer = false);
+    void completeCollectionScanDeferFiles();
     void allowToScanDeferredFiles();
 
     /**
