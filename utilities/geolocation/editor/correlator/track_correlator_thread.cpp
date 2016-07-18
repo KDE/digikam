@@ -7,7 +7,7 @@
  * @date   2006-09-19
  * @brief  Thread for correlator for tracks and images
  *
- * @author Copyright (C) 2006-2015 by Gilles Caulier
+ * @author Copyright (C) 2006-2016 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
@@ -35,7 +35,7 @@ namespace Digikam
 
 bool TrackCorrelationLessThan(const TrackCorrelator::Correlation& a, const TrackCorrelator::Correlation& b)
 {
-    return a.dateTime < b.dateTime;
+    return (a.dateTime < b.dateTime);
 }
 
 TrackCorrelatorThread::TrackCorrelatorThread(QObject* const parent)
@@ -59,10 +59,10 @@ void TrackCorrelatorThread::run()
     const int nFiles = fileList.count();
     QList<int> currentIndices;
 
-    for (int i = 0; i < nFiles; ++i)
+    for (int i = 0 ; i < nFiles ; i++)
         currentIndices << 0;
 
-    for (TrackCorrelator::Correlation::List::iterator it = itemsToCorrelate.begin(); it!=itemsToCorrelate.end(); ++it)
+    for (TrackCorrelator::Correlation::List::iterator it = itemsToCorrelate.begin() ; it != itemsToCorrelate.end() ; ++it)
     {
         if (doCancel)
         {
@@ -85,7 +85,7 @@ void TrackCorrelatorThread::run()
         QDateTime       firstBiggerTime;
         QPair<int, int> firstIndexPair;
 
-        for (int f = 0; f < nFiles; ++f)
+        for (int f = 0 ; f < nFiles ; f++)
         {
             if (doCancel)
             {
@@ -170,7 +170,7 @@ void TrackCorrelatorThread::run()
 
         if (canUseTimeBefore)
         {
-            dtimeBefore      = abs(lastSmallerTime.secsTo(itemDateTime));
+            dtimeBefore      = qAbs(lastSmallerTime.secsTo(itemDateTime));
             canUseTimeBefore = dtimeBefore <= options.maxGapTime;
         }
 
@@ -179,7 +179,7 @@ void TrackCorrelatorThread::run()
 
         if (canUseTimeAfter)
         {
-            dtimeAfter      = abs(firstBiggerTime.secsTo(itemDateTime));
+            dtimeAfter      = qAbs(firstBiggerTime.secsTo(itemDateTime));
             canUseTimeAfter = dtimeAfter <= options.maxGapTime;
         }
 
@@ -219,12 +219,12 @@ void TrackCorrelatorThread::run()
 
             if (canInterpolate)
             {
-                canInterpolate = abs(lastSmallerTime.secsTo(itemDateTime)) <= options.interpolationDstTime;
+                canInterpolate = qAbs(lastSmallerTime.secsTo(itemDateTime)) <= options.interpolationDstTime;
             }
 
             if (canInterpolate)
             {
-                canInterpolate = abs(firstBiggerTime.secsTo(itemDateTime)) <= options.interpolationDstTime;
+                canInterpolate = qAbs(firstBiggerTime.secsTo(itemDateTime)) <= options.interpolationDstTime;
             }
 
             if (canInterpolate)
@@ -243,7 +243,7 @@ void TrackCorrelatorThread::run()
                     const double lonBefore  = dataPointBefore.coordinates.lon();
                     const double latAfter   = dataPointAfter.coordinates.lat();
                     const double lonAfter   = dataPointAfter.coordinates.lon();
-                    const qreal interFactor = qreal(tCor-tBefore)/qreal(tAfter-tBefore);
+                    const qreal interFactor = qreal(tCor-tBefore) / qreal(tAfter-tBefore);
 
                     resultCoordinates.setLatLon(latBefore + (latAfter - latBefore) * interFactor,
                                                 lonBefore + (lonAfter - lonBefore) * interFactor);
@@ -258,7 +258,7 @@ void TrackCorrelatorThread::run()
                     }
 
                     correlatedData.coordinates = resultCoordinates;
-                    correlatedData.flags       = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
+                    correlatedData.flags       = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags | TrackCorrelator::CorrelationFlagCoordinates);
                 }
 
             }
