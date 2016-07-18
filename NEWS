@@ -4,7 +4,8 @@ digiKam 5.1.0 - Release date: 2016-08-07
 NEW FEATURES:
 
 General : Fix broken Windows 64bits installer due to mix with 32 bits dlls.
-
+Database: Consolidation of Mysql database backend.
+Database: Startup up time improved. Scan for new items is always differed after that main gui is displayed.
 
 BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 
