@@ -15,9 +15,21 @@
  *
  *   See <http://www.opensource.org/licenses/bsd-license>
  */
+
+// Pragma directives to reduce warnings from OpenCv header files.
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wcast-align"
+#endif
+
 #include "precomp.hpp"
 #include "face.hpp"
 #include "face_basic.hpp"
+
+// Restore warnings
+#if defined(__APPLE__) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
 namespace cv { namespace face {
 
@@ -61,7 +73,9 @@ public:
         _grid_y(gridy),
         _radius(radius_),
         _neighbors(neighbors_),
-        _threshold(threshold) {}
+        _threshold(threshold) {
+        (void)_threshold;
+    }
 
     // Initializes and computes this LBPH Model. The current implementation is
     // rather fixed as it uses the Extended Local Binary Patterns per default.
@@ -78,6 +92,7 @@ public:
                 _radius(radius_),
                 _neighbors(neighbors_),
                 _threshold(threshold) {
+        (void)_threshold;
         train(src, labels);
     }
 
