@@ -128,13 +128,21 @@ public:
      * Computes a LBPH model with images in src and
      * corresponding labels in labels.
      */
+#if OPENCV_TEST_VERSION(3,1,0)
     void train(cv::InputArrayOfArrays src, cv::InputArray labels);
+#else
+    void train(cv::InputArrayOfArrays src, cv::InputArray labels) override;
+#endif
 
     /**
      * Updates this LBPH model with images in src and
      * corresponding labels in labels.
      */
+#if OPENCV_TEST_VERSION(3,1,0)
     void update(cv::InputArrayOfArrays src, cv::InputArray labels);
+#else
+    void update(cv::InputArrayOfArrays src, cv::InputArray labels) override;
+#endif
 
 
 #if OPENCV_TEST_VERSION(3,1,0)
@@ -158,12 +166,20 @@ public:
     /**
      * See FaceRecognizer::load().
      */
+#if OPENCV_TEST_VERSION(3,1,0)
     void load(const cv::FileStorage&) {}
+#else
+    void load(const cv::FileStorage&) override {}
+#endif
 
     /**
      * See FaceRecognizer::save().
      */
+#if OPENCV_TEST_VERSION(3,1,0)
     void save(cv::FileStorage&) const {}
+#else
+    void save(cv::FileStorage&) const override {}
+#endif
 
     /**
      * Getter functions.
@@ -192,7 +208,7 @@ public:
     int getGrid_y()    const                             { return m_grid_y;               }
     void setGrid_y(int _grid_y)                          { m_grid_y = _grid_y;            }
 
-    double getThreshold() const                          { return m_threshold;            }
+    double getThreshold() const override                 { return m_threshold;            }
     void setThreshold(double _threshold)                 { m_threshold = _threshold;      }
 
     void setHistograms(std::vector<cv::Mat> _histograms) { m_histograms = _histograms;    }
