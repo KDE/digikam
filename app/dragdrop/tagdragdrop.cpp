@@ -44,6 +44,8 @@
 #include "imageinfo.h"
 #include "albumtreeview.h"
 #include "coredb.h"
+#include "dbengineparameters.h"
+#include "dbenginebackend.h"
 
 namespace Digikam
 {
@@ -116,7 +118,12 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                 {
                     // move dragItem as child of dropItem
                     newParentTag = destAlbum;
-                    CoreDbAccess().db()->moveTag(newParentTag);
+                    
+                    DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
+                    if(internalServerParameters.MySQLDatabaseType() == QLatin1String("QMYSQL"))
+                    {
+                        CoreDbAccess().db()->moveTag(newParentTag);
+                    }
                 }
 
                 QString errMsg;
