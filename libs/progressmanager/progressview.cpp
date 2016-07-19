@@ -405,6 +405,7 @@ void ProgressView::slotTransactionAdded(ProgressItem* item)
         {
             d->transactionsToListviewItems.insert( item, ti );
         }
+
         if ( first && d->wasLastShown )
         {
             QTimer::singleShot( 1000, this, SLOT(slotShow()) );
@@ -425,6 +426,7 @@ void ProgressView::slotTransactionCompleted(ProgressItem* item)
         connect ( ti, SIGNAL(destroyed()),
                 d->scrollView, SLOT(slotLayoutFirstItem()) );
     }
+
     // This was the last item, hide.
     if ( d->transactionsToListviewItems.empty() )
     {
@@ -468,6 +470,7 @@ void ProgressView::slotTransactionUsesBusyIndicator(ProgressItem* item, bool val
     if (d->transactionsToListviewItems.contains(item))
     {
         TransactionItem* const ti = d->transactionsToListviewItems[item];
+
         if (value)
         {
             ti->setTotalSteps(0);
