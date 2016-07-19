@@ -394,12 +394,12 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         // restore menubar
 
         if (d->menubarVisibility)
-            menuBar()->show();
+            menuBar()->setVisible(true);
 
         // restore statusbar
 
         if (d->statusbarVisibility)
-            statusBar()->show();
+            statusBar()->setVisible(true);
 
         // restore sidebars
 
@@ -433,12 +433,12 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         // hide menubar
 
         d->menubarVisibility = menuBar()->isVisible();
-        menuBar()->hide();
+        menuBar()->setVisible(false);
 
         // hide statusbar
 
         d->statusbarVisibility = statusBar()->isVisible();
-        statusBar()->hide();
+        statusBar()->setVisible(false);
 
         // hide sidebars
 
