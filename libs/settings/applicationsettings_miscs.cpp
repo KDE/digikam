@@ -196,4 +196,14 @@ int ApplicationSettings::getRatingFilterCond() const
     return d->ratingFilterCond;
 }
 
+void ApplicationSettings::setScanAtStart(bool val)
+{
+    d->scanAtStart = val;
+}
+
+bool ApplicationSettings::getScanAtStart() const
+{
+    return d->scanAtStart;
+}
+
 }  // namespace Digikam

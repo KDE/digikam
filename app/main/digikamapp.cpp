@@ -440,8 +440,12 @@ void DigikamApp::show()
 
     // Enable finished the collection scan as deferred process
 
-    NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
-    QTimer::singleShot(1000, tool, SLOT(start()));
+    if (ApplicationSettings::instance()->getScanAtStart() ||
+        !CollectionScanner::databaseInitialScanDone())
+    {
+        NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+        QTimer::singleShot(1000, tool, SLOT(start()));
+    }
 
 }
 

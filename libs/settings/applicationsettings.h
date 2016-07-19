@@ -358,6 +358,9 @@ public:
 
     // -- Miscs Settings -------------------------------------------------------
 
+    void setScanAtStart(bool val);
+    bool getScanAtStart() const;
+
     void setUseTrash(bool val);
     bool getUseTrash() const;
 

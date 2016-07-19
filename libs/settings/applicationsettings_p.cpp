@@ -136,6 +136,7 @@ const QString ApplicationSettings::Private::configStringComparisonTypeEntry(QLat
 const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry(QLatin1String("Detection Accuracy"));
 const QString ApplicationSettings::Private::configApplicationStyleEntry(QLatin1String("Application Style"));
 const QString ApplicationSettings::Private::configIconThemeEntry(QLatin1String("Icon Theme"));
+const QString ApplicationSettings::Private::configScanAtStartEntry(QLatin1String("Scan At Start"));
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
@@ -199,6 +200,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       ratingFilterCond(0),
       recursiveAlbums(false),
       recursiveTags(false),
+      scanAtStart(true),
       sidebarTitleStyle(DMultiTabBar::AllIconsText),
       albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
@@ -320,6 +322,7 @@ void ApplicationSettings::Private::init()
 
     faceDetectionAccuracy               = 0.8;
 
+    scanAtStart                         = true;
     stringComparisonType                = ApplicationSettings::Natural;
     applicationStyle                    = qApp->style()->objectName();
     iconTheme                           = QString();

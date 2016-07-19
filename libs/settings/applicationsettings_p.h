@@ -224,6 +224,7 @@ public:
 
     // database settings
     DbEngineParameters                        databaseParams;
+    bool                                      scanAtStart;
 
     // album settings
     QStringList                               albumCategoryNames;
