@@ -120,6 +120,7 @@ bool TagDragDropHandler::dropEvent(QAbstractItemView* view, const QDropEvent* e,
                     newParentTag = destAlbum;
                     
                     DbEngineParameters internalServerParameters = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig());
+
                     if(internalServerParameters.isMySQL())
                     {
                         CoreDbAccess().db()->moveTag(newParentTag);
