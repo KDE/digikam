@@ -462,8 +462,7 @@ bool ProgressManager::addProgressItem(ProgressItem* const t, ProgressItem* const
     }
     else
     {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                           i18n("A tool identified as \"%1\" is already running....", t->id()));
+        qCWarning(DIGIKAM_GENERAL_LOG) << "A tool identified as " << t->id() << " is already running.";
         t->setComplete();
         return false;
     }
