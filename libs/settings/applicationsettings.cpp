@@ -137,7 +137,7 @@ void ApplicationSettings::readSettings()
     d->currentTheme                     = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
     d->sidebarTitleStyle                = (DMultiTabBar::TextStyle)group.readEntry(d->configSidebarTitleStyleEntry,
-                                          (int)DMultiTabBar::ActiveIconText);
+                                          (int)DMultiTabBar::AllIconsText);
 
     d->ratingFilterCond                 = group.readEntry(d->configRatingFilterConditionEntry,
                                           (int)ImageFilterSettings::GreaterEqualCondition);
