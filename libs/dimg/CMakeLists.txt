@@ -83,7 +83,6 @@ set(libdimgfilters_SRCS
     filters/sharp/sharpenfilter.cpp
     filters/sharp/unsharpmaskfilter.cpp
     filters/sharp/sharpsettings.cpp
-    filters/sharp/redeyecorrectionfilter.cpp
     filters/levels/imagelevels.cpp
     filters/levels/levelsfilter.cpp
     filters/levels/imagehistogram.cpp
@@ -109,7 +108,19 @@ set(libdimgfilters_SRCS
     filters/lens/antivignettingsettings.cpp
     filters/lens/lensdistortionfilter.cpp
     filters/lens/pixelaccess.cpp
+    filters/redeye/redeyecorrectionfilter.cpp
 )
+
+set(libdlib_SRCS
+    filters/redeye/dlib/all/source.cpp
+
+)
+
+set(DLIB_INCLUDE_DIRS
+    filters/redeye/
+)
+
+include_directories(${DLIB_INCLUDE_DIRS})
 
 # ==================================================================================================
 # get the gcc version
@@ -201,4 +212,5 @@ add_library(dimg_src OBJECT
             ${libdimgloaders_SRCS}
             ${libdimgfilters_SRCS}
             ${libdimg_SRCS}
+            ${libdlib_SRCS}
 )
