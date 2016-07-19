@@ -117,9 +117,9 @@ QSize TransactionItemView::minimumSizeHint() const
 
 void TransactionItemView::slotLayoutFirstItem()
 {
-    //This slot is called whenever a TransactionItem is deleted, so this is a
-    //good place to call updateGeometry(), so our parent takes the new size
-    //into account and resizes.
+    // This slot is called whenever a TransactionItem is deleted, so this is a
+    // good place to call updateGeometry(), so our parent takes the new size
+    // into account and resizes.
     updateGeometry();
 
     /*
@@ -339,9 +339,9 @@ ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, co
 */
 
     /*
-    * Get the singleton ProgressManager item which will inform us of
-    * appearing and vanishing items.
-    */
+     * Get the singleton ProgressManager item which will inform us of
+     * appearing and vanishing items.
+     */
     ProgressManager* const pm = ProgressManager::instance();
 
     connect(pm, SIGNAL(progressItemAdded(ProgressItem*)),
@@ -520,10 +520,10 @@ void ProgressView::setVisible(bool b)
 void ProgressView::slotToggleVisibility()
 {
     /* Since we are only hiding with a timeout, there is a short period of
-    * time where the last item is still visible, but clicking on it in
-    * the statusbarwidget should not display the dialog, because there
-    * are no items to be shown anymore. Guard against that.
-    */
+     * time where the last item is still visible, but clicking on it in
+     * the statusbarwidget should not display the dialog, because there
+     * are no items to be shown anymore. Guard against that.
+     */
     d->wasLastShown = isHidden();
 
     if ( !isHidden() || !d->transactionsToListviewItems.isEmpty() )

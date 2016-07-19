@@ -478,6 +478,7 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
             qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to add in thread 1 a ProgressItem created in thread 2 to ProgressManager, living in thread 3";
             return;
         }
+
         // Move to ProgressManager's thread
         t->moveToThread(thread());
     }
@@ -579,10 +580,12 @@ void ProgressManager::slotAbortAll()
     QHash<QString,ProgressItem*> hash;
     {
         QMutexLocker lock(&d->mutex);
+
         if (d->transactions.isEmpty())
         {
             return;
         }
+
         hash = d->transactions;
     }
 
