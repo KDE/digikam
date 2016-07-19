@@ -242,7 +242,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->useLazySync        = new QCheckBox;
     d->useLazySync->setText(i18nc("@option:check", "Use lazy synchronization"));
     d->useLazySync->setWhatsThis(i18nc("@info:whatsthis",
-                                             "Instead of synchronizing metadata, just schedule it for syncronization."
+                                             "Instead of synchronizing metadata, just schedule it for synchronization."
                                              "Synchronization can be done later by triggering the apply pending, or at digikam exit"));
     d->readXMPSidecarBox  = new QCheckBox;
     d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));

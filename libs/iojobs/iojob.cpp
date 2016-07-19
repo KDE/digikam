@@ -203,7 +203,7 @@ void DeleteJob::run()
         {
             if (!DTrash::deleteDirRecursivley(m_srcToDelete.toLocalFile()))
             {
-                emit error(i18n("Couldn't move Dir %1 to collection trash",
+                emit error(i18n("Couldn't move folder %1 to collection trash",
                                 QDir::toNativeSeparators(fileInfo.path())));
             }
         }
