@@ -406,10 +406,10 @@ void ProgressView::slotTransactionAdded(ProgressItem* item)
             d->transactionsToListviewItems.insert( item, ti );
         }
 
-        if ( first && d->wasLastShown )
-        {
-            QTimer::singleShot( 1000, this, SLOT(slotShow()) );
-        }
+
+        // Force to show progress view for 5 seconds to inform user about new process add in queue.
+        QTimer::singleShot( 1000, this, SLOT(slotShow()) );
+        QTimer::singleShot( 6000, this, SLOT(slotClose()) );
     }
 }
 
