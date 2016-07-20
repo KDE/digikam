@@ -164,7 +164,7 @@ DigikamApp::DigikamApp()
 
     m_instance         = this;
     d->config          = KSharedConfig::openConfig();
-    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
+    KConfigGroup group = d->config->group(configGroupName());
 
 #ifdef HAVE_DBUS
 
@@ -181,7 +181,7 @@ DigikamApp::DigikamApp()
         ScanController::instance()->completeCollectionScanDeferFiles();
     }
 
-    if (group.readEntry("Show Splash", true) &&
+    if (ApplicationSettings::instance()->getShowSplashScreen() &&
         !qApp->isSessionRestored())
     {
         d->splashScreen = new DSplashScreen();
@@ -272,15 +272,19 @@ DigikamApp::DigikamApp()
     readFullScreenSettings(group);
 
 #ifdef HAVE_KFILEMETADATA
+
     // Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
     BalooWrap* const baloo = BalooWrap::instance();
     Q_UNUSED(baloo);
+
 #endif //HAVE_KFILEMETADATA
 
 #ifdef HAVE_MEDIAPLAYER
+
     VideoThumbnailer* const video = VideoThumbnailer::instance();
     Q_UNUSED(video);
+
 #endif // HAVE_MEDIAPLAYER
 
     setAutoSaveSettings(group, true);
@@ -331,17 +335,21 @@ DigikamApp::~DigikamApp()
     }
 
 #ifdef HAVE_KFILEMETADATA
+
     if (BalooWrap::isCreated())
     {
         BalooWrap::internalPtr.clear();
     }
+
 #endif
 
 #ifdef HAVE_MEDIAPLAYER
+
     if (VideoThumbnailer::isCreated())
     {
         delete VideoThumbnailer::internalPtr;
     }
+
 #endif
 
     if (ExpoBlendingManager::isCreated())
@@ -350,10 +358,12 @@ DigikamApp::~DigikamApp()
     }
 
 #ifdef HAVE_PANORAMA
+
     if (PanoManager::isCreated())
     {
         delete PanoManager::internalPtr;
     }
+
 #endif
 
     delete d->view;

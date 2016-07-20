@@ -106,6 +106,13 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), panel);
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
     d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
+    d->scanAtStart->setToolTip(i18n("Set this option to force digiKam to scan all collections for new items, in goal to\n"
+                                    "register new elements in database. The scan is performed in the background through\n"
+                                    "the progress manager available in the status-bar,\n after than digiKam main interface\n"
+                                    "is loaded. If your computer is enough faster, this will have no effect on usability\n"
+                                    "of digiKam while scanning. If your collections are huge or if you use a remote database,\n"
+                                    "this can introduce low latency, and it's recommended to disabled this option and to plan\n"
+                                    "a manual scan through the maintenance tool at right moment."));
 
     // --------------------------------------------------------
 
@@ -114,7 +121,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
-    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible."));
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible. "
+                                    "Use \"Only For Active Tab\" option if you use a small screen resolution as with a laptop computer."));
 
     // --------------------------------------------------------
 
@@ -140,7 +148,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     QStringList styleList = QStyleFactory::keys();
 
-    for (int i = 0; i < styleList.count(); ++i)
+    for (int i = 0 ; i < styleList.count() ; ++i)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }
