@@ -90,6 +90,7 @@ public:
         statusbarVisibility    = true;
         libsInfoAction         = 0;
         showMenuBarAction      = 0;
+        showStatusBarAction    = 0;
         about                  = 0;
         dbStatAction           = 0;
         anim                   = 0;
