@@ -463,12 +463,20 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
 
         // hide menubar
 
+#ifdef Q_OS_WIN
+        d->menubarVisibility = d->showStatusBarAction->isChecked();
+#else
         d->menubarVisibility = menuBar()->isVisible();
+#endif
         menuBar()->setVisible(false);
 
         // hide statusbar
 
+#ifdef Q_OS_WIN
+        d->statusbarVisibility = actionCollection()->action(QLatin1String("options_show_statusbar"))->isChecked();
+#else
         d->statusbarVisibility = statusBar()->isVisible();
+#endif
         statusBar()->setVisible(false);
 
         // hide sidebars
