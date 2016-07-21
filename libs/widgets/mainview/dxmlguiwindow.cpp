@@ -272,6 +272,8 @@ void DXmlGuiWindow::createSettingsActions()
 
     if (!actionCollection()->action(QLatin1String("options_show_statusbar")))
     {
+        qCWarning(DIGIKAM_WIDGETS_LOG) << "Status bar menu action cannot be found in action collection";
+
         QAction* const nstb = new QAction(i18n("Show Statusbar"), this);
         nstb->setCheckable(true);
         nstb->setChecked(true);
