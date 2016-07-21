@@ -322,4 +322,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 310 ==> 285683 - Already imported pictures not recognized after daylight savings time.
 311 ==> 365876 - Adjust date/time menu entry missing (digikam 5).
 312 ==> 237878 - SCHEMA : add foreign keys support.
-313 ==> 
+313 ==> 364883 - Full screen view Mac-OSX menu at top is missing and digikam menu is doubled.
+314 ==> 
