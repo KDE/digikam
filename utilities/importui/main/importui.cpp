@@ -602,16 +602,11 @@ void ImportUI::setupActions()
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
     d->showBarAction->setEnabled(false);
 
-    // -- Standard 'Configure' menu actions ----------------------------------------
-
-    createSettingsActions();
-
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
+    // Standard 'Help' menu actions
     createHelpActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -620,7 +615,10 @@ void ImportUI::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Keyboard-only actions added to <MainWindow> ------------------------------
+    // Standard 'Configure' menu actions
+    createSettingsActions();
+
+    // -- Keyboard-only actions added to <MainWindow> ----------------------------------
 
     QAction* const altBackwardAction = new QAction(i18nc("@action", "Previous Image"), this);
     ac->addAction(QLatin1String("importui_backward_shift_space"), altBackwardAction);
@@ -2640,11 +2638,9 @@ void ImportUI::slotSwitchedToMapView()
 
 void ImportUI::customizedFullScreenMode(bool set)
 {
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
+    showStatusBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
 

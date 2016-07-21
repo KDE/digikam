@@ -143,6 +143,7 @@ public:
     QAction*                 dbStatAction;
     QAction*                 libsInfoAction;
     QAction*                 showMenuBarAction;
+    QAction*                 showStatusBarAction;
     DAboutData*              about;
     DLogoAction*             anim;
 
@@ -266,13 +267,24 @@ void DXmlGuiWindow::createSidebarActions()
 
 void DXmlGuiWindow::createSettingsActions()
 {
-    d->showMenuBarAction = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()),       actionCollection());
-    KStandardAction::keyBindings(this,                        SLOT(slotEditKeys()),          actionCollection());
-    KStandardAction::preferences(this,                        SLOT(slotSetup()),             actionCollection());
-    KStandardAction::configureToolbars(this,                  SLOT(slotConfToolbars()),      actionCollection());
+    d->showMenuBarAction   = KStandardAction::showMenubar(this,   SLOT(slotShowMenuBar()),   actionCollection());
+    d->showStatusBarAction = KStandardAction::showStatusbar(this, SLOT(slotShowStatusBar()), actionCollection());
+
+    if (!actionCollection()->action(QLatin1String("options_show_statusbar")))
+    {
+        QAction* const nstb = new QAction(i18n("Show Statusbar"), this);
+        nstb->setCheckable(true);
+        nstb->setChecked(true);
+        connect(nstb, SIGNAL(toggled(bool)), this, SLOT(slotNewStatusBar(bool)));
+        actionCollection()->addAction(QLatin1String("options_show_statusbar"), nstb);
+    }
+
+    KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
+    KStandardAction::preferences(this,            SLOT(slotSetup()),             actionCollection());
+    KStandardAction::configureToolbars(this,      SLOT(slotConfToolbars()),      actionCollection());
 
 #ifdef HAVE_KNOTIFYCONFIG
-    KStandardAction::configureNotifications(this,             SLOT(slotConfNotifications()), actionCollection());
+    KStandardAction::configureNotifications(this, SLOT(slotConfNotifications()), actionCollection());
 #endif
 }
 
@@ -281,9 +293,28 @@ QAction* DXmlGuiWindow::showMenuBarAction() const
     return d->showMenuBarAction;
 }
 
+QAction* DXmlGuiWindow::showStatusBarAction() const
+{
+    return d->showStatusBarAction;
+}
+
 void DXmlGuiWindow::slotShowMenuBar()
 {
     menuBar()->setVisible(d->showMenuBarAction->isChecked());
+}
+
+void DXmlGuiWindow::slotShowStatusBar()
+{
+#ifdef Q_OS_WIN
+    menuBar()->setVisible(d->showStatusBarAction->isChecked());
+#else
+    statusBar()->setVisible(d->showStatusBarAction->isChecked());
+#endif
+}
+
+void DXmlGuiWindow::slotNewStatusBar(bool visible)
+{
+    statusBar()->setVisible(visible);
 }
 
 void DXmlGuiWindow::slotConfNotifications()
@@ -629,21 +660,6 @@ void DXmlGuiWindow::showToolBars(bool visible)
             }
         }
     }
-}
-
-QAction* DXmlGuiWindow::statusBarMenuAction() const
-{
-    QList<QAction*> lst = actionCollection()->actions();
-
-    foreach(QAction* const act, lst)
-    {
-        if (act && QString(act->objectName()) == QLatin1String("options_show_statusbar"))
-            return act;
-    }
-
-    qCWarning(DIGIKAM_WIDGETS_LOG) << "Status bar menu action cannot be found in action collection";
-
-    return 0;
 }
 
 void DXmlGuiWindow::showSideBars(bool visible)

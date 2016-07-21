@@ -323,4 +323,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 311 ==> 365876 - Adjust date/time menu entry missing (digikam 5).
 312 ==> 237878 - SCHEMA : add foreign keys support.
 313 ==> 364883 - Full screen view Mac-OSX menu at top is missing and digikam menu is doubled.
-314 ==> 
+314 ==> 365409 - Toolbar + menubar disappeared.
+315 ==> 365929 - Ctrl+M doesn't show/hide menu bar, only status bar.
+316 ==> 

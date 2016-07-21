@@ -616,16 +616,11 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("color_managed_view"), d->viewCMViewAction);
     ac->setDefaultShortcut(d->viewCMViewAction, Qt::Key_F12);
 
-    // -- Standard 'Configure' menu actions ----------------------------------------
-
-    createSettingsActions();
-
-    // ---------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
+    // Standard 'Help' menu actions
     createHelpActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -633,6 +628,9 @@ void LightTableWindow::setupActions()
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
+
+    // Standard 'Configure' menu actions
+    createSettingsActions();
 
     // -- Keyboard-only actions ----------------------------------------------------
 
@@ -1673,12 +1671,11 @@ void LightTableWindow::slotNextRightSideBarTab()
 
 void LightTableWindow::customizedFullScreenMode(bool set)
 {
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
+    showStatusBarAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
     d->showBarAction->setEnabled(!set);
+
     d->previewView->toggleFullScreen(set);
 }
 

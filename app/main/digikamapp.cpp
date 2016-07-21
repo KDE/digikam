@@ -1232,13 +1232,14 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("showthumbs"), d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
 
-    createSettingsActions();
-
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
+
+    // Standard 'Configure' menu actions
+    createSettingsActions();
 
     // -----------------------------------------------------------
 
@@ -3174,11 +3175,9 @@ void DigikamApp::slotSwitchedToTrashView()
 
 void DigikamApp::customizedFullScreenMode(bool set)
 {
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
+    showStatusBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toggleShowBar();
 

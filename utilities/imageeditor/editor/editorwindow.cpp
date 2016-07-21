@@ -617,18 +617,17 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcut(d->rotateRightAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
     d->rotateRightAction->setEnabled(false);
 
-    // -- Standard 'Configure' menu actions ----------------------------------------
-
     m_showBarAction = thumbBar()->getToggleAction(this);
     ac->addAction(QLatin1String("editorwindow_showthumbs"), m_showBarAction);
-
-    createSettingsActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
+
+    // Standard 'Configure' menu actions
+    createSettingsActions();
 
     // ---------------------------------------------------------------------------------
 
@@ -2729,9 +2728,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
     set ? m_canvas->setBackgroundBrush(QBrush(Qt::black))
         : m_canvas->setBackgroundBrush(QBrush(m_bgColor));
 
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
+    showStatusBarAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
     m_showBarAction->setEnabled(!set);
