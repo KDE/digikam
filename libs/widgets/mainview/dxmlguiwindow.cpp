@@ -268,18 +268,18 @@ void DXmlGuiWindow::createSidebarActions()
 
 void DXmlGuiWindow::createSettingsActions()
 {
-    d->showMenuBarAction   = KStandardAction::showMenubar(this,   SLOT(slotShowMenuBar()),   actionCollection());
-    d->showStatusBarAction = KStandardAction::showStatusbar(this, SLOT(slotShowStatusBar()), actionCollection());
+    d->showMenuBarAction   = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+    d->showStatusBarAction = actionCollection()->action(QLatin1String("options_show_statusbar"));
 
-    if (!actionCollection()->action(QLatin1String("options_show_statusbar")))
+    if (!d->showStatusBarAction)
     {
         qCWarning(DIGIKAM_WIDGETS_LOG) << "Status bar menu action cannot be found in action collection";
 
-        QAction* const nstb = new QAction(i18n("Show Statusbar"), this);
-        nstb->setCheckable(true);
-        nstb->setChecked(true);
-        connect(nstb, SIGNAL(toggled(bool)), this, SLOT(slotNewStatusBar(bool)));
-        actionCollection()->addAction(QLatin1String("options_show_statusbar"), nstb);
+        d->showStatusBarAction = new QAction(i18n("Show Statusbar"), this);
+        d->showStatusBarAction->setCheckable(true);
+        d->showStatusBarAction->setChecked(true);
+        connect(d->showStatusBarAction, SIGNAL(toggled(bool)), this, SLOT(slotShowStatusBar()));
+        actionCollection()->addAction(QLatin1String("options_show_statusbar"), d->showStatusBarAction);
     }
 
     KStandardAction::keyBindings(this,            SLOT(slotEditKeys()),          actionCollection());
@@ -308,16 +308,7 @@ void DXmlGuiWindow::slotShowMenuBar()
 
 void DXmlGuiWindow::slotShowStatusBar()
 {
-#ifdef Q_OS_WIN
-    menuBar()->setVisible(d->showStatusBarAction->isChecked());
-#else
     statusBar()->setVisible(d->showStatusBarAction->isChecked());
-#endif
-}
-
-void DXmlGuiWindow::slotNewStatusBar(bool visible)
-{
-    statusBar()->setVisible(visible);
 }
 
 void DXmlGuiWindow::slotConfNotifications()
@@ -467,7 +458,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         // hide menubar
 
 #ifdef Q_OS_WIN
-        d->menubarVisibility = d->showStatusBarAction->isChecked();
+        d->menubarVisibility = d->showMenuBarAction->isChecked();
 #else
         d->menubarVisibility = menuBar()->isVisible();
 #endif
@@ -476,7 +467,7 @@ void DXmlGuiWindow::slotToggleFullScreen(bool set)
         // hide statusbar
 
 #ifdef Q_OS_WIN
-        d->statusbarVisibility = actionCollection()->action(QLatin1String("options_show_statusbar"))->isChecked();
+        d->statusbarVisibility = d->showStatusBarAction->isChecked();
 #else
         d->statusbarVisibility = statusBar()->isVisible();
 #endif

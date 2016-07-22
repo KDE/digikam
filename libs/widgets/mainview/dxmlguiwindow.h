@@ -207,7 +207,6 @@ private Q_SLOTS:
     void slotToggleFullScreen(bool);
     void slotShowMenuBar();
     void slotShowStatusBar();
-    void slotNewStatusBar(bool);
     void slotConfNotifications();
     void slotConfToolbars();
     void slotNewToolbarConfig();
