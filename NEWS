@@ -326,4 +326,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 314 ==> 365409 - Toolbar + menubar disappeared.
 315 ==> 365929 - Ctrl+M doesn't show/hide menu bar, only status bar.
 316 ==> 345045 - MYSQL : images not displayed in album.
-317 ==> 
+317 ==> 365907 - digikam timestamp not updated after use of Adjust Time.
+318 ==> 
