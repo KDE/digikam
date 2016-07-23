@@ -325,4 +325,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 313 ==> 364883 - Full screen view Mac-OSX menu at top is missing and digikam menu is doubled.
 314 ==> 365409 - Toolbar + menubar disappeared.
 315 ==> 365929 - Ctrl+M doesn't show/hide menu bar, only status bar.
-316 ==> 
+316 ==> 345045 - MYSQL : images not displayed in album.
+317 ==> 
