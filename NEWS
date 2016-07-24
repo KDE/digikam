@@ -328,4 +328,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 316 ==> 345045 - MYSQL : images not displayed in album.
 317 ==> 365907 - digikam timestamp not updated after use of Adjust Time.
 318 ==> 341112 - BQM Metadata Tool : removing Metadata from Batch Queue Manager modifies files.
-319 ==> 
+319 ==> 269337 - SETUP : use idle folder icon if collection is missing.
+320 ==> 
