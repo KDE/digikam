@@ -2058,7 +2058,7 @@ void DigikamView::toggleTag(int tagID)
     ImageInfoList tagToRemove, tagToAssign;
     const ImageInfoList selectedList = selectedInfoList();
 
-    foreach(ImageInfo info, selectedList)
+    foreach(const ImageInfo& info, selectedList)
     {
         if (info.tagIds().contains(tagID))
             tagToRemove.append(info);

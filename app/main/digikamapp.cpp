@@ -3260,7 +3260,7 @@ void DigikamApp::slotEditGeolocation()
 #ifdef HAVE_MARBLE
     ImageInfoList infos = d->view->selectedInfoList();
 
-    if ( infos.isEmpty() )
+    if (infos.isEmpty())
         return;
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
@@ -3270,7 +3270,7 @@ void DigikamApp::slotEditGeolocation()
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(ImageInfo inf, infos)
+    foreach(const ImageInfo& inf, infos)
     {
         ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
     }
@@ -3281,7 +3281,7 @@ void DigikamApp::slotEditMetadata()
 {
     QList<QUrl> urls = view()->selectedUrls();
 
-    if ( urls.isEmpty() )
+    if (urls.isEmpty())
         return;
 
     QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(), urls);
@@ -3290,7 +3290,7 @@ void DigikamApp::slotEditMetadata()
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(QUrl u, urls)
+    foreach(const QUrl& u, urls)
     {
         ScanController::instance()->scannedInfo(u.toLocalFile());
     }

@@ -136,7 +136,7 @@ QList<GPSImageItem*> ImageGPS::infosToItems(const ImageInfoList& infos)
 {
     QList<GPSImageItem*> items;
 
-    foreach(ImageInfo inf, infos)
+    foreach(const ImageInfo& inf, infos)
     {
         items << new ImageGPS(inf);
     }

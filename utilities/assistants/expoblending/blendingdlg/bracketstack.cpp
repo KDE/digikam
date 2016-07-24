@@ -203,7 +203,7 @@ void BracketStackList::addItems(const QList<QUrl>& list)
         }
     }
 
-    foreach(QUrl url, urls)
+    foreach(const QUrl& url, urls)
     {
         ThumbnailLoadThread::defaultThread()->find(ThumbnailIdentifier(url.toLocalFile()));
     }

@@ -313,7 +313,7 @@ void ImageCopyright::fillTemplate(Template& t)
 
 void ImageCopyright::setFromTemplate(const Template& t)
 {
-    foreach(QString author, t.authors()) // krazy:exclude=foreach
+    foreach(const QString& author, t.authors()) // krazy:exclude=foreach
     {
         setAuthor(author, ImageCopyright::AddEntryToExisting);
     }

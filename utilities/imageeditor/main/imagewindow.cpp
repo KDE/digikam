@@ -600,7 +600,7 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 
     QList<ImageInfo> toAdd;
 
-    foreach(ImageInfo it, infos)
+    foreach(const ImageInfo& it, infos)
     {
         QModelIndex index(d->imageFilterModel->indexForImageInfo(it));
 
@@ -612,7 +612,7 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 
     // Loading images if new images are dropped
 
-    if(!toAdd.isEmpty())
+    if (!toAdd.isEmpty())
     {
         loadImageInfos(toAdd, toAdd.first(), QString());
     }
