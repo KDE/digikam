@@ -202,7 +202,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     connect(d->libsInfoAction, SIGNAL(triggered()), this, SLOT(slotComponentsInfo()));
     actionCollection()->addAction(QLatin1String("help_librariesinfo"), d->libsInfoAction);
 
-    d->about = new DAboutData(this);
+    d->about          = new DAboutData(this);
 
     QAction* const rawCameraListAction = new QAction(QIcon::fromTheme(QLatin1String("image-x-adobe-dng")), i18n("Supported RAW Cameras"), this);
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
@@ -211,6 +211,7 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     QAction* const donateMoneyAction   = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Donate..."), this);
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction(QLatin1String("help_donatemoney"), donateMoneyAction);
+
 
     QAction* const recipesBookAction   = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Recipes Book..."), this);
     connect(recipesBookAction, SIGNAL(triggered()), this, SLOT(slotRecipesBook()));
@@ -230,6 +231,15 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
         connect(d->dbStatAction, SIGNAL(triggered()), this, SLOT(slotDBStat()));
         actionCollection()->addAction(QLatin1String("help_dbstat"), d->dbStatAction);
     }
+}
+
+void DXmlGuiWindow::cleanupActions()
+{
+    QAction* ac = actionCollection()->action(QLatin1String("help_about_kde"));
+    if (ac) actionCollection()->removeAction(ac);
+
+    ac          = actionCollection()->action(QLatin1String("help_donate"));
+    if (ac) actionCollection()->removeAction(ac);
 }
 
 void DXmlGuiWindow::createSidebarActions()

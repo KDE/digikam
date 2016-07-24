@@ -173,6 +173,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     setupActions();
     setupStatusBar();
     createGUI(xmlFile());
+    cleanupActions();
 
     // Load image plugins to GUI
 

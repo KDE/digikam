@@ -1407,6 +1407,8 @@ void DigikamApp::setupActions()
     populateThemes();
 
     createGUI(xmlFile());
+
+    cleanupActions();
 }
 
 void DigikamApp::initGui()

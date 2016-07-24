@@ -125,6 +125,10 @@ public:
      */
     void createHelpActions(bool coreOptions=true);
 
+    /** Cleanup unwanted actions from action collection.
+     */
+    void cleanupActions();
+
     /** Create common actions to handle side-bar through keyboard shortcuts.
      */
     void createSidebarActions();

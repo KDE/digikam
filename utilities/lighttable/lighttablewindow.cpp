@@ -677,6 +677,7 @@ void LightTableWindow::setupActions()
     // ---------------------------------------------------------------------------------
 
     createGUI(xmlFile());
+    cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }

@@ -631,6 +631,7 @@ void ImportUI::setupActions()
     connect(d->connectAction, SIGNAL(triggered()), d->controller, SLOT(slotConnect()));
 
     createGUI(xmlFile());
+    cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
