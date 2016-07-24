@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="52" name="digikamimageplugin_color" >
+<gui version="53" name="digikamimageplugin_color" translationDomain="digikam" >
 
  <MenuBar>
 

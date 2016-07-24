@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="504" name="digikamimagewindow" >
+<gui version="505" name="digikamimagewindow" translationDomain="digikam" >
 
 <MenuBar>
 

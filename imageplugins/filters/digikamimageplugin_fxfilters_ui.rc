@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="50" name="digikamimageplugin_fxfilters" >
+<gui version="51" name="digikamimageplugin_fxfilters" translationDomain="digikam" >
 
  <MenuBar>
 

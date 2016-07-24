@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="13" name="digikamimageplugin_transform" >
+<gui version="14" name="digikamimageplugin_transform" translationDomain="digikam" >
 
  <MenuBar>
 
