@@ -73,7 +73,6 @@ int main(int argc, char* argv[])
     DXmlGuiWindow::setupIconTheme();
 
     KLocalizedString::setApplicationDomain("digikam");
-    KLocalizedString::setApplicationDomain("kipiplugins");
 
     KAboutData aboutData(QString::fromLatin1("digikam"), // component name
                          i18n("digiKam"),                // display name
