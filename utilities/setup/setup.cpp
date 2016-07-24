@@ -194,7 +194,7 @@ Setup::Setup(QWidget* const parent)
     d->collectionsPage  = new SetupCollections();
     d->page_collections = addPage(d->collectionsPage, i18n("Collections"));
     d->page_collections->setHeader(i18n("<qt>Collections Settings<br/>"
-                                        "<i>Set root albums and database locations</i></qt>"));
+                                        "<i>Set root albums locations</i></qt>"));
     d->page_collections->setIcon(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
     d->albumViewPage  = new SetupAlbumView();
