@@ -330,4 +330,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 318 ==> 341112 - BQM Metadata Tool : removing Metadata from Batch Queue Manager modifies files.
 319 ==> 269337 - SETUP : use idle folder icon if collection is missing.
 320 ==> 366010 - Main menu bar is not translated (localized).
-321 ==> 
+321 ==> 365262 - GUI Theme Colors hard to see: always use Fusion widget style under OSX and Windows.
+322 ==> 
