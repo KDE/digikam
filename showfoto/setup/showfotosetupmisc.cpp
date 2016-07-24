@@ -68,7 +68,7 @@ public:
         sortOrderComboBox(0),
         applicationStyle(0),
         iconTheme(0),
-        settings(0)
+        settings(ShowfotoSettings::instance())
     {
     }
 
@@ -100,8 +100,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // -- Misc Options --------------------------------------------------------
@@ -128,7 +127,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
-    QStringList styleList = QStyleFactory::keys();
+    QStringList styleList     = QStyleFactory::keys();
 
     for (int i = 0; i < styleList.count(); ++i)
     {
@@ -215,8 +214,6 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::readSettings()
 {
-    d->settings = ShowfotoSettings::instance();
-
     d->itemCenter->setChecked(d->settings->getItemCenter());
     d->showSplash->setChecked(d->settings->getShowSplash());
     d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());

@@ -240,6 +240,10 @@ void DXmlGuiWindow::cleanupActions()
 
     ac          = actionCollection()->action(QLatin1String("help_donate"));
     if (ac) actionCollection()->removeAction(ac);
+    
+    QList<QAction*> lst = actionCollection()->actions();
+    foreach(QAction* act, lst)
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "action: " << act->objectName();
 }
 
 void DXmlGuiWindow::createSidebarActions()
