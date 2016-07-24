@@ -110,16 +110,23 @@ void RemoveMetadata::slotSettingsChanged()
 
 bool RemoveMetadata::toolOperations()
 {
+    DMetadata meta;
+
+    if (image().isNull())
+    {
+        if (!meta.load(inputUrl().toLocalFile()))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        meta.setData(image().getMetadata());
+    }
+
     bool removeExif = settings()[QLatin1String("RemoveExif")].toBool();
     bool removeIptc = settings()[QLatin1String("RemoveIptc")].toBool();
     bool removeXmp  = settings()[QLatin1String("RemoveXmp")].toBool();
-
-    if (!loadToDImg())
-    {
-        return false;
-    }
-
-    DMetadata meta(image().getMetadata());
 
     if (removeExif)
     {
@@ -136,9 +143,29 @@ bool RemoveMetadata::toolOperations()
         meta.clearXmp();
     }
 
-    image().setMetadata(meta.data());
+    bool ret = true;
 
-    return (savefromDImg());
+    if (image().isNull())
+    {
+        QFile::remove(outputUrl().toLocalFile());
+        ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
+
+        if (ret && (removeExif || removeIptc || removeXmp))
+        {
+            ret = meta.save(outputUrl().toLocalFile());
+        }
+    }
+    else
+    {
+        if (removeExif || removeIptc || removeXmp)
+        {
+            image().setMetadata(meta.data());
+        }
+
+        ret = savefromDImg();
+    }
+
+    return ret;
 }
 
 }  // namespace Digikam
