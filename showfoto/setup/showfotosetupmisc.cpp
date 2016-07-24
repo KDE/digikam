@@ -129,10 +129,15 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     QStringList styleList     = QStyleFactory::keys();
 
-    for (int i = 0; i < styleList.count(); ++i)
+    for (int i = 0; i < styleList.count(); i++)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }
+
+#ifndef Q_OS_LINUX
+    // See Bug #365262
+    appStyleHbox->setVisible(false);
+#endif
 
     DHBox* const iconThemeHbox = new DHBox(panel);
     d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
@@ -221,7 +226,9 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
     d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
     d->sortReverse->setChecked(d->settings->getReverseSort());
+#ifdef Q_OS_LINUX
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle(), Qt::MatchFixedString));
+#endif
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(d->settings->getIconTheme()));
 }
 
@@ -234,7 +241,9 @@ void SetupMisc::applySettings()
     d->settings->setRightSideBarStyle(d->sidebarType->currentIndex());
     d->settings->setSortRole(d->sortOrderComboBox->currentIndex());
     d->settings->setReverseSort(d->sortReverse->isChecked());
+#ifdef Q_OS_LINUX
     d->settings->setApplicationStyle(d->applicationStyle->currentText());
+#endif
     d->settings->setIconTheme(d->iconTheme->currentData().toString());
     d->settings->syncConfig();
 }

@@ -243,7 +243,11 @@ void ShowfotoSettings::init()
     d->showPhotoWB             = false;
     d->showPhotoDate           = true;
     d->showPhotoMode           = true;
+#ifdef Q_OS_LINUX
     d->applicationStyle        = qApp->style()->objectName();
+#else
+    d->applicationStyle        = QLatin1String("Fusion");
+#endif
     d->iconTheme               = QString();
 }
 
@@ -255,7 +259,9 @@ void ShowfotoSettings::readSettings()
     d->deleteItem2Trash        = group.readEntry(d->configDeleteItem2Trash, true);
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
+#ifdef Q_OS_LINUX
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
+#endif
     d->iconTheme               = group.readEntry(d->configIconTheme, QString());
     d->itemCenter              = group.readEntry(d->configItemCenter, false);
     d->showSplash              = group.readEntry(d->configShowSplash, true);
@@ -280,7 +286,7 @@ void ShowfotoSettings::readSettings()
     d->showPhotoDate           = group.readEntry(d->configShowPhotoDate,  true);
     d->showPhotoMode           = group.readEntry(d->configShowPhotoMode,  true);
 
-    d->toolTipsFont            = group.readEntry(d->configToolTipsFont,QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    d->toolTipsFont            = group.readEntry(d->configToolTipsFont, QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 }
 
 QString ShowfotoSettings::getLastOpenedDir() const

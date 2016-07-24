@@ -467,6 +467,7 @@ void ShowFoto::applySettings()
     if (currentStyle.compare(newStyle, Qt::CaseInsensitive) != 0)
     {
         qApp->setStyle(newStyle);
+        qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Switch to widget style: " << newStyle;
     }
 
     m_fileDeleteAction->setIcon(QIcon::fromTheme(QLatin1String("edit-delete")));

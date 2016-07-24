@@ -153,6 +153,11 @@ SetupMisc::SetupMisc(QWidget* const parent)
         d->applicationStyle->addItem(styleList.at(i));
     }
 
+#ifndef Q_OS_LINUX
+    // See Bug #365262
+    appStyleHbox->setVisible(false);
+#endif
+
     // --------------------------------------------------------
 
     DHBox* const iconThemeHbox = new DHBox(panel);
@@ -223,7 +228,11 @@ void SetupMisc::applySettings()
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
+
+#ifdef Q_OS_LINUX
     settings->setApplicationStyle(d->applicationStyle->currentText());
+#endif
+
     settings->setIconTheme(d->iconTheme->currentData().toString());
     settings->saveSettings();
 }
@@ -241,7 +250,11 @@ void SetupMisc::readSettings()
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
+
+#ifdef Q_OS_LINUX
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(), Qt::MatchFixedString));
+#endif
+
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(settings->getIconTheme()));
 }
 

@@ -235,7 +235,13 @@ void ApplicationSettings::readSettings()
     d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
+
+#ifdef Q_OS_LINUX
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
+#else
+    setApplicationStyle(QLatin1String("Fusion"));
+#endif
+
     d->iconTheme                        = group.readEntry(d->configIconThemeEntry,                                   QString());
     d->scanAtStart                      = group.readEntry(d->configScanAtStartEntry,                                 true);
 

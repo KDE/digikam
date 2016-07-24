@@ -324,6 +324,7 @@ void ApplicationSettings::Private::init()
 
     scanAtStart                         = true;
     stringComparisonType                = ApplicationSettings::Natural;
+
     applicationStyle                    = qApp->style()->objectName();
     iconTheme                           = QString();
 
