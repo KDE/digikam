@@ -332,4 +332,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 320 ==> 366010 - Main menu bar is not translated (localized).
 321 ==> 365262 - GUI Theme Colors hard to see: always use Fusion widget style under OSX and Windows.
 322 ==> 365411 - Tooltips unreadable.
-323 ==> 
+323 ==> 365973 - digiKam and program hung for a while then crashed.
+324 ==> 
