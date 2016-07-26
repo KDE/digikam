@@ -68,6 +68,16 @@ set(libqueuemanager_SRCS
     main/queuemgrwindow.cpp
 )
 
+set(libdlib_SRCS
+    ../../dlibdk/dlib/all/source.cpp
+)
+
+set(DLIB_INCLUDE_DIRS
+    ../../dlibdk/
+)
+
+include_directories(${DLIB_INCLUDE_DIRS})
+
 if(JASPER_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
         basetools/convert/convert2jp2.cpp
@@ -101,6 +111,6 @@ if(KF5Kipi_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS})
+add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS} ${libdlib_SRCS})
 
 install( FILES main/queuemgrwindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

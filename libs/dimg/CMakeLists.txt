@@ -112,12 +112,12 @@ set(libdimgfilters_SRCS
 )
 
 set(libdlib_SRCS
-    filters/redeye/dlib/all/source.cpp
+    ../../dlibdk/dlib/all/source.cpp
 
 )
 
 set(DLIB_INCLUDE_DIRS
-    filters/redeye/
+    ../../dlibdk/
 )
 
 include_directories(${DLIB_INCLUDE_DIRS})
