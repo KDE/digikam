@@ -64,7 +64,7 @@ public:
           databaseWatch(0),
           initializing(false)
     {
-        // create a unique identifier for this application (as an application accessing a database
+        // Create a unique identifier for this application (as an application accessing a database
         applicationIdentifier = QUuid::createUuid();
     };
 
@@ -75,7 +75,7 @@ public:
 public:
 
     CoreDbBackend*      backend;
-    CoreDB*            db;
+    CoreDB*             db;
     CoreDbWatch*        databaseWatch;
     DbEngineParameters  parameters;
     DbEngineLocking     lock;
@@ -186,7 +186,6 @@ DbEngineParameters CoreDbAccess::parameters()
 
 void CoreDbAccess::setParameters(const DbEngineParameters& parameters)
 {
-    //TODO 0.11: Refine API
     setParameters(parameters, DatabaseSlave);
 
     if (d->databaseWatch)
@@ -289,7 +288,7 @@ bool CoreDbAccess::checkReadyForUse(InitializationObserver* const observer)
         return true;
     }
 
-    //TODO: Implement a method to wait until the database is open
+    // TODO: Implement a method to wait until the database is open
 
     if (!d->backend->isOpen())
     {
@@ -364,13 +363,15 @@ CoreDbAccessUnlock::CoreDbAccessUnlock()
 {
     // acquire lock
     CoreDbAccess::d->lock.mutex.lock();
+
     // store lock count
     count = CoreDbAccess::d->lock.lockCount;
+
     // set lock count to 0
     CoreDbAccess::d->lock.lockCount = 0;
 
     // unlock
-    for (int i=0; i<count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         CoreDbAccess::d->lock.mutex.unlock();
     }
@@ -384,11 +385,12 @@ CoreDbAccessUnlock::CoreDbAccessUnlock(CoreDbAccess* const)
     // With the passed pointer, we have assured that the mutex is acquired
     // Store lock count
     count = CoreDbAccess::d->lock.lockCount;
+
     // set lock count to 0
     CoreDbAccess::d->lock.lockCount = 0;
 
     // unlock
-    for (int i = 0; i < count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         CoreDbAccess::d->lock.mutex.unlock();
     }
@@ -399,7 +401,7 @@ CoreDbAccessUnlock::CoreDbAccessUnlock(CoreDbAccess* const)
 CoreDbAccessUnlock::~CoreDbAccessUnlock()
 {
     // lock as often as it was locked before
-    for (int i = 0; i < count; ++i)
+    for (int i = 0 ; i < count ; ++i)
     {
         CoreDbAccess::d->lock.mutex.lock();
     }
