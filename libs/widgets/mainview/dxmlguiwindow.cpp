@@ -98,45 +98,58 @@ public:
 
 public:
 
-    /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
+    /**
+     * Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
      */
     bool                     fullScreenHideToolBars;
 
-    /** Settings taken from managed window configuration to handle thumbbar visibility in full-screen mode
+    /**
+     * Settings taken from managed window configuration to handle thumbbar visibility in full-screen mode
      */
     bool                     fullScreenHideThumbBar;
 
-    /** Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
+    /**
+     * Settings taken from managed window configuration to handle toolbar visibility  in full-screen mode
      */
     bool                     fullScreenHideSideBars;
 
-    /** Full-Screen options. See FullScreenOptions enum and setFullScreenOptions() for details.
+    /**
+     * Full-Screen options. See FullScreenOptions enum and setFullScreenOptions() for details.
      */
     int                      fsOptions;
 
-    /** Action plug in managed window to switch fullscreen state */
+    /**
+     * Action plug in managed window to switch fullscreen state
+     */
     KToggleFullScreenAction* fullScreenAction;
 
-    /** Show only if toolbar is hidden */
+    /**
+     * Show only if toolbar is hidden
+     */
     QToolButton*             fullScreenBtn;
 
-    /** Used by slotToggleFullScreen() to manage state of full-screen button on managed window
+    /**
+     * Used by slotToggleFullScreen() to manage state of full-screen button on managed window
      */
     bool                     dirtyMainToolBar;
 
-    /** Store previous visibility of toolbars before ful-screen mode.
+    /**
+     * Store previous visibility of toolbars before ful-screen mode.
      */
     QMap<KToolBar*, bool>    toolbarsVisibility;
 
-    /** Store previous visibility of thumbbar before ful-screen mode.
+    /**
+     * Store previous visibility of thumbbar before ful-screen mode.
      */
     bool                     thumbbarVisibility;
 
-    /** Store previous visibility of menubar before ful-screen mode.
+    /**
+     * Store previous visibility of menubar before ful-screen mode.
      */
     bool                     menubarVisibility;
 
-    /** Store previous visibility of statusbar before ful-screen mode.
+    /**
+     * Store previous visibility of statusbar before ful-screen mode.
      */
     bool                     statusbarVisibility;
 
@@ -240,10 +253,12 @@ void DXmlGuiWindow::cleanupActions()
 
     ac          = actionCollection()->action(QLatin1String("help_donate"));
     if (ac) actionCollection()->removeAction(ac);
-    
+/*    
     QList<QAction*> lst = actionCollection()->actions();
-    foreach(QAction* act, lst)
+
+    foreach(QAction* const act, lst)
         qCDebug(DIGIKAM_WIDGETS_LOG) << "action: " << act->objectName();
+*/
 }
 
 void DXmlGuiWindow::createSidebarActions()
@@ -393,7 +408,7 @@ void DXmlGuiWindow::createKSaneAction()
 
     connect(m_ksaneAction, SIGNAL(triggered(bool)),
             this, SLOT(slotImportFromScanner()));
-#endif // HAVE_KSANE
+#endif
 }
 
 void DXmlGuiWindow::createFullScreenAction(const QString& name)
@@ -571,14 +586,14 @@ bool DXmlGuiWindow::eventFilter(QObject* obj, QEvent* ev)
                         QRect topLeft, topRight;
                         QRect topRightLarger;
 
-                        desktopRect       = QRect(desktopRect.y(), desktopRect.y(), desktopRect.width(), desktopRect.height());
-                        topLeft           = sizeRect;
-                        topRight          = sizeRect;
+                        desktopRect        = QRect(desktopRect.y(), desktopRect.y(), desktopRect.width(), desktopRect.height());
+                        topLeft            = sizeRect;
+                        topRight           = sizeRect;
 
                         topLeft.moveTo(desktopRect.x(), desktopRect.y());
                         topRight.moveTo(desktopRect.x() + desktopRect.width() - sizeRect.width() - 1, topLeft.y());
 
-                        topRightLarger    = topRight.adjusted(-25, 0, 0, 10);
+                        topRightLarger     = topRight.adjusted(-25, 0, 0, 10);
 
                         if (topRightLarger.contains(pos))
                         {
@@ -722,7 +737,8 @@ void DXmlGuiWindow::saveWindowSize(QWindow* const win, KConfigGroup& group)
     KWindowConfig::saveWindowSize(win, group);
 }
 
-QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const recvr, const char* const slot, QObject* const parent)
+QAction* DXmlGuiWindow::buildStdAction(StdActionType type, const QObject* const recvr,
+                                       const char* const slot, QObject* const parent)
 {
     switch(type)
     {
@@ -801,7 +817,7 @@ void DXmlGuiWindow::setupIconTheme()
 
     if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons) && QResource::registerResource(breezeIcons))
     {
-        // tell qt about the theme
+        // Tell Qt about the theme
         QIcon::setThemeSearchPaths(QStringList() << QLatin1String(":/icons"));
         QIcon::setThemeName(QLatin1String("breeze"));
 
