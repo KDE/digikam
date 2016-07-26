@@ -93,7 +93,7 @@ void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
     }
 
     ActionJobCollection collection;
-    collection.insert(j,0);
+    collection.insert(j, 0);
 
     appendJobs(collection);
 }
@@ -132,7 +132,7 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
     }
 
     ActionJobCollection collection;
-    collection.insert(j,0);
+    collection.insert(j, 0);
 
     appendJobs(collection);
 }
@@ -166,7 +166,7 @@ void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
     }
 
     ActionJobCollection collection;
-    collection.insert(j,0);
+    collection.insert(j, 0);
 
     appendJobs(collection);
 }
@@ -200,7 +200,7 @@ void GPSDBJobsThread::GPSListing(const GPSDBJobInfo& info)
     }
 
     ActionJobCollection collection;
-    collection.insert(j,0);
+    collection.insert(j, 0);
 
     appendJobs(collection);
 }
@@ -238,7 +238,7 @@ void SearchesDBJobsThread::searchesListing(const SearchesDBJobInfo& info)
     }
 
     ActionJobCollection collection;
-    collection.insert(j,0);
+    collection.insert(j, 0);
 
     appendJobs(collection);
 }
