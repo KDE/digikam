@@ -298,6 +298,11 @@ void DXmlGuiWindow::createSidebarActions()
 void DXmlGuiWindow::createSettingsActions()
 {
     d->showMenuBarAction   = KStandardAction::showMenubar(this, SLOT(slotShowMenuBar()), actionCollection());
+#ifdef Q_OS_OSX
+    // Under MacOS the menu bar visibility is managed by desktop.
+    d->showMenuBarAction->setVisible(false);
+#endif
+
     d->showStatusBarAction = actionCollection()->action(QLatin1String("options_show_statusbar"));
 
     if (!d->showStatusBarAction)
