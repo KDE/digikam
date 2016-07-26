@@ -191,14 +191,14 @@ void DatabaseSettingsWidget::setupMainArea()
     // --------------------------------------------------------
 
     d->dbPathLabel = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
-                                     "There are 3 databases : one for all collections properties, "
+                                     "There are three databases: one for all collections properties, "
                                      "one to store compressed thumbnails, "
                                      "and one to store faces recognition metadata.<br/>"
                                      "Write access is required to be able to edit image properties.</p>"
-                                     "<p>Databases are digiKam core engines. Take a care to use a place hosted by a fast "
+                                     "<p>Databases are digiKam core engines. Take care to use a place hosted by fast "
                                      "hardware (as SSD) with enough free space especially for thumbnails database.</p>"
                                      "<p>Note: a remote file system such as NFS, cannot be used here. "
-                                     "For performance reasons, it's also recommended to not use a removable media.</p>"
+                                     "For performance reasons, it's also recommended not to use removable media.</p>"
                                      "<p></p>"), dbConfigBox);
     d->dbPathLabel->setWordWrap(true);
     d->dbPathEdit  = new DFileSelector(dbConfigBox);
@@ -210,11 +210,10 @@ void DatabaseSettingsWidget::setupMainArea()
     d->mysqlCmdBox->layout()->setMargin(0);
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
-
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binaries tools are located. "
-                                                       "digiKam will try to found these binaries automatically if there are "
-                                                       "installed on your computer.</p>"),
-                                                  d->mysqlCmdBox);
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binary tools are located. "               
+						       "digiKam will try to find these binaries automatically if they are "                       
+						       "already installed on your computer.</p>"),                                                          
+						  d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);
 
     QGroupBox* const binaryBox        = new QGroupBox(d->mysqlCmdBox);
