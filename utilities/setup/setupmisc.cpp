@@ -106,13 +106,13 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), panel);
     d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
     d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
-    d->scanAtStart->setToolTip(i18n("Set this option to force digiKam to scan all collections for new items, in goal to\n"
+    d->scanAtStart->setToolTip(i18n("Set this option to force digiKam to scan all collections for new items to\n"
                                     "register new elements in database. The scan is performed in the background through\n"
-                                    "the progress manager available in the status-bar,\n after than digiKam main interface\n"
-                                    "is loaded. If your computer is enough faster, this will have no effect on usability\n"
+                                    "the progress manager available in the statusbar\n when digiKam main interface\n"
+                                    "is loaded. If your computer is fast enough, this will have no effect on usability\n"
                                     "of digiKam while scanning. If your collections are huge or if you use a remote database,\n"
-                                    "this can introduce low latency, and it's recommended to disabled this option and to plan\n"
-                                    "a manual scan through the maintenance tool at right moment."));
+                                    "this can introduce low latency, and it's recommended to disable this option and to plan\n"
+                                    "a manual scan through the maintenance tool at the right moment."));
 
     // --------------------------------------------------------
 
