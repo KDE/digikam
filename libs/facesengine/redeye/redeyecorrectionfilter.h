@@ -34,8 +34,6 @@
 // OpenCV Includes
 #include <opencv2/opencv.hpp>
 
-#include "dlib/image_processing.h"
-#include "dlib/opencv.h"
 
 namespace Digikam
 {
@@ -89,11 +87,8 @@ private:
     void QRectFtocvRect(const QList<QRectF> & faces,QList<cv::Rect> & result);
     void readParameters(const FilterAction&);
 
-    std::vector<cv::Rect> dlibrecttocvrect(const std::vector<dlib::rectangle>  & eyes );
-    std::vector<dlib::rectangle> geteyes(const dlib::full_object_detection & shape);
 
     void drawRects(cv::Mat &image, const std::vector<cv::Rect> & rects);
-    void drawRects(cv::Mat &image, const std::vector<dlib::rectangle> & rects);
     void drawRects(cv::Mat &image, const QList<cv::Rect> &rects);
 
 

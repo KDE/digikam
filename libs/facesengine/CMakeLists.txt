@@ -16,6 +16,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
@@ -26,6 +27,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
+                    ${CMAKE_CURRENT_SOURCE_DIR}/redeye
 
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment-flandmark
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
@@ -46,6 +48,7 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                          recognition-opencv-lbph/opencvmatdata.cpp
                          recognition-opencv-lbph/facerec_borrowed.cpp
+                         redeye/redeyecorrectionfilter.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp

@@ -108,19 +108,9 @@ set(libdimgfilters_SRCS
     filters/lens/antivignettingsettings.cpp
     filters/lens/lensdistortionfilter.cpp
     filters/lens/pixelaccess.cpp
-    filters/redeye/redeyecorrectionfilter.cpp
+#    filters/redeye/redeyecorrectionfilter.cpp
 )
 
-set(libdlib_SRCS
-    ../../dlibdk/dlib/all/source.cpp
-
-)
-
-set(DLIB_INCLUDE_DIRS
-    ../../dlibdk/
-)
-
-include_directories(${DLIB_INCLUDE_DIRS})
 
 # ==================================================================================================
 # get the gcc version

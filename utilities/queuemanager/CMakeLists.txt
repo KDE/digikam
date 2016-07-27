@@ -68,15 +68,6 @@ set(libqueuemanager_SRCS
     main/queuemgrwindow.cpp
 )
 
-set(libdlib_SRCS
-    ../../dlibdk/dlib/all/source.cpp
-)
-
-set(DLIB_INCLUDE_DIRS
-    ../../dlibdk/
-)
-
-include_directories(${DLIB_INCLUDE_DIRS})
 
 if(JASPER_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}

@@ -28,6 +28,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/opencv.hpp>
+#include "facedetector.h"
+
 
 // Qt includes
 
@@ -43,9 +45,8 @@
 // Local includes
 #include "digikam_debug.h"
 //#include "opencv"
-#include "dlib/opencv.h"
-#include "dlib/image_processing.h"
-#include "dlib/image_processing/frontal_face_detector.h"
+#include "facedetector.h"
+
 
 namespace Digikam
 {
@@ -59,7 +60,7 @@ public:
 
     }
 
-    //FacesEngine::FaceDetector facedetector;
+    FacesEngine::FaceDetector facedetector;
 
 };
 
@@ -135,67 +136,7 @@ cv::Mat RedEyeCorrectionFilter::QImageToCvMat( const QImage &inImage, bool inClo
 }
 
 
-std::vector<cv::Rect> RedEyeCorrectionFilter::dlibrecttocvrect(const std::vector<dlib::rectangle>  & eyes )
-{
-    std::vector<dlib::rectangle >::const_iterator rectsit;
-    std::vector<cv::Rect > cveyes;
 
-    for(rectsit = eyes.begin();rectsit!=eyes.end();rectsit++)
-    {
-        const dlib::rectangle & rect = * rectsit;
-
-        cveyes.push_back(cv::Rect(rect.tl_corner().x(),rect.tl_corner().y(),rect.width(),rect.height()));
-    }
-    return cveyes;
-}
-
-std::vector<dlib::rectangle> RedEyeCorrectionFilter::geteyes(const dlib::full_object_detection & shape)
-{
-    std::vector<dlib::rectangle> eyes;
-    for(int j = 0;j<2;j++)
-    {
-        // Todo: replace this shape predictor with a smaller one that
-        // predicts eyes points only.
-
-        int start = j?36:42;
-        int end = j?41:47;
-        int tlx,tly,brx,bry; // topleftx,y,toprightx,y
-
-        for(int i = start;i<=end;i++)
-        {
-            dlib::point x = shape.part(i);
-            if(i == start)
-            {
-                tlx = x.x();
-                brx = x.x();
-                tly = x.y();
-                bry = x.y();
-                continue;
-            }
-            if(x.x() < tlx)
-            {
-                tlx = x.x();
-            }
-            else if(x.x() > brx)
-            {
-                brx = x.x();
-            }
-            if(x.y() < tly)
-            {
-                tly = x.y();
-            }
-            else if(x.y() > bry)
-            {
-                bry = x.y();
-            }
-        }
-
-        dlib::point tl; tl.x() = tlx;tl.y() = tly;
-        dlib::point br; br.x() = brx;br.y() = bry;
-        eyes.push_back(dlib::rectangle(tl,br));
-    }
-    return eyes;
-}
 
 
 void RedEyeCorrectionFilter::filterImage()
@@ -203,14 +144,6 @@ void RedEyeCorrectionFilter::filterImage()
     // Todo:move the deserialization into a single place
     // preparing shape predictor
     bool visualize = false;
-
-    dlib::shape_predictor sp;
-    QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                          QString::fromLatin1("digikam/facesengine"),
-                                          QStandardPaths::LocateDirectory);
-
-    std::string facelandmarkspath = path.toStdString() + "shape_predictor_68_face_landmarks.dat";
-    dlib::deserialize(facelandmarkspath)>>sp;
 
 
     // Todo: convert dImg to Opencv::Mat directly
@@ -227,50 +160,7 @@ void RedEyeCorrectionFilter::filterImage()
     cv::Mat gray;
     cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY);
 
-    // cv::Mat to dlib::cv_image
-    dlib::array2d<uchar> dlibimg;
-    dlib::assign_image(dlibimg,
-                       dlib::cv_image<uchar>(gray));
-
-    // Face Detection
-    dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
-    std::vector<dlib::rectangle> dets = detector(dlibimg);
-
-    // visualize rectangles
-    if(visualize)
-    {
-        drawRects(intermediateImage, dets);
-    }
-
-    // Locating and Correcting red eyes
-    for(unsigned int i =0;i<dets.size();i++)
-    {
-        dlib::rectangle rect = dets[i];
-        dlib::full_object_detection shape = sp(dlibimg, rect);
-        std::vector<dlib::rectangle> singlefaceeyes;
-        std::vector<cv::Rect> cvEyes;
-        singlefaceeyes = geteyes(shape);
-
-        if(singlefaceeyes.size() == 2)
-        {
-            cvEyes = dlibrecttocvrect(singlefaceeyes);
-
-            for(unsigned int y=0;y<cvEyes.size();y++)
-            {
-                cv::Mat eye = intermediateImage(cvEyes[y]);
-                correctRedEye(intermediateImage.data, type,
-                              cvEyes[y],
-                              cv::Rect(0, 0,
-                                       intermediateImage.cols,
-                                       intermediateImage.rows));
-            }
-
-            if(visualize)
-            {
-                drawRects(intermediateImage, cvEyes);
-            }
-        }
-    }
+    QList<QRectF> dets = d->facedetector.detectFaces(temp);
 
     m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                              true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
@@ -297,17 +187,6 @@ void RedEyeCorrectionFilter::drawRects(cv::Mat &image, const std::vector<cv::Rec
         cv::rectangle(image, temp, cv::Scalar(0,0,255));
     }
 }
-
-void RedEyeCorrectionFilter::drawRects(cv::Mat &image, const std::vector<dlib::rectangle> & rects)
-{
-    std::vector<cv::Rect> cvrects = dlibrecttocvrect(rects);
-    for(unsigned int i =0;i<cvrects.size();i++)
-    {
-        cv::Rect temp = cvrects[i];
-        cv::rectangle(image, temp, cv::Scalar(255,0,0));
-    }
-}
-
 
 
 void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRectF> & faces, QList<cv::Rect> & result)
