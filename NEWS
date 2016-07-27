@@ -334,4 +334,6 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 322 ==> 365411 - Tooltips unreadable.
 323 ==> 365973 - digiKam and program hung for a while then crashed.
 324 ==> 366124 - Corrected spelling in first run widgets [patch].
-325 ==> 
+325 ==> 325655 - MIGRATION : after MySQL to Sqlite database conversion, random tags are assigned to new images.
+326 ==> 
+
