@@ -53,29 +53,21 @@ or a devel wish.
 
 The current bugs and devel wishes reported to the bugzilla servers can be seen at these urls :
 
-* digiKam (KDE bugzilla):
+* digiKam:
 
 http://bugs.kde.org/buglist.cgi?product=digikam&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
-* Image Editor plugins (KDE bugzilla):
-
-http://bugs.kde.org/buglist.cgi?product=digikamimageplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
-
-* Showfoto (KDE bugzilla):
-
-http://bugs.kde.org/buglist.cgi?product=showfoto&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
-
-* Kipi-plugins (KDE bugzilla):
+* Kipi-plugins:
 
 http://bugs.kde.org/buglist.cgi?product=kipiplugins&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED
 
 Extra Bugzilla servers for shared libs used by digiKam :
 
-* GPhoto2 library (sourceforge bugzilla):
+* GPhoto2 library:
 
 http://gphoto.org/bugs
 
-* Exiv2 library (robotbattle bugzilla):
+* Exiv2 library:
 
 http://dev.robotbattle.com/bugs/main_page.php
 
