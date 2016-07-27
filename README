@@ -82,52 +82,9 @@ http://dev.robotbattle.com/bugs/main_page.php
 
 -- DEPENDENCIES -------------------------------------------------------
 
-Name              Version                       URL                                                               Remarks
+See the complete list of dependencies at this url:
 
-Required:
-
-CMake             >= 3.0.0                      http://www.cmake.org
-ECM               >= 1.7.0                      https://projects.kde.org/projects/kdesupport/extra-cmake-modules
-libqt             >= 5.4.0                      http://www.qtsoftware.com                                         Including run-time SQLite3 and Mysql database plugin.
-kdelibs           >= 5.5.0                      http://www.kde.org
-libexiv2          >= 0.24                       http://www.exiv2.org                                              Exiv2 0.25 recommended
-libjpeg           >= 6b                         http://www.ijg.org
-libtiff           >= 3.8.2                      http://www.remotesensing.org/libtiff
-libpng            >= 1.2.0                      http://www.libpng.org/pub/png/libpng.html
-liblcms           >= 2.x                        http://www.littlecms.com
-libboostgraph     >= 1.43.0                     http://www.boost.org/doc/libs
-libexpat          >= 2.0.0                      http://expat.sourceforge.net
-libopencv         >= 2.4.9                      http://opencv.willowgarage.com
-
-libpthread        >= 2.0.0                      http://www.gnu.org/software/hurd/libpthread.html
-
-Optional:
-
-libkipi           >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libkipi                                          To support Kipi-plugins.
-libksane          >= 5.0.0                      https://projects.kde.org/projects/kde/kdegraphics/libs/libksane                                         To support digital scanner.
-libmarble         >= 0.22.0                     https://projects.kde.org/projects/kde/kdeedu/marble                                                     To support geolocation maps.
-libakonadicontact >= 4.89.0                     https://projects.kde.org/projects/kde/kdepimlibs/repository/revisions/master/show/akonadi-contact       To support KDE Address Book entries.
-libkfilemetadata  >= 5.x                        https://projects.kde.org/projects/frameworks/kfilemetadata                                              To support KDE files indexing support.
-libkcalcore       >= 4.81.0                     https://projects.kde.org/projects/kde/pim/kcalcore                                                      For Calendar tool.
-libthreadweaver   >= 5.0.0                      https://projects.kde.org/projects/frameworks/threadweaver                                               For Panorama tool
-libjasper         >= 1.7.0                      http://www.ece.uvic.ca/~mdadams/jasper                                                                  To support JPEG2000.
-liblensfun        >= 0.2.6                      http://lensfun.sourceforge.net                                                                          To support LensCorrection tool.
-liblqr-1          >= 0.4.1                      http://liblqr.wikidot.com                                                                               To support Liquid Rescale tool.
-libeigen3         >= 3.0.0                      http://eigen.tuxfamily.org                                                                              To support Refocus tool.
-libgphoto2        >= 2.4.0                      http://www.gphoto.org                                                                                   To support Gphoto2 Cameras drivers. Need libusb1 to prevent conflict at run-time with libopencv.
-libgomp           >= 5.0                        https://gcc.gnu.org/onlinedocs/libgomp                                                                  OpenMP support for RawEngine.
-libmesa           >= 11.0                       http://www.mesa3d.org                                                                                   For Presentation tools (Linux only).
-libusb            >= 1.0.0                      http://www.libusb.org                                                                                   Required by Gphoto2 as linking dependency. See details in bug #268267.
-doxygen           >= 1.8.0                      http://www.doxygen.org                                                                                  To support API documentation building (This does not affect building digiKam in any way).
-flex              >= 2.5.0                      http://flex.sourceforge.net
-bison             >= 2.5.0                      http://www.gnu.org/software/bison/bison.html
-
-Note: all library dependencies require development and binary packages installed on your computer to compile digiKam.
-
-Runtime dependencies:
-
-Hugin           >= 2013.0                       http://hugin.sourceforge.net
-Enblend         >= 3.0.0                        http://enblend.sourceforge.net
+https://quickgit.kde.org/?p=digikam-software-compilation.git&a=blob&f=DEPENDENCIES 
 
 CMake compilation options to custom digiKam:
 
@@ -147,9 +104,6 @@ Use CMake "-DENABLE_INTERNALMYSQL=on"         flag to compile digiKam with inter
 Debug options:
 
 Use CMake "-DBUILD_TESTING=on"                flag to compile digiKam source code unit tests                                         (disabled by default).
-
-digiKam do not have any video thumbnailer. Video support is delegate to KDE. To support Video thumbnails, 
-please install "ffmpegthumbs" package, which is the kdemultimedia Video thumbnail generator for KDE4 file managers.
 
 -- INSTALLATION --------------------------------------------------------
 
