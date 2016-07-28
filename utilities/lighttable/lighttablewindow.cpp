@@ -546,6 +546,7 @@ void LightTableWindow::setupActions()
 
     d->showBarAction = d->barViewDock->getToggleAction(this);
     ac->addAction(QLatin1String("lighttable_showthumbbar"), d->showBarAction);
+    ac->setDefaultShortcut(d->showBarAction, Qt::CTRL + Qt::Key_T);
 
     createFullScreenAction(QLatin1String("lighttable_fullscreen"));
     createSidebarActions();
