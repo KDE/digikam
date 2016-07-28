@@ -89,7 +89,7 @@ ForegroundPositive=186,221,150
 ForegroundVisited=203,121,185
 
 [General]
-Name=DigiKamGray
+Name=ShadeOfGray
 shadeSortColumn=true
 
 [KDE]
