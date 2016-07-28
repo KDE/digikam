@@ -100,7 +100,7 @@ add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL2)
 add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL3)
 
 # Flag to compile with DNG SDK
-add_definitions(-DUSE_DNGSDK)
+#add_definitions(-DUSE_DNGSDK)
 
 # Flag to debug LibRaw
 add_definitions(-DDCRAW_VERBOSE)
