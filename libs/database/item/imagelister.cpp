@@ -200,7 +200,7 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
                     "       Images.modificationDate, Images.fileSize, "
                     "       ImageInformation.width, ImageInformation.height "
                     " FROM Images "
-                    "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                    "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                     " WHERE Images.status=1 AND ");
 
     if (d->recursive)
@@ -352,7 +352,7 @@ void ImageLister::listFaces(ImageListerReceiver* const receiver, int personId)
 
     access.backend()->execSql(QString::fromUtf8("SELECT Images.id "
                                                 " FROM Images "
-                                                "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                                "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                                 "       INNER JOIN Albums ON Albums.id=")+
                               QString::number(personId)+
                               QString::fromUtf8(" WHERE Images.status=1 "
@@ -393,7 +393,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
                                           "       Images.modificationDate, Images.fileSize, "
                                           "       ImageInformation.width, ImageInformation.height "
                                           " FROM Images "
-                                          "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                          "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                           "       INNER JOIN Albums ON Albums.id=Images.album "
                                           " WHERE Images.status=1 "
                                           "   AND ImageInformation.creationDate < ? "
@@ -463,7 +463,7 @@ void ImageLister::listAreaRange(ImageListerReceiver* const receiver, double lat1
                                       "       Albums.albumRoot, ImageInformation.rating, ImageInformation.creationDate, "
                                       "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                                       " FROM Images "
-                                      "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+                                      "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                                       "       INNER JOIN Albums ON Albums.id=Images.album "
                                       "       INNER JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
                                       " WHERE Images.status=1 "
@@ -529,7 +529,7 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
                "       ImageInformation.width, ImageInformation.height, "
                "       ImagePositions.latitudeNumber, ImagePositions.longitudeNumber "
                " FROM Images "
-               "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       LEFT  JOIN ImageMetadata    ON Images.id=ImageMetadata.imageid "
                "       LEFT  JOIN VideoMetadata    ON Images.id=VideoMetadata.imageid "
                "       LEFT  JOIN ImagePositions   ON Images.id=ImagePositions.imageid "
@@ -653,7 +653,7 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
                "       ImageTagProperties.value, ImageTagProperties.property, ImageTagProperties.tagid "
                " FROM Images "
                "       INNER JOIN ImageTagProperties ON ImageTagProperties.imageid=Images.id "
-               "       INNER JOIN ImageInformation ON Images.id=ImageInformation.imageid "
+               "       LEFT JOIN ImageInformation ON Images.id=ImageInformation.imageid "
                "       INNER JOIN Albums           ON Albums.id=Images.album "
                "WHERE Images.status=1 AND ( ");
 

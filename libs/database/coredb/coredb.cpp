@@ -2144,7 +2144,7 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                   " INNER JOIN ImageInformation ON id=imageid "
+                   " LEFT JOIN ImageInformation ON id=imageid "
                    "WHERE name=? AND creationDate=? AND status!=3;"),
                    fileName, creationDate.toString(Qt::ISODate), &values);
 
