@@ -99,6 +99,9 @@ add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL2)
 # Flag to include demosaic pack GPL3
 add_definitions(-DLIBRAW_DEMOSAIC_PACK_GPL3)
 
+# Flag to compile with DNG SDK
+add_definitions(-DUSE_DNGSDK)
+
 # Flag to debug LibRaw
 add_definitions(-DDCRAW_VERBOSE)
 
@@ -117,6 +120,7 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL2
                     ${CMAKE_CURRENT_SOURCE_DIR}/demosaic-pack-GPL3
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../../dngwriter/extra/dng_sdk
                    )
 
 set(libraw_LIB_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/internal/dcraw_common.cpp
@@ -165,41 +169,41 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/libraw_config.h.cmake ${CMAKE_CURRENT
 
 # A small macro so that this is a bit cleaner
 
-macro(LIBRAW_BUILD_SAMPLES)
+#macro(LIBRAW_BUILD_SAMPLES)
 
-    set(_filename ${ARGV0})
-    string(REPLACE "." ";" _temp ${_filename})
-    list(GET _temp 0 _target) 
+#    set(_filename ${ARGV0})
+#    string(REPLACE "." ";" _temp ${_filename})
+#    list(GET _temp 0 _target) 
 
-    set(${_target}_SRCS samples/${_filename})
-    set_source_files_properties(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
+#    set(${_target}_SRCS samples/${_filename})
+#    set_source_files_properties(${${_target}_SRCS} PROPERTIES COMPILE_FLAGS -w)
 
-    add_executable(${_target} ${${_target}_SRCS})
+#    add_executable(${_target} ${${_target}_SRCS})
 
-    target_link_libraries(${_target} libraw ${OPENMP_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT})
+#    target_link_libraries(${_target} libraw ${OPENMP_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} libdng)
 
-    if(WIN32)
-        target_link_libraries(${_target} ws2_32)
-    endif()
+#    if(WIN32)
+#        target_link_libraries(${_target} ws2_32)
+#    endif()
 
-endmacro()
+#endmacro()
 
-LIBRAW_BUILD_SAMPLES(simple_dcraw.cpp)
-LIBRAW_BUILD_SAMPLES(mem_image.cpp)
-LIBRAW_BUILD_SAMPLES(dcraw_emu.cpp)
-LIBRAW_BUILD_SAMPLES(4channels.cpp)
-LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp)
-LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
-LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
-LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
+#LIBRAW_BUILD_SAMPLES(simple_dcraw.cpp)
+#LIBRAW_BUILD_SAMPLES(mem_image.cpp)
+#LIBRAW_BUILD_SAMPLES(dcraw_emu.cpp)
+#LIBRAW_BUILD_SAMPLES(4channels.cpp)
+#LIBRAW_BUILD_SAMPLES(unprocessed_raw.cpp)
+#LIBRAW_BUILD_SAMPLES(raw-identify.cpp)
+#LIBRAW_BUILD_SAMPLES(multirender_test.cpp)
+#LIBRAW_BUILD_SAMPLES(postprocessing_benchmark.cpp)
 
 # C sample files which must be compiled only if LCMS v2 is detected, to prevent broken compilation
 
-if(LCMS2_FOUND)
-   if(MSVC)
-        LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
-   else()
-        LIBRAW_BUILD_SAMPLES(dcraw_half.c)
-        LIBRAW_BUILD_SAMPLES(half_mt.c)
-   endif()
-endif()
+#if(LCMS2_FOUND)
+#   if(MSVC)
+#        LIBRAW_BUILD_SAMPLES(half_mt_win32.c)
+#   else()
+#        LIBRAW_BUILD_SAMPLES(dcraw_half.c)
+#        LIBRAW_BUILD_SAMPLES(half_mt.c)
+#   endif()
+#endif()

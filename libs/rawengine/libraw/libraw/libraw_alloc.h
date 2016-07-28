@@ -1,7 +1,7 @@
 /* -*- C++ -*-
  * File: libraw_alloc.h
- * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
- * Created: Sat Mar  22, 2008
+ * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
+ * Created: Sat Mar  22, 2008 
  *
  * LibRaw C++ interface
  *
@@ -27,7 +27,7 @@ it under the terms of the one of three licenses as you choose:
 
 #ifdef __cplusplus
 
-#define LIBRAW_MSIZE 32
+#define LIBRAW_MSIZE 64
 
 class DllDef libraw_memmgr
 {

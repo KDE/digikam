@@ -1,6 +1,6 @@
 /* -*- C -*-
  * File: libraw_datastream.h
- * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
  * Created: Sun Jan 18 13:07:35 2009
  *
  * LibRaw Data stream interface
@@ -45,6 +45,26 @@ it under the terms of the one of three licenses as you choose:
 #define WIN32SECURECALLS
 #endif
 #endif
+
+#ifdef USE_DNGSDK
+
+#if defined(WIN32)
+#define qWinOS 1
+#define qMacOS 0
+#elif defined(__APPLE__)
+#define qWinOS 0
+#define qMacOS 1
+#else
+/* define OS types for DNG here */
+#endif
+#define qDNGXMPDocOps  0
+#define qDNGUseLibJPEG 1
+#define qDNGXMPFiles   0
+#define qDNGExperimental 1
+#define qDNGThreadSafe 1
+#include "dng_stream.h"
+#endif /* DNGSDK */
+
 
 #define IOERROR() do { throw LIBRAW_EXCEPTION_IO_EOF; } while(0)
 
@@ -188,7 +208,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual void        subfile_close();
     virtual int         get_char()
     {
-#if !defined(_WIN32) && !defined(__MINGW32__)
+#ifndef WIN32
         return substream?substream->get_char():getc_unlocked(f);
 #else
         return substream?substream->get_char():fgetc(f);
@@ -231,6 +251,45 @@ protected:
 
 #endif
 
+#ifdef USE_DNGSDK
+
+class libraw_dng_stream: public dng_stream
+{
+public:
+	libraw_dng_stream(LibRaw_abstract_datastream* p): dng_stream((dng_abort_sniffer*)NULL,kBigBufferSize,0),parent_stream(p)
+	{
+		if(parent_stream)
+		{
+			off = parent_stream->tell();
+			parent_stream->seek(0UL,SEEK_SET); /* seek to start */
+		}
+	}
+	~libraw_dng_stream(){
+		if(parent_stream)
+			parent_stream->seek(off,SEEK_SET);
+	}
+	virtual uint64 DoGetLength (){
+		if(parent_stream)
+			return parent_stream->size();
+		return 0;
+	}
+	virtual void DoRead (void *data, uint32 count, uint64 offset)
+	{
+		if(parent_stream)
+		{
+			parent_stream->seek(offset,SEEK_SET);
+			parent_stream->read(data,1,count);
+		}
+	}
+
+private:
+	libraw_dng_stream (const libraw_dng_stream &stream);
+	libraw_dng_stream & operator= (const libraw_dng_stream &stream);
+	LibRaw_abstract_datastream *parent_stream;
+	INT64 off;
+};
+
+#endif
 
 #endif /* cplusplus */
 

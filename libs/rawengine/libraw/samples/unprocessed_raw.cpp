@@ -24,7 +24,7 @@ it under the terms of the one of three licenses as you choose:
 #include <string.h>
 #include <math.h>
 #include <time.h>
-#if !defined(WIN32) && !defined(__MINGW32__)
+#ifndef WIN32
 #include <netinet/in.h>
 #else
 #include <sys/utime.h>
@@ -49,10 +49,10 @@ int main(int ac, char *av[])
 {
     int  i, ret;
     int verbose=1,autoscale=0,use_gamma=0,out_tiff=0;
-    char outfn[1024];
+    char outfn[1024]; 
 
     LibRaw RawProcessor;
-    if(ac<2)
+    if(ac<2) 
         {
           usage:
             printf(
@@ -68,7 +68,7 @@ int main(int ac, char *av[])
                 av[0]);
             return 0;
         }
-
+    
 #define S RawProcessor.imgdata.sizes
 #define OUT RawProcessor.imgdata.params
 
@@ -122,19 +122,19 @@ int main(int ac, char *av[])
                     continue;
                 }
 
-
+            
             if(autoscale)
                 {
                     unsigned max=0,scale;
                     for(int j=0; j<S.raw_height*S.raw_width; j++)
                         if(max < RawProcessor.imgdata.rawdata.raw_image[j])
-                            max = RawProcessor.imgdata.rawdata.raw_image[j];
+                            max = RawProcessor.imgdata.rawdata.raw_image[j]; 
                     if (max >0 && max< 1<<15)
                         {
                             scale = (1<<16)/max;
                             if(verbose)
                                 printf("Scaling with multiplier=%d (max=%d)\n",scale,max);
-
+                            
                             for(int j=0; j<S.raw_height*S.raw_width; j++)
                                 RawProcessor.imgdata.rawdata.raw_image[j] *= scale;
                         }
@@ -144,12 +144,12 @@ int main(int ac, char *av[])
                     unsigned short curve[0x10000];
                     gamma_curve(curve);
                     for(int j=0; j<S.raw_height*S.raw_width; j++)
-                                RawProcessor.imgdata.rawdata.raw_image[j]
+                                RawProcessor.imgdata.rawdata.raw_image[j] 
                                     = curve[RawProcessor.imgdata.rawdata.raw_image[j]];
                     if(verbose)
                         printf("Gamma-corrected....\n");
                 }
-
+            
             if(OUT.shot_select)
                 snprintf(outfn,sizeof(outfn),"%s-%d.%s",av[i],OUT.shot_select,out_tiff?"tiff":"pgm");
             else

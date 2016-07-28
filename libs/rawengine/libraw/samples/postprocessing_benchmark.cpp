@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: postprocessing_benchmark.cpp
- * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
  * Created: Jul 13, 2011
  *
  * LibRaw simple C++ API:  creates 8 different renderings from 1 source file. The 1st and 4th one should be identical
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 #define OUT RawProcessor.imgdata.params
 #define S RawProcessor.imgdata.sizes
 
-    if(argc<2)
+    if(argc<2) 
         {
             printf(
                 "postprocessing benchmark: LibRaw %s sample, %d cameras supported\n"
@@ -73,47 +73,47 @@ int main(int argc, char *argv[])
     int shrink = 0;
 
     argv[argc] = (char*)"";
-    for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; )
+    for (arg=1; (((opm = argv[arg][0]) - 2) | 2) == '+'; ) 
         {
             char *optstr = argv[arg];
             opt = argv[arg++][1];
             if ((cp = strchr (sp=(char*)"HqmnsBR", opt))!=0)
                 for (i=0; i < "1111141"[cp-sp]-'0'; i++)
-                    if (!isdigit(argv[arg+i][0]) && !optstr[2])
+                    if (!isdigit(argv[arg+i][0]) && !optstr[2]) 
                         {
                             fprintf (stderr,"Non-numeric argument to \"-%c\"\n", opt);
                             return 1;
                         }
-            switch (opt)
+            switch (opt) 
                 {
-                case 'a':
-                    OUT.use_auto_wb = 1;
+                case 'a': 
+                    OUT.use_auto_wb = 1;  
                     break;
                 case 'H':
-                    OUT.highlight   = atoi(argv[arg++]);
+                    OUT.highlight   = atoi(argv[arg++]);  
                     break;
                 case 'q':
-                    OUT.user_qual   = atoi(argv[arg++]);
+                    OUT.user_qual   = atoi(argv[arg++]);  
                     break;
-                case 'h':
-                    OUT.half_size = 1;
-                    OUT.four_color_rgb    = 1;
+                case 'h':  
+                    OUT.half_size = 1;		
+                    OUT.four_color_rgb    = 1;  
                     shrink = 1;
                     break;
                 case 'm':
-                    OUT.med_passes  = atoi(argv[arg++]);
+                    OUT.med_passes  = atoi(argv[arg++]);  
                     break;
-                case 'n':
-                    OUT.threshold   = (float)atof(argv[arg++]);
+                case 'n':  
+                    OUT.threshold   = (float)atof(argv[arg++]);  
                     break;
-                case 's':
-                    OUT.shot_select = abs(atoi(argv[arg++]));
+                case 's':  
+                    OUT.shot_select = abs(atoi(argv[arg++])); 
                     break;
-                case 'B':
-                  for(c=0; c<4;c++) OUT.cropbox[c]  = atoi(argv[arg++]);
+                case 'B':  
+                  for(c=0; c<4;c++) OUT.cropbox[c]  = atoi(argv[arg++]); 
                   break;
-                case 'R':
-                    rep = abs(atoi(argv[arg++]));
+                case 'R':  
+                    rep = abs(atoi(argv[arg++])); 
                     if(rep<1) rep = 1;
                     break;
 				case 'c':
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
                     fprintf(stderr,"Cannot open_file %s: %s\n",argv[arg],libraw_strerror(ret));
                     continue; // no recycle b/c open file will recycle itself
                 }
-
+            
             if( (ret = RawProcessor.unpack() ) != LIBRAW_SUCCESS)
                 {
                     fprintf(stderr,"Cannot unpack %s: %s\n",argv[arg],libraw_strerror(ret));
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
                         crop[0],crop[1],crop[2],crop[3],mpix,1000.0f/msec);
                 }
         }
-
+    
     return 0;
 }
 

@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_types.h
- * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C data structures
@@ -151,9 +151,10 @@ typedef struct
 
 typedef struct
 {
+  char	      guard[4];
   char        make[64];
   char        model[64];
-  char		  	software[64];
+  char        software[64];
   unsigned    raw_count;
   unsigned    dng_version;
   unsigned    is_foveon;
@@ -163,25 +164,24 @@ typedef struct
   char        xtrans_abs[6][6];
   char        cdesc[5];
   unsigned    xmplen;
-  char	      *xmpdata;
+  char        *xmpdata;
 
 }libraw_iparams_t;
 
 typedef struct
 {
-    ushort      raw_height,
-                raw_width,
-                height,
-                width,
-                top_margin,
-                left_margin;
-    ushort      iheight,
-                iwidth;
-    unsigned    raw_pitch;
-    double      pixel_aspect;
-    int         flip;
-    int         mask[8][4];
-
+  ushort      raw_height,
+              raw_width,
+              height,
+              width,
+              top_margin,
+              left_margin;
+  ushort      iheight,
+              iwidth;
+  unsigned    raw_pitch;
+  double      pixel_aspect;
+  int         flip;
+  int         mask[8][4];
 } libraw_image_sizes_t;
 
 struct ph1_t
@@ -193,155 +193,294 @@ struct ph1_t
 
 typedef struct
 {
-  unsigned short illuminant;
-  float calibration[4][4];
-  float colormatrix[4][3];
+  ushort       illuminant;
+  float        calibration[4][4];
+  float        colormatrix[4][3];
+  float        forwardmatrix[3][4];
+  float        dng_blacklevel[4];
+  unsigned     dng_whitelevel[4];
+  float        analogbalance[4];
 } libraw_dng_color_t;
 
 typedef struct
 {
-	int CanonColorDataVer;
-	int CanonColorDataSubVer;
-	int SpecularWhiteLevel;
-	int AverageBlackLevel;
+  int          CanonColorDataVer;
+  int          CanonColorDataSubVer;
+  int          SpecularWhiteLevel;
+  int          AverageBlackLevel;
+// metering
+  short        MeteringMode;
+  short        SpotMeteringMode;
+  uchar        FlashMeteringMode;
+  short        FlashExposureLock;
+  short        ExposureMode;
+  short        AESetting;
+  uchar        HighlightTonePriority;
+// stabilization
+  short        ImageStabilization;
+// focus
+  short        FocusMode;
+  short        AFPoint;
+  short        FocusContinuous;
+  short        AFPointsInFocus30D;
+  uchar        AFPointsInFocus1D[8];
+  ushort       AFPointsInFocus5D;        // bytes in reverse
+// AFInfo
+  ushort       AFAreaMode;
+  ushort       NumAFPoints;
+  ushort       ValidAFPoints;
+  ushort       AFImageWidth;
+  ushort       AFImageHeight;
+  short        AFAreaWidths[61];        // cycle to NumAFPoints
+  short        AFAreaHeights[61];       // --''--
+  short        AFAreaXPositions[61];    // --''--
+  short        AFAreaYPositions[61];    // --''--
+  short        AFPointsInFocus[4];      // cycle to floor((NumAFPoints+15)/16)
+  short        AFPointsSelected[4];     // --''--
+  ushort       PrimaryAFPoint;
+// flash
+  short        FlashMode;
+  short        FlashActivity;
+  short        FlashBits;
+  short        ManualFlashOutput;
+  short        FlashOutput;
+  short        FlashGuideNumber;
+// drive
+  short        ContinuousDrive;
 } libraw_canon_makernotes_t;
 
 typedef struct
 {
-  ushort      curve[0x10000];
-  unsigned    cblack[4102];
-  unsigned    black;
-  unsigned    data_maximum;
-  unsigned    maximum;
-  ushort      white[8][8];
-  float       cam_mul[4];
-  float       pre_mul[4];
-  float       cmatrix[3][4];
-  float       rgb_cam[3][4];
-  float       cam_xyz[4][3];
-  struct ph1_t       phase_one_data;
-  float       flash_used;
-  float       canon_ev;
-  char        model2[64];
-  void        *profile;
-  unsigned    profile_length;
-  unsigned    black_stat[8];
-  libraw_dng_color_t  dng_color[2];
-  libraw_canon_makernotes_t canon_makernotes;
-  float	      baseline_exposure;
-  int		  OlympusSensorCalibration[2];
-  float       FujiExpoMidPointShift;
-  int		digitalBack_color;
-}libraw_colordata_t;
+  float        FujiExpoMidPointShift;
+  ushort       FujiDynamicRange;
+  ushort       FujiFilmMode;
+  ushort       FujiDynamicRangeSetting;
+  ushort       FujiDevelopmentDynamicRange;
+  ushort       FujiAutoDynamicRange;
+  ushort       FocusMode;
+  ushort       AFMode;
+  ushort       FocusPixel[2];
+  ushort       ImageStabilization[3];
+  ushort       FlashMode;
+} libraw_fuji_info_t;
 
 typedef struct
 {
-    enum LibRaw_thumbnail_formats tformat;
-    ushort      twidth,
-                theight;
-    unsigned    tlength;
-    int         tcolors;
 
-    char       *thumb;
+  double       ExposureBracketValue;
+  ushort       ActiveDLighting;
+  ushort       ShootingMode;
+// stabilization
+  uchar        ImageStabilization[7];
+  uchar        VibrationReduction;
+  uchar        VRMode;
+// focus
+  char         FocusMode[7];
+  uchar        AFPoint;
+  ushort       AFPointsInFocus;
+  uchar        ContrastDetectAF;
+  uchar        AFAreaMode;
+  uchar        PhaseDetectAF;
+  uchar        PrimaryAFPoint;
+  uchar        AFPointsUsed[29];
+  ushort       AFImageWidth;
+  ushort       AFImageHeight;
+  ushort       AFAreaXPposition;
+  ushort       AFAreaYPosition;
+  ushort       AFAreaWidth;
+  ushort       AFAreaHeight;
+  uchar        ContrastDetectAFInFocus;
+// flash
+  char         FlashSetting[13];
+  char         FlashType[20];
+  uchar        FlashExposureCompensation[4];
+  uchar        ExternalFlashExposureComp[4];
+  uchar        FlashExposureBracketValue[4];
+  uchar        FlashMode;
+  signed char  FlashExposureCompensation2;
+  signed char  FlashExposureCompensation3;
+  signed char  FlashExposureCompensation4;
+  uchar        FlashSource;
+  uchar        FlashFirmware[2];
+  uchar        ExternalFlashFlags;
+  uchar        FlashControlCommanderMode;
+  uchar        FlashOutputAndCompensation;
+  uchar        FlashFocalLength;
+  uchar        FlashGNDistance;
+  uchar        FlashGroupControlMode[4];
+  uchar        FlashGroupOutputAndCompensation[4];
+  uchar        FlashColorFilter;
+} libraw_nikon_makernotes_t;
+
+typedef struct
+{
+  int          OlympusCropID;
+  ushort       OlympusFrame[4];	/* upper left XY, lower right XY */
+  int          OlympusSensorCalibration[2];
+  ushort       FocusMode[2];
+  ushort       AutoFocus;
+  ushort       AFPoint;
+  unsigned     AFAreas[64];
+  double       AFPointSelected[5];
+  ushort       AFResult;
+  unsigned     ImageStabilization;
+} libraw_olympus_makernotes_t;
+
+typedef struct
+{
+  ushort       FocusMode;
+  uchar        AFPointMode;
+  ushort       AFPointSelected[2];
+  unsigned     AFPointsInFocus;
+  uchar        DriveMode[4];
+  uchar        SRResult;
+  uchar        ShakeReduction;
+} libraw_pentax_makernotes_t;
+
+typedef struct
+{
+  ushort       SonyCameraType;
+} libraw_sony_info_t;
+
+typedef struct
+{
+  ushort       curve[0x10000];
+  unsigned     cblack[4102];
+  unsigned     black;
+  unsigned     data_maximum;
+  unsigned     maximum;
+  float        fmaximum;
+  float        fnorm;
+  ushort       white[8][8];
+  float        cam_mul[4];
+  float        pre_mul[4];
+  float        cmatrix[3][4];
+  float        rgb_cam[3][4];
+  float        cam_xyz[4][3];
+  struct ph1_t       phase_one_data;
+  float        flash_used;
+  float        canon_ev;
+  char         model2[64];
+  void         *profile;
+  unsigned     profile_length;
+  unsigned     black_stat[8];
+  libraw_dng_color_t  dng_color[2];
+  float        baseline_exposure;
+  int          digitalBack_color;
+  int          WB_Coeffs[256][4];      /* R, G1, B, G2 coeffs */
+  float        WBCT_Coeffs[64][5];     /* CCT, than R, G1, B, G2 coeffs */
+} libraw_colordata_t;
+
+typedef struct
+{
+  enum LibRaw_thumbnail_formats tformat;
+  ushort       twidth,
+               theight;
+  unsigned     tlength;
+  int          tcolors;
+  char         *thumb;
 }libraw_thumbnail_t;
 
 typedef struct
 {
-	float latitude[3]; /* Deg,min,sec */
-	float longtitude[3]; /* Deg,min,sec */
-	float gpstimestamp[3]; /* Deg,min,sec */
-	float altitude;
-	char  altref, latref, longref, gpsstatus;
-	char  gpsparsed;
-
+  float        latitude[3]; /* Deg,min,sec */
+  float        longtitude[3]; /* Deg,min,sec */
+  float        gpstimestamp[3]; /* Deg,min,sec */
+  float        altitude;
+  char         altref, latref, longref, gpsstatus;
+  char         gpsparsed;
 } libraw_gps_info_t;
 
 typedef struct
 {
-    float       iso_speed;
-    float       shutter;
-    float       aperture;
-    float       focal_len;
-    time_t      timestamp;
-    unsigned    shot_order;
-    unsigned    gpsdata[32];
-	libraw_gps_info_t parsed_gps;
-    char        desc[512],
-                artist[64];
+  float        iso_speed;
+  float        shutter;
+  float        aperture;
+  float        focal_len;
+  time_t       timestamp;
+  unsigned     shot_order;
+  unsigned     gpsdata[32];
+  libraw_gps_info_t parsed_gps;
+  char         desc[512],
+               artist[64];
+  float        FlashEC;
 } libraw_imgother_t;
 
 typedef struct
 {
-    unsigned    greybox[4];     /* -A  x1 y1 x2 y2 */
-    unsigned    cropbox[4];     /* -B x1 y1 x2 y2 */
-    double      aber[4];        /* -C */
-    double      gamm[6];        /* -g */
-    float       user_mul[4];    /* -r mul0 mul1 mul2 mul3 */
-    unsigned    shot_select;    /* -s */
-    float       bright;         /* -b */
-    float       threshold;      /*  -n */
-    int         half_size;      /* -h */
-    int         four_color_rgb; /* -f */
-    int         highlight;      /* -H */
-    int         use_auto_wb;    /* -a */
-    int         use_camera_wb;  /* -w */
-    int         use_camera_matrix; /* +M/-M */
-    int         output_color;   /* -o */
-    char        *output_profile; /* -o */
-    char        *camera_profile; /* -p */
-    char        *bad_pixels;    /* -P */
-    char        *dark_frame;    /* -K */
-    int         output_bps;     /* -4 */
-    int         output_tiff;    /* -T */
-    int         user_flip;      /* -t */
-    int         user_qual;      /* -q */
-    int         user_black;     /* -k */
-    int		user_cblack[4];
-    int         user_sat;       /* -S */
+  unsigned    greybox[4];     /* -A  x1 y1 x2 y2 */
+  unsigned    cropbox[4];     /* -B x1 y1 x2 y2 */
+  double      aber[4];        /* -C */
+  double      gamm[6];        /* -g */
+  float       user_mul[4];    /* -r mul0 mul1 mul2 mul3 */
+  unsigned    shot_select;    /* -s */
+  float       bright;         /* -b */
+  float       threshold;      /*  -n */
+  int         half_size;      /* -h */
+  int         four_color_rgb; /* -f */
+  int         highlight;      /* -H */
+  int         use_auto_wb;    /* -a */
+  int         use_camera_wb;  /* -w */
+  int         use_camera_matrix; /* +M/-M */
+  int         output_color;   /* -o */
+  char        *output_profile; /* -o */
+  char        *camera_profile; /* -p */
+  char        *bad_pixels;    /* -P */
+  char        *dark_frame;    /* -K */
+  int         output_bps;     /* -4 */
+  int         output_tiff;    /* -T */
+  int         user_flip;      /* -t */
+  int         user_qual;      /* -q */
+  int         user_black;     /* -k */
+  int		user_cblack[4];
+  int         user_sat;       /* -S */
 
-    int         med_passes;     /* -m */
-    float       auto_bright_thr;
-    float       adjust_maximum_thr;
-    int         no_auto_bright; /* -W */
-    int         use_fuji_rotate;/* -j */
-    int         green_matching;
-    /* DCB parameters */
-    int         dcb_iterations;
-    int         dcb_enhance_fl;
-    int         fbdd_noiserd;
-    /* VCD parameters */
-    int         eeci_refine;
-    int         es_med_passes;
-    /* AMaZE*/
-    int         ca_correc;
-    float       cared;
-    float	cablue;
-    int cfaline;
-    float linenoise;
-    int cfa_clean;
-    float lclean;
-    float cclean;
-    int cfa_green;
-    float green_thresh;
-    int exp_correc;
-    float exp_shift;
-    float exp_preser;
-   /* WF debanding */
-    int   wf_debanding;
-    float wf_deband_treshold[4];
+  int         med_passes;     /* -m */
+  float       auto_bright_thr;
+  float       adjust_maximum_thr;
+  int         no_auto_bright; /* -W */
+  int         use_fuji_rotate;/* -j */
+  int         green_matching;
+  /* DCB parameters */
+  int         dcb_iterations;
+  int         dcb_enhance_fl;
+  int         fbdd_noiserd;
+  /* VCD parameters */
+  int         eeci_refine;
+  int         es_med_passes;
+  /* AMaZE*/
+  int         ca_correc;
+  float       cared;
+  float	cablue;
+  int cfaline;
+  float linenoise;
+  int cfa_clean;
+  float lclean;
+  float cclean;
+  int cfa_green;
+  float green_thresh;
+  int exp_correc;
+  float exp_shift;
+  float exp_preser;
+ /* WF debanding */
+  int   wf_debanding;
+  float wf_deband_treshold[4];
 	/* Raw speed */
     int use_rawspeed;
+	/* DNG SDK */
+	int use_dngsdk;
   /* Disable Auto-scale */
-    int no_auto_scale;
+  int no_auto_scale;
   /* Disable intepolation */
-    int no_interpolation;
+  int no_interpolation;
   /* Disable sRAW YCC to RGB conversion */
   int sraw_ycc;
   /* Force use x3f data decoding either if demosaic pack GPL2 enabled */
   int force_foveon_x3f;
-  int x3f_flags;
+  /*  int x3f_flags; */
   /* Sony ARW2 digging mode */
-  int sony_arw2_options;
+  /* int sony_arw2_options; */
+  unsigned raw_processing_options;
   int sony_arw2_posterization_thr;
   /* Nikon Coolscan */
   float coolscan_nef_gamma;
@@ -357,6 +496,12 @@ typedef struct
   ushort        (*color4_image)[4] ;
   /* alias to 3-color variand decoded by RawSpeed */
   ushort        (*color3_image)[3];
+  /* float bayer */
+  float			*float_image;
+  /* float 3-component */
+  float			(*float3_image)[3];
+  /* float 4-component */
+  float			(*float4_image)[4];
 
   /* Phase One black level data; */
   short  (*ph1_cblack)[2];
@@ -370,61 +515,82 @@ typedef struct
 
 typedef struct
 {
-	unsigned long long LensID;
-	char	Lens[128];
-	ushort	LensFormat;    /* to characterize the image circle the lens covers */
-	ushort	LensMount;     /* 'male', lens itself */
-	unsigned long long  CamID;
-	ushort	CameraFormat;  /* some of the sensor formats */
-	ushort	CameraMount;   /* 'female', body throat */
-	char	body[64];
-	short	FocalType;       /* -1/0 is unknown; 1 is fixed focal; 2 is zoom */
-	char	LensFeatures_pre[16], LensFeatures_suf[16];
-	float	MinFocal, MaxFocal;
-	float	MaxAp4MinFocal, MaxAp4MaxFocal, MinAp4MinFocal, MinAp4MaxFocal;
-	float	MaxAp, MinAp;
-	float	CurFocal, CurAp;
-	float	MaxAp4CurFocal, MinAp4CurFocal;
-	float	LensFStops;
-	unsigned long long TeleconverterID;
-	char	Teleconverter[128];
-	unsigned long long AdapterID;
-	char	Adapter[128];
-	unsigned long long AttachmentID;
-	char	Attachment[128];
-	short CanonFocalUnits;
-	float	FocalLengthIn35mmFormat;
+  unsigned long long LensID;
+  char         Lens[128];
+  ushort       LensFormat;    /* to characterize the image circle the lens covers */
+  ushort       LensMount;     /* 'male', lens itself */
+  unsigned long long  CamID;
+  ushort       CameraFormat;  /* some of the sensor formats */
+  ushort       CameraMount;   /* 'female', body throat */
+  char         body[64];
+  short        FocalType;       /* -1/0 is unknown; 1 is fixed focal; 2 is zoom */
+  char         LensFeatures_pre[16], LensFeatures_suf[16];
+  float        MinFocal, MaxFocal;
+  float        MaxAp4MinFocal, MaxAp4MaxFocal, MinAp4MinFocal, MinAp4MaxFocal;
+  float        MaxAp, MinAp;
+  float        CurFocal, CurAp;
+  float        MaxAp4CurFocal, MinAp4CurFocal;
+  float        MinFocusDistance;
+  float        FocusRangeIndex;
+  float        LensFStops;
+  unsigned long long TeleconverterID;
+  char         Teleconverter[128];
+  unsigned long long AdapterID;
+  char         Adapter[128];
+  unsigned long long AttachmentID;
+  char         Attachment[128];
+  ushort        CanonFocalUnits;
+  float        FocalLengthIn35mmFormat;
 } libraw_makernotes_lens_t;
 
 typedef struct
 {
-	float NikonEffectiveMaxAp;
-	uchar NikonLensIDNumber, NikonLensFStops, NikonMCUVersion, NikonLensType;
+  float        NikonEffectiveMaxAp;
+  uchar        NikonLensIDNumber, NikonLensFStops, NikonMCUVersion, NikonLensType;
 } libraw_nikonlens_t;
 
 typedef struct
 {
-	float MinFocal, MaxFocal, MaxAp4MinFocal, MaxAp4MaxFocal;
+  float        MinFocal, MaxFocal, MaxAp4MinFocal, MaxAp4MaxFocal;
 } libraw_dnglens_t;
 
 typedef struct
 {
-	float MinFocal, MaxFocal, MaxAp4MinFocal, MaxAp4MaxFocal, EXIF_MaxAp;
-	char LensMake[128], Lens[128];
-	ushort FocalLengthIn35mmFormat;
-	libraw_nikonlens_t nikon;
-	libraw_dnglens_t dng;
-	libraw_makernotes_lens_t makernotes;
+  float        MinFocal, MaxFocal, MaxAp4MinFocal, MaxAp4MaxFocal, EXIF_MaxAp;
+  char         LensMake[128], Lens[128];
+  ushort       FocalLengthIn35mmFormat;
+  libraw_nikonlens_t nikon;
+  libraw_dnglens_t dng;
+  libraw_makernotes_lens_t makernotes;
 } libraw_lensinfo_t;
 
+typedef struct
+{
+  libraw_canon_makernotes_t canon;
+  libraw_fuji_info_t fuji;
+  libraw_olympus_makernotes_t olympus;
+  libraw_sony_info_t sony;
+} libraw_makernotes_t;
+
+typedef struct
+{
+	short DriveMode;
+	short FocusMode;
+	short MeteringMode;
+	short AFPoint;
+	short ExposureMode;
+	short ImageStabilization;
+} libraw_shootinginfo_t;
 
 typedef struct
 {
   ushort                      (*image)[4] ;
   libraw_image_sizes_t        sizes;
   libraw_iparams_t            idata;
-  libraw_lensinfo_t			  lens;
-  libraw_output_params_t		params;
+  libraw_lensinfo_t           lens;
+  libraw_makernotes_t         makernotes;
+  libraw_shootinginfo_t       shootinginfo;
+  libraw_output_params_t      params;
   unsigned int                progress_flags;
   unsigned int                process_warnings;
   libraw_colordata_t          color;
@@ -438,5 +604,33 @@ typedef struct
 #ifdef __cplusplus
 }
 #endif
+
+/* Byte order */
+#if defined(__POWERPC__)
+#define LibRawBigEndian 1
+
+#elif defined(__INTEL__)
+#define LibRawBigEndian 0
+
+#elif defined(_M_IX86)
+#define LibRawBigEndian 0
+
+#elif defined(_M_X64) || defined(__amd64__)
+#define LibRawBigEndian 0
+
+#elif defined(__LITTLE_ENDIAN__)
+#define LibRawBigEndian 0
+
+#elif defined(__BIG_ENDIAN__)
+#define LibRawBigEndian 1
+#elif defined(_ARM_)
+#define LibRawBigEndian 0
+#else
+#ifndef qXCodeRez
+#error Unable to figure out byte order.
+#endif
+#endif
+
+
 
 #endif
