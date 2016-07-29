@@ -28,10 +28,9 @@
 
 // QT includes
 
-#include <QString>
-#include <QVariant>
-#include <QObject>
+#include <QProcess>
 #include <QThread>
+#include <QString>
 
 // Local includes
 
@@ -56,7 +55,7 @@ public:
         notRunning,
         stopped
     };
-    DatabaseServer::DatabaseServerStateEnum databaseServerStateEnum;
+    DatabaseServerStateEnum databaseServerStateEnum;
 
 public:
 
@@ -89,19 +88,51 @@ protected :
 private:
 
     /**
-     * Init and Starts Mysql server.
+     * Inits and Starts Mysql server.
      */
-    DatabaseServerError startMYSQLDatabaseProcess();
+    DatabaseServerError startMysqlDatabaseProcess();
 
     /**
-     * Creates the initial database for the internal server instance.
+     * Checks if Mysql binaries and database directories exists and creates
+     * the latter if necessary.
      */
-    DatabaseServerError createDatabase();
+    DatabaseServerError checkDatabaseDirs() const;
+
+    /**
+     * Finds and updates (if necessary) configuration files for the mysql
+     * server.
+     */
+    DatabaseServerError initMysqlConfig() const;
+
+    /**
+     * Remove mysql error log files.
+     */
+    void removeMysqlLogs() const;
+
+    /**
+     * Creates initial Mysql database files for internal server.
+     */
+    DatabaseServerError createMysqlFiles() const;
+
+    /**
+     * Starts the server for the internal database.
+     */
+    DatabaseServerError startMysqlServer();
+
+    /**
+     * Creates or connects to database digikam in mysql.
+     */
+    DatabaseServerError initMysqlDatabase() const;
 
     /**
      * Return the current user account name.
      */
     QString getcurrentAccountUserName() const;
+
+    /**
+     * Returns i18n converted error message and writes to qCDebug.
+     */
+    QString processErrorLog(QProcess* const process, const QString& msg) const;
 
 private:
 

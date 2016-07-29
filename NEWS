@@ -348,4 +348,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 324 ==> 366124 - Corrected spelling in first run widgets [patch].
 325 ==> 325655 - MIGRATION : after MySQL to Sqlite database conversion, random tags are assigned to new images.
 326 ==> 339607 - MYSQL : Images not show if corresponding ImageInformation entry does not exist in database [patch].
-327 ==> 
+327 ==> 366219 - Setting up internal mysql database fails [patch].
+328 ==> 
