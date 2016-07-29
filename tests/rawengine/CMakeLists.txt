@@ -46,7 +46,13 @@ macro(LIBRAW_BUILD_SAMPLES)
 
     add_executable(${_target} ${${_target}_SRCS})
 
-    target_link_libraries(${_target} libraw ${OPENMP_LDFLAGS} ${CMAKE_THREAD_LIBS_INIT} libdng)
+    target_link_libraries(${_target}
+                          ${OPENMP_LDFLAGS}
+                          ${CMAKE_THREAD_LIBS_INIT}
+                          digikamcore
+                          libraw
+                          libdng
+    )
 
     if(WIN32)
         target_link_libraries(${_target} ws2_32)
