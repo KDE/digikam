@@ -7,7 +7,7 @@
 # =======================================================
 # DNGVALIDATE tool from DNG SDK
 
-set(dngvalidate_SRCS ../extra/dng_sdk/dng_validate.cpp)
+set(dngvalidate_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/dngwriter/extra/dng_sdk/dng_validate.cpp)
 
 add_executable(dngvalidate ${dngvalidate_SRCS})
 ecm_mark_nongui_executable(dngvalidate)

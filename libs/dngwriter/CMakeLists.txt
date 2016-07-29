@@ -186,5 +186,3 @@ set(libdngwriter_SRCS
 )
 
 add_library(dngwriter_src OBJECT ${libdngwriter_SRCS})
-
-add_subdirectory(tests)
