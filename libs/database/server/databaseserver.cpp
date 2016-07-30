@@ -636,6 +636,7 @@ QString DatabaseServer::getcurrentAccountUserName() const
 
 QString DatabaseServer::processErrorLog(QProcess* const process, const QString& msg) const
 {
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << msg;
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Executable:"
                                         << process->program();
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Arguments:"
