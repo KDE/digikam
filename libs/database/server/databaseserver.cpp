@@ -253,7 +253,7 @@ DatabaseServerError DatabaseServer::checkDatabaseDirs() const
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql server command set in configuration file!";
 
         return DatabaseServerError(DatabaseServerError::StartError,
-                                   i18n("No path to mysql server command set"
+                                   i18n("No path to mysql server command set "
                                         "in configuration file!"));
     }
 
@@ -262,7 +262,7 @@ DatabaseServerError DatabaseServer::checkDatabaseDirs() const
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No path to mysql initialization command set in configuration file!";
 
         return DatabaseServerError(DatabaseServerError::StartError,
-                                   i18n("No path to mysql initialization"
+                                   i18n("No path to mysql initialization "
                                         "command set in configuration file!."));
     }
 
@@ -396,7 +396,7 @@ DatabaseServerError DatabaseServer::initMysqlConfig() const
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Cannot find MySQL server default configuration (mysql-global.conf)";
 
         return DatabaseServerError(DatabaseServerError::StartError,
-                                   i18n("Cannot find MySQL server default"
+                                   i18n("Cannot find MySQL server default "
                                         "configuration (mysql-global.conf)."));
     }
 
