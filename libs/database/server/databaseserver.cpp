@@ -438,19 +438,19 @@ DatabaseServerError DatabaseServer::createMysqlFiles() const
 {
     DatabaseServerError result;
 
-    // Synthesize the server initialization command line arguments
-
-    QStringList mysqlInitCmdArgs;
-    mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(d->dataDir));
-
-#ifndef Q_OS_WIN
-    mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(d->actualConfig));
-#endif
-
     // Initialize the database
 
     if (!QFile(QDir(d->dataDir).absoluteFilePath(QLatin1String("mysql"))).exists())
     {
+        // Synthesize the server initialization command line arguments
+
+        QStringList mysqlInitCmdArgs;
+        mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--datadir=%1").arg(d->dataDir));
+
+#ifndef Q_OS_WIN
+        mysqlInitCmdArgs << QDir::toNativeSeparators(QString::fromLatin1("--defaults-file=%1").arg(d->actualConfig));
+#endif
+
         QProcess initProcess;
         initProcess.start(d->mysqldInitPath, mysqlInitCmdArgs);
 
