@@ -189,7 +189,7 @@ void AlbumWatch::removeWatchedPAlbums(const PAlbum* const album)
 
     foreach(const QString& dir, d->dirWatch->directories())
     {
-        if (dir.contains(album->folderPath()))
+        if (dir.startsWith(album->folderPath()))
         {
             d->dirWatch->removePath(dir);
         }
