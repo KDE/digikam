@@ -350,4 +350,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 326 ==> 339607 - MYSQL : Images not show if corresponding ImageInformation entry does not exist in database [patch].
 327 ==> 366219 - Setting up internal mysql database fails [patch].
 328 ==> 365596 - Deleting Albums and renaming not possible.
-329 ==> 
+329 ==> 345649 - Assigning "Rejected" label using Alt+1 shortcut leaves focus on menu.
+330 ==> 
