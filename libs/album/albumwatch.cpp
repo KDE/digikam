@@ -160,6 +160,9 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
     connect(parent, SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
+    connect(parent, SIGNAL(signalAlbumRenamed(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
     connect(parent, SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
             this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
 }
@@ -174,6 +177,22 @@ void AlbumWatch::clear()
     if (d->dirWatch)
     {
         d->dirWatch->removePaths(d->dirWatch->directories());
+    }
+}
+
+void AlbumWatch::removeWatchedPAlbums(const PAlbum* const album)
+{
+    if (!album)
+    {
+        return;
+    }
+
+    foreach(const QString& dir, d->dirWatch->directories())
+    {
+        if (dir.contains(album->folderPath()))
+        {
+            d->dirWatch->removePath(dir);
+        }
     }
 }
 

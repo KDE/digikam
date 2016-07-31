@@ -606,6 +606,8 @@ public:
     bool isShowingOnlyAvailableAlbums() const;
     void setShowOnlyAvailableAlbums(bool onlyAvailable);
 
+    void removeWatchedPAlbums(const PAlbum* const album);
+
     //@}
 
 Q_SIGNALS:

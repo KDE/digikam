@@ -391,6 +391,10 @@ void DIO::move(const PAlbum* src, const PAlbum* const dest)
         return;
     }
 
+#ifdef Q_OS_WIN
+    AlbumManager::instance()->removeWatchedPAlbums(src);
+#endif
+
     instance()->d->albumToAlbum(Move, src, dest);
 }
 
@@ -473,6 +477,10 @@ void DIO::del(const PAlbum* const album, bool useTrash)
     {
         return;
     }
+
+#ifdef Q_OS_WIN
+    AlbumManager::instance()->removeWatchedPAlbums(album);
+#endif
 
     instance()->createJob(useTrash ? Trash : Delete, QList<QUrl>() << album->fileUrl(), QUrl());
 }

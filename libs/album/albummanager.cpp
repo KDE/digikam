@@ -2275,6 +2275,10 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         return false;
     }
 
+#ifdef Q_OS_WIN
+    d->albumWatch->removeWatchedPAlbums(album);
+#endif
+
     QString oldAlbumPath = album->albumPath();
     QUrl oldUrl          = album->fileUrl();
     album->setTitle(newName);
@@ -2290,6 +2294,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     if (!ret)
     {
+        ScanController::instance()->resumeCollectionScan();
+
         errMsg = i18n("Failed to rename Album");
         return false;
     }
@@ -3463,6 +3469,11 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
         default:
             break;
     }
+}
+
+void AlbumManager::removeWatchedPAlbums(const PAlbum* const album)
+{
+    d->albumWatch->removeWatchedPAlbums(album);
 }
 
 }  // namespace Digikam
