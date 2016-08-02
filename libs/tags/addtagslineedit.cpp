@@ -160,16 +160,11 @@ void AddTagsLineEdit::setAllowExceedBound(bool value)
 
 void AddTagsLineEdit::slotReturnPressed()
 {
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "slot return pressed";
-
     if (text().isEmpty())
     {
         //focus back to mainview
         emit taggingActionFinished();
-        return;
     }
-
-    emit taggingActionActivated(currentTaggingAction());
 }
 
 void AddTagsLineEdit::slotEditingFinished()
