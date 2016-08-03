@@ -139,6 +139,7 @@ public:
         }
 
         QAction* const action = new QAction(mainAction->icon(), mainAction->text(), q);
+        action->setShortcut(mainAction->shortcut());
         action->setToolTip(mainAction->toolTip());
         return action;
     }
