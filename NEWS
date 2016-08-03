@@ -352,4 +352,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 328 ==> 365596 - Deleting Albums and renaming not possible.
 329 ==> 345649 - Assigning "Rejected" label using Alt+1 shortcut leaves focus on menu.
 330 ==> 366316 - Adding tag results in duplicate tag error.
-331 ==> 
+331 ==> 366348 - WISH: Saving metadata to video files.
+332 ==> 
