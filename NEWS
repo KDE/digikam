@@ -355,4 +355,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 331 ==> 366348 - WISH: Saving metadata to video files.
 332 ==> 287081 - F2 renames image, not Album in Thumbnails mode.
 333 ==> 366361 - createReadWriteLock and createMetadataProcessor should not be pure virtual.
-334 ==> 
+334 ==> 366109 - Slideshow freezes on first image (Windows).
+335 ==> 
