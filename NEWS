@@ -354,4 +354,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 330 ==> 366316 - Adding tag results in duplicate tag error.
 331 ==> 366348 - WISH: Saving metadata to video files.
 332 ==> 287081 - F2 renames image, not Album in Thumbnails mode.
-333 ==> 
+333 ==> 366361 - createReadWriteLock and createMetadataProcessor should not be pure virtual.
+334 ==> 
