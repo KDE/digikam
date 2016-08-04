@@ -466,14 +466,31 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
 
         // atomic rename
 
-#ifndef Q_OS_WIN
-        if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
+        if (DMetadata::hasSidecar(tempFile))
+        {
+            QString sidecarTemp = DMetadata::sidecarPath(tempFile);
+            QString sidecarDest = DMetadata::sidecarPath(dest);
+
+#ifdef Q_OS_WIN
+            if (::MoveFileEx((LPCWSTR)sidecarTemp.utf16(), (LPCWSTR)sidecarDest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
 #else
+            if (::rename(QFile::encodeName(sidecarTemp).constData(), QFile::encodeName(sidecarDest).constData()) != 0)
+#endif
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming sidecar file" << sidecarTemp << "to" << sidecarDest << "failed";
+                unlinkLater << sidecarTemp;
+                break;
+            }
+        }
+
+#ifdef Q_OS_WIN
         if (::MoveFileEx((LPCWSTR)tempFile.utf16(), (LPCWSTR)dest.utf16(), MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH) == 0)
+#else
+        if (::rename(QFile::encodeName(tempFile).constData(), QFile::encodeName(dest).constData()) != 0)
 #endif
         {
-            unlinkLater << tempFile;
             qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming" << tempFile << "to" << dest << "failed";
+            unlinkLater << tempFile;
             break;
         }
     }
