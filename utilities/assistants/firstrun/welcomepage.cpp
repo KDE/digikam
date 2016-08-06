@@ -63,10 +63,23 @@ WelcomePage::WelcomePage(FirstRunDlg* const dlg)
                         "It is recommended to create a backup of your database "
                         "before proceeding.</p>"
                         "<p>The new location for configuration files is "
-                        "~/.config (old ~/.kde4/share/config). There are "
-                        "unresolved crashes reported when reusing old files, "
-                        "so it is not recommended and at your own risk.</p>"
-                        "</qt>", QLatin1String(digikam_version_short)));
+                        "%2 (old %3). "
+                        "There are unresolved problems reported when re-using old "
+                        "configuration files, so it is not recommended to do it "
+                        "for the moment, and at your own risk.</p>"
+                        "</qt>",
+                        QLatin1String(digikam_version_short),
+#if defined Q_OS_WIN
+                        // Windows settings place.
+                        QLatin1String("~/Local Settings/"), QLatin1String("~/AppData/Local/")
+#elif defined Q_OS_OSX
+                        // MacOS settings place.
+                        QLatin1String("~/Library/Preferences/"), QLatin1String("~/Library/Preferences/KDE/share/config/")
+#else
+			// Linux settings place.
+                        QLatin1String("~/.config/"), QLatin1String("~/.kde4/share/config")
+#endif                        
+                  ));
 
     setPageWidget(vbox);
 }
