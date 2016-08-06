@@ -357,4 +357,5 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 333 ==> 366361 - createReadWriteLock and createMetadataProcessor should not be pure virtual.
 334 ==> 366109 - Slideshow freezes on first image (Windows).
 335 ==> 366391 - rotating an image seems to forget to reset the orientation flag.
-336 ==> 
+336 ==> 366446 - Creating new albums fails due to invalid path name.
+337 ==> 
