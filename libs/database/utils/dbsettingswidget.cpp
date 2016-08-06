@@ -358,7 +358,9 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<p>...</p>"
                                                "<p>Enter SQL code to Mysql prompt in order to init digiKam databases with grant privileges (see behind)</p>"
                                                "<p>...</p>"
-                                               "<p>quit</p>"),
+                                               "<p>quit</p>"
+                                               "<p>NOTE: If you've an enormous collection, you should start MySQL server with "
+                                               "mysql --max_allowed_packet=128M OR in my.ini or ~/.my.cnf, change the settings</p>"),
                                           d->dbNoticeBox);
     notice2->setWordWrap(true);
 
