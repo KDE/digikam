@@ -358,4 +358,3 @@ BUGFIXES FROM KDE BUGZILLA (https://www.digikam.org/changelog):
 334 ==> 366109 - Slideshow freezes on first image (Windows).
 335 ==> 366391 - Rotating an image seems to forget to reset the orientation flag.
 336 ==> 366445 - MySQL Schema upgrade from V7 to V8 fails [patch].
-337 ==> 
