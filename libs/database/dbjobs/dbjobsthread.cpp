@@ -59,7 +59,7 @@ void DBJobsThread::connectFinishAndErrorSignals(DBJob* const j)
             this, SLOT(error(QString)));
 }
 
-void DBJobsThread::error(const QString &errString)
+void DBJobsThread::error(const QString& errString)
 {
     m_errorsList.append(errString);
 }

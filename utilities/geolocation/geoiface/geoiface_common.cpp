@@ -109,7 +109,7 @@ GeoIfaceGlobalObject* GeoIfaceGlobalObject::instance()
     return &(geoifaceGlobalObjectCreator->object);
 }
 
-QPixmap GeoIfaceGlobalObject::getMarkerPixmap(const QString pixmapId)
+QPixmap GeoIfaceGlobalObject::getMarkerPixmap(const QString& pixmapId)
 {
     if (d->markerPixmaps.isEmpty())
     {
@@ -124,7 +124,7 @@ QPixmap GeoIfaceGlobalObject::getStandardMarkerPixmap()
     return getMarkerPixmap(QLatin1String("00ff00"));
 }
 
-QUrl GeoIfaceGlobalObject::locateDataFile(const QString filename)
+QUrl GeoIfaceGlobalObject::locateDataFile(const QString& filename)
 {
     const QUrl dataFile = QUrl::fromLocalFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/geoiface/") + filename));
     qCDebug(DIGIKAM_GEOIFACE_LOG) << "located data: " << dataFile;

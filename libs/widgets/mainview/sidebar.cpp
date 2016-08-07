@@ -185,7 +185,7 @@ DMultiTabBarButton::~DMultiTabBarButton()
 {
 }
 
-void DMultiTabBarButton::setText(const QString &text)
+void DMultiTabBarButton::setText(const QString& text)
 {
     QPushButton::setText(text);
 }

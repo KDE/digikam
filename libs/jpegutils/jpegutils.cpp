@@ -495,7 +495,7 @@ bool JpegRotator::exifTransform(const MetaEngineRotation& matrix)
         }
     }
 
-    foreach (const QString tempFile, unlinkLater)
+    foreach (const QString& tempFile, unlinkLater)
     {
         ::unlink(QFile::encodeName(tempFile).constData());
     }

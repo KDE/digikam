@@ -134,7 +134,7 @@ public:
      * Returns true if the format is accepted.
      */
     bool setLatitude(const QString& latitude);
-    bool setLongitude(const QString longitude);
+    bool setLongitude(const QString& longitude);
 
     /**
      * Sets the latitude/longitude from a double floating point number,

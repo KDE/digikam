@@ -55,7 +55,7 @@ public:
      * @param imageToDelete: path to image
      * @return true if the image was deleted
      */
-    static bool deleteImage(const QString &imageToDelete);
+    static bool deleteImage(const QString& imageToDelete);
 
     /**
      * @brief Deletes a whole folder from the collection

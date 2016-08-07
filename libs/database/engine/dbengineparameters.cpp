@@ -621,7 +621,7 @@ QString DbEngineParameters::faceDatabaseDirectorySQLite(const QString& path)
     return path;
 }
 
-DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseType)
+DbEngineParameters DbEngineParameters::defaultParameters(const QString& databaseType)
 {
     DbEngineParameters parameters;
 

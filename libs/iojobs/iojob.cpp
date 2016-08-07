@@ -292,7 +292,7 @@ void RenameFileJob::run()
 
 // ----------------------------------------------
 
-DTrashItemsListingJob::DTrashItemsListingJob(const QString &collectionPath)
+DTrashItemsListingJob::DTrashItemsListingJob(const QString& collectionPath)
 {
     m_collectionPath = collectionPath;
 }

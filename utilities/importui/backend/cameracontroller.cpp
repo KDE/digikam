@@ -1074,7 +1074,7 @@ void CameraController::listRootFolder(bool useMetadata)
     listFiles(d->camera->path(), useMetadata);
 }
 
-void CameraController::listFolders(const QString &folder)
+void CameraController::listFolders(const QString& folder)
 {
     d->canceled              = false;
     CameraCommand* const cmd = new CameraCommand;

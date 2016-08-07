@@ -106,7 +106,7 @@ public:
     /**
      * Return a set of default parameters for the given type. For Mysql, it return internal server configuration.
      */
-    static DbEngineParameters defaultParameters(const QString databaseType);
+    static DbEngineParameters defaultParameters(const QString& databaseType);
 
     static DbEngineParameters parametersFromConfig(KSharedConfig::Ptr config = KSharedConfig::openConfig(),
                                                    const QString& configGroup = QString());

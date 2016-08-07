@@ -235,7 +235,7 @@ public:
         }
     }
 
-    QList<int> tagsForFragment(bool (QString::*stringFunction)(const QString &, Qt::CaseSensitivity cs) const,
+    QList<int> tagsForFragment(bool (QString::*stringFunction)(const QString&, Qt::CaseSensitivity cs) const,
                                const QString& fragment, Qt::CaseSensitivity caseSensitivity, HiddenTagsPolicy hiddenTagsPolicy);
 };
 
@@ -1108,7 +1108,7 @@ QStringList TagsCache::shortenedTagPaths(const QList<int>& ids,
     return ImagePropertiesTab::shortenedTagPaths(tagPaths(ids, slashPolicy, hiddenTagsPolicy));
 }
 
-QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(const QString &, Qt::CaseSensitivity cs) const,
+QList<int> TagsCache::Private::tagsForFragment(bool (QString::*stringFunction)(const QString&, Qt::CaseSensitivity cs) const,
                                                      const QString& fragment,
                                                      Qt::CaseSensitivity caseSensitivity,
                                                      HiddenTagsPolicy hiddenTagsPolicy)

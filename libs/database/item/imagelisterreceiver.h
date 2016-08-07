@@ -74,7 +74,7 @@ class DIGIKAM_DATABASE_EXPORT ImageListerJobReceiver : public ImageListerValueLi
 public:
 
     explicit ImageListerJobReceiver(DBJob *const job);
-    virtual void error(const QString &errMsg);
+    virtual void error(const QString& errMsg);
     void sendData();
 
 protected:
