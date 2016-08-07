@@ -91,7 +91,7 @@ public:
     {
     }
 
-    explicit TableViewColumnDescription(const QString& id, const QString title,
+    explicit TableViewColumnDescription(const QString& id, const QString& title,
                                         const QString& settingKey = QString(),
                                         const QString& settingValue = QString())
       : columnId(id),
@@ -145,7 +145,7 @@ public:
         return *this;
     }
 
-    static bool FindInListById(const TableViewColumnDescription::List& listToSearch, const QString targetId, TableViewColumnDescription* const resultDescription)
+    static bool FindInListById(const TableViewColumnDescription::List& listToSearch, const QString& targetId, TableViewColumnDescription* const resultDescription)
     {
         TableViewColumnDescription::List leftToSearch = listToSearch;
 

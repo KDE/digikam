@@ -670,7 +670,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
     }
 }
 
-bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, const QString suggestedAlbumRoot)
+bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, const QString& suggestedAlbumRoot)
 {
     // This is to ensure that the setup does not overrule the command line.
     // TODO: there is a bug that setup is showing something different here.

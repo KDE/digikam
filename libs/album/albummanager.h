@@ -91,7 +91,7 @@ public:
      * A return value of false during startup indicates termination of the program
      * (user is informed)
      */
-    bool setDatabase(const DbEngineParameters& params, bool priority, const QString suggestedAlbumRoot = QString());
+    bool setDatabase(const DbEngineParameters& params, bool priority, const QString& suggestedAlbumRoot = QString());
 
     /**
      * Some checks for settings done in first run wizard in case of QSlite Database.
