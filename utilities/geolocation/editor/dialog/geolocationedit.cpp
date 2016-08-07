@@ -995,7 +995,7 @@ void GeolocationEdit::slotProgressSetup(const int maxProgress, const QString& pr
     d->progressBar->setProgressTotalSteps(maxProgress);
     d->progressBar->setProgressValue(0);
     d->progressBar->setNotify(true);
-    d->progressBar->setNotificationTitle(i18n("Edit Geolocation"), QIcon::fromTheme(QLatin1String("internet-web-browser")));
+    d->progressBar->setNotificationTitle(i18n("Edit Geolocation"), QIcon::fromTheme(QLatin1String("folder-html")));
     d->progressBar->setVisible(true);
     d->progressCancelButton->setVisible(d->progressCancelObject != 0);
 }

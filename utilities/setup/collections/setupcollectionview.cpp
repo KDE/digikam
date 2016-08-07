@@ -737,7 +737,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                             return QIcon::fromTheme(QLatin1String("drive-removable-media"));
 
                         case CategoryRemote:
-                            return QIcon::fromTheme(QLatin1String("network-wired"));
+                            return QIcon::fromTheme(QLatin1String("network-wired-activated"));
                     }
 
                     break;
@@ -830,7 +830,7 @@ QVariant SetupCollectionModel::data(const QModelIndex& index, int role) const
                                     return QIcon::fromTheme(QLatin1String("drive-removable-media-usb")).pixmap(16, QIcon::Disabled);
 
                                 case CategoryRemote:
-                                    return QIcon::fromTheme(QLatin1String("network-wired")).pixmap(16, QIcon::Disabled);
+                                    return QIcon::fromTheme(QLatin1String("network-wired-activated")).pixmap(16, QIcon::Disabled);
                             }
 
                         case CollectionLocation::LocationNull:

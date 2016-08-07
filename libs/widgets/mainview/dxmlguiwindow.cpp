@@ -221,16 +221,16 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     connect(rawCameraListAction, SIGNAL(triggered()), this, SLOT(slotRawCameraList()));
     actionCollection()->addAction(QLatin1String("help_rawcameralist"), rawCameraListAction);
 
-    QAction* const donateMoneyAction   = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Donate..."), this);
+    QAction* const donateMoneyAction   = new QAction(QIcon::fromTheme(QLatin1String("folder-html")), i18n("Donate..."), this);
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction(QLatin1String("help_donatemoney"), donateMoneyAction);
 
 
-    QAction* const recipesBookAction   = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Recipes Book..."), this);
+    QAction* const recipesBookAction   = new QAction(QIcon::fromTheme(QLatin1String("folder-html")), i18n("Recipes Book..."), this);
     connect(recipesBookAction, SIGNAL(triggered()), this, SLOT(slotRecipesBook()));
     actionCollection()->addAction(QLatin1String("help_recipesbook"), recipesBookAction);
 
-    QAction* const contributeAction    = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Contribute..."), this);
+    QAction* const contributeAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-html")), i18n("Contribute..."), this);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction(QLatin1String("help_contribute"), contributeAction);
 
@@ -386,7 +386,7 @@ void DXmlGuiWindow::slotNewToolbarConfig()
 void DXmlGuiWindow::createGeolocationEditAction()
 {
 #ifdef HAVE_MARBLE
-    m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")), i18n("Edit Geolocation..."), this);
+    m_geolocationEditAction = new QAction(QIcon::fromTheme(QLatin1String("folder-html")), i18n("Edit Geolocation..."), this);
     actionCollection()->addAction(QLatin1String("geolocation_edit"), m_geolocationEditAction);
     actionCollection()->setDefaultShortcut(m_geolocationEditAction, Qt::CTRL + Qt::SHIFT + Qt::Key_G);
 

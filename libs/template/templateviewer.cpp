@@ -199,7 +199,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->locationProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->locationCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    addItem(w2, QIcon::fromTheme(QLatin1String("internet-web-browser")),
+    addItem(w2, QIcon::fromTheme(QLatin1String("folder-html")),
             i18n("Location"), QLatin1String("Location"), true);
 
     // ------------------------------------------------------------------

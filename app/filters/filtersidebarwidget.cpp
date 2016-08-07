@@ -135,7 +135,7 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     // --------------------------------------------------------------------------------------------------------
 
     d->geolocationFilter = new GeolocationFilter(d->expbox);
-    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme(QLatin1String("internet-web-browser")),
+    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme(QLatin1String("folder-html")),
                        i18n("Geolocation Filter"), QLatin1String("TypeGeolocationFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------

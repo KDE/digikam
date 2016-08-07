@@ -1133,7 +1133,7 @@ CollectionManager::LocationCheckResult CollectionManager::checkNetworkLocation(c
 
     if (iconName)
     {
-        *iconName = QLatin1String("network-wired");
+        *iconName = QLatin1String("network-wired-activated");
     }
 
     return LocationAllRight;

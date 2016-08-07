@@ -817,7 +817,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->renameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Rename..."), this);
+    d->renameAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Rename..."), this);
     connect(d->renameAction, SIGNAL(triggered()), d->view, SLOT(slotRenameAlbum()));
     ac->addAction(QLatin1String("album_rename"), d->renameAction);
     ac->setDefaultShortcut(d->renameAction, Qt::SHIFT + Qt::Key_F2);
@@ -914,7 +914,7 @@ void DigikamApp::setupActions()
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
 #ifdef HAVE_MARBLE
-    d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")),
+    d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-html")),
                                         i18nc("@action Switch to map view", "Map"), this);
     d->imageMapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("map_view"), d->imageMapViewAction);
