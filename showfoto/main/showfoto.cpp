@@ -202,7 +202,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     // -- Load current items ---------------------------
     slotDroppedUrls(urlList);
 
-    if(!d->infoList.isEmpty())
+    if (!d->infoList.isEmpty())
     {
         slotOpenUrl(d->infoList.at(0));
     }
@@ -534,12 +534,6 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
 
 void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 {
-    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
-    {
-        d->thumbBar->setCurrentUrl(info.url);
-        return;
-    }
-
     if (d->thumbBar->currentInfo().isNull())
     {
         return;
@@ -587,11 +581,13 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
 void ShowFoto::slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info)
 {
-    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->currentLoadedUrl))
+    {
+        d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
+        return;
+    }
 
     slotOpenUrl(info);
-
-    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
 }
 
 Digikam::ThumbBarDock* ShowFoto::thumbBar() const
@@ -1244,7 +1240,7 @@ void ShowFoto::openFolder(const QUrl& url)
         infos.append(iteminfo);
     }
 
-    if(d->droppedUrls)
+    if (d->droppedUrls)
     {
         d->infoList << infos;
     }

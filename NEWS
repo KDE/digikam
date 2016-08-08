@@ -6,4 +6,5 @@ NEW FEATURES:
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 
+001 ==> 366518 - Showfoto writes to wrong file when switching between images.
+002 ==> 
