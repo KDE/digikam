@@ -150,11 +150,6 @@ public:
      */
     static int librawUseGomp();
 
-    /** Return true or false if LibRaw use RawSpeed codec or not.
-     *  Return -1 if undefined.
-     */
-    static int librawUseRawSpeed();
-
     static bool isRawFile(const QUrl& url);
 
 public:

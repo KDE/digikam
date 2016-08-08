@@ -93,12 +93,10 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 
     QMap<QString, QString> list;
     list.insert(i18nc(CONTEXT, "Qt"),                          QLatin1String(qVersion()));
-    list.insert(i18nc(CONTEXT, "KDE"),                         QLatin1String(KXMLGUI_VERSION_STRING));
+    list.insert(i18nc(CONTEXT, "KF5"),                         QLatin1String(KXMLGUI_VERSION_STRING));
     list.insert(i18nc(CONTEXT, "LibRaw"),                      DRawDecoder::librawVersion());
 
     list.insert(i18nc(CONTEXT, "Parallelized demosaicing"),    checkTriState(DRawDecoder::librawUseGomp()));
-
-    list.insert(i18nc(CONTEXT, "RawSpeed codec support"),      checkTriState(DRawDecoder::librawUseRawSpeed()));
 
 #ifdef HAVE_EIGEN3
     list.insert(i18nc(CONTEXT, "Eigen"),                       QLatin1String(EIGEN3_VERSION_STRING));

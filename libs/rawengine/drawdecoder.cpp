@@ -523,15 +523,6 @@ int DRawDecoder::librawUseGomp()
 #endif
 }
 
-int DRawDecoder::librawUseRawSpeed()
-{
-#ifdef LIBRAW_USE_RAWSPEED
-    return true;
-#else
-    return false;
-#endif
-}
-
 bool DRawDecoder::isRawFile(const QUrl& url)
 {
     QString   rawFilesExt = QLatin1String(rawFiles());
