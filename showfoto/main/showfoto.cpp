@@ -204,7 +204,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
     if (!d->infoList.isEmpty())
     {
-        slotOpenUrl(d->infoList.at(0));
+        slotOpenUrl(d->thumbBar->currentInfo());
     }
 }
 
@@ -476,6 +476,39 @@ void ShowFoto::applySettings()
     d->thumbBar->setToolTipEnabled(d->settings->getShowToolTip());
 
     d->rightSideBar->slotLoadMetadataFilters();
+
+    // Determine sort ordering for the entries from configuration setting:
+
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(configGroupName());
+
+    if (group.readEntry(QLatin1String("ReverseSort"), false))
+    {
+        d->filterModel->setSortOrder(ShowfotoItemSortSettings::DescendingOrder);
+    }
+    else
+    {
+        d->filterModel->setSortOrder(ShowfotoItemSortSettings::AscendingOrder);
+    }
+
+    switch (group.readEntry(QLatin1String("SortOrder"), (int)SetupMisc::SortByDate))
+    {
+        case SetupMisc::SortByName:
+        {
+            d->filterModel->setSortRole(ShowfotoItemSortSettings::SortByFileName);
+            break;
+        }
+        case SetupMisc::SortByFileSize:
+        {
+            d->filterModel->setSortRole(ShowfotoItemSortSettings::SortByFileSize);
+            break;
+        }
+        default:
+        {
+            d->filterModel->setSortRole(ShowfotoItemSortSettings::SortByCreationDate);
+            break;
+        }
+    }
 }
 
 void ShowFoto::slotOpenFile()
@@ -496,7 +529,6 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
         ShowfotoItemInfoList infos;
         ShowfotoItemInfo     iteminfo;
         DMetadata            meta;
-        int i = 0;
 
         for (QList<QUrl>::const_iterator it = urls.constBegin();
              it != urls.constEnd(); ++it)
@@ -514,7 +546,6 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
             iteminfo.height    = meta.getImageDimensions().height();
             iteminfo.photoInfo = meta.getPhotographInformation();
             infos.append(iteminfo);
-            i++;
         }
 
         if (d->droppedUrls)
@@ -527,7 +558,7 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
             d->infoList = infos;
             d->model->clearShowfotoItemInfos();
             emit signalInfoList(d->infoList);
-            slotOpenUrl(d->infoList.first());
+            slotOpenUrl(d->thumbBar->currentInfo());
         }
     }
 }
@@ -551,8 +582,7 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
         QMessageBox::critical(this, i18n("Error Loading File"),
                               i18n("Failed to load file: %1\n"
                                    "Remote file handling is not supported",
-                                   info.url.fileName())
-                             );
+                                   info.url.fileName()));
         return;
     }
 
@@ -655,7 +685,7 @@ bool ShowFoto::setup(bool iccSetupPage)
 
     applySettings();
 
-    if ( d->itemsNb == 0 )
+    if (d->itemsNb == 0)
     {
         slotUpdateItemInfo();
         toggleActions(false);
@@ -700,7 +730,7 @@ void ShowFoto::slotUpdateItemInfo()
     }
 
     m_nameLabel->setText(text);
-    toggleNavigation( index );
+    toggleNavigation(index);
 }
 
 void ShowFoto::slotOpenFolder(const QUrl& url)
@@ -729,8 +759,14 @@ void ShowFoto::slotOpenFilesInFolder()
                                                                      d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile()));
     if (!url.isEmpty())
     {
+
+        m_canvas->load(QString(), m_IOFileSettings);
+        d->thumbBar->showfotoItemInfos().clear();
         d->lastOpenedDirectory = url;
-        slotOpenFolder(url);
+        emit signalNoCurrentItem();
+
+        openFolder(url);
+        toggleNavigation(1);
     }
 }
 
@@ -797,7 +833,7 @@ void ShowFoto::toggleNavigation(int index)
         return;
     }
 
-    if ( d->itemsNb == 0 || d->itemsNb == 1 )
+    if (d->itemsNb == 0 || d->itemsNb == 1)
     {
         m_backwardAction->setEnabled(false);
         m_forwardAction->setEnabled(false);
@@ -880,8 +916,7 @@ void ShowFoto::moveFile()
     {
         QMessageBox::critical(this, i18n("Error Saving File"),
                               i18n("Failed to save file: %1",
-                              i18n("Remote file handling is not supported")
-                            ));
+                              i18n("Remote file handling is not supported")));
     }
 }
 
@@ -971,7 +1006,7 @@ bool ShowFoto::saveAs()
         return false;
     }
 
-    return ( startingSaveAs(d->thumbBar->currentUrl()) );
+    return (startingSaveAs(d->thumbBar->currentUrl()));
 }
 
 void ShowFoto::slotDeleteCurrentItem()
@@ -1003,7 +1038,7 @@ void ShowFoto::slotDeleteCurrentItem()
 
         d->itemsNb = d->thumbBar->showfotoItemInfos().size();
 
-        if ( d->itemsNb == 0 )
+        if (d->itemsNb == 0)
         {
             slotUpdateItemInfo();
             toggleActions(false);
@@ -1150,64 +1185,13 @@ void ShowFoto::openFolder(const QUrl& url)
     // Get all image files from directory.
 
     QDir dir(url.toLocalFile(), patterns);
-    dir.setFilter ( QDir::Files );
+    dir.setFilter (QDir::Files);
     d->dir = dir;
 
     if (!dir.exists())
     {
         return;
     }
-
-    // Determine sort ordering for the entries from configuration setting:
-
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(configGroupName());
-
-    QDir::SortFlags flag;
-    bool            reverse   = group.readEntry(QLatin1String("ReverseSort"), false);
-
-    switch (group.readEntry(QLatin1String("SortOrder"), (int)SetupMisc::SortByDate))
-    {
-        case SetupMisc::SortByName:
-        {
-            flag = QDir::Name;  // Ordering by file name.
-
-            if (reverse)
-            {
-                flag = flag | QDir::Reversed;
-            }
-
-            break;
-        }
-        case SetupMisc::SortByFileSize:
-        {
-            flag = QDir::Size;  // Ordering by file size.
-
-            // Disabled reverse in the settings leads e.g. to increasing file sizes
-            // Note, that this is just the opposite to the sort order for QDir.
-            if (!reverse)
-            {
-                flag = flag | QDir::Reversed;
-            }
-
-            break;
-        }
-        default:
-        {
-            flag = QDir::Time;  // Ordering by file date.
-
-            // Disabled reverse in the settings leads e.g. to increasing dates
-            // Note, that this is just the opposite to the sort order for QDir.
-            if (!reverse)
-            {
-                flag = flag | QDir::Reversed;
-            }
-
-            break;
-        }
-    }
-
-    dir.setSorting(flag);
 
     QFileInfoList fileinfolist = dir.entryInfoList();
 
@@ -1249,10 +1233,10 @@ void ShowFoto::openFolder(const QUrl& url)
         d->infoList = infos;
         d->model->clearShowfotoItemInfos();
         emit signalInfoList(d->infoList);
-        slotOpenUrl(d->infoList.at(0));
+        slotOpenUrl(d->thumbBar->currentInfo());
     }
 
-    d->lastOpenedDirectory = d->infoList.at(0).url;
+    d->lastOpenedDirectory = d->infoList.first().url;
 }
 
 void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
@@ -1305,7 +1289,7 @@ void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)
 
         if (!d->infoList.isEmpty())
         {
-            slotOpenUrl(d->infoList.at(0));
+            slotOpenUrl(d->thumbBar->currentInfo());
         }
         else
         {
