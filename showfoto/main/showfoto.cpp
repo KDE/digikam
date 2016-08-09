@@ -29,17 +29,6 @@
 
 #include "showfoto.h"
 
-// C ANSI includes
-
-extern "C"
-{
-#include <unistd.h>
-}
-
-// C++ includes
-
-#include <cstdio>
-
 // Qt includes
 
 #include <QCursor>
@@ -432,7 +421,7 @@ void ShowFoto::readSettings()
         defaultDir = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     }
 
-    d->lastOpenedDirectory.setPath(defaultDir);
+    d->lastOpenedDirectory = QUrl::fromLocalFile(defaultDir);
 
     d->rightSideBar->loadState();
 
@@ -477,12 +466,9 @@ void ShowFoto::applySettings()
 
     d->rightSideBar->slotLoadMetadataFilters();
 
-    // Determine sort ordering for the entries from configuration setting:
+    // Determine sort ordering for the entries from the Showfoto settings:
 
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(configGroupName());
-
-    if (group.readEntry(QLatin1String("ReverseSort"), false))
+    if (d->settings->getReverseSort())
     {
         d->filterModel->setSortOrder(ShowfotoItemSortSettings::DescendingOrder);
     }
@@ -491,7 +477,7 @@ void ShowFoto::applySettings()
         d->filterModel->setSortOrder(ShowfotoItemSortSettings::AscendingOrder);
     }
 
-    switch (group.readEntry(QLatin1String("SortOrder"), (int)SetupMisc::SortByDate))
+    switch (d->settings->getSortRole())
     {
         case SetupMisc::SortByName:
         {
@@ -527,11 +513,10 @@ void ShowFoto::openUrls(const QList<QUrl> &urls)
     if (!urls.isEmpty())
     {
         ShowfotoItemInfoList infos;
-        ShowfotoItemInfo     iteminfo;
-        DMetadata            meta;
+        ShowfotoItemInfo iteminfo;
+        DMetadata meta;
 
-        for (QList<QUrl>::const_iterator it = urls.constBegin();
-             it != urls.constEnd(); ++it)
+        for (QList<QUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it)
         {
             QFileInfo fi((*it).toLocalFile());
             iteminfo.name      = fi.fileName();
@@ -611,13 +596,16 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
 void ShowFoto::slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info)
 {
-    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->currentLoadedUrl))
+    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
+
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
     {
-        d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
         return;
     }
 
     slotOpenUrl(info);
+
+    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
 }
 
 Digikam::ThumbBarDock* ShowFoto::thumbBar() const
@@ -756,10 +744,9 @@ void ShowFoto::slotOpenFilesInFolder()
     }
 
     QUrl url = QUrl::fromLocalFile(QFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
-                                                                     d->lastOpenedDirectory.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile()));
+                                                                     d->lastOpenedDirectory.toLocalFile()));
     if (!url.isEmpty())
     {
-
         m_canvas->load(QString(), m_IOFileSettings);
         d->thumbBar->showfotoItemInfos().clear();
         d->lastOpenedDirectory = url;
@@ -1185,8 +1172,7 @@ void ShowFoto::openFolder(const QUrl& url)
     // Get all image files from directory.
 
     QDir dir(url.toLocalFile(), patterns);
-    dir.setFilter (QDir::Files);
-    d->dir = dir;
+    dir.setFilter(QDir::Files);
 
     if (!dir.exists())
     {
@@ -1202,8 +1188,8 @@ void ShowFoto::openFolder(const QUrl& url)
     }
 
     QFileInfoList::const_iterator fi;
-    ShowfotoItemInfo iteminfo;
     ShowfotoItemInfoList infos;
+    ShowfotoItemInfo iteminfo;
     DMetadata meta;
 
     // And open all items in image editor.
@@ -1236,7 +1222,7 @@ void ShowFoto::openFolder(const QUrl& url)
         slotOpenUrl(d->thumbBar->currentInfo());
     }
 
-    d->lastOpenedDirectory = d->infoList.first().url;
+    d->lastOpenedDirectory = QUrl::fromLocalFile(dir.absolutePath());
 }
 
 void ShowFoto::slotDroppedUrls(const QList<QUrl>& droppedUrls)

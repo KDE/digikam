@@ -26,10 +26,6 @@
 #ifndef SHOWFOTO_P_H
 #define SHOWFOTO_P_H
 
-// Qt includes
-
-#include <QDir>
-
 // Local includes
 
 #include "showfoto.h"
@@ -82,7 +78,6 @@ public:
     QUrl                             lastOpenedDirectory;
     QAction*                         openFilesInFolderAction;
     QAction*                         first;
-    QDir                             dir;
 
     ShowfotoItemInfoList             infoList;
     ShowfotoThumbnailModel*          model;
