@@ -56,7 +56,7 @@
 using namespace Digikam;
 using namespace FacesEngine;
 
-const QString IMAGE_PATH(QFINDTESTDATA("data/"));
+const QString IMAGE_PATH(QFINDTESTDATA("data/testimages/"));
 
 int main(int argc, char** argv)
 {
