@@ -31,6 +31,7 @@
 #include <QDBusConnection>
 #include <QString>
 #include <QTimer>
+#include <QTest>
 #include <QCommandLineParser>
 #include <QDebug>
 
@@ -55,6 +56,8 @@
 using namespace Digikam;
 using namespace FacesEngine;
 
+const QString IMAGE_PATH(QFINDTESTDATA("data/"));
+
 int main(int argc, char** argv)
 {
     KAboutData aboutData(QString::fromLatin1("digikam"),
@@ -72,8 +75,9 @@ int main(int argc, char** argv)
 
     DbEngineParameters params;
     params.databaseType = DbEngineParameters::SQLiteDatabaseType();
-    params.setCoreDatabasePath(QDir::currentPath() + QLatin1String("/digikam-test.db"));
+    params.setCoreDatabasePath(QDir::currentPath() + QLatin1String("/digikam-core-test.db"));
     params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
+    params.setFaceDatabasePath(QDir::currentPath() + QLatin1String("/digikam-faces-test.db"));
 
     params.legacyAndDefaultChecks();
 
@@ -81,7 +85,7 @@ int main(int argc, char** argv)
                      QString::number(QCoreApplication::instance()->applicationPid()));
 
     // initialize database
-    bool b = AlbumManager::instance()->setDatabase(params, false, QLatin1String("/media/fotos/Digikam Sample/"));
+    bool b = AlbumManager::instance()->setDatabase(params, false, IMAGE_PATH);
 
     qDebug() << "Database initialization done: " << b;
 
