@@ -6,7 +6,7 @@
  * Date        : 2014-11-03
  * Description : calendar system.
  *
- * Copyright 'C) 2014 by John Layt <john at layt dot net>
+ * Copyright (C) 2014 by John Layt <john at layt dot net>
  * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -36,31 +36,31 @@ public:
 
     CalSystemPrivate(CalSystem::CalendarSystem calendar);
 
-    CalSystem::CalendarSystem calendarSystem() const;
-    qint64 epoch() const;
-    qint64 earliestValidDate() const;
-    int    earliestValidYear() const;
-    qint64 latestValidDate() const;
-    int    latestValidYear() const;
-    int    yearOffset() const;
-    int    maxMonthsInYear() const;
-    int    monthsInYear(int year) const;
-    int    maxDaysInYear() const;
-    int    daysInYear(int year) const;
-    int    maxDaysInMonth() const;
-    int    daysInMonth(int year, int month) const;
-    bool   hasYearZero() const;
-    bool   hasLeapMonths() const;
+    CalSystem::CalendarSystem calendarSystem()                         const;
+    qint64 epoch()                                                     const;
+    qint64 earliestValidDate()                                         const;
+    int    earliestValidYear()                                         const;
+    qint64 latestValidDate()                                           const;
+    int    latestValidYear()                                           const;
+    int    yearOffset()                                                const;
+    int    maxMonthsInYear()                                           const;
+    int    monthsInYear(int year)                                      const;
+    int    maxDaysInYear()                                             const;
+    int    daysInYear(int year)                                        const;
+    int    maxDaysInMonth()                                            const;
+    int    daysInMonth(int year, int month)                            const;
+    bool   hasYearZero()                                               const;
+    bool   hasLeapMonths()                                             const;
 
-    int    quarter(int month) const;
-    bool   isLeapYear(int year) const;
+    int    quarter(int month)                                          const;
+    bool   isLeapYear(int year)                                        const;
     void   julianDayToDate(qint64 jd, int* year, int* month, int* day) const;
-    qint64 julianDayFromDate(int year, int month, int day) const;
+    qint64 julianDayFromDate(int year, int month, int day)             const;
 
-    bool   isValidYear(int year) const;
-    bool   isValidMonth(int year, int month) const;
-    int    addYears(int y1, int years) const;
-    int    diffYears(int y1, int y2) const;
+    bool   isValidYear(int year)                                       const;
+    bool   isValidMonth(int year, int month)                           const;
+    int    addYears(int y1, int years)                                 const;
+    int    diffYears(int y1, int y2)                                   const;
 
 public:
 
@@ -108,26 +108,37 @@ qint64 CalSystemPrivate::epoch() const
     {
         case CalSystem::GregorianCalendar:
             return 1721426;  //  0001-01-01 Gregorian
+
         case CalSystem::CopticCalendar:
             return 1825030;  //  0001-01-01 ==  0284-08-29 Gregorian
+
         case CalSystem::EthiopicCalendar:
             return 1724221;  //  0001-01-01 ==  0008-08-29 Gregorian
+
         case CalSystem::EthiopicAmeteAlemCalendar:
             return -284655;  //  0001-01-01 == -5492-08-29 Gregorian
+
         case CalSystem::IndianNationalCalendar:
             return 1749994;  //  0000-01-01 == 0078-03-22 Gregorian
+
         case CalSystem::IslamicCivilCalendar:
             return 1948440;  //  0001-01-01 == 0622-07-19 Gregorian
+
         case CalSystem::ISO8601Calendar:
             return 1721060;  //  0000-01-01 Gregorian
+
         case CalSystem::JapaneseCalendar:
             return 1721426;  //  0001-01-01 Gregorian
+
         case CalSystem::JulianCalendar:
             return 1721424;  //  0001-01-01 ==  Gregorian
+
         case CalSystem::ROCCalendar:
             return 2419403;  //  0001-01-01 ==  1912-01-01 Gregorian
+
         case CalSystem::ThaiCalendar:
             return 1522734;  //  0000-01-01 == -0544-01-01 Gregorian
+
         default:
             return 0;
     }
@@ -139,26 +150,37 @@ qint64 CalSystemPrivate::earliestValidDate() const
     {
         case CalSystem::GregorianCalendar:
             return -31738;   // -4800-01-01 Gregorian
+
         case CalSystem::CopticCalendar:
             return 1825030;  //  0001-01-01 == 0284-08-29 Gregorian
+
         case CalSystem::EthiopicCalendar:
             return 1724221;  //  0001-01-01 == 0008-08-29 Gregorian
+
         case CalSystem::EthiopicAmeteAlemCalendar:
             return -284655;  //  0001-01-01 == -5492-08-29 Gregorian
+
         case CalSystem::IndianNationalCalendar:
             return 1749994;  //  0000-01-01 == 0078-03-22 Gregorian
+
         case CalSystem::IslamicCivilCalendar:
             return 1948440;  //  0001-01-01 == 0622-07-19 Gregorian
+
         case CalSystem::ISO8601Calendar:
             return 1721060;  //  0000-01-01 Gregorian
+
         case CalSystem::JapaneseCalendar:
             return -31738;   // -4800-01-01 Gregorian
+
         case CalSystem::JulianCalendar:
             return -31776;   // -4800-01-01 Julian
+
         case CalSystem::ROCCalendar:
             return 2419403;  //  0001-01-01 == 1912-01-01 Gregorian
+
         case CalSystem::ThaiCalendar:
             return 1522734;  //  0000-01-01 == -0544-01-01 Gregorian
+
         default:
             return 0;
     }
@@ -172,10 +194,12 @@ int CalSystemPrivate::earliestValidYear() const
         case CalSystem::JapaneseCalendar:
         case CalSystem::JulianCalendar:
             return -4800;
+
         case CalSystem::IndianNationalCalendar:
         case CalSystem::ISO8601Calendar:
         case CalSystem::ThaiCalendar:
             return 0;
+
         default:
             return 1;
     }
@@ -187,26 +211,37 @@ qint64 CalSystemPrivate::latestValidDate() const
     {
         case CalSystem::GregorianCalendar:
             return 5373484;  //  9999-12-31 Gregorian
+
         case CalSystem::CopticCalendar:
             return 5477164;  //  9999-13-05 == 10283-11-12 Gregorian
+
         case CalSystem::EthiopicCalendar:
             return 5376721;  //  9999-13-05 == 10008-11-10 Gregorian
+
         case CalSystem::EthiopicAmeteAlemCalendar:
             return 3367114;  //  9999-13-05 ==  4506-09-29 Gregorian
+
         case CalSystem::IndianNationalCalendar:
             return 5402054;  //  9999-12-30 == 10078-03-21 Gregorian
+
         case CalSystem::IslamicCivilCalendar:
             return 5491751;  //  9999-12-29 == 10323-10-21 Gregorian
+
         case CalSystem::ISO8601Calendar:
             return 5373484;  //  9999-12-31 Gregorian
+
         case CalSystem::JapaneseCalendar:
             return 5373484;  //  9999-12-31 Gregorian
+
         case CalSystem::JulianCalendar:
             return 5373557;  //  9999-12-31 == 10000-03-13 Gregorian
+
         case CalSystem::ROCCalendar:
             return 6071462;  //  9999-12-31 == 11910-12-31 Gregorian
+
         case CalSystem::ThaiCalendar:
             return 5175158;  //  9999-12-31 ==  9456-12-31 Gregorian
+
         default:
             return 0;
     }
@@ -227,8 +262,10 @@ int CalSystemPrivate::yearOffset() const
     {
         case CalSystem::ROCCalendar:
             return 1911;  // 0001-01-01 == 1912-01-01 Gregorian
+
         case CalSystem::ThaiCalendar:
             return -543;  // 0000-01-01 == -544-01-01 Gregorian
+
         default:
             return 0;
     }
@@ -242,6 +279,7 @@ int CalSystemPrivate::maxMonthsInYear() const
         case CalSystem::EthiopicCalendar:
         case CalSystem::EthiopicAmeteAlemCalendar:
             return 13;
+
         default:
             return 12;
     }
@@ -257,6 +295,7 @@ int CalSystemPrivate::monthsInYear(int year) const
         case CalSystem::EthiopicCalendar:
         case CalSystem::EthiopicAmeteAlemCalendar:
             return 13;
+
         default:
             return 12;
     }
@@ -268,6 +307,7 @@ int CalSystemPrivate::maxDaysInYear() const
     {
         case CalSystem::IslamicCivilCalendar:
             return 355;
+
         default:
             return 366;
     }
@@ -279,6 +319,7 @@ int CalSystemPrivate::daysInYear(int year) const
     {
         case CalSystem::IslamicCivilCalendar:
             return isLeapYear(year) ? 355 : 354;
+
         default:
             return isLeapYear(year) ? 366 : 365;
     }
@@ -293,6 +334,7 @@ int CalSystemPrivate::maxDaysInMonth() const
         case CalSystem::EthiopicAmeteAlemCalendar:
         case CalSystem::IslamicCivilCalendar:
             return 30;
+
         default:
             return 31;
     }
@@ -387,6 +429,7 @@ bool CalSystemPrivate::hasYearZero() const
         case CalSystem::ISO8601Calendar:
         case CalSystem::ThaiCalendar:
             return true;
+
         default:
             return false;
     }
@@ -412,6 +455,7 @@ int CalSystemPrivate::quarter(int month) const
             { // Consider the short epagomenal month as part of the 4th quarter
                 return 4;
             }
+
         default:
             return (((month - 1) / 3) + 1);
     }
@@ -442,14 +486,18 @@ bool CalSystemPrivate::isLeapYear(int year) const
         case CalSystem::ROCCalendar:
         case CalSystem::ThaiCalendar:
             return ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0);
+
         case CalSystem::CopticCalendar:
         case CalSystem::EthiopicCalendar:
         case CalSystem::EthiopicAmeteAlemCalendar:
             return (year % 4 == 3);
+
         case CalSystem::JulianCalendar:
             return (year % 4 == 0);
+
         case CalSystem::IslamicCivilCalendar:
             return ((((11 * year) + 14) % 30) < 11);
+
         default:
             return false;
     }
@@ -591,12 +639,12 @@ qint64 CalSystemPrivate::julianDayFromDate(int year, int month, int day) const
             year  = year + 4800 - a;
             int m = month + (12 * a) - 3;
             jd    = day
-                + (((153 * m) + 2) / 5)
-                + (365 * year)
-                + (year / 4)
-                - (year / 100)
-                + (year / 400)
-                - 32045;
+                   + (((153 * m) + 2) / 5)
+                   + (365 * year)
+                   + (year / 4)
+                   - (year / 100)
+                   + (year / 400)
+                   - 32045;
             break;
         }
 
@@ -649,10 +697,10 @@ qint64 CalSystemPrivate::julianDayFromDate(int year, int month, int day) const
             year  = year + 4800 - a;
             int m = month + (12 * a) - 3;
             jd    = day
-                + (((153 * m) + 2) / 5)
-                + (365 * year)
-                + (year / 4)
-                - 32083;
+                   + (((153 * m) + 2) / 5)
+                   + (365 * year)
+                   + (year / 4)
+                   - 32083;
             break;
         }
 
@@ -881,6 +929,7 @@ int CalSystem::quarter(const QDate& date) const
     {
         int month;
         d->julianDayToDate(date.toJulianDay(), 0, &month, 0);
+
         return d->quarter(month);
     }
     else
@@ -921,6 +970,7 @@ int CalSystem::dayOfYear(int year, int month, int day) const
 int CalSystem::dayOfWeek(const QDate& date) const
 {
     //jd 0 = Monday = weekday 1.  We've never skipped weekdays.
+
     if (isValid(date))
     {
         if (date.toJulianDay() >= 0)
@@ -943,7 +993,7 @@ int CalSystem::dayOfWeek(int year, int month, int day) const
     return dayOfWeek(date(year, month, day));
 }
 
-//TODO These are ISO weeks, may need to localise
+// TODO: These are ISO weeks, may need to localise
 int CalSystem::weekNumber(const QDate& date, int* yearNum) const
 {
     if (isValid(date))
@@ -958,7 +1008,7 @@ int CalSystem::weekNumber(const QDate& date, int* yearNum) const
     }
 }
 
-//TODO These are ISO weeks, may need to localise
+// TODO: These are ISO weeks, may need to localise
 int CalSystem::weekNumber(int year, int month, int day, int* yearNum) const
 {
     if (!isValid(year, month, day))
@@ -983,19 +1033,13 @@ int CalSystem::weekNumber(int year, int month, int day, int* yearNum) const
 
     for (;;)
     {
-        int len, bot, top;
+        int len = d->daysInYear(year);
 
-        len = d->daysInYear(year);
-        /*
-        ** What yday (-3 ... 3) does
-        ** the ISO year begin on?
-        */
-        bot = ((yday + 11 - wday) % 7) - 3;
-        /*
-        ** What yday does the NEXT
-        ** ISO year begin on?
-        */
-        top = bot - (len % 7);
+        // What yday (-3 ... 3) does the ISO year begin on?
+        int bot = ((yday + 11 - wday) % 7) - 3;
+
+        // What yday does the NEXT ISO year begin on?
+        int top = bot - (len % 7);
 
         if (top < -3)
         {
@@ -1065,7 +1109,7 @@ int CalSystem::weeksInYear(const QDate& date) const
     }
 }
 
-//TODO This is ISO weeks, may need to localise
+// TODO: This is ISO weeks, may need to localise
 int CalSystem::weeksInYear(int year) const
 {
     if (d->isValidYear(year))
@@ -1248,7 +1292,7 @@ int CalSystem::yearsDifference(const QDate& fromDate, const QDate& toDate) const
 
     int y1, m1, d1, y2, m2, d2;
     d->julianDayToDate(fromDate.toJulianDay(), &y1, &m1, &d1);
-    d->julianDayToDate(toDate.toJulianDay(), &y2, &m2, &d2);
+    d->julianDayToDate(toDate.toJulianDay(),   &y2, &m2, &d2);
 
     if (y2 == y1)
     {
@@ -1278,7 +1322,7 @@ int CalSystem::yearsDifference(const QDate& fromDate, const QDate& toDate) const
     }
 }
 
-//Caters for Leap Months, but possibly not for Hebrew
+// Caters for Leap Months, but possibly not for Hebrew
 int CalSystem::monthsDifference(const QDate& fromDate, const QDate& toDate) const
 {
     if (!isValid(fromDate) || !isValid(toDate) || toDate == fromDate)
@@ -1293,7 +1337,7 @@ int CalSystem::monthsDifference(const QDate& fromDate, const QDate& toDate) cons
 
     int y1, m1, d1, y2, m2, d2, my;
     d->julianDayToDate(fromDate.toJulianDay(), &y1, &m1, &d1);
-    d->julianDayToDate(toDate.toJulianDay(), &y2, &m2, &d2);
+    d->julianDayToDate(toDate.toJulianDay(),   &y2, &m2, &d2);
 
     // Calculate number of months in full years preceding y2
     if (y2 == y1)
@@ -1341,7 +1385,7 @@ qint64 CalSystem::daysDifference(const QDate& fromDate, const QDate& toDate) con
 
 //Caters for Leap Months, but possibly not for Hebrew
 void CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
-                                     int* years, int* months, int* days, int* direction) const
+                               int* years, int* months, int* days, int* direction) const
 {
     int dy  = 0;
     int dm  = 0;
@@ -1359,7 +1403,7 @@ void CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
         {
             int y1, m1, d1, y2, m2, d2;
             d->julianDayToDate(fromDate.toJulianDay(), &y1, &m1, &d1);
-            d->julianDayToDate(toDate.toJulianDay(), &y2, &m2, &d2);
+            d->julianDayToDate(toDate.toJulianDay(),   &y2, &m2, &d2);
 
             dy = yearsDifference(fromDate, toDate);
 
@@ -1469,6 +1513,7 @@ QDate CalSystem::firstDayOfMonth(const QDate& dt) const
 {
     int year, month;
     getDate(dt, &year, &month, 0);
+
     return date(year, month, 1);
 }
 
@@ -1481,6 +1526,7 @@ QDate CalSystem::lastDayOfMonth(const QDate& dt) const
 {
     int year, month;
     getDate(dt, &year, &month, 0);
+
     return date(year, month, daysInMonth(year, month));
 }
 
@@ -1489,4 +1535,4 @@ QDate CalSystem::lastDayOfMonth(int year, int month) const
     return date(year, month, daysInMonth(year, month));
 }
 
-}  // Namespace Digikam
+} // Namespace Digikam
