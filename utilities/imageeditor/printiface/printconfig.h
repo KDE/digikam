@@ -36,8 +36,8 @@
 
 // Local includes
 
-#include <digikam_export.h>
-#include <printoptionspage.h>
+#include "digikam_export.h"
+#include "printoptionspage.h"
 
 namespace Digikam
 {
