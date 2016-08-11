@@ -28,7 +28,6 @@
 #include <QApplication>
 #include <QDir>
 #include <QSqlDatabase>
-#include <QDBusConnection>
 #include <QString>
 #include <QTimer>
 #include <QTest>
@@ -80,9 +79,6 @@ int main(int argc, char** argv)
     params.setFaceDatabasePath(QDir::currentPath() + QLatin1String("/digikam-faces-test.db"));
 
     params.legacyAndDefaultChecks();
-
-    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam.startup-") +
-                     QString::number(QCoreApplication::instance()->applicationPid()));
 
     // initialize database
     bool b = AlbumManager::instance()->setDatabase(params, false, IMAGE_PATH);
