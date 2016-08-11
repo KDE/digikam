@@ -48,6 +48,7 @@
 #include "calsystem.h"
 #include "caltemplate.h"
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "ui_calevents.h"
 #include "ui_calprogress.h"
 
@@ -62,20 +63,23 @@ public:
     {
         cSettings     = 0;
         wTemplate     = 0;
-        wEvents       = 0;
         wPrintLabel   = 0;
         wFinish       = 0;
         wTemplatePage = 0;
-        wEventsPage   = 0;
         wPrintPage    = 0;
         wFinishPage   = 0;
+
+#ifdef HAVE_KCALENDAR
+        wEvents       = 0;
+        wEventsPage   = 0;
+#endif
+
         printer       = 0;
         printThread   = 0;
     }
 
     CalSettings*     cSettings;
     CalTemplate*     wTemplate;
-    QWidget*         wEvents;
     Ui::CalEvents    calEventsUI;
     Ui::CalProgress  calProgressUI;
 
@@ -83,9 +87,13 @@ public:
     QWidget*         wFinish;
 
     DWizardPage*     wTemplatePage;
-    DWizardPage*     wEventsPage;
     DWizardPage*     wPrintPage;
     DWizardPage*     wFinishPage;
+
+#ifdef HAVE_KCALENDAR
+    QWidget*         wEvents;
+    DWizardPage*     wEventsPage;
+#endif
 
     QPrinter*        printer;
 
@@ -110,18 +118,20 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
+#ifdef HAVE_KCALENDAR
     d->wEvents     = new QWidget(this);
     d->calEventsUI.setupUi(d->wEvents);
     d->wEventsPage = new DWizardPage(this, i18n("Choose events to show on the Calendar"));
     d->wEventsPage->setPageWidget(d->wEvents);
     d->wEventsPage->setShowLeftView(false);
+#endif
 
     // ---------------------------------------------------------------
 
     d->wPrintLabel = new QLabel(this);
     d->wPrintLabel->setIndent(20);
     d->wPrintLabel->setWordWrap(true);
-    d->wPrintPage = new DWizardPage(this, i18n("Print Calendar"));
+    d->wPrintPage  = new DWizardPage(this, i18n("Print Calendar"));
     d->wPrintPage->setPageWidget(d->wPrintLabel);
     d->wPrintPage->setShowLeftView(false);
 
@@ -290,13 +300,16 @@ void CalWizard::print()
     }
 
     d->cSettings->clearSpecial();
+
+#ifdef HAVE_KCALENDAR
     d->cSettings->loadSpecial(QUrl::fromLocalFile(d->calEventsUI.ohUrlRequester->lineEdit()->text()), Qt::red);
     d->cSettings->loadSpecial(QUrl::fromLocalFile(d->calEventsUI.fhUrlRequester->lineEdit()->text()), Qt::darkGreen);
+#endif
 
     d->printThread = new CalPrinter(d->printer, d->months, this);
 
     connect(d->printThread, SIGNAL(pageChanged(int)),
-            this,         SLOT(updatePage(int)));
+            this, SLOT(updatePage(int)));
 
     connect(d->printThread, SIGNAL(pageChanged(int)),
             d->calProgressUI.totalProgress, SLOT(setValue(int)));

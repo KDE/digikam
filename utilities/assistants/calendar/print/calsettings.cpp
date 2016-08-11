@@ -30,16 +30,18 @@
 
 #include <klocalizedstring.h>
 
-// KCalCore includes
-
-#include <kcalcore/icalformat.h>
-#include <kcalcore/filestorage.h>
-#include <kcalcore/memorycalendar.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 #include "calsystem.h"
+
+// KCalCore includes
+
+#ifdef HAVE_KCALENDAR
+#   include <kcalcore/icalformat.h>
+#   include <kcalcore/filestorage.h>
+#   include <kcalcore/memorycalendar.h>
+#endif // HAVE_KCALENDAR
 
 namespace Digikam
 {
@@ -223,6 +225,66 @@ void CalSettings::addSpecial(const QDate& date, const Day& info)
     }
 }
 
+bool CalSettings::isPrayDay(const QDate& date) const
+{
+    return (date.dayOfWeek() == Qt::Sunday);
+}
+
+/*!
+ * \returns true if d->special formatting is to be applied to the particular day
+ */
+bool CalSettings::isSpecial(int month, int day) const
+{
+    QDate dt = CalSystem().date(params.year, month, day);
+
+    return (isPrayDay(dt) || d->special.contains(dt));
+}
+
+/*!
+ * \returns the color to be used for painting of the day info
+ */
+QColor CalSettings::getDayColor(int month, int day) const
+{
+    QDate dt = CalSystem().date(params.year, month, day);
+
+    if (isPrayDay(dt))
+    {
+        return Qt::red;
+    }
+
+    if (d->special.contains(dt))
+    {
+        return d->special[dt].first;
+    }
+
+    //default
+    return Qt::black;
+}
+
+/*!
+ * \returns the description of the day to be painted on the calendar.
+ */
+QString CalSettings::getDayDescr(int month, int day) const
+{
+    QDate dt = CalSystem().date(params.year, month, day);
+
+    QString ret;
+
+    if (d->special.contains(dt))
+    {
+        ret = d->special[dt].second;
+    }
+
+    return ret;
+}
+
+QPrinter::PrinterMode CalSettings::resolution() const
+{
+    return params.printResolution;
+}
+
+#ifdef HAVE_KCALENDAR
+
 void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 {
     if (url.isEmpty())
@@ -284,62 +346,6 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     }
 }
 
-bool CalSettings::isPrayDay(const QDate& date) const
-{
-    return (date.dayOfWeek() == Qt::Sunday);
-}
-
-/*!
-    \returns true if d->special formatting is to be applied to the particular day
- */
-bool CalSettings::isSpecial(int month, int day) const
-{
-    QDate dt = CalSystem().date(params.year, month, day);
-
-    return (isPrayDay(dt) || d->special.contains(dt));
-}
-
-/*!
-    \returns the color to be used for painting of the day info
- */
-QColor CalSettings::getDayColor(int month, int day) const
-{
-    QDate dt = CalSystem().date(params.year, month, day);
-
-    if (isPrayDay(dt))
-    {
-        return Qt::red;
-    }
-
-    if (d->special.contains(dt))
-    {
-        return d->special[dt].first;
-    }
-
-    //default
-    return Qt::black;
-}
-
-/*!
-    \returns the description of the day to be painted on the calendar.
- */
-QString CalSettings::getDayDescr(int month, int day) const
-{
-    QDate dt = CalSystem().date(params.year, month, day);
-
-    QString ret;
-
-    if (d->special.contains(dt))
-    {
-        ret = d->special[dt].second;
-    }
-
-    return ret;
-}
-
-QPrinter::PrinterMode CalSettings::resolution() const
-{
-    return params.printResolution;
-}
+#endif // HAVE_KCALENDAR
 
 }  // Namespace Digikam
