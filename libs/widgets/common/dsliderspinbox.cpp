@@ -369,6 +369,14 @@ bool DAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
 
         switch (keyEvent->key())
         {
+            case Qt::Key_Tab:
+                if (d->edit->isModified())
+                {
+                    setInternalValue(QLocale::system().toDouble(d->edit->text()) * d->factor);
+                }
+
+                e->accept();
+                return true;
             case Qt::Key_Enter:
             case Qt::Key_Return:
             case Qt::Key_Escape:
