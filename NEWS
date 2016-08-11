@@ -9,4 +9,5 @@ BUGFIXES FROM BUGZILLA:
 001 ==> 366518 - Showfoto writes to wrong file when switching between images.
 002 ==> 366542 - Build failure on i686.
 003 ==> 365135 - Digikam 5 fails to build with DIGIKAMSC_COMPILE_DOC=on.
-004 ==> 
+004 ==> 366630 - digiKam Not Responding if 'Right Click' on a empty area below the album lists.
+005 ==> 
