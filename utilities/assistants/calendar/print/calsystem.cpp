@@ -505,7 +505,7 @@ bool CalSystemPrivate::isLeapYear(int year) const
 
 void CalSystemPrivate::julianDayToDate(qint64 jd, int* year, int* month, int* day) const
 {
-    int yy, mm, dd;
+    int yy=0, mm=0, dd=0;
 
     switch (calendarSystem())
     {
