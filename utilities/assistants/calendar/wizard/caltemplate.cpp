@@ -32,12 +32,12 @@
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "calsettings.h"
+#include "calsystem.h"
 #include "calmonthwidget.h"
 #include "calpainter.h"
 #include "digikam_debug.h"
@@ -79,12 +79,10 @@ CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
     connect(d->ui.yearSpin, SIGNAL(valueChanged(int)),
             this, SLOT(yearChanged(int)));
 
-    const KCalendarSystem* const cal = KLocale::global()->calendar();
-    int currentYear                  = cal->year(QDate::currentDate());
+    int currentYear   = CalSystem().year(QDate::currentDate());
 
-    QDate date;
-    cal->setDate(date, currentYear, 1, 1);
-    int months        = cal->monthsInYear(date);
+    QDate date        = CalSystem().date(currentYear, 1, 1);
+    int months        = CalSystem().monthsInYear(date);
     // span the monthWidgets over 2 rows. inRow should usually be 6 or 7 (for 12 or 13 months)
     int inRow         = (months / 2) + ((months % 2) != 0);
     CalMonthWidget* w = 0;
@@ -113,7 +111,8 @@ CalTemplate::CalTemplate(const QList<QUrl>& urlList, QWidget* const parent)
         d->wVector.insert(i, w);
     }
 
-    d->ui.yearSpin->setRange(cal->year(cal->earliestValidDate()) + 1, cal->year(cal->latestValidDate()) - 1);
+    d->ui.yearSpin->setRange(CalSystem().year(CalSystem().earliestValidDate()) + 1,
+                             CalSystem().year(CalSystem().latestValidDate()) - 1);
     d->ui.yearSpin->setValue(currentYear);
 
     QButtonGroup* const btnGrp = new QButtonGroup(d->ui.imagePosButtonGroup);
@@ -157,18 +156,16 @@ void CalTemplate::monthChanged(int m)
 void CalTemplate::yearChanged(int year)
 {
     int months;
-    QDate date, oldD;
-    const KCalendarSystem* const cal = KLocale::global()->calendar();
-    cal->setDate(date, year, 1, 1);
-    cal->setDate(oldD, CalSettings::instance()->year(), 1, 1);
-    months = cal->monthsInYear(date);
+    QDate date = CalSystem().date(year, 1, 1);
+    QDate oldD = CalSystem().date(CalSettings::instance()->year(), 1, 1);
+    months     = CalSystem().monthsInYear(date);
 
-    if ((cal->monthsInYear(oldD) != months) && !d->wVector.isEmpty())
+    if ((CalSystem().monthsInYear(oldD) != months) && !d->wVector.isEmpty())
     {
         int i;
 
         // hide the last months that are not present on the current year
-        for (i = months; (i < cal->monthsInYear(oldD)) && (i < d->wVector.count()); ++i)
+        for (i = months; (i < CalSystem().monthsInYear(oldD)) && (i < d->wVector.count()); ++i)
         {
             d->wVector.at(i)->hide();
         }
@@ -177,7 +174,7 @@ void CalTemplate::yearChanged(int year)
         int inRow = (months / 2) + ((months % 2) != 0);
 
         // remove all the monthWidgets, then readd the needed ones
-        for (i = 0; i < cal->monthsInYear(oldD); ++i)
+        for (i = 0; i < CalSystem().monthsInYear(oldD); ++i)
         {
             d->ui.monthBoxLayout->removeWidget(d->wVector.at(i));
         }

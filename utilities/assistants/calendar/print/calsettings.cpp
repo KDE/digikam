@@ -29,7 +29,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcalendarsystem.h>
 
 // KCalCore includes
 
@@ -40,6 +39,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "calsystem.h"
 
 namespace Digikam
 {
@@ -62,7 +62,7 @@ CalSettings::CalSettings(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
-    params.year = KLocale::global()->calendar()->earliestValidDate().year() + 1;
+    params.year = CalSystem().earliestValidDate().year() + 1;
     setPaperSize(QString::fromLatin1("A4"));
     setResolution(QString::fromLatin1("High"));
     setImagePos(0);
@@ -242,10 +242,13 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     }
     else
     {
-        QDate qFirst, qLast;
-        KLocale::global()->calendar()->setDate(qFirst, params.year, 1, 1);
-        KLocale::global()->calendar()->setDate(qLast, params.year + 1, 1, 1);
-        qLast = qLast.addDays(-1);
+        CalSystem calSys;
+        QDate     qFirst, qLast;
+
+        qFirst = calSys.date(params.year, 1, 1);
+        qLast  = calSys.date(params.year + 1, 1, 1);
+        qLast  = qLast.addDays(-1);
+
         KDateTime dtFirst(qFirst);
         KDateTime dtLast(qLast);
         KDateTime dtCurrent;
@@ -260,7 +263,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 
             if (event->recurs())
             {
-                KCalCore::Recurrence* recur = event->recurrence();
+                KCalCore::Recurrence* const recur = event->recurrence();
 
                 for (dtCurrent = recur->getNextDateTime(dtFirst.addDays(-1));
                      (dtCurrent <= dtLast) && dtCurrent.isValid();
@@ -283,7 +286,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 
 bool CalSettings::isPrayDay(const QDate& date) const
 {
-    return (date.dayOfWeek() == KLocale::global()->weekDayOfPray());
+    return (date.dayOfWeek() == Qt::Sunday);
 }
 
 /*!
@@ -291,8 +294,7 @@ bool CalSettings::isPrayDay(const QDate& date) const
  */
 bool CalSettings::isSpecial(int month, int day) const
 {
-    QDate dt;
-    KLocale::global()->calendar()->setDate(dt, params.year, month, day);
+    QDate dt = CalSystem().date(params.year, month, day);
 
     return (isPrayDay(dt) || d->special.contains(dt));
 }
@@ -302,8 +304,7 @@ bool CalSettings::isSpecial(int month, int day) const
  */
 QColor CalSettings::getDayColor(int month, int day) const
 {
-    QDate dt;
-    KLocale::global()->calendar()->setDate(dt, params.year, month, day);
+    QDate dt = CalSystem().date(params.year, month, day);
 
     if (isPrayDay(dt))
     {
@@ -324,8 +325,7 @@ QColor CalSettings::getDayColor(int month, int day) const
  */
 QString CalSettings::getDayDescr(int month, int day) const
 {
-    QDate dt;
-    KLocale::global()->calendar()->setDate(dt, params.year, month, day);
+    QDate dt = CalSystem().date(params.year, month, day);
 
     QString ret;
 
