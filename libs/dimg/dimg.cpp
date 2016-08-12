@@ -211,7 +211,7 @@ void DImg::detach()
 
     if (old->data)
     {
-        int size = allocateData();
+        size_t size = allocateData();
         memcpy(m_priv->data, old->data, size);
     }
 }
@@ -234,7 +234,7 @@ void DImg::putImageData(uint width, uint height, bool sixteenBit, bool alpha, uc
     }
     else if (copyData)
     {
-        int size = allocateData();
+        size_t size = allocateData();
 
         if (data)
         {
@@ -303,7 +303,7 @@ void DImg::copyImageData(const Private* const src)
     setImageData(src->null, src->width, src->height, src->sixteenBit, src->alpha);
 }
 
-int DImg::allocateData()
+size_t DImg::allocateData()
 {
     size_t size  = m_priv->width * m_priv->height * (m_priv->sixteenBit ? 8 : 4);
     m_priv->data = DImgLoader::new_failureTolerant(size);
@@ -2231,7 +2231,7 @@ void DImg::crop(int x, int y, int w, int h)
 
 void DImg::resize(int w, int h)
 {
-    if (w <= 0 || h <= 0)
+    if (isNull() || w <= 0 || h <= 0)
     {
         return;
     }
