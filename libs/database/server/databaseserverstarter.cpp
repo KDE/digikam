@@ -93,11 +93,11 @@ DatabaseServerStarter* DatabaseServerStarter::instance()
     return &databaseServerStarterCreator->object;
 }
 
-DatabaseServerError DatabaseServerStarter::startServerManagerProcess() const
+DatabaseServerError DatabaseServerStarter::startServerManagerProcess(const DbEngineParameters& parameters) const
 {
     DatabaseServerError result;
 
-    d->internalServer = new DatabaseServer();
+    d->internalServer = new DatabaseServer(parameters);
 
     QSystemSemaphore sem(QLatin1String("DigikamDBSrvAccess"), 1, QSystemSemaphore::Open);
     sem.acquire();
@@ -118,6 +118,7 @@ DatabaseServerError DatabaseServerStarter::startServerManagerProcess() const
 
     return result;
 }
+
 
 void DatabaseServerStarter::stopServerManagerProcess()
 {

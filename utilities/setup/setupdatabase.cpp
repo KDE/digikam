@@ -174,10 +174,11 @@ void SetupDatabase::applySettings()
         case DatabaseSettingsWidget::MysqlInternal:
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql Internal DB config...";
-            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            DbEngineParameters params = d->databaseWidget->getDbEngineParameters();
+            settings->setDbEngineParameters(params);
             settings->saveSettings();
             DatabaseServerStarter::instance()->stopServerManagerProcess();
-            DatabaseServerStarter::instance()->startServerManagerProcess();
+            DatabaseServerStarter::instance()->startServerManagerProcess(params);
             break;
         }
         default: // DatabaseSettingsWidget::MysqlServer

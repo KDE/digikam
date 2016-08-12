@@ -729,7 +729,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     if (params.internalServer)
     {
-        DatabaseServerError result = DatabaseServerStarter::instance()->startServerManagerProcess();
+        DatabaseServerError result = DatabaseServerStarter::instance()->startServerManagerProcess(params);
 
         if (result.getErrorType() != DatabaseServerError::NoErrors)
         {

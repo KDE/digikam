@@ -49,7 +49,7 @@ public:
      */
     static DatabaseServerStarter* instance();
 
-    DatabaseServerError startServerManagerProcess() const;
+    DatabaseServerError startServerManagerProcess(const DbEngineParameters& parameters) const;
     void                stopServerManagerProcess();
 
 private:

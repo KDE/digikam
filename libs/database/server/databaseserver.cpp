@@ -61,54 +61,50 @@ public:
         databaseProcess = 0;
     }
 
-    DatabaseServerStarter*  app;
-    QProcess*               databaseProcess;
+    DbEngineParameters     params;
+    DatabaseServerStarter* app;
+    QProcess*              databaseProcess;
 
-    QString                 internalDBName;
-    QString                 mysqldInitPath;
-    QString                 mysqldCmd;
-    QString                 dataDir;
-    QString                 miscDir;
-    QString                 fileDataDir;
-    QString                 actualConfig;
+    QString                internalDBName;
+    QString                mysqldInitPath;
+    QString                mysqldCmd;
+    QString                dataDir;
+    QString                miscDir;
+    QString                fileDataDir;
+    QString                actualConfig;
 };
 
-DatabaseServer::DatabaseServer(DatabaseServerStarter* const parent)
+DatabaseServer::DatabaseServer(const DbEngineParameters& params, DatabaseServerStarter* const parent)
     : QThread(parent),
       d(new Private)
 {
-    d->app = parent;
+    d->app    = parent;
+    d->params = params;
 
-    DbEngineParameters internalServerParameters
-        = DbEngineParameters::parametersFromConfig(KSharedConfig::openConfig(QLatin1String("digikamrc")));
-
-    qCDebug(DIGIKAM_DATABASESERVER_LOG) << internalServerParameters;
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << d->params;
 
     QString defaultAkDir = DbEngineParameters::internalServerPrivatePath();
     QString dataDir;
 
-    if (internalServerParameters.internalServerPath().isEmpty())
+    if (d->params.internalServerPath().isEmpty())
     {
         dataDir = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_data"));
-        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No internal server data path is given, we will use the default."
-                                            << dataDir;
+        qCDebug(DIGIKAM_DATABASESERVER_LOG) << "No internal server data path is given, we will use the default." << dataDir;
     }
     else
     {
-        dataDir = QDir(internalServerParameters.internalServerPath()).absoluteFilePath(QLatin1String(".mysql.digikam/db_data"));
+        dataDir = QDir(d->params.internalServerPath()).absoluteFilePath(QLatin1String(".mysql.digikam/db_data"));
     }
 
-    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal Server data path:"
-                                        << dataDir;
+    qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Internal Server data path:" << dataDir;
 
-    d->internalDBName = QLatin1String("digikam");
-    d->mysqldInitPath = internalServerParameters.internalServerMysqlInitCmd;
-    d->mysqldCmd      = internalServerParameters.internalServerMysqlServCmd;
-    d->dataDir        = dataDir;
-    d->miscDir        = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_misc"));
-    d->fileDataDir    = QDir(defaultAkDir).absoluteFilePath(QLatin1String("file_db_data"));
-    d->actualConfig   = QDir(defaultAkDir).absoluteFilePath(QLatin1String("mysql.conf"));
-
+    d->internalDBName       = QLatin1String("digikam");
+    d->mysqldInitPath       = d->params.internalServerMysqlInitCmd;
+    d->mysqldCmd            = d->params.internalServerMysqlServCmd;
+    d->dataDir              = dataDir;
+    d->miscDir              = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_misc"));
+    d->fileDataDir          = QDir(defaultAkDir).absoluteFilePath(QLatin1String("file_db_data"));
+    d->actualConfig         = QDir(defaultAkDir).absoluteFilePath(QLatin1String("mysql.conf"));
     databaseServerStateEnum = started;
 }
 
@@ -138,7 +134,7 @@ DatabaseServerError DatabaseServer::startDatabaseProcess()
 {
     DatabaseServerError error;
 
-    if (DbEngineParameters::MySQLDatabaseType() == QLatin1String("QMYSQL"))
+    if (d->params.isMySQL())
     {
         error = startMysqlDatabaseProcess();
     }

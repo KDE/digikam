@@ -36,6 +36,7 @@
 
 #include "databaseservererror.h"
 #include "databaseserverstarter.h"
+#include "dbengineparameters.h"
 
 class QCoreApplication;
 
@@ -59,7 +60,7 @@ public:
 
 public:
 
-    explicit DatabaseServer(DatabaseServerStarter* const parent = DatabaseServerStarter::instance());
+    explicit DatabaseServer(const DbEngineParameters& params, DatabaseServerStarter* const parent = DatabaseServerStarter::instance());
     virtual ~DatabaseServer();
 
     /**
