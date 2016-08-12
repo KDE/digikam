@@ -11,4 +11,5 @@ BUGFIXES FROM BUGZILLA:
 003 ==> 365135 - Digikam 5 fails to build with DIGIKAMSC_COMPILE_DOC=on.
 004 ==> 366630 - digiKam Not Responding if 'Right Click' on a empty area below the album lists.
 005 ==> 366621 - Crash when performing Transformation resize operation.
-006 ==> 
+006 ==> 366683 - Reverse Geottaging doesn't work on manually modified coordinates.
+007 ==> 
