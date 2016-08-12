@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qDebug() << "testdatabase - test database initialization";
+        qDebug() << "testdatabaseinit - test database initialization";
         qDebug() << "Usage: <dbtype: sqlite | mysql>";
         return -1;
     }
