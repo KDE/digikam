@@ -10,4 +10,5 @@ BUGFIXES FROM BUGZILLA:
 002 ==> 366542 - Build failure on i686.
 003 ==> 365135 - Digikam 5 fails to build with DIGIKAMSC_COMPILE_DOC=on.
 004 ==> 366630 - digiKam Not Responding if 'Right Click' on a empty area below the album lists.
-005 ==> 
+005 ==> 366621 - Crash when performing Transformation resize operation.
+006 ==> 
