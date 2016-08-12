@@ -42,14 +42,11 @@
 
 #include "daboutdata.h"
 #include "albummanager.h"
-#include "collectionlocation.h"
-#include "collectionmanager.h"
 #include "coredbaccess.h"
 #include "thumbsdbaccess.h"
 #include "facedbaccess.h"
 #include "dbengineparameters.h"
 #include "scancontroller.h"
-#include "setup.h"
 #include "digikam_version.h"
 
 using namespace Digikam;
