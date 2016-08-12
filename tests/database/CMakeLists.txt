@@ -18,18 +18,14 @@ include_directories(
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-if(ENABLE_DBUS)
-    include_directories($<TARGET_PROPERTY:Qt5::DBus,INTERFACE_INCLUDE_DIRECTORIES>)
-endif()
-
 if(KF5Notifications_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-set(testdatabase_SRCS testdatabase.cpp)
-add_executable(testdatabase ${testdatabase_SRCS})
+set(testdatabaseinit_SRCS testdatabaseinit.cpp)
+add_executable(testdatabaseinit ${testdatabaseinit_SRCS})
 
-target_link_libraries(testdatabase
+target_link_libraries(testdatabaseinit
                       digikamcore
                       digikamgui
 
@@ -46,16 +42,12 @@ target_link_libraries(testdatabase
                       ${OpenCV_LIBRARIES}
 )
 
-if(ENABLE_DBUS)
-    target_link_libraries(testdatabase Qt5::DBus)
-endif()
-
 if(KF5Notifications_FOUND)
-    target_link_libraries(testdatabase KF5::Notifications)
+    target_link_libraries(testdatabaseinit KF5::Notifications)
 endif()
 
 if(KF5Kipi_FOUND)
-    target_link_libraries(testdatabase KF5::Kipi)
+    target_link_libraries(testdatabaseinit KF5::Kipi)
 endif()
 
 #------------------------------------------------------------------------
