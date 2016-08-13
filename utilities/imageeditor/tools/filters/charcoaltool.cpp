@@ -45,7 +45,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class CharcoalTool::Private
@@ -57,8 +57,8 @@ public:
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
-
+    {
+    }
 
     static const QString configGroupName;
     static const QString configPencilAdjustmentEntry;
@@ -198,4 +198,4 @@ void CharcoalTool::setFinalImage()
     iface.setOriginal(i18n("Charcoal"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

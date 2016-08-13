@@ -45,7 +45,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class EmbossTool::Private
@@ -56,7 +56,8 @@ public:
         depthInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configDepthAdjustmentEntry;
@@ -177,4 +178,4 @@ void EmbossTool::setFinalImage()
     iface.setOriginal(i18n("Emboss"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

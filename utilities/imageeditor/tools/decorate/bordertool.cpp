@@ -57,7 +57,8 @@ public:
         gboxSettings(0),
         previewWidget(0),
         settingsView(0)
-    {}
+    {
+    }
 
     const QString       configGroupName;
 

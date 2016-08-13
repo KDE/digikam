@@ -32,9 +32,7 @@
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class DistortionFXTool : public EditorToolThreaded
@@ -68,6 +66,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam
 
 #endif /* DISTORTIONFXTOOL_H */

@@ -3,12 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-26
- * Description : a digiKam image editor plugin to emboss
- *               an image.
+ * Date        : 2004-02-14
+ * Description : a digiKam image plugin for to apply a color
+ *               effect to an image.
  *
- * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,30 +23,26 @@
  *
  * ============================================================ */
 
-#ifndef EMBOSSTOOL_H
-#define EMBOSSTOOL_H
+#ifndef COLORFXTOOL_H
+#define COLORFXTOOL_H
 
 // Local includes
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
-class EmbossTool : public EditorToolThreaded
+class DColor;
+
+class ColorFxTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit EmbossTool(QObject* const parent);
-    ~EmbossTool();
-
-private Q_SLOTS:
-
-    void slotResetSettings();
+    explicit ColorFxTool(QObject* const parent);
+    ~ColorFxTool();
 
 private:
 
@@ -57,12 +53,18 @@ private:
     void setPreviewImage();
     void setFinalImage();
 
+private Q_SLOTS:
+
+    void slotInit();
+    void slotResetSettings();
+    void slotColorSelectedFromTarget(const Digikam::DColor& color);
+
 private:
 
     class Private;
     Private* const d;
 };
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam
 
-#endif /* EMBOSSTOOL_H */
+#endif /* COLORFXTOOL_H */

@@ -333,6 +333,14 @@ private Q_SLOTS:
     void slotInsertText();
     void slotBorder();
     void slotTexture();
+    void slotColorEffects();
+    void slotCharcoal();
+    void slotEmboss();
+    void slotOilPaint();
+    void slotBlurFX();
+    void slotDistortionFX();
+    void slotRainDrop();
+    void slotFilmGrain();
 
 private:
 

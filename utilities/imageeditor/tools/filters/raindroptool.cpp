@@ -46,7 +46,7 @@
 #include "imageguidewidget.h"
 #include "raindropfilter.h"
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class RainDropTool::Private
@@ -59,7 +59,8 @@ public:
         coeffInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configDropAdjustmentEntry;
@@ -246,4 +247,4 @@ void RainDropTool::blockWidgetSignals(bool b)
     d->coeffInput->blockSignals(b);
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

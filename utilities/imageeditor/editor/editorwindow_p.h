@@ -95,6 +95,14 @@ public:
         textureAction(0),
         borderAction(0),
         insertTextAction(0),
+        filmgrainAction(0),
+        raindropAction(0),
+        distortionfxAction(0),
+        blurfxAction(0),
+        oilpaintAction(0),
+        embossAction(0),
+        charcoalAction(0),
+        colorEffectsAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -176,6 +184,14 @@ public:
     QAction*                     textureAction;
     QAction*                     borderAction;
     QAction*                     insertTextAction;
+    QAction*                     filmgrainAction;
+    QAction*                     raindropAction;
+    QAction*                     distortionfxAction;
+    QAction*                     blurfxAction;
+    QAction*                     oilpaintAction;
+    QAction*                     embossAction;
+    QAction*                     charcoalAction;
+    QAction*                     colorEffectsAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;

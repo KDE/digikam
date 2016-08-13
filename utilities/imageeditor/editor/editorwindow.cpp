@@ -134,6 +134,14 @@
 #include "inserttexttool.h"
 #include "bordertool.h"
 #include "texturetool.h"
+#include "colorfxtool.h"
+#include "charcoaltool.h"
+#include "embosstool.h"
+#include "oilpainttool.h"
+#include "blurfxtool.h"
+#include "distortionfxtool.h"
+#include "raindroptool.h"
+#include "filmgraintool.h"
 
 namespace Digikam
 {
@@ -548,6 +556,56 @@ void EditorWindow::setupStandardActions()
     connect(d->textureAction, SIGNAL(triggered(bool)),
             this, SLOT(slotTexture()));
     d->textureAction->setEnabled(false);
+
+    // -- Standard 'Effects' menu actions ---------------------------------------------
+
+    d->colorEffectsAction = new QAction(QIcon::fromTheme(QLatin1String("colorfx")), i18n("Color Effects..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_colorfx"), d->colorEffectsAction);
+    connect(d->colorEffectsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotColorEffects()));
+    d->colorEffectsAction->setEnabled(false);
+
+    d->charcoalAction = new QAction(QIcon::fromTheme(QLatin1String("charcoaltool")), i18n("Charcoal Drawing..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_charcoal"), d->charcoalAction);
+    connect(d->charcoalAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCharcoal()));
+    d->charcoalAction->setEnabled(false);
+
+    d->embossAction = new QAction(QIcon::fromTheme(QLatin1String("embosstool")), i18n("Emboss..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_emboss"), d->embossAction);
+    connect(d->embossAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotEmboss()));
+    d->embossAction->setEnabled(false);
+
+    d->oilpaintAction = new QAction(QIcon::fromTheme(QLatin1String("oilpaint")), i18n("Oil Paint..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_oilpaint"), d->oilpaintAction);
+    connect(d->oilpaintAction, SIGNAL(triggered(bool)),
+            this ,SLOT(slotOilPaint()));
+    d->oilpaintAction->setEnabled(false);
+
+    d->blurfxAction = new QAction(QIcon::fromTheme(QLatin1String("blurfx")), i18n("Blur Effects..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_blurfx"), d->blurfxAction);
+    connect(d->blurfxAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBlurFX()));
+    d->blurfxAction->setEnabled(false);
+
+    d->distortionfxAction = new QAction(QIcon::fromTheme(QLatin1String("draw-spiral")), i18n("Distortion Effects..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_distortionfx"), d->distortionfxAction );
+    connect(d->distortionfxAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotDistortionFX()));
+    d->distortionfxAction->setEnabled(false);
+
+    d->raindropAction = new QAction(QIcon::fromTheme(QLatin1String("raindrop")), i18n("Raindrops..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_raindrop"), d->raindropAction);
+    connect(d->raindropAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRainDrop()));
+    d->raindropAction->setEnabled(false);
+
+    d->filmgrainAction  = new QAction(QIcon::fromTheme(QLatin1String("filmgrain")), i18n("Add Film Grain..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_filmgrain"), d->filmgrainAction);
+    connect(d->filmgrainAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFilmGrain()));
+    d->filmgrainAction->setEnabled(false);
 
     // --------------------------------------------------------
 
@@ -1171,6 +1229,14 @@ void EditorWindow::toggleStandardActions(bool val)
     d->insertTextAction->setEnabled(val);
     d->borderAction->setEnabled(val);
     d->textureAction->setEnabled(val);
+    d->charcoalAction->setEnabled(val);
+    d->colorEffectsAction->setEnabled(val);
+    d->embossAction->setEnabled(val);
+    d->oilpaintAction->setEnabled(val);
+    d->blurfxAction->setEnabled(val);
+    d->distortionfxAction->setEnabled(val);
+    d->raindropAction->setEnabled(val);
+    d->filmgrainAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
@@ -2631,15 +2697,31 @@ DCategorizedView* EditorWindow::createToolSelectionView()
     // Create action model
     ActionItemModel* const actionModel = new ActionItemModel(this);
     actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
-    QString basicTransformCategory     = i18nc("@title Image transformations", "Basic Transformations");
 
     // builtin actions
-    actionModel->addAction(d->rotateLeftAction, basicTransformCategory);
-    actionModel->addAction(d->rotateRightAction, basicTransformCategory);
-    actionModel->addAction(d->flipHorizAction, basicTransformCategory);
-    actionModel->addAction(d->flipVertAction, basicTransformCategory);
-    actionModel->addAction(d->cropAction, basicTransformCategory);
-    actionModel->addAction(d->autoCropAction, basicTransformCategory);
+
+    QString basicTransformCategory     = i18nc("@title Image transformations", "Basic Transformations");
+    actionModel->addAction(d->rotateLeftAction,   basicTransformCategory);
+    actionModel->addAction(d->rotateRightAction,  basicTransformCategory);
+    actionModel->addAction(d->flipHorizAction,    basicTransformCategory);
+    actionModel->addAction(d->flipVertAction,     basicTransformCategory);
+    actionModel->addAction(d->cropAction,         basicTransformCategory);
+    actionModel->addAction(d->autoCropAction,     basicTransformCategory);
+
+    QString decorateCategory           = i18nc("@title Image Decorate",        "Decorate");
+    actionModel->addAction(d->textureAction,      decorateCategory);
+    actionModel->addAction(d->borderAction,       decorateCategory);
+    actionModel->addAction(d->insertTextAction,   decorateCategory);
+
+    QString effectsCategory            = i18nc("@title Image Effect",          "Effects");
+    actionModel->addAction(d->filmgrainAction,    effectsCategory);
+    actionModel->addAction(d->raindropAction,     effectsCategory);
+    actionModel->addAction(d->distortionfxAction, effectsCategory);
+    actionModel->addAction(d->blurfxAction,       effectsCategory);
+    actionModel->addAction(d->oilpaintAction,     effectsCategory);
+    actionModel->addAction(d->embossAction,       effectsCategory);
+    actionModel->addAction(d->charcoalAction,     effectsCategory);
+    actionModel->addAction(d->colorEffectsAction, effectsCategory);
 
     // parse menus for image plugin actions
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
@@ -2889,6 +2971,46 @@ void EditorWindow::slotBorder()
 void EditorWindow::slotTexture()
 {
     loadTool(new TextureTool(this));
+}
+
+void EditorWindow::slotColorEffects()
+{
+    loadTool(new ColorFxTool(this));
+}
+
+void EditorWindow::slotCharcoal()
+{
+    loadTool(new CharcoalTool(this));
+}
+
+void EditorWindow::slotEmboss()
+{
+    loadTool(new EmbossTool(this));
+}
+
+void EditorWindow::slotOilPaint()
+{
+    loadTool(new OilPaintTool(this));
+}
+
+void EditorWindow::slotBlurFX()
+{
+    loadTool(new BlurFXTool(this));
+}
+
+void EditorWindow::slotDistortionFX()
+{
+    loadTool(new DistortionFXTool(this));
+}
+
+void EditorWindow::slotRainDrop()
+{
+    loadTool(new RainDropTool(this));
+}
+
+void EditorWindow::slotFilmGrain()
+{
+    loadTool(new FilmGrainTool(this));
 }
 
 }  // namespace Digikam

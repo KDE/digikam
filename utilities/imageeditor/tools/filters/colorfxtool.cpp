@@ -59,7 +59,7 @@
 
 
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class ColorFxTool::Private
@@ -240,4 +240,4 @@ void ColorFxTool::setFinalImage()
     iface.setOriginal(name, filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

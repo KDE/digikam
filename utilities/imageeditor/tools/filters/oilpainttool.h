@@ -3,10 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-02-14
- * Description : a digiKam image plugin to apply special effects.
+ * Date        : 2004-08-25
+ * Description : a plugin to simulate Oil Painting
  *
  * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,44 +22,37 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_FXFILTERS_H
-#define IMAGEPLUGIN_FXFILTERS_H
-
-// Qt includes
-
-#include <QVariant>
+#ifndef OILPAINTTOOL_H
+#define OILPAINTTOOL_H
 
 // Local includes
 
-#include "imageplugin.h"
-#include "digikam_export.h"
+#include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
-class ImagePlugin_FxFilters : public ImagePlugin
+class OilPaintTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_FxFilters(QObject* const parent, const QVariantList& args);
-    ~ImagePlugin_FxFilters();
-
-    void setEnabledActions(bool b);
+    explicit OilPaintTool(QObject* const parent);
+    ~OilPaintTool();
 
 private Q_SLOTS:
 
-    void slotColorEffects();
-    void slotCharcoal();
-    void slotEmboss();
-    void slotOilPaint();
-    void slotBlurFX();
-    void slotDistortionFX();
-    void slotRainDrop();
-    void slotFilmGrain();
+    void slotResetSettings();
+
+private:
+
+    void readSettings();
+    void writeSettings();
+    void preparePreview();
+    void prepareFinal();
+    void setPreviewImage();
+    void setFinalImage();
 
 private:
 
@@ -66,6 +60,6 @@ private:
     Private* const d;
 };
 
-} // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam
 
-#endif /* IMAGEPLUGIN_FXFILTERS_H */
+#endif /* OILPAINTTOOL_H */

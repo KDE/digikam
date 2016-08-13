@@ -48,7 +48,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class FilmGrainTool::Private
@@ -60,7 +60,8 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     const QString       configGroupName;
 
@@ -161,4 +162,4 @@ void FilmGrainTool::renderingFinished()
     toolSettings()->enableButton(EditorToolSettings::Ok, d->settingsView->settings().isDirty());
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

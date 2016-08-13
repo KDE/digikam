@@ -3,11 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-26
- * Description : a digikam image editor plugin to
- *               simulate charcoal drawing.
+ * Date        : 2004-09-30
+ * Description : a plugin to add rain drop over an image
  *
  * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,26 +22,24 @@
  *
  * ============================================================ */
 
-#ifndef CHARCOALTOOL_H
-#define CHARCOALTOOL_H
+#ifndef RAINDROPTOOL_H
+#define RAINDROPTOOL_H
 
 // Local includes
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
-class CharcoalTool : public EditorToolThreaded
+class RainDropTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit CharcoalTool(QObject* const parent);
-    ~CharcoalTool();
+    explicit RainDropTool(QObject* const parent);
+    ~RainDropTool();
 
 private Q_SLOTS:
 
@@ -56,12 +54,14 @@ private:
     void setPreviewImage();
     void setFinalImage();
 
+    void blockWidgetSignals(bool b);
+
 private:
 
     class Private;
     Private* const d;
 };
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam
 
-#endif /* CHARCOALTOOL_H */
+#endif /* RAINDROPTOOL_H */

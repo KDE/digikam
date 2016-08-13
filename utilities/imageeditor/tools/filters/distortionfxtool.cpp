@@ -52,7 +52,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class DistortionFXTool::Private
@@ -68,7 +68,8 @@ public:
         iterationInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configEffectTypeEntry;
@@ -356,4 +357,4 @@ void DistortionFXTool::blockWidgetSignals(bool b)
     d->iterationInput->blockSignals(b);
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam

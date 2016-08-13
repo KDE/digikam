@@ -83,6 +83,7 @@ static const char* ObsoleteImagePluginsList[] =
     "digikamimageplugin_hotpixels",                // Merged to "Enhance" plugin since 1.2.0.
     "digikamimageplugin_core",                     // Renamed "Color" plugin since 1.2.0.
     "digikamimageplugin_decorate",
+    "digikamimageplugin_fxfilters",
     "-1"
 };
 

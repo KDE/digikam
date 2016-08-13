@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="506" name="digikamimagewindow" translationDomain="digikam" >
+<gui version="507" name="digikamimagewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -86,6 +86,14 @@
     </Menu>
 
     <Menu name="Filters" ><text>Effec&amp;ts</text>
+        <Action name="imageplugin_colorfx" />
+        <Action name="imageplugin_charcoal" />
+        <Action name="imageplugin_emboss" />
+        <Action name="imageplugin_oilpaint" />
+        <Action name="imageplugin_blurfx" />
+        <Action name="imageplugin_distortionfx" />
+        <Action name="imageplugin_raindrop" />
+        <Action name="imageplugin_filmgrain" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>

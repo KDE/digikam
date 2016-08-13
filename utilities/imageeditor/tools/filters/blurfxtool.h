@@ -3,12 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-26
- * Description : a digiKam image editor plugin for add film
- *               grain on an image.
+ * Date        : 2005-02-09
+ * Description : a plugin to apply Blur FX to images
  *
- * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,29 +22,28 @@
  *
  * ============================================================ */
 
-#ifndef FILMGRAINTOOL_H
-#define FILMGRAINTOOL_H
+#ifndef BLURFXTOOL_H
+#define BLURFXTOOL_H
 
 // Local includes
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
-class FilmGrainTool : public EditorToolThreaded
+class BlurFXTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit FilmGrainTool(QObject* const parent);
-    ~FilmGrainTool();
+    explicit BlurFXTool(QObject* const parent);
+    ~BlurFXTool();
 
 private Q_SLOTS:
 
+    void slotEffectTypeChanged(int type);
     void slotResetSettings();
 
 private:
@@ -57,6 +55,7 @@ private:
     void setPreviewImage();
     void setFinalImage();
     void renderingFinished();
+    void blockWidgetSignals(bool b);
 
 private:
 
@@ -64,6 +63,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam
 
-#endif /* FILMGRAINTOOL_H */
+#endif /* BLURFXTOOL_H */

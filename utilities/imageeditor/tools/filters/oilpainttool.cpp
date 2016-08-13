@@ -46,7 +46,7 @@
 #include "imageregionwidget.h"
 #include "oilpaintfilter.h"
 
-namespace DigikamFxFiltersImagePlugin
+namespace Digikam
 {
 
 class OilPaintTool::Private
@@ -58,7 +58,8 @@ public:
         smoothInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configBrushSizeEntry;
@@ -200,4 +201,4 @@ void OilPaintTool::setFinalImage()
     iface.setOriginal(i18n("Oil Paint"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamFxFiltersImagePlugin
+}  // namespace Digikam
