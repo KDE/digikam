@@ -70,7 +70,6 @@
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
 #include <ktoolbarpopupaction.h>
