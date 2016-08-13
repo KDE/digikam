@@ -75,7 +75,7 @@
 
 
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 // -------------------------------------------------------------
@@ -623,4 +623,4 @@ void ResizeTool::slotSaveAsSettings()
     file.close();
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam

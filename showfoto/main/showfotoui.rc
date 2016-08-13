@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="511" name="showfoto" translationDomain="digikam" >
+<gui version="512" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -110,6 +110,13 @@
         <Separator/>
         <Action name="editorwindow_crop" />
         <Action name="editorwindow_resize" />
+        <Action name="imageplugin_ratiocrop" />
+        <Action name="imageplugin_resize" />
+        <Separator />
+        <Action name="imageplugin_perspective" />
+        <Action name="imageplugin_freerotation" />
+        <Action name="imageplugin_sheartool" />
+        <Action name="imageplugin_contentawareresizing" />
     </Menu>
 
     <Menu name="Decorate" ><text>&amp;Decorate</text>

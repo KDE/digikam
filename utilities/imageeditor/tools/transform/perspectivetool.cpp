@@ -50,7 +50,7 @@
 #include "perspectivewidget.h"
 #include "dexpanderbox.h"
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class PerspectiveTool::Private
@@ -283,4 +283,4 @@ void PerspectiveTool::setBackgroundColor(const QColor& bg)
     d->previewWidget->setBackgroundColor(bg);
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam

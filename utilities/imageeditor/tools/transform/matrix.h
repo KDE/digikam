@@ -26,7 +26,7 @@
 #ifndef IMAGEEFFECT_PERSPECTIVE_MATRIX_H
 #define IMAGEEFFECT_PERSPECTIVE_MATRIX_H
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class Matrix
@@ -103,6 +103,6 @@ public:
     double coeff[3][3];
 };
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
 #endif // IMAGEEFFECT_PERSPECTIVE_MATRIX_H

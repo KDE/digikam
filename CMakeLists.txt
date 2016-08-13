@@ -597,13 +597,12 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-   add_subdirectory(data)
-   add_subdirectory(libs)
-   add_subdirectory(utilities)
-   add_subdirectory(app)
-   add_subdirectory(showfoto)
-   add_subdirectory(imageplugins)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    add_subdirectory(data)
+    add_subdirectory(libs)
+    add_subdirectory(utilities)
+    add_subdirectory(app)
+    add_subdirectory(showfoto)
 
     if(BUILD_TESTING)
         add_subdirectory(tests)

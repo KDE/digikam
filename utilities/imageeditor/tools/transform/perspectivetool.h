@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2005-02-17
- * Description : a plugin to transform image geometry.
+ * Description : a plugin to change image perspective .
  *
  * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,47 +21,41 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPLUGIN_TRANSFORM_H
-#define IMAGEPLUGIN_TRANSFORM_H
-
-// Qt includes
-
-#include <QVariant>
+#ifndef PERSPECTIVETOOL_H
+#define PERSPECTIVETOOL_H
 
 // Local includes
 
-#include "imageplugin.h"
+#include "editortool.h"
 
-using namespace Digikam;
+class QRect;
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
-class ImagePlugin_Transform : public ImagePlugin
+class PerspectiveTool : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    ImagePlugin_Transform(QObject* const parent, const QVariantList& args);
-    ~ImagePlugin_Transform();
-
-    void setEnabledActions(bool b);
-
-Q_SIGNALS:
-
-    void signalPoint1Action();
-    void signalPoint2Action();
-    void signalAutoAdjustAction();
+    explicit PerspectiveTool(QObject* const parent);
+    ~PerspectiveTool();
 
 private Q_SLOTS:
 
-    void slotPerspective();
-    void slotFreeRotation();
-    void slotShearTool();
-    void slotContentAwareResizing();
-    void slotResize();
-    void slotRatioCrop();
+    void slotInverseTransformationChanged(bool b);
+    void slotResetSettings();
+    void slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
+                        float bottomLeftAngle, float bottomRightAngle, bool valid);
+    void slotColorGuideChanged();
+
+private:
+
+    void readSettings();
+    void writeSettings();
+    void finalRendering();
+    void setBackgroundColor(const QColor& bg);
 
 private:
 
@@ -69,6 +63,6 @@ private:
     Private* const d;
 };
 
-} // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
-#endif /* IMAGEPLUGIN_TRANSFORM_H */
+#endif /* PERSPECTIVETOOL_H */

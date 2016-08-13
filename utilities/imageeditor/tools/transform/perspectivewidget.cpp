@@ -51,7 +51,7 @@
 #include "imageiface.h"
 #include "pixelsaliasfilter.h"
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class PerspectiveWidget::Private
@@ -1024,4 +1024,4 @@ void PerspectiveWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam

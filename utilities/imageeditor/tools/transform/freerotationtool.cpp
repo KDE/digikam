@@ -56,7 +56,7 @@
 #include "imageguidewidget.h"
 #include "dexpanderbox.h"
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class FreeRotationTool::Private
@@ -582,4 +582,4 @@ QString FreeRotationTool::repeatString(const QString& str, int times) const
     return tmp;
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam

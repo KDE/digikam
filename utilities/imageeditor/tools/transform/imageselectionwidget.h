@@ -34,13 +34,8 @@
 
 namespace Digikam
 {
-    class ImageIface;
-}
 
-using namespace Digikam;
-
-namespace DigikamTransformImagePlugin
-{
+class ImageIface;
 
 class ImageSelectionWidget : public QWidget
 {
@@ -191,6 +186,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
 #endif /* IMAGESELECTIONWIDGET_H */

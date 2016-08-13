@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-02-17
- * Description : a plugin to change image perspective .
+ * Date        : 2004-12-23
+ * Description : a plugin to shear an image
  *
- * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,43 +21,38 @@
  *
  * ============================================================ */
 
-#ifndef PERSPECTIVETOOL_H
-#define PERSPECTIVETOOL_H
+#ifndef SHEARTOOL_H
+#define SHEARTOOL_H
 
 // Local includes
 
 #include "editortool.h"
 
-class QRect;
-
-using namespace Digikam;
-
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
-class PerspectiveTool : public EditorTool
+class ShearTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit PerspectiveTool(QObject* const parent);
-    ~PerspectiveTool();
+    explicit ShearTool(QObject* const parent);
+    ~ShearTool();
 
 private Q_SLOTS:
 
-    void slotInverseTransformationChanged(bool b);
     void slotResetSettings();
-    void slotUpdateInfo(const QRect& newSize, float topLeftAngle, float topRightAngle,
-                        float bottomLeftAngle, float bottomRightAngle, bool valid);
     void slotColorGuideChanged();
 
 private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
-    void setBackgroundColor(const QColor& bg);
+    void preparePreview();
+    void prepareFinal();
+    void setPreviewImage();
+    void setFinalImage();
 
 private:
 
@@ -65,6 +60,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
-#endif /* PERSPECTIVETOOL_H */
+#endif /* SHEARTOOL_H */

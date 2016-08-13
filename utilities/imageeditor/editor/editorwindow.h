@@ -94,6 +94,9 @@ Q_SIGNALS:
     void signalNoCurrentItem();
     void signalPreviewModeChanged(int);
     void signalToolApplied();
+    void signalPoint1Action();
+    void signalPoint2Action();
+    void signalAutoAdjustAction();
 
 protected:
 
@@ -369,6 +372,12 @@ private Q_SLOTS:
     void slotAntiVignetting();
     void slotLensDistortion();
     void slotHotPixels();
+    void slotPerspective();
+    void slotFreeRotation();
+    void slotShearTool();
+    void slotContentAwareResizing();
+    void slotResize();
+    void slotRatioCrop();
 
 private:
 

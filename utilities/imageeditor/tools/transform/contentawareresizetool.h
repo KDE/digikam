@@ -30,9 +30,7 @@
 #include "editortool.h"
 #include "dimg.h"
 
-using namespace Digikam;
-
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class ContentAwareResizeTool : public EditorToolThreaded
@@ -75,6 +73,6 @@ private:
     Private* const d;
 };
 
-} // namespace DigikamTransformImagePlugin
+} // namespace Digikam
 
 #endif /*CONTENT_AWARE_RESIZE_TOOL_H*/

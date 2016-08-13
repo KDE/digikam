@@ -66,7 +66,7 @@
 #include "imageiface.h"
 #include "dimg.h"
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class ImageSelectionWidget::Private
@@ -1511,4 +1511,4 @@ void ImageSelectionWidget::setIsDrawingSelection(bool draw)
     d->isDrawingSelection = draw;
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam

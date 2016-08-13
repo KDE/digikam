@@ -130,6 +130,12 @@ public:
         noiseReductionAction(0),
         localContrastAction(0),
         inPaintingAction(0),
+        aspectRatioCropAction(0),
+        resizeAction(0),
+        contentAwareResizingAction(0),
+        sheartoolAction(0),
+        freerotationAction(0),
+        perspectiveAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -245,6 +251,12 @@ public:
     QAction*                     noiseReductionAction;
     QAction*                     localContrastAction;
     QAction*                     inPaintingAction;
+    QAction*                     aspectRatioCropAction;
+    QAction*                     resizeAction;
+    QAction*                     contentAwareResizingAction;
+    QAction*                     sheartoolAction;
+    QAction*                     freerotationAction;
+    QAction*                     perspectiveAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;

@@ -33,9 +33,7 @@
 class QPixmap;
 class QString;
 
-using namespace Digikam;
-
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class FreeRotationTool : public EditorToolThreaded
@@ -83,6 +81,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
 #endif /* FREEROTATIONTOOL_H */

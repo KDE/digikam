@@ -169,11 +169,20 @@
 #include "inpaintingtool.h"
 #include "antivignettingtool.h"
 #include "lensdistortiontool.h"
-#include "hotpixels/hotpixelstool.h"
+#include "hotpixelstool.h"
+#include "perspectivetool.h"
+#include "freerotationtool.h"
+#include "sheartool.h"
+#include "resizetool.h"
+#include "ratiocroptool.h"
+
+#ifdef HAVE_LIBLQR_1
+#   include "contentawareresizetool.h"
+#endif
 
 #ifdef HAVE_LENSFUN
 #   include "lensautofixtool.h"
-#endif // HAVE_LENSFUN
+#endif
 
 namespace Digikam
 {
@@ -887,6 +896,66 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_autocrop"), d->autoCropAction);
     ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
 
+    d->perspectiveAction = new QAction(QIcon::fromTheme(QLatin1String("perspective")), i18n("Perspective Adjustment..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_perspective"), d->perspectiveAction);
+    connect(d->perspectiveAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotPerspective()));
+    d->perspectiveAction->setEnabled(false);
+
+    d->sheartoolAction = new QAction(QIcon::fromTheme(QLatin1String("transform-shear-left")), i18n("Shear..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_sheartool"), d->sheartoolAction);
+    connect(d->sheartoolAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotShearTool()));
+    d->sheartoolAction->setEnabled(false);
+
+    d->resizeAction = new QAction(QIcon::fromTheme(QLatin1String("transform-scale")), i18n("&Resize..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_resize"), d->resizeAction);
+    connect(d->resizeAction, SIGNAL(triggered()),
+            this, SLOT(slotResize()));
+    d->resizeAction->setEnabled(false);
+
+    d->aspectRatioCropAction = new QAction(QIcon::fromTheme(QLatin1String("transform-crop")), i18n("Aspect Ratio Crop..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_ratiocrop"), d->aspectRatioCropAction);
+    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRatioCrop()));
+    d->aspectRatioCropAction->setEnabled(false);
+
+#ifdef HAVE_LIBLQR_1
+
+    d->contentAwareResizingAction = new QAction(QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Liquid Rescale..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_contentawareresizing"), d->contentAwareResizingAction);
+    connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotContentAwareResizing()));
+    d->contentAwareResizingAction->setEnabled(false);
+
+#endif /* HAVE_LIBLQR_1 */
+
+    //-----------------------------------------------------------------------------------
+
+    d->freerotationAction = new QAction(QIcon::fromTheme(QLatin1String("transform-rotate")), i18n("Free Rotation..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_freerotation"), d->freerotationAction );
+    connect(d->freerotationAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFreeRotation()));
+    d->freerotationAction->setEnabled(false);
+
+    QAction* const point1Action = new QAction(i18n("Set Point 1"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_freerotation_point1"), point1Action);
+    actionCollection()->setDefaultShortcut(point1Action, Qt::CTRL + Qt::SHIFT + Qt::Key_1);
+    connect(point1Action, SIGNAL(triggered(bool)),
+            this, SIGNAL(signalPoint1Action()));
+
+    QAction* const point2Action = new QAction(i18n("Set Point 2"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_freerotation_point2"), point2Action);
+    actionCollection()->setDefaultShortcut(point2Action, Qt::CTRL + Qt::SHIFT + Qt::Key_2);
+    connect(point2Action, SIGNAL(triggered(bool)),
+            this, SIGNAL(signalPoint2Action()));
+
+    QAction* const autoAdjustAction = new QAction(i18n("Auto Adjust"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_freerotation_autoadjust"), autoAdjustAction);
+    actionCollection()->setDefaultShortcut(autoAdjustAction, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+    connect(autoAdjustAction, SIGNAL(triggered(bool)),
+            this, SIGNAL(signalAutoAdjustAction()));
+
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
     d->flipHorizAction = new QAction(QIcon::fromTheme(QLatin1String("object-flip-horizontal")), i18n("Flip Horizontally"), this);
@@ -1477,20 +1546,19 @@ void EditorWindow::toggleStandardActions(bool val)
     d->lensdistortionAction->setEnabled(val);
     d->antivignettingAction->setEnabled(val);
     d->hotpixelsAction->setEnabled(val);
+    d->resizeAction->setEnabled(val);
+    d->perspectiveAction->setEnabled(val);
+    d->freerotationAction->setEnabled(val);
+    d->sheartoolAction->setEnabled(val);
+    d->aspectRatioCropAction->setEnabled(val);
 
 #ifdef HAVE_LENSFUN
     d->lensAutoFixAction->setEnabled(val);
-#endif // HAVE_LENSFUN
+#endif
 
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            plugin->setEnabledActions(val);
-        }
-    }
+#ifdef HAVE_LIBLQR_1
+    d->contentAwareResizingAction->setEnabled(val);
+#endif
 }
 
 void EditorWindow::toggleNonDestructiveActions()
@@ -2945,42 +3013,42 @@ DCategorizedView* EditorWindow::createToolSelectionView()
     // builtin actions
 
     QString basicTransformCategory     = i18nc("@title Image transformations", "Basic Transformations");
-    actionModel->addAction(d->rotateLeftAction,     basicTransformCategory);
-    actionModel->addAction(d->rotateRightAction,    basicTransformCategory);
-    actionModel->addAction(d->flipHorizAction,      basicTransformCategory);
-    actionModel->addAction(d->flipVertAction,       basicTransformCategory);
-    actionModel->addAction(d->cropAction,           basicTransformCategory);
-    actionModel->addAction(d->autoCropAction,       basicTransformCategory);
+    actionModel->addAction(d->rotateLeftAction,      basicTransformCategory);
+    actionModel->addAction(d->rotateRightAction,     basicTransformCategory);
+    actionModel->addAction(d->flipHorizAction,       basicTransformCategory);
+    actionModel->addAction(d->flipVertAction,        basicTransformCategory);
+    actionModel->addAction(d->cropAction,            basicTransformCategory);
+    actionModel->addAction(d->autoCropAction,        basicTransformCategory);
 
     QString decorateCategory           = i18nc("@title Image Decorate",        "Decorate");
-    actionModel->addAction(d->textureAction,        decorateCategory);
-    actionModel->addAction(d->borderAction,         decorateCategory);
-    actionModel->addAction(d->insertTextAction,     decorateCategory);
+    actionModel->addAction(d->textureAction,         decorateCategory);
+    actionModel->addAction(d->borderAction,          decorateCategory);
+    actionModel->addAction(d->insertTextAction,      decorateCategory);
 
     QString effectsCategory            = i18nc("@title Image Effect",          "Effects");
-    actionModel->addAction(d->filmgrainAction,      effectsCategory);
-    actionModel->addAction(d->raindropAction,       effectsCategory);
-    actionModel->addAction(d->distortionfxAction,   effectsCategory);
-    actionModel->addAction(d->blurfxAction,         effectsCategory);
-    actionModel->addAction(d->oilpaintAction,       effectsCategory);
-    actionModel->addAction(d->embossAction,         effectsCategory);
-    actionModel->addAction(d->charcoalAction,       effectsCategory);
-    actionModel->addAction(d->colorEffectsAction,   effectsCategory);
+    actionModel->addAction(d->filmgrainAction,       effectsCategory);
+    actionModel->addAction(d->raindropAction,        effectsCategory);
+    actionModel->addAction(d->distortionfxAction,    effectsCategory);
+    actionModel->addAction(d->blurfxAction,          effectsCategory);
+    actionModel->addAction(d->oilpaintAction,        effectsCategory);
+    actionModel->addAction(d->embossAction,          effectsCategory);
+    actionModel->addAction(d->charcoalAction,        effectsCategory);
+    actionModel->addAction(d->colorEffectsAction,    effectsCategory);
 
     QString colorsCategory             = i18nc("@title Image Colors",          "Colors");
-    actionModel->addAction(d->convertTo8Bits,       colorsCategory);
-    actionModel->addAction(d->convertTo16Bits,      colorsCategory);
-    actionModel->addAction(d->invertAction,         colorsCategory);
-    actionModel->addAction(d->BCGAction,            colorsCategory);
-    actionModel->addAction(d->CBAction,             colorsCategory);
-    actionModel->addAction(d->autoCorrectionAction, colorsCategory);
-    actionModel->addAction(d->BWAction,             colorsCategory);
-    actionModel->addAction(d->HSLAction,            colorsCategory);
-    actionModel->addAction(d->whitebalanceAction,   colorsCategory);
-    actionModel->addAction(d->channelMixerAction,   colorsCategory);
-    actionModel->addAction(d->curvesAction,         colorsCategory);
-    actionModel->addAction(d->levelsAction,         colorsCategory);
-    actionModel->addAction(d->filmAction,           colorsCategory);
+    actionModel->addAction(d->convertTo8Bits,        colorsCategory);
+    actionModel->addAction(d->convertTo16Bits,       colorsCategory);
+    actionModel->addAction(d->invertAction,          colorsCategory);
+    actionModel->addAction(d->BCGAction,             colorsCategory);
+    actionModel->addAction(d->CBAction,              colorsCategory);
+    actionModel->addAction(d->autoCorrectionAction,  colorsCategory);
+    actionModel->addAction(d->BWAction,              colorsCategory);
+    actionModel->addAction(d->HSLAction,             colorsCategory);
+    actionModel->addAction(d->whitebalanceAction,    colorsCategory);
+    actionModel->addAction(d->channelMixerAction,    colorsCategory);
+    actionModel->addAction(d->curvesAction,          colorsCategory);
+    actionModel->addAction(d->levelsAction,          colorsCategory);
+    actionModel->addAction(d->filmAction,            colorsCategory);
 
     foreach(QAction* const ac, d->profileMenuAction->actions())
     {
@@ -2988,23 +3056,31 @@ DCategorizedView* EditorWindow::createToolSelectionView()
     }
 
     QString enhanceCategory             = i18nc("@title Image Enhance",        "Enhance");
-    actionModel->addAction(d->restorationAction,    enhanceCategory);
-    actionModel->addAction(d->blurAction,           enhanceCategory);
-    actionModel->addAction(d->sharpenAction,        enhanceCategory);
-    actionModel->addAction(d->noiseReductionAction, enhanceCategory);
-    actionModel->addAction(d->localContrastAction,  enhanceCategory);
-    actionModel->addAction(d->redeyeAction,         enhanceCategory);
-    actionModel->addAction(d->inPaintingAction,     enhanceCategory);
-    actionModel->addAction(d->lensdistortionAction, enhanceCategory);
-    actionModel->addAction(d->antivignettingAction, enhanceCategory);
-    actionModel->addAction(d->hotpixelsAction,      enhanceCategory);
+    actionModel->addAction(d->restorationAction,     enhanceCategory);
+    actionModel->addAction(d->blurAction,            enhanceCategory);
+    actionModel->addAction(d->sharpenAction,         enhanceCategory);
+    actionModel->addAction(d->noiseReductionAction,  enhanceCategory);
+    actionModel->addAction(d->localContrastAction,   enhanceCategory);
+    actionModel->addAction(d->redeyeAction,          enhanceCategory);
+    actionModel->addAction(d->inPaintingAction,      enhanceCategory);
+    actionModel->addAction(d->lensdistortionAction,  enhanceCategory);
+    actionModel->addAction(d->antivignettingAction,  enhanceCategory);
+    actionModel->addAction(d->hotpixelsAction,       enhanceCategory);
+
+    QString transformCategory           = i18nc("@title Image Transform",      "Transform");
+    actionModel->addAction(d->aspectRatioCropAction, transformCategory);
+    actionModel->addAction(d->resizeAction,          transformCategory);
+    actionModel->addAction(d->sheartoolAction,       transformCategory);
+    actionModel->addAction(d->freerotationAction,    transformCategory);
+    actionModel->addAction(d->perspectiveAction,     transformCategory);
+
+#ifdef HAVE_LIBLQR_1
+    actionModel->addAction(d->contentAwareResizingAction, transformCategory);
+#endif
 
 #ifdef HAVE_LENSFUN
     actionModel->addAction(d->lensAutoFixAction, enhanceCategory);
-#endif // HAVE_LENSFUN
-
-    // parse menus for image plugin actions
-    actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
+#endif
 
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
@@ -3553,12 +3629,55 @@ void EditorWindow::slotLensAutoFix()
 {
 #ifdef HAVE_LENSFUN
     loadTool(new LensAutoFixTool(this));
-#endif // HAVE_LENSFUN
+#endif
 }
 
 void EditorWindow::slotAntiVignetting()
 {
     loadTool(new AntiVignettingTool(this));
+}
+
+void EditorWindow::slotPerspective()
+{
+    loadTool(new PerspectiveTool(this));
+}
+
+void EditorWindow::slotShearTool()
+{
+    loadTool(new ShearTool(this));
+}
+
+void EditorWindow::slotResize()
+{
+    loadTool(new ResizeTool(this));
+}
+
+void EditorWindow::slotRatioCrop()
+{
+    loadTool(new RatioCropTool(this));
+}
+
+void EditorWindow::slotContentAwareResizing()
+{
+#ifdef HAVE_LIBLQR_1
+    loadTool(new ContentAwareResizeTool(this));
+#endif
+}
+
+void EditorWindow::slotFreeRotation()
+{
+    FreeRotationTool* const tool = new FreeRotationTool(this);
+
+    connect(this, SIGNAL(signalPoint1Action()),
+            tool, SLOT(slotAutoAdjustP1Clicked()));
+
+    connect(this, SIGNAL(signalPoint2Action()),
+            tool, SLOT(slotAutoAdjustP2Clicked()));
+
+    connect(this, SIGNAL(signalAutoAdjustAction()),
+            tool, SLOT(slotAutoAdjustClicked()));
+
+    loadTool(tool);
 }
 
 }  // namespace Digikam

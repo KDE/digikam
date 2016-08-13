@@ -43,12 +43,6 @@
 namespace Digikam
 {
 class ImageIface;
-}
-
-using namespace Digikam;
-
-namespace DigikamTransformImagePlugin
-{
 
 class PerspectiveWidget : public QWidget
 {
@@ -118,6 +112,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
 #endif /* PERSPECTIVEWIDGET_H */

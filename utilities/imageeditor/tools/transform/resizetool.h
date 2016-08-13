@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-01-18
- * Description : triangle geometry calculation class.
+ * Date        : 2005-04-07
+ * Description : a tool to resize an image
  *
  * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,39 +21,54 @@
  *
  * ============================================================ */
 
-#ifndef TRIANGLE_H
-#define TRIANGLE_H
+#ifndef RESIZE_TOOL_H
+#define RESIZE_TOOL_H
 
 // Qt includes
 
-#include <QPoint>
+#include <QString>
 
-namespace DigikamTransformImagePlugin
+// Local includes
+
+#include "editortool.h"
+
+namespace Digikam
 {
 
-class Triangle
+class ResizeTool : public EditorToolThreaded
 {
+    Q_OBJECT
 
 public:
 
-    Triangle(const QPoint& A, const QPoint& B, const QPoint& C);
-    ~Triangle() {};
-
-    float angleABC() const;
-    float angleACB() const;
-    float angleBAC() const;
+    explicit ResizeTool(QObject* const parent);
+    ~ResizeTool();
 
 private:
 
-    float distanceP2P(const QPoint& p1, const QPoint& p2) const;
+    void writeSettings();
+    void readSettings();
+    void preparePreview();
+    void prepareFinal();
+    void setPreviewImage();
+    void setFinalImage();
+    void renderingFinished();
+    void blockWidgetSignals(bool b);
+
+private Q_SLOTS:
+
+    void slotSaveAsSettings();
+    void slotLoadSettings();
+    void slotResetSettings();
+    void slotValuesChanged();
+    void slotRestorationToggled(bool);
 
 private:
 
-    float m_a;
-    float m_b;
-    float m_c;
+    class Private;
+    Private* const d;
 };
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
 
-#endif /* TRIANGLE_H */
+#endif /* RESIZE_TOOL_H */

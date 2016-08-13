@@ -54,9 +54,7 @@
 #include "imageguidewidget.h"
 #include "contentawarefilter.h"
 
-
-
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class ContentAwareResizeTool::Private
@@ -862,4 +860,4 @@ bool ContentAwareResizeTool::eventFilter(QObject* obj, QEvent* ev)
     return false;
 }
 
-} // namespace DigikamTransformImagePlugin
+} // namespace Digikam

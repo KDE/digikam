@@ -48,7 +48,7 @@
 #include "shearfilter.h"
 #include "dexpanderbox.h"
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class ShearTool::Private
@@ -339,4 +339,4 @@ void ShearTool::setFinalImage()
     iface.setOriginal(i18n("Shear Tool"), filter()->filterAction(), targetImage);
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam

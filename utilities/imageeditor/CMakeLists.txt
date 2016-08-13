@@ -130,7 +130,22 @@ set(libeditortools_SRCS
     tools/enhance/hotpixels/blackframelistview.cpp
     tools/enhance/hotpixels/hotpixelfixer.cpp
     tools/enhance/hotpixels/hotpixelstool.cpp
+    tools/transform/freerotationtool.cpp
+    tools/transform/sheartool.cpp
+    tools/transform/resizetool.cpp
+    tools/transform/perspectivetool.cpp
+    tools/transform/perspectivewidget.cpp
+    tools/transform/triangle.cpp
+    tools/transform/matrix.cpp
+    tools/transform/imageselectionwidget.cpp
+    tools/transform/ratiocroptool.cpp
 )
+
+if(LQR-1_FOUND)
+    set(libeditortools_SRCS ${libeditortools_SRCS}
+        tools/transform/contentawareresizetool.cpp
+       )
+endif()
 
 if(LENSFUN_FOUND)
     set(libeditortools_SRCS ${libeditortools_SRCS}

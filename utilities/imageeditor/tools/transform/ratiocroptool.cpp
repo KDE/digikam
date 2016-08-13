@@ -63,7 +63,7 @@
 
 
 
-namespace DigikamTransformImagePlugin
+namespace Digikam
 {
 
 class RatioCropTool::Private
@@ -1092,4 +1092,4 @@ void RatioCropTool::setBackgroundColor(const QColor& bg)
     d->imageSelectionWidget->setBackgroundColor(bg);
 }
 
-}  // namespace DigikamTransformImagePlugin
+}  // namespace Digikam
