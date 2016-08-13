@@ -113,7 +113,7 @@ public:
     /**
      * Checks if the given database path is equal to the current one
      */
-    bool databaseEqual(const QString& dbType, const QString& dbName, const QString& dbHostName, int dbPort, bool dbInternalServer) const;
+    bool databaseEqual(const DbEngineParameters& parameters) const;
 
     /**
      * starts scanning the libraryPath and listing the albums. If the
