@@ -34,16 +34,6 @@ if(GPHOTO2_FOUND)
     include_directories(${GPHOTO2_INCLUDE_DIRS})
 endif()
 
-set(libeditorplugin_SRCS
-    plugin/imageiface.cpp
-    plugin/imageplugin.cpp
-    plugin/imagepluginloader.cpp
-)
-
-add_library(editorplugin_src OBJECT ${libeditorplugin_SRCS})
-
-install(FILES plugin/digikamimageplugin.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
-
 set(libeditorwidgets_SRCS
     widgets/imageguidewidget.cpp
     widgets/imagepreviewitem.cpp
@@ -161,6 +151,7 @@ set(libeditoriface_SRCS
     editor/editortoolsettings.cpp
     editor/editorwindow.cpp
     editor/actioncategorizedview.cpp
+    editor/imageiface.cpp
 )
 
 # this lib is used to build digikam core

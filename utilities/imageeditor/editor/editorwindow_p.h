@@ -51,8 +51,6 @@ class QLabel;
 class QToolButton;
 class QWidgetAction;
 
-class KActionCollection;
-
 namespace Digikam
 {
 
@@ -75,7 +73,6 @@ public:
         underExposureIndicator(0),
         overExposureIndicator(0),
         infoLabel(0),
-        imagepluginsActionCollection(0),
         copyAction(0),
         cropAction(0),
         autoCropAction(0),
@@ -192,8 +189,6 @@ public:
     QToolButton*                 overExposureIndicator;
 
     DAdjustableLabel*            infoLabel;
-
-    KActionCollection*           imagepluginsActionCollection;
 
     QAction*                     copyAction;
     QAction*                     cropAction;

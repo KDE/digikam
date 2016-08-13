@@ -111,8 +111,6 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "imagedialog.h"
-#include "imageplugin.h"
-#include "imagepluginloader.h"
 #include "iofilesettings.h"
 #include "metadatasettings.h"
 #include "libsinfodlg.h"
@@ -201,7 +199,6 @@ EditorWindow::EditorWindow(const QString& name)
     m_servicesMenu                 = 0;
     m_serviceAction                = 0;
     m_canvas                       = 0;
-    m_imagePluginLoader            = 0;
     m_openVersionAction            = 0;
     m_saveAction                   = 0;
     m_saveAsAction                 = 0;
@@ -1018,8 +1015,6 @@ void EditorWindow::setupStandardActions()
     m_selectToolsAction->setVisible(false);
     ac->addAction(QLatin1String("editorwindow_selecttool"), m_selectToolsAction->menuAction());
 
-    // NOTE: setup is done after image plugins are loaded
-
     m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("Ok"), this);
     ac->addAction(QLatin1String("editorwindow_applytool"), m_applyToolAction);
     ac->setDefaultShortcut(m_applyToolAction, Qt::Key_Return);
@@ -1119,11 +1114,6 @@ void EditorWindow::printImage(const QUrl&)
     printHelp.print(*image);
 }
 
-void EditorWindow::slotEditKeys()
-{
-    editKeyboardShortcuts(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
-}
-
 void EditorWindow::slotAboutToShowUndoMenu()
 {
     m_undoAction->menu()->clear();
@@ -1198,80 +1188,6 @@ void EditorWindow::slotToggleOffFitToWindow()
     d->zoomFitToWindowAction->blockSignals(true);
     d->zoomFitToWindowAction->setChecked(false);
     d->zoomFitToWindowAction->blockSignals(false);
-}
-
-void EditorWindow::loadImagePlugins()
-{
-    if (d->imagepluginsActionCollection)
-    {
-        d->imagepluginsActionCollection->clear();
-        delete d->imagepluginsActionCollection;
-    }
-
-    d->imagepluginsActionCollection = new KActionCollection(dynamic_cast<QObject*>(this));
-
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Got total of " << pluginList.size() << " image plugins";
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            guiFactory()->addClient(plugin);
-            plugin->setEnabledSelectionActions(false);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "loading plugin: " << plugin->componentName();
-            // add actions to imagepluginsActionCollection
-            QString categoryStr = plugin->actionCategory();
-
-            if (categoryStr != QLatin1String("__INVALID__") && !categoryStr.isEmpty())
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Adding to category " << categoryStr;
-                KActionCategory* const category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
-
-                foreach(QAction* const action, plugin->actionCollection()->actions())
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "  Action: " << action->objectName();
-                    category->addAction(action->objectName(), action);
-                }
-            }
-            else
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Adding non-categorized plugins:";
-                foreach(QAction* const action, plugin->actionCollection()->actions())
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "  " << action->objectName();
-                    d->imagepluginsActionCollection->addAction(action->objectName(), action);
-                }
-            }
-        }
-        else
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid plugin to add!";
-        }
-    }
-
-    // load imagepluginsActionCollection settings
-    d->imagepluginsActionCollection->readSettings();
-}
-
-void EditorWindow::unLoadImagePlugins()
-{
-    if (d->imagepluginsActionCollection)
-    {
-        d->imagepluginsActionCollection->clear();
-        delete d->imagepluginsActionCollection;
-    }
-
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            guiFactory()->removeClient(plugin);
-            plugin->setEnabledSelectionActions(false);
-        }
-    }
 }
 
 void EditorWindow::readStandardSettings()
@@ -1952,17 +1868,8 @@ void EditorWindow::slotSelected(bool val)
     d->zoomFitToSelectAction->setEnabled(val);
     d->copyAction->setEnabled(val);
 
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            plugin->setEnabledSelectionActions(val);
-        }
-    }
-
     QRect sel = m_canvas->getSelectedArea();
+
     // Update histogram into sidebar.
     emit signalSelectionChanged(sel);
 
@@ -3399,7 +3306,7 @@ void EditorWindow::slotConvertTo8Bits()
                                             qApp->applicationName(),
                                             i18n("Performing this operation will reduce image color quality. "
                                             "Do you want to continue?"),
-                                            QLatin1String("ImagePluginColor16To8Bits"))
+                                            QLatin1String("ToolColor16To8Bits"))
             == QMessageBox::Cancel)
         {
             return;

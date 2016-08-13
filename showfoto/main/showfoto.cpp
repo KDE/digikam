@@ -80,8 +80,6 @@
 #include "geolocationedit.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
-#include "imageplugin.h"
-#include "imagepluginloader.h"
 #include "imagepropertiessidebar.h"
 #include "iofilesettings.h"
 #include "loadingcache.h"
@@ -164,10 +162,6 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     createGUI(xmlFile());
     cleanupActions();
 
-    // Load image plugins to GUI
-
-    m_imagePluginLoader = new Digikam::ImagePluginLoader(this, d->splash);
-
     // Create context menu.
 
     setupContextMenu();
@@ -199,15 +193,12 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
 
 ShowFoto::~ShowFoto()
 {
-    unLoadImagePlugins();
-
     delete m_canvas;
     m_canvas = 0;
 
     Digikam::ThumbnailLoadThread::cleanUp();
     Digikam::LoadingCacheInterface::cleanUp();
 
-    delete m_imagePluginLoader;
     delete d->model;
     delete d->filterModel;
     delete d->thumbBar;
@@ -576,22 +567,6 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
     m_canvas->load(localFile, m_IOFileSettings);
 
     //TODO : add preload here like in ImageWindow::slotLoadCurrent() ???
-
-    // By this condition we make sure that no crashes will happen
-    // if no images were loaded to the canvas before
-
-    qDebug(DIGIKAM_SHOWFOTO_LOG) << "Loading plugins?";
-
-    if (!d->imagePluginsLoaded)
-    {
-        qDebug(DIGIKAM_SHOWFOTO_LOG) << "  Yes, doing it..";
-        loadImagePlugins();
-        d->imagePluginsLoaded = true;
-    }
-    else
-    {
-        qDebug(DIGIKAM_SHOWFOTO_LOG) << "  Already loaded..";
-    }
 }
 
 void ShowFoto::slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info)

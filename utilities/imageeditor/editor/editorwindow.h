@@ -62,7 +62,6 @@ class EditorTool;
 class EditorStackView;
 class ExposureSettingsContainer;
 class IOFileSettings;
-class ImagePluginLoader;
 class ICCSettingsContainer;
 class Sidebar;
 class SidebarSplitter;
@@ -146,7 +145,6 @@ protected:
 
     EditorStackView*          m_stackView;
     Canvas*                   m_canvas;
-    ImagePluginLoader*        m_imagePluginLoader;
     StatusProgressBar*        m_nameLabel;
     IOFileSettings*           m_IOFileSettings;
     QPointer<QProgressDialog> m_savingProgressDialog;
@@ -186,9 +184,6 @@ protected:
     void toggleToolActions(EditorTool* tool = 0);
 
     void printImage(const QUrl& url);
-
-    void unLoadImagePlugins();
-    void loadImagePlugins();
 
     bool promptForOverWrite();
 
@@ -261,8 +256,6 @@ protected:
     virtual void saveVersionIsComplete() = 0;
 
 protected Q_SLOTS:
-
-    void slotEditKeys();
 
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
