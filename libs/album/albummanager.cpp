@@ -391,16 +391,11 @@ void AlbumManager::cleanUp()
     }
 }
 
-bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbNameCore,
-                                 const QString& dbHostName, int dbPort, bool dbInternalServer) const
+bool AlbumManager::databaseEqual(const DbEngineParameters& parameters) const
 {
     DbEngineParameters params = CoreDbAccess::parameters();
 
-    return params.databaseType      == dbType          &&
-           params.databaseNameCore  == dbNameCore      &&
-           params.hostName          == dbHostName      &&
-           params.port              == dbPort          &&
-           params.internalServer    == dbInternalServer;
+    return (params == parameters);
 }
 
 static bool moveToBackup(const QFileInfo& info)
