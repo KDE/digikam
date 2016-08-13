@@ -91,8 +91,6 @@
 #include "imageinfo.h"
 #include "imagegps.h"
 #include "imagelistmodel.h"
-#include "imageplugin.h"
-#include "imagepluginloader.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"
 #include "imagescanner.h"
@@ -166,11 +164,6 @@ ImageWindow::ImageWindow()
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 
-    // Load image plugins to GUI
-
-    m_imagePluginLoader = ImagePluginLoader::instance();
-    loadImagePlugins();
-
     // Create tool selection view
 
     setupSelectToolsAction();
@@ -205,8 +198,6 @@ ImageWindow::ImageWindow()
 ImageWindow::~ImageWindow()
 {
     m_instance = 0;
-
-    unLoadImagePlugins();
 
     delete d->rightSideBar;
     delete d->thumbBar;

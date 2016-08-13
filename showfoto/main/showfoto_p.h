@@ -47,7 +47,6 @@ public:
     Private() :
         validIccPath(true),
         droppedUrls(false),
-        imagePluginsLoaded(false),
         itemsNb(0),
         vSplitter(0),
         fileOpenAction(0),
@@ -68,7 +67,6 @@ public:
 
     bool                             validIccPath;
     bool                             droppedUrls;
-    bool                             imagePluginsLoaded;
 
     int                              itemsNb;
 

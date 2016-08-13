@@ -62,7 +62,6 @@ class EditorTool;
 class EditorStackView;
 class ExposureSettingsContainer;
 class IOFileSettings;
-class ImagePluginLoader;
 class ICCSettingsContainer;
 class Sidebar;
 class SidebarSplitter;
@@ -70,6 +69,7 @@ class SlideShowSettings;
 class StatusProgressBar;
 class VersionManager;
 class VersionFileOperation;
+class IccProfile;
 
 class DIGIKAM_EXPORT EditorWindow : public DXmlGuiWindow
 {
@@ -93,6 +93,9 @@ Q_SIGNALS:
     void signalNoCurrentItem();
     void signalPreviewModeChanged(int);
     void signalToolApplied();
+    void signalPoint1Action();
+    void signalPoint2Action();
+    void signalAutoAdjustAction();
 
 protected:
 
@@ -142,7 +145,6 @@ protected:
 
     EditorStackView*          m_stackView;
     Canvas*                   m_canvas;
-    ImagePluginLoader*        m_imagePluginLoader;
     StatusProgressBar*        m_nameLabel;
     IOFileSettings*           m_IOFileSettings;
     QPointer<QProgressDialog> m_savingProgressDialog;
@@ -182,9 +184,6 @@ protected:
     void toggleToolActions(EditorTool* tool = 0);
 
     void printImage(const QUrl& url);
-
-    void unLoadImagePlugins();
-    void loadImagePlugins();
 
     bool promptForOverWrite();
 
@@ -258,8 +257,6 @@ protected:
 
 protected Q_SLOTS:
 
-    void slotEditKeys();
-
     void slotAboutToShowUndoMenu();
     void slotAboutToShowRedoMenu();
 
@@ -329,6 +326,51 @@ private Q_SLOTS:
     void slotToggleRightSideBar();
     void slotPreviousRightSideBarTab();
     void slotNextRightSideBarTab();
+    void slotToolDone();
+    void slotInsertText();
+    void slotBorder();
+    void slotTexture();
+    void slotColorEffects();
+    void slotCharcoal();
+    void slotEmboss();
+    void slotOilPaint();
+    void slotBlurFX();
+    void slotDistortionFX();
+    void slotRainDrop();
+    void slotFilmGrain();
+    void slotBCG();
+    void slotCB();
+    void slotHSL();
+    void slotAutoCorrection();
+    void slotInvert();
+    void slotBW();
+    void slotWhiteBalance();
+    void slotConvertTo8Bits();
+    void slotConvertTo16Bits();
+    void slotConvertToColorSpace(const IccProfile&);
+    void slotProfileConversionTool();
+    void slotChannelMixer();
+    void slotCurvesAdjust();
+    void slotLevelsAdjust();
+    void slotFilm();
+    void slotUpdateColorSpaceMenu();
+    void slotRestoration();
+    void slotBlur();
+    void slotSharpen();
+    void slotNoiseReduction();
+    void slotLocalContrast();
+    void slotRedEye();
+    void slotInPainting();
+    void slotLensAutoFix();
+    void slotAntiVignetting();
+    void slotLensDistortion();
+    void slotHotPixels();
+    void slotPerspective();
+    void slotFreeRotation();
+    void slotShearTool();
+    void slotContentAwareResizing();
+    void slotResize();
+    void slotRatioCrop();
 
 private:
 
@@ -374,6 +416,8 @@ private:
     QString selectValidSavingFormat(const QUrl& targetUrl);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);
+
+    void loadTool(EditorTool* const tool);
 
 private:
 

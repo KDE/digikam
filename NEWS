@@ -3,6 +3,7 @@ digiKam 5.2.0 - Release date: 2016-09-11
 
 NEW FEATURES:
 
+ImageEditor: digiKam editor and Showfoto plugins interface removed to reduce run-time dependancies and speed-up initialization.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -12,4 +13,5 @@ BUGFIXES FROM BUGZILLA:
 004 ==> 366630 - digiKam Not Responding if 'Right Click' on a empty area below the album lists.
 005 ==> 366621 - Crash when performing Transformation resize operation.
 006 ==> 366683 - Reverse Geottaging doesn't work on manually modified coordinates.
-007 ==> 
+007 ==> 360528 - Digikam looks for digikamimageplugins in different directory than they were installed to.
+008 ==> 

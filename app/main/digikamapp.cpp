@@ -116,7 +116,6 @@
 #include "maintenancedlg.h"
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
-#include "imagepluginloader.h"
 #include "tagsmanager.h"
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
@@ -307,8 +306,6 @@ DigikamApp::~DigikamApp()
     {
         // Delete after close
         ImageWindow::imageWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
-        // pass ownership of object - needed by ImageWindow destructor
-        ImagePluginLoader::instance()->setParent(ImageWindow::imageWindow());
         // close the window
         ImageWindow::imageWindow()->close();
     }
@@ -2535,9 +2532,6 @@ void DigikamApp::loadPlugins()
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
     d->view->slotAlbumSelected(albumList);
-
-    // Load Image Editor plugins.
-    new ImagePluginLoader(this, d->splashScreen);
 }
 
 void DigikamApp::populateThemes()
