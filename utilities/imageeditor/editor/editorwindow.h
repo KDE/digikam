@@ -329,6 +329,10 @@ private Q_SLOTS:
     void slotToggleRightSideBar();
     void slotPreviousRightSideBarTab();
     void slotNextRightSideBarTab();
+    void slotToolDone();
+    void slotInsertText();
+    void slotBorder();
+    void slotTexture();
 
 private:
 
@@ -374,6 +378,8 @@ private:
     QString selectValidSavingFormat(const QUrl& targetUrl);
 
     void addAction2ContextMenu(const QString& actionName, bool addDisabled = false);
+
+    void loadTool(EditorTool* const tool);
 
 private:
 

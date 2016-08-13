@@ -3,12 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-01-20
- * Description : a digiKam image plugin to add a border
- *               around an image.
+ * Date        : 2005-02-14
+ * Description : a plugin to insert a text over an image.
  *
- * Copyright 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,43 +22,44 @@
  *
  * ============================================================ */
 
-#ifndef BORDERTOOL_H
-#define BORDERTOOL_H
-
-// Qt includes
-
-#include <QString>
+#ifndef INSERTTEXTTOOL_H
+#define INSERTTEXTTOOL_H
 
 // Local includes
 
 #include "editortool.h"
 
-using namespace Digikam;
+class QFont;
 
-namespace DigikamDecorateImagePlugin
+namespace Digikam
 {
 
-class BorderTool : public EditorToolThreaded
+class InsertTextTool : public EditorTool
 {
     Q_OBJECT
 
 public:
 
-    explicit BorderTool(QObject* const parent);
-    ~BorderTool();
+    explicit InsertTextTool(QObject* const parent);
+    ~InsertTextTool();
+
+Q_SIGNALS:
+
+    void signalUpdatePreview();
 
 private Q_SLOTS:
 
     void slotResetSettings();
+    void slotFontPropertiesChanged(const QFont& font);
+    void slotUpdatePreview();
+    void slotAlignModeChanged(int mode);
 
 private:
 
     void readSettings();
     void writeSettings();
-    void preparePreview();
-    void prepareFinal();
-    void setPreviewImage();
-    void setFinalImage();
+    void finalRendering();
+    void setBackgroundColor(const QColor& bg);
 
 private:
 
@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam
 
-#endif /* BORDERTOOL_H */
+#endif /* INSERTTEXTTOOL_H */

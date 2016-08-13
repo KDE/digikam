@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-02-14
- * Description : a plugin to insert a text over an image.
+ * Date        : 2005-03-10
+ * Description : a plugin to apply texture over an image
  *
  * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -22,46 +22,45 @@
  *
  * ============================================================ */
 
-#ifndef INSERTTEXTTOOL_H
-#define INSERTTEXTTOOL_H
+#ifndef TEXTURETOOL_H
+#define TEXTURETOOL_H
+
+// Qt includes
+
+#include <QString>
 
 // Local includes
 
 #include "editortool.h"
 
-class QFont;
-
-using namespace Digikam;
-
-namespace DigikamDecorateImagePlugin
+namespace Digikam
 {
 
-class InsertTextTool : public EditorTool
+class TextureTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit InsertTextTool(QObject* const parent);
-    ~InsertTextTool();
+    explicit TextureTool(QObject* const parent);
+    ~TextureTool();
 
-Q_SIGNALS:
+private:
 
-    void signalUpdatePreview();
+    QString getTexturePath(int texture);
 
 private Q_SLOTS:
 
     void slotResetSettings();
-    void slotFontPropertiesChanged(const QFont& font);
-    void slotUpdatePreview();
-    void slotAlignModeChanged(int mode);
 
 private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
-    void setBackgroundColor(const QColor& bg);
+    void preparePreview();
+    void prepareFinal();
+    void setPreviewImage();
+    void setFinalImage();
 
 private:
 
@@ -69,6 +68,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam
 
-#endif /* INSERTTEXTTOOL_H */
+#endif /* TEXTURETOOL_H */

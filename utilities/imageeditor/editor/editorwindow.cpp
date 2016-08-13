@@ -131,6 +131,9 @@
 #include "undostate.h"
 #include "versionmanager.h"
 #include "dexpanderbox.h"
+#include "inserttexttool.h"
+#include "bordertool.h"
+#include "texturetool.h"
 
 namespace Digikam
 {
@@ -524,6 +527,27 @@ void EditorWindow::setupStandardActions()
     d->zoomFitToSelectAction->setEnabled(false);
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
+
+    // -- Standard 'Decorate' menu actions ---------------------------------------------
+
+    d->insertTextAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")), i18n("Insert Text..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_inserttext"), d->insertTextAction );
+    actionCollection()->setDefaultShortcut(d->insertTextAction, Qt::SHIFT+Qt::CTRL+Qt::Key_T);
+    connect(d->insertTextAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInsertText()));
+    d->insertTextAction->setEnabled(false);
+
+    d->borderAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("Add Border..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_border"), d->borderAction );
+    connect(d->borderAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBorder()));
+    d->borderAction->setEnabled(false);
+
+    d->textureAction = new QAction(QIcon::fromTheme(QLatin1String("texture")), i18n("Apply Texture..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_texture"), d->textureAction );
+    connect(d->textureAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotTexture()));
+    d->textureAction->setEnabled(false);
 
     // --------------------------------------------------------
 
@@ -1141,6 +1165,12 @@ void EditorWindow::toggleStandardActions(bool val)
         m_undoAction->setEnabled(false);
         m_redoAction->setEnabled(false);
     }
+
+    // Tools actions
+
+    d->insertTextAction->setEnabled(val);
+    d->borderAction->setEnabled(val);
+    d->textureAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
@@ -2828,6 +2858,37 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
     }
 
     FileOperation::runFiles(*service, QList<QUrl>() << url);
+}
+
+void EditorWindow::loadTool(EditorTool* const tool)
+{
+    EditorToolIface::editorToolIface()->loadTool(tool);
+
+    connect(tool, SIGNAL(okClicked()),
+            this, SLOT(slotToolDone()));
+
+    connect(tool, SIGNAL(cancelClicked()),
+            this, SLOT(slotToolDone()));
+}
+
+void EditorWindow::slotToolDone()
+{
+    EditorToolIface::editorToolIface()->unLoadTool();
+}
+
+void EditorWindow::slotInsertText()
+{
+    loadTool(new InsertTextTool(this));
+}
+
+void EditorWindow::slotBorder()
+{
+    loadTool(new BorderTool(this));
+}
+
+void EditorWindow::slotTexture()
+{
+    loadTool(new TextureTool(this));
 }
 
 }  // namespace Digikam

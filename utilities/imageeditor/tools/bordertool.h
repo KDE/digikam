@@ -3,11 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2005-03-10
- * Description : a plugin to apply texture over an image
+ * Date        : 2005-01-20
+ * Description : a digiKam image plugin to add a border
+ *               around an image.
  *
- * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2006-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef TEXTURETOOL_H
-#define TEXTURETOOL_H
+#ifndef BORDERTOOL_H
+#define BORDERTOOL_H
 
 // Qt includes
 
@@ -33,23 +34,17 @@
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamDecorateImagePlugin
+namespace Digikam
 {
 
-class TextureTool : public EditorToolThreaded
+class BorderTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit TextureTool(QObject* const parent);
-    ~TextureTool();
-
-private:
-
-    QString getTexturePath(int texture);
+    explicit BorderTool(QObject* const parent);
+    ~BorderTool();
 
 private Q_SLOTS:
 
@@ -70,6 +65,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam
 
-#endif /* TEXTURETOOL_H */
+#endif /* BORDERTOOL_H */

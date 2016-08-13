@@ -59,7 +59,7 @@
 #include "inserttextwidget.h"
 #include "dfontproperties.h"
 
-namespace DigikamDecorateImagePlugin
+namespace Digikam
 {
 
 class InsertTextTool::Private
@@ -426,4 +426,4 @@ void InsertTextTool::finalRendering()
     qApp->restoreOverrideCursor();
 }
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam

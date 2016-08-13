@@ -38,7 +38,7 @@
 
 #include "imageiface.h"
 
-namespace DigikamDecorateImagePlugin
+namespace Digikam
 {
 
 class InsertTextWidget::Private
@@ -743,4 +743,4 @@ void InsertTextWidget::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam

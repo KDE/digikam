@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="505" name="digikamimagewindow" translationDomain="digikam" >
+<gui version="506" name="digikamimagewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -80,6 +80,9 @@
     </Menu>
 
     <Menu name="Decorate" ><text>&amp;Decorate</text>
+        <Action name="imageplugin_inserttext" />
+        <Action name="imageplugin_border" />
+        <Action name="imageplugin_texture" />
     </Menu>
 
     <Menu name="Filters" ><text>Effec&amp;ts</text>

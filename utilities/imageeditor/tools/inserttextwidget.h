@@ -38,9 +38,6 @@
 #include <QSize>
 #include <QString>
 #include <QWidget>
-
-// KDE includes
-
 #include <QUrl>
 
 // Local includes
@@ -51,13 +48,8 @@ class QPixmap;
 
 namespace Digikam
 {
+
 class ImageIface;
-}
-
-using namespace Digikam;
-
-namespace DigikamDecorateImagePlugin
-{
 
 class InsertTextWidget : public QWidget
 {
@@ -132,6 +124,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam
 
 #endif /* INSERTTEXTWIDGET_H */

@@ -92,6 +92,9 @@ public:
         zoomPlusAction(0),
         zoomTo100percents(0),
         openWithAction(0),
+        textureAction(0),
+        borderAction(0),
+        insertTextAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -169,6 +172,10 @@ public:
     QAction*                     zoomPlusAction;
     QAction*                     zoomTo100percents;
     QAction*                     openWithAction;
+
+    QAction*                     textureAction;
+    QAction*                     borderAction;
+    QAction*                     insertTextAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;

@@ -47,7 +47,7 @@
 #include "imageregionwidget.h"
 #include "texturefilter.h"
 
-namespace DigikamDecorateImagePlugin
+namespace Digikam
 {
 
 class TextureTool::Private
@@ -316,4 +316,4 @@ QString TextureTool::getTexturePath(int texture)
     return (QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/") + pattern + QLatin1String(".png")));
 }
 
-}  // namespace DigikamDecorateImagePlugin
+}  // namespace Digikam
