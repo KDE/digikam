@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="510" name="digikamimagewindow" translationDomain="digikam" >
+<gui version="511" name="digikamimagewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -62,43 +62,43 @@
     </Menu>
 
     <Menu name="Color"><text>&amp;Color</text>
-        <Action name="imageplugin_autocorrection" />
-        <Action name="imageplugin_bcg" />
-        <Action name="imageplugin_hsl" />
-        <Action name="imageplugin_rgb" />
+        <Action name="editorwindow_autocorrection" />
+        <Action name="editorwindow_bcg" />
+        <Action name="editorwindow_hsl" />
+        <Action name="editorwindow_rgb" />
         <Separator />
-        <Action name="imageplugin_adjustlevels" />
-        <Action name="imageplugin_adjustcurves" />
+        <Action name="editorwindow_adjustlevels" />
+        <Action name="editorwindow_adjustcurves" />
         <Separator />
-        <Action name="imageplugin_invert" />
-        <Action name="imageplugin_film" />
-        <Action name="imageplugin_blackwhite" />
-        <Action name="imageplugin_channelmixer" />
-        <Action name="imageplugin_whitebalance" />
+        <Action name="editorwindow_invert" />
+        <Action name="editorwindow_film" />
+        <Action name="editorwindow_blackwhite" />
+        <Action name="editorwindow_channelmixer" />
+        <Action name="editorwindow_whitebalance" />
         <Separator />
         <Menu name="Depth"><text>&amp;Depth</text>
-            <Action name="imageplugin_convertto8bits" />
-            <Action name="imageplugin_convertto16bits" />
+            <Action name="editorwindow_convertto8bits" />
+            <Action name="editorwindow_convertto16bits" />
         </Menu>
-        <Action name="imageplugin_colormanagement" />
+        <Action name="editorwindow_colormanagement" />
         <Separator />
     </Menu>
 
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
-        <Action name="imageplugin_restoration" />
-        <Action name="imageplugin_blur" />
-        <Action name="imageplugin_sharpen" />
-        <Action name="imageplugin_noisereduction" />
-        <Action name="imageplugin_localcontrast" />
-        <Action name="imageplugin_inpainting" />
-        <Action name="imageplugin_hotpixels" />
+        <Action name="editorwindow_restoration" />
+        <Action name="editorwindow_blur" />
+        <Action name="editorwindow_sharpen" />
+        <Action name="editorwindow_noisereduction" />
+        <Action name="editorwindow_localcontrast" />
+        <Action name="editorwindow_inpainting" />
+        <Action name="editorwindow_hotpixels" />
         <Separator />
-        <Action name="imageplugin_redeye" />
+        <Action name="editorwindow_redeye" />
 
         <Menu name="Lens" ><text>&amp;Lens</text>
-            <Action name="imageplugin_lensautofix" />
-            <Action name="imageplugin_antivignetting" />
-            <Action name="imageplugin_lensdistortion" />
+            <Action name="editorwindow_lensautofix" />
+            <Action name="editorwindow_antivignetting" />
+            <Action name="editorwindow_lensdistortion" />
         </Menu>
     </Menu>
 
@@ -112,30 +112,30 @@
         <Action name="editorwindow_crop" />
         <Action name="editorwindow_autocrop" />
         <Action name="editorwindow_resize" />
-        <Action name="imageplugin_ratiocrop" />
-        <Action name="imageplugin_resize" />
+        <Action name="editorwindow_ratiocrop" />
+        <Action name="editorwindow_resize" />
         <Separator />
-        <Action name="imageplugin_perspective" />
-        <Action name="imageplugin_freerotation" />
-        <Action name="imageplugin_sheartool" />
-        <Action name="imageplugin_contentawareresizing" />
+        <Action name="editorwindow_perspective" />
+        <Action name="editorwindow_freerotation" />
+        <Action name="editorwindow_sheartool" />
+        <Action name="editorwindow_contentawareresizing" />
     </Menu>
 
     <Menu name="Decorate" ><text>&amp;Decorate</text>
-        <Action name="imageplugin_inserttext" />
-        <Action name="imageplugin_border" />
-        <Action name="imageplugin_texture" />
+        <Action name="editorwindow_inserttext" />
+        <Action name="editorwindow_border" />
+        <Action name="editorwindow_texture" />
     </Menu>
 
     <Menu name="Filters" ><text>Effec&amp;ts</text>
-        <Action name="imageplugin_colorfx" />
-        <Action name="imageplugin_charcoal" />
-        <Action name="imageplugin_emboss" />
-        <Action name="imageplugin_oilpaint" />
-        <Action name="imageplugin_blurfx" />
-        <Action name="imageplugin_distortionfx" />
-        <Action name="imageplugin_raindrop" />
-        <Action name="imageplugin_filmgrain" />
+        <Action name="editorwindow_colorfx" />
+        <Action name="editorwindow_charcoal" />
+        <Action name="editorwindow_emboss" />
+        <Action name="editorwindow_oilpaint" />
+        <Action name="editorwindow_blurfx" />
+        <Action name="editorwindow_distortionfx" />
+        <Action name="editorwindow_raindrop" />
+        <Action name="editorwindow_filmgrain" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
