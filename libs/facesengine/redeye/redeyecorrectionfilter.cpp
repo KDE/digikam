@@ -30,9 +30,7 @@
 #include <opencv2/opencv.hpp>
 #include "facedetector.h"
 
-
 // Qt includes
-
 #include <QtConcurrent>
 #include <QtMath>
 #include <QMutex>
@@ -40,10 +38,12 @@
 #include <QListIterator>
 #include <QImage>
 #include <QDebug>
+#include <QDataStream>
 
 
 // Local includes
 #include "digikam_debug.h"
+#include "shapepredictor.h"
 //#include "opencv"
 #include "facedetector.h"
 
@@ -143,7 +143,22 @@ void RedEyeCorrectionFilter::filterImage()
 {
     // Todo:move the deserialization into a single place
     // preparing shape predictor
+    redeye::shapepredictor sp;
+
+
+    // Loading the shape predictor model
+    QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                             QString::fromLatin1("digikam/facesengine"),
+                                             QStandardPaths::LocateDirectory);
+    QFile model(*path.begin()+QString("/shape-predictor.dat"));
+    cv::Mat intermediateImage;
+    model.open(QIODevice::ReadOnly);
+    QDataStream dataStream(&model);
+    dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+    dataStream>>sp;
+
     bool visualize = false;
+
 
 
     // Todo: convert dImg to Opencv::Mat directly
@@ -155,13 +170,43 @@ void RedEyeCorrectionFilter::filterImage()
     // Todo : converting to Qimage including adding an alpha channel
     // to be handled
     type = type+8;//m_orgImage.hasAlpha()?type:type+8;
-    cv::Mat intermediateImage = cv::Mat(cv::Size(temp.width(),temp.height()),
+    intermediateImage = cv::Mat(cv::Size(temp.width(),temp.height()),
                                         type,temp.bits());
     cv::Mat gray;
     cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY);
 
-    QList<QRectF> dets = d->facedetector.detectFaces(temp);
+    QList<QRectF> qrectfdets = d->facedetector.detectFaces(temp);
+    if(qrectfdets.size() != 0)
+    {
+        std::vector<cv::Rect> dets;
+        QList<QRect> qrectdets =
+                FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets,temp.size());
+        QRectFtocvRect(qrectdets,dets);
 
+        drawRects(intermediateImage,dets);
+
+        // Eye Detection
+        for(unsigned int i = 0;i<dets.size();i++)
+        {
+            fullobjectdetection object = sp(intermediateImage,dets[i]);
+            std::vector<cv::Rect> eyes = geteyes(object);
+            drawRects(intermediateImage,eyes);
+            for(unsigned int j = 0;j<eyes.size();j++)
+            {
+                correctRedEye(intermediateImage.data,
+                              intermediateImage.type(),
+                              eyes[j],
+                              cv::Rect(0,0,intermediateImage.size().width ,
+                                           intermediateImage.size().height));
+//                correctRedEye(intermediateImage[eyes[j]],
+//                              intermediateImage.type(),
+//                              cv::Rect(0,0,intermediateImage.size().width,
+//                                       intermediateImage.size().height));
+            }
+
+
+        }
+    }
     m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
                              true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
 
@@ -189,15 +234,15 @@ void RedEyeCorrectionFilter::drawRects(cv::Mat &image, const std::vector<cv::Rec
 }
 
 
-void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRectF> & faces, QList<cv::Rect> & result)
+void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect> & faces, std::vector<cv::Rect> & result)
 {
-    QListIterator<QRectF> listit(faces);
+    QListIterator<QRect> listit(faces);
 
     while(listit.hasNext())
     {
-        QRectF  temp = listit.next();
-        result.append(cv::Rect(temp.topLeft().rx(), temp.topLeft().ry(),
-                               temp.width()       , temp.height()) );
+        QRect  temp = listit.next();
+        result.push_back(cv::Rect(temp.topLeft().rx(), temp.topLeft().ry(),
+                                  temp.width()       , temp.height()) );
     }
 }
 

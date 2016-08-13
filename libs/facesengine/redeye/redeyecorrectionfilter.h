@@ -84,7 +84,7 @@ private:
     void filterImage();
     void correctRedEye(cv::Mat & eye, int type, cv::Rect imgRect);
     void correctRedEye(uchar *  data, int type, cv::Rect eyerect, cv::Rect imgRect);
-    void QRectFtocvRect(const QList<QRectF> & faces,QList<cv::Rect> & result);
+    void QRectFtocvRect(const QList<QRect> &faces, std::vector<cv::Rect> &result);
     void readParameters(const FilterAction&);
 
 

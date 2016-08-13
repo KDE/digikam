@@ -28,6 +28,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
                     ${CMAKE_CURRENT_SOURCE_DIR}/redeye
+                    ${CMAKE_CURRENT_SOURCE_DIR}/shape-predictor
 
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/alignment-flandmark
 #                   ${CMAKE_CURRENT_SOURCE_DIR}/preprocessing-tantriggs
