@@ -84,6 +84,7 @@ static const char* ObsoleteImagePluginsList[] =
     "digikamimageplugin_core",                     // Renamed "Color" plugin since 1.2.0.
     "digikamimageplugin_decorate",
     "digikamimageplugin_fxfilters",
+    "digikamimageplugin_color",
     "-1"
 };
 

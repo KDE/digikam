@@ -105,6 +105,17 @@ set(libeditortools_SRCS
     tools/filters/distortionfxtool.cpp
     tools/filters/raindroptool.cpp
     tools/filters/filmgraintool.cpp
+    tools/colors/autocorrectiontool.cpp
+    tools/colors/bcgtool.cpp
+    tools/colors/bwsepiatool.cpp
+    tools/colors/profileconversiontool.cpp
+    tools/colors/cbtool.cpp
+    tools/colors/whitebalancetool.cpp
+    tools/colors/hsltool.cpp
+    tools/colors/channelmixertool.cpp
+    tools/colors/adjustcurvestool.cpp
+    tools/colors/adjustlevelstool.cpp
+    tools/colors/filmtool.cpp
 )
 
 set(libeditoriface_SRCS

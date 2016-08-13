@@ -3,11 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-07-16
- * Description : digiKam image editor to adjust Hue, Saturation,
- *               and Lightness of picture.
+ * Date        : 2004-06-05
+ * Description : digiKam image editor to adjust Brightness,
+ *               Contrast, and Gamma of picture.
  *
- * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
+ * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,12 +23,12 @@
  *
  * ============================================================ */
 
-#include "hsltool.h"
+#include "bcgtool.h"
 
 // Qt includes
 
 #include <QLabel>
-#include <QColorDialog>
+#include <QIcon>
 #include <QIcon>
 
 // KDE includes
@@ -37,25 +38,24 @@
 
 // Local includes
 
+#include "dnuminput.h"
 #include "dimg.h"
-#include "hslsettings.h"
+#include "bcgsettings.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
-class HSLTool::Private
+class BCGTool::Private
 {
 public:
 
     Private() :
-        hslSettings(0),
+        settingsView(0),
         previewWidget(0),
         gboxSettings(0)
     {}
@@ -64,25 +64,27 @@ public:
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
 
-    HSLSettings*         hslSettings;
+    BCGSettings*         settingsView;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
-const QString HSLTool::Private::configGroupName(QLatin1String("hsladjust Tool"));
-const QString HSLTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
-const QString HSLTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString BCGTool::Private::configGroupName(QLatin1String("bcgadjust Tool"));
+const QString BCGTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString BCGTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
-HSLTool::HSLTool(QObject* const parent)
+BCGTool::BCGTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName(QLatin1String("adjusthsl"));
-    setToolName(i18n("Hue / Saturation / Lightness"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("adjusthsl")));
-    setToolHelp(QLatin1String("hsladjusttool.anchor"));
+    setObjectName(QLatin1String("bcgadjust"));
+    setToolName(i18n("Brightness / Contrast / Gamma"));
+    setToolVersion(1);
+    setToolIcon(QIcon::fromTheme(QLatin1String("contrast")));
+    setToolHelp(QLatin1String("bcgadjusttool.anchor"));
+    setToolCategory(FilterAction::ReproducibleFilter);
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;
@@ -97,61 +99,63 @@ HSLTool::HSLTool(QObject* const parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
+//                              EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
-    d->hslSettings = new HSLSettings(d->gboxSettings->plainPage());
+    d->settingsView = new BCGSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
+    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 }
 
-HSLTool::~HSLTool()
+BCGTool::~BCGTool()
 {
     delete d;
 }
 
-void HSLTool::readSettings()
+void BCGTool::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
-    d->hslSettings->readSettings(group);
+    d->settingsView->readSettings(group);
 }
 
-void HSLTool::writeSettings()
+void BCGTool::writeSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
-    d->hslSettings->writeSettings(group);
+    d->settingsView->writeSettings(group);
 
     config->sync();
 }
 
-void HSLTool::slotResetSettings()
+void BCGTool::slotResetSettings()
 {
-    d->hslSettings->resetToDefault();
+    d->settingsView->resetToDefault();
     slotPreview();
 }
 
-void HSLTool::preparePreview()
+void BCGTool::preparePreview()
 {
-    HSLContainer settings = d->hslSettings->settings();
+    BCGContainer settings = d->settingsView->settings();
+
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(new HSLFilter(&preview, this, settings));
+    setFilter(new BCGFilter(&preview, this, settings));
 }
 
-void HSLTool::setPreviewImage()
+void BCGTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -161,18 +165,19 @@ void HSLTool::setPreviewImage()
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
-void HSLTool::prepareFinal()
+void BCGTool::prepareFinal()
 {
-    HSLContainer settings = d->hslSettings->settings();
+    BCGContainer settings = d->settingsView->settings();
 
     ImageIface iface;
-    setFilter(new HSLFilter(iface.original(), this, settings));
+
+    setFilter(new BCGFilter(iface.original(), this, settings));
 }
 
-void HSLTool::setFinalImage()
+void BCGTool::setFinalImage()
 {
     ImageIface iface;
-    iface.setOriginal(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

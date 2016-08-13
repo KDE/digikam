@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-12-01
- * Description : image histogram adjust curves.
+ * Date        : 2004-07-11
+ * Description : digiKam image editor Color Balance tool.
  *
  * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,39 +21,30 @@
  *
  * ============================================================ */
 
-#ifndef ADJUSTCURVESTOOL_H
-#define ADJUSTCURVESTOOL_H
+#ifndef CBTOOL_H
+#define CBTOOL_H
+
+#include <QObject>
 
 // Local includes
 
 #include "editortool.h"
-#include "dcolor.h"
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
-class AdjustCurvesTool : public EditorToolThreaded
+class CBTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit AdjustCurvesTool(QObject* const parent);
-    ~AdjustCurvesTool();
+    explicit CBTool(QObject* const parent);
+    ~CBTool();
 
 private Q_SLOTS:
 
-    void slotSaveAsSettings();
-    void slotLoadSettings();
     void slotResetSettings();
-    void slotPickerColorButtonActived(int);
-    void slotSpotColorChanged();
-    void slotColorSelectedFromTarget(const Digikam::DColor&);
-    void slotResetCurrentChannel();
-    void slotChannelChanged();
-    void slotScaleChanged();
 
 private:
 
@@ -70,6 +61,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
 
-#endif /* ADJUSTCURVESTOOL_H */
+#endif /* CBTOOL_H */

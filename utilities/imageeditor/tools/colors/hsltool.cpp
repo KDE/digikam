@@ -3,8 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-07-11
- * Description : digiKam image editor Color Balance tool.
+ * Date        : 2004-07-16
+ * Description : digiKam image editor to adjust Hue, Saturation,
+ *               and Lightness of picture.
  *
  * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,23 +22,23 @@
  *
  * ============================================================ */
 
-#include "cbtool.h"
+#include "hsltool.h"
 
 // Qt includes
 
 #include <QLabel>
+#include <QColorDialog>
 #include <QIcon>
 
 // KDE includes
 
-#include <ksharedconfig.h>
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 // Local includes
 
-#include "cbsettings.h"
-#include "cbfilter.h"
 #include "dimg.h"
+#include "hslsettings.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
@@ -46,15 +47,15 @@
 
 
 
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
-class CBTool::Private
+class HSLTool::Private
 {
 public:
 
     Private() :
-        cbSettings(0),
+        hslSettings(0),
         previewWidget(0),
         gboxSettings(0)
     {}
@@ -63,24 +64,25 @@ public:
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
 
-    CBSettings*          cbSettings;
+    HSLSettings*         hslSettings;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
-const QString CBTool::Private::configGroupName(QLatin1String("colorbalance Tool"));
-const QString CBTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
-const QString CBTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString HSLTool::Private::configGroupName(QLatin1String("hsladjust Tool"));
+const QString HSLTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString HSLTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
-CBTool::CBTool(QObject* const parent)
+HSLTool::HSLTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName(QLatin1String("colorbalance"));
-    setToolName(i18n("Color Balance"));
-    setToolIcon(QIcon::fromTheme(QLatin1String("adjustrgb")));
+    setObjectName(QLatin1String("adjusthsl"));
+    setToolName(i18n("Hue / Saturation / Lightness"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("adjusthsl")));
+    setToolHelp(QLatin1String("hsladjusttool.anchor"));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;
@@ -96,59 +98,60 @@ CBTool::CBTool(QObject* const parent)
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
 
-    d->cbSettings = new CBSettings(d->gboxSettings->plainPage());
+    // -------------------------------------------------------------
+
+    d->hslSettings = new HSLSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    connect(d->cbSettings, SIGNAL(signalSettingsChanged()),
+    connect(d->hslSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 }
 
-CBTool::~CBTool()
+HSLTool::~HSLTool()
 {
     delete d;
 }
 
-void CBTool::readSettings()
+void HSLTool::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
-
-    d->cbSettings->readSettings(group);
+    d->hslSettings->readSettings(group);
 }
 
-void CBTool::writeSettings()
+void HSLTool::writeSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
-    d->cbSettings->writeSettings(group);
+    d->hslSettings->writeSettings(group);
 
-    group.sync();
+    config->sync();
 }
 
-void CBTool::slotResetSettings()
+void HSLTool::slotResetSettings()
 {
-    d->cbSettings->resetToDefault();
+    d->hslSettings->resetToDefault();
     slotPreview();
 }
 
-void CBTool::preparePreview()
+void HSLTool::preparePreview()
 {
-    CBContainer settings = d->cbSettings->settings();
+    HSLContainer settings = d->hslSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(new CBFilter(&preview, this, settings));
+    setFilter(new HSLFilter(&preview, this, settings));
 }
 
-void CBTool::setPreviewImage()
+void HSLTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -158,18 +161,18 @@ void CBTool::setPreviewImage()
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
-void CBTool::prepareFinal()
+void HSLTool::prepareFinal()
 {
-    CBContainer settings = d->cbSettings->settings();
+    HSLContainer settings = d->hslSettings->settings();
 
     ImageIface iface;
-    setFilter(new CBFilter(iface.original(), this, settings));
+    setFilter(new HSLFilter(iface.original(), this, settings));
 }
 
-void CBTool::setFinalImage()
+void HSLTool::setFinalImage()
 {
     ImageIface iface;
-    iface.setOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("HSL Adjustments"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

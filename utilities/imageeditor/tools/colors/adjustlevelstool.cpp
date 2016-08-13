@@ -63,7 +63,7 @@
 #include "imagelevels.h"
 #include "imageregionwidget.h"
 
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class AdjustLevelsTool::Private
@@ -934,4 +934,4 @@ void AdjustLevelsTool::slotSaveAsSettings()
     slotChannelChanged();
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

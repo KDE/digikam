@@ -62,6 +62,7 @@ class ExposureSettingsContainer;
 class ICCSettingsContainer;
 class PreviewToolBar;
 class DAdjustableLabel;
+class IccProfilesMenuAction;
 
 class EditorWindow::Private
 {
@@ -103,6 +104,20 @@ public:
         embossAction(0),
         charcoalAction(0),
         colorEffectsAction(0),
+        BCGAction(0),
+        HSLAction(0),
+        CBAction(0),
+        autoCorrectionAction(0),
+        invertAction(0),
+        BWAction(0),
+        convertTo8Bits(0),
+        convertTo16Bits(0),
+        whitebalanceAction(0),
+        channelMixerAction(0),
+        curvesAction(0),
+        levelsAction(0),
+        filmAction(0),
+        profileMenuAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -181,6 +196,7 @@ public:
     QAction*                     zoomTo100percents;
     QAction*                     openWithAction;
 
+    // Tools Actions
     QAction*                     textureAction;
     QAction*                     borderAction;
     QAction*                     insertTextAction;
@@ -192,6 +208,20 @@ public:
     QAction*                     embossAction;
     QAction*                     charcoalAction;
     QAction*                     colorEffectsAction;
+    QAction*                     BCGAction;
+    QAction*                     HSLAction;
+    QAction*                     CBAction;
+    QAction*                     autoCorrectionAction;
+    QAction*                     invertAction;
+    QAction*                     BWAction;
+    QAction*                     convertTo8Bits;
+    QAction*                     convertTo16Bits;
+    QAction*                     whitebalanceAction;
+    QAction*                     channelMixerAction;
+    QAction*                     curvesAction;
+    QAction*                     levelsAction;
+    QAction*                     filmAction;
+    IccProfilesMenuAction*       profileMenuAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;

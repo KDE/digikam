@@ -29,9 +29,7 @@
 #include "editortool.h"
 #include "dcolor.h"
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class AdjustLevelsTool : public EditorToolThreaded
@@ -84,6 +82,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
 
 #endif /* ADJUSTLEVELSTOOL_H */

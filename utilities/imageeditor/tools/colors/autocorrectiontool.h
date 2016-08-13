@@ -3,11 +3,9 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-06-05
- * Description : digiKam image editor to adjust Brightness,
- *               Contrast, and Gamma of picture.
+ * Date        : 2005-05-31
+ * Description : Auto-Color correction tool.
  *
- * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -23,39 +21,45 @@
  *
  * ============================================================ */
 
-#ifndef BCGTOOL_H
-#define BCGTOOL_H
+#ifndef AUTOCORRECTIONTOOL_H
+#define AUTOCORRECTIONTOOL_H
+
+// Qt includes
+
+#include <QPixmap>
 
 // Local includes
 
 #include "editortool.h"
+#include "dimg.h"
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
-class BCGTool : public EditorToolThreaded
+class AutoCorrectionTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit BCGTool(QObject* const parent);
-    ~BCGTool();
+    explicit AutoCorrectionTool(QObject* const parent);
+    ~AutoCorrectionTool();
 
 private Q_SLOTS:
 
+    void slotInit();
     void slotResetSettings();
 
 private:
 
-    void readSettings();
     void writeSettings();
+    void readSettings();
     void preparePreview();
     void prepareFinal();
     void setPreviewImage();
     void setFinalImage();
+
+    void autoCorrection(DImg* const img, DImg* const ref, int type);
 
 private:
 
@@ -63,6 +67,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
 
-#endif /* BCGTOOL_H */
+#endif /* AUTOCORRECTIONTOOL_H */

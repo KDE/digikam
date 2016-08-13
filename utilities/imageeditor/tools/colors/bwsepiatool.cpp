@@ -46,7 +46,7 @@
 #include "bwsepiafilter.h"
 #include "bwsepiasettings.h"
 
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class BWSepiaTool::Private
@@ -213,4 +213,4 @@ void BWSepiaTool::slotScaleChanged()
     d->bwsepiaSettings->setScaleType(d->gboxSettings->histogramBox()->scale());
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

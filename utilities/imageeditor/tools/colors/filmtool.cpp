@@ -61,7 +61,7 @@
 #include "imageregionwidget.h"
 #include "filmfilter_p.h"
 
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class FilmTool::Private
@@ -686,4 +686,4 @@ bool FilmTool::eventFilter(QObject* obj, QEvent* ev)
     return EditorToolThreaded::eventFilter(obj, ev);
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

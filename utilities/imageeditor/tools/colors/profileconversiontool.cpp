@@ -50,7 +50,7 @@
 #include "imageregionwidget.h"
 #include "dmetadata.h"
 
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class ProfileConversionTool::Private
@@ -268,4 +268,4 @@ void ProfileConversionTool::fastConversion(const IccProfile& profile)
     iface.setOriginalMetadata(meta.data());
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

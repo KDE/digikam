@@ -3,10 +3,12 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2012-02-05
- * Description : film color negative inverter tool
+ * Date        : 2005-03-11
+ * Description : a digiKam image editor plugin to correct
+ *               image white balance
  *
- * Copyright (C) 2012 by Matthias Welwarsky <matthias at welwarsky dot de>
+ * Copyright (C) 2008-2009 by Guillaume Castagnino <casta at xwing dot info>
+ * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,49 +23,35 @@
  *
  * ============================================================ */
 
-#ifndef FILMTOOL_H_
-#define FILMTOOL_H_
+#ifndef WHITEBALANCETOOL_H
+#define WHITEBALANCETOOL_H
 
 // Local includes
 
 #include "editortool.h"
 #include "dcolor.h"
 
-class QListWidgetItem;
-
 namespace Digikam
 {
-    class FilmProfile;
-}
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
-{
-
-class FilmTool : public EditorToolThreaded
+class WhiteBalanceTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit FilmTool(QObject* const parent);
-    ~FilmTool();
+    explicit WhiteBalanceTool(QObject* const parent);
+    ~WhiteBalanceTool();
 
 private Q_SLOTS:
 
+    void slotSaveAsSettings();
+    void slotLoadSettings();
     void slotResetSettings();
-    void slotScaleChanged();
-    void slotChannelChanged();
-    void slotAdjustSliders();
-    void slotFilmItemActivated(QListWidgetItem* item);
-    void slotExposureChanged(double val);
-    void slotGammaInputChanged(double val);
-    void slotColorSelectedFromTarget(const Digikam::DColor& color, const QPoint& p);
-    void slotPickerColorButtonActived(bool checked);
-    void slotResetWhitePoint();
-    void slotColorBalanceStateChanged(int);
-    void slotAutoWhitePoint(void);
+    void slotPickerColorButtonActived();
+    void slotColorSelectedFromOriginal(const Digikam::DColor&);
+    void slotColorSelectedFromTarget(const Digikam::DColor&);
+    void slotAutoAdjustExposure();
 
 private:
 
@@ -74,16 +62,12 @@ private:
     void setPreviewImage();
     void setFinalImage();
 
-    void gammaInputChanged(double val);
-    void setLevelsFromFilm();
-    bool eventFilter(QObject*, QEvent*);
-
 private:
 
     class Private;
     Private* const d;
 };
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
 
-#endif /* FILMTOOL_H_ */
+#endif /* WHITEBALANCETOOL_H */

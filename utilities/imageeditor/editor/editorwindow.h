@@ -70,6 +70,7 @@ class SlideShowSettings;
 class StatusProgressBar;
 class VersionManager;
 class VersionFileOperation;
+class IccProfile;
 
 class DIGIKAM_EXPORT EditorWindow : public DXmlGuiWindow
 {
@@ -341,6 +342,22 @@ private Q_SLOTS:
     void slotDistortionFX();
     void slotRainDrop();
     void slotFilmGrain();
+    void slotBCG();
+    void slotCB();
+    void slotHSL();
+    void slotAutoCorrection();
+    void slotInvert();
+    void slotBW();
+    void slotWhiteBalance();
+    void slotConvertTo8Bits();
+    void slotConvertTo16Bits();
+    void slotConvertToColorSpace(const IccProfile&);
+    void slotProfileConversionTool();
+    void slotChannelMixer();
+    void slotCurvesAdjust();
+    void slotLevelsAdjust();
+    void slotFilm();
+    void slotUpdateColorSpaceMenu();
 
 private:
 

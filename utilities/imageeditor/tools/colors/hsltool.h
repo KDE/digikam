@@ -3,11 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-12-06
- * Description : Black and White conversion tool.
+ * Date        : 2004-07-16
+ * Description : digiKam image editor to adjust Hue, Saturation,
+ *               and Lightness of picture.
  *
- * Copyright (C) 2004-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,32 +22,27 @@
  *
  * ============================================================ */
 
-#ifndef BWSEPIATOOL_H
-#define BWSEPIATOOL_H
+#ifndef HSLTOOL_H
+#define HSLTOOL_H
 
 // Local includes
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
-class BWSepiaTool : public EditorToolThreaded
+class HSLTool : public EditorToolThreaded
 {
     Q_OBJECT
 
 public:
 
-    explicit BWSepiaTool(QObject* const parent);
-    ~BWSepiaTool();
+    explicit HSLTool(QObject* const parent);
+    ~HSLTool();
 
 private Q_SLOTS:
 
-    void slotInit();
-    void slotSaveAsSettings();
-    void slotLoadSettings();
     void slotResetSettings();
 
 private:
@@ -58,7 +53,6 @@ private:
     void prepareFinal();
     void setPreviewImage();
     void setFinalImage();
-    void slotScaleChanged();
 
 private:
 
@@ -66,6 +60,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
 
-#endif /* BWSEPIATOOL_H */
+#endif /* HSLTOOL_H */

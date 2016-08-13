@@ -3,12 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-06-05
- * Description : digiKam image editor to adjust Brightness,
- *               Contrast, and Gamma of picture.
+ * Date        : 2004-07-11
+ * Description : digiKam image editor Color Balance tool.
  *
- * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,39 +21,40 @@
  *
  * ============================================================ */
 
-#include "bcgtool.h"
+#include "cbtool.h"
 
 // Qt includes
 
 #include <QLabel>
 #include <QIcon>
-#include <QIcon>
 
 // KDE includes
 
-#include <klocalizedstring.h>
 #include <ksharedconfig.h>
+#include <klocalizedstring.h>
 
 // Local includes
 
-#include "dnuminput.h"
+#include "cbsettings.h"
+#include "cbfilter.h"
 #include "dimg.h"
-#include "bcgsettings.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
 #include "imageiface.h"
 #include "imageregionwidget.h"
 
-namespace DigikamColorImagePlugin
+
+
+namespace Digikam
 {
 
-class BCGTool::Private
+class CBTool::Private
 {
 public:
 
     Private() :
-        settingsView(0),
+        cbSettings(0),
         previewWidget(0),
         gboxSettings(0)
     {}
@@ -64,27 +63,24 @@ public:
     static const QString configHistogramChannelEntry;
     static const QString configHistogramScaleEntry;
 
-    BCGSettings*         settingsView;
+    CBSettings*          cbSettings;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
 
-const QString BCGTool::Private::configGroupName(QLatin1String("bcgadjust Tool"));
-const QString BCGTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
-const QString BCGTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
+const QString CBTool::Private::configGroupName(QLatin1String("colorbalance Tool"));
+const QString CBTool::Private::configHistogramChannelEntry(QLatin1String("Histogram Channel"));
+const QString CBTool::Private::configHistogramScaleEntry(QLatin1String("Histogram Scale"));
 
 // --------------------------------------------------------
 
-BCGTool::BCGTool(QObject* const parent)
+CBTool::CBTool(QObject* const parent)
     : EditorToolThreaded(parent),
       d(new Private)
 {
-    setObjectName(QLatin1String("bcgadjust"));
-    setToolName(i18n("Brightness / Contrast / Gamma"));
-    setToolVersion(1);
-    setToolIcon(QIcon::fromTheme(QLatin1String("contrast")));
-    setToolHelp(QLatin1String("bcgadjusttool.anchor"));
-    setToolCategory(FilterAction::ReproducibleFilter);
+    setObjectName(QLatin1String("colorbalance"));
+    setToolName(i18n("Color Balance"));
+    setToolIcon(QIcon::fromTheme(QLatin1String("adjustrgb")));
     setInitPreview(true);
 
     d->previewWidget = new ImageRegionWidget;
@@ -99,63 +95,60 @@ BCGTool::BCGTool(QObject* const parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                              EditorToolSettings::Try);
 
-    // -------------------------------------------------------------
-
-    d->settingsView = new BCGSettings(d->gboxSettings->plainPage());
+    d->cbSettings = new CBSettings(d->gboxSettings->plainPage());
     setToolSettings(d->gboxSettings);
 
     // -------------------------------------------------------------
 
-    connect(d->settingsView, SIGNAL(signalSettingsChanged()),
+    connect(d->cbSettings, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotTimer()));
 }
 
-BCGTool::~BCGTool()
+CBTool::~CBTool()
 {
     delete d;
 }
 
-void BCGTool::readSettings()
+void CBTool::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     d->gboxSettings->histogramBox()->setChannel((ChannelType)group.readEntry(d->configHistogramChannelEntry, (int)LuminosityChannel));
     d->gboxSettings->histogramBox()->setScale((HistogramScale)group.readEntry(d->configHistogramScaleEntry,  (int)LogScaleHistogram));
-    d->settingsView->readSettings(group);
+
+    d->cbSettings->readSettings(group);
 }
 
-void BCGTool::writeSettings()
+void CBTool::writeSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
     group.writeEntry(d->configHistogramChannelEntry, (int)d->gboxSettings->histogramBox()->channel());
     group.writeEntry(d->configHistogramScaleEntry,   (int)d->gboxSettings->histogramBox()->scale());
-    d->settingsView->writeSettings(group);
+    d->cbSettings->writeSettings(group);
 
-    config->sync();
+    group.sync();
 }
 
-void BCGTool::slotResetSettings()
+void CBTool::slotResetSettings()
 {
-    d->settingsView->resetToDefault();
+    d->cbSettings->resetToDefault();
     slotPreview();
 }
 
-void BCGTool::preparePreview()
+void CBTool::preparePreview()
 {
-    BCGContainer settings = d->settingsView->settings();
-
+    CBContainer settings = d->cbSettings->settings();
     d->gboxSettings->histogramBox()->histogram()->stopHistogramComputation();
 
     DImg preview = d->previewWidget->getOriginalRegionImage(true);
-    setFilter(new BCGFilter(&preview, this, settings));
+    setFilter(new CBFilter(&preview, this, settings));
 }
 
-void BCGTool::setPreviewImage()
+void CBTool::setPreviewImage()
 {
     DImg preview = filter()->getTargetImage();
     d->previewWidget->setPreviewImage(preview);
@@ -165,19 +158,18 @@ void BCGTool::setPreviewImage()
     d->gboxSettings->histogramBox()->histogram()->updateData(preview.copy(), DImg(), false);
 }
 
-void BCGTool::prepareFinal()
+void CBTool::prepareFinal()
 {
-    BCGContainer settings = d->settingsView->settings();
+    CBContainer settings = d->cbSettings->settings();
 
     ImageIface iface;
-
-    setFilter(new BCGFilter(iface.original(), this, settings));
+    setFilter(new CBFilter(iface.original(), this, settings));
 }
 
-void BCGTool::setFinalImage()
+void CBTool::setFinalImage()
 {
     ImageIface iface;
-    iface.setOriginal(i18n("Brightness / Contrast / Gamma"), filter()->filterAction(), filter()->getTargetImage());
+    iface.setOriginal(i18n("Color Balance"), filter()->filterAction(), filter()->getTargetImage());
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

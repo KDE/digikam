@@ -28,9 +28,7 @@
 
 #include "editortool.h"
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class ChannelMixerTool : public EditorToolThreaded
@@ -66,6 +64,6 @@ private:
     Private* const d;
 };
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
 
 #endif /* CHANNELMIXERTOOL_H */

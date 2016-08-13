@@ -32,6 +32,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QByteArray>
 #include <QCursor>
 #include <QDir>
@@ -142,6 +143,22 @@
 #include "distortionfxtool.h"
 #include "raindroptool.h"
 #include "filmgraintool.h"
+#include "invertfilter.h"
+#include "imageiface.h"
+#include "editortooliface.h"
+#include "iccprofilescombobox.h"
+#include "iccsettings.h"
+#include "autocorrectiontool.h"
+#include "bcgtool.h"
+#include "bwsepiatool.h"
+#include "hsltool.h"
+#include "profileconversiontool.h"
+#include "cbtool.h"
+#include "whitebalancetool.h"
+#include "channelmixertool.h"
+#include "adjustcurvestool.h"
+#include "adjustlevelstool.h"
+#include "filmtool.h"
 
 namespace Digikam
 {
@@ -606,6 +623,111 @@ void EditorWindow::setupStandardActions()
     connect(d->filmgrainAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilmGrain()));
     d->filmgrainAction->setEnabled(false);
+
+    // -- Standard 'Colors' menu actions ---------------------------------------------
+
+    d->BCGAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Brightness/Contrast/Gamma..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_bcg"), d->BCGAction);
+    connect(d->BCGAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBCG()));
+    d->BCGAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+U.
+    d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_hsl"), d->HSLAction);
+    actionCollection()->setDefaultShortcut(d->HSLAction, Qt::CTRL+Qt::Key_U);
+    connect(d->HSLAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHSL()));
+    d->HSLAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+B.
+    d->CBAction = new QAction(QIcon::fromTheme(QLatin1String("adjustrgb")), i18n("Color Balance..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_rgb"), d->CBAction);
+    actionCollection()->setDefaultShortcut(d->CBAction, Qt::CTRL+Qt::Key_B);
+    connect(d->CBAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCB()));
+    d->CBAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+SHIFT+B with
+    d->autoCorrectionAction = new QAction(QIcon::fromTheme(QLatin1String("autocorrection")), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_autocorrection"), d->autoCorrectionAction);
+    actionCollection()->setDefaultShortcut(d->autoCorrectionAction, Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+    connect(d->autoCorrectionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotAutoCorrection()));
+    d->autoCorrectionAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+I.
+    d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("edit-select-invert")), i18n("Invert"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_invert"), d->invertAction);
+    actionCollection()->setDefaultShortcut(d->invertAction, Qt::CTRL+Qt::Key_I);
+    connect(d->invertAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInvert()));
+    d->invertAction->setEnabled(false);
+
+    d->convertTo8Bits = new QAction(QIcon::fromTheme(QLatin1String("depth16to8")), i18n("8 bits"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_convertto8bits"), d->convertTo8Bits);
+    connect(d->convertTo8Bits, SIGNAL(triggered(bool)),
+            this, SLOT(slotConvertTo8Bits()));
+    d->convertTo8Bits->setEnabled(false);
+
+    d->convertTo16Bits = new QAction(QIcon::fromTheme(QLatin1String("depth8to16")), i18n("16 bits"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_convertto16bits"), d->convertTo16Bits);
+    connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
+            this, SLOT(slotConvertTo16Bits()));
+    d->convertTo16Bits->setEnabled(false);
+
+    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Space Conversion"), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_colormanagement"), d->profileMenuAction->menuAction());
+    connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
+            this, SLOT(slotConvertToColorSpace(IccProfile)));
+    d->profileMenuAction->setEnabled(false);
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
+    slotUpdateColorSpaceMenu();
+
+    d->BWAction = new QAction(QIcon::fromTheme(QLatin1String("bwtonal")), i18n("Black && White..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_blackwhite"), d->BWAction);
+    connect(d->BWAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBW()));
+    d->BWAction->setEnabled(false);
+
+    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("White Balance..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_whitebalance"), d->whitebalanceAction);
+    actionCollection()->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
+    connect(d->whitebalanceAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotWhiteBalance()));
+    d->whitebalanceAction->setEnabled(false);
+
+    d->channelMixerAction = new QAction(QIcon::fromTheme(QLatin1String("channelmixer")), i18n("Channel Mixer..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_channelmixer"), d->channelMixerAction);
+    actionCollection()->setDefaultShortcut(d->channelMixerAction, Qt::CTRL+Qt::Key_H);
+    connect(d->channelMixerAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotChannelMixer()));
+    d->channelMixerAction->setEnabled(false);
+
+    d->curvesAction = new QAction(QIcon::fromTheme(QLatin1String("adjustcurves")), i18n("Curves Adjust..."), this);
+    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
+    actionCollection()->addAction(QLatin1String("imageplugin_adjustcurves"), d->curvesAction);
+    actionCollection()->setDefaultShortcut(d->curvesAction, Qt::CTRL+Qt::SHIFT+Qt::Key_C);
+    connect(d->curvesAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCurvesAdjust()));
+    d->curvesAction->setEnabled(false);
+
+    d->levelsAction  = new QAction(QIcon::fromTheme(QLatin1String("adjustlevels")), i18n("Levels Adjust..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_adjustlevels"), d->levelsAction);
+    actionCollection()->setDefaultShortcut(d->levelsAction, Qt::CTRL+Qt::Key_L);
+    connect(d->levelsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLevelsAdjust()));
+    d->levelsAction->setEnabled(false);
+
+    d->filmAction = new QAction(QIcon::fromTheme(QLatin1String("colorneg")), i18n("Color Negative..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_film"), d->filmAction);
+    actionCollection()->setDefaultShortcut(d->filmAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+    connect(d->filmAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFilm()));
+    d->filmAction->setEnabled(false);
 
     // --------------------------------------------------------
 
@@ -1237,6 +1359,20 @@ void EditorWindow::toggleStandardActions(bool val)
     d->distortionfxAction->setEnabled(val);
     d->raindropAction->setEnabled(val);
     d->filmgrainAction->setEnabled(val);
+    d->convertTo8Bits->setEnabled(val);
+    d->convertTo16Bits->setEnabled(val);
+    d->invertAction->setEnabled(val);
+    d->BCGAction->setEnabled(val);
+    d->CBAction->setEnabled(val);
+    d->autoCorrectionAction->setEnabled(val);
+    d->BWAction->setEnabled(val);
+    d->HSLAction->setEnabled(val);
+    d->profileMenuAction->setEnabled(val);
+    d->whitebalanceAction->setEnabled(val);
+    d->channelMixerAction->setEnabled(val);
+    d->curvesAction->setEnabled(val);
+    d->levelsAction->setEnabled(val);
+    d->filmAction->setEnabled(val);
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
@@ -2701,27 +2837,47 @@ DCategorizedView* EditorWindow::createToolSelectionView()
     // builtin actions
 
     QString basicTransformCategory     = i18nc("@title Image transformations", "Basic Transformations");
-    actionModel->addAction(d->rotateLeftAction,   basicTransformCategory);
-    actionModel->addAction(d->rotateRightAction,  basicTransformCategory);
-    actionModel->addAction(d->flipHorizAction,    basicTransformCategory);
-    actionModel->addAction(d->flipVertAction,     basicTransformCategory);
-    actionModel->addAction(d->cropAction,         basicTransformCategory);
-    actionModel->addAction(d->autoCropAction,     basicTransformCategory);
+    actionModel->addAction(d->rotateLeftAction,     basicTransformCategory);
+    actionModel->addAction(d->rotateRightAction,    basicTransformCategory);
+    actionModel->addAction(d->flipHorizAction,      basicTransformCategory);
+    actionModel->addAction(d->flipVertAction,       basicTransformCategory);
+    actionModel->addAction(d->cropAction,           basicTransformCategory);
+    actionModel->addAction(d->autoCropAction,       basicTransformCategory);
 
     QString decorateCategory           = i18nc("@title Image Decorate",        "Decorate");
-    actionModel->addAction(d->textureAction,      decorateCategory);
-    actionModel->addAction(d->borderAction,       decorateCategory);
-    actionModel->addAction(d->insertTextAction,   decorateCategory);
+    actionModel->addAction(d->textureAction,        decorateCategory);
+    actionModel->addAction(d->borderAction,         decorateCategory);
+    actionModel->addAction(d->insertTextAction,     decorateCategory);
 
     QString effectsCategory            = i18nc("@title Image Effect",          "Effects");
-    actionModel->addAction(d->filmgrainAction,    effectsCategory);
-    actionModel->addAction(d->raindropAction,     effectsCategory);
-    actionModel->addAction(d->distortionfxAction, effectsCategory);
-    actionModel->addAction(d->blurfxAction,       effectsCategory);
-    actionModel->addAction(d->oilpaintAction,     effectsCategory);
-    actionModel->addAction(d->embossAction,       effectsCategory);
-    actionModel->addAction(d->charcoalAction,     effectsCategory);
-    actionModel->addAction(d->colorEffectsAction, effectsCategory);
+    actionModel->addAction(d->filmgrainAction,      effectsCategory);
+    actionModel->addAction(d->raindropAction,       effectsCategory);
+    actionModel->addAction(d->distortionfxAction,   effectsCategory);
+    actionModel->addAction(d->blurfxAction,         effectsCategory);
+    actionModel->addAction(d->oilpaintAction,       effectsCategory);
+    actionModel->addAction(d->embossAction,         effectsCategory);
+    actionModel->addAction(d->charcoalAction,       effectsCategory);
+    actionModel->addAction(d->colorEffectsAction,   effectsCategory);
+
+    QString colorsCategory             = i18nc("@title Image Colors",          "Colors");
+    actionModel->addAction(d->convertTo8Bits,       colorsCategory);
+    actionModel->addAction(d->convertTo16Bits,      colorsCategory);
+    actionModel->addAction(d->invertAction,         colorsCategory);
+    actionModel->addAction(d->BCGAction,            colorsCategory);
+    actionModel->addAction(d->CBAction,             colorsCategory);
+    actionModel->addAction(d->autoCorrectionAction, colorsCategory);
+    actionModel->addAction(d->BWAction,             colorsCategory);
+    actionModel->addAction(d->HSLAction,            colorsCategory);
+    actionModel->addAction(d->whitebalanceAction,   colorsCategory);
+    actionModel->addAction(d->channelMixerAction,   colorsCategory);
+    actionModel->addAction(d->curvesAction,         colorsCategory);
+    actionModel->addAction(d->levelsAction,         colorsCategory);
+    actionModel->addAction(d->filmAction,           colorsCategory);
+
+    foreach(QAction* const ac, d->profileMenuAction->actions())
+    {
+        actionModel->addAction(ac, colorsCategory);
+    }
 
     // parse menus for image plugin actions
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
@@ -3011,6 +3167,189 @@ void EditorWindow::slotRainDrop()
 void EditorWindow::slotFilmGrain()
 {
     loadTool(new FilmGrainTool(this));
+}
+
+void EditorWindow::slotInvert()
+{
+    qApp->setOverrideCursor(Qt::WaitCursor);
+
+    ImageIface iface;
+    InvertFilter invert(iface.original(), 0L);
+    invert.startFilterDirectly();
+    iface.setOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
+
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotConvertTo8Bits()
+{
+    ImageIface iface;
+
+    if (!iface.originalSixteenBit())
+    {
+        QMessageBox::critical(qApp->activeWindow(),
+                              qApp->applicationName(),
+                              i18n("This image is already using a depth of 8 bits / color / pixel."));
+        return;
+    }
+    else
+    {
+        if (DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                            qApp->activeWindow(),
+                                            qApp->applicationName(),
+                                            i18n("Performing this operation will reduce image color quality. "
+                                            "Do you want to continue?"),
+                                            QLatin1String("ImagePluginColor16To8Bits"))
+            == QMessageBox::Cancel)
+        {
+            return;
+        }
+    }
+
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    iface.convertOriginalColorDepth(32);
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotConvertTo16Bits()
+{
+    ImageIface iface;
+
+    if (iface.originalSixteenBit())
+    {
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is already using a depth of 16 bits / color / pixel."));
+        return;
+    }
+
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    iface.convertOriginalColorDepth(64);
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotConvertToColorSpace(const IccProfile& profile)
+{
+    ImageIface iface;
+
+    if (iface.originalIccProfile().isNull())
+    {
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is not color managed."));
+        return;
+    }
+
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    ProfileConversionTool::fastConversion(profile);
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotUpdateColorSpaceMenu()
+{
+    d->profileMenuAction->clear();
+
+    if (!IccSettings::instance()->isEnabled())
+    {
+        QAction* const action = new QAction(i18n("Color Management is disabled..."), this);
+        d->profileMenuAction->addAction(action);
+
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(slotSetupICC()));
+        return;
+    }
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    QList<IccProfile> standardProfiles, favoriteProfiles;
+    QSet<QString> standardProfilePaths, favoriteProfilePaths;
+    standardProfiles << IccProfile::sRGB()
+                     << IccProfile::adobeRGB()
+                     << IccProfile::wideGamutRGB()
+                     << IccProfile::proPhotoRGB();
+
+    foreach(IccProfile profile, standardProfiles) // krazy:exclude=foreach
+    {
+        d->profileMenuAction->addProfile(profile, profile.description());
+        standardProfilePaths << profile.filePath();
+    }
+
+    d->profileMenuAction->addSeparator();
+
+    favoriteProfilePaths  = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
+    favoriteProfilePaths -= standardProfilePaths;
+
+    foreach(const QString& path, favoriteProfilePaths)
+    {
+        favoriteProfiles << path;
+    }
+
+    d->profileMenuAction->addProfiles(favoriteProfiles);
+    d->profileMenuAction->addSeparator();
+
+    QAction* const moreAction = new QAction(i18n("Other..."), this);
+    d->profileMenuAction->addAction(moreAction);
+
+    connect(moreAction, SIGNAL(triggered()),
+            this, SLOT(slotProfileConversionTool()));
+}
+
+void EditorWindow::slotProfileConversionTool()
+{
+    ProfileConversionTool* const tool = new ProfileConversionTool(this);
+
+    connect(tool, SIGNAL(okClicked()),
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
+    loadTool(tool);
+}
+
+void EditorWindow::slotBW()
+{
+    loadTool(new BWSepiaTool(this));
+}
+
+void EditorWindow::slotHSL()
+{
+    loadTool(new HSLTool(this));
+}
+
+void EditorWindow::slotWhiteBalance()
+{
+    loadTool(new WhiteBalanceTool(this));
+}
+
+void EditorWindow::slotChannelMixer()
+{
+    loadTool(new ChannelMixerTool(this));
+}
+
+void EditorWindow::slotCurvesAdjust()
+{
+    loadTool(new AdjustCurvesTool(this));
+}
+
+void EditorWindow::slotLevelsAdjust()
+{
+    loadTool(new AdjustLevelsTool(this));
+}
+
+void EditorWindow::slotFilm()
+{
+    loadTool(new FilmTool(this));
+}
+
+void EditorWindow::slotBCG()
+{
+    loadTool(new BCGTool(this));
+}
+
+void EditorWindow::slotCB()
+{
+    loadTool(new CBTool(this));
+}
+
+void EditorWindow::slotAutoCorrection()
+{
+    loadTool(new AutoCorrectionTool(this));
 }
 
 }  // namespace Digikam

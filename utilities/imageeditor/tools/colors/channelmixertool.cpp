@@ -55,7 +55,7 @@
 #include "imageregionwidget.h"
 #include "dnuminput.h"
 
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class ChannelMixerTool::Private
@@ -224,4 +224,4 @@ void ChannelMixerTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

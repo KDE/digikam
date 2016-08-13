@@ -49,10 +49,7 @@
 #include "wbfilter.h"
 #include "wbsettings.h"
 
-
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class WhiteBalanceTool::Private
@@ -267,4 +264,4 @@ void WhiteBalanceTool::slotSaveAsSettings()
     d->settingsView->saveAsSettings();
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam

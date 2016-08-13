@@ -47,9 +47,7 @@
 #include "imageregionwidget.h"
 #include "previewlist.h"
 
-using namespace Digikam;
-
-namespace DigikamColorImagePlugin
+namespace Digikam
 {
 
 class AutoCorrectionTool::Private
@@ -325,4 +323,4 @@ void AutoCorrectionTool::autoCorrection(DImg* const img, DImg* const ref, int ty
     }
 }
 
-}  // namespace DigikamColorImagePlugin
+}  // namespace Digikam
