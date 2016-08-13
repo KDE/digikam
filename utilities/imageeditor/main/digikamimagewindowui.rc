@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="508" name="digikamimagewindow" translationDomain="digikam" >
+<gui version="509" name="digikamimagewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -85,6 +85,21 @@
     </Menu>
 
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
+        <Action name="imageplugin_restoration" />
+        <Action name="imageplugin_blur" />
+        <Action name="imageplugin_sharpen" />
+        <Action name="imageplugin_noisereduction" />
+        <Action name="imageplugin_localcontrast" />
+        <Action name="imageplugin_inpainting" />
+        <Action name="imageplugin_hotpixels" />
+        <Separator />
+        <Action name="imageplugin_redeye" />
+
+        <Menu name="Lens" ><text>&amp;Lens</text>
+            <Action name="imageplugin_lensautofix" />
+            <Action name="imageplugin_antivignetting" />
+            <Action name="imageplugin_lensdistortion" />
+        </Menu>
     </Menu>
 
     <Menu name="Transform" ><text>Tra&amp;nsform</text>

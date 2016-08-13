@@ -42,6 +42,7 @@
 #include "digikam_globals.h"
 #include "editorwindow.h"
 #include "versionmanager.h"
+#include "dnotificationpopup.h"
 
 class QAction;
 class QDialog;
@@ -118,6 +119,17 @@ public:
         levelsAction(0),
         filmAction(0),
         profileMenuAction(0),
+        hotpixelsAction(0),
+        lensdistortionAction(0),
+        antivignettingAction(0),
+        lensAutoFixAction(0),
+        redeyeAction(0),
+        restorationAction(0),
+        blurAction(0),
+        sharpenAction(0),
+        noiseReductionAction(0),
+        localContrastAction(0),
+        inPaintingAction(0),
         undoSignalMapper(0),
         redoSignalMapper(0),
         formatMenuActionMapper(0),
@@ -222,6 +234,17 @@ public:
     QAction*                     levelsAction;
     QAction*                     filmAction;
     IccProfilesMenuAction*       profileMenuAction;
+    QAction*                     hotpixelsAction;
+    QAction*                     lensdistortionAction;
+    QAction*                     antivignettingAction;
+    QAction*                     lensAutoFixAction;
+    QAction*                     redeyeAction;
+    QAction*                     restorationAction;
+    QAction*                     blurAction;
+    QAction*                     sharpenAction;
+    QAction*                     noiseReductionAction;
+    QAction*                     localContrastAction;
+    QAction*                     inPaintingAction;
 
     QSignalMapper*               undoSignalMapper;
     QSignalMapper*               redoSignalMapper;
@@ -347,6 +370,30 @@ void EditorWindow::Private::plugNewVersionInFormatAction(EditorWindow* const q, 
     formatMenuActionMapper->setMapping(action, format);
     menuAction->addAction(action);
 }
+
+// -----------------------------------------------------------------
+
+class EditorToolPassivePopup : public DNotificationPopup
+{
+public:
+
+    explicit EditorToolPassivePopup(QWidget* const parent)
+        : DNotificationPopup(parent),
+          m_parent(parent)
+    {
+    }
+
+protected:
+
+    virtual void positionSelf()
+    {
+        move(m_parent->x() + 30, m_parent->y() + 30);
+    }
+
+private:
+
+    QWidget* m_parent;
+};
 
 }  // namespace Digikam
 

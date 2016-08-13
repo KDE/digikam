@@ -358,6 +358,17 @@ private Q_SLOTS:
     void slotLevelsAdjust();
     void slotFilm();
     void slotUpdateColorSpaceMenu();
+    void slotRestoration();
+    void slotBlur();
+    void slotSharpen();
+    void slotNoiseReduction();
+    void slotLocalContrast();
+    void slotRedEye();
+    void slotInPainting();
+    void slotLensAutoFix();
+    void slotAntiVignetting();
+    void slotLensDistortion();
+    void slotHotPixels();
 
 private:
 

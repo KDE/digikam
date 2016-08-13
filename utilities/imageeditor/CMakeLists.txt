@@ -116,7 +116,28 @@ set(libeditortools_SRCS
     tools/colors/adjustcurvestool.cpp
     tools/colors/adjustlevelstool.cpp
     tools/colors/filmtool.cpp
+    tools/enhance/restorationtool.cpp
+    tools/enhance/blurtool.cpp
+    tools/enhance/sharpentool.cpp
+    tools/enhance/noisereductiontool.cpp
+    tools/enhance/localcontrasttool.cpp
+    tools/enhance/redeyetool.cpp
+    tools/enhance/inpaintingtool.cpp
+    tools/enhance/antivignettingtool.cpp
+    tools/enhance/lensdistortiontool.cpp
+    tools/enhance/hotpixels/weights.cpp
+    tools/enhance/hotpixels/blackframeparser.cpp
+    tools/enhance/hotpixels/blackframelistview.cpp
+    tools/enhance/hotpixels/hotpixelfixer.cpp
+    tools/enhance/hotpixels/hotpixelstool.cpp
 )
+
+if(LENSFUN_FOUND)
+    set(libeditortools_SRCS ${libeditortools_SRCS}
+        tools/enhance/lensautofixtool.cpp
+       )
+    include_directories(${LENSFUN_INCLUDE_DIRS})
+endif()
 
 set(libeditoriface_SRCS
     editor/editortool.cpp

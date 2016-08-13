@@ -159,6 +159,21 @@
 #include "adjustcurvestool.h"
 #include "adjustlevelstool.h"
 #include "filmtool.h"
+#include "restorationtool.h"
+#include "blurtool.h"
+#include "sharpentool.h"
+#include "noisereductiontool.h"
+#include "localcontrasttool.h"
+#include "redeyetool.h"
+#include "imageiface.h"
+#include "inpaintingtool.h"
+#include "antivignettingtool.h"
+#include "lensdistortiontool.h"
+#include "hotpixels/hotpixelstool.h"
+
+#ifdef HAVE_LENSFUN
+#   include "lensautofixtool.h"
+#endif // HAVE_LENSFUN
 
 namespace Digikam
 {
@@ -728,6 +743,85 @@ void EditorWindow::setupStandardActions()
     connect(d->filmAction, SIGNAL(triggered(bool)),
             this, SLOT(slotFilm()));
     d->filmAction->setEnabled(false);
+
+    // -- Standard 'Enhance' menu actions ---------------------------------------------
+
+    d->restorationAction = new QAction(QIcon::fromTheme(QLatin1String("restoration")), i18n("Restoration..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_restoration"), d->restorationAction);
+    connect(d->restorationAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRestoration()));
+    d->restorationAction->setEnabled(false);
+
+    d->sharpenAction = new QAction(QIcon::fromTheme(QLatin1String("sharpenimage")), i18n("Sharpen..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_sharpen"), d->sharpenAction);
+    connect(d->sharpenAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotSharpen()));
+    d->sharpenAction->setEnabled(false);
+
+    d->blurAction = new QAction(QIcon::fromTheme(QLatin1String("blurimage")), i18n("Blur..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_blur"), d->blurAction);
+    connect(d->blurAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBlur()));
+    d->blurAction->setEnabled(false);
+
+    d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_noisereduction"), d->noiseReductionAction);
+    connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotNoiseReduction()));
+    d->noiseReductionAction->setEnabled(false);
+
+    d->localContrastAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Local Contrast..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_localcontrast"), d->localContrastAction);
+    connect(d->localContrastAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLocalContrast()));
+    d->localContrastAction->setEnabled(false);
+
+    d->redeyeAction = new QAction(QIcon::fromTheme(QLatin1String("redeyes")), i18n("Red Eye..."), this);
+    d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
+                                       "Select a region including the eyes to use this option."));
+    actionCollection()->addAction(QLatin1String("imageplugin_redeye"), d->redeyeAction);
+    connect(d->redeyeAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRedEye()));
+    d->redeyeAction->setEnabled(false);
+
+    d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("select-rectangular")), i18n("In-painting..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_inpainting"), d->inPaintingAction);
+    actionCollection()->setDefaultShortcut(d->inPaintingAction, Qt::CTRL+Qt::Key_E);
+    d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
+                                             "To use this option, select a region to in-paint.") );
+    connect(d->inPaintingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInPainting()));
+    d->inPaintingAction->setEnabled(false);
+
+    d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_antivignetting"), d->antivignettingAction);
+    connect(d->antivignettingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotAntiVignetting()));
+    d->antivignettingAction->setEnabled(false);
+
+    d->lensdistortionAction = new QAction(QIcon::fromTheme(QLatin1String("lensdistortion")), i18n("Distortion..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_lensdistortion"), d->lensdistortionAction);
+    connect(d->lensdistortionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensDistortion()));
+    d->lensdistortionAction->setEnabled(false);
+
+    d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_hotpixels"), d->hotpixelsAction);
+    connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHotPixels()));
+    d->hotpixelsAction->setEnabled(false);
+
+#ifdef HAVE_LENSFUN
+
+    d->lensAutoFixAction = new QAction(QIcon::fromTheme(QLatin1String("lensautofix")), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction(QLatin1String("imageplugin_lensautofix"), d->lensAutoFixAction );
+    connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensAutoFix()));
+    d->lensAutoFixAction->setEnabled(false);
+
+#endif // HAVE_LENSFUN
+
+    HotPixelsTool::registerFilter();
 
     // --------------------------------------------------------
 
@@ -1373,6 +1467,20 @@ void EditorWindow::toggleStandardActions(bool val)
     d->curvesAction->setEnabled(val);
     d->levelsAction->setEnabled(val);
     d->filmAction->setEnabled(val);
+    d->restorationAction->setEnabled(val);
+    d->blurAction->setEnabled(val);
+    d->sharpenAction->setEnabled(val);
+    d->noiseReductionAction->setEnabled(val);
+    d->localContrastAction->setEnabled(val);
+    d->redeyeAction->setEnabled(val);
+    d->inPaintingAction->setEnabled(val);
+    d->lensdistortionAction->setEnabled(val);
+    d->antivignettingAction->setEnabled(val);
+    d->hotpixelsAction->setEnabled(val);
+
+#ifdef HAVE_LENSFUN
+    d->lensAutoFixAction->setEnabled(val);
+#endif // HAVE_LENSFUN
 
     QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
 
@@ -2879,6 +2987,22 @@ DCategorizedView* EditorWindow::createToolSelectionView()
         actionModel->addAction(ac, colorsCategory);
     }
 
+    QString enhanceCategory             = i18nc("@title Image Enhance",        "Enhance");
+    actionModel->addAction(d->restorationAction,    enhanceCategory);
+    actionModel->addAction(d->blurAction,           enhanceCategory);
+    actionModel->addAction(d->sharpenAction,        enhanceCategory);
+    actionModel->addAction(d->noiseReductionAction, enhanceCategory);
+    actionModel->addAction(d->localContrastAction,  enhanceCategory);
+    actionModel->addAction(d->redeyeAction,         enhanceCategory);
+    actionModel->addAction(d->inPaintingAction,     enhanceCategory);
+    actionModel->addAction(d->lensdistortionAction, enhanceCategory);
+    actionModel->addAction(d->antivignettingAction, enhanceCategory);
+    actionModel->addAction(d->hotpixelsAction,      enhanceCategory);
+
+#ifdef HAVE_LENSFUN
+    actionModel->addAction(d->lensAutoFixAction, enhanceCategory);
+#endif // HAVE_LENSFUN
+
     // parse menus for image plugin actions
     actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
 
@@ -3350,6 +3474,91 @@ void EditorWindow::slotCB()
 void EditorWindow::slotAutoCorrection()
 {
     loadTool(new AutoCorrectionTool(this));
+}
+
+void EditorWindow::slotHotPixels()
+{
+    loadTool(new HotPixelsTool(this));
+}
+
+void EditorWindow::slotLensDistortion()
+{
+    loadTool(new LensDistortionTool(this));
+}
+
+void EditorWindow::slotRestoration()
+{
+    loadTool(new RestorationTool(this));
+}
+
+void EditorWindow::slotBlur()
+{
+    loadTool(new BlurTool(this));
+}
+
+void EditorWindow::slotSharpen()
+{
+    loadTool(new SharpenTool(this));
+}
+
+void EditorWindow::slotNoiseReduction()
+{
+    loadTool(new NoiseReductionTool(this));
+}
+
+void EditorWindow::slotLocalContrast()
+{
+    loadTool(new LocalContrastTool(this));
+}
+
+void EditorWindow::slotRedEye()
+{
+    ImageIface iface;
+
+    if (iface.selectionRect().size().isNull())
+    {
+        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
+        popup->setView(i18n("Red-Eye Correction Tool"),
+                       i18n("You need to select a region including the eyes to use "
+                            "the red-eye correction tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    loadTool(new RedEyeTool(this));
+}
+
+void EditorWindow::slotInPainting()
+{
+    ImageIface iface;
+
+    if (iface.selectionRect().size().isNull())
+    {
+        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
+        popup->setView(i18n("In-Painting Photograph Tool"),
+                       i18n("To use this tool, you need to select a region "
+                            "to in-paint."));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    loadTool(new InPaintingTool(this));
+}
+
+void EditorWindow::slotLensAutoFix()
+{
+#ifdef HAVE_LENSFUN
+    loadTool(new LensAutoFixTool(this));
+#endif // HAVE_LENSFUN
+}
+
+void EditorWindow::slotAntiVignetting()
+{
+    loadTool(new AntiVignettingTool(this));
 }
 
 }  // namespace Digikam

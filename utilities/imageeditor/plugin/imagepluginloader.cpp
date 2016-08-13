@@ -85,6 +85,7 @@ static const char* ObsoleteImagePluginsList[] =
     "digikamimageplugin_decorate",
     "digikamimageplugin_fxfilters",
     "digikamimageplugin_color",
+    "digikamimageplugin_enhance",
     "-1"
 };
 
