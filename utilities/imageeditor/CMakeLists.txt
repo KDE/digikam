@@ -93,10 +93,10 @@ set(libeditorrawimport_SRCS
 )
 
 set(libeditortools_SRCS
-    tools/inserttextwidget.cpp
-    tools/inserttexttool.cpp
-    tools/bordertool.cpp
-    tools/texturetool.cpp
+    tools/decorate/inserttextwidget.cpp
+    tools/decorate/inserttexttool.cpp
+    tools/decorate/bordertool.cpp
+    tools/decorate/texturetool.cpp
 )
 
 set(libeditoriface_SRCS
