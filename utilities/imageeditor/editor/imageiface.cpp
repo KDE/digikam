@@ -317,6 +317,7 @@ IccProfile ImageIface::originalIccProfile() const
 MetaEngineData ImageIface::originalMetadata() const
 {
     DImg* const img = original();
+
     if (img)
         return (img->getMetadata());
 
@@ -326,6 +327,7 @@ MetaEngineData ImageIface::originalMetadata() const
 void ImageIface::setOriginalMetadata(const MetaEngineData& meta)
 {
     DImg* const img = original();
+
     if (img)
         img->setMetadata(meta);
 }
@@ -365,8 +367,8 @@ void ImageIface::paint(QPaintDevice* const device, const QRect& rect, QPainter* 
         }
 
         QPixmap              pixImage;
-        bool doSoftProofing              = d->core->softProofingEnabled();
-        ICCSettingsContainer iccSettings = d->core->getICCSettings();
+        bool                 doSoftProofing = d->core->softProofingEnabled();
+        ICCSettingsContainer iccSettings    = d->core->getICCSettings();
 
         if (iccSettings.enableCM && (iccSettings.useManagedView || doSoftProofing))
         {

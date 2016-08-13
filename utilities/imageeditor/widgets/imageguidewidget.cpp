@@ -34,6 +34,10 @@
 #include <QFont>
 #include <QFontMetrics>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "dimg.h"
@@ -114,10 +118,13 @@ public:
 };
 
 ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
-                                   bool spotVisible, int guideMode,
-                                   const QColor& guideColor, int guideSize,
+                                   bool spotVisible,
+                                   int guideMode,
+                                   const QColor& guideColor,
+                                   int guideSize,
                                    bool blink, ImageIface::PreviewType type)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     int w            = 480;
     int h            = 320;
@@ -406,14 +413,13 @@ void ImageGuideWidget::updatePixmap()
     if (d->selectedPoints.count() > 0)
     {
         QPainter::RenderHints hints = p.renderHints();
-
         QColor semiTransGuideColor  = QColor(d->guideColor.red(), d->guideColor.green(), d->guideColor.blue(), 75);
 
         QPoint point;
         int x = 0;
         int y = 0;
 
-        for (int i = 0; i < d->selectedPoints.count(); ++i)
+        for (int i = 0 ; i < d->selectedPoints.count() ; ++i)
         {
             point = d->selectedPoints.point(i);
             point = translatePointPosition(point);
@@ -794,8 +800,8 @@ QImage ImageGuideWidget::getMask() const
 
 QPoint ImageGuideWidget::translatePointPosition(QPoint& point) const
 {
-    int x = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
-    int y = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
+    int x  = (int)(point.x() * (float)(d->preview.width())  / (float) d->iface->originalSize().width());
+    int y  = (int)(point.y() * (float)(d->preview.height()) / (float) d->iface->originalSize().height());
     x     += d->rect.x() + 1;
     y     += d->rect.y() + 1;
     return (QPoint(x, y));

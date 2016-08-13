@@ -30,10 +30,6 @@
 #include <QString>
 #include <QPixmap>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "dimg.h"
@@ -50,6 +46,7 @@ namespace Digikam
 
 class DIGIKAM_EXPORT ImageIface
 {
+
 public:
 
     enum PreviewType
@@ -111,7 +108,7 @@ public:
      */
     IccProfile         originalIccProfile() const;
     PhotoInfoContainer originalPhotoInfo()  const;
-    MetaEngineData         originalMetadata()   const;
+    MetaEngineData     originalMetadata()   const;
     void               setOriginalMetadata(const MetaEngineData& meta);
 
     /** Return a pointer to the DImg object representing the original image.
