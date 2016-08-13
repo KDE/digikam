@@ -59,9 +59,7 @@ public:
     {
 
     }
-
     FacesEngine::FaceDetector facedetector;
-
 };
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
@@ -150,14 +148,14 @@ void RedEyeCorrectionFilter::filterImage()
     QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                              QString::fromLatin1("digikam/facesengine"),
                                              QStandardPaths::LocateDirectory);
-    QFile model(*path.begin()+QString("/shape-predictor.dat"));
+    QFile model(*path.begin()+QString("/shapepredictor.dat"));
     cv::Mat intermediateImage;
     model.open(QIODevice::ReadOnly);
     QDataStream dataStream(&model);
     dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
     dataStream>>sp;
 
-    bool visualize = false;
+    //bool visualize = false;
 
 
 
@@ -166,12 +164,12 @@ void RedEyeCorrectionFilter::filterImage()
     QImage temp = m_orgImage.copyQImage();
 
     //
-    int type = m_orgImage.sixteenBit()?CV_16UC3:CV_8UC3;
-    // Todo : converting to Qimage including adding an alpha channel
-    // to be handled
-    type = type+8;//m_orgImage.hasAlpha()?type:type+8;
+//    int type = m_orgImage.sixteenBit()?CV_8UC3:CV_8UC3;
+//    // Todo : converting to Qimage including adding an alpha channel
+//    // to be handled
+//    type = type+8;//m_orgImage.hasAlpha()?type:type+8;
     intermediateImage = cv::Mat(cv::Size(temp.width(),temp.height()),
-                                        type,temp.bits());
+                                        CV_8UC4,temp.bits());
     cv::Mat gray;
     cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY);
 
@@ -183,14 +181,14 @@ void RedEyeCorrectionFilter::filterImage()
                 FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets,temp.size());
         QRectFtocvRect(qrectdets,dets);
 
-        drawRects(intermediateImage,dets);
+        //drawRects(intermediateImage,dets);
 
         // Eye Detection
         for(unsigned int i = 0;i<dets.size();i++)
         {
             fullobjectdetection object = sp(gray,dets[i]);
             std::vector<cv::Rect> eyes = geteyes(object);
-            drawRects(intermediateImage,eyes);
+            //drawRects(intermediateImage,eyes);
             for(unsigned int j = 0;j<eyes.size();j++)
             {
                 correctRedEye(intermediateImage.data,
@@ -207,8 +205,10 @@ void RedEyeCorrectionFilter::filterImage()
 
         }
     }
-    m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), m_orgImage.sixteenBit(),
+    m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), false,//m_orgImage.sixteenBit(),
                              true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
+    if(m_orgImage.sixteenBit()) m_destImage.convertDepth(64);
+    //if(!m_orgImage.hasAlpha())  m_destImage.removeAlphaChannel();
 
 
 }
@@ -302,7 +302,7 @@ void RedEyeCorrectionFilter::correctRedEye(cv::Mat & eye, int type, cv::Rect img
 
 }
 
-void RedEyeCorrectionFilter::correctRedEye(uchar * data, int type,
+void RedEyeCorrectionFilter::correctRedEye(uchar * data    , int type,
                                            cv::Rect eyerect, cv::Rect imgRect)
 {
     // Todo : handle different images depth
@@ -331,28 +331,22 @@ void RedEyeCorrectionFilter::correctRedEye(uchar * data, int type,
         {
             int pixelindex = (i*imgRect.width + j) * pixeldepth;
             onebytedata = &(((uchar*)  data)[pixelindex]);
-//            twobytedata = &(((ushort*) data)[pixelindex]);
-//            if(i>imgRect.height || j > imgRect.width)
-//            {
-//                qDebug()<<"row or column wrong\n";
-//            }
-//            if(pixelindex/4 > imgRect.width * imgRect.height)
-//            {
-//                qDebug()<<"pixel index out of context\n";
-//            }
+            twobytedata = &(((ushort*) data)[pixelindex]);
             if(sixteendepth)
             {
-                float redIntensity = ((float)twobytedata[0] / ((twobytedata[1] + twobytedata[2]) / 2));
+                float redIntensity = ((float)twobytedata[0] / (((unsigned int)twobytedata[1]
+                                                               +(unsigned int)twobytedata[2]) / 2));
                 if (redIntensity > 2.1f)
                 {
                     // reduce red to the average of blue and green
-                    twobytedata[0] = (twobytedata[1] + twobytedata[2]) / 2;
+                    twobytedata[2] = (twobytedata[1] + twobytedata[2]) / 2;
                 }
             }
             else
             {
 
-                float redIntensity = ((float)onebytedata[2] / (((int)onebytedata[1] + (int)onebytedata[0]) / 2));
+                float redIntensity = ((float)onebytedata[2] / (( (unsigned int)onebytedata[1]
+                                                               + (unsigned int)onebytedata[0]) / 2));
                 if (redIntensity > 2.1f)
                 {
                     // reduce red to the average of blue and green

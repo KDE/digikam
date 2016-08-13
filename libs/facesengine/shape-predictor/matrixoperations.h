@@ -39,8 +39,8 @@ std::vector<std::vector<float> > pinv(const std::vector<std::vector<float> >& ma
 
     cv::invert(A,B,cv::DECOMP_SVD);
 
-    for(unsigned int i =0; i<B.rows;i++)
-        for(unsigned int j =0; j<B.cols;j++)
+    for(int i =0; i<B.rows;i++)
+        for(int j =0; j<B.cols;j++)
         {
             result[i][j] = B.at<float>(i,j);
         }
