@@ -22,6 +22,38 @@ if(KF5Notifications_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::Notifications,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
+#------------------------------------------------------------------------
+
+set(testdatabaseswitch_SRCS testdatabaseswitch.cpp)
+add_executable(testdatabaseswitch ${testdatabaseswitch_SRCS})
+
+target_link_libraries(testdatabaseswitch
+                      digikamcore
+                      digikamgui
+
+                      libdng
+
+                      Qt5::Core
+                      Qt5::Gui
+                      Qt5::Test
+                      Qt5::Sql
+
+                      KF5::I18n
+                      KF5::XmlGui
+
+                      ${OpenCV_LIBRARIES}
+)
+
+if(KF5Notifications_FOUND)
+    target_link_libraries(testdatabaseswitch KF5::Notifications)
+endif()
+
+if(KF5Kipi_FOUND)
+    target_link_libraries(testdatabaseswitch KF5::Kipi)
+endif()
+
+#------------------------------------------------------------------------
+
 set(testdatabaseinit_SRCS testdatabaseinit.cpp)
 add_executable(testdatabaseinit ${testdatabaseinit_SRCS})
 
