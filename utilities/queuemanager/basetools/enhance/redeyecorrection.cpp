@@ -45,7 +45,7 @@ RedEyeCorrection::RedEyeCorrection(QObject* const parent)
 {
     setToolTitle(i18n("RedEye-Correction"));
     setToolDescription(i18n("Automatically detect and correct RedEye effect."));
-    setToolIconName(QLatin1String("redeyecorrection"));
+    setToolIconName(QLatin1String("redeyes"));
 }
 
 RedEyeCorrection::~RedEyeCorrection()
