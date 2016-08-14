@@ -29,13 +29,10 @@
 #include <QFlags>
 #include <QString>
 
-// LibMetaEngine includes
-
-#include "metaengine.h"
-
 // Local includes
 
 #include "digikam_export.h"
+#include "metaengine.h"
 
 class KConfigGroup;
 

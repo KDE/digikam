@@ -31,13 +31,10 @@
 #include <QDateTime>
 #include <QDebug>
 
-// LibMetaEngine includes
-
-#include "metaengine.h"
-
 // Local includes
 
 #include "digikam_export.h"
+#include "metaengine.h"
 
 using namespace Digikam;
 
