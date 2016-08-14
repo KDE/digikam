@@ -54,12 +54,13 @@ RedEyeCorrection::~RedEyeCorrection()
 
 void RedEyeCorrection::registerSettingsWidget()
 {
-    // Todo: modify or delete depending on settings
-
+    // TODO: modify or delete depending on settings
+/*
     m_settingsWidget = new QWidget;
 
-    //connect(m_settingsView, SIGNAL(signalSettingsChanged()),
-    //        this, SLOT(slotSettingsChanged()));
+    connect(m_settingsView, SIGNAL(signalSettingsChanged()),
+            this, SLOT(slotSettingsChanged()));
+*/
 
     BatchTool::registerSettingsWidget();
 }
