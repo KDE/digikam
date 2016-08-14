@@ -66,10 +66,11 @@ public:
         portButtonGroup(0),
         usbButton(0),
         serialButton(0),
-        portPathLabel(0),
+        networkButton(0),
         portPathComboBox(0),
         listView(0),
         titleEdit(0),
+        networkEdit(0),
         umsMountURL(0),
         searchBar(0)
     {
@@ -81,20 +82,21 @@ public:
 
     QRadioButton*     usbButton;
     QRadioButton*     serialButton;
-
-    QLabel*           portPathLabel;
+    QRadioButton*     networkButton;
 
     QComboBox*        portPathComboBox;
 
     QString           UMSCameraNameActual;
     QString           UMSCameraNameShown;
     QString           PTPCameraNameShown;
+    QString           PTPIPCameraNameShown;
 
     QStringList       serialPortList;
 
     QTreeWidget*      listView;
 
     QLineEdit*        titleEdit;
+    QLineEdit*        networkEdit;
 
     DFileSelector*    umsMountURL;
 
@@ -114,9 +116,10 @@ CameraSelection::CameraSelection(QWidget* const parent)
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
-    d->UMSCameraNameActual = QLatin1String("Directory Browse");   // Don't be i18n!
-    d->UMSCameraNameShown  = i18n("Mounted Camera");
-    d->PTPCameraNameShown  = QLatin1String("USB PTP Class Camera");
+    d->UMSCameraNameActual  = QLatin1String("Directory Browse");   // Don't be i18n!
+    d->UMSCameraNameShown   = i18n("Mounted Camera");
+    d->PTPCameraNameShown   = QLatin1String("USB PTP Class Camera");
+    d->PTPIPCameraNameShown = QLatin1String("PTP/IP Camera");
 
     QWidget* const page        = new QWidget(this);
     QGridLayout* mainBoxLayout = new QGridLayout(page);
@@ -152,49 +155,49 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     // --------------------------------------------------------------
 
-    QGroupBox* const portBox    = new QGroupBox(i18n("Camera Port Type"), page);
-    QVBoxLayout* const gLayout2 = new QVBoxLayout(portBox);
-    d->portButtonGroup          = new QButtonGroup(portBox);
+    QGroupBox* const portPathBox = new QGroupBox(i18n("Camera Port Type"), page);
+    QGridLayout* const gLayout2  = new QGridLayout(portPathBox);
+    d->portButtonGroup           = new QButtonGroup(portPathBox);
     d->portButtonGroup->setExclusive(true);
 
-    d->usbButton = new QRadioButton(i18n("USB"), portBox);
+    d->usbButton        = new QRadioButton(i18n("USB"), portPathBox);
     d->usbButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
                                     "computer using a USB cable.</p>"));
 
-    d->serialButton = new QRadioButton(i18n("Serial"), portBox);
+    d->serialButton     = new QRadioButton(i18n("Serial"), portPathBox);
     d->serialButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
                                        "computer using a serial cable.</p>"));
 
-    d->portButtonGroup->addButton(d->usbButton);
-    d->portButtonGroup->addButton(d->serialButton);
-
-    gLayout2->addWidget(d->usbButton);
-    gLayout2->addWidget(d->serialButton);
-    gLayout2->setContentsMargins(spacing, spacing, spacing, spacing);
-    gLayout2->setSpacing(spacing);
-
-    // --------------------------------------------------------------
-
-    QGroupBox* const portPathBox = new QGroupBox(i18n("Camera Port Path"), page);
-    QVBoxLayout* const gLayout3  = new QVBoxLayout(portPathBox);
-
-    d->portPathLabel = new QLabel(portPathBox);
-    d->portPathLabel->setText(i18n("Note: only for serial port cameras."));
+    d->networkButton    = new QRadioButton(i18n("Network"), portPathBox);
+    d->networkButton->setWhatsThis(i18n("<p>Select this option if your camera is connected to your "
+                                        "computer network.</p>"));
 
     d->portPathComboBox = new QComboBox(portPathBox);
     d->portPathComboBox->setDuplicatesEnabled(false);
     d->portPathComboBox->setWhatsThis(i18n("<p>Select the serial port to use on your computer here. "
                                            "This option is only required if you use a serial camera.</p>"));
 
-    gLayout3->addWidget(d->portPathLabel);
-    gLayout3->addWidget(d->portPathComboBox);
-    gLayout3->setContentsMargins(spacing, spacing, spacing, spacing);
-    gLayout3->setSpacing(spacing);
+    d->networkEdit      = new QLineEdit(portPathBox);
+    d->networkEdit->setWhatsThis(i18n("<p>Enter here the network address of your camera.</p>"));
+    d->networkEdit->setInputMask(QLatin1String("000.000.000.000"));
+    d->networkEdit->setText(QLatin1String("192.168.001.001"));
+
+    d->portButtonGroup->addButton(d->usbButton);
+    d->portButtonGroup->addButton(d->serialButton);
+    d->portButtonGroup->addButton(d->networkButton);
+
+    gLayout2->addWidget(d->usbButton,        0, 0, 1, 2);
+    gLayout2->addWidget(d->serialButton,     1, 0, 1, 2);
+    gLayout2->addWidget(d->portPathComboBox, 1, 1, 1, 2);
+    gLayout2->addWidget(d->networkButton,    2, 0, 1, 2);
+    gLayout2->addWidget(d->networkEdit,      2, 1, 1, 2);
+    gLayout2->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout2->setSpacing(spacing);
 
     // --------------------------------------------------------------
 
     QGroupBox* const umsMountBox = new QGroupBox(i18n("Camera Mount Path"), page);
-    QVBoxLayout* const gLayout4  = new QVBoxLayout(umsMountBox);
+    QVBoxLayout* const gLayout3  = new QVBoxLayout(umsMountBox);
 
     QLabel* const umsMountLabel = new QLabel(umsMountBox);
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
@@ -206,15 +209,15 @@ CameraSelection::CameraSelection(QWidget* const parent)
                                       "option is only required if you use a <b>USB Mass Storage</b> "
                                       "camera.</p>"));
 
-    gLayout4->addWidget(umsMountLabel);
-    gLayout4->addWidget(d->umsMountURL);
-    gLayout4->setContentsMargins(spacing, spacing, spacing, spacing);
-    gLayout4->setSpacing(spacing);
+    gLayout3->addWidget(umsMountLabel);
+    gLayout3->addWidget(d->umsMountURL);
+    gLayout3->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout3->setSpacing(spacing);
 
     // --------------------------------------------------------------
 
-    QWidget* const box2   = new QWidget(page);
-    QGridLayout* gLayout5 = new QGridLayout(box2);
+    QWidget* const box2         = new QWidget(page);
+    QGridLayout* const gLayout4 = new QGridLayout(box2);
 
     QLabel* const logo = new QLabel(box2);
     logo->setPixmap(QIcon::fromTheme(QLatin1String("digikam")).pixmap(QSize(48,48)));
@@ -232,28 +235,34 @@ CameraSelection::CameraSelection(QWidget* const parent)
                         "use <a href=\"ptpcamera\">%1</a> from the camera list.</p>",
                         d->PTPCameraNameShown));
 
+    QLabel* const link3 = new QLabel(box2);
+    link3->setText(i18n("<p>To set a <b>Generic PTP/IP Network Device</b><br/>"
+                        "(which uses Picture Transfer Protocol), please<br/>"
+                        "use <a href=\"ptpipcamera\">%1</a> from the camera list.</p>",
+                        d->PTPIPCameraNameShown));
+
     QLabel* const explanation = new QLabel(box2);
     explanation->setOpenExternalLinks(true);
     explanation->setText(i18n("<p>A complete list of camera settings to use is<br/>"
                               "available at <a href='http://www.teaser.fr/~hfiguiere/linux/digicam.html'>"
                               "this URL</a>.</p>"));
 
-    gLayout5->setContentsMargins(spacing, spacing, spacing, spacing);
-    gLayout5->setSpacing(spacing);
-    gLayout5->addWidget(logo,        0, 0, 1, 1);
-    gLayout5->addWidget(link,        0, 1, 2, 1);
-    gLayout5->addWidget(link2,       2, 1, 2, 1);
-    gLayout5->addWidget(explanation, 4, 1, 2, 1);
+    gLayout4->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout4->setSpacing(spacing);
+    gLayout4->addWidget(logo,        0, 0, 1, 1);
+    gLayout4->addWidget(link,        0, 1, 2, 1);
+    gLayout4->addWidget(link2,       2, 1, 2, 1);
+    gLayout4->addWidget(link3,       4, 1, 2, 1);
+    gLayout4->addWidget(explanation, 6, 1, 2, 1);
 
     // --------------------------------------------------------------
 
     mainBoxLayout->addWidget(d->listView,  0, 0, 6, 1);
     mainBoxLayout->addWidget(d->searchBar, 7, 0, 1, 1);
     mainBoxLayout->addWidget(titleBox,     0, 1, 1, 1);
-    mainBoxLayout->addWidget(portBox,      1, 1, 1, 1);
-    mainBoxLayout->addWidget(portPathBox,  2, 1, 1, 1);
-    mainBoxLayout->addWidget(umsMountBox,  3, 1, 1, 1);
-    mainBoxLayout->addWidget(box2,         4, 1, 2, 1);
+    mainBoxLayout->addWidget(portPathBox,  1, 1, 1, 1);
+    mainBoxLayout->addWidget(umsMountBox,  2, 1, 1, 1);
+    mainBoxLayout->addWidget(box2,         3, 1, 2, 1);
     mainBoxLayout->setColumnStretch(0, 10);
     mainBoxLayout->setRowStretch(6, 10);
     mainBoxLayout->setContentsMargins(QMargins());
@@ -271,6 +280,12 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     connect(link2, SIGNAL(linkActivated(QString)),
             this, SLOT(slotPTPCameraLinkUsed()));
+
+    connect(link3, SIGNAL(linkActivated(QString)),
+            this, SLOT(slotPTPIPCameraLinkUsed()));
+
+    connect(d->networkEdit, SIGNAL(textChanged(QString)),
+            this, SLOT(slotNetworkEditChanged(QString)));
 
     connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
             this, SLOT(slotSelectionChanged(QTreeWidgetItem*,int)));
@@ -343,6 +358,51 @@ void CameraSelection::slotPTPCameraLinkUsed()
     }
 }
 
+void CameraSelection::slotPTPIPCameraLinkUsed()
+{
+    QList<QTreeWidgetItem*> list = d->listView->findItems(d->PTPIPCameraNameShown, Qt::MatchExactly, 0);
+
+    if (!list.isEmpty())
+    {
+        QTreeWidgetItem* const item = list.first();
+
+        if (item)
+        {
+            d->listView->setCurrentItem(item);
+            d->listView->scrollToItem(item);
+        }
+    }
+}
+
+void CameraSelection::slotNetworkEditChanged(const QString& text)
+{
+    int cursorPosition   = d->networkEdit->cursorPosition();
+    QStringList ipRanges = text.split(QLatin1Char('.'));
+
+    for (int i = 0; i < ipRanges.count(); ++i)
+    {
+        bool ok;
+
+        for (int a = ipRanges.at(i).count(); a < 3; ++a)
+        {
+            ipRanges[i].append(QLatin1Char('0'));
+        }
+
+        if (ipRanges.at(i).toInt(&ok) > 255)
+        {
+            ipRanges[i] = QLatin1String("255");
+        }
+
+        if (!ok)
+        {
+            ipRanges[i] = QLatin1String("000");
+        }
+    }
+
+    d->networkEdit->setText(ipRanges.join(QLatin1Char('.')));
+    d->networkEdit->setCursorPosition(cursorPosition);
+}
+
 void CameraSelection::setCamera(const QString& title, const QString& model,
                                 const QString& port,  const QString& path)
 {
@@ -387,6 +447,12 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
                 }
             }
 
+            slotPortChanged();
+        }
+        else if (port.contains(QLatin1String("ptpip")))
+        {
+            d->networkButton->setChecked(true);
+            d->networkEdit->setText(port);
             slotPortChanged();
         }
 
@@ -449,25 +515,30 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
 
         d->titleEdit->setText(model);
 
-        d->serialButton->setEnabled(true);
-        d->serialButton->setChecked(false);
-        d->serialButton->setEnabled(false);
         d->usbButton->setEnabled(true);
         d->usbButton->setChecked(false);
         d->usbButton->setEnabled(false);
+        d->serialButton->setEnabled(true);
+        d->serialButton->setChecked(false);
+        d->serialButton->setEnabled(false);
+        d->networkButton->setEnabled(true);
+        d->networkButton->setChecked(false);
+        d->networkButton->setEnabled(false);
         d->portPathComboBox->setEnabled(true);
+        d->portPathComboBox->clear();
         d->portPathComboBox->insertItem(0, QLatin1String("NONE"));
         d->portPathComboBox->setEnabled(false);
+        d->networkEdit->setEnabled(true);
+        d->networkEdit->setText(QLatin1String("192.168.001.001"));
+        d->networkEdit->setEnabled(false);
 
         d->umsMountURL->setEnabled(true);
-        d->umsMountURL->lineEdit()->clear();
         d->umsMountURL->lineEdit()->setText(QLatin1String("/mnt/camera"));
         return;
     }
     else
     {
         d->umsMountURL->setEnabled(true);
-        d->umsMountURL->lineEdit()->clear();
         d->umsMountURL->lineEdit()->setText(QLatin1String("/"));
         d->umsMountURL->setEnabled(false);
     }
@@ -487,6 +558,18 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
         d->serialButton->setEnabled(true);
         d->serialButton->setChecked(false);
         d->serialButton->setEnabled(false);
+    }
+
+    if (plist.contains(QLatin1String("ptpip")))
+    {
+        d->networkButton->setEnabled(true);
+        d->networkButton->setChecked(true);
+    }
+    else
+    {
+        d->networkButton->setEnabled(true);
+        d->networkButton->setChecked(false);
+        d->networkButton->setEnabled(false);
     }
 
     if (plist.contains(QLatin1String("usb")))
@@ -512,6 +595,17 @@ void CameraSelection::slotPortChanged()
         d->portPathComboBox->clear();
         d->portPathComboBox->insertItem(0, QLatin1String("usb:"));
         d->portPathComboBox->setEnabled(false);
+        d->networkEdit->setEnabled(false);
+        return;
+    }
+
+    if (d->networkButton->isChecked())
+    {
+        d->portPathComboBox->setEnabled(true);
+        d->portPathComboBox->clear();
+        d->portPathComboBox->insertItem(0, QLatin1String("ptpip:"));
+        d->portPathComboBox->setEnabled(false);
+        d->networkEdit->setEnabled(true);
         return;
     }
 
@@ -520,6 +614,7 @@ void CameraSelection::slotPortChanged()
         d->portPathComboBox->setEnabled(true);
         d->portPathComboBox->clear();
         d->portPathComboBox->insertItems(0, d->serialPortList);
+        d->networkEdit->setEnabled(false);
     }
 }
 
@@ -549,7 +644,15 @@ QString CameraSelection::currentModel() const
 
 QString CameraSelection::currentPortPath() const
 {
-    return d->portPathComboBox->currentText();
+    if (d->networkButton->isChecked())
+    {
+        return (d->portPathComboBox->currentText() +
+                d->networkEdit->text());
+    }
+    else
+    {
+        return d->portPathComboBox->currentText();
+    }
 }
 
 QString CameraSelection::currentCameraPath() const

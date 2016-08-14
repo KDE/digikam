@@ -1595,6 +1595,11 @@ void GPCamera::getCameraSupportedPorts(const QString& model, QStringList& plist)
         plist.append(QLatin1String("serial"));
     }
 
+    if (abilities.port & GP_PORT_PTPIP)
+    {
+        plist.append(QLatin1String("ptpip"));
+    }
+
     if (abilities.port & GP_PORT_USB)
     {
         plist.append(QLatin1String("usb"));
