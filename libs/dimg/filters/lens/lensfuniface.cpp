@@ -20,6 +20,12 @@
 
 #include "lensfuniface.h"
 
+// Qt includes
+
+#include <QStandardPaths>
+#include <QFile>
+#include <QDir>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -58,7 +64,22 @@ LensFunIface::LensFunIface()
     : d(new Private)
 {
     d->lfDb      = lf_db_new();
+
+#ifdef Q_OS_WIN
+    QString lensPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                              QLatin1String("lensfun"),
+                                              QStandardPaths::LocateDirectory);
+
+    QDir lensDir(lensPath, QLatin1String("*.xml"));
+
+    foreach(const QString& lens, lensDir.entryList())
+    {
+        d->lfDb->Load(QFile::encodeName(lensDir.absoluteFilePath(lens)).constData());
+    }
+#else
     d->lfDb->Load();
+#endif
+
     d->lfCameras = d->lfDb->GetCameras();
 }
 
@@ -88,8 +109,8 @@ LensFunIface::DevicePtr LensFunIface::usedCamera() const
 void LensFunIface::setUsedCamera(DevicePtr cam)
 {
     d->usedCamera           = cam;
-    d->settings.cameraMake  = d->usedCamera ? QLatin1String(d->usedCamera->Maker)      : QString();
-    d->settings.cameraModel = d->usedCamera ? QLatin1String(d->usedCamera->Model)      : QString();
+    d->settings.cameraMake  = d->usedCamera ? QLatin1String(d->usedCamera->Maker) : QString();
+    d->settings.cameraModel = d->usedCamera ? QLatin1String(d->usedCamera->Model) : QString();
     d->settings.cropFactor  = d->usedCamera ? d->usedCamera->CropFactor : -1.0;
 }
 
@@ -424,22 +445,20 @@ LensFunIface::MetadataMatch LensFunIface::findFromMetadata(const DMetadata& meta
 
     if (temp.isEmpty())
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : NOT FOUND";
-        exactMatch &= false;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : NOT FOUND : Use default value.";
+        temp = QLatin1String("1000");
     }
-    else
+
+    temp                        = temp.remove(QLatin1String(" m"));
+    bool ok;
+    d->settings.subjectDistance = temp.toDouble(&ok);
+
+    if (!ok)
     {
-        temp                        = temp.remove(QLatin1String(" m"));
-        bool ok;
-        d->settings.subjectDistance = temp.toDouble(&ok);
-
-        if(!ok)
-        {
-            d->settings.subjectDistance = -1.0;
-        }
-
-        qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : " << d->settings.subjectDistance;
+        d->settings.subjectDistance = -1.0;
     }
+
+    qCDebug(DIGIKAM_DIMG_LOG) << "Subject dist.  : " << d->settings.subjectDistance;
 
     // ------------------------------------------------------------------------------------------------
 

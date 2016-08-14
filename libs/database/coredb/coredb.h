@@ -45,6 +45,7 @@
 #include "coredbconstants.h"
 #include "digikam_export.h"
 #include "dbenginesqlquery.h"
+#include "album.h"
 
 namespace Digikam
 {
@@ -383,6 +384,13 @@ public:
      */
     //TODO move to other place (AlbumManager)
     QList<int> getRecentlyAssignedTags() const;
+    
+    /**
+     * Moves a tag within tag hierarchy.
+     * Lft and rgt also updated, along with 
+     * parent tag id.
+     */
+    void moveTag(TAlbum* parentTagID);
 
     /**
      * Deletes a tag from the database. This will not delete the

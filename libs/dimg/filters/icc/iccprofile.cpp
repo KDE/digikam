@@ -498,9 +498,9 @@ QStringList IccProfile::defaultSearchPaths()
     candidates << QDir::rootPath() + QLatin1String("/Windows/Spool/Drivers/Color/");   // For Win2K and WinXP
     candidates << QDir::rootPath() + QLatin1String("/Windows/Color/");                 // For Win98 and WinMe
 
-#elif defined (Q_OS_MAC)
+#elif defined (Q_OS_OSX)
 
-    // Use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local and the OS X standard ColorSync directories
+    // Use a scheme highly identical to the Linux scheme, adapted for MacPorts in /opt/local, ofcial PKG installer, and the OS X standard ColorSync directories
 
     candidates << QLatin1String("/System/Library/ColorSync/Profiles");
     candidates << QLatin1String("/Library/ColorSync/Profiles");
@@ -512,6 +512,11 @@ QStringList IccProfile::defaultSearchPaths()
     if (!dataDirs.contains(QLatin1String("/opt/local/share")))
     {
         dataDirs << QLatin1String("/opt/local/share");
+    }
+
+    if (!dataDirs.contains(QLatin1String("/opt/digikam/share")))
+    {
+        dataDirs << QLatin1String("/opt/digikam/share");
     }
 
     foreach(const QString& dataDir, dataDirs)

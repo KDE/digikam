@@ -15,16 +15,20 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/wizard
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
 
-                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
-                    $<TARGET_PROPERTY:KF5::CalendarCore,INTERFACE_INCLUDE_DIRECTORIES>
 )
+
+if(KF5CalendarCore_FOUND)
+    include_directories($<TARGET_PROPERTY:KF5::CalendarCore,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
 set(libcalendar_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calsettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calpainter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calprinter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/print/calsystem.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calmonthwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/caltemplate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calwidget.cpp

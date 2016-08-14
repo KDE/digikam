@@ -27,6 +27,7 @@
 #include <QFormLayout>
 #include <QComboBox>
 #include <QLocale>
+#include <QDir>
 
 // KDE includes
 
@@ -132,7 +133,7 @@ QVariant ColumnFileProperties::data(TableViewModel::Item* const item, const int 
             break;
 
         case SubColumnFilePath:
-            return info.fileUrl().path();
+            return QDir::toNativeSeparators(info.fileUrl().toLocalFile());
             break;
 
         case SubColumnSize:

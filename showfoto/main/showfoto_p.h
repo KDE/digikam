@@ -26,16 +26,12 @@
 #ifndef SHOWFOTO_P_H
 #define SHOWFOTO_P_H
 
-// Qt includes
-
-#include <QDir>
-
 // Local includes
 
 #include "showfoto.h"
 #include "showfotoiteminfo.h"
 #include "showfotothumbnailbar.h"
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 #include "imagepropertiessidebar.h"
 #include "showfotodelegate.h"
 #include "showfotosettings.h"
@@ -51,7 +47,6 @@ public:
     Private() :
         validIccPath(true),
         droppedUrls(false),
-        imagePluginsLoaded(false),
         itemsNb(0),
         vSplitter(0),
         fileOpenAction(0),
@@ -72,7 +67,6 @@ public:
 
     bool                             validIccPath;
     bool                             droppedUrls;
-    bool                             imagePluginsLoaded;
 
     int                              itemsNb;
 
@@ -82,7 +76,6 @@ public:
     QUrl                             lastOpenedDirectory;
     QAction*                         openFilesInFolderAction;
     QAction*                         first;
-    QDir                             dir;
 
     ShowfotoItemInfoList             infoList;
     ShowfotoThumbnailModel*          model;
@@ -93,7 +86,7 @@ public:
     Digikam::ThumbBarDock*           thumbBarDock;
     ShowfotoNormalDelegate*          normalDelegate;
     Digikam::ImagePropertiesSideBar* rightSideBar;
-    Digikam::SplashScreen*           splash;
+    Digikam::DSplashScreen*          splash;
     ShowfotoSettings*                settings;
 };
 

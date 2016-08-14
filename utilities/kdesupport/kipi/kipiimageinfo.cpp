@@ -86,7 +86,7 @@ KipiImageInfo::KipiImageInfo(Interface* const interface, const QUrl& url)
 
     if (d->info.isNull())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "DB Info is null (" << url.path() << ")";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DB Info is null (" << url.toLocalFile() << ")";
     }
 }
 
@@ -100,7 +100,7 @@ void KipiImageInfo::cloneData(ImageInfoShared* const other)
     QUrl otherUrl = other->url();
 
     ImageInfo parentInf = ImageInfo::fromUrl(otherUrl);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Clone DB Info from" << parentInf.fileUrl().path() << "to" << _url.path();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Clone DB Info from" << parentInf.fileUrl().toLocalFile() << "to" << _url.toLocalFile();
     FileActionMngr::instance()->copyAttributes(parentInf, _url.toLocalFile());
 }
 

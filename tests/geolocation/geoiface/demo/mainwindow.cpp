@@ -243,7 +243,7 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
 
     resize(512, 512);
     setWindowTitle(i18n("GeoIface demo"));
-    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("applications-internet")));
+    setWindowIcon(QIcon::fromTheme(QString::fromLatin1("folder-html")));
     setObjectName(QLatin1String("Demo-GeoIface" ));
 
     d->cmdLineArgs = cmdLineArgs;
@@ -386,7 +386,7 @@ MyImageData LoadImageData(const QUrl& urlToLoad)
 
     // TODO: error handling!
     DMetadata meta;
-    meta.load(urlToLoad.path());
+    meta.load(urlToLoad.toLocalFile());
     double lat, lon, alt;
 
     if (meta.getGPSInfo(alt, lat, lon))

@@ -223,7 +223,7 @@ void SlideShow::slotLoadNextItem()
 
     if (d->fileIndex < num)
     {
-        d->imageView->setLoadUrl(QUrl::fromLocalFile(currentItem().toLocalFile()));
+        d->imageView->setLoadUrl(currentItem());
     }
     else
     {
@@ -252,7 +252,7 @@ void SlideShow::slotLoadPrevItem()
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
     {
-        d->imageView->setLoadUrl(QUrl::fromLocalFile(currentItem().toLocalFile()));
+        d->imageView->setLoadUrl(currentItem());
     }
     else
     {
@@ -310,7 +310,7 @@ void SlideShow::preloadNextItem()
 
     if (index < num)
     {
-        d->imageView->setPreloadUrl(QUrl::fromLocalFile(currentItem().toLocalFile()));
+        d->imageView->setPreloadUrl(currentItem());
     }
 }
 

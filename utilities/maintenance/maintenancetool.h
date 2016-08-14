@@ -51,8 +51,6 @@ public:
      */
     void setNotificationEnabled(bool b);
 
-    void start();
-
     /** Re-implement this method if your tool is able to use multi-core CPU to process item in parallel
      */
     virtual void setUseMultiCoreCPU(bool) {};
@@ -62,6 +60,10 @@ Q_SIGNALS:
     /** Emit when process is done (not canceled).
      */
     void signalComplete();
+
+public Q_SLOTS:
+
+    void start();
 
 protected Q_SLOTS:
 

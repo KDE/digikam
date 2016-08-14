@@ -7,7 +7,7 @@
  * Description : database server error reporting
  *
  * Copyright (C) 2010 by Holger Foerster <Hamsi2k at freenet dot de>
- *
+ * Copyright (C) 2016 by Swati Lodha <swatilodha27 at gmail dot com>
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
@@ -40,22 +40,6 @@ DatabaseServerError::DatabaseServerError(const DatabaseServerError& dbServerErro
 
 DatabaseServerError::~DatabaseServerError()
 {
-}
-
-DatabaseServerError& DatabaseServerError::operator<<(const QDBusArgument& argument)
-{
-    argument.beginStructure();
-    argument >> m_ErrorType >> m_ErrorText;
-    argument.endStructure();
-    return *this;
-}
-
-const DatabaseServerError& DatabaseServerError::operator>>(QDBusArgument& argument) const
-{
-    argument.beginStructure();
-    argument << m_ErrorType << m_ErrorText;
-    argument.endStructure();
-    return *this;
 }
 
 int DatabaseServerError::getErrorType() const

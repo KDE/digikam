@@ -13,6 +13,7 @@ haar/               Haar fingerprint algorithms used by Fuzzy Search tool.
 imagehistory/       Image history algorithms.
 imgqsort/           Image Quality algorithms.
 item/               Image management interface.
+server/             Internal database server.
 tags/               Tags management and Face tags interface.
 thumbsdb/           Thumbnails database implementation based on Database Engine.
 utils/              High level implementation based on corebd interface plus widgets and dialogs.

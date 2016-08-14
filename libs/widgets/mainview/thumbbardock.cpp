@@ -166,9 +166,6 @@ QAction* ThumbBarDock::getToggleAction(QObject* const parent, const QString& cap
 {
     QAction* const action = new QAction(QIcon::fromTheme(QLatin1String("view-choose")), caption, parent);
 
-    // Default shortcut is Ctrl+T.
-    action->setShortcut(QKeySequence(Qt::CTRL+Qt::Key_T));
-
     action->setCheckable(true);
 
     // Connect the triggered signal, which is only emitted after a user action

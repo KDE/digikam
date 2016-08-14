@@ -120,6 +120,7 @@ const QString ApplicationSettings::Private::configToolTipsShowAlbumPreviewEntry(
 const QString ApplicationSettings::Private::configPreviewLoadFullImageSizeEntry(QLatin1String("Preview Load Full Image Size"));
 const QString ApplicationSettings::Private::configPreviewRawUseEmbeddedPreview(QLatin1String("Preview Raw Use Embedded Preview"));
 const QString ApplicationSettings::Private::configPreviewRawUseHalfSizeData(QLatin1String("Preview Raw Use Half Size Data"));
+const QString ApplicationSettings::Private::configPreviewZoomOrgSizeEntry(QLatin1String("Preview Zoom Use Original Size"));
 const QString ApplicationSettings::Private::configPreviewShowIconsEntry(QLatin1String("Preview Show Icons"));
 const QString ApplicationSettings::Private::configShowThumbbarEntry(QLatin1String("Show Thumbbar"));
 const QString ApplicationSettings::Private::configShowFolderTreeViewItemsCountEntry(QLatin1String("Show Folder Tree View Items Count"));
@@ -135,6 +136,7 @@ const QString ApplicationSettings::Private::configStringComparisonTypeEntry(QLat
 const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry(QLatin1String("Detection Accuracy"));
 const QString ApplicationSettings::Private::configApplicationStyleEntry(QLatin1String("Application Style"));
 const QString ApplicationSettings::Private::configIconThemeEntry(QLatin1String("Icon Theme"));
+const QString ApplicationSettings::Private::configScanAtStartEntry(QLatin1String("Scan At Start"));
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
@@ -198,7 +200,8 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       ratingFilterCond(0),
       recursiveAlbums(false),
       recursiveTags(false),
-      sidebarTitleStyle(DMultiTabBar::ActiveIconText),
+      scanAtStart(true),
+      sidebarTitleStyle(DMultiTabBar::AllIconsText),
       albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
       imageSortOrder(0),
@@ -242,7 +245,7 @@ void ApplicationSettings::Private::init()
     thumbnailSize                       = ThumbnailSize::Medium;
     treeThumbnailSize                   = 22;
     treeviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    sidebarTitleStyle                   = DMultiTabBar::ActiveIconText;
+    sidebarTitleStyle                   = DMultiTabBar::AllIconsText;
 
     ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
 
@@ -255,18 +258,18 @@ void ApplicationSettings::Private::init()
 
     iconShowName                        = false;
     iconShowSize                        = false;
-    iconShowDate                        = true;
-    iconShowModDate                     = true;
-    iconShowTitle                       = true;
-    iconShowComments                    = true;
+    iconShowDate                        = false;
+    iconShowModDate                     = false;
+    iconShowTitle                       = false;
+    iconShowComments                    = false;
     iconShowResolution                  = false;
     iconShowAspectRatio                 = false;
     iconShowTags                        = true;
     iconShowOverlays                    = true;
     iconShowFullscreen                  = true;
     iconShowRating                      = true;
-    iconShowImageFormat                 = false;
-    iconShowCoordinates                 = false;
+    iconShowImageFormat                 = true;
+    iconShowCoordinates                 = true;
     iconviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     toolTipsFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
     showToolTips                        = false;
@@ -319,7 +322,9 @@ void ApplicationSettings::Private::init()
 
     faceDetectionAccuracy               = 0.8;
 
+    scanAtStart                         = true;
     stringComparisonType                = ApplicationSettings::Natural;
+
     applicationStyle                    = qApp->style()->objectName();
     iconTheme                           = QString();
 

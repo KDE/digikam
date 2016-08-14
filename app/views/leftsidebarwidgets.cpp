@@ -1331,7 +1331,7 @@ void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 const QIcon GPSSearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme(QLatin1String("applications-internet"));
+    return QIcon::fromTheme(QLatin1String("folder-html"));
 }
 
 const QString GPSSearchSideBarWidget::getCaption()

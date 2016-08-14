@@ -65,7 +65,7 @@ void HistoryImageId::setCreationDate(const QDateTime& creationDate)
 void HistoryImageId::setPathOnDisk(const QString& filePath)
 {
     QUrl url = QUrl::fromLocalFile(filePath);
-    m_filePath = url.adjusted(QUrl::RemoveFilename).path() + QLatin1String("/");
+    m_filePath = url.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).toLocalFile() + QLatin1Char('/');
 }
 
 void HistoryImageId::setPath(const QString& path)

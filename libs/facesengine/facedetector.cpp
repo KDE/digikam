@@ -143,6 +143,11 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
 {
     QList<QRectF> result;
 
+    if (image.isNull() || !image.size().isValid())
+    {
+        return result;
+    }
+
     try
     {
         cv::Size cvOriginalSize;

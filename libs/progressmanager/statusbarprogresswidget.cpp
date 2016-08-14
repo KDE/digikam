@@ -96,21 +96,22 @@ public:
 };
 
 StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressView, QWidget* const parent, bool button)
-    : QFrame(parent), d(new Private)
+    : QFrame(parent),
+      d(new Private)
 {
-    d->progressView      = progressView;
-    d->bShowButton       = button;
+    d->progressView = progressView;
+    d->bShowButton  = button;
 
-    int w  = fontMetrics().width(QLatin1String(" 999.9 kB/s 00:00:01 ")) + 8;
-    d->box = new QHBoxLayout(this);
+    int w           = fontMetrics().width(QLatin1String(" 999.9 kB/s 00:00:01 ")) + 8;
+    d->box          = new QHBoxLayout(this);
     d->box->setContentsMargins(QMargins());
     d->box->setSpacing(0);
 
-    d->pButton        = new QPushButton(this);
+    d->pButton      = new QPushButton(this);
     d->pButton->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     d->pButton->setIcon(QIcon::fromTheme(QLatin1String("go-up")));
     d->box->addWidget(d->pButton);
-    d->stack          = new QStackedWidget(this);
+    d->stack        = new QStackedWidget(this);
     d->stack->setMaximumHeight(fontMetrics().height());
     d->box->addWidget(d->stack);
 
@@ -121,7 +122,7 @@ StatusbarProgressWidget::StatusbarProgressWidget(ProgressView* const progressVie
     d->pProgressBar->setMinimumWidth(w);
     d->stack->insertWidget(1, d->pProgressBar);
 
-    d->pLabel = new QLabel(i18n("No active process"), this);
+    d->pLabel       = new QLabel(i18n("No active process"), this);
     d->pLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     d->pLabel->installEventFilter(this);
     d->pLabel->setMinimumWidth(w);

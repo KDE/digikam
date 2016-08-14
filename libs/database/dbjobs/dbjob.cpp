@@ -70,7 +70,8 @@ void AlbumsJob::run()
         ImageLister lister;
         lister.setRecursive(m_jobInfo.isRecursive());
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
-        // send data every 200 images to be more responsive
+        
+        // Send data every 200 images to be more responsive
         Digikam::ImageListerJobGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
         lister.listAlbum(&receiver, m_jobInfo.albumRootId(), m_jobInfo.album());
         receiver.sendData();
@@ -102,10 +103,12 @@ void DatesJob::run()
     {
         ImageLister lister;
         lister.setListOnlyAvailable(true);
-        // send data every 200 images to be more responsive
+        
+        // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
         lister.listDateRange(&receiver, m_jobInfo.startDate(), m_jobInfo.endDate());
-        // send rest
+        
+        // Send rest
         receiver.sendData();
     }
 
@@ -130,11 +133,11 @@ void GPSJob::run()
     {
         QList<QVariant> imagesInfoFromArea =
                 CoreDbAccess().db()->getImageIdsFromArea(m_jobInfo.lat1(),
-                                                           m_jobInfo.lat2(),
-                                                           m_jobInfo.lng1(),
-                                                           m_jobInfo.lng2(),
-                                                           0,
-                                                           QLatin1String("rating"));
+                                                         m_jobInfo.lat2(),
+                                                         m_jobInfo.lng1(),
+                                                         m_jobInfo.lng2(),
+                                                         0,
+                                                         QLatin1String("rating"));
 
         emit directQueryData(imagesInfoFromArea);
     }
@@ -143,7 +146,8 @@ void GPSJob::run()
         ImageLister lister;
         lister.setAllowExtraValues(true);
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
-        // send data every 200 images to be more responsive
+        
+        // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
         lister.listAreaRange(&receiver,
                              m_jobInfo.lat1(),
@@ -180,8 +184,10 @@ void TagsJob::run()
     else if (m_jobInfo.isFaceFoldersJob())
     {
         QMap<QString, QMap<int, int> > facesNumberMap;
+
         facesNumberMap[ImageTagPropertyName::autodetectedFace()] =
             CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedFace());
+
         facesNumberMap[ImageTagPropertyName::tagRegion()]        =
             CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
 
@@ -192,7 +198,8 @@ void TagsJob::run()
         ImageLister lister;
         lister.setRecursive(m_jobInfo.isRecursive());
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
-        // send data every 200 images to be more responsive
+
+        // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
 
         if (!m_jobInfo.specialTag().isNull())
@@ -209,7 +216,7 @@ void TagsJob::run()
             lister.listTag(&receiver, m_jobInfo.tagsIds());
         }
 
-        // finish sending
+        // Finish sending
         receiver.sendData();
     }
 
@@ -237,7 +244,7 @@ void SearchesJob::run()
         ImageLister lister;
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
 
-        // send data every 200 images to be more responsive
+        // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
 
         if (info.type == DatabaseSearch::HaarSearch)
@@ -269,7 +276,7 @@ void SearchesJob::run()
 
         DuplicatesProgressObserver observer(this);
 
-        // rebuild the duplicate albums
+        // Rebuild the duplicate albums
         HaarIface iface;
         iface.rebuildDuplicatesAlbums(m_jobInfo.albumsIds(),
                                       m_jobInfo.tagsIds(),

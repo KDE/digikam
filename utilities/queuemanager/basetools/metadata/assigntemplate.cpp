@@ -112,14 +112,21 @@ void AssignTemplate::slotSettingsChanged()
 
 bool AssignTemplate::toolOperations()
 {
-    if (!loadToDImg())
+    DMetadata meta;
+
+    if (image().isNull())
     {
-        return false;
+        if (!meta.load(inputUrl().toLocalFile()))
+        {
+            return false;
+        }
+    }
+    else
+    {
+        meta.setData(image().getMetadata());
     }
 
     QString title = settings()[QLatin1String("TemplateTitle")].toString();
-
-    DMetadata meta(image().getMetadata());
 
     if (title == Template::removeTemplateTitle())
     {
@@ -136,9 +143,29 @@ bool AssignTemplate::toolOperations()
         meta.setMetadataTemplate(t);
     }
 
-    image().setMetadata(meta.data());
+    bool ret = true;
 
-    return (savefromDImg());
+    if (image().isNull())
+    {
+        QFile::remove(outputUrl().toLocalFile());
+        ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
+
+        if (ret && !title.isEmpty())
+        {
+            ret = meta.save(outputUrl().toLocalFile());
+        }
+    }
+    else
+    {
+        if (!title.isEmpty())
+        {
+            image().setMetadata(meta.data());
+        }
+
+        ret = savefromDImg();
+    }
+
+    return ret;
 }
 
 }  // namespace Digikam

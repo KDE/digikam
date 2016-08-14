@@ -457,7 +457,7 @@ void ExpoBlendingDlg::slotProcess()
 
 void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
 {
-    QUrl newUrl = QUrl::fromLocalFile(temp.adjusted(QUrl::RemoveFilename).path() + settings.targetFileName);
+    QUrl newUrl = QUrl::fromLocalFile(temp.adjusted(QUrl::RemoveFilename).toLocalFile() + settings.targetFileName);
 
     if (d->saveSettingsBox->conflictRule() != DSaveSettingsWidget::OVERWRITE)
     {
@@ -476,7 +476,7 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
 
         if (!QFile::rename(temp.toLocalFile(), newUrl.toLocalFile()))
         {
-            QMessageBox::critical(this, QString(), i18n("Failed to save image to %1.", newUrl.toLocalFile()));
+            QMessageBox::critical(this, QString(), i18n("Failed to save image to %1.", QDir::toNativeSeparators(newUrl.toLocalFile())));
             d->enfuseStack->setOnItem(settings.previewUrl, false);
             d->enfuseStack->processedItem(settings.previewUrl, false);
             return;

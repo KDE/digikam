@@ -271,7 +271,7 @@ void MaintenanceMngr::stage5()
     {
         // NOTE : Use multi-core CPU option is passed through FaceScanSettings
         d->settings.faceSettings.useFullCpu = d->settings.useMutiCoreCPU;
-        d->facesDetector                     = new FacesDetector(d->settings.faceSettings);
+        d->facesDetector                    = new FacesDetector(d->settings.faceSettings);
         d->facesDetector->setNotificationEnabled(false);
         d->facesDetector->start();
     }
@@ -314,7 +314,8 @@ void MaintenanceMngr::stage7()
         list << d->settings.tags;
         d->metadataSynchronizer = new MetadataSynchronizer(list, MetadataSynchronizer::SyncDirection(d->settings.syncDirection));
         d->metadataSynchronizer->setNotificationEnabled(false);
-        d->metadataSynchronizer->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
+        // See Bug #329091 : Multicore CPU support with Exiv2 sound problematic, even with 0.25 release.
+        d->metadataSynchronizer->setUseMultiCoreCPU(false);
         d->metadataSynchronizer->start();
     }
     else

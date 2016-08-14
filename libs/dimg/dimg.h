@@ -655,7 +655,7 @@ private:
     void copyImageData(const Private* const src);
     void setImageData(bool null, uint width, uint height, bool sixteenBit, bool alpha);
     void setImageDimension(uint width, uint height);
-    int  allocateData();
+    size_t allocateData();
 
     static void bitBlt(const uchar* const src, uchar* const dest,
                        int sx, int sy, int w, int h, int dx, int dy,

@@ -32,6 +32,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QByteArray>
 #include <QCursor>
 #include <QDir>
@@ -69,7 +70,6 @@
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kconfiggroup.h>
-#include <kservice.h>
 #include <kservicetype.h>
 #include <kservicetypetrader.h>
 #include <ktoolbarpopupaction.h>
@@ -110,8 +110,6 @@
 #include "iccsettingscontainer.h"
 #include "icctransform.h"
 #include "imagedialog.h"
-#include "imageplugin.h"
-#include "imagepluginloader.h"
 #include "iofilesettings.h"
 #include "metadatasettings.h"
 #include "libsinfodlg.h"
@@ -131,6 +129,57 @@
 #include "undostate.h"
 #include "versionmanager.h"
 #include "dexpanderbox.h"
+#include "inserttexttool.h"
+#include "bordertool.h"
+#include "texturetool.h"
+#include "colorfxtool.h"
+#include "charcoaltool.h"
+#include "embosstool.h"
+#include "oilpainttool.h"
+#include "blurfxtool.h"
+#include "distortionfxtool.h"
+#include "raindroptool.h"
+#include "filmgraintool.h"
+#include "invertfilter.h"
+#include "imageiface.h"
+#include "editortooliface.h"
+#include "iccprofilescombobox.h"
+#include "iccsettings.h"
+#include "autocorrectiontool.h"
+#include "bcgtool.h"
+#include "bwsepiatool.h"
+#include "hsltool.h"
+#include "profileconversiontool.h"
+#include "cbtool.h"
+#include "whitebalancetool.h"
+#include "channelmixertool.h"
+#include "adjustcurvestool.h"
+#include "adjustlevelstool.h"
+#include "filmtool.h"
+#include "restorationtool.h"
+#include "blurtool.h"
+#include "sharpentool.h"
+#include "noisereductiontool.h"
+#include "localcontrasttool.h"
+#include "redeyetool.h"
+#include "imageiface.h"
+#include "inpaintingtool.h"
+#include "antivignettingtool.h"
+#include "lensdistortiontool.h"
+#include "hotpixelstool.h"
+#include "perspectivetool.h"
+#include "freerotationtool.h"
+#include "sheartool.h"
+#include "resizetool.h"
+#include "ratiocroptool.h"
+
+#ifdef HAVE_LIBLQR_1
+#   include "contentawareresizetool.h"
+#endif
+
+#ifdef HAVE_LENSFUN
+#   include "lensautofixtool.h"
+#endif
 
 namespace Digikam
 {
@@ -149,7 +198,6 @@ EditorWindow::EditorWindow(const QString& name)
     m_servicesMenu                 = 0;
     m_serviceAction                = 0;
     m_canvas                       = 0;
-    m_imagePluginLoader            = 0;
     m_openVersionAction            = 0;
     m_saveAction                   = 0;
     m_saveAsAction                 = 0;
@@ -177,8 +225,9 @@ EditorWindow::EditorWindow(const QString& name)
     m_vSplitter                    = 0;
     m_stackView                    = 0;
     m_setExifOrientationTag        = true;
-    m_cancelSlideShow              = false;
     m_editingOriginalImage         = true;
+    m_actionEnabledState           = false;
+    m_cancelSlideShow              = false;
 
     // Settings containers instance.
 
@@ -317,12 +366,14 @@ void EditorWindow::setupStandardActions()
 
     m_backwardAction = buildStdAction(StdBackAction, this, SLOT(slotBackward()), this);
     ac->addAction(QLatin1String("editorwindow_backward"), m_backwardAction);
-    ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace);
+    ac->setDefaultShortcuts(m_backwardAction, QList<QKeySequence>() << Qt::Key_PageUp << Qt::Key_Backspace
+                                                                    << Qt::Key_Up << Qt::Key_Left);
     m_backwardAction->setEnabled(false);
 
     m_forwardAction = buildStdAction(StdForwardAction, this, SLOT(slotForward()), this);
     ac->addAction(QLatin1String("editorwindow_forward"), m_forwardAction);
-    ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space);
+    ac->setDefaultShortcuts(m_forwardAction, QList<QKeySequence>() << Qt::Key_PageDown << Qt::Key_Space
+                                                                   << Qt::Key_Down << Qt::Key_Right);
     m_forwardAction->setEnabled(false);
 
     m_firstAction = new QAction(QIcon::fromTheme(QLatin1String("go-first")), i18n("&First"), this);
@@ -522,6 +573,261 @@ void EditorWindow::setupStandardActions()
     d->zoomFitToSelectAction->setWhatsThis(i18n("This option can be used to zoom the image to the "
                                                 "current selection area."));
 
+    // -- Standard 'Decorate' menu actions ---------------------------------------------
+
+    d->insertTextAction = new QAction(QIcon::fromTheme(QLatin1String("insert-text")), i18n("Insert Text..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_inserttext"), d->insertTextAction );
+    actionCollection()->setDefaultShortcut(d->insertTextAction, Qt::SHIFT+Qt::CTRL+Qt::Key_T);
+    connect(d->insertTextAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInsertText()));
+    d->insertTextAction->setEnabled(false);
+
+    d->borderAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("Add Border..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_border"), d->borderAction );
+    connect(d->borderAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBorder()));
+    d->borderAction->setEnabled(false);
+
+    d->textureAction = new QAction(QIcon::fromTheme(QLatin1String("texture")), i18n("Apply Texture..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_texture"), d->textureAction );
+    connect(d->textureAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotTexture()));
+    d->textureAction->setEnabled(false);
+
+    // -- Standard 'Effects' menu actions ---------------------------------------------
+
+    d->colorEffectsAction = new QAction(QIcon::fromTheme(QLatin1String("colorfx")), i18n("Color Effects..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_colorfx"), d->colorEffectsAction);
+    connect(d->colorEffectsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotColorEffects()));
+    d->colorEffectsAction->setEnabled(false);
+
+    d->charcoalAction = new QAction(QIcon::fromTheme(QLatin1String("charcoaltool")), i18n("Charcoal Drawing..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_charcoal"), d->charcoalAction);
+    connect(d->charcoalAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCharcoal()));
+    d->charcoalAction->setEnabled(false);
+
+    d->embossAction = new QAction(QIcon::fromTheme(QLatin1String("embosstool")), i18n("Emboss..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_emboss"), d->embossAction);
+    connect(d->embossAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotEmboss()));
+    d->embossAction->setEnabled(false);
+
+    d->oilpaintAction = new QAction(QIcon::fromTheme(QLatin1String("oilpaint")), i18n("Oil Paint..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_oilpaint"), d->oilpaintAction);
+    connect(d->oilpaintAction, SIGNAL(triggered(bool)),
+            this ,SLOT(slotOilPaint()));
+    d->oilpaintAction->setEnabled(false);
+
+    d->blurfxAction = new QAction(QIcon::fromTheme(QLatin1String("blurfx")), i18n("Blur Effects..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_blurfx"), d->blurfxAction);
+    connect(d->blurfxAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBlurFX()));
+    d->blurfxAction->setEnabled(false);
+
+    d->distortionfxAction = new QAction(QIcon::fromTheme(QLatin1String("draw-spiral")), i18n("Distortion Effects..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_distortionfx"), d->distortionfxAction );
+    connect(d->distortionfxAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotDistortionFX()));
+    d->distortionfxAction->setEnabled(false);
+
+    d->raindropAction = new QAction(QIcon::fromTheme(QLatin1String("raindrop")), i18n("Raindrops..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_raindrop"), d->raindropAction);
+    connect(d->raindropAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRainDrop()));
+    d->raindropAction->setEnabled(false);
+
+    d->filmgrainAction  = new QAction(QIcon::fromTheme(QLatin1String("filmgrain")), i18n("Add Film Grain..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_filmgrain"), d->filmgrainAction);
+    connect(d->filmgrainAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFilmGrain()));
+    d->filmgrainAction->setEnabled(false);
+
+    // -- Standard 'Colors' menu actions ---------------------------------------------
+
+    d->BCGAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Brightness/Contrast/Gamma..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_bcg"), d->BCGAction);
+    connect(d->BCGAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBCG()));
+    d->BCGAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+U.
+    d->HSLAction = new QAction(QIcon::fromTheme(QLatin1String("adjusthsl")), i18n("Hue/Saturation/Lightness..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_hsl"), d->HSLAction);
+    actionCollection()->setDefaultShortcut(d->HSLAction, Qt::CTRL+Qt::Key_U);
+    connect(d->HSLAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHSL()));
+    d->HSLAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+B.
+    d->CBAction = new QAction(QIcon::fromTheme(QLatin1String("adjustrgb")), i18n("Color Balance..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_rgb"), d->CBAction);
+    actionCollection()->setDefaultShortcut(d->CBAction, Qt::CTRL+Qt::Key_B);
+    connect(d->CBAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCB()));
+    d->CBAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+SHIFT+B with
+    d->autoCorrectionAction = new QAction(QIcon::fromTheme(QLatin1String("autocorrection")), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_autocorrection"), d->autoCorrectionAction);
+    actionCollection()->setDefaultShortcut(d->autoCorrectionAction, Qt::CTRL+Qt::SHIFT+Qt::Key_B);
+    connect(d->autoCorrectionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotAutoCorrection()));
+    d->autoCorrectionAction->setEnabled(false);
+
+    // NOTE: Photoshop 7 use CTRL+I.
+    d->invertAction = new QAction(QIcon::fromTheme(QLatin1String("edit-select-invert")), i18n("Invert"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_invert"), d->invertAction);
+    actionCollection()->setDefaultShortcut(d->invertAction, Qt::CTRL+Qt::Key_I);
+    connect(d->invertAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInvert()));
+    d->invertAction->setEnabled(false);
+
+    d->convertTo8Bits = new QAction(QIcon::fromTheme(QLatin1String("depth16to8")), i18n("8 bits"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_convertto8bits"), d->convertTo8Bits);
+    connect(d->convertTo8Bits, SIGNAL(triggered(bool)),
+            this, SLOT(slotConvertTo8Bits()));
+    d->convertTo8Bits->setEnabled(false);
+
+    d->convertTo16Bits = new QAction(QIcon::fromTheme(QLatin1String("depth8to16")), i18n("16 bits"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_convertto16bits"), d->convertTo16Bits);
+    connect(d->convertTo16Bits, SIGNAL(triggered(bool)),
+            this, SLOT(slotConvertTo16Bits()));
+    d->convertTo16Bits->setEnabled(false);
+
+    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Space Conversion"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_colormanagement"), d->profileMenuAction->menuAction());
+    connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
+            this, SLOT(slotConvertToColorSpace(IccProfile)));
+    d->profileMenuAction->setEnabled(false);
+
+    connect(IccSettings::instance(), SIGNAL(settingsChanged()),
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
+    slotUpdateColorSpaceMenu();
+
+    d->BWAction = new QAction(QIcon::fromTheme(QLatin1String("bwtonal")), i18n("Black && White..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_blackwhite"), d->BWAction);
+    connect(d->BWAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBW()));
+    d->BWAction->setEnabled(false);
+
+    d->whitebalanceAction = new QAction(QIcon::fromTheme(QLatin1String("bordertool")), i18n("White Balance..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_whitebalance"), d->whitebalanceAction);
+    actionCollection()->setDefaultShortcut(d->whitebalanceAction, Qt::CTRL+Qt::SHIFT+Qt::Key_W);
+    connect(d->whitebalanceAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotWhiteBalance()));
+    d->whitebalanceAction->setEnabled(false);
+
+    d->channelMixerAction = new QAction(QIcon::fromTheme(QLatin1String("channelmixer")), i18n("Channel Mixer..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_channelmixer"), d->channelMixerAction);
+    actionCollection()->setDefaultShortcut(d->channelMixerAction, Qt::CTRL+Qt::Key_H);
+    connect(d->channelMixerAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotChannelMixer()));
+    d->channelMixerAction->setEnabled(false);
+
+    d->curvesAction = new QAction(QIcon::fromTheme(QLatin1String("adjustcurves")), i18n("Curves Adjust..."), this);
+    // NOTE: Photoshop 7 use CTRL+M (but it's used in KDE to toogle menu bar).
+    actionCollection()->addAction(QLatin1String("editorwindow_adjustcurves"), d->curvesAction);
+    actionCollection()->setDefaultShortcut(d->curvesAction, Qt::CTRL+Qt::SHIFT+Qt::Key_C);
+    connect(d->curvesAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCurvesAdjust()));
+    d->curvesAction->setEnabled(false);
+
+    d->levelsAction  = new QAction(QIcon::fromTheme(QLatin1String("adjustlevels")), i18n("Levels Adjust..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_adjustlevels"), d->levelsAction);
+    actionCollection()->setDefaultShortcut(d->levelsAction, Qt::CTRL+Qt::Key_L);
+    connect(d->levelsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLevelsAdjust()));
+    d->levelsAction->setEnabled(false);
+
+    d->filmAction = new QAction(QIcon::fromTheme(QLatin1String("colorneg")), i18n("Color Negative..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_film"), d->filmAction);
+    actionCollection()->setDefaultShortcut(d->filmAction, Qt::CTRL+Qt::SHIFT+Qt::Key_I);
+    connect(d->filmAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFilm()));
+    d->filmAction->setEnabled(false);
+
+    // -- Standard 'Enhance' menu actions ---------------------------------------------
+
+    d->restorationAction = new QAction(QIcon::fromTheme(QLatin1String("restoration")), i18n("Restoration..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_restoration"), d->restorationAction);
+    connect(d->restorationAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRestoration()));
+    d->restorationAction->setEnabled(false);
+
+    d->sharpenAction = new QAction(QIcon::fromTheme(QLatin1String("sharpenimage")), i18n("Sharpen..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_sharpen"), d->sharpenAction);
+    connect(d->sharpenAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotSharpen()));
+    d->sharpenAction->setEnabled(false);
+
+    d->blurAction = new QAction(QIcon::fromTheme(QLatin1String("blurimage")), i18n("Blur..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_blur"), d->blurAction);
+    connect(d->blurAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotBlur()));
+    d->blurAction->setEnabled(false);
+
+    d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_noisereduction"), d->noiseReductionAction);
+    connect(d->noiseReductionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotNoiseReduction()));
+    d->noiseReductionAction->setEnabled(false);
+
+    d->localContrastAction = new QAction(QIcon::fromTheme(QLatin1String("contrast")), i18n("Local Contrast..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_localcontrast"), d->localContrastAction);
+    connect(d->localContrastAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLocalContrast()));
+    d->localContrastAction->setEnabled(false);
+
+    d->redeyeAction = new QAction(QIcon::fromTheme(QLatin1String("redeyes")), i18n("Red Eye..."), this);
+    d->redeyeAction->setWhatsThis(i18n("This filter can be used to correct red eyes in a photo. "
+                                       "Select a region including the eyes to use this option."));
+    actionCollection()->addAction(QLatin1String("editorwindow_redeye"), d->redeyeAction);
+    connect(d->redeyeAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRedEye()));
+    d->redeyeAction->setEnabled(false);
+
+    d->inPaintingAction = new QAction(QIcon::fromTheme(QLatin1String("select-rectangular")), i18n("In-painting..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_inpainting"), d->inPaintingAction);
+    actionCollection()->setDefaultShortcut(d->inPaintingAction, Qt::CTRL+Qt::Key_E);
+    d->inPaintingAction->setWhatsThis( i18n( "This filter can be used to in-paint a part in a photo. "
+                                             "To use this option, select a region to in-paint.") );
+    connect(d->inPaintingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotInPainting()));
+    d->inPaintingAction->setEnabled(false);
+
+    d->antivignettingAction = new QAction(QIcon::fromTheme(QLatin1String("antivignetting")), i18n("Vignetting Correction..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_antivignetting"), d->antivignettingAction);
+    connect(d->antivignettingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotAntiVignetting()));
+    d->antivignettingAction->setEnabled(false);
+
+    d->lensdistortionAction = new QAction(QIcon::fromTheme(QLatin1String("lensdistortion")), i18n("Distortion..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_lensdistortion"), d->lensdistortionAction);
+    connect(d->lensdistortionAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensDistortion()));
+    d->lensdistortionAction->setEnabled(false);
+
+    d->hotpixelsAction  = new QAction(QIcon::fromTheme(QLatin1String("hotpixels")), i18n("Hot Pixels..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_hotpixels"), d->hotpixelsAction);
+    connect(d->hotpixelsAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHotPixels()));
+    d->hotpixelsAction->setEnabled(false);
+
+#ifdef HAVE_LENSFUN
+
+    d->lensAutoFixAction = new QAction(QIcon::fromTheme(QLatin1String("lensautofix")), i18n("Auto-Correction..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_lensautofix"), d->lensAutoFixAction );
+    connect(d->lensAutoFixAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotLensAutoFix()));
+    d->lensAutoFixAction->setEnabled(false);
+
+#endif // HAVE_LENSFUN
+
+    HotPixelsTool::registerFilter();
+
     // --------------------------------------------------------
 
     createFullScreenAction(QLatin1String("editorwindow_fullscreen"));
@@ -586,6 +892,66 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_autocrop"), d->autoCropAction);
     ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
 
+    d->perspectiveAction = new QAction(QIcon::fromTheme(QLatin1String("perspective")), i18n("Perspective Adjustment..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_perspective"), d->perspectiveAction);
+    connect(d->perspectiveAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotPerspective()));
+    d->perspectiveAction->setEnabled(false);
+
+    d->sheartoolAction = new QAction(QIcon::fromTheme(QLatin1String("transform-shear-left")), i18n("Shear..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_sheartool"), d->sheartoolAction);
+    connect(d->sheartoolAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotShearTool()));
+    d->sheartoolAction->setEnabled(false);
+
+    d->resizeAction = new QAction(QIcon::fromTheme(QLatin1String("transform-scale")), i18n("&Resize..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_resize"), d->resizeAction);
+    connect(d->resizeAction, SIGNAL(triggered()),
+            this, SLOT(slotResize()));
+    d->resizeAction->setEnabled(false);
+
+    d->aspectRatioCropAction = new QAction(QIcon::fromTheme(QLatin1String("transform-crop")), i18n("Aspect Ratio Crop..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_ratiocrop"), d->aspectRatioCropAction);
+    connect(d->aspectRatioCropAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotRatioCrop()));
+    d->aspectRatioCropAction->setEnabled(false);
+
+#ifdef HAVE_LIBLQR_1
+
+    d->contentAwareResizingAction = new QAction(QIcon::fromTheme(QLatin1String("transform-scale")), i18n("Liquid Rescale..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_contentawareresizing"), d->contentAwareResizingAction);
+    connect(d->contentAwareResizingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotContentAwareResizing()));
+    d->contentAwareResizingAction->setEnabled(false);
+
+#endif /* HAVE_LIBLQR_1 */
+
+    //-----------------------------------------------------------------------------------
+
+    d->freerotationAction = new QAction(QIcon::fromTheme(QLatin1String("transform-rotate")), i18n("Free Rotation..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_freerotation"), d->freerotationAction );
+    connect(d->freerotationAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotFreeRotation()));
+    d->freerotationAction->setEnabled(false);
+
+    QAction* const point1Action = new QAction(i18n("Set Point 1"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_freerotation_point1"), point1Action);
+    actionCollection()->setDefaultShortcut(point1Action, Qt::CTRL + Qt::SHIFT + Qt::Key_1);
+    connect(point1Action, SIGNAL(triggered(bool)),
+            this, SIGNAL(signalPoint1Action()));
+
+    QAction* const point2Action = new QAction(i18n("Set Point 2"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_freerotation_point2"), point2Action);
+    actionCollection()->setDefaultShortcut(point2Action, Qt::CTRL + Qt::SHIFT + Qt::Key_2);
+    connect(point2Action, SIGNAL(triggered(bool)),
+            this, SIGNAL(signalPoint2Action()));
+
+    QAction* const autoAdjustAction = new QAction(i18n("Auto Adjust"), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_freerotation_autoadjust"), autoAdjustAction);
+    actionCollection()->setDefaultShortcut(autoAdjustAction, Qt::CTRL + Qt::SHIFT + Qt::Key_R);
+    connect(autoAdjustAction, SIGNAL(triggered(bool)),
+            this, SIGNAL(signalAutoAdjustAction()));
+
     // -- Standard 'Flip' menu actions ---------------------------------------------
 
     d->flipHorizAction = new QAction(QIcon::fromTheme(QLatin1String("object-flip-horizontal")), i18n("Flip Horizontally"), this);
@@ -614,18 +980,18 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcut(d->rotateRightAction, Qt::SHIFT + Qt::CTRL + Qt::Key_Right);
     d->rotateRightAction->setEnabled(false);
 
-    // -- Standard 'Configure' menu actions ----------------------------------------
-
     m_showBarAction = thumbBar()->getToggleAction(this);
     ac->addAction(QLatin1String("editorwindow_showthumbs"), m_showBarAction);
-
-    createSettingsActions();
+    ac->setDefaultShortcut(m_showBarAction, Qt::CTRL + Qt::Key_T);
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
+
+    // Standard 'Configure' menu actions
+    createSettingsActions();
 
     // ---------------------------------------------------------------------------------
 
@@ -641,16 +1007,12 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcut(altBackwardAction, Qt::SHIFT + Qt::Key_Space);
     connect(altBackwardAction, SIGNAL(triggered()), this, SLOT(slotBackward()));
 
-    d->addPageUpDownActions(this, this);
-
     // -- Tool control actions ---------------------------------------------------------
 
     m_selectToolsAction = new QMenu(i18nc("@action Select image editor tool/filter", "Select Tool"), this);
     m_selectToolsAction->setIcon(QIcon::fromTheme(QLatin1String("applications-graphics")));
     m_selectToolsAction->setVisible(false);
     ac->addAction(QLatin1String("editorwindow_selecttool"), m_selectToolsAction->menuAction());
-
-    // NOTE: setup is done after image plugins are loaded
 
     m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("Ok"), this);
     ac->addAction(QLatin1String("editorwindow_applytool"), m_applyToolAction);
@@ -751,11 +1113,6 @@ void EditorWindow::printImage(const QUrl&)
     printHelp.print(*image);
 }
 
-void EditorWindow::slotEditKeys()
-{
-    editKeyboardShortcuts(d->imagepluginsActionCollection, i18nc("imageplugins shortcuts", "Image Plugins"));
-}
-
 void EditorWindow::slotAboutToShowUndoMenu()
 {
     m_undoAction->menu()->clear();
@@ -830,80 +1187,6 @@ void EditorWindow::slotToggleOffFitToWindow()
     d->zoomFitToWindowAction->blockSignals(true);
     d->zoomFitToWindowAction->setChecked(false);
     d->zoomFitToWindowAction->blockSignals(false);
-}
-
-void EditorWindow::loadImagePlugins()
-{
-    if (d->imagepluginsActionCollection)
-    {
-        d->imagepluginsActionCollection->clear();
-        delete d->imagepluginsActionCollection;
-    }
-
-    d->imagepluginsActionCollection = new KActionCollection(dynamic_cast<QObject*>(this));
-
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Got total of " << pluginList.size() << " image plugins";
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            guiFactory()->addClient(plugin);
-            plugin->setEnabledSelectionActions(false);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "loading plugin: " << plugin->componentName();
-            // add actions to imagepluginsActionCollection
-            QString categoryStr = plugin->actionCategory();
-
-            if (categoryStr != QLatin1String("__INVALID__") && !categoryStr.isEmpty())
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Adding to category " << categoryStr;
-                KActionCategory* const category = new KActionCategory(categoryStr, d->imagepluginsActionCollection);
-
-                foreach(QAction* const action, plugin->actionCollection()->actions())
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "  Action: " << action->objectName();
-                    category->addAction(action->objectName(), action);
-                }
-            }
-            else
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Adding non-categorized plugins:";
-                foreach(QAction* const action, plugin->actionCollection()->actions())
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "  " << action->objectName();
-                    d->imagepluginsActionCollection->addAction(action->objectName(), action);
-                }
-            }
-        }
-        else
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid plugin to add!";
-        }
-    }
-
-    // load imagepluginsActionCollection settings
-    d->imagepluginsActionCollection->readSettings();
-}
-
-void EditorWindow::unLoadImagePlugins()
-{
-    if (d->imagepluginsActionCollection)
-    {
-        d->imagepluginsActionCollection->clear();
-        delete d->imagepluginsActionCollection;
-    }
-
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            guiFactory()->removeClient(plugin);
-            plugin->setEnabledSelectionActions(false);
-        }
-    }
 }
 
 void EditorWindow::readStandardSettings()
@@ -1093,6 +1376,8 @@ void EditorWindow::toggleStandardActions(bool val)
     d->zoomFitToSelectAction->setEnabled(val);
     toggleZoomActions(val);
 
+    m_actionEnabledState = val;
+
     m_forwardAction->setEnabled(val);
     m_backwardAction->setEnabled(val);
     m_firstAction->setEnabled(val);
@@ -1139,15 +1424,56 @@ void EditorWindow::toggleStandardActions(bool val)
         m_redoAction->setEnabled(false);
     }
 
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
+    // Tools actions
 
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            plugin->setEnabledActions(val);
-        }
-    }
+    d->insertTextAction->setEnabled(val);
+    d->borderAction->setEnabled(val);
+    d->textureAction->setEnabled(val);
+    d->charcoalAction->setEnabled(val);
+    d->colorEffectsAction->setEnabled(val);
+    d->embossAction->setEnabled(val);
+    d->oilpaintAction->setEnabled(val);
+    d->blurfxAction->setEnabled(val);
+    d->distortionfxAction->setEnabled(val);
+    d->raindropAction->setEnabled(val);
+    d->filmgrainAction->setEnabled(val);
+    d->convertTo8Bits->setEnabled(val);
+    d->convertTo16Bits->setEnabled(val);
+    d->invertAction->setEnabled(val);
+    d->BCGAction->setEnabled(val);
+    d->CBAction->setEnabled(val);
+    d->autoCorrectionAction->setEnabled(val);
+    d->BWAction->setEnabled(val);
+    d->HSLAction->setEnabled(val);
+    d->profileMenuAction->setEnabled(val);
+    d->whitebalanceAction->setEnabled(val);
+    d->channelMixerAction->setEnabled(val);
+    d->curvesAction->setEnabled(val);
+    d->levelsAction->setEnabled(val);
+    d->filmAction->setEnabled(val);
+    d->restorationAction->setEnabled(val);
+    d->blurAction->setEnabled(val);
+    d->sharpenAction->setEnabled(val);
+    d->noiseReductionAction->setEnabled(val);
+    d->localContrastAction->setEnabled(val);
+    d->redeyeAction->setEnabled(val);
+    d->inPaintingAction->setEnabled(val);
+    d->lensdistortionAction->setEnabled(val);
+    d->antivignettingAction->setEnabled(val);
+    d->hotpixelsAction->setEnabled(val);
+    d->resizeAction->setEnabled(val);
+    d->perspectiveAction->setEnabled(val);
+    d->freerotationAction->setEnabled(val);
+    d->sheartoolAction->setEnabled(val);
+    d->aspectRatioCropAction->setEnabled(val);
+
+#ifdef HAVE_LENSFUN
+    d->lensAutoFixAction->setEnabled(val);
+#endif
+
+#ifdef HAVE_LIBLQR_1
+    d->contentAwareResizingAction->setEnabled(val);
+#endif
 }
 
 void EditorWindow::toggleNonDestructiveActions()
@@ -1541,17 +1867,8 @@ void EditorWindow::slotSelected(bool val)
     d->zoomFitToSelectAction->setEnabled(val);
     d->copyAction->setEnabled(val);
 
-    QList<ImagePlugin*> pluginList = m_imagePluginLoader->pluginList();
-
-    foreach(ImagePlugin* const plugin, pluginList)
-    {
-        if (plugin)
-        {
-            plugin->setEnabledSelectionActions(val);
-        }
-    }
-
     QRect sel = m_canvas->getSelectedArea();
+
     // Update histogram into sidebar.
     emit signalSelectionChanged(sel);
 
@@ -1587,12 +1904,12 @@ void EditorWindow::slotLoadingStarted(const QString& /*filename*/)
 void EditorWindow::slotLoadingFinished(const QString& /*filename*/, bool success)
 {
     m_nameLabel->setProgressBarMode(StatusProgressBar::TextMode);
-    slotUpdateItemInfo();
 
     // Enable actions as appropriate after loading
     // No need to re-enable image properties sidebar here, it's will be done
     // automatically by a signal from canvas
     toggleActions(success);
+    slotUpdateItemInfo();
     unsetCursor();
     m_animLogo->stop();
 
@@ -2185,7 +2502,7 @@ VersionFileOperation EditorWindow::saveVersionFileOperation(const QUrl& url, boo
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
     return versionManager()->operation(fork ? VersionManager::NewVersionName : VersionManager::CurrentVersionName,
                                        currentName, resolvedHistory, history);
 }
@@ -2195,8 +2512,8 @@ VersionFileOperation EditorWindow::saveAsVersionFileOperation(const QUrl& url, c
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path(), url.fileName(), m_canvas->currentImageFileFormat());
-    VersionFileInfo saveLocation(saveUrl.adjusted(QUrl::RemoveFilename).path(), saveUrl.fileName(), format);
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo saveLocation(saveUrl.adjusted(QUrl::RemoveFilename).toLocalFile(), saveUrl.fileName(), format);
     return versionManager()->operationNewVersionAs(currentName, saveLocation, resolvedHistory, history);
 }
 
@@ -2205,7 +2522,7 @@ VersionFileOperation EditorWindow::saveInFormatVersionFileOperation(const QUrl& 
     DImageHistory resolvedHistory = m_canvas->interface()->getResolvedInitialHistory();
     DImageHistory history         = m_canvas->interface()->getImageHistory();
 
-    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).path(), url.fileName(), m_canvas->currentImageFileFormat());
+    VersionFileInfo currentName(url.adjusted(QUrl::RemoveFilename|QUrl::StripTrailingSlash).toLocalFile(), url.fileName(), m_canvas->currentImageFileFormat());
     return versionManager()->operationNewVersionInFormat(currentName, format, resolvedHistory, history);
 }
 
@@ -2598,18 +2915,76 @@ DCategorizedView* EditorWindow::createToolSelectionView()
     // Create action model
     ActionItemModel* const actionModel = new ActionItemModel(this);
     actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
-    QString basicTransformCategory     = i18nc("@title Image transformations", "Basic Transformations");
 
-    // builtin actions
-    actionModel->addAction(d->rotateLeftAction, basicTransformCategory);
-    actionModel->addAction(d->rotateRightAction, basicTransformCategory);
-    actionModel->addAction(d->flipHorizAction, basicTransformCategory);
-    actionModel->addAction(d->flipVertAction, basicTransformCategory);
-    actionModel->addAction(d->cropAction, basicTransformCategory);
-    actionModel->addAction(d->autoCropAction, basicTransformCategory);
+    // Builtin actions
 
-    // parse menus for image plugin actions
-    actionModel->addActions(menuBar(), d->imagepluginsActionCollection->actions());
+    QString transformCategory          = i18nc("@title Image Transform", "Transform");
+    actionModel->addAction(d->rotateLeftAction,           transformCategory);
+    actionModel->addAction(d->rotateRightAction,          transformCategory);
+    actionModel->addAction(d->flipHorizAction,            transformCategory);
+    actionModel->addAction(d->flipVertAction,             transformCategory);
+    actionModel->addAction(d->cropAction,                 transformCategory);
+    actionModel->addAction(d->autoCropAction,             transformCategory);
+    actionModel->addAction(d->aspectRatioCropAction,      transformCategory);
+    actionModel->addAction(d->resizeAction,               transformCategory);
+    actionModel->addAction(d->sheartoolAction,            transformCategory);
+    actionModel->addAction(d->freerotationAction,         transformCategory);
+    actionModel->addAction(d->perspectiveAction,          transformCategory);
+
+#ifdef HAVE_LIBLQR_1
+    actionModel->addAction(d->contentAwareResizingAction, transformCategory);
+#endif
+
+    QString decorateCategory           = i18nc("@title Image Decorate",  "Decorate");
+    actionModel->addAction(d->textureAction,              decorateCategory);
+    actionModel->addAction(d->borderAction,               decorateCategory);
+    actionModel->addAction(d->insertTextAction,           decorateCategory);
+
+    QString effectsCategory            = i18nc("@title Image Effect",    "Effects");
+    actionModel->addAction(d->filmgrainAction,            effectsCategory);
+    actionModel->addAction(d->raindropAction,             effectsCategory);
+    actionModel->addAction(d->distortionfxAction,         effectsCategory);
+    actionModel->addAction(d->blurfxAction,               effectsCategory);
+    actionModel->addAction(d->oilpaintAction,             effectsCategory);
+    actionModel->addAction(d->embossAction,               effectsCategory);
+    actionModel->addAction(d->charcoalAction,             effectsCategory);
+    actionModel->addAction(d->colorEffectsAction,         effectsCategory);
+
+    QString colorsCategory             = i18nc("@title Image Colors",    "Colors");
+    actionModel->addAction(d->convertTo8Bits,             colorsCategory);
+    actionModel->addAction(d->convertTo16Bits,            colorsCategory);
+    actionModel->addAction(d->invertAction,               colorsCategory);
+    actionModel->addAction(d->BCGAction,                  colorsCategory);
+    actionModel->addAction(d->CBAction,                   colorsCategory);
+    actionModel->addAction(d->autoCorrectionAction,       colorsCategory);
+    actionModel->addAction(d->BWAction,                   colorsCategory);
+    actionModel->addAction(d->HSLAction,                  colorsCategory);
+    actionModel->addAction(d->whitebalanceAction,         colorsCategory);
+    actionModel->addAction(d->channelMixerAction,         colorsCategory);
+    actionModel->addAction(d->curvesAction,               colorsCategory);
+    actionModel->addAction(d->levelsAction,               colorsCategory);
+    actionModel->addAction(d->filmAction,                 colorsCategory);
+
+    foreach(QAction* const ac, d->profileMenuAction->actions())
+    {
+        actionModel->addAction(ac, colorsCategory);
+    }
+
+    QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
+    actionModel->addAction(d->restorationAction,          enhanceCategory);
+    actionModel->addAction(d->blurAction,                 enhanceCategory);
+    actionModel->addAction(d->sharpenAction,              enhanceCategory);
+    actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
+    actionModel->addAction(d->localContrastAction,        enhanceCategory);
+    actionModel->addAction(d->redeyeAction,               enhanceCategory);
+    actionModel->addAction(d->inPaintingAction,           enhanceCategory);
+    actionModel->addAction(d->lensdistortionAction,       enhanceCategory);
+    actionModel->addAction(d->antivignettingAction,       enhanceCategory);
+    actionModel->addAction(d->hotpixelsAction,            enhanceCategory);
+
+#ifdef HAVE_LENSFUN
+    actionModel->addAction(d->lensAutoFixAction,          enhanceCategory);
+#endif
 
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
@@ -2726,9 +3101,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
     set ? m_canvas->setBackgroundBrush(QBrush(Qt::black))
         : m_canvas->setBackgroundBrush(QBrush(m_bgColor));
 
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
+    showStatusBarAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
     m_showBarAction->setEnabled(!set);
@@ -2827,6 +3200,388 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
     }
 
     FileOperation::runFiles(*service, QList<QUrl>() << url);
+}
+
+void EditorWindow::loadTool(EditorTool* const tool)
+{
+    EditorToolIface::editorToolIface()->loadTool(tool);
+
+    connect(tool, SIGNAL(okClicked()),
+            this, SLOT(slotToolDone()));
+
+    connect(tool, SIGNAL(cancelClicked()),
+            this, SLOT(slotToolDone()));
+}
+
+void EditorWindow::slotToolDone()
+{
+    EditorToolIface::editorToolIface()->unLoadTool();
+}
+
+void EditorWindow::slotInsertText()
+{
+    loadTool(new InsertTextTool(this));
+}
+
+void EditorWindow::slotBorder()
+{
+    loadTool(new BorderTool(this));
+}
+
+void EditorWindow::slotTexture()
+{
+    loadTool(new TextureTool(this));
+}
+
+void EditorWindow::slotColorEffects()
+{
+    loadTool(new ColorFxTool(this));
+}
+
+void EditorWindow::slotCharcoal()
+{
+    loadTool(new CharcoalTool(this));
+}
+
+void EditorWindow::slotEmboss()
+{
+    loadTool(new EmbossTool(this));
+}
+
+void EditorWindow::slotOilPaint()
+{
+    loadTool(new OilPaintTool(this));
+}
+
+void EditorWindow::slotBlurFX()
+{
+    loadTool(new BlurFXTool(this));
+}
+
+void EditorWindow::slotDistortionFX()
+{
+    loadTool(new DistortionFXTool(this));
+}
+
+void EditorWindow::slotRainDrop()
+{
+    loadTool(new RainDropTool(this));
+}
+
+void EditorWindow::slotFilmGrain()
+{
+    loadTool(new FilmGrainTool(this));
+}
+
+void EditorWindow::slotInvert()
+{
+    qApp->setOverrideCursor(Qt::WaitCursor);
+
+    ImageIface iface;
+    InvertFilter invert(iface.original(), 0L);
+    invert.startFilterDirectly();
+    iface.setOriginal(i18n("Invert"), invert.filterAction(), invert.getTargetImage());
+
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotConvertTo8Bits()
+{
+    ImageIface iface;
+
+    if (!iface.originalSixteenBit())
+    {
+        QMessageBox::critical(qApp->activeWindow(),
+                              qApp->applicationName(),
+                              i18n("This image is already using a depth of 8 bits / color / pixel."));
+        return;
+    }
+    else
+    {
+        if (DMessageBox::showContinueCancel(QMessageBox::Warning,
+                                            qApp->activeWindow(),
+                                            qApp->applicationName(),
+                                            i18n("Performing this operation will reduce image color quality. "
+                                            "Do you want to continue?"),
+                                            QLatin1String("ToolColor16To8Bits"))
+            == QMessageBox::Cancel)
+        {
+            return;
+        }
+    }
+
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    iface.convertOriginalColorDepth(32);
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotConvertTo16Bits()
+{
+    ImageIface iface;
+
+    if (iface.originalSixteenBit())
+    {
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is already using a depth of 16 bits / color / pixel."));
+        return;
+    }
+
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    iface.convertOriginalColorDepth(64);
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotConvertToColorSpace(const IccProfile& profile)
+{
+    ImageIface iface;
+
+    if (iface.originalIccProfile().isNull())
+    {
+        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
+                              i18n("This image is not color managed."));
+        return;
+    }
+
+    qApp->setOverrideCursor(Qt::WaitCursor);
+    ProfileConversionTool::fastConversion(profile);
+    qApp->restoreOverrideCursor();
+}
+
+void EditorWindow::slotUpdateColorSpaceMenu()
+{
+    d->profileMenuAction->clear();
+
+    if (!IccSettings::instance()->isEnabled())
+    {
+        QAction* const action = new QAction(i18n("Color Management is disabled..."), this);
+        d->profileMenuAction->addAction(action);
+
+        connect(action, SIGNAL(triggered()),
+                this, SLOT(slotSetupICC()));
+        return;
+    }
+
+    ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+    QList<IccProfile> standardProfiles, favoriteProfiles;
+    QSet<QString> standardProfilePaths, favoriteProfilePaths;
+    standardProfiles << IccProfile::sRGB()
+                     << IccProfile::adobeRGB()
+                     << IccProfile::wideGamutRGB()
+                     << IccProfile::proPhotoRGB();
+
+    foreach(IccProfile profile, standardProfiles) // krazy:exclude=foreach
+    {
+        d->profileMenuAction->addProfile(profile, profile.description());
+        standardProfilePaths << profile.filePath();
+    }
+
+    d->profileMenuAction->addSeparator();
+
+    favoriteProfilePaths  = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
+    favoriteProfilePaths -= standardProfilePaths;
+
+    foreach(const QString& path, favoriteProfilePaths)
+    {
+        favoriteProfiles << path;
+    }
+
+    d->profileMenuAction->addProfiles(favoriteProfiles);
+    d->profileMenuAction->addSeparator();
+
+    QAction* const moreAction = new QAction(i18n("Other..."), this);
+    d->profileMenuAction->addAction(moreAction);
+
+    connect(moreAction, SIGNAL(triggered()),
+            this, SLOT(slotProfileConversionTool()));
+}
+
+void EditorWindow::slotProfileConversionTool()
+{
+    ProfileConversionTool* const tool = new ProfileConversionTool(this);
+
+    connect(tool, SIGNAL(okClicked()),
+            this, SLOT(slotUpdateColorSpaceMenu()));
+
+    loadTool(tool);
+}
+
+void EditorWindow::slotBW()
+{
+    loadTool(new BWSepiaTool(this));
+}
+
+void EditorWindow::slotHSL()
+{
+    loadTool(new HSLTool(this));
+}
+
+void EditorWindow::slotWhiteBalance()
+{
+    loadTool(new WhiteBalanceTool(this));
+}
+
+void EditorWindow::slotChannelMixer()
+{
+    loadTool(new ChannelMixerTool(this));
+}
+
+void EditorWindow::slotCurvesAdjust()
+{
+    loadTool(new AdjustCurvesTool(this));
+}
+
+void EditorWindow::slotLevelsAdjust()
+{
+    loadTool(new AdjustLevelsTool(this));
+}
+
+void EditorWindow::slotFilm()
+{
+    loadTool(new FilmTool(this));
+}
+
+void EditorWindow::slotBCG()
+{
+    loadTool(new BCGTool(this));
+}
+
+void EditorWindow::slotCB()
+{
+    loadTool(new CBTool(this));
+}
+
+void EditorWindow::slotAutoCorrection()
+{
+    loadTool(new AutoCorrectionTool(this));
+}
+
+void EditorWindow::slotHotPixels()
+{
+    loadTool(new HotPixelsTool(this));
+}
+
+void EditorWindow::slotLensDistortion()
+{
+    loadTool(new LensDistortionTool(this));
+}
+
+void EditorWindow::slotRestoration()
+{
+    loadTool(new RestorationTool(this));
+}
+
+void EditorWindow::slotBlur()
+{
+    loadTool(new BlurTool(this));
+}
+
+void EditorWindow::slotSharpen()
+{
+    loadTool(new SharpenTool(this));
+}
+
+void EditorWindow::slotNoiseReduction()
+{
+    loadTool(new NoiseReductionTool(this));
+}
+
+void EditorWindow::slotLocalContrast()
+{
+    loadTool(new LocalContrastTool(this));
+}
+
+void EditorWindow::slotRedEye()
+{
+    ImageIface iface;
+
+    if (iface.selectionRect().size().isNull())
+    {
+        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
+        popup->setView(i18n("Red-Eye Correction Tool"),
+                       i18n("You need to select a region including the eyes to use "
+                            "the red-eye correction tool"));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    loadTool(new RedEyeTool(this));
+}
+
+void EditorWindow::slotInPainting()
+{
+    ImageIface iface;
+
+    if (iface.selectionRect().size().isNull())
+    {
+        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
+        popup->setView(i18n("In-Painting Photograph Tool"),
+                       i18n("To use this tool, you need to select a region "
+                            "to in-paint."));
+        popup->setAutoDelete(true);
+        popup->setTimeout(2500);
+        popup->show();
+        return;
+    }
+
+    loadTool(new InPaintingTool(this));
+}
+
+void EditorWindow::slotLensAutoFix()
+{
+#ifdef HAVE_LENSFUN
+    loadTool(new LensAutoFixTool(this));
+#endif
+}
+
+void EditorWindow::slotAntiVignetting()
+{
+    loadTool(new AntiVignettingTool(this));
+}
+
+void EditorWindow::slotPerspective()
+{
+    loadTool(new PerspectiveTool(this));
+}
+
+void EditorWindow::slotShearTool()
+{
+    loadTool(new ShearTool(this));
+}
+
+void EditorWindow::slotResize()
+{
+    loadTool(new ResizeTool(this));
+}
+
+void EditorWindow::slotRatioCrop()
+{
+    loadTool(new RatioCropTool(this));
+}
+
+void EditorWindow::slotContentAwareResizing()
+{
+#ifdef HAVE_LIBLQR_1
+    loadTool(new ContentAwareResizeTool(this));
+#endif
+}
+
+void EditorWindow::slotFreeRotation()
+{
+    FreeRotationTool* const tool = new FreeRotationTool(this);
+
+    connect(this, SIGNAL(signalPoint1Action()),
+            tool, SLOT(slotAutoAdjustP1Clicked()));
+
+    connect(this, SIGNAL(signalPoint2Action()),
+            tool, SLOT(slotAutoAdjustP2Clicked()));
+
+    connect(this, SIGNAL(signalAutoAdjustAction()),
+            tool, SLOT(slotAutoAdjustClicked()));
+
+    loadTool(tool);
 }
 
 }  // namespace Digikam

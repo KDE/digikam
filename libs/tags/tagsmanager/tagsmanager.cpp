@@ -843,7 +843,7 @@ void TagsManager::setupActions()
 }
 
 // helper based on KAction::setHelpText
-void TagsManager::setHelpText(QAction *action, const QString &text)
+void TagsManager::setHelpText(QAction *action, const QString& text)
 {
     action->setStatusTip(text);
     action->setToolTip(text);

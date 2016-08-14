@@ -117,9 +117,9 @@ QSize TransactionItemView::minimumSizeHint() const
 
 void TransactionItemView::slotLayoutFirstItem()
 {
-    //This slot is called whenever a TransactionItem is deleted, so this is a
-    //good place to call updateGeometry(), so our parent takes the new size
-    //into account and resizes.
+    // This slot is called whenever a TransactionItem is deleted, so this is a
+    // good place to call updateGeometry(), so our parent takes the new size
+    // into account and resizes.
     updateGeometry();
 
     /*
@@ -339,9 +339,9 @@ ProgressView::ProgressView(QWidget* const alignWidget, QWidget* const parent, co
 */
 
     /*
-    * Get the singleton ProgressManager item which will inform us of
-    * appearing and vanishing items.
-    */
+     * Get the singleton ProgressManager item which will inform us of
+     * appearing and vanishing items.
+     */
     ProgressManager* const pm = ProgressManager::instance();
 
     connect(pm, SIGNAL(progressItemAdded(ProgressItem*)),
@@ -405,10 +405,11 @@ void ProgressView::slotTransactionAdded(ProgressItem* item)
         {
             d->transactionsToListviewItems.insert( item, ti );
         }
-        if ( first && d->wasLastShown )
-        {
-            QTimer::singleShot( 1000, this, SLOT(slotShow()) );
-        }
+
+
+        // Force to show progress view for 5 seconds to inform user about new process add in queue.
+        QTimer::singleShot( 1000, this, SLOT(slotShow()) );
+        QTimer::singleShot( 6000, this, SLOT(slotClose()) );
     }
 }
 
@@ -425,6 +426,7 @@ void ProgressView::slotTransactionCompleted(ProgressItem* item)
         connect ( ti, SIGNAL(destroyed()),
                 d->scrollView, SLOT(slotLayoutFirstItem()) );
     }
+
     // This was the last item, hide.
     if ( d->transactionsToListviewItems.empty() )
     {
@@ -468,6 +470,7 @@ void ProgressView::slotTransactionUsesBusyIndicator(ProgressItem* item, bool val
     if (d->transactionsToListviewItems.contains(item))
     {
         TransactionItem* const ti = d->transactionsToListviewItems[item];
+
         if (value)
         {
             ti->setTotalSteps(0);
@@ -517,10 +520,10 @@ void ProgressView::setVisible(bool b)
 void ProgressView::slotToggleVisibility()
 {
     /* Since we are only hiding with a timeout, there is a short period of
-    * time where the last item is still visible, but clicking on it in
-    * the statusbarwidget should not display the dialog, because there
-    * are no items to be shown anymore. Guard against that.
-    */
+     * time where the last item is still visible, but clicking on it in
+     * the statusbarwidget should not display the dialog, because there
+     * are no items to be shown anymore. Guard against that.
+     */
     d->wasLastShown = isHidden();
 
     if ( !isHidden() || !d->transactionsToListviewItems.isEmpty() )

@@ -40,6 +40,10 @@
 #include <QPointer>
 #include <QPrinter>
 
+// Local includes
+
+#include "digikam_config.h"
+
 namespace Digikam
 {
 
@@ -85,12 +89,15 @@ public:
     QUrl image(int month) const;
     void clearSpecial();
     void addSpecial(const QDate& date, const Day& info);
-    void loadSpecial(const QUrl& url, const QColor& color);
     bool isSpecial(int month, int day) const;
 
     QColor getDayColor(int month, int day) const;
     QString getDayDescr(int month, int day) const;
     QPrinter::PrinterMode resolution() const;
+
+#ifdef HAVE_KCALENDAR
+    void loadSpecial(const QUrl& url, const QColor& color);
+#endif
 
     static CalSettings* instance(QObject* const parent = 0);
 

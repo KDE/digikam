@@ -125,6 +125,10 @@ public:
      */
     void createHelpActions(bool coreOptions=true);
 
+    /** Cleanup unwanted actions from action collection.
+     */
+    void cleanupActions();
+
     /** Create common actions to handle side-bar through keyboard shortcuts.
      */
     void createSidebarActions();
@@ -170,8 +174,8 @@ protected:
 
 protected:
 
-    QAction* statusBarMenuAction() const;
     QAction* showMenuBarAction()   const;
+    QAction* showStatusBarAction() const;
 
     /** Call this method from your main window to show keyboard shortcut config dialog
      *  with an extra action collection to configure. This method is called by slotEditKeys()
@@ -206,6 +210,7 @@ private Q_SLOTS:
 
     void slotToggleFullScreen(bool);
     void slotShowMenuBar();
+    void slotShowStatusBar();
     void slotConfNotifications();
     void slotConfToolbars();
     void slotNewToolbarConfig();

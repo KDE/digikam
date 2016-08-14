@@ -1032,8 +1032,8 @@ void ImageDescEditTab::slotTaggingActionActivated(const TaggingAction& action)
 
     if (assigned)
     {
-        d->newTagEdit->clear();
         d->tagCheckView->scrollTo(d->tagCheckView->albumFilterModel()->indexForAlbum(assigned));
+        QTimer::singleShot(0, d->newTagEdit, SLOT(clear()));
     }
 }
 

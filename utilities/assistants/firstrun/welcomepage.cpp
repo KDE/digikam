@@ -40,18 +40,46 @@ namespace Digikam
 {
 
 WelcomePage::WelcomePage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("Welcome to digiKam %1", QLatin1String(digikam_version_short)))
+    : FirstRunDlgPage(dlg, i18n("Welcome to digiKam %1",
+                                QLatin1String(digikam_version_short)))
 {
     DVBox* const vbox   = new DVBox(this);
     QLabel* const title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
                         "<p><h1><b>Welcome to digiKam %1</b></h1></p>"
-                        "<p>digiKam is an advanced digital photo management application published "
-                        "as open-source.</p>"
-                        "<p>This assistant will help you to configure first run settings to be able to "
-                        "use digiKam quickly.</p>"
-                        "</qt>", QLatin1String(digikam_version_short)));
+                        "<p>digiKam is an advanced digital photo management "
+                        "application published as open-source.</p>"
+                        "<p>This assistant will help you to configure first "
+                        "run settings to be able to use digiKam quickly.</p>"
+                        "<br/>"
+                        "<p>You can ignore the following if you use digiKam "
+                        "for the first time:</p>"
+                        "<p><b>Transition from digiKam 4</b></p>"
+                        "<p>Configuration files from digiKam 4 are not "
+                        "migrated. The old database can still be used, you "
+                        "just need to choose the same locations for "
+                        "collections and database in the following dialogs. "
+                        "It is recommended to create a backup of your database "
+                        "before proceeding.</p>"
+                        "<p>The new location for configuration files is "
+                        "%2 (old %3). "
+                        "There are unresolved problems reported when re-using old "
+                        "configuration files, so it is not recommended to do it "
+                        "for the moment, and at your own risk.</p>"
+                        "</qt>",
+                        QLatin1String(digikam_version_short),
+#if defined Q_OS_WIN
+                        // Windows settings place.
+                        QLatin1String("~/Local Settings/"), QLatin1String("~/AppData/Local/")
+#elif defined Q_OS_OSX
+                        // MacOS settings place.
+                        QLatin1String("~/Library/Preferences/"), QLatin1String("~/Library/Preferences/KDE/share/config/")
+#else
+			// Linux settings place.
+                        QLatin1String("~/.config/"), QLatin1String("~/.kde4/share/config")
+#endif                        
+                  ));
 
     setPageWidget(vbox);
 }

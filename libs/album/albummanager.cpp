@@ -391,16 +391,11 @@ void AlbumManager::cleanUp()
     }
 }
 
-bool AlbumManager::databaseEqual(const QString& dbType, const QString& dbNameCore,
-                                 const QString& dbHostName, int dbPort, bool dbInternalServer) const
+bool AlbumManager::databaseEqual(const DbEngineParameters& parameters) const
 {
     DbEngineParameters params = CoreDbAccess::parameters();
 
-    return params.databaseType      == dbType          &&
-           params.databaseNameCore  == dbNameCore      &&
-           params.hostName          == dbHostName      &&
-           params.port              == dbPort          &&
-           params.internalServer    == dbInternalServer;
+    return (params == parameters);
 }
 
 static bool moveToBackup(const QFileInfo& info)
@@ -670,7 +665,7 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
     }
 }
 
-bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, const QString suggestedAlbumRoot)
+bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, const QString& suggestedAlbumRoot)
 {
     // This is to ensure that the setup does not overrule the command line.
     // TODO: there is a bug that setup is showing something different here.
@@ -729,7 +724,7 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
 
     if (params.internalServer)
     {
-        DatabaseServerError result = DatabaseServerStarter::startServerManagerProcess();
+        DatabaseServerError result = DatabaseServerStarter::instance()->startServerManagerProcess(params);
 
         if (result.getErrorType() != DatabaseServerError::NoErrors)
         {
@@ -1006,7 +1001,8 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
         }
         else
         {
-            CollectionManager::instance()->addLocation(QUrl::fromLocalFile(suggestedAlbumRoot));
+            QUrl albumRoot(QUrl::fromLocalFile(suggestedAlbumRoot));
+            CollectionManager::instance()->addLocation(albumRoot, albumRoot.fileName());
             // Not needed? See bug #188959
             //ScanController::instance()->completeCollectionScan();
         }
@@ -2199,7 +2195,7 @@ PAlbum* AlbumManager::createPAlbum(PAlbum*        parent,
         child = static_cast<PAlbum*>(child->m_next);
     }
 
-    CoreDbUrl url = parent->databaseUrl();
+    CoreDbUrl url   = parent->databaseUrl();
     url             = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + QLatin1Char('/') + name);
     QUrl fileUrl    = url.fileUrl();
@@ -2274,6 +2270,10 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         return false;
     }
 
+#ifdef Q_OS_WIN
+    d->albumWatch->removeWatchedPAlbums(album);
+#endif
+
     QString oldAlbumPath = album->albumPath();
     QUrl oldUrl          = album->fileUrl();
     album->setTitle(newName);
@@ -2289,6 +2289,8 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
 
     if (!ret)
     {
+        ScanController::instance()->resumeCollectionScan();
+
         errMsg = i18n("Failed to rename Album");
         return false;
     }
@@ -3336,6 +3338,7 @@ void AlbumManager::slotTagChange(const TagChangeset& changeset)
     switch (changeset.operation())
     {
         case TagChangeset::Added:
+        case TagChangeset::Moved:    
         case TagChangeset::Deleted:
         case TagChangeset::Reparented:
 
@@ -3461,6 +3464,11 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
         default:
             break;
     }
+}
+
+void AlbumManager::removeWatchedPAlbums(const PAlbum* const album)
+{
+    d->albumWatch->removeWatchedPAlbums(album);
 }
 
 }  // namespace Digikam

@@ -375,6 +375,13 @@ void PreviewLoadingTask::execute()
             m_img = m_img.smoothScale(scaledSize.width(), scaledSize.height());
         }
 
+        // Set originalSize attribute to the m_img size, to disable zoom to the original image size
+
+        if (!m_loadingDescription.previewParameters.previewSettings.zoomOrgSize)
+        {
+            m_img.setAttribute(QLatin1String("originalSize"), m_img.size());
+        }
+
         // Scale if hinted, Store previews rotated in the cache
 
         if (MetadataSettings::instance()->settings().exifRotate)

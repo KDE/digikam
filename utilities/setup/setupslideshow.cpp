@@ -68,7 +68,8 @@ public:
         showProgress(0),
         screenPlacement(0),
         delayInput(0)
-    {}
+    {
+    }
 
     QCheckBox*    startWithCurrent;
     QCheckBox*    loopMode;

@@ -346,7 +346,7 @@ void DNotificationPopup::setView(QWidget* child)
     d->topLayout->activate();
 }
 
-void DNotificationPopup::setView(const QString & caption, const QString& text,
+void DNotificationPopup::setView(const QString& caption, const QString& text,
                                  const QPixmap& icon)
 {
     // qCDebug(LOG_KNOTIFICATIONS) << "DNotificationPopup::setView " << caption << ", " << text;

@@ -196,7 +196,7 @@ void EXIFEditWidget::slotItemChanged()
     d->page_adjust->setHeader(d->dlg->currentItemTitleHeader(i18n("Pictures Adjustments")));
 
     DMetadata meta;
-    meta.load((*d->dlg->currentItem()).path());
+    meta.load((*d->dlg->currentItem()).toLocalFile());
 
     d->exifData = meta.getExifEncoded();
     d->iptcData = meta.getIptc();
@@ -208,7 +208,7 @@ void EXIFEditWidget::slotItemChanged()
     d->lightPage->readMetadata(d->exifData);
     d->adjustPage->readMetadata(d->exifData);
 
-    d->isReadOnly = !DMetadata::canWriteExif((*d->dlg->currentItem()).path());
+    d->isReadOnly = !DMetadata::canWriteExif((*d->dlg->currentItem()).toLocalFile());
     emit signalSetReadOnly(d->isReadOnly);
     d->page_caption->setEnabled(!d->isReadOnly);
     d->page_datetime->setEnabled(!d->isReadOnly);
@@ -232,11 +232,11 @@ void EXIFEditWidget::apply()
 
         DMetadata meta;
 
-        meta.load((*d->dlg->currentItem()).path());
+        meta.load((*d->dlg->currentItem()).toLocalFile());
         meta.setExif(d->exifData);
         meta.setIptc(d->iptcData);
         meta.setXmp(d->xmpData);
-        meta.save((*d->dlg->currentItem()).path());
+        meta.save((*d->dlg->currentItem()).toLocalFile());
 
         d->modified = false;
     }

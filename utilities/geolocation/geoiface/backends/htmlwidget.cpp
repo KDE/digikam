@@ -75,9 +75,10 @@ HTMLWidget::HTMLWidget(QWidget* const parent)
       s(0)
 {
     d->parent = parent;
+    setAcceptDrops(false);
     setFocusPolicy(Qt::WheelFocus);
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     setRenderHint(QPainter::TextAntialiasing);
+    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 
     d->parent->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 

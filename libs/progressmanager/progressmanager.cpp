@@ -462,8 +462,7 @@ bool ProgressManager::addProgressItem(ProgressItem* const t, ProgressItem* const
     }
     else
     {
-        QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(),
-                           i18n("A tool identified as \"%1\" is already running....", t->id()));
+        qCWarning(DIGIKAM_GENERAL_LOG) << "A tool identified as " << t->id() << " is already running.";
         t->setComplete();
         return false;
     }
@@ -479,6 +478,7 @@ void ProgressManager::addProgressItemImpl(ProgressItem* const t, ProgressItem* c
             qCDebug(DIGIKAM_GENERAL_LOG) << "Refusing to add in thread 1 a ProgressItem created in thread 2 to ProgressManager, living in thread 3";
             return;
         }
+
         // Move to ProgressManager's thread
         t->moveToThread(thread());
     }
@@ -580,10 +580,12 @@ void ProgressManager::slotAbortAll()
     QHash<QString,ProgressItem*> hash;
     {
         QMutexLocker lock(&d->mutex);
+
         if (d->transactions.isEmpty())
         {
             return;
         }
+
         hash = d->transactions;
     }
 

@@ -229,7 +229,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
         QMessageBox::critical(0, i18n("Cannot Save File"),
                               i18n("Failed to save file\n\"%1\" to\n\"%2\".",
                               newURL.fileName(),
-                              newURL.path().section(QLatin1Char('/'), -2, -2)));
+                              QDir::toNativeSeparators(newURL.toLocalFile().section(QLatin1Char('/'), -2, -2))));
         qCWarning(DIGIKAM_GENERAL_LOG) << "target URL is not valid !";
         delete imageFileSaveDialog;
         return;

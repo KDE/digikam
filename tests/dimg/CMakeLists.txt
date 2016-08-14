@@ -151,3 +151,23 @@ target_link_libraries(testequalizefilter
 
                       ${OpenCV_LIBRARIES}
 )
+
+#------------------------------------------------------------------------
+
+set(testcolorbalancefilter_SRCS testcolorbalancefilter.cpp)
+add_executable(testcolorbalancefilter ${testcolorbalancefilter_SRCS})
+ecm_mark_nongui_executable(testcolorbalancefilter)
+
+target_link_libraries(testcolorbalancefilter
+
+                      digikamcore
+                      libdng
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::I18n
+                      KF5::XmlGui
+
+                      ${OpenCV_LIBRARIES}
+)

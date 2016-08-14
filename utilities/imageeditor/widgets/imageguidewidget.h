@@ -69,8 +69,10 @@ public:
 public:
 
     explicit ImageGuideWidget(QWidget* const parent = 0,
-                              bool spotVisible = true, int guideMode = PickColorMode,
-                              const QColor& guideColor = Qt::red, int guideSize = 1,
+                              bool spotVisible = true,
+                              int guideMode = PickColorMode,
+                              const QColor& guideColor = Qt::red,
+                              int guideSize = 1,
                               bool blink = false,
                               ImageIface::PreviewType type= ImageIface::FullImage);
     ~ImageGuideWidget();

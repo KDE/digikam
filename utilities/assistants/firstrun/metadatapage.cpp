@@ -72,7 +72,7 @@ MetadataPage::MetadataPage(FirstRunDlg* const dlg)
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here if you want to store the information assigned to items in digiKam in the files' "
-                         "metadata, to improve interoperability with others photo management programs:</p>"
+                         "metadata, to improve interoperability with other photo management programs:</p>"
                          "</qt>"));
 
     QWidget* const btns      = new QWidget(vbox);
@@ -101,7 +101,7 @@ MetadataPage::MetadataPage(FirstRunDlg* const dlg)
                          "</qt>"));
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-xml")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("format-text-code")));
 }
 
 MetadataPage::~MetadataPage()

@@ -176,13 +176,14 @@ public:
 };
 
 SetupToolTip::SetupToolTip(QWidget* const parent)
-    : QScrollArea(parent), d(new Private)
+    : QScrollArea(parent),
+      d(new Private)
 {
     QWidget* const panel    = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QVBoxLayout* const vlay = new QVBoxLayout(panel);
 
@@ -485,8 +486,6 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     readSettings();
     adjustSize();
-
-    // --------------------------------------------------------
 }
 
 SetupToolTip::~SetupToolTip()

@@ -93,11 +93,11 @@ ImagePropertiesSideBarCamGui::ImagePropertiesSideBarCamGui(QWidget* const parent
     d->metadataTab   = new ImagePropertiesMetaDataTab(parent);
 
     appendTab(d->cameraItemTab, QIcon::fromTheme(QLatin1String("configure")),             i18n("Properties"));
-    appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("text-xml")),              i18n("Metadata")); // krazy:exclude=iconnames
+    appendTab(d->metadataTab,   QIcon::fromTheme(QLatin1String("format-text-code")),              i18n("Metadata")); // krazy:exclude=iconnames
 
 #ifdef HAVE_MARBLE
     d->gpsTab        = new ImagePropertiesGPSTab(parent);
-    appendTab(d->gpsTab,        QIcon::fromTheme(QLatin1String("applications-internet")), i18n("Geolocation"));
+    appendTab(d->gpsTab,        QIcon::fromTheme(QLatin1String("folder-html")), i18n("Geolocation"));
 #endif // HAVE_MARBLE
 
     // ----------------------------------------------------------

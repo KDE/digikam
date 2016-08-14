@@ -43,6 +43,8 @@
 // Qt includes
 
 #include <QFile>
+#include <QMutex>
+#include <QMutexLocker>
 #include <qmath.h>
 
 // Local includes
@@ -286,6 +288,8 @@ public:
 
     double                 speedVsAccuracy;
     double                 sensitivityVsSpecificity;
+
+    QMutex                 mutex;
 };
 
 // --------------------------------------------------------------------------------
@@ -450,6 +454,8 @@ QList<QRect> OpenCVFaceDetector::cascadeResult(const cv::Mat& inputImage,
         qCDebug(DIGIKAM_FACESENGINE_LOG) << "Cascade XML data are not loaded.";
         return QList<QRect>();
     }
+
+    QMutexLocker locker(&d->mutex);
 
     // There can be more than one face in an image. So create a growable sequence of faces.
     // Detect the objects and store them in the sequence

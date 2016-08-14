@@ -33,6 +33,7 @@
 
 #include "applicationsettings.h"
 #include "applicationsettings_p.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -158,6 +159,7 @@ void ApplicationSettings::setApplicationStyle(const QString& style)
     {
         d->applicationStyle = style;
         qApp->setStyle(d->applicationStyle);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to widget style: " << d->applicationStyle;
     }
 }
 
@@ -194,6 +196,16 @@ void ApplicationSettings::setRatingFilterCond(int val)
 int ApplicationSettings::getRatingFilterCond() const
 {
     return d->ratingFilterCond;
+}
+
+void ApplicationSettings::setScanAtStart(bool val)
+{
+    d->scanAtStart = val;
+}
+
+bool ApplicationSettings::getScanAtStart() const
+{
+    return d->scanAtStart;
 }
 
 }  // namespace Digikam

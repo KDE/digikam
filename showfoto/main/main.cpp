@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
     KLocalizedString::setApplicationDomain("digikam");
 
     KAboutData aboutData(QString::fromLatin1("showfoto"), // component name
-                         i18n("showFoto"),                // display name
+                         i18n("Showfoto"),                // display name
                          digiKamVersion());               // NOTE: showFoto version = digiKam version
 
     aboutData.setShortDescription(DAboutData::digiKamSlogan());;
@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
     aboutData.setCopyrightStatement(DAboutData::copyright());
     aboutData.setOtherText(additionalInformation());
     aboutData.setHomepage(DAboutData::webProjectUrl().url());
+    aboutData.setProductName(QByteArray("digikam/showfoto"));   // For bugzilla
 
     DAboutData::authorsRegistration(aboutData);
 

@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qDebug() << "testdimgloader - test DImg image loader";
+        qDebug() << "testequalizefilter - test DImg equalize algorithm";
         qDebug() << "Usage: <image>";
         return -1;
     }

@@ -104,7 +104,7 @@ void BalooWrap::setAllData(const QUrl& url, QStringList* const tags, QString* co
         return;
     }
 
-    KFileMetaData::UserMetaData md(url.path());
+    KFileMetaData::UserMetaData md(url.toLocalFile());
 
     if (tags != NULL)
     {
@@ -131,7 +131,7 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url) const
         return BalooInfo();
     }
 
-    KFileMetaData::UserMetaData md(url.path());
+    KFileMetaData::UserMetaData md(url.toLocalFile());
 
     //Baloo::File file = job->file();
     BalooInfo bInfo;

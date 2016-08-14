@@ -163,7 +163,7 @@ void DImgLoader::loadingFailed()
 
 qint64 DImgLoader::checkAllocation(qint64 fullSize)
 {
-    if (fullSize > std::numeric_limits<int>::max())
+    if ((quint64)fullSize > std::numeric_limits<size_t>::max())
     {
         qCWarning(DIGIKAM_DIMG_LOG) << "Cannot allocate buffer of size" << fullSize;
         return 0;

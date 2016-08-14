@@ -641,7 +641,7 @@ QString AlbumLabelsSearchHandler::createXMLForCurrentSelection(const QHash<Album
     return writer.xml();
 }
 
-SAlbum* AlbumLabelsSearchHandler::search(const QString &xml) const
+SAlbum* AlbumLabelsSearchHandler::search(const QString& xml) const
 {
     SAlbum* album = 0;
     int id;

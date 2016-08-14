@@ -1993,7 +1993,7 @@ public:
     virtual void reset();
 
     void setChoice(const QMap<int, QString> &map);
-    void setAnyText(const QString &string);
+    void setAnyText(const QString& string);
 
     virtual void setupValueWidgets(QGridLayout *layout, int row, int column);
     virtual void setValueWidgetsVisible(bool visible);

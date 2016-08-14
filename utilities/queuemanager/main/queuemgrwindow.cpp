@@ -391,16 +391,11 @@ void QueueMgrWindow::setupActions()
 
     createFullScreenAction(QLatin1String("queuemgr_fullscreen"));
 
-    // -- Standard 'Configure' menu actions ----------------------------------------
-
-    createSettingsActions();
-
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
+    // Standard 'Help' menu actions
     createHelpActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -409,9 +404,13 @@ void QueueMgrWindow::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
+    // Standard 'Configure' menu actions
+    createSettingsActions();
+
     // ---------------------------------------------------------------------------------
 
     createGUI(xmlFile());
+    cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
@@ -1005,9 +1004,7 @@ void QueueMgrWindow::slotSaveWorkflow()
 
 void QueueMgrWindow::customizedFullScreenMode(bool set)
 {
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
+    showStatusBarAction()->setEnabled(!set);
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
 }

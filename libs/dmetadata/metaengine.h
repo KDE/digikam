@@ -996,7 +996,7 @@ public:
     /** Set all GPS location information into image. Return true if all information have been
         changed in metadata.
      */
-    bool setGPSInfo(const double altitude, const QString &latitude, const QString &longitude, const bool setProgramName=true);
+    bool setGPSInfo(const double altitude, const QString& latitude, const QString& longitude, const bool setProgramName=true);
 
     /** Remove all Exif tags relevant of GPS location information. Return true if all tags have been
         removed successfully in metadata.

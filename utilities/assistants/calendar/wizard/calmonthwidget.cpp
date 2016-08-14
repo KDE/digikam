@@ -40,10 +40,10 @@
 #include <QMimeData>
 #include <QUrl>
 #include <QSize>
+#include <QLocale>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -101,31 +101,28 @@ QUrl CalMonthWidget::imagePath() const
     return d->imagePath;
 }
 
-void CalMonthWidget::paintEvent(QPaintEvent* event)
+void CalMonthWidget::paintEvent(QPaintEvent* e)
 {
-    QRect cr;
+    QPushButton::paintEvent(e);
 
-    QPushButton::paintEvent(event);
     QPainter painter(this);
-    QString name = KLocale::global()->calendar()->monthName(
-                   d->month, CalSettings::instance()->year(), KCalendarSystem::ShortName);
-
-    cr = contentsRect();
+    QString name = QLocale().monthName(d->month, QLocale::ShortFormat);
+    QRect cr     = contentsRect();
     cr.setBottom(70);
     painter.drawPixmap(cr.width()  / 2 - d->thumb.width()  / 2,
                        cr.height() / 2 - d->thumb.height() / 2,
                        d->thumb);
 
-    cr = contentsRect();
+    cr           = contentsRect();
     cr.setTop(70);
     painter.drawText(cr, Qt::AlignHCenter, name);
 }
 
-void CalMonthWidget::dragEnterEvent(QDragEnterEvent* event)
+void CalMonthWidget::dragEnterEvent(QDragEnterEvent* e)
 {
-    if (event->mimeData()->hasImage())
+    if (e->mimeData()->hasImage())
     {
-        event->acceptProposedAction();
+        e->acceptProposedAction();
     }
 }
 
@@ -158,9 +155,9 @@ void CalMonthWidget::setImage(const QUrl& url)
     d->thumbLoadThread->find(ThumbnailIdentifier(url.toLocalFile()), d->thumbSize.width());
 }
 
-void CalMonthWidget::dropEvent(QDropEvent* event)
+void CalMonthWidget::dropEvent(QDropEvent* e)
 {
-    QList<QUrl> srcURLs = event->mimeData()->urls();
+    QList<QUrl> srcURLs = e->mimeData()->urls();
 
     if (srcURLs.isEmpty())
     {
@@ -186,21 +183,21 @@ void CalMonthWidget::slotThumbnail(const LoadingDescription& desc, const QPixmap
     setThumb(pix);
 }
 
-void CalMonthWidget::mouseReleaseEvent(QMouseEvent* event)
+void CalMonthWidget::mouseReleaseEvent(QMouseEvent* e)
 {
-    if (!contentsRect().contains(event->pos()))
+    if (!contentsRect().contains(e->pos()))
     {
         return;
     }
 
-    if (event->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton)
     {
         ImageDialog dlg(this,
                         QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)),
                         true);
         setImage(dlg.url());
     }
-    else if (event->button() == Qt::RightButton)
+    else if (e->button() == Qt::RightButton)
     {
         d->imagePath = QUrl();
         CalSettings::instance()->setImage(d->month, d->imagePath);

@@ -9,8 +9,6 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libassistants_SRCS dwizardpage.cpp
-                       dbinaryiface.cpp
-                       dbinarysearch.cpp
                        dsavesettingswidget.cpp
                        dwizardpage.cpp
                        dpreviewmanager.cpp

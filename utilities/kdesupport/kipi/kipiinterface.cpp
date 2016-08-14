@@ -248,7 +248,7 @@ void KipiInterface::refreshImages(const QList<QUrl>& urls)
         ThumbnailLoadThread::deleteThumbnail(path);
         LoadingCacheInterface::fileChanged(path);
         ImageAttributesWatch::instance()->fileMetadataChanged(url);
-        dirs << url.adjusted(QUrl::RemoveFilename).path();
+        dirs << url.adjusted(QUrl::RemoveFilename).toLocalFile();
     }
 
     ScanController::instance()->hintAtModificationOfItems(ids);

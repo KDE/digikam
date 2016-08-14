@@ -16,11 +16,11 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 # digiKam version
 set(DIGIKAM_MAJOR_VERSION "5")
-set(DIGIKAM_MINOR_VERSION "0")
+set(DIGIKAM_MINOR_VERSION "2")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2016-07-03")
+set(DIGIKAM_RELEASE_DATE "2016-09-11")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
@@ -29,7 +29,7 @@ set(DIGIKAM_RELEASE_DATE "2016-07-03")
 # "-beta3" : beta3 release.
 # "-rc"    : release candidate.
 # ""       : final release. Can be used in production.
-set(DIGIKAM_SUFFIX_VERSION "-beta7")
+set(DIGIKAM_SUFFIX_VERSION "")
 
 # ==================================================================================================
 # Set env. variables accordingly.
@@ -147,11 +147,6 @@ if(ENABLE_DBUS)
     endif()
 endif()
 
-if(NOT ENABLE_DBUS)
-    # As Internal database server is based on DBUS, it cannot be compiled without.
-    set(ENABLE_INTERNALMYSQL OFF)
-endif()
-
 if(BUILD_TESTING)
     find_package(Qt5 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS
                  Test)
@@ -235,12 +230,12 @@ set_package_properties("Exiv2"     PROPERTIES
 
 if(ENABLE_OPENCV3)
 
-    set(OPENCV_MIN_VERSION "3.0.0")
+    set(OPENCV_MIN_VERSION "3.1.0")
     DETECT_OPENCV(${OPENCV_MIN_VERSION} core highgui objdetect imgproc)
 
     if(${OpenCV_FOUND})
-        if(${OpenCV_VERSION} VERSION_LESS 3.0.0)
-            message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.0.0 have been found. Disabled ENABLE_OPENCV3")
+        if(${OpenCV_VERSION} VERSION_LESS 3.1.0)
+            message(STATUS "ENABLE_OPENCV3 option is enabled and OpenCV < 3.1.0 have been found. Disabled ENABLE_OPENCV3")
             set(OpenCV_FOUND FALSE)
         endif()
     endif()
@@ -602,17 +597,12 @@ if(DIGIKAM_CAN_BE_COMPILED)
     # ==================================================================================================
     # Common targets parts
 
-   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-   add_subdirectory(data)
-   add_subdirectory(libs)
-   add_subdirectory(utilities)
-   add_subdirectory(app)
-   add_subdirectory(showfoto)
-   add_subdirectory(imageplugins)
-
-    if(ENABLE_INTERNALMYSQL)
-        add_subdirectory(databaseserver)
-    endif()
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    add_subdirectory(data)
+    add_subdirectory(libs)
+    add_subdirectory(utilities)
+    add_subdirectory(app)
+    add_subdirectory(showfoto)
 
     if(BUILD_TESTING)
         add_subdirectory(tests)

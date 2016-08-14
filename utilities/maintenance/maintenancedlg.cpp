@@ -175,7 +175,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     DVBox* const options    = new DVBox;
     d->albumSelectors       = new AlbumSelectors(i18nc("@label", "Process items from:"), d->configGroupName, options);
-    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), options);
+    d->useMutiCoreCPU       = new QCheckBox(i18nc("@option:check", "Work on all processor cores (when it possible)"), options);
     d->expanderBox->insertItem(Private::Options, options, QIcon::fromTheme(QLatin1String("configure")), i18n("Common Options"), QLatin1String("Options"), true);
 
     // --------------------------------------------------------------------------------------

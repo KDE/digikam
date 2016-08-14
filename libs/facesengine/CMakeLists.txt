@@ -41,6 +41,7 @@ if(ENABLE_OPENCV3)
                              opencv3-face/lbph_faces.cpp
                              opencv3-face/eigen_faces.cpp
                              opencv3-face/fisher_faces.cpp
+                             opencv3-face/predict_collector.cpp
     )
 endif()
 

@@ -149,52 +149,44 @@ void SetupDatabase::applySettings()
         return;
     }
 
-    if (!d->databaseWidget->checkDatabaseSettings())
+    if (d->databaseWidget->getDbEngineParameters() == d->databaseWidget->orgDatabasePrm())
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "No DB settings changes. Do nothing...";
         return;
     }
 
-    switch(d->databaseWidget->databaseType())
+    if (!d->databaseWidget->checkDatabaseSettings())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "DB settings check invalid. Do nothing...";
+        return;
+    }
+
+    switch (d->databaseWidget->databaseType())
     {
         case DatabaseSettingsWidget::SQlite:
         {
-            QString newPath = d->databaseWidget->databasePath();
-            QDir oldDir(d->databaseWidget->orgDatabasePrm().getCoreDatabaseNameOrDir());
-            QDir newDir(newPath);
-
-            if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to SQlite DB config...";
-                settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
-                settings->saveSettings();
-                DatabaseServerStarter::stopServerManagerProcess();
-            }
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to SQlite DB config...";
+            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            settings->saveSettings();
+            DatabaseServerStarter::instance()->stopServerManagerProcess();
             break;
         }
         case DatabaseSettingsWidget::MysqlInternal:
         {
-            QString newPath = d->databaseWidget->databasePath();
-            QDir oldDir(d->databaseWidget->orgDatabasePrm().internalServerPath());
-            QDir newDir(newPath);
-
-            if (oldDir != newDir || d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql Internal DB config...";
-                settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
-                settings->saveSettings();
-                DatabaseServerStarter::startServerManagerProcess(d->databaseWidget->databaseBackend());
-            }
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql Internal DB config...";
+            DbEngineParameters params = d->databaseWidget->getDbEngineParameters();
+            settings->setDbEngineParameters(params);
+            settings->saveSettings();
+            DatabaseServerStarter::instance()->stopServerManagerProcess();
+            DatabaseServerStarter::instance()->startServerManagerProcess(params);
             break;
         }
         default: // DatabaseSettingsWidget::MysqlServer
         {
-            if (d->databaseWidget->databaseBackend() != d->databaseWidget->orgDatabasePrm().databaseType)
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql server DB config...";
-                settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
-                settings->saveSettings();
-                DatabaseServerStarter::stopServerManagerProcess();
-            }
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql server DB config...";
+            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            settings->saveSettings();
+            DatabaseServerStarter::instance()->stopServerManagerProcess();
             break;
         }
     }

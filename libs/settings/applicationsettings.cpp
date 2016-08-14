@@ -137,14 +137,13 @@ void ApplicationSettings::readSettings()
     d->currentTheme                     = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
     d->sidebarTitleStyle                = (DMultiTabBar::TextStyle)group.readEntry(d->configSidebarTitleStyleEntry,
-                                          (int)DMultiTabBar::ActiveIconText);
+                                          (int)DMultiTabBar::AllIconsText);
 
     d->ratingFilterCond                 = group.readEntry(d->configRatingFilterConditionEntry,
                                           (int)ImageFilterSettings::GreaterEqualCondition);
 
     d->recursiveAlbums                  = group.readEntry(d->configRecursiveAlbumsEntry,              false);
     d->recursiveTags                    = group.readEntry(d->configRecursiveTagsEntry,                true);
-
 
     d->iconShowName                     = group.readEntry(d->configIconShowNameEntry,                 false);
     d->iconShowResolution               = group.readEntry(d->configIconShowResolutionEntry,           false);
@@ -218,6 +217,8 @@ void ApplicationSettings::readSettings()
     {
         d->previewSettings.quality = PreviewSettings::FastPreview;
     }
+
+    d->previewSettings.zoomOrgSize      = group.readEntry(d->configPreviewZoomOrgSizeEntry,           true);
     d->previewShowIcons                 = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                     = group.readEntry(d->configShowThumbbarEntry,                 true);
 
@@ -234,8 +235,15 @@ void ApplicationSettings::readSettings()
     d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
+
+#ifdef Q_OS_LINUX
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
+#else
+    setApplicationStyle(QLatin1String("Fusion"));
+#endif
+
     d->iconTheme                        = group.readEntry(d->configIconThemeEntry,                                   QString());
+    d->scanAtStart                      = group.readEntry(d->configScanAtStartEntry,                                 true);
 
     // ---------------------------------------------------------------------
 
@@ -368,6 +376,7 @@ void ApplicationSettings::saveSettings()
         group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
     }
 
+    group.writeEntry(d->configPreviewZoomOrgSizeEntry,                 d->previewSettings.zoomOrgSize);
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                       d->showThumbbar);
     group.writeEntry(d->configShowFolderTreeViewItemsCountEntry,       d->showFolderTreeViewItemsCount);
@@ -385,6 +394,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configStringComparisonTypeEntry,               (int) d->stringComparisonType);
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
     group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
+    group.writeEntry(d->configScanAtStartEntry,                        d->scanAtStart);
 
     // ---------------------------------------------------------------------
 

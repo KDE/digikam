@@ -23,16 +23,18 @@ set(libcommonwidgets_SRCS
     common/dfontselect.cpp
     common/dgradientslider.cpp
     common/dragdropimplementations.cpp
+    common/dsplashscreen.cpp
     common/filesaveoptionsbox.cpp
     common/fullscreensettings.cpp
     common/modelcompleter.cpp
     common/searchtextbar.cpp
-    common/splashscreen.cpp
     common/statesavingobject.cpp
     common/visibilitycontroller.cpp
     common/workingwidget.cpp
     common/drawdecoderwidget.cpp
     common/dwidgetutils.cpp
+    common/dbinarysearch.cpp
+    common/dbinaryiface.cpp
     common/squeezedcombobox.cpp
 )
 

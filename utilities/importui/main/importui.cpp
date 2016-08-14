@@ -465,7 +465,7 @@ void ImportUI::setupActions()
     d->imageViewSelectionAction->addAction(d->camItemPreviewAction);
 
 #ifdef HAVE_MARBLE
-    d->mapViewAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")),
+    d->mapViewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-html")),
                                    i18nc("@action Switch to map view", "Map"), this);
     d->mapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("importui_map_view"), d->mapViewAction);
@@ -589,7 +589,7 @@ void ImportUI::setupActions()
     createFullScreenAction(QLatin1String("importui_fullscreen"));
     createSidebarActions();
 
-    d->showLogAction = new QAction(QIcon::fromTheme(QLatin1String("view-history")), i18nc("@option:check", "Show History"), this);
+    d->showLogAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18nc("@option:check", "Show History"), this);
     d->showLogAction->setCheckable(true);
     connect(d->showLogAction, SIGNAL(triggered()), this, SLOT(slotShowLog()));
     ac->addAction(QLatin1String("importui_showlog"), d->showLogAction);
@@ -602,16 +602,11 @@ void ImportUI::setupActions()
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
     d->showBarAction->setEnabled(false);
 
-    // -- Standard 'Configure' menu actions ----------------------------------------
-
-    createSettingsActions();
-
     // ---------------------------------------------------------------------------------
 
     ThemeManager::instance()->registerThemeActions(this);
 
-    // -- Standard 'Help' menu actions ---------------------------------------------
-
+    // Standard 'Help' menu actions
     createHelpActions();
 
     // Provides a menu entry that allows showing/hiding the toolbar(s)
@@ -620,7 +615,10 @@ void ImportUI::setupActions()
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
 
-    // -- Keyboard-only actions added to <MainWindow> ------------------------------
+    // Standard 'Configure' menu actions
+    createSettingsActions();
+
+    // -- Keyboard-only actions added to <MainWindow> ----------------------------------
 
     QAction* const altBackwardAction = new QAction(i18nc("@action", "Previous Image"), this);
     ac->addAction(QLatin1String("importui_backward_shift_space"), altBackwardAction);
@@ -633,6 +631,7 @@ void ImportUI::setupActions()
     connect(d->connectAction, SIGNAL(triggered()), d->controller, SLOT(slotConnect()));
 
     createGUI(xmlFile());
+    cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
 }
@@ -1333,7 +1332,7 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
         {
             QString msg(i18nc("@info", "<qt>Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<br>"
                              "Please enter a new filename (without extension):</qt>",
-                             cameraFolder, fi.fileName()));
+                             QDir::toNativeSeparators(cameraFolder), fi.fileName()));
             uploadInfo.name = QInputDialog::getText(this,
                                                     i18nc("@title:window", "File already exists"),
                                                     msg,
@@ -2445,7 +2444,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
         else
         {
             errMsg = i18nc("@info", "A file with the same name (<b>%1</b>) already exists in folder <resource>%2</resource>.",
-                          sub, parentURL.toLocalFile());
+                          sub, QDir::toNativeSeparators(parentURL.toLocalFile()));
             return false;
         }
     }
@@ -2456,7 +2455,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
 
     if (!parent)
     {
-        errMsg = i18nc("@info", "Failed to find Album for path <b>%1</b>.", parentURL.toLocalFile());
+        errMsg = i18nc("@info", "Failed to find Album for path <b>%1</b>.", QDir::toNativeSeparators(parentURL.toLocalFile()));
         return false;
     }
 
@@ -2640,11 +2639,9 @@ void ImportUI::slotSwitchedToMapView()
 
 void ImportUI::customizedFullScreenMode(bool set)
 {
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
+    showStatusBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toogleShowBar();
 

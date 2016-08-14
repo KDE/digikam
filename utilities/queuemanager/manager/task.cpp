@@ -49,6 +49,7 @@ extern "C"
 #include "fileactionmngr.h"
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
+#include "collectionscanner.h"
 #include "fileoperation.h"
 
 namespace Digikam
@@ -237,16 +238,16 @@ void Task::run()
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
             if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
-                                               DMetadata::sidecarPath(outUrl.toLocalFile()),
-                                               DMetadata::sidecarPath(dest.toLocalFile())))
+                                                DMetadata::sidecarPath(outUrl.toLocalFile()),
+                                                DMetadata::sidecarPath(dest.toLocalFile())))
             {
                 emitActionData(ActionData::BatchFailed, i18n("Failed to create sidecar file..."), dest);
             }
         }
 
         if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
-                                           outUrl.toLocalFile(),
-                                           dest.toLocalFile()))
+                                            outUrl.toLocalFile(),
+                                            dest.toLocalFile()))
         {
             emitActionData(ActionData::BatchFailed, i18n("Failed to create file..."), dest);
         }
@@ -254,7 +255,15 @@ void Task::run()
         {
             // -- Now copy the digiKam attributes from original file to the new file ------------
 
-            FileActionMngr::instance()->copyAttributes(source, dest.toLocalFile());
+            CollectionScanner scanner;
+            qlonglong id = scanner.scanFile(dest.toLocalFile(), CollectionScanner::NormalScan);
+
+            ImageInfo destInfo(id);
+            CollectionScanner::copyFileProperties(source, destInfo);
+
+            // -- Read again new file that the database is up to date ---------------------------
+
+            scanner.scanFile(destInfo, CollectionScanner::Rescan);
 
             emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);
         }

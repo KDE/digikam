@@ -187,26 +187,61 @@ QUrl FileOperation::getUniqueFileUrl(const QUrl& orgUrl, bool* const newurl)
 
 bool FileOperation::runFiles(const KService& service, const QList<QUrl>& urls)
 {
-    return (runFiles(service.exec().section(QLatin1Char(' '), 0, 0), urls));
+    return (runFiles(service.exec(), urls, service.desktopEntryName(), service.icon()));
 }
 
-bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls)
+bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, const QString& name,
+                                                                             const QString& icon)
 {
-    QString cmd(appCmd);
+    QRegExp split(QLatin1String(" +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
+    QStringList cmdList = appCmd.split(split, QString::SkipEmptyParts);
 
-    if (cmd.isEmpty())
+    if (cmdList.isEmpty() || urls.isEmpty())
     {
         return false;
     }
 
-    foreach(const QUrl& url, urls)
+    if (!appCmd.contains(QLatin1String("%f"), Qt::CaseInsensitive) &&
+        !appCmd.contains(QLatin1String("%u"), Qt::CaseInsensitive) &&
+        !appCmd.contains(QLatin1String("%d"), Qt::CaseInsensitive))
     {
-        cmd.append(QLatin1String(" \""));
-        cmd.append(url.toLocalFile());
-        cmd.append(QLatin1Char('"'));
+        cmdList << QLatin1String("%f");
     }
 
-    return (QProcess::startDetached(QLatin1String("/bin/sh"), QStringList() << QLatin1String("-c") << cmd));
+    QStringList dirs;
+    QStringList files;
+    QStringList cmdArgs;
+    QString exec = cmdList.takeFirst();
+
+    foreach(const QUrl& url, urls)
+    {
+        dirs  << url.adjusted(QUrl::RemoveFilename).toLocalFile();
+        files << url.toLocalFile();
+    }
+
+    foreach(const QString& cmd, cmdList)
+    {
+        if (cmd == QLatin1String("%c"))
+            cmdArgs << name;
+        else if (cmd == QLatin1String("%i"))
+            cmdArgs << icon;
+        else if (cmd == QLatin1String("%f"))
+            cmdArgs << files.first();
+        else if (cmd == QLatin1String("%F"))
+            cmdArgs << files;
+        else if (cmd == QLatin1String("%u"))
+            cmdArgs << files.first();
+        else if (cmd == QLatin1String("%U"))
+            cmdArgs << files;
+        else if (cmd == QLatin1String("%d"))
+            cmdArgs << dirs.first();
+        else if (cmd == QLatin1String("%D"))
+            cmdArgs << dirs;
+        else
+            cmdArgs << cmd;
+    }
+
+    return (QProcess::startDetached(exec, cmdArgs));
 }
 
 KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
@@ -219,7 +254,7 @@ KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
 
     foreach(const QUrl& item, urls)
     {
-        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.path(), QMimeDatabase::MatchExtension).name();
+        const QString mimeType = QMimeDatabase().mimeTypeForFile(item.toLocalFile(), QMimeDatabase::MatchExtension).name();
 
         if (!mimeTypes.contains(mimeType))
         {

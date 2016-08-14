@@ -65,10 +65,10 @@ Q_SIGNALS:
 
 protected:
 
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dropEvent(QDropEvent* event);
-    void paintEvent(QPaintEvent* event);
-    void mouseReleaseEvent(QMouseEvent* event);
+    void dragEnterEvent(QDragEnterEvent* e);
+    void dropEvent(QDropEvent* e);
+    void paintEvent(QPaintEvent* e);
+    void mouseReleaseEvent(QMouseEvent* e);
 
 private Q_SLOTS:
 

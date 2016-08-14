@@ -51,26 +51,20 @@ public:
 
     Private()
     {
-        copyrightEdit    = 0;
-        bylineEdit       = 0;
-        bylineTitleEdit  = 0;
-        creditEdit       = 0;
-        sourceEdit       = 0;
-        contactEdit      = 0;
         copyrightCheck   = 0;
-        bylineCheck      = 0;
-        bylineTitleCheck = 0;
         creditCheck      = 0;
         sourceCheck      = 0;
-        contactCheck     = 0;
+        copyrightEdit    = 0;
+        creditEdit       = 0;
+        sourceEdit       = 0;
+        bylineEdit       = 0;
+        bylineTitleEdit  = 0;
+        contactEdit      = 0;
     }
 
     QCheckBox*        copyrightCheck;
-    QCheckBox*        bylineCheck;
-    QCheckBox*        bylineTitleCheck;
     QCheckBox*        creditCheck;
     QCheckBox*        sourceCheck;
-    QCheckBox*        contactCheck;
 
     QLineEdit*        copyrightEdit;
     QLineEdit*        creditEdit;

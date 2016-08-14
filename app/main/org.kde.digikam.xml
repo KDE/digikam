@@ -13,8 +13,5 @@
     <method name="autoDetect">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
     </method>
-    <method name="currentDbEngineParameters">
-      <arg direction="out" type="s" name="services" />
-    </method>
   </interface>
 </node>

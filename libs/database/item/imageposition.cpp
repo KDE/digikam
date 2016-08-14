@@ -348,7 +348,7 @@ bool ImagePosition::setLatitude(const QString& latitude)
     return true;
 }
 
-bool ImagePosition::setLongitude(const QString longitude)
+bool ImagePosition::setLongitude(const QString& longitude)
 {
     if (!d)
     {

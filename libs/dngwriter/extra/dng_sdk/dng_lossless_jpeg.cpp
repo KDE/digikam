@@ -1130,7 +1130,7 @@ int32 dng_lossless_decoder::ReadScanHeader ()
  *
  * DecoderStructInit --
  *
- *	Initalize the rest of the fields in the decompression
+ *	Initialize the rest of the fields in the decompression
  *	structure.
  *
  * Results:

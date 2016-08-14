@@ -194,6 +194,7 @@ void EditorToolIface::unLoadTool()
 
     d->editor->toggleActions(true);
     d->editor->toggleToolActions();
+    d->editor->slotUpdateItemInfo();
     d->editor->setPreviewModeMask(PreviewToolBar::NoPreviewMode);
 
     delete d->tool;

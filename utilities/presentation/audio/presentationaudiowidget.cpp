@@ -54,14 +54,14 @@ public:
         isZeroTime  = false;
     }
 
-    PresentationContainer*     sharedData;
-    QList<QUrl>          urlList;
-    int                  currIndex;
-    bool                 stopCalled;
-    bool                 isZeroTime;
-    bool                 canHide;
+    PresentationContainer* sharedData;
+    QList<QUrl>            urlList;
+    int                    currIndex;
+    bool                   stopCalled;
+    bool                   isZeroTime;
+    bool                   canHide;
 
-    QMediaPlayer*        mediaObject;
+    QMediaPlayer*          mediaObject;
 };
 
 PresentationAudioWidget::PresentationAudioWidget(QWidget* const parent, const QList<QUrl>& urls, PresentationContainer* const sharedData)
@@ -320,7 +320,7 @@ void PresentationAudioWidget::slotNext()
 
 void PresentationAudioWidget::slotTimeUpdaterTimeout()
 {
-    if (!d->mediaObject->error() == QMediaPlayer::NoError)
+    if (d->mediaObject->error() != QMediaPlayer::NoError)
     {
         slotError();
         return;

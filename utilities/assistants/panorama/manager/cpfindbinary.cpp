@@ -34,7 +34,7 @@ bool CPFindBinary::parseHeader(const QString& output)
     QStringList lines    = output.split(QChar::fromLatin1('\n'));
     m_developmentVersion = false;
 
-    foreach(QString line, lines)
+    foreach(const QString& line, lines)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << path() << " help header line: \n" << line;
 

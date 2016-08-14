@@ -440,6 +440,12 @@ public:
      */
     int maximumBoundValues() const;
 
+    /**
+     * Enables or disables FOREIGN_KEY_CHECKS for the database.
+     * This function depends on the database engine.
+     */
+    void setForeignKeyChecks(bool check);
+
     /*
         Qt SQL driver supported features
         SQLITE3:

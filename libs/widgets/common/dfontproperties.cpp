@@ -702,7 +702,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     qtStyles.clear();
     styleIDs.clear();
 
-    Q_FOREACH (const QString &style, styles)
+    Q_FOREACH (const QString& style, styles)
     {
         // Sometimes the font database will report an invalid style,
         // that falls back back to another when set.
@@ -1356,7 +1356,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
     QStringList             trNames;
     QHash<QString, QString> trMap;
 
-    Q_FOREACH (const QString &name, names)
+    Q_FOREACH (const QString& name, names)
     {
         QString trName = translateFontName(name);
 
@@ -1374,7 +1374,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
 
     // Prepend generic fonts, in the predefined order.
 
-    Q_FOREACH (const QString &genericName, genericNames)
+    Q_FOREACH (const QString& genericName, genericNames)
     {
         QString trGenericName = translateFontName(genericName);
 

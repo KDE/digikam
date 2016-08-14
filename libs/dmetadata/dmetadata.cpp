@@ -280,54 +280,56 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
     if (hasXmp())
     {
 
-        for(NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)))
+        for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)))
         {
-            if(entry.isDisabled)
+            if (entry.isDisabled)
                 continue;
 
             QString commentString;
             const std::string myStr = entry.namespaceName.toStdString();
             const char* nameSpace = myStr.data();
+
             switch(entry.subspace)
             {
-            case NamespaceEntry::XMP:
-                switch(entry.specialOpts)
-                {
-                case NamespaceEntry::COMMENT_ALTLANG:
-                    commentString = getXmpTagStringLangAlt(nameSpace, QString(), false);
+                case NamespaceEntry::XMP:
+                    switch(entry.specialOpts)
+                    {
+                        case NamespaceEntry::COMMENT_ALTLANG:
+                            commentString = getXmpTagStringLangAlt(nameSpace, QString(), false);
+                            break;
+                        case NamespaceEntry::COMMENT_ATLLANGLIST:
+                            commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
+                            break;
+                        case NamespaceEntry::COMMENT_XMP:
+                            commentString = getXmpTagString("Xmp.acdsee.notes", false);
+                            break;
+                        case NamespaceEntry::COMMENT_JPEG:
+                            // Now, we trying to get image comments, outside of XMP.
+                            // For JPEG, string is extracted from JFIF Comments section.
+                            // For PNG, string is extracted from iTXt chunk.
+                            commentString = getCommentsDecoded();
+                        default:
+                            break;
+                    }
                     break;
-                case NamespaceEntry::COMMENT_ATLLANGLIST:
-                    commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
+                case NamespaceEntry::IPTC:
+                    commentString = getIptcTagString(nameSpace, false);
                     break;
-                case NamespaceEntry::COMMENT_XMP:
-                    commentString = getXmpTagString("Xmp.acdsee.notes", false);
+                case NamespaceEntry::EXIF:
+                    commentString = getExifComment();
                     break;
-                case NamespaceEntry::COMMENT_JPEG:
-                    // Now, we trying to get image comments, outside of XMP.
-                    // For JPEG, string is extracted from JFIF Comments section.
-                    // For PNG, string is extracted from iTXt chunk.
-                    commentString = getCommentsDecoded();
                 default:
                     break;
-                }
-                break;
-            case NamespaceEntry::IPTC:
-                commentString = getIptcTagString(nameSpace, false);
-                break;
-            case NamespaceEntry::EXIF:
-                commentString = getExifComment();
-                break;
-            default:
-                break;
             }
-            if(!commentString.isEmpty() &&!commentString.trimmed().isEmpty())
+
+            if (!commentString.isEmpty() &&!commentString.trimmed().isEmpty())
             {
                 commentsMap.insert(QLatin1String("x-default"), commentString);
                 captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
                 return captionsMap;
             }
 
-            if(!commentsMap.isEmpty())
+            if (!commentsMap.isEmpty())
             {
                 captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
                 return captionsMap;
@@ -391,7 +393,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
         switch(entry.subspace)
         {
             case NamespaceEntry::XMP:
-                if(entry.namespaceName.contains(QLatin1String("Xmp.")))
+                if (entry.namespaceName.contains(QLatin1String("Xmp.")))
                     removeXmpTag(nameSpace);
 
                 switch(entry.specialOpts)
@@ -399,7 +401,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                     case NamespaceEntry::COMMENT_ALTLANG:
                         if (!defaultComment.isNull())
                         {
-                            if(!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
+                            if (!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
                             {
                                 qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
                                 return false;
@@ -666,41 +668,45 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
     {
         return -1;
     }
+
     long rating = -1;
     bool xmpSupported = hasXmp();
     bool iptcSupported = hasIptc();
     bool exivSupported = hasExif();
 
-    for(NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER)))
+    for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER)))
     {
-        if(entry.isDisabled)
+        if (entry.isDisabled)
             continue;
 
         const std::string myStr = entry.namespaceName.toStdString();
         const char* nameSpace = myStr.data();
         QString value;
+
         switch(entry.subspace)
         {
-        case NamespaceEntry::XMP:
-            if(xmpSupported)
-                value = getXmpTagString(nameSpace, false);
-            break;
-        case NamespaceEntry::IPTC:
-            if(iptcSupported)
-                value = QString::fromUtf8(getIptcTagData(nameSpace));
-            break;
-        case NamespaceEntry::EXIF:
-            if(exivSupported)
-                getExifTagLong(nameSpace, rating);
-            break;
-        default:
-            break;
+            case NamespaceEntry::XMP:
+                if (xmpSupported)
+                    value = getXmpTagString(nameSpace, false);
+                break;
+            case NamespaceEntry::IPTC:
+                if (iptcSupported)
+                    value = QString::fromUtf8(getIptcTagData(nameSpace));
+                break;
+            case NamespaceEntry::EXIF:
+                if (exivSupported)
+                    getExifTagLong(nameSpace, rating);
+                break;
+            default:
+                break;
         }
-        if(!value.isEmpty())
+
+        if (!value.isEmpty())
         {
             bool ok = false;
             rating = value.toLong(&ok);
-            if(!ok)
+
+            if (!ok)
             {
                 return -1;
             }
@@ -710,13 +716,13 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
 
         // Exact value was not found,but rating is in range,
         // so we try to aproximate it
-        if(index == -1
+        if (index == -1
                 && rating > entry.convertRatio.first()
                 && rating < entry.convertRatio.last())
         {
-            for(int i = 0; i < entry.convertRatio.size(); i++)
+            for (int i = 0; i < entry.convertRatio.size(); i++)
             {
-                if(rating > entry.convertRatio.at(i))
+                if (rating > entry.convertRatio.at(i))
                 {
                     index = i;
                 }
@@ -840,35 +846,38 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
         qCDebug(DIGIKAM_METAENGINE_LOG) << "Could not set program id";
         return false;
     }
+
     QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_RATING_CONTAINER));
 
-    if(!settings.unifyReadWrite())
+    if (!settings.unifyReadWrite())
         toWrite = settings.getWriteMapping(QLatin1String(DM_RATING_CONTAINER));
 
-    for(NamespaceEntry entry : toWrite)
+    for (NamespaceEntry entry : toWrite)
     {
-        if(entry.isDisabled)
+        if (entry.isDisabled)
             continue;
 
         const std::string myStr = entry.namespaceName.toStdString();
         const char* nameSpace = myStr.data();
+
         switch(entry.subspace)
         {
-        case NamespaceEntry::XMP:
-            if(!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
-            {
-                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
-                return false;
-            }
-            break;
-        case NamespaceEntry::EXIF:
-            if (!setExifTagLong(nameSpace, rating))
-            {
-                return false;
-            }
-        case NamespaceEntry::IPTC: // IPTC rating deprecated
-        default:
-            break;
+            case NamespaceEntry::XMP:
+                if (!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
+                {
+                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
+                    return false;
+                }
+                break;
+            case NamespaceEntry::EXIF:
+                if (!setExifTagLong(nameSpace, rating))
+                {
+                    return false;
+                }
+                break;
+            case NamespaceEntry::IPTC: // IPTC rating deprecated
+            default:
+                break;
         }
     }
 
@@ -1364,10 +1373,10 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
     {
         QList<NamespaceEntry> toWrite = settings.getReadMapping(QLatin1String(DM_TAG_CONTAINER));
 
-        if(!settings.unifyReadWrite())
+        if (!settings.unifyReadWrite())
             toWrite = settings.getWriteMapping(QLatin1String(DM_TAG_CONTAINER));
 
-        for(NamespaceEntry entry : toWrite)
+        for (NamespaceEntry entry : toWrite)
         {
             if (entry.isDisabled)
                 continue;
@@ -1390,7 +1399,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             {
                 newList = tagsPath;
 
-                if(entry.separator.compare(QLatin1String("/")) != 0){
+                if (entry.separator.compare(QLatin1String("/")) != 0){
                     newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
                 }
             }
@@ -1496,7 +1505,7 @@ bool DMetadata::setACDSeeTagsPath(const QStringList &tagsPath) const
         splitTags   = tags.split(QLatin1String("/"));
         int current = 0;
 
-        for(int index = 0; index < splitTags.size(); index++)
+        for (int index = 0; index < splitTags.size(); index++)
         {
             int tagIndex = xmlTags.indexOf(category.arg(0) + splitTags[index]);
 
@@ -1561,7 +1570,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
     const QString personPathTemplate = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:PersonDisplayName");
     const QString rectPathTemplate   = QLatin1String("Xmp.MP.RegionInfo/MPRI:Regions[%1]/MPReg:Rectangle");
 
-    for (int i=1; ; i++)
+    for (int i = 1; ; i++)
     {
         QString person = getXmpTagString(personPathTemplate.arg(i).toLatin1().constData(), false);
 
@@ -1603,7 +1612,7 @@ bool DMetadata::getImageFacesMap(QMultiMap<QString,QVariant>& faces) const
     const QString mwg_rect_w_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:w");
     const QString mwg_rect_h_PathTemplate = QLatin1String("Xmp.mwg-rs.Regions/mwg-rs:RegionList[%1]/mwg-rs:Area/stArea:h");
 
-    for (int i=1; ; i++)
+    for (int i = 1; ; i++)
     {
         QString person = getXmpTagString(mwg_personPathTemplate.arg(i).toLatin1().constData(), false);
 
@@ -1647,7 +1656,7 @@ bool DMetadata::setImageFacesMap(QMultiMap< QString, QVariant >& facesPath, bool
     {
         QString check = getXmpTagString(nameTagKey.arg(1).toLatin1().constData());
 
-        if(check.isEmpty())
+        if (check.isEmpty())
             return true;
     }
 
@@ -1737,13 +1746,13 @@ bool DMetadata::setMetadataTemplate(const Template& t) const
         return false;
     }
 
-    QStringList authors           = t.authors();
-    QString authorsPosition       = t.authorsPosition();
-    QString credit                = t.credit();
-    QString source                = t.source();
+    QStringList authors               = t.authors();
+    QString authorsPosition           = t.authorsPosition();
+    QString credit                    = t.credit();
+    QString source                    = t.source();
     MetaEngine::AltLangMap copyright  = t.copyright();
     MetaEngine::AltLangMap rightUsage = t.rightUsageTerms();
-    QString instructions          = t.instructions();
+    QString instructions              = t.instructions();
 
     qCDebug(DIGIKAM_METAENGINE_LOG) << "Applying Metadata Template: " << t.templateTitle() << " :: " << authors;
 
@@ -2992,7 +3001,7 @@ QStringList DMetadata::valuesToString(const QVariantList& values, const Metadata
     Q_ASSERT(size == values.size());
 
     QStringList list;
-    for (int i=0; i<size; ++i)
+    for (int i = 0; i < size; ++i)
     {
         list << valueToString(values.at(i), fields.at(i));
     }

@@ -52,9 +52,10 @@ public:
 
     enum DatabaseType
     {
-        SQlite        = 0,
-        MysqlInternal = 1,
-        MysqlServer   = 2
+        SQlite          = 0,
+        MariadbInternal = 1,
+        MysqlInternal   = 2,
+        MysqlServer     = 3
     };
 
 public:

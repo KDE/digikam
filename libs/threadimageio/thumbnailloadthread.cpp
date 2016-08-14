@@ -229,6 +229,10 @@ ThumbnailLoadThread* ThumbnailLoadThread::defaultThumbBarThread()
 void ThumbnailLoadThread::cleanUp()
 {
     // NOTE : Nothing to do with Qt5 and Q_GLOBAL_STATIC. Qt clean up all automatically at end of application instance.
+    // But stopping all running tasks to prevent a crash at end.
+    defaultIconViewThread()->stopAllTasks();
+    defaultThumbBarThread()->stopAllTasks();
+    defaultThread()->stopAllTasks();
 }
 
 void ThumbnailLoadThread::initializeThumbnailDatabase(const DbEngineParameters& params, ThumbnailInfoProvider* const provider)

@@ -1,9 +1,9 @@
 /* -*- C++ -*-
  * File: libraw_c_api.cpp
- * Copyright 2008-2015 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
- * LibRaw C interface
+ * LibRaw C interface 
 
 
 LibRaw is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@ it under the terms of the one of three licenses as you choose:
 
 #ifdef __cplusplus
 #include <new>
-extern "C"
+extern "C" 
 {
 #endif
 
@@ -42,6 +42,7 @@ extern "C"
         return &(ret->imgdata);
     }
 
+	unsigned libraw_capabilities() { return LibRaw::capabilities();}
     const char*   libraw_version() { return LibRaw::version();}
     const char*   libraw_strprogress(enum LibRaw_progress p) { return LibRaw::strprogress(p);}
     int     libraw_versionNumber() { return LibRaw::versionNumber();}
@@ -251,6 +252,13 @@ DllDef void libraw_set_output_bps(libraw_data_t *lr,int value)
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 #define LIM(x,min,max) MAX(min,MIN(x,max))
+
+DllDef void libraw_set_user_mul(libraw_data_t *lr,int index, float val)
+	{
+		if(!lr) return;
+		LibRaw *ip = (LibRaw*) lr->parent_class;
+		ip->imgdata.params.user_mul[LIM(index,0,3)]=val;
+	}
 
 DllDef void libraw_set_gamma(libraw_data_t *lr,int index, float value)
 	{

@@ -150,7 +150,7 @@ DbEngineParameters::DbEngineParameters(const QUrl& url)
     {
         internalServerDBPath = internalServerPrivatePath();
     }
-    
+
     internalServerMysqlServCmd = QUrlQuery(url).queryItemValue(QLatin1String("internalServerMysqlServCmd"));
     internalServerMysqlInitCmd = QUrlQuery(url).queryItemValue(QLatin1String("internalServerMysqlInitCmd"));
 #else
@@ -374,7 +374,9 @@ void DbEngineParameters::setInternalServerPath(const QString& path)
 
 QString DbEngineParameters::internalServerPath() const
 {
-    return internalServerDBPath;
+    QFileInfo fileInfo(internalServerDBPath);
+
+    return QDir::cleanPath(fileInfo.filePath());
 }
 
 void DbEngineParameters::setCoreDatabasePath(const QString& folderOrFileOrName)
@@ -419,7 +421,7 @@ QString DbEngineParameters::coreDatabaseFileSQLite(const QString& folderOrFile)
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(digikam4db));
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(digikam4db));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -431,7 +433,7 @@ QString DbEngineParameters::thumbnailDatabaseFileSQLite(const QString& folderOrF
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(thumbnails_digikamdb));
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(thumbnails_digikamdb));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -443,7 +445,7 @@ QString DbEngineParameters::faceDatabaseFileSQLite(const QString& folderOrFile)
 
     if (fileInfo.isDir())
     {
-        return QDir::cleanPath(fileInfo.filePath() + QDir::separator() + QLatin1String(face_digikamdb));
+        return QDir::cleanPath(fileInfo.filePath() + QLatin1Char('/') + QLatin1String(face_digikamdb));
     }
 
     return QDir::cleanPath(folderOrFile);
@@ -461,11 +463,18 @@ void DbEngineParameters::legacyAndDefaultChecks(const QString& suggestedPath, KS
         databaseNameThumbnails     = QLatin1String("digikam");
         databaseNameFace           = QLatin1String("digikam");
         internalServer             = true;
-        hostName.clear();
-        port                       = -1;
         userName                   = QLatin1String("root");
         password.clear();
+
+#ifdef Q_OS_WIN
+        hostName                   = QLatin1String("localhost");
+        port                       = 3307;
+        connectOptions.clear();
+#else
+        hostName.clear();
+        port                       = -1;
         connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+#endif
     }
 
     if (databaseType.isEmpty())
@@ -612,7 +621,7 @@ QString DbEngineParameters::faceDatabaseDirectorySQLite(const QString& path)
     return path;
 }
 
-DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseType)
+DbEngineParameters DbEngineParameters::defaultParameters(const QString& databaseType)
 {
     DbEngineParameters parameters;
 
@@ -622,19 +631,40 @@ DbEngineParameters DbEngineParameters::defaultParameters(const QString databaseT
     parameters.databaseNameCore           = config.databaseName;
     parameters.databaseNameThumbnails     = config.databaseName;
     parameters.databaseNameFace           = config.databaseName;
-    parameters.hostName                   = config.hostName;
     parameters.userName                   = config.userName;
     parameters.password                   = config.password;
-    parameters.port                       = config.port.toInt();
     parameters.internalServer             = (databaseType == QLatin1String("QMYSQL"));
     parameters.internalServerDBPath       = (databaseType == QLatin1String("QMYSQL")) ? internalServerPrivatePath() : QString();
     parameters.internalServerMysqlServCmd = (databaseType == QLatin1String("QMYSQL")) ? defaultMysqlServerCmd()     : QString();
     parameters.internalServerMysqlInitCmd = (databaseType == QLatin1String("QMYSQL")) ? defaultMysqlInitCmd()       : QString();
 
-    const QString miscDir                 = internalServerPrivatePath() + QLatin1String("db_misc");
+    QString hostName                      = config.hostName;
+    QString port                          = config.port;
     QString connectOptions                = config.connectOptions;
-    connectOptions.replace(QLatin1String("$$DBMISCPATH$$"), (databaseType == QLatin1String("QMYSQL"))
-                                                            ? miscDir : QString());
+
+#ifdef Q_OS_WIN
+    hostName.replace(QLatin1String("$$DBHOSTNAME$$"),      (databaseType == QLatin1String("QMYSQL"))
+                                                           ? QLatin1String("localhost")
+                                                           : QString());
+
+    port.replace(QLatin1String("$$DBPORT$$"),              (databaseType == QLatin1String("QMYSQL"))
+                                                           ? QLatin1String("3307")
+                                                           : QLatin1String("-1"));
+
+    connectOptions.replace(QLatin1String("$$DBOPTIONS$$"), QString());
+#else
+    hostName.replace(QLatin1String("$$DBHOSTNAME$$"),      QString());
+
+    port.replace(QLatin1String("$$DBPORT$$"),              QLatin1String("-1"));
+
+    const QString miscDir                 = internalServerPrivatePath() + QLatin1String("db_misc");
+    connectOptions.replace(QLatin1String("$$DBOPTIONS$$"), (databaseType == QLatin1String("QMYSQL"))
+                                                           ? QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir)
+                                                           : QString());
+#endif
+
+    parameters.hostName                   = hostName;
+    parameters.port                       = port.toInt();
     parameters.connectOptions             = connectOptions;
 
     qCDebug(DIGIKAM_DBENGINE_LOG) << "ConnectOptions " << parameters.connectOptions;
@@ -668,41 +698,17 @@ DbEngineParameters DbEngineParameters::parametersForSQLite(const QString& databa
 
 DbEngineParameters DbEngineParameters::parametersForSQLiteDefaultFile(const QString& directory)
 {
-    return parametersForSQLite(QDir::cleanPath(directory + QDir::separator() + QLatin1String(digikam4db)));
+    return parametersForSQLite(QDir::cleanPath(directory + QLatin1Char('/') + QLatin1String(digikam4db)));
 }
 
 QString DbEngineParameters::defaultMysqlServerCmd()
 {
-    QString servName = QLatin1String("mysqld_safe"); // For Linux
-
-#ifdef Q_OS_WIN32
-    // Under windows, mysqld_safe do not exists.
-    servName = QLatin1String("mysqld");
-#endif
-
-#ifdef Q_OS_MAC
-    // Under MAC OSX, mysqld_safe tool exists as under Linux
-    servName = QLatin1String("mysqld_safe");
-#endif
-
-    return servName;
+    return QLatin1String("mysqld"); // For Linux, Windows and OSX
 }
 
 QString DbEngineParameters::defaultMysqlInitCmd()
 {
-    QString initName = QLatin1String("mysql_install_db"); // For Linux
-
-#ifdef Q_OS_WIN32
-    // Under windows, mysql_install_db PERL script is named "mysql_install_db.pl"
-    initName = QLatin1String("mysql_install_db.pl");
-#endif
-
-#ifdef Q_OS_MAC
-    // Under MAC OSX, through macports project, mysql_install_db PERL script is named "mysql_install_db5"
-    initName = QLatin1String("mysql_install_db5");
-#endif
-
-    return initName;
+    return QLatin1String("mysql_install_db"); // For Linux, Windows and OSX
 }
 
 // --------------------------------

@@ -1,4 +1,4 @@
-/*
+/* 
    WF debanding code
    Copyright 2011 by Yan Vladimirovich
 
@@ -51,10 +51,10 @@ int LibRaw::wf_remove_banding()
 
 #define WF_MAXTRESHOLD 65536
 
-#define WF_BAYERSRC(row, col, c) ((ushort(*)[4])imgdata.image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
-#define WF_BAYERGAU(l, row, col) (gauss_pyramid[l])[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
-#define WF_BAYERDFG(l, row, col) (difwg_pyramid[l])[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
-
+#define WF_BAYERSRC(row, col, c) ((ushort(*)[4])imgdata.image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
+#define WF_BAYERGAU(l, row, col) (gauss_pyramid[l])[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)] 
+#define WF_BAYERDFG(l, row, col) (difwg_pyramid[l])[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)] 
+	
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
@@ -65,7 +65,7 @@ int LibRaw::wf_remove_banding()
 	if (S.width<128 || S.height<128)
 		return WF_DEBANDING_TOOSMALL;
 
-	// is 2x2 bayer?
+	// is 2x2 bayer? 
 
 	int bayer2x2flag=-1;
 
@@ -93,7 +93,7 @@ int LibRaw::wf_remove_banding()
 
 	width_d2  = S.width/2;
 	height_d2 = S.height/2;
-
+	
 	width_p1_d2  = (S.width+1)/2;
 	height_p1_d2 = (S.height+1)/2;
 
@@ -115,7 +115,7 @@ int LibRaw::wf_remove_banding()
 		int     row, row_p1;
 		ushort *src[4];
 		ushort *src_first, *src_plast, *src_last;
-
+		
 		row    = row_d2*2;
 		row_p1 = row+1;
 
@@ -151,12 +151,12 @@ int LibRaw::wf_remove_banding()
 	}
 
 	val_max=MAX(MAX(val_max_c[0], val_max_c[1]), MAX(val_max_c[2], val_max_c[3]));
-
+	
 	// end of searching max value
 
 	if (val_max==0)
 		return WF_DEBANDING_OK;
-
+		
 	int data_shift;
 	int data_mult;
 	int val_max_s;
@@ -168,10 +168,10 @@ int LibRaw::wf_remove_banding()
 	if (val_max_s >= (1 << 4)) { val_max_s >>= 4; data_shift -=  4; }
 	if (val_max_s >= (1 << 2)) { val_max_s >>= 2; data_shift -=  2; }
 	if (val_max_s >= (1 << 1)) {                  data_shift -=  1; }
-
+  
 	data_mult = 1<<data_shift;
 	val_max <<= data_shift;
-
+		
 	// Bit shift
 
 	for(int row_d2=0; row_d2<height_p1_d2; row_d2++)
@@ -179,7 +179,7 @@ int LibRaw::wf_remove_banding()
 		int     row, row_p1;
 		ushort *src[4];
 		ushort *src_first, *src_plast, *src_last;
-
+		
 		row    = row_d2*2;
 		row_p1 = row+1;
 
@@ -241,9 +241,9 @@ int LibRaw::wf_remove_banding()
 
 	wf_bayer4_block_filter (radius3x3,  gauss_pyramid[0], WF_IMGMODE_BAYER1PLANE, gauss_pyramid[1], WF_IMGMODE_BAYER1PLANE); // as gau r=24
 	wf_bayer4_block_filter (radius3x14, gauss_pyramid[0], WF_IMGMODE_BAYER1PLANE, gauss_pyramid[2], WF_IMGMODE_BAYER1PLANE); // as gau r=420
-	wf_bayer4_block_filter (radius3x45, gauss_pyramid[0], WF_IMGMODE_BAYER1PLANE, gauss_pyramid[3], WF_IMGMODE_BAYER1PLANE); // as gau r=4140
+	wf_bayer4_block_filter (radius3x45, gauss_pyramid[0], WF_IMGMODE_BAYER1PLANE, gauss_pyramid[3], WF_IMGMODE_BAYER1PLANE); // as gau r=4140 
 
-
+	
 	// Energy multiplyers for laplasyan pyramid
 
 	float dfg_mult[WF_GAUSS_PIRAMID_SIZE]={1.560976, 8.196011, 180.413773, 3601.427246/3.0};
@@ -271,7 +271,7 @@ int LibRaw::wf_remove_banding()
 		green_mode = WF_GREENMODE_XG_GX;
 	else
 		green_mode = WF_GREENMODE_IND;
-
+	
 	for(int l=0; l<WF_GAUSS_PIRAMID_SIZE; l++)
 	{
 		switch (green_mode)
@@ -283,7 +283,7 @@ int LibRaw::wf_remove_banding()
 
 				dfg_mlcc[l][1]=dfg_mlcc[l][2]=dfg_mult[l];
 				dfg_dmax[l][1]=dfg_dmax[l][2]=65535/dfg_mult[l];
-
+				
 				break;
 
 			case WF_GREENMODE_XG_GX:
@@ -293,14 +293,14 @@ int LibRaw::wf_remove_banding()
 
 				dfg_mlcc[l][0]=dfg_mlcc[l][3]=dfg_mult[l];
 				dfg_dmax[l][0]=dfg_dmax[l][3]=65535/dfg_mult[l];
-
+				
 				break;
-
+			
 			case WF_GREENMODE_IND:
 
 				dfg_mlcc[l][0]=dfg_mlcc[l][1]=dfg_mlcc[l][2]=dfg_mlcc[l][3]=dfg_mult[l];
 				dfg_dmax[l][0]=dfg_dmax[l][1]=dfg_dmax[l][2]=dfg_dmax[l][3]=65535/dfg_mult[l];
-
+				
 				break;
 		}
 	}
@@ -392,7 +392,7 @@ int LibRaw::wf_remove_banding()
 		}
 		while(1);
 	}
-
+	
 	int radius2x32 [3]={32, 32, 0};
 	int radius2x56 [3]={56, 56, 0};
 	int radius2x90 [3]={90, 90, 0};
@@ -556,7 +556,7 @@ int LibRaw::wf_remove_banding()
 
 	banding_col_i = (int(*)[4])calloc(height_p1_d2, sizeof(int)*4);
 	banding_row_i = (int(*)[4])calloc(width_p1_d2,  sizeof(int)*4);
-
+	
 	// cols
 
 	WF_i_1TO4 bsum[i]=bmean[i]=0;
@@ -572,7 +572,7 @@ int LibRaw::wf_remove_banding()
 		}
 
 	WF_i_1TO4 bmean[i]=bsum[i]/(i<2?height_d2:height_p1_d2);
-
+		
 	for(int row_d2=0; row_d2<height_p1_d2; row_d2++)
 		for(int i=0; i<4; i++)
 			banding_col_i[row_d2][i]=int(banding_col[row_d2][i]-bmean[i]);
@@ -603,7 +603,7 @@ int LibRaw::wf_remove_banding()
 		int     row, row_p1;
 		ushort *src[4];
 		ushort *src_first, *src_plast, *src_last;
-
+		
 		row    = row_d2*2;
 		row_p1 = row+1;
 
@@ -668,7 +668,7 @@ int LibRaw::wf_remove_banding()
 	free(banding_row_i);
 
 	free(tr_weight);
-
+	
 	free(banding_col);
 	free(banding_col_count);
 
@@ -687,11 +687,11 @@ int LibRaw::wf_remove_banding()
 
 double LibRaw::wf_filter_energy(int r1_greenmode, int r1, int r2_greenmode, int r2)
 {
-	/*
+	/* 
 		This function caclulates energy of laplasyan piramid level.
 		Laplasyan level is difference between two 2D gaussian (exactly, binominal) convolutions with radius r1 and r2
 		Convolution is done on bayer data, 4 channels, and if (greenmode), additive on green channel.
-
+	
 		Not optimized, because now it's used only for precalculations.
 	*/
 
@@ -728,7 +728,7 @@ double LibRaw::wf_filter_energy(int r1_greenmode, int r1, int r2_greenmode, int 
 		gau_kernel_rmin[i]=0;
 
 	gau_kernel_rmin[1]=1.0;
-
+				
 	for(int i=2; i<=rmin_x2_p1; i++)
 	{
 		for(int j=i; j>0; j--)
@@ -791,7 +791,7 @@ double LibRaw::wf_filter_energy(int r1_greenmode, int r1, int r2_greenmode, int 
 
 			energy_sum+=(wght_rmax-wght_rmin)*(wght_rmax-wght_rmin);
 		}
-
+		
 	}
 
 	return energy_sum;
@@ -799,7 +799,7 @@ double LibRaw::wf_filter_energy(int r1_greenmode, int r1, int r2_greenmode, int 
 
 void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, void* dst_image, int dst_imgmode)
 {
-	/*
+	/* 
 		This function filters green (or any "diagonal") channel of bayer4 data with "X" kernel,
 
 		1 1
@@ -807,9 +807,9 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 		1 1
 	*/
 
-#define WF_BAYERSRC4(row, col, c) ((ushort(*)[4])src_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
-#define WF_BAYERSRC1(row, col)    ((ushort*)src_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
-#define WF_BAYERDST4(row, col, c) ((ushort(*)[4])dst_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
+#define WF_BAYERSRC4(row, col, c) ((ushort(*)[4])src_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
+#define WF_BAYERSRC1(row, col)    ((ushort*)src_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)] 
+#define WF_BAYERDST4(row, col, c) ((ushort(*)[4])dst_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
 #define WF_BAYERDST1(row, col)    ((ushort*)dst_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
 
 	int green_mode;
@@ -840,8 +840,8 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 	long int *line_filtered;
 
 	line_filtered = (long int*) calloc(S.width, sizeof(*line_filtered));
-
-	ushort *src, *src_c, *src_u1, *src_u2, *src_d1, *src_d2, *dst_c, *src_ca, *dst_ca, *dst_rb;
+	
+	ushort *src, *src_c, *src_u1, *src_u2, *src_d1, *src_d2, *dst_c, *src_ca, *dst_ca, *dst_rb; 
 	int start_col, start_col_left, row_up, row_dn;
 
 	if ( green_mode != WF_GREENMODE_IND)
@@ -895,8 +895,8 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 			long int sum_l1, sum_l2;
 
 			sum_l1 = *src_u1 + *src_d1;
-			sum_l2 = *src_u2 + *src_d2;
-
+			sum_l2 = *src_u2 + *src_d2;			
+			
 			if (start_col == 0)
 			{
 				// Edges
@@ -904,7 +904,7 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 				line_filtered[start_col] = sum_l1 + sum_l2 + (*src_c)*4;
 
 				src_u2 += src_h_shift;
-				src_d2 += src_h_shift;
+				src_d2 += src_h_shift;				
 
 				sum_l2 = *src_u2 + *src_d2;
 
@@ -933,11 +933,11 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 				src_u2 += src_h_shift_x2;
 				src_d2 += src_h_shift_x2;
 
-				sum_l2 = *src_u2 + *src_d2;
+				sum_l2 = *src_u2 + *src_d2; 
 
 				src_c += src_h_shift;
 			}
-
+			
 			// Right edge
 
 			if      (col == S.width-1)
@@ -951,7 +951,7 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 			else if (col == S.width-3)
 			{
 				line_filtered[col] = sum_l1 + sum_l2 + 4*(*src_c);
-
+				
 				src_c += src_h_shift;
 				col+=2;
 
@@ -965,7 +965,7 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 					start_col = ( row+1 ) & 1;
 				else
 					start_col = row & 1;
-
+				
 
 				switch (dst_imgmode)
 				{
@@ -992,7 +992,7 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 						start_col = row & 1;
 					else
 						start_col = (row+1) & 1;
-
+					
 					switch (src_imgmode)
 					{
 						case WF_IMGMODE_BAYER1PLANE:
@@ -1029,7 +1029,7 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 			start_col = ( row+1 ) & 1;
 		else
 			start_col = row & 1;
-
+				
 
 		switch (dst_imgmode)
 		{
@@ -1051,12 +1051,12 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 		if (src_image != dst_image)
 		{
 			// copy red or blue channel
-
+			
 			if ( green_mode == WF_GREENMODE_GX_XG )
 				start_col = row & 1;
 			else
 				start_col = (row+1) & 1;
-
+				
 			switch (src_imgmode)
 			{
 				case WF_IMGMODE_BAYER1PLANE:
@@ -1073,12 +1073,12 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 				case WF_IMGMODE_BAYER1PLANE:
 					dst_rb  = &WF_BAYERDST1(row-1, start_col);
 					break;
-
+				
 				case WF_IMGMODE_BAYER4PLANE:
 					dst_rb  = &WF_BAYERDST4(row-1, start_col, FC(row-1, start_col));
 					break;
 			}
-
+			
 			for (col=start_col;  col<S.width; col+=2)
 			{
 				*dst_rb=*src;
@@ -1093,13 +1093,13 @@ void LibRaw::wf_bayer4_green_blur(int mode, void* src_image, int src_imgmode, vo
 
 void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmode, void* dst_image, int dst_imgmode)
 {
-	/*
+	/* 
 	   This function filter source bayer4 data with gauss (binominal), 4 channels independently.
 	*/
-
-#define WF_BAYERSRC4(row, col, c) ((ushort(*)[4])src_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
-#define WF_BAYERSRC1(row, col)    ((ushort*)src_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
-#define WF_BAYERDST4(row, col, c) ((ushort(*)[4])dst_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
+	   
+#define WF_BAYERSRC4(row, col, c) ((ushort(*)[4])src_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
+#define WF_BAYERSRC1(row, col)    ((ushort*)src_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)] 
+#define WF_BAYERDST4(row, col, c) ((ushort(*)[4])dst_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
 #define WF_BAYERDST1(row, col)    ((ushort*)dst_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
 
 	if (radius <= 0 || radius > 8)
@@ -1109,7 +1109,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 
 	long int gauss_conv_kernel[9][4];
 
-	long int gauss_conv_kernel_c[8][9] =
+	long int gauss_conv_kernel_c[8][9] = 
 	{
 		{32768, 16384},
 		{24576, 16384, 4096},
@@ -1160,7 +1160,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 	ushort   *src  [4], *dst[4];
 	long int  src_c[4];
 
-	// Horizontal
+	// Horizontal 
 
 	int right_edge[4];
 
@@ -1169,7 +1169,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 		int padding = i<2 && (S.width & 1) ? 1 : 0;
 		right_edge[i]=width_d2 + radius + padding;
 	}
-
+	
 	for(row=0; row<S.height; row+=2)
 	{
 		int row_p1=MIN(row+1, S.height-1);
@@ -1200,7 +1200,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 			for(i=0;i<4;i++)
 				line_filtered[j][i]=0;
 		}
-
+		
 		for(col=0; col<S.width-1; col+=2)
 		{
 
@@ -1218,7 +1218,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 			{
 				col1++;
 				col2--;
-
+			
 				for (i=0; i<4; i++)
 				{
 					long int g;
@@ -1254,7 +1254,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 			{
 				col1++;
 				col2--;
-
+			
 				for (i=0; i<2; i++)
 				{
 					long int g;
@@ -1282,11 +1282,11 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 				line_filtered[right_edge[i]-1-j][i]+=line_filtered[right_edge[i]+j][i];
 			}
 		}
-
+		
 		switch (dst_imgmode)
 		{
 			case WF_IMGMODE_BAYER1PLANE:
-
+			
 				dst[0] = &WF_BAYERDST1(row,    0);
 				dst[1] = &WF_BAYERDST1(row_p1, 0);
 				dst[2] = &WF_BAYERDST1(row,    1);
@@ -1294,7 +1294,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 				break;
 
 			case WF_IMGMODE_BAYER4PLANE:
-
+		
 				dst[0] = &WF_BAYERDST4(row,    0, FC(0,      0));
 				dst[1] = &WF_BAYERDST4(row_p1, 0, FC(row_p1, 0));
 				dst[2] = &WF_BAYERDST4(row,    1, FC(0,      1));
@@ -1336,7 +1336,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 
 	for(col=0; col<S.width; col+=2)
 	{
-		int col_p1=MIN(col+1, S.width-1);
+		int col_p1=MIN(col+1, S.width-1);	
 
 		switch (dst_imgmode)
 		{
@@ -1364,7 +1364,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 			for(i=0;i<4;i++)
 				line_filtered[j][i]=0;
 		}
-
+		
 		for(row=0; row<S.height-1; row+=2)
 		{
 
@@ -1382,7 +1382,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 			{
 				row1++;
 				row2--;
-
+			
 				long int g[4];
 
 				for (i=0; i<4; i++)
@@ -1419,7 +1419,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 			{
 				row1++;
 				row2--;
-
+			
 				long int g[4];
 
 				for (i=0; i<2; i++)
@@ -1453,7 +1453,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 		switch (dst_imgmode)
 		{
 			case WF_IMGMODE_BAYER1PLANE:
-
+			
 				dst[0] = &WF_BAYERDST1(0, col);
 				dst[1] = &WF_BAYERDST1(0, col_p1);
 				dst[2] = &WF_BAYERDST1(1, col);
@@ -1461,7 +1461,7 @@ void LibRaw::wf_bayer4_igauss_filter(int radius, void* src_image, int src_imgmod
 				break;
 
 			case WF_IMGMODE_BAYER4PLANE:
-
+		
 				dst[0] = &WF_BAYERDST4(0, col,    FC(0, 0));
 				dst[1] = &WF_BAYERDST4(0, col_p1, FC(0, col_p1));
 				dst[2] = &WF_BAYERDST4(1, col,    FC(1, 0));
@@ -1496,14 +1496,14 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 {
 #define WF_BLOCKFILTER_MAXF 8
 
-#define WF_BAYERSRC4(row,col,c) ((ushort(*)[4])src_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
-#define WF_BAYERSRC1(row,col)   ((ushort*)src_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
-#define WF_BAYERDST4(row,col,c) ((ushort(*)[4])dst_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c]
-#define WF_BAYERDST1(row,col)   ((ushort*)dst_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)]
+#define WF_BAYERSRC4(row,col,c) ((ushort(*)[4])src_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
+#define WF_BAYERSRC1(row,col)   ((ushort*)src_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)] 
+#define WF_BAYERDST4(row,col,c) ((ushort(*)[4])dst_image)[((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)][c] 
+#define WF_BAYERDST1(row,col)   ((ushort*)dst_image)     [((row) >> IO.shrink)*S.iwidth + ((col) >> IO.shrink)] 
 
 	int filter_itrtns_num = 0;
-
-	int block_radius      [WF_BLOCKFILTER_MAXF];
+	
+	int block_radius      [WF_BLOCKFILTER_MAXF]; 
 	int block_radius_x2   [WF_BLOCKFILTER_MAXF];
 	int block_radius_x2_p1[WF_BLOCKFILTER_MAXF];
 
@@ -1545,20 +1545,20 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 
 	block_radius_max_x2    = block_radius_max*2;
 	block_radius_max_x2_p1 = block_radius_max_x2+1;
-
+	
 	int line_memory_len;
 
 	long int (*source_line)[4];
 	long int (*line_block_filtered)[4];
-
+ 
 	line_memory_len = (MAX(S.height, S.width)+1)/2+block_radius_max_x2_p1*2;
 
 	line_block_filtered=(long int(*)[4]) calloc(line_memory_len, sizeof(long int[4]));
 	source_line        =(long int(*)[4]) calloc(line_memory_len, sizeof(long int[4]));
-
+	
 
    	int   src_h_shift, dst_h_shift, src_v_shift, dst_v_shift;
-
+ 
 	if      (src_imgmode == WF_IMGMODE_BAYER1PLANE)
 		src_h_shift = 2 >> IO.shrink;
 	else if (src_imgmode == WF_IMGMODE_BAYER4PLANE)
@@ -1583,7 +1583,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 
 	long int  (*src_plus)[4], (*src_minus)[4];
 	long int  block_sum[4];
-
+	
 	int row, col;
 
 	int right_edge[4], lower_edge[4];
@@ -1620,15 +1620,15 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 			}
 		}
 
-		if (S.width & 1 == 1)
+		if ((S.width & 1) == 1)
 		{
 			for (int i=0; i<2; i++)
-			{
+			{		   
 				source_line[width_d2][i]=*src[i];
 			}
 
 			for (int i=2; i<4; i++)
-			{
+			{		   
 				source_line[width_d2][i]=0;
 			}
 		}
@@ -1654,7 +1654,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 			for(col=block_radius_x2_p1[f]; col<width_p1_d2; col++)
 			{
 				for (int i=0; i<4; i++)
-				{
+				{		   
 					block_sum[i]+=(*src_plus)[i];
 					block_sum[i]-=(*src_minus)[i];
 					line_block_filtered[col][i]=block_sum[i];
@@ -1679,7 +1679,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 
 			for (int i=0; i<4; i++)
 			{
-				int padding = i<2 && (S.width & 1 == 1) ? 1 : 0;
+				int padding = i<2 && ((S.width & 1) == 1) ? 1 : 0;
 				right_edge[i]=width_d2 + block_radius[f] + padding;
 			}
 
@@ -1700,7 +1700,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 						source_line[col][i]=line_block_filtered[col+block_radius[f]][i];
 				}
 
-				if (S.width & 1 == 1)
+				if ((S.width & 1) == 1)
 				{
 					for (int i=0; i<2; i++)
 						source_line[width_d2][i]=line_block_filtered[width_d2+block_radius[f]][i];
@@ -1717,7 +1717,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 						source_line[col][i]=line_block_filtered[col+block_radius[f]][i]/divider[f];
 				}
 
-				if (S.width & 1 == 1)
+				if ((S.width & 1) == 1)
 				{
 					for (int i=0; i<2; i++)
 						source_line[width_d2][i]=line_block_filtered[width_d2+block_radius[f]][i]/divider[f];
@@ -1750,13 +1750,13 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 		for(col=0; col<width_d2; col++)
 		{
 			for (int i=0; i<4; i++)
-			{
+			{		   
 				*dst[i]=source_line[col][i];
 				dst[i]+=dst_h_shift;
 			}
 		}
 
-		if (S.width & 1 == 1)
+		if ((S.width & 1) == 1)
 		{
 			for (int i=0; i<2; i++)
 				*dst[i]=source_line[col][i];
@@ -1794,16 +1794,16 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 				src[i] += dst_v_shift;
 			}
 		}
-
-		if (S.height & 1 == 1)
+		
+		if ((S.height & 1) == 1)
 		{
 			for (int i=0; i<2; i++)
-			{
+			{		   
 				source_line[height_d2][i]=*src[i];
 			}
 
 			for (int i=2; i<4; i++)
-			{
+			{		   
 				source_line[height_d2][i]=0;
 			}
 		}
@@ -1829,7 +1829,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 			for(row=block_radius_x2_p1[f]; row<height_p1_d2; row++)
 			{
 				for (int i=0; i<4; i++)
-				{
+				{		   
 					block_sum[i]+=(*src_plus)[i];
 					block_sum[i]-=(*src_minus)[i];
 					line_block_filtered[row][i]=block_sum[i];
@@ -1854,7 +1854,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 
 			for (int i=0; i<4; i++)
 			{
-				int padding = (i<2) && (S.height & 1 == 1) ? 1 : 0;
+				int padding = (i<2) && ((S.height & 1) == 1) ? 1 : 0;
 				lower_edge[i]=height_d2 + block_radius[f] + padding;
 			}
 
@@ -1875,7 +1875,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 						source_line[row][i]=line_block_filtered[row+block_radius[f]][i];
 				}
 
-				if (S.height & 1 == 1)
+				if ((S.height & 1) == 1)
 				{
 					for (int i=0; i<2; i++)
 						source_line[height_d2][i]=line_block_filtered[height_d2+block_radius[f]][i];
@@ -1892,7 +1892,7 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 						source_line[row][i]=line_block_filtered[row+block_radius[f]][i]/divider[f];
 				}
 
-				if (S.height & 1 == 1)
+				if ((S.height & 1) == 1)
 				{
 					for (int i=0; i<2; i++)
 						source_line[height_d2][i]=line_block_filtered[height_d2+block_radius[f]][i]/divider[f];
@@ -1925,13 +1925,13 @@ void LibRaw::wf_bayer4_block_filter(int* radius_list, void* src_image, int src_i
 		for(row=0; row<height_d2; row++)
 		{
 			for (int i=0; i<4; i++)
-			{
+			{		   
 				*dst[i]=source_line[row][i];
 				dst[i]+=dst_v_shift;
 			}
 		}
 
-		if (S.height & 1 == 1)
+		if ((S.height & 1) == 1)
 		{
 			for (int i=0; i<2; i++)
 				*dst[i]=source_line[height_d2][i];

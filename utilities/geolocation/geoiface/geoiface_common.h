@@ -112,9 +112,9 @@ public:
 
     /// @name Shared pixmaps
     //@{
-    QPixmap getMarkerPixmap(const QString pixmapId);
+    QPixmap getMarkerPixmap(const QString& pixmapId);
     QPixmap getStandardMarkerPixmap();
-    QUrl    locateDataFile(const QString filename);
+    QUrl    locateDataFile(const QString& filename);
     //@}
 
     /// @name Shared internal map widgets

@@ -104,7 +104,7 @@ bool DTrash::deleteDirRecursivley(const QString& dirToDelete)
     return srcDir.removeRecursively();
 }
 
-void DTrash::extractJsonForItem(const QString &collPath, const QString &baseName, DTrashItemInfo &itemInfo)
+void DTrash::extractJsonForItem(const QString& collPath, const QString& baseName, DTrashItemInfo& itemInfo)
 {
     QString jsonFilePath = collPath + QLatin1Char('/') + TRASH_FOLDER +
                            QLatin1Char('/') + INFO_FOLDER + QLatin1Char('/') +

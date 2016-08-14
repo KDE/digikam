@@ -86,7 +86,7 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     d->binariesWidget->addBinary(d->mngr->alignBinary());
     d->binariesWidget->addBinary(d->mngr->enfuseBinary());
 
-#ifdef Q_OS_MAC
+#ifdef Q_OS_OSX
     d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));    // Hugin bundle PKG install
     d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
     d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install

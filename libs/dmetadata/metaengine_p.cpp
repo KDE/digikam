@@ -118,7 +118,7 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
 {
     if (!finfo.isWritable())
     {
-        qCDebug(DIGIKAM_METAENGINE_LOG) << "File '" << finfo.fileName().toLatin1().constData() << "' is read only. Metadata not written.";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "File" << finfo.fileName() << "is read only. Metadata not written.";
         return false;
     }
 

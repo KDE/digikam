@@ -101,7 +101,7 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
 
     QPixmap thumbnail;
     ThumbnailIdentifier thumbId;
-    thumbId.filePath = currentGPSImageInfo.url.path();
+    thumbId.filePath = currentGPSImageInfo.url.toLocalFile();
     thumbId.id       = currentGPSImageInfo.id;
 
     if (d->thumbnailLoadThread->find(thumbId, thumbnail, qMax(size.width(), size.height())))
@@ -148,7 +148,7 @@ void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingD
         const QStandardItem* const item        = static_cast<QStandardItem*>(d->itemModel->item(i));
         const GPSImageInfo currentGPSImageInfo = item->data(RoleGPSImageInfo).value<GPSImageInfo>();
 
-        if (currentGPSImageInfo.url.path() == loadingDescription.filePath)
+        if (currentGPSImageInfo.url.toLocalFile() == loadingDescription.filePath)
         {
             const QPersistentModelIndex goodIndex(d->itemModel->index(i,0));
 

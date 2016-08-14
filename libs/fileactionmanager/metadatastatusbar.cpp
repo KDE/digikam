@@ -81,8 +81,8 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     d->info->setFocusPolicy(Qt::NoFocus);
     d->info->setAdjustedText(i18n("No pending metadata synchronization"));
 
-    d->info->setWhatsThis(i18n("If lazy syncronization is enabled in metadata settings, "
-                               "the status bar will display the number of items waiting for syncronization"));
+    d->info->setWhatsThis(i18n("If lazy synchronization is enabled in metadata settings, "
+                               "the status bar will display the number of items waiting for synchronization"));
 
     d->applyBtn    = new QToolButton(this);
     d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
@@ -134,8 +134,8 @@ void MetadataStatusBar::slotSetPendingItems(int number)
     }
     else
     {
-        d->info->setAdjustedText(i18np("1 file awaits syncronization",
-                                       "%1 files await syncronization",
+        d->info->setAdjustedText(i18np("1 file awaits synchronization",
+                                       "%1 files await synchronization",
                                        number));
         d->applyBtn->setDisabled(false);
     }

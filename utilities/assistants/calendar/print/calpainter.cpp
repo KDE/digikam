@@ -35,15 +35,16 @@
 #include <QString>
 #include <QUrl>
 #include <QImage>
+#include <QLocale>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "calsettings.h"
+#include "calsystem.h"
 #include "digikam_debug.h"
 #include "metaengine.h"
 #include "dimg.h"
@@ -110,23 +111,22 @@ void CalPainter::paint(int month)
 
     // FIXME: magic number 42
     int days[42];
-    int startDayOffset = KLocale::global()->weekStartDay();
+    int startDayOffset = QLocale().weekdays().first();
 
     for (int i = 0; i < 42; ++i)
     {
         days[i] = -1;
     }
 
-    QDate date;
-    KLocale::global()->calendar()->setDate(date, params.year, month, 1);
-    int s = date.dayOfWeek();
+    QDate date = CalSystem().date(params.year, month, 1);
+    int s      = date.dayOfWeek();
 
     if (s + 7 - startDayOffset >= 7)
     {
         s = s - 7;
     }
 
-    for (int i = s; i < (s + KLocale::global()->calendar()->daysInMonth(date)); ++i)
+    for (int i = s; i < (s + CalSystem().daysInMonth(date)); ++i)
     {
         days[i + (7 - startDayOffset)] = i - s + 1;
     }
@@ -226,8 +226,7 @@ void CalPainter::paint(int month)
     f.setPixelSize(f.pixelSize() + 5);
     setFont(f);
     drawText(rCalHeader, Qt::AlignLeft | Qt::AlignVCenter, QString::number(params.year));
-    drawText(rCalHeader, Qt::AlignRight | Qt::AlignVCenter,
-             KLocale::global()->calendar()->monthName(month, params.year));
+    drawText(rCalHeader, Qt::AlignRight | Qt::AlignVCenter, QLocale().monthName(month));
     restore();
 
     // ---------------------------------------------------------------
@@ -259,8 +258,7 @@ void CalPainter::paint(int month)
         rsmall = r;
         rsmall.setWidth(r.width() - 2);
         rsmall.setHeight(r.height() - 2);
-        drawText(rsmall, Qt::AlignRight | Qt::AlignBottom,
-                 KLocale::global()->calendar()->weekDayName(dayname, KCalendarSystem::ShortDayName));
+        drawText(rsmall, Qt::AlignRight | Qt::AlignBottom, QLocale().dayName(dayname, QLocale::ShortFormat));
     }
 
     restore();
@@ -287,9 +285,11 @@ void CalPainter::paint(int month)
                              QString::number(days[index]));
 
                     QString descr = settings->getDayDescr(month, days[index]);
+
                     qCDebug(DIGIKAM_GENERAL_LOG) << "Painting special info: '" << descr
                              << "' for date " << days[index] << "/"
                              << month;
+
                     rSpecial = rsmall;
                     rSpecial.translate(2, 0);
                     QFont f(params.baseFont);

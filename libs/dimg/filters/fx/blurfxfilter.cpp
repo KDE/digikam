@@ -1625,12 +1625,12 @@ DColor BlurFXFilter::RandomColor(uchar* const Bits, int Width, int Height, bool 
             count += IntensityCount[Index];
             ++Index;
         }
-        while (count < RandNumber && runningFlag());
+        while (runningFlag() && (count < RandNumber));
 
         J = Index - 1;
         ++ErrorCount;
     }
-    while ((IntensityCount[J] == 0) && (ErrorCount <= counter)  && runningFlag());
+    while (runningFlag() && (IntensityCount[J] == 0) && (ErrorCount <= counter));
 
     if (!runningFlag())
     {

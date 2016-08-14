@@ -60,7 +60,6 @@
 #include "albummanager.h"
 #include "album.h"
 #include "coredbschemaupdater.h"
-#include "splashscreen.h"
 
 namespace Digikam
 {
@@ -109,7 +108,6 @@ public:
         relaxedTimer(0),
         hints(CollectionScanner::createHintContainer()),
         progressDialog(0),
-        splash(0),
         advice(ScanController::Success),
         needTotalFiles(false),
         totalFilesToScan(0)
@@ -154,8 +152,6 @@ public:
     QDateTime                       lastHintAdded;
 
     DProgressDlg*                   progressDialog;
-
-    SplashScreen*                   splash;
 
     ScanController::Advice          advice;
 
@@ -362,7 +358,7 @@ void ScanController::slotShowProgressDialog()
 {
     if (d->progressDialog)
     {
-        if (!d->splash || !CollectionScanner::databaseInitialScanDone())
+        //if (!CollectionScanner::databaseInitialScanDone())
         {
             d->progressDialog->show();
         }
@@ -399,9 +395,9 @@ ScanController::Advice ScanController::databaseInitialization()
     return d->advice;
 }
 
-void ScanController::completeCollectionScanDeferFiles(SplashScreen* const splash)
+void ScanController::completeCollectionScanDeferFiles()
 {
-    completeCollectionScan(splash, true);
+    completeCollectionScan(true);
 }
 
 void ScanController::allowToScanDeferredFiles()
@@ -411,19 +407,16 @@ void ScanController::allowToScanDeferredFiles()
     d->condVar.wakeAll();
 }
 
-void ScanController::completeCollectionScan(SplashScreen* const splash, bool defer)
+void ScanController::completeCollectionScan(bool defer)
 {
-    d->splash = splash;
     createProgressDialog();
 
     // we only need to count the files in advance
     // if we show a progress percentage in progress dialog
-    completeCollectionScanCore(!d->splash || !CollectionScanner::databaseInitialScanDone(), defer);
+    completeCollectionScanCore(!CollectionScanner::databaseInitialScanDone(), defer);
 
     delete d->progressDialog;
     d->progressDialog = 0;
-    // We do not delete Splashscreen here.
-    d->splash         = 0;
 }
 
 void ScanController::completeCollectionScanInBackground(bool defer)
@@ -814,11 +807,6 @@ void ScanController::slotStartCompleteScan()
 
     QString message     = i18n("Preparing collection scan...");
 
-    if (d->splash)
-    {
-        d->splash->message(message);
-    }
-
     if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->restartPixmap(), message);
@@ -861,11 +849,7 @@ void ScanController::slotStartScanningForStaleAlbums()
 {
     QString message = i18n("Scanning for removed albums...");
 
-    if (d->splash)
-    {
-        d->splash->message(message);
-    }
-    else if (d->progressDialog)
+    if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->actionPixmap(), message);
     }
@@ -875,11 +859,7 @@ void ScanController::slotStartScanningAlbumRoots()
 {
     QString message = i18n("Scanning images in individual albums...");
 
-    if (d->splash)
-    {
-        d->splash->message(message);
-    }
-    else if (d->progressDialog)
+    if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->actionPixmap(), message);
     }
@@ -904,11 +884,7 @@ void ScanController::slotProgressFromInitialization(const QString& message, int 
 {
     // main thread
 
-    if (d->splash)
-    {
-        d->splash->message(message);
-    }
-    else if (d->progressDialog)
+    if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->actionPixmap(), message);
         d->progressDialog->advance(numberOfSteps);
@@ -952,11 +928,7 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
     // main thread
     QString message = i18n("Error");
 
-    if (d->splash)
-    {
-        d->splash->message(message);
-    }
-    else if (d->progressDialog)
+    if (d->progressDialog)
     {
         d->progressDialog->addedAction(d->errorPixmap(), message);
     }
@@ -967,11 +939,6 @@ void ScanController::slotErrorFromInitialization(const QString& errorMessage)
 void ScanController::setInitializationMessage()
 {
     QString message = i18n("Initializing database...");
-
-    if (d->splash)
-    {
-        d->splash->message(message);
-    }
 
     if (d->progressDialog)
     {

@@ -25,7 +25,7 @@
 
 #!/bin/bash
 
-for f in `find -iname \*`; do
+for f in `find . -iname \*`; do
     if file $f | grep "CRLF"
     then
         echo "Patched EOL of file: $f"

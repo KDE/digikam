@@ -1089,13 +1089,25 @@ void AbstractAlbumTreeView::contextMenuEvent(QContextMenuEvent* event)
 
     Album* const album = albumFilterModel()->albumForIndex(indexAt(event->pos()));
 
+    if (!album)
+    {
+        return;
+    }
+
+    if (album->isTrashAlbum())
+    {
+        // For the moment, disabling context menu for trash.
+        // TODO : customize it.
+        return;
+    }
+
     if (!showContextMenuAt(event, album))
     {
         return;
     }
 
     // switch to the selected album if need
-    if (d->selectOnContextMenu && album)
+    if (d->selectOnContextMenu)
     {
         setCurrentAlbums(QList<Album*>() << album);
     }

@@ -68,7 +68,7 @@ public:
         sortOrderComboBox(0),
         applicationStyle(0),
         iconTheme(0),
-        settings(0)
+        settings(ShowfotoSettings::instance())
     {
     }
 
@@ -100,8 +100,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // -- Misc Options --------------------------------------------------------
@@ -128,12 +127,17 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
 
-    QStringList styleList = QStyleFactory::keys();
+    QStringList styleList     = QStyleFactory::keys();
 
-    for (int i = 0; i < styleList.count(); ++i)
+    for (int i = 0; i < styleList.count(); i++)
     {
         d->applicationStyle->addItem(styleList.at(i));
     }
+
+#ifndef Q_OS_LINUX
+    // See Bug #365262
+    appStyleHbox->setVisible(false);
+#endif
 
     DHBox* const iconThemeHbox = new DHBox(panel);
     d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
@@ -215,8 +219,6 @@ SetupMisc::~SetupMisc()
 
 void SetupMisc::readSettings()
 {
-    d->settings = ShowfotoSettings::instance();
-
     d->itemCenter->setChecked(d->settings->getItemCenter());
     d->showSplash->setChecked(d->settings->getShowSplash());
     d->showMimeOverImage->setChecked(d->settings->getShowFormatOverThumbnail());
@@ -224,7 +226,9 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
     d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
     d->sortReverse->setChecked(d->settings->getReverseSort());
+#ifdef Q_OS_LINUX
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle(), Qt::MatchFixedString));
+#endif
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(d->settings->getIconTheme()));
 }
 
@@ -237,7 +241,9 @@ void SetupMisc::applySettings()
     d->settings->setRightSideBarStyle(d->sidebarType->currentIndex());
     d->settings->setSortRole(d->sortOrderComboBox->currentIndex());
     d->settings->setReverseSort(d->sortReverse->isChecked());
+#ifdef Q_OS_LINUX
     d->settings->setApplicationStyle(d->applicationStyle->currentText());
+#endif
     d->settings->setIconTheme(d->iconTheme->currentData().toString());
     d->settings->syncConfig();
 }

@@ -29,17 +29,19 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kcalendarsystem.h>
-
-// KCalCore includes
-
-#include <kcalcore/icalformat.h>
-#include <kcalcore/filestorage.h>
-#include <kcalcore/memorycalendar.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "calsystem.h"
+
+// KCalCore includes
+
+#ifdef HAVE_KCALENDAR
+#   include <kcalcore/icalformat.h>
+#   include <kcalcore/filestorage.h>
+#   include <kcalcore/memorycalendar.h>
+#endif // HAVE_KCALENDAR
 
 namespace Digikam
 {
@@ -62,7 +64,7 @@ CalSettings::CalSettings(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
-    params.year = KLocale::global()->calendar()->earliestValidDate().year() + 1;
+    params.year = CalSystem().earliestValidDate().year() + 1;
     setPaperSize(QString::fromLatin1("A4"));
     setResolution(QString::fromLatin1("High"));
     setImagePos(0);
@@ -223,6 +225,66 @@ void CalSettings::addSpecial(const QDate& date, const Day& info)
     }
 }
 
+bool CalSettings::isPrayDay(const QDate& date) const
+{
+    return (date.dayOfWeek() == Qt::Sunday);
+}
+
+/*!
+ * \returns true if d->special formatting is to be applied to the particular day
+ */
+bool CalSettings::isSpecial(int month, int day) const
+{
+    QDate dt = CalSystem().date(params.year, month, day);
+
+    return (isPrayDay(dt) || d->special.contains(dt));
+}
+
+/*!
+ * \returns the color to be used for painting of the day info
+ */
+QColor CalSettings::getDayColor(int month, int day) const
+{
+    QDate dt = CalSystem().date(params.year, month, day);
+
+    if (isPrayDay(dt))
+    {
+        return Qt::red;
+    }
+
+    if (d->special.contains(dt))
+    {
+        return d->special[dt].first;
+    }
+
+    //default
+    return Qt::black;
+}
+
+/*!
+ * \returns the description of the day to be painted on the calendar.
+ */
+QString CalSettings::getDayDescr(int month, int day) const
+{
+    QDate dt = CalSystem().date(params.year, month, day);
+
+    QString ret;
+
+    if (d->special.contains(dt))
+    {
+        ret = d->special[dt].second;
+    }
+
+    return ret;
+}
+
+QPrinter::PrinterMode CalSettings::resolution() const
+{
+    return params.printResolution;
+}
+
+#ifdef HAVE_KCALENDAR
+
 void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 {
     if (url.isEmpty())
@@ -232,9 +294,9 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     }
 
     KCalCore::MemoryCalendar::Ptr memCal(new KCalCore::MemoryCalendar(QString::fromLatin1("UTC")));
-    KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.path(), new KCalCore::ICalFormat));
+    KCalCore::FileStorage::Ptr fileStorage(new KCalCore::FileStorage(memCal, url.toLocalFile(), new KCalCore::ICalFormat));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.path();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Loading calendar from file " << url.toLocalFile();
 
     if (!fileStorage->load())
     {
@@ -242,10 +304,13 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     }
     else
     {
-        QDate qFirst, qLast;
-        KLocale::global()->calendar()->setDate(qFirst, params.year, 1, 1);
-        KLocale::global()->calendar()->setDate(qLast, params.year + 1, 1, 1);
-        qLast = qLast.addDays(-1);
+        CalSystem calSys;
+        QDate     qFirst, qLast;
+
+        qFirst = calSys.date(params.year, 1, 1);
+        qLast  = calSys.date(params.year + 1, 1, 1);
+        qLast  = qLast.addDays(-1);
+
         KDateTime dtFirst(qFirst);
         KDateTime dtLast(qLast);
         KDateTime dtCurrent;
@@ -260,7 +325,7 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
 
             if (event->recurs())
             {
-                KCalCore::Recurrence* recur = event->recurrence();
+                KCalCore::Recurrence* const recur = event->recurrence();
 
                 for (dtCurrent = recur->getNextDateTime(dtFirst.addDays(-1));
                      (dtCurrent <= dtLast) && dtCurrent.isValid();
@@ -281,65 +346,6 @@ void CalSettings::loadSpecial(const QUrl& url, const QColor& color)
     }
 }
 
-bool CalSettings::isPrayDay(const QDate& date) const
-{
-    return (date.dayOfWeek() == KLocale::global()->weekDayOfPray());
-}
-
-/*!
-    \returns true if d->special formatting is to be applied to the particular day
- */
-bool CalSettings::isSpecial(int month, int day) const
-{
-    QDate dt;
-    KLocale::global()->calendar()->setDate(dt, params.year, month, day);
-
-    return (isPrayDay(dt) || d->special.contains(dt));
-}
-
-/*!
-    \returns the color to be used for painting of the day info
- */
-QColor CalSettings::getDayColor(int month, int day) const
-{
-    QDate dt;
-    KLocale::global()->calendar()->setDate(dt, params.year, month, day);
-
-    if (isPrayDay(dt))
-    {
-        return Qt::red;
-    }
-
-    if (d->special.contains(dt))
-    {
-        return d->special[dt].first;
-    }
-
-    //default
-    return Qt::black;
-}
-
-/*!
-    \returns the description of the day to be painted on the calendar.
- */
-QString CalSettings::getDayDescr(int month, int day) const
-{
-    QDate dt;
-    KLocale::global()->calendar()->setDate(dt, params.year, month, day);
-
-    QString ret;
-
-    if (d->special.contains(dt))
-    {
-        ret = d->special[dt].second;
-    }
-
-    return ret;
-}
-
-QPrinter::PrinterMode CalSettings::resolution() const
-{
-    return params.printResolution;
-}
+#endif // HAVE_KCALENDAR
 
 }  // Namespace Digikam

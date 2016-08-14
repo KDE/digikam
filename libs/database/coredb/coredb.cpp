@@ -60,6 +60,7 @@ extern "C"
 #include "collectionlocation.h"
 #include "dbengineactiontype.h"
 #include "tagscache.h"
+#include "album.h"
 
 namespace Digikam
 {
@@ -573,11 +574,13 @@ void CoreDB::makeStaleAlbum(int albumID)
     }
 
     // now do our update
+    d->db->setForeignKeyChecks(false);
     d->db->execSql(QString::fromUtf8("UPDATE Albums SET albumRoot=0, relativePath=? WHERE id=?;"),
                    newRelativePath, albumID);
 
     // for now, we make no distinction to deleteAlbums wrt to changeset
     d->db->recordChangeset(AlbumChangeset(albumID, AlbumChangeset::Deleted));
+    d->db->setForeignKeyChecks(true);
 }
 
 void CoreDB::deleteStaleAlbums()
@@ -627,6 +630,17 @@ int CoreDB::addTag(int parentTagID, const QString& name, const QString& iconKDE,
 
     d->db->recordChangeset(TagChangeset(id.toInt(), TagChangeset::Added));
     return id.toInt();
+}
+
+void CoreDB::moveTag(TAlbum* /*parentTagID*/)
+{
+    d->db->execSql(QString::fromUtf8("LOCK TABLE Tags WRITE;"));
+    d->db->execSql(QString::fromUtf8("SELECT @myLeft := lft FROM Tags WHERE id = :parentTagID;"));
+    d->db->execSql(QString::fromUtf8("SELECT @myLeft := IF (@myLeft is null, 0, @myLeft);"));
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET rgt = rgt + 2 WHERE rgt > @myLeft;"));
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = lft + 2 WHERE lft > @myLeft;"));
+    d->db->execSql(QString::fromUtf8("UPDATE Tags SET lft = @myLeft + 1, rgt = @myLeft + 2 WHERE pid = :parentTagID;"));
+    d->db->execSql(QString::fromUtf8("UNLOCK TABLES;"));
 }
 
 void CoreDB::deleteTag(int tagID)
@@ -2130,7 +2144,7 @@ QList<qlonglong> CoreDB::findByNameAndCreationDate(const QString& fileName, cons
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                   " INNER JOIN ImageInformation ON id=imageid "
+                   " LEFT JOIN ImageInformation ON id=imageid "
                    "WHERE name=? AND creationDate=? AND status!=3;"),
                    fileName, creationDate.toString(Qt::ISODate), &values);
 

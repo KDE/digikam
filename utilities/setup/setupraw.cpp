@@ -179,7 +179,7 @@ SetupRaw::~SetupRaw()
 
 void SetupRaw::slotSixteenBitsImageToggled(bool)
 {
-    // Dcraw do not provide a way to set brightness of image in 16 bits color depth.
+    // Linraw provide a way to set brightness of image in 16 bits color depth.
     // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
     d->dcrawSettings->setEnabledBrightnessSettings(true);
 }

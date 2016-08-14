@@ -91,8 +91,6 @@
 #include "imageinfo.h"
 #include "imagegps.h"
 #include "imagelistmodel.h"
-#include "imageplugin.h"
-#include "imagepluginloader.h"
 #include "imagepropertiessidebardb.h"
 #include "imagepropertiesversionstab.h"
 #include "imagescanner.h"
@@ -162,13 +160,9 @@ ImageWindow::ImageWindow()
     setupActions();
     setupStatusBar();
     createGUI(xmlFile());
+    cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080
-
-    // Load image plugins to GUI
-
-    m_imagePluginLoader = ImagePluginLoader::instance();
-    loadImagePlugins();
 
     // Create tool selection view
 
@@ -204,8 +198,6 @@ ImageWindow::ImageWindow()
 ImageWindow::~ImageWindow()
 {
     m_instance = 0;
-
-    unLoadImagePlugins();
 
     delete d->rightSideBar;
     delete d->thumbBar;
@@ -600,7 +592,7 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 
     QList<ImageInfo> toAdd;
 
-    foreach(ImageInfo it, infos)
+    foreach(const ImageInfo& it, infos)
     {
         QModelIndex index(d->imageFilterModel->indexForImageInfo(it));
 
@@ -612,7 +604,7 @@ void ImageWindow::slotDroppedOnThumbbar(const QList<ImageInfo>& infos)
 
     // Loading images if new images are dropped
 
-    if(!toAdd.isEmpty())
+    if (!toAdd.isEmpty())
     {
         loadImageInfos(toAdd, toAdd.first(), QString());
     }
@@ -885,6 +877,11 @@ void ImageWindow::slotUpdateItemInfo()
                          QString::number(d->currentIndex().row() + 1),
                          QString::number(d->imageFilterModel->rowCount()));
     m_nameLabel->setText(text);
+
+    if (!m_actionEnabledState)
+    {
+        return;
+    }
 
     if (d->imageInfoModel->rowCount() == 1)
     {

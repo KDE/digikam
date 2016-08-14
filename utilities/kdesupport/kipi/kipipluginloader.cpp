@@ -47,7 +47,7 @@
 #include "digikam_debug.h"
 #include "kipiinterface.h"
 #include "digikamapp.h"
-#include "splashscreen.h"
+#include "dsplashscreen.h"
 
 namespace Digikam
 {
@@ -79,7 +79,7 @@ public:
     KipiPluginLoader*           parent;
     PluginLoader*               kipiPluginLoader;
     KipiInterface*              kipiInterface;
-    SplashScreen*               splashScreen;
+    DSplashScreen*              splashScreen;
     DigikamApp*                 app;
 
     KActionCollection*          kipipluginsActionCollection; // Collection used to host all plugin actions for KDE shortcuts editor
@@ -92,7 +92,7 @@ void KipiPluginLoader::Private::loadPlugins()
 
     if (splashScreen)
     {
-        splashScreen->message(i18n("Loading KIPI Plugins..."));
+        splashScreen->setMessage(i18n("Loading KIPI Plugins..."));
     }
 
     QStringList ignores;
@@ -218,7 +218,7 @@ KipiPluginLoader* KipiPluginLoader::m_instance = 0;
 
 // -----------------------------------------------------------------------------------------------------------------------
 
-KipiPluginLoader::KipiPluginLoader(QObject* const parent, SplashScreen* const splash)
+KipiPluginLoader::KipiPluginLoader(QObject* const parent, DSplashScreen* const splash)
     : QObject(parent),
       d(new Private(this))
 {

@@ -116,7 +116,6 @@
 #include "maintenancedlg.h"
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
-#include "imagepluginloader.h"
 #include "tagsmanager.h"
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
@@ -157,28 +156,14 @@ DigikamApp::DigikamApp()
     : DXmlGuiWindow(0),
       d(new Private)
 {
+    setObjectName(QLatin1String("Digikam"));
     setConfigGroupName(ApplicationSettings::instance()->generalConfigGroupName());
     setFullScreenOptions(FS_ALBUMGUI);
     setXMLFile(QLatin1String("digikamui.rc"));
 
-    m_instance = this;
-    d->config  = KSharedConfig::openConfig();
-
-    setObjectName(QLatin1String("Digikam"));
-
-    KConfigGroup group = KSharedConfig::openConfig()->group(configGroupName());
-
-    if (group.readEntry("Show Splash", true) &&
-        !qApp->isSessionRestored())
-    {
-        d->splashScreen = new SplashScreen();
-        d->splashScreen->show();
-    }
-
-    if (d->splashScreen)
-    {
-        d->splashScreen->message(i18n("Scanning Albums..."));
-    }
+    m_instance         = this;
+    d->config          = KSharedConfig::openConfig();
+    KConfigGroup group = d->config->group(configGroupName());
 
 #ifdef HAVE_DBUS
 
@@ -190,15 +175,21 @@ DigikamApp::DigikamApp()
 #endif
 
     // collection scan
-    if (group.readEntry("Scan At Start", true) ||
-        !CollectionScanner::databaseInitialScanDone())
+    if (!CollectionScanner::databaseInitialScanDone())
     {
-        ScanController::instance()->completeCollectionScanDeferFiles(d->splashScreen);
+        ScanController::instance()->completeCollectionScanDeferFiles();
+    }
+
+    if (ApplicationSettings::instance()->getShowSplashScreen() &&
+        !qApp->isSessionRestored())
+    {
+        d->splashScreen = new DSplashScreen();
+        d->splashScreen->show();
     }
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Initializing..."));
+        d->splashScreen->setMessage(i18n("Initializing..."));
     }
 
     // ensure creation
@@ -258,7 +249,7 @@ DigikamApp::DigikamApp()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Checking ICC repository..."));
+        d->splashScreen->setMessage(i18n("Checking ICC repository..."));
     }
 
     d->validIccPath = SetupICC::iccRepositoryIsValid();
@@ -266,7 +257,7 @@ DigikamApp::DigikamApp()
     // Read albums from database
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Reading database..."));
+        d->splashScreen->setMessage(i18n("Reading database..."));
     }
 
     AlbumManager::instance()->startScan();
@@ -280,27 +271,22 @@ DigikamApp::DigikamApp()
     readFullScreenSettings(group);
 
 #ifdef HAVE_KFILEMETADATA
+
     // Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
     BalooWrap* const baloo = BalooWrap::instance();
     Q_UNUSED(baloo);
+
 #endif //HAVE_KFILEMETADATA
 
 #ifdef HAVE_MEDIAPLAYER
+
     VideoThumbnailer* const video = VideoThumbnailer::instance();
     Q_UNUSED(video);
+
 #endif // HAVE_MEDIAPLAYER
 
     setAutoSaveSettings(group, true);
-
-    // Now, enable finished the collection scan as deferred process
-    if (d->splashScreen)
-    {
-        d->splashScreen->message(i18n("Search for new items..."));
-    }
-
-    NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
-    tool->start();
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
 }
@@ -320,8 +306,6 @@ DigikamApp::~DigikamApp()
     {
         // Delete after close
         ImageWindow::imageWindow()->setAttribute(Qt::WA_DeleteOnClose, true);
-        // pass ownership of object - needed by ImageWindow destructor
-        ImagePluginLoader::instance()->setParent(ImageWindow::imageWindow());
         // close the window
         ImageWindow::imageWindow()->close();
     }
@@ -348,17 +332,21 @@ DigikamApp::~DigikamApp()
     }
 
 #ifdef HAVE_KFILEMETADATA
+
     if (BalooWrap::isCreated())
     {
         BalooWrap::internalPtr.clear();
     }
+
 #endif
 
 #ifdef HAVE_MEDIAPLAYER
+
     if (VideoThumbnailer::isCreated())
     {
         delete VideoThumbnailer::internalPtr;
     }
+
 #endif
 
     if (ExpoBlendingManager::isCreated())
@@ -367,10 +355,12 @@ DigikamApp::~DigikamApp()
     }
 
 #ifdef HAVE_PANORAMA
+
     if (PanoManager::isCreated())
     {
         delete PanoManager::internalPtr;
     }
+
 #endif
 
     delete d->view;
@@ -391,7 +381,7 @@ DigikamApp::~DigikamApp()
     // close database server
     if (ApplicationSettings::instance()->getDbEngineParameters().internalServer)
     {
-        DatabaseServerStarter::cleanUp();
+        DatabaseServerStarter::instance()->stopServerManagerProcess();
     }
 
     m_instance = 0;
@@ -454,6 +444,16 @@ void DigikamApp::show()
     slotThumbSizeChanged(ApplicationSettings::instance()->getDefaultIconSize());
     slotZoomSliderChanged(ApplicationSettings::instance()->getDefaultIconSize());
     d->autoShowZoomToolTip = true;
+
+    // Enable finished the collection scan as deferred process
+
+    if (ApplicationSettings::instance()->getScanAtStart() ||
+        !CollectionScanner::databaseInitialScanDone())
+    {
+        NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+        QTimer::singleShot(1000, tool, SLOT(start()));
+    }
+
 }
 
 void DigikamApp::restoreSession()
@@ -493,7 +493,7 @@ void DigikamApp::autoDetect()
 
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Auto-Detecting Camera..."));
+        d->splashScreen->setMessage(i18n("Auto-Detecting Camera..."));
     }
 
     QTimer::singleShot(0, this, SLOT(slotCameraAutoDetect()));
@@ -507,7 +507,7 @@ void DigikamApp::downloadFrom(const QString& cameraGuiPath)
     {
         if (d->splashScreen)
         {
-            d->splashScreen->message(i18n("Opening Download Dialog..."));
+            d->splashScreen->setMessage(i18n("Opening Download Dialog..."));
         }
 
         emit queuedOpenCameraUiFromPath(cameraGuiPath);
@@ -522,19 +522,11 @@ void DigikamApp::downloadFromUdi(const QString& udi)
     {
         if (d->splashScreen)
         {
-            d->splashScreen->message(i18n("Opening Download Dialog..."));
+            d->splashScreen->setMessage(i18n("Opening Download Dialog..."));
         }
 
         emit queuedOpenSolidDevice(udi);
     }
-}
-
-QString DigikamApp::currentDbEngineParameters() const
-{
-    DbEngineParameters parameters = CoreDbAccess::parameters();
-    QUrl url;
-    parameters.insertInUrl(url);
-    return url.url();
 }
 
 bool DigikamApp::queryClose()
@@ -558,7 +550,7 @@ void DigikamApp::setupView()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Initializing Main View..."));
+        d->splashScreen->setMessage(i18n("Initializing Main View..."));
     }
 
     d->view = new DigikamView(this, d->modelCollection);
@@ -822,7 +814,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------------
 
-    d->renameAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Rename..."), this);
+    d->renameAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Rename..."), this);
     connect(d->renameAction, SIGNAL(triggered()), d->view, SLOT(slotRenameAlbum()));
     ac->addAction(QLatin1String("album_rename"), d->renameAction);
     ac->setDefaultShortcut(d->renameAction, Qt::SHIFT + Qt::Key_F2);
@@ -919,7 +911,7 @@ void DigikamApp::setupActions()
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
 #ifdef HAVE_MARBLE
-    d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("applications-internet")),
+    d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-html")),
                                         i18nc("@action Switch to map view", "Map"), this);
     d->imageMapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("map_view"), d->imageMapViewAction);
@@ -1237,13 +1229,14 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("showthumbs"), d->showBarAction);
     ac->setDefaultShortcut(d->showBarAction, Qt::CTRL+Qt::Key_T);
 
-    createSettingsActions();
-
     // Provides a menu entry that allows showing/hiding the toolbar(s)
     setStandardToolBarMenuEnabled(true);
 
     // Provides a menu entry that allows showing/hiding the statusbar
     createStandardStatusBarAction();
+
+    // Standard 'Configure' menu actions
+    createSettingsActions();
 
     // -----------------------------------------------------------
 
@@ -1401,7 +1394,7 @@ void DigikamApp::setupActions()
     // are plugged into the toolbar at startup
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading cameras..."));
+        d->splashScreen->setMessage(i18n("Loading cameras..."));
     }
 
     loadCameras();
@@ -1411,6 +1404,8 @@ void DigikamApp::setupActions()
     populateThemes();
 
     createGUI(xmlFile());
+
+    cleanupActions();
 }
 
 void DigikamApp::initGui()
@@ -2473,13 +2468,9 @@ void DigikamApp::slotSetupChanged()
     //if(ApplicationSettings::instance()->getAlbumLibraryPath() != AlbumManager::instance()->getLibraryPath())
     //  d->view->clearHistory();
 
-    DbEngineParameters prm = ApplicationSettings::instance()->getDbEngineParameters();
+    const DbEngineParameters prm = ApplicationSettings::instance()->getDbEngineParameters();
 
-    if (!AlbumManager::instance()->databaseEqual(prm.databaseType,
-                                                 prm.databaseNameCore,
-                                                 prm.hostName,
-                                                 prm.port,
-                                                 prm.internalServer))
+    if (!AlbumManager::instance()->databaseEqual(prm))
     {
         AlbumManager::instance()->changeDatabase(ApplicationSettings::instance()->getDbEngineParameters());
     }
@@ -2541,16 +2532,13 @@ void DigikamApp::loadPlugins()
     QList<Album*> albumList = AlbumManager::instance()->currentAlbums();
 
     d->view->slotAlbumSelected(albumList);
-
-    // Load Image Editor plugins.
-    new ImagePluginLoader(this, d->splashScreen);
 }
 
 void DigikamApp::populateThemes()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading themes..."));
+        d->splashScreen->setMessage(i18n("Loading themes..."));
     }
 
     ThemeManager::instance()->setThemeMenuAction(new QMenu(i18n("&Themes"), this));
@@ -2570,7 +2558,7 @@ void DigikamApp::preloadWindows()
 {
     if (d->splashScreen)
     {
-        d->splashScreen->message(i18n("Loading tools..."));
+        d->splashScreen->setMessage(i18n("Loading tools..."));
     }
 
     QueueMgrWindow::queueManagerWindow();
@@ -3179,11 +3167,9 @@ void DigikamApp::slotSwitchedToTrashView()
 
 void DigikamApp::customizedFullScreenMode(bool set)
 {
-    QAction* const ac = statusBarMenuAction();
-    if (ac) ac->setEnabled(!set);
-
     toolBarMenuAction()->setEnabled(!set);
     showMenuBarAction()->setEnabled(!set);
+    showStatusBarAction()->setEnabled(!set);
     set ? d->showBarAction->setEnabled(false)
         : toggleShowBar();
 
@@ -3266,7 +3252,7 @@ void DigikamApp::slotEditGeolocation()
 #ifdef HAVE_MARBLE
     ImageInfoList infos = d->view->selectedInfoList();
 
-    if ( infos.isEmpty() )
+    if (infos.isEmpty())
         return;
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
@@ -3276,7 +3262,7 @@ void DigikamApp::slotEditGeolocation()
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(ImageInfo inf, infos)
+    foreach(const ImageInfo& inf, infos)
     {
         ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
     }
@@ -3287,7 +3273,7 @@ void DigikamApp::slotEditMetadata()
 {
     QList<QUrl> urls = view()->selectedUrls();
 
-    if ( urls.isEmpty() )
+    if (urls.isEmpty())
         return;
 
     QPointer<MetadataEditDialog> dialog = new MetadataEditDialog(QApplication::activeWindow(), urls);
@@ -3296,7 +3282,7 @@ void DigikamApp::slotEditMetadata()
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    foreach(QUrl u, urls)
+    foreach(const QUrl& u, urls)
     {
         ScanController::instance()->scannedInfo(u.toLocalFile());
     }

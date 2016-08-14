@@ -259,7 +259,7 @@ DisjointMetadata::Status DisjointMetadata::tagStatus(int albumId) const
     return d->tags.value(albumId, DisjointMetadata::MetadataInvalid);
 }
 
-DisjointMetadata::Status DisjointMetadata::tagStatus(const QString &tagPath) const
+DisjointMetadata::Status DisjointMetadata::tagStatus(const QString& tagPath) const
 {
     return tagStatus(TagsCache::instance()->tagForPath(tagPath));
 }

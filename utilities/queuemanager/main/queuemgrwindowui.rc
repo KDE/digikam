@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="500" name="queuemgrwindow" >
+<gui version="502" name="queuemgrwindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -34,7 +34,7 @@
         <Action name="help_rawcameralist"/>
         <Action name="help_librariesinfo"/>
         <Action name="help_dbstat"/>
-        <Separator/>        
+        <Separator/>
         <Action name="help_donatemoney" />
         <Action name="help_contribute" />
     </Menu>

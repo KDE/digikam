@@ -32,6 +32,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QLabel>
+#include <QHeaderView>
 #include <QGroupBox>
 #include <QTimer>
 #include <QTemporaryFile>
@@ -58,6 +59,9 @@
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
 #include "dbengineparameters.h"
+#include "dbinarysearch.h"
+#include "mysqlinitbinary.h"
+#include "mysqlservbinary.h"
 
 namespace Digikam
 {
@@ -84,8 +88,7 @@ public:
         password            = 0;
         hostPort            = 0;
         dbPathEdit          = 0;
-        mysqlServerCmdEdit  = 0;
-        mysqlInitCmdEdit    = 0;
+        dbBinariesWidget    = 0;
         tab                 = 0;
         dbDetailsBox        = 0;
     }
@@ -111,8 +114,11 @@ public:
     QTabWidget*        tab;
 
     DFileSelector*     dbPathEdit;
-    DFileSelector*     mysqlServerCmdEdit;
-    DFileSelector*     mysqlInitCmdEdit;
+
+    DBinarySearch*     dbBinariesWidget;
+
+    MysqlInitBinary    mysqlInitBin;
+    MysqlServBinary    mysqlServBin;
 
     DbEngineParameters orgPrms;
 
@@ -150,19 +156,19 @@ void DatabaseSettingsWidget::setupMainArea()
 
     // --------- fill with default values ---------------------
 
-    int dbTypeIdx = 0;
+    int dbTypeIdx               = 0;
     d->dbType->addItem(i18n("SQLite"),                        SQlite);
-    d->dbTypeMap[SQlite] = dbTypeIdx++;
+    d->dbTypeMap[SQlite]        = dbTypeIdx++;
 
 #ifdef HAVE_MYSQLSUPPORT
 
 #   ifdef HAVE_INTERNALMYSQL
-    d->dbType->addItem(i18n("MySQL Internal (experimental)"), MysqlInternal);
+    d->dbType->addItem(i18n("Mysql Internal (experimental)"), MysqlInternal);
     d->dbTypeMap[MysqlInternal] = dbTypeIdx++;
 #   endif
 
     d->dbType->addItem(i18n("MySQL Server (experimental)"),   MysqlServer);
-    d->dbTypeMap[MysqlServer] = dbTypeIdx++;
+    d->dbTypeMap[MysqlServer]   = dbTypeIdx++;
 #endif
 
     d->dbType->setToolTip(i18n("<p>Select here the type of database backend.</p>"
@@ -185,14 +191,14 @@ void DatabaseSettingsWidget::setupMainArea()
     // --------------------------------------------------------
 
     d->dbPathLabel = new QLabel(i18n("<p>Set here the location where the database files will be stored on your system. "
-                                     "There are 3 databases : one for all collections properties, "
+                                     "There are three databases: one for all collections properties, "
                                      "one to store compressed thumbnails, "
                                      "and one to store faces recognition metadata.<br/>"
                                      "Write access is required to be able to edit image properties.</p>"
-                                     "<p>Databases are digiKam core engines. Take a care to use a place hosted by a fast "
+                                     "<p>Databases are digiKam core engines. Take care to use a place hosted by fast "
                                      "hardware (as SSD) with enough free space especially for thumbnails database.</p>"
                                      "<p>Note: a remote file system such as NFS, cannot be used here. "
-                                     "For performance reasons, it's also recommended to not use a removable media.</p>"
+                                     "For performance reasons, it's also recommended not to use removable media.</p>"
                                      "<p></p>"), dbConfigBox);
     d->dbPathLabel->setWordWrap(true);
     d->dbPathEdit  = new DFileSelector(dbConfigBox);
@@ -204,35 +210,45 @@ void DatabaseSettingsWidget::setupMainArea()
     d->mysqlCmdBox->layout()->setMargin(0);
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
-
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Set here the locations where MySQL binaries tools are located. "
-                                                       "These run-time dependencies are only used by MySQL Internal backend.</p>"
-                                                       "<p>Note: if executables are included in default system PATH environment variable, "
-                                                       "you don't need to set the full paths to run these tools.</p>"
-                                                       "<p></p>"),
-                                                  d->mysqlCmdBox);
+    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binary tools are located. "               
+						       "digiKam will try to find these binaries automatically if they are "                       
+						       "already installed on your computer.</p>"),                                                          
+						  d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);
 
-    QWidget* const mysqlCmdSpace      = new QWidget(d->mysqlCmdBox);
-    d->mysqlCmdBox->setStretchFactor(mysqlCmdSpace, 10);
+    QGroupBox* const binaryBox        = new QGroupBox(d->mysqlCmdBox);
+    QGridLayout* const binaryLayout   = new QGridLayout;
+    binaryBox->setLayout(binaryLayout);
+    binaryBox->setTitle(i18nc("@title:group", "MySQL Binaries"));
+    d->dbBinariesWidget = new DBinarySearch(binaryBox);
+    d->dbBinariesWidget->header()->setSectionHidden(2, true);
 
-    QLabel* const mysqlServerCmdLabel = new QLabel(d->mysqlCmdBox);
-    mysqlServerCmdLabel->setText(i18n("Path to Mysql database server:"));
-    d->mysqlServerCmdEdit = new DFileSelector(d->mysqlCmdBox);
-    d->mysqlServerCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
-    d->mysqlServerCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlServerCmd());
-    d->mysqlServerCmdEdit->setToolTip(i18n("This binary file is used to start a dedicated instance of MySQL server.\n"
-                                           "It's usually named \"%1\" in your MySQL installation.",
-                                           DbEngineParameters::defaultMysqlServerCmd()));
+    d->dbBinariesWidget->addBinary(d->mysqlInitBin);
+    d->dbBinariesWidget->addBinary(d->mysqlServBin);
 
-    QLabel* const mysqlInitCmdLabel   = new QLabel(d->mysqlCmdBox);
-    mysqlInitCmdLabel->setText(i18n("Path to Mysql database initialization Perl script:"));
-    d->mysqlInitCmdEdit = new DFileSelector(d->mysqlCmdBox);
-    d->mysqlInitCmdEdit->setFileDlgMode(QFileDialog::ExistingFile);
-    d->mysqlInitCmdEdit->lineEdit()->setText(DbEngineParameters::defaultMysqlInitCmd());
-    d->mysqlInitCmdEdit->setToolTip(i18n("This binary file is used to initialize the MySQL data files for the database.\n"
-                                         "It's usually named \"%1\" in your MySQL installation.",
-                                         DbEngineParameters::defaultMysqlInitCmd()));
+#ifdef Q_OS_LINUX
+    d->dbBinariesWidget->addDirectory(QLatin1String("/usr/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/usr/sbin"));
+#endif
+
+#ifdef Q_OS_OSX
+    // Std Macports install
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/sbin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/local/lib/mysql56/bin"));
+
+    // digiKam Bundle PKG install
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/sbin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("/opt/digikam/lib/mysql56/bin"));
+#endif
+
+#ifdef Q_OS_WIN
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files/MariaDB 10.1/bin"));
+    d->dbBinariesWidget->addDirectory(QLatin1String("C:/Program Files (x86/MariaDB 10.1/bin"));
+#endif
+
+    d->dbBinariesWidget->allBinariesFound();
 
     // --------------------------------------------------------
 
@@ -241,7 +257,7 @@ void DatabaseSettingsWidget::setupMainArea()
     QLabel* const hostNameLabel                      = new QLabel(i18n("Host Name:"));
     d->hostName                                      = new QLineEdit();
     d->hostName->setPlaceholderText(i18n("Set the host computer name"));
-    d->hostName->setToolTip(i18n("This is the computer name running Mysql server.\nThis can be \"localhost\" for a local server, "
+    d->hostName->setToolTip(i18n("This is the computer name running MySQL server.\nThis can be \"localhost\" for a local server, "
                                  "or the network computer\n name (or IP address) in case of remote computer."));
 
     QLabel* const connectOptsLabel                   = new QLabel(i18n("<a href=\"http://doc.qt.io/qt-5/"
@@ -249,29 +265,29 @@ void DatabaseSettingsWidget::setupMainArea()
     connectOptsLabel->setOpenExternalLinks(true);
     d->connectOpts                                   = new QLineEdit();
     d->connectOpts->setPlaceholderText(i18n("Set the database connection options"));
-    d->connectOpts->setToolTip(i18n("Set the Mysql server connection options.\nFor advanced users only."));
+    d->connectOpts->setToolTip(i18n("Set the MySQL server connection options.\nFor advanced users only."));
 
     QLabel* const userNameLabel                      = new QLabel(i18n("User:"));
     d->userName                                      = new QLineEdit();
     d->userName->setPlaceholderText(i18n("Set the database account name"));
-    d->userName->setToolTip(i18n("Set the Mysql server account name used\nby digiKam to be connected to the server.\n"
-                                 "This account must be available on the remote Mysql server when database have been created."));
+    d->userName->setToolTip(i18n("Set the MySQL server account name used\nby digiKam to be connected to the server.\n"
+                                 "This account must be available on the remote MySQL server when database have been created."));
 
     QLabel* const passwordLabel                      = new QLabel(i18n("Password:"));
     d->password                                      = new QLineEdit();
-    d->password->setToolTip(i18n("Set the Mysql server account password used\nby digiKam to be connected to the server.\n"
+    d->password->setToolTip(i18n("Set the MySQL server account password used\nby digiKam to be connected to the server.\n"
                                  "You can left this field empty to use an account set without password."));
     d->password->setEchoMode(QLineEdit::Password);
 
     DHBox* const phbox                               = new DHBox();
     QLabel* const hostPortLabel                      = new QLabel(i18n("Host Port:"));
     d->hostPort                                      = new QSpinBox(phbox);
-    d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, Mysql server use port number 3306 by default"));
+    d->hostPort->setToolTip(i18n("Set the host computer port.\nUsually, MySQL server use port number 3306 by default"));
     d->hostPort->setMaximum(65535);
     QWidget* const space                             = new QWidget(phbox);
     phbox->setStretchFactor(space, 10);
     QPushButton* const checkDBConnectBtn             = new QPushButton(i18n("Check Connection"), phbox);
-    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if current Mysql server settings is suitable."));
+    checkDBConnectBtn->setToolTip(i18n("Run a basic database connection to see if current MySQL server settings is suitable."));
 
     // Only accept printable Ascii char for database names.
     QRegExp asciiRx(QLatin1String("[\x20-\x7F]+$"));
@@ -323,10 +339,11 @@ void DatabaseSettingsWidget::setupMainArea()
 
     d->dbNoticeBox           = new QGroupBox(i18n("Database Server Instructions"), this);
     QVBoxLayout* const vlay2 = new QVBoxLayout(d->dbNoticeBox);
-    QLabel* const notice     = new QLabel(i18n("<p>digiKam expects the above database and user account to already exists. "
-                                               "This user also require full access to the database.<br>"
+    QLabel* const notice     = new QLabel(i18n("<p>digiKam expects that database is already created with a dedicated user account. "
+                                               "This user name <i>digikam</i> will require full access to the database.<br>"
                                                "If your database is not already set up, you can use the following SQL commands "
-                                               "(after replacing the <b><i>password</i></b> with the correct one)."), d->dbNoticeBox);
+                                               "(after replacing the <b><i>password</i></b> with the correct one).<br>"),
+                                          d->dbNoticeBox);
     notice->setWordWrap(true);
 
     d->sqlInit = new QTextBrowser(d->dbNoticeBox);
@@ -334,10 +351,24 @@ void DatabaseSettingsWidget::setupMainArea()
     d->sqlInit->setOpenLinks(false);
     d->sqlInit->setReadOnly(false);
 
+    QLabel* const notice2    = new QLabel(i18n("<p>Note: with a Linux server, a database can be initialized following the commands below:</p>"
+                                               "<p># su</p>"
+                                               "<p># systemctl restart mysqld</p>"
+                                               "<p># mysql -u root</p>"
+                                               "<p>...</p>"
+                                               "<p>Enter SQL code to Mysql prompt in order to init digiKam databases with grant privileges (see behind)</p>"
+                                               "<p>...</p>"
+                                               "<p>quit</p>"
+                                               "<p>NOTE: If you've an enormous collection, you should start MySQL server with "
+                                               "mysql --max_allowed_packet=128M OR in my.ini or ~/.my.cnf, change the settings</p>"),
+                                          d->dbNoticeBox);
+    notice2->setWordWrap(true);
+
     vlay2->addWidget(notice);
     vlay2->addWidget(d->sqlInit);
     vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay2->setSpacing(spacing);
+    vlay2->addWidget(notice2);
 
     d->tab->addTab(d->dbNoticeBox, i18n("Requirements"));
 
@@ -350,11 +381,11 @@ void DatabaseSettingsWidget::setupMainArea()
                                                "<a href=\"https://en.wikipedia.org/wiki/MySQL\">Mysql database server</a> "
                                                "(or <a href=\"https://en.wikipedia.org/wiki/MariaDB\">MariaDB</a>) "
                                                "through a network. "
-                                               "As with Sqlite or Mysql internal server, 3 databases will be stored "
+                                               "As with Sqlite or MySQL internal server, 3 databases will be stored "
                                                "on the remote server: one for all collections properties, "
                                                "one to store compressed thumbnails, and one to store faces "
                                                "recognition metadata.</p>"
-                                               "<p>Unlike Sqlite or Mysql internal server, you can customize the "
+                                               "<p>Unlike Sqlite or MySQL internal server, you can customize the "
                                                "database names to simplify your backups.</p>"
                                                "<p>Databases are digiKam core engines. To prevent performance issues, "
                                                "take a care to use a fast network link between the client and the server "
@@ -527,19 +558,22 @@ void DatabaseSettingsWidget::handleInternalServer(int index)
 
 void DatabaseSettingsWidget::slotUpdateSqlInit()
 {
-    QString sql = QString::fromLatin1("GRANT USAGE ON *.* TO \'%1\'@\'localhost\' IDENTIFIED BY \'<b><i>password</i></b>\';<br>")
+    QString sql = QString::fromLatin1("CREATE USER \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
                                       .arg(d->userName->text());
 
-    sql += QString::fromLatin1("CREATE DATABASE %1; "
-                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
+    sql += QString::fromLatin1("GRANT ALL ON *.* TO \'%1\'@\'%\' IDENTIFIED BY \'<b>password</b>\';<br>")
+                                      .arg(d->userName->text());
+
+    sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
+                               "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
                                       .arg(d->dbNameCore->text())
                                       .arg(d->dbNameCore->text())
                                       .arg(d->userName->text());
 
     if (d->dbNameThumbs->text() != d->dbNameCore->text())
     {
-        sql += QString::fromLatin1("CREATE DATABASE %1; "
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
+        sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->dbNameThumbs->text())
                                    .arg(d->userName->text());
@@ -548,8 +582,8 @@ void DatabaseSettingsWidget::slotUpdateSqlInit()
     if ((d->dbNameFace->text() != d->dbNameCore->text()) &&
         (d->dbNameFace->text() != d->dbNameThumbs->text()))
     {
-        sql += QString::fromLatin1("CREATE DATABASE %1; "
-                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'localhost\';<br>")
+        sql += QString::fromLatin1("CREATE DATABASE %1;<br>"
+                                   "GRANT ALL PRIVILEGES ON %2.* TO \'%3\'@\'%\';<br>")
                                    .arg(d->dbNameFace->text())
                                    .arg(d->dbNameFace->text())
                                    .arg(d->userName->text());
@@ -664,9 +698,10 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
     else if (d->orgPrms.databaseType == DbEngineParameters::MySQLDatabaseType() && d->orgPrms.internalServer)
     {
         d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
-        d->mysqlServerCmdEdit->lineEdit()->setText(d->orgPrms.internalServerMysqlServCmd);
-        d->mysqlInitCmdEdit->lineEdit()->setText(d->orgPrms.internalServerMysqlInitCmd);
         d->dbType->setCurrentIndex(d->dbTypeMap[MysqlInternal]);
+        d->mysqlInitBin.setup(QFileInfo(d->orgPrms.internalServerMysqlInitCmd).absoluteFilePath());
+        d->mysqlServBin.setup(QFileInfo(d->orgPrms.internalServerMysqlServCmd).absoluteFilePath());
+        d->dbBinariesWidget->allBinariesFound();
         slotResetMysqlServerDBNames();
     }
 #   endif
@@ -700,8 +735,8 @@ DbEngineParameters DatabaseSettingsWidget::getDbEngineParameters() const
         case MysqlInternal:
             prm = DbEngineParameters::defaultParameters(databaseBackend());
             prm.setInternalServerPath(databasePath());
-            prm.internalServerMysqlServCmd = d->mysqlServerCmdEdit->lineEdit()->text();
-            prm.internalServerMysqlInitCmd = d->mysqlInitCmdEdit->lineEdit()->text();
+            prm.internalServerMysqlInitCmd = d->mysqlInitBin.path();
+            prm.internalServerMysqlServCmd = d->mysqlServBin.path();
             break;
 
         default: // MysqlServer
@@ -730,7 +765,7 @@ void DatabaseSettingsWidget::slotDatabasePathEdited()
 {
     QString newPath = databasePath();
 
-#ifndef _WIN32
+#ifndef Q_OS_WIN
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
@@ -757,39 +792,8 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
             if (!checkDatabasePath())
                 return false;
 
-            QString mysqlServer = d->mysqlServerCmdEdit->lineEdit()->text();
-            qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL server path : " << mysqlServer;
-
-            if (mysqlServer.isEmpty())
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("MySQL server path is empty. Please fix it."));
+            if (!d->dbBinariesWidget->allBinariesFound())
                 return false;
-            }
-
-            if (QProcess::execute(mysqlServer, QStringList() << QLatin1String("--help")) == -2)
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("Cannot find MySQL server \"%1\". Please fix it.", mysqlServer));
-                return false;
-            }
-
-            QString mysqlInit = d->mysqlInitCmdEdit->lineEdit()->text();
-            qCDebug(DIGIKAM_DATABASE_LOG) << "MySQL init path : " << mysqlInit;
-
-            if (mysqlInit.isEmpty())
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("MySQL initialization script path is empty. Please fix it."));
-                return false;
-            }
-
-            if (QProcess::execute(mysqlInit, QStringList() << QLatin1String("--help")) == -2)
-            {
-                QMessageBox::information(qApp->activeWindow(), qApp->applicationName(),
-                                         i18n("Cannot find MySQL initialization script \"%1\". Please fix it.", mysqlInit));
-                return false;
-            }
 
             return true;
 
@@ -802,7 +806,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
 
             if (!checkMysqlServerDbNamesConfig(error))
             {
-                QMessageBox::critical(qApp->activeWindow(), i18n("Database configuration"),
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database Configuration"),
                                       i18n("The database names configuration is not valid. Error is <br/><p>%1</p><br/>"
                                            "Please check your configuration.",
                                            error));
@@ -811,7 +815,7 @@ bool DatabaseSettingsWidget::checkDatabaseSettings()
 
             if (!checkMysqlServerConnection(error))
             {
-                QMessageBox::critical(qApp->activeWindow(), i18n("Database connection test"),
+                QMessageBox::critical(qApp->activeWindow(), i18n("Database Connection Test"),
                                       i18n("Testing database connection has failed with error<br/><p>%1</p><br/>"
                                            "Please check your configuration.",
                                            error));
@@ -864,7 +868,7 @@ bool DatabaseSettingsWidget::checkDatabasePath()
 
     QFileInfo path(dbFolder);
 
-#ifdef _WIN32
+#ifdef Q_OS_WIN
     // Work around bug #189168
     QTemporaryFile temp;
     temp.setFileTemplate(dbFolder + QLatin1String("XXXXXX"));

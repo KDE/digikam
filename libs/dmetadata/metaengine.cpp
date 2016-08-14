@@ -383,7 +383,7 @@ bool MetaEngine::save(const QString& imageFilePath) const
 
     if (!dinfo.isWritable())
     {
-        qCDebug(DIGIKAM_METAENGINE_LOG) << "Dir '" << dinfo.filePath() << "' is read-only. Metadata not saved.";
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Dir" << dinfo.filePath() << "is read-only. Metadata not saved.";
         return false;
     }
 
@@ -426,12 +426,12 @@ bool MetaEngine::save(const QString& imageFilePath) const
 
     if (writeToSidecar || (writeToSidecarIfFileNotPossible && !writtenToFile))
     {
-        qCDebug(DIGIKAM_METAENGINE_LOG) << "Will write XMP sidecar for file" << givenFileInfo.fileName();
-        writtenToSidecar = d->saveToXMPSidecar(imageFilePath);
+        qCDebug(DIGIKAM_METAENGINE_LOG) << "Will write XMP sidecar for file" << finfo.fileName();
+        writtenToSidecar = d->saveToXMPSidecar(regularFilePath);
 
         if (writtenToSidecar)
         {
-            qCDebug(DIGIKAM_METAENGINE_LOG) << "Metadata for file '" << givenFileInfo.fileName() << "' written to XMP sidecar.";
+            qCDebug(DIGIKAM_METAENGINE_LOG) << "Metadata for file" << finfo.fileName() << "written to XMP sidecar.";
         }
     }
 

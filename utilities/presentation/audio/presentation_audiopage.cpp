@@ -236,7 +236,8 @@ void PresentationAudioPage::updateTracksNumber()
 
     if ( number > 0 )
     {
-        displayTime.addMSecs(1000 * (number - 1));
+        displayTime = displayTime.addMSecs(1000 * (number - 1));
+        
 
         for (QMap<QUrl, QTime>::iterator it = d->tracksTime->begin(); it != d->tracksTime->end(); ++it)
         {
@@ -350,7 +351,7 @@ void PresentationAudioPage::slotSoundFilesButtonAdd()
 {
     QPointer<QFileDialog> dlg = new QFileDialog(this,
                                                 i18n("Select sound files"),
-                                                d->sharedData->soundtrackPath.adjusted(QUrl::RemoveFilename).path());
+                                                d->sharedData->soundtrackPath.adjusted(QUrl::RemoveFilename).toLocalFile());
 
     QStringList atm;
     atm << QLatin1String("audio/mp3");

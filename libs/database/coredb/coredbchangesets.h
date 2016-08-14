@@ -90,6 +90,7 @@ public:
     {
         Unknown,
         Added,
+        Moved,
         Removed,
         RemovedAll,
         PropertiesChanged
@@ -283,6 +284,7 @@ public:
     {
         Unknown,
         Added,
+        Moved,
         Deleted,
         Renamed,
         Reparented,

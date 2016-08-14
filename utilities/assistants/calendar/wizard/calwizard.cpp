@@ -34,19 +34,21 @@
 #include <QPrinter>
 #include <QStringList>
 #include <QMenu>
+#include <QLocale>
 #include <QPushButton>
 
 // KDE includes
 
-#include <kcalendarsystem.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "calprinter.h"
 #include "calsettings.h"
+#include "calsystem.h"
 #include "caltemplate.h"
 #include "digikam_debug.h"
+#include "digikam_config.h"
 #include "ui_calevents.h"
 #include "ui_calprogress.h"
 
@@ -61,20 +63,23 @@ public:
     {
         cSettings     = 0;
         wTemplate     = 0;
-        wEvents       = 0;
         wPrintLabel   = 0;
         wFinish       = 0;
         wTemplatePage = 0;
-        wEventsPage   = 0;
         wPrintPage    = 0;
         wFinishPage   = 0;
+
+#ifdef HAVE_KCALENDAR
+        wEvents       = 0;
+        wEventsPage   = 0;
+#endif
+
         printer       = 0;
         printThread   = 0;
     }
 
     CalSettings*     cSettings;
     CalTemplate*     wTemplate;
-    QWidget*         wEvents;
     Ui::CalEvents    calEventsUI;
     Ui::CalProgress  calProgressUI;
 
@@ -82,9 +87,13 @@ public:
     QWidget*         wFinish;
 
     DWizardPage*     wTemplatePage;
-    DWizardPage*     wEventsPage;
     DWizardPage*     wPrintPage;
     DWizardPage*     wFinishPage;
+
+#ifdef HAVE_KCALENDAR
+    QWidget*         wEvents;
+    DWizardPage*     wEventsPage;
+#endif
 
     QPrinter*        printer;
 
@@ -109,18 +118,20 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
+#ifdef HAVE_KCALENDAR
     d->wEvents     = new QWidget(this);
     d->calEventsUI.setupUi(d->wEvents);
     d->wEventsPage = new DWizardPage(this, i18n("Choose events to show on the Calendar"));
     d->wEventsPage->setPageWidget(d->wEvents);
     d->wEventsPage->setShowLeftView(false);
+#endif
 
     // ---------------------------------------------------------------
 
     d->wPrintLabel = new QLabel(this);
     d->wPrintLabel->setIndent(20);
     d->wPrintLabel->setWordWrap(true);
-    d->wPrintPage = new DWizardPage(this, i18n("Print Calendar"));
+    d->wPrintPage  = new DWizardPage(this, i18n("Print Calendar"));
     d->wPrintPage->setPageWidget(d->wPrintLabel);
     d->wPrintPage->setShowLeftView(false);
 
@@ -174,12 +185,11 @@ void CalWizard::slotPageSelected(int curr)
         QUrl        image;
         QString     month;
         QStringList printList;
-        QDate       date;
-        KLocale::global()->calendar()->setDate(date, d->cSettings->year(), 1, 1);
+        QDate       date = CalSystem().date(d->cSettings->year(), 1, 1);
 
-        for (int i = 1; i <= KLocale::global()->calendar()->monthsInYear(date); ++i)
+        for (int i = 1; i <= CalSystem().monthsInYear(date); ++i)
         {
-            month = KLocale::global()->calendar()->monthName(i, d->cSettings->year(), KCalendarSystem::LongName);
+            month = QLocale().monthName(i, QLocale::LongFormat);
             image = d->cSettings->image(i);
 
             if (!image.isEmpty())
@@ -202,19 +212,21 @@ void CalWizard::slotPageSelected(int curr)
 
             QString extra;
 
-            if ((KLocale::global()->calendar()->month(QDate::currentDate()) >= 6    &&
-                 KLocale::global()->calendar()->year(QDate::currentDate()) == year) ||
-                 KLocale::global()->calendar()->year(QDate::currentDate()) > year)
+            if ((CalSystem().month(QDate::currentDate()) >= 6    &&
+                 CalSystem().year(QDate::currentDate()) == year) ||
+                 CalSystem().year(QDate::currentDate()) > year)
+            {
                 extra = QString::fromLatin1("<br/><br/><b>") +
-                    i18n("Please note that you are making a "
-                         "calendar for<br/>the current year or a year in the "
-                         "past.") + QString::fromLatin1("</b>");
+                        i18n("Please note that you are making a "
+                             "calendar for<br/>the current year or a year in the "
+                             "past.") + QString::fromLatin1("</b>");
+            }
 
-            QString year_locale = KLocale::global()->calendar()->formatDate(date, KLocale::Year, KLocale::LongNumber);
+            QString year_locale = QLocale().toString(date, QLatin1String("yyyy"));
 
             d->wPrintLabel->setText(i18n("Click Next to start Printing<br/><br/>"
                                        "Following months will be printed for year %1:<br/>", year_locale)
-                                  + printList.join(QString::fromLatin1(" - ")) + extra);
+                                    + printList.join(QString::fromLatin1(" - ")) + extra);
             d->wPrintLabel->setTextFormat(Qt::RichText);
 
             d->wFinishPage->setComplete(true);
@@ -288,13 +300,16 @@ void CalWizard::print()
     }
 
     d->cSettings->clearSpecial();
+
+#ifdef HAVE_KCALENDAR
     d->cSettings->loadSpecial(QUrl::fromLocalFile(d->calEventsUI.ohUrlRequester->lineEdit()->text()), Qt::red);
     d->cSettings->loadSpecial(QUrl::fromLocalFile(d->calEventsUI.fhUrlRequester->lineEdit()->text()), Qt::darkGreen);
+#endif
 
     d->printThread = new CalPrinter(d->printer, d->months, this);
 
     connect(d->printThread, SIGNAL(pageChanged(int)),
-            this,         SLOT(updatePage(int)));
+            this, SLOT(updatePage(int)));
 
     connect(d->printThread, SIGNAL(pageChanged(int)),
             d->calProgressUI.totalProgress, SLOT(setValue(int)));
@@ -323,8 +338,8 @@ void CalWizard::updatePage(int page)
     int month = d->months.keys().at(page);
 
     d->calProgressUI.finishLabel->setText(i18n("Printing calendar page for %1 of %2",
-        KLocale::global()->calendar()->monthName(month, year, KCalendarSystem::LongName),
-        KLocale::global()->calendar()->formatDate(date, QString::fromLatin1("%Y"))));
+                                          QLocale().monthName(month, QLocale::LongFormat),
+                                          QLocale().toString(date, QLatin1String("yyyy"))));
 }
 
 void CalWizard::printComplete()

@@ -220,7 +220,7 @@ LightTableThumbBar::~LightTableThumbBar()
 
 void LightTableThumbBar::setItems(const ImageInfoList& list)
 {
-    foreach(ImageInfo info, list)
+    foreach(const ImageInfo& info, list)
     {
         if (!d->imageInfoModel->hasImage(info))
         {

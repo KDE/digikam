@@ -35,6 +35,7 @@ namespace Digikam
 {
 
 class Album;
+class PAlbum;
 class AlbumManager;
 class DbEngineParameters;
 
@@ -48,6 +49,7 @@ public:
     ~AlbumWatch();
 
     void clear();
+    void removeWatchedPAlbums(const PAlbum* const album);
     void setDbEngineParameters(const DbEngineParameters& params);
 
 protected Q_SLOTS:
