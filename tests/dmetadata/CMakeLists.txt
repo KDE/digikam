@@ -1,5 +1,6 @@
 #
-# Copyright (c) 2015 by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2015,      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
+# Copyright (c) 2010-2016, by Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -15,6 +16,13 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+add_executable(metareaderthread metareaderthread.cpp)
+ecm_mark_nongui_executable(metareaderthread)
+target_link_libraries(metareaderthread
+                      digikamcore
+                      Qt5::Core
+)
+
 set(testTag_SRCS tagsreadwritetest.cpp)
 add_executable(tagsReadWriteTest ${testTag_SRCS})
 ecm_mark_nongui_executable(tagsReadWriteTest)
@@ -26,7 +34,7 @@ target_link_libraries(tagsReadWriteTest
                       Qt5::Test
 
                       KF5::I18n
-                     )
+)
 
 set(testRating_SRCS ratingreadwritetest.cpp)
 add_executable(ratingReadWriteTest ${testRating_SRCS})
@@ -39,7 +47,7 @@ target_link_libraries(ratingReadWriteTest
                       Qt5::Test
 
                       KF5::I18n
-                     )
+)
 
 set(testComment_SRCS commentreadwritetest.cpp)
 add_executable(commentReadWriteTest ${testComment_SRCS})
@@ -52,7 +60,7 @@ target_link_libraries(commentReadWriteTest
                       Qt5::Test
 
                       KF5::I18n
-                     )
+)
 
 set(setiptcpreview_SRCS setiptcpreview.cpp)
 add_executable(setiptcpreview ${setiptcpreview_SRCS})
@@ -64,7 +72,7 @@ target_link_libraries(setiptcpreview
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
 
 set(loadfromba_SRCS loadfromba.cpp)
 add_executable(loadfromba ${loadfromba_SRCS})
@@ -76,7 +84,7 @@ target_link_libraries(loadfromba
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
 
 set(erasetag_SRCS erasetag.cpp)
 add_executable(erasetag ${erasetag_SRCS})
@@ -88,7 +96,7 @@ target_link_libraries(erasetag
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
 
 set(printtagslist_SRCS printtagslist.cpp)
 add_executable(printtagslist ${printtagslist_SRCS})
@@ -100,7 +108,7 @@ target_link_libraries(printtagslist
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
 
 set(usexmpsidecar_SRCS usexmpsidecar.cpp)
 add_executable(usexmpsidecar ${usexmpsidecar_SRCS})
@@ -112,7 +120,7 @@ target_link_libraries(usexmpsidecar
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
 
 set(readimagewritexmpsidecar_SRCS readimagewritexmpsidecar.cpp)
 add_executable(readimagewritexmpsidecar ${readimagewritexmpsidecar_SRCS})
@@ -124,7 +132,7 @@ target_link_libraries(readimagewritexmpsidecar
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
 
 set(setxmpface_SRCS setxmpface.cpp)
 add_executable(setxmpface ${setxmpface_SRCS})
@@ -136,4 +144,4 @@ target_link_libraries(setxmpface
                       Qt5::Core
 
                       KF5::I18n
-                     )
+)
