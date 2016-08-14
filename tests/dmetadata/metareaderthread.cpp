@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2016-08-14
- * Description : CLI tool to test to load metadata from images through multi-core threades.
+ * Description : CLI tool to test to load metadata from images through multi-core threads.
  *
  * Copyright (C) 2016 by by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
