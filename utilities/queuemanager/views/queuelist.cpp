@@ -313,7 +313,7 @@ QueueListView::QueueListView(QWidget* const parent)
 
     QStringList titles;
     titles.append(i18n("Thumbnail"));
-    titles.append(i18n("File Name"));
+    titles.append(i18n("Original"));
     titles.append(i18n("Target"));
     setHeaderLabels(titles);
     header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
