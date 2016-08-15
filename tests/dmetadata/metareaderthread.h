@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2007-01-08
- * Description : Hue/Saturation preview widget
+ * Date        : 2016-08-14
+ * Description : CLI tool to test to load metadata from images through multi-core threads.
  *
- * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2016 by by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,48 +21,39 @@
  *
  * ============================================================ */
 
-#ifndef HSPREVIEWWIDGET_H
-#define HSPREVIEWWIDGET_H
+#ifndef META_READER_THREAD_H
+#define META_READER_THREAD_H
 
 // Qt includes
 
-#include <QWidget>
-#include <QPaintEvent>
-#include <QResizeEvent>
+#include <QList>
+#include <QUrl>
 
 // Local includes
 
-#include "digikam_export.h"
+#include "metadatasettingscontainer.h"
+#include "actionthreadbase.h"
 
-namespace Digikam
-{
+using namespace Digikam;
 
-class DIGIKAM_EXPORT HSPreviewWidget : public QWidget
+class MetaReaderThread : public ActionThreadBase
 {
     Q_OBJECT
 
 public:
 
-    explicit HSPreviewWidget(QWidget* const parent=0);
-    ~HSPreviewWidget();
+    MetaReaderThread(QObject* const parent);
+    ~MetaReaderThread() {};
 
-    void setHS(double hue, double sat);
+    void readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings);
 
-protected:
+protected Q_SLOTS:
 
-    void resizeEvent(QResizeEvent*);
-    void paintEvent(QPaintEvent*);
+    void slotJobFinished();
 
-private:
+Q_SIGNALS:
 
-    void updatePixmap();
-
-private:
-
-    class Private;
-    Private* const d;
+    void done();
 };
 
-}  // namespace Digikam
-
-#endif /* HSPREVIEWWIDGET_H */
+#endif // META_READER_THREAD_H

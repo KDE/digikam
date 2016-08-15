@@ -34,10 +34,6 @@
 #include <QApplication>
 #include <QStyle>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 namespace Digikam
 {
 
@@ -59,13 +55,15 @@ public:
 };
 
 Rule::Rule(const QString& name)
-    : QObject(0), d(new Private)
+    : QObject(0),
+      d(new Private)
 {
     setObjectName(name);
 }
 
 Rule::Rule(const QString& name, const QString& icon)
-    : QObject(0), d(new Private)
+    : QObject(0),
+      d(new Private)
 {
     setObjectName(name);
     setIcon(icon);

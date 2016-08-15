@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="510" name="digikam" translationDomain="digikam" >
+<gui version="512" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -148,10 +148,10 @@
       <DefineGroup name="kipi_import_group" append="kipi_import_group" />
   </Menu>
 
-   <Menu name="Export"><text>&amp;Export</text>
+  <Menu name="Export"><text>&amp;Export</text>
       <Action name="empty_export_group" />
       <DefineGroup name="kipi_export_group" append="kipi_export_group" />
-   </Menu>
+  </Menu>
 
   <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
      <Merge name="StandardToolBarMenuHandler" />

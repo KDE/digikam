@@ -32,10 +32,6 @@
 #include <QFuture>
 #include <QFutureWatcher>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // local includes
 
 #include "trackreader.h"

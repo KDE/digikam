@@ -30,10 +30,6 @@
 #include <QPainter>
 #include <QApplication>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "thememanager.h"
@@ -42,7 +38,8 @@ namespace Digikam
 {
 
 DbHeaderListItem::DbHeaderListItem(QTreeWidget* parent, const QString& key)
-    : QObject(parent), QTreeWidgetItem(parent)
+    : QObject(parent),
+      QTreeWidgetItem(parent)
 {
     // Reset all item flags: item is not selectable.
     setFlags(Qt::ItemIsEnabled);

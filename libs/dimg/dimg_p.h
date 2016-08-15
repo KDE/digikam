@@ -139,7 +139,7 @@ public:
     unsigned char*          data;
     LANCZOS_DATA_TYPE*      lanczos_func;
 
-    MetaEngineData              metaData;
+    MetaEngineData          metaData;
     QMap<QString, QVariant> attributes;
     QMap<QString, QString>  embeddedText;
     IccProfile              iccProfile;
@@ -148,4 +148,4 @@ public:
 
 }  // namespace Digikam
 
-#endif /* DIMGPRIVATE_H */
+#endif // DIMGPRIVATE_H

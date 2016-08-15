@@ -33,7 +33,6 @@
 
 #include <kactioncollection.h>
 #include <kbookmarkmenu.h>
-#include <klocalizedstring.h>
 
 // Local includes
 
@@ -134,8 +133,8 @@ bool GPSBookmarkOwner::enableOption(BookmarkOption option) const
 
 void GPSBookmarkOwner::openBookmark(const KBookmark& bookmark, Qt::MouseButtons, Qt::KeyboardModifiers)
 {
-    const QString url                        = bookmark.url().url().toLower();
-    bool okay;
+    const QString url                         = bookmark.url().url().toLower();
+    bool  okay                                = false;
     const GeoIface::GeoCoordinates coordinate = GeoIface::GeoCoordinates::fromGeoUrl(url, &okay);
 
     if (okay)

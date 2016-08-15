@@ -364,7 +364,7 @@ AlbumManager::~AlbumManager()
 
 void AlbumManager::cleanUp()
 {
-    // This is what we prefer to do before KApplication destruction
+    // This is what we prefer to do before Application destruction
 
     if (d->dateListJob)
     {
@@ -715,7 +715,6 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     d->rootTAlbum = 0;
     d->rootDAlbum = 0;
     d->rootSAlbum = 0;
-
 
     // -- Database initialization -------------------------------------------------
 

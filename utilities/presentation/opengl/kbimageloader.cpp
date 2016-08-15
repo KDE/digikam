@@ -31,10 +31,6 @@
 #include <QMatrix>
 #include <QFileInfo>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "dimg.h"

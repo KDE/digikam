@@ -29,10 +29,6 @@
 #include <QCollator>
 #include <QIcon>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "album.h"

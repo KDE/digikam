@@ -36,10 +36,6 @@
 #include <QFontDatabase>
 #include <QStandardPaths>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"

@@ -1,7 +1,7 @@
-Native DIMG Loaders status (Gilles Caulier - 2011-06-21)
---------------------------------------------------------
+Native DIMG Loaders status
+--------------------------
 
-Format  Read  Write  ICC   MetaData  Thumb  8bits    16bits  depency
+Format  Read  Write  ICC   MetaData  Thumb   8bits    16bits  dependency
 
 JPG     Done  Done   Done  Done      Done    yes      N.A     libjpeg
 PNG     Done  Done   Done  Done      N.A     yes      yes     libpng
@@ -39,4 +39,4 @@ GIF      yes        no
 TODO :
 
 Add WebP support using http://code.google.com/speed/webp
-Remove Jasper depency and replace by OpenJpeg http://www.openjpeg.org
+Remove Jasper dependency and replace by OpenJpeg http://www.openjpeg.org

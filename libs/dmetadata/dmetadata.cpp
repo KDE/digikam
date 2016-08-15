@@ -35,10 +35,6 @@
 #include <QFileInfo>
 #include <QLocale>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "rawinfo.h"

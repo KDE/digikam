@@ -165,8 +165,14 @@ void ThemeManager::setThemeMenuAction(QMenu* const action)
 
 void ThemeManager::registerThemeActions(DXmlGuiWindow* const win)
 {
-    if (!d->themeMenuAction || !win)
+    if (!win)
     {
+        return;
+    }
+
+    if (!d->themeMenuAction)
+    {
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Cannot register theme actions to " << win->windowTitle();
         return;
     }
 

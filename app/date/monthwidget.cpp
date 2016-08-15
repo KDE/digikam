@@ -39,10 +39,6 @@
 #include <QLocale>
 #include <QDate>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "imagefiltermodel.h"

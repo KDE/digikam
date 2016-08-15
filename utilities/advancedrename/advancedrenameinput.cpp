@@ -35,14 +35,13 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <klocalizedstring.h>
 
 // Local includes
 
 #include "highlighter.h"
 #include "parser.h"
 
-// const variables
+// Constantes
 
 namespace
 {
@@ -413,9 +412,8 @@ void AdvancedRenameInput::slotAddToken(const QString& token)
 
 void AdvancedRenameInput::readSettings()
 {
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(d->configGroupName);
-
+    KSharedConfig::Ptr config  = KSharedConfig::openConfig();
+    KConfigGroup group         = config->group(d->configGroupName);
     QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
     patternHistory.removeAll(QLatin1String(""));
     addItems(patternHistory);
@@ -424,9 +422,8 @@ void AdvancedRenameInput::readSettings()
 
 void AdvancedRenameInput::writeSettings()
 {
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup group        = config->group(d->configGroupName);
-
+    KSharedConfig::Ptr config  = KSharedConfig::openConfig();
+    KConfigGroup group         = config->group(d->configGroupName);
     QStringList patternHistory = group.readEntry(d->configPatternHistoryListEntry, QStringList());
 
     // remove duplicate entries and save pattern history, omit empty strings

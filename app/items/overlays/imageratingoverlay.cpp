@@ -25,10 +25,6 @@
 
 #include "imageratingoverlay.h"
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "imagedelegate.h"

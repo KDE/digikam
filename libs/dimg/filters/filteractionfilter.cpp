@@ -28,6 +28,10 @@
 
 #include <QScopedPointer>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -121,6 +125,7 @@ bool FilterActionFilter::isComplexAction() const
             return false;
         }
     }
+
     return true;
 }
 
@@ -133,6 +138,7 @@ bool FilterActionFilter::isSupported() const
             return false;
         }
     }
+
     return true;
 }
 

@@ -6,7 +6,7 @@
  * Date        : 2007-01-08
  * Description : Hue/Saturation preview widget
  *
- * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -31,10 +31,6 @@
 #include <QPixmap>
 #include <QPaintEvent>
 #include <QResizeEvent>
-
-// KDE includes
-
-#include <klocalizedstring.h>
 
 // Local includes
 
@@ -65,7 +61,8 @@ public:
 };
 
 HSPreviewWidget::HSPreviewWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->xBorder = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     setAttribute(Qt::WA_DeleteOnClose);
@@ -103,7 +100,7 @@ void HSPreviewWidget::updatePixmap()
 
     DImg   image(xSize, ySize, false, false, 0, false);
     QColor col;
-    uint*  p = 0;
+    uint*  p  = 0;
 
     for (int s = ySize - 1 ; s >= 0 ; --s)
     {

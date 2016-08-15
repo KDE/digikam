@@ -33,10 +33,6 @@
 #include <QTimeLine>
 #include <QIcon>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 namespace Digikam
 {
 

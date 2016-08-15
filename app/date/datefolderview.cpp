@@ -28,7 +28,6 @@
 
 // KDE includes
 
-#include <klocalizedstring.h>
 #include <kconfiggroup.h>
 
 // Local includes
@@ -64,7 +63,8 @@ public:
 };
 
 DateFolderView::DateFolderView(QWidget* const parent, DateAlbumModel* const dateAlbumModel)
-    : DVBox(parent), StateSavingObject(this),
+    : DVBox(parent),
+      StateSavingObject(this),
       d(new Private)
 {
     setObjectName(QLatin1String("DateFolderView"));

@@ -983,17 +983,6 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("image_add_to_new_queue"), d->imageAddNewQueueAction);
     ac->setDefaultShortcut(d->imageAddNewQueueAction, Qt::SHIFT+Qt::CTRL+Qt::Key_B);
 
-    // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
-
-    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
-            d->bqmAction, SLOT(setDisabled(bool)));
-
-    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
-            d->imageAddCurrentQueueAction, SLOT(setDisabled(bool)));
-
-    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
-            d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
-
     // -----------------------------------------------------------------
 
     d->quickImportMenu->setTitle(i18nc("@action Import photos from camera", "Import"));
@@ -1406,6 +1395,18 @@ void DigikamApp::setupActions()
     createGUI(xmlFile());
 
     cleanupActions();
+
+    // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
+    // These connections must be done after loading color theme else theme menu cannot be pluged to Settings menu,
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->bqmAction, SLOT(setDisabled(bool)));
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->imageAddCurrentQueueAction, SLOT(setDisabled(bool)));
+
+    connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
+            d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
 }
 
 void DigikamApp::initGui()
@@ -2545,8 +2546,8 @@ void DigikamApp::populateThemes()
     ThemeManager::instance()->registerThemeActions(this);
     ThemeManager::instance()->setCurrentTheme(ApplicationSettings::instance()->getCurrentTheme());
 
-    connect (ThemeManager::instance(), SIGNAL(signalThemeChanged()),
-             this, SLOT(slotThemeChanged()));
+    connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
+            this, SLOT(slotThemeChanged()));
 }
 
 void DigikamApp::slotThemeChanged()

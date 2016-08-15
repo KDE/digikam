@@ -31,10 +31,6 @@
 #include <QAction>
 #include <QMenu>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "importcategorizedview.h"
@@ -145,11 +141,11 @@ int ImportIconView::fitToWidthIcons()
 CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& file)
 {
     QUrl url = QUrl::fromLocalFile(folder);
-    url = url.adjusted(QUrl::StripTrailingSlash);
+    url      = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + QLatin1Char('/') + (file));
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
 
-    if(indexForCamItemInfo.isValid())
+    if (indexForCamItemInfo.isValid())
     {
         return importFilterModel()->camItemInfo(indexForCamItemInfo);
     }
@@ -160,10 +156,11 @@ CamItemInfo ImportIconView::camItemInfo(const QString& folder, const QString& fi
 CamItemInfo& ImportIconView::camItemInfoRef(const QString& folder, const QString& file)
 {
     QUrl url = QUrl::fromLocalFile(folder);
-    url = url.adjusted(QUrl::StripTrailingSlash);
+    url      = url.adjusted(QUrl::StripTrailingSlash);
     url.setPath(url.path() + QLatin1Char('/') + (file));
     QModelIndex indexForCamItemInfo = importFilterModel()->indexForPath(url.toLocalFile());
     QModelIndex mappedIndex         = importFilterModel()->mapToSource(indexForCamItemInfo);
+
     return importImageModel()->camItemInfoRef(mappedIndex);
 }
 
@@ -179,7 +176,7 @@ void ImportIconView::slotSetupChanged()
 
 void ImportIconView::rename()
 {
-    QList<QUrl>   urls = selectedUrls();
+    QList<QUrl>  urls = selectedUrls();
     NewNamesList newNamesList;
 
     QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);

@@ -70,8 +70,10 @@ private:
 private Q_SLOTS:
 
     void slotHelp();
-    void slotPTPCameraLinkUsed();
     void slotUMSCameraLinkUsed();
+    void slotPTPCameraLinkUsed();
+    void slotPTPIPCameraLinkUsed();
+    void slotNetworkEditChanged(const QString& text);
     void slotSelectionChanged(QTreeWidgetItem*, int);
     void slotPortChanged();
     void slotOkClicked();

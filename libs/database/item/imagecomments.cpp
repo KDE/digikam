@@ -28,10 +28,6 @@
 
 #include <QLocale>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "coredb.h"
@@ -447,7 +443,7 @@ void ImageComments::replaceComments(const CaptionsMap& map, DatabaseComment::Typ
     }
 
     // remove all comments of this type that have not been touched above
-    for (int i=0; i<d->infos.size() /* changing! */; )
+    for (int i = 0 ; i < d->infos.size() /* changing! */; )
     {
         if (!d->dirtyIndices.contains(i) && !d->newIndices.contains(i) && d->infos[i].type == type)
         {
@@ -525,7 +521,7 @@ void ImageComments::removeAll(DatabaseComment::Type type)
         return;
     }
 
-    for (int i=0; i<d->infos.size() /* changing! */; )
+    for (int i = 0 ; i < d->infos.size() /* changing! */; )
     {
         if (d->infos.at(i).type == type)
         {
@@ -643,7 +639,7 @@ void ImageComments::apply(CoreDbAccess& access)
     foreach(int index, d->newIndices)
     {
         CommentInfo& info = d->infos[index];
-        info.id = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
+        info.id           = access.db()->setImageComment(d->id, info.comment, info.type, info.language, info.author, info.date);
     }
 
     d->dirtyIndices.subtract(d->newIndices);
