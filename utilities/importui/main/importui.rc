@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="502" name="importui" translationDomain="digikam" >
+<gui version="503" name="importui" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -61,16 +61,6 @@
         <Action name="color_managed_view" />
     </Menu>
 
-    <Menu name="help" ><text>&amp;Help</text>
-        <Action name="help_rawcameralist"/>
-        <Action name="help_librariesinfo"/>
-        <Action name="help_dbstat"/>
-        <Separator/>
-        <Action name="help_donatemoney" />
-        <Action name="help_contribute" />
-    </Menu>
-
-    <Merge/>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
         <Merge name="StandardToolBarMenuHandler" />
@@ -85,6 +75,17 @@
         <Action name="options_configure_notifications"/>
         <Action name="options_configure" />
     </Menu>
+
+    <Menu name="help" ><text>&amp;Help</text>
+        <Action name="help_rawcameralist"/>
+        <Action name="help_librariesinfo"/>
+        <Action name="help_dbstat"/>
+        <Separator/>
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
+    </Menu>
+
+    <Merge/>
 
 </MenuBar>
 

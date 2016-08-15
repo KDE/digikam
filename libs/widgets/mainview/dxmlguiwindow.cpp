@@ -253,7 +253,7 @@ void DXmlGuiWindow::cleanupActions()
 
     ac          = actionCollection()->action(QLatin1String("help_donate"));
     if (ac) actionCollection()->removeAction(ac);
-/*    
+/*
     QList<QAction*> lst = actionCollection()->actions();
 
     foreach(QAction* const act, lst)
@@ -667,7 +667,6 @@ void DXmlGuiWindow::showToolBars(bool visible)
     }
 
     // Switch toolbars visibility
-
     for (QMap<KToolBar*, bool>::const_iterator it = d->toolbarsVisibility.constBegin(); it != d->toolbarsVisibility.constEnd(); ++it)
     {
         KToolBar* const toolbar = it.key();
