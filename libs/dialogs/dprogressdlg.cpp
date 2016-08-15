@@ -37,10 +37,6 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "dexpanderbox.h"

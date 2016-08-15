@@ -34,10 +34,6 @@
 #include <QTextCodec>
 #include <QStandardPaths>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "template.h"

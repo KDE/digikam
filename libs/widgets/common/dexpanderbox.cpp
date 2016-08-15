@@ -44,7 +44,6 @@
 // KDE includes
 
 #include <kconfiggroup.h>
-#include <klocalizedstring.h>
 
 // Local includes
 
@@ -696,7 +695,8 @@ public:
 };
 
 DExpanderBox::DExpanderBox(QWidget* const parent)
-    : QScrollArea(parent), d(new Private(this))
+    : QScrollArea(parent),
+      d(new Private(this))
 {
     setFrameStyle(QFrame::NoFrame);
     setWidgetResizable(true);
@@ -892,7 +892,8 @@ bool DExpanderBox::isItemExpanded(int index) const
 
     DLabelExpander* const exp = d->wList[index];
 
-    if (!exp) return false;
+    if (!exp)
+        return false;
 
     return (exp->isExpanded());
 }
@@ -940,7 +941,9 @@ DExpanderBoxExclusive::~DExpanderBoxExclusive()
 void DExpanderBoxExclusive::slotItemExpanded(bool b)
 {
     DLabelExpander* const exp = dynamic_cast<DLabelExpander*>(sender());
-    if (!exp) return;
+
+    if (!exp)
+        return;
 
     if (isToolBox() && b)
     {
