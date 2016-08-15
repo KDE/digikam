@@ -16,4 +16,5 @@ BUGFIXES FROM BUGZILLA:
 006 ==> 366683 - Reverse Geottaging doesn't work on manually modified coordinates.
 007 ==> 360528 - Digikam looks for digikamimageplugins in different directory than they were installed to.
 008 ==> 365175 - Geolocation editing no long works in digikam 5.
-009 ==> 
+009 ==> 366095 - Raw files not (always) properly decoded when using "raw data in half size" option for preview.
+010 ==> 
