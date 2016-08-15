@@ -244,7 +244,7 @@ void CoreDbAccess::setParameters(const DbEngineParameters& parameters, Applicati
         delete d->backend;
         d->backend = new CoreDbBackend(&d->lock);
         d->backend->setCoreDbWatch(d->databaseWatch);
-        d->db = new CoreDB(d->backend);
+        d->db      = new CoreDB(d->backend);
         TagsCache::instance()->initialize();
     }
 

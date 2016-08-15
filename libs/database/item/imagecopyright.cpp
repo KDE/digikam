@@ -28,10 +28,6 @@
 
 #include <QLocale>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "coredb.h"

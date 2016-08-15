@@ -30,10 +30,6 @@
 
 #include <QFileInfo>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -82,7 +78,7 @@ void SidecarFinder::process(const QList<QUrl>& files)
             if (DMetadata::hasSidecar(url.toLocalFile()))
             {
                 localFiles << DMetadata::sidecarUrl(url);
-                qCDebug(DIGIKAM_DATABASE_LOG)   << "Detected a sidecar" << localFiles.last();
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
             }
 
             localFiles << url;
@@ -188,7 +184,7 @@ void DIO::Private::imagesToAlbum(int operation, const QList<ImageInfo> infos, co
 
     QStringList      filenames;
     QList<qlonglong> ids;
-    QList<QUrl>       urls;
+    QList<QUrl>      urls;
 
     foreach(const ImageInfo& info, finder.infos)
     {
@@ -280,10 +276,9 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
         return;
     }
 
-    IOJobsThread *jobThread  = 0;
-
-    int flags      = operation & FlagMask;
-    operation     &= OperationMask;
+    IOJobsThread* jobThread = 0;
+    int flags               = operation & FlagMask;
+    operation              &= OperationMask;
 
     if (operation == Copy)
     {
@@ -327,7 +322,7 @@ void DIO::createJob(int operation, const QList<QUrl>& src, const QUrl& dest)
 
 void DIO::slotResult()
 {
-    IOJobsThread *jobThread = dynamic_cast<IOJobsThread*>(sender());
+    IOJobsThread* const jobThread = dynamic_cast<IOJobsThread*>(sender());
 
     if (!jobThread)
     {

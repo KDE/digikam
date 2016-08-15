@@ -30,10 +30,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"

@@ -50,7 +50,6 @@ extern "C"
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <klocalizedstring.h>
 
 // Local includes
 
