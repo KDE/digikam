@@ -60,7 +60,12 @@ public:
 
     }
     FacesEngine::FaceDetector facedetector;
+
+    static redeye::shapepredictor * sp;
+
 };
+redeye::shapepredictor * RedEyeCorrectionFilter::Private::sp = 0;
+
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
@@ -141,23 +146,28 @@ void RedEyeCorrectionFilter::filterImage()
 {
     // Todo:move the deserialization into a single place
     // preparing shape predictor
-    redeye::shapepredictor sp;
+    //redeye::shapepredictor sp;
 
+    if(d->sp == 0)
+    {
+        // Loading the shape predictor model
+        redeye::shapepredictor *temp = new redeye::shapepredictor();
 
-    // Loading the shape predictor model
-    QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                             QString::fromLatin1("digikam/facesengine"),
-                                             QStandardPaths::LocateDirectory);
-    QFile model(*path.begin()+QString("/shapepredictor.dat"));
-    cv::Mat intermediateImage;
-    model.open(QIODevice::ReadOnly);
-    QDataStream dataStream(&model);
-    dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-    dataStream>>sp;
+        QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                 QString::fromLatin1("digikam/facesengine"),
+                                                 QStandardPaths::LocateDirectory);
+        QFile model(*path.begin()+QString("/shapepredictor.dat"));
+
+        model.open(QIODevice::ReadOnly);
+        QDataStream dataStream(&model);
+        dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+        dataStream>>*temp;
+        d->sp = temp;
+    }
 
     //bool visualize = false;
 
-
+    cv::Mat intermediateImage;
 
     // Todo: convert dImg to Opencv::Mat directly
     // Deep copy
@@ -174,6 +184,7 @@ void RedEyeCorrectionFilter::filterImage()
     cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY);
 
     QList<QRectF> qrectfdets = d->facedetector.detectFaces(temp);
+    redeye::shapepredictor &sp = *(d->sp);
     if(qrectfdets.size() != 0)
     {
         std::vector<cv::Rect> dets;
