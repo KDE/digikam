@@ -28,10 +28,6 @@
 
 #include <QImage>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -93,9 +89,9 @@ void FaceUtils::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 // --- Convert between FacesEngine results and FaceTagsIface ---
 
 QList<FaceTagsIface> FaceUtils::toFaceTagsIfaces(qlonglong imageid,
-                                               const QList<QRectF>& detectedFaces,
-                                               const QList<FacesEngine::Identity> recognitionResults,
-                                               const QSize& fullSize) const
+                                                 const QList<QRectF>& detectedFaces,
+                                                 const QList<FacesEngine::Identity> recognitionResults,
+                                                 const QSize& fullSize) const
 {
     QList<FaceTagsIface> faces;
 
@@ -109,8 +105,8 @@ QList<FaceTagsIface> FaceUtils::toFaceTagsIfaces(qlonglong imageid,
         }
 
         // We'll get the unknownPersonTagId if the identity is null
-        int tagId               = FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
-        QRect fullSizeRect      = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
+        int tagId                = FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
+        QRect fullSizeRect       = TagRegion::relativeToAbsolute(detectedFaces[i], fullSize);
         FaceTagsIface::Type type = identity.isNull() ? FaceTagsIface::UnknownName : FaceTagsIface::UnconfirmedName;
 
         if (!tagId || !fullSizeRect.isValid())
@@ -150,9 +146,9 @@ void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString
 // --- Face detection: merging results ------------------------------------------------------------------------------------
 
 QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
-                                                       const QList<QRectF>& detectedFaces,
-                                                       const QList<FacesEngine::Identity> recognitionResults,
-                                                       const QSize& fullSize)
+                                                        const QList<QRectF>& detectedFaces,
+                                                        const QList<FacesEngine::Identity> recognitionResults,
+                                                        const QSize& fullSize)
 {
     // Build list of new entries
     QList<FaceTagsIface> newFaces = toFaceTagsIfaces(imageid, detectedFaces, recognitionResults, fullSize);
@@ -179,7 +175,7 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
             {
                 overlappingEntries << oldFace;
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Entry" << oldFace.region() << oldFace.tagId()
-                         << "overlaps" << newFace.region() << newFace.tagId() << ", skipping";
+                                             << "overlaps" << newFace.region() << newFace.tagId() << ", skipping";
             }
         }
 
@@ -263,7 +259,7 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
 FacesEngine::Identity FaceUtils::identityForTag(int tagId, FacesEngine::RecognitionDatabase& db) const
 {
     QMap<QString, QString> attributes = FaceTags::identityAttributes(tagId);
-    FacesEngine::Identity identity     = db.findIdentity(attributes);
+    FacesEngine::Identity identity    = db.findIdentity(attributes);
 
     if (!identity.isNull())
     {

@@ -30,10 +30,6 @@
 #include <QPixmap>
 #include <QTextDocument>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "applicationsettings.h"
@@ -58,7 +54,8 @@ public:
 };
 
 QueueToolTip::QueueToolTip(QueueListView* const view)
-    : DItemToolTip(), d(new Private)
+    : DItemToolTip(),
+      d(new Private)
 {
     d->view = view;
 }
@@ -72,8 +69,7 @@ void QueueToolTip::setQueueItem(QueueListViewItem* const item)
 {
     d->item = item;
 
-    if (!d->item ||
-        !ApplicationSettings::instance()->showToolTipsIsValid())
+    if (!d->item || !ApplicationSettings::instance()->showToolTipsIsValid())
     {
         hide();
     }
@@ -98,6 +94,7 @@ QRect QueueToolTip::repositionRect()
 
     QRect rect = d->view->visualItemRect(d->item);
     rect.moveTopLeft(d->view->viewport()->mapToGlobal(rect.topLeft()));
+
     return rect;
 }
 
@@ -109,6 +106,7 @@ QString QueueToolTip::tipContents()
     }
 
     ImageInfo info = d->item->info();
+
     return ToolTipFiller::imageInfoTipContents(info);
 }
 

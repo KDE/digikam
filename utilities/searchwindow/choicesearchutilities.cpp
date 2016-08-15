@@ -27,10 +27,6 @@
 
 #include <QTreeView>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -151,7 +147,7 @@ QStringList ChoiceSearchModel::checkedDisplayTexts() const
 void ChoiceSearchModel::setChecked(int i, bool checked)
 {
     m_entries[i].m_checkState = checked;
-    QModelIndex modelIndex  = index(i);
+    QModelIndex modelIndex    = index(i);
 
     emit dataChanged(modelIndex, modelIndex);
     emit checkStateChanged(m_entries.at(i).m_key, checked);

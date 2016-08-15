@@ -31,10 +31,6 @@
 #include <QAction>
 #include <QStandardPaths>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // local includes
 
 #include "searchbackend.h"
@@ -363,4 +359,4 @@ void SearchResultModel::removeRowsBySelection(const QItemSelection& selectionLis
     }
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

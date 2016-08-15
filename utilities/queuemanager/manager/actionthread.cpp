@@ -6,7 +6,7 @@
  * Date        : 2009-02-06
  * Description : Thread actions manager.
  *
- * Copyright (C) 2009-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2012      by Pankaj Kumar <me at panks dot me>
  *
  * This program is free software; you can redistribute it
@@ -23,10 +23,6 @@
  * ============================================================ */
 
 #include "actionthread.h"
-
-// KDE includes
-
-#include <klocalizedstring.h>
 
 // Local includes
 
@@ -86,7 +82,7 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
     ActionJobCollection collection;
 
-    for(int i=0; i < items.size(); i++)
+    for(int i = 0 ; i < items.size() ; i++)
     {
         Task* const t = new Task();
         t->setSettings(d->settings);
