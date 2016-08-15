@@ -263,6 +263,7 @@ void RedEyeCorrectionFilter::correctRedEye(cv::Mat & eye, int type, cv::Rect img
     uchar  * onebytedata  = eye.data;
     //ushort * twobytedata = (ushort*)eye.data;
     int pixeldepth;
+
     if(type == CV_8UC3 || type == CV_16UC3 )
     {
         pixeldepth = 3;
@@ -273,7 +274,8 @@ void RedEyeCorrectionFilter::correctRedEye(cv::Mat & eye, int type, cv::Rect img
     }
     else
     {
-        qDebug()<<"\nInsupported Type in redeye correction function";
+        qDebug() << "\nInsupported Type in redeye correction function";
+        return;
     }
 
     //bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false:true;
