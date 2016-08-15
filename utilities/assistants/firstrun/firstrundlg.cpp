@@ -27,10 +27,6 @@
 
 #include <QPushButton>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local incudes
 
 #include "dxmlguiwindow.h"

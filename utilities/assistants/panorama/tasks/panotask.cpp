@@ -26,10 +26,6 @@
 
 #include <QFileInfo>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 namespace Digikam
 {
 

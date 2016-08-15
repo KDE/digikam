@@ -33,16 +33,13 @@
 #include <QApplication>
 #include <QIcon>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "digikam_debug.h"
 
 namespace Digikam
 {
+
 PresentationCtrlWidget::PresentationCtrlWidget(QWidget* const parent)
     : QWidget(parent)
 {

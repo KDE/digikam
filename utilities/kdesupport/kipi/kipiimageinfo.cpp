@@ -32,10 +32,6 @@
 #include <QDir>
 #include <QDateTime>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // LibKipi includes
 
 #include <KIPI/Interface>
@@ -80,7 +76,8 @@ public:
 };
 
 KipiImageInfo::KipiImageInfo(Interface* const interface, const QUrl& url)
-    : ImageInfoShared(interface, url) , d(new Private)
+    : ImageInfoShared(interface, url),
+      d(new Private)
 {
     d->info = ScanController::instance()->scannedInfo(url.toLocalFile());
 

@@ -42,10 +42,6 @@
 #include <QSize>
 #include <QLocale>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "calsettings.h"
