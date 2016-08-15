@@ -364,7 +364,7 @@ AlbumManager::~AlbumManager()
 
 void AlbumManager::cleanUp()
 {
-    // This is what we prefer to do before KApplication destruction
+    // This is what we prefer to do before Application destruction
 
     if (d->dateListJob)
     {
