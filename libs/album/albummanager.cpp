@@ -716,7 +716,6 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
     d->rootDAlbum = 0;
     d->rootSAlbum = 0;
 
-
     // -- Database initialization -------------------------------------------------
 
     // ensure, embedded database is loaded
