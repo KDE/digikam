@@ -156,7 +156,7 @@ void RedEyeCorrectionFilter::filterImage()
         QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                  QString::fromLatin1("digikam/facesengine"),
                                                  QStandardPaths::LocateDirectory);
-        QFile model(*path.begin()+QString("/shapepredictor.dat"));
+        QFile model(*path.begin()+QLatin1String("/shapepredictor.dat"));
 
         model.open(QIODevice::ReadOnly);
         QDataStream dataStream(&model);
