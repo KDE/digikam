@@ -32,10 +32,6 @@
 #include <QFileInfo>
 #include <QUrl>
 
-// KDE includes
-
-#include "klocalizedstring.h"
-
 // Local includes
 
 #include "iojob.h"

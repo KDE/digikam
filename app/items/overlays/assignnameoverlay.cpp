@@ -31,10 +31,6 @@
 #include <QApplication>
 #include <QPushButton>
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "dwidgetutils.h"

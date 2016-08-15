@@ -23,10 +23,6 @@
 
 #include "showfotothumbnailmodel.h"
 
-// KDE includes
-
-#include <klocalizedstring.h>
-
 // Local includes
 
 #include "drawdecoder.h"
@@ -54,17 +50,8 @@ public:
         preloadThumbSize(0),
         emitDataChanged(true)
     {
-            maxThumbSize = ThumbnailSize::Huge;
+        maxThumbSize = ThumbnailSize::Huge;
     }
-
-    ThumbnailLoadThread*   thread;
-    ThumbnailLoadThread*   preloadThread;
-    ThumbnailSize          thumbSize;
-    ThumbnailSize          lastGlobalThumbSize;
-    ThumbnailSize          preloadThumbSize;
-    QRect                  detailRect;
-    int                    maxThumbSize;
-    bool                   emitDataChanged;
 
     int preloadThumbnailSize() const
     {
@@ -75,10 +62,22 @@ public:
 
         return thumbSize.size();
     }
+
+public:
+
+    ThumbnailLoadThread* thread;
+    ThumbnailLoadThread* preloadThread;
+    ThumbnailSize        thumbSize;
+    ThumbnailSize        lastGlobalThumbSize;
+    ThumbnailSize        preloadThumbSize;
+    QRect                detailRect;
+    int                  maxThumbSize;
+    bool                 emitDataChanged;
 };
 
 ShowfotoThumbnailModel::ShowfotoThumbnailModel(QObject* const parent)
-    : ShowfotoImageModel(parent), d(new Private)
+    : ShowfotoImageModel(parent),
+      d(new Private)
 {
     connect(this, &ShowfotoThumbnailModel::signalThumbInfo, this, &ShowfotoThumbnailModel::slotThumbInfoLoaded);
 }
@@ -93,7 +92,8 @@ void ShowfotoThumbnailModel::setThumbnailLoadThread(ThumbnailLoadThread* thread)
 {
     d->thread = thread;
 
-    connect(d->thread, &ThumbnailLoadThread::signalThumbnailLoaded, this, &ShowfotoThumbnailModel::slotThumbnailLoaded);
+    connect(d->thread, &ThumbnailLoadThread::signalThumbnailLoaded,
+            this, &ShowfotoThumbnailModel::slotThumbnailLoaded);
 }
 
 ThumbnailLoadThread* ShowfotoThumbnailModel::thumbnailLoadThread() const
@@ -262,7 +262,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
     bool turnHighQualityThumbs = group.readEntry(QLatin1String("TurnHighQualityThumbs"), false);
 
     // Try to get thumbnail from Exif data (poor quality).
-    if(!turnHighQualityThumbs)
+    if (!turnHighQualityThumbs)
     {
         thumbnail = metadata.getExifThumbnail(true);
 
@@ -332,7 +332,6 @@ bool ShowfotoThumbnailModel::pixmapForItem(QString url, QPixmap& pix) const
         else
         {
             return false;
-
         }
     }
     else
@@ -345,7 +344,7 @@ void ShowfotoThumbnailModel::slotThumbInfoLoaded(const ShowfotoItemInfo& info, c
 {
     QImage thumbnail = thumbnailImage;
 
-    if(thumbnail.isNull())
+    if (thumbnail.isNull())
     {
         thumbnail = QImage();
     }
