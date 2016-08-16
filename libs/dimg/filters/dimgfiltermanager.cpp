@@ -74,6 +74,7 @@
 #include "normalizefilter.h"
 #include "nrfilter.h"
 #include "oilpaintfilter.h"
+#include "redeyecorrectionfilter.h"
 #include "raindropfilter.h"
 #include "sharpenfilter.h"
 #include "shearfilter.h"
@@ -83,6 +84,7 @@
 #include "unsharpmaskfilter.h"
 #include "wbfilter.h"
 #include "filmfilter_p.h"
+
 
 #ifdef HAVE_LIBLQR_1
 #include "contentawarefilter.h"
@@ -170,6 +172,7 @@ void DImgFilterManager::Private::setupCoreGenerators()
             << ImgFilterPtr(new BasicDImgFilterGenerator<NRFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<OilPaintFilter>())
             << ImgFilterPtr(new BasicDImgFilterGenerator<RainDropFilter>())
+            << ImgFilterPtr(new BasicDImgFilterGenerator<RedEyeCorrectionFilter>())
 #ifdef HAVE_EIGEN3
             << ImgFilterPtr(new BasicDImgFilterGenerator<RefocusFilter>())
 #endif // HAVE_EIGEN3
@@ -218,6 +221,7 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:OilPaintFilter"),       QLatin1String("oilpaint"));
     filterIcons.insert(QLatin1String("digikam:RainDropFilter"),       QLatin1String("raindrop"));
     filterIcons.insert(QLatin1String("digikam:RatioCrop"),            QLatin1String("transform-crop"));
+    //filterIcons.insert(QLatin1String("digikam:RedEyeCorrectionFilter"),            QLatin1String("redeye-correction"));
     filterIcons.insert(QLatin1String("digikam:RefocusFilter"),        QLatin1String("sharpenimage"));
     filterIcons.insert(QLatin1String("digikam:Rotate90"),             QLatin1String("object-rotate-right"));
     filterIcons.insert(QLatin1String("digikam:Rotate270"),            QLatin1String("object-rotate-left"));

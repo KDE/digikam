@@ -36,6 +36,7 @@ set(libqueuemanager_SRCS
     basetools/enhance/noisereduction.cpp
     basetools/enhance/restoration.cpp
     basetools/enhance/sharpen.cpp
+    basetools/enhance/redeyecorrection.cpp
     basetools/filters/filmgrain.cpp
     basetools/filters/colorfx.cpp
     basetools/metadata/assigntemplate.cpp
@@ -66,6 +67,7 @@ set(libqueuemanager_SRCS
     views/workflowlist.cpp
     main/queuemgrwindow.cpp
 )
+
 
 if(JASPER_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
@@ -100,6 +102,6 @@ if(KF5Kipi_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::Kipi,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS})
+add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS} ${libdlib_SRCS})
 
 install( FILES main/queuemgrwindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )

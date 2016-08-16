@@ -53,6 +53,7 @@
 #include "colorfx.h"
 #include "localcontrast.h"
 #include "antivignetting.h"
+#include "redeyecorrection.h"
 #include "invert.h"
 #include "convert8to16.h"
 #include "convert16to8.h"
@@ -138,6 +139,7 @@ BatchToolsManager::BatchToolsManager()
     registerTool(new Restoration(this));
     registerTool(new LocalContrast(this));
     registerTool(new AntiVignetting(this));
+    registerTool(new RedEyeCorrection(this));
 #ifdef HAVE_LENSFUN
     registerTool(new LensAutoFix(this));
 #endif // HAVE_LENSFUN

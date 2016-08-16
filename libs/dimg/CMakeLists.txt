@@ -108,7 +108,16 @@ set(libdimgfilters_SRCS
     filters/lens/antivignettingsettings.cpp
     filters/lens/lensdistortionfilter.cpp
     filters/lens/pixelaccess.cpp
+#    filters/redeye/redeyecorrectionfilter.cpp
 )
+
+
+set(facedetector_LIB_SRCS ../facesengine/detection/opencvfacedetector.cpp
+                          ../facesengine/redeye/redeyecorrectionfilter.cpp
+                          ../facesengine/facedetector.cpp
+
+)
+
 
 # ==================================================================================================
 # get the gcc version
@@ -192,12 +201,19 @@ include_directories(
     $<TARGET_PROPERTY:KF5::WidgetsAddons,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../facesengine/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../facesengine/redeye/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/../facesengine/detector/
+)
+
 if(X11_FOUND)
     include_directories($<TARGET_PROPERTY:Qt5::X11Extras,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
 add_library(dimg_src OBJECT
+            ${facedetector_LIB_SRCS}
             ${libdimgloaders_SRCS}
             ${libdimgfilters_SRCS}
             ${libdimg_SRCS}
+            ${libdlib_SRCS}
 )
