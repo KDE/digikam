@@ -47,7 +47,7 @@ public:
                    const QUrl& sourceUrl);
     ~PreProcessTask();
 
-    void requestAbort();
+    void requestAbort() override;
 
 protected:
 
