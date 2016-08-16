@@ -759,10 +759,9 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
         {
             return RAW;
         }
-
-        if (ext == QLatin1String("JP2") || ext == QLatin1String("JPX") || // JPEG2000 file format
-            ext == QLatin1String("JPC") || ext == QLatin1String("J2K") || // JPEG2000 code stream
-            ext == QLatin1String("PGX"))                                  // JPEG2000 WM format
+        else if (ext == QLatin1String("JP2") || ext == QLatin1String("JPX") || // JPEG2000 file format
+                 ext == QLatin1String("JPC") || ext == QLatin1String("J2K") || // JPEG2000 code stream
+                 ext == QLatin1String("PGX"))                                  // JPEG2000 WM format
         {
             return JP2K;
         }

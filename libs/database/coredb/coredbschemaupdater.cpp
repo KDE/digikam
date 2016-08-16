@@ -458,7 +458,7 @@ bool CoreDbSchemaUpdater::makeUpdates()
 }
 
 void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter, QStringList& defaultVideoFilter,
-                                          QStringList& defaultAudioFilter)
+                                                QStringList& defaultAudioFilter)
 {
     //NOTE for updating:
     //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
@@ -468,7 +468,8 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
                        << QLatin1String("png")                                                                                                  // PNG
                        << QLatin1String("xpm") << QLatin1String("ppm")  << QLatin1String("pnm") << QLatin1String("pgf")
-                       << QLatin1String("gif") << QLatin1String("bmp")  << QLatin1String("xcf") << QLatin1String("pcx");
+                       << QLatin1String("gif") << QLatin1String("bmp")  << QLatin1String("xcf") << QLatin1String("pcx")
+                       << QLatin1String("webp");
 
     defaultImageFilter << RawEngine::DRawDecoder::rawFilesList();
 
