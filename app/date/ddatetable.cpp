@@ -377,7 +377,7 @@ void DDateTable::paintCell(QPainter* painter, int row, int col)
     }
     else if (cellBackgroundColor != palette().color(backgroundRole()) || pos == d->hoveredPos)
     {
-        QStyleOptionViewItemV4 opt;
+        QStyleOptionViewItem opt;
         opt.initFrom(this);
         opt.rect = cell.toRect();
 
@@ -397,7 +397,7 @@ void DDateTable::paintCell(QPainter* painter, int row, int col)
         }
 
         opt.showDecorationSelected = true;
-        opt.viewItemPosition       = QStyleOptionViewItemV4::OnlyOne;
+        opt.viewItemPosition       = QStyleOptionViewItem::OnlyOne;
         style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, this);
     }
 
