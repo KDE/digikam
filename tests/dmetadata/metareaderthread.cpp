@@ -28,6 +28,7 @@
 #include <QDirIterator>
 #include <QDebug>
 #include <QApplication>
+#include <QElapsedTimer>
 
 // Local includes
 
@@ -50,18 +51,16 @@ protected:
 
     void run()
     {
-        qDebug() << url;
         DMetadata meta;
         meta.setSettings(settings);
 
         if (!meta.load(url.toLocalFile()))
         {
-            qDebug() << "Cannot load metadata!";
+            qDebug() << url.fileName() << " : cannot load metadata!";
         }
         else
         {
-            qDebug() << "Photo info:";
-            qDebug() << meta.getPhotographInformation();
+            qDebug() << url.fileName() << meta.getPhotographInformation();
         }
 
         emit signalDone();
@@ -106,9 +105,8 @@ void MetaReaderThread::slotJobFinished()
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    QList<QUrl> list;
 
-    if (argc != 2)
+    if (argc < 3)
     {
         qDebug() << "metareaderthread - test to load metadata from images through multi-core threades";
         qDebug() << "Usage  : <images path> <image file filter> ... <image file filter>";
@@ -129,6 +127,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    QList<QUrl> list;
     QDirIterator it(path, filters,
                     QDir::Files,
                     QDirIterator::Subdirectories);
@@ -146,11 +145,14 @@ int main(int argc, char* argv[])
     }
 
     MetaEngine::initializeExiv2();
-
     MetadataSettingsContainer settings;
 
     MetaReaderThread* const thread = new MetaReaderThread(&app);
     thread->readMetadata(list, settings);
+
+    QElapsedTimer timer;
+    timer.start();
+
     thread->start();
 
     QObject::connect(thread, SIGNAL(done()),
@@ -158,7 +160,7 @@ int main(int argc, char* argv[])
 
     app.exec();
 
-    qDebug() << list.size() << " files processed";
+    qDebug() << "Reading metadata from " << list.size() << " files took " << timer.elapsed()/1000.0 << " seconds";
 
     MetaEngine::cleanupExiv2();
 
