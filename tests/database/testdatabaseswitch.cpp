@@ -56,14 +56,14 @@ const QString IMAGE_PATH(QFINDTESTDATA("data/testimages/"));
 
 int main(int argc, char** argv)
 {
-/*
+
     if (argc != 2)
     {
         qDebug() << "testdatabaseswitch - test database switch";
-        qDebug() << "Usage: <>";
+        qDebug() << "Usage: <sqliteToMysql | mysqlToSqlite>";
         return -1;
     }
-*/
+
     KAboutData aboutData(QString::fromLatin1("digikam"),
                          QString::fromLatin1("digiKam"), // No need i18n here.
                          digiKamVersion());
@@ -76,74 +76,146 @@ int main(int argc, char** argv)
     aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
+    QString switchCondition = QString::fromLatin1(argv[1]);
 
     // ------------------------------------------------------------------------------------
 
-    qDebug() << "Setup sqlite Database...";
+    if(switchCondition == "sqliteToMysql")
+    {
+        qDebug() << "Setup sqlite Database...";
 
-    DbEngineParameters params;
+        DbEngineParameters params;
 
-    params.databaseType = DbEngineParameters::SQLiteDatabaseType();
-    params.setCoreDatabasePath(QDir::currentPath() + QLatin1String("/digikam-core-test.db"));
-    params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
-    params.setFaceDatabasePath(QDir::currentPath() + QLatin1String("/digikam-faces-test.db"));
-    params.legacyAndDefaultChecks();
+        params.databaseType = DbEngineParameters::SQLiteDatabaseType();
+        params.setCoreDatabasePath(QDir::currentPath() + QLatin1String("/digikam-core-test.db"));
+        params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
+        params.setFaceDatabasePath(QDir::currentPath() + QLatin1String("/digikam-faces-test.db"));
+        params.legacyAndDefaultChecks();
 
-    qDebug() << "Initializing database...";
-    bool b = AlbumManager::instance()->setDatabase(params, false, IMAGE_PATH);
+        qDebug() << "Initializing database...";
+        bool b = AlbumManager::instance()->setDatabase(params, false, IMAGE_PATH);
 
-    qDebug() << "Database initialization done: " << b;
+        qDebug() << "Database initialization done: " << b;
 
-    QTest::qWait(3000);
+        QTest::qWait(3000);
 
-//    qDebug() << "Shutting down database";
-//    ScanController::instance()->shutDown();
-//    AlbumManager::instance()->cleanUp();
+         //qDebug() << "Shutting down database";
+         //ScanController::instance()->shutDown();
+         //AlbumManager::instance()->cleanUp();
 
-    qDebug() << "Cleaning DB now";
-    CoreDbAccess::cleanUpDatabase();
-    ThumbsDbAccess::cleanUpDatabase();
-    FaceDbAccess::cleanUpDatabase();
+        qDebug() << "Cleaning DB now";
+        CoreDbAccess::cleanUpDatabase();
+        ThumbsDbAccess::cleanUpDatabase();
+        FaceDbAccess::cleanUpDatabase();
 
-    // ------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------
 
-    qDebug() << "Setup mysql Database...";
+        qDebug() << "Setup mysql Database...";
 
-    params                            = DbEngineParameters();
-    QString defaultAkDir              = DbEngineParameters::internalServerPrivatePath();
-    QString miscDir                   = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_misc"));
-    params.databaseType               = DbEngineParameters::MySQLDatabaseType();
-    params.databaseNameCore           = QLatin1String("digikam");
-    params.databaseNameThumbnails     = QLatin1String("digikam");
-    params.databaseNameFace           = QLatin1String("digikam");
-    params.userName                   = QLatin1String("root");
-    params.password                   = QString();
-    params.internalServer             = true;
-    params.internalServerDBPath       = QDir::currentPath();
-    params.internalServerMysqlServCmd = DbEngineParameters::defaultMysqlServerCmd();
-    params.internalServerMysqlInitCmd = DbEngineParameters::defaultMysqlInitCmd();
-    params.hostName                   = QString();
-    params.port                       = -1;
-    params.connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+        params                            = DbEngineParameters();
+        QString defaultAkDir              = DbEngineParameters::internalServerPrivatePath();
+        QString miscDir                   = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_misc"));
+        params.databaseType               = DbEngineParameters::MySQLDatabaseType();
+        params.databaseNameCore           = QLatin1String("digikam");
+        params.databaseNameThumbnails     = QLatin1String("digikam");
+        params.databaseNameFace           = QLatin1String("digikam");
+        params.userName                   = QLatin1String("root");
+        params.password                   = QString();
+        params.internalServer             = true;
+        params.internalServerDBPath       = QDir::currentPath();
+        params.internalServerMysqlServCmd = DbEngineParameters::defaultMysqlServerCmd();
+        params.internalServerMysqlInitCmd = DbEngineParameters::defaultMysqlInitCmd();
+        params.hostName                   = QString();
+        params.port                       = -1;
+        params.connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
 
-    // ------------------------------------------------------------------------------------
+        // ------------------------------------------------------------------------------------
 
-    qDebug() << "Initializing database...";
-    AlbumManager::instance()->changeDatabase(params);
+        qDebug() << "Initializing database...";
+        AlbumManager::instance()->changeDatabase(params);
 
-    qDebug() << "Database switch done";
+        qDebug() << "Database switch done";
 
-    QTimer::singleShot(5000, &app, SLOT(quit()));
-    app.exec();
+        QTimer::singleShot(5000, &app, SLOT(quit()));
+        app.exec();
 
-    qDebug() << "Shutting down database";
-    ScanController::instance()->shutDown();
-    AlbumManager::instance()->cleanUp();
+        qDebug() << "Shutting down database";
+        ScanController::instance()->shutDown();
+        AlbumManager::instance()->cleanUp();
 
-    qDebug() << "Cleaning DB now";
-    CoreDbAccess::cleanUpDatabase();
-    ThumbsDbAccess::cleanUpDatabase();
-    FaceDbAccess::cleanUpDatabase();
+        qDebug() << "Cleaning DB now";
+        CoreDbAccess::cleanUpDatabase();
+        ThumbsDbAccess::cleanUpDatabase();
+        FaceDbAccess::cleanUpDatabase();
+    }
+    
+    else if(switchCondition == "mysqlToSqlite")
+    {
+        DbEngineParameters params;
+         
+        qDebug() << "Setup mysql Database...";
+
+        QString defaultAkDir              = DbEngineParameters::internalServerPrivatePath();
+        QString miscDir                   = QDir(defaultAkDir).absoluteFilePath(QLatin1String("db_misc"));
+        params.databaseType               = DbEngineParameters::MySQLDatabaseType();
+        params.databaseNameCore           = QLatin1String("digikam");
+        params.databaseNameThumbnails     = QLatin1String("digikam");
+        params.databaseNameFace           = QLatin1String("digikam");
+        params.userName                   = QLatin1String("root");
+        params.password                   = QString();
+        params.internalServer             = true;
+        params.internalServerDBPath       = QDir::currentPath();
+        params.internalServerMysqlServCmd = DbEngineParameters::defaultMysqlServerCmd();
+        params.internalServerMysqlInitCmd = DbEngineParameters::defaultMysqlInitCmd();
+        params.hostName                   = QString();
+        params.port                       = -1;
+        params.connectOptions             = QString::fromLatin1("UNIX_SOCKET=%1/mysql.socket").arg(miscDir);
+
+        // ------------------------------------------------------------------------------------
+
+        qDebug() << "Initializing database...";
+        AlbumManager::instance()->changeDatabase(params);
+
+        qDebug() << "Database switch done";
+
+        QTimer::singleShot(5000, &app, SLOT(quit()));
+        app.exec();
+
+        qDebug() << "Shutting down database";
+        ScanController::instance()->shutDown();
+        AlbumManager::instance()->cleanUp();
+
+        qDebug() << "Cleaning DB now";
+        CoreDbAccess::cleanUpDatabase();
+        ThumbsDbAccess::cleanUpDatabase();
+        FaceDbAccess::cleanUpDatabase();
+        
+        // ------------------------------------------------------------------------------------
+        
+        qDebug() << "Setup sqlite Database...";
+
+        params.databaseType = DbEngineParameters::SQLiteDatabaseType();
+        params.setCoreDatabasePath(QDir::currentPath() + QLatin1String("/digikam-core-test.db"));
+        params.setThumbsDatabasePath(QDir::currentPath() + QLatin1String("/digikam-thumbs-test.db"));
+        params.setFaceDatabasePath(QDir::currentPath() + QLatin1String("/digikam-faces-test.db"));
+        params.legacyAndDefaultChecks();
+
+        qDebug() << "Initializing database...";
+        bool b = AlbumManager::instance()->setDatabase(params, false, IMAGE_PATH);
+
+        qDebug() << "Database initialization done: " << b;
+
+        QTest::qWait(3000);
+
+        //qDebug() << "Shutting down database";
+        //ScanController::instance()->shutDown();
+        //AlbumManager::instance()->cleanUp();
+
+        qDebug() << "Cleaning DB now";
+        CoreDbAccess::cleanUpDatabase();
+        ThumbsDbAccess::cleanUpDatabase();
+        FaceDbAccess::cleanUpDatabase();
+    }
 
     return 0;
 }
