@@ -95,17 +95,21 @@ std::vector<cv::Rect> geteyes(const fullobjectdetection & shape)
         int start = j?36:42;
         int end = j?41:47;
         int tlx,tly,brx,bry; // topleftx,y,toprightx,y
+        // initializing
+        std::vector<float> firstpoint = shape.part(start);
+        tlx = brx = firstpoint[0];
+        tly = bry = firstpoint[1];
         for(int i = start;i<=end;i++)
         {
             std::vector<float> x = shape.part(i);
-            if(i == start)
-            {
-                tlx = x[0];
-                brx = x[0];
-                tly = x[1];
-                bry = x[1];
-                continue;
-            }
+//            if(i == start)
+//            {
+//                tlx = x[0];
+//                brx = x[0];
+//                tly = x[1];
+//                bry = x[1];
+//                continue;
+//            }
             if(x[0] < tlx)
                 tlx = x[0];
             else if(x[0] > brx)
