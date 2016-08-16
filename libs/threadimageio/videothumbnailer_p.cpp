@@ -529,6 +529,7 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     : QObject(parent),
       createStrip(false),
       thumbSize(ThumbnailSize::Huge),
+      thumbJob(0),
       isReady(false),
       player(0),
       probe(0),
@@ -624,9 +625,9 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             if (!player->isVideoAvailable())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Video stream is not available for " << fileName();
-                isReady = true;
                 player->setMedia(QMediaContent());
-                dd->emit signalThumbnailFailed(filePath());
+                dd->emit signalThumbnailFailed(thumbJob, filePath());
+                isReady = true;
                 return;
             }
 
@@ -642,18 +643,18 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             if (!player->isSeekable())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Video seek is not available for " << fileName();
-                isReady = true;
                 player->setMedia(QMediaContent());
-                dd->emit signalThumbnailFailed(filePath());
+                dd->emit signalThumbnailFailed(thumbJob, filePath());
+                isReady = true;
                 return;
             }
 
             if (player->duration() <= 0)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Video has no valid duration for " << fileName();
-                isReady = true;
                 player->setMedia(QMediaContent());
-                dd->emit signalThumbnailFailed(filePath());
+                dd->emit signalThumbnailFailed(thumbJob, filePath());
+                isReady = true;
                 return;
             }
 
@@ -670,9 +671,10 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         case QMediaPlayer::InvalidMedia:
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Video cannot be decoded for " << fileName();
-            isReady = true;
             player->setMedia(QMediaContent());
-            dd->emit signalThumbnailFailed(filePath());
+            dd->emit signalThumbnailFailed(thumbJob, filePath());
+            isReady = true;
+            return;
         }
         default:
             break;
@@ -692,9 +694,9 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
         if (++errorCount > 1000)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video data are corrupted from " << fileName();
-            isReady = true;
             player->setMedia(QMediaContent());
-            dd->emit signalThumbnailFailed(filePath());
+            dd->emit signalThumbnailFailed(thumbJob, filePath());
+            isReady = true;
             return;
         }
         else
@@ -710,9 +712,9 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     if (!frm.isValid())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video frame is not valid.";
-        isReady = true;
         player->setMedia(QMediaContent());
-        dd->emit signalThumbnailFailed(filePath());
+        dd->emit signalThumbnailFailed(thumbJob, filePath());
+        isReady = true;
         return;
     }
 
@@ -742,18 +744,18 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame extracted with size " << img.size();
 
-        isReady = true;
         player->setMedia(QMediaContent());
-        dd->emit signalThumbnailDone(filePath(), img.copy());
+        dd->emit signalThumbnailDone(thumbJob, filePath(), img.copy());
     }
     else
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame format is not supported: " << frm;
 
-        isReady = true;
         player->setMedia(QMediaContent());
-        dd->emit signalThumbnailFailed(filePath());
+        dd->emit signalThumbnailFailed(thumbJob, filePath());
     }
+
+    isReady = true;
 }
 
 }  // namespace Digikam

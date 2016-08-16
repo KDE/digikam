@@ -45,23 +45,23 @@ public:
     {
         canceled    = false;
         running     = false;
-        jobDone     = true;
         createStrip = true;
         thumbSize   = ThumbnailSize::Huge;
+        thumbJob    = 0;
         vthumb      = 0;
     }
 
     volatile bool     canceled;
     volatile bool     running;
-    volatile bool     jobDone;
+
     bool              createStrip;
     int               thumbSize;
+    quintptr          thumbJob;
 
     QMutex            mutex;
     QWaitCondition    condVar;
 
     QStringList       todo;
-    QString           currentFile;
     VideoThumbnailer* vthumb;
 };
 
@@ -69,16 +69,14 @@ VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
-    d->vthumb = VideoThumbnailer::instance();
+    d->thumbJob = reinterpret_cast<quintptr>(this);
+    d->vthumb   = VideoThumbnailer::instance();
 
-    connect(this, SIGNAL(signalGetThumbnail(const QString&,int,bool)),
-            d->vthumb, SLOT(slotGetThumbnail(const QString&,int,bool)));
+    connect(d->vthumb, SIGNAL(signalThumbnailDone(quintptr, const QString&, const QImage&)),
+            this, SLOT(slotThumbnailDone(quintptr, const QString&, const QImage&)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailDone(const QString&, const QImage&)),
-            this, SLOT(slotThumbnailDone(const QString&, const QImage&)));
-
-    connect(d->vthumb, SIGNAL(signalThumbnailFailed(const QString&)),
-            this, SLOT(slotThumbnailFailed(const QString&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailFailed(quintptr, const QString&)),
+            this, SLOT(slotThumbnailFailed(quintptr, const QString&)));
 }
 
 VideoThumbnailerJob::~VideoThumbnailerJob()
@@ -138,11 +136,11 @@ void VideoThumbnailerJob::addItems(const QStringList& files)
 
 void VideoThumbnailerJob::processOne()
 {
-    if (!d->todo.isEmpty() && d->jobDone)
+    if (!d->todo.isEmpty())
     {
         d->condVar.wakeAll();
     }
-    else if (d->todo.isEmpty())
+    else
     {
         emit signalThumbnailJobFinished();
     }
@@ -154,45 +152,55 @@ void VideoThumbnailerJob::run()
     {
         QMutexLocker lock(&d->mutex);
 
-        if (d->vthumb->isReady() && d->jobDone && !d->todo.isEmpty())
+        if (d->vthumb->isReady() && !d->todo.isEmpty())
         {
-            d->jobDone = false;
-            d->currentFile = d->todo.takeFirst();
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
-            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
+            QString file = d->todo.takeFirst();
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << file;
+
+            if (!d->vthumb->getThumbnail(d->thumbJob, file, d->thumbSize, d->createStrip))
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
+                emit signalThumbnailFailed(file);
+
+                if (d->todo.isEmpty())
+                {
+                    emit signalThumbnailJobFinished();
+                }
+            }
+        }
+
+        if (d->todo.isEmpty())
+        {
+            d->condVar.wait(&d->mutex);
         }
         else
         {
-            d->condVar.wait(&d->mutex);
+            d->condVar.wait(&d->mutex, 250);
         }
     }
 }
 
-void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& img)
+void VideoThumbnailerJob::slotThumbnailDone(quintptr job, const QString& file, const QImage& img)
 {
-    if (d->currentFile != file)
+    if (d->thumbJob != job)
     {
         return;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
     emit signalThumbnailDone(file, img);
-    QMutexLocker lock(&d->mutex);
-    d->jobDone = true;
     processOne();
 }
 
-void VideoThumbnailerJob::slotThumbnailFailed(const QString& file)
+void VideoThumbnailerJob::slotThumbnailFailed(quintptr job, const QString& file)
 {
-    if (d->currentFile != file)
+    if (d->thumbJob != job)
     {
         return;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
     emit signalThumbnailFailed(file);
-    QMutexLocker lock(&d->mutex);
-    d->jobDone = true;
     processOne();
 }
 

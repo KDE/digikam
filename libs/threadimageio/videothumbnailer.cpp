@@ -71,9 +71,10 @@ bool VideoThumbnailer::isReady() const
     return d->isReady;
 }
 
-void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool strip)
+bool VideoThumbnailer::getThumbnail(quintptr job, const QString& file, int size, bool strip)
 {
     d->isReady     = false;
+    d->thumbJob    = job;
     d->createStrip = strip;
 
     if (size < ThumbnailSize::Step || size > ThumbnailSize::HD)
@@ -90,16 +91,14 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video monitoring is not available.";
         d->isReady = true;
-        emit signalThumbnailFailed(file);
-        return;
+        return false;
     }
 
     if (!QFile::exists(file))
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video file " << file << " does not exist.";
         d->isReady = true;
-        emit signalThumbnailFailed(file);
-        return;
+        return false;
     }
 
     QMimeDatabase mimeDB;
@@ -108,13 +107,14 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video from " << file;
         d->isReady = true;
-        emit signalThumbnailFailed(file);
-        return;
+        return false;
     }
 
     d->media = QMediaContent(QUrl::fromLocalFile(file));
     d->player->setMedia(d->media);
     d->player->setMuted(true);
+
+    return true;
 }
 
 }  // namespace Digikam
