@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="512" name="digikamimagewindow" translationDomain="digikam" >
+<gui version="513" name="digikamimagewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -180,7 +180,6 @@
      <Action name="editorwindow_redo" />
      <Action name="editorwindow_revert" />
      <Separator/>
-     <Action name="editorwindow_selecttool" />
      <Action name="editorwindow_applytool" />
      <Action name="editorwindow_closetool" />
      <!--

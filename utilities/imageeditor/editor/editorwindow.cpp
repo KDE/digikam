@@ -142,7 +142,6 @@
 #include "filmgraintool.h"
 #include "invertfilter.h"
 #include "imageiface.h"
-#include "editortooliface.h"
 #include "iccprofilescombobox.h"
 #include "iccsettings.h"
 #include "autocorrectiontool.h"
@@ -219,7 +218,6 @@ EditorWindow::EditorWindow(const QString& name)
     m_closeToolAction              = 0;
     m_undoAction                   = 0;
     m_redoAction                   = 0;
-    m_selectToolsAction            = 0;
     m_showBarAction                = 0;
     m_splitter                     = 0;
     m_vSplitter                    = 0;
@@ -1009,11 +1007,6 @@ void EditorWindow::setupStandardActions()
 
     // -- Tool control actions ---------------------------------------------------------
 
-    m_selectToolsAction = new QMenu(i18nc("@action Select image editor tool/filter", "Select Tool"), this);
-    m_selectToolsAction->setIcon(QIcon::fromTheme(QLatin1String("applications-graphics")));
-    m_selectToolsAction->setVisible(false);
-    ac->addAction(QLatin1String("editorwindow_selecttool"), m_selectToolsAction->menuAction());
-
     m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("Ok"), this);
     ac->addAction(QLatin1String("editorwindow_applytool"), m_applyToolAction);
     ac->setDefaultShortcut(m_applyToolAction, Qt::Key_Return);
@@ -1387,7 +1380,6 @@ void EditorWindow::toggleStandardActions(bool val)
     d->flipHorizAction->setEnabled(val);
     d->flipVertAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
-    m_selectToolsAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
@@ -2905,13 +2897,8 @@ VersionManager* EditorWindow::versionManager() const
     return &d->defaultVersionManager;
 }
 
-DCategorizedView* EditorWindow::createToolSelectionView()
+void EditorWindow::setupSelectToolsAction()
 {
-    if (d->selectToolsActionView)
-    {
-        return d->selectToolsActionView;
-    }
-
     // Create action model
     ActionItemModel* const actionModel = new ActionItemModel(this);
     actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
@@ -2989,37 +2976,15 @@ DCategorizedView* EditorWindow::createToolSelectionView()
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 
-    d->selectToolsActionView = new ActionCategorizedView;
-    d->selectToolsActionView->setupIconMode();
-    d->selectToolsActionView->setModel(filterModel);
-    d->selectToolsActionView->adjustGridSize();
+    ActionCategorizedView* const selectToolsActionView  = new ActionCategorizedView;
+    selectToolsActionView->setupIconMode();
+    selectToolsActionView->setModel(filterModel);
+    selectToolsActionView->adjustGridSize();
 
-    connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
+    connect(selectToolsActionView, SIGNAL(clicked(QModelIndex)),
             actionModel, SLOT(trigger(QModelIndex)));
 
-    return d->selectToolsActionView;
-}
-
-void EditorWindow::setupSelectToolsAction()
-{
-    QWidgetAction* const viewAction = new QWidgetAction(this);
-    viewAction->setDefaultWidget(createToolSelectionView());
-    d->selectToolsActionView->setMinimumSize(QSize(400, 400));
-    m_selectToolsAction->addAction(viewAction);
-
-    connect(m_selectToolsAction, SIGNAL(aboutToShow()),
-            this, SLOT(slotSelectToolsMenuAboutToShow()));
-
-    connect(d->selectToolsActionView, SIGNAL(clicked(QModelIndex)),
-            m_selectToolsAction, SLOT(close()));
-}
-
-void EditorWindow::slotSelectToolsMenuAboutToShow()
-{
-    // adjust to window size
-    QSize s = size();
-    s      /= 2;
-    d->selectToolsActionView->setMinimumSize(s);
+    EditorToolIface::editorToolIface()->setToolsIconView(selectToolsActionView);
 }
 
 void EditorWindow::slotThemeChanged()

@@ -39,6 +39,7 @@ class EditorTool;
 class EditorWindow;
 class ExposureSettingsContainer;
 class ICCSettingsContainer;
+class DCategorizedView;
 
 class DIGIKAM_EXPORT EditorToolIface : public QObject
 {
@@ -57,6 +58,7 @@ public:
     void unLoadTool();
 
     void setPreviewModeMask(int mask);
+    void setToolsIconView(DCategorizedView* const view);
 
     void setToolStartProgress(const QString& toolName);
     void setToolProgress(int progress);

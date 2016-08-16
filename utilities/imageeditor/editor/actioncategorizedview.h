@@ -41,7 +41,7 @@ class ActionCategorizedView : public DCategorizedView
 {
 public:
 
-    explicit ActionCategorizedView(QWidget* const parent = 0);
+    explicit ActionCategorizedView(QWidget* const parent=0, bool autoScroll=false);
     ~ActionCategorizedView();
 
     void setupIconMode();
@@ -58,6 +58,7 @@ protected:
 
     QPropertyAnimation* m_verticalScrollAnimation;
     QPropertyAnimation* m_horizontalScrollAnimation;
+    bool                m_autoScroll;
 };
 
 }  // namespace Digikam

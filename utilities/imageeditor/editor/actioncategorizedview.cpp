@@ -40,9 +40,10 @@
 namespace Digikam
 {
 
-ActionCategorizedView::ActionCategorizedView(QWidget* const parent)
+ActionCategorizedView::ActionCategorizedView(QWidget* const parent, bool autoScroll)
     : DCategorizedView(parent)
 {
+    m_autoScroll = autoScroll;
     m_horizontalScrollAnimation = new QPropertyAnimation(horizontalScrollBar(), "value", this);
     m_verticalScrollAnimation   = new QPropertyAnimation(verticalScrollBar(),   "value", this);
 }
@@ -143,8 +144,12 @@ void ActionCategorizedView::autoScroll(float relativePos, QScrollBar* scrollBar,
 void ActionCategorizedView::mouseMoveEvent(QMouseEvent* e)
 {
     DCategorizedView::mouseMoveEvent(e);
-    autoScroll(float(e->pos().x()) / viewport()->width(),  horizontalScrollBar(), m_horizontalScrollAnimation);
-    autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(),   m_verticalScrollAnimation);
+
+    if (m_autoScroll)
+    {
+        autoScroll(float(e->pos().x()) / viewport()->width(),  horizontalScrollBar(), m_horizontalScrollAnimation);
+        autoScroll(float(e->pos().y()) / viewport()->height(), verticalScrollBar(),   m_verticalScrollAnimation);
+    }
 }
 
 void ActionCategorizedView::leaveEvent(QEvent* e)

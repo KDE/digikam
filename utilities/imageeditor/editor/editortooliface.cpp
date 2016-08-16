@@ -39,6 +39,7 @@
 #include "imageguidewidget.h"
 #include "imageregionwidget.h"
 #include "previewlayout.h"
+#include "dcategorizedview.h"
 
 namespace Digikam
 {
@@ -49,15 +50,19 @@ class EditorToolIface::Private
 public:
 
     Private() :
+        toolsIconView(0),
         tool(0),
         editor(0),
-        sidebarWasExpanded(false)
+        sidebarWasExpanded(false),
+        toolsViewSelected(false)
     {
     }
 
-    EditorTool*   tool;
-    EditorWindow* editor;
-    bool          sidebarWasExpanded;
+    DCategorizedView* toolsIconView;
+    EditorTool*       tool;
+    EditorWindow*     editor;
+    bool              sidebarWasExpanded;
+    bool              toolsViewSelected;
 };
 
 EditorToolIface* EditorToolIface::m_iface = 0;
@@ -68,7 +73,8 @@ EditorToolIface* EditorToolIface::editorToolIface()
 }
 
 EditorToolIface::EditorToolIface(EditorWindow* const editor)
-    : QObject(), d(new Private)
+    : QObject(),
+      d(new Private)
 {
     d->editor = editor;
     m_iface   = this;
@@ -82,6 +88,12 @@ EditorToolIface::~EditorToolIface()
     {
         m_iface = 0;
     }
+}
+
+void EditorToolIface::setToolsIconView(DCategorizedView* const view)
+{
+    d->toolsIconView = view;
+    d->editor->rightSideBar()->appendTab(d->toolsIconView, QIcon::fromTheme("applications-graphics"), i18n("Select Tools"));
 }
 
 EditorTool* EditorToolIface::currentTool() const
@@ -99,6 +111,8 @@ void EditorToolIface::loadTool(EditorTool* const tool)
     d->tool = tool;
     d->editor->editorStackView()->setToolView(d->tool->toolView());
     d->editor->editorStackView()->setViewMode(EditorStackView::ToolViewMode);
+    d->toolsViewSelected = (d->editor->rightSideBar()->getActiveTab() == d->toolsIconView);
+    d->editor->rightSideBar()->deleteTab(d->toolsIconView);
     d->editor->rightSideBar()->appendTab(d->tool->toolSettings(), d->tool->toolIcon(), d->tool->toolName());
     d->editor->rightSideBar()->setActiveTab(d->tool->toolSettings());
     d->editor->toggleActions(false);
@@ -186,6 +200,12 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setViewMode(EditorStackView::CanvasMode);
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
+    d->editor->rightSideBar()->appendTab(d->toolsIconView, QIcon::fromTheme("applications-graphics"), i18n("Select Tools"));
+
+    if (d->toolsViewSelected)
+    {
+        d->editor->rightSideBar()->setActiveTab(d->toolsIconView);
+    }
 
     if (!d->editor->rightSideBar()->isVisible())
     {

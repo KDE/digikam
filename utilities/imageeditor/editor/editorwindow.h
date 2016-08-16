@@ -137,8 +137,6 @@ protected:
     KToolBarPopupAction*      m_undoAction;
     KToolBarPopupAction*      m_redoAction;
 
-    QMenu*                    m_selectToolsAction;
-
     QMenu*                    m_contextMenu;
     QMenu*                    m_servicesMenu;
     QAction*                  m_serviceAction;
@@ -211,7 +209,6 @@ protected:
 
     EditorStackView*           editorStackView()  const;
     ExposureSettingsContainer* exposureSettings() const;
-    DCategorizedView*          createToolSelectionView();
 
     VersionFileOperation saveVersionFileOperation(const QUrl& url, bool fork);
     VersionFileOperation saveAsVersionFileOperation(const QUrl& url, const QUrl& saveLocation, const QString& format);
@@ -321,7 +318,6 @@ private Q_SLOTS:
     void slotCloseTool();
     void slotApplyTool();
     void slotUndoStateChanged();
-    void slotSelectToolsMenuAboutToShow();
     void slotThemeChanged();
     void slotToggleRightSideBar();
     void slotPreviousRightSideBarTab();
