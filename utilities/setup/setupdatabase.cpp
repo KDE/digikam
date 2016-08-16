@@ -61,6 +61,7 @@
 #include "databaseserverstarter.h"
 #include "scancontroller.h"
 #include "coredbschemaupdater.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -166,9 +167,10 @@ void SetupDatabase::applySettings()
         case DatabaseSettingsWidget::SQlite:
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to SQlite DB config...";
-            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            DbEngineParameters params = d->databaseWidget->getDbEngineParameters();
+            settings->setDbEngineParameters(params);
+            AlbumManager::instance()->changeDatabase(params);
             settings->saveSettings();
-            DatabaseServerStarter::instance()->stopServerManagerProcess();
             break;
         }
         case DatabaseSettingsWidget::MysqlInternal:
@@ -177,16 +179,16 @@ void SetupDatabase::applySettings()
             DbEngineParameters params = d->databaseWidget->getDbEngineParameters();
             settings->setDbEngineParameters(params);
             settings->saveSettings();
-            DatabaseServerStarter::instance()->stopServerManagerProcess();
-            DatabaseServerStarter::instance()->startServerManagerProcess(params);
+            AlbumManager::instance()->changeDatabase(params);
             break;
         }
         default: // DatabaseSettingsWidget::MysqlServer
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to Mysql server DB config...";
-            settings->setDbEngineParameters(d->databaseWidget->getDbEngineParameters());
+            DbEngineParameters params = d->databaseWidget->getDbEngineParameters();
+            settings->setDbEngineParameters(params);
             settings->saveSettings();
-            DatabaseServerStarter::instance()->stopServerManagerProcess();
+            AlbumManager::instance()->changeDatabase(params);
             break;
         }
     }
