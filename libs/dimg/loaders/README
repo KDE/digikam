@@ -11,7 +11,7 @@ PPM     Done  TODO   N.A   N.A       N.A     yes      yes     none
 PGF     Done  DONE   TODO  DONE      N.A     yes      yes     libpgf
 JPEG2K  Done  Done   Done  Done      N.A     yes      yes     libjasper
 
-Others file formats are supported only in 8 bits/color/pixel using QImage/kimgio.
+Others file formats are supported only in 8 bits/color/pixel using QImageFormats plugins.
 Supported formats are listed below :
 
 Format   Read       Write      Remarks
@@ -24,19 +24,19 @@ PGM      yes        yes
 PPM      no         yes
 TGA      yes        yes
 PCX      yes        yes
-BMP      yes        yes        Win32 bitmap format
+BMP      yes        yes        Windows bitmap format
 RGB      yes        yes
 XBM      yes        yes
 XPM      yes        yes
 EPS      yes        yes
 DDS      yes        no
-ICO      yes        no         Win32 icon format
+ICO      yes        no         Windows icon format
 MNG      yes        no
 GIF      yes        no
+WEBP     yes        yes
 
 ---------------------------------------------------------------------------
 
 TODO :
 
-Add WebP support using http://code.google.com/speed/webp
 Remove Jasper dependency and replace by OpenJpeg http://www.openjpeg.org
