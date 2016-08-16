@@ -47,7 +47,7 @@ public:
     ~DWItemDelegatePrivate();
 
     void updateRowRange(const QModelIndex& parent, int start, int end, bool isRemoving);
-    QStyleOptionViewItemV4 optionView(const QModelIndex& index);
+    QStyleOptionViewItem optionView(const QModelIndex& index);
 
 public Q_SLOTS:
 

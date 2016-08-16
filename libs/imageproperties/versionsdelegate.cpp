@@ -29,7 +29,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QStyle>
-#include <QStyleOptionViewItemV4>
+#include <QStyleOptionViewItem>
 
 // KDE includes
 
@@ -239,7 +239,7 @@ void VersionsDelegate::initStyleOption(QStyleOptionViewItem* option, const QMode
 */
     option->font.setWeight(QFont::Bold);
 
-    if (QStyleOptionViewItemV4* v4 = qstyleoption_cast<QStyleOptionViewItemV4*>(option))
+    if (QStyleOptionViewItem* v4 = qstyleoption_cast<QStyleOptionViewItem*>(option))
     {
         v4->features |= QStyleOptionViewItemV2::HasDecoration;
 

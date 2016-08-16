@@ -433,7 +433,7 @@ void DConfigDlgListViewDelegate::paint(QPainter* painter, const QStyleOptionView
         return;
     }
 
-    QStyleOptionViewItemV4 opt(option);
+    QStyleOptionViewItem opt(option);
     opt.showDecorationSelected = true;
     QStyle* const style        = opt.widget ? opt.widget->style() : QApplication::style();
 
@@ -491,7 +491,7 @@ QSize DConfigDlgListViewDelegate::sizeHint(const QStyleOptionViewItem& option, c
         return QSize(0, 0);
     }
 
-    QStyleOptionViewItemV4 opt(option);
+    QStyleOptionViewItem opt(option);
     opt.showDecorationSelected = true;
     QStyle* const style        = opt.widget ? opt.widget->style() : QApplication::style();
 

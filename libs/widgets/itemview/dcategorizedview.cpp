@@ -506,7 +506,7 @@ void DCategorizedView::Private::updateScrollbars()
 
 void DCategorizedView::Private::drawDraggedItems(QPainter* painter)
 {
-    QStyleOptionViewItemV4 option = listView->viewOptions();
+    QStyleOptionViewItem option = listView->viewOptions();
     option.state                 &= ~QStyle::State_MouseOver;
 
     foreach(const QModelIndex& index, listView->selectionModel()->selectedIndexes())
@@ -788,12 +788,12 @@ void DCategorizedView::paintEvent(QPaintEvent* event)
     }
 
     bool alternatingRows          = alternatingRowColors();
-    QStyleOptionViewItemV4 option = viewOptions();
+    QStyleOptionViewItem option = viewOptions();
     option.widget                 = this;
 
     if (wordWrap())
     {
-        option.features |= QStyleOptionViewItemV4::WrapText;
+        option.features |= QStyleOptionViewItem::WrapText;
     }
 
     QPainter painter(viewport());
@@ -816,12 +816,12 @@ void DCategorizedView::paintEvent(QPaintEvent* event)
     {
         if (alternatingRows && alternate)
         {
-            option.features |= QStyleOptionViewItemV4::Alternate;
+            option.features |= QStyleOptionViewItem::Alternate;
             alternate = false;
         }
         else if (alternatingRows)
         {
-            option.features &= ~QStyleOptionViewItemV4::Alternate;
+            option.features &= ~QStyleOptionViewItem::Alternate;
             alternate = true;
         }
 
@@ -873,7 +873,7 @@ void DCategorizedView::paintEvent(QPaintEvent* event)
     }
 
     // Redraw categories
-    QStyleOptionViewItemV4 otherOption;
+    QStyleOptionViewItem otherOption;
     bool                   intersectedInThePast = false;
 
     foreach(const QString& category, d->categories)
