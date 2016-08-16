@@ -20,9 +20,9 @@ if(WIN32)
     add_definitions(-DDJGPP)
 endif()
 
-# Under OSX, remove unwanted Clang compiler options to compile fine.
+# Adjust compiler options to compile fine.
 
-if(APPLE)
+if(NOT MSVC)
 
     while(CMAKE_CXX_FLAGS MATCHES "-Werror=return-type")
         string(REPLACE "-Werror=return-type" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
