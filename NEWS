@@ -18,4 +18,5 @@ BUGFIXES FROM BUGZILLA:
 008 ==> 365175 - Geolocation editing no long works in digikam 5.
 009 ==> 366095 - Raw files not (always) properly decoded when using "raw data in half size" option for preview.
 010 ==> 357617 - Batch rename fails when using custom file extensions.
-011 ==> 
+011 ==> 366786 - Libraw fails to build with CLang (C++11 non constant initializer narrowing).
+012 ==> 
