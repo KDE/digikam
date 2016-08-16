@@ -505,6 +505,8 @@ void AlbumManager::changeDatabase(const DbEngineParameters& newParams)
     // New database type SQLITE
     if (newParams.isSQLite())
     {
+        DatabaseServerStarter::instance()->stopServerManagerProcess();
+        
         QDir newDir(newParams.getCoreDatabaseNameOrDir());
         QFileInfo newFile(newDir, QLatin1String("digikam4.db"));
 
@@ -693,6 +695,8 @@ bool AlbumManager::setDatabase(const DbEngineParameters& params, bool priority, 
         disconnect(CoreDbAccess::databaseWatch(), 0, this, 0);
     }
 
+    DatabaseServerStarter::instance()->stopServerManagerProcess();
+    
     d->albumWatch->clear();
 
     cleanUp();
