@@ -111,28 +111,37 @@ int main(int argc, char* argv[])
     if (argc != 2)
     {
         qDebug() << "metareaderthread - test to load metadata from images through multi-core threades";
-        qDebug() << "Usage: <images path>";
+        qDebug() << "Usage  : <images path> <image file filter> ... <image file filter>";
+        qDebug() << "Example: /mnt/photos *.jpg *.png *.tif *.nef *.dng";
         return -1;
     }
 
-    QDirIterator it(QString::fromLocal8Bit(argv[1]),
-                    QStringList() << QLatin1String("*.jpg")
-                                  << QLatin1String("*.png")
-                                  << QLatin1String("*.tif"),
+    QString path = QString::fromLocal8Bit(argv[1]);
+    qDebug() << "Images path : " << path;
+    QStringList filters;
+
+    for (int i = 2 ; i < argc ; i++)
+        filters << QString::fromLocal8Bit(argv[i]);
+
+    if (filters.isEmpty())
+    {
+        qDebug() << "Image filters list is empty!";
+        return -1;
+    }
+
+    QDirIterator it(path, filters,
                     QDir::Files,
                     QDirIterator::Subdirectories);
-    qDebug() << "Root dir : " << argv[1];
 
     while (it.hasNext())
     {
         QString path = it.next();
-        qDebug() << path;
         list.append(QUrl::fromLocalFile(path));
     }
 
     if (list.isEmpty())
     {
-        qDebug() << "Files list is empty!";
+        qDebug() << "Files list to process is empty!";
         return -1;
     }
 
