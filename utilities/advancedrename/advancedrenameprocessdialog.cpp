@@ -57,6 +57,7 @@ public:
     ThumbnailLoadThread* thumbLoadThread;
     NewNamesList         newNameList;
     ImageViewUtilities*  utilities;
+    QUrl                 processedUrl;
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list)
@@ -138,7 +139,9 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
     addedAction(pix, desc.filePath);
     advance(1);
 
-    NewNameInfo info = d->newNameList.first();
+    NewNameInfo info = d->newNameList.takeFirst();
+    d->processedUrl  = info.first;
+
     d->utilities->rename(info.first, info.second);
 }
 
@@ -150,19 +153,9 @@ void AdvancedRenameProcessDialog::slotCancel()
 
 void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
 {
-    if (d->cancel || d->newNameList.isEmpty())
+    if (d->cancel || d->processedUrl != src)
     {
         return;
-    }
-
-    if (d->newNameList.first().first != src)
-    {
-        return;
-    }
-
-    if (!d->newNameList.isEmpty())
-    {
-        d->newNameList.removeFirst();
     }
 
     if (d->newNameList.isEmpty())
