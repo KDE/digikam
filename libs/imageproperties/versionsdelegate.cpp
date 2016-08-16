@@ -84,7 +84,7 @@ public:
 
     inline const QWidget* widget(const QStyleOptionViewItem& option)
     {
-        if (const QStyleOptionViewItemV3* v3 = qstyleoption_cast<const QStyleOptionViewItemV3*>(&option))
+        if (const QStyleOptionViewItem* v3 = qstyleoption_cast<const QStyleOptionViewItem*>(&option))
             return v3->widget;
         return 0;
     }
