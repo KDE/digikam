@@ -47,17 +47,18 @@ class AdvancedRenameProcessDialog::Private
 public:
 
     Private() :
-        cancel(false),
         thumbLoadThread(0),
-        utilities(0)
+        utilities(0),
+        cancel(false)
     {
     }
 
-    bool                 cancel;
     ThumbnailLoadThread* thumbLoadThread;
-    NewNamesList         newNameList;
     ImageViewUtilities*  utilities;
-    QUrl                 processedUrl;
+
+    NewNamesList         newNameList;
+    QUrl                 currentUrl;
+    bool                 cancel;
 };
 
 AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& list)
@@ -80,17 +81,18 @@ AdvancedRenameProcessDialog::AdvancedRenameProcessDialog(const NewNamesList& lis
     connect(DIO::instance(), SIGNAL(renamingAborted(QUrl)),
             this, SLOT(slotCancel()));
 
-    setModal(true);
     setValue(0);
+    setModal(true);
+    setButtonText(i18n("&Abort"));
     setWindowTitle(i18n("Renaming images"));
     setLabel(i18n("<b>Renaming images. Please wait...</b>"));
-    setButtonText(i18n("&Abort"));
 
     QTimer::singleShot(500, this, SLOT(slotRenameImages()));
 }
 
 AdvancedRenameProcessDialog::~AdvancedRenameProcessDialog()
 {
+    delete d->utilities;
     delete d;
 }
 
@@ -136,11 +138,16 @@ void AdvancedRenameProcessDialog::slotGotThumbnail(const LoadingDescription& des
         return;
     }
 
+    if (d->currentUrl.toLocalFile() == desc.filePath)
+    {
+        return;
+    }
+
     addedAction(pix, desc.filePath);
     advance(1);
 
     NewNameInfo info = d->newNameList.takeFirst();
-    d->processedUrl  = info.first;
+    d->currentUrl    = info.first;
 
     d->utilities->rename(info.first, info.second);
 }
@@ -153,7 +160,7 @@ void AdvancedRenameProcessDialog::slotCancel()
 
 void AdvancedRenameProcessDialog::slotRenameSuccess(const QUrl& src)
 {
-    if (d->cancel || d->processedUrl != src)
+    if (d->cancel || d->currentUrl != src)
     {
         return;
     }
