@@ -52,12 +52,15 @@ public:
     static bool                       isCreated();
 
     bool isReady() const;
-    bool getThumbnail(quintptr job, const QString&, int size, bool strip);
 
 Q_SIGNALS:
 
-    void signalThumbnailDone(quintptr, const QString&, const QImage&);
-    void signalThumbnailFailed(quintptr, const QString&);
+    void signalThumbnailDone(const QString&, const QImage&);
+    void signalThumbnailFailed(const QString&);
+
+public Q_SLOTS:
+
+    void slotGetThumbnail(const QString&, int size, bool strip);
 
 private:
 
