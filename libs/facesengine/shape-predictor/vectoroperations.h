@@ -1,20 +1,45 @@
+/* ============================================================
+ *
+ * This file is a part of digiKam project
+ * http://www.digikam.org
+ *
+ * Date        : 16/08/2016
+ * Description : TODO
+ *
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ *
+ * This program is free software; you can redistribute it
+ * and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation;
+ * either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * ============================================================ */
+
 #ifndef VECTOROPERATIONS_H
 #define VECTOROPERATIONS_H
 
+// C++ includes
+
 #include <vector>
 
-
 template<class T>
-inline T length_squared(const std::vector<T> & diff)
+inline T length_squared(const std::vector<T>& diff)
 {
     T sum = 0;
-    for(unsigned int i = 0;i<diff.size();i++)
+
+    for(unsigned int i = 0 ; i < diff.size() ; i++)
     {
         sum += diff[i] * diff[i];
     }
+
     return sum;
 }
-
 
 template<class T>
 std::vector<T> operator-(const std::vector<T>& v1, const std::vector<T>& v2)
@@ -50,6 +75,7 @@ std::vector<T> operator/(const std::vector<T>& v1, int divisor)
     }
     return result;
 }
+
 template<class T>
 std::vector<std::vector<T> > operator/(const std::vector<std::vector<T> >& v1, int divisor)
 {
@@ -173,6 +199,7 @@ std::vector<std::vector<T> > operator+(const std::vector<std::vector<T> >& v1,
         }
 
     }
+
     return result;
 }
 
@@ -189,8 +216,8 @@ std::vector<T> operator*(const std::vector<T>& v1,
         result[i] = v1[i] * d;
 
     }
+
     return result;
 }
-
 
 #endif // VECTOROPERATIONS_H
