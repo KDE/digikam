@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : TBD
+ * Date        : 16/08/2016
  * Description : A Red-Eye tool for automatic detection and correction filter.
  *
- * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ RedEyeCorrection::~RedEyeCorrection()
 
 void RedEyeCorrection::registerSettingsWidget()
 {
-    // TODO: modify or delete depending on settings
+    // TODO: add settings widget
 /*
     m_settingsWidget = new QWidget;
 
@@ -67,7 +67,7 @@ void RedEyeCorrection::registerSettingsWidget()
 
 BatchToolSettings RedEyeCorrection::defaultSettings()
 {
-    // Todo: modify or delete depending on settings
+    // TODO: add settings widget serialization of parameters
     BatchToolSettings prm;
 
     return prm;
@@ -75,13 +75,12 @@ BatchToolSettings RedEyeCorrection::defaultSettings()
 
 void RedEyeCorrection::slotAssignSettings2Widget()
 {
-    // Todo: modify or delete depending on settings
-
+    // TODO: add settings widget serialization of parameters
 }
 
 void RedEyeCorrection::slotSettingsChanged()
 {
-    // Todo: modify or delete depending on settings
+    // TODO: add settings widget serialization of parameters
 }
 
 bool RedEyeCorrection::toolOperations()
@@ -90,7 +89,6 @@ bool RedEyeCorrection::toolOperations()
     {
         return false;
     }
-
 
     RedEyeCorrectionFilter vig(&image(), 0L);
     applyFilter(&vig);

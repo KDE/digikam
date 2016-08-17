@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : TBD
+ * Date        : 16/08/2016
  * Description : A Red-Eye tool for automatic detection and correction filter.
  *
- * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,7 @@ class RedEyeCorrection : public BatchTool
 public:
 
     explicit RedEyeCorrection(QObject* const parent = 0);
-    ~RedEyeCorrection();
+    virtual ~RedEyeCorrection();
 
     BatchToolSettings defaultSettings();
 
@@ -54,9 +54,8 @@ private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
-
 };
 
 }  // namespace Digikam
 
-#endif /* REDEYECORRECTION_H */
+#endif // REDEYECORRECTION_H
