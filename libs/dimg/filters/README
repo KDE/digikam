@@ -16,4 +16,4 @@ nr            : Wavelets Noise Reduction.
 sharp         : Sharp / Unsharp Mask / Refocus
 transform     : Change Image Geometry.
 wb            : White Balance.
-redeye        : Red-Eye Detection and Correction
+redeye        : Red-Eye Detection and Correction (core/libs/faceengine/redeye)
