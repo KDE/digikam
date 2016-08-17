@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 
     // ------------------------------------------------------------------------------------
 
-    if(switchCondition == "sqliteToMysql")
+    if (switchCondition == QLatin1String("sqliteToMysql"))
     {
         qDebug() << "Setup sqlite Database...";
 
@@ -149,7 +149,7 @@ int main(int argc, char** argv)
         FaceDbAccess::cleanUpDatabase();
     }
     
-    else if(switchCondition == "mysqlToSqlite")
+    else if(switchCondition == QLatin1String("mysqlToSqlite"))
     {
         DbEngineParameters params;
          
