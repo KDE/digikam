@@ -55,7 +55,7 @@ public:
     int    quarter(int month)                                          const;
     bool   isLeapYear(int year)                                        const;
     void   julianDayToDate(qint64 jd, int* year, int* month, int* day) const;
-    qint64 julianDayFromDate(int year, int month, int day)             const;
+    qint64 julianDayFromDate(int yr, int mth, int dy)                  const;
 
     bool   isValidYear(int year)                                       const;
     bool   isValidMonth(int year, int month)                           const;
@@ -617,11 +617,12 @@ void CalSystemPrivate::julianDayToDate(qint64 jd, int* year, int* month, int* da
     }
 }
 
-qint64 CalSystemPrivate::julianDayFromDate(int year, int month, int day) const
+qint64 CalSystemPrivate::julianDayFromDate(int yr, int mth, int dy) const
 {
-    qint64 jd = 0;
-
-    year = year + yearOffset();
+    qint64 jd    = 0;
+    qint64 year  = yr + yearOffset();
+    qint64 month = mth;
+    qint64 day   = dy;
 
     if (year < 1 && !hasYearZero())
     {
