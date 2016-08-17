@@ -5,6 +5,7 @@ NEW FEATURES:
 
 ImageEditor: digiKam editor and Showfoto plugins interface removed to reduce run-time dependancies and speed-up initialization.
 Import     : new configuration options to support gPhoto2 PTP/IP cameras.
+BQM        : New tool to detect and fix red-eyes automatically.
 
 BUGFIXES FROM BUGZILLA:
 
