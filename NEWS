@@ -19,4 +19,5 @@ BUGFIXES FROM BUGZILLA:
 009 ==> 366095 - Raw files not (always) properly decoded when using "raw data in half size" option for preview.
 010 ==> 357617 - Batch rename fails when using custom file extensions.
 011 ==> 366786 - Libraw fails to build with CLang (C++11 non constant initializer narrowing).
-012 ==> 
+012 ==> 365727 - Thumbbar in editor should have a vertical scroll.
+013 ==> 
