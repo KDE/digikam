@@ -138,7 +138,7 @@ void VideoThumbnailerJob::addItems(const QStringList& files)
 
 void VideoThumbnailerJob::processOne()
 {
-    if (!d->todo.isEmpty() && d->jobDone)
+    if (!d->todo.isEmpty())
     {
         d->condVar.wakeAll();
     }
@@ -161,9 +161,14 @@ void VideoThumbnailerJob::run()
             qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
             emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
         }
-        else
+
+        if (d->todo.isEmpty())
         {
             d->condVar.wait(&d->mutex);
+        }
+        else
+        {
+            d->condVar.wait(&d->mutex, 250);
         }
     }
 }
