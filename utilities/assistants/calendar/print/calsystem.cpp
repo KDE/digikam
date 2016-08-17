@@ -540,6 +540,7 @@ void CalSystemPrivate::julianDayToDate(qint64 jd, int* year, int* month, int* da
             qint64 diy = s - (yy * 365) + (yy / 4);
             mm         = (diy / 30) + 1;
             dd         = (diy % 30) + 1;
+            break;
         }
 
         case CalSystem::IndianNationalCalendar:
@@ -557,6 +558,7 @@ void CalSystemPrivate::julianDayToDate(qint64 jd, int* year, int* month, int* da
             l        = j / 11;
             mm       = j + 2 - 12 * l;
             yy       = 100 * (n - 49) + l + i - 78;
+            break;
         }
 
         case CalSystem::IslamicCivilCalendar:
@@ -572,6 +574,7 @@ void CalSystemPrivate::julianDayToDate(qint64 jd, int* year, int* month, int* da
             yy       = (30 * n) + j - 30;
             mm       = (24 * l) / 709;
             dd       = l - ((709 * mm) / 24);
+            break;
         }
 
         case CalSystem::JulianCalendar:
@@ -658,6 +661,7 @@ qint64 CalSystemPrivate::julianDayFromDate(int year, int month, int day) const
                 + (year / 4)
                 + ((month - 1) * 30)
                 + day;
+            break;
         }
 
         case CalSystem::IndianNationalCalendar:
@@ -673,6 +677,7 @@ qint64 CalSystemPrivate::julianDayFromDate(int year, int month, int day) const
                 - (3 * ((year  + 78 - 1 / month) / 100 + 1)) / 4
                 + day
                 + 1749579;
+            break;
         }
 
         case CalSystem::IslamicCivilCalendar:
@@ -687,6 +692,7 @@ qint64 CalSystemPrivate::julianDayFromDate(int year, int month, int day) const
                 + day
                 + epoch()
                 - 385;
+            break;
         }
 
         case CalSystem::JulianCalendar:
