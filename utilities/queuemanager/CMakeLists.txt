@@ -10,45 +10,45 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libqueuemanager_SRCS
-    basetools/color/autocorrection.cpp
-    basetools/color/bcgcorrection.cpp
-    basetools/color/bwconvert.cpp
-    basetools/color/channelmixer.cpp
-    basetools/color/colorbalance.cpp
-    basetools/color/convert16to8.cpp
-    basetools/color/convert8to16.cpp
-    basetools/color/curvesadjust.cpp
-    basetools/color/hslcorrection.cpp
-    basetools/color/iccconvert.cpp
-    basetools/color/invert.cpp
-    basetools/color/whitebalance.cpp
-    basetools/convert/convert2jpeg.cpp
-    basetools/convert/convert2pgf.cpp
-    basetools/convert/convert2png.cpp
-    basetools/convert/convert2tiff.cpp
-    basetools/convert/convert2dng.cpp
-    basetools/custom/userscript.cpp
-    basetools/decorate/border.cpp
-    basetools/decorate/watermark.cpp
-    basetools/enhance/antivignetting.cpp
-    basetools/enhance/blur.cpp
-    basetools/enhance/localcontrast.cpp
-    basetools/enhance/noisereduction.cpp
-    basetools/enhance/restoration.cpp
-    basetools/enhance/sharpen.cpp
-    basetools/enhance/redeyecorrection.cpp
-    basetools/filters/filmgrain.cpp
-    basetools/filters/colorfx.cpp
-    basetools/metadata/assigntemplate.cpp
-    basetools/metadata/removemetadata.cpp
-    basetools/metadata/timeadjust.cpp
-    basetools/metadata/timeadjustcontainer.cpp
-    basetools/metadata/timeadjustsettings.cpp
-    basetools/metadata/clockphotodialog.cpp
-    basetools/transform/flip.cpp
-    basetools/transform/resize.cpp
-    basetools/transform/rotate.cpp
-    basetools/transform/crop.cpp
+    tools/color/autocorrection.cpp
+    tools/color/bcgcorrection.cpp
+    tools/color/bwconvert.cpp
+    tools/color/channelmixer.cpp
+    tools/color/colorbalance.cpp
+    tools/color/convert16to8.cpp
+    tools/color/convert8to16.cpp
+    tools/color/curvesadjust.cpp
+    tools/color/hslcorrection.cpp
+    tools/color/iccconvert.cpp
+    tools/color/invert.cpp
+    tools/color/whitebalance.cpp
+    tools/convert/convert2jpeg.cpp
+    tools/convert/convert2pgf.cpp
+    tools/convert/convert2png.cpp
+    tools/convert/convert2tiff.cpp
+    tools/convert/convert2dng.cpp
+    tools/custom/userscript.cpp
+    tools/decorate/border.cpp
+    tools/decorate/watermark.cpp
+    tools/enhance/antivignetting.cpp
+    tools/enhance/blur.cpp
+    tools/enhance/localcontrast.cpp
+    tools/enhance/noisereduction.cpp
+    tools/enhance/restoration.cpp
+    tools/enhance/sharpen.cpp
+    tools/enhance/redeyecorrection.cpp
+    tools/filters/filmgrain.cpp
+    tools/filters/colorfx.cpp
+    tools/metadata/assigntemplate.cpp
+    tools/metadata/removemetadata.cpp
+    tools/metadata/timeadjust.cpp
+    tools/metadata/timeadjustcontainer.cpp
+    tools/metadata/timeadjustsettings.cpp
+    tools/metadata/clockphotodialog.cpp
+    tools/transform/flip.cpp
+    tools/transform/resize.cpp
+    tools/transform/rotate.cpp
+    tools/transform/crop.cpp
     manager/actionthread.cpp
     manager/task.cpp
     manager/batchtool.cpp
@@ -71,13 +71,13 @@ set(libqueuemanager_SRCS
 
 if(JASPER_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
-        basetools/convert/convert2jp2.cpp
+        tools/convert/convert2jp2.cpp
        )
 endif()
 
 if(LENSFUN_FOUND)
     set(libqueuemanager_SRCS ${libqueuemanager_SRCS}
-        basetools/enhance/lensautofix.cpp
+        tools/enhance/lensautofix.cpp
     )
     include_directories(${LENSFUN_INCLUDE_DIRS})
 endif()
