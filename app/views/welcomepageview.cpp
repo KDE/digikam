@@ -89,6 +89,7 @@ QStringList WelcomePageView::featuresTabContent() const
     newFeatures << i18n("Mysql internal/remote server is now configurable with first run assistant;");
     newFeatures << i18n("Add a new batch queue manager tool to convert RAW files to DNG;");
     newFeatures << i18n("Add a new batch queue manager tool to adjust time and date metadata;");
+    newFeatures << i18n("Add a new batch queue manager tool to detect and fix red-eyes automatically;");
     newFeatures << i18n("Add a new option in editor and light table to import images from a digital scanner;");
     newFeatures << i18n("Add a new option in editor and light table to edit metadata;");
     newFeatures << i18n("Add a new option in editor and light table to edit geolocation;");
