@@ -125,7 +125,7 @@ public:
     int    monthsDifference(const QDate& fromDate, const QDate& toDate) const;
     qint64 daysDifference(const QDate& fromDate, const QDate& toDate)   const;
 
-    void dateDifference(const QDate& fromDate, const QDate& toDate,
+    bool dateDifference(const QDate& fromDate, const QDate& toDate,
                         int* years, int* months, int* days, int* direction) const;
 
     QDate firstDayOfYear(const QDate& date) const;

@@ -1384,7 +1384,7 @@ qint64 CalSystem::daysDifference(const QDate& fromDate, const QDate& toDate) con
 }
 
 //Caters for Leap Months, but possibly not for Hebrew
-void CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
+bool CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
                                int* years, int* months, int* days, int* direction) const
 {
     int dy  = 0;
@@ -1410,6 +1410,12 @@ void CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
             // Calculate months and days difference
             int miy0 = d->monthsInYear(d->addYears(y2, -1));
 
+            if (miy0 == 0)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot compute date difference";
+                return false;
+            }
+
             if (d2 >= d1)
             {
                 dm = (miy0 + m2 - m1) % miy0;
@@ -1424,6 +1430,12 @@ void CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
                 //      2000-02-29 to 2001-03-01 is 1 year 1 day
                 int dim0 = daysInMonth(addMonths(toDate, -1));
                 int dim1 = d->daysInMonth(y1, m1);
+
+                if (dim0 == 0 || dim1 == 0)
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot compute date difference";
+                    return false;
+                }
 
                 if (d1 == dim1 && d2 == d->daysInMonth(y2, m2))
                 {
@@ -1465,6 +1477,8 @@ void CalSystem::dateDifference(const QDate& fromDate, const QDate& toDate,
     {
         *direction = dir;
     }
+
+    return true;
 }
 
 QDate CalSystem::firstDayOfYear(const QDate& dt) const
