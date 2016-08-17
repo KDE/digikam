@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : TBD
+ * Date        : 16/08/2016
  * Description : A Red-Eye automatic detection and correction filter.
  *
  * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -30,10 +30,7 @@
 #include "digikam_export.h"
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
-
-// OpenCV Includes
-#include <opencv2/opencv.hpp>
-
+#include "libopencv.h"
 
 namespace Digikam
 {
@@ -48,7 +45,7 @@ public:
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     explicit RedEyeCorrectionFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
-                        int progressBegin=0, int progressEnd=100);
+                                    int progressBegin=0, int progressEnd=100);
 
     ~RedEyeCorrectionFilter();
 
@@ -80,24 +77,22 @@ public:
     virtual FilterAction    filterAction();
 
 private:
-    cv::Mat QImageToCvMat( const QImage &inImage, bool inCloneImageData = true );
+
+    cv::Mat QImageToCvMat( const QImage& inImage, bool inCloneImageData = true );
     void filterImage();
-    void correctRedEye(cv::Mat & eye, int type, cv::Rect imgRect);
-    void correctRedEye(uchar *  data, int type, cv::Rect eyerect, cv::Rect imgRect);
-    void QRectFtocvRect(const QList<QRect> &faces, std::vector<cv::Rect> &result);
+    void correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect);
+    void correctRedEye(uchar*  data, int type, cv::Rect eyerect, cv::Rect imgRect);
+    void QRectFtocvRect(const QList<QRect>& faces, std::vector<cv::Rect>& result);
     void readParameters(const FilterAction&);
 
-
-    void drawRects(cv::Mat &image, const std::vector<cv::Rect> & rects);
-    void drawRects(cv::Mat &image, const QList<cv::Rect> &rects);
-
-
-
+    void drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects);
+    void drawRects(cv::Mat& image, const QList<cv::Rect>& rects);
 
 private:
 
-    class Private;
     //FacesEngine::FaceDetector facedetector;
+
+    class Private;
     Private* const d;
 };
 
