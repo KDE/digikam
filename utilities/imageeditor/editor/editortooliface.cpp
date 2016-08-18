@@ -94,8 +94,8 @@ void EditorToolIface::setToolsIconView(DCategorizedView* const view)
 {
     d->toolsIconView = view;
     d->editor->rightSideBar()->appendTab(d->toolsIconView,
-					 QIcon::fromTheme(QLatin1String("applications-graphics")),
-					 i18n("Select Tools"));
+                                         QIcon::fromTheme(QLatin1String("applications-graphics")),
+                                         i18n("Tools"));
 }
 
 EditorTool* EditorToolIface::currentTool() const
@@ -203,8 +203,8 @@ void EditorToolIface::unLoadTool()
     d->editor->editorStackView()->setToolView(0);
     d->editor->rightSideBar()->deleteTab(d->tool->toolSettings());
     d->editor->rightSideBar()->appendTab(d->toolsIconView,
-					 QIcon::fromTheme(QLatin1String("applications-graphics")),
-					 i18n("Select Tools"));
+                                         QIcon::fromTheme(QLatin1String("applications-graphics")),
+                                         i18n("Tools"));
 
     if (d->toolsViewSelected)
     {
