@@ -1392,7 +1392,7 @@ void DigikamApp::setupActions()
 
     populateThemes();
 
-    createGUI();
+    createGUI(xmlFile());
 
     cleanupActions();
 
