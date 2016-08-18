@@ -7,7 +7,7 @@
  * Description : A QImage loader for DImg framework.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2015 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2016 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,6 +48,8 @@ QImageLoader::QImageLoader(DImg* const image)
 
 bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const observer)
 {
+    readMetadata(filePath, DImg::QIMAGE);
+
     // Loading is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
     QImageReader reader(filePath);
@@ -180,6 +182,8 @@ bool QImageLoader::save(const QString& filePath, DImgLoaderObserver* const obser
     }
 
     imageSetAttribute(QLatin1String("format"), format.toUpper());
+
+    saveMetadata(filePath);
 
     return success;
 }
