@@ -58,8 +58,8 @@
 #include "tagscache.h"
 
 #ifdef HAVE_MARBLE
-#include "imagepropertiesgpstab.h"
-#include "gpsimageinfosorter.h"
+#   include "imagepropertiesgpstab.h"
+#   include "gpsimageinfosorter.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
@@ -100,8 +100,8 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     d->desceditTab        = new ImageDescEditTab(parent);
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
-    appendTab(d->desceditTab,        QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Captions/Tags"));
-    appendTab(d->versionsHistoryTab, QIcon::fromTheme(QLatin1String("view-catalog")), i18n("Versioning"));
+    appendTab(d->desceditTab,        QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Captions"));
+    appendTab(d->versionsHistoryTab, QIcon::fromTheme(QLatin1String("view-catalog")),           i18n("Versioning"));
 
     // ----------------------------------------------------------
 
