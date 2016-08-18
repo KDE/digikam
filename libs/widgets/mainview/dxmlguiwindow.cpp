@@ -253,6 +253,10 @@ void DXmlGuiWindow::cleanupActions()
 
     ac          = actionCollection()->action(QLatin1String("help_donate"));
     if (ac) actionCollection()->removeAction(ac);
+
+    ac          = actionCollection()->action(QLatin1String("help_about_kde"));
+    if (ac) actionCollection()->removeAction(ac);
+
 /*
     QList<QAction*> lst = actionCollection()->actions();
 
