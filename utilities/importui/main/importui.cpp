@@ -630,7 +630,7 @@ void ImportUI::setupActions()
     d->connectAction = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18nc("@action Connection failed, try again?", "Retry"), this);
     connect(d->connectAction, SIGNAL(triggered()), d->controller, SLOT(slotConnect()));
 
-    createGUI(xmlFile());
+    createGUI();
     cleanupActions();
 
     showMenuBarAction()->setChecked(!menuBar()->isHidden());  // NOTE: workaround for bug #171080

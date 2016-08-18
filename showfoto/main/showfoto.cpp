@@ -159,7 +159,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     setupUserArea();
     setupActions();
     setupStatusBar();
-    createGUI(xmlFile());
+    createGUI();
     cleanupActions();
 
     // Create context menu.
