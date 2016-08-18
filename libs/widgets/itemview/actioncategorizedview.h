@@ -24,8 +24,9 @@
 #ifndef ACTIONCATEGORIZEDVIEW_H
 #define ACTIONCATEGORIZEDVIEW_H
 
-// KDE includes
+// Local includes
 
+#include "digikam_export.h"
 #include "dcategorizedview.h"
 
 class QWidget;
@@ -37,7 +38,7 @@ class QPropertyAnimation;
 namespace Digikam
 {
 
-class ActionCategorizedView : public DCategorizedView
+class DIGIKAM_EXPORT ActionCategorizedView : public DCategorizedView
 {
 public:
 

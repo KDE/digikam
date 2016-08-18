@@ -78,6 +78,7 @@ set(libitemview_SRCS
     itemview/itemviewimagedelegate.cpp
     itemview/itemviewtooltip.cpp
     itemview/itemviewcategorized.cpp
+    itemview/actioncategorizedview.cpp
 )
 
 set(libgraphicsviewwidgets_SRCS

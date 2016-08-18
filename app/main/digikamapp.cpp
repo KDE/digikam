@@ -66,7 +66,7 @@
 
 // Local includes
 
-#include "metaengine_rotation.h"
+#include "actioncategorizedview.h"
 #include "drawdecoder.h"
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
@@ -79,6 +79,7 @@
 #include "imagegps.h"
 #include "importui.h"
 #include "cameranamehelper.h"
+#include "categorizeditemmodel.h"
 #include "collectionscanner.h"
 #include "collectionmanager.h"
 #include "componentsinfo.h"
@@ -97,6 +98,7 @@
 #include "loadingcache.h"
 #include "loadingcacheinterface.h"
 #include "loadsavethread.h"
+#include "metaengine_rotation.h"
 #include "scancontroller.h"
 #include "setup.h"
 #include "setupeditor.h"
@@ -940,10 +942,10 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), d->openWithAction);
     ac->setDefaultShortcut(d->openWithAction, Qt::META + Qt::Key_F4);
 
-    QAction* const ieAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Image Editor"), this);
-    ieAction->setWhatsThis(i18n("Open the image editor."));
-    connect(ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
-    ac->addAction(QLatin1String("imageeditor"), ieAction);
+    d->ieAction = new QAction(QIcon::fromTheme(QLatin1String("document-edit")), i18n("Image Editor"), this);
+    d->ieAction->setWhatsThis(i18n("Open the image editor."));
+    connect(d->ieAction, SIGNAL(triggered()), d->view, SLOT(slotEditor()));
+    ac->addAction(QLatin1String("imageeditor"), d->ieAction);
 
     // -----------------------------------------------------------
 
@@ -1407,6 +1409,8 @@ void DigikamApp::setupActions()
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
+
+    setupSelectToolsAction();
 }
 
 void DigikamApp::initGui()
@@ -3294,6 +3298,41 @@ void DigikamApp::slotImportFromScanner()
 #ifdef HAVE_KSANE
     m_ksaneAction->activate(scannerTargetPlace(), configGroupName());
 #endif
+}
+
+void DigikamApp::setupSelectToolsAction()
+{
+    // Create action model
+    ActionItemModel* const actionModel = new ActionItemModel(this);
+    actionModel->setMode(ActionItemModel::ToplevelMenuCategory | ActionItemModel::SortCategoriesByInsertionOrder);
+
+    // Builtin actions
+
+    QString mainCategory               = i18nc("@title Main Tools", "Main Tools");
+    actionModel->addAction(d->ieAction,                   mainCategory);
+    actionModel->addAction(d->openTagMngrAction,          mainCategory);
+    actionModel->addAction(d->bqmAction,                  mainCategory);
+    actionModel->addAction(d->maintenanceAction,          mainCategory);
+    actionModel->addAction(d->imageLightTableAction,      mainCategory);
+
+/*
+    QString exportCategory             = i18nc("@title Export Tools",  "Export");
+    actionModel->addAction(d->textureAction,              exportCategory);
+    actionModel->addAction(d->borderAction,               exportCategory);
+    actionModel->addAction(d->insertTextAction,           exportCategory);
+*/
+    // setup categorized view
+    DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
+
+    ActionCategorizedView* const selectToolsActionView  = new ActionCategorizedView;
+    selectToolsActionView->setupIconMode();
+    selectToolsActionView->setModel(filterModel);
+    selectToolsActionView->adjustGridSize();
+
+    connect(selectToolsActionView, SIGNAL(clicked(QModelIndex)),
+            actionModel, SLOT(trigger(QModelIndex)));
+
+    d->view->setToolsIconView(selectToolsActionView);
 }
 
 }  // namespace Digikam

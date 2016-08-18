@@ -2452,4 +2452,11 @@ void DigikamView::toggleFullScreen(bool set)
     d->stackedview->imagePreviewView()->toggleFullScreen(set);
 }
 
+void DigikamView::setToolsIconView(DCategorizedView* const view)
+{
+    d->rightSideBar->appendTab(view,
+                               QIcon::fromTheme(QLatin1String("applications-graphics")),
+                               i18n("Tools"));
+}
+
 }  // namespace Digikam

@@ -150,7 +150,6 @@ set(libeditoriface_SRCS
     editor/editorstackview.cpp
     editor/editortoolsettings.cpp
     editor/editorwindow.cpp
-    editor/actioncategorizedview.cpp
     editor/imageiface.cpp
 )
 

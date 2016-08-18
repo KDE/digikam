@@ -52,6 +52,7 @@ class Album;
 class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
+class DCategorizedView;
 
 class DigikamView : public DHBox
 {
@@ -77,6 +78,7 @@ public:
     void previousRightSideBarTab();
     void nextRightSideBarTab();
 
+    void setToolsIconView(DCategorizedView* const view);
     void setThumbSize(int size);
     void toggleShowBar(bool);
     void setRecurseAlbums(bool recursive);
@@ -87,15 +89,15 @@ public:
 
     QList<QUrl> allUrls()      const;
     QList<QUrl> selectedUrls() const;
-    QUrl currentUrl()         const;
-    bool hasCurrentItem()     const;
-    ImageInfo currentInfo()   const;
+    QUrl currentUrl()          const;
+    bool hasCurrentItem()      const;
+    ImageInfo currentInfo()    const;
 
     QList<ImageInfo> selectedInfoList(const bool currentFirst = false) const;
-    ImageInfoList allInfo()   const;
+    ImageInfoList allInfo()    const;
 
-    double zoomMin()          const;
-    double zoomMax()          const;
+    double zoomMin()           const;
+    double zoomMax()           const;
 
     void toggleTag(int tagID);
     void toggleFullScreen(bool set);

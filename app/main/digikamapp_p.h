@@ -143,6 +143,7 @@ public:
         imageDeleteAction(0),
         imageExifOrientationActionMenu(0),
         openWithAction(0),
+        ieAction(0),
         cutItemsAction(0),
         copyItemsAction(0),
         pasteItemsAction(0),
@@ -172,7 +173,6 @@ public:
         expoBendingAction(0),
         panoramaAction(0),
         calendarAction(0),
-        slideShowQmlAction(0),
         qualityAction(0),
         kipiHelpAction(0),
         addCameraSeparatorAction(0),
@@ -267,6 +267,7 @@ public:
     QAction*                            imageDeleteAction;
     QMenu*                              imageExifOrientationActionMenu;
     QAction*                            openWithAction;
+    QAction*                            ieAction;
 
     // Edit Actions
     QAction*                            cutItemsAction;
@@ -302,7 +303,6 @@ public:
     QAction*                            expoBendingAction;
     QAction*                            panoramaAction;
     QAction*                            calendarAction;
-    QAction*                            slideShowQmlAction;
     QAction*                            qualityAction;
 
     // Application Actions

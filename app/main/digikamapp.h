@@ -126,6 +126,7 @@ private:
     void    setupAccelerators();
     void    setupExifOrientationActions();
     void    setupImageTransformActions();
+    void    setupSelectToolsAction();
     void    loadPlugins();
     void    loadCameras();
     void    populateThemes();
