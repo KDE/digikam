@@ -21,4 +21,5 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 357617 - Batch rename fails when using custom file extensions.
 011 ==> 366786 - Libraw fails to build with CLang (C++11 non constant initializer narrowing).
 012 ==> 365727 - Thumbbar in editor should have a vertical scroll.
-013 ==> 
+013 ==> 366626 - Video frame remains on screen even after moving to another item.
+014 ==> 
