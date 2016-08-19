@@ -60,7 +60,8 @@ CalSettings::CalSettings(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
-    params.year = CalSystem().earliestValidDate().year() + 1;
+    params.drawLines = false;
+    params.year      = CalSystem().earliestValidDate().year() + 1;
     setPaperSize(QString::fromLatin1("A4"));
     setResolution(QString::fromLatin1("High"));
     setImagePos(0);
