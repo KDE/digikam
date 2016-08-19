@@ -34,20 +34,17 @@ target_link_libraries(expoblending
 # =======================================================
 # Stand alone version of Calendar tool
 
-if(KF5CalendarCore_FOUND)
-    set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)
+set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)
 
-    add_executable(calendar ${calendar_SRCS})
+add_executable(calendar ${calendar_SRCS})
 
-    target_link_libraries(calendar
-                          digikamcore
-                          libdng
+target_link_libraries(calendar
+                      digikamcore
+                      libdng
 
-                          Qt5::Gui
-                          Qt5::Xml
-    )
-endif()
-
+                      Qt5::Gui
+                      Qt5::Xml
+)
 
 # =======================================================
 # Stand alone version of Panorama tool plus test code

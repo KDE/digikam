@@ -43,12 +43,12 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "calprinter.h"
 #include "calsettings.h"
 #include "calsystem.h"
 #include "caltemplate.h"
 #include "digikam_debug.h"
-#include "digikam_config.h"
 #include "ui_calevents.h"
 #include "ui_calprogress.h"
 
@@ -145,6 +145,7 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
+#ifdef HAVE_KCALENDAR
     d->calEventsUI.ohUrlRequester->setFileDlgFilter(i18n("%1|Calendar Data File", QLatin1String("*.ics")));
     d->calEventsUI.ohUrlRequester->setFileDlgTitle(i18n("Select Calendar Data File"));
     d->calEventsUI.ohUrlRequester->setFileDlgMode(QFileDialog::ExistingFile);
@@ -152,6 +153,7 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
     d->calEventsUI.fhUrlRequester->setFileDlgFilter(i18n("%1|Calendar Data File", QLatin1String("*.ics")));
     d->calEventsUI.fhUrlRequester->setFileDlgTitle(i18n("Select Calendar Data File"));
     d->calEventsUI.fhUrlRequester->setFileDlgMode(QFileDialog::ExistingFile);
+#endif
 
     // ------------------------------------------
 
