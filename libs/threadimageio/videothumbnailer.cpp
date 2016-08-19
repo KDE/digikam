@@ -71,9 +71,10 @@ bool VideoThumbnailer::isReady() const
     return d->isReady;
 }
 
-void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool strip)
+void VideoThumbnailer::slotGetThumbnail(quint64 job, const QString& file, int size, bool strip)
 {
     d->isReady     = false;
+    d->thumbJob    = job;
     d->createStrip = strip;
 
     if (size < ThumbnailSize::Step || size > ThumbnailSize::HD)
@@ -90,7 +91,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video monitoring is not available.";
         d->isReady = true;
-        emit signalThumbnailFailed(file);
+        emit signalThumbnailFailed(job, file);
         return;
     }
 
@@ -98,7 +99,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video file " << file << " does not exist.";
         d->isReady = true;
-        emit signalThumbnailFailed(file);
+        emit signalThumbnailFailed(job, file);
         return;
     }
 
@@ -108,7 +109,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video from " << file;
         d->isReady = true;
-        emit signalThumbnailFailed(file);
+        emit signalThumbnailFailed(job, file);
         return;
     }
 

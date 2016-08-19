@@ -55,12 +55,12 @@ public:
 
 Q_SIGNALS:
 
-    void signalThumbnailDone(const QString&, const QImage&);
-    void signalThumbnailFailed(const QString&);
+    void signalThumbnailDone(quint64, const QString&, const QImage&);
+    void signalThumbnailFailed(quint64, const QString&);
 
 public Q_SLOTS:
 
-    void slotGetThumbnail(const QString&, int size, bool strip);
+    void slotGetThumbnail(quint64, const QString&, int size, bool strip);
 
 private:
 

@@ -187,7 +187,7 @@ void RedEyeCorrectionFilter::filterImage()
             std::vector<cv::Rect> eyes = geteyes(object);
             //drawRects(intermediateImage,eyes);
 
-            for(unsigned int j = 0 ; j < eyes.size() ; j++)
+            for (unsigned int j = 0 ; j < eyes.size() ; j++)
             {
                 correctRedEye(intermediateImage.data,
                               intermediateImage.type(),
@@ -205,7 +205,7 @@ void RedEyeCorrectionFilter::filterImage()
     m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), false, //m_orgImage.sixteenBit(),
                              true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
 
-    if (m_orgImage.sixteenBit()) 
+    if (m_orgImage.sixteenBit())
         m_destImage.convertDepth(64);
 
     //if(!m_orgImage.hasAlpha())  m_destImage.removeAlphaChannel();
@@ -215,7 +215,7 @@ void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const QList<cv::Rect>& re
 {
     QListIterator<cv::Rect> listit(rects);
 
-    while(listit.hasNext())
+    while (listit.hasNext())
     {
         cv::Rect temp = listit.next();
         cv::rectangle(image, temp, cv::Scalar(0,0,255));
@@ -224,7 +224,7 @@ void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const QList<cv::Rect>& re
 
 void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects)
 {
-    for(unsigned int i = 0 ; i < rects.size() ; i++)
+    for (unsigned int i = 0 ; i < rects.size() ; i++)
     {
         cv::Rect temp = rects[i];
         cv::rectangle(image, temp, cv::Scalar(0, 0, 255));
@@ -235,7 +235,7 @@ void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect>& faces, std::vect
 {
     QListIterator<QRect> listit(faces);
 
-    while(listit.hasNext())
+    while (listit.hasNext())
     {
         QRect  temp = listit.next();
         result.push_back(cv::Rect(temp.topLeft().rx(), temp.topLeft().ry(),
@@ -246,9 +246,9 @@ void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect>& faces, std::vect
 void RedEyeCorrectionFilter::correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect)
 {
     // Todo : handle different images depth
-    uchar* onebytedata = eye.data;
+    uchar*  onebytedata = eye.data;
     //ushort* twobytedata = (ushort*)eye.data;
-    int pixeldepth;
+    int     pixeldepth  = 0;
 
     if (type == CV_8UC3 || type == CV_16UC3 )
     {
@@ -308,7 +308,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     // Todo : handle different images depth
     uchar*  onebytedata = data;
     ushort* twobytedata = (ushort*)data;
-    int     pixeldepth;
+    int     pixeldepth  = 0;
 
     if (type == CV_8UC3 || type == CV_16UC3 )
     {

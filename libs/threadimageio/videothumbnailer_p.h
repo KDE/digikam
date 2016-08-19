@@ -59,6 +59,7 @@ public:
 
     bool              createStrip;
     int               thumbSize;
+    quint64           thumbJob;
     volatile bool     isReady;
     QMediaPlayer*     player;
     QVideoProbe*      probe;
