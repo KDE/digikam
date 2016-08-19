@@ -48,6 +48,7 @@ public:
         jobDone     = true;
         createStrip = true;
         thumbSize   = ThumbnailSize::Huge;
+        thumbJob    = 0;
         vthumb      = 0;
     }
 
@@ -56,6 +57,7 @@ public:
     volatile bool     jobDone;
     bool              createStrip;
     int               thumbSize;
+    quint64           thumbJob;
 
     QMutex            mutex;
     QWaitCondition    condVar;
@@ -69,16 +71,17 @@ VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
-    d->vthumb = VideoThumbnailer::instance();
+    d->thumbJob = reinterpret_cast<quint64>(this);
+    d->vthumb   = VideoThumbnailer::instance();
 
-    connect(this, SIGNAL(signalGetThumbnail(const QString&,int,bool)),
-            d->vthumb, SLOT(slotGetThumbnail(const QString&,int,bool)));
+    connect(this, SIGNAL(signalGetThumbnail(quint64, const QString&,int,bool)),
+            d->vthumb, SLOT(slotGetThumbnail(quint64, const QString&,int,bool)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailDone(const QString&, const QImage&)),
-            this, SLOT(slotThumbnailDone(const QString&, const QImage&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailDone(quint64, const QString&, const QImage&)),
+            this, SLOT(slotThumbnailDone(quint64, const QString&, const QImage&)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailFailed(const QString&)),
-            this, SLOT(slotThumbnailFailed(const QString&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailFailed(quint64, const QString&)),
+            this, SLOT(slotThumbnailFailed(quint64, const QString&)));
 }
 
 VideoThumbnailerJob::~VideoThumbnailerJob()
@@ -159,7 +162,7 @@ void VideoThumbnailerJob::run()
             d->jobDone = false;
             d->currentFile = d->todo.takeFirst();
             qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
-            emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
+            emit signalGetThumbnail(d->thumbJob, d->currentFile, d->thumbSize, d->createStrip);
         }
 
         if (d->todo.isEmpty())
@@ -173,9 +176,9 @@ void VideoThumbnailerJob::run()
     }
 }
 
-void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& img)
+void VideoThumbnailerJob::slotThumbnailDone(quint64 job, const QString& file, const QImage& img)
 {
-    if (d->currentFile != file)
+    if (d->thumbJob != job || d->currentFile != file)
     {
         return;
     }
@@ -187,9 +190,9 @@ void VideoThumbnailerJob::slotThumbnailDone(const QString& file, const QImage& i
     processOne();
 }
 
-void VideoThumbnailerJob::slotThumbnailFailed(const QString& file)
+void VideoThumbnailerJob::slotThumbnailFailed(quint64 job, const QString& file)
 {
-    if (d->currentFile != file)
+    if (d->thumbJob != job || d->currentFile != file)
     {
         return;
     }
