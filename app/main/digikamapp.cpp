@@ -124,6 +124,7 @@
 #include "metadataedit.h"
 #include "geolocationedit.h"
 #include "expoblendingmanager.h"
+#include "calwizard.h"
 
 #ifdef HAVE_DBUS
 #   include "digikamadaptor.h"
@@ -145,10 +146,6 @@
 #   include "videothumbnailer.h"
 #endif
 
-#ifdef HAVE_KCALENDAR
-#   include "calwizard.h"
-#endif
-
 namespace Digikam
 {
 
@@ -168,12 +165,10 @@ DigikamApp::DigikamApp()
     KConfigGroup group = d->config->group(configGroupName());
 
 #ifdef HAVE_DBUS
-
     new DigikamAdaptor(this);
     QDBusConnection::sessionBus().registerObject(QLatin1String("/Digikam"), this);
     QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.digikam-") +
                                                   QString::number(QCoreApplication::instance()->applicationPid()));
-
 #endif
 
     // collection scan
@@ -273,24 +268,22 @@ DigikamApp::DigikamApp()
     readFullScreenSettings(group);
 
 #ifdef HAVE_KFILEMETADATA
-
     // Create BalooWrap object, because it need to register a listener
     // to update digiKam data when changes in Baloo occur
     BalooWrap* const baloo = BalooWrap::instance();
     Q_UNUSED(baloo);
-
 #endif //HAVE_KFILEMETADATA
 
 #ifdef HAVE_MEDIAPLAYER
-
     VideoThumbnailer* const video = VideoThumbnailer::instance();
     Q_UNUSED(video);
-
 #endif // HAVE_MEDIAPLAYER
 
     setAutoSaveSettings(group, true);
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
+
+    setupSelectToolsAction();
 }
 
 DigikamApp::~DigikamApp()
@@ -334,21 +327,17 @@ DigikamApp::~DigikamApp()
     }
 
 #ifdef HAVE_KFILEMETADATA
-
     if (BalooWrap::isCreated())
     {
         BalooWrap::internalPtr.clear();
     }
-
 #endif
 
 #ifdef HAVE_MEDIAPLAYER
-
     if (VideoThumbnailer::isCreated())
     {
         delete VideoThumbnailer::internalPtr;
     }
-
 #endif
 
     if (ExpoBlendingManager::isCreated())
@@ -357,12 +346,10 @@ DigikamApp::~DigikamApp()
     }
 
 #ifdef HAVE_PANORAMA
-
     if (PanoManager::isCreated())
     {
         delete PanoManager::internalPtr;
     }
-
 #endif
 
     delete d->view;
@@ -1365,13 +1352,11 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("panorama"), d->panoramaAction);
 #endif
 
-#ifdef HAVE_KCALENDAR
     d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
                                     i18nc("@action", "Create Calendar..."),
                                     this);
     connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));
     ac->addAction(QLatin1String("calendar"), d->calendarAction);
-#endif
 
     // -----------------------------------------------------------
 
@@ -1409,8 +1394,6 @@ void DigikamApp::setupActions()
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->imageAddNewQueueAction, SLOT(setDisabled(bool)));
-
-    setupSelectToolsAction();
 }
 
 void DigikamApp::initGui()
@@ -2630,10 +2613,8 @@ void DigikamApp::slotPanorama()
 
 void DigikamApp::slotCalendar()
 {
-#ifdef HAVE_KCALENDAR
     CalWizard w(view()->selectedUrls(), this);
     w.exec();
-#endif
 }
 
 void DigikamApp::slotRecurseAlbums(bool checked)
@@ -3317,10 +3298,23 @@ void DigikamApp::setupSelectToolsAction()
 
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(d->expoBendingAction,          postCategory);
-    actionModel->addAction(d->panoramaAction,             postCategory);
     actionModel->addAction(d->calendarAction,             postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
+#ifdef HAVE_PANORAMA
+    actionModel->addAction(d->panoramaAction,             postCategory);
+#endif
+#ifdef HAVE_MARBLE
     actionModel->addAction(m_geolocationEditAction,       postCategory);
+#endif
+
+#ifdef HAVE_KIPI
+    QString exportCategory           = i18nc("@title Export Tools",          "Export");
+
+    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin))
+    {
+        actionModel->addAction(ac,                        exportCategory);
+    }
+#endif
 
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
