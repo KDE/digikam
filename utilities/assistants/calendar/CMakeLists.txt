@@ -8,7 +8,6 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/wizard
                     ${CMAKE_CURRENT_SOURCE_DIR}/print
 
@@ -40,6 +39,5 @@ ki18n_wrap_ui(libcalendar_SRCS
               ui/calevents.ui
               ui/calprogress.ui
 )
-
 
 add_library(calendar_src OBJECT ${libcalendar_SRCS})
