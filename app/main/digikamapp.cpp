@@ -863,7 +863,7 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->openTagMngrAction = new QAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Open Tag Manager"), this);
+    d->openTagMngrAction = new QAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Tag Manager"), this);
     connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
     ac->addAction(QLatin1String("open_tag_mngr"), d->openTagMngrAction);
 
@@ -949,10 +949,10 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    QAction* const ltAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Light Table"), this);
-    connect(ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
-    ac->addAction(QLatin1String("light_table"), ltAction);
-    ac->setDefaultShortcut(ltAction, Qt::Key_L);
+    d->ltAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Light Table"), this);
+    connect(d->ltAction, SIGNAL(triggered()), d->view, SLOT(slotLightTable()));
+    ac->addAction(QLatin1String("light_table"), d->ltAction);
+    ac->setDefaultShortcut(d->ltAction, Qt::Key_L);
 
     d->imageLightTableAction = new QAction(QIcon::fromTheme(QLatin1String("lighttable")), i18n("Place onto Light Table"), this);
     d->imageLightTableAction->setWhatsThis(i18n("Place the selected items on the light table thumbbar."));
@@ -3308,19 +3308,20 @@ void DigikamApp::setupSelectToolsAction()
 
     // Builtin actions
 
-    QString mainCategory               = i18nc("@title Main Tools", "Main Tools");
+    QString mainCategory               = i18nc("@title Main Tools",          "Main Tools");
     actionModel->addAction(d->ieAction,                   mainCategory);
     actionModel->addAction(d->openTagMngrAction,          mainCategory);
     actionModel->addAction(d->bqmAction,                  mainCategory);
     actionModel->addAction(d->maintenanceAction,          mainCategory);
-    actionModel->addAction(d->imageLightTableAction,      mainCategory);
+    actionModel->addAction(d->ltAction,                   mainCategory);
 
-/*
-    QString exportCategory             = i18nc("@title Export Tools",  "Export");
-    actionModel->addAction(d->textureAction,              exportCategory);
-    actionModel->addAction(d->borderAction,               exportCategory);
-    actionModel->addAction(d->insertTextAction,           exportCategory);
-*/
+    QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
+    actionModel->addAction(d->expoBendingAction,          postCategory);
+    actionModel->addAction(d->panoramaAction,             postCategory);
+    actionModel->addAction(d->calendarAction,             postCategory);
+    actionModel->addAction(m_metadataEditAction,          postCategory);
+    actionModel->addAction(m_geolocationEditAction,       postCategory);
+
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 

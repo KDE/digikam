@@ -144,6 +144,7 @@ public:
         imageExifOrientationActionMenu(0),
         openWithAction(0),
         ieAction(0),
+        ltAction(0),
         cutItemsAction(0),
         copyItemsAction(0),
         pasteItemsAction(0),
@@ -268,6 +269,7 @@ public:
     QMenu*                              imageExifOrientationActionMenu;
     QAction*                            openWithAction;
     QAction*                            ieAction;
+    QAction*                            ltAction;
 
     // Edit Actions
     QAction*                            cutItemsAction;
