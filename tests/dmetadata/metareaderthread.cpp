@@ -120,7 +120,7 @@ int main(int argc, char* argv[])
 
     if (argc < 3)
     {
-        qDebug() << "metareaderthread - test to load metadata from images through multi-core threades";
+        qDebug() << "metareaderthread - test to load/save metadata from images through multi-core threads";
         qDebug() << "Usage  : <direction: READ | WRITE> <images path> <image file filter> ... <image file filter>";
         qDebug() << "Example: READ /mnt/photos *.jpg *.png *.tif *.nef *.dng";
         qDebug() << "Warning: Write direction will touch file matadata contents!";
