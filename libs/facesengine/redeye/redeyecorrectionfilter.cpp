@@ -172,7 +172,7 @@ void RedEyeCorrectionFilter::filterImage()
     QList<QRectF> qrectfdets   = d->facedetector.detectFaces(temp);
     redeye::shapepredictor& sp = *(d->sp);
 
-    if (qrectfdets.size() != 0)
+    if (runningFlag() && (qrectfdets.size() != 0))
     {
         std::vector<cv::Rect> dets;
         QList<QRect> qrectdets = FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets,temp.size());
@@ -181,13 +181,13 @@ void RedEyeCorrectionFilter::filterImage()
         //drawRects(intermediateImage,dets);
 
         // Eye Detection
-        for (unsigned int i = 0 ; i < dets.size() ; i++)
+        for (unsigned int i = 0 ; runningFlag() && (i < dets.size()) ; i++)
         {
             fullobjectdetection object = sp(gray,dets[i]);
             std::vector<cv::Rect> eyes = geteyes(object);
             //drawRects(intermediateImage,eyes);
 
-            for (unsigned int j = 0 ; j < eyes.size() ; j++)
+            for (unsigned int j = 0 ; runningFlag() && (j < eyes.size()) ; j++)
             {
                 correctRedEye(intermediateImage.data,
                               intermediateImage.type(),
@@ -202,13 +202,16 @@ void RedEyeCorrectionFilter::filterImage()
         }
     }
 
-    m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), false, //m_orgImage.sixteenBit(),
-                             true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
+    if (runningFlag())
+    {
+        m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), false, //m_orgImage.sixteenBit(),
+                                 true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
 
-    if (m_orgImage.sixteenBit())
-        m_destImage.convertDepth(64);
+        if (m_orgImage.sixteenBit())
+            m_destImage.convertDepth(64);
 
-    //if(!m_orgImage.hasAlpha())  m_destImage.removeAlphaChannel();
+        //if(!m_orgImage.hasAlpha())  m_destImage.removeAlphaChannel();
+    }
 }
 
 void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const QList<cv::Rect>& rects)

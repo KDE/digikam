@@ -27,6 +27,7 @@
 // Local includes
 
 #include "batchtool.h"
+#include "redeyecorrectionfilter.h"
 
 namespace Digikam
 {
@@ -46,6 +47,8 @@ public:
 
     void registerSettingsWidget();
 
+    void cancel();
+
 private:
 
     bool toolOperations();
@@ -54,6 +57,10 @@ private Q_SLOTS:
 
     void slotAssignSettings2Widget();
     void slotSettingsChanged();
+
+private:
+
+    RedEyeCorrectionFilter* m_redEyeCFilter;
 };
 
 }  // namespace Digikam

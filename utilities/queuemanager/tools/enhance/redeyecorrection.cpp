@@ -35,13 +35,13 @@
 // Local includes
 
 #include "dimg.h"
-#include "redeyecorrectionfilter.h"
 
 namespace Digikam
 {
 
 RedEyeCorrection::RedEyeCorrection(QObject* const parent)
-    : BatchTool(QLatin1String("RedEyeCorrection"), EnhanceTool, parent)
+    : BatchTool(QLatin1String("RedEyeCorrection"), EnhanceTool, parent),
+      m_redEyeCFilter(0)
 {
     setToolTitle(i18n("RedEye-Correction"));
     setToolDescription(i18n("Automatically detect and correct RedEye effect."));
@@ -90,10 +90,23 @@ bool RedEyeCorrection::toolOperations()
         return false;
     }
 
-    RedEyeCorrectionFilter vig(&image(), 0L);
-    applyFilter(&vig);
+    m_redEyeCFilter = new RedEyeCorrectionFilter(&image(), 0L);
+    applyFilter(m_redEyeCFilter);
+
+    delete m_redEyeCFilter;
+    m_redEyeCFilter = 0;
 
     return (savefromDImg());
+}
+
+void RedEyeCorrection::cancel()
+{
+    if (m_redEyeCFilter)
+    {
+        m_redEyeCFilter->cancelFilter();
+    }
+
+    BatchTool::cancel();
 }
 
 }  // namespace Digikam
