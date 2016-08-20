@@ -39,13 +39,15 @@ class Mytask : public ActionJob
 {
 public:
 
-    Mytask()
+    Mytask(const QString& direction)
         : ActionJob()
     {
+	dir = direction;
     }
 
     MetadataSettingsContainer settings;
     QUrl                      url;
+    QString                   dir;
 
 protected:
 
@@ -60,7 +62,16 @@ protected:
         }
         else
         {
-            qDebug() << url.fileName() << meta.getPhotographInformation();
+            if (dir == QLatin1String("READ"))
+            {
+                 qDebug() << url.fileName() << meta.getPhotographInformation();
+            }
+            else
+            {        
+                 qDebug() << "Patch file: " << url.fileName();
+                 meta.setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
+                 meta.applyChanges();
+            } 
         }
 
         emit signalDone();
@@ -74,13 +85,14 @@ MetaReaderThread::MetaReaderThread(QObject* const parent)
 {
 }
 
-void MetaReaderThread::readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings)
+void MetaReaderThread::readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings, 
+                                    const QString& direction)
 {
     ActionJobCollection collection;
 
     foreach (const QUrl& url, list)
     {
-        Mytask* const job = new Mytask();
+        Mytask* const job = new Mytask(direction);
         job->url          = url;
         job->settings     = settings;
 
@@ -109,23 +121,36 @@ int main(int argc, char* argv[])
     if (argc < 3)
     {
         qDebug() << "metareaderthread - test to load metadata from images through multi-core threades";
-        qDebug() << "Usage  : <images path> <image file filter> ... <image file filter>";
-        qDebug() << "Example: /mnt/photos *.jpg *.png *.tif *.nef *.dng";
+        qDebug() << "Usage  : <direction: READ | WRITE> <images path> <image file filter> ... <image file filter>";
+        qDebug() << "Example: READ /mnt/photos *.jpg *.png *.tif *.nef *.dng";
+        qDebug() << "Warning: Write direction will touch file matadata contents!";
         return -1;
     }
 
-    QString path = QString::fromLocal8Bit(argv[1]);
+    QString direction = QString::fromLocal8Bit(argv[1]);
+    
+    if (direction != QLatin1String("READ") || direction != QLatin1String("WRITE")) 
+    {
+        qDebug() << "Wrong direction type: " << direction;
+        return -1;
+    }
+    
+    QString path = QString::fromLocal8Bit(argv[2]);
     qDebug() << "Images path : " << path;
     QStringList filters;
 
-    for (int i = 2 ; i < argc ; i++)
+    for (int i = 3 ; i < argc ; i++)
+    {
         filters << QString::fromLocal8Bit(argv[i]);
+    }
 
     if (filters.isEmpty())
     {
         qDebug() << "Image filters list is empty!";
         return -1;
     }
+
+    qDebug() << "Images filters : " << filters;
 
     QList<QUrl> list;
     QDirIterator it(path, filters,
@@ -148,7 +173,7 @@ int main(int argc, char* argv[])
     MetadataSettingsContainer settings;
 
     MetaReaderThread* const thread = new MetaReaderThread(&app);
-    thread->readMetadata(list, settings);
+    thread->readMetadata(list, settings, direction);
 
     QElapsedTimer timer;
     timer.start();

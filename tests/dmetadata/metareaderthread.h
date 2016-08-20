@@ -45,7 +45,8 @@ public:
     MetaReaderThread(QObject* const parent);
     ~MetaReaderThread() {};
 
-    void readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings);
+    void readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings,
+                      const QString& direction);
 
 protected Q_SLOTS:
 
