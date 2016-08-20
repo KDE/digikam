@@ -22,4 +22,5 @@ BUGFIXES FROM BUGZILLA:
 011 ==> 366786 - Libraw fails to build with CLang (C++11 non constant initializer narrowing).
 012 ==> 365727 - Thumbbar in editor should have a vertical scroll.
 013 ==> 366626 - Video frame remains on screen even after moving to another item.
-014 ==> 
+014 ==> 307839 - No import from automaticaly added smartphone.
+015 ==> 
