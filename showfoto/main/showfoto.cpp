@@ -162,6 +162,10 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     createGUI(xmlFile());
     cleanupActions();
 
+    // Create tool selection view
+
+    setupSelectToolsAction();
+
     // Create context menu.
 
     setupContextMenu();
