@@ -32,29 +32,25 @@
 
 // Local includes
 
-#include "dmetadata.h"
 #include "metaengine.h"
 
 class Mytask : public ActionJob
 {
 public:
 
-    Mytask(const QString& direction)
+    Mytask()
         : ActionJob()
     {
-	dir = direction;
     }
 
-    MetadataSettingsContainer settings;
-    QUrl                      url;
-    QString                   dir;
+    QUrl    url;
+    QString direction;
 
 protected:
 
     void run()
     {
-        DMetadata meta;
-        meta.setSettings(settings);
+        MetaEngine meta;
 
         if (!meta.load(url.toLocalFile()))
         {
@@ -62,9 +58,13 @@ protected:
         }
         else
         {
-            if (dir == QLatin1String("READ"))
+            if (direction == QLatin1String("READ"))
             {
-                 qDebug() << url.fileName() << meta.getPhotographInformation();
+                 qDebug() << url.fileName() << " :: Dim: " << meta.getImageDimensions() 
+                                            << " :: Dat: " << meta.getImageDateTime()
+                                            << " :: Com: " << meta.getCommentsDecoded()
+                                            << " :: Ori: " << meta.getImageOrientation()
+                                            << " :: Col: " << meta.getImageColorWorkSpace();
             }
             else
             {        
@@ -85,17 +85,15 @@ MetaReaderThread::MetaReaderThread(QObject* const parent)
 {
 }
 
-void MetaReaderThread::readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings, 
-                                    const QString& direction)
+void MetaReaderThread::readMetadata(const QList<QUrl>& list, const QString& direction)
 {
     ActionJobCollection collection;
 
     foreach (const QUrl& url, list)
     {
-        Mytask* const job = new Mytask(direction);
+        Mytask* const job = new Mytask();
         job->url          = url;
-        job->settings     = settings;
-
+        job->direction    = direction;
         collection.insert(job, 0);
 
         qDebug() << "Appending file to process " << url;
@@ -170,10 +168,9 @@ int main(int argc, char* argv[])
     }
 
     MetaEngine::initializeExiv2();
-    MetadataSettingsContainer settings;
 
     MetaReaderThread* const thread = new MetaReaderThread(&app);
-    thread->readMetadata(list, settings, direction);
+    thread->readMetadata(list, direction);
 
     QElapsedTimer timer;
     timer.start();

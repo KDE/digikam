@@ -31,7 +31,6 @@
 
 // Local includes
 
-#include "metadatasettingscontainer.h"
 #include "actionthreadbase.h"
 
 using namespace Digikam;
@@ -45,8 +44,7 @@ public:
     MetaReaderThread(QObject* const parent);
     ~MetaReaderThread() {};
 
-    void readMetadata(const QList<QUrl>& list, const MetadataSettingsContainer& settings,
-                      const QString& direction);
+    void readMetadata(const QList<QUrl>& list, const QString& direction);
 
 protected Q_SLOTS:
 
