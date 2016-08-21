@@ -4,9 +4,11 @@
  * http://www.digikam.org
  *
  * Date        : 16/08/2016
- * Description : TODO
+ * Description : A Shape predictor class that can predicts 68 facial point including
+ * points surrounding faces eyes, that can be used for detecting human eyes positions,
+ * almost all codes are ported from dlib library (http://dlib.net/)
  *
- * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,12 +46,6 @@ namespace redeye
         unsigned long idx1;
         unsigned long idx2;
         float thresh;
-//        void operator=(const splitfeature& in)
-//        {
-//            idx1 = in.idx1;
-//            idx2 = in.idx2;
-//            thresh = in.thresh;
-//        }
     };
 
     QDataStream& operator<<(QDataStream& dataStream, const splitfeature& sp)
@@ -153,7 +149,6 @@ namespace redeye
         dataStream >> size;
         regtree.leaf_values.resize(size);
         dataStream >> size;
-//        datastream << regtree.leaf_values[0].size();
 
         for (unsigned int i = 0 ; i < regtree.leaf_values.size() ; i++)
         {
@@ -163,17 +158,11 @@ namespace redeye
             {
                 dataStream >> regtree.leaf_values[i][j];
             }
-
-            //datastream << regtree.splits.size();
         }
 
         return dataStream;
     }
 
-//    inline vector<float,2> location(
-//        const matrix<float,0,1>& shape,
-//        unsigned long idx
-//    )
 
     /*!
         requires
@@ -190,14 +179,11 @@ namespace redeye
         temp[1] = shape[idx * 2 + 1];
 
         return temp;
-        //return std::vector<float>(shape(idx*2), shape(idx*2+1));
     }
 
     // ------------------------------------------------------------------------------------
 
-    inline unsigned long nearest_shape_point(//const matrix<float,0,1>& shape,
-                                             const std::vector<float>& shape,
-                                             //const dlib::vector<float,2>& pt
+    inline unsigned long nearest_shape_point(const std::vector<float>& shape,
                                              const std::vector<float>& pt)
     {
         // find the nearest part of the shape to this pixel
@@ -231,12 +217,9 @@ namespace redeye
             - for all valid i:
             - pixel_coordinates[i] == location(shape,#anchor_idx[i]) + #deltas[i]
     !*/
-    inline void create_shape_relative_encoding(//const matrix<float,0,1>& shape,
-                                               const std::vector<float>& shape,
-                                               //const std::vector<dlib::vector<float,2> >& pixel_coordinates,
+    inline void create_shape_relative_encoding(const std::vector<float>& shape,
                                                const std::vector<std::vector<float> >& pixel_coordinates,
                                                std::vector<unsigned long>& anchor_idx,
-                                               //std::vector<dlib::vector<float,2> >& deltas
                                                std::vector<std::vector<float> >& deltas)
     {
         anchor_idx.resize(pixel_coordinates.size());
@@ -251,13 +234,11 @@ namespace redeye
 
     // ------------------------------------------------------------------------------------
 
-    inline pointtransformaffine find_tform_between_shapes(//const matrix<float,0,1>& from_shape,
-                                                          const std::vector<float>& from_shape,
-                                                          //const matrix<float,0,1>& to_shape
+    inline pointtransformaffine find_tform_between_shapes(const std::vector<float>& from_shape,
                                                           const std::vector<float>& to_shape)
     {
         assert(from_shape.size() == to_shape.size() && (from_shape.size()%2) == 0 && from_shape.size() > 0);
-        //std::vector<vector<float,2> > from_points, to_points;
+
         std::vector<std::vector<float> > from_points, to_points;
         const unsigned long num = from_shape.size()/2;
         from_points.reserve(num);
@@ -287,7 +268,6 @@ namespace redeye
     !*/
     inline pointtransformaffine normalizing_tform (const cv::Rect& rect)
     {
-        //std::vector<vector<float,2> > from_points, to_points;
         std::vector<std::vector<float> > from_points, to_points;
         std::vector<float> tlcorner(2);
         tlcorner[0] = rect.x;
@@ -347,7 +327,6 @@ namespace redeye
         pt3[0] = 1;
         pt3[1] = 1;
 
-        //std::vector<vector<float,2> > from_points, to_points;
         to_points.push_back(tlcorner);
         from_points.push_back(pt1);
         to_points.push_back(trcorner);
@@ -391,16 +370,11 @@ namespace redeye
                   and reference_pixel_deltas[i] when the pixel is located relative to
                   current_shape rather than reference_shape.
     !*/
-    // template <typename image_type>
-    void extract_feature_pixel_values(//const image_type& img_,
-                                      const cv::Mat& img_,
+    void extract_feature_pixel_values(const cv::Mat& img_,
                                       const cv::Rect& rect,
-                                      //const matrix<float,0,1>& current_shape,
                                       const std::vector<float>& current_shape,
-                                      //const matrix<float,0,1>& reference_shape,
                                       const std::vector<float>& reference_shape,
                                       const std::vector<unsigned long>& reference_pixel_anchor_idx,
-                                      //const std::vector<dlib::vector<float,2> >& reference_pixel_deltas,
                                       const std::vector<std::vector<float> >& reference_pixel_deltas,
                                       std::vector<float>& feature_pixel_values)
     {
@@ -419,7 +393,6 @@ namespace redeye
             if (pointcontained(area,p))
             {
                 feature_pixel_values[i] = img.at<unsigned char>(std::round(p[1]), std::round(p[0]));
-                //get_pixel_intensity(img[p.y()][p.x()]);
             }
             else
             {
@@ -435,34 +408,6 @@ namespace redeye
         shapepredictor()
         {
         }
-
-//        shapepredictor (
-////            const matrix<float,0,1>& initial_shape_,
-//            const std::vector<float>& initial_shape_,
-//            const std::vector<std::vector<impl::regressiontree> >& forests_,
-////            const std::vector<std::vector<dlib::vector<float,2> > >& pixel_coordinates
-//            const std::vector<std::vector<std::vector<float> > >& pixel_coordinates
-//        ) : initial_shape(initial_shape_), forests(forests_)
-//        /*!
-//            requires
-//                - initial_shape.size()%2 == 0
-//                - forests.size() == pixel_coordinates.size() == the number of cascades
-//                - for all valid i:
-//                    - all the index values in forests[i] are less than pixel_coordinates[i].size()
-//                - for all valid i and j:
-//                    - forests[i][j].leaf_values.size() is a power of 2.
-//                      (i.e. we require a tree with all the levels fully filled out.
-//                    - forests[i][j].leaf_values.size() == forests[i][j].splits.size()+1
-//                      (i.e. there need to be the right number of leaves given the number of splits in the tree)
-//        !*/
-//        {
-//            anchor_idx.resize(pixel_coordinates.size());
-//            deltas.resize(pixel_coordinates.size());
-//            // Each cascade uses a different set of pixels for its features.  We compute
-//            // their representations relative to the initial shape now and save it.
-//            for (unsigned long i = 0; i < pixel_coordinates.size(); ++i)
-//                impl::create_shape_relative_encoding(initial_shape, pixel_coordinates[i], anchor_idx[i], deltas[i]);
-//        }
 
         unsigned long num_parts() const
         {
@@ -484,11 +429,9 @@ namespace redeye
             return num;
         }
 
-        //template <typename image_type>
         fullobjectdetection operator()(const cv::Mat& img, const cv::Rect& rect) const
         {
             using namespace redeye;
-            //matrix<float,0,1> current_shape = initial_shape;
             std::vector<float> current_shape = initial_shape;
             std::vector<float> feature_pixel_values;
 
@@ -520,8 +463,6 @@ namespace redeye
 
     public:
 
-        //matrix<float,0,1> initial_shape;
-        // kano float
         std::vector<float> initial_shape;
         std::vector<std::vector<redeye::regressiontree> > forests;
         std::vector<std::vector<unsigned long> > anchor_idx;
@@ -530,10 +471,6 @@ namespace redeye
 
     QDataStream& operator<<(QDataStream& dataStream, const shapepredictor& shape)
     {
-//        std::vector<float> initial_shape;
-//        std::vector<std::vector<redeye::regressiontree> > forests;
-//        std::vector<std::vector<unsigned long> > anchor_idx;
-//        std::vector<std::vector<std::vector<float> > > deltas;
         dataStream << (unsigned int)shape.initial_shape.size();
 
         for (unsigned int i = 0 ; i < shape.initial_shape.size() ; i++)

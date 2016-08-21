@@ -3,10 +3,11 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 16/08/2016
- * Description : TODO
+ * Date        : 17-8-2016
+ * Description : Some matrix utility functions including singular value decomposition, inverse
+ * , and pseudoinverse.
  *
- * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -33,7 +34,9 @@
 
 #include "libopencv.h"
 
-std::vector<std::vector<float> > inv2(const std::vector<std::vector<float> >& mat)
+#include <opencv/cv.h>
+
+std::vector<std::vector<float> >  inv2(const std::vector<std::vector<float> >& mat)
 {
     assert(mat.size() == 2 && mat[0].size() == 2);
 
@@ -144,13 +147,9 @@ inline T pythag(const T& a, const T& b)
 void transpose(std::vector<std::vector<float> >& src,
                std::vector<std::vector<float> >& dst)
 {
-    //dst.resize(src[0].size());
-
-    for (unsigned int i = 0  ;i < src.size() ; i++)
+    for(unsigned int i = 0;i<src.size();i++)
     {
-        //dst[i].resize(src.size());
-
-        for (unsigned int j = 0 ; j < src[0].size() ; j++)
+        for(unsigned int j=0;j<src[0].size();j++)
         {
             dst[i][j] = src[j][i];
         }
@@ -160,13 +159,10 @@ void transpose(std::vector<std::vector<float> >& src,
 
 float trace(const std::vector<std::vector<float> >& src)
 {
-    //dst.resize(src[0].size());
     float result = 0;
 
     for (unsigned int i = 0 ; i < src.size() ; i++)
     {
-        //dst[i].resize(src.size());
-
         for (unsigned int j = 0 ; j < src[0].size() ; j++)
         {
             if (i == j)
@@ -579,20 +575,5 @@ float determinant(const std::vector<std::vector<float> >& u)
     return result;
 }
 
-//void svdusingeigen(const Eigen::MatrixXf& input )
-//{
-//    using namespace std;
-//    Eigen::JacobiSVD<Eigen::MatrixXf> svdeigen(input, Eigen::ComputeThinU | Eigen::ComputeThinV);
-//    cout << "Its singular values are:" << endl << svdeigen.singularValues() << endl;
-//    cout << "Its left singular vectors are the columns of the thin U matrix:" << endl << svdeigen.matrixU() << endl;
-//    cout << "Its right singular vectors are the columns of the thin V matrix:" << endl << svdeigen.matrixV() << endl;
-//    auto d = svdeigen.singularValues();
-//    Eigen::MatrixXf u = svdeigen.matrixU();
-//    Eigen::MatrixXf v = svdeigen.matrixV();
-//}
-
-//void stdmattoeigenmat(const std::vector<std::vector<float> >&input , Eigen::MatrixXf& result)
-//{
-//}
 
 #endif // MATRIXOPERATIONS_H

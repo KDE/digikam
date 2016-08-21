@@ -4,9 +4,9 @@
  * http://www.digikam.org
  *
  * Date        : 16/08/2016
- * Description : TODO
+ * Description : Serialization utilities to help making long serialization platform independent
  *
- * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

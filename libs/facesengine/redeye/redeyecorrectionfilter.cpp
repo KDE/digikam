@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 16/08/2016
+ * Date        : 17-8-2016
  * Description : A Red-Eye automatic detection and correction filter.
  *
  * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "redeyecorrectionfilter.h"
+
 
 // Qt includes
 
@@ -35,11 +35,11 @@
 #include <QDataStream>
 
 // Local includes
-
 #include "digikam_debug.h"
-#include "shapepredictor.h"
 #include "facedetector.h"
-#include "digikam_debug.h"
+#include "redeyecorrectionfilter.h"
+#include "shapepredictor.h"
+
 
 namespace Digikam
 {
@@ -133,9 +133,6 @@ cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inClon
 
 void RedEyeCorrectionFilter::filterImage()
 {
-    // TODO : move the deserialization into a single place
-    // preparing shape predictor
-    //redeye::shapepredictor sp;
 
     if (d->sp == 0)
     {
@@ -145,16 +142,18 @@ void RedEyeCorrectionFilter::filterImage()
         QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                         QString::fromLatin1("digikam/facesengine"),
                                                         QStandardPaths::LocateDirectory);
-        QFile model(*path.begin() + QLatin1String("/shapepredictor.dat"));
+        QFile model(*path.begin()+QLatin1String("/shapepredictor.dat"));
 
         model.open(QIODevice::ReadOnly);
-        QDataStream dataStream(&model);
-        dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-        dataStream >> *temp;
-        d->sp = temp;
+        if(model.isOpen())
+        {
+            QDataStream dataStream(&model);
+            dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
+            dataStream>>*temp;
+            d->sp = temp;
+        }
     }
 
-    //bool visualize = false;
 
     cv::Mat intermediateImage;
 
@@ -195,10 +194,6 @@ void RedEyeCorrectionFilter::filterImage()
                               eyes[j],
                               cv::Rect(0,0,intermediateImage.size().width ,
                                            intermediateImage.size().height));
-//                correctRedEye(intermediateImage[eyes[j]],
-//                              intermediateImage.type(),
-//                              cv::Rect(0,0,intermediateImage.size().width,
-//                                       intermediateImage.size().height));
             }
         }
     }
