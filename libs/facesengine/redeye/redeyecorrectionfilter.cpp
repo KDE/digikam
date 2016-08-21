@@ -311,7 +311,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
 {
     // TODO : handle different images depth
     uchar*  onebytedata = data;
-    ushort* twobytedata = (ushort*)data;
+    ushort* twobytedata = reinterpret_cast<ushort*>(data);
     int     pixeldepth  = 0;
 
     if (type == CV_8UC3 || type == CV_16UC3 )
@@ -335,14 +335,14 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
         for (int j = eyerect.x ; j < eyerect.x + eyerect.width ; j++)
         {
             int pixelindex = (i*imgRect.width + j) * pixeldepth;
-            onebytedata    = &(((uchar*)  data)[pixelindex]);
-            twobytedata    = &(((ushort*) data)[pixelindex]);
+            onebytedata    = &(reinterpret_cast<uchar*> (data)[pixelindex]);
+            twobytedata    = &(reinterpret_cast<ushort*>(data)[pixelindex]);
 
             if (sixteendepth)
             {
                 float redIntensity = ((float)twobytedata[0] / (((unsigned int)twobytedata[1]
                                                                +(unsigned int)twobytedata[2]) / 2));
-                if (redIntensity > 2.1f)
+                if (redIntensity > 2.1F)
                 {
                     // reduce red to the average of blue and green
                     twobytedata[2] = (twobytedata[1] + twobytedata[2]) / 2;
@@ -353,7 +353,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
 
                 float redIntensity = ((float)onebytedata[2] / (( (unsigned int)onebytedata[1]
                                                                + (unsigned int)onebytedata[0]) / 2));
-                if (redIntensity > 2.1f)
+                if (redIntensity > 2.1F)
                 {
                     // reduce red to the average of blue and green
                     onebytedata[2] = ((int)onebytedata[1] + (int)onebytedata[0]) / 2;
