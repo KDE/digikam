@@ -25,4 +25,5 @@ BUGFIXES FROM BUGZILLA:
 014 ==> 307839 - No import from automaticaly added smartphone.
 015 ==> 297459 - Cancel button doesn't work when items are being processed.
 016 ==> 360462 - Can't drag image from list to map in Google Maps mode.
-017 ==> 
+017 ==> 367580 - digiKam freeze, and most of the computer, when geolocalising pictures. 
+018 ==> 
