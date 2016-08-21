@@ -4,7 +4,7 @@ digiKam 5.2.0 - Release date: 2016-09-11
 NEW FEATURES:
 
 ImageEditor: digiKam editor and Showfoto plugins interface removed to reduce run-time dependancies and speed-up initialization.
-Import     : new configuration options to support gPhoto2 PTP/IP cameras.
+Import     : New configuration options to support gPhoto2 PTP/IP cameras.
 BQM        : New tool to detect and fix red-eyes automatically.
 
 BUGFIXES FROM BUGZILLA:
@@ -24,4 +24,5 @@ BUGFIXES FROM BUGZILLA:
 013 ==> 366626 - Video frame remains on screen even after moving to another item.
 014 ==> 307839 - No import from automaticaly added smartphone.
 015 ==> 297459 - Cancel button doesn't work when items are being processed.
-016 ==> 
+016 ==> 360462 - Can't drag image from list to map in Google Maps mode.
+017 ==> 
