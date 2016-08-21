@@ -167,14 +167,12 @@ void TimeAdjust::slotSettingsChanged()
 
 bool TimeAdjust::toolOperations()
 {
+    bool metaLoadState = true;
     DMetadata meta;
 
     if (image().isNull())
     {
-        if (!meta.load(inputUrl().toLocalFile()))
-        {
-            return false;
-        }
+        metaLoadState = meta.load(inputUrl().toLocalFile());
     }
     else
     {
@@ -254,6 +252,11 @@ bool TimeAdjust::toolOperations()
             break;
     }
 
+    if (!metaLoadState && prm.dateSource != TimeAdjustContainer::CUSTOMDATE)
+    {
+        orgDateTime = imageInfo().modDateTime();
+    }
+
     QDateTime dt = prm.calculateAdjustedDate(orgDateTime);
 
     if (!dt.isValid())
@@ -261,7 +264,7 @@ bool TimeAdjust::toolOperations()
         return false;
     }
 
-    if (metadataChanged)
+    if (metadataChanged && metaLoadState)
     {
 
         if (prm.updEXIFModDate)
@@ -320,7 +323,7 @@ bool TimeAdjust::toolOperations()
         QFile::remove(outputUrl().toLocalFile());
         ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
 
-        if (ret && metadataChanged)
+        if (ret && metadataChanged && metaLoadState)
         {
             ret = meta.save(outputUrl().toLocalFile());
         }
