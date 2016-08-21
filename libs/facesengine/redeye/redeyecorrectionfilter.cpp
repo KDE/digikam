@@ -6,7 +6,7 @@
  * Date        : 16/08/2016
  * Description : A Red-Eye automatic detection and correction filter.
  *
- * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -90,7 +90,8 @@ RedEyeCorrectionFilter::~RedEyeCorrectionFilter()
 
 cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inCloneImageData)
 {
-    // Todo : Handle QImage 16 bit depth images or convert from DImg to cv::Mat directly
+    // TODO : Handle QImage 16 bit depth images or convert from DImg to cv::Mat directly
+
     switch (inImage.format())
     {
         // 8-bit, 4 channel
@@ -132,7 +133,7 @@ cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inClon
 
 void RedEyeCorrectionFilter::filterImage()
 {
-    // Todo:move the deserialization into a single place
+    // TODO : move the deserialization into a single place
     // preparing shape predictor
     //redeye::shapepredictor sp;
 
@@ -162,7 +163,7 @@ void RedEyeCorrectionFilter::filterImage()
     QImage temp = m_orgImage.copyQImage();
 
 //    int type = m_orgImage.sixteenBit()?CV_8UC3:CV_8UC3;
-//    // Todo : converting to Qimage including adding an alpha channel
+//    // TODO : converting to Qimage including adding an alpha channel
 //    // to be handled
 //    type = type+8;//m_orgImage.hasAlpha()?type:type+8;
     intermediateImage = cv::Mat(cv::Size(temp.width(),temp.height()), CV_8UC4,temp.bits());
@@ -248,7 +249,7 @@ void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect>& faces, std::vect
 
 void RedEyeCorrectionFilter::correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect)
 {
-    // Todo : handle different images depth
+    // TODO : handle different images depth
     uchar*  onebytedata = eye.data;
     //ushort* twobytedata = (ushort*)eye.data;
     int     pixeldepth  = 0;
@@ -308,7 +309,7 @@ void RedEyeCorrectionFilter::correctRedEye(cv::Mat& eye, int type, cv::Rect imgR
 void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
                                            cv::Rect eyerect, cv::Rect imgRect)
 {
-    // Todo : handle different images depth
+    // TODO : handle different images depth
     uchar*  onebytedata = data;
     ushort* twobytedata = (ushort*)data;
     int     pixeldepth  = 0;
