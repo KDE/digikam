@@ -742,6 +742,50 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const QImage& inputImage) const
     return cvImage;
 }
 
+cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage) const
+{
+    if (inputImage.isNull() || !inputImage.size().isValid())
+    {
+        return cv::Mat();
+    }
+
+    Digikam::DImg image(inputImage);
+    int inputArea                    = image.size().width() * image.height();
+    const int maxAcceptableInputArea = 1024*768;
+
+    if (inputArea > maxAcceptableInputArea)
+    {
+        // Resize to 1024 * 768 (or comparable area for different aspect ratio)
+        // Looking for scale factor z where A = w*z * h*z => z = sqrt(A/(w*h))
+        qreal z          = qSqrt(qreal(maxAcceptableInputArea) / image.width() / image.height());
+        QSize scaledSize = image.size() * z;
+        image            = image.smoothScale(scaledSize);
+    }
+
+    //TODO: move to common utils, opentldrecognition
+    cv::Mat cvImageWrapper, cvImage;
+    int type = image.sixteenBit() ? CV_16UC3 : CV_8UC3;
+    type     = image.hasAlpha()   ? type+8  : type;
+
+    switch (type)
+    {
+        case CV_8UC4:
+        case CV_16UC4:
+            cvImageWrapper = cv::Mat(image.height(), image.width(), type, image.bits());
+            cvtColor(cvImageWrapper, cvImage, CV_RGBA2GRAY);
+            break;
+        case CV_8UC3:
+        case CV_16UC3:
+            cvImageWrapper = cv::Mat(image.height(), image.width(), type, image.bits());
+            cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
+            break;
+    }
+
+    equalizeHist(cvImage, cvImage);
+    return cvImage;
+}
+
+
 QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv::Size& originalSize)
 {
     if (inputImage.empty())

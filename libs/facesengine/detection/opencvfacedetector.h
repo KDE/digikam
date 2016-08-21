@@ -46,6 +46,10 @@
 #include <QRect>
 #include <QStringList>
 
+// DigiKam includes
+
+#include "dimg.h"
+
 namespace FacesEngine
 {
 
@@ -60,6 +64,7 @@ public:
     ~OpenCVFaceDetector();
 
     cv::Mat prepareForDetection(const QImage& inputImage) const;
+    cv::Mat prepareForDetection(const Digikam::DImg& inputImage) const;
     QList<QRect> detectFaces(const cv::Mat& inputImage, const cv::Size& originalSize = cv::Size(0, 0));
 
     /**

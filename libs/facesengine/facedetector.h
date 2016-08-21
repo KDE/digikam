@@ -39,6 +39,7 @@
 // Local includes
 
 #include "digikam_export.h"
+#include "dimg.h"
 
 namespace FacesEngine
 {
@@ -75,6 +76,16 @@ public:
      * Found faces are returned in relative coordinates.
      */
     QList<QRectF> detectFaces(const QImage& image, const QSize& originalSize = QSize());
+
+    /**
+     * Scan an image for faces. Return a list with regions possibly
+     * containing faces.
+     * If the image has been downscaled anywhere in the process,
+     * provide the original size of the image as this may be of importance in the detection process.
+     *
+     * Found faces are returned in relative coordinates.
+     */
+    QList<QRectF> detectFaces(const Digikam::DImg& image, const QSize& originalSize = QSize());
 
     /**
      * Tunes backend parameters.

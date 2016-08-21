@@ -178,6 +178,47 @@ QList<QRectF> FaceDetector::detectFaces(const QImage& image, const QSize& origin
     return result;
 }
 
+
+QList<QRectF> FaceDetector::detectFaces(const Digikam::DImg& image, const QSize& originalSize)
+{
+    QList<QRectF> result;
+
+    if (image.isNull() || !image.size().isValid())
+    {
+        return result;
+    }
+
+    try
+    {
+        cv::Size cvOriginalSize;
+
+        if (originalSize.isValid())
+        {
+            cvOriginalSize = cv::Size(originalSize.width(), originalSize.height());
+        }
+        else
+        {
+            cvOriginalSize = cv::Size(image.width(), image.height());
+        }
+
+        cv::Mat cvImage       = d->backend()->prepareForDetection(image);
+        QList<QRect> absRects = d->backend()->detectFaces(cvImage, cvOriginalSize);
+        result                = toRelativeRects(absRects, QSize(cvImage.cols, cvImage.rows));
+
+    }
+    catch (cv::Exception& e)
+    {
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception:" << e.what();
+    }
+    catch(...)
+    {
+        qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
+    }
+
+    return result;
+}
+
+
 void FaceDetector::setParameter(const QString& parameter, const QVariant& value)
 {
     d->m_parameters.insert(parameter, value);
