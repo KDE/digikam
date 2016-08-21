@@ -159,15 +159,23 @@ void RedEyeCorrectionFilter::filterImage()
 
     // Todo: convert dImg to Opencv::Mat directly
     // Deep copy
-    QImage temp = m_orgImage.copyQImage();
+    DImg temp = m_orgImage.copy();
 
-//    int type = m_orgImage.sixteenBit()?CV_8UC3:CV_8UC3;
-//    // TODO : converting to Qimage including adding an alpha channel
-//    // to be handled
-//    type = type+8;//m_orgImage.hasAlpha()?type:type+8;
-    intermediateImage = cv::Mat(cv::Size(temp.width(),temp.height()), CV_8UC4,temp.bits());
+    int type = m_orgImage.sixteenBit()?CV_16UC3:CV_8UC3;
+    type = m_orgImage.hasAlpha()?type:type+8;
+
+    intermediateImage = cv::Mat(m_orgImage.height(), m_orgImage.width(),
+                                type, m_orgImage.bits());
+
     cv::Mat gray;
-    cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY);
+    if(type == CV_8UC3 || type == CV_16UC3)
+    {
+        cv::cvtColor(intermediateImage,gray,CV_RGB2GRAY);  // 3 channels
+    }
+    else
+    {
+        cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY); // 4 channels
+    }
 
     QList<QRectF> qrectfdets   = d->facedetector.detectFaces(temp);
     redeye::shapepredictor& sp = *(d->sp);
@@ -178,14 +186,11 @@ void RedEyeCorrectionFilter::filterImage()
         QList<QRect> qrectdets = FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets,temp.size());
         QRectFtocvRect(qrectdets,dets);
 
-        //drawRects(intermediateImage,dets);
-
         // Eye Detection
         for (unsigned int i = 0 ; runningFlag() && (i < dets.size()) ; i++)
         {
             fullobjectdetection object = sp(gray,dets[i]);
             std::vector<cv::Rect> eyes = geteyes(object);
-            //drawRects(intermediateImage,eyes);
 
             for (unsigned int j = 0 ; runningFlag() && (j < eyes.size()) ; j++)
             {
@@ -200,13 +205,8 @@ void RedEyeCorrectionFilter::filterImage()
 
     if (runningFlag())
     {
-        m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), false, //m_orgImage.sixteenBit(),
-                                 true/*m_orgImage.hasAlpha()*/, intermediateImage.data, true);
-
-        if (m_orgImage.sixteenBit())
-            m_destImage.convertDepth(64);
-
-        //if(!m_orgImage.hasAlpha())  m_destImage.removeAlphaChannel();
+        m_destImage.putImageData(m_orgImage.width(), m_orgImage.height(), temp.sixteenBit(),
+                                 !temp.hasAlpha(), intermediateImage.data, true);
     }
 }
 

@@ -765,7 +765,7 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage)
     //TODO: move to common utils, opentldrecognition
     cv::Mat cvImageWrapper, cvImage;
     int type = image.sixteenBit() ? CV_16UC3 : CV_8UC3;
-    type     = image.hasAlpha()   ? type+8  : type;
+    type     = image.hasAlpha()   ? type     : type+8;
 
     switch (type)
     {
@@ -780,7 +780,6 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage)
             cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;
     }
-
     equalizeHist(cvImage, cvImage);
     return cvImage;
 }
