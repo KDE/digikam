@@ -639,6 +639,14 @@ void FaceGroup::clear()
 
 void FaceGroup::rejectAll()
 {
+    foreach(FaceItem* const item, d->items)
+    {
+        d->editPipeline.remove(d->info, item->face());
+        item->setFace(FaceTagsIface());
+        d->visibilityController->hideAndRemoveItem(item);
+    }
+
+    clear();
 }
 
 void FaceGroup::slotAssigned(const TaggingAction& action, const ImageInfo&, const QVariant& faceIdentifier)

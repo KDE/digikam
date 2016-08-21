@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 016 ==> 360462 - Can't drag image from list to map in Google Maps mode.
 017 ==> 367580 - digiKam freeze, and most of the computer, when geolocalising pictures. 
 018 ==> 367649 - Adjusting File Last Modified timestamps makes 0-byte files out of MP4 video.
-019 ==> 
+019 ==> 367643 - In album view, "Clear all faces in this image" does not work.
+020 ==> 
