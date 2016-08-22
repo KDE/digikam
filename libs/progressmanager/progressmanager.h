@@ -52,6 +52,17 @@ public:
     virtual ~ProgressItem();
 
     /**
+     * Set the property to pop-up item when it's added in progress manager.
+     * Use this method if you consider that item is important to be notified to end-user.
+     */
+    void setShowAtStart(bool showAtStart);
+
+    /**
+     * @return true if item must be pop-up when it's added in progress manager.
+     */
+    bool showAtStart() const;
+
+    /**
      * @return The id string which uniquely identifies the operation
      *         represented by this item.
      */

@@ -62,6 +62,7 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
 {
     setLabel(i18n("Find new items"));
     setThumbnail(QIcon::fromTheme(QLatin1String("view-refresh")).pixmap(22));
+    setShowAtStart(true);
     ProgressManager::addProgressItem(this);
 
     d->mode = mode;
@@ -83,7 +84,7 @@ NewItemsFinder::NewItemsFinder(const FinderMode mode, const QStringList& folders
             this, SLOT(slotPartialScanDone(QString)));
 
     // If we are scanning for newly imported files, we need to have the folders for scanning...
-    if(mode == ScheduleCollectionScan && foldersToScan.isEmpty())
+    if (mode == ScheduleCollectionScan && foldersToScan.isEmpty())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "NewItemsFinder called without any folders. Wrong call.";
     }

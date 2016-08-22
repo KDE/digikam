@@ -62,6 +62,7 @@ public:
         usesBusyIndicator(false),
         canBeCanceled(false),
         hasThumb(false),
+        showAtStart(false),
         progress(0),
         total(0),
         completed(0),
@@ -74,6 +75,7 @@ public:
     bool            usesBusyIndicator;
     bool            canBeCanceled;
     bool            hasThumb;
+    bool            showAtStart;   // Force to show progress item when it's add in progress manager
 
     QAtomicInt      progress;
     QAtomicInt      total;
@@ -103,6 +105,16 @@ ProgressItem::ProgressItem(ProgressItem* const parent, const QString& id,
 ProgressItem::~ProgressItem()
 {
     delete d;
+}
+
+void ProgressItem::setShowAtStart(bool showAtStart)
+{
+    d->showAtStart = showAtStart;
+}
+
+bool ProgressItem::showAtStart() const
+{
+    return d->showAtStart;
 }
 
 void ProgressItem::setComplete()
