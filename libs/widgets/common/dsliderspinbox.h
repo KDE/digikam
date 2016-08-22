@@ -84,10 +84,11 @@ protected:
     QStyleOptionSpinBox spinBoxOptions()         const;
     QStyleOptionProgressBar progressBarOptions() const;
 
-    QRect editRect(const QStyleOptionSpinBox& spinBoxOptions)   const;
-    QRect progressRect(const QStyleOptionProgressBar& progressBarOptions)   const;
-    QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions)   const;
-    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+    QRect editRect(const QStyleOptionSpinBox& spinBoxOptions)              const;
+    QRect labelRect(const QStyleOptionProgressBar& progressBarOptions)     const;
+    QRect progressRect(const QStyleOptionProgressBar& progressBarOptions)  const;
+    QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions)          const;
+    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions)        const;
 
     int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 

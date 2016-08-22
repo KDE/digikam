@@ -194,7 +194,8 @@ void DAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
 void DAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
 {
     Q_D(DAbstractSliderSpinBox);
-    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    QStyleOptionSpinBox spinOpts         = spinBoxOptions();
+    QStyleOptionProgressBar progressOpts = progressBarOptions();
 
     // Depress buttons or highlight slider. Also used to emulate mouse grab.
 
@@ -207,6 +208,10 @@ void DAbstractSliderSpinBox::mousePressEvent(QMouseEvent* e)
         else if (downButtonRect(spinOpts).contains(e->pos()))
         {
             d->downButtonDown = true;
+        }
+        else if (labelRect(progressOpts).contains(e->pos()))
+        {
+            showEdit();
         }
     }
     else if (e->buttons() & Qt::RightButton)
@@ -254,7 +259,7 @@ void DAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
         if (!d->shiftMode)
         {
             d->shiftPercent = pow(double(d->value - d->minimum)/double(d->maximum - d->minimum),
-                                  1/double(d->exponentRatio));
+                                  1 / double(d->exponentRatio));
             d->shiftMode    = true;
         }
     }
@@ -373,6 +378,8 @@ bool DAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
                 if (d->edit->isModified())
                 {
                     setInternalValue(QLocale::system().toDouble(d->edit->text()) * d->factor);
+                    hideEdit();
+                    setFocus();
                 }
 
                 e->accept();
@@ -498,6 +505,11 @@ QRect DAbstractSliderSpinBox::editRect(const QStyleOptionSpinBox& spinBoxOptions
 {
     return style()->subControlRect(QStyle::CC_SpinBox, &spinBoxOptions,
                                    QStyle::SC_SpinBoxEditField);
+}
+
+QRect DAbstractSliderSpinBox::labelRect(const QStyleOptionProgressBar& progressBarOptions) const
+{
+    return style()->subElementRect(QStyle::SE_ProgressBarLabel, &progressBarOptions);
 }
 
 QRect DAbstractSliderSpinBox::progressRect(const QStyleOptionProgressBar& progressBarOptions) const

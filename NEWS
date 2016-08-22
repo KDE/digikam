@@ -29,4 +29,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 367649 - Adjusting File Last Modified timestamps makes 0-byte files out of MP4 video.
 019 ==> 367643 - In album view, "Clear all faces in this image" does not work.
 020 ==> 366897 - Detailed progress window cannot be hidden properly.
-021 ==> 
+021 ==> 367604 - Reduced usability of combined slider/input widgets in editing tools.
+022 ==> 
