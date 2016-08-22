@@ -176,6 +176,10 @@ void RedEyeCorrectionFilter::filterImage()
     {
         cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY); // 4 channels
     }
+    if(type == CV_16UC3 || type == CV_16UC4)
+    {
+        gray.convertTo(gray,CV_8UC1,1/255.0);
+    }
 
     QList<QRectF> qrectfdets   = d->facedetector.detectFaces(temp);
     redeye::shapepredictor& sp = *(d->sp);
@@ -331,17 +335,20 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
         {
             int pixelindex = (i*imgRect.width + j) * pixeldepth;
             onebytedata    = &(reinterpret_cast<uchar*> (data)[pixelindex]);
-            twobytedata    = &(reinterpret_cast<ushort*>(data)[pixelindex]);
+            twobytedata    = &(((ushort*)data)[pixelindex]);
 
             if (sixteendepth)
             {
-                float redIntensity = ((float)twobytedata[0] / (((unsigned int)twobytedata[1]
-                                                               +(unsigned int)twobytedata[2]) / 2));
-                if (redIntensity > 2.1F)
-                {
-                    // reduce red to the average of blue and green
-                    twobytedata[2] = (twobytedata[1] + twobytedata[2]) / 2;
-                }
+                //float redIntensity = ((float)twobytedata[0] / (((unsigned int)twobytedata[1]
+                                                              // +(unsigned int)twobytedata[2]) / 2));
+                twobytedata[2] = twobytedata[2] *0.02
+                                 + twobytedata[1] * 0.68
+                                 + twobytedata[0] * 0.3;
+//                if (redIntensity > 1.05F)
+//                {
+//                    // reduce red to the average of blue and green
+//                    twobytedata[2] = (twobytedata[1] + twobytedata[2]) / 2;
+//                }
             }
             else
             {

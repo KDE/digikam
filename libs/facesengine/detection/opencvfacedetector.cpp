@@ -780,6 +780,12 @@ cv::Mat OpenCVFaceDetector::prepareForDetection(const Digikam::DImg& inputImage)
             cvtColor(cvImageWrapper, cvImage, CV_RGB2GRAY);
             break;
     }
+    if(type == CV_16UC4 || type == CV_16UC3)
+    {
+        cvImage.convertTo(cvImage,CV_8UC1,1/255.0);
+    }
+
+
     equalizeHist(cvImage, cvImage);
     return cvImage;
 }
