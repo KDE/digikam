@@ -210,10 +210,6 @@ bool TagsActionMngr::createRatingActionShortcut(KActionCollection* const ac, int
         QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->ratingShortcutPrefix).arg(rating));
         action->setText(i18n("Assign Rating \"%1 Star\"", rating));
         ac->setDefaultShortcut(action, QKeySequence(QString::fromUtf8("CTRL+%1").arg(rating)));
-#pragma message("PORT QT5")
-/*
-        action->forgetGlobalShortcut();
-*/
         action->setIcon(RatingWidget::buildIcon(rating, 32));
         action->setData(rating);
 
@@ -233,10 +229,6 @@ bool TagsActionMngr::createPickLabelActionShortcut(KActionCollection* const ac, 
         QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->pickShortcutPrefix).arg(pickId));
         action->setText(i18n("Assign Pick Label \"%1\"", PickLabelWidget::labelPickName((PickLabel)pickId)));
         ac->setDefaultShortcut(action, QKeySequence(QString::fromUtf8("ALT+%1").arg(pickId)));
-#pragma message("PORT QT5")
-/*
-        action->forgetGlobalShortcut();
-*/
         action->setIcon(PickLabelWidget::buildIcon((PickLabel)pickId));
         action->setData(pickId);
 
@@ -256,10 +248,6 @@ bool TagsActionMngr::createColorLabelActionShortcut(KActionCollection* const ac,
         QAction* const action = ac->addAction(QString::fromUtf8("%1-%2").arg(d->colorShortcutPrefix).arg(colorId));
         action->setText(i18n("Assign Color Label \"%1\"", ColorLabelWidget::labelColorName((ColorLabel)colorId)));
         ac->setDefaultShortcut(action, QKeySequence(QString::fromUtf8("ALT+CTRL+%1").arg(colorId)));
-#pragma message("PORT QT5")
-/*
-        action->forgetGlobalShortcut();
-*/
         action->setIcon(ColorLabelWidget::buildIcon((ColorLabel)colorId, 32));
         action->setData(colorId);
 
@@ -307,10 +295,6 @@ bool TagsActionMngr::createTagActionShortcut(int tagId)
         action->setText(i18n("Assign Tag \"%1\"", talbum->title()));
         action->setParent(this);
         ac->setDefaultShortcut(action, ks);
-#pragma message("PORT QT5")
-/*
-        action->forgetGlobalShortcut();
-*/
         action->setIcon(icon);
         action->setData(tagId);
 
