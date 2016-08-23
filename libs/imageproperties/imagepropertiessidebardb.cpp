@@ -101,7 +101,7 @@ ImagePropertiesSideBarDB::ImagePropertiesSideBarDB(QWidget* const parent, Sideba
     d->versionsHistoryTab = new ImagePropertiesVersionsTab(parent);
 
     appendTab(d->desceditTab,        QIcon::fromTheme(QLatin1String("edit-text-frame-update")), i18n("Captions"));
-    appendTab(d->versionsHistoryTab, QIcon::fromTheme(QLatin1String("view-catalog")),           i18n("Versioning"));
+    appendTab(d->versionsHistoryTab, QIcon::fromTheme(QLatin1String("view-catalog")),           i18n("Versions"));
 
     // ----------------------------------------------------------
 
