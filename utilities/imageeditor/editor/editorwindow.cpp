@@ -893,6 +893,7 @@ void EditorWindow::setupStandardActions()
     d->autoCropAction = new QAction(QIcon::fromTheme(QLatin1String("transform-crop")), i18nc("@action", "Auto-Crop"), this);
     d->autoCropAction->setWhatsThis(i18n("This option can be used to crop automatically the image."));
     connect(d->autoCropAction, SIGNAL(triggered()), m_canvas, SLOT(slotAutoCrop()));
+    d->autoCropAction->setEnabled(false);
     ac->addAction(QLatin1String("editorwindow_autocrop"), d->autoCropAction);
     ac->setDefaultShortcut(d->autoCropAction, Qt::SHIFT + Qt::CTRL + Qt::Key_X);
 
@@ -1444,7 +1445,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->BWAction->setEnabled(val);
     d->HSLAction->setEnabled(val);
     d->profileMenuAction->setEnabled(val);
-    d->colorSpaceConverter->setEnabled(val);
+    d->colorSpaceConverter->setEnabled(val && IccSettings::instance()->isEnabled());
     d->whitebalanceAction->setEnabled(val);
     d->channelMixerAction->setEnabled(val);
     d->curvesAction->setEnabled(val);
@@ -1461,6 +1462,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->antivignettingAction->setEnabled(val);
     d->hotpixelsAction->setEnabled(val);
     d->resizeAction->setEnabled(val);
+    d->autoCropAction->setEnabled(val);
     d->perspectiveAction->setEnabled(val);
     d->freerotationAction->setEnabled(val);
     d->sheartoolAction->setEnabled(val);
@@ -3359,7 +3361,7 @@ void EditorWindow::slotUpdateColorSpaceMenu()
     
     d->profileMenuAction->addSeparator();
     d->profileMenuAction->addAction(d->colorSpaceConverter);
-    d->colorSpaceConverter->setEnabled(IccSettings::instance()->isEnabled());
+    d->colorSpaceConverter->setEnabled(m_actionEnabledState && IccSettings::instance()->isEnabled());
 }
 
 void EditorWindow::slotProfileConversionTool()

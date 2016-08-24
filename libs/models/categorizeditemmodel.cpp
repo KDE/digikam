@@ -171,6 +171,8 @@ protected:
     }
 };
 
+// -------------------------------------------------------------------------------------------------------------------------
+
 ActionItemModel::ActionItemModel(QObject* const parent)
     : CategorizedItemModel(parent),
       m_mode(ToplevelMenuCategory | SortCategoriesAlphabetically)
@@ -271,7 +273,7 @@ void ActionItemModel::trigger(const QModelIndex& index)
 {
     QAction* const action = actionForIndex(index);
 
-    if (action)
+    if (action && action->isEnabled())
         action->trigger();
 }
 
