@@ -3313,10 +3313,6 @@ void DigikamApp::setupSelectToolsAction()
 
     QString importCategory           = i18nc("@title Import Tools",          "Import");
 
-#ifdef HAVE_KSANE
-    actionModel->addAction(m_ksaneAction,                 importCategory);
-#endif
-
 #ifdef HAVE_KIPI
     foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ToolsPlugin))
     {
@@ -3339,6 +3335,10 @@ void DigikamApp::setupSelectToolsAction()
     {
         actionModel->addAction(ac,                        importCategory);
     }
+#endif
+
+#ifdef HAVE_KSANE
+    actionModel->addAction(m_ksaneAction,                 importCategory);
 #endif
 
     // setup categorized view
