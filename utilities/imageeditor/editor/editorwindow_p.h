@@ -116,6 +116,7 @@ public:
         levelsAction(0),
         filmAction(0),
         profileMenuAction(0),
+        colorSpaceConverter(0),
         hotpixelsAction(0),
         lensdistortionAction(0),
         antivignettingAction(0),
@@ -235,6 +236,7 @@ public:
     QAction*                     levelsAction;
     QAction*                     filmAction;
     IccProfilesMenuAction*       profileMenuAction;
+    QAction*                     colorSpaceConverter;
     QAction*                     hotpixelsAction;
     QAction*                     lensdistortionAction;
     QAction*                     antivignettingAction;

@@ -694,7 +694,7 @@ void EditorWindow::setupStandardActions()
             this, SLOT(slotConvertTo16Bits()));
     d->convertTo16Bits->setEnabled(false);
 
-    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Space Conversion"), this);
+    d->profileMenuAction = new IccProfilesMenuAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")), i18n("Color Spaces"), this);
     actionCollection()->addAction(QLatin1String("editorwindow_colormanagement"), d->profileMenuAction->menuAction());
     connect(d->profileMenuAction, SIGNAL(triggered(IccProfile)),
             this, SLOT(slotConvertToColorSpace(IccProfile)));
@@ -703,6 +703,11 @@ void EditorWindow::setupStandardActions()
     connect(IccSettings::instance(), SIGNAL(settingsChanged()),
             this, SLOT(slotUpdateColorSpaceMenu()));
 
+    d->colorSpaceConverter = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")),
+                                                          i18n("Color Space Converter..."), this);
+    connect(d->colorSpaceConverter, SIGNAL(triggered()),
+            this, SLOT(slotProfileConversionTool()));
+    
     slotUpdateColorSpaceMenu();
 
     d->BWAction = new QAction(QIcon::fromTheme(QLatin1String("bwtonal")), i18n("Black && White..."), this);
@@ -2951,11 +2956,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->curvesAction,               colorsCategory);
     actionModel->addAction(d->levelsAction,               colorsCategory);
     actionModel->addAction(d->filmAction,                 colorsCategory);
-
-    foreach(QAction* const ac, d->profileMenuAction->actions())
-    {
-        actionModel->addAction(ac, colorsCategory);
-    }
+    actionModel->addAction(d->colorSpaceConverter,        colorsCategory);
 
     QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
     actionModel->addAction(d->restorationAction,          enhanceCategory);
@@ -3323,42 +3324,40 @@ void EditorWindow::slotUpdateColorSpaceMenu()
 
         connect(action, SIGNAL(triggered()),
                 this, SLOT(slotSetupICC()));
-        return;
     }
-
-    ICCSettingsContainer settings = IccSettings::instance()->settings();
-
-    QList<IccProfile> standardProfiles, favoriteProfiles;
-    QSet<QString> standardProfilePaths, favoriteProfilePaths;
-    standardProfiles << IccProfile::sRGB()
-                     << IccProfile::adobeRGB()
-                     << IccProfile::wideGamutRGB()
-                     << IccProfile::proPhotoRGB();
-
-    foreach(IccProfile profile, standardProfiles) // krazy:exclude=foreach
+    else
     {
-        d->profileMenuAction->addProfile(profile, profile.description());
-        standardProfilePaths << profile.filePath();
+        ICCSettingsContainer settings = IccSettings::instance()->settings();
+
+        QList<IccProfile> standardProfiles, favoriteProfiles;
+        QSet<QString> standardProfilePaths, favoriteProfilePaths;
+        standardProfiles << IccProfile::sRGB()
+                        << IccProfile::adobeRGB()
+                        << IccProfile::wideGamutRGB()
+                        << IccProfile::proPhotoRGB();
+
+        foreach(IccProfile profile, standardProfiles) // krazy:exclude=foreach
+        {
+            d->profileMenuAction->addProfile(profile, profile.description());
+            standardProfilePaths << profile.filePath();
+        }
+
+        d->profileMenuAction->addSeparator();
+
+        favoriteProfilePaths  = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
+        favoriteProfilePaths -= standardProfilePaths;
+
+        foreach(const QString& path, favoriteProfilePaths)
+        {
+            favoriteProfiles << path;
+        }
+
+        d->profileMenuAction->addProfiles(favoriteProfiles);
     }
-
+    
     d->profileMenuAction->addSeparator();
-
-    favoriteProfilePaths  = QSet<QString>::fromList(ProfileConversionTool::favoriteProfiles());
-    favoriteProfilePaths -= standardProfilePaths;
-
-    foreach(const QString& path, favoriteProfilePaths)
-    {
-        favoriteProfiles << path;
-    }
-
-    d->profileMenuAction->addProfiles(favoriteProfiles);
-    d->profileMenuAction->addSeparator();
-
-    QAction* const moreAction = new QAction(i18n("Other..."), this);
-    d->profileMenuAction->addAction(moreAction);
-
-    connect(moreAction, SIGNAL(triggered()),
-            this, SLOT(slotProfileConversionTool()));
+    d->profileMenuAction->addAction(d->colorSpaceConverter);
+    d->colorSpaceConverter->setEnabled(IccSettings::instance()->isEnabled());
 }
 
 void EditorWindow::slotProfileConversionTool()
