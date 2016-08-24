@@ -707,6 +707,7 @@ void EditorWindow::setupStandardActions()
                                                           i18n("Color Space Converter..."), this);
     connect(d->colorSpaceConverter, SIGNAL(triggered()),
             this, SLOT(slotProfileConversionTool()));
+    d->colorSpaceConverter->setEnabled(false);
     
     slotUpdateColorSpaceMenu();
 
@@ -1443,6 +1444,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->BWAction->setEnabled(val);
     d->HSLAction->setEnabled(val);
     d->profileMenuAction->setEnabled(val);
+    d->colorSpaceConverter->setEnabled(val);
     d->whitebalanceAction->setEnabled(val);
     d->channelMixerAction->setEnabled(val);
     d->curvesAction->setEnabled(val);

@@ -76,8 +76,8 @@ ImageRegionItem::ImageRegionItem(ImageRegionWidget* const widget):
 {
     d_ptr->view  = widget;
     d_ptr->iface = new ImageIface;
-    setImage(d_ptr->iface->original()->copy());
     setAcceptHoverEvents(true);
+    setImage(d_ptr->iface->original() ? d_ptr->iface->original()->copy() : DImg());
 }
 
 ImageRegionItem::~ImageRegionItem()

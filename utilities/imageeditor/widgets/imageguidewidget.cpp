@@ -141,7 +141,7 @@ ImageGuideWidget::ImageGuideWidget(QWidget* const parent,
     d->iface         = new ImageIface(QSize(w, h));
     d->iface->setPreviewType(type);
     d->preview       = d->iface->preview();
-    d->preview.setIccProfile(d->iface->original()->getIccProfile());
+    d->preview.setIccProfile(d->iface->original() ? d->iface->original()->getIccProfile() : IccProfile());
 
     d->pixmap        = new QPixmap(w, h);
     d->rect          = QRect(w / 2 - d->preview.width() / 2, h / 2 - d->preview.height() / 2, d->preview.width(), d->preview.height());
@@ -543,7 +543,7 @@ void ImageGuideWidget::resizeEvent(QResizeEvent* e)
     int old_w         = d->preview.width();
     int old_h         = d->preview.height();
     d->preview        = d->iface->setPreviewSize(QSize(w, h));
-    d->preview.setIccProfile(d->iface->original()->getIccProfile());
+    d->preview.setIccProfile(d->iface->original() ? d->iface->original()->getIccProfile() : IccProfile());
 
     d->pixmap         = new QPixmap(w, h);
     d->previewPixmap  = new QPixmap(w, h);

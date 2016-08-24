@@ -79,7 +79,8 @@ public:
 };
 
 EditorTool::EditorTool(QObject* const parent)
-    : QObject(parent), d(new Private)
+    : QObject(parent),
+      d(new Private)
 {
     d->timer = new QTimer(this);
 
