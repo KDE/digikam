@@ -4,7 +4,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-set(digikamhelperdir ${DATA_INSTALL_DIR}/digikam/utils)
+set(digikamhelperdir ${KDE_INSTALL_FULL_DATADIR}/digikam/utils)
 
 #configure_file(digikam-download.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-download.desktop @ONLY)
 #configure_file(digikam-gphoto2-camera.desktop.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam-gphoto2-camera.desktop @ONLY)
