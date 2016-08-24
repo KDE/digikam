@@ -1312,10 +1312,10 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    QAction* const advFindAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Advanced Search..."), this);
-    connect(advFindAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
-    ac->addAction(QLatin1String("search_advanced"), advFindAction);
-    ac->setDefaultShortcut(advFindAction, Qt::CTRL+Qt::ALT+Qt::Key_F);
+    d->advSearchAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Advanced Search..."), this);
+    connect(d->advSearchAction, SIGNAL(triggered()), d->view, SLOT(slotNewAdvancedSearch()));
+    ac->addAction(QLatin1String("search_advanced"), d->advSearchAction);
+    ac->setDefaultShortcut(d->advSearchAction, Qt::CTRL+Qt::ALT+Qt::Key_F);
 
     // -----------------------------------------------------------
 
@@ -3295,16 +3295,26 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(d->bqmAction,                  mainCategory);
     actionModel->addAction(d->maintenanceAction,          mainCategory);
     actionModel->addAction(d->ltAction,                   mainCategory);
+    actionModel->addAction(d->advSearchAction,            mainCategory);
 
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(d->expoBendingAction,          postCategory);
     actionModel->addAction(d->calendarAction,             postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
+    actionModel->addAction(d->presentationAction,         postCategory);
+
 #ifdef HAVE_PANORAMA
     actionModel->addAction(d->panoramaAction,             postCategory);
 #endif
+
 #ifdef HAVE_MARBLE
     actionModel->addAction(m_geolocationEditAction,       postCategory);
+#endif
+
+    QString importCategory           = i18nc("@title Import Tools",          "Import");
+
+#ifdef HAVE_KSANE
+    actionModel->addAction(m_ksaneAction,                 importCategory);
 #endif
 
 #ifdef HAVE_KIPI
@@ -3323,6 +3333,11 @@ void DigikamApp::setupSelectToolsAction()
     foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin))
     {
         actionModel->addAction(ac,                        exportCategory);
+    }
+
+    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImportPlugin))
+    {
+        actionModel->addAction(ac,                        importCategory);
     }
 #endif
 

@@ -175,6 +175,7 @@ public:
         panoramaAction(0),
         calendarAction(0),
         qualityAction(0),
+        advSearchAction(0),
         kipiHelpAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
@@ -240,9 +241,11 @@ public:
     // Image Actions
     KSelectAction*                      imageViewSelectionAction;
     QAction*                            imagePreviewAction;
+
 #ifdef HAVE_MARBLE
     QAction*                            imageMapViewAction;
 #endif // HAVE_MARBLE
+
     QAction*                            imageTableViewAction;
     QAction*                            imageIconViewAction;
     QAction*                            imageLightTableAction;
@@ -306,6 +309,7 @@ public:
     QAction*                            panoramaAction;
     QAction*                            calendarAction;
     QAction*                            qualityAction;
+    QAction*                            advSearchAction;
 
     // Application Actions
     QAction*                            kipiHelpAction;
