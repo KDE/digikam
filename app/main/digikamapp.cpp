@@ -3308,6 +3308,16 @@ void DigikamApp::setupSelectToolsAction()
 #endif
 
 #ifdef HAVE_KIPI
+    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ToolsPlugin))
+    {
+        actionModel->addAction(ac,                        postCategory);
+    }
+
+    foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ImagesPlugin))
+    {
+        actionModel->addAction(ac,                        postCategory);
+    }
+
     QString exportCategory           = i18nc("@title Export Tools",          "Export");
 
     foreach(QAction* const ac, KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::ExportPlugin))
