@@ -241,17 +241,17 @@ bool MetadataHub::writeToMetadata(ImageInfo info, WriteComponent writeMode, bool
 {
     applyChangeNotifications();
 
-    if (!ignoreLazySync && settings.useLazySync)
-    {
-        MetadataHubMngr::instance()->addPending(info);
-        return true;
-    }
-
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
     {
         return false;
+    }
+
+    if (!ignoreLazySync && settings.useLazySync)
+    {
+        MetadataHubMngr::instance()->addPending(info);
+        return true;
     }
 
     writeToBaloo(info.filePath());
@@ -355,17 +355,18 @@ bool MetadataHub::write(const QString& filePath, WriteComponent writeMode, bool 
 {
     applyChangeNotifications();
 
-    if (!ignoreLazySync && settings.useLazySync)
-    {
-        ImageInfo info = ImageInfo::fromLocalFile(filePath);
-        MetadataHubMngr::instance()->addPending(info);
-        return true;
-    }
     // if no DMetadata object is needed at all, don't construct one -
     // important optimization if writing to file is turned off in setup!
     if (!willWriteMetadata(writeMode, settings))
     {
         return false;
+    }
+
+    if (!ignoreLazySync && settings.useLazySync)
+    {
+        ImageInfo info = ImageInfo::fromLocalFile(filePath);
+        MetadataHubMngr::instance()->addPending(info);
+        return true;
     }
 
     writeToBaloo(filePath);
@@ -403,7 +404,7 @@ bool MetadataHub::write(DImg& image, WriteComponent writeMode, bool ignoreLazySy
         filePath = image.lastSavedFilePath();
     }
 
-    if(!ignoreLazySync && settings.useLazySync && !filePath.isEmpty())
+    if (!ignoreLazySync && settings.useLazySync && !filePath.isEmpty())
     {
         ImageInfo info = ImageInfo::fromLocalFile(filePath);
         MetadataHubMngr::instance()->addPending(info);
