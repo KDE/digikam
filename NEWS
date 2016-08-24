@@ -31,4 +31,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 366897 - Detailed progress window cannot be hidden properly.
 021 ==> 367604 - Reduced usability of combined slider/input widgets in editing tools.
 022 ==> 367714 - Folders not found after computer restart.
-023 ==> 
+023 ==> 367675 - Incomplete "Exec"-line in digikam-opencamera.desktop.
+024 ==> 
