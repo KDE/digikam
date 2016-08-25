@@ -1299,12 +1299,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->kipiHelpAction = new QAction(QIcon::fromTheme(QLatin1String("kipi")), i18n("Kipi Plugins Handbook"), this);
-    connect(d->kipiHelpAction, SIGNAL(triggered()), this, SLOT(slotShowKipiHelp()));
-    ac->addAction(QLatin1String("help_kipi"), d->kipiHelpAction);
-
-    //------------------------------------------------------------
-
     QAction* const findAction = new QAction(QIcon::fromTheme(QLatin1String("edit-find")), i18n("Search..."), this);
     connect(findAction, SIGNAL(triggered()), d->view, SLOT(slotNewKeywordSearch()));
     ac->addAction(QLatin1String("search_quick"), findAction);

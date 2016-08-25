@@ -176,7 +176,6 @@ public:
         calendarAction(0),
         qualityAction(0),
         advSearchAction(0),
-        kipiHelpAction(0),
         addCameraSeparatorAction(0),
         quitAction(0),
         tipAction(0),
@@ -312,7 +311,6 @@ public:
     QAction*                            advSearchAction;
 
     // Application Actions
-    QAction*                            kipiHelpAction;
     QAction*                            addCameraSeparatorAction;
     QAction*                            quitAction;
     QAction*                            tipAction;
