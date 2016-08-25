@@ -240,7 +240,10 @@ void PrivateProgressItemCreator::addProgressItem(ProgressItem* const item)
 
 void PrivateProgressItemCreator::slotProgressItemCompleted()
 {
-    activeProgressItems.deref();
+    if (!activeProgressItems.deref())
+    {
+        emit lastItemCompleted();
+    }
 }
 
 void PrivateProgressItemCreator::slotProgressItemCanceled(ProgressItem* const item)
