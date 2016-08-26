@@ -530,7 +530,6 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
       createStrip(false),
       thumbSize(ThumbnailSize::Huge),
       thumbJob(0),
-      isReady(false),
       player(0),
       probe(0),
       media(0),
@@ -551,8 +550,6 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
             this, SLOT(slotProcessframe(QVideoFrame)));
 
     strip   = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
-
-    isReady = true;
 }
 
 QString VideoThumbnailer::Private::fileName() const
@@ -625,7 +622,6 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             if (!player->isVideoAvailable())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Video stream is not available for " << fileName();
-                isReady = true;
                 player->setMedia(QMediaContent());
                 dd->emit signalThumbnailFailed(thumbJob, filePath());
                 return;
@@ -643,7 +639,6 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             if (!player->isSeekable())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Video seek is not available for " << fileName();
-                isReady = true;
                 player->setMedia(QMediaContent());
                 dd->emit signalThumbnailFailed(thumbJob, filePath());
                 return;
@@ -652,7 +647,6 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
             if (player->duration() <= 0)
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Video has no valid duration for " << fileName();
-                isReady = true;
                 player->setMedia(QMediaContent());
                 dd->emit signalThumbnailFailed(thumbJob, filePath());
                 return;
@@ -671,7 +665,6 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
         case QMediaPlayer::InvalidMedia:
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Video cannot be decoded for " << fileName();
-            isReady = true;
             player->setMedia(QMediaContent());
             dd->emit signalThumbnailFailed(thumbJob, filePath());
         }
@@ -683,6 +676,8 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QMediaPlayer::MediaStatus
 void VideoThumbnailer::Private::slotHandlePlayerError()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Problem while video data extraction from " << fileName();
+    player->setMedia(QMediaContent());
+    dd->emit signalThumbnailFailed(thumbJob, filePath());
 }
 
 void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
@@ -693,7 +688,6 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
         if (++errorCount > 1000)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video data are corrupted from " << fileName();
-            isReady = true;
             player->setMedia(QMediaContent());
             dd->emit signalThumbnailFailed(thumbJob, filePath());
             return;
@@ -711,7 +705,6 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     if (!frm.isValid())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Error: Video frame is not valid.";
-        isReady = true;
         player->setMedia(QMediaContent());
         dd->emit signalThumbnailFailed(thumbJob, filePath());
         return;
@@ -743,7 +736,6 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame extracted with size " << img.size();
 
-        isReady = true;
         player->setMedia(QMediaContent());
         dd->emit signalThumbnailDone(thumbJob, filePath(), img.copy());
     }
@@ -751,7 +743,6 @@ void VideoThumbnailer::Private::slotProcessframe(QVideoFrame frm)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame format is not supported: " << frm;
 
-        isReady = true;
         player->setMedia(QMediaContent());
         dd->emit signalThumbnailFailed(thumbJob, filePath());
     }

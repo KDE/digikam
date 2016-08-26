@@ -143,7 +143,7 @@ void VideoThumbnailerJob::processOne()
 {
     if (!d->todo.isEmpty())
     {
-        d->condVar.wakeOne();
+        d->condVar.wakeAll();
     }
     else
     {
@@ -178,27 +178,29 @@ void VideoThumbnailerJob::run()
 
 void VideoThumbnailerJob::slotThumbnailDone(quint64 job, const QString& file, const QImage& img)
 {
-    if (d->thumbJob != job || d->currentFile != file)
+    if (d->thumbJob != job || d->jobDone || d->currentFile != file)
     {
         return;
     }
 
+    d->jobDone = true;
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
     emit signalThumbnailDone(file, img);
-    d->jobDone = true;
     processOne();
 }
 
 void VideoThumbnailerJob::slotThumbnailFailed(quint64 job, const QString& file)
 {
-    if (d->thumbJob != job || d->currentFile != file)
+    if (d->thumbJob != job || d->jobDone || d->currentFile != file)
     {
         return;
     }
 
+    d->jobDone = true;
+
     qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
     emit signalThumbnailFailed(file);
-    d->jobDone = true;
     processOne();
 }
 
