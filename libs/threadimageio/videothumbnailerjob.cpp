@@ -166,13 +166,22 @@ void VideoThumbnailerJob::run()
             qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
             emit signalGetThumbnail(d->thumbJob, d->currentFile, d->thumbSize, d->createStrip);
         }
-        else if (!ready)
+        else if (!ready && d->jobDone)
         {
             d->condVar.wait(&d->mutex, 250);
             continue;
         }
 
-        d->condVar.wait(&d->mutex);
+        if (d->todo.isEmpty())
+        {
+            d->condVar.wait(&d->mutex);
+        }
+        else if (!d->condVar.wait(&d->mutex, 5000))
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Timeout to get thumbnail for " << d->currentFile;
+            emit signalThumbnailFailed(d->currentFile);
+            d->jobDone = true;
+        }
     }
 }
 
@@ -183,10 +192,9 @@ void VideoThumbnailerJob::slotThumbnailDone(quint64 job, const QString& file, co
         return;
     }
 
-    d->jobDone = true;
-
     qCDebug(DIGIKAM_GENERAL_LOG) << "Video thumbnail extracted for " << file << " :: " << img;
     emit signalThumbnailDone(file, img);
+    d->jobDone = true;
     processOne();
 }
 
@@ -197,10 +205,9 @@ void VideoThumbnailerJob::slotThumbnailFailed(quint64 job, const QString& file)
         return;
     }
 
-    d->jobDone = true;
-
     qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to extract video thumbnail for " << file;
     emit signalThumbnailFailed(file);
+    d->jobDone = true;
     processOne();
 }
 
