@@ -51,6 +51,7 @@ set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          recognition-opencv-lbph/opencvmatdata.cpp
                          recognition-opencv-lbph/facerec_borrowed.cpp
                          redeye/redeyecorrectionfilter.cpp
+                         shape-predictor/fullobjectdetection.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp

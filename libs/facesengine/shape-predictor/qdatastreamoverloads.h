@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 16/08/2016
- * Description : Serialization utilities to help making long serialization platform independent
+ * Description : Serialization utilities to help making long
+ *               serialization platform independent
  *
- * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef QDATASTREAMOVERLOADS_H
-#define QDATASTREAMOVERLOADS_H
+#ifndef QDATASTREAM_OVERLOADS_H
+#define QDATASTREAM_OVERLOADS_H
 
 // Qt includes
 
@@ -33,6 +34,7 @@ QDataStream& operator>>(QDataStream& dataStream, unsigned long& in)
     qint64 x;
     dataStream >> x;
     in = x;
+
     return dataStream;
 }
 
@@ -40,7 +42,8 @@ QDataStream& operator << (QDataStream& dataStream, const unsigned long& in)
 {
     qint64 x = in;
     dataStream << x;
+
     return dataStream;
 }
 
-#endif // QDATASTREAMOVERLOADS_H
+#endif // QDATASTREAM_OVERLOADS_H

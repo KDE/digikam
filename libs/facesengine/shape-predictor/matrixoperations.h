@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 17-8-2016
- * Description : Some matrix utility functions including singular value decomposition, inverse
- * , and pseudoinverse.
+ * Description : Some matrix utility functions including singular value
+ *               decomposition, inverse, and pseudo-inverse.
  *
- * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MATRIXOPERATIONS_H
-#define MATRIXOPERATIONS_H
+#ifndef MATRIX_OPERATIONS_H
+#define MATRIX_OPERATIONS_H
 
 // C++ includes
 
@@ -34,7 +34,8 @@
 
 #include "libopencv.h"
 
-#include <opencv/cv.h>
+namespace Digikam
+{
 
 std::vector<std::vector<float> >  inv2(const std::vector<std::vector<float> >& mat)
 {
@@ -79,7 +80,6 @@ std::vector<std::vector<float> > pinv(const std::vector<std::vector<float> >& ma
 
     return result;
 }
-
 
 void stdmattocvmat(const std::vector<std::vector<float> >& src, cv::Mat& dst)
 {
@@ -575,5 +575,6 @@ float determinant(const std::vector<std::vector<float> >& u)
     return result;
 }
 
+}  // namespace Digikam
 
-#endif // MATRIXOPERATIONS_H
+#endif // MATRIX_OPERATIONS_H

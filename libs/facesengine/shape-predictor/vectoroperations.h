@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 16/08/2016
- * Description : TODO
+ * Description : Vector operations methods for red eyes detection.
  *
  * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
@@ -21,12 +21,15 @@
  *
  * ============================================================ */
 
-#ifndef VECTOROPERATIONS_H
-#define VECTOROPERATIONS_H
+#ifndef VECTOR_OPERATIONS_H
+#define VECTOR_OPERATIONS_H
 
 // C++ includes
 
 #include <vector>
+
+namespace Digikam
+{
 
 template<class T>
 inline T length_squared(const std::vector<T>& diff)
@@ -91,7 +94,7 @@ std::vector<std::vector<T> > operator/(const std::vector<std::vector<T> >& v1, i
 
     for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
-        for(unsigned int j = 0 ; j < v1[0].size() ; j++)
+        for (unsigned int j = 0 ; j < v1[0].size() ; j++)
         {
             result[i][j] = v1[i][j] / divisor;
         }
@@ -107,7 +110,7 @@ std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2)
 
     std::vector<T> result(v1.size());
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
         result[i] = v1[i] + v2[i];
     }
@@ -116,16 +119,17 @@ std::vector<T> operator+(const std::vector<T>& v1, const std::vector<T>& v2)
 }
 
 template<class T>
-std::vector<std::vector<T> > operator+(const std::vector<std::vector<T> >& v1, const std::vector<std::vector<T> >& v2)
+std::vector<std::vector<T> > operator+(const std::vector<std::vector<T> >& v1,
+                                       const std::vector<std::vector<T> >& v2)
 {
     assert(v1.size()    == v2.size()     &&
            v1[0].size() == v2[0].size());
 
     std::vector<std::vector<T> > result(v1.size(), std::vector<T>(v1[0].size(),0));
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
-        for(unsigned int j = 0 ; j < v2[0].size() ; j++)
+        for (unsigned int j = 0 ; j < v2[0].size() ; j++)
         {
             result[i][j] += v1[i][j] + v2[i][j];
         }
@@ -142,11 +146,11 @@ std::vector<T> operator*(const std::vector<std::vector<T> >& v1, const std::vect
 
     std::vector<T> result(v1.size());
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
         result[i] = 0;
 
-        for(unsigned int j = 0 ; j < v1[0].size() ; j++)
+        for (unsigned int j = 0 ; j < v1[0].size() ; j++)
         {
             result[i] += v1[i][j] * v2[j];
         }
@@ -156,19 +160,20 @@ std::vector<T> operator*(const std::vector<std::vector<T> >& v1, const std::vect
 }
 
 template<class T>
-std::vector<std::vector<T> > operator*(const std::vector<std::vector<T> >& v1, const std::vector<std::vector<T> >& v2)
+std::vector<std::vector<T> > operator*(const std::vector<std::vector<T> >& v1,
+                                       const std::vector<std::vector<T> >& v2)
 {
     assert(v1[0].size() == v2.size());
 
     std::vector<std::vector<T> > result(v1.size(), std::vector<T>(v2[0].size(),0));
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
-        for(unsigned int k = 0 ; k < v1[0].size() ; k++)
+        for (unsigned int k = 0 ; k < v1[0].size() ; k++)
         {
             // swapping j and k loops for cache optimization
 
-            for(unsigned int j = 0 ; j < v2[0].size() ; j++)
+            for (unsigned int j = 0 ; j < v2[0].size() ; j++)
             {
 
                 result[i][j] += v1[i][k] * v2[k][j];
@@ -187,9 +192,9 @@ std::vector<std::vector<T> > operator*(const std::vector<T>& v1, const std::vect
 
     std::vector<std::vector<T> > result(v1.size(), std::vector<T>(v2.size(), 0));
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
-        for(unsigned int j = 0 ; j < v1.size() ; j++)
+        for (unsigned int j = 0 ; j < v1.size() ; j++)
         {
             result[i][j] = v1[i] * v2[j];
         }
@@ -206,9 +211,9 @@ std::vector<std::vector<T> > operator+(const std::vector<std::vector<T> >& v1, f
 
     std::vector<std::vector<T> > result(v1.size(), std::vector<T>(v1[0].size(), 0));
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
-        for(unsigned int j = 0 ; j < v1[0].size() ; j++)
+        for (unsigned int j = 0 ; j < v1[0].size() ; j++)
         {
             result[i][j] = v1[i][j] * d;
         }
@@ -226,7 +231,7 @@ std::vector<T> operator*(const std::vector<T>& v1, float d)
 
     std::vector<T> result(v1.size());
 
-    for(unsigned int i = 0 ; i < v1.size() ; i++)
+    for (unsigned int i = 0 ; i < v1.size() ; i++)
     {
         result[i] = v1[i] * d;
 
@@ -235,4 +240,6 @@ std::vector<T> operator*(const std::vector<T>& v1, float d)
     return result;
 }
 
-#endif // VECTOROPERATIONS_H
+}  // namespace Digikam
+
+#endif // VECTOR_OPERATIONS_H

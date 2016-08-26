@@ -5,9 +5,10 @@
  *
  * Date        : 16/08/2016
  * Description : Full object detection class representing the output of the
- * shape predictor class, containing 64 facial point including eye, nose, and mouth.
+ *               shape predictor class, containing 64 facial point including
+ *               eye, nose, and mouth.
  *
- * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,50 +22,35 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
+
 #ifndef FULL_OBJECT_DETECTION_H
 #define FULL_OBJECT_DETECTION_H
 
 // C++ includes
+
 #include <vector>
 
 // Local includes
+
 #include "libopencv.h"
 
-// ----------------------------------------------------------------------------------------
+namespace Digikam
+{
 
 class fullobjectdetection
 {
 public:
 
-    fullobjectdetection(const cv::Rect& rect_, const std::vector<std::vector<float> >& parts_)
-        : rect(rect_),
-          parts(parts_)
-    {
-    }
+    fullobjectdetection(const cv::Rect& rect_, const std::vector<std::vector<float> >& parts_);
+    fullobjectdetection();
+    explicit fullobjectdetection(const cv::Rect& rect_);
 
-    fullobjectdetection()
-    {
-    }
+    const cv::Rect& get_rect()  const;
+    cv::Rect&       get_rect();
+    unsigned long   num_parts() const;
 
-    explicit fullobjectdetection(const cv::Rect& rect_)
-        : rect(rect_)
-    {
-    }
-
-    const cv::Rect& get_rect() const { return rect;         }
-    cv::Rect& get_rect()             { return rect;         }
-    unsigned long num_parts() const  { return parts.size(); }
-
-    const std::vector<float>& part(unsigned long idx) const
-    {
-        return parts[idx];
-    }
-
-    std::vector<float> & part(unsigned long idx)
-    {
-        return parts[idx];
-    }
-
+    const std::vector<float>& part(unsigned long idx) const;
+    std::vector<float>&       part(unsigned long idx);
 
 private:
 
@@ -72,40 +58,9 @@ private:
     std::vector<std::vector<float> > parts;
 };
 
-std::vector<cv::Rect> geteyes(const fullobjectdetection& shape)
-{
-    std::vector<cv::Rect> eyes;
+std::vector<cv::Rect> geteyes(const fullobjectdetection& shape);
 
-    for (int j = 0 ; j < 2 ; j++)
-    {
-        int start = j ? 36 : 42;
-        int end   = j ? 41 : 47;
-        int tlx, tly, brx, bry; // topleftx, y, toprightx, y
-
-        // initializing
-        std::vector<float> firstpoint = shape.part(start);
-        tlx                           = firstpoint[0];
-        brx                           = firstpoint[0];
-        tly                           = firstpoint[1];
-        bry                           = firstpoint[1];
-
-        for(int i = start ; i <= end ; i++)
-        {
-            std::vector<float> x = shape.part(i);
-            if (x[0] < tlx)
-                tlx = x[0];
-            else if (x[0] > brx)
-                brx = x[0];
-            if (x[1] < tly)
-                tly = x[1];
-            else if (x[1] > bry)
-                bry = x[1];
-        }
-
-        eyes.push_back(cv::Rect(cv::Point(tlx,tly), cv::Point(brx,bry)));
-    }
-
-    return eyes;
-}
+}  // namespace Digikam
 
 #endif // FULL_OBJECT_DETECTION_H
+

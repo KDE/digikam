@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 16/08/2016
- * Description : point transform class and its utilities that models affine transformations
- * between two sets of 2d-points.
+ * Description : point transform class and its utilities that models
+ *               affine transformations between two sets of 2d-points.
  *
- * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
+ * Copyright (C) 2016 by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -36,6 +36,9 @@
 #include "vectoroperations.h"
 
 using namespace std;
+
+namespace Digikam
+{
 
 class pointtransformaffine
 {
@@ -204,5 +207,7 @@ pointtransformaffine find_similarity_transform(const std::vector<std::vector<flo
 
     return pointtransformaffine(r * c, t);
 }
+
+}  // namespace Digikam
 
 #endif // POINT_TRANSFORM_AFFINE_H
