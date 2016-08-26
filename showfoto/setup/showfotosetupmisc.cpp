@@ -43,6 +43,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "dwidgetutils.h"
 #include "showfotosettings.h"
 

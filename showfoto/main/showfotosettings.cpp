@@ -37,6 +37,7 @@
 
 // Local includes
 
+#include "digikam_config.h"
 #include "digikam_debug.h"
 #include "setupmisc.h"
 #include "thememanager.h"
