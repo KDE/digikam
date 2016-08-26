@@ -99,18 +99,20 @@ include(MacroBoolTo01)
 
 # ==================================================================================================
 
-option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                         OFF)
-option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                       OFF)
-option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                       OFF)
-option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                            OFF)
-option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                     ON)
+option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                           OFF)
+option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
+option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
+option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                              OFF)
+option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                       ON)
+option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
 
 # Mysql support options (experimental):
-option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                          OFF)
-option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"                OFF)
+option(ENABLE_MYSQLSUPPORT          "Build digiKam with MySQL dabatase support (default=OFF)"                            OFF)
+option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server executable (default=OFF)"                  OFF)
+
 
 # Debug options:
-option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                      OFF)
+option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
 
 ############## Find Packages ###################
 
@@ -420,6 +422,7 @@ MACRO_BOOL_TO_01(ENABLE_MYSQLSUPPORT                                    HAVE_MYS
 MACRO_BOOL_TO_01(ENABLE_INTERNALMYSQL                                   HAVE_INTERNALMYSQL)
 MACRO_BOOL_TO_01(ENABLE_MEDIAPLAYER                                     HAVE_MEDIAPLAYER)
 MACRO_BOOL_TO_01(ENABLE_DBUS                                            HAVE_DBUS)
+MACRO_BOOL_TO_01(ENABLE_APPSTYLES                                       HAVE_APPSTYLE_SUPPORT)
 
 # Whether to use Qt's scaling to downscale previews. Under MacOSX, Qt
 # can make use of the higher physical resolution of Retina
@@ -440,9 +443,10 @@ message(STATUS "----------------------------------------------------------------
 message(STATUS " digiKam ${DIGIKAM_VERSION_STRING} dependencies results   <http://www.digikam.org>")
 message(STATUS "")
 
-PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support" ENABLE_MYSQLSUPPORT)
-PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support" ENABLE_INTERNALMYSQL)
-PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"           ENABLE_DBUS)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support"     ENABLE_MYSQLSUPPORT)
+PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support"     ENABLE_INTERNALMYSQL)
+PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"               ENABLE_DBUS)
+PRINT_COMPONENT_COMPILE_STATUS("Application Style Support"  ENABLE_APPSTYLES)
 
 
 # ================================================================

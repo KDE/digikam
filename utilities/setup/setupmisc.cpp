@@ -153,7 +153,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
         d->applicationStyle->addItem(styleList.at(i));
     }
 
-#ifndef Q_OS_LINUX
+#ifndef HAVE_APPSTYLE_SUPPORT
     // See Bug #365262
     appStyleHbox->setVisible(false);
 #endif
@@ -229,7 +229,7 @@ void SetupMisc::applySettings()
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     settings->setApplicationStyle(d->applicationStyle->currentText());
 #endif
 
@@ -251,7 +251,7 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(), Qt::MatchFixedString));
 #endif
 

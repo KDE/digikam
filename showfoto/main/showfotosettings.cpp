@@ -243,7 +243,7 @@ void ShowfotoSettings::init()
     d->showPhotoWB             = false;
     d->showPhotoDate           = true;
     d->showPhotoMode           = true;
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     d->applicationStyle        = qApp->style()->objectName();
 #else
     d->applicationStyle        = QLatin1String("Fusion");
@@ -259,7 +259,7 @@ void ShowfotoSettings::readSettings()
     d->deleteItem2Trash        = group.readEntry(d->configDeleteItem2Trash, true);
     d->theme                   = group.readEntry(d->configCurrentTheme, Digikam::ThemeManager::instance()->defaultThemeName());
     d->rightSideBarStyle       = group.readEntry(d->configRightSideBarStyle, 0);
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     d->applicationStyle        = group.readEntry(d->configApplicationStyle, qApp->style()->objectName());
 #endif
     d->iconTheme               = group.readEntry(d->configIconTheme, QString());

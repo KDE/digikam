@@ -134,7 +134,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
         d->applicationStyle->addItem(styleList.at(i));
     }
 
-#ifndef Q_OS_LINUX
+#ifndef HAVE_APPSTYLE_SUPPORT
     // See Bug #365262
     appStyleHbox->setVisible(false);
 #endif
@@ -226,7 +226,7 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(d->settings->getRightSideBarStyle());
     d->sortOrderComboBox->setCurrentIndex(d->settings->getSortRole());
     d->sortReverse->setChecked(d->settings->getReverseSort());
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(d->settings->getApplicationStyle(), Qt::MatchFixedString));
 #endif
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(d->settings->getIconTheme()));
@@ -241,7 +241,7 @@ void SetupMisc::applySettings()
     d->settings->setRightSideBarStyle(d->sidebarType->currentIndex());
     d->settings->setSortRole(d->sortOrderComboBox->currentIndex());
     d->settings->setReverseSort(d->sortReverse->isChecked());
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     d->settings->setApplicationStyle(d->applicationStyle->currentText());
 #endif
     d->settings->setIconTheme(d->iconTheme->currentData().toString());

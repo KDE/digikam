@@ -236,7 +236,7 @@ void ApplicationSettings::readSettings()
     d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
     d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
 
-#ifdef Q_OS_LINUX
+#ifdef HAVE_APPSTYLE_SUPPORT
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
 #else
     setApplicationStyle(QLatin1String("Fusion"));
@@ -392,7 +392,9 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,        d->sidebarApplyDirectly);
     group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
     group.writeEntry(d->configStringComparisonTypeEntry,               (int) d->stringComparisonType);
+#ifdef HAVE_APPSTYLE_SUPPORT
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
+#endif
     group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
     group.writeEntry(d->configScanAtStartEntry,                        d->scanAtStart);
 
