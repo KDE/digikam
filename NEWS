@@ -33,4 +33,5 @@ BUGFIXES FROM BUGZILLA:
 022 ==> 367714 - Folders not found after computer restart.
 023 ==> 367675 - Incomplete "Exec"-line in digikam-opencamera.desktop.
 024 ==> 286398 - Allow to input coordinates manually in items list.
-025 ==> 
+025 ==> 367847 - digiKam crashed when we right click on albums area.
+026 ==> 
