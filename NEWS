@@ -32,4 +32,5 @@ BUGFIXES FROM BUGZILLA:
 021 ==> 367604 - Reduced usability of combined slider/input widgets in editing tools.
 022 ==> 367714 - Folders not found after computer restart.
 023 ==> 367675 - Incomplete "Exec"-line in digikam-opencamera.desktop.
-024 ==> 
+024 ==> 286398 - Allow to input coordinates manually in items list.
+025 ==> 
