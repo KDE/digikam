@@ -507,7 +507,7 @@ DRawDecoding RawSettingsBox::settings() const
 
 void RawSettingsBox::slotFileDialogAboutToOpen()
 {
-#pragma message("PORT QT5")
+    //TODO : port to Qt5
     //requester->fileDialog()->setPreviewWidget(new ICCPreviewWidget(requester));
 }
 
