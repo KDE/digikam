@@ -22,8 +22,6 @@
  *
  * ============================================================ */
 
-
-
 // Qt includes
 
 #include <QtConcurrent>
@@ -35,11 +33,11 @@
 #include <QDataStream>
 
 // Local includes
+
 #include "digikam_debug.h"
 #include "facedetector.h"
 #include "redeyecorrectionfilter.h"
 #include "shapepredictor.h"
-
 
 namespace Digikam
 {
@@ -145,7 +143,8 @@ void RedEyeCorrectionFilter::filterImage()
         QFile model(*path.begin()+QLatin1String("/shapepredictor.dat"));
 
         model.open(QIODevice::ReadOnly);
-        if(model.isOpen())
+
+        if (model.isOpen())
         {
             QDataStream dataStream(&model);
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
@@ -159,16 +158,17 @@ void RedEyeCorrectionFilter::filterImage()
 
     // Todo: convert dImg to Opencv::Mat directly
     // Deep copy
-    DImg temp = m_orgImage.copy();
+    DImg temp         = m_orgImage.copy();
 
-    int type = m_orgImage.sixteenBit()?CV_16UC3:CV_8UC3;
-    type = m_orgImage.hasAlpha()?type:type+8;
+    int type          = m_orgImage.sixteenBit()?CV_16UC3:CV_8UC3;
+    type              = m_orgImage.hasAlpha()?type:type+8;
 
     intermediateImage = cv::Mat(m_orgImage.height(), m_orgImage.width(),
                                 type, m_orgImage.bits());
 
     cv::Mat gray;
-    if(type == CV_8UC3 || type == CV_16UC3)
+
+    if (type == CV_8UC3 || type == CV_16UC3)
     {
         cv::cvtColor(intermediateImage,gray,CV_RGB2GRAY);  // 3 channels
     }
@@ -176,7 +176,7 @@ void RedEyeCorrectionFilter::filterImage()
     {
         cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY); // 4 channels
     }
-    if(type == CV_16UC3 || type == CV_16UC4)
+    if (type == CV_16UC3 || type == CV_16UC4)
     {
         gray.convertTo(gray,CV_8UC1,1/255.0);
     }
@@ -362,7 +362,6 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
 
                 }
             }
-
         }
 
         //globalindex = globalindex + imgRect.width*pixeldepth;
