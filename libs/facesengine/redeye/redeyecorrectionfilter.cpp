@@ -326,7 +326,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
         qCDebug(DIGIKAM_FACESENGINE_LOG) << "\nInsupported Type in redeye correction function";
     }
 
-    bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false:true;
+    bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false : true;
     //uchar* globalindex = eye.data;
 
     for (int i = eyerect.y ; i < eyerect.y + eyerect.height ; i++)
@@ -335,15 +335,15 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
         {
             int pixelindex = (i*imgRect.width + j) * pixeldepth;
             onebytedata    = &(reinterpret_cast<uchar*> (data)[pixelindex]);
-            twobytedata    = &(((ushort*)data)[pixelindex]);
+            twobytedata    = &(reinterpret_cast<ushort*>(data)[pixelindex]);
 
             if (sixteendepth)
             {
                 //float redIntensity = ((float)twobytedata[0] / (((unsigned int)twobytedata[1]
                                                               // +(unsigned int)twobytedata[2]) / 2));
-                twobytedata[2] = twobytedata[2] *0.02
-                                 + twobytedata[1] * 0.68
-                                 + twobytedata[0] * 0.3;
+                twobytedata[2] = twobytedata[2] * 0.02 +
+                                 twobytedata[1] * 0.68 +
+                                 twobytedata[0] * 0.3;
 //                if (redIntensity > 1.05F)
 //                {
 //                    // reduce red to the average of blue and green
