@@ -2212,7 +2212,8 @@ void DigikamApp::fillSolidMenus()
 
         QString driveType;
 
-        bool isHarddisk = false;
+        bool isHarddisk   = false;
+        bool isCardReader = false;
 
         switch (drive->driveType())
         {
@@ -2225,18 +2226,23 @@ void DigikamApp::fillSolidMenus()
                 // accept card readers
             case Solid::StorageDrive::CompactFlash:
                 driveType = i18n("CompactFlash Card Reader");
+                isCardReader = true;
                 break;
             case Solid::StorageDrive::MemoryStick:
                 driveType = i18n("Memory Stick Reader");
+                isCardReader = true;
                 break;
             case Solid::StorageDrive::SmartMedia:
                 driveType = i18n("SmartMedia Card Reader");
+                isCardReader = true;
                 break;
             case Solid::StorageDrive::SdMmc:
                 driveType = i18n("SD / MMC Card Reader");
+                isCardReader = true;
                 break;
             case Solid::StorageDrive::Xd:
                 driveType = i18n("xD Card Reader");
+                isCardReader = true;
                 break;
             case Solid::StorageDrive::HardDisk:
 
@@ -2280,67 +2286,81 @@ void DigikamApp::fillSolidMenus()
             continue;
         }
 
-        bool isCamera                            = accessDevice.is<Solid::Camera>();
-        const Solid::StorageAccess* const access = accessDevice.as<Solid::StorageAccess>();
-        const Solid::StorageVolume* const volume = volumeDevice.as<Solid::StorageVolume>();
-
-        if (volume->isIgnored())
-        {
-            continue;
-        }
-
         QString label;
 
-        if (isCamera)
-        {
-            label = accessDevice.vendor() + QLatin1Char(' ') + accessDevice.product();
-        }
-        else
-        {
-            QString labelOrProduct;
+        bool isCamera                            = accessDevice.is<Solid::Camera>();
+        const Solid::StorageAccess* const access = accessDevice.as<Solid::StorageAccess>();
 
-            if (!volume->label().isEmpty())
+        if (access->isAccessible() || !isCardReader)
+        {
+            const Solid::StorageVolume* const volume = volumeDevice.as<Solid::StorageVolume>();
+
+            if (volume->isIgnored())
             {
-                labelOrProduct = volume->label();
-            }
-            else if (!volumeDevice.product().isEmpty())
-            {
-                labelOrProduct = volumeDevice.product();
-            }
-            else if (!volumeDevice.vendor().isEmpty())
-            {
-                labelOrProduct = volumeDevice.vendor();
-            }
-            else if (!driveDevice.product().isEmpty())
-            {
-                labelOrProduct = driveDevice.product();
+                continue;
             }
 
-            if (!labelOrProduct.isNull())
+            if (isCamera)
             {
-                if (!access->filePath().isEmpty())
-                    label += i18nc("<drive type> \"<device name or label>\" at <mount path>",
-                                   "%1 \"%2\" at %3", driveType, labelOrProduct, QDir::toNativeSeparators(access->filePath()));
-                else
-                    label += i18nc("<drive type> \"<device name or label>\"",
-                                   "%1 \"%2\"", driveType, labelOrProduct);
+                label = accessDevice.vendor() + QLatin1Char(' ') + accessDevice.product();
             }
             else
             {
-                if (!access->filePath().isEmpty())
-                    label += i18nc("<drive type> at <mount path>",
-                                   "%1 at %2", driveType, QDir::toNativeSeparators(access->filePath()));
+                QString labelOrProduct;
+
+                if (!volume->label().isEmpty())
+                {
+                    labelOrProduct = volume->label();
+                }
+                else if (!volumeDevice.product().isEmpty())
+                {
+                    labelOrProduct = volumeDevice.product();
+                }
+                else if (!volumeDevice.vendor().isEmpty())
+                {
+                    labelOrProduct = volumeDevice.vendor();
+                }
+                else if (!driveDevice.product().isEmpty())
+                {
+                    labelOrProduct = driveDevice.product();
+                }
+
+                if (!labelOrProduct.isNull())
+                {
+                    if (!access->filePath().isEmpty())
+                    {
+                        label += i18nc("<drive type> \"<device name or label>\" at <mount path>",
+                                       "%1 \"%2\" at %3", driveType, labelOrProduct, QDir::toNativeSeparators(access->filePath()));
+                    }
+                    else
+                    {
+                        label += i18nc("<drive type> \"<device name or label>\"",
+                                       "%1 \"%2\"", driveType, labelOrProduct);
+                    }
+                }
                 else
                 {
-                    label += driveType;
+                    if (!access->filePath().isEmpty())
+                    {
+                        label += i18nc("<drive type> at <mount path>",
+                                       "%1 at %2", driveType, QDir::toNativeSeparators(access->filePath()));
+                    }
+                    else
+                    {
+                        label += driveType;
+                    }
+                }
+
+                if (volume->size())
+                {
+                    label += i18nc("device label etc... (<formatted byte size>)",
+                                   " (%1)", ImagePropertiesTab::humanReadableBytesCount(volume->size()));
                 }
             }
-
-            if (volume->size())
-            {
-                label += i18nc("device label etc... (<formatted byte size>)",
-                               " (%1)", ImagePropertiesTab::humanReadableBytesCount(volume->size()));
-            }
+        }
+        else
+        {
+            label = driveType;
         }
 
         QString iconName;
