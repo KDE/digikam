@@ -27,6 +27,7 @@
 
 #include <QMutex>
 #include <QDebug>
+#include <QProgressDialog>
 
 // Local includes
 
@@ -52,6 +53,16 @@ public:
     QMutex mutex;
 };
 
+MetadataHubMngr::MetadataHubMngr()
+    : d(new Private())
+{
+}
+
+MetadataHubMngr::~MetadataHubMngr()
+{
+    delete d;
+}
+
 MetadataHubMngr* MetadataHubMngr::instance()
 {
     if (internalPtr.isNull())
@@ -60,9 +71,9 @@ MetadataHubMngr* MetadataHubMngr::instance()
     return internalPtr;
 }
 
-MetadataHubMngr::~MetadataHubMngr()
+bool MetadataHubMngr::isCreated()
 {
-    delete d;
+    return (!internalPtr.isNull());
 }
 
 void MetadataHubMngr::addPending(ImageInfo &info)
@@ -87,14 +98,36 @@ void MetadataHubMngr::slotApplyPending()
 
     emit signalPendingMetadata(0);
 
-    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos,
-                                                                MetadataSynchronizer::WriteFromDatabaseToFile);
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos, MetadataSynchronizer::WriteFromDatabaseToFile);
     tool->start();
 }
 
-MetadataHubMngr::MetadataHubMngr()
-    : d(new Private())
+void MetadataHubMngr::requestShutDown()
 {
+    QMutexLocker lock(&d->mutex);
+
+    if (d->pendingItems.isEmpty())
+        return;
+
+    QPointer<QProgressDialog> dialog = new QProgressDialog;
+    dialog->setMinimum(0);
+    dialog->setMaximum(0);
+    dialog->setMinimumDuration(100);
+    dialog->setLabelText(i18nc("@label", "Apply pending changes to metadata"));
+
+    ImageInfoList infos(d->pendingItems);
+    d->pendingItems.clear();
+
+    emit signalPendingMetadata(0);
+
+    MetadataSynchronizer* const tool = new MetadataSynchronizer(infos, MetadataSynchronizer::WriteFromDatabaseToFile);
+
+    connect(tool, SIGNAL(signalComplete()),
+            dialog, SLOT(accept()));
+
+    tool->start();
+
+    dialog->exec();
 }
 
 } // namespace Digikam

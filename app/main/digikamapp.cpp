@@ -288,9 +288,6 @@ DigikamApp::DigikamApp()
 
 DigikamApp::~DigikamApp()
 {
-    // Apply pending metadata if any
-    MetadataHubMngr::instance()->slotApplyPending();
-
     ProgressManager::instance()->slotAbortAll();
 
     ImageAttributesWatch::shutDown();
@@ -324,6 +321,11 @@ DigikamApp::~DigikamApp()
     if (TagsManager::isCreated())
     {
         TagsManager::instance()->close();
+    }
+
+    if (MetadataHubMngr::isCreated())
+    {
+        delete MetadataHubMngr::internalPtr;
     }
 
 #ifdef HAVE_KFILEMETADATA
@@ -469,6 +471,8 @@ void DigikamApp::restoreSession()
 
 void DigikamApp::closeEvent(QCloseEvent* e)
 {
+    // may show a progress dialog to apply pending metadata
+    MetadataHubMngr::instance()->requestShutDown();
     // may show a progress dialog to finish actions
     FileActionMngr::instance()->requestShutDown();
 
