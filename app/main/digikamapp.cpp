@@ -471,11 +471,11 @@ void DigikamApp::restoreSession()
 
 void DigikamApp::closeEvent(QCloseEvent* e)
 {
+    // may show a progress dialog to finish actions
+    FileActionMngr::instance()->requestShutDown();
     // may show a progress dialog to apply pending metadata
     if (MetadataHubMngr::isCreated())
         MetadataHubMngr::instance()->requestShutDown();
-    // may show a progress dialog to finish actions
-    FileActionMngr::instance()->requestShutDown();
 
     DXmlGuiWindow::closeEvent(e);
     e->accept();
