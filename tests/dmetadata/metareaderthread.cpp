@@ -67,7 +67,7 @@ protected:
                                             << " :: Col: " << meta.getImageColorWorkSpace();
             }
             else
-            {        
+            {
                  qDebug() << "Patch file: " << url.fileName();
                  meta.setImageProgramId(QLatin1String("digiKam"), QLatin1String("Exiv2"));
                  meta.applyChanges();
@@ -126,13 +126,13 @@ int main(int argc, char* argv[])
     }
 
     QString direction = QString::fromLocal8Bit(argv[1]);
-    
-    if (direction != QLatin1String("READ") || direction != QLatin1String("WRITE")) 
+
+    if (direction != QLatin1String("READ") && direction == QLatin1String("WRITE"))
     {
         qDebug() << "Wrong direction type: " << direction;
         return -1;
     }
-    
+
     QString path = QString::fromLocal8Bit(argv[2]);
     qDebug() << "Images path : " << path;
     QStringList filters;
