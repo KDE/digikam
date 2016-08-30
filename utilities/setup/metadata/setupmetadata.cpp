@@ -424,7 +424,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotationAdvGroup                  = new QGroupBox;
     QGridLayout* const rotationAdvLayout = new QGridLayout;
 
-    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced"));
+    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
     QLabel* const rotationAdvIcon  = new QLabel;
     rotationAdvIcon->setPixmap(QIcon::fromTheme(QLatin1String("configure")).pixmap(32));
 
@@ -536,7 +536,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     //--------------Advanced Metadata Configuration --------------
 
     d->advTab = new AdvancedMetadataTab(this);
-    d->tab->insertTab(AdvancedConfig, d->advTab, i18nc("@title:tab", "Advanced Configurations"));
+    d->tab->insertTab(AdvancedConfig, d->advTab, i18nc("@title:tab", "Advanced"));
 
     // --------------------------------------------------------
 
@@ -544,7 +544,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
 
     connect(d->exifRotateBox, SIGNAL(toggled(bool)),
             this, SLOT(slotExifAutoRotateToggled(bool)));
-
 }
 
 SetupMetadata::~SetupMetadata()
