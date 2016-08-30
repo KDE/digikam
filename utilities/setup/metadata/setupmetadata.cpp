@@ -7,7 +7,7 @@
  * Description : setup Metadata tab.
  *
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well dot com>
- * Copyright (C) 2003-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2003-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
@@ -424,7 +424,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotationAdvGroup                  = new QGroupBox;
     QGridLayout* const rotationAdvLayout = new QGridLayout;
 
-    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
+    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced"));
     QLabel* const rotationAdvIcon  = new QLabel;
     rotationAdvIcon->setPixmap(QIcon::fromTheme(QLatin1String("configure")).pixmap(32));
 
@@ -478,7 +478,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     QVBoxLayout* const balooLayout = new QVBoxLayout(balooPanel);
 
     QGroupBox* const balooGroup    = new QGroupBox(i18n("Baloo Desktop Search"), balooPanel);
-    QVBoxLayout* const gLayout3   = new QVBoxLayout(balooGroup);
+    QVBoxLayout* const gLayout3    = new QVBoxLayout(balooGroup);
 
     d->saveToBalooBox           = new QCheckBox;
     d->saveToBalooBox->setText(i18n("Store metadata from digiKam in Baloo"));
