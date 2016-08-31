@@ -212,9 +212,9 @@ Setup::Setup(QWidget* const parent)
     d->page_mime->setIcon(QIcon::fromTheme(QLatin1String("system-file-manager")));
 
     d->editorPage  = new SetupEditor();
-    d->page_editor = addPage(d->editorPage, i18n("Editor Window"));
-    d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
-                                   "<i>Customize the image editor window</i></qt>"));
+    d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
+    d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
+                                   "<i>Customize the image editor settings</i></qt>"));
     d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
 
     d->rawPage  = new SetupRaw();

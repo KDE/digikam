@@ -74,7 +74,7 @@ SetupEditor::SetupEditor(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->tab->addTab(d->iface,      i18nc("@title:tab", "Interface"));
+    d->tab->addTab(d->iface,      i18nc("@title:tab", "Editor Window"));
     d->tab->addTab(d->versioning, i18nc("@title:tab", "Versioning"));
     d->tab->addTab(d->iofiles,    i18nc("@title:tab", "Save Settings"));
 
