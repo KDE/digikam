@@ -6,7 +6,7 @@
  * Date        : 2007-02-06
  * Description : setup kipi tools.
  *
- * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -132,9 +132,8 @@ SetupKipi::SetupKipi(QWidget* const parent)
     QRect r          = fm.boundingRect(QString::fromLatin1("XX"));
     QByteArray byteArray;
     QBuffer    buffer(&byteArray);
-    QImage img = QImage(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                               QLatin1String("kf5/kipi/pics/kipi-plugins_logo.png")))
-                 .scaledToHeight(r.height()*3, Qt::SmoothTransformation);
+    QPixmap img(QLatin1String(":/images/kipi-plugins_logo.png"));
+    img = img.scaledToHeight(r.height()*3, Qt::SmoothTransformation);
     img.save(&buffer, "PNG");
     d->kipiLogoLabel->setText(QString::fromLatin1("<a href=\"https://projects.kde.org/projects/extragear/graphics/kipi-plugins\">%1</a>")
                               .arg(QString::fromLatin1("<img src=\"data:image/png;base64,%1\">")

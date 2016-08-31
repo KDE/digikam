@@ -290,7 +290,7 @@ Setup::Setup(QWidget* const parent)
     d->page_plugins = addPage(d->pluginsPage, i18n("Plugins"));
     d->page_plugins->setHeader(i18n("<qt>Main Interface Plug-in Settings<br/>"
                                     "<i>Set which plugins will be accessible from the main interface</i></qt>"));
-    d->page_plugins->setIcon(QIcon::fromTheme(QLatin1String("kipi")));
+    d->page_plugins->setIcon(QIcon(QLatin1String(":/icons/kipi-icon.svg")));
 
 #endif /* HAVE_KIPI */
 
