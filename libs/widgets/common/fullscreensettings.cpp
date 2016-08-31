@@ -61,7 +61,8 @@ public:
 };
 
 FullScreenSettings::FullScreenSettings(int options, QWidget* const parent)
-    : QGroupBox(i18n("Full-screen Options"), parent), d(new Private)
+    : QGroupBox(i18n("Full-screen Options"), parent),
+      d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 

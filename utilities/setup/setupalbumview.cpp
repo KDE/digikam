@@ -87,6 +87,7 @@ public:
         largeThumbsBox(0),
         iconTreeThumbSize(0),
         leftClickActionComboBox(0),
+        tab(0),
         iconViewFontSelect(0),
         treeViewFontSelect(0),
         fullScreenSettings(0)
@@ -123,6 +124,8 @@ public:
     QComboBox*          iconTreeThumbSize;
     QComboBox*          leftClickActionComboBox;
 
+    QTabWidget*         tab;
+
     DFontSelect*        iconViewFontSelect;
     DFontSelect*        treeViewFontSelect;
 
@@ -133,81 +136,80 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    QWidget* const panel      = new QWidget(viewport());
-    setWidget(panel);
+    d->tab = new QTabWidget(viewport());
+    setWidget(d->tab);
     setWidgetResizable(true);
 
+    QWidget* const iwpanel    = new QWidget(d->tab);
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
 
-    QGroupBox* const iconViewGroup = new QGroupBox(i18n("Icon-View Options"), panel);
-    QGridLayout* const grid        = new QGridLayout(iconViewGroup);
+    QGridLayout* const grid  = new QGridLayout(iwpanel);
 
-    d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iconViewGroup);
+    d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iwpanel);
     d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
 
-    d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iconViewGroup);
+    d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iwpanel);
     d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
 
-    d->iconShowDateBox       = new QCheckBox(i18n("Show camera creation &date"), iconViewGroup);
+    d->iconShowDateBox       = new QCheckBox(i18n("Show camera creation &date"), iwpanel);
     d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
                                           "below the image thumbnail."));
 
-    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iconViewGroup);
+    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iwpanel);
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
                                              "below the image thumbnail if it's different than camera creation date. "
                                              "This option is useful to identify quickly which items have been modified."));
 
-    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iconViewGroup);
+    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iwpanel);
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
                                                 "below the image thumbnail."));
 
-    d->iconShowAspectRatioBox = new QCheckBox(i18n("Show image aspect ratio"), iconViewGroup);
+    d->iconShowAspectRatioBox = new QCheckBox(i18n("Show image aspect ratio"), iwpanel);
     d->iconShowAspectRatioBox->setWhatsThis(i18n("Set this option to show the image aspect ratio "
                                                 "below the image thumbnail."));
 
-    d->iconShowFormatBox      = new QCheckBox(i18n("Show image Format"), iconViewGroup);
+    d->iconShowFormatBox      = new QCheckBox(i18n("Show image Format"), iwpanel);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
 
-    d->iconShowTitleBox       = new QCheckBox(i18n("Show digiKam tit&le"), iconViewGroup);
+    d->iconShowTitleBox       = new QCheckBox(i18n("Show digiKam tit&le"), iwpanel);
     d->iconShowTitleBox->setWhatsThis(i18n("Set this option to show the digiKam title "
                                            "below the image thumbnail."));
 
-    d->iconShowCommentsBox    = new QCheckBox(i18n("Show digiKam &captions"), iconViewGroup);
+    d->iconShowCommentsBox    = new QCheckBox(i18n("Show digiKam &captions"), iwpanel);
     d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "
                                               "below the image thumbnail."));
 
-    d->iconShowTagsBox        = new QCheckBox(i18n("Show digiKam &tags"), iconViewGroup);
+    d->iconShowTagsBox        = new QCheckBox(i18n("Show digiKam &tags"), iwpanel);
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
                                           "below the image thumbnail."));
 
-    d->iconShowRatingBox      = new QCheckBox(i18n("Show digiKam &rating"), iconViewGroup);
+    d->iconShowRatingBox      = new QCheckBox(i18n("Show digiKam &rating"), iwpanel);
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
-    d->iconShowOverlaysBox    = new QCheckBox(i18n("Show rotation overlay buttons"), iconViewGroup);
+    d->iconShowOverlaysBox    = new QCheckBox(i18n("Show rotation overlay buttons"), iwpanel);
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
                                               "the image thumbnail for image rotation."));
 
-    d->iconShowFullscreenBox  = new QCheckBox(i18n("Show fullscreen overlay button"), iconViewGroup);
+    d->iconShowFullscreenBox  = new QCheckBox(i18n("Show fullscreen overlay button"), iwpanel);
     d->iconShowFullscreenBox->setWhatsThis(i18n("Set this option to show an overlay button on the "
                                                 "image thumbnail to open it in fullscreen."));
 
-    d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iconViewGroup);
+    d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iwpanel);
     d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
 
-    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iconViewGroup);
-    d->leftClickActionComboBox = new QComboBox(iconViewGroup);
+    QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iwpanel);
+    d->leftClickActionComboBox = new QComboBox(iwpanel);
     d->leftClickActionComboBox->addItem(i18n("Show embedded view"), ApplicationSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
-    d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), panel);
+    d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), iwpanel);
     d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
 
-    d->largeThumbsBox = new QCheckBox(i18n("Use large thumbnail size for high screen resolution"), iconViewGroup);
+    d->largeThumbsBox = new QCheckBox(i18n("Use large thumbnail size for high screen resolution"), iwpanel);
     d->largeThumbsBox->setWhatsThis(i18n("Set this option to render icon-view with large thumbnail size, for example in case of 4K monitor is used.\n"
                                          "By default this option is turned off and the maximum thumbnail size is limited to 256x256 pixels. "
                                          "When this option is enabled, thumbnail size can be extended to 512x512 pixels.\n"
@@ -237,14 +239,17 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->addWidget(d->largeThumbsBox,           9, 0, 1, 2);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);
+    grid->setRowStretch(10, 10);
+
+    d->tab->insertTab(IconView, iwpanel, i18nc("@title:tab", "Icon-View"));
 
     // --------------------------------------------------------
 
-    QGroupBox* const folderViewGroup = new QGroupBox(i18n("Folder View Options"), panel);
-    QGridLayout* const grid2         = new QGridLayout(folderViewGroup);
+    QWidget* const fwpanel   = new QWidget(d->tab);
+    QGridLayout* const grid2 = new QGridLayout(fwpanel);
 
-    d->iconTreeThumbLabel = new QLabel(i18n("Tree View thumbnail size:"), folderViewGroup);
-    d->iconTreeThumbSize  = new QComboBox(folderViewGroup);
+    d->iconTreeThumbLabel = new QLabel(i18n("Tree View thumbnail size:"), fwpanel);
+    d->iconTreeThumbSize  = new QComboBox(fwpanel);
     d->iconTreeThumbSize->addItem(QLatin1String("16"));
     d->iconTreeThumbSize->addItem(QLatin1String("22"));
     d->iconTreeThumbSize->addItem(QLatin1String("32"));
@@ -252,10 +257,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
                                           "the Tree View thumbnails in digiKam's sidebars."));
 
-    d->treeViewFontSelect = new DFontSelect(i18n("Tree View font:"), folderViewGroup);
+    d->treeViewFontSelect = new DFontSelect(i18n("Tree View font:"), fwpanel);
     d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in Tree Views."));
 
-    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show a count of items in Tree Views"), folderViewGroup);
+    d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show a count of items in Tree Views"), fwpanel);
 
     grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
@@ -263,11 +268,14 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid2->addWidget(d->showFolderTreeViewItemsCount, 2, 0, 1, 2);
     grid2->setContentsMargins(spacing, spacing, spacing, spacing);
     grid2->setSpacing(spacing);
+    grid2->setRowStretch(3, 10);
+
+    d->tab->insertTab(FolderView, fwpanel, i18nc("@title:tab", "Folder-View"));
 
     // --------------------------------------------------------
 
-    QGroupBox* const interfaceOptionsGroup = new QGroupBox(i18n("Preview Options"), panel);
-    QGridLayout* const grid3               = new QGridLayout(interfaceOptionsGroup);
+    QWidget* const pwpanel        = new QWidget(d->tab);
+    QGridLayout* const grid3      = new QGridLayout(pwpanel);
 
     d->previewFastPreview         = new QRadioButton(i18nc("@option:radio",
                                                            "Embedded view shows a small, quick preview"));
@@ -283,10 +291,10 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->previewRawMode->addItem(i18nc("@option:inlistbox Original, half-size data as RAW image preview source",
                                      "Raw data in half size"), PreviewSettings::RawPreviewFromRawHalfSize);
 
-    d->previewZoomOrgSize = new QCheckBox(i18n("Embedded view zoomed to the original image size"), interfaceOptionsGroup);
+    d->previewZoomOrgSize = new QCheckBox(i18n("Embedded view zoomed to the original image size"), pwpanel);
     d->previewZoomOrgSize->setWhatsThis(i18n("Uncheck this if you do not want to zoom the embedded view to the original image size."));
 
-    d->previewShowIcons   = new QCheckBox(i18n("Show icons and text over preview"), interfaceOptionsGroup);
+    d->previewShowIcons   = new QCheckBox(i18n("Show icons and text over preview"), pwpanel);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
     grid3->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -297,24 +305,28 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid3->addWidget(d->previewRawMode,     2, 1, 1, 1);
     grid3->addWidget(d->previewZoomOrgSize, 3, 0, 1, 2);
     grid3->addWidget(d->previewShowIcons,   4, 0, 1, 2);
+    grid3->setRowStretch(5, 10);
 
     d->previewFastPreview->setChecked(true);
     d->previewRawMode->setCurrentIndex(0);
     d->previewRawMode->setEnabled(false);
 
-    // --------------------------------------------------------
-
-    d->fullScreenSettings = new FullScreenSettings(FS_ALBUMGUI, panel);
+    d->tab->insertTab(Preview, pwpanel, i18nc("@title:tab", "Preview"));
 
     // --------------------------------------------------------
+
+    QWidget* const fspanel    = new QWidget(d->tab);
+    QVBoxLayout* const layout = new QVBoxLayout(fspanel);
+    d->fullScreenSettings     = new FullScreenSettings(FS_ALBUMGUI, d->tab);
+    d->fullScreenSettings->setTitle(QString());
+    d->fullScreenSettings->setFlat(true);
 
     layout->setContentsMargins(QMargins());
     layout->setSpacing(spacing);
-    layout->addWidget(iconViewGroup);
-    layout->addWidget(folderViewGroup);
-    layout->addWidget(interfaceOptionsGroup);
     layout->addWidget(d->fullScreenSettings);
     layout->addStretch();
+
+    d->tab->insertTab(FullScreen, fspanel, i18nc("@title:tab", "Full-Screen"));
 
     // --------------------------------------------------------
 

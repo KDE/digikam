@@ -38,6 +38,16 @@ class SetupAlbumView : public QScrollArea
 
 public:
 
+    enum AlbumTab
+    {
+        IconView = 0,
+        FolderView,
+        Preview,
+        FullScreen
+    };
+
+public:
+
     explicit SetupAlbumView(QWidget* const parent = 0);
     ~SetupAlbumView();
 
