@@ -73,24 +73,24 @@ public:
     {
     }
 
-    DConfigDlgWdgItem*       page_editorIface;
-    DConfigDlgWdgItem*       page_metadata;
-    DConfigDlgWdgItem*       page_tooltip;
-    DConfigDlgWdgItem*       page_raw;
-    DConfigDlgWdgItem*       page_iofiles;
-    DConfigDlgWdgItem*       page_slideshow;
-    DConfigDlgWdgItem*       page_icc;
-    DConfigDlgWdgItem*       page_misc;
+    DConfigDlgWdgItem*         page_editorIface;
+    DConfigDlgWdgItem*         page_metadata;
+    DConfigDlgWdgItem*         page_tooltip;
+    DConfigDlgWdgItem*         page_raw;
+    DConfigDlgWdgItem*         page_iofiles;
+    DConfigDlgWdgItem*         page_slideshow;
+    DConfigDlgWdgItem*         page_icc;
+    DConfigDlgWdgItem*         page_misc;
 
-    SetupMetadata*           metadataPage;
-    SetupToolTip*            toolTipPage;
-    SetupMisc*               miscPage;
+    SetupMetadata*             metadataPage;
+    SetupToolTip*              toolTipPage;
+    SetupMisc*                 miscPage;
 
-    Digikam::SetupEditorIface*    editorIfacePage;
-    Digikam::SetupRaw*       rawPage;
-    Digikam::SetupIOFiles*   iofilesPage;
-    Digikam::SetupSlideShow* slideshowPage;
-    Digikam::SetupICC*       iccPage;
+    Digikam::SetupEditorIface* editorIfacePage;
+    Digikam::SetupRaw*         rawPage;
+    Digikam::SetupIOFiles*     iofilesPage;
+    Digikam::SetupSlideShow*   slideshowPage;
+    Digikam::SetupICC*         iccPage;
 
 public:
 
@@ -108,9 +108,9 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     setModal(true);
 
     d->editorIfacePage     = new Digikam::SetupEditorIface();
-    d->page_editorIface    = addPage(d->editorIfacePage, i18n("Image Editor"));
-    d->page_editorIface->setHeader(i18n("<qt>Image Editor Settings<br/>"
-                                   "<i>Customize image editor behavior</i></qt>"));
+    d->page_editorIface    = addPage(d->editorIfacePage, i18n("Editor Window"));
+    d->page_editorIface->setHeader(i18n("<qt>Editor Window Settings<br/>"
+                                   "<i>Customize editor window behavior</i></qt>"));
     d->page_editorIface->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
 
     d->metadataPage   = new SetupMetadata();
