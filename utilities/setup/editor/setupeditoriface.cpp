@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-03
- * Description : setup Image Editor tab.
+ * Description : setup Image Editor interface.
  *
  * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "setupeditor.h"
+#include "setupeditoriface.h"
 
 // Qt includes
 
@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-class SetupEditor::Private
+class SetupEditorIface::Private
 {
 public:
 
@@ -101,18 +101,18 @@ public:
     DDoubleNumInput*    overExposurePcents;
 };
 
-const QString SetupEditor::Private::configGroupName(QLatin1String("ImageViewer Settings"));
-const QString SetupEditor::Private::configUseThemeBackgroundColorEntry(QLatin1String("UseThemeBackgroundColor"));
-const QString SetupEditor::Private::configBackgroundColorEntry(QLatin1String("BackgroundColor"));
-const QString SetupEditor::Private::configUnderExposureColorEntry(QLatin1String("UnderExposureColor"));
-const QString SetupEditor::Private::configOverExposureColorEntry(QLatin1String("OverExposureColor"));
-const QString SetupEditor::Private::configUnderExposurePercentsEntry(QLatin1String("UnderExposurePercentsEntry"));
-const QString SetupEditor::Private::configOverExposurePercentsEntry(QLatin1String("OverExposurePercentsEntry"));
-const QString SetupEditor::Private::configExpoIndicatorModeEntry(QLatin1String("ExpoIndicatorMode"));
+const QString SetupEditorIface::Private::configGroupName(QLatin1String("ImageViewer Settings"));
+const QString SetupEditorIface::Private::configUseThemeBackgroundColorEntry(QLatin1String("UseThemeBackgroundColor"));
+const QString SetupEditorIface::Private::configBackgroundColorEntry(QLatin1String("BackgroundColor"));
+const QString SetupEditorIface::Private::configUnderExposureColorEntry(QLatin1String("UnderExposureColor"));
+const QString SetupEditorIface::Private::configOverExposureColorEntry(QLatin1String("OverExposureColor"));
+const QString SetupEditorIface::Private::configUnderExposurePercentsEntry(QLatin1String("UnderExposurePercentsEntry"));
+const QString SetupEditorIface::Private::configOverExposurePercentsEntry(QLatin1String("OverExposurePercentsEntry"));
+const QString SetupEditorIface::Private::configExpoIndicatorModeEntry(QLatin1String("ExpoIndicatorMode"));
 
 // --------------------------------------------------------
 
-SetupEditor::SetupEditor(QWidget* const parent)
+SetupEditorIface::SetupEditorIface(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
@@ -262,17 +262,17 @@ SetupEditor::SetupEditor(QWidget* const parent)
     slotExpoSettingsChanged();
 }
 
-SetupEditor::~SetupEditor()
+SetupEditorIface::~SetupEditorIface()
 {
     delete d;
 }
 
-void SetupEditor::slotThemeBackgroundColor(bool e)
+void SetupEditorIface::slotThemeBackgroundColor(bool e)
 {
     d->colorBox->setEnabled(!e);
 }
 
-void SetupEditor::slotExpoSettingsChanged()
+void SetupEditorIface::slotExpoSettingsChanged()
 {
     ExposureSettingsContainer prm;
     prm.underExposureIndicator = true;
@@ -292,21 +292,21 @@ void SetupEditor::slotExpoSettingsChanged()
     d->expoPreview->setPixmap(pix);
 }
 
-void SetupEditor::slotShowOverExpoHistogramGuide(double v)
+void SetupEditorIface::slotShowOverExpoHistogramGuide(double v)
 {
     int max  = lround(255.0 - (255.0 * v / 100.0));
     DColor color(max, max, max, max, false);
     d->expoPreviewHisto->setHistogramGuideByColor(color);
 }
 
-void SetupEditor::slotShowUnderExpoHistogramGuide(double v)
+void SetupEditorIface::slotShowUnderExpoHistogramGuide(double v)
 {
     int min  = lround(0.0 + (255.0 * v / 100.0));
     DColor color(min, min, min, min, false);
     d->expoPreviewHisto->setHistogramGuideByColor(color);
 }
 
-void SetupEditor::readSettings()
+void SetupEditorIface::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
@@ -322,7 +322,7 @@ void SetupEditor::readSettings()
     d->fullScreenSettings->readSettings(group);
 }
 
-void SetupEditor::applySettings()
+void SetupEditorIface::applySettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);

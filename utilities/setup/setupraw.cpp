@@ -73,7 +73,7 @@ public:
     QRadioButton*         openDefault;
     QRadioButton*         openTool;
 
-    DRawDecoderWidget*  dcrawSettings;
+    DRawDecoderWidget*    dcrawSettings;
 };
 
 const QString SetupRaw::Private::configGroupName(QLatin1String("ImageViewer Settings"));
@@ -87,10 +87,10 @@ SetupRaw::SetupRaw(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->behaviorPanel = new QWidget;
+    d->behaviorPanel                  = new QWidget;
     QVBoxLayout* const behaviorLayout = new QVBoxLayout;
 
-    QLabel* const rawExplanation = new QLabel;
+    QLabel* const rawExplanation      = new QLabel;
     rawExplanation->setText(i18nc("@info",
                                   "<p>A <i>raw image file</i> contains minimally processed data "
                                   "from the image sensor of a digital camera.</p>"
@@ -134,10 +134,10 @@ SetupRaw::SetupRaw(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->settingsPanel            = new QWidget;
+    d->settingsPanel                  = new QWidget;
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
-    d->dcrawSettings = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
+    d->dcrawSettings                  = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
     d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
     d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("bordertool")));
     d->dcrawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
@@ -179,7 +179,7 @@ SetupRaw::~SetupRaw()
 
 void SetupRaw::slotSixteenBitsImageToggled(bool)
 {
-    // Linraw provide a way to set brightness of image in 16 bits color depth.
+    // Libraw provide a way to set brightness of image in 16 bits color depth.
     // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
     d->dcrawSettings->setEnabledBrightnessSettings(true);
 }

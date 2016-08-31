@@ -45,7 +45,6 @@
 #include "setupraw.h"
 #include "setupeditor.h"
 #include "setupicc.h"
-#include "setupiofiles.h"
 #include "setuplighttable.h"
 #include "setupmetadata.h"
 #include "setupmime.h"
@@ -54,7 +53,6 @@
 #include "setupimagequalitysorter.h"
 #include "setuptooltip.h"
 #include "setupdatabase.h"
-#include "setupversioning.h"
 #include "importsettings.h"
 #include "dxmlguiwindow.h"
 
@@ -82,18 +80,16 @@ public:
         page_lighttable(0),
         page_editor(0),
         page_raw(0),
-        page_iofiles(0),
         page_slideshow(0),
         page_imagequalitysorter(0),
         page_icc(0),
         page_camera(0),
-        page_misc(0),
 
 #ifdef HAVE_KIPI
         page_plugins(0),
 #endif /* HAVE_KIPI */
 
-        page_versioning(0),
+        page_misc(0),
         databasePage(0),
         collectionsPage(0),
         albumViewPage(0),
@@ -104,18 +100,16 @@ public:
         lighttablePage(0),
         editorPage(0),
         rawPage(0),
-        iofilesPage(0),
         slideshowPage(0),
         imageQualitySorterPage(0),
         iccPage(0),
         cameraPage(0),
-        miscPage(0),
 
 #ifdef HAVE_KIPI
         pluginsPage(0),
 #endif /* HAVE_KIPI */
 
-        versioningPage(0)
+        miscPage(0)
     {
     }
 
@@ -129,19 +123,16 @@ public:
     DConfigDlgWdgItem*       page_lighttable;
     DConfigDlgWdgItem*       page_editor;
     DConfigDlgWdgItem*       page_raw;
-    DConfigDlgWdgItem*       page_iofiles;
     DConfigDlgWdgItem*       page_slideshow;
     DConfigDlgWdgItem*       page_imagequalitysorter;
     DConfigDlgWdgItem*       page_icc;
     DConfigDlgWdgItem*       page_camera;
-    DConfigDlgWdgItem*       page_misc;
 
 #ifdef HAVE_KIPI
     DConfigDlgWdgItem*       page_plugins;
 #endif /* HAVE_KIPI */
 
-    DConfigDlgWdgItem*       page_versioning;
-
+    DConfigDlgWdgItem*       page_misc;
     SetupDatabase*           databasePage;
     SetupCollections*        collectionsPage;
     SetupAlbumView*          albumViewPage;
@@ -152,18 +143,16 @@ public:
     SetupLightTable*         lighttablePage;
     SetupEditor*             editorPage;
     SetupRaw*                rawPage;
-    SetupIOFiles*            iofilesPage;
     SetupSlideShow*          slideshowPage;
     SetupImageQualitySorter* imageQualitySorterPage;
     SetupICC*                iccPage;
     SetupCamera*             cameraPage;
-    SetupMisc*               miscPage;
 
 #ifdef HAVE_KIPI
     SetupKipi*               pluginsPage;
 #endif /* HAVE_KIPI */
 
-    SetupVersioning*         versioningPage;
+    SetupMisc*               miscPage;
 
 public:
 
@@ -227,18 +216,6 @@ Setup::Setup(QWidget* const parent)
     d->page_editor->setHeader(i18n("<qt>Image Editor Window Settings<br/>"
                                    "<i>Customize the image editor window</i></qt>"));
     d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
-
-    d->versioningPage  = new SetupVersioning();
-    d->page_versioning = addPage(d->versioningPage, i18n("Editing Images"));
-    d->page_versioning->setHeader(i18n("<qt>Editing Images<br/>"
-                                       "<i>Configure non-destructive editing and versioning</i></qt>"));
-    d->page_versioning->setIcon(QIcon::fromTheme(QLatin1String("view-catalog")));
-
-    d->iofilesPage  = new SetupIOFiles();
-    d->page_iofiles = addPage(d->iofilesPage, i18n("Saving Images"));
-    d->page_iofiles->setHeader(i18n("<qt>Image Editor: Settings for Saving Image Files<br/>"
-                                    "<i>Set default configuration used to save images with the image editor</i></qt>"));
-    d->page_iofiles->setIcon(QIcon::fromTheme(QLatin1String("document-save-all")));
 
     d->rawPage  = new SetupRaw();
     d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
@@ -368,7 +345,6 @@ QSize Setup::sizeHint() const
             page == MimePage        ||
             page == LightTablePage  ||
             page == EditorPage      ||
-            page == IOFilesPage     ||
             page == RawPage         ||
             page == MiscellaneousPage)
         {
@@ -481,7 +457,6 @@ void Setup::slotOkClicked()
     d->lighttablePage->applySettings();
     d->editorPage->applySettings();
     d->rawPage->applySettings();
-    d->iofilesPage->applySettings();
     d->slideshowPage->applySettings();
     d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
@@ -490,8 +465,6 @@ void Setup::slotOkClicked()
 #ifdef HAVE_KIPI
     d->pluginsPage->applySettings();
 #endif /* HAVE_KIPI */
-
-    d->versioningPage->applySettings();
 
     ApplicationSettings::instance()->emitSetupChanged();
     ImportSettings::instance()->emitSetupChanged();
@@ -592,11 +565,6 @@ Setup::Page Setup::activePageIndex() const
         return RawPage;
     }
 
-    if (cur == d->page_iofiles)
-    {
-        return IOFilesPage;
-    }
-
     if (cur == d->page_slideshow)
     {
         return SlideshowPage;
@@ -620,11 +588,6 @@ Setup::Page Setup::activePageIndex() const
     if (cur == d->page_misc)
     {
         return MiscellaneousPage;
-    }
-
-    if (cur == d->page_versioning)
-    {
-        return VersioningPage;
     }
 
 #ifdef HAVE_KIPI
@@ -671,9 +634,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
         case Setup::RawPage:
             return page_raw;
 
-        case Setup::IOFilesPage:
-            return page_iofiles;
-
         case Setup::SlideshowPage:
             return page_slideshow;
 
@@ -688,9 +648,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::MiscellaneousPage:
             return page_misc;
-
-        case Setup::VersioningPage:
-            return page_versioning;
 
 #ifdef HAVE_KIPI
         case Setup::KipiPluginsPage:

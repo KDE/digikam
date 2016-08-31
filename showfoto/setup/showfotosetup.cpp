@@ -37,7 +37,7 @@
 // Local includes
 
 #include "setupraw.h"
-#include "setupeditor.h"
+#include "setupeditoriface.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
 #include "setupslideshow.h"
@@ -54,7 +54,7 @@ class Setup::Private
 public:
 
     Private() :
-        page_editor(0),
+        page_editorIface(0),
         page_metadata(0),
         page_tooltip(0),
         page_raw(0),
@@ -65,7 +65,7 @@ public:
         metadataPage(0),
         toolTipPage(0),
         miscPage(0),
-        editorPage(0),
+        editorIfacePage(0),
         rawPage(0),
         iofilesPage(0),
         slideshowPage(0),
@@ -73,7 +73,7 @@ public:
     {
     }
 
-    DConfigDlgWdgItem*       page_editor;
+    DConfigDlgWdgItem*       page_editorIface;
     DConfigDlgWdgItem*       page_metadata;
     DConfigDlgWdgItem*       page_tooltip;
     DConfigDlgWdgItem*       page_raw;
@@ -86,7 +86,7 @@ public:
     SetupToolTip*            toolTipPage;
     SetupMisc*               miscPage;
 
-    Digikam::SetupEditor*    editorPage;
+    Digikam::SetupEditorIface*    editorIfacePage;
     Digikam::SetupRaw*       rawPage;
     Digikam::SetupIOFiles*   iofilesPage;
     Digikam::SetupSlideShow* slideshowPage;
@@ -107,11 +107,11 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
     setFaceType(DConfigDlg::List);
     setModal(true);
 
-    d->editorPage     = new Digikam::SetupEditor();
-    d->page_editor    = addPage(d->editorPage, i18n("Image Editor"));
-    d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
+    d->editorIfacePage     = new Digikam::SetupEditorIface();
+    d->page_editorIface    = addPage(d->editorIfacePage, i18n("Image Editor"));
+    d->page_editorIface->setHeader(i18n("<qt>Image Editor Settings<br/>"
                                    "<i>Customize image editor behavior</i></qt>"));
-    d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
+    d->page_editorIface->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
 
     d->metadataPage   = new SetupMetadata();
     d->page_metadata  = addPage(d->metadataPage, i18n("Metadata"));
@@ -212,7 +212,7 @@ void Setup::slotHelp()
 
 void Setup::slotOkClicked()
 {
-    d->editorPage->applySettings();
+    d->editorIfacePage->applySettings();
     d->metadataPage->applySettings();
     d->toolTipPage->applySettings();
     d->rawPage->applySettings();
@@ -249,7 +249,7 @@ void Setup::showPage(Setup::Page page)
             setCurrentPage(d->page_misc);
             break;
         default:
-            setCurrentPage(d->page_editor);
+            setCurrentPage(d->page_editorIface);
             break;
     }
 }
@@ -301,7 +301,7 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
     switch (page)
     {
         case Setup::EditorPage:
-            return page_editor;
+            return page_editorIface;
         case Setup::MetadataPage:
             return page_metadata;
         case Setup::ToolTipPage:

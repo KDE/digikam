@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2004-08-03
- * Description : setup Image Editor tab.
+ * Description : setup Image Editor interface.
  *
  * Copyright (C) 2004-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SETUPEDITOR_H
-#define SETUPEDITOR_H
+#ifndef SETUPEDITORIFACE_H
+#define SETUPEDITORIFACE_H
 
 // Qt includes
 
@@ -35,14 +35,14 @@
 namespace Digikam
 {
 
-class SetupEditor : public QScrollArea
+class SetupEditorIface : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    explicit SetupEditor(QWidget* const parent = 0);
-    ~SetupEditor();
+    explicit SetupEditorIface(QWidget* const parent = 0);
+    ~SetupEditorIface();
 
     void applySettings();
 
@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SETUPEDITOR_H
+#endif // SETUPEDITORIFACE_H
