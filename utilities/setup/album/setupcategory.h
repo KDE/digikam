@@ -41,9 +41,6 @@ public:
     ~SetupCategory();
 
     void applySettings();
-
-private:
-
     void readSettings();
 
 private Q_SLOTS:

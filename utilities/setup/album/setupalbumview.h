@@ -43,7 +43,8 @@ public:
         IconView = 0,
         FolderView,
         Preview,
-        FullScreen
+        FullScreen,
+        Category
     };
 
 public:

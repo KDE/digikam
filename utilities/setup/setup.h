@@ -49,7 +49,6 @@ public:
         DatabasePage    = 0,
         CollectionsPage,
         AlbumViewPage,
-        CategoryPage,
         ToolTipPage,
         FaceTagsPage,
         MetadataPage,

@@ -52,6 +52,7 @@
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
 #include "previewsettings.h"
+#include "setupcategory.h"
 
 namespace Digikam
 {
@@ -90,7 +91,8 @@ public:
         tab(0),
         iconViewFontSelect(0),
         treeViewFontSelect(0),
-        fullScreenSettings(0)
+        fullScreenSettings(0),
+        category(0)
     {
     }
 
@@ -130,6 +132,8 @@ public:
     DFontSelect*        treeViewFontSelect;
 
     FullScreenSettings* fullScreenSettings;
+
+    SetupCategory*      category;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* const parent)
@@ -330,6 +334,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    d->category  = new SetupCategory(d->tab);
+    d->tab->insertTab(Category, d->category, i18nc("@title:tab", "Category"));
+
+    // --------------------------------------------------------
+
     readSettings();
     adjustSize();
 
@@ -392,8 +401,12 @@ void SetupAlbumView::applySettings()
     KConfigGroup group = KSharedConfig::openConfig()->group(settings->generalConfigGroupName());
     d->fullScreenSettings->saveSettings(group);
 
-    // Method ThumbnailSize::setUseLargeThumbs() is not called here to prevent dysfunction between Thumbs DB and icon if
-    // thumb size is over 256 and when large thumbs size support is disabled. digiKam need to be restarted to take effect.
+    d->category->applySettings();
+
+    // Method ThumbnailSize::setUseLargeThumbs() is not called here to prevent
+    // dysfunction between Thumbs DB and icon if
+    // thumb size is over 256 and when large thumbs size support is disabled.
+    // digiKam need to be restarted to take effect.
     ThumbnailSize::saveSettings(group, d->largeThumbsBox->isChecked());
 }
 
@@ -466,6 +479,8 @@ void SetupAlbumView::readSettings()
     ThumbnailSize::readSettings(group);
     d->useLargeThumbsOriginal = ThumbnailSize::getUseLargeThumbs();
     d->largeThumbsBox->setChecked(d->useLargeThumbsOriginal);
+
+    d->category->readSettings();
 }
 
 bool SetupAlbumView::useLargeThumbsHasChanged() const

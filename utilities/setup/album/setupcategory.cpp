@@ -84,8 +84,7 @@ SetupCategory::SetupCategory(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QGridLayout* const grid = new QGridLayout(panel);
 
     // --------------------------------------------------------
@@ -137,10 +136,7 @@ SetupCategory::SetupCategory(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    readSettings();
     adjustSize();
-
-    // --------------------------------------------------------
 }
 
 SetupCategory::~SetupCategory()
@@ -223,7 +219,7 @@ void SetupCategory::slotAddCategory()
 
 void SetupCategory::applySettings()
 {
-    ApplicationSettings* settings = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {
@@ -244,7 +240,7 @@ void SetupCategory::applySettings()
 
 void SetupCategory::readSettings()
 {
-    ApplicationSettings* settings = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
 
     if (!settings)
     {

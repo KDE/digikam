@@ -19,8 +19,6 @@ set(libsetupshowfoto_SRCS
 
 set(libsetup_SRCS
     setupicc.cpp
-    setupcategory.cpp
-    setupalbumview.cpp
     setup.cpp
     setuptooltip.cpp
     setuptemplate.cpp
@@ -34,6 +32,9 @@ set(libsetup_SRCS
     setupversioning.cpp
     setupimagequalitysorter.cpp
     setupraw.cpp
+
+    album/setupalbumview.cpp
+    album/setupcategory.cpp
 
     metadata/setupmetadata.cpp
     metadata/advancedmetadatatab.cpp

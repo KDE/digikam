@@ -41,7 +41,6 @@
 #include "thumbsgenerator.h"
 #include "setupalbumview.h"
 #include "setupcamera.h"
-#include "setupcategory.h"
 #include "setupcollections.h"
 #include "setupraw.h"
 #include "setupeditor.h"
@@ -79,7 +78,6 @@ public:
         page_tooltip(0),
         page_metadata(0),
         page_template(0),
-        page_category(0),
         page_mime(0),
         page_lighttable(0),
         page_editor(0),
@@ -102,7 +100,6 @@ public:
         tooltipPage(0),
         metadataPage(0),
         templatePage(0),
-        categoryPage(0),
         mimePage(0),
         lighttablePage(0),
         editorPage(0),
@@ -128,7 +125,6 @@ public:
     DConfigDlgWdgItem*       page_tooltip;
     DConfigDlgWdgItem*       page_metadata;
     DConfigDlgWdgItem*       page_template;
-    DConfigDlgWdgItem*       page_category;
     DConfigDlgWdgItem*       page_mime;
     DConfigDlgWdgItem*       page_lighttable;
     DConfigDlgWdgItem*       page_editor;
@@ -152,7 +148,6 @@ public:
     SetupToolTip*            tooltipPage;
     SetupMetadata*           metadataPage;
     SetupTemplate*           templatePage;
-    SetupCategory*           categoryPage;
     SetupMime*               mimePage;
     SetupLightTable*         lighttablePage;
     SetupEditor*             editorPage;
@@ -202,12 +197,6 @@ Setup::Setup(QWidget* const parent)
     d->page_albumView->setHeader(i18n("<qt>Album View Settings<br/>"
                                       "<i>Customize the look of the albums list</i></qt>"));
     d->page_albumView->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
-
-    d->categoryPage  = new SetupCategory();
-    d->page_category = addPage(d->categoryPage, i18n("Album Category"));
-    d->page_category->setHeader(i18n("<qt>Album Category Settings<br/>"
-                                     "<i>Assign categories to albums used to sort them</i></qt>"));
-    d->page_category->setIcon(QIcon::fromTheme(QLatin1String("view-calendar-list")));
 
     d->tooltipPage  = new SetupToolTip();
     d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
@@ -488,7 +477,6 @@ void Setup::slotOkClicked()
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->templatePage->applySettings();
-    d->categoryPage->applySettings();
     d->mimePage->applySettings();
     d->lighttablePage->applySettings();
     d->editorPage->applySettings();
@@ -584,11 +572,6 @@ Setup::Page Setup::activePageIndex() const
         return TemplatePage;
     }
 
-    if (cur == d->page_category)
-    {
-        return CategoryPage;
-    }
-
     if (cur == d->page_mime)
     {
         return MimePage;
@@ -675,9 +658,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::TemplatePage:
             return page_template;
-
-        case Setup::CategoryPage:
-            return page_category;
 
         case Setup::MimePage:
             return page_mime;
