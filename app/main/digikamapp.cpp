@@ -2324,17 +2324,23 @@ void DigikamApp::fillSolidMenus()
             if (!labelOrProduct.isNull())
             {
                 if (!access->filePath().isEmpty())
+                {
                     label += i18nc("<drive type> \"<device name or label>\" at <mount path>",
                                    "%1 \"%2\" at %3", driveType, labelOrProduct, QDir::toNativeSeparators(access->filePath()));
+                }
                 else
+                {
                     label += i18nc("<drive type> \"<device name or label>\"",
                                    "%1 \"%2\"", driveType, labelOrProduct);
+                }
             }
             else
             {
                 if (!access->filePath().isEmpty())
+                {
                     label += i18nc("<drive type> at <mount path>",
                                    "%1 at %2", driveType, QDir::toNativeSeparators(access->filePath()));
+                }
                 else
                 {
                     label += driveType;
