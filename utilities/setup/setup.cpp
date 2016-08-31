@@ -189,8 +189,8 @@ Setup::Setup(QWidget* const parent)
 
     d->tooltipPage  = new SetupToolTip();
     d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
-    d->page_tooltip->setHeader(i18n("<qt>Icon-View Items Tool-Tip Settings<br/>"
-                                    "<i>Customize information in tool-tips for icon-view items</i></qt>"));
+    d->page_tooltip->setHeader(i18n("<qt>Items Tool-Tip Settings<br/>"
+                                    "<i>Customize information in item tool-tips</i></qt>"));
     d->page_tooltip->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
 
     d->metadataPage  = new SetupMetadata();
