@@ -424,7 +424,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->rotationAdvGroup                  = new QGroupBox;
     QGridLayout* const rotationAdvLayout = new QGridLayout;
 
-    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Advanced Settings"));
+    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Rotate actions"));
     QLabel* const rotationAdvIcon  = new QLabel;
     rotationAdvIcon->setPixmap(QIcon::fromTheme(QLatin1String("configure")).pixmap(32));
 
