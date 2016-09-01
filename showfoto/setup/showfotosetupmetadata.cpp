@@ -88,7 +88,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     // --------------------------------------------------------
 
-    QGroupBox* const ExifGroup  = new QGroupBox(i18n("EXIF Actions"), panel);
+    QGroupBox* const ExifGroup  = new QGroupBox(i18n("Rotation"), panel);
     QVBoxLayout* const gLayout1 = new QVBoxLayout(ExifGroup);
 
     d->exifRotateBox            = new QCheckBox(ExifGroup);
