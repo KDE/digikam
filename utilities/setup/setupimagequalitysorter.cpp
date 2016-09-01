@@ -28,6 +28,7 @@
 
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QGridLayout>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QIcon>
@@ -51,6 +52,7 @@ namespace Digikam
 class SetupImageQualitySorter::Private
 {
 public:
+
     Private() :
         optionsView(0),
         enableSorter(0),
@@ -98,7 +100,7 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    QWidget* const panel = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
@@ -113,14 +115,6 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
     layout->addWidget(d->optionsView);
 
     // ------------------------------------------------------------------------------
-
-    DHBox* const hbox1 = new DHBox(d->optionsView);
-    QLabel* const lbl1 = new QLabel(i18n("Speed:"), hbox1);
-    lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setSpeed        = new DIntNumInput(hbox1);
-    d->setSpeed->setDefaultValue(5);
-    d->setSpeed->setRange(1, 3, 1);
-    d->setSpeed->setWhatsThis(i18n("Tradeoff between speed and accuracy of sorting algorithm"));
 
     d->detectBlur  = new QCheckBox(i18n("Detect Blur"), d->optionsView);
     d->detectBlur->setWhatsThis(i18n("Detect the amount of blur in the images passed to it"));
@@ -175,56 +169,73 @@ SetupImageQualitySorter::SetupImageQualitySorter(QWidget* const parent)
 
     // ------------------------------------------------------------------------------
 
-    DHBox* const hbox2 = new DHBox(d->optionsView);
-    QLabel* const lbl2 = new QLabel(i18n("Rejected threshold:"), hbox2);
+    QWidget* const settings = new QWidget(d->optionsView);
+    QGridLayout* const glay = new QGridLayout(settings);
+
+    QLabel* const lbl1 = new QLabel(i18n("Speed:"), settings);
+    lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    d->setSpeed        = new DIntNumInput(settings);
+    d->setSpeed->setDefaultValue(5);
+    d->setSpeed->setRange(1, 3, 1);
+    d->setSpeed->setWhatsThis(i18n("Tradeoff between speed and accuracy of sorting algorithm"));
+
+    QLabel* const lbl2 = new QLabel(i18n("Rejected threshold:"), settings);
     lbl2->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setRejectedThreshold = new DIntNumInput(hbox2);
+    d->setRejectedThreshold = new DIntNumInput(settings);
     d->setRejectedThreshold->setDefaultValue(5);
     d->setRejectedThreshold->setRange(1, 100, 1);
     d->setRejectedThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Rejected Label"));
 
-    DHBox* const hbox3 = new DHBox(d->optionsView);
-    QLabel* const lbl3 = new QLabel(i18n("Pending threshold:"), hbox3);
+    QLabel* const lbl3 = new QLabel(i18n("Pending threshold:"), settings);
     lbl3->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setPendingThreshold  = new DIntNumInput(hbox3);
+    d->setPendingThreshold  = new DIntNumInput(settings);
     d->setPendingThreshold->setDefaultValue(5);
     d->setPendingThreshold->setRange(1, 100, 1);
     d->setPendingThreshold->setWhatsThis(i18n("Threshold below which all pictures are assigned Pending Label"));
 
-    DHBox* const hbox4 = new DHBox(d->optionsView);
-    QLabel* const lbl4 = new QLabel(i18n("Accepted threshold:"), hbox4);
+    QLabel* const lbl4 = new QLabel(i18n("Accepted threshold:"), settings);
     lbl4->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setAcceptedThreshold = new DIntNumInput(hbox4);
+    d->setAcceptedThreshold = new DIntNumInput(settings);
     d->setAcceptedThreshold->setDefaultValue(5);
     d->setAcceptedThreshold->setRange(1, 100, 1);
     d->setAcceptedThreshold->setWhatsThis(i18n("Threshold above which all pictures are assigned Accepted Label"));
 
-    DHBox* const hbox5 = new DHBox(d->optionsView);
-    QLabel* const lbl5 = new QLabel(i18n("Blur Weight:"), hbox5);
+    QLabel* const lbl5 = new QLabel(i18n("Blur Weight:"), settings);
     lbl5->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setBlurWeight        = new DIntNumInput(hbox5);
+    d->setBlurWeight        = new DIntNumInput(settings);
     d->setBlurWeight->setDefaultValue(5);
     d->setBlurWeight->setRange(1, 100, 1);
     d->setBlurWeight->setWhatsThis(i18n("Weight to assign to Blur Algorithm"));
 
-    DHBox* const hbox6 = new DHBox(d->optionsView);
-    QLabel* const lbl6 = new QLabel(i18n("Noise Weight:"), hbox6);
+    QLabel* const lbl6 = new QLabel(i18n("Noise Weight:"), settings);
     lbl6->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setNoiseWeight       = new DIntNumInput(hbox6);
+    d->setNoiseWeight       = new DIntNumInput(settings);
     d->setNoiseWeight->setDefaultValue(5);
     d->setNoiseWeight->setRange(1, 100, 1);
     d->setNoiseWeight->setWhatsThis(i18n("Weight to assign to Noise Algorithm"));
 
-    DHBox* const hbox7 = new DHBox(d->optionsView);
-    QLabel* const lbl7 = new QLabel(i18n("Compression Weight:"), hbox7);
+    QLabel* const lbl7 = new QLabel(i18n("Compression Weight:"), settings);
     lbl7->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->setCompressionWeight = new DIntNumInput(hbox7);
+    d->setCompressionWeight = new DIntNumInput(settings);
     d->setCompressionWeight->setDefaultValue(5);
     d->setCompressionWeight->setRange(1, 100, 1);
     d->setCompressionWeight->setWhatsThis(i18n("Weight to assign to Compression Algorithm"));
 
-    QWidget* const vspace   = new QWidget(d->optionsView);
-    d->optionsView->setStretchFactor(vspace, 10);
+    glay->addWidget(lbl1,                     0, 0, 1, 1);
+    glay->addWidget(d->setSpeed,              0, 1, 1, 1);
+    glay->addWidget(lbl2,                     1, 0, 1, 1);
+    glay->addWidget(d->setRejectedThreshold,  1, 1, 1, 1);
+    glay->addWidget(lbl3,                     2, 0, 1, 1);
+    glay->addWidget(d->setPendingThreshold,   2, 1, 1, 1);
+    glay->addWidget(lbl4,                     3, 0, 1, 1);
+    glay->addWidget(d->setAcceptedThreshold,  3, 1, 1, 1);
+    glay->addWidget(lbl5,                     4, 0, 1, 1);
+    glay->addWidget(d->setBlurWeight,         4, 1, 1, 1);
+    glay->addWidget(lbl6,                     5, 0, 1, 1);
+    glay->addWidget(d->setNoiseWeight,        5, 1, 1, 1);
+    glay->addWidget(lbl7,                     6, 0, 1, 1);
+    glay->addWidget(d->setCompressionWeight,  6, 1, 1, 1);
+    glay->setRowStretch(7, 10);
 
     connect(d->enableSorter, SIGNAL(toggled(bool)),
             d->optionsView, SLOT(setEnabled(bool)));
