@@ -468,7 +468,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     displayLayout->setColumnStretch(2, 1);
 
     displayPanel->setLayout(displayLayout);
-    d->tab->insertTab(Display, displayPanel, i18nc("@title:tab", "Display"));
+    d->tab->insertTab(Display, displayPanel, i18nc("@title:tab", "Views"));
 
     // --------------------------------------------------------
 
