@@ -3,9 +3,12 @@ digiKam 5.2.0 - Release date: 2016-09-11
 
 NEW FEATURES:
 
-ImageEditor: digiKam editor and Showfoto plugins interface removed to reduce run-time dependancies and speed-up initialization.
-Import     : New configuration options to support gPhoto2 PTP/IP cameras.
-BQM        : New tool to detect and fix red-eyes automatically.
+ImageEditor   : digiKam editor and Showfoto plugins interface removed to reduce run-time dependancies and speed-up initialization.
+Import        : New configuration options to support gPhoto2 PTP/IP cameras.
+BQM           : New tool to detect and fix red-eyes automatically.
+Setup         : Factoring and simplification of Album and Image Editor tabs.
+Documentation : Start to re-write giant handbook based on 5.x release.
+
 
 BUGFIXES FROM BUGZILLA:
 
