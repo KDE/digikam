@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-02-06
- * Description : Editor RAW decoding settings.
+ * Description : setup RAW decoding settings.
  *
  * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,34 +21,30 @@
  *
  * ============================================================ */
 
-#ifndef SETUPRAW_H
-#define SETUPRAW_H
+#ifndef SHOWFOTOSETUPRAW_H
+#define SHOWFOTOSETUPRAW_H
 
 // Qt includes
 
-#include <QObject>
+#include <QScrollArea>
 
-class QTabWidget;
-
-namespace Digikam
+namespace ShowFoto
 {
 
-class SetupRaw : public QObject
+class SetupRaw : public QScrollArea
 {
     Q_OBJECT
 
 public:
 
-    explicit SetupRaw(QTabWidget* const tab);
+    explicit SetupRaw(QWidget* const parent = 0);
     ~SetupRaw();
 
     void applySettings();
+
+private:
+
     void readSettings();
-
-private Q_SLOTS:
-
-    void slotSixteenBitsImageToggled(bool);
-    void slotBehaviorChanged();
 
 private:
 
@@ -56,6 +52,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+}  // namespace ShowFoto
 
-#endif // SETUPRAW_H
+#endif // SHOWFOTOSETUPRAW_H

@@ -57,7 +57,7 @@ public:
         openSimple(0),
         openDefault(0),
         openTool(0),
-        dcrawSettings(0)
+        rawSettings(0)
     {
     }
 
@@ -73,17 +73,17 @@ public:
     QRadioButton*         openDefault;
     QRadioButton*         openTool;
 
-    DRawDecoderWidget*    dcrawSettings;
+    DRawDecoderWidget*    rawSettings;
 };
 
 const QString SetupRaw::Private::configGroupName(QLatin1String("ImageViewer Settings"));
 const QString SetupRaw::Private::configUseRawImportToolEntry(QLatin1String("UseRawImportTool"));
 
-SetupRaw::SetupRaw(QWidget* const parent)
-    : QScrollArea(parent),
+SetupRaw::SetupRaw(QTabWidget* const tab)
+    : QObject(tab),
       d(new Private)
 {
-    d->tab = new QTabWidget;
+    d->tab = tab;
 
     // --------------------------------------------------------
 
@@ -137,21 +137,18 @@ SetupRaw::SetupRaw(QWidget* const parent)
     d->settingsPanel                  = new QWidget;
     QVBoxLayout* const settingsLayout = new QVBoxLayout;
 
-    d->dcrawSettings                  = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
-    d->dcrawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
-    d->dcrawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("bordertool")));
-    d->dcrawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
+    d->rawSettings                    = new DRawDecoderWidget(0, 0 /* no advanced settings shown */);
+    d->rawSettings->setItemIcon(0, QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
+    d->rawSettings->setItemIcon(1, QIcon::fromTheme(QLatin1String("bordertool")));
+    d->rawSettings->setItemIcon(2, QIcon::fromTheme(QLatin1String("lensdistortion")));
 
-    settingsLayout->addWidget(d->dcrawSettings);
+    settingsLayout->addWidget(d->rawSettings);
     d->settingsPanel->setLayout(settingsLayout);
 
     // --------------------------------------------------------
 
-    d->tab->addTab(d->behaviorPanel, i18nc("@title:tab", "Behavior"));
-    d->tab->addTab(d->settingsPanel, i18nc("@title:tab", "Default Settings"));
-
-    setWidget(d->tab);
-    setWidgetResizable(true);
+    d->tab->addTab(d->behaviorPanel, i18nc("@title:tab", "RAW Behavior"));
+    d->tab->addTab(d->settingsPanel, i18nc("@title:tab", "RAW Default Settings"));
 
     // --------------------------------------------------------
 
@@ -164,12 +161,12 @@ SetupRaw::SetupRaw(QWidget* const parent)
     connect(d->openTool, SIGNAL(toggled(bool)),
             this, SLOT(slotBehaviorChanged()));
 
-    connect(d->dcrawSettings, SIGNAL(signalSixteenBitsImageToggled(bool)),
+    connect(d->rawSettings, SIGNAL(signalSixteenBitsImageToggled(bool)),
             this, SLOT(slotSixteenBitsImageToggled(bool)));
 
-    readSettings();
-
     // --------------------------------------------------------
+
+    readSettings();
 }
 
 SetupRaw::~SetupRaw()
@@ -181,14 +178,14 @@ void SetupRaw::slotSixteenBitsImageToggled(bool)
 {
     // Libraw provide a way to set brightness of image in 16 bits color depth.
     // We always set on this option. We drive brightness adjustment in digiKam Raw image loader.
-    d->dcrawSettings->setEnabledBrightnessSettings(true);
+    d->rawSettings->setEnabledBrightnessSettings(true);
 }
 
 void SetupRaw::slotBehaviorChanged()
 {
-    DRawDecoderSettings settings = d->dcrawSettings->settings();
+    DRawDecoderSettings settings = d->rawSettings->settings();
     settings.sixteenBitsImage    = !d->openSimple->isChecked();
-    d->dcrawSettings->setSettings(settings);
+    d->rawSettings->setSettings(settings);
 }
 
 void SetupRaw::applySettings()
@@ -197,7 +194,7 @@ void SetupRaw::applySettings()
     KConfigGroup group        = config->group(d->configGroupName);
     group.writeEntry(d->configUseRawImportToolEntry, d->openTool->isChecked());
 
-    d->dcrawSettings->writeSettings(group);
+    d->rawSettings->writeSettings(group);
 
     config->sync();
 }
@@ -207,7 +204,7 @@ void SetupRaw::readSettings()
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configGroupName);
 
-    d->dcrawSettings->readSettings(group);
+    d->rawSettings->readSettings(group);
 
     bool useTool = group.readEntry(d->configUseRawImportToolEntry, false);
 
@@ -217,7 +214,7 @@ void SetupRaw::readSettings()
     }
     else
     {
-        if (d->dcrawSettings->settings().sixteenBitsImage)
+        if (d->rawSettings->settings().sixteenBitsImage)
         {
             d->openDefault->setChecked(true);
         }

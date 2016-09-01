@@ -55,7 +55,6 @@ public:
         TemplatePage,
         MimePage,
         EditorPage,
-        RawPage,
         ICCPage,
         LightTablePage,
         SlideshowPage,
@@ -72,13 +71,15 @@ public:
 
 public:
 
-    /** Show a setup dialog. The specified page will be selected.
-        True is returned if the dialog was closed with Ok.
+    /*
+     * Show a setup dialog. The specified page will be selected.
+     * True is returned if the dialog was closed with Ok.
      */
     static bool execDialog(Page page = LastPageUsed);
     static bool execDialog(QWidget* const parent, Page page = LastPageUsed);
 
-    /** Show a setup dialog. Only the specified page will be available.
+    /*
+     * Show a setup dialog. Only the specified page will be available.
      */
     static bool execSinglePage(Page page);
     static bool execSinglePage(QWidget* const parent, Page page);

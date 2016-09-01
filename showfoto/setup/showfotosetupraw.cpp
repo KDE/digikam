@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2007-02-06
- * Description : Editor RAW decoding settings.
+ * Description : setup RAW decoding settings.
  *
  * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,41 +21,60 @@
  *
  * ============================================================ */
 
-#ifndef SETUPRAW_H
-#define SETUPRAW_H
+#include "showfotosetupraw.h"
 
 // Qt includes
 
-#include <QObject>
+#include <QTabWidget>
 
-class QTabWidget;
+// Local includes
 
-namespace Digikam
+#include "setupraw.h"
+
+namespace ShowFoto
 {
 
-class SetupRaw : public QObject
+class SetupRaw::Private
 {
-    Q_OBJECT
-
 public:
 
-    explicit SetupRaw(QTabWidget* const tab);
-    ~SetupRaw();
 
-    void applySettings();
-    void readSettings();
+    Private() :
+        tab(0),
+        raw(0)
+    {
+    }
 
-private Q_SLOTS:
-
-    void slotSixteenBitsImageToggled(bool);
-    void slotBehaviorChanged();
-
-private:
-
-    class Private;
-    Private* const d;
+    QTabWidget*        tab;
+    Digikam::SetupRaw* raw;
 };
 
-}  // namespace Digikam
+SetupRaw::SetupRaw(QWidget* const parent)
+    : QScrollArea(parent),
+      d(new Private)
+{
+    d->tab = new QTabWidget;
+    d->raw = new Digikam::SetupRaw(d->tab);
 
-#endif // SETUPRAW_H
+    setWidget(d->tab);
+    setWidgetResizable(true);
+
+    readSettings();
+}
+
+SetupRaw::~SetupRaw()
+{
+    delete d;
+}
+
+void SetupRaw::applySettings()
+{
+    d->raw->applySettings();
+}
+
+void SetupRaw::readSettings()
+{
+    d->raw->readSettings();
+}
+
+}  // namespace ShowFoto

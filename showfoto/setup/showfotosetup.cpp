@@ -36,11 +36,11 @@
 
 // Local includes
 
-#include "setupraw.h"
 #include "setupeditoriface.h"
 #include "setupicc.h"
 #include "setupiofiles.h"
 #include "setupslideshow.h"
+#include "showfotosetupraw.h"
 #include "showfotosetupmisc.h"
 #include "showfotosetupmetadata.h"
 #include "showfotosetuptooltip.h"
@@ -65,8 +65,8 @@ public:
         metadataPage(0),
         toolTipPage(0),
         miscPage(0),
-        editorIfacePage(0),
         rawPage(0),
+        editorIfacePage(0),
         iofilesPage(0),
         slideshowPage(0),
         iccPage(0)
@@ -85,9 +85,9 @@ public:
     SetupMetadata*             metadataPage;
     SetupToolTip*              toolTipPage;
     SetupMisc*                 miscPage;
+    SetupRaw*                  rawPage;
 
     Digikam::SetupEditorIface* editorIfacePage;
-    Digikam::SetupRaw*         rawPage;
     Digikam::SetupIOFiles*     iofilesPage;
     Digikam::SetupSlideShow*   slideshowPage;
     Digikam::SetupICC*         iccPage;
@@ -125,7 +125,7 @@ Setup::Setup(QWidget* const parent, Setup::Page page)
                                     "<i>Customize information in tool-tips</i></qt>"));
     d->page_tooltip->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
 
-    d->rawPage        = new Digikam::SetupRaw();
+    d->rawPage        = new SetupRaw();
     d->page_raw       = addPage(d->rawPage, i18n("RAW Decoding"));
     d->page_raw->setHeader(i18n("<qt>RAW Files Decoding Settings<br/>"
                                   "<i>Customize default RAW decoding settings</i></qt>"));

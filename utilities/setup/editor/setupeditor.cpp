@@ -36,6 +36,7 @@
 #include "setupeditoriface.h"
 #include "setupiofiles.h"
 #include "setupversioning.h"
+#include "setupraw.h"
 
 namespace Digikam
 {
@@ -44,12 +45,12 @@ class SetupEditor::Private
 {
 public:
 
-
     Private() :
         tab(0),
         iface(0),
         iofiles(0),
-        versioning(0)
+        versioning(0),
+        raw(0)
     {
     }
 
@@ -58,6 +59,7 @@ public:
     SetupEditorIface* iface;
     SetupIOFiles*     iofiles;
     SetupVersioning*  versioning;
+    SetupRaw*         raw;
 };
 
 SetupEditor::SetupEditor(QWidget* const parent)
@@ -78,6 +80,8 @@ SetupEditor::SetupEditor(QWidget* const parent)
     d->tab->addTab(d->versioning, i18nc("@title:tab", "Versioning"));
     d->tab->addTab(d->iofiles,    i18nc("@title:tab", "Save Settings"));
 
+    d->raw        = new SetupRaw(d->tab);
+
     // --------------------------------------------------------
 
     setWidget(d->tab);
@@ -95,6 +99,7 @@ void SetupEditor::applySettings()
     d->iface->applySettings();
     d->versioning->applySettings();
     d->iofiles->applySettings();
+    d->raw->applySettings();
 }
 
 void SetupEditor::readSettings()

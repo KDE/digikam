@@ -42,7 +42,6 @@
 #include "setupalbumview.h"
 #include "setupcamera.h"
 #include "setupcollections.h"
-#include "setupraw.h"
 #include "setupeditor.h"
 #include "setupicc.h"
 #include "setuplighttable.h"
@@ -79,7 +78,6 @@ public:
         page_mime(0),
         page_lighttable(0),
         page_editor(0),
-        page_raw(0),
         page_slideshow(0),
         page_imagequalitysorter(0),
         page_icc(0),
@@ -99,7 +97,6 @@ public:
         mimePage(0),
         lighttablePage(0),
         editorPage(0),
-        rawPage(0),
         slideshowPage(0),
         imageQualitySorterPage(0),
         iccPage(0),
@@ -122,7 +119,6 @@ public:
     DConfigDlgWdgItem*       page_mime;
     DConfigDlgWdgItem*       page_lighttable;
     DConfigDlgWdgItem*       page_editor;
-    DConfigDlgWdgItem*       page_raw;
     DConfigDlgWdgItem*       page_slideshow;
     DConfigDlgWdgItem*       page_imagequalitysorter;
     DConfigDlgWdgItem*       page_icc;
@@ -142,7 +138,6 @@ public:
     SetupMime*               mimePage;
     SetupLightTable*         lighttablePage;
     SetupEditor*             editorPage;
-    SetupRaw*                rawPage;
     SetupSlideShow*          slideshowPage;
     SetupImageQualitySorter* imageQualitySorterPage;
     SetupICC*                iccPage;
@@ -216,12 +211,6 @@ Setup::Setup(QWidget* const parent)
     d->page_editor->setHeader(i18n("<qt>Image Editor Settings<br/>"
                                    "<i>Customize the image editor settings</i></qt>"));
     d->page_editor->setIcon(QIcon::fromTheme(QLatin1String("document-edit")));
-
-    d->rawPage  = new SetupRaw();
-    d->page_raw = addPage(d->rawPage, i18n("RAW Decoding"));
-    d->page_raw->setHeader(i18n("<qt>RAW Files Decoding<br/>"
-                                "<i>Configure RAW files decoding settings and behavior</i></qt>"));
-    d->page_raw->setIcon(QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
 
     d->iccPage  = new SetupICC(buttonBox());
     d->page_icc = addPage(d->iccPage, i18n("Color Management"));
@@ -345,7 +334,6 @@ QSize Setup::sizeHint() const
             page == MimePage        ||
             page == LightTablePage  ||
             page == EditorPage      ||
-            page == RawPage         ||
             page == MiscellaneousPage)
         {
             DConfigDlgWdgItem* const item   = d->pageItem((Page)page);
@@ -456,7 +444,6 @@ void Setup::slotOkClicked()
     d->mimePage->applySettings();
     d->lighttablePage->applySettings();
     d->editorPage->applySettings();
-    d->rawPage->applySettings();
     d->slideshowPage->applySettings();
     d->imageQualitySorterPage->applySettings();
     d->iccPage->applySettings();
@@ -560,11 +547,6 @@ Setup::Page Setup::activePageIndex() const
         return EditorPage;
     }
 
-    if (cur == d->page_raw)
-    {
-        return RawPage;
-    }
-
     if (cur == d->page_slideshow)
     {
         return SlideshowPage;
@@ -630,9 +612,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::EditorPage:
             return page_editor;
-
-        case Setup::RawPage:
-            return page_raw;
 
         case Setup::SlideshowPage:
             return page_slideshow;

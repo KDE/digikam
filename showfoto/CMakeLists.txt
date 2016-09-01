@@ -28,6 +28,7 @@ set(showfoto_SRCS
     setup/showfotosetuptooltip.cpp
     setup/showfotosetupmisc.cpp
     setup/showfotosetupmetadata.cpp
+    setup/showfotosetupraw.cpp
     setup/showfotosetup.cpp
 
     thumbbar/showfotoiteminfo.cpp
