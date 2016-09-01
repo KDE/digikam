@@ -109,12 +109,12 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* const miscOptionsGroup = new QGroupBox(i18n("Behavior"), panel);
     QVBoxLayout* const gLayout5       = new QVBoxLayout();
 
-    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), miscOptionsGroup);
-    d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"), miscOptionsGroup);
-    d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"), miscOptionsGroup);
+    d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"),                        miscOptionsGroup);
     d->showMimeOverImage->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
-    d->showCoordinates   = new QCheckBox(i18n("&Show Geolocation Indicator"), miscOptionsGroup);
+    d->showCoordinates   = new QCheckBox(i18n("&Show Geolocation Indicator"),               miscOptionsGroup);
     d->showCoordinates->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
+    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), miscOptionsGroup);
+    d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"),            miscOptionsGroup);
 
     DHBox* const tabStyleHbox = new DHBox(miscOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
@@ -202,8 +202,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    layout->addWidget(miscOptionsGroup);
     layout->addWidget(sortOptionsGroup);
+    layout->addWidget(miscOptionsGroup);
     layout->addStretch();
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);

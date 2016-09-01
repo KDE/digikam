@@ -194,16 +194,16 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);
+    layout->addWidget(stringComparisonHbox);
+    layout->addWidget(d->scanAtStart);
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
     layout->addWidget(d->scrollItemToCenterCheck);
     layout->addWidget(d->showSplashCheck);
-    layout->addWidget(d->scanAtStart);
     layout->addWidget(tabStyleHbox);
     layout->addWidget(appStyleHbox);
     layout->addWidget(iconThemeHbox);
-    layout->addWidget(stringComparisonHbox);
     layout->addStretch();
 
     readSettings();
