@@ -88,19 +88,24 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     // --------------------------------------------------------
 
-    QGroupBox* const ExifGroup  = new QGroupBox(i18n("Rotate actions"), panel);
-    QVBoxLayout* const gLayout1 = new QVBoxLayout(ExifGroup);
+    QGroupBox* const   rotationAdvGroup  = new QGroupBox(panel);
+    QGridLayout* const rotationAdvLayout = new QGridLayout(rotationAdvGroup);
 
-    d->exifRotateBox            = new QCheckBox(ExifGroup);
+    QLabel* const rotationAdvExpl  = new QLabel(i18nc("@label", "Rotate actions"));
+    QLabel* const rotationAdvIcon  = new QLabel;
+    rotationAdvIcon->setPixmap(QIcon::fromTheme(QLatin1String("configure")).pixmap(32));
+
+    d->exifRotateBox         = new QCheckBox(rotationAdvGroup);
     d->exifRotateBox->setText(i18n("Show images/thumbnails &rotated according to orientation tag."));
-
-    d->exifSetOrientationBox    = new QCheckBox(ExifGroup);
+    d->exifSetOrientationBox = new QCheckBox(rotationAdvGroup);
     d->exifSetOrientationBox->setText(i18n("Set orientation tag to normal after rotate/flip."));
 
-    gLayout1->addWidget(d->exifRotateBox);
-    gLayout1->addWidget(d->exifSetOrientationBox);
-    gLayout1->setContentsMargins(spacing, spacing, spacing, spacing);
-    gLayout1->setSpacing(0);
+    rotationAdvLayout->addWidget(rotationAdvIcon,          0, 0, 1, 1);
+    rotationAdvLayout->addWidget(rotationAdvExpl,          0, 1, 1, 1);
+    rotationAdvLayout->addWidget(d->exifRotateBox,         1, 0, 1, 3);
+    rotationAdvLayout->addWidget(d->exifSetOrientationBox, 2, 0, 1, 3);
+    rotationAdvLayout->setColumnStretch(2, 10);
+    rotationAdvGroup->setLayout(rotationAdvLayout);
 
     // --------------------------------------------------------
 
@@ -145,7 +150,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
 
     mainLayout->setContentsMargins(QMargins());
     mainLayout->setSpacing(spacing);
-    mainLayout->addWidget(ExifGroup);
+    mainLayout->addWidget(rotationAdvGroup);
     mainLayout->addSpacing(spacing);
     mainLayout->addWidget(box);
     mainLayout->addStretch();
