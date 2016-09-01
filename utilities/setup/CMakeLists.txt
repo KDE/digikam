@@ -12,9 +12,9 @@ endif (POLICY CMP0063)
 set(libsetupshowfoto_SRCS
     editor/setupeditoriface.cpp
     editor/setupiofiles.cpp
+    editor/setupraw.cpp
     setupicc.cpp
     setupslideshow.cpp
-    setupraw.cpp
 )
 
 set(libsetup_SRCS
@@ -28,12 +28,12 @@ set(libsetup_SRCS
     setuplighttable.cpp
     setupdatabase.cpp
     setupimagequalitysorter.cpp
-    setupraw.cpp
 
     editor/setupeditor.cpp
     editor/setupeditoriface.cpp
     editor/setupiofiles.cpp
     editor/setupversioning.cpp
+    editor/setupraw.cpp
 
     album/setupalbumview.cpp
     album/setupcategory.cpp
