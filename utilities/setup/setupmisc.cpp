@@ -94,36 +94,10 @@ SetupMisc::SetupMisc(QWidget* const parent)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QWidget* const panel = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
+    QVBoxLayout* const layout = new QVBoxLayout(panel);
     setWidget(panel);
     setWidgetResizable(true);
-
-    // --------------------------------------------------------
-
-    QVBoxLayout* const layout         = new QVBoxLayout(panel);
-    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
-    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
-    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
-    d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), panel);
-    d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), panel);
-    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
-    d->scanAtStart->setToolTip(i18n("Set this option to force digiKam to scan all collections for new items to\n"
-                                    "register new elements in database. The scan is performed in the background through\n"
-                                    "the progress manager available in the statusbar\n when digiKam main interface\n"
-                                    "is loaded. If your computer is fast enough, this will have no effect on usability\n"
-                                    "of digiKam while scanning. If your collections are huge or if you use a remote database,\n"
-                                    "this can introduce low latency, and it's recommended to disable this option and to plan\n"
-                                    "a manual scan through the maintenance tool at the right moment."));
-
-    // --------------------------------------------------------
-
-    DHBox* const tabStyleHbox = new DHBox(panel);
-    d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
-    d->sidebarType            = new QComboBox(tabStyleHbox);
-    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
-    d->sidebarType->addItem(i18n("For All Tabs"),        1);
-    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible. "
-                                    "Use \"Only For Active Tab\" option if you use a small screen resolution as with a laptop computer."));
 
     // --------------------------------------------------------
 
@@ -142,7 +116,35 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    DHBox* const appStyleHbox = new DHBox(panel);
+    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
+    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
+    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
+    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
+    d->scanAtStart->setToolTip(i18n("Set this option to force digiKam to scan all collections for new items to\n"
+                                    "register new elements in database. The scan is performed in the background through\n"
+                                    "the progress manager available in the statusbar\n when digiKam main interface\n"
+                                    "is loaded. If your computer is fast enough, this will have no effect on usability\n"
+                                    "of digiKam while scanning. If your collections are huge or if you use a remote database,\n"
+                                    "this can introduce low latency, and it's recommended to disable this option and to plan\n"
+                                    "a manual scan through the maintenance tool at the right moment."));
+
+    // -- Application Behavior Options --------------------------------------------------------
+
+    QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
+    QVBoxLayout* const gLayout5     = new QVBoxLayout();
+
+    d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
+    d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
+
+    DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
+    d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
+    d->sidebarType            = new QComboBox(tabStyleHbox);
+    d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
+    d->sidebarType->addItem(i18n("For All Tabs"),        1);
+    d->sidebarType->setToolTip(i18n("Set this option to configure how sidebar tab titles are visible. "
+                                    "Use \"Only For Active Tab\" option if you use a small screen resolution as with a laptop computer."));
+
+    DHBox* const appStyleHbox = new DHBox(abOptionsGroup);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
@@ -159,9 +161,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     appStyleHbox->setVisible(false);
 #endif
 
-    // --------------------------------------------------------
-
-    DHBox* const iconThemeHbox = new DHBox(panel);
+    DHBox* const iconThemeHbox = new DHBox(abOptionsGroup);
     d->iconThemeLabel          = new QLabel(i18n("Icon theme (changes after restart):"), iconThemeHbox);
     d->iconTheme               = new QComboBox(iconThemeHbox);
     d->iconTheme->setToolTip(i18n("Set this option to choose the default icon theme."));
@@ -190,6 +190,13 @@ SetupMisc::SetupMisc(QWidget* const parent)
         }
     }
 
+    gLayout5->addWidget(d->scrollItemToCenterCheck);
+    gLayout5->addWidget(d->showSplashCheck);
+    gLayout5->addWidget(tabStyleHbox);
+    gLayout5->addWidget(appStyleHbox);
+    gLayout5->addWidget(iconThemeHbox);
+    abOptionsGroup->setLayout(gLayout5);
+
     // --------------------------------------------------------
 
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -199,11 +206,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
-    layout->addWidget(d->scrollItemToCenterCheck);
-    layout->addWidget(d->showSplashCheck);
-    layout->addWidget(tabStyleHbox);
-    layout->addWidget(appStyleHbox);
-    layout->addWidget(iconThemeHbox);
+    layout->addWidget(abOptionsGroup);
     layout->addStretch();
 
     readSettings();
