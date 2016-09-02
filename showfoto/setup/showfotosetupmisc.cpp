@@ -104,26 +104,58 @@ SetupMisc::SetupMisc(QWidget* const parent)
     const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
-    // -- Misc Options --------------------------------------------------------
+    // -- Sort Order Options --------------------------------------------------------
 
-    QGroupBox* const miscOptionsGroup = new QGroupBox(i18n("Behavior"), panel);
-    QVBoxLayout* const gLayout5       = new QVBoxLayout();
+    QGroupBox* const sortOptionsGroup = new QGroupBox(i18n("Images Sort Order"), panel);
+    QVBoxLayout* const gLayout4       = new QVBoxLayout();
 
-    d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"),                        miscOptionsGroup);
+    DHBox* const sortBox = new DHBox(sortOptionsGroup);
+    new QLabel(i18n("Sort images by:"), sortBox);
+    d->sortOrderComboBox = new QComboBox(sortBox);
+    d->sortOrderComboBox->insertItem(SortByDate,     i18nc("sort images by date", "Date"));
+    d->sortOrderComboBox->insertItem(SortByName,     i18nc("sort images by name", "Name"));
+    d->sortOrderComboBox->insertItem(SortByFileSize, i18nc("sort images by size", "File Size"));
+    d->sortOrderComboBox->setWhatsThis(i18n("Here, select whether newly-loaded "
+                                            "images are sorted by their date, name, or size on disk."));
+
+    d->sortReverse = new QCheckBox(i18n("Reverse ordering"), sortOptionsGroup);
+    d->sortReverse->setWhatsThis(i18n("If this option is enabled, newly-loaded "
+                                      "images will be sorted in descending order."));
+
+    gLayout4->addWidget(sortBox);
+    gLayout4->addWidget(d->sortReverse);
+    sortOptionsGroup->setLayout(gLayout4);
+
+    // Thumbnails Options ----------------------------------------------------------------------
+
+    QGroupBox* const thOptionsGroup = new QGroupBox(i18n("Thumbnails"), panel);
+    QVBoxLayout* const gLayout3     = new QVBoxLayout();
+
+    d->showMimeOverImage = new QCheckBox(i18n("&Show image Format"),          thOptionsGroup);
     d->showMimeOverImage->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
-    d->showCoordinates   = new QCheckBox(i18n("&Show Geolocation Indicator"),               miscOptionsGroup);
+    d->showCoordinates   = new QCheckBox(i18n("&Show Geolocation Indicator"), thOptionsGroup);
     d->showCoordinates->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
-    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), miscOptionsGroup);
-    d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"),            miscOptionsGroup);
 
-    DHBox* const tabStyleHbox = new DHBox(miscOptionsGroup);
+    gLayout3->addWidget(d->showMimeOverImage);
+    gLayout3->addWidget(d->showCoordinates);
+    thOptionsGroup->setLayout(gLayout3);
+
+    // -- Application Behavior Options --------------------------------------------------------
+
+    QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
+    QVBoxLayout* const gLayout5     = new QVBoxLayout();
+
+    d->itemCenter        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
+    d->showSplash        = new QCheckBox(i18n("&Show splash screen at startup"),            abOptionsGroup);
+
+    DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
     d->sidebarType->addItem(i18n("Only For Active Tab"), 0);
     d->sidebarType->addItem(i18n("For All Tabs"),        1);
     d->sidebarType->setToolTip(i18n("Set this option to configure how sidebars tab title are visible."));
 
-    DHBox* const appStyleHbox = new DHBox(miscOptionsGroup);
+    DHBox* const appStyleHbox = new DHBox(abOptionsGroup);
     d->applicationStyleLabel  = new QLabel(i18n("Widget style:"), appStyleHbox);
     d->applicationStyle       = new QComboBox(appStyleHbox);
     d->applicationStyle->setToolTip(i18n("Set this option to choose the default window decoration and looks."));
@@ -171,39 +203,16 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     gLayout5->addWidget(d->itemCenter);
     gLayout5->addWidget(d->showSplash);
-    gLayout5->addWidget(d->showMimeOverImage);
-    gLayout5->addWidget(d->showCoordinates);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     gLayout5->addWidget(iconThemeHbox);
-    miscOptionsGroup->setLayout(gLayout5);
-
-    // -- Sort Order Options --------------------------------------------------------
-
-    QGroupBox* const sortOptionsGroup = new QGroupBox(i18n("Sort order for images"), panel);
-    QVBoxLayout* const gLayout4       = new QVBoxLayout();
-
-    DHBox* const sortBox = new DHBox(sortOptionsGroup);
-    new QLabel(i18n("Sort images by:"), sortBox);
-    d->sortOrderComboBox = new QComboBox(sortBox);
-    d->sortOrderComboBox->insertItem(SortByDate,     i18nc("sort images by date", "Date"));
-    d->sortOrderComboBox->insertItem(SortByName,     i18nc("sort images by name", "Name"));
-    d->sortOrderComboBox->insertItem(SortByFileSize, i18nc("sort images by size", "File Size"));
-    d->sortOrderComboBox->setWhatsThis(i18n("Here, select whether newly-loaded "
-                                            "images are sorted by their date, name, or size on disk."));
-
-    d->sortReverse = new QCheckBox(i18n("Reverse ordering"), sortOptionsGroup);
-    d->sortReverse->setWhatsThis(i18n("If this option is enabled, newly-loaded "
-                                      "images will be sorted in descending order."));
-
-    gLayout4->addWidget(sortBox);
-    gLayout4->addWidget(d->sortReverse);
-    sortOptionsGroup->setLayout(gLayout4);
+    abOptionsGroup->setLayout(gLayout5);
 
     // --------------------------------------------------------
 
     layout->addWidget(sortOptionsGroup);
-    layout->addWidget(miscOptionsGroup);
+    layout->addWidget(thOptionsGroup);
+    layout->addWidget(abOptionsGroup);
     layout->addStretch();
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);
