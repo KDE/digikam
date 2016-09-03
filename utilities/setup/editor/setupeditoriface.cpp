@@ -81,24 +81,24 @@ public:
     static const QString  configOverExposurePercentsEntry;
     static const QString  configExpoIndicatorModeEntry;
 
-    QCheckBox*          themebackgroundColor;
-    QCheckBox*          expoIndicatorMode;
+    QCheckBox*            themebackgroundColor;
+    QCheckBox*            expoIndicatorMode;
 
-    QLabel*             expoPreview;
+    QLabel*               expoPreview;
 
-    DHBox*              colorBox;
-    DColorSelector*     backgroundColor;
-    DColorSelector*     underExposureColor;
-    DColorSelector*     overExposureColor;
+    DHBox*                colorBox;
+    DColorSelector*       backgroundColor;
+    DColorSelector*       underExposureColor;
+    DColorSelector*       overExposureColor;
 
-    HistogramWidget*    expoPreviewHisto;
+    HistogramWidget*      expoPreviewHisto;
 
-    FullScreenSettings* fullScreenSettings;
+    FullScreenSettings*   fullScreenSettings;
 
-    DImg                preview;
+    DImg                  preview;
 
-    DDoubleNumInput*    underExposurePcents;
-    DDoubleNumInput*    overExposurePcents;
+    DDoubleNumInput*      underExposurePcents;
+    DDoubleNumInput*      overExposurePcents;
 };
 
 const QString SetupEditorIface::Private::configGroupName(QLatin1String("ImageViewer Settings"));
@@ -147,23 +147,21 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->fullScreenSettings            = new FullScreenSettings(FS_EDITOR, panel);
+    d->fullScreenSettings = new FullScreenSettings(FS_EDITOR, panel);
 
     // --------------------------------------------------------
 
     QGroupBox* const exposureOptionsGroup = new QGroupBox(i18n("Exposure Indicators"), panel);
-    QVBoxLayout* const gLayout2           = new QVBoxLayout(exposureOptionsGroup);
+    QGridLayout* const gLayout2           = new QGridLayout(exposureOptionsGroup);
 
-    DHBox* const underExpoBox             = new DHBox(exposureOptionsGroup);
-    QLabel* const underExpoColorlabel     = new QLabel(i18n("&Under-exposure color: "), underExpoBox);
-    d->underExposureColor                 = new DColorSelector(underExpoBox);
+    QLabel* const underExpoColorlabel     = new QLabel(i18n("&Under-exposure color: "), exposureOptionsGroup);
+    d->underExposureColor                 = new DColorSelector(exposureOptionsGroup);
     underExpoColorlabel->setBuddy(d->underExposureColor);
     d->underExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                              "under-exposed pixels."));
 
-    DHBox* const underPcentBox        = new DHBox(exposureOptionsGroup);
-    QLabel* const underExpoPcentlabel = new QLabel(i18n("Under-exposure percents: "), underPcentBox);
-    d->underExposurePcents            = new DDoubleNumInput(underPcentBox);
+    QLabel* const underExpoPcentlabel = new QLabel(i18n("Under-exposure percents: "), exposureOptionsGroup);
+    d->underExposurePcents            = new DDoubleNumInput(exposureOptionsGroup);
     d->underExposurePcents->setDecimals(1);
     d->underExposurePcents->setRange(0.1, 5.0, 0.1);
     d->underExposurePcents->setDefaultValue(1.0);
@@ -171,16 +169,14 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
     d->underExposurePcents->setWhatsThis(i18n("Adjust the percents of the bottom of image histogram "
                                               "which will be used to check under exposed pixels."));
 
-    DHBox* const overExpoBox         = new DHBox(exposureOptionsGroup);
-    QLabel* const overExpoColorlabel = new QLabel(i18n("&Over-exposure color: "), overExpoBox);
-    d->overExposureColor             = new DColorSelector(overExpoBox);
+    QLabel* const overExpoColorlabel = new QLabel(i18n("&Over-exposure color: "), exposureOptionsGroup);
+    d->overExposureColor             = new DColorSelector(exposureOptionsGroup);
     overExpoColorlabel->setBuddy(d->overExposureColor);
     d->overExposureColor->setWhatsThis(i18n("Customize color used in image editor to identify "
                                             "over-exposed pixels."));
 
-    DHBox* const overPcentBox        = new DHBox(exposureOptionsGroup);
-    QLabel* const overExpoPcentlabel = new QLabel(i18n("Over-exposure percents: "), overPcentBox);
-    d->overExposurePcents            = new DDoubleNumInput(overPcentBox);
+    QLabel* const overExpoPcentlabel = new QLabel(i18n("Over-exposure percents: "), exposureOptionsGroup);
+    d->overExposurePcents            = new DDoubleNumInput(exposureOptionsGroup);
     d->overExposurePcents->setDecimals(1);
     d->overExposurePcents->setRange(0.1, 5.0, 0.1);
     d->overExposurePcents->setDefaultValue(1.0);
@@ -189,16 +185,14 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
                                              "which will be used to check over exposed pixels."));
 
     d->expoIndicatorMode = new QCheckBox(i18n("Indicate exposure as pure color"), exposureOptionsGroup);
-    d->overExposureColor->setWhatsThis(i18n("If this option is enabled, over- and under-exposure indicators will be displayed "
+    d->expoIndicatorMode->setWhatsThis(i18n("If this option is enabled, over- and under-exposure indicators will be displayed "
                                             "only when pure white and pure black color matches, as all color components match "
                                             "the condition in the same time. "
                                             "Otherwise, indicators are turned on when one of the color components matches the condition."));
 
     QLabel* const exampleLabel = new QLabel(i18n("Example:"), exposureOptionsGroup);
-    DHBox* const previewHBox   = new DHBox(exposureOptionsGroup);
-    d->expoPreview             = new QLabel(previewHBox);
-    QLabel* const space        = new QLabel(previewHBox);
-    d->expoPreviewHisto        = new HistogramWidget(256, 128, previewHBox, false, false);
+    d->expoPreview             = new QLabel(exposureOptionsGroup);
+    d->expoPreviewHisto        = new HistogramWidget(256, 128, exposureOptionsGroup, false, false);
     d->preview                 = DImg(QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("digikam/data/sample-aix.png")));
 
     if (!d->preview.isNull())
@@ -208,17 +202,22 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
 
     d->expoPreviewHisto->setChannelType(ColorChannels);
     d->expoPreview->setFrameStyle(QFrame::Box | QFrame::Plain);
-    previewHBox->setStretchFactor(space, 10);
 
-    gLayout2->addWidget(underExpoBox);
-    gLayout2->addWidget(underPcentBox);
-    gLayout2->addWidget(overExpoBox);
-    gLayout2->addWidget(overPcentBox);
-    gLayout2->addWidget(d->expoIndicatorMode);
-    gLayout2->addWidget(exampleLabel);
-    gLayout2->addWidget(previewHBox);
-    gLayout2->setContentsMargins(spacing, spacing, spacing, spacing);
+    gLayout2->addWidget(underExpoColorlabel,    0, 0, 1, 2);
+    gLayout2->addWidget(d->underExposureColor,  0, 2, 1, 1);
+    gLayout2->addWidget(underExpoPcentlabel,    1, 0, 1, 2);
+    gLayout2->addWidget(d->underExposurePcents, 1, 2, 1, 1);
+    gLayout2->addWidget(overExpoColorlabel,     2, 0, 1, 2);
+    gLayout2->addWidget(d->overExposureColor,   2, 2, 1, 1);
+    gLayout2->addWidget(overExpoPcentlabel,     3, 0, 1, 2);
+    gLayout2->addWidget(d->overExposurePcents,  3, 2, 1, 1);
+    gLayout2->addWidget(d->expoIndicatorMode,   4, 0, 1, 2);
+    gLayout2->addWidget(exampleLabel,           5, 0, 1, 2);
+    gLayout2->addWidget(d->expoPreview,         6, 0, 1, 1);
+    gLayout2->addWidget(d->expoPreviewHisto,    6, 2, 1, 1);
+    gLayout2->setColumnStretch(1, 10);
     gLayout2->setSpacing(spacing);
+    gLayout2->setContentsMargins(spacing, spacing, spacing, spacing);
 
     // --------------------------------------------------------
 
@@ -226,7 +225,7 @@ SetupEditorIface::SetupEditorIface(QWidget* const parent)
     layout->addWidget(d->fullScreenSettings);
     layout->addWidget(exposureOptionsGroup);
     layout->addStretch();
-    layout->setContentsMargins(QMargins());
+    layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);
 
     // --------------------------------------------------------
