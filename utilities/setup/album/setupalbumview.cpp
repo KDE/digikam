@@ -189,7 +189,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
                                               "below the image thumbnail."));
 
     d->iconShowTagsBox        = new QCheckBox(i18n("Show digiKam &tags"), iwpanel);
-    d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags "
+    d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags list "
                                           "below the image thumbnail."));
 
     d->iconShowRatingBox      = new QCheckBox(i18n("Show digiKam &rating"), iwpanel);
@@ -197,15 +197,15 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
                                             "below the image thumbnail."));
 
     d->iconShowOverlaysBox    = new QCheckBox(i18n("Show rotation overlay buttons"), iwpanel);
-    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons on "
-                                              "the image thumbnail for image rotation."));
+    d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons over "
+                                              "the image thumbnail to be able to process left or right image rotation."));
 
     d->iconShowFullscreenBox  = new QCheckBox(i18n("Show fullscreen overlay button"), iwpanel);
-    d->iconShowFullscreenBox->setWhatsThis(i18n("Set this option to show an overlay button on the "
-                                                "image thumbnail to open it in fullscreen."));
+    d->iconShowFullscreenBox->setWhatsThis(i18n("Set this option to show an overlay button over the "
+                                                "image thumbnail to open it in fullscreen mode."));
 
     d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iwpanel);
-    d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to indicate if image has geolocation information."));
+    d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to show an icon over the image thumbnail if item has geolocation information."));
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iwpanel);
     d->leftClickActionComboBox = new QComboBox(iwpanel);
@@ -214,7 +214,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
     d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), iwpanel);
-    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in Icon Views."));
+    d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in icon views."));
 
     d->largeThumbsBox = new QCheckBox(i18n("Use large thumbnail size for high screen resolution"), iwpanel);
     d->largeThumbsBox->setWhatsThis(i18n("Set this option to render icon-view with large thumbnail size, for example in case of 4K monitor is used.\n"
