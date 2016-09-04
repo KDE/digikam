@@ -96,7 +96,8 @@ SetupMime::SetupMime(QWidget* const parent)
     // --------------------------------------------------------
 
     QLabel* const explanationLabel = new QLabel;
-    explanationLabel->setText(i18n("<p>digiKam attempts to support all of the image formats that digital cameras produce, "
+    explanationLabel->setText(i18n("<p>Add new file types to show as album items. "
+                                   "<p>digiKam attempts to support all of the image formats that digital cameras produce, "
                                    "while being able to handle a few other important video and audio formats.</p> "
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "
                                    "adding the extension of the type you want to add. Multiple extensions need to be separated by a space.</p>"));
@@ -135,7 +136,7 @@ SetupMime::SetupMime(QWidget* const parent)
     grid1->addWidget(d->imageFileFilterLabel, 0, 1, 1, 1);
     grid1->addWidget(hbox1,                   1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
-    grid1->setContentsMargins(spacing, spacing, spacing, spacing);
+    //grid1->setContentsMargins(spacing, spacing, spacing, spacing);
     grid1->setSpacing(spacing);
 
     // --------------------------------------------------------
@@ -173,7 +174,7 @@ SetupMime::SetupMime(QWidget* const parent)
     grid2->addWidget(d->movieFileFilterLabel,   0, 1, 1, 1);
     grid2->addWidget(hbox2,                     1, 1, 1, 1);
     grid2->setColumnStretch(1, 10);
-    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    //grid2->setContentsMargins(spacing, spacing, spacing, spacing);
     grid2->setSpacing(spacing);
 
     // --------------------------------------------------------
@@ -211,7 +212,7 @@ SetupMime::SetupMime(QWidget* const parent)
     grid3->addWidget(d->audioFileFilterLabel, 0, 1, 1, 1);
     grid3->addWidget(hbox3,                   1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
-    grid3->setContentsMargins(spacing, spacing, spacing, spacing);
+    //grid3->setContentsMargins(spacing, spacing, spacing, spacing);
     grid3->setSpacing(spacing);
 
     // --------------------------------------------------------
@@ -292,8 +293,8 @@ void SetupMime::applySettings()
     }
 
     CoreDbAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
-                                                 d->movieFileFilterEdit->text(),
-                                                 d->audioFileFilterEdit->text());
+                                               d->movieFileFilterEdit->text(),
+                                               d->audioFileFilterEdit->text());
 }
 
 void SetupMime::readSettings()

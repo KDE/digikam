@@ -44,6 +44,7 @@ public:
         FolderView,
         Preview,
         FullScreen,
+        MimeType,
         Category
     };
 

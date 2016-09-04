@@ -22,7 +22,6 @@ set(libsetup_SRCS
     setup.cpp
     setuptooltip.cpp
     setuptemplate.cpp
-    setupmime.cpp
     setupslideshow.cpp
     setupmisc.cpp
     setuplighttable.cpp
@@ -37,6 +36,7 @@ set(libsetup_SRCS
 
     album/setupalbumview.cpp
     album/setupcategory.cpp
+    album/setupmime.cpp
 
     metadata/setupmetadata.cpp
     metadata/advancedmetadatatab.cpp

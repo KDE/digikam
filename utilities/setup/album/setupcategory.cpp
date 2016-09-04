@@ -87,6 +87,10 @@ SetupCategory::SetupCategory(QWidget* const parent)
     const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QGridLayout* const grid = new QGridLayout(panel);
 
+    QLabel* const explanationLabel = new QLabel(panel);
+    explanationLabel->setText(i18n("Manage categories to sort and re-arrange album tree-view."));
+    explanationLabel->setWordWrap(true);
+
     // --------------------------------------------------------
 
     d->categoryEdit     = new QLineEdit(panel);
@@ -110,12 +114,13 @@ SetupCategory::SetupCategory(QWidget* const parent)
     d->repCategoryButton->setEnabled(false);
 
     grid->setAlignment(Qt::AlignTop);
-    grid->addWidget(d->categoryEdit,      0, 0, 1, 1);
-    grid->addWidget(d->albumCategoryBox,  1, 0, 5, 1);
-    grid->addWidget(d->addCategoryButton, 1, 1, 1, 1);
-    grid->addWidget(d->delCategoryButton, 2, 1, 1, 1);
-    grid->addWidget(d->repCategoryButton, 3, 1, 1, 1);
-    grid->setRowStretch(4, 10);
+    grid->addWidget(explanationLabel,     0, 0, 1, 1);
+    grid->addWidget(d->categoryEdit,      1, 0, 1, 1);
+    grid->addWidget(d->albumCategoryBox,  2, 0, 5, 1);
+    grid->addWidget(d->addCategoryButton, 2, 1, 1, 1);
+    grid->addWidget(d->delCategoryButton, 3, 1, 1, 1);
+    grid->addWidget(d->repCategoryButton, 4, 1, 1, 1);
+    grid->setRowStretch(5, 10);
     grid->setColumnStretch(0, 10);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);

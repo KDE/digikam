@@ -53,6 +53,7 @@
 #include "dxmlguiwindow.h"
 #include "previewsettings.h"
 #include "setupcategory.h"
+#include "setupmime.h"
 
 namespace Digikam
 {
@@ -92,7 +93,8 @@ public:
         iconViewFontSelect(0),
         treeViewFontSelect(0),
         fullScreenSettings(0),
-        category(0)
+        category(0),
+        mimetype(0)
     {
     }
 
@@ -134,6 +136,7 @@ public:
     FullScreenSettings* fullScreenSettings;
 
     SetupCategory*      category;
+    SetupMime*          mimetype;
 };
 
 SetupAlbumView::SetupAlbumView(QWidget* const parent)
@@ -334,8 +337,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
+    d->mimetype  = new SetupMime();
+    d->tab->insertTab(MimeType, d->mimetype, i18nc("@title:tab", "Mime Types"));
+
     d->category  = new SetupCategory(d->tab);
-    d->tab->insertTab(Category, d->category, i18nc("@title:tab", "Category"));
+    d->tab->insertTab(Category, d->category, i18nc("@title:tab", "Categories"));
 
     // --------------------------------------------------------
 
@@ -402,6 +408,7 @@ void SetupAlbumView::applySettings()
     d->fullScreenSettings->saveSettings(group);
 
     d->category->applySettings();
+    d->mimetype->applySettings();
 
     // Method ThumbnailSize::setUseLargeThumbs() is not called here to prevent
     // dysfunction between Thumbs DB and icon if
@@ -481,6 +488,7 @@ void SetupAlbumView::readSettings()
     d->largeThumbsBox->setChecked(d->useLargeThumbsOriginal);
 
     d->category->readSettings();
+    d->mimetype->readSettings();
 }
 
 bool SetupAlbumView::useLargeThumbsHasChanged() const

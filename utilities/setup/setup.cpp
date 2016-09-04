@@ -46,7 +46,6 @@
 #include "setupicc.h"
 #include "setuplighttable.h"
 #include "setupmetadata.h"
-#include "setupmime.h"
 #include "setupmisc.h"
 #include "setupslideshow.h"
 #include "setupimagequalitysorter.h"
@@ -75,7 +74,6 @@ public:
         page_tooltip(0),
         page_metadata(0),
         page_template(0),
-        page_mime(0),
         page_lighttable(0),
         page_editor(0),
         page_slideshow(0),
@@ -94,7 +92,6 @@ public:
         tooltipPage(0),
         metadataPage(0),
         templatePage(0),
-        mimePage(0),
         lighttablePage(0),
         editorPage(0),
         slideshowPage(0),
@@ -116,7 +113,6 @@ public:
     DConfigDlgWdgItem*       page_tooltip;
     DConfigDlgWdgItem*       page_metadata;
     DConfigDlgWdgItem*       page_template;
-    DConfigDlgWdgItem*       page_mime;
     DConfigDlgWdgItem*       page_lighttable;
     DConfigDlgWdgItem*       page_editor;
     DConfigDlgWdgItem*       page_slideshow;
@@ -135,7 +131,6 @@ public:
     SetupToolTip*            tooltipPage;
     SetupMetadata*           metadataPage;
     SetupTemplate*           templatePage;
-    SetupMime*               mimePage;
     SetupLightTable*         lighttablePage;
     SetupEditor*             editorPage;
     SetupSlideShow*          slideshowPage;
@@ -181,12 +176,6 @@ Setup::Setup(QWidget* const parent)
     d->page_albumView->setHeader(i18n("<qt>Album View Settings<br/>"
                                       "<i>Customize the look of the albums list</i></qt>"));
     d->page_albumView->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
-
-    d->mimePage  = new SetupMime();
-    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
-    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
-                                 "<i>Add new file types to show as album items</i></qt>"));
-    d->page_mime->setIcon(QIcon::fromTheme(QLatin1String("system-file-manager")));
 
     d->tooltipPage  = new SetupToolTip();
     d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
@@ -331,7 +320,6 @@ QSize Setup::sizeHint() const
         if (page == CollectionsPage ||
             page == AlbumViewPage   ||
             page == TemplatePage    ||
-            page == MimePage        ||
             page == LightTablePage  ||
             page == EditorPage      ||
             page == MiscellaneousPage)
@@ -441,7 +429,6 @@ void Setup::slotOkClicked()
     d->tooltipPage->applySettings();
     d->metadataPage->applySettings();
     d->templatePage->applySettings();
-    d->mimePage->applySettings();
     d->lighttablePage->applySettings();
     d->editorPage->applySettings();
     d->slideshowPage->applySettings();
@@ -532,11 +519,6 @@ Setup::Page Setup::activePageIndex() const
         return TemplatePage;
     }
 
-    if (cur == d->page_mime)
-    {
-        return MimePage;
-    }
-
     if (cur == d->page_lighttable)
     {
         return LightTablePage;
@@ -603,9 +585,6 @@ DConfigDlgWdgItem* Setup::Private::pageItem(Setup::Page page) const
 
         case Setup::TemplatePage:
             return page_template;
-
-        case Setup::MimePage:
-            return page_mime;
 
         case Setup::LightTablePage:
             return page_lighttable;
