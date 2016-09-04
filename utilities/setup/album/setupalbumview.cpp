@@ -177,8 +177,8 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->iconShowAspectRatioBox->setWhatsThis(i18n("Set this option to show the image aspect ratio "
                                                 "below the image thumbnail."));
 
-    d->iconShowFormatBox      = new QCheckBox(i18n("Show image Format"), iwpanel);
-    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image format over image thumbnail."));
+    d->iconShowFormatBox      = new QCheckBox(i18n("Show image format"), iwpanel);
+    d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image mime type over image thumbnail."));
 
     d->iconShowTitleBox       = new QCheckBox(i18n("Show digiKam tit&le"), iwpanel);
     d->iconShowTitleBox->setWhatsThis(i18n("Set this option to show the digiKam title "
