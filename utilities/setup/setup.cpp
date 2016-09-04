@@ -182,6 +182,12 @@ Setup::Setup(QWidget* const parent)
                                       "<i>Customize the look of the albums list</i></qt>"));
     d->page_albumView->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
 
+    d->mimePage  = new SetupMime();
+    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
+    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
+                                 "<i>Add new file types to show as album items</i></qt>"));
+    d->page_mime->setIcon(QIcon::fromTheme(QLatin1String("system-file-manager")));
+
     d->tooltipPage  = new SetupToolTip();
     d->page_tooltip = addPage(d->tooltipPage, i18n("Tool-Tip"));
     d->page_tooltip->setHeader(i18n("<qt>Items Tool-Tip Settings<br/>"
@@ -199,12 +205,6 @@ Setup::Setup(QWidget* const parent)
     d->page_template->setHeader(i18n("<qt>Metadata templates<br/>"
                                      "<i>Manage your collection of metadata templates</i></qt>"));
     d->page_template->setIcon(QIcon::fromTheme(QLatin1String("im-user")));
-
-    d->mimePage  = new SetupMime();
-    d->page_mime = addPage(d->mimePage, i18n("MIME Types"));
-    d->page_mime->setHeader(i18n("<qt>Supported File Settings<br/>"
-                                 "<i>Add new file types to show as album items</i></qt>"));
-    d->page_mime->setIcon(QIcon::fromTheme(QLatin1String("system-file-manager")));
 
     d->editorPage  = new SetupEditor();
     d->page_editor = addPage(d->editorPage, i18n("Image Editor"));
