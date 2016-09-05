@@ -268,6 +268,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in Tree Views."));
 
     d->showFolderTreeViewItemsCount = new QCheckBox(i18n("Show a count of items in Tree Views"), fwpanel);
+    d->showFolderTreeViewItemsCount->setToolTip(i18n("Set this option to display along the album name the number of icon-view items inside."));
 
     grid2->addWidget(d->iconTreeThumbLabel,           0, 0, 1, 1);
     grid2->addWidget(d->iconTreeThumbSize,            0, 1, 1, 1);
