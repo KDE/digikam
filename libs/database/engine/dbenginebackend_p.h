@@ -80,14 +80,14 @@ public:
     bool isInMainThread() const;
     bool isInUIThread()   const;
 
-    bool reconnectOnError()                                       const;
-    bool isSQLiteLockError(const DbEngineSqlQuery& query)                 const;
-    bool isSQLiteLockTransactionError(const QSqlError& lastError) const;
-    bool isConnectionError(const DbEngineSqlQuery& query)                 const;
-    bool needToConsultUserForError(const DbEngineSqlQuery& query)         const;
-    bool needToHandleWithErrorHandler(const DbEngineSqlQuery& query)      const;
-    void debugOutputFailedQuery(const QSqlQuery& query)           const;
-    void debugOutputFailedTransaction(const QSqlError& error)     const;
+    bool reconnectOnError()                                          const;
+    bool isSQLiteLockError(const DbEngineSqlQuery& query)            const;
+    bool isSQLiteLockTransactionError(const QSqlError& lastError)    const;
+    bool isConnectionError(const DbEngineSqlQuery& query)            const;
+    bool needToConsultUserForError(const DbEngineSqlQuery& query)    const;
+    bool needToHandleWithErrorHandler(const DbEngineSqlQuery& query) const;
+    void debugOutputFailedQuery(const QSqlQuery& query)              const;
+    void debugOutputFailedTransaction(const QSqlError& error)        const;
 
     bool checkRetrySQLiteLockError(int retries);
     bool checkOperationStatus();
@@ -128,7 +128,7 @@ public:
 
     DbEngineErrorHandler*                     errorHandler;
 
-public :
+public:
 
     class AbstractUnlocker
     {
@@ -141,7 +141,7 @@ public :
 
     protected:
 
-        int                               count;
+        int                           count;
         BdEngineBackendPrivate* const d;
     };
 
