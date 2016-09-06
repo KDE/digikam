@@ -16,62 +16,33 @@ if(GPHOTO2_LIBRARIES AND GPHOTO2_INCLUDE_DIR)
 
 else()
 
-    find_program(GPHOTO2CONFIG_EXECUTABLE     NAMES gphoto2-config)
-    find_program(GPHOTO2PORTCONFIG_EXECUTABLE NAMES gphoto2-port-config)
+    find_package(PkgConfig)
+    pkg_check_modules(PC_GPHOTO2 QUIET gphoto2)
 
-    set(GPHOTO2_LIBRARIES)
-    set(GPHOTO2_INCLUDE_DIRS)
+    find_path(GPHOTO2_TOP_INCLUDE_DIR gphoto2/gphoto2.h
+      HINTS ${PC_GPHOTO2_INCLUDEDIR})
 
-    # if gphoto2-port-config and gphoto2-config have been found
+    set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2_TOP_INCLUDE_DIR}/gphoto2)
 
-    if(GPHOTO2PORTCONFIG_EXECUTABLE AND GPHOTO2CONFIG_EXECUTABLE)
+    find_library(GPHOTO2_LIBRARY NAMES gphoto2
+      HINTS ${PC_GPHOTO2_LIBDIR} ${PC_GPHOTO2_LIBRARY_DIRS})
 
-        message(STATUS "libgphoto2 execurables check...")
-        exec_program(${GPHOTO2PORTCONFIG_EXECUTABLE} ARGS --libs   RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2PORT_LIBRARY)
-        exec_program(${GPHOTO2CONFIG_EXECUTABLE}     ARGS --libs   RETURN_VALUE _return_VALUE OUTPUT_VARIABLE GPHOTO2_LIBRARY)
-        exec_program(${GPHOTO2PORTCONFIG_EXECUTABLE} ARGS --cflags RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _GPHOTO2PORT_RESULT_INCLUDE_DIR)
-        exec_program(${GPHOTO2CONFIG_EXECUTABLE}     ARGS --cflags RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _GPHOTO2_RESULT_INCLUDE_DIR)
+    find_library(GPHOTO2_PORT_LIBRARY NAMES gphoto2_port
+      HINTS ${PC_GPHOTO2_LIBDIR} ${PC_GPHOTO2_LIBRARY_DIRS})
 
-        set(GPHOTO2_LIBRARIES ${GPHOTO2PORT_LIBRARY} ${GPHOTO2_LIBRARY})
+    set(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARY})
+    list(APPEND GPHOTO2_LIBRARIES ${GPHOTO2_PORT_LIBRARY})
+    set(GPHOTO2_VERSION "${PC_GPHOTO2_VERSION}")
 
-        # the cflags can contain more than one include path
-        separate_arguments(_GPHOTO2_RESULT_INCLUDE_DIR)
-
-        foreach(_includedir ${_GPHOTO2_RESULT_INCLUDE_DIR})
-
-            string(REGEX REPLACE "-I(.+)" "\\1" _includedir "${_includedir}")
-            set(GPHOTO2_INCLUDE_DIR ${GPHOTO2_INCLUDE_DIR} ${_includedir})
-
-        endforeach()
-
-        separate_arguments(_GPHOTO2PORT_RESULT_INCLUDE_DIR)
-
-        foreach(_includedir ${_GPHOTO2PORT_RESULT_INCLUDE_DIR})
-
-            string(REGEX REPLACE "-I(.+)" "\\1" _includedir "${_includedir}")
-            set(GPHOTO2PORT_INCLUDE_DIR ${GPHOTO2PORT_INCLUDE_DIR} ${_includedir})
-
-        endforeach()
-
-        set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2PORT_INCLUDE_DIR} ${GPHOTO2_INCLUDE_DIR} )
-
-    else()
-
-        message(WARNING "Could not find gphoto2-config and/or \
-                         gphoto2-port-config executables.")
-
-        set(GPHOTO2_FOUND FALSE)
-
-    endif()
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(gphoto2 DEFAULT_MSG GPHOTO2_LIBRARIES GPHOTO2_INCLUDE_DIRS)
 
     if(GPHOTO2_LIBRARIES AND GPHOTO2_INCLUDE_DIRS)
 
         set(GPHOTO2_FOUND TRUE)
-        message(STATUS "Found gphoto2: ${GPHOTO2_LIBRARIES}")
 
     else()
 
-        message(WARNING "Could not find gphoto2 libraries.")
         set(GPHOTO2_FOUND FALSE)
 
     endif()
