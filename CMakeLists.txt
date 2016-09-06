@@ -339,16 +339,17 @@ if(NOT WIN32)
 
     if(GPHOTO2_FOUND)
 
-        execute_process(COMMAND gphoto2-config --version RESULT_VARIABLE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
+        execute_process(COMMAND gphoto2 --version RESULT_VARIABLE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
 
         if(NOT "${_return_VALUE}" STREQUAL "0")
 
-            message(STATUS "Command gphoto2-config not found. Cannot identify GPhoto2 API version.")
+            message(STATUS "Command gphoto2 not found. Cannot identify GPhoto2 API version.")
             set(GPHOTO2_FOUND false)
 
         else()
 
-            string(REPLACE "libgphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+            string(REGEX REPLACE "\n.*$" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+            string(REPLACE "gphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
 
             if("${GPHOTO2_VERSION}" VERSION_GREATER "2.4.0")
                 set(VERSION_GPHOTO2 true)
