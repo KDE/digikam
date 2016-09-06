@@ -194,31 +194,31 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    DVBox* const vbox       = new DVBox(panel);
+    DVBox* const vbox        = new DVBox(panel);
 
-    d->showToolTipsBox      = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
+    d->showToolTipsBox       = new QCheckBox(i18n("Show icon-view and thumb-bar items' tool-tips"), vbox);
     d->showToolTipsBox->setWhatsThis(i18n("Set this option to display image information when "
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
     d->fileSettingBox        = new QGroupBox(i18n("File/Item Information"), vbox);
     QVBoxLayout* const vlay2 = new QVBoxLayout(d->fileSettingBox);
 
-    d->showFileNameBox    = new QCheckBox(i18n("Show file name"), d->fileSettingBox);
+    d->showFileNameBox       = new QCheckBox(i18n("File name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis(i18n("Set this option to display the image file name."));
 
-    d->showFileDateBox    = new QCheckBox(i18n("Show file date"), d->fileSettingBox);
+    d->showFileDateBox       = new QCheckBox(i18n("File date"), d->fileSettingBox);
     d->showFileDateBox->setWhatsThis(i18n("Set this option to display the image file date."));
 
-    d->showFileSizeBox    = new QCheckBox(i18n("Show file size"), d->fileSettingBox);
+    d->showFileSizeBox       = new QCheckBox(i18n("File size"), d->fileSettingBox);
     d->showFileSizeBox->setWhatsThis(i18n("Set this option to display the image file size."));
 
-    d->showImageTypeBox   = new QCheckBox(i18n("Show image type"), d->fileSettingBox);
+    d->showImageTypeBox      = new QCheckBox(i18n("Image type"), d->fileSettingBox);
     d->showImageTypeBox->setWhatsThis(i18n("Set this option to display the image type."));
 
-    d->showImageDimBox    = new QCheckBox(i18n("Show image dimensions"), d->fileSettingBox);
+    d->showImageDimBox       = new QCheckBox(i18n("Image dimensions"), d->fileSettingBox);
     d->showImageDimBox->setWhatsThis(i18n("Set this option to display the image dimensions in pixels."));
 
-    d->showImageARBox     = new QCheckBox(i18n("Show image aspect ratio"), d->fileSettingBox);
+    d->showImageARBox        = new QCheckBox(i18n("Image aspect ratio"), d->fileSettingBox);
     d->showImageARBox->setWhatsThis(i18n("Set this option to display the image aspect ratio."));
 
     vlay2->addWidget(d->showFileNameBox);
@@ -236,30 +236,30 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->photoSettingBox       = new QGroupBox(i18n("Photograph Information"), vbox);
     QVBoxLayout* const vlay3 = new QVBoxLayout(d->photoSettingBox);
 
-    d->showPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
+    d->showPhotoMakeBox      = new QCheckBox(i18n("Camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                            "camera with which the image has been taken."));
 
-    d->showPhotoDateBox  = new QCheckBox(i18n("Show camera date"), d->photoSettingBox);
+    d->showPhotoDateBox      = new QCheckBox(i18n("Camera date"), d->photoSettingBox);
     d->showPhotoDateBox->setWhatsThis(i18n("Set this option to display the date when the image was taken."));
 
-    d->showPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
+    d->showPhotoFocalBox     = new QCheckBox(i18n("Camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
                                             "used to take the image."));
 
-    d->showPhotoExpoBox  = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
+    d->showPhotoExpoBox      = new QCheckBox(i18n("Camera exposure and sensitivity"), d->photoSettingBox);
     d->showPhotoExpoBox->setWhatsThis(i18n("Set this option to display the camera exposure and sensitivity "
                                            "used to take the image."));
 
-    d->showPhotoModeBox  = new QCheckBox(i18n("Show camera mode and program"), d->photoSettingBox);
+    d->showPhotoModeBox      = new QCheckBox(i18n("Camera mode and program"), d->photoSettingBox);
     d->showPhotoModeBox->setWhatsThis(i18n("Set this option to display the camera mode and program "
                                            "used to take the image."));
 
-    d->showPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
+    d->showPhotoFlashBox     = new QCheckBox(i18n("Camera flash settings"), d->photoSettingBox);
     d->showPhotoFlashBox->setWhatsThis(i18n("Set this option to display the camera flash settings "
                                             "used to take the image."));
 
-    d->showPhotoWbBox    = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
+    d->showPhotoWbBox        = new QCheckBox(i18n("Camera white balance settings"), d->photoSettingBox);
     d->showPhotoWbBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
                                          "used to take the image."));
 
@@ -278,19 +278,19 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->digikamSettingBox     = new QGroupBox(i18n("digiKam Information"), vbox);
     QVBoxLayout* const vlay4 = new QVBoxLayout(d->digikamSettingBox);
 
-    d->showAlbumNameBox  = new QCheckBox(i18n("Show album name"), d->digikamSettingBox);
+    d->showAlbumNameBox      = new QCheckBox(i18n("Album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
 
-    d->showTitlesBox     = new QCheckBox(i18n("Show image title"), d->digikamSettingBox);
+    d->showTitlesBox         = new QCheckBox(i18n("SImage title"), d->digikamSettingBox);
     d->showTitlesBox->setWhatsThis(i18n("Set this option to display the image title."));
 
-    d->showCommentsBox   = new QCheckBox(i18n("Show image caption"), d->digikamSettingBox);
+    d->showCommentsBox       = new QCheckBox(i18n("Image caption"), d->digikamSettingBox);
     d->showCommentsBox->setWhatsThis(i18n("Set this option to display the image captions."));
 
-    d->showTagsBox       = new QCheckBox(i18n("Show image tags"), d->digikamSettingBox);
+    d->showTagsBox           = new QCheckBox(i18n("Image tags"), d->digikamSettingBox);
     d->showTagsBox->setWhatsThis(i18n("Set this option to display the image tags."));
 
-    d->showLabelsBox     = new QCheckBox(i18n("Show image labels"), d->digikamSettingBox);
+    d->showLabelsBox         = new QCheckBox(i18n("Image labels"), d->digikamSettingBox);
     d->showLabelsBox->setWhatsThis(i18n("Set this option to display the image pick, color, rating labels."));
 
     vlay4->addWidget(d->showAlbumNameBox);
@@ -303,28 +303,28 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->videoSettingBox             = new QGroupBox(i18n("Video Information"), vbox);
-    QVBoxLayout* const vlay5       = new QVBoxLayout(d->videoSettingBox);
+    d->videoSettingBox           = new QGroupBox(i18n("Video Information"), vbox);
+    QVBoxLayout* const vlay5     = new QVBoxLayout(d->videoSettingBox);
 
-    d->showVideoAspectRatio        = new QCheckBox(i18n("Show Video Aspect Ratio"), d->videoSettingBox);
+    d->showVideoAspectRatio      = new QCheckBox(i18n("Video Aspect Ratio"), d->videoSettingBox);
     d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
 
-    d->showVideoAudioBitRate       = new QCheckBox(i18n("Show Audio Bit Rate"), d->videoSettingBox);
+    d->showVideoAudioBitRate     = new QCheckBox(i18n("Audio Bit Rate"), d->videoSettingBox);
     d->showVideoAudioBitRate->setWhatsThis(i18n("Set this option to display the Audio Bit Rate of the Video"));
 
-    d->showVideoAudioChannelType   = new QCheckBox(i18n("Show Audio Channel Type"), d->videoSettingBox);
+    d->showVideoAudioChannelType = new QCheckBox(i18n("Audio Channel Type"), d->videoSettingBox);
     d->showVideoAudioChannelType->setWhatsThis(i18n("Set this option to display the Audio Channel Type of the Video"));
 
-    d->showVideoAudioCompressor    = new QCheckBox(i18n("Show Audio Compressor"), d->videoSettingBox);
+    d->showVideoAudioCompressor  = new QCheckBox(i18n("Audio Compressor"), d->videoSettingBox);
     d->showVideoAudioCompressor->setWhatsThis(i18n("Set this option to display the Audio Compressor of the Video"));
 
-    d->showVideoDuration           = new QCheckBox(i18n("Show Video Duration"), d->videoSettingBox);
+    d->showVideoDuration         = new QCheckBox(i18n("Video Duration"), d->videoSettingBox);
     d->showVideoDuration->setWhatsThis(i18n("Set this option to display the Duration of the Video"));
 
-    d->showVideoFrameRate          = new QCheckBox(i18n("Show Video Frame Rate"), d->videoSettingBox);
+    d->showVideoFrameRate        = new QCheckBox(i18n("Video Frame Rate"), d->videoSettingBox);
     d->showVideoFrameRate->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
 
-    d->showVideoVideoCodec         = new QCheckBox(i18n("Show Video Codec"), d->videoSettingBox);
+    d->showVideoVideoCodec       = new QCheckBox(i18n("Video Codec"), d->videoSettingBox);
     d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
 
     vlay5->addWidget(d->showVideoAspectRatio);
@@ -351,22 +351,22 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
                                                "the mouse hovers over a folder-view item."));
 
-    d->showAlbumTitleBox      = new QCheckBox(i18n("Show album name"));
+    d->showAlbumTitleBox      = new QCheckBox(i18n("Album name"));
     d->showAlbumTitleBox->setWhatsThis(i18n("Set this option to display the album name."));
 
-    d->showAlbumDateBox       = new QCheckBox(i18n("Show album date"));
+    d->showAlbumDateBox       = new QCheckBox(i18n("Album date"));
     d->showAlbumDateBox->setWhatsThis(i18n("Set this option to display the album date."));
 
-    d->showAlbumCollectionBox = new QCheckBox(i18n("Show album collection"));
+    d->showAlbumCollectionBox = new QCheckBox(i18n("Album collection"));
     d->showAlbumCollectionBox->setWhatsThis(i18n("Set this option to display the album collection."));
 
-    d->showAlbumCategoryBox   = new QCheckBox(i18n("Show album category"));
+    d->showAlbumCategoryBox   = new QCheckBox(i18n("Album category"));
     d->showAlbumCategoryBox->setWhatsThis(i18n("Set this option to display the album category."));
 
-    d->showAlbumCaptionBox    = new QCheckBox(i18n("Show album caption"));
+    d->showAlbumCaptionBox    = new QCheckBox(i18n("Album caption"));
     d->showAlbumCaptionBox->setWhatsThis(i18n("Set this option to display the album caption."));
 
-    d->showAlbumPreviewBox    = new QCheckBox(i18n("Show album preview"));
+    d->showAlbumPreviewBox    = new QCheckBox(i18n("Album preview"));
     d->showAlbumPreviewBox->setWhatsThis(i18n("Set this option to display the album preview."));
 
     QVBoxLayout* const albumSettingBoxLayout = new QVBoxLayout;
@@ -392,41 +392,41 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumToolTipsBox->setWhatsThis(i18n("Set this option to display album information when "
                                                "the mouse hovers over a folder-view item."));
 
-    d->showItemTitleBox      = new QCheckBox(i18n("Show item name"));
+    d->showItemTitleBox      = new QCheckBox(i18n("Item name"));
     d->showItemTitleBox->setWhatsThis(i18n("Set this option to display the item name."));
 
-    d->showItemDateBox       = new QCheckBox(i18n("Show item date"));
+    d->showItemDateBox       = new QCheckBox(i18n("Item date"));
     d->showItemDateBox->setWhatsThis(i18n("Set this option to display the item date."));
 
-    d->showItemSizeBox       = new QCheckBox(i18n("Show item size"));
+    d->showItemSizeBox       = new QCheckBox(i18n("Item size"));
     d->showItemSizeBox->setWhatsThis(i18n("Set this option to display the item size."));
 
-    d->showItemTypeBox       = new QCheckBox(i18n("Show item type"));
+    d->showItemTypeBox       = new QCheckBox(i18n("Item type"));
     d->showItemTypeBox->setWhatsThis(i18n("Set this option to display the item type."));
 
-    d->showItemDimensionsBox = new QCheckBox(i18n("Show item dimensions"));
+    d->showItemDimensionsBox = new QCheckBox(i18n("Item dimensions"));
     d->showItemDimensionsBox->setWhatsThis(i18n("Set this option to display the item dimensions."));
 
     DLineWidget* const line  = new DLineWidget(Qt::Horizontal, d->photoSettingBox);
     QLabel* const label      = new QLabel(i18n("Note: these settings require \"Use File Metadata\" option from Camera Setup Behavior page."), d->photoSettingBox);
 
-    d->showItemPhotoMakeBox  = new QCheckBox(i18n("Show camera make and model"), d->photoSettingBox);
+    d->showItemPhotoMakeBox  = new QCheckBox(i18n("Camera make and model"), d->photoSettingBox);
     d->showItemPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
                                                "camera with which the image has been taken."));
 
-    d->showItemPhotoFocalBox = new QCheckBox(i18n("Show camera aperture and focal length"), d->photoSettingBox);
+    d->showItemPhotoFocalBox = new QCheckBox(i18n("Camera aperture and focal length"), d->photoSettingBox);
     d->showPhotoFocalBox->setWhatsThis(i18n("Set this option to display the camera aperture and focal settings "
                                             "used to take the image."));
 
-    d->showItemPhotoExpoBox  = new QCheckBox(i18n("Show camera exposure and sensitivity"), d->photoSettingBox);
+    d->showItemPhotoExpoBox  = new QCheckBox(i18n("Camera exposure and sensitivity"), d->photoSettingBox);
     d->showPhotoExpoBox->setWhatsThis(i18n("Set this option to display the camera exposure and sensitivity "
                                            "used to take the image."));
 
-    d->showItemPhotoFlashBox = new QCheckBox(i18n("Show camera flash settings"), d->photoSettingBox);
+    d->showItemPhotoFlashBox = new QCheckBox(i18n("Camera flash settings"), d->photoSettingBox);
     d->showPhotoFlashBox->setWhatsThis(i18n("Set this option to display the camera flash settings "
                                             "used to take the image."));
 
-    d->showItemPhotoWBBox    = new QCheckBox(i18n("Show camera white balance settings"), d->photoSettingBox);
+    d->showItemPhotoWBBox    = new QCheckBox(i18n("Camera white balance settings"), d->photoSettingBox);
     d->showItemPhotoWBBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
                                              "used to take the image."));
 
