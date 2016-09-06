@@ -39,4 +39,5 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 367847 - digiKam crashed when we right click on albums area.
 026 ==> 242630 - Write an handbook section for Metadata Edit tool.
 027 ==> 367642 - IPTC/XMP metadata not saved to image on exit when Lazy Sync is on.
-028 ==> 
+028 ==> 367740 - Album View not updated after moving albums.
+029 ==> 
