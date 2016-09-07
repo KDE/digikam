@@ -29,6 +29,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QGridLayout>
 #include <QTabWidget>
 #include <QApplication>
 #include <QStyle>
@@ -201,7 +202,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
                                           "the mouse hovers over an icon-view or thumb-bar item."));
 
     d->fileSettingBox        = new QGroupBox(i18n("File/Item Information"), vbox);
-    QVBoxLayout* const vlay2 = new QVBoxLayout(d->fileSettingBox);
+    QGridLayout* const grid2 = new QGridLayout(d->fileSettingBox);
 
     d->showFileNameBox       = new QCheckBox(i18n("File name"), d->fileSettingBox);
     d->showFileNameBox->setWhatsThis(i18n("Set this option to display the image file name."));
@@ -221,20 +222,19 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showImageARBox        = new QCheckBox(i18n("Image aspect ratio"), d->fileSettingBox);
     d->showImageARBox->setWhatsThis(i18n("Set this option to display the image aspect ratio."));
 
-    vlay2->addWidget(d->showFileNameBox);
-    vlay2->addWidget(d->showFileDateBox);
-    vlay2->addWidget(d->showFileSizeBox);
-    vlay2->addWidget(d->showImageTypeBox);
-    vlay2->addWidget(d->showImageDimBox);
-    vlay2->addWidget(d->showImageARBox);
-
-    vlay2->setContentsMargins(spacing, spacing, spacing, spacing);
-    vlay2->setSpacing(0);
+    grid2->addWidget(d->showFileNameBox,  0, 0, 1, 1);
+    grid2->addWidget(d->showFileDateBox,  1, 0, 1, 1);
+    grid2->addWidget(d->showFileSizeBox,  2, 0, 1, 1);
+    grid2->addWidget(d->showImageTypeBox, 0, 1, 1, 1);
+    grid2->addWidget(d->showImageDimBox,  1, 1, 1, 1);
+    grid2->addWidget(d->showImageARBox,   2, 1, 1, 1);
+    grid2->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid2->setSpacing(0);
 
     // --------------------------------------------------------
 
     d->photoSettingBox       = new QGroupBox(i18n("Photograph Information"), vbox);
-    QVBoxLayout* const vlay3 = new QVBoxLayout(d->photoSettingBox);
+    QGridLayout* const grid3 = new QGridLayout(d->photoSettingBox);
 
     d->showPhotoMakeBox      = new QCheckBox(i18n("Camera make and model"), d->photoSettingBox);
     d->showPhotoMakeBox->setWhatsThis(i18n("Set this option to display the make and model of the "
@@ -263,20 +263,20 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showPhotoWbBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
                                          "used to take the image."));
 
-    vlay3->addWidget(d->showPhotoMakeBox);
-    vlay3->addWidget(d->showPhotoDateBox);
-    vlay3->addWidget(d->showPhotoFocalBox);
-    vlay3->addWidget(d->showPhotoExpoBox);
-    vlay3->addWidget(d->showPhotoModeBox);
-    vlay3->addWidget(d->showPhotoFlashBox);
-    vlay3->addWidget(d->showPhotoWbBox);
-    vlay3->setContentsMargins(spacing, spacing, spacing, spacing);
-    vlay3->setSpacing(0);
+    grid3->addWidget(d->showPhotoMakeBox,  0, 0, 1, 1);
+    grid3->addWidget(d->showPhotoDateBox,  1, 0, 1, 1);
+    grid3->addWidget(d->showPhotoFocalBox, 2, 0, 1, 1);
+    grid3->addWidget(d->showPhotoExpoBox,  3, 0, 1, 1);
+    grid3->addWidget(d->showPhotoModeBox,  0, 1, 1, 1);
+    grid3->addWidget(d->showPhotoFlashBox, 1, 1, 1, 1);
+    grid3->addWidget(d->showPhotoWbBox,    2, 1, 1, 1);
+    grid3->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid3->setSpacing(0);
 
     // --------------------------------------------------------
 
     d->digikamSettingBox     = new QGroupBox(i18n("digiKam Information"), vbox);
-    QVBoxLayout* const vlay4 = new QVBoxLayout(d->digikamSettingBox);
+    QGridLayout* const grid4 = new QGridLayout(d->digikamSettingBox);
 
     d->showAlbumNameBox      = new QCheckBox(i18n("Album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
@@ -293,18 +293,18 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showLabelsBox         = new QCheckBox(i18n("Image labels"), d->digikamSettingBox);
     d->showLabelsBox->setWhatsThis(i18n("Set this option to display the image pick, color, rating labels."));
 
-    vlay4->addWidget(d->showAlbumNameBox);
-    vlay4->addWidget(d->showTitlesBox);
-    vlay4->addWidget(d->showCommentsBox);
-    vlay4->addWidget(d->showTagsBox);
-    vlay4->addWidget(d->showLabelsBox);
-    vlay4->setContentsMargins(spacing, spacing, spacing, spacing);
-    vlay4->setSpacing(0);
+    grid4->addWidget(d->showAlbumNameBox, 0, 0, 1, 1);
+    grid4->addWidget(d->showTitlesBox,    1, 0, 1, 1);
+    grid4->addWidget(d->showCommentsBox,  2, 0, 1, 1);
+    grid4->addWidget(d->showTagsBox,      0, 1, 1, 1);
+    grid4->addWidget(d->showLabelsBox,    1, 1, 1, 1);
+    grid4->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid4->setSpacing(0);
 
     // --------------------------------------------------------
 
     d->videoSettingBox           = new QGroupBox(i18n("Video Information"), vbox);
-    QVBoxLayout* const vlay5     = new QVBoxLayout(d->videoSettingBox);
+    QGridLayout* const grid5     = new QGridLayout(d->videoSettingBox);
 
     d->showVideoAspectRatio      = new QCheckBox(i18n("Video Aspect Ratio"), d->videoSettingBox);
     d->showVideoAspectRatio->setWhatsThis(i18n("Set this option to display the Aspect Ratio of the Video"));
@@ -327,15 +327,15 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showVideoVideoCodec       = new QCheckBox(i18n("Video Codec"), d->videoSettingBox);
     d->showVideoVideoCodec->setWhatsThis(i18n("Set this option to display the Codec of the Video"));
 
-    vlay5->addWidget(d->showVideoAspectRatio);
-    vlay5->addWidget(d->showVideoAudioBitRate);
-    vlay5->addWidget(d->showVideoAudioChannelType);
-    vlay5->addWidget(d->showVideoAudioCompressor);
-    vlay5->addWidget(d->showVideoDuration);
-    vlay5->addWidget(d->showVideoFrameRate);
-    vlay5->addWidget(d->showVideoVideoCodec);
-    vlay5->setContentsMargins(spacing, spacing, spacing, spacing);
-    vlay5->setSpacing(0);
+    grid5->addWidget(d->showVideoAspectRatio,      0, 0, 1, 1);
+    grid5->addWidget(d->showVideoAudioBitRate,     1, 0, 1, 1);
+    grid5->addWidget(d->showVideoAudioChannelType, 2, 0, 1, 1);
+    grid5->addWidget(d->showVideoAudioCompressor,  3, 0, 1, 1);
+    grid5->addWidget(d->showVideoDuration,         0, 1, 1, 1);
+    grid5->addWidget(d->showVideoFrameRate,        1, 1, 1, 1);
+    grid5->addWidget(d->showVideoVideoCodec,       2, 1, 1, 1);
+    grid5->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid5->setSpacing(0);
 
     QWidget* const space = new QWidget(vbox);
     vbox->setStretchFactor(space, 10);
@@ -369,13 +369,13 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumPreviewBox    = new QCheckBox(i18n("Album preview"));
     d->showAlbumPreviewBox->setWhatsThis(i18n("Set this option to display the album preview."));
 
-    QVBoxLayout* const albumSettingBoxLayout = new QVBoxLayout;
-    albumSettingBoxLayout->addWidget(d->showAlbumTitleBox);
-    albumSettingBoxLayout->addWidget(d->showAlbumDateBox);
-    albumSettingBoxLayout->addWidget(d->showAlbumCollectionBox);
-    albumSettingBoxLayout->addWidget(d->showAlbumCategoryBox);
-    albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox);
-    albumSettingBoxLayout->addWidget(d->showAlbumPreviewBox);
+    QGridLayout* const albumSettingBoxLayout = new QGridLayout;
+    albumSettingBoxLayout->addWidget(d->showAlbumTitleBox,      0, 0, 1, 1);
+    albumSettingBoxLayout->addWidget(d->showAlbumDateBox,       1, 0, 1, 1);
+    albumSettingBoxLayout->addWidget(d->showAlbumCollectionBox, 2, 0, 1, 1);
+    albumSettingBoxLayout->addWidget(d->showAlbumCategoryBox,   0, 1, 1, 1);
+    albumSettingBoxLayout->addWidget(d->showAlbumCaptionBox,    1, 1, 1, 1);
+    albumSettingBoxLayout->addWidget(d->showAlbumPreviewBox,    2, 1, 1, 1);
     d->albumSettingBox->setLayout(albumSettingBoxLayout);
 
     QWidget* const space2 = new QWidget(vbox2);
@@ -430,19 +430,19 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showItemPhotoWBBox->setWhatsThis(i18n("Set this option to display the camera white balance settings "
                                              "used to take the image."));
 
-    QVBoxLayout* const importSettingBoxLayout = new QVBoxLayout;
-    importSettingBoxLayout->addWidget(d->showItemTitleBox);
-    importSettingBoxLayout->addWidget(d->showItemDateBox);
-    importSettingBoxLayout->addWidget(d->showItemSizeBox);
-    importSettingBoxLayout->addWidget(d->showItemTypeBox);
-    importSettingBoxLayout->addWidget(d->showItemDimensionsBox);
-    importSettingBoxLayout->addWidget(line);
-    importSettingBoxLayout->addWidget(label);
-    importSettingBoxLayout->addWidget(d->showItemPhotoMakeBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoFlashBox);
-    importSettingBoxLayout->addWidget(d->showItemPhotoWBBox);
+    QGridLayout* const importSettingBoxLayout = new QGridLayout;
+    importSettingBoxLayout->addWidget(d->showItemTitleBox,      0, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemDateBox,       1, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemSizeBox,       2, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemTypeBox,       0, 1, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemDimensionsBox, 1, 1, 1, 1);
+    importSettingBoxLayout->addWidget(line,                     3, 0, 1, 2);
+    importSettingBoxLayout->addWidget(label,                    4, 0, 1, 2);
+    importSettingBoxLayout->addWidget(d->showItemPhotoMakeBox,  5, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoFocalBox, 6, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoExpoBox,  7, 0, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoFlashBox, 5, 1, 1, 1);
+    importSettingBoxLayout->addWidget(d->showItemPhotoWBBox,    6, 1, 1, 1);
     d->importSettingBox->setLayout(importSettingBoxLayout);
 
     QWidget* const space3 = new QWidget(vbox3);
