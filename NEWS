@@ -40,4 +40,5 @@ BUGFIXES FROM BUGZILLA:
 026 ==> 242630 - Write an handbook section for Metadata Edit tool.
 027 ==> 367642 - IPTC/XMP metadata not saved to image on exit when Lazy Sync is on.
 028 ==> 367740 - Album View not updated after moving albums.
-029 ==> 
+029 ==> 368291 - New taggued face not appearing after Plasma5 upgrade.
+030 ==> 
