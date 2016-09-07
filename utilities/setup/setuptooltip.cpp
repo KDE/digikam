@@ -281,7 +281,7 @@ SetupToolTip::SetupToolTip(QWidget* const parent)
     d->showAlbumNameBox      = new QCheckBox(i18n("Album name"), d->digikamSettingBox);
     d->showAlbumNameBox->setWhatsThis(i18n("Set this option to display the album name."));
 
-    d->showTitlesBox         = new QCheckBox(i18n("SImage title"), d->digikamSettingBox);
+    d->showTitlesBox         = new QCheckBox(i18n("Image title"), d->digikamSettingBox);
     d->showTitlesBox->setWhatsThis(i18n("Set this option to display the image title."));
 
     d->showCommentsBox       = new QCheckBox(i18n("Image caption"), d->digikamSettingBox);
