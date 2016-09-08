@@ -340,7 +340,9 @@ bool WorkflowManager::load(QStringList& failed)
     d->modified = false;
 
     QFile file(d->file);
-    if (file.exists()){
+
+    if (file.exists())
+    {
         if (!file.open(QIODevice::ReadOnly))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot open XML file to load Workflow";
@@ -383,6 +385,7 @@ bool WorkflowManager::load(QStringList& failed)
             for (QDomNode n2 = e.firstChild(); !n2.isNull(); n2 = n2.nextSibling())
             {
                 QDomElement e2 = n2.toElement();
+
                 if (e2.isNull())
                 {
                     continue;
@@ -471,6 +474,7 @@ bool WorkflowManager::load(QStringList& failed)
                     for (QDomNode n3 = e2.firstChild(); !n3.isNull(); n3 = n3.nextSibling())
                     {
                         QDomElement e3 = n3.toElement();
+
                         if (e3.isNull())
                         {
                             continue;
@@ -536,6 +540,7 @@ bool WorkflowManager::load(QStringList& failed)
                 failed.append(QString::fromUtf8("%1 [%2]").arg(q.title).arg(q.desc));
             }
         }
+
         return true;
     }
     else
