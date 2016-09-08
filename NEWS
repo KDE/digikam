@@ -42,5 +42,6 @@ BUGFIXES FROM BUGZILLA:
 028 ==> 367740 - Album View not updated after moving albums.
 029 ==> 368291 - New taggued face not appearing after Plasma5 upgrade.
 030 ==> 365721 - Album view shows thumbnails for deleted pictures/videos.
-031 ==> 
+031 ==> 368444 - Not supporting XCF anymore.
+032 ==> 
 
