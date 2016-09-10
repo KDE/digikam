@@ -31,6 +31,7 @@
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
 #include "libopencv.h"
+#include "redeyecorrectioncontainer.h"
 
 namespace Digikam
 {
@@ -41,10 +42,10 @@ class DIGIKAM_EXPORT RedEyeCorrectionFilter : public DImgThreadedFilter
 public:
 
     explicit RedEyeCorrectionFilter(QObject* const parent = 0);
-    explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=0);
+    explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=0, const RedEyeCorrectionContainer &settings=RedEyeCorrectionContainer());
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    explicit RedEyeCorrectionFilter(DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
+    explicit RedEyeCorrectionFilter(const RedEyeCorrectionContainer &settings, DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
                                     int progressBegin=0, int progressEnd=100);
 
     ~RedEyeCorrectionFilter();
