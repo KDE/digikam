@@ -43,5 +43,5 @@ BUGFIXES FROM BUGZILLA:
 029 ==> 368291 - New taggued face not appearing after Plasma5 upgrade.
 030 ==> 365721 - Album view shows thumbnails for deleted pictures/videos.
 031 ==> 368444 - Not supporting XCF anymore.
-032 ==> 
-
+032 ==> 368564 - Settings fields not working properly.
+033 ==> 
