@@ -16,6 +16,8 @@
 }
 
 body {
+  background-color: black;
+  background-repeat: no-repeat;
   background-image: url("../images/body-background.jpg");
   background-size: cover;
   overflow-x: hidden;
