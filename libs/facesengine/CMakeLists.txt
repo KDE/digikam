@@ -45,21 +45,21 @@ if(ENABLE_OPENCV3)
 endif()
 
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
-                         recognition-opencv-lbph/lbphfacemodel.cpp
-                         recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
-                         recognition-opencv-lbph/opencvmatdata.cpp
-                         recognition-opencv-lbph/facerec_borrowed.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp
-                         alignment-congealing/funnelreal.cpp
-                         recognitiondatabase.cpp
 
 #                        alignment-flandmark/flandmarkaligner.cpp
 #                        preprocessing-tantriggs/tantriggspreprocessor.cpp
 )
 
-set(facesengine_database_LIB_SRCS facedb/facedbaccess.cpp
+set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
+                                  recognition-opencv-lbph/lbphfacemodel.cpp
+                                  recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
+                                  recognition-opencv-lbph/opencvmatdata.cpp
+                                  recognition-opencv-lbph/facerec_borrowed.cpp
+                                  alignment-congealing/funnelreal.cpp
+                                  facedb/facedbaccess.cpp
                                   facedb/facedbbackend.cpp
                                   facedb/facedboperationgroup.cpp
                                   facedb/facedbschemaupdater.cpp
@@ -70,7 +70,13 @@ add_library(digikamfacesengine_src
             OBJECT
             ${opencv3face_LIB_SRCS}             # Empty with OpenCV2
             ${facesengine_LIB_SRCS}
-            ${facesengine_database_LIB_SRCS}
 )
 
 add_library(digikamfacesengine STATIC $<TARGET_OBJECTS:digikamfacesengine_src>)
+
+add_library(digikamfacesenginedatabase_src
+            OBJECT
+            ${facesengine_database_LIB_SRCS}
+)
+
+add_library(digikamfacesenginedatabase STATIC $<TARGET_OBJECTS:digikamfacesenginedatabase_src>)

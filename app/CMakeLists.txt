@@ -29,6 +29,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:kmemoryinfo_src>
             $<TARGET_OBJECTS:dngwriter_src>
             $<TARGET_OBJECTS:rawengine_srcs>
+            $<TARGET_OBJECTS:digikamfacesengine_src>
 
             # widgets
             $<TARGET_OBJECTS:digikamwidgetscore_src>
@@ -363,7 +364,7 @@ add_library(digikamgui_src
 
 set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:digikamdatabasemain_src>
-            $<TARGET_OBJECTS:digikamfacesengine_src>
+            $<TARGET_OBJECTS:digikamfacesenginedatabase_src>
             $<TARGET_OBJECTS:digikamgui_src>
             $<TARGET_OBJECTS:digikamdeletedialog_src>
             $<TARGET_OBJECTS:digikamtemplate_src>
