@@ -168,7 +168,6 @@ cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inClon
 
 void RedEyeCorrectionFilter::filterImage()
 {
-
     if (d->sp == 0)
     {
         // Loading the shape predictor model
@@ -179,9 +178,7 @@ void RedEyeCorrectionFilter::filterImage()
                                                         QStandardPaths::LocateDirectory);
         QFile model(*path.begin() + QLatin1String("/shapepredictor.dat"));
 
-        model.open(QIODevice::ReadOnly);
-
-        if (model.isOpen())
+        if (model.open(QIODevice::ReadOnly))
         {
             QDataStream dataStream(&model);
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
