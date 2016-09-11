@@ -54,7 +54,8 @@ public:
         radiusInput(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configRadiusAdjustmentEntry;

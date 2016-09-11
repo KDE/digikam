@@ -37,7 +37,7 @@ namespace Digikam
 class DImg;
 class DColor;
 
-class RedEyeTool : public EditorTool
+class RedEyeTool : public EditorToolThreaded
 {
     Q_OBJECT
 
@@ -48,19 +48,16 @@ public:
 
 private Q_SLOTS:
 
-    void slotPreview();
     void slotResetSettings();
-    void slotColorSelectedFromTarget(const DColor& color);
-    void slotHSChanged(int h, int s);
-    void slotVChanged(int v);
 
 private:
 
     void readSettings();
     void writeSettings();
-    void finalRendering();
-    void redEyeFilter(DImg& selection);
-    void setColor(const QColor& color);
+    void preparePreview();
+    void prepareFinal();
+    void setPreviewImage();
+    void setFinalImage();
 
 private:
 

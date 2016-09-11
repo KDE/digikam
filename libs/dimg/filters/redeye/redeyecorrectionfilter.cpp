@@ -28,11 +28,12 @@
 
 // Qt includes
 
-#include <QStandardPaths>
+#include <QtConcurrent>
+#include <QtMath>
+#include <QMutex>
 #include <QListIterator>
-#include <QDataStream>
 #include <QImage>
-#include <QFile>
+#include <QDataStream>
 
 // Local includes
 

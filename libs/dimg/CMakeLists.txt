@@ -108,12 +108,12 @@ set(libdimgfilters_SRCS
     filters/lens/antivignettingsettings.cpp
     filters/lens/lensdistortionfilter.cpp
     filters/lens/pixelaccess.cpp
-#    filters/redeye/redeyecorrectionfilter.cpp
+    filters/redeye/redeyecorrectionfilter.cpp
+    filters/redeye/redeyecorrectionsettings.cpp
 )
 
 
 set(facedetector_LIB_SRCS ../facesengine/detection/opencvfacedetector.cpp
-                          ../facesengine/redeye/redeyecorrectionfilter.cpp
                           ../facesengine/facedetector.cpp
 
 )
@@ -202,7 +202,6 @@ include_directories(
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../facesengine/
-                    ${CMAKE_CURRENT_SOURCE_DIR}/../facesengine/redeye/
                     ${CMAKE_CURRENT_SOURCE_DIR}/../facesengine/detector/
 )
 

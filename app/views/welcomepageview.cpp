@@ -94,6 +94,7 @@ QStringList WelcomePageView::featuresTabContent() const
     newFeatures << i18n("Add a new option in editor and light table to edit metadata;");
     newFeatures << i18n("Add a new option in editor and light table to edit geolocation;");
     newFeatures << i18n("Add a new option in editor and light table to run presentation tool;");
+    newFeatures << i18n("Add a new editor tool to detect and fix red-eyes automatically;");
     newFeatures << i18n("Add a new editor tool to perform color change based on Lut3D;");
     newFeatures << i18n("Add a new tool in camera import interface to convert RAW files to DNG;");
     newFeatures << i18n("Consolidation of Mysql database backend;");

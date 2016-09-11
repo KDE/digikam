@@ -67,6 +67,8 @@ public:
      */
     DImg   getOriginalRegionImage(bool useDownscaledImage = false) const;
 
+    DImg   getOriginalImage() const;
+
     void   setPreviewImage(const DImg& img);
 
     void   setCapturePointMode(bool b);

@@ -178,6 +178,11 @@ void ImageRegionWidget::setPreviewImage(const DImg& img)
     d_ptr->item->setTargetImage(image);
 }
 
+DImg ImageRegionWidget::getOriginalImage() const
+{
+    return (d_ptr->item->image().copy());
+}
+
 DImg ImageRegionWidget::getOriginalRegionImage(bool useDownscaledImage) const
 {
     DImg image = d_ptr->item->image().copy(getOriginalImageRegionToRender());

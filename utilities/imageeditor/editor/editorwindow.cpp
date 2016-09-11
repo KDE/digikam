@@ -3461,20 +3461,6 @@ void EditorWindow::slotLocalContrast()
 
 void EditorWindow::slotRedEye()
 {
-    ImageIface iface;
-
-    if (iface.selectionRect().size().isNull())
-    {
-        EditorToolPassivePopup* const popup = new EditorToolPassivePopup(qApp->activeWindow());
-        popup->setView(i18n("Red-Eye Correction Tool"),
-                       i18n("You need to select a region including the eyes to use "
-                            "the red-eye correction tool"));
-        popup->setAutoDelete(true);
-        popup->setTimeout(2500);
-        popup->show();
-        return;
-    }
-
     loadTool(new RedEyeTool(this));
 }
 

@@ -58,7 +58,8 @@ public:
         settingsView(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     static const QString configGroupName;
     static const QString configHistogramChannelEntry;
@@ -99,7 +100,6 @@ BCGTool::BCGTool(QObject* const parent)
     d->gboxSettings->setButtons(EditorToolSettings::Default|
                                 EditorToolSettings::Ok|
                                 EditorToolSettings::Cancel);
-//                              EditorToolSettings::Try);
 
     // -------------------------------------------------------------
 
