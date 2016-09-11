@@ -99,7 +99,10 @@ bool RedEyeCorrection::toolOperations()
         return false;
     }
 
-    m_redEyeCFilter = new RedEyeCorrectionFilter(&image(), 0L);
+    RedEyeCorrectionContainer prm;
+    prm.m_redToAvgRatio = settings()[QLatin1String("redtoavgratio")].toDouble();
+
+    m_redEyeCFilter = new RedEyeCorrectionFilter(&image(), 0L, prm);
     applyFilter(m_redEyeCFilter);
 
     delete m_redEyeCFilter;
