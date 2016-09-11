@@ -27,10 +27,12 @@
 // Local includes
 
 #include "batchtool.h"
-#include "redeyecorrectionfilter.h"
 
 namespace Digikam
 {
+
+class RedEyeCorrectionSettings;
+class RedEyeCorrectionFilter;
 
 class RedEyeCorrection : public BatchTool
 {
@@ -60,7 +62,8 @@ private Q_SLOTS:
 
 private:
 
-    RedEyeCorrectionFilter* m_redEyeCFilter;
+    RedEyeCorrectionFilter*   m_redEyeCFilter;
+    RedEyeCorrectionSettings* m_settingsView;
 };
 
 }  // namespace Digikam
