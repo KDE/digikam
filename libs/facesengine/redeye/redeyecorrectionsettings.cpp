@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2010-02-09
- * Description : BCG settings view.
+ * Description : Red Eyes auto correction settings view.
  *
  * Copyright (C) 2010-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2016      by Omar Amin <Omar dot moh dot amin at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -70,12 +71,12 @@ RedEyeCorrectionSettings::RedEyeCorrectionSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing     = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    QGridLayout* grid = new QGridLayout(parent);
+    QGridLayout* grid     = new QGridLayout(parent);
 
-    QLabel* const label2 = new QLabel(i18n("RedToAvgRatio:"));
-    d->redtoavgratioInput      = new DDoubleNumInput();
+    QLabel* const label2  = new QLabel(i18n("Red Level:"));
+    d->redtoavgratioInput = new DDoubleNumInput();
     d->redtoavgratioInput->setRange(1.5, 2.2, 0.1);
     d->redtoavgratioInput->setDefaultValue(2.1);
     d->redtoavgratioInput->setWhatsThis(i18n("Set here the red level you want to correct."));
@@ -103,7 +104,7 @@ RedEyeCorrectionContainer RedEyeCorrectionSettings::settings() const
 {
     RedEyeCorrectionContainer prm;
 
-    prm.redtoavgratio = (double)d->redtoavgratioInput->value();
+    prm.m_redToAvgRatio = (double)d->redtoavgratioInput->value();
 
     return prm;
 }
@@ -111,7 +112,7 @@ RedEyeCorrectionContainer RedEyeCorrectionSettings::settings() const
 void RedEyeCorrectionSettings::setSettings(const RedEyeCorrectionContainer& settings)
 {
     blockSignals(true);
-    d->redtoavgratioInput->setValue(settings.redtoavgratio);
+    d->redtoavgratioInput->setValue(settings.m_redToAvgRatio);
     blockSignals(false);
 }
 
@@ -126,7 +127,7 @@ RedEyeCorrectionContainer RedEyeCorrectionSettings::defaultSettings() const
 {
     RedEyeCorrectionContainer prm;
 
-    prm.redtoavgratio = (double)(d->redtoavgratioInput->defaultValue());
+    prm.m_redToAvgRatio = (double)(d->redtoavgratioInput->defaultValue());
 
     return prm;
 }
@@ -136,7 +137,7 @@ void RedEyeCorrectionSettings::readSettings(KConfigGroup& group)
     RedEyeCorrectionContainer prm;
     RedEyeCorrectionContainer defaultPrm = defaultSettings();
 
-    prm.redtoavgratio = group.readEntry(d->configRedToAvgRatioAdjustmentEntry, defaultPrm.redtoavgratio);
+    prm.m_redToAvgRatio = group.readEntry(d->configRedToAvgRatioAdjustmentEntry, defaultPrm.m_redToAvgRatio);
 
     setSettings(prm);
 }
@@ -145,7 +146,7 @@ void RedEyeCorrectionSettings::writeSettings(KConfigGroup& group)
 {
     RedEyeCorrectionContainer prm = settings();
 
-    group.writeEntry(d->configRedToAvgRatioAdjustmentEntry, prm.redtoavgratio);
+    group.writeEntry(d->configRedToAvgRatioAdjustmentEntry, prm.m_redToAvgRatio);
 }
 
 }  // namespace Digikam

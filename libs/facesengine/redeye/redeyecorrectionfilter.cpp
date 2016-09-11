@@ -44,7 +44,7 @@ namespace Digikam
 
 RedEyeCorrectionContainer::RedEyeCorrectionContainer()
 {
-    redtoavgratio = 2.1;
+    m_redToAvgRatio = 2.1;
 }
 
 bool RedEyeCorrectionContainer::isDefault() const
@@ -54,25 +54,23 @@ bool RedEyeCorrectionContainer::isDefault() const
 
 bool RedEyeCorrectionContainer::operator==(const RedEyeCorrectionContainer& other) const
 {
-    return (redtoavgratio    == other.redtoavgratio);
+    return (m_redToAvgRatio == other.m_redToAvgRatio);
 }
 
 void RedEyeCorrectionContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
 {
-    action.addParameter(prefix + QLatin1String("redtoavgratio"),    redtoavgratio);
-
+    action.addParameter(prefix + QLatin1String("redtoavgratio"), m_redToAvgRatio);
 }
 
 RedEyeCorrectionContainer RedEyeCorrectionContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
 {
     RedEyeCorrectionContainer settings;
-    settings.redtoavgratio    = action.parameter(prefix + QLatin1String("redtoavgratio"),    settings.redtoavgratio);
+    settings.m_redToAvgRatio = action.parameter(prefix + QLatin1String("redtoavgratio"), settings.m_redToAvgRatio);
+
     return settings;
 }
 
 // -----------------------------------------------------------------------------------------------
-
-
 
 class RedEyeCorrectionFilter::Private
 {
@@ -85,7 +83,7 @@ public:
     FacesEngine::FaceDetector      facedetector;
     static redeye::shapepredictor* sp;
 
-    RedEyeCorrectionContainer settings;
+    RedEyeCorrectionContainer      settings;
 };
 
 redeye::shapepredictor * RedEyeCorrectionFilter::Private::sp = 0;
@@ -193,8 +191,8 @@ void RedEyeCorrectionFilter::filterImage()
     // Todo: convert dImg to Opencv::Mat directly
     // Deep copy
     DImg temp         = m_orgImage.copy();
-    int type          = m_orgImage.sixteenBit()?CV_16UC3:CV_8UC3;
-    type              = m_orgImage.hasAlpha()?type:type+8;
+    int type          = m_orgImage.sixteenBit() ? CV_16UC3 : CV_8UC3;
+    type              = m_orgImage.hasAlpha()   ? type     : type+8;
 
     intermediateImage = cv::Mat(m_orgImage.height(), m_orgImage.width(),
                                 type, m_orgImage.bits());
@@ -203,15 +201,15 @@ void RedEyeCorrectionFilter::filterImage()
 
     if (type == CV_8UC3 || type == CV_16UC3)
     {
-        cv::cvtColor(intermediateImage,gray,CV_RGB2GRAY);  // 3 channels
+        cv::cvtColor(intermediateImage, gray, CV_RGB2GRAY);  // 3 channels
     }
     else
     {
-        cv::cvtColor(intermediateImage,gray,CV_RGBA2GRAY); // 4 channels
+        cv::cvtColor(intermediateImage, gray, CV_RGBA2GRAY); // 4 channels
     }
     if (type == CV_16UC3 || type == CV_16UC4)
     {
-        gray.convertTo(gray,CV_8UC1,1/255.0);
+        gray.convertTo(gray, CV_8UC1, 1/255.0);
     }
 
     QList<QRectF> qrectfdets   = d->facedetector.detectFaces(temp);
@@ -220,8 +218,8 @@ void RedEyeCorrectionFilter::filterImage()
     if (runningFlag() && (qrectfdets.size() != 0))
     {
         std::vector<cv::Rect> dets;
-        QList<QRect> qrectdets = FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets,temp.size());
-        QRectFtocvRect(qrectdets,dets);
+        QList<QRect> qrectdets = FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets, temp.size());
+        QRectFtocvRect(qrectdets, dets);
 
         // Eye Detection
         for (unsigned int i = 0 ; runningFlag() && (i < dets.size()) ; i++)
@@ -234,8 +232,8 @@ void RedEyeCorrectionFilter::filterImage()
                 correctRedEye(intermediateImage.data,
                               intermediateImage.type(),
                               eyes[j],
-                              cv::Rect(0,0,intermediateImage.size().width ,
-                                           intermediateImage.size().height));
+                              cv::Rect(0, 0, intermediateImage.size().width ,
+                                             intermediateImage.size().height));
             }
         }
     }
@@ -309,7 +307,7 @@ void RedEyeCorrectionFilter::correctRedEye(cv::Mat& eye, int type, cv::Rect imgR
         {
             int pixelindex = j * pixeldepth;
             onebytedata    = &(((uchar*)globalindex)[pixelindex]);
-            //twobytedata = &(((ushort*) globalindex)[pixelindex]);
+            //twobytedata  = &(((ushort*) globalindex)[pixelindex]);
             onebytedata[0] = 0;   // R
             onebytedata[1] = 255; // G
             onebytedata[2] = 0;   // B
@@ -342,7 +340,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     }
 
     bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false : true;
-    double redratio = d->settings.redtoavgratio;
+    double redratio   = d->settings.m_redToAvgRatio;
 
     for (int i = eyerect.y ; i < eyerect.y + eyerect.height ; i++)
     {
@@ -354,25 +352,22 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
 
             if (sixteendepth)
             {
-                twobytedata[2] = twobytedata[2] *0.02
-                                 + twobytedata[1] * 0.68
-                                 + twobytedata[0] * 0.3;
+                twobytedata[2] = twobytedata[2] * 0.02
+                               + twobytedata[1] * 0.68
+                               + twobytedata[0] * 0.3;
 
             }
             else
             {
-
                 float redIntensity = ((float)onebytedata[2] / (( (unsigned int)onebytedata[1]
                                                                + (unsigned int)onebytedata[0]) / 2));
                 if (redIntensity > redratio)
                 {
                     // reduce red to the average of blue and green
                     onebytedata[2] = ((int)onebytedata[1] + (int)onebytedata[0]) / 2;
-
                 }
             }
         }
-
     }
 }
 
