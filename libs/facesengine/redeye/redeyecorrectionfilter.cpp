@@ -88,7 +88,7 @@ public:
     RedEyeCorrectionContainer      settings;
 };
 
-redeye::shapepredictor * RedEyeCorrectionFilter::Private::sp = 0;
+redeye::shapepredictor* RedEyeCorrectionFilter::Private::sp = 0;
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
@@ -118,8 +118,8 @@ RedEyeCorrectionFilter::RedEyeCorrectionFilter(const RedEyeCorrectionContainer& 
 
 RedEyeCorrectionFilter::~RedEyeCorrectionFilter()
 {
-      cancelFilter();
-      delete d;
+    cancelFilter();
+    delete d;
 }
 
 cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inCloneImageData)
