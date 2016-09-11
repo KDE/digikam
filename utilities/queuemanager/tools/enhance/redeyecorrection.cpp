@@ -35,6 +35,7 @@
 // Local includes
 
 #include "dimg.h"
+#include "redeyecorrectionsettings.h"
 
 namespace Digikam
 {
@@ -54,13 +55,11 @@ RedEyeCorrection::~RedEyeCorrection()
 
 void RedEyeCorrection::registerSettingsWidget()
 {
-    // TODO: add settings widget
-/*
     m_settingsWidget = new QWidget;
+    m_settingsView   = new RedEyeCorrectionSettings(m_settingsWidget);
 
     connect(m_settingsView, SIGNAL(signalSettingsChanged()),
             this, SLOT(slotSettingsChanged()));
-*/
 
     BatchTool::registerSettingsWidget();
 }
@@ -69,7 +68,7 @@ BatchToolSettings RedEyeCorrection::defaultSettings()
 {
     // TODO: add settings widget serialization of parameters
     BatchToolSettings prm;
-
+    settings.insert(QLatin1String("RestorationMethod"), ReduceUniformNoise);
     return prm;
 }
 
