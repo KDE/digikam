@@ -176,7 +176,7 @@ void RedEyeCorrectionFilter::filterImage()
         QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                         QString::fromLatin1("digikam/facesengine"),
                                                         QStandardPaths::LocateDirectory);
-        QFile model(*path.begin()+QLatin1String("/shapepredictor.dat"));
+        QFile model(*path.begin() + QLatin1String("/shapepredictor.dat"));
 
         model.open(QIODevice::ReadOnly);
 
@@ -184,7 +184,7 @@ void RedEyeCorrectionFilter::filterImage()
         {
             QDataStream dataStream(&model);
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
-            dataStream>>*temp;
+            dataStream >> *temp;
             d->sp = temp;
         }
     }
