@@ -22,15 +22,17 @@
  *
  * ============================================================ */
 
+// C++ includes
+
+#include <iterator>
+
 // Qt includes
 
-#include <QtConcurrent>
-#include <QtMath>
-#include <QMutex>
-#include <iterator>
+#include <QStandardPaths>
 #include <QListIterator>
-#include <QImage>
 #include <QDataStream>
+#include <QImage>
+#include <QFile>
 
 // Local includes
 
@@ -355,7 +357,6 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
                 twobytedata[2] = twobytedata[2] * 0.02
                                + twobytedata[1] * 0.68
                                + twobytedata[0] * 0.3;
-
             }
             else
             {
