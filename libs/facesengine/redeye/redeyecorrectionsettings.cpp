@@ -77,7 +77,7 @@ RedEyeCorrectionSettings::RedEyeCorrectionSettings(QWidget* const parent)
 
     QLabel* const label2  = new QLabel(i18n("Red Level:"));
     d->redtoavgratioInput = new DDoubleNumInput();
-    d->redtoavgratioInput->setRange(1.5, 2.2, 0.1);
+    d->redtoavgratioInput->setRange(1.5, 3.0, 0.1);
     d->redtoavgratioInput->setDefaultValue(2.1);
     d->redtoavgratioInput->setWhatsThis(i18n("Set here the red level you want to correct."));
 
