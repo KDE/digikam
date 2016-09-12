@@ -46,4 +46,5 @@ BUGFIXES FROM BUGZILLA:
 031 ==> 368444 - Not supporting XCF anymore.
 032 ==> 368564 - Settings fields not working properly.
 033 ==> 368575 - Untranslatable strings in BQM-File Renaming (Date & Time dialog).
-034 ==> 
+034 ==> 368715 - Transform > Resize is missing an edit box (regression).
+035 ==> 
