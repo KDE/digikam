@@ -110,14 +110,8 @@ set(libdimgfilters_SRCS
     filters/lens/pixelaccess.cpp
     filters/redeye/redeyecorrectionfilter.cpp
     filters/redeye/redeyecorrectionsettings.cpp
+    filters/redeye/redeyecorrectioncontainer.cpp
 )
-
-
-set(facedetector_LIB_SRCS ../facesengine/detection/opencvfacedetector.cpp
-                          ../facesengine/facedetector.cpp
-
-)
-
 
 # ==================================================================================================
 # get the gcc version

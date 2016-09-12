@@ -45,36 +45,6 @@
 namespace Digikam
 {
 
-RedEyeCorrectionContainer::RedEyeCorrectionContainer()
-{
-    m_redToAvgRatio = 2.1;
-}
-
-bool RedEyeCorrectionContainer::isDefault() const
-{
-    return (*this == RedEyeCorrectionContainer());
-}
-
-bool RedEyeCorrectionContainer::operator==(const RedEyeCorrectionContainer& other) const
-{
-    return (m_redToAvgRatio == other.m_redToAvgRatio);
-}
-
-void RedEyeCorrectionContainer::writeToFilterAction(FilterAction& action, const QString& prefix) const
-{
-    action.addParameter(prefix + QLatin1String("redtoavgratio"), m_redToAvgRatio);
-}
-
-RedEyeCorrectionContainer RedEyeCorrectionContainer::fromFilterAction(const FilterAction& action, const QString& prefix)
-{
-    RedEyeCorrectionContainer settings;
-    settings.m_redToAvgRatio = action.parameter(prefix + QLatin1String("redtoavgratio"), settings.m_redToAvgRatio);
-
-    return settings;
-}
-
-// -----------------------------------------------------------------------------------------------
-
 class RedEyeCorrectionFilter::Private
 {
 public:
