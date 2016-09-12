@@ -123,49 +123,6 @@ RedEyeCorrectionFilter::~RedEyeCorrectionFilter()
     delete d;
 }
 
-cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inCloneImageData)
-{
-    // TODO : Handle QImage 16 bit depth images or convert from DImg to cv::Mat directly
-
-    switch (inImage.format())
-    {
-        // 8-bit, 4 channel
-        case QImage::Format_RGB32:
-        {
-            cv::Mat mat(inImage.height(), inImage.width(), CV_8UC4, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine());
-
-            return (inCloneImageData ? mat.clone() : mat);
-        }
-
-        // 8-bit, 3 channel
-        case QImage::Format_RGB888:
-        {
-            if ( !inCloneImageData )
-            {
-               qCWarning(DIGIKAM_FACESENGINE_LOG) << "ASM::QImageToCvMat() - Conversion requires cloning since we use a temporary QImage";
-            }
-
-            QImage swapped = inImage.rgbSwapped();
-
-            return cv::Mat(swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine()).clone();
-        }
-
-         // 8-bit, 1 channel
-        case QImage::Format_Indexed8:
-        {
-            cv::Mat mat(inImage.height(), inImage.width(), CV_8UC1, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine());
-
-            return (inCloneImageData ? mat.clone() : mat);
-        }
-
-        default:
-            qCWarning(DIGIKAM_FACESENGINE_LOG) << "ASM::QImageToCvMat() - QImage format not handled in switch:" << inImage.format();
-            break;
-    }
-
-    return cv::Mat();
-}
-
 void RedEyeCorrectionFilter::filterImage()
 {
     if (d->sp == 0)
@@ -188,7 +145,7 @@ void RedEyeCorrectionFilter::filterImage()
     }
 
     cv::Mat intermediateImage;
-    // Todo: convert dImg to Opencv::Mat directly
+    // TODO: convert dImg to Opencv::Mat directly
     // Deep copy
     DImg temp         = m_orgImage.copy();
     int type          = m_orgImage.sixteenBit() ? CV_16UC3 : CV_8UC3;
@@ -245,79 +202,6 @@ void RedEyeCorrectionFilter::filterImage()
     }
 }
 
-void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const QList<cv::Rect>& rects)
-{
-    QListIterator<cv::Rect> listit(rects);
-
-    while (listit.hasNext())
-    {
-        cv::Rect temp = listit.next();
-        cv::rectangle(image, temp, cv::Scalar(0,0,255));
-    }
-}
-
-void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects)
-{
-    for (unsigned int i = 0 ; i < rects.size() ; i++)
-    {
-        cv::Rect temp = rects[i];
-        cv::rectangle(image, temp, cv::Scalar(0, 0, 255));
-    }
-}
-
-void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect>& faces, std::vector<cv::Rect>& result)
-{
-    QListIterator<QRect> listit(faces);
-
-    while (listit.hasNext())
-    {
-        QRect  temp = listit.next();
-        result.push_back(cv::Rect(temp.topLeft().rx(), temp.topLeft().ry(),
-                                  temp.width()       , temp.height()) );
-    }
-}
-
-void RedEyeCorrectionFilter::correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect)
-{
-    // TODO : handle different images depth
-    uchar*  onebytedata = eye.data;
-    //ushort* twobytedata = (ushort*)eye.data;
-    int     pixeldepth  = 0;
-
-    if (type == CV_8UC3 || type == CV_16UC3 )
-    {
-        pixeldepth = 3;
-    }
-    else if(type == CV_8UC4 || type == CV_16UC4)
-    {
-        pixeldepth = 4;
-    }
-    else
-    {
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "\nInsupported Type in redeye correction function";
-        return;
-    }
-
-    //bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false:true;
-    uchar* globalindex = eye.data;
-
-    for (int i = 0 ; i < eye.rows ; i++)
-    {
-        for (int j = 0 ; j < eye.cols ; j++)
-        {
-            int pixelindex = j * pixeldepth;
-            onebytedata    = &(((uchar*)globalindex)[pixelindex]);
-            //twobytedata  = &(((ushort*) globalindex)[pixelindex]);
-            onebytedata[0] = 0;   // R
-            onebytedata[1] = 255; // G
-            onebytedata[2] = 0;   // B
-
-        }
-
-        globalindex = globalindex + imgRect.width*pixeldepth;
-    }
-}
-
 void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
                                            cv::Rect eyerect, cv::Rect imgRect)
 {
@@ -336,7 +220,7 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     }
     else
     {
-        qCDebug(DIGIKAM_FACESENGINE_LOG) << "\nInsupported Type in redeye correction function";
+        qCDebug(DIGIKAM_DIMG_LOG) << "\nInsupported Type in redeye correction function";
     }
 
     bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false : true;
@@ -370,6 +254,18 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     }
 }
 
+void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect>& faces, std::vector<cv::Rect>& result)
+{
+    QListIterator<QRect> listit(faces);
+
+    while (listit.hasNext())
+    {
+        QRect  temp = listit.next();
+        result.push_back(cv::Rect(temp.topLeft().rx(), temp.topLeft().ry(),
+                                  temp.width()       , temp.height()) );
+    }
+}
+
 FilterAction RedEyeCorrectionFilter::filterAction()
 {
     FilterAction action(FilterIdentifier(), CurrentVersion());
@@ -381,5 +277,111 @@ FilterAction RedEyeCorrectionFilter::filterAction()
 void RedEyeCorrectionFilter::readParameters(const FilterAction&)
 {
 }
+
+/*
+void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const QList<cv::Rect>& rects)
+{
+    QListIterator<cv::Rect> listit(rects);
+
+    while (listit.hasNext())
+    {
+        cv::Rect temp = listit.next();
+        cv::rectangle(image, temp, cv::Scalar(0,0,255));
+    }
+}
+
+void RedEyeCorrectionFilter::drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects)
+{
+    for (unsigned int i = 0 ; i < rects.size() ; i++)
+    {
+        cv::Rect temp = rects[i];
+        cv::rectangle(image, temp, cv::Scalar(0, 0, 255));
+    }
+}
+
+void RedEyeCorrectionFilter::correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect)
+{
+    // TODO : handle different images depth
+    uchar*  onebytedata = eye.data;
+    //ushort* twobytedata = (ushort*)eye.data;
+    int     pixeldepth  = 0;
+
+    if (type == CV_8UC3 || type == CV_16UC3 )
+    {
+        pixeldepth = 3;
+    }
+    else if(type == CV_8UC4 || type == CV_16UC4)
+    {
+        pixeldepth = 4;
+    }
+    else
+    {
+        qCDebug(DIGIKAM_DIMG_LOG) << "\nInsupported Type in redeye correction function";
+        return;
+    }
+
+    //bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false:true;
+    uchar* globalindex = eye.data;
+
+    for (int i = 0 ; i < eye.rows ; i++)
+    {
+        for (int j = 0 ; j < eye.cols ; j++)
+        {
+            int pixelindex = j * pixeldepth;
+            onebytedata    = &(((uchar*)globalindex)[pixelindex]);
+            //twobytedata  = &(((ushort*) globalindex)[pixelindex]);
+            onebytedata[0] = 0;   // R
+            onebytedata[1] = 255; // G
+            onebytedata[2] = 0;   // B
+
+        }
+
+        globalindex = globalindex + imgRect.width*pixeldepth;
+    }
+}
+
+cv::Mat RedEyeCorrectionFilter::QImageToCvMat(const QImage& inImage, bool inCloneImageData)
+{
+    // TODO : Handle QImage 16 bit depth images or convert from DImg to cv::Mat directly
+
+    switch (inImage.format())
+    {
+        // 8-bit, 4 channel
+        case QImage::Format_RGB32:
+        {
+            cv::Mat mat(inImage.height(), inImage.width(), CV_8UC4, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine());
+
+            return (inCloneImageData ? mat.clone() : mat);
+        }
+
+        // 8-bit, 3 channel
+        case QImage::Format_RGB888:
+        {
+            if ( !inCloneImageData )
+            {
+               qCWarning(DIGIKAM_DIMG_LOG) << "ASM::QImageToCvMat() - Conversion requires cloning since we use a temporary QImage";
+            }
+
+            QImage swapped = inImage.rgbSwapped();
+
+            return cv::Mat(swapped.height(), swapped.width(), CV_8UC3, const_cast<uchar*>(swapped.bits()), swapped.bytesPerLine()).clone();
+        }
+
+         // 8-bit, 1 channel
+        case QImage::Format_Indexed8:
+        {
+            cv::Mat mat(inImage.height(), inImage.width(), CV_8UC1, const_cast<uchar*>(inImage.bits()), inImage.bytesPerLine());
+
+            return (inCloneImageData ? mat.clone() : mat);
+        }
+
+        default:
+            qCWarning(DIGIKAM_DIMG_LOG) << "ASM::QImageToCvMat() - QImage format not handled in switch:" << inImage.format();
+            break;
+    }
+
+    return cv::Mat();
+}
+*/
 
 }  // namespace Digikam

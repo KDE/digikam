@@ -42,10 +42,12 @@ class DIGIKAM_EXPORT RedEyeCorrectionFilter : public DImgThreadedFilter
 public:
 
     explicit RedEyeCorrectionFilter(QObject* const parent = 0);
-    explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=0, const RedEyeCorrectionContainer &settings=RedEyeCorrectionContainer());
+    explicit RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent=0,
+                                    const RedEyeCorrectionContainer& settings=RedEyeCorrectionContainer());
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
-    explicit RedEyeCorrectionFilter(const RedEyeCorrectionContainer &settings, DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
+    explicit RedEyeCorrectionFilter(const RedEyeCorrectionContainer& settings,
+                                    DImgThreadedFilter* const parentFilter, const DImg& orgImage, const DImg& destImage,
                                     int progressBegin=0, int progressEnd=100);
 
     ~RedEyeCorrectionFilter();
@@ -82,13 +84,13 @@ private:
     void filterImage();
     void readParameters(const FilterAction&);
 
-    cv::Mat QImageToCvMat(const QImage& inImage, bool inCloneImageData = true);
-    void correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect);
+    //cv::Mat QImageToCvMat(const QImage& inImage, bool inCloneImageData = true);
+    //void correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect);
     void correctRedEye(uchar* data, int type, cv::Rect eyerect, cv::Rect imgRect);
     void QRectFtocvRect(const QList<QRect>& faces, std::vector<cv::Rect>& result);
 
-    void drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects);
-    void drawRects(cv::Mat& image, const QList<cv::Rect>& rects);
+    //void drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects);
+    //void drawRects(cv::Mat& image, const QList<cv::Rect>& rects);
 
 private:
 
