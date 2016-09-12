@@ -119,7 +119,6 @@ void RedEyeCorrectionFilter::filterImage()
     }
 
     cv::Mat intermediateImage;
-    // TODO: convert dImg to Opencv::Mat directly
     // Deep copy
     DImg temp         = m_orgImage.copy();
     int type          = m_orgImage.sixteenBit() ? CV_16UC3 : CV_8UC3;
@@ -180,7 +179,6 @@ void RedEyeCorrectionFilter::filterImage()
 void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
                                            cv::Rect eyerect, cv::Rect imgRect)
 {
-    // TODO : handle different images depth
     uchar*  onebytedata = data;
     ushort* twobytedata = reinterpret_cast<ushort*>(data);
     int     pixeldepth  = 0;
