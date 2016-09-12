@@ -195,10 +195,10 @@ void RedEyeCorrectionFilter::correctRedEye(uchar* data, int type,
     }
     else
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "\nInsupported Type in redeye correction function";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Insupported Type in redeye correction filter";
     }
 
-    bool sixteendepth = type == CV_8UC3 || type == CV_8UC4 ? false : true;
+    bool sixteendepth = (type == CV_8UC3) || (type == CV_8UC4) ? false : true;
     double redratio   = d->settings.m_redToAvgRatio;
 
     for (int i = eyerect.y ; i < eyerect.y + eyerect.height ; i++)

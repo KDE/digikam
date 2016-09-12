@@ -79,7 +79,7 @@ RedEyeCorrectionSettings::RedEyeCorrectionSettings(QWidget* const parent)
     d->redtoavgratioInput = new DDoubleNumInput();
     d->redtoavgratioInput->setRange(1.5, 3.0, 0.1);
     d->redtoavgratioInput->setDefaultValue(2.1);
-    d->redtoavgratioInput->setWhatsThis(i18n("Set here the red level you want to correct."));
+    d->redtoavgratioInput->setWhatsThis(i18n("Set here the reducing level of red to the average of blue and green."));
 
     // -------------------------------------------------------------
 
