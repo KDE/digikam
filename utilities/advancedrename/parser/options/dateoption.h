@@ -47,21 +47,24 @@ class DateFormat
 {
 public:
 
-    DateFormat();
-    ~DateFormat() {};
-
-    typedef QPair<QString, QVariant>    DateFormatDescriptor;
-    typedef QList<DateFormatDescriptor> DateFormatMap;
     enum Type
     {
         Standard = 0,
         ISO,
         FullText,
-#if QT_VERSION >= 0x040700
         UnixTimeStamp,
-#endif
         Custom
     };
+
+public:
+
+    typedef QPair<QString, QVariant>    DateFormatDescriptor;
+    typedef QList<DateFormatDescriptor> DateFormatMap;
+
+public:
+
+    DateFormat();
+    ~DateFormat() {};
 
     Type     type(const QString& identifier);
 

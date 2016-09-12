@@ -54,11 +54,11 @@ static QString getDateFormatLinkText()
 
 DateFormat::DateFormat()
 {
-    m_map.insert(Standard,      DateFormatDescriptor(QLatin1String("Standard"),       QLatin1String("yyyyMMddThhmmss")));
-    m_map.insert(ISO,           DateFormatDescriptor(QLatin1String("ISO"),            Qt::ISODate));
-    m_map.insert(FullText,      DateFormatDescriptor(QLatin1String("Text"),           Qt::TextDate));
-    m_map.insert(UnixTimeStamp, DateFormatDescriptor(QLatin1String("UnixTimeStamp"),  QVariant()));
-    m_map.insert(Custom,        DateFormatDescriptor(QLatin1String("Custom"),         QVariant()));
+    m_map.insert(Standard,      DateFormatDescriptor(i18n("Standard"),        QLatin1String("yyyyMMddThhmmss")));
+    m_map.insert(ISO,           DateFormatDescriptor(i18n("ISO"),             Qt::ISODate));
+    m_map.insert(FullText,      DateFormatDescriptor(i18n("Text"),            Qt::TextDate));
+    m_map.insert(UnixTimeStamp, DateFormatDescriptor(i18n("Unix Time Stamp"), QVariant()));
+    m_map.insert(Custom,        DateFormatDescriptor(i18n("Custom"),          QVariant()));
 }
 
 DateFormat::Type DateFormat::type(const QString& identifier)
@@ -237,7 +237,7 @@ void DateOptionDialog::slotCustomFormatChanged(const QString&)
 
 void DateOptionDialog::updateExampleLabel()
 {
-    QString result = QString::fromUtf8("example: %1").arg(formattedDateTime(QDateTime::currentDateTime()));
+    QString result = i18n("example: ") + formattedDateTime(QDateTime::currentDateTime());
     ui->exampleLabel->setText(result);
 }
 
@@ -249,8 +249,8 @@ DateOption::DateOption()
              QLatin1String("view-calendar"))
 {
     addToken(QLatin1String("[date]"),            i18n("Date and time (standard format)"));
-    addToken(QLatin1String("[date:||key||]"),    i18n("Date and time (||key|| = Standard|ISO|UnixTimeStamp|Text)"));
-    addToken(QLatin1String("[date:||format||]"), i18n("Date and time") + QLatin1String(" (") +  getDateFormatLinkText() + QLatin1Char(')'));
+    addToken(QLatin1String("[date:||key||]"),    i18n("Date and time") + QLatin1String(" (||key|| = Standard|ISO|UnixTimeStamp|Text)"));
+    addToken(QLatin1String("[date:||format||]"), i18n("Date and time") + QLatin1String(" (") + getDateFormatLinkText() + QLatin1Char(')'));
 
     QRegExp reg(QLatin1String("\\[date(:(.*))?\\]"));
     reg.setMinimal(true);
