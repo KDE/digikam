@@ -68,18 +68,22 @@ RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
     initFilter();
 }
 
-RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent, const RedEyeCorrectionContainer& settings)
-    : DImgThreadedFilter(orgImage, parent, QLatin1String("RedEyeCorrection")),
+RedEyeCorrectionFilter::RedEyeCorrectionFilter(DImg* const orgImage, QObject* const parent,
+                                               const RedEyeCorrectionContainer& settings)
+    : DImgThreadedFilter(orgImage, parent,
+                         QLatin1String("RedEyeCorrection")),
       d(new Private)
 {
     d->settings = settings;
     initFilter();
 }
 
-RedEyeCorrectionFilter::RedEyeCorrectionFilter(const RedEyeCorrectionContainer& settings, DImgThreadedFilter* const parentFilter,
+RedEyeCorrectionFilter::RedEyeCorrectionFilter(const RedEyeCorrectionContainer& settings,
+                                               DImgThreadedFilter* const parentFilter,
                                                const DImg& orgImage, const DImg& destImage,
                                                int progressBegin, int progressEnd)
-    : DImgThreadedFilter(parentFilter, orgImage, destImage, progressBegin, progressEnd,
+    : DImgThreadedFilter(parentFilter, orgImage, destImage,
+                         progressBegin, progressEnd,
                          parentFilter->filterName() + QLatin1String(": RedEyeCorrection")),
       d(new Private)
 {
@@ -119,7 +123,7 @@ void RedEyeCorrectionFilter::filterImage()
     // Deep copy
     DImg temp         = m_orgImage.copy();
     int type          = m_orgImage.sixteenBit() ? CV_16UC3 : CV_8UC3;
-    type              = m_orgImage.hasAlpha()   ? type     : type+8;
+    type              = m_orgImage.hasAlpha()   ? type     : type + 8;
 
     intermediateImage = cv::Mat(m_orgImage.height(), m_orgImage.width(),
                                 type, m_orgImage.bits());
@@ -134,9 +138,10 @@ void RedEyeCorrectionFilter::filterImage()
     {
         cv::cvtColor(intermediateImage, gray, CV_RGBA2GRAY); // 4 channels
     }
+
     if (type == CV_16UC3 || type == CV_16UC4)
     {
-        gray.convertTo(gray, CV_8UC1, 1/255.0);
+        gray.convertTo(gray, CV_8UC1, 1 / 255.0);
     }
 
     QList<QRectF> qrectfdets   = d->facedetector.detectFaces(temp);
