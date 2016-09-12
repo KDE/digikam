@@ -34,8 +34,6 @@
 #include "showfotoimagemodel.h"
 #include "ddragobjects.h"
 
-class KJob;
-
 namespace ShowFoto
 {
 
@@ -56,13 +54,12 @@ public:
 
 Q_SIGNALS:
 
-    void dioResult(KJob*);
     void signalDroppedUrls(const QList<QUrl>& droppedUrls);
 
 private:
 
-    QAction*   addGroupAction(QMenu* const menu);
-    QAction*   addCancelAction(QMenu* const menu);
+    QAction* addGroupAction(QMenu* const menu);
+    QAction* addCancelAction(QMenu* const menu);
 };
 
 } // namespace Digikam
