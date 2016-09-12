@@ -37,49 +37,23 @@
 namespace Digikam
 {
 
-class fullobjectdetection
+class FullObjectDetection
 {
 public:
 
-    fullobjectdetection(const cv::Rect& rect_, const std::vector<std::vector<float> >& parts_)
-        : rect(rect_),
-        parts(parts_)
-    {
-    }
+    FullObjectDetection(const cv::Rect& rect_, const std::vector<std::vector<float> >& parts_);
+    FullObjectDetection();
+    FullObjectDetection(const cv::Rect& rect_);
 
-    fullobjectdetection()
-    {
-    }
+    const cv::Rect& get_rect() const;
 
-    fullobjectdetection(const cv::Rect& rect_)
-        : rect(rect_)
-    {
-    }
+    cv::Rect& get_rect();
 
-    const cv::Rect& get_rect() const
-    {
-        return rect;
-    }
+    unsigned long num_parts() const;
 
-    cv::Rect& get_rect()
-    {
-        return rect;
-    }
+    const std::vector<float>& part(unsigned long idx) const;
 
-    unsigned long num_parts() const
-    {
-        return parts.size();
-    }
-
-    const std::vector<float>& part(unsigned long idx) const
-    {
-        return parts[idx];
-    }
-
-    std::vector<float>& part(unsigned long idx)
-    {
-        return parts[idx];
-    }
+    std::vector<float>& part(unsigned long idx);
 
 private:
 
@@ -89,43 +63,8 @@ private:
 
 // -------------------------------------------------------------------
 
-std::vector<cv::Rect> geteyes(const fullobjectdetection& shape)
-{
-    std::vector<cv::Rect> eyes;
-
-    for (int j = 0 ; j < 2 ; j++)
-    {
-        int start = j ? 36 : 42;
-        int end   = j ? 41 : 47;
-        int tlx, tly, brx, bry; // topleftx, y, toprightx, y
-
-        // initializing
-        std::vector<float> firstpoint = shape.part(start);
-        tlx                           = firstpoint[0];
-        brx                           = firstpoint[0];
-        tly                           = firstpoint[1];
-        bry                           = firstpoint[1];
-
-        for(int i = start ; i <= end ; i++)
-        {
-            std::vector<float> x = shape.part(i);
-            if (x[0] < tlx)
-                tlx = x[0];
-            else if (x[0] > brx)
-                brx = x[0];
-            if (x[1] < tly)
-                tly = x[1];
-            else if (x[1] > bry)
-                bry = x[1];
-        }
-
-        eyes.push_back(cv::Rect(cv::Point(tlx,tly), cv::Point(brx,bry)));
-    }
-
-    return eyes;
-}
+std::vector<cv::Rect> geteyes(const FullObjectDetection& shape);
 
 }  // namespace Digikam
 
 #endif // FULL_OBJECT_DETECTION_H
-

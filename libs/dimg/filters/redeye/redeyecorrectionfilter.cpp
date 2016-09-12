@@ -156,7 +156,7 @@ void RedEyeCorrectionFilter::filterImage()
         // Eye Detection
         for (unsigned int i = 0 ; runningFlag() && (i < dets.size()) ; i++)
         {
-            fullobjectdetection object = sp(gray,dets[i]);
+            FullObjectDetection object = sp(gray,dets[i]);
             std::vector<cv::Rect> eyes = geteyes(object);
 
             for (unsigned int j = 0 ; runningFlag() && (j < eyes.size()) ; j++)

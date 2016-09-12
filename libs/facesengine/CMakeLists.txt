@@ -45,6 +45,7 @@ if(ENABLE_OPENCV3)
 endif()
 
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
+                         shape-predictor/fullobjectdetection.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp

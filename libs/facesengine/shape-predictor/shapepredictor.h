@@ -434,7 +434,7 @@ public:
         return num;
     }
 
-    fullobjectdetection operator()(const cv::Mat& img, const cv::Rect& rect) const
+    FullObjectDetection operator()(const cv::Mat& img, const cv::Rect& rect) const
     {
         using namespace redeye;
         std::vector<float> current_shape = initial_shape;
@@ -463,7 +463,7 @@ public:
             parts[i] = tform_to_img(location(current_shape, i));
         }
 
-        return fullobjectdetection(rect, parts);
+        return FullObjectDetection(rect, parts);
     }
 
 public:
