@@ -85,17 +85,16 @@
 #include "wbfilter.h"
 #include "filmfilter_p.h"
 
-
 #ifdef HAVE_LIBLQR_1
-#include "contentawarefilter.h"
+#   include "contentawarefilter.h"
 #endif /* HAVE_LIBLQR_1 */
 
 #ifdef HAVE_LENSFUN
-#include "lensfunfilter.h"
+#   include "lensfunfilter.h"
 #endif // HAVE_LENSFUN
 
 #ifdef HAVE_EIGEN3
-#include "refocusfilter.h"
+#   include "refocusfilter.h"
 #endif // HAVE_EIGEN3
 
 namespace Digikam
@@ -200,7 +199,7 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:ColorBalanceFilter"),     QLatin1String("adjustrgb"));
     filterIcons.insert(QLatin1String("digikam:CharcoalFilter"),         QLatin1String("charcoaltool"));
     filterIcons.insert(QLatin1String("digikam:ColorFX"),                QLatin1String("colorfx"));
-    //filterIcons.insert(QLatin1String("digikam:ContentAwareFilter"),     QLatin1String(""));         //FIXME
+    filterIcons.insert(QLatin1String("digikam:ContentAwareFilter"),     QLatin1String("transform-scale"));
     filterIcons.insert(QLatin1String("digikam:CurvesFilter"),           QLatin1String("adjustcurves"));
     filterIcons.insert(QLatin1String("digikam:DistortionFXFilter"),     QLatin1String("draw-spiral"));
     filterIcons.insert(QLatin1String("digikam:EmbossFilter"),           QLatin1String("embosstool"));
@@ -208,11 +207,11 @@ void DImgFilterManager::Private::setupFilterIcons()
     filterIcons.insert(QLatin1String("digikam:FilmFilter"),             QLatin1String("colorneg"));
     filterIcons.insert(QLatin1String("digikam:FilmGrainFilter"),        QLatin1String("filmgrain"));
     filterIcons.insert(QLatin1String("digikam:FreeRotationFilter"),     QLatin1String("transform-rotate"));
-    //filterIcons.insert(QLatin1String("digikam:GreycstorationFilter"),   QLatin1String(""));         //FIXME
+    filterIcons.insert(QLatin1String("digikam:GreycstorationFilter"),   QLatin1String("restoration"));
     filterIcons.insert(QLatin1String("digikam:HSLFilter"),              QLatin1String("adjusthsl"));
     filterIcons.insert(QLatin1String("digikam:InvertFilter"),           QLatin1String("edit-select-invert"));
     filterIcons.insert(QLatin1String("digikam:LensDistortionFilter"),   QLatin1String("lensdistortion"));
-    //filterIcons.insert(QLatin1String("digikam:LensFunFilter"),          QLatin1String(""));         //FIXME
+    filterIcons.insert(QLatin1String("digikam:LensFunFilter"),          QLatin1String("lensautofix"));
     filterIcons.insert(QLatin1String("digikam:LevelsFilter"),           QLatin1String("adjustlevels"));
     filterIcons.insert(QLatin1String("digikam:LocalContrastFilter"),    QLatin1String("contrast"));
     filterIcons.insert(QLatin1String("digikam:MixerFilter"),            QLatin1String("channelmixer"));
