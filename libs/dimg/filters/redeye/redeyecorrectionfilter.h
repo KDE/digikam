@@ -84,13 +84,8 @@ private:
     void filterImage();
     void readParameters(const FilterAction&);
 
-    //cv::Mat QImageToCvMat(const QImage& inImage, bool inCloneImageData = true);
-    //void correctRedEye(cv::Mat& eye, int type, cv::Rect imgRect);
     void correctRedEye(uchar* data, int type, cv::Rect eyerect, cv::Rect imgRect);
     void QRectFtocvRect(const QList<QRect>& faces, std::vector<cv::Rect>& result);
-
-    //void drawRects(cv::Mat& image, const std::vector<cv::Rect>& rects);
-    //void drawRects(cv::Mat& image, const QList<cv::Rect>& rects);
 
 private:
 
