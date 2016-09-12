@@ -243,14 +243,14 @@ void RedEyeCorrectionFilter::QRectFtocvRect(const QList<QRect>& faces, std::vect
 
 FilterAction RedEyeCorrectionFilter::filterAction()
 {
-    FilterAction action(FilterIdentifier(), CurrentVersion());
-    action.setDisplayableName(DisplayableName());
-
+    DefaultFilterAction<RedEyeCorrectionFilter> action;
+    d->settings.writeToFilterAction(action);
     return action;
 }
 
-void RedEyeCorrectionFilter::readParameters(const FilterAction&)
+void RedEyeCorrectionFilter::readParameters(const FilterAction& action)
 {
+    d->settings = RedEyeCorrectionContainer::fromFilterAction(action);
 }
 
 /*
