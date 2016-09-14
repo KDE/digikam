@@ -47,3 +47,6 @@ BUGFIXES FROM BUGZILLA:
 032 ==> 368564 - Settings fields not working properly.
 033 ==> 368575 - Untranslatable strings in BQM-File Renaming (Date & Time dialog).
 034 ==> 368715 - Transform > Resize is missing an edit box (regression).
+035 ==> 366558 - Face detection does not honour album selection in options.
+036 ==> 334183 - Face recognition folder selection scans all available folders
+037 ==> 335013 - The face recognition and detection tool does not respect the albums selection to process.

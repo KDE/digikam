@@ -44,6 +44,14 @@ class AlbumSelectors : public QWidget
 
 public:
 
+    enum AlbumType
+    {
+        PhysAlbum=0,
+        TagsAlbum
+    };
+
+public:
+
     /** Default Contructor. 'label' is front text of label which title widget. 'configName' is name used to store
      *  Albums configuration in settings file. 'parent' is parent widget.
      */
@@ -103,6 +111,7 @@ private Q_SLOTS:
     void slotUpdateClearButtons();
     void slotWholePalbums(bool);
     void slotWholeTalbums(bool);
+    void slotToggleTypeSelection(int);
 
 private:
 
