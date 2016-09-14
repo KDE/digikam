@@ -57,7 +57,6 @@ protected:
 protected Q_SLOTS:
 
     void retrainAllButtonToggled(bool on);
-    void benchmarkButtonToggled(bool on);
 
 private:
 
