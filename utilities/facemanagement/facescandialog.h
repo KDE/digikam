@@ -56,7 +56,6 @@ protected:
 
 protected Q_SLOTS:
 
-    void setDetectionDefaultParameters();
     void retrainAllButtonToggled(bool on);
     void benchmarkButtonToggled(bool on);
 

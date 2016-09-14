@@ -119,7 +119,6 @@ public:
         alreadyScannedBox          = 0;
         reRecognizeButton          = 0;
         tabWidget                  = 0;
-        parametersResetButton      = 0;
         albumSelectors             = 0;
         accuracyInput              = 0;
         useFullCpuButton           = 0;
@@ -140,7 +139,6 @@ public:
 
     AlbumSelectors*              albumSelectors;
 
-    QToolButton*                 parametersResetButton;
     DIntNumInput*                accuracyInput;
 
     QCheckBox*                   useFullCpuButton;
@@ -179,11 +177,6 @@ FaceScanDialog::FaceScanDialog(QWidget* const parent)
 FaceScanDialog::~FaceScanDialog()
 {
     delete d;
-}
-
-void FaceScanDialog::setDetectionDefaultParameters()
-{
-    d->accuracyInput->setValue(80);
 }
 
 void FaceScanDialog::doLoadState()
@@ -393,23 +386,17 @@ void FaceScanDialog::setupUi()
 
     QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"), (parametersTab));
 
-    d->parametersResetButton            = new QToolButton(parametersTab);
-    d->parametersResetButton->setAutoRaise(true);
-    d->parametersResetButton->setFocusPolicy(Qt::NoFocus);
-    d->parametersResetButton->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
-    d->parametersResetButton->setToolTip(i18nc("@action:button", "Reset to default values"));
-
     DHBox* const hbox                   = new DHBox(parametersTab);
-    QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"), hbox);
+    QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast - Accurate: "), hbox);
     accuracyLabel->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     d->accuracyInput                    = new DIntNumInput(hbox);
+    d->accuracyInput->setDefaultValue(80);
     d->accuracyInput->setRange(0, 100, 10);
     d->accuracyInput->setToolTip(i18nc("@info:tooltip",
                                        "Adjust speed versus accuracy: The higher the value, the more accurate the results "
                                        "will be, but it will take more time."));
 
     parametersLayout->addWidget(detectionLabel,           0, 0);
-    parametersLayout->addWidget(d->parametersResetButton, 0, 1);
     parametersLayout->addWidget(hbox,                     1, 0, 1, -1);
     parametersLayout->setColumnStretch(0, 10);
     parametersLayout->setRowStretch(2, 10);
@@ -484,9 +471,6 @@ void FaceScanDialog::setupConnections()
 
     connect(d->detectAndRecognizeButton, SIGNAL(toggled(bool)),
             d->alreadyScannedBox, SLOT(setEnabled(bool)));
-
-    connect(d->parametersResetButton, SIGNAL(clicked()),
-            this, SLOT(setDetectionDefaultParameters()));
 
     connect(d->retrainAllButton, SIGNAL(toggled(bool)),
             this, SLOT(retrainAllButtonToggled(bool)));
