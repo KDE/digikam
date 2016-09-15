@@ -451,7 +451,7 @@ void FaceScanDialog::setupConnections()
             this, SLOT(retrainAllButtonToggled(bool)));
 
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
-            this, SLOT(accept()));
+            this, SLOT(slotOk()));
 
     connect(d->buttons->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
             this, SLOT(reject()));
