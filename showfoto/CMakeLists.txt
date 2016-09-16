@@ -100,6 +100,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL FreeBSD)
 endif()
 
 install(TARGETS  showfoto                  ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(PROGRAMS main/showfoto.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(FILES    main/showfoto.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata)
+install(PROGRAMS main/org.kde.showfoto.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES    main/org.kde.showfoto.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 install(FILES    main/showfotoui.rc        DESTINATION ${KXMLGUI_INSTALL_DIR}/showfoto)
