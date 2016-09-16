@@ -57,7 +57,7 @@ private Q_SLOTS:
     void slotContinueAlbumListing();
     void slotItemsInfo(const ImageInfoList&);
     void slotImagesSkipped(const QList<ImageInfo>&);
-    void slotShowOneDetected(const FacePipelinePackage& package);
+    void slotShowOneDetected(const FacePipelinePackage&);
     void slotDone();
     void slotCancel();
 

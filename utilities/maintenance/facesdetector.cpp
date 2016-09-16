@@ -171,7 +171,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
             filterMode = FacePipeline::ScanAll;
             writeMode  = FacePipeline::OverwriteUnconfirmed;
         }
-        else // if (settings.alreadyScannedHandling == FaceScanSettings::Merge)
+        else // FaceScanSettings::Merge
         {
             filterMode = FacePipeline::ScanAll;
             writeMode  = FacePipeline::NormalWrite;
@@ -189,16 +189,17 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
             d->pipeline.plugFaceDetector();
         }
 
-        if(settings.task == FaceScanSettings::DetectAndRecognize)
+        if (settings.task == FaceScanSettings::DetectAndRecognize)
         {
             d->pipeline.plugRerecognizingDatabaseFilter();
             d->pipeline.plugFaceRecognizer();
         }
+
         d->pipeline.plugDatabaseWriter(writeMode);
         d->pipeline.setDetectionAccuracy(settings.accuracy);
         d->pipeline.construct();
     }
-    else // if (settings.task == FaceScanSettings::RecognizeMarkedFaces)
+    else // FaceScanSettings::RecognizeMarkedFaces
     {
         d->pipeline.plugRerecognizingDatabaseFilter();
         d->pipeline.plugFaceRecognizer();
@@ -283,16 +284,16 @@ void FacesDetector::slotStart()
 
     // first, we use the relativeProgressValue map to store absolute counts
 
-    foreach(Album* const album, d->albumTodoList)
+    foreach (Album* const album, d->albumTodoList)
     {
         if (album->type() == Album::PHYSICAL)
         {
             d->relativeProgressValue[album] = palbumCounts.value(album->id());
         }
         else
+        {
             // this is possibly broken of course because we do not know if images have multiple tags,
             // but there's no better solution without expensive operation
-        {
             d->relativeProgressValue[album] = talbumCounts.value(album->id());
         }
     }
@@ -380,21 +381,6 @@ void FacesDetector::slotImagesSkipped(const QList<ImageInfo>& infos)
 
 void FacesDetector::slotShowOneDetected(const FacePipelinePackage& /*package*/)
 {
-    //TODO: Embedded images are gone. Needs to be solved by loading thumbnails
-/*
-    QPixmap pix;
-
-    if (!package.faces.isEmpty())
-    {
-        pix = QPixmap::fromImage(package.faces.first().image().toQImage().scaled(22, 22, Qt::KeepAspectRatio));
-    }
-    else if (!package.image.isNull())
-    {
-        pix = package.image.smoothScale(22, 22, Qt::KeepAspectRatio).convertToPixmap();
-    }
-
-    setThumbnail(pix);
-*/
     advance(1);
 }
 
