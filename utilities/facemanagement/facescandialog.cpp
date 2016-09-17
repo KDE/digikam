@@ -169,7 +169,7 @@ void FaceScanDialog::doLoadState()
     {
         handling = FaceScanSettings::Merge;
     }
-    else //if (skipHandling == "Skip")
+    else // Skip
     {
         handling = FaceScanSettings::Skip;
     }
@@ -213,8 +213,7 @@ void FaceScanDialog::doSaveState()
 
     QString handling;
 
-    switch ((FaceScanSettings::AlreadyScannedHandling)
-            d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt())
+    switch ((FaceScanSettings::AlreadyScannedHandling)(d->alreadyScannedBox->itemData(d->alreadyScannedBox->currentIndex()).toInt()))
     {
         case FaceScanSettings::Skip:
             handling = QLatin1String("Skip");
@@ -234,16 +233,15 @@ void FaceScanDialog::doSaveState()
     ApplicationSettings::instance()->setFaceDetectionAccuracy(double(d->accuracyInput->value()) / 100);
     d->albumSelectors->saveState();
 
-    group.writeEntry(entryName(d->configUseFullCpu),             d->useFullCpuButton->isChecked());
-    group.writeEntry(entryName(d->configSettingsVisible),        d->tabWidget->isVisible());
+    group.writeEntry(entryName(d->configUseFullCpu),      d->useFullCpuButton->isChecked());
+    group.writeEntry(entryName(d->configSettingsVisible), d->tabWidget->isVisible());
 }
 
 void FaceScanDialog::setupUi()
 {
-    // --- Main Widget -------------
-
     QWidget* const mainWidget     = new QWidget;
     QGridLayout* const mainLayout = new QGridLayout;
+    d->tabWidget                  = new QTabWidget;
 
     // ---- Introductory labels ----
 
@@ -297,10 +295,6 @@ void FaceScanDialog::setupUi()
     mainLayout->setColumnStretch(1, 1);
     mainLayout->setRowStretch(2, 1);
     mainWidget->setLayout(mainLayout);
-
-    // --- Tab Widget ---------
-
-    d->tabWidget = new QTabWidget;
 
     // ---- Album tab ---------
 
