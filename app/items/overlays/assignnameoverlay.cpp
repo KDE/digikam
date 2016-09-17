@@ -194,7 +194,7 @@ void AssignNameOverlay::updatePosition()
         return;
     }
 
-    QRect rect = delegate()->pixmapRect();
+    QRect rect = delegate()->imageInformationRect();
 
     if (rect.width() < m_widget->minimumSizeHint().width())
     {
