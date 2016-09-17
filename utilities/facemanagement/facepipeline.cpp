@@ -1072,21 +1072,21 @@ void Trainer::aboutToDeactivate()
 FacePipeline::Private::Private(FacePipeline* const q)
     : q(q)
 {
-    databaseFilter       = 0;
-    previewThread        = 0;
-    detectionWorker      = 0;
-    parallelDetectors    = 0;
-    recognitionWorker    = 0;
-    databaseWriter       = 0;
-    trainer              = 0;
-    detectionBenchmarker = 0;
+    databaseFilter         = 0;
+    previewThread          = 0;
+    detectionWorker        = 0;
+    parallelDetectors      = 0;
+    recognitionWorker      = 0;
+    databaseWriter         = 0;
+    trainer                = 0;
+    detectionBenchmarker   = 0;
     recognitionBenchmarker = 0;
-    priority             = QThread::LowPriority;
-    started              = false;
-    infosForFiltering    = 0;
-    packagesOnTheRoad    = 0;
-    maxPackagesOnTheRoad = 50;
-    totalPackagesAdded   = 0;
+    priority               = QThread::LowPriority;
+    started                = false;
+    infosForFiltering      = 0;
+    packagesOnTheRoad      = 0;
+    maxPackagesOnTheRoad   = 50;
+    totalPackagesAdded     = 0;
 }
 
 void FacePipeline::Private::processBatch(const QList<ImageInfo>& infos)
@@ -1521,40 +1521,48 @@ void FacePipeline::construct()
     if (d->previewThread)
     {
         d->pipeline << d->previewThread;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add preview thread";
     }
 
     if (d->parallelDetectors)
     {
         d->pipeline << d->parallelDetectors;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add parallel thread detectors";
     }
     else if (d->detectionWorker)
     {
         d->pipeline << d->detectionWorker;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add single thread detector";
     }
 
     if (d->recognitionWorker)
     {
         d->pipeline << d->recognitionWorker;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add recognition worker";
     }
 
     if (d->detectionBenchmarker)
     {
         d->pipeline << d->detectionBenchmarker;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add detection benchmaker";
     }
 
     if (d->recognitionBenchmarker)
     {
         d->pipeline << d->recognitionBenchmarker;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add recognition benchmaker";
     }
 
     if (d->databaseWriter)
     {
         d->pipeline << d->databaseWriter;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add database writer";
     }
 
     if (d->trainer)
     {
         d->pipeline << d->trainer;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Face PipeLine: add faces trainer";
     }
 
     if (d->pipeline.isEmpty())
