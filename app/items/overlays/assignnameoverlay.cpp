@@ -194,7 +194,13 @@ void AssignNameOverlay::updatePosition()
         return;
     }
 
+    // See bug #365667.
+    // Use information view below pixmap.
+    // Depending of icon-view item options enabled in setup, the free space to use can be different.
+    // We can continue to show the widget behind bottom of thumbnail view.
+
     QRect rect = delegate()->imageInformationRect();
+    rect.setTop(delegate()->pixmapRect().top());
 
     if (rect.width() < m_widget->minimumSizeHint().width())
     {
