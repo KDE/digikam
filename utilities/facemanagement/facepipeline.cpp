@@ -932,10 +932,10 @@ QString RecognitionBenchmarker::result() const
     for (QMap<int, Statistics>::const_iterator it = results.begin(); it != results.end(); ++it)
     {
         const Statistics& stat = it.value();
-        double correctRate = double(stat.correctlyRecognized) / stat.knownFaces;
-        s += TagsCache::instance()->tagName(it.key());
-        s += QString::fromUtf8(": %1 faces, %2 (%3%) correctly recognized<br/>")
-             .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
+        double correctRate     = double(stat.correctlyRecognized) / stat.knownFaces;
+        s                     += TagsCache::instance()->tagName(it.key());
+        s                     += QString::fromUtf8(": %1 faces, %2 (%3%) correctly recognized<br/>")
+                                 .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
     }
 
     s += QLatin1String("</p>");
@@ -960,7 +960,6 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
     emit processed(package);
 }
-
 
 // ----------------------------------------------------------------------------------------
 

@@ -308,7 +308,7 @@ void FaceScanDialog::setupUi()
 
     QLabel* const detectionLabel        = new QLabel(i18nc("@label", "Parameters for face detection and Recognition"), parametersTab);
 
-    QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast   -   Accurate"), parametersTab);
+    QLabel* const accuracyLabel         = new QLabel(i18nc("@label Two extremities of a scale", "Fast     -     Accurate"), parametersTab);
     accuracyLabel->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
     d->accuracyInput                    = new DIntNumInput(parametersTab);
     d->accuracyInput->setDefaultValue(80);
@@ -345,8 +345,7 @@ void FaceScanDialog::setupUi()
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
     d->retrainAllButton->setToolTip(i18nc("@info:tooltip",
                                           "This will clear all training data for recognition "
-                                          "and rebuild it from all available faces. "
-                                          "Be careful if any other application helped in building your training database. "));
+                                          "and rebuild it from all available faces."));
 
     advancedLayout->addWidget(cpuExplanation,                  0, 0);
     advancedLayout->addWidget(d->useFullCpuButton,             1, 0);

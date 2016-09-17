@@ -124,13 +124,13 @@ public:
 
 public:
 
-    ImageInfo                    info;
-    DImg                         image;
-    QList<QRectF>                detectedFaces;
-    QList<FacesEngine::Identity> recognitionResults;
+    ImageInfo                     info;
+    DImg                          image;
+    QList<QRectF>                 detectedFaces;
+    QList<FacesEngine::Identity>  recognitionResults;
     FacePipelineFaceTagsIfaceList databaseFaces;
 
-    ProcessFlags                 processFlags;
+    ProcessFlags                  processFlags;
 };
 
 // ------------------------------------------------------------------------------------
