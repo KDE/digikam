@@ -197,7 +197,6 @@ public:
      *  Trainer
      *  DatabaseEditor -> Trainer
      */
-
     void plugDatabaseFilter(FilterMode mode);
     void plugRerecognizingDatabaseFilter();
     void plugRetrainingDatabaseFilter();
@@ -212,9 +211,14 @@ public:
     void plugRecognitionBenchmarker();
     void construct();
 
-    /** Cancels all processing */
+    /**
+     * Cancels all processing
+     */
     void cancel();
-    /** Cancels and waits for the pipeline to finish */
+
+    /**
+     * Cancels and waits for the pipeline to finish
+     */
     void shutDown();
 
     bool hasFinished() const;
@@ -253,6 +257,7 @@ public Q_SLOTS:
      */
     void train(const ImageInfo& info, const QList<FaceTagsIface>& faces);
     void train(const ImageInfo& info, const QList<FaceTagsIface>& faces, const DImg& image);
+
     /**
      * Remove the given face.
      */
@@ -262,6 +267,7 @@ public Q_SLOTS:
      * Add an entry manually.
      */
     FaceTagsIface addManually(const ImageInfo& info, const DImg& image, const TagRegion& assignedRegion);
+
     /**
      * Change the given face's region to newRegion.
      * Does not care for training atm.

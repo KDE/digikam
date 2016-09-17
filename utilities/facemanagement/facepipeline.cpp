@@ -45,12 +45,15 @@ namespace Digikam
 {
 
 FacePipelineFaceTagsIface::FacePipelineFaceTagsIface()
-    : roles(NoRole), assignedTagId(0)
+    : roles(NoRole),
+      assignedTagId(0)
 {
 }
 
 FacePipelineFaceTagsIface::FacePipelineFaceTagsIface(const FaceTagsIface& face)
-    : FaceTagsIface(face), roles(NoRole), assignedTagId(0)
+    : FaceTagsIface(face),
+      roles(NoRole),
+      assignedTagId(0)
 {
 }
 
@@ -229,7 +232,8 @@ void ParallelPipes::process(FacePipelineExtendedPackage::Ptr package)
 // ----------------------------------------------------------------------------------------
 
 ScanStateFilter::ScanStateFilter(FacePipeline::FilterMode mode, FacePipeline::Private* const d)
-    : d(d), mode(mode)
+    : d(d),
+      mode(mode)
 {
     connect(this, SIGNAL(infosToDispatch()),
             this, SLOT(dispatch()));
@@ -357,7 +361,7 @@ void ScanStateFilter::run()
 
             {
                 QMutexLocker lock(threadMutex());
-                toSend << send;
+                toSend      << send;
                 toBeSkipped << skip;
             }
 
@@ -483,7 +487,7 @@ void DetectionWorker::process(FacePipelineExtendedPackage::Ptr package)
     package->detectedFaces = detector.detectFaces(detectionImage, package->image.originalSize());
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Found" << package->detectedFaces.size() << "faces in" << package->info.name()
-             << package->image.size() << package->image.originalSize();
+                                 << package->image.size() << package->image.originalSize();
 
     package->processFlags |= FacePipelinePackage::ProcessedByDetector;
 
@@ -689,7 +693,7 @@ void DatabaseWriter::process(FacePipelineExtendedPackage::Ptr package)
         {
             if (it->roles & FacePipelineFaceTagsIface::ForConfirmation)
             {
-                FacePipelineFaceTagsIface confirmed  = utils.confirmName(*it, it->assignedTagId, it->assignedRegion);
+                FacePipelineFaceTagsIface confirmed = utils.confirmName(*it, it->assignedTagId, it->assignedRegion);
                 confirmed.roles                    |= FacePipelineFaceTagsIface::Confirmed | FacePipelineFaceTagsIface::ForTraining;
                 add << confirmed;
             }
@@ -760,14 +764,14 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
         QList<FaceTagsIface> groundTruth = utils.databaseFaces(package->info.id());
 
         QList<FaceTagsIface> testedFaces = utils.toFaceTagsIfaces(package->info.id(), package->detectedFaces,
-                                                                package->recognitionResults, package->image.originalSize());
+                                                                  package->recognitionResults, package->image.originalSize());
 
         QList<FaceTagsIface> unmatchedTrueFaces   = groundTruth;
         QList<FaceTagsIface> unmatchedTestedFaces = testedFaces;
         QList<FaceTagsIface> matchedTrueFaces;
 
-        int trueFaces           = groundTruth.size();
-        const double minOverlap = 0.75;
+        int trueFaces                             = groundTruth.size();
+        const double minOverlap                   = 0.75;
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "There are" << trueFaces << "faces to be detected. The detector found" << testedFaces.size();
 
@@ -821,7 +825,7 @@ void DetectionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
         falseNegativeFaces += unmatchedTrueFaces.size();
         falsePositiveFaces += unmatchedTestedFaces.size();
         qCDebug(DIGIKAM_GENERAL_LOG) << "Faces detected correctly:" << matchedTrueFaces.size() << ", faces missed:" << unmatchedTrueFaces.size()
-                 << ", faces falsely detected:" << unmatchedTestedFaces.size();
+                                     << ", faces falsely detected:" << unmatchedTestedFaces.size();
     }
 
     package->processFlags  |= FacePipelinePackage::WrittenToDatabase;
@@ -857,13 +861,13 @@ QString DetectionBenchmarker::result() const
     }
 
     // collection properties
-    double pixelCoverage     = facePixels / totalPixels;
+    double pixelCoverage     = facePixels                  / totalPixels;
     // per-image
-    double specificity       = double(trueNegativeImages) / negativeImages;
+    double specificity       = double(trueNegativeImages)  / negativeImages;
     double falsePositiveRate = double(falsePositiveImages) / negativeImages;
     // per-face
-    double sensitivity       = double(truePositiveFaces) / trueFaces;
-    double ppv               = double(truePositiveFaces) / (truePositiveFaces + falsePositiveFaces);
+    double sensitivity       = double(truePositiveFaces)   / trueFaces;
+    double ppv               = double(truePositiveFaces)   / (truePositiveFaces + falsePositiveFaces);
 
     return QString::fromUtf8("<p>"
                    "<u>Collection Properties:</u><br/>"
@@ -931,7 +935,7 @@ QString RecognitionBenchmarker::result() const
         double correctRate = double(stat.correctlyRecognized) / stat.knownFaces;
         s += TagsCache::instance()->tagName(it.key());
         s += QString::fromUtf8(": %1 faces, %2 (%3%) correctly recognized<br/>")
-            .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
+             .arg(stat.knownFaces).arg(stat.correctlyRecognized).arg(correctRate * 100);
     }
 
     s += QLatin1String("</p>");
@@ -945,7 +949,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
     for (int i=0; i<package->databaseFaces.size(); i++)
     {
         FacesEngine::Identity identity = utils.identityForTag(package->databaseFaces[i].tagId(), database);
-        Statistics& result            = results[package->databaseFaces[i].tagId()];
+        Statistics& result             = results[package->databaseFaces[i].tagId()];
         result.knownFaces++;
 
         if (identity == package->recognitionResults[i])
@@ -1655,15 +1659,15 @@ void FacePipeline::train(const ImageInfo& info, const QList<FaceTagsIface>& data
 }
 
 FaceTagsIface FacePipeline::confirm(const ImageInfo& info, const FaceTagsIface& databaseFace,
-                                   int assignedTagId, const TagRegion& assignedRegion)
+                                    int assignedTagId, const TagRegion& assignedRegion)
 {
     return confirm(info, databaseFace, DImg(), assignedTagId, assignedRegion);
 }
 
 FaceTagsIface FacePipeline::confirm(const ImageInfo& info, const FaceTagsIface& databaseFace,
-                                   const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
+                                    const DImg& image, int assignedTagId, const TagRegion& assignedRegion)
 {
-    FacePipelineFaceTagsIface face             = databaseFace;
+    FacePipelineFaceTagsIface face            = databaseFace;
     face.assignedTagId                        = assignedTagId;
     face.assignedRegion                       = assignedRegion;
     face.roles                               |= FacePipelineFaceTagsIface::ForConfirmation;
@@ -1689,10 +1693,10 @@ FaceTagsIface FacePipeline::addManually(const ImageInfo& info, const DImg& image
 }
 
 FaceTagsIface FacePipeline::editRegion(const ImageInfo& info, const DImg& image,
-                                      const FaceTagsIface& databaseFace,
-                                      const TagRegion& newRegion)
+                                       const FaceTagsIface& databaseFace,
+                                       const TagRegion& newRegion)
 {
-    FacePipelineFaceTagsIface face             = databaseFace;
+    FacePipelineFaceTagsIface face            = databaseFace;
     face.assignedTagId                        = -1;
     face.assignedRegion                       = newRegion;
     face.roles                               |= FacePipelineFaceTagsIface::ForEditing;
