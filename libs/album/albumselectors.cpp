@@ -117,14 +117,14 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     : QWidget(parent),
       d(new Private)
 {
-    d->configName                         = configName;
-    QVBoxLayout* const selectAlbumsLayout = new QVBoxLayout(this);
-    d->titleLabel                         = new QLabel(label);
+    d->configName           = configName;
+    QGridLayout* const grid = new QGridLayout(this);
+    d->titleLabel           = new QLabel(label, this);
 
     // ---------------
 
-    d->pAlbumsBtn       = new QRadioButton(i18n("Albums"), this);
-    d->pAlbumsBox       = new QGroupBox(this);
+    d->pAlbumsBtn       = new QRadioButton(this);
+    d->pAlbumsBox       = new QGroupBox(i18n("Albums"), this);
 
     d->wholePalbums     = new QCheckBox(i18n("Whole albums collection"), d->pAlbumsBox);
     d->albumSelectCB    = new AlbumTreeViewSelectComboBox(d->pAlbumsBox);
@@ -145,8 +145,8 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
 
     // ---------------
 
-    d->tAlbumsBtn       = new QRadioButton(i18n("Tags"), this);
-    d->tAlbumsBox       = new QGroupBox(this);
+    d->tAlbumsBtn       = new QRadioButton(this);
+    d->tAlbumsBox       = new QGroupBox(i18n("Tags"), this);
 
     d->wholeTalbums     = new QCheckBox(i18n("Whole tags collection"), d->tAlbumsBox);
     d->tagSelectCB      = new TagTreeViewSelectComboBox(d->tAlbumsBox);
@@ -174,12 +174,18 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     d->btnGroup->setId(d->tAlbumsBtn, TagsAlbum);
     d->btnGroup->setExclusive(true);
 
-    selectAlbumsLayout->addWidget(d->titleLabel);
-    selectAlbumsLayout->addWidget(d->pAlbumsBtn);
-    selectAlbumsLayout->addWidget(d->pAlbumsBox);
-    selectAlbumsLayout->addWidget(d->tAlbumsBtn);
-    selectAlbumsLayout->addWidget(d->tAlbumsBox);
-    selectAlbumsLayout->setSpacing(0);
+    // ---------------
+
+    grid->addWidget(d->titleLabel, 0, 0, 1, 2);
+    grid->addWidget(d->pAlbumsBtn, 1, 0, 1, 1);
+    grid->addWidget(d->pAlbumsBox, 1, 1, 1, 1);
+    grid->addWidget(d->tAlbumsBtn, 2, 0, 1, 1);
+    grid->addWidget(d->tAlbumsBox, 2, 1, 1, 1);
+    grid->setColumnStretch(1, 10);
+    grid->setAlignment(d->pAlbumsBtn, Qt::AlignTop);
+    grid->setAlignment(d->tAlbumsBtn, Qt::AlignTop);
+
+    // ---------------
 
     connect(d->wholePalbums, SIGNAL(toggled(bool)),
             this, SLOT(slotWholePalbums(bool)));
@@ -187,10 +193,10 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     connect(d->wholeTalbums, SIGNAL(toggled(bool)),
             this, SLOT(slotWholeTalbums(bool)));
 
-    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotUpdateClearButtons()));
 
-    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
+    connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotUpdateClearButtons()));
 
     connect(d->btnGroup, SIGNAL(buttonClicked(int)),
