@@ -52,3 +52,4 @@ BUGFIXES FROM BUGZILLA:
 037 ==> 335013 - The face recognition and detection tool does not respect the albums selection to process.
 038 ==> 366557 - Face detection/recognition options are not persistent.
 039 ==> 365321 - Scan + recognize faces does not work.
+040 ==> 365667 - Face image tagger obscuring image.
