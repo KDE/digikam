@@ -49,8 +49,6 @@
 #include "tagscache.h"
 #include "searchutilities.h"
 
-
-
 namespace Digikam
 {
 
@@ -70,6 +68,7 @@ public:
         {
             return false;
         }
+
         // isAncestorOf may not work if widgets are located in different windows
         while (widget)
         {
@@ -95,7 +94,8 @@ public:
 };
 
 AssignNameOverlay::AssignNameOverlay(QObject* const parent)
-    : PersistentWidgetDelegateOverlay(parent), d(new Private)
+    : PersistentWidgetDelegateOverlay(parent),
+      d(new Private)
 {
     d->filteredModel.setSourceAlbumModel(&d->tagModel);
     d->filterModel.setSourceFilterModel(&d->filteredModel);
@@ -141,7 +141,6 @@ void AssignNameOverlay::setActive(bool active)
 
         connect(assignNameWidget(), SIGNAL(rejected(ImageInfo,QVariant)),
                 this, SLOT(slotRejected(ImageInfo,QVariant)));
-
 
         connect(assignNameWidget(), SIGNAL(selected(TaggingAction,ImageInfo,QVariant)),
                 this, SLOT(enterPersistentMode()));
@@ -308,7 +307,6 @@ void AssignNameOverlay::slotRejected(const ImageInfo& info, const QVariant& face
 {
     Q_UNUSED(info);
     Q_UNUSED(faceIdentifier);
-    //FaceTagsIface face = FaceTagsIface::fromVariant(faceIdentifier);
     emit removeFaces(affectedIndexes(index()));
     hide();
 }
