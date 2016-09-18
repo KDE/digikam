@@ -46,6 +46,7 @@ endif()
 
 set(facesengine_LIB_SRCS detection/opencvfacedetector.cpp
                          shape-predictor/fullobjectdetection.cpp
+                         shape-predictor/qdatastreamoverloads.cpp
                          facedetector.cpp
                          identity.cpp
                          dataproviders.cpp

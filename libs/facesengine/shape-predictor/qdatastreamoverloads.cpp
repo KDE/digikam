@@ -22,15 +22,21 @@
  *
  * ============================================================ */
 
-#ifndef QDATASTREAM_OVERLOADS_H
-#define QDATASTREAM_OVERLOADS_H
+#include "qdatastreamoverloads.h"
 
-// Qt includes
+QDataStream& operator >> (QDataStream& dataStream, unsigned long& in)
+{
+    qint64 x;
+    dataStream >> x;
+    in = x;
 
-#include <QDataStream>
+    return dataStream;
+}
 
-QDataStream& operator >> (QDataStream& dataStream, unsigned long& in);
+QDataStream& operator << (QDataStream& dataStream, const unsigned long& in)
+{
+    qint64 x = in;
+    dataStream << x;
 
-QDataStream& operator << (QDataStream& dataStream, const unsigned long& in);
-
-#endif // QDATASTREAM_OVERLOADS_H
+    return dataStream;
+}
