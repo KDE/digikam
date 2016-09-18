@@ -54,12 +54,12 @@ public:
     }
 
     FacesEngine::FaceDetector      facedetector;
-    static redeye::shapepredictor* sp;
+    static redeye::ShapePredictor* sp;
 
     RedEyeCorrectionContainer      settings;
 };
 
-redeye::shapepredictor* RedEyeCorrectionFilter::Private::sp = 0;
+redeye::ShapePredictor* RedEyeCorrectionFilter::Private::sp = 0;
 
 RedEyeCorrectionFilter::RedEyeCorrectionFilter(QObject* const parent)
     : DImgThreadedFilter(parent),
@@ -102,12 +102,12 @@ void RedEyeCorrectionFilter::filterImage()
     if (d->sp == 0)
     {
         // Loading the shape predictor model
-        redeye::shapepredictor* const temp = new redeye::shapepredictor();
+        redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
 
         QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                         QString::fromLatin1("digikam/facesengine"),
                                                         QStandardPaths::LocateDirectory);
-        QFile model(*path.begin() + QLatin1String("/shapepredictor.dat"));
+        QFile model(*path.begin() + QLatin1String("/ShapePredictor.dat"));
 
         if (model.open(QIODevice::ReadOnly))
         {
@@ -144,7 +144,7 @@ void RedEyeCorrectionFilter::filterImage()
     }
 
     QList<QRectF> qrectfdets   = d->facedetector.detectFaces(temp);
-    redeye::shapepredictor& sp = *(d->sp);
+    redeye::ShapePredictor& sp = *(d->sp);
 
     if (runningFlag() && (qrectfdets.size() != 0))
     {

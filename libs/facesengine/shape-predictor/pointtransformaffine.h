@@ -40,11 +40,11 @@ using namespace std;
 namespace Digikam
 {
 
-class pointtransformaffine
+class PointTransformAffine
 {
 public:
 
-    pointtransformaffine()
+    PointTransformAffine()
     {
         m       = std::vector<std::vector<float> >(2, std::vector<float>(2, 0));
         m[0][0] = 1.0;
@@ -52,21 +52,21 @@ public:
         b       = std::vector<float>(2, 0);
     }
 
-    pointtransformaffine (
-        const std::vector<std::vector<float> > & m_,
-        const std::vector<float>& b_
-    ) :m(m_), b(b_)
+    PointTransformAffine(const std::vector<std::vector<float> > & m_,
+                         const std::vector<float>& b_)
+      : m(m_),
+        b(b_)
     {
     }
 
-    pointtransformaffine(const std::vector<std::vector<float> >& m_)
+    PointTransformAffine(const std::vector<std::vector<float> >& m_)
     {
         m = std::vector<std::vector<float> >(2, std::vector<float>(2, 0));
         b = std::vector<float >(2, 0);
 
-        for(unsigned int i = 0 ; i < m_.size() ; i++)
+        for (unsigned int i = 0 ; i < m_.size() ; i++)
         {
-            for(unsigned int j =0 ; j < m_[0].size() ; j++)
+            for (unsigned int j =0 ; j < m_[0].size() ; j++)
             {
                 if (j == 2)
                 {
@@ -103,25 +103,25 @@ private:
 
 // ----------------------------------------------------------------------------------------
 
-inline pointtransformaffine operator* (const pointtransformaffine& lhs,
-                                       const pointtransformaffine& rhs)
+inline PointTransformAffine operator* (const PointTransformAffine& lhs,
+                                       const PointTransformAffine& rhs)
 {
-    return pointtransformaffine(lhs.get_m() * rhs.get_m(), lhs.get_m() * rhs.get_b() + lhs.get_b());
+    return PointTransformAffine(lhs.get_m() * rhs.get_m(), lhs.get_m() * rhs.get_b() + lhs.get_b());
 }
 
 // ----------------------------------------------------------------------------------------
 
-inline pointtransformaffine inv (const pointtransformaffine& trans)
+inline PointTransformAffine inv (const PointTransformAffine& trans)
 {
     std::vector<std::vector<float> > im = inv2(trans.get_m());
 
-    return pointtransformaffine(im, -(im * trans.get_b()));
+    return PointTransformAffine(im, -(im * trans.get_b()));
 }
 
 // ----------------------------------------------------------------------------------------
 
 template <typename T>
-pointtransformaffine find_affine_transform(const std::vector<std::vector<T> >& from_points,
+PointTransformAffine find_affine_transform(const std::vector<std::vector<T> >& from_points,
                                            const std::vector<std::vector<T> >& to_points)
 {
     std::vector<std::vector<float> > P(3, std::vector<float>(from_points.size()));
@@ -139,13 +139,13 @@ pointtransformaffine find_affine_transform(const std::vector<std::vector<T> >& f
 
     const std::vector<std::vector<float> > m = Q * pinv(P);
 
-    return pointtransformaffine(m);
+    return PointTransformAffine(m);
 }
 
 // ----------------------------------------------------------------------------------------
 
 
-pointtransformaffine find_similarity_transform(const std::vector<std::vector<float> >& from_points,
+PointTransformAffine find_similarity_transform(const std::vector<std::vector<float> >& from_points,
                                                const std::vector<std::vector<float> >& to_points)
 {
     // We use the formulas from the paper: Least-squares estimation of transformation
@@ -205,7 +205,7 @@ pointtransformaffine find_similarity_transform(const std::vector<std::vector<flo
 
     std::vector<float> t = mean_to - r * mean_from * c;
 
-    return pointtransformaffine(r * c, t);
+    return PointTransformAffine(r * c, t);
 }
 
 }  // namespace Digikam

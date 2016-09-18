@@ -37,7 +37,7 @@
 namespace Digikam
 {
 
-std::vector<std::vector<float> >  inv2(const std::vector<std::vector<float> >& mat)
+std::vector<std::vector<float> > inv2(const std::vector<std::vector<float> >& mat)
 {
     assert(mat.size() == 2 && mat[0].size() == 2);
 
@@ -178,8 +178,7 @@ float trace(const std::vector<std::vector<float> >& src)
 bool svd3(std::vector<std::vector<float> >& a,
           std::vector<float >& w,
           std::vector<std::vector<float> >& v,
-          std::vector<float >& rv1
-         )
+          std::vector<float >& rv1)
 {
     const float one     = 1.0;
     const long max_iter = 300;

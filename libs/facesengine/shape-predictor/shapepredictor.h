@@ -47,45 +47,54 @@ namespace Digikam
 namespace redeye
 {
 
-struct splitfeature
+struct SplitFeature
 {
     unsigned long idx1;
     unsigned long idx2;
     float         thresh;
 };
 
-QDataStream& operator<<(QDataStream& dataStream, const splitfeature& sp)
+QDataStream& operator << (QDataStream& dataStream, const SplitFeature& sp)
 {
     dataStream << sp.idx1 << sp.idx2 << sp.thresh;
     return dataStream;
 }
 
-QDataStream& operator>>(QDataStream& dataStream, splitfeature& sp)
+QDataStream& operator >> (QDataStream& dataStream, SplitFeature& sp)
 {
     dataStream >> sp.idx1 >> sp.idx2 >> sp.thresh;
     return dataStream;
 }
 
-// a tree is just a std::vector<redeye::splitfeature>.  We use this function to navigate the tree nodes.
+// a tree is just a std::vector<redeye::SplitFeature>.  We use this function to navigate the tree nodes.
 
 /*!
     ensures
         - returns the index of the left child of the binary tree node idx
 !*/
-inline unsigned long left_child(unsigned long idx)  { return 2*idx + 1; }
-
-/*!
-    ensures
-        - returns the index of the left child of the binary tree node idx
-!*/
-inline unsigned long right_child(unsigned long idx) { return 2*idx + 2; }
-
-struct regressiontree
+inline unsigned long left_child(unsigned long idx)
 {
-    std::vector<splitfeature>        splits;
+    return 2*idx + 1;
+}
+
+/*!
+    ensures
+        - returns the index of the left child of the binary tree node idx
+!*/
+inline unsigned long right_child(unsigned long idx)
+{
+    return 2*idx + 2;
+}
+
+struct RegressionTree
+{
+    std::vector<SplitFeature>        splits;
     std::vector<std::vector<float> > leaf_values;
 
-    unsigned long num_leaves() const { return leaf_values.size(); }
+    unsigned long num_leaves() const
+    {
+        return leaf_values.size();
+    }
 
     /*!
         requires
@@ -116,7 +125,7 @@ struct regressiontree
     }
 };
 
-QDataStream& operator<<(QDataStream& dataStream, const regressiontree& regtree)
+QDataStream& operator << (QDataStream& dataStream, const RegressionTree& regtree)
 {
     dataStream << (unsigned int)regtree.splits.size();
 
@@ -140,7 +149,7 @@ QDataStream& operator<<(QDataStream& dataStream, const regressiontree& regtree)
     return dataStream;
 }
 
-QDataStream& operator>>(QDataStream& dataStream, regressiontree& regtree)
+QDataStream& operator >> (QDataStream& dataStream, RegressionTree& regtree)
 {
     unsigned int size;
     dataStream >> size;
@@ -168,7 +177,6 @@ QDataStream& operator>>(QDataStream& dataStream, regressiontree& regtree)
     return dataStream;
 }
 
-
 /*!
     requires
         - idx < shape.size()/2
@@ -189,7 +197,7 @@ inline std::vector<T> location(const std::vector<T>& shape, unsigned long idx)
 // ------------------------------------------------------------------------------------
 
 inline unsigned long nearest_shape_point(const std::vector<float>& shape,
-                                            const std::vector<float>& pt)
+                                         const std::vector<float>& pt)
 {
     // find the nearest part of the shape to this pixel
     float best_dist                     = std::numeric_limits<float>::infinity();
@@ -223,9 +231,9 @@ inline unsigned long nearest_shape_point(const std::vector<float>& shape,
         - pixel_coordinates[i] == location(shape,#anchor_idx[i]) + #deltas[i]
 !*/
 inline void create_shape_relative_encoding(const std::vector<float>& shape,
-                                            const std::vector<std::vector<float> >& pixel_coordinates,
-                                            std::vector<unsigned long>& anchor_idx,
-                                            std::vector<std::vector<float> >& deltas)
+                                           const std::vector<std::vector<float> >& pixel_coordinates,
+                                           std::vector<unsigned long>& anchor_idx,
+                                           std::vector<std::vector<float> >& deltas)
 {
     anchor_idx.resize(pixel_coordinates.size());
     deltas.resize(pixel_coordinates.size());
@@ -239,8 +247,8 @@ inline void create_shape_relative_encoding(const std::vector<float>& shape,
 
 // ------------------------------------------------------------------------------------
 
-inline pointtransformaffine find_tform_between_shapes(const std::vector<float>& from_shape,
-                                                        const std::vector<float>& to_shape)
+inline PointTransformAffine find_tform_between_shapes(const std::vector<float>& from_shape,
+                                                      const std::vector<float>& to_shape)
 {
     assert(from_shape.size() == to_shape.size() && (from_shape.size()%2) == 0 && from_shape.size() > 0);
 
@@ -252,7 +260,7 @@ inline pointtransformaffine find_tform_between_shapes(const std::vector<float>& 
     if (num == 1)
     {
         // Just use an identity transform if there is only one landmark.
-        return pointtransformaffine();
+        return PointTransformAffine();
     }
 
     for (unsigned long i = 0 ; i < num ; ++i)
@@ -271,7 +279,7 @@ inline pointtransformaffine find_tform_between_shapes(const std::vector<float>& 
         - returns a transform that maps rect.tl_corner() to (0,0) and rect.br_corner()
             to (1,1).
 !*/
-inline pointtransformaffine normalizing_tform (const cv::Rect& rect)
+inline PointTransformAffine normalizing_tform(const cv::Rect& rect)
 {
     std::vector<std::vector<float> > from_points, to_points;
     std::vector<float> tlcorner(2);
@@ -309,7 +317,7 @@ inline pointtransformaffine normalizing_tform (const cv::Rect& rect)
         - returns a transform that maps (0,0) to rect.tl_corner() and (1,1) to
             rect.br_corner().
 !*/
-inline pointtransformaffine unnormalizing_tform (const cv::Rect& rect)
+inline PointTransformAffine unnormalizing_tform(const cv::Rect& rect)
 {
     std::vector<std::vector<float> > from_points, to_points;
     std::vector<float> tlcorner(2);
@@ -376,15 +384,15 @@ bool pointcontained(const cv::Rect& rect, const std::vector<float>& point)
                 current_shape rather than reference_shape.
 !*/
 void extract_feature_pixel_values(const cv::Mat& img_,
-                                    const cv::Rect& rect,
-                                    const std::vector<float>& current_shape,
-                                    const std::vector<float>& reference_shape,
-                                    const std::vector<unsigned long>& reference_pixel_anchor_idx,
-                                    const std::vector<std::vector<float> >& reference_pixel_deltas,
-                                    std::vector<float>& feature_pixel_values)
+                                  const cv::Rect& rect,
+                                  const std::vector<float>& current_shape,
+                                  const std::vector<float>& reference_shape,
+                                  const std::vector<unsigned long>& reference_pixel_anchor_idx,
+                                  const std::vector<std::vector<float> >& reference_pixel_deltas,
+                                  std::vector<float>& feature_pixel_values)
 {
     const std::vector<std::vector<float> > tform = find_tform_between_shapes(reference_shape, current_shape).get_m();
-    const pointtransformaffine tform_to_img      = unnormalizing_tform(rect);
+    const PointTransformAffine tform_to_img      = unnormalizing_tform(rect);
     const cv::Rect area                          = cv::Rect(0,0,img_.size().width, img_.size().height);
     cv::Mat img(img_);
     feature_pixel_values.resize(reference_pixel_deltas.size());
@@ -406,11 +414,13 @@ void extract_feature_pixel_values(const cv::Mat& img_,
     }
 }
 
-class shapepredictor
+// ------------------------------------------------------------------------------------
+
+class ShapePredictor
 {
 public:
 
-    shapepredictor()
+    ShapePredictor()
     {
     }
 
@@ -455,7 +465,7 @@ public:
         }
 
         // convert the current_shape into a full_object_detection
-        const pointtransformaffine tform_to_img = unnormalizing_tform(rect);
+        const PointTransformAffine tform_to_img = unnormalizing_tform(rect);
         std::vector<std::vector<float> > parts(current_shape.size() / 2);
 
         for (unsigned long i = 0 ; i < parts.size() ; ++i)
@@ -468,13 +478,15 @@ public:
 
 public:
 
-    std::vector<float> initial_shape;
-    std::vector<std::vector<redeye::regressiontree> > forests;
-    std::vector<std::vector<unsigned long> > anchor_idx;
-    std::vector<std::vector<std::vector<float> > > deltas;
+    std::vector<float>                                initial_shape;
+    std::vector<std::vector<redeye::RegressionTree> > forests;
+    std::vector<std::vector<unsigned long> >          anchor_idx;
+    std::vector<std::vector<std::vector<float> > >    deltas;
 };
 
-QDataStream& operator<<(QDataStream& dataStream, const shapepredictor& shape)
+// ------------------------------------------------------------------------------------
+
+QDataStream& operator << (QDataStream& dataStream, const ShapePredictor& shape)
 {
     dataStream << (unsigned int)shape.initial_shape.size();
 
@@ -521,7 +533,7 @@ QDataStream& operator<<(QDataStream& dataStream, const shapepredictor& shape)
     return dataStream;
 }
 
-QDataStream& operator>>(QDataStream& dataStream, shapepredictor& shape)
+QDataStream& operator >> (QDataStream& dataStream, ShapePredictor& shape)
 {
     unsigned int size;
     dataStream >> size;
