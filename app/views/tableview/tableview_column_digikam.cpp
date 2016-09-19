@@ -109,7 +109,7 @@ TableViewColumn::ColumnFlags ColumnDigikamProperties::getColumnFlags() const
         (subColumn == SubColumnPickLabel) ||
         (subColumn == SubColumnColorLabel))
     {
-        flags|=ColumnCustomSorting;
+        flags |= ColumnCustomSorting;
     }
 
     return flags;

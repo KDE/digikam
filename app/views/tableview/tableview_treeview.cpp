@@ -192,7 +192,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
 
     // since the header column order is not the same as the model's column order, we need
     // to make sure the new column is moved directly behind the current column in the header:
-    const int clickedVisualIndex = header()->visualIndex(d->headerContextMenuActiveColumn);
+    const int clickedVisualIndex   = header()->visualIndex(d->headerContextMenuActiveColumn);
     const int newColumnVisualIndex = header()->visualIndex(newColumnLogicalIndex);
     int newColumnVisualTargetIndex = clickedVisualIndex + 1;
 

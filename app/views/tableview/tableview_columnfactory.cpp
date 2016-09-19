@@ -180,7 +180,7 @@ void TableViewColumn::updateThumbnailSize()
 
 bool TableViewColumn::compareHelperBoolFailCheck(const bool okA, const bool okB, ColumnCompareResult* const result)
 {
-    if (okA&&okB)
+    if (okA && okB)
     {
         return true;
     }
@@ -222,7 +222,7 @@ void TableViewColumnProfile::loadSettings(const KConfigGroup& configGroup)
     headerState        = configGroup.readEntry("Header State", QByteArray());
     const int nColumns = configGroup.readEntry("Column Count", int(0));
 
-    for (int i=0; i<nColumns; ++i)
+    for (int i = 0; i < nColumns; ++i)
     {
         /// @todo check for invalid column configurations
         const QString configSubGroupName = QString::fromUtf8("Column %1").arg(i);
@@ -277,7 +277,7 @@ void TableViewColumnProfile::saveSettings(KConfigGroup& configGroup)
     configGroup.writeEntry(QLatin1String("Column Count"), nColumns);
     configGroup.writeEntry(QLatin1String("Header State"), headerState);
 
-    for (int i=0; i<nColumns; ++i)
+    for (int i = 0; i < nColumns; ++i)
     {
         const QString configSubGroupName                        = QString::fromUtf8("Column %1").arg(i);
         KConfigGroup subGroup                                   = configGroup.group(configSubGroupName);
@@ -293,7 +293,7 @@ void TableViewColumnConfiguration::loadSettings(const KConfigGroup& configGroup)
     columnId            = configGroup.readEntry(QLatin1String("Column Id"), QString());
     const int nSettings = configGroup.readEntry(QLatin1String("NSettings"), int(0));
 
-    for (int i=0; i<nSettings; ++i)
+    for (int i = 0; i < nSettings; ++i)
     {
         const QString& key   = configGroup.readEntry(QString::fromUtf8("Key %1").arg(i),   QString());
         const QString& value = configGroup.readEntry(QString::fromUtf8("Value %1").arg(i), QString());
@@ -314,7 +314,7 @@ void TableViewColumnConfiguration::saveSettings(KConfigGroup& configGroup) const
 
     QHashIterator<QString, QString> settingsIterator(columnSettings);
 
-    for (int i=0; settingsIterator.hasNext(); ++i)
+    for (int i = 0; settingsIterator.hasNext(); ++i)
     {
         settingsIterator.next();
         configGroup.writeEntry(QString::fromUtf8("Key %1").arg(i),   settingsIterator.key());

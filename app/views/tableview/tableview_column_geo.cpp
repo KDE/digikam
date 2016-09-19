@@ -130,7 +130,7 @@ QVariant ColumnGeoProperties::data(TableViewModel::Item* const item, const int r
         return QVariant();
     }
 
-    if (role==Qt::TextAlignmentRole)
+    if (role == Qt::TextAlignmentRole)
     {
         switch (subColumn)
         {

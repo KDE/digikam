@@ -129,7 +129,7 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
         (subColumn == SubColumnDigitizationDateTime)    ||
         (subColumn == SubColumnAspectRatio) )
     {
-        flags|=ColumnCustomSorting;
+        flags |= ColumnCustomSorting;
     }
 
     return flags;
@@ -143,7 +143,7 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
         return QVariant();
     }
 
-    if (role==Qt::TextAlignmentRole)
+    if (role == Qt::TextAlignmentRole)
     {
         switch (subColumn)
         {
@@ -284,7 +284,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(TableViewMode
             const int widthB                      = infoB.dimensions().width();
             const ColumnCompareResult widthResult = compareHelper<int>(widthA, widthB);
 
-            if (widthResult!=CmpEqual)
+            if (widthResult != CmpEqual)
             {
                 return widthResult;
             }
@@ -314,7 +314,7 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(TableViewMode
             const int heightA = infoA.dimensions().height();
             const int heightB = infoB.dimensions().height();
 
-            if ( (heightA==0) || (heightB==0) )
+            if ((heightA == 0) || (heightB == 0))
             {
                 // at least one of the two does not have valid data,
                 // sort based on which one has data at all

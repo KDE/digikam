@@ -111,7 +111,7 @@ TableViewColumn::ColumnFlags ColumnAudioVideoProperties::getColumnFlags() const
         (subColumn==SubColumnDuration)     ||
         (subColumn==SubColumnFrameRate))
     {
-        flags|=ColumnCustomSorting;
+        flags |= ColumnCustomSorting;
     }
 
     return flags;
