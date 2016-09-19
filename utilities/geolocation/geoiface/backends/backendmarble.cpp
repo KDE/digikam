@@ -45,6 +45,7 @@
 // Marble includes
 
 #include <marble/GeoDataLinearRing.h>
+#include <marble/GeoDataLatLonAltBox.h>
 #include <marble/GeoPainter.h>
 #include <marble/MarbleMap.h>
 #include <marble/MarbleWidget.h>
