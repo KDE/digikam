@@ -332,7 +332,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
 
     QAction* const choice = cmHelper.exec(event->globalPos());
 
-    if (choice && (choice == viewAction) )
+    if (choice && (choice == viewAction))
     {
         emit(signalPreviewRequested(s->tableViewModel->imageInfo(indexAtMenu)));
     }
@@ -406,11 +406,11 @@ ThumbnailSize TableView::getThumbnailSize() const
 QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
 {
     const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
-    QList<qlonglong> selectedImageIds     =  s->tableViewModel->imageIds(selectedIndexes);
+    QList<qlonglong> selectedImageIds     = s->tableViewModel->imageIds(selectedIndexes);
     const QModelIndex currentIndex        = s->tableViewSelectionModel->currentIndex();
     qlonglong currentId                   = s->tableViewModel->imageId(currentIndex);
 
-    if (currentId>=0)
+    if (currentId >= 0)
     {
         if (selectedImageIds.first()!=currentId)
         {
@@ -453,7 +453,7 @@ Album* TableView::currentAlbum()
         return 0;
     }
 
-    if(albumModel->currentAlbums().isEmpty())
+    if (albumModel->currentAlbums().isEmpty())
     {
         return 0;
     }
@@ -663,7 +663,7 @@ ImageInfo TableView::previousInfo() const
     const int currentDeepRowNumber  = s->tableViewModel->indexToDeepRowNumber(cIndex);
     const int previousDeepRowNumber = currentDeepRowNumber - 1;
 
-    if (previousDeepRowNumber<0)
+    if (previousDeepRowNumber < 0)
     {
         return ImageInfo();
     }
@@ -708,7 +708,7 @@ void TableView::slotAwayFromSelection()
         // select an index inbetween
         const int nextFreeDeepRow = s->tableViewModel->firstDeepRowNotInList(selection);
 
-        if (nextFreeDeepRow<0)
+        if (nextFreeDeepRow < 0)
         {
             s->tableViewSelectionModel->clearSelection();
             s->tableViewSelectionModel->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
@@ -758,9 +758,9 @@ void TableView::invertSelection()
 
         if (s->tableViewSelectionModel->isSelected(iIndex))
         {
-            if (i-1 > lastSelectedRow)
+            if (i - 1 > lastSelectedRow)
             {
-                for (int j = lastSelectedRow+1; j < i; ++j)
+                for (int j = lastSelectedRow + 1; j < i; ++j)
                 {
                     rowsToSelect << j;
                 }
@@ -770,9 +770,9 @@ void TableView::invertSelection()
         }
     }
 
-    if (lastSelectedRow+1<deepRowCount)
+    if (lastSelectedRow + 1 < deepRowCount)
     {
-        for (int j = lastSelectedRow+1; j < deepRowCount; ++j)
+        for (int j = lastSelectedRow + 1; j < deepRowCount; ++j)
         {
             rowsToSelect << j;
         }
@@ -796,7 +796,7 @@ void TableView::selectAll()
 
 void TableView::slotSetActive(const bool isActive)
 {
-    if (s->isActive!=isActive)
+    if (s->isActive != isActive)
     {
         s->isActive = isActive;
         s->tableViewModel->slotSetActive(isActive);

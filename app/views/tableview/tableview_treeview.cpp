@@ -111,7 +111,7 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
 {
     QHeaderView* const headerView = header();
 
-    if ( (watched == headerView) && (event->type() == QEvent::ContextMenu) )
+    if ((watched == headerView) && (event->type() == QEvent::ContextMenu))
     {
         showHeaderContextMenu(event);
 
@@ -123,7 +123,7 @@ bool TableViewTreeView::eventFilter(QObject* watched, QEvent* event)
 
 void TableViewTreeView::addColumnDescriptionsToMenu(const QList<TableViewColumnDescription>& columnDescriptions, QMenu* const menu)
 {
-    for (int i = 0; i<columnDescriptions.count(); ++i)
+    for (int i = 0; i < columnDescriptions.count(); ++i)
     {
         const TableViewColumnDescription& desc = columnDescriptions.at(i);
         QAction* const action                  = new QAction(desc.columnTitle, menu);
@@ -199,7 +199,7 @@ void TableViewTreeView::slotHeaderContextMenuAddColumn()
     // If the column is inserted before the clicked column, we have to
     // subtract one from the target index because it looks like QHeaderView first removes
     // the column and then inserts it.
-    if (newColumnVisualIndex<clickedVisualIndex)
+    if (newColumnVisualIndex < clickedVisualIndex)
     {
         newColumnVisualTargetIndex--;
     }
