@@ -1,55 +1,10 @@
 *****************************************************************************************************
-digiKam 5.2.0 - Release date: 2016-09-18
+digiKam 5.3.0 - Release date: 2016-10-16
 
 NEW FEATURES:
 
-ImageEditor   : digiKam editor and Showfoto plugins interface removed to reduce run-time dependancies and speed-up initialization.
-ImageEditor   : New tool to detect and fix red-eyes automatically.
-Import        : New configuration options to support gPhoto2 PTP/IP cameras.
-BQM           : New tool to detect and fix red-eyes automatically.
-Setup         : Factoring and simplification of Album and Image Editor tabs.
-Documentation : First version re-written of the huge users guide based on 5.x release.
 
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 366518 - Showfoto writes to wrong file when switching between images.
-002 ==> 366542 - Build failure on i686.
-003 ==> 365135 - digiKam 5 fails to build with DIGIKAMSC_COMPILE_DOC=on.
-004 ==> 366630 - digiKam Not Responding if 'Right Click' on a empty area below the album lists.
-005 ==> 366621 - Crash when performing Transformation resize operation.
-006 ==> 366683 - Reverse Geottaging doesn't work on manually modified coordinates.
-007 ==> 360528 - digiKam looks for digikamimageplugins in different directory than they were installed to.
-008 ==> 365175 - Geolocation editing no long works in digikam 5.
-009 ==> 366095 - Raw files not (always) properly decoded when using "raw data in half size" option for preview.
-010 ==> 357617 - Batch rename fails when using custom file extensions.
-011 ==> 366786 - Libraw fails to build with Clang (C++11 non constant initializer narrowing).
-012 ==> 365727 - Thumbbar in editor should have a vertical scroll.
-013 ==> 366626 - Video frame remains on screen even after moving to another item.
-014 ==> 307839 - No import from automaticaly added smartphone.
-015 ==> 297459 - Cancel button doesn't work when items are being processed.
-016 ==> 360462 - Can't drag image from list to map in Google Maps mode.
-017 ==> 367580 - digiKam freeze, and most of the computer, when geolocalising pictures.
-018 ==> 367649 - Adjusting File Last Modified timestamps makes 0-byte files out of MP4 video.
-019 ==> 367643 - In album view, "Clear all faces in this image" does not work.
-020 ==> 366897 - Detailed progress window cannot be hidden properly.
-021 ==> 367604 - Reduced usability of combined slider/input widgets in editing tools.
-022 ==> 367714 - Folders not found after computer restart.
-023 ==> 367675 - Incomplete "Exec"-line in digikam-opencamera.desktop.
-024 ==> 286398 - Allow to input coordinates manually in items list.
-025 ==> 367847 - digiKam crashed when we right click on albums area.
-026 ==> 242630 - Write an handbook section for Metadata Edit tool.
-027 ==> 367642 - IPTC/XMP metadata not saved to image on exit when Lazy Sync is on.
-028 ==> 367740 - Album View not updated after moving albums.
-029 ==> 368291 - New taggued face not appearing after Plasma5 upgrade.
-030 ==> 365721 - Album view shows thumbnails for deleted pictures/videos.
-031 ==> 368444 - Not supporting XCF anymore.
-032 ==> 368564 - Settings fields not working properly.
-033 ==> 368575 - Untranslatable strings in BQM-File Renaming (Date & Time dialog).
-034 ==> 368715 - Transform > Resize is missing an edit box (regression).
-035 ==> 366558 - Face detection does not honour album selection in options.
-036 ==> 334183 - Face recognition folder selection scans all available folders
-037 ==> 335013 - The face recognition and detection tool does not respect the albums selection to process.
-038 ==> 366557 - Face detection/recognition options are not persistent.
-039 ==> 365321 - Scan + recognize faces does not work.
-040 ==> 365667 - Face image tagger obscuring image.
+001 ==> 
