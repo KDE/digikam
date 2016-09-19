@@ -61,6 +61,14 @@ TableViewItemDelegate::~TableViewItemDelegate()
 void TableViewItemDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& tableViewModelIndex) const
 {
     const int columnIndex               = tableViewModelIndex.column();
+    const int columnCount               = s->tableViewModel->columnCount(QModelIndex());
+
+    if (columnIndex < 0 || columnIndex >= columnCount)
+    {
+        QItemDelegate::paint(painter, option, tableViewModelIndex);
+        return;
+    }
+
     TableViewColumn* const columnObject = s->tableViewModel->getColumnObject(columnIndex);
     bool useDefaultPainter              = !columnObject->getColumnFlags().testFlag(TableViewColumn::ColumnCustomPainting);
 
@@ -86,6 +94,11 @@ QSize TableViewItemDelegate::sizeHint(const QStyleOptionViewItem& option, const 
     const int columnCount            = s->tableViewModel->columnCount(QModelIndex());
     TableViewModel::Item* const item = s->tableViewModel->itemFromIndex(tableViewModelIndex);
     int maxHeight                    = 0;
+
+    if (columnIndex < 0 || columnIndex >= columnCount)
+    {
+        return QItemDelegate::sizeHint(option, tableViewModelIndex);
+    }
 
     for (int i = 0; i < columnCount ; ++i)
     {

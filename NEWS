@@ -7,4 +7,5 @@ NEW FEATURES:
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 
+001 ==> 368965 - Crash when clicking on Table button in top menu bar [patch].
+002 ==> 
