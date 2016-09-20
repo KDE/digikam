@@ -42,6 +42,10 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
+// Marble includes
+
+#include <marble/GeoDataLatLonAltBox.h>
+
 // Local includes
 
 #include "htmlwidget.h"
