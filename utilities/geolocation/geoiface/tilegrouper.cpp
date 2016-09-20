@@ -24,6 +24,10 @@
 
 #include "tilegrouper.h"
 
+// C++ includes
+
+#include <cmath>
+
 // local includes
 
 #include "abstractmarkertiler.h"
@@ -41,7 +45,6 @@ public:
         : clustersDirty(true),
           currentBackend(0)
     {
-
     }
 
     bool        clustersDirty;
@@ -177,11 +180,11 @@ void TileGrouper::updateClusters()
             continue;
 
         debugCountNonEmptyTiles++;
-        const int linearIndex = tilePoint.x() + tilePoint.y()*gridWidth;
+        const int linearIndex        = tilePoint.x() + tilePoint.y()*gridWidth;
         pixelNonEmptyTileIndexGrid[linearIndex] << tileIndex;
-        pixelCountGrid[linearIndex]+= s->markerModel->getTileMarkerCount(tileIndex);
+        pixelCountGrid[linearIndex] += s->markerModel->getTileMarkerCount(tileIndex);
 
-//         qCDebug(DIGIKAM_GEOIFACE_LOG)<<QString::fromLatin1("pixel at: %1, %2 (%3): %4 markers").arg(tilePoint.x()).arg(tilePoint.y()).arg(linearIndex).arg(pixelCountGrid[linearIndex]);
+//         qCDebug(DIGIKAM_GEOIFACE_LOG) << QString::fromLatin1("pixel at: %1, %2 (%3): %4 markers").arg(tilePoint.x()).arg(tilePoint.y()).arg(linearIndex).arg(pixelCountGrid[linearIndex]);
     }
 
     /// @todo Cleanup this list every ... iterations in the next loop, too
@@ -247,7 +250,8 @@ void TileGrouper::updateClusters()
                 if (tooClose)
                 {
                     // move markers into leftover list
-                    leftOverList << QPair<QPoint, QPair<int, QList<TileIndex> > >(QPoint(x,y), QPair<int, QList<TileIndex> >(pixelCountGrid.at(index), pixelNonEmptyTileIndexGrid.at(index)));
+                    leftOverList << QPair<QPoint, QPair<int, QList<TileIndex> > >(QPoint(x,y),
+                                    QPair<int, QList<TileIndex> >(pixelCountGrid.at(index), pixelNonEmptyTileIndexGrid.at(index)));
                     pixelCountGrid[index] = 0;
                     pixelNonEmptyTileIndexGrid[index].clear();
                     nonEmptyPixelIndices[pixelGridMetaIndex] = -1;
@@ -299,7 +303,9 @@ void TileGrouper::updateClusters()
             }
         }
 
-        qCDebug(DIGIKAM_GEOIFACE_LOG)<<QString::fromLatin1("created cluster %1: %2 tiles").arg(s->clusterList.size()).arg(cluster.tileIndicesList.count());
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << QString::fromLatin1("created cluster %1: %2 tiles")
+                                         .arg(s->clusterList.size())
+                                         .arg(cluster.tileIndicesList.count());
 
         s->clusterList << cluster;
     }
@@ -351,10 +357,14 @@ void TileGrouper::updateClusters()
         cluster.groupState          = clusterStateComputer.getState();
     }
 
-//     qCDebug(DIGIKAM_GEOIFACE_LOG)<<s->clusterList.size();
-    qCDebug(DIGIKAM_GEOIFACE_LOG)<<QString::fromLatin1("level %1: %2 non empty tiles sorted into %3 clusters (%4 searched)").arg(markerLevel).arg(debugCountNonEmptyTiles).arg(s->clusterList.count()).arg(debugTilesSearched);
+//     qCDebug(DIGIKAM_GEOIFACE_LOG) << s->clusterList.size();
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << QString::fromLatin1("level %1: %2 non empty tiles sorted into %3 clusters (%4 searched)")
+                                     .arg(markerLevel)
+                                     .arg(debugCountNonEmptyTiles)
+                                     .arg(s->clusterList.count())
+                                     .arg(debugTilesSearched);
 
     d->currentBackend->updateClusters();
 }
 
-} /* namespace GeoIface */
+} // namespace GeoIface

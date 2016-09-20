@@ -54,9 +54,9 @@
 // Local includes
 
 #ifdef GEOIFACE_MARBLE_ADD_LAYER
-#include "backendmarblelayer.h"
+#    include "backendmarblelayer.h"
 #else
-#include "backend_map_marble_subwidget.h"
+#    include "backend_map_marble_subwidget.h"
 #endif // GEOIFACE_MARBLE_ADD_LAYER
 
 #include "abstractmarkertiler.h"
@@ -192,13 +192,7 @@ BackendMarble::~BackendMarble()
     {
 #ifdef GEOIFACE_MARBLE_ADD_LAYER
 
-#if MARBLE_VERSION>=0x000c00
         d->marbleWidget->removeLayer(d->bmLayer);
-#elif MARBLE_VERSION>=0x000b00
-        d->marbleWidget->map()->removeLayer(d->bmLayer);
-#else
-        d->marbleWidget->model()->removeLayer(d->bmLayer);
-#endif
 
         delete d->bmLayer;
 #endif
@@ -241,14 +235,7 @@ QWidget* BackendMarble::mapWidget()
             d->marbleWidget = new Marble::MarbleWidget();
             d->bmLayer      = new BackendMarbleLayer(this);
 
-#if MARBLE_VERSION>=0x000c00
             d->marbleWidget->addLayer(d->bmLayer);
-#elif MARBLE_VERSION>=0x000b00
-            d->marbleWidget->map()->addLayer(d->bmLayer);
-#else
-            d->marbleWidget->model()->addLayer(d->bmLayer);
-#endif
-
 #else
             d->marbleWidget = new BMWidget(this);
 #endif
@@ -667,9 +654,6 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
     }
 
     painter->save();
-#if MARBLE_VERSION < 0x000f14
-    painter->autoMapQuality();
-#endif
 
     if (s->trackManager)
     {
@@ -1111,11 +1095,7 @@ GeoCoordinates::PairList BackendMarble::getNormalizedBounds()
         return GeoCoordinates::PairList();
     }
 
-#if MARBLE_VERSION < 0x000b00
-    const Marble::GeoDataLatLonAltBox marbleBounds = d->marbleWidget->map()->viewParams()->viewport()->viewLatLonAltBox();
-#else
     const Marble::GeoDataLatLonAltBox marbleBounds = d->marbleWidget->viewport()->viewLatLonAltBox();
-#endif
 //     qCDebug(DIGIKAM_GEOIFACE_LOG)<<marbleBounds.toString(GeoDataCoordinates::Degree);
 
     const GeoCoordinates::Pair boundsPair = GeoCoordinates::makePair(
@@ -1773,14 +1753,7 @@ void BackendMarble::drawSearchRectangle(Marble::GeoPainter* const painter, const
     Marble::GeoDataCoordinates coordBottomRight(lonEast, latSouth, 0, Marble::GeoDataCoordinates::Degree);
     Marble::GeoDataLinearRing polyRing;
 
-#if MARBLE_VERSION < 0x000800
-    polyRing.append(&coordTopLeft);
-    polyRing.append(&coordTopRight);
-    polyRing.append(&coordBottomRight);
-    polyRing.append(&coordBottomLeft);
-#else // MARBLE_VERSION < 0x000800
     polyRing << coordTopLeft << coordTopRight << coordBottomRight << coordBottomLeft;
-#endif // MARBLE_VERSION < 0x000800
 
     QPen selectionPen;
 

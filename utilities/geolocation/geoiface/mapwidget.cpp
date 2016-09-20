@@ -56,6 +56,7 @@
 // Marbel includes
 
 #include <marble/GeoDataLineString.h>
+#include <marble/GeoDataLatLonBox.h>
 #include <marble/MarbleGlobal.h>
 
 // local includes

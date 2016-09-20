@@ -33,10 +33,6 @@
 
 #include <QModelIndex>
 
-// Marble Widget includes
-
-#include <marble/GeoDataLatLonBox.h>
-
 // Local includes
 
 #include "geoiface_common.h"
@@ -44,6 +40,11 @@
 class QMenu;
 class QWidget;
 class KConfigGroup;
+
+namespace Marble
+{
+class GeoDataLatLonBox;
+}
 
 namespace GeoIface
 {
