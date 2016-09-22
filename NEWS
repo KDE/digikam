@@ -9,4 +9,5 @@ BUGFIXES FROM BUGZILLA:
 
 001 ==> 368965 - Crash when clicking on Table button in top menu bar [patch].
 002 ==> 366769 - Rename aborts after first rename of many.
-003 ==> 
+003 ==> 369140 - Tags don't appear at all.
+004 ==> 
