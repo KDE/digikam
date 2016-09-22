@@ -8,4 +8,5 @@ NEW FEATURES:
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 368965 - Crash when clicking on Table button in top menu bar [patch].
-002 ==> 
+002 ==> 366769 - Rename aborts after first rename of many.
+003 ==> 
