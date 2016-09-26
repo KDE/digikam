@@ -64,6 +64,7 @@ public:
 
 private Q_SLOTS:
 
+    void slotDelayedModelTimer();
     void slotRowsInserted(const QModelIndex& parent, int start, int end);
     void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
     void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
@@ -71,8 +72,6 @@ private Q_SLOTS:
 
 private:
 
-    void connectToModel(QAbstractItemModel* const model);
-    void disconnectFromModel(QAbstractItemModel* const model);
     void sync(QAbstractItemModel* const model);
     void sync(QAbstractItemModel* const model, const QModelIndex& index);
 

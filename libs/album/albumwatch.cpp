@@ -238,10 +238,7 @@ void AlbumWatch::slotAlbumAdded(Album* a)
         return;
     }
 
-    if (!d->dirWatch->directories().contains(dir))
-    {
-        d->dirWatch->addPath(dir);
-    }
+    d->dirWatch->addPath(dir);
 }
 
 void AlbumWatch::slotAlbumAboutToBeDeleted(Album* a)

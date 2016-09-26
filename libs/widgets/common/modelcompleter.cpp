@@ -27,6 +27,7 @@
 
 // Qt includes
 
+#include <QTimer>
 #include <QPointer>
 #include <QStringListModel>
 
@@ -44,6 +45,7 @@ public:
     Private() :
         displayRole(Qt::DisplayRole),
         uniqueIdRole(Qt::DisplayRole),
+        delayedModelTimer(0),
         stringModel(0),
         model(0)
     {
@@ -52,6 +54,7 @@ public:
     int                          displayRole;
     int                          uniqueIdRole;
 
+    QTimer*                      delayedModelTimer;
     QStringListModel*            stringModel;
     QPointer<QAbstractItemModel> model;
 
@@ -79,6 +82,13 @@ ModelCompleter::ModelCompleter(QObject* parent)
     setFilterMode(Qt::MatchContains);
     setMaxVisibleItems(10);
     setCompletionColumn(0);
+
+    d->delayedModelTimer = new QTimer(this);
+    d->delayedModelTimer->setInterval(250);
+    d->delayedModelTimer->setSingleShot(true);
+
+    connect(d->delayedModelTimer, SIGNAL(timeout()),
+            this, SLOT(slotDelayedModelTimer()));
 }
 
 ModelCompleter::~ModelCompleter()
@@ -91,7 +101,7 @@ void ModelCompleter::setItemModel(QAbstractItemModel* const model, int uniqueIdR
     // first release old model
     if (d->model)
     {
-        disconnectFromModel(d->model);
+        disconnect(d->model);
         d->idToTextMap.clear();
         d->stringModel->setStringList(QStringList());
     }
@@ -103,26 +113,21 @@ void ModelCompleter::setItemModel(QAbstractItemModel* const model, int uniqueIdR
     // connect to the new model
     if (d->model)
     {
-        connectToModel(d->model);
+        connect(d->model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+                this, SLOT(slotRowsInserted(QModelIndex,int,int)));
+
+        connect(d->model, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+                this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+
+        connect(d->model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+                this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
+
+        connect(d->model, SIGNAL(modelReset()),
+                this, SLOT(slotModelReset()));
 
         // do an initial sync wit the new model
         sync(d->model);
     }
-}
-
-void ModelCompleter::connectToModel(QAbstractItemModel* const model)
-{
-    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this, SLOT(slotRowsInserted(QModelIndex,int,int)));
-
-    connect(model, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
-            this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
-
-    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
-
-    connect(model, SIGNAL(modelReset()),
-            this, SLOT(slotModelReset()));
 }
 
 QAbstractItemModel* ModelCompleter::itemModel() const
@@ -140,6 +145,15 @@ void ModelCompleter::addItem(const QString& item)
 QStringList ModelCompleter::items() const
 {
     return d->stringModel->stringList();
+}
+
+void ModelCompleter::slotDelayedModelTimer()
+{
+    QStringList stringList = d->idToTextMap.values();
+    stringList.removeDuplicates();
+    stringList.sort();
+
+    d->stringModel->setStringList(stringList);
 }
 
 void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int end)
@@ -164,6 +178,8 @@ void ModelCompleter::slotRowsInserted(const QModelIndex& parent, int start, int 
                      << child;
         }
     }
+
+    d->delayedModelTimer->start();
 }
 
 void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
@@ -190,11 +206,7 @@ void ModelCompleter::slotRowsAboutToBeRemoved(const QModelIndex& parent, int sta
             // item with the same display name
             if (d->idToTextMap.keys(itemName).empty())
             {
-                QStringList stringList = d->idToTextMap.values();
-                stringList.removeDuplicates();
-
-                d->stringModel->setStringList(stringList);
-                d->stringModel->sort(0);
+                d->delayedModelTimer->start();
             }
         }
         else
@@ -233,20 +245,10 @@ void ModelCompleter::slotDataChanged(const QModelIndex& topLeft, const QModelInd
 
         int id             = index.data(d->uniqueIdRole).toInt();
         QString itemName   = index.data(d->displayRole).toString();
-
         d->idToTextMap[id] = itemName;
 
-        QStringList stringList = d->idToTextMap.values();
-        stringList.removeDuplicates();
-
-        d->stringModel->setStringList(stringList);
-        d->stringModel->sort(0);
+        d->delayedModelTimer->start();
     }
-}
-
-void ModelCompleter::disconnectFromModel(QAbstractItemModel* const model)
-{
-    disconnect(model);
 }
 
 void ModelCompleter::sync(QAbstractItemModel* const model)
@@ -262,11 +264,7 @@ void ModelCompleter::sync(QAbstractItemModel* const model)
         sync(model, index);
     }
 
-    QStringList stringList = d->idToTextMap.values();
-    stringList.removeDuplicates();
-
-    d->stringModel->setStringList(stringList);
-    d->stringModel->sort(0);
+    d->delayedModelTimer->start();
 }
 
 void ModelCompleter::sync(QAbstractItemModel* const model, const QModelIndex& index)
