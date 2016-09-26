@@ -240,13 +240,14 @@ QModelIndex AlbumFilterModel::rootAlbumIndex() const
 
 QVariant AlbumFilterModel::dataForCurrentSortRole(Album* album) const
 {
-    if(album)
+    if (album)
     {
-        if(album->type() == Album::PHYSICAL)
+        if (album->type() == Album::PHYSICAL)
         {
-            PAlbum* a = static_cast<PAlbum*>(album);
+            PAlbum* const a = static_cast<PAlbum*>(album);
 
             ApplicationSettings::AlbumSortRole sortRole = ApplicationSettings::instance()->getAlbumSortRole();
+
             switch (sortRole)
             {
                 case ApplicationSettings::ByFolder:
@@ -257,7 +258,7 @@ QVariant AlbumFilterModel::dataForCurrentSortRole(Album* album) const
                     return a->category();
             }
         }
-        else if(album->type() == Album::TAG)
+        else if (album->type() == Album::TAG)
         {
             return static_cast<TAlbum*>(album)->title();
         }
@@ -400,7 +401,7 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
         collator.setCaseSensitivity(sortCaseSensitivity());
         return (collator.compare(valLeft.toString(), valRight.toString()) < 0);
     }
-    else if((valLeft.type() == QVariant::Date) && (valRight.type() == QVariant::Date))
+    else if ((valLeft.type() == QVariant::Date) && (valRight.type() == QVariant::Date))
     {
         return compareByOrder(valLeft.toDate(),valRight.toDate(),Qt::AscendingOrder) < 0;
     }
@@ -737,28 +738,28 @@ void TagsManagerFilterModel::setQuickListTags(QList<int> tags)
 
 bool TagsManagerFilterModel::matches(Album* album) const
 {
-    if(!TagPropertiesFilterModel::matches(album))
+    if (!TagPropertiesFilterModel::matches(album))
     {
         return false;
     }
 
-    if(m_keywords.isEmpty())
+    if (m_keywords.isEmpty())
     {
         return true;
     }
 
     bool dirty = false;
 
-    for(QSet<int>::const_iterator it = m_keywords.begin(); it != m_keywords.end(); ++it)
+    for (QSet<int>::const_iterator it = m_keywords.begin(); it != m_keywords.end(); ++it)
     {
         TAlbum* const talbum = AlbumManager::instance()->findTAlbum(*it);
 
-        if(!talbum)
+        if (!talbum)
         {
             continue;
         }
 
-        if(talbum->title().compare(album->title()) == 0)
+        if (talbum->title().compare(album->title()) == 0)
         {
             dirty = true;
         }
