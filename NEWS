@@ -12,4 +12,5 @@ BUGFIXES FROM BUGZILLA:
 003 ==> 369140 - Tags don't appear at all.
 004 ==> 329060 - digiKam Tabs in Scanning faces dialog need to be fixed.
 005 ==> 369407 - Remove <para><interface> and </para></interface> from tooltip.
-006 ==> 
+006 ==> 369321 - Translation of digikam + showfoto docbooks missing in digikam-5.2.0 tarball.
+007 ==> 
