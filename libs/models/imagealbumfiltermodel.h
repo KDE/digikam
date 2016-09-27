@@ -67,6 +67,11 @@ private:
 
     void albumChange(Album* album);
 
+private Q_SLOTS:
+
+    void slotDelayedAlbumNamesTimer();
+    void slotDelayedTagNamesTimer();
+
 private:
 
     Q_DECLARE_PRIVATE(ImageAlbumFilterModel)

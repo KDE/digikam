@@ -24,6 +24,10 @@
 
 #include "imagealbumfiltermodel.h"
 
+// Qt includes
+
+#include <QTimer>
+
 // Local includes
 
 #include "imagefiltermodelpriv.h"
@@ -41,13 +45,23 @@ class ImageAlbumFilterModelPrivate : public ImageFilterModel::ImageFilterModelPr
 {
 public:
 
+    ImageAlbumFilterModelPrivate()
+    {
+        delayedAlbumNamesTimer = 0;
+        delayedTagNamesTimer   = 0;
+    }
+
     QHash<int, QString> tagNamesHash;
     QHash<int, QString> albumNamesHash;
+    QTimer*             delayedAlbumNamesTimer;
+    QTimer*             delayedTagNamesTimer;
 };
 
 ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* const parent)
     : ImageFilterModel(*new ImageAlbumFilterModelPrivate, parent)
 {
+    Q_D(ImageAlbumFilterModel);
+
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
@@ -59,6 +73,20 @@ ImageAlbumFilterModel::ImageAlbumFilterModel(QObject* const parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumRenamed(Album*)));
+
+    d->delayedAlbumNamesTimer = new QTimer(this);
+    d->delayedAlbumNamesTimer->setInterval(250);
+    d->delayedAlbumNamesTimer->setSingleShot(true);
+
+    d->delayedTagNamesTimer = new QTimer(this);
+    d->delayedTagNamesTimer->setInterval(250);
+    d->delayedTagNamesTimer->setSingleShot(true);
+
+    connect(d->delayedAlbumNamesTimer, SIGNAL(timeout()),
+            this, SLOT(slotDelayedAlbumNamesTimer()));
+
+    connect(d->delayedTagNamesTimer, SIGNAL(timeout()),
+            this, SLOT(slotDelayedTagNamesTimer()));
 
     foreach(Album* const a, AlbumManager::instance()->allPAlbums())
     {
@@ -155,25 +183,15 @@ int ImageAlbumFilterModel::compareInfosCategories(const ImageInfo& left, const I
 
 void ImageAlbumFilterModel::albumChange(Album* album)
 {
-    Q_D(ImageAlbumFilterModel);
+    Q_D(const ImageAlbumFilterModel);
 
     if (album->type() == Album::PHYSICAL)
     {
-        d->albumNamesHash = AlbumManager::instance()->albumTitles();
-
-        if (d->filter.isFilteringByText())
-        {
-            setImageFilterSettings(d->filter);
-        }
+        d->delayedAlbumNamesTimer->start();
     }
     else if (album->type() == Album::TAG)
     {
-        d->tagNamesHash = AlbumManager::instance()->tagNames();
-
-        if (d->filter.isFilteringByText() || d->filter.isFilteringByTags())
-        {
-            setImageFilterSettings(d->filter);
-        }
+        d->delayedTagNamesTimer->start();
     }
 }
 
@@ -197,6 +215,30 @@ void ImageAlbumFilterModel::slotAlbumsCleared()
     Q_D(ImageAlbumFilterModel);
     d->albumNamesHash.clear();
     d->tagNamesHash.clear();
+}
+
+void ImageAlbumFilterModel::slotDelayedAlbumNamesTimer()
+{
+    Q_D(ImageAlbumFilterModel);
+
+    d->albumNamesHash = AlbumManager::instance()->albumTitles();
+
+    if (d->filter.isFilteringByText())
+    {
+        setImageFilterSettings(d->filter);
+    }
+}
+
+void ImageAlbumFilterModel::slotDelayedTagNamesTimer()
+{
+    Q_D(ImageAlbumFilterModel);
+
+    d->tagNamesHash = AlbumManager::instance()->tagNames();
+
+    if (d->filter.isFilteringByText() || d->filter.isFilteringByTags())
+    {
+        setImageFilterSettings(d->filter);
+    }
 }
 
 } // namespace Digikam
