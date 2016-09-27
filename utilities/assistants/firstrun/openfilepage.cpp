@@ -72,7 +72,7 @@ OpenFilePage::OpenFilePage(FirstRunDlg* const dlg)
     QLabel* const label1 = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
-                         "<p>Specify how images should be opened when right-clicked on in the icon view:</p>"
+                         "<p>Specify how images should be opened when left-clicked on in the icon view:</p>"
                          "</qt>"));
 
     QWidget* const btns     = new QWidget(vbox);
