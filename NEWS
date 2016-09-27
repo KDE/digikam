@@ -11,4 +11,5 @@ BUGFIXES FROM BUGZILLA:
 002 ==> 366769 - Rename aborts after first rename of many.
 003 ==> 369140 - Tags don't appear at all.
 004 ==> 329060 - digiKam Tabs in Scanning faces dialog need to be fixed.
-005 ==> 
+005 ==> 369407 - Remove <para><interface> and </para></interface> from tooltip.
+006 ==> 

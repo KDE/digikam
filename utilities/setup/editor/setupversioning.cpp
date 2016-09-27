@@ -68,12 +68,6 @@ public:
           snapshotComplex(0),
           viewShowOriginal(0),
           viewShowSnapshots(0),
-/*
-          jpgFormat(0),
-          pngFormat(0),
-          tiffFormat(0),
-          pgfFormat(0),
-*/
           formatBox(0),
           askToSave(0),
           autoSave(0),
@@ -103,12 +97,6 @@ public:
     QCheckBox*     viewShowSnapshots;
 
     QComboBox*     formatBox;
-/*
-    QRadioButton*  jpgFormat;
-    QRadioButton*  pngFormat;
-    QRadioButton*  tiffFormat;
-    QRadioButton*  pgfFormat;
-*/
 
     QRadioButton*  askToSave;
     QRadioButton*  autoSave;
@@ -210,17 +198,6 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                      "to the tradition formats JPEG, PNG or TIFF. "
                                      "</item>"
                                      "</list></para></qt>"));
-/*
-    d->jpgFormat  = new QRadioButton(i18nc("@option:radio", "JPEG"));
-    d->pngFormat  = new QRadioButton(i18nc("@option:radio", "PNG"));
-    d->tiffFormat = new QRadioButton(i18nc("@option:radio", "TIFF"));
-    d->pgfFormat  = new QRadioButton(i18nc("@option:radio", "PGF"));
-    wsLayout->addWidget(d->jpgFormat,    1, 0, 1, 2);
-    wsLayout->addWidget(d->pngFormat,    2, 0, 1, 2);
-    wsLayout->addWidget(d->tiffFormat,   3, 0, 1, 2);
-    wsLayout->addWidget(d->pgfFormat,    4, 0, 1, 2);
-    wsLayout->addWidget(d->formatInfoLabel, 5, 0, 1, 2, Qt::AlignRight);
-*/
 
     d->infoFormat = new QPushButton;
     d->infoFormat->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
@@ -323,27 +300,6 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
 
     // --------------------------------------------------------
 
-/*
-    d->viewPanel = new QWidget;
-    QVBoxLayout* const viewLayout = new QVBoxLayout;
-
-    // ---
-
-    QGridLayout* const viewHeaderLayout = new QGridLayout;
-
-    QLabel* const viewExplanation = new QLabel;
-    viewExplanation->setText(i18nc("@label",
-                                   "If an image has been edited, only the current versions will be shown. "
-                                   "From the right sidebar, you can access all hidden files. "
-                                   "Here, you can choose to show certain files permanently."));
-    viewExplanation->setWordWrap(true);
-
-    viewHeaderLayout->addWidget(viewIconLabel,       0, 0);
-    viewHeaderLayout->addWidget(viewExplanation,     0, 1);
-
-    // ---
-*/
-
     d->viewGB = new QGroupBox;
     QGridLayout* const viewGBLayout = new QGridLayout;
 
@@ -373,16 +329,6 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     viewGBLayout->addWidget(d->viewShowSnapshots, 2, 0, 1, 4);
     viewGBLayout->setColumnStretch(2, 1);
     d->viewGB->setLayout(viewGBLayout);
-
-/*
-    / ---
-
-    viewLayout->addLayout(viewHeaderLayout);
-    viewLayout->addWidget(d->viewGB);
-    viewLayout->addStretch();
-
-    d->viewPanel->setLayout(viewLayout);
-*/
 
     // --------------------------------------------------------
 
@@ -460,21 +406,11 @@ void SetupVersioning::applySettings()
     {
         settings.editorClosingMode = VersionManagerSettings::AutoSave;
     }
-    else //if (d->askToSave->isChecked())
+    else // d->askToSave->isChecked()
     {
         settings.editorClosingMode = VersionManagerSettings::AlwaysAsk;
     }
 
-/*
-    if (d->jpgFormat->isChecked())
-        settings.format = "JPG";
-    else if (d->pngFormat->isChecked())
-        settings.format = "PNG";
-    else if (d->tiffFormat->isChecked())
-        settings.format = "TIFF";
-    else if (d->pgfFormat->isChecked())
-        settings.format = "PGF";
-*/
     settings.format = d->formatBox->itemData(d->formatBox->currentIndex()).toString();
 
     ApplicationSettings::instance()->setVersionManagerSettings(settings);
@@ -494,16 +430,6 @@ void SetupVersioning::readSettings()
     d->askToSave->setChecked(settings.editorClosingMode == VersionManagerSettings::AlwaysAsk);
     d->autoSave->setChecked(settings.editorClosingMode == VersionManagerSettings::AutoSave);
 
-/*
-    if (settings.format == "JPG")
-        d->jpgFormat->setChecked(true);
-    else if (settings.format == "PNG")
-        d->pngFormat->setChecked(true);
-    else if (settings.format == "TIFF")
-        d->tiffFormat->setChecked(true);
-    else if (settings.format == "PGF")
-        d->pgfFormat->setChecked(true);
-*/
     d->formatBox->setCurrentIndex(d->formatBox->findData(settings.format));
 }
 
