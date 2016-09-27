@@ -102,7 +102,6 @@ void RedEyeCorrectionFilter::filterImage()
     if (d->sp == 0)
     {
         // Loading the shape predictor model
-        redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
 
         QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                         QString::fromLatin1("digikam/facesengine"),
@@ -111,6 +110,7 @@ void RedEyeCorrectionFilter::filterImage()
 
         if (model.open(QIODevice::ReadOnly))
         {
+            redeye::ShapePredictor* const temp = new redeye::ShapePredictor();
             QDataStream dataStream(&model);
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             dataStream >> *temp;
