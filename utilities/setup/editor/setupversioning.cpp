@@ -123,22 +123,22 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    d->nonDestructivePanel            = new QWidget;
+    d->nonDestructivePanel                  = new QWidget;
     QVBoxLayout* const nonDestructiveLayout = new QVBoxLayout;
 
     // ---
 
     QGridLayout* const gridHeader = new QGridLayout;
 
-    d->enableNonDestructive = new QCheckBox;
+    d->enableNonDestructive       = new QCheckBox;
     d->enableNonDestructive->setText(i18n("Enable Non-Destructive Editing and Versioning"));
     d->enableNonDestructive->setToolTip(i18nc("@info:tooltip",
                                               "Enable support for non-destructive editing and image versioning"));
     d->enableNonDestructive->setWhatsThis(i18nc("@info:whatsthis",
-                                                "<para><interface>Non-Destructive Editing and Versioning</interface> "
+                                                "<qt><para><interface>Non-Destructive Editing and Versioning</interface> "
                                                 "allows different versions of an image to be created, "
                                                 "whilst always preserving the original image.</para> "
-                                                "<para> All steps of the editing history are recorded and can be accessed later.</para>"));
+                                                "<para> All steps of the editing history are recorded and can be accessed later.</para></qt>"));
 
     QLabel* const iconLabel = new QLabel;
     iconLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-catalog")).pixmap(32));
@@ -172,7 +172,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     d->formatBox->insertSeparator(4);
 
     d->formatBox->setWhatsThis(i18nc("@info:whatsthis",
-                                     "<title>Default File Format for Saving</title>"
+                                     "<qt><title>Default File Format for Saving</title>"
                                      "<para>Select the file format in which edited images are saved automatically. "
                                      "Format-specific options, like compression settings, "
                                      "can be configured on the <interface>Format Options</interface> tab.</para>"
@@ -209,7 +209,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                      "and the format more widely supported, though still not comparable "
                                      "to the tradition formats JPEG, PNG or TIFF. "
                                      "</item>"
-                                     "</list></para>"));
+                                     "</list></para></qt>"));
 /*
     d->jpgFormat  = new QRadioButton(i18nc("@option:radio", "JPEG"));
     d->pngFormat  = new QRadioButton(i18nc("@option:radio", "PNG"));
@@ -277,7 +277,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QGridLayout* const snapshotLayout = new QGridLayout;
 
     QString snapshotWhatsThis = i18nc("@info:whatsthis",
-                                      "<para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
+                                      "<qt><para>First and foremost, the <emphasis>original image will never be overwritten.</emphasis> "
                                       "Instead, when an image is edited, a new file is created: "
                                       "The <interface>current version</interface>.</para> "
                                       "<para>You can also create multiple <interface>versions</interface> "
@@ -286,7 +286,7 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
                                       "digiKam can take and keep additional, <interface>intermediate snapshots</interface> "
                                       "during the editing process. "
                                       "This can be useful if you want to preserve the intermediate steps for later "
-                                      "access, for example if some editing steps cannot be automatically reproduced.</para> ");
+                                      "access, for example if some editing steps cannot be automatically reproduced.</para></qt>");
     d->snapshotGB->setWhatsThis(snapshotWhatsThis);
 
     QLabel* const snapshotIconLabel = new QLabel;
@@ -348,10 +348,10 @@ SetupVersioning::SetupVersioning(QWidget* const parent)
     QGridLayout* const viewGBLayout = new QGridLayout;
 
     QString viewWhatsThis = i18nc("@info:whatsthis",
-                                  "<para>If an image has been edited, only the <interface>current versions</interface> "
+                                  "<qt><para>If an image has been edited, only the <interface>current versions</interface> "
                                   "will be shown in the main thumbnail view. "
                                   "From the <interface>right sidebar</interface>, you always have access to all hidden files.</para> "
-                                  "<para>With the options here, you can choose to show certain files permanently.</para>");
+                                  "<para>With the options here, you can choose to show certain files permanently.</para></qt>");
     d->viewGB->setWhatsThis(viewWhatsThis);
 
     QLabel* const viewLabel     =  new QLabel(i18nc("@label", "In main view"));
