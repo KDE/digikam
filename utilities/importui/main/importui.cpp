@@ -2120,7 +2120,7 @@ bool ImportUI::downloadCameraItems(PAlbum* pAlbum, bool onlySelected, bool delet
         settings.dest = downloadUrl.toLocalFile();
         allItems.append(settings);
 
-        if (settings.autoRotate)
+        if (settings.autoRotate && settings.mime == QLatin1String("image/jpeg"))
         {
             d->autoRotateItemsList << downloadUrl.toLocalFile();
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "autorotating for " << downloadUrl;
