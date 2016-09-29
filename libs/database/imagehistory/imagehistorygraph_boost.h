@@ -48,6 +48,7 @@
 
 #include <utility>
 #include <algorithm>
+#include <boost/unordered/details/table.hpp>
 #include <boost/graph/transitive_closure.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/topological_sort.hpp>
