@@ -255,14 +255,14 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     QWidget* const fwpanel   = new QWidget(d->tab);
     QGridLayout* const grid2 = new QGridLayout(fwpanel);
 
-    d->iconTreeThumbLabel = new QLabel(i18n("Tree View thumbnail size:"), fwpanel);
+    d->iconTreeThumbLabel = new QLabel(i18n("Tree View icon size:"), fwpanel);
     d->iconTreeThumbSize  = new QComboBox(fwpanel);
     d->iconTreeThumbSize->addItem(QLatin1String("16"));
     d->iconTreeThumbSize->addItem(QLatin1String("22"));
     d->iconTreeThumbSize->addItem(QLatin1String("32"));
     d->iconTreeThumbSize->addItem(QLatin1String("48"));
     d->iconTreeThumbSize->setToolTip(i18n("Set this option to configure the size in pixels of "
-                                          "the Tree View thumbnails in digiKam's sidebars."));
+                                          "the Tree View icons in digiKam's sidebars."));
 
     d->treeViewFontSelect = new DFontSelect(i18n("Tree View font:"), fwpanel);
     d->treeViewFontSelect->setToolTip(i18n("Select here the font used to display text in Tree Views."));
