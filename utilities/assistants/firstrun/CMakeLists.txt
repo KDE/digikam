@@ -11,6 +11,7 @@ endif (POLICY CMP0063)
 
 set(libfirstrun_SRCS
     firstrundlg.cpp
+    migratefromdigikam4page.cpp
     firstrundlgpage.cpp
     welcomepage.cpp
     collectionpage.cpp
@@ -26,6 +27,7 @@ set(libfirstrun_SRCS
 include_directories($<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
 
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>

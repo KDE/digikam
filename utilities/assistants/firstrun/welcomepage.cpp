@@ -52,6 +52,7 @@ WelcomePage::WelcomePage(FirstRunDlg* const dlg)
                         "application published as open-source.</p>"
                         "<p>This assistant will help you to configure first "
                         "run settings to be able to use digiKam quickly.</p>"
+#if defined Q_OS_WIN || defined Q_OS_OSX
                         "<br/>"
                         "<p>You can ignore the following if you use digiKam "
                         "for the first time:</p>"
@@ -75,10 +76,11 @@ WelcomePage::WelcomePage(FirstRunDlg* const dlg)
 #elif defined Q_OS_OSX
                         // MacOS settings place.
                         QLatin1String("~/Library/Preferences/"), QLatin1String("~/Library/Preferences/KDE/share/config/")
-#else
-			// Linux settings place.
-                        QLatin1String("~/.config/"), QLatin1String("~/.kde4/share/config")
 #endif                        
+#else // defined Q_OS_LINUX
+                        "</qt>",
+                        QLatin1String(digikam_version_short)
+#endif
                   ));
 
     setPageWidget(vbox);

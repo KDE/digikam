@@ -27,10 +27,15 @@
 
 #include <QPushButton>
 
+// KDE includes
+
+#include <kdelibs4migration.h>
+
 // Local incudes
 
 #include "dxmlguiwindow.h"
 #include "welcomepage.h"
+#include "migratefromdigikam4page.h"
 #include "collectionpage.h"
 #include "databasepage.h"
 #include "rawpage.h"
@@ -49,6 +54,7 @@ public:
 
     Private() :
         welcomePage(0),
+        migrateFromDigikam4Page(0),
         collectionPage(0),
         databasePage(0),
         rawPage(0),
@@ -61,6 +67,7 @@ public:
     }
 
     WelcomePage*    welcomePage;
+    MigrateFromDigikam4Page*    migrateFromDigikam4Page;
     CollectionPage* collectionPage;
     DatabasePage*   databasePage;
     RawPage*        rawPage;
@@ -82,7 +89,21 @@ FirstRunDlg::FirstRunDlg(QWidget* const parent)
                                                    << QWizard::NextButton
                                                    << QWizard::FinishButton);
 
+    bool migrateAvailable = false;
+
+#ifdef Q_OS_LINUX
+    ::Kdelibs4Migration migration;
+
+    // If there's a digikamrc file in $KDEHOME/share/config,
+    // then we create the migration page in the wizard
+    migrateAvailable = !migration.locateLocal("config", QStringLiteral("digikamrc")).isEmpty();
+#endif
+
     d->welcomePage    = new WelcomePage(this);    // First assistant page
+
+    if (migrateAvailable)
+       d->migrateFromDigikam4Page = new MigrateFromDigikam4Page(this);
+
     d->collectionPage = new CollectionPage(this);
     d->databasePage   = new DatabasePage(this);
     d->rawPage        = new RawPage(this);
@@ -151,14 +172,22 @@ bool FirstRunDlg::validateCurrentPage()
 
 void FirstRunDlg::slotFinishPressed()
 {
-    // Save settings to rc files.
-    d->collectionPage->saveSettings();
-    d->databasePage->saveSettings();
-    d->rawPage->saveSettings();
-    d->metadataPage->saveSettings();
-    d->previewPage->saveSettings();
-    d->openFilePage->saveSettings();
-    d->tooltipsPage->saveSettings();
+    if (d->migrateFromDigikam4Page && d->migrateFromDigikam4Page->isMigrationChecked())
+    {
+       // The user choosed to do a migration from digikam4
+       d->migrateFromDigikam4Page->doMigration();
+    }
+    else
+    {
+       // Save settings to rc files.
+       d->collectionPage->saveSettings();
+       d->databasePage->saveSettings();
+       d->rawPage->saveSettings();
+       d->metadataPage->saveSettings();
+       d->previewPage->saveSettings();
+       d->openFilePage->saveSettings();
+       d->tooltipsPage->saveSettings();
+    }
 }
 
 }   // namespace Digikam
