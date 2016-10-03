@@ -16,4 +16,7 @@ BUGFIXES FROM BUGZILLA:
 007 ==> 369517 - digiKam from 5.2.0 tarball installs libvkontakte translations even if libvkontakte is disabled.
 008 ==> 369626 - "Subjects" metadata fields cannot be edited once other metadata are filled in and stored.
 009 ==> 369656 - Corrections to Metadata Editor section.
-010 ==>
+010 ==> 364258 - 4.x application configuration rc files are ignored
+011 ==> 357944 - wrong encoded collection paths after upgrade from digikam v4.x
+012 ==> 368968 - Geo bookmarks are not migrated from version 4 to version 5
+013 ==>
