@@ -150,6 +150,7 @@ SubjectWidget::SubjectWidget(QWidget* const parent)
 
     // By default, check box is not visible. (digiKam do not use it, kipi-plugins yes).
     m_subjectsCheck->setVisible(false);
+    m_subjectsCheck->setEnabled(false);
 
     QLabel* const customLabel = new QLabel(i18n("Use custom definition"));
 
@@ -590,16 +591,22 @@ void SubjectWidget::setSubjectsList(const QStringList& list)
 
     blockSignals(true);
     d->subjectsBox->clear();
-    m_subjectsCheck->setChecked(false);
+
+    if (m_subjectsCheck->isEnabled())
+        m_subjectsCheck->setChecked(false);
 
     if (!d->subjectsList.isEmpty())
     {
         d->subjectsBox->insertItems(0, d->subjectsList);
-        m_subjectsCheck->setChecked(true);
+
+        if (m_subjectsCheck->isEnabled())
+            m_subjectsCheck->setChecked(true);
     }
 
     blockSignals(false);
-    slotSubjectsToggled(m_subjectsCheck->isChecked());
+
+    if (m_subjectsCheck->isEnabled())
+        slotSubjectsToggled(m_subjectsCheck->isChecked());
 }
 
 QStringList SubjectWidget::subjectsList() const

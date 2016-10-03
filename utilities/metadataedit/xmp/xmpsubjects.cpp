@@ -82,6 +82,7 @@ XMPSubjects::XMPSubjects(QWidget* const parent)
     delete m_note;
 
     m_subjectsCheck->setVisible(true);
+    m_subjectsCheck->setEnabled(true);
 }
 
 XMPSubjects::~XMPSubjects()
