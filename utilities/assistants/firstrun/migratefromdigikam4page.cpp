@@ -141,7 +141,24 @@ void MigrateFromDigikam4Page::doMigration()
              qCDebug(DIGIKAM_GENERAL_LOG) << "Config file" << oldConfigFile << "was migrated to" << newConfigLocation;
          }
      }
+  }
 
+  // Migrate $KDEHOME/share/apps/kipi/geobookmarks.xml to ./.local/share/digikam/geobookmarks.xml
+  QString oldGeobookmarksFile = migration.locateLocal("data", QStringLiteral("kipi/geobookmarks.xml"));
+  const QString newGeobookmarksFile = QStandardPaths::writableLocation(QStandardPaths::DataLocation)
+                                    + QStringLiteral("/geobookmarks.xml");
+
+  if (QFile(newGeobookmarksFile).exists()) {
+     qCDebug(DIGIKAM_GENERAL_LOG) << newGeobookmarksFile << " already exists. Skipping";
+  } else {
+     QFileInfo fileInfo(newGeobookmarksFile);
+     QDir().mkpath(fileInfo.absolutePath());
+
+     if (!oldGeobookmarksFile.isEmpty()) {
+         if (QFile(oldGeobookmarksFile).copy(newGeobookmarksFile)) {
+             qCDebug(DIGIKAM_GENERAL_LOG) << "Config file" << oldGeobookmarksFile << "was migrated to" << newGeobookmarksFile;
+         }
+     }
   }
 
   // Fix albumroot identifier since digiKam 5 doesn't interpret correctly
