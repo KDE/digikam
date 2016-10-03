@@ -97,6 +97,7 @@ IPTCSubjects::IPTCSubjects(QWidget* const parent)
                  "Use contextual help for details.</b>"));
 
     m_subjectsCheck->setVisible(true);
+    m_subjectsCheck->setEnabled(true);
 }
 
 IPTCSubjects::~IPTCSubjects()
