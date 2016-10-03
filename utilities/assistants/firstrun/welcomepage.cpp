@@ -76,7 +76,7 @@ WelcomePage::WelcomePage(FirstRunDlg* const dlg)
 #elif defined Q_OS_OSX
                         // MacOS settings place.
                         QLatin1String("~/Library/Preferences/"), QLatin1String("~/Library/Preferences/KDE/share/config/")
-#endif                        
+#endif
 #else // defined Q_OS_LINUX
                         "</qt>",
                         QLatin1String(digikam_version_short)
