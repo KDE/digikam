@@ -65,10 +65,10 @@ MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
     title->setWordWrap(true);
     title->setText(i18n("<qt>"
                         "<p><h1><b>Migrate configuration and metadata from digiKam 4</b></h1></p>"
-                        "<p>You can choose here if you want to use the configuration and albums from digiKam 4 in digiKam 5 . "
+                        "<p>You can choose here if you want to use the configuration and albums from digiKam 4 in digiKam 5. "
                         "Please note the following warnings:</p>"
                         "<p>Migration is done <b>at your own risk</b>. Digikam developers "
-                        "don't recommend it and don't support it. On the other hand, Creating "
+                        "don't recommend it and don't support it. On the other hand, creating "
                         "a new configuration might result in loss of tags and other metadata that wasn't embedded inside "
                         "the pictures and was only available in digiKam 4's database.</p>"
                         "<p>In either case you're recommended to backup "
