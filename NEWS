@@ -19,4 +19,5 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 364258 - 4.x application configuration rc files are ignored
 011 ==> 357944 - wrong encoded collection paths after upgrade from digikam v4.x
 012 ==> 368968 - Geo bookmarks are not migrated from version 4 to version 5
-013 ==>
+013 ==> 368794 - digiKam crashes with lossy dng image.
+014 ==> 
