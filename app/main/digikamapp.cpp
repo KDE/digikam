@@ -2044,7 +2044,7 @@ bool DigikamApp::checkSolidCamera(const Solid::Device& cameraDevice)
     QStringList drivers = camera->supportedDrivers();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "fillSolidMenus: Found Camera "
-                                 << QString::fromUtf8("%1 %1").arg(cameraDevice.vendor()).arg(cameraDevice.product())
+                                 << QString::fromUtf8("%1 %2").arg(cameraDevice.vendor()).arg(cameraDevice.product())
                                  << " protocols " << camera->supportedProtocols()
                                  << " drivers " << camera->supportedDrivers(QLatin1String("ptp"));
 
