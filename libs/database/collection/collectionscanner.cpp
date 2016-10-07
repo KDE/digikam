@@ -1094,8 +1094,15 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 }
             }
         }
-        else if ( fi->isDir() )
+        else if (fi->isDir())
         {
+#ifdef Q_OS_WIN
+            //Hide album that starts with a dot, as under Linux.
+            if (fi->fileName().startsWith(QLatin1Char('.')))
+            {
+                continue;
+            }
+#endif
             QString subalbum;
 
             if (album == QLatin1String("/"))
@@ -1107,7 +1114,7 @@ void CollectionScanner::scanAlbum(const CollectionLocation& location, const QStr
                 subalbum = album + QLatin1Char('/') + fi->fileName();
             }
 
-            scanAlbum( location, subalbum );
+            scanAlbum(location, subalbum);
         }
     }
 
