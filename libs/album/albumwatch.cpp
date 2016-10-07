@@ -163,6 +163,9 @@ AlbumWatch::AlbumWatch(AlbumManager* const parent)
     connect(parent, SIGNAL(signalAlbumRenamed(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
+    connect(parent, SIGNAL(signalAlbumNewPath(Album*)),
+            this, SLOT(slotAlbumAdded(Album*)));
+
     connect(parent, SIGNAL(signalAlbumAboutToBeDeleted(Album*)),
             this, SLOT(slotAlbumAboutToBeDeleted(Album*)));
 }

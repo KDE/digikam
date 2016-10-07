@@ -2273,9 +2273,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         return false;
     }
 
-#ifdef Q_OS_WIN
     d->albumWatch->removeWatchedPAlbums(album);
-#endif
 
     QString oldAlbumPath = album->albumPath();
     QUrl oldUrl          = album->fileUrl();
@@ -2311,6 +2309,7 @@ bool AlbumManager::renamePAlbum(PAlbum* album, const QString& newName,
         {
             subAlbum->m_parentPath = newAlbumPath + subAlbum->m_parentPath.mid(oldAlbumPath.length());
             access.db()->renameAlbum(subAlbum->id(), album->albumRootId(), subAlbum->albumPath());
+            emit signalAlbumNewPath(subAlbum);
             ++it;
         }
     }

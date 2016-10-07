@@ -630,6 +630,7 @@ Q_SIGNALS:
     void signalAllDAlbumsLoaded();
     void signalAlbumIconChanged(Album* album);
     void signalAlbumRenamed(Album* album);
+    void signalAlbumNewPath(Album* album);
     void signalSearchUpdated(SAlbum* album);
     /// Indicates that an album is about to be moved. Signals for deleting and adding will be
     /// sent afterwards, but the album object is guaranteed not to be deleted until after signalAlbumMoved.
