@@ -481,7 +481,6 @@ QStyleOptionProgressBar DAbstractSliderSpinBox::progressBarOptions() const
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
     // Create opts for drawing the progress portion
-
     QStyleOptionProgressBar progressOpts;
     progressOpts.initFrom(this);
     progressOpts.maximum       = d->maximum;
@@ -533,7 +532,7 @@ int DAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
 {
     const Q_D(DAbstractSliderSpinBox);
 
-    QStyleOptionSpinBox spinOpts = spinBoxOptions();
+    QStyleOptionSpinBox spinOpts         = spinBoxOptions();
     QStyleOptionProgressBar progressOpts = progressBarOptions();
 
     // Adjust for magic number in style code (margins)
@@ -551,7 +550,7 @@ int DAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
     double percent  = (xDbl / (rightDbl - leftDbl));
 
     // If SHIFT is pressed, movement should be slowed.
-    if ( modifiers & Qt::ShiftModifier )
+    if (modifiers & Qt::ShiftModifier)
     {
         percent = d->shiftPercent + (percent - d->shiftPercent) * d->slowFactor;
     }
@@ -561,11 +560,11 @@ int DAbstractSliderSpinBox::valueForX(int x, Qt::KeyboardModifiers modifiers) co
 
     // If key CTRL is pressed, round to the closest step.
 
-    if ( modifiers & Qt::ControlModifier )
+    if (modifiers & Qt::ControlModifier)
     {
         double fstep = d->fastSliderStep;
 
-        if( modifiers & Qt::ShiftModifier )
+        if ( modifiers & Qt::ShiftModifier )
         {
             fstep *= d->slowFactor;
         }
@@ -615,7 +614,7 @@ class DSliderSpinBoxPrivate : public DAbstractSliderSpinBoxPrivate
 DSliderSpinBox::DSliderSpinBox(QWidget* const parent)
     : DAbstractSliderSpinBox(parent, new DSliderSpinBoxPrivate)
 {
-    setRange(0,99);
+    setRange(0, 99);
 }
 
 DSliderSpinBox::~DSliderSpinBox()
@@ -627,7 +626,7 @@ void DSliderSpinBox::setRange(int minimum, int maximum)
     Q_D(DSliderSpinBox);
     d->minimum        = minimum;
     d->maximum        = maximum;
-    d->fastSliderStep = (maximum-minimum+1)/20;
+    d->fastSliderStep = (maximum - minimum + 1) / 20;
     d->validator->setRange(minimum, maximum, 0);
     update();
 }
@@ -737,11 +736,11 @@ void DDoubleSliderSpinBox::setRange(double minimum, double maximum, int decimals
     }
     else if(decimals == 1)
     {
-        d->fastSliderStep = (maximum-minimum)*d->factor/10;
+        d->fastSliderStep = (maximum - minimum) * d->factor / 10;
     }
     else
     {
-        d->fastSliderStep = (maximum-minimum)*d->factor/20;
+        d->fastSliderStep = (maximum - minimum) * d->factor / 20;
     }
 
     d->validator->setRange(minimum, maximum, decimals);
