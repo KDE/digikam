@@ -21,5 +21,7 @@ BUGFIXES FROM BUGZILLA:
 012 ==> 368968 - Geo bookmarks are not migrated from version 4 to version 5
 013 ==> 368794 - digiKam crashes with lossy dng image.
 014 ==> 370190 - Trash is shown twice.
-015 ==> 366019 - Digikam Crashes when Table view button is clicked.
-016 ==> 
+015 ==> 366019 - digiKam Crashes when Table view button is clicked.
+016 ==> 370331 - Menu dropdown Color / Enhance / Decorate / Effects not working.
+017 ==> 370252 - In picture editor the menus "color", "enhance", "decorate" and "effects" are empty.
+018 ==> 

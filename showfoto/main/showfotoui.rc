@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="516" name="showfoto" translationDomain="digikam" >
+<gui version="530" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -61,19 +61,19 @@
     </Menu>
 
     <Menu name="Color"><text>&amp;Color</text>
-        <Action name="editorwindow_autocorrection" />
-        <Action name="editorwindow_bcg" />
-        <Action name="editorwindow_hsl" />
-        <Action name="editorwindow_rgb" />
+        <Action name="editorwindow_color_autocorrection" />
+        <Action name="editorwindow_color_bcg" />
+        <Action name="editorwindow_color_hsl" />
+        <Action name="editorwindow_color_rgb" />
         <Separator />
-        <Action name="editorwindow_adjustlevels" />
-        <Action name="editorwindow_adjustcurves" />
+        <Action name="editorwindow_color_adjustlevels" />
+        <Action name="editorwindow_color_adjustcurves" />
         <Separator />
-        <Action name="editorwindow_invert" />
-        <Action name="editorwindow_film" />
-        <Action name="editorwindow_blackwhite" />
-        <Action name="editorwindow_channelmixer" />
-        <Action name="editorwindow_whitebalance" />
+        <Action name="editorwindow_color_invert" />
+        <Action name="editorwindow_color_film" />
+        <Action name="editorwindow_color_blackwhite" />
+        <Action name="editorwindow_color_channelmixer" />
+        <Action name="editorwindow_color_whitebalance" />
         <Separator />
         <Menu name="Depth"><text>&amp;Depth</text>
             <Action name="editorwindow_convertto8bits" />
@@ -84,56 +84,55 @@
     </Menu>
 
     <Menu name="Enhance" ><text>Enh&amp;ance</text>
-        <Action name="editorwindow_restoration" />
-        <Action name="editorwindow_blur" />
-        <Action name="editorwindow_sharpen" />
-        <Action name="editorwindow_noisereduction" />
-        <Action name="editorwindow_localcontrast" />
-        <Action name="editorwindow_inpainting" />
-        <Action name="editorwindow_hotpixels" />
+        <Action name="editorwindow_enhance_restoration" />
+        <Action name="editorwindow_enhance_blur" />
+        <Action name="editorwindow_enhance_sharpen" />
+        <Action name="editorwindow_enhance_noisereduction" />
+        <Action name="editorwindow_enhance_localcontrast" />
+        <Action name="editorwindow_enhance_inpainting" />
+        <Action name="editorwindow_enhance_hotpixels" />
         <Separator />
-        <Action name="editorwindow_redeye" />
+        <Action name="editorwindow_enhance_redeye" />
 
         <Menu name="Lens" ><text>&amp;Lens</text>
-            <Action name="editorwindow_lensautofix" />
-            <Action name="editorwindow_antivignetting" />
-            <Action name="editorwindow_lensdistortion" />
+            <Action name="editorwindow_enhance_lensautofix" />
+            <Action name="editorwindow_enhance_antivignetting" />
+            <Action name="editorwindow_enhance_lensdistortion" />
         </Menu>
     </Menu>
 
     <Menu name="Transform" ><text>Tra&amp;nsform</text>
-        <Action name="editorwindow_rotate_left" />
-        <Action name="editorwindow_rotate_right" />
+        <Action name="editorwindow_transform_rotateleft" />
+        <Action name="editorwindow_transform_rotateright" />
         <Separator/>
-        <Action name="editorwindow_flip_horiz" />
-        <Action name="editorwindow_flip_vert" />
+        <Action name="editorwindow_transform_fliphoriz" />
+        <Action name="editorwindow_transform_flipvert" />
         <Separator/>
-        <Action name="editorwindow_crop" />
-        <Action name="editorwindow_resize" />
-        <Action name="editorwindow_ratiocrop" />
-        <Action name="editorwindow_resize" />
+        <Action name="editorwindow_transform_crop" />
+        <Action name="editorwindow_transform_resize" />
+        <Action name="editorwindow_transform_ratiocrop" />
         <Separator />
-        <Action name="editorwindow_perspective" />
-        <Action name="editorwindow_freerotation" />
-        <Action name="editorwindow_sheartool" />
-        <Action name="editorwindow_contentawareresizing" />
+        <Action name="editorwindow_transform_perspective" />
+        <Action name="editorwindow_transform_freerotation" />
+        <Action name="editorwindow_transform_sheartool" />
+        <Action name="editorwindow_transform_contentawareresizing" />
     </Menu>
 
     <Menu name="Decorate" ><text>&amp;Decorate</text>
-        <Action name="editorwindow_inserttext" />
-        <Action name="editorwindow_border" />
-        <Action name="editorwindow_texture" />
+        <Action name="editorwindow_decorate_inserttext" />
+        <Action name="editorwindow_decorate_border" />
+        <Action name="editorwindow_decorate_texture" />
     </Menu>
 
     <Menu name="Filters" ><text>Effec&amp;ts</text>
-        <Action name="editorwindow_colorfx" />
-        <Action name="editorwindow_charcoal" />
-        <Action name="editorwindow_emboss" />
-        <Action name="editorwindow_oilpaint" />
-        <Action name="editorwindow_blurfx" />
-        <Action name="editorwindow_distortionfx" />
-        <Action name="editorwindow_raindrop" />
-        <Action name="editorwindow_filmgrain" />
+        <Action name="editorwindow_filter_colorfx" />
+        <Action name="editorwindow_filter_charcoal" />
+        <Action name="editorwindow_filter_emboss" />
+        <Action name="editorwindow_filter_oilpaint" />
+        <Action name="editorwindow_filter_blurfx" />
+        <Action name="editorwindow_filter_distortionfx" />
+        <Action name="editorwindow_filter_raindrop" />
+        <Action name="editorwindow_filter_filmgrain" />
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
@@ -176,9 +175,9 @@
     <Action name="editorwindow_redo" />
     <Action name="editorwindow_revert" />
     <Separator/>
-    <Action name="editorwindow_rotate_left" />
-    <Action name="editorwindow_rotate_right" />
-    <Action name="editorwindow_crop" />
+    <Action name="editorwindow_transform_rotateleft" />
+    <Action name="editorwindow_transform_rotateright" />
+    <Action name="editorwindow_transform_crop" />
     <Separator/>
     <Action name="editorwindow_fullscreen" />
     <Action name="editorwindow_slideshow" />
