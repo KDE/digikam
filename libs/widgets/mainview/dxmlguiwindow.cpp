@@ -819,19 +819,23 @@ void DXmlGuiWindow::slotContribute()
 
 void DXmlGuiWindow::setupIconTheme()
 {
+    // -- To hack AppImage startup ----------------------------------------------------------
+
     QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
-    qCDebug(DIGIKAM_WIDGETS_LOG) << "Check for Breeze.rcc inside : " << paths;
+    qDebug() << "Check for Breeze.rcc inside : " << paths;
 
     foreach(QString p, paths)
     {
-        qCDebug(DIGIKAM_WIDGETS_LOG) << "Path: " << p;
+        qDebug() << "Path: " << p;
         QFileInfoList l = QDir(p).entryInfoList();
 
         foreach(QFileInfo f, l)
         {
-            qCDebug(DIGIKAM_WIDGETS_LOG) << "entry: " << f.fileName();
+            qDebug() << "entry: " << f.fileName();
         }
     }
+
+    // --------------------------------------------------------------------------------------
 
     /**
      * let QStandardPaths handle this, it will look for app local stuff
