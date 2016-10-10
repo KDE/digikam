@@ -24,4 +24,5 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 366019 - digiKam Crashes when Table view button is clicked.
 016 ==> 370331 - Menu dropdown Color / Enhance / Decorate / Effects not working.
 017 ==> 370252 - In picture editor the menus "color", "enhance", "decorate" and "effects" are empty.
-018 ==> 
+018 ==> 370287 - Crash rotating image taken with Casio camera.
+019 ==> 
