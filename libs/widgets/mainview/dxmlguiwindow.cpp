@@ -43,6 +43,8 @@
 #include <QUrlQuery>
 #include <QDesktopServices>
 #include <QIcon>
+#include <QDir>
+#include <QFileInfo>
 #include <QResource>
 #include <QStandardPaths>
 
@@ -817,7 +819,19 @@ void DXmlGuiWindow::slotContribute()
 
 void DXmlGuiWindow::setupIconTheme()
 {
-    qCDebug(DIGIKAM_WIDGETS_LOG) << "Check for Breeze.rcc inside : " << QStandardPaths::standardLocations(QStandardPaths::DataLocation);
+    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
+    qCDebug(DIGIKAM_WIDGETS_LOG) << "Check for Breeze.rcc inside : " << paths;
+
+    foreach(QString p, paths)
+    {
+        qCDebug(DIGIKAM_WIDGETS_LOG) << "Path: " << p;
+        QFileInfoList l = QDir(p).entryInfoList();
+
+        foreach(QFileInfo f, l)
+        {
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "entry: " << f.fileName();
+        }
+    }
 
     /**
      * let QStandardPaths handle this, it will look for app local stuff
