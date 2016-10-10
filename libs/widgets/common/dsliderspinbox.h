@@ -30,9 +30,7 @@
 
 // Qt includes
 
-#include <QWidget>
-#include <QString>
-#include <QRect>
+#include <QAbstractSpinBox>
 #include <QStyleOptionSpinBox>
 #include <QStyleOptionProgressBar>
 
@@ -43,9 +41,6 @@ class DAbstractSliderSpinBoxPrivate;
 class DSliderSpinBoxPrivate;
 class DDoubleSliderSpinBoxPrivate;
 
-/**
- * TODO: when inactive, also show the progress bar part as inactive!
- */
 class DAbstractSliderSpinBox : public QWidget
 {
     Q_OBJECT
@@ -54,7 +49,7 @@ class DAbstractSliderSpinBox : public QWidget
 
 protected:
 
-    explicit DAbstractSliderSpinBox(QWidget* const parent, DAbstractSliderSpinBoxPrivate* const q);
+    explicit DAbstractSliderSpinBox(QWidget* parent, DAbstractSliderSpinBoxPrivate* const q);
 
 public:
 
@@ -63,9 +58,23 @@ public:
     void showEdit();
     void hideEdit();
 
+    void setPrefix(const QString& prefix);
     void setSuffix(const QString& suffix);
 
     void setExponentRatio(double dbl);
+
+    /**
+     * If set to block, it informs inheriting classes that they shouldn't emit signals
+     * if the update comes from a mouse dragging the slider.
+     * Set this to true when dragging the slider and updates during the drag are not needed.
+     */
+    void setBlockUpdateSignalOnDrag(bool block);
+
+    virtual QSize sizeHint() const;
+    virtual QSize minimumSizeHint() const;
+    virtual QSize minimumSize() const;
+
+    bool isDragging() const;
 
 protected:
 
@@ -78,22 +87,21 @@ protected:
     virtual void focusInEvent(QFocusEvent* e);
     virtual bool eventFilter(QObject* recv, QEvent* e);
 
-    virtual QSize sizeHint()        const;
-    virtual QSize minimumSizeHint() const;
-
-    QStyleOptionSpinBox spinBoxOptions()         const;
+    QStyleOptionSpinBox spinBoxOptions() const;
     QStyleOptionProgressBar progressBarOptions() const;
 
-    QRect editRect(const QStyleOptionSpinBox& spinBoxOptions)              const;
-    QRect labelRect(const QStyleOptionProgressBar& progressBarOptions)     const;
-    QRect progressRect(const QStyleOptionProgressBar& progressBarOptions)  const;
-    QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions)          const;
-    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions)        const;
+    QRect progressRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+    QRect upButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
+    QRect downButtonRect(const QStyleOptionSpinBox& spinBoxOptions) const;
 
     int valueForX(int x, Qt::KeyboardModifiers modifiers = Qt::NoModifier) const;
 
     virtual QString valueString() const = 0;
-    virtual void setInternalValue(int value) = 0;
+    /**
+     * Sets the slider internal value. Inheriting classes should respect blockUpdateSignal
+     * so that, in specific cases, we have a performance improvement. See setIgnoreMouseMoveEvents.
+     */
+    virtual void setInternalValue(int value, bool blockUpdateSignal) = 0;
 
 protected Q_SLOTS:
 
@@ -103,20 +111,33 @@ protected Q_SLOTS:
 protected:
 
     DAbstractSliderSpinBoxPrivate* const d_ptr;
-};
 
 // ---------------------------------------------------------------------------------
+
+    // QWidget interface
+protected:
+
+    virtual void changeEvent(QEvent* e);
+    void paint(QPainter& painter);
+    void paintFusion(QPainter& painter);
+    void paintPlastique(QPainter& painter);
+    void paintBreeze(QPainter& painter);
+
+private:
+
+    void setInternalValue(int value);
+};
 
 class DSliderSpinBox : public DAbstractSliderSpinBox
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(DSliderSpinBox)
-    Q_PROPERTY( int minimum READ minimum WRITE setMinimum )
-    Q_PROPERTY( int maximum READ maximum WRITE setMaximum )
+    Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
+    Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
 
 public:
 
-    DSliderSpinBox(QWidget* const parent = 0);
+    DSliderSpinBox(QWidget* parent = 0);
     ~DSliderSpinBox();
 
     void setRange(int minimum, int maximum);
@@ -128,20 +149,25 @@ public:
     int  fastSliderStep() const;
     void setFastSliderStep(int step);
 
-    int  value() const;
-    void setValue(int value);
+    ///Get the value, don't use value()
+    int  value();
 
     void setSingleStep(int value);
     void setPageStep(int value);
 
-Q_SIGNALS:
+public Q_SLOTS:
 
-    void valueChanged(int value);
+    ///Set the value, don't use setValue()
+    void setValue(int value);
 
 protected:
 
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool blockUpdateSignal);
+
+Q_SIGNALS:
+
+    void valueChanged(int value);
 };
 
 // ---------------------------------------------------------------------------------
@@ -153,10 +179,10 @@ class DDoubleSliderSpinBox : public DAbstractSliderSpinBox
 
 public:
 
-    DDoubleSliderSpinBox(QWidget* const parent = 0);
+    DDoubleSliderSpinBox(QWidget* parent = 0);
     ~DDoubleSliderSpinBox();
 
-    void setRange(double minimum, double maximum, int decimals = 0);
+    void   setRange(double minimum, double maximum, int decimals = 0);
 
     double minimum() const;
     void   setMinimum(double minimum);
@@ -165,19 +191,21 @@ public:
     double fastSliderStep() const;
     void   setFastSliderStep(double step);
 
-    double value() const;
-    void   setValue(double value);
-
+    double value();
     void   setSingleStep(double value);
 
-Q_SIGNALS:
+public Q_SLOTS:
 
-    void valueChanged(double value);
+    void setValue(double value);
 
 protected:
 
     virtual QString valueString() const;
-    virtual void setInternalValue(int val);
+    virtual void setInternalValue(int value, bool blockUpdateSignal);
+
+Q_SIGNALS:
+
+    void valueChanged(double value);
 };
 
 }  // namespace Digikam
