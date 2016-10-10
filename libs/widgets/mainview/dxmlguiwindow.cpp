@@ -817,6 +817,8 @@ void DXmlGuiWindow::slotContribute()
 
 void DXmlGuiWindow::setupIconTheme()
 {
+    qCDebug(DIGIKAM_WIDGETS_LOG) << "Check for Breeze.rcc inside : " << QStandardPaths::standardLocations(QStandardPaths::DataLocation);
+
     /**
      * let QStandardPaths handle this, it will look for app local stuff
      * this means e.g. for mac: "<APPDIR>/../Resources" and for win: "<APPDIR>/data"
