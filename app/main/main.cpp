@@ -68,7 +68,6 @@ int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-
     // if we have some local breeze icon resource, prefer it
     DXmlGuiWindow::setupIconTheme();
 
