@@ -168,6 +168,8 @@ void DMetadataSettingsContainer::defaultValues()
 {
     qCDebug(DIGIKAM_METAENGINE_LOG) << "Loading default values ++++++++++++++++";
     d->unifyReadWrite = true;
+    d->writeMappings.clear();
+    d->readMappings.clear();
 
     defaultTagValues();
     defaultRatingValues();

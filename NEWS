@@ -26,4 +26,5 @@ BUGFIXES FROM BUGZILLA:
 017 ==> 370252 - In picture editor the menus "color", "enhance", "decorate" and "effects" are empty.
 018 ==> 370287 - Crash rotating image taken with Casio camera.
 019 ==> 370298 - Slider behaviour, e.g. in 'local contrast'.
-020 ==> 
+020 ==> 370427 - Reset To Default Button Causes Duplication of List Items When Configuring Metadata.
+021 ==> 
