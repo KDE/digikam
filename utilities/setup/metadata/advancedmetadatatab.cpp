@@ -146,7 +146,7 @@ void AdvancedMetadataTab::slotResetToDefault()
 
     d->container.defaultValues();
     d->models.at(getModelIndex())->clear();
-    setModelData(d->models.at(getModelIndex()),getCurrentContainer());
+    setModelData(d->models.at(getModelIndex()), getCurrentContainer());
 
     d->namespaceView->setModel(d->models.at(getModelIndex()));
 }
@@ -154,7 +154,7 @@ void AdvancedMetadataTab::slotResetToDefault()
 void AdvancedMetadataTab::slotRevertChanges()
 {
     d->models.at(getModelIndex())->clear();
-    setModelData(d->models.at(getModelIndex()),getCurrentContainer());
+    setModelData(d->models.at(getModelIndex()), getCurrentContainer());
 
     d->namespaceView->setModel(d->models.at(getModelIndex()));
 
@@ -217,16 +217,16 @@ void AdvancedMetadataTab::applySettings()
     QList<QLatin1String> keys = d->container.mappingKeys();
     int index                 = 0;
 
-    foreach(QLatin1String str, keys)
+    foreach(const QLatin1String& str, keys)
     {
         d->container.getReadMapping(str).clear();
-        saveModelData(d->models.at(index++),d->container.getReadMapping(str));
+        saveModelData(d->models.at(index++), d->container.getReadMapping(str));
     }
 
-    foreach(QLatin1String str, keys)
+    foreach(const QLatin1String& str, keys)
     {
         d->container.getWriteMapping(str).clear();
-        saveModelData(d->models.at(index++),d->container.getWriteMapping(str));
+        saveModelData(d->models.at(index++), d->container.getWriteMapping(str));
     }
 
     DMetadataSettings::instance()->setSettings(d->container);
@@ -443,7 +443,7 @@ void AdvancedMetadataTab::setModels()
 {
     QList<QLatin1String> keys = d->container.mappingKeys();
 
-    foreach(QLatin1String str, keys)
+    foreach(const QLatin1String& str, keys)
     {
         d->metadataType->addItem(i18n(str.data()), str);
     }
@@ -457,12 +457,12 @@ void AdvancedMetadataTab::setModels()
 
     int index = 0;
 
-    foreach(QLatin1String str, keys)
+    foreach(const QLatin1String& str, keys)
     {
         setModelData(d->models.at(index++), d->container.getReadMapping(str));
     }
 
-    foreach(QLatin1String str, keys)
+    foreach(const QLatin1String& str, keys)
     {
         setModelData(d->models.at(index++), d->container.getWriteMapping(str));
     }
