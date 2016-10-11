@@ -93,7 +93,8 @@ void FileActionProgressItemContainer::schedulingForWrite(int numberOfInfos, cons
                                                          FileActionProgressItemCreator* const creator)
 {
     scheduleOnProgressItem(secondItem, numberOfInfos, action, creator);
-    connect(secondItem, SIGNAL(progressItemCompleted(ProgressItem*)), this, SIGNAL(signalWrittingDone()));
+    connect(secondItem, SIGNAL(progressItemCompleted(ProgressItem*)),
+            this, SIGNAL(signalWrittingDone()));
 }
 
 void FileActionProgressItemContainer::written(int numberOfInfos)

@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 370287 - Crash rotating image taken with Casio camera.
 019 ==> 370298 - Slider behaviour, e.g. in 'local contrast'.
 020 ==> 370427 - Reset To Default Button Causes Duplication of List Items When Configuring Metadata.
-021 ==> 
+021 ==> 369345 - In tagging apply to all versions fails.
+022 ==> 

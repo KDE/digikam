@@ -1446,7 +1446,13 @@ void ImageDescEditTab::slotApplyChangesToAllVersions()
         relations.append(info.relationCloud());
     }
 
-    for(int i = 0; i < relations.size(); ++i)
+    if (relations.isEmpty())
+    {
+        slotApplyAllChanges();
+        return;
+    }
+
+    for (int i = 0; i < relations.size(); ++i)
     {
         // Use QSet to prevent duplicates
         tmpSet.insert(relations.at(i).first);
