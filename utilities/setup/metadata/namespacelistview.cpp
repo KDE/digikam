@@ -67,7 +67,7 @@ QModelIndexList NamespaceListView::mySelectedIndexes()
     return this->selectedIndexes();
 }
 
-void NamespaceListView::dropEvent(QDropEvent *e)
+void NamespaceListView::dropEvent(QDropEvent* e)
 {
     QListView::dropEvent(e);
     emit signalItemsChanged();
@@ -169,9 +169,9 @@ void NamespaceListView::slotMoveItemUp()
     QStandardItem* const newCopy = item->clone();
 
     root->removeRow(index.row());
-    root->insertRow(savedRow-1,newCopy);
+    root->insertRow(savedRow - 1, newCopy);
 
-    this->setCurrentIndex(model->index(index.row()-1, index.column(), index.parent()));
+    this->setCurrentIndex(model->index(index.row() - 1, index.column(), index.parent()));
 
     emit signalItemsChanged();
 }
@@ -197,7 +197,7 @@ void NamespaceListView::slotMoveItemDown()
 
     QStandardItem* const root = model->invisibleRootItem();
 
-    if (index.row() == root->rowCount()-1)
+    if (index.row() == root->rowCount() - 1)
     {
         return;
     }
@@ -208,9 +208,9 @@ void NamespaceListView::slotMoveItemDown()
 
 
     root->removeRow(index.row());
-    root->insertRow(savedRow+1,newCopy);
+    root->insertRow(savedRow + 1, newCopy);
 
-    this->setCurrentIndex(model->index(index.row()+1, index.column(), index.parent()));
+    this->setCurrentIndex(model->index(index.row() + 1, index.column(), index.parent()));
 
     emit signalItemsChanged();
 }
