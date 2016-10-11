@@ -175,7 +175,7 @@ public:
     bool unifyReadWrite() const;
     void setUnifyReadWrite(bool b);
 
-    void addMapping(const QLatin1String key);
+    void addMapping(const QLatin1String& key);
 
     QList<NamespaceEntry>& getReadMapping(const QLatin1String& key) const;
 
@@ -188,8 +188,8 @@ private:
     void defaultTagValues();
     void defaultRatingValues();
     void defaultCommentValues();
-    void readOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry> &container);
-    void writeOneGroup(KConfigGroup& group, QString name, QList<NamespaceEntry>& container) const;
+    void readOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container);
+    void writeOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container) const;
 
     class Private;
     Private* d;

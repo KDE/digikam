@@ -97,7 +97,7 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 {
     bool valid = true;
 
-    foreach(QLatin1String str, mappingKeys())
+    foreach(const QLatin1String& str, mappingKeys())
     {
         if (!group.hasGroup(QLatin1String("read") + str + QLatin1String("Namespaces")))
         {
@@ -116,7 +116,7 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
     if (valid)
     {
-        foreach(QLatin1String str, mappingKeys())
+        foreach(const QLatin1String& str, mappingKeys())
         {
             readOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
             readOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
@@ -149,7 +149,7 @@ void DMetadataSettingsContainer::readFromConfig(KConfigGroup& group)
 
 void DMetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
 {
-    foreach(QLatin1String str, mappingKeys())
+    foreach(const QLatin1String& str, mappingKeys())
     {
         writeOneGroup(group, QLatin1String("read")  + str + QLatin1String("Namespaces"), getReadMapping(str));
         writeOneGroup(group, QLatin1String("write") + str + QLatin1String("Namespaces"), getWriteMapping(str));
@@ -176,18 +176,18 @@ void DMetadataSettingsContainer::defaultValues()
     defaultCommentValues();
 }
 
-void DMetadataSettingsContainer::addMapping(const QLatin1String key)
+void DMetadataSettingsContainer::addMapping(const QLatin1String& key)
 {
     d->readMappings[key]  = QList<NamespaceEntry>();
     d->writeMappings[key] = QList<NamespaceEntry>();
 }
 
-QList<NamespaceEntry> &DMetadataSettingsContainer::getReadMapping(const QLatin1String &key) const
+QList<NamespaceEntry> &DMetadataSettingsContainer::getReadMapping(const QLatin1String& key) const
 {
     return d->readMappings[key];
 }
 
-QList<Digikam::NamespaceEntry> &DMetadataSettingsContainer::getWriteMapping(const QLatin1String &key) const
+QList<NamespaceEntry> &DMetadataSettingsContainer::getWriteMapping(const QLatin1String& key) const
 {
     return d->writeMappings[key];
 }
@@ -410,7 +410,7 @@ void DMetadataSettingsContainer::defaultCommentValues()
     d->writeMappings[QLatin1String(DM_COMMENT_CONTAINER)] = QList<NamespaceEntry>(getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)));
 }
 
-void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry>& container)
+void DMetadataSettingsContainer::readOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container)
 {
     KConfigGroup myItems = group.group(name);
 
@@ -443,24 +443,24 @@ void DMetadataSettingsContainer::readOneGroup(KConfigGroup &group, QString name,
     qSort(container.begin(), container.end(), Digikam::dmcompare);
 }
 
-void DMetadataSettingsContainer::writeOneGroup(KConfigGroup &group, QString name, QList<NamespaceEntry>& container) const
+void DMetadataSettingsContainer::writeOneGroup(KConfigGroup& group, const QString& name, QList<NamespaceEntry>& container) const
 {
     KConfigGroup namespacesGroup = group.group(name);
 
     for (NamespaceEntry e : container)
     {
         KConfigGroup tmp = namespacesGroup.group(e.namespaceName);
-        tmp.writeEntry("alternativeName",   e.alternativeName);
-        tmp.writeEntry("subspace",          (int)e.subspace);
-        tmp.writeEntry("tagPaths",          (int)e.tagPaths);
-        tmp.writeEntry("separator",         e.separator);
-        tmp.writeEntry("nsType",            (int)e.nsType);
-        tmp.writeEntry("convertRatio",      e.convertRatio);
-        tmp.writeEntry("specialOpts",       (int)e.specialOpts);
-        tmp.writeEntry("secondNameOpts",    (int)e.secondNameOpts);
-        tmp.writeEntry("index",             e.index);
-        tmp.writeEntry("isDisabled",        e.isDisabled);
-        tmp.writeEntry("isDefault",         e.isDefault);
+        tmp.writeEntry("alternativeName", e.alternativeName);
+        tmp.writeEntry("subspace",        (int)e.subspace);
+        tmp.writeEntry("tagPaths",        (int)e.tagPaths);
+        tmp.writeEntry("separator",       e.separator);
+        tmp.writeEntry("nsType",          (int)e.nsType);
+        tmp.writeEntry("convertRatio",    e.convertRatio);
+        tmp.writeEntry("specialOpts",     (int)e.specialOpts);
+        tmp.writeEntry("secondNameOpts",  (int)e.secondNameOpts);
+        tmp.writeEntry("index",           e.index);
+        tmp.writeEntry("isDisabled",      e.isDisabled);
+        tmp.writeEntry("isDefault",       e.isDefault);
     }
 }
 
