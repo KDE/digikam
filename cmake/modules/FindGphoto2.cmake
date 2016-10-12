@@ -51,7 +51,8 @@ find_package_handle_standard_args(GPHOTO2 DEFAULT_MSG
 
 if(GPHOTO2_FOUND)
 
-    set(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARY} ${GPHOTO2_PORT_LIBRARY})
+    set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2_INCLUDE_DIRS}/gphoto2)
+    set(GPHOTO2_LIBRARIES    ${GPHOTO2_LIBRARY} ${GPHOTO2_PORT_LIBRARY})
 
     # See bug #268267: digiKam need to be linked to libusb to prevent crash
     # at gphoto2 init if opencv is linked with libdc1394.
