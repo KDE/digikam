@@ -2,7 +2,7 @@
 #
 # This module defines
 #  GPHOTO2_FOUND          - True if libgphoto2 is detected.
-#  GPHOTO2_INCLUDE_DIR    - Path to libgphoto2 header files.
+#  GPHOTO2_INCLUDE_DIRS   - Path to libgphoto2 header files.
 #  GPHOTO2_LIBRARIES      - Libraries to link against to use libgphoto2.
 #  GPHOTO2_VERSION_STRING - e.g. "2.4.14"
 #  GPHOTO2_VERSION_MAJOR  - e.g. "2"
@@ -18,8 +18,8 @@
 
 set(GPHOTO2_FIND_REQUIRED ${Gphoto2_FIND_REQUIRED})
 
-find_path(GPHOTO2_INCLUDE_DIR gphoto2/gphoto2.h)
-mark_as_advanced(GPHOTO2_INCLUDE_DIR)
+find_path(GPHOTO2_INCLUDE_DIRS gphoto2/gphoto2.h)
+mark_as_advanced(GPHOTO2_INCLUDE_DIRS)
 
 set(GPHOTO2_NAMES      ${GPHOTO2_NAMES}      gphoto2      libgphoto2)
 set(GPHOTO2_PORT_NAMES ${GPHOTO2_PORT_NAMES} gphoto2_port libgphoto2_port)
@@ -47,7 +47,7 @@ endif()
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(GPHOTO2 DEFAULT_MSG
                                   GPHOTO2_LIBRARY
-                                  GPHOTO2_INCLUDE_DIR)
+                                  GPHOTO2_INCLUDE_DIRS)
 
 if(GPHOTO2_FOUND)
 
@@ -76,5 +76,5 @@ endif()
 
 message(STATUS "libgphoto2 found    : ${GPHOTO2_FOUND}")
 message(STATUS "libgphoto2 version  : ${GPHOTO2_VERSION_STRING}")
-message(STATUS "libgphoto2 includes : ${GPHOTO2_INCLUDE_DIR}")
+message(STATUS "libgphoto2 includes : ${GPHOTO2_INCLUDE_DIRS}")
 message(STATUS "libgphoto2 libraries: ${GPHOTO2_LIBRARIES}")
