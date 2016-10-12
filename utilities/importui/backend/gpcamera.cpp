@@ -1562,7 +1562,7 @@ void GPCamera::getSupportedPorts(QStringList& plist)
             gp_port_info_get_name (info, &xpath);
             plist.append(QString::fromUtf8(xpath));
 #else
-            plist.append(info.path);
+            plist.append(QString::fromUtf8(info.path));
 #endif
         }
     }
