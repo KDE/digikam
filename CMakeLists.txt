@@ -319,60 +319,27 @@ find_package(Lqr-1)
 if(NOT WIN32)
 
     find_package(Gphoto2)
-    message(STATUS "libgphoto2 found: ${GPHOTO2_FOUND}")
-
-    if (GPHOTO2_FOUND)
-
-        # See bug #268267 : digiKam need to be linked to libusb1.x to prevent crash at gphoto2 init if opencv is linked with libdc1394
-        find_package(LibUSB1)
-        message(STATUS "libusb1 found: ${LibUSB1_FOUND}")
-
-        if(LibUSB1_FOUND)
-            set(GPHOTO2_FOUND true)
-            message(STATUS "Libgphoto2 and libusb1 have been found.")
-        else()
-            set(GPHOTO2_FOUND false)
-            message(WARNING "Libgphoto2 is found but libusb1 cannot be found on your system. Libgphoto2 support will be disabled.")
-        endif()
-
-    endif()
 
     if(GPHOTO2_FOUND)
 
-        execute_process(COMMAND gphoto2 --version RESULT_VARIABLE _return_VALUE OUTPUT_VARIABLE GPHOTO2_VERSION)
-
-        if(NOT "${_return_VALUE}" STREQUAL "0")
-
-            message(STATUS "Command gphoto2 not found. Cannot identify GPhoto2 API version.")
-            set(GPHOTO2_FOUND false)
-
+        if("${GPHOTO2_VERSION_STRING}" VERSION_GREATER "2.4.0")
+            set(VERSION_GPHOTO2 true)
         else()
+            set(VERSION_GPHOTO2 false)
+        endif()
 
-            string(REGEX REPLACE "\n.*$" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
-            string(REPLACE "gphoto2" "" GPHOTO2_VERSION "${GPHOTO2_VERSION}")
+        if("${GPHOTO2_VERSION_STRING}" VERSION_GREATER "2.5.0")
+            set(VERSION_GPHOTO25 true)
+            message(STATUS "libgphoto2 API version >= 2.5")
+        else()
+            set(VERSION_GPHOTO25 false)
+            message(STATUS "libgphoto2 API version < 2.5")
+        endif()
 
-            if("${GPHOTO2_VERSION}" VERSION_GREATER "2.4.0")
-                set(VERSION_GPHOTO2 true)
-            else()
-                set(VERSION_GPHOTO2 false)
-            endif()
-
-            if("${GPHOTO2_VERSION}" VERSION_GREATER "2.5.0")
-                set(VERSION_GPHOTO25 true)
-                message(STATUS "libgphoto2 API version >= 2.5")
-            else()
-                set(VERSION_GPHOTO25 false)
-                message(STATUS "libgphoto2 API version < 2.5")
-            endif()
-
-            if(VERSION_GPHOTO25)
-                set(HAVE_GPHOTO25 1)
-            else()
-                set(HAVE_GPHOTO25 0)
-            endif()
-
-            message(STATUS "libgphoto2 API version found: ${GPHOTO2_VERSION}")
-
+        if(VERSION_GPHOTO25)
+            set(HAVE_GPHOTO25 1)
+        else()
+            set(HAVE_GPHOTO25 0)
         endif()
 
     endif()

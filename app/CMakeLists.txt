@@ -486,12 +486,12 @@ endif()
 
 if(GPHOTO2_FOUND)
     # See bug #258931: libgphoto2 library must be the last arg for linker.
+    # See bug #268267 : digiKam need to be linked to libusb to prevent crash 
+    # at gphoto2 init if opencv is linked with libdc1394. Libusb linking rules are 
+    # add to gphoto2 linking rules by Gphoto2 cmake detection script.
+
     target_link_libraries(digikamgui PUBLIC ${GPHOTO2_LIBRARIES})
 
-    if(NOT WIN32)
-        # See bug #268267 : digiKam need to be linked to libusb to prevent crash at gphoto2 init if opencv is linked with libdc1394
-        target_link_libraries(digikamgui PUBLIC ${LibUSB1_LIBRARIES})
-    endif()
 endif()
 
 set_target_properties(digikamgui PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})

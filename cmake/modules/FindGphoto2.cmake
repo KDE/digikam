@@ -1,52 +1,80 @@
 # Cmake macro to detect gphoto2 libraries
 #
-#  GPHOTO2_FOUND - system has the GPHOTO2 library
-#  GPHOTO2_INCLUDE_DIR - the GPHOTO2 include directory
-#  GPHOTO2_LIBRARIES - The libraries needed to use GPHOTO2
+# This module defines
+#  GPHOTO2_FOUND          - True if libgphoto2 is detected.
+#  GPHOTO2_INCLUDE_DIR    - Path to libgphoto2 header files.
+#  GPHOTO2_LIBRARIES      - Libraries to link against to use libgphoto2.
+#  GPHOTO2_VERSION_STRING - e.g. "2.4.14"
+#  GPHOTO2_VERSION_MAJOR  - e.g. "2"
+#  GPHOTO2_VERSION_MINOR  - e.g. "4"
+#  GPHOTO2_VERSION_PATCH  - e.g. "14"
 #
-# Copyright (c) 2006, 2007 Laurent Montel, <montel@kde.org>
+# Copyright (c) 2006-2007 Laurent Montel <montel@kde.org>
+# Copyright (c) 2011-2016 Gilles Caulier <caulier.gilles@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
-if(GPHOTO2_LIBRARIES AND GPHOTO2_INCLUDE_DIR)
+set(GPHOTO2_FIND_REQUIRED ${Gphoto2_FIND_REQUIRED})
 
-    # in cache already
-    set(GPHOTO2_FOUND TRUE)
+find_path(GPHOTO2_INCLUDE_DIR gphoto2/gphoto2.h)
+mark_as_advanced(GPHOTO2_INCLUDE_DIR)
 
-else()
+set(GPHOTO2_NAMES      ${GPHOTO2_NAMES}      gphoto2      libgphoto2)
+set(GPHOTO2_PORT_NAMES ${GPHOTO2_PORT_NAMES} gphoto2_port libgphoto2_port)
 
-    find_package(PkgConfig)
-    pkg_check_modules(PC_GPHOTO2 QUIET gphoto2)
+find_library(GPHOTO2_LIBRARY      NAMES ${GPHOTO2_NAMES})
+find_library(GPHOTO2_PORT_LIBRARY NAMES ${GPHOTO2_PORT_NAMES})
 
-    find_path(GPHOTO2_TOP_INCLUDE_DIR gphoto2/gphoto2.h
-      HINTS ${PC_GPHOTO2_INCLUDEDIR})
+mark_as_advanced(GPHOTO2_LIBRARY)
+mark_as_advanced(GPHOTO2_PORT_LIBRARY)
 
-    set(GPHOTO2_INCLUDE_DIRS ${GPHOTO2_TOP_INCLUDE_DIR}/gphoto2)
+# Detect libgphoto2 version
 
-    find_library(GPHOTO2_LIBRARY NAMES gphoto2
-      HINTS ${PC_GPHOTO2_LIBDIR} ${PC_GPHOTO2_LIBRARY_DIRS})
+find_package(PkgConfig)
+pkg_check_modules(PC_GPHOTO2 QUIET libgphoto2)
 
-    find_library(GPHOTO2_PORT_LIBRARY NAMES gphoto2_port
-      HINTS ${PC_GPHOTO2_LIBDIR} ${PC_GPHOTO2_LIBRARY_DIRS})
+if(PC_GPHOTO2_FOUND)
 
-    set(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARY})
-    list(APPEND GPHOTO2_LIBRARIES ${GPHOTO2_PORT_LIBRARY})
-    set(GPHOTO2_VERSION "${PC_GPHOTO2_VERSION}")
+    set(GPHOTO2_VERSION_STRING "${PC_GPHOTO2_VERSION}")
 
-    include(FindPackageHandleStandardArgs)
-    find_package_handle_standard_args(gphoto2 DEFAULT_MSG GPHOTO2_LIBRARIES GPHOTO2_INCLUDE_DIRS)
+endif()
 
-    if(GPHOTO2_LIBRARIES AND GPHOTO2_INCLUDE_DIRS)
+# handle the QUIETLY and REQUIRED arguments and set GPHOTO2_FOUND to TRUE if
+# all listed variables are TRUE
 
-        set(GPHOTO2_FOUND TRUE)
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(GPHOTO2 DEFAULT_MSG
+                                  GPHOTO2_LIBRARY
+                                  GPHOTO2_INCLUDE_DIR)
 
-    else()
+if(GPHOTO2_FOUND)
 
-        set(GPHOTO2_FOUND FALSE)
+    set(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARY} ${GPHOTO2_PORT_LIBRARY})
+
+    # See bug #268267: digiKam need to be linked to libusb to prevent crash
+    # at gphoto2 init if opencv is linked with libdc1394.
+    #
+    # libgphoto2 dynamically loads and unloads usb library
+    # without calling any cleanup functions (since they are absent from libusb-0.1).
+    # This leaves usb event handling threads running with invalid callback and return addresses,
+    # which causes a crash after any usb event is generated.
+    # libusb1 backend does correctly call exit function, but ATM it crashes anyway.
+    # Workaround is to link against libusb so that it wouldn't get unloaded.
+
+    find_library(USB1_LIBRARY NAMES usb-1.0 libusb-1.0)
+    mark_as_advanced(USB1_LIBRARY)
+
+    if(USB1_LIBRARY)
+
+        set(GPHOTO2_LIBRARIES ${GPHOTO2_LIBRARIES} ${USB1_LIBRARY})
 
     endif()
 
 endif()
 
-mark_as_advanced(GPHOTO2_LIBRARIES GPHOTO2_INCLUDE_DIRS)
+message(STATUS "libgphoto2 found    : ${GPHOTO2_FOUND}")
+message(STATUS "libgphoto2 version  : ${GPHOTO2_VERSION_STRING}")
+message(STATUS "libgphoto2 includes : ${GPHOTO2_INCLUDE_DIR}")
+message(STATUS "libgphoto2 libraries: ${GPHOTO2_LIBRARIES}")
