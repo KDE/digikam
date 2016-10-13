@@ -819,24 +819,6 @@ void DXmlGuiWindow::slotContribute()
 
 void DXmlGuiWindow::setupIconTheme()
 {
-    // -- To hack AppImage startup ----------------------------------------------------------
-
-    QStringList paths = QStandardPaths::standardLocations(QStandardPaths::DataLocation);
-    qDebug() << "Check for Breeze.rcc inside : " << paths;
-
-    foreach(QString p, paths)
-    {
-        qDebug() << "Path: " << p;
-        QFileInfoList l = QDir(p).entryInfoList();
-
-        foreach(QFileInfo f, l)
-        {
-            qDebug() << "entry: " << f.fileName();
-        }
-    }
-
-    // --------------------------------------------------------------------------------------
-
     /**
      * let QStandardPaths handle this, it will look for app local stuff
      * this means e.g. for mac: "<APPDIR>/../Resources" and for win: "<APPDIR>/data"
