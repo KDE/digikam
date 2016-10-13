@@ -177,7 +177,7 @@ AlbumWatch::~AlbumWatch()
 
 void AlbumWatch::clear()
 {
-    if (d->dirWatch)
+    if (d->dirWatch && !d->dirWatch->directories().isEmpty())
     {
         d->dirWatch->removePaths(d->dirWatch->directories());
     }
