@@ -1710,6 +1710,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
     int count = gp_list_count(camList);
     int cnt   = 0;
 
+    qCDebug(DIGIKAM_IMPORTUI_LOG) << "GPhoto2-Test2:" << count << vendorId << productId;
+
     for (int i = 0 ; i < count ; i++)
     {
         const char* xmodel = 0;
@@ -1717,6 +1719,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
         int model          = gp_abilities_list_lookup_model (abilList, xmodel);
         CameraAbilities ab;
         gp_abilities_list_get_abilities(abilList, model, &ab);
+
+        qCDebug(DIGIKAM_IMPORTUI_LOG) << "GPhoto2-Test3:" << ab.port << ab.usb_vendor << ab.usb_product << xmodel;
 
         if (ab.port != GP_PORT_USB)
             continue;
@@ -1735,6 +1739,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
             /* get the port path so we only look at this bus position */
             gp_list_get_value(camList, i, &xport);
             ret = gp_port_info_list_lookup_path (list, xport);
+
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "GPhoto2-Test4:" << ret;
 
             if (ret < GP_OK) /* should not happen */
                 continue;
@@ -1755,6 +1761,8 @@ bool GPCamera::findConnectedUsbCamera(int vendorId, int productId, QString& mode
                 ab.usb_vendor  = vendorId;
                 ab.usb_product = productId;
             }
+
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "GPhoto2-Test5:" << ab.usb_vendor << ab.usb_product;
 
             gp_port_free (gpport);
         }
