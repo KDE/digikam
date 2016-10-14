@@ -1886,8 +1886,6 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
         Solid::Camera* const camera = device.as<Solid::Camera>();
         QList<QVariant> list = camera->driverHandle(QLatin1String("gphoto")).toList();
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "GPhoto2-Test1:" << list;
-
         // all sanity checks have already been done when creating the action
         if (list.size() < 3)
         {
