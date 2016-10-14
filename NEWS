@@ -29,4 +29,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 370427 - Reset To Default Button Causes Duplication of List Items When Configuring Metadata.
 021 ==> 369345 - In tagging apply to all versions fails.
 022 ==> 370631 - Converting ARW to DNG fails.
-023 ==> 
+023 ==> 370175 - Cannot Import Images (Failed to detect camera with GPhoto2 from Solid information).
+024 ==> 
