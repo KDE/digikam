@@ -28,4 +28,5 @@ BUGFIXES FROM BUGZILLA:
 019 ==> 370298 - Slider behaviour, e.g. in 'local contrast'.
 020 ==> 370427 - Reset To Default Button Causes Duplication of List Items When Configuring Metadata.
 021 ==> 369345 - In tagging apply to all versions fails.
-022 ==> 
+022 ==> 370631 - Converting ARW to DNG fails.
+023 ==> 
