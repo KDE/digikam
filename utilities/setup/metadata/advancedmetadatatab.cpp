@@ -169,9 +169,21 @@ void AdvancedMetadataTab::slotAddNewNamespace()
     /**
      * Setting some default parameters;
      */
-    entry.nsType    = (NamespaceEntry::NamespaceType)d->metadataType->currentIndex();
-    entry.isDefault = false;
-    entry.subspace  = NamespaceEntry::XMP;
+    if (d->metadataType->currentData().toString() == QLatin1String(DM_TAG_CONTAINER))
+    {
+        entry.nsType = NamespaceEntry::TAGS;
+    }
+    else if (d->metadataType->currentData().toString() == QLatin1String(DM_RATING_CONTAINER))
+    {
+        entry.nsType = NamespaceEntry::RATING;
+    }
+    else if (d->metadataType->currentData().toString() == QLatin1String(DM_COMMENT_CONTAINER))
+    {
+        entry.nsType = NamespaceEntry::COMMENT;
+    }
+
+    entry.isDefault  = false;
+    entry.subspace   = NamespaceEntry::XMP;
 
     if (!NamespaceEditDlg::create(qApp->activeWindow(), entry))
     {
@@ -425,7 +437,6 @@ int AdvancedMetadataTab::getModelIndex()
 
 QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
 {
-
     int currentIndex = getModelIndex();
 
     if (currentIndex >= d->metadataTypeSize)
@@ -436,7 +447,6 @@ QList<NamespaceEntry>& AdvancedMetadataTab::getCurrentContainer()
     {
         return d->container.getReadMapping(QLatin1String(d->metadataType->currentData().toByteArray()));
     }
-
 }
 
 void AdvancedMetadataTab::setModels()
@@ -450,7 +460,7 @@ void AdvancedMetadataTab::setModels()
 
     d->metadataTypeSize = keys.size();
 
-    for (int i = 0 ; i < keys.size()*2; i++)
+    for (int i = 0 ; i < keys.size() * 2; i++)
     {
         d->models.append(new QStandardItemModel(this));
     }
