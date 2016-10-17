@@ -108,7 +108,9 @@ void SaveImgThread::run()
 {
     emit signalProgress(d->newUrl, 10);
 
-    bool sixteenBit = (d->frmt == KSaneWidget::FormatRGB_16_C);
+    int bytesPerPixel = d->bytesPerLine / d->width;
+    bool sixteenBit   = (d->frmt == KSaneWidget::FormatRGB_16_C ||
+                         d->frmt == KSaneWidget::FormatGrayScale16);
     DImg img((uint)d->width, (uint)d->height, sixteenBit, false);
     int progress;
 
@@ -117,17 +119,58 @@ void SaveImgThread::run()
         uchar* src = (uchar*)d->ksaneData.data();
         uchar* dst = img.bits();
 
-        for (int w = 0; w < d->width; ++w)
+        for (int h = 0; h < d->height; ++h)
         {
-            dst[0]  = src[2];    // Blue
-            dst[1]  = src[1];    // Green
-            dst[2]  = src[0];    // Red
-            dst[3]  = 0x00;      // Alpha
+            for (int w = 0; w < d->width; ++w)
+            {
+                if (bytesPerPixel == 3) // Color
+                {
+                    dst[0]  = src[2];    // Blue
+                    dst[1]  = src[1];    // Green
+                    dst[2]  = src[0];    // Red
+                    dst[3]  = 0x00;      // Alpha
 
-            dst    += 4;
-            src    += 3;
+                    dst    += 4;
+                    src    += 3;
+                }
+                else if (bytesPerPixel == 1) // Gray
+                {
+                    dst[0]  = src[0];    // Blue
+                    dst[1]  = src[0];    // Green
+                    dst[2]  = src[0];    // Red
+                    dst[3]  = 0x00;      // Alpha
 
-            progress = 10 + (int)(((double)w * 50.0) / d->width);
+                    dst    += 4;
+                    src    += 1;
+                }
+                else if (bytesPerPixel == 0) // Lineart
+                {
+                    for (int i = 0; i < 8; ++i)
+                    {
+                        if (*src & (1 << (7 - i)))
+                        {
+                            dst[0]  = 0x00;    // Blue
+                            dst[1]  = 0x00;    // Green
+                            dst[2]  = 0x00;    // Red
+                            dst[3]  = 0x00;    // Alpha
+                        }
+                        else
+                        {
+                            dst[0]  = 0xFF;    // Blue
+                            dst[1]  = 0xFF;    // Green
+                            dst[2]  = 0xFF;    // Red
+                            dst[3]  = 0x00;    // Alpha
+                        }
+
+                        dst    += 4;
+                    }
+
+                    src += 1;
+                    w   += 7;
+                }
+            }
+
+            progress = 10 + (int)(((double)h * 50.0) / d->height);
 
             if (progress % 5 == 0)
             {
@@ -140,21 +183,37 @@ void SaveImgThread::run()
         unsigned short* src = (unsigned short*)d->ksaneData.data();
         unsigned short* dst = (unsigned short*)img.bits();
 
-        for (int w = 0; w < d->width; ++w)
+        for (int h = 0; h < d->height; ++h)
         {
-            dst[0]  = src[2];    // Blue
-            dst[1]  = src[1];    // Green
-            dst[2]  = src[0];    // Red
-            dst[3]  = 0x0000;    // Alpha
+            for (int w = 0; w < d->width; ++w)
+            {
+                if (bytesPerPixel == 6) // Color16
+                {
+                    dst[0]  = src[2];    // Blue
+                    dst[1]  = src[1];    // Green
+                    dst[2]  = src[0];    // Red
+                    dst[3]  = 0x0000;    // Alpha
 
-            dst    += 4;
-            src    += 3;
+                    dst    += 4;
+                    src    += 3;
+                }
+                else if (bytesPerPixel == 2) // Gray16
+                {
+                    dst[0]  = src[0];    // Blue
+                    dst[1]  = src[0];    // Green
+                    dst[2]  = src[0];    // Red
+                    dst[3]  = 0x0000;    // Alpha
 
-            progress = 10 + (int)(((double)w * 50.0) / d->width);
+                    dst    += 4;
+                    src    += 1;
+                }
+            }
+
+            progress = 10 + (int)(((double)h * 50.0) / d->height);
 
             if (progress % 5 == 0)
             {
-               emit signalProgress(d->newUrl, progress);
+                emit signalProgress(d->newUrl, progress);
             }
         }
     }

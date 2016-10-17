@@ -193,19 +193,19 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
     QString selectedFilterString = imageFileSaveDialog->selectedNameFilter();
     QLatin1String triggerString("*.");
     int triggerPos = selectedFilterString.lastIndexOf(triggerString);
-    QByteArray format;
+    QString format;
 
     if (triggerPos != -1)
     {
-        QString formatStr = selectedFilterString.mid(triggerPos + triggerString.size());
-        formatStr = formatStr.left(formatStr.size() - 1);
-        format = formatStr.toUpper().toLatin1();
+        format = selectedFilterString.mid(triggerPos + triggerString.size());
+        format = format.left(format.size() - 1);
+        format = format.toUpper();
     }
 
     // If name filter was selected, we guess image type using file extension.
     if (format.isEmpty())
     {
-        format = fi.suffix().toUpper().toLatin1();
+        format = fi.suffix().toUpper();
 
         QList<QByteArray> imgExtList = QImageWriter::supportedImageFormats();
         imgExtList << "TIF";
@@ -213,11 +213,10 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
         imgExtList << "JPG";
         imgExtList << "JPE";
 
-        if (!imgExtList.contains(format))
+        if (!imgExtList.contains(format.toLatin1()) && !imgExtList.contains(format.toLower().toLatin1()))
         {
             QMessageBox::critical(0, i18n("Unsupported Format"),
-                                  i18n("The target image file format \"%1\" is unsupported.",
-                                       QLatin1String(format)));
+                                  i18n("The target image file format \"%1\" is unsupported.", format));
             qCWarning(DIGIKAM_GENERAL_LOG) << "target image file format " << format << " is unsupported!";
             delete imageFileSaveDialog;
             return;
@@ -268,7 +267,7 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
             this, SLOT(slotThreadDone(QUrl,bool)));
 
     thread->setImageData(ksane_data, width, height, bytes_per_line, ksaneformat);
-    thread->setTargetFile(newURL, QLatin1String(format));
+    thread->setTargetFile(newURL, format);
     thread->setScannerModel(d->saneWidget->make(), d->saneWidget->model());
     thread->start();
 }
