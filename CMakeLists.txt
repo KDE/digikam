@@ -85,6 +85,7 @@ include(ECMPackageConfigHelpers)
 include(ECMSetupVersion)
 include(ECMInstallIcons)
 include(ECMAddAppIcon)
+include(ECMPoQmTools)
 # KDE macros
 include(KDEInstallDirs)
 include(KDECMakeSettings)
