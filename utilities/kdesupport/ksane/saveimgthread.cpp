@@ -108,7 +108,6 @@ void SaveImgThread::run()
 {
     emit signalProgress(d->newUrl, 10);
 
-    int bytesPerPixel = d->bytesPerLine / d->width;
     bool sixteenBit   = (d->frmt == KSaneWidget::FormatRGB_16_C ||
                          d->frmt == KSaneWidget::FormatGrayScale16);
     DImg img((uint)d->width, (uint)d->height, sixteenBit, false);
@@ -123,7 +122,7 @@ void SaveImgThread::run()
         {
             for (int w = 0; w < d->width; ++w)
             {
-                if (bytesPerPixel == 3) // Color
+                if (d->frmt == KSaneWidget::FormatRGB_8_C) // Color
                 {
                     dst[0]  = src[2];    // Blue
                     dst[1]  = src[1];    // Green
@@ -133,7 +132,7 @@ void SaveImgThread::run()
                     dst    += 4;
                     src    += 3;
                 }
-                else if (bytesPerPixel == 1) // Gray
+                else if (d->frmt == KSaneWidget::FormatGrayScale8) // Gray
                 {
                     dst[0]  = src[0];    // Blue
                     dst[1]  = src[0];    // Green
@@ -143,7 +142,7 @@ void SaveImgThread::run()
                     dst    += 4;
                     src    += 1;
                 }
-                else if (bytesPerPixel == 0) // Lineart
+                else if (d->frmt == KSaneWidget::FormatBlackWhite) // Lineart
                 {
                     for (int i = 0; i < 8; ++i)
                     {
@@ -187,7 +186,7 @@ void SaveImgThread::run()
         {
             for (int w = 0; w < d->width; ++w)
             {
-                if (bytesPerPixel == 6) // Color16
+                if (d->frmt == KSaneWidget::FormatRGB_16_C) // Color16
                 {
                     dst[0]  = src[2];    // Blue
                     dst[1]  = src[1];    // Green
@@ -197,7 +196,7 @@ void SaveImgThread::run()
                     dst    += 4;
                     src    += 3;
                 }
-                else if (bytesPerPixel == 2) // Gray16
+                else if (d->frmt == KSaneWidget::FormatGrayScale16) // Gray16
                 {
                     dst[0]  = src[0];    // Blue
                     dst[1]  = src[0];    // Green
