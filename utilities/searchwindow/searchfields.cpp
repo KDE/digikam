@@ -2788,9 +2788,9 @@ void SearchFieldLabels::write(SearchXmlWriter& writer)
         return;
     }
 
-    // NOTE: there is no XML database query rule for Color Labels in ImageQueryBuilder::buildField()
-    //       As Color Labels are internal tags, we trig database on "tagid".
-    writer.writeField(QLatin1String("tagid"), SearchXml::InTree);
+    // NOTE: As Color Labels are internal tags, we trig database on "tagid"
+    //       with "labels" in ImageQueryBuilder::buildField().
+    writer.writeField(m_name, SearchXml::InTree);
 
     if (albumIds.size() > 1)
     {

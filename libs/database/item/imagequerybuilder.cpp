@@ -846,7 +846,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     {
         fieldQuery.addChoiceStringField(QLatin1String("Albums.collection"));
     }
-    else if (name == QLatin1String("tagid"))
+    else if (name == QLatin1String("tagid") || name == QLatin1String("labels"))
     {
         if (relation == SearchXml::Equal)
         {
