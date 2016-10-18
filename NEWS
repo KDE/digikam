@@ -32,4 +32,5 @@ BUGFIXES FROM BUGZILLA:
 023 ==> 370175 - Cannot Import Images (Failed to detect camera with GPhoto2 from Solid information).
 024 ==> 370958 - Cannot save a scanned image.
 025 ==> 370943 - Cannot Select EXIF or IPTC Metadata Subspaces.
-026 ==> 
+026 ==> 371066 - Crash whenever right-clicking in Albums area under the albums list.
+027 ==> 
