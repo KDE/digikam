@@ -183,7 +183,7 @@ void MetadataHub::loadTags(const QList<int>& loadedTags)
 
     foreach(int tagId, loadedTags)
     {
-        if(TagsCache::instance()->isInternalTag(tagId))
+        if (TagsCache::instance()->isInternalTag(tagId))
         {
             continue;
         }
@@ -499,7 +499,7 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
                     tagsPathList << tagPath;
                 }
 
-                if(!tagName.isEmpty())
+                if (!tagName.isEmpty())
                 {
                     newKeywords << tagName;
                 }
@@ -542,7 +542,7 @@ QStringList MetadataHub::cleanupTags(const QStringList& toClean)
 {
     QSet<QString> deduplicator;
 
-    for(int index = 0; index < toClean.size(); index++)
+    for (int index = 0; index < toClean.size(); index++)
     {
         QString keyword = toClean.at(index);
 

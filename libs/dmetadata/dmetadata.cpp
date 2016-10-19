@@ -1377,7 +1377,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             if (entry.isDisabled)
                 continue;
 
-            // We do not write to IPTC and EXIV namespaces, for now
+            // We do not write to IPTC and EXIF namespaces, for now
             if (entry.subspace != NamespaceEntry::XMP)
                 continue;
 
@@ -1395,7 +1395,8 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
             {
                 newList = tagsPath;
 
-                if (entry.separator.compare(QLatin1String("/")) != 0){
+                if (entry.separator.compare(QLatin1String("/")) != 0)
+                {
                     newList = newList.replaceInStrings(QLatin1String("/"), entry.separator);
                 }
             }
