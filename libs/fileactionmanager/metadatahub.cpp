@@ -516,11 +516,11 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             // synchronize metadata, else contents is not coherent.
 
             // We set Iptc keywords using tags name.
-            dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
+            // dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
 
             // We add Xmp keywords using tags name.
-            dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
-            dirty |= metadata.setXmpKeywords(newKeywords);
+            // dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
+            // dirty |= metadata.setXmpKeywords(newKeywords);
 
             // We set Tags Path list in digiKam Xmp private namespace using tags path.
             dirty |= metadata.setImageTagsPath(tagsPathList);
@@ -529,8 +529,8 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Delete all keywords";
             // Delete all IPTC and XMP keywords
-            dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), QStringList());
-            dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
+            // dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), QStringList());
+            // dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
             dirty |= metadata.setImageTagsPath(QStringList());
         }
     }

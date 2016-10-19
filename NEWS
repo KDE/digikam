@@ -34,4 +34,5 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 370943 - Cannot Select EXIF or IPTC Metadata Subspaces.
 026 ==> 371066 - Crash whenever right-clicking in Albums area under the albums list.
 027 ==> 371072 - Edit Advanced Search does not show selected labels.
-028 ==> 
+028 ==> 370942 - Advanced Metadata Write Options Ineffective.
+029 ==> 
