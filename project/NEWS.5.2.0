@@ -10,7 +10,6 @@ BQM           : New tool to detect and fix red-eyes automatically.
 Setup         : Factoring and simplification of Album and Image Editor tabs.
 Documentation : First version re-written of the huge users guide based on 5.x release.
 
-
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 366518 - Showfoto writes to wrong file when switching between images.
