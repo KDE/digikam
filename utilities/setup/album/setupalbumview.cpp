@@ -209,7 +209,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iwpanel);
     d->leftClickActionComboBox = new QComboBox(iwpanel);
-    d->leftClickActionComboBox->addItem(i18n("Show embedded view"), ApplicationSettings::ShowPreview);
+    d->leftClickActionComboBox->addItem(i18n("Show preview"),       ApplicationSettings::ShowPreview);
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
