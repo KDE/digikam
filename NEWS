@@ -36,5 +36,6 @@ BUGFIXES FROM BUGZILLA:
 027 ==> 371072 - Edit Advanced Search does not show selected labels.
 028 ==> 370942 - Advanced Metadata Write Options Ineffective.
 029 ==> 371142 - digikam5 does not start when SD card with photos is inserted to computer.
-030 ==> 
+030 ==> 371517 - Thumbnail view is not rotated, but the image preview is rotated ok.
+031 ==> 
 
