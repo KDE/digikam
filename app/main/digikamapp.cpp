@@ -849,12 +849,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->openInTerminalAction = new QAction(QIcon::fromTheme(QLatin1String("utilities-terminal")), i18n("Open in Terminal"), this);
-    connect(d->openInTerminalAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInTerminal()));
-    ac->addAction(QLatin1String("album_openinterminal"), d->openInTerminalAction);
-
-    // -----------------------------------------------------------
-
     d->openTagMngrAction = new QAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Tag Manager"), this);
     connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
     ac->addAction(QLatin1String("open_tag_mngr"), d->openTagMngrAction);
@@ -1404,7 +1398,6 @@ void DigikamApp::initGui()
     d->addImagesAction->setEnabled(false);
     d->propsEditAction->setEnabled(false);
     d->openInFileManagerAction->setEnabled(false);
-    d->openInTerminalAction->setEnabled(false);
 
     d->imageViewAction->setEnabled(false);
     d->imagePreviewAction->setEnabled(false);
@@ -1497,7 +1490,6 @@ void DigikamApp::slotAlbumSelected(Album* album)
             d->addImagesAction->setEnabled(false);
             d->propsEditAction->setEnabled(false);
             d->openInFileManagerAction->setEnabled(false);
-            d->openInTerminalAction->setEnabled(false);
             d->newAction->setEnabled(false);
             d->addFoldersAction->setEnabled(false);
             d->writeAlbumMetadataAction->setEnabled(true);
@@ -1527,7 +1519,6 @@ void DigikamApp::slotAlbumSelected(Album* album)
             d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->propsEditAction->setEnabled(isNormalAlbum);
             d->openInFileManagerAction->setEnabled(isNormalAlbum || isAlbumRoot);
-            d->openInTerminalAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
@@ -1544,7 +1535,6 @@ void DigikamApp::slotAlbumSelected(Album* album)
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInFileManagerAction->setEnabled(false);
-        d->openInTerminalAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
         d->writeAlbumMetadataAction->setEnabled(false);

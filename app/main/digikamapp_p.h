@@ -103,7 +103,6 @@ public:
         propsEditAction(0),
         addFoldersAction(0),
         openInFileManagerAction(0),
-        openInTerminalAction(0),
         refreshAction(0),
         writeAlbumMetadataAction(0),
         readAlbumMetadataAction(0),
@@ -224,7 +223,6 @@ public:
     QAction*                            propsEditAction;
     QAction*                            addFoldersAction;
     QAction*                            openInFileManagerAction;
-    QAction*                            openInTerminalAction;
     QAction*                            refreshAction;
     QAction*                            writeAlbumMetadataAction;
     QAction*                            readAlbumMetadataAction;

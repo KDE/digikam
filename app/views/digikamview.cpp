@@ -35,10 +35,6 @@
 #include <QApplication>
 #include <QDesktopServices>
 
-// KDE includes
-
-#include <ktoolinvocation.h>
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -1300,31 +1296,6 @@ void DigikamView::slotAlbumOpenInFileManager()
     {
         QDesktopServices::openUrl(QUrl::fromLocalFile(palbum->folderPath()));
     }
-}
-
-void DigikamView::slotAlbumOpenInTerminal()
-{
-    Album* const album = d->albumManager->currentAlbums().first();
-
-    if (!album || album->type() != Album::PHYSICAL)
-    {
-        return;
-    }
-
-    if (album->isRoot())
-    {
-        QMessageBox::critical(this, qApp->applicationName(), i18n("Cannot open the root. It is not a physical location."));
-        return;
-    }
-
-    PAlbum* const palbum = dynamic_cast<PAlbum*>(album);
-
-    if (!palbum)
-    {
-        return;
-    }
-
-    KToolInvocation::invokeTerminal(QString(), palbum->folderPath());
 }
 
 void DigikamView::slotRefresh()
