@@ -75,6 +75,13 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
 {
     QHBoxLayout* const vlay = new QHBoxLayout(this);
 
+    d->applyBtn    = new QToolButton(this);
+    d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
+    d->applyBtn->setToolTip(i18n("Apply pending changes to metadata"));
+    d->applyBtn->setFocusPolicy(Qt::NoFocus);
+    d->applyBtn->setAutoRaise(true);
+    d->applyBtn->setDisabled(true);
+
     d->info        = new DAdjustableLabel(this);
     d->info->setContextMenuPolicy(Qt::NoContextMenu);
     d->info->setAutoFillBackground(true);
@@ -84,15 +91,8 @@ MetadataStatusBar::MetadataStatusBar(QWidget* const parent)
     d->info->setWhatsThis(i18n("If lazy synchronization is enabled in metadata settings, "
                                "the status bar will display the number of items waiting for synchronization"));
 
-    d->applyBtn    = new QToolButton(this);
-    d->applyBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-    d->applyBtn->setToolTip(i18n("Apply pending changes to metadata"));
-    d->applyBtn->setFocusPolicy(Qt::NoFocus);
-    d->applyBtn->setAutoRaise(true);
-    d->applyBtn->setDisabled(true);
-
-    vlay->addWidget(d->info);
     vlay->addWidget(d->applyBtn);
+    vlay->addWidget(d->info);
     vlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vlay->setContentsMargins(QMargins());
     vlay->setStretchFactor(d->info, 10);

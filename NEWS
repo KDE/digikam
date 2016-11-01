@@ -46,4 +46,5 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 371627 - Enlarging Thumbnail On Map Results in Large Blue Circle.
 034 ==> 371951 - Thumbnail recreation is blocking.
 035 ==> 368124 - Face tag inside album view is case sensitive.
-036 ==> 
+036 ==> 371956 - "Apply pending changes" button placement.
+037 ==> 
