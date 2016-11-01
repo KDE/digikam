@@ -44,4 +44,5 @@ BUGFIXES FROM BUGZILLA:
 030 ==> 371517 - Thumbnail view is not rotated, but the image preview is rotated ok.
 031 ==> 367640 - Crash when decoding Canon 550D RAW file using VNG interpolation with libraw 0.18.
 032 ==> 368862 - Thumbnails for Olympus raw (ORF) in albumview are blurred.
-033 ==> 
+033 ==> 371627 - Enlarging Thumbnail On Map Results in Large Blue Circle.
+034 ==> 

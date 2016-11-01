@@ -1510,7 +1510,7 @@ void BackendMarble::slotThumbnailAvailableForIndex(const QVariant& index, const 
     // TODO: properly reject pixmaps with the wrong size
     const int expectedThumbnailSize = s->worldMapWidget->getUndecoratedThumbnailSize();
 
-    if ((pixmap.size().height() != expectedThumbnailSize) && (pixmap.size().width() != expectedThumbnailSize))
+    if ((pixmap.size().height() > expectedThumbnailSize) || (pixmap.size().width() > expectedThumbnailSize))
     {
         return;
     }
