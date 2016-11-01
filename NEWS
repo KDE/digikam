@@ -42,5 +42,6 @@ BUGFIXES FROM BUGZILLA:
 028 ==> 370942 - Advanced Metadata Write Options Ineffective.
 029 ==> 371142 - digikam5 does not start when SD card with photos is inserted to computer.
 030 ==> 371517 - Thumbnail view is not rotated, but the image preview is rotated ok.
-031 ==> 
-
+031 ==> 367640 - Crash when decoding Canon 550D RAW file using VNG interpolation with libraw 0.18.
+032 ==> 368862 - Thumbnails for Olympus raw (ORF) in albumview are blurred.
+033 ==> 
