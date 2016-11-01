@@ -4,16 +4,13 @@
  * Created: Sat Mar  14, 2008
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
 
  */
 
@@ -30,7 +27,7 @@ it under the terms of the one of three licenses as you choose:
     double	wf_filter_energy       (int r1_greenmode, int r1, int r2_greenmode, int r2);
 
 
-// inline functions
+/* inline functions */
     ushort      sget2 (uchar *s);
     ushort      sget2Rev(uchar *s);
     void	setCanonBodyFeatures (unsigned id);
@@ -38,16 +35,19 @@ it under the terms of the one of three licenses as you choose:
     void	Canon_CameraSettings();
     void	Canon_WBpresets (int skip1, int skip2);
     void	Canon_WBCTpresets (short WBCTversion);
+    void      parseCanonMakernotes (unsigned tag, unsigned type, unsigned len);
     void	processNikonLensData (uchar *LensData, unsigned len);
     void	setOlympusBodyFeatures (unsigned long long id);
     void	setPhaseOneFeatures (unsigned id);
     void	setPentaxBodyFeatures (unsigned id);
+    void	PentaxISO (ushort c);
     void	PentaxLensInfo (unsigned id, unsigned len);
     void	setSonyBodyFeatures (unsigned id);
     void	parseSonyLensType2 (uchar a, uchar b);
     void 	parseSonyLensFeatures (uchar a, uchar b);
     void	process_Sony_0x9050 (uchar * buf, unsigned id);
     void	process_Sony_0x940c (uchar * buf);
+    void      parseFujiMakernotes (unsigned tag, unsigned type);
 
     ushort      get2();
     unsigned    sget4 (uchar *s);
@@ -56,7 +56,7 @@ it under the terms of the one of three licenses as you choose:
     double      getreal (int type);
     void        read_shorts (ushort *pixel, int count);
 
-// Canon P&S cameras
+/* Canon P&S cameras */
     void        canon_600_fixed_wb (int temp);
     int         canon_600_color (int ratio[2], int mar);
     void        canon_600_auto_wb();
@@ -144,6 +144,8 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     void        parse_phase_one (int base);
 
 // Misc P&S cameras
+    void        parse_broadcom();
+    void        broadcom_load_raw();
     void        nokia_load_raw();
     void        android_loose_load_raw();
     void        android_tight_load_raw();
@@ -215,6 +217,7 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     void        x3f_load_raw();
     void        x3f_dpq_interpolate_rg();
 	void        x3f_dpq_interpolate_af(int xstep, int ystep, int scale); // 1x1 af pixels
+	void        x3f_dpq_interpolate_af_sd(int xstart,int ystart, int xend, int yend, int xstep, int ystep, int scale); // sd Quattro interpolation
 
 // CAM/RGB
     void        pseudoinverse (double (*in)[3], double (*out)[3], int size);
@@ -259,6 +262,13 @@ void        crw_init_tables (unsigned table, ushort *huff[2]);
     void ahd_interpolate_combine_homogeneous_pixels(int top, int left, ushort (*rgb)[TS][TS][3], char (*homogeneity_map)[TS][2]);
 
 #undef TS
+
+	void parse_xtrans_header();
+	void xtrans_compressed_load_raw();
+	void init_xtrans(struct xtrans_params* info);
+	void init_xtrans_block(struct xtrans_block* info, const struct xtrans_params *params, INT64 raw_offset, unsigned dsize);
+	void copy_line_to_xtrans(struct xtrans_block* info, int cur_line, int cur_block, int cur_block_width);
+	void xtrans_decode_block(struct xtrans_block* info, const struct xtrans_params * params, int cur_line);
 
 // LibRaw demosaic packs  functions
 // AMaZe

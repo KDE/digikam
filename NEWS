@@ -4,6 +4,11 @@ digiKam 5.3.0 - Release date: 2016-11-06
 NEW FEATURES:
 
 General: Add support of universal Linux AppImage bundle deployement.
+General: Internal Libraw updated to 0.18-beta1 with 78 cameras added,
+         floating point DNG support, decode exotic DNG formats e.g. 8-bit DNG,
+         and more metadata parsed while decoding as white balance presets,
+         DNG colordata, vendor specific metadata.
+
 
 BUGFIXES FROM BUGZILLA:
 

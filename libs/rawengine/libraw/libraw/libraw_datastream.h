@@ -6,16 +6,13 @@
  * LibRaw Data stream interface
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
 
  */
 
@@ -87,8 +84,9 @@ class DllDef LibRaw_abstract_datastream
     virtual int         eof() = 0;
     virtual void *      make_jas_stream() = 0;
     virtual int         jpeg_src(void *) { return -1; }
-    /* Make buffer from current offset */
-
+	/* reimplement in subclass to use parallel access in xtrans_load_raw() if OpenMP is not used */
+	virtual int			lock() { return 1;} /* success */
+	virtual void		unlock(){}
     /* subfile parsing not implemented in base class */
     virtual const char* fname(){ return NULL;};
 #if defined(_WIN32) && !defined(__MINGW32__) && defined(_MSC_VER) && (_MSC_VER > 1310)
@@ -97,7 +95,6 @@ class DllDef LibRaw_abstract_datastream
 #endif
     virtual int         subfile_open(const char*) { return -1;}
     virtual void        subfile_close() { }
-
 
     virtual int		tempbuffer_open(void*, size_t);
     virtual void	tempbuffer_close();
@@ -208,7 +205,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual void        subfile_close();
     virtual int         get_char()
     {
-#if !defined(_WIN32) && !defined(__MINGW32__)
+#ifndef WIN32
         return substream?substream->get_char():getc_unlocked(f);
 #else
         return substream?substream->get_char():fgetc(f);

@@ -7,16 +7,13 @@
  *
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
 
 
  */
@@ -30,6 +27,8 @@ it under the terms of the one of three licenses as you choose:
 
 #ifdef WIN32
 #define snprintf _snprintf
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
 #endif
 
 #define P1 MyCoolRawProcessor.imgdata.idata
@@ -39,13 +38,14 @@ it under the terms of the one of three licenses as you choose:
 #define exifLens MyCoolRawProcessor.imgdata.lens
 #define ShootingInfo MyCoolRawProcessor.imgdata.shootinginfo
 
-#define S MyCoolRawProcessor.imgdata.sizes
-#define Oly MyCoolRawProcessor.imgdata.makernotes.olympus
-#define O MyCoolRawProcessor.imgdata.params
-#define C MyCoolRawProcessor.imgdata.color
-#define F MyCoolRawProcessor.imgdata.makernotes.fuji
-#define T MyCoolRawProcessor.imgdata.thumbnail
+#define S     MyCoolRawProcessor.imgdata.sizes
+#define O     MyCoolRawProcessor.imgdata.params
+#define C     MyCoolRawProcessor.imgdata.color
+#define T     MyCoolRawProcessor.imgdata.thumbnail
 
+#define Canon MyCoolRawProcessor.imgdata.makernotes.canon
+#define Fuji  MyCoolRawProcessor.imgdata.makernotes.fuji
+#define Oly   MyCoolRawProcessor.imgdata.makernotes.olympus
 
 const char *EXIF_LightSources[] = {
 	"Unknown",
@@ -110,19 +110,32 @@ const char *WB_LightSources[] = {
 	"Studio Tungsten",
 };
 
+void trimSpaces(char *s)
+{
+  char *p = s;
+  if (!strncasecmp(p, "NO=", 3)) p = p+3; /* fix for Nikon D70, D70s */
+  int l = strlen(p);
+  if(!l) return;
+  while(isspace(p[l - 1])) p[--l] = 0;    /* trim trailing spaces */
+  while(*p && isspace(*p)) ++p, --l;      /* trim leading spaces */
+  memmove(s, p, l + 1);
+}
+
 int main(int ac, char *av[])
 {
     int verbose = 0, ret,print_unpack=0,print_frame=0,print_wb=0;
+    int compact = 0;
     LibRaw MyCoolRawProcessor;
 
     for (int i=1;i<ac;i++) {
         if(av[i][0]=='-')
             {
+                if(av[i][1]=='c' && av[i][2]==0) compact++;
                 if(av[i][1]=='v' && av[i][2]==0) verbose++;
                 if(av[i][1]=='w' && av[i][2]==0) print_wb++;
                 if(av[i][1]=='u' && av[i][2]==0) print_unpack++;
                 if(av[i][1]=='f' && av[i][2]==0) print_frame++;
-                if(av[i][1]=='x' && av[i][2]==0) O.force_foveon_x3f=1;
+                if(av[i][1]=='x' && av[i][2]==0) O.raw_processing_options |=LIBRAW_PROCESSING_FORCE_FOVEON_X3F;
                 continue;
             }
         if( (ret = MyCoolRawProcessor.open_file(av[i])) != LIBRAW_SUCCESS)
@@ -140,6 +153,10 @@ int main(int ac, char *av[])
             printf ("\nFilename: %s\n", av[i]);
             printf ("Timestamp: %s", ctime(&(P2.timestamp)));
             printf ("Camera: %s %s\n", P1.make, P1.model);
+            if (ShootingInfo.BodySerial[0]) {
+               trimSpaces(ShootingInfo.BodySerial);
+               printf ("Body serial: %s\n", ShootingInfo.BodySerial);
+            }
             if (P2.artist[0])
                 printf ("Owner: %s\n", P2.artist);
             if (P1.dng_version) {
@@ -177,6 +194,7 @@ int main(int ac, char *av[])
 					case 2:  printf("FF\n"); break;
 					case 3:  printf("MF\n"); break;
 					case 4:  printf("APS-H\n"); break;
+					case 5:  printf("1\"\n"); break;
 					case 8:  printf("4/3\n"); break;
 					default: printf("Unknown\n"); break;
 				}
@@ -306,13 +324,13 @@ int main(int ac, char *av[])
 	   if (C.baseline_exposure > -999.f) printf ("Baseline exposure: %04.3f\n", C.baseline_exposure);
 
             printf ("Number of raw images: %d\n", P1.raw_count);
-            if (F.FujiExpoMidPointShift > -999.f) printf ("Fuji Exposure shift: %04.3f\n", F.FujiExpoMidPointShift);
+            if (Fuji.FujiExpoMidPointShift > -999.f) printf ("Fuji Exposure shift: %04.3f\n", Fuji.FujiExpoMidPointShift);
 
-	    if (F.FujiDynamicRange != 0xffff) printf ("Fuji Dynamic Range: %d\n", F.FujiDynamicRange);
-	    if (F.FujiFilmMode != 0xffff) printf ("Fuji Film Mode: %d\n", F.FujiFilmMode);
-	    if (F.FujiDynamicRangeSetting != 0xffff) printf ("Fuji Dynamic Range Setting: %d\n", F.FujiDynamicRangeSetting);
-	    if (F.FujiDevelopmentDynamicRange != 0xffff) printf ("Fuji Development Dynamic Range: %d\n", F.FujiDevelopmentDynamicRange);
-	    if (F.FujiAutoDynamicRange != 0xffff) printf ("Fuji Auto Dynamic Range: %d\n", F.FujiAutoDynamicRange);
+	    if (Fuji.FujiDynamicRange != 0xffff) printf ("Fuji Dynamic Range: %d\n", Fuji.FujiDynamicRange);
+	    if (Fuji.FujiFilmMode != 0xffff) printf ("Fuji Film Mode: %d\n", Fuji.FujiFilmMode);
+	    if (Fuji.FujiDynamicRangeSetting != 0xffff) printf ("Fuji Dynamic Range Setting: %d\n", Fuji.FujiDynamicRangeSetting);
+	    if (Fuji.FujiDevelopmentDynamicRange != 0xffff) printf ("Fuji Development Dynamic Range: %d\n", Fuji.FujiDevelopmentDynamicRange);
+	    if (Fuji.FujiAutoDynamicRange != 0xffff) printf ("Fuji Auto Dynamic Range: %d\n", Fuji.FujiAutoDynamicRange);
 
 
             if (S.pixel_aspect != 1)
@@ -323,6 +341,17 @@ int main(int ac, char *av[])
 
             printf ("Image size:  %4d x %d\n", S.width, S.height);
             printf ("Output size: %4d x %d\n", S.iwidth, S.iheight);
+
+            if (Canon.SensorWidth)			printf("SensorWidth          = %d\n", Canon.SensorWidth);
+            if (Canon.SensorHeight)		printf("SensorHeight         = %d\n", Canon.SensorHeight);
+            if (Canon.SensorLeftBorder)		printf("SensorLeftBorder     = %d\n", Canon.SensorLeftBorder);
+            if (Canon.SensorTopBorder)		printf("SensorTopBorder      = %d\n", Canon.SensorTopBorder);
+            if (Canon.SensorRightBorder)		printf("SensorRightBorder    = %d\n", Canon.SensorRightBorder);
+            if (Canon.SensorBottomBorder)	printf("SensorBottomBorder   = %d\n", Canon.SensorBottomBorder);
+            if (Canon.BlackMaskLeftBorder)	printf("BlackMaskLeftBorder  = %d\n", Canon.BlackMaskLeftBorder);
+            if (Canon.BlackMaskTopBorder)	printf("BlackMaskTopBorder   = %d\n", Canon.BlackMaskTopBorder);
+            if (Canon.BlackMaskRightBorder)	printf("BlackMaskRightBorder = %d\n", Canon.BlackMaskRightBorder);
+            if (Canon.BlackMaskBottomBorder)	printf("BlackMaskBottomBorder= %d\n", Canon.BlackMaskBottomBorder);
 
             if (Oly.OlympusCropID != -1)
             {
@@ -338,6 +367,11 @@ int main(int ac, char *av[])
                     if (!P1.cdesc[3]) P1.cdesc[3] = 'G';
                     for (int i=0; i < 16; i++)
                         putchar (P1.cdesc[MyCoolRawProcessor.fcol(i >> 1,i & 1)]);
+                }
+            if (C.linear_max[0] != 0)
+                {
+                    printf ("\nHighlight linearity limits:");
+                    for(int c=0;c<4;c++) printf (" %ld", C.linear_max[c]);
                 }
             if (C.cam_mul[0] > 0)
                 {
@@ -367,6 +401,41 @@ int main(int ac, char *av[])
  			if (C.dng_color[1].illuminant < 0xffff)
 				printf ("\nDNG Illuminant 2: %s", EXIF_LightSources[C.dng_color[1].illuminant]);
 
+            if (fabsf(C.P1_color[0].romm_cam[0]) > 0)
+            {
+              printf("\nPhaseOne Matrix1:\n");
+              for(int i=0; i< 3; i++)
+            	printf("%6.4f\t%6.4f\t%6.4f\n",C.P1_color[0].romm_cam[i*3],C.P1_color[0].romm_cam[i*3+1],C.P1_color[0].romm_cam[i*3+2]);
+            }
+
+            if (fabsf(C.P1_color[1].romm_cam[0]) > 0)
+            {
+              printf("\nPhaseOne Matrix2:\n");
+              for(int i=0; i< 3; i++)
+            	printf("%6.4f\t%6.4f\t%6.4f\n",C.P1_color[1].romm_cam[i*3],C.P1_color[1].romm_cam[i*3+1],C.P1_color[1].romm_cam[i*3+2]);
+            }
+
+            if (fabsf(C.cmatrix[0][0]) > 0)
+            {
+            	printf("\ncamRGB -> sRGB Matrix:\n");
+            	for(int i=0; i< P1.colors; i++)
+            		{
+            			for(int j=0; j< P1.colors; j++)
+                			printf("%6.4f\t",C.cmatrix[j][i]);
+                		printf ("\n");
+                	}
+            }
+
+            if (fabsf(C.ccm[0][0]) > 0)
+            {
+            	printf("\nColor Correction Matrix:\n");
+            	for(int i=0; i< P1.colors; i++)
+            		{
+            			for(int j=0; j< P1.colors; j++)
+                			printf("%6.4f\t",C.ccm[j][i]);
+                		printf ("\n");
+                	}
+            }
             if (fabsf(C.dng_color[0].colormatrix[0][0]) > 0)
             {
             	printf("\nDNG color matrix 1:\n");
@@ -460,10 +529,45 @@ int main(int ac, char *av[])
 						    	printf ("%6.5ff}},\n", C.WBCT_Coeffs[cnt][4]/C.WBCT_Coeffs[cnt][2]);
 					} else break;
 					printf ("\n");
-                } else
-//                    printf ("%s is a %s %s image.\n", av[i],P1.make, P1.model);
-					printf ("%s=%s=%d=%04.3f=%04.3f\n", P1.make, P1.model, (int)P2.iso_speed, C.baseline_exposure, F.FujiExpoMidPointShift);
+                } else if (compact) {
+//                   printf ("%s is a %s %s image.\n", av[i],P1.make, P1.model);
+//                   printf ("%s=%s=%d=%04.3f", P1.make, P1.model, (int)P2.iso_speed, C.baseline_exposure);
+                   trimSpaces(P1.make); trimSpaces(P1.model);
+                   trimSpaces(C.model2);
+                   trimSpaces(ShootingInfo.BodySerial); trimSpaces(ShootingInfo.InternalBodySerial);
+                   printf ("%s=%s", P1.make, P1.model);
+                   if (ShootingInfo.BodySerial[0] && !(ShootingInfo.BodySerial[0] == 48 && !ShootingInfo.BodySerial[1]))
+                      printf ("=Body#: %s", ShootingInfo.BodySerial);
+                   else if (C.model2[0] && (!strncasecmp(P1.make, "Kodak", 5) || !strcmp(P1.model, "EOS D2000C")))
+                      printf ("=Body#: %s", C.model2);
+                   if (ShootingInfo.InternalBodySerial[0])
+                      printf ("=Assy#: %s", ShootingInfo.InternalBodySerial);
+                   if (exifLens.LensSerial[0])
+                      printf ("=Lens#: %s", exifLens.LensSerial);
+                   if (exifLens.InternalLensSerial[0])
+                      printf ("=LensAssy#: %s", exifLens.InternalLensSerial);
+                   printf ("=\n");
+
+// print comma-separated
+//                    printf ("%s,%s,%s,", av[i], P1.make, P1.model);
+//                    if (ShootingInfo.BodySerial[0] && !(ShootingInfo.BodySerial[0] == 48 && !ShootingInfo.BodySerial[1])) {
+//                      trimSpaces(ShootingInfo.BodySerial);
+//                      printf ("%s,", ShootingInfo.BodySerial);
+//                    } else if (C.model2[0] && (!strncasecmp(P1.make, "Kodak", 5) || !strcmp(P1.model, "EOS D2000C"))) {
+//                      trimSpaces(C.model2);
+//                      printf ("%s,", C.model2);
+//                    } else printf (",");
+//                    if (ShootingInfo.InternalBodySerial[0]) {
+//                      trimSpaces(ShootingInfo.InternalBodySerial);
+//                      printf ("%s", ShootingInfo.InternalBodySerial);
+//                    }
+//                    printf ("\n");
+
+                }
+	        else
+                   printf ("%s is a %s %s image.\n", av[i],P1.make, P1.model);
             }
+
         MyCoolRawProcessor.recycle();
     }// endfor
     return 0;

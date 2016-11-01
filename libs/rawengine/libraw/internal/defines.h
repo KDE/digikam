@@ -2,16 +2,13 @@
   Copyright 2008-2016 LibRaw LLC (info@libraw.org)
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
 
    This file is generated from Dave Coffin's dcraw.c
    dcraw.c -- Dave Coffin's raw photo decoder
@@ -48,7 +45,7 @@ it under the terms of the one of three licenses as you choose:
 #ifdef __CYGWIN__
 #include <io.h>
 #endif
-#if defined WIN32 || defined (__MINGW32__)
+#ifdef WIN32
 #include <sys/utime.h>
 #include <winsock2.h>
 #pragma comment(lib, "ws2_32.lib")
@@ -99,7 +96,7 @@ typedef unsigned long long UINT64;
 #define FORC(cnt) for (c=0; c < cnt; c++)
 #define FORC3 FORC(3)
 #define FORC4 FORC(4)
-#define FORCC FORC(colors)
+#define FORCC for (c=0; c < colors && c < 4; c++)
 
 #define SQR(x) ((x)*(x))
 #define ABS(x) (((int)(x) ^ ((int)(x) >> 31)) - ((int)(x) >> 31))
