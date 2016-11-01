@@ -3,12 +3,11 @@ digiKam 5.3.0 - Release date: 2016-11-06
 
 NEW FEATURES:
 
-General: Add support of universal Linux AppImage bundle deployement.
+General: Add support of universal Linux 32 and 64 bits AppImage bundle deployement.
 General: Internal Libraw updated to 0.18-beta1 with 78 cameras added,
          floating point DNG support, decode exotic DNG formats e.g. 8-bit DNG,
          and more metadata parsed while decoding as white balance presets,
          DNG colordata, vendor specific metadata.
-
 
 BUGFIXES FROM BUGZILLA:
 
@@ -45,4 +44,5 @@ BUGFIXES FROM BUGZILLA:
 031 ==> 367640 - Crash when decoding Canon 550D RAW file using VNG interpolation with libraw 0.18.
 032 ==> 368862 - Thumbnails for Olympus raw (ORF) in albumview are blurred.
 033 ==> 371627 - Enlarging Thumbnail On Map Results in Large Blue Circle.
-034 ==> 
+034 ==> 371951 - Thumbnail recreation is blocking.
+035 ==> 
