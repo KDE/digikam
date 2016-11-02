@@ -248,7 +248,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid->setSpacing(spacing);
     grid->setRowStretch(10, 10);
 
-    d->tab->insertTab(IconView, iwpanel, i18nc("@title:tab", "Icon-View"));
+    d->tab->insertTab(IconView, iwpanel, i18nc("@title:tab", "Icons"));
 
     // --------------------------------------------------------
 
@@ -278,7 +278,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     grid2->setSpacing(spacing);
     grid2->setRowStretch(3, 10);
 
-    d->tab->insertTab(FolderView, fwpanel, i18nc("@title:tab", "Folder-View"));
+    d->tab->insertTab(FolderView, fwpanel, i18nc("@title:tab", "Tree-Views"));
 
     // --------------------------------------------------------
 
