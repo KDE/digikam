@@ -64,15 +64,25 @@ LensFunIface::LensFunIface()
     : d(new Private)
 {
     d->lfDb          = lf_db_new();
+
     QString lensPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                               QLatin1String("lensfun"),
                                               QStandardPaths::LocateDirectory);
 
+    qCDebug(DIGIKAM_DIMG_LOG) << "Root lens database dir: " << lensPath;
+
+    // For older Lensfun versions.
     QDir lensDir(lensPath, QLatin1String("*.xml"));
+
+    if (lensDir.entryList().isEmpty())
+    {
+        // More Lensfun recent versions use a sub-directory to host XML files.
+        lensDir = QDir(lensPath + QLatin1String("/version_1"), QLatin1String("*.xml"));
+    }
 
     foreach(const QString& lens, lensDir.entryList())
     {
-        qCDebug(DIGIKAM_DIMG_LOG) << "Load Lens Database file: " << lens;
+        qCDebug(DIGIKAM_DIMG_LOG) << "Load lens database file: " << lens;
         d->lfDb->Load(QFile::encodeName(lensDir.absoluteFilePath(lens)).constData());
     }
 
