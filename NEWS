@@ -47,4 +47,5 @@ BUGFIXES FROM BUGZILLA:
 034 ==> 371951 - Thumbnail recreation is blocking.
 035 ==> 368124 - Face tag inside album view is case sensitive.
 036 ==> 371956 - "Apply pending changes" button placement.
-037 ==> 
+037 ==> 366429 - digiKam 4.14.0 linux does not read XMP created by digiKam 5.0.0 windows.
+038 ==> 
