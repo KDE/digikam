@@ -55,7 +55,7 @@ set(libeditorgui_SRCS
     main/imagewindow.cpp
 )
 
-install(FILES main/digikamimagewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
+install(FILES main/imageeditorui5.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
 
 set(libeditorcore_SRCS
     core/undocache.cpp

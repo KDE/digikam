@@ -147,7 +147,7 @@ ImageWindow::ImageWindow()
     : EditorWindow(QLatin1String("Image Editor")),
       d(new Private)
 {
-    setXMLFile(QLatin1String("digikamimagewindowui.rc"));
+    setXMLFile(QLatin1String("imageeditorui5.rc"));
 
     m_instance = this;
     // We don't want to be deleted on close
