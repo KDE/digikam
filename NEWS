@@ -49,4 +49,5 @@ BUGFIXES FROM BUGZILLA:
 036 ==> 371956 - "Apply pending changes" button placement.
 037 ==> 366429 - digiKam 4.14.0 linux does not read XMP created by digiKam 5.0.0 windows.
 038 ==> 369003 - Editor crash.
-039 ==> 
+039 ==> 366104 - digikam5 "hangs' @ 100%CPU at exit.
+040 ==> 
