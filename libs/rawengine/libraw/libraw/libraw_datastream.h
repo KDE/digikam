@@ -205,7 +205,7 @@ class DllDef LibRaw_bigfile_datastream : public LibRaw_abstract_datastream
     virtual void        subfile_close();
     virtual int         get_char()
     {
-#ifndef WIN32
+#if !defined(_WIN32) && !defined(__MINGW32__)
         return substream?substream->get_char():getc_unlocked(f);
 #else
         return substream?substream->get_char():fgetc(f);
