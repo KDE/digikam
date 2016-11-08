@@ -62,7 +62,6 @@ QList<QUrl> ImageInfoList::toImageUrlList() const
     return urlList;
 }
 
-
 bool ImageInfoList::namefileLessThan(const ImageInfo &d1, const ImageInfo &d2)
 {
     return d1.name().toLower() < d2.name().toLower(); // sort by name

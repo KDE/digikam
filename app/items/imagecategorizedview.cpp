@@ -730,9 +730,9 @@ ImageInfoList ImageCategorizedView::resolveGrouping(const QModelIndexList indexe
             infos << info.groupedImages();
         }
     }
+
     return infos;
 }
-
 
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
 {
