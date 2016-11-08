@@ -556,7 +556,7 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("lighttable_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
-    d->presentationAction = new QAction(QIcon::fromTheme(QLatin1String("presentation_section")), i18n("Presentation..."), this);
+    d->presentationAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Presentation..."), this);
     connect(d->presentationAction, SIGNAL(triggered()), this, SLOT(slotPresentation()));
     ac->addAction(QLatin1String("lighttable_presentation"), d->presentationAction);
     ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
