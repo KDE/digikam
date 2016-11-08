@@ -1769,7 +1769,7 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
     }
 
     // the ImportUI will delete itself when it has finished
-    ImportUI* const cgui = new ImportUI(this, i18n("Images found in %1", path),
+    ImportUI* const cgui = new ImportUI(i18n("Images found in %1", path),
                                         QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
     cgui->show();
 
@@ -1797,7 +1797,7 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
         else
         {
             // the ImportUI will delete itself when it has finished
-            ImportUI* const cgui = new ImportUI(this, ctype->title(), ctype->model(),
+            ImportUI* const cgui = new ImportUI(ctype->title(), ctype->model(),
                                                 ctype->port(), ctype->path(), ctype->startingNumber());
 
             ctype->setCurrentImportUI(cgui);
@@ -1895,7 +1895,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
                                          << " camera is: " << model << " at " << port;
 
             // the ImportUI will delete itself when it has finished
-            ImportUI* const cgui = new ImportUI(this, cameraLabel, model, port, QLatin1String("/"), 1);
+            ImportUI* const cgui = new ImportUI(cameraLabel, model, port, QLatin1String("/"), 1);
             d->cameraUIMap[udi]  = cgui;
 
             cgui->show();
@@ -1986,7 +1986,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
         }
 
         // the ImportUI will delete itself when it has finished
-        ImportUI* const cgui = new ImportUI(this, i18n("Images on %1", mediaLabel),
+        ImportUI* const cgui = new ImportUI(i18n("Images on %1", mediaLabel),
                                             QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
         d->cameraUIMap[udi]  = cgui;
 

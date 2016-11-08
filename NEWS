@@ -8,4 +8,5 @@ BUGFIXES FROM BUGZILLA:
 
 001 ==> 366624 - digiKam defaults to fullscreen with no menu and status bar.
 002 ==> 372027 - Adjust grouping behavior [patch].
-003 ==> 
+003 ==> 372232 - Strange window switching between main digikam window and importing window.
+004 ==> 

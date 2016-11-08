@@ -64,10 +64,8 @@ class DIGIKAM_EXPORT ImportUI : public DXmlGuiWindow
 
 public:
 
-    ImportUI(QWidget* const parent,
-             const QString& cameraTitle,
-             const QString& model, const QString& port,
-             const QString& path, int startIndex);
+    ImportUI(const QString& cameraTitle, const QString& model,
+             const QString& port, const QString& path, int startIndex);
     ~ImportUI();
 
     static ImportUI* instance();
