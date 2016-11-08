@@ -51,5 +51,4 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 369003 - Editor crash.
 039 ==> 366104 - digikam5 "hangs' @ 100%CPU at exit.
 040 ==> 367495 - Geolocation editor and reverse geocoding segmentation fault.
-041 ==> 
 
