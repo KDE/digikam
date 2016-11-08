@@ -113,8 +113,6 @@ public:
     ImageInfo imageInfo(const QModelIndex& index) const;
     QModelIndex itemIndex(Item* const item) const;
     QList<ImageInfo> allImageInfo() const;
-    QList<QUrl> urlsFromIndexes(const QModelIndexList& indexList) const;
-    QList<QUrl> selectedUrls() const;
     QModelIndex deepRowIndex(const int rowNumber) const;
     int indexToDeepRowNumber(const QModelIndex& index) const;
     int deepRowCount() const;

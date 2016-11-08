@@ -31,7 +31,6 @@
 #include "digikam_debug.h"
 #include "imagedelegate.h"
 #include "imagemodel.h"
-#include "imagecategorizedview.h"
 #include "addtagslineedit.h"
 #include "tagscache.h"
 #include "abstractalbummodel.h"

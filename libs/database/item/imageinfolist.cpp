@@ -50,6 +50,19 @@ QList<qlonglong> ImageInfoList::toImageIdList() const
     return idList;
 }
 
+QList<QUrl> ImageInfoList::toImageUrlList() const
+{
+    QList<QUrl> urlList;
+
+    foreach(const ImageInfo& info, *this)
+    {
+        urlList << info.fileUrl();
+    }
+
+    return urlList;
+}
+
+
 bool ImageInfoList::namefileLessThan(const ImageInfo &d1, const ImageInfo &d2)
 {
     return d1.name().toLower() < d2.name().toLower(); // sort by name

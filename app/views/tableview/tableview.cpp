@@ -32,10 +32,14 @@
 #include <QAction>
 #include <QIcon>
 #include <QApplication>
+#include <QPointer>
 
 // Local includes
 
+#include "advancedrenamedialog.h"
+#include "advancedrenameprocessdialog.h"
 #include "contextmenuhelper.h"
+#include "digikam_debug.h"
 #include "fileactionmngr.h"
 #include "album.h"
 #include "applicationsettings.h"
@@ -103,6 +107,12 @@ TableView::TableView(QItemSelectionModel* const selectionModel,
             this, SIGNAL(signalZoomOutStep()));
 
     connect(s->tableViewSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->treeView, SIGNAL(collapsed(QModelIndex)),
+            this, SIGNAL(signalItemsChanged()));
+
+    connect(s->treeView, SIGNAL(expanded(QModelIndex)),
             this, SIGNAL(signalItemsChanged()));
 
     connect(s->tableViewModel, SIGNAL(rowsInserted(QModelIndex,int,int)),
@@ -255,7 +265,7 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     cmHelper.addAction(viewAction);
     /// @todo image_edit is grayed out on first invocation of the menu for some reason
     cmHelper.addAction(QLatin1String("image_edit"));
-    cmHelper.addServicesMenu(s->tableViewModel->selectedUrls());
+    cmHelper.addServicesMenu(selectedUrls());
     cmHelper.addGotoMenu(selectedImageIds);
     cmHelper.addAction(QLatin1String("image_rotate"));
     cmHelper.addSeparator();
@@ -338,30 +348,6 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     }
 }
 
-QList<ImageInfo> TableView::selectedImageInfos() const
-{
-    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
-
-    return s->tableViewModel->imageInfos(selectedIndexes);
-}
-
-QList<ImageInfo> TableView::selectedImageInfosCurrentFirst() const
-{
-    QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
-    const QModelIndex cIndex        = s->tableViewSelectionModel->currentIndex();
-
-    if (!selectedIndexes.isEmpty())
-    {
-        if (selectedIndexes.first()!=cIndex)
-        {
-            selectedIndexes.removeOne(cIndex);
-            selectedIndexes.prepend(cIndex);
-        }
-    }
-
-    return s->tableViewModel->imageInfos(selectedIndexes);
-}
-
 void TableView::slotAssignColorLabelToSelected(const int colorLabelID)
 {
     FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorLabelID);
@@ -401,25 +387,6 @@ void TableView::setThumbnailSize(const ThumbnailSize& size)
 ThumbnailSize TableView::getThumbnailSize() const
 {
     return d->thumbnailSize;
-}
-
-QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
-{
-    const QModelIndexList selectedIndexes = s->tableViewSelectionModel->selectedRows();
-    QList<qlonglong> selectedImageIds     = s->tableViewModel->imageIds(selectedIndexes);
-    const QModelIndex currentIndex        = s->tableViewSelectionModel->currentIndex();
-    qlonglong currentId                   = s->tableViewModel->imageId(currentIndex);
-
-    if (currentId >= 0)
-    {
-        if (selectedImageIds.first()!=currentId)
-        {
-            selectedImageIds.removeOne(currentId);
-            selectedImageIds.prepend(currentId);
-        }
-    }
-
-    return selectedImageIds;
 }
 
 void TableView::slotInsertSelectedToExistingQueue(const int queueId)
@@ -588,11 +555,6 @@ QList<QUrl> TableView::allUrls() const
     }
 
     return resultList;
-}
-
-QList<QUrl> TableView::selectedUrls() const
-{
-    return s->tableViewModel->selectedUrls();
 }
 
 int TableView::numberOfSelectedItems() const
@@ -804,4 +766,89 @@ void TableView::slotSetActive(const bool isActive)
     }
 }
 
+ImageInfoList TableView::selectedImageInfos() const
+{
+    return resolveGrouping(s->tableViewSelectionModel->selectedRows());
+}
+
+QModelIndexList TableView::selectedIndexesCurrentFirst() const
+{
+    QModelIndexList indexes = s->tableViewSelectionModel->selectedRows();
+    const QModelIndex current = s->tableViewSelectionModel->currentIndex();
+
+    if (!indexes.isEmpty())
+    {
+        if (indexes.first() != current)
+        {
+            indexes.removeOne(current);
+            indexes.prepend(current);
+        }
+    }
+
+    return indexes;
+}
+
+ImageInfoList TableView::selectedImageInfosCurrentFirst() const
+{
+    return resolveGrouping(selectedIndexesCurrentFirst());
+}
+
+QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
+{
+    return resolveGrouping(selectedIndexesCurrentFirst()).toImageIdList();
+}
+
+QList<QUrl> TableView::selectedUrls() const
+{
+    return resolveGrouping(s->tableViewSelectionModel->selectedRows()).toImageUrlList();
+}
+
+ImageInfoList TableView::resolveGrouping(const QList<QModelIndex> indexes) const
+{
+    ImageInfoList infos;
+
+    foreach(const QModelIndex& index, indexes)
+    {
+        ImageInfo info = s->tableViewModel->imageInfo(index);
+
+        infos << info;
+
+        if (info.hasGroupedImages()
+            && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped
+                || (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems
+                    && !s->treeView->isExpanded(index))))
+        {
+            infos << info.groupedImages();
+        }
+    }
+
+    return infos;
+}
+
+void TableView::rename()
+{
+    QList<QUrl>  urls = selectedUrls();
+    NewNamesList newNamesList;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;
+
+    QPointer<AdvancedRenameDialog> dlg = new AdvancedRenameDialog(this);
+    dlg->slotAddImages(urls);
+
+    if (dlg->exec() == QDialog::Accepted)
+    {
+        newNamesList = dlg->newNames();
+
+        slotAwayFromSelection();
+    }
+
+    delete dlg;
+
+    if (!newNamesList.isEmpty())
+    {
+        QPointer<AdvancedRenameProcessDialog> dlg = new AdvancedRenameProcessDialog(newNamesList);
+        dlg->exec();
+        delete dlg;
+    }
+}
 } // namespace Digikam

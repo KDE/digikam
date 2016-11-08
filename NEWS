@@ -7,4 +7,5 @@ NEW FEATURES:
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 366624 - digiKam defaults to fullscreen with no menu and status bar.
-002 ==> 
+002 ==> 372027 - Adjust grouping behavior [patch].
+003 ==> 

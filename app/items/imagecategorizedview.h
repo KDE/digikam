@@ -76,9 +76,9 @@ public:
     ImageInfo              currentInfo()           const;
     QUrl                   currentUrl()            const;
 
-    QList<ImageInfo>       selectedImageInfos()             const;
-    QList<ImageInfo>       selectedImageInfosCurrentFirst() const;
-    QList<QUrl>             selectedUrls()                   const;
+    ImageInfoList          selectedImageInfos()             const;
+    ImageInfoList          selectedImageInfosCurrentFirst() const;
+    QList<QUrl>            selectedUrls()                   const;
 
     QList<ImageInfo>       imageInfos()                     const;
     QList<QUrl>             urls()                           const;
@@ -204,6 +204,9 @@ protected:
     virtual void activated(const ImageInfo& info, Qt::KeyboardModifiers modifiers);
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
+
+    // Converts indexes to imageInfos and adds group members when appropriate
+    ImageInfoList resolveGrouping(const QModelIndexList indexes) const;
 
 private Q_SLOTS:
 

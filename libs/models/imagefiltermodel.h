@@ -150,6 +150,7 @@ public:
     GroupImageFilterSettings   groupImageFilterSettings() const;
     ImageSortSettings          imageSortSettings() const;
 
+    // group is identified by the id of its group leader
     bool isGroupOpen(qlonglong group) const;
     bool isAllGroupsOpen() const;
 

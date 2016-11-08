@@ -296,32 +296,26 @@ QUrl ImageCategorizedView::currentUrl() const
     return currentInfo().fileUrl();
 }
 
-QList<ImageInfo> ImageCategorizedView::selectedImageInfos() const
+ImageInfoList ImageCategorizedView::selectedImageInfos() const
 {
-    return d->filterModel->imageInfos(selectedIndexes());
+    return resolveGrouping(selectedIndexes());
 }
 
-QList<ImageInfo> ImageCategorizedView::selectedImageInfosCurrentFirst() const
+ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
 {
-    QList<QModelIndex> indexes = selectedIndexes();
-    QModelIndex        current = currentIndex();
-    QList<ImageInfo>   infos;
+    QModelIndexList indexes = selectedIndexes();
+    const QModelIndex current  = currentIndex();
 
-    foreach(const QModelIndex& index, indexes)
+    if (!indexes.isEmpty())
     {
-        ImageInfo info = d->filterModel->imageInfo(index);
-
-        if (index == current)
+        if (indexes.first() != current)
         {
-            infos.prepend(info);
-        }
-        else
-        {
-            infos.append(info);
+            indexes.removeOne(current);
+            indexes.prepend(current);
         }
     }
 
-    return infos;
+    return resolveGrouping(indexes);
 }
 
 QList<ImageInfo> ImageCategorizedView::imageInfos() const
@@ -331,7 +325,7 @@ QList<ImageInfo> ImageCategorizedView::imageInfos() const
 
 QList<QUrl> ImageCategorizedView::urls() const
 {
-    QList<ImageInfo> infos = imageInfos();
+    ImageInfoList infos = imageInfos();
     QList<QUrl>       urls;
 
     foreach(const ImageInfo& info, infos)
@@ -344,7 +338,7 @@ QList<QUrl> ImageCategorizedView::urls() const
 
 QList<QUrl> ImageCategorizedView::selectedUrls() const
 {
-    QList<ImageInfo> infos = selectedImageInfos();
+    ImageInfoList infos = selectedImageInfos();
     QList<QUrl>       urls;
 
     foreach(const ImageInfo& info, infos)
@@ -722,6 +716,23 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const Image
 {
     // implemented in subclass
 }
+
+ImageInfoList ImageCategorizedView::resolveGrouping(const QModelIndexList indexes) const
+{
+    ImageInfoList infos;
+
+    foreach(const ImageInfo& info, d->filterModel->imageInfos(indexes))
+    {
+        infos << info;
+
+        if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
+        {
+            infos << info.groupedImages();
+        }
+    }
+    return infos;
+}
+
 
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
 {
