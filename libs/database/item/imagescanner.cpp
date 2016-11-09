@@ -390,6 +390,9 @@ bool ImageScanner::scanFromIdenticalFile()
 void ImageScanner::commitCopyImageAttributes()
 {
     CoreDbAccess().db()->copyImageAttributes(d->commit.copyImageAttributesId, d->scanInfo.id);
+    // Remove grouping for copied or identical images.
+    CoreDbAccess().db()->removeAllImageRelationsFrom(d->scanInfo.id, DatabaseRelation::Grouped);
+    CoreDbAccess().db()->removeAllImageRelationsTo(d->scanInfo.id, DatabaseRelation::Grouped);
 }
 
 bool ImageScanner::copyFromSource(qlonglong srcId)

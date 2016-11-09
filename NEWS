@@ -10,4 +10,6 @@ BUGFIXES FROM BUGZILLA:
 002 ==> 372027 - Adjust grouping behavior [patch].
 003 ==> 372232 - Strange window switching between main digikam window and importing window.
 004 ==> 294579 - GROUP : grouped pictures are not processed together except the first one (Renaming, Tags, Metadata, Labels, etc.).
-005 ==> 
+005 ==> 307332 - GROUP : problem about grouped items at copy operation.
+006 ==> 368762 - Only Jpg files are visible if importing them into a Subfolder of a Grouped folder [patch].
+007 ==> 
