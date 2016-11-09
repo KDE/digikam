@@ -9,4 +9,5 @@ BUGFIXES FROM BUGZILLA:
 001 ==> 366624 - digiKam defaults to fullscreen with no menu and status bar.
 002 ==> 372027 - Adjust grouping behavior [patch].
 003 ==> 372232 - Strange window switching between main digikam window and importing window.
-004 ==> 
+004 ==> 294579 - GROUP : grouped pictures are not processed together except the first one (Renaming, Tags, Metadata, Labels, etc.).
+005 ==> 
