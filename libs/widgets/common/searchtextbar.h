@@ -64,13 +64,10 @@ public:
 bool DIGIKAM_EXPORT operator==(const SearchTextSettings& a, const SearchTextSettings& b);
 
 /**
- * A text input for searching entries with visual feedback. Can be used on
- * QAbstractItemModels.
- *
- * @todo the model code could also be placed in a subclass of KCompletion...
+ * A text input for searching entries with visual feedback.
+ * Can be used on QAbstractItemModels.
  *
  * @author Gilles Caulier
- * @author jwienke
  */
 class DIGIKAM_EXPORT SearchTextBar : public QLineEdit, public StateSavingObject
 {
