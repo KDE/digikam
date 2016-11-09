@@ -119,16 +119,16 @@ namespace Digikam
 
 ImportUI* ImportUI::m_instance = 0;
 
-ImportUI::ImportUI(QWidget* const parent, const QString& cameraTitle,
-                   const QString& model, const QString& port,
-                   const QString& path, int startIndex)
-    : DXmlGuiWindow(parent),
+ImportUI::ImportUI(const QString& cameraTitle, const QString& model,
+                   const QString& port, const QString& path, int startIndex)
+    : DXmlGuiWindow(0),
       d(new Private)
 {
     setConfigGroupName(QLatin1String("Camera Settings"));
 
     setXMLFile(QLatin1String("importui.rc"));
     setFullScreenOptions(FS_IMPORTUI);
+    setWindowFlags(Qt::Window);
 
     m_instance = this;
 

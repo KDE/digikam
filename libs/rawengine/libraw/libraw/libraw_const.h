@@ -4,16 +4,13 @@
  * Created: Sat Mar  8 , 2008
  * LibRaw error codes
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
 
  */
 
@@ -57,14 +54,6 @@ LIBRAW_WBI_StudioTungsten=24,
 LIBRAW_WBI_Sunset=64,
 LIBRAW_WBI_Other=255
 };
-
-enum LibRaw_colormatrix_type
-  {
-    LIBRAW_CMATRIX_NONE=0,
-    LIBRAW_CMATRIX_DNG=1,
-    LIBRAW_CMATRIX_DIGBACK=2,
-    LIBRAW_CMATRIX_OTHER=4
-  };
 
 enum LibRaw_dng_processing
 {
@@ -147,13 +136,15 @@ enum LibRaw_processing_options
     LIBRAW_PROCESSING_SONYARW2_ALLFLAGS = LIBRAW_PROCESSING_SONYARW2_BASEONLY + LIBRAW_PROCESSING_SONYARW2_DELTAONLY + LIBRAW_PROCESSING_SONYARW2_DELTAZEROBASE + LIBRAW_PROCESSING_SONYARW2_DELTATOVALUE,
     LIBRAW_PROCESSING_DP2Q_INTERPOLATERG=1<<4,
     LIBRAW_PROCESSING_DP2Q_INTERPOLATEAF=1<<5,
-    LIBRAW_PROCESSING_PENTAXK32_ALLFRAMES=1<<6,
-	LIBRAW_PROCESSING_CONVERTFLOAT_TO_INT=1<<7
+    LIBRAW_PROCESSING_PENTAX_PS_ALLFRAMES=1<<6,
+    LIBRAW_PROCESSING_CONVERTFLOAT_TO_INT=1<<7,
+    LIBRAW_PROCESSING_SRAW_NO_RGB=1<<8,
+    LIBRAW_PROCESSING_SRAW_NO_INTERPOLATE=1<<9,
+    LIBRAW_PROCESSING_FORCE_FOVEON_X3F=1<<10
   };
 
 enum LibRaw_decoder_flags
 {
-    LIBRAW_DECODER_USEBAYER2 = 1<<3,
     LIBRAW_DECODER_HASCURVE = 1<<4,
     LIBRAW_DECODER_SONYARW2 = 1<<5,
     LIBRAW_DECODER_TRYRAWSPEED = 1<<6,
@@ -207,20 +198,6 @@ enum LibRaw_exceptions
     LIBRAW_EXCEPTION_DECODE_JPEG2000=9
 };
 
-#if 0
-enum LibRaw_colorstate
-{
-    LIBRAW_COLORSTATE_UNKNOWN   =0,
-    LIBRAW_COLORSTATE_INIT      =1,
-    LIBRAW_COLORSTATE_CONST     =2,
-    LIBRAW_COLORSTATE_LOADED    =3,
-    LIBRAW_COLORSTATE_CALCULATED=4,
-    LIBRAW_COLORSTATE_RESERVED1 =5,
-    LIBRAW_COLORSTATE_RESERVED2 =6,
-    LIBRAW_COLORSTATE_RESERVED3 =7
-};
-#endif
-
 enum LibRaw_progress
 {
     LIBRAW_PROGRESS_START               = 0,
@@ -228,7 +205,7 @@ enum LibRaw_progress
     LIBRAW_PROGRESS_IDENTIFY            = 1<<1,
     LIBRAW_PROGRESS_SIZE_ADJUST         = 1<<2,
     LIBRAW_PROGRESS_LOAD_RAW            = 1<<3,
-	LIBRAW_PROGRESS_RAW2_IMAGE			= 1<<4,
+    LIBRAW_PROGRESS_RAW2_IMAGE		= 1<<4,
     LIBRAW_PROGRESS_REMOVE_ZEROES       = 1<<5,
     LIBRAW_PROGRESS_BAD_PIXELS          = 1<<6,
     LIBRAW_PROGRESS_DARK_FRAME          = 1<<7,
@@ -256,7 +233,8 @@ enum LibRaw_progress
 
     LIBRAW_PROGRESS_THUMB_LOAD          = 1<<28,
     LIBRAW_PROGRESS_TRESERVED1          = 1<<29,
-    LIBRAW_PROGRESS_TRESERVED2          = 1<<30
+    LIBRAW_PROGRESS_TRESERVED2          = 1<<30,
+    LIBRAW_PROGRESS_TRESERVED3          = 1<<31
 };
 #define LIBRAW_PROGRESS_THUMB_MASK 0x0fffffff
 
@@ -270,7 +248,7 @@ enum LibRaw_errors
     LIBRAW_NO_THUMBNAIL=-5,
     LIBRAW_UNSUPPORTED_THUMBNAIL=-6,
     LIBRAW_INPUT_CLOSED=-7,
-	LIBRAW_NOT_IMPLEMENTED=-8,
+    LIBRAW_NOT_IMPLEMENTED=-8,
     LIBRAW_UNSUFFICIENT_MEMORY=-100007,
     LIBRAW_DATA_ERROR=-100008,
     LIBRAW_IO_ERROR=-100009,

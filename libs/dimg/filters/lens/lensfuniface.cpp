@@ -4,7 +4,7 @@
  * Description : a tool to fix automatically camera lens aberrations
  *
  * Copyright (C) 2008      by Adrian Schroeter <adrian at suse dot de>
- * Copyright (C) 2008-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -63,22 +63,30 @@ public:
 LensFunIface::LensFunIface()
     : d(new Private)
 {
-    d->lfDb      = lf_db_new();
+    d->lfDb          = lf_db_new();
 
-#ifdef Q_OS_WIN
     QString lensPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                               QLatin1String("lensfun"),
                                               QStandardPaths::LocateDirectory);
 
+    qCDebug(DIGIKAM_DIMG_LOG) << "Root lens database dir: " << lensPath;
+
+    // For older Lensfun versions.
     QDir lensDir(lensPath, QLatin1String("*.xml"));
+
+    if (lensDir.entryList().isEmpty())
+    {
+        // More Lensfun recent versions use a sub-directory to host XML files.
+        lensDir = QDir(lensPath + QLatin1String("/version_1"), QLatin1String("*.xml"));
+    }
 
     foreach(const QString& lens, lensDir.entryList())
     {
+        qCDebug(DIGIKAM_DIMG_LOG) << "Load lens database file: " << lens;
         d->lfDb->Load(QFile::encodeName(lensDir.absoluteFilePath(lens)).constData());
     }
-#else
+
     d->lfDb->Load();
-#endif
 
     d->lfCameras = d->lfDb->GetCameras();
 }

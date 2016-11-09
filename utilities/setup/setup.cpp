@@ -172,9 +172,9 @@ Setup::Setup(QWidget* const parent)
     d->page_collections->setIcon(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
     d->albumViewPage  = new SetupAlbumView();
-    d->page_albumView = addPage(d->albumViewPage, i18n("Album View"));
-    d->page_albumView->setHeader(i18n("<qt>Album View Settings<br/>"
-                                      "<i>Customize the look of the albums list</i></qt>"));
+    d->page_albumView = addPage(d->albumViewPage, i18n("Views"));
+    d->page_albumView->setHeader(i18n("<qt>Application Views Settings<br/>"
+                                      "<i>Customize the look of the views</i></qt>"));
     d->page_albumView->setIcon(QIcon::fromTheme(QLatin1String("view-list-icons")));
 
     d->tooltipPage  = new SetupToolTip();

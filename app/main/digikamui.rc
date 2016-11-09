@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="514" name="digikam" translationDomain="digikam" >
+<gui version="515" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -28,7 +28,6 @@
      <Action name="album_propsEdit" />
      <Action name="album_rename" />
      <Action name="album_openinfilemanager" />
-     <Action name="album_openinterminal" />
      <Action name="album_remove" />
      <Action name="album_delete" />
    <Separator/>

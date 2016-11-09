@@ -105,33 +105,6 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
 
     QList<ImageInfo> deleteInfos = infos;
 
-    foreach(const ImageInfo& info, infos)
-    {
-        if (info.hasGroupedImages())
-        {
-            QList<ImageInfo> groupedInfos;
-            bool infosGrouped = true;
-
-            foreach(const ImageInfo& group, info.groupedImages())
-            {
-                if (infos.contains(group))
-                {
-                    infosGrouped = false;
-                    break;
-                }
-                else
-                {
-                    groupedInfos << group;
-                }
-            }
-
-            if (infosGrouped)
-            {
-                deleteInfos << groupedInfos;
-            }
-        }
-    }
-
     QList<QUrl> urlList;
 
     foreach(const ImageInfo& info, deleteInfos)

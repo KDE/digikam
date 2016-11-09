@@ -7,17 +7,13 @@
  *
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
-
 
 
  */
@@ -47,6 +43,13 @@ it under the terms of the one of three licenses as you choose:
 #include <windows.h>
 #else
 #define O_BINARY 0
+#endif
+
+#ifdef USE_DNGSDK
+#include "dng_host.h"
+#include "dng_negative.h"
+#include "dng_simple_image.h"
+#include "dng_info.h"
 #endif
 
 
@@ -114,6 +117,8 @@ void usage(const char *prog)
 "-agreen <g> equilibrate green\n"
 #endif
 "-aexpo <e p> exposure correction\n"
+"-apentax4shot enables merge of 4-shot pentax files\n"
+"-apentax4shotorder 3102 sets pentax 4-shot alignment order\n"
 // WF
 "-dbnd <r g b g> debanding\n"
 #ifndef WIN32
@@ -124,7 +129,11 @@ void usage(const char *prog)
 "-disinterp Do not run interpolation step\n"
 "-dsrawrgb1 Disable YCbCr to RGB conversion for sRAW (Cb/Cr interpolation enabled)\n"
 "-dsrawrgb2 Disable YCbCr to RGB conversion for sRAW (Cb/Cr interpolation disabled)\n"
-"-disadcf  Do not use dcraw Foveon code either if compiled with demosaic-pack-GPL2\n"
+"-disadcf  Do not use dcraw Foveon code even if compiled with demosaic-pack-GPL2\n"
+#ifdef USE_DNGSDK
+"-dngsdk   Use Adobe DNG SDK for DNG decode\n"
+"-dngflags N set DNG decoding options to value N\n"
+#endif
 );
     exit(1);
 }
@@ -188,6 +197,9 @@ int main(int argc, char *argv[])
     int i,arg,c,ret;
     char opm,opt,*cp,*sp;
     int use_bigfile=0, use_timing=0,use_mem=0;
+#ifdef USE_DNGSDK
+    dng_host *dnghost = NULL;
+#endif
 #ifndef WIN32
     int msize = 0,use_mmap=0;
     
@@ -297,7 +309,15 @@ int main(int argc, char *argv[])
                     OUT.exp_correc = 1;
                     OUT.exp_shift = (float)atof(argv[arg++]);
                     OUT.exp_preser = (float)atof(argv[arg++]);
-                  }	
+                  }
+	        else if(!strcmp(optstr,"-apentax4shot"))
+		 {
+		    OUT.raw_processing_options |= LIBRAW_PROCESSING_PENTAX_PS_ALLFRAMES;
+		 }
+	        else if(!strcmp(optstr,"-apentax4shotorder"))
+		 {
+		    strncpy(OUT.p4shot_order,argv[arg++],5);
+		 }
                 else
 #ifdef LIBRAW_DEMOSAIC_PACK_GPL3
                   if(!strcmp(optstr,"-acae")) 
@@ -343,21 +363,38 @@ int main(int argc, char *argv[])
                 else if(!strcmp(optstr,"-disars"))
                   OUT.use_rawspeed=0;
                 else if(!strcmp(optstr,"-disadcf"))
-                  OUT.force_foveon_x3f=1;
+                  OUT.raw_processing_options |=LIBRAW_PROCESSING_FORCE_FOVEON_X3F;
                 else if(!strcmp(optstr,"-disinterp"))
                   OUT.no_interpolation=1;
                 else if(!strcmp(optstr,"-dcbe"))
                   OUT.dcb_enhance_fl = 1;
                 else if(!strcmp(optstr,"-dsrawrgb1"))
-                  OUT.sraw_ycc = 1;
+		{
+                  OUT.raw_processing_options |= LIBRAW_PROCESSING_SRAW_NO_RGB;
+                  OUT.raw_processing_options &= ~LIBRAW_PROCESSING_SRAW_NO_INTERPOLATE;
+		}
                 else if(!strcmp(optstr,"-dsrawrgb2"))
-                  OUT.sraw_ycc = 2;
+		{
+                  OUT.raw_processing_options &= ~LIBRAW_PROCESSING_SRAW_NO_RGB;
+                  OUT.raw_processing_options |= LIBRAW_PROCESSING_SRAW_NO_INTERPOLATE;
+		}
                 else if(!strcmp(optstr,"-dbnd"))
                   {
                     for(c=0; c<4; c++)
                       OUT.wf_deband_treshold[c] = (float)atof(argv[arg++]);
                     OUT.wf_debanding = 1;
                   }
+#ifdef USE_DNGSDK
+                else if(!strcmp(optstr,"-dngsdk"))
+                  {
+			dnghost = new dng_host;
+                        RawProcessor.set_dng_host(dnghost);
+                  }
+                else if(!strcmp(optstr,"-dngflags"))
+                  {
+			OUT.use_dngsdk = atoi(argv[arg++]);
+                  }
+#endif
                 else
                   fprintf (stderr,"Unknown option \"%s\".\n",argv[arg-1]);
                 break;
@@ -540,5 +577,9 @@ int main(int argc, char *argv[])
             
       RawProcessor.recycle(); // just for show this call
     }
+#ifdef USE_DNGSDK
+   if(dnghost)
+     delete dnghost;
+#endif
   return 0;
 }

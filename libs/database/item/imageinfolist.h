@@ -55,7 +55,8 @@ public:
     {
     }
 
-    QList<qlonglong> toImageIdList() const;
+    QList<qlonglong> toImageIdList()  const;
+    QList<QUrl>      toImageUrlList() const;
 
     void loadGroupImageIds() const;
     void loadTagIds() const;

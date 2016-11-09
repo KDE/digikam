@@ -35,7 +35,6 @@
 #include "digikam_export.h"
 
 class QUrl;
-class KJob;
 
 namespace Digikam
 {

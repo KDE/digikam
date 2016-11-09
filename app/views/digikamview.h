@@ -147,7 +147,6 @@ public Q_SLOTS:
     void slotRenameAlbum();
     void slotAlbumPropsEdit();
     void slotAlbumOpenInFileManager();
-    void slotAlbumOpenInTerminal();
     void slotAlbumHistoryBack(int steps=1);
     void slotAlbumHistoryForward(int steps=1);
     void slotAlbumWriteMetadata();

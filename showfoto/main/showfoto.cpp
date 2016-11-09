@@ -112,7 +112,7 @@ ShowFoto::ShowFoto(const QList<QUrl>& urlList)
     : Digikam::EditorWindow(QLatin1String("Showfoto")),
       d(new Private)
 {
-    setXMLFile(QLatin1String("showfotoui.rc"));
+    setXMLFile(QLatin1String("showfotoui5.rc"));
 
     m_nonDestructive = false;
 

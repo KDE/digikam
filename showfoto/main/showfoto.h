@@ -37,8 +37,6 @@
 #include "editorwindow.h"
 #include "showfotoiteminfo.h"
 
-class KJob;
-
 namespace ShowFoto
 {
 

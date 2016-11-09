@@ -7,7 +7,7 @@
 
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
@@ -15,8 +15,6 @@ it under the terms of the one of three licenses as you choose:
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
 
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
  */
 
 #include <math.h>
@@ -343,6 +341,43 @@ DllDef int libraw_get_color_maximum(libraw_data_t *lr)
         if(!lr) return EINVAL;
         return lr->color.maximum;
     }
+
+DllDef void libraw_set_ca_correction(libraw_data_t *lr,int ca_correc, float ca_red, float ca_blue)
+	{
+		if(!lr) return;
+		LibRaw *ip = (LibRaw*) lr->parent_class;
+		ip->imgdata.params.ca_correc = ca_correc;
+		ip->imgdata.params.cared = ca_red;
+		ip->imgdata.params.cablue = ca_blue;
+	}
+
+DllDef void libraw_set_cfalinenoise(libraw_data_t *lr,int cfaline, float linenoise)
+	{
+		if(!lr) return;
+		LibRaw *ip = (LibRaw*) lr->parent_class;
+		ip->imgdata.params.cfaline = cfaline;
+		ip->imgdata.params.linenoise = linenoise;
+	}
+
+DllDef void libraw_set_wf_debanding(libraw_data_t *lr, int wf_debanding, float wfd0, float wfd1, float wfd2, float wfd3)
+	{
+		if(!lr) return;
+		LibRaw *ip = (LibRaw*) lr->parent_class;
+		ip->imgdata.params.wf_debanding = wf_debanding;
+		ip->imgdata.params.wf_deband_treshold[0] = wfd0;
+		ip->imgdata.params.wf_deband_treshold[0] = wfd1;
+		ip->imgdata.params.wf_deband_treshold[0] = wfd2;
+		ip->imgdata.params.wf_deband_treshold[0] = wfd3;
+	}
+
+DllDef void libraw_set_interpolation_passes(libraw_data_t *lr,int passes)
+	{
+		if(!lr) return;
+		LibRaw *ip = (LibRaw*) lr->parent_class;
+		ip->imgdata.params.med_passes = passes;
+		ip->imgdata.params.es_med_passes = passes;
+		ip->imgdata.params.dcb_iterations = passes;
+	}
 
 #ifdef __cplusplus
 }

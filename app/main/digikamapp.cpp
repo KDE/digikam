@@ -849,12 +849,6 @@ void DigikamApp::setupActions()
 
     // -----------------------------------------------------------
 
-    d->openInTerminalAction = new QAction(QIcon::fromTheme(QLatin1String("utilities-terminal")), i18n("Open in Terminal"), this);
-    connect(d->openInTerminalAction, SIGNAL(triggered()), d->view, SLOT(slotAlbumOpenInTerminal()));
-    ac->addAction(QLatin1String("album_openinterminal"), d->openInTerminalAction);
-
-    // -----------------------------------------------------------
-
     d->openTagMngrAction = new QAction(QIcon::fromTheme(QLatin1String("tag")), i18n("Tag Manager"), this);
     connect(d->openTagMngrAction, SIGNAL(triggered()), d->view, SLOT(slotOpenTagsManager()));
     ac->addAction(QLatin1String("open_tag_mngr"), d->openTagMngrAction);
@@ -1279,7 +1273,7 @@ void DigikamApp::setupActions()
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
     d->presentationAction = new QAction(i18n("Presentation..."), this);
-    d->presentationAction->setIcon(QIcon::fromTheme(QString::fromLatin1("presentation_section")));
+    d->presentationAction->setIcon(QIcon::fromTheme(QString::fromLatin1("view-presentation")));
     connect(d->presentationAction, SIGNAL(triggered()), d->view, SLOT(slotPresentation()));
     ac->addAction(QLatin1String("presentation"), d->presentationAction);
     ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
@@ -1404,7 +1398,6 @@ void DigikamApp::initGui()
     d->addImagesAction->setEnabled(false);
     d->propsEditAction->setEnabled(false);
     d->openInFileManagerAction->setEnabled(false);
-    d->openInTerminalAction->setEnabled(false);
 
     d->imageViewAction->setEnabled(false);
     d->imagePreviewAction->setEnabled(false);
@@ -1497,7 +1490,6 @@ void DigikamApp::slotAlbumSelected(Album* album)
             d->addImagesAction->setEnabled(false);
             d->propsEditAction->setEnabled(false);
             d->openInFileManagerAction->setEnabled(false);
-            d->openInTerminalAction->setEnabled(false);
             d->newAction->setEnabled(false);
             d->addFoldersAction->setEnabled(false);
             d->writeAlbumMetadataAction->setEnabled(true);
@@ -1527,7 +1519,6 @@ void DigikamApp::slotAlbumSelected(Album* album)
             d->addImagesAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->propsEditAction->setEnabled(isNormalAlbum);
             d->openInFileManagerAction->setEnabled(isNormalAlbum || isAlbumRoot);
-            d->openInTerminalAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->newAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->addFoldersAction->setEnabled(isNormalAlbum || isAlbumRoot);
             d->writeAlbumMetadataAction->setEnabled(isNormalAlbum || isAlbumRoot);
@@ -1544,7 +1535,6 @@ void DigikamApp::slotAlbumSelected(Album* album)
         d->addImagesAction->setEnabled(false);
         d->propsEditAction->setEnabled(false);
         d->openInFileManagerAction->setEnabled(false);
-        d->openInTerminalAction->setEnabled(false);
         d->newAction->setEnabled(false);
         d->addFoldersAction->setEnabled(false);
         d->writeAlbumMetadataAction->setEnabled(false);
@@ -1779,7 +1769,7 @@ void DigikamApp::slotOpenCameraUiFromPath(const QString& path)
     }
 
     // the ImportUI will delete itself when it has finished
-    ImportUI* const cgui = new ImportUI(this, i18n("Images found in %1", path),
+    ImportUI* const cgui = new ImportUI(i18n("Images found in %1", path),
                                         QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
     cgui->show();
 
@@ -1807,7 +1797,7 @@ void DigikamApp::slotOpenManualCamera(QAction* action)
         else
         {
             // the ImportUI will delete itself when it has finished
-            ImportUI* const cgui = new ImportUI(this, ctype->title(), ctype->model(),
+            ImportUI* const cgui = new ImportUI(ctype->title(), ctype->model(),
                                                 ctype->port(), ctype->path(), ctype->startingNumber());
 
             ctype->setCurrentImportUI(cgui);
@@ -1905,7 +1895,7 @@ void DigikamApp::openSolidCamera(const QString& udi, const QString& cameraLabel)
                                          << " camera is: " << model << " at " << port;
 
             // the ImportUI will delete itself when it has finished
-            ImportUI* const cgui = new ImportUI(this, cameraLabel, model, port, QLatin1String("/"), 1);
+            ImportUI* const cgui = new ImportUI(cameraLabel, model, port, QLatin1String("/"), 1);
             d->cameraUIMap[udi]  = cgui;
 
             cgui->show();
@@ -1996,7 +1986,7 @@ void DigikamApp::openSolidUsmDevice(const QString& udi, const QString& givenLabe
         }
 
         // the ImportUI will delete itself when it has finished
-        ImportUI* const cgui = new ImportUI(this, i18n("Images on %1", mediaLabel),
+        ImportUI* const cgui = new ImportUI(i18n("Images on %1", mediaLabel),
                                             QLatin1String("directory browse"), QLatin1String("Fixed"), path, 1);
         d->cameraUIMap[udi]  = cgui;
 

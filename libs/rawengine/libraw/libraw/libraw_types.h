@@ -7,16 +7,13 @@
  *
 
 LibRaw is free software; you can redistribute it and/or modify
-it under the terms of the one of three licenses as you choose:
+it under the terms of the one of two licenses as you choose:
 
 1. GNU LESSER GENERAL PUBLIC LICENSE version 2.1
    (See file LICENSE.LGPL provided in LibRaw distribution archive for details).
 
 2. COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0
    (See file LICENSE.CDDL provided in LibRaw distribution archive for details).
-
-3. LibRaw Software License 27032010
-   (See file LICENSE.LibRaw.pdf provided in LibRaw distribution archive for details).
 
  */
 
@@ -204,6 +201,11 @@ typedef struct
 
 typedef struct
 {
+  float        romm_cam[9];
+} libraw_P1_color_t;
+
+typedef struct
+{
   int          CanonColorDataVer;
   int          CanonColorDataSubVer;
   int          SpecularWhiteLevel;
@@ -224,7 +226,7 @@ typedef struct
   short        FocusContinuous;
   short        AFPointsInFocus30D;
   uchar        AFPointsInFocus1D[8];
-  ushort       AFPointsInFocus5D;        /* bytes in reverse */
+  ushort       AFPointsInFocus5D;        /* bytes in reverse*/
 /* AFInfo */
   ushort       AFAreaMode;
   ushort       NumAFPoints;
@@ -232,11 +234,11 @@ typedef struct
   ushort       AFImageWidth;
   ushort       AFImageHeight;
   short        AFAreaWidths[61];        /* cycle to NumAFPoints */
-  short        AFAreaHeights[61];       /* --''-- */
-  short        AFAreaXPositions[61];    /* --''-- */
-  short        AFAreaYPositions[61];    /* --''-- */
+  short        AFAreaHeights[61];       /* --''--               */
+  short        AFAreaXPositions[61];    /* --''--               */
+  short        AFAreaYPositions[61];    /* --''--               */
   short        AFPointsInFocus[4];      /* cycle to floor((NumAFPoints+15)/16) */
-  short        AFPointsSelected[4];     /* --''-- */
+  short        AFPointsSelected[4];     /* --''--               */
   ushort       PrimaryAFPoint;
 /* flash */
   short        FlashMode;
@@ -247,6 +249,18 @@ typedef struct
   short        FlashGuideNumber;
 /* drive */
   short        ContinuousDrive;
+/* sensor */
+  short        SensorWidth;
+  short        SensorHeight;
+  short        SensorLeftBorder;
+  short        SensorTopBorder;
+  short        SensorRightBorder;
+  short        SensorBottomBorder;
+  short        BlackMaskLeftBorder;
+  short        BlackMaskTopBorder;
+  short        BlackMaskRightBorder;
+  short        BlackMaskBottomBorder;
+
 } libraw_canon_makernotes_t;
 
 typedef struct
@@ -262,6 +276,14 @@ typedef struct
   ushort       FocusPixel[2];
   ushort       ImageStabilization[3];
   ushort       FlashMode;
+  ushort       WB_Preset;
+  ushort       ShutterType;
+  ushort       ExrMode;
+  ushort       Macro;
+  unsigned     Rating;
+  ushort       FrameRate;
+  ushort       FrameWidth;
+  ushort       FrameHeight;
 } libraw_fuji_info_t;
 
 typedef struct
@@ -324,6 +346,7 @@ typedef struct
   double       AFPointSelected[5];
   ushort       AFResult;
   unsigned     ImageStabilization;
+  ushort       ColorSpace;
 } libraw_olympus_makernotes_t;
 
 typedef struct
@@ -349,26 +372,30 @@ typedef struct
   unsigned     black;
   unsigned     data_maximum;
   unsigned     maximum;
+  long         linear_max[4];
   float        fmaximum;
   float        fnorm;
   ushort       white[8][8];
   float        cam_mul[4];
   float        pre_mul[4];
   float        cmatrix[3][4];
+  float        ccm[3][4];
   float        rgb_cam[3][4];
   float        cam_xyz[4][3];
   struct ph1_t       phase_one_data;
   float        flash_used;
   float        canon_ev;
   char         model2[64];
+  char         UniqueCameraModel[64];
+  char         LocalizedCameraModel[64];
   void         *profile;
   unsigned     profile_length;
   unsigned     black_stat[8];
   libraw_dng_color_t  dng_color[2];
   float        baseline_exposure;
-  int          digitalBack_color;
   int          WB_Coeffs[256][4];      /* R, G1, B, G2 coeffs */
   float        WBCT_Coeffs[64][5];     /* CCT, than R, G1, B, G2 coeffs */
+  libraw_P1_color_t  P1_color[2];
 } libraw_colordata_t;
 
 typedef struct
@@ -466,17 +493,13 @@ typedef struct
   int   wf_debanding;
   float wf_deband_treshold[4];
 	/* Raw speed */
-    int use_rawspeed;
+  int use_rawspeed;
 	/* DNG SDK */
-	int use_dngsdk;
+  int use_dngsdk;
   /* Disable Auto-scale */
   int no_auto_scale;
   /* Disable intepolation */
   int no_interpolation;
-  /* Disable sRAW YCC to RGB conversion */
-  int sraw_ycc;
-  /* Force use x3f data decoding either if demosaic pack GPL2 enabled */
-  int force_foveon_x3f;
   /*  int x3f_flags; */
   /* Sony ARW2 digging mode */
   /* int sony_arw2_options; */
@@ -484,6 +507,9 @@ typedef struct
   int sony_arw2_posterization_thr;
   /* Nikon Coolscan */
   float coolscan_nef_gamma;
+  char p4shot_order[5];
+  /* Custom camera list */
+  char **custom_camera_strings;
 }libraw_output_params_t;
 
 typedef struct
@@ -557,7 +583,7 @@ typedef struct
 typedef struct
 {
   float        MinFocal, MaxFocal, MaxAp4MinFocal, MaxAp4MaxFocal, EXIF_MaxAp;
-  char         LensMake[128], Lens[128];
+  char         LensMake[128], Lens[128], LensSerial[128], InternalLensSerial[128];
   ushort       FocalLengthIn35mmFormat;
   libraw_nikonlens_t nikon;
   libraw_dnglens_t dng;
@@ -580,7 +606,17 @@ typedef struct
 	short AFPoint;
 	short ExposureMode;
 	short ImageStabilization;
+	char BodySerial[64];
+	char InternalBodySerial[64]; /* this may be PCB or sensor serial, depends on make/model*/
 } libraw_shootinginfo_t;
+
+typedef struct {
+    unsigned fsize;
+    ushort rw, rh;
+    uchar lm, tm, rm, bm, lf, cf, max, flags;
+    char t_make[10], t_model[20];
+    ushort offset;
+} libraw_custom_camera_t;
 
 typedef struct
 {
@@ -600,6 +636,18 @@ typedef struct
   void                *parent_class;
 } libraw_data_t;
 
+
+struct xtrans_params
+{
+	char        *q_table;        /* quantization table */
+	int         q_point[5];      /* quantization points */
+	int         max_bits;
+	int         min_value;
+	int         raw_bits;
+	int         total_values;
+	int         maxDiff;
+	ushort      line_width;
+};
 
 #ifdef __cplusplus
 }
@@ -637,7 +685,5 @@ typedef struct
 #error Unable to figure out byte order.
 #endif
 #endif
-
-
 
 #endif

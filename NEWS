@@ -1,38 +1,12 @@
 *****************************************************************************************************
-digiKam 5.3.0 - Release date: 2016-10-30
+digiKam 5.4.0 - Release date: 2016-12-27
 
 NEW FEATURES:
 
-General: Add support of universal Linux AppImage bundle deployement.
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 368965 - Crash when clicking on Table button in top menu bar [patch].
-002 ==> 366769 - Rename aborts after first rename of many.
-003 ==> 369140 - Tags don't appear at all.
-004 ==> 329060 - digiKam Tabs in Scanning faces dialog need to be fixed.
-005 ==> 369407 - Remove <para><interface> and </para></interface> from tooltip.
-006 ==> 369321 - Translation of digikam + showfoto docbooks missing in digikam-5.2.0 tarball.
-007 ==> 369517 - digiKam from 5.2.0 tarball installs libvkontakte translations even if libvkontakte is disabled.
-008 ==> 369626 - "Subjects" metadata fields cannot be edited once other metadata are filled in and stored.
-009 ==> 369656 - Corrections to Metadata Editor section.
-010 ==> 364258 - 4.x application configuration rc files are ignored
-011 ==> 357944 - wrong encoded collection paths after upgrade from digikam v4.x
-012 ==> 368968 - Geo bookmarks are not migrated from version 4 to version 5
-013 ==> 368794 - digiKam crashes with lossy dng image.
-014 ==> 370190 - Trash is shown twice.
-015 ==> 366019 - digiKam Crashes when Table view button is clicked.
-016 ==> 370331 - Menu dropdown Color / Enhance / Decorate / Effects not working.
-017 ==> 370252 - In picture editor the menus "color", "enhance", "decorate" and "effects" are empty.
-018 ==> 370287 - Crash rotating image taken with Casio camera.
-019 ==> 370298 - Slider behaviour, e.g. in 'local contrast'.
-020 ==> 370427 - Reset To Default Button Causes Duplication of List Items When Configuring Metadata.
-021 ==> 369345 - In tagging apply to all versions fails.
-022 ==> 370631 - Converting ARW to DNG fails.
-023 ==> 370175 - Cannot Import Images (Failed to detect camera with GPhoto2 from Solid information).
-024 ==> 370958 - Cannot save a scanned image.
-025 ==> 370943 - Cannot Select EXIF or IPTC Metadata Subspaces.
-026 ==> 371066 - Crash whenever right-clicking in Albums area under the albums list.
-027 ==> 371072 - Edit Advanced Search does not show selected labels.
-028 ==> 370942 - Advanced Metadata Write Options Ineffective.
-029 ==> 
+001 ==> 366624 - digiKam defaults to fullscreen with no menu and status bar.
+002 ==> 372027 - Adjust grouping behavior [patch].
+003 ==> 372232 - Strange window switching between main digikam window and importing window.
+004 ==> 
