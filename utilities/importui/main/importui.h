@@ -42,7 +42,7 @@
 #include "camiteminfo.h"
 #include "dhistoryview.h"
 #include "dmetadata.h"
-#include "camerahistoryupdater.h"
+//#include "camerahistoryupdater.h"
 #include "downloadsettings.h"
 #include "importiconview.h"
 #include "dxmlguiwindow.h"

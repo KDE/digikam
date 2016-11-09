@@ -119,7 +119,7 @@ public:
         splitter(0),
         camThumbsCtrl(0),
         controller(0),
-        historyUpdater(0),
+        //historyUpdater(0),
         view(0),
         renameCustomizer(0),
         albumCustomizer(0),
@@ -215,7 +215,7 @@ public:
 
     CameraThumbsCtrl*             camThumbsCtrl;
     CameraController*             controller;
-    CameraHistoryUpdater*         historyUpdater;
+    //CameraHistoryUpdater*         historyUpdater;
 
     ImportView*                   view;
 
@@ -241,7 +241,7 @@ public:
     DHistoryView*                 historyView;
     FilterComboBox*               filterComboBox;
 
-    CHUpdateItemMap               map;
+    //CHUpdateItemMap               map;
 
     DNotificationWidget*          errorWidget;
 };

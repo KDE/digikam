@@ -40,7 +40,7 @@ endif()
 set(libimportuibackend_SRCS
     backend/cameracontroller.cpp
     backend/camerathumbsctrl.cpp
-    backend/camerahistoryupdater.cpp
+#   backend/camerahistoryupdater.cpp
     backend/dkcamera.cpp
     backend/gpcamera.cpp
     backend/camiteminfo.cpp

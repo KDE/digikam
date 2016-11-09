@@ -158,13 +158,13 @@ ImportUI::ImportUI(const QString& cameraTitle, const QString& model,
 
     // -------------------------------------------------------------------
 
-    d->historyUpdater = new CameraHistoryUpdater(this);
+    //d->historyUpdater = new CameraHistoryUpdater(this);
 
     //connect (d->historyUpdater, SIGNAL(signalHistoryMap(CHUpdateItemMap)),
     //this, SLOT(slotRefreshIconView(CHUpdateItemMap)));
 
-    connect(d->historyUpdater, SIGNAL(signalBusy(bool)),
-            this, SLOT(slotBusy(bool)));
+    //connect(d->historyUpdater, SIGNAL(signalBusy(bool)),
+    //        this, SLOT(slotBusy(bool)));
 
     // --------------------------------------------------------
 
@@ -950,7 +950,7 @@ void ImportUI::slotCancelButton()
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
                                           i18nc("@info:status", "Canceling current operation, please wait..."));
     d->controller->slotCancel();
-    d->historyUpdater->slotCancel();
+    //d->historyUpdater->slotCancel();
     d->currentlyDeleting.clear();
     refreshFreeSpace();
 }
