@@ -3,6 +3,7 @@ digiKam 5.4.0 - Release date: 2016-12-27
 
 NEW FEATURES:
 
+Searches : improvements of dupplicate searches to introduce a range of similarity of items.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -13,4 +14,5 @@ BUGFIXES FROM BUGZILLA:
 005 ==> 307332 - GROUP : problem about grouped items at copy operation.
 006 ==> 368762 - Only Jpg files are visible if importing them into a Subfolder of a Grouped folder [patch].
 007 ==> 371543 - BQM TimeAdjust tool language is wrong.
-008 ==> 
+008 ==> 369051 - Too low similarity threshold in fuzzy/duplicate search bloats the results with potentially unwished high-similarity results [patch].
+009 ==> 
