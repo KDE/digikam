@@ -97,7 +97,7 @@ public:
      *  All matches with a similarity in a given threshold interval are returned.
      *  The threshold is in the range requiredPercentage..maximumPercentage.
      */
-    QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid,
+    QPair<double,QList<qlonglong>> bestMatchesForImageWithThreshold(qlonglong imageid,
             double requiredPercentage, double maximumPercentage, SketchType type=ScannedSketch);
 
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
@@ -116,15 +116,15 @@ public:
      *  All images are referenced by id from database.
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
-    QMap< qlonglong, QList<qlonglong> > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
+    QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
             double maximumPercentage, HaarProgressObserver* const observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */
-    QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
+    QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
             double maximumPercentage, HaarProgressObserver* const observer = 0);
 
     /** Calls findDuplicates with all images in the given album and tag ids */
-    QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
+    QMap< double,QMap< qlonglong,QList<qlonglong> > > findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
             const QList<int>& tags2Scan,
             double requiredPercentage,
             double maximumPercentage,
@@ -154,7 +154,7 @@ private:
     bool   indexImage(qlonglong imageid);
 
     QList<qlonglong> bestMatches(Haar::SignatureData* const data, int numberOfResults, SketchType type);
-    QList<qlonglong> bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig,
+    QPair<double,QList<qlonglong>> bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig,
             double requiredPercentage, double maximumPercentage, SketchType type);
 
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData* const data, SketchType type);

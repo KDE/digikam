@@ -808,7 +808,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        list = iface.bestMatchesForImageWithThreshold(id, threshold,maxThreshold, sketchType);
+        list = iface.bestMatchesForImageWithThreshold(id, threshold,maxThreshold, sketchType).second;
     }
 
     listFromIdList(receiver, list);

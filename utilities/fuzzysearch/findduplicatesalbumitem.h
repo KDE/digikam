@@ -44,6 +44,15 @@ class FindDuplicatesAlbumItem : public QTreeWidgetItem
 
 public:
 
+    enum Column
+    {
+      REFERENCE_IMAGE = 0,
+      RESULT_COUNT    = 1,
+      AVG_SIMILARITY  = 2
+    };
+
+public:
+
     FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album);
     virtual ~FindDuplicatesAlbumItem();
 

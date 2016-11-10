@@ -75,8 +75,6 @@
 #include "dcolorvalueselector.h"
 #include "dexpanderbox.h"
 
-
-
 namespace Digikam
 {
 
@@ -207,7 +205,8 @@ const QString FuzzySearchView::Private::configSimilarsMaxThresholdEntry(QLatin1S
 FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
                                  SearchModificationHelper* const searchModificationHelper,
                                  QWidget* const parent)
-    : QScrollArea(parent), StateSavingObject(this),
+    : QScrollArea(parent),
+      StateSavingObject(this),
       d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -880,11 +879,11 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
     if (DItemDrag::canDecode(e->mimeData()))
     {
         QList<QUrl>      urls;
-        QList<QUrl>      kioURLs;
+        QList<QUrl>      ioURLs;
         QList<int>       albumIDs;
         QList<qlonglong> imageIDs;
 
-        if (!DItemDrag::decode(e->mimeData(), urls, kioURLs, albumIDs, imageIDs))
+        if (!DItemDrag::decode(e->mimeData(), urls, ioURLs, albumIDs, imageIDs))
         {
             return;
         }
@@ -922,9 +921,12 @@ void FuzzySearchView::slotMaxLevelImageChanged(int newValue)
 void FuzzySearchView::slotLevelImageChanged(int newValue)
 {
     d->maxLevelImage->setMinimum(newValue);
-    if (newValue > d->maxLevelImage->value()){
+
+    if (newValue > d->maxLevelImage->value())
+    {
         d->maxLevelImage->setValue(newValue);
     }
+
     if (d->timerImage)
     {
         d->timerImage->stop();
@@ -939,6 +941,7 @@ void FuzzySearchView::slotLevelImageChanged(int newValue)
         d->timerImage->setSingleShot(true);
         d->timerImage->setInterval(500);
     }
+
     d->timerImage->start();
 }
 

@@ -785,7 +785,11 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
     SearchXml::Relation relation = reader.fieldRelation();
     FieldQueryBuilder fieldQuery(sql, reader, boundValues, hooks, relation);
 
-    if (name == QLatin1String("albumid"))
+    // First catch all noeffect fields. Those are only used for message passing when no Signal-Slot-communication is possible
+    if (name.startsWith(QLatin1String("noeffect_"))){
+        return false;
+    }
+    else if (name == QLatin1String("albumid"))
     {
         if (relation == SearchXml::Equal || relation == SearchXml::Unequal)
         {

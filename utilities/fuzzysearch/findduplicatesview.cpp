@@ -80,7 +80,7 @@ public:
 
     QSpinBox*                    minSimilarity;
     QSpinBox*                    maxSimilarity;
-    
+
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
 
@@ -128,10 +128,10 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->maxSimilarity->setValue(100);
     d->maxSimilarity->setSingleStep(1);
     d->maxSimilarity->setSuffix(QLatin1String("%"));
-    
+
     d->similarityLabel = new QLabel(i18n("Similarity:"));
     d->similarityLabel->setBuddy(d->minSimilarity);
-    
+
     d->similarityIntervalLabel = new QLabel("-");
 
     // ---------------------------------------------------------------
@@ -179,7 +179,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
-    
+
     connect(d->minSimilarity, SIGNAL(valueChanged(int)),this,SLOT(slotMinimumChanged(int)));
 }
 
