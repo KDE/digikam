@@ -98,7 +98,8 @@ private Q_SLOTS:
     void slotTimerSketchDone();
     void slotUndoRedoStateChanged(bool, bool);
 
-    void slotLevelImageChanged();
+    void slotLevelImageChanged(int);
+    void slotMaxLevelImageChanged(int);
     void slotTimerImageDone();
 
 private:

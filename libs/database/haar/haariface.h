@@ -94,11 +94,11 @@ public:
     QList<qlonglong> bestMatchesForSignature(const QString& signature, int numberOfResults=20, SketchType type=ScannedSketch);
 
     /** Searches the database for the best matches for the specified query image.
-     *  All matches with a similarity above a given threshold are returned.
-     *  The threshold is in the range 0..1, with 1 meaning identical signature.
+     *  All matches with a similarity in a given threshold interval are returned.
+     *  The threshold is in the range requiredPercentage..maximumPercentage.
      */
     QList<qlonglong> bestMatchesForImageWithThreshold(qlonglong imageid,
-            double requiredPercentage, SketchType type=ScannedSketch);
+            double requiredPercentage, double maximumPercentage, SketchType type=ScannedSketch);
 
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature.
@@ -117,23 +117,24 @@ public:
      *  The threshold is in the range 0..1, with 1 meaning identical signature.
      */
     QMap< qlonglong, QList<qlonglong> > findDuplicates(const QSet<qlonglong>& images2Scan, double requiredPercentage,
-            HaarProgressObserver* const observer = 0);
+            double maximumPercentage, HaarProgressObserver* const observer = 0);
 
     /** Calls findDuplicates with all images in the given album ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbums(const QList<int>& albums2Scan, double requiredPercentage,
-            HaarProgressObserver* const observer = 0);
+            double maximumPercentage, HaarProgressObserver* const observer = 0);
 
     /** Calls findDuplicates with all images in the given album and tag ids */
     QMap< qlonglong, QList<qlonglong> > findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
             const QList<int>& tags2Scan,
             double requiredPercentage,
+            double maximumPercentage,
             HaarProgressObserver* const observer = 0);
 
     /** Rebuilds the special search albums in the database that contain a list of possible candidates
      *  for duplicate images (one album per group of duplicates)
      */
     void rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
-                                 double requiredPercentage, HaarProgressObserver* const observer = 0);
+                                 double requiredPercentage, double maximumPercentage, HaarProgressObserver* const observer = 0);
 
     /** Retrieve the Haar signature from database using image id.
      *  Return true if item signature exist else false.
@@ -153,8 +154,8 @@ private:
     bool   indexImage(qlonglong imageid);
 
     QList<qlonglong> bestMatches(Haar::SignatureData* const data, int numberOfResults, SketchType type);
-    QList<qlonglong> bestMatchesWithThreshold(Haar::SignatureData* const querySig,
-            double requiredPercentage, SketchType type);
+    QList<qlonglong> bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig,
+            double requiredPercentage, double maximumPercentage, SketchType type);
 
     QMap<qlonglong, double> searchDatabase(Haar::SignatureData* const data, SketchType type);
     double calculateScore(Haar::SignatureData& querySig, Haar::SignatureData& targetSig,

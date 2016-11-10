@@ -150,8 +150,11 @@ public:
     void setSearchId(int id);
     int searchId() const;
 
-    void setThreshold(double t);
-    double threshold() const;
+    void setMinThreshold(double t);
+    double minThreshold() const;
+    
+    void setMaxThreshold(double t);
+    double maxThreshold() const;
 
     void setAlbumsIds(const QList<int>& albumsIds);
     QList<int> albumsIds() const;
@@ -163,7 +166,8 @@ public:
 
     bool       m_duplicates;
     int        m_searchId;
-    double     m_threshold;
+    double     m_minThreshold;
+    double     m_maxThreshold;
     QList<int> m_albumsIds;
     QList<int> m_tagsIds;
 };

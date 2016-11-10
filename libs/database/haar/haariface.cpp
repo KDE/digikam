@@ -424,7 +424,7 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
 }
 
 QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
-                                                             SketchType type)
+                                                             double maximumPercentage, SketchType type)
 {
     if ( !d->useSignatureCache || (d->signatureCache->isEmpty() && d->useSignatureCache) )
     {
@@ -435,14 +435,14 @@ QList<qlonglong> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, 
             return QList<qlonglong>();
         }
 
-        return bestMatchesWithThreshold(&sig, requiredPercentage, type);
+        return bestMatchesWithThreshold(imageid, &sig, requiredPercentage, maximumPercentage, type);
     }
     else
     {
         // reference for easier access
         SignatureCache& signatureCache = *d->signatureCache;
         Haar::SignatureData& sig       = signatureCache[imageid];
-        return bestMatchesWithThreshold(&sig, requiredPercentage, type);
+        return bestMatchesWithThreshold(imageid, &sig, requiredPercentage, maximumPercentage, type);
     }
 }
 
@@ -526,14 +526,19 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int
     return bestMatches.values();
 }
 
-QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* const querySig, double requiredPercentage, SketchType type)
+QList<qlonglong> HaarIface::bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig, double requiredPercentage, double maximumPercentage, SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
     double lowest, highest;
     getBestAndWorstPossibleScore(querySig, type, &lowest, &highest);
-
-    double range         = highest - lowest;
-    double requiredScore = lowest + range * (1.0 - requiredPercentage);
+    // The range between the highest (worst) and lowest (best) score
+    // example: 0.2 and 0.5 -> 0.3
+    double scoreRange      = highest - lowest;
+    // The lower the requiredPercentage is, the higher will the result be.
+    // example: 0.7 -> 0.3
+    double percentageRange = 1.0 - requiredPercentage;
+    // example: 0.2 + (0.3 * 0.3) = 0.2 + 0.09 = 0.29
+    double requiredScore   = lowest + scoreRange * percentageRange;
 
     QMultiMap<double, qlonglong> bestMatches;
     double score, percentage;
@@ -543,11 +548,14 @@ QList<qlonglong> HaarIface::bestMatchesWithThreshold(Haar::SignatureData* const 
     {
         score = it.value();
         id    = it.key();
-
+        // If the score of the picture is at most the required (maximum) score
         if (score <= requiredScore)
         {
-            percentage = 1.0 - (score - lowest) / range;
-            bestMatches.insert(percentage, id);
+            percentage = 1.0 - (score - lowest) / scoreRange;
+            // If the found image is the original one (check by id) or the percentage is below the maximum.
+            if ((id == imageid) || (percentage <= maximumPercentage)){
+                bestMatches.insert(percentage, id);
+            }
         }
     }
 
@@ -747,10 +755,10 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData* const sig, Ske
 }
 
 void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
-                                        double requiredPercentage, HaarProgressObserver* const observer)
+                                        double requiredPercentage, double maximumPercentage, HaarProgressObserver* const observer)
 {
     // Carry out search. This takes long.
-    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbumsAndTags(albums2Scan, tags2Scan, requiredPercentage, observer);
+    QMap< qlonglong, QList<qlonglong> > results = findDuplicatesInAlbumsAndTags(albums2Scan, tags2Scan, requiredPercentage, maximumPercentage, observer);
 
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
@@ -786,6 +794,7 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QList<int>& albums2Scan,
                                                                       double requiredPercentage,
+                                                                      double maximumPercentage,
                                                                       HaarProgressObserver* const observer)
 {
     QSet<qlonglong> idList;
@@ -796,12 +805,13 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbums(const QLis
         idList.unite(CoreDbAccess().db()->getItemIDsInAlbum(albumId).toSet());
     }
 
-    return findDuplicates(idList, requiredPercentage, observer);
+    return findDuplicates(idList, requiredPercentage, maximumPercentage, observer);
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(const QList<int>& albums2Scan,
                                                                              const QList<int>& tags2Scan,
                                                                              double requiredPercentage,
+                                                                             double maximumPercentage,
                                                                              HaarProgressObserver* const observer)
 {
     QSet<qlonglong> idList;
@@ -818,11 +828,12 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicatesInAlbumsAndTags(con
         idList.unite(CoreDbAccess().db()->getItemIDsInTag(albumId).toSet());
     }
 
-    return findDuplicates(idList, requiredPercentage, observer);
+    return findDuplicates(idList, requiredPercentage, maximumPercentage, observer);
 }
 
 QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglong>& images2Scan,
                                                               double requiredPercentage,
+                                                              double maximumPercentage,
                                                               HaarProgressObserver* const observer)
 {
     QMap< qlonglong, QList<qlonglong> > resultsMap;
@@ -849,8 +860,8 @@ QMap< qlonglong, QList<qlonglong> > HaarIface::findDuplicates(const QSet<qlonglo
         if (!resultsCandidates.contains(*it))
         {
             // find images with required similarity
-            bestMatchesList = bestMatchesForImageWithThreshold(*it, requiredPercentage, ScannedSketch);
-
+            bestMatchesList = bestMatchesForImageWithThreshold(*it, requiredPercentage, maximumPercentage, ScannedSketch);
+            
             if (!bestMatchesList.isEmpty())
             {
                 // the list will usually contain one image: the original. Filter out.

@@ -106,6 +106,7 @@ public:
         penSize(0),
         resultsSketch(0),
         levelImage(0),
+        maxLevelImage(0),
         imageWidget(0),
         timerSketch(0),
         timerImage(0),
@@ -136,6 +137,7 @@ public:
     static const QString configPenSketchSaturationEntry;
     static const QString configPenSkethValueEntry;
     static const QString configSimilarsThresholdEntry;
+    static const QString configSimilarsMaxThresholdEntry;
 
     bool                      active;
     bool                      fingerprintsChecked;
@@ -151,6 +153,7 @@ public:
     QSpinBox*                 penSize;
     QSpinBox*                 resultsSketch;
     QSpinBox*                 levelImage;
+    QSpinBox*                 maxLevelImage;
 
     QLabel*                   imageWidget;
 
@@ -197,6 +200,7 @@ const QString FuzzySearchView::Private::configPenSketchHueEntry(QLatin1String("P
 const QString FuzzySearchView::Private::configPenSketchSaturationEntry(QLatin1String("Pen Sketch Saturation"));
 const QString FuzzySearchView::Private::configPenSkethValueEntry(QLatin1String("Pen Sketch Value"));
 const QString FuzzySearchView::Private::configSimilarsThresholdEntry(QLatin1String("Similars Threshold"));
+const QString FuzzySearchView::Private::configSimilarsMaxThresholdEntry(QLatin1String("Similars Maximum Threshold"));
 
 // --------------------------------------------------------
 
@@ -302,6 +306,18 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
                                      "value, as a percentage. "
                                      "This value is used by the algorithm to distinguish two "
                                      "similar images. The default value is 90."));
+    
+    QLabel* const levelIntervalLabel = new QLabel("-");
+    
+    d->maxLevelImage              = new QSpinBox();
+    d->maxLevelImage->setSuffix(QLatin1String("%"));
+    d->maxLevelImage->setRange(90, 100);
+    d->maxLevelImage->setSingleStep(1);
+    d->maxLevelImage->setValue(100);
+    d->maxLevelImage->setWhatsThis(i18n("Select here the approximate maximum similarity threshold "
+                                     "value, as a percentage. "
+                                     "This value is used by the algorithm to restrict "
+                                     "similar images. The default value is 100."));
 
     // ---------------------------------------------------------------
 
@@ -327,14 +343,16 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     QWidget* const mainWidget     = new QWidget();
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(imageBox,       0, 0, 1, -1);
-    mainLayout->addWidget(file,           1, 0, 1, 1);
-    mainLayout->addWidget(d->labelFile,   1, 1, 1, -1);
-    mainLayout->addWidget(folder,         2, 0, 1, 1);
-    mainLayout->addWidget(d->labelFolder, 2, 1, 1, -1);
-    mainLayout->addWidget(resultsLabel,   3, 0, 1, 1);
-    mainLayout->addWidget(d->levelImage,  3, 2, 1, -1);
-    mainLayout->addWidget(saveBox,        4, 0, 1, 3);
+    mainLayout->addWidget(imageBox,               0, 0, 1, -1);
+    mainLayout->addWidget(file,                   1, 0, 1, 1);
+    mainLayout->addWidget(d->labelFile,           1, 1, 1, -1);
+    mainLayout->addWidget(folder,                 2, 0, 1, 1);
+    mainLayout->addWidget(d->labelFolder,         2, 1, 1, -1);
+    mainLayout->addWidget(resultsLabel,           3, 0, 1, 1);
+    mainLayout->addWidget(d->levelImage,          3, 2, 1, 1);
+    mainLayout->addWidget(levelIntervalLabel,     3, 3, 1, 1);
+    mainLayout->addWidget(d->maxLevelImage,       3, 4, 1, -1);
+    mainLayout->addWidget(saveBox,                4, 0, 1, 3);
     mainLayout->setRowStretch(5, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -474,8 +492,11 @@ void FuzzySearchView::setupConnections()
             this, SLOT(slotDirtySketch()));
 
     connect(d->levelImage, SIGNAL(valueChanged(int)),
-            this, SLOT(slotLevelImageChanged()));
+            this, SLOT(slotLevelImageChanged(int)));
 
+    connect(d->maxLevelImage, SIGNAL(valueChanged(int)),
+            this, SLOT(slotMaxLevelImageChanged(int)));
+    
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotClearSketch()));
 
@@ -570,6 +591,7 @@ void FuzzySearchView::doLoadState()
     d->hsSelector->setSaturation(group.readEntry(entryName(d->configPenSketchSaturationEntry), 128));
     d->vSelector->setValue(group.readEntry(entryName(d->configPenSkethValueEntry),             255));
     d->levelImage->setValue(group.readEntry(entryName(d->configSimilarsThresholdEntry),        90));
+    d->maxLevelImage->setValue(group.readEntry(entryName(d->configSimilarsMaxThresholdEntry),  100));
     d->hsSelector->updateContents();
 
     QColor col;
@@ -593,6 +615,7 @@ void FuzzySearchView::doSaveState()
     group.writeEntry(entryName(d->configPenSketchSaturationEntry), d->hsSelector->saturation());
     group.writeEntry(entryName(d->configPenSkethValueEntry),       d->vSelector->value());
     group.writeEntry(entryName(d->configSimilarsThresholdEntry),   d->levelImage->value());
+    group.writeEntry(entryName(d->configSimilarsMaxThresholdEntry),d->maxLevelImage->value());
     d->searchTreeView->saveState();
     group.sync();
 }
@@ -695,6 +718,7 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
     QStringRef type             = reader.attributes().value(QLatin1String("type"));
     QStringRef numResultsString = reader.attributes().value(QLatin1String("numberofresults"));
     QStringRef thresholdString  = reader.attributes().value(QLatin1String("threshold"));
+    QStringRef maxThresholdString  = reader.attributes().value(QLatin1String("maxthreshold"));
     QStringRef sketchTypeString = reader.attributes().value(QLatin1String("sketchtype"));
 
     if (type == QLatin1String("imageid"))
@@ -876,8 +900,31 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
     }
 }
 
-void FuzzySearchView::slotLevelImageChanged()
+void FuzzySearchView::slotMaxLevelImageChanged(int newValue)
 {
+    if (d->timerImage)
+    {
+        d->timerImage->stop();
+    }
+    else
+    {
+        d->timerImage = new QTimer(this);
+
+        connect(d->timerImage, SIGNAL(timeout()),
+                this, SLOT(slotTimerImageDone()));
+
+        d->timerImage->setSingleShot(true);
+        d->timerImage->setInterval(500);
+    }
+    d->timerImage->start();
+}
+
+void FuzzySearchView::slotLevelImageChanged(int newValue)
+{
+    d->maxLevelImage->setMinimum(newValue);
+    if (newValue > d->maxLevelImage->value()){
+        d->maxLevelImage->setValue(newValue);
+    }
     if (d->timerImage)
     {
         d->timerImage->stop();
@@ -933,7 +980,7 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
 void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
-    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo, d->levelImage->value() / 100.0, force);
+    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo, d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, force);
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
 }
 

@@ -62,21 +62,25 @@ public:
 
     Private()
     {
-        includeAlbumsLabel = 0;
-        listView           = 0;
-        scanDuplicatesBtn  = 0;
-        updateFingerPrtBtn = 0;
-        progressItem       = 0;
-        similarityLabel    = 0;
-        similarity         = 0;
-        albumSelectors     = 0;
+        includeAlbumsLabel      = 0;
+        listView                = 0;
+        scanDuplicatesBtn       = 0;
+        updateFingerPrtBtn      = 0;
+        progressItem            = 0;
+        similarityLabel         = 0;
+        similarityIntervalLabel = 0;
+        minSimilarity           = 0;
+        maxSimilarity           = 0;
+        albumSelectors          = 0;
     }
 
     QLabel*                      includeAlbumsLabel;
     QLabel*                      similarityLabel;
+    QLabel*                      similarityIntervalLabel;
 
-    QSpinBox*                    similarity;
-
+    QSpinBox*                    minSimilarity;
+    QSpinBox*                    maxSimilarity;
+    
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
 
@@ -113,24 +117,34 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->similarity = new QSpinBox();
-    d->similarity->setRange(0, 100);
-    d->similarity->setValue(90);
-    d->similarity->setSingleStep(1);
-    d->similarity->setSuffix(QLatin1String("%"));
+    d->minSimilarity = new QSpinBox();
+    d->minSimilarity->setRange(0, 100);
+    d->minSimilarity->setValue(90);
+    d->minSimilarity->setSingleStep(1);
+    d->minSimilarity->setSuffix(QLatin1String("%"));
 
+    d->maxSimilarity = new QSpinBox();
+    d->maxSimilarity->setRange(90, 100);
+    d->maxSimilarity->setValue(100);
+    d->maxSimilarity->setSingleStep(1);
+    d->maxSimilarity->setSuffix(QLatin1String("%"));
+    
     d->similarityLabel = new QLabel(i18n("Similarity:"));
-    d->similarityLabel->setBuddy(d->similarity);
+    d->similarityLabel->setBuddy(d->minSimilarity);
+    
+    d->similarityIntervalLabel = new QLabel("-");
 
     // ---------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->listView,           0, 0, 1, -1);
-    mainLayout->addWidget(d->albumSelectors,     1, 0, 1, -1);
-    mainLayout->addWidget(d->similarityLabel,    2, 0, 1, 1);
-    mainLayout->addWidget(d->similarity,         2, 2, 1, 1);
-    mainLayout->addWidget(d->updateFingerPrtBtn, 3, 0, 1, -1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,  4, 0, 1, -1);
+    mainLayout->addWidget(d->listView,               0, 0, 1, -1);
+    mainLayout->addWidget(d->albumSelectors,         1, 0, 1, -1);
+    mainLayout->addWidget(d->similarityLabel,        2, 0, 1, 1);
+    mainLayout->addWidget(d->minSimilarity,          2, 2, 1, 1);
+    mainLayout->addWidget(d->similarityIntervalLabel,2, 3, 1, 1);
+    mainLayout->addWidget(d->maxSimilarity,          2, 4, 1, -1);
+    mainLayout->addWidget(d->updateFingerPrtBtn,     3, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,      4, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -165,6 +179,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
+    
+    connect(d->minSimilarity, SIGNAL(valueChanged(int)),this,SLOT(slotMinimumChanged(int)));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -281,7 +297,8 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->updateFingerPrtBtn->setEnabled(val);
     d->albumSelectors->setEnabled(val);
     d->similarityLabel->setEnabled(val);
-    d->similarity->setEnabled(val);
+    d->minSimilarity->setEnabled(val);
+    d->maxSimilarity->setEnabled(val);
 }
 
 void FindDuplicatesView::slotFindDuplicates()
@@ -290,12 +307,23 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     enableControlWidgets(false);
 
-    DuplicatesFinder* const finder = new DuplicatesFinder(d->albumSelectors->selectedPAlbums(), d->albumSelectors->selectedTAlbums(), d->similarity->value());
+    DuplicatesFinder* const finder = new DuplicatesFinder(d->albumSelectors->selectedPAlbums(), d->albumSelectors->selectedTAlbums(), d->minSimilarity->value(), d->maxSimilarity->value());
 
     connect(finder, SIGNAL(signalComplete()),
             this, SLOT(slotComplete()));
 
     finder->start();
+}
+
+void FindDuplicatesView::slotMinimumChanged(int newValue)
+{
+    // Set the new minimum value of the maximum similarity
+    d->maxSimilarity->setMinimum(newValue);
+    // If the new value of the mimimum is now higher than the maximum similarity,
+    // set the maximum similarity to the new value.
+    if (newValue > d->maxSimilarity->value()){
+        d->maxSimilarity->setValue(d->minSimilarity->value());
+    }
 }
 
 void FindDuplicatesView::slotComplete()

@@ -197,7 +197,8 @@ SearchesDBJobInfo::SearchesDBJobInfo()
     : DBJobInfo()
 {
     m_duplicates = false;
-    m_threshold  = 0;
+    m_minThreshold  = 0;
+    m_maxThreshold  = 1;
     m_searchId   = -1;
 }
 
@@ -221,14 +222,24 @@ int SearchesDBJobInfo::searchId() const
     return m_searchId;
 }
 
-void SearchesDBJobInfo::setThreshold(double t)
+void SearchesDBJobInfo::setMinThreshold(double t)
 {
-    m_threshold = t;
+    m_minThreshold = t;
 }
 
-double SearchesDBJobInfo::threshold() const
+double SearchesDBJobInfo::minThreshold() const
 {
-    return m_threshold;
+    return m_minThreshold;
+}
+
+void SearchesDBJobInfo::setMaxThreshold(double t)
+{
+    m_maxThreshold = t;
+}
+
+double SearchesDBJobInfo::maxThreshold() const
+{
+    return m_maxThreshold;
 }
 
 void SearchesDBJobInfo::setAlbumsIds(const QList<int>& albumsIds)

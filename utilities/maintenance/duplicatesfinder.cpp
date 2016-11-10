@@ -52,23 +52,26 @@ class DuplicatesFinder::Private
 public:
 
     Private() :
-        similarity(90),
+        minSimilarity(90),
+        maxSimilarity(100),
         job(0)
     {
     }
 
-    int                   similarity;
+    int                   minSimilarity;
+    int                   maxSimilarity;
     QList<int>            albumsIdList;
     QList<int>            tagsIdList;
     SearchesDBJobsThread* job;
 };
 
-DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int similarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity, int maxSimilarity, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
-    d->similarity   = similarity;
-
+    d->minSimilarity   = minSimilarity;
+    d->maxSimilarity   = maxSimilarity;
+    
     foreach(Album* const a, albums)
         d->albumsIdList << a->id();
 
@@ -76,12 +79,13 @@ DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tag
         d->tagsIdList << a->id();
 }
 
-DuplicatesFinder::DuplicatesFinder(const int similarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const int minSimilarity, int maxSimilarity, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
-    d->similarity = similarity;
-
+    d->minSimilarity = minSimilarity;
+    d->maxSimilarity = maxSimilarity;
+    
     foreach(Album* const a, AlbumManager::instance()->allPAlbums())
         d->albumsIdList << a->id();
 }
@@ -98,10 +102,12 @@ void DuplicatesFinder::slotStart()
     setThumbnail(QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(22));
     ProgressManager::addProgressItem(this);
 
-    double thresh = d->similarity / 100.0;
+    double minThresh = d->minSimilarity / 100.0;
+    double maxThresh = d->maxSimilarity / 100.0;
     SearchesDBJobInfo jobInfo;
     jobInfo.setDuplicatesJob();
-    jobInfo.setThreshold(thresh);
+    jobInfo.setMinThreshold(minThresh);
+    jobInfo.setMaxThreshold(maxThresh);
     jobInfo.setAlbumsIds(d->albumsIdList);
 
     if (!d->tagsIdList.isEmpty())

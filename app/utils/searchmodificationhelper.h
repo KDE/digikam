@@ -90,6 +90,7 @@ public:
     SAlbum* createFuzzySearchFromImage(const QString& name,
                                        const ImageInfo& image,
                                        float threshold,
+                                       float maxThreshold,
                                        bool overwriteIfExisting = false);
 
 public Q_SLOTS:

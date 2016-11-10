@@ -264,6 +264,7 @@ void SearchModificationHelper::slotCreateFuzzySearchFromSketch(const QString& pr
 SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& proposedName,
                                                              const ImageInfo& image,
                                                              float threshold,
+                                                             float maxThreshold,
                                                              bool overwriteIfExisting)
 {
     if (image.isNull())
@@ -289,6 +290,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     writer.writeField(QLatin1String("similarity"), SearchXml::Like);
     writer.writeAttribute(QLatin1String("type"), QLatin1String("imageid"));
     writer.writeAttribute(QLatin1String("threshold"), QString::number(threshold));
+    writer.writeAttribute(QLatin1String("maxthreshold"), QString::number(maxThreshold));
     writer.writeAttribute(QLatin1String("sketchtype"), QLatin1String("scanned"));
     writer.writeValue(image.id());
     writer.finishField();

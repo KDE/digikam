@@ -269,9 +269,9 @@ void SearchesJob::run()
             return;
         }
 
-        if (m_jobInfo.threshold() == 0)
+        if (m_jobInfo.minThreshold() == 0)
         {
-            m_jobInfo.setThreshold(0.4);
+            m_jobInfo.setMinThreshold(0.4);
         }
 
         DuplicatesProgressObserver observer(this);
@@ -280,7 +280,8 @@ void SearchesJob::run()
         HaarIface iface;
         iface.rebuildDuplicatesAlbums(m_jobInfo.albumsIds(),
                                       m_jobInfo.tagsIds(),
-                                      m_jobInfo.threshold(),
+                                      m_jobInfo.minThreshold(),
+                                      m_jobInfo.maxThreshold(),
                                       &observer);
     }
 
