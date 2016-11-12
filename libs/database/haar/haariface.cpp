@@ -108,7 +108,7 @@ public:
         // read coefficients
         for (int i = 0; i < 3; ++i)
         {
-            for (int j = 0; j<Haar::NumberOfCoefficients; ++j)
+            for (int j = 0; j < Haar::NumberOfCoefficients; ++j)
             {
                 stream >> data->sig[i][j];
             }
