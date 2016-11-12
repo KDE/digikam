@@ -17,4 +17,5 @@ BUGFIXES FROM BUGZILLA:
 007 ==> 371543 - BQM TimeAdjust tool language is wrong.
 008 ==> 369051 - Too low similarity threshold in fuzzy/duplicate search bloats the results with potentially unwished high-similarity results [patch].
 009 ==> 372217 - The results of the Duplicates are currently sorted by the image id and sortable by name and count if similars. But it should be sortable by the similarity of the duplicates, too. [patch].
-010 ==> 
+010 ==> 372362 - Build error due to private function.
+011 ==> 

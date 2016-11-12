@@ -305,9 +305,9 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
                                      "value, as a percentage. "
                                      "This value is used by the algorithm to distinguish two "
                                      "similar images. The default value is 90."));
-    
-    QLabel* const levelIntervalLabel = new QLabel("-");
-    
+
+    QLabel* const levelIntervalLabel = new QLabel(QLatin1String("-"));
+
     d->maxLevelImage              = new QSpinBox();
     d->maxLevelImage->setSuffix(QLatin1String("%"));
     d->maxLevelImage->setRange(90, 100);
@@ -899,7 +899,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
     }
 }
 
-void FuzzySearchView::slotMaxLevelImageChanged(int newValue)
+void FuzzySearchView::slotMaxLevelImageChanged(int /*newValue*/)
 {
     if (d->timerImage)
     {
@@ -915,6 +915,7 @@ void FuzzySearchView::slotMaxLevelImageChanged(int newValue)
         d->timerImage->setSingleShot(true);
         d->timerImage->setInterval(500);
     }
+
     d->timerImage->start();
 }
 
