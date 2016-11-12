@@ -100,15 +100,15 @@ public:
         stream.setVersion(QDataStream::Qt_4_3);
 
         // read averages
-        for (int i=0; i<3; ++i)
+        for (int i = 0; i < 3; ++i)
         {
             stream >> data->avg[i];
         }
 
         // read coefficients
-        for (int i=0; i<3; ++i)
+        for (int i = 0; i < 3; ++i)
         {
-            for (int j=0; j<Haar::NumberOfCoefficients; ++j)
+            for (int j = 0; j<Haar::NumberOfCoefficients; ++j)
             {
                 stream >> data->sig[i][j];
             }
@@ -126,15 +126,15 @@ public:
         stream << (qint32)Version;
 
         // write averages
-        for (int i=0; i<3; ++i)
+        for (int i = 0; i < 3; ++i)
         {
             stream << data->avg[i];
         }
 
         // write coefficients
-        for (int i=0; i<3; ++i)
+        for (int i = 0; i < 3; ++i)
         {
-            for (int j=0; j<Haar::NumberOfCoefficients; ++j)
+            for (int j = 0; j < Haar::NumberOfCoefficients; ++j)
             {
                 stream << data->sig[i][j];
             }
@@ -554,10 +554,12 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong ima
         {
             percentage = 1.0 - (score - lowest) / scoreRange;
             // If the found image is the original one (check by id) or the percentage is below the maximum.
-            if ((id == imageid) || (percentage <= maximumPercentage)){
+            if ((id == imageid) || (percentage <= maximumPercentage))
+            {
                 bestMatches.insert(percentage, id);
                 // If the current image is not the original, use the images similarity for the average percentage
-                if (id != imageid){
+                if (id != imageid)
+                {
                     avgPercentage += percentage;
                 }
             }
@@ -615,7 +617,7 @@ QMap<qlonglong, double> HaarIface::searchDatabase(Haar::SignatureData* const que
     bool filterByAlbumRoots = !d->albumRootsToSearch.isEmpty();
 
     // if no cache is used or the cache signature map is empty, query the database
-    if ( !d->useSignatureCache || (signatureCache.isEmpty() && d->useSignatureCache) )
+    if (!d->useSignatureCache || (signatureCache.isEmpty() && d->useSignatureCache))
     {
         QString queryText;
 
@@ -751,7 +753,7 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData* const sig, Ske
     // so in our case all 3*40, subtract the specifically assigned weighting.
     score = 0;
 
-    for (int channel=0; channel<3; ++channel)
+    for (int channel = 0; channel < 3; ++channel)
     {
         Haar::Idx* coefs = sig->sig[channel];
 
@@ -779,7 +781,8 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
         double similarity = similarity_it.key() * 100;
         QMap<qlonglong,QList<qlonglong>> sameSimilarityMap = similarity_it.value();
         // Iterate ofer
-        for (QMap< qlonglong,QList<qlonglong> >::const_iterator it = sameSimilarityMap.constBegin(); it != sameSimilarityMap.constEnd(); ++it){
+        for (QMap< qlonglong,QList<qlonglong> >::const_iterator it = sameSimilarityMap.constBegin(); it != sameSimilarityMap.constEnd(); ++it)
+        {
             SearchXmlWriter writer;
             writer.writeGroup();
             writer.writeField(QLatin1String("imageid"), SearchXml::OneOf);
@@ -891,9 +894,12 @@ QMap< double,QMap< qlonglong,QList<qlonglong> > > HaarIface::findDuplicates(cons
                     // make a lookup for the average similarity
                     similarity_it = resultsMap.find(bestMatches.first);
                     // If there is an entry for this similarity, add the result set. Else, create a new similarity entry.
-                    if (similarity_it != resultsMap.end()){
+                    if (similarity_it != resultsMap.end())
+                    {
                         similarity_it->insert(*it,bestMatches.second);
-                    } else {
+                    }
+                    else
+                    {
                         QMap<qlonglong,QList<qlonglong>> result;
                         result.insert(*it, bestMatches.second);
                         resultsMap.insert(bestMatches.first,result);

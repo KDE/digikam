@@ -321,7 +321,8 @@ void FindDuplicatesView::slotMinimumChanged(int newValue)
     d->maxSimilarity->setMinimum(newValue);
     // If the new value of the mimimum is now higher than the maximum similarity,
     // set the maximum similarity to the new value.
-    if (newValue > d->maxSimilarity->value()){
+    if (newValue > d->maxSimilarity->value())
+    {
         d->maxSimilarity->setValue(d->minSimilarity->value());
     }
 }
