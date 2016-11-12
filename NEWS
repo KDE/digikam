@@ -19,4 +19,5 @@ BUGFIXES FROM BUGZILLA:
 009 ==> 372217 - The results of the Duplicates are currently sorted by the image id and sortable by name and count if similars. But it should be sortable by the similarity of the duplicates, too. [patch].
 010 ==> 372362 - Build error due to private function.
 011 ==> 372341 - Title not showing in tool-tip.
-012 ==> 
+012 ==> 372326 - digiKam crashed when closing it.
+013 ==> 

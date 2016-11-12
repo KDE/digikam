@@ -70,7 +70,7 @@ LoadSaveThread::LoadSaveThread(QObject* parent)
 
 LoadSaveThread::~LoadSaveThread()
 {
-    wait();
+    shutDown();
     delete d;
 }
 
