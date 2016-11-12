@@ -132,19 +132,19 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->similarityLabel = new QLabel(i18n("Similarity:"));
     d->similarityLabel->setBuddy(d->minSimilarity);
 
-    d->similarityIntervalLabel = new QLabel("-");
+    d->similarityIntervalLabel = new QLabel(QLatin1String("-"));
 
     // ---------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(d->listView,               0, 0, 1, -1);
-    mainLayout->addWidget(d->albumSelectors,         1, 0, 1, -1);
-    mainLayout->addWidget(d->similarityLabel,        2, 0, 1, 1);
-    mainLayout->addWidget(d->minSimilarity,          2, 2, 1, 1);
-    mainLayout->addWidget(d->similarityIntervalLabel,2, 3, 1, 1);
-    mainLayout->addWidget(d->maxSimilarity,          2, 4, 1, -1);
-    mainLayout->addWidget(d->updateFingerPrtBtn,     3, 0, 1, -1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,      4, 0, 1, -1);
+    mainLayout->addWidget(d->listView,                0, 0, 1, -1);
+    mainLayout->addWidget(d->albumSelectors,          1, 0, 1, -1);
+    mainLayout->addWidget(d->similarityLabel,         2, 0, 1, 1);
+    mainLayout->addWidget(d->minSimilarity,           2, 2, 1, 1);
+    mainLayout->addWidget(d->similarityIntervalLabel, 2, 3, 1, 1);
+    mainLayout->addWidget(d->maxSimilarity,           2, 4, 1, -1);
+    mainLayout->addWidget(d->updateFingerPrtBtn,      3, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,       4, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);

@@ -75,9 +75,9 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
         double avgSim = 0.00;
         SearchXml::Element element;
 
-        while ( (element = reader.readNext()) != SearchXml::End )
+        while ((element = reader.readNext()) != SearchXml::End)
         {
-            if ( (element == SearchXml::Field) && (reader.fieldName().compare("noeffect_avgsim") == 0) )
+            if ((element == SearchXml::Field) && (reader.fieldName().compare(QLatin1String("noeffect_avgsim")) == 0))
             {
                 avgSim = reader.valueToDouble();
             }
