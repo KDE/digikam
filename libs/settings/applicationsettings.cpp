@@ -177,6 +177,7 @@ void ApplicationSettings::readSettings()
     d->tooltipShowPhotoFlash            = group.readEntry(d->configToolTipsShowPhotoFlashEntry,       false);
     d->tooltipShowPhotoWb               = group.readEntry(d->configToolTipsShowPhotoWBEntry,          false);
     d->tooltipShowAlbumName             = group.readEntry(d->configToolTipsShowAlbumNameEntry,        false);
+    d->tooltipShowTitles                = group.readEntry(d->configToolTipsShowTitlesEntry,           true);
     d->tooltipShowComments              = group.readEntry(d->configToolTipsShowCommentsEntry,         true);
     d->tooltipShowTags                  = group.readEntry(d->configToolTipsShowTagsEntry,             true);
     d->tooltipShowLabelRating           = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
@@ -332,6 +333,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configToolTipsShowPhotoFlashEntry,             d->tooltipShowPhotoFlash);
     group.writeEntry(d->configToolTipsShowPhotoWBEntry,                d->tooltipShowPhotoWb);
     group.writeEntry(d->configToolTipsShowAlbumNameEntry,              d->tooltipShowAlbumName);
+    group.writeEntry(d->configToolTipsShowTitlesEntry,                 d->tooltipShowTitles);
     group.writeEntry(d->configToolTipsShowCommentsEntry,               d->tooltipShowComments);
     group.writeEntry(d->configToolTipsShowTagsEntry,                   d->tooltipShowTags);
     group.writeEntry(d->configToolTipsShowLabelRatingEntry,            d->tooltipShowLabelRating);
