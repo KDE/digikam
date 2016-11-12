@@ -418,6 +418,7 @@ void AdvancedRenameInput::readSettings()
     patternHistory.removeAll(QLatin1String(""));
     addItems(patternHistory);
     d->lineEdit->clear();
+    setCurrentIndex(-1);
 }
 
 void AdvancedRenameInput::writeSettings()

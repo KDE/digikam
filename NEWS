@@ -20,4 +20,5 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 372362 - Build error due to private function.
 011 ==> 372341 - Title not showing in tool-tip.
 012 ==> 372326 - digiKam crashed when closing it.
-013 ==> 
+013 ==> 372314 - I cannot choose the template predefined in the import window while renaming (F2).
+014 ==> 
