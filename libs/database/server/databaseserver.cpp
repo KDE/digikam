@@ -114,9 +114,9 @@ DatabaseServer::~DatabaseServer()
 
 void DatabaseServer::run()
 {
-    qint64 runningTime = 0;
-    int debugTime      = 0;
-    int waitTime       = 1;
+    quint64 runningTime = 0;
+    int debugTime       = 0;
+    int waitTime        = 1;
 
     // Loop to wait for stopping the server.
 
