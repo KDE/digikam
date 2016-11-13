@@ -140,6 +140,10 @@ bool FindDuplicatesAlbumItem::operator<(const QTreeWidgetItem& other) const
     {
         result = ( text(column).toDouble() < other.text(column).toDouble() ) ? -1 : 0;
     }
+    else if (column == Column::RESULT_COUNT)
+    {
+        result = ( text(column).toInt() < other.text(column).toInt() ) ? -1 : 0;
+    }
     else
     {
         result = QCollator().compare(text(column), other.text(column));

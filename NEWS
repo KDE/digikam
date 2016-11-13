@@ -23,4 +23,5 @@ BUGFIXES FROM BUGZILLA:
 013 ==> 372314 - I cannot choose the template predefined in the import window while renaming (F2).
 014 ==> 372164 - Camera related photograph properties are unavailable (erroneously).
 015 ==> 372433 - Reduce debug messages from databaseserver with internal mysql.
-016 ==> 
+016 ==> 372442 - Ordering of duplicates search by the result count is done lexicographically [patch].
+017 ==> 
