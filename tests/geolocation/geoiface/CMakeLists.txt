@@ -71,11 +71,11 @@ target_link_libraries(geoiface_test_tileindex
 # do not add this as a test because it only works if there is an internet connection
 #
 # set(test_lookup_altitude_geonames_sources test_lookup_altitude_geonames.cpp)
-# 
+#
 # add_executable(geoiface_test_lookup_altitude_geonames ${test_lookup_altitude_geonames_sources})
 # add_test(geoiface_test_lookup_altitude_geonames geoiface_test_lookup_altitude_geonames)
 # ecm_mark_as_test(geoiface_test_lookup_altitude_geonames)
-# 
+#
 # target_link_libraries(geoiface_test_lookup_altitude_geonames
 #                       digikamcore
 #                       Qt5::Core
@@ -90,7 +90,7 @@ if(NOT WIN32)
 
     add_executable(geoiface_test_itemmarkertiler ${test_itemmarkertiler_sources})
     add_test(geoiface_test_itemmarkertiler geoiface_test_itemmarkertiler)
-    ecm_mark_as_test(geoiface_test_itemmarkertiler)    
+    ecm_mark_as_test(geoiface_test_itemmarkertiler)
 
     target_link_libraries(geoiface_test_itemmarkertiler
                           digikamcore

@@ -73,4 +73,4 @@ void TestLookupAltitudeGeonames::testSimpleLookup()
     QCOMPARE(spyRequestsReady.count(), 2);
 }
 
-QTEST_MAIN(TestLookupAltitudeGeonames)
+QTEST_GUILESS_MAIN(TestLookupAltitudeGeonames)

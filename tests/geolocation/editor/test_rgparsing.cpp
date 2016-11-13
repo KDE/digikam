@@ -168,4 +168,4 @@ void TestRGParsing::testVerifyRG()
     // * now that we have makeTagString separate, these are handled same in tests and UI
 }
 
-QTEST_MAIN(TestRGParsing)
+QTEST_GUILESS_MAIN(TestRGParsing)

@@ -119,4 +119,4 @@ void TestGPSImageItem::testBasicLoading()
     }
 }
 
-QTEST_MAIN(TestGPSImageItem)
+QTEST_GUILESS_MAIN(TestGPSImageItem)

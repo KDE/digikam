@@ -282,4 +282,4 @@ void TestRGTagModel::testModelSpacerTags()
 
 }
 
-QTEST_MAIN(TestRGTagModel)
+QTEST_GUILESS_MAIN(TestRGTagModel)

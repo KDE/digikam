@@ -156,4 +156,4 @@ void TestTileIndex::testMovable()
 //     }
 }
 
-QTEST_MAIN(TestTileIndex)
+QTEST_GUILESS_MAIN(TestTileIndex)

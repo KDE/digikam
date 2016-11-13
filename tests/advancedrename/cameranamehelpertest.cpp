@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(CameraNameHelperTest)
+QTEST_GUILESS_MAIN(CameraNameHelperTest)
 
 void CameraNameHelperTest::testCreateCameraName_data()
 {

@@ -148,11 +148,11 @@ int main(int argc, char** argv)
         ThumbsDbAccess::cleanUpDatabase();
         FaceDbAccess::cleanUpDatabase();
     }
-    
+
     else if(switchCondition == QLatin1String("mysqlToSqlite"))
     {
         DbEngineParameters params;
-         
+
         qDebug() << "Setup mysql Database...";
 
         QString defaultAkDir              = DbEngineParameters::internalServerPrivatePath();
@@ -189,9 +189,9 @@ int main(int argc, char** argv)
         CoreDbAccess::cleanUpDatabase();
         ThumbsDbAccess::cleanUpDatabase();
         FaceDbAccess::cleanUpDatabase();
-        
+
         // ------------------------------------------------------------------------------------
-        
+
         qDebug() << "Setup sqlite Database...";
 
         params.databaseType = DbEngineParameters::SQLiteDatabaseType();

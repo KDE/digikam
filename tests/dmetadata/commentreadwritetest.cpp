@@ -33,7 +33,7 @@
 
 #include "dmetadata.h"
 
-QTEST_MAIN(CommentReadWriteTest)
+QTEST_GUILESS_MAIN(CommentReadWriteTest)
 
 using namespace Digikam;
 

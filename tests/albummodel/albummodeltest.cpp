@@ -48,7 +48,7 @@ using namespace Digikam;
 
 const QString IMAGE_PATH(QFINDTESTDATA("data/"));
 
-QTEST_MAIN(AlbumModelTest)
+QTEST_GUILESS_MAIN(AlbumModelTest)
 
 AlbumModelTest::AlbumModelTest()
     : albumCategory(QLatin1String("DummyCategory")),

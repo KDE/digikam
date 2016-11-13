@@ -272,4 +272,4 @@ void TestPrimitives::testGroupStateComputer()
     /// @todo Test addState
 }
 
-QTEST_MAIN(TestPrimitives)
+QTEST_GUILESS_MAIN(TestPrimitives)

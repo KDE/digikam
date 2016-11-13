@@ -37,7 +37,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(DImgFreeRotationTest)
+QTEST_GUILESS_MAIN(DImgFreeRotationTest)
 
 void DImgFreeRotationTest::testCalculateAngle_data()
 {

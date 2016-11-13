@@ -82,10 +82,9 @@ void IOJobsTest::copyAndMove()
     QFileInfo srcFi(src);
     QFileInfo dstFi(dst);
 
-    QUrl srcUrl = QUrl::fromLocalFile(srcFi.absoluteFilePath());
-    QUrl dstUrl = QUrl::fromLocalFile(dstFi.absoluteFilePath());
-
-    CopyJob* job = new CopyJob(srcUrl, dstUrl, isMove);
+    QUrl srcUrl        = QUrl::fromLocalFile(srcFi.absoluteFilePath());
+    QUrl dstUrl        = QUrl::fromLocalFile(dstFi.absoluteFilePath());
+    CopyJob* const job = new CopyJob(srcUrl, dstUrl, isMove);
 
     QThreadPool::globalInstance()->start(job);
     QThreadPool::globalInstance()->waitForDone();
@@ -166,4 +165,4 @@ void IOJobsTest::permanentDel_data()
             << testFolderPath;
 }
 
-QTEST_MAIN(IOJobsTest)
+QTEST_GUILESS_MAIN(IOJobsTest)

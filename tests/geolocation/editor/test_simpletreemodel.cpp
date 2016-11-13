@@ -117,4 +117,4 @@ void TestSimpleTreeModel::testModel1()
     new ModelTest(treeModel, this);
 }
 
-QTEST_MAIN(TestSimpleTreeModel)
+QTEST_GUILESS_MAIN(TestSimpleTreeModel)

@@ -41,7 +41,7 @@
 const QString originalImageFolder(QFINDTESTDATA("data/"));
 const QString originalImageFile(QFINDTESTDATA("data/1.jpg"));
 
-QTEST_MAIN(TimeStampUpdateTest)
+QTEST_GUILESS_MAIN(TimeStampUpdateTest)
 
 using namespace Digikam;
 

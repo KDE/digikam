@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(AdvancedRenameTest)
+QTEST_GUILESS_MAIN(AdvancedRenameTest)
 
 const QString imagesDir = QLatin1String("data/");
 

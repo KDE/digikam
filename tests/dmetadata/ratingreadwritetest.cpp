@@ -36,7 +36,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(RatingReadWriteTest)
+QTEST_GUILESS_MAIN(RatingReadWriteTest)
 
 void RatingReadWriteTest::initTestCase()
 {

@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(TagsReadWriteTest)
+QTEST_GUILESS_MAIN(TagsReadWriteTest)
 
 void TagsReadWriteTest::initTestCase()
 {

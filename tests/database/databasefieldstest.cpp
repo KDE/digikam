@@ -33,7 +33,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(DatabaseFieldsTest)
+QTEST_GUILESS_MAIN(DatabaseFieldsTest)
 
 using namespace DatabaseFields;
 

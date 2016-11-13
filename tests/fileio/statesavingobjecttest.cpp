@@ -38,7 +38,7 @@
 
 using namespace Digikam;
 
-QTEST_MAIN(StateSavingObjectTest)
+QTEST_GUILESS_MAIN(StateSavingObjectTest)
 
 class StubStateSaverPriv
 {

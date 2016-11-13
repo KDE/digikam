@@ -178,4 +178,4 @@ void TestGPXParsing::testInterpolation()
     QCOMPARE(myCorrelatedItems.first().hDop, -1.0);
 }
 
-QTEST_MAIN(TestGPXParsing)
+QTEST_GUILESS_MAIN(TestGPXParsing)

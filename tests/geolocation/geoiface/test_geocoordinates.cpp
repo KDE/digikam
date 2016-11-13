@@ -99,4 +99,4 @@ void TestGeoCoordinates::testMovable()
 //     }
 }
 
-QTEST_MAIN(TestGeoCoordinates)
+QTEST_GUILESS_MAIN(TestGeoCoordinates)
