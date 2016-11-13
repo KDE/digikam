@@ -651,6 +651,7 @@ QString MetaEngine::createExifUserStringFromValue(const char* exifTagName, const
                 break;
             }
 
+            case QVariant::ByteArray:
             case QVariant::String:
             case QVariant::Char:
                 datum = (std::string)val.toString().toLatin1().constData();
