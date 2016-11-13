@@ -22,4 +22,5 @@ BUGFIXES FROM BUGZILLA:
 012 ==> 372326 - digiKam crashed when closing it.
 013 ==> 372314 - I cannot choose the template predefined in the import window while renaming (F2).
 014 ==> 372164 - Camera related photograph properties are unavailable (erroneously).
-015 ==> 
+015 ==> 372433 - Reduce debug messages from databaseserver with internal mysql.
+016 ==> 
