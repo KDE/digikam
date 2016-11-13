@@ -147,8 +147,9 @@ public:
     void setDuplicatesJob();
     bool isDuplicatesJob() const;
 
+    void setSearchIds(QList<int> ids);
     void setSearchId(int id);
-    int searchId() const;
+    QList<int> searchIds() const;
 
     void setMinThreshold(double t);
     double minThreshold() const;
@@ -165,7 +166,7 @@ public:
 public:
 
     bool       m_duplicates;
-    int        m_searchId;
+    QList<int> m_searchIds;
     double     m_minThreshold;
     double     m_maxThreshold;
     QList<int> m_albumsIds;

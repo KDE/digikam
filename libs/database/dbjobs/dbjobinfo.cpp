@@ -199,7 +199,7 @@ SearchesDBJobInfo::SearchesDBJobInfo()
     m_duplicates = false;
     m_minThreshold  = 0;
     m_maxThreshold  = 1;
-    m_searchId   = -1;
+    m_searchIds  = QList<int>();
 }
 
 void SearchesDBJobInfo::setDuplicatesJob()
@@ -214,12 +214,17 @@ bool SearchesDBJobInfo::isDuplicatesJob() const
 
 void SearchesDBJobInfo::setSearchId(int id)
 {
-    m_searchId = id;
+    m_searchIds = QList<int>() << id;
 }
 
-int SearchesDBJobInfo::searchId() const
+void SearchesDBJobInfo::setSearchIds(QList<int> ids)
 {
-    return m_searchId;
+    m_searchIds = ids;
+}
+
+QList<int> SearchesDBJobInfo::searchIds() const
+{
+    return m_searchIds;
 }
 
 void SearchesDBJobInfo::setMinThreshold(double t)

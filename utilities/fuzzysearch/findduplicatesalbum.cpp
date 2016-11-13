@@ -64,7 +64,7 @@ FindDuplicatesAlbum::FindDuplicatesAlbum(QWidget* const parent)
     d->thumbLoadThread = ThumbnailLoadThread::defaultThread();
 
     setRootIsDecorated(false);
-    setSelectionMode(QAbstractItemView::SingleSelection);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setAllColumnsShowFocus(true);
     setIconSize(QSize(d->iconSize, d->iconSize));

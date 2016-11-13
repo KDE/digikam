@@ -61,7 +61,7 @@ private Q_SLOTS:
     void slotSearchUpdated(SAlbum* a);
     void slotClear();
     void slotFindDuplicates();
-    void slotDuplicatesAlbumActived(QTreeWidgetItem*, int);
+    void slotDuplicatesAlbumActived();
     void slotComplete();
     void slotUpdateFingerPrints();
     void slotCheckForValidSettings();

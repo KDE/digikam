@@ -239,7 +239,11 @@ void SearchesJob::run()
 {
     if (!m_jobInfo.isDuplicatesJob())
     {
-        SearchInfo info = CoreDbAccess().db()->getSearchInfo(m_jobInfo.searchId());
+        QList<SearchInfo> infos;
+        foreach(int id, m_jobInfo.searchIds())
+        {
+            infos << CoreDbAccess().db()->getSearchInfo(id);
+        }
 
         ImageLister lister;
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
@@ -247,18 +251,21 @@ void SearchesJob::run()
         // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
 
-        if (info.type == DatabaseSearch::HaarSearch)
+        foreach(SearchInfo info, infos)
         {
-            lister.listHaarSearch(&receiver, info.query);
-        }
-        else
-        {
-            lister.listSearch(&receiver, info.query);
-        }
+            if (info.type == DatabaseSearch::HaarSearch)
+            {
+                lister.listHaarSearch(&receiver, info.query);
+            }
+            else
+            {
+                lister.listSearch(&receiver, info.query);
+            }
 
-        if (!receiver.hasError)
-        {
-            receiver.sendData();
+            if (!receiver.hasError)
+            {
+                receiver.sendData();
+            }
         }
     }
     else

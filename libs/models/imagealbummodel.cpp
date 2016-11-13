@@ -322,21 +322,24 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
     }
 
     CoreDbUrl url;
-    QList<int> tagIds;
+    QList<int> ids;
 
     if (albums.first()->isTrashAlbum())
     {
         return;
     }
 
-    if(albums.first()->type() == Album::TAG)
+    if(albums.first()->type() == Album::TAG || albums.first()->type() == Album::SEARCH)
     {
         for(QList<Album*>::iterator it = albums.begin(); it != albums.end(); ++it)
         {
-            tagIds << (*it)->id();
+            ids << (*it)->id();
         }
 
-        url = CoreDbUrl::fromTagIds(tagIds);
+        if(albums.first()->type() == Album::TAG)
+        {
+            url = CoreDbUrl::fromTagIds(ids);
+        }
     }
     else
     {
@@ -372,7 +375,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         if (d->recurseTags)
             jobInfo.setRecursive();
 
-        jobInfo.setTagsIds(tagIds);
+        jobInfo.setTagsIds(ids);
 
         if (!d->specialListing.isNull())
         {
@@ -407,7 +410,7 @@ void ImageAlbumModel::startListJob(QList<Album*> albums)
         if (d->listOnlyAvailableImages)
             jobInfo.setListAvailableImagesOnly();
 
-        jobInfo.setSearchId( url.searchId() );
+        jobInfo.setSearchIds(ids);
 
         d->jobThread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
     }

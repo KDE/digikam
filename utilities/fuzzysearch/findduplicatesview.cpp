@@ -159,8 +159,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     connect(d->scanDuplicatesBtn, SIGNAL(clicked()),
             this, SLOT(slotFindDuplicates()));
 
-    connect(d->listView, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-            this, SLOT(slotDuplicatesAlbumActived(QTreeWidgetItem*,int)));
+    connect(d->listView, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotDuplicatesAlbumActived()));
 
     connect(d->albumSelectors, SIGNAL(signalSelectionChanged()),
             this, SLOT(slotCheckForValidSettings()));
@@ -333,13 +333,21 @@ void FindDuplicatesView::slotComplete()
     populateTreeView();
 }
 
-void FindDuplicatesView::slotDuplicatesAlbumActived(QTreeWidgetItem* item, int)
+void FindDuplicatesView::slotDuplicatesAlbumActived()
 {
-    FindDuplicatesAlbumItem* const sitem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
-
-    if (sitem)
+    QList<Album*> albums;
+    foreach(QTreeWidgetItem* item, d->listView->selectedItems())
     {
-        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << sitem->album());
+        FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
+        if (albumItem)
+        {
+            albums << albumItem->album();
+        }
+    }
+
+    if (!albums.empty())
+    {
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << albums);
     }
 }
 
