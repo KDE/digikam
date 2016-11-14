@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 016 ==> 372442 - Ordering of duplicates search by the result count is done lexicographically [patch].
 017 ==> 366567 - Allow choosing several duplicate results [patch].
 018 ==> 274360 - Fuzzy search finds only in few type of pictures.
-019 ==> 
+019 ==> 372380 - Support for digiKam 5.2.0.
+020 ==> 
