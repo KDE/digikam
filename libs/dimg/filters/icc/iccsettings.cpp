@@ -191,6 +191,12 @@ IccProfile IccSettings::Private::profileFromWindowSystem(QWidget* const widget)
 {
 #ifdef HAVE_X11
 
+    if (!QX11Info::isPlatformX11())
+    {
+        qCDebug(DIGIKAM_DIMG_LOG) << "Desktop platform is not X11";
+        return IccProfile();
+    }
+
     unsigned long appRootWindow;
     QString       atomName;
 
