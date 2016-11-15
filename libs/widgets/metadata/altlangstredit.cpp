@@ -366,7 +366,7 @@ void AltLangStrEdit::slotSelectionChanged()
     d->valueEdit->blockSignals(true);
 
     QString text = d->values.value(d->currentLanguage);
-    d->valueEdit->setText(text);
+    d->valueEdit->setPlainText(text);
     d->delValueButton->setEnabled(!text.isNull());
 
     d->valueEdit->blockSignals(false);
@@ -384,7 +384,7 @@ void AltLangStrEdit::setValues(const MetaEngine::AltLangMap& values)
     d->valueEdit->blockSignals(true);
 
     QString text = d->values.value(d->currentLanguage);
-    d->valueEdit->setText(text);
+    d->valueEdit->setPlainText(text);
     d->delValueButton->setEnabled(!text.isNull());
 
     d->valueEdit->blockSignals(false);
