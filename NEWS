@@ -30,4 +30,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 274360 - Fuzzy search finds only in few type of pictures.
 019 ==> 372380 - Support for digiKam 5.2.0.
 020 ==> 372484 - HTML captions only show in right side panel as rendered, not editable source.
-021 ==> 
+021 ==> 372323 - Camera autodetection fails when using AppImage bundle.
+022 ==> 
