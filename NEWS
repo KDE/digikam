@@ -32,4 +32,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 372484 - HTML captions only show in right side panel as rendered, not editable source.
 021 ==> 372323 - Camera autodetection fails when using AppImage bundle.
 022 ==> 372583 - The Similarity in DuplicatesSearch and FuzzySearch should be renamed to Similarity range [patch].
-023 ==> 
+023 ==> 372584 - It is not possible to give a similarity range for duplicates search in maintenance dialog [patch].
+024 ==> 

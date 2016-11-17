@@ -41,7 +41,8 @@ MaintenanceSettings::MaintenanceSettings()
     scanFingerPrints   = false;
 
     duplicates         = false;
-    similarity         = 90;
+    minSimilarity      = 90;
+    maxSimilarity      = 100;
 
     faceManagement     = false;
 
@@ -71,7 +72,8 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "fingerPrints        : " << s.fingerPrints << endl;
     dbg.nospace() << "scanFingerPrints    : " << s.scanFingerPrints << endl;
     dbg.nospace() << "duplicates          : " << s.duplicates << endl;
-    dbg.nospace() << "similarity          : " << s.similarity << endl;
+    dbg.nospace() << "minSimilarity       : " << s.minSimilarity << endl;
+    dbg.nospace() << "maxSimilarity       : " << s.maxSimilarity << endl;
     dbg.nospace() << "faceManagement      : " << s.faceManagement << endl;
     dbg.nospace() << "faceScannedHandling : " << s.faceSettings.alreadyScannedHandling << endl;
     dbg.nospace() << "qualitySort         : " << s.qualitySort << endl;

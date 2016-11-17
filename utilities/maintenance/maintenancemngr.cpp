@@ -253,7 +253,7 @@ void MaintenanceMngr::stage4()
 
     if (d->settings.duplicates)
     {
-        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, d->settings.similarity);
+        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, d->settings.minSimilarity, d->settings.maxSimilarity);
         d->duplicatesFinder->setNotificationEnabled(false);
         d->duplicatesFinder->start();
     }

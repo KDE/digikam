@@ -73,8 +73,10 @@ public:
 
     /// Scan for new items
     bool                 duplicates;
-    /// Similarity between items to compare, in percents.
-    int                  similarity;
+    /// Minimal similarity between items to compare, in percents.
+    int                  minSimilarity;
+    /// Maximal similarity between items to compare, in percents.
+    int                  maxSimilarity;
 
     /// Scan for faces.
     bool                 faceManagement;

@@ -92,7 +92,8 @@ public:
         vbox2(0),
         hbox3(0),
         faceScannedHandling(0),
-        similarity(0),
+        minSimilarity(0),
+        maxSimilarity(0),
         expanderBox(0),
         albumSelectors(0)
     {
@@ -106,7 +107,8 @@ public:
     static const QString configFingerPrints;
     static const QString configScanFingerPrints;
     static const QString configDuplicates;
-    static const QString configSimilarity;
+    static const QString configMinSimilarity;
+    static const QString configMaxSimilarity;
     static const QString configFaceManagement;
     static const QString configFaceScannedHandling;
     static const QString configImageQualitySorter;
@@ -129,7 +131,8 @@ public:
     DVBox*               vbox2;
     DHBox*               hbox3;
     QComboBox*           faceScannedHandling;
-    DIntNumInput*        similarity;
+    DIntNumInput*        minSimilarity;
+    DIntNumInput*        maxSimilarity;
     DExpanderBox*        expanderBox;
     AlbumSelectors*      albumSelectors;
 };
@@ -142,7 +145,8 @@ const QString MaintenanceDlg::Private::configScanThumbs(QLatin1String("ScanThumb
 const QString MaintenanceDlg::Private::configFingerPrints(QLatin1String("FingerPrints"));
 const QString MaintenanceDlg::Private::configScanFingerPrints(QLatin1String("ScanFingerPrints"));
 const QString MaintenanceDlg::Private::configDuplicates(QLatin1String("Duplicates"));
-const QString MaintenanceDlg::Private::configSimilarity(QLatin1String("Similarity"));
+const QString MaintenanceDlg::Private::configMinSimilarity(QLatin1String("minSimilarity"));
+const QString MaintenanceDlg::Private::configMaxSimilarity(QLatin1String("maxSimilarity"));
 const QString MaintenanceDlg::Private::configFaceManagement(QLatin1String("FaceManagement"));
 const QString MaintenanceDlg::Private::configFaceScannedHandling(QLatin1String("FaceScannedHandling"));
 const QString MaintenanceDlg::Private::configImageQualitySorter(QLatin1String("ImageQualitySorter"));
@@ -202,12 +206,18 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     // --------------------------------------------------------------------------------------
 
     d->hbox              = new DHBox;
-    new QLabel(i18n("Similarity (in percents): "), d->hbox);
+    new QLabel(i18n("Similarity range (in percents): "), d->hbox);
     QWidget* const space = new QWidget(d->hbox);
     d->hbox->setStretchFactor(space, 10);
-    d->similarity        = new DIntNumInput(d->hbox);
-    d->similarity->setDefaultValue(90);
-    d->similarity->setRange(0, 100, 1);
+    d->minSimilarity        = new DIntNumInput(d->hbox);
+    d->minSimilarity->setDefaultValue(90);
+    d->minSimilarity->setRange(0, 100, 1);
+    new QLabel(QLatin1String("-"), d->hbox);
+    // Create the maximum similarity and set the minimum value to the current value of minSimilarity
+    d->maxSimilarity        = new DIntNumInput(d->hbox);
+    d->maxSimilarity->setDefaultValue(100);
+    d->maxSimilarity->setRange(d->minSimilarity->value(), 100, 1);
+
     d->expanderBox->insertItem(Private::Duplicates, d->hbox, QIcon::fromTheme(QLatin1String("tools-wizard")),
                                i18n("Find Duplicates Items"), QLatin1String("Duplicates"), false);
     d->expanderBox->setCheckBoxVisible(Private::Duplicates, true);
@@ -303,6 +313,9 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     connect(d->qualitySetup, SIGNAL(clicked()),
             this, SLOT(slotQualitySetup()));
 
+    connect(d->minSimilarity, SIGNAL(valueChanged(int)),
+            this,SLOT(slotMinSimilarityChanged(int)));
+
     // --------------------------------------------------------------------------------------
 
     readSettings();
@@ -311,6 +324,18 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 MaintenanceDlg::~MaintenanceDlg()
 {
     delete d;
+}
+
+void MaintenanceDlg::slotMinSimilarityChanged(int newValue)
+{
+    // Set the new minimum value of the maximum similarity
+    d->maxSimilarity->setRange(newValue, 100, 1);
+    // If the new value of the mimimum is now higher than the maximum similarity,
+    // set the maximum similarity to the new value.
+    if (newValue > d->maxSimilarity->value())
+    {
+        d->maxSimilarity->setValue(d->minSimilarity->value());
+    }
 }
 
 void MaintenanceDlg::slotOk()
@@ -333,7 +358,8 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.fingerPrints                        = d->expanderBox->isChecked(Private::FingerPrints);
     prm.scanFingerPrints                    = d->scanFingerPrints->isChecked();
     prm.duplicates                          = d->expanderBox->isChecked(Private::Duplicates);
-    prm.similarity                          = d->similarity->value();
+    prm.minSimilarity                       = d->minSimilarity->value();
+    prm.maxSimilarity                       = d->maxSimilarity->value();
     prm.faceManagement                      = d->expanderBox->isChecked(Private::FaceManagement);
     prm.faceSettings.alreadyScannedHandling = (FaceScanSettings::AlreadyScannedHandling)d->faceScannedHandling->itemData(d->faceScannedHandling->currentIndex()).toInt();
     prm.faceSettings.albums                 = d->albumSelectors->selectedAlbums();
@@ -363,7 +389,8 @@ void MaintenanceDlg::readSettings()
     d->expanderBox->setChecked(Private::FingerPrints,       group.readEntry(d->configFingerPrints,       prm.fingerPrints));
     d->scanFingerPrints->setChecked(group.readEntry(d->configScanFingerPrints,                           prm.scanFingerPrints));
     d->expanderBox->setChecked(Private::Duplicates,         group.readEntry(d->configDuplicates,         prm.duplicates));
-    d->similarity->setValue(group.readEntry(d->configSimilarity,                                         prm.similarity));
+    d->minSimilarity->setValue(group.readEntry(d->configMinSimilarity,                                   prm.minSimilarity));
+    d->maxSimilarity->setValue(group.readEntry(d->configMaxSimilarity,                                   prm.maxSimilarity));
     d->expanderBox->setChecked(Private::FaceManagement,     group.readEntry(d->configFaceManagement,     prm.faceManagement));
     d->faceScannedHandling->setCurrentIndex(group.readEntry(d->configFaceScannedHandling,                (int)prm.faceSettings.alreadyScannedHandling));
     d->expanderBox->setChecked(Private::ImageQualitySorter, group.readEntry(d->configImageQualitySorter, prm.qualitySort));
@@ -397,7 +424,8 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configFingerPrints,        prm.fingerPrints);
     group.writeEntry(d->configScanFingerPrints,    prm.scanFingerPrints);
     group.writeEntry(d->configDuplicates,          prm.duplicates);
-    group.writeEntry(d->configSimilarity,          prm.similarity);
+    group.writeEntry(d->configMinSimilarity,       prm.minSimilarity);
+    group.writeEntry(d->configMaxSimilarity,       prm.maxSimilarity);
     group.writeEntry(d->configFaceManagement,      prm.faceManagement);
     group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
     group.writeEntry(d->configImageQualitySorter,  prm.qualitySort);
