@@ -286,9 +286,9 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     QGridLayout* const grid3      = new QGridLayout(pwpanel);
 
     d->previewFastPreview         = new QRadioButton(i18nc("@option:radio",
-                                                           "Embedded view shows a small, quick preview"));
+                                                           "Preview shows embedded view if available (faster)"));
     d->previewFullView            = new QRadioButton(i18nc("@option:radio",
-                                                           "Embedded view shows the full image"));
+                                                           "Preview shows the full image"));
     QLabel* const rawPreviewLabel = new QLabel(i18nc("@label:listbox Mode of RAW preview decoding:",
                                                      "Raw images:"));
     d->previewRawMode             = new QComboBox;
