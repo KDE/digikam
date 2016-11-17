@@ -129,7 +129,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->maxSimilarity->setSingleStep(1);
     d->maxSimilarity->setSuffix(QLatin1String("%"));
 
-    d->similarityLabel = new QLabel(i18n("Similarity:"));
+    d->similarityLabel = new QLabel(i18n("Similarity range:"));
     d->similarityLabel->setBuddy(d->minSimilarity);
 
     d->similarityIntervalLabel = new QLabel(QLatin1String("-"));

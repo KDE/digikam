@@ -295,7 +295,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     // ---------------------------------------------------------------
 
-    QLabel* const resultsLabel = new QLabel(i18n("Threshold:"));
+    QLabel* const resultsLabel = new QLabel(i18n("Similarity range:"));
     d->levelImage              = new QSpinBox();
     d->levelImage->setSuffix(QLatin1String("%"));
     d->levelImage->setRange(1, 100);
