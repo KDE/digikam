@@ -33,4 +33,5 @@ BUGFIXES FROM BUGZILLA:
 021 ==> 372323 - Camera autodetection fails when using AppImage bundle.
 022 ==> 372583 - The Similarity in DuplicatesSearch and FuzzySearch should be renamed to Similarity range [patch].
 023 ==> 372584 - It is not possible to give a similarity range for duplicates search in maintenance dialog [patch].
-024 ==> 
+024 ==> 372683 - Attempt to set a screen on a child window and DBusMenuExporterPrivate::fillLayoutItem No id for action.
+025 ==> 
