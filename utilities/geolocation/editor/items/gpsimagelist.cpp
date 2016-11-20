@@ -119,7 +119,7 @@ void GPSImageList::startDrag(Qt::DropActions supportedActions)
 
     QDrag* const drag = new QDrag(this);
     drag->setMimeData(dragMimeData);
-    drag->start(Qt::CopyAction);
+    drag->exec(Qt::CopyAction);
 }
 
 void GPSImageList::setModelAndSelectionModel(GPSImageModel* const model, QItemSelectionModel* const selectionModel)
