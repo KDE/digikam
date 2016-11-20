@@ -35,4 +35,5 @@ BUGFIXES FROM BUGZILLA:
 023 ==> 372584 - It is not possible to give a similarity range for duplicates search in maintenance dialog [patch].
 024 ==> 372683 - Attempt to set a screen on a child window and DBusMenuExporterPrivate::fillLayoutItem No id for action.
 025 ==> 372640 - Can't drag any image file from digikam to GIMP.
-026 ==> 
+026 ==> 370150 - digiKam geolocation editor drag and drop works only at the first edit.
+027 ==> 
