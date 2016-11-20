@@ -197,7 +197,7 @@ void DragDropViewImplementation::startDrag(Qt::DropActions supportedActions)
         QDrag* const drag = new QDrag(asView());
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
-        drag->exec(supportedActions, Qt::IgnoreAction);
+        drag->exec(supportedActions, Qt::CopyAction);
     }
 }
 

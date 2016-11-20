@@ -656,7 +656,7 @@ void AbstractAlbumTreeView::startDrag(Qt::DropActions supportedActions)
         QDrag* const drag           = new QDrag(this);
         drag->setPixmap(pixmap);
         drag->setMimeData(data);
-        drag->exec(supportedActions, Qt::IgnoreAction);
+        drag->exec(supportedActions, Qt::CopyAction);
     }
 }
 
