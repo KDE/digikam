@@ -1014,7 +1014,7 @@ void EditorWindow::setupStandardActions()
 
     // -- Tool control actions ---------------------------------------------------------
 
-    m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("Ok"), this);
+    m_applyToolAction = new QAction(QIcon::fromTheme(QLatin1String("dialog-ok-apply")), i18n("OK"), this);
     ac->addAction(QLatin1String("editorwindow_applytool"), m_applyToolAction);
     ac->setDefaultShortcut(m_applyToolAction, Qt::Key_Return);
     connect(m_applyToolAction, SIGNAL(triggered()), this, SLOT(slotApplyTool()));

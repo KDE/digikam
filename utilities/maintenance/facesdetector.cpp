@@ -67,7 +67,7 @@ public:
         QVBoxLayout* const vbox     = new QVBoxLayout;
         QTextEdit* const edit       = new QTextEdit;
         vbox->addWidget(edit, 1);
-        QPushButton* const okButton = new QPushButton(i18n("Ok"));
+        QPushButton* const okButton = new QPushButton(i18n("OK"));
         vbox->addWidget(okButton, 0, Qt::AlignRight);
 
         setLayout(vbox);

@@ -626,7 +626,7 @@ StyleSheetDebugger::StyleSheetDebugger(QWidget* const object)
     QVBoxLayout* const vbox = new QVBoxLayout;
     m_edit                  = new QTextEdit;
 
-    m_okButton = new QPushButton(i18n("Ok"));
+    m_okButton = new QPushButton(i18n("OK"));
     m_okButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
 
     vbox->addWidget(m_edit,     1);

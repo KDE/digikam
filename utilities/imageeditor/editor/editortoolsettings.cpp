@@ -186,7 +186,7 @@ EditorToolSettings::EditorToolSettings(QWidget* const parent)
     d->defaultBtn->setIcon(QIcon::fromTheme(QLatin1String("document-revert")));
     d->defaultBtn->setToolTip(i18n("Reset all settings to their default values."));
 
-    d->okBtn = new QPushButton(i18n("Ok"));
+    d->okBtn = new QPushButton(i18n("OK"));
     d->okBtn->setIcon(QIcon::fromTheme(QLatin1String("dialog-ok-apply")));
     d->okBtn->setDefault(true);
 
