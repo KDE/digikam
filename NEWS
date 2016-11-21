@@ -36,4 +36,5 @@ BUGFIXES FROM BUGZILLA:
 024 ==> 372683 - Attempt to set a screen on a child window and DBusMenuExporterPrivate::fillLayoutItem No id for action.
 025 ==> 372640 - Can't drag any image file from digikam to GIMP.
 026 ==> 370150 - digiKam geolocation editor drag and drop works only at the first edit.
-027 ==> 
+027 ==> 372672 - File Renaming Options sidebar is missing.
+028 ==> 
