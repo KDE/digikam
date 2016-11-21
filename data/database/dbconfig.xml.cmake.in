@@ -1925,58 +1925,64 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">DROP TRIGGER IF EXISTS delete_tag;</statement>
                 <statement mode="plain">DROP TRIGGER IF EXISTS move_tagstree;</statement>
                 <statement mode="plain">ALTER TABLE AlbumRoots
+                                        DROP INDEX IF EXISTS identifier;</statement>
+                <statement mode="plain">ALTER TABLE AlbumRoots
                                         ADD UNIQUE (identifier(127), specificPath(128)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE Albums
-                                        DROP FOREIGN KEY Albums_AlbumRoots;</statement>
+                                        DROP FOREIGN KEY IF EXISTS Albums_AlbumRoots,
+                                        DROP INDEX IF EXISTS albumRoot;</statement>
                 <statement mode="plain">ALTER TABLE Albums
                                         ADD CONSTRAINT Albums_AlbumRoots FOREIGN KEY (albumRoot) REFERENCES AlbumRoots (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE (albumRoot, relativePath(255)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE Images
-                                        DROP FOREIGN KEY Images_Albums;</statement>
+                                        DROP FOREIGN KEY IF EXISTS Images_Albums,
+                                        DROP INDEX IF EXISTS album;</statement>
                 <statement mode="plain">ALTER TABLE Images
                                         ADD CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE (album, name(255)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">UPDATE Albums SET icon = null where icon = 0;</statement>
                 <statement mode="plain">ALTER TABLE Albums
-                                        DROP FOREIGN KEY Albums_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS Albums_Images;</statement>
                 <statement mode="plain">ALTER TABLE Albums
                                         ADD CONSTRAINT Albums_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE;</statement>
                 <statement mode="plain">ALTER TABLE ImageHaarMatrix
-                                        DROP FOREIGN KEY ImageHaarMatrix_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageHaarMatrix_Images;</statement>
                 <statement mode="plain">ALTER TABLE ImageHaarMatrix
                                         ADD CONSTRAINT ImageHaarMatrix_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageInformation
-                                        DROP FOREIGN KEY ImageInformation_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageInformation_Images;</statement>
                 <statement mode="plain">ALTER TABLE ImageInformation
                                         ADD CONSTRAINT ImageInformation_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageMetadata
-                                        DROP FOREIGN KEY ImageMetadata_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageMetadata_Images;</statement>
                 <statement mode="plain">ALTER TABLE ImageMetadata
                                         ADD CONSTRAINT ImageMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE VideoMetadata
-                                        DROP FOREIGN KEY VideoMetadata_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS VideoMetadata_Images;</statement>
                 <statement mode="plain">ALTER TABLE VideoMetadata
                                         ADD CONSTRAINT VideoMetadata_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImagePositions
-                                        DROP FOREIGN KEY ImagePositions_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImagePositions_Images;</statement>
                 <statement mode="plain">ALTER TABLE ImagePositions
                                         ADD CONSTRAINT ImagePositions_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageComments
-                                        DROP FOREIGN KEY ImageComments_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageComments_Images,
+                                        DROP INDEX IF EXISTS imageid;</statement>
                 <statement mode="plain">ALTER TABLE ImageComments
                                         ADD CONSTRAINT ImageComments_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE(imageid, type, language, author(202)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageCopyright
-                                        DROP FOREIGN KEY ImageCopyright_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageCopyright_Images,
+                                        DROP INDEX IF EXISTS imageid;</statement>
                 <statement mode="plain">ALTER TABLE ImageCopyright
                                         ADD CONSTRAINT ImageCopyright_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE(imageid, property(110), value(111), extraValue(111)),
@@ -1988,20 +1994,22 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">SET SQL_MODE=@OLD_SQL_MODE;</statement>
                 <statement mode="plain">UPDATE Tags set icon = null where icon = 0;</statement>
                 <statement mode="plain">ALTER TABLE Tags
-                                        DROP FOREIGN KEY Tags_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS Tags_Images,
+                                        DROP INDEX IF EXISTS pid;</statement>
                 <statement mode="plain">ALTER TABLE Tags
                                         ADD CONSTRAINT Tags_Images FOREIGN KEY (icon) REFERENCES Images (id) ON DELETE SET NULL ON UPDATE CASCADE,
                                         ADD UNIQUE(pid, name(100)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageTags
-                                        DROP FOREIGN KEY ImageTags_Images,
-                                        DROP FOREIGN KEY ImageTags_Tags;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageTags_Images,
+                                        DROP FOREIGN KEY IF EXISTS ImageTags_Tags;</statement>
                 <statement mode="plain">ALTER TABLE ImageTags
                                         ADD CONSTRAINT ImageTags_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD CONSTRAINT ImageTags_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageProperties
-                                        DROP FOREIGN KEY ImageProperties_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageProperties_Images,
+                                        DROP INDEX IF EXISTS imageid;</statement>
                 <statement mode="plain">ALTER TABLE ImageProperties
                                         ADD CONSTRAINT ImageProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD UNIQUE (imageid, property(255)),
@@ -2011,29 +2019,30 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">ALTER TABLE DownloadHistory
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE Settings
-                                        DROP KEY keyword,
+                                        DROP INDEX IF EXISTS keyword;</statement>
+                <statement mode="plain">ALTER TABLE Settings
                                         ADD UNIQUE(keyword(255)),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageHistory
-                                        DROP FOREIGN KEY ImageHistory_Images;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageHistory_Images;</statement>
                 <statement mode="plain">ALTER TABLE ImageHistory
                                         ADD CONSTRAINT ImageHistory_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageRelations
-                                        DROP FOREIGN KEY ImageRelations_ImagesS,
-                                        DROP FOREIGN KEY ImageRelations_ImagesO;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageRelations_ImagesS,
+                                        DROP FOREIGN KEY IF EXISTS ImageRelations_ImagesO;</statement>
                 <statement mode="plain">ALTER TABLE ImageRelations
                                         ADD CONSTRAINT ImageRelations_ImagesS FOREIGN KEY (subject) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD CONSTRAINT ImageRelations_ImagesO FOREIGN KEY (object) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE TagProperties
-                                        DROP FOREIGN KEY TagProperties_Tags;</statement>
+                                        DROP FOREIGN KEY IF EXISTS TagProperties_Tags;</statement>
                 <statement mode="plain">ALTER TABLE TagProperties
                                         ADD CONSTRAINT TagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE ImageTagProperties
-                                        DROP FOREIGN KEY ImageTagProperties_Images,
-                                        DROP FOREIGN KEY ImageTagProperties_Tags;</statement>
+                                        DROP FOREIGN KEY IF EXISTS ImageTagProperties_Images,
+                                        DROP FOREIGN KEY IF EXISTS ImageTagProperties_Tags;</statement>
                 <statement mode="plain">ALTER TABLE ImageTagProperties
                                         ADD CONSTRAINT ImageTagProperties_Images FOREIGN KEY (imageid) REFERENCES Images (id) ON DELETE CASCADE ON UPDATE CASCADE,
                                         ADD CONSTRAINT ImageTagProperties_Tags FOREIGN KEY (tagid) REFERENCES Tags (id) ON DELETE CASCADE ON UPDATE CASCADE,

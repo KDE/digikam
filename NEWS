@@ -39,4 +39,5 @@ BUGFIXES FROM BUGZILLA:
 027 ==> 372672 - File Renaming Options sidebar is missing.
 028 ==> 372722 - Missing items in albums.
 029 ==> 204006 - Automatic renaming of duplicate filenames while importing.
-030 ==> 
+030 ==> 372312 - Database upgrade v7 to v8 failed.
+031 ==> 
