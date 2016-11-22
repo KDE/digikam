@@ -2190,6 +2190,7 @@ QString DMetadata::getLensDescription() const
     lensExifTags.append(QLatin1String("Exif.Sony2.LensID"));          // Sony Cameras Makernote.
     lensExifTags.append(QLatin1String("Exif.SonyMinolta.LensID"));    // Sony Cameras Makernote.
     lensExifTags.append(QLatin1String("Exif.Pentax.LensType"));       // Pentax Cameras Makernote.
+    lensExifTags.append(QLatin1String("Exif.PentaxDng.LensType"));    // Pentax Cameras Makernote.
     lensExifTags.append(QLatin1String("Exif.Panasonic.0x0051"));      // Panasonic Cameras Makernote.
     lensExifTags.append(QLatin1String("Exif.Panasonic.0x0310"));      // Panasonic Cameras Makernote.
     lensExifTags.append(QLatin1String("Exif.Sigma.LensRange"));       // Sigma Cameras Makernote.
