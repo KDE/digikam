@@ -82,6 +82,7 @@ public Q_SLOTS:
 Q_SIGNALS:
 
     void editorCurrentUrlChanged(const QUrl& url);
+    void signalImagesDeleted(const QList<qlonglong>& imageIds);
 
 protected:
 

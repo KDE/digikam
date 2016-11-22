@@ -54,16 +54,30 @@ public:
     Private() :
         minSimilarity(90),
         maxSimilarity(100),
+        isAlbumUpdate(false),
         job(0)
     {
     }
 
     int                   minSimilarity;
     int                   maxSimilarity;
+    bool                  isAlbumUpdate;
     QList<int>            albumsIdList;
+    QList<qlonglong>      imageIdList;
     QList<int>            tagsIdList;
     SearchesDBJobsThread* job;
 };
+
+DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity, int maxSimilarity, ProgressItem* const parent)
+    : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
+      d(new Private)
+{
+    d->minSimilarity   = minSimilarity;
+    d->maxSimilarity   = maxSimilarity;
+
+    d->isAlbumUpdate   = true;
+    d->imageIdList     = imageIds;
+}
 
 DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity, int maxSimilarity, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
@@ -71,7 +85,7 @@ DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tag
 {
     d->minSimilarity   = minSimilarity;
     d->maxSimilarity   = maxSimilarity;
-    
+
     foreach(Album* const a, albums)
         d->albumsIdList << a->id();
 
@@ -85,7 +99,7 @@ DuplicatesFinder::DuplicatesFinder(const int minSimilarity, int maxSimilarity, P
 {
     d->minSimilarity = minSimilarity;
     d->maxSimilarity = maxSimilarity;
-    
+
     foreach(Album* const a, AlbumManager::instance()->allPAlbums())
         d->albumsIdList << a->id();
 }
@@ -109,6 +123,10 @@ void DuplicatesFinder::slotStart()
     jobInfo.setMinThreshold(minThresh);
     jobInfo.setMaxThreshold(maxThresh);
     jobInfo.setAlbumsIds(d->albumsIdList);
+    jobInfo.setImageIds(d->imageIdList);
+
+    if (d->isAlbumUpdate)
+        jobInfo.setAlbumUpdate();
 
     if (!d->tagsIdList.isEmpty())
         jobInfo.setTagsIds(d->tagsIdList);

@@ -258,6 +258,13 @@ public:
      * @param name the name of the search
      */
     SAlbum*   findSAlbum(const QString& name) const;
+
+    /**
+     * @return SAlbums with given type, empty list if not found
+     * @param searchType the type of the search
+     */
+    QList< SAlbum* > findSAlbumsBySearchType(int searchType) const;
+
     //@}
 
     /** @name Operations on PAlbum
@@ -556,6 +563,7 @@ public:
      * @param leadingSlash if <code>true</code> return name paths with a leading slash
      */
     QStringList namePaths(const QList<QString>& tagNames, bool leadingSlash=true) const;
+
     //@}
 
     /** @name Accessors to counting maps
@@ -645,6 +653,7 @@ Q_SIGNALS:
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
     void signalTagPropertiesChanged(TAlbum* album);
     void signalAlbumsUpdated(int type);
+    void signalUpdateDuplicatesAlbums(QList<qlonglong> imagesToRescan);
     // Signals a change in this property. Please note that affected albums may appear or disappear after this signal has been emitted.
     void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
 
@@ -666,6 +675,7 @@ private Q_SLOTS:
     void slotSearchChange(const SearchChangeset& changeset);
     void slotCollectionImageChange(const CollectionImageChangeset& changeset);
     void slotImageTagChange(const ImageTagChangeset& changeset);
+    void slotImagesDeleted(const QList<qlonglong>& imageIds);
 
     /**
      * Scan albums directly from database and creates new PAlbums

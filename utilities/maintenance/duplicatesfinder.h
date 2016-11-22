@@ -44,6 +44,9 @@ class DuplicatesFinder : public MaintenanceTool
 
 public:
 
+    /** Version to find all duplicates in the set of images
+     */
+    DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity = 90, int maxSimilarity = 100, ProgressItem* const parent = 0);
     /** Version to find all duplicates over a specific list to PAlbums and TAlbums
      */
     DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity = 90, int maxSimilarity = 100, ProgressItem* const parent = 0);

@@ -766,17 +766,14 @@ void HaarIface::getBestAndWorstPossibleScore(Haar::SignatureData* const sig, Ske
     *lowestAndBestScore = score;
 }
 
-void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
-                                        double requiredPercentage, double maximumPercentage, HaarProgressObserver* const observer)
-{
-    // Carry out search. This takes long.
-    QMap< double,QMap< qlonglong,QList<qlonglong> > > results = findDuplicatesInAlbumsAndTags(albums2Scan, tags2Scan, requiredPercentage, maximumPercentage, observer);
 
+QMap<QString, QString> HaarIface::writeSAlbumQueries(QMap< double,QMap< qlonglong,QList<qlonglong> > > searchResults)
+{
     // Build search XML from the results. Store list of ids of similar images.
     QMap<QString, QString> queries;
 
     // Iterate over the similarity
-    for (QMap< double,QMap< qlonglong,QList<qlonglong> > >::const_iterator similarity_it = results.constBegin(); similarity_it != results.constEnd(); ++similarity_it)
+    for (QMap< double,QMap< qlonglong,QList<qlonglong> > >::const_iterator similarity_it = searchResults.constBegin(); similarity_it != searchResults.constEnd(); ++similarity_it)
     {
         double similarity = similarity_it.key() * 100;
         QMap<qlonglong,QList<qlonglong>> sameSimilarityMap = similarity_it.value();
@@ -798,6 +795,39 @@ void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QLi
             queries.insert(QString::number(it.key()), writer.xml());
         }
     }
+
+    return queries;
+}
+
+void HaarIface::rebuildDuplicatesAlbums(const QList<qlonglong>& imageIds, double requiredPercentage, double maximumPercentage, 
+                                 HaarProgressObserver* const observer)
+{
+    QMap< double,QMap< qlonglong,QList<qlonglong> > > results = findDuplicates(imageIds.toSet(), requiredPercentage, maximumPercentage, observer);
+
+    QMap<QString, QString> queries = writeSAlbumQueries(results);
+
+    // Write the new search albums to the database
+    {
+        CoreDbAccess access;
+        CoreDbTransaction transaction(&access);
+
+        // Update existing searches by deleting and adding them.
+        for (QMap<QString, QString>::const_iterator it = queries.constBegin(); it != queries.constEnd(); ++it)
+        {
+            access.db()->deleteSearch(it.key().toInt());
+            access.db()->addSearch(DatabaseSearch::DuplicatesSearch, it.key(), it.value());
+        }
+    }
+}
+
+void HaarIface::rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
+                                        double requiredPercentage, double maximumPercentage, HaarProgressObserver* const observer)
+{
+    // Carry out search. This takes long.
+    QMap< double,QMap< qlonglong,QList<qlonglong> > > results = findDuplicatesInAlbumsAndTags(albums2Scan, tags2Scan, requiredPercentage, maximumPercentage, observer);
+
+    // Build search XML from the results. Store list of ids of similar images.
+    QMap<QString, QString> queries = writeSAlbumQueries(results);
 
     // Write search albums to database
     {

@@ -197,6 +197,7 @@ SearchesDBJobInfo::SearchesDBJobInfo()
     : DBJobInfo()
 {
     m_duplicates = false;
+    m_albumUpdate = false;
     m_minThreshold  = 0;
     m_maxThreshold  = 1;
     m_searchIds  = QList<int>();
@@ -210,6 +211,16 @@ void SearchesDBJobInfo::setDuplicatesJob()
 bool SearchesDBJobInfo::isDuplicatesJob() const
 {
     return m_duplicates;
+}
+
+void SearchesDBJobInfo::setAlbumUpdate()
+{
+    m_albumUpdate = true;
+}
+
+bool SearchesDBJobInfo::isAlbumUpdate() const
+{
+    return m_albumUpdate;
 }
 
 void SearchesDBJobInfo::setSearchId(int id)
@@ -255,6 +266,16 @@ void SearchesDBJobInfo::setAlbumsIds(const QList<int>& albumsIds)
 QList<int> SearchesDBJobInfo::albumsIds() const
 {
     return m_albumsIds;
+}
+
+void SearchesDBJobInfo::setImageIds(const QList<qlonglong>& imageIds)
+{
+    m_imageIds = imageIds;
+}
+
+QList<qlonglong> SearchesDBJobInfo::imageIds() const
+{
+    return m_imageIds;
 }
 
 void SearchesDBJobInfo::setTagsIds(const QList<int>& tagsIds)

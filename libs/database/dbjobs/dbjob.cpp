@@ -270,9 +270,9 @@ void SearchesJob::run()
     }
     else
     {
-        if (m_jobInfo.albumsIds().isEmpty() && m_jobInfo.tagsIds().isEmpty())
+        if (m_jobInfo.albumsIds().isEmpty() && m_jobInfo.tagsIds().isEmpty() && m_jobInfo.imageIds().isEmpty())
         {
-            qCDebug(DIGIKAM_DBJOB_LOG) << "No album ids passed for duplicates search";
+            qCDebug(DIGIKAM_DBJOB_LOG) << "No album, tag or image ids passed for duplicates search";
             return;
         }
 
@@ -285,11 +285,21 @@ void SearchesJob::run()
 
         // Rebuild the duplicate albums
         HaarIface iface;
-        iface.rebuildDuplicatesAlbums(m_jobInfo.albumsIds(),
-                                      m_jobInfo.tagsIds(),
-                                      m_jobInfo.minThreshold(),
-                                      m_jobInfo.maxThreshold(),
-                                      &observer);
+        if (m_jobInfo.isAlbumUpdate())
+        {
+            iface.rebuildDuplicatesAlbums(m_jobInfo.imageIds(),
+                                          m_jobInfo.minThreshold(),
+                                          m_jobInfo.maxThreshold(),
+                                          &observer);
+        }
+        else
+        {
+            iface.rebuildDuplicatesAlbums(m_jobInfo.albumsIds(),
+                                          m_jobInfo.tagsIds(),
+                                          m_jobInfo.minThreshold(),
+                                          m_jobInfo.maxThreshold(),
+                                          &observer);
+        }
     }
 
     emit signalDone();

@@ -84,6 +84,7 @@ extern "C"
 #include "databaseserverstarter.h"
 #include "coredbthumbinfoprovider.h"
 #include "coredburl.h"
+#include "coredbsearchxml.h"
 #include "coredbwatch.h"
 #include "dio.h"
 #include "facetags.h"
@@ -2071,6 +2072,20 @@ SAlbum* AlbumManager::findSAlbum(const QString& name) const
     return 0;
 }
 
+QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
+{
+    QList<SAlbum*> albums;
+    for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
+    {
+        SAlbum* sAlbum = dynamic_cast<SAlbum*>(album);
+        if (sAlbum->searchType() == searchType)
+        {
+            albums.append(sAlbum);
+        }
+    }
+    return albums;
+}
+
 void AlbumManager::addGuardedPointer(Album* album, Album** pointer)
 {
     if (album)
@@ -3465,6 +3480,54 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
 
         default:
             break;
+    }
+}
+
+void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
+{
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
+
+    QSet<qlonglong> imagesToRescan;
+    QSet<SAlbum*> sAlbumsToDelete;
+
+    QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
+
+    foreach(SAlbum* sAlbum, sAlbums)
+    {
+        // Read the search query XML and save the image ids
+        SearchXmlReader reader(sAlbum->query());
+        SearchXml::Element element;
+        QSet<qlonglong> images;
+        while ((element = reader.readNext()) != SearchXml::End)
+        {
+            if ((element == SearchXml::Field) && (reader.fieldName().compare(QLatin1String("imageid")) == 0))
+            {
+                images = reader.valueToLongLongList().toSet();
+            }
+        }
+        // If the deleted images are part of the SAlbum,
+        // mark the album as ready for deletion and the images as ready for rescan.
+        if (images.intersects(imageIds.toSet()))
+        {
+            sAlbumsToDelete.insert(sAlbum);
+            imagesToRescan.unite(images);
+        }
+    }
+
+    if (!imagesToRescan.empty())
+    {
+        // Delete albums
+        foreach (SAlbum* sAlbum, sAlbumsToDelete)
+        {
+            deleteSAlbum(sAlbum);
+        }
+
+        // Remove the deleted images from the set of images for rescan.
+        imagesToRescan.subtract(imageIds.toSet());
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Rescanning " << imagesToRescan.size() << " images for duplicates.";
+        emit signalUpdateDuplicatesAlbums(imagesToRescan.toList());
     }
 }
 

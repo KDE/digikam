@@ -136,6 +136,16 @@ public:
     void rebuildDuplicatesAlbums(const QList<int>& albums2Scan, const QList<int>& tags2Scan,
                                  double requiredPercentage, double maximumPercentage, HaarProgressObserver* const observer = 0);
 
+    /** 
+     * This method rebuilds the given SAlbums by searching duplicates and replacing the SAlbums by the updated versions.
+     * @param imageIds The set of images to scan for duplicates.
+     * @param requiredPercentage The minimum similarity for duplicate recognition.
+     * @param maximumPercentage The maximum similarity for duplicate recognition.
+     * @param observer The progress observer.
+     */
+    void rebuildDuplicatesAlbums(const QList<qlonglong>& imageIds, double requiredPercentage, double maximumPercentage, 
+                                 HaarProgressObserver* const observer = 0);
+
     /** Retrieve the Haar signature from database using image id.
      *  Return true if item signature exist else false.
      */
@@ -152,6 +162,12 @@ private:
     QImage loadQImage(const QString& filename);
 
     bool   indexImage(qlonglong imageid);
+
+    /**
+     * This method writes the search results to the SearchXml structure.
+     * @param searchResults The results to write as XML.
+     */
+    QMap<QString, QString> writeSAlbumQueries(QMap< double,QMap< qlonglong,QList<qlonglong> > > searchResults);
 
     QList<qlonglong> bestMatches(Haar::SignatureData* const data, int numberOfResults, SketchType type);
     QPair<double,QList<qlonglong>> bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig,
