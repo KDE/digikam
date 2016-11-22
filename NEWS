@@ -41,4 +41,5 @@ BUGFIXES FROM BUGZILLA:
 029 ==> 204006 - Automatic renaming of duplicate filenames while importing.
 030 ==> 372312 - Database upgrade v7 to v8 failed.
 031 ==> 366162 - After exporting the images in picasa or yandex photo they are not visible in digiKam.
-032 ==> 
+032 ==> 261417 - Duplicate image counter is not adjusted when removing a duplicate [patch].
+033 ==> 
