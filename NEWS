@@ -40,4 +40,5 @@ BUGFIXES FROM BUGZILLA:
 028 ==> 372722 - Missing items in albums.
 029 ==> 204006 - Automatic renaming of duplicate filenames while importing.
 030 ==> 372312 - Database upgrade v7 to v8 failed.
-031 ==> 
+031 ==> 366162 - After exporting the images in picasa or yandex photo they are not visible in digiKam.
+032 ==> 
