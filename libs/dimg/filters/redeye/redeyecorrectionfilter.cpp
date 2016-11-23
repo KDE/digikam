@@ -118,6 +118,7 @@ void RedEyeCorrectionFilter::filterImage()
         }
         else
         {
+            qCDebug(DIGIKAM_DIMG_LOG) << "Error open file shapepredictor.dat";
             return;
         }
     }
