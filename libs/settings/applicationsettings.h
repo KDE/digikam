@@ -419,6 +419,12 @@ public:
     void setRatingFilterCond(int val);
     int  getRatingFilterCond() const;
 
+    void setDuplicatesSearchLastMinSimilarity(int val);
+    int  getDuplicatesSearchLastMinSimilarity() const;
+
+    void setDuplicatesSearchLastMaxSimilarity(int val);
+    int  getDuplicatesSearchLastMaxSimilarity() const;
+
 private Q_SLOTS:
 
     void applyBalooSettings();

@@ -208,4 +208,25 @@ bool ApplicationSettings::getScanAtStart() const
     return d->scanAtStart;
 }
 
+void ApplicationSettings::setDuplicatesSearchLastMinSimilarity(int val)
+{
+    d->duplicatesSearchLastMinSimilarity = val;
+}
+
+int  ApplicationSettings::getDuplicatesSearchLastMinSimilarity() const
+{
+    return d->duplicatesSearchLastMinSimilarity;
+}
+
+void ApplicationSettings::setDuplicatesSearchLastMaxSimilarity(int val)
+{
+    d->duplicatesSearchLastMaxSimilarity = val;
+}
+
+int  ApplicationSettings::getDuplicatesSearchLastMaxSimilarity() const
+{
+    return d->duplicatesSearchLastMaxSimilarity;
+}
+
+
 }  // namespace Digikam

@@ -43,6 +43,7 @@
 #include "digikamapp.h"
 #include "dbjobsthread.h"
 #include "dbjobsmanager.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -164,6 +165,10 @@ void DuplicatesFinder::slotDone()
         DNotificationWrapper(QString(), d->job->errorsList().first(),
                              DigikamApp::instance(), DigikamApp::instance()->windowTitle());
     }
+
+    // save the min and max similarity in the configuration.
+    ApplicationSettings::instance()->setDuplicatesSearchLastMinSimilarity(d->minSimilarity);
+    ApplicationSettings::instance()->setDuplicatesSearchLastMaxSimilarity(d->maxSimilarity);
 
     d->job = 0;
     MaintenanceTool::slotDone();

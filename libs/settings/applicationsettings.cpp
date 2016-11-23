@@ -120,83 +120,83 @@ void ApplicationSettings::readSettings()
         d->albumCategoryNames = collectionList;
     }
 
-    d->albumSortRole                    = ApplicationSettings::AlbumSortRole(group.readEntry(d->configAlbumSortRoleEntry,
-                                          (int)ApplicationSettings::ByFolder));
+    d->albumSortRole                     = ApplicationSettings::AlbumSortRole(group.readEntry(d->configAlbumSortRoleEntry,
+                                           (int)ApplicationSettings::ByFolder));
 
-    d->imageSortOrder                   = group.readEntry(d->configImageSortOrderEntry,      (int)ImageSortSettings::SortByFileName);
-    d->imageSorting                     = group.readEntry(d->configImageSortingEntry,        (int)ImageSortSettings::AscendingOrder);
-    d->imageGroupMode                   = group.readEntry(d->configImageGroupModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
-    d->imageGroupSortOrder              = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
+    d->imageSortOrder                    = group.readEntry(d->configImageSortOrderEntry,      (int)ImageSortSettings::SortByFileName);
+    d->imageSorting                      = group.readEntry(d->configImageSortingEntry,        (int)ImageSortSettings::AscendingOrder);
+    d->imageGroupMode                    = group.readEntry(d->configImageGroupModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
+    d->imageGroupSortOrder               = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
 
-    d->itemLeftClickAction              = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
-                                          (int)ApplicationSettings::ShowPreview));
+    d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
+                                           (int)ApplicationSettings::ShowPreview));
 
-    d->thumbnailSize                    = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
-    d->treeThumbnailSize                = group.readEntry(d->configDefaultTreeIconSizeEntry,          22);
-    d->treeviewFont                     = group.readEntry(d->configTreeViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
-    d->currentTheme                     = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
+    d->thumbnailSize                     = group.readEntry(d->configDefaultIconSizeEntry,              (int)ThumbnailSize::Medium);
+    d->treeThumbnailSize                 = group.readEntry(d->configDefaultTreeIconSizeEntry,          22);
+    d->treeviewFont                      = group.readEntry(d->configTreeViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    d->currentTheme                      = group.readEntry(d->configThemeEntry,                        ThemeManager::instance()->defaultThemeName());
 
-    d->sidebarTitleStyle                = (DMultiTabBar::TextStyle)group.readEntry(d->configSidebarTitleStyleEntry,
-                                          (int)DMultiTabBar::AllIconsText);
+    d->sidebarTitleStyle                 = (DMultiTabBar::TextStyle)group.readEntry(d->configSidebarTitleStyleEntry,
+                                           (int)DMultiTabBar::AllIconsText);
 
-    d->ratingFilterCond                 = group.readEntry(d->configRatingFilterConditionEntry,
-                                          (int)ImageFilterSettings::GreaterEqualCondition);
+    d->ratingFilterCond                  = group.readEntry(d->configRatingFilterConditionEntry,
+                                           (int)ImageFilterSettings::GreaterEqualCondition);
 
-    d->recursiveAlbums                  = group.readEntry(d->configRecursiveAlbumsEntry,              false);
-    d->recursiveTags                    = group.readEntry(d->configRecursiveTagsEntry,                true);
+    d->recursiveAlbums                   = group.readEntry(d->configRecursiveAlbumsEntry,              false);
+    d->recursiveTags                     = group.readEntry(d->configRecursiveTagsEntry,                true);
 
-    d->iconShowName                     = group.readEntry(d->configIconShowNameEntry,                 false);
-    d->iconShowResolution               = group.readEntry(d->configIconShowResolutionEntry,           false);
-    d->iconShowAspectRatio              = group.readEntry(d->configIconShowAspectRatioEntry,          false);
-    d->iconShowSize                     = group.readEntry(d->configIconShowSizeEntry,                 false);
-    d->iconShowDate                     = group.readEntry(d->configIconShowDateEntry,                 true);
-    d->iconShowModDate                  = group.readEntry(d->configIconShowModificationDateEntry,     true);
-    d->iconShowTitle                    = group.readEntry(d->configIconShowTitleEntry,                true);
-    d->iconShowComments                 = group.readEntry(d->configIconShowCommentsEntry,             true);
-    d->iconShowTags                     = group.readEntry(d->configIconShowTagsEntry,                 true);
-    d->iconShowOverlays                 = group.readEntry(d->configIconShowOverlaysEntry,             true);
-    d->iconShowFullscreen               = group.readEntry(d->configIconShowFullscreenEntry,           true);
-    d->iconShowRating                   = group.readEntry(d->configIconShowRatingEntry,               true);
-    d->iconShowImageFormat              = group.readEntry(d->configIconShowImageFormatEntry,          false);
-    d->iconShowCoordinates              = group.readEntry(d->configIconShowCoordinatesEntry,          false);
-    d->iconviewFont                     = group.readEntry(d->configIconViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    d->iconShowName                      = group.readEntry(d->configIconShowNameEntry,                 false);
+    d->iconShowResolution                = group.readEntry(d->configIconShowResolutionEntry,           false);
+    d->iconShowAspectRatio               = group.readEntry(d->configIconShowAspectRatioEntry,          false);
+    d->iconShowSize                      = group.readEntry(d->configIconShowSizeEntry,                 false);
+    d->iconShowDate                      = group.readEntry(d->configIconShowDateEntry,                 true);
+    d->iconShowModDate                   = group.readEntry(d->configIconShowModificationDateEntry,     true);
+    d->iconShowTitle                     = group.readEntry(d->configIconShowTitleEntry,                true);
+    d->iconShowComments                  = group.readEntry(d->configIconShowCommentsEntry,             true);
+    d->iconShowTags                      = group.readEntry(d->configIconShowTagsEntry,                 true);
+    d->iconShowOverlays                  = group.readEntry(d->configIconShowOverlaysEntry,             true);
+    d->iconShowFullscreen                = group.readEntry(d->configIconShowFullscreenEntry,           true);
+    d->iconShowRating                    = group.readEntry(d->configIconShowRatingEntry,               true);
+    d->iconShowImageFormat               = group.readEntry(d->configIconShowImageFormatEntry,          false);
+    d->iconShowCoordinates               = group.readEntry(d->configIconShowCoordinatesEntry,          false);
+    d->iconviewFont                      = group.readEntry(d->configIconViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
-    d->toolTipsFont                     = group.readEntry(d->configToolTipsFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
-    d->showToolTips                     = group.readEntry(d->configShowToolTipsEntry,                 false);
-    d->tooltipShowFileName              = group.readEntry(d->configToolTipsShowFileNameEntry,         true);
-    d->tooltipShowFileDate              = group.readEntry(d->configToolTipsShowFileDateEntry,         false);
-    d->tooltipShowFileSize              = group.readEntry(d->configToolTipsShowFileSizeEntry,         false);
-    d->tooltipShowImageType             = group.readEntry(d->configToolTipsShowImageTypeEntry,        false);
-    d->tooltipShowImageDim              = group.readEntry(d->configToolTipsShowImageDimEntry,         true);
-    d->tooltipShowImageAR               = group.readEntry(d->configToolTipsShowImageAREntry,          true);
-    d->tooltipShowPhotoMake             = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
-    d->tooltipShowPhotoDate             = group.readEntry(d->configToolTipsShowPhotoDateEntry,        true);
-    d->tooltipShowPhotoFocal            = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
-    d->tooltipShowPhotoExpo             = group.readEntry(d->configToolTipsShowPhotoExpoEntry,        true);
-    d->tooltipShowPhotoMode             = group.readEntry(d->configToolTipsShowPhotoModeEntry,        true);
-    d->tooltipShowPhotoFlash            = group.readEntry(d->configToolTipsShowPhotoFlashEntry,       false);
-    d->tooltipShowPhotoWb               = group.readEntry(d->configToolTipsShowPhotoWBEntry,          false);
-    d->tooltipShowAlbumName             = group.readEntry(d->configToolTipsShowAlbumNameEntry,        false);
-    d->tooltipShowTitles                = group.readEntry(d->configToolTipsShowTitlesEntry,           true);
-    d->tooltipShowComments              = group.readEntry(d->configToolTipsShowCommentsEntry,         true);
-    d->tooltipShowTags                  = group.readEntry(d->configToolTipsShowTagsEntry,             true);
-    d->tooltipShowLabelRating           = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
+    d->toolTipsFont                      = group.readEntry(d->configToolTipsFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
+    d->showToolTips                      = group.readEntry(d->configShowToolTipsEntry,                 false);
+    d->tooltipShowFileName               = group.readEntry(d->configToolTipsShowFileNameEntry,         true);
+    d->tooltipShowFileDate               = group.readEntry(d->configToolTipsShowFileDateEntry,         false);
+    d->tooltipShowFileSize               = group.readEntry(d->configToolTipsShowFileSizeEntry,         false);
+    d->tooltipShowImageType              = group.readEntry(d->configToolTipsShowImageTypeEntry,        false);
+    d->tooltipShowImageDim               = group.readEntry(d->configToolTipsShowImageDimEntry,         true);
+    d->tooltipShowImageAR                = group.readEntry(d->configToolTipsShowImageAREntry,          true);
+    d->tooltipShowPhotoMake              = group.readEntry(d->configToolTipsShowPhotoMakeEntry,        true);
+    d->tooltipShowPhotoDate              = group.readEntry(d->configToolTipsShowPhotoDateEntry,        true);
+    d->tooltipShowPhotoFocal             = group.readEntry(d->configToolTipsShowPhotoFocalEntry,       true);
+    d->tooltipShowPhotoExpo              = group.readEntry(d->configToolTipsShowPhotoExpoEntry,        true);
+    d->tooltipShowPhotoMode              = group.readEntry(d->configToolTipsShowPhotoModeEntry,        true);
+    d->tooltipShowPhotoFlash             = group.readEntry(d->configToolTipsShowPhotoFlashEntry,       false);
+    d->tooltipShowPhotoWb                = group.readEntry(d->configToolTipsShowPhotoWBEntry,          false);
+    d->tooltipShowAlbumName              = group.readEntry(d->configToolTipsShowAlbumNameEntry,        false);
+    d->tooltipShowTitles                 = group.readEntry(d->configToolTipsShowTitlesEntry,           true);
+    d->tooltipShowComments               = group.readEntry(d->configToolTipsShowCommentsEntry,         true);
+    d->tooltipShowTags                   = group.readEntry(d->configToolTipsShowTagsEntry,             true);
+    d->tooltipShowLabelRating            = group.readEntry(d->configToolTipsShowLabelRatingEntry,      true);
 
-    d->tooltipShowVideoAspectRatio      = group.readEntry(d->configToolTipsShowVideoAspectRatioEntry,      true);
-    d->tooltipShowVideoAudioBitRate     = group.readEntry(d->configToolTipsShowVideoAudioBitRateEntry,     true);
-    d->tooltipShowVideoAudioChannelType = group.readEntry(d->configToolTipsShowVideoAudioChannelTypeEntry, true);
-    d->tooltipShowVideoAudioCompressor  = group.readEntry(d->configToolTipsShowVideoAudioCompressorEntry,  true);
-    d->tooltipShowVideoDuration         = group.readEntry(d->configToolTipsShowVideoDurationEntry,         true);
-    d->tooltipShowVideoFrameRate        = group.readEntry(d->configToolTipsShowVideoFrameRateEntry,        true);
-    d->tooltipShowVideoVideoCodec       = group.readEntry(d->configToolTipsShowVideoVideoCodecEntry,       true);
+    d->tooltipShowVideoAspectRatio       = group.readEntry(d->configToolTipsShowVideoAspectRatioEntry,      true);
+    d->tooltipShowVideoAudioBitRate      = group.readEntry(d->configToolTipsShowVideoAudioBitRateEntry,     true);
+    d->tooltipShowVideoAudioChannelType  = group.readEntry(d->configToolTipsShowVideoAudioChannelTypeEntry, true);
+    d->tooltipShowVideoAudioCompressor   = group.readEntry(d->configToolTipsShowVideoAudioCompressorEntry,  true);
+    d->tooltipShowVideoDuration          = group.readEntry(d->configToolTipsShowVideoDurationEntry,         true);
+    d->tooltipShowVideoFrameRate         = group.readEntry(d->configToolTipsShowVideoFrameRateEntry,        true);
+    d->tooltipShowVideoVideoCodec        = group.readEntry(d->configToolTipsShowVideoVideoCodecEntry,       true);
 
-    d->showAlbumToolTips                = group.readEntry(d->configShowAlbumToolTipsEntry,            false);
-    d->tooltipShowAlbumTitle            = group.readEntry(d->configToolTipsShowAlbumTitleEntry,       true);
-    d->tooltipShowAlbumDate             = group.readEntry(d->configToolTipsShowAlbumDateEntry,        true);
-    d->tooltipShowAlbumCollection       = group.readEntry(d->configToolTipsShowAlbumCollectionEntry,  true);
-    d->tooltipShowAlbumCategory         = group.readEntry(d->configToolTipsShowAlbumCategoryEntry,    true);
-    d->tooltipShowAlbumCaption          = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
-    d->tooltipShowAlbumPreview          = group.readEntry(d->configToolTipsShowAlbumPreviewEntry,     false);
+    d->showAlbumToolTips                 = group.readEntry(d->configShowAlbumToolTipsEntry,            false);
+    d->tooltipShowAlbumTitle             = group.readEntry(d->configToolTipsShowAlbumTitleEntry,       true);
+    d->tooltipShowAlbumDate              = group.readEntry(d->configToolTipsShowAlbumDateEntry,        true);
+    d->tooltipShowAlbumCollection        = group.readEntry(d->configToolTipsShowAlbumCollectionEntry,  true);
+    d->tooltipShowAlbumCategory          = group.readEntry(d->configToolTipsShowAlbumCategoryEntry,    true);
+    d->tooltipShowAlbumCaption           = group.readEntry(d->configToolTipsShowAlbumCaptionEntry,     true);
+    d->tooltipShowAlbumPreview           = group.readEntry(d->configToolTipsShowAlbumPreviewEntry,     false);
 
     if (group.readEntry(d->configPreviewLoadFullImageSizeEntry, true))
     {
@@ -219,23 +219,23 @@ void ApplicationSettings::readSettings()
         d->previewSettings.quality = PreviewSettings::FastPreview;
     }
 
-    d->previewSettings.zoomOrgSize      = group.readEntry(d->configPreviewZoomOrgSizeEntry,           true);
-    d->previewShowIcons                 = group.readEntry(d->configPreviewShowIconsEntry,             true);
-    d->showThumbbar                     = group.readEntry(d->configShowThumbbarEntry,                 true);
+    d->previewSettings.zoomOrgSize       = group.readEntry(d->configPreviewZoomOrgSizeEntry,           true);
+    d->previewShowIcons                  = group.readEntry(d->configPreviewShowIconsEntry,             true);
+    d->showThumbbar                      = group.readEntry(d->configShowThumbbarEntry,                 true);
 
-    d->showFolderTreeViewItemsCount     = group.readEntry(d->configShowFolderTreeViewItemsCountEntry, false);
+    d->showFolderTreeViewItemsCount      = group.readEntry(d->configShowFolderTreeViewItemsCountEntry, false);
 
     // ---------------------------------------------------------------------
 
-    group                               = generalConfigGroup();
+    group                                = generalConfigGroup();
 
-    d->showSplash                       = group.readEntry(d->configShowSplashEntry,                                  true);
-    d->useTrash                         = group.readEntry(d->configUseTrashEntry,                                    true);
-    d->showTrashDeleteDialog            = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
-    d->showPermanentDeleteDialog        = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
-    d->sidebarApplyDirectly             = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
-    d->scrollItemToCenter               = group.readEntry(d->configScrollItemToCenterEntry,                          false);
-    d->stringComparisonType             = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
+    d->showSplash                        = group.readEntry(d->configShowSplashEntry,                                  true);
+    d->useTrash                          = group.readEntry(d->configUseTrashEntry,                                    true);
+    d->showTrashDeleteDialog             = group.readEntry(d->configShowTrashDeleteDialogEntry,                       true);
+    d->showPermanentDeleteDialog         = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
+    d->sidebarApplyDirectly              = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
+    d->scrollItemToCenter                = group.readEntry(d->configScrollItemToCenterEntry,                          false);
+    d->stringComparisonType              = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
 
 #ifdef HAVE_APPSTYLE_SUPPORT
     setApplicationStyle(group.readEntry(d->configApplicationStyleEntry, qApp->style()->objectName()));
@@ -243,8 +243,8 @@ void ApplicationSettings::readSettings()
     setApplicationStyle(QLatin1String("Fusion"));
 #endif
 
-    d->iconTheme                        = group.readEntry(d->configIconThemeEntry,                                   QString());
-    d->scanAtStart                      = group.readEntry(d->configScanAtStartEntry,                                 true);
+    d->iconTheme                         = group.readEntry(d->configIconThemeEntry,                                   QString());
+    d->scanAtStart                       = group.readEntry(d->configScanAtStartEntry,                                 true);
 
     // ---------------------------------------------------------------------
 
@@ -252,10 +252,10 @@ void ApplicationSettings::readSettings()
 
 #ifdef HAVE_KFILEMETADATA
 
-    group                               = config->group(d->configGroupBaloo);
+    group                                = config->group(d->configGroupBaloo);
 
-    d->syncToDigikam                    = group.readEntry(d->configSyncBalootoDigikamEntry, false);
-    d->syncToBaloo                      = group.readEntry(d->configSyncDigikamtoBalooEntry, false);
+    d->syncToDigikam                     = group.readEntry(d->configSyncBalootoDigikamEntry, false);
+    d->syncToBaloo                       = group.readEntry(d->configSyncDigikamtoBalooEntry, false);
 
     emit balooSettingsChanged();
 
@@ -270,6 +270,13 @@ void ApplicationSettings::readSettings()
 
     group                    = config->group(d->configGroupFaceDetection);
     d->faceDetectionAccuracy = group.readEntry(d->configFaceDetectionAccuracyEntry, double(0.8));
+
+    // ---------------------------------------------------------------------
+
+    group                    = config->group(d->configGroupDuplicatesSearch);
+
+    d->duplicatesSearchLastMinSimilarity = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,      90);
+    d->duplicatesSearchLastMaxSimilarity = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,      100);
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -423,6 +430,11 @@ void ApplicationSettings::saveSettings()
     group = config->group(d->configGroupFaceDetection);
 
     group.writeEntry(d->configFaceDetectionAccuracyEntry,              d->faceDetectionAccuracy);
+
+    group = config->group(d->configGroupDuplicatesSearch);
+
+    group.writeEntry(d->configDuplicatesSearchLastMinSimilarity,       d->duplicatesSearchLastMinSimilarity);
+    group.writeEntry(d->configDuplicatesSearchLastMaxSimilarity,       d->duplicatesSearchLastMaxSimilarity);
 
     config->sync();
 }

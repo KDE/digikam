@@ -51,6 +51,7 @@
 #include "findduplicatesalbumitem.h"
 #include "duplicatesfinder.h"
 #include "fingerprintsgenerator.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -119,13 +120,13 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     d->minSimilarity = new QSpinBox();
     d->minSimilarity->setRange(0, 100);
-    d->minSimilarity->setValue(90);
+    d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
     d->minSimilarity->setSingleStep(1);
     d->minSimilarity->setSuffix(QLatin1String("%"));
 
     d->maxSimilarity = new QSpinBox();
     d->maxSimilarity->setRange(90, 100);
-    d->maxSimilarity->setValue(100);
+    d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
     d->maxSimilarity->setSingleStep(1);
     d->maxSimilarity->setSuffix(QLatin1String("%"));
 
@@ -246,6 +247,9 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
         FindDuplicatesAlbumItem* const item = new FindDuplicatesAlbumItem(d->listView, salbum);
         salbum->setExtraData(this, item);
     }
+
+    d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
+    d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
 }
 
 void FindDuplicatesView::slotAlbumDeleted(Album* a)
@@ -264,6 +268,9 @@ void FindDuplicatesView::slotAlbumDeleted(Album* a)
         a->removeExtraData(this);
         delete item;
     }
+
+    d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
+    d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
 }
 
 void FindDuplicatesView::slotSearchUpdated(SAlbum* a)

@@ -50,6 +50,7 @@ public:
     static const QString                      configGroupGeneral;
     static const QString                      configGroupVersioning;
     static const QString                      configGroupFaceDetection;
+    static const QString                      configGroupDuplicatesSearch;
     static const QString                      configAlbumCollectionsEntry;
     static const QString                      configAlbumSortRoleEntry;
     static const QString                      configImageSortOrderEntry;
@@ -134,6 +135,8 @@ public:
     static const QString                      configFaceDetectionAccuracyEntry;
     static const QString                      configApplicationStyleEntry;
     static const QString                      configIconThemeEntry;
+    static const QString                      configDuplicatesSearchLastMinSimilarity;
+    static const QString                      configDuplicatesSearchLastMaxSimilarity;
 
     // start up setting
     bool                                      showSplash;
@@ -259,6 +262,9 @@ public:
     ApplicationSettings::StringComparisonType stringComparisonType;
     QString                                   applicationStyle;
     QString                                   iconTheme;
+
+    int                                       duplicatesSearchLastMinSimilarity;
+    int                                       duplicatesSearchLastMaxSimilarity;
 
 private :
 
