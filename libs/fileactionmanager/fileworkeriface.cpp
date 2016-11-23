@@ -153,12 +153,12 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
             break;
         }
 
-        QString path                                = info.filePath();
-        QString format                              = info.format();
+        QString path                                    = info.filePath();
+        QString format                                  = info.format();
         MetaEngine::ImageOrientation currentOrientation = (MetaEngine::ImageOrientation)info.orientation();
-        bool isRaw                                  = info.format().startsWith(QLatin1String("RAW"));
-        bool rotateAsJpeg                           = false;
-        bool rotateLossy                            = false;
+        bool isRaw                                      = info.format().startsWith(QLatin1String("RAW"));
+        bool rotateAsJpeg                               = false;
+        bool rotateLossy                                = false;
 
         MetadataSettingsContainer::RotationBehaviorFlags behavior;
         behavior              = MetadataSettings::instance()->settings().rotationBehavior;
@@ -194,10 +194,10 @@ void FileActionMngrFileWorker::transform(FileActionImageInfoList infos, int acti
         ajustFaceRectangles(info,action);
 
         MetaEngineRotation matrix;
-        matrix                                    *= currentOrientation;
-        matrix                                    *= (MetaEngineRotation::TransformationAction)action;
+        matrix                                        *= currentOrientation;
+        matrix                                        *= (MetaEngineRotation::TransformationAction)action;
         MetaEngine::ImageOrientation finalOrientation  = matrix.exifOrientation();
-        bool rotatedPixels                         = false;
+        bool rotatedPixels                             = false;
 
         if (rotateAsJpeg)
         {
@@ -306,15 +306,15 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
         QString name  = FaceTags::faceNameForTag(dface.tagId());
         QRect oldrect = dface.region().toRect();
 
-        if(action == 5) // TODO: use enum
+        if (action == MetaEngineRotation::Rotate90)
         {
-            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),0);
+            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 0);
             ajustedFaces[name] = newRect;
         }
 
-        if(action == 7) // TODO: use enum
+        if (action == MetaEngineRotation::Rotate270)
         {
-            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect,info.dimensions(),1);
+            QRect newRect      = TagRegion::ajustToRotatedImg(oldrect, info.dimensions(), 1);
             ajustedFaces[name] = newRect;
         }
     }
@@ -326,7 +326,7 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
 
     QMap<QString,QRect>::ConstIterator it = ajustedFaces.constBegin();
 
-    for( ;it!=ajustedFaces.constEnd();++it)
+    for (; it != ajustedFaces.constEnd(); ++it)
     {
         int tagId = FaceTags::getOrCreateTagForPerson(it.key());
 
@@ -344,9 +344,9 @@ void FileActionMngrFileWorker::ajustFaceRectangles(const ImageInfo& info, int ac
      */
     MetadataHub hub;
     hub.load(info);
-    QSize tempS = info.dimensions ();
-    hub.loadFaceTags (info,QSize(tempS.height (),tempS.width ()));
-    hub.write (info.filePath (),MetadataHub::WRITE_ALL);
+    QSize tempS = info.dimensions();
+    hub.loadFaceTags(info, QSize(tempS.height(), tempS.width()));
+    hub.write(info.filePath(), MetadataHub::WRITE_ALL);
 }
 
 } // namespace Digikam
