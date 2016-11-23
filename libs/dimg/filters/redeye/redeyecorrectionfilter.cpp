@@ -99,14 +99,14 @@ RedEyeCorrectionFilter::~RedEyeCorrectionFilter()
 
 void RedEyeCorrectionFilter::filterImage()
 {
-    if (d->sp == 0)
+    if (!d->sp)
     {
         // Loading the shape predictor model
 
-        QList<QString> path = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                        QString::fromLatin1("digikam/facesengine"),
-                                                        QStandardPaths::LocateDirectory);
-        QFile model(*path.begin() + QLatin1String("/ShapePredictor.dat"));
+        QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                              QLatin1String("digikam/facesengine/shapepredictor.dat"));
+
+        QFile model(path);
 
         if (model.open(QIODevice::ReadOnly))
         {
@@ -115,6 +115,10 @@ void RedEyeCorrectionFilter::filterImage()
             dataStream.setFloatingPointPrecision(QDataStream::SinglePrecision);
             dataStream >> *temp;
             d->sp = temp;
+        }
+        else
+        {
+            return;
         }
     }
 
