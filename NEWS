@@ -46,4 +46,5 @@ BUGFIXES FROM BUGZILLA:
 034 ==> 372684 - No thumbnail shows for some files.
 035 ==> 372781 - The recent similarity range is not saved which may lead to odd results [patch].
 036 ==> 372831 - Digikam crashes when trying to fix red eyes.
-037 ==> 
+037 ==> 372872 - Possible Null-Pointer dereference in AlbumManager [patch].
+038 ==> 

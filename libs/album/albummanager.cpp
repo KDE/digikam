@@ -2077,10 +2077,13 @@ QList<SAlbum*> AlbumManager::findSAlbumsBySearchType(int searchType) const
     QList<SAlbum*> albums;
     for (Album* album = d->rootSAlbum->firstChild(); album; album = album->next())
     {
-        SAlbum* sAlbum = dynamic_cast<SAlbum*>(album);
-        if (sAlbum->searchType() == searchType)
+        if (album != 0)
         {
-            albums.append(sAlbum);
+            SAlbum* sAlbum = dynamic_cast<SAlbum*>(album);
+            if ((sAlbum != 0) && (sAlbum->searchType() == searchType))
+            {
+                albums.append(sAlbum);
+            }
         }
     }
     return albums;
