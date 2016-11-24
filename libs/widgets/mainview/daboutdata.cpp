@@ -126,7 +126,7 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
 
     aboutData.addAuthor ( ki18n("Mario Frank").toString(),
                           ki18n("Advanced Searches Tool Improvements").toString(),
-                          QLatin1String("mario.frank@uni-potsdam.de"),
+                          QLatin1String("mario.frank@uni-potsdam.de")
                         );
 
     aboutData.addAuthor ( ki18n("Nicolas Lécureuil").toString(),
