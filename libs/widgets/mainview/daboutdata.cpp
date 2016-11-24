@@ -124,10 +124,9 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                           QLatin1String("https://plus.google.com/+JulienNarboux")
                         );
 
-    aboutData.addAuthor ( ki18n("Ananta Palani").toString(),
-                          ki18n("Windows Port and Release Manager").toString(),
-                          QLatin1String("anantapalani at gmail dot com"),
-                          QLatin1String("https://plus.google.com/u/0/+AnantaPalani")
+    aboutData.addAuthor ( ki18n("Mario Frank").toString(),
+                          ki18n("Advanced Searches Tool Improvements").toString(),
+                          QLatin1String("mario.frank@uni-potsdam.de"),
                         );
 
     aboutData.addAuthor ( ki18n("Nicolas Lécureuil").toString(),
@@ -229,6 +228,12 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 
     // -- Former contributors ----------------------------------------------------
+
+    aboutData.addAuthor ( ki18n("Ananta Palani").toString(),
+                          ki18n("Windows Port and Release Manager").toString(),
+                          QLatin1String("anantapalani at gmail dot com"),
+                          QLatin1String("https://plus.google.com/u/0/+AnantaPalani")
+                        );
 
     aboutData.addAuthor ( ki18n("Andi Clemens").toString(),
                           ki18n("Developer").toString(),

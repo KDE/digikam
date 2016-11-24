@@ -7,21 +7,18 @@ Marcel Wiesweg <marcel dot wiesweg at gmx dot de>                         : Lead
 Michael G. Hansen <mike at mghansen dot de>                               : Lead developer.
 Teemu Rytilahti <tpr at iki dotfi>                                        : Developer.
 
-
 CURRENT CONTRIBUTORS :
 --------------------
 
+Mario Frank <mario dot frank at uni-potsdam dot de>                       : Developer.
 Nicolas Lecureuil <nlecureuil at mandriva dot com>                        : Release manager.
-Ananta Palani <anantapalani at gmail dot com>                             : Windows port and packaging.
 Mohamed Anwer <m dot anwer at gmx dot com>                                : Developer.
 Veaceslav Munteanu <veaceslav dot munteanu90 at gmail.com>                : Developer.
 Pieter Edelman <p dot edelman at gmx dot net>                             : Developer.
 Johannes Wienke <languitar at semipol dot de>                             : Developer.
-Holger Foerster <hamsi2k at freenet dot de>                               : Developer.
 Matthias Welwarsky <matze at welwarsky dot de>                            : Developer.
 Angelo Naselli <anaselli at linux dot it>                                 : Developer, Mandriva packages.
 Guillaume Castagnino <casta at xwing dot info>                            : Developer.
-Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
 Julien Narboux <Julien at narboux dot fr>                                 : Developer.
 Julien Pontabry <julien dot pontabry at ulp dot u-strasbg dot fr>         : Developer.
 
@@ -35,6 +32,9 @@ Tom Albers <tomalbers at kde dot nl>                                      : Deve
 OLD CONTRIBUTORS :
 ----------------
 
+Holger Foerster <hamsi2k at freenet dot de>                               : Developer.
+Luka Renko <lure at kubuntu dot org>                                      : Developer, Kubuntu packages.
+Ananta Palani <anantapalani at gmail dot com>                             : Windows port and packaging.
 Andi Clemens <andi dot clemens at gmail dot com>                          : Advance Rename tool, developer.
 Franscesco Riosa <francesco at pnpitalia dot it>                          : LCMS2 port.
 Patrick Spendrin <patrick_spendrin at gmx dot de>                         : Developer, Windows port, Marble support.
