@@ -63,6 +63,7 @@ extern "C"
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QSet>
 
 // KDE includes
 
@@ -3488,7 +3489,6 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
 
 void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 {
-
     qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
 
     QSet<qlonglong> imagesToRescan;
@@ -3496,12 +3496,13 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 
     QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
 
-    foreach(SAlbum* sAlbum, sAlbums)
+    foreach(SAlbum* const sAlbum, sAlbums)
     {
         // Read the search query XML and save the image ids
         SearchXmlReader reader(sAlbum->query());
         SearchXml::Element element;
         QSet<qlonglong> images;
+
         while ((element = reader.readNext()) != SearchXml::End)
         {
             if ((element == SearchXml::Field) && (reader.fieldName().compare(QLatin1String("imageid")) == 0))
@@ -3509,6 +3510,7 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
                 images = reader.valueToLongLongList().toSet();
             }
         }
+
         // If the deleted images are part of the SAlbum,
         // mark the album as ready for deletion and the images as ready for rescan.
         if (images.intersects(imageIds.toSet()))
@@ -3521,7 +3523,7 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
     if (!imagesToRescan.empty())
     {
         // Delete albums
-        foreach (SAlbum* sAlbum, sAlbumsToDelete)
+        foreach (SAlbum* const sAlbum, sAlbumsToDelete)
         {
             deleteSAlbum(sAlbum);
         }
