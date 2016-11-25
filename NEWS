@@ -47,4 +47,5 @@ BUGFIXES FROM BUGZILLA:
 035 ==> 372781 - The recent similarity range is not saved which may lead to odd results [patch].
 036 ==> 372831 - Digikam crashes when trying to fix red eyes.
 037 ==> 372872 - Possible Null-Pointer dereference in AlbumManager [patch].
-038 ==> 
+038 ==> 372859 - iphone not usable anymore in digiKam.
+039 ==> 
