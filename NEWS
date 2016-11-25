@@ -49,5 +49,7 @@ BUGFIXES FROM BUGZILLA:
 037 ==> 372872 - Possible Null-Pointer dereference in AlbumManager [patch].
 038 ==> 372859 - iphone not usable anymore in digiKam.
 039 ==> 367611 - Time gap on renaming at download...
-040 ==> 
+040 ==> 371899 - Crash on tagging images.
+041 ==> 
+
 
