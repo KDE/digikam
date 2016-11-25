@@ -50,6 +50,5 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 372859 - iphone not usable anymore in digiKam.
 039 ==> 367611 - Time gap on renaming at download...
 040 ==> 371899 - Crash on tagging images.
-041 ==> 
-
-
+041 ==> 363998 - digiKam sees Nikon D700 but cannot import files.
+042 ==> 
