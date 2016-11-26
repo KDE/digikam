@@ -53,6 +53,7 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 363998 - digiKam sees Nikon D700 but cannot import files.
 042 ==> 361848 - When writing metadata to files is disabled, digikam still displays "Writing metadata to files".
 043 ==> 330062 - Import from MTP or PTP based cameras is very slow.
-044 ==> 
+044 ==> 372900 - When starting Digikam5, it crashes before opening the program, but after the splash screen.
+045 ==> 
 
 
