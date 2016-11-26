@@ -54,6 +54,7 @@ BUGFIXES FROM BUGZILLA:
 042 ==> 361848 - When writing metadata to files is disabled, digikam still displays "Writing metadata to files".
 043 ==> 330062 - Import from MTP or PTP based cameras is very slow.
 044 ==> 372900 - When starting Digikam5, it crashes before opening the program, but after the splash screen.
-045 ==> 
+045 ==> 372427 - Some pictures do not display.
+046 ==> 
 
 
