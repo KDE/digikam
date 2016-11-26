@@ -51,4 +51,6 @@ BUGFIXES FROM BUGZILLA:
 039 ==> 367611 - Time gap on renaming at download...
 040 ==> 371899 - Crash on tagging images.
 041 ==> 363998 - digiKam sees Nikon D700 but cannot import files.
-042 ==> 
+042 ==> 361848 - When writing metadata to files is disabled, digikam still displays "Writing metadata to files".
+043 ==> 
+
