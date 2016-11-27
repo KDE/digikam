@@ -119,13 +119,13 @@ CameraFolderDialog::CameraFolderDialog(QWidget* const parent, const QMap<QString
                 folder.remove(0, rootPath.length());
             }
 
-            QString parent(QLatin1String("/"));
+            QString path(QLatin1String("/"));
 
             foreach(const QString& sub, folder.split(QLatin1Char('/'), QString::SkipEmptyParts))
             {
-                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Camera folder:" << folder << "parent=" << parent << "sub=" << sub;
-                d->folderView->addFolder(parent, sub, it.value());
-                parent += sub + QLatin1Char('/');
+                qCDebug(DIGIKAM_IMPORTUI_LOG) << "Camera folder:" << path << "Subfolder:" << sub;
+                d->folderView->addFolder(path, sub, it.value());
+                path += sub + QLatin1Char('/');
             }
         }
     }

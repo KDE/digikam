@@ -1777,7 +1777,7 @@ void ImportUI::slotSelectLocked()
 
     foreach(const CamItemInfo& info, allItems)
     {
-        if(info.writePermissions == 0)
+        if (info.writePermissions == 0)
         {
             toBeSelected << info;
         }
@@ -1839,7 +1839,7 @@ void ImportUI::setDownloaded(CamItemInfo& itemInfo, int status)
     itemInfo.downloaded = status;
     d->progressValue = 0;
 
-    if(itemInfo.downloaded == CamItemInfo::DownloadStarted)
+    if (itemInfo.downloaded == CamItemInfo::DownloadStarted)
     {
         d->progressTimer->start(500);
     }
