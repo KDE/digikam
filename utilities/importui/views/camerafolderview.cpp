@@ -107,7 +107,7 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
     CameraFolderItem* const parentItem = findFolder(folder);
 
     qCDebug(DIGIKAM_IMPORTUI_LOG) << "Adding Subfolder " << subFolder
-                          << " of folder " << folder;
+                                  << " of folder " << folder;
 
     if (parentItem)
     {
@@ -118,20 +118,28 @@ CameraFolderItem* CameraFolderView::addFolder(const QString& folder, const QStri
             path += QLatin1Char('/');
         }
 
-        path += subFolder;
-        CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, icon);
+        path += subFolder + QLatin1Char('/');
 
-        qCDebug(DIGIKAM_IMPORTUI_LOG) << "Added ViewItem with path "
-                              << item->folderPath();
+        if (!findFolder(path))
+        {
+            CameraFolderItem* item = new CameraFolderItem(parentItem, subFolder, path, icon);
 
-        item->setCount(nbItems);
-        item->setExpanded(true);
-        return item;
+            qCDebug(DIGIKAM_IMPORTUI_LOG) << "Added ViewItem with path "
+                                          << item->folderPath();
+
+            item->setCount(nbItems);
+            item->setExpanded(true);
+            return item;
+        }
+        else
+        {
+            return 0;
+        }
     }
     else
     {
         qCWarning(DIGIKAM_IMPORTUI_LOG) << "Could not find parent for subFolder "
-                                << subFolder << " of folder " << folder;
+                                        << subFolder << " of folder " << folder;
         return 0;
     }
 }

@@ -56,6 +56,5 @@ BUGFIXES FROM BUGZILLA:
 044 ==> 372900 - When starting Digikam5, it crashes before opening the program, but after the splash screen.
 045 ==> 372427 - Some pictures do not display.
 046 ==> 102500 - ICONVIEW : more space conservative in thumbs view.
-047 ==> 
-
-
+047 ==> 330064 - Copy file from computer to camera doesn't work.
+048 ==> 
