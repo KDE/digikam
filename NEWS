@@ -57,4 +57,5 @@ BUGFIXES FROM BUGZILLA:
 045 ==> 372427 - Some pictures do not display.
 046 ==> 102500 - ICONVIEW : more space conservative in thumbs view.
 047 ==> 330064 - Copy file from computer to camera doesn't work.
-048 ==> 
+048 ==> 372628 - Crash at startup connecting to MySQL 5.7 database.
+049 ==> 
