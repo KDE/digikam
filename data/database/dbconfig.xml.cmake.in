@@ -961,7 +961,7 @@
                             status INTEGER NOT NULL,
                             category INTEGER NOT NULL,
                             modificationDate DATETIME,
-                            fileSize INTEGER,
+                            fileSize BIGINT,
                             uniqueHash VARCHAR(128),
                             CONSTRAINT Images_Albums FOREIGN KEY (album) REFERENCES Albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
                             UNIQUE (album, name(255)))
@@ -1089,7 +1089,7 @@
                             (id  INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
                             filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
-                            filesize INTEGER,
+                            filesize BIGINT,
                             filedate DATETIME,
                             UNIQUE(identifier(164), filename(165), filesize, filedate))
                             ENGINE InnoDB;</statement>
@@ -1892,6 +1892,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">ALTER TABLE Albums MODIFY COLUMN caption LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE Albums MODIFY COLUMN collection LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE Images MODIFY COLUMN name LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL;</statement>
+                <statement mode="plain">ALTER TABLE Images MODIFY COLUMN fileSize BIGINT;</statement>
                 <statement mode="plain">ALTER TABLE ImageHaarMatrix MODIFY COLUMN uniqueHash LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE ImageInformation MODIFY COLUMN format LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE ImageMetadata MODIFY COLUMN make LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
@@ -1914,6 +1915,7 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">ALTER TABLE Searches MODIFY COLUMN query LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL;</statement>
                 <statement mode="plain">ALTER TABLE DownloadHistory MODIFY COLUMN identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE DownloadHistory MODIFY COLUMN filename LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
+                <statement mode="plain">ALTER TABLE DownloadHistory MODIFY COLUMN filesize BIGINT;</statement>
                 <statement mode="plain">ALTER TABLE Settings MODIFY COLUMN keyword LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL;</statement>
                 <statement mode="plain">ALTER TABLE Settings MODIFY COLUMN value LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>
                 <statement mode="plain">ALTER TABLE ImageHistory MODIFY COLUMN history LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin;</statement>

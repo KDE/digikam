@@ -58,4 +58,5 @@ BUGFIXES FROM BUGZILLA:
 046 ==> 102500 - ICONVIEW : more space conservative in thumbs view.
 047 ==> 330064 - Copy file from computer to camera doesn't work.
 048 ==> 372628 - Crash at startup connecting to MySQL 5.7 database.
-049 ==> 
+049 ==> 372540 - fileSize field in Images table limited to 4GB.
+050 ==> 
