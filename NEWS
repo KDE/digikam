@@ -59,4 +59,5 @@ BUGFIXES FROM BUGZILLA:
 047 ==> 330064 - Copy file from computer to camera doesn't work.
 048 ==> 372628 - Crash at startup connecting to MySQL 5.7 database.
 049 ==> 372540 - fileSize field in Images table limited to 4GB.
-050 ==> 
+050 ==> 373003 - wrongly calculated uniqueHash.
+051 ==> 

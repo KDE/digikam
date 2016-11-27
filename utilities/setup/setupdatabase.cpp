@@ -214,7 +214,8 @@ void SetupDatabase::upgradeUniqueHashes()
                                             "<p>Please ensure that any important collections on removable media are connected. "
                                             "<i>After the upgrade you cannot use your database with a digiKam version "
                                             "prior to 2.0.</i></p> "
-                                            "<p>Do you want to begin the update?</p>"));
+                                            "<p>Do you want to begin the update?</p>"),
+                                            QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::Yes)
     {

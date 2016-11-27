@@ -402,7 +402,7 @@ QByteArray DImgLoader::uniqueHash(const QString& filePath, const DImg& img, bool
             QByteArray size = 0;
             md5.addData(databuf, readlen);
             md5.addData(size.setNum(qfile.size()));
-            hash = md5.result();
+            hash = md5.result().toHex();
         }
     }
 
