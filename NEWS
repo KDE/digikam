@@ -60,4 +60,6 @@ BUGFIXES FROM BUGZILLA:
 048 ==> 372628 - Crash at startup connecting to MySQL 5.7 database.
 049 ==> 372540 - fileSize field in Images table limited to 4GB.
 050 ==> 373003 - wrongly calculated uniqueHash.
-051 ==> 
+051 ==> 370553 - Adjust date - not possible to update "digikam timestamp".
+052 ==> 
+
