@@ -61,5 +61,6 @@ BUGFIXES FROM BUGZILLA:
 049 ==> 372540 - fileSize field in Images table limited to 4GB.
 050 ==> 373003 - wrongly calculated uniqueHash.
 051 ==> 370553 - Adjust date - not possible to update "digikam timestamp".
-052 ==> 
+052 ==> 372093 - Corrupts image file when crashing.
+053 ==> 
 
