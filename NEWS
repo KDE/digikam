@@ -62,5 +62,7 @@ BUGFIXES FROM BUGZILLA:
 050 ==> 373003 - wrongly calculated uniqueHash.
 051 ==> 370553 - Adjust date - not possible to update "digikam timestamp".
 052 ==> 372093 - Corrupts image file when crashing.
-053 ==> 
+053 ==> 352870 - Image is missing from album thumbnails.
+054 ==> 
+
 
