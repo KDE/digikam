@@ -2824,6 +2824,8 @@ void DigikamApp::updateQuickImportAction()
 
         connect(d->quickImportMenu->menuAction(), SIGNAL(triggered()),
                 primaryAction, SLOT(trigger()));
+
+        d->quickImportMenu->setEnabled(true);
     }
 }
 
