@@ -514,23 +514,12 @@ bool MetadataHub::writeTags(DMetadata& metadata, bool saveTags)
             qCDebug(DIGIKAM_GENERAL_LOG) << "-------------------------- New Keywords" << newKeywords;
             // NOTE: See bug #175321 : we remove all old keyword from IPTC and XMP before to
             // synchronize metadata, else contents is not coherent.
-
-            // We set Iptc keywords using tags name.
-            // dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), newKeywords);
-
-            // We add Xmp keywords using tags name.
-            // dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
-            // dirty |= metadata.setXmpKeywords(newKeywords);
-
-            // We set Tags Path list in digiKam Xmp private namespace using tags path.
             dirty |= metadata.setImageTagsPath(tagsPathList);
         }
         else
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Delete all keywords";
             // Delete all IPTC and XMP keywords
-            // dirty |= metadata.setIptcKeywords(metadata.getIptcKeywords(), QStringList());
-            // dirty |= metadata.removeXmpKeywords(metadata.getXmpKeywords());
             dirty |= metadata.setImageTagsPath(QStringList());
         }
     }
