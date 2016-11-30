@@ -3493,6 +3493,7 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 
     QSet<qlonglong> imagesToRescan;
     QSet<SAlbum*> sAlbumsToDelete;
+    QSet<qlonglong> deletedImages = imageIds.toSet();
 
     QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
 
@@ -3513,15 +3514,15 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 
         // If the deleted images are part of the SAlbum,
         // mark the album as ready for deletion and the images as ready for rescan.
-
-        QSet<qlonglong> part = images.intersect(imageIds.toSet());
-
-        if (!part.isEmpty())
+        if (images.intersects(deletedImages))
         {
             sAlbumsToDelete.insert(sAlbum);
             imagesToRescan.unite(images);
         }
     }
+
+    // Remove the deleted images from the set of images for rescan.
+    imagesToRescan.subtract(deletedImages);
 
     if (!imagesToRescan.empty())
     {
@@ -3530,9 +3531,6 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
         {
             deleteSAlbum(sAlbum);
         }
-
-        // Remove the deleted images from the set of images for rescan.
-        imagesToRescan.subtract(imageIds.toSet());
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Rescanning " << imagesToRescan.size() << " images for duplicates.";
         emit signalUpdateDuplicatesAlbums(imagesToRescan.toList());
