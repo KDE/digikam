@@ -1375,9 +1375,6 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
         if (entry.isDisabled)
             continue;
 
-        const std::string myStr = entry.namespaceName.toStdString();
-        const char* nameSpace   = myStr.data();
-
         QStringList newList;
 
         // get keywords from tags path, for type tag
@@ -1402,13 +1399,16 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
                         }
                     }
 
+                    const std::string myStr = entry.namespaceName.toStdString();
+                    const char* nameSpace   = myStr.data();
+
                     switch(entry.specialOpts)
                     {
                         case NamespaceEntry::TAG_XMPSEQ:
 
                             if (!setXmpTagStringSeq(nameSpace, newList))
                             {
-                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace;
                                 return false;
                             }
 
@@ -1418,7 +1418,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
                             if (!setXmpTagStringBag(nameSpace, newList))
                             {
-                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace;
                                 return false;
                             }
 
@@ -1428,7 +1428,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
                             if (!setACDSeeTagsPath(newList))
                             {
-                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace;
                                 return false;
                             }
 
@@ -1443,7 +1443,7 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
                 if (!setIptcKeywords(getIptcKeywords(), newList))
                 {
-                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << nameSpace << " | " << entry.namespaceName;
+                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << entry.namespaceName;
                     return false;
                 }
 
