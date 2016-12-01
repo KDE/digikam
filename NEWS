@@ -65,4 +65,5 @@ BUGFIXES FROM BUGZILLA:
 053 ==> 352870 - Image is missing from album thumbnails.
 054 ==> 373100 - Deleting duplicate image in "Find duplicates" removes all other found duplicates
 055 ==> 334799 - Import button on toolbar not activated after plugging in USB stick/memory card with photos.
-056 ==> 
+056 ==> 321145 - GoogleMaps : lost zoom function via mouse wheel and keyboard shortcuts.
+057 ==> 
