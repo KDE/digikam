@@ -67,4 +67,5 @@ BUGFIXES FROM BUGZILLA:
 055 ==> 334799 - Import button on toolbar not activated after plugging in USB stick/memory card with photos.
 056 ==> 321145 - GoogleMaps : lost zoom function via mouse wheel and keyboard shortcuts.
 057 ==> 320628 - Rename makes copies instead of renaming.
-058 ==> 
+058 ==> 285910 - Reverse Geocoding and order of tags.
+059 ==> 

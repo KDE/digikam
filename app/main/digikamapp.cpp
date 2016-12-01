@@ -3238,7 +3238,12 @@ void DigikamApp::slotEditGeolocation()
     if (infos.isEmpty())
         return;
 
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
+    TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
+    filterModel->setSourceAlbumModel(tagModel);
+    filterModel->sort(0);
+
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel, QApplication::activeWindow());
     dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 

@@ -69,6 +69,7 @@
 #include "syncjob.h"
 #include "lighttablepreview.h"
 #include "albummodel.h"
+#include "albumfiltermodel.h"
 #include "coredbchangesets.h"
 #include "scancontroller.h"
 #include "tagsactionmngr.h"
@@ -1756,7 +1757,12 @@ void LightTableWindow::slotEditGeolocation()
         return;
     }
 
-    QPointer<GeolocationEdit> dialog = new GeolocationEdit(new TagModel(AbstractAlbumModel::IgnoreRootAlbum, 0), QApplication::activeWindow());
+    TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
+    TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
+    filterModel->setSourceAlbumModel(tagModel);
+    filterModel->sort(0);
+
+    QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel, QApplication::activeWindow());
     dialog->setItems(ImageGPS::infosToItems(ImageInfoList() << inf));
     dialog->exec();
 
