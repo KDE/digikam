@@ -399,7 +399,7 @@ bool DMetadata::setImageComments(const CaptionsMap& comments, const DMetadataSet
                         {
                             if (!setXmpTagStringLangAlt(nameSpace, defaultComment, QString(), false))
                             {
-                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image comment failed" << nameSpace << " | " << entry.namespaceName;
+                                qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image comment failed" << nameSpace;
                                 return false;
                             }
                         }
@@ -861,7 +861,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
             case NamespaceEntry::XMP:
                 if (!setXmpTagString(nameSpace, QString::number(entry.convertRatio.at(rating))))
                 {
-                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace << " | " << entry.namespaceName;
+                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting rating failed" << nameSpace;
                     return false;
                 }
                 break;
@@ -1441,10 +1441,13 @@ bool DMetadata::setImageTagsPath(const QStringList& tagsPath, const DMetadataSet
 
             case NamespaceEntry::IPTC:
 
-                if (!setIptcKeywords(getIptcKeywords(), newList))
+                if (entry.namespaceName == QLatin1String("Iptc.Application2.Keywords"))
                 {
-                    qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << entry.namespaceName;
-                    return false;
+                    if (!setIptcKeywords(getIptcKeywords(), newList))
+                    {
+                        qCDebug(DIGIKAM_METAENGINE_LOG) << "Setting image paths failed" << entry.namespaceName;
+                        return false;
+                    }
                 }
 
             default:
