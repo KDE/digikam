@@ -398,7 +398,7 @@ void ImageLister::listDateRange(ImageListerReceiver* const receiver, const QDate
                                           " WHERE Images.status=1 "
                                           "   AND ImageInformation.creationDate < ? "
                                           "   AND ImageInformation.creationDate >= ? "
-                                          " ORDER BY Albums.id;"),
+                                          " ORDER BY Images.album;"),
                                   QDateTime(endDate).toString(Qt::ISODate),
                                   QDateTime(startDate).toString(Qt::ISODate),
                                   &values);

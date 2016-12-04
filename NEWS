@@ -69,4 +69,5 @@ BUGFIXES FROM BUGZILLA:
 057 ==> 320628 - Rename makes copies instead of renaming.
 058 ==> 285910 - Reverse Geocoding and order of tags.
 059 ==> 340609 - impossible to use [meta:Exif.Photo.LensModel] in rename function.
-060 ==> 
+060 ==> 370744 - Date viewer does not return photos [patch].
+061 ==> 
