@@ -3514,7 +3514,11 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 
         // If the deleted images are part of the SAlbum,
         // mark the album as ready for deletion and the images as ready for rescan.
+#if QT_VERSION >= 0x050600
         if (images.intersects(deletedImages))
+#else
+        if (images.intersect(deletedImages).isEmpty())
+#endif
         {
             sAlbumsToDelete.insert(sAlbum);
             imagesToRescan.unite(images);
