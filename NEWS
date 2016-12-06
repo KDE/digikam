@@ -70,4 +70,6 @@ BUGFIXES FROM BUGZILLA:
 058 ==> 285910 - Reverse Geocoding and order of tags.
 059 ==> 340609 - impossible to use [meta:Exif.Photo.LensModel] in rename function.
 060 ==> 370744 - Date viewer does not return photos [patch].
-061 ==> 
+061 ==> 339961 - HUB : Add Windows Photo Gallery / Windows Explorer Hierarchical tags support.
+062 ==> 
+
