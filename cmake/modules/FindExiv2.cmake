@@ -1,23 +1,23 @@
 # - Try to find the Exiv2 library
 #
 #  EXIV2_MIN_VERSION - You can set this variable to the minimum version you need
-#                      before doing FIND_PACKAGE(Exiv2). The default is 0.12.
+#                      before doing FIND_PACKAGE(Exiv2). The default is 0.15.
 #
 # Once done this will define
 #
-#  EXIV2_FOUND - system has libexiv2
+#  EXIV2_FOUND       - system has libexiv2
 #  EXIV2_INCLUDE_DIR - the libexiv2 include directory
-#  EXIV2_LIBRARIES - Link these to use libexiv2
+#  EXIV2_LIBRARIES   - Link these to use libexiv2
 #  EXIV2_DEFINITIONS - Compiler switches required for using libexiv2
 #
 # The minimum required version of Exiv2 can be specified using the
 # standard syntax, e.g. find_package(Exiv2 0.17)
 #
 # For compatibility, also the variable EXIV2_MIN_VERSION can be set to the minimum version
-# you need before doing FIND_PACKAGE(Exiv2). The default is 0.12.
+# you need before doing FIND_PACKAGE(Exiv2). The default is 0.15.
 #
-# Copyright (c) 2010,      Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2008-2017, Gilles Caulier, <caulier.gilles@gmail.com>
+# Copyright (c) 2010,      Alexander Neundorf, <neundorf at kde dot org>
+# Copyright (c) 2008-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
