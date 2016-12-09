@@ -16,8 +16,8 @@
 # For compatibility, also the variable EXIV2_MIN_VERSION can be set to the minimum version
 # you need before doing FIND_PACKAGE(Exiv2). The default is 0.12.
 #
-# Copyright (c) 2010, Alexander Neundorf, <neundorf@kde.org>
-# Copyright (c) 2008, Gilles Caulier, <caulier.gilles@gmail.com>
+# Copyright (c) 2010,      Alexander Neundorf, <neundorf@kde.org>
+# Copyright (c) 2008-2017, Gilles Caulier, <caulier.gilles@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -29,9 +29,8 @@ endif(NOT Exiv2_FIND_VERSION)
 
 # the minimum version of exiv2 we require
 if(NOT Exiv2_FIND_VERSION)
-  set(Exiv2_FIND_VERSION "0.12")
+  set(Exiv2_FIND_VERSION "0.15")
 endif(NOT Exiv2_FIND_VERSION)
-
 
 if (NOT WIN32)
    # use pkg-config to get the directories and then use these values
@@ -40,7 +39,6 @@ if (NOT WIN32)
    pkg_check_modules(PC_EXIV2 QUIET exiv2)
    set(EXIV2_DEFINITIONS ${PC_EXIV2_CFLAGS_OTHER})
 endif (NOT WIN32)
-
 
 find_path(EXIV2_INCLUDE_DIR NAMES exiv2/exif.hpp
           HINTS
@@ -53,7 +51,6 @@ find_library(EXIV2_LIBRARY NAMES exiv2 libexiv2
              ${PC_EXIV2_LIBDIR}
              ${PC_EXIV2_LIBRARY_DIRS}
             )
-
 
 # Get the version number from exiv2/version.hpp and store it in the cache:
 if(EXIV2_INCLUDE_DIR  AND NOT  EXIV2_VERSION)
@@ -73,8 +70,7 @@ endif(EXIV2_INCLUDE_DIR  AND NOT  EXIV2_VERSION)
 set(EXIV2_LIBRARIES "${EXIV2_LIBRARY}")
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Exiv2  REQUIRED_VARS  EXIV2_LIBRARY EXIV2_INCLUDE_DIR
-                                         VERSION_VAR  EXIV2_VERSION)
+find_package_handle_standard_args(Exiv2 REQUIRED_VARS EXIV2_LIBRARY EXIV2_INCLUDE_DIR
+                                        VERSION_VAR   EXIV2_VERSION)
 
 mark_as_advanced(EXIV2_INCLUDE_DIR EXIV2_LIBRARY)
-
