@@ -71,5 +71,6 @@ BUGFIXES FROM BUGZILLA:
 059 ==> 340609 - impossible to use [meta:Exif.Photo.LensModel] in rename function.
 060 ==> 370744 - Date viewer does not return photos [patch].
 061 ==> 339961 - HUB : Add Windows Photo Gallery / Windows Explorer Hierarchical tags support.
-062 ==> 
+062 ==> 312054 - Cannot add a collection on the network in Gnome-based environment.
+063 ==> 
 
