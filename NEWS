@@ -75,4 +75,5 @@ BUGFIXES FROM BUGZILLA:
 063 ==> 373500 - digiKam segfaults when tagging face.
 064 ==> 362406 - On import renaming by date from file should use exif date and time not modification time as standard.
 065 ==> 301936 - Rename by date is based on 'date modified' not 'date created' : add helper text in GUI.
-066 ==> 
+066 ==> 327244 - Automatic album generation produces only lower case album / folder names.
+067 ==> 
