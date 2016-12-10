@@ -28,6 +28,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
+#include "collectionscanner.h"
 #include "task.h"
 
 namespace Digikam
@@ -82,7 +83,7 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
 {
     ActionJobCollection collection;
 
-    for(int i = 0 ; i < items.size() ; i++)
+    for (int i = 0 ; i < items.size() ; i++)
     {
         Task* const t = new Task();
         t->setSettings(d->settings);
@@ -92,10 +93,12 @@ void ActionThread::processQueueItems(const QList<AssignedBatchTools>& items)
                 this, SIGNAL(signalStarting(Digikam::ActionData)));
 
         connect(t, SIGNAL(signalFinished(Digikam::ActionData)),
-                this, SIGNAL(signalFinished(Digikam::ActionData)));
+                this, SLOT(slotUpdateImageInfo(Digikam::ActionData)),
+                Qt::BlockingQueuedConnection);
 
         connect(this, SIGNAL(signalCancelTask()),
-                t, SLOT(slotCancel()), Qt::QueuedConnection);
+                t, SLOT(slotCancel()),
+                Qt::QueuedConnection);
 
         collection.insert(t, 0);
     }
@@ -109,6 +112,24 @@ void ActionThread::cancel()
         emit signalCancelTask();
 
     ActionThreadBase::cancel();
+}
+
+void ActionThread::slotUpdateImageInfo(const Digikam::ActionData& ad)
+{
+    if (ad.status == ActionData::BatchDone)
+    {
+        CollectionScanner scanner;
+        ImageInfo source = ImageInfo::fromUrl(ad.fileUrl);
+        qlonglong id     = scanner.scanFile(ad.destUrl.toLocalFile(), CollectionScanner::NormalScan);
+        ImageInfo info(id);
+        QDateTime dateTime = info.dateTime();
+        // Copy the digiKam attributes from original file to the new file
+        CollectionScanner::copyFileProperties(source, info);
+        // Restore date time from new file
+        info.setDateTime(dateTime);
+    }
+
+    emit signalFinished(ad);
 }
 
 void ActionThread::slotThreadFinished()
