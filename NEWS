@@ -77,4 +77,5 @@ BUGFIXES FROM BUGZILLA:
 065 ==> 301936 - Rename by date is based on 'date modified' not 'date created' : add helper text in GUI.
 066 ==> 327244 - Automatic album generation produces only lower case album / folder names.
 067 ==> 256179 - GPS metadata not stored in JPEG when exporting from raw.
-068 ==> 
+068 ==> 327391 - HUB : add IrfanView tags support.
+069 ==> 
