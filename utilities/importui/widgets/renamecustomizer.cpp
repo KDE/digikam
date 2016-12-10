@@ -291,10 +291,11 @@ void RenameCustomizer::slotCustomRenameChanged()
 
 void RenameCustomizer::slotFileMetadataLinkUsed()
 {
-    Setup::execSinglePage(Setup::CameraPage);
-
-    d->fileMetadataLabel->setText(i18n("<p><a href=\"camerasetup\">Note: changes after "
-                                       "restart the camera connection.</a></p>"));
+    if (Setup::execSinglePage(this, Setup::CameraPage))
+    {
+        d->fileMetadataLabel->setText(i18n("<p><a href=\"camerasetup\">Note: changes after "
+                                           "restart the camera connection.</a></p>"));
+    }
 }
 
 void RenameCustomizer::readSettings()
