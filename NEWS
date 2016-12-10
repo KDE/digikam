@@ -73,5 +73,6 @@ BUGFIXES FROM BUGZILLA:
 061 ==> 339961 - HUB : Add Windows Photo Gallery / Windows Explorer Hierarchical tags support.
 062 ==> 312054 - Cannot add a collection on the network in Gnome-based environment.
 063 ==> 373500 - digiKam segfaults when tagging face.
-064 ==> 
-
+064 ==> 362406 - On import renaming by date from file should use exif date and time not modification time as standard.
+065 ==> 301936 - Rename by date is based on 'date modified' not 'date created' : add helper text in GUI.
+066 ==> 
