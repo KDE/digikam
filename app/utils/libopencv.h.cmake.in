@@ -60,7 +60,6 @@
 #   include <opencv/cv.h>
 #   include <opencv/cvaux.h>
 #   include <opencv/cxcore.h>
-//#   include <opencv/highgui.h>
 #   include <opencv2/imgproc.hpp>
 #endif
 
@@ -74,7 +73,6 @@
 #   include <opencv2/core/utility.hpp>
 #   include <opencv2/core/persistence.hpp>
 #   include <opencv2/imgcodecs.hpp>
-//#   include <opencv2/highgui.hpp>
 #endif
 
 // for old-style code
@@ -82,7 +80,7 @@
 #   include <opencv2/legacy/compat.hpp>
 #endif
 
-#include <opencv2/highgui/highgui_c.h>
+#include <opencv2/imgcodecs/imgcodecs_c.h>
 
 // Restore warnings
 #if not defined(__APPLE__) && defined(__GNUC__)

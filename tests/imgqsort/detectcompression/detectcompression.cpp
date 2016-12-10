@@ -22,33 +22,9 @@
  *
  * ============================================================ */
 
-// Pragma directives to reduce warnings from OpenCV header files.
-#if not defined(__APPLE__) && defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#endif
-
-#if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#pragma clang diagnostic ignored "-Woverloaded-virtual"
-#pragma clang diagnostic ignored "-Wcast-align"
-#endif
-
 // OpenCV includes
 
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
-
-// Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
-#if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic pop
-#endif
+#include "libopencv.h"
 
 // C++ includes
 
@@ -202,9 +178,6 @@ int main( int /*argc*/, char** argv )
     }
 
     std::cout << "Number of blocks: " << number_of_blocks << "\t\t";
-
-    //we can set the threshold value, after testing, as to how many blocks make a picture blocky [be affected by JPEG Compression]
-    waitKey(0);
 
     return 0;
 }

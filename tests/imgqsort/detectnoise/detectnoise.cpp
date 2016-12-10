@@ -22,39 +22,19 @@
  *
  * ============================================================ */
 
-// Pragma directives to reduce warnings from OpenCV header files.
-#if not defined(__APPLE__) && defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#endif
-
-#if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnon-virtual-dtor"
-#pragma clang diagnostic ignored "-Woverloaded-virtual"
-#pragma clang diagnostic ignored "-Wcast-align"
-#endif
-
-// OpenCV includes
-
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/highgui/highgui.hpp"
-
-// Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
-#if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic pop
-#endif
+#include "libopencv.h"
+#include "../../facesengine/asmopencv.h"
 
 // C++ includes
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+
+// Qt includes
+
+#include <QLabel>
+#include <QApplication>
 
 using namespace cv;
 using namespace std;
@@ -81,12 +61,16 @@ void CannyThreshold(int, void*)
     dst = Scalar::all(0);
 
     src.copyTo( dst, detected_edges);
-    imshow( window_name, dst );
+
+    QLabel label;
+    label.setPixmap(ASM::cvMatToQPixmap(dst));
+    label.show();
 }
 
-/** @function main */
-int main( int /*argc*/, char** argv )
+int main(int argc, char** argv)
 {
+    QApplication app(argc, argv);
+
     // Load an image
     src = imread( argv[1] );
 
@@ -118,8 +102,7 @@ int main( int /*argc*/, char** argv )
     cout << "The maximum of the edge intensity is " << maxval     << std::endl;
     cout << "The result of the edge intensity is "  << blurresult << std::endl;
 
-    // Wait until user exit program by pressing a key
-    waitKey(0);
+    app.exec();
 
     return 0;
 }

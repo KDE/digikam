@@ -26,6 +26,7 @@
 // OpenCV includes
 
 #include "libopencv.h"
+#include "asmopencv.h"
 
 // Qt includes
 
@@ -34,6 +35,7 @@
 #include <QImage>
 #include <QTime>
 #include <QDebug>
+#include <QLabel>
 #include <QGraphicsScene>
 
 // Local includes
@@ -109,10 +111,11 @@ public:
         currentRow++;
     }
 
-    void show(const char* const title = "images")
+    void show()
     {
-        cv::namedWindow(title);
-        cv::imshow(title, bigImage);
+        QLabel label;
+        label.setPixmap(ASM::cvMatToQPixmap(bigImage));
+        label.show();
     }
 
     cv::Mat   bigImage;

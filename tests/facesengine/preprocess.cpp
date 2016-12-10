@@ -26,11 +26,13 @@
 // OpenCV includes
 
 #include "libopencv.h"
+#include "asmopencv.h"
 
 // Qt includes
 
 #include <QApplication>
 #include <QDir>
+#include <QLabel>
 #include <QImage>
 #include <QTime>
 #include <QDebug>
@@ -113,10 +115,11 @@ public:
         currentRow++;
     }
 
-    void show(const char* const title = "images")
+    void show()
     {
-        cv::namedWindow(title);
-        cv::imshow(title, bigImage);
+        QLabel label;
+        label.setPixmap(ASM::cvMatToQPixmap(bigImage));
+        label.show();
     }
 
     cv::Mat   bigImage;
