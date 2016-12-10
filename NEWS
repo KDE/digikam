@@ -72,5 +72,6 @@ BUGFIXES FROM BUGZILLA:
 060 ==> 370744 - Date viewer does not return photos [patch].
 061 ==> 339961 - HUB : Add Windows Photo Gallery / Windows Explorer Hierarchical tags support.
 062 ==> 312054 - Cannot add a collection on the network in Gnome-based environment.
-063 ==> 
+063 ==> 373500 - digiKam segfaults when tagging face.
+064 ==> 
 

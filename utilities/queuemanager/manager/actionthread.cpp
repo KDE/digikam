@@ -122,11 +122,10 @@ void ActionThread::slotUpdateImageInfo(const Digikam::ActionData& ad)
         ImageInfo source = ImageInfo::fromUrl(ad.fileUrl);
         qlonglong id     = scanner.scanFile(ad.destUrl.toLocalFile(), CollectionScanner::NormalScan);
         ImageInfo info(id);
-        QDateTime dateTime = info.dateTime();
         // Copy the digiKam attributes from original file to the new file
         CollectionScanner::copyFileProperties(source, info);
-        // Restore date time from new file
-        info.setDateTime(dateTime);
+        // Read again new file that the database is up to date
+        scanner.scanFile(info, CollectionScanner::Rescan);
     }
 
     emit signalFinished(ad);
