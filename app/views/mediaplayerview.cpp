@@ -38,8 +38,8 @@
 
 // QtAV includes
 
-#include <QtAV/QtAV.h>
 #include <QtAV/AVError.h>
+#include <QtAV/AVPlayer.h>
 #include <QtAVWidgets/WidgetRenderer.h>
 
 // KDE includes

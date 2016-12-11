@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2008-2009 by Valerio Fuoglio <valerio dot fuoglio at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
- * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -38,7 +38,12 @@
 #include <QUrl>
 #include <QMessageBox>
 #include <QApplication>
-#include <QMediaMetaData>
+
+// QtAV includes
+
+#include <QtAV/AVError.h>
+#include <QtAV/AVPlayer.h>
+#include <QtAV/Statistics.h>
 
 // KDE includes
 
@@ -47,6 +52,8 @@
 // Local includes
 
 #include "digikam_debug.h"
+
+using namespace QtAV;
 
 namespace Digikam
 {
@@ -65,7 +72,7 @@ public:
     QString       artist;
     QString       title;
     QTime         totalTime;
-    QMediaPlayer* mediaObject;
+    AVPlayer*     mediaObject;
 };
 
 PresentationAudioListItem::PresentationAudioListItem(QListWidget* const parent, const QUrl& url)
@@ -76,15 +83,15 @@ PresentationAudioListItem::PresentationAudioListItem(QListWidget* const parent, 
     setIcon(QIcon::fromTheme(QString::fromLatin1("audio-x-generic")).pixmap(48, QIcon::Disabled));
 
     d->totalTime   = QTime(0, 0, 0);
-    d->mediaObject = new QMediaPlayer();
+    d->mediaObject = new AVPlayer();
 
-    connect(d->mediaObject, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),
-            this, SLOT(slotMediaStateChanged(QMediaPlayer::MediaStatus)));
+    connect(d->mediaObject, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
+            this, SLOT(slotMediaStateChanged(QtAV::MediaStatus)));
 
-    connect(d->mediaObject, SIGNAL(error(QMediaPlayer::Error)),
-            this, SLOT(slotPlayerError(QMediaPlayer::Error)));
+    connect(d->mediaObject, SIGNAL(error(QtAV::AVError)),
+            this, SLOT(slotPlayerError(QtAV::AVError)));
 
-    d->mediaObject->setMedia(url);
+    d->mediaObject->setFile(url.toLocalFile());
 }
 
 PresentationAudioListItem::~PresentationAudioListItem()
@@ -117,32 +124,35 @@ QTime PresentationAudioListItem::totalTime() const
     return d->totalTime;
 }
 
-void PresentationAudioListItem::slotPlayerError(QMediaPlayer::Error err)
+void PresentationAudioListItem::slotPlayerError(const QtAV::AVError& err)
 {
-    if (err != QMediaPlayer::NoError)
+    if (err.error() != AVError::NoError)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "An error as occured while playing (" << err << ")";
-        showErrorDialog();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "An error as occured while playing (" << err.string() << ")";
+        showErrorDialog(err.string());
     }
 }
 
-void PresentationAudioListItem::slotMediaStateChanged(QMediaPlayer::MediaStatus status)
+void PresentationAudioListItem::slotMediaStateChanged(QtAV::MediaStatus status)
 {
-    if (status == QMediaPlayer::UnknownMediaStatus ||
-        status == QMediaPlayer::NoMedia            ||
-        status == QMediaPlayer::InvalidMedia)
+    if (status != QtAV::UnknownMediaStatus ||
+        status != QtAV::NoMedia            ||
+        status != QtAV::StalledMedia       ||
+        status != QtAV::InvalidMedia)
     {
-        showErrorDialog();
+        showErrorDialog(i18n("No detail available"));
         return;
     }
 
     qint64 total = d->mediaObject->duration();
-    int hours      = (int)(total  / (long int)( 60 * 60 * 1000 ));
-    int mins       = (int)((total / (long int)( 60 * 1000 )) - (long int)(hours * 60));
+    int hours      = (int)(total  / (long int)(60 * 60 * 1000));
+    int mins       = (int)((total / (long int)(60 * 1000 )) - (long int)(hours * 60));
     int secs       = (int)((total / (long int)1000) - (long int)(hours * 60 * 60) - (long int)(mins * 60));
     d->totalTime   = QTime(hours, mins, secs);
-    d->artist      = (d->mediaObject->metaData(QMediaMetaData::Author)).toStringList().join(QString::fromLatin1(","));
-    d->title       = (d->mediaObject->metaData(QMediaMetaData::Title)).toString();
+
+    QHash<QString, QString> meta = d->mediaObject->statistics().metadata;
+    d->artist      = meta.value(QLatin1String("artist"));
+    d->title       = meta.value(QLatin1String("title"));
 
     if ( d->artist.isEmpty() && d->title.isEmpty() )
         setText(d->url.fileName());
@@ -152,12 +162,12 @@ void PresentationAudioListItem::slotMediaStateChanged(QMediaPlayer::MediaStatus 
     emit signalTotalTimeReady(d->url, d->totalTime);
 }
 
-void PresentationAudioListItem::showErrorDialog()
+void PresentationAudioListItem::showErrorDialog(const QString& err)
 {
     QMessageBox msgBox(QApplication::activeWindow());
     msgBox.setWindowTitle(i18n("Error"));
     msgBox.setText(i18n("%1 may not be playable.", d->url.fileName()));
-    msgBox.setDetailedText(d->mediaObject->errorString());
+    msgBox.setDetailedText(err);
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setDefaultButton(QMessageBox::Ok);
     msgBox.setIcon(QMessageBox::Critical);

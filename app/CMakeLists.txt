@@ -248,6 +248,10 @@ if(WIN32)
   target_link_libraries(digikamcore PUBLIC wsock32 ws2_32)
 endif()
 
+if(ENABLE_MEDIAPLAYER)
+    target_link_libraries(digikamcore PUBLIC ${QTAV_LIBRARIES})
+endif()
+
 set_target_properties(digikamcore PROPERTIES VERSION ${DIGIKAM_VERSION_SHORT} SOVERSION ${DIGIKAM_VERSION_SHORT})
 
 install(TARGETS digikamcore ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -457,11 +461,6 @@ endif()
 
 if(APPLE)
     target_link_libraries(digikamgui PRIVATE /System/Library/Frameworks/AppKit.framework)
-endif()
-
-if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamgui PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets
-                                            ${QTAV_LIBRARIES})
 endif()
 
 if(HAVE_OPENGL)

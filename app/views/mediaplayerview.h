@@ -31,7 +31,7 @@
 
 // QtAV includes
 
-#include <QtAV/AVPlayer.h>
+#include <QtAV/QtAV.h>
 
 class QEvent;
 
@@ -87,7 +87,7 @@ private Q_SLOTS:
 
     void slotPlayerFinished();
     void slotThemeChanged();
-    void slotPlayerStateChanged(QtAV::MediaStatus newState);
+    void slotPlayerStateChanged(QtAV::MediaStatus);
 
     // Slidebar slots
     void slotPositionChanged(qint64 position);
