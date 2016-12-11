@@ -204,9 +204,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(this, SIGNAL(signalFinished()),
             this, SLOT(slotPlayerFinished()));
 
-    connect(d->player, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
-            this, SLOT(slotPlayerStateChanged(QtAV::MediaStatus)));
-
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
 
@@ -224,6 +221,9 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->slider, SIGNAL(sliderMoved(int)),
             this, SLOT(slotPosition(int)));
+
+    connect(d->player, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
+            this, SLOT(slotPlayerStateChanged(QtAV::MediaStatus)));
 
     connect(d->player, SIGNAL(positionChanged(qint64)),
             this, SLOT(slotPositionChanged(qint64)));

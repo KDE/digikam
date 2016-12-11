@@ -53,6 +53,7 @@ public:
     {
         ErrorView=0,
         ImageView,
+        VideoView,
         EndView
     };
 
@@ -97,6 +98,8 @@ private Q_SLOTS:
     void slotMouseMoveTimeOut();
     void slotImageLoaded(bool);
     void slotScreenSelected(int);
+    void slotVideoLoaded(bool);
+    void slotVideoFinished();
 
 private:
 

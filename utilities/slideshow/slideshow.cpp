@@ -54,6 +54,7 @@
 #include "slidetoolbar.h"
 #include "slideosd.h"
 #include "slideimage.h"
+#include "slidevideo.h"
 #include "slideerror.h"
 #include "slideend.h"
 
@@ -70,6 +71,7 @@ public:
           screenSaverCookie(-1),
           mouseMoveTimer(0),
           imageView(0),
+          videoView(0),
           errorView(0),
           endView(0),
           osd(0)
@@ -82,6 +84,7 @@ public:
     QTimer*           mouseMoveTimer;  // To hide cursor when not moved.
 
     SlideImage*       imageView;
+    SlideVideo*       videoView;
     SlideError*       errorView;
     SlideEnd*         endView;
     SlideOSD*         osd;
@@ -121,6 +124,19 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
             this, SLOT(slotImageLoaded(bool)));
 
     insertWidget(ImageView, d->imageView);
+
+    // ---------------------------------------------------------------
+
+    d->videoView = new SlideVideo(this);
+    d->videoView->installEventFilter(this);
+
+    connect(d->videoView, SIGNAL(signalVideoLoaded(bool)),
+            this, SLOT(slotVideoLoaded(bool)));
+
+    connect(d->videoView, SIGNAL(signalVideoFinished()),
+            this, SLOT(slotVideoFinished()));
+
+    insertWidget(VideoView, d->videoView);
 
     // ---------------------------------------------------------------
 
@@ -264,10 +280,39 @@ void SlideShow::slotImageLoaded(bool loaded)
 {
     if (loaded)
     {
+        d->videoView->stop();
         setCurrentIndex(ImageView);
+
+        d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+        d->osd->raise();
+
+        if (d->fileIndex != -1)
+        {
+            if (!d->osd->isPaused())
+            {
+                d->osd->pause(false);
+            }
+
+            preloadNextItem();
+        }
     }
     else
     {
+        // Try to load item as video
+        d->videoView->setCurrentUrl(currentItem());
+    }
+}
+
+void SlideShow::slotVideoLoaded(bool loaded)
+{
+    if (loaded)
+    {
+        setCurrentIndex(VideoView);
+        d->osd->pause(true);
+    }
+    else
+    {
+        // Failed to load item
         d->errorView->setCurrentUrl(currentItem());
         setCurrentIndex(ErrorView);
     }
@@ -284,6 +329,12 @@ void SlideShow::slotImageLoaded(bool loaded)
 
         preloadNextItem();
     }
+}
+
+void SlideShow::slotVideoFinished()
+{
+    d->osd->pause(false);
+    slotLoadNextItem();
 }
 
 void SlideShow::endOfSlide()
@@ -395,7 +446,7 @@ void SlideShow::inhibitScreenSaver()
     {
         d->screenSaverCookie = reply.value();
     }
-#endif    
+#endif
 }
 
 void SlideShow::allowScreenSaver()
@@ -453,14 +504,26 @@ void SlideShow::dispatchCurrentInfoChange(const QUrl& url)
 
 void SlideShow::slotPause()
 {
-    // NOTE: prepare to video slide support.
-    d->osd->pause(true);
+    if (currentIndex() == VideoView)
+    {
+        d->videoView->pause(true);
+    }
+    else
+    {
+        d->osd->pause(true);
+    }
 }
 
 void SlideShow::slotPlay()
 {
-    // NOTE: prepare to video slide support.
-    d->osd->pause(false);
+    if (currentIndex() == VideoView)
+    {
+        d->videoView->pause(false);
+    }
+    else
+    {
+        d->osd->pause(false);
+    }
 }
 
 void SlideShow::slotScreenSelected(int screen)

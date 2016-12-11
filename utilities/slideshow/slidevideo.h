@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-20-12
- * Description : a view to embed Phonon media player.
+ * Date        : 2014-09-22
+ * Description : Slideshow video viewer
  *
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2014-2017 Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +21,12 @@
  *
  * ============================================================ */
 
-#ifndef MEDIAPLAYERVIEW_H
-#define MEDIAPLAYERVIEW_H
+#ifndef SLIDEVIDEO_H
+#define SLIDEVIDEO_H
 
 // Qt includes
 
-#include <QStackedWidget>
+#include <QWidget>
 #include <QUrl>
 
 // QtAV includes
@@ -38,69 +38,34 @@ class QEvent;
 namespace Digikam
 {
 
-class MediaPlayerMouseClickFilter : public QObject
+class SlideVideo : public QWidget
 {
     Q_OBJECT
 
 public:
 
-    explicit MediaPlayerMouseClickFilter(QObject* const parent);
+    explicit SlideVideo(QWidget* const parent);
+    ~SlideVideo();
 
-protected:
-
-    bool eventFilter(QObject* obj, QEvent* event);
-
-private:
-
-    QObject* m_parent;
-};
-
-// --------------------------------------------------------
-
-class MediaPlayerView : public QStackedWidget
-{
-    Q_OBJECT
-
-public:
-
-    explicit MediaPlayerView(QWidget* const parent);
-    ~MediaPlayerView();
-
-    void setCurrentItem(const QUrl& url   = QUrl(),
-                        bool  hasPrevious = false,
-                        bool  hasNext     = false);
-    void escapePreview();
-    void reload();
+    void setCurrentUrl(const QUrl& url);
+    void pause(bool);
+    void stop();
 
 Q_SIGNALS:
 
-    void signalNextItem();
-    void signalPrevItem();
-    void signalEscapePreview();
-    void signalFinished();
-
-public Q_SLOTS:
-
-    void slotEscapePressed();
+    void signalVideoLoaded(bool);
+    void signalVideoFinished();
 
 private Q_SLOTS:
 
-    void slotPlayerFinished();
-    void slotThemeChanged();
     void slotPlayerStateChanged(QtAV::MediaStatus);
     void slotHandlePlayerError(const QtAV::AVError&);
 
-    // Slidebar slots
     void slotPositionChanged(qint64 position);
     void slotDurationChanged(qint64 duration);
     void slotPosition(int position);
     void slotSliderPressed();
     void slotSliderReleased();
-
-private:
-
-    int  previewMode();
-    void setPreviewMode(int mode);
 
 private:
 
@@ -110,4 +75,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // MEDIAPLAYERVIEW_H
+#endif // SLIDEVIDEO_H

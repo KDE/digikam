@@ -14,6 +14,7 @@ set(libslideshow_SRCS
     slideosd.cpp
     slideproperties.cpp
     slideimage.cpp
+    slidevideo.cpp
     slideerror.cpp
     slideend.cpp
     slideshow.cpp
