@@ -16,14 +16,16 @@ find_package(Qt5
              Core
 )
 
-find_path(QTAV_CORE_INCLUDE_DIR NAMES QtAV/QtAV.h
-          HINTS
-          ${_qt5_install_prefix}
+find_path(QTAV_CORE_INCLUDE_DIR
+          NAMES QtAV.h
+          HINTS ${_qt5_install_prefix}
+          PATH_SUFFIXES QtAV
 )
 
-find_path(QTAV_WIDGETS_INCLUDE_DIR NAMES QtAVWidgets/QtAVWidgets.h
-          HINTS
-          ${_qt5_install_prefix}
+find_path(QTAV_WIDGETS_INCLUDE_DIR
+          NAMES QtAVWidgets.h
+          HINTS ${_qt5_install_prefix}
+          PATH_SUFFIXES QtAVWidgets
 )
 
 find_library(QTAV_CORE_LIBRARY NAMES QtAV libQtAV)
@@ -31,7 +33,7 @@ find_library(QTAV_CORE_LIBRARY NAMES QtAV libQtAV)
 find_library(QTAV_WIDGETS_LIBRARY NAMES QtAVWidgets libQtAVWidgets)
 
 set(QTAV_INCLUDE_DIRS "${QTAV_CORE_INCLUDE_DIR} ${QTAV_WIDGETS_INCLUDE_DIR}")
-set(QTAV_LIBRARIES    "${QTAV_CORE_LIBRARY} ${QTAV_WIDGETS_LIBRARY}")
+set(QTAV_LIBRARIES     ${QTAV_CORE_LIBRARY} ${QTAV_WIDGETS_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(QtAV REQUIRED_VARS QTAV_LIBRARIES QTAV_INCLUDE_DIRS)
