@@ -212,7 +212,6 @@ find_package(TIFF                       REQUIRED)
 find_package(PNG                        REQUIRED)
 find_package(Boost                      REQUIRED)
 find_package(LCMS2                      REQUIRED)
-find_package(QtAV                       REQUIRED)
 find_package(EXPAT                      REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
 find_package(Threads                    REQUIRED)  # For DNGWriter and LibRaw which needs native threads support.
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
@@ -226,13 +225,16 @@ set_package_properties("Exiv2"     PROPERTIES
 
 # -- check Media player --------------------------------------------------------------------------
 
+find_package(QtAV)
 
 if(ENABLE_MEDIAPLAYER)
+
     if(NOT Qt5Multimedia_FOUND OR NOT Qt5MultimediaWidgets_FOUND OR NOT ${QTAV_FOUND})
         set(ENABLE_MEDIAPLAYER OFF)
     else()
         include_directories(${QTAV_INCLUDE_DIRS})
     endif()
+
 endif()
 
 # -- check OpenCV --------------------------------------------------------------------------------
