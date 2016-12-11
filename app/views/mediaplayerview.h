@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed Phonon media player.
  *
- * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,8 +27,11 @@
 // Qt includes
 
 #include <QStackedWidget>
-#include <QMediaPlayer>
 #include <QUrl>
+
+// QtAV includes
+
+#include <QtAV/AVPlayer.h>
 
 class QEvent;
 
@@ -84,13 +87,13 @@ private Q_SLOTS:
 
     void slotPlayerFinished();
     void slotThemeChanged();
-    void slotPlayerStateChanged(QMediaPlayer::State newState);
+    void slotPlayerStateChanged(QtAV::MediaStatus newState);
 
     // Slidebar slots
-    void positionChanged(qint64 position);
-    void durationChanged(qint64 duration);
-    void setPosition(int position);
-    void handlePlayerError();
+    void slotPositionChanged(qint64 position);
+    void slotDurationChanged(qint64 duration);
+    void slotPosition(int position);
+    void slotHandlePlayerError(const QtAV::AVError&);
     void slotSliderPressed();
     void slotSliderReleased();
 
@@ -107,4 +110,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* MEDIAPLAYERVIEW_H */
+#endif // MEDIAPLAYERVIEW_H

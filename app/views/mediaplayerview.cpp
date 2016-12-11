@@ -6,7 +6,7 @@
  * Date        : 2006-20-12
  * Description : a view to embed Phonon media player.
  *
- * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QApplication>
-#include <QVideoWidget>
 #include <QVBoxLayout>
 #include <QMouseEvent>
 #include <QToolBar>
@@ -37,6 +36,12 @@
 #include <QEvent>
 #include <QStyle>
 
+// QtAV includes
+
+#include <QtAV/QtAV.h>
+#include <QtAV/AVError.h>
+#include <QtAVWidgets/WidgetRenderer.h>
+
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -46,6 +51,8 @@
 #include "stackedview.h"
 #include "thememanager.h"
 #include "digikam_debug.h"
+
+using namespace QtAV;
 
 namespace Digikam
 {
@@ -123,8 +130,8 @@ public:
 
     QToolBar*            toolBar;
 
-    QVideoWidget*        videoWidget;
-    QMediaPlayer*        player;
+    WidgetRenderer*      videoWidget;
+    AVPlayer*            player;
     QSlider*             slider;
     QUrl                 currentItem;
 };
@@ -159,16 +166,16 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     // --------------------------------------------------------------------------
 
     d->playerView  = new QFrame(this);
-    d->videoWidget = new QVideoWidget(this);
-    d->player      = new QMediaPlayer(this, QMediaPlayer::VideoSurface);
+    d->videoWidget = new WidgetRenderer(this);
+    d->player      = new AVPlayer(this);
 
     d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
-    d->player->setVideoOutput(d->videoWidget);
+    d->player->addVideoRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
 
-    d->videoWidget->setAspectRatioMode(Qt::KeepAspectRatio);
+    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
     d->videoWidget->setStyleSheet(QLatin1String("background-color:black;"));
 
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
@@ -197,8 +204,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(this, SIGNAL(signalFinished()),
             this, SLOT(slotPlayerFinished()));
 
-    connect(d->player, SIGNAL(stateChanged(QMediaPlayer::State)),
-            this, SLOT(slotPlayerStateChanged(QMediaPlayer::State)));
+    connect(d->player, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
+            this, SLOT(slotPlayerStateChanged(QtAV::MediaStatus)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -216,16 +223,16 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
             this, SLOT(slotSliderReleased()));
 
     connect(d->slider, SIGNAL(sliderMoved(int)),
-            this, SLOT(setPosition(int)));
+            this, SLOT(slotPosition(int)));
 
     connect(d->player, SIGNAL(positionChanged(qint64)),
-            this, SLOT(positionChanged(qint64)));
+            this, SLOT(slotPositionChanged(qint64)));
 
     connect(d->player, SIGNAL(durationChanged(qint64)),
-            this, SLOT(durationChanged(qint64)));
+            this, SLOT(slotDurationChanged(qint64)));
 
-    connect(d->player, SIGNAL(error(QMediaPlayer::Error)),
-            this, SLOT(handlePlayerError()));
+    connect(d->player, SIGNAL(error(QtAV::AVError)),
+            this, SLOT(slotHandlePlayerError(QtAV::AVError)));
 }
 
 MediaPlayerView::~MediaPlayerView()
@@ -240,29 +247,24 @@ MediaPlayerView::~MediaPlayerView()
 void MediaPlayerView::reload()
 {
     d->player->stop();
-    d->player->setMedia(d->currentItem);
+    d->player->setFile(d->currentItem.toLocalFile());
     d->player->play();
 }
 
 void MediaPlayerView::slotPlayerFinished()
 {
-    if (d->player->state() == QMediaPlayer::StoppedState  &&
-        d->player->error() != QMediaPlayer::NoError)
+    if (d->player->mediaStatus() == UnknownMediaStatus ||
+        d->player->mediaStatus() == NoMedia            ||
+        d->player->mediaStatus() == StalledMedia       ||
+        d->player->mediaStatus() == InvalidMedia)
     {
         setPreviewMode(Private::ErrorView);
     }
 }
 
-void MediaPlayerView::slotPlayerStateChanged(QMediaPlayer::State newState)
+void MediaPlayerView::slotPlayerStateChanged(QtAV::MediaStatus/* newState*/)
 {
-    if (newState           == QMediaPlayer::StoppedState  &&
-        d->player->error() != QMediaPlayer::NoError)
-    {
-        setPreviewMode(Private::ErrorView);
-    }
-
-    if (newState                 == QMediaPlayer::StoppedState &&
-        d->player->mediaStatus() == QMediaPlayer::EndOfMedia)
+    if (d->player->state() == AVPlayer::StoppedState)
     {
         emit signalFinished();
     }
@@ -325,20 +327,20 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     }
 
     if (d->currentItem == url &&
-        (d->player->state() == QMediaPlayer::PlayingState ||
-         d->player->state() == QMediaPlayer::PausedState))
+        (d->player->state() == AVPlayer::PlayingState ||
+         d->player->state() == AVPlayer::PausedState))
     {
         return;
     }
 
     d->currentItem = url;
 
-    d->player->setMedia(d->currentItem);
+    d->player->setFile(d->currentItem.toLocalFile());
     setPreviewMode(Private::PlayerView);
     d->player->play();
 }
 
-void MediaPlayerView::positionChanged(qint64 position)
+void MediaPlayerView::slotPositionChanged(qint64 position)
 {
     if (!d->slider->isSliderDown())
     {
@@ -346,12 +348,12 @@ void MediaPlayerView::positionChanged(qint64 position)
     }
 }
 
-void MediaPlayerView::durationChanged(qint64 duration)
+void MediaPlayerView::slotDurationChanged(qint64 duration)
 {
     d->slider->setRange(0, duration);
 }
 
-void MediaPlayerView::setPosition(int position)
+void MediaPlayerView::slotPosition(int position)
 {
     if (d->player->isSeekable())
     {
@@ -361,8 +363,8 @@ void MediaPlayerView::setPosition(int position)
 
 void MediaPlayerView::slotSliderPressed()
 {
-    if (d->player->state() == QMediaPlayer::PlayingState ||
-        d->player->mediaStatus() == QMediaPlayer::EndOfMedia)
+    if (d->player->state()       == AVPlayer::PlayingState ||
+        d->player->mediaStatus() == MediaStatus::EndOfMedia)
     {
         d->player->pause();
     }
@@ -370,16 +372,16 @@ void MediaPlayerView::slotSliderPressed()
 
 void MediaPlayerView::slotSliderReleased()
 {
-    if (d->player->mediaStatus() != QMediaPlayer::EndOfMedia)
+    if (d->player->mediaStatus() != MediaStatus::EndOfMedia)
     {
         d->player->play();
     }
 }
 
-void MediaPlayerView::handlePlayerError()
+void MediaPlayerView::slotHandlePlayerError(const QtAV::AVError& err)
 {
     setPreviewMode(Private::ErrorView);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << d->player->errorString();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << err.string();
 }
 
 }  // namespace Digikam
