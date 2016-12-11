@@ -36,6 +36,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QLabel>
 
 // KDE includes
 
@@ -44,6 +45,7 @@
 
 // Local includes
 
+#include "setup.h"
 #include "dcursortracker.h"
 #include "parsesettings.h"
 #include "parser.h"
@@ -68,6 +70,7 @@ public:
         focusedWidget(0),
         renameDefaultBox(0),
         renameDefaultCaseType(0),
+        fileMetadataLabel(0),
         advancedRenameWidget(0),
         advancedRenameManager(0)
     {
@@ -90,6 +93,8 @@ public:
     QWidget*               renameDefaultBox;
 
     QComboBox*             renameDefaultCaseType;
+
+    QLabel*                fileMetadataLabel;
 
     AdvancedRenameWidget*  advancedRenameWidget;
     AdvancedRenameManager* advancedRenameManager;
@@ -147,11 +152,15 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
 
     d->buttonGroup->addButton(d->renameCustom, 2);
 
+    d->fileMetadataLabel     = new QLabel(this);
+    d->fileMetadataLabel->setWordWrap(true);
+
     mainLayout->addWidget(d->renameDefault,        0, 0, 1, 2);
     mainLayout->addWidget(d->renameDefaultBox,     1, 0, 1, 2);
     mainLayout->addWidget(d->renameCustom,         4, 0, 1, 2);
     mainLayout->addWidget(d->advancedRenameWidget, 5, 0, 1, 2);
-    mainLayout->setRowStretch(6, 10);
+    mainLayout->addWidget(d->fileMetadataLabel,    6, 0, 1, 2);
+    mainLayout->setRowStretch(7, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
 
@@ -168,6 +177,9 @@ RenameCustomizer::RenameCustomizer(QWidget* const parent, const QString& cameraT
 
     connect(d->advancedRenameWidget, SIGNAL(signalTextChanged(QString)),
             this, SLOT(slotCustomRenameChanged()));
+
+    connect(d->fileMetadataLabel, SIGNAL(linkActivated(QString)),
+            this, SLOT(slotFileMetadataLinkUsed()));
 
     // --------------------------------------------------------
 
@@ -277,6 +289,15 @@ void RenameCustomizer::slotCustomRenameChanged()
     slotRenameOptionsChanged();
 }
 
+void RenameCustomizer::slotFileMetadataLinkUsed()
+{
+    if (Setup::execSinglePage(this, Setup::CameraPage))
+    {
+        d->fileMetadataLabel->setText(i18n("<p><a href=\"camerasetup\">Note: changes after "
+                                           "restart the camera connection.</a></p>"));
+    }
+}
+
 void RenameCustomizer::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
@@ -285,8 +306,20 @@ void RenameCustomizer::readSettings()
     int def              = group.readEntry("Rename Method",        0);
     int chcaseT          = group.readEntry("Case Type",            (int)NONE);
     QString manualRename = group.readEntry("Manual Rename String", QString());
+    bool useFileMetadata = group.readEntry("UseFileMetadata",      false);
 
     slotRadioButtonClicked(def);
+
+    if (useFileMetadata)
+    {
+        d->fileMetadataLabel->setText(i18n("<p><a href=\"camerasetup\">Note: file metadata "
+                                           "is used.</a></p>"));
+    }
+    else
+    {
+        d->fileMetadataLabel->setText(i18n("<p><a href=\"camerasetup\">Note: file metadata "
+                                           "is not used.</a></p>"));
+    }
 
     d->renameDefaultCaseType->setCurrentIndex(chcaseT);
     d->advancedRenameWidget->setParseString(manualRename);

@@ -2210,10 +2210,6 @@ bool ImportUI::createDateBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& inf
             break;
     }
 
-    // See bug #136927 : we need to support file system which do not
-    // handle upper case properly.
-    dirName = dirName.toLower();
-
     return createSubAlbum(downloadUrl, dirName, dateTime.date());
 }
 
@@ -2244,10 +2240,6 @@ bool ImportUI::createExtBasedSubAlbum(QUrl& downloadUrl, const CamItemInfo& info
     {
         subAlbum = QLatin1String("MPG");
     }
-
-    // See bug #136927 : we need to support file system which do not
-    // handle upper case properly.
-    subAlbum = subAlbum.toLower();
 
     return createSubAlbum(downloadUrl, subAlbum, info.ctime.date());
 }
