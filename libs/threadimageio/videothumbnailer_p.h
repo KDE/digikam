@@ -28,10 +28,17 @@
 // Qt includes
 
 #include <QObject>
-#include <QMediaPlayer>
-#include <QVideoFrame>
-#include <QVideoProbe>
 #include <QString>
+#include <QTimer>
+
+// QtAV includes
+
+#include <QtAV/QtAV.h>
+#include <QtAV/AVError.h>
+#include <QtAV/AVPlayer.h>
+#include <QtAV/VideoFrameExtractor.h>
+
+using namespace QtAV;
 
 namespace Digikam
 {
@@ -44,31 +51,30 @@ public:
 
     Private(VideoThumbnailer* const p);
 
-    QString fileName() const;
-    QString filePath() const;
-
-    QImage imageFromVideoFrame(const QVideoFrame&) const;
-
 public Q_SLOTS:
 
-    void slotMediaStatusChanged(QMediaPlayer::MediaStatus);
+    void slotMediaStatusChanged(QtAV::MediaStatus);
+    void slotFrameExtracted(const QtAV::VideoFrame& frame);
     void slotHandlePlayerError();
-    void slotProcessframe(QVideoFrame);
+    void slotExtractedTimout();
 
 public:
 
-    bool              createStrip;
-    int               thumbSize;
-    quint64           thumbJob;
-    QMediaPlayer*     player;
-    QVideoProbe*      probe;
-    QMediaContent     media;
+    bool                 createStrip;
+    int                  thumbSize;
+    quint64              thumbJob;
+    bool                 ready;
+    QString              file;
+
+    AVPlayer*            player;
+    VideoFrameExtractor* extractor;
 
 private:
 
-    int               errorCount;
     qint64            position;
+    qint64            duration;
     QImage            strip;
+    QTimer*           timer;
     VideoThumbnailer* dd;
 };
 

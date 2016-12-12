@@ -176,12 +176,14 @@ void VideoThumbnailerJob::run()
         {
             d->condVar.wait(&d->mutex);
         }
+/*
         else if (!d->condVar.wait(&d->mutex, 5000))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Timeout to get thumbnail for " << d->currentFile;
             emit signalThumbnailFailed(d->currentFile);
             d->jobDone = true;
         }
+*/
     }
 }
 

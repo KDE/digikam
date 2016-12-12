@@ -30,8 +30,6 @@ set(libthreadimageio_SRCS
 
 if(ENABLE_MEDIAPLAYER)
 
-    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
-
     set(libthreadimageio_SRCS
         ${libthreadimageio_SRCS}
         videothumbnailer.cpp

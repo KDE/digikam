@@ -25,9 +25,7 @@
 // Qt includes
 
 #include <QMimeDatabase>
-#include <QApplication>
 #include <QImage>
-#include <QDebug>
 #include <QFile>
 
 // Local includes
@@ -68,7 +66,7 @@ bool VideoThumbnailer::isCreated()
 
 bool VideoThumbnailer::isReady() const
 {
-    return d->player->media().isNull();
+    return d->ready;
 }
 
 void VideoThumbnailer::slotGetThumbnail(quint64 job, const QString& file, int size, bool strip)
@@ -84,13 +82,6 @@ void VideoThumbnailer::slotGetThumbnail(quint64 job, const QString& file, int si
     else
     {
         d->thumbSize = size;
-    }
-
-    if (!d->probe->setSource(d->player))
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Video monitoring is not available.";
-        emit signalThumbnailFailed(job, file);
-        return;
     }
 
     if (!QFile::exists(file))
@@ -109,9 +100,11 @@ void VideoThumbnailer::slotGetThumbnail(quint64 job, const QString& file, int si
         return;
     }
 
-    d->media = QMediaContent(QUrl::fromLocalFile(file));
-    d->player->setMedia(d->media);
-    d->player->setMuted(true);
+    d->file = file;
+    d->player->setFile(d->file);
+    d->player->audio()->setMute(true);
+    d->player->play();
+    d->ready = false;
 }
 
 }  // namespace Digikam
