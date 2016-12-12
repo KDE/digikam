@@ -154,7 +154,7 @@ void VideoThumbnailer::Private::slotMediaStatusChanged(QtAV::MediaStatus state)
 
             position = (qint64)(duration * 0.2);
 
-            player->unload();
+            player->pause();
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << file << " at position " << position;
 
