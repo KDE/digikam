@@ -306,10 +306,6 @@ void MediaPlayerView::setPreviewMode(int mode)
 
     setCurrentIndex(mode);
 
-    // Workaround for no video frame in the QVideoWidget, possible Qt-5.6.0 bug?
-    d->videoWidget->setMaximumSize(0, 0);
-    d->videoWidget->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-
     d->toolBar->adjustSize();
     d->toolBar->raise();
 }
