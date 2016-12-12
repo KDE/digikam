@@ -359,8 +359,7 @@ void MediaPlayerView::slotPosition(int position)
 
 void MediaPlayerView::slotSliderPressed()
 {
-    if (d->player->state()       == AVPlayer::PlayingState ||
-        d->player->mediaStatus() == MediaStatus::EndOfMedia)
+    if (d->player->state() == AVPlayer::PlayingState)
     {
         d->player->pause();
     }
@@ -369,6 +368,10 @@ void MediaPlayerView::slotSliderPressed()
 void MediaPlayerView::slotSliderReleased()
 {
     if (d->player->mediaStatus() != MediaStatus::EndOfMedia)
+    {
+        d->player->togglePause();
+    }
+    else
     {
         d->player->play();
     }
