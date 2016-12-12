@@ -196,6 +196,7 @@ void VideoThumbnailer::Private::slotExtractedTimout()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << file << " at position " << position;
 
+    extractor->setSource(file);
     extractor->setPosition(position);
     timer->start();
 }
