@@ -109,6 +109,8 @@ VideoThumbnailer::Private::Private(VideoThumbnailer* const parent)
     player    = new AVPlayer(this);
     extractor = new VideoFrameExtractor(this);
 
+    player->audio()->setMute(true);
+
     timer     = new QTimer(this);
     timer->setInterval(1000);
     timer->setSingleShot(true);
@@ -194,7 +196,6 @@ void VideoThumbnailer::Private::slotExtractedTimout()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << file << " at position " << position;
 
-    extractor->setSource(file);
     extractor->setPosition(position);
     timer->start();
 }

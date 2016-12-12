@@ -100,11 +100,11 @@ void VideoThumbnailer::slotGetThumbnail(quint64 job, const QString& file, int si
         return;
     }
 
-    d->file = file;
-    d->player->setFile(d->file);
-    d->player->audio()->setMute(true);
-    d->player->play();
+    d->file  = file;
     d->ready = false;
+
+    d->player->setFile(d->file);
+    d->player->play();
 }
 
 }  // namespace Digikam
