@@ -92,12 +92,6 @@ if(KF5KIO_FOUND)
     include_directories($<TARGET_PROPERTY:KF5::KIOWidgets,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
 
-if(ENABLE_MEDIAPLAYER)
-    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>
-                        $<TARGET_PROPERTY:Qt5::MultimediaWidgets,INTERFACE_INCLUDE_DIRECTORIES>
-    )
-endif()
-
 if(HAVE_OPENGL)
     include_directories($<TARGET_PROPERTY:Qt5::OpenGL,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
@@ -210,10 +204,6 @@ endif()
 
 if(KF5FileMetaData_FOUND)
     target_link_libraries(digikamcore PUBLIC baloowrap)
-endif()
-
-if(ENABLE_MEDIAPLAYER)
-    target_link_libraries(digikamcore PUBLIC Qt5::Multimedia Qt5::MultimediaWidgets)
 endif()
 
 if(HAVE_OPENGL)

@@ -127,8 +127,6 @@ endif()
 
 if(ENABLE_MEDIAPLAYER)
 
-    include_directories($<TARGET_PROPERTY:Qt5::Multimedia,INTERFACE_INCLUDE_DIRECTORIES>)
-
     set(videothumbtest_SRCS videothumbtest.cpp)
     add_executable(videothumbtest ${videothumbtest_SRCS})
     ecm_mark_nongui_executable(videothumbtest)
@@ -139,7 +137,6 @@ if(ENABLE_MEDIAPLAYER)
 
                           Qt5::Core
                           Qt5::Widgets
-                          Qt5::Multimedia
     )
 
 endif()

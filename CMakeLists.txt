@@ -103,7 +103,7 @@ include(MacroBoolTo01)
 option(ENABLE_OPENCV3               "Build digiKam with OpenCV3 instead OpenCV2 (default=OFF)"                           OFF)
 option(ENABLE_KFILEMETADATASUPPORT  "Build digiKam with KDE files indexer support (default=OFF)"                         OFF)
 option(ENABLE_AKONADICONTACTSUPPORT "Build digiKam with KDE Mail Contacts support (default=OFF)"                         OFF)
-option(ENABLE_MEDIAPLAYER           "Build digiKam with QtMultimedia support (default=OFF)"                              OFF)
+option(ENABLE_MEDIAPLAYER           "Build digiKam with Media Player support (default=OFF)"                              OFF)
 option(ENABLE_DBUS                  "Build digiKam with DBUS support (default=ON)"                                       ON)
 option(ENABLE_APPSTYLES             "Build digiKam with support for changing the widget application style (default=OFF)" OFF)
 
@@ -132,8 +132,6 @@ find_package(Qt5 ${QT_MIN_VERSION}
 
 find_package(Qt5 ${QT_MIN_VERSION}
              OPTIONAL_COMPONENTS
-             Multimedia
-             MultimediaWidgets
              DBus
              OpenGL
 )
@@ -229,7 +227,7 @@ find_package(QtAV)
 
 if(ENABLE_MEDIAPLAYER)
 
-    if(NOT Qt5Multimedia_FOUND OR NOT Qt5MultimediaWidgets_FOUND OR NOT ${QTAV_FOUND})
+    if(NOT ${QTAV_FOUND})
         set(ENABLE_MEDIAPLAYER OFF)
     else()
         include_directories(${QTAV_INCLUDE_DIRS})
@@ -464,8 +462,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"      
 PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpneGL support."                            HAVE_OPENGL)
 
 if(ENABLE_MEDIAPLAYER)
-    PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 Multimedia"        Qt5Multimedia_FOUND)
-    PRINT_OPTIONAL_QTMODULE_STATUS("Qt5 MultimediaWidgets" Qt5MultimediaWidgets_FOUND)
+    PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"       "http://www.qtav.org/"                                            "(version >= 1.11.0)"                  "digiKam will be compiled without Media Player support."                      QTAV_FOUND)
 endif()
 
 # ================================================================
