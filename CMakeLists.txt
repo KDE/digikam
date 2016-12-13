@@ -254,7 +254,7 @@ if(ENABLE_OPENCV3)
 else()
 
     set(OPENCV_MIN_VERSION "2.4.9")
-    DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect contrib legacy imgproc imgcodecs)
+    DETECT_OPENCV(${OPENCV_MIN_VERSION} core objdetect imgproc contrib legacy)
 
     if(${OpenCV_FOUND})
         if(${OpenCV_VERSION} VERSION_GREATER 2.4.99)
