@@ -142,10 +142,6 @@
 #   include "baloowrap.h"
 #endif
 
-#ifdef HAVE_MEDIAPLAYER
-#   include "videothumbnailer.h"
-#endif
-
 namespace Digikam
 {
 
@@ -274,11 +270,6 @@ DigikamApp::DigikamApp()
     Q_UNUSED(baloo);
 #endif //HAVE_KFILEMETADATA
 
-#ifdef HAVE_MEDIAPLAYER
-    VideoThumbnailer* const video = VideoThumbnailer::instance();
-    Q_UNUSED(video);
-#endif // HAVE_MEDIAPLAYER
-
     setAutoSaveSettings(group, true);
 
     LoadSaveThread::setInfoProvider(new DatabaseLoadSaveFileInfoProvider);
@@ -332,13 +323,6 @@ DigikamApp::~DigikamApp()
     if (BalooWrap::isCreated())
     {
         BalooWrap::internalPtr.clear();
-    }
-#endif
-
-#ifdef HAVE_MEDIAPLAYER
-    if (VideoThumbnailer::isCreated())
-    {
-        delete VideoThumbnailer::internalPtr;
     }
 #endif
 

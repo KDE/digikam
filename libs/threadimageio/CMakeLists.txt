@@ -33,7 +33,6 @@ if(ENABLE_MEDIAPLAYER)
     set(libthreadimageio_SRCS
         ${libthreadimageio_SRCS}
         videothumbnailer.cpp
-        videothumbnailer_p.cpp
         videothumbnailerjob.cpp
        )
 endif()

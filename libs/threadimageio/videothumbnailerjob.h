@@ -76,7 +76,7 @@ Q_SIGNALS:
     void signalThumbnailJobFinished();
 
     /// Internal use only.
-    void signalGetThumbnail(quint64, const QString&, int size, bool strip);
+    void signalGetThumbnail(const QString&, int size, bool strip);
 
 public Q_SLOTS:
 
@@ -84,8 +84,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotThumbnailDone(quint64, const QString&, const QImage&);
-    void slotThumbnailFailed(quint64, const QString&);
+    void slotThumbnailDone(const QString&, const QImage&);
+    void slotThumbnailFailed(const QString&);
 
 private:
 

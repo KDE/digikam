@@ -25,15 +25,21 @@
 
 // Qt includes
 
-#include <QPointer>
 #include <QObject>
 #include <QString>
 #include <QImage>
+
+// QtAV includes
+
+#include <QtAV/QtAV.h>
+#include <QtAV/VideoFrame.h>
 
 // Local includes
 
 #include "digikam_config.h"
 #include "digikam_export.h"
+
+using namespace QtAV;
 
 namespace Digikam
 {
@@ -47,20 +53,21 @@ public:
     explicit VideoThumbnailer(QObject* const parent=0);
     virtual ~VideoThumbnailer();
 
-    static QPointer<VideoThumbnailer> internalPtr;
-    static VideoThumbnailer*          instance();
-    static bool                       isCreated();
-
     bool isReady() const;
-
-Q_SIGNALS:
-
-    void signalThumbnailDone(quint64, const QString&, const QImage&);
-    void signalThumbnailFailed(quint64, const QString&);
 
 public Q_SLOTS:
 
-    void slotGetThumbnail(quint64, const QString&, int size, bool strip);
+    void slotGetThumbnail(const QString&, int size, bool strip);
+
+Q_SIGNALS:
+
+    void signalThumbnailDone(const QString&, const QImage&);
+    void signalThumbnailFailed(const QString&);
+
+private Q_SLOTS:
+
+    void slotTryExtractVideo();
+    void slotFrameExtracted(const QtAV::VideoFrame& frame);
 
 private:
 
