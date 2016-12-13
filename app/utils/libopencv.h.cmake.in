@@ -73,14 +73,13 @@
 #   include <opencv2/core/utility.hpp>
 #   include <opencv2/core/persistence.hpp>
 #   include <opencv2/imgcodecs.hpp>
+#   include <opencv2/imgcodecs/imgcodecs_c.h>
 #endif
 
 // for old-style code
 #if OPENCV_VERSION <= OPENCV_MAKE_VERSION(2,4,99)
 #   include <opencv2/legacy/compat.hpp>
 #endif
-
-#include <opencv2/imgcodecs/imgcodecs_c.h>
 
 // Restore warnings
 #if not defined(__APPLE__) && defined(__GNUC__)
