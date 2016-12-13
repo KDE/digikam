@@ -6,7 +6,7 @@
  * Date        : 2005-04-21
  * Description : slide show tool using preview of pictures.
  *
- * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2004      by Enrico Ros <eros dot kde at email dot it>
  *
  * This program is free software; you can redistribute it
@@ -54,9 +54,12 @@
 #include "slidetoolbar.h"
 #include "slideosd.h"
 #include "slideimage.h"
-#include "slidevideo.h"
 #include "slideerror.h"
 #include "slideend.h"
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "slidevideo.h"
+#endif //HAVE_MEDIAPLAYER
 
 namespace Digikam
 {
@@ -71,7 +74,9 @@ public:
           screenSaverCookie(-1),
           mouseMoveTimer(0),
           imageView(0),
+#ifdef HAVE_MEDIAPLAYER
           videoView(0),
+#endif
           errorView(0),
           endView(0),
           osd(0)
@@ -84,7 +89,9 @@ public:
     QTimer*           mouseMoveTimer;  // To hide cursor when not moved.
 
     SlideImage*       imageView;
+#ifdef HAVE_MEDIAPLAYER
     SlideVideo*       videoView;
+#endif
     SlideError*       errorView;
     SlideEnd*         endView;
     SlideOSD*         osd;
@@ -127,6 +134,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
+#ifdef HAVE_MEDIAPLAYER
     d->videoView = new SlideVideo(this);
     d->videoView->installEventFilter(this);
 
@@ -137,6 +145,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
             this, SLOT(slotVideoFinished()));
 
     insertWidget(VideoView, d->videoView);
+#endif
 
     // ---------------------------------------------------------------
 
@@ -280,7 +289,9 @@ void SlideShow::slotImageLoaded(bool loaded)
 {
     if (loaded)
     {
+#ifdef HAVE_MEDIAPLAYER
         d->videoView->stop();
+#endif
         setCurrentIndex(ImageView);
 
         d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
@@ -298,8 +309,12 @@ void SlideShow::slotImageLoaded(bool loaded)
     }
     else
     {
+#ifdef HAVE_MEDIAPLAYER
         // Try to load item as video
         d->videoView->setCurrentUrl(currentItem());
+#else
+        slotVideoLoaded(false);
+#endif
     }
 }
 
@@ -307,8 +322,10 @@ void SlideShow::slotVideoLoaded(bool loaded)
 {
     if (loaded)
     {
+#ifdef HAVE_MEDIAPLAYER
         setCurrentIndex(VideoView);
         d->osd->pause(true);
+#endif
     }
     else
     {
@@ -499,16 +516,20 @@ void SlideShow::toggleTag(int tag)
 void SlideShow::dispatchCurrentInfoChange(const QUrl& url)
 {
     if (currentItem() == url)
+    {
         d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+    }
 }
 
 void SlideShow::slotPause()
 {
+#ifdef HAVE_DBUS
     if (currentIndex() == VideoView)
     {
         d->videoView->pause(true);
     }
     else
+#endif
     {
         d->osd->pause(true);
     }
@@ -516,11 +537,13 @@ void SlideShow::slotPause()
 
 void SlideShow::slotPlay()
 {
+#ifdef HAVE_DBUS
     if (currentIndex() == VideoView)
     {
         d->videoView->pause(false);
     }
     else
+#endif
     {
         d->osd->pause(false);
     }
