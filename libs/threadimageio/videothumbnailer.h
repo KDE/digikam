@@ -53,8 +53,6 @@ public:
     explicit VideoThumbnailer(QObject* const parent=0);
     virtual ~VideoThumbnailer();
 
-    bool isReady() const;
-
 public Q_SLOTS:
 
     void slotGetThumbnail(const QString&, int size, bool strip);

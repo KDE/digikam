@@ -150,11 +150,6 @@ VideoThumbnailer::~VideoThumbnailer()
     delete d;
 }
 
-bool VideoThumbnailer::isReady() const
-{
-    return (d->extractor == 0);
-}
-
 void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool strip)
 {
     d->createStrip = strip;

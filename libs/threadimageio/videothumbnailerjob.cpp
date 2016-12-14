@@ -154,25 +154,15 @@ void VideoThumbnailerJob::run()
     {
         QMutexLocker lock(&d->mutex);
 
-        bool ready = d->vthumb->isReady();
-
-        if (ready && d->jobDone && !d->todo.isEmpty())
+        if (d->jobDone && !d->todo.isEmpty())
         {
             d->jobDone = false;
             d->currentFile = d->todo.takeFirst();
             qCDebug(DIGIKAM_GENERAL_LOG) << "Request to get thumbnail for " << d->currentFile;
             emit signalGetThumbnail(d->currentFile, d->thumbSize, d->createStrip);
         }
-        else if (!ready && d->jobDone)
-        {
-            d->condVar.wait(&d->mutex, 250);
-            continue;
-        }
 
-        if (d->todo.isEmpty())
-        {
-            d->condVar.wait(&d->mutex);
-        }
+        d->condVar.wait(&d->mutex);
     }
 }
 
