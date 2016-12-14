@@ -69,7 +69,7 @@ VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
     : QThread(parent),
       d(new Private)
 {
-    d->vthumb = new VideoThumbnailer();
+    d->vthumb = new VideoThumbnailer(this);
 
     connect(this, SIGNAL(signalGetThumbnail(const QString&,int,bool)),
             d->vthumb, SLOT(slotGetThumbnail(const QString&,int,bool)));
