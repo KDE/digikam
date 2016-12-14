@@ -139,7 +139,7 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     d->timer->setSingleShot(true);
 
     connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotTryExtractVideo()));
+            this, SLOT(slotTryExtractVideoFrame()));
 
     d->strip = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
 }
@@ -205,32 +205,35 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     d->file     = file;
     d->position = (qint64)(d->duration * 0.1);
 
-    slotTryExtractVideo();
+    slotTryExtractVideoFrame();
 }
 
-void VideoThumbnailer::slotTryExtractVideo()
+void VideoThumbnailer::slotTryExtractVideoFrame()
 {
+    delete d->extractor;
+    d->extractor = 0;
+
+    d->timer->stop();
+
     d->position += (qint64)(d->duration * 0.1);
 
     if (d->position > d->duration)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Problem while video data extraction from " << d->file;
-        delete d->extractor;
-        d->extractor = 0;
-
         emit signalThumbnailFailed(d->file);
         return;
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << d->file << " at position " << d->position;
 
-    delete d->extractor;
-
     d->extractor = new VideoFrameExtractor();
     d->extractor->setAutoExtract(false);
 
     connect(d->extractor, SIGNAL(frameExtracted(QtAV::VideoFrame)),
             this, SLOT(slotFrameExtracted(QtAV::VideoFrame)));
+
+    connect(d->extractor, SIGNAL(error()),
+            this, SLOT(slotTryExtractVideoFrame()));
 
     d->extractor->setSource(d->file);
     d->extractor->setPosition(d->position);
@@ -240,12 +243,12 @@ void VideoThumbnailer::slotTryExtractVideo()
 
 void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
 {
-    d->timer->stop();
-
     QImage img = frame.toImage();
 
     delete d->extractor;
     d->extractor = 0;
+
+    d->timer->stop();
 
     if (!img.isNull())
     {
