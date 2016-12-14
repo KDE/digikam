@@ -346,7 +346,8 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
 
 void MediaPlayerView::slotDurationChanged(qint64 duration)
 {
-    d->slider->setRange(0, duration);
+    qint64 max = qMax((qint64)1, duration);
+    d->slider->setRange(0, max);
 }
 
 void MediaPlayerView::slotPosition(int position)
@@ -363,17 +364,17 @@ void MediaPlayerView::slotSliderPressed()
     {
         d->player->pause();
     }
+    else if (d->player->state() == AVPlayer::StoppedState)
+    {
+        d->player->play();
+    }
 }
 
 void MediaPlayerView::slotSliderReleased()
 {
-    if (d->player->mediaStatus() != MediaStatus::EndOfMedia)
+    if (d->player->state() == AVPlayer::PausedState)
     {
         d->player->togglePause();
-    }
-    else
-    {
-        d->player->play();
     }
 }
 
