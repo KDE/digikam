@@ -166,13 +166,13 @@ void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
 
 void SlideVideo::pause(bool b)
 {
-    if (b)
+    if (b && d->player->state() == AVPlayer::PlayingState)
     {
         d->player->pause();
     }
     else
     {
-        d->player->play();
+        d->player->togglePause();
     }
 }
 
@@ -192,7 +192,7 @@ void SlideVideo::slotPositionChanged(qint64 position)
 void SlideVideo::slotDurationChanged(qint64 duration)
 {
     qint64 max = qMax((qint64)1, duration);
-    d->slider->setRange(0, duration);
+    d->slider->setRange(0, max);
 }
 
 void SlideVideo::slotPosition(int position)
