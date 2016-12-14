@@ -146,7 +146,11 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
 
 VideoThumbnailer::~VideoThumbnailer()
 {
-    delete d->extractor;
+    if (d->extractor)
+    {
+        d->extractor->deleteLater();
+    }
+
     delete d;
 }
 
