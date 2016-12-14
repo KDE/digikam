@@ -449,7 +449,7 @@ void SlideShow::slotMouseMoveTimeOut()
 // TODO: Add OSX and Windows support
 void SlideShow::inhibitScreenSaver()
 {
-#ifdef HAVE_DBUS    
+#ifdef HAVE_DBUS
     QDBusMessage message = QDBusMessage::createMethodCall(QLatin1String("org.freedesktop.ScreenSaver"),
                                                           QLatin1String("/ScreenSaver"),
                                                           QLatin1String("org.freedesktop.ScreenSaver"),
@@ -523,7 +523,7 @@ void SlideShow::dispatchCurrentInfoChange(const QUrl& url)
 
 void SlideShow::slotPause()
 {
-#ifdef HAVE_DBUS
+#ifdef HAVE_MEDIAPLAYER
     if (currentIndex() == VideoView)
     {
         d->videoView->pause(true);
@@ -537,7 +537,7 @@ void SlideShow::slotPause()
 
 void SlideShow::slotPlay()
 {
-#ifdef HAVE_DBUS
+#ifdef HAVE_MEDIAPLAYER
     if (currentIndex() == VideoView)
     {
         d->videoView->pause(false);
