@@ -85,4 +85,5 @@ BUGFIXES FROM BUGZILLA:
 071 ==> 372755 - CASIO EX-Z750.
 072 ==> 366387 - Video (mts and mov) not played (neither from camera nor local file).
 073 ==> 348933 - When in slideshow mode digikam can't play video files.
-074 ==> 
+074 ==> 330112 - No Thumbnails for video files - ffmpegthumbnailer works perfectly outside of digikam
+075 ==> 
