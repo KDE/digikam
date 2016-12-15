@@ -84,4 +84,5 @@ BUGFIXES FROM BUGZILLA:
 070 ==> 159824 - Show videos in Slideshow.
 071 ==> 372755 - CASIO EX-Z750.
 072 ==> 366387 - Video (mts and mov) not played (neither from camera nor local file).
-073 ==> 
+073 ==> 348933 - When in slideshow mode digikam can't play video files.
+074 ==> 
