@@ -83,4 +83,5 @@ BUGFIXES FROM BUGZILLA:
 069 ==> 373272 - No longer shows video previews.
 070 ==> 159824 - Show videos in Slideshow.
 071 ==> 372755 - CASIO EX-Z750.
-072 ==> 
+072 ==> 366387 - Video (mts and mov) not played (neither from camera nor local file).
+073 ==> 
