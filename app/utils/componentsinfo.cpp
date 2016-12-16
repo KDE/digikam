@@ -6,7 +6,7 @@
  * Date        : 2008-07-30
  * Description : digiKam components info dialog.
  *
- * Copyright (C) 2008-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2008-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -86,9 +86,9 @@ void showDigikamComponentsInfo()
 #endif /* HAVE_AKONADICONTACT */
 
 #ifdef HAVE_MEDIAPLAYER
-    list.insert(i18n("QtMultimedia support"), i18n("Yes"));
+    list.insert(i18n("Media player support"), i18n("Yes"));
 #else
-    list.insert(i18n("QtMultimedia support"), i18n("no"));
+    list.insert(i18n("Media player support"), i18n("no"));
 #endif /* HAVE_MEDIAPLAYER */
 
 #ifdef HAVE_DBUS
