@@ -89,4 +89,5 @@ BUGFIXES FROM BUGZILLA:
 075 ==> 222319 - Videos are not played in slideshow.
 076 ==> 281718 - Thumbnails only generate for certain video files but not others even though all from same camera on same day.
 077 ==> 280755 - Need thumbnail for video items instead of generic icon.
-078 ==> 
+078 ==> 373715 - Renaming popup stays when file with new name already exists.
+079 ==> 
