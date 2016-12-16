@@ -20,13 +20,13 @@ Message(STATUS "QtAV search path: ${_qt5_install_prefix}")
 
 find_path(QTAV_CORE_INCLUDE_DIR
           NAMES QtAV.h
-          HINTS ${_qt5_install_prefix} ${_qt5_install_prefix}/../QtAV.framework/Headers
+          HINTS ${_qt5_install_prefix} ${_qt5_install_prefix}/../../include/qt5 ${_qt5_install_prefix}/../QtAV.framework/Headers
           PATH_SUFFIXES QtAV
 )
 
 find_path(QTAV_WIDGETS_INCLUDE_DIR
           NAMES QtAVWidgets.h
-          HINTS ${_qt5_install_prefix} ${_qt5_install_prefix}/../QtAVWidgets.framework/Headers
+          HINTS ${_qt5_install_prefix} ${_qt5_install_prefix}/../../include/qt5 ${_qt5_install_prefix}/../QtAVWidgets.framework/Headers
           PATH_SUFFIXES QtAVWidgets
 )
 
