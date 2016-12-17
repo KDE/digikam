@@ -102,4 +102,5 @@ BUGFIXES FROM BUGZILLA:
 088 ==> 225731 - digiKam no preview icon for video.
 089 ==> 96133  - digiKam to play video.
 090 ==> 91538  - Optionally don't generate thumbnails for video files.
-091 ==> 
+091 ==> 151540 - usability: video view is missing some play/stop/pause buttons.
+092 ==> 

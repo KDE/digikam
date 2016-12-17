@@ -115,6 +115,7 @@ public:
         playerView(0),
         prevAction(0),
         nextAction(0),
+        playAction(0),
         toolBar(0),
         videoWidget(0),
         player(0),
@@ -127,6 +128,7 @@ public:
 
     QAction*             prevAction;
     QAction*             nextAction;
+    QAction*             playAction;
 
     QToolBar*            toolBar;
 
@@ -146,8 +148,9 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QMargins margins(spacing, 0, spacing, spacing);
 
-    d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")), i18nc("go to previous image", "Back"), this);
-    d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),     i18nc("go to next image", "Forward"),  this);
+    d->prevAction          = new QAction(QIcon::fromTheme(QLatin1String("go-previous")),          i18nc("go to previous image", "Back"),   this);
+    d->nextAction          = new QAction(QIcon::fromTheme(QLatin1String("go-next")),              i18nc("go to next image", "Forward"),    this);
+    d->playAction          = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18nc("pause/play video", "Pause/Play"), this);
 
     d->errorView           = new QFrame(this);
     QLabel* const errorMsg = new QLabel(i18n("An error has occurred with the media player...."), this);
@@ -192,6 +195,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->toolBar = new QToolBar(this);
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
+    d->toolBar->addAction(d->playAction);
     d->toolBar->setAutoFillBackground(true);
 
     setPreviewMode(Private::PlayerView);
@@ -200,9 +204,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->videoWidget->installEventFilter(new MediaPlayerMouseClickFilter(this));
 
     // --------------------------------------------------------------------------
-
-    connect(this, SIGNAL(signalFinished()),
-            this, SLOT(slotPlayerFinished()));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -213,17 +214,23 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     connect(d->nextAction, SIGNAL(triggered()),
             this, SIGNAL(signalNextItem()));
 
+    connect(d->playAction, SIGNAL(triggered()),
+            this, SLOT(slotPausePlay()));
+
     connect(d->slider, SIGNAL(sliderPressed()),
-            this, SLOT(slotSliderPressed()));
+            this, SLOT(slotPausePlay()));
 
     connect(d->slider, SIGNAL(sliderReleased()),
-            this, SLOT(slotSliderReleased()));
+            this, SLOT(slotPausePlay()));
 
     connect(d->slider, SIGNAL(sliderMoved(int)),
             this, SLOT(slotPosition(int)));
 
+    connect(d->player, SIGNAL(stateChanged(QtAV::AVPlayer::State)),
+            this, SLOT(slotPlayerStateChanged(QtAV::AVPlayer::State)));
+
     connect(d->player, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
-            this, SLOT(slotPlayerStateChanged(QtAV::MediaStatus)));
+            this, SLOT(slotMediaStatusChanged(QtAV::MediaStatus)));
 
     connect(d->player, SIGNAL(positionChanged(qint64)),
             this, SLOT(slotPositionChanged(qint64)));
@@ -248,25 +255,30 @@ void MediaPlayerView::reload()
 {
     d->player->stop();
     d->player->setFile(d->currentItem.toLocalFile());
-    d->player->play();
+    slotPausePlay();
 }
 
-void MediaPlayerView::slotPlayerFinished()
+void MediaPlayerView::slotPlayerStateChanged(QtAV::AVPlayer::State state)
 {
-    if (d->player->mediaStatus() == UnknownMediaStatus ||
-        d->player->mediaStatus() == NoMedia            ||
-        d->player->mediaStatus() == StalledMedia       ||
-        d->player->mediaStatus() == InvalidMedia)
+    if (state == QtAV::AVPlayer::PlayingState)
     {
-        setPreviewMode(Private::ErrorView);
+        d->playAction->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+    }
+    else if (state == QtAV::AVPlayer::PausedState ||
+             state == QtAV::AVPlayer::StoppedState)
+    {
+        d->playAction->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
     }
 }
 
-void MediaPlayerView::slotPlayerStateChanged(QtAV::MediaStatus/* newState*/)
+void MediaPlayerView::slotMediaStatusChanged(QtAV::MediaStatus status)
 {
-    if (d->player->state() == AVPlayer::StoppedState)
+    if (status == UnknownMediaStatus ||
+        status == NoMedia            ||
+        status == StalledMedia       ||
+        status == InvalidMedia)
     {
-        emit signalFinished();
+        setPreviewMode(Private::ErrorView);
     }
 }
 
@@ -290,6 +302,22 @@ void MediaPlayerView::slotEscapePressed()
 {
     escapePreview();
     emit signalEscapePreview();
+}
+
+void MediaPlayerView::slotPausePlay()
+{
+    if (d->player->state() == QtAV::AVPlayer::PlayingState)
+    {
+        d->player->pause();
+    }
+    else if (d->player->state() == QtAV::AVPlayer::PausedState)
+    {
+        d->player->togglePause();
+    }
+    else if (d->player->state() == QtAV::AVPlayer::StoppedState)
+    {
+         d->player->play();
+    }
 }
 
 int MediaPlayerView::previewMode()
@@ -322,18 +350,17 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
         return;
     }
 
-    if (d->currentItem == url &&
-        (d->player->state() == AVPlayer::PlayingState ||
-         d->player->state() == AVPlayer::PausedState))
+    if (d->currentItem == url)
     {
         return;
     }
 
     d->currentItem = url;
+    d->player->stop();
 
     d->player->setFile(d->currentItem.toLocalFile());
     setPreviewMode(Private::PlayerView);
-    d->player->play();
+    slotPausePlay();
 }
 
 void MediaPlayerView::slotPositionChanged(qint64 position)
@@ -355,26 +382,6 @@ void MediaPlayerView::slotPosition(int position)
     if (d->player->isSeekable())
     {
         d->player->setPosition((qint64)position);
-    }
-}
-
-void MediaPlayerView::slotSliderPressed()
-{
-    if (d->player->state() == AVPlayer::PlayingState)
-    {
-        d->player->pause();
-    }
-    else if (d->player->state() == AVPlayer::StoppedState)
-    {
-        d->player->play();
-    }
-}
-
-void MediaPlayerView::slotSliderReleased()
-{
-    if (d->player->state() == AVPlayer::PausedState)
-    {
-        d->player->togglePause();
     }
 }
 

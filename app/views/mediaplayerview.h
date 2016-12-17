@@ -77,7 +77,6 @@ Q_SIGNALS:
     void signalNextItem();
     void signalPrevItem();
     void signalEscapePreview();
-    void signalFinished();
 
 public Q_SLOTS:
 
@@ -85,17 +84,16 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void slotPlayerFinished();
     void slotThemeChanged();
-    void slotPlayerStateChanged(QtAV::MediaStatus);
-    void slotHandlePlayerError(const QtAV::AVError&);
+    void slotPlayerStateChanged(QtAV::AVPlayer::State state);
+    void slotMediaStatusChanged(QtAV::MediaStatus status);
+    void slotHandlePlayerError(const QtAV::AVError& err);
 
     // Slidebar slots
     void slotPositionChanged(qint64 position);
     void slotDurationChanged(qint64 duration);
     void slotPosition(int position);
-    void slotSliderPressed();
-    void slotSliderReleased();
+    void slotPausePlay();
 
 private:
 
