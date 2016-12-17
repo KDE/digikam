@@ -100,4 +100,5 @@ BUGFIXES FROM BUGZILLA:
 086 ==> 335996 - Crash when try opening video.
 087 ==> 336594 - digiKam crash when try to look at video.
 088 ==> 225731 - digiKam no preview icon for video.
-089 ==> 
+089 ==> 96133  - digiKam to play video.
+090 ==> 
