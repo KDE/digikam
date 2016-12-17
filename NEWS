@@ -93,5 +93,6 @@ BUGFIXES FROM BUGZILLA:
 079 ==> 301029 - Meaningless video preview.
 080 ==> 242799 - digiKam segfaults when opening video.
 081 ==> 260594 - digiKam crashed when starting video playback.
-082 ==> 
+082 ==> 230985 - digiKam veiwing album click on video file program crashed.
+083 ==> 
 
