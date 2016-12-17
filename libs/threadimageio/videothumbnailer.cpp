@@ -114,6 +114,7 @@ public:
     {
         createStrip = false;
         thumbSize   = ThumbnailSize::Huge;
+        trySteps    = 8;
         position    = 0;
         duration    = 0;
         timer       = 0;
@@ -122,6 +123,7 @@ public:
 
     bool                 createStrip;
     int                  thumbSize;
+    int                  trySteps;
     qint64               position;
     qint64               duration;
     QString              file;
@@ -177,7 +179,10 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     QMimeDatabase mimeDB;
 
-    if (!mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video/")))
+    bool audio = mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("audio/mpeg"));
+    bool video = mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video/"));
+
+    if (!video && !audio)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video from " << file;
         emit signalThumbnailFailed(file);
@@ -206,8 +211,9 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Video duration for " << file << "is " << d->duration << " seconds";
 
-    d->file     = file;
-    d->position = (qint64)(d->duration * 0.1);
+    d->file      = file;
+    d->trySteps  = audio ? 1 : 8;
+    d->position  = (qint64)(d->duration * 0.1);
 
     slotTryExtractVideoFrame();
 }
@@ -221,7 +227,7 @@ void VideoThumbnailer::slotTryExtractVideoFrame()
 
     d->position += (qint64)(d->duration * 0.1);
 
-    if (d->position > d->duration)
+    if (!d->trySteps || d->position >= d->duration)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Problem while video data extraction from " << d->file;
         emit signalThumbnailFailed(d->file);
@@ -243,6 +249,7 @@ void VideoThumbnailer::slotTryExtractVideoFrame()
     d->extractor->setPosition(d->position);
     d->extractor->extract();
     d->timer->start();
+    d->trySteps--;
 }
 
 void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
