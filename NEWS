@@ -91,4 +91,6 @@ BUGFIXES FROM BUGZILLA:
 077 ==> 280755 - Need thumbnail for video items instead of generic icon.
 078 ==> 373715 - Renaming popup stays when file with new name already exists.
 079 ==> 301029 - Meaningless video preview.
-080 ==> 
+080 ==> 242799 - digiKam segfaults when opening video.
+081 ==> 
+
