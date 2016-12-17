@@ -768,11 +768,6 @@ void ThumbnailLoadThread::slotThumbnailsAvailable()
 
 void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& description, const QImage& thumb)
 {
-    if (thumb.isNull())
-    {
-        loadVideoThumbnail(description);
-    }
-
     QPixmap pix;
 
     int w = thumb.width();
@@ -800,6 +795,11 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
 
+    if (thumb.isNull())
+    {
+        loadVideoThumbnail(description);
+    }
+
     emit signalThumbnailLoaded(description, pix);
 }
 
@@ -807,8 +807,8 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 
 void ThumbnailLoadThread::loadVideoThumbnail(const LoadingDescription& description)
 {
-#ifdef HAVE_MEDIAPLAYER
     d->videoJobHash.insert(description.filePath, description);
+#ifdef HAVE_MEDIAPLAYER
     d->videoThumbs->setThumbnailSize(d->creator->storedSize());
     d->videoThumbs->addItems(QStringList() << description.filePath);
 #else
