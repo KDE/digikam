@@ -98,5 +98,6 @@ BUGFIXES FROM BUGZILLA:
 084 ==> 332074 - Crash while playing video and adding a color-tag.
 085 ==> 336309 - digiKam crashes when opening video.
 086 ==> 335996 - Crash when try opening video.
-087 ==> 
+087 ==> 336594 - digiKam crash when try to look at video.
+088 ==> 
 
