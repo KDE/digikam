@@ -57,7 +57,7 @@ if (NOT APPLE)
 else()
 
     set(QTAV_INCLUDE_DIRS ${_qt5_install_prefix}/../../include/QtAV ${_qt5_install_prefix}/../../include/QtAVWidgets)
-    set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../lib/QtAV.framework/QtAV;${_qt5_install_prefix}/../lib/QtAVWidgets.framework/QtAVWidgets")
+    set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
 
 endif()
 
