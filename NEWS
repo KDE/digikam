@@ -95,5 +95,6 @@ BUGFIXES FROM BUGZILLA:
 081 ==> 260594 - digiKam crashed when starting video playback.
 082 ==> 230985 - digiKam veiwing album click on video file program crashed.
 083 ==> 151539 - Usability - scrolling into video takes long time without visual indication to user.
-084 ==> 
+084 ==> 332074 - Crash while playing video and adding a color-tag.
+085 ==> 
 
