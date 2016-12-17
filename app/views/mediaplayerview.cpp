@@ -175,11 +175,9 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
+    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
     d->player->addVideoRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
-
-    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
-    d->videoWidget->setStyleSheet(QLatin1String("background-color:black;"));
 
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->playerView->setLineWidth(1);
@@ -245,9 +243,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 MediaPlayerView::~MediaPlayerView()
 {
     d->player->stop();
-    delete d->player;
-    delete d->videoWidget;
-    delete d->slider;
     delete d;
 }
 
@@ -273,10 +268,7 @@ void MediaPlayerView::slotPlayerStateChanged(QtAV::AVPlayer::State state)
 
 void MediaPlayerView::slotMediaStatusChanged(QtAV::MediaStatus status)
 {
-    if (status == UnknownMediaStatus ||
-        status == NoMedia            ||
-        status == StalledMedia       ||
-        status == InvalidMedia)
+    if (status == InvalidMedia)
     {
         setPreviewMode(Private::ErrorView);
     }

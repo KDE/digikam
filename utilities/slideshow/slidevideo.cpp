@@ -89,7 +89,6 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->player->setNotifyInterval(250);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
-    d->videoWidget->setStyleSheet(QLatin1String("background-color:black;"));
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(this);
