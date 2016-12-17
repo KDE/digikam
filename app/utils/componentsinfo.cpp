@@ -46,7 +46,7 @@
 #ifdef HAVE_KIPI
 #    include <KIPI/Interface>
 #    include <KIPI/PluginLoader>
-#endif /* HAVE_KIPI */
+#endif // HAVE_KIPI
 
 // LibGphoto2 includes
 
@@ -57,7 +57,13 @@ extern "C"
 #include <gphoto2-version.h>
 }
 
-#endif /* HAVE_GPHOTO2 */
+#endif // HAVE_GPHOTO2
+
+// QtAV includes
+
+#ifdef HAVE_MEDIAPLAYER
+#    include <QtAV/version.h>
+#endif // HAVE_MEDIAPLAYER
 
 namespace Digikam
 {
@@ -87,6 +93,7 @@ void showDigikamComponentsInfo()
 
 #ifdef HAVE_MEDIAPLAYER
     list.insert(i18n("Media player support"), i18n("Yes"));
+    list.insert(i18n("LibQtAV"),              QString::fromLatin1("%1.%2.%3").arg(QTAV_MAJOR).arg(QTAV_MINOR).arg(QTAV_PATCH));
 #else
     list.insert(i18n("Media player support"), i18n("no"));
 #endif /* HAVE_MEDIAPLAYER */
