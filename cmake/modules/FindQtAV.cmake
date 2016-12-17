@@ -20,23 +20,35 @@ Message(STATUS "QtAV search path: ${_qt5_install_prefix}")
 
 find_path(QTAV_CORE_INCLUDE_DIR
           NAMES QtAV.h
-          HINTS ${_qt5_install_prefix} ${_qt5_install_prefix}/../../include/qt5 ${_qt5_install_prefix}/../QtAV.framework/Headers
+          HINTS ${_qt5_install_prefix}                                           # For MXE
+                ${_qt5_install_prefix}/../../include/qt5                         # For Suse
+                ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
+                ${_qt5_install_prefix}/../QtAV.framework/Headers                 # For Macports
           PATH_SUFFIXES QtAV
 )
 
 find_path(QTAV_WIDGETS_INCLUDE_DIR
           NAMES QtAVWidgets.h
-          HINTS ${_qt5_install_prefix} ${_qt5_install_prefix}/../../include/qt5 ${_qt5_install_prefix}/../QtAVWidgets.framework/Headers
+          HINTS ${_qt5_install_prefix}                                           # For MXE
+                ${_qt5_install_prefix}/../../include/qt5                         # For Suse
+                ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
+                ${_qt5_install_prefix}/../QtAVWidgets.framework/Headers          # For Macports
           PATH_SUFFIXES QtAVWidgets
 )
 
 find_library(QTAV_CORE_LIBRARY
-             NAMES QtAV QtAV1 libQtAV libQtAV1
+             NAMES QtAV
+                   QtAV1
+                   libQtAV
+                   libQtAV1
              HINTS ${_qt5_install_prefix}/../
 )
 
 find_library(QTAV_WIDGETS_LIBRARY
-             NAMES QtAVWidgets QtAVWidgets1 libQtAVWidgets libQtAVWidgets1
+             NAMES QtAVWidgets
+                   QtAVWidgets1
+                   libQtAVWidgets
+                   libQtAVWidgets1
              HINTS ${_qt5_install_prefix}/../
 )
 
