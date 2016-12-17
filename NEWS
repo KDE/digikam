@@ -92,5 +92,6 @@ BUGFIXES FROM BUGZILLA:
 078 ==> 373715 - Renaming popup stays when file with new name already exists.
 079 ==> 301029 - Meaningless video preview.
 080 ==> 242799 - digiKam segfaults when opening video.
-081 ==> 
+081 ==> 260594 - digiKam crashed when starting video playback.
+082 ==> 
 
