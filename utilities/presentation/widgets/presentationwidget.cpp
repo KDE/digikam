@@ -9,7 +9,7 @@
  * Copyright (C) 2006-2009 by Valerio Fuoglio <valerio dot fuoglio at gmail dot com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -61,6 +61,7 @@
 
 #ifdef HAVE_MEDIAPLAYER
 #   include "presentationaudiowidget.h"
+#   include "slidevideo.h"
 #endif
 
 namespace Digikam
@@ -78,6 +79,7 @@ public:
 
 #ifdef HAVE_MEDIAPLAYER
         playbackWidget               = 0;
+        videoView                    = 0;
 #endif
 
         timer                        = 0;
@@ -127,6 +129,7 @@ public:
 
 #ifdef HAVE_MEDIAPLAYER
     PresentationAudioWidget*    playbackWidget;
+    SlideVideo*                 videoView;
 #endif
 
     QTimer*                     timer;
@@ -220,6 +223,21 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 
     connect(d->slidePresentationAudioWidget, SIGNAL(signalClose()),
             this, SLOT(slotClose()));
+
+    // -- video preview ---------------------------------
+
+    d->videoView = new SlideVideo(this);
+    //TODO: pass mouse events from d->videoView to this ?
+    //d->videoView->installEventFilter(this);
+
+    connect(d->videoView, SIGNAL(signalVideoLoaded(bool)),
+            this, SLOT(slotVideoLoaded(bool)));
+
+    connect(d->videoView, SIGNAL(signalVideoFinished()),
+            this, SLOT(slotVideoFinished()));
+
+    d->videoView->hide();
+    d->videoView->resize( d->deskWidth, d->deskHeight );
 
 #endif
 
@@ -436,7 +454,9 @@ void PresentationWidget::loadNextImage()
         d->slidePresentationAudioWidget->setEnabledNext( d->fileIndex < num - 1 );
     }
 
-    QPixmap newPixmap = QPixmap( QPixmap::fromImage( d->imageLoader->getCurrent() ) );
+    QImage img = d->imageLoader->getCurrent();
+
+    QPixmap newPixmap = QPixmap( QPixmap::fromImage( img ) );
     QPixmap pixmap( width(), height() );
     pixmap.fill( Qt::black );
     QPainter p( &pixmap );
@@ -445,6 +465,13 @@ void PresentationWidget::loadNextImage()
                  0, 0, newPixmap.width(), newPixmap.height() );
 
     d->currImage = QPixmap( pixmap );
+
+    if (img.isNull())
+    {
+#ifdef HAVE_MEDIAPLAYER
+        d->videoView->setCurrentUrl(d->imageLoader->currPath());
+#endif
+    }
 }
 
 void PresentationWidget::loadPrevImage()
@@ -473,7 +500,9 @@ void PresentationWidget::loadPrevImage()
         d->slidePresentationAudioWidget->setEnabledNext( d->fileIndex < num - 1 );
     }
 
-    QPixmap newPixmap = QPixmap( QPixmap::fromImage( d->imageLoader->getCurrent() ) );
+    QImage img = d->imageLoader->getCurrent();
+
+    QPixmap newPixmap = QPixmap( QPixmap::fromImage( img ) );
     QPixmap pixmap( width(), height() );
     pixmap.fill( Qt::black );
     QPainter p( &pixmap );
@@ -482,6 +511,13 @@ void PresentationWidget::loadPrevImage()
                  0, 0, newPixmap.width(), newPixmap.height() );
 
     d->currImage = QPixmap( pixmap );
+
+    if (img.isNull())
+    {
+#ifdef HAVE_MEDIAPLAYER
+        d->videoView->setCurrentUrl(d->imageLoader->currPath());
+#endif
+    }
 }
 
 void PresentationWidget::showCurrentImage()
@@ -1500,6 +1536,25 @@ void PresentationWidget::slotNext()
 void PresentationWidget::slotClose()
 {
     close();
+}
+
+void PresentationWidget::slotVideoLoaded(bool loaded)
+{
+    if (loaded)
+    {
+#ifdef HAVE_MEDIAPLAYER
+        slotPause();
+        d->videoView->show();
+#endif
+    }
+}
+
+void PresentationWidget::slotVideoFinished()
+{
+#ifdef HAVE_MEDIAPLAYER
+    d->videoView->hide();
+    slotPlay();
+#endif
 }
 
 }  // namespace Digikam
