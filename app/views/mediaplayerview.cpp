@@ -250,7 +250,7 @@ void MediaPlayerView::reload()
 {
     d->player->stop();
     d->player->setFile(d->currentItem.toLocalFile());
-    slotPausePlay();
+    d->player->play();
 }
 
 void MediaPlayerView::slotPlayerStateChanged(QtAV::AVPlayer::State state)
@@ -343,11 +343,11 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     }
 
     d->currentItem = url;
-    d->player->stop();
 
-    d->player->setFile(d->currentItem.toLocalFile());
+    d->player->stop();
     setPreviewMode(Private::PlayerView);
-    slotPausePlay();
+    d->player->setFile(d->currentItem.toLocalFile());
+    d->player->play();
 }
 
 void MediaPlayerView::slotPositionChanged(qint64 position)
