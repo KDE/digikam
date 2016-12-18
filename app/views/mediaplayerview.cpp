@@ -176,7 +176,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->slider->setRange(0, 0);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
-    d->player->addVideoRenderer(d->videoWidget);
+    d->player->setRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
 
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
@@ -298,13 +298,10 @@ void MediaPlayerView::slotEscapePressed()
 
 void MediaPlayerView::slotPausePlay()
 {
-    if (d->player->state() == QtAV::AVPlayer::PlayingState)
+    if (d->player->state() == QtAV::AVPlayer::PausedState ||
+        d->player->state() == QtAV::AVPlayer::PlayingState)
     {
-        d->player->pause();
-    }
-    else if (d->player->state() == QtAV::AVPlayer::PausedState)
-    {
-        d->player->togglePause();
+        d->player->pause(!d->player->isPaused());
     }
     else if (d->player->state() == QtAV::AVPlayer::StoppedState)
     {

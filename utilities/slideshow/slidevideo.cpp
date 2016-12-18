@@ -85,11 +85,10 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->slider      = new QSlider(Qt::Horizontal, this);
     d->slider->setRange(0, 0);
 
-    d->player->addVideoRenderer(d->videoWidget);
-    d->player->setNotifyInterval(250);
-
-    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
+    d->player->setRenderer(d->videoWidget);
+    d->player->setNotifyInterval(250);
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(this);
     vbox2->addWidget(d->videoWidget, 10);
@@ -165,14 +164,7 @@ void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
 
 void SlideVideo::pause(bool b)
 {
-    if (b && d->player->state() == AVPlayer::PlayingState)
-    {
-        d->player->pause();
-    }
-    else
-    {
-        d->player->togglePause();
-    }
+    d->player->pause(b);
 }
 
 void SlideVideo::stop()
@@ -204,11 +196,11 @@ void SlideVideo::slotPosition(int position)
 
 void SlideVideo::slotSliderPressed()
 {
-    if (d->player->state() == AVPlayer::PlayingState)
+    if (d->player->state() == QtAV::AVPlayer::PlayingState)
     {
         d->player->pause();
     }
-    else if (d->player->state() == AVPlayer::StoppedState)
+    else if (d->player->state() == QtAV::AVPlayer::StoppedState)
     {
         d->player->play();
     }
@@ -216,9 +208,9 @@ void SlideVideo::slotSliderPressed()
 
 void SlideVideo::slotSliderReleased()
 {
-    if (d->player->state() == AVPlayer::PausedState)
+    if (d->player->state() == QtAV::AVPlayer::PausedState)
     {
-        d->player->togglePause();
+        d->player->pause(false);
     }
 }
 
