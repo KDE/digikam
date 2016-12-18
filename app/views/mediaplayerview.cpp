@@ -298,15 +298,13 @@ void MediaPlayerView::slotEscapePressed()
 
 void MediaPlayerView::slotPausePlay()
 {
-    if (d->player->state() == QtAV::AVPlayer::PausedState ||
-        d->player->state() == QtAV::AVPlayer::PlayingState)
+    if (!d->player->isPlaying())
     {
-        d->player->pause(!d->player->isPaused());
+        d->player->play();
+        return;
     }
-    else if (d->player->state() == QtAV::AVPlayer::StoppedState)
-    {
-         d->player->play();
-    }
+
+    d->player->pause(!d->player->isPaused());
 }
 
 int MediaPlayerView::previewMode()

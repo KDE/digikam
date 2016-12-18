@@ -129,14 +129,12 @@ SlideVideo::SlideVideo(QWidget* const parent)
 SlideVideo::~SlideVideo()
 {
     d->player->stop();
-    delete d->player;
-    delete d->videoWidget;
-    delete d->slider;
     delete d;
 }
 
 void SlideVideo::setCurrentUrl(const QUrl& url)
 {
+    d->player->stop();
     d->player->setFile(url.toLocalFile());
     d->player->play();
 }
@@ -196,19 +194,18 @@ void SlideVideo::slotPosition(int position)
 
 void SlideVideo::slotSliderPressed()
 {
-    if (d->player->state() == QtAV::AVPlayer::PlayingState)
-    {
-        d->player->pause();
-    }
-    else if (d->player->state() == QtAV::AVPlayer::StoppedState)
+    if (!d->player->isPlaying())
     {
         d->player->play();
+        return;
     }
+
+    d->player->pause(true);
 }
 
 void SlideVideo::slotSliderReleased()
 {
-    if (d->player->state() == QtAV::AVPlayer::PausedState)
+    if (d->player->isPaused())
     {
         d->player->pause(false);
     }
