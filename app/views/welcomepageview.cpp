@@ -100,6 +100,7 @@ QStringList WelcomePageView::featuresTabContent() const
     newFeatures << i18n("Add a new tool in camera import interface to convert RAW files to DNG;");
     newFeatures << i18n("Consolidation of Mysql database backend;");
     newFeatures << i18n("Improved startup time with differed scan for new items stage.");
+    newFeatures << i18n("Presentation and Slideshow tools now support video.");
     // Add new features here...
     newFeatures << i18n("...and much more.");
 
