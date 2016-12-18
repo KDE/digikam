@@ -7,7 +7,7 @@
  * Description : a widget to display a welcome page
  *               on root album.
  *
- * Copyright (C) 2006-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -83,6 +83,7 @@ QStringList WelcomePageView::featuresTabContent() const
     QStringList newFeatures;
     newFeatures << i18n("Port to Qt5 and KF5;");
     newFeatures << i18n("Replacing digiKam KIOSlaves by a multi-threaded interface to query the database;");
+    newFeatures << i18n("Replacing Qt5Multimedia dependency by QtAV framework to handle video files;");
     newFeatures << i18n("Add embedded trash support for each collection instead desktop trash;");
     newFeatures << i18n("Thumbs and preview video support is now delegate to QT5Multimedia framework;");
     newFeatures << i18n("Mysql internal server is now configurable as Sqlite to store database files at a customized place;");
