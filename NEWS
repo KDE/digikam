@@ -103,4 +103,6 @@ BUGFIXES FROM BUGZILLA:
 089 ==> 96133  - digiKam to play video.
 090 ==> 91538  - Optionally don't generate thumbnails for video files.
 091 ==> 151540 - usability: video view is missing some play/stop/pause buttons.
-092 ==> 
+092 ==> 372485 - Video thumbnails not created on OS X (Linux works fine since 5.3).
+093 ==> 370228 - Thumbnail generation fails on video files.
+094 ==> 
