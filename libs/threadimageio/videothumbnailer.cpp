@@ -214,10 +214,10 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
     qCDebug(DIGIKAM_GENERAL_LOG) << "Video duration for " << d->name << "is " << d->duration << " seconds";
 
     d->position = 0;
-    slotTryExtractVideoFrame();
+    tryExtractVideoFrame();
 }
 
-void VideoThumbnailer::slotTryExtractVideoFrame()
+void VideoThumbnailer::tryExtractVideoFrame()
 {
     d->position += (qint64)(d->duration * 0.2);
 
@@ -244,7 +244,7 @@ void VideoThumbnailer::slotFrameError()
         return;
     }
 
-    slotTryExtractVideoFrame();
+    tryExtractVideoFrame();
 }
 
 void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
@@ -278,7 +278,7 @@ void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame format is not supported from " << d->name;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame is null from " << d->name;
         emit signalThumbnailFailed(d->file);
     }
 }

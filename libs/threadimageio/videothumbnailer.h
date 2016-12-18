@@ -62,10 +62,13 @@ Q_SIGNALS:
     void signalThumbnailDone(const QString&, const QImage&);
     void signalThumbnailFailed(const QString&);
 
+private:
+
+    void tryExtractVideoFrame();
+
 private Q_SLOTS:
 
     void slotFrameError();
-    void slotTryExtractVideoFrame();
     void slotFrameExtracted(const QtAV::VideoFrame& frame);
 
 private:
