@@ -3,12 +3,13 @@ digiKam 5.4.0 - Release date: 2016-12-27
 
 NEW FEATURES:
 
-Searches  : improvements of duplicate searches to introduce a range of similarity of items.
-Searches  : improvements of duplicate searches to be able to sort search albums list view by similary level.
-Searches  : improvements of duplicate searches to permit multiple selection in search albums list view.
-AlbumGUI  : improvements of grouped images to apply renaming, copying or metadata actions to all images.
-General   : Media player is now ported to QtAV instead Qt5Multimedia.
-SlideShow : Add support of video.
+Searches     : improvements of duplicate searches to introduce a range of similarity of items.
+Searches     : improvements of duplicate searches to be able to sort search albums list view by similary level.
+Searches     : improvements of duplicate searches to permit multiple selection in search albums list view.
+AlbumGUI     : improvements of grouped images to apply renaming, copying or metadata actions to all images.
+General      : Media player is now ported to QtAV instead Qt5Multimedia.
+SlideShow    : Add video support.
+Presentation : Add video support.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -105,4 +106,7 @@ BUGFIXES FROM BUGZILLA:
 091 ==> 151540 - usability: video view is missing some play/stop/pause buttons.
 092 ==> 372485 - Video thumbnails not created on OS X (Linux works fine since 5.3).
 093 ==> 370228 - Thumbnail generation fails on video files.
-094 ==> 
+094 ==> 216655 - Add video files support in Advanced slideshow.
+095 ==> 248586 - Advanced slide show should also use videos like normal slide show.
+096 ==> 139690 - Include videos to slideshow.
+097 ==> 
