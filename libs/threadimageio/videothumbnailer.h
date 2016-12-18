@@ -64,6 +64,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
+    void slotFrameError();
     void slotTryExtractVideoFrame();
     void slotFrameExtracted(const QtAV::VideoFrame& frame);
 
