@@ -26,7 +26,6 @@
 
 #include <QFile>
 #include <QImage>
-#include <QTimer>
 #include <QMimeDatabase>
 
 // QtAV includes
@@ -113,22 +112,21 @@ public:
     Private()
     {
         createStrip = false;
+        audioFile   = false;
         thumbSize   = ThumbnailSize::Huge;
-        trySteps    = 8;
         position    = 0;
         duration    = 0;
-        timer       = 0;
         extractor   = 0;
     }
 
     bool                 createStrip;
+    bool                 audioFile;
     int                  thumbSize;
-    int                  trySteps;
     qint64               position;
     qint64               duration;
     QString              file;
+    QString              name;
     QImage               strip;
-    QTimer*              timer;
     VideoFrameExtractor* extractor;
 };
 
@@ -136,12 +134,14 @@ VideoThumbnailer::VideoThumbnailer(QObject* const parent)
     : QObject(parent),
       d(new Private)
 {
-    d->timer = new QTimer(this);
-    d->timer->setInterval(500);
-    d->timer->setSingleShot(true);
+    d->extractor = new VideoFrameExtractor();
+    d->extractor->setAutoExtract(false);
 
-    connect(d->timer, SIGNAL(timeout()),
-            this, SLOT(slotTryExtractVideoFrame()));
+    connect(d->extractor, SIGNAL(frameExtracted(QtAV::VideoFrame)),
+            this, SLOT(slotFrameExtracted(QtAV::VideoFrame)));
+
+    connect(d->extractor, SIGNAL(error()),
+            this, SLOT(slotFrameError()));
 
     d->strip = QImage::fromData(sprocket_large_png, sprocket_large_png_len, "PNG");
 }
@@ -179,23 +179,25 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     QMimeDatabase mimeDB;
 
-    bool audio = mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("audio/mpeg"));
-    bool video = mimeDB.mimeTypeForFile(file).name().startsWith(QLatin1String("video/"));
+    d->file      = file;
+    d->name      = QUrl::fromLocalFile(d->file).fileName();
+    bool video   = mimeDB.mimeTypeForFile(d->file).name().startsWith(QLatin1String("video/"));
+    d->audioFile = mimeDB.mimeTypeForFile(d->file).name().startsWith(QLatin1String("audio/mpeg"));
 
-    if (!video && !audio)
+    if (!video && !d->audioFile)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video from " << file;
-        emit signalThumbnailFailed(file);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video or audio/mpeg from " << d->name;
+        emit signalThumbnailFailed(d->file);
         return;
     }
 
     AVDemuxer demuxer;
-    demuxer.setMedia(file);
+    demuxer.setMedia(d->file);
 
     if (!demuxer.load())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Video cannot loaded from " << file;
-        emit signalThumbnailFailed(file);
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video cannot loaded from " << d->name;
+        emit signalThumbnailFailed(d->file);
         return;
     }
 
@@ -204,62 +206,50 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     if (d->duration <= 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Video has no valid duration for " << file;
-        emit signalThumbnailFailed(file);
-        return;
-    }
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Video duration for " << file << "is " << d->duration << " seconds";
-
-    d->file      = file;
-    d->trySteps  = audio ? 1 : 8;
-    d->position  = (qint64)(d->duration * 0.1);
-
-    slotTryExtractVideoFrame();
-}
-
-void VideoThumbnailer::slotTryExtractVideoFrame()
-{
-    delete d->extractor;
-    d->extractor = 0;
-
-    d->timer->stop();
-
-    d->position += (qint64)(d->duration * 0.1);
-
-    if (!d->trySteps || d->position >= d->duration)
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Problem while video data extraction from " << d->file;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video has no valid duration for " << d->name;
         emit signalThumbnailFailed(d->file);
         return;
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << d->file << " at position " << d->position;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Video duration for " << d->name << "is " << d->duration << " seconds";
 
-    d->extractor = new VideoFrameExtractor();
-    d->extractor->setAutoExtract(false);
+    d->position = 0;
+    tryExtractVideoFrame();
+}
 
-    connect(d->extractor, SIGNAL(frameExtracted(QtAV::VideoFrame)),
-            this, SLOT(slotFrameExtracted(QtAV::VideoFrame)));
+void VideoThumbnailer::tryExtractVideoFrame()
+{
+    d->position += (qint64)(d->duration * 0.2);
 
-    connect(d->extractor, SIGNAL(error()),
-            this, SLOT(slotTryExtractVideoFrame()));
+    if (d->position >= d->duration)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Problem while video data extraction from " << d->name;
+        emit signalThumbnailFailed(d->file);
+        return;
+    }
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Trying to get thumbnail from " << d->name << " at position " << d->position;
 
     d->extractor->setSource(d->file);
     d->extractor->setPosition(d->position);
     d->extractor->extract();
-    d->timer->start();
-    d->trySteps--;
+}
+
+void VideoThumbnailer::slotFrameError()
+{
+    if (d->audioFile)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Audio file has no embedded image for " << d->name;
+        emit signalThumbnailFailed(d->file);
+        return;
+    }
+
+    tryExtractVideoFrame();
 }
 
 void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
 {
     QImage img = frame.toImage();
-
-    delete d->extractor;
-    d->extractor = 0;
-
-    d->timer->stop();
 
     if (!img.isNull())
     {
@@ -288,7 +278,7 @@ void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
     }
     else
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame format is not supported from " << d->file;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Video frame is null from " << d->name;
         emit signalThumbnailFailed(d->file);
     }
 }
