@@ -186,7 +186,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     if (!video && !d->audioFile)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video from " << d->name;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Mime type is not video or audio/mpeg from " << d->name;
         emit signalThumbnailFailed(d->file);
         return;
     }
@@ -213,7 +213,7 @@ void VideoThumbnailer::slotGetThumbnail(const QString& file, int size, bool stri
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Video duration for " << d->name << "is " << d->duration << " seconds";
 
-    d->position  = 0;
+    d->position = 0;
     slotTryExtractVideoFrame();
 }
 
@@ -239,7 +239,7 @@ void VideoThumbnailer::slotFrameError()
 {
     if (d->audioFile)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "No thumbnail found in audio file " << d->name;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Audio file has no embedded image for " << d->name;
         emit signalThumbnailFailed(d->file);
         return;
     }
