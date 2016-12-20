@@ -34,7 +34,6 @@
       Showfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them.
       Showfoto is the standalone image editor of the digiKam project.
     </p>
-    <p xml:lang="ast">Showfoto ye un editor de imáxenes con ferramientes poderoses. Pues usalu pa ver semeyes y ameyorales. Showfoto ye un editor de semeyes independiente pal proyeutu de digiKam.</p>
     <p xml:lang="bs">Showfoto je brz uređivač slika sa moćnim alatima za obradu slika. Možete ga koristiti da vidite svoje fotografije i poboljšati ih. Showfoto je samostalan urednik slika projekta digikam.</p>
     <p xml:lang="ca">El showFoto és un editor d'imatges ràpid amb potents eines per a l'edició d'imatges. El pot usar per a visualitzar i millorar les vostres fotografies. El showFoto és un editor d'imatges independent del projecte digiKam.</p>
     <p xml:lang="ca-valencia">El showFoto és un editor d'imatges ràpid amb potents eines per a l'edició d'imatges. El pot usar per a visualitzar i millorar les vostres fotografies. El showFoto és un editor d'imatges independent del projecte digiKam.</p>
@@ -67,7 +66,6 @@
   </screenshots>
   <project_group>KDE</project_group>
   <developer_name>digiKam Project</developer_name>
-  <developer_name xml:lang="ast">Proyeutu digiKam</developer_name>
   <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="ca-valencia">Projecte digiKam</developer_name>
