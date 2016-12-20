@@ -8,7 +8,7 @@ Searches     : Improvements of duplicate searches to be able to sort search albu
 Searches     : Improvements of duplicate searches to permit multiple selection in search albums list view.
 AlbumGUI     : Improvements of grouped images to apply renaming, copying or metadata actions to all images.
 General      : Update internal Libraw to last 0.18-beta2. New camera supported : Olympus E-M1-II, Panasonic FZ2000 and FZ2500, Sony A99-II, Sony a6500.
-General      : Media player is now ported to QtAV instead Qt5Multimedia.
+General      : Media player is now ported to QtAV instead Qt5Multimedia (http://www.qtav.org/).
 SlideShow    : Add video support.
 Presentation : Add video support.
 
@@ -49,10 +49,10 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 354232 - Lens information is always "unavailable" for Pentax K-S1 images.
 034 ==> 372684 - No thumbnail shows for some files.
 035 ==> 372781 - The recent similarity range is not saved which may lead to odd results [patch].
-036 ==> 372831 - Digikam crashes when trying to fix red eyes.
+036 ==> 372831 - digiKam crashes when trying to fix red eyes.
 037 ==> 372872 - Possible Null-Pointer dereference in AlbumManager [patch].
 038 ==> 372859 - Iphone not usable anymore in digiKam.
-039 ==> 367611 - Time gap on renaming at download...
+039 ==> 367611 - Time gap on renaming at download.
 040 ==> 371899 - Crash on tagging images.
 041 ==> 363998 - digiKam sees Nikon D700 but cannot import files.
 042 ==> 361848 - When writing metadata to files is disabled, digikam still displays "Writing metadata to files".
@@ -102,8 +102,8 @@ BUGFIXES FROM BUGZILLA:
 086 ==> 335996 - Crash when try opening video.
 087 ==> 336594 - digiKam crash when try to look at video.
 088 ==> 225731 - digiKam no preview icon for video.
-089 ==> 96133  - digiKam to play video.
-090 ==> 91538  - Optionally don't generate thumbnails for video files.
+089 ==> 096133 - digiKam to play video.
+090 ==> 091538 - Optionally don't generate thumbnails for video files.
 091 ==> 151540 - usability: video view is missing some play/stop/pause buttons.
 092 ==> 372485 - Video thumbnails not created on OS X (Linux works fine since 5.3).
 093 ==> 370228 - Thumbnail generation fails on video files.
