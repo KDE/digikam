@@ -112,4 +112,5 @@ BUGFIXES FROM BUGZILLA:
 096 ==> 139690 - Include videos to slideshow.
 097 ==> 373606 - digiKam crash on exit.
 098 ==> 373954 - Tags are not written to images in Iptc.Application2.Keywords.
-099 ==> 
+099 ==> 373754 - Cannot Shorten Face Tag Name.
+100 ==> 

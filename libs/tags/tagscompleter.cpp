@@ -179,6 +179,11 @@ void TagCompleter::update(const QString& fragment)
     }
 
     d->model->appendColumn(items);
+
+    if (!actions.isEmpty() && completionMode() == QCompleter::InlineCompletion)
+    {
+        emit highlighted(actions.first());
+    }
 }
 
 void TagCompleter::slotActivated(const QModelIndex& index)
