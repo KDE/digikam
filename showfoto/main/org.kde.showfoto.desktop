@@ -1,6 +1,5 @@
 [Desktop Entry]
 Name=showFoto
-Name[ast]=showFoto
 Name[bg]=showFoto
 Name[bs]=showFoto
 Name[ca]=showFoto
@@ -54,7 +53,6 @@ Name[zh_CN]=showFoto
 Name[zh_TW]=showFoto
 GenericName=Photo Viewer and Editor
 GenericName[ar]=عارض ومحرّر صور
-GenericName[ast]=Visor ya editor de semeyes
 GenericName[bg]=Програма за преглед и редакция на снимки
 GenericName[bs]=Preglednik i editor slika
 GenericName[ca]=Visualitzador de fotografies i editor
@@ -102,7 +100,6 @@ GenericName[zh_CN]=照片查看器和编辑器
 GenericName[zh_TW]=照片檢視器與編輯器
 Comment=Manage your photographs like a professional with the power of open source
 Comment[ar]=أدر صورك الفوتوغرافيّة كمحترف باستخدام قوّة المصادر المفتوحة
-Comment[ast]=Xestiona les tos semeyes como un profesional usando software llibre
 Comment[bg]=Обработвайте снимките си професионално с помощта на свободния софтуер
 Comment[bs]=Upravljajte fotografijama kao profesionalac snagom otvorenog izvornog koda
 Comment[ca]=Gestioneu les vostres fotografies com un professional amb la potència del programari lliure
