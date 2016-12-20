@@ -209,6 +209,7 @@ typedef struct
   int          CanonColorDataVer;
   int          CanonColorDataSubVer;
   int          SpecularWhiteLevel;
+  int          ChannelBlackLevel[4];
   int          AverageBlackLevel;
 /* metering */
   short        MeteringMode;
@@ -679,7 +680,6 @@ struct xtrans_params
 
 #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define LibRawBigEndian 1
-
 #else
 #ifndef qXCodeRez
 #error Unable to figure out byte order.

@@ -51,12 +51,14 @@ int CLASS fcol (int row, int col)
   if (filters == 9) return xtrans[(row+6) % 6][(col+6) % 6];
   return FC(row,col);
 }
-
 static size_t local_strnlen(const char *s, size_t n)
 {
   const char *p = (const char *)memchr(s, 0, n);
   return(p ? p-s : n);
 }
+/* add OS X version check here ?? */
+#define strnlen(a,b) local_strnlen(a,b)
+
 #ifdef LIBRAW_LIBRARY_BUILD
 static int stread(char *buf, size_t len, LibRaw_abstract_datastream *fp)
 {
@@ -89,11 +91,7 @@ char *my_strcasestr (char *haystack, const char *needle)
 #define strcasestr my_strcasestr
 #endif
 
-int my_strlen(const char *str)
-{
-	return (int)local_strnlen(str,0x7fffffff);
-}
-#define strlen(a) my_strlen((a))
+#define strbuflen(buf) strnlen(buf,sizeof(buf)-1)
 
 ushort CLASS sget2 (uchar *s)
 {
@@ -3931,7 +3929,7 @@ mask_set:
 #endif
   } else if (zero < mblack[4] && mblack[5] && mblack[6] && mblack[7]) {
     FORC4 cblack[c] = mblack[c] / mblack[4+c];
-    cblack[4] = cblack[5] = cblack[6] = 0;
+    black = cblack[4] = cblack[5] = cblack[6] = 0;
   }
 }
 #ifdef LIBRAW_LIBRARY_BUILD
@@ -6419,18 +6417,19 @@ if (tag == 0x0001) Canon_CameraSettings();
             break;
           case 796:
             imgdata.makernotes.canon.CanonColorDataVer = 3;	// 1DmkIIN / 5D / 30D / 400D
-			imgdata.makernotes.canon.CanonColorDataSubVer = get2();
-			{
-			  fseek (ifp, save1+(0x4e<<1), SEEK_SET);
-              Canon_WBpresets(2,12);
-              fseek (ifp, save1+(0x85<<1), SEEK_SET);
-              Canon_WBCTpresets (0);	// BCAT
-              fseek (ifp, save1+(0x0c4<<1), SEEK_SET); // offset 196 short
-              int bls=0;
-              FORC4 bls+=get2();
-              imgdata.makernotes.canon.AverageBlackLevel = bls/4;
-			}
-			break;
+	    imgdata.makernotes.canon.CanonColorDataSubVer = get2();
+	    {
+	      fseek (ifp, save1+(0x4e<<1), SEEK_SET);
+	      Canon_WBpresets(2,12);
+	      fseek (ifp, save1+(0x85<<1), SEEK_SET);
+	      Canon_WBCTpresets (0);	// BCAT
+	      fseek (ifp, save1+(0x0c4<<1), SEEK_SET); // offset 196 short
+	      int bls=0;
+	      FORC4
+		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
+	      imgdata.makernotes.canon.AverageBlackLevel = bls/4;
+	    }
+	    break;
             // 1DmkIII / 1DSmkIII / 1DmkIV / 5DmkII
             // 7D / 40D / 50D / 60D / 450D / 500D
             // 550D / 1000D / 1100D
@@ -6439,13 +6438,14 @@ if (tag == 0x0001) Canon_CameraSettings();
             imgdata.makernotes.canon.CanonColorDataVer = 4;
             imgdata.makernotes.canon.CanonColorDataSubVer = get2();
             {
-            	fseek (ifp, save1+(0x53<<1), SEEK_SET);
-            	Canon_WBpresets(2,12);
-            	fseek (ifp, save1+(0xa8<<1), SEEK_SET);
-              	Canon_WBCTpresets (0);	// BCAT
+	      fseek (ifp, save1+(0x53<<1), SEEK_SET);
+	      Canon_WBpresets(2,12);
+	      fseek (ifp, save1+(0xa8<<1), SEEK_SET);
+	      Canon_WBCTpresets (0);	// BCAT
               fseek (ifp, save1+(0x0e7<<1), SEEK_SET); // offset 231 short
               int bls=0;
-              FORC4 bls+=get2();
+              FORC4
+		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
               imgdata.makernotes.canon.AverageBlackLevel = bls/4;
             }
             if ((imgdata.makernotes.canon.CanonColorDataSubVer == 4)
@@ -6496,7 +6496,8 @@ if (tag == 0x0001) Canon_CameraSettings();
                 fseek (ifp, save1+(0x108<<1), SEEK_SET);  // offset 264 short
               }
               int bls=0;
-              FORC4 bls+=get2();
+              FORC4
+		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
               imgdata.makernotes.canon.AverageBlackLevel = bls/4;
             }
             break;
@@ -6511,7 +6512,8 @@ if (tag == 0x0001) Canon_CameraSettings();
               Canon_WBCTpresets (0);	// BCAT
               fseek (ifp, save1+(0x0fb<<1), SEEK_SET);			// offset 251 short
               int bls=0;
-              FORC4 bls+=get2();
+              FORC4 
+		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
               imgdata.makernotes.canon.AverageBlackLevel = bls/4;
             }
             fseek (ifp, save1+(0x1e4<<1), SEEK_SET);			// offset 484 shorts
@@ -6530,7 +6532,8 @@ if (tag == 0x0001) Canon_CameraSettings();
               Canon_WBCTpresets (0);	// BCAT
               fseek (ifp, save1+(0x114<<1), SEEK_SET);			// offset 276 shorts
               int bls=0;
-              FORC4 bls+=get2();
+              FORC4
+		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
               imgdata.makernotes.canon.AverageBlackLevel = bls/4;
             }
             if (imgdata.makernotes.canon.CanonColorDataSubVer == 10)
@@ -6557,7 +6560,8 @@ if (tag == 0x0001) Canon_CameraSettings();
               Canon_WBCTpresets (0);	// BCAT
               fseek (ifp, save1+(0x146<<1), SEEK_SET);			// offset 326 shorts
               int bls=0;
-              FORC4 bls+=get2();
+              FORC4
+		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
               imgdata.makernotes.canon.AverageBlackLevel = bls/4;
             }
               if (imgdata.makernotes.canon.CanonColorDataSubVer == 14)  // 1300D
@@ -6998,7 +7002,8 @@ void CLASS setSonyBodyFeatures (unsigned id) {
            (id == 340) ||
            (id == 346) ||
            (id == 347) ||
-           (id == 350)
+           (id == 350) ||
+           (id == 360)
           )
     {
       imgdata.lens.makernotes.CameraMount = LIBRAW_MOUNT_Sony_E;
@@ -7122,7 +7127,7 @@ void CLASS parseSonyLensType2 (uchar a, uchar b) {
     }
   else
     imgdata.lens.makernotes.LensID = lid2;
-    if ((lid2 >= 50481) && (lid2 < 50500))
+  if ((lid2 >= 50481) && (lid2 < 50500))
     {
       strcpy(imgdata.lens.makernotes.Adapter, "MC-11");
       imgdata.lens.makernotes.AdapterID = 0x4900;
@@ -7130,7 +7135,7 @@ void CLASS parseSonyLensType2 (uchar a, uchar b) {
   return;
 }
 
-#define strnXcat(buf,string) strncat(buf,string,LIM(sizeof(buf)-strlen(buf)-1,0,sizeof(buf)))
+#define strnXcat(buf,string) strncat(buf,string,LIM(sizeof(buf)-strbuflen(buf)-1,0,sizeof(buf)))
 
 void CLASS parseSonyLensFeatures (uchar a, uchar b) {
 
@@ -7195,7 +7200,8 @@ void CLASS parseSonyLensFeatures (uchar a, uchar b) {
     strnXcat(imgdata.lens.makernotes.LensFeatures_suf, " II");
 
   if (imgdata.lens.makernotes.LensFeatures_suf[0] == ' ')
-    memmove(imgdata.lens.makernotes.LensFeatures_suf, imgdata.lens.makernotes.LensFeatures_suf+1, strlen(imgdata.lens.makernotes.LensFeatures_suf));
+    memmove(imgdata.lens.makernotes.LensFeatures_suf, imgdata.lens.makernotes.LensFeatures_suf+1,
+	    strbuflen(imgdata.lens.makernotes.LensFeatures_suf)-1);
 
   return;
 }
@@ -7303,13 +7309,35 @@ void CLASS process_Sony_0x9050 (uchar * buf, unsigned id)
                            SonySubstitution[buf[0x117]]);
 
    if ((id==347) || (id==350) || (id==357))
-     sprintf(imgdata.shootinginfo.InternalBodySerial, "%06lx", ((long)SonySubstitution[buf[0x88]]<<40) + ((long)SonySubstitution[buf[0x89]]<<32) + (SonySubstitution[buf[0x8a]]<<24) + (SonySubstitution[buf[0x8b]]<<16) + (SonySubstitution[buf[0x8c]]<<8) +SonySubstitution[buf[0x8d]]);
-
+   {
+     unsigned long b88 = SonySubstitution[buf[0x88]];
+     unsigned long b89 = SonySubstitution[buf[0x89]];
+     unsigned long b8a = SonySubstitution[buf[0x8a]];
+     unsigned long b8b = SonySubstitution[buf[0x8b]];
+     unsigned long b8c = SonySubstitution[buf[0x8c]];
+     unsigned long b8d = SonySubstitution[buf[0x8d]];
+     sprintf(imgdata.shootinginfo.InternalBodySerial, "%06lx",
+     (b88<<40) + (b89<<32) + (b8a<<24) + (b8b<<16) + b8c<<8 + b8d);
+   }
    else if ((imgdata.lens.makernotes.CameraMount == LIBRAW_MOUNT_Minolta_A) && (id > 279) && (id != 282) && (id != 283))
-     sprintf(imgdata.shootinginfo.InternalBodySerial, "%05lx", ((long)SonySubstitution[buf[0xf0]]<<32) + (SonySubstitution[buf[0xf1]]<<24) + (SonySubstitution[buf[0xf2]]<<16) + (SonySubstitution[buf[0xf3]]<<8) +SonySubstitution[buf[0xf4]]);
-
+   {
+     unsigned long bf0 = SonySubstitution[buf[0xf0]];
+     unsigned long bf1 = SonySubstitution[buf[0xf1]];
+     unsigned long bf2 = SonySubstitution[buf[0xf2]];
+     unsigned long bf3 = SonySubstitution[buf[0xf3]];
+     unsigned long bf4 = SonySubstitution[buf[0xf4]];
+     sprintf(imgdata.shootinginfo.InternalBodySerial, "%05lx",
+      (bf0<<32) + (bf1<<24) + (bf2<<16) + (bf3<<8) +bf4);
+   }
    else if ((imgdata.lens.makernotes.CameraMount == LIBRAW_MOUNT_Sony_E) && (id != 288) && (id != 289)  && (id != 290))
-     sprintf(imgdata.shootinginfo.InternalBodySerial, "%04x", (SonySubstitution[buf[0x7c]]<<24) + (SonySubstitution[buf[0x7d]]<<16) + (SonySubstitution[buf[0x7e]]<<8) +SonySubstitution[buf[0x7f]]);
+   {
+     unsigned b7c = SonySubstitution[buf[0x7c]];
+     unsigned b7d = SonySubstitution[buf[0x7d]];
+     unsigned b7e = SonySubstitution[buf[0x7e]];
+     unsigned b7f = SonySubstitution[buf[0x7f]];
+     sprintf(imgdata.shootinginfo.InternalBodySerial, "%04x",
+     (b7c<<24) + (b7d<<16) + (b7e<<8) + b7f);
+   }
 
   return;
 }
@@ -7486,7 +7514,7 @@ void CLASS parse_makernote_0xc634(int base, int uptag, unsigned dng_writer)
           {
             if ((!custom_serial) && (!isdigit(c)))
             {
-              if ((strlen(model) == 3) && (!strcmp(model,"D50")))
+              if ((strbuflen(model) == 3) && (!strcmp(model,"D50")))
               {
                 custom_serial = 34;
               }
@@ -8295,18 +8323,28 @@ void CLASS parse_makernote (int base, int uptag)
          nwords = getwords(FujiSerial, words, 4,sizeof(imgdata.shootinginfo.InternalBodySerial));
          for (int i = 0; i < nwords; i++) {
            mm[2] = dd[2] = 0;
-           if (strlen(words[i]) < 18)
-              if (i == 0) strcpy (imgdata.shootinginfo.InternalBodySerial, words[0]);
-              else snprintf (imgdata.shootinginfo.InternalBodySerial, sizeof(imgdata.shootinginfo.InternalBodySerial), "%s %s", imgdata.shootinginfo.InternalBodySerial, words[i]);
+           if (strnlen(words[i],sizeof(imgdata.shootinginfo.InternalBodySerial)-1) < 18)
+              if (i == 0)
+	         strncpy (imgdata.shootinginfo.InternalBodySerial,
+		 	words[0],
+			sizeof(imgdata.shootinginfo.InternalBodySerial)-1);
+              else
+	      {
+	       char tbuf[sizeof(imgdata.shootinginfo.InternalBodySerial)];
+	       snprintf (tbuf, sizeof(tbuf), "%s %s",
+	            imgdata.shootinginfo.InternalBodySerial, words[i]);
+	       strncpy(imgdata.shootinginfo.InternalBodySerial,tbuf,
+	            sizeof(imgdata.shootinginfo.InternalBodySerial)-1);
+	       }
            else
            {
-             strncpy (dd, words[i]+strlen(words[i])-14, 2);
-             strncpy (mm, words[i]+strlen(words[i])-16, 2);
-             strncpy (yy, words[i]+strlen(words[i])-18, 2);
+             strncpy (dd, words[i]+strnlen(words[i],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-14, 2);
+             strncpy (mm, words[i]+strnlen(words[i],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-16, 2);
+             strncpy (yy, words[i]+strnlen(words[i],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-18, 2);
              year = (yy[0]-'0')*10 + (yy[1]-'0');
              if (year <70) year += 2000; else year += 1900;
 
-             ynum_len = (int)strlen(words[i])-18;
+             ynum_len = (int)strnlen(words[i],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-18;
              strncpy(ynum, words[i], ynum_len);
              ynum[ynum_len] = 0;
              for ( int j = 0; ynum[j] && ynum[j+1] && sscanf(ynum+j, "%2x", &c); j += 2) ystr[j/2] = c;
@@ -8314,14 +8352,37 @@ void CLASS parse_makernote (int base, int uptag)
              strcpy (model2, ystr);
 
              if (i == 0) {
-               if (nwords == 1) snprintf (imgdata.shootinginfo.InternalBodySerial, sizeof(imgdata.shootinginfo.InternalBodySerial), "%s %s %d:%s:%s", words[0]+strlen(words[0])-12, ystr, year, mm, dd);
-               else snprintf (imgdata.shootinginfo.InternalBodySerial, sizeof(imgdata.shootinginfo.InternalBodySerial), "%s %d:%s:%s %s", ystr, year, mm, dd, words[0]+strlen(words[0])-12);
-             } else snprintf (imgdata.shootinginfo.InternalBodySerial, sizeof(imgdata.shootinginfo.InternalBodySerial), "%s %s %d:%s:%s %s", imgdata.shootinginfo.InternalBodySerial, ystr, year, mm, dd, words[i]+strlen(words[i])-12);
+	       char tbuf[sizeof(imgdata.shootinginfo.InternalBodySerial)];
+
+               if (nwords == 1)
+		   snprintf (tbuf,sizeof(tbuf),
+			   "%s %s %d:%s:%s",
+			   words[0]+strnlen(words[0],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-12,
+				ystr, year, mm, dd);
+
+               else
+		 snprintf (tbuf,sizeof(tbuf),
+			    "%s %d:%s:%s %s",
+			    ystr, year, mm, dd,
+			    words[0]+strnlen(words[0],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-12);
+
+	       strncpy(imgdata.shootinginfo.InternalBodySerial,tbuf,
+	            sizeof(imgdata.shootinginfo.InternalBodySerial)-1);
+             } else {
+		char tbuf[sizeof(imgdata.shootinginfo.InternalBodySerial)];
+	        snprintf (tbuf, sizeof(tbuf),
+		"%s %s %d:%s:%s %s",
+		imgdata.shootinginfo.InternalBodySerial, ystr, year, mm, dd,
+		 words[i]+strnlen(words[i],sizeof(imgdata.shootinginfo.InternalBodySerial)-1)-12);
+		 strncpy(imgdata.shootinginfo.InternalBodySerial,tbuf,
+		 	sizeof(imgdata.shootinginfo.InternalBodySerial)-1);
+      	     }
            }
          }
       }
-     else parseFujiMakernotes (tag, type);
-      }
+      else
+	parseFujiMakernotes (tag, type);
+    }
 
     else if (!strncasecmp(make, "LEICA", 5))
       {
@@ -9305,7 +9366,7 @@ void CLASS parse_makernote (int base, int uptag)
       {
         if ((!custom_serial) && (!isdigit(c)))
         {
-          if ((strlen(model) == 3) && (!strcmp(model,"D50")))
+          if ((strbuflen(model) == 3) && (!strcmp(model,"D50")))
           {
             custom_serial = 34;
           }
@@ -9426,17 +9487,17 @@ void CLASS parse_makernote (int base, int uptag)
       }
     if (tag == 0x200 && len == 3)
       shot_order = (get4(),get4());
-    if (tag == 0x200 && len == 4)
+    if (tag == 0x200 && len == 4 && !(cblack[4]*cblack[5]) && !black)
       FORC4 cblack[c ^ c >> 1] = get2();
     if (tag == 0x201 && len == 4)
          FORC4 cam_mul[c ^ (c >> 1)] = get2();
     if (tag == 0x220 && type == 7)
       meta_offset = ftell(ifp);
-    if (tag == 0x401 && type == 4 && len == 4)
+    if (tag == 0x401 && type == 4 && len == 4 && !(cblack[4]*cblack[5]) && !black)
       FORC4 cblack[c ^ c >> 1] = get4();
 #ifdef LIBRAW_LIBRARY_BUILD
     // not corrected for file bitcount, to be patched in open_datastream
-    if (tag == 0x03d && strstr(make,"NIKON") && len == 4)
+    if (tag == 0x03d && strstr(make,"NIKON") && len == 4 && !(cblack[4]*cblack[5]) && !black)
       {
         FORC4 cblack[c ^ c >> 1] = get2();
         i = cblack[3];
@@ -9492,7 +9553,7 @@ void CLASS parse_makernote (int base, int uptag)
             FORC3 cmatrix[i][c] = ((short) get2()) / 256.0;
 #endif
           }
-    if ((tag == 0x1012 || tag == 0x20400600) && len == 4)
+    if ((tag == 0x1012 || tag == 0x20400600) && len == 4 && !(cblack[4]*cblack[5]) && !black)
       FORC4 cblack[c ^ c >> 1] = get2();
     if (tag == 0x1017 || tag == 0x20400100)
       cam_mul[0] = get2() / 256.0;
@@ -9586,7 +9647,7 @@ get2_256:
             for (i=0; i < 3; i++)
               FORC3 cmatrix[i][c] = (float)((short)((get4() + SamsungKey[i*3+c])))/256.0;
 
-        if (tag == 0xa028)
+        if (tag == 0xa028 && !(cblack[4]*cblack[5]) && !black)
           FORC4 cblack[c ^ (c >> 1)] = get4() - SamsungKey[c];
       }
     else
@@ -9748,7 +9809,7 @@ void CLASS parse_exif (int base)
        else
 #endif
         parse_makernote (base, 0);
-        break;
+       break;
       case 40962:  if (kodak) raw_width  = get4();	break;
       case 40963:  if (kodak) raw_height = get4();	break;
       case 41730:
@@ -10118,6 +10179,11 @@ int CLASS parse_tiff_ifd (int base)
          !strncasecmp(model, "HV",2))))
   {
   	switch (tag) {
+	case 0x7300: // SR2 black level
+	  if(!(cblack[4]*cblack[5]) && !black)
+	    for (int i = 0; i < 4 && i < len; i++)
+	      cblack[i] = get2();
+	  break;
 	case 0x7480:
 	case 0x7820:
 	    FORC3 imgdata.color.WB_Coeffs[LIBRAW_WBI_Daylight][c] = get2();
@@ -10256,8 +10322,11 @@ int CLASS parse_tiff_ifd (int base)
         else
 #endif
           {
-            cblack[tag-28] = get2();
-            cblack[3] = cblack[1];
+	    if(!(cblack[4]*cblack[5]) && !black)
+	      {
+		cblack[tag-28] = get2();
+		cblack[3] = cblack[1];
+	      }
           }
 	break;
       case 36: case 37: case 38:
@@ -10507,14 +10576,18 @@ int CLASS parse_tiff_ifd (int base)
       break;
 #endif
     case 29456: // Sony black level, Sony_SR2SubIFD_0x7310, no more needs to be divided by 4
-      FORC4 cblack[c ^ c >> 1] = get2();
-      i = cblack[3];
-      FORC3 if(i>cblack[c]) i = cblack[c];
-      FORC4 cblack[c]-=i;
-      black = i;
+      if(!(cblack[4]*cblack[5]) && !black)
+	{
+	  FORC4 cblack[c ^ c >> 1] = get2();
+	  i = cblack[3];
+	  FORC3 if(i>cblack[c]) i = cblack[c];
+	  FORC4 cblack[c]-=i;
+	  black = i;
+	  
 #ifdef DCRAW_VERBOSE
       if (verbose) fprintf (stderr, _("...Sony black: %u cblack: %u %u %u %u\n"),black, cblack[0],cblack[1],cblack[2], cblack[3]);
 #endif
+	}
       break;
       case 33405:			/* Model2 */
 	fgets (model2, 64, ifp);
@@ -10875,24 +10948,26 @@ guess_cfa_pc:
 	cblack[4] = cblack[5] = MIN(sqrt((double)len),64);
       case 50714:			/* BlackLevel */
 #ifdef LIBRAW_LIBRARY_BUILD
-		if(tiff_ifd[ifd].samples > 1  && tiff_ifd[ifd].samples == len) // LinearDNG, per-channel black
-		{
-			for(i=0; i < colors && i < 4 && i < len; i++)
-				cblack[i]=(imgdata.color.dng_color[0].dng_blacklevel[i]=getreal(type))+0.5;
-			black = 0;
-		}
-		else
+	if(tiff_ifd[ifd].samples > 1  && tiff_ifd[ifd].samples == len) // LinearDNG, per-channel black
+	  {
+	    for(i=0; i < colors && i < 4 && i < len; i++)
+	      cblack[i]=(imgdata.color.dng_color[0].dng_blacklevel[i]=getreal(type))+0.5;
+	    black = 0;
+	  }
+	else
 #endif
-        if((cblack[4] * cblack[5] < 2) && len == 1)
-          {
-            black = getreal(type);
-          }
-        else if(cblack[4] * cblack[5] <= len)
-          {
-            FORC (cblack[4] * cblack[5])
-              cblack[6+c] = getreal(type);
-            black = 0;
-          }
+	  if((cblack[4] * cblack[5] < 2) && len == 1)
+	    {
+	      black = getreal(type);
+	    }
+	  else if(cblack[4] * cblack[5] <= len)
+	    {
+	      FORC (cblack[4] * cblack[5])
+		cblack[6+c] = getreal(type);
+	      black = 0;
+	      FORC4
+		cblack[c] = 0;
+	    }
       break;
       case 50715:			/* BlackLevelDeltaH */
       case 50716:			/* BlackLevelDeltaV */
@@ -11578,7 +11653,7 @@ void CLASS parse_ciff (int offset, int length, int depth)
       fread (artist, 64, 1, ifp);
     if (type == 0x080a) {
       fread (make, 64, 1, ifp);
-      fseek (ifp, strlen(make) - 63, SEEK_CUR);
+      fseek (ifp, strbuflen(make) - 63, SEEK_CUR);
       fread (model, 64, 1, ifp);
     }
     if (type == 0x1810) {
@@ -11652,9 +11727,9 @@ void CLASS parse_ciff (int offset, int length, int depth)
       } else if (!cam_mul[0]) {
 	if (get2() == key[0])		/* Pro1, G6, S60, S70 */
 	  c = (strstr(model,"Pro1") ?
-	      "012346000000000000":"01345:000000006008")[wbi]-'0'+ 2;
+	      "012346000000000000":"01345:000000006008")[LIM(0,wbi,17)]-'0'+ 2;
 	else {				/* G3, G5, S45, S50 */
-	  c = "023457000000006000"[wbi]-'0';
+	  c = "023457000000006000"[LIM(0,wbi,17)]-'0';
 	  key[0] = key[1] = 0;
 	}
 	fseek (ifp, 78 + c*8, SEEK_CUR);
@@ -11663,11 +11738,11 @@ void CLASS parse_ciff (int offset, int length, int depth)
       }
     }
     if (type == 0x10a9) {		/* D60, 10D, 300D, and clones */
-      if (len > 66) wbi = "0134567028"[wbi]-'0';
+      if (len > 66) wbi = "0134567028"[LIM(0,wbi,9)]-'0';
       fseek (ifp, 2 + wbi*8, SEEK_CUR);
       FORC4 cam_mul[c ^ (c >> 1)] = get2();
     }
-    if (type == 0x1030 && (0x18040 >> wbi & 1))
+    if (type == 0x1030 && wbi>=0 && (0x18040 >> wbi & 1))
       ciff_block_1030();		/* all that don't have 0x10a9 */
     if (type == 0x1031) {
       raw_width = (get2(),get2());
@@ -11723,7 +11798,7 @@ void CLASS parse_rollei()
     if ((val = strchr(line,'=')))
       *val++ = 0;
     else
-      val = line + strlen(line);
+      val = line + strbuflen(line);
     if (!strcmp(line,"DAT"))
       sscanf (val, "%d.%d.%d", &t.tm_mday, &t.tm_mon, &t.tm_year);
     if (!strcmp(line,"TIM"))
@@ -13091,6 +13166,10 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 11904,-4541,-1189,-2355,10899,1662,-296,1586,4289 } },
     { "Leica V-LUX 3", -15, 0xfff,
       { 11904,-4541,-1189,-2355,10899,1662,-296,1586,4289 } },
+    { "Panasonic DMC-FZ2000", -15, 0, /* markets: DMC-FZ2000, DMC-FZ2500 */
+      { 7830,-2696,-763,-3325,11667,1866,-641,1712,4824 } },
+    { "Panasonic DMC-FZ2500", -15, 0, /* markets: DMC-FZ2000, DMC-FZ2500 */
+      { 7830,-2696,-763,-3325,11667,1866,-641,1712,4824 } },
     { "Panasonic DMC-FZ200", -15, 0xfff,
       { 8112,-2563,-740,-3730,11784,2197,-941,2075,4933 } },
     { "Leica V-LUX 4", -15, 0xfff,
@@ -13341,6 +13420,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 6435,-1903,-536,-4722,12449,2550,-663,1363,6517 } },
     { "Sony ILCA-77M2", 0, 0,
       { 5991,-1732,-443,-4100,11989,2381,-704,1467,5992 } },
+    { "Sony ILCA-99M2", 0, 0,
+      { 6629,-1900,-483,-4618,12349,2550,-622,1381,6514 } },
     { "Sony ILCE-7M2", 0, 0,
       { 5271,-712,-347,-6153,13653,2763,-1601,2366,7242 } },
     { "Sony ILCE-7SM2", 0, 0,
@@ -13354,6 +13435,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
     { "Sony ILCE-7", 0, 0,
       { 5271,-712,-347,-6153,13653,2763,-1601,2366,7242 } },
     { "Sony ILCE-6300", 0, 0,
+      { 5973,-1695,-419,-3826,11797,2293,-639,1398,5789 } },
+    { "Sony ILCE-6500", 0, 0, /* temp */
       { 5973,-1695,-419,-3826,11797,2293,-639,1398,5789 } },
     { "Sony ILCE", 0, 0,	/* 3000, 5000, 5100, 6000, and QX1 */
       { 5991,-1456,-455,-4764,12135,2980,-707,1425,6701 } },
@@ -13515,7 +13598,7 @@ static void remove_trailing_spaces(char *string, size_t len)
   if(len<1) return; // not needed, b/c sizeof of make/model is 64
   string[len-1]=0;
   if(len<3) return; // also not needed
-  len = strlen(string);
+  len = strnlen(string,len-1);
   for(int i=len-1; i>=0; i--)
   {
     if(isspace(string[i]))
@@ -13725,6 +13808,7 @@ void CLASS identify()
     { 0x163, "DSC-RX10M3" },
     { 0x164, "DSC-RX100M5"},
     { 0x165, "ILCE-6300" },
+    { 0x168, "ILCE-6500"},
   };
 
 #ifdef LIBRAW_LIBRARY_BUILD
@@ -14252,7 +14336,7 @@ void CLASS identify()
   cp = model + strlen(model);
   while (*--cp == ' ') *cp = 0;
 #endif
-  i = strlen(make);			/* Remove make from model */
+  i = strbuflen(make);			/* Remove make from model */
   if (!strncasecmp (model, make, i) && model[i++] == ' ')
     memmove (model, model+i, 64-i);
   if (!strncmp (model,"FinePix ",8))
@@ -14374,6 +14458,9 @@ void CLASS identify()
     top_margin = filters = 0;
     strcpy (model,"C603");
   }
+  if (!strcmp(make, "Sony") && raw_width > 3888 && !black && !cblack[0])
+    black = 128 << (tiff_bps - 12);
+
   if (is_foveon) {
     if (height*2 < width) pixel_aspect = 0.5;
     if (height   > width) pixel_aspect = 2;
@@ -15276,6 +15363,17 @@ notraw:
   if (flip == UINT_MAX) flip = tiff_flip;
   if (flip == UINT_MAX) flip = 0;
 
+  // Convert from degrees to bit-field if needed
+  if(flip > 89 || flip < -89)
+   {
+     switch ((flip+3600) % 360)
+     {
+       case 270:  flip = 5;  break;
+       case 180:  flip = 3;  break;
+       case  90:  flip = 6;  break;
+     }
+   }
+
 #ifdef LIBRAW_LIBRARY_BUILD
   RUN_CALLBACK(LIBRAW_PROGRESS_IDENTIFY,1,2);
 #endif
@@ -15528,7 +15626,7 @@ void CLASS tiff_set (struct tiff_hdr *th, ushort *ntag,
   if (type == 1 && count <= 4)
     FORC(4) tt->val.c[c] = val >> (c << 3);
   else if (type == 2) {
-    count = local_strnlen((char *)th + val, count-1) + 1;
+    count = strnlen((char *)th + val, count-1) + 1;
     if (count <= 4)
       FORC(4) tt->val.c[c] = ((char *)th)[val+c];
   } else if (type == 3 && count <= 2)

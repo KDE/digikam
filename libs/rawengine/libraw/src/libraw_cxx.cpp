@@ -2518,7 +2518,7 @@ int LibRaw::unpack(void)
             S.raw_pitch = S.raw_width*8;
             // allocate image as temporary buffer, size
             imgdata.rawdata.raw_alloc = 0;
-            imgdata.image = (ushort (*)[4]) calloc(S.raw_width*S.raw_height,sizeof(*imgdata.image));
+            imgdata.image = (ushort (*)[4]) calloc(unsigned(S.raw_width)*unsigned(S.raw_height),sizeof(*imgdata.image));
 			if(!(decoder_info.decoder_flags &  LIBRAW_DECODER_ADOBECOPYPIXEL))
 			{
 				imgdata.rawdata.raw_image = (ushort*) imgdata.image ;
@@ -3524,16 +3524,24 @@ int LibRaw::dcraw_ppm_tiff_writer(const char *filename)
   }
 }
 
+#define THUMB_READ_BEYOND  16384
+
 void LibRaw::kodak_thumb_loader()
 {
-  // some kodak cameras
+	INT64 est_datasize = T.theight * T.twidth / 3; // is 0.3 bytes per pixel good estimate?
+	if (ID.toffset < 0)
+		throw LIBRAW_EXCEPTION_IO_CORRUPT;
+
+	if (ID.toffset + est_datasize > ID.input->size() + THUMB_READ_BEYOND)
+		throw LIBRAW_EXCEPTION_IO_EOF;
+
+	// some kodak cameras
   ushort s_height = S.height, s_width = S.width,s_iwidth = S.iwidth,s_iheight=S.iheight;
   ushort s_flags = libraw_internal_data.unpacker_data.load_flags;
   libraw_internal_data.unpacker_data.load_flags = 12;
   int s_colors = P1.colors;
   unsigned s_filters = P1.filters;
   ushort (*s_image)[4] = imgdata.image;
-
 
   S.height = T.theight;
   S.width  = T.twidth;
@@ -3677,27 +3685,27 @@ void LibRaw::kodak_thumb_loader()
   merror (T.thumb, "LibRaw::kodak_thumb_loader()");
   T.tlength = S.width * S.height * P1.colors;
 
-  // from write_tiff_ppm
+// from write_tiff_ppm
   {
-    int soff  = flip_index (0, 0);
-    int cstep = flip_index (0, 1) - soff;
-    int rstep = flip_index (1, 0) - flip_index (0, S.width);
+	  int soff = flip_index(0, 0);
+	  int cstep = flip_index(0, 1) - soff;
+	  int rstep = flip_index(1, 0) - flip_index(0, S.width);
 
-    for (int row=0; row < S.height; row++, soff += rstep)
-      {
-        char *ppm = T.thumb + row*S.width*P1.colors;
-        for (int col=0; col < S.width; col++, soff += cstep)
-          for(int c = 0; c < P1.colors; c++)
-            ppm [col*P1.colors+c] = imgdata.color.curve[imgdata.image[soff][c]]>>8;
-      }
+	  for (int row = 0; row < S.height; row++, soff += rstep)
+	  {
+		  char *ppm = T.thumb + row*S.width*P1.colors;
+		  for (int col = 0; col < S.width; col++, soff += cstep)
+			  for (int c = 0; c < P1.colors; c++)
+				  ppm[col*P1.colors + c] = imgdata.color.curve[imgdata.image[soff][c]] >> 8;
+	  }
   }
 
-  memmove(C.curve,t_curve,sizeof(C.curve));
+  memmove(C.curve, t_curve, sizeof(C.curve));
   free(t_curve);
 
   // restore variables
   free(imgdata.image);
-  imgdata.image  = s_image;
+  imgdata.image = s_image;
 
   T.twidth = S.width;
   S.width = s_width;
@@ -3749,33 +3757,51 @@ int LibRaw::thumbOK(INT64 maxsz)
 		return 0;
 	if (maxsz > 0 && tsize > maxsz)
 		return 0;
-	return (tsize + ID.toffset <= fsize)?1:0;
+	return (tsize + ID.toffset <= fsize) ? 1 : 0;
 }
 
 int LibRaw::unpack_thumb(void)
 {
-  CHECK_ORDER_LOW(LIBRAW_PROGRESS_IDENTIFY);
-  CHECK_ORDER_BIT(LIBRAW_PROGRESS_THUMB_LOAD);
+	CHECK_ORDER_LOW(LIBRAW_PROGRESS_IDENTIFY);
+	CHECK_ORDER_BIT(LIBRAW_PROGRESS_THUMB_LOAD);
 
-  try {
-    if(!libraw_internal_data.internal_data.input)
-      return LIBRAW_INPUT_CLOSED;
+	try {
+		if (!libraw_internal_data.internal_data.input)
+			return LIBRAW_INPUT_CLOSED;
 
-    if ( !ID.toffset && 
-		!(imgdata.thumbnail.tlength>0 && load_raw == &LibRaw::broadcom_load_raw) // RPi
-		)
-      {
-        return LIBRAW_NO_THUMBNAIL;
-      }
-    else if (thumb_load_raw)
-      {
-        kodak_thumb_loader();
-        T.tformat = LIBRAW_THUMBNAIL_BITMAP;
-        SET_PROC_FLAG(LIBRAW_PROGRESS_THUMB_LOAD);
-        return 0;
-      }
-    else
-      {
+		if (!ID.toffset &&
+			!(imgdata.thumbnail.tlength > 0 && load_raw == &LibRaw::broadcom_load_raw) // RPi
+			)
+		{
+			return LIBRAW_NO_THUMBNAIL;
+		}
+		else if (thumb_load_raw)
+		{
+			kodak_thumb_loader();
+			T.tformat = LIBRAW_THUMBNAIL_BITMAP;
+			SET_PROC_FLAG(LIBRAW_PROGRESS_THUMB_LOAD);
+			return 0;
+		}
+		else
+		{
+			if (write_thumb == &LibRaw::x3f_thumb_loader)
+			{
+				INT64 tsize = x3f_thumb_size();
+				if (tsize < 2048 ||INT64(ID.toffset) + tsize < 1)
+					throw LIBRAW_EXCEPTION_IO_CORRUPT;
+
+				if (INT64(ID.toffset) + tsize > ID.input->size() + THUMB_READ_BEYOND)
+					throw LIBRAW_EXCEPTION_IO_EOF;
+			}
+			else
+			{
+				if (INT64(ID.toffset) + INT64(T.tlength) < 1)
+					throw LIBRAW_EXCEPTION_IO_CORRUPT;
+
+				if (INT64(ID.toffset) + INT64(T.tlength) > ID.input->size() + THUMB_READ_BEYOND)
+					throw LIBRAW_EXCEPTION_IO_EOF;
+			}
+
         ID.input->seek(ID.toffset, SEEK_SET);
         if ( write_thumb == &LibRaw::jpeg_thumb)
           {
@@ -4148,9 +4174,23 @@ void LibRaw::adjust_bl()
  // Add common part to cblack[] early
    if (imgdata.idata.filters > 1000 && (C.cblack[4]+1)/2 == 1 && (C.cblack[5]+1)/2 == 1)
    {
+	   int clrs[4];
+	   int lastg = -1, gcnt = 0;
+	   for(int c = 0; c < 4; c++)
+	   {
+			clrs[c] = FC(c/2,c%2);
+			if(clrs[c]==1)
+			{
+				gcnt++;
+				lastg = c;
+			}
+	   }
+	   if(gcnt>1 && lastg>=0)
+		   clrs[lastg] = 3;
 	   for(int c=0; c<4; c++)
-		   C.cblack[c] += C.cblack[6 + c/2 % C.cblack[4] * C.cblack[5] + c%2 % C.cblack[5]];
+		   C.cblack[clrs[c]] += C.cblack[6 + c/2 % C.cblack[4] * C.cblack[5] + c%2 % C.cblack[5]];
 	   C.cblack[4]=C.cblack[5]=0;
+	   //imgdata.idata.filters = sfilters;
    }
    else if(imgdata.idata.filters <= 1000 && C.cblack[4]==1 && C.cblack[5]==1) // Fuji RAF dng
    {
@@ -5034,6 +5074,7 @@ static const char  *static_camera_list[] =
 "Olympus E-PM1",
 "Olympus E-PM2",
 "Olympus E-M1",
+"Olympus E-M1 Mark II",
 "Olympus E-M10",
 "Olympus E-M10 Mark II",
 "Olympus E-M5",
@@ -5076,6 +5117,7 @@ static const char  *static_camera_list[] =
 "Panasonic DMC-FZ200",
 "Panasonic DMC-FZ300/330",
 "Panasonic DMC-FZ1000",
+"Panasonic DMC-FZ2000/2500",
 "Panasonic DMC-FX150",
 "Panasonic DMC-G1",
 "Panasonic DMC-G10",
@@ -5290,11 +5332,13 @@ static const char  *static_camera_list[] =
 "Sony A7S II",
 "Sony ILCA-68 (A68)",
 "Sony ILCA-77M2 (A77-II)",
+"Sony ILCA-99M2 (A99-II)",
 "Sony ILCE-3000",
 "Sony ILCE-5000",
 "Sony ILCE-5100",
 "Sony ILCE-6000",
 "Sony ILCE-6300",
+"Sony ILCE-6500",
 "Sony ILCE-QX1",
 "Sony DSC-F828",
 "Sony DSC-R1",

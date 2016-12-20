@@ -3,10 +3,11 @@ digiKam 5.4.0 - Release date: 2016-12-27
 
 NEW FEATURES:
 
-Searches     : improvements of duplicate searches to introduce a range of similarity of items.
-Searches     : improvements of duplicate searches to be able to sort search albums list view by similary level.
-Searches     : improvements of duplicate searches to permit multiple selection in search albums list view.
-AlbumGUI     : improvements of grouped images to apply renaming, copying or metadata actions to all images.
+Searches     : Improvements of duplicate searches to introduce a range of similarity of items.
+Searches     : Improvements of duplicate searches to be able to sort search albums list view by similary level.
+Searches     : Improvements of duplicate searches to permit multiple selection in search albums list view.
+AlbumGUI     : Improvements of grouped images to apply renaming, copying or metadata actions to all images.
+General      : Update internal Libraw to last 0.18-beta2. New camera supported : Olympus E-M1-II, Panasonic FZ2000 and FZ2500, Sony A99-II, Sony a6500.
 General      : Media player is now ported to QtAV instead Qt5Multimedia.
 SlideShow    : Add video support.
 Presentation : Add video support.
