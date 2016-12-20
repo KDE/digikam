@@ -205,8 +205,9 @@ protected:
     virtual void showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info);
     virtual void showContextMenuOnIndex(QContextMenuEvent* event, const QModelIndex& index);
 
-    // Converts indexes to imageInfos and adds group members when appropriate
-    ImageInfoList resolveGrouping(const QModelIndexList indexes) const;
+    // Adds group members when appropriate
+    ImageInfoList resolveGrouping(const QModelIndexList& indexes) const;
+    ImageInfoList resolveGrouping(const ImageInfoList& infos) const;
 
 private Q_SLOTS:
 

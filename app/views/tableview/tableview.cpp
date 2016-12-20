@@ -773,8 +773,8 @@ ImageInfoList TableView::selectedImageInfos() const
 
 QModelIndexList TableView::selectedIndexesCurrentFirst() const
 {
-    QModelIndexList indexes = s->tableViewSelectionModel->selectedRows();
-    const QModelIndex current = s->tableViewSelectionModel->currentIndex();
+    QModelIndexList indexes   = s->tableViewSelectionModel->selectedRows();
+    const QModelIndex current = s->tableViewModel->toCol0(s->tableViewSelectionModel->currentIndex());
 
     if (!indexes.isEmpty())
     {

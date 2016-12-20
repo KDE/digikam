@@ -1327,12 +1327,14 @@ QList<ImageInfo> TableViewModel::allImageInfo() const
 
     while (!itemsToList.isEmpty())
     {
-        Item* const item = itemsToList.takeFirst();
-        infoList << infoFromItem(item);
+        ImageInfo const info = infoFromItem(itemsToList.takeFirst());
+        infoList << info;
 
-        if (!item->children.isEmpty())
+        if ((s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped ||
+             s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems) &&
+             info.hasGroupedImages())
         {
-            itemsToList << item->children;
+            infoList << info.groupedImages();
         }
     }
 

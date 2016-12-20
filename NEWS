@@ -113,4 +113,5 @@ BUGFIXES FROM BUGZILLA:
 097 ==> 373606 - digiKam crash on exit.
 098 ==> 373954 - Tags are not written to images in Iptc.Application2.Keywords.
 099 ==> 373754 - Cannot Shorten Face Tag Name.
-100 ==> 
+100 ==> 373562 - Inconsistent items selected count with groups in the main view [patch].
+101 ==> 

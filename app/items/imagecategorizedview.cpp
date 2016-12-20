@@ -320,13 +320,13 @@ ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
 
 QList<ImageInfo> ImageCategorizedView::imageInfos() const
 {
-    return d->filterModel->imageInfosSorted();
+    return resolveGrouping(d->filterModel->imageInfosSorted());
 }
 
 QList<QUrl> ImageCategorizedView::urls() const
 {
     ImageInfoList infos = imageInfos();
-    QList<QUrl>       urls;
+    QList<QUrl>   urls;
 
     foreach(const ImageInfo& info, infos)
     {
@@ -339,7 +339,7 @@ QList<QUrl> ImageCategorizedView::urls() const
 QList<QUrl> ImageCategorizedView::selectedUrls() const
 {
     ImageInfoList infos = selectedImageInfos();
-    QList<QUrl>       urls;
+    QList<QUrl>   urls;
 
     foreach(const ImageInfo& info, infos)
     {
@@ -511,7 +511,7 @@ void ImageCategorizedView::setSelectedUrls(const QList<QUrl>& urlList)
 
     for (QList<QUrl>::const_iterator it = urlList.constBegin(); it!=urlList.constEnd(); ++it)
     {
-        const QString path = it->toLocalFile();
+        const QString path      = it->toLocalFile();
         const QModelIndex index = d->filterModel->indexForPath(path);
 
         if (!index.isValid())
@@ -717,21 +717,26 @@ void ImageCategorizedView::showContextMenuOnInfo(QContextMenuEvent*, const Image
     // implemented in subclass
 }
 
-ImageInfoList ImageCategorizedView::resolveGrouping(const QModelIndexList indexes) const
+ImageInfoList ImageCategorizedView::resolveGrouping(const QModelIndexList& indexes) const
 {
-    ImageInfoList infos;
+    return resolveGrouping(d->filterModel->imageInfos(indexes));
+}
 
-    foreach(const ImageInfo& info, d->filterModel->imageInfos(indexes))
+ImageInfoList ImageCategorizedView::resolveGrouping(const ImageInfoList& infos) const
+{
+    ImageInfoList outInfos;
+
+    foreach(const ImageInfo& info, infos)
     {
-        infos << info;
+        outInfos << info;
 
         if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
         {
-            infos << info.groupedImages();
+            outInfos << info.groupedImages();
         }
     }
 
-    return infos;
+    return outInfos;
 }
 
 void ImageCategorizedView::paintEvent(QPaintEvent* e)
