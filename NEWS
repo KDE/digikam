@@ -109,4 +109,5 @@ BUGFIXES FROM BUGZILLA:
 094 ==> 216655 - Add video files support in Advanced slideshow.
 095 ==> 248586 - Advanced slide show should also use videos like normal slide show.
 096 ==> 139690 - Include videos to slideshow.
-097 ==> 
+097 ==> 373606 - digiKam crash on exit.
+098 ==> 
