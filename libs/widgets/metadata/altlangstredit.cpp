@@ -7,7 +7,7 @@
  * @date   2009-06-15
  * @brief  multi-languages string editor
  *
- * @author Copyright (C) 2009-2016 by Gilles Caulier
+ * @author Copyright (C) 2009-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it
@@ -95,7 +95,7 @@ public:
         languageCodeMap.insert( QString::fromLatin1("ca-ES"), i18n("Catalan (Spain)") );
         languageCodeMap.insert( QString::fromLatin1("ca-FR"), i18n("Catalan (France)") );
         languageCodeMap.insert( QString::fromLatin1("co-FR"), i18n("Corsican (France)") );
-        languageCodeMap.insert( QString::fromLatin1("cs-CZ"), i18n("Czech (Czech Republic)") );
+        languageCodeMap.insert( QString::fromLatin1("cs-CZ"), i18n("Czech (Czechia)") );
         languageCodeMap.insert( QString::fromLatin1("cy-GB"), i18n("Welsh (United Kingdom)") );
         languageCodeMap.insert( QString::fromLatin1("da-DK"), i18n("Danish (Denmark)") );
         languageCodeMap.insert( QString::fromLatin1("de-AT"), i18n("German (Austria)") );
