@@ -50,6 +50,7 @@
 
 #include "stackedview.h"
 #include "thememanager.h"
+#include "dwidgetutils.h"
 #include "digikam_debug.h"
 
 using namespace QtAV;
@@ -130,7 +131,9 @@ public:
         toolBar(0),
         videoWidget(0),
         player(0),
-        slider(0)
+        slider(0),
+        tlabel(0),
+        dlabel(0)
     {
     }
 
@@ -146,6 +149,8 @@ public:
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
     QSlider*             slider;
+    QLabel*              tlabel;
+    QLabel*              dlabel;
     QUrl                 currentItem;
 };
 
@@ -183,8 +188,12 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->videoWidget = new WidgetRenderer(this);
     d->player      = new AVPlayer(this);
 
-    d->slider      = new QSlider(Qt::Horizontal, this);
+    DHBox* const hbox = new DHBox(this);
+    d->slider         = new QSlider(Qt::Horizontal, hbox);
     d->slider->setRange(0, 0);
+    d->tlabel         = new QLabel(hbox);
+    d->tlabel->setText(QString::fromLatin1("00:00:00 / 00:00:00"));
+    hbox->setStretchFactor(d->slider, 10);
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
     d->player->setRenderer(d->videoWidget);
@@ -195,7 +204,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(d->playerView);
     vbox2->addWidget(d->videoWidget, 10);
-    vbox2->addWidget(d->slider,       0);
+    vbox2->addWidget(hbox,           0);
     vbox2->setContentsMargins(margins);
     vbox2->setSpacing(spacing);
 
@@ -367,6 +376,10 @@ void MediaPlayerView::slotPositionChanged(qint64 position)
     {
         d->slider->setValue(position);
     }
+
+    d->tlabel->setText(QString::fromLatin1("%1 / %2")
+                       .arg(QTime(0, 0, 0).addMSecs(position).toString(QString::fromLatin1("HH:mm:ss")))
+                       .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QString::fromLatin1("HH:mm:ss"))));
 }
 
 void MediaPlayerView::slotDurationChanged(qint64 duration)
