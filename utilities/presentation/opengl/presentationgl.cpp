@@ -9,7 +9,7 @@
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2006-2009 by Valerio Fuoglio <valerio.fuoglio@gmail.com>
  * Copyright (C) 2009      by Andi Clemens <andi dot clemens at googlemail dot com>
- * Copyright (C) 2012-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -95,7 +95,7 @@ public:
         random              = false;
         i                   = 0;
         dir                 = 0;
-        slidePresentationAudioWidget = 0;
+        slideCtrlWidget     = 0;
 
 #ifdef HAVE_MEDIAPLAYER
         playbackWidget      = 0;
@@ -135,7 +135,7 @@ public:
     int                               dir;
     float                             points[40][40][3];
 
-    PresentationCtrlWidget*           slidePresentationAudioWidget;
+    PresentationCtrlWidget*           slideCtrlWidget;
 
 #ifdef HAVE_MEDIAPLAYER
     PresentationAudioWidget*          playbackWidget;
@@ -167,27 +167,27 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
     d->sharedData   = sharedData;
 
-    d->slidePresentationAudioWidget = new PresentationCtrlWidget(this);
-    d->slidePresentationAudioWidget->hide();
+    d->slideCtrlWidget = new PresentationCtrlWidget(this);
+    d->slideCtrlWidget->hide();
 
     if (!d->sharedData->loop)
     {
-        d->slidePresentationAudioWidget->setEnabledPrev(false);
+        d->slideCtrlWidget->setEnabledPrev(false);
     }
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalPause()),
+    connect(d->slideCtrlWidget, SIGNAL(signalPause()),
             this, SLOT(slotPause()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalPlay()),
+    connect(d->slideCtrlWidget, SIGNAL(signalPlay()),
             this, SLOT(slotPlay()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalNext()),
+    connect(d->slideCtrlWidget, SIGNAL(signalNext()),
             this, SLOT(slotNext()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalPrev()),
+    connect(d->slideCtrlWidget, SIGNAL(signalPrev()),
             this, SLOT(slotPrev()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalClose()),
+    connect(d->slideCtrlWidget, SIGNAL(signalClose()),
             this, SLOT(slotClose()));
 
 #ifdef HAVE_MEDIAPLAYER
@@ -198,8 +198,8 @@ PresentationGL::PresentationGL(PresentationContainer* const sharedData)
 
 #endif
 
-    int w = d->slidePresentationAudioWidget->width();
-    d->slidePresentationAudioWidget->move(d->deskX + d->deskWidth - w - 1, d->deskY);
+    int w = d->slideCtrlWidget->width();
+    d->slideCtrlWidget->move(d->deskX + d->deskWidth - w - 1, d->deskY);
 
     // -- Minimal texture size (opengl specs) --------------
 
@@ -343,7 +343,7 @@ void PresentationGL::keyPressEvent(QKeyEvent* event)
     if (!event)
         return;
 
-    d->slidePresentationAudioWidget->keyPressEvent(event);
+    d->slideCtrlWidget->keyPressEvent(event);
 #ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->keyPressEvent(event);
 #endif
@@ -357,13 +357,13 @@ void PresentationGL::mousePressEvent(QMouseEvent* e)
     if (e->button() == Qt::LeftButton)
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused(true);
+        d->slideCtrlWidget->setPaused(true);
         slotNext();
     }
     else if (e->button() == Qt::RightButton && d->fileIndex - 1 >= 0)
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused(true);
+        d->slideCtrlWidget->setPaused(true);
         slotPrev();
     }
 }
@@ -374,7 +374,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
     d->mouseMoveTimer->setSingleShot(true);
     d->mouseMoveTimer->start(1000);
 
-    if (!d->slidePresentationAudioWidget->canHide()
+    if (!d->slideCtrlWidget->canHide()
 #ifdef HAVE_MEDIAPLAYER
         || !d->playbackWidget->canHide()
 #endif
@@ -386,7 +386,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
     if ((pos.y() > (d->deskY + 20)) &&
             (pos.y() < (d->deskY + d->deskHeight - 20 - 1)))
     {
-        if (d->slidePresentationAudioWidget->isHidden()
+        if (d->slideCtrlWidget->isHidden()
 #ifdef HAVE_MEDIAPLAYER
             || d->playbackWidget->isHidden()
 #endif
@@ -396,7 +396,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
         }
         else
         {
-            d->slidePresentationAudioWidget->hide();
+            d->slideCtrlWidget->hide();
 #ifdef HAVE_MEDIAPLAYER
             d->playbackWidget->hide();
 #endif
@@ -405,7 +405,7 @@ void PresentationGL::mouseMoveEvent(QMouseEvent* e)
         return;
     }
 
-    d->slidePresentationAudioWidget->show();
+    d->slideCtrlWidget->show();
 #ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->show();
 #endif
@@ -424,13 +424,13 @@ void PresentationGL::wheelEvent(QWheelEvent* e)
     if (delta < 0)
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused(true);
+        d->slideCtrlWidget->setPaused(true);
         slotNext();
     }
     else if (delta > 0 && d->fileIndex - 1 >= 0)
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused(true);
+        d->slideCtrlWidget->setPaused(true);
         slotPrev();
     }
 }
@@ -513,16 +513,16 @@ void PresentationGL::advanceFrame()
         {
             d->fileIndex = num - 1;
             d->endOfShow = true;
-            d->slidePresentationAudioWidget->setEnabledPlay(false);
-            d->slidePresentationAudioWidget->setEnabledNext(false);
-            d->slidePresentationAudioWidget->setEnabledPrev(false);
+            d->slideCtrlWidget->setEnabledPlay(false);
+            d->slideCtrlWidget->setEnabledNext(false);
+            d->slideCtrlWidget->setEnabledPrev(false);
         }
     }
 
     if (!d->sharedData->loop && !d->endOfShow)
     {
-        d->slidePresentationAudioWidget->setEnabledPrev(d->fileIndex > 0);
-        d->slidePresentationAudioWidget->setEnabledNext(d->fileIndex < num - 1);
+        d->slideCtrlWidget->setEnabledPrev(d->fileIndex > 0);
+        d->slideCtrlWidget->setEnabledNext(d->fileIndex < num - 1);
     }
 
     d->tex1First = !d->tex1First;
@@ -545,16 +545,16 @@ void PresentationGL::previousFrame()
         {
             d->fileIndex = 0;
             d->endOfShow = true;
-            d->slidePresentationAudioWidget->setEnabledPlay(false);
-            d->slidePresentationAudioWidget->setEnabledNext(false);
-            d->slidePresentationAudioWidget->setEnabledPrev(false);
+            d->slideCtrlWidget->setEnabledPlay(false);
+            d->slideCtrlWidget->setEnabledNext(false);
+            d->slideCtrlWidget->setEnabledPrev(false);
         }
     }
 
     if (!d->sharedData->loop && !d->endOfShow)
     {
-        d->slidePresentationAudioWidget->setEnabledPrev(d->fileIndex > 0);
-        d->slidePresentationAudioWidget->setEnabledNext(d->fileIndex < num - 1);
+        d->slideCtrlWidget->setEnabledPrev(d->fileIndex > 0);
+        d->slideCtrlWidget->setEnabledNext(d->fileIndex < num - 1);
     }
 
     d->tex1First = !d->tex1First;
@@ -1597,17 +1597,17 @@ void PresentationGL::slotPause()
 {
     d->timer->stop();
 
-    if (d->slidePresentationAudioWidget->isHidden())
+    if (d->slideCtrlWidget->isHidden())
     {
-        int w = d->slidePresentationAudioWidget->width();
-        d->slidePresentationAudioWidget->move(d->deskWidth - w - 1, 0);
-        d->slidePresentationAudioWidget->show();
+        int w = d->slideCtrlWidget->width();
+        d->slideCtrlWidget->move(d->deskWidth - w - 1, 0);
+        d->slideCtrlWidget->show();
     }
 }
 
 void PresentationGL::slotPlay()
 {
-    d->slidePresentationAudioWidget->hide();
+    d->slideCtrlWidget->hide();
     slotTimeOut();
 }
 
