@@ -162,7 +162,7 @@ bool PresentationAudioWidget::canHide() const
 
 bool PresentationAudioWidget::isPaused() const
 {
-    return (d->mediaObject->state() == AVPlayer::PausedState);
+    return d->mediaObject->isPaused();
 }
 
 void PresentationAudioWidget::checkSkip()
@@ -260,21 +260,29 @@ void PresentationAudioWidget::keyPressEvent(QKeyEvent* event)
 
 void PresentationAudioWidget::slotPlay()
 {
-    if (d->mediaObject->state() == AVPlayer::PlayingState || d->mediaObject->mediaStatus() == QtAV::BufferingMedia)
+    if (!d->mediaObject->isPlaying() || d->mediaObject->isPaused())
+    {
+        if (!d->mediaObject->isPlaying())
+        {
+            d->mediaObject->play();
+        }
+        else
+        {
+            d->mediaObject->pause(false);
+        }
+
+        setGUIPlay(false);
+        d->canHide = true;
+        emit signalPlay();
+        return;
+    }
+    else
     {
         d->mediaObject->pause();
         setGUIPlay(true);
         d->canHide = false;
         emit signalPause();
         return;
-    }
-
-    if (d->mediaObject->state() == AVPlayer::PausedState || d->mediaObject->state() == AVPlayer::StoppedState)
-    {
-        d->mediaObject->play();
-        setGUIPlay(false);
-        d->canHide = true;
-        emit signalPlay();
     }
 }
 
@@ -306,6 +314,7 @@ void PresentationAudioWidget::slotPrev()
         }
     }
 
+    d->mediaObject->stop();
     d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
     d->mediaObject->play();
     setZeroTime();
@@ -328,6 +337,7 @@ void PresentationAudioWidget::slotNext()
         }
     }
 
+    d->mediaObject->stop();
     d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
     d->mediaObject->play();
     setZeroTime();
@@ -335,10 +345,10 @@ void PresentationAudioWidget::slotNext()
 
 void PresentationAudioWidget::slotTimeUpdaterTimeout()
 {
-    if (d->mediaObject->mediaStatus() != QtAV::UnknownMediaStatus ||
-        d->mediaObject->mediaStatus() != QtAV::NoMedia            ||
-        d->mediaObject->mediaStatus() != QtAV::StalledMedia       ||
-        d->mediaObject->mediaStatus() != QtAV::InvalidMedia)
+    if (d->mediaObject->mediaStatus() == QtAV::UnknownMediaStatus ||
+        d->mediaObject->mediaStatus() == QtAV::NoMedia            ||
+        d->mediaObject->mediaStatus() == QtAV::StalledMedia       ||
+        d->mediaObject->mediaStatus() == QtAV::InvalidMedia)
     {
         slotError();
         return;
