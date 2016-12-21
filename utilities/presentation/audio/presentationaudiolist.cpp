@@ -83,7 +83,7 @@ PresentationAudioListItem::PresentationAudioListItem(QListWidget* const parent, 
     setIcon(QIcon::fromTheme(QString::fromLatin1("audio-x-generic")).pixmap(48, QIcon::Disabled));
 
     d->totalTime   = QTime(0, 0, 0);
-    d->mediaObject = new AVPlayer();
+    d->mediaObject = new AVPlayer(this);
 
     connect(d->mediaObject, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
             this, SLOT(slotMediaStateChanged(QtAV::MediaStatus)));
@@ -92,6 +92,7 @@ PresentationAudioListItem::PresentationAudioListItem(QListWidget* const parent, 
             this, SLOT(slotPlayerError(QtAV::AVError)));
 
     d->mediaObject->setFile(url.toLocalFile());
+    d->mediaObject->load();
 }
 
 PresentationAudioListItem::~PresentationAudioListItem()
@@ -135,10 +136,10 @@ void PresentationAudioListItem::slotPlayerError(const QtAV::AVError& err)
 
 void PresentationAudioListItem::slotMediaStateChanged(QtAV::MediaStatus status)
 {
-    if (status != QtAV::UnknownMediaStatus ||
-        status != QtAV::NoMedia            ||
-        status != QtAV::StalledMedia       ||
-        status != QtAV::InvalidMedia)
+    if (status == QtAV::UnknownMediaStatus ||
+        status == QtAV::NoMedia            ||
+        status == QtAV::StalledMedia       ||
+        status == QtAV::InvalidMedia)
     {
         showErrorDialog(i18n("No detail available"));
         return;
