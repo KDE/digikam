@@ -57,43 +57,54 @@ using namespace QtAV;
 namespace Digikam
 {
 
-MediaPlayerMouseClickFilter::MediaPlayerMouseClickFilter(QObject* const parent)
-    : QObject(parent),
-      m_parent(parent)
+class MediaPlayerMouseClickFilter : public QObject
 {
-}
+public:
 
-bool MediaPlayerMouseClickFilter::eventFilter(QObject* obj, QEvent* event)
-{
-    if ((qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)  && event->type() == QEvent::MouseButtonRelease) ||
-        (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) && event->type() == QEvent::MouseButtonDblClick))
+    explicit MediaPlayerMouseClickFilter(QObject* const parent)
+        : QObject(parent),
+          m_parent(parent)
     {
-        QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    }
 
-        if (mouseEvent && mouseEvent->button() == Qt::LeftButton)
+protected:
+
+    bool eventFilter(QObject* obj, QEvent* event)
+    {
+        if ((qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick)  && event->type() == QEvent::MouseButtonRelease)   ||
+            (!qApp->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick) && event->type() == QEvent::MouseButtonDblClick))
         {
-            if (m_parent)
+            QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
+
+            if (mouseEvent && mouseEvent->button() == Qt::LeftButton)
             {
-                MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
-
-                if (mplayer)
+                if (m_parent)
                 {
-                    mplayer->slotEscapePressed();
-                }
-            }
+                    MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
 
-            return true;
+                    if (mplayer)
+                    {
+                        mplayer->slotEscapePressed();
+                    }
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            return false;
+            return QObject::eventFilter(obj, event);
         }
     }
-    else
-    {
-        return QObject::eventFilter(obj, event);
-    }
-}
+
+private:
+
+    QObject* m_parent;
+};
 
 // --------------------------------------------------------
 

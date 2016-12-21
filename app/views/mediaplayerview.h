@@ -38,25 +38,6 @@ class QEvent;
 namespace Digikam
 {
 
-class MediaPlayerMouseClickFilter : public QObject
-{
-    Q_OBJECT
-
-public:
-
-    explicit MediaPlayerMouseClickFilter(QObject* const parent);
-
-protected:
-
-    bool eventFilter(QObject* obj, QEvent* event);
-
-private:
-
-    QObject* m_parent;
-};
-
-// --------------------------------------------------------
-
 class MediaPlayerView : public QStackedWidget
 {
     Q_OBJECT
