@@ -600,8 +600,9 @@ void CameraController::executeCommand(CameraCommand* const cmd)
 
             emit signalDownloaded(folder, file, CamItemInfo::DownloadStarted);
 
-            QString tempFile = QLatin1String("/.digikam-camera-tmp%1-") +
-                               QString::number(QCoreApplication::applicationPid());
+            QString tempFile = QLatin1String("/Camera-tmp%1-") +
+                               QString::number(QCoreApplication::applicationPid()) +
+                               QLatin1String(".digikamtempfile.");
             QUrl tempURL     = QUrl::fromLocalFile(dest).adjusted(QUrl::RemoveFilename |
                                                                   QUrl::StripTrailingSlash);
             QString temp     = tempURL.toLocalFile() + tempFile.arg(1) + file;
