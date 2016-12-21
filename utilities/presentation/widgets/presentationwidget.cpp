@@ -110,7 +110,7 @@ public:
         pdone                        = 0;
         pixelMatrix                  = 0;
 
-        slidePresentationAudioWidget = 0;
+        slideCtrlWidget              = 0;
         mouseMoveTimer               = 0;
         deskX                        = 0;
         deskY                        = 0;
@@ -167,7 +167,7 @@ public:
     //static
     QPolygon                    pa;
 
-    PresentationCtrlWidget*     slidePresentationAudioWidget;
+    PresentationCtrlWidget*     slideCtrlWidget;
     QTimer*                     mouseMoveTimer;
 
     int                         deskX;
@@ -192,13 +192,13 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     move( d->deskX, d->deskY );
     resize( d->deskWidth, d->deskHeight );
 
-    d->slidePresentationAudioWidget = new PresentationCtrlWidget(this);
-    d->slidePresentationAudioWidget->hide();
-    d->slidePresentationAudioWidget->move(d->deskWidth - d->slidePresentationAudioWidget->width(), d->deskY);
+    d->slideCtrlWidget = new PresentationCtrlWidget(this);
+    d->slideCtrlWidget->hide();
+    d->slideCtrlWidget->move(d->deskWidth - d->slideCtrlWidget->width(), d->deskY);
 
     if ( !d->sharedData->loop )
     {
-        d->slidePresentationAudioWidget->setEnabledPrev( false );
+        d->slideCtrlWidget->setEnabledPrev( false );
     }
 
 #ifdef HAVE_MEDIAPLAYER
@@ -209,19 +209,19 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
     d->playbackWidget->hide();
     d->playbackWidget->move(d->deskX, d->deskY);
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalPause()),
+    connect(d->slideCtrlWidget, SIGNAL(signalPause()),
             this, SLOT(slotPause()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalPlay()),
+    connect(d->slideCtrlWidget, SIGNAL(signalPlay()),
             this, SLOT(slotPlay()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalNext()),
+    connect(d->slideCtrlWidget, SIGNAL(signalNext()),
             this, SLOT(slotNext()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalPrev()),
+    connect(d->slideCtrlWidget, SIGNAL(signalPrev()),
             this, SLOT(slotPrev()));
 
-    connect(d->slidePresentationAudioWidget, SIGNAL(signalClose()),
+    connect(d->slideCtrlWidget, SIGNAL(signalClose()),
             this, SLOT(slotClose()));
 
     // -- video preview ---------------------------------
@@ -450,8 +450,8 @@ void PresentationWidget::loadNextImage()
 
     if ( !d->sharedData->loop )
     {
-        d->slidePresentationAudioWidget->setEnabledPrev( d->fileIndex > 0 );
-        d->slidePresentationAudioWidget->setEnabledNext( d->fileIndex < num - 1 );
+        d->slideCtrlWidget->setEnabledPrev( d->fileIndex > 0 );
+        d->slideCtrlWidget->setEnabledNext( d->fileIndex < num - 1 );
     }
 
     QImage img = d->imageLoader->getCurrent();
@@ -496,8 +496,8 @@ void PresentationWidget::loadPrevImage()
 
     if ( !d->sharedData->loop )
     {
-        d->slidePresentationAudioWidget->setEnabledPrev( d->fileIndex > 0 );
-        d->slidePresentationAudioWidget->setEnabledNext( d->fileIndex < num - 1 );
+        d->slideCtrlWidget->setEnabledPrev( d->fileIndex > 0 );
+        d->slideCtrlWidget->setEnabledNext( d->fileIndex < num - 1 );
     }
 
     QImage img = d->imageLoader->getCurrent();
@@ -686,9 +686,9 @@ void PresentationWidget::showEndOfShow()
     m_endOfShow = true;
     update();
 
-    d->slidePresentationAudioWidget->setEnabledPlay( false );
-    d->slidePresentationAudioWidget->setEnabledNext( false );
-    d->slidePresentationAudioWidget->setEnabledPrev( false );
+    d->slideCtrlWidget->setEnabledPlay( false );
+    d->slideCtrlWidget->setEnabledNext( false );
+    d->slideCtrlWidget->setEnabledPrev( false );
 }
 
 void PresentationWidget::keyPressEvent(QKeyEvent* event)
@@ -700,7 +700,7 @@ void PresentationWidget::keyPressEvent(QKeyEvent* event)
     d->playbackWidget->keyPressEvent(event);
 #endif
 
-    d->slidePresentationAudioWidget->keyPressEvent(event);
+    d->slideCtrlWidget->keyPressEvent(event);
 }
 
 void PresentationWidget::mousePressEvent( QMouseEvent* e )
@@ -711,13 +711,13 @@ void PresentationWidget::mousePressEvent( QMouseEvent* e )
     if ( e->button() == Qt::LeftButton )
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused( true );
+        d->slideCtrlWidget->setPaused( true );
         slotNext();
     }
     else if ( e->button() == Qt::RightButton && d->fileIndex - 1 >= 0 )
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused( true );
+        d->slideCtrlWidget->setPaused( true );
         slotPrev();
     }
 }
@@ -728,7 +728,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
     d->mouseMoveTimer->setSingleShot( true );
     d->mouseMoveTimer->start( 1000 );
 
-    if (!d->slidePresentationAudioWidget->canHide()
+    if (!d->slideCtrlWidget->canHide()
 #ifdef HAVE_MEDIAPLAYER
         || !d->playbackWidget->canHide()
 #endif
@@ -740,7 +740,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
     if (( pos.y() > ( d->deskY + 20 ) ) &&
         ( pos.y() < ( d->deskY + d->deskHeight - 20 - 1 ) ) )
     {
-        if (!d->slidePresentationAudioWidget->canHide()
+        if (!d->slideCtrlWidget->canHide()
 #ifdef HAVE_MEDIAPLAYER
             || !d->playbackWidget->canHide()
 #endif
@@ -750,7 +750,7 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
         }
         else
         {
-            d->slidePresentationAudioWidget->hide();
+            d->slideCtrlWidget->hide();
 #ifdef HAVE_MEDIAPLAYER
             d->playbackWidget->hide();
 #endif
@@ -759,29 +759,29 @@ void PresentationWidget::mouseMoveEvent( QMouseEvent* e )
         return;
     }
 
-//    int w = d->slidePresentationAudioWidget->width();
-//    int h = d->slidePresentationAudioWidget->height();
+//    int w = d->slideCtrlWidget->width();
+//    int h = d->slideCtrlWidget->height();
 //
 //    if ( pos.y() < ( d->deskY + 20 ) )
 //    {
 //        if ( pos.x() <= ( d->deskX + d->deskWidth / 2 ) )
 //            // position top left
-//            d->slidePresentationAudioWidget->move( d->deskX, d->deskY );
+//            d->slideCtrlWidget->move( d->deskX, d->deskY );
 //        else
 //            // position top right
-//            d->slidePresentationAudioWidget->move( d->deskX + d->deskWidth - w - 1, d->deskY );
+//            d->slideCtrlWidget->move( d->deskX + d->deskWidth - w - 1, d->deskY );
 //    }
 //    else
 //    {
 //        if ( pos.x() <= ( d->deskX + d->deskWidth / 2 ) )
 //            // position bot left
-//            d->slidePresentationAudioWidget->move( d->deskX, d->deskY + d->deskHeight - h - 1 );
+//            d->slideCtrlWidget->move( d->deskX, d->deskY + d->deskHeight - h - 1 );
 //        else
 //            // position bot right
-//            d->slidePresentationAudioWidget->move( d->deskX + d->deskWidth - w - 1, d->deskY + d->deskHeight - h - 1 );
+//            d->slideCtrlWidget->move( d->deskX + d->deskWidth - w - 1, d->deskY + d->deskHeight - h - 1 );
 //    }
 
-    d->slidePresentationAudioWidget->show();
+    d->slideCtrlWidget->show();
 #ifdef HAVE_MEDIAPLAYER
     d->playbackWidget->show();
 #endif
@@ -800,13 +800,13 @@ void PresentationWidget::wheelEvent( QWheelEvent* e )
     if ( delta < 0 )
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused( true );
+        d->slideCtrlWidget->setPaused( true );
         slotNext();
     }
     else if ( delta > 0 && d->fileIndex - 1 >= 0 )
     {
         d->timer->stop();
-        d->slidePresentationAudioWidget->setPaused( true );
+        d->slideCtrlWidget->setPaused( true );
         slotPrev();
     }
 }
@@ -1004,7 +1004,7 @@ int PresentationWidget::effectSweep( bool aInit )
 
 int PresentationWidget::effectMosaic( bool aInit )
 {
-    int dim    = 10; // Size of a cell (dim x dim)
+    int dim    = 10;         // Size of a cell (dim x dim)
     int margin = dim + ( int )( dim/4 );
 
     if ( aInit )
@@ -1250,8 +1250,8 @@ int PresentationWidget::effectMultiCircleOut( bool aInit )
 
     for ( alpha = d->alpha, i = d->i; i >= 0; i--, alpha += d->fd )
     {
-        x   = ( d->w >> 1 ) + ( int )( d->fy * cos( -alpha ) );
-        y   = ( d->h >> 1 ) + ( int )( d->fy * sin( -alpha ) );
+        x    = ( d->w >> 1 ) + ( int )( d->fy * cos( -alpha ) );
+        y    = ( d->h >> 1 ) + ( int )( d->fy * sin( -alpha ) );
         d->x = ( d->w >> 1 ) + ( int )( d->fy * cos( -alpha + d->fx ) );
         d->y = ( d->h >> 1 ) + ( int )( d->fy * sin( -alpha + d->fx ) );
 
@@ -1300,7 +1300,7 @@ int PresentationWidget::effectSpiralIn( bool aInit )
         return -1;
     }
 
-    if ( d->i == 0 && d->x >= d->x1 ) // switch to: down on right side
+    if ( d->i == 0 && d->x >= d->x1 )      // switch to: down on right side
     {
         d->i   = 1;
         d->dx  = 0;
@@ -1465,12 +1465,6 @@ void PresentationWidget::paintEvent( QPaintEvent* )
         p.drawText( 100, 100, i18n( "Slideshow Completed" ) );
         p.drawText( 100, 100+10+fn.pointSize(), i18n( "Click to Exit..." ) );
 
-/* FIXME
-        QPixmap kipiLogoPixmap = KPSvgPixmapRenderer(width() / 6, width() / 6).getPixmap();
-        p.drawPixmap( width()-( width()/12 )-kipiLogoPixmap.width(),
-                      height()-( height()/12 )-kipiLogoPixmap.height(),
-                      kipiLogoPixmap );
-*/
         p.end();
         return;
     }
@@ -1489,17 +1483,17 @@ void PresentationWidget::slotPause()
 {
     d->timer->stop();
 
-    if ( d->slidePresentationAudioWidget->isHidden() )
+    if ( d->slideCtrlWidget->isHidden() )
     {
-        int w = d->slidePresentationAudioWidget->width();
-        d->slidePresentationAudioWidget->move( d->deskWidth - w - 1, 0 );
-        d->slidePresentationAudioWidget->show();
+        int w = d->slideCtrlWidget->width();
+        d->slideCtrlWidget->move( d->deskWidth - w - 1, 0 );
+        d->slideCtrlWidget->show();
     }
 }
 
 void PresentationWidget::slotPlay()
 {
-    d->slidePresentationAudioWidget->hide();
+    d->slideCtrlWidget->hide();
     slotTimeOut();
 }
 
