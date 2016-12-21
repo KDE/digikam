@@ -132,8 +132,7 @@ public:
         videoWidget(0),
         player(0),
         slider(0),
-        tlabel(0),
-        dlabel(0)
+        tlabel(0)
     {
     }
 
@@ -150,7 +149,6 @@ public:
     AVPlayer*            player;
     QSlider*             slider;
     QLabel*              tlabel;
-    QLabel*              dlabel;
     QUrl                 currentItem;
 };
 

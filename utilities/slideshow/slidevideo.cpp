@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QSlider>
 #include <QStyle>
+#include <QLabel>
 
 // KDE includes
 
@@ -45,6 +46,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dwidgetutils.h"
 
 using namespace QtAV;
 
@@ -59,13 +61,15 @@ public:
     Private() :
         videoWidget(0),
         player(0),
-        slider(0)
+        slider(0),
+        tlabel(0)
     {
     }
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
     QSlider*             slider;
+    QLabel*              tlabel;
 };
 
 SlideVideo::SlideVideo(QWidget* const parent)
@@ -82,8 +86,12 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->videoWidget = new WidgetRenderer(this);
     d->player      = new AVPlayer(this);
 
-    d->slider      = new QSlider(Qt::Horizontal, this);
+    DHBox* const hbox = new DHBox(this);
+    d->slider         = new QSlider(Qt::Horizontal, hbox);
     d->slider->setRange(0, 0);
+    d->tlabel         = new QLabel(hbox);
+    d->tlabel->setText(QString::fromLatin1("00:00:00 / 00:00:00"));
+    hbox->setStretchFactor(d->slider, 10);
 
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
@@ -92,7 +100,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(this);
     vbox2->addWidget(d->videoWidget, 10);
-    vbox2->addWidget(d->slider,       0);
+    vbox2->addWidget(hbox,           0);
     vbox2->setContentsMargins(margins);
     vbox2->setSpacing(spacing);
 
@@ -176,6 +184,10 @@ void SlideVideo::slotPositionChanged(qint64 position)
     {
         d->slider->setValue(position);
     }
+
+    d->tlabel->setText(QString::fromLatin1("%1 / %2")
+                       .arg(QTime(0, 0, 0).addMSecs(position).toString(QString::fromLatin1("HH:mm:ss")))
+                       .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QString::fromLatin1("HH:mm:ss"))));
 }
 
 void SlideVideo::slotDurationChanged(qint64 duration)
