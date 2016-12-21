@@ -286,7 +286,10 @@ void MediaPlayerView::slotPlayerStateChanged(QtAV::AVPlayer::State state)
 
 void MediaPlayerView::slotMediaStatusChanged(QtAV::MediaStatus status)
 {
-    if (status == InvalidMedia)
+    if (status == QtAV::UnknownMediaStatus ||
+        status == QtAV::NoMedia            ||
+        status == QtAV::StalledMedia       ||
+        status == QtAV::InvalidMedia)
     {
         setPreviewMode(Private::ErrorView);
     }

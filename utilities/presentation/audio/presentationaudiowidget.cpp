@@ -395,11 +395,11 @@ void PresentationAudioWidget::slotPlayerStateChanged(QtAV::AVPlayer::State state
 {
     switch (state)
     {
-        case AVPlayer::StoppedState:
+        case QtAV::AVPlayer::StoppedState:
             m_playButton->setEnabled(true);
             setGUIPlay(true);
 
-            if (d->mediaObject->mediaStatus() == MediaStatus::LoadingMedia)
+            if (d->mediaObject->mediaStatus() == QtAV::LoadingMedia)
             {
                 if (d->stopCalled)
                 {
@@ -413,7 +413,7 @@ void PresentationAudioWidget::slotPlayerStateChanged(QtAV::AVPlayer::State state
             }
             break;
 
-        case AVPlayer::PlayingState:
+        case QtAV::AVPlayer::PlayingState:
             setGUIPlay(false);
             checkSkip();
             break;
