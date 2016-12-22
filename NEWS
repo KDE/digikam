@@ -123,5 +123,6 @@ BUGFIXES FROM BUGZILLA:
 107 ==> 144078 - Very slow AVI files preview.
 108 ==> 336791 - Add same features for video files than image files
 109 ==> 132369 - Don't down some file .mov video files.
-110 ==> 
+110 ==> 142051 - JVC gz-mc500e video thumbnails issue.
+111 ==> 
 
