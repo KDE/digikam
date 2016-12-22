@@ -125,4 +125,5 @@ BUGFIXES FROM BUGZILLA:
 109 ==> 132369 - Don't down some file .mov video files.
 110 ==> 142051 - JVC gz-mc500e video thumbnails issue.
 111 ==> 340093 - digiKam freezed with 100% CPU when rebuilding video thumbnails.
-112 ==> 
+112 ==> 335299 - digiKam crashes when clicking on avi file icon to play it.
+113 ==> 
