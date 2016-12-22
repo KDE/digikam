@@ -7,7 +7,7 @@
  * Description : A QImage loader for DImg framework.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2016 by Caulier Gilles <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2017 by Caulier Gilles <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,7 +21,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
 
 #include "qimageloader.h"
 
@@ -52,9 +51,20 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     // Loading is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
+    
     QImageReader reader(filePath);
     reader.setDecideFormatFromContent(true);
 
+    if (reader.supportsAnimation() && 
+       (QString::fromLatin1(reader.format()).toUpper() == QLatin1String("GIF")) &&
+       (reader.imageCount() > 1))
+    {
+        qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "File \"" << filePath << "\" is an animated GIF "
+                                              "and it will not be loaded as a single image!";
+        loadingFailed();
+        return false;
+    }
+    
     QImage image = reader.read();
 
     if (observer)
