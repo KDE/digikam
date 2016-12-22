@@ -116,4 +116,5 @@ BUGFIXES FROM BUGZILLA:
 100 ==> 373562 - Inconsistent items selected count with groups in the main view [patch].
 101 ==> 374010 - Segfault on accessing DNG file.
 102 ==> 339748 - Open folder with mp4 file digiKam crash.
-103 ==> 
+103 ==> 337300 - Crash when opening mp4 file.
+104 ==> 
