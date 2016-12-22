@@ -7,7 +7,7 @@
  * @date   2006-09-13
  * @brief  Raw Decoder settings widgets
  *
- * @author Copyright (C) 2006-2016 by Gilles Caulier
+ * @author Copyright (C) 2006-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2011 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>

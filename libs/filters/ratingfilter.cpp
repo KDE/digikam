@@ -6,7 +6,7 @@
  * Date        : 2007-10-09
  * Description : a widget to filter album contents by rating
  *
- * Copyright (C) 2007-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
  *

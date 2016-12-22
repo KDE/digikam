@@ -7,7 +7,7 @@
  * @date   2007-05-02
  * @brief  RAW file identification information container
  *
- * @author Copyright (C) 2007-2016 by Gilles Caulier
+ * @author Copyright (C) 2007-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it

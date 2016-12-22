@@ -6,7 +6,7 @@
  * @date   2012-03-12
  * @brief  a command line tool to test autocrop of DImg
  *
- * @author Copyright (C) 2012-2016 by Gilles Caulier
+ * @author Copyright (C) 2012-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *         Copyright (C) 2012-2013 by Sayantan Datta
  *         <a href="mailto:sayantan dot knz at gmail dot com">sayantan dot knz at gmail dot com</a>

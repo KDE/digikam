@@ -7,7 +7,7 @@
  * @date   2014-11-30
  * @brief  Save space slider widget
  *
- * @author Copyright (C) 2014-2016 by Gilles Caulier
+ * @author Copyright (C) 2014-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2010 by Justin Noel
  *         <a href="mailto:justin at ics dot com">justin at ics dot com</a>

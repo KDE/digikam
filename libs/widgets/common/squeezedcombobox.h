@@ -8,7 +8,7 @@
  * @brief  a combo box with a width not depending of text
  *         content size
  *
- * @author Copyright (C) 2006-2016 by Gilles Caulier
+ * @author Copyright (C) 2006-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2008 by Andi Clemens
  *         <a href="mailto:andi dot clemens at googlemail dot com">andi dot clemens at googlemail dot com</a>

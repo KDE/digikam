@@ -7,7 +7,7 @@
  * @date  : 2014-10-17
  * @brief : a class to manage Raw to Png conversion using threads
  *
- * @author Copyright (C) 2011-2016 by Gilles Caulier
+ * @author Copyright (C) 2011-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2014 by Veaceslav Munteanu
  *         <a href="mailto:veaceslav dot munteanu90 at gmail dot com">veaceslav dot munteanu90 at gmail dot com</a>

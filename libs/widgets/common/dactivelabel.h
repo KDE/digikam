@@ -7,7 +7,7 @@
  * @date   2014-09-12
  * @brief  A label with an active url
  *
- * @author Copyright (C) 2014-2016 by Gilles Caulier
+ * @author Copyright (C) 2014-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  *
  * This program is free software; you can redistribute it

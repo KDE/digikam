@@ -13,7 +13,7 @@
  * @brief         http://www.iptc.org/std/Iptc4xmpCore/1.0/specification/Iptc4xmpCore_1.0-spec-XMPSchema_8.pdf
  * @brief  Paper: http://www.metadataworkinggroup.com/pdf/mwg_guidance.pdf
  *
- * @author Copyright (C) 2006-2016 by Gilles Caulier
+ * @author Copyright (C) 2006-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2006-2013 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>

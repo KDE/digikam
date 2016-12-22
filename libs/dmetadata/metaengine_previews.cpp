@@ -7,7 +7,7 @@
  * @date   2009-11-14
  * @brief  Embedded preview loading
  *
- * @author Copyright (C) 2009-2016 by Gilles Caulier
+ * @author Copyright (C) 2009-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2009-2012 by Marcel Wiesweg
  *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>

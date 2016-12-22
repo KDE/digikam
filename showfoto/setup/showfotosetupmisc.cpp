@@ -6,7 +6,7 @@
  * Date        : 2005-04-02
  * Description : setup Misc tab.
  *
- * Copyright (C) 2005-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C)      2008 by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C)      2014 by Mohamed Anwer <m dot anwer at gmx dot com>
  *
