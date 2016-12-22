@@ -117,4 +117,5 @@ BUGFIXES FROM BUGZILLA:
 101 ==> 374010 - Segfault on accessing DNG file.
 102 ==> 339748 - Open folder with mp4 file digiKam crash.
 103 ==> 337300 - Crash when opening mp4 file.
-104 ==> 
+104 ==> 349924 - Videos (mp4, mov, avi) do not play under OS X Yosemite when using digiKam.
+105 ==> 
