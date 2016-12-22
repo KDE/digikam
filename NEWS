@@ -115,4 +115,5 @@ BUGFIXES FROM BUGZILLA:
 099 ==> 373754 - Cannot Shorten Face Tag Name.
 100 ==> 373562 - Inconsistent items selected count with groups in the main view [patch].
 101 ==> 374010 - Segfault on accessing DNG file.
-102 ==> 
+102 ==> 339748 - Open folder with mp4 file digiKam crash.
+103 ==> 
