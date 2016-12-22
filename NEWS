@@ -120,4 +120,10 @@ BUGFIXES FROM BUGZILLA:
 104 ==> 349924 - Videos (mp4, mov, avi) do not play under OS X Yosemite when using digiKam.
 105 ==> 292316 - digiKam do not provide thumbnails for .mov, .mp4 video files.
 106 ==> 152522 - Support for *.3gp and *.mp4 video files in digiKam.
-107 ==> 
+107 ==> 144078 - Very slow AVI files preview.
+108 ==> 336791 - Add same features for video files than image files.
+109 ==> 132369 - Don't down some file .mov video files.
+110 ==> 142051 - JVC gz-mc500e video thumbnails issue.
+111 ==> 340093 - digiKam freezed with 100% CPU when rebuilding video thumbnails.
+112 ==> 335299 - digiKam crashes when clicking on avi file icon to play it.
+113 ==> 
