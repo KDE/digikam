@@ -128,5 +128,6 @@ BUGFIXES FROM BUGZILLA:
 112 ==> 335299 - digiKam crashes when clicking on avi file icon to play it.
 113 ==> 147466 - digiKam crashes on termination if an audio file played.
 114 ==> 187959 - Crash on start with audio problem.
-115 ==> 
+115 ==> 330579 - Does not show Audio files in Album View.
+116 ==> 
 
