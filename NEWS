@@ -119,4 +119,5 @@ BUGFIXES FROM BUGZILLA:
 103 ==> 337300 - Crash when opening mp4 file.
 104 ==> 349924 - Videos (mp4, mov, avi) do not play under OS X Yosemite when using digiKam.
 105 ==> 292316 - digiKam do not provide thumbnails for .mov, .mp4 video files.
-106 ==> 
+106 ==> 152522 - Support for *.3gp and *.mp4 video files in digiKam.
+107 ==> 
