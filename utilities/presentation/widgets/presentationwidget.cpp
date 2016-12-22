@@ -313,110 +313,6 @@ void PresentationWidget::readSettings()
 {
 }
 
-void PresentationWidget::registerEffects()
-{
-    d->Effects.insert( QString::fromLatin1("None"),             &PresentationWidget::effectNone );
-    d->Effects.insert( QString::fromLatin1("Chess Board"),      &PresentationWidget::effectChessboard );
-    d->Effects.insert( QString::fromLatin1("Melt Down"),        &PresentationWidget::effectMeltdown );
-    d->Effects.insert( QString::fromLatin1("Sweep"),            &PresentationWidget::effectSweep );
-    d->Effects.insert( QString::fromLatin1("Mosaic"),           &PresentationWidget::effectMosaic );
-    d->Effects.insert( QString::fromLatin1("Cubism"),           &PresentationWidget::effectCubism );
-    d->Effects.insert( QString::fromLatin1("Growing"),          &PresentationWidget::effectGrowing );
-    d->Effects.insert( QString::fromLatin1("Horizontal Lines"), &PresentationWidget::effectHorizLines );
-    d->Effects.insert( QString::fromLatin1("Vertical Lines"),   &PresentationWidget::effectVertLines );
-    d->Effects.insert( QString::fromLatin1("Circle Out"),       &PresentationWidget::effectCircleOut );
-    d->Effects.insert( QString::fromLatin1("MultiCircle Out"),  &PresentationWidget::effectMultiCircleOut );
-    d->Effects.insert( QString::fromLatin1("Spiral In"),        &PresentationWidget::effectSpiralIn );
-    d->Effects.insert( QString::fromLatin1("Blobs"),            &PresentationWidget::effectBlobs );
-}
-
-QStringList PresentationWidget::effectNames()
-{
-    QStringList effects;
-
-    effects.append( QString::fromLatin1("None") );
-    effects.append( QString::fromLatin1("Chess Board") );
-    effects.append( QString::fromLatin1("Melt Down") );
-    effects.append( QString::fromLatin1("Sweep") );
-    effects.append( QString::fromLatin1("Mosaic") );
-    effects.append( QString::fromLatin1("Cubism") );
-    effects.append( QString::fromLatin1("Growing") );
-    effects.append( QString::fromLatin1("Horizontal Lines") );
-    effects.append( QString::fromLatin1("Vertical Lines") );
-    effects.append( QString::fromLatin1("Circle Out") );
-    effects.append( QString::fromLatin1("MultiCircle Out") );
-    effects.append( QString::fromLatin1("Spiral In") );
-    effects.append( QString::fromLatin1("Blobs") );
-    effects.append( QString::fromLatin1("Random") );
-
-    return effects;
-}
-
-QMap<QString, QString> PresentationWidget::effectNamesI18N()
-{
-    QMap<QString, QString> effects;
-
-    effects[QString::fromLatin1("None")]             = i18nc("Filter Effect: No effect",        "None" );
-    effects[QString::fromLatin1("Chess Board")]      = i18nc("Filter Effect: Chess Board",      "Chess Board" );
-    effects[QString::fromLatin1("Melt Down")]        = i18nc("Filter Effect: Melt Down",        "Melt Down" );
-    effects[QString::fromLatin1("Sweep")]            = i18nc("Filter Effect: Sweep",            "Sweep" );
-    effects[QString::fromLatin1("Mosaic")]           = i18nc("Filter Effect: Mosaic",           "Mosaic" );
-    effects[QString::fromLatin1("Cubism")]           = i18nc("Filter Effect: Cubism",           "Cubism" );
-    effects[QString::fromLatin1("Growing")]          = i18nc("Filter Effect: Growing",          "Growing" );
-    effects[QString::fromLatin1("Horizontal Lines")] = i18nc("Filter Effect: Horizontal Lines", "Horizontal Lines" );
-    effects[QString::fromLatin1("Vertical Lines")]   = i18nc("Filter Effect: Vertical Lines",   "Vertical Lines" );
-    effects[QString::fromLatin1("Circle Out")]       = i18nc("Filter Effect: Circle Out",       "Circle Out" );
-    effects[QString::fromLatin1("MultiCircle Out")]  = i18nc("Filter Effect: Multi-Circle Out", "Multi-Circle Out" );
-    effects[QString::fromLatin1("Spiral In")]        = i18nc("Filter Effect: Spiral In",        "Spiral In" );
-    effects[QString::fromLatin1("Blobs")]            = i18nc("Filter Effect: Blobs",            "Blobs" );
-    effects[QString::fromLatin1("Random")]           = i18nc("Filter Effect: Random effect",    "Random" );
-
-    return effects;
-}
-
-void PresentationWidget::slotTimeOut()
-{
-    if ( !d->effect ) return;                       // No effect -> bye !
-
-    int tmout = -1;
-
-    if ( d->effectRunning )                         // Effect under progress ?
-    {
-        tmout = ( this->*d->effect )( false );
-    }
-    else
-    {
-        loadNextImage();
-
-        if (d->currImage.isNull() || d->sharedData->urlList.isEmpty()) // End of slideshow ?
-        {
-            showEndOfShow();
-            return;
-        }
-
-        if ( d->sharedData->effectName  == QString::fromLatin1("Random") )            // Take a random effect.
-        {
-            d->effect = getRandomEffect();
-
-            if ( !d->effect ) return;
-        }
-
-        d->effectRunning = true;
-
-        tmout = ( this->*d->effect )( true );
-    }
-
-    if ( tmout <= 0 )                             // Effect finished -> delay.
-    {
-        tmout            = d->sharedData->delay;
-        d->effectRunning = false;
-    }
-
-    d->timer->setSingleShot( true );
-
-    d->timer->start( tmout );
-}
-
 void PresentationWidget::loadNextImage()
 {
     if ( !d->currImage.isNull() )
@@ -518,16 +414,6 @@ void PresentationWidget::loadPrevImage()
         d->videoView->setCurrentUrl(d->imageLoader->currPath());
 #endif
     }
-}
-
-void PresentationWidget::showCurrentImage()
-{
-    if ( d->currImage.isNull() )
-        return;
-
-    m_simplyShow = true;
-
-    repaint();
 }
 
 void PresentationWidget::printFilename()
@@ -666,19 +552,6 @@ void PresentationWidget::printProgress()
 
     p.setPen( QColor( Qt::white ) );
     p.drawText( width() - stringLength - 10, 20, progress );
-}
-
-PresentationWidget::EffectMethod PresentationWidget::getRandomEffect()
-{
-    QStringList effs = d->Effects.keys();
-    effs.removeAt( effs.indexOf(QString::fromLatin1("None")));
-
-    int count        = effs.count();
-    int i            = qrand() % count;
-    QString key      = effs[i];
-    d->effectName    = key;
-
-    return d->Effects[key];
 }
 
 void PresentationWidget::showEndOfShow()
@@ -820,6 +693,259 @@ void PresentationWidget::slotMouseMoveTimeOut()
         return;
 
     setCursor( QCursor( Qt::BlankCursor ) );
+}
+
+void PresentationWidget::paintEvent( QPaintEvent* )
+{
+    QPainter p(this);
+
+    if (m_simplyShow)
+    {
+        if (d->sharedData->printFileName)
+            printFilename();
+
+        if (d->sharedData->printProgress)
+            printProgress();
+
+        if (d->sharedData->printFileComments)
+            printComments();
+
+        p.drawPixmap( 0, 0, d->currImage,
+                      0, 0, d->currImage.width(), d->currImage.height() );
+
+        p.end();
+
+        m_simplyShow = false;
+
+        return;
+    }
+
+    if (m_endOfShow)
+    {
+        p.fillRect( 0, 0, width(), height(), Qt::black );
+
+        QFont fn( font() );
+        fn.setPointSize( fn.pointSize() + 10 );
+        fn.setBold( true );
+
+        p.setFont( fn );
+        p.setPen( Qt::white );
+        p.drawText( 100, 100, i18n( "Slideshow Completed" ) );
+        p.drawText( 100, 100+10+fn.pointSize(), i18n( "Click to Exit..." ) );
+
+        p.end();
+        return;
+    }
+
+    // If execution reach this line, an effect is running
+    p.drawPixmap(0, 0, m_buffer);
+}
+
+void PresentationWidget::startPainter()
+{
+    m_startPainter = true;
+    repaint();
+}
+
+void PresentationWidget::slotPause()
+{
+    d->timer->stop();
+
+    if ( d->slideCtrlWidget->isHidden() )
+    {
+        int w = d->slideCtrlWidget->width();
+        d->slideCtrlWidget->move( d->deskWidth - w - 1, 0 );
+        d->slideCtrlWidget->show();
+    }
+}
+
+void PresentationWidget::slotPlay()
+{
+    d->slideCtrlWidget->hide();
+    slotTimeOut();
+}
+
+void PresentationWidget::slotPrev()
+{
+    loadPrevImage();
+
+    if (d->currImage.isNull() || d->sharedData->urlList.isEmpty())
+    {
+        showEndOfShow();
+        return;
+    }
+
+    d->effectRunning = false;
+
+    showCurrentImage();
+}
+
+void PresentationWidget::slotNext()
+{
+    loadNextImage();
+
+    if (d->currImage.isNull() || d->sharedData->urlList.isEmpty())
+    {
+        showEndOfShow();
+        return;
+    }
+
+    d->effectRunning = false;
+
+    showCurrentImage();
+}
+
+void PresentationWidget::slotClose()
+{
+    close();
+}
+
+void PresentationWidget::slotVideoLoaded(bool loaded)
+{
+    if (loaded)
+    {
+#ifdef HAVE_MEDIAPLAYER
+        slotPause();
+        d->videoView->show();
+#endif
+    }
+}
+
+void PresentationWidget::slotVideoFinished()
+{
+#ifdef HAVE_MEDIAPLAYER
+    d->videoView->hide();
+    slotPlay();
+#endif
+}
+
+// -- Effects rules --------------------------------------------------------------------------------------------------------
+
+void PresentationWidget::registerEffects()
+{
+    d->Effects.insert( QString::fromLatin1("None"),             &PresentationWidget::effectNone );
+    d->Effects.insert( QString::fromLatin1("Chess Board"),      &PresentationWidget::effectChessboard );
+    d->Effects.insert( QString::fromLatin1("Melt Down"),        &PresentationWidget::effectMeltdown );
+    d->Effects.insert( QString::fromLatin1("Sweep"),            &PresentationWidget::effectSweep );
+    d->Effects.insert( QString::fromLatin1("Mosaic"),           &PresentationWidget::effectMosaic );
+    d->Effects.insert( QString::fromLatin1("Cubism"),           &PresentationWidget::effectCubism );
+    d->Effects.insert( QString::fromLatin1("Growing"),          &PresentationWidget::effectGrowing );
+    d->Effects.insert( QString::fromLatin1("Horizontal Lines"), &PresentationWidget::effectHorizLines );
+    d->Effects.insert( QString::fromLatin1("Vertical Lines"),   &PresentationWidget::effectVertLines );
+    d->Effects.insert( QString::fromLatin1("Circle Out"),       &PresentationWidget::effectCircleOut );
+    d->Effects.insert( QString::fromLatin1("MultiCircle Out"),  &PresentationWidget::effectMultiCircleOut );
+    d->Effects.insert( QString::fromLatin1("Spiral In"),        &PresentationWidget::effectSpiralIn );
+    d->Effects.insert( QString::fromLatin1("Blobs"),            &PresentationWidget::effectBlobs );
+}
+
+QStringList PresentationWidget::effectNames()
+{
+    QStringList effects;
+
+    effects.append( QString::fromLatin1("None") );
+    effects.append( QString::fromLatin1("Chess Board") );
+    effects.append( QString::fromLatin1("Melt Down") );
+    effects.append( QString::fromLatin1("Sweep") );
+    effects.append( QString::fromLatin1("Mosaic") );
+    effects.append( QString::fromLatin1("Cubism") );
+    effects.append( QString::fromLatin1("Growing") );
+    effects.append( QString::fromLatin1("Horizontal Lines") );
+    effects.append( QString::fromLatin1("Vertical Lines") );
+    effects.append( QString::fromLatin1("Circle Out") );
+    effects.append( QString::fromLatin1("MultiCircle Out") );
+    effects.append( QString::fromLatin1("Spiral In") );
+    effects.append( QString::fromLatin1("Blobs") );
+    effects.append( QString::fromLatin1("Random") );
+
+    return effects;
+}
+
+QMap<QString, QString> PresentationWidget::effectNamesI18N()
+{
+    QMap<QString, QString> effects;
+
+    effects[QString::fromLatin1("None")]             = i18nc("Filter Effect: No effect",        "None" );
+    effects[QString::fromLatin1("Chess Board")]      = i18nc("Filter Effect: Chess Board",      "Chess Board" );
+    effects[QString::fromLatin1("Melt Down")]        = i18nc("Filter Effect: Melt Down",        "Melt Down" );
+    effects[QString::fromLatin1("Sweep")]            = i18nc("Filter Effect: Sweep",            "Sweep" );
+    effects[QString::fromLatin1("Mosaic")]           = i18nc("Filter Effect: Mosaic",           "Mosaic" );
+    effects[QString::fromLatin1("Cubism")]           = i18nc("Filter Effect: Cubism",           "Cubism" );
+    effects[QString::fromLatin1("Growing")]          = i18nc("Filter Effect: Growing",          "Growing" );
+    effects[QString::fromLatin1("Horizontal Lines")] = i18nc("Filter Effect: Horizontal Lines", "Horizontal Lines" );
+    effects[QString::fromLatin1("Vertical Lines")]   = i18nc("Filter Effect: Vertical Lines",   "Vertical Lines" );
+    effects[QString::fromLatin1("Circle Out")]       = i18nc("Filter Effect: Circle Out",       "Circle Out" );
+    effects[QString::fromLatin1("MultiCircle Out")]  = i18nc("Filter Effect: Multi-Circle Out", "Multi-Circle Out" );
+    effects[QString::fromLatin1("Spiral In")]        = i18nc("Filter Effect: Spiral In",        "Spiral In" );
+    effects[QString::fromLatin1("Blobs")]            = i18nc("Filter Effect: Blobs",            "Blobs" );
+    effects[QString::fromLatin1("Random")]           = i18nc("Filter Effect: Random effect",    "Random" );
+
+    return effects;
+}
+
+void PresentationWidget::slotTimeOut()
+{
+    if ( !d->effect ) return;                       // No effect -> bye !
+
+    int tmout = -1;
+
+    if ( d->effectRunning )                         // Effect under progress ?
+    {
+        tmout = ( this->*d->effect )( false );
+    }
+    else
+    {
+        loadNextImage();
+
+        if (d->currImage.isNull() || d->sharedData->urlList.isEmpty()) // End of slideshow ?
+        {
+            showEndOfShow();
+            return;
+        }
+
+        if ( d->sharedData->effectName  == QString::fromLatin1("Random") )            // Take a random effect.
+        {
+            d->effect = getRandomEffect();
+
+            if ( !d->effect ) return;
+        }
+
+        d->effectRunning = true;
+
+        tmout = ( this->*d->effect )( true );
+    }
+
+    if ( tmout <= 0 )                             // Effect finished -> delay.
+    {
+        tmout            = d->sharedData->delay;
+        d->effectRunning = false;
+    }
+
+    d->timer->setSingleShot( true );
+
+    d->timer->start( tmout );
+}
+
+void PresentationWidget::showCurrentImage()
+{
+    if ( d->currImage.isNull() )
+        return;
+
+    m_simplyShow = true;
+
+    repaint();
+}
+
+PresentationWidget::EffectMethod PresentationWidget::getRandomEffect()
+{
+    QStringList effs = d->Effects.keys();
+    effs.removeAt( effs.indexOf(QString::fromLatin1("None")));
+
+    int count        = effs.count();
+    int i            = qrand() % count;
+    QString key      = effs[i];
+    d->effectName    = key;
+
+    return d->Effects[key];
 }
 
 int PresentationWidget::effectNone( bool /* aInit */ )
@@ -1009,7 +1135,7 @@ int PresentationWidget::effectMosaic( bool aInit )
 
     if ( aInit )
     {
-        d->i           = 30; // giri totali
+        d->i           = 30; // giri totaly
         d->pixelMatrix = new bool*[width()];
 
         for ( int x=0; x<width(); ++x )
@@ -1360,7 +1486,7 @@ int PresentationWidget::effectCircleOut( bool aInit )
         d->alpha = 2 * M_PI;
         d->pa.setPoint( 0, d->w >> 1, d->h >> 1 );
         d->pa.setPoint( 3, d->w >> 1, d->h >> 1 );
-        d->fx    = M_PI / 16;  // divisor must be powers of 8
+        d->fx    = M_PI / 16;                       // divisor must be powers of 8
         d->fy    = sqrt(( double )d->w * d->w + d->h * d->h ) / 2;
     }
 
@@ -1425,130 +1551,6 @@ int PresentationWidget::effectBlobs( bool aInit )
     d->i--;
 
     return 10;
-}
-
-void PresentationWidget::paintEvent( QPaintEvent* )
-{
-    QPainter p(this);
-
-    if (m_simplyShow)
-    {
-        if (d->sharedData->printFileName)
-            printFilename();
-
-        if (d->sharedData->printProgress)
-            printProgress();
-
-        if (d->sharedData->printFileComments)
-            printComments();
-
-        p.drawPixmap( 0, 0, d->currImage,
-                      0, 0, d->currImage.width(), d->currImage.height() );
-
-        p.end();
-
-        m_simplyShow = false;
-
-        return;
-    }
-
-    if (m_endOfShow)
-    {
-        p.fillRect( 0, 0, width(), height(), Qt::black );
-
-        QFont fn( font() );
-        fn.setPointSize( fn.pointSize() + 10 );
-        fn.setBold( true );
-
-        p.setFont( fn );
-        p.setPen( Qt::white );
-        p.drawText( 100, 100, i18n( "Slideshow Completed" ) );
-        p.drawText( 100, 100+10+fn.pointSize(), i18n( "Click to Exit..." ) );
-
-        p.end();
-        return;
-    }
-
-    // If execution reach this line, an effect is running
-    p.drawPixmap(0, 0, m_buffer);
-}
-
-void PresentationWidget::startPainter()
-{
-    m_startPainter = true;
-    repaint();
-}
-
-void PresentationWidget::slotPause()
-{
-    d->timer->stop();
-
-    if ( d->slideCtrlWidget->isHidden() )
-    {
-        int w = d->slideCtrlWidget->width();
-        d->slideCtrlWidget->move( d->deskWidth - w - 1, 0 );
-        d->slideCtrlWidget->show();
-    }
-}
-
-void PresentationWidget::slotPlay()
-{
-    d->slideCtrlWidget->hide();
-    slotTimeOut();
-}
-
-void PresentationWidget::slotPrev()
-{
-    loadPrevImage();
-
-    if (d->currImage.isNull() || d->sharedData->urlList.isEmpty())
-    {
-        showEndOfShow();
-        return;
-    }
-
-    d->effectRunning = false;
-
-    showCurrentImage();
-}
-
-void PresentationWidget::slotNext()
-{
-    loadNextImage();
-
-    if (d->currImage.isNull() || d->sharedData->urlList.isEmpty())
-    {
-        showEndOfShow();
-        return;
-    }
-
-    d->effectRunning = false;
-
-    showCurrentImage();
-}
-
-void PresentationWidget::slotClose()
-{
-    close();
-}
-
-void PresentationWidget::slotVideoLoaded(bool loaded)
-{
-    if (loaded)
-    {
-#ifdef HAVE_MEDIAPLAYER
-        slotPause();
-        d->videoView->show();
-#endif
-    }
-}
-
-void PresentationWidget::slotVideoFinished()
-{
-#ifdef HAVE_MEDIAPLAYER
-    d->videoView->hide();
-    slotPlay();
-#endif
 }
 
 }  // namespace Digikam
