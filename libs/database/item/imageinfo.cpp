@@ -1729,6 +1729,11 @@ bool ImageInfo::isLocationAvailable() const
     return CollectionManager::instance()->locationForAlbumRootId(m_data->albumRootId).isAvailable();
 }
 
+double ImageInfo::similarityTo(const qlonglong imageId) const
+{
+    return imageExtendedProperties().similarityTo(imageId);
+}
+
 QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong fileSize)
 {
     QList<ItemScanInfo> scanInfos = CoreDbAccess().db()->getIdenticalFiles(uniqueHash, fileSize);

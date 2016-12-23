@@ -316,6 +316,14 @@ public:
     void newDuplicatesSearch(Album* album);
     void newSimilarSearch(const ImageInfo& imageInfo);
 
+public Q_SLOTS:
+    void slotImageChanged();
+
+Q_SIGNALS:
+
+    void signalActive(bool);
+    void signalImageChanged();
+
 private:
 
     class Private;

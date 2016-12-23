@@ -72,6 +72,9 @@ public:
     void doLoadState();
     void doSaveState();
 
+Q_SIGNALS:
+    void signalReferenceImageSelected();
+
 protected:
 
     void dragEnterEvent(QDragEnterEvent* e);

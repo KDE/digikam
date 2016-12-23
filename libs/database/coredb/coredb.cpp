@@ -2033,6 +2033,12 @@ void CoreDB::removeImageProperty(qlonglong imageID, const QString& property)
                    imageID, property);
 }
 
+void CoreDB::removeImagePropertyByName(const QString& property)
+{
+    d->db->execSql(QString::fromUtf8("DELETE FROM ImageProperties WHERE property=?;"),
+                   property);
+}
+
 QList<CopyrightInfo> CoreDB::getImageCopyright(qlonglong imageID, const QString& property)
 {
     QList<CopyrightInfo> list;

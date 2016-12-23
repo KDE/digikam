@@ -131,6 +131,8 @@ BUGFIXES FROM BUGZILLA:
 115 ==> 330579 - Does not show Audio files in Album View.
 116 ==> 356939 - Advanced slide show: playing sound track does not work.
 117 ==> 333348 - Soundtrack is zero length in Advanced Slideshow.
-118 ==> 
+118 ==> 320666 - Add search of similar images outside digiKam collections [patch].
+119 ==> 302923 - Sort Icon-view items found by Fuzzy Searches [patch].
+120 ==> 
 
 

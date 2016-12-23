@@ -84,6 +84,16 @@ public:
                                         bool overwriteIfExisting = false);
 
     /**
+     * @see slotCreateFuzzySearchFromDropped()
+     * @return the newly created album
+     */
+    SAlbum* createFuzzySearchFromDropped(const QString& name,
+                                        const QString& filePath,
+                                        float threshold,
+                                        float maxThreshold,
+                                        bool overwriteIfExisting = false);
+
+    /**
      * @see slotCreateFuzzySearchFromImage()
      * @return the newly created album
      */
@@ -156,6 +166,25 @@ public Q_SLOTS:
                                         const ImageInfo& image,
                                         float threshold,
                                         bool overwriteIfExisting = false);
+
+    /**
+     * Creates a new fuzzy search for finding similar photos based on the file 
+     * path of a photo
+     * and selects it in the album manager after creation.
+     *
+     * @param name of the new search
+     * @param filePath path of the image to base this search on
+     * @param threshold minimum threshold for image search
+     * @param maxThreshold maximum threshold for image search
+     * @param overwriteIfExisting if true, an existing search with the desired
+     *                            name will be overwritten without prompting the
+     *                            user for a new name
+     */
+    void slotCreateFuzzySearchFromDropped(const QString& name,
+                                          const QString& filePath,
+                                          float threshold,
+                                          float maxThreshold,
+                                          bool overwriteIfExisting);
 
 private:
 

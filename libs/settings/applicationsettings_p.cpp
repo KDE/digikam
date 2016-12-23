@@ -140,6 +140,7 @@ const QString ApplicationSettings::Private::configIconThemeEntry(QLatin1String("
 const QString ApplicationSettings::Private::configScanAtStartEntry(QLatin1String("Scan At Start"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMinSimilarity(QLatin1String("Last minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMaxSimilarity(QLatin1String("Last maximum similarity"));
+const QString ApplicationSettings::Private::configFuzzySearchReferenceImage(QLatin1String("Fuzzy reference image id"));
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
@@ -212,6 +213,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       imageGroupMode(0),
       imageGroupSortOrder(0),
       itemLeftClickAction(ApplicationSettings::ShowPreview),
+      fuzzySearchReferenceImage(0),
       syncToDigikam(false),
       syncToBaloo(false),
       faceDetectionAccuracy(0.8),
@@ -329,6 +331,8 @@ void ApplicationSettings::Private::init()
 
     duplicatesSearchLastMinSimilarity   = 90;
     duplicatesSearchLastMaxSimilarity   = 100;
+
+    fuzzySearchReferenceImage           = 0;
 
     scanAtStart                         = true;
     stringComparisonType                = ApplicationSettings::Natural;

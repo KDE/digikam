@@ -228,5 +228,14 @@ int  ApplicationSettings::getDuplicatesSearchLastMaxSimilarity() const
     return d->duplicatesSearchLastMaxSimilarity;
 }
 
+void ApplicationSettings::setCurrentFuzzySearchReferenceImage(qlonglong val)
+{
+    d->fuzzySearchReferenceImage = val;
+}
+
+qlonglong  ApplicationSettings::getCurrentFuzzySearchReferenceImage() const
+{
+    return d->fuzzySearchReferenceImage;
+}
 
 }  // namespace Digikam

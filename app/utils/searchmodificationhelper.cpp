@@ -261,6 +261,52 @@ void SearchModificationHelper::slotCreateFuzzySearchFromSketch(const QString& pr
     createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults, overwriteIfExisting);
 }
 
+SAlbum* SearchModificationHelper::createFuzzySearchFromDropped(const QString& proposedName,
+                                                               const QString& filePath,
+                                                               float threshold,
+                                                               float maxThreshold,
+                                                               bool overwriteIfExisting)
+{
+    QString name = proposedName;
+
+    if (!overwriteIfExisting)
+    {
+        if (!checkName(name))
+        {
+            return 0;
+        }
+    }
+
+    // We query database here
+
+    HaarIface haarIface;
+    SearchXmlWriter writer;
+
+    writer.writeGroup();
+    writer.writeField(QLatin1String("similarity"), SearchXml::Like);
+    writer.writeAttribute(QLatin1String("type"), QLatin1String("image")); // we pass an image path
+    writer.writeAttribute(QLatin1String("threshold"), QString::number(threshold));
+    writer.writeAttribute(QLatin1String("maxthreshold"), QString::number(maxThreshold));
+    writer.writeAttribute(QLatin1String("sketchtype"), QLatin1String("scanned"));
+    writer.writeValue(filePath);
+    writer.finishField();
+    writer.finishGroup();
+
+    SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
+    AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
+
+    return salbum;
+}
+
+void SearchModificationHelper::slotCreateFuzzySearchFromDropped(const QString& proposedName,
+                                                                const QString& filePath,
+                                                                float threshold,
+                                                                float maxThreshold,
+                                                                bool overwriteIfExisting)
+{
+    createFuzzySearchFromDropped(proposedName, filePath, threshold, maxThreshold, overwriteIfExisting);
+}
+
 SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& proposedName,
                                                              const ImageInfo& image,
                                                              float threshold,

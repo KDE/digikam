@@ -120,16 +120,19 @@ public:
         SortByRating,
         SortByModificationDate,
         SortByImageSize,            // pixel number
-        SortByAspectRatio           // width / height * 100000
+        SortByAspectRatio,          // width / height * 100000
+        SortBySimilarity
     };
 
     SortRole                sortRole;
     SortOrder               sortOrder;
     bool                    strTypeNatural;
+    qlonglong               referenceImageId;
 
     void setSortRole(SortRole role);
     void setSortOrder(SortOrder order);
     void setStringTypeNatural(bool natural);
+    void setReferenceImageId(qlonglong imageid);
 
     Qt::SortOrder           currentSortOrder;
     Qt::CaseSensitivity     sortCaseSensitivity;

@@ -810,6 +810,19 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
 
         list = iface.bestMatchesForImageWithThreshold(id, threshold,maxThreshold, sketchType).second;
     }
+    else if (type == QLatin1String("image"))
+    {
+        // If the given SAlbum contains a dropped image, get all images which are similar to this one.
+        QString path = reader.value();
+        HaarIface iface;
+
+        if (d->listOnlyAvailableImages)
+        {
+            iface.setAlbumRootsToSearch(albumRootsToList());
+        }
+
+        list = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, sketchType).second;
+    }
 
     listFromIdList(receiver, list);
 }

@@ -423,6 +423,27 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
     return bestMatches(&sig, numberOfResults, type);
 }
 
+QPair<double,QList<qlonglong>> HaarIface::bestMatchesForImageWithThreshold(const QString& imagePath, double requiredPercentage,
+                                                             double maximumPercentage, SketchType type)
+{
+    QImage image = loadQImage(imagePath);
+    if (image.isNull())
+    {
+        return QPair<double,QList<qlonglong>>();
+    }
+
+    d->createLoadingBuffer();
+    d->data->fillPixelData(image);
+
+    Haar::Calculator haar;
+    haar.transform(d->data);
+    Haar::SignatureData sig;
+    haar.calcHaar(d->data, &sig);
+
+    // Apply duplicates search for the image. Use the image id -1 which cannot be present.
+    return bestMatchesWithThreshold(-1, &sig, requiredPercentage, maximumPercentage, type);
+}
+
 QPair<double,QList<qlonglong>> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
                                                              double maximumPercentage, SketchType type)
 {
@@ -543,7 +564,11 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong ima
     QMultiMap<double, qlonglong> bestMatches;
     double score, percentage, avgPercentage = 0.0;
     QPair<double,QList<qlonglong>> result;
-    qlonglong id;
+    qlonglong         id;
+    CoreDbAccess      access;
+
+    // Remove all image properties that show a similarity to the specified image id.
+    access.db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageid));
 
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
@@ -558,8 +583,10 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong ima
             {
                 bestMatches.insert(percentage, id);
                 // If the current image is not the original, use the images similarity for the average percentage
+                // Also, save the similarity of the found image to the original image.
                 if (id != imageid)
                 {
+                    access.db()->setImageProperty(id,QLatin1String("similarityTo_")+QString::number(imageid),QString::number(percentage));
                     avgPercentage += percentage;
                 }
             }

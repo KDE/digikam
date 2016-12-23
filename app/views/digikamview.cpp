@@ -333,6 +333,12 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
                                                          d->searchModificationHelper);
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
+    connect(d->fuzzySearchSideBar,SIGNAL(signalActive(bool)),
+            this, SLOT(slotFuzzySidebarActive(bool)));
+
+    connect(d->fuzzySearchSideBar, SIGNAL(signalImageChanged()),
+        this, SLOT(slotUpdateFuzzyReferenceImage()));
+
 #ifdef HAVE_MARBLE
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
                                                      d->modelCollection->getSearchModel(),
@@ -1974,7 +1980,23 @@ void DigikamView::slotSortImages(int sortRole)
     }
 
     settings->setImageSortOrder(sortRole);
+    if (sortRole == ImageSortSettings::SortRole::SortBySimilarity)
+    {
+        d->iconView->imageFilterModel()->setReferenceImageId(settings->getCurrentFuzzySearchReferenceImage());
+    }
     d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
+}
+
+void DigikamView::slotUpdateFuzzyReferenceImage()
+{
+    ApplicationSettings* const settings = ApplicationSettings::instance();
+
+    if (!settings)
+    {
+        return;
+    }
+
+    d->iconView->imageFilterModel()->setReferenceImageId(settings->getCurrentFuzzySearchReferenceImage());
 }
 
 void DigikamView::slotSortImagesOrder(int order)
@@ -2124,6 +2146,11 @@ void DigikamView::slotPresentation()
     }
 
     mngr->showConfigDialog();
+}
+
+void DigikamView::slotFuzzySidebarActive(bool active)
+{
+    emit signalFuzzySidebarActive(active);
 }
 
 void DigikamView::slideShow(const ImageInfoList& infoList)

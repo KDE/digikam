@@ -100,6 +100,13 @@ public:
     QPair<double,QList<qlonglong>> bestMatchesForImageWithThreshold(qlonglong imageid,
             double requiredPercentage, double maximumPercentage, SketchType type=ScannedSketch);
 
+    /** Searches the database for the best matches for the specified query image.
+     *  All matches with a similarity in a given threshold interval are returned.
+     *  The threshold is in the range requiredPercentage..maximumPercentage.
+     */
+    QPair<double,QList<qlonglong>> bestMatchesForImageWithThreshold(const QString& imagePath,
+            double requiredPercentage, double maximumPercentage, SketchType type=ScannedSketch);
+
     /** Calculates the Haar signature, bring it in a form as stored in the DB,
      *  and encode it to Ascii data. Can be used for bestMatchesForSignature.
      */
@@ -157,9 +164,14 @@ public:
     void setAlbumRootsToSearch(QList<int> albumRootIds);
     void setAlbumRootsToSearch(QSet<int> albumRootIds);
 
-private:
-
+    /**
+     * This method loads a QImage from the given filename.
+     * @param filename the name of the file (path)
+     * @return A QImage, non-null on success.
+     */
     QImage loadQImage(const QString& filename);
+
+private:
 
     bool   indexImage(qlonglong imageid);
 

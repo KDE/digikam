@@ -48,6 +48,7 @@ ImageSortSettings::ImageSortSettings()
     sortCaseSensitivity            = Qt::CaseSensitive;
     currentCategorizationSortOrder = Qt::AscendingOrder;
     currentSortOrder               = Qt::AscendingOrder;
+    referenceImageId               = 0;
 }
 
 bool ImageSortSettings::operator==(const ImageSortSettings& other) const
@@ -58,7 +59,8 @@ bool ImageSortSettings::operator==(const ImageSortSettings& other) const
         categorizationCaseSensitivity == other.categorizationCaseSensitivity &&
         sortRole                      == other.sortRole                      &&
         sortOrder                     == other.sortOrder                     &&
-        sortCaseSensitivity           == other.sortCaseSensitivity;
+        sortCaseSensitivity           == other.sortCaseSensitivity           &&
+        referenceImageId              == other.referenceImageId;
 }
 
 void ImageSortSettings::setCategorizationMode(CategorizationMode mode)
@@ -114,6 +116,11 @@ void ImageSortSettings::setStringTypeNatural(bool natural)
     strTypeNatural = natural;
 }
 
+void ImageSortSettings::setReferenceImageId(qlonglong imageid)
+{
+    referenceImageId = imageid;
+}
+
 Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
 {
     switch (mode)
@@ -143,6 +150,8 @@ Qt::SortOrder ImageSortSettings::defaultSortOrderForSortRole(SortRole role)
         case SortByImageSize:
             return Qt::DescendingOrder;
         case SortByAspectRatio:
+            return Qt::DescendingOrder;
+        case SortBySimilarity:
             return Qt::DescendingOrder;
         default:
             return Qt::AscendingOrder;
@@ -226,6 +235,11 @@ bool ImageSortSettings::lessThan(const ImageInfo& left, const ImageInfo& right) 
         return result < 0;
     }
 
+    if ( (result = compare(left, right, SortBySimilarity)) != 0)
+    {
+        return result < 0;
+    }
+
     return false;
 }
 
@@ -266,6 +280,13 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
             int leftAR = (double(leftSize.width()) / double(leftSize.height())) * 1000000;
             int rightAR = (double(rightSize.width()) / double(rightSize.height())) * 1000000;
             return compareByOrder(leftAR, rightAR, currentSortOrder);
+        }
+        case SortBySimilarity:
+        {
+            // make sure that the original image has always the highest similarity.
+            double leftSimilarity  = left.id() == referenceImageId ? 1.1 : left.similarityTo(referenceImageId);
+            double rightSimilarity = right.id() == referenceImageId ? 1.1 : right.similarityTo(referenceImageId);
+            return compareByOrder(leftSimilarity, rightSimilarity, currentSortOrder);
         }
         default:
             return 1;
@@ -356,6 +377,10 @@ DatabaseFields::Set ImageSortSettings::watchFlags() const
             break;
         case SortByAspectRatio:
             set |= DatabaseFields::Width | DatabaseFields::Height;
+            break;
+        case SortBySimilarity:
+            // TODO: Not sure what to do here....
+            set |= DatabaseFields::Name;
             break;
     }
 

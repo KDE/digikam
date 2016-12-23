@@ -492,6 +492,8 @@ public:
     ThumbnailInfo thumbnailInfo() const;
     static ThumbnailIdentifier thumbnailIdentifier(qlonglong id);
 
+    double similarityTo(const qlonglong imageId) const;
+
 private:
 
     friend class ImageInfoCache;

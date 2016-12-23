@@ -372,6 +372,17 @@ void FindDuplicatesView::slotDuplicatesAlbumActived()
     if (!albums.empty())
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << albums);
+        // Set the image id of the first selected album as reference.
+        ApplicationSettings * settings = ApplicationSettings::instance();
+        if (settings)
+        {
+            bool ok;
+            qlonglong imageid = albums.first()->title().toLongLong(&ok);
+            if (ok)
+            {
+                settings->setCurrentFuzzySearchReferenceImage(imageid);
+            }
+        }
     }
 }
 

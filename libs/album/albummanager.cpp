@@ -3539,6 +3539,12 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
         qCDebug(DIGIKAM_GENERAL_LOG) << "Rescanning " << imagesToRescan.size() << " images for duplicates.";
         emit signalUpdateDuplicatesAlbums(imagesToRescan.toList());
     }
+
+    // Delete all similarity properties to the deleted images:
+    foreach(qlonglong imageid, deletedImages)
+    {
+        CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageid));
+    }
 }
 
 void AlbumManager::removeWatchedPAlbums(const PAlbum* const album)

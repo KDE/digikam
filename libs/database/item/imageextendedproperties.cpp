@@ -73,6 +73,31 @@ void ImageExtendedProperties::removeJobId()
     setJobId(QString());
 }
 
+double ImageExtendedProperties::similarityTo(const qlonglong imageId)
+{
+    QString similarityString = readProperty(QLatin1String("similarityTo_")+ QString::number(imageId));
+    bool ok;
+    double similarityValue = similarityString.toDouble(&ok);
+    if (ok)
+    {
+        return similarityValue;
+    }
+    else
+    {
+        return 0.0;
+    }
+}
+
+void ImageExtendedProperties::setSimilarityTo(const qlonglong imageId, const double value)
+{
+    setProperty(QLatin1String("similarityTo_")+ QString::number(imageId),QString::number(value));
+}
+
+void ImageExtendedProperties::removeSimilarityTo(const qlonglong imageId)
+{
+    removeProperty(QLatin1String("similarityTo_")+ QString::number(imageId));
+}
+
 QStringList ImageExtendedProperties::scene()
 {
     return readFakeListProperty(ImageScanner::iptcCorePropertyName(MetadataInfo::IptcCoreScene));

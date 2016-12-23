@@ -895,6 +895,7 @@ public:
      */
     void setImageProperty(qlonglong imageID, const QString& property, const QString& value);
     void removeImageProperty(qlonglong imageID, const QString& property);
+    void removeImagePropertyByName(const QString& property);
 
     /**
      * Returns the copyright properties of the specified image.

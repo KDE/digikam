@@ -100,6 +100,13 @@ public:
     void removeSubjectCode();
 
     /**
+     * Returns the similarity. of the image to the given image.
+     */
+    double similarityTo(const qlonglong imageId);
+    void setSimilarityTo(const qlonglong imageId, const double value);
+    void removeSimilarityTo(const qlonglong imageId);
+
+    /**
      * Return the IPTC Core Location.
      * This includes Country, Country Code, City, Location and ProvinceState.
      * This includes IPTC Country Name, Country Code, City, SubLocation and ProvinceState.

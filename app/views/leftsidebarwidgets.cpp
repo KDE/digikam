@@ -1200,6 +1200,9 @@ FuzzySearchSideBarWidget::FuzzySearchSideBarWidget(QWidget* const parent, Search
     QVBoxLayout* const layout = new QVBoxLayout(this);
 
     layout->addWidget(d->fuzzySearchView);
+
+    connect(d->fuzzySearchView, SIGNAL(signalReferenceImageSelected()),
+        this, SLOT(slotImageChanged()));
 }
 
 FuzzySearchSideBarWidget::~FuzzySearchSideBarWidget()
@@ -1215,6 +1218,7 @@ void FuzzySearchSideBarWidget::setActive(bool active)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << d->fuzzySearchView->currentAlbum());
     }
+    emit signalActive(active);
 }
 
 void FuzzySearchSideBarWidget::doLoadState()
@@ -1260,6 +1264,11 @@ void FuzzySearchSideBarWidget::newSimilarSearch(const ImageInfo& imageInfo)
     }
 
     d->fuzzySearchView->setImageInfo(imageInfo);
+}
+
+void FuzzySearchSideBarWidget::slotImageChanged()
+{
+    emit signalImageChanged();
 }
 
 // -----------------------------------------------------------------------------

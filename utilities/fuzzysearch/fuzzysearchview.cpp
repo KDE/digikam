@@ -74,6 +74,7 @@
 #include "dhuesaturationselect.h"
 #include "dcolorvalueselector.h"
 #include "dexpanderbox.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -173,6 +174,7 @@ public:
     DAdjustableLabel*         labelFolder;
 
     ImageInfo                 imageInfo;
+    QUrl                      imageUrl;
 
     SearchTextBar*            searchFuzzyBar;
 
@@ -872,6 +874,24 @@ void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
     {
         e->acceptProposedAction();
     }
+    else if (e->mimeData()->hasUrls())
+    {
+        QList<QUrl> urls = e->mimeData()->urls();
+        // If there is at least one URL and the URL is a local file.
+        if (!urls.empty())
+        {
+            if (urls.first().isLocalFile())
+            {
+                HaarIface haarIface;
+                QString path = urls.first().path();
+                const QImage image = haarIface.loadQImage(path);
+                if (!image.isNull())
+                {
+                    e->acceptProposedAction();
+                }
+            }
+        }
+    }
 }
 
 void FuzzySearchView::dropEvent(QDropEvent* e)
@@ -896,6 +916,44 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
         setImageInfo(ImageInfo(imageIDs.first()));
 
         e->acceptProposedAction();
+    }
+
+    // Allow dropping urls and handle them as sketch search if the urls represent images.
+    if (e->mimeData()->hasUrls())
+    {
+        QList<QUrl> urls = e->mimeData()->urls();
+        // If there is at least one URL and the URL is a local file.
+        if (!urls.empty())
+        {
+            if (urls.first().isLocalFile())
+            {
+                HaarIface haarIface;
+                QString path = urls.first().path();
+                const QImage image = haarIface.loadQImage(path);
+                if (!image.isNull())
+                {
+                    // Set a temporary image id
+                    d->imageInfo = ImageInfo(-1);
+                    d->imageUrl = urls.first();
+
+                    d->imageWidget->setPixmap(QPixmap::fromImage(image).scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+                    AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+                    QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
+                    ApplicationSettings * settings = ApplicationSettings::instance();
+                    if (settings)
+                    {
+                        settings->setCurrentFuzzySearchReferenceImage(-1);
+                    }
+                    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path, d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, true);
+                    d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
+                    d->labelFile->setAdjustedText(urls.first().fileName());
+                    d->labelFolder->setAdjustedText(urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
+
+                    e->acceptProposedAction();
+                }
+            }
+        }
     }
 }
 
@@ -948,6 +1006,14 @@ void FuzzySearchView::slotLevelImageChanged(int newValue)
 
 void FuzzySearchView::slotTimerImageDone()
 {
+    if (d->imageInfo.isNull() && d->imageInfo.id() == -1 && !d->imageUrl.isEmpty()){
+        AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+        QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
+        d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, d->imageUrl.path(), d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, true);
+        d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
+        return;
+    }
+
     if (!d->imageInfo.isNull() && d->active)
     {
         setImageInfo(d->imageInfo);
@@ -961,10 +1027,17 @@ void FuzzySearchView::setCurrentImage(qlonglong imageid)
 
 void FuzzySearchView::setCurrentImage(const ImageInfo& info)
 {
+    ApplicationSettings * settings = ApplicationSettings::instance();
+    if (settings)
+    {
+        settings->setCurrentFuzzySearchReferenceImage(info.id());
+    }
     d->imageInfo = info;
+    d->imageUrl = info.fileUrl();
     d->labelFile->setAdjustedText(d->imageInfo.name());
     d->labelFolder->setAdjustedText(d->imageInfo.fileUrl().adjusted(QUrl::RemoveFilename).toLocalFile());
     d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
+    emit signalReferenceImageSelected();
 }
 
 void FuzzySearchView::setImageInfo(const ImageInfo& info)

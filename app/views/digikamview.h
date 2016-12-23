@@ -122,6 +122,8 @@ Q_SIGNALS:
     void signalGotoDateAndItem(AlbumIconItem*);
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
+    void signalFuzzySidebarActive(bool active);
+    void signalReferenceImageSelected(qlonglong imageId);
 
 public Q_SLOTS:
 
@@ -138,6 +140,8 @@ public Q_SLOTS:
     void slotSlideShowManualFromCurrent();
     void slotSlideShowManualFrom(const ImageInfo& info);
     void slotPresentation();
+    void slotFuzzySidebarActive(bool);
+    void slotUpdateFuzzyReferenceImage();
 
     // Album action slots
     void slotRefresh();

@@ -137,6 +137,7 @@ public:
     static const QString                      configIconThemeEntry;
     static const QString                      configDuplicatesSearchLastMinSimilarity;
     static const QString                      configDuplicatesSearchLastMaxSimilarity;
+    static const QString                      configFuzzySearchReferenceImage;
 
     // start up setting
     bool                                      showSplash;
@@ -246,6 +247,7 @@ public:
     int                                       imageGroupMode;
     int                                       imageGroupSortOrder;
     ApplicationSettings::ItemLeftClickAction  itemLeftClickAction;
+    qlonglong                                 fuzzySearchReferenceImage;
 
     // Baloo settings
     bool                                      syncToDigikam;
