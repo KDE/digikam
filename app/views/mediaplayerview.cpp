@@ -91,15 +91,23 @@ protected:
 
                 return true;
             }
-            else
+            else if (mouseEvent && mouseEvent->button() == Qt::RightButton)
             {
-                return false;
+                if (m_parent)
+                {
+                    MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
+
+                    if (mplayer)
+                    {
+                        mplayer->slotRotateVideo();
+                    }
+                }
+
+                return true;
             }
         }
-        else
-        {
-            return QObject::eventFilter(obj, event);
-        }
+
+        return QObject::eventFilter(obj, event);
     }
 
 private:
@@ -315,6 +323,31 @@ void MediaPlayerView::slotEscapePressed()
 {
     escapePreview();
     emit signalEscapePreview();
+}
+
+void MediaPlayerView::slotRotateVideo()
+{
+    if (d->player->isPlaying())
+    {
+        int orientation = 0;
+
+        switch (d->videoWidget->orientation())
+        {
+            case 0:
+                orientation = 90;
+                break;
+            case 90:
+                orientation = 180;
+                break;
+            case 180:
+                orientation = 270;
+                break;
+            default:
+                orientation = 0;
+        }
+
+        d->videoWidget->setOrientation(orientation);
+    }
 }
 
 void MediaPlayerView::slotPausePlay()
