@@ -148,4 +148,6 @@ BUGFIXES FROM BUGZILLA:
 130 ==> 369595 - Crash on startup with segmentation vault.
 131 ==> 366440 - digiKam 5.0.0-147.4 with mysql database segfaults upon startup.
 132 ==> 349929 - digiKam can't register existing type 'GstObject' on startup.
-133 ==> 
+133 ==> 221690 - digikam: symbol lookup error about GStreamer.
+134 ==> 363116 - import selected from sd-card crashes.
+135 ==> 
