@@ -77,7 +77,8 @@ protected:
         {
             QMouseEvent* const mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
-            if (mouseEvent && mouseEvent->button() == Qt::LeftButton)
+            if (mouseEvent && (mouseEvent->button() == Qt::LeftButton ||
+                               mouseEvent->button() == Qt::RightButton))
             {
                 if (m_parent)
                 {
@@ -85,25 +86,18 @@ protected:
 
                     if (mplayer)
                     {
-                        mplayer->slotEscapePressed();
+                        if (mouseEvent->button() == Qt::LeftButton)
+                        {
+                            mplayer->slotEscapePressed();
+                        }
+                        else
+                        {
+                            mplayer->slotRotateVideo();
+                        }
+
+                        return true;
                     }
                 }
-
-                return true;
-            }
-            else if (mouseEvent && mouseEvent->button() == Qt::RightButton)
-            {
-                if (m_parent)
-                {
-                    MediaPlayerView* const mplayer = dynamic_cast<MediaPlayerView*>(m_parent);
-
-                    if (mplayer)
-                    {
-                        mplayer->slotRotateVideo();
-                    }
-                }
-
-                return true;
             }
         }
 
