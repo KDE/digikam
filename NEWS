@@ -153,4 +153,5 @@ BUGFIXES FROM BUGZILLA:
 135 ==> 374071 - Tags checkbox tristate incorrect when deselecting tagged images (off-by-one).
 136 ==> 313507 - digiKam does not start reliable anymore.
 137 ==> 353534 - Error at startup: error loading kio_digikamalbums followed by crash.
-138 ==> 
+138 ==> 097078 - digiKam comments KIO slave for inserting comments into other files.
+139 ==> 
