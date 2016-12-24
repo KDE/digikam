@@ -135,6 +135,5 @@ BUGFIXES FROM BUGZILLA:
 117 ==> 333348 - Soundtrack is zero length in Advanced Slideshow.
 118 ==> 320666 - Add search of similar images outside digiKam collections [patch].
 119 ==> 302923 - Sort Icon-view items found by Fuzzy Searches [patch].
-120 ==> 
-
-
+120 ==> 374109 - Video playback does not work.
+121 ==> 
