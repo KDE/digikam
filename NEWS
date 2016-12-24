@@ -142,4 +142,5 @@ BUGFIXES FROM BUGZILLA:
 124 ==> 335885 - Crash opening .mov.
 125 ==> 267992 - digiKam crashes after showing start up splash.
 126 ==> 235920 - digiKam crashes after uppgrading from Ubuntu 9.10 to 10.04.
-127 ==> 
+127 ==> 294432 - digiKam crashes on startup.
+128 ==> 
