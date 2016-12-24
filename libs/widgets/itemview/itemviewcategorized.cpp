@@ -82,7 +82,7 @@ public:
     bool                       ensureOneSelectedItem;
     bool                       ensureInitialSelectedItem;
     bool                       scrollCurrentToCenter;
-    Qt::MouseButton         mouseButtonPressed;
+    Qt::MouseButton            mouseButtonPressed;
     QPersistentModelIndex      hintAtSelectionIndex;
     int                        hintAtSelectionRow;
     QPersistentModelIndex      hintAtScrollPosition;
