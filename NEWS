@@ -150,4 +150,5 @@ BUGFIXES FROM BUGZILLA:
 132 ==> 349929 - digiKam can't register existing type 'GstObject' on startup.
 133 ==> 221690 - digikam: symbol lookup error about GStreamer.
 134 ==> 363116 - import selected from sd-card crashes.
-135 ==> 
+135 ==> 374071 - Tags checkbox tristate incorrect when deselecting tagged images (off-by-one).
+136 ==> 

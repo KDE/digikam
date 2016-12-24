@@ -310,8 +310,10 @@ ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
     {
         if (indexes.first() != current)
         {
-            indexes.removeOne(current);
-            indexes.prepend(current);
+            if (indexes.removeOne(current))
+            {
+                indexes.prepend(current);
+            }
         }
     }
 
