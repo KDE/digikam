@@ -136,4 +136,6 @@ BUGFIXES FROM BUGZILLA:
 118 ==> 320666 - Add search of similar images outside digiKam collections [patch].
 119 ==> 302923 - Sort Icon-view items found by Fuzzy Searches [patch].
 120 ==> 374109 - Video playback does not work.
-121 ==> 
+121 ==> 339027 - digiKam crashes directly after starting (segmentation fault).
+122 ==> 339092 - Segmentation Fault when launching digiKam.
+123 ==> 
