@@ -143,4 +143,5 @@ BUGFIXES FROM BUGZILLA:
 125 ==> 267992 - digiKam crashes after showing start up splash.
 126 ==> 235920 - digiKam crashes after uppgrading from Ubuntu 9.10 to 10.04.
 127 ==> 294432 - digiKam crashes on startup.
-128 ==> 
+128 ==> 264035 - digiKam crashes reading corrupt image.
+129 ==> 
