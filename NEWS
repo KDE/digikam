@@ -138,4 +138,5 @@ BUGFIXES FROM BUGZILLA:
 120 ==> 374109 - Video playback does not work.
 121 ==> 339027 - digiKam crashes directly after starting (segmentation fault).
 122 ==> 339092 - Segmentation Fault when launching digiKam.
-123 ==> 
+123 ==> 175626 - digiKam crashes while startup.
+124 ==> 
