@@ -805,7 +805,7 @@ QList<QUrl> TableView::selectedUrls() const
     return resolveGrouping(s->tableViewSelectionModel->selectedRows()).toImageUrlList();
 }
 
-ImageInfoList TableView::resolveGrouping(const QList<QModelIndex> indexes) const
+ImageInfoList TableView::resolveGrouping(const QList<QModelIndex>& indexes) const
 {
     ImageInfoList infos;
 
