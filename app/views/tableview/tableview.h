@@ -91,7 +91,7 @@ protected:
     QList<QAction*> getExtraGroupingActions(QObject*const parentObject) const;
 
     // Converts indexes to imageInfos and adds group members when appropriate
-    ImageInfoList resolveGrouping(const QList<QModelIndex> indexes) const;
+    ImageInfoList resolveGrouping(const QList<QModelIndex>& indexes) const;
 
 public Q_SLOTS:
 
