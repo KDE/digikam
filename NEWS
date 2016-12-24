@@ -147,4 +147,5 @@ BUGFIXES FROM BUGZILLA:
 129 ==> 369681 - Startup Crash digikam 5.2 (segmentation vault).
 130 ==> 369595 - Crash on startup with segmentation vault.
 131 ==> 366440 - digiKam 5.0.0-147.4 with mysql database segfaults upon startup.
-132 ==> 
+132 ==> 349929 - digiKam can't register existing type 'GstObject' on startup.
+133 ==> 
