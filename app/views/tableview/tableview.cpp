@@ -780,8 +780,10 @@ QModelIndexList TableView::selectedIndexesCurrentFirst() const
     {
         if (indexes.first() != current)
         {
-            indexes.removeOne(current);
-            indexes.prepend(current);
+            if (indexes.removeOne(current))
+            {
+                indexes.prepend(current);
+            }
         }
     }
 
