@@ -155,4 +155,5 @@ BUGFIXES FROM BUGZILLA:
 137 ==> 353534 - Error at startup: error loading kio_digikamalbums followed by crash.
 138 ==> 097078 - digiKam comments KIO slave for inserting comments into other files.
 139 ==> 096878 - Ability to use kioslaves for camera image source.
-140 ==> 
+140 ==> 119424 - digiKam unable to create io-slave.
+141 ==> 
