@@ -345,21 +345,21 @@ void FreeSpaceWidget::updateToolTip()
         if (d->dSizeKb > 0)
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBSize) + cnt.cellEnd;
+            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBSize * 1024) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBAvail) + cnt.cellEnd;
+            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBAvail * 1024) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Require:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->dSizeKb) + cnt.cellEnd;
+            tip += ImagePropertiesTab::humanReadableBytesCount(d->dSizeKb * 1024) + cnt.cellEnd;
         }
         else
         {
             tip += cnt.cellBeg + i18nc("@info Storage", "Capacity:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBSize) + cnt.cellEnd;
+            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBSize * 1024) + cnt.cellEnd;
 
             tip += cnt.cellBeg + i18nc("@info Storage", "Available:") + cnt.cellMid;
-            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBAvail) + cnt.cellEnd;
+            tip += ImagePropertiesTab::humanReadableBytesCount(d->kBAvail * 1024) + cnt.cellEnd;
         }
 
         tip += cnt.tipFooter;

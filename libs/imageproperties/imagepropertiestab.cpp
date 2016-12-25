@@ -988,7 +988,7 @@ QString ImagePropertiesTab::humanReadableBytesCount(qint64 bytes, bool si)
         ret.sprintf("%.1f %s", bytes / qPow(unit, exp), pre.toLatin1().constData());
     }
 
-    return (QString::fromUtf8("%1 %2").arg(ret).arg(byteStr));
+    return (QString::fromUtf8("%1%2").arg(ret).arg(byteStr));
 }
 
 }  // namespace Digikam
