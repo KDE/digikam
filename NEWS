@@ -157,4 +157,6 @@ BUGFIXES FROM BUGZILLA:
 139 ==> 096878 - Ability to use kioslaves for camera image source.
 140 ==> 119424 - digiKam unable to create io-slave.
 141 ==> 145228 - Public Album kioslaves.
-142 ==> 
+142 ==> 354867 - digikam crashes while renaming files.
+143 ==> 150076 - playing music during a slideshow.
+144 ==> 
