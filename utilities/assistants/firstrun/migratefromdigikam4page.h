@@ -30,6 +30,7 @@
 
 class QRadioButton;
 class QButtonGroup;
+
 namespace Digikam
 {
 
@@ -50,12 +51,14 @@ public:
     int nextId() const;
 
 public Q_SLOTS:
+
     void migrationToggled(bool b);
 
 protected:
-    QButtonGroup *m_migrateBehavior;
-    QRadioButton *m_migrate;
-    QRadioButton *m_createnew;
+
+    QButtonGroup* m_migrateBehavior;
+    QRadioButton* m_migrate;
+    QRadioButton* m_createnew;
 };
 
 }   // namespace Digikam
