@@ -1280,8 +1280,8 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
                                         "to upload pictures.\n\n"
                                         "Space require: %1\n"
                                         "Available free space: %2",
-                                        ImagePropertiesTab::humanReadableBytesCount(totalKbSize),
-                                        ImagePropertiesTab::humanReadableBytesCount(d->cameraFreeSpace->kBAvail())));
+                                        ImagePropertiesTab::humanReadableBytesCount(totalKbSize * 1024),
+                                        ImagePropertiesTab::humanReadableBytesCount(d->cameraFreeSpace->kBAvail() * 1024)));
             return;
         }
     }
@@ -2016,21 +2016,22 @@ bool ImportUI::checkDiskSpace(PAlbum *pAlbum)
 
     if (dSize >= kBAvail)
     {
-        int result     = QMessageBox::warning(this, i18nc("@title:window", "Insufficient Disk Space"),
-                                              i18nc("@info", "There is not enough free space on the disk of the album you selected "
-                                                    "to download and process the selected pictures from the camera.\n\n"
-                                                    "Estimated space required: %1\n"
-                                                    "Available free space: %2\n\n"
-                                                    "Try Anyway?",
-                                                    ImagePropertiesTab::humanReadableBytesCount(dSize),
-                                                    ImagePropertiesTab::humanReadableBytesCount(kBAvail)),
-                                              QMessageBox::Yes | QMessageBox::No);
+        int result = QMessageBox::warning(this, i18nc("@title:window", "Insufficient Disk Space"),
+                                          i18nc("@info", "There is not enough free space on the disk of the album you selected "
+                                                "to download and process the selected pictures from the camera.\n\n"
+                                                "Estimated space required: %1\n"
+                                                "Available free space: %2\n\n"
+                                                "Try Anyway?",
+                                                ImagePropertiesTab::humanReadableBytesCount(dSize * 1024),
+                                                ImagePropertiesTab::humanReadableBytesCount(kBAvail * 1024)),
+                                          QMessageBox::Yes | QMessageBox::No);
 
         if (result == QMessageBox::No)
         {
             return false;
         }
     }
+
     return true;
 }
 
