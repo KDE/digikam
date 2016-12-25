@@ -66,16 +66,16 @@ public:
     {
     }
 
-    WelcomePage*    welcomePage;
-    MigrateFromDigikam4Page*    migrateFromDigikam4Page;
-    CollectionPage* collectionPage;
-    DatabasePage*   databasePage;
-    RawPage*        rawPage;
-    MetadataPage*   metadataPage;
-    PreviewPage*    previewPage;
-    OpenFilePage*   openFilePage;
-    TooltipsPage*   tooltipsPage;
-    StartScanPage*  startScanPage;
+    WelcomePage*             welcomePage;
+    MigrateFromDigikam4Page* migrateFromDigikam4Page;
+    CollectionPage*          collectionPage;
+    DatabasePage*            databasePage;
+    RawPage*                 rawPage;
+    MetadataPage*            metadataPage;
+    PreviewPage*             previewPage;
+    OpenFilePage*            openFilePage;
+    TooltipsPage*            tooltipsPage;
+    StartScanPage*           startScanPage;
 };
 
 FirstRunDlg::FirstRunDlg(QWidget* const parent)
@@ -96,7 +96,7 @@ FirstRunDlg::FirstRunDlg(QWidget* const parent)
 
     // If there's a digikamrc file in $KDEHOME/share/config,
     // then we create the migration page in the wizard
-    migrateAvailable = !migration.locateLocal("config", QStringLiteral("digikamrc")).isEmpty();
+    migrateAvailable = !migration.locateLocal("config", QLatin1String("digikamrc")).isEmpty();
 #endif
 
     d->welcomePage    = new WelcomePage(this);    // First assistant page
