@@ -56,7 +56,9 @@ namespace Digikam
 
 MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
     : FirstRunDlgPage(dlg, i18n("Migration from digiKam 4")),
-      m_migrateBehavior(0L), m_migrate(0L), m_createnew(0L)
+      m_migrateBehavior(0L),
+      m_migrate(0L),
+      m_createnew(0L)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -82,7 +84,10 @@ MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
     m_migrate               = new QRadioButton(btns);
     m_migrate->setText(i18n("Migrate configuration from digiKam 4"));
     m_migrate->setChecked(true);
-    connect(m_migrate, SIGNAL(toggled(bool)), this, SLOT(migrationToggled(bool)));
+
+    connect(m_migrate, SIGNAL(toggled(bool)),
+            this, SLOT(migrationToggled(bool)));
+
     m_migrateBehavior->addButton(m_migrate);
 
     m_createnew             = new QRadioButton(btns);
@@ -94,7 +99,8 @@ MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
     vlay->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay->setSpacing(spacing);
 
-    connect(m_migrateBehavior, SIGNAL(buttonClicked(int)), this, SIGNAL(completeChanged()));
+    connect(m_migrateBehavior, SIGNAL(buttonClicked(int)),
+            this, SIGNAL(completeChanged()));
 
     setPageWidget(vbox);
 }
