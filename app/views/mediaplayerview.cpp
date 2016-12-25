@@ -214,7 +214,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->toolBar->addAction(d->prevAction);
     d->toolBar->addAction(d->nextAction);
     d->toolBar->addAction(d->playAction);
-    d->toolBar->setAutoFillBackground(true);
 
     setPreviewMode(Private::PlayerView);
 
