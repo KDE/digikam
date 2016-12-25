@@ -159,4 +159,5 @@ BUGFIXES FROM BUGZILLA:
 141 ==> 145228 - Public Album kioslaves.
 142 ==> 354867 - digikam crashes while renaming files.
 143 ==> 150076 - playing music during a slideshow.
-144 ==> 
+144 ==> 374135 - Storage capacity shows lower unit than actual capacity.
+145 ==> 
