@@ -730,7 +730,7 @@ void DXmlGuiWindow::openHandbook(const QString& anchor, const QString& appname)
     if (!anchor.isEmpty())
     {
         QUrlQuery query(url);
-        query.addQueryItem(QStringLiteral("anchor"), anchor);
+        query.addQueryItem(QLatin1String("anchor"), anchor);
         url.setQuery(query);
     }
 
