@@ -81,22 +81,25 @@ SlideVideo::SlideVideo(QWidget* const parent)
     setAutoFillBackground(true);
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QMargins margins(spacing, 0, spacing, spacing);
+    QMargins margins(0, 0, 0, 0);
 
-    d->videoWidget = new WidgetRenderer(this);
-    d->player      = new AVPlayer(this);
+    d->videoWidget    = new WidgetRenderer(this);
+    d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
+
+    d->player         = new AVPlayer(this);
+    d->player->setRenderer(d->videoWidget);
+    d->player->setNotifyInterval(250);
 
     DHBox* const hbox = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, hbox);
     d->slider->setRange(0, 0);
+    d->slider->setAutoFillBackground(true);
     d->tlabel         = new QLabel(hbox);
     d->tlabel->setText(QString::fromLatin1("00:00:00 / 00:00:00"));
+    d->tlabel->setAutoFillBackground(true);
     hbox->setStretchFactor(d->slider, 10);
-
-    d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
-    d->player->setRenderer(d->videoWidget);
-    d->player->setNotifyInterval(250);
+    hbox->setAutoFillBackground(true);
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(this);
     vbox2->addWidget(d->videoWidget, 10);
