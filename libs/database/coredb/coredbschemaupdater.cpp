@@ -60,7 +60,7 @@ int CoreDbSchemaUpdater::schemaVersion()
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
 {
-    return 4;
+    return 5;
 }
 
 int CoreDbSchemaUpdater::uniqueHashVersion()
@@ -473,7 +473,7 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
 
     defaultImageFilter << RawEngine::DRawDecoder::rawFilesList();
 
-    defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe")                                                    // MPEG
+    defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe") << QLatin1String("vob")                            // MPEG
                        << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
                        << QLatin1String("wmv")  << QLatin1String("wmf")  << QLatin1String("asf")                                                                            // ASF
                        << QLatin1String("mp4")  << QLatin1String("3gp")  << QLatin1String("mov") << QLatin1String("3g2") << QLatin1String("m4v") << QLatin1String("m2v")    // QuickTime
