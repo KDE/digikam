@@ -52,6 +52,7 @@
 #include "thumbbardock.h"
 #include "tableview.h"
 #include "trashview.h"
+#include "dimg.h"
 
 #ifdef HAVE_MEDIAPLAYER
 #include "mediaplayerview.h"
@@ -348,9 +349,13 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
     }
     else
     {
-        if (info.category() == DatabaseItem::Audio || info.category() == DatabaseItem::Video)
+        if (info.category() == DatabaseItem::Audio      ||
+            info.category() == DatabaseItem::Video      ||
+            DImg::isAnimatedImage(info.fileUrl().toLocalFile())        // Special case for animated image as GIF or NMG
+           )
         {
             // Stop image viewer
+
             if (viewMode() == PreviewImageMode)
             {
                 d->imagePreviewView->setImageInfo();
@@ -361,9 +366,10 @@ void StackedView::setPreviewItem(const ImageInfo& info, const ImageInfo& previou
             d->mediaPlayerView->setCurrentItem(info.fileUrl(), !previous.isNull(), !next.isNull());
 #endif //HAVE_MEDIAPLAYER
         }
-        else
+        else // Static image or Raw image.
         {
             // Stop media player if running...
+
             if (viewMode() == MediaPlayerMode)
             {
 #ifdef HAVE_MEDIAPLAYER

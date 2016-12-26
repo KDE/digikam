@@ -645,6 +645,10 @@ public:
      */
     static QString colorModelToString(COLORMODEL colorModel);
 
+    /** Return true if image file is an animation, as GIFa or NMG
+     */
+    static bool isAnimatedImage(const QString& filePath);
+
 private:
 
     DImg(const DImg& image, int w, int h);

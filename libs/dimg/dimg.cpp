@@ -49,6 +49,7 @@ extern "C"
 #include <QFile>
 #include <QFileInfo>
 #include <QImage>
+#include <QImageReader>
 #include <QMap>
 #include <QPaintEngine>
 #include <QPainter>
@@ -3193,6 +3194,21 @@ QString DImg::colorModelToString(COLORMODEL colorModel)
         default:
             return i18nc("Color Model: Unknown", "Unknown");
     }
+}
+
+bool DImg::isAnimatedImage(const QString& filePath)
+{
+    QImageReader reader(filePath);
+    reader.setDecideFormatFromContent(true);
+
+    if (reader.supportsAnimation() && 
+       (reader.imageCount() > 1))
+    {
+        qDebug(DIGIKAM_DIMG_LOG_QIMAGE) << "File \"" << filePath << "\" is an animated image ";
+        return true;
+    }
+
+    return false;
 }
 
 }  // namespace Digikam

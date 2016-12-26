@@ -51,20 +51,10 @@ bool QImageLoader::load(const QString& filePath, DImgLoaderObserver* const obser
 
     // Loading is opaque to us. No support for stopping from observer,
     // progress info are only pseudo values
-    
+
     QImageReader reader(filePath);
     reader.setDecideFormatFromContent(true);
 
-    if (reader.supportsAnimation() && 
-       (QString::fromLatin1(reader.format()).toUpper() == QLatin1String("GIF")) &&
-       (reader.imageCount() > 1))
-    {
-        qCWarning(DIGIKAM_DIMG_LOG_QIMAGE) << "File \"" << filePath << "\" is an animated GIF "
-                                              "and it will not be loaded as a single image!";
-        loadingFailed();
-        return false;
-    }
-    
     QImage image = reader.read();
 
     if (observer)
