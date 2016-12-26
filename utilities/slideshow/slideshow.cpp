@@ -318,6 +318,9 @@ void SlideShow::slotImageLoaded(bool loaded)
 
 void SlideShow::slotVideoLoaded(bool loaded)
 {
+    d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+    d->osd->raise();
+
     if (loaded)
     {
 #ifdef HAVE_MEDIAPLAYER
@@ -330,20 +333,17 @@ void SlideShow::slotVideoLoaded(bool loaded)
         // Failed to load item
         d->errorView->setCurrentUrl(currentItem());
         setCurrentIndex(ErrorView);
-    }
 
-    d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
-    d->osd->raise();
-
-    if (d->fileIndex != -1)
-    {
-        if (!d->osd->isPaused())
+        if (d->fileIndex != -1)
         {
-            d->osd->pause(false);
+            if (!d->osd->isPaused())
+            {
+                d->osd->pause(false);
+            }
         }
-
-        preloadNextItem();
     }
+
+    preloadNextItem();
 }
 
 void SlideShow::slotVideoFinished()
