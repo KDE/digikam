@@ -89,8 +89,8 @@ void SlideImage::setPreviewSettings(const PreviewSettings& settings)
 {
     d->previewSettings = settings;
     // calculate preview size which is used for fast previews
-    QSize desktopSize = QApplication::desktop()->screenGeometry(parentWidget()).size();
-    d->deskSize = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
+    QSize desktopSize  = QApplication::desktop()->screenGeometry(parentWidget()).size();
+    d->deskSize        = qMax(640, qMax(desktopSize.height(), desktopSize.width()));
 }
 
 void SlideImage::setLoadUrl(const QUrl& url)
@@ -137,22 +137,22 @@ void SlideImage::slotGotImagePreview(const LoadingDescription& desc, const DImg&
 void SlideImage::updatePixmap()
 {
     /* For high resolution ("retina") displays, Mac OS X / Qt
-        report only half of the physical resolution in terms of
-        pixels, i.e. every logical pixels corresponds to 2x2
-        physical pixels. However, UI elements and fonts are
-        nevertheless rendered at full resolution, and pixmaps
-        as well, provided their resolution is high enough (that
-        is, higher than the reported, logical resolution).
+       report only half of the physical resolution in terms of
+       pixels, i.e. every logical pixels corresponds to 2x2
+       physical pixels. However, UI elements and fonts are
+       nevertheless rendered at full resolution, and pixmaps
+       as well, provided their resolution is high enough (that
+       is, higher than the reported, logical resolution).
 
-        To work around this, we render the photos not a logical
-        resolution, but with the photo's full resolution, but
-        at the screen's aspect ratio. When we later draw this
-        high resolution bitmap, it is up to Qt to scale the
-        photo to the true physical resolution.  The ratio
-        computed below is the ratio between the photo and
-        screen resolutions, or equivalently the factor by which
-        we need to increase the pixel size of the rendered
-        pixmap.
+       To work around this, we render the photos not a logical
+       resolution, but with the photo's full resolution, but
+       at the screen's aspect ratio. When we later draw this
+       high resolution bitmap, it is up to Qt to scale the
+       photo to the true physical resolution.  The ratio
+       computed below is the ratio between the photo and
+       screen resolutions, or equivalently the factor by which
+       we need to increase the pixel size of the rendered
+       pixmap.
     */
 #ifdef USE_QT_SCALING
     double xratio  = double(d->preview.width())  / width();
@@ -161,6 +161,7 @@ void SlideImage::updatePixmap()
 #else
     double ratio   = 1.0;
 #endif
+
     QSize fullSize = QSizeF(ratio*width(), ratio*height()).toSize();
     d->pixmap      = QPixmap(fullSize);
     d->pixmap.fill(Qt::black);
