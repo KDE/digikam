@@ -162,4 +162,5 @@ BUGFIXES FROM BUGZILLA:
 143 ==> 150076 - playing music during a slideshow.
 144 ==> 374135 - Storage capacity shows lower unit than actual capacity.
 145 ==> 203714 - Play animated GIF files in preview mode.
-146 ==> 
+146 ==> 374178 - Wanting .vob files and .mov files to appear.
+147 ==> 
