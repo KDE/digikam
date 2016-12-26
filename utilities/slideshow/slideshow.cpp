@@ -103,16 +103,14 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     : QStackedWidget(0),
       d(new Private)
 {
+    d->settings = settings;
+
     setWindowFlags(Qt::FramelessWindowHint);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowState(windowState() | Qt::WindowFullScreen);
     setWindowTitle(i18n("Slideshow"));
     setContextMenuPolicy(Qt::PreventContextMenu);
     setMouseTracking(true);
-
-    // ---------------------------------------------------------------
-
-    d->settings = settings;
 
     // ---------------------------------------------------------------
 
@@ -214,7 +212,7 @@ SlideShow::~SlideShow()
 
 void SlideShow::setCurrentItem(const QUrl& url)
 {
-    int index = d->settings.fileList.indexOf(url);
+    int index = d->settings.indexOf(url);
 
     if (index != -1)
     {
@@ -230,7 +228,7 @@ QUrl SlideShow::currentItem() const
 void SlideShow::slotLoadNextItem()
 {
     d->fileIndex++;
-    int num = d->settings.fileList.count();
+    int num = d->settings.count();
 
     if (d->fileIndex >= num)
     {
@@ -259,7 +257,7 @@ void SlideShow::slotLoadNextItem()
 void SlideShow::slotLoadPrevItem()
 {
     d->fileIndex--;
-    int num = d->settings.fileList.count();
+    int num = d->settings.count();
 
     if (d->fileIndex < 0)
     {
@@ -366,7 +364,7 @@ void SlideShow::endOfSlide()
 void SlideShow::preloadNextItem()
 {
     int index = d->fileIndex + 1;
-    int num   = d->settings.fileList.count();
+    int num   = d->settings.count();
 
     if (index >= num)
     {

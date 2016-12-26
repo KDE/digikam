@@ -120,4 +120,14 @@ void SlideShowSettings::writeToConfig()
     group.sync();
 }
 
+int SlideShowSettings::indexOf(const QUrl& url) const
+{
+    return fileList.indexOf(url);
+}
+
+int SlideShowSettings::count() const
+{
+    return fileList.count();
+}
+
 }   // namespace Digikam
