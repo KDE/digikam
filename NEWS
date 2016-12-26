@@ -161,4 +161,5 @@ BUGFIXES FROM BUGZILLA:
 142 ==> 354867 - digikam crashes while renaming files.
 143 ==> 150076 - playing music during a slideshow.
 144 ==> 374135 - Storage capacity shows lower unit than actual capacity.
-145 ==> 203710 - Play animated GIF files in preview mode.
+145 ==> 203714 - Play animated GIF files in preview mode.
+146 ==> 
