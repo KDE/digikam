@@ -193,7 +193,7 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
 
     // ---------------------------------------------------------------
 
-    setCurrentIndex(ImageView);
+    setCurrentView(ImageView);
     inhibitScreenSaver();
     slotMouseMoveTimeOut();
 }
@@ -208,6 +208,34 @@ SlideShow::~SlideShow()
 
     delete d->mouseMoveTimer;
     delete d;
+}
+
+void SlideShow::setCurrentView(SlideShowViewMode view)
+{
+    switch(view)
+    {
+        case ErrorView:
+            d->errorView->setCurrentUrl(currentItem());
+            setCurrentIndex(view);
+            break;
+
+        case ImageView:
+#ifdef HAVE_MEDIAPLAYER
+            d->videoView->stop();
+#endif
+            setCurrentIndex(view);
+            break;
+
+        case VideoView:
+#ifdef HAVE_MEDIAPLAYER
+            d->osd->pause(true);
+            setCurrentIndex(view);
+#endif
+            break;
+
+        default : // EndView
+            break;
+    }
 }
 
 void SlideShow::setCurrentItem(const QUrl& url)
@@ -287,10 +315,7 @@ void SlideShow::slotImageLoaded(bool loaded)
 {
     if (loaded)
     {
-#ifdef HAVE_MEDIAPLAYER
-        d->videoView->stop();
-#endif
-        setCurrentIndex(ImageView);
+        setCurrentView(ImageView);
 
         d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
         d->osd->raise();
@@ -323,16 +348,12 @@ void SlideShow::slotVideoLoaded(bool loaded)
 
     if (loaded)
     {
-#ifdef HAVE_MEDIAPLAYER
-        setCurrentIndex(VideoView);
-        d->osd->pause(true);
-#endif
+        setCurrentView(VideoView);
     }
     else
     {
         // Failed to load item
-        d->errorView->setCurrentUrl(currentItem());
-        setCurrentIndex(ErrorView);
+        setCurrentView(ErrorView);
 
         if (d->fileIndex != -1)
         {
@@ -354,7 +375,7 @@ void SlideShow::slotVideoFinished()
 
 void SlideShow::endOfSlide()
 {
-    setCurrentIndex(EndView);
+    setCurrentView(EndView);
     d->fileIndex = -1;
     d->osd->toolBar()->setEnabledPlay(false);
     d->osd->toolBar()->setEnabledNext(false);

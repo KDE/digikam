@@ -103,6 +103,7 @@ private Q_SLOTS:
 
 private:
 
+    void setCurrentView(SlideShowViewMode);
     bool eventFilter(QObject* obj, QEvent* ev);
     void preloadNextItem();
     void endOfSlide();
