@@ -467,8 +467,8 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("jp2") << QLatin1String("j2k")  << QLatin1String("jpx") << QLatin1String("jpc") << QLatin1String("pgx") // JPEG-2000
                        << QLatin1String("tif") << QLatin1String("tiff")                                                                         // TIFF
                        << QLatin1String("png")                                                                                                  // PNG
-                       << QLatin1String("xpm") << QLatin1String("ppm")  << QLatin1String("pnm") << QLatin1String("pgf")
-                       << QLatin1String("gif") << QLatin1String("bmp")  << QLatin1String("xcf") << QLatin1String("pcx")
+                       << QLatin1String("gif") << QLatin1String("xpm")  << QLatin1String("ppm") << QLatin1String("pnm") << QLatin1String("pgf")
+                       << QLatin1String("bmp") << QLatin1String("xcf")  << QLatin1String("pcx")
                        << QLatin1String("webp");
 
     defaultImageFilter << RawEngine::DRawDecoder::rawFilesList();
@@ -477,7 +477,8 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
                        << QLatin1String("wmv")  << QLatin1String("wmf")  << QLatin1String("asf")                                                                            // ASF
                        << QLatin1String("mp4")  << QLatin1String("3gp")  << QLatin1String("mov") << QLatin1String("3g2") << QLatin1String("m4v") << QLatin1String("m2v")    // QuickTime
-                       << QLatin1String("mkv")  << QLatin1String("webm");                                                                                                   // Matroska
+                       << QLatin1String("mkv")  << QLatin1String("webm")                                                                                                    // Matroska
+                       << QLatin1String("mng");                                                                                                                             // Animated PNG image
 
     defaultAudioFilter << QLatin1String("ogg") << QLatin1String("mp3") << QLatin1String("wma") << QLatin1String("wav");
 }
