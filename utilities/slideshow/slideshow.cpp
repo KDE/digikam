@@ -255,24 +255,27 @@ QUrl SlideShow::currentItem() const
 
 void SlideShow::slotLoadNextItem()
 {
-    d->fileIndex++;
     int num = d->settings.count();
 
-    if (d->fileIndex >= num)
+    if (d->fileIndex == (num - 1))
     {
         if (d->settings.loop)
         {
             d->fileIndex = 0;
         }
     }
+    else
+    {
+        d->fileIndex++;
+    }
 
     if (!d->settings.loop)
     {
         d->osd->toolBar()->setEnabledPrev(d->fileIndex > 0);
-        d->osd->toolBar()->setEnabledNext(d->fileIndex < num - 1);
+        d->osd->toolBar()->setEnabledNext(d->fileIndex < (num - 1));
     }
 
-    if (d->fileIndex < num)
+    if (d->fileIndex >= 0 && d->fileIndex < num)
     {
         d->imageView->setLoadUrl(currentItem());
     }
@@ -284,21 +287,24 @@ void SlideShow::slotLoadNextItem()
 
 void SlideShow::slotLoadPrevItem()
 {
-    d->fileIndex--;
     int num = d->settings.count();
 
-    if (d->fileIndex < 0)
+    if (d->fileIndex == 0)
     {
         if (d->settings.loop)
         {
             d->fileIndex = num - 1;
         }
     }
+    else
+    {
+        d->fileIndex--;
+    }
 
     if (!d->settings.loop)
     {
         d->osd->toolBar()->setEnabledPrev(d->fileIndex > 0);
-        d->osd->toolBar()->setEnabledNext(d->fileIndex < num - 1);
+        d->osd->toolBar()->setEnabledNext(d->fileIndex < (num - 1));
     }
 
     if (d->fileIndex >= 0 && d->fileIndex < num)
