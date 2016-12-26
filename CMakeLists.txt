@@ -421,7 +421,7 @@ message(STATUS "")
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Database Support"     ENABLE_MYSQLSUPPORT)
 PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support"     ENABLE_INTERNALMYSQL)
 PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"               ENABLE_DBUS)
-PRINT_COMPONENT_COMPILE_STATUS("Application Style Support"  ENABLE_APPSTYLES)
+PRINT_COMPONENT_COMPILE_STATUS("App. Style Support"         ENABLE_APPSTYLES)
 
 
 # ================================================================
