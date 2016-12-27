@@ -125,7 +125,6 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     }
 
     cmh.addExportMenu();
-    cmh.addBatchMenu();
     cmh.addSeparator();
     cmh.addActionDeleteTag(tagModificationHelper(), tag);
     cmh.addSeparator();
@@ -269,7 +268,6 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
     cmh.addSeparator();
     cmh.addExportMenu();
-    cmh.addBatchMenu();
     cmh.addActionDeleteTags(tagModificationHelper(),albums);
     cmh.addSeparator();
 }

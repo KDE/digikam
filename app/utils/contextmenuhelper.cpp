@@ -589,34 +589,6 @@ void ContextMenuHelper::addExportMenu()
     d->parent->addMenu(menuExport);
 }
 
-void ContextMenuHelper::addBatchMenu()
-{
-    QMenu* const menuKIPIBatch = new QMenu(i18n("Batch Process"), d->parent);
-    QList<QAction*> batchActions;
-
-#ifdef HAVE_KIPI
-    batchActions = KipiPluginLoader::instance()->kipiActionsByCategory(KIPI::BatchPlugin);
-#endif /* HAVE_KIPI */
-
-#if 0
-    QAction* selectAllAction = 0;
-    selectAllAction = d->stdActionCollection->action("selectAll");
-#endif
-
-    if (!batchActions.isEmpty())
-    {
-        menuKIPIBatch->addActions(batchActions);
-    }
-    else
-    {
-        QAction* const noPlugins = new QAction(i18n("No batch process plugins available"), this);
-        noPlugins->setEnabled(false);
-        menuKIPIBatch->addAction(noPlugins);
-    }
-
-    d->parent->addMenu(menuKIPIBatch);
-}
-
 void ContextMenuHelper::addAlbumActions()
 {
     QList<QAction*> albumActions;

@@ -353,11 +353,6 @@ public:
      */
     void addExportMenu();
 
-    /**
-     * Add Batch KIPI actions menu.
-     */
-    void addBatchMenu();
-
     void addAlbumActions();
 
     /**
