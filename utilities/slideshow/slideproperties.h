@@ -42,7 +42,7 @@ class SlideProperties : public QWidget
 public:
 
     explicit SlideProperties(const SlideShowSettings& settings, QWidget* const parent);
-    ~SlideProperties();
+    virtual ~SlideProperties();
 
     void setCurrentInfo(const SlidePictureInfo& info, const QUrl& url);
 
@@ -62,4 +62,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDEPROPERTIES_H */
+#endif // SLIDEPROPERTIES_H

@@ -43,7 +43,7 @@ class DIGIKAM_EXPORT SlideError : public QWidget
 public:
 
     explicit SlideError(QWidget* const parent = 0);
-    ~SlideError();
+    virtual ~SlideError();
 
     void setCurrentUrl(const QUrl& url);
 
@@ -55,4 +55,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDEERROR_H */
+#endif // SLIDEERROR_H

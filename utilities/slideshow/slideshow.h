@@ -60,7 +60,7 @@ public:
 public:
 
     explicit SlideShow(const SlideShowSettings& settings);
-    ~SlideShow();
+    virtual ~SlideShow();
 
     void setCurrentItem(const QUrl& url);
     QUrl currentItem() const;
@@ -122,4 +122,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDE_SHOW_H */
+#endif // SLIDE_SHOW_H

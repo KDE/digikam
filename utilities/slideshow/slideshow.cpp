@@ -217,6 +217,8 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
         case ErrorView:
             d->errorView->setCurrentUrl(currentItem());
             setCurrentIndex(view);
+            d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+            d->osd->raise();
             break;
 
         case ImageView:
@@ -224,12 +226,16 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             d->videoView->stop();
 #endif
             setCurrentIndex(view);
+            d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+            d->osd->raise();
             break;
 
         case VideoView:
 #ifdef HAVE_MEDIAPLAYER
             d->osd->pause(true);
             setCurrentIndex(view);
+            d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
+            d->osd->raise();
 #endif
             break;
 
@@ -323,9 +329,6 @@ void SlideShow::slotImageLoaded(bool loaded)
     {
         setCurrentView(ImageView);
 
-        d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
-        d->osd->raise();
-
         if (d->fileIndex != -1)
         {
             if (!d->osd->isPaused())
@@ -349,9 +352,6 @@ void SlideShow::slotImageLoaded(bool loaded)
 
 void SlideShow::slotVideoLoaded(bool loaded)
 {
-    d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
-    d->osd->raise();
-
     if (loaded)
     {
         setCurrentView(VideoView);

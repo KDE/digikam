@@ -40,10 +40,10 @@ class DIGIKAM_EXPORT SlideHelp : public QDialog
 
 public:
 
-    SlideHelp();
-    ~SlideHelp();
+    explicit SlideHelp();
+    virtual ~SlideHelp();
 };
 
 } // namespace Digikam
 
-#endif /* SLIDE_HELP_H */
+#endif // SLIDE_HELP_H

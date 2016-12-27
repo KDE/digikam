@@ -47,14 +47,14 @@ class DIGIKAM_EXPORT SlidePictureInfo
 
 public:
 
-    SlidePictureInfo()
+    explicit SlidePictureInfo()
     {
         rating     = 0;
         colorLabel = 0;
         pickLabel  = 0;
     };
 
-    ~SlidePictureInfo()
+    virtual ~SlidePictureInfo()
     {
     };
 
@@ -90,8 +90,8 @@ class DIGIKAM_EXPORT SlideShowSettings
 
 public:
 
-    SlideShowSettings();
-    ~SlideShowSettings();
+    explicit SlideShowSettings();
+    virtual ~SlideShowSettings();
 
     void readFromConfig();
     void writeToConfig();

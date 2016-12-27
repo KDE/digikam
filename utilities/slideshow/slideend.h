@@ -42,9 +42,9 @@ class DIGIKAM_EXPORT SlideEnd : public QWidget
 public:
 
     explicit SlideEnd(QWidget* const parent = 0);
-    ~SlideEnd();
+    virtual ~SlideEnd();
 };
 
 }  // namespace Digikam
 
-#endif /* SLIDEEND_H */
+#endif // SLIDEEND_H

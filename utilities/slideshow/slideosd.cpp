@@ -36,7 +36,7 @@
 // Windows includes
 
 #ifdef Q_OS_WIN
-#include <windows.h>
+#   include <windows.h>
 #endif
 
 // Local includes

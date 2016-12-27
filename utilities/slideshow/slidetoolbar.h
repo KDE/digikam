@@ -48,7 +48,7 @@ class DIGIKAM_EXPORT SlideToolBar : public DHBox
 public:
 
     explicit SlideToolBar(const SlideShowSettings& settings, QWidget* const parent);
-    ~SlideToolBar();
+    virtual ~SlideToolBar();
 
     bool isPaused() const;
     void pause(bool val);
@@ -76,8 +76,8 @@ private Q_SLOTS:
     void slotPlayBtnToggled();
     void slotNexPrevClicked();
     void slotScreenSelected(QAction*);
-private:
 
+private:
 
     class Private;
     Private* const d;
@@ -85,6 +85,6 @@ private:
     friend class SlideShow;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* SLIDE_TOOL_BAR_H */
+#endif // SLIDE_TOOL_BAR_H

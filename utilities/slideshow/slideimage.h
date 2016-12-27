@@ -46,7 +46,7 @@ class DIGIKAM_EXPORT SlideImage : public QWidget
 public:
 
     explicit SlideImage(QWidget* const parent = 0);
-    ~SlideImage();
+    virtual ~SlideImage();
 
     void setPreviewSettings(const PreviewSettings& settings);
     void setLoadUrl(const QUrl& url);
@@ -73,4 +73,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SLIDEIMAGE_H */
+#endif // SLIDEIMAGE_H
