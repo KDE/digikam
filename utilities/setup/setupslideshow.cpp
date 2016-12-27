@@ -99,17 +99,20 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
-    DHBox* const hbox1 = new DHBox(panel);
-    QLabel* const lbl1 = new QLabel(i18n("Delay between images:"), hbox1);
+    DHBox* const hbox1     = new DHBox(panel);
+    QLabel* const lbl1     = new QLabel(i18n("Delay between images:"), hbox1);
     lbl1->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    d->delayInput      = new DIntNumInput(hbox1);
+    hbox1->setStretchFactor(lbl1, 5);
+    QWidget* const space   = new QWidget(hbox1);
+    hbox1->setStretchFactor(space, 5);
+    d->delayInput          = new DIntNumInput(hbox1);
     d->delayInput->setDefaultValue(5);
     d->delayInput->setRange(1, 3600, 1);
     d->delayInput->setWhatsThis(i18n("The delay, in seconds, between images."));
+    hbox1->setStretchFactor(d->delayInput, 10);
 
     d->startWithCurrent    = new QCheckBox(i18n("Start with current image"), panel);
     d->startWithCurrent->setWhatsThis(i18n("If this option is enabled, the Slideshow will be started "
@@ -160,7 +163,7 @@ SetupSlideShow::SetupSlideShow(QWidget* const parent)
     choices.append(i18nc("@label:listbox The current screen, for the presentation mode", "Current Screen"));
     choices.append(i18nc("@label:listbox The default screen for the presentation mode",  "Default Screen"));
 
-    for (int i = 0 ; i < qApp->desktop()->numScreens() ; ++i )
+    for (int i = 0 ; i < qApp->desktop()->numScreens() ; i++ )
     {
         choices.append(i18nc("@label:listbox %1 is the screen number (0, 1, ...)", "Screen %1", i));
     }
