@@ -103,11 +103,12 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->indicator->setStretchFactor(d->slider, 10);
     d->indicator->setAutoFillBackground(true);
 
-    QVBoxLayout* const vbox2 = new QVBoxLayout(this);
-    vbox2->addWidget(d->videoWidget, 10);
-    vbox2->addWidget(d->indicator,    0);
-    vbox2->setContentsMargins(margins);
-    vbox2->setSpacing(spacing);
+    QGridLayout* const grid = new QGridLayout(this);
+    grid->addWidget(d->videoWidget, 0, 0, 2, 1);
+    grid->addWidget(d->indicator,   1, 0, 1, 1);
+    grid->setRowStretch(0, 100);
+    grid->setRowStretch(1, 1);
+    grid->setContentsMargins(margins);
 
     // --------------------------------------------------------------------------
 
@@ -147,7 +148,7 @@ SlideVideo::~SlideVideo()
 
 void SlideVideo::showIndicator(bool b)
 {
-//TODO    d->indicator->setVisible(b);
+    d->indicator->setVisible(b);
 }
 
 void SlideVideo::setCurrentUrl(const QUrl& url)
@@ -155,6 +156,7 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
     d->player->stop();
     d->player->setFile(url.toLocalFile());
     d->player->play();
+    showIndicator(false);
 }
 
 void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
