@@ -114,6 +114,9 @@ public:
         : _num_components(num_components), _threshold(threshold)
     {}
 
+    using cv::face::BasicFaceRecognizer::load;
+    using cv::face::BasicFaceRecognizer::save;
+
     void load(const FileStorage& fs)
     {
         //read matrices
