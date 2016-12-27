@@ -570,8 +570,8 @@ void LibRaw:: recycle()
   imgdata.color.dng_color[0].illuminant = imgdata.color.dng_color[1].illuminant = 0xffff;
 
   for(int i = 0; i < 4; i++)
-   imgdata.color.dng_color[0].analogbalance[i]=
-   imgdata.color.dng_color[1].analogbalance[i]=1.0f;
+   imgdata.color.dng_levels.analogbalance[i]=
+   imgdata.color.dng_levels.analogbalance[i]=1.0f;
 
   ZERO(libraw_internal_data);
   ZERO(imgdata.lens);
@@ -1772,6 +1772,12 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
 			imgdata.sizes.iheight = imgdata.sizes.height = imgdata.sizes.raw_height - imgdata.sizes.top_margin;
 			libraw_internal_data.unpacker_data.load_flags |= 256;
 		}
+		else
+		{
+			imgdata.sizes.raw_width = imgdata.sizes.width;
+			imgdata.sizes.raw_height = imgdata.sizes.height;
+			imgdata.sizes.top_margin = imgdata.sizes.left_margin = 0;
+		}
 	}
 
 	// XTrans Compressed?
@@ -1802,7 +1808,7 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
       {
 	float delta[4]={0.f,0.f,0.f,0.f};
 	for(int c = 0; c < imgdata.idata.colors ; c++ )
-	  delta[c] = imgdata.color.dng_color[0].dng_whitelevel[c] - imgdata.color.dng_color[0].dng_blacklevel[c];
+	  delta[c] = imgdata.color.dng_levels.dng_whitelevel[c] - imgdata.color.dng_levels.dng_blacklevel[c];
 	float mindelta = delta[0],maxdelta = delta[0];
 	for(int c = 1; c < imgdata.idata.colors; c++)
 	  {
@@ -4617,6 +4623,7 @@ static const char  *static_camera_list[] =
 "Canon EOS M",
 "Canon EOS M2",
 "Canon EOS M3",
+"Canon EOS M5",
 "Canon EOS M10",
 "Canon EOS-1D",
 "Canon EOS-1DS",
@@ -4749,6 +4756,7 @@ static const char  *static_camera_list[] =
 "FujiFilm IS-1",
 "Gione E7",
 "GITUP GIT2",
+"Google Pixel",
 "Google Pixel XL",
 "Hasselblad H5D-60",
 "Hasselblad H5D-50",
@@ -4779,6 +4787,7 @@ static const char  *static_camera_list[] =
 "Hasselblad Stellar",
 "Hasselblad Stellar II",
 "Hasselblad HV",
+"Hasselblad X1D",
 "HTC UltraPixel",
 "HTC MyTouch 4G",
 "HTC One (A9)",
@@ -4904,6 +4913,7 @@ static const char  *static_camera_list[] =
 "Leica S (Typ 007)",
 "Leica SL (Typ 601)",
 "Leica T (Typ 701)",
+"Leica TL",
 "Leica X1",
 "Leica X (Typ 113)",
 "Leica X2",
@@ -5117,7 +5127,7 @@ static const char  *static_camera_list[] =
 "Panasonic DMC-FZ200",
 "Panasonic DMC-FZ300/330",
 "Panasonic DMC-FZ1000",
-"Panasonic DMC-FZ2000/2500",
+"Panasonic DMC-FZ2000/2500/FZH1",
 "Panasonic DMC-FX150",
 "Panasonic DMC-G1",
 "Panasonic DMC-G10",
@@ -5285,6 +5295,8 @@ static const char  *static_camera_list[] =
 "Samsung S85 (hacked)",
 "Samsung S850 (hacked)",
 "Samsung Galaxy S3",
+"Samsung Galaxy S7",
+"Samsung Galaxy S7 Edge",
 "Samsung Galaxy Nexus",
 "Sarnoff 4096x5440",
 "Seitz 6x17",

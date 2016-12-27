@@ -6140,6 +6140,7 @@ void CLASS Canon_WBCTpresets (short WBCTversion)
 	else if ((WBCTversion == 2) &&
 		((unique_id == 0x80000374) ||	// M3
 		 (unique_id == 0x80000384) ||	// M10
+		 (unique_id == 0x80000394) ||	// M5
 		 (unique_id == 0x03970000)))	// G7 X Mark II
 	  for (int i=0; i<15; i++)	// tint, offset, as shot R, as shot B, CСT
 	    {
@@ -6471,10 +6472,11 @@ if (tag == 0x0001) Canon_CameraSettings();
             break;
 
           case 5120:
-            imgdata.makernotes.canon.CanonColorDataVer = 5;	// PowerSot G10, G12, G5 X, EOS M3
+            imgdata.makernotes.canon.CanonColorDataVer = 5;	// PowerSot G10, G12, G5 X, EOS M3, EOS M5
             {
               fseek (ifp, save1+(0x56<<1), SEEK_SET);
-              if (unique_id == 0x03970000)  // G7 X Mark II
+              if ((unique_id == 0x03970000) || // G7 X Mark II
+                  (unique_id == 0x80000394))   // EOS M5
               {
                 fseek(ifp, 18, SEEK_CUR);
                 FORC4 imgdata.color.WB_Coeffs[LIBRAW_WBI_Other][c ^ (c >> 1)] = get2();
@@ -6512,7 +6514,7 @@ if (tag == 0x0001) Canon_CameraSettings();
               Canon_WBCTpresets (0);	// BCAT
               fseek (ifp, save1+(0x0fb<<1), SEEK_SET);			// offset 251 short
               int bls=0;
-              FORC4 
+              FORC4
 		bls+= (imgdata.makernotes.canon.ChannelBlackLevel[c]=get2());
               imgdata.makernotes.canon.AverageBlackLevel = bls/4;
             }
@@ -7317,7 +7319,7 @@ void CLASS process_Sony_0x9050 (uchar * buf, unsigned id)
      unsigned long b8c = SonySubstitution[buf[0x8c]];
      unsigned long b8d = SonySubstitution[buf[0x8d]];
      sprintf(imgdata.shootinginfo.InternalBodySerial, "%06lx",
-     (b88<<40) + (b89<<32) + (b8a<<24) + (b8b<<16) + b8c<<8 + b8d);
+     (b88<<40) + (b89<<32) + (b8a<<24) + (b8b<<16) + (b8c<<8) + b8d);
    }
    else if ((imgdata.lens.makernotes.CameraMount == LIBRAW_MOUNT_Minolta_A) && (id > 279) && (id != 282) && (id != 283))
    {
@@ -9487,17 +9489,17 @@ void CLASS parse_makernote (int base, int uptag)
       }
     if (tag == 0x200 && len == 3)
       shot_order = (get4(),get4());
-    if (tag == 0x200 && len == 4 && !(cblack[4]*cblack[5]) && !black)
+    if (tag == 0x200 && len == 4)
       FORC4 cblack[c ^ c >> 1] = get2();
     if (tag == 0x201 && len == 4)
          FORC4 cam_mul[c ^ (c >> 1)] = get2();
     if (tag == 0x220 && type == 7)
       meta_offset = ftell(ifp);
-    if (tag == 0x401 && type == 4 && len == 4 && !(cblack[4]*cblack[5]) && !black)
+    if (tag == 0x401 && type == 4 && len == 4)
       FORC4 cblack[c ^ c >> 1] = get4();
 #ifdef LIBRAW_LIBRARY_BUILD
     // not corrected for file bitcount, to be patched in open_datastream
-    if (tag == 0x03d && strstr(make,"NIKON") && len == 4 && !(cblack[4]*cblack[5]) && !black)
+    if (tag == 0x03d && strstr(make,"NIKON") && len == 4)
       {
         FORC4 cblack[c ^ c >> 1] = get2();
         i = cblack[3];
@@ -9553,7 +9555,7 @@ void CLASS parse_makernote (int base, int uptag)
             FORC3 cmatrix[i][c] = ((short) get2()) / 256.0;
 #endif
           }
-    if ((tag == 0x1012 || tag == 0x20400600) && len == 4 && !(cblack[4]*cblack[5]) && !black)
+    if ((tag == 0x1012 || tag == 0x20400600) && len == 4)
       FORC4 cblack[c ^ c >> 1] = get2();
     if (tag == 0x1017 || tag == 0x20400100)
       cam_mul[0] = get2() / 256.0;
@@ -9647,7 +9649,7 @@ get2_256:
             for (i=0; i < 3; i++)
               FORC3 cmatrix[i][c] = (float)((short)((get4() + SamsungKey[i*3+c])))/256.0;
 
-        if (tag == 0xa028 && !(cblack[4]*cblack[5]) && !black)
+        if (tag == 0xa028)
           FORC4 cblack[c ^ (c >> 1)] = get4() - SamsungKey[c];
       }
     else
@@ -10180,7 +10182,6 @@ int CLASS parse_tiff_ifd (int base)
   {
   	switch (tag) {
 	case 0x7300: // SR2 black level
-	  if(!(cblack[4]*cblack[5]) && !black)
 	    for (int i = 0; i < 4 && i < len; i++)
 	      cblack[i] = get2();
 	  break;
@@ -10322,11 +10323,8 @@ int CLASS parse_tiff_ifd (int base)
         else
 #endif
           {
-	    if(!(cblack[4]*cblack[5]) && !black)
-	      {
-		cblack[tag-28] = get2();
-		cblack[3] = cblack[1];
-	      }
+	     cblack[tag-28] = get2();
+	     cblack[3] = cblack[1];
           }
 	break;
       case 36: case 37: case 38:
@@ -10576,18 +10574,15 @@ int CLASS parse_tiff_ifd (int base)
       break;
 #endif
     case 29456: // Sony black level, Sony_SR2SubIFD_0x7310, no more needs to be divided by 4
-      if(!(cblack[4]*cblack[5]) && !black)
-	{
 	  FORC4 cblack[c ^ c >> 1] = get2();
 	  i = cblack[3];
 	  FORC3 if(i>cblack[c]) i = cblack[c];
 	  FORC4 cblack[c]-=i;
 	  black = i;
-	  
+
 #ifdef DCRAW_VERBOSE
       if (verbose) fprintf (stderr, _("...Sony black: %u cblack: %u %u %u %u\n"),black, cblack[0],cblack[1],cblack[2], cblack[3]);
 #endif
-	}
       break;
       case 33405:			/* Model2 */
 	fgets (model2, 64, ifp);
@@ -10849,9 +10844,19 @@ guess_cfa_pc:
 	linear_table (len);
 	break;
       case 50713:			/* BlackLevelRepeatDim */
+#ifdef LIBRAW_LIBRARY_BUILD
+        imgdata.color.dng_levels.dng_cblack[4] = 
+#endif
 	cblack[4] = get2();
+#ifdef LIBRAW_LIBRARY_BUILD
+        imgdata.color.dng_levels.dng_cblack[5] = 
+#endif
 	cblack[5] = get2();
 	if (cblack[4] * cblack[5] > (sizeof(cblack) / sizeof (cblack[0]) - 6))
+#ifdef LIBRAW_LIBRARY_BUILD
+            imgdata.color.dng_levels.dng_cblack[4]=
+	    imgdata.color.dng_levels.dng_cblack[5]= 
+#endif
 	    cblack[4] = cblack[5] = 1;
 	break;
 
@@ -10951,14 +10956,21 @@ guess_cfa_pc:
 	if(tiff_ifd[ifd].samples > 1  && tiff_ifd[ifd].samples == len) // LinearDNG, per-channel black
 	  {
 	    for(i=0; i < colors && i < 4 && i < len; i++)
-	      cblack[i]=(imgdata.color.dng_color[0].dng_blacklevel[i]=getreal(type))+0.5;
-	    black = 0;
+	      imgdata.color.dng_levels.dng_cblack[i]=
+	        cblack[i]=
+		  getreal(type)+0.5;
+
+	    imgdata.color.dng_levels.dng_black= black = 0;
 	  }
 	else
 #endif
 	  if((cblack[4] * cblack[5] < 2) && len == 1)
 	    {
-	      black = getreal(type);
+#ifdef LIBRAW_LIBRARY_BUILD
+	      imgdata.color.dng_levels.dng_black= 
+#endif
+	        black =
+		  getreal(type);
 	    }
 	  else if(cblack[4] * cblack[5] <= len)
 	    {
@@ -10967,6 +10979,17 @@ guess_cfa_pc:
 	      black = 0;
 	      FORC4
 		cblack[c] = 0;
+
+#ifdef LIBRAW_LIBRARY_BUILD
+              if(tag == 50714)
+	      {
+	        FORC (cblack[4] * cblack[5])
+	          imgdata.color.dng_levels.dng_cblack[6+c]= cblack[6+c];
+	        imgdata.color.dng_levels.dng_black=0;
+	        FORC4
+	          imgdata.color.dng_levels.dng_cblack[c]= 0;
+	      }
+#endif
 	    }
       break;
       case 50715:			/* BlackLevelDeltaH */
@@ -10974,16 +10997,19 @@ guess_cfa_pc:
 	for (num=i=0; i < len && i < 65536; i++)
 	  num += getreal(type);
 	black += num/len + 0.5;
+#ifdef LIBRAW_LIBRARY_BUILD
+	imgdata.color.dng_levels.dng_black += num/len + 0.5;
+#endif
 	break;
       case 50717:			/* WhiteLevel */
 #ifdef LIBRAW_LIBRARY_BUILD
-	imgdata.color.dng_color[0].dng_whitelevel[0]=
+	imgdata.color.dng_levels.dng_whitelevel[0]=
 #endif
 	maximum = getint(type);
 #ifdef LIBRAW_LIBRARY_BUILD
 	if(tiff_ifd[ifd].samples > 1 ) // Linear DNG case
 		for(i=1; i < colors && i < 4 && i < len; i++)
-			imgdata.color.dng_color[0].dng_whitelevel[i]=getint(type);
+			imgdata.color.dng_levels.dng_whitelevel[i]=getint(type);
 #endif
 	break;
       case 50718:			/* DefaultScale */
@@ -11047,7 +11073,7 @@ guess_cfa_pc:
       case 50727:			/* AnalogBalance */
 	FORCC{
 #ifdef LIBRAW_LIBRARY_BUILD
-              imgdata.color.dng_color[0].analogbalance[c]=
+              imgdata.color.dng_levels.analogbalance[c]=
 #endif
 	      ab[c] = getreal(type);
 	}
@@ -12376,8 +12402,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 6939, -1016, -866, -4428, 12473, 2177, -1175, 2178, 6162 } },
     { "Canon EOS M3", 0, 0,
       { 6362,-823,-847,-4426,12109,2616,-743,1857,5635 } },
-    { "Canon EOS M5", 0, 0,  /* temp, copy from Canon 80D */
-      { 7457,-671,-937,-4849,12495,2643,-1213,2354,5492 } },
+    { "Canon EOS M5", 0, 0,  /* Adobe */
+      { 8532, -701, -1167, -4095, 11879, 2508, -797, 2424, 7010 }},
     { "Canon EOS M10", 0, 0,
       { 6400,-480,-888,-5294,13416,2047,-1296,2203,6137 } },
     { "Canon EOS M", 0, 0,
@@ -12662,6 +12688,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 4932, -835, 141, -4878, 11868, 3437, -1138, 1961, 7067 } },
     { "Hasselblad H5D-50",0, 0, /* Adobe */
       { 5656, -659, -346, -3923, 12306, 1791, -1602, 3509, 5442 } },
+    { "Hasselblad X1D",0, 0, /* Adobe */
+      {4932, -835, 141, -4878, 11868, 3437, -1138, 1961, 7067 }},
     { "HTC One A9", 64, 1023, /* this is CM1 transposed */
       { 101, -20, -2, -11, 145, 41, -24, 1, 56 } },
     { "Imacon Ixpress", 0, 0,		/* DJC */
@@ -12988,6 +13016,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 8380,-2630,-639,-2887,10725,2496,-627,1427,5438 } },
     { "Olympus E-M10", 0, 0, /* Same for E-M10MarkII */
       { 8380,-2630,-639,-2887,10725,2496,-627,1427,5438 } },
+    { "Olympus E-M1MarkII", 0, 0, /* Adobe */
+      { 8380, -2630, -639, -2887, 10725, 2496, -627, 1427, 5438 }},
     { "Olympus E-M1", 0, 0,
       { 7687,-1984,-606,-4327,11928,2721,-1381,2339,6452 } },
     { "Olympus E-M5MarkII", 0, 0,
@@ -13065,7 +13095,7 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
     { "Pentax K-5", 0, 0,
       { 8713,-2833,-743,-4342,11900,2772,-722,1543,6247 } },
     { "Pentax K-70", 0, 0,
-      {8049, -2060,-1264,-4358, 12953, 1514, -1096, 1965, 6074 }},
+      {8766, -3149, -747, -3976, 11943, 2292, -517, 1259, 5552 }},
     { "Pentax K-7", 0, 0,
       { 9142,-2947,-678,-8648,16967,1663,-2224,2898,8615 } },
     { "Pentax K-S1", 0, 0,
@@ -13080,6 +13110,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 12995,-5593,-1107,-1879,10139,2027,-64,1233,4919 } },
     { "Pentax 645D", 0, 0x3e00,
       { 10646,-3593,-1158,-3329,11699,1831,-667,2874,6287 } },
+    { "Pentax 645Z", 0, 0, /* Adobe */
+      { 9702, -3060, -1254, -3685, 12133, 1721, -1086, 2010, 6971}},
     { "Panasonic DMC-CM10", -15, 0,
       { 8770, -3194,-820,-2871,11281,1803,-513,1552,4434 } },
     { "Panasonic DMC-CM1", -15, 0,
@@ -13166,10 +13198,12 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 11904,-4541,-1189,-2355,10899,1662,-296,1586,4289 } },
     { "Leica V-LUX 3", -15, 0xfff,
       { 11904,-4541,-1189,-2355,10899,1662,-296,1586,4289 } },
-    { "Panasonic DMC-FZ2000", -15, 0, /* markets: DMC-FZ2000, DMC-FZ2500 */
-      { 7830,-2696,-763,-3325,11667,1866,-641,1712,4824 } },
-    { "Panasonic DMC-FZ2500", -15, 0, /* markets: DMC-FZ2000, DMC-FZ2500 */
-      { 7830,-2696,-763,-3325,11667,1866,-641,1712,4824 } },
+    { "Panasonic DMC-FZ2000", -15, 0, /* markets: DMC-FZ2000,DMC-FZ2500,FZH1 */
+      { 7386, -2443, -743, -3437, 11864, 1757, -608, 1660, 4766 }},
+    { "Panasonic DMC-FZ2500", -15, 0,
+      { 7386, -2443, -743, -3437, 11864, 1757, -608, 1660, 4766 }},
+    { "Panasonic DMC-FZH1", -15, 0,
+      { 7386, -2443, -743, -3437, 11864, 1757, -608, 1660, 4766 }},
     { "Panasonic DMC-FZ200", -15, 0xfff,
       { 8112,-2563,-740,-3730,11784,2197,-941,2075,4933 } },
     { "Leica V-LUX 4", -15, 0xfff,
@@ -13370,10 +13404,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 8512,-2641,-694,-8042,15670,2526,-1821,2117,7414 } },
     { "Sony DSC-V3", 0, 0,
       { 7511,-2571,-692,-7894,15088,3060,-948,1111,8128 } },
-
-    {"Sony DSC-RX100M5", -800, 0,  /* temp */
-      {5956,-1701,-441,-3995,11216,2240,-1255,2218,4932}},
-
+    {"Sony DSC-RX100M5", -800, 0,  /* Adobe */
+      {6596, -2079, -562, -4782, 13016, 1933, -970, 1581, 5181 }},
     { "Sony DSC-RX100M", -800, 0,	/* M2 and M3 and M4 */
       { 6596,-2079,-562,-4782,13016,1933,-970,1581,5181 } },
     { "Sony DSC-RX100", 0, 0,
@@ -13420,8 +13452,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 6435,-1903,-536,-4722,12449,2550,-663,1363,6517 } },
     { "Sony ILCA-77M2", 0, 0,
       { 5991,-1732,-443,-4100,11989,2381,-704,1467,5992 } },
-    { "Sony ILCA-99M2", 0, 0,
-      { 6629,-1900,-483,-4618,12349,2550,-622,1381,6514 } },
+    { "Sony ILCA-99M2", 0, 0, /* Adobe */
+      { 6660, -1918, -471, -4613, 12398, 2485, -649, 1433, 6447}},
     { "Sony ILCE-7M2", 0, 0,
       { 5271,-712,-347,-6153,13653,2763,-1601,2366,7242 } },
     { "Sony ILCE-7SM2", 0, 0,
@@ -13436,7 +13468,7 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 5271,-712,-347,-6153,13653,2763,-1601,2366,7242 } },
     { "Sony ILCE-6300", 0, 0,
       { 5973,-1695,-419,-3826,11797,2293,-639,1398,5789 } },
-    { "Sony ILCE-6500", 0, 0, /* temp */
+    { "Sony ILCE-6500", 0, 0, /* Adobe */
       { 5973,-1695,-419,-3826,11797,2293,-639,1398,5789 } },
     { "Sony ILCE", 0, 0,	/* 3000, 5000, 5100, 6000, and QX1 */
       { 5991,-1456,-455,-4764,12135,2980,-707,1425,6701 } },
@@ -14865,7 +14897,16 @@ konica_400z:
       filters = 0x61616161;
       adobe_coeff("Hasselblad","H4D-40");
       strcpy(model,"H4D-40");
-    } else if (raw_width == 9044) {
+    }
+    else if( raw_width == 8384) // X1D
+    {
+     top_margin  = 96;
+     height -= 96;
+     left_margin = 48;
+     width  -= 106;
+     adobe_coeff("Hasselblad","X1D");
+    }
+    else if (raw_width == 9044) {
       if(black > 500)
         {
           top_margin = 12;
@@ -15268,6 +15309,17 @@ bw:   colors = 1;
   }
 
 dng_skip:
+#ifdef LIBRAW_LIBRARY_BUILD
+  if(dng_version) /* Override black level by DNG tags */
+  {
+    black = imgdata.color.dng_levels.dng_black;
+    int ll = LIM(0,
+    (sizeof(cblack)/sizeof(cblack[0])),
+    (sizeof(imgdata.color.dng_levels.dng_cblack)/sizeof(imgdata.color.dng_levels.dng_cblack[0])));
+    for(int i=0; i < ll; i++)
+      cblack[i] = imgdata.color.dng_levels.dng_cblack[i];
+  }
+#endif
   /* Early reject for damaged images */
   if (!load_raw || height < 22 || width < 22 ||
 #ifdef LIBRAW_LIBRARY_BUILD
