@@ -9,11 +9,39 @@ Searches     : Improvements of duplicate searches to permit multiple selection i
 Searches     : Improvements of fuzzy searches to permit fuzzy search on local images not present in the database.
 Searches     : Improvements of duplicate/fuzzy/sketch searches to permit sorting the resulting images in image view by similarity level.
 AlbumGUI     : Improvements of grouped images to apply renaming, copying or metadata actions to all images.
-General      : Update internal Libraw to last 0.18-beta2. New camera supported : Olympus E-M1-II, Panasonic FZ2000 and FZ2500, Sony A99-II, Sony a6500.
 General      : Media player is now ported to QtAV instead Qt5Multimedia (http://www.qtav.org/).
 General      : Add support of animated GIF in preview mode.
 SlideShow    : Add video support.
 Presentation : Add video support.
+General      : Update internal Libraw to last 0.18. New camera supported:
+               Apple: iPad Pro, iPhone SE, iPhone 6s, iPhone 6 plus, iPhone 7, iPhone 7 plus
+               BlackMagic Micro Cinema Camera, URSA, URSA Mini
+               Canon PowerShot G5 X, PowerShot G7 X Mark II, PowerShot G9 X, IXUS 160 (CHDK hack), EOS 5D Mark IV, EOS 80D, EOS 1300D, EOS M10, EOS M5, EOS-1D X Mark II
+               Casio EX-ZR4000/5000
+               DXO One,
+               FujiFilm X-Pro2, X70, X-E2S, X-T2
+               Gione E7
+               GITUP GIT2
+               Google Pixel,Pixel XL
+               Hasselblad X1D, True Zoom
+               HTC MyTouch 4G, One (A9), One (M9), 10
+               Huawei P9
+               Leica M (Typ 262), M-D (Typ 262), S (Typ 007), SL (Typ 601), X-U (Typ 113), TL
+               LG G3, G4
+               Meizy MX4
+               Nikon D5, D500, D3400
+               Olympus E-PL8, E-M10 Mark II, Pen F, SH-3, E-M1-II
+               Panasonic DMC-G8/80/81/85, DMC-GX80/85, DMC-TZ80/81/85/ZS60, DMC-TZ100/101/ZS100,DMC-LX9/10/15, FZ2000/FZ2500
+               Pentax K-1, K-3 II, K-70
+               PhaseOne IQ3 100MP
+               RaspberryPi Camera, Camera V2
+               Ricoh GR II
+               Samsung Galaxy S7, S7 Edge
+               Sigma sd Quattro
+               Sony A7S II, ILCA-68 (A68),ILCE-6300,DSC-RX1R II,DSC-RX10III, DSC-RX100V,ILCA-99M2 (A99-II), a6500, IMX214, IMX219, IMX230, IMX298-mipi 16mp, IMX219-mipi 8mp, Xperia L
+               PtGrey GRAS-50S5C
+               YUNEEC CGO4
+               Xiaomi MI3, RedMi Note3 Pro
 
 BUGFIXES FROM BUGZILLA:
 
