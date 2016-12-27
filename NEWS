@@ -164,4 +164,6 @@ BUGFIXES FROM BUGZILLA:
 145 ==> 203714 - Play animated GIF files in preview mode.
 146 ==> 374178 - Wanting .vob files and .mov files to appear.
 147 ==> 374179 - Want .mts movies to appear in the digikam album.
-148 ==> 
+148 ==> 370392 - digikam does not start on wayland.
+149 ==> 372420 - digikam crashed under wayland.
+150 ==> 
