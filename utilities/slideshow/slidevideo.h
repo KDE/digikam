@@ -47,6 +47,7 @@ public:
     explicit SlideVideo(QWidget* const parent);
     ~SlideVideo();
 
+    void showIndicator(bool);
     void setCurrentUrl(const QUrl& url);
     void pause(bool);
     void stop();

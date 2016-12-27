@@ -62,7 +62,8 @@ public:
         videoWidget(0),
         player(0),
         slider(0),
-        tlabel(0)
+        tlabel(0),
+        indicator(0)
     {
     }
 
@@ -70,6 +71,7 @@ public:
     AVPlayer*            player;
     QSlider*             slider;
     QLabel*              tlabel;
+    DHBox*               indicator;
 };
 
 SlideVideo::SlideVideo(QWidget* const parent)
@@ -91,19 +93,19 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->player->setRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
 
-    DHBox* const hbox = new DHBox(this);
-    d->slider         = new QSlider(Qt::Horizontal, hbox);
+    d->indicator      = new DHBox(this);
+    d->slider         = new QSlider(Qt::Horizontal, d->indicator);
     d->slider->setRange(0, 0);
     d->slider->setAutoFillBackground(true);
-    d->tlabel         = new QLabel(hbox);
+    d->tlabel         = new QLabel(d->indicator);
     d->tlabel->setText(QString::fromLatin1("00:00:00 / 00:00:00"));
     d->tlabel->setAutoFillBackground(true);
-    hbox->setStretchFactor(d->slider, 10);
-    hbox->setAutoFillBackground(true);
+    d->indicator->setStretchFactor(d->slider, 10);
+    d->indicator->setAutoFillBackground(true);
 
     QVBoxLayout* const vbox2 = new QVBoxLayout(this);
     vbox2->addWidget(d->videoWidget, 10);
-    vbox2->addWidget(hbox,           0);
+    vbox2->addWidget(d->indicator,    0);
     vbox2->setContentsMargins(margins);
     vbox2->setSpacing(spacing);
 
@@ -141,6 +143,11 @@ SlideVideo::~SlideVideo()
 {
     d->player->stop();
     delete d;
+}
+
+void SlideVideo::showIndicator(bool b)
+{
+//TODO    d->indicator->setVisible(b);
 }
 
 void SlideVideo::setCurrentUrl(const QUrl& url)

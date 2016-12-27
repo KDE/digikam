@@ -458,6 +458,11 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
         setCursor(QCursor(Qt::ArrowCursor));
         d->mouseMoveTimer->setSingleShot(true);
         d->mouseMoveTimer->start(1000);
+
+#ifdef HAVE_MEDIAPLAYER
+        d->videoView->showIndicator(true);
+#endif
+
         return false;
     }
 
@@ -468,6 +473,10 @@ bool SlideShow::eventFilter(QObject* obj, QEvent* ev)
 void SlideShow::slotMouseMoveTimeOut()
 {
     setCursor(QCursor(Qt::BlankCursor));
+
+#ifdef HAVE_MEDIAPLAYER
+    d->videoView->showIndicator(false);
+#endif
 }
 
 // From Okular's presentation widget
