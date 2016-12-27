@@ -82,9 +82,6 @@ SlideVideo::SlideVideo(QWidget* const parent)
     setMouseTracking(true);
     setAutoFillBackground(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QMargins margins(0, 0, 0, 0);
-
     d->videoWidget    = new WidgetRenderer(this);
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
@@ -108,7 +105,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
     grid->addWidget(d->indicator,   1, 0, 1, 1);
     grid->setRowStretch(0, 100);
     grid->setRowStretch(1, 1);
-    grid->setContentsMargins(margins);
+    grid->setContentsMargins(QMargins(0, 0, 0, 0));
 
     // --------------------------------------------------------------------------
 
