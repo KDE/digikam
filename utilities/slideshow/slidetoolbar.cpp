@@ -86,6 +86,11 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
     d->prevBtn->setFocusPolicy(Qt::NoFocus);
     d->nextBtn->setFocusPolicy(Qt::NoFocus);
     d->stopBtn->setFocusPolicy(Qt::NoFocus);
+    QSize s(32, 32);
+    d->playBtn->setIconSize(s);
+    d->prevBtn->setIconSize(s);
+    d->nextBtn->setIconSize(s);
+    d->stopBtn->setIconSize(s);
 
     QString iconString = settings.autoPlayEnabled ? QLatin1String("media-playback-pause") : QLatin1String("media-playback-start");
     d->playBtn->setIcon(QIcon::fromTheme(iconString));
