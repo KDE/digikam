@@ -72,7 +72,6 @@ public:
         ratingWidget(0),
         clWidget(0),
         plWidget(0)
-
     {
     }
 
@@ -303,7 +302,6 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
 
 void SlideOSD::slotSlideTimer()
 {
-    // NOTE: prepare to video slide support.
     d->parent->slotLoadNextItem();
 }
 
@@ -327,7 +325,7 @@ void SlideOSD::slotProgressTimer()
     else
     {
         d->progressBar->setFormat(str);
-        d->progressBar->setValue(d->progressBar->value()-1);
+        d->progressBar->setValue(d->progressBar->value()+1);
     }
 }
 
@@ -341,7 +339,7 @@ void SlideOSD::pause(bool b)
     }
     else
     {
-        d->progressBar->setValue(d->settings.delay*(1000/d->delay));
+        d->progressBar->setValue(0);
         d->progressTimer->start(d->delay);
         d->slideTimer->setSingleShot(true);
         d->slideTimer->start(d->settings.delay * 1000);
