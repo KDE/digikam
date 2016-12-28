@@ -118,7 +118,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
 
-    d->player         = new AVPlayer(this);
+    d->player         = new AVPlayer;
     d->player->setRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
     d->thread         = new SlidePlayerThread(d->player);
