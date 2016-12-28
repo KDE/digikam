@@ -217,7 +217,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     d->playerView  = new QFrame(this);
     d->videoWidget = new WidgetRenderer(this);
-    d->player      = new AVPlayer(this);
+    d->player      = new AVPlayer;
     d->thread      = new MediaPlayerThread(d->player);
 
     DHBox* const hbox = new DHBox(this);
