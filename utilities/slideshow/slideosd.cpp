@@ -267,6 +267,7 @@ void SlideOSD::setCurrentInfo(const SlidePictureInfo& info, const QUrl& url)
     QRect geometry(QApplication::desktop()->availableGeometry(parentWidget()));
     move(10, geometry.bottom() - height());
     show();
+    raise();
 }
 
 bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)

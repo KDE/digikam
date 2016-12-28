@@ -218,7 +218,6 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             d->errorView->setCurrentUrl(currentItem());
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
-            d->osd->raise();
             break;
 
         case ImageView:
@@ -227,7 +226,6 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
 #endif
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
-            d->osd->raise();
             break;
 
         case VideoView:
@@ -235,7 +233,6 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             d->osd->pause(true);
             setCurrentIndex(view);
             d->osd->setCurrentInfo(d->settings.pictInfoMap[currentItem()], currentItem());
-            d->osd->raise();
 #endif
             break;
 
