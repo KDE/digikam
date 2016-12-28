@@ -32,6 +32,7 @@
 #include <QSlider>
 #include <QStyle>
 #include <QLabel>
+#include <QThread>
 
 // KDE includes
 
@@ -53,6 +54,35 @@ using namespace QtAV;
 namespace Digikam
 {
 
+class SlidePlayerThread : public QThread
+{
+public:
+
+    explicit SlidePlayerThread(AVPlayer* const player)
+      : QThread(0),
+        m_player(player)
+    {
+        m_player->moveToThread(this);
+    }
+
+    virtual ~SlidePlayerThread()
+    {
+    }
+
+private:
+
+    virtual void run()
+    {
+        exec();
+    }
+
+private:
+
+    AVPlayer* m_player;
+};
+
+// --------------------------------------------------------
+
 class SlideVideo::Private
 {
 
@@ -61,6 +91,7 @@ public:
     Private() :
         videoWidget(0),
         player(0),
+        thread(0),
         slider(0),
         tlabel(0),
         indicator(0)
@@ -69,6 +100,7 @@ public:
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
+    SlidePlayerThread*   thread;
     QSlider*             slider;
     QLabel*              tlabel;
     DHBox*               indicator;
@@ -89,6 +121,7 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->player         = new AVPlayer(this);
     d->player->setRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
+    d->thread         = new SlidePlayerThread(d->player);
 
     d->indicator      = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, d->indicator);
@@ -152,6 +185,7 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
 {
     d->player->stop();
     d->player->setFile(url.toLocalFile());
+    d->thread->start();
     d->player->play();
     showIndicator(false);
 }

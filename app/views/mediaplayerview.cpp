@@ -58,6 +58,35 @@ using namespace QtAV;
 namespace Digikam
 {
 
+class MediaPlayerThread : public QThread
+{
+public:
+
+    explicit MediaPlayerThread(AVPlayer* const player)
+      : QThread(0),
+        m_player(player)
+    {
+        m_player->moveToThread(this);
+    }
+
+    virtual ~MediaPlayerThread()
+    {
+    }
+
+private:
+
+    virtual void run()
+    {
+        exec();
+    }
+
+private:
+
+    AVPlayer* m_player;
+};
+
+// --------------------------------------------------------
+
 class MediaPlayerMouseClickFilter : public QObject
 {
 public:
@@ -133,6 +162,7 @@ public:
         toolBar(0),
         videoWidget(0),
         player(0),
+        thread(0),
         slider(0),
         tlabel(0)
     {
@@ -149,6 +179,7 @@ public:
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
+    MediaPlayerThread*   thread;
     QSlider*             slider;
     QLabel*              tlabel;
     QUrl                 currentItem;
@@ -187,6 +218,7 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->playerView  = new QFrame(this);
     d->videoWidget = new WidgetRenderer(this);
     d->player      = new AVPlayer(this);
+    d->thread      = new MediaPlayerThread(d->player);
 
     DHBox* const hbox = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, hbox);
@@ -269,6 +301,7 @@ void MediaPlayerView::reload()
 {
     d->player->stop();
     d->player->setFile(d->currentItem.toLocalFile());
+    d->thread->start();
     d->player->play();
 }
 
@@ -347,6 +380,7 @@ void MediaPlayerView::slotPausePlay()
 {
     if (!d->player->isPlaying())
     {
+        d->thread->start();
         d->player->play();
         return;
     }
@@ -394,6 +428,7 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     d->player->stop();
     setPreviewMode(Private::PlayerView);
     d->player->setFile(d->currentItem.toLocalFile());
+    d->thread->start();
     d->player->play();
 }
 
