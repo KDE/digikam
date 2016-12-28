@@ -2664,7 +2664,6 @@ void DigikamApp::slotImportAddFolders()
     QPointer<QFileDialog> dlg = new QFileDialog(this);
     dlg->setWindowTitle(i18n("Select folders to import into album"));
     dlg->setFileMode(QFileDialog::DirectoryOnly);
-    dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 
     QListView* const l = dlg->findChild<QListView*>(QLatin1String("listView"));
 

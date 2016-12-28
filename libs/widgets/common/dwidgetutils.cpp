@@ -166,7 +166,7 @@ public:
         edit      = 0;
         btn       = 0;
         fdMode    = QFileDialog::ExistingFile;
-        fdOptions = QFileDialog::DontUseNativeDialog;
+        fdOptions = -1;
     }
 
     QLineEdit*            edit;
@@ -175,7 +175,7 @@ public:
     QFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
-    QFileDialog::Options  fdOptions;
+    int                   fdOptions;
 };
 
 DFileSelector::DFileSelector(QWidget* const parent)
@@ -217,7 +217,7 @@ void DFileSelector::setFileDlgTitle(const QString& title)
 
 void DFileSelector::setFileDlgOptions(QFileDialog::Options opts)
 {
-    d->fdOptions = opts;
+    d->fdOptions = (int)opts;
 }
 
 void DFileSelector::slotBtnClicked()
@@ -229,7 +229,10 @@ void DFileSelector::slotBtnClicked()
     }
 
     QFileDialog* const fileDlg = new QFileDialog();
-    fileDlg->setOptions(d->fdOptions);
+
+    if (d->fdOptions != -1)
+        fileDlg->setOptions((QFileDialog::Options)d->fdOptions);
+
     fileDlg->setDirectory(QFileInfo(d->edit->text()).filePath());
     fileDlg->setFileMode(d->fdMode);
 
