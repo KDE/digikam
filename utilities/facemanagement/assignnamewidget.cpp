@@ -776,4 +776,14 @@ void AssignNameWidget::showEvent(QShowEvent* e)
     QWidget::showEvent(e);
 }
 
+bool AssignNameWidget::isCompleterPopupVisible() const
+{
+    if (d->comboBox)
+    {
+        return (d->comboBox->lineEdit()->completer()->popup()->isVisible());
+    }
+
+    return false;
+}
+
 } // namespace Digikam

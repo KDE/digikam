@@ -195,4 +195,9 @@ BUGFIXES FROM BUGZILLA:
 148 ==> 370392 - digikam does not start on wayland.
 149 ==> 372420 - digikam crashed under wayland.
 150 ==> 366234 - Import from card readers starts automatically when digikam is started.
-151 ==> 
+151 ==> 374185 - Tagging problem when two names like 'Name%'.
+152 ==> 372481 - Face tag assignment with copy/paste.
+153 ==> 284780 - Face assignement need to use both mouse and keyboard to name persons.
+154 ==> 368124 - Face tag inside album view is case sensitive.
+155 ==> 360155 - Tag list is not filtered during face tag naming.
+156 ==> 

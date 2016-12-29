@@ -72,6 +72,7 @@ public:
         {
             return QModelIndex();
         }
+
         TAlbum* const talbum = AlbumManager::instance()->findTAlbum(id);
         return supportingModel->indexForAlbum(talbum);
     }
@@ -98,8 +99,11 @@ TagCompleter::TagCompleter(QObject* const parent)
     d->model = new QStandardItemModel(this);
     setModel(d->model);
 
-    setCompletionMode(UnfilteredPopupCompletion);
+    setCaseSensitivity(Qt::CaseInsensitive);
+    setFilterMode(Qt::MatchStartsWith);
+    setCompletionMode(PopupCompletion);
     setCompletionRole(CompletionRole);
+    setModelSorting(UnsortedModel);
     setCompletionColumn(0);
 
     connect(this, SIGNAL(activated(QModelIndex)),
@@ -144,7 +148,7 @@ void TagCompleter::update(const QString& fragment)
     QList<TaggingAction> actions = d->factory.actions();
     QList<QStandardItem*> items;
 
-    foreach (const TaggingAction& action, actions)
+    foreach(const TaggingAction& action, actions)
     {
         QStandardItem* item = new QStandardItem;
 
@@ -180,7 +184,7 @@ void TagCompleter::update(const QString& fragment)
 
     d->model->appendColumn(items);
 
-    if (!actions.isEmpty() && completionMode() == QCompleter::InlineCompletion)
+    if (!actions.isEmpty())
     {
         emit highlighted(actions.first());
     }

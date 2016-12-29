@@ -28,6 +28,10 @@
 
 #include "addtagscombobox.h"
 
+// Qt includes
+
+#include <QKeyEvent>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -54,14 +58,15 @@ public:
 // ---------------------------------------------------------------------------------------
 
 AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
-    : TagTreeViewSelectComboBox(parent), d(new Private)
+    : TagTreeViewSelectComboBox(parent),
+      d(new Private)
 {
     setInsertPolicy(QComboBox::NoInsert); // do not let Qt interfere when Enter is pressed
     setCloseOnActivate(true);
     setCheckable(false);
 
     d->lineEdit = new AddTagsLineEdit(this);
-    d->lineEdit->completer()->setCompletionMode(QCompleter::InlineCompletion);
+    d->lineEdit->completer()->popup()->installEventFilter(this);
 
     setLineEdit(d->lineEdit);
 
@@ -160,6 +165,39 @@ void AddTagsComboBox::slotLineEditActionSelected(const TaggingAction& action)
 {
     d->viewTaggingAction = TaggingAction();
     emit taggingActionSelected(action);
+}
+
+bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == d->lineEdit->completer()->popup())
+    {
+        if (event->type() == QEvent::Move)
+        {
+            if (parentWidget() && parentWidget()->parentWidget())
+            {
+                int top     = parentWidget()->contentsMargins().top();
+                int left    = parentWidget()->contentsMargins().left();
+                int bottom  = parentWidget()->contentsMargins().bottom();
+                int fromTop = height() + top + bottom;
+
+                QPoint pos = parentWidget()->parentWidget()->mapToGlobal(QPoint(left, fromTop));
+                d->lineEdit->completer()->popup()->setStyleSheet(parentWidget()->styleSheet());
+                d->lineEdit->completer()->popup()->move(pos);
+            }
+        }
+        else if (event->type() == QEvent::ShortcutOverride)
+        {
+            QKeyEvent* const keyEvent = static_cast<QKeyEvent*>(event);
+
+            if (keyEvent && (keyEvent->key() == Qt::Key_Up ||
+                             keyEvent->key() == Qt::Key_Down))
+            {
+                event->accept();
+            }
+        }
+    }
+
+    return TagTreeViewSelectComboBox::eventFilter(object, event);
 }
 
 } // namespace Digikam

@@ -24,6 +24,10 @@
 #ifndef ADDTAGSCOMBOBOX_H
 #define ADDTAGSCOMBOBOX_H
 
+// Qt includes
+
+#include <QEvent>
+
 // Local includes
 
 #include "albumselectcombobox.h"
@@ -94,6 +98,10 @@ protected Q_SLOTS:
     void slotViewIndexActivated(const QModelIndex&);
     void slotLineEditActionActivated(const TaggingAction& action);
     void slotLineEditActionSelected(const TaggingAction& action);
+
+protected:
+
+    bool eventFilter(QObject* object, QEvent* event);
 
 private:
 
