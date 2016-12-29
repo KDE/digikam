@@ -194,4 +194,5 @@ BUGFIXES FROM BUGZILLA:
 147 ==> 374179 - Want .mts movies to appear in the digikam album.
 148 ==> 370392 - digikam does not start on wayland.
 149 ==> 372420 - digikam crashed under wayland.
-150 ==> 
+150 ==> 366234 - Import from card readers starts automatically when digikam is started.
+151 ==> 
