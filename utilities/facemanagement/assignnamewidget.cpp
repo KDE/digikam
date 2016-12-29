@@ -406,6 +406,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QWidget { "
                     " %1 "
                     "} "
+
                     "QFrame {"
                     "  background-color: rgba(0, 0, 0, 66%); "
                     "  border: 1px solid rgba(100, 100, 100, 66%); "
@@ -452,7 +453,7 @@ void AssignNameWidget::Private::updateVisualStyle()
 
                     "QLabel { "
                     "  color: white; background-color: transparent; border: none; "
-                    " }"
+                    "}"
                 ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
             );
             break;
@@ -466,13 +467,14 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QWidget { "
                     " %1 "
                     "} "
+
                     "QFrame#assignNameWidget {"
                     "  background-color: "
                     "    qradialgradient(cx:0, cy:0, fx:0, fy:0, radius: 1, stop:0 rgba(%2,%3,%4,255), "
                     "                    stop:0.8 rgba(%2,%3,%4,200), stop:1 rgba(%2,%3,%4,0));"
                     "  border: none; "
                     "  border-radius: 8px; "
-                    "} "
+                    "}"
                 ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
                  .arg(bg.red())
                  .arg(bg.green())

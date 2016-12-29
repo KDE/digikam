@@ -31,6 +31,7 @@
 // Qt includes
 
 #include <QKeyEvent>
+#include <QFontDatabase>
 
 // Local includes
 
@@ -66,9 +67,36 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
     setCheckable(false);
 
     d->lineEdit = new AddTagsLineEdit(this);
-    d->lineEdit->completer()->popup()->installEventFilter(this);
-
     setLineEdit(d->lineEdit);
+
+    QString stringFont;
+    QFont font  = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+    stringFont += (font.pointSize() == -1) ? QString::fromUtf8("font-size: %1px; ").arg(font.pixelSize())
+                                           : QString::fromUtf8("font-size: %1pt; ").arg(font.pointSize());
+    stringFont += QString::fromUtf8("font-family: \"%1\"; ").arg(font.family());
+
+    d->lineEdit->completer()->popup()->setStyleSheet(
+        QString::fromUtf8(
+            "QWidget { "
+            " %1 "
+            "} "
+
+            "QFrame {"
+            "  background-color: rgba(0, 0, 0, 66%); "
+            "  border: 1px solid rgba(100, 100, 100, 66%); "
+            "  border-radius: 4px; "
+            "} "
+
+            "QAbstractItemView, QListView::item:!selected { "
+            "  color: white; "
+            "  background-color: rgba(0,0,0,80%); "
+            "} "
+
+            "QLabel { "
+            "  color: white; background-color: transparent; border: none; "
+            "}"
+        ).arg(stringFont)
+    );
 
     connect(d->lineEdit, SIGNAL(taggingActionActivated(TaggingAction)),
             this, SLOT(slotLineEditActionActivated(TaggingAction)));
@@ -81,6 +109,8 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
 
     connect(m_treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotViewIndexActivated(QModelIndex)));
+
+    d->lineEdit->completer()->popup()->installEventFilter(this);
 }
 
 AddTagsComboBox::~AddTagsComboBox()
@@ -181,7 +211,6 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
                 int fromTop = height() + top + bottom;
 
                 QPoint pos = parentWidget()->parentWidget()->mapToGlobal(QPoint(left, fromTop));
-                d->lineEdit->completer()->popup()->setStyleSheet(parentWidget()->styleSheet());
                 d->lineEdit->completer()->popup()->move(pos);
             }
         }
