@@ -407,6 +407,7 @@ void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
 
     resetAlbumsAndTags();
     d->albumSelectors->setPAlbumSelected(album, true);
+    d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
     slotCheckForValidSettings();
 }
 
@@ -419,6 +420,7 @@ void FindDuplicatesView::slotSetSelectedTag(Album* album)
 
     resetAlbumsAndTags();
     d->albumSelectors->setTAlbumSelected(album, true);
+    d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::TagsAlbum);
     slotCheckForValidSettings();
 }
 
