@@ -200,4 +200,5 @@ BUGFIXES FROM BUGZILLA:
 153 ==> 284780 - Face assignement need to use both mouse and keyboard to name persons.
 154 ==> 368124 - Face tag inside album view is case sensitive.
 155 ==> 360155 - Tag list is not filtered during face tag naming.
-156 ==> 
+156 ==> 374354 - Installer adds "Uninstall" item to Start menu.
+157 ==> 
