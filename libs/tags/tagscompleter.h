@@ -68,7 +68,6 @@ private Q_SLOTS:
 
     void slotActivated(const QModelIndex& index);
     void slotHighlighted(const QModelIndex& index);
-    void slotTextEdited(const QString& text);
 
 private:
 
