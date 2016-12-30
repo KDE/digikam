@@ -201,4 +201,5 @@ BUGFIXES FROM BUGZILLA:
 154 ==> 368124 - Face tag inside album view is case sensitive.
 155 ==> 360155 - Tag list is not filtered during face tag naming.
 156 ==> 374354 - Installer adds "Uninstall" item to Start menu.
-157 ==> 
+157 ==> 360955 - digikam - EXIF caption no longer copied to captions area.
+158 ==> 

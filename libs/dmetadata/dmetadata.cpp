@@ -273,63 +273,68 @@ CaptionsMap DMetadata::getImageComments(const DMetadataSettingsContainer &settin
 
     // In first, we check XMP alternative language tags to create map of values.
 
-    if (hasXmp())
+    bool xmpSupported  = hasXmp();
+    bool iptcSupported = hasIptc();
+    bool exivSupported = hasExif();
+
+    for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)))
     {
+        if (entry.isDisabled)
+            continue;
 
-        for (NamespaceEntry entry : settings.getReadMapping(QLatin1String(DM_COMMENT_CONTAINER)))
+        QString commentString;
+        const std::string myStr = entry.namespaceName.toStdString();
+        const char* nameSpace   = myStr.data();
+
+        switch(entry.subspace)
         {
-            if (entry.isDisabled)
-                continue;
-
-            QString commentString;
-            const std::string myStr = entry.namespaceName.toStdString();
-            const char* nameSpace = myStr.data();
-
-            switch(entry.subspace)
-            {
-                case NamespaceEntry::XMP:
-                    switch(entry.specialOpts)
-                    {
-                        case NamespaceEntry::COMMENT_ALTLANG:
+            case NamespaceEntry::XMP:
+                switch(entry.specialOpts)
+                {
+                    case NamespaceEntry::COMMENT_ALTLANG:
+                        if (xmpSupported)
                             commentString = getXmpTagStringLangAlt(nameSpace, QString(), false);
-                            break;
-                        case NamespaceEntry::COMMENT_ATLLANGLIST:
+                        break;
+                    case NamespaceEntry::COMMENT_ATLLANGLIST:
+                        if (xmpSupported)
                             commentsMap = getXmpTagStringListLangAlt(nameSpace, false);
-                            break;
-                        case NamespaceEntry::COMMENT_XMP:
+                        break;
+                    case NamespaceEntry::COMMENT_XMP:
+                        if (xmpSupported)
                             commentString = getXmpTagString("Xmp.acdsee.notes", false);
-                            break;
-                        case NamespaceEntry::COMMENT_JPEG:
-                            // Now, we trying to get image comments, outside of XMP.
-                            // For JPEG, string is extracted from JFIF Comments section.
-                            // For PNG, string is extracted from iTXt chunk.
-                            commentString = getCommentsDecoded();
-                        default:
-                            break;
-                    }
-                    break;
-                case NamespaceEntry::IPTC:
+                        break;
+                    case NamespaceEntry::COMMENT_JPEG:
+                        // Now, we trying to get image comments, outside of XMP.
+                        // For JPEG, string is extracted from JFIF Comments section.
+                        // For PNG, string is extracted from iTXt chunk.
+                        commentString = getCommentsDecoded();
+                    default:
+                        break;
+                }
+                break;
+            case NamespaceEntry::IPTC:
+                if (iptcSupported)
                     commentString = getIptcTagString(nameSpace, false);
-                    break;
-                case NamespaceEntry::EXIF:
+                break;
+            case NamespaceEntry::EXIF:
+                if (exivSupported)
                     commentString = getExifComment();
-                    break;
-                default:
-                    break;
-            }
+                break;
+            default:
+                break;
+        }
 
-            if (!commentString.isEmpty() &&!commentString.trimmed().isEmpty())
-            {
-                commentsMap.insert(QLatin1String("x-default"), commentString);
-                captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-                return captionsMap;
-            }
+        if (!commentString.isEmpty() &&!commentString.trimmed().isEmpty())
+        {
+            commentsMap.insert(QLatin1String("x-default"), commentString);
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
+            return captionsMap;
+        }
 
-            if (!commentsMap.isEmpty())
-            {
-                captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
-                return captionsMap;
-            }
+        if (!commentsMap.isEmpty())
+        {
+            captionsMap.setData(commentsMap, authorsMap, commonAuthor, datesMap);
+            return captionsMap;
         }
     }
 
@@ -665,8 +670,8 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
         return -1;
     }
 
-    long rating = -1;
-    bool xmpSupported = hasXmp();
+    long rating        = -1;
+    bool xmpSupported  = hasXmp();
     bool iptcSupported = hasIptc();
     bool exivSupported = hasExif();
 
@@ -676,7 +681,7 @@ int DMetadata::getImageRating(const DMetadataSettingsContainer &settings) const
             continue;
 
         const std::string myStr = entry.namespaceName.toStdString();
-        const char* nameSpace = myStr.data();
+        const char* nameSpace   = myStr.data();
         QString value;
 
         switch(entry.subspace)
@@ -854,7 +859,7 @@ bool DMetadata::setImageRating(int rating, const DMetadataSettingsContainer &set
             continue;
 
         const std::string myStr = entry.namespaceName.toStdString();
-        const char* nameSpace = myStr.data();
+        const char* nameSpace   = myStr.data();
 
         switch(entry.subspace)
         {
