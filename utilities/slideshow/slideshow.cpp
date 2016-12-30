@@ -603,12 +603,13 @@ void SlideShow::slotPlay()
 
 void SlideShow::slotScreenSelected(int screen)
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Slideshow: move to screen: " << screen;
-
     QRect deskRect = qApp->desktop()->screenGeometry(screen);
 
     move(deskRect.x(), deskRect.y());
     resize(deskRect.width(), deskRect.height());
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Slideshow: move to screen: " << screen
+                                 << " :: " << deskRect;
 }
 
 }  // namespace Digikam
