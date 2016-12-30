@@ -57,6 +57,9 @@ Q_SIGNALS:
     void signalVideoLoaded(bool);
     void signalVideoFinished();
 
+    void signalVideoPosition(qint64);
+    void signalVideoDuration(qint64);
+
 private Q_SLOTS:
 
     void slotPlayerStateChanged(QtAV::MediaStatus);

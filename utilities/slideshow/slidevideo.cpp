@@ -231,12 +231,16 @@ void SlideVideo::slotPositionChanged(qint64 position)
     d->tlabel->setText(QString::fromLatin1("%1 / %2")
                        .arg(QTime(0, 0, 0).addMSecs(position).toString(QString::fromLatin1("HH:mm:ss")))
                        .arg(QTime(0, 0, 0).addMSecs(d->slider->maximum()).toString(QString::fromLatin1("HH:mm:ss"))));
+
+    emit signalVideoPosition(position);
 }
 
 void SlideVideo::slotDurationChanged(qint64 duration)
 {
     qint64 max = qMax((qint64)1, duration);
     d->slider->setRange(0, max);
+
+    emit signalVideoDuration(duration);
 }
 
 void SlideVideo::slotPosition(int position)
