@@ -77,9 +77,6 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
     connect(this, SIGNAL(editingFinished()),
             this, SLOT(slotEditingFinished()));
 
-    connect(this, SIGNAL(textChanged(QString)),
-            this, SLOT(slotTextChanged(QString)));
-
     connect(this, SIGNAL(textEdited(QString)),
             this, SLOT(slotTextEdited(QString)));
 
@@ -172,20 +169,11 @@ void AddTagsLineEdit::slotEditingFinished()
     d->currentTaggingAction = TaggingAction();
 }
 
-void AddTagsLineEdit::slotTextChanged(const QString& text)
-{
-    if (text.isEmpty())
-    {
-        setCurrentTaggingAction(TaggingAction());
-    }
-    else
-    {
-        setCurrentTaggingAction(currentTaggingAction());
-    }
-}
-
 void AddTagsLineEdit::slotTextEdited(const QString& text)
 {
+    d->currentTaggingAction = TaggingAction();
+    setCurrentTaggingAction(currentTaggingAction());
+
     d->completer->update(text);
 }
 
@@ -212,14 +200,12 @@ TaggingAction AddTagsLineEdit::currentTaggingAction() const
     {
         return d->currentTaggingAction;
     }
-    else if (!text().isEmpty())
-    {
-        return TaggingActionFactory::defaultTaggingAction(text(), d->parentTagId);
-    }
-    else
+    else if (text().isEmpty())
     {
         return TaggingAction();
     }
+
+    return TaggingActionFactory::defaultTaggingAction(text(), d->parentTagId);
 }
 
 } // namespace Digikam
