@@ -316,6 +316,17 @@ void AlbumSelectors::setTAlbumSelected(Album* const album, bool singleSelection)
     d->wholeTalbums->setChecked(false);
 }
 
+void AlbumSelectors::setTypeSelection(int albumType)
+{
+    QAbstractButton* button = d->btnGroup->button(albumType);
+    if (button)
+    {
+        button->setChecked(true);
+        slotToggleTypeSelection(albumType);
+    }
+    
+}
+
 void AlbumSelectors::loadState()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();

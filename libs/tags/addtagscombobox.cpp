@@ -28,6 +28,11 @@
 
 #include "addtagscombobox.h"
 
+// Qt includes
+
+#include <QKeyEvent>
+#include <QFontDatabase>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -54,16 +59,44 @@ public:
 // ---------------------------------------------------------------------------------------
 
 AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
-    : TagTreeViewSelectComboBox(parent), d(new Private)
+    : TagTreeViewSelectComboBox(parent),
+      d(new Private)
 {
     setInsertPolicy(QComboBox::NoInsert); // do not let Qt interfere when Enter is pressed
     setCloseOnActivate(true);
     setCheckable(false);
 
     d->lineEdit = new AddTagsLineEdit(this);
-    d->lineEdit->completer()->setCompletionMode(QCompleter::InlineCompletion);
-
     setLineEdit(d->lineEdit);
+
+    QString stringFont;
+    QFont font  = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
+    stringFont += (font.pointSize() == -1) ? QString::fromUtf8("font-size: %1px; ").arg(font.pixelSize())
+                                           : QString::fromUtf8("font-size: %1pt; ").arg(font.pointSize());
+    stringFont += QString::fromUtf8("font-family: \"%1\"; ").arg(font.family());
+
+    d->lineEdit->completer()->popup()->setStyleSheet(
+        QString::fromUtf8(
+            "QWidget { "
+            " %1 "
+            "} "
+
+            "QFrame {"
+            "  background-color: rgba(0, 0, 0, 66%); "
+            "  border: 1px solid rgba(100, 100, 100, 66%); "
+            "  border-radius: 4px; "
+            "} "
+
+            "QAbstractItemView, QListView::item:!selected { "
+            "  color: white; "
+            "  background-color: rgba(0,0,0,80%); "
+            "} "
+
+            "QLabel { "
+            "  color: white; background-color: transparent; border: none; "
+            "}"
+        ).arg(stringFont)
+    );
 
     connect(d->lineEdit, SIGNAL(taggingActionActivated(TaggingAction)),
             this, SLOT(slotLineEditActionActivated(TaggingAction)));
@@ -76,6 +109,8 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
 
     connect(m_treeView, SIGNAL(activated(QModelIndex)),
             this, SLOT(slotViewIndexActivated(QModelIndex)));
+
+    d->lineEdit->completer()->popup()->installEventFilter(this);
 }
 
 AddTagsComboBox::~AddTagsComboBox()
@@ -160,6 +195,38 @@ void AddTagsComboBox::slotLineEditActionSelected(const TaggingAction& action)
 {
     d->viewTaggingAction = TaggingAction();
     emit taggingActionSelected(action);
+}
+
+bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
+{
+    if (object == d->lineEdit->completer()->popup())
+    {
+        if (event->type() == QEvent::Move)
+        {
+            if (parentWidget() && parentWidget()->parentWidget())
+            {
+                int top     = parentWidget()->contentsMargins().top();
+                int left    = parentWidget()->contentsMargins().left();
+                int bottom  = parentWidget()->contentsMargins().bottom();
+                int fromTop = height() + top + bottom;
+
+                QPoint pos = parentWidget()->parentWidget()->mapToGlobal(QPoint(left, fromTop));
+                d->lineEdit->completer()->popup()->move(pos);
+            }
+        }
+        else if (event->type() == QEvent::ShortcutOverride)
+        {
+            QKeyEvent* const keyEvent = static_cast<QKeyEvent*>(event);
+
+            if (keyEvent && (keyEvent->key() == Qt::Key_Up ||
+                             keyEvent->key() == Qt::Key_Down))
+            {
+                event->accept();
+            }
+        }
+    }
+
+    return TagTreeViewSelectComboBox::eventFilter(object, event);
 }
 
 } // namespace Digikam

@@ -498,6 +498,14 @@ void FaceGroup::leaveEvent(QEvent*)
 {
     if (d->showOnHover && !isVisible())
     {
+        foreach(FaceItem* const item, d->items)
+        {
+            if (item->widget() && item->widget()->isCompleterPopupVisible())
+            {
+                return;
+            }
+        }
+
         setVisibleItem(0);
     }
 }
@@ -570,7 +578,7 @@ AssignNameWidget::Mode FaceGroup::Private::assignWidgetMode(FaceTagsIface::Type 
 
 AssignNameWidget* FaceGroup::Private::createAssignNameWidget(const FaceTagsIface& face, const QVariant& identifier)
 {
-    AssignNameWidget* const assignWidget = new AssignNameWidget;
+    AssignNameWidget* const assignWidget = new AssignNameWidget(view);
     assignWidget->setMode(assignWidgetMode(face.type()));
     assignWidget->setTagEntryWidgetMode(AssignNameWidget::AddTagsComboBoxMode);
     assignWidget->setVisualStyle(AssignNameWidget::TranslucentDarkRound);

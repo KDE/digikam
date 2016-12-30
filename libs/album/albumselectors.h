@@ -83,6 +83,11 @@ public:
      *  selected from tree-view and all others are deselected.
      */
     void setTAlbumSelected(Album* const album, bool singleSelection=true);
+    
+    /**
+     * Sets the search type selection with the AlbumType.
+     **/
+    void setTypeSelection(int albumType);
 
     /** Return true if whole Albums collection option is checked.
      */
