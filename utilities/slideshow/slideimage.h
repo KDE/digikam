@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDEIMAGE_H
-#define SLIDEIMAGE_H
+#ifndef SLIDE_IMAGE_H
+#define SLIDE_IMAGE_H
 
 // Qt includes
 
@@ -73,4 +73,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SLIDEIMAGE_H
+#endif // SLIDE_IMAGE_H

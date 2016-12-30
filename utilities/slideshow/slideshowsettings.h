@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDESHOWSETTINGSCONTAINER_H
-#define SLIDESHOWSETTINGSCONTAINER_H
+#ifndef SLIDESHOW_SETTINGS_H
+#define SLIDESHOW_SETTINGS_H
 
 // Qt includes
 
@@ -209,4 +209,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // SLIDESHOWSETTINGSCONTAINER_H
+#endif  // SLIDESHOW_SETTINGS_H

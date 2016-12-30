@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SLIDEPROPERTIES_H
-#define SLIDEPROPERTIES_H
+#ifndef SLIDE_PROPERTIES_H
+#define SLIDE_PROPERTIES_H
 
 #include <QWidget>
 #include <QPainter>
@@ -62,4 +62,4 @@ private:
 
 }  // namespace Digikam
 
-#endif // SLIDEPROPERTIES_H
+#endif // SLIDE_PROPERTIES_H

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef OSD_WIDGET_H
-#define OSD_WIDGET_H
+#ifndef SLIDE_OSD_H
+#define SLIDE_OSD_H
 
 // Qt includes
 
@@ -74,4 +74,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // OSD_WIDGET_H
+#endif  // SLIDE_OSD_H
