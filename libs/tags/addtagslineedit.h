@@ -102,6 +102,7 @@ protected Q_SLOTS:
     void slotReturnPressed();
     void slotEditingFinished();
     void slotTextChanged(const QString& text);
+    void slotTextEdited(const QString& text);
 
 private:
 

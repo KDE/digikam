@@ -183,11 +183,6 @@ void TagCompleter::update(const QString& fragment)
     }
 
     d->model->appendColumn(items);
-
-    if (!actions.isEmpty())
-    {
-        emit highlighted(actions.first());
-    }
 }
 
 void TagCompleter::slotActivated(const QModelIndex& index)
@@ -198,11 +193,6 @@ void TagCompleter::slotActivated(const QModelIndex& index)
 void TagCompleter::slotHighlighted(const QModelIndex& index)
 {
     emit highlighted(index.data(TaggingActionRole).value<TaggingAction>());
-}
-
-void TagCompleter::slotTextEdited(const QString& text)
-{
-    update(text);
 }
 
 } // namespace Digikam

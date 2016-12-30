@@ -81,7 +81,7 @@ AddTagsLineEdit::AddTagsLineEdit(QWidget* const parent)
             this, SLOT(slotTextChanged(QString)));
 
     connect(this, SIGNAL(textEdited(QString)),
-            d->completer, SLOT(slotTextEdited(QString)));
+            this, SLOT(slotTextEdited(QString)));
 
     connect(d->completer, static_cast<void(TagCompleter::*)(const TaggingAction&)>(&TagCompleter::activated),
             [this](const TaggingAction& action){ completerActivated(action); });
@@ -176,8 +176,17 @@ void AddTagsLineEdit::slotTextChanged(const QString& text)
 {
     if (text.isEmpty())
     {
-        d->currentTaggingAction = TaggingAction();
+        setCurrentTaggingAction(TaggingAction());
     }
+    else
+    {
+        setCurrentTaggingAction(currentTaggingAction());
+    }
+}
+
+void AddTagsLineEdit::slotTextEdited(const QString& text)
+{
+    d->completer->update(text);
 }
 
 void AddTagsLineEdit::completerActivated(const TaggingAction& action)
@@ -193,11 +202,6 @@ void AddTagsLineEdit::completerHighlighted(const TaggingAction& action)
 
 void AddTagsLineEdit::setCurrentTaggingAction(const TaggingAction& action)
 {
-    if (d->currentTaggingAction == action)
-    {
-        return;
-    }
-
     d->currentTaggingAction = action;
     emit taggingActionSelected(action);
 }
