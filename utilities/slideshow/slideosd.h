@@ -60,7 +60,6 @@ public:
 private Q_SLOTS:
 
     void slotProgressTimer();
-    void slotSlideTimer();
 
 private:
 

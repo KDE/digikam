@@ -60,10 +60,9 @@ public:
     Private() :
         paused(false),
         blink(false),
-        delay(500),         // Progress bar refresh slideTimer in ms
+        refresh(1000),       // Progress bar refresh in ms
         progressBar(0),
         progressTimer(0),
-        slideTimer(0),
         labelsBox(0),
         progressBox(0),
         parent(0),
@@ -77,11 +76,10 @@ public:
 
     bool                paused;
     bool                blink;
-    int const           delay;
+    int const           refresh;
 
     QProgressBar*       progressBar;
     QTimer*             progressTimer;
-    QTimer*             slideTimer;
 
     DHBox*              labelsBox;
     DHBox*              progressBox;
@@ -169,7 +167,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     d->progressBar   = new QProgressBar(d->progressBox);
     d->progressBar->setMinimum(0);
-    d->progressBar->setMaximum(d->settings.delay*(1000/d->delay));
+    d->progressBar->setMaximum(d->settings.delay);
     d->progressBar->setFocusPolicy(Qt::NoFocus);
     d->progressBar->installEventFilter(d->parent);
     d->progressBar->setMouseTracking(true);
@@ -214,22 +212,12 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimer()));
-
-    d->slideTimer    = new QTimer(this);
-
-    connect(d->slideTimer, SIGNAL(timeout()),
-            this, SLOT(slotSlideTimer()));
-
-    d->slideTimer->setSingleShot(true);
-    d->slideTimer->start(10);
 }
 
 SlideOSD::~SlideOSD()
 {
-    d->slideTimer->stop();
     d->progressTimer->stop();
 
-    delete d->slideTimer;
     delete d->progressTimer;
     delete d;
 }
@@ -301,11 +289,6 @@ bool SlideOSD::eventFilter(QObject* obj, QEvent* ev)
     return QWidget::eventFilter(obj, ev);
 }
 
-void SlideOSD::slotSlideTimer()
-{
-    d->parent->slotLoadNextItem();
-}
-
 void SlideOSD::slotProgressTimer()
 {
     QString str = QString::fromUtf8("(%1/%2)")
@@ -327,6 +310,12 @@ void SlideOSD::slotProgressTimer()
     {
         d->progressBar->setFormat(str);
         d->progressBar->setValue(d->progressBar->value()+1);
+
+        if (d->progressBar->value() == d->settings.delay)
+        {
+            d->progressTimer->stop();
+            d->parent->slotLoadNextItem();
+        }
     }
 }
 
@@ -336,14 +325,12 @@ void SlideOSD::pause(bool b)
 
     if (b)
     {
-        d->slideTimer->stop();
+        d->progressTimer->stop();
     }
     else
     {
         d->progressBar->setValue(0);
-        d->progressTimer->start(d->delay);
-        d->slideTimer->setSingleShot(true);
-        d->slideTimer->start(d->settings.delay * 1000);
+        d->progressTimer->start(d->refresh);
     }
 }
 

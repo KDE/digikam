@@ -105,6 +105,7 @@ SlideToolBar::SlideToolBar(const SlideShowSettings& settings, QWidget* const par
         d->screenSelectBtn      = new QToolButton(this);
         QMenu* const screenMenu = new QMenu(d->screenSelectBtn);
         d->screenSelectBtn->setToolTip(i18n("Switch Screen"));
+        d->screenSelectBtn->setIconSize(s);
         d->screenSelectBtn->setIcon(QIcon::fromTheme(QLatin1String("video-display")));
         d->screenSelectBtn->setMenu(screenMenu);
         d->screenSelectBtn->setPopupMode(QToolButton::InstantPopup);

@@ -196,6 +196,9 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     setCurrentView(ImageView);
     inhibitScreenSaver();
     slotMouseMoveTimeOut();
+
+    // Start slideshow imediatly.
+    slotLoadNextItem();
 }
 
 SlideShow::~SlideShow()
@@ -237,6 +240,11 @@ void SlideShow::setCurrentView(SlideShowViewMode view)
             break;
 
         default : // EndView
+#ifdef HAVE_MEDIAPLAYER
+            d->videoView->stop();
+#endif
+            d->osd->pause(true);
+            setCurrentIndex(view);
             break;
     }
 }
@@ -264,13 +272,13 @@ void SlideShow::slotLoadNextItem()
     {
         if (d->settings.loop)
         {
-            d->fileIndex = 0;
+            d->fileIndex = -1;
         }
     }
-    else
-    {
-        d->fileIndex++;
-    }
+
+    d->fileIndex++;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fileIndex: " << d->fileIndex;
 
     if (!d->settings.loop)
     {
@@ -296,13 +304,13 @@ void SlideShow::slotLoadPrevItem()
     {
         if (d->settings.loop)
         {
-            d->fileIndex = num - 1;
+            d->fileIndex = num;
         }
     }
-    else
-    {
-        d->fileIndex--;
-    }
+
+    d->fileIndex--;
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "fileIndex: " << d->fileIndex;
 
     if (!d->settings.loop)
     {
@@ -414,6 +422,12 @@ void SlideShow::wheelEvent(QWheelEvent* e)
 
     if (e->delta() > 0)
     {
+        if (d->fileIndex == -1)
+        {
+            // EndView => backward.
+            d->fileIndex = d->settings.count();
+        }
+
         d->osd->pause(true);
         slotLoadPrevItem();
     }
@@ -423,6 +437,7 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
 {
     if (d->fileIndex == -1)
     {
+        // EndView => close Slideshow view.
         close();
     }
 
@@ -431,8 +446,14 @@ void SlideShow::mousePressEvent(QMouseEvent* e)
         d->osd->pause(true);
         slotLoadNextItem();
     }
-    else if (e->button() == Qt::RightButton && d->fileIndex - 1 >= 0)
+    else if (e->button() == Qt::RightButton)
     {
+        if (d->fileIndex == -1)
+        {
+            // EndView => backward.
+            d->fileIndex = d->settings.count() - 1;
+        }
+
         d->osd->pause(true);
         slotLoadPrevItem();
     }
