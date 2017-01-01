@@ -104,15 +104,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     setAttribute(Qt::WA_TranslucentBackground, true);
     setAttribute(Qt::WA_ShowWithoutActivating, true);
     setMouseTracking(true);
-/*
-#ifdef Q_OS_WIN
-    // Don't show the window in the taskbar.  Qt::ToolTip does this too, but it
-    // adds an extra ugly shadow.
-    int ex_style = GetWindowLong((HWND)winId(), GWL_EXSTYLE);
-    ex_style    |= WS_EX_NOACTIVATE;
-    SetWindowLong((HWND)winId(), GWL_EXSTYLE, ex_style);
-#endif
-*/
+
     d->settings   = settings;
     d->parent     = parent;
     d->slideProps = new SlideProperties(d->settings, this);
@@ -212,6 +204,8 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
 
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimer()));
+
+    QTimer::singleShot(100, this, SLOT(slotStart()));
 }
 
 SlideOSD::~SlideOSD()
@@ -220,6 +214,13 @@ SlideOSD::~SlideOSD()
 
     delete d->progressTimer;
     delete d;
+}
+
+void SlideOSD::slotStart()
+{
+    d->parent->slotLoadNextItem();
+    d->progressTimer->start(d->refresh);
+    pause(false);
 }
 
 SlideToolBar* SlideOSD::toolBar() const
@@ -295,7 +296,7 @@ void SlideOSD::slotProgressTimer()
                     .arg(QString::number(d->settings.fileList.indexOf(d->parent->currentItem()) + 1))
                     .arg(QString::number(d->settings.fileList.count()));
 
-    if (d->toolBar->isPaused())
+    if (isPaused())
     {
         d->blink = !d->blink;
 
@@ -313,7 +314,6 @@ void SlideOSD::slotProgressTimer()
 
         if (d->progressBar->value() == d->settings.delay)
         {
-            d->progressTimer->stop();
             d->parent->slotLoadNextItem();
         }
     }
@@ -323,14 +323,9 @@ void SlideOSD::pause(bool b)
 {
     d->toolBar->pause(b);
 
-    if (b)
-    {
-        d->progressTimer->stop();
-    }
-    else
+    if (!b)
     {
         d->progressBar->setValue(0);
-        d->progressTimer->start(d->refresh);
     }
 }
 

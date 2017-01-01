@@ -196,9 +196,6 @@ SlideShow::SlideShow(const SlideShowSettings& settings)
     setCurrentView(ImageView);
     inhibitScreenSaver();
     slotMouseMoveTimeOut();
-
-    // Start slideshow imediatly.
-    slotLoadNextItem();
 }
 
 SlideShow::~SlideShow()
