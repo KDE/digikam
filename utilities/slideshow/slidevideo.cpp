@@ -173,6 +173,10 @@ SlideVideo::SlideVideo(QWidget* const parent)
 SlideVideo::~SlideVideo()
 {
     d->player->stop();
+    d->thread->quit();
+    d->thread->wait();
+    delete d->thread;
+    delete d->player;
     delete d;
 }
 
