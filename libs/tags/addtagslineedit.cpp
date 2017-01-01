@@ -121,14 +121,17 @@ void AddTagsLineEdit::setTagTreeView(TagTreeView* const view)
 {
     if (d->tagView)
     {
-        disconnect(d->tagView, &TagTreeView::currentAlbumChanged, this, &AddTagsLineEdit::setParentTag);
+        disconnect(d->tagView, &TagTreeView::currentAlbumChanged, this,
+                   &AddTagsLineEdit::setParentTag);
     }
 
     d->tagView = view;
 
     if (d->tagView)
     {
-        connect(d->tagView, &TagTreeView::currentAlbumChanged, this, &AddTagsLineEdit::setParentTag);
+        connect(d->tagView, &TagTreeView::currentAlbumChanged, this,
+                &AddTagsLineEdit::setParentTag);
+
         setParentTag(d->tagView->currentAlbum());
     }
 }
