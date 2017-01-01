@@ -186,14 +186,14 @@ BUGFIXES FROM BUGZILLA:
 139 ==> 096878 - Ability to use kioslaves for camera image source.
 140 ==> 119424 - digiKam unable to create io-slave.
 141 ==> 145228 - Public Album kioslaves.
-142 ==> 354867 - digikam crashes while renaming files.
-143 ==> 150076 - playing music during a slideshow.
+142 ==> 354867 - digiKam crashes while renaming files.
+143 ==> 150076 - Playing music during a slideshow.
 144 ==> 374135 - Storage capacity shows lower unit than actual capacity.
 145 ==> 203714 - Play animated GIF files in preview mode.
 146 ==> 374178 - Wanting .vob files and .mov files to appear.
 147 ==> 374179 - Want .mts movies to appear in the digikam album.
-148 ==> 370392 - digikam does not start on wayland.
-149 ==> 372420 - digikam crashed under wayland.
+148 ==> 370392 - digiKam does not start on wayland.
+149 ==> 372420 - digiKam crashed under wayland.
 150 ==> 366234 - Import from card readers starts automatically when digikam is started.
 151 ==> 374185 - Tagging problem when two names like 'Name%'.
 152 ==> 372481 - Face tag assignment with copy/paste.
@@ -201,8 +201,8 @@ BUGFIXES FROM BUGZILLA:
 154 ==> 368124 - Face tag inside album view is case sensitive.
 155 ==> 360155 - Tag list is not filtered during face tag naming.
 156 ==> 374354 - Installer adds "Uninstall" item to Start menu.
-157 ==> 360955 - digikam - EXIF caption no longer copied to captions area.
-158 ==> 371530 - Database query fails when adding face rectangle resulting in full freeze
+157 ==> 360955 - digiKam - EXIF caption no longer copied to captions area.
+158 ==> 371530 - Database query fails when adding face rectangle resulting in full freeze.
 159 ==> 365313 - SETUP : Selecting location for pictures during initial setup results in wrong collection path.
-160 ==> 
-
+160 ==> 366247 - digiKam writes metadata to some files only not every one.
+161 ==> 
