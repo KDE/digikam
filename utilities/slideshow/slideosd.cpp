@@ -205,7 +205,7 @@ SlideOSD::SlideOSD(const SlideShowSettings& settings, SlideShow* const parent)
     connect(d->progressTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTimer()));
 
-    QTimer::singleShot(100, this, SLOT(slotStart()));
+    QTimer::singleShot(500, this, SLOT(slotStart()));
 }
 
 SlideOSD::~SlideOSD()
