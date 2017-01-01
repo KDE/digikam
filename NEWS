@@ -203,4 +203,6 @@ BUGFIXES FROM BUGZILLA:
 156 ==> 374354 - Installer adds "Uninstall" item to Start menu.
 157 ==> 360955 - digikam - EXIF caption no longer copied to captions area.
 158 ==> 371530 - Database query fails when adding face rectangle resulting in full freeze
-159 ==> 
+159 ==> 365313 - SETUP : Selecting location for pictures during initial setup results in wrong collection path.
+160 ==> 
+
