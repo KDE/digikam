@@ -161,7 +161,7 @@ public:
     {
         QCollator collator;
         collator.setNumericMode(true);
-        collator.setIgnorePunctuation(true);
+        collator.setIgnorePunctuation(false);
         collator.setCaseSensitivity(caseSensitive);
         return (compareByOrder(collator.compare(a, b), sortOrder));
     }

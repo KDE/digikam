@@ -171,11 +171,12 @@ public:
     /** Compares the two string by natural comparison and adheres to given sort order
      */
     static inline int naturalCompare(const QString& a, const QString& b, Qt::SortOrder sortOrder,
-                                     Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive, bool natural = true)
+                                     Qt::CaseSensitivity caseSensitive = Qt::CaseSensitive,
+                                     bool natural = true, bool versioning = false)
     {
         QCollator collator;
         collator.setNumericMode(natural);
-        collator.setIgnorePunctuation(true);
+        collator.setIgnorePunctuation(versioning);
         collator.setCaseSensitivity(caseSensitive);
         return (compareByOrder(collator.compare(a, b), sortOrder));
     }

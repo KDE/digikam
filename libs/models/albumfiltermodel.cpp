@@ -397,7 +397,7 @@ bool AlbumFilterModel::lessThan(const QModelIndex& left, const QModelIndex& righ
     {
         QCollator collator;
         collator.setNumericMode(natural);
-        collator.setIgnorePunctuation(true);
+        collator.setIgnorePunctuation(false);
         collator.setCaseSensitivity(sortCaseSensitivity());
         return (collator.compare(valLeft.toString(), valRight.toString()) < 0);
     }

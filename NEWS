@@ -207,4 +207,5 @@ BUGFIXES FROM BUGZILLA:
 160 ==> 366247 - digiKam writes metadata to some files only not every one.
 161 ==> 374326 - Tag view does not always show children.
 162 ==> 374327 - Tags view: shows images that do not have the currently selected tag.
-163 ==> 
+163 ==> 374413 - Picture sorting by name incorrect.
+164 ==> 

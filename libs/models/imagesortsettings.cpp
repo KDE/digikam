@@ -253,7 +253,11 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
     switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
+        {
+            bool versioning = (left.name().contains(QLatin1String("_v"), Qt::CaseInsensitive) ||
+                               right.name().contains(QLatin1String("_v"), Qt::CaseInsensitive));
+            return naturalCompare(left.name(), right.name(), currentSortOrder, sortCaseSensitivity, strTypeNatural, versioning);
+        }
         case SortByFilePath:
             return naturalCompare(left.filePath(), right.filePath(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFileSize:

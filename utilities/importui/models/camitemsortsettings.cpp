@@ -216,7 +216,11 @@ int CamItemSortSettings::compare(const CamItemInfo& left, const CamItemInfo& rig
     switch (role)
     {
         case SortByFileName:
-            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity, strTypeNatural);
+        {
+            bool versioning = (left.name.contains(QLatin1String("_v"), Qt::CaseInsensitive) ||
+                               right.name.contains(QLatin1String("_v"), Qt::CaseInsensitive));
+            return naturalCompare(left.name, right.name, currentSortOrder, sortCaseSensitivity, strTypeNatural, versioning);
+        }
         case SortByFilePath:
             return naturalCompare(left.url().toLocalFile(), right.url().toLocalFile(), currentSortOrder, sortCaseSensitivity, strTypeNatural);
         case SortByFileSize:
