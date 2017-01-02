@@ -205,4 +205,6 @@ BUGFIXES FROM BUGZILLA:
 158 ==> 371530 - Database query fails when adding face rectangle resulting in full freeze.
 159 ==> 365313 - SETUP : Selecting location for pictures during initial setup results in wrong collection path.
 160 ==> 366247 - digiKam writes metadata to some files only not every one.
-161 ==> 
+161 ==> 374326 - Tag view does not always show children.
+162 ==> 374327 - Tags view: shows images that do not have the currently selected tag.
+163 ==> 
