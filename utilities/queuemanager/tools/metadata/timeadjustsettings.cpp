@@ -48,6 +48,7 @@
 #include "dexpanderbox.h"
 #include "clockphotodialog.h"
 #include "dmetadata.h"
+#include "detbyclockphotobutton.h"
 
 namespace Digikam
 {
@@ -116,7 +117,7 @@ public:
 
     QSpinBox*     adjDaysInput;
 
-    QPushButton*  adjDetByClockPhotoBtn;
+    DetByClockPhotoButton*  adjDetByClockPhotoBtn;
 
     QDateEdit*    useCustDateInput;
 
@@ -216,8 +217,9 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->adjDaysLabel             = new QLabel(i18nc("time adjust offset, days value label", "days"), d->adjustSettingsBox);
     d->adjTimeInput             = new QTimeEdit(d->adjustSettingsBox);
     d->adjTimeInput->setDisplayFormat(QLatin1String("hh:mm:ss"));
-    d->adjDetByClockPhotoBtn    = new QPushButton(i18n("Determine difference from clock photo"));
-
+    d->adjDetByClockPhotoBtn    = new DetByClockPhotoButton(i18n("Determine difference from clock photo"));
+    d->adjDetByClockPhotoBtn->setToolTip(i18n("Either click or drag'n drop a photo on the button to choose a clock photo"));
+    
     adjustGBLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     adjustGBLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     adjustGBLayout->setColumnStretch(0, 1);
@@ -287,7 +289,10 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
             this, SLOT(slotResetDateToCurrent()));
 
     connect(d->adjDetByClockPhotoBtn, SIGNAL(clicked()),
-            this, SLOT(slotDetAdjustmentByClockPhoto()));
+            this, SLOT(slotDetAdjustmentByClockPhotoDialog()));
+
+    connect(d->adjDetByClockPhotoBtn, SIGNAL(signalClockPhotoDropped(QUrl)),
+            this, SLOT(slotDetAdjustmentByClockPhotoUrl(QUrl)));
 
     connect(d->useCustDateInput, SIGNAL(dateChanged(QDate)),
             this, SIGNAL(signalSettingsChanged()));
@@ -389,6 +394,42 @@ TimeAdjustContainer TimeAdjustSettings::settings() const
     return settings;
 }
 
+void TimeAdjustSettings::detAdjustmentByClockPhotoUrl(QUrl url)
+{
+    /* When user press the clock photo button, a dialog is displayed and set the
+    *  results to the proper widgets.
+    */
+    QPointer<ClockPhotoDialog> dlg = new ClockPhotoDialog(this, url);
+    const int result               = dlg->exec();
+
+    if (result == QDialog::Accepted)
+    {
+        DeltaTime dvalues = dlg->deltaValues();
+
+        if (dvalues.isNull())
+        {
+            d->adjTypeChooser->setCurrentIndex(TimeAdjustContainer::COPYVALUE);
+        }
+        else if (dvalues.deltaNegative)
+        {
+            d->adjTypeChooser->setCurrentIndex(TimeAdjustContainer::SUBVALUE);
+        }
+        else
+        {
+            d->adjTypeChooser->setCurrentIndex(TimeAdjustContainer::ADDVALUE);
+        }
+
+        d->adjDaysInput->setValue(dvalues.deltaDays);
+        QTime deltaTime;
+        deltaTime.setHMS(dvalues.deltaHours, dvalues.deltaMinutes, dvalues.deltaSeconds);
+        d->adjTimeInput->setTime(deltaTime);
+
+        emit signalSettingsChanged();
+    }
+
+    delete dlg;
+}
+
 void TimeAdjustSettings::slotSrcTimestampChanged()
 {
     d->useFileDateTypeChooser->setEnabled(false);
@@ -435,43 +476,19 @@ void TimeAdjustSettings::slotAdjustmentTypeChanged()
     emit signalSettingsChanged();
 }
 
-void TimeAdjustSettings::slotDetAdjustmentByClockPhoto()
+void TimeAdjustSettings::slotDetAdjustmentByClockPhotoUrl(QUrl url)
+{
+    //usually called when a photo is dropped onto the push button
+    detAdjustmentByClockPhotoUrl(url);
+}
+
+void TimeAdjustSettings::slotDetAdjustmentByClockPhotoDialog()
 {
     // Determine the currently selected item and preselect it as clock photo
-    QUrl defaultUrl;
+    QUrl emptyUrl;
 
-    /* When user press the clock photo button, a dialog is displayed and set the
-     * results to the proper widgets.
-     */
-    QPointer<ClockPhotoDialog> dlg = new ClockPhotoDialog(this, defaultUrl);
-    const int result               = dlg->exec();
-
-    if (result == QDialog::Accepted)
-    {
-        DeltaTime dvalues = dlg->deltaValues();
-
-        if (dvalues.isNull())
-        {
-            d->adjTypeChooser->setCurrentIndex(TimeAdjustContainer::COPYVALUE);
-        }
-        else if (dvalues.deltaNegative)
-        {
-            d->adjTypeChooser->setCurrentIndex(TimeAdjustContainer::SUBVALUE);
-        }
-        else
-        {
-            d->adjTypeChooser->setCurrentIndex(TimeAdjustContainer::ADDVALUE);
-        }
-
-        d->adjDaysInput->setValue(dvalues.deltaDays);
-        QTime deltaTime;
-        deltaTime.setHMS(dvalues.deltaHours, dvalues.deltaMinutes, dvalues.deltaSeconds);
-        d->adjTimeInput->setTime(deltaTime);
-
-        emit signalSettingsChanged();
-    }
-
-    delete dlg;
+   detAdjustmentByClockPhotoUrl(emptyUrl);
 }
+
 
 }  // namespace Digikam
