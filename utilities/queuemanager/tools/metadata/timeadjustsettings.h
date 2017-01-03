@@ -49,6 +49,7 @@ public:
 
     void setSettings(const TimeAdjustContainer& settings);
     TimeAdjustContainer settings() const;
+    void detAdjustmentByClockPhotoUrl(QUrl url);
 
 Q_SIGNALS:
 
@@ -59,7 +60,8 @@ private Q_SLOTS:
     void slotSrcTimestampChanged();
     void slotResetDateToCurrent();
     void slotAdjustmentTypeChanged();
-    void slotDetAdjustmentByClockPhoto();
+    void slotDetAdjustmentByClockPhotoDialog();
+    void slotDetAdjustmentByClockPhotoUrl(QUrl url);
 
 private:
 
