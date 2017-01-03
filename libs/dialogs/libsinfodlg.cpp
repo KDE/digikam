@@ -131,8 +131,8 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
 #endif // HAVE_LIBLQR_1
 
     QString tiffver = QLatin1String(TIFFLIB_VERSION_STR);
-    QString tiffver = tiffver.left(tiffver.indexOf(QLatin1Char('\n')));
-    QString tiffver = tiffver.section(QLatin1Char(' '), 2, 2);
+    tiffver         = tiffver.left(tiffver.indexOf(QLatin1Char('\n')));
+    tiffver         = tiffver.section(QLatin1Char(' '), 2, 2);
     list.insert(i18nc(CONTEXT, "LibTIFF"), tiffver);
 
     list.insert(i18nc(CONTEXT, "LibPNG"),                      QLatin1String(PNG_LIBPNG_VER_STRING));

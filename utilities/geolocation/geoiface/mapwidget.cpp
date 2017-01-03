@@ -1011,12 +1011,10 @@ void MapWidget::getColorInfos(const GroupState groupState,
     }
     else if ((nMarkers >= 1000) && (nMarkers <= 1950))
     {
-        /// @todo Use KDE-versions instead
         *labelText = QString::fromLatin1("%L1k").arg(qreal(nMarkers)/1000.0, 0, 'f', 1);
     }
     else if ((nMarkers >= 1951) && (nMarkers < 19500))
     {
-        /// @todo Use KDE-versions instead
         *labelText = QString::fromLatin1("%L1k").arg(qreal(nMarkers)/1000.0, 0, 'f', 0);
     }
     else
@@ -2034,7 +2032,7 @@ void MapWidget::addWidgetToControlWidget(QWidget* const newWidget)
 
 QString MapWidget::MarbleWidgetVersion()
 {
-    return QString(Marble::MARBLE_VERSION_STRING);
+    return QString(Marble::MARBLE_VERSION_STRING).section(QLatin1Char(' '), 0, 0);
 }
 
 void MapWidget::setActive(const bool state)
