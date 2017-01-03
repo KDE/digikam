@@ -130,8 +130,12 @@ LibsInfoDlg::LibsInfoDlg(QWidget* const parent)
     list.insert(i18nc(CONTEXT, "LibLqr support"),              SUPPORTED_NO);
 #endif // HAVE_LIBLQR_1
 
+    QString tiffver = QLatin1String(TIFFLIB_VERSION_STR);
+    QString tiffver = tiffver.left(tiffver.indexOf(QLatin1Char('\n')));
+    QString tiffver = tiffver.section(QLatin1Char(' '), 2, 2);
+    list.insert(i18nc(CONTEXT, "LibTIFF"), tiffver);
+
     list.insert(i18nc(CONTEXT, "LibPNG"),                      QLatin1String(PNG_LIBPNG_VER_STRING));
-    list.insert(i18nc(CONTEXT, "LibTIFF"),                     QString::fromLatin1(TIFFLIB_VERSION_STR).replace(QLatin1Char('\n'), QLatin1Char(' ')));
     list.insert(i18nc(CONTEXT, "LibJPEG"),                     QString::number(JPEG_LIB_VERSION));
     list.insert(i18nc(CONTEXT, "LibCImg"),                     GreycstorationFilter::cimgVersionString());
     list.insert(i18nc(CONTEXT, "LibLCMS"),                     QString::number(LCMS_VERSION));
