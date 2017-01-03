@@ -7,7 +7,7 @@
  * Description : Wavelets Noise Reduction threaded image filter.
  *               This filter work in YCrCb color space.
  *
- * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008      by Marco Rossini <marco dot rossini at gmx dot net>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *

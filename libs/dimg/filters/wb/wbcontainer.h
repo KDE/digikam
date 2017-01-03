@@ -6,7 +6,7 @@
  * Date        : 2010-12-15
  * Description : white balance color correction settings container
  *
- * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2008      by Guillaume Castagnino <casta at xwing dot info>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *

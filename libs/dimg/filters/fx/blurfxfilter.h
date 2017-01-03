@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Blur FX threaded image filter.
  *
- * Copyright 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright 2006-2010 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  * Copyright 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *

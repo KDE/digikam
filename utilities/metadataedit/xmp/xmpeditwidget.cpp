@@ -6,7 +6,7 @@
  * Date        : 2011-10-11
  * Description : a DConfigDlgWdg to edit XMP metadata
  *
- * Copyright (C) 2007-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2007-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2011      by Victor Dodon <dodon dot victor at gmail dot com>
  *
  * This program is free software; you can redistribute it

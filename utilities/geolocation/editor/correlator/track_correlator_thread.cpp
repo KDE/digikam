@@ -7,7 +7,7 @@
  * @date   2006-09-19
  * @brief  Thread for correlator for tracks and images
  *
- * @author Copyright (C) 2006-2016 by Gilles Caulier
+ * @author Copyright (C) 2006-2017 by Gilles Caulier
  *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
  * @author Copyright (C) 2010 by Michael G. Hansen
  *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>

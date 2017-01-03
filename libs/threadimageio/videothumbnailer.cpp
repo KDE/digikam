@@ -6,7 +6,7 @@
  * Date        : 2016-04-21
  * Description : QtAV based video thumbnailer
  *
- * Copyright (C) 2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2016-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

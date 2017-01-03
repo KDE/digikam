@@ -6,7 +6,7 @@
  * Date        : 2005-05-25
  * Description : Refocus threaded image filter.
  *
- * Copyright (C) 2005-2015 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009      by Matthias Welwarsky <matze at welwarsky dot de>
  * Copyright (C) 2010      by Martin Klapetek <martin dot klapetek at gmail dot com>
  *
