@@ -89,44 +89,44 @@ public:
         settingsExpander       = 0;
     }
 
-    QWidget*      useSettingsBox;
-    QWidget*      adjustSettingsBox;
-    QWidget*      updateSettingsBox;
+    QWidget*               useSettingsBox;
+    QWidget*               adjustSettingsBox;
+    QWidget*               updateSettingsBox;
 
-    QButtonGroup* useButtonGroup;
+    QButtonGroup*          useButtonGroup;
 
-    QRadioButton* useApplDateBtn;
-    QRadioButton* useFileDateBtn;
-    QRadioButton* useMetaDateBtn;
-    QRadioButton* useCustomDateBtn;
+    QRadioButton*          useApplDateBtn;
+    QRadioButton*          useFileDateBtn;
+    QRadioButton*          useMetaDateBtn;
+    QRadioButton*          useCustomDateBtn;
 
-    QCheckBox*    updFileModDateCheck;
-    QCheckBox*    updEXIFModDateCheck;
-    QCheckBox*    updEXIFOriDateCheck;
-    QCheckBox*    updEXIFDigDateCheck;
-    QCheckBox*    updEXIFThmDateCheck;
-    QCheckBox*    updIPTCDateCheck;
-    QCheckBox*    updXMPDateCheck;
+    QCheckBox*             updFileModDateCheck;
+    QCheckBox*             updEXIFModDateCheck;
+    QCheckBox*             updEXIFOriDateCheck;
+    QCheckBox*             updEXIFDigDateCheck;
+    QCheckBox*             updEXIFThmDateCheck;
+    QCheckBox*             updIPTCDateCheck;
+    QCheckBox*             updXMPDateCheck;
 
-    QComboBox*    useFileDateTypeChooser;
-    QComboBox*    useMetaDateTypeChooser;
-    QComboBox*    adjTypeChooser;
+    QComboBox*             useFileDateTypeChooser;
+    QComboBox*             useMetaDateTypeChooser;
+    QComboBox*             adjTypeChooser;
 
-    QLabel*       useApplDateLbl;
-    QLabel*       adjDaysLabel;
+    QLabel*                useApplDateLbl;
+    QLabel*                adjDaysLabel;
 
-    QSpinBox*     adjDaysInput;
+    QSpinBox*              adjDaysInput;
 
-    DetByClockPhotoButton*  adjDetByClockPhotoBtn;
+    DetByClockPhotoButton* adjDetByClockPhotoBtn;
 
-    QDateEdit*    useCustDateInput;
+    QDateEdit*             useCustDateInput;
 
-    QTimeEdit*    useCustTimeInput;
-    QTimeEdit*    adjTimeInput;
+    QTimeEdit*             useCustTimeInput;
+    QTimeEdit*             adjTimeInput;
 
-    QToolButton*  useCustomDateTodayBtn;
+    QToolButton*           useCustomDateTodayBtn;
 
-    DExpanderBox* settingsExpander;
+    DExpanderBox*          settingsExpander;
 };
 
 TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
