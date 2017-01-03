@@ -135,9 +135,9 @@ SlideVideo::SlideVideo(QWidget* const parent)
 
     QGridLayout* const grid = new QGridLayout(this);
     grid->addWidget(d->videoWidget, 0, 0, 2, 1);
-    grid->addWidget(d->indicator,   1, 0, 1, 1);
-    grid->setRowStretch(0, 100);
-    grid->setRowStretch(1, 1);
+    grid->addWidget(d->indicator,   0, 0, 1, 1); // Widget will be over player to not change layout when visibility is changed.
+    grid->setRowStretch(0, 1);
+    grid->setRowStretch(1, 100);
     grid->setContentsMargins(QMargins(0, 0, 0, 0));
 
     // --------------------------------------------------------------------------
