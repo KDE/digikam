@@ -22,6 +22,7 @@ if (NOT APPLE)
     find_path(QTAV_CORE_INCLUDE_DIR
               NAMES QtAV.h
               HINTS ${_qt5_install_prefix}                                           # For MXE
+                    ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
                     ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
               PATH_SUFFIXES QtAV
@@ -30,6 +31,7 @@ if (NOT APPLE)
     find_path(QTAV_WIDGETS_INCLUDE_DIR
               NAMES QtAVWidgets.h
               HINTS ${_qt5_install_prefix}                                           # For MXE
+                    ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
                     ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
               PATH_SUFFIXES QtAVWidgets
