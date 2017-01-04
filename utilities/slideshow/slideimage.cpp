@@ -119,7 +119,12 @@ void SlideImage::slotGotImagePreview(const LoadingDescription& desc, const DImg&
         return;
     }
 
-    d->preview = preview;
+    d->preview.reset();
+
+    if (!DImg::isAnimatedImage(desc.filePath))      // Special case for animated images as GIF or NMG
+    {
+        d->preview = preview;
+    }
 
     if (!d->preview.isNull())
     {
