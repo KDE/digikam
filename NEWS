@@ -209,4 +209,5 @@ BUGFIXES FROM BUGZILLA:
 162 ==> 374327 - Tags view: shows images that do not have the currently selected tag.
 163 ==> 374413 - Picture sorting by name incorrect.
 164 ==> 296580 - Allow D&D for clock photo in batch queue manager
-165 ==>
+165 ==> 374428 - digiKam crashes when choosing several duplicate results.
+#66 ==> 
