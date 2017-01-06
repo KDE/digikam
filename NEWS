@@ -6,8 +6,9 @@ NEW FEATURES:
 Searches     : Improvements of duplicate searches to introduce a range of similarity of items.
 Searches     : Improvements of duplicate searches to be able to sort search albums list view by similary level.
 Searches     : Improvements of duplicate searches to permit multiple selection in search albums list view.
-Searches     : Improvements of fuzzy searches to permit fuzzy search on local images not present in the database.
+Searches     : Improvements of fuzzy searches to permit fuzzy search on local images not present in the database via drag & drop.
 Searches     : Improvements of duplicate/fuzzy/sketch searches to permit sorting the resulting images in image view by similarity level.
+Searches     : Improvements of duplicate/fuzzy/sketch search results by showing the concrete similarity values in table view.
 AlbumGUI     : Improvements of grouped images to apply renaming, copying or metadata actions to all images.
 General      : Media player is now ported to QtAV instead Qt5Multimedia (http://www.qtav.org/).
 General      : Add support of animated GIF in preview mode.
