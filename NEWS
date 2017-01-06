@@ -214,4 +214,16 @@ BUGFIXES FROM BUGZILLA:
 167 ==> 339308 - digiKam 4.2.0-2 crashes in Manjaro.
 168 ==> 321531 - digiKam crash while browsing videos.
 169 ==> 372159 - Add option to run only the selected queue in BQM
-170 ==> 
+170 ==> 357696 - digiKam crashes at startup.
+171 ==> 199608 - digiKam crash after photo scan.
+172 ==> 335915 - digiKam crashes in Preview while moving photos to new Albums.
+173 ==> 274893 - digiKam crashes on start.
+174 ==> 180701 - digiKam crashes after startdialog.
+175 ==> 362300 - digiKam crashed.
+176 ==> 358092 - digiKam crashed on trying dot downloadf photos from Fairphone 2 in PTP mode.
+177 ==> 288658 - digiKam Crash on startup.
+178 ==> 352295 - Launching digiKam crash.
+179 ==> 361111 - digiKam doesn't start.
+180 ==> 292230 - digiKam Crash after WMV video open attempt.
+181 ==> 220201 - digiKam crashed for no apparent reason.
+182 ==> 
