@@ -210,4 +210,6 @@ BUGFIXES FROM BUGZILLA:
 163 ==> 374413 - Picture sorting by name incorrect.
 164 ==> 296580 - Allow D&D for clock photo in batch queue manager
 165 ==> 374428 - digiKam crashes when choosing several duplicate results.
-#66 ==> 
+166 ==> 340986 - digiKam crashed at startup.
+167 ==> 339308 - digiKam 4.2.0-2 crashes in Manjaro.
+168 ==> 
