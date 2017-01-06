@@ -226,4 +226,4 @@ BUGFIXES FROM BUGZILLA:
 179 ==> 361111 - digiKam doesn't start.
 180 ==> 292230 - digiKam Crash after WMV video open attempt.
 181 ==> 220201 - digiKam crashed for no apparent reason.
-182 ==> 
+182 ==> 374191 - Unusable context menu entries in tags and people view

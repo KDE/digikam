@@ -54,7 +54,8 @@ public:
         SubColumnType = 6,
         SubColumnCreationDateTime = 7,
         SubColumnDigitizationDateTime = 8,
-        SubColumnAspectRatio = 9
+        SubColumnAspectRatio = 9,
+        SubColumnSimilarity = 10
     };
 
 public:

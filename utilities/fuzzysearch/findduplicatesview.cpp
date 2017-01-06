@@ -372,17 +372,6 @@ void FindDuplicatesView::slotDuplicatesAlbumActived()
     if (!albums.empty())
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << albums);
-        // Set the image id of the first selected album as reference.
-        ApplicationSettings * settings = ApplicationSettings::instance();
-        if (settings)
-        {
-            bool ok;
-            qlonglong imageid = albums.first()->title().toLongLong(&ok);
-            if (ok)
-            {
-                settings->setCurrentFuzzySearchReferenceImage(imageid);
-            }
-        }
     }
 }
 
@@ -398,7 +387,7 @@ void FindDuplicatesView::slotUpdateFingerPrints()
     tool->start();
 }
 
-void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
+void FindDuplicatesView::slotSetSelectedAlbum(PAlbum* album)
 {
     if (!album)
     {
@@ -406,20 +395,31 @@ void FindDuplicatesView::slotSetSelectedAlbum(Album* album)
     }
 
     resetAlbumsAndTags();
+    // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     d->albumSelectors->setPAlbumSelected(album, true);
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
     slotCheckForValidSettings();
 }
 
-void FindDuplicatesView::slotSetSelectedTag(Album* album)
+void FindDuplicatesView::slotSetSelectedAlbums(QList<PAlbum*> albums)
 {
-    if (!album)
-    {
-        return;
-    }
-
+    // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     resetAlbumsAndTags();
-    d->albumSelectors->setTAlbumSelected(album, true);
+    foreach(PAlbum* const album, albums)
+    {
+        d->albumSelectors->setPAlbumSelected(album, false);
+    }
+    d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
+    slotCheckForValidSettings();
+}
+
+void FindDuplicatesView::slotSetSelectedAlbums(QList<TAlbum*> albums)
+{
+    resetAlbumsAndTags();
+    foreach(TAlbum* const album, albums)
+    {
+        d->albumSelectors->setTAlbumSelected(album, false);
+    }
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::TagsAlbum);
     slotCheckForValidSettings();
 }

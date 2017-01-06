@@ -818,12 +818,6 @@ void ImageFilterModel::setStringTypeNatural(bool natural)
     setImageSortSettings(d->sorter);
 }
 
-void ImageFilterModel::setReferenceImageId(qlonglong imageid){
-    Q_D(ImageFilterModel);
-    d->sorter.setReferenceImageId(imageid);
-    setImageSortSettings(d->sorter);
-}
-
 int ImageFilterModel::compareCategories(const QModelIndex& left, const QModelIndex& right) const
 {
     // source indexes

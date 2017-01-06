@@ -408,7 +408,7 @@ QList<qlonglong> HaarIface::bestMatchesForImage(const QImage& image, int numberO
     Haar::SignatureData sig;
     haar.calcHaar(d->data, &sig);
 
-    return bestMatches(&sig, numberOfResults, type);
+    return bestMatches(&sig, numberOfResults, type).values();
 }
 
 QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfResults, SketchType type)
@@ -420,16 +420,16 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
         return QList<qlonglong>();
     }
 
-    return bestMatches(&sig, numberOfResults, type);
+    return bestMatches(&sig, numberOfResults, type).values();
 }
 
-QPair<double,QList<qlonglong>> HaarIface::bestMatchesForImageWithThreshold(const QString& imagePath, double requiredPercentage,
+QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesForImageWithThreshold(const QString& imagePath, double requiredPercentage,
                                                              double maximumPercentage, SketchType type)
 {
     QImage image = loadQImage(imagePath);
     if (image.isNull())
     {
-        return QPair<double,QList<qlonglong>>();
+        return QPair<double,QMap<qlonglong,double>>();
     }
 
     d->createLoadingBuffer();
@@ -440,11 +440,15 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesForImageWithThreshold(const
     Haar::SignatureData sig;
     haar.calcHaar(d->data, &sig);
 
-    // Apply duplicates search for the image. Use the image id -1 which cannot be present.
-    return bestMatchesWithThreshold(-1, &sig, requiredPercentage, maximumPercentage, type);
+    // Remove all previous similarities from pictures
+    CoreDbAccess access;
+    access.db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(0));
+
+    // Apply duplicates search for the image. Use the image id 0 which cannot be present.
+    return bestMatchesWithThreshold(0, &sig, requiredPercentage, maximumPercentage, type);
 }
 
-QPair<double,QList<qlonglong>> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
+QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesForImageWithThreshold(qlonglong imageid, double requiredPercentage,
                                                              double maximumPercentage, SketchType type)
 {
     if ( !d->useSignatureCache || (d->signatureCache->isEmpty() && d->useSignatureCache) )
@@ -453,7 +457,7 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesForImageWithThreshold(qlong
 
         if (!retrieveSignatureFromDB(imageid, &sig))
         {
-            return QPair<double,QList<qlonglong>>();
+            return QPair<double,QMap<qlonglong,double>>();
         }
 
         return bestMatchesWithThreshold(imageid, &sig, requiredPercentage, maximumPercentage, type);
@@ -479,7 +483,7 @@ QList<qlonglong> HaarIface::bestMatchesForFile(const QString& filename, int numb
     return bestMatchesForImage(image, numberOfResults, type);
 }
 
-QList<qlonglong> HaarIface::bestMatchesForSignature(const QString& signature, int numberOfResults, SketchType type)
+QMap<qlonglong,double> HaarIface::bestMatchesForSignature(const QString& signature, int numberOfResults, SketchType type)
 {
     QByteArray bytes = QByteArray::fromBase64(signature.toLatin1());
 
@@ -487,10 +491,18 @@ QList<qlonglong> HaarIface::bestMatchesForSignature(const QString& signature, in
     Haar::SignatureData sig;
     blobReader.read(bytes, &sig);
 
-    return bestMatches(&sig, numberOfResults, type);
+    // Get all matching images with their score and save their similarity to the signature, i.e. id -2
+    QMultiMap<double,qlonglong> matches = bestMatches(&sig, numberOfResults, type);
+    QMap<qlonglong, double> result;
+    for (QMultiMap<double,qlonglong>::const_iterator it = matches.constBegin(); it != matches.constEnd(); ++it)
+    {
+        // Add the image id and the normalised score (make sure that it is positive and between 0 and 1.
+        result.insert(it.value(), ( 0.0 - ( it.key()/100) ));
+    }
+    return result;
 }
 
-QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int numberOfResults, SketchType type)
+QMultiMap<double, qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int numberOfResults, SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
 
@@ -544,10 +556,10 @@ QList<qlonglong> HaarIface::bestMatches(Haar::SignatureData* const querySig, int
         qCDebug(DIGIKAM_DATABASE_LOG) << it.key() << it.value();
 */
 
-    return bestMatches.values();
+    return bestMatches;
 }
 
-QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig, double requiredPercentage, double maximumPercentage, SketchType type)
+QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesWithThreshold(qlonglong imageid,Haar::SignatureData* const querySig, double requiredPercentage, double maximumPercentage, SketchType type)
 {
     QMap<qlonglong, double> scores = searchDatabase(querySig, type);
     double lowest, highest;
@@ -561,14 +573,11 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong ima
     // example: 0.2 + (0.3 * 0.3) = 0.2 + 0.09 = 0.29
     double requiredScore   = lowest + scoreRange * percentageRange;
 
-    QMultiMap<double, qlonglong> bestMatches;
+    QMap<qlonglong, double> bestMatches;
     double score, percentage, avgPercentage = 0.0;
-    QPair<double,QList<qlonglong>> result;
+    QPair<double,QMap<qlonglong,double>> result;
     qlonglong         id;
     CoreDbAccess      access;
-
-    // Remove all image properties that show a similarity to the specified image id.
-    access.db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageid));
 
     for (QMap<qlonglong, double>::const_iterator it = scores.constBegin(); it != scores.constEnd(); ++it)
     {
@@ -581,12 +590,16 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong ima
             // If the found image is the original one (check by id) or the percentage is below the maximum.
             if ((id == imageid) || (percentage <= maximumPercentage))
             {
-                bestMatches.insert(percentage, id);
+                bestMatches.insert(id, percentage);
                 // If the current image is not the original, use the images similarity for the average percentage
                 // Also, save the similarity of the found image to the original image.
                 if (id != imageid)
                 {
-                    access.db()->setImageProperty(id,QLatin1String("similarityTo_")+QString::number(imageid),QString::number(percentage));
+                    // Store the similarity if the reference image has a valid image id
+                    if (imageid > 0)
+                    {
+                        access.db()->setImageProperty(id,QLatin1String("similarityTo_")+QString::number(imageid),QString::number(percentage));
+                    }
                     avgPercentage += percentage;
                 }
             }
@@ -603,13 +616,13 @@ QPair<double,QList<qlonglong>> HaarIface::bestMatchesWithThreshold(qlonglong ima
 
         qCDebug(DIGIKAM_DATABASE_LOG) << "Duplicates with id and score:";
 
-        for (QMultiMap<double, qlonglong>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
+        for (QMap<qlonglong, double>::const_iterator it = bestMatches.constBegin(); it != bestMatches.constEnd(); ++it)
         {
-            qCDebug(DIGIKAM_DATABASE_LOG) << it.value() << QString::number(it.key() * 100) + QLatin1Char('%');
+            qCDebug(DIGIKAM_DATABASE_LOG) << it.key() << QString::number(it.value() * 100) + QLatin1Char('%');
         }
     }
     result.first = avgPercentage;
-    result.second = bestMatches.values();
+    result.second = bestMatches;
     return result;
 }
 
@@ -919,7 +932,8 @@ QMap< double,QMap< qlonglong,QList<qlonglong> > > HaarIface::findDuplicates(cons
     QMap<double,QMap<qlonglong,QList<qlonglong>>> resultsMap;
     QMap<double,QMap<qlonglong,QList<qlonglong>>>::iterator similarity_it;
     QSet<qlonglong>::const_iterator     it;
-    QPair<double,QList<qlonglong>>      bestMatches;
+    QPair<double,QMap<qlonglong,double>>      bestMatches;
+    QList<qlonglong>                    imageIdList;
     QSet<qlonglong>                     resultsCandidates;
 
     int                                 total        = 0;
@@ -942,27 +956,28 @@ QMap< double,QMap< qlonglong,QList<qlonglong> > > HaarIface::findDuplicates(cons
         {
             // find images with required similarity
             bestMatches = bestMatchesForImageWithThreshold(*it, requiredPercentage, maximumPercentage, ScannedSketch);
-
-            if (!bestMatches.second.isEmpty())
+            // We need only the image ids from the best matches map.
+            imageIdList = bestMatches.second.keys();
+            if (!imageIdList.isEmpty())
             {
                 // the list will usually contain one image: the original. Filter out.
-                if (!(bestMatches.second.count() == 1 && bestMatches.second.first() == *it))
+                if (!(imageIdList.count() == 1 && imageIdList.first() == *it))
                 {
                     // make a lookup for the average similarity
                     similarity_it = resultsMap.find(bestMatches.first);
                     // If there is an entry for this similarity, add the result set. Else, create a new similarity entry.
                     if (similarity_it != resultsMap.end())
                     {
-                        similarity_it->insert(*it,bestMatches.second);
+                        similarity_it->insert(*it,imageIdList);
                     }
                     else
                     {
                         QMap<qlonglong,QList<qlonglong>> result;
-                        result.insert(*it, bestMatches.second);
+                        result.insert(*it, imageIdList);
                         resultsMap.insert(bestMatches.first,result);
                     }
                     resultsCandidates << *it;
-                    resultsCandidates.unite(bestMatches.second.toSet());
+                    resultsCandidates.unite(imageIdList.toSet());
                 }
             }
         }

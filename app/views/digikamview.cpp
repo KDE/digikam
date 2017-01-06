@@ -294,15 +294,15 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
                                                              d->albumModificationHelper);
     d->leftSideBarWidgets << d->albumFolderSideBar;
 
-    connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
+    connect(d->albumFolderSideBar, SIGNAL(signalFindDuplicates(PAlbum*)),
+            this, SLOT(slotNewDuplicatesSearch(PAlbum*)));
 
     // Tags sidebar tab contents.
     d->tagViewSideBar = new TagViewSideBarWidget(d->leftSideBar, d->modelCollection->getTagModel());
     d->leftSideBarWidgets << d->tagViewSideBar;
 
-    connect(d->tagViewSideBar, SIGNAL(signalFindDuplicatesInAlbum(Album*)),
-            this, SLOT(slotNewDuplicatesSearch(Album*)));
+    connect(d->tagViewSideBar, SIGNAL(signalFindDuplicates(QList<TAlbum*>)),
+            this, SLOT(slotNewDuplicatesSearch(QList<TAlbum*>)));
 
     // Labels sidebar
     d->labelsSideBar       = new LabelsSideBarWidget(d->leftSideBar);
@@ -334,10 +334,7 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->leftSideBarWidgets << d->fuzzySearchSideBar;
 
     connect(d->fuzzySearchSideBar,SIGNAL(signalActive(bool)),
-            this, SLOT(slotFuzzySidebarActive(bool)));
-
-    connect(d->fuzzySearchSideBar, SIGNAL(signalImageChanged()),
-        this, SLOT(slotUpdateFuzzyReferenceImage()));
+            this, SIGNAL(signalFuzzySidebarActive(bool)));
 
 #ifdef HAVE_MARBLE
     d->gpsSearchSideBar = new GPSSearchSideBarWidget(d->leftSideBar,
@@ -356,6 +353,9 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
 
     connect(d->peopleSideBar, SIGNAL(requestFaceMode(bool)),
             d->iconView, SLOT(setFaceMode(bool)));
+
+    connect(d->peopleSideBar, SIGNAL(signalFindDuplicates(QList<TAlbum*>)),
+            this, SLOT(slotNewDuplicatesSearch(QList<TAlbum*>)));
 
     d->leftSideBarWidgets << d->peopleSideBar;
 
@@ -1040,10 +1040,22 @@ void DigikamView::slotNewAdvancedSearch()
     d->searchSideBar->newAdvancedSearch();
 }
 
-void DigikamView::slotNewDuplicatesSearch(Album* album)
+void DigikamView::slotNewDuplicatesSearch(PAlbum* album)
 {
     slotLeftSideBarActivate(d->fuzzySearchSideBar);
     d->fuzzySearchSideBar->newDuplicatesSearch(album);
+}
+
+void DigikamView::slotNewDuplicatesSearch(QList<PAlbum*> albums)
+{
+    slotLeftSideBarActivate(d->fuzzySearchSideBar);
+    d->fuzzySearchSideBar->newDuplicatesSearch(albums);
+}
+
+void DigikamView::slotNewDuplicatesSearch(QList<TAlbum*> albums)
+{
+    slotLeftSideBarActivate(d->fuzzySearchSideBar);
+    d->fuzzySearchSideBar->newDuplicatesSearch(albums);
 }
 
 void DigikamView::slotAlbumsCleared()
@@ -1980,23 +1992,7 @@ void DigikamView::slotSortImages(int sortRole)
     }
 
     settings->setImageSortOrder(sortRole);
-    if (sortRole == ImageSortSettings::SortRole::SortBySimilarity)
-    {
-        d->iconView->imageFilterModel()->setReferenceImageId(settings->getCurrentFuzzySearchReferenceImage());
-    }
     d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
-}
-
-void DigikamView::slotUpdateFuzzyReferenceImage()
-{
-    ApplicationSettings* const settings = ApplicationSettings::instance();
-
-    if (!settings)
-    {
-        return;
-    }
-
-    d->iconView->imageFilterModel()->setReferenceImageId(settings->getCurrentFuzzySearchReferenceImage());
 }
 
 void DigikamView::slotSortImagesOrder(int order)
@@ -2146,11 +2142,6 @@ void DigikamView::slotPresentation()
     }
 
     mngr->showConfigDialog();
-}
-
-void DigikamView::slotFuzzySidebarActive(bool active)
-{
-    emit signalFuzzySidebarActive(active);
 }
 
 void DigikamView::slideShow(const ImageInfoList& infoList)

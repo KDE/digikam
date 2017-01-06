@@ -48,7 +48,6 @@ ImageSortSettings::ImageSortSettings()
     sortCaseSensitivity            = Qt::CaseSensitive;
     currentCategorizationSortOrder = Qt::AscendingOrder;
     currentSortOrder               = Qt::AscendingOrder;
-    referenceImageId               = 0;
 }
 
 bool ImageSortSettings::operator==(const ImageSortSettings& other) const
@@ -59,8 +58,7 @@ bool ImageSortSettings::operator==(const ImageSortSettings& other) const
         categorizationCaseSensitivity == other.categorizationCaseSensitivity &&
         sortRole                      == other.sortRole                      &&
         sortOrder                     == other.sortOrder                     &&
-        sortCaseSensitivity           == other.sortCaseSensitivity           &&
-        referenceImageId              == other.referenceImageId;
+        sortCaseSensitivity           == other.sortCaseSensitivity;
 }
 
 void ImageSortSettings::setCategorizationMode(CategorizationMode mode)
@@ -114,11 +112,6 @@ void ImageSortSettings::setSortOrder(SortOrder order)
 void ImageSortSettings::setStringTypeNatural(bool natural)
 {
     strTypeNatural = natural;
-}
-
-void ImageSortSettings::setReferenceImageId(qlonglong imageid)
-{
-    referenceImageId = imageid;
 }
 
 Qt::SortOrder ImageSortSettings::defaultSortOrderForCategorizationMode(CategorizationMode mode)
@@ -287,9 +280,11 @@ int ImageSortSettings::compare(const ImageInfo& left, const ImageInfo& right, So
         }
         case SortBySimilarity:
         {
+            qlonglong leftReferenceImageId  = left.currentReferenceImage();
+            qlonglong rightReferenceImageId = right.currentReferenceImage();
             // make sure that the original image has always the highest similarity.
-            double leftSimilarity  = left.id() == referenceImageId ? 1.1 : left.similarityTo(referenceImageId);
-            double rightSimilarity = right.id() == referenceImageId ? 1.1 : right.similarityTo(referenceImageId);
+            double leftSimilarity  = left.id() == leftReferenceImageId ? 1.1 : left.currentSimilarity();
+            double rightSimilarity = right.id() == rightReferenceImageId ? 1.1 : right.currentSimilarity();
             return compareByOrder(leftSimilarity, rightSimilarity, currentSortOrder);
         }
         default:

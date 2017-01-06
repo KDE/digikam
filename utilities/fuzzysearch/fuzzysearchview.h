@@ -45,6 +45,8 @@ class FuzzySearchFolderView;
 class ImageInfo;
 class LoadingDescription;
 class SAlbum;
+class PAlbum;
+class TAlbum;
 class SearchModel;
 class SearchModificationHelper;
 class SearchTextBar;
@@ -66,14 +68,13 @@ public:
     void setActive(bool val);
     void setImageInfo(const ImageInfo& info);
 
-    void newDuplicatesSearch(Album* const);
+    void newDuplicatesSearch(PAlbum* const);
+    void newDuplicatesSearch(QList<PAlbum*> const);
+    void newDuplicatesSearch(QList<TAlbum*> const);
 
     virtual void setConfigGroup(const KConfigGroup& group);
     void doLoadState();
     void doSaveState();
-
-Q_SIGNALS:
-    void signalReferenceImageSelected();
 
 protected:
 

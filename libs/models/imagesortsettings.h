@@ -127,12 +127,10 @@ public:
     SortRole                sortRole;
     SortOrder               sortOrder;
     bool                    strTypeNatural;
-    qlonglong               referenceImageId;
 
     void setSortRole(SortRole role);
     void setSortOrder(SortOrder order);
     void setStringTypeNatural(bool natural);
-    void setReferenceImageId(qlonglong imageid);
 
     Qt::SortOrder           currentSortOrder;
     Qt::CaseSensitivity     sortCaseSensitivity;

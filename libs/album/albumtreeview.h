@@ -551,9 +551,10 @@ public:
     TAlbum* currentAlbum() const;
 
     /**
-     * @brief selectedAlbums - return a list of all selected items in tag model
+     * @brief selectedTags - return a list of all selected items in tag model
      */
     QList<Album*> selectedTags();
+    QList<TAlbum*> selectedTagAlbums();
 
     TAlbum* albumForIndex(const QModelIndex& index) const;
     TagModificationHelper* tagModificationHelper()  const;

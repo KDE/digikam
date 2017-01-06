@@ -49,6 +49,8 @@ namespace Digikam
 class AlbumIconItem;
 class ApplicationSettings;
 class Album;
+class PAlbum;
+class TAlbum;
 class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
@@ -123,7 +125,6 @@ Q_SIGNALS:
     void signalGotoTagAndItem(int tagID);
     void signalChangedTab(QWidget*);
     void signalFuzzySidebarActive(bool active);
-    void signalReferenceImageSelected(qlonglong imageId);
 
 public Q_SLOTS:
 
@@ -140,8 +141,6 @@ public Q_SLOTS:
     void slotSlideShowManualFromCurrent();
     void slotSlideShowManualFrom(const ImageInfo& info);
     void slotPresentation();
-    void slotFuzzySidebarActive(bool);
-    void slotUpdateFuzzyReferenceImage();
 
     // Album action slots
     void slotRefresh();
@@ -174,7 +173,9 @@ public Q_SLOTS:
     // Search action slots
     void slotNewKeywordSearch();
     void slotNewAdvancedSearch();
-    void slotNewDuplicatesSearch(Album* album=0);
+    void slotNewDuplicatesSearch(PAlbum* album=0);
+    void slotNewDuplicatesSearch(QList<PAlbum*> albums);
+    void slotNewDuplicatesSearch(QList<TAlbum*> albums);
 
     // Image action slots
     void slotImageLightTable();

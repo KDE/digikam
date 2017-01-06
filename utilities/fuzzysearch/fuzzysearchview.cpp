@@ -558,18 +558,31 @@ void FuzzySearchView::setCurrentAlbum(SAlbum* const album)
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << album);
 }
 
-void FuzzySearchView::newDuplicatesSearch(Album* const album)
+void FuzzySearchView::newDuplicatesSearch(PAlbum* const album)
 {
     if (album)
     {
-        if (album->type() == Album::PHYSICAL)
-        {
-            d->findDuplicatesPanel->slotSetSelectedAlbum(album);
-        }
-        else if (album->type() == Album::TAG)
-        {
-            d->findDuplicatesPanel->slotSetSelectedTag(album);
-        }
+        d->findDuplicatesPanel->slotSetSelectedAlbum(album);
+    }
+
+    d->tabWidget->setCurrentIndex(Private::DUPLICATES);
+}
+
+void FuzzySearchView::newDuplicatesSearch(QList<PAlbum*> const albums)
+{
+    if (!albums.isEmpty())
+    {
+        d->findDuplicatesPanel->slotSetSelectedAlbums(albums);
+    }
+
+    d->tabWidget->setCurrentIndex(Private::DUPLICATES);
+}
+
+void FuzzySearchView::newDuplicatesSearch(QList<TAlbum*> const albums)
+{
+    if (!albums.isEmpty())
+    {
+        d->findDuplicatesPanel->slotSetSelectedAlbums(albums);
     }
 
     d->tabWidget->setCurrentIndex(Private::DUPLICATES);
@@ -940,11 +953,6 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
 
                     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
                     QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
-                    ApplicationSettings * settings = ApplicationSettings::instance();
-                    if (settings)
-                    {
-                        settings->setCurrentFuzzySearchReferenceImage(-1);
-                    }
                     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path, d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, true);
                     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
                     d->labelFile->setAdjustedText(urls.first().fileName());
@@ -1027,17 +1035,11 @@ void FuzzySearchView::setCurrentImage(qlonglong imageid)
 
 void FuzzySearchView::setCurrentImage(const ImageInfo& info)
 {
-    ApplicationSettings * settings = ApplicationSettings::instance();
-    if (settings)
-    {
-        settings->setCurrentFuzzySearchReferenceImage(info.id());
-    }
     d->imageInfo = info;
     d->imageUrl = info.fileUrl();
     d->labelFile->setAdjustedText(d->imageInfo.name());
     d->labelFolder->setAdjustedText(d->imageInfo.fileUrl().adjusted(QUrl::RemoveFilename).toLocalFile());
     d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
-    emit signalReferenceImageSelected();
 }
 
 void FuzzySearchView::setImageInfo(const ImageInfo& info)

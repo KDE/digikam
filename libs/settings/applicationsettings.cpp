@@ -127,7 +127,6 @@ void ApplicationSettings::readSettings()
     d->imageSorting                      = group.readEntry(d->configImageSortingEntry,        (int)ImageSortSettings::AscendingOrder);
     d->imageGroupMode                    = group.readEntry(d->configImageGroupModeEntry,      (int)ImageSortSettings::CategoryByAlbum);
     d->imageGroupSortOrder               = group.readEntry(d->configImageGroupSortOrderEntry, (int)ImageSortSettings::AscendingOrder);
-    d->fuzzySearchReferenceImage         = group.readEntry(d->configFuzzySearchReferenceImage,(int)0);
 
     d->itemLeftClickAction               = ApplicationSettings::ItemLeftClickAction(group.readEntry( d->configItemLeftClickActionEntry,
                                            (int)ApplicationSettings::ShowPreview));
@@ -298,7 +297,6 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configImageSortingEntry,                       (int)d->imageSorting);
     group.writeEntry(d->configImageGroupModeEntry,                     (int)d->imageGroupMode);
     group.writeEntry(d->configImageGroupSortOrderEntry,                (int)d->imageGroupSortOrder);
-    group.writeEntry(d->configFuzzySearchReferenceImage,               (int)d->fuzzySearchReferenceImage);
 
     group.writeEntry(d->configItemLeftClickActionEntry,                (int)d->itemLeftClickAction);
     group.writeEntry(d->configDefaultIconSizeEntry,                    QString::number(d->thumbnailSize));

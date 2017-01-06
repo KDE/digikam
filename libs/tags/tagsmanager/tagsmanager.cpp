@@ -454,12 +454,12 @@ void TagsManager::slotResetTagIcon()
 {
     QString errMsg;
 
-    const QList<Album*> selected = d->tagMngrView->selectedTags();
+    const QList<TAlbum*> selected = d->tagMngrView->selectedTagAlbums();
     const QString icon = QLatin1String("tag");
 
-    for (QList<Album*>::const_iterator it = selected.constBegin(); it != selected.constEnd(); ++it )
+    for (QList<TAlbum*>::const_iterator it = selected.constBegin(); it != selected.constEnd(); ++it )
     {
-        TAlbum* const tag = dynamic_cast<TAlbum*>(*it);
+        TAlbum* const tag = *it;
 
         if (tag)
         {

@@ -187,6 +187,7 @@ ImageInfoCache* ImageInfoStatic::cache()
 ImageInfoData::ImageInfoData()
 {
     id                     = -1;
+    currentReferenceImage  = -1;
     albumId                = -1;
     albumRootId            = -1;
 
@@ -199,6 +200,7 @@ ImageInfoData::ImageInfoData()
     longitude              = 0;
     latitude               = 0;
     altitude               = 0;
+    currentSimilarity      = 0.0;
 
     hasCoordinates         = false;
     hasAltitude            = false;
@@ -259,6 +261,8 @@ ImageInfo::ImageInfo(const ImageListerRecord& record)
     m_data->modificationDate       = record.modificationDate;
     m_data->fileSize               = record.fileSize;
     m_data->imageSize              = record.imageSize;
+    m_data->currentSimilarity      = record.currentSimilarity;
+    m_data->currentReferenceImage  = record.currentFuzzySearchReferenceImage;
 
     m_data->ratingCached           = true;
     m_data->categoryCached         = true;
@@ -1732,6 +1736,16 @@ bool ImageInfo::isLocationAvailable() const
 double ImageInfo::similarityTo(const qlonglong imageId) const
 {
     return imageExtendedProperties().similarityTo(imageId);
+}
+
+double ImageInfo::currentSimilarity() const
+{
+    return m_data->currentSimilarity;
+}
+
+qlonglong ImageInfo::currentReferenceImage() const
+{
+    return m_data->currentReferenceImage;
 }
 
 QList<ImageInfo> ImageInfo::fromUniqueHash(const QString& uniqueHash, qlonglong fileSize)

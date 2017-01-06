@@ -63,7 +63,8 @@ QStringList ColumnItemProperties::getSubColumns()
             << QLatin1String("dimensions")           << QLatin1String("pixelcount")
             << QLatin1String("bitdepth")             << QLatin1String("colormode")
             << QLatin1String("itemtype")             << QLatin1String("itemcreationdatetime")
-            << QLatin1String("itemdigitizationtime") << QLatin1String("itemaspectratio");
+            << QLatin1String("itemdigitizationtime") << QLatin1String("itemaspectratio")
+            << QLatin1String("similarity");
 
     return columns;
 }
@@ -83,6 +84,7 @@ TableViewColumnDescription ColumnItemProperties::getDescription()
     description.addSubColumn(TableViewColumnDescription(QLatin1String("itemcreationdatetime"), i18n("Creation date/time")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("itemdigitizationtime"), i18n("Digitization date/time")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("itemaspectratio"),      i18n("Aspect ratio")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("similarity"),           i18n("Similarity")));
 
     return description;
 }
@@ -111,6 +113,8 @@ QString ColumnItemProperties::getTitle() const
             return i18n("Digitization date/time");
         case SubColumnAspectRatio:
             return i18n("Aspect ratio");
+        case SubColumnSimilarity:
+            return i18n("Similarity");
     }
 
     return QString();
@@ -127,7 +131,8 @@ TableViewColumn::ColumnFlags ColumnItemProperties::getColumnFlags() const
         (subColumn == SubColumnPixelCount)              ||
         (subColumn == SubColumnCreationDateTime)        ||
         (subColumn == SubColumnDigitizationDateTime)    ||
-        (subColumn == SubColumnAspectRatio) )
+        (subColumn == SubColumnAspectRatio)             ||
+        (subColumn == SubColumnSimilarity) )
     {
         flags |= ColumnCustomSorting;
     }
@@ -249,6 +254,16 @@ QVariant ColumnItemProperties::data(TableViewModel::Item* const item, const int 
 
             return QLocale().toString(digitizationDateTime, QLocale::ShortFormat);
         }
+        case SubColumnSimilarity:
+        {
+            qlonglong referenceImageId = info.currentReferenceImage();
+            double similarity = info.currentSimilarity() * 100;
+            if (referenceImageId == info.id())
+            {
+                similarity = 100.00;
+            }
+            return QLocale().toString(similarity,'f',2);
+        }
     }
 
     return QVariant();
@@ -354,6 +369,23 @@ TableViewColumn::ColumnCompareResult ColumnItemProperties::compare(TableViewMode
             const QDateTime dtB                    = commonInfoB.digitizationDate;
 
             return compareHelper<QDateTime>(dtA, dtB);
+        }
+        case SubColumnSimilarity:
+        {
+            qlonglong referenceImageIdA = infoA.currentReferenceImage();
+            qlonglong referenceImageIdB = infoB.currentReferenceImage();
+            if (referenceImageIdA == referenceImageIdB)
+            {
+                // make sure that the original image has always the highest similarity.
+                double infoASimilarity  = infoA.id() == referenceImageIdA ? 1.0 : infoA.currentSimilarity();
+                double infoBSimilarity = infoB.id() == referenceImageIdB ? 1.0 : infoB.currentSimilarity();
+                return compareHelper<double>(infoASimilarity, infoBSimilarity);
+            }
+            else
+            {
+                qCWarning(DIGIKAM_GENERAL_LOG) << "item: items have different fuzzy search reference images. Sorting is not possible.";
+                return CmpEqual;
+            }
         }
 
         default:

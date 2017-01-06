@@ -239,7 +239,9 @@ void TagFolderView::handleCustomContextMenuAction(QAction* action, AlbumPointer<
     }
     else if (action == d->findDuplAction)
     {
-        emit signalFindDuplicatesInAlbum(tag);
+        QList<TAlbum*> selected = selectedTagAlbums();
+
+        emit signalFindDuplicates(selected);
     }
 }
 

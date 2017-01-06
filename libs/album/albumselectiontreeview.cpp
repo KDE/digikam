@@ -203,7 +203,7 @@ void AlbumSelectionTreeView::setEnableToolTips(bool enable)
 
 void AlbumSelectionTreeView::slotFindDuplicates()
 {
-    emit signalFindDuplicatesInAlbum(d->albumModificationHelper->boundAlbum(sender()));
+    emit signalFindDuplicates(d->albumModificationHelper->boundAlbum(sender()));
 }
 
 void AlbumSelectionTreeView::slotRebuildThumbs()

@@ -98,6 +98,7 @@ public:
 public:
 
     qlonglong              id;
+    qlonglong              currentReferenceImage;
     int                    albumId;
     int                    albumRootId;
     QString                name;
@@ -118,6 +119,7 @@ public:
     double                 longitude;
     double                 latitude;
     double                 altitude;
+    double                 currentSimilarity;
 
     //! number of grouped images, if this is group leader
     int                    groupedImages;

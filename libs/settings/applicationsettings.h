@@ -425,9 +425,6 @@ public:
     void setDuplicatesSearchLastMaxSimilarity(int val);
     int  getDuplicatesSearchLastMaxSimilarity() const;
 
-    void setCurrentFuzzySearchReferenceImage(qlonglong val);
-    qlonglong  getCurrentFuzzySearchReferenceImage() const;
-
 private Q_SLOTS:
 
     void applyBalooSettings();

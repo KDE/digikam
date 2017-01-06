@@ -36,6 +36,8 @@ namespace Digikam
 {
 class Album;
 class SAlbum;
+class PAlbum;
+class TAlbum;
 
 class FindDuplicatesView : public QWidget
 {
@@ -50,8 +52,9 @@ public:
 
 public Q_SLOTS:
 
-    void slotSetSelectedAlbum(Album*);
-    void slotSetSelectedTag(Album*);
+    void slotSetSelectedAlbum(PAlbum* album);
+    void slotSetSelectedAlbums(QList<PAlbum*> albums);
+    void slotSetSelectedAlbums(QList<TAlbum*> albums);
 
 private Q_SLOTS:
 

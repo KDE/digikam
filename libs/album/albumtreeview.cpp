@@ -1647,6 +1647,11 @@ QList<Album*> TagTreeView::selectedTags()
     return selectedAlbums<Album>(selectionModel(),m_filteredModel);
 }
 
+QList<TAlbum*> TagTreeView::selectedTagAlbums()
+{
+    return selectedAlbums<TAlbum>(selectionModel(),m_filteredModel);
+}
+
 TAlbum* TagTreeView::albumForIndex(const QModelIndex& index) const
 {
     return dynamic_cast<TAlbum*> (m_albumFilterModel->albumForIndex(index));

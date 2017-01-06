@@ -493,6 +493,11 @@ public:
     static ThumbnailIdentifier thumbnailIdentifier(qlonglong id);
 
     double similarityTo(const qlonglong imageId) const;
+    double currentSimilarity() const;
+    /**
+     * Returns the id of the current fuzzy search reference image.
+     */
+    qlonglong currentReferenceImage() const;
 
 private:
 

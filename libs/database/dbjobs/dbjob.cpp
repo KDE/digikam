@@ -259,7 +259,16 @@ void SearchesJob::run()
             }
             else
             {
-                lister.listSearch(&receiver, info.query);
+                bool ok;
+                qlonglong referenceImageId = info.name.toLongLong(&ok);
+                if (ok)
+                {
+                    lister.listSearch(&receiver, info.query, 0, referenceImageId);
+                }
+                else
+                {
+                    lister.listSearch(&receiver, info.query, 0, -1);
+                }
             }
 
             if (!receiver.hasError)
