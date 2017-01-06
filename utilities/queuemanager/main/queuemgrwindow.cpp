@@ -324,11 +324,19 @@ void QueueMgrWindow::setupActions()
 
     KActionCollection* const ac = actionCollection();
 
-    d->runAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")), i18n("Run"), this);
+    d->runAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")),
+                               i18n("Run"), this);
     d->runAction->setEnabled(false);
     connect(d->runAction, SIGNAL(triggered()), this, SLOT(slotRun()));
     ac->addAction(QLatin1String("queuemgr_run"), d->runAction);
     ac->setDefaultShortcut(d->runAction, Qt::CTRL + Qt::Key_P);
+
+    d->runAllAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-start")),
+                               i18n("Run all"), this);
+    d->runAllAction->setEnabled(false);
+    connect(d->runAllAction, SIGNAL(triggered()), this, SLOT(slotRunAll()));
+    ac->addAction(QLatin1String("queuemgr_run_all"), d->runAllAction);
+    ac->setDefaultShortcut(d->runAllAction, Qt::ALT + Qt::CTRL + Qt::Key_P);
 
     d->stopAction = new QAction(QIcon::fromTheme(QLatin1String("media-playback-stop")), i18n("Stop"), this);
     d->stopAction->setEnabled(false);
@@ -528,6 +536,7 @@ void QueueMgrWindow::refreshStatusBar()
         d->removeItemsDoneAction->setEnabled((items - pendingItems) > 0);
         d->clearQueueAction->setEnabled(items > 0);
         d->runAction->setEnabled((tasks > 0) && (pendingItems > 0));
+        d->runAllAction->setEnabled((totalTasks > 0) && (totalItems > 0));
     }
 }
 
@@ -650,6 +659,54 @@ void QueueMgrWindow::slotRun()
 {
     d->currentQueueToProcess = 0;
 
+    QueueListView* const queue = d->queuePool->currentQueue();
+    QString msg;
+
+    if (!queue)
+    {
+        msg = i18n("There is no queue to be run.");
+    }
+    else if (queue->pendingItemsCount() == 0)
+    {
+        msg = i18n("There is no item to process in the current queue (%1).",
+                   d->queuePool->currentTitle());
+    }
+    else if (queue->settings().renamingRule == QueueSettings::CUSTOMIZE
+             && queue->settings().renamingParser.isEmpty())
+    {
+        msg = i18n("Custom renaming rule is invalid for current queue (%1). "
+                   "Please fix it.", d->queuePool->currentTitle());
+    }
+    else if (queue->assignedTools().m_toolsList.isEmpty())
+    {
+        msg = i18n("Assigned batch tools list is empty for current queue (%1). "
+                   "Please assign tools.", d->queuePool->currentTitle());
+    }
+
+    if (!msg.isEmpty())
+    {
+        QMessageBox::critical(this, qApp->applicationName(), msg);
+        processingAborted();
+        return;
+    }
+
+    // Take a look if general settings are changed, as we cannot do it when BQM is busy.
+    applySettings();
+
+    d->statusProgressBar->setProgressTotalSteps(queue->pendingTasksCount());
+    d->statusProgressBar->setProgressValue(0);
+    d->statusProgressBar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
+    d->toolsView->showTab(ToolsView::HISTORY);
+    busy(true);
+
+    d->processingAllQueues = false;
+    processOneQueue();
+}
+
+void QueueMgrWindow::slotRunAll()
+{
+    d->currentQueueToProcess = 0;
+
     if (!d->queuePool->totalPendingItems())
     {
         QMessageBox::critical(this, qApp->applicationName(), i18n("There are no items to process in the queues."));
@@ -678,6 +735,7 @@ void QueueMgrWindow::slotRun()
     d->toolsView->showTab(ToolsView::HISTORY);
     busy(true);
 
+    d->processingAllQueues = true;
     processOneQueue();
 }
 
@@ -725,6 +783,7 @@ void QueueMgrWindow::busy(bool busy)
 {
     d->busy = busy;
     d->runAction->setEnabled(!d->busy);
+    d->runAllAction->setEnabled(!d->busy);
     d->newQueueAction->setEnabled(!d->busy);
     d->saveQueueAction->setEnabled(!d->busy);
     d->removeQueueAction->setEnabled(!d->busy);
@@ -956,21 +1015,25 @@ void QueueMgrWindow::slotQueueProcessed()
     }
 
     d->currentQueueToProcess++;
+    QString msg;
 
-    if (d->currentQueueToProcess == d->queuePool->count())
+    if (!d->processingAllQueues) {
+        msg = i18n("Batch queue finished");
+    }
+    else if (d->currentQueueToProcess == d->queuePool->count())
     {
-        // Pop-up a message to bring user when all is done.
-        DNotificationWrapper(QLatin1String("batchqueuecompleted"), i18n("Batch queue finished"),
-                             this, windowTitle());
-
-        processingAborted();
-        return;
+        msg = i18n("All batch queues finished");
     }
     else
     {
         // We will process next queue from the pool.
         processOneQueue();
+        return;
     }
+
+    DNotificationWrapper(QLatin1String("batchqueuecompleted"), msg, this,
+                         windowTitle());
+    processingAborted();
 }
 
 void QueueMgrWindow::slotAssignQueueSettings(const QString& title)

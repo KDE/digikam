@@ -153,6 +153,11 @@ QueueListView* QueuePool::currentQueue() const
     return (dynamic_cast<QueueListView*>(currentWidget()));
 }
 
+QString QueuePool::currentTitle() const
+{
+    return queueTitle(currentIndex());
+}
+
 QueueListView* QueuePool::findQueueByItemId(qlonglong id) const
 {
     for (int i = 0; i < count(); ++i)
@@ -453,7 +458,7 @@ bool QueuePool::customRenamingRulesAreValid() const
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+        QueueListView* const queue = findQueueByIndex(i);
 
         if (queue)
         {
@@ -485,7 +490,7 @@ bool QueuePool::assignedBatchToolsListsAreValid() const
 
     for (int i = 0; i < count(); ++i)
     {
-        QueueListView* const queue = dynamic_cast<QueueListView*>(widget(i));
+        QueueListView* const queue = findQueueByIndex(i);
 
         if (queue)
         {

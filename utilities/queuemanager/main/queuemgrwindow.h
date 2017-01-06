@@ -87,6 +87,7 @@ protected:
 public Q_SLOTS:
 
     void slotRun();
+    void slotRunAll();
     void slotStop();
     void slotAssignQueueSettings(const QString&);
 

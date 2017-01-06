@@ -1,11 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="503" name="queuemgrwindow" translationDomain="digikam" >
+<gui version="504" name="queuemgrwindow" translationDomain="digikam" >
 
 <MenuBar>
 
     <Menu name="Queues" ><text>&amp;Queues</text>
         <Action name="queuemgr_run" />
+        <Action name="queuemgr_run_all" />
         <Action name="queuemgr_stop" />
         <Separator/>
         <Action name="queuemgr_newqueue" />
@@ -59,6 +60,7 @@
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
      <Action name="queuemgr_run" />
+     <Action name="queuemgr_run_all" />
      <Action name="queuemgr_stop" />
      <Separator/>
      <Action name="queuemgr_newqueue" />

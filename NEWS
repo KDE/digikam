@@ -213,4 +213,5 @@ BUGFIXES FROM BUGZILLA:
 166 ==> 340986 - digiKam crashed at startup.
 167 ==> 339308 - digiKam 4.2.0-2 crashes in Manjaro.
 168 ==> 321531 - digiKam crash while browsing videos.
-169 ==> 
+169 ==> 372159 - Add option to run only the selected queue in BQM
+170 ==> 

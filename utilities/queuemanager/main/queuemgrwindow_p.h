@@ -58,6 +58,7 @@ public:
         VERTICAL_SPLITTER_CONFIG_KEY(QLatin1String("BqmVerticalSplitter"))
     {
         busy                   = false;
+        processingAllQueues    = false;
         clearQueueAction       = 0;
         moveUpToolAction       = 0;
         moveDownToolAction     = 0;
@@ -89,6 +90,7 @@ public:
     }
 
     bool                     busy;
+    bool                     processingAllQueues;
 
     int                      currentQueueToProcess;
 
@@ -103,6 +105,7 @@ public:
     QAction*                 clearToolsAction;
 
     QAction*                 runAction;
+    QAction*                 runAllAction;
     QAction*                 stopAction;
     QAction*                 removeQueueAction;
     QAction*                 newQueueAction;
