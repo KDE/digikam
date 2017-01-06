@@ -232,4 +232,11 @@ BUGFIXES FROM BUGZILLA:
 184 ==> 335340 - digiKam crashes while moving Fotos [@ Phonon::Gstreamer::Pipeline::setState].
 185 ==> 335051 - Opening a MP4 File from a Nexus 4 crashes digiKam (may be by thumbnail generation).
 186 ==> 333737 - digiKam crashes during startup (before any window shows up).
-187 ==> 
+187 ==> 330848 - digiKam crash when i want play video.
+188 ==> 319702 - digiKam crashed during opening an .avi movie.
+189 ==> 244789 - digiKam crashes when opening a movie file.
+190 ==> 261914 - digiKam crashes on exit after selecting VLC as Phonon backend.
+191 ==> 323194 - Crash of digiKam by starting as user.
+192 ==> 261397 - digiKam Crashes on Startup.
+193 ==> 323514 - digiKam crashes when viewing a video.
+194 ==> 
