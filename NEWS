@@ -229,4 +229,6 @@ BUGFIXES FROM BUGZILLA:
 182 ==> 374191 - Unusable context menu entries in tags and people view.
 183 ==> 344698 - digiKam Crash when start.
 184 ==> 335340 - digiKam crashes while moving Fotos [@ Phonon::Gstreamer::Pipeline::setState].
-185 ==> 
+185 ==> 335051 - Opening a MP4 File from a Nexus 4 crashes digiKam (may be by thumbnail generation).
+186 ==> 333737 - digiKam crashes during startup (before any window shows up).
+187 ==> 
