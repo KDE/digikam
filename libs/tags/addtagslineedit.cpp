@@ -165,6 +165,10 @@ void AddTagsLineEdit::slotReturnPressed()
         //focus back to mainview
         emit taggingActionFinished();
     }
+    else
+    {
+        emit taggingActionActivated(currentTaggingAction());
+    }
 }
 
 void AddTagsLineEdit::slotEditingFinished()
