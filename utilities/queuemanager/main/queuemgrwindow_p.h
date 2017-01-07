@@ -70,6 +70,7 @@ public:
         statusProgressBar      = 0;
         statusLabel            = 0;
         runAction              = 0;
+        runAllAction           = 0;
         stopAction             = 0;
         removeQueueAction      = 0;
         newQueueAction         = 0;

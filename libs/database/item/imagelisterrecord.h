@@ -69,6 +69,7 @@ public:
         fileSize                         = -1;
         currentSimilarity                = 0.0;
         category                         = DatabaseItem::UndefinedCategory;
+        currentFuzzySearchReferenceImage = -1;
     }
 
     int                    albumID;
