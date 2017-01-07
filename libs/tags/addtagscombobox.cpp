@@ -205,13 +205,13 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
         {
             if (parentWidget() && parentWidget()->parentWidget())
             {
-                int top     = parentWidget()->contentsMargins().top();
-                int left    = parentWidget()->contentsMargins().left();
-                int bottom  = parentWidget()->contentsMargins().bottom();
-                int fromTop = height() + top + bottom;
+                QPoint pos    = geometry().bottomLeft();
+                QPoint newPos = parentWidget()->parentWidget()->mapToGlobal(pos);
 
-                QPoint pos = parentWidget()->parentWidget()->mapToGlobal(QPoint(left, fromTop));
-                d->lineEdit->completer()->popup()->move(pos);
+                if (d->lineEdit->completer()->popup()->pos() != newPos)
+                {
+                    d->lineEdit->completer()->popup()->move(newPos);
+                }
             }
         }
         else if (event->type() == QEvent::ShortcutOverride)
