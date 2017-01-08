@@ -100,9 +100,9 @@ TagCompleter::TagCompleter(QObject* const parent)
     setModel(d->model);
 
     setCaseSensitivity(Qt::CaseInsensitive);
-    setFilterMode(Qt::MatchStartsWith);
     setCompletionMode(PopupCompletion);
     setCompletionRole(CompletionRole);
+    setFilterMode(Qt::MatchContains);
     setModelSorting(UnsortedModel);
     setCompletionColumn(0);
 
