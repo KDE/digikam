@@ -16,11 +16,11 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 # digiKam version
 set(DIGIKAM_MAJOR_VERSION "5")
-set(DIGIKAM_MINOR_VERSION "4")
+set(DIGIKAM_MINOR_VERSION "5")
 set(DIGIKAM_PATCH_VERSION "0")
 
 #digiKam release date
-set(DIGIKAM_RELEASE_DATE "2016-01-08")
+set(DIGIKAM_RELEASE_DATE "2016-02-12")
 
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
