@@ -99,6 +99,8 @@ TagCompleter::TagCompleter(QObject* const parent)
     d->model = new QStandardItemModel(this);
     setModel(d->model);
 
+    d->factory.setNameMatchMode(TaggingActionFactory::MatchContainingFragment);
+
     setCaseSensitivity(Qt::CaseInsensitive);
     setCompletionMode(PopupCompletion);
     setCompletionRole(CompletionRole);
@@ -122,7 +124,6 @@ void TagCompleter::setTagFilterModel(AlbumFilterModel* const filterModel)
 {
     d->filterModel = filterModel;
     d->factory.setConstraintInterface(d->filterModel ? d : 0);
-    d->factory.setNameMatchMode(TaggingActionFactory::MatchContainingFragment);
 }
 
 void TagCompleter::setSupportingTagModel(TagModel* const model)
