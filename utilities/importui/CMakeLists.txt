@@ -92,4 +92,4 @@ add_library(importuibackend_src OBJECT ${libimportuibackend_SRCS})
 
 add_library(importui_src OBJECT ${libimportui_SRCS})
 
-install(FILES main/importui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
+install(FILES main/importui5.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

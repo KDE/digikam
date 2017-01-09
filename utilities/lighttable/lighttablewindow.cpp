@@ -103,7 +103,7 @@ LightTableWindow::LightTableWindow()
       d(new Private)
 {
     setConfigGroupName(QLatin1String("LightTable Settings"));
-    setXMLFile(QLatin1String("lighttablewindowui.rc"));
+    setXMLFile(QLatin1String("lighttablewindowui5.rc"));
 
     m_instance = this;
 

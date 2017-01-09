@@ -105,4 +105,4 @@ endif()
 
 add_library(queuemanager_src OBJECT ${libqueuemanager_SRCS} ${libdlib_SRCS})
 
-install( FILES main/queuemgrwindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )
+install(FILES main/queuemgrwindowui5.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)

@@ -37,4 +37,4 @@ endif()
 
 add_library(lighttable_src OBJECT ${liblighttable_SRCS})
 
-install( FILES lighttablewindowui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam )
+install(FILES lighttablewindowui5.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
