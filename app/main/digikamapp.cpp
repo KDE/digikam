@@ -154,7 +154,7 @@ DigikamApp::DigikamApp()
     setObjectName(QLatin1String("Digikam"));
     setConfigGroupName(ApplicationSettings::instance()->generalConfigGroupName());
     setFullScreenOptions(FS_ALBUMGUI);
-    setXMLFile(QLatin1String("digikamui.rc"));
+    setXMLFile(QLatin1String("digikamui5.rc"));
 
     m_instance         = this;
     d->config          = KSharedConfig::openConfig();
