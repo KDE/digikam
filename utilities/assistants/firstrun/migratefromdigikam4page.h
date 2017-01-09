@@ -48,13 +48,13 @@ public:
      */
     bool isMigrationChecked() const;
     void doMigration();
-    int nextId() const;
+    int  nextId() const;
 
 public Q_SLOTS:
 
     void migrationToggled(bool b);
 
-protected:
+private:
 
     QButtonGroup* m_migrateBehavior;
     QRadioButton* m_migrate;

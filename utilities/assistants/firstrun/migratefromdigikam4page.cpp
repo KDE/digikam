@@ -60,8 +60,7 @@ MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
       m_migrate(0L),
       m_createnew(0L)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing   = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     DVBox* const vbox   = new DVBox(this);
     QLabel* const title = new QLabel(vbox);
     title->setWordWrap(true);
@@ -130,7 +129,7 @@ void MigrateFromDigikam4Page::doMigration()
     foreach(const QString& configFileName, oldAppFiles)
     {
         const QString newConfigLocation = QStandardPaths::writableLocation(QStandardPaths::DataLocation) +
-                                          QLatin1Char('/') + configFileName;
+                                          QLatin1Char('/') + configFileName + QLatin1Char('5');
 
         if (QFile(newConfigLocation).exists())
         {
@@ -153,7 +152,7 @@ void MigrateFromDigikam4Page::doMigration()
     }
 
     // Migrate $KDEHOME/share/apps/kipi/geobookmarks.xml to ./.local/share/digikam/geobookmarks.xml
-    QString oldGeobookmarksFile = migration.locateLocal("data", QLatin1String("kipi/geobookmarks.xml"));
+    QString oldGeobookmarksFile       = migration.locateLocal("data", QLatin1String("kipi/geobookmarks.xml"));
     const QString newGeobookmarksFile = QStandardPaths::writableLocation(QStandardPaths::DataLocation)
                                         + QLatin1String("/geobookmarks.xml");
 
