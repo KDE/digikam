@@ -546,5 +546,5 @@ install(TARGETS digikam ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(PROGRAMS main/org.kde.digikam.desktop     DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES    main/org.kde.digikam.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
-install(FILES    main/digikamui.rc        DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
-install(FILES    main/digikam.notifyrc    DESTINATION ${KNOTIFYRC_INSTALL_DIR})
+install(FILES    main/digikamui5.rc               DESTINATION ${KXMLGUI_INSTALL_DIR}/digikam)
+install(FILES    main/digikam.notifyrc            DESTINATION ${KNOTIFYRC_INSTALL_DIR})
