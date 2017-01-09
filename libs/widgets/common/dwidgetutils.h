@@ -101,7 +101,10 @@ public:
     explicit DFileSelector(QWidget* const parent=0);
     virtual ~DFileSelector();
 
-    QLineEdit* lineEdit()   const;
+    QLineEdit* lineEdit() const;
+
+    void setFileDlgPath(const QString& path);
+    QString fileDlgPath() const;
 
     void setFileDlgMode(QFileDialog::FileMode mode);
     void setFileDlgFilter(const QString& filter);

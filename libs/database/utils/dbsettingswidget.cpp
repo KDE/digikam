@@ -455,12 +455,12 @@ int DatabaseSettingsWidget::databaseType() const
 
 QString DatabaseSettingsWidget::databasePath() const
 {
-    return d->dbPathEdit->lineEdit()->text();
+    return d->dbPathEdit->fileDlgPath();
 }
 
 void DatabaseSettingsWidget::setDatabasePath(const QString& path)
 {
-    d->dbPathEdit->lineEdit()->setText(path);
+    d->dbPathEdit->setFileDlgPath(path);
 }
 
 DbEngineParameters DatabaseSettingsWidget::orgDatabasePrm() const
@@ -688,7 +688,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
 
     if (d->orgPrms.databaseType == DbEngineParameters::SQLiteDatabaseType())
     {
-        d->dbPathEdit->lineEdit()->setText(d->orgPrms.getCoreDatabaseNameOrDir());
+        d->dbPathEdit->setFileDlgPath(d->orgPrms.getCoreDatabaseNameOrDir());
         d->dbType->setCurrentIndex(d->dbTypeMap[SQlite]);
         slotResetMysqlServerDBNames();
     }
@@ -697,7 +697,7 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
 #   ifdef HAVE_INTERNALMYSQL
     else if (d->orgPrms.databaseType == DbEngineParameters::MySQLDatabaseType() && d->orgPrms.internalServer)
     {
-        d->dbPathEdit->lineEdit()->setText(d->orgPrms.internalServerPath());
+        d->dbPathEdit->setFileDlgPath(d->orgPrms.internalServerPath());
         d->dbType->setCurrentIndex(d->dbTypeMap[MysqlInternal]);
         d->mysqlInitBin.setup(QFileInfo(d->orgPrms.internalServerMysqlInitCmd).absoluteFilePath());
         d->mysqlServBin.setup(QFileInfo(d->orgPrms.internalServerMysqlServCmd).absoluteFilePath());
@@ -769,12 +769,12 @@ void DatabaseSettingsWidget::slotDatabasePathEdited()
 
     if (!newPath.isEmpty() && !QDir::isAbsolutePath(newPath))
     {
-        d->dbPathEdit->lineEdit()->setText(QDir::homePath() + QLatin1Char('/') + QDir::fromNativeSeparators(newPath));
+        d->dbPathEdit->setFileDlgPath(QDir::homePath() + QLatin1Char('/') + newPath);
     }
 
 #endif
 
-    d->dbPathEdit->lineEdit()->setText(QDir::toNativeSeparators(newPath));
+    d->dbPathEdit->setFileDlgPath(newPath);
 }
 
 bool DatabaseSettingsWidget::checkDatabaseSettings()

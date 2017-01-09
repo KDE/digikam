@@ -203,7 +203,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
     umsMountLabel->setText(i18n("Note: only for USB/IEEE mass storage cameras."));
 
     d->umsMountURL = new DFileSelector(umsMountBox);
-    d->umsMountURL->lineEdit()->setText(QLatin1String("/mnt/camera"));
+    d->umsMountURL->setFileDlgPath(QLatin1String("/mnt/camera"));
     d->umsMountURL->setFileDlgMode(QFileDialog::Directory);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
                                       "option is only required if you use a <b>USB Mass Storage</b> "
@@ -456,7 +456,7 @@ void CameraSelection::setCamera(const QString& title, const QString& model,
             slotPortChanged();
         }
 
-        d->umsMountURL->lineEdit()->setText(path);
+        d->umsMountURL->setFileDlgPath(path);
     }
 }
 
@@ -533,13 +533,13 @@ void CameraSelection::slotSelectionChanged(QTreeWidgetItem* item, int)
         d->networkEdit->setEnabled(false);
 
         d->umsMountURL->setEnabled(true);
-        d->umsMountURL->lineEdit()->setText(QLatin1String("/mnt/camera"));
+        d->umsMountURL->setFileDlgPath(QLatin1String("/mnt/camera"));
         return;
     }
     else
     {
         d->umsMountURL->setEnabled(true);
-        d->umsMountURL->lineEdit()->setText(QLatin1String("/"));
+        d->umsMountURL->setFileDlgPath(QLatin1String("/"));
         d->umsMountURL->setEnabled(false);
     }
 
@@ -657,7 +657,7 @@ QString CameraSelection::currentPortPath() const
 
 QString CameraSelection::currentCameraPath() const
 {
-    return d->umsMountURL->lineEdit()->text();
+    return d->umsMountURL->fileDlgPath();
 }
 
 void CameraSelection::slotOkClicked()

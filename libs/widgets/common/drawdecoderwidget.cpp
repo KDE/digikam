@@ -1200,8 +1200,8 @@ void DRawDecoderWidget::setSettings(const DRawDecoderSettings& settings)
     d->expoCorrectionShiftSpinBox->setValue(d->shiftExpoFromLinearToEv(settings.expoCorrectionShift));
     d->expoCorrectionHighlightSpinBox->setValue(settings.expoCorrectionHighlight);
 
-    d->inIccUrlEdit->lineEdit()->setText(settings.inputProfile);
-    d->outIccUrlEdit->lineEdit()->setText(settings.outputProfile);
+    d->inIccUrlEdit->setFileDlgPath(settings.inputProfile);
+    d->outIccUrlEdit->setFileDlgPath(settings.outputProfile);
 }
 
 DRawDecoderSettings DRawDecoderWidget::settings() const
@@ -1307,8 +1307,8 @@ DRawDecoderSettings DRawDecoderWidget::settings() const
 
     prm.inputColorSpace         = (DRawDecoderSettings::InputColorSpace)(d->inputColorSpaceComboBox->currentIndex());
     prm.outputColorSpace        = (DRawDecoderSettings::OutputColorSpace)(d->outputColorSpaceComboBox->currentIndex());
-    prm.inputProfile            = d->inIccUrlEdit->lineEdit()->text();
-    prm.outputProfile           = d->outIccUrlEdit->lineEdit()->text();
+    prm.inputProfile            = d->inIccUrlEdit->fileDlgPath();
+    prm.outputProfile           = d->outIccUrlEdit->fileDlgPath();
 
     return prm;
 }

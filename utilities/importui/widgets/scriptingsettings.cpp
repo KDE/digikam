@@ -112,17 +112,17 @@ ScriptingSettings::~ScriptingSettings()
 
 void ScriptingSettings::readSettings(KConfigGroup& group)
 {
-    d->script->lineEdit()->setText(group.readEntry("Script", QString()));
+    d->script->setFileDlgPath(group.readEntry("Script", QString()));
 }
 
 void ScriptingSettings::saveSettings(KConfigGroup& group)
 {
-    group.writeEntry("Script", d->script->lineEdit()->text());
+    group.writeEntry("Script", d->script->fileDlgPath());
 }
 
 void ScriptingSettings::settings(DownloadSettings* const settings) const
 {
-    settings->script = d->script->lineEdit()->text();
+    settings->script = d->script->fileDlgPath();
 }
 
 void ScriptingSettings::slotToolTipButtonToggled(bool /*checked*/)

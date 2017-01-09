@@ -613,7 +613,7 @@ void SetupICC::applySettings()
         settings.defaultUncalibratedBehavior = ICCSettingsContainer::AutomaticColors | ICCSettingsContainer::ConvertToWorkspace;
     }
 
-    settings.iccFolder           = d->defaultPathKU->lineEdit()->text();
+    settings.iccFolder           = d->defaultPathKU->fileDlgPath();
     settings.useBPC              = d->bpcAlgorithm->isChecked();
     settings.renderingIntent     = d->renderingIntentKC->intent();
     settings.useManagedView      = d->managedView->isChecked();
@@ -688,7 +688,7 @@ void SetupICC::readSettings(bool restore)
         d->defaultGuessRaw->setChecked(true);
     }
 
-    d->defaultPathKU->lineEdit()->setText(settings.iccFolder);
+    d->defaultPathKU->setFileDlgPath(settings.iccFolder);
     fillCombos(false);
 
     d->workProfilesKC->setCurrentProfile(settings.workspaceProfile);
@@ -708,13 +708,13 @@ void SetupICC::readSettings(bool restore)
 
 void SetupICC::slotUrlChanged()
 {
-    IccSettings::instance()->setIccPath(d->defaultPathKU->lineEdit()->text());
+    IccSettings::instance()->setIccPath(d->defaultPathKU->fileDlgPath());
     fillCombos(true);
 }
 
 void SetupICC::slotUrlTextChanged()
 {
-    d->defaultPathKU->lineEdit()->setText(QDir::toNativeSeparators(d->defaultPathKU->lineEdit()->text()));
+    d->defaultPathKU->setFileDlgPath(d->defaultPathKU->fileDlgPath());
 }
 
 void SetupICC::fillCombos(bool report)

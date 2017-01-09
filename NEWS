@@ -7,4 +7,5 @@ NEW FEATURES:
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 374787 : Release Notes are difficult to read because of color choices.
-002 ==> 
+002 ==> 374784 - Startup wizard displays path to album with forward slashes.
+003 ==> 

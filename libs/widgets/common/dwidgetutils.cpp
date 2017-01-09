@@ -200,6 +200,16 @@ QLineEdit* DFileSelector::lineEdit() const
     return d->edit;
 }
 
+void DFileSelector::setFileDlgPath(const QString& path)
+{
+    d->edit->setText(QDir::toNativeSeparators(path));
+}
+
+QString DFileSelector::fileDlgPath() const
+{
+    return QDir::fromNativeSeparators(d->edit->text());
+}
+
 void DFileSelector::setFileDlgMode(QFileDialog::FileMode mode)
 {
     d->fdMode = mode;
@@ -233,7 +243,7 @@ void DFileSelector::slotBtnClicked()
     if (d->fdOptions != -1)
         fileDlg->setOptions((QFileDialog::Options)d->fdOptions);
 
-    fileDlg->setDirectory(QFileInfo(d->edit->text()).filePath());
+    fileDlg->setDirectory(QFileInfo(fileDlgPath()).filePath());
     fileDlg->setFileMode(d->fdMode);
 
     if (!d->fdFilter.isNull())
@@ -250,7 +260,7 @@ void DFileSelector::slotBtnClicked()
 
         if (!sel.isEmpty())
         {
-            d->edit->setText(sel.first());
+            setFileDlgPath(sel.first());
             emit signalUrlSelected(QUrl::fromLocalFile(sel.first()));
         }
     }

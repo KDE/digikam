@@ -355,7 +355,7 @@ void WaterMark::slotAssignSettings2Widget()
     d->changeSettings = false;
     d->useImageRadioButton->setChecked(settings()[QLatin1String("Use image")].toBool());
     d->useTextRadioButton->setChecked(!settings()[QLatin1String("Use image")].toBool());
-    d->imageFileUrlRequester->lineEdit()->setText(settings()[QLatin1String("Watermark image")].toString());
+    d->imageFileUrlRequester->setFileDlgPath(settings()[QLatin1String("Watermark image")].toString());
     d->textEdit->setText(settings()[QLatin1String("Text")].toString());
     d->fontChooserWidget->setFont(settings()[QLatin1String("Font")].toString());
     d->fontColorButton->setColor(settings()[QLatin1String("Color")].toString());
@@ -387,7 +387,7 @@ void WaterMark::slotSettingsChanged()
     {
         BatchToolSettings settings;
         settings.insert(QLatin1String("Use image"),          d->useImageRadioButton->isChecked());
-        settings.insert(QLatin1String("Watermark image"),    d->imageFileUrlRequester->lineEdit()->text());
+        settings.insert(QLatin1String("Watermark image"),    d->imageFileUrlRequester->fileDlgPath());
         settings.insert(QLatin1String("Text"),               d->textEdit->text());
         settings.insert(QLatin1String("Font"),               d->fontChooserWidget->currentFont());
         settings.insert(QLatin1String("Color"),              d->fontColorButton->color());
