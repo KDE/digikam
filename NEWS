@@ -10,4 +10,5 @@ BUGFIXES FROM BUGZILLA:
 002 ==> 374784 - Startup wizard displays path to album with forward slashes.
 003 ==> 374771 - Thumbnails for video files are gray.
 004 ==> 366010 - Main menu bar is not translated (localized).
-005 ==> 
+005 ==> 328321 - Image orientation is not maintained when processing RAW image through BQM.
+006 ==> 
