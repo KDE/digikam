@@ -32,7 +32,7 @@
 #include <QSlider>
 #include <QStyle>
 #include <QLabel>
-#include <QThread>
+//#include <QThread>
 
 // KDE includes
 
@@ -53,7 +53,7 @@ using namespace QtAV;
 
 namespace Digikam
 {
-
+/*
 class SlidePlayerThread : public QThread
 {
 public:
@@ -80,7 +80,7 @@ private:
 
     AVPlayer* m_player;
 };
-
+*/
 // --------------------------------------------------------
 
 class SlideVideo::Private
@@ -91,7 +91,7 @@ public:
     Private() :
         videoWidget(0),
         player(0),
-        thread(0),
+        //thread(0),
         slider(0),
         tlabel(0),
         indicator(0)
@@ -100,7 +100,7 @@ public:
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
-    SlidePlayerThread*   thread;
+    //SlidePlayerThread*   thread;
     QSlider*             slider;
     QLabel*              tlabel;
     DHBox*               indicator;
@@ -118,10 +118,10 @@ SlideVideo::SlideVideo(QWidget* const parent)
     d->videoWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
 
-    d->player         = new AVPlayer;
+    d->player         = new AVPlayer(this);
     d->player->setRenderer(d->videoWidget);
     d->player->setNotifyInterval(250);
-    d->thread         = new SlidePlayerThread(d->player);
+    //d->thread         = new SlidePlayerThread(d->player);
 
     d->indicator      = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, d->indicator);
@@ -173,10 +173,10 @@ SlideVideo::SlideVideo(QWidget* const parent)
 SlideVideo::~SlideVideo()
 {
     d->player->stop();
-    d->thread->quit();
-    d->thread->wait();
-    delete d->thread;
-    delete d->player;
+    //d->thread->quit();
+    //d->thread->wait();
+    //delete d->thread;
+    //delete d->player;
     delete d;
 }
 
@@ -189,7 +189,7 @@ void SlideVideo::setCurrentUrl(const QUrl& url)
 {
     d->player->stop();
     d->player->setFile(url.toLocalFile());
-    d->thread->start();
+    //d->thread->start();
     d->player->play();
     showIndicator(false);
 }
