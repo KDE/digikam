@@ -12,4 +12,5 @@ BUGFIXES FROM BUGZILLA:
 004 ==> 366010 - Main menu bar is not translated (localized).
 005 ==> 328321 - Image orientation is not maintained when processing RAW image through BQM.
 006 ==> 374922 - digiKam crashes when dropping ext. image into fuzzy search target area.
-007 ==> 
+007 ==> 375019 - Error updating scheme from digikam 4.
+008 ==> 

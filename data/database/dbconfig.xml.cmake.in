@@ -935,14 +935,14 @@
 
             <dbaction name="CreateDB" mode="transaction">
             <statement mode="plain">  CREATE TABLE IF NOT EXISTS AlbumRoots
-            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
-            label LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
-            status INTEGER NOT NULL,
-            type INTEGER NOT NULL,
-            identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
-            specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
-            UNIQUE(identifier(127), specificPath(128)))
-            ENGINE InnoDB;</statement>
+                            (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                            label LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            status INTEGER NOT NULL,
+                            type INTEGER NOT NULL,
+                            identifier LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            specificPath LONGTEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            UNIQUE(identifier(127), specificPath(128)))
+                            ENGINE InnoDB;</statement>
             <statement mode="plain">CREATE TABLE IF NOT EXISTS Albums
                             (id INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             albumRoot INTEGER NOT NULL,
@@ -2019,6 +2019,9 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">ALTER TABLE Searches
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE DownloadHistory
+                                        DROP INDEX IF EXISTS identifier;</statement>
+                <statement mode="plain">ALTER TABLE DownloadHistory
+                                        ADD UNIQUE(identifier(164), filename(165), filesize, filedate),
                                         ENGINE InnoDB;</statement>
                 <statement mode="plain">ALTER TABLE Settings
                                         DROP INDEX IF EXISTS keyword;</statement>
