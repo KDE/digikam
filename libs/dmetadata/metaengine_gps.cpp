@@ -78,7 +78,7 @@ bool MetaEngine::getGPSLatitudeNumber(double* const latitude) const
         {
             Exiv2::ExifKey exifKey("Exif.GPSInfo.GPSLatitude");
             Exiv2::ExifData exifData(d->exifMetadata());
-            Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+            Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey);
 
             if (it != exifData.end() && (*it).count() == 3)
             {
@@ -163,7 +163,7 @@ bool MetaEngine::getGPSLongitudeNumber(double* const longitude) const
 
             Exiv2::ExifKey exifKey2("Exif.GPSInfo.GPSLongitude");
             Exiv2::ExifData exifData(d->exifMetadata());
-            Exiv2::ExifData::iterator it = exifData.findKey(exifKey2);
+            Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey2);
 
             if (it != exifData.end() && (*it).count() == 3)
             {
@@ -280,7 +280,7 @@ bool MetaEngine::getGPSAltitude(double* const altitude) const
 
             Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
             Exiv2::ExifData exifData(d->exifMetadata());
-            Exiv2::ExifData::iterator it = exifData.findKey(exifKey3);
+            Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey3);
             if (it != exifData.end() && (*it).count())
             {
                 num = (double)((*it).toRational(0).first);
@@ -526,7 +526,7 @@ bool MetaEngine::removeGPSInfo(const bool setProgramName)
     {
         QStringList gpsTagsKeys;
 
-        for (Exiv2::ExifData::iterator it = d->exifMetadata().begin();
+        for (Exiv2::ExifData::const_iterator it = d->exifMetadata().begin();
              it != d->exifMetadata().end(); ++it)
         {
             QString key = QString::fromLocal8Bit(it->key().c_str());

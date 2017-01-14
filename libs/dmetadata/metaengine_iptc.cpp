@@ -162,7 +162,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
         QString     ifDItemName;
         MetaDataMap metaDataMap;
 
-        for (Exiv2::IptcData::iterator md = iptcData.begin(); md != iptcData.end(); ++md)
+        for (Exiv2::IptcData::const_iterator md = iptcData.begin(); md != iptcData.end(); ++md)
         {
             QString key = QString::fromLocal8Bit(md->key().c_str());
 
@@ -185,7 +185,7 @@ MetaEngine::MetaDataMap MetaEngine::getIptcTagsDataList(const QStringList& iptcK
             value.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
             // Some Iptc key are redondancy. check if already one exist...
-            MetaDataMap::iterator it = metaDataMap.find(key);
+            MetaDataMap::const_iterator it = metaDataMap.find(key);
 
             // We apply a filter to get only the Iptc tags that we need.
 
@@ -369,7 +369,7 @@ QByteArray MetaEngine::getIptcTagData(const char* iptcTagName) const
     {
         Exiv2::IptcKey  iptcKey(iptcTagName);
         Exiv2::IptcData iptcData(d->iptcMetadata());
-        Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+        Exiv2::IptcData::const_iterator it = iptcData.findKey(iptcKey);
 
         if (it != iptcData.end())
         {
@@ -398,7 +398,7 @@ QString MetaEngine::getIptcTagString(const char* iptcTagName, bool escapeCR) con
     {
         Exiv2::IptcKey  iptcKey(iptcTagName);
         Exiv2::IptcData iptcData(d->iptcMetadata());
-        Exiv2::IptcData::iterator it = iptcData.findKey(iptcKey);
+        Exiv2::IptcData::const_iterator it = iptcData.findKey(iptcKey);
 
         if (it != iptcData.end())
         {
@@ -458,7 +458,7 @@ QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool esca
             QStringList values;
             Exiv2::IptcData iptcData(d->iptcMetadata());
 
-            for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
+            for (Exiv2::IptcData::const_iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
 
@@ -525,7 +525,7 @@ bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
 
         Exiv2::IptcKey iptcTag(iptcTagName);
 
-        for (QStringList::iterator it = newvals.begin(); it != newvals.end(); ++it)
+        for (QStringList::const_iterator it = newvals.begin(); it != newvals.end(); ++it)
         {
             QString key = *it;
             key.truncate(maxSize);
@@ -563,7 +563,7 @@ QStringList MetaEngine::getIptcKeywords() const
             QStringList keywords;
             Exiv2::IptcData iptcData(d->iptcMetadata());
 
-            for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
+            for (Exiv2::IptcData::const_iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
 
@@ -626,7 +626,7 @@ bool MetaEngine::setIptcKeywords(const QStringList& oldKeywords, const QStringLi
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.Keywords");
 
-        for (QStringList::iterator it = newkeys.begin(); it != newkeys.end(); ++it)
+        for (QStringList::const_iterator it = newkeys.begin(); it != newkeys.end(); ++it)
         {
             QString key = *it;
             key.truncate(64);
@@ -664,7 +664,7 @@ QStringList MetaEngine::getIptcSubjects() const
             QStringList subjects;
             Exiv2::IptcData iptcData(d->iptcMetadata());
 
-            for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
+            for (Exiv2::IptcData::const_iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
 
@@ -720,7 +720,7 @@ bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringLi
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.Subject");
 
-        for (QStringList::iterator it = newDef.begin(); it != newDef.end(); ++it)
+        for (QStringList::const_iterator it = newDef.begin(); it != newDef.end(); ++it)
         {
             QString key = *it;
             key.truncate(236);
@@ -758,7 +758,7 @@ QStringList MetaEngine::getIptcSubCategories() const
             QStringList subCategories;
             Exiv2::IptcData iptcData(d->iptcMetadata());
 
-            for (Exiv2::IptcData::iterator it = iptcData.begin(); it != iptcData.end(); ++it)
+            for (Exiv2::IptcData::const_iterator it = iptcData.begin(); it != iptcData.end(); ++it)
             {
                 QString key = QString::fromLocal8Bit(it->key().c_str());
 
@@ -815,7 +815,7 @@ bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const
 
         Exiv2::IptcKey iptcTag("Iptc.Application2.SuppCategory");
 
-        for (QStringList::iterator it = newkeys.begin(); it != newkeys.end(); ++it)
+        for (QStringList::const_iterator it = newkeys.begin(); it != newkeys.end(); ++it)
         {
             QString key = *it;
             key.truncate(32);

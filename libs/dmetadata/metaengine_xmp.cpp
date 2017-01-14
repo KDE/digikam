@@ -186,7 +186,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
         QString     ifDItemName;
         MetaDataMap metaDataMap;
 
-        for (Exiv2::XmpData::iterator md = xmpData.begin(); md != xmpData.end(); ++md)
+        for (Exiv2::XmpData::const_iterator md = xmpData.begin(); md != xmpData.end(); ++md)
         {
             QString key = QString::fromLatin1(md->key().c_str());
 
@@ -210,7 +210,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
             value.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
             // Some XMP key are redondancy. check if already one exist...
-            MetaDataMap::iterator it = metaDataMap.find(key);
+            MetaDataMap::const_iterator it = metaDataMap.find(key);
 
             // We apply a filter to get only the XMP tags that we need.
 
@@ -351,7 +351,7 @@ QString MetaEngine::getXmpTagString(const char* xmpTagName, bool escapeCR) const
     {
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
-        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
         if (it != xmpData.end())
         {
@@ -478,7 +478,7 @@ MetaEngine::AltLangMap MetaEngine::getXmpTagStringListLangAlt(const char* xmpTag
     {
         Exiv2::XmpData xmpData = d->xmpMetadata();
 
-        for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
+        for (Exiv2::XmpData::const_iterator it = xmpData.begin(); it != xmpData.end(); ++it)
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
             {
@@ -580,7 +580,7 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
 
-        for (Exiv2::XmpData::iterator it = xmpData.begin(); it != xmpData.end(); ++it)
+        for (Exiv2::XmpData::const_iterator it = xmpData.begin(); it != xmpData.end(); ++it)
         {
             if (it->key() == xmpTagName && it->typeId() == Exiv2::langAlt)
             {
@@ -649,7 +649,7 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
 
         if (!map.isEmpty())
         {
-            for (AltLangMap::iterator it = map.begin(); it != map.end(); ++it)
+            for (AltLangMap::const_iterator it = map.begin(); it != map.end(); ++it)
             {
                 if (it.key() != langAlt)
                 {
@@ -694,7 +694,7 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
     {
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
-        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
         if (it != xmpData.end())
         {
@@ -795,7 +795,7 @@ QStringList MetaEngine::getXmpTagStringBag(const char* xmpTagName, bool escapeCR
     {
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
-        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
         if (it != xmpData.end())
         {
@@ -938,7 +938,7 @@ QVariant MetaEngine::getXmpTagVariant(const char* xmpTagName, bool rationalAsLis
     {
         Exiv2::XmpData xmpData(d->xmpMetadata());
         Exiv2::XmpKey key(xmpTagName);
-        Exiv2::XmpData::iterator it = xmpData.findKey(key);
+        Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
         if (it != xmpData.end())
         {

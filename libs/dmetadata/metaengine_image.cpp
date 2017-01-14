@@ -58,7 +58,7 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
         {
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifKey key("Exif.Image.Software");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
             if (it == exifData.end())
                 d->exifMetadata()["Exif.Image.Software"] = std::string(software.toLatin1().constData());
@@ -73,7 +73,7 @@ bool MetaEngine::setImageProgramId(const QString& program, const QString& versio
             // Only create Xmp.xmp.CreatorTool if it do not exist.
             Exiv2::XmpData xmpData(d->xmpMetadata());
             Exiv2::XmpKey key("Xmp.xmp.CreatorTool");
-            Exiv2::XmpData::iterator it = xmpData.findKey(key);
+            Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
             if (it == xmpData.end())
                 setXmpTagString("Xmp.xmp.CreatorTool", software, false);
@@ -111,13 +111,13 @@ QSize MetaEngine::getImageDimensions() const
 
         Exiv2::ExifData exifData(d->exifMetadata());
         Exiv2::ExifKey key("Exif.Photo.PixelXDimension");
-        Exiv2::ExifData::iterator it = exifData.findKey(key);
+        Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
         if (it != exifData.end() && it->count())
             width = it->toLong();
 
         Exiv2::ExifKey key2("Exif.Photo.PixelYDimension");
-        Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+        Exiv2::ExifData::const_iterator it2 = exifData.findKey(key2);
 
         if (it2 != exifData.end() && it2->count())
             height = it2->toLong();
@@ -131,13 +131,13 @@ QSize MetaEngine::getImageDimensions() const
         height = -1;
 
         Exiv2::ExifKey key3("Exif.Image.ImageWidth");
-        Exiv2::ExifData::iterator it3 = exifData.findKey(key3);
+        Exiv2::ExifData::const_iterator it3 = exifData.findKey(key3);
 
         if (it3 != exifData.end() && it3->count())
             width = it3->toLong();
 
         Exiv2::ExifKey key4("Exif.Image.ImageLength");
-        Exiv2::ExifData::iterator it4 = exifData.findKey(key4);
+        Exiv2::ExifData::const_iterator it4 = exifData.findKey(key4);
 
         if (it4 != exifData.end() && it4->count())
             height = it4->toLong();
@@ -544,7 +544,7 @@ QDateTime MetaEngine::getImageDateTime() const
             Exiv2::ExifData exifData(d->exifMetadata());
             {
                 Exiv2::ExifKey key("Exif.Photo.DateTimeOriginal");
-                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
                 if (it != exifData.end())
                 {
@@ -559,7 +559,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::ExifKey key("Exif.Photo.DateTimeDigitized");
-                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
                 if (it != exifData.end())
                 {
@@ -574,7 +574,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::ExifKey key("Exif.Image.DateTime");
-                Exiv2::ExifData::iterator it = exifData.findKey(key);
+                Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
                 if (it != exifData.end())
                 {
@@ -598,7 +598,7 @@ QDateTime MetaEngine::getImageDateTime() const
             Exiv2::XmpData xmpData(d->xmpMetadata());
             {
                 Exiv2::XmpKey key("Xmp.exif.DateTimeOriginal");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -613,7 +613,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.exif.DateTimeDigitized");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -628,7 +628,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.photoshop.DateCreated");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -643,7 +643,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.xmp.CreateDate");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -658,7 +658,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.tiff.DateTime");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -673,7 +673,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.xmp.ModifyDate");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -688,7 +688,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.xmp.MetadataDate");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -706,7 +706,7 @@ QDateTime MetaEngine::getImageDateTime() const
 
             {
                 Exiv2::XmpKey key("Xmp.video.DateTimeOriginal");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -721,7 +721,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.video.DateUTC");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -736,7 +736,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.video.ModificationDate");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -751,7 +751,7 @@ QDateTime MetaEngine::getImageDateTime() const
             }
             {
                 Exiv2::XmpKey key("Xmp.video.DateTimeDigitized");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -777,13 +777,13 @@ QDateTime MetaEngine::getImageDateTime() const
             // Try creation Iptc date & time entries.
 
             Exiv2::IptcKey keyDateCreated("Iptc.Application2.DateCreated");
-            Exiv2::IptcData::iterator it = iptcData.findKey(keyDateCreated);
+            Exiv2::IptcData::const_iterator it = iptcData.findKey(keyDateCreated);
 
             if (it != iptcData.end())
             {
                 QString IptcDateCreated(QString::fromLatin1(it->toString().c_str()));
                 Exiv2::IptcKey keyTimeCreated("Iptc.Application2.TimeCreated");
-                Exiv2::IptcData::iterator it2 = iptcData.findKey(keyTimeCreated);
+                Exiv2::IptcData::const_iterator it2 = iptcData.findKey(keyTimeCreated);
 
                 if (it2 != iptcData.end())
                 {
@@ -803,13 +803,13 @@ QDateTime MetaEngine::getImageDateTime() const
             // Try digitization Iptc date & time entries.
 
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
-            Exiv2::IptcData::iterator it3 = iptcData.findKey(keyDigitizationDate);
+            Exiv2::IptcData::const_iterator it3 = iptcData.findKey(keyDigitizationDate);
 
             if (it3 != iptcData.end())
             {
                 QString IptcDateDigitization(QString::fromLatin1(it3->toString().c_str()));
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
-                Exiv2::IptcData::iterator it4 = iptcData.findKey(keyDigitizationTime);
+                Exiv2::IptcData::const_iterator it4 = iptcData.findKey(keyDigitizationTime);
 
                 if (it4 != iptcData.end())
                 {
@@ -932,7 +932,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifKey key("Exif.Photo.DateTimeDigitized");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
             if (it != exifData.end())
             {
@@ -955,7 +955,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
             Exiv2::XmpData xmpData(d->xmpMetadata());
             {
                 Exiv2::XmpKey key("Xmp.exif.DateTimeDigitized");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -970,7 +970,7 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
             }
             {
                 Exiv2::XmpKey key("Xmp.video.DateTimeDigitized");
-                Exiv2::XmpData::iterator it = xmpData.findKey(key);
+                Exiv2::XmpData::const_iterator it = xmpData.findKey(key);
 
                 if (it != xmpData.end())
                 {
@@ -995,14 +995,14 @@ QDateTime MetaEngine::getDigitizationDateTime(bool fallbackToCreationTime) const
 
             Exiv2::IptcData iptcData(d->iptcMetadata());
             Exiv2::IptcKey keyDigitizationDate("Iptc.Application2.DigitizationDate");
-            Exiv2::IptcData::iterator it = iptcData.findKey(keyDigitizationDate);
+            Exiv2::IptcData::const_iterator it = iptcData.findKey(keyDigitizationDate);
 
             if (it != iptcData.end())
             {
                 QString IptcDateDigitization(QString::fromLatin1(it->toString().c_str()));
 
                 Exiv2::IptcKey keyDigitizationTime("Iptc.Application2.DigitizationTime");
-                Exiv2::IptcData::iterator it2 = iptcData.findKey(keyDigitizationTime);
+                Exiv2::IptcData::const_iterator it2 = iptcData.findKey(keyDigitizationTime);
 
                 if (it2 != iptcData.end())
                 {

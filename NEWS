@@ -11,4 +11,5 @@ BUGFIXES FROM BUGZILLA:
 003 ==> 374771 - Thumbnails for video files are gray.
 004 ==> 366010 - Main menu bar is not translated (localized).
 005 ==> 328321 - Image orientation is not maintained when processing RAW image through BQM.
-006 ==> 
+006 ==> 374922 - digiKam crashes when dropping ext. image into fuzzy search target area.
+007 ==> 

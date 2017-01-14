@@ -173,7 +173,7 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
         QString     ifDItemName;
         MetaDataMap metaDataMap;
 
-        for (Exiv2::ExifData::iterator md = exifData.begin(); md != exifData.end(); ++md)
+        for (Exiv2::ExifData::const_iterator md = exifData.begin(); md != exifData.end(); ++md)
         {
             QString key = QString::fromLatin1(md->key().c_str());
 
@@ -191,7 +191,7 @@ MetaEngine::MetaDataMap MetaEngine::getExifTagsDataList(const QStringList& exifK
             else
             {
                 std::ostringstream os;
-                os << *md;
+                md->write(os, &exifData);
 
                 // Exif tag contents can be an translated strings, no only simple ascii.
                 tagValue = QString::fromLocal8Bit(os.str().c_str());
@@ -242,7 +242,7 @@ QString MetaEngine::getExifComment() const
         {
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifKey key("Exif.Photo.UserComment");
-            Exiv2::ExifData::iterator it = exifData.findKey(key);
+            Exiv2::ExifData::const_iterator it = exifData.findKey(key);
 
             if (it != exifData.end())
             {
@@ -254,7 +254,7 @@ QString MetaEngine::getExifComment() const
             }
 
             Exiv2::ExifKey key2("Exif.Image.ImageDescription");
-            Exiv2::ExifData::iterator it2 = exifData.findKey(key2);
+            Exiv2::ExifData::const_iterator it2 = exifData.findKey(key2);
 
             if (it2 != exifData.end())
             {
@@ -426,7 +426,7 @@ bool MetaEngine::getExifTagRational(const char* exifTagName, long int& num, long
     {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey);
 
         if (it != exifData.end())
         {
@@ -692,7 +692,7 @@ bool MetaEngine::getExifTagLong(const char* exifTagName, long& val, int componen
     {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey);
 
         if (it != exifData.end() && it->count() > 0)
         {
@@ -718,7 +718,7 @@ QByteArray MetaEngine::getExifTagData(const char* exifTagName) const
     {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey);
 
         if (it != exifData.end())
         {
@@ -748,7 +748,7 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
     {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey);
 
         if (it != exifData.end())
         {
@@ -802,7 +802,7 @@ QVariant MetaEngine::getExifTagVariant(const char* exifTagName, bool rationalAsL
                 case Exiv2::string:
                 {
                     std::ostringstream os;
-                    os << *it;
+                    it->write(os, &exifData);
                     QString tagValue = QString::fromLocal8Bit(os.str().c_str());
 
                     if (stringEscapeCR)
@@ -833,7 +833,7 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
     {
         Exiv2::ExifKey exifKey(exifTagName);
         Exiv2::ExifData exifData(d->exifMetadata());
-        Exiv2::ExifData::iterator it = exifData.findKey(exifKey);
+        Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey);
 
         if (it != exifData.end())
         {
@@ -901,7 +901,7 @@ QImage MetaEngine::getExifThumbnail(bool fixOrientation) const
                 Exiv2::ExifKey key1("Exif.Thumbnail.Orientation");
                 Exiv2::ExifKey key2("Exif.Image.Orientation");
                 Exiv2::ExifData exifData(d->exifMetadata());
-                Exiv2::ExifData::iterator it = exifData.findKey(key1);
+                Exiv2::ExifData::const_iterator it = exifData.findKey(key1);
 
                 if (it == exifData.end())
                     it = exifData.findKey(key2);

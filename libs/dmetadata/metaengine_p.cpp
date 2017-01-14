@@ -255,7 +255,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
                 untouchedTags << QString::fromLatin1("Exif.Image.PlanarConfiguration");
                 untouchedTags << QString::fromLatin1("Exif.Image.ResolutionUnit");
 
-                for (Exiv2::ExifData::iterator it = orgExif.begin(); it != orgExif.end(); ++it)
+                for (Exiv2::ExifData::const_iterator it = orgExif.begin(); it != orgExif.end(); ++it)
                 {
                     if (untouchedTags.contains(QString::fromLatin1(it->key().c_str())))
                     {
@@ -265,7 +265,7 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
 
                 Exiv2::ExifData readedExif = exifMetadata();
 
-                for (Exiv2::ExifData::iterator it = readedExif.begin(); it != readedExif.end(); ++it)
+                for (Exiv2::ExifData::const_iterator it = readedExif.begin(); it != readedExif.end(); ++it)
                 {
                     if (!untouchedTags.contains(QString::fromLatin1(it->key().c_str())))
                     {
