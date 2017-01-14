@@ -377,8 +377,11 @@ void SlideShow::slotVideoLoaded(bool loaded)
 
 void SlideShow::slotVideoFinished()
 {
-    d->osd->pause(false);
-    slotLoadNextItem();
+    if (d->fileIndex != -1)
+    {
+        d->osd->pause(false);
+        slotLoadNextItem();
+    }
 }
 
 void SlideShow::endOfSlide()
