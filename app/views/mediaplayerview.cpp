@@ -229,7 +229,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     d->videoWidget->setOutAspectRatioMode(VideoRenderer::VideoAspectRatio);
     d->player->setRenderer(d->videoWidget);
-    d->player->setNotifyInterval(250);
 
     d->playerView->setFrameStyle(QFrame::StyledPanel | QFrame::Plain);
     d->playerView->setLineWidth(1);

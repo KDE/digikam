@@ -120,7 +120,6 @@ SlideVideo::SlideVideo(QWidget* const parent)
 
     d->player         = new AVPlayer(this);
     d->player->setRenderer(d->videoWidget);
-    d->player->setNotifyInterval(250);
     //d->thread         = new SlidePlayerThread(d->player);
 
     d->indicator      = new DHBox(this);
