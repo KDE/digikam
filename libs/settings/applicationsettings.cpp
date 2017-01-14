@@ -149,16 +149,16 @@ void ApplicationSettings::readSettings()
     d->iconShowResolution                = group.readEntry(d->configIconShowResolutionEntry,           false);
     d->iconShowAspectRatio               = group.readEntry(d->configIconShowAspectRatioEntry,          false);
     d->iconShowSize                      = group.readEntry(d->configIconShowSizeEntry,                 false);
-    d->iconShowDate                      = group.readEntry(d->configIconShowDateEntry,                 true);
-    d->iconShowModDate                   = group.readEntry(d->configIconShowModificationDateEntry,     true);
+    d->iconShowDate                      = group.readEntry(d->configIconShowDateEntry,                 false);
+    d->iconShowModDate                   = group.readEntry(d->configIconShowModificationDateEntry,     false);
     d->iconShowTitle                     = group.readEntry(d->configIconShowTitleEntry,                true);
     d->iconShowComments                  = group.readEntry(d->configIconShowCommentsEntry,             true);
     d->iconShowTags                      = group.readEntry(d->configIconShowTagsEntry,                 true);
     d->iconShowOverlays                  = group.readEntry(d->configIconShowOverlaysEntry,             true);
     d->iconShowFullscreen                = group.readEntry(d->configIconShowFullscreenEntry,           true);
     d->iconShowRating                    = group.readEntry(d->configIconShowRatingEntry,               true);
-    d->iconShowImageFormat               = group.readEntry(d->configIconShowImageFormatEntry,          false);
-    d->iconShowCoordinates               = group.readEntry(d->configIconShowCoordinatesEntry,          false);
+    d->iconShowImageFormat               = group.readEntry(d->configIconShowImageFormatEntry,          true);
+    d->iconShowCoordinates               = group.readEntry(d->configIconShowCoordinatesEntry,          true);
     d->iconviewFont                      = group.readEntry(d->configIconViewFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
 
     d->toolTipsFont                      = group.readEntry(d->configToolTipsFontEntry,                 QFontDatabase::systemFont(QFontDatabase::GeneralFont));
