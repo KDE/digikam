@@ -68,7 +68,7 @@ VersionManagerSettings::VersionManagerSettings()
 {
     enabled                  = true;
     saveIntermediateVersions = NoIntermediates;
-    showInViewFlags          = OnlyShowCurrent;
+    showInViewFlags          = ShowOriginal;
     editorClosingMode        = AlwaysAsk;
     format                   = QLatin1String("JPG");
 }
