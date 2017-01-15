@@ -99,7 +99,7 @@ QueueMgrWindow::QueueMgrWindow()
       d(new Private)
 {
     setConfigGroupName(QLatin1String("Batch Queue Manager Settings"));
-    setXMLFile(QLatin1String("queuemgrwindowui.rc"));
+    setXMLFile(QLatin1String("queuemgrwindowui5.rc"));
 
     qRegisterMetaType<BatchToolSettings>("BatchToolSettings");
     qRegisterMetaType<BatchToolSet>("BatchToolSet");

@@ -126,7 +126,7 @@ ImportUI::ImportUI(const QString& cameraTitle, const QString& model,
 {
     setConfigGroupName(QLatin1String("Camera Settings"));
 
-    setXMLFile(QLatin1String("importui.rc"));
+    setXMLFile(QLatin1String("importui5.rc"));
     setFullScreenOptions(FS_IMPORTUI);
     setWindowFlags(Qt::Window);
 
