@@ -14,4 +14,5 @@ BUGFIXES FROM BUGZILLA:
 006 ==> 374922 - digiKam crashes when dropping ext. image into fuzzy search target area.
 007 ==> 375019 - Error updating scheme from digikam 4.
 008 ==> 311652 - THUMBBAR : wrong items selection with shift key.
-009 ==> 
+009 ==> 374671 - Breeze Icons missing dark icons.
+010 ==> 
