@@ -391,19 +391,10 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
 {
     ImportSortFilterModel* const fromModel = from->importSortFilterModel();
     ImportSortFilterModel* const toModel   = to->importSortFilterModel();
-
-    if(!fromModel || !toModel)
-    {
-        qCWarning(DIGIKAM_IMPORTUI_LOG) << "one or both of the models are null?! from:" << from << "to:" << to;
-        return;
-    }
-
-    // set current info
-    QModelIndex currentIndex         = toModel->indexForCamItemInfo(from->currentInfo());
-    to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
+    QModelIndex currentIndex               = toModel->indexForCamItemInfo(from->currentInfo());
 
     // sync selection
-    QItemSelection selection         = from->selectionModel()->selection();
+    QItemSelection selection               = from->selectionModel()->selection();
     QItemSelection newSelection;
 
     foreach(const QItemSelectionRange& range, selection)
@@ -414,6 +405,13 @@ void ImportStackedView::syncSelection(ImportCategorizedView* const from, ImportC
     }
 
     d->syncingSelection = true;
+
+    if (currentIndex.isValid())
+    {
+        // set current info
+        to->setCurrentIndex(currentIndex);
+    }
+
     to->selectionModel()->select(newSelection, QItemSelectionModel::ClearAndSelect);
     d->syncingSelection = false;
 }

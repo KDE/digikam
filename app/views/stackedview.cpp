@@ -454,9 +454,7 @@ void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView
 {
     ImageSortFilterModel* const fromModel = from->imageSortFilterModel();
     ImageSortFilterModel* const toModel   = to->imageSortFilterModel();
-    // set current info
     QModelIndex currentIndex              = toModel->indexForImageInfo(from->currentInfo());
-    to->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::NoUpdate);
 
     // sync selection
     QItemSelection selection              = from->selectionModel()->selection();
@@ -470,6 +468,13 @@ void StackedView::syncSelection(ImageCategorizedView* from, ImageCategorizedView
     }
 
     d->syncingSelection = true;
+
+    if (currentIndex.isValid())
+    {
+        // set current info
+        to->setCurrentIndex(currentIndex);
+    }
+
     to->selectionModel()->select(newSelection, QItemSelectionModel::ClearAndSelect);
     d->syncingSelection = false;
 }

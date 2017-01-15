@@ -13,4 +13,5 @@ BUGFIXES FROM BUGZILLA:
 005 ==> 328321 - Image orientation is not maintained when processing RAW image through BQM.
 006 ==> 374922 - digiKam crashes when dropping ext. image into fuzzy search target area.
 007 ==> 375019 - Error updating scheme from digikam 4.
-008 ==> 
+008 ==> 311652 - THUMBBAR : wrong items selection with shift key.
+009 ==> 
