@@ -210,7 +210,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
             value.replace(QString::fromLatin1("\n"), QString::fromLatin1(" "));
 
             // Some XMP key are redondancy. check if already one exist...
-            MetaDataMap::const_iterator it = metaDataMap.find(key);
+            MetaDataMap::const_iterator it = metaDataMap.constFind(key);
 
             // We apply a filter to get only the XMP tags that we need.
 
@@ -220,7 +220,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
                 {
                     if (xmpKeysFilter.contains(key.section(QString::fromLatin1("."), 1, 1)))
                     {
-                        if (it == metaDataMap.end())
+                        if (it == metaDataMap.constEnd())
                         {
                             metaDataMap.insert(key, value);
                         }
@@ -237,7 +237,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
                 {
                     if (!xmpKeysFilter.contains(key.section(QString::fromLatin1("."), 1, 1)))
                     {
-                        if (it == metaDataMap.end())
+                        if (it == metaDataMap.constEnd())
                         {
                             metaDataMap.insert(key, value);
                         }
@@ -253,7 +253,7 @@ MetaEngine::MetaDataMap MetaEngine::getXmpTagsDataList(const QStringList& xmpKey
             }
             else // else no filter at all.
             {
-                if (it == metaDataMap.end())
+                if (it == metaDataMap.constEnd())
                 {
                     metaDataMap.insert(key, value);
                 }
@@ -649,7 +649,7 @@ bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& v
 
         if (!map.isEmpty())
         {
-            for (AltLangMap::const_iterator it = map.begin(); it != map.end(); ++it)
+            for (AltLangMap::const_iterator it = map.constBegin(); it != map.constEnd(); ++it)
             {
                 if (it.key() != langAlt)
                 {
