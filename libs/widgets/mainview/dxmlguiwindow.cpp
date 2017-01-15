@@ -819,21 +819,52 @@ void DXmlGuiWindow::slotContribute()
 
 void DXmlGuiWindow::setupIconTheme()
 {
-    /**
-     * let QStandardPaths handle this, it will look for app local stuff
-     * this means e.g. for mac: "<APPDIR>/../Resources" and for win: "<APPDIR>/data"
-     */
-    const QString breezeIcons = QStandardPaths::locate(QStandardPaths::DataLocation, QLatin1String("breeze.rcc"));
+    // Let QStandardPaths handle this, it will look for app local stuff
+    // this means e.g. for mac: "<APPDIR>/../Resources" and for win: "<APPDIR>/data".
 
-    if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons) && QResource::registerResource(breezeIcons))
+    bool hasBreeze                = false;
+    const QString breezeIcons     = QStandardPaths::locate(QStandardPaths::DataLocation, QLatin1String("breeze.rcc"));
+
+    if (!breezeIcons.isEmpty() && QFile::exists(breezeIcons))
+    {
+        QResource::registerResource(breezeIcons);
+        hasBreeze = true;
+    }
+
+    bool hasBreezeDark            = false;
+    const QString breezeDarkIcons = QStandardPaths::locate(QStandardPaths::DataLocation, QLatin1String("breeze-dark.rcc"));
+
+    if (!breezeDarkIcons.isEmpty() && QFile::exists(breezeDarkIcons))
+    {
+        QResource::registerResource(breezeDarkIcons);
+        hasBreezeDark = true;
+    }
+
+    if (hasBreeze || hasBreezeDark)
     {
         // Tell Qt about the theme
         QIcon::setThemeSearchPaths(QStringList() << QLatin1String(":/icons"));
-        QIcon::setThemeName(QLatin1String("breeze"));
 
         // Tell icons loader an co. about the theme
         KConfigGroup cg(KSharedConfig::openConfig(), "Icons");
-        cg.writeEntry("Theme", "breeze");
+
+        if (hasBreeze)
+        {
+            QIcon::setThemeName(QLatin1String("breeze"));
+            cg.writeEntry("Theme", "breeze");
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze icons ressource file found";
+        }
+        else if (hasBreezeDark)
+        {
+            QIcon::setThemeName(QLatin1String("breeze-dark"));
+            cg.writeEntry("Theme", "breeze-dark");
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "Breeze-dark icons ressource file found";
+        }
+        else
+        {
+            qCDebug(DIGIKAM_WIDGETS_LOG) << "No icons ressource file found";
+        }
+
         cg.sync();
     }
 }
