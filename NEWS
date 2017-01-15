@@ -15,4 +15,5 @@ BUGFIXES FROM BUGZILLA:
 007 ==> 375019 - Error updating scheme from digikam 4.
 008 ==> 311652 - THUMBBAR : wrong items selection with shift key.
 009 ==> 374671 - Breeze Icons missing dark icons.
-010 ==> 
+010 ==> 375107 - Deleting a tag with 0 images from Tag Manager generates incorrect dialog - missing tag name.
+011 ==> 

@@ -307,6 +307,7 @@ void TagModificationHelper::slotTagDelete()
 void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
 {
     QString tagWithChildrens;
+    QString tagWithoutImages;
     QString tagWithImages;
     QMultiMap<int, TAlbum*> sortedTags;
 
@@ -330,13 +331,19 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
             ++iter;
         }
 
-        if(children)
+        if (children)
             tagWithChildrens.append(tag->title() + QLatin1String(" "));
 
         QList<qlonglong> assignedItems = CoreDbAccess().db()->getItemIDsInTag(tag->id());
 
-        if(!assignedItems.isEmpty())
+        if (!assignedItems.isEmpty())
+        {
             tagWithImages.append(tag->title() + QLatin1String(" "));
+        }
+        else
+        {
+            tagWithoutImages.append(tag->title() + QLatin1String(" "));
+        }
 
         /**
          * Tags must be deleted from children to parents, if we don't want
@@ -347,14 +354,13 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
         Album* parent = t;
         int depth     = 0;
 
-        while(!parent->isRoot())
+        while (!parent->isRoot())
         {
             parent = parent->parent();
             depth++;
         }
 
         sortedTags.insert(depth,tag);
-
     }
 
     // ask for deletion of children
@@ -385,7 +391,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
     }
     else
     {
-        message = i18n("Delete '%1' tag(s)?", tagWithImages);
+        message = i18n("Delete '%1' tag(s)?", tagWithoutImages);
     }
 
     int result = QMessageBox::warning(qApp->activeWindow(), i18n("Delete Tag"),
@@ -399,7 +405,7 @@ void TagModificationHelper::slotMultipleTagDel(QList<TAlbum* >& tags)
          * QMultimap doesn't provide reverse iterator, -1 is required
          * because end() points after the last element
          */
-        for(it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
+        for (it = sortedTags.end()-1; it != sortedTags.begin()-1; --it)
         {
             emit aboutToDeleteTag(it.value());
             QString errMsg;
