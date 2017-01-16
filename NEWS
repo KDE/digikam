@@ -21,5 +21,6 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 375107 - Deleting a tag with 0 images from Tag Manager generates incorrect dialog - missing tag name.
 011 ==> 375142 - The similarity calculated for the fuzzy image drop search is imprecise.
 012 ==> 336253 - Create a New tag, Unconfirmed Faces [patch]
-013 ==> 262168 - When adding name, the list should only contain people [patch].
-014 ==> 
+013 ==> 263400 - Newly detected faces should be stored in a dedicated virtual album for checking.
+014 ==> 262168 - When adding name, the list should only contain people [patch].
+015 ==> 
