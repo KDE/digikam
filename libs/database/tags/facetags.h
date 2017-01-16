@@ -52,6 +52,9 @@ public:
     static bool           isTheUnknownPerson(int tagId);
     static int            unknownPersonTagId();
 
+    static bool           isTheUnconfirmedPerson(int tagId);
+    static int            unconfirmedPersonTagId();
+
     /**
      * A method to return a list of all person tags in the DB
      */

@@ -725,12 +725,29 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         height                   = (*it).toInt();
         ++it;
         // sync the following order with the places where it's read, e.g., FaceTagsIface
-        record.extraValues      << (*it); // value
+        QVariant value = (*it);
         ++it;
-        record.extraValues      << (*it); // property
+        QVariant property = (*it);
         ++it;
-        record.extraValues      << (*it); // tag id
+        QVariant tagId = (*it);
         ++it;
+
+        // If the property is the autodetected person, get the original image tag properties
+        if (property.toString().compare(ImageTagPropertyName::autodetectedPerson()) == 0)
+        {
+            // If we split the value by ',' we must have the segments tagId, property, region
+            // Set the values.
+            QStringList values = value.toString().split(',');
+            if (values.size() == 3)
+            {
+                value = values.at(2);
+                property = values.at(1);
+                tagId = values.at(0);
+            }
+        }
+        record.extraValues << value;
+        record.extraValues << property;
+        record.extraValues << tagId;
 
         if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
         {
@@ -1059,6 +1076,7 @@ QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeCh
         writer.setDefaultFieldOperator(SearchXml::Or);
 
         QStringList properties;
+        properties << QLatin1String("autodetectedPerson");
         properties << QLatin1String("autodetectedFace");
         properties << QLatin1String("tagRegion");
 

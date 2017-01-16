@@ -229,6 +229,11 @@ bool FaceTags::isTheUnknownPerson(int tagId)
     return TagsCache::instance()->hasProperty(tagId, TagPropertyName::unknownPerson());
 }
 
+bool FaceTags::isTheUnconfirmedPerson(int tagId)
+{
+    return TagsCache::instance()->hasProperty(tagId, TagPropertyName::unconfirmedPerson());
+}
+
 QList<int> FaceTags::allPersonTags()
 {
     return TagsCache::instance()->tagsWithProperty(TagPropertyName::person());
@@ -417,6 +422,26 @@ int FaceTags::unknownPersonTagId()
     TagProperties props(unknownPersonTagId);
     props.setProperty(TagPropertyName::person(),        QString()); // no name associated
     props.setProperty(TagPropertyName::unknownPerson(), QString()); // special property
+
+    return unknownPersonTagId;
+}
+
+int FaceTags::unconfirmedPersonTagId()
+{
+    QList<int> ids = TagsCache::instance()->tagsWithPropertyCached(TagPropertyName::unconfirmedPerson());
+
+    if (!ids.isEmpty())
+    {
+        return ids.first();
+    }
+
+    int unknownPersonTagId = TagsCache::instance()->getOrCreateTag(
+                                        FaceTagsHelper::tagPath(
+                                        i18nc("The list of recognized faces from the collections but not confirmed", "Unconfirmed"),
+                                        personParentTag()));
+    TagProperties props(unknownPersonTagId);
+    props.setProperty(TagPropertyName::person(),        QString()); // no name associated
+    props.setProperty(TagPropertyName::unconfirmedPerson(), QString()); // special property
 
     return unknownPersonTagId;
 }

@@ -115,6 +115,11 @@ public:
     static Type        typeForAttribute(const QString& attribute, int tagId = 0);
 
     /**
+     * Returns the string tagId + ',' + unconfirmedFace + ',' + regionXml
+     */
+    QString getAutodetectedPersonString() const;
+
+    /**
      * Writes the contents of this face - in a compact way - in the QVariant.
      * Only native QVariant types are used, that is, the QVariant will not have a custom type,
      * thus it can be compared by value by operator==.

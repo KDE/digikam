@@ -217,9 +217,19 @@ FaceTagsIface FaceTagsEditor::changeSuggestedName(const FaceTagsIface& previousE
 
     removeFace(previousEntry);
 
+    QStringList attributesList = FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName);
+
     ImageTagPair pair(newEntry.imageId(), newEntry.tagId());
     // UnconfirmedName and UnknownName have the same attribute
-    addFaceAndTag(pair, newEntry, FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName), false);
+    addFaceAndTag(pair, newEntry, attributesList, false);
+
+    // Add the image to the face to the unconfirmed tag, if it is not the unknown or unconfirmed tag.
+    if (!FaceTags::isTheUnknownPerson(unconfirmedNameTagId) && !FaceTags::isTheUnconfirmedPerson(unconfirmedNameTagId))
+    {
+        ImageTagPair unconfirmedAssociation(newEntry.imageId(),FaceTags::unconfirmedPersonTagId());
+        unconfirmedAssociation.addProperty(ImageTagPropertyName::autodetectedPerson(), newEntry.getAutodetectedPersonString());
+    }
+
     return newEntry;
 }
 
@@ -379,6 +389,10 @@ void FaceTagsEditor::removeFaceAndTag(ImageTagPair& pair, const FaceTagsIface& f
     {
         pair.removeProperty(FaceTagsIface::attributeForType(FaceTagsIface::FaceForTraining), regionString);
     }
+
+    // Remove the unconfirmed property for the image id and the unconfirmed tag with the original tag id and the confirmed region
+    ImageTagPair unconfirmedAssociation(face.imageId(),FaceTags::unconfirmedPersonTagId());
+    unconfirmedAssociation.removeProperty(ImageTagPropertyName::autodetectedPerson(),face.getAutodetectedPersonString());
 
     // Tag assigned and no other entry left?
     if (touchTags            &&

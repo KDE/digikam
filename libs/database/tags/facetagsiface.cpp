@@ -222,6 +222,18 @@ FaceTagsIface FaceTagsIface::fromListing(qlonglong imageId, const QList<QVariant
                         TagRegion(value));
 }
 
+QString FaceTagsIface::getAutodetectedPersonString() const
+{
+    if (isUnconfirmedType())
+    {
+        return QString::number(tagId()) + QLatin1Char(',') + ImageTagPropertyName::autodetectedFace() + QLatin1Char(',') + (TagRegion(region().toRect())).toXml();
+    }
+    else
+    {
+        return QString();
+    }
+}
+
 QDebug operator<<(QDebug dbg, const FaceTagsIface& f)
 {
     dbg.nospace() << "FaceTagsIface(" << f.type()

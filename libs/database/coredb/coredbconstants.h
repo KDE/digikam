@@ -185,6 +185,7 @@ public:
 
     static QLatin1String person();
     static QLatin1String unknownPerson();
+    static QLatin1String unconfirmedPerson();
     static QLatin1String faceEngineName();
     static QLatin1String tagKeyboardShortcut();
     static QLatin1String faceEngineUuid();
@@ -198,6 +199,7 @@ public:
 
     static QLatin1String tagRegion();
     static QLatin1String autodetectedFace();
+    static QLatin1String autodetectedPerson();
     static QLatin1String faceToTrain();
 };
 
