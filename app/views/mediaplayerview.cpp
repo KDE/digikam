@@ -288,6 +288,8 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 
     connect(d->player, SIGNAL(error(QtAV::AVError)),
             this, SLOT(slotHandlePlayerError(QtAV::AVError)));
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "AudioOutput backends:" << d->player->audio()->backendsAvailable();
 }
 
 MediaPlayerView::~MediaPlayerView()
