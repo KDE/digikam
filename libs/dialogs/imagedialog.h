@@ -83,10 +83,8 @@ public:
     explicit DFileIconProvider();
     ~DFileIconProvider();
 
-private:
-
-    QIcon icon(IconType type) const;
-    QIcon icon(const QFileInfo& info) const;
+    virtual QIcon icon(IconType type) const;
+    virtual QIcon icon(const QFileInfo& info) const;
 
 private:
 

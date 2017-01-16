@@ -389,12 +389,13 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     d->fileFormats = supportedImageMimeTypes(QIODevice::ReadOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
-    QFileDialog* const dlg = new QFileDialog(parent);
+    DFileIconProvider* const provider = new DFileIconProvider();
+    QFileDialog* const dlg            = new QFileDialog(parent);
     dlg->setWindowTitle(caption);
     dlg->setDirectoryUrl(url);
+    dlg->setIconProvider(provider);
     dlg->setNameFilters(d->fileFormats);
     dlg->selectNameFilter(d->fileFormats.last());
-    dlg->setIconProvider(new DFileIconProvider());
     dlg->setAcceptMode(QFileDialog::AcceptOpen);
     dlg->setFileMode(singleSelect ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
 
@@ -402,6 +403,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     d->urls = dlg->selectedUrls();
 
     delete dlg;
+    delete provider;
 }
 
 ImageDialog::~ImageDialog()
