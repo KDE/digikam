@@ -207,11 +207,12 @@ void ImageLister::listAlbum(ImageListerReceiver* const receiver, int albumRootId
     {
         // SQLite allows no more than 999 parameters
         const int maxParams = CoreDbAccess().backend()->maximumBoundValues();
-        for (int i=0; i<albumIds.size(); i++)
+
+        for (int i = 0 ; i < albumIds.size() ; i++)
         {
             QString q           = query;
             QList<QVariant> ids =  (albumIds.size() <= maxParams) ? albumIds : albumIds.mid(i, maxParams);
-            i                   += ids.count();
+            i                  += ids.count();
 
             QList<QVariant> v;
             CoreDbAccess  access;
@@ -273,7 +274,7 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
     QSet<ImageListerRecord> records;
     QList<int>::iterator it;
 
-    for(it = tagIds.begin(); it != tagIds.end(); ++it)
+    for(it = tagIds.begin() ; it != tagIds.end() ; ++it)
     {
         QList<QVariant>         values;
         QMap<QString, QVariant> parameters;
@@ -314,10 +315,10 @@ void ImageLister::listTag(ImageListerReceiver* const receiver, QList<int> tagIds
             record.format            = (*it).toString();
             ++it;
             record.creationDate      = (*it).isNull() ? QDateTime()
-                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
+                                       : QDateTime::fromString((*it).toString(), Qt::ISODate);
             ++it;
             record.modificationDate  = (*it).isNull() ? QDateTime()
-                                    : QDateTime::fromString((*it).toString(), Qt::ISODate);
+                                       : QDateTime::fromString((*it).toString(), Qt::ISODate);
             ++it;
             record.fileSize          = toInt32BitSafe(it);
             ++it;
@@ -613,7 +614,8 @@ void ImageLister::listSearch(ImageListerReceiver* const receiver, const QString&
         lon                      = (*it).toDouble();
         ++it;
 
-        record.currentSimilarity = access.db()->getImageProperty(record.imageID,QLatin1String("similarityTo_")+QString::number(referenceImageId)).toDouble();
+        record.currentSimilarity                 = access.db()->getImageProperty(record.imageID,QLatin1String("similarityTo_") +
+                                                   QString::number(referenceImageId)).toDouble();
         record.currentFuzzySearchReferenceImage  = referenceImageId;
 
         if (d->listOnlyAvailableImages && !albumRoots.contains(record.albumRootID))
@@ -725,11 +727,11 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         height                   = (*it).toInt();
         ++it;
         // sync the following order with the places where it's read, e.g., FaceTagsIface
-        QVariant value = (*it);
+        QVariant value           = (*it);
         ++it;
-        QVariant property = (*it);
+        QVariant property        = (*it);
         ++it;
-        QVariant tagId = (*it);
+        QVariant tagId           = (*it);
         ++it;
 
         // If the property is the autodetected person, get the original image tag properties
@@ -737,12 +739,13 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
         {
             // If we split the value by ',' we must have the segments tagId, property, region
             // Set the values.
-            QStringList values = value.toString().split(',');
+            QStringList values = value.toString().split(QLatin1Char(','));
+
             if (values.size() == 3)
             {
-                value = values.at(2);
+                value    = values.at(2);
                 property = values.at(1);
-                tagId = values.at(0);
+                tagId    = values.at(0);
             }
         }
         record.extraValues << value;
@@ -771,11 +774,11 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
         return;
     }
 
-    QStringRef type             = reader.attributes().value(QLatin1String("type"));
-    QStringRef numResultsString = reader.attributes().value(QLatin1String("numberofresults"));
-    QStringRef thresholdString  = reader.attributes().value(QLatin1String("threshold"));
-    QStringRef maxThresholdString  = reader.attributes().value(QLatin1String("maxthreshold"));
-    QStringRef sketchTypeString = reader.attributes().value(QLatin1String("sketchtype"));
+    QStringRef type                  = reader.attributes().value(QLatin1String("type"));
+    QStringRef numResultsString      = reader.attributes().value(QLatin1String("numberofresults"));
+    QStringRef thresholdString       = reader.attributes().value(QLatin1String("threshold"));
+    QStringRef maxThresholdString    = reader.attributes().value(QLatin1String("maxthreshold"));
+    QStringRef sketchTypeString      = reader.attributes().value(QLatin1String("sketchtype"));
 
     double threshold                 = 0.9;
     double maxThreshold              = 1.0;
@@ -791,12 +794,12 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
     {
         threshold = qMax(thresholdString.toString().toDouble(), 0.1);
     }
-    
+
     if (!maxThresholdString.isNull())
     {
         maxThreshold = qMax(maxThresholdString.toString().toDouble(), 0.1);
     }
-    
+
     if (sketchTypeString == QLatin1String("handdrawn"))
     {
         sketchType = HaarIface::HanddrawnSketch;
@@ -806,7 +809,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
         sketchType = HaarIface::ScannedSketch;
     }
 
-    QMap<qlonglong,double> imageSimilarityMap;
+    QMap<qlonglong, double> imageSimilarityMap;
 
     if (type == QLatin1String("signature"))
     {
@@ -872,6 +875,7 @@ void ImageLister::listFromHaarSearch(ImageListerReceiver* const receiver, const 
 
         qlonglong imageId;
         double similarity;
+
         // Iterate over the image similarity map and bind the image id and similarity to the query.
         for (QMap<qlonglong, double>::const_iterator it = imageSimilarityMap.constBegin(); it != imageSimilarityMap.constEnd(); ++it)
         {
