@@ -4,6 +4,7 @@ digiKam 5.5.0 - Release date: 2017-02-12
 NEW FEATURES:
 Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
 Faces    : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
+Faces    : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
 Searches : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
 
 BUGFIXES FROM BUGZILLA:
@@ -20,4 +21,5 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 375107 - Deleting a tag with 0 images from Tag Manager generates incorrect dialog - missing tag name.
 011 ==> 375142 - The similarity calculated for the fuzzy image drop search is imprecise.
 012 ==> 336253 - Create a New tag, Unconfirmed Faces [patch]
-013 ==> 
+013 ==> 262168 - When adding name, the list should only contain people [patch].
+014 ==> 

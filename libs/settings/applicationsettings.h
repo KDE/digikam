@@ -376,6 +376,9 @@ public:
     void setScrollItemToCenter(bool val);
     bool getScrollItemToCenter() const;
 
+    void setShowOnlyPersonTagsInPeopleSidebar(bool val);
+    bool showOnlyPersonTagsInPeopleSidebar() const;
+
     /**
      * Defines the way in which string comparisons are performed.
      *

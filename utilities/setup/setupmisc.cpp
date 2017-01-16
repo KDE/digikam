@@ -62,6 +62,7 @@ public:
         showPermanentDeleteDialogCheck(0),
         sidebarApplyDirectlyCheck(0),
         scrollItemToCenterCheck(0),
+        showOnlyPersonTagsInPeopleSidebarCheck(0),
         scanAtStart(0),
         sidebarType(0),
         stringComparisonType(0),
@@ -80,6 +81,7 @@ public:
     QCheckBox* showPermanentDeleteDialogCheck;
     QCheckBox* sidebarApplyDirectlyCheck;
     QCheckBox* scrollItemToCenterCheck;
+    QCheckBox* showOnlyPersonTagsInPeopleSidebarCheck;
     QCheckBox* scanAtStart;
 
     QComboBox* sidebarType;
@@ -133,8 +135,9 @@ SetupMisc::SetupMisc(QWidget* const parent)
     QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
     QVBoxLayout* const gLayout5     = new QVBoxLayout();
 
-    d->scrollItemToCenterCheck        = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
-    d->showSplashCheck                = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
+    d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
+    d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), abOptionsGroup);
+    d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
 
     DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
@@ -191,6 +194,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     }
 
     gLayout5->addWidget(d->scrollItemToCenterCheck);
+    gLayout5->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
     gLayout5->addWidget(d->showSplashCheck);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
@@ -230,6 +234,7 @@ void SetupMisc::applySettings()
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
+    settings->setShowOnlyPersonTagsInPeopleSidebar(d->showOnlyPersonTagsInPeopleSidebarCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
 
@@ -252,6 +257,7 @@ void SetupMisc::readSettings()
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
+    d->showOnlyPersonTagsInPeopleSidebarCheck->setChecked(settings->showOnlyPersonTagsInPeopleSidebar());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
 

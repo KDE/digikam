@@ -190,6 +190,9 @@ void TagsJob::run()
 
         facesNumberMap[ImageTagPropertyName::tagRegion()]        =
             CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
+            
+        facesNumberMap[ImageTagPropertyName::autodetectedPerson()] =
+            CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedPerson());
 
         emit faceFoldersData(facesNumberMap);
     }

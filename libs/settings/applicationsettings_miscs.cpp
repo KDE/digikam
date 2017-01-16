@@ -118,6 +118,16 @@ bool ApplicationSettings::getScrollItemToCenter() const
     return d->scrollItemToCenter;
 }
 
+void ApplicationSettings::setShowOnlyPersonTagsInPeopleSidebar(bool val)
+{
+    d->showOnlyPersonTagsInPeopleSidebar = val;
+}
+
+bool ApplicationSettings::showOnlyPersonTagsInPeopleSidebar() const
+{
+    return d->showOnlyPersonTagsInPeopleSidebar;
+}
+
 void ApplicationSettings::setStringComparisonType(ApplicationSettings::StringComparisonType val)
 {
     d->stringComparisonType = val;

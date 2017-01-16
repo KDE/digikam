@@ -64,6 +64,7 @@ public:
     static const QString                      configThemeEntry;
     static const QString                      configSidebarTitleStyleEntry;
     static const QString                      configScrollItemToCenterEntry;
+    static const QString                      configShowOnlyPersonTagsInPeopleSidebarEntry;
     static const QString                      configRatingFilterConditionEntry;
     static const QString                      configRecursiveAlbumsEntry;
     static const QString                      configRecursiveTagsEntry;
@@ -148,6 +149,8 @@ public:
     bool                                      sidebarApplyDirectly;
     // item center settings
     bool                                      scrollItemToCenter;
+    // tag filter settings
+    bool                                      showOnlyPersonTagsInPeopleSidebar;
 
     // icon view settings
     bool                                      iconShowName;

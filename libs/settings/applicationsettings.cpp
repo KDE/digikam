@@ -235,6 +235,7 @@ void ApplicationSettings::readSettings()
     d->showPermanentDeleteDialog         = group.readEntry(d->configShowPermanentDeleteDialogEntry,                   true);
     d->sidebarApplyDirectly              = group.readEntry(d->configApplySidebarChangesDirectlyEntry,                 false);
     d->scrollItemToCenter                = group.readEntry(d->configScrollItemToCenterEntry,                          false);
+    d->showOnlyPersonTagsInPeopleSidebar = group.readEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,           false);
     d->stringComparisonType              = (StringComparisonType) group.readEntry(d->configStringComparisonTypeEntry, (int) Natural);
 
 #ifdef HAVE_APPSTYLE_SUPPORT
@@ -400,6 +401,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configShowPermanentDeleteDialogEntry,          d->showPermanentDeleteDialog);
     group.writeEntry(d->configApplySidebarChangesDirectlyEntry,        d->sidebarApplyDirectly);
     group.writeEntry(d->configScrollItemToCenterEntry,                 d->scrollItemToCenter);
+    group.writeEntry(d->configShowOnlyPersonTagsInPeopleSidebarEntry,  d->showOnlyPersonTagsInPeopleSidebar);
     group.writeEntry(d->configStringComparisonTypeEntry,               (int) d->stringComparisonType);
 #ifdef HAVE_APPSTYLE_SUPPORT
     group.writeEntry(d->configApplicationStyleEntry,                   d->applicationStyle);
