@@ -426,13 +426,8 @@ QList<qlonglong> HaarIface::bestMatchesForImage(qlonglong imageid, int numberOfR
 QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesForImageWithThreshold(const QString& imagePath, double requiredPercentage,
                                                              double maximumPercentage, SketchType type)
 {
-    QImage image = loadQImage(imagePath);
-    if (image.isNull())
-    {
-        return QPair<double,QMap<qlonglong,double>>();
-    }
-
     d->createLoadingBuffer();
+    DImg image(imagePath);
     d->data->fillPixelData(image);
 
     Haar::Calculator haar;

@@ -2,7 +2,8 @@
 digiKam 5.5.0 - Release date: 2017-02-12
 
 NEW FEATURES:
-Faces : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
+Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
+Searches : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -16,4 +17,5 @@ BUGFIXES FROM BUGZILLA:
 008 ==> 311652 - THUMBBAR : wrong items selection with shift key.
 009 ==> 374671 - Breeze Icons missing dark icons.
 010 ==> 375107 - Deleting a tag with 0 images from Tag Manager generates incorrect dialog - missing tag name.
-011 ==> 
+011 ==> 375142 - The similarity calculated for the fuzzy image drop search is imprecise.
+012 ==>
