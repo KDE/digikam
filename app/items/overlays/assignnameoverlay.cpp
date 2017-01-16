@@ -101,12 +101,13 @@ AssignNameOverlay::AssignNameOverlay(QObject* const parent)
     d->filteredModel.setSourceAlbumModel(&d->tagModel);
     d->filterModel.setSourceFilterModel(&d->filteredModel);
     // Restrict the tag properties filter model to people if configured.
-    ApplicationSettings * settings = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
+
     if (settings)
     {
         if (settings->showOnlyPersonTagsInPeopleSidebar())
         {
-            d->filteredModel.listOnlyTagsWithProperty("person");
+            d->filteredModel.listOnlyTagsWithProperty(QLatin1String("person"));
         }
     }
 }

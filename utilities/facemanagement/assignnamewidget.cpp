@@ -553,12 +553,13 @@ void AssignNameWidget::setDefaultModel()
 void AssignNameWidget::setModel(TagModel* const model, TagPropertiesFilterModel* const filteredModel, CheckableAlbumFilterModel* const filterModel)
 {
     // Restrict the tag properties filter model to people if configured.
-    ApplicationSettings * settings = ApplicationSettings::instance();
+    ApplicationSettings* const settings = ApplicationSettings::instance();
+
     if (settings)
     {
         if (settings->showOnlyPersonTagsInPeopleSidebar())
         {
-            filteredModel->listOnlyTagsWithProperty("person");
+            filteredModel->listOnlyTagsWithProperty(QLatin1String("person"));
         }
     }
 
