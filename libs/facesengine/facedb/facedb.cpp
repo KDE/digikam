@@ -108,6 +108,24 @@ void FaceDb::deleteIdentity(int id)
     d->db->execSql(QString::fromLatin1("DELETE FROM Identities WHERE id=?;"), id);
 }
 
+void FaceDb::deleteIdentity(const QString & uuid)
+{
+    QList<QVariant> ids;
+    d->db->execSql(QString::fromLatin1("SELECT Identities.id FROM Identities LEFT JOIN IdentityAttributes ON "
+                                       " Identities.id=IdentityAttributes.id WHERE "
+                                       " IdentityAttributes.attribute='uuid' AND IdentityAttributes.value=?;"), uuid, &ids);
+    if (ids.size() == 1)
+    {
+        deleteIdentity(ids.first().toInt());
+    }
+    else
+    {
+        qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot delete identity with uuid "
+                                      << uuid << ". There are " << ids.size()
+                                      << " identities with this uuid.";
+    }
+}
+
 QList<Identity> FaceDb::identities() const
 {
     QList<QVariant> ids;

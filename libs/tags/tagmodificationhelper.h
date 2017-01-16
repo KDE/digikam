@@ -127,6 +127,32 @@ public Q_SLOTS:
     void slotMultipleTagDel();
 
     /**
+     * Deletes the given face tag and after prompting the user for this.
+     * The tag itself is not deleted. Only its property as face tag.
+     *
+     * @param tag the face tag to delete
+     */
+    void slotFaceTagDelete(TAlbum* tag);
+
+    /**
+     * must use bindTag and a QAction
+     */
+    void slotFaceTagDelete(); /// must use bindTag and a QAction
+
+    /**
+     * Delete multiple face tags and prompt user only once for all
+     * The tags itself are not deleted. Only their properties as face tags.
+     *
+     * @param tags face tags to be deleted.
+     */
+    void slotMultipleFaceTagDel(QList<TAlbum* >& tags);
+
+    /**
+     * must use bindMultipleTags and a QAction
+     */
+    void slotMultipleFaceTagDel();
+
+    /**
      * Sets the tag that the given action operates on.
      * You must call bindTag and then connect the action's triggered
      * to the desired slot, slotTagNew(), slotTagEdit() or slotTagDelete().
@@ -166,6 +192,19 @@ private:
 
     class Private;
     Private* const d;
+
+    /**
+     * Returns all sub-tags of the given one which have the person property.
+     * This includes the root tag, if it has the property, too.
+     */
+    QList<TAlbum*> getFaceTags(TAlbum* rootTags = 0);
+
+    /**
+     * Returns all sub-tags of the given ones which have the person property.
+     * This includes the root tags, if they have the property, too.
+     */
+    QSet<TAlbum*> getFaceTags(QList<TAlbum*> tags);
+
 };
 
 } // namespace Digikam

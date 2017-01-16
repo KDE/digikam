@@ -1388,6 +1388,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->tagFolderView->setConfigGroup(getConfigGroup());
     d->tagFolderView->setExpandNewCurrentItem(true);
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
+    d->tagFolderView->setShowDeleteFaceTagsAction(true);
 
     d->tagFolderView->filteredModel()->listOnlyTagsWithProperty(QLatin1String("person"));
     d->tagFolderView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);

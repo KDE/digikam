@@ -54,12 +54,14 @@ public:
 
     Private() :
         showFindDuplicateAction(true),
+        showDeleteFaceTagsAction(false),
         resetIconAction(0),
         findDuplAction(0)
     {
     }
 
     bool     showFindDuplicateAction;
+    bool     showDeleteFaceTagsAction;
 
     QAction* resetIconAction;
     QAction* findDuplAction;
@@ -86,6 +88,11 @@ TagFolderView::~TagFolderView()
 void TagFolderView::setShowFindDuplicateAction(bool show)
 {
     d->showFindDuplicateAction = show;
+}
+
+void TagFolderView::setShowDeleteFaceTagsAction(bool show)
+{
+    d->showDeleteFaceTagsAction = show;
 }
 
 QString TagFolderView::contextMenuTitle() const
@@ -126,7 +133,14 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
 
     cmh.addExportMenu();
     cmh.addSeparator();
-    cmh.addActionDeleteTag(tagModificationHelper(), tag);
+    if (d->showDeleteFaceTagsAction)
+    {
+        cmh.addActionDeleteFaceTag(tagModificationHelper(),tag);
+    }
+    else
+    {
+        cmh.addActionDeleteTag(tagModificationHelper(), tag);
+    }
     cmh.addSeparator();
     cmh.addActionEditTag(tagModificationHelper(), tag);
 
@@ -270,7 +284,15 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     cmh.addAction(collapseSel, this, SLOT(slotCollapseNode()), false);
     cmh.addSeparator();
     cmh.addExportMenu();
-    cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    cmh.addSeparator();
+    if (d->showDeleteFaceTagsAction)
+    {
+        cmh.addActionDeleteFaceTags(tagModificationHelper(),albums);
+    }
+    else
+    {
+        cmh.addActionDeleteTags(tagModificationHelper(),albums);
+    }
     cmh.addSeparator();
 }
 

@@ -41,6 +41,7 @@
 #include "coredb.h"
 #include "coredbtransaction.h"
 #include "imageinfo.h"
+#include "imagetagpair.h"
 #include "metadatahub.h"
 #include "scancontroller.h"
 #include "statusprogressbar.h"
@@ -48,6 +49,8 @@
 #include "tagproperties.h"
 #include "tageditdlg.h"
 #include "facetags.h"
+#include "facedbaccess.h"
+#include "facedb.h"
 
 namespace Digikam
 {
@@ -423,6 +426,235 @@ void TagModificationHelper::slotMultipleTagDel()
     QList<TAlbum*> lst = boundMultipleTags(sender());
     qCDebug(DIGIKAM_GENERAL_LOG) << lst.size();
     slotMultipleTagDel(lst);
+}
+
+void TagModificationHelper::slotFaceTagDelete(TAlbum* t)
+{
+    QList<TAlbum*> tag;
+    tag.append(t);
+    slotMultipleFaceTagDel(tag);
+}
+
+void TagModificationHelper::slotFaceTagDelete()
+{
+    slotFaceTagDelete(boundTag(sender()));
+}
+
+void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
+{
+    QString tagsWithChildren;
+    QString tagsWithImages;
+
+    // We use a set here since else one tag could occur more than once
+    // which could lead to undefined behaviour.
+    QSet<TAlbum*> allPersonTagsToDelete;
+    int tagsWithChildrenCount = 0;
+    QSet<qlonglong> allAssignedItems;
+    int tagsWithImagesCount = 0;
+
+    foreach(TAlbum* const selectedTag, tags)
+    {
+        if (!selectedTag || selectedTag->isRoot())
+        {
+            continue;
+        }
+
+        // find tags and subtags with person property
+        QSet<TAlbum*> personTagsToDelete = getFaceTags(selectedTag).toSet();
+
+        // If there is more than one person tag in the list,
+        // the tag to remove has at least one sub tag that is a face tag.
+        // Thus, we have to warn.
+        //
+        // If there is only one face tag, it is either the original tag,
+        // or it is the only sub tag of the original tag.
+        // Behave, like the face tag itself was selected.
+        if(personTagsToDelete.size() > 1)
+        {
+            if (tagsWithChildrenCount > 0)
+            {
+                tagsWithChildren.append(QLatin1String(","));
+            }
+            tagsWithChildren.append(selectedTag->title());
+            ++tagsWithChildrenCount;
+        }
+
+        // Get the assigned faces for all person tags to delete
+        foreach (TAlbum* const tAlbum, personTagsToDelete)
+        {
+            // If the global set does not yet contain the tag
+            if (!allPersonTagsToDelete.contains(tAlbum))
+            {
+                QSet<qlonglong> assignedItems = CoreDbAccess().db()->getImagesWithImageTagProperty(
+                    tAlbum->id(), Digikam::ImageTagPropertyName::tagRegion()).toSet();
+                assignedItems.unite(CoreDbAccess().db()->getImagesWithImageTagProperty(
+                    tAlbum->id(), Digikam::ImageTagPropertyName::autodetectedFace()).toSet());
+
+                if(!assignedItems.isEmpty())
+                {
+                    // Add the items to the global set for potential untagging
+                    allAssignedItems.unite(assignedItems);
+                    if (tagsWithImagesCount > 0)
+                    {
+                        tagsWithImages.append(QLatin1String(","));
+                    }
+                    tagsWithImages.append(tAlbum->title());
+                    ++tagsWithImagesCount;
+                }
+            }
+        }
+
+        // Add the found tags to the global set.
+        allPersonTagsToDelete.unite(personTagsToDelete);
+    }
+
+    // ask for deletion of children
+    if (tagsWithChildrenCount)
+    {
+        QString message = i18np("Face tag '%2' has at least one face tag child."
+                                "Deleting it will also delete the children.\n"
+                                "Do you want to continue?",
+                                "Face tags '%2' have at least one face tag child."
+                                "Deleting it will also delete the children.\n"
+                                "Do you want to continue?",
+                                tagsWithChildrenCount, tagsWithChildren);
+
+        bool removeChildren = QMessageBox::Yes == (QMessageBox::warning(qApp->activeWindow(),
+                                          qApp->applicationName(), message,
+                                          QMessageBox::Yes | QMessageBox::Cancel));
+
+        if (!removeChildren)
+        {
+            return;
+        }
+    }
+
+    QString message;
+
+    if (!allAssignedItems.isEmpty())
+    {
+        message = i18np("Face tag '%2' is assigned to at least one item. "
+                        "Do you want to continue?",
+                        "Face tags '%2' are assigned to at least one item. "
+                        "Do you want to continue?",
+                        tagsWithImagesCount, tagsWithImages);
+    }
+    else
+    {
+        message = i18np("Remove face tag?", "Remove face tags?", tags.size());
+    }
+
+    bool removeFaceTag = QMessageBox::Yes == (QMessageBox::warning(qApp->activeWindow(),
+                                      qApp->applicationName(), message,
+                                      QMessageBox::Yes | QMessageBox::Cancel));
+
+    if (removeFaceTag)
+    {
+        // Now we ask the user if we should also remove the tags from the images.
+        QString msg = i18np("Remove the tag corresponding to this face tag from the images?",
+                            "Remove the %1 tags corresponding to this face tags from the images?",
+                            allPersonTagsToDelete.size());
+
+        bool removeTagFromImages = QMessageBox::Yes == (QMessageBox::warning(qApp->activeWindow(),
+                                        qApp->applicationName(), msg,
+                                        QMessageBox::Yes | QMessageBox::No));
+
+        MetadataHub metadataHub;
+
+        // remove the face region from images and unassign the tag if wished
+        foreach (qlonglong imageId, allAssignedItems)
+        {
+            foreach (TAlbum* const tagToRemove, allPersonTagsToDelete)
+            {
+                ImageTagPair imageTagAssociation(imageId,tagToRemove->id());
+                if (imageTagAssociation.isAssigned())
+                {
+                    imageTagAssociation.removeProperties(ImageTagPropertyName::autodetectedFace());
+                    imageTagAssociation.removeProperties(ImageTagPropertyName::tagRegion());
+                    if (removeTagFromImages)
+                    {
+                        imageTagAssociation.unAssignTag();
+                        // Load the current metadata and sync the tags
+                        ImageInfo info(imageId);
+                        if (!info.isNull())
+                        {
+                            metadataHub.load(info);
+                            if (!metadataHub.writeToMetadata(info))
+                            {
+                                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed writing tags to image " << info.filePath();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach (TAlbum * const tAlbum, allPersonTagsToDelete)
+        {
+            TagProperties props(tAlbum->id());
+            // Delete TagPropertyName::person() and TagPropertyName::faceEngineName()
+            // fetch the UUID to delete the identity from facesdb
+            props.removeProperties(TagPropertyName::person());
+            props.removeProperties(TagPropertyName::faceEngineName());
+            QString uuid = props.value(TagPropertyName::faceEngineUuid());
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting person tag properties for tag "
+                                         << tAlbum->title() << " with uuid " << uuid;
+            if (!uuid.isEmpty())
+            {
+                // Delete the UUID
+                props.removeProperties(TagPropertyName::faceEngineUuid());
+                // delete the faces db identity with this uuid.
+                FacesEngine::FaceDbAccess access;
+                access.db()->deleteIdentity(uuid);
+            }
+        }
+    }
+}
+
+void TagModificationHelper::slotMultipleFaceTagDel()
+{
+    QList<TAlbum*> lst = boundMultipleTags(sender());
+    qCDebug(DIGIKAM_GENERAL_LOG) << lst.size();
+    slotMultipleFaceTagDel(lst);
+}
+
+QList<TAlbum*> TagModificationHelper::getFaceTags(TAlbum* rootTag)
+{
+    if (!rootTag)
+    {
+        return QList<TAlbum*>();
+    }
+
+    QList<TAlbum*> tags;
+    tags.append(rootTag);
+    return getFaceTags(tags).toList();
+}
+
+QSet<TAlbum*> TagModificationHelper::getFaceTags(QList<TAlbum*> tags)
+{
+    QSet<TAlbum*> faceTags;
+    foreach(TAlbum* const tAlbum, tags)
+    {
+        if (FaceTags::isPerson(tAlbum->id()))
+        {
+            faceTags.insert(tAlbum);
+        }
+
+        AlbumPointer<TAlbum> tag(tAlbum);
+        AlbumIterator iter(tag);
+
+        // Get all shild tags which have the person property.
+        while (iter.current())
+        {
+            TAlbum * tAlbum = dynamic_cast<TAlbum*>(iter.current());
+            if (FaceTags::isPerson(tAlbum->id()))
+            {
+                faceTags.insert(tAlbum);
+            }
+            ++iter;
+        }
+    }
+    return faceTags;
 }
 
 } // namespace Digikam

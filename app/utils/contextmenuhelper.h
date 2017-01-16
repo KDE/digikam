@@ -252,6 +252,12 @@ public:
     void addActionEditTag(TagModificationHelper* helper, TAlbum* tag);
 
     /**
+     * Add action to delete tags from people sidebar.
+     */
+    void addActionDeleteFaceTag(TagModificationHelper* helper, TAlbum* tag);
+    void addActionDeleteFaceTags(TagModificationHelper* helper, QList< TAlbum* > tags);
+
+    /**
      * Add actions to add, remove or edit a tag.
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.

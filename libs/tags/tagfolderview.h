@@ -66,6 +66,15 @@ public:
      */
     void setShowFindDuplicateAction(bool show);
 
+    /**
+     * Define whether to show the "Delete People Tags" action in context menus
+     * or not.
+     *
+     * @param show if <code>true</code> the action to delete people tags in
+     *             the tag album is displayed
+     */
+    void setShowDeleteFaceTagsAction(bool show);
+
 Q_SIGNALS:
 
     void signalFindDuplicates(QList<TAlbum*>);
