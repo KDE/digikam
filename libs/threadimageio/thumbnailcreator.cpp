@@ -457,10 +457,11 @@ void ThumbnailCreator::deleteThumbnailsFromDisk(const QString& filePath) const
 ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, const QRect& detailRect) const
 {
     const QString path = info.filePath;
+    QFileInfo fileInfo(path);
 
-    if (!info.isAccessible)
+    if (!info.isAccessible || !fileInfo.exists() || !fileInfo.isFile())
     {
-        d->error = i18n("File does not exist");
+        d->error = i18n("File does not exist or is not a file");
         return ThumbnailImage();
     }
 
@@ -491,7 +492,6 @@ ThumbnailImage ThumbnailCreator::createThumbnail(const ThumbnailInfo& info, cons
             qimage = loadImagePreview(metadata);
         }
 
-        QFileInfo fileInfo(path);
         // To speed-up thumb extraction, we now try to load the images by the file extension.
         QString ext = fileInfo.suffix().toUpper();
 
