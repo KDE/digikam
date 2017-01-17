@@ -1390,7 +1390,7 @@ PeopleSideBarWidget::PeopleSideBarWidget(QWidget* const parent, TagModel* const 
     d->tagFolderView->setAlbumManagerCurrentAlbum(true);
     d->tagFolderView->setShowDeleteFaceTagsAction(true);
 
-    d->tagFolderView->filteredModel()->listOnlyTagsWithProperty(QLatin1String("person"));
+    d->tagFolderView->filteredModel()->listOnlyTagsWithProperty(TagPropertyName::person());
     d->tagFolderView->filteredModel()->setFilterBehavior(AlbumFilterModel::StrictFiltering);
 
     d->tagSearchBar   = new SearchTextBar(this, QLatin1String("DigikamViewPeopleSearchBar"));

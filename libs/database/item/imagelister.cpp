@@ -1080,9 +1080,9 @@ QString ImageLister::tagSearchXml(int tagId, const QString& type, bool includeCh
         writer.setDefaultFieldOperator(SearchXml::Or);
 
         QStringList properties;
-        properties << QLatin1String("autodetectedPerson");
-        properties << QLatin1String("autodetectedFace");
-        properties << QLatin1String("tagRegion");
+        properties << ImageTagPropertyName::autodetectedPerson();
+        properties << ImageTagPropertyName::autodetectedFace();
+        properties << ImageTagPropertyName::tagRegion();
 
         foreach(const QString& property, properties)
         {

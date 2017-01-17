@@ -107,7 +107,7 @@ AssignNameOverlay::AssignNameOverlay(QObject* const parent)
     {
         if (settings->showOnlyPersonTagsInPeopleSidebar())
         {
-            d->filteredModel.listOnlyTagsWithProperty(QLatin1String("person"));
+            d->filteredModel.listOnlyTagsWithProperty(TagPropertyName::person());
         }
     }
 }

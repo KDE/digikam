@@ -559,7 +559,7 @@ void AssignNameWidget::setModel(TagModel* const model, TagPropertiesFilterModel*
     {
         if (settings->showOnlyPersonTagsInPeopleSidebar())
         {
-            filteredModel->listOnlyTagsWithProperty(QLatin1String("person"));
+            filteredModel->listOnlyTagsWithProperty(TagPropertyName::person());
         }
     }
 
