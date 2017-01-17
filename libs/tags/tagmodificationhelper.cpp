@@ -511,10 +511,10 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
     // ask for deletion of children
     if (tagsWithChildrenCount)
     {
-        QString message = i18np("Face tag '%2' has at least one face tag child."
+        QString message = i18np("Face tag '%2' has at least one face tag child. "
                                 "Deleting it will also delete the children.\n"
                                 "Do you want to continue?",
-                                "Face tags '%2' have at least one face tag child."
+                                "Face tags '%2' have at least one face tag child. "
                                 "Deleting it will also delete the children.\n"
                                 "Do you want to continue?",
                                 tagsWithChildrenCount, tagsWithChildren);
