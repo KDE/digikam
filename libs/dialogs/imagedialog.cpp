@@ -334,16 +334,12 @@ void ImageDialogPreview::slotClearPreview()
 DFileIconProvider::DFileIconProvider()
     : QFileIconProvider()
 {
-    ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
-    m_catcher                         = new ThumbnailImageCatcher(thread);
+    m_catcher = new ThumbnailImageCatcher(ThumbnailLoadThread::defaultThread());
 }
 
 DFileIconProvider::~DFileIconProvider()
 {
-    m_catcher->thread()->stopAllTasks();
     m_catcher->cancel();
-
-    delete m_catcher->thread();
     delete m_catcher;
 }
 
