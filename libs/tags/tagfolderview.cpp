@@ -44,6 +44,7 @@
 #include "albummanager.h"
 #include "contextmenuhelper.h"
 #include "tagmodificationhelper.h"
+#include "facetags.h"
 
 namespace Digikam
 {
@@ -136,12 +137,18 @@ void TagFolderView::addCustomContextMenuActions(ContextMenuHelper& cmh, Album* a
     if (d->showDeleteFaceTagsAction)
     {
         cmh.addActionDeleteFaceTag(tagModificationHelper(),tag);
+        cmh.addSeparator();
     }
     else
     {
         cmh.addActionDeleteTag(tagModificationHelper(), tag);
+        cmh.addSeparator();
+        // If the tag is no face tag, add the option to set it as face tag.
+        if (!FaceTags::isPerson(tag->id()))
+        {
+            cmh.addActionTagToFaceTag(tagModificationHelper(),tag);
+        }
     }
-    cmh.addSeparator();
     cmh.addActionEditTag(tagModificationHelper(), tag);
 
     connect(&cmh, SIGNAL(signalAddNewTagFromABCMenu(QString)),
@@ -292,6 +299,16 @@ void TagFolderView::setContexMenuItems(ContextMenuHelper& cmh, QList< TAlbum* > 
     else
     {
         cmh.addActionDeleteTags(tagModificationHelper(),albums);
+        // If one of the selected tags is no face tag, add the action to mark them as face tags.
+        foreach (TAlbum * const tag, albums)
+        {
+            if (!FaceTags::isPerson(tag->id()))
+            {
+                cmh.addSeparator();
+                cmh.addActionTagToFaceTag(tagModificationHelper(),tag);
+                break;
+            }
+        }
     }
     cmh.addSeparator();
 }

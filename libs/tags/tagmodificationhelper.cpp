@@ -618,6 +618,40 @@ void TagModificationHelper::slotMultipleFaceTagDel()
     slotMultipleFaceTagDel(lst);
 }
 
+void TagModificationHelper::slotTagToFaceTag(TAlbum* tAlbum)
+{
+    if (!tAlbum)
+    {
+        return;
+    }
+    
+    if (!FaceTags::isPerson(tAlbum->id()))
+    {
+        FaceTags::ensureIsPerson(tAlbum->id());
+    }
+    
+}
+
+void TagModificationHelper::slotTagToFaceTag()
+{
+    slotTagToFaceTag(boundTag(sender()));
+}
+
+void TagModificationHelper::slotMultipleTagsToFaceTags(QList<TAlbum*>& tags)
+{
+    foreach(TAlbum* const selectedTag, tags)
+    {
+        slotTagToFaceTag(selectedTag);
+    }
+}
+
+void TagModificationHelper::slotMultipleTagsToFaceTags()
+{
+    QList<TAlbum*> lst = boundMultipleTags(sender());
+    qCDebug(DIGIKAM_GENERAL_LOG) << lst.size();
+    slotMultipleTagsToFaceTags(lst);
+}
+
 QList<TAlbum*> TagModificationHelper::getFaceTags(TAlbum* rootTag)
 {
     if (!rootTag)

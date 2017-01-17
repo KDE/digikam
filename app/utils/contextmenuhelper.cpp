@@ -391,6 +391,26 @@ void ContextMenuHelper::addActionDeleteTags(Digikam::TagModificationHelper* help
             helper, SLOT(slotMultipleTagDel()));
 }
 
+void ContextMenuHelper::addActionTagToFaceTag(TagModificationHelper* helper, TAlbum* tag)
+{
+    QAction* const tagToFaceTagAction = new QAction(QIcon::fromTheme(QLatin1String("tag-properties")), i18n("Mark As Face Tag"), this);
+    addAction(tagToFaceTagAction);
+    helper->bindTag(tagToFaceTagAction, tag);
+
+    connect(tagToFaceTagAction, SIGNAL(triggered()),
+            helper, SLOT(slotTagToFaceTag()));
+}
+    
+void ContextMenuHelper::addActionTagsToFaceTags(TagModificationHelper* helper, QList< TAlbum* > tags)
+{
+    QAction* const tagToFaceTagsAction = new QAction(QIcon::fromTheme(QLatin1String("tag-properties")), i18n("Mark As Face Tags"), this);
+    addAction(tagToFaceTagsAction);
+    helper->bindMultipleTags(tagToFaceTagsAction, tags);
+
+    connect(tagToFaceTagsAction, SIGNAL(triggered()),
+            helper, SLOT(slotMultipleTagsToFaceTags()));
+}
+
 void ContextMenuHelper::addActionEditTag(TagModificationHelper* helper, TAlbum* tag)
 {
     QAction* const editTagAction = new QAction(QIcon::fromTheme(QLatin1String("tag-properties")), i18nc("Edit Tag Properties", "Properties..."), this);

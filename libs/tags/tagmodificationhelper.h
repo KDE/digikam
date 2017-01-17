@@ -151,6 +151,30 @@ public Q_SLOTS:
      * must use bindMultipleTags and a QAction
      */
     void slotMultipleFaceTagDel();
+    
+    /**
+     * Marks the tag as face tag if it is not already.
+     *
+     * @param tag the tag to mark
+     */
+    void slotTagToFaceTag(TAlbum* tag);
+
+    /**
+     * must use bindTag and a QAction
+     */
+    void slotTagToFaceTag(); /// must use bindTag and a QAction
+
+    /**
+     * Marks the tags as face tags if they are not already.
+     *
+     * @param tags the tags to mark.
+     */
+    void slotMultipleTagsToFaceTags(QList<TAlbum* >& tags);
+
+    /**
+     * must use bindMultipleTags and a QAction
+     */
+    void slotMultipleTagsToFaceTags();
 
     /**
      * Sets the tag that the given action operates on.

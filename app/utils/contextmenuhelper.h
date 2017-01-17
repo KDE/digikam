@@ -258,6 +258,12 @@ public:
     void addActionDeleteFaceTags(TagModificationHelper* helper, QList< TAlbum* > tags);
 
     /**
+     * Add action to set tags as face tags.
+     */
+    void addActionTagToFaceTag(TagModificationHelper* helper, TAlbum* tag);
+    void addActionTagsToFaceTags(TagModificationHelper* helper, QList< TAlbum* > tags);
+
+    /**
      * Add actions to add, remove or edit a tag.
      * The tag modification helper is used to execute the action.
      * You must set the parent tag to use on modification helper.
