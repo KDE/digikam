@@ -29,6 +29,7 @@
 #include <QPointer>
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QMimeDatabase>
 #include <QStyle>
 #include <QLocale>
 #include <QFileDialog>
@@ -350,15 +351,30 @@ QIcon DFileIconProvider::icon(IconType type) const
 
 QIcon DFileIconProvider::icon(const QFileInfo& info) const
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "request thumb icon for " << info.absoluteFilePath();
+    QString path = info.absoluteFilePath();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "request thumb icon for " << path;
+
+    QString mime = QMimeDatabase().mimeTypeForFile(path).name();
+
+    if (!mime.startsWith(QLatin1String("image/")) && !mime.startsWith(QLatin1String("video/")))
+    {
+        return QFileIconProvider::icon(info);
+    }
+
     m_catcher->setActive(true);
 
-    m_catcher->thread()->find(ThumbnailIdentifier(info.absoluteFilePath()));
+    m_catcher->thread()->find(ThumbnailIdentifier(path));
     m_catcher->enqueue();
     QList<QImage> images = m_catcher->waitForThumbnails();
-    QIcon icon(QPixmap::fromImage(images.first()));
 
     m_catcher->setActive(false);
+
+    if (images.isEmpty())
+    {
+         return QFileIconProvider::icon(info);
+    }
+
+    QIcon icon(QPixmap::fromImage(images.first()));
 
     return icon;
 }
@@ -385,11 +401,11 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     d->fileFormats = supportedImageMimeTypes(QIODevice::ReadOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
-    DFileIconProvider* const provider = new DFileIconProvider();
+    //DFileIconProvider* const provider = new DFileIconProvider();
     QFileDialog* const dlg            = new QFileDialog(parent);
     dlg->setWindowTitle(caption);
     dlg->setDirectoryUrl(url);
-    dlg->setIconProvider(provider);
+    //dlg->setIconProvider(provider);
     dlg->setNameFilters(d->fileFormats);
     dlg->selectNameFilter(d->fileFormats.last());
     dlg->setAcceptMode(QFileDialog::AcceptOpen);
@@ -399,7 +415,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     d->urls = dlg->selectedUrls();
 
     delete dlg;
-    delete provider;
+    //delete provider;
 }
 
 ImageDialog::~ImageDialog()
