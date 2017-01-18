@@ -351,14 +351,15 @@ QIcon DFileIconProvider::icon(IconType type) const
 
 QIcon DFileIconProvider::icon(const QFileInfo& info) const
 {
-    QString path = info.absoluteFilePath();
+    QString path    = info.absoluteFilePath();
     qCDebug(DIGIKAM_GENERAL_LOG) << "request thumb icon for " << path;
 
-    QString mime = QMimeDatabase().mimeTypeForFile(path).name();
+    QMimeType mtype = QMimeDatabase().mimeTypeForFile(path);
 
-    if (!mime.startsWith(QLatin1String("image/")) && !mime.startsWith(QLatin1String("video/")))
+    if (!mtype.name().startsWith(QLatin1String("image/")) &&
+        !mtype.name().startsWith(QLatin1String("video/")))
     {
-        return QFileIconProvider::icon(info);
+        return QIcon::fromTheme(mtype.iconName());
     }
 
     m_catcher->setActive(true);
@@ -371,12 +372,10 @@ QIcon DFileIconProvider::icon(const QFileInfo& info) const
 
     if (images.isEmpty())
     {
-         return QFileIconProvider::icon(info);
+        return QIcon::fromTheme(mtype.iconName());
     }
 
-    QIcon icon(QPixmap::fromImage(images.first()));
-
-    return icon;
+    return QIcon(QPixmap::fromImage(images.first()));
 }
 
 // ------------------------------------------------------------------------
@@ -401,11 +400,11 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     d->fileFormats = supportedImageMimeTypes(QIODevice::ReadOnly, all);
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
-    //DFileIconProvider* const provider = new DFileIconProvider();
+    DFileIconProvider* const provider = new DFileIconProvider();
     QFileDialog* const dlg            = new QFileDialog(parent);
     dlg->setWindowTitle(caption);
     dlg->setDirectoryUrl(url);
-    //dlg->setIconProvider(provider);
+    dlg->setIconProvider(provider);
     dlg->setNameFilters(d->fileFormats);
     dlg->selectNameFilter(d->fileFormats.last());
     dlg->setAcceptMode(QFileDialog::AcceptOpen);
@@ -415,7 +414,7 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     d->urls = dlg->selectedUrls();
 
     delete dlg;
-    //delete provider;
+    delete provider;
 }
 
 ImageDialog::~ImageDialog()

@@ -520,7 +520,18 @@ bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size, 
 
         if (emitSignal)
         {
+            // Cut the highlighted frame from the cached pixmap
+            QImage image(pix->toImage());
+            int h = image.height();
+            int w = image.width();
+
+            if (d->highlight && (w >= 10 && h >= 10))
+            {
+                image = image.copy(1, 1, w - 2, h - 2);
+            }
+
             emit signalThumbnailLoaded(description, QPixmap(*pix));
+            emit signalThumbnailFromCache(description, image);
         }
 
         return true;
@@ -1020,7 +1031,7 @@ void ThumbnailImageCatcher::Private::harvest(const LoadingDescription& descripti
     // called under lock
     bool finished = true;
 
-    for (int i=0 ; i < tasks.size() ; ++i)
+    for (int i = 0 ; i < tasks.size() ; ++i)
     {
         Private::CatcherResult& task = tasks[i];
 
@@ -1074,20 +1085,27 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* const th
 
     if (d->thread)
     {
-        disconnect(thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
+        disconnect(d->thread, SIGNAL(signalThumbnailFromCache(LoadingDescription,QImage)),
+                   this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)));
+
+        disconnect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
                    this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)));
     }
 
     d->thread = thread;
 
     {
-        QMutexLocker(&d->mutex);
+        QMutexLocker lock(&d->mutex);
         d->reset();
     }
 
     if (d->thread)
     {
-        connect(thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
+        connect(d->thread, SIGNAL(signalThumbnailFromCache(LoadingDescription,QImage)),
+                this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)),
+                Qt::DirectConnection);
+
+        connect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
                 this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)),
                 Qt::DirectConnection);
     }
@@ -1125,7 +1143,7 @@ void ThumbnailImageCatcher::slotThumbnailLoaded(const LoadingDescription& descri
 {
     // We are in the thumbnail thread here, DirectConnection!
 
-    QMutexLocker(&d->mutex);
+    QMutexLocker lock(&d->mutex);
 
     switch (d->state)
     {
@@ -1146,7 +1164,7 @@ int ThumbnailImageCatcher::enqueue()
 {
     QList<LoadingDescription> descriptions = d->thread->lastDescriptions();
 
-    QMutexLocker(&d->mutex);
+    QMutexLocker lock(&d->mutex);
 
     foreach(const LoadingDescription& description, descriptions)
     {
