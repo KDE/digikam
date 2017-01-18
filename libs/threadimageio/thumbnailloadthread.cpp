@@ -520,19 +520,20 @@ bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size, 
 
         if (emitSignal)
         {
-            // Cut the highlighted frame from the cached pixmap
-            QImage image(pix->toImage());
-            int h = image.height();
-            int w = image.width();
-
-            if (d->highlight && (w >= 10 && h >= 10))
-            {
-                image = image.copy(1, 1, w - 2, h - 2);
-            }
-
             emit signalThumbnailLoaded(description, QPixmap(*pix));
-            emit signalThumbnailFromCache(description, image);
         }
+
+        // Cut the highlighted frame from the cached pixmap
+        QImage image(pix->toImage());
+        int h = image.height();
+        int w = image.width();
+
+        if (d->highlight && (w >= 10 && h >= 10))
+        {
+            image = image.copy(1, 1, w - 2, h - 2);
+        }
+
+        emit signalThumbnailFromCache(description, image);
 
         return true;
     }
