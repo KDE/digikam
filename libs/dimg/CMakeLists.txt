@@ -11,6 +11,9 @@ endif (POLICY CMP0063)
 
 kde_enable_exceptions()
 
+# Boost uses operator names (and, not, ...)
+string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
 set(libdimg_SRCS
     dimg.cpp
     drawdecoding.cpp

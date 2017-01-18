@@ -10,6 +10,9 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
+# Boost uses operator names (and, not, ...)
+string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
 set(libdatabasecore_SRCS
     server/databaseserverstarter.cpp
     server/databaseservererror.cpp
