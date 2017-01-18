@@ -233,8 +233,6 @@ Q_SIGNALS:
 
     // See LoadSaveThread for a QImage-based thumbnailLoaded() signal.
     void signalThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& pix);
-    // Signal for the ThumbnailImageCatcher if getting image from the cache.
-    void signalThumbnailFromCache(const LoadingDescription& loadingDescription, const QImage& img);
 
 public:
 

@@ -520,20 +520,9 @@ bool ThumbnailLoadThread::find(const ThumbnailIdentifier& identifier, int size, 
 
         if (emitSignal)
         {
+            load(description);
             emit signalThumbnailLoaded(description, QPixmap(*pix));
         }
-
-        // Cut the highlighted frame from the cached pixmap
-        QImage image(pix->toImage());
-        int h = image.height();
-        int w = image.width();
-
-        if (d->highlight && (w >= 10 && h >= 10))
-        {
-            image = image.copy(1, 1, w - 2, h - 2);
-        }
-
-        emit signalThumbnailFromCache(description, image);
 
         return true;
     }
@@ -1086,9 +1075,6 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* const th
 
     if (d->thread)
     {
-        disconnect(d->thread, SIGNAL(signalThumbnailFromCache(LoadingDescription,QImage)),
-                   this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)));
-
         disconnect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
                    this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)));
     }
@@ -1102,10 +1088,6 @@ void ThumbnailImageCatcher::setThumbnailLoadThread(ThumbnailLoadThread* const th
 
     if (d->thread)
     {
-        connect(d->thread, SIGNAL(signalThumbnailFromCache(LoadingDescription,QImage)),
-                this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)),
-                Qt::DirectConnection);
-
         connect(d->thread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QImage)),
                 this, SLOT(slotThumbnailLoaded(LoadingDescription,QImage)),
                 Qt::DirectConnection);
