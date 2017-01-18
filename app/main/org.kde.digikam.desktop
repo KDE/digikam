@@ -1,7 +1,6 @@
-# KDE Config File
 [Desktop Entry]
 Type=Application
-Categories=Qt;KDE;Graphics;Photography;
+Categories=Qt;Graphics;Photography;
 Exec=digikam -qwindowtitle %c
 Icon=digikam
 X-DocPath=digikam/index.html
