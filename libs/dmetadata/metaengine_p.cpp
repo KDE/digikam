@@ -49,7 +49,7 @@ extern "C"
 #include "digikam_debug.h"
 
 // Pragma directives to reduce warnings from Exiv2.
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
@@ -723,7 +723,7 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 }  // namespace Digikam
 
 // Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 

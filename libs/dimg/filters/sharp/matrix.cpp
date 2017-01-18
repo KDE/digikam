@@ -43,7 +43,7 @@
 // Eigen includes
 
 // Pragma directives to reduce warnings from Eigen header files.
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -53,7 +53,7 @@
 #include <Eigen/LU>
 
 // Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 

@@ -52,7 +52,7 @@
 #define GREYSTORATION_USING_GFACT 1
 
 // Pragma directives to reduce warnings from CImg header files.
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #pragma GCC diagnostic ignored "-Wunused-but-set-variable"
@@ -71,7 +71,7 @@
 #include "cimg/CImg.h"
 
 // Restore warnings
-#if not defined(__APPLE__) && defined(__GNUC__)
+#if !defined(__APPLE__) && defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
 
