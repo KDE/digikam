@@ -100,6 +100,9 @@ int main(int argc, char* argv[])
 
     MetaEngine::initializeExiv2();
 
+    // Force to use application icon for non plasma desktop as Unity for ex.
+    QApplication::setWindowIcon(QIcon::fromTheme(QLatin1String("digikam"), app.windowIcon()));
+
     // Check if Qt database plugins are available.
 
     if (!QSqlDatabase::isDriverAvailable(DbEngineParameters::SQLiteDatabaseType()) &&

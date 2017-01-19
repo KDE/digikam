@@ -100,6 +100,9 @@ int main(int argc, char* argv[])
         QIcon::setThemeName(iconTheme);
     }
 
+    // Force to use application icon for non plasma desktop as Unity for ex.
+    QApplication::setWindowIcon(QIcon::fromTheme(QLatin1String("showfoto"), app.windowIcon()));
+
     ShowFoto::ShowFoto* const w = new ShowFoto::ShowFoto(urlList);
 
     // If application cache place in home directory to save cached files do not exist, create it.
