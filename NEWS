@@ -26,4 +26,5 @@ BUGFIXES FROM BUGZILLA:
 014 ==> 262168 - When adding name, the list should only contain people [patch].
 015 ==> 373946 - digiKam freezes when trying to use "Upload".
 016 ==> 367083 - Not Writing Labels to XMP Sidecar.
-017 ==> 
+017 ==> 375108 - AppImage has no application icon showing in Ubuntu.
+018 ==> 
