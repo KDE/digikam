@@ -25,4 +25,5 @@ BUGFIXES FROM BUGZILLA:
 013 ==> 263400 - Newly detected faces should be stored in a dedicated virtual album for checking.
 014 ==> 262168 - When adding name, the list should only contain people [patch].
 015 ==> 373946 - digiKam freezes when trying to use "Upload".
-016 ==> 
+016 ==> 367083 - Not Writing Labels to XMP Sidecar.
+017 ==> 
