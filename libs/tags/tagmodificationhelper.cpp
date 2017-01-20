@@ -680,12 +680,19 @@ QSet<TAlbum*> TagModificationHelper::getFaceTags(QList<TAlbum*> tags)
         // Get all shild tags which have the person property.
         while (iter.current())
         {
-            TAlbum * tAlbum = dynamic_cast<TAlbum*>(iter.current());
-            if (FaceTags::isPerson(tAlbum->id()))
+            Album * album = iter.current();
+            // Make sure that no nullp pointer dereference is done.
+            // though while(iter.current()) already tests for  the current
+            // album being true, i.e. > 0 , i.e. non-null
+            if (album)
             {
-                faceTags.insert(tAlbum);
+                TAlbum * tAlbum = dynamic_cast<TAlbum*>(album);
+                if (FaceTags::isPerson(tAlbum->id()))
+                {
+                    faceTags.insert(tAlbum);
+                }
+                ++iter;
             }
-            ++iter;
         }
     }
     return faceTags;
