@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 373946 - digiKam freezes when trying to use "Upload".
 016 ==> 367083 - Not Writing Labels to XMP Sidecar.
 017 ==> 375108 - AppImage has no application icon showing in Ubuntu.
-018 ==> 
+018 ==> 341758 - BQM Watermark tool : Option to set size based on given dimension.
+019 ==> 

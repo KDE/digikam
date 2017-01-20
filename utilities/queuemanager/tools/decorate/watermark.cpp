@@ -432,6 +432,16 @@ bool WaterMark::toolOperations()
     int marginW              = lround(image().width()  * (xMargin / 100.0));
     int marginH              = lround(image().height() * (yMargin / 100.0));
 
+    // For Images whose height are much larger than their width, this helps keep
+    // the watermark size reasonable
+    float ratio = (float)image().height() / (float)image().width();
+
+    if (ratio > 1)
+    {
+        int tempSize = size *1.5*ratio ;
+        size         = (tempSize < 100) ? tempSize : 100;
+    }
+
     if (useImage)
     {
         watermarkImage = DImg(fileName);
