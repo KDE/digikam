@@ -771,22 +771,30 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 {
     QPixmap pix;
 
-    int w = thumb.width();
-    int h = thumb.height();
-
-    // highlight only when requested and when thumbnail
-    // width and height are greater than 10
-    if (d->highlight && (w >= 10 && h >= 10))
+    if (thumb.isNull())
     {
-        pix = QPixmap(w + 2, h + 2);
-        QPainter p(&pix);
-        p.setPen(QPen(Qt::black, 1));
-        p.drawRect(0, 0, w + 1, h + 1);
-        p.drawImage(1, 1, thumb);
+        loadVideoThumbnail(description);
+        pix = surrogatePixmap(description);
     }
     else
     {
-        pix = QPixmap::fromImage(thumb);
+        int w = thumb.width();
+        int h = thumb.height();
+
+        // highlight only when requested and when thumbnail
+        // width and height are greater than 10
+        if (d->highlight && (w >= 10 && h >= 10))
+        {
+            pix = QPixmap(w + 2, h + 2);
+            QPainter p(&pix);
+            p.setPen(QPen(Qt::black, 1));
+            p.drawRect(0, 0, w + 1, h + 1);
+            p.drawImage(1, 1, thumb);
+        }
+        else
+        {
+            pix = QPixmap::fromImage(thumb);
+        }
     }
 
     // put into cache
@@ -796,11 +804,6 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
         cache->putThumbnail(description.cacheKey(), pix, description.filePath);
     }
 
-    if (thumb.isNull())
-    {
-        loadVideoThumbnail(description);
-    }
-
     emit signalThumbnailLoaded(description, pix);
 }
 
@@ -808,14 +811,13 @@ void ThumbnailLoadThread::slotThumbnailLoaded(const LoadingDescription& descript
 
 void ThumbnailLoadThread::loadVideoThumbnail(const LoadingDescription& description)
 {
-    d->videoJobHash.insert(description.filePath, description);
 #ifdef HAVE_MEDIAPLAYER
+    d->videoJobHash.insert(description.filePath, description);
     d->videoThumbs->setThumbnailSize(d->creator->storedSize());
     d->videoThumbs->addItems(QStringList() << description.filePath);
 #else
     qDebug(DIGIKAM_GENERAL_LOG) << "Cannot get video thumb for " << description.filePath;
     qDebug(DIGIKAM_GENERAL_LOG) << "Video support is not available";
-    slotVideoThumbnailFailed(description.filePath);
 #endif
 }
 
@@ -875,7 +877,7 @@ QPixmap ThumbnailLoadThread::surrogatePixmap(const LoadingDescription& descripti
 
     if (pix.isNull())
     {
-        pix = QIcon::fromTheme(QLatin1String("unknown")).pixmap(128);
+        pix = QIcon::fromTheme(QLatin1String("application-x-zerosize")).pixmap(128);
     }
 
     if (pix.isNull())
