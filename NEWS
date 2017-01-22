@@ -32,4 +32,5 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 375399 - No preview of video files.
 021 ==> 375357 - No video preview.
 022 ==> 375390 - "Set as Tag Thumbnail" in Tag View doesn't work.
-023 ==> 
+023 ==> 375110 - Open with doesn't remember application association.
+024 ==> 
