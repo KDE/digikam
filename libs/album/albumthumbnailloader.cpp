@@ -223,7 +223,7 @@ bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
         icon = QPixmap();
         return true;
     }
-    else if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    else if (!album->icon().isEmpty())
     {
         icon = loadIcon(album->icon(), d->iconSize);
         return false;
@@ -247,7 +247,7 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
 
         addUrl(album, album->iconId());
     }
-    else if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    else if (!album->icon().isEmpty())
     {
         QPixmap pixmap = loadIcon(album->icon(), d->iconSize);
         return pixmap;
