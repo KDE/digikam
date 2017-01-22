@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Mikkel Baekhoej Christensen <mbc at baekhoej dot dk>
+ * Copyright (C) 2017      by Ahmed Fathi <ahmed dot fathi dot abdelmageed at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -55,8 +56,6 @@
 #include "dimg.h"
 #include "blurfilter.h"
 
-
-
 namespace Digikam
 {
 
@@ -80,6 +79,7 @@ public:
         textSettingsGroupBox(0),
         imageSettingsGroupBox(0),
         useImageRadioButton(0),
+        ignoreWatermarkAspectCheckBox(0),
         useTextRadioButton(0),
         useBackgroundCheckBox(0),
         imageFileUrlRequester(0),
@@ -100,6 +100,7 @@ public:
     QGroupBox*      textSettingsGroupBox;
     QGroupBox*      imageSettingsGroupBox;
     QRadioButton*   useImageRadioButton;
+    QCheckBox*   ignoreWatermarkAspectCheckBox;
     QRadioButton*   useTextRadioButton;
     QCheckBox*      useBackgroundCheckBox;
 
@@ -179,6 +180,19 @@ void WaterMark::registerSettingsWidget()
     imageSettingsGroupBoxLayout->addWidget(label);
     imageSettingsGroupBoxLayout->addWidget(d->imageFileUrlRequester);
 
+    DHBox* const ignoreWatermarkAspectRatioHBox   = new DHBox();
+    ignoreWatermarkAspectRatioHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    ignoreWatermarkAspectRatioHBox->setSpacing(5);
+
+    d->ignoreWatermarkAspectCheckBox = new QCheckBox(ignoreWatermarkAspectRatioHBox);
+    d->ignoreWatermarkAspectCheckBox->setWhatsThis(i18n("Check this if you want the watermark to ignore "
+                                                        "its own aspect ratio and use the image's aspect ratio instead"));
+
+    QLabel* const ignoreWatermarkAspectRatioLabel = new QLabel(ignoreWatermarkAspectRatioHBox);
+    ignoreWatermarkAspectRatioLabel->setText(i18n("Ignore Watermark aspect Ratio"));
+    d->ignoreWatermarkAspectCheckBox->setChecked(false);
+    imageSettingsGroupBoxLayout->addWidget(ignoreWatermarkAspectRatioHBox);
+
     d->textSettingsGroupBox = new QGroupBox(vbox);
     d->textSettingsGroupBox->setTitle(i18n("Text settings"));
     QVBoxLayout* const textSettingsGroupBoxLayout = new QVBoxLayout;
@@ -221,6 +235,7 @@ void WaterMark::registerSettingsWidget()
     DHBox* const useBackgroundHBox   = new DHBox();
     useBackgroundHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useBackgroundHBox->setSpacing(5);
+
     d->useBackgroundCheckBox         = new QCheckBox(useBackgroundHBox);
     d->useBackgroundCheckBox->setWhatsThis(i18n("Check this if you want a background fill behind the text"));
     QLabel* const useBackgroundLabel = new QLabel(useBackgroundHBox);
@@ -308,6 +323,9 @@ void WaterMark::registerSettingsWidget()
     connect(d->useBackgroundCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
+    connect(d->ignoreWatermarkAspectCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+
     connect(d->backgroundColorButton, SIGNAL(signalColorSelected(QColor)),
             this, SLOT(slotSettingsChanged()));
 
@@ -386,57 +404,58 @@ void WaterMark::slotSettingsChanged()
     if (d->changeSettings)
     {
         BatchToolSettings settings;
-        settings.insert(QLatin1String("Use image"),          d->useImageRadioButton->isChecked());
-        settings.insert(QLatin1String("Watermark image"),    d->imageFileUrlRequester->fileDlgPath());
-        settings.insert(QLatin1String("Text"),               d->textEdit->text());
-        settings.insert(QLatin1String("Font"),               d->fontChooserWidget->currentFont());
-        settings.insert(QLatin1String("Color"),              d->fontColorButton->color());
-        settings.insert(QLatin1String("Text opacity"),       d->textOpacity->value());
-        settings.insert(QLatin1String("Use background"),     d->useBackgroundCheckBox->isChecked());
-        settings.insert(QLatin1String("Background color"),   d->backgroundColorButton->color());
-        settings.insert(QLatin1String("Background opacity"), d->backgroundOpacity->value());
-        settings.insert(QLatin1String("Placement"),          (int)d->comboBox->currentIndex());
-        settings.insert(QLatin1String("Watermark size"),     (int)d->waterMarkSizePercent->value());
-        settings.insert(QLatin1String("X margin"),           (int)d->xMarginInput->value());
-        settings.insert(QLatin1String("Y margin"),           (int)d->yMarginInput->value());
+        settings.insert(QLatin1String("Use image"),                     d->useImageRadioButton->isChecked());
+        settings.insert(QLatin1String("Watermark image"),               d->imageFileUrlRequester->fileDlgPath());
+        settings.insert(QLatin1String("Text"),                          d->textEdit->text());
+        settings.insert(QLatin1String("Font"),                          d->fontChooserWidget->currentFont());
+        settings.insert(QLatin1String("Color"),                         d->fontColorButton->color());
+        settings.insert(QLatin1String("Text opacity"),                  d->textOpacity->value());
+        settings.insert(QLatin1String("Use background"),                d->useBackgroundCheckBox->isChecked());
+        settings.insert(QLatin1String("Ignore Watermark Aspect Ratio"), d->ignoreWatermarkAspectCheckBox->isChecked());
+        settings.insert(QLatin1String("Background color"),              d->backgroundColorButton->color());
+        settings.insert(QLatin1String("Background opacity"),            d->backgroundOpacity->value());
+        settings.insert(QLatin1String("Placement"),                     (int)d->comboBox->currentIndex());
+        settings.insert(QLatin1String("Watermark size"),                (int)d->waterMarkSizePercent->value());
+        settings.insert(QLatin1String("X margin"),                      (int)d->xMarginInput->value());
+        settings.insert(QLatin1String("Y margin"),                      (int)d->yMarginInput->value());
         BatchTool::slotSettingsChanged(settings);
     }
 }
 
 bool WaterMark::toolOperations()
 {
-
     if (!loadToDImg())
     {
         return false;
     }
 
-    QString fileName        = settings()[QLatin1String("Watermark image")].toString();
-    int placement           = settings()[QLatin1String("Placement")].toInt();
-    int size                = settings()[QLatin1String("Watermark size")].toInt();
-    int xMargin             = settings()[QLatin1String("X margin")].toInt();
-    int yMargin             = settings()[QLatin1String("Y margin")].toInt();
-    bool useImage           = settings()[QLatin1String("Use image")].toBool();
+    QString fileName                             = settings()[QLatin1String("Watermark image")].toString();
+    int placement                                = settings()[QLatin1String("Placement")].toInt();
+    int size                                     = settings()[QLatin1String("Watermark size")].toInt();
+    int xMargin                                  = settings()[QLatin1String("X margin")].toInt();
+    int yMargin                                  = settings()[QLatin1String("Y margin")].toInt();
+    bool useImage                                = settings()[QLatin1String("Use image")].toBool();
 
-    QString text            = settings()[QLatin1String("Text")].toString();
-    QFont font              = settings()[QLatin1String("Font")].toString();
-    QColor fontColor        = settings()[QLatin1String("Color")].toString();
-    int textOpacity         = settings()[QLatin1String("Text opacity")].toInt();
-    bool useBackground      = settings()[QLatin1String("Use background")].toBool();
-    QColor backgroundColor  = settings()[QLatin1String("Background color")].toString();
-    int backgroundOpacity   = settings()[QLatin1String("Background opacity")].toInt();
-
+    QString text                                 = settings()[QLatin1String("Text")].toString();
+    QFont font                                   = settings()[QLatin1String("Font")].toString();
+    QColor fontColor                             = settings()[QLatin1String("Color")].toString();
+    int textOpacity                              = settings()[QLatin1String("Text opacity")].toInt();
+    bool useBackground                           = settings()[QLatin1String("Use background")].toBool();
+    QColor backgroundColor                       = settings()[QLatin1String("Background color")].toString();
+    int backgroundOpacity                        = settings()[QLatin1String("Background opacity")].toInt();
+    Qt::AspectRatioMode watermarkAspectRatioMode = settings()[QLatin1String("Ignore Watermark Aspect Ratio")].toBool() ? 
+                                                              Qt::IgnoreAspectRatio : Qt::KeepAspectRatio;
 
     DImg watermarkImage;
-    DColorComposer* composer = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
-    int marginW              = lround(image().width()  * (xMargin / 100.0));
-    int marginH              = lround(image().height() * (yMargin / 100.0));
+    DColorComposer* composer                     = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    int marginW                                  = lround(image().width()  * (xMargin / 100.0));
+    int marginH                                  = lround(image().height() * (yMargin / 100.0));
 
     // For Images whose height are much larger than their width, this helps keep
     // the watermark size reasonable
-    float ratio = (float)image().height() / (float)image().width();
+    float ratio = (float)image().height()/image().width();
 
-    if (ratio > 1)
+    if(ratio > 1)
     {
         int tempSize = size *1.5*ratio ;
         size         = (tempSize < 100) ? tempSize : 100;
@@ -451,7 +470,9 @@ bool WaterMark::toolOperations()
             return false;
         }
 
-        DImg tempImage = watermarkImage.smoothScale(image().width() * size / 100, image().height() * size / 100, Qt::KeepAspectRatio);
+        DImg tempImage = watermarkImage.smoothScale(image().width()  * size / 100,
+                                                    image().height() * size / 100,
+                                                    watermarkAspectRatioMode);
         watermarkImage = tempImage;
     }
     else
@@ -559,11 +580,11 @@ bool WaterMark::toolOperations()
             break;
 
         case Private::TopRight:
-            watermarkRect.moveTopRight(QPoint(image().width() - marginW, marginH));
+            watermarkRect.moveTopRight(QPoint(image().width()-1 - marginW, marginH));
             break;
 
         case Private::BottomLeft:
-            watermarkRect.moveBottomLeft(QPoint(marginW, image().height() - marginH));
+            watermarkRect.moveBottomLeft(QPoint(marginW, image().height()-1 - marginH));
             break;
 
         case Private::Center:
@@ -571,7 +592,7 @@ bool WaterMark::toolOperations()
             break;
 
         default :    // BottomRight
-            watermarkRect.moveBottomRight(QPoint(image().width() - marginW, image().height() - marginH));
+            watermarkRect.moveBottomRight(QPoint(image().width()-1 - marginW, image().height()-1 - marginH));
             break;
     }
 
@@ -584,7 +605,6 @@ bool WaterMark::toolOperations()
 
     return (savefromDImg());
 }
-
 
 int WaterMark::queryFontSize(const QString& text, const QFont& font, int length) const
 {

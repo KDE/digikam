@@ -69,4 +69,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* WATERMARK_H */
+#endif // WATERMARK_H
