@@ -217,30 +217,25 @@ QPixmap AlbumThumbnailLoader::loadIcon(const QString& name, int size) const
 
 bool AlbumThumbnailLoader::getTagThumbnail(TAlbum* const album, QPixmap& icon)
 {
-    if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    if (album->iconId() && d->iconSize > d->minBlendSize)
     {
-        if (album->iconId())
-        {
-            addUrl(album, album->iconId());
-            icon = QPixmap();
-            return true;
-        }
-        else
-        {
-            icon = loadIcon(album->icon(), d->iconSize);
-            return false;
-        }
-    }
-    else
-    {
+        addUrl(album, album->iconId());
         icon = QPixmap();
+        return true;
+    }
+    else if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    {
+        icon = loadIcon(album->icon(), d->iconSize);
         return false;
     }
+
+    icon = QPixmap();
+    return false;
 }
 
 QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
 {
-    if (!album->icon().isEmpty())
+    if (album->iconId() && d->iconSize > d->minBlendSize)
     {
         // icon cached?
         AlbumThumbnailMap::const_iterator it = d->thumbnailMap.constFind(album->globalID());
@@ -250,15 +245,12 @@ QPixmap AlbumThumbnailLoader::getTagThumbnailDirectly(TAlbum* const album)
             return *it;
         }
 
-        if (album->iconId())
-        {
-            addUrl(album, album->iconId());
-        }
-        else
-        {
-            QPixmap pixmap = loadIcon(album->icon(), d->iconSize);
-            return pixmap;
-        }
+        addUrl(album, album->iconId());
+    }
+    else if (!album->icon().isEmpty() && d->iconSize > d->minBlendSize)
+    {
+        QPixmap pixmap = loadIcon(album->icon(), d->iconSize);
+        return pixmap;
     }
 
     return getStandardTagIcon(album);

@@ -31,4 +31,5 @@ BUGFIXES FROM BUGZILLA:
 019 ==> 371485 - GoogleMaps outdated.
 020 ==> 375399 - No preview of video files.
 021 ==> 375357 - No video preview.
-022 ==> 
+022 ==> 375390 - "Set as Tag Thumbnail" in Tag View doesn't work.
+023 ==> 
