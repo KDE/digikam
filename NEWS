@@ -30,5 +30,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 341758 - BQM Watermark tool : Option to set size based on given dimension.
 019 ==> 371485 - GoogleMaps outdated.
 020 ==> 375399 - No preview of video files.
-021 ==> 
-
+021 ==> 375357 - No video preview.
+022 ==> 
