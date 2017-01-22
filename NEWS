@@ -29,5 +29,6 @@ BUGFIXES FROM BUGZILLA:
 017 ==> 375108 - AppImage has no application icon showing in Ubuntu.
 018 ==> 341758 - BQM Watermark tool : Option to set size based on given dimension.
 019 ==> 371485 - GoogleMaps outdated.
-020 ==> 
+020 ==> 375399 - No preview of video files.
+021 ==> 
 
