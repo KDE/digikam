@@ -34,4 +34,5 @@ BUGFIXES FROM BUGZILLA:
 022 ==> 375390 - "Set as Tag Thumbnail" in Tag View doesn't work.
 023 ==> 375110 - Open with doesn't remember application association.
 024 ==> 328457 - BQM Watermark tool : doesn't apply zero margins.
-025 ==> 
+025 ==> 373756 - Display Names Are Not Updated in Regions When People Tag Changed.
+026 ==> 
