@@ -37,4 +37,5 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 373756 - Display Names Are Not Updated in Regions When People Tag Changed.
 026 ==> 374712 - Preview image does not work any more from thumbs view.
 027 ==> 281742 - ICONVIEW : wrong selection start when browsing images.
-028 ==> 
+028 ==> 375408 - Don't change context menu shortcut keys in single vs. multiple image context menus.
+029 ==> 

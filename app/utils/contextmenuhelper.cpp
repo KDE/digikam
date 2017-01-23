@@ -498,7 +498,7 @@ void ContextMenuHelper::addAssignTagsMenu(const imageIds &ids)
     setSelectedIds(ids);
 
     QMenu* const assignTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::RECENTLYASSIGNED, d->parent);
-    assignTagsPopup->menuAction()->setText(i18n("Assign Tag"));
+    assignTagsPopup->menuAction()->setText(i18n("A&ssign Tag"));
     assignTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     d->parent->addMenu(assignTagsPopup);
 
@@ -514,7 +514,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
     setSelectedIds(ids);
 
     QMenu* const removeTagsPopup = new TagsPopupMenu(ids, TagsPopupMenu::REMOVE, d->parent);
-    removeTagsPopup->menuAction()->setText(i18n("Remove Tag"));
+    removeTagsPopup->menuAction()->setText(i18n("R&emove Tag"));
     removeTagsPopup->menuAction()->setIcon(QIcon::fromTheme(QLatin1String("tag")));
     d->parent->addMenu(removeTagsPopup);
 
@@ -545,7 +545,7 @@ void ContextMenuHelper::addRemoveTagsMenu(const imageIds &ids)
 
 void ContextMenuHelper::addLabelsAction()
 {
-    QMenu* const menuLabels           = new QMenu(i18n("Assign Labels"), d->parent);
+    QMenu* const menuLabels           = new QMenu(i18n("Assign Labe&ls"), d->parent);
     PickLabelMenuAction* const pmenu  = new PickLabelMenuAction(d->parent);
     ColorLabelMenuAction* const cmenu = new ColorLabelMenuAction(d->parent);
     RatingMenuAction* const rmenu     = new RatingMenuAction(d->parent);
