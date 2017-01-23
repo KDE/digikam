@@ -36,4 +36,5 @@ BUGFIXES FROM BUGZILLA:
 024 ==> 328457 - BQM Watermark tool : doesn't apply zero margins.
 025 ==> 373756 - Display Names Are Not Updated in Regions When People Tag Changed.
 026 ==> 374712 - Preview image does not work any more from thumbs view.
-027 ==> 
+027 ==> 281742 - ICONVIEW : wrong selection start when browsing images.
+028 ==> 
