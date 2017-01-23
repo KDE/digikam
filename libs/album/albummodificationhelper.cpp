@@ -250,7 +250,11 @@ void AlbumModificationHelper::addAlbumChildrenToList(QList<QUrl>& list, Album* c
     // simple recursive helper function
     if (album)
     {
-        list.append(album->databaseUrl());
+        if (!list.contains(album->databaseUrl()))
+        {
+            list.append(album->databaseUrl());
+        }
+
         AlbumIterator it(album);
 
         while (it.current())
