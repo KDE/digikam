@@ -3474,6 +3474,13 @@ void AlbumManager::slotImageTagChange(const ImageTagChangeset& changeset)
         case ImageTagChangeset::Added:
         case ImageTagChangeset::Removed:
         case ImageTagChangeset::RemovedAll:
+        // Add properties changed.
+        // Reason: in people sidebar, the images are not
+        // connected with the ImageTag table but by
+        // ImageTagProperties entries.
+        // Thus, the count of entries in face tags are not
+        // updated. This adoption should fix the problem.
+        case ImageTagChangeset::PropertiesChanged:
 
             if (!d->tagItemCountTimer->isActive())
             {

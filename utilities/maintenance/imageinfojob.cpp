@@ -95,7 +95,9 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
     else if (album->type() == Album::TAG)
     {
         TagsDBJobInfo jobInfo;
-        jobInfo.setTagsIds( url.tagIds() );
+        // If we want to search for images with this tag, we only want the tag and not
+        // all images in the tag path.
+        jobInfo.setTagsIds( QList<int>() << url.tagId() );
 
         d->jobThread = DBJobsManager::instance()->startTagsJobThread(jobInfo);
     }

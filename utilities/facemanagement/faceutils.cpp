@@ -250,6 +250,12 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
             ImageTagPair pair(imageid, newFace.tagId());
             // UnconfirmedName and UnknownName have the same attribute
             addFaceAndTag(pair, newFace, FaceTagsIface::attributesForFlags(FaceTagsIface::UnconfirmedName), false);
+            // If the face is unconfirmed and the tag is not the unknown person tag, set the unconfirmed person property.
+            if (newFace.isUnconfirmedType() && !FaceTags::isTheUnknownPerson(newFace.tagId()))
+            {
+                ImageTagPair unconfirmedPair(imageid, FaceTags::unconfirmedPersonTagId());
+                unconfirmedPair.addProperty(ImageTagPropertyName::autodetectedPerson(),newFace.getAutodetectedPersonString());
+            }
         }
     }
 

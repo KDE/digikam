@@ -191,7 +191,7 @@ FacesDetector::FacesDetector(const FaceScanSettings& settings, ProgressItem* con
 
         if (settings.task == FaceScanSettings::DetectAndRecognize)
         {
-            d->pipeline.plugRerecognizingDatabaseFilter();
+            //d->pipeline.plugRerecognizingDatabaseFilter();
             d->pipeline.plugFaceRecognizer();
         }
 
