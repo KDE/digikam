@@ -335,17 +335,17 @@ void ImageDialogPreview::slotClearPreview()
 DFileIconProvider::DFileIconProvider()
     : QFileIconProvider()
 {
-    ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
-    m_catcher                         = new ThumbnailImageCatcher(thread);
+    //ThumbnailLoadThread* const thread = new ThumbnailLoadThread;
+    //m_catcher                         = new ThumbnailImageCatcher(thread);
 }
 
 DFileIconProvider::~DFileIconProvider()
 {
-    m_catcher->thread()->stopAllTasks();
-    m_catcher->cancel();
+    //m_catcher->thread()->stopAllTasks();
+    //m_catcher->cancel();
 
-    delete m_catcher->thread();
-    delete m_catcher;
+    //delete m_catcher->thread();
+    //delete m_catcher;
 }
 
 QIcon DFileIconProvider::icon(IconType type) const
@@ -353,6 +353,16 @@ QIcon DFileIconProvider::icon(IconType type) const
     return QFileIconProvider::icon(type);
 }
 
+QIcon DFileIconProvider::icon(const QFileInfo& info) const
+{
+    QString path    = info.absoluteFilePath();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "request thumb icon for " << path;
+
+    QMimeType mtype = QMimeDatabase().mimeTypeForFile(path);
+
+    return QIcon::fromTheme(mtype.iconName());
+}
+/*
 QIcon DFileIconProvider::icon(const QFileInfo& info) const
 {
     QString path    = info.absoluteFilePath();
@@ -381,7 +391,7 @@ QIcon DFileIconProvider::icon(const QFileInfo& info) const
 
     return QIcon(QPixmap::fromImage(images.first()));
 }
-
+*/
 // ------------------------------------------------------------------------
 
 class ImageDialog::Private
