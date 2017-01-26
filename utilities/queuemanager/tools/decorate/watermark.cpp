@@ -1,3 +1,4 @@
+
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -43,6 +44,7 @@
 #include <QFontComboBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <dfontproperties.h>
 
 // KDE includes
 
@@ -85,7 +87,7 @@ public:
         imageFileUrlRequester(0),
         textEdit(0),
         comboBox(0),
-        fontChooserWidget(0),
+        extendedFontChooserWidget(0),
         fontColorButton(0),
         backgroundColorButton(0),
         textOpacity(0),
@@ -108,7 +110,7 @@ public:
     QLineEdit*      textEdit;
 
     QComboBox*      comboBox;
-    QFontComboBox*  fontChooserWidget;
+    DFontProperties*     extendedFontChooserWidget;
 
     DColorSelector* fontColorButton;
     DColorSelector* backgroundColorButton;
@@ -208,12 +210,11 @@ void WaterMark::registerSettingsWidget()
     textSettingsGroupBoxLayout->addWidget(textEditLabel);
     textSettingsGroupBoxLayout->addWidget(d->textEdit);
 
-    QLabel* const label2 = new QLabel();
-    d->fontChooserWidget = new QFontComboBox(vbox);
-    d->fontChooserWidget->setWhatsThis(i18n("Here you can choose the font to be used."));
-    label2->setText(i18n("Font:"));
-    textSettingsGroupBoxLayout->addWidget(label2);
-    textSettingsGroupBoxLayout->addWidget(d->fontChooserWidget);
+    d->extendedFontChooserWidget = new DFontProperties(0, DFontProperties::NoDisplayFlags);
+    d->extendedFontChooserWidget->setSampleBoxVisible(true);
+    d->extendedFontChooserWidget->makeColumnVisible(0x04,false);
+    d->extendedFontChooserWidget->setWhatsThis(i18n("choose the font type and style. size is auto calculated"));
+    textSettingsGroupBoxLayout->addWidget(d->extendedFontChooserWidget);
 
     QLabel* const label3 = new QLabel();
     d->fontColorButton   = new DColorSelector();
@@ -308,7 +309,7 @@ void WaterMark::registerSettingsWidget()
     connect(d->imageFileUrlRequester->lineEdit(), SIGNAL(textChanged(QString)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->fontChooserWidget, SIGNAL(currentFontChanged(QFont)),
+    connect(d->extendedFontChooserWidget, SIGNAL(fontSelected(QFont)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->fontColorButton, SIGNAL(signalColorSelected(QColor)),
@@ -375,7 +376,6 @@ void WaterMark::slotAssignSettings2Widget()
     d->useTextRadioButton->setChecked(!settings()[QLatin1String("Use image")].toBool());
     d->imageFileUrlRequester->setFileDlgPath(settings()[QLatin1String("Watermark image")].toString());
     d->textEdit->setText(settings()[QLatin1String("Text")].toString());
-    d->fontChooserWidget->setFont(settings()[QLatin1String("Font")].toString());
     d->fontColorButton->setColor(settings()[QLatin1String("Color")].toString());
     d->textOpacity->setValue(settings()[QLatin1String("Text opacity")].toInt());
     d->useBackgroundCheckBox->setChecked(settings()[QLatin1String("Use background")].toBool());
@@ -407,7 +407,7 @@ void WaterMark::slotSettingsChanged()
         settings.insert(QLatin1String("Use image"),                     d->useImageRadioButton->isChecked());
         settings.insert(QLatin1String("Watermark image"),               d->imageFileUrlRequester->fileDlgPath());
         settings.insert(QLatin1String("Text"),                          d->textEdit->text());
-        settings.insert(QLatin1String("Font"),                          d->fontChooserWidget->currentFont());
+        settings.insert(QLatin1String("Font"),                          d->extendedFontChooserWidget->font());
         settings.insert(QLatin1String("Color"),                         d->fontColorButton->color());
         settings.insert(QLatin1String("Text opacity"),                  d->textOpacity->value());
         settings.insert(QLatin1String("Use background"),                d->useBackgroundCheckBox->isChecked());
@@ -435,15 +435,15 @@ bool WaterMark::toolOperations()
     int xMargin                                  = settings()[QLatin1String("X margin")].toInt();
     int yMargin                                  = settings()[QLatin1String("Y margin")].toInt();
     bool useImage                                = settings()[QLatin1String("Use image")].toBool();
-
     QString text                                 = settings()[QLatin1String("Text")].toString();
-    QFont font                                   = settings()[QLatin1String("Font")].toString();
+    QFont font                                   = qvariant_cast<QFont>(settings()[QLatin1String("Font")]);;
+
     QColor fontColor                             = settings()[QLatin1String("Color")].toString();
     int textOpacity                              = settings()[QLatin1String("Text opacity")].toInt();
     bool useBackground                           = settings()[QLatin1String("Use background")].toBool();
     QColor backgroundColor                       = settings()[QLatin1String("Background color")].toString();
     int backgroundOpacity                        = settings()[QLatin1String("Background opacity")].toInt();
-    Qt::AspectRatioMode watermarkAspectRatioMode = settings()[QLatin1String("Ignore Watermark Aspect Ratio")].toBool() ? 
+    Qt::AspectRatioMode watermarkAspectRatioMode = settings()[QLatin1String("Ignore Watermark Aspect Ratio")].toBool() ?
                                                               Qt::IgnoreAspectRatio : Qt::KeepAspectRatio;
 
     DImg watermarkImage;

@@ -39,4 +39,5 @@ BUGFIXES FROM BUGZILLA:
 027 ==> 281742 - ICONVIEW : wrong selection start when browsing images.
 028 ==> 375408 - Don't change context menu shortcut keys in single vs. multiple image context menus.
 029 ==> 375471 - Delete Selected Albums Dialogue Contains Duplicate Paths.
-030 ==> 
+030 ==> 339460 - BQM Watermark tool : add new option to support font style [patch].
+031 ==> 

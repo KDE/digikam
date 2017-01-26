@@ -156,12 +156,27 @@ public:
     void enableColumn(int column, bool state);
 
     /**
+     * Makes a font column in the chooser visible or invisible.
+     *
+     * Use this
+     * function if your application does not need to show all font
+     * properties.
+     *
+     * @param column Specify the columns. An or'ed combination of
+     *        @p FamilyList, @p StyleList and @p SizeList is possible.
+     * @param state If @p false the columns are made invisible.
+     */
+    void makeColumnVisible(int column, bool state);
+
+    /**
      * Sets the currently selected font in the chooser.
      *
      * @param font The font to select.
      * @param onlyFixed Readjust the font list to display only fixed
      *        width fonts if @p true, or vice-versa.
      */
+
+
     void setFont(const QFont& font, bool onlyFixed = false);
 
     /**

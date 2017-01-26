@@ -31,7 +31,6 @@
 #include <cmath>
 
 // Qt includes
-
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QGuiApplication>
@@ -605,6 +604,28 @@ void DFontProperties::enableColumn(int column, bool state)
     }
 }
 
+void DFontProperties::makeColumnVisible(int column, bool state)
+{
+    if (column & FamilyList)
+    {
+        d->familyListBox->setVisible(state);
+        d->familyLabel->setVisible(state);
+    }
+
+    if (column & StyleList)
+    {
+        d->styleListBox->setVisible(state);
+        d->styleLabel->setVisible(state);
+    }
+
+    if (column & SizeList)
+    {
+        d->sizeListBox->setVisible(state);
+        d->sizeOfFont->setVisible(state);
+        d->sizeLabel->setVisible(state);
+    }
+
+}
 void DFontProperties::setFont(const QFont& aFont, bool onlyFixed)
 {
     d->selFont = aFont;
