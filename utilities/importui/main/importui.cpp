@@ -407,7 +407,7 @@ void ImportUI::setupActions()
     d->lockAction = new QAction(QIcon::fromTheme(QLatin1String("object-locked")), i18nc("@action", "Toggle Lock"), this);
     connect(d->lockAction, SIGNAL(triggered()), this, SLOT(slotToggleLock()));
     ac->addAction(QLatin1String("importui_imagelock"), d->lockAction);
-    ac->setDefaultShortcut(d->lockAction, Qt::CTRL + Qt::Key_L);
+    ac->setDefaultShortcut(d->lockAction, Qt::CTRL + Qt::Key_G);
     d->cameraActions->addAction(d->lockAction);
 
     // -------------------------------------------------------------------------
