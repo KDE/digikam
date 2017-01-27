@@ -40,4 +40,5 @@ BUGFIXES FROM BUGZILLA:
 028 ==> 375408 - Don't change context menu shortcut keys in single vs. multiple image context menus.
 029 ==> 375471 - Delete Selected Albums Dialogue Contains Duplicate Paths.
 030 ==> 339460 - BQM Watermark tool : add new option to support font style [patch].
-031 ==> 
+031 ==> 375600 - Time Adjust Batch Queue depends on Global Metadata Setting for timestamp.
+032 ==> 

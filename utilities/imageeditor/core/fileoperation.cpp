@@ -53,7 +53,7 @@
 namespace Digikam
 {
 
-bool FileOperation::localFileRename(const QString& source, const QString& orgPath, const QString& destPath)
+bool FileOperation::localFileRename(const QString& source, const QString& orgPath, const QString& destPath, bool ignoreSettings)
 {
     QString dest = destPath;
     // check that we're not replacing a symlink
@@ -96,7 +96,7 @@ bool FileOperation::localFileRename(const QString& source, const QString& orgPat
     {
         // See bug #329608: Restore file modification time from original file only if updateFileTimeStamp for Setup/Metadata is turned off.
 
-        if (!MetadataSettings::instance()->settings().updateFileTimeStamp)
+        if (!ignoreSettings && !MetadataSettings::instance()->settings().updateFileTimeStamp)
         {
             struct utimbuf ut;
             ut.modtime = st.st_mtime;

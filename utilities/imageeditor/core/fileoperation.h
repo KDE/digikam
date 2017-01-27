@@ -47,7 +47,7 @@ namespace FileOperation
      *  restoration taken from 'source' file.
      *  Return true if operation is completed.
      */
-    DIGIKAM_EXPORT bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath);
+    DIGIKAM_EXPORT bool localFileRename(const QString& source, const QString& orgPath, const QString& destPath, bool ignoreSettings = false);
 
     /** Open file urls to default application relevant of file type-mimes desktop configration.
      */

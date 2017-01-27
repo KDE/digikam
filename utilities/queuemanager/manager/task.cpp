@@ -136,12 +136,14 @@ void Task::run()
 
     // ImageInfo must be tread-safe.
     ImageInfo source = ImageInfo::fromUrl(d->tools.m_itemUrl);
+    bool timeAdjust  = false;
 
     foreach (const BatchToolSet& set, d->tools.m_toolsList)
     {
-        d->tool = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
-        inUrl   = outUrl;
-        index   = set.index + 1;
+        d->tool     = BatchToolsManager::instance()->findTool(set.name, set.group)->clone();
+        timeAdjust |= (set.name == QLatin1String("TimeAdjust"));
+        inUrl       = outUrl;
+        index       = set.index + 1;
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Tool : index= " << index
                  << " :: name= "     << set.name
@@ -237,7 +239,8 @@ void Task::run()
         {
             if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                                 DMetadata::sidecarPath(outUrl.toLocalFile()),
-                                                DMetadata::sidecarPath(dest.toLocalFile())))
+                                                DMetadata::sidecarPath(dest.toLocalFile()),
+                                                timeAdjust))
             {
                 emitActionData(ActionData::BatchFailed, i18n("Failed to create sidecar file..."), dest);
             }
@@ -245,7 +248,8 @@ void Task::run()
 
         if (FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                            outUrl.toLocalFile(),
-                                           dest.toLocalFile()))
+                                           dest.toLocalFile(),
+                                           timeAdjust))
         {
             emitActionData(ActionData::BatchDone, i18n("Item processed successfully %1", renameMess), dest);
         }
