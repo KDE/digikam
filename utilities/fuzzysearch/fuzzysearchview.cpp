@@ -344,17 +344,17 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     QWidget* const mainWidget     = new QWidget();
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(imageBox,               0, 0, 1, -1);
-    mainLayout->addWidget(file,                   1, 0, 1, 1);
-    mainLayout->addWidget(d->labelFile,           1, 1, 1, -1);
-    mainLayout->addWidget(folder,                 2, 0, 1, 1);
-    mainLayout->addWidget(d->labelFolder,         2, 1, 1, -1);
-    mainLayout->addWidget(resultsLabel,           3, 0, 1, 1);
-    mainLayout->addWidget(d->levelImage,          3, 2, 1, 1);
-    mainLayout->addWidget(levelIntervalLabel,     3, 3, 1, 1);
-    mainLayout->addWidget(d->maxLevelImage,       3, 4, 1, -1);
-    mainLayout->addWidget(saveBox,                4, 0, 1, 3);
-    mainLayout->setRowStretch(5, 10);
+    mainLayout->addWidget(imageBox,           0, 0, 1, 5);
+    mainLayout->addWidget(file,               1, 0, 1, 1);
+    mainLayout->addWidget(d->labelFile,       1, 1, 1, 4);
+    mainLayout->addWidget(folder,             2, 0, 1, 1);
+    mainLayout->addWidget(d->labelFolder,     2, 1, 1, 4);
+    mainLayout->addWidget(resultsLabel,       3, 0, 1, 1);
+    mainLayout->addWidget(d->levelImage,      3, 2, 1, 1);
+    mainLayout->addWidget(levelIntervalLabel, 3, 3, 1, 1);
+    mainLayout->addWidget(d->maxLevelImage,   3, 4, 1, 1);
+    mainLayout->addWidget(saveBox,            5, 0, 1, 5);
+    mainLayout->setRowStretch(4, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
