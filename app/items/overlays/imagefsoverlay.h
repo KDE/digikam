@@ -42,7 +42,7 @@ class ImageFsOverlayButton : public ItemViewHoverButton
 {
 public:
 
-    ImageFsOverlayButton(QAbstractItemView* const parentView);
+    explicit ImageFsOverlayButton(QAbstractItemView* const parentView);
     virtual QSize sizeHint() const;
 
 protected:
@@ -59,7 +59,7 @@ class ImageFsOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ImageFsOverlay(QObject* const parent);
+    explicit ImageFsOverlay(QObject* const parent);
     virtual void setActive(bool active);
 
     static ImageFsOverlay* instance(QObject* const parent);
