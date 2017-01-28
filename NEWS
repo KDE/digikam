@@ -42,4 +42,5 @@ BUGFIXES FROM BUGZILLA:
 030 ==> 339460 - BQM Watermark tool : add new option to support font style [patch].
 031 ==> 375600 - Time Adjust Batch Queue depends on Global Metadata Setting for timestamp.
 032 ==> 375627 - What is the input box under Fuzzy -> Image -> Similarity range?
-033 ==> 
+033 ==> 375663 - Progress bars not initialized in ImageEditor at various places.
+034 ==> 
