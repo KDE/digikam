@@ -262,7 +262,7 @@ void DAbstractSliderSpinBox::paintFusion(QPainter &painter)
     int progressIndicatorPos = (progressOpts.progress - double(progressOpts.minimum)) / qMax(double(1.0),
                                 double(progressOpts.maximum) - progressOpts.minimum) * rect.width();
 
-    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width() && (progressOpts.progress != 0))
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width())
     {
         leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
     }
@@ -328,7 +328,7 @@ void DAbstractSliderSpinBox::paintPlastique(QPainter &painter)
     int progressIndicatorPos = (progressOpts.progress - double(progressOpts.minimum)) / qMax(double(1.0),
                                 double(progressOpts.maximum) - progressOpts.minimum) * rect.width();
 
-    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width() && (progressOpts.progress != 0))
+    if (progressIndicatorPos >= 0 && progressIndicatorPos <= rect.width())
     {
         leftRect = QRect(rect.left(), rect.top(), progressIndicatorPos, rect.height());
     }
