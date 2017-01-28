@@ -49,7 +49,7 @@ class DatePickerValidator : public QValidator
 {
 public:
 
-    DatePickerValidator(DDatePicker* const parent);
+    explicit DatePickerValidator(DDatePicker* const parent);
 
     State validate(QString& text, int&) const Q_DECL_OVERRIDE;
 
@@ -66,8 +66,9 @@ class DatePickerYearSelector : public QLineEdit
 
 public:
 
-    DatePickerYearSelector(const QDate& currentDate, QWidget* const parent = 0);
-    int year() const;
+    explicit DatePickerYearSelector(const QDate& currentDate, QWidget* const parent = 0);
+
+    int  year() const;
     void setYear(int year);
 
 public Q_SLOTS:
@@ -96,7 +97,7 @@ class DDatePicker::Private
 {
 public:
 
-    Private(DDatePicker* const qq);
+    explicit Private(DDatePicker* const qq);
 
     void fillWeeksCombo();
     QDate validDateInYearMonth(int year, int month);

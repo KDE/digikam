@@ -83,12 +83,13 @@ public:
     ThumbnailSize              thumbSize;
 };
 
-TrashView::TrashView(QWidget* parent)
-    : QWidget(parent), d(new Private)
+TrashView::TrashView(QWidget* const parent)
+    : QWidget(parent),
+      d(new Private)
 {
     // Layouts
-    d->mainLayout = new QVBoxLayout(this);
-    d->btnsLayout = new QHBoxLayout();
+    d->mainLayout    = new QVBoxLayout(this);
+    d->btnsLayout    = new QHBoxLayout();
 
     // View and plugins
     d->tableView     = new QTableView(this);
@@ -179,8 +180,7 @@ void TrashView::slotRestoreSelectedItems()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Restoring selected items from collection trash";
 
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
-
-    DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+    DTrashItemInfoList items   = d->model->itemsForIndexes(d->selectedIndexesToRemove);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Items to Restore:\n " << items;
 
@@ -193,9 +193,8 @@ void TrashView::slotRestoreSelectedItems()
 void TrashView::slotDeleteSelectedItems()
 {
     QString title = i18n("Confirm Deletion");
-    QString msg = i18n("Are you sure you want to delete those items permanently?");
-
-    int result = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
+    QString msg   = i18n("Are you sure you want to delete those items permanently?");
+    int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
     {
@@ -205,7 +204,7 @@ void TrashView::slotDeleteSelectedItems()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Deleting selected items from collection trash";
 
     d->selectedIndexesToRemove = d->tableView->selectionModel()->selectedRows();
-    DTrashItemInfoList items = d->model->itemsForIndexes(d->selectedIndexesToRemove);
+    DTrashItemInfoList items   = d->model->itemsForIndexes(d->selectedIndexesToRemove);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Items count: " << items.count();
 
@@ -241,17 +240,15 @@ void TrashView::slotDeleteAllItems()
     }
 
     QString title = i18n("Confirm Deletion");
-    QString msg = i18n("Are you sure you want to delete ALL items permanently?");
-
-    int result = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
+    QString msg   = i18n("Are you sure you want to delete ALL items permanently?");
+    int result    = QMessageBox::warning(this, title, msg, QMessageBox::Yes | QMessageBox::No);
 
     if (result == QMessageBox::No)
         return;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Removing all item from trash permanently";
 
-    IOJobsThread* const thread =
-            IOJobsManager::instance()->startDeletingDTrashItems(d->model->allItems());
+    IOJobsThread* const thread = IOJobsManager::instance()->startDeletingDTrashItems(d->model->allItems());
 
     connect(thread, SIGNAL(finished()),
             this, SLOT(slotRemoveAllItemsFromModel()));
@@ -273,7 +270,7 @@ void TrashView::slotDataChanged()
 void TrashView::slotChangeLastSelectedItem(const QModelIndex& curr, const QModelIndex&)
 {
     d->lastSelectedIndex = curr;
-    d->lastSelectedItem = d->model->itemForIndex(curr);
+    d->lastSelectedItem  = d->model->itemForIndex(curr);
     emit selectionChanged();
 }
 
@@ -293,7 +290,7 @@ void TrashView::selectLastSelected()
 {
     if (d->model->isEmpty())
     {
-        d->lastSelectedItem = DTrashItemInfo();
+        d->lastSelectedItem  = DTrashItemInfo();
         d->lastSelectedIndex = QModelIndex();
     }
     else if (!d->lastSelectedIndex.isValid())
@@ -312,16 +309,15 @@ void TrashView::selectLastSelected()
 
 // --------------------------------------------------
 
-ThumbnailAligningDelegate::ThumbnailAligningDelegate(QObject *parent)
+ThumbnailAligningDelegate::ThumbnailAligningDelegate(QObject* const parent)
     : QStyledItemDelegate(parent)
 {
 }
 
-void ThumbnailAligningDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void ThumbnailAligningDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     QPixmap pixmap;
-    pixmap = index.data(Qt::DecorationRole).value<QPixmap>();
-
+    pixmap     = index.data(Qt::DecorationRole).value<QPixmap>();
     QPoint loc = option.rect.center() - pixmap.rect().center();
 
     painter->save();
@@ -338,6 +334,5 @@ void ThumbnailAligningDelegate::paint(QPainter *painter, const QStyleOptionViewI
     painter->drawPixmap(loc, pixmap);
     painter->restore();
 }
-
 
 } // namespace Digikam

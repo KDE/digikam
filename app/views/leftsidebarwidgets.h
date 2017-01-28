@@ -42,7 +42,7 @@
 #include "albumlabelstreeview.h"
 
 #ifdef HAVE_MARBLE
-#include "gpssearchview.h"
+#   include "gpssearchview.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
@@ -62,8 +62,8 @@ class AlbumFolderViewSideBarWidget : public SidebarWidget
 
 public:
 
-    AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
-                                 AlbumModificationHelper* const albumModificationHelper);
+    explicit AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
+                                          AlbumModificationHelper* const albumModificationHelper);
     virtual ~AlbumFolderViewSideBarWidget();
 
     void    setActive(bool active);
@@ -71,7 +71,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
     AlbumPointer<PAlbum> currentAlbum() const;
@@ -104,7 +104,7 @@ class TagViewSideBarWidget : public SidebarWidget
 
 public:
 
-    TagViewSideBarWidget(QWidget* const parent, TagModel* const model);
+    explicit TagViewSideBarWidget(QWidget* const parent, TagModel* const model);
     virtual ~TagViewSideBarWidget();
 
     void    setActive(bool active);
@@ -112,7 +112,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
     AlbumPointer<TAlbum> currentAlbum() const;
@@ -154,7 +154,7 @@ class LabelsSideBarWidget : public SidebarWidget
 
 public:
 
-    LabelsSideBarWidget(QWidget* const parent);
+    explicit LabelsSideBarWidget(QWidget* const parent);
     virtual ~LabelsSideBarWidget();
 
     AlbumLabelsTreeView* labelsTree();
@@ -164,7 +164,7 @@ public:
     void    changeAlbumFromHistory(QList<Album *> album);
     void    doLoadState();
     void    doSaveState();
-    const QIcon  getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
     QHash<AlbumLabelsTreeView::Labels, QList<int> > selectedLabels();
@@ -188,8 +188,8 @@ class DateFolderViewSideBarWidget : public SidebarWidget
 
 public:
 
-    DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
-                                ImageAlbumFilterModel* const imageFilterModel);
+    explicit DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
+                                         ImageAlbumFilterModel* const imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
     void    setActive(bool active);
@@ -197,7 +197,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon  getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
     AlbumPointer<DAlbum> currentAlbum() const;
@@ -223,8 +223,8 @@ class TimelineSideBarWidget : public SidebarWidget
 
 public:
 
-    TimelineSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                          SearchModificationHelper* const searchModificationHelper);
+    explicit TimelineSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                   SearchModificationHelper* const searchModificationHelper);
     virtual ~TimelineSideBarWidget();
 
     void    setActive(bool active);
@@ -232,7 +232,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon  getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
 private Q_SLOTS:
@@ -269,8 +269,8 @@ class SearchSideBarWidget : public SidebarWidget
 
 public:
 
-    SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                        SearchModificationHelper* const searchModificationHelper);
+    explicit SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                 SearchModificationHelper* const searchModificationHelper);
     virtual ~SearchSideBarWidget();
 
     void    setActive(bool active);
@@ -278,7 +278,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
     void newKeywordSearch();
@@ -300,9 +300,11 @@ private:
 class FuzzySearchSideBarWidget : public SidebarWidget
 {
     Q_OBJECT
+
 public:
-    FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                             SearchModificationHelper* const searchModificationHelper);
+
+    explicit FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                      SearchModificationHelper* const searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
     void    setActive(bool active);
@@ -310,7 +312,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
     void newDuplicatesSearch(PAlbum* album);
@@ -343,9 +345,10 @@ class GPSSearchSideBarWidget : public SidebarWidget
 
 public:
 
-    GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
-                           SearchModificationHelper* const searchModificationHelper,
-                           ImageFilterModel* const imageFilterModel, QItemSelectionModel* const itemSelectionModel);
+    explicit GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+                                    SearchModificationHelper* const searchModificationHelper,
+                                    ImageFilterModel* const imageFilterModel,
+                                    QItemSelectionModel* const itemSelectionModel);
     virtual ~GPSSearchSideBarWidget();
 
     void    setActive(bool active);
@@ -353,7 +356,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
 Q_SIGNALS:
@@ -381,8 +384,8 @@ class PeopleSideBarWidget : public SidebarWidget
 
 public:
 
-    PeopleSideBarWidget(QWidget* const parent, TagModel* const tagModel,
-                        SearchModificationHelper* const searchModificationHelper);
+    explicit PeopleSideBarWidget(QWidget* const parent, TagModel* const tagModel,
+                                 SearchModificationHelper* const searchModificationHelper);
     virtual ~PeopleSideBarWidget();
 
     void    setActive(bool active);
@@ -390,7 +393,7 @@ public:
     void    doSaveState();
     void    applySettings();
     void    changeAlbumFromHistory(QList<Album*> album);
-    const QIcon  getIcon();
+    const QIcon   getIcon();
     const QString getCaption();
 
 private Q_SLOTS:
