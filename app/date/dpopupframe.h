@@ -43,7 +43,7 @@ public:
     /**
      * The contructor. Creates a dialog without buttons.
      */
-    DPopupFrame(QWidget* const parent = 0);
+    explicit DPopupFrame(QWidget* const parent = 0);
 
     /**
      * The destructor

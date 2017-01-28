@@ -40,7 +40,7 @@ class DPopupFrame::Private
 {
 public:
 
-    Private(DPopupFrame* const qq);
+    explicit Private(DPopupFrame* const qq);
     ~Private();
 
 public:
@@ -65,7 +65,7 @@ class DPopupFrame::Private::OutsideClickCatcher : public QObject
 {
 public:
 
-    OutsideClickCatcher(QObject* const parent = 0)
+    explicit OutsideClickCatcher(QObject* const parent = 0)
         : QObject(parent),
           m_popup(0)
     {
