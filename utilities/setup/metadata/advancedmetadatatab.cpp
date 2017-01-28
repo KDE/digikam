@@ -58,18 +58,19 @@ public:
 
     Private()
     {
-        metadataType   = 0;
-        operationType  = 0;
-        addButton      = 0;
-        editButton     = 0;
-        deleteButton   = 0;
-        moveUpButton   = 0;
-        moveDownButton = 0;
-        revertChanges  = 0;
-        resetButton    = 0;
-        unifyReadWrite = 0;
-        namespaceView  = 0;
-        changed        = false;
+        metadataType     = 0;
+        operationType    = 0;
+        addButton        = 0;
+        editButton       = 0;
+        deleteButton     = 0;
+        moveUpButton     = 0;
+        moveDownButton   = 0;
+        revertChanges    = 0;
+        resetButton      = 0;
+        unifyReadWrite   = 0;
+        namespaceView    = 0;
+        metadataTypeSize = 0;
+        changed          = false;
     }
 
     QComboBox*                  metadataType;
@@ -166,9 +167,8 @@ void AdvancedMetadataTab::slotAddNewNamespace()
 {
     NamespaceEntry entry;
 
-    /**
-     * Setting some default parameters;
-     */
+    // Setting some default parameters;
+
     if (d->metadataType->currentData().toString() == QLatin1String(DM_TAG_CONTAINER))
     {
         entry.nsType = NamespaceEntry::TAGS;

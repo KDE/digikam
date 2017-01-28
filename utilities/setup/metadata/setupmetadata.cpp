@@ -81,6 +81,7 @@ public:
         saveDateTimeBox(0),
         saveTemplateBox(0),
         saveFaceTags(0),
+        useLazySync(0),
         writeRawFilesBox(0),
         writeXMPSidecarBox(0),
         readXMPSidecarBox(0),
@@ -95,7 +96,6 @@ public:
         exifSetOrientationBox(0),
         saveToBalooBox(0),
         readFromBalooBox(0),
-//      resyncButton(0),
         tab(0),
         displaySubTab(0),
         tagsCfgPanel(0),
@@ -137,7 +137,6 @@ public:
 
     QCheckBox*           saveToBalooBox;
     QCheckBox*           readFromBalooBox;
-//  QToolButton*         resyncButton;
 
     QTabWidget*          tab;
     QTabWidget*          displaySubTab;
