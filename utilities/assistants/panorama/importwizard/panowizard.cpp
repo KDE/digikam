@@ -34,7 +34,6 @@
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Local includes.
 
@@ -45,6 +44,7 @@
 #include "panooptimizepage.h"
 #include "panopreviewpage.h"
 #include "panolastpage.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -94,7 +94,7 @@ PanoWizard::PanoWizard(PanoManager* const mngr, QWidget* const parent)
     if (group.exists())
     {
         winId();
-        KWindowConfig::restoreWindowSize(windowHandle(), group);
+        DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
         resize(windowHandle()->size());
     }
     else
@@ -125,7 +125,7 @@ PanoWizard::~PanoWizard()
 {
     KConfig config;
     KConfigGroup group = config.group("Panorama Dialog");
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
     config.sync();
 
     delete d;

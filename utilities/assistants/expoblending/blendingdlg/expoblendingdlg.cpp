@@ -57,7 +57,6 @@ extern "C"
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Local includes
 
@@ -72,6 +71,7 @@ extern "C"
 #include "dsavesettingswidget.h"
 #include "expoblendingmanager.h"
 #include "fileoperation.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -384,7 +384,7 @@ void ExpoBlendingDlg::readSettings()
 
     winId();
     KConfigGroup group2 = config.group("ExpoBlending Dialog");
-    KWindowConfig::restoreWindowSize(windowHandle(), group2);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group2);
     resize(windowHandle()->size());
 }
 
@@ -399,7 +399,7 @@ void ExpoBlendingDlg::saveSettings()
     group.writeEntry("Template File Name", d->templateFileName->text());
 
     KConfigGroup group2 = config.group("ExpoBlending Dialog");
-    KWindowConfig::saveWindowSize(windowHandle(), group2);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group2);
     config.sync();
 }
 

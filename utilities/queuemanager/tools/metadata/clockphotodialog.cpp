@@ -42,7 +42,6 @@
 
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
-#include <kwindowconfig.h>
 
 // Local includes
 
@@ -53,6 +52,7 @@
 #include "graphicsdimgview.h"
 #include "dimgpreviewitem.h"
 #include "collectionmanager.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -213,14 +213,14 @@ void ClockPhotoDialog::loadSettings()
     KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Clock Photo Dialog"));
 
     winId();
-    KWindowConfig::restoreWindowSize(windowHandle(), group);
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
     resize(windowHandle()->size());
 }
 
 void ClockPhotoDialog::saveSettings()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("Clock Photo Dialog"));
-    KWindowConfig::saveWindowSize(windowHandle(), group);
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 }
 
 void ClockPhotoDialog::slotLoadPhoto()
