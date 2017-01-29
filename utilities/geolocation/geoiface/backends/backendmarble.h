@@ -98,8 +98,9 @@ public:
 
     void marbleCustomPaint(Marble::GeoPainter* painter);
     void setShowCompass(const bool state);
-    void setShowOverviewMap(const bool state);
     void setShowScaleBar(const bool state);
+    void setShowNavigation(const bool state);
+    void setShowOverviewMap(const bool state);
 
     virtual void regionSelectionChanged();
     virtual void mouseModeChanged();

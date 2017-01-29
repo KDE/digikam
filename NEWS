@@ -45,4 +45,5 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 375663 - Progress bars not initialized in ImageEditor at various places.
 034 ==> 375350 - Default maintenance window too small on OSX.
 035 ==> 374004 - Different Images recognised as identical images.
-036 ==> 
+036 ==> 375704 - Dragging the map over the zoom slider in Marble/OSM view will unintentionally zoom out/in.
+037 ==> 

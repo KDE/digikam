@@ -50,6 +50,7 @@
 #include <marble/MarbleMap.h>
 #include <marble/MarbleWidget.h>
 #include <marble/ViewportParams.h>
+#include <marble/AbstractFloatItem.h>
 
 // Local includes
 
@@ -101,12 +102,14 @@ public:
         actionGroupProjection(0),
         actionGroupFloatItems(0),
         actionShowCompass(0),
-        actionShowOverviewMap(0),
         actionShowScaleBar(0),
+        actionShowNavigation(0),
+        actionShowOverviewMap(0),
         cacheMapTheme(QLatin1String("atlas")),
         cacheProjection(QLatin1String("spherical")),
         cacheShowCompass(false),
         cacheShowScaleBar(false),
+        cacheShowNavigation(false),
         cacheShowOverviewMap(false),
         cacheZoom(900),
         havePotentiallyMouseMovingObject(false),
@@ -139,13 +142,15 @@ public:
     QActionGroup*                             actionGroupProjection;
     QActionGroup*                             actionGroupFloatItems;
     QAction*                                  actionShowCompass;
-    QAction*                                  actionShowOverviewMap;
     QAction*                                  actionShowScaleBar;
+    QAction*                                  actionShowNavigation;
+    QAction*                                  actionShowOverviewMap;
 
     QString                                   cacheMapTheme;
     QString                                   cacheProjection;
     bool                                      cacheShowCompass;
     bool                                      cacheShowScaleBar;
+    bool                                      cacheShowNavigation;
     bool                                      cacheShowOverviewMap;
     int                                       cacheZoom;
     bool                                      havePotentiallyMouseMovingObject;
@@ -381,15 +386,20 @@ void BackendMarble::createActions()
     d->actionShowCompass->setCheckable(true);
     d->actionGroupFloatItems->addAction(d->actionShowCompass);
 
-    d->actionShowOverviewMap = new QAction(i18n("Show overview map"), d->actionGroupFloatItems);
-    d->actionShowOverviewMap->setData(QLatin1String("showoverviewmap"));
-    d->actionShowOverviewMap->setCheckable(true);
-    d->actionGroupFloatItems->addAction(d->actionShowOverviewMap);
-
     d->actionShowScaleBar = new QAction(i18n("Show scale bar"), d->actionGroupFloatItems);
     d->actionShowScaleBar->setData(QLatin1String("showscalebar"));
     d->actionShowScaleBar->setCheckable(true);
     d->actionGroupFloatItems->addAction(d->actionShowScaleBar);
+
+    d->actionShowNavigation = new QAction(i18n("Show navigation"), d->actionGroupFloatItems);
+    d->actionShowNavigation->setData(QLatin1String("shownavigation"));
+    d->actionShowNavigation->setCheckable(true);
+    d->actionGroupFloatItems->addAction(d->actionShowNavigation);
+
+    d->actionShowOverviewMap = new QAction(i18n("Show overview map"), d->actionGroupFloatItems);
+    d->actionShowOverviewMap->setData(QLatin1String("showoverviewmap"));
+    d->actionShowOverviewMap->setCheckable(true);
+    d->actionGroupFloatItems->addAction(d->actionShowOverviewMap);
 }
 
 void BackendMarble::addActionsToConfigurationMenu(QMenu* const configurationMenu)
@@ -464,8 +474,9 @@ void BackendMarble::setMapTheme(const QString& newMapTheme)
     }
 
     // the float items are reset when the theme is changed:
-    setShowScaleBar(d->cacheShowScaleBar);
     setShowCompass(d->cacheShowCompass);
+    setShowScaleBar(d->cacheShowScaleBar);
+    setShowNavigation(d->cacheShowNavigation);
     setShowOverviewMap(d->cacheShowOverviewMap);
 
     // make sure the zoom level is within the allowed range
@@ -504,8 +515,9 @@ void BackendMarble::saveSettingsToGroup(KConfigGroup* const group)
 
     group->writeEntry("Marble Map Theme",         d->cacheMapTheme);
     group->writeEntry("Marble Projection",        d->cacheProjection);
-    group->writeEntry("Marble Show Scale Bar",    d->cacheShowScaleBar);
     group->writeEntry("Marble Show Compass",      d->cacheShowCompass);
+    group->writeEntry("Marble Show Scale Bar",    d->cacheShowScaleBar);
+    group->writeEntry("Marble Show Navigation",   d->cacheShowNavigation);
     group->writeEntry("Marble Show Overview Map", d->cacheShowOverviewMap);
 }
 
@@ -520,8 +532,9 @@ void BackendMarble::readSettingsFromGroup(const KConfigGroup* const group)
 
     setMapTheme(group->readEntry("Marble Map Theme",                d->cacheMapTheme));
     setProjection(group->readEntry("Marble Projection",             d->cacheProjection));
-    setShowScaleBar(group->readEntry("Marble Show Scale Bar",       d->cacheShowScaleBar));
     setShowCompass(group->readEntry("Marble Show Compass",          d->cacheShowCompass));
+    setShowScaleBar(group->readEntry("Marble Show Scale Bar",       d->cacheShowScaleBar));
+    setShowNavigation(group->readEntry("Marble Show Navigation",    d->cacheShowNavigation));
     setShowOverviewMap(group->readEntry("Marble Show Overview Map", d->cacheShowOverviewMap));
 }
 
@@ -931,18 +944,8 @@ void BackendMarble::setShowCompass(const bool state)
 
     if (d->marbleWidget)
     {
+        qDebug() << state;
         d->marbleWidget->setShowCompass(state);
-    }
-}
-
-void BackendMarble::setShowOverviewMap(const bool state)
-{
-    d->cacheShowOverviewMap = state;
-    updateActionAvailability();
-
-    if (d->marbleWidget)
-    {
-        d->marbleWidget->setShowOverviewMap(state);
     }
 }
 
@@ -954,6 +957,33 @@ void BackendMarble::setShowScaleBar(const bool state)
     if (d->marbleWidget)
     {
         d->marbleWidget->setShowScaleBar(state);
+    }
+}
+
+void BackendMarble::setShowNavigation(const bool state)
+{
+    d->cacheShowNavigation = state;
+    updateActionAvailability();
+
+    if (d->marbleWidget)
+    {
+        Marble::AbstractFloatItem* const item = d->marbleWidget->floatItem(QLatin1String("navigation"));
+
+        if (item)
+        {
+            item->setVisible(state);
+        }
+    }
+}
+
+void BackendMarble::setShowOverviewMap(const bool state)
+{
+    d->cacheShowOverviewMap = state;
+    updateActionAvailability();
+
+    if (d->marbleWidget)
+    {
+        d->marbleWidget->setShowOverviewMap(state);
     }
 }
 
@@ -969,6 +999,10 @@ void BackendMarble::slotFloatSettingsTriggered(QAction* action)
     else if (actionIdString == QLatin1String("showscalebar"))
     {
         setShowScaleBar(actionState);
+    }
+    else if (actionIdString == QLatin1String("shownavigation"))
+    {
+        setShowNavigation(actionState);
     }
     else if (actionIdString == QLatin1String("showoverviewmap"))
     {
@@ -1490,6 +1524,7 @@ void BackendMarble::updateActionAvailability()
 
     d->actionShowCompass->setChecked(d->cacheShowCompass);
     d->actionShowScaleBar->setChecked(d->cacheShowScaleBar);
+    d->actionShowNavigation->setChecked(d->cacheShowNavigation);
     d->actionShowOverviewMap->setChecked(d->cacheShowOverviewMap);
 }
 
@@ -1805,8 +1840,9 @@ void BackendMarble::applyCacheToWidget()
     setMapTheme(d->cacheMapTheme);
     setProjection(d->cacheProjection);
     setShowCompass(d->cacheShowCompass);
-    setShowOverviewMap(d->cacheShowOverviewMap);
     setShowScaleBar(d->cacheShowScaleBar);
+    setShowNavigation(d->cacheShowNavigation);
+    setShowOverviewMap(d->cacheShowOverviewMap);
 }
 
 void BackendMarble::slotTracksChanged(const QList<TrackManager::TrackChanges> trackChanges)
