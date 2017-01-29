@@ -1098,34 +1098,34 @@ int BackendMarble::getMarkerModelLevel()
     {
         case Marble::Equirectangular:
 
-                 if (currentZoom<1000) { tileLevel = 4; }
-            else if (currentZoom<1400) { tileLevel = 5; }
-            else if (currentZoom<1900) { tileLevel = 6; }
-            else if (currentZoom<2300) { tileLevel = 7; }
-            else if (currentZoom<2800) { tileLevel = 8; }
-            else                       { tileLevel = 9; }
+                 if (currentZoom < 1000) { tileLevel = 4; }
+            else if (currentZoom < 1400) { tileLevel = 5; }
+            else if (currentZoom < 1900) { tileLevel = 6; }
+            else if (currentZoom < 2300) { tileLevel = 7; }
+            else if (currentZoom < 2800) { tileLevel = 8; }
+            else                         { tileLevel = 9; }
             // note: level 9 is not enough starting at zoom level 3200
             break;
 
         case Marble::Mercator:
 
-                 if (currentZoom<1000) { tileLevel = 4; }
-            else if (currentZoom<1500) { tileLevel = 5; }
-            else if (currentZoom<1900) { tileLevel = 6; }
-            else if (currentZoom<2300) { tileLevel = 7; }
-            else if (currentZoom<2800) { tileLevel = 8; }
-            else                       { tileLevel = 9; }
+                 if (currentZoom < 1000) { tileLevel = 4; }
+            else if (currentZoom < 1500) { tileLevel = 5; }
+            else if (currentZoom < 1900) { tileLevel = 6; }
+            else if (currentZoom < 2300) { tileLevel = 7; }
+            else if (currentZoom < 2800) { tileLevel = 8; }
+            else                         { tileLevel = 9; }
             // note: level 9 is not enough starting at zoom level 3200
             break;
 
         default:
         case Marble::Spherical:
 
-                 if (currentZoom<1300) { tileLevel = 5; }
-            else if (currentZoom<1800) { tileLevel = 6; }
-            else if (currentZoom<2200) { tileLevel = 7; }
-            else if (currentZoom<2800) { tileLevel = 8; }
-            else                       { tileLevel = 9; }
+                 if (currentZoom < 1300) { tileLevel = 5; }
+            else if (currentZoom < 1800) { tileLevel = 6; }
+            else if (currentZoom < 2200) { tileLevel = 7; }
+            else if (currentZoom < 2800) { tileLevel = 8; }
+            else                         { tileLevel = 9; }
             // note: level 9 is not enough starting at zoom level 3200
             break;
     }
