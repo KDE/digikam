@@ -159,6 +159,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
       d(new Private)
 {
     setWindowTitle(i18n("Maintenance"));
+    resize(500, 400);
 
     d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Cancel)->setDefault(true);
