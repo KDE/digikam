@@ -944,8 +944,12 @@ void BackendMarble::setShowCompass(const bool state)
 
     if (d->marbleWidget)
     {
-        qDebug() << state;
-        d->marbleWidget->setShowCompass(state);
+        Marble::AbstractFloatItem* const item = d->marbleWidget->floatItem(QLatin1String("compass"));
+
+        if (item)
+        {
+            item->setVisible(state);
+        }
     }
 }
 
@@ -956,7 +960,12 @@ void BackendMarble::setShowScaleBar(const bool state)
 
     if (d->marbleWidget)
     {
-        d->marbleWidget->setShowScaleBar(state);
+        Marble::AbstractFloatItem* const item = d->marbleWidget->floatItem(QLatin1String("scalebar"));
+
+        if (item)
+        {
+            item->setVisible(state);
+        }
     }
 }
 
@@ -983,7 +992,12 @@ void BackendMarble::setShowOverviewMap(const bool state)
 
     if (d->marbleWidget)
     {
-        d->marbleWidget->setShowOverviewMap(state);
+        Marble::AbstractFloatItem* const item = d->marbleWidget->floatItem(QLatin1String("overviewmap"));
+
+        if (item)
+        {
+            item->setVisible(state);
+        }
     }
 }
 
