@@ -311,7 +311,7 @@ void BackendMarble::setCenter(const GeoCoordinates& coordinate)
 
 bool BackendMarble::isReady() const
 {
-    return d->marbleWidget!=0;
+    return d->marbleWidget != 0;
 }
 
 void BackendMarble::zoomIn()
@@ -404,7 +404,7 @@ void BackendMarble::createActions()
 
 void BackendMarble::addActionsToConfigurationMenu(QMenu* const configurationMenu)
 {
-    GEOIFACE_ASSERT(configurationMenu!=0);
+    GEOIFACE_ASSERT(configurationMenu != 0);
 
     configurationMenu->addSeparator();
 
@@ -655,9 +655,9 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
     }
 
     // check whether the parameters of the map changed and we may have to update the clusters:
-    if ( (d->clustersDirtyCacheLat        != d->marbleWidget->centerLatitude())  ||
-         (d->clustersDirtyCacheLon        != d->marbleWidget->centerLongitude()) ||
-         (d->clustersDirtyCacheProjection != d->marbleWidget->projection()) )
+    if ((d->clustersDirtyCacheLat        != d->marbleWidget->centerLatitude())  ||
+        (d->clustersDirtyCacheLon        != d->marbleWidget->centerLongitude()) ||
+        (d->clustersDirtyCacheProjection != d->marbleWidget->projection()))
     {
 //         qCDebug(DIGIKAM_GEOIFACE_LOG)<<d->marbleWidget->centerLatitude()<<d->marbleWidget->centerLongitude()<<d->marbleWidget->projection();
         d->clustersDirtyCacheLat        = d->marbleWidget->centerLatitude();
@@ -772,7 +772,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             int markerCountOverride                  = cluster.markerCount;
             GroupState selectionStateOverride = cluster.groupState;
 
-            if (d->haveMouseMovingObject&&(d->mouseMoveClusterIndex>=0))
+            if (d->haveMouseMovingObject && (d->mouseMoveClusterIndex >= 0))
             {
                 bool movingSelectedMarkers = s->clusterList.at(d->mouseMoveClusterIndex).groupState != SelectedNone;
 
@@ -787,7 +787,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
                     markerCountOverride = 0;
                 }
 
-                if (markerCountOverride==0)
+                if (markerCountOverride == 0)
                     continue;
             }
 
@@ -808,7 +808,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
     }
 
     // now render the mouse-moving cluster, if there is one:
-    if (d->haveMouseMovingObject&&(d->mouseMoveClusterIndex>=0))
+    if (d->haveMouseMovingObject && (d->mouseMoveClusterIndex >= 0))
     {
         const GeoIfaceCluster& cluster            = s->clusterList.at(d->mouseMoveClusterIndex);
         GeoCoordinates clusterCoordinates        = d->mouseMoveObjectCoordinates;
@@ -1150,8 +1150,7 @@ GeoCoordinates::PairList BackendMarble::getNormalizedBounds()
             marbleBounds.south(Marble::GeoDataCoordinates::Degree),
             marbleBounds.west(Marble::GeoDataCoordinates::Degree),
             marbleBounds.north(Marble::GeoDataCoordinates::Degree),
-            marbleBounds.east(Marble::GeoDataCoordinates::Degree)
-        );
+            marbleBounds.east(Marble::GeoDataCoordinates::Degree));
 
 //     qCDebug(DIGIKAM_GEOIFACE_LOG)<<boundsPair.first<<boundsPair.second;
 //     qCDebug(DIGIKAM_GEOIFACE_LOG)<<GeoIfaceHelperNormalizeBounds(boundsPair);
@@ -1170,8 +1169,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
     // we only handle mouse events:
     if ((event->type() != QEvent::MouseButtonPress) &&
         (event->type() != QEvent::MouseMove)        &&
-        (event->type() != QEvent::MouseButtonRelease)
-       )
+        (event->type() != QEvent::MouseButtonRelease))
     {
         return QObject::eventFilter(object, event);
     }
@@ -1230,8 +1228,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
 
                 const GeoCoordinates::Pair selectionCoordinates(
                         GeoCoordinates(latNorth, lonWest),
-                        GeoCoordinates(latSouth, lonEast)
-                    );
+                        GeoCoordinates(latSouth, lonEast));
 
                 //setSelectionRectangle(selectionCoordinates, SelectionRectangle);
                 d->displayedRectangle = selectionCoordinates;
@@ -1282,8 +1279,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
 
                 const GeoCoordinates::Pair selectionCoordinates(
                         GeoCoordinates(latNorth, lonWest),
-                        GeoCoordinates(latSouth, lonEast)
-                    );
+                        GeoCoordinates(latSouth, lonEast));
 
                 d->firstSelectionPoint.clear();
                 d->displayedRectangle.first.clear();
@@ -1305,7 +1301,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
             // one below
     //         if (s->specialMarkersModel)
     //         {
-    //             for (int row = s->specialMarkersModel->rowCount()-1; row>=0; --row)
+    //             for (int row = s->specialMarkersModel->rowCount()-1; row >= 0; --row)
     //             {
     //                 const QModelIndex currentIndex = s->specialMarkersModel->index(row, 0);
     //                 const GeoCoordinates currentCoordinates = s->specialMarkersModel->data(currentIndex, s->specialMarkersCoordinatesRole).value<GeoCoordinates>();
@@ -1377,7 +1373,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
                  (d->havePotentiallyMouseMovingObject || d->haveMouseMovingObject))
         {
             if ((!s->modificationsAllowed) || (!s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable)) ||
-                ((d->mouseMoveClusterIndex >= 0) && s->showThumbnails) )
+                ((d->mouseMoveClusterIndex >= 0) && s->showThumbnails))
             {
                 // clusters only move in edit mode and when edit mode is enabled
                 /// @todo This blocks moving of the map in non-edit mode
@@ -1415,7 +1411,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
                  (d->havePotentiallyMouseMovingObject))
         {
             // the object was not moved, but just clicked once
-            if (d->mouseMoveClusterIndex>=0)
+            if (d->mouseMoveClusterIndex >= 0)
             {
                 const int mouseMoveClusterIndex     = d->mouseMoveClusterIndex;
 
@@ -1524,14 +1520,14 @@ void BackendMarble::updateActionAvailability()
     s->worldMapWidget->getControlAction(QLatin1String("zoomout"))->setEnabled(d->cacheZoom>d->marbleWidget->minimumZoom());
     const QList<QAction*> mapThemeActions = d->actionGroupMapTheme->actions();
 
-    for (int i=0; i<mapThemeActions.size(); ++i)
+    for (int i = 0; i<mapThemeActions.size(); ++i)
     {
         mapThemeActions.at(i)->setChecked(mapThemeActions.at(i)->data().toString() == getMapTheme());
     }
 
     const QList<QAction*> projectionActions = d->actionGroupProjection->actions();
 
-    for (int i=0; i<projectionActions.size(); ++i)
+    for (int i = 0; i<projectionActions.size(); ++i)
     {
         projectionActions.at(i)->setChecked(projectionActions.at(i)->data().toString() == d->cacheProjection);
     }
@@ -1653,7 +1649,7 @@ bool BackendMarble::findSnapPoint(const QPoint& actualPoint, QPoint* const snapP
         }
     }
 
-    const bool foundSnapPoint = (bestSnapDistanceSquared>=0);
+    const bool foundSnapPoint = (bestSnapDistanceSquared >= 0);
 
     if (foundSnapPoint)
     {
@@ -1746,7 +1742,7 @@ void BackendMarble::setActive(const bool state)
 
     if (oldState!=state)
     {
-        if ((!state)&&d->marbleWidget)
+        if ((!state) && d->marbleWidget)
         {
             // we should share our widget in the list of widgets in the global object
             GeoIfaceInternalWidgetInfo info;
@@ -1766,7 +1762,7 @@ void BackendMarble::setActive(const bool state)
             go->addMyInternalWidgetToPool(info);
         }
 
-        if (state&&d->marbleWidget)
+        if (state && d->marbleWidget)
         {
             // we should remove our widget from the list of widgets in the global object
             GeoIfaceGlobalObject* const go = GeoIfaceGlobalObject::instance();
