@@ -44,4 +44,5 @@ BUGFIXES FROM BUGZILLA:
 032 ==> 375627 - What is the input box under Fuzzy -> Image -> Similarity range?
 033 ==> 375663 - Progress bars not initialized in ImageEditor at various places.
 034 ==> 375350 - Default maintenance window too small on OSX.
-035 ==> 
+035 ==> 374004 - Different Images recognised as identical images.
+036 ==> 
