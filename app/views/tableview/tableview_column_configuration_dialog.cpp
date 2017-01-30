@@ -38,6 +38,7 @@
 #include "tableview_model.h"
 #include "tableview_selection_model_syncer.h"
 #include "thumbnailloadthread.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -72,20 +73,26 @@ TableViewConfigurationDialog::TableViewConfigurationDialog(TableViewShared* cons
       d(new Private()),
       s(sharedObject)
 {
-    setWindowTitle(i18n("Configure column \"%1\"", d->columnObject->getTitle()));
-
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
-
     d->columnIndex               = columnIndex;
     d->columnObject              = s->tableViewModel->getColumnObject(d->columnIndex);
     d->columnConfigurationWidget = d->columnObject->getConfigurationWidget(this);
+
+    if (d->columnObject)
+    {
+        setWindowTitle(i18n("Configure column \"%1\"", d->columnObject->getTitle()));
+    }
+    else
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Column object from TableView is null";
+    }
+
+    d->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     QVBoxLayout* const vbx = new QVBoxLayout(this);
     vbx->addWidget(d->columnConfigurationWidget);
     vbx->addWidget(d->buttons);
     setLayout(vbx);
-
 
     connect(d->buttons->button(QDialogButtonBox::Ok), SIGNAL(clicked()),
             this, SLOT(accept()));
@@ -100,7 +107,15 @@ TableViewConfigurationDialog::~TableViewConfigurationDialog()
 
 TableViewColumnConfiguration TableViewConfigurationDialog::getNewConfiguration() const
 {
-    return d->columnConfigurationWidget->getNewConfiguration();
+    if (d->columnConfigurationWidget)
+    {
+        return d->columnConfigurationWidget->getNewConfiguration();
+    }
+    else
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Configuration widget from TableView is null";
+        return TableViewColumnConfiguration();
+    }
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

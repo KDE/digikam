@@ -46,4 +46,5 @@ BUGFIXES FROM BUGZILLA:
 034 ==> 375350 - Default maintenance window too small on OSX.
 035 ==> 374004 - Different Images recognised as identical images.
 036 ==> 375704 - Dragging the map over the zoom slider in Marble/OSM view will unintentionally zoom out/in.
-037 ==> 
+037 ==> 375749 - Crash when trying to configure table column.
+038 ==> 

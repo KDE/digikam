@@ -56,6 +56,6 @@ private:
     TableViewShared* const        s;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 #endif // TABLEVIEW_COLUMN_CONFIGURATION_DIALOG_H
