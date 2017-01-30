@@ -118,6 +118,7 @@ public:
     QMutex                    mutex;
     QWaitCondition            condVar;
 
+    QList<CameraCommand*>     cmdThumbs;
     QList<CameraCommand*>     commands;
 };
 
@@ -360,6 +361,7 @@ void CameraController::slotCancel()
     d->canceled = true;
     d->camera->cancel();
     QMutexLocker lock(&d->mutex);
+    d->cmdThumbs.clear();
     d->commands.clear();
 }
 
@@ -375,6 +377,12 @@ void CameraController::run()
             if (!d->commands.isEmpty())
             {
                 command = d->commands.takeFirst();
+                emit signalBusy(true);
+            }
+            else if (!d->cmdThumbs.isEmpty())
+            {
+                command = d->cmdThumbs.takeLast();
+                emit signalBusy(false);
             }
             else
             {
@@ -386,12 +394,6 @@ void CameraController::run()
 
         if (command)
         {
-            // Special case with thumbs handling. We don't need progress bar in gui.
-            if (command->action != CameraCommand::cam_thumbsinfo)
-            {
-                emit signalBusy(true);
-            }
-
             executeCommand(command);
             delete command;
         }
@@ -1042,10 +1044,9 @@ void CameraController::addCommand(CameraCommand* const cmd)
 {
     QMutexLocker lock(&d->mutex);
 
-    // New thumbnails commands at first, for a faster view.
     if (cmd->action == CameraCommand::cam_thumbsinfo)
     {
-        d->commands.prepend(cmd);
+        d->cmdThumbs << cmd;
     }
     else
     {
@@ -1058,7 +1059,7 @@ void CameraController::addCommand(CameraCommand* const cmd)
 bool CameraController::queueIsEmpty() const
 {
     QMutexLocker lock(&d->mutex);
-    return d->commands.isEmpty();
+    return (d->commands.isEmpty() && d->cmdThumbs.isEmpty());
 }
 
 void CameraController::slotConnect()
