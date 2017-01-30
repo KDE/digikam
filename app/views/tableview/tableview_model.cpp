@@ -87,7 +87,7 @@ void TableViewModel::Item::takeChild(TableViewModel::Item* const oldChild)
 
 TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong searchImageId)
 {
-    if (imageId==searchImageId)
+    if (imageId == searchImageId)
     {
         return this;
     }
@@ -95,6 +95,7 @@ TableViewModel::Item* TableViewModel::Item::findChildWithImageId(const qlonglong
     Q_FOREACH(Item* const item, children)
     {
         Item* const iItem = item->findChildWithImageId(searchImageId);
+
         if (iItem)
         {
             return iItem;
@@ -245,6 +246,7 @@ QVariant TableViewModel::data(const QModelIndex& i, int role) const
 
     const int columnNumber          = i.column();
     TableViewColumn* const myColumn = d->columnObjects.at(columnNumber);
+
     return myColumn->data(item, role);
 }
 
@@ -264,13 +266,15 @@ QModelIndex TableViewModel::index(int row, int column, const QModelIndex& parent
     }
 
     // test for valid row/column values
-    if ((row < 0) || (column < 0) ||
-        (column >= d->columnObjects.count()) || (row >= parentItem->children.count()))
+    if ((row < 0) || (column < 0)            ||
+        (column >= d->columnObjects.count()) ||
+        (row >= parentItem->children.count()))
     {
         return QModelIndex();
     }
 
     Item* const itemPointer = parentItem->children.at(row);
+
     return createIndex(row, column, itemPointer);
 }
 
@@ -281,7 +285,7 @@ QModelIndex TableViewModel::parent(const QModelIndex& childIndex) const
         return QModelIndex();
     }
 
-    Item* const childItem = itemFromIndex(childIndex);
+    Item* const childItem  = itemFromIndex(childIndex);
     Item* const parentItem = childItem->parent;
 
     if (parentItem == d->rootItem)
@@ -290,7 +294,7 @@ QModelIndex TableViewModel::parent(const QModelIndex& childIndex) const
     }
 
     Item* const grandParentItem = parentItem->parent;
-    const int rowIndex = grandParentItem->children.indexOf(parentItem);
+    const int rowIndex          = grandParentItem->children.indexOf(parentItem);
 
     /// @todo What should be the column number?
     return createIndex(rowIndex, 0, parentItem);
@@ -327,6 +331,7 @@ QVariant TableViewModel::headerData(int section, Qt::Orientation orientation, in
     }
 
     TableViewColumn* const myColumn = d->columnObjects.at(section);
+
     return myColumn->getTitle();
 }
 
@@ -380,14 +385,14 @@ void TableViewModel::slotColumnDataChanged(const qlonglong imageId)
     TableViewColumn* const senderColumn = qobject_cast<TableViewColumn*>(sender());
 
     /// @todo find a faster way to find the column number
-    const int iColumn = d->columnObjects.indexOf(senderColumn);
+    const int iColumn                   = d->columnObjects.indexOf(senderColumn);
 
     if (iColumn < 0)
     {
         return;
     }
 
-    const QModelIndex changedIndex = indexFromImageId(imageId, iColumn);
+    const QModelIndex changedIndex      = indexFromImageId(imageId, iColumn);
     emit(dataChanged(changedIndex, changedIndex));
 }
 
@@ -396,15 +401,16 @@ void TableViewModel::slotColumnAllDataChanged()
     TableViewColumn* const senderColumn = qobject_cast<TableViewColumn*>(sender());
 
     /// @todo find a faster way to find the column number
-    const int iColumn = d->columnObjects.indexOf(senderColumn);
+    const int iColumn                   = d->columnObjects.indexOf(senderColumn);
 
     if (iColumn < 0)
     {
         return;
     }
 
-    const QModelIndex changedIndexTopLeft = index(0, iColumn, QModelIndex());
+    const QModelIndex changedIndexTopLeft     = index(0, iColumn, QModelIndex());
     const QModelIndex changedIndexBottomRight = index(rowCount(QModelIndex())-1, iColumn, QModelIndex());
+
     emit(dataChanged(changedIndexTopLeft, changedIndexBottomRight));
 }
 
@@ -426,7 +432,7 @@ TableViewColumnProfile TableViewModel::getColumnProfile() const
 {
     TableViewColumnProfile profile;
 
-    for (int i = 0; i < d->columnObjects.count(); ++i)
+    for (int i = 0 ; i < d->columnObjects.count() ; ++i)
     {
         TableViewColumnConfiguration ic = d->columnObjects.at(i)->getConfiguration();
         profile.columnConfigurationList << ic;
@@ -443,7 +449,7 @@ void TableViewModel::loadColumnProfile(const TableViewColumnProfile& columnProfi
     }
 
     /// @todo disable updating of the model while this happens
-    for (int i = 0; i < columnProfile.columnConfigurationList.count(); ++i)
+    for (int i = 0 ; i < columnProfile.columnConfigurationList.count() ; ++i)
     {
         addColumnAt(columnProfile.columnConfigurationList.at(i), -1);
     }
@@ -488,7 +494,7 @@ void TableViewModel::slotSourceRowsInserted(const QModelIndex& parent, int start
         return;
     }
 
-    for (int i = start; i <= end; ++i)
+    for (int i = start ; i <= end ; ++i)
     {
         const QModelIndex sourceIndex = s->imageModel->index(i, 0, parent);
 
@@ -504,20 +510,20 @@ void TableViewModel::slotSourceRowsAboutToBeRemoved(const QModelIndex& parent, i
         return;
     }
 
-    for (int i = start; i <= end; ++i)
+    for (int i = start ; i <= end ; ++i)
     {
         const QModelIndex imageModelIndex = s->imageModel->index(i, 0, parent);
-        const qlonglong imageId = s->imageModel->imageId(imageModelIndex);
+        const qlonglong imageId           = s->imageModel->imageId(imageModelIndex);
         d->cachedImageInfos.remove(imageId);
 
-        const QModelIndex tableViewIndex = indexFromImageId(imageId, 0);
+        const QModelIndex tableViewIndex  = indexFromImageId(imageId, 0);
 
         if (!tableViewIndex.isValid())
         {
             continue;
         }
 
-        Item* const item = itemFromIndex(tableViewIndex);
+        Item* const item                  = itemFromIndex(tableViewIndex);
 
         if (!item)
         {
@@ -652,7 +658,7 @@ void TableViewModel::slotDatabaseImageChanged(const ImageChangeset& imageChanges
                 continue;
             }
 
-            const ImageInfo imageInfo = s->imageModel->imageInfo(imageModelIndex);
+            const ImageInfo imageInfo          = s->imageModel->imageInfo(imageModelIndex);
 
             if (d->imageFilterSettings.matches(imageInfo))
             {
@@ -727,7 +733,7 @@ Qt::ItemFlags TableViewModel::flags(const QModelIndex& index) const
     return Qt::ItemIsDropEnabled | defaultFlags;
 }
 
-QList< TableViewColumn* > TableViewModel::getColumnObjects()
+QList<TableViewColumn*> TableViewModel::getColumnObjects()
 {
     return d->columnObjects;
 }
@@ -790,7 +796,7 @@ void TableViewModel::slotPopulateModel(const bool sendNotifications)
 
     const int sourceRowCount = s->imageModel->rowCount(QModelIndex());
 
-    for (int i = 0; i < sourceRowCount; ++i)
+    for (int i = 0 ; i < sourceRowCount ; ++i)
     {
         const QModelIndex sourceModelIndex = s->imageModel->index(i, 0);
         // do not send notifications in addSourceModelIndex, because this function here
@@ -847,7 +853,7 @@ void TableViewModel::addSourceModelIndex(const QModelIndex& imageModelIndex, con
         }
     }
 
-    Item* item = createItemFromSourceIndex(imageModelIndex);
+    Item* item      = createItemFromSourceIndex(imageModelIndex);
 
     // Normally we do the sorting of items here on insertion.
     // However, if the sorting is currently outdated, we just
@@ -923,7 +929,7 @@ TableViewModel::Item* TableViewModel::itemFromIndex(const QModelIndex& i) const
         return 0;
     }
 
-    Q_ASSERT(i.model()==this);
+    Q_ASSERT(i.model() == this);
 
     Item* const item = static_cast<Item*>(i.internalPointer());
 
@@ -989,7 +995,7 @@ QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, 
     if (requestedField.hasFieldsFromImageMetadata())
     {
         const DatabaseFields::ImageMetadata requestedFieldFlag = requestedField;
-        const QVariant value = rawHash.value(requestedFieldFlag);
+        const QVariant value                                   = rawHash.value(requestedFieldFlag);
 
         return value;
     }
@@ -997,7 +1003,7 @@ QVariant TableViewModel::itemDatabaseFieldRaw(TableViewModel::Item* const item, 
     if (requestedField.hasFieldsFromVideoMetadata())
     {
         const DatabaseFields::VideoMetadata requestedFieldFlag = requestedField;
-        const QVariant value = rawHash.value(requestedFieldFlag);
+        const QVariant value                                   = rawHash.value(requestedFieldFlag);
 
         return value;
     }
@@ -1105,8 +1111,6 @@ public:
     {
     }
 
-    TableViewModel* m;
-
     bool operator()(const TableViewModel::Item* const itemA, const TableViewModel::Item* const itemB)
     {
         const bool compareResult = m->lessThan(const_cast<Item*>(itemA), const_cast<Item*>(itemB));
@@ -1118,6 +1122,10 @@ public:
 
         return compareResult;
     }
+
+public:
+
+    TableViewModel* m;
 };
 
 QList<TableViewModel::Item*> TableViewModel::sortItems(const QList<TableViewModel::Item*> itemList)
@@ -1218,7 +1226,7 @@ QMimeData* TableViewModel::mimeData(const QModelIndexList& indexes) const
         }
     }
 
-    QMimeData* const imageModelMimeData = ddHandler->createMimeData(imageModelIndexList);
+    QMimeData* const imageModelMimeData   = ddHandler->createMimeData(imageModelIndexList);
 
     return imageModelMimeData;
 }
@@ -1240,8 +1248,10 @@ QStringList TableViewModel::mimeTypes() const
     return QStringList();
 }
 
-bool TableViewModel::dropMimeData(
-        const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
+bool TableViewModel::dropMimeData(const QMimeData* data,
+                                  Qt::DropAction action,
+                                  int row, int column,
+                                  const QModelIndex& parent)
 {
     Q_UNUSED(data)
     Q_UNUSED(action)
@@ -1275,6 +1285,7 @@ void TableViewModel::scheduleResort()
     }
 
     d->sortRequired = true;
+
     QTimer::singleShot(100, this, SLOT(slotResortModel()));
 }
 
@@ -1352,6 +1363,7 @@ void TableViewModel::setGroupingMode(const TableViewModel::GroupingMode newGroup
     {
         d->groupingMode = newGroupingMode;
         QTimer::singleShot(100, this, SLOT(slotPopulateModelWithNotifications()));
+
         emit(signalGroupingModeChanged());
     }
 }
@@ -1362,12 +1374,12 @@ QModelIndex TableViewModel::deepRowIndex(const int rowNumber) const
 
     if (rowNumber < 0)
     {
-        targetRowNumber+=deepRowCount();
+        targetRowNumber += deepRowCount();
     }
 
     QModelIndex cIndex = index(0, 0);
 
-    for (int i = 0; i < targetRowNumber; ++i)
+    for (int i = 0 ; i < targetRowNumber ; ++i)
     {
         if (hasChildren(cIndex))
         {
@@ -1428,7 +1440,7 @@ int TableViewModel::indexToDeepRowNumber(const QModelIndex& rowIndex) const
                     break;
                 }
 
-                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+                candidateIndex          = parentIndex.sibling(parentIndex.row() + 1, 0);
             }
 
             cIndex = candidateIndex;
@@ -1445,7 +1457,7 @@ int TableViewModel::indexToDeepRowNumber(const QModelIndex& rowIndex) const
 
 int TableViewModel::deepRowCount() const
 {
-    int deepRowNumber = 0;
+    int deepRowNumber  = 0;
     QModelIndex cIndex = index(0, 0);
 
     while (cIndex.isValid())
@@ -1469,7 +1481,7 @@ int TableViewModel::deepRowCount() const
                     break;
                 }
 
-                candidateIndex = parentIndex.sibling(parentIndex.row() + 1, 0);
+                candidateIndex          = parentIndex.sibling(parentIndex.row() + 1, 0);
             }
 
             cIndex = candidateIndex;
@@ -1486,10 +1498,10 @@ QModelIndex TableViewModel::toCol0(const QModelIndex& anIndex) const
 
 int TableViewModel::firstDeepRowNotInList(const QList<QModelIndex>& needleList)
 {
-    int currentNeedlePos = 0;
+    int currentNeedlePos           = 0;
     QModelIndex currentNeedleIndex = toCol0(needleList.first());
-    int deepRowNumber  = 0;
-    QModelIndex cIndex = index(0, 0);
+    int deepRowNumber              = 0;
+    QModelIndex cIndex             = index(0, 0);
 
     while (cIndex.isValid())
     {
@@ -1635,4 +1647,4 @@ int TableViewModel::findChildSortedPosition(TableViewModel::Item* const parentIt
     return pos;
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

@@ -196,7 +196,7 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::TableViewModel::GroupingMode)
 
