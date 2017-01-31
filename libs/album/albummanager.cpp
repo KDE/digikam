@@ -1592,6 +1592,8 @@ void AlbumManager::scanTAlbums()
             }
         }
 
+        tagHash.clear();
+
         // now insert the items into the list. becomes sorted
         AlbumIterator it(rootTag);
 
