@@ -281,6 +281,7 @@ bool MetaEngine::getGPSAltitude(double* const altitude) const
             Exiv2::ExifKey exifKey3("Exif.GPSInfo.GPSAltitude");
             Exiv2::ExifData exifData(d->exifMetadata());
             Exiv2::ExifData::const_iterator it = exifData.findKey(exifKey3);
+
             if (it != exifData.end() && (*it).count())
             {
                 num = (double)((*it).toRational(0).first);
@@ -594,7 +595,7 @@ bool MetaEngine::removeGPSInfo(const bool setProgramName)
 }
 
 void MetaEngine::convertToRational(const double number, long int* const numerator,
-                               long int* const denominator, const int rounding)
+                                   long int* const denominator, const int rounding)
 {
     // This function converts the given decimal number
     // to a rational (fractional) number.
@@ -721,9 +722,9 @@ void MetaEngine::convertToRationalSmallDenominator(const double number, long int
 }
 
 QString MetaEngine::convertToGPSCoordinateString(const long int numeratorDegrees, const long int denominatorDegrees,
-                                             const long int numeratorMinutes, const long int denominatorMinutes,
-                                             const long int numeratorSeconds, long int denominatorSeconds,
-                                             const char directionReference)
+                                                 const long int numeratorMinutes, const long int denominatorMinutes,
+                                                 const long int numeratorSeconds, long int denominatorSeconds,
+                                                 const char directionReference)
 {
     /**
      * Precision:
@@ -835,10 +836,10 @@ QString MetaEngine::convertToGPSCoordinateString(const bool isLatitude, double c
 }
 
 bool MetaEngine::convertFromGPSCoordinateString(const QString& gpsString,
-                                            long int* const numeratorDegrees, long int* const denominatorDegrees,
-                                            long int* const numeratorMinutes, long int* const denominatorMinutes,
-                                            long int* const numeratorSeconds, long int* const denominatorSeconds,
-                                            char* const directionReference)
+                                                long int* const numeratorDegrees, long int* const denominatorDegrees,
+                                                long int* const numeratorMinutes, long int* const denominatorMinutes,
+                                                long int* const numeratorSeconds, long int* const denominatorSeconds,
+                                                char* const directionReference)
 {
     if (gpsString.isEmpty())
         return false;
@@ -923,8 +924,8 @@ bool MetaEngine::convertFromGPSCoordinateString(const QString& gpsString, double
 }
 
 bool MetaEngine::convertToUserPresentableNumbers(const QString& gpsString,
-                                             int* const degrees, int* const minutes,
-                                             double* const seconds, char* const directionReference)
+                                                 int* const degrees, int* const minutes,
+                                                 double* const seconds, char* const directionReference)
 {
     if (gpsString.isEmpty())
         return false;
@@ -959,8 +960,8 @@ bool MetaEngine::convertToUserPresentableNumbers(const QString& gpsString,
 }
 
 void MetaEngine::convertToUserPresentableNumbers(const bool isLatitude, double coordinate,
-                                             int* const degrees, int* const minutes,
-                                             double* const seconds, char* const directionReference)
+                                                 int* const degrees, int* const minutes,
+                                                 double* const seconds, char* const directionReference)
 {
     if (isLatitude)
     {

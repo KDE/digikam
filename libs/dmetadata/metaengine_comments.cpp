@@ -41,14 +41,15 @@ bool MetaEngine::canWriteComment(const QString& filePath)
         Exiv2::Image::AutoPtr image = Exiv2::ImageFactory::open((const char*)
                                       (QFile::encodeName(filePath).constData()));
 
-        Exiv2::AccessMode mode = image->checkMode(Exiv2::mdComment);
+        Exiv2::AccessMode mode      = image->checkMode(Exiv2::mdComment);
+
         return (mode == Exiv2::amWrite || mode == Exiv2::amReadWrite);
     }
     catch( Exiv2::Error& e )
     {
         std::string s(e.what());
         qCCritical(DIGIKAM_METAENGINE_LOG) << "Cannot check Comment access mode using Exiv2 (Error #"
-                                  << e.code() << ": " << s.c_str() << ")";
+                                           << e.code() << ": " << s.c_str() << ")";
     }
     catch(...)
     {

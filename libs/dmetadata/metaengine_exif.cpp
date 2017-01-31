@@ -1076,6 +1076,7 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
                     ++ti;
                 }
             }
+
             ++gi;
         }
 
@@ -1084,14 +1085,20 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
             do
             {
                 const Exiv2::TagInfo* const ti = *it;
-                QString key                    = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
-                QStringList values;
-                values << QString::fromLatin1(ti->name_) << QString::fromLatin1(ti->title_) << QString::fromLatin1(ti->desc_);
-                tagsMap.insert(key, values);
+
+                if (ti)
+                {
+                    QString key = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
+                    QStringList values;
+                    values << QString::fromLatin1(ti->name_) << QString::fromLatin1(ti->title_) << QString::fromLatin1(ti->desc_);
+                    tagsMap.insert(key, values);
+                }
+
                 ++(*it);
             }
             while((*it)->tag_ != 0xffff);
         }
+
         return tagsMap;
     }
     catch( Exiv2::Error& e )
@@ -1128,6 +1135,7 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
                     ++ti;
                 }
             }
+
             ++gi;
         }
 
@@ -1136,10 +1144,15 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
             do
             {
                 const Exiv2::TagInfo* const ti = *it;
-                QString key                    = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
-                QStringList values;
-                values << QString::fromLatin1(ti->name_) << QString::fromLatin1(ti->title_) << QString::fromLatin1(ti->desc_);
-                tagsMap.insert(key, values);
+
+                if (ti)
+                {
+                    QString key = QLatin1String(Exiv2::ExifKey(*ti).key().c_str());
+                    QStringList values;
+                    values << QString::fromLatin1(ti->name_) << QString::fromLatin1(ti->title_) << QString::fromLatin1(ti->desc_);
+                    tagsMap.insert(key, values);
+                }
+
                 ++(*it);
             }
             while((*it)->tag_ != 0xffff);
