@@ -165,7 +165,7 @@ void AddTagsLineEdit::slotReturnPressed()
         //focus back to mainview
         emit taggingActionFinished();
     }
-    else
+    else if (!d->currentTaggingAction.isValid())
     {
         emit taggingActionActivated(currentTaggingAction());
     }
@@ -179,7 +179,15 @@ void AddTagsLineEdit::slotEditingFinished()
 void AddTagsLineEdit::slotTextEdited(const QString& text)
 {
     d->currentTaggingAction = TaggingAction();
-    setCurrentTaggingAction(currentTaggingAction());
+
+    if (text.isEmpty())
+    {
+        emit taggingActionSelected(TaggingAction());
+    }
+    else
+    {
+        emit taggingActionSelected(TaggingActionFactory::defaultTaggingAction(text, d->parentTagId));
+    }
 
     d->completer->update(text);
 }
