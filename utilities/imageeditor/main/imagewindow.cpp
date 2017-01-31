@@ -490,6 +490,10 @@ void ImageWindow::loadImageInfos(const ImageInfoList& imageInfoList, const Image
     // We enable thumbbar as soon as indexes are available
     // If not, we load imageInfoCurrent, then the index 0, then again imageInfoCurrent
     d->thumbBar->setEnabled(false);
+    // Update sort role and order from the icon view.
+    d->imageFilterModel->setSortRole((ImageSortSettings::SortRole)ApplicationSettings::instance()->getImageSortOrder());
+    d->imageFilterModel->setSortOrder((ImageSortSettings::SortOrder)ApplicationSettings::instance()->getImageSorting());
+
     d->imageInfoModel->setImageInfos(imageInfoList);
     d->setThumbBarToCurrent();
 
