@@ -1993,6 +1993,7 @@ void DigikamView::slotSortImages(int sortRole)
 
     settings->setImageSortOrder(sortRole);
     d->iconView->imageFilterModel()->setSortRole((ImageSortSettings::SortRole) sortRole);
+    settings->emitSetupChanged();
 }
 
 void DigikamView::slotSortImagesOrder(int order)
@@ -2006,6 +2007,7 @@ void DigikamView::slotSortImagesOrder(int order)
 
     settings->setImageSorting(order);
     d->iconView->imageFilterModel()->setSortOrder((ImageSortSettings::SortOrder) order);
+    settings->emitSetupChanged();
 }
 
 void DigikamView::slotGroupImages(int categoryMode)
