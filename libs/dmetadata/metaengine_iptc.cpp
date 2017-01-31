@@ -489,8 +489,8 @@ QStringList MetaEngine::getIptcTagsStringList(const char* iptcTagName, bool esca
 }
 
 bool MetaEngine::setIptcTagsStringList(const char* iptcTagName, int maxSize,
-                                   const QStringList& oldValues, const QStringList& newValues,
-                                   bool setProgramName) const
+                                       const QStringList& oldValues, const QStringList& newValues,
+                                       bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -691,7 +691,7 @@ QStringList MetaEngine::getIptcSubjects() const
 }
 
 bool MetaEngine::setIptcSubjects(const QStringList& oldSubjects, const QStringList& newSubjects,
-                             bool setProgramName) const
+                                 bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
@@ -785,7 +785,7 @@ QStringList MetaEngine::getIptcSubCategories() const
 }
 
 bool MetaEngine::setIptcSubCategories(const QStringList& oldSubCategories, const QStringList& newSubCategories,
-                                  bool setProgramName) const
+                                      bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;

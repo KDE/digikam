@@ -624,7 +624,7 @@ QString MetaEngine::getXmpTagStringLangAlt(const char* xmpTagName, const QString
 }
 
 bool MetaEngine::setXmpTagStringLangAlt(const char* xmpTagName, const QString& value,
-                                    const QString& langAlt, bool setProgramName) const
+                                        const QString& langAlt, bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -739,7 +739,7 @@ QStringList MetaEngine::getXmpTagStringSeq(const char* xmpTagName, bool escapeCR
 }
 
 bool MetaEngine::setXmpTagStringSeq(const char* xmpTagName, const QStringList& seq,
-                                bool setProgramName) const
+                                    bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -839,7 +839,7 @@ QStringList MetaEngine::getXmpTagStringBag(const char* xmpTagName, bool escapeCR
 }
 
 bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& bag,
-                                bool setProgramName) const
+                                    bool setProgramName) const
 {
 #ifdef _XMP_SUPPORT_
 
@@ -888,7 +888,7 @@ bool MetaEngine::setXmpTagStringBag(const char* xmpTagName, const QStringList& b
 }
 
 bool MetaEngine::addToXmpTagStringBag(const char* xmpTagName, const QStringList& entriesToAdd,
-                                     bool setProgramName) const
+                                       bool setProgramName) const
 {
     if (!setProgramId(setProgramName))
         return false;
