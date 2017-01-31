@@ -50,4 +50,5 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 363937 - Add option to disable thumbnails in Import window.
 039 ==> 291110 - BQM Watermark tool : size original/unchanged/pixels/points.
 040 ==> 375767 - In Editor switching between pictures with left/right key is reversed. Pic 1 of 80 is displayed as 80 of 80.
-041 ==> 
+041 ==> 375770 - Creating tag from left panel causes error.
+042 ==> 
