@@ -48,4 +48,5 @@ BUGFIXES FROM BUGZILLA:
 036 ==> 375704 - Dragging the map over the zoom slider in Marble/OSM view will unintentionally zoom out/in.
 037 ==> 375749 - Crash when trying to configure table column.
 038 ==> 363937 - Add option to disable thumbnails in Import window.
-039 ==> 
+039 ==> 291110 - BQM Watermark tool : size original/unchanged/pixels/points.
+040 ==> 

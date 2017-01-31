@@ -1,4 +1,3 @@
-
 /* ============================================================
  *
  * This file is a part of digiKam project
@@ -80,8 +79,10 @@ public:
     Private() :
         textSettingsGroupBox(0),
         imageSettingsGroupBox(0),
+        useAbsoluteImageSizeGroupBox(0),
         useImageRadioButton(0),
         ignoreWatermarkAspectCheckBox(0),
+        useAbsoluteSizeCheckBox(0),
         useTextRadioButton(0),
         useBackgroundCheckBox(0),
         imageFileUrlRequester(0),
@@ -99,29 +100,31 @@ public:
     {
     }
 
-    QGroupBox*      textSettingsGroupBox;
-    QGroupBox*      imageSettingsGroupBox;
-    QRadioButton*   useImageRadioButton;
-    QCheckBox*   ignoreWatermarkAspectCheckBox;
-    QRadioButton*   useTextRadioButton;
-    QCheckBox*      useBackgroundCheckBox;
+    QGroupBox*       textSettingsGroupBox;
+    QGroupBox*       imageSettingsGroupBox;
+    QGroupBox*       useAbsoluteImageSizeGroupBox ;
+    QRadioButton*    useImageRadioButton;
+    QCheckBox*       ignoreWatermarkAspectCheckBox;
+    QCheckBox*       useAbsoluteSizeCheckBox;
+    QRadioButton*    useTextRadioButton;
+    QCheckBox*       useBackgroundCheckBox;
 
-    DFileSelector*  imageFileUrlRequester;
-    QLineEdit*      textEdit;
+    DFileSelector*   imageFileUrlRequester;
+    QLineEdit*       textEdit;
 
-    QComboBox*      comboBox;
-    DFontProperties*     extendedFontChooserWidget;
+    QComboBox*       comboBox;
+    DFontProperties* extendedFontChooserWidget;
 
-    DColorSelector* fontColorButton;
-    DColorSelector* backgroundColorButton;
+    DColorSelector*  fontColorButton;
+    DColorSelector*  backgroundColorButton;
 
-    DIntNumInput*   textOpacity;
-    DIntNumInput*   backgroundOpacity;
-    DIntNumInput*   xMarginInput;
-    DIntNumInput*   yMarginInput;
-    DIntNumInput*   waterMarkSizePercent;
+    DIntNumInput*    textOpacity;
+    DIntNumInput*    backgroundOpacity;
+    DIntNumInput*    xMarginInput;
+    DIntNumInput*    yMarginInput;
+    DIntNumInput*    waterMarkSizePercent;
 
-    bool            changeSettings;
+    bool             changeSettings;
 };
 
 WaterMark::WaterMark(QObject* const parent)
@@ -150,16 +153,35 @@ void WaterMark::registerSettingsWidget()
     hbox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     hbox->setSpacing(10);
 
-    QLabel* const watermarkTypeLabel = new QLabel(hbox);
+    d->useAbsoluteImageSizeGroupBox                       = new QGroupBox(vbox);
+    QVBoxLayout* const useAbsoluteImageSizeGroupBoxLayout = new QVBoxLayout;
+    useAbsoluteImageSizeGroupBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    useAbsoluteImageSizeGroupBoxLayout->addStretch(1);
+    d->useAbsoluteImageSizeGroupBox->setLayout(useAbsoluteImageSizeGroupBoxLayout);
+
+
+    DHBox* const useAbsoluteSizeHBox   = new DHBox();
+    useAbsoluteSizeHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    useAbsoluteSizeHBox->setSpacing(10);
+    d->useAbsoluteSizeCheckBox         = new QCheckBox(useAbsoluteSizeHBox);
+    d->useAbsoluteSizeCheckBox->setWhatsThis(i18n("Check this if you want the watermark to use the given size of the font or the image "
+                                                        "without any adjustment to the actual image"));
+    QLabel* const useAbsoluteSizeLabel = new QLabel(useAbsoluteSizeHBox);
+    useAbsoluteSizeLabel->setText(i18n("Use Absolute Size"));
+    d->useAbsoluteSizeCheckBox->setChecked(false);
+
+    useAbsoluteImageSizeGroupBoxLayout->addWidget(useAbsoluteSizeHBox);
+
+    QLabel* const watermarkTypeLabel   = new QLabel(hbox);
     watermarkTypeLabel->setText(i18n("Watermark type:"));
 
-    d->useImageRadioButton       = new QRadioButton(hbox);
+    d->useImageRadioButton      = new QRadioButton(hbox);
     d->useImageRadioButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    QLabel* const useImageLabel  = new QLabel(hbox);
+    QLabel* const useImageLabel = new QLabel(hbox);
     useImageLabel ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    d->useTextRadioButton        = new QRadioButton(hbox);
+    d->useTextRadioButton       = new QRadioButton(hbox);
     d->useTextRadioButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    QLabel* const useTextLabel   = new QLabel(hbox);
+    QLabel* const useTextLabel  = new QLabel(hbox);
     useTextLabel ->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useImageLabel->setText(i18n("Image"));
     useTextLabel->setText(i18n("Text"));
@@ -186,7 +208,7 @@ void WaterMark::registerSettingsWidget()
     ignoreWatermarkAspectRatioHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     ignoreWatermarkAspectRatioHBox->setSpacing(5);
 
-    d->ignoreWatermarkAspectCheckBox = new QCheckBox(ignoreWatermarkAspectRatioHBox);
+    d->ignoreWatermarkAspectCheckBox              = new QCheckBox(ignoreWatermarkAspectRatioHBox);
     d->ignoreWatermarkAspectCheckBox->setWhatsThis(i18n("Check this if you want the watermark to ignore "
                                                         "its own aspect ratio and use the image's aspect ratio instead"));
 
@@ -195,7 +217,7 @@ void WaterMark::registerSettingsWidget()
     d->ignoreWatermarkAspectCheckBox->setChecked(false);
     imageSettingsGroupBoxLayout->addWidget(ignoreWatermarkAspectRatioHBox);
 
-    d->textSettingsGroupBox = new QGroupBox(vbox);
+    d->textSettingsGroupBox                       = new QGroupBox(vbox);
     d->textSettingsGroupBox->setTitle(i18n("Text settings"));
     QVBoxLayout* const textSettingsGroupBoxLayout = new QVBoxLayout;
     textSettingsGroupBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -212,7 +234,7 @@ void WaterMark::registerSettingsWidget()
 
     d->extendedFontChooserWidget = new DFontProperties(0, DFontProperties::NoDisplayFlags);
     d->extendedFontChooserWidget->setSampleBoxVisible(true);
-    d->extendedFontChooserWidget->makeColumnVisible(0x04,false);
+    d->extendedFontChooserWidget->enableColumn(0x04,false);
     d->extendedFontChooserWidget->setWhatsThis(i18n("choose the font type and style. size is auto calculated"));
     textSettingsGroupBoxLayout->addWidget(d->extendedFontChooserWidget);
 
@@ -272,6 +294,7 @@ void WaterMark::registerSettingsWidget()
     d->comboBox->insertItem(Private::Center,      i18n("Center"));
     label4->setText(i18n("Placement:"));
 
+
     QLabel* const label5    = new QLabel(vbox);
     d->waterMarkSizePercent = new DIntNumInput(vbox);
     d->waterMarkSizePercent->setRange(0, 100, 1);
@@ -325,6 +348,9 @@ void WaterMark::registerSettingsWidget()
             this, SLOT(slotSettingsChanged()));
 
     connect(d->ignoreWatermarkAspectCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->useAbsoluteSizeCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->backgroundColorButton, SIGNAL(signalColorSelected(QColor)),
@@ -401,6 +427,9 @@ void WaterMark::slotSettingsChanged()
         d->textSettingsGroupBox->setVisible(true);
     }
 
+    d->waterMarkSizePercent->setEnabled(!d->useAbsoluteSizeCheckBox->isChecked());
+    d->extendedFontChooserWidget->enableColumn(0x04,d->useAbsoluteSizeCheckBox->isChecked());
+
     if (d->changeSettings)
     {
         BatchToolSettings settings;
@@ -412,6 +441,7 @@ void WaterMark::slotSettingsChanged()
         settings.insert(QLatin1String("Text opacity"),                  d->textOpacity->value());
         settings.insert(QLatin1String("Use background"),                d->useBackgroundCheckBox->isChecked());
         settings.insert(QLatin1String("Ignore Watermark Aspect Ratio"), d->ignoreWatermarkAspectCheckBox->isChecked());
+        settings.insert(QLatin1String("Use Absolute Size"),             d->useAbsoluteSizeCheckBox->isChecked());
         settings.insert(QLatin1String("Background color"),              d->backgroundColorButton->color());
         settings.insert(QLatin1String("Background opacity"),            d->backgroundOpacity->value());
         settings.insert(QLatin1String("Placement"),                     (int)d->comboBox->currentIndex());
@@ -446,8 +476,10 @@ bool WaterMark::toolOperations()
     Qt::AspectRatioMode watermarkAspectRatioMode = settings()[QLatin1String("Ignore Watermark Aspect Ratio")].toBool() ?
                                                               Qt::IgnoreAspectRatio : Qt::KeepAspectRatio;
 
+    bool useAbsoluteSize                         = settings()[QLatin1String("Use Absolute Size")].toBool();
+
     DImg watermarkImage;
-    DColorComposer* composer                     = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
+    DColorComposer* const composer               = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
     int marginW                                  = lround(image().width()  * (xMargin / 100.0));
     int marginH                                  = lround(image().height() * (yMargin / 100.0));
 
@@ -455,7 +487,7 @@ bool WaterMark::toolOperations()
     // the watermark size reasonable
     float ratio = (float)image().height()/image().width();
 
-    if(ratio > 1)
+    if (ratio > 1)
     {
         int tempSize = size *1.5*ratio ;
         size         = (tempSize < 100) ? tempSize : 100;
@@ -470,10 +502,13 @@ bool WaterMark::toolOperations()
             return false;
         }
 
-        DImg tempImage = watermarkImage.smoothScale(image().width()  * size / 100,
-                                                    image().height() * size / 100,
-                                                    watermarkAspectRatioMode);
-        watermarkImage = tempImage;
+        if (!useAbsoluteSize)
+        {
+            DImg tempImage = watermarkImage.smoothScale(image().width()  * size / 100,
+                                                        image().height() * size / 100,
+                                                        watermarkAspectRatioMode);
+            watermarkImage = tempImage;
+        }
     }
     else
     {
@@ -515,7 +550,11 @@ bool WaterMark::toolOperations()
                 break;
         }
 
-        font.setPointSizeF(fontSize);
+        if (!useAbsoluteSize)
+        {
+            font.setPointSizeF(fontSize);
+        }
+
         QFontMetrics fontMt(font);
         QRect fontRect = fontMt.boundingRect(radius, radius, image().width(), image().height(), 0, text);
 
@@ -627,4 +666,4 @@ int WaterMark::queryFontSize(const QString& text, const QFont& font, int length)
     return 0;
 }
 
-}  // namespace Digikam
+} // namespace Digikam
