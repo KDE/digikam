@@ -1065,7 +1065,12 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 
         while (gi->tagList_ != 0)
         {
-            if (QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("Makernote"))
+            qCDebug(DIGIKAM_METAENGINE_LOG) << gi->ifdName_;
+
+            // NOTE: See BUG #375809 : MPF tags = execption Exiv2 0.26
+
+            if (QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("Makernote") &&
+                QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("MPF"))
             {
                 Exiv2::TagListFct tl     = gi->tagList_;
                 const Exiv2::TagInfo* ti = tl();
