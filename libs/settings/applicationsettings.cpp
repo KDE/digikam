@@ -246,7 +246,7 @@ void ApplicationSettings::readSettings()
 
     d->iconTheme                         = group.readEntry(d->configIconThemeEntry,                                   QString());
     d->scanAtStart                       = group.readEntry(d->configScanAtStartEntry,                                 true);
-    d->cleanAtStart                      = group.readEntry(d->configCleanAtStartEntry,                                true);
+    d->cleanAtStart                      = group.readEntry(d->configCleanAtStartEntry,                                false);
 
     // ---------------------------------------------------------------------
 

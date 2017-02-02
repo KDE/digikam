@@ -205,11 +205,12 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     // --------------------------------------------------------------------------------------
 
     d->vbox3              = new DVBox;
-    d->cleanThumbsDb      = new QCheckBox(i18n("Clean up the thumbnail database. This may take much time."),d->vbox3);
-    d->cleanFacesDb       = new QCheckBox(i18n("Clean up the faces database. This may take much time."),d->vbox3);
+    new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning. .</i></qt>"),d->vbox3);
+    d->cleanThumbsDb      = new QCheckBox(i18n("Also clean up the thumbnail database. This may take much time."),d->vbox3);
+    d->cleanFacesDb       = new QCheckBox(i18n("Also clean up the faces database. This may take much time."),d->vbox3);
     d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
                                QIcon::fromTheme(QLatin1String("run-build")),
-                               i18n("Cleanup Databases"), QLatin1String("DbCleanup"), false);
+                               i18n("Perform database cleaning"), QLatin1String("DbCleanup"), false);
     d->expanderBox->setCheckBoxVisible(Private::DbCleanup, true);
 
     // --------------------------------------------------------------------------------------
