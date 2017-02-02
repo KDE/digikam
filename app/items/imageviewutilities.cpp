@@ -52,6 +52,8 @@
 #include "thumbnailloadthread.h"
 #include "fileactionmngr.h"
 #include "fileoperation.h"
+#include "coredb.h"
+#include "coredbaccess.h"
 
 namespace Digikam
 {
@@ -133,6 +135,17 @@ bool ImageViewUtilities::deleteImages(const QList<ImageInfo>& infos, const Delet
     }
 
     const bool useTrash = !dialog.shouldDelete();
+    if (!useTrash)
+    {
+        // If the images should be deleted permanently, mark the images as obsolete and remove them
+        // from their album
+        CoreDbAccess access;
+        foreach(const ImageInfo& info, deleteInfos)
+        {
+            access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+        }
+    }
+
     DIO::del(deleteInfos, useTrash);
 
     // Signal the Albummanager about the ids of the deleted images.
@@ -159,6 +172,16 @@ void ImageViewUtilities::deleteImagesDirectly(const QList<ImageInfo>& infos, con
     }
 
     const bool useTrash = (deleteMode == ImageViewUtilities::DeleteUseTrash);
+    if (!useTrash)
+    {
+        // If the images should be deleted permanently, mark the images as obsolete and remove them
+        // from their album
+        CoreDbAccess access;
+        foreach(const ImageInfo& info, infos)
+        {
+            access.db()->removeItemsPermanently(QList<qlonglong>() << info.id(), QList<int>() << info.albumId());
+        }
+    }
     DIO::del(infos, useTrash);
 
     // Signal the Albummanager about the ids of the deleted images.

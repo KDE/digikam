@@ -84,6 +84,13 @@ public:
     void deleteDTrashItems(const DTrashItemInfoList& items);
 
     /**
+     * @brief Starts a number of jobs to delete multiple files
+     * @param srcsToDelete: files to be deleted
+     * @param useTrash: a flag to use trash or not
+     */
+    void deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash);
+
+    /**
      * @brief Starts one job to rename a file to a new name
      * @param srcToRename: the url to be renamed
      * @param newName: the url of the renamed item

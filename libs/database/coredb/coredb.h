@@ -435,6 +435,11 @@ public:
     QList<TagProperty> getTagProperties(int tagID);
 
     /**
+     * Returns the list of tag properties with the given attribute.
+     */
+    QList<TagProperty> getTagProperties(const QString& property);
+
+    /**
      * Adds a tag property. Note that this never replaces existing entries.
      * It is also all right to add multiple entries for a tag with the same property.
      * To replace an existing entry, remove the entry before.
@@ -517,6 +522,13 @@ public:
     void deleteItem(int albumID, const QString& file);
 
     /**
+     * Deletes an item from the database if it does not belong to an album.
+     * This method can only be used if the album of the image is NULL!
+     * @param imageId The id of the image.
+     */
+    void deleteItem(qlonglong imageId);
+
+    /**
      * Marks all items in the specified album as removed,
      * resets their dirids.
      * The album can be deleted afterwards without removing
@@ -539,6 +551,16 @@ public:
     void removeItems(QList<qlonglong> itemIDs, const QList<int>& albumIDs = QList<int>());
 
     /**
+     * Marks all items in the list as obsolete,
+     * resets their dirids.
+     * The items can later be removed by deleteRemovedItems().
+     * @param itemIDs a list of item IDs to be marked
+     * @param albumIDs this parameter is purely informational.
+     *                 it shall contain the albums that the items are removed from.
+     */
+    void removeItemsPermanently(QList<qlonglong> itemIDs, const QList<int>& albumIDs = QList<int>());
+
+    /**
      * Delete all items from the database that are marked as removed.
      * Use with care!
      */
@@ -553,6 +575,40 @@ public:
      * @return the ImageId for the item, or -1 if it does not exist
      */
     qlonglong getImageId(int albumID, const QString& name);
+
+    /**
+     * Get the imageId fitting to the information given for the item
+     * @param albumID the albumID of the item (-1 means NULL)
+     * @param name the name of the item
+     * @param status the status of the item
+     * @return the ImageIds for the item, or an empty list if there are no matching entries.
+     */
+    QList<qlonglong> getImageIds(int albumID, const QString& name, DatabaseItem::Status status);
+
+    /**
+     * Returns all image ids with the given status.
+     * @param status The status.
+     * @return The ids of the images that have the given status.
+     */
+    QList<qlonglong> getImageIds(DatabaseItem::Status status);
+
+    /**
+     * Get the imageId fitting to the information given for the item
+     * @param albumID the albumID of the item (-1 means NULL)
+     * @param name the name of the item
+     * @param status the status of the item
+     * @param category the category of the item
+     * @param modificationDate the modification date
+     * @param fileSize the file size
+     * @param uniqueHash the unique hash
+     * @return the ImageId for the item, or -1 if no matching or more than one infos were found.
+     */
+    qlonglong getImageId(int albumID, const QString& name,
+                      DatabaseItem::Status status,
+                      DatabaseItem::Category category,
+                      const QDateTime& modificationDate,
+                      qlonglong fileSize,
+                      const QString& uniqueHash);
 
     enum ItemSortOrder
     {
@@ -572,6 +628,20 @@ public:
      * @return It returns a QStringList with the filenames.
      */
     QStringList getItemNamesInAlbum(int albumID, bool recursive=false);
+
+    /**
+     * Returns all ids of items in images table.
+     */
+    QList<qlonglong> getAllItems();
+
+    /**
+     * Returns the id of the item with the given filename in
+     * the album with the given id.
+     * @param albumId The albumId in which we search the item.
+     * @param fileName The name of the item file.
+     * @return The item id or -1 if not existent.
+     */
+    qlonglong getItemFromAlbum(int albumID, const QString& fileName);
 
     /**
      * Returns an ItemScanInfo object for each item in the album
@@ -681,6 +751,13 @@ public:
      * Note: Do not use this to set to the Removed status, see removeItems().
      */
     void setItemStatus(qlonglong imageID, DatabaseItem::Status status);
+
+    /**
+     * Updates the album field for the item.
+     * Note: Do not use this to move the item. This function only has the purpose to
+     * reuse image infos for restored images from trash.
+     */
+    void setItemAlbum(qlonglong imageID, qlonglong albumId);
 
     /**
      * Returns the requested fields from the Images table.
@@ -1037,7 +1114,7 @@ public:
     /**
      * Find items that are, with reasonable certainty, identical
      * to the file pointed to by id.
-     * Criteria: Unique Hash, file size.
+     * Criteria: Unique Hash, file size and album non-null.
      * The first variant will not return an ItemScanInfo for id.
      * The second allows to pass one id as source id for exclusion from the list.
      * If this is -1, no id is excluded.

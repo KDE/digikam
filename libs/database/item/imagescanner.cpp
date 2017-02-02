@@ -429,10 +429,25 @@ void ImageScanner::prepareAddImage(int albumId)
 
 void ImageScanner::commitAddImage()
 {
-    d->scanInfo.id = CoreDbAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
+    // get the image id of a deleted image info if existent and mark it as valid.
+    // otherwise, create a new item.
+    qlonglong imageId = CoreDbAccess().db()->getImageId(-1, d->scanInfo.itemName, DatabaseItem::Status::Trashed,
+                                                         d->scanInfo.category, d->scanInfo.modificationDate,
+                                                         d->scanInfo.fileSize, d->scanInfo.uniqueHash);
+    if (imageId != -1)
+    {
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Detected identical image info with id " << imageId << " and album id NULL of a removed image for image " << d->scanInfo.itemName;
+        qCDebug(DIGIKAM_DATABASE_LOG) << "Will reuse this image info and set the status to visible and the album id to " << d->scanInfo.albumID;
+        CoreDbAccess().db()->setItemAlbum(imageId,d->scanInfo.albumID);
+        CoreDbAccess().db()->setItemStatus(imageId, DatabaseItem::Status::Visible);
+    }
+    else
+    {
+        d->scanInfo.id = CoreDbAccess().db()->addItem(d->scanInfo.albumID, d->scanInfo.itemName,
                                                     d->scanInfo.status, d->scanInfo.category,
                                                     d->scanInfo.modificationDate, d->scanInfo.fileSize,
                                                     d->scanInfo.uniqueHash);
+    }
 }
 
 void ImageScanner::prepareUpdateImage()
@@ -1304,7 +1319,7 @@ QList<qlonglong> ImageScanner::resolveHistoryImageId(const HistoryImageId& histo
 
             foreach(const ItemScanInfo& info, infos)
             {
-                if (info.status != DatabaseItem::Removed)
+                if (info.status != DatabaseItem::Status::Trashed && info.status != DatabaseItem::Status::Obsolete)
                 {
                     ids << info.id;
                 }

@@ -94,6 +94,11 @@ public:
     bool                 metadataSync;
     /// Sync direction (image metadata <-> DB).
     int                  syncDirection;
+
+    /// Perform database cleanup
+    bool                 databaseCleanup;
+    bool                 cleanThumbDb;
+    bool                 cleanFacesDb;
 };
 
 //! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.

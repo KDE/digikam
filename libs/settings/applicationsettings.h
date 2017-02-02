@@ -361,6 +361,9 @@ public:
     void setScanAtStart(bool val);
     bool getScanAtStart() const;
 
+    void setCleanAtStart(bool val);
+    bool getCleanAtStart() const;
+
     void setUseTrash(bool val);
     bool getUseTrash() const;
 

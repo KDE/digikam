@@ -27,6 +27,7 @@
 
 #include <QFile>
 #include <QDir>
+#include <QDirIterator>
 
 // KDE includes
 
@@ -36,6 +37,10 @@
 
 #include "digikam_debug.h"
 #include "dtrash.h"
+#include "coredb.h"
+#include "coredbaccess.h"
+#include "collectionmanager.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -176,10 +181,11 @@ void CopyJob::run()
 
 // --------------------------------------------
 
-DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash)
+DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete)
 {
-    m_srcToDelete = srcToDelete;
-    m_useTrash    = useTrash;
+    m_srcToDelete  = srcToDelete;
+    m_useTrash     = useTrash;
+    m_markAsObsolete = markAsObsolete;
 }
 
 void DeleteJob::run()
@@ -227,6 +233,36 @@ void DeleteJob::run()
                 emit error(i18n("Album %1 could not be removed",
                                 QDir::toNativeSeparators(fileInfo.path())));
             }
+            else if (m_markAsObsolete)
+            {
+                CoreDbAccess access;
+                // If the images in the directory should be marked as obsolete
+                // get all files recursively and remove all image information
+                // for which the file path leads to an image id.
+                QList<qlonglong> imageIds;
+                QDirIterator iter(dir);
+                while (iter.hasNext())
+                {
+                    // get the next path and advance the iterator
+                    QString filePath = iter.next();
+                    // Use the file info to get the file type
+                    QFileInfo info = iter.fileInfo();
+                    if (info.isFile())
+                    {
+                        qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
+                        if (imageId != -1)
+                        {
+                            imageIds << imageId;
+                        }
+                    }
+                }
+
+                // Mark all image ids as obsolete.
+                foreach(qlonglong imageId, imageIds)
+                {
+                    access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                }
+            }
         }
         else
         {
@@ -237,10 +273,38 @@ void DeleteJob::run()
                 emit error(i18n("Image %1 could not be removed",
                                 QDir::toNativeSeparators(fileInfo.filePath())));
             }
+            else if (m_markAsObsolete)
+            {
+                // Mark the image info of the removed file as obsolete
+                CoreDbAccess access;
+                qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
+                if (imageId != -1)
+                {
+                    access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
+                }
+            }
         }
     }
 
     emit signalDone();
+}
+
+qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
+{
+    QString fileName = url.fileName();
+    // Get the album path, i.e. collection + album. For this,
+    // get the n leftmost characters where n is the complete path without the size of the filename
+    QString completePath = url.path();
+    QString albumPath    = CollectionManager::instance()->album(completePath);
+
+    qlonglong imageId = -1;
+    // Get the album and with this the image id of the image to trash.
+    PAlbum* pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
+    if (pAlbum)
+    {
+        imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(),fileName);
+    }
+    return imageId;
 }
 
 // --------------------------------------------

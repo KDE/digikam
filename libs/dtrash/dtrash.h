@@ -47,6 +47,7 @@ public:
     const static QString INFO_FILE_EXTENSION;
     const static QString PATH_JSON_KEY;
     const static QString DELETIONTIMESTAMP_JSON_KEY;
+    const static QString IMAGEID_JSON_KEY;
 
 public:
 
@@ -86,11 +87,12 @@ private:
      *        and return the baseName for this json file
      * @param collectionPath: Path of collection that the image belongs to
      * @param imagePath: path of image to create json file for
+     * @param imageId: The image id for the file.
      *
      * @example createJsonRecordForFile("home/user/Pics", "/home/user/Pics/cats/cute/katy.jpg")
      *          returns => "katy"
      */
-    static QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath);
+    static QString createJsonRecordForFile(const QString& collectionPath, const QString& imagePath, qlonglong imageId);
 
     /**
      * @brief Checks for duplicates of files names inside the trash and if there is

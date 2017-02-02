@@ -45,6 +45,7 @@ public:
     QString   collectionPath;
     QString   collectionRelativePath;
     QDateTime deletionTimestamp;
+    qlonglong imageId;
 };
 
 typedef QList<DTrashItemInfo> DTrashItemInfoList;

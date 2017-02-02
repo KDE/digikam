@@ -118,6 +118,7 @@ public Q_SLOTS:
 
 private:
 
+    void addAlbumChildrenToList(QList<int>& list, Album* const album);
     void addAlbumChildrenToList(QList<QUrl>& list, Album* const album);
 
 private:

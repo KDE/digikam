@@ -66,6 +66,7 @@ private:
     void stage5();  // Faces Management
     void stage6();  // Image Quality Sorter
     void stage7();  // Metadata
+    void stage8();  // Database cleanup
 
     void done();    // Called when all scheduled tools are done.
     void cancel();  // Called when a tool is canceled.

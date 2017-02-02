@@ -130,6 +130,7 @@ public:
     static const QString                      configShowPermanentDeleteDialogEntry;
     static const QString                      configApplySidebarChangesDirectlyEntry;
     static const QString                      configScanAtStartEntry;
+    static const QString                      configCleanAtStartEntry;
     static const QString                      configSyncBalootoDigikamEntry;
     static const QString                      configSyncDigikamtoBalooEntry;
     static const QString                      configStringComparisonTypeEntry;
@@ -231,6 +232,7 @@ public:
     // database settings
     DbEngineParameters                        databaseParams;
     bool                                      scanAtStart;
+    bool                                      cleanAtStart;
 
     // album settings
     QStringList                               albumCategoryNames;

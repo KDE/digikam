@@ -32,6 +32,8 @@
 #include "iojob.h"
 #include "digikam_debug.h"
 #include "dtrashiteminfo.h"
+#include "coredb.h"
+#include "coredbaccess.h"
 
 namespace Digikam
 {
@@ -121,6 +123,23 @@ void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
     appendJobs(collection);
 }
 
+void IOJobsThread::deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash)
+{
+    ActionJobCollection collection;
+
+    foreach (const QUrl& url, srcsToDelete)
+    {
+        DeleteJob* const j = new DeleteJob(url, useTrash,true);
+
+        connectOneJob(j);
+
+        collection.insert(j, 0);
+        d->jobsCount++;
+    }
+
+    appendJobs(collection);
+}
+
 void IOJobsThread::listDTrashItems(const QString& collectionPath)
 {
     ActionJobCollection collection;
@@ -169,10 +188,13 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
 {
     QList<QUrl> urlsToDelete;
 
+    CoreDbAccess access;
     foreach (const DTrashItemInfo& item, items)
     {
         urlsToDelete << QUrl::fromLocalFile(item.trashPath);
         urlsToDelete << QUrl::fromLocalFile(item.jsonFilePath);
+        // Set the status of the image id to obsolete, i.e. to remove.
+        access.db()->setItemStatus(item.imageId,DatabaseItem::Status::Obsolete);
     }
 
     del(urlsToDelete, false);

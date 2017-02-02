@@ -48,6 +48,7 @@
 #include "dnotificationwrapper.h"
 #include "progressmanager.h"
 #include "facesdetector.h"
+#include "dbcleaner.h"
 
 namespace Digikam
 {
@@ -66,6 +67,7 @@ public:
         metadataSynchronizer  = 0;
         imageQualitySorter    = 0;
         facesDetector         = 0;
+        databaseCleaner       = 0;
     }
 
     bool                   running;
@@ -81,6 +83,7 @@ public:
     MetadataSynchronizer*  metadataSynchronizer;
     ImageQualitySorter*    imageQualitySorter;
     FacesDetector*         facesDetector;
+    DbCleaner*             databaseCleaner;
 };
 
 MaintenanceMngr::MaintenanceMngr(QObject* const parent)
@@ -124,30 +127,35 @@ void MaintenanceMngr::slotToolCompleted(ProgressItem* tool)
         d->newItemsFinder = 0;
         stage2();
     }
+    else if (tool == dynamic_cast<ProgressItem*>(d->databaseCleaner))
+    {
+        d->databaseCleaner = 0;
+        stage3();
+    }
     else if (tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator))
     {
         d->thumbsGenerator = 0;
-        stage3();
+        stage4();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator))
     {
         d->fingerPrintsGenerator = 0;
-        stage4();
+        stage5();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder))
     {
         d->duplicatesFinder = 0;
-        stage5();
+        stage6();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->facesDetector))
     {
         d->facesDetector = 0;
-        stage6();
+        stage7();
     }
    else if (tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter))
     {
         d->imageQualitySorter = 0;
-        stage7();
+        stage8();
     }
     else if (tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
     {
@@ -162,6 +170,7 @@ void MaintenanceMngr::slotToolCanceled(ProgressItem* tool)
         tool == dynamic_cast<ProgressItem*>(d->thumbsGenerator)       ||
         tool == dynamic_cast<ProgressItem*>(d->fingerPrintsGenerator) ||
         tool == dynamic_cast<ProgressItem*>(d->duplicatesFinder)      ||
+        tool == dynamic_cast<ProgressItem*>(d->databaseCleaner)       ||
         tool == dynamic_cast<ProgressItem*>(d->facesDetector)         ||
         tool == dynamic_cast<ProgressItem*>(d->imageQualitySorter)    ||
         tool == dynamic_cast<ProgressItem*>(d->metadataSynchronizer))
@@ -207,6 +216,23 @@ void MaintenanceMngr::stage2()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "stage2";
 
+    if (d->settings.databaseCleanup)
+    {
+        d->databaseCleaner = new DbCleaner(d->settings.cleanThumbDb,d->settings.cleanFacesDb);
+        d->databaseCleaner->setNotificationEnabled(false);
+        d->databaseCleaner->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
+        d->databaseCleaner->start();
+    }
+    else
+    {
+        stage3();
+    }
+}
+
+void MaintenanceMngr::stage3()
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage3";
+
     if (d->settings.thumbnails)
     {
         bool rebuildAll = (d->settings.scanThumbs == false);
@@ -221,13 +247,13 @@ void MaintenanceMngr::stage2()
     }
     else
     {
-        stage3();
+        stage4();
     }
 }
 
-void MaintenanceMngr::stage3()
+void MaintenanceMngr::stage4()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "stage3";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage4";
 
     if (d->settings.fingerPrints)
     {
@@ -243,13 +269,13 @@ void MaintenanceMngr::stage3()
     }
     else
     {
-        stage4();
+        stage5();
     }
 }
 
-void MaintenanceMngr::stage4()
+void MaintenanceMngr::stage5()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "stage4";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage5";
 
     if (d->settings.duplicates)
     {
@@ -259,13 +285,13 @@ void MaintenanceMngr::stage4()
     }
     else
     {
-        stage5();
+        stage6();
     }
 }
 
-void MaintenanceMngr::stage5()
+void MaintenanceMngr::stage6()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "stage5";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage6";
 
     if (d->settings.faceManagement)
     {
@@ -277,13 +303,13 @@ void MaintenanceMngr::stage5()
     }
     else
     {
-        stage6();
+        stage7();
     }
 }
 
-void MaintenanceMngr::stage6()
+void MaintenanceMngr::stage7()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "stage6";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage7";
 
     if (d->settings.qualitySort && d->settings.quality.enableSorter)
     {
@@ -298,14 +324,14 @@ void MaintenanceMngr::stage6()
     }
     else
     {
-        stage7();
+        stage8();
     }
 }
 
 
-void MaintenanceMngr::stage7()
+void MaintenanceMngr::stage8()
 {
-    qCDebug(DIGIKAM_GENERAL_LOG) << "stage7";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "stage8";
 
     if (d->settings.metadataSync)
     {

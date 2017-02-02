@@ -246,6 +246,7 @@ void ApplicationSettings::readSettings()
 
     d->iconTheme                         = group.readEntry(d->configIconThemeEntry,                                   QString());
     d->scanAtStart                       = group.readEntry(d->configScanAtStartEntry,                                 true);
+    d->cleanAtStart                      = group.readEntry(d->configCleanAtStartEntry,                                true);
 
     // ---------------------------------------------------------------------
 
@@ -408,6 +409,7 @@ void ApplicationSettings::saveSettings()
 #endif
     group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
     group.writeEntry(d->configScanAtStartEntry,                        d->scanAtStart);
+    group.writeEntry(d->configCleanAtStartEntry,                       d->cleanAtStart);
 
     // ---------------------------------------------------------------------
 

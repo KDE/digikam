@@ -65,6 +65,7 @@ public:
     {
         Options = 0,
         NewItems,
+        DbCleanup,
         Thumbnails,
         FingerPrints,
         Duplicates,
@@ -83,6 +84,8 @@ public:
         scanThumbs(0),
         scanFingerPrints(0),
         useMutiCoreCPU(0),
+        cleanThumbsDb(0),
+        cleanFacesDb(0),
         qualityScanMode(0),
         metadataSetup(0),
         qualitySetup(0),
@@ -90,6 +93,7 @@ public:
         hbox(0),
         vbox(0),
         vbox2(0),
+        vbox3(0),
         hbox3(0),
         faceScannedHandling(0),
         minSimilarity(0),
@@ -114,6 +118,9 @@ public:
     static const QString configImageQualitySorter;
     static const QString configQualityScanMode;
     static const QString configMetadataSync;
+    static const QString configCleanupDatabase;
+    static const QString configCleanupThumbDatabase;
+    static const QString configCleanupFacesDatabase;
     static const QString configSyncDirection;
 
     QDialogButtonBox*    buttons;
@@ -122,6 +129,8 @@ public:
     QCheckBox*           scanThumbs;
     QCheckBox*           scanFingerPrints;
     QCheckBox*           useMutiCoreCPU;
+    QCheckBox*           cleanThumbsDb;
+    QCheckBox*           cleanFacesDb;
     QComboBox*           qualityScanMode;
     QPushButton*         metadataSetup;
     QPushButton*         qualitySetup;
@@ -129,6 +138,7 @@ public:
     DHBox*               hbox;
     DVBox*               vbox;
     DVBox*               vbox2;
+    DVBox*               vbox3;
     DHBox*               hbox3;
     QComboBox*           faceScannedHandling;
     DIntNumInput*        minSimilarity;
@@ -153,6 +163,9 @@ const QString MaintenanceDlg::Private::configImageQualitySorter(QLatin1String("I
 const QString MaintenanceDlg::Private::configQualityScanMode(QLatin1String("QualityScanMode"));
 const QString MaintenanceDlg::Private::configMetadataSync(QLatin1String("MetadataSync"));
 const QString MaintenanceDlg::Private::configSyncDirection(QLatin1String("SyncDirection"));
+const QString MaintenanceDlg::Private::configCleanupDatabase(QLatin1String("CleanupDatabase"));
+const QString MaintenanceDlg::Private::configCleanupThumbDatabase(QLatin1String("CleanupThumbDatabase"));
+const QString MaintenanceDlg::Private::configCleanupFacesDatabase(QLatin1String("CleanupFacesDatabase"));
 
 MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     : QDialog(parent),
@@ -189,6 +202,15 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
                                "<i>Note: only Albums Collection are processed by this tool.</i></qt>")),
                                QIcon::fromTheme(QLatin1String("view-refresh")), i18n("Scan for new items"), QLatin1String("NewItems"), false);
     d->expanderBox->setCheckBoxVisible(Private::NewItems, true);
+    // --------------------------------------------------------------------------------------
+
+    d->vbox3              = new DVBox;
+    d->cleanThumbsDb      = new QCheckBox(i18n("Clean up the thumbnail database. This may take much time."),d->vbox3);
+    d->cleanFacesDb       = new QCheckBox(i18n("Clean up the faces database. This may take much time."),d->vbox3);
+    d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
+                               QIcon::fromTheme(QLatin1String("run-build")),
+                               i18n("Cleanup Databases"), QLatin1String("DbCleanup"), false);
+    d->expanderBox->setCheckBoxVisible(Private::DbCleanup, true);
 
     // --------------------------------------------------------------------------------------
 
@@ -277,6 +299,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->expanderBox->insertItem(Private::MetadataSync, d->vbox2, QIcon::fromTheme(QLatin1String("run-build-file")),
                                i18n("Sync Metadata and Database"), QLatin1String("MetadataSync"), false);
     d->expanderBox->setCheckBoxVisible(Private::MetadataSync, true);
+
     d->expanderBox->insertStretch(Private::Stretch);
 
     // --------------------------------------------------------------------------------------
@@ -354,6 +377,9 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.tags                                = d->albumSelectors->selectedTAlbums();
     prm.useMutiCoreCPU                      = d->useMutiCoreCPU->isChecked();
     prm.newItems                            = d->expanderBox->isChecked(Private::NewItems);
+    prm.databaseCleanup                     = d->expanderBox->isChecked(Private::DbCleanup);
+    prm.cleanThumbDb                        = d->cleanThumbsDb->isChecked();
+    prm.cleanFacesDb                        = d->cleanFacesDb->isChecked();
     prm.thumbnails                          = d->expanderBox->isChecked(Private::Thumbnails);
     prm.scanThumbs                          = d->scanThumbs->isChecked();
     prm.fingerPrints                        = d->expanderBox->isChecked(Private::FingerPrints);
@@ -385,6 +411,9 @@ void MaintenanceDlg::readSettings()
 
     d->useMutiCoreCPU->setChecked(group.readEntry(d->configUseMutiCoreCPU,                               prm.useMutiCoreCPU));
     d->expanderBox->setChecked(Private::NewItems,           group.readEntry(d->configNewItems,           prm.newItems));
+    d->expanderBox->setChecked(Private::DbCleanup,          group.readEntry(d->configCleanupDatabase,    prm.databaseCleanup));
+    d->cleanThumbsDb->setChecked(group.readEntry(d->configCleanupThumbDatabase,                          prm.cleanThumbDb));
+    d->cleanFacesDb->setChecked(group.readEntry(d->configCleanupFacesDatabase,                           prm.cleanFacesDb));
     d->expanderBox->setChecked(Private::Thumbnails,         group.readEntry(d->configThumbnails,         prm.thumbnails));
     d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                                       prm.scanThumbs));
     d->expanderBox->setChecked(Private::FingerPrints,       group.readEntry(d->configFingerPrints,       prm.fingerPrints));
@@ -418,21 +447,24 @@ void MaintenanceDlg::writeSettings()
 
     MaintenanceSettings prm   = settings();
 
-    group.writeEntry(d->configUseMutiCoreCPU,      prm.useMutiCoreCPU);
-    group.writeEntry(d->configNewItems,            prm.newItems);
-    group.writeEntry(d->configThumbnails,          prm.thumbnails);
-    group.writeEntry(d->configScanThumbs,          prm.scanThumbs);
-    group.writeEntry(d->configFingerPrints,        prm.fingerPrints);
-    group.writeEntry(d->configScanFingerPrints,    prm.scanFingerPrints);
-    group.writeEntry(d->configDuplicates,          prm.duplicates);
-    group.writeEntry(d->configMinSimilarity,       prm.minSimilarity);
-    group.writeEntry(d->configMaxSimilarity,       prm.maxSimilarity);
-    group.writeEntry(d->configFaceManagement,      prm.faceManagement);
-    group.writeEntry(d->configFaceScannedHandling, (int)prm.faceSettings.alreadyScannedHandling);
-    group.writeEntry(d->configImageQualitySorter,  prm.qualitySort);
-    group.writeEntry(d->configQualityScanMode,     prm.qualityScanMode);
-    group.writeEntry(d->configMetadataSync,        prm.metadataSync);
-    group.writeEntry(d->configSyncDirection,       prm.syncDirection);
+    group.writeEntry(d->configUseMutiCoreCPU,       prm.useMutiCoreCPU);
+    group.writeEntry(d->configNewItems,             prm.newItems);
+    group.writeEntry(d->configCleanupDatabase,      prm.databaseCleanup);
+    group.writeEntry(d->configCleanupThumbDatabase, prm.cleanThumbDb);
+    group.writeEntry(d->configCleanupFacesDatabase, prm.cleanFacesDb);
+    group.writeEntry(d->configThumbnails,           prm.thumbnails);
+    group.writeEntry(d->configScanThumbs,           prm.scanThumbs);
+    group.writeEntry(d->configFingerPrints,         prm.fingerPrints);
+    group.writeEntry(d->configScanFingerPrints,     prm.scanFingerPrints);
+    group.writeEntry(d->configDuplicates,           prm.duplicates);
+    group.writeEntry(d->configMinSimilarity,        prm.minSimilarity);
+    group.writeEntry(d->configMaxSimilarity,        prm.maxSimilarity);
+    group.writeEntry(d->configFaceManagement,       prm.faceManagement);
+    group.writeEntry(d->configFaceScannedHandling,  (int)prm.faceSettings.alreadyScannedHandling);
+    group.writeEntry(d->configImageQualitySorter,   prm.qualitySort);
+    group.writeEntry(d->configQualityScanMode,      prm.qualityScanMode);
+    group.writeEntry(d->configMetadataSync,         prm.metadataSync);
+    group.writeEntry(d->configSyncDirection,        prm.syncDirection);
 
     DXmlGuiWindow::saveWindowSize(windowHandle(), group);
 }
@@ -463,6 +495,10 @@ void MaintenanceDlg::slotItemToggled(int index, bool b)
 
         case Private::MetadataSync:
             d->vbox2->setEnabled(b);
+            break;
+
+        case Private::DbCleanup:
+            d->vbox3->setEnabled(b);
             break;
 
         default :  // NewItems

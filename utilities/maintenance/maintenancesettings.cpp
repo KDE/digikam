@@ -51,6 +51,10 @@ MaintenanceSettings::MaintenanceSettings()
 
     metadataSync       = false;
     syncDirection      = MetadataSynchronizer::WriteFromDatabaseToFile;
+
+    databaseCleanup    = false;
+    cleanThumbDb       = false;
+    cleanFacesDb       = false;
 }
 
 MaintenanceSettings::~MaintenanceSettings()
@@ -81,6 +85,9 @@ QDebug operator<<(QDebug dbg, const MaintenanceSettings& s)
     dbg.nospace() << "qualityScanMode     : " << s.qualityScanMode << endl;
     dbg.nospace() << "metadataSync        : " << s.metadataSync << endl;
     dbg.nospace() << "syncDirection       : " << s.syncDirection << endl;
+    dbg.nospace() << "databaseCleanup     : " << s.databaseCleanup << endl;
+    dbg.nospace() << "cleanThumbDb        : " << s.cleanThumbDb << endl;
+    dbg.nospace() << "cleanFacesDb        : " << s.cleanFacesDb << endl;
     return dbg.space();
 }
 

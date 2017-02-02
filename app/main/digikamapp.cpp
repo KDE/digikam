@@ -118,6 +118,7 @@
 #include "maintenancedlg.h"
 #include "maintenancemngr.h"
 #include "newitemsfinder.h"
+#include "dbcleaner.h"
 #include "tagsmanager.h"
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
@@ -426,6 +427,12 @@ void DigikamApp::show()
         !CollectionScanner::databaseInitialScanDone())
     {
         NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScanDeferredFiles);
+        QTimer::singleShot(1000, tool, SLOT(start()));
+    }
+
+    if (ApplicationSettings::instance()->getCleanAtStart())
+    {
+        DbCleaner* const tool = new DbCleaner(false,false);
         QTimer::singleShot(1000, tool, SLOT(start()));
     }
 

@@ -334,6 +334,15 @@ public:
      * describing why the operation failed
      */
     bool updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& errMsg);
+
+    /**
+     * Returns the id of the item with the given filename in
+     * the given PAlbum.
+     * @param album The albumId in which we search the item.
+     * @param fileName The name of the item file.
+     * @return The item id or -1 if not existent.
+     */
+    qlonglong getItemFromAlbum(PAlbum* album, const QString& fileName);
     //@}
 
     /**

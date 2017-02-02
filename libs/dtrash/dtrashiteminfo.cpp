@@ -39,7 +39,8 @@ bool DTrashItemInfo::isNull() const
            jsonFilePath.isEmpty()           &&
            collectionPath.isEmpty()         &&
            collectionRelativePath.isEmpty() &&
-           deletionTimestamp.isNull();
+           deletionTimestamp.isNull()       &&
+           imageId == -1;
 }
 
 QDebug operator<<(QDebug dbg, const DTrashItemInfo& info)
@@ -50,6 +51,7 @@ QDebug operator<<(QDebug dbg, const DTrashItemInfo& info)
     dbg.nospace() << "CollectionPath: "<< info.collectionPath << "\n ";
     dbg.nospace() << "RelativePath: " << info.collectionRelativePath << "\n ";
     dbg.nospace() << "DeletionTimestamp: " << info.deletionTimestamp.toString() << "\n";
+    dbg.nospace() << "Image id: " << QString::number(info.imageId) << "\n";
     return dbg.space();
 }
 

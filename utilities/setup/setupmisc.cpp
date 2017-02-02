@@ -64,6 +64,7 @@ public:
         scrollItemToCenterCheck(0),
         showOnlyPersonTagsInPeopleSidebarCheck(0),
         scanAtStart(0),
+        cleanAtStart(0),
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0),
@@ -83,6 +84,7 @@ public:
     QCheckBox* scrollItemToCenterCheck;
     QCheckBox* showOnlyPersonTagsInPeopleSidebarCheck;
     QCheckBox* scanAtStart;
+    QCheckBox* cleanAtStart;
 
     QComboBox* sidebarType;
     QComboBox* stringComparisonType;
@@ -130,6 +132,13 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "this can introduce low latency, and it's recommended to disable this option and to plan\n"
                                     "a manual scan through the maintenance tool at the right moment."));
 
+    // ---------------------------------------------------------
+    d->cleanAtStart                   = new QCheckBox(i18n("Remove obsolete core database objects (makes startup slower)"), panel);
+    d->cleanAtStart->setToolTip(i18n("Set this option to force digiKam to clean up the core database from obsolete item entries.\n"
+                                    "Entries are only deleted if the connected image/video/audio file was already removed, i.e.\n"
+                                    "the database object wastes space.\n"
+                                    "This option does not clean up other databases as the thumbnails or recognition db.\n"
+                                    "For clean up routines for other databases, please use the maintenance."));
     // -- Application Behavior Options --------------------------------------------------------
 
     QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
@@ -207,6 +216,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->setSpacing(spacing);
     layout->addWidget(stringComparisonHbox);
     layout->addWidget(d->scanAtStart);
+    layout->addWidget(d->cleanAtStart);
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
@@ -233,6 +243,7 @@ void SetupMisc::applySettings()
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
+    settings->setCleanAtStart(d->cleanAtStart->isChecked());
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setShowOnlyPersonTagsInPeopleSidebar(d->showOnlyPersonTagsInPeopleSidebarCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
@@ -256,6 +267,7 @@ void SetupMisc::readSettings()
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
+    d->cleanAtStart->setChecked(settings->getCleanAtStart());
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->showOnlyPersonTagsInPeopleSidebarCheck->setChecked(settings->showOnlyPersonTagsInPeopleSidebar());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
