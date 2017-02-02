@@ -24,9 +24,6 @@
 #ifndef DATABASE_TASK_H
 #define DATABASE_TASK_H
 
-// Qt includes
-
-
 // Local includes
 
 #include "actionthreadbase.h"
@@ -47,8 +44,8 @@ class DatabaseTask : public ActionJob
 
 public:
 
-    DatabaseTask();
-    ~DatabaseTask();
+    explicit DatabaseTask();
+    virtual ~DatabaseTask();
 
     void setItem(qlonglong imageId);
     void setItems(const QList<qlonglong>& imageIds);
@@ -85,5 +82,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* DATABASE_TASK_H */
-
+#endif // DATABASE_TASK_H

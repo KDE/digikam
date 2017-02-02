@@ -6,7 +6,7 @@
  * Date        : 2017-01-29
  * Description : Database cleaner.
  *
- * Copyright (C) 2017      by Mario Frank <mario dot frank at uni minus potsdam dot de>
+ * Copyright (C) 2017 by Mario Frank <mario dot frank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ class DbCleaner : public MaintenanceTool
 public:
 
     explicit DbCleaner(bool cleanThumbsDb = false, bool cleanFacesDb = false, ProgressItem* const parent = 0);
-    ~DbCleaner();
+    virtual ~DbCleaner();
 
     void setUseMultiCoreCPU(bool b);
 
@@ -75,5 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DBCLEANER_H */
-
+#endif // DBCLEANER_H

@@ -48,7 +48,6 @@ public:
         cleanThumbsDb(false),
         cleanFacesDb(false),
         threadChunkSize(0)
-
     {
     }
 
@@ -72,13 +71,12 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, ProgressItem* const 
 
     d->cleanThumbsDb = cleanThumbsDb;
     d->cleanFacesDb  = cleanFacesDb;
-    
-    d->thread     = new MaintenanceThread(this);
+
+    d->thread        = new MaintenanceThread(this);
 
     connect(d->thread, SIGNAL(signalAdvance()),
             this, SLOT(slotAdvance()));
 }
-
 
 DbCleaner::~DbCleaner()
 {
@@ -106,8 +104,8 @@ void DbCleaner::slotStart()
 }
 
 void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
-                     const QList<int>& staleThumbIds,
-                     const QList<FacesEngine::Identity>& staleIdentities)
+                                const QList<int>& staleThumbIds,
+                                const QList<FacesEngine::Identity>& staleIdentities)
 {
     // We have data now. Store it and trigger the core db cleaning
     d->imagesToRemove  = staleImageIds;
@@ -116,6 +114,7 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
 
     // If we have nothing to do, finish.
     // Signal done if no elements cleanup is necessary
+
     if (d->imagesToRemove.isEmpty() && d->staleThumbnails.isEmpty() && d->staleIdentities.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Nothing to do. Databases are clean.";
@@ -131,19 +130,20 @@ void DbCleaner::slotCleanItems()
     qCDebug(DIGIKAM_GENERAL_LOG) << "Cleaning core db.";
 
     disconnect(d->thread, SIGNAL(signalCompleted()),
-                   this, SLOT(slotCleanItems()));
+               this, SLOT(slotCleanItems()));
 
     connect(d->thread, SIGNAL(signalCompleted()),
-                this, SLOT(slotCleanedItems()));
+            this, SLOT(slotCleanedItems()));
 
     if (d->imagesToRemove.size() > 0)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->imagesToRemove.size() << " obsolete image entries.";
+
         // Set the total count of items to remove
         setTotalItems(d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size());
         setLabel(i18n("Clean up the databases : ") + i18n("cleaning core db"));
 
-        // GO! 
+        // GO!
         d->thread->cleanCoreDb(d->imagesToRemove, d->threadChunkSize);
         d->thread->start();
     }
@@ -158,10 +158,10 @@ void DbCleaner::slotCleanedItems()
 {
     // We cleaned the items. Now clean the thumbs db
     disconnect(d->thread, SIGNAL(signalCompleted()),
-                   this, SLOT(slotCleanedItems()));
+               this, SLOT(slotCleanedItems()));
 
     connect(d->thread, SIGNAL(signalCompleted()),
-                    this, SLOT(slotCleanedThumbnails()));
+            this, SLOT(slotCleanedThumbnails()));
 
     if (d->cleanThumbsDb)
     {
@@ -184,15 +184,14 @@ void DbCleaner::slotCleanedItems()
     {
         slotCleanedThumbnails();
     }
-
 }
 
 void DbCleaner::slotCleanedThumbnails()
 {
     // We cleaned the thumbnails. Now clean the recognition db
     disconnect(d->thread, SIGNAL(signalCompleted()),
-                   this, SLOT(slotCleanedThumbnails()));
-    
+               this, SLOT(slotCleanedThumbnails()));
+
     if (d->cleanFacesDb)
     {
         if (d->staleIdentities.count() > 0)
@@ -242,5 +241,4 @@ void DbCleaner::slotCancel()
     MaintenanceTool::slotCancel();
 }
 
-}  // namespace Digikam
-
+} // namespace Digikam
