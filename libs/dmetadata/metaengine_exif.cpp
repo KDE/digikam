@@ -697,6 +697,7 @@ bool MetaEngine::getExifTagLong(const char* exifTagName, long& val, int componen
         if (it != exifData.end() && it->count() > 0)
         {
             val = it->toLong(component);
+
             return true;
         }
     }
@@ -837,7 +838,7 @@ QString MetaEngine::getExifTagString(const char* exifTagName, bool escapeCR) con
 
         if (it != exifData.end())
         {
-            // See B.K.O #184156 comment #13
+            // See BUG #184156 comment #13
             std::string val  = it->print(&exifData);
             QString tagValue = QString::fromLocal8Bit(val.c_str());
 
@@ -867,6 +868,7 @@ bool MetaEngine::setExifTagString(const char* exifTagName, const QString& value,
     try
     {
         d->exifMetadata()[exifTagName] = std::string(value.toLatin1().constData());
+
         return true;
     }
     catch( Exiv2::Error& e )
@@ -904,7 +906,9 @@ QImage MetaEngine::getExifThumbnail(bool fixOrientation) const
                 Exiv2::ExifData::const_iterator it = exifData.findKey(key1);
 
                 if (it == exifData.end())
+                {
                     it = exifData.findKey(key2);
+                }
 
                 if (it != exifData.end() && it->count())
                 {
@@ -960,6 +964,7 @@ bool MetaEngine::setExifThumbnail(const QImage& thumbImage, bool setProgramName)
         thumbImage.save(&buffer, "JPEG");
         Exiv2::ExifThumb thumb(d->exifMetadata());
         thumb.setJpegThumbnail((Exiv2::byte *)data.data(), data.size());
+
         return true;
     }
     catch( Exiv2::Error& e )
@@ -997,9 +1002,13 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage, bool setProgramName)
         for (Exiv2::ExifData::iterator md = d->exifMetadata().begin(); md != d->exifMetadata().end();)
         {
             if (md->groupName() == subImage1)
+            {
                 md = d->exifMetadata().erase(md);
+            }
             else
+            {
                 ++md;
+            }
         }
 
         if (!thumbImage.isNull())
@@ -1016,8 +1025,9 @@ bool MetaEngine::setTiffThumbnail(const QImage& thumbImage, bool setProgramName)
             val.setDataArea(buf.pData_, buf.size_);
             d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormat"]       = val;
             d->exifMetadata()["Exif.SubImage1.JPEGInterchangeFormatLength"] = uint32_t(buf.size_);
-            d->exifMetadata()["Exif.SubImage1.Compression"]                 = uint16_t(6); // JPEG (old-style)
-            d->exifMetadata()["Exif.SubImage1.NewSubfileType"]              = uint32_t(1); // Thumbnail image
+            d->exifMetadata()["Exif.SubImage1.Compression"]                 = uint16_t(6);          // JPEG (old-style)
+            d->exifMetadata()["Exif.SubImage1.NewSubfileType"]              = uint32_t(1);          // Thumbnail image
+
             return true;
         }
     }
@@ -1040,6 +1050,7 @@ bool MetaEngine::removeExifThumbnail() const
         // Remove all IFD0 subimages.
         Exiv2::ExifThumb thumb(d->exifMetadata());
         thumb.erase();
+
         return true;
     }
     catch( Exiv2::Error& e )
@@ -1065,8 +1076,6 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
 
         while (gi->tagList_ != 0)
         {
-            qCDebug(DIGIKAM_METAENGINE_LOG) << gi->ifdName_;
-
             // NOTE: See BUG #375809 : MPF tags = execption Exiv2 0.26
 
             if (QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("Makernote") &&
@@ -1085,7 +1094,7 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
             ++gi;
         }
 
-        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin() ; it != tags.end() ; ++it)
         {
             do
             {
@@ -1144,7 +1153,7 @@ MetaEngine::TagsMap MetaEngine::getMakernoteTagsList() const
             ++gi;
         }
 
-        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin(); it != tags.end(); ++it)
+        for (QList<const Exiv2::TagInfo*>::iterator it = tags.begin() ; it != tags.end() ; ++it)
         {
             do
             {
