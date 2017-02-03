@@ -70,6 +70,7 @@ private Q_SLOTS:
     void slotUpdateFingerPrints();
     void slotCheckForValidSettings();
     void slotMinimumChanged(int);
+    void slotApplicationSettingsChanged();
 
 private:
 

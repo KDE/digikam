@@ -34,6 +34,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QSpinBox>
 
 // KDE includes
 
@@ -57,6 +58,7 @@ public:
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
         iconThemeLabel(0),
+        minSimilarityBoundLabel(0),
         showSplashCheck(0),
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
@@ -68,7 +70,8 @@ public:
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0),
-        iconTheme(0)
+        iconTheme(0),
+        minimumSimilarityBound(0)
     {
     }
 
@@ -76,6 +79,7 @@ public:
     QLabel*    stringComparisonTypeLabel;
     QLabel*    applicationStyleLabel;
     QLabel*    iconThemeLabel;
+    QLabel*    minSimilarityBoundLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
@@ -90,6 +94,8 @@ public:
     QComboBox* stringComparisonType;
     QComboBox* applicationStyle;
     QComboBox* iconTheme;
+
+    QSpinBox*  minimumSimilarityBound;
 };
 
 SetupMisc::SetupMisc(QWidget* const parent)
@@ -148,6 +154,20 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), abOptionsGroup);
     d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
 
+    DHBox* const minSimilarityBoundHbox       = new DHBox(abOptionsGroup);
+    d->minSimilarityBoundLabel                = new QLabel(i18n("Lower bound for minimum similarity:"), minSimilarityBoundHbox);
+    d->minimumSimilarityBound                 = new QSpinBox(minSimilarityBoundHbox);
+    d->minimumSimilarityBound->setSuffix(QLatin1String("%"));
+    d->minimumSimilarityBound->setRange(1, 100);
+    d->minimumSimilarityBound->setSingleStep(1);
+    d->minimumSimilarityBound->setValue(40);
+    d->minimumSimilarityBound->setToolTip(i18n("Select here the lower bound of   "
+                                               "the minimum similarity threshold "
+                                               "for fuzzy and duplicates searches. "
+                                               "The default value is 40. Selecting "
+                                               "a lower value than 40 can make the search <b>really</b> slow"));
+    d->minSimilarityBoundLabel->setBuddy(d->minimumSimilarityBound);
+
     DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
     d->sidebarType            = new QComboBox(tabStyleHbox);
@@ -205,6 +225,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     gLayout5->addWidget(d->scrollItemToCenterCheck);
     gLayout5->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
     gLayout5->addWidget(d->showSplashCheck);
+    gLayout5->addWidget(minSimilarityBoundHbox);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     gLayout5->addWidget(iconThemeHbox);
@@ -241,6 +262,7 @@ void SetupMisc::applySettings()
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
+    settings->setMinimumSimilarityBound(d->minimumSimilarityBound->value());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
     settings->setCleanAtStart(d->cleanAtStart->isChecked());
@@ -264,6 +286,7 @@ void SetupMisc::readSettings()
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->showPermanentDeleteDialogCheck->setChecked(settings->getShowPermanentDeleteDialog());
+    d->minimumSimilarityBound->setValue(settings->getMinimumSimilarityBound());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());

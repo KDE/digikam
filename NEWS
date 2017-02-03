@@ -6,6 +6,7 @@ Faces    : It is now possible to remove face tags from people sidebar but preser
 Faces    : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
 Faces    : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
 Searches : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
+Searches : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
 Tags     : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 
 BUGFIXES FROM BUGZILLA:
@@ -52,4 +53,5 @@ BUGFIXES FROM BUGZILLA:
 040 ==> 375767 - In Editor switching between pictures with left/right key is reversed. Pic 1 of 80 is displayed as 80 of 80.
 041 ==> 375770 - Creating tag from left panel causes error.
 042 ==> 375591 - Digikam crash.
-043 ==> 
+043 ==> 375700 - Digikam freezes for a long time (I/O wait) if similarity range is set too low 
+044 ==>

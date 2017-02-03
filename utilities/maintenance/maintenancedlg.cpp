@@ -53,6 +53,7 @@
 #include "imagequalitysettings.h"
 #include "metadatasynchronizer.h"
 #include "dxmlguiwindow.h"
+#include "applicationsettings.h"
 
 namespace Digikam
 {
@@ -229,13 +230,22 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     // --------------------------------------------------------------------------------------
 
+    const ApplicationSettings * settings = ApplicationSettings::instance();
+
     d->hbox              = new DHBox;
     new QLabel(i18n("Similarity range (in percents): "), d->hbox);
     QWidget* const space = new QWidget(d->hbox);
     d->hbox->setStretchFactor(space, 10);
     d->minSimilarity        = new DIntNumInput(d->hbox);
+    if (settings)
+    {
+        d->minSimilarity->setRange(settings->getMinimumSimilarityBound(), 100,1);
+    }
+    else
+    {
+        d->minSimilarity->setRange(40, 100,1);
+    }
     d->minSimilarity->setDefaultValue(90);
-    d->minSimilarity->setRange(0, 100, 1);
     new QLabel(QLatin1String("-"), d->hbox);
     // Create the maximum similarity and set the minimum value to the current value of minSimilarity
     d->maxSimilarity        = new DIntNumInput(d->hbox);

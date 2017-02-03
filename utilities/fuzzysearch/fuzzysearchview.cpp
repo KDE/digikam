@@ -125,7 +125,8 @@ public:
         imageSAlbum(0),
         sketchSAlbum(0),
         searchModel(0),
-        searchModificationHelper(0)
+        searchModificationHelper(0),
+        settings(0)
     {
     }
 
@@ -191,6 +192,8 @@ public:
 
     SearchModel*              searchModel;
     SearchModificationHelper* searchModificationHelper;
+
+    ApplicationSettings*      settings;
 };
 
 const QString FuzzySearchView::Private::configTabEntry(QLatin1String("FuzzySearch Tab"));
@@ -211,6 +214,8 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
       StateSavingObject(this),
       d(new Private)
 {
+    d->settings = ApplicationSettings::instance();
+
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     d->thumbLoadThread          = ThumbnailLoadThread::defaultThread();
@@ -300,7 +305,14 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     QLabel* const resultsLabel = new QLabel(i18n("Similarity range:"));
     d->levelImage              = new QSpinBox();
     d->levelImage->setSuffix(QLatin1String("%"));
-    d->levelImage->setRange(1, 100);
+    if (d->settings)
+    {
+        d->levelImage->setRange(d->settings->getMinimumSimilarityBound(), 100);
+    }
+    else
+    {
+        d->levelImage->setRange(40, 100);
+    }
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
     d->levelImage->setWhatsThis(i18n("Select here the approximate threshold "
@@ -474,6 +486,9 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
 void FuzzySearchView::setupConnections()
 {
+    connect(d->settings, SIGNAL(setupChanged()),
+            this, SLOT(slotApplicationSettingsChanged()));
+
     connect(d->tabWidget, SIGNAL(currentChanged(int)),
             this, SLOT(slotTabChanged(int)));
 
@@ -751,6 +766,11 @@ void FuzzySearchView::slotAlbumSelected(Album* album)
             d->sketchWidget->setSketchImageFromXML(reader);
         }
     }
+}
+
+void FuzzySearchView::slotApplicationSettingsChanged()
+{
+    d->levelImage->setRange(d->settings->getMinimumSimilarityBound(),100);
 }
 
 // Sketch Searches methods -----------------------------------------------------------------------

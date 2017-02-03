@@ -277,6 +277,7 @@ void ApplicationSettings::readSettings()
 
     group                    = config->group(d->configGroupDuplicatesSearch);
 
+    d->minimumSimilarityBound            = group.readEntry(d->configMinimumSimilarityBound,                 40);
     d->duplicatesSearchLastMinSimilarity = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,      90);
     d->duplicatesSearchLastMaxSimilarity = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,      100);
 
@@ -437,6 +438,7 @@ void ApplicationSettings::saveSettings()
 
     group = config->group(d->configGroupDuplicatesSearch);
 
+    group.writeEntry(d->configMinimumSimilarityBound,                  d->minimumSimilarityBound);
     group.writeEntry(d->configDuplicatesSearchLastMinSimilarity,       d->duplicatesSearchLastMinSimilarity);
     group.writeEntry(d->configDuplicatesSearchLastMaxSimilarity,       d->duplicatesSearchLastMaxSimilarity);
 

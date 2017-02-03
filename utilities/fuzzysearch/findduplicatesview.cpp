@@ -73,6 +73,7 @@ public:
         minSimilarity           = 0;
         maxSimilarity           = 0;
         albumSelectors          = 0;
+        settings                = 0;
     }
 
     QLabel*                      includeAlbumsLabel;
@@ -90,12 +91,16 @@ public:
     ProgressItem*                progressItem;
 
     AlbumSelectors*              albumSelectors;
+
+    ApplicationSettings*         settings;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     : QWidget(parent), d(new Private)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+
+    d->settings = ApplicationSettings::instance();
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
@@ -119,7 +124,14 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     // ---------------------------------------------------------------
 
     d->minSimilarity = new QSpinBox();
-    d->minSimilarity->setRange(0, 100);
+    if (d->settings)
+    {
+        d->minSimilarity->setRange(d->settings->getMinimumSimilarityBound(), 100);
+    }
+    else
+    {
+        d->minSimilarity->setRange(40, 100);
+    }
     d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
     d->minSimilarity->setSingleStep(1);
     d->minSimilarity->setSuffix(QLatin1String("%"));
@@ -185,6 +197,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<qlonglong>)),
             this,SLOT(slotUpdateDuplicates(QList<qlonglong>)));
+
+    connect(d->settings, SIGNAL(setupChanged()),
+            this, SLOT(slotApplicationSettingsChanged()));
 }
 
 FindDuplicatesView::~FindDuplicatesView()
@@ -349,6 +364,11 @@ void FindDuplicatesView::slotMinimumChanged(int newValue)
     {
         d->maxSimilarity->setValue(d->minSimilarity->value());
     }
+}
+
+void FindDuplicatesView::slotApplicationSettingsChanged()
+{
+    d->minSimilarity->setRange(d->settings->getMinimumSimilarityBound(),100);
 }
 
 void FindDuplicatesView::slotComplete()
