@@ -106,6 +106,8 @@ private Q_SLOTS:
     void slotMaxLevelImageChanged(int);
     void slotTimerImageDone();
 
+    void slotApplicationSettingsChanged();
+
 private:
 
     void setCurrentImage(qlonglong imageid);

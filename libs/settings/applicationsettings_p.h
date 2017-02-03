@@ -136,6 +136,7 @@ public:
     static const QString                      configFaceDetectionAccuracyEntry;
     static const QString                      configApplicationStyleEntry;
     static const QString                      configIconThemeEntry;
+    static const QString                      configMinimumSimilarityBound;
     static const QString                      configDuplicatesSearchLastMinSimilarity;
     static const QString                      configDuplicatesSearchLastMaxSimilarity;
 
@@ -266,6 +267,7 @@ public:
     QString                                   applicationStyle;
     QString                                   iconTheme;
 
+    int                                       minimumSimilarityBound;
     int                                       duplicatesSearchLastMinSimilarity;
     int                                       duplicatesSearchLastMaxSimilarity;
 

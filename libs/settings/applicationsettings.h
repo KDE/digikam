@@ -422,6 +422,9 @@ public:
     void setRatingFilterCond(int val);
     int  getRatingFilterCond() const;
 
+    void setMinimumSimilarityBound(int val);
+    int  getMinimumSimilarityBound() const;
+
     void setDuplicatesSearchLastMinSimilarity(int val);
     int  getDuplicatesSearchLastMinSimilarity() const;
 

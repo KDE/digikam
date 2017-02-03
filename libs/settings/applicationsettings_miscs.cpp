@@ -218,6 +218,16 @@ bool ApplicationSettings::getScanAtStart() const
     return d->scanAtStart;
 }
 
+void ApplicationSettings::setMinimumSimilarityBound(int val)
+{
+    d->minimumSimilarityBound = val;
+}
+
+int  ApplicationSettings::getMinimumSimilarityBound() const
+{
+    return d->minimumSimilarityBound;
+}
+
 void ApplicationSettings::setDuplicatesSearchLastMinSimilarity(int val)
 {
     d->duplicatesSearchLastMinSimilarity = val;
