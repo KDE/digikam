@@ -637,14 +637,14 @@ void FuzzySearchView::doLoadState()
 void FuzzySearchView::doSaveState()
 {
     KConfigGroup group = getConfigGroup();
-    group.writeEntry(entryName(d->configTabEntry),                 d->tabWidget->currentIndex());
-    group.writeEntry(entryName(d->configPenSketchSizeEntry),       d->penSize->value());
-    group.writeEntry(entryName(d->configResultSketchItemsEntry),   d->resultsSketch->value());
-    group.writeEntry(entryName(d->configPenSketchHueEntry),        d->hsSelector->hue());
-    group.writeEntry(entryName(d->configPenSketchSaturationEntry), d->hsSelector->saturation());
-    group.writeEntry(entryName(d->configPenSkethValueEntry),       d->vSelector->value());
-    group.writeEntry(entryName(d->configSimilarsThresholdEntry),   d->levelImage->value());
-    group.writeEntry(entryName(d->configSimilarsMaxThresholdEntry),d->maxLevelImage->value());
+    group.writeEntry(entryName(d->configTabEntry),                  d->tabWidget->currentIndex());
+    group.writeEntry(entryName(d->configPenSketchSizeEntry),        d->penSize->value());
+    group.writeEntry(entryName(d->configResultSketchItemsEntry),    d->resultsSketch->value());
+    group.writeEntry(entryName(d->configPenSketchHueEntry),         d->hsSelector->hue());
+    group.writeEntry(entryName(d->configPenSketchSaturationEntry),  d->hsSelector->saturation());
+    group.writeEntry(entryName(d->configPenSkethValueEntry),        d->vSelector->value());
+    group.writeEntry(entryName(d->configSimilarsThresholdEntry),    d->levelImage->value());
+    group.writeEntry(entryName(d->configSimilarsMaxThresholdEntry), d->maxLevelImage->value());
     d->searchTreeView->saveState();
     group.sync();
 }
@@ -916,8 +916,9 @@ void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
             if (urls.first().isLocalFile())
             {
                 HaarIface haarIface;
-                QString path = urls.first().toLocalFile();
+                QString path       = urls.first().toLocalFile();
                 const QImage image = haarIface.loadQImage(path);
+
                 if (!image.isNull())
                 {
                     e->acceptProposedAction();
@@ -961,19 +962,22 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
             if (urls.first().isLocalFile())
             {
                 HaarIface haarIface;
-                QString path = urls.first().toLocalFile();
+                QString path       = urls.first().toLocalFile();
                 const QImage image = haarIface.loadQImage(path);
+
                 if (!image.isNull())
                 {
                     // Set a temporary image id
                     d->imageInfo = ImageInfo(-1);
-                    d->imageUrl = urls.first();
+                    d->imageUrl  = urls.first();
 
                     d->imageWidget->setPixmap(QPixmap::fromImage(image).scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 
                     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
                     QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
-                    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path, d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, true);
+                    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path,
+                                                                                               d->levelImage->value() / 100.0,
+                                                                                               d->maxLevelImage->value() / 100.0, true);
                     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
                     d->labelFile->setAdjustedText(urls.first().fileName());
                     d->labelFolder->setAdjustedText(urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
@@ -1034,13 +1038,14 @@ void FuzzySearchView::slotLevelImageChanged(int newValue)
 
 void FuzzySearchView::slotTimerImageDone()
 {
-    if (d->imageInfo.isNull() && d->imageInfo.id() == -1 && !d->imageUrl.isEmpty()){
+    if (d->imageInfo.isNull() && d->imageInfo.id() == -1 && !d->imageUrl.isEmpty())
+    {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
         QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
-        d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle,
-                                                                                   d->imageUrl.toLocalFile(),
-                                                                                   d->levelImage->value() / 100.0,
-                                                                                   d->maxLevelImage->value() / 100.0, true);
+        d->imageSAlbum    = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle,
+                                                                                      d->imageUrl.toLocalFile(),
+                                                                                      d->levelImage->value() / 100.0,
+                                                                                      d->maxLevelImage->value() / 100.0, true);
         d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
         return;
     }
@@ -1059,7 +1064,7 @@ void FuzzySearchView::setCurrentImage(qlonglong imageid)
 void FuzzySearchView::setCurrentImage(const ImageInfo& info)
 {
     d->imageInfo = info;
-    d->imageUrl = info.fileUrl();
+    d->imageUrl  = info.fileUrl();
     d->labelFile->setAdjustedText(d->imageInfo.name());
     d->labelFolder->setAdjustedText(d->imageInfo.fileUrl().adjusted(QUrl::RemoveFilename).toLocalFile());
     d->thumbLoadThread->find(d->imageInfo.thumbnailIdentifier());
@@ -1076,13 +1081,17 @@ void FuzzySearchView::setImageInfo(const ImageInfo& info)
 void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
 {
     if (!d->imageInfo.isNull() && QUrl::fromLocalFile(desc.filePath) == d->imageInfo.fileUrl())
+    {
         d->imageWidget->setPixmap(pix.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
 }
 
 void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
-    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo, d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, force);
+    d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo,
+                                                                             d->levelImage->value() / 100.0,
+                                                                             d->maxLevelImage->value() / 100.0, force);
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
 }
 
