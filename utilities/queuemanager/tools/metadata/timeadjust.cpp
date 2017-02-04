@@ -46,7 +46,6 @@ extern "C"
 #include "dwidgetutils.h"
 #include "dmetadata.h"
 #include "timeadjustsettings.h"
-#include "digikam_debug.h"
 
 namespace Digikam
 {

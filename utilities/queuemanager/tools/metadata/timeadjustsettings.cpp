@@ -396,7 +396,7 @@ TimeAdjustContainer TimeAdjustSettings::settings() const
     return settings;
 }
 
-void TimeAdjustSettings::detAdjustmentByClockPhotoUrl(QUrl url)
+void TimeAdjustSettings::detAdjustmentByClockPhotoUrl(const QUrl& url)
 {
     /* When user press the clock photo button, a dialog is displayed and set the
     *  results to the proper widgets.
@@ -478,7 +478,7 @@ void TimeAdjustSettings::slotAdjustmentTypeChanged()
     emit signalSettingsChanged();
 }
 
-void TimeAdjustSettings::slotDetAdjustmentByClockPhotoUrl(QUrl url)
+void TimeAdjustSettings::slotDetAdjustmentByClockPhotoUrl(const QUrl& url)
 {
     //usually called when a photo is dropped onto the push button
     detAdjustmentByClockPhotoUrl(url);
