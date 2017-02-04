@@ -294,7 +294,7 @@ qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
     QString fileName = url.fileName();
     // Get the album path, i.e. collection + album. For this,
     // get the n leftmost characters where n is the complete path without the size of the filename
-    QString completePath = url.path();
+    QString completePath = url.toLocalFile();
     QString albumPath    = CollectionManager::instance()->album(completePath);
 
     qlonglong imageId = -1;
