@@ -916,7 +916,7 @@ void FuzzySearchView::dragEnterEvent(QDragEnterEvent* e)
             if (urls.first().isLocalFile())
             {
                 HaarIface haarIface;
-                QString path = urls.first().path();
+                QString path = urls.first().toLocalFile();
                 const QImage image = haarIface.loadQImage(path);
                 if (!image.isNull())
                 {
@@ -961,7 +961,7 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
             if (urls.first().isLocalFile())
             {
                 HaarIface haarIface;
-                QString path = urls.first().path();
+                QString path = urls.first().toLocalFile();
                 const QImage image = haarIface.loadQImage(path);
                 if (!image.isNull())
                 {
@@ -1037,7 +1037,10 @@ void FuzzySearchView::slotTimerImageDone()
     if (d->imageInfo.isNull() && d->imageInfo.id() == -1 && !d->imageUrl.isEmpty()){
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
         QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
-        d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, d->imageUrl.path(), d->levelImage->value() / 100.0, d->maxLevelImage->value() / 100.0, true);
+        d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle,
+                                                                                   d->imageUrl.toLocalFile(),
+                                                                                   d->levelImage->value() / 100.0,
+                                                                                   d->maxLevelImage->value() / 100.0, true);
         d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
         return;
     }
