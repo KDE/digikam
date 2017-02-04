@@ -239,6 +239,11 @@ public:
     bool isVisible() const;
 
     /**
+     * Returns true if the corresponding file was not deleted.
+     */
+    bool isRemoved() const;
+
+    /**
      * Returns the orientation of the image,
      * (MetaEngine::ImageOrientation, EXIF standard)
      */

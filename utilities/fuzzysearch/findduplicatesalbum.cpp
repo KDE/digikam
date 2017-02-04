@@ -105,6 +105,24 @@ void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, co
     }
 }
 
+void FindDuplicatesAlbum::updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild, const QList<qlonglong>& deletedImages)
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
+
+        if (sAlbumsToRebuild.contains(item->album()))
+        {
+            item->calculateInfos(deletedImages);
+            //item->setHidden(item->itemCount() < 2);
+        }
+
+        ++it;
+    }
+}
+
 void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
 {
     FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));

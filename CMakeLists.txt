@@ -19,9 +19,6 @@ set(DIGIKAM_MAJOR_VERSION "5")
 set(DIGIKAM_MINOR_VERSION "5")
 set(DIGIKAM_PATCH_VERSION "0")
 
-#digiKam release date
-set(DIGIKAM_RELEASE_DATE "2016-02-12")
-
 # Suffix to add at end of version string. Usual values are:
 # "-git"   : alpha code unstable from git. Do not use in production
 # "-beta1" : beta1 release.
@@ -581,10 +578,6 @@ if(DIGIKAM_CAN_BE_COMPILED)
 
     if(BUILD_TESTING)
         add_subdirectory(tests)
-    endif()
-
-    if(NOT WIN32)
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cmake/templates/digikam.lsm.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/digikam.lsm)
     endif()
 
 endif()

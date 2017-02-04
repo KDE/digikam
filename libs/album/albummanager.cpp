@@ -3505,8 +3505,7 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
 
-    QSet<qlonglong> imagesToRescan;
-    QSet<SAlbum*> sAlbumsToDelete;
+    QSet<SAlbum*> sAlbumsToUpdate;
     QSet<qlonglong> deletedImages = imageIds.toSet();
 
     QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
@@ -3534,31 +3533,21 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
         if (images.intersect(deletedImages).isEmpty())
 #endif
         {
-            sAlbumsToDelete.insert(sAlbum);
-            imagesToRescan.unite(images);
+            sAlbumsToUpdate.insert(sAlbum);
         }
     }
 
-    // Remove the deleted images from the set of images for rescan.
-    imagesToRescan.subtract(deletedImages);
-
-    if (!imagesToRescan.empty())
+    if (!sAlbumsToUpdate.isEmpty())
     {
-        // Delete albums
-        foreach (SAlbum* const sAlbum, sAlbumsToDelete)
-        {
-            deleteSAlbum(sAlbum);
-        }
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Rescanning " << imagesToRescan.size() << " images for duplicates.";
-        emit signalUpdateDuplicatesAlbums(imagesToRescan.toList());
+        emit signalUpdateDuplicatesAlbums(sAlbumsToUpdate.toList(), deletedImages.toList());
     }
 
+    // For now, do not delete the similarities here. We will take care of this in garbage collection.
     // Delete all similarity properties to the deleted images:
-    foreach(qlonglong imageid, deletedImages)
-    {
-        CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageid));
-    }
+    //foreach(qlonglong imageid, deletedImages)
+    //{
+    //    CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageid));
+    //}
 }
 
 void AlbumManager::removeWatchedPAlbums(const PAlbum* const album)

@@ -58,6 +58,16 @@ public:
 
     bool hasValidThumbnail() const;
 
+    /**
+     * Calculates the duplicates count and average similarity.
+     **/
+    void calculateInfos(const QList<qlonglong>& deletedImages = QList<qlonglong>());
+
+    /**
+     * Returns the item count.
+     **/
+    int itemCount() const;
+
     SAlbum* album()  const;
     QUrl    refUrl() const;
 

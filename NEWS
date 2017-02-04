@@ -1,5 +1,5 @@
 *****************************************************************************************************
-digiKam 5.5.0 - Release date: 2017-02-12
+digiKam 5.5.0 - Release date: 2017-03-12
 
 NEW FEATURES:
 Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
@@ -54,4 +54,5 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 375770 - Creating tag from left panel causes error.
 042 ==> 375591 - Digikam crash.
 043 ==> 375700 - Digikam freezes for a long time (I/O wait) if similarity range is set too low 
-044 ==>
+044 ==> 375573 - Don't reset/destroy context after deleting one image among a set of duplicates
+045 ==>
