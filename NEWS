@@ -55,4 +55,5 @@ BUGFIXES FROM BUGZILLA:
 042 ==> 375591 - Digikam crash.
 043 ==> 375700 - Digikam freezes for a long time (I/O wait) if similarity range is set too low 
 044 ==> 375573 - Don't reset/destroy context after deleting one image among a set of duplicates
-045 ==>
+045 ==> 374368 - Unchecking "Show splash screen at startup" causes no window to display at launch.
+046 ==> 
