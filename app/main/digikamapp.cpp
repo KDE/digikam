@@ -180,6 +180,11 @@ DigikamApp::DigikamApp()
         d->splashScreen = new DSplashScreen();
         d->splashScreen->show();
     }
+    else
+    {
+        // Windows need here QCoreApplication::processEvents().
+        qApp->processEvents();
+    }
 
     if (d->splashScreen)
     {
