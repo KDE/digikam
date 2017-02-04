@@ -152,11 +152,11 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->minimumSimilarityBound->setRange(1, 100);
     d->minimumSimilarityBound->setSingleStep(1);
     d->minimumSimilarityBound->setValue(40);
-    d->minimumSimilarityBound->setToolTip(i18n("Select here the lower bound of   "
+    d->minimumSimilarityBound->setToolTip(i18n("Select here the lower bound of "
                                                "the minimum similarity threshold "
                                                "for fuzzy and duplicates searches. "
                                                "The default value is 40. Selecting "
-                                               "a lower value than 40 can make the search <b>really</b> slow"));
+                                               "a lower value than 40 can make the search <b>really</b> slow."));
     d->minSimilarityBoundLabel->setBuddy(d->minimumSimilarityBound);
 
     DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
