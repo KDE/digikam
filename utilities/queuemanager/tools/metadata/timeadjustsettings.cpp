@@ -142,6 +142,8 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     QVBoxLayout* const vlay = new QVBoxLayout(panel);
     vlay->addWidget(d->settingsExpander);
 
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     // -- Settings View Used Timestamps ---------------------------------------------------------
 
     d->useSettingsBox              = new QWidget(d->settingsExpander);
@@ -181,10 +183,6 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->useCustomDateTodayBtn->setIcon(QIcon::fromTheme(QLatin1String("go-jump-today")));
     d->useCustomDateTodayBtn->setToolTip(i18n("Reset to current date"));
 
-    useGBLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    useGBLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    useGBLayout->setColumnStretch(1, 1);
-    useGBLayout->setColumnStretch(2, 1);
     useGBLayout->addWidget(d->useApplDateBtn,         0, 0, 1, 1);
     useGBLayout->addWidget(d->useApplDateLbl,         0, 1, 1, 1);
     useGBLayout->addWidget(d->useFileDateBtn,         1, 0, 1, 1);
@@ -195,6 +193,10 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     useGBLayout->addWidget(d->useCustDateInput,       3, 1, 1, 1);
     useGBLayout->addWidget(d->useCustTimeInput,       3, 2, 1, 1);
     useGBLayout->addWidget(d->useCustomDateTodayBtn,  3, 3, 1, 1);
+    useGBLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    useGBLayout->setSpacing(spacing);
+    useGBLayout->setColumnStretch(1, 1);
+    useGBLayout->setColumnStretch(2, 1);
 
     d->useButtonGroup->addButton(d->useApplDateBtn,   0);
     d->useButtonGroup->addButton(d->useFileDateBtn,   1);
@@ -219,17 +221,17 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->adjTimeInput->setDisplayFormat(QLatin1String("hh:mm:ss"));
     d->adjDetByClockPhotoBtn    = new DetByClockPhotoButton(i18n("Determine difference from clock photo"));
     d->adjDetByClockPhotoBtn->setToolTip(i18n("Either click or drag'n drop a photo on the button to choose a clock photo"));
-    
-    adjustGBLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    adjustGBLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    adjustGBLayout->setColumnStretch(0, 1);
-    adjustGBLayout->setColumnStretch(1, 1);
-    adjustGBLayout->setColumnStretch(3, 1);
+
     adjustGBLayout->addWidget(d->adjTypeChooser,        0, 0, 1, 1);
     adjustGBLayout->addWidget(d->adjDaysInput,          0, 1, 1, 1);
     adjustGBLayout->addWidget(d->adjDaysLabel,          0, 2, 1, 1);
     adjustGBLayout->addWidget(d->adjTimeInput,          0, 3, 1, 1);
     adjustGBLayout->addWidget(d->adjDetByClockPhotoBtn, 1, 0, 1, 4);
+    adjustGBLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    adjustGBLayout->setSpacing(spacing);
+    adjustGBLayout->setColumnStretch(0, 1);
+    adjustGBLayout->setColumnStretch(1, 1);
+    adjustGBLayout->setColumnStretch(3, 1);
 
     // -- Settings View Updated Timestamps -------------------------------------------------------
 
@@ -244,10 +246,6 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->updIPTCDateCheck         = new QCheckBox(i18n("IPTC: created"),      d->updateSettingsBox);
     d->updXMPDateCheck          = new QCheckBox(i18n("XMP"),                d->updateSettingsBox);
 
-    updateGBLayout->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    updateGBLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    updateGBLayout->setColumnStretch(0, 1);
-    updateGBLayout->setColumnStretch(1, 1);
     updateGBLayout->addWidget(d->updEXIFModDateCheck, 0, 1, 1, 1);
     updateGBLayout->addWidget(d->updEXIFOriDateCheck, 1, 0, 1, 1);
     updateGBLayout->addWidget(d->updEXIFDigDateCheck, 1, 1, 1, 1);
@@ -255,6 +253,10 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     updateGBLayout->addWidget(d->updXMPDateCheck,     2, 1, 1, 1);
     updateGBLayout->addWidget(d->updIPTCDateCheck,    3, 0, 1, 1);
     updateGBLayout->addWidget(d->updFileModDateCheck, 3, 1, 1, 1);
+    updateGBLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    updateGBLayout->setSpacing(spacing);
+    updateGBLayout->setColumnStretch(0, 1);
+    updateGBLayout->setColumnStretch(1, 1);
 
     if (!DMetadata::supportXmp())
     {
