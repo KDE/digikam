@@ -653,7 +653,7 @@ Q_SIGNALS:
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
     void signalTagPropertiesChanged(TAlbum* album);
     void signalAlbumsUpdated(int type);
-    void signalUpdateDuplicatesAlbums(QList<qlonglong> imagesToRescan);
+    void signalUpdateDuplicatesAlbums(const QList<SAlbum*>& modifiedAlbums, const QList<qlonglong>& deletedImages);
     // Signals a change in this property. Please note that affected albums may appear or disappear after this signal has been emitted.
     void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
 

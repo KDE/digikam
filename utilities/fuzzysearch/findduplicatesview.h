@@ -64,7 +64,7 @@ private Q_SLOTS:
     void slotSearchUpdated(SAlbum* a);
     void slotClear();
     void slotFindDuplicates();
-    void slotUpdateDuplicates(const QList<qlonglong> imagesToRescan);
+    void slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild,const QList<qlonglong>& deletedImages);
     void slotDuplicatesAlbumActived();
     void slotComplete();
     void slotUpdateFingerPrints();

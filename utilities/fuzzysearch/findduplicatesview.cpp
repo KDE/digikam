@@ -195,8 +195,8 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     connect(d->minSimilarity, SIGNAL(valueChanged(int)),this,SLOT(slotMinimumChanged(int)));
 
-    connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<qlonglong>)),
-            this,SLOT(slotUpdateDuplicates(QList<qlonglong>)));
+    connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<SAlbum*>, QList<qlonglong>)),
+            this,SLOT(slotUpdateDuplicates(QList<SAlbum*>,QList<qlonglong>)));
 
     connect(d->settings, SIGNAL(setupChanged()),
             this, SLOT(slotApplicationSettingsChanged()));
@@ -340,18 +340,9 @@ void FindDuplicatesView::slotFindDuplicates()
     finder->start();
 }
 
-void FindDuplicatesView::slotUpdateDuplicates(const QList<qlonglong> imagesToRescan)
+void FindDuplicatesView::slotUpdateDuplicates(const QList<SAlbum*>& sAlbumsToRebuild, const QList<qlonglong>& deletedImages)
 {
-    d->albumSelectors->saveState();
-    slotClear();
-    enableControlWidgets(false);
-
-    DuplicatesFinder* const finder = new DuplicatesFinder(imagesToRescan, d->minSimilarity->value(), d->maxSimilarity->value());
-
-    connect(finder, SIGNAL(signalComplete()),
-            this, SLOT(slotComplete()));
-
-    finder->start();
+    d->listView->updateDuplicatesAlbumItems(sAlbumsToRebuild, deletedImages);
 }
 
 void FindDuplicatesView::slotMinimumChanged(int newValue)
