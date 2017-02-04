@@ -836,7 +836,7 @@ bool ImageInfo::isRemoved() const
 
     if (!value.isEmpty())
     {
-        return value.first().toInt() == DatabaseItem::Removed;
+        return (value.first().toInt() == DatabaseItem::Trashed) || (value.first().toInt() == DatabaseItem::Obsolete);
     }
 
     return false;

@@ -74,8 +74,6 @@ protected:
 
 private:
 
-    void analyseDatabases();
-
     class Private;
     Private* const d;
 };

@@ -121,142 +121,6 @@ void DatabaseTask::computeDatabaseJunk(bool thumbsDb, bool facesDb)
     d->scanRecognitionDb      = facesDb;
 }
 
-void DatabaseTask::analyseDatabases()
-{
-    CoreDbAccess coreDbAccess;
-
-    // Get the count of image entries in DB to delete.
-
-    d->imageIds = coreDbAccess.db()->getImageIds(DatabaseItem::Status::Obsolete);
-
-    if (d->imageIds.size() > 0)
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->imageIds.size() << " obsolete image entries.";
-    }
-    else
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Core DB is clean.";
-    }
-
-    // Get the stale thumbnail paths.
-
-    if (d->scanThumbsDb && ThumbsDbAccess::isInitialized())
-    {
-        // Thumbnails should be deleted, if the following conditions hold:
-        // 1) The file path to which the thumb is assigned does not lead to an item
-        // 2) The unique hash and file size are not used in core db for an item.
-        // 3) The custom identifier does not exist in core db for an item.
-        // OR
-        // The thumbnail is stale, i.e. no thumbs db table references it.
-
-        ThumbsDbAccess thumbsDbAccess;
-        QSet<int> thumbIds     = thumbsDbAccess.db()->findAll().toSet();
-
-        // Get all items, i.e. images, videos, ...
-        QList<qlonglong> items = coreDbAccess.db()->getAllItems();
-
-        FaceTagsEditor editor;
-
-        foreach(qlonglong item, items)
-        {
-            ImageInfo info(item);
-
-            if (!info.isNull())
-            {
-                QString hash       = coreDbAccess.db()->getImagesFields(item,DatabaseFields::ImagesField::UniqueHash).first().toString();
-                qlonglong fileSize = info.fileSize();
-                bool removed       = false;
-
-                // Remove the id that is found by the file path. Finding the id -1 does no harm
-                removed            = thumbIds.remove(thumbsDbAccess.db()->findByFilePath(info.filePath()).id);
-
-                if (!removed)
-                {
-                    // Remove the id that is found by the hash and file size. Finding the id -1 does no harm
-                    thumbIds.remove(thumbsDbAccess.db()->findByHash(hash,fileSize).id);
-                }
-
-                // Add the custom identifier.
-                // get all faces for the image and generate the custom identifiers
-                QUrl url;
-                url.setScheme(QLatin1String("detail"));
-                url.setPath(info.filePath());
-                QList<FaceTagsIface> faces = editor.databaseFaces(item);
-
-                foreach(FaceTagsIface face, faces)
-                {
-                    QRect rect = face.region().toRect();
-
-                    QString r  = QString::fromLatin1("%1,%2-%3x%4").arg(rect.x()).arg(rect.y()).arg(rect.width()).arg(rect.height());
-                    QUrlQuery q(url);
-
-                    // Remove the previous query if existent.
-                    q.removeQueryItem(QLatin1String("rect"));
-                    q.addQueryItem(QLatin1String("rect"), r);
-                    url.setQuery(q);
-
-                    //qCDebug(DIGIKAM_GENERAL_LOG) << "URL: " << url.toString(); 
-
-                    // Remove the id that is found by the custom identifyer. Finding the id -1 does no harm
-                    thumbIds.remove(thumbsDbAccess.db()->findByCustomIdentifier(url.toString()).id);
-                }
-            }
-        }
-
-        // The remaining thumbnail ids should be used to remove them since they are stale.
-        d->thumbIds = thumbIds.toList();
-
-        if (d->thumbIds.size() > 0)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->thumbIds.size() << " stale thumbnails.";
-        }
-        else
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Thumbnail DB is clean.";
-        }
-    }
-
-    // Get the stale face identities.
-
-    if (d->scanRecognitionDb)
-    {
-        QList<TagProperty> properties = coreDbAccess.db()->getTagProperties(TagPropertyName::faceEngineUuid());
-        QSet<QString> uuidSet;
-
-        foreach(TagProperty prop, properties)
-        {
-            uuidSet << prop.value;
-        }
-
-        FacesEngine::RecognitionDatabase rDatabase;
-
-        QList<FacesEngine::Identity> identities = rDatabase.allIdentities();
-
-        // Get all identitites to remove. Don't remove now in order to make sure no side effects occur.
-
-        foreach(FacesEngine::Identity identity, identities)
-        {
-            QString value = identity.attribute(QLatin1String("uuid"));
-
-            if (!value.isEmpty() && !uuidSet.contains(value))
-            {
-                d->identities << identity;
-            }
-        }
-
-        if (d->identities.count() > 0)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->identities.size() << " stale face identities.";
-        }
-        else
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Faces DB is clean.";
-        }
-    }
-
-    emit signalData(d->imageIds,d->thumbIds,d->identities);
-}
-
 void DatabaseTask::slotCancel()
 {
     d->cancel = true;
@@ -373,9 +237,13 @@ void DatabaseTask::run()
     }
     else if (!d->imageIds.isEmpty())
     {
+        CoreDbAccess access;
+
         foreach(qlonglong imageId, d->imageIds)
         {
-            CoreDbAccess().db()->deleteItem(imageId);
+            access.db()->deleteItem(imageId);
+            access.db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageId));
+        
             emit signalFinished();
         }
     }
