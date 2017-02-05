@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>digiKam</name>
+  <name xml:lang="ar">دِجي‌كام</name>
   <name xml:lang="ast">digiKam</name>
   <name xml:lang="bs">digiKam</name>
   <name xml:lang="ca">digiKam</name>
@@ -57,6 +58,7 @@
     <p xml:lang="uk">digiKam — програма з розширеними можливостями щодо керування цифровими фотографіями, яка робить імпортування і впорядкування цифрових фотографій зовсім простою справою". Програма впорядковує фотографії за альбомами, які можна розташовувати у вікні програму у хронологічному порядку, за теками або за нетиповими збірками.</p>
     <p xml:lang="x-test">xxdigiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.xx</p>
     <p>Features:</p>
+    <p xml:lang="ar">الميزات:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
     <p xml:lang="ca-valencia">Característiques:</p>
@@ -83,6 +85,7 @@
     <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Organization of photos in albums and sub-albums (with tags and comments support)</li>
+      <li xml:lang="ar">تنظيم الصّور في ألبومات وألبومات فرعيّة (بدعم الوسوم والتّعليقات)</li>
       <li xml:lang="bs">Organizacija fotografija u albume i podalbume (sa podrškom za označavanje i komentarisanje)</li>
       <li xml:lang="ca">Organització de les fotografies en àlbums i subàlbums (amb implementació per a les etiquetes i comentaris)</li>
       <li xml:lang="ca-valencia">Organització de les fotografies en àlbums i subàlbums (amb implementació per a les etiquetes i comentaris)</li>
@@ -127,6 +130,7 @@
       <li xml:lang="uk">підтримка Exif, Iptc, Xmp, Makernotes;</li>
       <li xml:lang="x-test">xxSupport for Exif, Iptc, Xmp, Makernotesxx</li>
       <li>SQLite powered storage for the albums and its metadata</li>
+      <li xml:lang="ar">مخزن تدعم «SQLite» للألبومات وبياناتها الوصفيّة</li>
       <li xml:lang="bs">SQLite skladište za albume i njegove metapodatke</li>
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
       <li xml:lang="ca-valencia">Emmagatzematge amb SQLite pels àlbums i les seues metadades</li>
@@ -149,6 +153,7 @@
       <li xml:lang="uk">сховище даних на основі SQLite для альбомів та метаданих;</li>
       <li xml:lang="x-test">xxSQLite powered storage for the albums and its metadataxx</li>
       <li>Support for filtering and sorting albums</li>
+      <li xml:lang="ar">دعم ترشيح الألبومات وفرزها</li>
       <li xml:lang="bs">Podrška za filtriranje i sortiranje albuma</li>
       <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
       <li xml:lang="ca-valencia">Implementació pel filtratge i classificació dels àlbums</li>
@@ -259,6 +264,7 @@
       <li xml:lang="uk">архітектура на основі додатків, використовуються додатки KIPI;</li>
       <li xml:lang="x-test">xxPlugins architectures: using Kipi-pluginsxx</li>
       <li>Share your photos using HTML or publishing them to social web sites</li>
+      <li xml:lang="ar">مشاركة الصّور عبر HTML أو نشرها إلى مواقع الوبّ الاجتماعيّة</li>
       <li xml:lang="bs">Podijelite vaše fotografije koristeći HTML ili objavljujući ih na socijalne web stranice</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
       <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
@@ -281,6 +287,7 @@
       <li xml:lang="uk">можливість оприлюднення фотографій за допомогою коду HTML або сайтів соціальних мереж;</li>
       <li xml:lang="x-test">xxShare your photos using HTML or publishing them to social web sitesxx</li>
       <li>Image editor included with advanced features</li>
+      <li xml:lang="ar">وجود محرّر صور مضمّن بمزايا متقدّمة</li>
       <li xml:lang="bs">Uvršten uređivač slika sa naprednim svojstvima</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
       <li xml:lang="ca-valencia">Inclou un editor d'imatges amb característiques avançades</li>
@@ -313,6 +320,7 @@
     </screenshot>
   </screenshots>
   <developer_name>digiKam Project</developer_name>
+  <developer_name xml:lang="ar">مشروع «دِجي‌كام»</developer_name>
   <developer_name xml:lang="bs">digiKam Projekt</developer_name>
   <developer_name xml:lang="ca">Projecte digiKam</developer_name>
   <developer_name xml:lang="ca-valencia">Projecte digiKam</developer_name>
