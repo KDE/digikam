@@ -52,8 +52,9 @@ BUGFIXES FROM BUGZILLA:
 039 ==> 291110 - BQM Watermark tool : size original/unchanged/pixels/points.
 040 ==> 375767 - In Editor switching between pictures with left/right key is reversed. Pic 1 of 80 is displayed as 80 of 80.
 041 ==> 375770 - Creating tag from left panel causes error.
-042 ==> 375591 - Digikam crash.
-043 ==> 375700 - Digikam freezes for a long time (I/O wait) if similarity range is set too low 
-044 ==> 375573 - Don't reset/destroy context after deleting one image among a set of duplicates
+042 ==> 375591 - digiKam crash.
+043 ==> 375700 - digiKam freezes for a long time (I/O wait) if similarity range is set too low.
+044 ==> 375573 - Don't reset/destroy context after deleting one image among a set of duplicates.
 045 ==> 374368 - Unchecking "Show splash screen at startup" causes no window to display at launch.
-046 ==> 
+046 ==> 375809 - digiKam froze on opening Settings.
+047 ==> 
