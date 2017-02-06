@@ -293,7 +293,7 @@ Setup::~Setup()
 
 void Setup::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("setupdialog.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 void Setup::setTemplate(const Template& t)

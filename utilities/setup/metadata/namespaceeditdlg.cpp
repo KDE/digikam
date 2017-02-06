@@ -678,7 +678,7 @@ void NamespaceEditDlg::accept()
 
 void NamespaceEditDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("namespacesadd.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 } // namespace Digikam

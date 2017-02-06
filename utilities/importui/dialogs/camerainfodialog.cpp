@@ -99,7 +99,7 @@ CameraInfoDialog::~CameraInfoDialog()
 
 void CameraInfoDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("digitalstillcamera.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

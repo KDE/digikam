@@ -510,7 +510,7 @@ void TagEditDlg::showtagsListCreationError(QWidget* const parent, const QMap<QSt
 
 void TagEditDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("tagscreation.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 // ------------------------------------------------------------------------------

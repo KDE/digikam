@@ -198,7 +198,7 @@ void CameraFolderDialog::slotFolderPathSelectionChanged(CameraFolderItem* item)
 
 void CameraFolderDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("camerainterface.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

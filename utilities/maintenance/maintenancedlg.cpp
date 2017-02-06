@@ -529,7 +529,7 @@ void MaintenanceDlg::slotQualitySetup()
 
 void MaintenanceDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

@@ -2499,7 +2499,7 @@ void DigikamApp::slotEditKeys()
 
 void DigikamApp::slotShowKipiHelp()
 {
-    DXmlGuiWindow::openHandbook( QString(), QLatin1String("kipi-plugins") );
+    DXmlGuiWindow::openHandbook();
 }
 
 void DigikamApp::slotDBStat()
