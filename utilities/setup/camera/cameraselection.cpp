@@ -696,7 +696,7 @@ void CameraSelection::slotSearchTextChanged(const SearchTextSettings& settings)
 
 void CameraSelection::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("cameraselection.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

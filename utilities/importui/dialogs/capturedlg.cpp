@@ -195,7 +195,7 @@ void CaptureDlg::slotPreviewDone(const QImage& preview)
 
 void CaptureDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("camerainterface.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

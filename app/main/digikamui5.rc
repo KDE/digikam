@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="551" name="digikam" translationDomain="digikam" >
+<gui version="552" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -176,6 +176,7 @@
     <Action name="help_donatemoney"/>
     <Action name="help_recipesbook"/>
     <Action name="help_contribute"/>
+    <Action name="help_handbook"/>
   </Menu>
 
   <Merge/>

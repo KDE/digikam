@@ -227,7 +227,6 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     connect(donateMoneyAction, SIGNAL(triggered()), this, SLOT(slotDonateMoney()));
     actionCollection()->addAction(QLatin1String("help_donatemoney"), donateMoneyAction);
 
-
     QAction* const recipesBookAction   = new QAction(QIcon::fromTheme(QLatin1String("folder-html")), i18n("Recipes Book..."), this);
     connect(recipesBookAction, SIGNAL(triggered()), this, SLOT(slotRecipesBook()));
     actionCollection()->addAction(QLatin1String("help_recipesbook"), recipesBookAction);
@@ -235,6 +234,11 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     QAction* const contributeAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-html")), i18n("Contribute..."), this);
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction(QLatin1String("help_contribute"), contributeAction);
+
+    QAction* const helpAction          = new QAction(QIcon::fromTheme(QLatin1String("help-contents")), i18n("Contents..."), this);
+    connect(helpAction, SIGNAL(triggered()), this, SLOT(slotHelpContents()));
+    actionCollection()->addAction(QLatin1String("help_handbook"), helpAction);
+    actionCollection()->setDefaultShortcut(helpAction, Qt::Key_F1);
 
     m_animLogo = new DLogoAction(this);
     actionCollection()->addAction(QLatin1String("logo_action"), m_animLogo);
@@ -256,7 +260,7 @@ void DXmlGuiWindow::cleanupActions()
     ac          = actionCollection()->action(QLatin1String("help_donate"));
     if (ac) actionCollection()->removeAction(ac);
 
-    ac          = actionCollection()->action(QLatin1String("help_about_kde"));
+    ac          = actionCollection()->action(QLatin1String("help_contents"));
     if (ac) actionCollection()->removeAction(ac);
 
 /*
@@ -723,16 +727,15 @@ bool DXmlGuiWindow::thumbbarVisibility() const
     return true;
 }
 
-void DXmlGuiWindow::openHandbook(const QString& anchor, const QString& appname)
+void DXmlGuiWindow::slotHelpContents()
 {
-    QUrl url = QUrl(QString::fromUtf8("help:/%1/index.html").arg(appname));
+    openHandbook();
+}
 
-    if (!anchor.isEmpty())
-    {
-        QUrlQuery query(url);
-        query.addQueryItem(QLatin1String("anchor"), anchor);
-        url.setQuery(query);
-    }
+void DXmlGuiWindow::openHandbook()
+{
+    QUrl url = QUrl(QString::fromUtf8("https://docs.kde.org/trunk5/en/extragear-graphics/%1/index.html")
+               .arg(QApplication::applicationName()));
 
     QDesktopServices::openUrl(url);
 }

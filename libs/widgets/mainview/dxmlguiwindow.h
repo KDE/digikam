@@ -151,7 +151,7 @@ public:
      */
     bool fullScreenIsActive() const;
 
-    static void openHandbook(const QString& anchor = QString(), const QString& appname = QString());
+    static void openHandbook();
     static void restoreWindowSize(QWindow* const win, const KConfigGroup& group);
     static void saveWindowSize(QWindow* const win, KConfigGroup& group);
 
@@ -219,6 +219,7 @@ private Q_SLOTS:
     void slotDonateMoney();
     void slotRecipesBook();
     void slotContribute();
+    void slotHelpContents();
 
     // Slots for common Help Actions
     virtual void slotComponentsInfo()          {};

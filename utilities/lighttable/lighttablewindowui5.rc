@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="550" name="lighttablewindow" translationDomain="digikam" >
+<gui version="551" name="lighttablewindow" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -70,8 +70,9 @@
         <Action name="help_librariesinfo"/>
         <Action name="help_dbstat"/>
         <Separator/>
-        <Action name="help_donatemoney" />
-        <Action name="help_contribute" />
+        <Action name="help_donatemoney"/>
+        <Action name="help_contribute"/>
+        <Action name="help_handbook"/>
     </Menu>
 
     <Merge/>

@@ -132,7 +132,7 @@ FirstRunDlg::~FirstRunDlg()
 
 void FirstRunDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("firstrundialog.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 QString FirstRunDlg::firstAlbumPath() const

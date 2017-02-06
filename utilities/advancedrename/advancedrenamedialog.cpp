@@ -581,7 +581,7 @@ NewNamesList AdvancedRenameDialog::filterNewNames() const
 
 void AdvancedRenameDialog::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("advancedrename.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

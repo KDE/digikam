@@ -195,7 +195,7 @@ void InfoDlg::slotCopy2ClipBoard()
 
 void InfoDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam
