@@ -235,13 +235,9 @@ void DXmlGuiWindow::createHelpActions(bool coreOptions)
     connect(contributeAction, SIGNAL(triggered()), this, SLOT(slotContribute()));
     actionCollection()->addAction(QLatin1String("help_contribute"), contributeAction);
 
-    QAction* const ac = actionCollection()->action(QLatin1String("help_contents"));
-    if (ac) actionCollection()->removeAction(ac);
-
     QAction* const helpAction          = new QAction(QIcon::fromTheme(QLatin1String("help-contents")), i18n("Online Handbook..."), this);
     connect(helpAction, SIGNAL(triggered()), this, SLOT(slotHelpContents()));
     actionCollection()->addAction(QLatin1String("help_handbook"), helpAction);
-    actionCollection()->setDefaultShortcut(helpAction, Qt::Key_F1);
 
     m_animLogo = new DLogoAction(this);
     actionCollection()->addAction(QLatin1String("logo_action"), m_animLogo);
@@ -261,6 +257,9 @@ void DXmlGuiWindow::cleanupActions()
     if (ac) actionCollection()->removeAction(ac);
 
     ac          = actionCollection()->action(QLatin1String("help_donate"));
+    if (ac) actionCollection()->removeAction(ac);
+
+    ac          = actionCollection()->action(QLatin1String("help_contents"));
     if (ac) actionCollection()->removeAction(ac);
 
 /*
