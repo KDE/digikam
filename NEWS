@@ -2,6 +2,7 @@
 digiKam 5.5.0 - Release date: 2017-03-12
 
 NEW FEATURES:
+Database : We introduced garbage collection for databases as maintenance stage. This stage removes stale image, thumbnail and face entries gut does not shrink Databases automatically.
 Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
 Faces    : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
 Faces    : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
