@@ -187,8 +187,8 @@ void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
 void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
 {
     QList<QUrl> urlsToDelete;
-
     CoreDbAccess access;
+
     foreach (const DTrashItemInfo& item, items)
     {
         urlsToDelete << QUrl::fromLocalFile(item.trashPath);
@@ -276,8 +276,8 @@ QUrl IOJobsThread::getAvailableQUrlToRestoreInCollection(const QString& fileColP
     if (version != 0)
     {
         QString dir      = fileInfo.dir().path() + QLatin1Char('/');
-        QString baseName = fileInfo.baseName() + QString::number(version);
-        QString suffix   = QLatin1String(".") + fileInfo.completeSuffix();
+        QString baseName = fileInfo.baseName()   + QString::number(version);
+        QString suffix   = QLatin1String(".")    + fileInfo.completeSuffix();
         fileInfo.setFile(dir + baseName + suffix);
     }
 

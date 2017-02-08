@@ -148,7 +148,8 @@ void CopyJob::run()
             if (!srcFile.rename(destenation))
             {
                 emit error(i18n("Could not move file %1 to album %2",
-                                srcInfo.filePath(), QDir::toNativeSeparators(dstDir.path())));
+                                srcInfo.filePath(),
+                                QDir::toNativeSeparators(dstDir.path())));
             }
         }
     }
@@ -241,15 +242,18 @@ void DeleteJob::run()
                 // for which the file path leads to an image id.
                 QList<qlonglong> imageIds;
                 QDirIterator iter(dir);
+
                 while (iter.hasNext())
                 {
                     // get the next path and advance the iterator
                     QString filePath = iter.next();
                     // Use the file info to get the file type
                     QFileInfo info = iter.fileInfo();
+
                     if (info.isFile())
                     {
                         qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(filePath));
+
                         if (imageId != -1)
                         {
                             imageIds << imageId;
@@ -278,6 +282,7 @@ void DeleteJob::run()
                 // Mark the image info of the removed file as obsolete
                 CoreDbAccess access;
                 qlonglong imageId = getItemFromUrl(QUrl::fromLocalFile(fileInfo.filePath()));
+
                 if (imageId != -1)
                 {
                     access.db()->setItemStatus(imageId, DatabaseItem::Status::Obsolete);
@@ -291,19 +296,21 @@ void DeleteJob::run()
 
 qlonglong DeleteJob::getItemFromUrl(const QUrl& url)
 {
-    QString fileName = url.fileName();
+    QString fileName     = url.fileName();
     // Get the album path, i.e. collection + album. For this,
     // get the n leftmost characters where n is the complete path without the size of the filename
     QString completePath = url.toLocalFile();
     QString albumPath    = CollectionManager::instance()->album(completePath);
 
-    qlonglong imageId = -1;
+    qlonglong imageId    = -1;
     // Get the album and with this the image id of the image to trash.
-    PAlbum* pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
+    PAlbum* const pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
+
     if (pAlbum)
     {
         imageId = CoreDbAccess().db()->getItemFromAlbum(pAlbum->id(),fileName);
     }
+
     return imageId;
 }
 
