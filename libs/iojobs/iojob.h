@@ -93,6 +93,8 @@ private:
 
     qlonglong getItemFromUrl(const QUrl& url);
 
+private:
+
     QUrl m_srcToDelete;
     bool m_useTrash;
     bool m_markAsObsolete;
