@@ -156,7 +156,7 @@ public:
 
     void setMinThreshold(double t);
     double minThreshold() const;
-    
+
     void setMaxThreshold(double t);
     double maxThreshold() const;
 
