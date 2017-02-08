@@ -423,12 +423,7 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
     {
         QUrl oldUrl = info.fileUrl();
 
-        PAlbum* const album = AlbumManager::instance()->findPAlbum(info.albumId());
-
-        if (album)
-        {
-            access.db()->moveItem(info.albumId(),info.name(),dest->id(),info.name());
-        }
+        access.db()->moveItem(info.albumId(),info.name(),dest->id(),info.name());
     }
 
     instance()->d->imagesToAlbum(Move, infos, dest);
