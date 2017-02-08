@@ -218,7 +218,7 @@ void MaintenanceMngr::stage2()
 
     if (d->settings.databaseCleanup)
     {
-        d->databaseCleaner = new DbCleaner(d->settings.cleanThumbDb,d->settings.cleanFacesDb);
+        d->databaseCleaner = new DbCleaner(d->settings.cleanThumbDb,d->settings.cleanFacesDb,d->settings.shrinkDatabases);
         d->databaseCleaner->setNotificationEnabled(false);
         d->databaseCleaner->setUseMultiCoreCPU(d->settings.useMutiCoreCPU);
         d->databaseCleaner->start();

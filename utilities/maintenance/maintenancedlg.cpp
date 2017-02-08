@@ -87,6 +87,7 @@ public:
         useMutiCoreCPU(0),
         cleanThumbsDb(0),
         cleanFacesDb(0),
+        shrinkDatabases(0),
         qualityScanMode(0),
         metadataSetup(0),
         qualitySetup(0),
@@ -122,6 +123,7 @@ public:
     static const QString configCleanupDatabase;
     static const QString configCleanupThumbDatabase;
     static const QString configCleanupFacesDatabase;
+    static const QString configShrinkDatabases;
     static const QString configSyncDirection;
 
     QDialogButtonBox*    buttons;
@@ -132,6 +134,7 @@ public:
     QCheckBox*           useMutiCoreCPU;
     QCheckBox*           cleanThumbsDb;
     QCheckBox*           cleanFacesDb;
+    QCheckBox*           shrinkDatabases;
     QComboBox*           qualityScanMode;
     QPushButton*         metadataSetup;
     QPushButton*         qualitySetup;
@@ -167,6 +170,7 @@ const QString MaintenanceDlg::Private::configSyncDirection(QLatin1String("SyncDi
 const QString MaintenanceDlg::Private::configCleanupDatabase(QLatin1String("CleanupDatabase"));
 const QString MaintenanceDlg::Private::configCleanupThumbDatabase(QLatin1String("CleanupThumbDatabase"));
 const QString MaintenanceDlg::Private::configCleanupFacesDatabase(QLatin1String("CleanupFacesDatabase"));
+const QString MaintenanceDlg::Private::configShrinkDatabases(QLatin1String("ShrinkDatabases"));
 
 MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     : QDialog(parent),
@@ -209,6 +213,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning. .</i></qt>"),d->vbox3);
     d->cleanThumbsDb      = new QCheckBox(i18n("Also clean up the thumbnail database. This may take much time."),d->vbox3);
     d->cleanFacesDb       = new QCheckBox(i18n("Also clean up the faces database. This may take much time."),d->vbox3);
+    d->shrinkDatabases    = new QCheckBox(i18n("Also shrink all databases if possible (SQLite only). This may take much time and will block digiKam until the process is finished."),d->vbox3);
     d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
                                QIcon::fromTheme(QLatin1String("run-build")),
                                i18n("Perform database cleaning"), QLatin1String("DbCleanup"), false);
@@ -391,6 +396,7 @@ MaintenanceSettings MaintenanceDlg::settings() const
     prm.databaseCleanup                     = d->expanderBox->isChecked(Private::DbCleanup);
     prm.cleanThumbDb                        = d->cleanThumbsDb->isChecked();
     prm.cleanFacesDb                        = d->cleanFacesDb->isChecked();
+    prm.shrinkDatabases                     = d->shrinkDatabases->isChecked();
     prm.thumbnails                          = d->expanderBox->isChecked(Private::Thumbnails);
     prm.scanThumbs                          = d->scanThumbs->isChecked();
     prm.fingerPrints                        = d->expanderBox->isChecked(Private::FingerPrints);
@@ -425,6 +431,7 @@ void MaintenanceDlg::readSettings()
     d->expanderBox->setChecked(Private::DbCleanup,          group.readEntry(d->configCleanupDatabase,    prm.databaseCleanup));
     d->cleanThumbsDb->setChecked(group.readEntry(d->configCleanupThumbDatabase,                          prm.cleanThumbDb));
     d->cleanFacesDb->setChecked(group.readEntry(d->configCleanupFacesDatabase,                           prm.cleanFacesDb));
+    d->shrinkDatabases->setChecked(group.readEntry(d->configShrinkDatabases,                             prm.shrinkDatabases));
     d->expanderBox->setChecked(Private::Thumbnails,         group.readEntry(d->configThumbnails,         prm.thumbnails));
     d->scanThumbs->setChecked(group.readEntry(d->configScanThumbs,                                       prm.scanThumbs));
     d->expanderBox->setChecked(Private::FingerPrints,       group.readEntry(d->configFingerPrints,       prm.fingerPrints));
@@ -463,6 +470,7 @@ void MaintenanceDlg::writeSettings()
     group.writeEntry(d->configCleanupDatabase,      prm.databaseCleanup);
     group.writeEntry(d->configCleanupThumbDatabase, prm.cleanThumbDb);
     group.writeEntry(d->configCleanupFacesDatabase, prm.cleanFacesDb);
+    group.writeEntry(d->configShrinkDatabases,      prm.shrinkDatabases);
     group.writeEntry(d->configThumbnails,           prm.thumbnails);
     group.writeEntry(d->configScanThumbs,           prm.scanThumbs);
     group.writeEntry(d->configFingerPrints,         prm.fingerPrints);

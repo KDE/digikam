@@ -64,6 +64,18 @@ public:
     void clearLBPHTraining(const QString& context = QString());
     void clearLBPHTraining(const QList<int>& identities, const QString& context = QString());
 
+    // ----------- Database shrinking methods ----------
+
+    /**
+     * Returns true if the integrity of the database is preserved.
+     */
+    bool integrityCheck();
+
+    /**
+     * Shrinks the database.
+     */
+    void vacuum();
+
 private:
 
     class Private;

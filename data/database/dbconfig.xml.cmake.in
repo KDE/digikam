@@ -875,6 +875,17 @@
                 <!-- Nothing to do for SQLite -->
             </dbaction>
 
+            <!-- statements for shrinking the databases -->
+
+            <dbaction name="vacuum">
+				<!-- vacuum creates a temporary database that replaces the current one on successful vacuuming-->
+                <statement mode="query">VACUUM;</statement>
+            </dbaction>
+
+            <dbaction name="integrityCheck">
+                <statement mode="query">pragma integrity_check;</statement>
+            </dbaction>
+
         </dbactions>
 
     </database>
@@ -2084,6 +2095,41 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">ALTER TABLE CustomIdentifiers
                             ADD CONSTRAINT CustomIdentifiers_Thumbnails FOREIGN KEY (thumbId) REFERENCES Thumbnails (id) ON DELETE CASCADE ON UPDATE CASCADE;
                 </statement>
+            </dbaction>
+
+            <!-- statements for shrinking the databases -->
+
+            <dbaction name="vacuum"> <!-- mode="transaction"> -->
+                <!-- Core DB (part of it) -->
+                <!--<statement mode="plain">OPTIMIZE TABLE Albums;</statement>
+                <statement mode="plain">OPTIMIZE TABLE Images;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageHaarMatrix;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageInformation;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageMetadata;</statement>
+                <statement mode="plain">OPTIMIZE TABLE VideoMetadata;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImagePositions;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageComments;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageCopyright;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageProperties;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageHistory;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageRelations;</statement>
+                <statement mode="plain">OPTIMIZE TABLE Tags;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageTags;</statement>
+                <statement mode="plain">OPTIMIZE TABLE ImageTagProperties;</statement>-->
+                <!-- Thumbs DB (part of it) -->
+                <!--<statement mode="plain">OPTIMIZE TABLE Thumbnails;</statement>
+                <statement mode="plain">OPTIMIZE TABLE UniqueHashes;</statement>
+                <statement mode="plain">OPTIMIZE TABLE FilePaths;</statement>
+                <statement mode="plain">OPTIMIZE TABLE CustomIdentifiers;</statement>-->
+                <!-- Recognition DB (part of it) -->
+                <!--<statement mode="plain">OPTIMIZE TABLE Identities;</statement>
+                <statement mode="plain">OPTIMIZE TABLE IdentityAttributes;</statement>-->
+                OPTIMIZE TABLE Thumbnails;
+            </dbaction>
+
+            <dbaction name="integrityCheck">
+                <!-- Nothing to do for MySQL for now. So return not ok for now. -->
+                SELECT 'ok' AS IntegrityCheck FROM Thumbnails;
             </dbaction>
 
         </dbactions>

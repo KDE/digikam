@@ -99,6 +99,7 @@ public:
     bool                 databaseCleanup;
     bool                 cleanThumbDb;
     bool                 cleanFacesDb;
+    bool                 shrinkDatabases;
 };
 
 //! qDebug() stream operator. Writes property @a s to the debug output in a nicely formatted way.

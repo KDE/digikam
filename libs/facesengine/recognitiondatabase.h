@@ -203,6 +203,16 @@ public:
      */
     void deleteIdentity(const Identity& identityToBeDeleted);
 
+    /**
+     * Checks the integrity and returns true if everything is fine.
+     */
+    bool integrityCheck();
+
+    /**
+     * Shrinks the database.
+     */
+    void vacuum();
+
 public:
 
     // Declared as public to please with CLang compiler, due to use as argument with static methods.

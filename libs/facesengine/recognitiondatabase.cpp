@@ -790,4 +790,28 @@ void RecognitionDatabase::deleteIdentity(const Identity& identityToBeDeleted)
     d->identityCache.remove(identityToBeDeleted.id());
 }
 
+bool RecognitionDatabase::integrityCheck()
+{
+    if (!d || !d->dbAvailable)
+    {
+        return false;
+    }
+
+    QMutexLocker lock(&d->mutex);
+
+    return FaceDbAccess().db()->integrityCheck();
+}
+
+void RecognitionDatabase::vacuum()
+{
+    if (!d || !d->dbAvailable)
+    {
+        return;
+    }
+
+    QMutexLocker lock(&d->mutex);
+
+    return FaceDbAccess().db()->vacuum();
+}
+
 } // namespace FacesEngine

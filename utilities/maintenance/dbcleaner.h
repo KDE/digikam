@@ -47,7 +47,7 @@ class DbCleaner : public MaintenanceTool
 
 public:
 
-    explicit DbCleaner(bool cleanThumbsDb = false, bool cleanFacesDb = false, ProgressItem* const parent = 0);
+    explicit DbCleaner(bool cleanThumbsDb = false, bool cleanFacesDb = false, bool shrinkDatabases = false, ProgressItem* const parent = 0);
     virtual ~DbCleaner();
 
     void setUseMultiCoreCPU(bool b);
@@ -66,6 +66,7 @@ private Q_SLOTS:
     void slotCleanedItems();
     void slotCleanedThumbnails();
     void slotCleanedFaces();
+    void slotShrinkDatabases();
 
 private:
 

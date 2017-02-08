@@ -301,6 +301,27 @@ void MaintenanceThread::cleanFacesDb(const QList<FacesEngine::Identity>& staleId
     }
 }
 
+void MaintenanceThread::shrinkDatabases()
+{
+    ActionJobCollection collection;
+
+    DatabaseTask* const t = new DatabaseTask();
+    t->setShrinkJob();
+
+    connect(t, SIGNAL(signalFinished()),
+            this, SIGNAL(signalAdvance()));
+
+    connect(this, SIGNAL(signalCanceled()),
+            t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+    collection.insert(t, 0);
+
+    if (!collection.isEmpty())
+    {
+        appendJobs(collection);
+    }
+}
+
 void MaintenanceThread::cancel()
 {
     if (isRunning())

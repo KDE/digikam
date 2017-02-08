@@ -47,6 +47,8 @@ public:
         thread(0),
         cleanThumbsDb(false),
         cleanFacesDb(false),
+        shrinkDatabases(false),
+        databasesToVacuum(0),
         threadChunkSize(0)
     {
     }
@@ -54,7 +56,9 @@ public:
     MaintenanceThread*           thread;
     bool                         cleanThumbsDb;
     bool                         cleanFacesDb;
+    bool                         shrinkDatabases;
 
+    int                          databasesToVacuum;
     QList<qlonglong>             imagesToRemove;
     QList<int>                   staleThumbnails;
     QList<FacesEngine::Identity> staleIdentities;
@@ -62,17 +66,23 @@ public:
     int                          threadChunkSize;
 };
 
-DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, ProgressItem* const parent)
+DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DbCleaner"), parent),
       d(new Private)
 {
     // register the identity list as meta type to be able to use it in signal/slot connection
     qRegisterMetaType<QList<FacesEngine::Identity>>("QList<FacesEngine::Identity>");
 
-    d->cleanThumbsDb = cleanThumbsDb;
-    d->cleanFacesDb  = cleanFacesDb;
+    d->cleanThumbsDb   = cleanThumbsDb;
+    d->cleanFacesDb    = cleanFacesDb;
+    d->shrinkDatabases = shrinkDatabases;
 
-    d->thread        = new MaintenanceThread(this);
+    if (d->shrinkDatabases)
+    {
+        d->databasesToVacuum = 1;
+    }
+
+    d->thread          = new MaintenanceThread(this);
 
     connect(d->thread, SIGNAL(signalAdvance()),
             this, SLOT(slotAdvance()));
@@ -118,11 +128,23 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
     if (d->imagesToRemove.isEmpty() && d->staleThumbnails.isEmpty() && d->staleIdentities.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Nothing to do. Databases are clean.";
+        if (d->shrinkDatabases)
+        {
+            disconnect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
+                       this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
+
+            disconnect(d->thread,SIGNAL(signalCompleted()),
+                        this, SLOT(slotCleanItems()));
+
+            setTotalItems(d->databasesToVacuum);
+
+            slotShrinkDatabases();
+        }
         MaintenanceTool::slotDone();
         return;
     }
 
-    setTotalItems(d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size());
+    setTotalItems(d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size() + d->databasesToVacuum);
 }
 
 void DbCleaner::slotCleanItems()
@@ -222,7 +244,22 @@ void DbCleaner::slotCleanedThumbnails()
 void DbCleaner::slotCleanedFaces()
 {
     // We cleaned the recognition db. We are done.
+    if (d->shrinkDatabases)
+    {
+        slotShrinkDatabases();
+    }
     MaintenanceTool::slotDone();
+}
+
+void DbCleaner::slotShrinkDatabases()
+{
+    disconnect(d->thread, SIGNAL(signalCompleted()),
+               this, SLOT(slotCleanedFaces()));
+
+    d->thread->shrinkDatabases();
+    // run blocking
+    //d->thread->run();
+    d->thread->start();
 }
 
 void DbCleaner::slotAdvance()

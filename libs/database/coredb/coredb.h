@@ -1317,6 +1317,18 @@ public:
 
     QList<QVariant> getImageIdsFromArea(qreal lat1, qreal lng1, qreal lat2, qreal lng2, int sortMode, const QString& sortBy);
 
+    // ----------- Database shrinking methods ----------
+
+    /**
+     * Returns true if the integrity of the database is preserved.
+     */
+    bool integrityCheck();
+
+    /**
+     * Shrinks the database.
+     */
+    void vacuum();
+
     // ----------- Static helper methods for constructing SQL queries -----------
 
     static QStringList imagesFieldList(DatabaseFields::Images fields);

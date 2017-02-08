@@ -355,4 +355,23 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
     }
 }
 
+bool FaceDb::integrityCheck()
+{
+    QList<QVariant> values;
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("integrityCheck")), &values);
+    if (values.size() == 1)
+    {
+        if (values.first().toString().compare(QLatin1String("ok")) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void FaceDb::vacuum()
+{
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuum")));
+}
+
 } // namespace FacesEngine

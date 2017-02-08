@@ -127,6 +127,18 @@ public:
 
     //QStringList getAllThumbnailPaths();
 
+    // ----------- Database shrinking methods ----------
+
+    /**
+     * Returns true if the integrity of the database is preserved.
+     */
+    bool integrityCheck();
+
+    /**
+     * Shrinks the database.
+     */
+    void vacuum();
+
 private:
 
     explicit ThumbsDb(ThumbsDbBackend* const backend);

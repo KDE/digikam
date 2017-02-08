@@ -4919,6 +4919,25 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
     return values;
 }
 
+bool CoreDB::integrityCheck()
+{
+    QList<QVariant> values;
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("integrityCheck")), &values);
+    if (values.size() == 1)
+    {
+        if (values.first().toString().compare(QLatin1String("ok")) == 0)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void CoreDB::vacuum()
+{
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuum")));
+}
+
 void CoreDB::readSettings()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();

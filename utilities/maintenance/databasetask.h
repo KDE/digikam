@@ -53,6 +53,7 @@ public:
     void setThumbIds(const QList<int>& thumbIds);
     void setIdentity(const FacesEngine::Identity& identity);
     void setIdentities(const QList<FacesEngine::Identity>& identities);
+    void setShrinkJob();
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
 

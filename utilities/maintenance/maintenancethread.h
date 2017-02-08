@@ -58,6 +58,7 @@ public:
     void cleanCoreDb(const QList<qlonglong>& imageIds, int chunkSize);
     void cleanThumbsDb(const QList<int>& thumbnailIds, int chunkSize);
     void cleanFacesDb(const QList<FacesEngine::Identity>& staleIdentities, int chunkSize);
+    void shrinkDatabases();
 
     void cancel();
 

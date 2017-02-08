@@ -49,6 +49,7 @@ public:
         computeDatabaseJunk(false),
         scanThumbsDb(false),
         scanRecognitionDb(false),
+        shrinkDatabases(false),
         cancel(false)
     {
     }
@@ -62,6 +63,7 @@ public:
     bool                          computeDatabaseJunk;
     bool                          scanThumbsDb;
     bool                          scanRecognitionDb;
+    bool                          shrinkDatabases;
 
     bool                          cancel;
 };
@@ -114,6 +116,11 @@ void DatabaseTask::setIdentities(const QList<FacesEngine::Identity>& identities)
     d->objectIdentification   = QLatin1String("face identity batch"); 
 }
 
+void DatabaseTask::setShrinkJob()
+{
+    d->shrinkDatabases = true;
+}
+
 void DatabaseTask::computeDatabaseJunk(bool thumbsDb, bool facesDb)
 {
     d->computeDatabaseJunk    = true;
@@ -128,7 +135,68 @@ void DatabaseTask::slotCancel()
 
 void DatabaseTask::run()
 {
-    if (d->computeDatabaseJunk)
+    if (d->shrinkDatabases)
+    {
+        if (CoreDbAccess().db()->integrityCheck())
+        {
+            CoreDbAccess().db()->vacuum();
+            if (!CoreDbAccess().db()->integrityCheck())
+            {
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed after vacuum. Something went wrong.";
+            }
+            else
+            {
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of core DB. Integrity check after vacuuming was positive.";
+            }
+        }
+        else
+        {
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your core DB is corrupt.";
+        }
+
+        if (ThumbsDbAccess::isInitialized())
+        {
+            if (ThumbsDbAccess().db()->integrityCheck())
+            {
+                ThumbsDbAccess().db()->vacuum();
+                if (!ThumbsDbAccess().db()->integrityCheck())
+                {
+                    qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for thumbnails DB failed after vacuum. Something went wrong.";
+                }
+                else
+                {
+                    qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of thumbnails DB. Integrity check after vacuuming was positive.";
+                }
+            }
+            else
+            {
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for thumbnails DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your thumbnails DB is corrupt.";
+            }
+        }
+        else
+        {
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Thumbnails DB is not initialised. Will not vacuum.";
+        }
+
+        FacesEngine::RecognitionDatabase rDatabase;
+        if (rDatabase.integrityCheck())
+        {
+            rDatabase.vacuum();
+            if (!rDatabase.integrityCheck())
+            {
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed after vacuum. Something went wrong.";
+            }
+            else
+            {
+                qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of recognition DB. Integrity check after vacuuming was positive.";
+            }
+        }
+        else
+        {
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your core DB is corrupt.";
+        }
+    }
+    else if (d->computeDatabaseJunk)
     {
         CoreDbAccess coreDbAccess;
 
