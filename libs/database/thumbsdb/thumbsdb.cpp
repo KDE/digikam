@@ -337,7 +337,7 @@ void ThumbsDb::replaceUniqueHash(const QString& oldUniqueHash, int oldFileSize,
 bool ThumbsDb::integrityCheck()
 {
     QList<QVariant> values;
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("integrityCheck")), &values);
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkThumbnailsDbIntegrity")), &values);
     if (values.size() == 1)
     {
         if (values.first().toString().compare(QLatin1String("ok")) == 0)
@@ -350,7 +350,7 @@ bool ThumbsDb::integrityCheck()
 
 void ThumbsDb::vacuum()
 {
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuum")));
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuumThumbnailsDB")));
 }
 
 }  // namespace Digikam

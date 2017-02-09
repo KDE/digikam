@@ -358,9 +358,11 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
 bool FaceDb::integrityCheck()
 {
     QList<QVariant> values;
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("integrityCheck")), &values);
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkRecognitionDbIntegrity")), &values);
+    qCDebug(DIGIKAM_GENERAL_LOG) << "integrity check result count: " << values.size();
     if (values.size() == 1)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "integrity check result: " << values.first().toString();
         if (values.first().toString().compare(QLatin1String("ok")) == 0)
         {
             return true;
@@ -371,7 +373,7 @@ bool FaceDb::integrityCheck()
 
 void FaceDb::vacuum()
 {
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuum")));
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuumRecognitionDB")));
 }
 
 } // namespace FacesEngine

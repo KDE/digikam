@@ -4922,7 +4922,7 @@ QList<QVariant> CoreDB::getImageIdsFromArea(qreal lat1, qreal lat2, qreal lng1, 
 bool CoreDB::integrityCheck()
 {
     QList<QVariant> values;
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("integrityCheck")), &values);
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkCoreDbIntegrity")), &values);
     if (values.size() == 1)
     {
         if (values.first().toString().compare(QLatin1String("ok")) == 0)
@@ -4935,7 +4935,7 @@ bool CoreDB::integrityCheck()
 
 void CoreDB::vacuum()
 {
-    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuum")));
+    d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuumCoreDB")));
 }
 
 void CoreDB::readSettings()

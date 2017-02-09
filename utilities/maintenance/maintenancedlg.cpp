@@ -213,7 +213,8 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning. .</i></qt>"),d->vbox3);
     d->cleanThumbsDb      = new QCheckBox(i18n("Also clean up the thumbnail database. This may take much time."),d->vbox3);
     d->cleanFacesDb       = new QCheckBox(i18n("Also clean up the faces database. This may take much time."),d->vbox3);
-    d->shrinkDatabases    = new QCheckBox(i18n("Also shrink all databases if possible (SQLite only). This may take much time and will block digiKam until the process is finished."),d->vbox3);
+    d->shrinkDatabases    = new QCheckBox(i18n("Also shrink all databases if possible (Full support only for SQLite). This may take much time and will block digiKam until the process is finished."),d->vbox3);
+    d->shrinkDatabases->setToolTip(i18n("This option leads to the vacuuming (shrinking) of the databases. Vacuuming is supported both for SQLite and MySQL. But no integrity check cannot be made for MySQL."));
     d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
                                QIcon::fromTheme(QLatin1String("run-build")),
                                i18n("Perform database cleaning"), QLatin1String("DbCleanup"), false);
