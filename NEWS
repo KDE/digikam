@@ -64,7 +64,8 @@ BUGFIXES FROM BUGZILLA:
 047 ==> 376112 - digiKam Handbook (Menu & F1) Goes To Incorrect Location.
 048 ==> 374591 - Deleting image only removes the file and sets the status to hidden but does not delete the image from DB [patch].
 049 ==> 323718 - THUMBDB : rebuild all thumbnails does not get rid of all thumbnails first.
-050 ==> 338869 - BQM Watermark tool : add new option to rotate text.
-051 ==> 250642 - BQM Watermark tool : signature does not respect correct orientation.
-052 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
-053 ==> 
+050 ==> 317210 - THUMBDB : delete image removes file, but does not remove thumbnails
+051 ==> 338869 - BQM Watermark tool : add new option to rotate text.
+052 ==> 250642 - BQM Watermark tool : signature does not respect correct orientation.
+053 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
+054 ==> 

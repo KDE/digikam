@@ -138,7 +138,7 @@ FaceItem::FaceItem(QGraphicsItem* const parent, QGraphicsScene* const scene, con
     o.setAlignment(Qt::AlignCenter);
     doc->setDefaultTextOption(o);
 
-    // Get coordinates of the name relative the the scene
+    // Get coordinates of the name relative to the scene
     QRectF r = d->faceName->mapRectToScene(d->faceName->boundingRect());
 
     // Draw the bounding name rectangle with the scene coordinates

@@ -38,7 +38,7 @@ int main (int argc, char **argv)
 {
     if(argc != 2)
     {
-        qDebug() << "erasetag - erase tag from from image";
+        qDebug() << "erasetag - erase tag from image";
         qDebug() << "Usage: <image>";
         return -1;
     }

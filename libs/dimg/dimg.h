@@ -313,7 +313,7 @@ public:
     DColor      getSubPixelColor(float x, float y) const;
     DColor      getSubPixelColorFast(float x, float y) const;
 
-    /** If the image has an alpha channel, check there there exist pixels
+    /** If the image has an alpha channel, check if there exist pixels
      *  which actually have non-opaque color, that is alpha < 1.0.
      *  Note that all pixels are scanned to reach a return value of "false".
      *  If hasAlpha() is false, always returns false.

@@ -97,7 +97,7 @@ public:
     qlonglong    camItemId(int row)      const;
 
     /**
-     * Return the index of a given CamItemInfo, it it exists in the model.
+     * Return the index of a given CamItemInfo, if it exists in the model.
      */
     QModelIndex        indexForCamItemInfo(const CamItemInfo& info)   const;
     QList<QModelIndex> indexesForCamItemInfo(const CamItemInfo& info) const;
