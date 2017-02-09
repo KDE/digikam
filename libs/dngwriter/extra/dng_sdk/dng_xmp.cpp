@@ -2632,7 +2632,7 @@ void dng_xmp::SyncExif (dng_exif &exif,
 				 exif.fFocalPlaneResolutionUnit > 0x0FFFF,
 				 options);
 
-	// ImageDescription:  (XMP is is always preferred)
+	// ImageDescription:  (XMP is always preferred)
 
 	if (fSDK->GetAltLangDefault (XMP_NS_DC,
 								 "description",
@@ -2674,7 +2674,7 @@ void dng_xmp::SyncExif (dng_exif &exif,
 
 		}
 
-	// Artist:  (XMP is is always preferred)
+	// Artist:  (XMP is always preferred)
 
 		{
 
@@ -2738,7 +2738,7 @@ void dng_xmp::SyncExif (dng_exif &exif,
 
 		}
 
-	// Software:  (XMP is is always preferred)
+	// Software:  (XMP is always preferred)
 
 	if (fSDK->GetString (XMP_NS_XAP,
 						 "CreatorTool",
@@ -2780,7 +2780,7 @@ void dng_xmp::SyncExif (dng_exif &exif,
 
 		}
 
-	// Copyright:  (XMP is is always preferred)
+	// Copyright:  (XMP is always preferred)
 
 	if (fSDK->GetAltLangDefault (XMP_NS_DC,
 								 "rights",
@@ -2905,7 +2905,7 @@ void dng_xmp::SyncExif (dng_exif &exif,
 					preferXMP);
 
 		// Generate default lens name from lens info if required.
-		// Ignore names names that end in "f/0.0" due to third party bug.
+		// Ignore names that end in "f/0.0" due to third party bug.
 
 		if ((exif.fLensName.IsEmpty () ||
 			 exif.fLensName.EndsWith ("f/0.0")) && exif.fLensInfo [0].IsValid ())

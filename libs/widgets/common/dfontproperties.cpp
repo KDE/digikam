@@ -726,7 +726,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     Q_FOREACH (const QString& style, styles)
     {
         // Sometimes the font database will report an invalid style,
-        // that falls back back to another when set.
+        // that falls back to another when set.
         // Remove such styles, by checking set/get round-trip.
         QFont testFont = dbase.font(currentFamily, style, 10);
 

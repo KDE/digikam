@@ -81,7 +81,7 @@ KBViewTrans::KBViewTrans(bool zoomIn, float relAspect)
     m_yScale     = 0.0;
     int i        = 0;
 
-    // randomly select sizes of start end end viewport
+    // randomly select sizes of start and end viewport
     double s[2];
 
     do

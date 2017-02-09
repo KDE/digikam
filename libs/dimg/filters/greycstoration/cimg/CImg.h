@@ -12726,7 +12726,7 @@ namespace cimg_library {
       return CImg<Tfloat>(*this,false).exp();
     }
 
-    //! Compute the log of each each pixel value.
+    //! Compute the log of each pixel value.
     CImg<T>& log() {
       cimg_for(*this,ptr,T) (*ptr) = (T)cimg_std::log((double)(*ptr));
       return *this;
@@ -12736,7 +12736,7 @@ namespace cimg_library {
       return CImg<Tfloat>(*this,false).log();
     }
 
-    //! Compute the log10 of each each pixel value.
+    //! Compute the log10 of each pixel value.
     CImg<T>& log10() {
       cimg_for(*this,ptr,T) (*ptr) = (T)cimg_std::log10((double)(*ptr));
       return *this;
@@ -36373,7 +36373,7 @@ namespace cimg_library {
       return _save_cimg(0,filename,compress);
     }
 
-    // Insert the instance image into into an existing .cimg file, at specified coordinates.
+    // Insert the instance image into an existing .cimg file, at specified coordinates.
     const CImgList<T>& _save_cimg(cimg_std::FILE *const file, const char *const filename,
                                  const unsigned int n0,
                                  const unsigned int x0, const unsigned int y0,
@@ -36481,7 +36481,7 @@ namespace cimg_library {
       return *this;
     }
 
-    //! Insert the instance image into into an existing .cimg file, at specified coordinates.
+    //! Insert the instance image into an existing .cimg file, at specified coordinates.
     const CImgList<T>& save_cimg(const char *const filename,
                                  const unsigned int n0,
                                  const unsigned int x0, const unsigned int y0,
@@ -36489,7 +36489,7 @@ namespace cimg_library {
       return _save_cimg(0,filename,n0,x0,y0,z0,v0);
     }
 
-    //! Insert the instance image into into an existing .cimg file, at specified coordinates.
+    //! Insert the instance image into an existing .cimg file, at specified coordinates.
     const CImgList<T>& save_cimg(cimg_std::FILE *const file,
                                  const unsigned int n0,
                                  const unsigned int x0, const unsigned int y0,

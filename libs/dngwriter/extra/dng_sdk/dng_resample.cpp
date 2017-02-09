@@ -598,7 +598,7 @@ void dng_resample_task::Start (uint32 threadCount,
 						  fKernel,
 						  *allocator);
 
-	// Find upper bound on source source tile.
+	// Find upper bound on source tile.
 
 	fSrcTileSize.v = Round_int32 (tileSize.v / fRowScale) + fWeightsV.Width () + 2;
 	fSrcTileSize.h = Round_int32 (tileSize.h / fColScale) + fWeightsH.Width () + 2;
