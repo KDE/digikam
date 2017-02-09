@@ -210,7 +210,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     // --------------------------------------------------------------------------------------
 
     d->vbox3              = new DVBox;
-    new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning. .</i></qt>"),d->vbox3);
+    new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning.</i></qt>"),d->vbox3);
     d->cleanThumbsDb      = new QCheckBox(i18n("Also clean up the thumbnail database. This may take much time."),d->vbox3);
     d->cleanFacesDb       = new QCheckBox(i18n("Also clean up the faces database. This may take much time."),d->vbox3);
     d->shrinkDatabases    = new QCheckBox(i18n("Also shrink all databases if possible (Full support only for SQLite). This may take much time and will block digiKam until the process is finished."),d->vbox3);

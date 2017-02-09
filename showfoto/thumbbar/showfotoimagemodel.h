@@ -96,7 +96,7 @@ public:
     qlonglong         showfotoItemId(int row)      const;
 
     /**
-     * Return the index of a given ShowfotoItemInfo, it it exists in the model.
+     * Return the index of a given ShowfotoItemInfo, if it exists in the model.
      */
     QModelIndex        indexForShowfotoItemInfo(const ShowfotoItemInfo& info)   const;
     QList<QModelIndex> indexesForShowfotoItemInfo(const ShowfotoItemInfo& info) const;

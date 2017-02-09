@@ -81,7 +81,7 @@ protected:
     /**
      * Abstract method for retrieving the value from the database for the given key.
      *
-     * This method has to be implemented by by all child classes. It is called by the
+     * This method has to be implemented by all child classes. It is called by the
      * getValue() method.
      *
      * @param key           the key representing the value in the database

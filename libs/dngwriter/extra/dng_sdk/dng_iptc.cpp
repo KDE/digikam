@@ -754,7 +754,7 @@ dng_memory_block * dng_iptc::Spool (dng_memory_allocator &allocator,
 
 	// Figure out character set to use.  Due to bugs in Photoshop CS2 and
 	// before, we only write UTF-8 in cases where it is required to preserve
-	// all the characters.  Is is not ideal since it makes the files not
+	// all the characters.  It is not ideal since it makes the files not
 	// portable across systems with different encodings.  Perhaps we can
 	// switch to using UTF-8 in all cases in the CS4 timeframe.
 

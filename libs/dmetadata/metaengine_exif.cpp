@@ -1078,8 +1078,7 @@ MetaEngine::TagsMap MetaEngine::getStdExifTagsList() const
         {
             // NOTE: See BUG #375809 : MPF tags = execption Exiv2 0.26
 
-            if (QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("Makernote") &&
-                QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("MPF"))
+            if (QString::fromLatin1(gi->ifdName_) != QString::fromLatin1("Makernote"))
             {
                 Exiv2::TagListFct tl     = gi->tagList_;
                 const Exiv2::TagInfo* ti = tl();
