@@ -336,4 +336,10 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
     return rotatedOrFlipped;
 }
 
+bool LoadSaveThread::reverseExifRotate(DImg& image, const QString& filePath)
+{
+    bool rotatedOrFlipped = image.reverseRotateAndFlip(exifOrientation(image, filePath));
+    return rotatedOrFlipped;
+}
+
 }   // namespace Digikam

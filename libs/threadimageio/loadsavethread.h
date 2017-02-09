@@ -139,6 +139,11 @@ public:
     static bool wasExifRotated(DImg& image);
 
     /**
+     * Reverses the previous function
+     */
+    static bool reverseExifRotate(DImg& image, const QString& filePath);
+
+    /**
      * Retrieves the Exif orientation, either from the info provider if available,
      * or from the metadata
      */

@@ -43,7 +43,6 @@
 #include <QFontComboBox>
 #include <QComboBox>
 #include <QLineEdit>
-#include <dfontproperties.h>
 
 // KDE includes
 
@@ -51,11 +50,14 @@
 
 // Local includes
 
+#include "dfontproperties.h"
 #include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
+#include "loadsavethread.h"
+#include "metaengine.h"
 
 namespace Digikam
 {
@@ -88,6 +90,7 @@ public:
         imageFileUrlRequester(0),
         textEdit(0),
         comboBox(0),
+        rotationComboBox(0),
         extendedFontChooserWidget(0),
         fontColorButton(0),
         backgroundColorButton(0),
@@ -113,6 +116,7 @@ public:
     QLineEdit*       textEdit;
 
     QComboBox*       comboBox;
+    QComboBox*       rotationComboBox;
     DFontProperties* extendedFontChooserWidget;
 
     DColorSelector*  fontColorButton;
@@ -165,7 +169,7 @@ void WaterMark::registerSettingsWidget()
     useAbsoluteSizeHBox->setSpacing(10);
     d->useAbsoluteSizeCheckBox         = new QCheckBox(useAbsoluteSizeHBox);
     d->useAbsoluteSizeCheckBox->setWhatsThis(i18n("Check this if you want the watermark to use the given size of the font or the image "
-                                                        "without any adjustment to the actual image"));
+                                                  "without any adjustment to the actual image"));
     QLabel* const useAbsoluteSizeLabel = new QLabel(useAbsoluteSizeHBox);
     useAbsoluteSizeLabel->setText(i18n("Use Absolute Size"));
     d->useAbsoluteSizeCheckBox->setChecked(false);
@@ -294,6 +298,13 @@ void WaterMark::registerSettingsWidget()
     d->comboBox->insertItem(Private::Center,      i18n("Center"));
     label4->setText(i18n("Placement:"));
 
+    QLabel* const labelRotation  = new QLabel(vbox);
+    d->rotationComboBox          = new QComboBox(vbox);
+    d->rotationComboBox->insertItem(0,     i18n("0 degrees"));
+    d->rotationComboBox->insertItem(1,     i18n("90 degrees CW"));
+    d->rotationComboBox->insertItem(2,     i18n("180 degrees"));
+    d->rotationComboBox->insertItem(3,     i18n("270 degrees CW"));
+    labelRotation->setText(i18n("Rotation:"));
 
     QLabel* const label5    = new QLabel(vbox);
     d->waterMarkSizePercent = new DIntNumInput(vbox);
@@ -319,7 +330,7 @@ void WaterMark::registerSettingsWidget()
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    m_settingsWidget = vbox;
+    m_settingsWidget    = vbox;
 
     // ------------------------------------------------------------------------------------------------------
 
@@ -361,6 +372,8 @@ void WaterMark::registerSettingsWidget()
 
     connect(d->comboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
+    connect(d->rotationComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotSettingsChanged()));
 
     connect(d->waterMarkSizePercent, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
@@ -388,6 +401,7 @@ BatchToolSettings WaterMark::defaultSettings()
     settings.insert(QLatin1String("Background color"),   QColor(0xCC, 0xCC, 0xCC));
     settings.insert(QLatin1String("Background opacity"), 0xCC);
     settings.insert(QLatin1String("Placement"),          Private::BottomRight);
+    settings.insert(QLatin1String("Rotation"),           0);
     settings.insert(QLatin1String("Watermark size"),     25);
     settings.insert(QLatin1String("X margin"),           2);
     settings.insert(QLatin1String("Y margin"),           2);
@@ -408,6 +422,7 @@ void WaterMark::slotAssignSettings2Widget()
     d->backgroundColorButton->setColor(settings()[QLatin1String("Background color")].toString());
     d->backgroundOpacity->setValue(settings()[QLatin1String("Background opacity")].toInt());
     d->comboBox->setCurrentIndex(settings()[QLatin1String("Placement")].toInt());
+    d->rotationComboBox->setCurrentIndex(settings()[QLatin1String("Rotation")].toInt());
     d->waterMarkSizePercent->setValue(settings()[QLatin1String("Watermark size")].toInt());
     d->xMarginInput->setValue(settings()[QLatin1String("X margin")].toInt());
     d->yMarginInput->setValue(settings()[QLatin1String("Y margin")].toInt());
@@ -445,6 +460,7 @@ void WaterMark::slotSettingsChanged()
         settings.insert(QLatin1String("Background color"),              d->backgroundColorButton->color());
         settings.insert(QLatin1String("Background opacity"),            d->backgroundOpacity->value());
         settings.insert(QLatin1String("Placement"),                     (int)d->comboBox->currentIndex());
+        settings.insert(QLatin1String("Rotation"),                      (int)d->rotationComboBox->currentIndex());
         settings.insert(QLatin1String("Watermark size"),                (int)d->waterMarkSizePercent->value());
         settings.insert(QLatin1String("X margin"),                      (int)d->xMarginInput->value());
         settings.insert(QLatin1String("Y margin"),                      (int)d->yMarginInput->value());
@@ -482,15 +498,36 @@ bool WaterMark::toolOperations()
     DColorComposer* const composer               = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
     int marginW                                  = lround(image().width()  * (xMargin / 100.0));
     int marginH                                  = lround(image().height() * (yMargin / 100.0));
+    int rotationIndex = settings()[QLatin1String("Rotation")].toInt();
 
-    // For Images whose height are much larger than their width, this helps keep
-    // the watermark size reasonable
+    DImg::ANGLE rotationAngle = (rotationIndex == 1) ? DImg::ANGLE::ROT90 :
+                                (rotationIndex == 2) ? DImg::ANGLE::ROT180 :
+                                (rotationIndex == 3) ? DImg::ANGLE::ROT270 :
+                                                       DImg::ANGLE::ROTNONE;
+
+    // rotate and/or flip the image depending on the exif information to allow for the expected watermark placement.
+    //note that this operation is reversed after proper watermark generation to leave everything as it was.
+    LoadSaveThread::exifRotate(image(), inputUrl().toLocalFile());
+
     float ratio = (float)image().height()/image().width();
 
-    if (ratio > 1)
+    if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
     {
-        int tempSize = size *1.5*ratio ;
-        size         = (tempSize < 100) ? tempSize : 100;
+        size    = size * ratio;
+    }
+    else
+    {
+        // For Images whose height are much larger than their width, this helps keep
+        // the watermark size reasonable
+        if (ratio > 1.5)
+        {
+            int tempSize  = size * ratio;
+
+            if(tempSize < 35)
+                tempSize *= 1.5;
+
+            size          = (tempSize < 100) ? tempSize : 100;
+        }
     }
 
     if (useImage)
@@ -612,6 +649,11 @@ bool WaterMark::toolOperations()
 
     QRect watermarkRect(0, 0, watermarkImage.width(), watermarkImage.height());
 
+    int xAdditionalValue = 0;
+    int yAdditionalValue = 0;
+
+    watermarkImage.rotate(rotationAngle);
+
     switch (placement)
     {
         case Private::TopLeft:
@@ -619,19 +661,47 @@ bool WaterMark::toolOperations()
             break;
 
         case Private::TopRight:
-            watermarkRect.moveTopRight(QPoint(image().width()-1 - marginW, marginH));
+
+            if (rotationAngle == DImg::ANGLE::ROT270 || rotationAngle == DImg::ANGLE::ROT90)
+            {
+                xAdditionalValue += watermarkRect.width() - watermarkRect.height();
+            }
+
+            watermarkRect.moveTopRight(QPoint(image().width() + xAdditionalValue -1 - marginW, marginH));
             break;
 
         case Private::BottomLeft:
-            watermarkRect.moveBottomLeft(QPoint(marginW, image().height()-1 - marginH));
+
+            if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+            {
+                yAdditionalValue += watermarkRect.height() - watermarkRect.width();
+            }
+
+            watermarkRect.moveBottomLeft(QPoint(marginW, image().height() + yAdditionalValue - 1 - marginH));
             break;
 
         case Private::Center:
-            watermarkRect.moveCenter(QPoint((int)(image().width() / 2), (int)(image().height() / 2)));
+
+            if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+            {
+                xAdditionalValue += (watermarkRect.width() - watermarkRect.height())/2;
+                yAdditionalValue += (watermarkRect.height() - watermarkRect.width())/2;
+            }
+
+            watermarkRect.moveCenter(QPoint((int)(image().width()  / 2 + xAdditionalValue),
+                                            (int)(image().height() / 2 + yAdditionalValue)));
             break;
 
         default :    // BottomRight
-            watermarkRect.moveBottomRight(QPoint(image().width()-1 - marginW, image().height()-1 - marginH));
+
+            if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+            {
+                xAdditionalValue += watermarkRect.width() - watermarkRect.height();
+                yAdditionalValue += watermarkRect.height() - watermarkRect.width();
+            }
+
+            watermarkRect.moveBottomRight(QPoint(image().width()  + xAdditionalValue - 1 - marginW,
+                                                 image().height() + yAdditionalValue -1 - marginH));
             break;
     }
 
@@ -641,6 +711,7 @@ bool WaterMark::toolOperations()
                           watermarkRect.left(), watermarkRect.top());
 
     delete composer;
+    LoadSaveThread::reverseExifRotate(image(), inputUrl().toLocalFile());
 
     return (savefromDImg());
 }
