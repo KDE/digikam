@@ -361,6 +361,9 @@ public:
     void setScanAtStart(bool val);
     bool getScanAtStart() const;
 
+    void setCleanAtStart(bool val);
+    bool getCleanAtStart() const;
+
     void setUseTrash(bool val);
     bool getUseTrash() const;
 
@@ -421,6 +424,9 @@ public:
 
     void setRatingFilterCond(int val);
     int  getRatingFilterCond() const;
+
+    void setMinimumSimilarityBound(int val);
+    int  getMinimumSimilarityBound() const;
 
     void setDuplicatesSearchLastMinSimilarity(int val);
     int  getDuplicatesSearchLastMinSimilarity() const;

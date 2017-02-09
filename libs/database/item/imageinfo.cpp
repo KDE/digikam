@@ -825,6 +825,23 @@ bool ImageInfo::isVisible() const
     return false;
 }
 
+bool ImageInfo::isRemoved() const
+{
+    if (!m_data)
+    {
+        return true;
+    }
+
+    QVariantList value = CoreDbAccess().db()->getImagesFields(m_data->id, DatabaseFields::Status);
+
+    if (!value.isEmpty())
+    {
+        return (value.first().toInt() == DatabaseItem::Trashed) || (value.first().toInt() == DatabaseItem::Obsolete);
+    }
+
+    return false;
+}
+
 void ImageInfo::setVisible(bool isVisible)
 {
     if (!m_data)

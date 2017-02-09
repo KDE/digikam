@@ -37,6 +37,7 @@
 
 #include "digikam_debug.h"
 #include "collectionmanager.h"
+#include "albummanager.h"
 
 namespace Digikam
 {
@@ -47,6 +48,7 @@ const QString DTrash::INFO_FOLDER                = QLatin1String("info");
 const QString DTrash::INFO_FILE_EXTENSION        = QLatin1String(".dtrashinfo");
 const QString DTrash::PATH_JSON_KEY              = QLatin1String("path");
 const QString DTrash::DELETIONTIMESTAMP_JSON_KEY = QLatin1String("deletiontimestamp");
+const QString DTrash::IMAGEID_JSON_KEY           = QLatin1String("imageid");
 
 // ----------------------------------------------
 
@@ -66,10 +68,24 @@ bool DTrash::deleteImage(const QString& imageToDelete)
         return false;
     }
 
-    QString baseNameForMovingIntoTrash = createJsonRecordForFile(collection, imageToDelete);
-
     QFileInfo imageFileInfo(imageToDelete);
     QFile imageFile(imageToDelete);
+
+    QString fileName = imageFileInfo.fileName();
+    // Get the album path, i.e. collection + album. For this,
+    // get the n leftmost characters where n is the complete path without the size of the filename
+    QString completePath = imageFileInfo.path();
+    QString albumPath    = CollectionManager::instance()->album(completePath);
+
+    qlonglong imageId = -1;
+    // Get the album and with this the image id of the image to trash.
+    PAlbum* pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
+    if (pAlbum)
+    {
+        imageId = AlbumManager::instance()->getItemFromAlbum(pAlbum,fileName);
+    }
+
+    QString baseNameForMovingIntoTrash = createJsonRecordForFile(collection, imageToDelete, imageId);
 
     QString destinationInTrash = collection + QLatin1Char('/') + TRASH_FOLDER +
                                  QLatin1Char('/') + FILES_FOLDER + QLatin1Char('/') +
@@ -129,6 +145,16 @@ void DTrash::extractJsonForItem(const QString& collPath, const QString& baseName
 
     itemInfo.deletionTimestamp = QDateTime::fromString(
                                  fileInfoObj.value(DELETIONTIMESTAMP_JSON_KEY).toString());
+
+    QJsonValue imageIdValue = fileInfoObj.value(IMAGEID_JSON_KEY);
+    if (!imageIdValue.isUndefined())
+    {
+        itemInfo.imageId = imageIdValue.toString().toLongLong();
+    }
+    else
+    {
+        itemInfo.imageId = -1;
+    }
 }
 
 bool DTrash::prepareCollectionTrash(const QString& collectionPath)
@@ -156,15 +182,17 @@ bool DTrash::prepareCollectionTrash(const QString& collectionPath)
     return true;
 }
 
-QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QString& imagePath)
+QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QString& imagePath, qlonglong imageId)
 {
     QJsonObject jsonObjForImg;
 
     QJsonValue pathJsonVal(imagePath);
     QJsonValue timestampJsonVal(QDateTime::currentDateTime().toString());
+    QJsonValue imageIdJsonVal(QString::number(imageId));
 
     jsonObjForImg.insert(PATH_JSON_KEY, pathJsonVal);
     jsonObjForImg.insert(DELETIONTIMESTAMP_JSON_KEY, timestampJsonVal);
+    jsonObjForImg.insert(IMAGEID_JSON_KEY, imageIdJsonVal);
 
     QJsonDocument jsonDocForImg(jsonObjForImg);
 

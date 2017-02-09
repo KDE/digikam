@@ -37,6 +37,7 @@
 #include "applicationsettings.h"
 #include "albummanager.h"
 #include "coredb.h"
+#include "coredbaccess.h"
 #include "album.h"
 #include "dmetadata.h"
 #include "imagelister.h"
@@ -216,6 +217,10 @@ void DIO::Private::renameFile(const ImageInfo& info, const QString& newName)
     {
         ScanController::instance()->hintAtMoveOrCopyOfItem(info.id(), album, newName);
     }
+
+    // If we rename a file, the name changes. This is equivalent to a move.
+    // Do this in database, too.
+    CoreDbAccess().db()->moveItem(info.albumId(),oldUrl.fileName(),info.albumId(),newName);
 
     emit renameToProcess(oldUrl, newUrl);
 }
@@ -410,6 +415,15 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
     if (!dest)
     {
         return;
+    }
+
+    // update the image infos
+    CoreDbAccess access;
+    foreach(ImageInfo info, infos)
+    {
+        QUrl oldUrl = info.fileUrl();
+
+        access.db()->moveItem(info.albumId(),info.name(),dest->id(),info.name());
     }
 
     instance()->d->imagesToAlbum(Move, infos, dest);

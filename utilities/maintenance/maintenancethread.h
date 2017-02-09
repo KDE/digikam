@@ -29,6 +29,7 @@
 #include "actionthreadbase.h"
 #include "metadatasynchronizer.h"
 #include "imageinfo.h"
+#include "identity.h"
 
 class QImage;
 
@@ -53,6 +54,11 @@ public:
     void generateFingerprints(const QStringList& paths);
     void sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality);
 
+    void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
+    void cleanCoreDb(const QList<qlonglong>& imageIds, int chunkSize);
+    void cleanThumbsDb(const QList<int>& thumbnailIds, int chunkSize);
+    void cleanFacesDb(const QList<FacesEngine::Identity>& staleIdentities, int chunkSize);
+
     void cancel();
 
 Q_SIGNALS:
@@ -60,6 +66,10 @@ Q_SIGNALS:
     /** Emit when an item have been processed. QImage can be used to pass item thumbnail processed.
      */
     void signalAdvance(const QImage&);
+
+    /** Emit when an itam was processed and on additional information is necessary.
+     */
+    void signalAdvance();
 
     /** Emit when a items list have been fully processed.
      */
@@ -69,9 +79,16 @@ Q_SIGNALS:
      */
     void signalCanceled();
 
+    /** Signal to emit junk data for db cleaner.
+     */
+    void signalData(const QList<qlonglong>& staleImageIds,
+                    const QList<int>& staleThumbIds,
+                    const QList<FacesEngine::Identity>& staleIdentities);
+
 private Q_SLOTS:
 
     void slotThreadFinished();
+
 };
 
 }  // namespace Digikam

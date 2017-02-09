@@ -87,7 +87,8 @@ enum Status
     UndefinedStatus = 0,
     Visible         = 1,
     Hidden          = 2,
-    Removed         = 3
+    Trashed         = 3, // previously "Removed"
+    Obsolete        = 4
 };
 
 enum Category

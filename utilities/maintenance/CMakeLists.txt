@@ -15,6 +15,8 @@ set(libmaintenance_SRCS
     metadatatask.cpp
     metadatasynchronizer.cpp
     duplicatesfinder.cpp
+    databasetask.cpp
+    dbcleaner.cpp
     newitemsfinder.cpp
     thumbsgenerator.cpp
     thumbstask.cpp

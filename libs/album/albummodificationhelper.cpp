@@ -47,6 +47,8 @@
 #include "dio.h"
 #include "digikamview.h"
 #include "digikamapp.h"
+#include "coredb.h"
+#include "coredbaccess.h"
 
 namespace Digikam
 {
@@ -202,6 +204,23 @@ void AlbumModificationHelper::slotAlbumDelete(PAlbum* album)
 
     bool useTrash = !dialog.shouldDelete();
 
+    if (!useTrash)
+    {
+        CoreDbAccess access;
+        // get all albums to delete
+        QList<int> albumsToDelete;
+        addAlbumChildrenToList(albumsToDelete, album);
+        // If the directory should be deleted permanently, mark the images as obsolete and remove them
+        // from their album
+
+        QSet<qlonglong> imagesToRemove;
+        foreach(int albumId, albumsToDelete)
+        {
+            imagesToRemove.unite(access.db()->getItemIDsInAlbum(albumId).toSet());
+        }
+        access.db()->removeItemsPermanently(imagesToRemove.toList(), albumsToDelete);
+    }
+
     // Currently trash kioslave can handle only full paths.
     // pass full folder path to the trashing job
     DIO::del(album, useTrash);
@@ -241,6 +260,26 @@ void AlbumModificationHelper::slotAlbumRename(PAlbum* album)
         if (!AlbumManager::instance()->renamePAlbum(album, title, errMsg))
         {
             QMessageBox::critical(qApp->activeWindow(), qApp->applicationName(), errMsg);
+        }
+    }
+}
+
+void AlbumModificationHelper::addAlbumChildrenToList(QList<int>& list, Album* const album)
+{
+    // simple recursive helper function
+    if (album)
+    {
+        if (!list.contains(album->id()))
+        {
+            list.append(album->id());
+        }
+
+        AlbumIterator it(album);
+
+        while (it.current())
+        {
+            addAlbumChildrenToList(list, *it);
+            ++it;
         }
     }
 }

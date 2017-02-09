@@ -334,6 +334,15 @@ public:
      * describing why the operation failed
      */
     bool updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& errMsg);
+
+    /**
+     * Returns the id of the item with the given filename in
+     * the given PAlbum.
+     * @param album The albumId in which we search the item.
+     * @param fileName The name of the item file.
+     * @return The item id or -1 if not existent.
+     */
+    qlonglong getItemFromAlbum(PAlbum* album, const QString& fileName);
     //@}
 
     /**
@@ -653,7 +662,7 @@ Q_SIGNALS:
     void signalDatesMapDirty(const QMap<QDateTime, int>&);
     void signalTagPropertiesChanged(TAlbum* album);
     void signalAlbumsUpdated(int type);
-    void signalUpdateDuplicatesAlbums(QList<qlonglong> imagesToRescan);
+    void signalUpdateDuplicatesAlbums(const QList<SAlbum*>& modifiedAlbums, const QList<qlonglong>& deletedImages);
     // Signals a change in this property. Please note that affected albums may appear or disappear after this signal has been emitted.
     void signalShowOnlyAvailableAlbumsChanged(bool showsOnlyAvailableAlbums);
 

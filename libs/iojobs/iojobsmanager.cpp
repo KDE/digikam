@@ -67,7 +67,7 @@ IOJobsThread* IOJobsManager::startMove(const QList<QUrl>& srcsList, const QUrl& 
 IOJobsThread* IOJobsManager::startDelete(const QList<QUrl>& filesToDelete, bool useTrash)
 {
     IOJobsThread* const thread = new IOJobsThread(this);
-    thread->del(filesToDelete, useTrash);
+    thread->deleteFiles(filesToDelete, useTrash);
     thread->start();
 
     return thread;

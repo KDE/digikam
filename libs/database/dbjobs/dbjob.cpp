@@ -70,7 +70,7 @@ void AlbumsJob::run()
         ImageLister lister;
         lister.setRecursive(m_jobInfo.isRecursive());
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
-        
+
         // Send data every 200 images to be more responsive
         Digikam::ImageListerJobGrowingPartsSendingReceiver receiver(this, 200, 2000, 100);
         lister.listAlbum(&receiver, m_jobInfo.albumRootId(), m_jobInfo.album());
@@ -103,11 +103,11 @@ void DatesJob::run()
     {
         ImageLister lister;
         lister.setListOnlyAvailable(true);
-        
+
         // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
         lister.listDateRange(&receiver, m_jobInfo.startDate(), m_jobInfo.endDate());
-        
+
         // Send rest
         receiver.sendData();
     }
@@ -146,7 +146,7 @@ void GPSJob::run()
         ImageLister lister;
         lister.setAllowExtraValues(true);
         lister.setListOnlyAvailable(m_jobInfo.isListAvailableImagesOnly());
-        
+
         // Send data every 200 images to be more responsive
         ImageListerJobPartsSendingReceiver receiver(this, 200);
         lister.listAreaRange(&receiver,
@@ -185,12 +185,12 @@ void TagsJob::run()
     {
         QMap<QString, QMap<int, int> > facesNumberMap;
 
-        facesNumberMap[ImageTagPropertyName::autodetectedFace()] =
+        facesNumberMap[ImageTagPropertyName::autodetectedFace()]   =
             CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedFace());
 
-        facesNumberMap[ImageTagPropertyName::tagRegion()]        =
+        facesNumberMap[ImageTagPropertyName::tagRegion()]          =
             CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::tagRegion());
-            
+
         facesNumberMap[ImageTagPropertyName::autodetectedPerson()] =
             CoreDbAccess().db()->getNumberOfImagesInTagProperties(Digikam::ImageTagPropertyName::autodetectedPerson());
 
@@ -243,6 +243,7 @@ void SearchesJob::run()
     if (!m_jobInfo.isDuplicatesJob())
     {
         QList<SearchInfo> infos;
+
         foreach(int id, m_jobInfo.searchIds())
         {
             infos << CoreDbAccess().db()->getSearchInfo(id);
@@ -264,6 +265,7 @@ void SearchesJob::run()
             {
                 bool ok;
                 qlonglong referenceImageId = info.name.toLongLong(&ok);
+
                 if (ok)
                 {
                     lister.listSearch(&receiver, info.query, 0, referenceImageId);
@@ -297,6 +299,7 @@ void SearchesJob::run()
 
         // Rebuild the duplicate albums
         HaarIface iface;
+
         if (m_jobInfo.isAlbumUpdate())
         {
             iface.rebuildDuplicatesAlbums(m_jobInfo.imageIds(),

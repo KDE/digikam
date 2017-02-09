@@ -2384,6 +2384,11 @@ bool AlbumManager::updatePAlbumIcon(PAlbum* album, qlonglong iconID, QString& er
     return true;
 }
 
+qlonglong AlbumManager::getItemFromAlbum(PAlbum* album, const QString& fileName)
+{
+    return CoreDbAccess().db()->getItemFromAlbum(album->id(),fileName);
+}
+
 TAlbum* AlbumManager::createTAlbum(TAlbum* parent, const QString& name,
                                    const QString& iconkde, QString& errMsg)
 {
@@ -3500,8 +3505,7 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Got image deletion notification from ImageViewUtilities for " << imageIds.size() << " images.";
 
-    QSet<qlonglong> imagesToRescan;
-    QSet<SAlbum*> sAlbumsToDelete;
+    QSet<SAlbum*> sAlbumsToUpdate;
     QSet<qlonglong> deletedImages = imageIds.toSet();
 
     QList<SAlbum*> sAlbums = findSAlbumsBySearchType(DatabaseSearch::DuplicatesSearch);
@@ -3529,30 +3533,13 @@ void AlbumManager::slotImagesDeleted(const QList<qlonglong>& imageIds)
         if (images.intersect(deletedImages).isEmpty())
 #endif
         {
-            sAlbumsToDelete.insert(sAlbum);
-            imagesToRescan.unite(images);
+            sAlbumsToUpdate.insert(sAlbum);
         }
     }
 
-    // Remove the deleted images from the set of images for rescan.
-    imagesToRescan.subtract(deletedImages);
-
-    if (!imagesToRescan.empty())
+    if (!sAlbumsToUpdate.isEmpty())
     {
-        // Delete albums
-        foreach (SAlbum* const sAlbum, sAlbumsToDelete)
-        {
-            deleteSAlbum(sAlbum);
-        }
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Rescanning " << imagesToRescan.size() << " images for duplicates.";
-        emit signalUpdateDuplicatesAlbums(imagesToRescan.toList());
-    }
-
-    // Delete all similarity properties to the deleted images:
-    foreach(qlonglong imageid, deletedImages)
-    {
-        CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageid));
+        emit signalUpdateDuplicatesAlbums(sAlbumsToUpdate.toList(), deletedImages.toList());
     }
 }
 

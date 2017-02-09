@@ -208,6 +208,19 @@ ThumbsDbInfo ThumbsDb::findByCustomIdentifier(const QString& id)
     return info;
 }
 
+QList<int> ThumbsDb::findAll()
+{
+    QList<QVariant> values;
+    d->db->execSql(QLatin1String("SELECT id FROM Thumbnails;"),&values);
+
+    QList<int> thumbIds;
+    foreach (QVariant object, values)
+    {
+        thumbIds << object.toInt();
+    }
+    return thumbIds;
+}
+
 QHash<QString, int> ThumbsDb::getFilePathsWithThumbnail()
 {
     DbEngineSqlQuery query = d->db->prepareQuery(QString::fromLatin1("SELECT path, id "
@@ -248,6 +261,11 @@ BdEngineBackend::QueryState ThumbsDb::insertCustomIdentifier(const QString& path
 {
     return d->db->execSql(QLatin1String("REPLACE INTO CustomIdentifiers (identifier, thumbId) VALUES (?,?);"),
                           path, thumbId);
+}
+
+BdEngineBackend::QueryState ThumbsDb::remove(int thumbId)
+{
+    return d->db->execSql(QLatin1String("DELETE FROM Thumbnails WHERE id=?;"), thumbId);
 }
 
 BdEngineBackend::QueryState ThumbsDb::removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize)

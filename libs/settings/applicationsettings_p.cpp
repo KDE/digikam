@@ -139,6 +139,8 @@ const QString ApplicationSettings::Private::configFaceDetectionAccuracyEntry(QLa
 const QString ApplicationSettings::Private::configApplicationStyleEntry(QLatin1String("Application Style"));
 const QString ApplicationSettings::Private::configIconThemeEntry(QLatin1String("Icon Theme"));
 const QString ApplicationSettings::Private::configScanAtStartEntry(QLatin1String("Scan At Start"));
+const QString ApplicationSettings::Private::configCleanAtStartEntry(QLatin1String("Clean core DB At Start"));
+const QString ApplicationSettings::Private::configMinimumSimilarityBound(QLatin1String("Lower bound for minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMinSimilarity(QLatin1String("Last minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMaxSimilarity(QLatin1String("Last maximum similarity"));
 
@@ -206,6 +208,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       recursiveAlbums(false),
       recursiveTags(false),
       scanAtStart(true),
+      cleanAtStart(true),
       sidebarTitleStyle(DMultiTabBar::AllIconsText),
       albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
@@ -218,6 +221,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       syncToBaloo(false),
       faceDetectionAccuracy(0.8),
       stringComparisonType(ApplicationSettings::Natural),
+      minimumSimilarityBound(40),
       duplicatesSearchLastMinSimilarity(90),
       duplicatesSearchLastMaxSimilarity(100),
       q(qq)
@@ -330,10 +334,12 @@ void ApplicationSettings::Private::init()
 
     faceDetectionAccuracy               = 0.8;
 
+    minimumSimilarityBound              = 40;
     duplicatesSearchLastMinSimilarity   = 90;
     duplicatesSearchLastMaxSimilarity   = 100;
 
     scanAtStart                         = true;
+    cleanAtStart                        = true;
     stringComparisonType                = ApplicationSettings::Natural;
 
     applicationStyle                    = qApp->style()->objectName();

@@ -58,7 +58,7 @@ public:
      * @brief A method to get all errors reported from jobs
      * @return String list with errors
      */
-    QList<QString> &errorsList();
+    QList<QString>& errorsList();
 
 protected:
 

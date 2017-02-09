@@ -102,10 +102,15 @@ public:
      */
     ThumbsDbInfo findByFilePath(const QString& path, const QString& uniqueHash);
 
+    /** Returns the thumbnail ids of all thumbnails in the database.
+     */
+    QList<int> findAll();
+
     BdEngineBackend::QueryState insertUniqueHash(const QString& uniqueHash, qlonglong fileSize, int thumbId);
     BdEngineBackend::QueryState insertFilePath(const QString& path, int thumbId);
     BdEngineBackend::QueryState insertCustomIdentifier(const QString& id, int thumbId);
 
+    BdEngineBackend::QueryState remove(int thumbId);
     /** Removes thumbnail data associated to the given uniqueHash/fileSize */
     BdEngineBackend::QueryState removeByUniqueHash(const QString& uniqueHash, qlonglong fileSize);
     /** Removes thumbnail data associated to the given file path */

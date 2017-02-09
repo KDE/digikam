@@ -246,6 +246,7 @@ void ApplicationSettings::readSettings()
 
     d->iconTheme                         = group.readEntry(d->configIconThemeEntry,                                   QString());
     d->scanAtStart                       = group.readEntry(d->configScanAtStartEntry,                                 true);
+    d->cleanAtStart                      = group.readEntry(d->configCleanAtStartEntry,                                false);
 
     // ---------------------------------------------------------------------
 
@@ -276,6 +277,7 @@ void ApplicationSettings::readSettings()
 
     group                    = config->group(d->configGroupDuplicatesSearch);
 
+    d->minimumSimilarityBound            = group.readEntry(d->configMinimumSimilarityBound,                 40);
     d->duplicatesSearchLastMinSimilarity = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,      90);
     d->duplicatesSearchLastMaxSimilarity = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,      100);
 
@@ -408,6 +410,7 @@ void ApplicationSettings::saveSettings()
 #endif
     group.writeEntry(d->configIconThemeEntry,                          d->iconTheme);
     group.writeEntry(d->configScanAtStartEntry,                        d->scanAtStart);
+    group.writeEntry(d->configCleanAtStartEntry,                       d->cleanAtStart);
 
     // ---------------------------------------------------------------------
 
@@ -435,6 +438,7 @@ void ApplicationSettings::saveSettings()
 
     group = config->group(d->configGroupDuplicatesSearch);
 
+    group.writeEntry(d->configMinimumSimilarityBound,                  d->minimumSimilarityBound);
     group.writeEntry(d->configDuplicatesSearchLastMinSimilarity,       d->duplicatesSearchLastMinSimilarity);
     group.writeEntry(d->configDuplicatesSearchLastMaxSimilarity,       d->duplicatesSearchLastMaxSimilarity);
 

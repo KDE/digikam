@@ -224,7 +224,7 @@ void WorkflowDlg::slotTitleChanged(const QString& text)
 
 void WorkflowDlg::slotHelp()
 {
-    DXmlGuiWindow::openHandbook(QLatin1String("workflowdlg.anchor"), QLatin1String("digikam"));
+    DXmlGuiWindow::openHandbook();
 }
 
 }  // namespace Digikam

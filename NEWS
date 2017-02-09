@@ -1,11 +1,14 @@
 *****************************************************************************************************
-digiKam 5.5.0 - Release date: 2017-02-12
+digiKam 5.5.0 - Release date: 2017-03-12
 
 NEW FEATURES:
+Database : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
+           thumbnail and face entries gut does not shrink Databases automatically.
 Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
 Faces    : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
 Faces    : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
 Searches : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
+Searches : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
 Tags     : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 
 BUGFIXES FROM BUGZILLA:
@@ -51,5 +54,12 @@ BUGFIXES FROM BUGZILLA:
 039 ==> 291110 - BQM Watermark tool : size original/unchanged/pixels/points.
 040 ==> 375767 - In Editor switching between pictures with left/right key is reversed. Pic 1 of 80 is displayed as 80 of 80.
 041 ==> 375770 - Creating tag from left panel causes error.
-042 ==> 375591 - Digikam crash.
-043 ==> 
+042 ==> 375591 - digiKam crash.
+043 ==> 375700 - digiKam freezes for a long time (I/O wait) if similarity range is set too low.
+044 ==> 375573 - Don't reset/destroy context after deleting one image among a set of duplicates.
+045 ==> 374368 - Unchecking "Show splash screen at startup" causes no window to display at launch.
+046 ==> 375809 - digiKam froze on opening Settings.
+047 ==> 376112 - digiKam Handbook (Menu & F1) Goes To Incorrect Location.
+048 ==> 374591 - Deleting image only removes the file and sets the status to hidden but does not delete the image from DB [patch].
+049 ==> 323718 - THUMBDB : rebuild all thumbnails does not get rid of all thumbnails first.
+050 ==> 

@@ -207,7 +207,7 @@ Setup::~Setup()
 
 void Setup::slotHelp()
 {
-    Digikam::DXmlGuiWindow::openHandbook(QLatin1String("setupdialog.anchor"), QLatin1String("showfoto"));
+    Digikam::DXmlGuiWindow::openHandbook();
 }
 
 void Setup::slotOkClicked()

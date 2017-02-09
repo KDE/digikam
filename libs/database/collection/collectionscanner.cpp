@@ -590,9 +590,15 @@ void CollectionScanner::completeScanCleanupPart()
     // This deletion shall be done after a certain time, as checked by checkedDeleteRemoved
     if (checkDeleteRemoved())
     {
-        // Definitely delete items which are marked as removed.
+        // Mark items that are old enough and have the status trashed as obsolete
         // Only do this in a complete scan!
-        CoreDbAccess().db()->deleteRemovedItems();
+        CoreDbAccess access;
+        QList<qlonglong> trashedItems = access.db()->getImageIds(DatabaseItem::Status::Trashed);
+        foreach(qlonglong item, trashedItems)
+        {
+            access.db()->setItemStatus(item, DatabaseItem::Status::Obsolete);
+        }
+
         resetDeleteRemovedSettings();
     }
     else

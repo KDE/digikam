@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "coredbsearchxml.h"
 
@@ -45,13 +46,16 @@ public:
 
     Private() :
         hasThumb(false),
-        album(0)
+        album(0),
+        itemCount(0)
     {
     }
 
     bool      hasThumb;
 
     SAlbum*   album;
+    int       itemCount;
+
     ImageInfo refImgInfo;
 };
 
@@ -63,27 +67,11 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
 
     if (d->album)
     {
-        d->refImgInfo = ImageInfo(d->album->title().toLongLong());
+        qlonglong refImage = d->album->title().toLongLong();
+        d->refImgInfo = ImageInfo(refImage);
         setText(Column::REFERENCE_IMAGE, d->refImgInfo.name());
 
-        SearchXmlReader reader(d->album->query());
-        reader.readToFirstField();
-        QList<int> list;
-        list << reader.valueToIntList();
-        setText(Column::RESULT_COUNT, QString::number(list.count()));
-
-        double avgSim = 0.00;
-        SearchXml::Element element;
-
-        while ((element = reader.readNext()) != SearchXml::End)
-        {
-            if ((element == SearchXml::Field) && (reader.fieldName().compare(QLatin1String("noeffect_avgsim")) == 0))
-            {
-                avgSim = reader.valueToDouble();
-            }
-        }
-
-        setText(Column::AVG_SIMILARITY,QString::number(avgSim,'f',2));
+        calculateInfos();
     }
 
     setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
@@ -97,6 +85,67 @@ FindDuplicatesAlbumItem::~FindDuplicatesAlbumItem()
 bool FindDuplicatesAlbumItem::hasValidThumbnail() const
 {
     return d->hasThumb;
+}
+
+void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImages)
+{
+    if (d->album)
+    {
+        qlonglong refImage = d->album->title().toLongLong();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Calculating info for album " << QString::number(refImage);
+
+        SearchXmlReader reader(d->album->query());
+        reader.readToFirstField();
+
+        // Get the defined image ids.
+        QList<int> list;
+        list << reader.valueToIntList();
+
+        // only images that are not removed/obsolete should be shown.
+        double avgSim = 0.00;
+        QList<int> filteredList;
+        foreach (int imageId, list)
+        {
+            ImageInfo info(imageId);
+            // If image is not deleted in this moment and was also not
+            // removed before.
+            if (!deletedImages.contains(imageId) && !info.isRemoved())
+            {
+                filteredList << imageId;
+                if (imageId != refImage)
+                {
+                    avgSim += info.similarityTo(refImage);
+                }
+            }
+        }
+
+        d->itemCount = filteredList.count();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "New Item count: " << QString::number(d->itemCount);
+
+        if (d->itemCount > 1)
+        {
+            if (!filteredList.contains(refImage))
+            {
+                avgSim = avgSim / (d->itemCount);
+            }
+            else
+            {
+                avgSim = avgSim / (d->itemCount - 1 );
+            }
+        }
+        else
+        {
+            this->setHidden(true);
+        }
+
+        setText(Column::RESULT_COUNT, QString::number(d->itemCount));
+        setText(Column::AVG_SIMILARITY,QString::number(avgSim,'f',2));
+    }
+}
+
+int FindDuplicatesAlbumItem::itemCount() const
+{
+    return d->itemCount;
 }
 
 void FindDuplicatesAlbumItem::setThumb(const QPixmap& pix, bool hasThumb)

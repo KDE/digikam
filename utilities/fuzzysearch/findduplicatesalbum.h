@@ -39,6 +39,8 @@
 namespace Digikam
 {
 
+class SAlbum;
+
 class FindDuplicatesAlbum : public QTreeWidget
 {
     Q_OBJECT
@@ -47,6 +49,8 @@ public:
 
     explicit FindDuplicatesAlbum(QWidget* const parent = 0);
     virtual ~FindDuplicatesAlbum();
+
+    void updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild, const QList<qlonglong>& deletedImages);
 
 private :
 

@@ -130,12 +130,14 @@ public:
     static const QString                      configShowPermanentDeleteDialogEntry;
     static const QString                      configApplySidebarChangesDirectlyEntry;
     static const QString                      configScanAtStartEntry;
+    static const QString                      configCleanAtStartEntry;
     static const QString                      configSyncBalootoDigikamEntry;
     static const QString                      configSyncDigikamtoBalooEntry;
     static const QString                      configStringComparisonTypeEntry;
     static const QString                      configFaceDetectionAccuracyEntry;
     static const QString                      configApplicationStyleEntry;
     static const QString                      configIconThemeEntry;
+    static const QString                      configMinimumSimilarityBound;
     static const QString                      configDuplicatesSearchLastMinSimilarity;
     static const QString                      configDuplicatesSearchLastMaxSimilarity;
 
@@ -231,6 +233,7 @@ public:
     // database settings
     DbEngineParameters                        databaseParams;
     bool                                      scanAtStart;
+    bool                                      cleanAtStart;
 
     // album settings
     QStringList                               albumCategoryNames;
@@ -266,6 +269,7 @@ public:
     QString                                   applicationStyle;
     QString                                   iconTheme;
 
+    int                                       minimumSimilarityBound;
     int                                       duplicatesSearchLastMinSimilarity;
     int                                       duplicatesSearchLastMaxSimilarity;
 

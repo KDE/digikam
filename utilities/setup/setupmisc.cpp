@@ -34,6 +34,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QSpinBox>
 
 // KDE includes
 
@@ -57,6 +58,7 @@ public:
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
         iconThemeLabel(0),
+        minSimilarityBoundLabel(0),
         showSplashCheck(0),
         showTrashDeleteDialogCheck(0),
         showPermanentDeleteDialogCheck(0),
@@ -64,10 +66,12 @@ public:
         scrollItemToCenterCheck(0),
         showOnlyPersonTagsInPeopleSidebarCheck(0),
         scanAtStart(0),
+        cleanAtStart(0),
         sidebarType(0),
         stringComparisonType(0),
         applicationStyle(0),
-        iconTheme(0)
+        iconTheme(0),
+        minimumSimilarityBound(0)
     {
     }
 
@@ -75,6 +79,7 @@ public:
     QLabel*    stringComparisonTypeLabel;
     QLabel*    applicationStyleLabel;
     QLabel*    iconThemeLabel;
+    QLabel*    minSimilarityBoundLabel;
 
     QCheckBox* showSplashCheck;
     QCheckBox* showTrashDeleteDialogCheck;
@@ -83,11 +88,14 @@ public:
     QCheckBox* scrollItemToCenterCheck;
     QCheckBox* showOnlyPersonTagsInPeopleSidebarCheck;
     QCheckBox* scanAtStart;
+    QCheckBox* cleanAtStart;
 
     QComboBox* sidebarType;
     QComboBox* stringComparisonType;
     QComboBox* applicationStyle;
     QComboBox* iconTheme;
+
+    QSpinBox*  minimumSimilarityBound;
 };
 
 SetupMisc::SetupMisc(QWidget* const parent)
@@ -130,6 +138,13 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "this can introduce low latency, and it's recommended to disable this option and to plan\n"
                                     "a manual scan through the maintenance tool at the right moment."));
 
+    // ---------------------------------------------------------
+    d->cleanAtStart                   = new QCheckBox(i18n("Remove obsolete core database objects (makes startup slower)"), panel);
+    d->cleanAtStart->setToolTip(i18n("Set this option to force digiKam to clean up the core database from obsolete item entries.\n"
+                                    "Entries are only deleted if the connected image/video/audio file was already removed, i.e.\n"
+                                    "the database object wastes space.\n"
+                                    "This option does not clean up other databases as the thumbnails or recognition db.\n"
+                                    "For clean up routines for other databases, please use the maintenance."));
     // -- Application Behavior Options --------------------------------------------------------
 
     QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
@@ -138,6 +153,20 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
     d->showOnlyPersonTagsInPeopleSidebarCheck = new QCheckBox(i18n("Show only face tags for assigning names in people sidebar"), abOptionsGroup);
     d->showSplashCheck                        = new QCheckBox(i18n("&Show splash screen at startup"), abOptionsGroup);
+
+    DHBox* const minSimilarityBoundHbox       = new DHBox(abOptionsGroup);
+    d->minSimilarityBoundLabel                = new QLabel(i18n("Lower bound for minimum similarity:"), minSimilarityBoundHbox);
+    d->minimumSimilarityBound                 = new QSpinBox(minSimilarityBoundHbox);
+    d->minimumSimilarityBound->setSuffix(QLatin1String("%"));
+    d->minimumSimilarityBound->setRange(1, 100);
+    d->minimumSimilarityBound->setSingleStep(1);
+    d->minimumSimilarityBound->setValue(40);
+    d->minimumSimilarityBound->setToolTip(i18n("Select here the lower bound of "
+                                               "the minimum similarity threshold "
+                                               "for fuzzy and duplicates searches. "
+                                               "The default value is 40. Selecting "
+                                               "a lower value than 40 can make the search <b>really</b> slow."));
+    d->minSimilarityBoundLabel->setBuddy(d->minimumSimilarityBound);
 
     DHBox* const tabStyleHbox = new DHBox(abOptionsGroup);
     d->sidebarTypeLabel       = new QLabel(i18n("Sidebar tab title:"), tabStyleHbox);
@@ -196,6 +225,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     gLayout5->addWidget(d->scrollItemToCenterCheck);
     gLayout5->addWidget(d->showOnlyPersonTagsInPeopleSidebarCheck);
     gLayout5->addWidget(d->showSplashCheck);
+    gLayout5->addWidget(minSimilarityBoundHbox);
     gLayout5->addWidget(tabStyleHbox);
     gLayout5->addWidget(appStyleHbox);
     gLayout5->addWidget(iconThemeHbox);
@@ -207,6 +237,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->setSpacing(spacing);
     layout->addWidget(stringComparisonHbox);
     layout->addWidget(d->scanAtStart);
+    layout->addWidget(d->cleanAtStart);
     layout->addWidget(d->showTrashDeleteDialogCheck);
     layout->addWidget(d->showPermanentDeleteDialogCheck);
     layout->addWidget(d->sidebarApplyDirectlyCheck);
@@ -231,8 +262,10 @@ void SetupMisc::applySettings()
     settings->setShowSplashScreen(d->showSplashCheck->isChecked());
     settings->setShowTrashDeleteDialog(d->showTrashDeleteDialogCheck->isChecked());
     settings->setShowPermanentDeleteDialog(d->showPermanentDeleteDialogCheck->isChecked());
+    settings->setMinimumSimilarityBound(d->minimumSimilarityBound->value());
     settings->setApplySidebarChangesDirectly(d->sidebarApplyDirectlyCheck->isChecked());
     settings->setScanAtStart(d->scanAtStart->isChecked());
+    settings->setCleanAtStart(d->cleanAtStart->isChecked());
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setShowOnlyPersonTagsInPeopleSidebar(d->showOnlyPersonTagsInPeopleSidebarCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
@@ -253,9 +286,11 @@ void SetupMisc::readSettings()
     d->showSplashCheck->setChecked(settings->getShowSplashScreen());
     d->showTrashDeleteDialogCheck->setChecked(settings->getShowTrashDeleteDialog());
     d->showPermanentDeleteDialogCheck->setChecked(settings->getShowPermanentDeleteDialog());
+    d->minimumSimilarityBound->setValue(settings->getMinimumSimilarityBound());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->sidebarApplyDirectlyCheck->setChecked(settings->getApplySidebarChangesDirectly());
     d->scanAtStart->setChecked(settings->getScanAtStart());
+    d->cleanAtStart->setChecked(settings->getCleanAtStart());
     d->scrollItemToCenterCheck->setChecked(settings->getScrollItemToCenter());
     d->showOnlyPersonTagsInPeopleSidebarCheck->setChecked(settings->showOnlyPersonTagsInPeopleSidebar());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
