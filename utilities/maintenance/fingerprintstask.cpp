@@ -44,7 +44,7 @@ public:
     }
 
     bool      cancel;
-    QString   path;
+    QStringList   paths;
 };
 
 // -------------------------------------------------------
@@ -63,7 +63,12 @@ FingerprintsTask::~FingerprintsTask()
 
 void FingerprintsTask::setItem(const QString& path)
 {
-    d->path = path;
+    d->paths = QStringList() << path;
+}
+
+void FingerprintsTask::setItems(const QStringList& paths)
+{
+    d->paths = paths;
 }
 
 void FingerprintsTask::slotCancel()
@@ -75,20 +80,23 @@ void FingerprintsTask::run()
 {
     if (!d->cancel)
     {
-        DImg dimg = PreviewLoadThread::loadFastSynchronously(d->path, HaarIface::preferredSize());
-
-        if (d->cancel)
-            return;
-
-        if (!dimg.isNull())
+        foreach(QString path, d->paths)
         {
-            // compute Haar fingerprint and store it to DB
-            HaarIface haarIface;
-            haarIface.indexImage(d->path, dimg);
-        }
+            DImg dimg = PreviewLoadThread::loadFastSynchronously(path, HaarIface::preferredSize());
 
-        QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
-        emit signalFinished(qimg);
+            if (d->cancel)
+                return;
+
+            if (!dimg.isNull())
+            {
+                // compute Haar fingerprint and store it to DB
+                HaarIface haarIface;
+                haarIface.indexImage(path, dimg);
+            }
+
+            QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
+            emit signalFinished(qimg);
+        }
         emit signalDone();
     }
 }

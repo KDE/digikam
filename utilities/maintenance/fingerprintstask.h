@@ -49,6 +49,7 @@ public:
     ~FingerprintsTask();
 
     void setItem(const QString& path);
+    void setItems(const QStringList& paths);
 
 Q_SIGNALS:
 

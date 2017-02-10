@@ -107,9 +107,9 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
     appendJobs(collection);
 }
 
-void MaintenanceThread::generateFingerprints(const QStringList& paths)
+void MaintenanceThread::generateFingerprints(const QStringList& paths, int chunkSize)
 {
-    ActionJobCollection collection;
+    /*ActionJobCollection collection;
 
     for(int i = 0; i < paths.size(); i++)
     {
@@ -125,7 +125,47 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths)
         collection.insert(t, 0);
     }
 
-    appendJobs(collection);
+    appendJobs(collection);*/
+
+    ActionJobCollection collection;
+
+    QQueue<QString> queue;
+    foreach(QString path, paths)
+    {
+        queue.enqueue(path);
+    }
+
+    // Generate the chunks for the tasks.
+    // Construct a task if the chunk size is reached
+    // or the queue became empty.
+    QList<QString> chunk;
+    while (!queue.isEmpty())
+    {
+        chunk << queue.dequeue();
+        // Chunk is complete if the size hits the maximum limit
+        // or the queus is empty (0 means unlimited)
+        if ( ( (chunk.size() == chunkSize) && (chunkSize != 0) ) || queue.isEmpty())
+        {
+            FingerprintsTask* const t = new FingerprintsTask();
+            t->setItems(chunk);
+
+            connect(t, SIGNAL(signalFinished(QImage)),
+                this, SIGNAL(signalAdvance(QImage)));
+
+            connect(this, SIGNAL(signalCanceled()),
+                t, SLOT(slotCancel()), Qt::QueuedConnection);
+
+            collection.insert(t, 0);
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Creating a database task for generating fingerprints for items with a chunk size of " << chunk.size();
+
+            chunk.clear();
+        }
+    }
+    if (!collection.isEmpty())
+    {
+        appendJobs(collection);
+    }
 }
 
 void MaintenanceThread::sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality)
