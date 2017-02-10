@@ -2659,6 +2659,56 @@ bool DImg::rotateAndFlip(int orientation)
 
     return rotatedOrFlipped;
 }
+bool DImg::reverseRotateAndFlip(int orientation)
+{
+    bool rotatedOrFlipped = false;
+
+    switch (orientation)
+    {
+        case DMetadata::ORIENTATION_NORMAL:
+        case DMetadata::ORIENTATION_UNSPECIFIED:
+            return false;
+
+        case DMetadata::ORIENTATION_HFLIP:
+            flip(DImg::HORIZONTAL);
+            rotatedOrFlipped = true;
+            break;
+
+        case DMetadata::ORIENTATION_ROT_180:
+            rotate(DImg::ROT180);
+            rotatedOrFlipped = true;
+            break;
+
+        case DMetadata::ORIENTATION_VFLIP:
+            flip(DImg::VERTICAL);
+            rotatedOrFlipped = true;
+            break;
+
+        case DMetadata::ORIENTATION_ROT_90_HFLIP:
+            rotate(DImg::ROT270);
+            flip(DImg::HORIZONTAL);
+            rotatedOrFlipped = true;
+            break;
+
+        case DMetadata::ORIENTATION_ROT_90:
+            rotate(DImg::ROT270);
+            rotatedOrFlipped = true;
+            break;
+
+        case DMetadata::ORIENTATION_ROT_90_VFLIP:
+            rotate(DImg::ROT270);
+            flip(DImg::VERTICAL);
+            rotatedOrFlipped = true;
+            break;
+
+        case DMetadata::ORIENTATION_ROT_270:
+            rotate(DImg::ROT90);
+            rotatedOrFlipped = true;
+            break;
+    }
+
+    return rotatedOrFlipped;
+}
 
 bool DImg::transform(int transformAction)
 {

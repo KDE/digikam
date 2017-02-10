@@ -44,7 +44,7 @@ class WaterMark : public BatchTool
 public:
 
     explicit WaterMark(QObject* const parent = 0);
-    ~WaterMark();
+    virtual ~WaterMark();
 
     BatchToolSettings defaultSettings();
 

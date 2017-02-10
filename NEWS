@@ -2,6 +2,7 @@
 digiKam 5.5.0 - Release date: 2017-03-12
 
 NEW FEATURES:
+
 Database : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
            thumbnail and face entries gut does not shrink Databases automatically.
 Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
@@ -10,6 +11,7 @@ Faces    : The list of proposed names for hame assigment in people sidebar can n
 Searches : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
 Searches : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
 Tags     : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
+BQM      : Several usability improvements in Watermark tool.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -62,4 +64,8 @@ BUGFIXES FROM BUGZILLA:
 047 ==> 376112 - digiKam Handbook (Menu & F1) Goes To Incorrect Location.
 048 ==> 374591 - Deleting image only removes the file and sets the status to hidden but does not delete the image from DB [patch].
 049 ==> 323718 - THUMBDB : rebuild all thumbnails does not get rid of all thumbnails first.
-050 ==> 
+050 ==> 317210 - THUMBDB : delete image removes file, but does not remove thumbnails
+051 ==> 338869 - BQM Watermark tool : add new option to rotate text.
+052 ==> 250642 - BQM Watermark tool : signature does not respect correct orientation.
+053 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
+054 ==> 

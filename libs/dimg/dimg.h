@@ -81,7 +81,8 @@ public:
     {
         ROT90=0,
         ROT180,
-        ROT270
+        ROT270,
+        ROTNONE
     };
 
     enum FLIP
@@ -563,6 +564,10 @@ public:
      *  is given, returns false, because no action is taken).
      */
     bool       rotateAndFlip(int orientation);
+
+    /** Reverses the previous function.
+     */
+    bool       reverseRotateAndFlip(int orientation);
 
     /** Rotates and/or flip the DImg according to the given transform action,
      *  which is a MetaEngineRotation::TransformAction.
