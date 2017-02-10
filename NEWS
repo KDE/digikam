@@ -68,4 +68,5 @@ BUGFIXES FROM BUGZILLA:
 051 ==> 338869 - BQM Watermark tool : add new option to rotate text.
 052 ==> 250642 - BQM Watermark tool : signature does not respect correct orientation.
 053 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
-054 ==> 
+054 ==> 374450 - DATA LOSS: Saving a file can overwrite other file.
+055 ==> 

@@ -575,16 +575,13 @@ void ShowFoto::slotOpenUrl(const ShowfotoItemInfo& info)
 
 void ShowFoto::slotShowfotoItemInfoActivated(const ShowfotoItemInfo& info)
 {
-    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
-
-    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->thumbBar->currentUrl()))
+    if (!d->thumbBar->currentInfo().isNull() && !promptUserSave(d->currentLoadedUrl))
     {
+        d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
         return;
     }
 
     slotOpenUrl(info);
-
-    d->thumbBar->setCurrentUrl(d->currentLoadedUrl);
 }
 
 Digikam::ThumbBarDock* ShowFoto::thumbBar() const
@@ -960,7 +957,7 @@ bool ShowFoto::save()
         return true;
     }
 
-    startingSave(d->thumbBar->currentUrl());
+    startingSave(d->currentLoadedUrl);
     return true;
 }
 
@@ -972,7 +969,7 @@ bool ShowFoto::saveAs()
         return false;
     }
 
-    return (startingSaveAs(d->thumbBar->currentUrl()));
+    return (startingSaveAs(d->currentLoadedUrl));
 }
 
 void ShowFoto::slotDeleteCurrentItem()
