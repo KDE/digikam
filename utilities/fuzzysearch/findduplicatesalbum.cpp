@@ -113,10 +113,9 @@ void FindDuplicatesAlbum::updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbu
     {
         FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
 
-        if (sAlbumsToRebuild.contains(item->album()))
+        if (item && sAlbumsToRebuild.contains(item->album()))
         {
             item->calculateInfos(deletedImages);
-            //item->setHidden(item->itemCount() < 2);
         }
 
         ++it;
