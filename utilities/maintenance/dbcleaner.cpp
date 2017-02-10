@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QIcon>
+#include <QMessageBox>
 
 // KDE includes
 
@@ -34,6 +35,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikamapp.h"
 #include "maintenancethread.h"
 
 namespace Digikam
@@ -48,9 +50,15 @@ public:
         cleanThumbsDb(false),
         cleanFacesDb(false),
         shrinkDatabases(false),
-        databasesToVacuum(0),
-        threadChunkSize(0)
+        threadChunkSize(0),
+        databaseCount(3),
+        messageBox(0)
     {
+    }
+    
+    ~Private()
+    {
+        delete messageBox;
     }
 
     MaintenanceThread*           thread;
@@ -58,12 +66,14 @@ public:
     bool                         cleanFacesDb;
     bool                         shrinkDatabases;
 
-    int                          databasesToVacuum;
     QList<qlonglong>             imagesToRemove;
     QList<int>                   staleThumbnails;
     QList<FacesEngine::Identity> staleIdentities;
 
     int                          threadChunkSize;
+    int                          databaseCount;
+
+    QMessageBox*                 messageBox;
 };
 
 DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases, ProgressItem* const parent)
@@ -77,15 +87,13 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases
     d->cleanFacesDb    = cleanFacesDb;
     d->shrinkDatabases = shrinkDatabases;
 
-    if (d->shrinkDatabases)
-    {
-        d->databasesToVacuum = 1;
-    }
-
     d->thread          = new MaintenanceThread(this);
+
+    d->messageBox      = new QMessageBox(DigikamApp::instance());
 
     connect(d->thread, SIGNAL(signalAdvance()),
             this, SLOT(slotAdvance()));
+
 }
 
 DbCleaner::~DbCleaner()
@@ -99,6 +107,9 @@ void DbCleaner::slotStart()
     setLabel(i18n("Clean up the databases : ") + i18n("analysing databases"));
     setThumbnail(QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(22));
     ProgressManager::addProgressItem(this);
+
+    // Set one item to make sure that the progress bar is shown.
+    setTotalItems(d->databaseCount);
 
     connect(d->thread,SIGNAL(signalCompleted()),
             this, SLOT(slotCleanItems()));
@@ -136,7 +147,7 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
             disconnect(d->thread,SIGNAL(signalCompleted()),
                         this, SLOT(slotCleanItems()));
 
-            setTotalItems(d->databasesToVacuum);
+            setTotalItems(totalItems() + d->databaseCount);
 
             slotShrinkDatabases();
         }
@@ -144,7 +155,14 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
         return;
     }
 
-    setTotalItems(d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size() + d->databasesToVacuum);
+    if (d->shrinkDatabases)
+    {
+        setTotalItems(totalItems() + d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size() + d->databaseCount);
+    }
+    else
+    {
+        setTotalItems(totalItems() + d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size());
+    }
 }
 
 void DbCleaner::slotCleanItems()
@@ -161,8 +179,6 @@ void DbCleaner::slotCleanItems()
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Found " << d->imagesToRemove.size() << " obsolete image entries.";
 
-        // Set the total count of items to remove
-        setTotalItems(d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size());
         setLabel(i18n("Clean up the databases : ") + i18n("cleaning core db"));
 
         // GO!
@@ -253,12 +269,27 @@ void DbCleaner::slotCleanedFaces()
 
 void DbCleaner::slotShrinkDatabases()
 {
+    setLabel(i18n("Clean up the databases : ") + i18n("shrinking databases"));
+
     disconnect(d->thread, SIGNAL(signalCompleted()),
                this, SLOT(slotCleanedFaces()));
+
+    connect(d->thread, SIGNAL(signalCompleted()),
+                    d->messageBox, SLOT(hide()));
 
     d->thread->shrinkDatabases();
     // run blocking
     //d->thread->run();
+
+    d->messageBox->setText(i18n("Database shrinking in progress."));
+    d->messageBox->setInformativeText(
+            i18n("Currently, your database(s) are shrinked.<br/>"
+            "This will take some time - depending on your database(s) size.<br/><br/>"
+            "We have to freeze digiKam in order to prevent database corruption.<br/>"
+            "This info box will vanish when the shrinking process is finished."));
+    d->messageBox->setStandardButtons(QMessageBox::NoButton);
+    d->messageBox->exec();
+    
     d->thread->start();
 }
 

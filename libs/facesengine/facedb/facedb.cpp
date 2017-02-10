@@ -359,10 +359,10 @@ bool FaceDb::integrityCheck()
 {
     QList<QVariant> values;
     d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkRecognitionDbIntegrity")), &values);
-    qCDebug(DIGIKAM_GENERAL_LOG) << "integrity check result count: " << values.size();
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "integrity check result count: " << values.size();
     if (values.size() == 1)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "integrity check result: " << values.first().toString();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "integrity check result: " << values.first().toString();
         if (values.first().toString().compare(QLatin1String("ok")) == 0)
         {
             return true;

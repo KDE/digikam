@@ -156,6 +156,9 @@ void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb)
     DatabaseTask* const t = new DatabaseTask();
     t->computeDatabaseJunk(thumbsDb, facesDb);
 
+    connect(t, SIGNAL(signalFinished()),
+                this, SIGNAL(signalAdvance()));
+
     connect(t,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
             this, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
 

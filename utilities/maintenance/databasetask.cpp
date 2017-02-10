@@ -135,6 +135,11 @@ void DatabaseTask::slotCancel()
 
 void DatabaseTask::run()
 {
+    if (d->cancel)
+    {
+        return;
+    }
+
     if (d->shrinkDatabases)
     {
         if (CoreDbAccess().db()->integrityCheck())
@@ -152,6 +157,13 @@ void DatabaseTask::run()
         else
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your core DB is corrupt.";
+        }
+
+        emit signalFinished();
+
+        if (d->cancel)
+        {
+            return;
         }
 
         if (ThumbsDbAccess::isInitialized())
@@ -178,11 +190,17 @@ void DatabaseTask::run()
             qCWarning(DIGIKAM_DATABASE_LOG) << "Thumbnails DB is not initialised. Will not vacuum.";
         }
 
-        FacesEngine::RecognitionDatabase rDatabase;
-        if (rDatabase.integrityCheck())
+        emit signalFinished();
+
+        if (d->cancel)
         {
-            rDatabase.vacuum();
-            if (!rDatabase.integrityCheck())
+            return;
+        }
+
+        if (FacesEngine::RecognitionDatabase().integrityCheck())
+        {
+            FacesEngine::RecognitionDatabase().vacuum();
+            if (!FacesEngine::RecognitionDatabase().integrityCheck())
             {
                 qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed after vacuum. Something went wrong.";
             }
@@ -195,13 +213,15 @@ void DatabaseTask::run()
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your core DB is corrupt.";
         }
+
+        emit signalFinished();
     }
     else if (d->computeDatabaseJunk)
     {
-        CoreDbAccess coreDbAccess;
-
         // Get the count of image entries in DB to delete.
-        d->imageIds   = coreDbAccess.db()->getImageIds(DatabaseItem::Status::Obsolete);
+        d->imageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
+        
+        emit signalFinished();
 
         // Get the stale thumbnail paths.
 
@@ -214,31 +234,35 @@ void DatabaseTask::run()
             // OR
             // The thumbnail is stale, i.e. no thumbs db table references it.
 
-            ThumbsDbAccess thumbsDbAccess;
-            QSet<int> thumbIds     = thumbsDbAccess.db()->findAll().toSet();
+            QSet<int> thumbIds     = ThumbsDbAccess().db()->findAll().toSet();
 
             // Get all items, i.e. images, videos, ...
-            QList<qlonglong> items = coreDbAccess.db()->getAllItems();
+            QList<qlonglong> items = CoreDbAccess().db()->getAllItems();
 
             FaceTagsEditor editor;
 
             foreach(qlonglong item, items)
             {
+                if (d->cancel)
+                {
+                    return;
+                }
+
                 ImageInfo info(item);
 
                 if (!info.isNull())
                 {
-                    QString hash       = coreDbAccess.db()->getImagesFields(item,DatabaseFields::ImagesField::UniqueHash).first().toString();
+                    QString hash       = CoreDbAccess().db()->getImagesFields(item,DatabaseFields::ImagesField::UniqueHash).first().toString();
                     qlonglong fileSize = info.fileSize();
                     bool removed       = false;
 
                     // Remove the id that is found by the file path. Finding the id -1 does no harm
-                    removed            = thumbIds.remove(thumbsDbAccess.db()->findByFilePath(info.filePath()).id);
+                    removed            = thumbIds.remove(ThumbsDbAccess().db()->findByFilePath(info.filePath()).id);
 
                     if (!removed)
                     {
                         // Remove the id that is found by the hash and file size. Finding the id -1 does no harm
-                        thumbIds.remove(thumbsDbAccess.db()->findByHash(hash,fileSize).id);
+                        thumbIds.remove(ThumbsDbAccess().db()->findByHash(hash,fileSize).id);
                     }
 
                     // Add the custom identifier.
@@ -262,7 +286,7 @@ void DatabaseTask::run()
                         //qCDebug(DIGIKAM_GENERAL_LOG) << "URL: " << url.toString(); 
 
                         // Remove the id that is found by the custom identifyer. Finding the id -1 does no harm
-                        thumbIds.remove(thumbsDbAccess.db()->findByCustomIdentifier(url.toString()).id);
+                        thumbIds.remove(ThumbsDbAccess().db()->findByCustomIdentifier(url.toString()).id);
                     }
                 }
             }
@@ -271,10 +295,17 @@ void DatabaseTask::run()
             d->thumbIds = thumbIds.toList();
         }
 
+        if (d->cancel)
+        {
+            return;
+        }
+
+        emit signalFinished();
+
         // Get the stale face identities.
         if (d->scanRecognitionDb)
         {
-            QList<TagProperty> properties = coreDbAccess.db()->getTagProperties(TagPropertyName::faceEngineUuid());
+            QList<TagProperty> properties = CoreDbAccess().db()->getTagProperties(TagPropertyName::faceEngineUuid());
             QSet<QString> uuidSet;
 
             foreach(TagProperty prop, properties)
@@ -282,9 +313,7 @@ void DatabaseTask::run()
                 uuidSet << prop.value;
             }
 
-            FacesEngine::RecognitionDatabase rDatabase;
-
-            QList<FacesEngine::Identity> identities = rDatabase.allIdentities();
+            QList<FacesEngine::Identity> identities = FacesEngine::RecognitionDatabase().allIdentities();
 
             // Get all identitites to remove. Don't remove now in order to make sure no side effects occur.
 
@@ -298,30 +327,32 @@ void DatabaseTask::run()
                 }
             }
         }
-
+        emit signalFinished();
         emit signalData(d->imageIds,d->thumbIds,d->identities);
         // do not emit the finished signal. We do not need it.
         // It would only trigger the advance slot of MaintenanceThread
     }
     else if (!d->imageIds.isEmpty())
     {
-        CoreDbAccess access;
-
         foreach(qlonglong imageId, d->imageIds)
         {
-            access.db()->deleteItem(imageId);
-            access.db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageId));
+            if (d->cancel)
+            {
+                return;
+            }
+
+            CoreDbAccess().db()->deleteItem(imageId);
+            CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageId));
         
             emit signalFinished();
         }
     }
     else if (!d->thumbIds.empty())
     {
-        ThumbsDbAccess access;
         BdEngineBackend::QueryState lastQueryState = BdEngineBackend::ConnectionError;
 
         // Connect to the database
-        lastQueryState                             = access.backend()->beginTransaction();
+        lastQueryState                             = ThumbsDbAccess().backend()->beginTransaction();
 
         if (BdEngineBackend::NoErrors == lastQueryState)
         {
@@ -329,7 +360,11 @@ void DatabaseTask::run()
 
             foreach(int thumbId, d->thumbIds)
             {
-                lastQueryState = access.db()->remove(thumbId);
+                if (d->cancel)
+                {
+                    return;
+                }
+                lastQueryState = ThumbsDbAccess().db()->remove(thumbId);
                 emit signalFinished();
             }
 
@@ -338,7 +373,7 @@ void DatabaseTask::run()
             if (BdEngineBackend::NoErrors == lastQueryState)
             {
                 // Commit the removel if everything was fine.
-                lastQueryState = access.backend()->commitTransaction();
+                lastQueryState = ThumbsDbAccess().backend()->commitTransaction();
 
                 if (BdEngineBackend::NoErrors != lastQueryState)
                 {
@@ -359,6 +394,11 @@ void DatabaseTask::run()
     {
         foreach (FacesEngine::Identity identity, d->identities)
         {
+            if (d->cancel)
+            {
+                return;
+            }
+
             FacesEngine::RecognitionDatabase().deleteIdentity(identity);
             emit signalFinished();
         }

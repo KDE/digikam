@@ -210,11 +210,15 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     // --------------------------------------------------------------------------------------
 
     d->vbox3              = new DVBox;
-    new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning.</i></qt>"),d->vbox3);
-    d->cleanThumbsDb      = new QCheckBox(i18n("Also clean up the thumbnail database. This may take much time."),d->vbox3);
-    d->cleanFacesDb       = new QCheckBox(i18n("Also clean up the faces database. This may take much time."),d->vbox3);
-    d->shrinkDatabases    = new QCheckBox(i18n("Also shrink all databases if possible (Full support only for SQLite). This may take much time and will block digiKam until the process is finished."),d->vbox3);
-    d->shrinkDatabases->setToolTip(i18n("This option leads to the vacuuming (shrinking) of the databases. Vacuuming is supported both for SQLite and MySQL. But no integrity check cannot be made for MySQL."));
+    new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning.<br/>"
+                            " If you select one of the options below, the process may take much time and can freeze digiKam temporarily<br/>"
+                            " in order to make sure that no database corruption occurs.</i></qt>"),d->vbox3);
+    d->cleanThumbsDb      = new QCheckBox(i18n("Also clean up the thumbnail database."),d->vbox3);
+    d->cleanFacesDb       = new QCheckBox(i18n("Also clean up the faces database."),d->vbox3);
+    d->shrinkDatabases    = new QCheckBox(i18n("Also shrink all databases if possible (Full support only for SQLite)."),d->vbox3);
+    d->shrinkDatabases->setToolTip(i18n("This option leads to the vacuuming (shrinking) of the databases."
+                                        " Vacuuming is supported both for SQLite and MySQL. "
+                                        " But no integrity check can be made for MySQL as it is unsupported as prepared statement."));
     d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
                                QIcon::fromTheme(QLatin1String("run-build")),
                                i18n("Perform database cleaning"), QLatin1String("DbCleanup"), false);
