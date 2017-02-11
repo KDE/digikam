@@ -415,7 +415,7 @@ void ImageViewUtilities::createGroupByTimeFromInfoList(const ImageInfoList& imag
     }
 }
 
-void ImageViewUtilities::createGroupByTypeFromInfoList(const ImageInfoList& imageInfoList)
+void ImageViewUtilities::createGroupByFilenameFromInfoList(const ImageInfoList& imageInfoList)
 {
     QList<ImageInfo> groupingList = imageInfoList;
     // sort by Name

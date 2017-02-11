@@ -982,8 +982,8 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
         connect(closeActionDate, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByTime()));
         actions << closeActionDate;
 
-        QAction* const closeActionType = new QAction(i18nc("@action:inmenu", "Group Selected By Type"), this);
-        connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByType()));
+        QAction* const closeActionType = new QAction(i18nc("@action:inmenu", "Group Selected By Filename"), this);
+        connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByFilename()));
         actions << closeActionType;
 
         QAction* const separator = new QAction(this);

@@ -426,8 +426,8 @@ void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const Ima
     connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
             this, SLOT(createGroupByTimeFromSelection()));
 
-    connect(&cmhelper, SIGNAL(signalCreateGroupByType()),
-            this, SLOT(createGroupByTypeFromSelection()));
+    connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
+            this, SLOT(createGroupByFilenameFromSelection()));
 
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(ungroupSelected()));
@@ -469,8 +469,8 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
     connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
             this, SLOT(createGroupByTimeFromSelection()));
 
-    connect(&cmhelper, SIGNAL(signalCreateGroupByType()),
-            this, SLOT(createGroupByTypeFromSelection()));
+    connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
+            this, SLOT(createGroupByFilenameFromSelection()));
 
     connect(&cmhelper, SIGNAL(signalUngroup()),
             this, SLOT(ungroupSelected()));
@@ -637,10 +637,10 @@ void DigikamImageView::createGroupByTimeFromSelection()
     d->utilities->createGroupByTimeFromInfoList(selectedInfos);
 }
 
-void DigikamImageView::createGroupByTypeFromSelection()
+void DigikamImageView::createGroupByFilenameFromSelection()
 {
     const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    d->utilities->createGroupByTypeFromInfoList(selectedInfos);
+    d->utilities->createGroupByFilenameFromInfoList(selectedInfos);
 }
 
 void DigikamImageView::ungroupSelected()
