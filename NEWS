@@ -70,4 +70,5 @@ BUGFIXES FROM BUGZILLA:
 053 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
 054 ==> 374450 - DATA LOSS: Saving a file can overwrite other file.
 055 ==> 376345 - Can't disable "auto spell check" while editing metadata.
-056 ==> 
+056 ==> 376369 - No Icon of Digikam in Gnome's panels.
+057 ==> 
