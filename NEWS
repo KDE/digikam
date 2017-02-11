@@ -69,4 +69,5 @@ BUGFIXES FROM BUGZILLA:
 052 ==> 250642 - BQM Watermark tool : signature does not respect correct orientation.
 053 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
 054 ==> 374450 - DATA LOSS: Saving a file can overwrite other file.
-055 ==> 
+055 ==> 376345 - Can't disable "auto spell check" while editing metadata.
+056 ==> 
