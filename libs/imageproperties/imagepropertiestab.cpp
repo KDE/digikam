@@ -301,7 +301,7 @@ ImagePropertiesTab::ImagePropertiesTab(QWidget* const parent)
     glay2->setColumnStretch(1, 10);
 
     insertItem(ImagePropertiesTab::Private::ImageProperties,
-               w2, QIcon::fromTheme(QLatin1String("image-x-generic")),
+               w2, QIcon::fromTheme(QLatin1String("view-preview")),
                i18n("Item Properties"), QLatin1String("ItemProperties"), true);
 
     // --------------------------------------------------

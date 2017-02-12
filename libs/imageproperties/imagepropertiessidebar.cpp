@@ -87,7 +87,7 @@ ImagePropertiesSideBar::ImagePropertiesSideBar(QWidget* const parent,
 
 #ifdef HAVE_MARBLE
     m_gpsTab = new ImagePropertiesGPSTab(parent);
-    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("folder-html")),      i18n("Map"));
+    appendTab(m_gpsTab,        QIcon::fromTheme(QLatin1String("globe")),      i18n("Map"));
 #endif // HAVE_MARBLE
 
     connect(this, SIGNAL(signalChangedTab(QWidget*)),

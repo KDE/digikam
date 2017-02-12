@@ -241,7 +241,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     grid1->addWidget(label7,                 6, 0, 1, 1);
     grid1->addWidget(d->instructionsEdit,    6, 1, 1, 2);
 
-    insertTab(RIGHTS, page1, QIcon::fromTheme(QLatin1String("flag-red")), i18n("Rights"));
+    insertTab(RIGHTS, page1, QIcon::fromTheme(QLatin1String("flag")), i18n("Rights"));
 
     // -- Location Template information panel -------------------------------------------------------------
 
@@ -307,7 +307,7 @@ TemplatePanel::TemplatePanel(QWidget* const parent)
     page2->setTabOrder(d->locationSublocationEdit, d->locationProvinceStateEdit);
     page2->setTabOrder(d->locationProvinceStateEdit, d->locationCountryCodeEdit);
 
-    insertTab(LOCATION, page2, QIcon::fromTheme(QLatin1String("folder-html")), i18n("Location"));
+    insertTab(LOCATION, page2, QIcon::fromTheme(QLatin1String("globe")), i18n("Location"));
 
     // -- Contact Template information panel -------------------------------------------------------------
 

@@ -92,7 +92,7 @@ DeleteItem::DeleteItem(QTreeWidget* const parent, const QUrl& url)
     }
     else
     {
-        setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
+        setThumb(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
     }
 
     setText(1, fileUrl());

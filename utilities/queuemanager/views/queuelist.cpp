@@ -98,7 +98,7 @@ QueueListViewItem::QueueListViewItem(QueueListView* const view, const ImageInfo&
       d(new Private)
 {
     d->view = view;
-    setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(48, QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(48, QIcon::Disabled), false);
     setInfo(info);
 }
 
@@ -748,7 +748,7 @@ void QueueListView::slotThumbnailLoaded(const LoadingDescription& desc, const QP
         {
             if (pix.isNull())
             {
-                item->setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(d->iconSize, QIcon::Disabled));
+                item->setThumb(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(d->iconSize, QIcon::Disabled));
             }
             else
             {

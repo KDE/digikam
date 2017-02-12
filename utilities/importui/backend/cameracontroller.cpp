@@ -342,7 +342,7 @@ QIcon CameraController::mimeTypeThumbnail(const QString& itemName) const
     }
     else if (mime.startsWith(QLatin1String("image/")))
     {
-        return QIcon::fromTheme(QLatin1String("image-x-generic"));
+        return QIcon::fromTheme(QLatin1String("view-preview"));
     }
     else if (mime.startsWith(QLatin1String("video/")))
     {

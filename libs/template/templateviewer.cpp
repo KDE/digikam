@@ -179,7 +179,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->source->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->instructions->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    addItem(w1, QIcon::fromTheme(QLatin1String("flag-red")),
+    addItem(w1, QIcon::fromTheme(QLatin1String("flag")),
             i18n("Rights"), QLatin1String("Rights"), true);
 
     // ------------------------------------------------------------------
@@ -199,7 +199,7 @@ TemplateViewer::TemplateViewer(QWidget* const parent)
     d->locationProvinceState->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     d->locationCountry->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    addItem(w2, QIcon::fromTheme(QLatin1String("folder-html")),
+    addItem(w2, QIcon::fromTheme(QLatin1String("globe")),
             i18n("Location"), QLatin1String("Location"), true);
 
     // ------------------------------------------------------------------

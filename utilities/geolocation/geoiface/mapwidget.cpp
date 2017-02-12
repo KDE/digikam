@@ -755,7 +755,7 @@ QWidget* MapWidget::getControlWidget()
         QToolButton* const configurationButton = new QToolButton(d->controlWidget);
         controlWidgetHBoxLayout->addWidget(configurationButton);
         configurationButton->setToolTip(i18n("Map settings"));
-        configurationButton->setIcon(QIcon::fromTheme( QLatin1String("folder-html") ));
+        configurationButton->setIcon(QIcon::fromTheme( QLatin1String("globe") ));
         configurationButton->setMenu(d->configurationMenu);
         configurationButton->setPopupMode(QToolButton::InstantPopup);
 

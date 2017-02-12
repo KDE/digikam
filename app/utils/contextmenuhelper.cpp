@@ -674,7 +674,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     }
 
     d->gotoAlbumAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")),     i18n("Album"), this);
-    d->gotoDateAction     = new QAction(QIcon::fromTheme(QLatin1String("view-calendar-month")), i18n("Date"),  this);
+    d->gotoDateAction     = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")), i18n("Date"),  this);
     QMenu* const gotoMenu = new QMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
     gotoMenu->addAction(d->gotoDateAction);

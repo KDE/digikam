@@ -141,7 +141,7 @@ BWSepiaSettings::BWSepiaSettings(QWidget* const parent, DImg* const img)
     }
     else
     {
-        d->thumbImage = DImg(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(128).toImage());
+        d->thumbImage = DImg(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(128).toImage());
     }
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);

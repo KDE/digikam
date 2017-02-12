@@ -386,7 +386,7 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcuts(m_lastAction, QList<QKeySequence>() << Qt::CTRL + Qt::Key_End);
     m_lastAction->setEnabled(false);
 
-    m_openVersionAction = new QAction(QIcon::fromTheme(QLatin1String("image-x-generic")),
+    m_openVersionAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")),
                                       i18nc("@action", "Open Original"), this);
     connect(m_openVersionAction, SIGNAL(triggered()), this, SLOT(slotOpenOriginal()));
     ac->addAction(QLatin1String("editorwindow_openversion"), m_openVersionAction);
@@ -419,7 +419,7 @@ void EditorWindow::setupStandardActions()
 
     m_saveNewVersionInFormatAction = new QMenu(i18nc("@action Save As New Version...Save in format...",
                                                      "Save in Format"), this);
-    m_saveNewVersionInFormatAction->setIcon(QIcon::fromTheme(QLatin1String("image-x-generic")));
+    m_saveNewVersionInFormatAction->setIcon(QIcon::fromTheme(QLatin1String("view-preview")));
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "JPEG"),      QLatin1String("JPG"));
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "TIFF"),      QLatin1String("TIFF"));
     d->plugNewVersionInFormatAction(this, m_saveNewVersionInFormatAction, i18nc("@action:inmenu", "PNG"),       QLatin1String("PNG"));

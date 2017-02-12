@@ -450,7 +450,7 @@ void PresentationMainPage::slotThumbnail(const LoadingDescription& /*desc*/, con
 {
     if (pix.isNull())
     {
-        m_previewLabel->setPixmap(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(ICONSIZE, QIcon::Disabled));
+        m_previewLabel->setPixmap(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(ICONSIZE, QIcon::Disabled));
     }
     else
     {

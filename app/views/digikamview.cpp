@@ -2455,7 +2455,7 @@ void DigikamView::toggleFullScreen(bool set)
 void DigikamView::setToolsIconView(DCategorizedView* const view)
 {
     d->rightSideBar->appendTab(view,
-                               QIcon::fromTheme(QLatin1String("applications-graphics")),
+                               QIcon::fromTheme(QLatin1String("document-edit")),
                                i18n("Tools"));
 }
 

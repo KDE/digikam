@@ -66,7 +66,7 @@ EnfuseStackItem::EnfuseStackItem(QTreeWidget* const parent)
 {
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
     setCheckState(0, Qt::Unchecked);
-    setThumbnail(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(treeWidget()->iconSize().width(), QIcon::Disabled));
+    setThumbnail(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(treeWidget()->iconSize().width(), QIcon::Disabled));
     d->asValidThumb = false;
 }
 
