@@ -71,5 +71,6 @@ BUGFIXES FROM BUGZILLA:
 054 ==> 374450 - DATA LOSS: Saving a file can overwrite other file.
 055 ==> 376345 - Can't disable "auto spell check" while editing metadata.
 056 ==> 376369 - No Icon of Digikam in Gnome's panels.
-057 ==> 376375 - Strange Map icon
-058 ==> 
+057 ==> 376375 - Strange Map icon.
+058 ==> 376351 - create a tool to automatically group jpeg and raw images with same name.
+059 ==> 
