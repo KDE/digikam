@@ -229,7 +229,7 @@ SetupICC::SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent)
     QVBoxLayout* const vlayMismatch = new QVBoxLayout(d->mismatchGB);
 
     QLabel* const behaviorIcon  = new QLabel;
-    behaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(32));
+    behaviorIcon->setPixmap(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(32));
     QLabel* const behaviorLabel = new QLabel(i18n("When the profile of an image does not match the working color space"));
     behaviorLabel->setWordWrap(true);
 

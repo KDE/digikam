@@ -674,7 +674,7 @@ void ContextMenuHelper::addGotoMenu(const imageIds &ids)
     }
 
     d->gotoAlbumAction    = new QAction(QIcon::fromTheme(QLatin1String("folder-pictures")),     i18n("Album"), this);
-    d->gotoDateAction     = new QAction(QIcon::fromTheme(QLatin1String("view-calendar-month")), i18n("Date"),  this);
+    d->gotoDateAction     = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")), i18n("Date"),  this);
     QMenu* const gotoMenu = new QMenu(d->parent);
     gotoMenu->addAction(d->gotoAlbumAction);
     gotoMenu->addAction(d->gotoDateAction);
@@ -982,8 +982,8 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
         connect(closeActionDate, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByTime()));
         actions << closeActionDate;
 
-        QAction* const closeActionType = new QAction(i18nc("@action:inmenu", "Group Selected By Type"), this);
-        connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByType()));
+        QAction* const closeActionType = new QAction(i18nc("@action:inmenu", "Group Selected By Filename"), this);
+        connect(closeActionType, SIGNAL(triggered()), this, SIGNAL(signalCreateGroupByFilename()));
         actions << closeActionType;
 
         QAction* const separator = new QAction(this);

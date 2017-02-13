@@ -99,7 +99,7 @@ ColorFXSettings::ColorFXSettings(QWidget* const parent, bool useGenericImg)
 
     if (useGenericImg)
     {
-        thumbImage = DImg(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(128).toImage());
+        thumbImage = DImg(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(128).toImage());
     }
     else
     {

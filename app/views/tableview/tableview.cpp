@@ -337,8 +337,8 @@ void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, co
     connect(&cmHelper, SIGNAL(signalCreateGroupByTime()),
             this, SLOT(slotCreateGroupByTimeFromSelection()));
 
-    connect(&cmHelper, SIGNAL(signalCreateGroupByType()),
-            this, SLOT(slotCreateGroupByTypeFromSelection()));
+    connect(&cmHelper, SIGNAL(signalCreateGroupByFilename()),
+            this, SLOT(slotCreateGroupByFilenameFromSelection()));
 
     QAction* const choice = cmHelper.exec(event->globalPos());
 
@@ -486,10 +486,10 @@ void TableView::slotCreateGroupByTimeFromSelection()
     d->imageViewUtilities->createGroupByTimeFromInfoList(selectedInfos);
 }
 
-void TableView::slotCreateGroupByTypeFromSelection()
+void TableView::slotCreateGroupByFilenameFromSelection()
 {
     const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    d->imageViewUtilities->createGroupByTypeFromInfoList(selectedInfos);
+    d->imageViewUtilities->createGroupByFilenameFromInfoList(selectedInfos);
 }
 
 QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) const

@@ -42,7 +42,7 @@
 #include "sharpsettings.h"
 
 #ifdef HAVE_EIGEN3
-#include "refocusfilter.h"
+#   include "refocusfilter.h"
 #endif // HAVE_EIGEN3
 
 namespace Digikam
@@ -87,6 +87,7 @@ BatchToolSettings Sharpen::defaultSettings()
     settings.insert(QLatin1String("UnsharpMaskRadius"),    (double)defaultPrm.umRadius);
     settings.insert(QLatin1String("UnsharpMaskAmount"),    (double)defaultPrm.umAmount);
     settings.insert(QLatin1String("UnsharpMaskThreshold"), (double)defaultPrm.umThreshold);
+    settings.insert(QLatin1String("UnsharpMaskLuma"),      (bool)defaultPrm.umLumaOnly);
 
 #ifdef HAVE_EIGEN3
     // refocus
@@ -114,6 +115,7 @@ void Sharpen::slotAssignSettings2Widget()
     prm.umRadius      = settings()[QLatin1String("UnsharpMaskRadius")].toDouble();
     prm.umAmount      = settings()[QLatin1String("UnsharpMaskAmount")].toDouble();
     prm.umThreshold   = settings()[QLatin1String("UnsharpMaskThreshold")].toDouble();
+    prm.umLumaOnly    = settings()[QLatin1String("UnsharpMaskLuma")].toBool();
 
 #ifdef HAVE_EIGEN3
     // refocus
@@ -142,6 +144,7 @@ void Sharpen::slotSettingsChanged()
     settings.insert(QLatin1String("UnsharpMaskRadius"),    (double)prm.umRadius);
     settings.insert(QLatin1String("UnsharpMaskAmount"),    (double)prm.umAmount);
     settings.insert(QLatin1String("UnsharpMaskThreshold"), (double)prm.umThreshold);
+    settings.insert(QLatin1String("UnsharpMaskLuma"),      (bool)prm.umLumaOnly);
 
 #ifdef HAVE_EIGEN3
     // refocus
@@ -190,8 +193,9 @@ bool Sharpen::toolOperations()
             double r     = settings()[QLatin1String("UnsharpMaskRadius")].toDouble();
             double a  = settings()[QLatin1String("UnsharpMaskAmount")].toDouble();
             double th = settings()[QLatin1String("UnsharpMaskThreshold")].toDouble();
+            bool    l = settings()[QLatin1String("UnsharpMaskLuma")].toBool();
 
-            UnsharpMaskFilter filter(&image(), 0L, r, a, th);
+            UnsharpMaskFilter filter(&image(), 0L, r, a, th, l);
             applyFilter(&filter);
             break;
         }

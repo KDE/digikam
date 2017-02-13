@@ -124,7 +124,7 @@ EXIFEditWidget::EXIFEditWidget(MetadataEditDialog* const parent)
 
     d->lightPage     = new EXIFLight(this);
     d->page_light    = addPage(d->lightPage, i18n("Light"));
-    d->page_light->setIcon(QIcon::fromTheme(QLatin1String("image-x-generic")));
+    d->page_light->setIcon(QIcon::fromTheme(QLatin1String("view-preview")));
 
     d->adjustPage    = new EXIFAdjust(this);
     d->page_adjust   = addPage(d->adjustPage, i18nc("Picture adjustments", "Adjustments"));

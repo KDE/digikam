@@ -130,7 +130,7 @@ ImageVersionsModel* DigikamModelCollection::getImageVersionsModel() const
 void DigikamModelCollection::slotApplicationSettingsChanged()
 {
     d->dateAlbumModel->setPixmaps(QIcon::fromTheme(QLatin1String("view-calendar-list")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()),
-                                  QIcon::fromTheme(QLatin1String("view-calendar-month")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
+                                  QIcon::fromTheme(QLatin1String("view-calendar")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
 }
 
 } // namespace Digikam

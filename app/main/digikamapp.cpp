@@ -895,7 +895,7 @@ void DigikamApp::setupActions()
     d->imageViewSelectionAction->addAction(d->imagePreviewAction);
 
 #ifdef HAVE_MARBLE
-    d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("folder-html")),
+    d->imageMapViewAction = new QAction(QIcon::fromTheme(QLatin1String("globe")),
                                         i18nc("@action Switch to map view", "Map"), this);
     d->imageMapViewAction->setCheckable(true);
     ac->addAction(QLatin1String("map_view"), d->imageMapViewAction);

@@ -98,7 +98,7 @@ DImagesListViewItem::DImagesListViewItem(DImagesListView* const view, const QUrl
 
     d->view      = view;
     int iconSize = d->view->iconSize().width();
-    setThumb(QIcon::fromTheme(QString::fromLatin1("image-x-generic")).pixmap(iconSize, iconSize, QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QString::fromLatin1("view-preview")).pixmap(iconSize, iconSize, QIcon::Disabled), false);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Creating new ImageListViewItem with url " << d->url
                                  << " for list view " << d->view;

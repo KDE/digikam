@@ -60,12 +60,13 @@ class SharpenTool::Private
 
 public:
 
-    Private() :
+    explicit Private() :
         configGroupName(QLatin1String("sharpen Tool")),
         sharpSettings(0),
         previewWidget(0),
         gboxSettings(0)
-    {}
+    {
+    }
 
     const QString       configGroupName;
 
@@ -183,13 +184,15 @@ void SharpenTool::preparePreview()
             double r  = settings.umRadius;
             double a  = settings.umAmount;
             double th = settings.umThreshold;
+            bool l    = settings.umLumaOnly;
 
-            setFilter(new UnsharpMaskFilter(&img, this, r, a, th));
+            setFilter(new UnsharpMaskFilter(&img, this, r, a, th, l));
             break;
         }
 
         case SharpContainer::Refocus:
         {
+
 #ifdef HAVE_EIGEN3
             DImg   img = d->previewWidget->getOriginalRegionImage();
             double r   = settings.rfRadius;
@@ -200,6 +203,7 @@ void SharpenTool::preparePreview()
 
             setFilter(new RefocusFilter(&img, this, ms, r, g, c, n));
 #endif // HAVE_EIGEN3
+
             break;
         }
     }
@@ -248,6 +252,7 @@ void SharpenTool::prepareFinal()
 
         case SharpContainer::Refocus:
         {
+
 #ifdef HAVE_EIGEN3
             double r   = settings.rfRadius;
             double c   = settings.rfCorrelation;
@@ -257,6 +262,7 @@ void SharpenTool::prepareFinal()
 
             setFilter(new RefocusFilter(iface.original(), this, ms, r, g, c, n));
 #endif // HAVE_EIGEN3
+
             break;
         }
     }
@@ -283,9 +289,11 @@ void SharpenTool::setFinalImage()
 
         case SharpContainer::Refocus:
         {
+
 #ifdef HAVE_EIGEN3
             iface.setOriginal(i18n("Refocus"), filter()->filterAction(), filter()->getTargetImage());
 #endif // HAVE_EIGEN3
+
             break;
         }
     }
@@ -306,4 +314,4 @@ void SharpenTool::slotSaveAsSettings()
     d->sharpSettings->saveAsSettings();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

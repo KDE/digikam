@@ -236,7 +236,7 @@ Album* SearchModel::albumForId(int id) const
 
 void SearchModel::albumSettingsChanged()
 {
-    setPixmapForMapSearches(QIcon::fromTheme(QLatin1String("folder-html")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
+    setPixmapForMapSearches(QIcon::fromTheme(QLatin1String("globe")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
     setPixmapForHaarSearches(QIcon::fromTheme(QLatin1String("tools-wizard")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
     setPixmapForNormalSearches(QIcon::fromTheme(QLatin1String("edit-find")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));
     setPixmapForTimelineSearches(QIcon::fromTheme(QLatin1String("chronometer")).pixmap(ApplicationSettings::instance()->getTreeViewIconSize()));

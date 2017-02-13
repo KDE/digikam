@@ -371,7 +371,7 @@ void TagViewSideBarWidget::setNoTagsAlbum()
 
 const QIcon TagViewSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme(QLatin1String("mail-tagged"));
+    return QIcon::fromTheme(QLatin1String("tag"));
 }
 
 const QString TagViewSideBarWidget::getCaption()
@@ -1342,7 +1342,7 @@ void GPSSearchSideBarWidget::changeAlbumFromHistory(QList<Album*> album)
 
 const QIcon GPSSearchSideBarWidget::getIcon()
 {
-    return QIcon::fromTheme(QLatin1String("folder-html"));
+    return QIcon::fromTheme(QLatin1String("globe"));
 }
 
 const QString GPSSearchSideBarWidget::getCaption()

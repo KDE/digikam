@@ -129,13 +129,13 @@ FilterSideBarWidget::FilterSideBarWidget(QWidget* const parent, TagModel* const 
     // --------------------------------------------------------------------------------------------------------
 
     d->mimeFilter = new MimeFilter(d->expbox);
-    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme(QLatin1String("system-file-manager")),
+    d->expbox->addItem(d->mimeFilter, QIcon::fromTheme(QLatin1String("folder-open")),
                        i18n("MIME Type Filter"), QLatin1String("TypeMimeFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------
 
     d->geolocationFilter = new GeolocationFilter(d->expbox);
-    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme(QLatin1String("folder-html")),
+    d->expbox->addItem(d->geolocationFilter, QIcon::fromTheme(QLatin1String("globe")),
                        i18n("Geolocation Filter"), QLatin1String("TypeGeolocationFilter"), true);
 
     // --------------------------------------------------------------------------------------------------------

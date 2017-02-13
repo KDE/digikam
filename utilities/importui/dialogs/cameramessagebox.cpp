@@ -73,7 +73,7 @@ CameraItem::CameraItem(QTreeWidget* const parent, const CamItemInfo& info)
       d(new Private)
 {
     d->info = info;
-    setThumb(QIcon::fromTheme(QLatin1String("image-x-generic")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
+    setThumb(QIcon::fromTheme(QLatin1String("view-preview")).pixmap(parent->iconSize().width(), QIcon::Disabled), false);
     setText(1, d->info.name);
 }
 

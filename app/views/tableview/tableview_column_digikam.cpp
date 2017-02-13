@@ -72,7 +72,7 @@ TableViewColumnDescription ColumnDigikamProperties::getDescription()
     description.setIcon(QLatin1String("edit-text-frame-update"));
 
     description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-rating"),     i18n("Rating")).setIcon(QLatin1String("draw-star")));
-    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-picklabel"),  i18n("Pick label")).setIcon(QLatin1String("flag-red")));
+    description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-picklabel"),  i18n("Pick label")).setIcon(QLatin1String("flag")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-colorlabel"), i18n("Color label")));
     /// @todo This column will show the 'default' title. Add a configuration dialog to choose different languages.
     description.addSubColumn(TableViewColumnDescription(QLatin1String("digikam-title"),      i18n("Title")));

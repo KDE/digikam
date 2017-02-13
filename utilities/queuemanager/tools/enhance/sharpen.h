@@ -39,7 +39,7 @@ class Sharpen : public BatchTool
 public:
 
     explicit Sharpen(QObject* const parent = 0);
-    ~Sharpen();
+    virtual ~Sharpen();
 
     BatchToolSettings defaultSettings();
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SHARPEN_H_ */
+#endif // SHARPEN_H_

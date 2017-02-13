@@ -88,7 +88,7 @@ QStringList ColumnGeoProperties::getSubColumns()
 TableViewColumnDescription ColumnGeoProperties::getDescription()
 {
     TableViewColumnDescription description(QLatin1String("geo-properties"), i18n("Geo properties"));
-    description.setIcon(QLatin1String("folder-html"));
+    description.setIcon(QLatin1String("globe"));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("geohascoordinates"), i18n("Geotagged")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("geocoordinates"),    i18n("Coordinates")));
     description.addSubColumn(TableViewColumnDescription(QLatin1String("geoaltitude"),       i18n("Altitude")));
