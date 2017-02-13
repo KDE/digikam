@@ -36,7 +36,7 @@ class WelcomePage : public FirstRunDlgPage
 public:
 
     explicit WelcomePage(FirstRunDlg* const dlg);
-    ~WelcomePage();
+    virtual ~WelcomePage();
 };
 
 }   // namespace Digikam
