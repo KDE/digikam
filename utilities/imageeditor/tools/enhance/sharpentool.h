@@ -38,7 +38,7 @@ class SharpenTool : public EditorToolThreaded
 public:
 
     explicit SharpenTool(QObject* const parent);
-    ~SharpenTool();
+    virtual ~SharpenTool();
 
 private Q_SLOTS:
 
@@ -65,4 +65,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* SHARPENTOOL_H */
+#endif // SHARPENTOOL_H

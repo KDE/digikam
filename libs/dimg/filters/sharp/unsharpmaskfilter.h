@@ -42,13 +42,13 @@ public:
 
     explicit UnsharpMaskFilter(QObject* const parent = 0);
     explicit UnsharpMaskFilter(DImg* const orgImage, QObject* const parent=0, double radius=1.0,
-                               double amount=1.0, double threshold=0.05);
+                               double amount=1.0, double threshold=0.05, bool luma=false);
 
     // Constructor for slave mode: execute immediately in current thread with specified master filter
     // UnsharpMaskFilter(DImgThreadedFilter *parentFilter, const DImg& orgImage, const DImg& destImage,
     //            int progressBegin=0, int progressEnd=100, double radius=0.0, double sigma=1.0);
 
-    ~UnsharpMaskFilter();
+    virtual ~UnsharpMaskFilter();
 
     static QString          FilterIdentifier()
     {
@@ -89,8 +89,9 @@ private:
 
     double m_amount;
     double m_threshold;
+    bool   m_luma;
 };
 
 } // namespace Digikam
 
-#endif /* UNSHARPMASKFILTER_H */
+#endif // UNSHARPMASKFILTER_H

@@ -54,7 +54,7 @@
 #include "dexpanderbox.h"
 
 #ifdef HAVE_EIGEN3
-#include "refocusfilter.h"
+#   include "refocusfilter.h"
 #endif // HAVE_EIGEN3
 
 namespace Digikam
@@ -69,16 +69,17 @@ public:
         stack(0),
         sharpMethod(0),
         radiusInput(0),
-        radiusInput2(0),
-        amountInput(0),
-        thresholdInput(0)
 #ifdef HAVE_EIGEN3
-        ,radius(0),
+        radius(0),
         correlation(0),
         noise(0),
         gauss(0),
-        matrixSize(0)
+        matrixSize(0),
 #endif // HAVE_EIGEN3
+        radiusInput2(0),
+        amountInput(0),
+        thresholdInput(0),
+        luma(0)
     {
     }
 
@@ -87,6 +88,7 @@ public:
     static const QString configUnsharpMaskRadiusAdjustmentEntry;
     static const QString configUnsharpMaskAmountAdjustmentEntry;
     static const QString configUnsharpMaskThresholdAdjustmentEntry;
+    static const QString configUnsharpMaskLumaEntry;
     static const QString configRefocusRadiusAdjustmentEntry;
     static const QString configRefocusCorrelationAdjustmentEntry;
     static const QString configRefocusNoiseAdjustmentEntry;
@@ -100,11 +102,6 @@ public:
     // Simple sharp.
     DIntNumInput*        radiusInput;
 
-    // Unsharp mask.
-    DDoubleNumInput*     radiusInput2;
-    DDoubleNumInput*     amountInput;
-    DDoubleNumInput*     thresholdInput;
-
 #ifdef HAVE_EIGEN3
     // Refocus.
     DDoubleNumInput*     radius;
@@ -113,6 +110,12 @@ public:
     DDoubleNumInput*     gauss;
     DIntNumInput*        matrixSize;
 #endif // HAVE_EIGEN3
+
+    // Unsharp mask.
+    DDoubleNumInput*     radiusInput2;
+    DDoubleNumInput*     amountInput;
+    DDoubleNumInput*     thresholdInput;
+    QCheckBox*           luma;
 };
 
 const QString SharpSettings::Private::configSharpenMethodEntry(QLatin1String("SharpenMethod"));
@@ -120,6 +123,7 @@ const QString SharpSettings::Private::configSimpleSharpRadiusAdjustmentEntry(QLa
 const QString SharpSettings::Private::configUnsharpMaskRadiusAdjustmentEntry(QLatin1String("UnsharpMaskRadiusAdjustment"));
 const QString SharpSettings::Private::configUnsharpMaskAmountAdjustmentEntry(QLatin1String("UnsharpMaskAmountAdjustment"));
 const QString SharpSettings::Private::configUnsharpMaskThresholdAdjustmentEntry(QLatin1String("UnsharpMaskThresholdAdjustment"));
+const QString SharpSettings::Private::configUnsharpMaskLumaEntry(QLatin1String("UnsharpMaskApplyOnLumaOnLy"));
 const QString SharpSettings::Private::configRefocusRadiusAdjustmentEntry(QLatin1String("RefocusRadiusAdjustment"));
 const QString SharpSettings::Private::configRefocusCorrelationAdjustmentEntry(QLatin1String("RefocusCorrelationAdjustment"));
 const QString SharpSettings::Private::configRefocusNoiseAdjustmentEntry(QLatin1String("RefocusNoiseAdjustment"));
@@ -132,12 +136,11 @@ SharpSettings::SharpSettings(QWidget* const parent)
     : QWidget(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QGridLayout* const grid = new QGridLayout(parent);
 
     QLabel* const label1 = new QLabel(i18n("Method:"), parent);
-    d->sharpMethod = new DComboBox(parent);
+    d->sharpMethod       = new DComboBox(parent);
     d->sharpMethod->addItem(i18n("Simple sharp"));
     d->sharpMethod->addItem(i18n("Unsharp mask"));
 #ifdef HAVE_EIGEN3
@@ -161,8 +164,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QWidget* const simpleSharpSettings = new QWidget(d->stack);
     QGridLayout* const grid1           = new QGridLayout(simpleSharpSettings);
 
-    QLabel* const label  = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
-    d->radiusInput = new DIntNumInput(simpleSharpSettings);
+    QLabel* const label = new QLabel(i18n("Sharpness:"), simpleSharpSettings);
+    d->radiusInput      = new DIntNumInput(simpleSharpSettings);
     d->radiusInput->setRange(0, 100, 1);
     d->radiusInput->setDefaultValue(0);
     d->radiusInput->setWhatsThis(i18n("A sharpness of 0 has no effect, "
@@ -182,8 +185,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     QWidget* const unsharpMaskSettings = new QWidget(d->stack);
     QGridLayout* const grid2           = new QGridLayout(unsharpMaskSettings);
 
-    QLabel* const label2  = new QLabel(i18n("Radius:"), unsharpMaskSettings);
-    d->radiusInput2 = new DDoubleNumInput(unsharpMaskSettings);
+    QLabel* const label2 = new QLabel(i18n("Radius:"), unsharpMaskSettings);
+    d->radiusInput2      = new DDoubleNumInput(unsharpMaskSettings);
     d->radiusInput2->setRange(0.1, 12.0, 0.1);
     d->radiusInput2->setDecimals(1);
     d->radiusInput2->setDefaultValue(1.0);
@@ -191,20 +194,26 @@ SharpSettings::SharpSettings(QWidget* const parent)
                                        "used to determines how much to blur the image."));
 
     QLabel* const label3 = new QLabel(i18n("Amount:"), unsharpMaskSettings);
-    d->amountInput = new DDoubleNumInput(unsharpMaskSettings);
+    d->amountInput       = new DDoubleNumInput(unsharpMaskSettings);
     d->amountInput->setDecimals(1);
     d->amountInput->setRange(0.0, 5.0, 0.1);
     d->amountInput->setDefaultValue(1.0);
     d->amountInput->setWhatsThis(i18n("The value of the difference between the "
                                       "original and the blur image that is added back into the original."));
 
-    QLabel* const label4    = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
-    d->thresholdInput = new DDoubleNumInput(unsharpMaskSettings);
+    QLabel* const label4 = new QLabel(i18n("Threshold:"), unsharpMaskSettings);
+    d->thresholdInput    = new DDoubleNumInput(unsharpMaskSettings);
     d->thresholdInput->setDecimals(2);
     d->thresholdInput->setRange(0.0, 1.0, 0.01);
     d->thresholdInput->setDefaultValue(0.05);
     d->thresholdInput->setWhatsThis(i18n("The threshold, as a fraction of the maximum "
                                          "luminosity value, needed to apply the difference amount."));
+
+    d->luma = new QCheckBox(unsharpMaskSettings);
+    d->luma->setText(i18n("Suppress color noise."));
+    d->luma->setCheckable(true);
+    d->luma->setWhatsThis(i18n("An option to apply filter on luminosity channel only "
+                               "used to suppress chroma noise amplification."));
 
     grid2->addWidget(label2,            0, 0, 1, 2);
     grid2->addWidget(d->radiusInput2,   1, 0, 1, 2);
@@ -212,7 +221,8 @@ SharpSettings::SharpSettings(QWidget* const parent)
     grid2->addWidget(d->amountInput,    3, 0, 1, 2);
     grid2->addWidget(label4,            4, 0, 1, 2);
     grid2->addWidget(d->thresholdInput, 5, 0, 1, 2);
-    grid2->setRowStretch(6, 10);
+    grid2->addWidget(d->luma,           6, 0, 1, 2);
+    grid2->setRowStretch(7, 10);
     grid2->setContentsMargins(QMargins());
     grid2->setSpacing(0);
 
@@ -307,6 +317,9 @@ SharpSettings::SharpSettings(QWidget* const parent)
     connect(d->thresholdInput, SIGNAL(valueChanged(double)),
             this, SIGNAL(signalSettingsChanged()));
 
+    connect(d->luma, SIGNAL(stateChanged(int)),
+                this, SIGNAL(signalSettingsChanged()));
+
 #ifdef HAVE_EIGEN3
 
     connect(d->radius, SIGNAL(valueChanged(double)),
@@ -349,6 +362,8 @@ SharpContainer SharpSettings::settings() const
     prm.umRadius      = d->radiusInput2->value();
     prm.umAmount      = d->amountInput->value();
     prm.umThreshold   = d->thresholdInput->value();
+    prm.umLumaOnly    = d->luma->isChecked();
+
 
 #ifdef HAVE_EIGEN3
     prm.rfRadius      = d->radius->value();
@@ -373,6 +388,7 @@ void SharpSettings::setSettings(const SharpContainer& settings)
     d->radiusInput2->setValue(settings.umRadius);
     d->amountInput->setValue(settings.umAmount);
     d->thresholdInput->setValue(settings.umThreshold);
+    d->luma->setChecked(settings.umLumaOnly);
 
 #ifdef HAVE_EIGEN3
     d->radius->setValue(settings.rfRadius);
@@ -397,6 +413,7 @@ void SharpSettings::resetToDefault()
     d->radiusInput2->slotReset();
     d->amountInput->slotReset();
     d->thresholdInput->slotReset();
+    d->luma->setChecked(false);
 
 #ifdef HAVE_EIGEN3
     d->radius->slotReset();
@@ -420,6 +437,7 @@ SharpContainer SharpSettings::defaultSettings() const
     prm.umRadius      = d->radiusInput2->defaultValue();
     prm.umAmount      = d->amountInput->defaultValue();
     prm.umThreshold   = d->thresholdInput->defaultValue();
+    prm.umLumaOnly    = false;
 
 #ifdef HAVE_EIGEN3
     prm.rfRadius      = d->radius->defaultValue();
@@ -437,20 +455,21 @@ void SharpSettings::readSettings(KConfigGroup& group)
     SharpContainer prm;
     SharpContainer defaultPrm = defaultSettings();
 
-    prm.method        = group.readEntry(d->configSharpenMethodEntry,                  defaultPrm.method);
+    prm.method                = group.readEntry(d->configSharpenMethodEntry,                  defaultPrm.method);
 
-    prm.ssRadius      = group.readEntry(d->configSimpleSharpRadiusAdjustmentEntry,    defaultPrm.ssRadius);
+    prm.ssRadius              = group.readEntry(d->configSimpleSharpRadiusAdjustmentEntry,    defaultPrm.ssRadius);
 
-    prm.umRadius      = group.readEntry(d->configUnsharpMaskRadiusAdjustmentEntry,    defaultPrm.umRadius);
-    prm.umAmount      = group.readEntry(d->configUnsharpMaskAmountAdjustmentEntry,    defaultPrm.umAmount);
-    prm.umThreshold   = group.readEntry(d->configUnsharpMaskThresholdAdjustmentEntry, defaultPrm.umThreshold);
+    prm.umRadius              = group.readEntry(d->configUnsharpMaskRadiusAdjustmentEntry,    defaultPrm.umRadius);
+    prm.umAmount              = group.readEntry(d->configUnsharpMaskAmountAdjustmentEntry,    defaultPrm.umAmount);
+    prm.umThreshold           = group.readEntry(d->configUnsharpMaskThresholdAdjustmentEntry, defaultPrm.umThreshold);
+    prm.umLumaOnly            = group.readEntry(d->configUnsharpMaskLumaEntry,                defaultPrm.umLumaOnly);
 
 #ifdef HAVE_EIGEN3
-    prm.rfRadius      = group.readEntry(d->configRefocusRadiusAdjustmentEntry,        defaultPrm.rfRadius);
-    prm.rfCorrelation = group.readEntry(d->configRefocusCorrelationAdjustmentEntry,   defaultPrm.rfCorrelation);
-    prm.rfNoise       = group.readEntry(d->configRefocusNoiseAdjustmentEntry,         defaultPrm.rfNoise);
-    prm.rfGauss       = group.readEntry(d->configRefocusGaussAdjustmentEntry,         defaultPrm.rfGauss);
-    prm.rfMatrix      = group.readEntry(d->configRefocusMatrixSizeEntry,              defaultPrm.rfMatrix);
+    prm.rfRadius              = group.readEntry(d->configRefocusRadiusAdjustmentEntry,        defaultPrm.rfRadius);
+    prm.rfCorrelation         = group.readEntry(d->configRefocusCorrelationAdjustmentEntry,   defaultPrm.rfCorrelation);
+    prm.rfNoise               = group.readEntry(d->configRefocusNoiseAdjustmentEntry,         defaultPrm.rfNoise);
+    prm.rfGauss               = group.readEntry(d->configRefocusGaussAdjustmentEntry,         defaultPrm.rfGauss);
+    prm.rfMatrix              = group.readEntry(d->configRefocusMatrixSizeEntry,              defaultPrm.rfMatrix);
 #endif // HAVE_EIGEN3
 
     setSettings(prm);
@@ -467,6 +486,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
     group.writeEntry(d->configUnsharpMaskRadiusAdjustmentEntry,    prm.umRadius);
     group.writeEntry(d->configUnsharpMaskAmountAdjustmentEntry,    prm.umAmount);
     group.writeEntry(d->configUnsharpMaskThresholdAdjustmentEntry, prm.umThreshold);
+    group.writeEntry(d->configUnsharpMaskLumaEntry,                prm.umLumaOnly);
 
 #ifdef HAVE_EIGEN3
     group.writeEntry(d->configRefocusRadiusAdjustmentEntry,        prm.rfRadius);
@@ -504,6 +524,7 @@ void SharpSettings::loadSettings()
         }
 
         blockSignals(true);
+
 #ifdef HAVE_EIGEN3
         d->matrixSize->setValue(stream.readLine().toInt());
         d->radius->setValue(stream.readLine().toDouble());
@@ -511,6 +532,7 @@ void SharpSettings::loadSettings()
         d->correlation->setValue(stream.readLine().toDouble());
         d->noise->setValue(stream.readLine().toDouble());
 #endif // HAVE_EIGEN3
+
         blockSignals(false);
     }
     else
@@ -539,6 +561,7 @@ void SharpSettings::saveAsSettings()
     {
         QTextStream stream(&file);
         stream << QLatin1String("# Photograph Refocus Configuration File\n");
+
 #ifdef HAVE_EIGEN3
         stream << d->matrixSize->value()  << QLatin1String("\n");
         stream << d->radius->value()      << QLatin1String("\n");
@@ -546,6 +569,7 @@ void SharpSettings::saveAsSettings()
         stream << d->correlation->value() << QLatin1String("\n");
         stream << d->noise->value()       << QLatin1String("\n");
 #endif // HAVE_EIGEN3
+
     }
     else
     {

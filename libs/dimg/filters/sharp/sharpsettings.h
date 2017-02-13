@@ -53,13 +53,14 @@ public:
 
 public:
 
-    SharpContainer()
+    explicit SharpContainer()
     {
         method        = SimpleSharp;
         ssRadius      = 0;
         umRadius      = 1.0;
         umAmount      = 1.0;
         umThreshold   = 0.05;
+        umLumaOnly    = false;
         rfRadius      = 1.0;
         rfCorrelation = 0.5;
         rfNoise       = 0.03;
@@ -67,7 +68,7 @@ public:
         rfMatrix      = 5;
     };
 
-    ~SharpContainer()
+    virtual ~SharpContainer()
     {
     };
 
@@ -82,6 +83,7 @@ public:
     double umRadius;
     double umAmount;
     double umThreshold;
+    bool   umLumaOnly;
 
     // Refocus
     double rfRadius;
@@ -100,7 +102,7 @@ class DIGIKAM_EXPORT SharpSettings : public QWidget
 public:
 
     explicit SharpSettings(QWidget* const parent);
-    ~SharpSettings();
+    virtual ~SharpSettings();
 
     SharpContainer defaultSettings() const;
     void resetToDefault();
@@ -128,6 +130,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* SHARPSETTINGS_H */
+#endif // SHARPSETTINGS_H
