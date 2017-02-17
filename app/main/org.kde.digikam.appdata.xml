@@ -176,6 +176,7 @@
       <li xml:lang="uk">підтримка фільтрування та упорядковування альбомів;</li>
       <li xml:lang="x-test">xxSupport for filtering and sorting albumsxx</li>
       <li>Import from more than 1100 digital camera devices</li>
+      <li xml:lang="ar">الاستيراد من أكثر من 1100 كمرة رقميّة</li>
       <li xml:lang="bs">Uvoz iz više od 1100 digitalnih kamera uređaja</li>
       <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
       <li xml:lang="ca-valencia">Importa des de més de 1.100 dispositius de càmeres digitals</li>
@@ -198,6 +199,7 @@
       <li xml:lang="uk">можливість імпортування даних з понад 1100 цифрових фотоапаратів;</li>
       <li xml:lang="x-test">xxImport from more than 1100 digital camera devicesxx</li>
       <li>Support for 300 RAW format pictures</li>
+      <li xml:lang="ar">دعم يصل حتّى 300 نسق للصّور الخامّ</li>
       <li xml:lang="bs">Podrška za fotografije 300 RAW formata</li>
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
       <li xml:lang="ca-valencia">Implementació per a 300 formats d'imatges RAW</li>
@@ -220,6 +222,7 @@
       <li xml:lang="uk">підтримка понад 300 форматів цифрових негативів (RAW);</li>
       <li xml:lang="x-test">xxSupport for 300 RAW format picturesxx</li>
       <li>Light Table feature</li>
+      <li xml:lang="ar">ميزة الطّاولة الضّوئيّة</li>
       <li xml:lang="bs">Light Table svojstvo</li>
       <li xml:lang="ca">La característica taula de llum</li>
       <li xml:lang="ca-valencia">La característica taula de llum</li>

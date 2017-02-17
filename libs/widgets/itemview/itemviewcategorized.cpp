@@ -398,7 +398,8 @@ void ItemViewCategorized::slotActivated(const QModelIndex& index)
 
         // if the activation is caused by mouse click (not keyboard)
         // we need to check the hot area
-        if (!d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
+        if (d->currentMouseEvent->isAccepted() &&
+            !d->delegate->acceptsActivation(d->currentMouseEvent->pos(), visualRect(index), index))
         {
             return;
         }
