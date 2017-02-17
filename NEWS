@@ -77,4 +77,6 @@ BUGFIXES FROM BUGZILLA:
 059 ==> 115753 - Option to apply unsharp masking to luma channel only [patch].
 060 ==> 376409 - Export doesn't work on Windows
 061 ==> 376423 - Inconsistent ENTER key in thumbnails view.
-062 ==> 
+062 ==> 376489 - Crash with Pentax K-5 DNG files.
+063 ==> 
+
