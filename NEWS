@@ -78,5 +78,7 @@ BUGFIXES FROM BUGZILLA:
 060 ==> 376409 - Export doesn't work on Windows
 061 ==> 376423 - Inconsistent ENTER key in thumbnails view.
 062 ==> 376489 - Crash with Pentax K-5 DNG files.
-063 ==> 
-
+063 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
+064 ==> 376650 - Write Meta Data hangs if album is empty.
+065 ==> 375199 - Metadata Synchronizer Tool is not working for subfolders.
+066 ==> 

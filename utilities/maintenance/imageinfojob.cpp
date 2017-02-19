@@ -84,11 +84,11 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
     // TODO: Drop Database Url usage
     CoreDbUrl url = album->databaseUrl();
 
-    if(album->type() == Album::DATE)
+    if (album->type() == Album::DATE)
     {
         DatesDBJobInfo jobInfo;
-        jobInfo.setStartDate( url.startDate() );
-        jobInfo.setEndDate( url.endDate() );
+        jobInfo.setStartDate(url.startDate());
+        jobInfo.setEndDate(url.endDate());
 
         d->jobThread = DBJobsManager::instance()->startDatesJobThread(jobInfo);
     }
@@ -97,22 +97,22 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
         TagsDBJobInfo jobInfo;
         // If we want to search for images with this tag, we only want the tag and not
         // all images in the tag path.
-        jobInfo.setTagsIds( QList<int>() << url.tagId() );
+        jobInfo.setTagsIds(QList<int>() << url.tagId());
 
         d->jobThread = DBJobsManager::instance()->startTagsJobThread(jobInfo);
     }
-    else if(album->type() == Album::PHYSICAL)
+    else if (album->type() == Album::PHYSICAL)
     {
         AlbumsDBJobInfo jobInfo;
-        jobInfo.setAlbumRootId( url.albumRootId() );
-        jobInfo.setAlbum( url.album() );
+        jobInfo.setAlbumRootId(url.albumRootId());
+        jobInfo.setAlbum(url.album());
 
         d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
     }
     else if(album->type() == Album::SEARCH)
     {
         SearchesDBJobInfo jobInfo;
-        jobInfo.setSearchId( url.searchId() );
+        jobInfo.setSearchId(url.searchId());
 
         d->jobThread = DBJobsManager::instance()->startSearchesJobThread(jobInfo);
     }
@@ -168,7 +168,7 @@ void ImageInfoJob::slotData(const QList<ImageListerRecord>& records)
 
     ImageInfoList itemsList;
 
-    foreach (const ImageListerRecord &record, records)
+    foreach(const ImageListerRecord& record, records)
     {
         ImageInfo info(record);
         itemsList.append(info);

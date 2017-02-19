@@ -68,7 +68,7 @@ void MaintenanceThread::syncMetadata(const ImageInfoList& items, MetadataSynchro
 {
     ActionJobCollection collection;
 
-    for(int i = 0; i < items.size(); i++)
+    for (int i = 0 ; i < items.size() ; i++)
     {
         MetadataTask* const t = new MetadataTask();
         t->setTagsOnly(tagsOnly);
@@ -90,7 +90,7 @@ void MaintenanceThread::generateThumbs(const QStringList& paths)
 {
     ActionJobCollection collection;
 
-    for(int i = 0; i < paths.size(); i++)
+    for (int i = 0 ; i < paths.size() ; i++)
     {
         ThumbsTask* const t = new ThumbsTask();
         t->setItem(paths.at(i));
@@ -111,7 +111,7 @@ void MaintenanceThread::generateFingerprints(const QStringList& paths, int chunk
 {
     /*ActionJobCollection collection;
 
-    for(int i = 0; i < paths.size(); i++)
+    for (int i = 0 ; i < paths.size() ; i++)
     {
         FingerprintsTask* const t = new FingerprintsTask();
         t->setItem(paths.at(i));
@@ -172,7 +172,7 @@ void MaintenanceThread::sortByImageQuality(const QStringList& paths, const Image
 {
     ActionJobCollection collection;
 
-    for(int i = 0; i < paths.size(); i++)
+    for (int i = 0 ; i < paths.size() ; i++)
     {
         ImageQualityTask* const t = new ImageQualityTask();
         t->setItem(paths.at(i), quality);
@@ -230,7 +230,7 @@ void MaintenanceThread::cleanCoreDb(const QList<qlonglong>& imageIds, int chunkS
         chunk << queue.dequeue();
         // Chunk is complete if the size hits the maximum limit
         // or the queus is empty (0 means unlimited)
-        if ( ( (chunk.size() == chunkSize) && (chunkSize != 0) ) || queue.isEmpty())
+        if (((chunk.size() == chunkSize) && (chunkSize != 0)) || queue.isEmpty())
         {
             DatabaseTask* const t = new DatabaseTask();
             t->setItems(chunk);
@@ -274,7 +274,7 @@ void MaintenanceThread::cleanThumbsDb(const QList<int>& thumbnailIds, int chunkS
         chunk << queue.dequeue();
         // Chunk is complete if the size hits the maximum limit
         // or the queus is empty (0 means unlimited)
-        if ( ( (chunk.size() == chunkSize) && (chunkSize != 0) ) || queue.isEmpty())
+        if (((chunk.size() == chunkSize) && (chunkSize != 0)) || queue.isEmpty())
         {
             DatabaseTask* const t = new DatabaseTask();
             t->setThumbIds(chunk);
@@ -319,7 +319,7 @@ void MaintenanceThread::cleanFacesDb(const QList<FacesEngine::Identity>& staleId
         chunk << queue.dequeue();
         // Chunk is complete if the size hits the maximum limit
         // or the queus is empty (0 means unlimited)
-        if ( ( (chunk.size() == chunkSize) && (chunkSize != 0) ) || queue.isEmpty())
+        if (((chunk.size() == chunkSize) && (chunkSize != 0)) || queue.isEmpty())
         {
             DatabaseTask* const t = new DatabaseTask();
             t->setIdentities(chunk);

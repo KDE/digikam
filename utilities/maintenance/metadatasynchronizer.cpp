@@ -199,6 +199,12 @@ void MetadataSynchronizer::parseList()
         setThumbnail(QIcon::fromTheme(QLatin1String("edit-redo")).pixmap(22));
     }
 
+    if (d->imageInfoList.isEmpty())
+    {
+        slotDone();
+        return;
+    }
+
     setTotalItems(d->imageInfoList.count());
 
     d->thread->syncMetadata(d->imageInfoList, d->direction, d->tagsOnly);
