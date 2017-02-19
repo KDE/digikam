@@ -79,5 +79,5 @@ BUGFIXES FROM BUGZILLA:
 061 ==> 376423 - Inconsistent ENTER key in thumbnails view.
 062 ==> 376489 - Crash with Pentax K-5 DNG files.
 063 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
-064 ==> 
-
+064 ==> 376650 - Write Meta Data hangs if album is empty.
+065 ==> 

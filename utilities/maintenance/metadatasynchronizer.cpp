@@ -188,6 +188,12 @@ void MetadataSynchronizer::parseList()
 {
     setUsesBusyIndicator(false);
 
+    if (d->imageInfoList.isEmpty())
+    {
+        slotDone();
+        return;
+    }
+
     if (d->direction == WriteFromDatabaseToFile)
     {
         setLabel(i18n("Synchronizing image metadata with database"));
