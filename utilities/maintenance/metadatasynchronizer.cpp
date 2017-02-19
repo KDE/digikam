@@ -188,12 +188,6 @@ void MetadataSynchronizer::parseList()
 {
     setUsesBusyIndicator(false);
 
-    if (d->imageInfoList.isEmpty())
-    {
-        slotDone();
-        return;
-    }
-
     if (d->direction == WriteFromDatabaseToFile)
     {
         setLabel(i18n("Synchronizing image metadata with database"));
@@ -203,6 +197,12 @@ void MetadataSynchronizer::parseList()
     {
         setLabel(i18n("Updating database from image metadata"));
         setThumbnail(QIcon::fromTheme(QLatin1String("edit-redo")).pixmap(22));
+    }
+
+    if (d->imageInfoList.isEmpty())
+    {
+        slotDone();
+        return;
     }
 
     setTotalItems(d->imageInfoList.count());
