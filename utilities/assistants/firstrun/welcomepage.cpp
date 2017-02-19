@@ -56,7 +56,7 @@ WelcomePage::WelcomePage(FirstRunDlg* const dlg)
                                QLatin1String(digikam_version_short));
 
 #if defined Q_OS_WIN || defined Q_OS_OSX
-    test.append(i18n(
+    text.append(i18n(
                      "<br/>"
                      "<p>You can ignore the following if you use digiKam "
                      "for the first time:</p>"
