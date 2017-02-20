@@ -36,6 +36,7 @@ namespace Digikam
 {
 
 class LoadingDescription;
+class MaintenanceData;
 
 class ThumbsTask : public ActionJob
 {
@@ -46,7 +47,7 @@ public:
     ThumbsTask();
     ~ThumbsTask();
 
-    void setItem(const QString& path);
+    void setMaintenanceData(MaintenanceData* data=0);
 
 Q_SIGNALS:
 

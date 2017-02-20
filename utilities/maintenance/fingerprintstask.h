@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class LoadingDescription;
+class MaintenanceData;
 class DImg;
 
 class FingerprintsTask : public ActionJob
@@ -48,8 +49,7 @@ public:
     FingerprintsTask();
     ~FingerprintsTask();
 
-    void setItem(const QString& path);
-    void setItems(const QStringList& paths);
+    void setMaintenanceData(MaintenanceData* data=0);
 
 Q_SIGNALS:
 

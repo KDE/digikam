@@ -37,6 +37,7 @@
 #include "coredbaccess.h"
 #include "recognitiondatabase.h"
 #include "facetagseditor.h"
+#include "maintenancedata.h"
 
 namespace Digikam
 {
@@ -46,26 +47,23 @@ class DatabaseTask::Private
 public:
 
     Private():
-        computeDatabaseJunk(false),
         scanThumbsDb(false),
         scanRecognitionDb(false),
-        shrinkDatabases(false),
-        cancel(false)
+        cancel(false),
+        mode(Mode::Unknown),
+        data(0)
     {
     }
 
-    QList<qlonglong>              imageIds;
-    QList<int>                    thumbIds;
-    QList<FacesEngine::Identity>  identities;
 
     QString                       objectIdentification;
 
-    bool                          computeDatabaseJunk;
     bool                          scanThumbsDb;
     bool                          scanRecognitionDb;
-    bool                          shrinkDatabases;
-
     bool                          cancel;
+
+    Mode                          mode;
+    MaintenanceData*              data;
 };
 
 // -------------------------------------------------------
@@ -83,49 +81,20 @@ DatabaseTask::~DatabaseTask()
     delete d;
 }
 
-void DatabaseTask::setItem(qlonglong imageId)
-{
-    setItems(QList<qlonglong>() << imageId);
-}
-
-void DatabaseTask::setItems(const QList<qlonglong>& imageIds)
-{
-    d->imageIds               = imageIds;
-    d->objectIdentification   = QLatin1String("item id batch"); 
-}
-
-void DatabaseTask::setThumbId(int thumbId)
-{
-    setThumbIds(QList<int>() << thumbId);
-}
-
-void DatabaseTask::setThumbIds(const QList<int>& thumbIds)
-{
-    d->thumbIds               = thumbIds;
-    d->objectIdentification   = QLatin1String("thumbnail id batch "); 
-}
-
-void DatabaseTask::setIdentity(const FacesEngine::Identity& identity)
-{
-    setIdentities(QList<FacesEngine::Identity>() << identity);
-}
-
-void DatabaseTask::setIdentities(const QList<FacesEngine::Identity>& identities)
-{
-    d->identities             = identities;
-    d->objectIdentification   = QLatin1String("face identity batch"); 
-}
-
-void DatabaseTask::setShrinkJob()
-{
-    d->shrinkDatabases = true;
-}
-
 void DatabaseTask::computeDatabaseJunk(bool thumbsDb, bool facesDb)
 {
-    d->computeDatabaseJunk    = true;
     d->scanThumbsDb           = thumbsDb;
     d->scanRecognitionDb      = facesDb;
+}
+
+void DatabaseTask::setMode(Mode mode)
+{
+    d->mode = mode;
+}
+
+void DatabaseTask::setMaintenanceData(MaintenanceData* data)
+{
+    d->data = data;
 }
 
 void DatabaseTask::slotCancel()
@@ -140,8 +109,11 @@ void DatabaseTask::run()
         return;
     }
 
-    if (d->shrinkDatabases)
+    emit signalStarted();
+
+    if (d->mode == Mode::ShrinkDatabases)
     {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Shrinking databases";
         if (CoreDbAccess().db()->integrityCheck())
         {
             CoreDbAccess().db()->vacuum();
@@ -160,6 +132,7 @@ void DatabaseTask::run()
         }
 
         emit signalFinished();
+        QThread::sleep(1);
 
         if (d->cancel)
         {
@@ -191,6 +164,7 @@ void DatabaseTask::run()
         }
 
         emit signalFinished();
+        QThread::sleep(1);
 
         if (d->cancel)
         {
@@ -215,11 +189,16 @@ void DatabaseTask::run()
         }
 
         emit signalFinished();
+        QThread::sleep(1);
     }
-    else if (d->computeDatabaseJunk)
+    else if (d->mode == Mode::ComputeDatabaseJunk)
     {
+        QList<qlonglong>              staleImageIds;
+        QList<int>                    staleThumbIds;
+        QList<FacesEngine::Identity>  staleIdentities;
+
         // Get the count of image entries in DB to delete.
-        d->imageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
+        staleImageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
         
         emit signalFinished();
 
@@ -292,15 +271,15 @@ void DatabaseTask::run()
             }
 
             // The remaining thumbnail ids should be used to remove them since they are stale.
-            d->thumbIds = thumbIds.toList();
+            staleThumbIds = thumbIds.toList();
+
+            emit signalFinished();
         }
 
         if (d->cancel)
         {
             return;
         }
-
-        emit signalFinished();
 
         // Get the stale face identities.
         if (d->scanRecognitionDb)
@@ -323,22 +302,29 @@ void DatabaseTask::run()
 
                 if (!value.isEmpty() && !uuidSet.contains(value))
                 {
-                    d->identities << identity;
+                    staleIdentities << identity;
                 }
             }
+
+            emit signalFinished();
         }
-        emit signalFinished();
-        emit signalData(d->imageIds,d->thumbIds,d->identities);
-        // do not emit the finished signal. We do not need it.
-        // It would only trigger the advance slot of MaintenanceThread
+
+        emit signalData(staleImageIds,staleThumbIds,staleIdentities);
     }
-    else if (!d->imageIds.isEmpty())
+    else if (d->mode == Mode::CleanCoreDb)
     {
-        foreach(qlonglong imageId, d->imageIds)
+        // While we have data (using this as check for non-null)
+        while (d->data)
         {
             if (d->cancel)
             {
                 return;
+            }
+
+            qlonglong imageId = d->data->getImageId();
+            if (imageId == -1)
+            {
+                break;
             }
 
             CoreDbAccess().db()->deleteItem(imageId);
@@ -347,7 +333,7 @@ void DatabaseTask::run()
             emit signalFinished();
         }
     }
-    else if (!d->thumbIds.empty())
+    else if (d->mode == Mode::CleanThumbsDb)
     {
         BdEngineBackend::QueryState lastQueryState = BdEngineBackend::ConnectionError;
 
@@ -358,12 +344,20 @@ void DatabaseTask::run()
         {
             // Start removing.
 
-            foreach(int thumbId, d->thumbIds)
+            // While we have data (using this as check for non-null)
+            while (d->data)
             {
                 if (d->cancel)
                 {
                     return;
                 }
+
+                int thumbId = d->data->getThumbnailId();
+                if (thumbId == -1)
+                {
+                    break;
+                }
+
                 lastQueryState = ThumbsDbAccess().db()->remove(thumbId);
                 emit signalFinished();
             }
@@ -390,13 +384,21 @@ void DatabaseTask::run()
             qCWarning(DIGIKAM_THUMBSDB_LOG) << "Could not begin the transaction for the removal of " << d->objectIdentification << " due to error ";
         }
     }
-    else if (!d->identities.isEmpty())
+    else if (d->mode == Mode::CleanRecognitionDb)
     {
-        foreach (FacesEngine::Identity identity, d->identities)
+        // While we have data (using this as check for non-null)
+        while (d->data)
         {
             if (d->cancel)
             {
                 return;
+            }
+
+            Identity identity = d->data->getIdentity();
+
+            if (identity.isNull())
+            {
+                break;
             }
 
             FacesEngine::RecognitionDatabase().deleteIdentity(identity);

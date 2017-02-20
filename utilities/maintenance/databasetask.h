@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class LoadingDescription;
+class MaintenanceData;
 
 class DatabaseTask : public ActionJob
 {
@@ -44,18 +45,23 @@ class DatabaseTask : public ActionJob
 
 public:
 
+    enum Mode{
+        Unknown,
+        ComputeDatabaseJunk,
+        CleanCoreDb,
+        CleanThumbsDb,
+        CleanRecognitionDb,
+        ShrinkDatabases
+    };
+
     explicit DatabaseTask();
     virtual ~DatabaseTask();
 
-    void setItem(qlonglong imageId);
-    void setItems(const QList<qlonglong>& imageIds);
-    void setThumbId(int thumbId);
-    void setThumbIds(const QList<int>& thumbIds);
-    void setIdentity(const FacesEngine::Identity& identity);
-    void setIdentities(const QList<FacesEngine::Identity>& identities);
-    void setShrinkJob();
+    void setMode(Mode mode);
+    void setMaintenanceData(MaintenanceData* data=0);
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
+
 
 Q_SIGNALS:
 
@@ -64,6 +70,8 @@ Q_SIGNALS:
     void signalData(const QList<qlonglong>& staleImageIds,
                     const QList<int>& staleThumbIds,
                     const QList<FacesEngine::Identity>& staleIdentities);
+
+    void signalStarted();
 
 public Q_SLOTS:
 

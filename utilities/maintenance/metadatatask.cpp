@@ -28,6 +28,7 @@
 #include "collectionscanner.h"
 #include "metadatahub.h"
 #include "digikam_debug.h"
+#include "maintenancedata.h"
 
 namespace Digikam
 {
@@ -37,17 +38,16 @@ class MetadataTask::Private
 public:
 
     Private()
+        : cancel(false), tagsOnly(false), direction(MetadataSynchronizer::WriteFromDatabaseToFile), data(0)
     {
-        cancel    = false;
-        direction = MetadataSynchronizer::WriteFromDatabaseToFile;
-        tagsOnly  = false;
     }
 
     bool                                cancel;
     bool                                tagsOnly;
 
-    ImageInfo                           item;
     MetadataSynchronizer::SyncDirection direction;
+
+    MaintenanceData *                   data;
 };
 
 // -------------------------------------------------------
@@ -64,16 +64,21 @@ MetadataTask::~MetadataTask()
     delete d;
 }
 
-void MetadataTask::setItem(const ImageInfo& item, MetadataSynchronizer::SyncDirection dir)
-{
-    d->item      = item;
-    d->direction = dir;
-}
-
 void MetadataTask::setTagsOnly(bool value)
 {
     d->tagsOnly = value;
 }
+
+void MetadataTask::setDirection(MetadataSynchronizer::SyncDirection dir)
+{
+    d->direction = dir;
+}
+
+void MetadataTask::setMaintenanceData(MaintenanceData* data)
+{
+    d->data = data;
+}
+
 void MetadataTask::slotCancel()
 {
     d->cancel = true;
@@ -81,35 +86,48 @@ void MetadataTask::slotCancel()
 
 void MetadataTask::run()
 {
-    if (d->cancel)
+    // While we have data (using this as check for non-null)
+    while(d->data)
     {
-        return;
-    }
+        ImageInfo item = d->data->getImageInfo();
 
-    if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)
-    {
-        MetadataHub fileHub;
-
-        // read in from database
-        fileHub.load(d->item);
-
-        // write out to file DMetadata
-        if(d->tagsOnly)
+        // If the item is null, we are done.
+        if (item.isNull())
         {
-            fileHub.writeTags(d->item.filePath());
+            break;
         }
-        else
+
+        if (d->cancel)
         {
-            fileHub.write(d->item.filePath(), MetadataHub::WRITE_ALL, true);
+            return;
         }
-    }
-    else // MetadataSynchronizer::ReadFromFileToDatabase
-    {
-        CollectionScanner scanner;
-        scanner.scanFile(d->item, CollectionScanner::Rescan);
+
+        if (d->direction == MetadataSynchronizer::WriteFromDatabaseToFile)
+        {
+            MetadataHub fileHub;
+
+            // read in from database
+            fileHub.load(item);
+
+            // write out to file DMetadata
+            if(d->tagsOnly)
+            {
+                fileHub.writeTags(item.filePath());
+            }
+            else
+            {
+                fileHub.write(item.filePath(), MetadataHub::WRITE_ALL, true);
+            }
+        }
+        else // MetadataSynchronizer::ReadFromFileToDatabase
+        {
+            CollectionScanner scanner;
+            scanner.scanFile(item, CollectionScanner::Rescan);
+        }
+
+        emit signalFinished(QImage());
     }
 
-    emit signalFinished(QImage());
     emit signalDone();
 }
 

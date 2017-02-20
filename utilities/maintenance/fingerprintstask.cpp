@@ -23,6 +23,9 @@
 
 #include "fingerprintstask.h"
 
+// Qt includes
+#include <QQueue>
+
 // Local includes
 
 #include "digikam_debug.h"
@@ -30,6 +33,7 @@
 #include "haar.h"
 #include "haariface.h"
 #include "previewloadthread.h"
+#include "maintenancedata.h"
 
 namespace Digikam
 {
@@ -39,12 +43,13 @@ class FingerprintsTask::Private
 public:
 
     Private()
+        : cancel(false), data(0)
     {
-        cancel = false;
     }
 
     bool      cancel;
-    QStringList   paths;
+
+    MaintenanceData*  data;
 };
 
 // -------------------------------------------------------
@@ -61,14 +66,9 @@ FingerprintsTask::~FingerprintsTask()
     delete d;
 }
 
-void FingerprintsTask::setItem(const QString& path)
+void FingerprintsTask::setMaintenanceData(MaintenanceData* data)
 {
-    d->paths = QStringList() << path;
-}
-
-void FingerprintsTask::setItems(const QStringList& paths)
-{
-    d->paths = paths;
+    d->data = data;
 }
 
 void FingerprintsTask::slotCancel()
@@ -78,27 +78,29 @@ void FingerprintsTask::slotCancel()
 
 void FingerprintsTask::run()
 {
-    if (!d->cancel)
+    // While we have data (using this as check for non-null)
+    while (d->data)
     {
-        foreach(QString path, d->paths)
+        if (d->cancel)
+            return;
+
+        QString path = d->data->getImagePath();
+        if (path.isEmpty())
+            break;
+
+        DImg dimg = PreviewLoadThread::loadFastSynchronously(path, HaarIface::preferredSize());
+
+        if (!dimg.isNull())
         {
-            DImg dimg = PreviewLoadThread::loadFastSynchronously(path, HaarIface::preferredSize());
-
-            if (d->cancel)
-                return;
-
-            if (!dimg.isNull())
-            {
-                // compute Haar fingerprint and store it to DB
-                HaarIface haarIface;
-                haarIface.indexImage(path, dimg);
-            }
-
-            QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
-            emit signalFinished(qimg);
+            // compute Haar fingerprint and store it to DB
+            HaarIface haarIface;
+            haarIface.indexImage(path, dimg);
         }
-        emit signalDone();
+
+        QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
+        emit signalFinished(qimg);
     }
+    emit signalDone();
 }
 
 }  // namespace Digikam

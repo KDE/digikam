@@ -23,11 +23,15 @@
 
 #include "thumbstask.h"
 
+// Qt includes
+#include <QQueue>
+
 // Local includes
 
 #include "digikam_debug.h"
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
+#include "maintenancedata.h"
 
 namespace Digikam
 {
@@ -37,16 +41,15 @@ class ThumbsTask::Private
 public:
 
     Private()
+        : cancel(false),catcher(0), data(0)
     {
-        cancel  = false;
-        catcher = 0;
     }
-
-    QString                path;
 
     bool                   cancel;
 
     ThumbnailImageCatcher* catcher;
+
+    MaintenanceData*       data;
 };
 
 // -------------------------------------------------------
@@ -70,10 +73,9 @@ ThumbsTask::~ThumbsTask()
     delete d;
 }
 
-void ThumbsTask::setItem(const QString& path)
+void ThumbsTask::setMaintenanceData(MaintenanceData* data)
 {
-    d->path = path;
-    d->catcher->thread()->deleteThumbnail(d->path);
+    d->data = data;
 }
 
 void ThumbsTask::slotCancel()
@@ -85,17 +87,30 @@ void ThumbsTask::slotCancel()
 
 void ThumbsTask::run()
 {
-    if (d->cancel)
-    {
-        return;
-    }
-
     d->catcher->setActive(true);
 
-    d->catcher->thread()->find(ThumbnailIdentifier(d->path));
-    d->catcher->enqueue();
-    QList<QImage> images = d->catcher->waitForThumbnails();
-    emit signalFinished(images.first());
+    // While we have data (using this as check for non-null)
+    while (d->data)
+    {
+        if (d->cancel)
+        {
+            return;
+        }
+
+        QString path = d->data->getImagePath();
+
+        if (path.isEmpty())
+        {
+            break;
+        }
+
+        // TODO Should be improved by some update procedure
+        d->catcher->thread()->deleteThumbnail(path);
+        d->catcher->thread()->find(ThumbnailIdentifier(path));
+        d->catcher->enqueue();
+        QList<QImage> images = d->catcher->waitForThumbnails();
+        emit signalFinished(images.first());
+    }
     emit signalDone();
 
     d->catcher->setActive(false);

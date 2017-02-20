@@ -37,6 +37,7 @@ namespace Digikam
 {
 
 class ImageQualitySettings;
+class MaintenanceData;
 
 class MaintenanceThread : public ActionThreadBase
 {
@@ -51,18 +52,24 @@ public:
 
     void syncMetadata(const ImageInfoList& items, MetadataSynchronizer::SyncDirection dir, bool tagsOnly);
     void generateThumbs(const QStringList& paths);
-    void generateFingerprints(const QStringList& paths, int chunkSize=0);
+    void generateFingerprints(const QStringList& paths);
     void sortByImageQuality(const QStringList& paths, const ImageQualitySettings& quality);
 
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
-    void cleanCoreDb(const QList<qlonglong>& imageIds, int chunkSize);
-    void cleanThumbsDb(const QList<int>& thumbnailIds, int chunkSize);
-    void cleanFacesDb(const QList<FacesEngine::Identity>& staleIdentities, int chunkSize);
+    void cleanCoreDb(const QList<qlonglong>& imageIds);
+    void cleanThumbsDb(const QList<int>& thumbnailIds);
+    void cleanFacesDb(const QList<FacesEngine::Identity>& staleIdentities);
     void shrinkDatabases();
 
     void cancel();
 
+    QString getThumbFingerprintPath();
+
 Q_SIGNALS:
+
+    /** Emit when the task has started it's work.
+     */
+    void signalStarted();
 
     /** Emit when an item have been processed. QImage can be used to pass item thumbnail processed.
      */
@@ -89,6 +96,49 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotThreadFinished();
+
+private:
+
+    /**
+     * This function generates from the given list
+     * a list of lists with each embedded list having size
+     * of at most chunkSize. If chunkSize is zero, the original
+     * list is the only chunk.
+     * @param toChunk The list to chunk
+     * @param chunkSize The chunk size (0 for take everything)
+     */
+    template<typename T>
+    QList<QList<T>> chunkList(const QList<T>& toChunk, int chunkSize=0)
+    {
+        QList<QList<T>> chunks;
+
+        // Chunk size 0 means all
+        if (chunkSize == 0)
+        {
+            chunks << toChunk;
+            return chunks;
+        }
+
+        // Buffer the input list
+        QList<T> toChunkList = toChunk;
+        QList<T> currentChunk;
+        while (!toChunkList.isEmpty())
+        {
+            // Set the current chunk to the first n elements
+            currentChunk = toChunkList.mid(0,chunkSize);
+            // Set the buffer list to the rest, i.e.
+            // start at position n and take all from this position
+            // If n is bigger than the size, an empty list is returned.
+            // see qarraydata.cpp in Qt implementation.
+            toChunkList  = toChunkList.mid(chunkSize);
+            chunks << currentChunk;
+        }
+        return chunks;
+    }
+
+    int getChunkSize(int elementCount);
+
+    MaintenanceData* const data;
 
 };
 

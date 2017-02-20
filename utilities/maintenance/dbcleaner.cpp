@@ -27,6 +27,7 @@
 
 #include <QIcon>
 #include <QMessageBox>
+#include <QThread>
 
 // KDE includes
 
@@ -50,8 +51,8 @@ public:
         cleanThumbsDb(false),
         cleanFacesDb(false),
         shrinkDatabases(false),
-        threadChunkSize(0),
-        databaseCount(3),
+        databasesToAnalyseCount(1),
+        databasesToShrinkCount(0),
         messageBox(0)
     {
     }
@@ -70,11 +71,18 @@ public:
     QList<int>                   staleThumbnails;
     QList<FacesEngine::Identity> staleIdentities;
 
-    int                          threadChunkSize;
-    int                          databaseCount;
+    int                          databasesToAnalyseCount;
+    int                          databasesToShrinkCount;
 
     QMessageBox*                 messageBox;
+
+    QString                      coreDbStatus;
+    QString                      thumbsDbStatus;
+    QString                      recognitionDbStatus;
 };
+
+    QString DbCleaner::VACUUM_PENDING(QLatin1String("&#62;"));
+    QString DbCleaner::VACUUM_DONE(QLatin1String("&#10003;"));
 
 DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DbCleaner"), parent),
@@ -84,8 +92,23 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases
     qRegisterMetaType<QList<FacesEngine::Identity>>("QList<FacesEngine::Identity>");
 
     d->cleanThumbsDb   = cleanThumbsDb;
+    if (cleanThumbsDb)
+    {
+        d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;
+    }
+
     d->cleanFacesDb    = cleanFacesDb;
+    if (cleanFacesDb)
+    {
+        d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;
+    }
+
     d->shrinkDatabases = shrinkDatabases;
+
+    if (shrinkDatabases)
+    {
+        d->databasesToShrinkCount = 3;
+    }
 
     d->thread          = new MaintenanceThread(this);
 
@@ -109,7 +132,8 @@ void DbCleaner::slotStart()
     ProgressManager::addProgressItem(this);
 
     // Set one item to make sure that the progress bar is shown.
-    setTotalItems(d->databaseCount);
+    setTotalItems(d->databasesToAnalyseCount + d->databasesToShrinkCount);
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Completed items at start: " << completedItems() << "/" << totalItems();
 
     connect(d->thread,SIGNAL(signalCompleted()),
             this, SLOT(slotCleanItems()));
@@ -147,22 +171,17 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
             disconnect(d->thread,SIGNAL(signalCompleted()),
                         this, SLOT(slotCleanItems()));
 
-            setTotalItems(totalItems() + d->databaseCount);
-
             slotShrinkDatabases();
         }
-        MaintenanceTool::slotDone();
-        return;
+        else
+        {
+            MaintenanceTool::slotDone();
+            return;
+        }
     }
 
-    if (d->shrinkDatabases)
-    {
-        setTotalItems(totalItems() + d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size() + d->databaseCount);
-    }
-    else
-    {
-        setTotalItems(totalItems() + d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size());
-    }
+    setTotalItems(totalItems() + d->imagesToRemove.size() + d->staleThumbnails.size() + d->staleIdentities.size());
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Completed items after analysis: " << completedItems() << "/" << totalItems();
 }
 
 void DbCleaner::slotCleanItems()
@@ -182,7 +201,7 @@ void DbCleaner::slotCleanItems()
         setLabel(i18n("Clean up the databases : ") + i18n("cleaning core db"));
 
         // GO!
-        d->thread->cleanCoreDb(d->imagesToRemove, d->threadChunkSize);
+        d->thread->cleanCoreDb(d->imagesToRemove);
         d->thread->start();
     }
     else
@@ -209,7 +228,7 @@ void DbCleaner::slotCleanedItems()
             setLabel(i18n("Clean up the databases : ") + i18n("cleaning thumbnails db"));
 
             // GO!
-            d->thread->cleanThumbsDb(d->staleThumbnails, d->threadChunkSize);
+            d->thread->cleanThumbsDb(d->staleThumbnails);
             d->thread->start();
         }
         else
@@ -242,7 +261,7 @@ void DbCleaner::slotCleanedThumbnails()
                     this, SLOT(slotCleanedFaces()));
 
             // We cleaned the thumbs db. Now clean the faces db.
-            d->thread->cleanFacesDb(d->staleIdentities, d->threadChunkSize);
+            d->thread->cleanFacesDb(d->staleIdentities);
             d->thread->start();
         }
         else
@@ -264,7 +283,7 @@ void DbCleaner::slotCleanedFaces()
     {
         slotShrinkDatabases();
     }
-    MaintenanceTool::slotDone();
+    slotDone();
 }
 
 void DbCleaner::slotShrinkDatabases()
@@ -274,28 +293,66 @@ void DbCleaner::slotShrinkDatabases()
     disconnect(d->thread, SIGNAL(signalCompleted()),
                this, SLOT(slotCleanedFaces()));
 
+    connect(d->thread, SIGNAL(signalStarted()),
+                d->messageBox, SLOT(exec()));
+
+    connect(d->thread, SIGNAL(signalAdvance()),
+                this, SLOT(slotShrinkNextDBInfo()));
+
     connect(d->thread, SIGNAL(signalCompleted()),
-                    d->messageBox, SLOT(hide()));
+                this, SLOT(slotDone()));
 
     d->thread->shrinkDatabases();
-    // run blocking
-    //d->thread->run();
+
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Completed items before vacuum: " << completedItems() << "/" << totalItems();
 
     d->messageBox->setText(i18n("Database shrinking in progress."));
-    d->messageBox->setInformativeText(
-            i18n("Currently, your database(s) are shrinked.<br/>"
-            "This will take some time - depending on your database(s) size.<br/><br/>"
-            "We have to freeze digiKam in order to prevent database corruption.<br/>"
-            "This info box will vanish when the shrinking process is finished."));
+
+    slotShrinkNextDBInfo();
     d->messageBox->setStandardButtons(QMessageBox::NoButton);
-    d->messageBox->exec();
-    
+
     d->thread->start();
 }
 
 void DbCleaner::slotAdvance()
 {
     advance(1);
+}
+
+void DbCleaner::slotShrinkNextDBInfo()
+{
+    switch(d->databasesToShrinkCount)
+    {
+        case 3:
+            d->coreDbStatus        = VACUUM_PENDING;
+            break;
+        case 2:
+            d->coreDbStatus        = VACUUM_DONE;
+            d->thumbsDbStatus      = VACUUM_PENDING;
+            break;
+        case 1:
+            d->thumbsDbStatus      = VACUUM_DONE;
+            d->recognitionDbStatus = VACUUM_PENDING;
+            break;
+        case 0:
+            d->recognitionDbStatus = VACUUM_DONE;
+            break;
+    }
+
+    d->databasesToShrinkCount = d->databasesToShrinkCount - 1;
+
+    QString filledText = i18n("Currently, your database(s) are shrinked.<br/>"
+            "This will take some time - depending on your database(s) size.<br/><br/>"
+            "We have to freeze digiKam in order to prevent database corruption.<br/>"
+            "This info box will vanish when the shrinking process is finished.<br/>"
+            "Current Status: <ul>"
+            "<li>%1 Core DB</li>"
+            "<li>%2 Thumbs DB</li>"
+            "<li>%3 Recognition DB</li>"
+            "</ul>",d->coreDbStatus,d->thumbsDbStatus,d->recognitionDbStatus);
+
+    d->messageBox->setInformativeText(filledText);
+
 }
 
 void DbCleaner::setUseMultiCoreCPU(bool b)
@@ -307,6 +364,12 @@ void DbCleaner::slotCancel()
 {
     d->thread->cancel();
     MaintenanceTool::slotCancel();
+}
+
+void DbCleaner::slotDone()
+{
+    d->messageBox->hide();
+    MaintenanceTool::slotDone();
 }
 
 } // namespace Digikam

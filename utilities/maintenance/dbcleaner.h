@@ -57,6 +57,7 @@ private Q_SLOTS:
     void slotStart();
     void slotCancel();
     void slotAdvance();
+    void slotShrinkNextDBInfo();
 
     void slotFetchedData(const QList<qlonglong>& staleImageIds,
                          const QList<int>& staleThumbIds,
@@ -68,7 +69,12 @@ private Q_SLOTS:
     void slotCleanedFaces();
     void slotShrinkDatabases();
 
+    void slotDone();
+
 private:
+
+    static QString VACUUM_PENDING;
+    static QString VACUUM_DONE;
 
     class Private;
     Private* const d;

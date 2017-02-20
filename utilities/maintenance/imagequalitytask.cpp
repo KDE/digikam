@@ -31,6 +31,7 @@
 #include "imagequalitysettings.h"
 #include "imgqsort.h"
 #include "imageinfo.h"
+#include "maintenancedata.h"
 
 namespace Digikam
 {
@@ -40,15 +41,15 @@ class ImageQualityTask::Private
 public:
 
     Private()
+        : cancel(false),imgqsort(0),data(0)
     {
-        cancel   = false;
-        imgqsort = 0;
     }
 
     bool                 cancel;
-    QString              path;
     ImageQualitySettings quality;
     ImgQSort*            imgqsort;
+
+    MaintenanceData*     data;
 };
 
 // -------------------------------------------------------
@@ -65,10 +66,14 @@ ImageQualityTask::~ImageQualityTask()
     delete d;
 }
 
-void ImageQualityTask::setItem(const QString& path, const ImageQualitySettings& quality)
+void ImageQualityTask::setQuality(const ImageQualitySettings& quality)
 {
-    d->path    = path;
     d->quality = quality;
+}
+
+void ImageQualityTask::setMaintenanceData(MaintenanceData* data)
+{
+    d->data = data;
 }
 
 void ImageQualityTask::slotCancel()
@@ -83,18 +88,28 @@ void ImageQualityTask::slotCancel()
 
 void ImageQualityTask::run()
 {
-    if (!d->cancel)
+    // While we have data (using this as check for non-null)
+    while(d->data)
     {
+        if (d->cancel)
+        {
+            return;
+        }
+
+        QString path = d->data->getImagePath();
+        if (path.isEmpty())
+            break;
+
         // Get item preview to perform quality analysis. No need to load whole image, this will be slower.
         // TODO : check if 1024 pixels size is enough to get suitable Quality results.
-        DImg dimg = PreviewLoadThread::loadFastSynchronously(d->path, 1024);
+        DImg dimg = PreviewLoadThread::loadFastSynchronously(path, 1024);
 
         if (!dimg.isNull() && !d->cancel)
         {
             // TODO : run here Quality analysis backend and store Pick Label result to DB.
             // Backend Input : d->quality as Quality analysis settings,
             //                 dimg       as reduced size image data to parse,
-            //                 d->path    as file path to patch DB properties.
+            //                 path    as file path to patch DB properties.
             // Result        : Backend must scan Quality of image depending of settings and compute a Quality estimation accordingly.
             //                 Finaly, using file path, DB Pick Label properties must be assigned through ImageInfo interface.
             // Warning       : All code here will run in a separated thread and must be re-entrant/thread-safe. Only pure computation
@@ -104,7 +119,7 @@ void ImageQualityTask::run()
             d->imgqsort = new ImgQSort(dimg, d->quality, &pick);
             d->imgqsort->startAnalyse();
 
-            ImageInfo info = ImageInfo::fromLocalFile(d->path);
+            ImageInfo info = ImageInfo::fromLocalFile(path);
             info.setPickLabel(pick);
 
             delete d->imgqsort; //delete image data after setting label
@@ -113,8 +128,8 @@ void ImageQualityTask::run()
         // Dispatch progress to Progress Manager
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
         emit signalFinished(qimg);
-        emit signalDone();
     }
+    emit signalDone();
 }
 
 }  // namespace Digikam

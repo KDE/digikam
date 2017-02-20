@@ -10,6 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libmaintenance_SRCS
+	maintenancedata.cpp
     imageinfojob.cpp
     imageinfoalbumsjob.cpp
     metadatatask.cpp

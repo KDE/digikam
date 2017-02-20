@@ -37,6 +37,8 @@
 namespace Digikam
 {
 
+class MaintenanceData;
+
 class MetadataTask : public ActionJob
 {
     Q_OBJECT
@@ -46,8 +48,9 @@ public:
     MetadataTask();
     ~MetadataTask();
 
-    void setItem(const ImageInfo& item, MetadataSynchronizer::SyncDirection dir);
     void setTagsOnly(bool value);
+    void setDirection(MetadataSynchronizer::SyncDirection dir);
+    void setMaintenanceData(MaintenanceData* data=0);
 
 Q_SIGNALS:
 
