@@ -81,4 +81,5 @@ BUGFIXES FROM BUGZILLA:
 063 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
 064 ==> 376650 - Write Meta Data hangs if album is empty.
 065 ==> 375199 - Metadata Synchronizer Tool is not working for subfolders.
-066 ==> 
+066 ==> 375796 - Barel Effect Apperaing on Images RAW RW2 Panasonic Format.
+067 ==> 
