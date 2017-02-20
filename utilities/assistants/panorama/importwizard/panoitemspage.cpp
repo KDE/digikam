@@ -78,6 +78,7 @@ PanoItemsPage::PanoItemsPage(PanoManager* const mngr, QWizard* const dlg)
                          "</qt>"));
 
     d->list = new DImagesList(vbox);
+    d->list->setObjectName(QLatin1String("Panorama ImagesList"));
     d->list->slotAddImages(d->mngr->itemsList());
 
     setPageWidget(vbox);

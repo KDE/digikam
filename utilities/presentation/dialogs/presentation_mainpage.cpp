@@ -89,6 +89,7 @@ PresentationMainPage::PresentationMainPage(QWidget* const parent, PresentationCo
 
     QVBoxLayout* const listBoxContainerLayout = new QVBoxLayout;
     d->imagesFilesListBox                     = new DImagesList(m_ImagesFilesListBoxContainer, 32);
+    d->imagesFilesListBox->setObjectName(QLatin1String("Presentation ImagesList"));
     d->imagesFilesListBox->listView()->header()->hide();
     d->imagesFilesListBox->enableControlButtons(true);
     d->imagesFilesListBox->enableDragAndDrop(true);

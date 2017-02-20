@@ -50,6 +50,8 @@
 
 // KDE includes
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -851,14 +853,19 @@ void DImagesList::slotAddImages(const QList<QUrl>& list)
 
 void DImagesList::slotAddItems()
 {
-    ImageDialog dlg(this,
-                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)),
-                    false);
+    KConfig config;
+    KConfigGroup grp = config.group(objectName());
+    QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Image Path",
+                                           QStandardPaths::writableLocation(QStandardPaths::PicturesLocation)));
+
+    ImageDialog dlg(this, lastFileUrl, false);
     QList<QUrl> urls = dlg.urls();
 
     if (!urls.isEmpty())
     {
         slotAddImages(urls);
+        grp.writeEntry("Last Image Path", urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
+        config.sync();
     }
 
 //     emit signalImageListChanged();
@@ -961,13 +968,15 @@ void DImagesList::slotClearItems()
 
 void DImagesList::slotLoadItems()
 {
+    KConfig config;
+    KConfigGroup grp = config.group(objectName());
+    QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Images List Path",
+                                           QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     QUrl loadLevelsFile;
-
-    loadLevelsFile = QFileDialog::getOpenFileUrl(this, i18n("Select the image file list to load"),
-                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    loadLevelsFile = QFileDialog::getOpenFileUrl(this, i18n("Select the image file list to load"), lastFileUrl,
                                                  i18n("All Files (*)"));
 
-    if ( loadLevelsFile.isEmpty() )
+    if (loadLevelsFile.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "empty url";
         return;
@@ -1020,6 +1029,8 @@ void DImagesList::slotLoadItems()
         else if (xmlReader.isEndElement() && xmlReader.name() == QString::fromLatin1("Images"))
         {
             // if EndElement is Images return
+            grp.writeEntry("Last Images List Path", loadLevelsFile.adjusted(QUrl::RemoveFilename).toLocalFile());
+            config.sync();
             return;
         }
 
@@ -1029,9 +1040,12 @@ void DImagesList::slotLoadItems()
 
 void DImagesList::slotSaveItems()
 {
+    KConfig config;
+    KConfigGroup grp = config.group(objectName());
+    QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Images List Path",
+                                           QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     QUrl saveLevelsFile;
-    saveLevelsFile = QFileDialog::getSaveFileUrl(this, i18n("Select the image file list to save"),
-                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
+    saveLevelsFile = QFileDialog::getSaveFileUrl(this, i18n("Select the image file list to save"), lastFileUrl,
                                                  i18n("All Files (*)"));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "file url " << saveLevelsFile.toDisplayString();
@@ -1084,6 +1098,9 @@ void DImagesList::slotSaveItems()
     xmlWriter.writeEndElement();  // Images
 
     xmlWriter.writeEndDocument(); // end document
+
+    grp.writeEntry("Last Images List Path", saveLevelsFile.adjusted(QUrl::RemoveFilename).toLocalFile());
+    config.sync();
 }
 
 void DImagesList::removeItemByUrl(const QUrl& url)

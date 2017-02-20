@@ -82,4 +82,5 @@ BUGFIXES FROM BUGZILLA:
 064 ==> 376650 - Write Meta Data hangs if album is empty.
 065 ==> 375199 - Metadata Synchronizer Tool is not working for subfolders.
 066 ==> 375796 - Barel Effect Apperaing on Images RAW RW2 Panasonic Format.
-067 ==> 
+067 ==> 376331 - Path when saving/opening presentation files should be remebered.
+068 ==> 
