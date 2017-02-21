@@ -83,4 +83,5 @@ BUGFIXES FROM BUGZILLA:
 065 ==> 375199 - Metadata Synchronizer Tool is not working for subfolders.
 066 ==> 375796 - Barel Effect Apperaing on Images RAW RW2 Panasonic Format.
 067 ==> 376331 - Path when saving/opening presentation files should be remebered.
-068 ==> 
+068 ==> 375416 - Frequent crashes when applying faces.
+069 ==> 
