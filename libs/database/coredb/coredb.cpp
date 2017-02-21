@@ -930,14 +930,15 @@ QString CoreDB::getSetting(const QString& keyword)
 }
 
 // helper method
-static QStringList joinMainAndUserFilterString(const QString& filter, const QString& userFilter)
+static QStringList joinMainAndUserFilterString(const QLatin1Char sep, const QString& filter,
+                                               const QString& userFilter)
 {
     QSet<QString> filterSet;
     QStringList   userFilterList;
     QStringList   sortedList;
 
-    filterSet      = filter.split(QLatin1Char(';'), QString::SkipEmptyParts).toSet();
-    userFilterList = userFilter.split(QLatin1Char(';'), QString::SkipEmptyParts);
+    filterSet      = filter.split(sep, QString::SkipEmptyParts).toSet();
+    userFilterList = userFilter.split(sep, QString::SkipEmptyParts);
 
     foreach(const QString& userFormat, userFilterList)
     {
@@ -953,6 +954,7 @@ static QStringList joinMainAndUserFilterString(const QString& filter, const QStr
 
     sortedList = filterSet.toList();
     sortedList.sort();
+
     return sortedList;
 }
 
@@ -962,23 +964,23 @@ void CoreDB::getFilterSettings(QStringList* imageFilter, QStringList* videoFilte
 
     if (imageFilter)
     {
-        imageFormats = getSetting(QLatin1String("databaseImageFormats"));
+        imageFormats     = getSetting(QLatin1String("databaseImageFormats"));
         userImageFormats = getSetting(QLatin1String("databaseUserImageFormats"));
-        *imageFilter = joinMainAndUserFilterString(imageFormats, userImageFormats);
+        *imageFilter     = joinMainAndUserFilterString(QLatin1Char(';'), imageFormats, userImageFormats);
     }
 
     if (videoFilter)
     {
-        videoFormats = getSetting(QLatin1String("databaseVideoFormats"));
+        videoFormats     = getSetting(QLatin1String("databaseVideoFormats"));
         userVideoFormats = getSetting(QLatin1String("databaseUserVideoFormats"));
-        *videoFilter = joinMainAndUserFilterString(videoFormats, userVideoFormats);
+        *videoFilter     = joinMainAndUserFilterString(QLatin1Char(';'), videoFormats, userVideoFormats);
     }
 
     if (audioFilter)
     {
-        audioFormats = getSetting(QLatin1String("databaseAudioFormats"));
+        audioFormats     = getSetting(QLatin1String("databaseAudioFormats"));
         userAudioFormats = getSetting(QLatin1String("databaseUserAudioFormats"));
-        *audioFilter = joinMainAndUserFilterString(audioFormats, userAudioFormats);
+        *audioFilter     = joinMainAndUserFilterString(QLatin1Char(';'), audioFormats, userAudioFormats);
     }
 }
 
@@ -1000,6 +1002,20 @@ void CoreDB::getUserFilterSettings(QString* imageFilterString, QString* videoFil
     }
 }
 
+void CoreDB::getUserIgnoreDirectoryFilterSettings(QString* ignoreDirectoryFilterString)
+{
+    *ignoreDirectoryFilterString = getSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"));
+}
+
+void CoreDB::getIgnoreDirectoryFilterSettings(QStringList* ignoreDirectoryFilter)
+{
+    QString ignoreDirectoryFormats, userIgnoreDirectoryFormats;
+
+    ignoreDirectoryFormats     = getSetting(QLatin1String("databaseIgnoreDirectoryFormats"));
+    userIgnoreDirectoryFormats = getSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"));
+    *ignoreDirectoryFilter     = joinMainAndUserFilterString(QLatin1Char(' '), ignoreDirectoryFormats, userIgnoreDirectoryFormats);
+}
+
 void CoreDB::setFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
 {
     setSetting(QLatin1String("databaseImageFormats"), imageFilter.join(QLatin1String(";")));
@@ -1007,8 +1023,13 @@ void CoreDB::setFilterSettings(const QStringList& imageFilter, const QStringList
     setSetting(QLatin1String("databaseAudioFormats"), audioFilter.join(QLatin1String(";")));
 }
 
+void CoreDB::setIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilter)
+{
+    setSetting(QLatin1String("databaseIgnoreDirectoryFormats"), ignoreDirectoryFilter.join(QLatin1String(" ")));
+}
+
 // helper method
-static QStringList cleanUserFilterString(const QString& filterString)
+static QStringList cleanUserFilterString(const QString& filterString, const bool caseSensitive = false)
 {
     // splits by either ; or space, removes "*.", trims
     QStringList filterList;
@@ -1031,41 +1052,89 @@ static QStringList cleanUserFilterString(const QString& filterString)
     {
         if (f.startsWith(wildcard))
         {
-            filterList << f.mid(2).trimmed().toLower();
+            if (caseSensitive)
+            {
+                filterList << f.mid(2).trimmed();
+            }
+            else
+            {
+                filterList << f.mid(2).trimmed().toLower();
+            }
         }
         else if (f.startsWith(minusWildcard))
         {
-            filterList << QLatin1Char('-') + f.mid(3).trimmed().toLower();
+            if (caseSensitive)
+            {
+                filterList << QLatin1Char('-') + f.mid(3).trimmed();
+            }
+            else
+            {
+                filterList << QLatin1Char('-') + f.mid(3).trimmed().toLower();
+            }
         }
         else if (f.startsWith(dot))
         {
-            filterList << f.mid(1).trimmed().toLower();
+            if (caseSensitive)
+            {
+                filterList << f.mid(1).trimmed();
+            }
+            else
+            {
+                filterList << f.mid(1).trimmed().toLower();
+            }
         }
         else if (f.startsWith(minusDot))
         {
-            filterList << QLatin1Char('-') + f.mid(2).trimmed().toLower();
+            if (caseSensitive)
+            {
+                filterList << QLatin1Char('-') + f.mid(2).trimmed();
+            }
+            else
+            {
+                filterList << QLatin1Char('-') + f.mid(2).trimmed().toLower();
+            }
         }
         else
         {
-            filterList << f.trimmed().toLower();
+            if (caseSensitive)
+            {
+                filterList << f.trimmed();
+            }
+            else
+            {
+                filterList << f.trimmed().toLower();
+            }
         }
     }
+
     return filterList;
 }
 
-void CoreDB::setUserFilterSettings(const QString& imageFilterString, const QString& videoFilterString,
-                                    const QString& audioFilterString)
+void CoreDB::setUserFilterSettings(const QString& imageFilterString,
+                                   const QString& videoFilterString,
+                                   const QString& audioFilterString)
 {
     setUserFilterSettings(cleanUserFilterString(imageFilterString),
                           cleanUserFilterString(videoFilterString),
                           cleanUserFilterString(audioFilterString));
 }
 
-void CoreDB::setUserFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter)
+void CoreDB::setUserFilterSettings(const QStringList& imageFilter,
+                                   const QStringList& videoFilter,
+                                   const QStringList& audioFilter)
 {
     setSetting(QLatin1String("databaseUserImageFormats"), imageFilter.join(QLatin1String(";")));
     setSetting(QLatin1String("databaseUserVideoFormats"), videoFilter.join(QLatin1String(";")));
     setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1String(";")));
+}
+
+void CoreDB::setUserIgnoreDirectoryFilterSettings(const QString& ignoreDirectoryFilterString)
+{
+    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setUserIgnoreDirectoryFilterSettings. ignoreDirectoryFilterString: " << ignoreDirectoryFilterString;
+
+    QStringList ignoreDirectoryFilterList = cleanUserFilterString(ignoreDirectoryFilterString, true);
+
+    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilterList.join(QLatin1String(" ")));
 }
 
 void CoreDB::addToUserImageFilterSettings(const QString& filterString)
@@ -1120,7 +1189,7 @@ int CoreDB::getUniqueHashVersion()
 
 bool CoreDB::isUniqueHashV2()
 {
-    return getUniqueHashVersion() == 2;
+    return (getUniqueHashVersion() == 2);
 }
 
 void CoreDB::setUniqueHashVersion(int version)
@@ -1160,7 +1229,6 @@ QString CoreDB::getItemCaption(int albumID, const QString& name)
         return QString();
 }
 
-
 QDateTime CoreDB::getItemDate(qlonglong imageID)
 {
     QList<QVariant> values;
@@ -1198,10 +1266,10 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name)
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "WHERE album=? AND name=?;"),
-                   albumID,
-                   name,
-                   &values);
+                                     "WHERE album=? AND name=?;"),
+                                     albumID,
+                                     name,
+                                     &values);
 
     if (values.isEmpty())
     {
@@ -1216,22 +1284,23 @@ qlonglong CoreDB::getImageId(int albumID, const QString& name)
 QList<qlonglong> CoreDB::getImageIds(int albumID, const QString& name, DatabaseItem::Status status)
 {
     QList<QVariant> values;
+
     if (albumID == -1)
     {
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "WHERE album IS NULL AND name=? AND status=?;"),
-                   name,
-                   status,
-                   &values);
+                                         "WHERE album IS NULL AND name=? AND status=?;"),
+                                         name,
+                                         status,
+                                         &values);
     }
     else
     {
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "WHERE album=? AND name=? AND status=?;"),
-                   albumID,
-                   name,
-                   status,
-                   &values);
+                                         "WHERE album=? AND name=? AND status=?;"),
+                                         albumID,
+                                         name,
+                                         status,
+                                         &values);
     }
 
     QList<qlonglong> items;
@@ -1240,6 +1309,7 @@ QList<qlonglong> CoreDB::getImageIds(int albumID, const QString& name, DatabaseI
     {
         items << it->toLongLong();
     }
+
     return items;
 }
 
@@ -1247,11 +1317,12 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
 {
     QList<QVariant> values;
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "WHERE status=?;"),
-                   status,
-                   &values);
+                                     "WHERE status=?;"),
+                                     status,
+                                     &values);
 
     QList<qlonglong> imageIds;
+
     foreach(QVariant object, values)
     {
         imageIds << object.toLongLong();
@@ -1261,41 +1332,41 @@ QList<qlonglong> CoreDB::getImageIds(DatabaseItem::Status status)
 }
 
 qlonglong CoreDB::getImageId(int albumID, const QString& name,
-                      DatabaseItem::Status status,
-                      DatabaseItem::Category category,
-                      const QDateTime& modificationDate,
-                      qlonglong fileSize,
-                      const QString& uniqueHash)
+                             DatabaseItem::Status status,
+                             DatabaseItem::Category category,
+                             const QDateTime& modificationDate,
+                             qlonglong fileSize,
+                             const QString& uniqueHash)
 {
     QList<QVariant> values;
     QVariantList boundValues;
 
     // Add the standard bindings
     boundValues << name << (int)status << (int)category
-                    << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash;
+                << modificationDate.toString(Qt::ISODate) << fileSize << uniqueHash;
 
     // If the album id is -1, no album is assigned. Get all images with NULL album
     if (albumID == -1)
     {
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "WHERE name=? AND status=? "
-                           "AND category=? AND modificationDate=? "
-                           "AND fileSize=? AND uniqueHash=? "
-                           "AND album IS NULL;"),
-                   boundValues,
-                   &values);
+                                         "WHERE name=? AND status=? "
+                                         "AND category=? AND modificationDate=? "
+                                         "AND fileSize=? AND uniqueHash=? "
+                                         "AND album IS NULL;"),
+                                         boundValues,
+                                         &values);
     }
     else
     {
         boundValues << albumID;
 
         d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "WHERE name=? AND status=? "
-                           "AND category=? AND modificationDate=? "
-                           "AND fileSize=? AND uniqueHash=?; "
-                           "AND album=?;"),
-                   boundValues,
-                   &values);
+                                         "WHERE name=? AND status=? "
+                                         "AND category=? AND modificationDate=? "
+                                         "AND fileSize=? AND uniqueHash=?; "
+                                         "AND album=?;"),
+                                         boundValues,
+                                         &values);
     }
 
     if ( values.isEmpty() || ( values.size() > 1 ) )
@@ -1313,11 +1384,11 @@ QStringList CoreDB::getItemTagNames(qlonglong imageID)
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT name FROM Tags \n "
-                           "WHERE id IN (SELECT tagid FROM ImageTags \n "
-                           "             WHERE imageid=?) \n "
-                           "ORDER BY name;"),
-                   imageID,
-                   &values);
+                                     "WHERE id IN (SELECT tagid FROM ImageTags \n "
+                                     "             WHERE imageid=?) \n "
+                                     "ORDER BY name;"),
+                                     imageID,
+                                     &values);
 
     QStringList names;
 
@@ -1360,8 +1431,8 @@ QVector<QList<int> > CoreDB::getItemsTagIDs(const QList<qlonglong> imageIds)
     }
 
     QVector<QList<int> > results(imageIds.size());
-    DbEngineSqlQuery             query = d->db->prepareQuery(QString::fromUtf8("SELECT tagid FROM ImageTags WHERE imageID=?;"));
-    QVariantList         values;
+    DbEngineSqlQuery query = d->db->prepareQuery(QString::fromUtf8("SELECT tagid FROM ImageTags WHERE imageID=?;"));
+    QVariantList values;
 
     for (int i = 0; i < imageIds.size(); i++)
     {
@@ -1543,7 +1614,7 @@ bool CoreDB::hasTags(const QList<qlonglong>& imageIDList)
     QList<QVariant> boundValues;
 
     QString sql = QString::fromUtf8("SELECT count(tagid) FROM ImageTags "
-                          "WHERE imageid=? ");
+                                    "WHERE imageid=? ");
     boundValues << imageIDList.first();
 
     QList<qlonglong>::const_iterator it = imageIDList.constBegin();
@@ -1581,7 +1652,7 @@ QList<int> CoreDB::getItemCommonTagIDs(const QList<qlonglong>& imageIDList)
     QList<QVariant> boundValues;
 
     QString sql = QString::fromUtf8("SELECT DISTINCT tagid FROM ImageTags "
-                          "WHERE imageid=? ");
+                                    "WHERE imageid=? ");
     boundValues << imageIDList.first();
 
     QList<qlonglong>::const_iterator it = imageIDList.constBegin();
@@ -1617,8 +1688,8 @@ QVariantList CoreDB::getImagesFields(qlonglong imageID, DatabaseFields::Images f
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imagesFieldList(fields);
-        query += fieldNames.join(QString::fromUtf8(", "));
-        query += QString::fromUtf8(" FROM Images WHERE id=?;");
+        query                 += fieldNames.join(QString::fromUtf8(", "));
+        query                 += QString::fromUtf8(" FROM Images WHERE id=?;");
 
         d->db->execSql(query, imageID, &values);
 
@@ -1642,22 +1713,22 @@ QVariantList CoreDB::getImageInformation(qlonglong imageID, DatabaseFields::Imag
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imageInformationFieldList(fields);
-        query += fieldNames.join(QString::fromUtf8(", "));
-        query += QString::fromUtf8(" FROM ImageInformation WHERE imageid=?;");
+        query                 += fieldNames.join(QString::fromUtf8(", "));
+        query                 += QString::fromUtf8(" FROM ImageInformation WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
         // Convert date times to QDateTime, they come as QString
         if ((fields & DatabaseFields::CreationDate) && !values.isEmpty())
         {
-            int index = fieldNames.indexOf(QLatin1String("creationDate"));
+            int index     = fieldNames.indexOf(QLatin1String("creationDate"));
             values[index] = (values.at(index).isNull() ? QDateTime()
                                                        : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
 
         if ((fields & DatabaseFields::DigitizationDate) && !values.isEmpty())
         {
-            int index = fieldNames.indexOf(QLatin1String("digitizationDate"));
+            int index     = fieldNames.indexOf(QLatin1String("digitizationDate"));
             values[index] = (values.at(index).isNull() ? QDateTime()
                                                        : QDateTime::fromString(values.at(index).toString(), Qt::ISODate));
         }
@@ -1674,8 +1745,8 @@ QVariantList CoreDB::getImageMetadata(qlonglong imageID, DatabaseFields::ImageMe
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = imageMetadataFieldList(fields);
-        query += fieldNames.join(QString::fromUtf8(", "));
-        query += QString::fromUtf8(" FROM ImageMetadata WHERE imageid=?;");
+        query                 += fieldNames.join(QString::fromUtf8(", "));
+        query                 += QString::fromUtf8(" FROM ImageMetadata WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
@@ -1693,27 +1764,27 @@ QVariantList CoreDB::getVideoMetadata(qlonglong imageID, DatabaseFields::VideoMe
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames = videoMetadataFieldList(fields);
-        query += fieldNames.join(QString::fromUtf8(", "));
-        query += QString::fromUtf8(" FROM VideoMetadata WHERE imageid=?;");
+        query                 += fieldNames.join(QString::fromUtf8(", "));
+        query                 += QString::fromUtf8(" FROM VideoMetadata WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 
         // For some reason REAL values may come as QString QVariants. Convert here.
-        if (values.size() == fieldNames.size() &&
-            ((fields & DatabaseFields::Aperture) ||
-             (fields & DatabaseFields::FocalLength) ||
+        if (values.size() == fieldNames.size()        &&
+            ((fields & DatabaseFields::Aperture)      ||
+             (fields & DatabaseFields::FocalLength)   ||
              (fields & DatabaseFields::FocalLength35) ||
-             (fields & DatabaseFields::ExposureTime) ||
+             (fields & DatabaseFields::ExposureTime)  ||
              (fields & DatabaseFields::SubjectDistance))
            )
         {
             for (int i = 0; i < values.size(); ++i)
             {
-                if (values.at(i).type() == QVariant::String &&
-                    (fieldNames.at(i) == QLatin1String("aperture") ||
-                     fieldNames.at(i) == QLatin1String("focalLength") ||
+                if (values.at(i).type() == QVariant::String             &&
+                    (fieldNames.at(i) == QLatin1String("aperture")      ||
+                     fieldNames.at(i) == QLatin1String("focalLength")   ||
                      fieldNames.at(i) == QLatin1String("focalLength35") ||
-                     fieldNames.at(i) == QLatin1String("exposureTime") ||
+                     fieldNames.at(i) == QLatin1String("exposureTime")  ||
                      fieldNames.at(i) == QLatin1String("subjectDistance"))
                    )
                 {
@@ -1734,8 +1805,8 @@ QVariantList CoreDB::getImagePosition(qlonglong imageID, DatabaseFields::ImagePo
     {
         QString query(QString::fromUtf8("SELECT "));
         QStringList fieldNames =  imagePositionsFieldList(fields);
-        query                  += fieldNames.join(QString::fromUtf8(", "));
-        query                  += QString::fromUtf8(" FROM ImagePositions WHERE imageid=?;");
+        query                 += fieldNames.join(QString::fromUtf8(", "));
+        query                 += QString::fromUtf8(" FROM ImagePositions WHERE imageid=?;");
 
         d->db->execSql(query, imageID, &values);
 

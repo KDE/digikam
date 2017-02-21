@@ -7,6 +7,7 @@
  * Description : Core database Schema updater
  *
  * Copyright (C) 2007-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -60,7 +61,7 @@ int CoreDbSchemaUpdater::schemaVersion()
 
 int CoreDbSchemaUpdater::filterSettingsVersion()
 {
-    return 5;
+    return 6;
 }
 
 int CoreDbSchemaUpdater::uniqueHashVersion()
@@ -480,15 +481,25 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("mkv")  << QLatin1String("webm")                                                                                                    // Matroska
                        << QLatin1String("mng");                                                                                                                             // Animated PNG image
 
-    defaultAudioFilter << QLatin1String("ogg") << QLatin1String("mp3") << QLatin1String("wma") << QLatin1String("wav");
+    defaultAudioFilter << QLatin1String("ogg") << QLatin1String("mp3") << QLatin1String("wma") << QLatin1String("wav");                                                                                                                             // Animated PNG image
+}
+
+void CoreDbSchemaUpdater::defaultIgnoreDirectoryFilterSettings(QStringList& defaultIgnoreDirectoryFilter)
+{
+    //NOTE for updating:
+    //When changing anything here, just increment filterSettingsVersion() so that the changes take effect
+
+    defaultIgnoreDirectoryFilter << QLatin1String("@eaDir");
 }
 
 bool CoreDbSchemaUpdater::createFilterSettings()
 {
-    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter;
+    QStringList defaultImageFilter, defaultVideoFilter, defaultAudioFilter, defaultIgnoreDirectoryFilter;
     defaultFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    defaultIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
 
     d->albumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
+    d->albumDB->setIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
     d->albumDB->setSetting(QLatin1String("FilterSettingsVersion"),      QString::number(filterSettingsVersion()));
     d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(RawEngine::DRawDecoder::rawFilesVersion()));
 

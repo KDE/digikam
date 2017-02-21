@@ -3,6 +3,7 @@ digiKam 5.5.0 - Release date: 2017-03-12
 
 NEW FEATURES:
 
+Database : Add new options to ignore some kind of directories while scanning collections.
 Database : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
            thumbnail and face entries gut does not shrink Databases automatically.
 Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
@@ -85,4 +86,5 @@ BUGFIXES FROM BUGZILLA:
 067 ==> 376331 - Path when saving/opening presentation files should be remebered.
 068 ==> 375416 - Frequent crashes when applying faces.
 069 ==> 301048 - BQM Watermark tool : more super-impose visible watermark options [patch].
-070 ==>
+070 ==> 123097 - SCAN : ignore some directories in digiKam [patch].
+071 ==> 

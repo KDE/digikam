@@ -47,6 +47,7 @@
 #include <QProcess>
 #include <QDir>
 #include <QUrl>
+#include <QWhatsThis>
 
 // KDE includes
 
@@ -62,6 +63,9 @@
 #include "dbinarysearch.h"
 #include "mysqlinitbinary.h"
 #include "mysqlservbinary.h"
+#include "coredbaccess.h"
+#include "coredb.h"
+#include "scancontroller.h"
 
 namespace Digikam
 {
@@ -91,6 +95,9 @@ public:
         dbBinariesWidget    = 0;
         tab                 = 0;
         dbDetailsBox        = 0;
+        ignoreDirectoriesBox = 0;
+        ignoreDirectoriesEdit = 0;
+        ignoreDirectoriesLabel = 0;
     }
 
     DVBox*             mysqlCmdBox;
@@ -123,6 +130,10 @@ public:
     DbEngineParameters orgPrms;
 
     QMap<int, int>     dbTypeMap;
+
+    QGroupBox*         ignoreDirectoriesBox;
+    QLineEdit*         ignoreDirectoriesEdit;
+    QLabel*            ignoreDirectoriesLabel;
 };
 
 DatabaseSettingsWidget::DatabaseSettingsWidget(QWidget* const parent)
@@ -210,10 +221,10 @@ void DatabaseSettingsWidget::setupMainArea()
     d->mysqlCmdBox->layout()->setMargin(0);
 
     new DLineWidget(Qt::Horizontal, d->mysqlCmdBox);
-    QLabel* const mysqlBinariesLabel = new QLabel(i18n("<p>Here you can configure locations where MySQL binary tools are located. "               
-						       "digiKam will try to find these binaries automatically if they are "                       
-						       "already installed on your computer.</p>"),                                                          
-						  d->mysqlCmdBox);
+    QLabel* const mysqlBinariesLabel  = new QLabel(i18n("<p>Here you can configure locations where MySQL binary tools are located. "
+                                                        "digiKam will try to find these binaries automatically if they are "
+                                                        "already installed on your computer.</p>"),
+                                                   d->mysqlCmdBox);
     mysqlBinariesLabel->setWordWrap(true);
 
     QGroupBox* const binaryBox        = new QGroupBox(d->mysqlCmdBox);
@@ -346,7 +357,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                           d->dbNoticeBox);
     notice->setWordWrap(true);
 
-    d->sqlInit = new QTextBrowser(d->dbNoticeBox);
+    d->sqlInit               = new QTextBrowser(d->dbNoticeBox);
     d->sqlInit->setOpenExternalLinks(false);
     d->sqlInit->setOpenLinks(false);
     d->sqlInit->setReadOnly(false);
@@ -406,6 +417,42 @@ void DatabaseSettingsWidget::setupMainArea()
 
     // --------------------------------------------------------
 
+    d->ignoreDirectoriesBox                  = new QGroupBox(i18n("Ignore Directories"));
+    QGridLayout* ignoreDirectoriesLayout     = new QGridLayout(d->ignoreDirectoriesBox);
+
+    QLabel* const ignoreDirectoriesInfoLabel = new QLabel(i18n("<p>Set here the names of directories (case sensitive and separeted by whitespaces) "
+                                                           "that you want to ignore from your photo collections.</p>"
+                                                           "<p>Useful is this for example, when you store your "
+                                                           "photos on a Synology NAS (Network Attached Storage). The system "
+                                                           "creates in every directory a subdirectory @eaDir to store "
+                                                           "thumbnails. To avoid that digikam inserts the original photo "
+                                                           "and its corresponding thumbnail twice, @eaDir is ignored by default.</p>"
+                                                           "<p>To re-include directories that are ignored by default "
+                                                           "prefix it with a minus, e.g. -@eaDir.</p>"),
+                                                           d->ignoreDirectoriesBox);
+    ignoreDirectoriesInfoLabel->setWordWrap(true);
+
+    QLabel* const logoLabel1  = new QLabel(d->ignoreDirectoriesBox);
+    logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("folder")).pixmap(48));
+
+    d->ignoreDirectoriesLabel = new QLabel(d->ignoreDirectoriesBox);
+    d->ignoreDirectoriesLabel->setText(i18n("Additional directories to ignore (<a href='image'>Currently ignored directories</a>):"));
+
+    d->ignoreDirectoriesEdit  = new QLineEdit(d->ignoreDirectoriesBox);
+    d->ignoreDirectoriesEdit->setClearButtonEnabled(true);
+    d->ignoreDirectoriesEdit->setPlaceholderText(i18n("Enter directories that you want to ignore from adding to your collections."));
+    ignoreDirectoriesInfoLabel->setBuddy(d->ignoreDirectoriesEdit);
+
+    ignoreDirectoriesLayout->addWidget(ignoreDirectoriesInfoLabel, 0, 0, 1, 2);
+    ignoreDirectoriesLayout->addWidget(logoLabel1,                 1, 0, 2, 1);
+    ignoreDirectoriesLayout->addWidget(d->ignoreDirectoriesLabel,  1, 1, 1, 1);
+    ignoreDirectoriesLayout->addWidget(d->ignoreDirectoriesEdit,   2, 1, 1, 1);
+    ignoreDirectoriesLayout->setColumnStretch(1, 10);
+    ignoreDirectoriesLayout->setContentsMargins(spacing, spacing, spacing, spacing);
+    ignoreDirectoriesLayout->setSpacing(spacing);
+
+    // --------------------------------------------------------
+
     vlay->addWidget(typeHbox);
     vlay->addWidget(new DLineWidget(Qt::Horizontal));
     vlay->addWidget(d->dbPathLabel);
@@ -420,6 +467,7 @@ void DatabaseSettingsWidget::setupMainArea()
     layout->setContentsMargins(QMargins());
     layout->setSpacing(spacing);
     layout->addWidget(dbConfigBox);
+    layout->addWidget(d->ignoreDirectoriesBox);
     layout->addStretch();
 
     // --------------------------------------------------------
@@ -445,7 +493,31 @@ void DatabaseSettingsWidget::setupMainArea()
     connect(d->userName, SIGNAL(textChanged(QString)),
             this, SLOT(slotUpdateSqlInit()));
 
+    connect(d->ignoreDirectoriesLabel, SIGNAL(linkActivated(QString)),
+            this, SLOT(slotShowCurrentIgnoredDirectoriesSettings()));
+
     slotHandleDBTypeIndexChanged(d->dbType->currentIndex());
+}
+
+void DatabaseSettingsWidget::applySettings()
+{
+    QString ignoreDirectory;
+    CoreDbAccess().db()->getUserIgnoreDirectoryFilterSettings(&ignoreDirectory);
+
+    if (d->ignoreDirectoriesEdit->text() != ignoreDirectory)
+    {
+        CoreDbAccess().db()->setUserIgnoreDirectoryFilterSettings(d->ignoreDirectoriesEdit->text());
+
+        ScanController::instance()->completeCollectionScanInBackground(false);
+    }
+}
+
+void DatabaseSettingsWidget::readSettings()
+{
+    QString ignoreDirectory;
+    CoreDbAccess().db()->getUserIgnoreDirectoryFilterSettings(&ignoreDirectory);
+
+    d->ignoreDirectoriesEdit->setText(ignoreDirectory);
 }
 
 int DatabaseSettingsWidget::databaseType() const
@@ -470,7 +542,7 @@ DbEngineParameters DatabaseSettingsWidget::orgDatabasePrm() const
 
 QString DatabaseSettingsWidget::databaseBackend() const
 {
-    switch(databaseType())
+    switch (databaseType())
     {
         case MysqlInternal:
         case MysqlServer:
@@ -501,7 +573,7 @@ void DatabaseSettingsWidget::slotHandleDBTypeIndexChanged(int index)
 
 void DatabaseSettingsWidget::setDatabaseInputFields(int index)
 {
-    switch(index)
+    switch (index)
     {
         case SQlite:
         {
@@ -777,6 +849,16 @@ void DatabaseSettingsWidget::slotDatabasePathEdited()
     d->dbPathEdit->setFileDlgPath(newPath);
 }
 
+void DatabaseSettingsWidget::slotShowCurrentIgnoredDirectoriesSettings()
+{
+    QStringList ignoreDirectoryList;
+    CoreDbAccess().db()->getIgnoreDirectoryFilterSettings(&ignoreDirectoryList);
+    QString text = i18n("<p>Directories starting with a dot will be already ignored "
+                        "and its content will be excluded from the database. For example:<br/> <code>%1</code></p>",
+                        ignoreDirectoryList.join(QLatin1String(" ")));
+    QWhatsThis::showText(d->ignoreDirectoriesLabel->mapToGlobal(QPoint(0, 0)), text, d->ignoreDirectoriesLabel);
+}
+
 bool DatabaseSettingsWidget::checkDatabaseSettings()
 {
     switch (databaseType())
@@ -879,10 +961,10 @@ bool DatabaseSettingsWidget::checkDatabasePath()
 #endif
     {
         QMessageBox::information(qApp->activeWindow(), i18n("No Database Write Access"),
-                                i18n("<p>You do not seem to have write access "
-                                     "for the folder to host the database file.<br/>"
-                                     "Please select a different location.</p>"
-                                     "<p><b>%1</b></p>", dbFolder));
+                                 i18n("<p>You do not seem to have write access "
+                                      "for the folder to host the database file.<br/>"
+                                      "Please select a different location.</p>"
+                                      "<p><b>%1</b></p>", dbFolder));
         return false;
     }
 

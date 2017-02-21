@@ -7,8 +7,9 @@
  * Description : Collection scanning to database.
  *
  * Copyright (C) 2005      by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2005-2006 by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2005-2006 by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2007-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef COLLECTIONSCANNER_H
-#define COLLECTIONSCANNER_H
+#ifndef COLLECTION_SCANNER_H
+#define COLLECTION_SCANNER_H
 
 // Qt includes
 
@@ -95,8 +96,8 @@ public:
 
 public:
 
-    CollectionScanner();
-    ~CollectionScanner();
+    explicit CollectionScanner();
+    virtual ~CollectionScanner();
 
     /**
      * Carries out a full scan on all available parts of the collection.
@@ -263,8 +264,11 @@ protected:
     void resetDeleteRemovedSettings();
     bool checkDeleteRemoved();
     void loadNameFilters();
-    int countItemsInFolder(const QString& directory);
+    int  countItemsInFolder(const QString& directory);
     DatabaseItem::Category category(const QFileInfo& info);
+
+    bool pathContainsIgnoredDirectory(const QString& path);
+    bool ignoredDirectoryContainsFileName(const QString& fileName);
 
     qlonglong scanFile(const QFileInfo& fi, int albumId, qlonglong id, FileScanMode mode);
     qlonglong scanNewFile(const QFileInfo& info, int albumId);
@@ -276,6 +280,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // COLLECTIONSCANNER_H
+#endif // COLLECTION_SCANNER_H
