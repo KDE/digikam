@@ -79,7 +79,6 @@ private Q_SLOTS:
 private:
 
     void checkSkip();
-    void setGUIPlay(bool);
     void setZeroTime();
 
 private:

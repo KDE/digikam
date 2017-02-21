@@ -488,7 +488,7 @@ void PresentationAudioPage::slotSoundFilesButtonLoad()
     {
         QFile file(filename);
 
-        if (file.open(QIODevice::ReadOnly|QIODevice::Text))
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             QTextStream in(&file);
             QList<QUrl> playlistFiles;
@@ -501,14 +501,11 @@ void PresentationAudioPage::slotSoundFilesButtonLoad()
                 if (line.startsWith(QLatin1Char('#')) || line.isEmpty())
                     continue;
 
-                QUrl fUrl(line);
+                QUrl fUrl = QUrl::fromLocalFile(line);
 
-                if (fUrl.isValid())
+                if (fUrl.isValid() && fUrl.isLocalFile())
                 {
-                    if (fUrl.isLocalFile())
-                    {
-                        playlistFiles << fUrl;
-                    }
+                    playlistFiles << fUrl;
                 }
             }
 
@@ -543,7 +540,7 @@ void PresentationAudioPage::slotSoundFilesButtonSave()
     {
         QFile file(filename);
 
-        if (file.open(QIODevice::WriteOnly|QIODevice::Text))
+        if (file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream out(&file);
             QList<QUrl> playlistFiles = m_SoundFilesListBox->fileUrls();
@@ -552,12 +549,9 @@ void PresentationAudioPage::slotSoundFilesButtonSave()
             {
                 QUrl fUrl(playlistFiles.at(i));
 
-                if (fUrl.isValid())
+                if (fUrl.isValid() && fUrl.isLocalFile())
                 {
-                    if (fUrl.isLocalFile())
-                    {
-                        out << fUrl.toLocalFile() << endl;
-                    }
+                    out << fUrl.toLocalFile() << endl;
                 }
             }
 

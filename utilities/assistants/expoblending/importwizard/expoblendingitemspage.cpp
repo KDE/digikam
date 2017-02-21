@@ -76,6 +76,7 @@ ItemsPage::ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
                          "</qt>"));
 
     d->list = new DImagesList(vbox);
+    d->list->setObjectName(QLatin1String("ExpoBlending ImagesList"));
     d->list->listView()->setColumn(DImagesListView::User1, i18nc("@title:column", "Exposure (EV)"), true);
     d->list->slotAddImages(d->mngr->itemsList());
 
