@@ -57,16 +57,16 @@ public:
         currIndex   = 0;
         mediaObject = 0;
         canHide     = true;
-        autoNext    = false;
         isZeroTime  = false;
+        playingNext = false;
     }
 
     PresentationContainer* sharedData;
     QList<QUrl>            urlList;
     int                    currIndex;
     bool                   canHide;
-    bool                   autoNext;
     bool                   isZeroTime;
+    bool                   playingNext;
 
     AVPlayer*              mediaObject;
 };
@@ -197,8 +197,6 @@ void PresentationAudioWidget::enqueue(const QList<QUrl>& urls)
     if (d->urlList.isEmpty())
         return;
 
-    d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
-
     m_playButton->setEnabled(true);
 }
 
@@ -257,7 +255,9 @@ void PresentationAudioWidget::slotPlay()
     {
         if (!d->mediaObject->isPlaying())
         {
+            d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
             d->mediaObject->play();
+            setZeroTime();
         }
         else
         {
@@ -266,23 +266,20 @@ void PresentationAudioWidget::slotPlay()
 
         d->canHide = true;
         emit signalPlay();
-        return;
     }
     else
     {
         d->mediaObject->pause();
         d->canHide = false;
         emit signalPause();
-        return;
     }
 }
 
 void PresentationAudioWidget::slotStop()
 {
-    d->autoNext = false;
+    d->playingNext = false;
     d->mediaObject->stop();
     d->currIndex  = 0;
-    d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
     setZeroTime();
     checkSkip();
 }
@@ -304,11 +301,9 @@ void PresentationAudioWidget::slotPrev()
         }
     }
 
-    d->autoNext = false;
+    d->playingNext = false;
     d->mediaObject->stop();
-    d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
-    d->mediaObject->play();
-    setZeroTime();
+    slotPlay();
 }
 
 void PresentationAudioWidget::slotNext()
@@ -328,11 +323,9 @@ void PresentationAudioWidget::slotNext()
         }
     }
 
-    d->autoNext = false;
+    d->playingNext = false;
     d->mediaObject->stop();
-    d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
-    d->mediaObject->play();
-    setZeroTime();
+    slotPlay();
 }
 
 void PresentationAudioWidget::slotTimeUpdaterTimeout()
@@ -368,7 +361,7 @@ void PresentationAudioWidget::slotTimeUpdaterTimeout()
 
 void PresentationAudioWidget::slotMediaStateChanged(QtAV::MediaStatus status)
 {
-    if (d->autoNext && (status == QtAV::EndOfMedia))
+    if (d->playingNext && (status == QtAV::EndOfMedia))
     {
         slotNext();
     }
@@ -395,7 +388,7 @@ void PresentationAudioWidget::slotPlayerStateChanged(QtAV::AVPlayer::State state
 
         case QtAV::AVPlayer::PlayingState:
             m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
-            d->autoNext = true;
+            d->playingNext = true;
             checkSkip();
             break;
 
