@@ -56,17 +56,17 @@ public:
         sharedData  = 0;
         currIndex   = 0;
         mediaObject = 0;
-        stopCalled  = false;
         canHide     = true;
+        autoNext    = false;
         isZeroTime  = false;
     }
 
     PresentationContainer* sharedData;
     QList<QUrl>            urlList;
     int                    currIndex;
-    bool                   stopCalled;
-    bool                   isZeroTime;
     bool                   canHide;
+    bool                   autoNext;
+    bool                   isZeroTime;
 
     AVPlayer*              mediaObject;
 };
@@ -79,17 +79,17 @@ PresentationAudioWidget::PresentationAudioWidget(QWidget* const parent, const QL
 
     d->sharedData = sharedData;
 
-    m_soundLabel->setPixmap(QIcon::fromTheme(QString::fromLatin1("speaker")).pixmap(64, 64));
+    m_soundLabel->setPixmap(QIcon::fromTheme(QLatin1String("speaker")).pixmap(64, 64));
 
-    m_prevButton->setText(QString::fromLatin1(""));
-    m_nextButton->setText(QString::fromLatin1(""));
-    m_playButton->setText(QString::fromLatin1(""));
-    m_stopButton->setText(QString::fromLatin1(""));
+    m_prevButton->setText(QLatin1String(""));
+    m_nextButton->setText(QLatin1String(""));
+    m_playButton->setText(QLatin1String(""));
+    m_stopButton->setText(QLatin1String(""));
 
-    m_prevButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-skip-backward")));
-    m_nextButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-skip-forward")));
-    m_playButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-start")));
-    m_stopButton->setIcon(QIcon::fromTheme(QString::fromLatin1("media-playback-stop")));
+    m_prevButton->setIcon(QIcon::fromTheme(QLatin1String("media-skip-backward")));
+    m_nextButton->setIcon(QIcon::fromTheme(QLatin1String("media-skip-forward")));
+    m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
+    m_stopButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-stop")));
 
     connect(m_prevButton, SIGNAL(clicked()),
             this, SLOT(slotPrev()));
@@ -115,7 +115,6 @@ PresentationAudioWidget::PresentationAudioWidget(QWidget* const parent, const QL
     m_prevButton->setEnabled(false);
 
     d->mediaObject = new AVPlayer(this);
-    d->mediaObject->setNotifyInterval(500);
 
     connect(d->mediaObject, SIGNAL(mediaStatusChanged(QtAV::MediaStatus)),
             this, SLOT(slotMediaStateChanged(QtAV::MediaStatus)));
@@ -151,7 +150,7 @@ void PresentationAudioWidget::slotSetVolume(int v)
 {
     if (d->mediaObject->audio())
     {
-        d->mediaObject->audio()->setVolume(v);
+        d->mediaObject->audio()->setVolume(v / 100.0);
     }
 }
 
@@ -180,17 +179,11 @@ void PresentationAudioWidget::checkSkip()
     }
 }
 
-void PresentationAudioWidget::setGUIPlay(bool isPlaying)
-{
-    m_playButton->setIcon(QIcon::fromTheme(isPlaying ? QString::fromLatin1("media-playback-start")
-                                                     : QString::fromLatin1("media-playback-pause")));
-}
-
 void PresentationAudioWidget::setZeroTime()
 {
     QTime zeroTime(0, 0, 0);
-    m_elapsedTimeLabel->setText(zeroTime.toString(QString::fromLatin1("H:mm:ss")));
-    m_totalTimeLabel->setText(zeroTime.toString(QString::fromLatin1("H:mm:ss")));
+    m_elapsedTimeLabel->setText(zeroTime.toString(QLatin1String("H:mm:ss")));
+    m_totalTimeLabel->setText(zeroTime.toString(QLatin1String("H:mm:ss")));
     d->isZeroTime = true;
 }
 
@@ -271,7 +264,6 @@ void PresentationAudioWidget::slotPlay()
             d->mediaObject->pause(false);
         }
 
-        setGUIPlay(false);
         d->canHide = true;
         emit signalPlay();
         return;
@@ -279,7 +271,6 @@ void PresentationAudioWidget::slotPlay()
     else
     {
         d->mediaObject->pause();
-        setGUIPlay(true);
         d->canHide = false;
         emit signalPause();
         return;
@@ -288,13 +279,12 @@ void PresentationAudioWidget::slotPlay()
 
 void PresentationAudioWidget::slotStop()
 {
+    d->autoNext = false;
     d->mediaObject->stop();
-    d->stopCalled = true;
     d->currIndex  = 0;
     d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
-    checkSkip();
-    setGUIPlay(false);
     setZeroTime();
+    checkSkip();
 }
 
 void PresentationAudioWidget::slotPrev()
@@ -314,6 +304,7 @@ void PresentationAudioWidget::slotPrev()
         }
     }
 
+    d->autoNext = false;
     d->mediaObject->stop();
     d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
     d->mediaObject->play();
@@ -337,6 +328,7 @@ void PresentationAudioWidget::slotNext()
         }
     }
 
+    d->autoNext = false;
     d->mediaObject->stop();
     d->mediaObject->setFile(d->urlList[d->currIndex].toLocalFile());
     d->mediaObject->play();
@@ -368,15 +360,15 @@ void PresentationAudioWidget::slotTimeUpdaterTimeout()
         mins          = (int)((total / (qint64)(60 * 1000)) - (qint64)(hours * 60));
         secs          = (int)((total / (qint64)1000) - (qint64)(hours * 60 + mins * 60));
         QTime totalTime(hours, mins, secs);
-        m_totalTimeLabel->setText(totalTime.toString(QString::fromLatin1("H:mm:ss")));
+        m_totalTimeLabel->setText(totalTime.toString(QLatin1String("H:mm:ss")));
     }
 
-    m_elapsedTimeLabel->setText(elapsedTime.toString(QString::fromLatin1("H:mm:ss")));
+    m_elapsedTimeLabel->setText(elapsedTime.toString(QLatin1String("H:mm:ss")));
 }
 
 void PresentationAudioWidget::slotMediaStateChanged(QtAV::MediaStatus status)
 {
-    if (status == QtAV::EndOfMedia)
+    if (d->autoNext && (status == QtAV::EndOfMedia))
     {
         slotNext();
     }
@@ -395,26 +387,15 @@ void PresentationAudioWidget::slotPlayerStateChanged(QtAV::AVPlayer::State state
 {
     switch (state)
     {
+        case QtAV::AVPlayer::PausedState:
         case QtAV::AVPlayer::StoppedState:
-            m_playButton->setEnabled(true);
-            setGUIPlay(true);
-
-            if (d->mediaObject->mediaStatus() == QtAV::LoadingMedia)
-            {
-                if (d->stopCalled)
-                {
-                    d->stopCalled = false;
-                }
-                else
-                {
-                    slotPlay();
-                    checkSkip();
-                }
-            }
+            m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-start")));
+            checkSkip();
             break;
 
         case QtAV::AVPlayer::PlayingState:
-            setGUIPlay(false);
+            m_playButton->setIcon(QIcon::fromTheme(QLatin1String("media-playback-pause")));
+            d->autoNext = true;
             checkSkip();
             break;
 
