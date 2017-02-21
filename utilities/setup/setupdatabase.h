@@ -39,7 +39,7 @@ class SetupDatabase : public QScrollArea
 public:
 
     explicit SetupDatabase(QWidget* const parent = 0);
-    ~SetupDatabase();
+    virtual ~SetupDatabase();
 
     void applySettings();
 
@@ -58,6 +58,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SETUPDATABASE_H

@@ -150,6 +150,8 @@ void SetupDatabase::applySettings()
         return;
     }
 
+    d->databaseWidget->applySettings();
+
     if (d->databaseWidget->getDbEngineParameters() == d->databaseWidget->orgDatabasePrm())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "No DB settings changes. Do nothing...";
@@ -169,8 +171,8 @@ void SetupDatabase::applySettings()
             qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to SQlite DB config...";
             DbEngineParameters params = d->databaseWidget->getDbEngineParameters();
             settings->setDbEngineParameters(params);
-            AlbumManager::instance()->changeDatabase(params);
             settings->saveSettings();
+            AlbumManager::instance()->changeDatabase(params);
             break;
         }
         case DatabaseSettingsWidget::MysqlInternal:
@@ -203,6 +205,8 @@ void SetupDatabase::readSettings()
         return;
     }
 
+    d->databaseWidget->readSettings();
+
     d->databaseWidget->setParametersFromSettings(settings);
 }
 
@@ -228,4 +232,4 @@ void SetupDatabase::showHashInformation()
     qApp->postEvent(d->hashesButton, new QHelpEvent(QEvent::WhatsThis, QPoint(0, 0), QCursor::pos()));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

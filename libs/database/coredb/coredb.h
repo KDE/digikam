@@ -106,6 +106,14 @@ public:
      */
     void setUserFilterSettings(const QString& imageFilterString, const QString& videoFilterString, const QString& audioFilterString);
 
+    void setIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilter);
+
+    void setUserIgnoreDirectoryFilterSettings(const QString& ignoreDirectoryFilterString);
+
+    void getUserIgnoreDirectoryFilterSettings(QString* ignoreDirectoryFilterString);
+
+    void getIgnoreDirectoryFilterSettings(QStringList* ignoreDirectoryFilter);
+
     /**
      * Adds the given filters to the user image filter settings
      */
@@ -384,10 +392,10 @@ public:
      */
     //TODO move to other place (AlbumManager)
     QList<int> getRecentlyAssignedTags() const;
-    
+
     /**
      * Moves a tag within tag hierarchy.
-     * Lft and rgt also updated, along with 
+     * Lft and rgt also updated, along with
      * parent tag id.
      */
     void moveTag(TAlbum* parentTagID);
@@ -1369,6 +1377,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* _CORE_DATABASE_H_ */
+#endif // _CORE_DATABASE_H_
