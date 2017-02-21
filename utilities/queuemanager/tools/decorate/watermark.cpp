@@ -25,6 +25,7 @@
 
 #include "watermark.h"
 
+
 // Qt includes
 
 #include <QFontMetrics>
@@ -43,19 +44,19 @@
 #include <QFontComboBox>
 #include <QComboBox>
 #include <QLineEdit>
-
+#include <QDoubleSpinBox>
 // KDE includes
 
 #include <klocalizedstring.h>
 
 // Local includes
 
-#include "dfontproperties.h"
 #include "dwidgetutils.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"
+#include <dfontproperties.h>
 #include "loadsavethread.h"
 #include "metaengine.h"
 
@@ -76,6 +77,13 @@ public:
         Center
     };
 
+    enum WaterMarkPlacementType
+    {
+        SpecifiedLocation = 0,
+        SystematicRepetition,
+        RandomRepetition
+    };
+
 public:
 
     Private() :
@@ -85,12 +93,16 @@ public:
         useImageRadioButton(0),
         ignoreWatermarkAspectCheckBox(0),
         useAbsoluteSizeCheckBox(0),
-        useTextRadioButton(0),
         useBackgroundCheckBox(0),
+        denseRepetitionCheckBox(0),
+        randomizeRotationCheckBox(0),
+        useTextRadioButton(0),
         imageFileUrlRequester(0),
         textEdit(0),
-        comboBox(0),
+        placementPositionComboBox(0),
+        placementTypeComboBox(0),
         rotationComboBox(0),
+        sparsityFactorSpinBox(0),
         extendedFontChooserWidget(0),
         fontColorButton(0),
         backgroundColorButton(0),
@@ -109,14 +121,18 @@ public:
     QRadioButton*    useImageRadioButton;
     QCheckBox*       ignoreWatermarkAspectCheckBox;
     QCheckBox*       useAbsoluteSizeCheckBox;
-    QRadioButton*    useTextRadioButton;
     QCheckBox*       useBackgroundCheckBox;
+    QCheckBox*       denseRepetitionCheckBox;
+    QCheckBox*       randomizeRotationCheckBox;
+    QRadioButton*    useTextRadioButton;
 
     DFileSelector*   imageFileUrlRequester;
     QLineEdit*       textEdit;
 
-    QComboBox*       comboBox;
+    QComboBox*       placementPositionComboBox;
+    QComboBox*       placementTypeComboBox;
     QComboBox*       rotationComboBox;
+    QDoubleSpinBox * sparsityFactorSpinBox;
     DFontProperties* extendedFontChooserWidget;
 
     DColorSelector*  fontColorButton;
@@ -163,7 +179,6 @@ void WaterMark::registerSettingsWidget()
     useAbsoluteImageSizeGroupBoxLayout->addStretch(1);
     d->useAbsoluteImageSizeGroupBox->setLayout(useAbsoluteImageSizeGroupBoxLayout);
 
-
     DHBox* const useAbsoluteSizeHBox   = new DHBox();
     useAbsoluteSizeHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     useAbsoluteSizeHBox->setSpacing(10);
@@ -194,7 +209,7 @@ void WaterMark::registerSettingsWidget()
     useTextLabel->setAlignment(Qt::AlignLeft);
     d->useImageRadioButton->setChecked(true);
 
-    d->imageSettingsGroupBox = new QGroupBox(vbox);
+    d->imageSettingsGroupBox                       = new QGroupBox(vbox);
     d->imageSettingsGroupBox->setTitle(i18n("Image settings"));
     QVBoxLayout* const imageSettingsGroupBoxLayout = new QVBoxLayout;
     imageSettingsGroupBoxLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -289,21 +304,69 @@ void WaterMark::registerSettingsWidget()
     d->imageSettingsGroupBox->setVisible(true);
     d->textSettingsGroupBox->setVisible(false);
 
-    QLabel* const label4 = new QLabel(vbox);
-    d->comboBox          = new QComboBox(vbox);
-    d->comboBox->insertItem(Private::TopLeft,     i18n("Top left"));
-    d->comboBox->insertItem(Private::TopRight,    i18n("Top right"));
-    d->comboBox->insertItem(Private::BottomLeft,  i18n("Bottom left"));
-    d->comboBox->insertItem(Private::BottomRight, i18n("Bottom right"));
-    d->comboBox->insertItem(Private::Center,      i18n("Center"));
-    label4->setText(i18n("Placement:"));
+    QLabel* const placementTypeLabel = new QLabel(vbox);
+    d->placementTypeComboBox         = new QComboBox(vbox);
+    d->placementTypeComboBox->insertItem(Private::SpecifiedLocation,    i18n("Specific Location"));
+    d->placementTypeComboBox->insertItem(Private::SystematicRepetition, i18n("Systematic Repetition"));
+    d->placementTypeComboBox->insertItem(Private::RandomRepetition,     i18n("Random Repetition"));
+    placementTypeLabel->setText(i18n("Placement Type:"));
+
+    DHBox* const placementHBox = new DHBox(vbox);
+    placementHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    placementHBox->setSpacing(5);
+
+    QLabel* const spaceLabel   = new QLabel(placementHBox);
+    d->denseRepetitionCheckBox = new QCheckBox(placementHBox);
+    d->denseRepetitionCheckBox->setWhatsThis(i18n("When you choose to have the watermark repeated many times in the placement combo box, you can specify here whether the repetition"));
+    d->denseRepetitionCheckBox->setChecked(false);
+    d->denseRepetitionCheckBox->setEnabled(false);
+    spaceLabel->setText(QLatin1String(" "));
+    QLabel* const placementDensityLabel = new QLabel(placementHBox);
+    placementDensityLabel->setText(i18n("Density of watermark repetition (Disabled in \"Specific Location\" mode)"));
+
+    DHBox* const randomizeHBox   = new DHBox(vbox);
+    randomizeHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    randomizeHBox->setSpacing(5);
+
+    QLabel* const spaceLabel2 = new QLabel(randomizeHBox);
+    d->randomizeRotationCheckBox          = new QCheckBox(randomizeHBox);
+    d->randomizeRotationCheckBox->setWhatsThis(i18n("When you choose to have the watermark repeated randomly, many times in the placement combo box, you can specify here whether the repetition, "
+                                               "you can check this to make the watermark rotations random also [0, 90, 180, 270]"));
+    d->randomizeRotationCheckBox->setChecked(true);
+    d->denseRepetitionCheckBox->setEnabled(false);
+    spaceLabel2->setText(QLatin1String(" "));
+    QLabel* const randomizeRotation   = new QLabel(randomizeHBox);
+    randomizeRotation->setText(i18n("Randomize watermark orientation (Enabled in \"Random Repetition\" mode only)"));
+
+    DHBox* const sparsityHBox         = new DHBox(vbox);
+    sparsityHBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    sparsityHBox->setSpacing(5);
+
+    QLabel* const sparsityFactorLabel = new QLabel(sparsityHBox);
+    d->sparsityFactorSpinBox          = new QDoubleSpinBox(sparsityHBox);
+    d->sparsityFactorSpinBox->setMinimum(0.0);
+    d->sparsityFactorSpinBox->setValue(1);
+    d->sparsityFactorSpinBox->setSingleStep(0.1);
+    d->sparsityFactorSpinBox->setWhatsThis(i18n("Use this to get more control over the sparsity of watermark repetition."
+                                           " The higher the value the sparser the watermarks get. use floating point values,"
+                                           " typically between 1.0 and 3.0. It can also be less than 1.0"));
+    sparsityFactorLabel->setText(i18n("Sparsity Factor:"));
+
+    QLabel* const label4         = new QLabel(vbox);
+    d->placementPositionComboBox = new QComboBox(vbox);
+    d->placementPositionComboBox->insertItem(Private::TopLeft,     i18n("Top left"));
+    d->placementPositionComboBox->insertItem(Private::TopRight,    i18n("Top right"));
+    d->placementPositionComboBox->insertItem(Private::BottomLeft,  i18n("Bottom left"));
+    d->placementPositionComboBox->insertItem(Private::BottomRight, i18n("Bottom right"));
+    d->placementPositionComboBox->insertItem(Private::Center,      i18n("Center"));
+    label4->setText(i18n("Placement Position:"));
 
     QLabel* const labelRotation  = new QLabel(vbox);
     d->rotationComboBox          = new QComboBox(vbox);
-    d->rotationComboBox->insertItem(0,     i18n("0 degrees"));
-    d->rotationComboBox->insertItem(1,     i18n("90 degrees CW"));
-    d->rotationComboBox->insertItem(2,     i18n("180 degrees"));
-    d->rotationComboBox->insertItem(3,     i18n("270 degrees CW"));
+    d->rotationComboBox->insertItem(0, i18n("0 degrees"));
+    d->rotationComboBox->insertItem(1, i18n("90 degrees CW"));
+    d->rotationComboBox->insertItem(2, i18n("180 degrees"));
+    d->rotationComboBox->insertItem(3, i18n("270 degrees CW"));
     labelRotation->setText(i18n("Rotation:"));
 
     QLabel* const label5    = new QLabel(vbox);
@@ -330,7 +393,7 @@ void WaterMark::registerSettingsWidget()
     QLabel* const space = new QLabel(vbox);
     vbox->setStretchFactor(space, 10);
 
-    m_settingsWidget    = vbox;
+    m_settingsWidget = vbox;
 
     // ------------------------------------------------------------------------------------------------------
 
@@ -370,8 +433,21 @@ void WaterMark::registerSettingsWidget()
     connect(d->backgroundOpacity, SIGNAL(valueChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->comboBox, SIGNAL(activated(int)),
+    connect(d->placementTypeComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
+
+    connect(d->placementPositionComboBox, SIGNAL(activated(int)),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->denseRepetitionCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->randomizeRotationCheckBox, SIGNAL(toggled(bool)),
+            this, SLOT(slotSettingsChanged()));
+
+    connect(d->sparsityFactorSpinBox, SIGNAL(valueChanged(double)),
+            this, SLOT(slotSettingsChanged()));
+
     connect(d->rotationComboBox, SIGNAL(activated(int)),
             this, SLOT(slotSettingsChanged()));
 
@@ -400,6 +476,10 @@ BatchToolSettings WaterMark::defaultSettings()
     settings.insert(QLatin1String("Use background"),     true);
     settings.insert(QLatin1String("Background color"),   QColor(0xCC, 0xCC, 0xCC));
     settings.insert(QLatin1String("Background opacity"), 0xCC);
+    settings.insert(QLatin1String("PlacementType"),      Private::SpecifiedLocation); // specified location for the watermark
+    settings.insert(QLatin1String("Dense Repetition"),   false);
+    settings.insert(QLatin1String("Randomize Rotation"), true);
+    settings.insert(QLatin1String("Sparsity Factor"),    1.0);
     settings.insert(QLatin1String("Placement"),          Private::BottomRight);
     settings.insert(QLatin1String("Rotation"),           0);
     settings.insert(QLatin1String("Watermark size"),     25);
@@ -421,7 +501,11 @@ void WaterMark::slotAssignSettings2Widget()
     d->useBackgroundCheckBox->setChecked(settings()[QLatin1String("Use background")].toBool());
     d->backgroundColorButton->setColor(settings()[QLatin1String("Background color")].toString());
     d->backgroundOpacity->setValue(settings()[QLatin1String("Background opacity")].toInt());
-    d->comboBox->setCurrentIndex(settings()[QLatin1String("Placement")].toInt());
+    d->placementPositionComboBox->setCurrentIndex(settings()[QLatin1String("PlacementType")].toInt());
+    d->denseRepetitionCheckBox->setChecked(settings()[QLatin1String("Dense Repetition")].toBool());
+    d->randomizeRotationCheckBox->setChecked(settings()[QLatin1String("Randomize Rotation")].toBool());
+    d->sparsityFactorSpinBox->setValue(settings()[QLatin1String("Sparsity Factor")].toDouble());
+    d->placementPositionComboBox->setCurrentIndex(settings()[QLatin1String("Placement")].toInt());
     d->rotationComboBox->setCurrentIndex(settings()[QLatin1String("Rotation")].toInt());
     d->waterMarkSizePercent->setValue(settings()[QLatin1String("Watermark size")].toInt());
     d->xMarginInput->setValue(settings()[QLatin1String("X margin")].toInt());
@@ -444,6 +528,11 @@ void WaterMark::slotSettingsChanged()
 
     d->waterMarkSizePercent->setEnabled(!d->useAbsoluteSizeCheckBox->isChecked());
     d->extendedFontChooserWidget->enableColumn(0x04,d->useAbsoluteSizeCheckBox->isChecked());
+    d->placementPositionComboBox->setEnabled(((int)d->placementTypeComboBox->currentIndex() == Private::SpecifiedLocation));
+    d->denseRepetitionCheckBox->setEnabled(((int)d->placementTypeComboBox->currentIndex() != Private::SpecifiedLocation));
+    d->sparsityFactorSpinBox->setEnabled(((int)d->placementTypeComboBox->currentIndex() != Private::SpecifiedLocation));
+    d->randomizeRotationCheckBox->setEnabled(((int)d->placementTypeComboBox->currentIndex() == Private::RandomRepetition));
+    d->rotationComboBox->setEnabled(!(d->randomizeRotationCheckBox->isEnabled() && d->randomizeRotationCheckBox->isChecked()));
 
     if (d->changeSettings)
     {
@@ -459,7 +548,11 @@ void WaterMark::slotSettingsChanged()
         settings.insert(QLatin1String("Use Absolute Size"),             d->useAbsoluteSizeCheckBox->isChecked());
         settings.insert(QLatin1String("Background color"),              d->backgroundColorButton->color());
         settings.insert(QLatin1String("Background opacity"),            d->backgroundOpacity->value());
-        settings.insert(QLatin1String("Placement"),                     (int)d->comboBox->currentIndex());
+        settings.insert(QLatin1String("Dense Repetition"),              d->denseRepetitionCheckBox->isChecked());
+        settings.insert(QLatin1String("Randomize Rotation"),            d->randomizeRotationCheckBox->isChecked());
+        settings.insert(QLatin1String("Sparsity Factor"),               (double)d->sparsityFactorSpinBox->value());
+        settings.insert(QLatin1String("PlacementType"),                 (int)d->placementTypeComboBox->currentIndex());
+        settings.insert(QLatin1String("Placement"),                     (int)d->placementPositionComboBox->currentIndex());
         settings.insert(QLatin1String("Rotation"),                      (int)d->rotationComboBox->currentIndex());
         settings.insert(QLatin1String("Watermark size"),                (int)d->waterMarkSizePercent->value());
         settings.insert(QLatin1String("X margin"),                      (int)d->xMarginInput->value());
@@ -476,7 +569,11 @@ bool WaterMark::toolOperations()
     }
 
     QString fileName                             = settings()[QLatin1String("Watermark image")].toString();
-    int placement                                = settings()[QLatin1String("Placement")].toInt();
+    int placementPosition                        = settings()[QLatin1String("Placement")].toInt();
+    int placementType                            = settings()[QLatin1String("PlacementType")].toInt();
+    bool denseRepetition                         = settings()[QLatin1String("Dense Repetition")].toBool();
+    bool randomizeRotation                       = settings()[QLatin1String("Randomize Rotation")].toBool();
+    double userSparsityFactor                    = settings()[QLatin1String("Sparsity Factor")].toDouble();
     int size                                     = settings()[QLatin1String("Watermark size")].toInt();
     int xMargin                                  = settings()[QLatin1String("X margin")].toInt();
     int yMargin                                  = settings()[QLatin1String("Y margin")].toInt();
@@ -491,8 +588,8 @@ bool WaterMark::toolOperations()
     int backgroundOpacity                        = settings()[QLatin1String("Background opacity")].toInt();
     Qt::AspectRatioMode watermarkAspectRatioMode = settings()[QLatin1String("Ignore Watermark Aspect Ratio")].toBool() ?
                                                               Qt::IgnoreAspectRatio : Qt::KeepAspectRatio;
-
     bool useAbsoluteSize                         = settings()[QLatin1String("Use Absolute Size")].toBool();
+
 
     DImg watermarkImage;
     DColorComposer* const composer               = DColorComposer::getComposer(DColorComposer::PorterDuffNone);
@@ -513,7 +610,7 @@ bool WaterMark::toolOperations()
 
     if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
     {
-        size    = size * ratio;
+        size = size * ratio;
     }
     else
     {
@@ -523,8 +620,8 @@ bool WaterMark::toolOperations()
         {
             int tempSize  = size * ratio;
 
-            if(tempSize < 35)
-                tempSize *= 1.5;
+            if (tempSize < 35)
+                tempSize *= 1.5 ;
 
             size          = (tempSize < 100) ? tempSize : 100;
         }
@@ -564,7 +661,7 @@ bool WaterMark::toolOperations()
             return false;
         }
 
-        switch (placement)
+        switch (placementPosition)
         {
             case Private::TopLeft:
                 alignMode = Qt::AlignLeft;
@@ -654,65 +751,117 @@ bool WaterMark::toolOperations()
 
     watermarkImage.rotate(rotationAngle);
 
-    switch (placement)
+    if(placementType == Private::SpecifiedLocation)
     {
-        case Private::TopLeft:
-            watermarkRect.moveTopLeft(QPoint(marginW, marginH));
-            break;
+        switch (placementPosition)
+        {
+            case Private::TopLeft:
+                watermarkRect.moveTopLeft(QPoint(marginW, marginH));
+                break;
 
-        case Private::TopRight:
+            case Private::TopRight:
 
+                if (rotationAngle == DImg::ANGLE::ROT270 || rotationAngle == DImg::ANGLE::ROT90)
+                {
+                    xAdditionalValue += watermarkRect.width() - watermarkRect.height();
+                }
+
+                watermarkRect.moveTopRight(QPoint(image().width() + xAdditionalValue -1 - marginW, marginH));
+                break;
+
+            case Private::BottomLeft:
+
+                if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+                {
+                    yAdditionalValue += watermarkRect.height() - watermarkRect.width();
+                }
+
+                watermarkRect.moveBottomLeft(QPoint(marginW, image().height() + yAdditionalValue - 1 - marginH));
+                break;
+
+            case Private::Center:
+
+                if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+                {
+                    xAdditionalValue += (watermarkRect.width() - watermarkRect.height())/2;
+                    yAdditionalValue += (watermarkRect.height() - watermarkRect.width())/2;
+                }
+
+                watermarkRect.moveCenter(QPoint((int)(image().width() / 2 + xAdditionalValue), (int)(image().height() / 2 + yAdditionalValue)));
+                break;
+
+            default :    // BottomRight
+                if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+                {
+                    xAdditionalValue += watermarkRect.width() - watermarkRect.height();
+                    yAdditionalValue += watermarkRect.height() - watermarkRect.width();
+                }
+
+                watermarkRect.moveBottomRight(QPoint(image().width() + xAdditionalValue - 1 - marginW, image().height() + yAdditionalValue -1 - marginH));
+                break;
+        }
+
+        image().bitBlendImage(composer,
+                              &watermarkImage, 0, 0, watermarkImage.width(), watermarkImage.height(),
+                              watermarkRect.left(), watermarkRect.top());
+    }
+    else
+    {
+        const float DENSE_SPACING_FACTOR  = 1.2;
+        const float SPARSE_SPACING_FACTOR = 1.8;
+        float widthRatio     = (float)watermarkRect.width()/image().width();
+        float heightRatio    = (float)watermarkRect.height()/image().height();
+        float spacingFactor  = (denseRepetition) ? DENSE_SPACING_FACTOR : SPARSE_SPACING_FACTOR;
+        spacingFactor       *= userSparsityFactor;
+
+        if (placementType == Private::SystematicRepetition)
+        {
             if (rotationAngle == DImg::ANGLE::ROT270 || rotationAngle == DImg::ANGLE::ROT90)
             {
-                xAdditionalValue += watermarkRect.width() - watermarkRect.height();
+                widthRatio = (float)watermarkRect.height()/image().width();
+                heightRatio = (float)watermarkRect.width()/image().height();
             }
 
-            watermarkRect.moveTopRight(QPoint(image().width() + xAdditionalValue -1 - marginW, marginH));
-            break;
-
-        case Private::BottomLeft:
-
-            if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+            for (uint i = 0 ; i < image().width(); i += spacingFactor * widthRatio * image().width())
             {
-                yAdditionalValue += watermarkRect.height() - watermarkRect.width();
+                for (uint j = 0 ; j < image().height() ; j +=  spacingFactor * heightRatio * image().height())
+                {
+                    image().bitBlendImage(composer, &watermarkImage, 0, 0, watermarkImage.width(), watermarkImage.height(), i, j);
+                }
             }
+        }
+        else if (placementType == Private::RandomRepetition)
+        {
+            widthRatio  = (widthRatio > heightRatio) ? widthRatio : heightRatio;
+            heightRatio = widthRatio;
 
-            watermarkRect.moveBottomLeft(QPoint(marginW, image().height() + yAdditionalValue - 1 - marginH));
-            break;
+            qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
 
-        case Private::Center:
-
-            if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
+            for (uint i = 0 ; i < image().width(); i += spacingFactor * widthRatio * image().width())
             {
-                xAdditionalValue += (watermarkRect.width() - watermarkRect.height())/2;
-                yAdditionalValue += (watermarkRect.height() - watermarkRect.width())/2;
+                for (uint j = 0 ; j < image().height() ; j += spacingFactor * heightRatio * image().height())
+                {
+                    int number = (denseRepetition) ? 2 : 3;
+
+                    if (qrand() % number == 0)
+                    {
+                        if (randomizeRotation)
+                        {
+                            int x = qrand() % 4;
+                            watermarkImage.rotate((DImg::ANGLE)x);
+                        }
+
+                        image().bitBlendImage(composer, &watermarkImage, 0, 0, watermarkImage.width(), watermarkImage.height(), i, j);
+                    }
+                }
             }
-
-            watermarkRect.moveCenter(QPoint((int)(image().width()  / 2 + xAdditionalValue),
-                                            (int)(image().height() / 2 + yAdditionalValue)));
-            break;
-
-        default :    // BottomRight
-
-            if (rotationAngle == DImg::ANGLE::ROT90 || rotationAngle == DImg::ANGLE::ROT270)
-            {
-                xAdditionalValue += watermarkRect.width() - watermarkRect.height();
-                yAdditionalValue += watermarkRect.height() - watermarkRect.width();
-            }
-
-            watermarkRect.moveBottomRight(QPoint(image().width()  + xAdditionalValue - 1 - marginW,
-                                                 image().height() + yAdditionalValue -1 - marginH));
-            break;
+        }
     }
 
     // TODO: Create watermark filter, move code there, implement FilterAction
 
-    image().bitBlendImage(composer, &watermarkImage, 0, 0, watermarkImage.width(), watermarkImage.height(),
-                          watermarkRect.left(), watermarkRect.top());
-
     delete composer;
     LoadSaveThread::reverseExifRotate(image(), inputUrl().toLocalFile());
-
     return (savefromDImg());
 }
 

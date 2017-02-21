@@ -84,4 +84,5 @@ BUGFIXES FROM BUGZILLA:
 066 ==> 375796 - Barel Effect Apperaing on Images RAW RW2 Panasonic Format.
 067 ==> 376331 - Path when saving/opening presentation files should be remebered.
 068 ==> 375416 - Frequent crashes when applying faces.
-069 ==> 
+069 ==> 301048 - BQM Watermark tool : more super-impose visible watermark options [patch].
+070 ==>
