@@ -80,6 +80,7 @@ bool DTrash::deleteImage(const QString& imageToDelete)
     qlonglong imageId = -1;
     // Get the album and with this the image id of the image to trash.
     PAlbum* pAlbum = AlbumManager::instance()->findPAlbum(QUrl::fromLocalFile(completePath));
+
     if (pAlbum)
     {
         imageId = AlbumManager::instance()->getItemFromAlbum(pAlbum,fileName);
@@ -147,6 +148,7 @@ void DTrash::extractJsonForItem(const QString& collPath, const QString& baseName
                                  fileInfoObj.value(DELETIONTIMESTAMP_JSON_KEY).toString());
 
     QJsonValue imageIdValue = fileInfoObj.value(IMAGEID_JSON_KEY);
+
     if (!imageIdValue.isUndefined())
     {
         itemInfo.imageId = imageIdValue.toString().toLongLong();
@@ -170,7 +172,7 @@ bool DTrash::prepareCollectionTrash(const QString& collectionPath)
         isCreated &= trashDir.mkpath(trashFolder + QLatin1Char('/') + FILES_FOLDER);
         isCreated &= trashDir.mkpath(trashFolder + QLatin1Char('/') + INFO_FOLDER);
 
-        if(!isCreated)
+        if (!isCreated)
         {
             qCDebug(DIGIKAM_IOJOB_LOG) << "DTrash: could not create trash folder for collection";
             return false;
@@ -204,7 +206,7 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 
     QFileInfo jsonFileInfo(jsonFileName);
 
-    if(!jsonFileForImg.open(QFile::WriteOnly))
+    if (!jsonFileForImg.open(QFile::WriteOnly))
         return jsonFileInfo.baseName();
 
     jsonFileForImg.write(jsonDocForImg.toJson());
