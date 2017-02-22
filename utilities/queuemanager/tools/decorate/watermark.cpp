@@ -348,7 +348,7 @@ void WaterMark::registerSettingsWidget()
     d->sparsityFactorSpinBox->setValue(1);
     d->sparsityFactorSpinBox->setSingleStep(0.1);
     d->sparsityFactorSpinBox->setWhatsThis(i18n("Use this to get more control over the sparsity of watermark repetition."
-                                           " The higher the value the sparser the watermarks get. use floating point values,"
+                                           " The higher the value the sparser the watermarks get. Use floating point values,"
                                            " typically between 1.0 and 3.0. It can also be less than 1.0"));
     sparsityFactorLabel->setText(i18n("Sparsity Factor:"));
 
