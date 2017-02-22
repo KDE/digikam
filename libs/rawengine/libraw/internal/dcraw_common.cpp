@@ -1,5 +1,5 @@
 /* 
-  Copyright 2008-2016 LibRaw LLC (info@libraw.org)
+  Copyright 2008-2017 LibRaw LLC (info@libraw.org)
 
 LibRaw is free software; you can redistribute it and/or modify
 it under the terms of the one of two licenses as you choose:
@@ -12073,11 +12073,14 @@ void CLASS parse_fuji (int offset)
       FORC(36) xtrans_abs[0][35-c] = fgetc(ifp) & 3;
     } else if (tag == 0x2ff0) {
       FORC4 cam_mul[c ^ 1] = get2();
-
+    }
 // IB start
 #ifdef LIBRAW_LIBRARY_BUILD
-    } else if (tag == 0x9650) {
-      imgdata.makernotes.fuji.FujiExpoMidPointShift = ((short)get2()) / fMAX(1.0f,get2());
+    else if (tag == 0x9650)
+    {
+      short a = (short)get2();
+      float b =fMAX(1.0f, get2());
+      imgdata.makernotes.fuji.FujiExpoMidPointShift = a / b;
     } else if (tag == 0x2100) {
         FORC4 imgdata.color.WB_Coeffs[LIBRAW_WBI_Daylight][c ^ 1] = get2();
     } else if (tag == 0x2200) {
@@ -12092,10 +12095,10 @@ void CLASS parse_fuji (int offset)
         FORC4 imgdata.color.WB_Coeffs[LIBRAW_WBI_FL_L][c ^ 1] = get2();
     } else if (tag == 0x2400) {
         FORC4 imgdata.color.WB_Coeffs[LIBRAW_WBI_Tungsten][c ^ 1] = get2();
+    }
 #endif
 // IB end
-
-    } else if (tag == 0xc000) {
+    else if (tag == 0xc000) {
       c = order;
       order = 0x4949;
       if ((tag = get4()) > 10000) tag = get4();
@@ -13373,6 +13376,8 @@ void CLASS adobe_coeff (const char *t_make, const char *t_model
       { 13801,-3390,-1016,5535,3802,877,1848,4245,3730 } },
     { "Sigma dp3 Quattro", 2047, 0,
       { 13801,-3390,-1016,5535,3802,877,1848,4245,3730 } },
+    { "Sigma sd Quattro H", 256, 0, 
+      {1295,108,-311, 256,828,-65,-28,750,254}}, /* temp, same as sd Quattro */
     { "Sigma sd Quattro", 2047, 0,
       {1295,108,-311, 256,828,-65,-28,750,254}}, /* temp */
     { "Sigma SD9", 15, 4095,			/* LibRaw */
@@ -14490,6 +14495,7 @@ void CLASS identify()
     top_margin = filters = 0;
     strcpy (model,"C603");
   }
+
   if (!strcmp(make, "Sony") && raw_width > 3888 && !black && !cblack[0])
     black = 128 << (tiff_bps - 12);
 
@@ -15095,6 +15101,10 @@ konica_400z:
     order = 0x4d4d;
   } else if (!strncmp(make,"Sony",4) && raw_width == 4288) {
     width -= 32;
+  }  else if (!strcmp(make, "Sony") && raw_width == 4600) {
+    if (!strcmp(model, "DSLR-A350"))
+      height -= 4;
+    black = 0;
   } else if (!strncmp(make,"Sony",4) && raw_width == 4928) {
     if (height < 3280) width -= 8;
   } else if (!strncmp(make,"Sony",4) && raw_width == 5504) { // ILCE-3000//5000
@@ -15107,6 +15117,10 @@ konica_400z:
     width -= 30;
   } else if (!strncmp(make,"Sony",4) && raw_width == 8000) {
     width -= 32;
+    if (!strncmp(model, "DSC", 3)) {
+      tiff_bps = 14;
+      load_raw = &CLASS unpacked_load_raw;
+    }
   } else if (!strcmp(model,"DSLR-A100")) {
     if (width == 3880) {
       height--;
@@ -15118,8 +15132,6 @@ konica_400z:
       load_flags = 2;
     }
     filters = 0x61616161;
-  } else if (!strcmp(model,"DSLR-A350")) {
-    height -= 4;
   } else if (!strcmp(model,"PIXL")) {
     height -= top_margin = 4;
     width -= left_margin = 32;

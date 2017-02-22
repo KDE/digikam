@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw_cxx.cpp
- * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2017 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8 , 2008
  *
  * LibRaw C++ interface (implementation)
@@ -35,23 +35,6 @@ it under the terms of the one of two licenses as you choose:
 #include <zlib.h>
 #endif
 
-#if defined(_WIN32)
-#if defined _MSC_VER
-typedef   signed __int8   int8_t;
-typedef unsigned __int8   uint8_t;
-typedef   signed __int16  int16_t;
-typedef unsigned __int16  uint16_t;
-typedef   signed __int32  int32_t;
-typedef unsigned __int32  uint32_t;
-typedef   signed __int64  int64_t;
-typedef unsigned __int64  uint64_t;
-#else
-#include <stdint.h>
-#endif // _WIN32
-#include <sys/types.h>
-#else
-#include <inttypes.h>
-#endif
 
 
 #ifdef USE_RAWSPEED
@@ -1729,6 +1712,11 @@ struct foveon_data_t
   // Sigma sd Quattro
   {"Sigma","sd Quattro",5888,3776,16383,204,76,5446,3624}, // full size
   {"Sigma","sd Quattro",2944,1888,16383,102,38,2723,1812}, // half size
+  // Sd Quattro H
+  {"Sigma","sd Quattro H",6656,4480,16383,224,160,6208,4160}, // full size
+  {"Sigma","sd Quattro H",3328,2240,16383,112,80,3104,2080}, // half size
+  {"Sigma","sd Quattro H",5504,3680,16383,0,4,5496,3668}, // full size
+  {"Sigma","sd Quattro H",2752,1840,16383,0,2,2748,1834}, // half size
 };
 const int foveon_count = sizeof(foveon_data)/sizeof(foveon_data[0]);
 
@@ -1751,7 +1739,6 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
 	if (!strcasecmp(imgdata.idata.make, "Canon")  && (load_raw == &LibRaw::canon_sraw_load_raw) && imgdata.sizes.raw_width>0)
 	{
 		float ratio = float(imgdata.sizes.raw_height) / float(imgdata.sizes.raw_width);
-
 		if((ratio < 0.57 || ratio > 0.75) && imgdata.makernotes.canon.SensorHeight>1 && imgdata.makernotes.canon.SensorWidth > 1)
 		{
 			imgdata.sizes.raw_width = imgdata.makernotes.canon.SensorWidth;
@@ -1772,7 +1759,7 @@ int LibRaw::open_datastream(LibRaw_abstract_datastream *stream)
 			imgdata.sizes.top_margin = 8;
 			imgdata.sizes.iheight = imgdata.sizes.height = imgdata.sizes.raw_height - imgdata.sizes.top_margin;
 			libraw_internal_data.unpacker_data.load_flags |= 256;
-            imgdata.sizes.raw_pitch = 8*imgdata.sizes.raw_width;
+			imgdata.sizes.raw_pitch = 8*imgdata.sizes.raw_width;
 		}
 	}
 
@@ -2517,8 +2504,8 @@ int LibRaw::unpack(void)
             S.iwidth = S.width;
             S.iheight= S.height;
             IO.shrink = 0;
-            if(!S.raw_pitch)
- 				S.raw_pitch = (decoder_info.decoder_flags & LIBRAW_DECODER_LEGACY_WITH_MARGINS) ? S.raw_width*8 : S.width*8;
+			if(!S.raw_pitch)
+				S.raw_pitch = (decoder_info.decoder_flags & LIBRAW_DECODER_LEGACY_WITH_MARGINS) ? S.raw_width*8 : S.width*8;
             // allocate image as temporary buffer, size
             imgdata.rawdata.raw_alloc = 0;
             imgdata.image = (ushort (*)[4]) calloc(unsigned(S.raw_width)*unsigned(S.raw_height),sizeof(*imgdata.image));
@@ -5320,6 +5307,7 @@ static const char  *static_camera_list[] =
 "Sigma dp2 Quattro",
 "Sigma dp3 Quattro",
 "Sigma sd Quattro",
+"Sigma sd Quattro H",
 "Sinar eMotion 22",
 "Sinar eMotion 54",
 "Sinar eSpirit 65",
@@ -5625,7 +5613,10 @@ void LibRaw::parse_x3f()
   else
   {
 	  // No property list
-	  if(imgdata.sizes.raw_width == 5888 ||imgdata.sizes.raw_width == 2944 ) // dp2Q
+	  if(imgdata.sizes.raw_width == 5888 ||imgdata.sizes.raw_width == 2944 
+		  || imgdata.sizes.raw_width == 6656 ||imgdata.sizes.raw_width == 3328 	  
+		  || imgdata.sizes.raw_width == 5504 ||imgdata.sizes.raw_width == 2752 	  
+		  ) // Quattro
 	  {
 		  imgdata.idata.raw_count=1;
 		  load_raw = &LibRaw::x3f_load_raw;
@@ -5650,12 +5641,16 @@ void LibRaw::parse_x3f()
 		  }
 		  else if(fndsd)
 		  {
-			  snprintf(imgdata.idata.model,64,"sd Quattro");
+			  snprintf(imgdata.idata.model,64,"%s",fndsd);
 		  }
 		  else
 #endif
+		  if(imgdata.sizes.raw_width == 6656 ||imgdata.sizes.raw_width == 3328 )
+			strcpy (imgdata.idata.model, "sd Quattro H");
+		  else
 			strcpy (imgdata.idata.model, "dp2 Quattro");
 	  }
+	  //else
   }
   // Try to get thumbnail data
   LibRaw_thumbnail_formats format = LIBRAW_THUMBNAIL_UNKNOWN;
@@ -5857,14 +5852,17 @@ void LibRaw::x3f_dpq_interpolate_af_sd(int xstart,int ystart, int xend, int yend
 		{
 			uint16_t* pixel00 = &row0[x*3]; // Current pixel
 			float sumR = 0.f,sumG=0.f;
+			float cnt = 0.f;
 			for(int xx = -scale; xx <= scale; xx+= scale)
 			{
 				sumR += row_minus[(x+xx)*3];
 				sumR += row_plus[(x+xx)*3];
 				sumG += row_minus[(x+xx)*3+1];
 				sumG += row_plus[(x+xx)*3+1];
+				cnt +=1.f;
 				if(xx)
 				{
+					cnt +=1.f;
 					sumR += row0[(x+xx)*3];
 					sumG += row0[(x+xx)*3+1];
 				}
@@ -5872,23 +5870,26 @@ void LibRaw::x3f_dpq_interpolate_af_sd(int xstart,int ystart, int xend, int yend
 			pixel00[0] = sumR/8.f;
 			pixel00[1] = sumG/8.f;
 
-			uint16_t* pixel0G = &row0[x*3+3]; // right pixel
 			if(scale == 2)
 			{
-				uint16_t* pixel1G = &row1[x*3+3]; // right pixel
+				uint16_t* pixel0B = &row0[x*3+3]; // right pixel
+				uint16_t* pixel1B = &row1[x*3+3]; // right pixel
 				float sumG0 = 0, sumG1 = 0.f;
+				float cnt = 0.f;
 				for(int xx = -scale; xx <= scale; xx+= scale)
 				{
 					sumG0 += row_minus1[(x+xx)*3+2];
-					sumG0 += row_plus[(x+xx)*3+2];
+					sumG1 += row_plus[(x+xx)*3+2];
+					cnt +=1.f;
 					if(xx)
 					{
 						sumG0 += row0[(x+xx)*3+2];
 						sumG1 += row1[(x+xx)*3+2];
+						cnt +=1.f;
 					}
 				}
-				pixel0G[2] = sumG0/5.f;
-				pixel1G[2] = sumG1/5.f;
+				pixel0B[2] = sumG0/cnt;
+				pixel1B[2] = sumG1/cnt;
 			}
 
 			//			uint16_t* pixel10 = &row1[x*3]; // Pixel below current
@@ -5973,7 +5974,23 @@ void LibRaw::x3f_load_raw()
 		  }
 		  else if(imgdata.sizes.raw_width == 5888 && imgdata.sizes.raw_height == 3776) // sd Quattro normal raw
 		  {
-			  x3f_dpq_interpolate_af_sd(216,464,imgdata.sizes.width+464,3312,16,32,2);
+			  x3f_dpq_interpolate_af_sd(216,464,imgdata.sizes.raw_width-1,3312,16,32,2);
+		  }
+		  else if(imgdata.sizes.raw_width == 6656 && imgdata.sizes.raw_height == 4480) // sd Quattro H normal raw
+		  {
+			  x3f_dpq_interpolate_af_sd(232,592,imgdata.sizes.raw_width-1,3888,16,32,2); 
+		  }
+		  else if(imgdata.sizes.raw_width == 3328 && imgdata.sizes.raw_height == 2240) // sd Quattro H half size
+		  {
+			  x3f_dpq_interpolate_af_sd(116,296,imgdata.sizes.raw_width-1,2200,8,16,1); 
+		  }
+		  else if(imgdata.sizes.raw_width == 5504 && imgdata.sizes.raw_height == 3680) // sd Quattro H APS-C raw
+		  {
+			  x3f_dpq_interpolate_af_sd(8,192,imgdata.sizes.raw_width-1,3185,16,32,2); 
+		  }
+		  else if(imgdata.sizes.raw_width == 2752 && imgdata.sizes.raw_height == 1840) // sd Quattro H APS-C half size
+		  {
+			  x3f_dpq_interpolate_af_sd(4, 96,imgdata.sizes.raw_width-1,1800,8,16,1); 
 		  }
 		  else if(imgdata.sizes.raw_width == 2944 && imgdata.sizes.raw_height == 1836) // dpN Quattro small raw
 		  {
@@ -5981,7 +5998,7 @@ void LibRaw::x3f_load_raw()
 		  }
 		  else if(imgdata.sizes.raw_width == 2944 && imgdata.sizes.raw_height == 1888) // sd Quattro small
 		  {
-			  x3f_dpq_interpolate_af_sd(108,232,imgdata.sizes.width+232,1656,8,16,1);
+			  x3f_dpq_interpolate_af_sd(108,232,imgdata.sizes.raw_width-1,1656,8,16,1);
 		  }
 	  }
 #endif

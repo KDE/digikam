@@ -1,6 +1,6 @@
 /* -*- C++ -*-
  * File: libraw.h
- * Copyright 2008-2016 LibRaw LLC (info@libraw.org)
+ * Copyright 2008-2017 LibRaw LLC (info@libraw.org)
  * Created: Sat Mar  8, 2008
  *
  * LibRaw C++ interface
@@ -32,7 +32,6 @@ it under the terms of the one of two licenses as you choose:
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 
 #include "libraw_datastream.h"
 #include "libraw_types.h"
