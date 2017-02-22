@@ -3,17 +3,19 @@ digiKam 5.5.0 - Release date: 2017-03-12
 
 NEW FEATURES:
 
-Database : Add new options to ignore some kind of directories while scanning collections.
-Database : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
-           thumbnail and face entries gut does not shrink Databases automatically.
-Faces    : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
-Faces    : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
-Faces    : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
-Searches : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
-Searches : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
-Tags     : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
-BQM      : Several usability improvements in Watermark tool.
-General  : Unsharp MAsk filter can now reduce color noise to process image in HSL color space.
+Database    : Add new options to ignore some kind of directories while scanning collections.
+Database    : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
+              thumbnail and face entries gut does not shrink Databases automatically.
+Faces       : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
+Faces       : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
+Faces       : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
+Maintenance : The maintenance now does not generate massive amounts of threads anymore. Instead, we use a queue based approach to
+              level the load on the CPUs more appropriate. This should improve the reactiveness during maintenance.
+Searches    : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
+Searches    : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
+Tags        : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
+BQM         : Several usability improvements in Watermark tool.
+General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -87,4 +89,7 @@ BUGFIXES FROM BUGZILLA:
 068 ==> 375416 - Frequent crashes when applying faces.
 069 ==> 301048 - BQM Watermark tool : more super-impose visible watermark options [patch].
 070 ==> 123097 - SCAN : ignore some directories in digiKam [patch].
-071 ==> 
+071 ==> 283062 - THUMBDB : limit the size of thumbnail database
+072 ==> 216895 - SQLITE : improve performance and reduce space with some pragma's
+073 ==> 374225 - Add possibility to remove face identities by removing tag and remove person tags but preserving the tags themselves [patch]
+074 ==>
