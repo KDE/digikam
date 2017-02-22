@@ -64,6 +64,7 @@ void MaintenanceThread::setUseMultiCore(const bool b)
     else
     {
         defaultMaximumNumberOfThreads();
+        //setMaximumNumberOfThreads(qMax( maximumNumberOfThreads() / 2, 1));
     }
 }
 
@@ -315,6 +316,7 @@ void MaintenanceThread::slotThreadFinished()
     }
 }
 
+/*
 int MaintenanceThread::getChunkSize(int elementCount)
 {
     int chunkSize = elementCount;
@@ -329,5 +331,6 @@ int MaintenanceThread::getChunkSize(int elementCount)
 
     return chunkSize;
 }
+*/
 
 }  // namespace Digikam

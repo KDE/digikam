@@ -107,6 +107,7 @@ private:
      * @param toChunk The list to chunk
      * @param chunkSize The chunk size (0 for take everything)
      */
+    /*
     template<typename T>
     QList<QList<T>> chunkList(const QList<T>& toChunk, int chunkSize=0)
     {
@@ -137,6 +138,7 @@ private:
     }
 
     int getChunkSize(int elementCount);
+    */
 
     MaintenanceData* const data;
 
