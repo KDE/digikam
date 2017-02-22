@@ -88,6 +88,8 @@ void FingerprintsTask::run()
         if (path.isEmpty())
             break;
 
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Updating fingerprints for file: " << path ;
+
         DImg dimg = PreviewLoadThread::loadFastSynchronously(path, HaarIface::preferredSize());
 
         if (!dimg.isNull())
