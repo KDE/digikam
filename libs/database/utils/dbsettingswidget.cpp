@@ -420,12 +420,12 @@ void DatabaseSettingsWidget::setupMainArea()
     d->ignoreDirectoriesBox                  = new QGroupBox(i18n("Ignore Directories"));
     QGridLayout* ignoreDirectoriesLayout     = new QGridLayout(d->ignoreDirectoriesBox);
 
-    QLabel* const ignoreDirectoriesInfoLabel = new QLabel(i18n("<p>Set here the names of directories (case sensitive and separeted by whitespaces) "
+    QLabel* const ignoreDirectoriesInfoLabel = new QLabel(i18n("<p>Set here the names of directories (case sensitive and separated by whitespaces) "
                                                            "that you want to ignore from your photo collections.</p>"
                                                            "<p>Useful is this for example, when you store your "
                                                            "photos on a Synology NAS (Network Attached Storage). The system "
                                                            "creates in every directory a subdirectory @eaDir to store "
-                                                           "thumbnails. To avoid that digikam inserts the original photo "
+                                                           "thumbnails. To avoid that digiKam inserts the original photo "
                                                            "and its corresponding thumbnail twice, @eaDir is ignored by default.</p>"
                                                            "<p>To re-include directories that are ignored by default "
                                                            "prefix it with a minus, e.g. -@eaDir.</p>"),
