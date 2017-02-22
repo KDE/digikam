@@ -215,10 +215,20 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 
 QString DTrash::getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version)
 {
+    QTime time = QTime::currentTime();
+    qsrand((uint)time.msec());
+    QString randomString;
+
+    for (int i = 0 ; i < 8 ; i++)
+    {
+        randomString.append(QString::number(qrand() % 16, 16));
+    }
+
     QString pathToCreateJsonFile = collectionPath + QLatin1Char('/') +
                                    TRASH_FOLDER + QLatin1Char('/') +
                                    INFO_FOLDER + QLatin1Char('/') +
                                    baseName +
+                                   randomString +
                                    (version ? QString::number(version) : QLatin1String("")) +
                                    INFO_FILE_EXTENSION;
 
