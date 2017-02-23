@@ -27,6 +27,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QUuid>
 #include <QFileInfo>
 #include <QJsonObject>
 #include <QJsonDocument>
@@ -217,14 +218,9 @@ QString DTrash::createJsonRecordForFile(const QString& collectionPath, const QSt
 
 QString DTrash::getAvialableJsonFilePathInTrash(const QString& collectionPath, const QString& baseName, int version)
 {
-    QTime time = QTime::currentTime();
-    qsrand((uint)time.msec());
-    QString randomString;
-
-    for (int i = 0 ; i < 8 ; i++)
-    {
-        randomString.append(QString::number(qrand() % 16, 16));
-    }
+    QString randomString = QUuid::createUuid().toString();
+    randomString.replace(0, 1, QChar('-'));
+    randomString.chop(1);
 
     QString pathToCreateJsonFile = collectionPath + QLatin1Char('/') +
                                    TRASH_FOLDER + QLatin1Char('/') +
