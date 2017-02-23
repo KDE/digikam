@@ -38,16 +38,13 @@ class SetupMime : public QScrollArea
 public:
 
     explicit SetupMime(QWidget* const parent = 0);
-    ~SetupMime();
+    virtual ~SetupMime();
 
     void applySettings();
     void readSettings();
 
 private Q_SLOTS:
 
-    void slotRevertImageFileFilter();
-    void slotRevertMovieFileFilter();
-    void slotRevertAudioFileFilter();
     void slotShowCurrentImageSettings();
     void slotShowCurrentMovieSettings();
     void slotShowCurrentAudioSettings();
@@ -58,6 +55,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SETUPMIME_H

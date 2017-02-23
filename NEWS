@@ -95,4 +95,5 @@ BUGFIXES FROM BUGZILLA:
 072 ==> 216895 - SQLITE : improve performance and reduce space with some pragma's
 073 ==> 374225 - Add possibility to remove face identities by removing tag and remove person tags but preserving the tags themselves [patch]
 074 ==> 376815 - Restore from Trash works incorrectly.
-075 ==> 
+075 ==> 376820 - Make mime type settings GUI more consistent [patch].
+076 ==> 

@@ -59,9 +59,6 @@ public:
         imageFileFilterLabel(0),
         movieFileFilterLabel(0),
         audioFileFilterLabel(0),
-        revertImageFileFilterBtn(0),
-        revertMovieFileFilterBtn(0),
-        revertAudioFileFilterBtn(0),
         imageFileFilterEdit(0),
         movieFileFilterEdit(0),
         audioFileFilterEdit(0)
@@ -72,10 +69,6 @@ public:
     QLabel*      movieFileFilterLabel;
     QLabel*      audioFileFilterLabel;
 
-    QToolButton* revertImageFileFilterBtn;
-    QToolButton* revertMovieFileFilterBtn;
-    QToolButton* revertAudioFileFilterBtn;
-
     QLineEdit*   imageFileFilterEdit;
     QLineEdit*   movieFileFilterEdit;
     QLineEdit*   audioFileFilterEdit;
@@ -85,12 +78,11 @@ SetupMime::SetupMime(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    QWidget* const panel = new QWidget(viewport());
+    QWidget* const panel      = new QWidget(viewport());
     setWidget(panel);
     setWidgetResizable(true);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QVBoxLayout* const layout = new QVBoxLayout(panel);
 
     // --------------------------------------------------------
@@ -107,15 +99,14 @@ SetupMime::SetupMime(QWidget* const parent)
 
     QGroupBox* const imageFileFilterBox = new QGroupBox(i18n("Image Files"), panel);
     QGridLayout* const grid1            = new QGridLayout(imageFileFilterBox);
-
-    QLabel* const logoLabel1 = new QLabel(imageFileFilterBox);
+    QLabel* const logoLabel1            = new QLabel(imageFileFilterBox);
     logoLabel1->setPixmap(QIcon::fromTheme(QLatin1String("image-jpeg")).pixmap(48));
 
-    d->imageFileFilterLabel  = new QLabel(imageFileFilterBox);
+    d->imageFileFilterLabel = new QLabel(imageFileFilterBox);
     d->imageFileFilterLabel->setText(i18n("Additional &image file extensions (<a href='image'>Currently-supported types</a>):"));
 
-    DHBox* const hbox1     = new DHBox(imageFileFilterBox);
-    d->imageFileFilterEdit = new QLineEdit(hbox1);
+    DHBox* const hbox1      = new DHBox(imageFileFilterBox);
+    d->imageFileFilterEdit  = new QLineEdit(hbox1);
     d->imageFileFilterEdit->setWhatsThis(i18n("<p>Here you can add the extensions of image files (including RAW files) "
                                               "to be displayed in the Album view. Just put \"xyz abc\" "
                                               "to display files with the xyz and abc extensions in your Album view.</p>"
@@ -125,18 +116,15 @@ SetupMime::SetupMime(QWidget* const parent)
                                               "They would not be deleted, just not shown in digiKam.</p>"
                                               "<p><b>Warning:</b> Removing files from the database means losing "
                                               "all of their tags and ratings.</p>"));
+    d->imageFileFilterEdit->setClearButtonEnabled(true);
+    d->imageFileFilterEdit->setPlaceholderText(i18n("Enter additional image file extensions."));
     d->imageFileFilterLabel->setBuddy(d->imageFileFilterEdit);
     hbox1->setStretchFactor(d->imageFileFilterEdit, 10);
-
-    d->revertImageFileFilterBtn = new QToolButton(hbox1);
-    d->revertImageFileFilterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-    d->revertImageFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid1->addWidget(logoLabel1,              0, 0, 2, 1);
     grid1->addWidget(d->imageFileFilterLabel, 0, 1, 1, 1);
     grid1->addWidget(hbox1,                   1, 1, 1, 1);
     grid1->setColumnStretch(1, 10);
-    //grid1->setContentsMargins(spacing, spacing, spacing, spacing);
     grid1->setSpacing(spacing);
 
     // --------------------------------------------------------
@@ -147,11 +135,11 @@ SetupMime::SetupMime(QWidget* const parent)
     QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
     logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-x-generic")).pixmap(48));
 
-    d->movieFileFilterLabel = new QLabel(movieFileFilterBox);
+    d->movieFileFilterLabel  = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
 
-    DHBox* const hbox2     = new DHBox(movieFileFilterBox);
-    d->movieFileFilterEdit = new QLineEdit(hbox2);
+    DHBox* const hbox2       = new DHBox(movieFileFilterBox);
+    d->movieFileFilterEdit   = new QLineEdit(hbox2);
     d->movieFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of video files "
                                               "to be displayed in your Album view. Just write \"xyz abc\" "
                                               "to support files with the *.xyz and *.abc extensions. "
@@ -163,18 +151,15 @@ SetupMime::SetupMime(QWidget* const parent)
                                               "They would not be deleted, just not shown in digiKam.</p>"
                                               "<p><b>Warning:</b> Removing files from the database means losing "
                                               "all of their tags and ratings.</p>"));
+    d->movieFileFilterEdit->setClearButtonEnabled(true);
+    d->movieFileFilterEdit->setPlaceholderText(i18n("Enter additional movie file extensions."));
     d->movieFileFilterLabel->setBuddy(d->movieFileFilterEdit);
     hbox2->setStretchFactor(d->movieFileFilterEdit, 10);
-
-    d->revertMovieFileFilterBtn = new QToolButton(hbox2);
-    d->revertMovieFileFilterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-    d->revertMovieFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid2->addWidget(logoLabel2,                0, 0, 2, 1);
     grid2->addWidget(d->movieFileFilterLabel,   0, 1, 1, 1);
     grid2->addWidget(hbox2,                     1, 1, 1, 1);
     grid2->setColumnStretch(1, 10);
-    //grid2->setContentsMargins(spacing, spacing, spacing, spacing);
     grid2->setSpacing(spacing);
 
     // --------------------------------------------------------
@@ -185,11 +170,11 @@ SetupMime::SetupMime(QWidget* const parent)
     QLabel* const logoLabel3 = new QLabel(audioFileFilterBox);
     logoLabel3->setPixmap(QIcon::fromTheme(QLatin1String("audio-x-generic")).pixmap(48));
 
-    d->audioFileFilterLabel = new QLabel(audioFileFilterBox);
+    d->audioFileFilterLabel  = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
 
-    DHBox* const hbox3     = new DHBox(audioFileFilterBox);
-    d->audioFileFilterEdit = new QLineEdit(hbox3);
+    DHBox* const hbox3       = new DHBox(audioFileFilterBox);
+    d->audioFileFilterEdit   = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of audio files "
                                               "to be displayed in your Album view. Just write \"mp7\" "
                                               "to support files with the *.mp7 extension. "
@@ -201,18 +186,15 @@ SetupMime::SetupMime(QWidget* const parent)
                                               "They would not be deleted, just not shown in digiKam.</p>"
                                               "<p><b>Warning:</b> Removing files from the database means losing "
                                               "all of their tags and ratings.</p>"));
+    d->audioFileFilterEdit->setClearButtonEnabled(true);
+    d->audioFileFilterEdit->setPlaceholderText(i18n("Enter additional audio file extensions."));
     d->audioFileFilterLabel->setBuddy(d->audioFileFilterEdit);
     hbox3->setStretchFactor(d->audioFileFilterEdit, 10);
-
-    d->revertAudioFileFilterBtn = new QToolButton(hbox3);
-    d->revertAudioFileFilterBtn->setIcon(QIcon::fromTheme(QLatin1String("view-refresh")));
-    d->revertAudioFileFilterBtn->setToolTip(i18n("Revert to default settings"));
 
     grid3->addWidget(logoLabel3,              0, 0, 2, 1);
     grid3->addWidget(d->audioFileFilterLabel, 0, 1, 1, 1);
     grid3->addWidget(hbox3,                   1, 1, 1, 1);
     grid3->setColumnStretch(1, 10);
-    //grid3->setContentsMargins(spacing, spacing, spacing, spacing);
     grid3->setSpacing(spacing);
 
     // --------------------------------------------------------
@@ -226,15 +208,6 @@ SetupMime::SetupMime(QWidget* const parent)
     layout->addStretch();
 
     // --------------------------------------------------------
-
-    connect(d->revertImageFileFilterBtn, SIGNAL(clicked()),
-            this, SLOT(slotRevertImageFileFilter()));
-
-    connect(d->revertMovieFileFilterBtn, SIGNAL(clicked()),
-            this, SLOT(slotRevertMovieFileFilter()));
-
-    connect(d->revertAudioFileFilterBtn, SIGNAL(clicked()),
-            this, SLOT(slotRevertAudioFileFilter()));
 
     connect(d->imageFileFilterLabel, SIGNAL(linkActivated(QString)),
             this, SLOT(slotShowCurrentImageSettings()));
@@ -307,21 +280,6 @@ void SetupMime::readSettings()
     d->audioFileFilterEdit->setText(audio);
 }
 
-void SetupMime::slotRevertImageFileFilter()
-{
-    d->imageFileFilterEdit->setText(QString());
-}
-
-void SetupMime::slotRevertMovieFileFilter()
-{
-    d->movieFileFilterEdit->setText(QString());
-}
-
-void SetupMime::slotRevertAudioFileFilter()
-{
-    d->audioFileFilterEdit->setText(QString());
-}
-
 void SetupMime::slotShowCurrentImageSettings()
 {
     QStringList imageList;
@@ -352,4 +310,4 @@ void SetupMime::slotShowCurrentAudioSettings()
     QWhatsThis::showText(d->audioFileFilterLabel->mapToGlobal(QPoint(0, 0)), text, d->audioFileFilterLabel);
 }
 
-}  // namespace Digikam
+} // namespace Digikam
