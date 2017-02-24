@@ -100,4 +100,5 @@ BUGFIXES FROM BUGZILLA:
 075 ==> 376820 - Make mime type settings GUI more consistent [patch].
 076 ==> 376615 - Missing icon in GNOME shell dock.
 077 ==> 376885 - The setting 'Always show original images' cannot be disabled in 5.5.0.
-078 ==> 
+078 ==> 376721 - Poor quality colour management in Preview vs Editor.
+079 ==> 
