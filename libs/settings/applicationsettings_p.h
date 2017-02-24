@@ -140,6 +140,7 @@ public:
     static const QString                      configMinimumSimilarityBound;
     static const QString                      configDuplicatesSearchLastMinSimilarity;
     static const QString                      configDuplicatesSearchLastMaxSimilarity;
+    static const QString                      configDuplicatesSearchLastRestrictions;
 
     // start up setting
     bool                                      showSplash;
@@ -272,6 +273,7 @@ public:
     int                                       minimumSimilarityBound;
     int                                       duplicatesSearchLastMinSimilarity;
     int                                       duplicatesSearchLastMaxSimilarity;
+    int                                       duplicatesSearchLastRestrictions;
 
 private :
 

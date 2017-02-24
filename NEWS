@@ -13,6 +13,8 @@ Maintenance : The maintenance now does not generate massive amounts of threads a
               level the load on the CPUs more appropriate. This should improve the reactiveness during maintenance.
 Searches    : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
 Searches    : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
+Searches    : The results of duplicates searches can now be restricted. It is now possible to restrict the duplicates to the ones that
+              are in the same album as the reference image or in another album. This feature is also usable in maintenance.
 Tags        : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 BQM         : Several usability improvements in Watermark tool.
 General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.

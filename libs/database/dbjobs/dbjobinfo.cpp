@@ -196,11 +196,12 @@ qreal GPSDBJobInfo::lng2() const
 SearchesDBJobInfo::SearchesDBJobInfo()
     : DBJobInfo()
 {
-    m_duplicates    = false;
-    m_albumUpdate   = false;
-    m_minThreshold  = 0;
-    m_maxThreshold  = 1;
-    m_searchIds     = QList<int>();
+    m_duplicates              = false;
+    m_albumUpdate             = false;
+    m_minThreshold            = 0;
+    m_maxThreshold            = 1;
+    m_searchResultRestriction = 0;
+    m_searchIds               = QList<int>();
 }
 
 void SearchesDBJobInfo::setDuplicatesJob()
@@ -221,6 +222,16 @@ void SearchesDBJobInfo::setAlbumUpdate()
 bool SearchesDBJobInfo::isAlbumUpdate() const
 {
     return m_albumUpdate;
+}
+
+void SearchesDBJobInfo::setSearchResultRestriction(int type)
+{
+    m_searchResultRestriction = type;
+}
+
+int SearchesDBJobInfo::searchResultRestriction() const
+{
+    return m_searchResultRestriction;
 }
 
 void SearchesDBJobInfo::setSearchId(int id)

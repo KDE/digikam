@@ -55,6 +55,7 @@ public:
     Private() :
         minSimilarity(90),
         maxSimilarity(100),
+        searchResultRestriction(0),
         isAlbumUpdate(false),
         job(0)
     {
@@ -62,6 +63,7 @@ public:
 
     int                   minSimilarity;
     int                   maxSimilarity;
+    int                   searchResultRestriction;
     bool                  isAlbumUpdate;
     QList<int>            albumsIdList;
     QList<qlonglong>      imageIdList;
@@ -69,23 +71,25 @@ public:
     SearchesDBJobsThread* job;
 };
 
-DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity, int maxSimilarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
-    d->minSimilarity   = minSimilarity;
-    d->maxSimilarity   = maxSimilarity;
+    d->minSimilarity            = minSimilarity;
+    d->maxSimilarity            = maxSimilarity;
 
-    d->isAlbumUpdate   = true;
-    d->imageIdList     = imageIds;
+    d->isAlbumUpdate            = true;
+    d->imageIdList              = imageIds;
+    d->searchResultRestriction  = searchResultRestriction;
 }
 
-DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity, int maxSimilarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
-    d->minSimilarity   = minSimilarity;
-    d->maxSimilarity   = maxSimilarity;
+    d->minSimilarity            = minSimilarity;
+    d->maxSimilarity            = maxSimilarity;
+    d->searchResultRestriction  = searchResultRestriction;
 
     foreach(Album* const a, albums)
         d->albumsIdList << a->id();
@@ -94,12 +98,13 @@ DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tag
         d->tagsIdList << a->id();
 }
 
-DuplicatesFinder::DuplicatesFinder(const int minSimilarity, int maxSimilarity, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
-    d->minSimilarity = minSimilarity;
-    d->maxSimilarity = maxSimilarity;
+    d->minSimilarity            = minSimilarity;
+    d->maxSimilarity            = maxSimilarity;
+    d->searchResultRestriction  = searchResultRestriction;
 
     foreach(Album* const a, AlbumManager::instance()->allPAlbums())
         d->albumsIdList << a->id();
@@ -125,6 +130,7 @@ void DuplicatesFinder::slotStart()
     jobInfo.setMaxThreshold(maxThresh);
     jobInfo.setAlbumsIds(d->albumsIdList);
     jobInfo.setImageIds(d->imageIdList);
+    jobInfo.setSearchResultRestriction(d->searchResultRestriction);
 
     if (d->isAlbumUpdate)
         jobInfo.setAlbumUpdate();
@@ -169,6 +175,7 @@ void DuplicatesFinder::slotDone()
     // save the min and max similarity in the configuration.
     ApplicationSettings::instance()->setDuplicatesSearchLastMinSimilarity(d->minSimilarity);
     ApplicationSettings::instance()->setDuplicatesSearchLastMaxSimilarity(d->maxSimilarity);
+    ApplicationSettings::instance()->setDuplicatesSearchRestrictions(d->searchResultRestriction);
 
     d->job = 0;
     MaintenanceTool::slotDone();

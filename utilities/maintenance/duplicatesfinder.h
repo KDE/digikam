@@ -46,13 +46,13 @@ public:
 
     /** Version to find all duplicates in the set of images
      */
-    DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity = 90, int maxSimilarity = 100, ProgressItem* const parent = 0);
+    DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimilarity = 90, int maxSimilarity = 100, int searchResultRestriction = 0, ProgressItem* const parent = 0);
     /** Version to find all duplicates over a specific list to PAlbums and TAlbums
      */
-    DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity = 90, int maxSimilarity = 100, ProgressItem* const parent = 0);
+    DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity = 90, int maxSimilarity = 100, int searchResultRestriction = 0, ProgressItem* const parent = 0);
     /** Version to find all duplicates over whole collections
      */
-    explicit DuplicatesFinder(const int minSimilarity = 90, int maxSimilarity = 100, ProgressItem* const parent = 0);
+    explicit DuplicatesFinder(const int minSimilarity = 90, int maxSimilarity = 100, int searchResultRestriction = 0, ProgressItem* const parent = 0);
     ~DuplicatesFinder();
 
 private Q_SLOTS:

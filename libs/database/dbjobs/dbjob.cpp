@@ -305,6 +305,7 @@ void SearchesJob::run()
             iface.rebuildDuplicatesAlbums(m_jobInfo.imageIds(),
                                           m_jobInfo.minThreshold(),
                                           m_jobInfo.maxThreshold(),
+                                          static_cast<HaarIface::DuplicatesSearchRestrictions>(m_jobInfo.searchResultRestriction()),
                                           &observer);
         }
         else
@@ -313,6 +314,7 @@ void SearchesJob::run()
                                           m_jobInfo.tagsIds(),
                                           m_jobInfo.minThreshold(),
                                           m_jobInfo.maxThreshold(),
+                                          static_cast<HaarIface::DuplicatesSearchRestrictions>(m_jobInfo.searchResultRestriction()),
                                           &observer);
         }
     }

@@ -833,7 +833,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold,maxThreshold, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold,maxThreshold, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
     else if (type == QLatin1String("image"))
     {
@@ -846,7 +846,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
 
     listFromHaarSearch(receiver, imageSimilarityMap);

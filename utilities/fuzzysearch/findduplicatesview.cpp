@@ -34,6 +34,7 @@
 #include <QLabel>
 #include <QApplication>
 #include <QStyle>
+#include <QComboBox>
 
 // KDE includes
 
@@ -41,6 +42,7 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "album.h"
 #include "coredb.h"
 #include "albummanager.h"
@@ -52,6 +54,7 @@
 #include "duplicatesfinder.h"
 #include "fingerprintsgenerator.h"
 #include "applicationsettings.h"
+#include "haariface.h"
 
 namespace Digikam
 {
@@ -72,6 +75,8 @@ public:
         similarityIntervalLabel = 0;
         minSimilarity           = 0;
         maxSimilarity           = 0;
+        restrictResultsLabel     = 0;
+        searchResultRestriction = 0;
         albumSelectors          = 0;
         settings                = 0;
     }
@@ -79,9 +84,12 @@ public:
     QLabel*                      includeAlbumsLabel;
     QLabel*                      similarityLabel;
     QLabel*                      similarityIntervalLabel;
+    QLabel*                      restrictResultsLabel;
 
     QSpinBox*                    minSimilarity;
     QSpinBox*                    maxSimilarity;
+
+    QComboBox*                   searchResultRestriction;
 
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
@@ -147,6 +155,18 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     d->similarityIntervalLabel = new QLabel(QLatin1String("-"));
 
+    d->restrictResultsLabel = new QLabel(i18n("Restriction on results:"));
+    d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
+
+    d->searchResultRestriction = new QComboBox;
+    d->searchResultRestriction->addItem(i18nc("@label:listbox", "No restriction"),              HaarIface::DuplicatesSearchRestrictions::None);
+    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Restrict to same album"),      HaarIface::DuplicatesSearchRestrictions::SameAlbum);
+    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Restrict to different album"), HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
+
+    // Load the last choice from application settings.
+    HaarIface::DuplicatesSearchRestrictions restrictions = (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions();
+    d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(restrictions));
+
     // ---------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
@@ -156,8 +176,10 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     mainLayout->addWidget(d->minSimilarity,           2, 2, 1, 1);
     mainLayout->addWidget(d->similarityIntervalLabel, 2, 3, 1, 1);
     mainLayout->addWidget(d->maxSimilarity,           2, 4, 1, -1);
-    mainLayout->addWidget(d->updateFingerPrtBtn,      3, 0, 1, -1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,       4, 0, 1, -1);
+    mainLayout->addWidget(d->restrictResultsLabel,    3, 0, 1, 2);
+    mainLayout->addWidget(d->searchResultRestriction, 3, 2, 1, -1);
+    mainLayout->addWidget(d->updateFingerPrtBtn,      4, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,       5, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -324,6 +346,7 @@ void FindDuplicatesView::enableControlWidgets(bool val)
     d->similarityLabel->setEnabled(val);
     d->minSimilarity->setEnabled(val);
     d->maxSimilarity->setEnabled(val);
+    d->searchResultRestriction->setEnabled(val);
 }
 
 void FindDuplicatesView::slotFindDuplicates()
@@ -332,7 +355,11 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     enableControlWidgets(false);
 
-    DuplicatesFinder* const finder = new DuplicatesFinder(d->albumSelectors->selectedPAlbums(), d->albumSelectors->selectedTAlbums(), d->minSimilarity->value(), d->maxSimilarity->value());
+    DuplicatesFinder* const finder = new DuplicatesFinder(d->albumSelectors->selectedPAlbums(),
+                                                          d->albumSelectors->selectedTAlbums(),
+                                                          d->minSimilarity->value(),
+                                                          d->maxSimilarity->value(),
+                                                          d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt());
 
     connect(finder, SIGNAL(signalComplete()),
             this, SLOT(slotComplete()));

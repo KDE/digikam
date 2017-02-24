@@ -143,6 +143,7 @@ const QString ApplicationSettings::Private::configCleanAtStartEntry(QLatin1Strin
 const QString ApplicationSettings::Private::configMinimumSimilarityBound(QLatin1String("Lower bound for minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMinSimilarity(QLatin1String("Last minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMaxSimilarity(QLatin1String("Last maximum similarity"));
+const QString ApplicationSettings::Private::configDuplicatesSearchLastRestrictions(QLatin1String("Last search results restriction"));
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
@@ -224,6 +225,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       minimumSimilarityBound(40),
       duplicatesSearchLastMinSimilarity(90),
       duplicatesSearchLastMaxSimilarity(100),
+      duplicatesSearchLastRestrictions(0),
       q(qq)
 {
 }
@@ -337,6 +339,7 @@ void ApplicationSettings::Private::init()
     minimumSimilarityBound              = 40;
     duplicatesSearchLastMinSimilarity   = 90;
     duplicatesSearchLastMaxSimilarity   = 100;
+    duplicatesSearchLastRestrictions    = 0;
 
     scanAtStart                         = true;
     cleanAtStart                        = true;

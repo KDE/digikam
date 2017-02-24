@@ -259,4 +259,14 @@ int  ApplicationSettings::getDuplicatesSearchLastMaxSimilarity() const
     return d->duplicatesSearchLastMaxSimilarity;
 }
 
+void ApplicationSettings::setDuplicatesSearchRestrictions(int val)
+{
+    d->duplicatesSearchLastRestrictions = val;
+}
+
+int  ApplicationSettings::getDuplicatesSearchRestrictions() const
+{
+    return d->duplicatesSearchLastRestrictions;
+}
+
 }  // namespace Digikam

@@ -434,6 +434,9 @@ public:
     void setDuplicatesSearchLastMaxSimilarity(int val);
     int  getDuplicatesSearchLastMaxSimilarity() const;
 
+    void setDuplicatesSearchRestrictions(int val);
+    int  getDuplicatesSearchRestrictions() const;
+
 private Q_SLOTS:
 
     void applyBalooSettings();

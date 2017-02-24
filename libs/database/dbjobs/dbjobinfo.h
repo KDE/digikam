@@ -160,6 +160,9 @@ public:
     void setMaxThreshold(double t);
     double maxThreshold() const;
 
+    void setSearchResultRestriction(int type);
+    int searchResultRestriction() const;
+
     void setAlbumsIds(const QList<int>& albumsIds);
     QList<int> albumsIds() const;
 
@@ -173,6 +176,7 @@ public:
 
     bool             m_duplicates;
     bool             m_albumUpdate;
+    int              m_searchResultRestriction;
     QList<int>       m_searchIds;
     double           m_minThreshold;
     double           m_maxThreshold;
