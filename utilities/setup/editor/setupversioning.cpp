@@ -398,7 +398,7 @@ void SetupVersioning::applySettings()
     }
     else
     {
-        settings.showInViewFlags &= VersionManagerSettings::ShowOriginal;
+        settings.showInViewFlags &= ~VersionManagerSettings::ShowOriginal;
     }
 
     if (d->viewShowSnapshots->isChecked())
