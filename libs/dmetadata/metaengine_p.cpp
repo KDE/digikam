@@ -50,13 +50,13 @@ extern "C"
 
 // Pragma directives to reduce warnings from Exiv2.
 #if !defined(__APPLE__) && defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 #if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 namespace Digikam
@@ -159,7 +159,8 @@ bool MetaEngine::Private::saveToFile(const QFileInfo& finfo) const
     if (!writeRawFiles && (rawTiffBasedSupported.contains(ext) || rawTiffBasedNotSupported.contains(ext)) )
     {
         qCDebug(DIGIKAM_METAENGINE_LOG) << finfo.fileName()
-                               << "is a TIFF based RAW file, writing to such a file is disabled by current settings.";
+                                        << "is a TIFF based RAW file, "
+                                        << "writing to such a file is disabled by current settings.";
         return false;
     }
 
@@ -207,7 +208,10 @@ bool MetaEngine::Private::saveOperations(const QFileInfo& finfo, Exiv2::Image::A
     try
     {
         Exiv2::AccessMode mode;
-        bool wroteComment = false, wroteEXIF = false, wroteIPTC = false, wroteXMP = false;
+        bool wroteComment = false;
+        bool wroteEXIF    = false;
+        bool wroteIPTC    = false;
+        bool wroteXMP     = false;
 
         // We need to load target file metadata to merge with new one. It's mandatory with TIFF format:
         // like all tiff file structure is based on Exif.
@@ -375,8 +379,8 @@ void MetaEngineData::Private::clear()
 void MetaEngine::Private::printExiv2ExceptionError(const QString& msg, Exiv2::Error& e)
 {
     std::string s(e.what());
-    qCCritical(DIGIKAM_METAENGINE_LOG) << msg.toLatin1().constData() << " (Error #"
-                              << e.code() << ": " << s.c_str();
+    qCCritical(DIGIKAM_METAENGINE_LOG) << msg.toLatin1().constData()
+                                       << " (Error #" << e.code() << ": " << s.c_str();
 }
 
 void MetaEngine::Private::printExiv2MessageHandler(int lvl, const char* msg)
@@ -416,7 +420,18 @@ QString MetaEngine::Private::convertCommentValue(const Exiv2::Exifdatum& exifDat
         else if (charset == "\"Jis\"")
         {
             QTextCodec* const codec = QTextCodec::codecForName("JIS7");
-            return codec->toUnicode(comment.c_str());
+
+            if (codec)
+            {
+                const char* tmp = comment.c_str();
+
+                if (tmp)
+                {
+                    return codec->toUnicode(tmp);
+                }
+            }
+
+            return QLatin1String("");
         }
         else if (charset == "\"Ascii\"")
         {
@@ -468,11 +483,13 @@ QString MetaEngine::Private::detectEncodingAndDecode(const std::string& value) c
 bool MetaEngine::Private::isUtf8(const char* const buffer) const
 {
     int i, n;
-   unsigned char c;
+    unsigned char c;
     bool gotone = false;
 
     if (!buffer)
+    {
         return true;
+    }
 
 // character never appears in text
 #define F 0
@@ -485,28 +502,28 @@ bool MetaEngine::Private::isUtf8(const char* const buffer) const
 
     static const unsigned char text_chars[256] =
     {
-            //                  BEL BS HT LF    FF CR
-            F, F, F, F, F, F, F, T, T, T, T, F, T, T, F, F,  // 0x0X
-            //                              ESC
-            F, F, F, F, F, F, F, F, F, F, F, T, F, F, F, F,  // 0x1X
-            T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x2X
-            T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x3X
-            T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x4X
-            T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x5X
-            T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x6X
-            T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, F,  // 0x7X
-            //            NEL
-            X, X, X, X, X, T, X, X, X, X, X, X, X, X, X, X,  // 0x8X
-            X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,  // 0x9X
-            I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xaX
-            I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xbX
-            I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xcX
-            I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xdX
-            I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xeX
-            I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I   // 0xfX
+        //                  BEL BS HT LF    FF CR
+        F, F, F, F, F, F, F, T, T, T, T, F, T, T, F, F,  // 0x0X
+        //                              ESC
+        F, F, F, F, F, F, F, F, F, F, F, T, F, F, F, F,  // 0x1X
+        T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x2X
+        T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x3X
+        T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x4X
+        T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x5X
+        T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T,  // 0x6X
+        T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, F,  // 0x7X
+        //            NEL
+        X, X, X, X, X, T, X, X, X, X, X, X, X, X, X, X,  // 0x8X
+        X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,  // 0x9X
+        I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xaX
+        I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xbX
+        I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xcX
+        I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xdX
+        I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I,  // 0xeX
+        I, I, I, I, I, I, I, I, I, I, I, I, I, I, I, I   // 0xfX
     };
 
-    for (i = 0; (c = buffer[i]); ++i)
+    for (i = 0 ; (c = buffer[i]) ; ++i)
     {
         if ((c & 0x80) == 0)
         {
@@ -516,8 +533,9 @@ bool MetaEngine::Private::isUtf8(const char* const buffer) const
             // still reject it if it uses weird control characters.
 
             if (text_chars[c] != T)
+            {
                 return false;
-
+            }
         }
         else if ((c & 0x40) == 0)
         {
@@ -559,15 +577,19 @@ bool MetaEngine::Private::isUtf8(const char* const buffer) const
                 return false;
             }
 
-            for (n = 0; n < following; ++n)
+            for (n = 0 ; n < following ; ++n)
             {
                 i++;
 
                 if (!(c = buffer[i]))
+                {
                     goto done;
+                }
 
                 if ((c & 0x80) == 0 || (c & 0x40))
+                {
                     return false;
+                }
             }
 
             gotone = true;
@@ -720,13 +742,13 @@ void MetaEngine::Private::loadSidecarData(Exiv2::Image::AutoPtr xmpsidecar)
 }
 #endif // _XMP_SUPPORT_
 
-}  // namespace Digikam
+} // namespace Digikam
 
 // Restore warnings
 #if !defined(__APPLE__) && defined(__GNUC__)
-#pragma GCC diagnostic pop
+#   pragma GCC diagnostic pop
 #endif
 
 #if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
