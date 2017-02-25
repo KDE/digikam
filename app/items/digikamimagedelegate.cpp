@@ -96,6 +96,11 @@ void DigikamImageDelegate::updateRects()
         y             = d->ratingRect.bottom();
     }
 
+    {
+        d->specialInfoRect = d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
+        y           = d->nameRect.bottom();
+    }
+
     if (albumSettings->getIconShowName())
     {
         d->nameRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());

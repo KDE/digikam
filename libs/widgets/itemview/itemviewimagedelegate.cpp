@@ -314,6 +314,14 @@ void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, co
     }
 }
 
+void ItemViewImageDelegate::drawSpecialInfo(QPainter* p,const QRect& specialInfoRect, const QString& text) const
+{
+    Q_D(const ItemViewImageDelegate);
+
+    p->setFont(d->fontReg);
+    p->drawText(specialInfoRect, Qt::AlignCenter, squeezedTextCached(p, specialInfoRect.width(), text));
+}
+
 void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const
 {
     Q_D(const ItemViewImageDelegate);

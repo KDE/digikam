@@ -276,9 +276,9 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     QWidget* const space4      = new QWidget(d->dupeRestrictionBox);
     d->dupeRestrictionBox->setStretchFactor(space4, 10);
     d->searchResultRestriction = new QComboBox(d->dupeRestrictionBox);
-    d->searchResultRestriction->addItem(i18n("No restriction"),              HaarIface::DuplicatesSearchRestrictions::None);
-    d->searchResultRestriction->addItem(i18n("Restrict to same album"),      HaarIface::DuplicatesSearchRestrictions::SameAlbum);
-    d->searchResultRestriction->addItem(i18n("Restrict to different album"), HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
+    d->searchResultRestriction->addItem(i18n("No restriction"),                       HaarIface::DuplicatesSearchRestrictions::None);
+    d->searchResultRestriction->addItem(i18n("Restrict to album of reference image"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
+    d->searchResultRestriction->addItem(i18n("Exclude album of reference image"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
 
     // Load the last choice from application settings.
     HaarIface::DuplicatesSearchRestrictions restrictions = HaarIface::DuplicatesSearchRestrictions::None;
@@ -290,7 +290,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(restrictions));
 
     d->expanderBox->insertItem(Private::Duplicates, d->duplicatesBox, QIcon::fromTheme(QLatin1String("tools-wizard")),
-                               i18n("Find Duplicates Items"), QLatin1String("Duplicates"), false);
+                               i18n("Find Duplicate Items"), QLatin1String("Duplicates"), false);
     d->expanderBox->setCheckBoxVisible(Private::Duplicates, true);
 
     // --------------------------------------------------------------------------------------

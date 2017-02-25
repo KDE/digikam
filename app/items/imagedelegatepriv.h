@@ -65,6 +65,7 @@ public:
     QRect                 dateRect;
     QRect                 modDateRect;
     QRect                 pixmapRect;
+    QRect                 specialInfoRect;
     QRect                 nameRect;
     QRect                 titleRect;
     QRect                 commentsRect;

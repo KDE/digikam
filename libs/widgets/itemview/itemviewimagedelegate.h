@@ -102,6 +102,7 @@ protected:
     /// Use the tool methods for painting in subclasses
     QRect drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background, const QPixmap& thumbnail) const;
     void drawRating(QPainter* p, const QModelIndex& index, const QRect& ratingRect, int rating, bool isSelected)  const;
+    void drawSpecialInfo(QPainter* p,const QRect& specialInfoRect, const QString& text)                           const;
     void drawName(QPainter* p,const QRect& nameRect, const QString& name)                                         const;
     void drawTitle(QPainter *p, const QRect& titleRect, const QString& title)                                     const;
     void drawComments(QPainter* p, const QRect& commentsRect, const QString& comments)                            const;

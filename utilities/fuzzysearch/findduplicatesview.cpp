@@ -159,9 +159,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
 
     d->searchResultRestriction = new QComboBox;
-    d->searchResultRestriction->addItem(i18nc("@label:listbox", "No restriction"),              HaarIface::DuplicatesSearchRestrictions::None);
-    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Restrict to same album"),      HaarIface::DuplicatesSearchRestrictions::SameAlbum);
-    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Restrict to different album"), HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
+    d->searchResultRestriction->addItem(i18nc("@label:listbox", "No restriction"),                       HaarIface::DuplicatesSearchRestrictions::None);
+    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Restrict to album of reference image"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
+    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Exclude album of reference image"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
 
     // Load the last choice from application settings.
     HaarIface::DuplicatesSearchRestrictions restrictions = (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions();

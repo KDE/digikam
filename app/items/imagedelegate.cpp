@@ -59,6 +59,7 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     dateRect             = QRect(0, 0, 0, 0);
     modDateRect          = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
+    specialInfoRect      = QRect(0, 0, 0, 0);
     nameRect             = QRect(0, 0, 0, 0);
     titleRect            = QRect(0, 0, 0, 0);
     commentsRect         = QRect(0, 0, 0, 0);
@@ -283,6 +284,14 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         p->drawPixmap(d->pixmapRect.right()-24, d->pixmapRect.bottom()-24, QIcon::fromTheme(QLatin1String("svn_switch")).pixmap(22, 22));
     }
 */
+
+    if (!d->specialInfoRect.isNull())
+    {
+        if (info.id() == info.currentReferenceImage())
+        {
+            drawSpecialInfo(p, d->specialInfoRect, i18n("Reference Image"));
+        }
+    }
 
     if (!d->nameRect.isNull())
     {
