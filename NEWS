@@ -15,6 +15,7 @@ Searches    : Improved the exactness of similarity recognition for external imag
 Searches    : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
 Searches    : The results of duplicates searches can now be restricted. It is now possible to restrict the duplicates to the ones that
               are in the same album as the reference image or in another album. This feature is also usable in maintenance.
+Searches    : In duplicates view, the reference image is more clearly identified by the description reference image in the image information.
 Tags        : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 BQM         : Several usability improvements in Watermark tool.
 General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.
