@@ -99,5 +99,9 @@ BUGFIXES FROM BUGZILLA:
 074 ==> 376815 - Restore from Trash works incorrectly.
 075 ==> 376820 - Make mime type settings GUI more consistent [patch].
 076 ==> 376615 - Missing icon in GNOME shell dock.
-077 ==> 
+077 ==> 376885 - The setting 'Always show original images' cannot be disabled in 5.5.0.
+078 ==> 376721 - Poor quality colour management in Preview vs Editor.
+079 ==> 376898 - Crash when scanning photo containing exif with empty Jis comment (Digikam::MetaEngine::getExifComment, QTextCodec::toUnicode) [patch].
+080 ==> 374248 - importing photo, bad file selector.
+081 ==> 
 

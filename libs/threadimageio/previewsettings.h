@@ -49,7 +49,7 @@ public:
          */
         FastButLargePreview,
         /**
-         * Load a high quality iadditionalmage. For normal images, loads the full data.
+         * Load a high quality additional image. For normal images, loads the full data.
          * For RAW, the additional settings below are taken into account
          */
         HighQualityPreview
@@ -72,7 +72,7 @@ public:
     Quality    quality;
     RawLoading rawLoading;
     bool       zoomOrgSize;
-
+    bool       convertToEightBit;
 };
 
 }   // namespace Digikam

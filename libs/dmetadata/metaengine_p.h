@@ -58,7 +58,7 @@
 // See http://gcc.gnu.org/wiki/Visibility, the section about c++ exceptions.
 // They are needed for all libexiv2 versions that do not care about visibility.
 #ifdef __GNUC__
-#pragma GCC visibility push(default)
+#   pragma GCC visibility push(default)
 #endif
 
 #include <exiv2/exv_conf.h>
@@ -95,7 +95,7 @@
 // and wiki topic           http://dev.exiv2.org/boards/3/topics/583
 
 #ifdef __GNUC__
-#pragma GCC visibility pop
+#   pragma GCC visibility pop
 #endif
 
 // End of Exiv2 headers ------------------------------------------------------
@@ -128,8 +128,8 @@ class Q_DECL_HIDDEN MetaEngine::Private
 {
 public:
 
-    Private();
-    ~Private();
+    explicit Private();
+    virtual ~Private();
 
     void copyPrivateData(const Private* const other);
 
@@ -183,20 +183,20 @@ public:
 
 public:
 
-    bool                                           writeRawFiles;
-    bool                                           updateFileTimeStamp;
+    bool                                        writeRawFiles;
+    bool                                        updateFileTimeStamp;
 
-    bool                                           useXMPSidecar4Reading;
+    bool                                        useXMPSidecar4Reading;
 
     /// A mode from #MetadataWritingMode enum.
-    int                                            metadataWritingMode;
+    int                                         metadataWritingMode;
 
     /// XMP, and parts of EXIF/IPTC, were loaded from an XMP sidecar file
-    bool                                           loadedFromSidecar;
+    bool                                        loadedFromSidecar;
 
-    QString                                        filePath;
-    QSize                                          pixelSize;
-    QString                                        mimeType;
+    QString                                     filePath;
+    QSize                                       pixelSize;
+    QString                                     mimeType;
 
     QSharedDataPointer<MetaEngineData::Private> data;
 };
@@ -223,7 +223,7 @@ public:
       */
     void mergeAll(const Data& src, Data& dest)
     {
-        for (typename Data::const_iterator it = src.begin(); it != src.end(); ++it)
+        for (typename Data::const_iterator it = src.begin() ; it != src.end() ; ++it)
         {
             typename Data::iterator destIt = dest.findKey(Key(it->key()));
 
@@ -281,7 +281,7 @@ public:
         {
             Key key(keyString.latin1());
             typename Data::const_iterator it = src.findKey(key);
-            typename Data::iterator destIt = dest.findKey(key);
+            typename Data::iterator destIt   = dest.findKey(key);
 
             if (destIt == dest.end())
             {
@@ -319,6 +319,6 @@ class XmpMergeHelper : public MergeHelper<Exiv2::XmpData, Exiv2::XmpKey, QLatin1
 };
 #endif
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // META_ENGINE_PRIVATE_H

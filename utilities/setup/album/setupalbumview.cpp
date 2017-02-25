@@ -83,6 +83,7 @@ public:
         previewFastPreview(0),
         previewFullView(0),
         previewRawMode(0),
+        previewConvertToEightBit(0),
         previewZoomOrgSize(0),
         previewShowIcons(0),
         showFolderTreeViewItemsCount(0),
@@ -120,6 +121,7 @@ public:
     QRadioButton*       previewFastPreview;
     QRadioButton*       previewFullView;
     QComboBox*          previewRawMode;
+    QCheckBox*          previewConvertToEightBit;
     QCheckBox*          previewZoomOrgSize;
     QCheckBox*          previewShowIcons;
     QCheckBox*          showFolderTreeViewItemsCount;
@@ -299,21 +301,25 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->previewRawMode->addItem(i18nc("@option:inlistbox Original, half-size data as RAW image preview source",
                                      "Raw data in half size"), PreviewSettings::RawPreviewFromRawHalfSize);
 
-    d->previewZoomOrgSize = new QCheckBox(i18n("Embedded view zoomed to the original image size"), pwpanel);
+    d->previewConvertToEightBit   = new QCheckBox(i18n("The preview image is converted to 8 bits for a faster viewing"), pwpanel);
+    d->previewConvertToEightBit->setWhatsThis(i18n("Uncheck this if you do not want to convert a 16 bits preview image to 8 bits."));
+
+    d->previewZoomOrgSize         = new QCheckBox(i18n("Embedded view zoomed to the original image size"), pwpanel);
     d->previewZoomOrgSize->setWhatsThis(i18n("Uncheck this if you do not want to zoom the embedded view to the original image size."));
 
-    d->previewShowIcons   = new QCheckBox(i18n("Show icons and text over preview"), pwpanel);
+    d->previewShowIcons           = new QCheckBox(i18n("Show icons and text over preview"), pwpanel);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
 
     grid3->setContentsMargins(spacing, spacing, spacing, spacing);
     grid3->setSpacing(spacing);
-    grid3->addWidget(d->previewFastPreview, 0, 0, 1, 2);
-    grid3->addWidget(d->previewFullView,    1, 0, 1, 2);
-    grid3->addWidget(rawPreviewLabel,       2, 0, 1, 1);
-    grid3->addWidget(d->previewRawMode,     2, 1, 1, 1);
-    grid3->addWidget(d->previewZoomOrgSize, 3, 0, 1, 2);
-    grid3->addWidget(d->previewShowIcons,   4, 0, 1, 2);
-    grid3->setRowStretch(5, 10);
+    grid3->addWidget(d->previewFastPreview,       0, 0, 1, 2);
+    grid3->addWidget(d->previewFullView,          1, 0, 1, 2);
+    grid3->addWidget(rawPreviewLabel,             2, 0, 1, 1);
+    grid3->addWidget(d->previewRawMode,           2, 1, 1, 1);
+    grid3->addWidget(d->previewConvertToEightBit, 3, 0, 1, 2);
+    grid3->addWidget(d->previewZoomOrgSize,       4, 0, 1, 2);
+    grid3->addWidget(d->previewShowIcons,         5, 0, 1, 2);
+    grid3->setRowStretch(6, 10);
 
     d->previewFastPreview->setChecked(true);
     d->previewRawMode->setCurrentIndex(0);
@@ -396,9 +402,10 @@ void SetupAlbumView::applySettings()
                                      d->leftClickActionComboBox->currentIndex());
 
     PreviewSettings previewSettings;
-    previewSettings.quality     = d->previewFastPreview->isChecked() ? PreviewSettings::FastPreview : PreviewSettings::HighQualityPreview;
-    previewSettings.rawLoading  = (PreviewSettings::RawLoading)d->previewRawMode->itemData(d->previewRawMode->currentIndex()).toInt();
-    previewSettings.zoomOrgSize = d->previewZoomOrgSize->isChecked();
+    previewSettings.quality           = d->previewFastPreview->isChecked() ? PreviewSettings::FastPreview : PreviewSettings::HighQualityPreview;
+    previewSettings.rawLoading        = (PreviewSettings::RawLoading)d->previewRawMode->itemData(d->previewRawMode->currentIndex()).toInt();
+    previewSettings.convertToEightBit = d->previewConvertToEightBit->isChecked();
+    previewSettings.zoomOrgSize       = d->previewZoomOrgSize->isChecked();
     settings->setPreviewSettings(previewSettings);
 
     settings->setPreviewShowIcons(d->previewShowIcons->isChecked());
@@ -479,6 +486,7 @@ void SetupAlbumView::readSettings()
 
     d->previewZoomOrgSize->setChecked(previewSettings.zoomOrgSize);
     d->previewShowIcons->setChecked(settings->getPreviewShowIcons());
+    d->previewConvertToEightBit->setChecked(previewSettings.convertToEightBit);
     d->showFolderTreeViewItemsCount->setChecked(settings->getShowFolderTreeViewItemsCount());
 
     KConfigGroup group = KSharedConfig::openConfig()->group(settings->generalConfigGroupName());

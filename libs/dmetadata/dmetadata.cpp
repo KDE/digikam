@@ -95,7 +95,7 @@ bool DMetadata::load(const QString& filePath) const
 
     if (!MetaEngine::load(filePath))
     {
-        if (!loadUsingDcraw(filePath))
+        if (!loadUsingRawEngine(filePath))
         {
             return false;
         }
@@ -116,7 +116,7 @@ bool DMetadata::applyChanges() const
     return MetaEngine::applyChanges();
 }
 
-bool DMetadata::loadUsingDcraw(const QString& filePath) const
+bool DMetadata::loadUsingRawEngine(const QString& filePath) const
 {
     RawInfo identify;
 

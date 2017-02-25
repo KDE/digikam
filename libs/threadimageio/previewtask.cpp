@@ -361,7 +361,10 @@ void PreviewLoadingTask::execute()
 
     if (continueQuery())
     {
-        m_img.convertToEightBit();
+        if (m_loadingDescription.previewParameters.previewSettings.convertToEightBit)
+        {
+            m_img.convertToEightBit();
+        }
 
         // Reduce size of image:
         // - only scale down if size is considerably larger

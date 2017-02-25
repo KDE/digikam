@@ -219,6 +219,7 @@ void ApplicationSettings::readSettings()
         d->previewSettings.quality = PreviewSettings::FastPreview;
     }
 
+    d->previewSettings.convertToEightBit = group.readEntry(d->configPreviewConvertToEightBitEntry,     true);
     d->previewSettings.zoomOrgSize       = group.readEntry(d->configPreviewZoomOrgSizeEntry,           true);
     d->previewShowIcons                  = group.readEntry(d->configPreviewShowIconsEntry,             true);
     d->showThumbbar                      = group.readEntry(d->configShowThumbbarEntry,                 true);
@@ -389,6 +390,7 @@ void ApplicationSettings::saveSettings()
         group.writeEntry(d->configPreviewLoadFullImageSizeEntry, false);
     }
 
+    group.writeEntry(d->configPreviewConvertToEightBitEntry,           d->previewSettings.convertToEightBit);
     group.writeEntry(d->configPreviewZoomOrgSizeEntry,                 d->previewSettings.zoomOrgSize);
     group.writeEntry(d->configPreviewShowIconsEntry,                   d->previewShowIcons);
     group.writeEntry(d->configShowThumbbarEntry,                       d->showThumbbar);
