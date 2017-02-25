@@ -102,4 +102,6 @@ BUGFIXES FROM BUGZILLA:
 077 ==> 376885 - The setting 'Always show original images' cannot be disabled in 5.5.0.
 078 ==> 376721 - Poor quality colour management in Preview vs Editor.
 079 ==> 376898 - Crash when scanning photo containing exif with empty Jis comment (Digikam::MetaEngine::getExifComment, QTextCodec::toUnicode) [patch].
-080 ==> 
+080 ==> 374248 - importing photo, bad file selector.
+081 ==> 
+
