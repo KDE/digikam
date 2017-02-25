@@ -66,9 +66,9 @@ public:
     bool save(const QString& filePath) const;
     bool applyChanges() const;
 
-    /** Try to extract metadata using dcraw identify method
+    /** Try to extract metadata using Raw Engine identify method
      */
-    bool loadUsingDcraw(const QString& filePath) const;
+    bool loadUsingRawEngine(const QString& filePath) const;
 
     /** Metadata manipulation methods */
 
