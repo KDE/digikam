@@ -208,10 +208,13 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
         cmdList << QLatin1String("%f");
     }
 
+    QString exec;
     QStringList dirs;
     QStringList files;
     QStringList cmdArgs;
-    QString exec = cmdList.takeFirst();
+
+    QProcess* const process = new QProcess();
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
     foreach(const QUrl& url, urls)
     {
@@ -221,6 +224,23 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
 
     foreach(const QString& cmd, cmdList)
     {
+        if (exec.isEmpty() && cmd.contains(QLatin1Char('=')))
+        {
+            QStringList envList = cmd.split(QLatin1Char('='), QString::SkipEmptyParts);
+
+            if (envList.count() == 2)
+            {
+                env.insert(envList[0], envList[1]);
+            }
+
+            continue;
+        }
+        else if (exec.isEmpty())
+        {
+            exec = cmd;
+            continue;
+        }
+
         if (cmd == QLatin1String("%c"))
             cmdArgs << name;
         else if (cmd == QLatin1String("%i"))
@@ -241,7 +261,10 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
             cmdArgs << cmd;
     }
 
-    return (QProcess::startDetached(exec, cmdArgs));
+    process->setProcessEnvironment(env);
+    process->start(exec, cmdArgs);
+
+    return process->waitForStarted();
 }
 
 KService::List FileOperation::servicesForOpenWith(const QList<QUrl>& urls)
