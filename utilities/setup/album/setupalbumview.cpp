@@ -301,11 +301,11 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->previewRawMode->addItem(i18nc("@option:inlistbox Original, half-size data as RAW image preview source",
                                      "Raw data in half size"), PreviewSettings::RawPreviewFromRawHalfSize);
 
-    d->previewConvertToEightBit   = new QCheckBox(i18n("The preview image is converted to 8 bits for a faster viewing"), pwpanel);
+    d->previewConvertToEightBit   = new QCheckBox(i18n("Preview image is converted to 8 bits for a faster viewing"), pwpanel);
     d->previewConvertToEightBit->setWhatsThis(i18n("Uncheck this if you do not want to convert a 16 bits preview image to 8 bits."));
 
-    d->previewZoomOrgSize         = new QCheckBox(i18n("Embedded view zoomed to the original image size"), pwpanel);
-    d->previewZoomOrgSize->setWhatsThis(i18n("Uncheck this if you do not want to zoom the embedded view to the original image size."));
+    d->previewZoomOrgSize         = new QCheckBox(i18n("Preview is zoomed to the original image size"), pwpanel);
+    d->previewZoomOrgSize->setWhatsThis(i18n("Uncheck this if you do not want to zoom the preview to the original image size."));
 
     d->previewShowIcons           = new QCheckBox(i18n("Show icons and text over preview"), pwpanel);
     d->previewShowIcons->setWhatsThis(i18n("Uncheck this if you do not want to see icons and text in the image preview."));
