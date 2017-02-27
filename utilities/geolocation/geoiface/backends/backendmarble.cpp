@@ -1421,6 +1421,7 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
                 d->mouseMoveClusterIndex            = -1;
                 d->mouseMoveMarkerIndex             = QPersistentModelIndex();
                 s->haveMovingCluster                = false;
+                doFilterEvent                       = true;
 
                 emit(signalClustersClicked(QIntList() << mouseMoveClusterIndex));
             }
