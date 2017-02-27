@@ -25,6 +25,7 @@ if (NOT APPLE)
                     ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
                     ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
+                    ${_qt5_install_prefix}/../../../include/i386-linux-gnu/qt5       # For Mint32 (possibly all 32 Debian)
               PATH_SUFFIXES QtAV
     )
 
@@ -34,6 +35,7 @@ if (NOT APPLE)
                     ${_qt5_install_prefix}/../qt5/include                            # For Mageia
                     ${_qt5_install_prefix}/../../include/qt5                         # For Suse
                     ${_qt5_install_prefix}/../../../include/x86_64-linux-gnu/qt5     # For Debian
+                    ${_qt5_install_prefix}/../../../include/i386-linux-gnu/qt5       # For Mint32 (possibly all 32 Debian)
               PATH_SUFFIXES QtAVWidgets
     )
 
