@@ -60,12 +60,18 @@ enum DropAction
     CopyAction,
     MoveAction,
     GroupAction,
+    GroupAndMoveAction,
     AssignTagAction
 };
 
 static QAction* addGroupAction(QMenu* const menu)
 {
     return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image", "Group here"));
+}
+
+static QAction* addGroupAndMoveAction(QMenu* const menu)
+{
+    return menu->addAction( QIcon::fromTheme(QLatin1String("go-bottom")), i18nc("@action:inmenu Group images with this image and move them to its album", "Group here and move to album"));
 }
 
 static QAction* addCancelAction(QMenu* const menu)
@@ -109,11 +115,13 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
     QAction* const copyAction = popMenu.addAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18n("&Copy Here"));
     popMenu.addSeparator();
 
-    QAction* groupAction = 0;
+    QAction* groupAction        = 0;
+    QAction* groupAndMoveAction = 0;
 
     if (askForGrouping)
     {
-        groupAction = addGroupAction(&popMenu);
+        groupAction        = addGroupAction(&popMenu);
+        groupAndMoveAction = addGroupAndMoveAction(&popMenu);
         popMenu.addSeparator();
     }
 
@@ -133,6 +141,10 @@ static DropAction copyOrMove(const QDropEvent* const e, QWidget* const view, boo
     else if (groupAction && choice == groupAction)
     {
         return GroupAction;
+    }
+    else if (groupAndMoveAction && choice == groupAndMoveAction)
+    {
+        return GroupAndMoveAction;
     }
 
     return NoAction;
@@ -427,6 +439,18 @@ bool ImageDragDropHandler::dropEvent(QAbstractItemView* abstractview, const QDro
             }
 
             emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
+            return true;
+        }
+
+        if (action == GroupAndMoveAction)
+        {
+            if (droppedOnInfo.isNull())
+            {
+                return false;
+            }
+
+            emit addToGroup(droppedOnInfo, ImageInfoList(imageIDs));
+            DIO::move(ImageInfoList(imageIDs), palbum);
             return true;
         }
 

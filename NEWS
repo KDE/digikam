@@ -107,5 +107,6 @@ BUGFIXES FROM BUGZILLA:
 081 ==> 376530 - Map jumps to 0/0 position when using "Zoom into a group".
 082 ==> 376928 - Changes on mimetypes are applied after restart [patch].
 083 ==> 377011 - A list of dependencies for setting up development environment.
-084 ==> 
+084 ==> 376020 - Moving of photos within the fuzzy search corrupts database
+085 ==>
 
