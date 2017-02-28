@@ -110,5 +110,6 @@ BUGFIXES FROM BUGZILLA:
 084 ==> 376020 - Moving of photos within the fuzzy search corrupts database
 085 ==> 375421 - Same name under "Albums" for different collections with same underlying name
 086 ==> 208713 - Quicker deletion of multiple duplicate images
-087 ==>
+087 ==> 372378 - Action after the search of the duplicated images
+088 ==>
 
