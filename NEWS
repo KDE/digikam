@@ -108,5 +108,6 @@ BUGFIXES FROM BUGZILLA:
 082 ==> 376928 - Changes on mimetypes are applied after restart [patch].
 083 ==> 377011 - A list of dependencies for setting up development environment.
 084 ==> 376020 - Moving of photos within the fuzzy search corrupts database
-085 ==>
+085 ==> 375421 - Same name under "Albums" for different collections with same underlying name
+086 ==>
 

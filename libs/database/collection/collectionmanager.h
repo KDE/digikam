@@ -193,6 +193,12 @@ public:
     QString albumRootPath(int id);
 
     /**
+     * Returns the album root label for the location with the given id.
+     * Returns a null QString if the location does not exist or is not available.
+     */
+    QString albumRootLabel(int id);
+
+    /**
      * For a given path, the part of the path that forms the album root is returned,
      * ending without a slash. Example: "/media/fotos/Paris 2007" gives "/media/fotos".
      * Only available (or hidden, but available) album roots are guaranteed to be found.

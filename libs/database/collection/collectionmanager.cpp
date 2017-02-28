@@ -1407,6 +1407,19 @@ QString CollectionManager::albumRootPath(int id)
     return QString();
 }
 
+QString CollectionManager::albumRootLabel(int id)
+{
+    CoreDbAccess access;
+    CollectionLocation* const location = d->locations.value(id);
+
+    if (location && location->status() == CollectionLocation::LocationAvailable)
+    {
+        return location->label();
+    }
+
+    return QString();
+}
+
 QUrl CollectionManager::albumRoot(const QUrl& fileUrl)
 {
     return QUrl::fromLocalFile(albumRootPath(fileUrl.adjusted(QUrl::StripTrailingSlash).toLocalFile()));

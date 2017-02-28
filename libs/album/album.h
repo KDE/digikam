@@ -361,18 +361,19 @@ public:
     void setCategory(const QString& category);
     void setDate(const QDate& date);
 
-    QString     albumRootPath() const;
-    int         albumRootId()   const;
-    QString     caption()       const;
-    QString     category()      const;
-    QDate       date()          const;
-    QString     albumPath()     const;
-    QString     prettyUrl()     const;
-    QString     folderPath()    const;
-    CoreDbUrl databaseUrl()   const;
-    QUrl        fileUrl()       const;
-    qlonglong   iconId()        const;
-    bool        isAlbumRoot()   const;
+    QString     albumRootPath()  const;
+    QString     albumRootLabel() const;
+    int         albumRootId()    const;
+    QString     caption()        const;
+    QString     category()       const;
+    QDate       date()           const;
+    QString     albumPath()      const;
+    QString     prettyUrl()      const;
+    QString     folderPath()     const;
+    CoreDbUrl   databaseUrl()    const;
+    QUrl        fileUrl()        const;
+    qlonglong   iconId()         const;
+    bool        isAlbumRoot()    const;
 
 private:
 

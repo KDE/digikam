@@ -432,6 +432,11 @@ QString PAlbum::albumRootPath() const
     return CollectionManager::instance()->albumRootPath(m_albumRootId);
 }
 
+QString PAlbum::albumRootLabel() const
+{
+    return CollectionManager::instance()->albumRootLabel(m_albumRootId);
+}
+
 int PAlbum::albumRootId() const
 {
     return m_albumRootId;
@@ -464,7 +469,7 @@ CoreDbUrl PAlbum::databaseUrl() const
 
 QString PAlbum::prettyUrl() const
 {
-    QString u = i18n("Albums") + albumRootPath().section(QLatin1Char('/'), -1, -1, QString::SectionIncludeLeadingSep) + albumPath();
+    QString u = i18n("Albums") + QLatin1Char('/') + albumRootLabel() + albumPath();
 
     if (u.endsWith(QLatin1Char('/')))
         u.truncate(u.length() - 1);
