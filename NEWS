@@ -109,5 +109,6 @@ BUGFIXES FROM BUGZILLA:
 083 ==> 377011 - A list of dependencies for setting up development environment.
 084 ==> 376020 - Moving of photos within the fuzzy search corrupts database
 085 ==> 375421 - Same name under "Albums" for different collections with same underlying name
-086 ==>
+086 ==> 208713 - Quicker deletion of multiple duplicate images
+087 ==>
 
