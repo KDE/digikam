@@ -272,7 +272,7 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
     d->maxSimilarity->setRange(d->minSimilarity->value(), 100, 1);
 
     d->dupeRestrictionBox      = new DHBox(d->duplicatesBox);
-    new QLabel(i18n("Restriction on results:"), d->dupeRestrictionBox);
+    new QLabel(i18n("Restriction on duplicates:"), d->dupeRestrictionBox);
     QWidget* const space4      = new QWidget(d->dupeRestrictionBox);
     d->dupeRestrictionBox->setStretchFactor(space4, 10);
     d->searchResultRestriction = new QComboBox(d->dupeRestrictionBox);

@@ -155,7 +155,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     d->similarityIntervalLabel = new QLabel(QLatin1String("-"));
 
-    d->restrictResultsLabel = new QLabel(i18n("Restriction on results:"));
+    d->restrictResultsLabel = new QLabel(i18n("Restriction on duplicates:"));
     d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
 
     d->searchResultRestriction = new QComboBox;
