@@ -111,5 +111,6 @@ BUGFIXES FROM BUGZILLA:
 085 ==> 375421 - Same name under "Albums" for different collections with same underlying name
 086 ==> 208713 - Quicker deletion of multiple duplicate images
 087 ==> 372378 - Action after the search of the duplicated images
-088 ==>
+088 ==> 202030 - Search duplicate images filtered by file type mime
+089 ==>
 
