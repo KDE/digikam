@@ -47,6 +47,7 @@
 #include "coredb.h"
 #include "applicationsettings.h"
 #include "coredbaccess.h"
+#include "scancontroller.h"
 
 namespace Digikam
 {
@@ -65,13 +66,13 @@ public:
     {
     }
 
-    QLabel*      imageFileFilterLabel;
-    QLabel*      movieFileFilterLabel;
-    QLabel*      audioFileFilterLabel;
+    QLabel*    imageFileFilterLabel;
+    QLabel*    movieFileFilterLabel;
+    QLabel*    audioFileFilterLabel;
 
-    QLineEdit*   imageFileFilterEdit;
-    QLineEdit*   movieFileFilterEdit;
-    QLineEdit*   audioFileFilterEdit;
+    QLineEdit* imageFileFilterEdit;
+    QLineEdit* movieFileFilterEdit;
+    QLineEdit* audioFileFilterEdit;
 };
 
 SetupMime::SetupMime(QWidget* const parent)
@@ -92,7 +93,9 @@ SetupMime::SetupMime(QWidget* const parent)
                                    "<p>digiKam attempts to support all of the image formats that digital cameras produce, "
                                    "while being able to handle a few other important video and audio formats.</p> "
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "
-                                   "adding the extension of the type you want to add. Multiple extensions need to be separated by a space.</p>"));
+                                   "adding the extension of the type you want to add. "
+                                   "Multiple extensions need to be separated by a space.</p>"
+                                   "<p><b><u>Note:</u> all changes done in this view will perform a database re-scan in background.</b></p>"));
     explanationLabel->setWordWrap(true);
 
     // --------------------------------------------------------
@@ -144,7 +147,7 @@ SetupMime::SetupMime(QWidget* const parent)
                                               "to be displayed in your Album view. Just write \"xyz abc\" "
                                               "to support files with the *.xyz and *.abc extensions. "
                                               "Clicking on these files will "
-                                              "play them in an embedded KDE movie player.</p>"
+                                              "play them in an embedded movie player.</p>"
                                               "<p>You can also remove file formats that are supported by default "
                                               "by putting a minus sign in front of the extension: e.g. \"-avi\" would remove "
                                               "all AVI files from your Album view and any trace of them in your database. "
@@ -176,10 +179,10 @@ SetupMime::SetupMime(QWidget* const parent)
     DHBox* const hbox3       = new DHBox(audioFileFilterBox);
     d->audioFileFilterEdit   = new QLineEdit(hbox3);
     d->audioFileFilterEdit->setWhatsThis(i18n("<p>Here you can add extra extensions of audio files "
-                                              "to be displayed in your Album view. Just write \"mp7\" "
-                                              "to support files with the *.mp7 extension. "
+                                              "to be displayed in your Album view. Just write \"xyz abc\" "
+                                              "to support files with the *.xyz and *.abc extensions. "
                                               "Clicking on these files will "
-                                              "play them in an embedded KDE audio player.</p>"
+                                              "play them in an embedded audio player.</p>"
                                               "<p>You can also remove file formats that are supported by default "
                                               "by putting a minus sign in front of the extension: e.g. \"-ogg\" would "
                                               "remove all OGG files from your Album view and any trace of them in your database. "
@@ -265,14 +268,30 @@ void SetupMime::applySettings()
         }
     }
 
-    CoreDbAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
-                                               d->movieFileFilterEdit->text(),
-                                               d->audioFileFilterEdit->text());
+    QString imageFilterString;
+    QString movieFilterString;
+    QString audioFilterString;
+
+    CoreDbAccess().db()->getUserFilterSettings(&imageFilterString, &movieFilterString, &audioFilterString);
+
+    if(d->imageFileFilterEdit->text() != imageFilterString ||
+       d->movieFileFilterEdit->text() != movieFilterString ||
+       d->audioFileFilterEdit->text() != audioFilterString)
+    {
+        CoreDbAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
+                                                   d->movieFileFilterEdit->text(),
+                                                   d->audioFileFilterEdit->text());
+
+        ScanController::instance()->completeCollectionScanInBackground(false);
+    }
 }
 
 void SetupMime::readSettings()
 {
-    QString image, audio, video;
+    QString image;
+    QString audio;
+    QString video;
+
     CoreDbAccess().db()->getUserFilterSettings(&image, &video, &audio);
 
     d->imageFileFilterEdit->setText(image);

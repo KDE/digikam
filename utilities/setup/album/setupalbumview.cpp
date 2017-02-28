@@ -154,59 +154,59 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    QGridLayout* const grid  = new QGridLayout(iwpanel);
+    QGridLayout* const grid   = new QGridLayout(iwpanel);
 
-    d->iconShowNameBox       = new QCheckBox(i18n("Show file&name"), iwpanel);
+    d->iconShowNameBox        = new QCheckBox(i18n("Show file&name"), iwpanel);
     d->iconShowNameBox->setWhatsThis(i18n("Set this option to show the filename below the image thumbnail."));
 
-    d->iconShowSizeBox       = new QCheckBox(i18n("Show file si&ze"), iwpanel);
+    d->iconShowSizeBox        = new QCheckBox(i18n("Show file si&ze"), iwpanel);
     d->iconShowSizeBox->setWhatsThis(i18n("Set this option to show the file size below the image thumbnail."));
 
-    d->iconShowDateBox       = new QCheckBox(i18n("Show camera creation &date"), iwpanel);
+    d->iconShowDateBox        = new QCheckBox(i18n("Show camera creation &date"), iwpanel);
     d->iconShowDateBox->setWhatsThis(i18n("Set this option to show the camera creation date "
                                           "below the image thumbnail."));
 
-    d->iconShowModDateBox    = new QCheckBox(i18n("Show file &modification date"), iwpanel);
+    d->iconShowModDateBox     = new QCheckBox(i18n("Show file &modification date"), iwpanel);
     d->iconShowModDateBox->setWhatsThis(i18n("Set this option to show the file modification date "
                                              "below the image thumbnail if it's different than camera creation date. "
                                              "This option is useful to identify quickly which items have been modified."));
 
-    d->iconShowResolutionBox = new QCheckBox(i18n("Show ima&ge dimensions"), iwpanel);
+    d->iconShowResolutionBox  = new QCheckBox(i18n("Show ima&ge dimensions"), iwpanel);
     d->iconShowResolutionBox->setWhatsThis(i18n("Set this option to show the image size in pixels "
                                                 "below the image thumbnail."));
 
-    d->iconShowAspectRatioBox = new QCheckBox(i18n("Show image aspect ratio"), iwpanel);
+    d->iconShowAspectRatioBox  = new QCheckBox(i18n("Show image aspect ratio"), iwpanel);
     d->iconShowAspectRatioBox->setWhatsThis(i18n("Set this option to show the image aspect ratio "
                                                 "below the image thumbnail."));
 
-    d->iconShowFormatBox      = new QCheckBox(i18n("Show image format"), iwpanel);
+    d->iconShowFormatBox       = new QCheckBox(i18n("Show image format"), iwpanel);
     d->iconShowFormatBox->setWhatsThis(i18n("Set this option to show image mime type over image thumbnail."));
 
-    d->iconShowTitleBox       = new QCheckBox(i18n("Show digiKam tit&le"), iwpanel);
+    d->iconShowTitleBox        = new QCheckBox(i18n("Show digiKam tit&le"), iwpanel);
     d->iconShowTitleBox->setWhatsThis(i18n("Set this option to show the digiKam title "
                                            "below the image thumbnail."));
 
-    d->iconShowCommentsBox    = new QCheckBox(i18n("Show digiKam &captions"), iwpanel);
+    d->iconShowCommentsBox     = new QCheckBox(i18n("Show digiKam &captions"), iwpanel);
     d->iconShowCommentsBox->setWhatsThis(i18n("Set this option to show the digiKam captions "
                                               "below the image thumbnail."));
 
-    d->iconShowTagsBox        = new QCheckBox(i18n("Show digiKam &tags"), iwpanel);
+    d->iconShowTagsBox         = new QCheckBox(i18n("Show digiKam &tags"), iwpanel);
     d->iconShowTagsBox->setWhatsThis(i18n("Set this option to show the digiKam tags list "
                                           "below the image thumbnail."));
 
-    d->iconShowRatingBox      = new QCheckBox(i18n("Show digiKam &rating"), iwpanel);
+    d->iconShowRatingBox       = new QCheckBox(i18n("Show digiKam &rating"), iwpanel);
     d->iconShowRatingBox->setWhatsThis(i18n("Set this option to show the digiKam rating "
                                             "below the image thumbnail."));
 
-    d->iconShowOverlaysBox    = new QCheckBox(i18n("Show rotation overlay buttons"), iwpanel);
+    d->iconShowOverlaysBox     = new QCheckBox(i18n("Show rotation overlay buttons"), iwpanel);
     d->iconShowOverlaysBox->setWhatsThis(i18n("Set this option to show overlay buttons over "
                                               "the image thumbnail to be able to process left or right image rotation."));
 
-    d->iconShowFullscreenBox  = new QCheckBox(i18n("Show fullscreen overlay button"), iwpanel);
+    d->iconShowFullscreenBox   = new QCheckBox(i18n("Show fullscreen overlay button"), iwpanel);
     d->iconShowFullscreenBox->setWhatsThis(i18n("Set this option to show an overlay button over the "
                                                 "image thumbnail to open it in fullscreen mode."));
 
-    d->iconShowCoordinatesBox = new QCheckBox(i18n("Show Geolocation Indicator"), iwpanel);
+    d->iconShowCoordinatesBox  = new QCheckBox(i18n("Show Geolocation Indicator"), iwpanel);
     d->iconShowCoordinatesBox->setWhatsThis(i18n("Set this option to show an icon over the image thumbnail if item has geolocation information."));
 
     QLabel* leftClickLabel     = new QLabel(i18n("Thumbnail click action:"), iwpanel);
@@ -215,7 +215,7 @@ SetupAlbumView::SetupAlbumView(QWidget* const parent)
     d->leftClickActionComboBox->addItem(i18n("Start image editor"), ApplicationSettings::StartEditor);
     d->leftClickActionComboBox->setToolTip(i18n("Choose what should happen when you click on a thumbnail."));
 
-    d->iconViewFontSelect = new DFontSelect(i18n("Icon View font:"), iwpanel);
+    d->iconViewFontSelect      = new DFontSelect(i18n("Icon View font:"), iwpanel);
     d->iconViewFontSelect->setToolTip(i18n("Select here the font used to display text in icon views."));
 
     d->largeThumbsBox = new QCheckBox(i18n("Use large thumbnail size for high screen resolution"), iwpanel);
@@ -520,4 +520,4 @@ void SetupAlbumView::slotUseLargeThumbsToggled(bool b)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

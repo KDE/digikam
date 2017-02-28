@@ -38,7 +38,7 @@ class SetupCategory : public QScrollArea
 public:
 
     explicit SetupCategory(QWidget* const parent = 0);
-    ~SetupCategory();
+    virtual ~SetupCategory();
 
     void applySettings();
     void readSettings();
@@ -56,6 +56,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SETUPCATEGORY_H

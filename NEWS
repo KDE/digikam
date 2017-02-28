@@ -105,4 +105,5 @@ BUGFIXES FROM BUGZILLA:
 079 ==> 376898 - Crash when scanning photo containing exif with empty Jis comment (Digikam::MetaEngine::getExifComment, QTextCodec::toUnicode) [patch].
 080 ==> 374248 - importing photo, bad file selector.
 081 ==> 376530 - Map jumps to 0/0 position when using "Zoom into a group".
-082 ==> 
+082 ==> 376928 - Changes on mimetypes are applied after restart [patch].
+083 ==> 

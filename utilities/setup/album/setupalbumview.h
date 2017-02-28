@@ -51,7 +51,7 @@ public:
 public:
 
     explicit SetupAlbumView(QWidget* const parent = 0);
-    ~SetupAlbumView();
+    virtual ~SetupAlbumView();
 
     void applySettings();
 
@@ -71,6 +71,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SETUPALBUMVIEW_H

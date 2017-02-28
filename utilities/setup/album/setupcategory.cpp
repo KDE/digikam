@@ -255,4 +255,4 @@ void SetupCategory::readSettings()
     d->albumCategoryBox->insertItems(0, settings->getAlbumCategoryNames());
 }
 
-}  // namespace Digikam
+} // namespace Digikam
