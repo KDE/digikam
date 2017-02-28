@@ -112,5 +112,6 @@ BUGFIXES FROM BUGZILLA:
 086 ==> 208713 - Quicker deletion of multiple duplicate images.
 087 ==> 372378 - Action after the search of the duplicated images.
 088 ==> 202030 - Search duplicate images filtered by file type mime.
-089 ==>
+089 ==> 365331 - digikam not loading because rpath information missing from libQt5Qml, libQt5Script and libQt5Quick.
+090 ==> 
 
