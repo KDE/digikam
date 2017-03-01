@@ -2264,6 +2264,8 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
     }
 
     newURL = urls.first();
+    newURL.setPath(QDir::cleanPath(newURL.path()));
+
     QFileInfo fi(newURL.fileName());
 
     if (fi.suffix().isEmpty())
