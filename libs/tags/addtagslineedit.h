@@ -94,6 +94,8 @@ Q_SIGNALS:
     /// Emitted when an action is selected. This already happens if anything is typed.
     void taggingActionSelected(const TaggingAction& action);
     void taggingActionFinished();
+    /// Emit when the content of lineEdit changes
+    void textEditChanged(const QString& txt);
 
 protected Q_SLOTS:
 
@@ -102,6 +104,7 @@ protected Q_SLOTS:
     void slotReturnPressed();
     void slotEditingFinished();
     void slotTextEdited(const QString& text);
+    void slotTextChanged(const QString& txt);
 
 private:
 

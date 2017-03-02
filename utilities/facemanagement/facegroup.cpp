@@ -110,6 +110,7 @@ void FaceItem::setHudWidget(AssignNameWidget* const widget)
     RegionFrameItem::setHudWidget(widget);
     // Ensure that all HUD widgets are stacked before the frame items
     hudWidget()->setZValue(1);
+    m_widget->addTagsChangeSignal();
 }
 
 AssignNameWidget* FaceItem::widget() const

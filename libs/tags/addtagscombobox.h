@@ -77,6 +77,11 @@ public:
 
     AddTagsLineEdit* lineEdit() const;
 
+    /**
+     * Gets the width of lineEdit
+     */
+    int getlineWidth();
+
 public Q_SLOTS:
 
     /** Set a parent tag for suggesting a parent tag for a new tag, and a default action. */
@@ -93,11 +98,17 @@ Q_SIGNALS:
      */
     void taggingActionSelected(const TaggingAction& action);
 
+    /**
+     * Emit when the content of lineEdit changes
+     */
+    void textEditChanged(const QString& txt);
+
 protected Q_SLOTS:
 
     void slotViewIndexActivated(const QModelIndex&);
     void slotLineEditActionActivated(const TaggingAction& action);
     void slotLineEditActionSelected(const TaggingAction& action);
+    void slotLineEditTextChanged(const QString& txt);
 
 protected:
 

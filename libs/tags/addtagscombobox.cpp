@@ -104,6 +104,9 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
     connect(d->lineEdit, SIGNAL(taggingActionSelected(TaggingAction)),
             this, SLOT(slotLineEditActionSelected(TaggingAction)));
 
+    connect(d->lineEdit, SIGNAL(textEditChanged(QString)),
+            this, SLOT(slotLineEditTextChanged(QString)));
+
     TagTreeView::Flags flags;
     m_treeView = new TagTreeView(this, flags);
 
@@ -197,6 +200,11 @@ void AddTagsComboBox::slotLineEditActionSelected(const TaggingAction& action)
     emit taggingActionSelected(action);
 }
 
+void AddTagsComboBox::slotLineEditTextChanged(const QString& txt)
+{
+    emit textEditChanged(txt);
+}
+
 bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
 {
     if (object == d->lineEdit->completer()->popup())
@@ -227,6 +235,11 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
     }
 
     return TagTreeViewSelectComboBox::eventFilter(object, event);
+}
+
+int AddTagsComboBox::getlineWidth()
+{
+    return d->lineEdit->width();
 }
 
 } // namespace Digikam

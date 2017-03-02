@@ -115,6 +115,7 @@ public:
     AddTagsLineEdit* lineEdit() const;
 
     bool isCompleterPopupVisible() const;
+    void addTagsChangeSignal() const;
 
 public Q_SLOTS:
 
@@ -165,6 +166,7 @@ protected Q_SLOTS:
 
     void slotConfirm();
     void slotReject();
+    void slotSetLineNumber(const QString & str);
     void slotActionActivated(const TaggingAction& action);
     void slotActionSelected(const TaggingAction& action);
     void slotLabelClicked();
