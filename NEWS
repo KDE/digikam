@@ -114,4 +114,5 @@ BUGFIXES FROM BUGZILLA:
 088 ==> 202030 - Search duplicate images filtered by file type mime.
 089 ==> 365331 - digiKam not loading because rpath information missing from libQt5Qml, libQt5Script and libQt5Quick.
 090 ==> 377039 - Network Collections cause hang on "Reading Database".
-091 ==> 
+091 ==> 218819 - Implement albums tree-view colapse/expand history.
+092 ==> 
