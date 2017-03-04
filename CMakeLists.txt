@@ -521,6 +521,11 @@ if(DIGIKAM_CAN_BE_COMPILED)
         string(REPLACE "-pedantic" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     endwhile()
 
+    # Remove Wsuggest-override GCC flag which generate a lots of compile warnings
+    while(CMAKE_CXX_FLAGS MATCHES "-Wsuggest-override")
+        string(REPLACE "-Wsuggest-override" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    endwhile()
+
     # translations catalog
     add_definitions(-DTRANSLATION_DOMAIN=\"digikam\")
 
