@@ -678,6 +678,7 @@ void SetupCamera::readSettings()
     {
         new QListWidgetItem(f->name, d->importListView);
     }
+    d->importListView->sortItems();
 
     d->ignoreNamesEdit->setText(importGroup.readEntry(QLatin1String("IgnoreNames"), FilterComboBox::defaultIgnoreNames));
     d->ignoreExtensionsEdit->setText(importGroup.readEntry(QLatin1String("IgnoreExtensions"), FilterComboBox::defaultIgnoreExtensions));

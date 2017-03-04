@@ -171,6 +171,9 @@ SetupTemplate::SetupTemplate(QWidget* const parent)
 
     readSettings();
     d->titleEdit->setFocus();
+
+    d->listView->sortItems(0, Qt::AscendingOrder);
+    d->listView->setSortingEnabled(true);
 }
 
 SetupTemplate::~SetupTemplate()
