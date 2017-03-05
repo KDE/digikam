@@ -292,7 +292,7 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     connect(d->showTracksOnMap, SIGNAL(stateChanged(int)),
             this, SLOT(slotShowTracksStateChanged(int)));
 
-    d->maxTimeLabel = new QLabel(i18n("Difference in min.:"), this);
+    d->maxTimeLabel = new QLabel(i18n("Max. interpol. time gap (min):"), this);
     d->maxTimeInput = new QSpinBox(this);
     d->maxTimeInput->setRange(0, 240);
     d->maxTimeInput->setSingleStep(1);
@@ -308,10 +308,9 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     row++;
     settingsLayout->addWidget(d->gpxFileList,        row, 0, 1, 2);
     row++;
-    settingsLayout->addWidget(line,                  row, 0, 1, 2);
+    settingsLayout->addWidget(d->showTracksOnMap,    row, 0, 1, 2);
     row++;
-    settingsLayout->addWidget(maxGapLabel,           row, 0, 1, 1);
-    settingsLayout->addWidget(d->maxGapInput,        row, 1, 1, 1);
+    settingsLayout->addWidget(line,                  row, 0, 1, 2);
     row++;
     settingsLayout->addWidget(timeZoneLabel,         row, 0, 1, 2);
     row++;
@@ -323,9 +322,10 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     settingsLayout->addWidget(d->offsetEnabled,      row, 0, 1, 1);
     settingsLayout->addWidget(offsetWidget,          row, 1, 1, 1);
     row++;
-    settingsLayout->addWidget(d->interpolateBox,     row, 0, 1, 2);
+    settingsLayout->addWidget(maxGapLabel,           row, 0, 1, 1);
+    settingsLayout->addWidget(d->maxGapInput,        row, 1, 1, 1);
     row++;
-    settingsLayout->addWidget(d->showTracksOnMap,    row, 0, 1, 2);
+    settingsLayout->addWidget(d->interpolateBox,     row, 0, 1, 2);
     row++;
     settingsLayout->addWidget(d->maxTimeLabel,       row, 0, 1, 1);
     settingsLayout->addWidget(d->maxTimeInput,       row, 1, 1, 1);
