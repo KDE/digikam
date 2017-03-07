@@ -321,11 +321,6 @@ void ImageScanner::copiedFrom(int albumId, qlonglong srcId)
         if (!scanFromIdenticalFile())
         {
             // scan newly
-            if (d->commit.commitImagePosition)
-            {
-                commitImagePosition();
-            }
-
             scanFile(NewScan);
         }
     }

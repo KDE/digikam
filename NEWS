@@ -118,4 +118,5 @@ BUGFIXES FROM BUGZILLA:
 092 ==> 377292 - Improve GPS Correlator UI
 093 ==> 377240 - Deleting an image (DEL key) within LightTable resets zoom factor for following image.
 094 ==> 377206 - Sort templates and camera filter ins configuration
-095 ==> 
+095 ==> 376933 - Geolocation icon missing.
+096 ==> 
