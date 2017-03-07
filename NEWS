@@ -116,4 +116,5 @@ BUGFIXES FROM BUGZILLA:
 090 ==> 377039 - Network Collections cause hang on "Reading Database".
 091 ==> 218819 - Implement albums tree-view colapse/expand history.
 092 ==> 377292 - Improve GPS Correlator UI
-093 ==>
+093 ==> 377240 - Deleting an image (DEL key) within LightTable resets zoom factor for following image.
+094 ==> 
