@@ -338,8 +338,6 @@ void ItemViewImageDelegate::drawSpecialInfo(QPainter* p,const QRect& r, const QS
             bRect = p->boundingRect(r, flags, text);
         }
 
-        bRect.adjust(0, 0, 0, -2);
-
         p->fillRect(bRect, Qt::SolidPattern);
         p->setPen(QPen(Qt::white));
         p->setOpacity(1.0);
