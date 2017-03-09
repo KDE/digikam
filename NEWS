@@ -19,8 +19,9 @@ Searches    : In duplicates view, the reference image is more clearly identified
 Tags        : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 BQM         : Several usability improvements in Watermark tool.
 General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.
-General     : Update internal Libraw to 0.18.1 : new camera supported: Sigma Quattro H.
+General     : Update internal Libraw to 0.18.2 : new camera supported: Sigma Quattro H.
               Fixed bug in exposure computation for Fuji camera. Fix wrong black level in Sony A350.
+              Fix Sony metadata parser. Fix Phase One decoding.
 
 BUGFIXES FROM BUGZILLA:
 
