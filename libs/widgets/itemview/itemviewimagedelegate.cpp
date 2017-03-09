@@ -314,12 +314,39 @@ void ItemViewImageDelegate::drawRating(QPainter* p, const QModelIndex& index, co
     }
 }
 
-void ItemViewImageDelegate::drawSpecialInfo(QPainter* p,const QRect& specialInfoRect, const QString& text) const
+void ItemViewImageDelegate::drawSpecialInfo(QPainter* p,const QRect& r, const QString& text) const
 {
     Q_D(const ItemViewImageDelegate);
 
-    p->setFont(d->fontReg);
-    p->drawText(specialInfoRect, Qt::AlignCenter, squeezedTextCached(p, specialInfoRect.width(), text));
+    if (!text.isEmpty() && !r.isNull())
+    {
+        p->save();
+
+        QFont fnt(d->fontReg);
+        fnt.setWeight(QFont::Black);
+        fnt.setItalic(false);
+        p->setFont(fnt);
+        p->setPen(QPen(Qt::gray));
+        p->setOpacity(0.50);
+
+        int flags   = Qt::AlignCenter | Qt::TextWordWrap;
+        QRect bRect = p->boundingRect(r, flags, text);
+
+        if (bRect.width() > r.width())
+        {
+            flags = Qt::AlignCenter | Qt::TextWrapAnywhere;
+            bRect = p->boundingRect(r, flags, text);
+        }
+
+        bRect.adjust(0, 0, 0, -2);
+
+        p->fillRect(bRect, Qt::SolidPattern);
+        p->setPen(QPen(Qt::white));
+        p->setOpacity(1.0);
+        p->drawText(bRect, flags, text);
+
+        p->restore();
+    }
 }
 
 void ItemViewImageDelegate::drawName(QPainter* p,const QRect& nameRect, const QString& name) const

@@ -84,7 +84,7 @@ void DigikamImageDelegate::updateRects()
     d->imageInformationRect                        = QRect(d->margin, y, d->contentWidth, 0);
     const ApplicationSettings* const albumSettings = ApplicationSettings::instance();
     d->drawImageFormat                             = albumSettings->getIconShowImageFormat();
-    d->drawCoordinates                             = ApplicationSettings::instance()->getIconShowCoordinates();
+    d->drawCoordinates                             = albumSettings->getIconShowCoordinates();
     const int iconSize                             = qBound(16, (d->contentWidth + 2*d->margin) / 8 - 2, 48);
     d->pickLabelRect                               = QRect(d->margin, y, iconSize, iconSize);
     d->groupRect                                   = QRect(d->contentWidth - iconSize, y, iconSize, iconSize);
@@ -94,11 +94,6 @@ void DigikamImageDelegate::updateRects()
     {
         d->ratingRect = QRect(d->margin, y, d->contentWidth, d->starPolygonSize.height());
         y             = d->ratingRect.bottom();
-    }
-
-    {
-        d->specialInfoRect = QRect(d->margin, y, d->contentWidth-d->margin, d->oneRowRegRect.height());
-        y                  = d->specialInfoRect.bottom();
     }
 
     if (albumSettings->getIconShowName())

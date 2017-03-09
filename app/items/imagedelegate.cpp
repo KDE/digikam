@@ -59,7 +59,6 @@ void ImageDelegate::ImageDelegatePrivate::clearRects()
     dateRect             = QRect(0, 0, 0, 0);
     modDateRect          = QRect(0, 0, 0, 0);
     pixmapRect           = QRect(0, 0, 0, 0);
-    specialInfoRect      = QRect(0, 0, 0, 0);
     nameRect             = QRect(0, 0, 0, 0);
     titleRect            = QRect(0, 0, 0, 0);
     commentsRect         = QRect(0, 0, 0, 0);
@@ -285,14 +284,6 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
     }
 */
 
-    if (!d->specialInfoRect.isNull())
-    {
-        if (info.id() == info.currentReferenceImage())
-        {
-            drawSpecialInfo(p, d->specialInfoRect, i18n("Reference Image"));
-        }
-    }
-
     if (!d->nameRect.isNull())
     {
         drawName(p, d->nameRect, info.name());
@@ -361,6 +352,11 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         QString frm = info.format();
         if (frm.contains(QLatin1String("-"))) frm = frm.section(QLatin1Char('-'), -1);   // For RAW format annoted as "RAW-xxx" => "xxx"
         drawImageFormat(p, actualPixmapRect, frm);
+    }
+
+    if (info.id() == info.currentReferenceImage())
+    {
+        drawSpecialInfo(p, actualPixmapRect, i18n("Reference Image"));
     }
 
     if (d->drawCoordinates && info.hasCoordinates())
