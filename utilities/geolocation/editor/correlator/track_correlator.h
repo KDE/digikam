@@ -87,15 +87,13 @@ public:
     public:
 
         CorrelationOptions()
-        : photosHaveSystemTimeZone(false),
-          interpolate(false),
+        : interpolate(false),
           interpolationDstTime(0),
           maxGapTime(0),
           secondsOffset(0)
         {
         }
 
-        bool photosHaveSystemTimeZone;
         bool interpolate;
         int  interpolationDstTime;
         int  maxGapTime;

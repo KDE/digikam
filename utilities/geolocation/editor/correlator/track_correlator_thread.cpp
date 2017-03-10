@@ -73,12 +73,6 @@ void TrackCorrelatorThread::run()
         // GPS device are sync in time by satelite using GMT time.
         QDateTime itemDateTime = it->dateTime.addSecs(options.secondsOffset*(-1));
 
-        if (!options.photosHaveSystemTimeZone)
-        {
-            // the timezone offset was already included in secondsOffset
-            itemDateTime.setTimeSpec(Qt::UTC);
-        }
-
         // find the last point before our item:
         QDateTime       lastSmallerTime;
         QPair<int, int> lastIndexPair;
@@ -164,58 +158,60 @@ void TrackCorrelatorThread::run()
 
         TrackCorrelator::Correlation correlatedData = *it;
 
-        // do we have a timestamp within maxGap?
-        bool canUseTimeBefore = lastSmallerTime.isValid();
-        int dtimeBefore       = 0;
-
-        if (canUseTimeBefore)
+        if (!options.interpolate)
         {
-            dtimeBefore      = qAbs(lastSmallerTime.secsTo(itemDateTime));
-            canUseTimeBefore = dtimeBefore <= options.maxGapTime;
-        }
+            // do we have a timestamp within maxGap?
+            bool canUseTimeBefore = lastSmallerTime.isValid();
+            int dtimeBefore       = 0;
 
-        bool canUseTimeAfter = firstBiggerTime.isValid();
-        int dtimeAfter       = 0;
-
-        if (canUseTimeAfter)
-        {
-            dtimeAfter      = qAbs(firstBiggerTime.secsTo(itemDateTime));
-            canUseTimeAfter = dtimeAfter <= options.maxGapTime;
-        }
-
-        if (canUseTimeAfter || canUseTimeBefore)
-        {
-            QPair<int, int> indexToUse(-1, -1);
-
-            if (canUseTimeAfter&&canUseTimeBefore)
+            if (canUseTimeBefore)
             {
-                indexToUse = (dtimeBefore < dtimeAfter) ? lastIndexPair:firstIndexPair;
-            }
-            else if (canUseTimeAfter)
-            {
-                indexToUse = firstIndexPair;
-            }
-            else if (canUseTimeBefore)
-            {
-                indexToUse = lastIndexPair;
+                dtimeBefore      = qAbs(lastSmallerTime.secsTo(itemDateTime));
+                canUseTimeBefore = dtimeBefore <= options.maxGapTime;
             }
 
-            if (indexToUse.first>=0)
+            bool canUseTimeAfter = firstBiggerTime.isValid();
+            int dtimeAfter       = 0;
+
+            if (canUseTimeAfter)
             {
-                const GeoIface::TrackManager::TrackPoint& dataPoint = fileList.at(indexToUse.first).points.at(indexToUse.second);
-                correlatedData.coordinates                          = dataPoint.coordinates;
-                correlatedData.flags                                = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
-                correlatedData.nSatellites                          = dataPoint.nSatellites;
-                correlatedData.hDop                                 = dataPoint.hDop;
-                correlatedData.pDop                                 = dataPoint.pDop;
-                correlatedData.fixType                              = dataPoint.fixType;
-                correlatedData.speed                                = dataPoint.speed;
+                dtimeAfter      = qAbs(firstBiggerTime.secsTo(itemDateTime));
+                canUseTimeAfter = dtimeAfter <= options.maxGapTime;
+            }
+
+            if (canUseTimeAfter || canUseTimeBefore)
+            {
+                QPair<int, int> indexToUse(-1, -1);
+
+                if (canUseTimeAfter&&canUseTimeBefore)
+                {
+                    indexToUse = (dtimeBefore < dtimeAfter) ? lastIndexPair:firstIndexPair;
+                }
+                else if (canUseTimeAfter)
+                {
+                    indexToUse = firstIndexPair;
+                }
+                else if (canUseTimeBefore)
+                {
+                    indexToUse = lastIndexPair;
+                }
+
+                if (indexToUse.first>=0)
+                {
+                    const GeoIface::TrackManager::TrackPoint& dataPoint = fileList.at(indexToUse.first).points.at(indexToUse.second);
+                    correlatedData.coordinates                          = dataPoint.coordinates;
+                    correlatedData.flags                                = static_cast<TrackCorrelator::CorrelationFlags>(correlatedData.flags|TrackCorrelator::CorrelationFlagCoordinates);
+                    correlatedData.nSatellites                          = dataPoint.nSatellites;
+                    correlatedData.hDop                                 = dataPoint.hDop;
+                    correlatedData.pDop                                 = dataPoint.pDop;
+                    correlatedData.fixType                              = dataPoint.fixType;
+                    correlatedData.speed                                = dataPoint.speed;
+                }
             }
         }
         else
         {
-            // no, we may have to interpolate
-            bool canInterpolate = options.interpolate && lastSmallerTime.isValid() && firstBiggerTime.isValid();
+            bool canInterpolate = lastSmallerTime.isValid() && firstBiggerTime.isValid();
 
             if (canInterpolate)
             {
