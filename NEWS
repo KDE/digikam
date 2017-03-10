@@ -121,5 +121,5 @@ BUGFIXES FROM BUGZILLA:
 094 ==> 377206 - Sort templates and camera filter ins configuration
 095 ==> 376933 - Geolocation icon missing.
 096 ==> 376952 - AppImage Video playback issues - no sound.
-097 ==> 
-
+097 ==> 375651 - Update 5.4.0 on Windows : no sound with all my videos.
+098 ==> 
