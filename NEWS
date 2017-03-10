@@ -120,4 +120,6 @@ BUGFIXES FROM BUGZILLA:
 093 ==> 377240 - Deleting an image (DEL key) within LightTable resets zoom factor for following image.
 094 ==> 377206 - Sort templates and camera filter ins configuration
 095 ==> 376933 - Geolocation icon missing.
-096 ==> 
+096 ==> 376952 - AppImage Video playback issues - no sound.
+097 ==> 
+
