@@ -451,6 +451,7 @@ void ShowFoto::applySettings()
     if (currentStyle.compare(newStyle, Qt::CaseInsensitive) != 0)
     {
         qApp->setStyle(newStyle);
+        qApp->style()->polish(qApp);
         qCDebug(DIGIKAM_SHOWFOTO_LOG) << "Switch to widget style: " << newStyle;
     }
 

@@ -169,6 +169,7 @@ void ApplicationSettings::setApplicationStyle(const QString& style)
     {
         d->applicationStyle = style;
         qApp->setStyle(d->applicationStyle);
+        qApp->style()->polish(qApp);
         qCDebug(DIGIKAM_GENERAL_LOG) << "Switch to widget style: " << d->applicationStyle;
     }
 }
