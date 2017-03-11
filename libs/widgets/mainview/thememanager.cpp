@@ -38,6 +38,7 @@
 #include <QStandardPaths>
 #include <QDirIterator>
 #include <QMenu>
+#include <QStyle>
 
 // Desktop includes
 
@@ -151,6 +152,7 @@ void ThemeManager::slotChangePalette()
     // hint for the style to synchronize the color scheme with the window manager/compositor
     qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
     qApp->setPalette(SchemeManager::createApplicationPalette(config));
+    qApp->style()->polish(qApp);
 
     qCDebug(DIGIKAM_WIDGETS_LOG) << theme << " :: " << filename;
 
