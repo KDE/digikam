@@ -46,7 +46,7 @@ class FindDuplicatesView : public QWidget
 public:
 
     explicit FindDuplicatesView(QWidget* const parent = 0);
-    ~FindDuplicatesView();
+    virtual ~FindDuplicatesView();
 
     SAlbum* currentFindDuplicatesAlbum() const;
 
@@ -89,4 +89,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FINDDUPLICATESVIEW_H */
+#endif // FINDDUPLICATESVIEW_H

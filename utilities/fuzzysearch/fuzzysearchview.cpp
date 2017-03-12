@@ -214,9 +214,9 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
       StateSavingObject(this),
       d(new Private)
 {
-    d->settings = ApplicationSettings::instance();
+    d->settings                 = ApplicationSettings::instance();
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing           = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     d->thumbLoadThread          = ThumbnailLoadThread::defaultThread();
     d->searchModel              = searchModel;
@@ -305,6 +305,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     QLabel* const resultsLabel = new QLabel(i18n("Similarity range:"));
     d->levelImage              = new QSpinBox();
     d->levelImage->setSuffix(QLatin1String("%"));
+
     if (d->settings)
     {
         d->levelImage->setRange(d->settings->getMinimumSimilarityBound(), 100);
@@ -313,6 +314,7 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
     {
         d->levelImage->setRange(40, 100);
     }
+
     d->levelImage->setSingleStep(1);
     d->levelImage->setValue(90);
     d->levelImage->setWhatsThis(i18n("Select here the approximate threshold "
@@ -512,7 +514,7 @@ void FuzzySearchView::setupConnections()
 
     connect(d->maxLevelImage, SIGNAL(valueChanged(int)),
             this, SLOT(slotMaxLevelImageChanged(int)));
-    
+
     connect(d->resetButton, SIGNAL(clicked()),
             this, SLOT(slotClearSketch()));
 

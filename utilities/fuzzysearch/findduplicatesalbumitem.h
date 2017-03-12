@@ -53,7 +53,7 @@ public:
 
 public:
 
-    FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album);
+    explicit FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlbum* const album);
     virtual ~FindDuplicatesAlbumItem();
 
     bool hasValidThumbnail() const;
@@ -83,4 +83,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FINDDUPLICATESALBUMITEM_H */
+#endif // FINDDUPLICATESALBUMITEM_H

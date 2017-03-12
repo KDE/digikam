@@ -57,10 +57,10 @@ class FuzzySearchView : public QScrollArea, public StateSavingObject
 
 public:
 
-    FuzzySearchView(SearchModel* const searchModel,
-                    SearchModificationHelper* const searchModificationHelper,
-                    QWidget* const parent = 0);
-    ~FuzzySearchView();
+    explicit FuzzySearchView(SearchModel* const searchModel,
+                             SearchModificationHelper* const searchModificationHelper,
+                             QWidget* const parent = 0);
+    virtual ~FuzzySearchView();
 
     SAlbum* currentAlbum() const;
     void setCurrentAlbum(SAlbum* const album);
@@ -130,4 +130,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FUZZYSEARCHVIEW_H */
+#endif // FUZZYSEARCHVIEW_H

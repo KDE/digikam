@@ -85,7 +85,8 @@ FindDuplicatesAlbum::~FindDuplicatesAlbum()
     delete d;
 }
 
-void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, const QPixmap& pix)
+void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc,
+                                              const QPixmap& pix)
 {
     QTreeWidgetItemIterator it(this);
 
@@ -105,7 +106,8 @@ void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc, co
     }
 }
 
-void FindDuplicatesAlbum::updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild, const QList<qlonglong>& deletedImages)
+void FindDuplicatesAlbum::updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild,
+                                                     const QList<qlonglong>& deletedImages)
 {
     QTreeWidgetItemIterator it(this);
 
@@ -122,7 +124,9 @@ void FindDuplicatesAlbum::updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbu
     }
 }
 
-void FindDuplicatesAlbum::drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const
+void FindDuplicatesAlbum::drawRow(QPainter* p,
+                                  const QStyleOptionViewItem& opt,
+                                  const QModelIndex& index) const
 {
     FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(itemFromIndex(index));
 
