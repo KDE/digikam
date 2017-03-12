@@ -43,8 +43,8 @@ class TrackListModel : public QAbstractItemModel
 
 public:
 
-    TrackListModel(GeoIface::TrackManager* const trackManager, QObject* const parent);
-    ~TrackListModel();
+    explicit TrackListModel(GeoIface::TrackManager* const trackManager, QObject* const parent);
+    virtual ~TrackListModel();
 
     // QAbstractItemModel:
     virtual int columnCount(const QModelIndex& parent = QModelIndex() ) const;
@@ -67,6 +67,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif //  TRACK_LISTMODEL_H
+#endif // TRACK_LISTMODEL_H

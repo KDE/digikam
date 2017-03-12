@@ -103,7 +103,7 @@ public:
 public:
 
     explicit TrackCorrelator(GeoIface::TrackManager* const trackManager, QObject* const parent = 0);
-    ~TrackCorrelator();
+    virtual ~TrackCorrelator();
 
     void correlate(const Correlation::List& itemsToCorrelate, const CorrelationOptions& options);
     void cancelCorrelation();

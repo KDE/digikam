@@ -50,8 +50,8 @@ class GPSCorrelatorWidget : public QWidget
 
 public:
 
-    GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, GeoIface::TrackManager* const trackManager);
-    ~GPSCorrelatorWidget();
+    explicit GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, GeoIface::TrackManager* const trackManager);
+    virtual ~GPSCorrelatorWidget();
 
     void setUIEnabledExternal(const bool state);
     void saveSettingsToGroup(KConfigGroup* const group);
@@ -93,6 +93,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
-#endif /* GPSCORRELATORWIDGET_H */
+#endif // GPSCORRELATORWIDGET_H

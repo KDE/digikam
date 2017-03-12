@@ -251,4 +251,4 @@ void Digikam::TrackListModel::slotTrackManagerUpdated()
     endResetModel();
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

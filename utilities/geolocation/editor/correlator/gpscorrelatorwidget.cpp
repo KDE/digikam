@@ -76,6 +76,7 @@ public:
     Private()
       : gpxLoadFilesButton(0),
         gpxFileList(0),
+        offsetEnabled(0),
         offsetSign(0),
         offsetTime(0),
         interpolateButton(0),
@@ -153,16 +154,16 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
 
     QGridLayout* const settingsLayout = new QGridLayout(this);
 
-    d->gpxLoadFilesButton = new QPushButton(i18n("Load GPX files..."), this);
+    d->gpxLoadFilesButton             = new QPushButton(i18n("Load GPX files..."), this);
 
-    d->gpxFileList = new QTreeView(this);
+    d->gpxFileList          = new QTreeView(this);
     d->gpxFileList->setModel(d->trackListModel);
     d->gpxFileList->setHeaderHidden(false);
     d->gpxFileList->setRootIsDecorated(false);
 
-    d->showTracksOnMap = new QCheckBox(i18n("Show tracks on Map"), this);
+    d->showTracksOnMap      = new QCheckBox(i18n("Show tracks on Map"), this);
     d->showTracksOnMap->setWhatsThis(i18n("Set this option to show tracks on the Map"));
-    DLineWidget* const line   = new DLineWidget(Qt::Horizontal, this);
+    DLineWidget* const line = new DLineWidget(Qt::Horizontal, this);
 
     connect(d->showTracksOnMap, SIGNAL(stateChanged(int)),
             this, SLOT(slotShowTracksStateChanged(int)));
@@ -170,8 +171,8 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     QWidget* const offsetWidget = new QWidget(this);
     QGridLayout* const offsetLayout = new QGridLayout(offsetWidget);
 
-    QLabel* offsetLabel = new QLabel(i18n("Offset of pictures (hh:mm:ss):"),
-                                     offsetWidget);
+    QLabel* offsetLabel         = new QLabel(i18n("Offset of pictures (hh:mm:ss):"),
+                                             offsetWidget);
     offsetLabel->setWhatsThis(i18n("Sets the offset between picture times "
                                         "and track times. E.g. to correct "
                                         "wrong camera clock or different time "
@@ -193,10 +194,10 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
     offsetLayout->setContentsMargins(this->contentsMargins());
 
     // track to picture matching options
-    QWidget* const matchWidget = new QWidget(this);
+    QWidget* const matchWidget     = new QWidget(this);
     QGridLayout* const matchLayout = new QGridLayout(matchWidget);
 
-    d->interpolateButton = new QRadioButton(QLatin1String("Interpolate"), matchWidget);
+    d->interpolateButton     = new QRadioButton(QLatin1String("Interpolate"), matchWidget);
     d->interpolateLimitLabel = new QLabel(i18n("Max. time gap (hh:mm:ss):"), matchWidget);
     d->interpolateLimitInput = new QTimeEdit(matchWidget);
     d->interpolateLimitInput->setDisplayFormat(QLatin1String("HH:mm:ss"));
@@ -208,8 +209,8 @@ GPSCorrelatorWidget::GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* c
                                                 "this setting, no match will be attempted."));
 
     QRadioButton* directMatchButton = new QRadioButton(QLatin1String("Match directly"), matchWidget);
-    d->directMatchLimitLabel = new QLabel(i18n("Max. time gap (hh:mm:ss):"), matchWidget);
-    d->directMatchLimitInput = new QTimeEdit(matchWidget);
+    d->directMatchLimitLabel        = new QLabel(i18n("Max. time gap (hh:mm:ss):"), matchWidget);
+    d->directMatchLimitInput        = new QTimeEdit(matchWidget);
     d->directMatchLimitInput->setDisplayFormat(QLatin1String("HH:mm:ss"));
     d->directMatchLimitInput->setTime(QTime::fromString(QLatin1String("00:00:30")));
     d->directMatchLimitInput->setWhatsThis(i18n("Sets the maximum time difference "
@@ -379,7 +380,7 @@ void GPSCorrelatorWidget::slotCorrelate()
 
     const int imageCount = d->imageModel->rowCount();
 
-    for (int i = 0; i<imageCount; ++i)
+    for (int i = 0 ; i < imageCount ; ++i)
     {
         QPersistentModelIndex imageIndex = d->imageModel->index(i, 0);
         GPSImageItem* const imageItem    = d->imageModel->itemFromIndex(imageIndex);
@@ -411,7 +412,7 @@ void GPSCorrelatorWidget::slotItemsCorrelated(const Digikam::TrackCorrelator::Co
     qCDebug(DIGIKAM_GENERAL_LOG) << correlatedItems.count();
     d->correlationTriedCount += correlatedItems.count();
 
-    for (int i = 0; i < correlatedItems.count(); ++i)
+    for (int i = 0 ; i < correlatedItems.count() ; ++i)
     {
         const TrackCorrelator::Correlation& itemCorrelation = correlatedItems.at(i);
         const QPersistentModelIndex itemIndex               = itemCorrelation.userData.value<QPersistentModelIndex>();
@@ -542,12 +543,12 @@ QList<GeoIface::GeoCoordinates::List> GPSCorrelatorWidget::getTrackCoordinates()
 {
     QList<GeoIface::GeoCoordinates::List> trackList;
 
-    for (int i = 0; i < d->trackManager->trackCount(); ++i)
+    for (int i = 0 ; i < d->trackManager->trackCount() ; ++i)
     {
         const GeoIface::TrackManager::Track& gpxData = d->trackManager->getTrack(i);
         GeoIface::GeoCoordinates::List track;
 
-        for (int coordIdx = 0; coordIdx < gpxData.points.count(); ++coordIdx)
+        for (int coordIdx = 0 ; coordIdx < gpxData.points.count() ; ++coordIdx)
         {
             GeoIface::TrackManager::TrackPoint const& point = gpxData.points.at(coordIdx);
             track << point.coordinates;
@@ -570,4 +571,4 @@ bool GPSCorrelatorWidget::getShowTracksOnMap() const
     return d->showTracksOnMap->isChecked();
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

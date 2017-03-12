@@ -285,8 +285,8 @@ public:
     }
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSDataContainer::HasFlags)
 
-#endif /* GPSDATACONTAINER_H */
+#endif // GPSDATACONTAINER_H
