@@ -76,7 +76,6 @@ public:
     Private()
       : gpxLoadFilesButton(0),
         gpxFileList(0),
-        offsetEnabled(0),
         offsetSign(0),
         offsetTime(0),
         interpolateButton(0),
@@ -104,7 +103,6 @@ public:
     QPushButton*            gpxLoadFilesButton;
     QTreeView*              gpxFileList;
 
-    QCheckBox*              offsetEnabled;
     QComboBox*              offsetSign;
     QTimeEdit*              offsetTime;
 
