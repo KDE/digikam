@@ -2118,6 +2118,7 @@ ORDER BY inf.rating DESC, img.name ASC
 
             <!-- statements for shrinking the databases -->
 
+            <!--
             <dbaction name="vacuumCoreDB">
                 <statement mode="query">OPTIMIZE TABLE Albums, Images, ImageHaarMatrix, ImageInformation, ImageMetadata, VideoMetadata, ImagePositions, ImageComments, ImageCopyright, ImageProperties, ImageHistory, ImageRelations, Tags, ImageTags, ImageTagProperties;</statement>
             </dbaction>
@@ -2129,6 +2130,20 @@ ORDER BY inf.rating DESC, img.name ASC
             <dbaction name="vacuumRecognitionDB">
                 <statement mode="query">OPTIMIZE TABLE Identities, IdentityAttributes;</statement>
             </dbaction>
+            -->
+            
+             <dbaction name="vacuumCoreDB">
+                <statement mode="query">SELECT 'NOP' AS status;</statement>
+            </dbaction>
+
+            <dbaction name="vacuumThumbnailsDB">
+                <statement mode="query">SELECT 'NOP' AS status;</statement>
+            </dbaction>
+
+            <dbaction name="vacuumRecognitionDB">
+                <statement mode="query">SELECT 'NOP' AS status;</statement>
+            </dbaction>
+
 
             <!--
             <dbaction name="checkCoreDbIntegrity"> 
