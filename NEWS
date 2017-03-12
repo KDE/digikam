@@ -8,7 +8,7 @@ Database    : We introduced garbage collection for databases as maintenance stag
               thumbnail and face entries gut does not shrink Databases automatically.
 Faces       : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
 Faces       : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
-Faces       : The list of proposed names for name assigment in people sidebar can now be reduced to face tags with a setup option.
+Faces       : The list of proposed names for name assignment in people sidebar can now be reduced to face tags with a setup option.
 Faces       : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 Maintenance : The maintenance now does not generate massive amounts of threads anymore. Instead, we use a queue based approach to
               level the load on the CPUs more appropriate. This should improve the reactiveness during maintenance.
