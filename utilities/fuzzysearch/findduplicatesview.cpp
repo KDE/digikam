@@ -34,7 +34,6 @@
 #include <QLabel>
 #include <QApplication>
 #include <QStyle>
-#include <QComboBox>
 
 // KDE includes
 
@@ -55,6 +54,7 @@
 #include "fingerprintsgenerator.h"
 #include "applicationsettings.h"
 #include "haariface.h"
+#include "squeezedcombobox.h"
 
 namespace Digikam
 {
@@ -89,7 +89,7 @@ public:
     QSpinBox*                    minSimilarity;
     QSpinBox*                    maxSimilarity;
 
-    QComboBox*                   searchResultRestriction;
+    SqueezedComboBox*            searchResultRestriction;
 
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
@@ -132,6 +132,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     // ---------------------------------------------------------------
 
     d->minSimilarity = new QSpinBox();
+
     if (d->settings)
     {
         d->minSimilarity->setRange(d->settings->getMinimumSimilarityBound(), 100);
@@ -140,6 +141,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     {
         d->minSimilarity->setRange(40, 100);
     }
+
     d->minSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMinSimilarity());
     d->minSimilarity->setSingleStep(1);
     d->minSimilarity->setSuffix(QLatin1String("%"));
@@ -155,13 +157,17 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
 
     d->similarityIntervalLabel = new QLabel(QLatin1String("-"));
 
-    d->restrictResultsLabel = new QLabel(i18n("Restriction on duplicates:"));
+    d->restrictResultsLabel    = new QLabel(i18n("Restriction:"));
     d->restrictResultsLabel->setBuddy(d->searchResultRestriction);
 
-    d->searchResultRestriction = new QComboBox;
-    d->searchResultRestriction->addItem(i18nc("@label:listbox", "No restriction"),                       HaarIface::DuplicatesSearchRestrictions::None);
-    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Restrict to album of reference image"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
-    d->searchResultRestriction->addItem(i18nc("@label:listbox", "Exclude album of reference image"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
+    d->searchResultRestriction = new SqueezedComboBox();
+    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "None"),                                 HaarIface::DuplicatesSearchRestrictions::None);
+    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Restrict to reference album"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
+    d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Exclude reference album"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
+    d->searchResultRestriction->setWhatsThis(i18n("Use this option to restrict the duplicate search "
+                                                  "with some critera, as to limit search to the album "
+                                                  "of reference image, or to exclude the album of "
+                                                  "reference image of the search."));
 
     // Load the last choice from application settings.
     HaarIface::DuplicatesSearchRestrictions restrictions = (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions();
@@ -376,6 +382,7 @@ void FindDuplicatesView::slotMinimumChanged(int newValue)
 {
     // Set the new minimum value of the maximum similarity
     d->maxSimilarity->setMinimum(newValue);
+
     // If the new value of the mimimum is now higher than the maximum similarity,
     // set the maximum similarity to the new value.
     if (newValue > d->maxSimilarity->value())
@@ -398,9 +405,11 @@ void FindDuplicatesView::slotComplete()
 void FindDuplicatesView::slotDuplicatesAlbumActived()
 {
     QList<Album*> albums;
+
     foreach(QTreeWidgetItem* item, d->listView->selectedItems())
     {
         FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
+
         if (albumItem)
         {
             albums << albumItem->album();
@@ -433,6 +442,7 @@ void FindDuplicatesView::slotSetSelectedAlbum(PAlbum* album)
     }
 
     resetAlbumsAndTags();
+
     // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     d->albumSelectors->setPAlbumSelected(album, true);
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
@@ -443,10 +453,12 @@ void FindDuplicatesView::slotSetSelectedAlbums(QList<PAlbum*> albums)
 {
     // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
     resetAlbumsAndTags();
+
     foreach(PAlbum* const album, albums)
     {
         d->albumSelectors->setPAlbumSelected(album, false);
     }
+
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
     slotCheckForValidSettings();
 }
@@ -454,10 +466,12 @@ void FindDuplicatesView::slotSetSelectedAlbums(QList<PAlbum*> albums)
 void FindDuplicatesView::slotSetSelectedAlbums(QList<TAlbum*> albums)
 {
     resetAlbumsAndTags();
+
     foreach(TAlbum* const album, albums)
     {
         d->albumSelectors->setTAlbumSelected(album, false);
     }
+
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::TagsAlbum);
     slotCheckForValidSettings();
 }

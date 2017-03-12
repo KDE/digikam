@@ -35,7 +35,6 @@
 #include "album.h"
 #include "coredbsearchxml.h"
 
-
 namespace Digikam
 {
 
@@ -68,7 +67,7 @@ FindDuplicatesAlbumItem::FindDuplicatesAlbumItem(QTreeWidget* const parent, SAlb
     if (d->album)
     {
         qlonglong refImage = d->album->title().toLongLong();
-        d->refImgInfo = ImageInfo(refImage);
+        d->refImgInfo      = ImageInfo(refImage);
         setText(Column::REFERENCE_IMAGE, d->refImgInfo.name());
 
         calculateInfos();
@@ -104,14 +103,17 @@ void FindDuplicatesAlbumItem::calculateInfos(const QList<qlonglong>& deletedImag
         // only images that are not removed/obsolete should be shown.
         double avgSim = 0.00;
         QList<int> filteredList;
+
         foreach (int imageId, list)
         {
             ImageInfo info(imageId);
+
             // If image is not deleted in this moment and was also not
             // removed before.
             if (!deletedImages.contains(imageId) && !info.isRemoved())
             {
                 filteredList << imageId;
+
                 if (imageId != refImage)
                 {
                     avgSim += info.similarityTo(refImage);

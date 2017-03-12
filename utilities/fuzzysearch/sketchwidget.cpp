@@ -147,7 +147,8 @@ public:
 };
 
 SketchWidget::SketchWidget(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     setWhatsThis(i18n("You simply draw here a rough sketch of what you want to find "
                       "and digiKam will displays the best matches in thumbnail view."));
@@ -366,6 +367,7 @@ bool SketchWidget::setSketchImageFromXML(QXmlStreamReader& reader)
 
     // set current event to the last event
     d->eventIndex = d->drawEventList.count() - 1;
+
     // apply events to our pixmap
     replayEvents(d->eventIndex);
     emit signalUndoRedoStateChanged(d->eventIndex != -1, false);

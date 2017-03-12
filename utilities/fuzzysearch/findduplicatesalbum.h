@@ -50,7 +50,8 @@ public:
     explicit FindDuplicatesAlbum(QWidget* const parent = 0);
     virtual ~FindDuplicatesAlbum();
 
-    void updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild, const QList<qlonglong>& deletedImages);
+    void updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild,
+                                    const QList<qlonglong>& deletedImages);
 
 private :
 
@@ -68,4 +69,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* FINDDUPLICATESALBUM_H */
+#endif // FINDDUPLICATESALBUM_H
