@@ -9,6 +9,7 @@ Database    : We introduced garbage collection for databases as maintenance stag
 Faces       : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
 Faces       : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
 Faces       : The list of proposed names for hame assigment in people sidebar can now be reduced to face tags with a setup option.
+Faces       : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 Maintenance : The maintenance now does not generate massive amounts of threads anymore. Instead, we use a queue based approach to
               level the load on the CPUs more appropriate. This should improve the reactiveness during maintenance.
 Searches    : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
@@ -16,7 +17,6 @@ Searches    : Introduced a configurable lower bound for the minimum similarity i
 Searches    : The results of duplicates searches can now be restricted. It is now possible to restrict the duplicates to the ones that
               are in the same album as the reference image or in another album. This feature is also usable in maintenance.
 Searches    : In duplicates view, the reference image is more clearly identified by the description reference image in the image information.
-Tags        : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
 BQM         : Several usability improvements in Watermark tool.
 General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.
 General     : Update internal Libraw to 0.18.2 : new camera supported: Sigma Quattro H.
@@ -122,4 +122,3 @@ BUGFIXES FROM BUGZILLA:
 095 ==> 376933 - Geolocation icon missing.
 096 ==> 376952 - AppImage Video playback issues - no sound.
 097 ==> 375651 - Update 5.4.0 on Windows : no sound with all my videos.
-098 ==> 
