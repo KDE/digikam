@@ -1,0 +1,124 @@
+*****************************************************************************************************
+digiKam 5.5.0 - Release date: 2017-03-12
+
+NEW FEATURES:
+
+Database    : Add new options to ignore some kind of directories while scanning collections.
+Database    : We introduced garbage collection for databases as maintenance stage. This stage removes stale image,
+              thumbnail and face entries gut does not shrink Databases automatically.
+Faces       : It is now possible to remove face tags from people sidebar but preserve them in tags sidebar.
+Faces       : Recognised but unconfirmed faces are now visible both in the recognised face tag and also in a special tag called Unconfirmed.
+Faces       : The list of proposed names for name assignment in people sidebar can now be reduced to face tags with a setup option.
+Faces       : Tags in tags sidebar can now be marked as face tags via context menu if they are not already.
+Maintenance : The maintenance now does not generate massive amounts of threads anymore. Instead, we use a queue based approach to
+              level the load on the CPUs more appropriate. This should improve the reactiveness during maintenance.
+Searches    : Improved the exactness of similarity recognition for external images dropped in fuzzy search.
+Searches    : Introduced a configurable lower bound for the minimum similarity in fuzzy and duplicates search.
+Searches    : The results of duplicates searches can now be restricted. It is now possible to restrict the duplicates to the ones that
+              are in the same album as the reference image or in another album. This feature is also usable in maintenance.
+Searches    : In duplicates view, the reference image is more clearly identified by the description reference image in the image information.
+BQM         : Several usability improvements in Watermark tool.
+General     : Unsharp Mask filter can now reduce color noise to process image in HSL color space.
+General     : Update internal Libraw to 0.18.2 : new camera supported: Sigma Quattro H.
+              Fixed bug in exposure computation for Fuji camera. Fix wrong black level in Sony A350.
+              Fix Sony metadata parser. Fix Phase One decoding.
+
+BUGFIXES FROM BUGZILLA:
+
+001 ==> 374787 : Release Notes are difficult to read because of color choices.
+002 ==> 374784 - Startup wizard displays path to album with forward slashes.
+003 ==> 374771 - Thumbnails for video files are gray.
+004 ==> 366010 - Main menu bar is not translated (localized).
+005 ==> 328321 - Image orientation is not maintained when processing RAW image through BQM.
+006 ==> 374922 - digiKam crashes when dropping ext. image into fuzzy search target area.
+007 ==> 375019 - Error updating scheme from digikam 4.
+008 ==> 311652 - THUMBBAR : wrong items selection with shift key.
+009 ==> 374671 - Breeze Icons missing dark icons.
+010 ==> 375107 - Deleting a tag with 0 images from Tag Manager generates incorrect dialog - missing tag name.
+011 ==> 375142 - The similarity calculated for the fuzzy image drop search is imprecise.
+012 ==> 336253 - Create a New tag, Unconfirmed Faces [patch].
+013 ==> 263400 - Newly detected faces should be stored in a dedicated virtual album for checking.
+014 ==> 262168 - When adding name, the list should only contain people [patch].
+015 ==> 373946 - digiKam freezes when trying to use "Upload".
+016 ==> 367083 - Not Writing Labels to XMP Sidecar.
+017 ==> 375108 - AppImage has no application icon showing in Ubuntu.
+018 ==> 341758 - BQM Watermark tool : Option to set size based on given dimension.
+019 ==> 371485 - GoogleMaps outdated.
+020 ==> 375399 - No preview of video files.
+021 ==> 375357 - No video preview.
+022 ==> 375390 - "Set as Tag Thumbnail" in Tag View doesn't work.
+023 ==> 375110 - Open with doesn't remember application association.
+024 ==> 328457 - BQM Watermark tool : doesn't apply zero margins.
+025 ==> 373756 - Display Names Are Not Updated in Regions When People Tag Changed.
+026 ==> 374712 - Preview image does not work any more from thumbs view.
+027 ==> 281742 - ICONVIEW : wrong selection start when browsing images.
+028 ==> 375408 - Don't change context menu shortcut keys in single vs. multiple image context menus.
+029 ==> 375471 - Delete Selected Albums Dialogue Contains Duplicate Paths.
+030 ==> 339460 - BQM Watermark tool : add new option to support font style [patch].
+031 ==> 375600 - Time Adjust Batch Queue depends on Global Metadata Setting for timestamp.
+032 ==> 375627 - What is the input box under Fuzzy -> Image -> Similarity range?
+033 ==> 375663 - Progress bars not initialized in ImageEditor at various places.
+034 ==> 375350 - Default maintenance window too small on OSX.
+035 ==> 374004 - Different Images recognised as identical images.
+036 ==> 375704 - Dragging the map over the zoom slider in Marble/OSM view will unintentionally zoom out/in.
+037 ==> 375749 - Crash when trying to configure table column.
+038 ==> 363937 - Add option to disable thumbnails in Import window.
+039 ==> 291110 - BQM Watermark tool : size original/unchanged/pixels/points.
+040 ==> 375767 - In Editor switching between pictures with left/right key is reversed. Pic 1 of 80 is displayed as 80 of 80.
+041 ==> 375770 - Creating tag from left panel causes error.
+042 ==> 375591 - digiKam crash.
+043 ==> 375700 - digiKam freezes for a long time (I/O wait) if similarity range is set too low.
+044 ==> 375573 - Don't reset/destroy context after deleting one image among a set of duplicates.
+045 ==> 374368 - Unchecking "Show splash screen at startup" causes no window to display at launch.
+046 ==> 375809 - digiKam froze on opening Settings.
+047 ==> 376112 - digiKam Handbook (Menu & F1) Goes To Incorrect Location.
+048 ==> 374591 - Deleting image only removes the file and sets the status to hidden but does not delete the image from DB [patch].
+049 ==> 323718 - THUMBDB : rebuild all thumbnails does not get rid of all thumbnails first.
+050 ==> 317210 - THUMBDB : delete image removes file, but does not remove thumbnails
+051 ==> 338869 - BQM Watermark tool : add new option to rotate text.
+052 ==> 250642 - BQM Watermark tool : signature does not respect correct orientation.
+053 ==> 290944 - BQM Watermark tool : does not support correct placement of watermarks.
+054 ==> 374450 - DATA LOSS: Saving a file can overwrite other file.
+055 ==> 376345 - Can't disable "auto spell check" while editing metadata.
+056 ==> 376369 - No Icon of digiKam in Gnome's panels.
+057 ==> 376375 - Strange Map icon.
+058 ==> 376351 - create a tool to automatically group jpeg and raw images with same name.
+059 ==> 115753 - Option to apply unsharp masking to luma channel only [patch].
+060 ==> 376409 - Export doesn't work on Windows
+061 ==> 376423 - Inconsistent ENTER key in thumbnails view.
+062 ==> 376489 - Crash with Pentax K-5 DNG files.
+063 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
+064 ==> 376650 - Write Meta Data hangs if album is empty.
+065 ==> 375199 - Metadata Synchronizer Tool is not working for subfolders.
+066 ==> 375796 - Barel Effect Apperaing on Images RAW RW2 Panasonic Format.
+067 ==> 376331 - Path when saving/opening presentation files should be remebered.
+068 ==> 375416 - Frequent crashes when applying faces.
+069 ==> 301048 - BQM Watermark tool : more super-impose visible watermark options [patch].
+070 ==> 123097 - SCAN : ignore some directories in digiKam [patch].
+071 ==> 283062 - THUMBDB : limit the size of thumbnail database
+072 ==> 216895 - SQLITE : improve performance and reduce space with some pragma's
+073 ==> 374225 - Add possibility to remove face identities by removing tag and remove person tags but preserving the tags themselves [patch]
+074 ==> 376815 - Restore from Trash works incorrectly.
+075 ==> 376820 - Make mime type settings GUI more consistent [patch].
+076 ==> 376615 - Missing icon in GNOME shell dock.
+077 ==> 376885 - The setting 'Always show original images' cannot be disabled in 5.5.0.
+078 ==> 376721 - Poor quality colour management in Preview vs Editor.
+079 ==> 376898 - Crash when scanning photo containing exif with empty Jis comment (Digikam::MetaEngine::getExifComment, QTextCodec::toUnicode) [patch].
+080 ==> 374248 - importing photo, bad file selector.
+081 ==> 376530 - Map jumps to 0/0 position when using "Zoom into a group".
+082 ==> 376928 - Changes on mimetypes are applied after restart [patch].
+083 ==> 377011 - A list of dependencies for setting up development environment.
+084 ==> 376020 - Moving of photos within the fuzzy search corrupts database.
+085 ==> 375421 - Same name under "Albums" for different collections with same underlying name.
+086 ==> 208713 - Quicker deletion of multiple duplicate images.
+087 ==> 372378 - Action after the search of the duplicated images.
+088 ==> 202030 - Search duplicate images filtered by file type mime.
+089 ==> 365331 - digiKam not loading because rpath information missing from libQt5Qml, libQt5Script and libQt5Quick.
+090 ==> 377039 - Network Collections cause hang on "Reading Database".
+091 ==> 218819 - Implement albums tree-view colapse/expand history.
+092 ==> 377292 - Improve GPS Correlator UI
+093 ==> 377240 - Deleting an image (DEL key) within LightTable resets zoom factor for following image.
+094 ==> 377206 - Sort templates and camera filter ins configuration
+095 ==> 376933 - Geolocation icon missing.
+096 ==> 376952 - AppImage Video playback issues - no sound.
+097 ==> 375651 - Update 5.4.0 on Windows : no sound with all my videos.
