@@ -165,7 +165,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Restrict to reference album"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Exclude reference album"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
     d->searchResultRestriction->setWhatsThis(i18n("Use this option to restrict the duplicate search "
-                                                  "with some critera, as to limit search to the album "
+                                                  "with some criteria, as to limit search to the album "
                                                   "of reference image, or to exclude the album of "
                                                   "reference image of the search."));
 
