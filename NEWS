@@ -1,9 +1,10 @@
 *****************************************************************************************************
-digiKam 5.6.0 - Release date: 2017-0?-??
+digiKam 5.6.0 - Release date: 2017-05-07
 
 NEW FEATURES:
 
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 
+001 ==> 377432 : Crash on browsing images.
+002 ==> 
