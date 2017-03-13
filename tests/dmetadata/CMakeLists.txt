@@ -1,6 +1,6 @@
 #
 # Copyright (c) 2015,      by Veaceslav Munteanu, <veaceslav dot munteanu90 at gmail dot com>
-# Copyright (c) 2010-2016, by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2017, by Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -78,6 +78,18 @@ set(loadfromba_SRCS loadfromba.cpp)
 add_executable(loadfromba ${loadfromba_SRCS})
 ecm_mark_nongui_executable(loadfromba)
 target_link_libraries(loadfromba
+                      digikamcore
+                      libdng
+
+                      Qt5::Core
+
+                      KF5::I18n
+)
+
+set(readfromimage_SRCS readfromimage.cpp)
+add_executable(readfromimage ${readfromimage_SRCS})
+ecm_mark_nongui_executable(readfromimage)
+target_link_libraries(readfromimage
                       digikamcore
                       libdng
 
