@@ -7,4 +7,5 @@ NEW FEATURES:
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 377432 : Crash on browsing images.
-002 ==> 
+002 ==> 377565 - Problem importing Person tags which are also "normal" tags.
+003 ==> 
