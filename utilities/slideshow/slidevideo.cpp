@@ -203,9 +203,6 @@ void SlideVideo::slotPlayerStateChanged(QtAV::MediaStatus newState)
         case LoadedMedia:
             emit signalVideoLoaded(true);
             break;
-        case UnknownMediaStatus:
-        case NoMedia:
-        case StalledMedia:
         case InvalidMedia:
             emit signalVideoLoaded(false);
             break;
