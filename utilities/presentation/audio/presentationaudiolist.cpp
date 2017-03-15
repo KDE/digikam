@@ -136,10 +136,7 @@ void PresentationAudioListItem::slotPlayerError(const QtAV::AVError& err)
 
 void PresentationAudioListItem::slotMediaStateChanged(QtAV::MediaStatus status)
 {
-    if (status == QtAV::UnknownMediaStatus ||
-        status == QtAV::NoMedia            ||
-        status == QtAV::StalledMedia       ||
-        status == QtAV::InvalidMedia)
+    if (status == QtAV::InvalidMedia)
     {
         showErrorDialog(i18n("No detail available"));
         return;

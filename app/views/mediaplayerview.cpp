@@ -325,12 +325,8 @@ void MediaPlayerView::slotPlayerStateChanged(QtAV::AVPlayer::State state)
 
 void MediaPlayerView::slotMediaStatusChanged(QtAV::MediaStatus status)
 {
-    if (status == QtAV::UnknownMediaStatus ||
-        status == QtAV::NoMedia            ||
-        status == QtAV::StalledMedia       ||
-        status == QtAV::InvalidMedia)
+    if (status == QtAV::InvalidMedia)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "MediaStatus: " << status;
         setPreviewMode(Private::ErrorView);
     }
 }

@@ -330,10 +330,7 @@ void PresentationAudioWidget::slotNext()
 
 void PresentationAudioWidget::slotTimeUpdaterTimeout()
 {
-    if (d->mediaObject->mediaStatus() == QtAV::UnknownMediaStatus ||
-        d->mediaObject->mediaStatus() == QtAV::NoMedia            ||
-        d->mediaObject->mediaStatus() == QtAV::StalledMedia       ||
-        d->mediaObject->mediaStatus() == QtAV::InvalidMedia)
+    if (d->mediaObject->mediaStatus() == QtAV::InvalidMedia)
     {
         slotError();
         return;
