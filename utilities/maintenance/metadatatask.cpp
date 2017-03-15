@@ -37,8 +37,11 @@ class MetadataTask::Private
 {
 public:
 
-    Private()
-        : cancel(false), tagsOnly(false), direction(MetadataSynchronizer::WriteFromDatabaseToFile), data(0)
+    Private() :
+        cancel(false),
+        tagsOnly(false),
+        direction(MetadataSynchronizer::WriteFromDatabaseToFile),
+        data(0)
     {
     }
 
@@ -47,7 +50,7 @@ public:
 
     MetadataSynchronizer::SyncDirection direction;
 
-    MaintenanceData *                   data;
+    MaintenanceData*                    data;
 };
 
 // -------------------------------------------------------
@@ -87,7 +90,7 @@ void MetadataTask::slotCancel()
 void MetadataTask::run()
 {
     // While we have data (using this as check for non-null)
-    while(d->data)
+    while (d->data)
     {
         ImageInfo item = d->data->getImageInfo();
 
@@ -110,7 +113,7 @@ void MetadataTask::run()
             fileHub.load(item);
 
             // write out to file DMetadata
-            if(d->tagsOnly)
+            if (d->tagsOnly)
             {
                 fileHub.writeTags(item.filePath());
             }

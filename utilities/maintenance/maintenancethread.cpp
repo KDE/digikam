@@ -42,7 +42,8 @@ namespace Digikam
 {
 
 MaintenanceThread::MaintenanceThread(QObject* const parent)
-    : ActionThreadBase(parent), data(new MaintenanceData)
+    : ActionThreadBase(parent),
+      data(new MaintenanceData)
 {
     connect(this, SIGNAL(finished()),
             this, SLOT(slotThreadFinished()));

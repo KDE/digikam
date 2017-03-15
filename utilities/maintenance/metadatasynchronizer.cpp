@@ -45,7 +45,6 @@ namespace Digikam
 
 class MetadataSynchronizer::Private
 {
-
 public:
 
     Private() :

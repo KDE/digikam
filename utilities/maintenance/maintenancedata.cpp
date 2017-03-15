@@ -24,9 +24,11 @@
 #include "maintenancedata.h"
 
 // Qt includes
+
 #include <QMutex>
 
 // Local includes
+
 #include "identity.h"
 
 namespace Digikam
@@ -84,57 +86,72 @@ void MaintenanceData::setIdentities(const QList<Identity>& identities)
     d->identitiesList = identities;
 }
 
-qlonglong MaintenanceData::getImageId() const{
+qlonglong MaintenanceData::getImageId() const
+{
     d->lock.lock();
     qlonglong id = -1;
+
     if (!d->imageIdList.isEmpty())
     {
         id = d->imageIdList.takeFirst();
     }
+
     d->lock.unlock();
     return id;
 }
 
-int MaintenanceData::getThumbnailId() const{
+int MaintenanceData::getThumbnailId() const
+{
     d->lock.lock();
     int id = -1;
+
     if (!d->thumbnailIdList.isEmpty())
     {
         id = d->thumbnailIdList.takeFirst();
     }
+
     d->lock.unlock();
     return id;
 }
 
-QString MaintenanceData::getImagePath() const{
+QString MaintenanceData::getImagePath() const
+{
     d->lock.lock();
     QString path;
+
     if (!d->imagePathList.isEmpty())
     {
         path = d->imagePathList.takeFirst();
     }
+
     d->lock.unlock();
     return path;
 }
 
-ImageInfo MaintenanceData::getImageInfo() const{
+ImageInfo MaintenanceData::getImageInfo() const
+{
     d->lock.lock();
     ImageInfo info;
+
     if (!d->imageInfoList.isEmpty())
     {
         info = d->imageInfoList.takeFirst();
     }
+
     d->lock.unlock();
     return info;
 }
 
-Identity MaintenanceData::getIdentity() const{
+Identity MaintenanceData::getIdentity() const
+{
     d->lock.lock();
     Identity identity;
+
     if (!d->identitiesList.isEmpty())
     {
         identity = d->identitiesList.takeFirst();
     }
+
     d->lock.unlock();
     return identity;
 }
