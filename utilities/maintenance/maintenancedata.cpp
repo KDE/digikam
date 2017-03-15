@@ -120,7 +120,7 @@ QString MaintenanceData::getImagePath() const{
 ImageInfo MaintenanceData::getImageInfo() const{
     d->lock.lock();
     ImageInfo info;
-    if (!d->imagePathList.isEmpty())
+    if (!d->imageInfoList.isEmpty())
     {
         info = d->imageInfoList.takeFirst();
     }
