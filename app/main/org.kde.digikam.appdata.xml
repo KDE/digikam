@@ -31,6 +31,13 @@
   <name xml:lang="x-test">xxdigiKamxx</name>
   <name xml:lang="zh-CN">digiKam</name>
   <summary>Photo Management Program</summary>
+  <summary xml:lang="ca">Programa de gestió de fotografies</summary>
+  <summary xml:lang="cs">Program pro správu fotografií</summary>
+  <summary xml:lang="nl">Fotobeheerprogramma</summary>
+  <summary xml:lang="pt">Programa de Gestão de Fotografias</summary>
+  <summary xml:lang="sv">Fotohanteringsprogram</summary>
+  <summary xml:lang="uk">Програма для керування фотографіями</summary>
+  <summary xml:lang="x-test">xxPhoto Management Programxx</summary>
   <description>
     <p>
       digiKam is an advanced digital photo management application, which makes importing and organizing digital photos
@@ -227,6 +234,7 @@
       <li xml:lang="bs">Light Table svojstvo</li>
       <li xml:lang="ca">La característica taula de llum</li>
       <li xml:lang="ca-valencia">La característica taula de llum</li>
+      <li xml:lang="cs">Vlastnost Prohlížecí stolek</li>
       <li xml:lang="de">Leuchttischfunktion</li>
       <li xml:lang="el">Φωτεινό τραπέζι</li>
       <li xml:lang="en-GB">Light Table feature</li>
