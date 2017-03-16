@@ -90,13 +90,13 @@ class FacesDetector::Private
 {
 public:
 
-    Private()
-        : benchmark(false),
-          total(0),
-          progressValue(0),
-          currentProgressChunk(0),
-          currentScheduled(0),
-          currentFinished(0)
+    Private() :
+        benchmark(false),
+        total(0),
+        progressValue(0),
+        currentProgressChunk(0),
+        currentScheduled(0),
+        currentFinished(0)
     {
     }
 

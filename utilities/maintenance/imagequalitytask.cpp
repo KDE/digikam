@@ -40,8 +40,10 @@ class ImageQualityTask::Private
 {
 public:
 
-    Private()
-        : cancel(false),imgqsort(0),data(0)
+    Private() :
+        cancel(false),
+        imgqsort(0),
+        data(0)
     {
     }
 
@@ -89,7 +91,7 @@ void ImageQualityTask::slotCancel()
 void ImageQualityTask::run()
 {
     // While we have data (using this as check for non-null)
-    while(d->data)
+    while (d->data)
     {
         if (d->cancel)
         {
@@ -97,6 +99,7 @@ void ImageQualityTask::run()
         }
 
         QString path = d->data->getImagePath();
+
         if (path.isEmpty())
             break;
 
@@ -129,6 +132,7 @@ void ImageQualityTask::run()
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
         emit signalFinished(qimg);
     }
+
     emit signalDone();
 }
 

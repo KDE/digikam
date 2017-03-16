@@ -42,14 +42,15 @@ class FingerprintsTask::Private
 {
 public:
 
-    Private()
-        : cancel(false), data(0)
+    Private() :
+        cancel(false),
+        data(0)
     {
     }
 
-    bool      cancel;
+    bool             cancel;
 
-    MaintenanceData*  data;
+    MaintenanceData* data;
 };
 
 // -------------------------------------------------------
@@ -85,6 +86,7 @@ void FingerprintsTask::run()
             return;
 
         QString path = d->data->getImagePath();
+
         if (path.isEmpty())
             break;
 
@@ -102,6 +104,7 @@ void FingerprintsTask::run()
         QImage qimg = dimg.smoothScale(22, 22, Qt::KeepAspectRatio).copyQImage();
         emit signalFinished(qimg);
     }
+
     emit signalDone();
 }
 

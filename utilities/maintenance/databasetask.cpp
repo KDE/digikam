@@ -55,15 +55,14 @@ public:
     {
     }
 
+    QString          objectIdentification;
 
-    QString                       objectIdentification;
+    bool             scanThumbsDb;
+    bool             scanRecognitionDb;
+    bool             cancel;
 
-    bool                          scanThumbsDb;
-    bool                          scanRecognitionDb;
-    bool                          cancel;
-
-    Mode                          mode;
-    MaintenanceData*              data;
+    Mode             mode;
+    MaintenanceData* data;
 };
 
 // -------------------------------------------------------
@@ -83,8 +82,8 @@ DatabaseTask::~DatabaseTask()
 
 void DatabaseTask::computeDatabaseJunk(bool thumbsDb, bool facesDb)
 {
-    d->scanThumbsDb           = thumbsDb;
-    d->scanRecognitionDb      = facesDb;
+    d->scanThumbsDb      = thumbsDb;
+    d->scanRecognitionDb = facesDb;
 }
 
 void DatabaseTask::setMode(Mode mode)
@@ -117,6 +116,7 @@ void DatabaseTask::run()
         if (CoreDbAccess().db()->integrityCheck())
         {
             CoreDbAccess().db()->vacuum();
+
             if (!CoreDbAccess().db()->integrityCheck())
             {
                 qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed after vacuum. Something went wrong.";
@@ -144,6 +144,7 @@ void DatabaseTask::run()
             if (ThumbsDbAccess().db()->integrityCheck())
             {
                 ThumbsDbAccess().db()->vacuum();
+
                 if (!ThumbsDbAccess().db()->integrityCheck())
                 {
                     qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for thumbnails DB failed after vacuum. Something went wrong.";
@@ -174,6 +175,7 @@ void DatabaseTask::run()
         if (FacesEngine::RecognitionDatabase().integrityCheck())
         {
             FacesEngine::RecognitionDatabase().vacuum();
+
             if (!FacesEngine::RecognitionDatabase().integrityCheck())
             {
                 qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed after vacuum. Something went wrong.";
@@ -199,7 +201,7 @@ void DatabaseTask::run()
 
         // Get the count of image entries in DB to delete.
         staleImageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
-        
+
         emit signalFinished();
 
         // Get the stale thumbnail paths.
@@ -329,7 +331,7 @@ void DatabaseTask::run()
 
             CoreDbAccess().db()->deleteItem(imageId);
             CoreDbAccess().db()->removeImagePropertyByName(QLatin1String("similarityTo_")+QString::number(imageId));
-        
+
             emit signalFinished();
         }
     }
@@ -353,6 +355,7 @@ void DatabaseTask::run()
                 }
 
                 int thumbId = d->data->getThumbnailId();
+
                 if (thumbId == -1)
                 {
                     break;

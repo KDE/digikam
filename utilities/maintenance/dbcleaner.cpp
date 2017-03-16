@@ -56,7 +56,7 @@ public:
         messageBox(0)
     {
     }
-    
+
     ~Private()
     {
         delete messageBox;
@@ -92,12 +92,14 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases
     qRegisterMetaType<QList<FacesEngine::Identity>>("QList<FacesEngine::Identity>");
 
     d->cleanThumbsDb   = cleanThumbsDb;
+
     if (cleanThumbsDb)
     {
         d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;
     }
 
     d->cleanFacesDb    = cleanFacesDb;
+
     if (cleanFacesDb)
     {
         d->databasesToAnalyseCount = d->databasesToAnalyseCount + 1;

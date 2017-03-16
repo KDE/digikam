@@ -109,7 +109,7 @@ void ImageInfoJob::allItemsFromAlbum(Album* const album)
 
         d->jobThread = DBJobsManager::instance()->startAlbumsJobThread(jobInfo);
     }
-    else if(album->type() == Album::SEARCH)
+    else if (album->type() == Album::SEARCH)
     {
         SearchesDBJobInfo jobInfo;
         jobInfo.setSearchId(url.searchId());

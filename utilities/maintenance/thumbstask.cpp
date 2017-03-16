@@ -111,6 +111,7 @@ void ThumbsTask::run()
         QList<QImage> images = d->catcher->waitForThumbnails();
         emit signalFinished(images.first());
     }
+
     emit signalDone();
 
     d->catcher->setActive(false);
