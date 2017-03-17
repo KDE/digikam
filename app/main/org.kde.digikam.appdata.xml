@@ -47,6 +47,7 @@
     <p xml:lang="bs">digiKam je napredna aplikacija za upravljanje digitalnim fotografijama, što čini uvoz i organizaciju digitalnih fotografija "klikom". Fotografije su organizovane u albumima koji mogu biti sortirani hronološki, po rasporedu foldera ili po korisničkim kolekcijama.</p>
     <p xml:lang="ca">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals sigui una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
     <p xml:lang="ca-valencia">El digiKam és una avançada aplicació per a gestionar les fotografies digitals, la qual fa que la importació i organització de les fotografies digitals siga una «tasca fàcil». Les fotografies s'organitzen en àlbums, els quals es poden ordenar cronològicament, per disposició de la carpeta o per col·leccions personalitzades.</p>
+    <p xml:lang="cs">digiKam je pokročilý správce fotografií, se kterým snadno zvládnete import a uspořádání digitálních fotografií. Obrázky jsou organizovány v albech, která je možné seřadit podle data, podle struktury složek, nebo podle uživatelských sbírek.</p>
     <p xml:lang="de">digiKam ist eine leistungsfähige Anwendung zur Verwaltung von Digitalbildern. Es stellt eine einfache Oberfläche zum Importieren und Organisieren von Digitalbildern zur Verfügung. Die Bilder werden in Alben organisiert, die chronologisch oder nach Ordnern oder als benutzerdefinierte Sammlungen sortiert werden können.</p>
     <p xml:lang="el">Το digiKam είναι μια προηγμένη εφαρμογή διαχείρισης φωτογραφιών, που κάνει πανεύκολη την εισαγωγή και οργάνωση φωτογραφιών. Οι φωτογραφίες οργανώνονται σε άλμπουμ με χρονολογική ταξινόμηση, ανάλογα με τη διάταξη του φακέλου ή τις προσαρμοσμένες συλλογές.</p>
     <p xml:lang="en-GB">digiKam is an advanced digital photo management application, which makes importing and organizing digital photos a "snap". The photos are organized in albums which can be sorted chronologically, by folder layout or by custom collections.</p>
@@ -97,6 +98,7 @@
       <li xml:lang="bs">Organizacija fotografija u albume i podalbume (sa podrškom za označavanje i komentarisanje)</li>
       <li xml:lang="ca">Organització de les fotografies en àlbums i subàlbums (amb implementació per a les etiquetes i comentaris)</li>
       <li xml:lang="ca-valencia">Organització de les fotografies en àlbums i subàlbums (amb implementació per a les etiquetes i comentaris)</li>
+      <li xml:lang="cs">Organizace fotografií do alb a podřízených alb s podporou značek a komentářů</li>
       <li xml:lang="de">Organisation von Fotos in Alben und Unteralben mit Unterstützung für Stichwörter und Kommentare</li>
       <li xml:lang="el">Οργάνωση φωτογραφιών σε άλμπουμ και υπο-άλμπουμ (με υποστήριξη για ετικέτες και σχόλια)</li>
       <li xml:lang="en-GB">Organisation of photos in albums and sub-albums (with tags and comments support)</li>
@@ -119,6 +121,7 @@
       <li xml:lang="bs">Podrška za Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="ca">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
       <li xml:lang="ca-valencia">Implementació per a notes Exif, Iptc, Xmp i del fabricant</li>
+      <li xml:lang="cs">Podpora pro Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="de">Unterstützung für Exif, Iptc, Xmp und Herstellerbemerkungen</li>
       <li xml:lang="el">Υποστήριξη για Exif, Iptc, Xmp, Makernotes</li>
       <li xml:lang="en-GB">Support for Exif, Iptc, Xmp, Makernotes</li>
@@ -142,6 +145,7 @@
       <li xml:lang="bs">SQLite skladište za albume i njegove metapodatke</li>
       <li xml:lang="ca">Emmagatzematge amb SQLite pels àlbums i les seves metadades</li>
       <li xml:lang="ca-valencia">Emmagatzematge amb SQLite pels àlbums i les seues metadades</li>
+      <li xml:lang="cs">Ukládání informace o albech do databáze založené na SQLite</li>
       <li xml:lang="de">Speicherung der Alben und Metadaten in einer SQLite-Datenbank</li>
       <li xml:lang="el">Αποθηκευτικός χώρος με SQLite για τα άλμπουμ και τα μεταδεδομένα τους</li>
       <li xml:lang="en-GB">SQLite powered storage for the albums and its metadata</li>
@@ -165,6 +169,7 @@
       <li xml:lang="bs">Podrška za filtriranje i sortiranje albuma</li>
       <li xml:lang="ca">Implementació pel filtratge i classificació dels àlbums</li>
       <li xml:lang="ca-valencia">Implementació pel filtratge i classificació dels àlbums</li>
+      <li xml:lang="cs">Podpora řazení a filtrování alb</li>
       <li xml:lang="de">Unterstützung für das Filtern und Sortieren von Alben</li>
       <li xml:lang="el">Υποστήριξη για φιλτράρισμα και ταξινόμηση των άλμπουμ</li>
       <li xml:lang="en-GB">Support for filtering and sorting albums</li>
@@ -188,6 +193,7 @@
       <li xml:lang="bs">Uvoz iz više od 1100 digitalnih kamera uređaja</li>
       <li xml:lang="ca">Importa des de més de 1.100 dispositius de càmeres digitals</li>
       <li xml:lang="ca-valencia">Importa des de més de 1.100 dispositius de càmeres digitals</li>
+      <li xml:lang="cs">Import z více než 1100 typů digitálních fotoaparátů</li>
       <li xml:lang="de">Import von mehr als 1100 digitalen Kameras</li>
       <li xml:lang="el">Εισαγωγή από περισσότερες από 1100 ψηφιακές κάμερες</li>
       <li xml:lang="en-GB">Import from more than 1100 digital camera devices</li>
@@ -211,6 +217,7 @@
       <li xml:lang="bs">Podrška za fotografije 300 RAW formata</li>
       <li xml:lang="ca">Implementació per a 300 formats d'imatges RAW</li>
       <li xml:lang="ca-valencia">Implementació per a 300 formats d'imatges RAW</li>
+      <li xml:lang="cs">Podpora 300 typů formátů RAW</li>
       <li xml:lang="de">Unterstützung für 300 Bild-Rohformate</li>
       <li xml:lang="el">Υποστήριξη για 300 τύπους RAW εικόνων</li>
       <li xml:lang="en-GB">Support for 300 RAW format pictures</li>
@@ -234,7 +241,7 @@
       <li xml:lang="bs">Light Table svojstvo</li>
       <li xml:lang="ca">La característica taula de llum</li>
       <li xml:lang="ca-valencia">La característica taula de llum</li>
-      <li xml:lang="cs">Vlastnost Prohlížecí stolek</li>
+      <li xml:lang="cs">Funkce prohlížecího stolku</li>
       <li xml:lang="de">Leuchttischfunktion</li>
       <li xml:lang="el">Φωτεινό τραπέζι</li>
       <li xml:lang="en-GB">Light Table feature</li>
@@ -257,6 +264,7 @@
       <li xml:lang="bs">Arhitekture plugin-a: koristeći Kipi-plugin-e</li>
       <li xml:lang="ca">Arquitectura de connectors: usant els connectors Kipi</li>
       <li xml:lang="ca-valencia">Arquitectura de connectors: usant els connectors Kipi</li>
+      <li xml:lang="cs">Modulární architektura: pomocí modulů KIPI</li>
       <li xml:lang="de">Modul-Architektur: Erweiterung durch KIPI-Module</li>
       <li xml:lang="el">Αρχιτεκτονικές προσθέτων: με χρήση Kipi-plugins</li>
       <li xml:lang="en-GB">Plugins architectures: using Kipi-plugins</li>
@@ -280,6 +288,7 @@
       <li xml:lang="bs">Podijelite vaše fotografije koristeći HTML ili objavljujući ih na socijalne web stranice</li>
       <li xml:lang="ca">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
       <li xml:lang="ca-valencia">Compartiu les vostres fotografies usant HTML o publicant-les a llocs web socials</li>
+      <li xml:lang="cs">Sdílení fotografií vytvořením HTML galerie nebo přímým publikováním na sociálních sítích</li>
       <li xml:lang="de">Teilen Sie Ihre Fotos über HTML oder veröffentlichen Sie sie auf sozialen Webseiten</li>
       <li xml:lang="el">Μοιραστείτε τις φωτογραφίες σας με HTML ή με δημοσίευση σε κοινωνικά δίκτυα</li>
       <li xml:lang="en-GB">Share your photos using HTML or publishing them to social web sites</li>
@@ -303,6 +312,7 @@
       <li xml:lang="bs">Uvršten uređivač slika sa naprednim svojstvima</li>
       <li xml:lang="ca">Inclou un editor d'imatges amb característiques avançades</li>
       <li xml:lang="ca-valencia">Inclou un editor d'imatges amb característiques avançades</li>
+      <li xml:lang="cs">Editor obrázků s pokročilými možnostmi úprav</li>
       <li xml:lang="de">Bildbearbeitung mit erweiterten Funktionen</li>
       <li xml:lang="el">Περιλαμβάνεται επεξεργαστής εικόνων με προηγμένες λειτουργίες</li>
       <li xml:lang="en-GB">Image editor included with advanced features</li>
