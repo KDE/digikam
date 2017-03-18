@@ -218,8 +218,8 @@ void DatabaseMigrationDialog::slotPerformCopy()
 
 void DatabaseMigrationDialog::dataInit()
 {
-    d->fromDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance());
-    d->toDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance());
+    d->fromDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance(), true);
+    d->toDatabaseSettingsWidget->setParametersFromSettings(ApplicationSettings::instance(), true);
 }
 
 void DatabaseMigrationDialog::slotUnlockInputFields()

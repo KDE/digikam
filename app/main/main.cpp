@@ -60,6 +60,7 @@
 #include "facedbaccess.h"
 #include "dxmlguiwindow.h"
 #include "digikam_version.h"
+#include "applicationsettings.h"
 
 using namespace Digikam;
 using namespace FacesEngine;
@@ -90,10 +91,20 @@ int main(int argc, char* argv[])
     parser.addVersionOption();
     parser.addHelpOption();
     aboutData.setupCommandLine(&parser);
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from"),      i18n("Open camera dialog at <path>"),                                             QLatin1String("path")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("download-from-udi"),  i18n("Open camera dialog for the device with Solid UDI <udi>"),                   QLatin1String("udi")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("detect-camera"),      i18n("Automatically detect and open a connected gphoto2 camera")));
-    parser.addOption(QCommandLineOption(QStringList() <<  QLatin1String("database-directory"), i18n("Start digikam with the SQLite database file found in the directory <dir>"), QLatin1String("dir")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("download-from"),
+                                        i18n("Open camera dialog at <path>"),
+                                        QLatin1String("path")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("download-from-udi"),
+                                        i18n("Open camera dialog for the device with Solid UDI <udi>"),
+                                        QLatin1String("udi")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("detect-camera"),
+                                        i18n("Automatically detect and open a connected gphoto2 camera")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("database-directory"),
+                                        i18n("Start digikam with the SQLite database file found in the directory <dir>"),
+                                        QLatin1String("dir")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("config"),
+                                        i18n("Start digikam with the configuration file <config>"),
+                                        QLatin1String("config")));
 
     parser.process(app);
     aboutData.processCommandLine(&parser);
@@ -147,7 +158,29 @@ int main(int argc, char* argv[])
         }
     }
 
+    if (parser.isSet(QLatin1String("config")))
+    {
+        QString configFilename = parser.value(QLatin1String("config"));
+        QFileInfo configFile(configFilename);
+
+        if (configFile.isDir() || !configFile.dir().exists()
+                || !configFile.isReadable() || !configFile.isWritable())
+        {
+            QMessageBox::critical(qApp->activeWindow(),
+                                  qApp->applicationName(),
+                                  QLatin1String("--config ") + configFilename
+                                  + i18n("<p>The given path for the config file "
+                                         "is not valid. Either its parent "
+                                         "directory does not exist, it is a "
+                                         "directory itself or it cannot be read/"
+                                         "written to.</p>"));
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Invalid path: --config"
+                                         << configFilename;
+            return 1;
+        }
+    }
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
+
     KConfigGroup group        = config->group(QLatin1String("General Settings"));
     QString version           = group.readEntry(QLatin1String("Version"), QString());
     QString iconTheme         = group.readEntry(QLatin1String("Icon Theme"), QString());
@@ -180,6 +213,8 @@ int main(int argc, char* argv[])
     {
         // command line option set?
         params = DbEngineParameters::parametersForSQLiteDefaultFile(commandLineDBPath);
+        ApplicationSettings::instance()->setDatabaseDirSetAtCmd(true);
+        ApplicationSettings::instance()->setDbEngineParameters(params);
     }
     else
     {

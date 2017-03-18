@@ -68,7 +68,8 @@ public:
 
 public:
 
-    void setParametersFromSettings(const ApplicationSettings* const settings);
+    void setParametersFromSettings(const ApplicationSettings* const settings,
+                                   const bool& migration = false);
     DbEngineParameters getDbEngineParameters() const;
 
     void    setDatabaseType(int type);

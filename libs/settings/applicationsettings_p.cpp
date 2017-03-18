@@ -211,6 +211,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       recursiveTags(false),
       scanAtStart(true),
       cleanAtStart(true),
+      databaseDirSetAtCmd(false),
       sidebarTitleStyle(DMultiTabBar::AllIconsText),
       albumSortRole(ApplicationSettings::ByFolder),
       albumSortChanged(false),
@@ -344,6 +345,7 @@ void ApplicationSettings::Private::init()
 
     scanAtStart                         = true;
     cleanAtStart                        = true;
+    databaseDirSetAtCmd                 = false;
     stringComparisonType                = ApplicationSettings::Natural;
 
     applicationStyle                    = qApp->style()->objectName();

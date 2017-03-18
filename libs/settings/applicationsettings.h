@@ -364,6 +364,9 @@ public:
     void setCleanAtStart(bool val);
     bool getCleanAtStart() const;
 
+    void setDatabaseDirSetAtCmd(bool val);
+    bool getDatabaseDirSetAtCmd() const;
+
     void setUseTrash(bool val);
     bool getUseTrash() const;
 

@@ -754,7 +754,8 @@ bool DatabaseSettingsWidget::checkMysqlServerConnection(QString& error)
     return result;
 }
 
-void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings)
+void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings* const settings,
+                                                       const bool& migration)
 {
     d->orgPrms = settings->getDbEngineParameters();
 
@@ -763,6 +764,14 @@ void DatabaseSettingsWidget::setParametersFromSettings(const ApplicationSettings
         d->dbPathEdit->setFileDlgPath(d->orgPrms.getCoreDatabaseNameOrDir());
         d->dbType->setCurrentIndex(d->dbTypeMap[SQlite]);
         slotResetMysqlServerDBNames();
+        if (settings->getDatabaseDirSetAtCmd() && !migration)
+        {
+            d->dbType->setEnabled(false);
+            d->dbPathEdit->setEnabled(false);
+            d->dbPathLabel->setText(d->dbPathLabel->text()
+                                    + i18n("This path was set as a command line"
+                                           "option (--database-directory)."));
+        }
     }
 #ifdef HAVE_MYSQLSUPPORT
 

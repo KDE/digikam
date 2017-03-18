@@ -227,8 +227,18 @@ void ApplicationSettings::setCleanAtStart(bool val)
 bool ApplicationSettings::getCleanAtStart() const
 {
     return d->cleanAtStart;
-
 }
+
+void ApplicationSettings::setDatabaseDirSetAtCmd(bool val)
+{
+    d->databaseDirSetAtCmd = val;
+}
+
+bool ApplicationSettings::getDatabaseDirSetAtCmd() const
+{
+    return d->databaseDirSetAtCmd;
+}
+
 
 void ApplicationSettings::setMinimumSimilarityBound(int val)
 {

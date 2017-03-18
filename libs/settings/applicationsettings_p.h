@@ -236,6 +236,7 @@ public:
     DbEngineParameters                        databaseParams;
     bool                                      scanAtStart;
     bool                                      cleanAtStart;
+    bool                                      databaseDirSetAtCmd;
 
     // album settings
     QStringList                               albumCategoryNames;
