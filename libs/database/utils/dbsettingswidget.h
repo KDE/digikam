@@ -63,9 +63,6 @@ public:
     explicit DatabaseSettingsWidget(QWidget* const parent = 0);
     virtual ~DatabaseSettingsWidget();
 
-    void applySettings();
-    void readSettings();
-
 public:
 
     void setParametersFromSettings(const ApplicationSettings* const settings,
@@ -106,7 +103,6 @@ private Q_SLOTS:
     void slotUpdateSqlInit();
     void slotCheckMysqlServerConnection();
     void slotResetMysqlServerDBNames();
-    void slotShowCurrentIgnoredDirectoriesSettings();
 
 private:
 

@@ -9,4 +9,5 @@ BUGFIXES FROM BUGZILLA:
 001 ==> 377432 : Crash on browsing images.
 002 ==> 377565 - Problem importing Person tags which are also "normal" tags.
 003 ==> 218297 - SETUP : Database location under control panel doesn't match when using database-directory command line option
-004 ==>
+004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue
+005 ==>
