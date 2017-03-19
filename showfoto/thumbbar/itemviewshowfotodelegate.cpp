@@ -299,8 +299,8 @@ void ItemViewShowfotoDelegate::drawGeolocationIndicator(QPainter* p, const QRect
 {
     if (!r.isNull())
     {
-        QIcon icon = QIcon::fromTheme(QLatin1String("globe"));
-        qreal op   = p->opacity();
+        QIcon icon(QIcon::fromTheme(QLatin1String("globe")).pixmap(r.size()));
+        qreal op = p->opacity();
         p->setOpacity(0.5);
         icon.paint(p, r);
         p->setOpacity(op);
