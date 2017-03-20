@@ -233,10 +233,10 @@ void ThumbBarDock::showThumbBar(bool status)
     setVisible(status);
 }
 
-QPixmap ThumbBarDock::generateFuzzyRect(const QSize& size, const QColor& color, int radius)
+QPixmap ThumbBarDock::generateFuzzyRect(const QSize& size, const QColor& color, int radius, const QColor& fillColor)
 {
     QPixmap pix(size);
-    pix.fill(Qt::transparent);
+    pix.fill(fillColor);
 
     QPainter painter(&pix);
     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -299,6 +299,38 @@ QPixmap ThumbBarDock::generateFuzzyRect(const QSize& size, const QColor& color, 
     linearGradient.setFinalStop(size.width(), 0);
     painter.fillRect(int(linearGradient.start().x()), radius, radius, size.height() - 2*radius, linearGradient);
     return pix;
+}
+
+QPixmap ThumbBarDock::generateFuzzyRectForGroup(const QSize& size, const QColor& color, int radius)
+{
+    // Create two normal borders
+    QSize groupSize = size.scaled(size.width()-10, size.height()-10, Qt::KeepAspectRatio);
+    QPixmap border1 = generateFuzzyRect(groupSize, color, radius, Qt::white);
+    QPixmap border2 = border1.copy();
+
+    QTransform rm;
+    // Rotate first border right by 4 degrees
+    rm.rotate(4);
+    border1 = border1.transformed(rm, Qt::SmoothTransformation);
+
+    // Rotate second border left by 4 degrees
+    rm.rotate(-8);
+    border2 = border2.transformed(rm, Qt::SmoothTransformation);
+
+    // Combine both borders
+    int width  = qMax(border1.size().width(), border2.size().width());
+    int height = qMax(border1.size().height(), border2.size().height());
+
+    QPixmap result(QSize(width, height));
+    result.fill(Qt::transparent); // force alpha channel
+    {
+        QPainter painter(&result);
+        painter.setRenderHints(QPainter::Antialiasing, true);
+        painter.drawPixmap(0, 0, border1);
+        painter.drawPixmap(0, 0, border2);
+    }
+
+    return result;
 }
 
 } // namespace Digikam

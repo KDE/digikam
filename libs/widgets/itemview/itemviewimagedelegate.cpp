@@ -267,8 +267,10 @@ void ItemViewImageDelegate::invalidatePaintingCache()
 }
 
 QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, const QPixmap& background,
-                                           const QPixmap& thumbnail) const
+                                           const QPixmap& thumbnail, bool isGrouped) const
 {
+    Q_D(const ItemViewImageDelegate);
+
     p->drawPixmap(0, 0, background);
 
     if (thumbnail.isNull())
@@ -293,12 +295,35 @@ QRect ItemViewImageDelegate::drawThumbnail(QPainter* p, const QRect& thumbRect, 
 
     p->drawPixmap(0, 0, background);
 */
-    QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size());
-    p->drawPixmap(actualPixmapRect.x()-3, actualPixmapRect.y()-3, borderPix);
+    QPixmap borderPix = thumbnailBorderPixmap(actualPixmapRect.size(), isGrouped);
 
-    p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
-                  r.y() + (r.height()-thumbnail.height())/2,
-                  thumbnail);
+    if (isGrouped)
+    {
+        const int xPadding = (borderPix.width()-actualPixmapRect.width())/2;
+        const int yPadding = (borderPix.height()-actualPixmapRect.height())/2;
+
+        p->drawPixmap(actualPixmapRect.x()-xPadding,
+                      actualPixmapRect.y()-yPadding, borderPix);
+
+        QPixmap groupThumbnail = thumbnail.scaled(thumbnail.width()-10,
+                                                  thumbnail.height()-10,
+                                                  Qt::KeepAspectRatio,
+                                                  Qt::SmoothTransformation);
+
+        p->drawPixmap(r.x() + (r.width()-groupThumbnail.width())/2,
+                      r.y() + (r.height()-groupThumbnail.height())/2,
+                      groupThumbnail);
+    }
+    else
+    {
+        p->drawPixmap(actualPixmapRect.x()-d->radius,
+                      actualPixmapRect.y()-d->radius, borderPix);
+
+        p->drawPixmap(r.x() + (r.width()-thumbnail.width())/2,
+                      r.y() + (r.height()-thumbnail.height())/2,
+                      thumbnail);
+    }
+
     //p->restore();
     return actualPixmapRect;
 }

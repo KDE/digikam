@@ -79,19 +79,35 @@ void DItemDelegate::clearCaches()
     d->squeezedTextCache.clear();
 }
 
-QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize) const
+QPixmap DItemDelegate::thumbnailBorderPixmap(const QSize& pixSize, bool isGrouped) const
 {
     const QColor borderColor = QColor(0, 0, 0, 128);
-    QString cacheKey         = QString::number(pixSize.width()) + QLatin1Char('-') + QString::number(pixSize.height());
+    QString cacheKey         = QString::number(pixSize.width())  + QLatin1Char('-')
+                             + QString::number(pixSize.height()) + QLatin1Char('-')
+                             + QString::number(isGrouped);
     QPixmap* const cachePix  = d->thumbnailBorderCache.object(cacheKey);
 
     if (!cachePix)
     {
         const int radius = 3;
-        QPixmap pix      = ThumbBarDock::generateFuzzyRect(QSize(pixSize.width()  + 2*radius,
-                           pixSize.height() + 2*radius),
-                           borderColor, radius);
-        const_cast<DItemDelegate*>(this)->d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
+        QPixmap pix;
+        const int width  = pixSize.width()  + 2*radius;
+        const int height = pixSize.height() + 2*radius;
+
+        if (isGrouped)
+        {
+            pix = ThumbBarDock::generateFuzzyRectForGroup(QSize(width, height),
+                                                          borderColor,
+                                                          radius);
+        }
+        else
+        {
+            pix = ThumbBarDock::generateFuzzyRect(QSize(width, height),
+                                                  borderColor,
+                                                  radius);
+        }
+
+        d->thumbnailBorderCache.insert(cacheKey, new QPixmap(pix));
         return pix;
     }
 

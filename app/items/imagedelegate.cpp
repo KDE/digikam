@@ -258,7 +258,9 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         pix = d->regPixmap;
     }
 
-    QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect, pix, thumbnailPixmap(index));
+    QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect,
+                                           pix, thumbnailPixmap(index),
+                                           info.hasGroupedImages());
 
     if (!actualPixmapRect.isNull())
     {

@@ -85,7 +85,7 @@ protected:
     virtual void clearCaches();
 
     QString squeezedTextCached(QPainter* const p, int width, const QString& text) const;
-    QPixmap thumbnailBorderPixmap(const QSize& pixSize) const;
+    QPixmap thumbnailBorderPixmap(const QSize& pixSize, bool isGrouped = false) const;
 
 private:
 

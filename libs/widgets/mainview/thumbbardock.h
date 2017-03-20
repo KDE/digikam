@@ -123,7 +123,8 @@ public:
     void setShouldBeVisible(bool);
     void restoreVisibility();
 
-    static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius);
+    static QPixmap generateFuzzyRect(const QSize& size, const QColor& color, int radius, const QColor& fillColor = Qt::transparent);
+    static QPixmap generateFuzzyRectForGroup(const QSize& size, const QColor& color, int radius);
 
 public Q_SLOTS:
 
