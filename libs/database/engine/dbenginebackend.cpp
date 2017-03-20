@@ -610,6 +610,12 @@ DbEngineAction BdEngineBackend::getDBAction(const QString& actionName) const
     return action;
 }
 
+BdEngineBackend::DbType BdEngineBackend::databaseType() const
+{
+    Q_D(const BdEngineBackend);
+    return d->parameters.isSQLite() ? DbType::SQLite : DbType::MySQL;
+}
+
 BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& action, QList<QVariant>* const values,
                                                           QVariant* const lastInsertId)
 {
@@ -658,6 +664,10 @@ BdEngineBackend::QueryState BdEngineBackend::execDBAction(const DbEngineAction& 
         if (actionElement.mode == QLatin1String("query"))
         {
             result = execSql(actionElement.statement, bindingMap, values, lastInsertId);
+        }
+        else if (actionElement.mode == QLatin1String("unprepared"))
+        {
+            result = execDirectSqlWithResult(actionElement.statement, values, lastInsertId);
         }
         else
         {
@@ -1351,6 +1361,41 @@ BdEngineBackend::QueryState BdEngineBackend::execDirectSql(const QString& sql)
     {
         if (query.exec(sql))
         {
+            break;
+        }
+        else
+        {
+            if (queryErrorHandling(query, retries++))
+            {
+                continue;
+            }
+            else
+            {
+                return BdEngineBackend::SQLError;
+            }
+        }
+    }
+
+    return BdEngineBackend::NoErrors;
+}
+
+BdEngineBackend::QueryState BdEngineBackend::execDirectSqlWithResult(const QString& sql, QList<QVariant>* const values, QVariant* const lastInsertId)
+{
+    Q_D(BdEngineBackend);
+
+    if (!d->checkOperationStatus())
+    {
+        return BdEngineBackend::SQLError;
+    }
+
+    DbEngineSqlQuery query = getQuery();
+    int retries    = 0;
+
+    forever
+    {
+        if (query.exec(sql))
+        {
+            handleQueryResult(query, values, lastInsertId);
             break;
         }
         else

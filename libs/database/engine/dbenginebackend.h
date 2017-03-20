@@ -115,6 +115,11 @@ public:
         AbortQueries
     };
 
+    enum DbType{
+        SQLite,
+        MySQL
+    };
+
 public:
 
     /** Creates a database backend. The backend name is an arbitrary string that
@@ -201,6 +206,11 @@ public:
       * corresponding to this backend's database type.
       */
     DbEngineConfigSettings configElement() const;
+
+    /**
+     * Return the database type.
+     */
+    DbType databaseType() const;
 
     /**
      * Returns a database action with name, specified in actionName,
@@ -318,6 +328,13 @@ public:
      * (e.g. trigger statements on QMYSQL).
      */
     QueryState execDirectSql(const QString& query);
+
+    /**
+     * Calls exec on the query, and handles debug output if something went wrong.
+     * The query is not prepared, which can be fail in certain situations
+     * (e.g. trigger statements on QMYSQL).
+     */
+    QueryState execDirectSqlWithResult(const QString& query, QList<QVariant>* const values = 0, QVariant* const lastInsertId = 0);
 
     /**
      * Executes the statement and returns the query object.

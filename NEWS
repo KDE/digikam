@@ -2,7 +2,7 @@
 digiKam 5.6.0 - Release date: 2017-05-07
 
 NEW FEATURES:
-
+Database    : We activated database shrinking for MySQL as part of the maintenance since now we can test the affected tables for integrity.
 
 BUGFIXES FROM BUGZILLA:
 
