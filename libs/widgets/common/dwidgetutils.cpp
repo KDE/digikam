@@ -386,7 +386,7 @@ QColor DColorSelector::color() const
 
 void DColorSelector::slotBtnClicked()
 {
-    QColor color = QColorDialog::getColor(d->color);
+    QColor color = QColorDialog::getColor(d->color, this);
 
     if (color.isValid())
     {
