@@ -120,18 +120,22 @@ void DatabaseTask::run()
             if (!CoreDbAccess().db()->integrityCheck())
             {
                 qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed after vacuum. Something went wrong.";
+                // Signal that the database was vacuumed but failed the integrity check afterwards.
+                emit signalFinished(true,false);
             }
             else
             {
                 qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of core DB. Integrity check after vacuuming was positive.";
+                emit signalFinished(true,true);
             }
         }
         else
         {
-            qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your core DB is corrupt.";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for core DB failed. Will not vacuum.";
+            // Signal that the integrity check failed and thus the vacuum was skipped
+            emit signalFinished(false,false);
         }
 
-        emit signalFinished();
         QThread::sleep(1);
 
         if (d->cancel)
@@ -148,23 +152,28 @@ void DatabaseTask::run()
                 if (!ThumbsDbAccess().db()->integrityCheck())
                 {
                     qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for thumbnails DB failed after vacuum. Something went wrong.";
+                    // Signal that the database was vacuumed but failed the integrity check afterwards.
+                    emit signalFinished(true,false);
                 }
                 else
                 {
                     qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of thumbnails DB. Integrity check after vacuuming was positive.";
+                    emit signalFinished(true,true);
                 }
             }
             else
             {
-                qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for thumbnails DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your thumbnails DB is corrupt.";
+                qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for thumbnails DB failed. Will not vacuum.";
+                // Signal that the integrity check failed and thus the vacuum was skipped
+                emit signalFinished(false,false);
             }
         }
         else
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "Thumbnails DB is not initialised. Will not vacuum.";
+            emit signalFinished(false,false);
         }
 
-        emit signalFinished();
         QThread::sleep(1);
 
         if (d->cancel)
@@ -179,18 +188,22 @@ void DatabaseTask::run()
             if (!FacesEngine::RecognitionDatabase().integrityCheck())
             {
                 qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed after vacuum. Something went wrong.";
+                // Signal that the database was vacuumed but failed the integrity check afterwards.
+                emit signalFinished(true,false);
             }
             else
             {
                 qCDebug(DIGIKAM_DATABASE_LOG) << "Finished vacuuming of recognition DB. Integrity check after vacuuming was positive.";
+                emit signalFinished(true,true);
             }
         }
         else
         {
-            qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed. Will not vacuum. Either you use MySQL which is currently not supported or your core DB is corrupt.";
+            qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed. Will not vacuum.";
+            // Signal that the integrity check failed and thus the vacuum was skipped
+            emit signalFinished(false,false);
         }
 
-        emit signalFinished();
         QThread::sleep(1);
     }
     else if (d->mode == Mode::ComputeDatabaseJunk)
@@ -198,9 +211,27 @@ void DatabaseTask::run()
         QList<qlonglong>              staleImageIds;
         QList<int>                    staleThumbIds;
         QList<FacesEngine::Identity>  staleIdentities;
+        int additionalItemsToProcess = 0;
 
         // Get the count of image entries in DB to delete.
         staleImageIds   = CoreDbAccess().db()->getImageIds(DatabaseItem::Status::Obsolete);
+
+        // get the count of items to process for thumbnails cleanup it enabled.
+        if (d->scanThumbsDb && ThumbsDbAccess::isInitialized())
+        {
+            additionalItemsToProcess += CoreDbAccess().db()->getAllItems().size();
+        }
+
+        // get the count of items to process for identities cleanup it enabled.
+        if (d->scanRecognitionDb)
+        {
+            additionalItemsToProcess += FacesEngine::RecognitionDatabase().allIdentities().size();
+        }
+
+        if (additionalItemsToProcess > 0)
+        {
+            emit signalAddItemsToProcess(additionalItemsToProcess);
+        }
 
         emit signalFinished();
 
@@ -270,11 +301,15 @@ void DatabaseTask::run()
                         thumbIds.remove(ThumbsDbAccess().db()->findByCustomIdentifier(url.toString()).id);
                     }
                 }
+
+                // Signal that this item was processed.
+                emit signalFinished();
             }
 
             // The remaining thumbnail ids should be used to remove them since they are stale.
             staleThumbIds = thumbIds.toList();
 
+            // Signal that the database was processed.
             emit signalFinished();
         }
 
@@ -306,8 +341,12 @@ void DatabaseTask::run()
                 {
                     staleIdentities << identity;
                 }
+
+                // Signal that this identity was processed.
+                emit signalFinished();
             }
 
+            // Signal that the database was processed.
             emit signalFinished();
         }
 

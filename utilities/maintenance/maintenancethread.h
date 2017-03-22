@@ -93,6 +93,17 @@ Q_SIGNALS:
                     const QList<int>& staleThumbIds,
                     const QList<FacesEngine::Identity>& staleIdentities);
 
+    /**
+     * Signal to emit the count of additional items to process.
+     */
+    void signalAddItemsToProcess(int count);
+
+    /**
+     * Signal to emit after processing with info if the processing was done
+     * and if yes, without errors.
+     */
+    void signalFinished(bool done, bool errorFree);
+
 private Q_SLOTS:
 
     void slotThreadFinished();

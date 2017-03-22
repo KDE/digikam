@@ -57,11 +57,13 @@ private Q_SLOTS:
     void slotStart();
     void slotCancel();
     void slotAdvance();
-    void slotShrinkNextDBInfo();
+    void slotShrinkNextDBInfo(bool done, bool passed);
 
     void slotFetchedData(const QList<qlonglong>& staleImageIds,
                          const QList<int>& staleThumbIds,
                          const QList<FacesEngine::Identity>& staleIdentities);
+
+    void slotAddItemsToProcess(int count);
 
     void slotCleanItems();
     void slotCleanedItems();
@@ -75,6 +77,8 @@ private:
 
     static QString VACUUM_PENDING;
     static QString VACUUM_DONE;
+    static QString VACUUM_NOT_DONE;
+    static QString INTEGRITY_FAILED_AFTER_VACUUM;
 
     class Private;
     Private* const d;

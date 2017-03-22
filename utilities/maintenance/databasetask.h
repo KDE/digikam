@@ -66,12 +66,18 @@ public:
 Q_SIGNALS:
 
     void signalFinished();
+    void signalFinished(bool done, bool errorFree);
 
     void signalData(const QList<qlonglong>& staleImageIds,
                     const QList<int>& staleThumbIds,
                     const QList<FacesEngine::Identity>& staleIdentities);
 
     void signalStarted();
+
+    /**
+     * Signal to emit the count of additional items to process.
+     */
+    void signalAddItemsToProcess(int count);
 
 public Q_SLOTS:
 

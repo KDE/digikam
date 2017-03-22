@@ -185,6 +185,9 @@ void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb)
     connect(t, SIGNAL(signalFinished()),
                 this, SIGNAL(signalAdvance()));
 
+    connect(t,SIGNAL(signalAddItemsToProcess(int)),
+            this, SIGNAL(signalAddItemsToProcess(int)));
+
     connect(t,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
             this, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
 
@@ -287,8 +290,8 @@ void MaintenanceThread::shrinkDatabases()
     connect(t, SIGNAL(signalStarted()),
             this, SIGNAL(signalStarted()));
 
-    connect(t, SIGNAL(signalFinished()),
-            this, SIGNAL(signalAdvance()));
+    connect(t, SIGNAL(signalFinished(bool,bool)),
+            this, SIGNAL(signalFinished(bool,bool)));
 
     connect(this, SIGNAL(signalCanceled()),
             t, SLOT(slotCancel()), Qt::QueuedConnection);

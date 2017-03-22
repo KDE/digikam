@@ -83,6 +83,8 @@ public:
 
     QString DbCleaner::VACUUM_PENDING(QLatin1String("&#62;"));
     QString DbCleaner::VACUUM_DONE(QLatin1String("&#10003;"));
+    QString DbCleaner::VACUUM_NOT_DONE(QLatin1String("&#10007;"));
+    QString DbCleaner::INTEGRITY_FAILED_AFTER_VACUUM(QLatin1String("&#x26a1;"));
 
 DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DbCleaner"), parent),
@@ -140,6 +142,9 @@ void DbCleaner::slotStart()
     connect(d->thread,SIGNAL(signalCompleted()),
             this, SLOT(slotCleanItems()));
 
+    connect(d->thread,SIGNAL(signalAddItemsToProcess(int)),
+            this, SLOT(slotAddItemsToProcess(int)));
+
     // Set the wiring from the data signal to the data slot.
     connect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
             this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
@@ -148,6 +153,11 @@ void DbCleaner::slotStart()
     // slotFetchedData.
     d->thread->computeDatabaseJunk(d->cleanThumbsDb,d->cleanFacesDb);
     d->thread->start();
+}
+
+void DbCleaner::slotAddItemsToProcess(int count)
+{
+    setTotalItems(totalItems() + count);
 }
 
 void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
@@ -298,8 +308,8 @@ void DbCleaner::slotShrinkDatabases()
     connect(d->thread, SIGNAL(signalStarted()),
                 d->messageBox, SLOT(exec()));
 
-    connect(d->thread, SIGNAL(signalAdvance()),
-                this, SLOT(slotShrinkNextDBInfo()));
+    connect(d->thread, SIGNAL(signalFinished(bool,bool)),
+                this, SLOT(slotShrinkNextDBInfo(bool, bool)));
 
     connect(d->thread, SIGNAL(signalCompleted()),
                 this, SLOT(slotDone()));
@@ -310,7 +320,7 @@ void DbCleaner::slotShrinkDatabases()
 
     d->messageBox->setText(i18n("Database shrinking in progress."));
 
-    slotShrinkNextDBInfo();
+    slotShrinkNextDBInfo(true,true);
     d->messageBox->setStandardButtons(QMessageBox::NoButton);
 
     d->thread->start();
@@ -321,7 +331,7 @@ void DbCleaner::slotAdvance()
     advance(1);
 }
 
-void DbCleaner::slotShrinkNextDBInfo()
+void DbCleaner::slotShrinkNextDBInfo(bool done, bool passed)
 {
     switch(d->databasesToShrinkCount)
     {
@@ -329,15 +339,57 @@ void DbCleaner::slotShrinkNextDBInfo()
             d->coreDbStatus        = VACUUM_PENDING;
             break;
         case 2:
-            d->coreDbStatus        = VACUUM_DONE;
+            if (done)
+            {
+                if (passed)
+                {
+                    d->coreDbStatus    = VACUUM_DONE;
+                }
+                else
+                {
+                    d->coreDbStatus    = INTEGRITY_FAILED_AFTER_VACUUM;
+                }
+            }
+            else
+            {
+                d->coreDbStatus    = VACUUM_NOT_DONE;
+            }
             d->thumbsDbStatus      = VACUUM_PENDING;
             break;
         case 1:
-            d->thumbsDbStatus      = VACUUM_DONE;
+            if (done)
+            {
+                if (passed)
+                {
+                    d->thumbsDbStatus    = VACUUM_DONE;
+                }
+                else
+                {
+                    d->thumbsDbStatus    = INTEGRITY_FAILED_AFTER_VACUUM;
+                }
+            }
+            else
+            {
+                d->thumbsDbStatus    = VACUUM_NOT_DONE;
+            }
             d->recognitionDbStatus = VACUUM_PENDING;
             break;
         case 0:
-            d->recognitionDbStatus = VACUUM_DONE;
+            if (done)
+            {
+                if (passed)
+                {
+                    d->recognitionDbStatus    = VACUUM_DONE;
+                }
+                else
+                {
+                    d->recognitionDbStatus    = INTEGRITY_FAILED_AFTER_VACUUM;
+                }
+            }
+            else
+            {
+                d->recognitionDbStatus    = VACUUM_NOT_DONE;
+            }
             break;
     }
 
