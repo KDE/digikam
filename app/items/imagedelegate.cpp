@@ -258,9 +258,12 @@ void ImageDelegate::paint(QPainter* p, const QStyleOptionViewItem& option, const
         pix = d->regPixmap;
     }
 
+    bool groupedAndClosed  = (info.hasGroupedImages() &&
+                              !index.data(ImageFilterModel::GroupIsOpenRole).toBool());
+
     QRect actualPixmapRect = drawThumbnail(p, d->pixmapRect,
                                            pix, thumbnailPixmap(index),
-                                           info.hasGroupedImages());
+                                           groupedAndClosed);
 
     if (!actualPixmapRect.isNull())
     {
