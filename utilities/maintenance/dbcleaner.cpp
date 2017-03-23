@@ -26,8 +26,10 @@
 // Qt includes
 
 #include <QIcon>
+#include <QLabel>
 #include <QMessageBox>
 #include <QThread>
+#include <QVBoxLayout>
 
 // KDE includes
 
@@ -53,13 +55,13 @@ public:
         shrinkDatabases(false),
         databasesToAnalyseCount(1),
         databasesToShrinkCount(0),
-        messageBox(0)
+        shrinkDlg(0)
     {
     }
 
     ~Private()
     {
-        delete messageBox;
+        delete shrinkDlg;
     }
 
     MaintenanceThread*           thread;
@@ -74,17 +76,8 @@ public:
     int                          databasesToAnalyseCount;
     int                          databasesToShrinkCount;
 
-    QMessageBox*                 messageBox;
-
-    QString                      coreDbStatus;
-    QString                      thumbsDbStatus;
-    QString                      recognitionDbStatus;
+    DbShrinkDialog*              shrinkDlg;
 };
-
-    QString DbCleaner::VACUUM_PENDING(QLatin1String("&#62;"));
-    QString DbCleaner::VACUUM_DONE(QLatin1String("&#10003;"));
-    QString DbCleaner::VACUUM_NOT_DONE(QLatin1String("&#10007;"));
-    QString DbCleaner::INTEGRITY_FAILED_AFTER_VACUUM(QLatin1String("&#x26a1;"));
 
 DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DbCleaner"), parent),
@@ -112,15 +105,13 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases
     if (shrinkDatabases)
     {
         d->databasesToShrinkCount = 3;
+        d->shrinkDlg = new DbShrinkDialog(DigikamApp::instance());
     }
 
     d->thread          = new MaintenanceThread(this);
 
-    d->messageBox      = new QMessageBox(DigikamApp::instance());
-
     connect(d->thread, SIGNAL(signalAdvance()),
             this, SLOT(slotAdvance()));
-
 }
 
 DbCleaner::~DbCleaner()
@@ -139,7 +130,7 @@ void DbCleaner::slotStart()
     setTotalItems(d->databasesToAnalyseCount + d->databasesToShrinkCount);
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Completed items at start: " << completedItems() << "/" << totalItems();
 
-    connect(d->thread,SIGNAL(signalCompleted()),
+    connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotCleanItems()));
 
     connect(d->thread,SIGNAL(signalAddItemsToProcess(int)),
@@ -177,10 +168,10 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
         qCDebug(DIGIKAM_GENERAL_LOG) << "Nothing to do. Databases are clean.";
         if (d->shrinkDatabases)
         {
-            disconnect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
-                       this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
+            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>, QList<int>, QList<FacesEngine::Identity>)),
+                       this, SLOT(slotFetchedData(QList<qlonglong>, QList<int>, QList<FacesEngine::Identity>)));
 
-            disconnect(d->thread,SIGNAL(signalCompleted()),
+            disconnect(d->thread, SIGNAL(signalCompleted()),
                         this, SLOT(slotCleanItems()));
 
             slotShrinkDatabases();
@@ -306,24 +297,26 @@ void DbCleaner::slotShrinkDatabases()
                this, SLOT(slotCleanedFaces()));
 
     connect(d->thread, SIGNAL(signalStarted()),
-                d->messageBox, SLOT(exec()));
+            d->shrinkDlg, SLOT(exec()));
 
     connect(d->thread, SIGNAL(signalFinished(bool,bool)),
                 this, SLOT(slotShrinkNextDBInfo(bool, bool)));
 
     connect(d->thread, SIGNAL(signalCompleted()),
-                this, SLOT(slotDone()));
+            this, SLOT(slotDone()));
 
     d->thread->shrinkDatabases();
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "Completed items before vacuum: " << completedItems() << "/" << totalItems();
 
-    d->messageBox->setText(i18n("Database shrinking in progress."));
-
-    slotShrinkNextDBInfo(true,true);
-    d->messageBox->setStandardButtons(QMessageBox::NoButton);
+//    slotShrinkNextDBInfo(true,true);
+//    qCDebug(DIGIKAM_GENERAL_LOG) << "Is timer active before start():"
+//                                 << d->progressTimer->isActive();
 
     d->thread->start();
+//    qCDebug(DIGIKAM_GENERAL_LOG) << "Is timer active after start():"
+//                                 << d->progressTimer->isActive();
+//    d->progressTimer->start(300);
 }
 
 void DbCleaner::slotAdvance()
@@ -333,80 +326,36 @@ void DbCleaner::slotAdvance()
 
 void DbCleaner::slotShrinkNextDBInfo(bool done, bool passed)
 {
-    switch(d->databasesToShrinkCount)
+    --d->databasesToShrinkCount;
+
+    QIcon statusIcon = QIcon::fromTheme(QLatin1String("dialog-cancel"));
+    if (done)
     {
-        case 3:
-            d->coreDbStatus        = VACUUM_PENDING;
-            break;
-        case 2:
-            if (done)
-            {
-                if (passed)
-                {
-                    d->coreDbStatus    = VACUUM_DONE;
-                }
-                else
-                {
-                    d->coreDbStatus    = INTEGRITY_FAILED_AFTER_VACUUM;
-                }
-            }
-            else
-            {
-                d->coreDbStatus    = VACUUM_NOT_DONE;
-            }
-            d->thumbsDbStatus      = VACUUM_PENDING;
-            break;
-        case 1:
-            if (done)
-            {
-                if (passed)
-                {
-                    d->thumbsDbStatus    = VACUUM_DONE;
-                }
-                else
-                {
-                    d->thumbsDbStatus    = INTEGRITY_FAILED_AFTER_VACUUM;
-                }
-            }
-            else
-            {
-                d->thumbsDbStatus    = VACUUM_NOT_DONE;
-            }
-            d->recognitionDbStatus = VACUUM_PENDING;
-            break;
-        case 0:
-            if (done)
-            {
-                if (passed)
-                {
-                    d->recognitionDbStatus    = VACUUM_DONE;
-                }
-                else
-                {
-                    d->recognitionDbStatus    = INTEGRITY_FAILED_AFTER_VACUUM;
-                }
-            }
-            else
-            {
-                d->recognitionDbStatus    = VACUUM_NOT_DONE;
-            }
-            break;
+        if (passed)
+        {
+            statusIcon = QIcon::fromTheme(QLatin1String("dialog-ok-apply"));
+        }
+        else
+        {
+            statusIcon = QIcon::fromTheme(QLatin1String("script-error"));
+        }
     }
 
-    d->databasesToShrinkCount = d->databasesToShrinkCount - 1;
-
-    QString filledText = i18n("Currently, your database(s) are shrinked.<br/>"
-            "This will take some time - depending on your database(s) size.<br/><br/>"
-            "We have to freeze digiKam in order to prevent database corruption.<br/>"
-            "This info box will vanish when the shrinking process is finished.<br/>"
-            "Current Status: <ul>"
-            "<li>%1 Core DB</li>"
-            "<li>%2 Thumbs DB</li>"
-            "<li>%3 Recognition DB</li>"
-            "</ul>",d->coreDbStatus,d->thumbsDbStatus,d->recognitionDbStatus);
-
-    d->messageBox->setInformativeText(filledText);
-
+    switch(d->databasesToShrinkCount)
+    {
+        case 2:
+            d->shrinkDlg->setIcon(0, statusIcon);
+            d->shrinkDlg->setActive(1);
+            break;
+        case 1:
+            d->shrinkDlg->setIcon(1, statusIcon);
+            d->shrinkDlg->setActive(2);
+            break;
+        case 0:
+            d->shrinkDlg->setIcon(2, statusIcon);
+            d->shrinkDlg->setActive(-1);
+            break;
+    }
 }
 
 void DbCleaner::setUseMultiCoreCPU(bool b)
@@ -422,8 +371,110 @@ void DbCleaner::slotCancel()
 
 void DbCleaner::slotDone()
 {
-    d->messageBox->hide();
+    d->shrinkDlg->hide();
     MaintenanceTool::slotDone();
 }
+
+//----------------------------------------------------------------------------
+
+DbShrinkDialog::DbShrinkDialog(QWidget* parent)
+    : QDialog(parent),
+      active(-1),
+      progressPix(DWorkingPixmap()),
+      progressTimer(new QTimer(parent)),
+      progressIndex(1),
+      statusList(new QListWidget(this))
+{
+    QVBoxLayout* statusLayout = new QVBoxLayout(this);
+
+    QLabel* infos = new QLabel(i18n("<p>Database shrinking in progress.</p>"
+                                    "<p>Currently, your databases are shrinked. "
+                                    "This will take some time - depending on "
+                                    "your databases size.</p>"
+                                    "<p>We have to freeze digiKam in order to "
+                                    "prevent database corruption. This info box "
+                                    "will vanish when the shrinking process is "
+                                    "finished.</p>"
+                                    "Current Status:"),
+                               this);
+    infos->setWordWrap(true);
+    statusLayout->addWidget(infos);
+
+    statusList->addItem(i18n("Core DB"));
+    statusList->addItem(i18n("Thumbnails DB"));
+    statusList->addItem(i18n("Face Recognition DB"));
+    for (int i = 0; i < 3; ++i)
+    {
+        statusList->item(i)->setIcon(QIcon::fromTheme(QLatin1String("system-run")));
+    }
+//    statusList->setMinimumSize(0, 0);
+//    statusList->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+//    statusList->adjustSize();
+    statusList->setMaximumHeight(3 * statusList->sizeHintForRow(0)
+                                 + 2 * statusList->frameWidth());
+    statusLayout->addWidget(statusList);
+
+    connect(progressTimer, SIGNAL(timeout()),
+            this, SLOT(slotProgressTimerDone()));
+}
+
+DbShrinkDialog::~DbShrinkDialog()
+{
+    progressTimer->stop();
+}
+
+void DbShrinkDialog::setActive(const int pos)
+{
+    active = pos;
+    if (progressTimer->isActive())
+    {
+        if (active < 0)
+        {
+            progressTimer->stop();
+        }
+    }
+    else
+    {
+        if (active >= 0)
+        {
+            statusList->item(active)->setIcon(progressPix.frameAt(0));
+            progressTimer->start(300);
+            progressIndex = 1;
+        }
+    }
+}
+
+void DbShrinkDialog::setIcon(const int pos, const QIcon& icon)
+{
+    if (active == pos)
+    {
+        active = -1;
+    }
+
+    statusList->item(pos)->setIcon(icon);
+}
+
+int DbShrinkDialog::exec()
+{
+    active = 0;
+    progressTimer->start(300);
+    return QDialog::exec();
+}
+
+void DbShrinkDialog::slotProgressTimerDone()
+{
+    if (active < 0)
+    {
+        return;
+    }
+
+    if (progressIndex == progressPix.frameCount())
+    {
+        progressIndex = 0;
+    }
+    statusList->item(active)->setIcon(progressPix.frameAt(progressIndex));
+    ++progressIndex;
+}
+
 
 } // namespace Digikam

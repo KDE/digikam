@@ -26,8 +26,15 @@
 
 // Qt includes
 
+#include <QDialog>
+#include <QListWidget>
 #include <QString>
-#include <QObject>
+#include <QTimer>
+#include <QWidget>
+
+// LibDRawDecoder includes
+
+#include "dwidgetutils.h"
 
 // Local includes
 
@@ -75,13 +82,34 @@ private Q_SLOTS:
 
 private:
 
-    static QString VACUUM_PENDING;
-    static QString VACUUM_DONE;
-    static QString VACUUM_NOT_DONE;
-    static QString INTEGRITY_FAILED_AFTER_VACUUM;
-
     class Private;
     Private* const d;
+};
+
+class DbShrinkDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+
+    explicit DbShrinkDialog(QWidget* parent);
+    virtual ~DbShrinkDialog();
+
+    void setActive(const int pos);
+    void setIcon(const int pos, const QIcon& icon);
+
+public Q_SLOTS:
+    virtual int exec();
+
+private Q_SLOTS:
+    void slotProgressTimerDone();
+
+private:
+    int            active;
+    DWorkingPixmap progressPix;
+    QTimer*        progressTimer;
+    int            progressIndex;
+    QListWidget*   statusList;
 };
 
 } // namespace Digikam
