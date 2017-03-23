@@ -219,11 +219,11 @@ MaintenanceDlg::MaintenanceDlg(QWidget* const parent)
 
     d->vbox3                   = new DVBox;
     new QLabel(i18n("<qt><i>Note: If activated, the Core DB is always cleaned. You can select additional databases for cleaning.<br/>"
-                            " If you select one of the options below, the process may take much time and can freeze digiKam temporarily<br/>"
-                            " in order to make sure that no database corruption occurs.</i></qt>"),d->vbox3);
-    d->cleanThumbsDb           = new QCheckBox(i18n("Also clean up the thumbnail database."),d->vbox3);
-    d->cleanFacesDb            = new QCheckBox(i18n("Also clean up the faces database."),d->vbox3);
-    d->shrinkDatabases         = new QCheckBox(i18n("Also shrink all databases if possible."),d->vbox3);
+                    " If you select one of the options below, the process may take much time and can freeze digiKam temporarily<br/>"
+                    " in order to make sure that no database corruption occurs.</i></qt>"), d->vbox3);
+    d->cleanThumbsDb           = new QCheckBox(i18n("Also clean up the thumbnail database."), d->vbox3);
+    d->cleanFacesDb            = new QCheckBox(i18n("Also clean up the faces database."), d->vbox3);
+    d->shrinkDatabases         = new QCheckBox(i18n("Also shrink all databases if possible."), d->vbox3);
     d->shrinkDatabases->setToolTip(i18n("This option leads to the vacuuming (shrinking) of the databases."
                                         " Vacuuming is supported both for SQLite and MySQL."));
     d->expanderBox->insertItem(Private::DbCleanup, d->vbox3,
