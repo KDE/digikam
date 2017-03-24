@@ -107,7 +107,7 @@ void DFontSelect::setMode(FontMode mode)
 {
     d->mode = mode;
     d->modeCombo->setCurrentIndex(d->mode);
-    d->modeCombo->setToolTip(i18n("Current font: %1", font().family()));
+    d->modeCombo->setToolTip(i18n("Current font: %1 - %2", font().family(), font().pointSize()));
     d->chooseFontButton->setEnabled(d->mode == CustomFont);
 }
 
