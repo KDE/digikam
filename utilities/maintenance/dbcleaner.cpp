@@ -388,7 +388,7 @@ DbShrinkDialog::DbShrinkDialog(QWidget* parent)
     QVBoxLayout* statusLayout = new QVBoxLayout(this);
 
     QLabel* infos = new QLabel(i18n("<p>Database shrinking in progress.</p>"
-                                    "<p>Currently, your databases are shrinked. "
+                                    "<p>Currently, your databases are being shrunk. "
                                     "This will take some time - depending on "
                                     "your databases size.</p>"
                                     "<p>We have to freeze digiKam in order to "
