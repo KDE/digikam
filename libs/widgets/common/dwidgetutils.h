@@ -135,7 +135,7 @@ class DIGIKAM_EXPORT DWorkingPixmap
 public:
 
     explicit DWorkingPixmap();
-    ~DWorkingPixmap();
+    virtual ~DWorkingPixmap();
 
     bool    isEmpty()          const;
     QSize   frameSize()        const;
@@ -145,40 +145,6 @@ public:
 private:
 
     QVector<QPixmap> m_frames;
-};
-
-// ------------------------------------------------------------------------------------
-
-/** A widget to chosse a color from a palette.
- */
-class DIGIKAM_EXPORT DColorSelector : public QPushButton
-{
-    Q_OBJECT
-
-public:
-
-    explicit DColorSelector(QWidget* const parent=0);
-    virtual ~DColorSelector();
-
-    void setColor(const QColor& color);
-    QColor color() const;
-
-Q_SIGNALS:
-
-    void signalColorSelected(const QColor&);
-
-private Q_SLOTS:
-
-    void slotBtnClicked();
-
-private:
-
-    void paintEvent(QPaintEvent*);
-
-private:
-
-    class Private;
-    Private* const d;
 };
 
 } // namespace Digikam

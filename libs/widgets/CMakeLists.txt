@@ -50,6 +50,7 @@ set(libcolorchooser_SRCS
     colorchooser/dcolorvalueselector.cpp
     colorchooser/dhuesaturationselect.cpp
     colorchooser/dcolorchoosermode.cpp
+    colorchooser/dcolorselector.cpp
 )
 
 set(libmainview_SRCS

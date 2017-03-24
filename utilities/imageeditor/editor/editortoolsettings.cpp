@@ -52,8 +52,7 @@
 #include "histogramwidget.h"
 #include "histogrambox.h"
 #include "digikam_globals.h"
-
-
+#include "dcolorselector.h"
 
 namespace Digikam
 {

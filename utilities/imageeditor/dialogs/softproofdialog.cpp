@@ -49,8 +49,7 @@
 #include "iccsettings.h"
 #include "iccprofileinfodlg.h"
 #include "dexpanderbox.h"
-
-
+#include "dcolorselector.h"
 
 namespace Digikam
 {

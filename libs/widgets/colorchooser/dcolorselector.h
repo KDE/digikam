@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2004-08-03
- * Description : setup Image Editor interface.
+ * Date        : 2010-02-20
+ * Description : color selector widget
  *
- * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,12 +21,13 @@
  *
  * ============================================================ */
 
-#ifndef SETUPEDITORIFACE_H
-#define SETUPEDITORIFACE_H
+#ifndef DCOLOR_SELECT_H
+#define DCOLOR_SELECT_H
 
 // Qt includes
 
-#include <QScrollArea>
+#include <QColor>
+#include <QPushButton>
 
 // Local includes
 
@@ -35,27 +36,31 @@
 namespace Digikam
 {
 
-class SetupEditorIface : public QScrollArea
+/** A widget to chosse a color from a palette.
+ */
+class DIGIKAM_EXPORT DColorSelector : public QPushButton
 {
     Q_OBJECT
 
 public:
 
-    explicit SetupEditorIface(QWidget* const parent = 0);
-    virtual ~SetupEditorIface();
+    explicit DColorSelector(QWidget* const parent=0);
+    virtual ~DColorSelector();
 
-    void applySettings();
+    void setColor(const QColor& color);
+    QColor color() const;
+
+Q_SIGNALS:
+
+    void signalColorSelected(const QColor&);
 
 private Q_SLOTS:
 
-    void slotThemeBackgroundColor(bool);
-    void slotExpoSettingsChanged();
-    void slotShowOverExpoHistogramGuide(double);
-    void slotShowUnderExpoHistogramGuide(double);
+    void slotBtnClicked();
 
 private:
 
-    void readSettings();
+    void paintEvent(QPaintEvent*);
 
 private:
 
@@ -63,6 +68,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // SETUPEDITORIFACE_H
+#endif // DCOLOR_SELECT_H

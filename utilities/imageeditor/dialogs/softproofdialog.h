@@ -44,7 +44,7 @@ class SoftProofDialog : public QDialog
 public:
 
     explicit SoftProofDialog(QWidget* const parent);
-    ~SoftProofDialog();
+    virtual ~SoftProofDialog();
 
     bool shallEnableSoftProofView() const;
 

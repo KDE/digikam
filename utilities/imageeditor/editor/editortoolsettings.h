@@ -72,7 +72,7 @@ public:
 public:
 
     explicit EditorToolSettings(QWidget* const parent = 0);
-    ~EditorToolSettings();
+    virtual ~EditorToolSettings();
 
     void setButtons(Buttons buttonMask);
     void setTools(Tools toolMask);

@@ -49,6 +49,7 @@
 #include "exposurecontainer.h"
 #include "fullscreensettings.h"
 #include "dxmlguiwindow.h"
+#include "dcolorselector.h"
 
 namespace Digikam
 {

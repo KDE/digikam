@@ -58,6 +58,7 @@
 #include "imageiface.h"
 #include "inserttextwidget.h"
 #include "dfontproperties.h"
+#include "dcolorselector.h"
 
 namespace Digikam
 {

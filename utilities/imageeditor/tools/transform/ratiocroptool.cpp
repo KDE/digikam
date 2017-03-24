@@ -60,8 +60,7 @@
 #include "imageselectionwidget.h"
 #include "histogrambox.h"
 #include "histogramwidget.h"
-
-
+#include "dcolorselector.h"
 
 namespace Digikam
 {

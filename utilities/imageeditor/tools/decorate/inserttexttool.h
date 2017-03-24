@@ -41,7 +41,7 @@ class InsertTextTool : public EditorTool
 public:
 
     explicit InsertTextTool(QObject* const parent);
-    ~InsertTextTool();
+    virtual ~InsertTextTool();
 
 Q_SIGNALS:
 
@@ -69,4 +69,4 @@ private:
 
 }  // namespace Digikam
 
-#endif /* INSERTTEXTTOOL_H */
+#endif // INSERTTEXTTOOL_H
