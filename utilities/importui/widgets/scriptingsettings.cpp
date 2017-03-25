@@ -40,6 +40,7 @@
 // Local includes
 
 #include "dwidgetutils.h"
+#include "dfileselector.h"
 #include "digikam_debug.h"
 #include "tooltipdialog.h"
 
@@ -81,13 +82,13 @@ ScriptingSettings::ScriptingSettings(QWidget* const parent)
                                      ));
     d->tooltipDialog->resize(650, 530);
 
-    QVBoxLayout* vlay      = new QVBoxLayout(this);
-    d->scriptLabel         = new QLabel(i18n("Execute script for image:"), this);
-    DHBox* hbox            = new DHBox(this);
-    d->script              = new DFileSelector(hbox);
+    QVBoxLayout* const vlay = new QVBoxLayout(this);
+    d->scriptLabel          = new QLabel(i18n("Execute script for image:"), this);
+    DHBox* const hbox       = new DHBox(this);
+    d->script               = new DFileSelector(hbox);
     d->script->setFileDlgMode(QFileDialog::ExistingFile);
     d->script->lineEdit()->setPlaceholderText(i18n("No script selected"));
-    d->tooltipToggleButton = new QToolButton(hbox);
+    d->tooltipToggleButton  = new QToolButton(hbox);
     d->tooltipToggleButton->setIcon(QIcon::fromTheme(QLatin1String("dialog-information")));
     d->tooltipToggleButton->setToolTip(i18n("Show a list of all available options"));
 
@@ -135,4 +136,4 @@ void ScriptingSettings::slotToolTipButtonToggled(bool /*checked*/)
     d->tooltipDialog->raise();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

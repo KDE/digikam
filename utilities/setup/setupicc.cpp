@@ -65,8 +65,7 @@
 #include "iccsettings.h"
 #include "iccsettingscontainer.h"
 #include "dactivelabel.h"
-
-
+#include "dfileselector.h"
 
 namespace Digikam
 {
@@ -966,4 +965,4 @@ bool SetupICC::iccRepositoryIsValid()
     return !paths.isEmpty();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

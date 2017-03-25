@@ -124,7 +124,7 @@ This is fully optional. All the events from this calendar will be printed in gre
   <customwidget>
    <class>Digikam::DFileSelector</class>
    <extends>QWidget</extends>
-   <header>dwidgetutils.h</header>
+   <header>dfileselector.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

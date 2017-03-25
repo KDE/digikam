@@ -43,7 +43,7 @@ class CollectionPage : public FirstRunDlgPage
 public:
 
     explicit CollectionPage(FirstRunDlg* const dlg);
-    ~CollectionPage();
+    virtual ~CollectionPage();
 
     bool checkSettings();
     void saveSettings();
@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* COLLECTION_PAGE_H */
+#endif // COLLECTION_PAGE_H

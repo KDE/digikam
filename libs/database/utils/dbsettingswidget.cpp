@@ -58,6 +58,7 @@
 #include "digikam_config.h"
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
+#include "dfileselector.h"
 #include "dbengineparameters.h"
 #include "dbinarysearch.h"
 #include "mysqlinitbinary.h"
@@ -76,26 +77,26 @@ public:
 
     Private()
     {
-        mysqlCmdBox         = 0;
-        dbType              = 0;
-        dbPathLabel         = 0;
-        expertSettings      = 0;
-        dbNoticeBox         = 0;
-        sqlInit             = 0;
-        dbNameCore          = 0;
-        dbNameThumbs        = 0;
-        dbNameFace          = 0;
-        hostName            = 0;
-        connectOpts         = 0;
-        userName            = 0;
-        password            = 0;
-        hostPort            = 0;
-        dbPathEdit          = 0;
-        dbBinariesWidget    = 0;
-        tab                 = 0;
-        dbDetailsBox        = 0;
-        ignoreDirectoriesBox = 0;
-        ignoreDirectoriesEdit = 0;
+        mysqlCmdBox            = 0;
+        dbType                 = 0;
+        dbPathLabel            = 0;
+        expertSettings         = 0;
+        dbNoticeBox            = 0;
+        sqlInit                = 0;
+        dbNameCore             = 0;
+        dbNameThumbs           = 0;
+        dbNameFace             = 0;
+        hostName               = 0;
+        connectOpts            = 0;
+        userName               = 0;
+        password               = 0;
+        hostPort               = 0;
+        dbPathEdit             = 0;
+        dbBinariesWidget       = 0;
+        tab                    = 0;
+        dbDetailsBox           = 0;
+        ignoreDirectoriesBox   = 0;
+        ignoreDirectoriesEdit  = 0;
         ignoreDirectoriesLabel = 0;
     }
 

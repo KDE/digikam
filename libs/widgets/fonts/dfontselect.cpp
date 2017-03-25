@@ -67,7 +67,8 @@ public:
 };
 
 DFontSelect::DFontSelect(const QString& text, QWidget* const parent)
-    : DHBox(parent), d(new Private)
+    : DHBox(parent),
+      d(new Private)
 {
     d->label     = new QLabel(this);
     d->label->setText(text);
@@ -164,4 +165,4 @@ void DFontSelect::slotChangeMode(int index)
     emit signalFontChanged();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

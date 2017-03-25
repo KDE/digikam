@@ -3,10 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2013-04-29
- * Description : a full screen settings widget
+ * Date        : 2004-07-28
+ * Description : a color gradient widget
  *
- * Copyright (C) 2013-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2004-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -21,16 +21,13 @@
  *
  * ============================================================ */
 
-#ifndef FULLSCREENSETTINGS_H
-#define FULLSCREENSETTINGS_H
-
-// Qt includes
-
-#include <QGroupBox>
+#ifndef COLORGRADIENTWIDGET_H
+#define COLORGRADIENTWIDGET_H
 
 // KDE includes
 
-#include <kconfiggroup.h>
+#include <QWidget>
+#include <QColor>
 
 // Local includes
 
@@ -39,16 +36,20 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT FullScreenSettings : public QGroupBox
+class DIGIKAM_EXPORT ColorGradientWidget : public QWidget
 {
+    Q_OBJECT
 
 public:
 
-    explicit FullScreenSettings(int options, QWidget* const parent);
-    virtual ~FullScreenSettings();
+    explicit ColorGradientWidget(Qt::Orientation orientation, int size, QWidget* const parent=0);
+    virtual ~ColorGradientWidget();
 
-    void readSettings(const KConfigGroup& group);
-    void saveSettings(KConfigGroup& group);
+    void setColors(const QColor& col1, const QColor& col2);
+
+protected:
+
+    void paintEvent(QPaintEvent*);
 
 private:
 
@@ -58,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* FULLSCREENSETTINGS_H */
+#endif // COLORGRADIENTWIDGET_H

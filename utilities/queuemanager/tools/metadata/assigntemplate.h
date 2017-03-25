@@ -40,7 +40,7 @@ class AssignTemplate : public BatchTool
 public:
 
     explicit AssignTemplate(QObject* const parent = 0);
-    ~AssignTemplate();
+    virtual ~AssignTemplate();
 
     BatchToolSettings defaultSettings();
 
@@ -63,6 +63,6 @@ private:
     TemplateViewer*   m_templateViewer;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* ASSIGNTEMPLATE_H */
+#endif // ASSIGNTEMPLATE_H

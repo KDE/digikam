@@ -3,11 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2003-02-10
- * Description : a widget to display splash with progress bar
+ * Date        : 2013-04-29
+ * Description : a full screen settings widget
  *
- * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2013-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,13 +21,16 @@
  *
  * ============================================================ */
 
-#ifndef DSPLASH_SCREEN_H
-#define DSPLASH_SCREEN_H
+#ifndef FULLSCREENSETTINGS_H
+#define FULLSCREENSETTINGS_H
 
 // Qt includes
 
-#include <QPainter>
-#include <QSplashScreen>
+#include <QGroupBox>
+
+// KDE includes
+
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -37,26 +39,16 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT DSplashScreen : public QSplashScreen
+class DIGIKAM_EXPORT FullScreenSettings : public QGroupBox
 {
-    Q_OBJECT
 
 public:
 
-    DSplashScreen();
-    virtual ~DSplashScreen();
+    explicit FullScreenSettings(int options, QWidget* const parent);
+    virtual ~FullScreenSettings();
 
-    void setAlignment(int alignment);
-    void setColor(const QColor& color);
-    void setMessage(const QString& message);
-
-protected:
-
-    void drawContents(QPainter*);
-
-private Q_SLOTS:
-
-    void slotAnimate();
+    void readSettings(const KConfigGroup& group);
+    void saveSettings(KConfigGroup& group);
 
 private:
 
@@ -64,6 +56,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* SPLASHSCREEN_H */
+#endif // FULLSCREENSETTINGS_H

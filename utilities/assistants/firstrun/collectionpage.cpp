@@ -46,6 +46,7 @@
 // Local includes
 
 #include "dwidgetutils.h"
+#include "dfileselector.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"
 
@@ -224,4 +225,4 @@ bool CollectionPage::checkRootAlbum(QString& rootAlbumFolder)
     return true;
 }
 
-}   // namespace Digikam
+} // namespace Digikam

@@ -43,6 +43,7 @@
 #include "drawdecodersettings.h"
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
+#include "dfileselector.h"
 #include "digikam_export.h"
 
 using namespace RawEngine;
@@ -128,4 +129,4 @@ private:
 
 } // NameSpace Digikam
 
-#endif /* DRAW_DECODER_WIDGET_H */
+#endif // DRAW_DECODER_WIDGET_H

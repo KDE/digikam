@@ -35,6 +35,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QFile>
 
 // KDE includes
 
@@ -102,8 +103,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     QWidget* const panel      = new QWidget(viewport());
     QVBoxLayout* const layout = new QVBoxLayout(panel);
     setWidget(panel);
@@ -297,10 +297,11 @@ void SetupMisc::readSettings()
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
 
 #ifdef HAVE_APPSTYLE_SUPPORT
-    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(), Qt::MatchFixedString));
+    d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(),
+                                                                       Qt::MatchFixedString));
 #endif
 
     d->iconTheme->setCurrentIndex(d->iconTheme->findData(settings->getIconTheme()));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

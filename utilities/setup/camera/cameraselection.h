@@ -47,7 +47,7 @@ class CameraSelection : public QDialog
 public:
 
     explicit CameraSelection(QWidget* const parent = 0);
-    ~CameraSelection();
+    virtual ~CameraSelection();
 
     void setCamera(const QString& title, const QString& model,
                    const QString& port,  const QString& path);
@@ -85,6 +85,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // CAMERASELECTION_H

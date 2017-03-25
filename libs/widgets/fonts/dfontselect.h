@@ -33,7 +33,6 @@
 #include "dwidgetutils.h"
 #include "digikam_export.h"
 
-
 namespace Digikam
 {
 
@@ -79,6 +78,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DFONTSELECT_H

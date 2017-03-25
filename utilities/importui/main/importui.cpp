@@ -32,6 +32,7 @@
 
 #include <QCheckBox>
 #include <QCloseEvent>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QFrame>
@@ -72,6 +73,7 @@
 #include "drawdecoder.h"
 #include "dwidgetutils.h"
 #include "dexpanderbox.h"
+#include "dfileselector.h"
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "cameramessagebox.h"
@@ -2694,4 +2696,4 @@ void ImportUI::slotColorManagementOptionsChanged()
     d->viewCMViewAction->blockSignals(false);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

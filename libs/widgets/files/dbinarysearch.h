@@ -57,8 +57,8 @@ public:
 
 public:
 
-    DBinarySearch(QWidget* const parent);
-    ~DBinarySearch();
+    explicit DBinarySearch(QWidget* const parent);
+    virtual ~DBinarySearch();
 
     void addBinary(DBinaryIface& binary);
     void addDirectory(const QString& dir);
@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DBINARY_SEARCH_H */
+#endif // DBINARY_SEARCH_H

@@ -64,9 +64,9 @@ class DIGIKAM_EXPORT ImportUI : public DXmlGuiWindow
 
 public:
 
-    ImportUI(const QString& cameraTitle, const QString& model,
+    explicit ImportUI(const QString& cameraTitle, const QString& model,
              const QString& port, const QString& path, int startIndex);
-    ~ImportUI();
+    virtual ~ImportUI();
 
     static ImportUI* instance();
 
@@ -236,6 +236,6 @@ private:
     static ImportUI* m_instance;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // IMPORTUI_H

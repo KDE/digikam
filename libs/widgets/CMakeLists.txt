@@ -12,20 +12,13 @@ endif (POLICY CMP0063)
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
     common/buttonicondisabler.cpp
-    common/colorgradientwidget.cpp
     common/comboboxutilities.cpp
     common/dsliderspinbox.cpp
     common/dnuminput.cpp
     common/dcombobox.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
-    common/dfontproperties.cpp
-    common/dfontselect.cpp
-    common/dgradientslider.cpp
     common/dragdropimplementations.cpp
-    common/dsplashscreen.cpp
-    common/filesaveoptionsbox.cpp
-    common/fullscreensettings.cpp
     common/modelcompleter.cpp
     common/searchtextbar.cpp
     common/statesavingobject.cpp
@@ -33,8 +26,6 @@ set(libcommonwidgets_SRCS
     common/workingwidget.cpp
     common/drawdecoderwidget.cpp
     common/dwidgetutils.cpp
-    common/dbinarysearch.cpp
-    common/dbinaryiface.cpp
     common/squeezedcombobox.cpp
 )
 
@@ -46,11 +37,25 @@ set(libimagehistory_SRCS
     imagehistory/versionswidget.cpp
 )
 
-set(libcolorchooser_SRCS
-    colorchooser/dcolorvalueselector.cpp
-    colorchooser/dhuesaturationselect.cpp
-    colorchooser/dcolorchoosermode.cpp
-    colorchooser/dcolorselector.cpp
+set(libcolorstools_SRCS
+    colors/dcolorvalueselector.cpp
+    colors/dhuesaturationselect.cpp
+    colors/dcolorchoosermode.cpp
+    colors/dcolorselector.cpp
+    colors/colorgradientwidget.cpp
+    colors/dgradientslider.cpp
+)
+
+set(libfontstools_SRCS
+    fonts/dfontproperties.cpp
+    fonts/dfontselect.cpp
+)
+
+set(libfilestools_SRCS
+    files/filesaveoptionsbox.cpp
+    files/dfileselector.cpp
+    files/dbinarysearch.cpp
+    files/dbinaryiface.cpp
 )
 
 set(libmainview_SRCS
@@ -66,6 +71,8 @@ set(libmainview_SRCS
     mainview/schememanager.cpp
     mainview/sidebar.cpp
     mainview/dmessagebox.cpp
+    mainview/dsplashscreen.cpp
+    mainview/fullscreensettings.cpp
     ../../app/utils/digikam_globals.cpp
    )
 
@@ -153,7 +160,9 @@ add_library(digikamwidgetscore_src OBJECT
     ${libiccprofileswidgets_SRCS}
     ${libitemview_SRCS}
     ${libmetadatawidgets_SRCS}
-    ${libcolorchooser_SRCS}
+    ${libcolorstools_SRCS}
+    ${libfontstools_SRCS}
+    ${libfilestools_SRCS}
 )
 
 add_library(imagehistorywidgets_src OBJECT ${libimagehistory_SRCS})

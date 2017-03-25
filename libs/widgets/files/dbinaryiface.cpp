@@ -355,4 +355,4 @@ QString DBinaryIface::goodBaseName(const QString& b)
 #endif // Q_OS_WIN
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -46,7 +46,7 @@ public:
 public:
 
     explicit SetupMisc(QWidget* const parent = 0);
-    ~SetupMisc();
+    virtual ~SetupMisc();
 
     void applySettings();
 
@@ -60,6 +60,6 @@ private:
     Private* const d;
 };
 
-}   // namespace ShowFoto
+} // namespace ShowFoto
 
 #endif // SHOWFOTOSETUPMISC_H

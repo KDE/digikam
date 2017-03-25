@@ -230,4 +230,4 @@ void DSplashScreen::drawContents(QPainter* p)
     slogan.drawContents(p, QRect(0, 0, r.width(), r.height()));
 }
 
-}   // namespace Digikam
+} // namespace Digikam

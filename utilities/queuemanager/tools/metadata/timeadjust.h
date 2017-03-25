@@ -39,7 +39,7 @@ class TimeAdjust : public BatchTool
 public:
 
     explicit TimeAdjust(QObject* const parent = 0);
-    ~TimeAdjust();
+    virtual ~TimeAdjust();
 
     BatchToolSettings defaultSettings();
 
@@ -62,6 +62,6 @@ private:
     int                 m_changeSettings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* TIMEADJUST_H */
+#endif // TIMEADJUST_H

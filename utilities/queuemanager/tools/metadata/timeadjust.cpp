@@ -35,6 +35,7 @@ extern "C"
 
 #include <QLabel>
 #include <QWidget>
+#include <QFile>
 
 // KDE includes
 
@@ -364,4 +365,4 @@ bool TimeAdjust::toolOperations()
     return ret;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

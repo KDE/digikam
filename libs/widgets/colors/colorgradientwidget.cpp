@@ -161,4 +161,4 @@ void ColorGradientWidget::paintEvent( QPaintEvent* )
     p.end();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

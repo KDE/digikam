@@ -27,6 +27,7 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QFile>
 
 // KDE includes
 
@@ -168,4 +169,4 @@ bool AssignTemplate::toolOperations()
     return ret;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

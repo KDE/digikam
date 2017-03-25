@@ -40,7 +40,7 @@ class RemoveMetadata : public BatchTool
 public:
 
     explicit RemoveMetadata(QObject* parent = 0);
-    ~RemoveMetadata();
+    virtual ~RemoveMetadata();
 
     BatchToolSettings defaultSettings();
 
@@ -74,6 +74,6 @@ private:
     bool toolOperations();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* REMOVEMETADATA_H */
+#endif // REMOVEMETADATA_H

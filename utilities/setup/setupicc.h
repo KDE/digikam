@@ -51,7 +51,7 @@ class SetupICC : public QScrollArea
 public:
 
     explicit SetupICC(QDialogButtonBox* const dlgBtnBox, QWidget* const parent = 0);
-    ~SetupICC();
+    virtual ~SetupICC();
 
     void applySettings();
 
@@ -82,6 +82,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SETUPICC_H

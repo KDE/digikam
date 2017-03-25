@@ -50,6 +50,7 @@
 // Local includes
 
 #include "dwidgetutils.h"
+#include "dfileselector.h"
 #include "digikam_config.h"
 #include "gpcamera.h"
 #include "dxmlguiwindow.h"
@@ -104,7 +105,8 @@ public:
 };
 
 CameraSelection::CameraSelection(QWidget* const parent)
-    : QDialog(parent), d(new Private)
+    : QDialog(parent),
+      d(new Private)
 {
     qApp->setOverrideCursor(Qt::WaitCursor);
 
@@ -113,7 +115,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    d->buttons = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
+    d->buttons        = new QDialogButtonBox(QDialogButtonBox::Help | QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     d->buttons->button(QDialogButtonBox::Ok)->setDefault(true);
 
     d->UMSCameraNameActual  = QLatin1String("Directory Browse");   // Don't be i18n!
@@ -699,4 +701,4 @@ void CameraSelection::slotHelp()
     DXmlGuiWindow::openHandbook();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

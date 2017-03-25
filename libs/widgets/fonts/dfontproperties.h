@@ -41,6 +41,9 @@
 class QFont;
 class QStringList;
 
+namespace Digikam
+{
+
 class DIGIKAM_EXPORT DFontProperties : public QWidget
 {
     Q_OBJECT
@@ -54,8 +57,8 @@ public:
 
     /**
      *  @li @p FamilyList - Identifies the family (leftmost) list.
-     *  @li @p StyleList -  Identifies the style (center) list.
-     *  @li @p SizeList -   Identifies the size (rightmost) list.
+     *  @li @p StyleList  - Identifies the style (center) list.
+     *  @li @p SizeList   - Identifies the size (rightmost) list.
      */
     enum FontColumn
     {
@@ -66,8 +69,8 @@ public:
 
     /**
      *  @li @p FontDiffFamily - Identifies a requested change in the font family.
-     *  @li @p FontDiffStyle -  Identifies a requested change in the font style.
-     *  @li @p FontDiffSize -   Identifies a requested change in the font size.
+     *  @li @p FontDiffStyle  - Identifies a requested change in the font style.
+     *  @li @p FontDiffSize   - Identifies a requested change in the font size.
      */
     enum FontDiff
     {
@@ -278,14 +281,16 @@ private:
 
     Q_DISABLE_COPY(DFontProperties)
 
-    Q_PRIVATE_SLOT(d, void _k_toggled_checkbox())
-    Q_PRIVATE_SLOT(d, void _k_family_chosen_slot(const QString&))
-    Q_PRIVATE_SLOT(d, void _k_size_chosen_slot(const QString&))
-    Q_PRIVATE_SLOT(d, void _k_style_chosen_slot(const QString&))
-    Q_PRIVATE_SLOT(d, void _k_displaySample(const QFont& font))
-    Q_PRIVATE_SLOT(d, void _k_size_value_slot(double))
+    Q_PRIVATE_SLOT(d, void _d_toggled_checkbox())
+    Q_PRIVATE_SLOT(d, void _d_family_chosen_slot(const QString&))
+    Q_PRIVATE_SLOT(d, void _d_size_chosen_slot(const QString&))
+    Q_PRIVATE_SLOT(d, void _d_style_chosen_slot(const QString&))
+    Q_PRIVATE_SLOT(d, void _d_displaySample(const QFont& font))
+    Q_PRIVATE_SLOT(d, void _d_size_value_slot(double))
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(DFontProperties::DisplayFlags)
+
+} // namespace Digikam
 
 #endif // DFONT_PROPERTIES_H

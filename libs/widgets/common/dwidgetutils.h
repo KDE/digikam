@@ -1,14 +1,12 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2014-09-12
- * @brief  Simple helpher widgets collection
+ * Date        : 2014-09-12
+ * Description : Simple helpher widgets collection.
  *
- * @author Copyright (C) 2014-2017 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +16,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -28,15 +26,10 @@
 
 // Qt includes
 
-#include <QUrl>
 #include <QString>
 #include <QFrame>
-#include <QLineEdit>
 #include <QSize>
 #include <QPixmap>
-#include <QFileDialog>
-#include <QColor>
-#include <QPushButton>
 
 // Local includes
 
@@ -85,45 +78,6 @@ class DIGIKAM_EXPORT DVBox : public DHBox
 
     explicit DVBox(QWidget* const parent=0);
     virtual ~DVBox();
-};
-
-// ------------------------------------------------------------------------------------
-
-/** A widget to chosse a single local file or path.
- *  Use line edit and file dialog properties to customize operation modes.
- */
-class DIGIKAM_EXPORT DFileSelector : public DHBox
-{
-    Q_OBJECT
-
-public:
-
-    explicit DFileSelector(QWidget* const parent=0);
-    virtual ~DFileSelector();
-
-    QLineEdit* lineEdit() const;
-
-    void setFileDlgPath(const QString& path);
-    QString fileDlgPath() const;
-
-    void setFileDlgMode(QFileDialog::FileMode mode);
-    void setFileDlgFilter(const QString& filter);
-    void setFileDlgTitle(const QString& title);
-    void setFileDlgOptions(QFileDialog::Options opts);
-
-Q_SIGNALS:
-
-    void signalOpenFileDialog();
-    void signalUrlSelected(const QUrl&);
-
-private Q_SLOTS:
-
-    void slotBtnClicked();
-
-private:
-
-    class Private;
-    Private* const d;
 };
 
 // --------------------------------------------------------------------------------------

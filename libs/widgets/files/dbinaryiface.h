@@ -143,4 +143,4 @@ protected:
 
 } // namespace Digikam
 
-#endif  // DBINARYIFACE_H
+#endif // DBINARYIFACE_H

@@ -53,6 +53,7 @@
 
 #include "dwidgetutils.h"
 #include "dnuminput.h"
+#include "dfileselector.h"
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "blurfilter.h"

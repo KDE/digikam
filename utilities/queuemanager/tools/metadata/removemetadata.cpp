@@ -28,6 +28,7 @@
 #include <QCheckBox>
 #include <QWidget>
 #include <QLabel>
+#include <QFile>
 
 // KDE includes
 
@@ -38,8 +39,6 @@
 #include "dwidgetutils.h"
 #include "dimg.h"
 #include "dmetadata.h"
-
-
 
 namespace Digikam
 {
@@ -168,4 +167,4 @@ bool RemoveMetadata::toolOperations()
     return ret;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

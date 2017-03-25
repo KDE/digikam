@@ -36,6 +36,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
+#include <QFile>
 
 // KDE includes
 
@@ -258,4 +259,4 @@ void SetupMisc::applySettings()
     d->settings->syncConfig();
 }
 
-}   // namespace ShowFoto
+} // namespace ShowFoto

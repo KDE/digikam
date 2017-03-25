@@ -88,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DGRADIENTSLIDER_H */
+#endif // DGRADIENTSLIDER_H

@@ -31,6 +31,7 @@
 #include <cmath>
 
 // Qt includes
+
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QGuiApplication>
@@ -50,6 +51,9 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+
+namespace Digikam
+{
 
 static bool localeLessThan(const QString& a, const QString& b)
 {
@@ -168,12 +172,12 @@ public:
      */
     QStringList translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames = 0);
 
-    void _k_toggled_checkbox();
-    void _k_family_chosen_slot(const QString&);
-    void _k_size_chosen_slot(const QString&);
-    void _k_style_chosen_slot(const QString&);
-    void _k_displaySample(const QFont& font);
-    void _k_size_value_slot(double);
+    void _d_toggled_checkbox();
+    void _d_family_chosen_slot(const QString&);
+    void _d_size_chosen_slot(const QString&);
+    void _d_style_chosen_slot(const QString&);
+    void _d_displaySample(const QFont& font);
+    void _d_size_value_slot(double);
 
 public:
 
@@ -269,7 +273,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
         d->familyCheckbox = new QCheckBox(i18n("Font"), page);
 
         connect(d->familyCheckbox, SIGNAL(toggled(bool)),
-                this, SLOT(_k_toggled_checkbox()));
+                this, SLOT(_d_toggled_checkbox()));
 
         familyLayout->addWidget(d->familyCheckbox, 0, Qt::AlignLeft);
         d->familyCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font family settings."));
@@ -292,7 +296,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
         d->styleCheckbox = new QCheckBox(i18n("Font style"), page);
 
         connect(d->styleCheckbox, SIGNAL(toggled(bool)),
-                this, SLOT(_k_toggled_checkbox()));
+                this, SLOT(_d_toggled_checkbox()));
 
         styleLayout->addWidget(d->styleCheckbox, 0, Qt::AlignLeft);
         d->styleCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font style settings."));
@@ -316,7 +320,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
         d->sizeCheckbox = new QCheckBox(i18n("Size"), page);
 
         connect(d->sizeCheckbox, SIGNAL(toggled(bool)),
-                this, SLOT(_k_toggled_checkbox()));
+                this, SLOT(_d_toggled_checkbox()));
 
         sizeLayout->addWidget(d->sizeCheckbox, 0, Qt::AlignLeft);
         d->sizeCheckbox->setWhatsThis(i18n("Enable this checkbox to change the font size settings."));
@@ -354,7 +358,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
     }
 
     connect(d->familyListBox, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(_k_family_chosen_slot(QString)));
+            this, SLOT(_d_family_chosen_slot(QString)));
 
     if (!fontList.isEmpty())
     {
@@ -393,7 +397,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
     d->styleListBox->setMinimumHeight(minimumListHeight(d->styleListBox, visibleListSize));
 
     connect(d->styleListBox, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(_k_style_chosen_slot(QString)));
+            this, SLOT(_d_style_chosen_slot(QString)));
 
     d->sizeListBox = new QListWidget(page);
     d->sizeOfFont  = new QDoubleSpinBox(page);
@@ -430,7 +434,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
         QGridLayout* const sizeLayout2 = new QGridLayout();
         sizeLayout2->setSpacing(spacingHint / 2);
         gridLayout->addLayout(sizeLayout2, row, 2);
-        sizeLayout2->addWidget(d->sizeOfFont, 0, 0);
+        sizeLayout2->addWidget(d->sizeOfFont,  0, 0);
         sizeLayout2->addWidget(d->sizeListBox, 1, 0);
     }
 
@@ -453,10 +457,10 @@ DFontProperties::DFontProperties(QWidget* const parent,
     d->sizeListBox->setMinimumHeight(minimumListHeight(d->sizeListBox, visibleListSize));
 
     connect(d->sizeOfFont, SIGNAL(valueChanged(double)),
-            this, SLOT(_k_size_value_slot(double)));
+            this, SLOT(_d_size_value_slot(double)));
 
     connect(d->sizeListBox, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(_k_size_chosen_slot(QString)));
+            this, SLOT(_d_size_chosen_slot(QString)));
 
     row ++;
 
@@ -479,7 +483,7 @@ DFontProperties::DFontProperties(QWidget* const parent,
     d->sampleEdit->setWhatsThis(sampleEditWhatsThisText);
 
     connect(this, SIGNAL(fontSelected(QFont)),
-            this, SLOT(_k_displaySample(QFont)));
+            this, SLOT(_d_displaySample(QFont)));
 
     splitter->addWidget(d->sampleEdit);
 
@@ -628,7 +632,7 @@ void DFontProperties::makeColumnVisible(int column, bool state)
 }
 void DFontProperties::setFont(const QFont& aFont, bool onlyFixed)
 {
-    d->selFont = aFont;
+    d->selFont      = aFont;
     d->selectedSize = aFont.pointSizeF();
 
     if (d->selectedSize == -1)
@@ -672,7 +676,7 @@ QFont DFontProperties::font() const
     return d->selFont;
 }
 
-void DFontProperties::Private::_k_toggled_checkbox()
+void DFontProperties::Private::_d_toggled_checkbox()
 {
     familyListBox->setEnabled(familyCheckbox->isChecked());
     styleListBox->setEnabled(styleCheckbox->isChecked());
@@ -680,7 +684,7 @@ void DFontProperties::Private::_k_toggled_checkbox()
     sizeOfFont->setEnabled(sizeCheckbox->isChecked());
 }
 
-void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
+void DFontProperties::Private::_d_family_chosen_slot(const QString& family)
 {
     if (!signalsAllowed)
     {
@@ -759,7 +763,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
         QString styleIt = i18n("Italic");
         QString styleOb = i18n("Oblique");
 
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0 ; i < 2 ; ++i)
         {
             int pos = selectedStyle.indexOf(styleIt);
 
@@ -787,7 +791,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     qreal currentSize = setupSizeListBox(currentFamily, currentStyle);
     sizeOfFont->setValue(currentSize);
 
-    selFont = dbase.font(currentFamily, currentStyle, int(currentSize));
+    selFont           = dbase.font(currentFamily, currentStyle, int(currentSize));
 
     if (dbase.isSmoothlyScalable(currentFamily, currentStyle) && selFont.pointSize() == floor(currentSize))
     {
@@ -799,7 +803,7 @@ void DFontProperties::Private::_k_family_chosen_slot(const QString& family)
     signalsAllowed = true;
 }
 
-void DFontProperties::Private::_k_style_chosen_slot(const QString& style)
+void DFontProperties::Private::_d_style_chosen_slot(const QString& style)
 {
     if (!signalsAllowed)
     {
@@ -843,7 +847,7 @@ void DFontProperties::Private::_k_style_chosen_slot(const QString& style)
     signalsAllowed = true;
 }
 
-void DFontProperties::Private::_k_size_chosen_slot(const QString& size)
+void DFontProperties::Private::_d_size_chosen_slot(const QString& size)
 {
     if (!signalsAllowed)
     {
@@ -883,7 +887,7 @@ void DFontProperties::Private::_k_size_chosen_slot(const QString& size)
     signalsAllowed = true;
 }
 
-void DFontProperties::Private::_k_size_value_slot(double dval)
+void DFontProperties::Private::_d_size_value_slot(double dval)
 {
     if (!signalsAllowed)
     {
@@ -964,7 +968,7 @@ void DFontProperties::Private::_k_size_value_slot(double dval)
     signalsAllowed = true;
 }
 
-void DFontProperties::Private::_k_displaySample(const QFont& font)
+void DFontProperties::Private::_d_displaySample(const QFont& font)
 {
     sampleEdit->setFont(font);
 }
@@ -1021,7 +1025,7 @@ qreal DFontProperties::Private::fillSizeList(const QList<qreal>& sizes_)
             0
         };
 
-        for (int i = 0; c[i]; ++i)
+        for (int i = 0 ; c[i] ; ++i)
         {
             sizes.append(c[i]);
         }
@@ -1055,7 +1059,7 @@ qreal DFontProperties::Private::fillSizeList(const QList<qreal>& sizes_)
 qreal DFontProperties::Private::setupSizeListBox(const QString& family, const QString& style)
 {
     QFontDatabase dbase;
-    QList<qreal> sizes;
+    QList<qreal>  sizes;
 
     if (dbase.isSmoothlyScalable(family, style))
     {
@@ -1108,7 +1112,7 @@ void DFontProperties::Private::setupDisplay()
 
     numEntries = familyListBox->count();
 
-    for (i = 0; i < numEntries; ++i)
+    for (i = 0 ; i < numEntries ; ++i)
     {
         if (family == qtFamilies[familyListBox->item(i)->text()].toLower())
         {
@@ -1125,7 +1129,7 @@ void DFontProperties::Private::setupDisplay()
         {
             family = family.left(family.indexOf(QLatin1Char('['))).trimmed();
 
-            for (i = 0; i < numEntries; ++i)
+            for (i = 0 ; i < numEntries ; ++i)
             {
                 if (family == qtFamilies[familyListBox->item(i)->text()].toLower())
                 {
@@ -1142,7 +1146,7 @@ void DFontProperties::Private::setupDisplay()
     {
         QString fallback = family + QLatin1String(" [");
 
-        for (i = 0; i < numEntries; ++i)
+        for (i = 0 ; i < numEntries ; ++i)
         {
             if (qtFamilies[familyListBox->item(i)->text()].toLower().startsWith(fallback))
             {
@@ -1156,7 +1160,7 @@ void DFontProperties::Private::setupDisplay()
 
     if (i == numEntries)
     {
-        for (i = 0; i < numEntries; ++i)
+        for (i = 0 ; i < numEntries ; ++i)
         {
             if (qtFamilies[familyListBox->item(i)->text()].toLower().startsWith(family))
             {
@@ -1181,7 +1185,7 @@ void DFontProperties::Private::setupDisplay()
 
     numEntries = styleListBox->count();
 
-    for (i = 0; i < numEntries; ++i)
+    for (i = 0 ; i < numEntries ; ++i)
     {
         if (styleID == styleIDs[styleListBox->item(i)->text()])
         {
@@ -1335,12 +1339,16 @@ QString DFontProperties::Private::translateFontName(const QString& name)
 
     // Obtain any regular translations for the family and foundry.
 
-    QString trFamily  = QCoreApplication::translate("FontHelpers", family.toUtf8().constData(), "@item Font name");
+    QString trFamily  = QCoreApplication::translate("FontHelpers",
+                                                    family.toUtf8().constData(),
+                                                    "@item Font name");
     QString trFoundry = foundry;
 
     if (!foundry.isEmpty())
     {
-        trFoundry = QCoreApplication::translate("FontHelpers", foundry.toUtf8().constData(), "@item Font foundry");
+        trFoundry = QCoreApplication::translate("FontHelpers",
+                                                foundry.toUtf8().constData(),
+                                                "@item Font foundry");
     }
 
     // Assemble full translation.
@@ -1364,7 +1372,8 @@ QString DFontProperties::Private::translateFontName(const QString& name)
     return trfont;
 }
 
-QStringList DFontProperties::Private::translateFontNameList(const QStringList& names, QHash<QString, QString>* trToRawNames)
+QStringList DFontProperties::Private::translateFontNameList(const QStringList& names,
+                                                            QHash<QString, QString>* trToRawNames)
 {
     // Generic fonts, in the inverse of desired order.
     QStringList genericNames;
@@ -1412,5 +1421,7 @@ QStringList DFontProperties::Private::translateFontNameList(const QStringList& n
 
     return trNames;
 }
+
+} // namespace Digikam
 
 #include "moc_dfontproperties.cpp"

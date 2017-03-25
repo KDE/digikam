@@ -103,7 +103,8 @@ public:
 };
 
 DGradientSlider::DGradientSlider(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     d->parent = this;
 
@@ -178,6 +179,7 @@ inline bool isCursorClicked(const QPoint& pos, double cursorPos,
                             int width, int height, int gradientWidth)
 {
     int pos2 = (int)(gradientWidth * cursorPos);
+
     return ((pos.y() >= 2 * height)    &&
             (pos.y() < 3 * height)     &&
             (pos.x() >= pos2)          &&
@@ -260,7 +262,7 @@ double DGradientSlider::middleValue() const
 
 void DGradientSlider::adjustMiddleValue( double newLeftValue, double newRightValue )
 {
-    double newDist  = newRightValue  - newLeftValue;
+    double newDist  = newRightValue   - newLeftValue;
     double oldDist  = d->rightCursor  - d->leftCursor;
     double oldPos   = d->middleCursor - d->leftCursor;
     d->middleCursor = oldPos * newDist / oldDist + newLeftValue;

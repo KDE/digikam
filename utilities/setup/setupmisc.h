@@ -38,7 +38,7 @@ class SetupMisc : public QScrollArea
 public:
 
     explicit SetupMisc(QWidget* const parent = 0);
-    ~SetupMisc();
+    virtual ~SetupMisc();
 
     void applySettings();
 
@@ -52,6 +52,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* SETUPMISC_H */
+#endif // SETUPMISC_H
