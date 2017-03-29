@@ -717,6 +717,34 @@ void AssignNameWidget::setCurrentTag(TAlbum* album)
     d->updateContents();
 }
 
+void AssignNameWidget::slotSetLineNumber(const QString & str)
+{
+    int new_width = fontMetrics().width(str);
+    int line_width, del_width = 35;
+
+    if(d->comboBox)
+    {
+        line_width = d->comboBox->getlineWidth();
+    }
+    else if(d->lineEdit)
+    {
+        line_width = d->lineEdit->width();
+    }
+    else
+    {
+        return ;
+    }
+    
+    if(line_width>new_width+del_width)
+    {
+        return ;
+    }
+    else
+    {
+        d->q->setFixedWidth(d->q->width()+new_width-(line_width-del_width));
+    }
+}
+
 void AssignNameWidget::slotConfirm()
 {
     if (d->comboBox)
@@ -798,6 +826,20 @@ bool AssignNameWidget::isCompleterPopupVisible() const
     }
 
     return false;
+}
+
+void AssignNameWidget::addTagsChangeSignal() const
+{
+    if(d->lineEdit)
+    {
+        d->q->connect(d->lineEdit, SIGNAL(textEditChanged(QString)),
+                            d->q, SLOT(slotSetLineNumber(QString)));
+    }
+    else if(d->comboBox)
+    {
+        d->q->connect(d->comboBox, SIGNAL(textEditChanged(QString)),
+                            d->q, SLOT(slotSetLineNumber(QString)));
+    }
 }
 
 } // namespace Digikam
