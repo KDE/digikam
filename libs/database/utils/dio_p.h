@@ -27,12 +27,12 @@
 // Local includes
 
 #include "workerobject.h"
-#include "dio.h"
 
 namespace Digikam
 {
 
 class Album;
+class DIO;
 
 class DIO::Private : public WorkerObject
 {

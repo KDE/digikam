@@ -37,7 +37,6 @@
 #include "digikam_export.h"
 #include "imageinfo.h"
 #include "thumbbardock.h"
-#include "trashview.h"
 
 namespace Digikam
 {
@@ -45,8 +44,9 @@ namespace Digikam
 class DigikamImageView;
 class ImageCategorizedView;
 class ImagePreviewView;
-class TableView;
 class ImageThumbnailBar;
+class TableView;
+class TrashView;
 
 #ifdef HAVE_MEDIAPLAYER
 class MediaPlayerView;

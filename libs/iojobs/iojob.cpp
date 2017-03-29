@@ -25,9 +25,9 @@
 
 // Qt includes
 
-#include <QFile>
 #include <QDir>
 #include <QDirIterator>
+#include <QFile>
 
 // KDE includes
 
@@ -184,8 +184,8 @@ void CopyJob::run()
 
 DeleteJob::DeleteJob(const QUrl& srcToDelete, bool useTrash, bool markAsObsolete)
 {
-    m_srcToDelete  = srcToDelete;
-    m_useTrash     = useTrash;
+    m_srcToDelete    = srcToDelete;
+    m_useTrash       = useTrash;
     m_markAsObsolete = markAsObsolete;
 }
 

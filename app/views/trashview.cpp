@@ -39,12 +39,11 @@
 
 // Local includes
 
+#include "digikam_debug.h"
 #include "dtrashiteminfo.h"
 #include "dtrashitemmodel.h"
-#include "thumbnailsize.h"
-#include "digikam_debug.h"
 #include "iojobsmanager.h"
-#include "iojobsthread.h"
+#include "thumbnailsize.h"
 
 namespace Digikam
 {

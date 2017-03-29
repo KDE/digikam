@@ -63,8 +63,8 @@ ImageViewUtilities::ImageViewUtilities(QWidget* const parentWidget)
 {
     m_widget = parentWidget;
 
-    connect(this,SIGNAL(signalImagesDeleted(const QList<qlonglong>&)),
-            AlbumManager::instance(),SLOT(slotImagesDeleted(const QList<qlonglong>&)));
+    connect(this, SIGNAL(signalImagesDeleted(const QList<qlonglong>&)),
+            AlbumManager::instance(), SLOT(slotImagesDeleted(const QList<qlonglong>&)));
 }
 
 void ImageViewUtilities::setAsAlbumThumbnail(Album* album, const ImageInfo& imageInfo)

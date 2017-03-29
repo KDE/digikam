@@ -48,10 +48,9 @@
 
 // Local includes
 
-#include "stackedview.h"
-#include "thememanager.h"
-#include "dwidgetutils.h"
 #include "digikam_debug.h"
+#include "dwidgetutils.h"
+#include "thememanager.h"
 
 using namespace QtAV;
 

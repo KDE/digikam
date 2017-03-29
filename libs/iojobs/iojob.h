@@ -30,8 +30,6 @@
 
 // Local includes
 
-#include "dtrashiteminfo.h"
-#include "dtrash.h"
 #include "actionthreadbase.h"
 #include "digikam_export.h"
 
@@ -39,6 +37,7 @@ namespace Digikam
 {
 
 class ImageInfo;
+class DTrashItemInfo;
 
 class DIGIKAM_EXPORT IOJob : public ActionJob
 {

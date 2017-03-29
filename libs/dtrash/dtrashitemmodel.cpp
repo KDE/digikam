@@ -39,7 +39,6 @@
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "iojobsmanager.h"
-#include "iojobsthread.h"
 
 namespace Digikam
 {

@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QCloseEvent>
 #include <QPixmap>
 #include <QTimer>
 #include <QDialogButtonBox>

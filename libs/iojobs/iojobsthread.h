@@ -26,14 +26,14 @@
 
 // Local includes
 
-#include "album.h"
-#include "iojob.h"
-#include "dtrashiteminfo.h"
 #include "actionthreadbase.h"
 #include "digikam_export.h"
+#include "dtrashiteminfo.h"
 
 namespace Digikam
 {
+
+class IOJob;
 
 class DIGIKAM_EXPORT IOJobsThread : public ActionThreadBase
 {
@@ -57,13 +57,6 @@ public:
      * @param destAlbum: destination folder
      */
     void move(const QList<QUrl>& srcFiles, const QUrl destAlbum);
-
-    /**
-     * @brief Starts a number of jobs to delete multiple files
-     * @param srcsToDelete: files to be deleted
-     * @param useTrash: a flag to use trash or not
-     */
-    void del(const QList<QUrl>& srcsToDelete, bool useTrash);
 
     /**
      * @brief Starts a job for listing trash items in a collection

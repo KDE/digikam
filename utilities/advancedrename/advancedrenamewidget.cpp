@@ -26,14 +26,14 @@
 // Qt includes
 
 #include <QAction>
+#include <QApplication>
 #include <QGridLayout>
+#include <QIcon>
 #include <QMenu>
 #include <QPushButton>
 #include <QRegExp>
-#include <QToolButton>
-#include <QApplication>
 #include <QStyle>
-#include <QIcon>
+#include <QToolButton>
 
 // KDE includes
 

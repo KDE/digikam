@@ -421,9 +421,7 @@ void DIO::move(const QList<ImageInfo> infos, const PAlbum* const dest)
     CoreDbAccess access;
     foreach(ImageInfo info, infos)
     {
-        QUrl oldUrl = info.fileUrl();
-
-        access.db()->moveItem(info.albumId(),info.name(),dest->id(),info.name());
+        access.db()->moveItem(info.albumId(), info.name(), dest->id(), info.name());
     }
 
     instance()->d->imagesToAlbum(Move, infos, dest);

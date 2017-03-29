@@ -26,27 +26,29 @@
 
 // Qt includes
 
-#include <QGridLayout>
-#include <QVBoxLayout>
+#include <QApplication>
+#include <QComboBox>
+#include <QDir>
+#include <QFileInfo>
 #include <QFormLayout>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QProcess>
+#include <QSpinBox>
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QLabel>
-#include <QHeaderView>
-#include <QGroupBox>
-#include <QTimer>
-#include <QTemporaryFile>
-#include <QApplication>
-#include <QStyle>
-#include <QMessageBox>
-#include <QTextBrowser>
-#include <QTabWidget>
-#include <QMessageBox>
-#include <QFileInfo>
 #include <QStandardPaths>
-#include <QProcess>
-#include <QDir>
-#include <QUrl>
+#include <QString>
+#include <QStyle>
+#include <QTabWidget>
+#include <QTemporaryFile>
+#include <QTextBrowser>
+#include <QTimer>
+#include <QVBoxLayout>
 
 // KDE includes
 
@@ -54,18 +56,16 @@
 
 // Local includes
 
-#include "digikam_debug.h"
-#include "digikam_config.h"
-#include "dwidgetutils.h"
-#include "dexpanderbox.h"
+#include "applicationsettings.h"
 #include "dfileselector.h"
 #include "dbengineparameters.h"
 #include "dbinarysearch.h"
+#include "dexpanderbox.h"
+#include "digikam_config.h"
+#include "digikam_debug.h"
+#include "dwidgetutils.h"
 #include "mysqlinitbinary.h"
 #include "mysqlservbinary.h"
-#include "coredbaccess.h"
-#include "coredb.h"
-#include "scancontroller.h"
 
 namespace Digikam
 {

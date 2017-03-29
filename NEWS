@@ -11,4 +11,5 @@ BUGFIXES FROM BUGZILLA:
 003 ==> 218297 - SETUP : Database location under control panel doesn't match when using database-directory command line option
 004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue
 005 ==> 378098 - Update meta data from selected images (generated outside digikam) does not work anymore.
-006 ==> 
+006 ==> 378219 - Optimize includes and polish
+006 ==>

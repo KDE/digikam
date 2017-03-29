@@ -28,11 +28,12 @@
 // Qt includes
 
 #include <QObject>
-#include <QUrl>
 
 // Local includes
 
 #include "digikam_export.h"
+
+class QUrl;
 
 namespace Digikam
 {

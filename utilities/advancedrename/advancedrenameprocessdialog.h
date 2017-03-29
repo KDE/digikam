@@ -24,20 +24,14 @@
 #ifndef ADVANCEDRENAMEPROCESSDIALOG_H
 #define ADVANCEDRENAMEPROCESSDIALOG_H
 
-// Qt includes
-
-#include <QCloseEvent>
-#include <QPixmap>
-
 // Local includes
 
-#include "dprogressdlg.h"
 #include "advancedrenamedialog.h"
+#include "dprogressdlg.h"
 #include "digikam_export.h"
 
+class QCloseEvent;
 class QPixmap;
-class QWidget;
-
 class QUrl;
 
 namespace Digikam

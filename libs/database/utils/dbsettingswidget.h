@@ -27,22 +27,19 @@
 
 // Qt includes
 
-#include <QString>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QSpinBox>
-#include <QUrl>
-#include <QCheckBox>
+#include <QWidget>
 
 // Local includes
 
 #include "digikam_export.h"
-#include "dwidgetutils.h"
-#include "applicationsettings.h"
-#include "dbengineparameters.h"
+
+class QString;
 
 namespace Digikam
 {
+
+class ApplicationSettings;
+class DbEngineParameters;
 
 class DIGIKAM_EXPORT DatabaseSettingsWidget : public QWidget
 {

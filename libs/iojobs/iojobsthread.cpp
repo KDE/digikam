@@ -31,7 +31,6 @@
 #include "iojobsthread.h"
 #include "iojob.h"
 #include "digikam_debug.h"
-#include "dtrashiteminfo.h"
 #include "coredb.h"
 #include "coredbaccess.h"
 
@@ -106,23 +105,6 @@ void IOJobsThread::move(const QList<QUrl>& srcFiles, const QUrl destAlbum)
     appendJobs(collection);
 }
 
-void IOJobsThread::del(const QList<QUrl>& srcsToDelete, bool useTrash)
-{
-    ActionJobCollection collection;
-
-    foreach (const QUrl& url, srcsToDelete)
-    {
-        DeleteJob* const j = new DeleteJob(url, useTrash);
-
-        connectOneJob(j);
-
-        collection.insert(j, 0);
-        d->jobsCount++;
-    }
-
-    appendJobs(collection);
-}
-
 void IOJobsThread::deleteFiles(const QList<QUrl>& srcsToDelete, bool useTrash)
 {
     ActionJobCollection collection;
@@ -181,7 +163,7 @@ void IOJobsThread::restoreDTrashItems(const DTrashItemInfoList& items)
         listOfJsonFilesToRemove << QUrl::fromLocalFile(item.jsonFilePath);
     }
 
-    del(listOfJsonFilesToRemove, false);
+    deleteFiles(listOfJsonFilesToRemove, false);
 }
 
 void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
@@ -194,10 +176,10 @@ void IOJobsThread::deleteDTrashItems(const DTrashItemInfoList& items)
         urlsToDelete << QUrl::fromLocalFile(item.trashPath);
         urlsToDelete << QUrl::fromLocalFile(item.jsonFilePath);
         // Set the status of the image id to obsolete, i.e. to remove.
-        access.db()->setItemStatus(item.imageId,DatabaseItem::Status::Obsolete);
+        access.db()->setItemStatus(item.imageId, DatabaseItem::Status::Obsolete);
     }
 
-    del(urlsToDelete, false);
+    deleteFiles(urlsToDelete, false);
 }
 
 void IOJobsThread::renameFile(const QUrl& srcToRename, const QUrl& newName)

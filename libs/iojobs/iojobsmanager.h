@@ -31,9 +31,9 @@
 
 // Local includes
 
-#include "iojobsthread.h"
-#include "dtrashiteminfo.h"
 #include "digikam_export.h"
+#include "dtrashiteminfo.h"
+#include "iojobsthread.h"
 
 namespace Digikam
 {

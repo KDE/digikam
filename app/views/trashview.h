@@ -28,13 +28,11 @@
 #include <QWidget>
 #include <QStyledItemDelegate>
 
-// Local includes
-
-#include "dtrashitemmodel.h"
-#include "thumbnailsize.h"
-
 namespace Digikam
 {
+
+class DTrashItemModel;
+class ThumbnailSize;
 
 class TrashView : public QWidget
 {
