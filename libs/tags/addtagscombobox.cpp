@@ -178,7 +178,7 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
 {
     if (object == d->lineEdit->completer()->popup())
     {
-        if (event->type() == QEvent::Resize)
+        if (event->type() == QEvent::Show)
         {
             QGraphicsProxyWidget* const proxyWidget = d->lineEdit->completer()->popup()->graphicsProxyWidget();
 
@@ -186,14 +186,12 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
             {
                 proxyWidget->setMinimumHeight(0);
             }
+
+            setFocus();
         }
         else if (event->type() == QEvent::Hide)
         {
             d->lineEdit->completer()->popup()->setFocus();
-        }
-        else if (event->type() == QEvent::Show)
-        {
-            setFocus();
         }
 
         return false;
