@@ -37,7 +37,6 @@
 #include "dexpanderbox.h"
 #include "digikam_debug.h"
 #include "addtagscombobox.h"
-#include "tagscompleter.h"
 #include "addtagslineedit.h"
 #include "album.h"
 #include "albummanager.h"
@@ -415,12 +414,12 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "} "
 
                     "QToolButton { "
-                    "  color: rgba(255,255,255,220); "
+                    "  color: rgba(255, 255, 255, 220); "
                     "  padding: 1px; "
                     "  background-color: "
-                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,100), "
-                    "                    stop:1 rgba(255,255,255,0)); "
-                    "  border: 1px solid rgba(255,255,255,127); "
+                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 100), "
+                    "                    stop:1 rgba(255, 255, 255, 0)); "
+                    "  border: 1px solid rgba(255, 255, 255, 127); "
                     "  border-radius: 4px; "
                     "} "
 
@@ -430,16 +429,16 @@ void AssignNameWidget::Private::updateVisualStyle()
 
                     "QToolButton:pressed { "
                     "  background-color: "
-                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,0), "
-                    "                    stop:1 rgba(255,255,255,100)); "
+                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 0), "
+                    "                    stop:1 rgba(255, 255, 255, 100)); "
                     "  border-color: white; "
                     "} "
 
                     "QToolButton:disabled { "
-                    "  color: rgba(255,255,255,120); "
+                    "  color: rgba(255, 255, 255, 120); "
                     "  background-color: "
-                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255,255,255,50), "
-                    "                    stop:1 rgba(255,255,255,0)); "
+                    "    qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 rgba(255, 255, 255, 50), "
+                    "                    stop:1 rgba(255, 255, 255, 0)); "
                     "} "
 
                     "QComboBox { "
@@ -449,7 +448,7 @@ void AssignNameWidget::Private::updateVisualStyle()
 
                     "QComboBox QAbstractItemView, QListView::item:!selected { "
                     "  color: white; "
-                    "  background-color: rgba(0,0,0,80%); "
+                    "  background-color: rgba(0, 0, 0, 80%); "
                     "} "
 
                     "QLabel { "
@@ -471,8 +470,8 @@ void AssignNameWidget::Private::updateVisualStyle()
 
                     "QFrame#assignNameWidget {"
                     "  background-color: "
-                    "    qradialgradient(cx:0, cy:0, fx:0, fy:0, radius: 1, stop:0 rgba(%2,%3,%4,255), "
-                    "                    stop:0.8 rgba(%2,%3,%4,200), stop:1 rgba(%2,%3,%4,0));"
+                    "    qradialgradient(cx:0, cy:0, fx:0, fy:0, radius: 1, stop:0 rgba(%2, %3, %4, 255), "
+                    "                    stop:0.8 rgba(%2, %3, %4, 200), stop:1 rgba(%2, %3, %4, 0));"
                     "  border: none; "
                     "  border-radius: 8px; "
                     "}"
@@ -575,10 +574,10 @@ void AssignNameWidget::setModel(TagModel* const model, TagPropertiesFilterModel*
     if (model || filteredModel || filterModel)
     {
         // possibly set later on box
-        d->modelsGiven       = true;
-        d->tagModel          = model;
-        d->tagFilterModel    = filterModel;
-        d->tagFilteredModel  = filteredModel;
+        d->modelsGiven      = true;
+        d->tagModel         = model;
+        d->tagFilterModel   = filterModel;
+        d->tagFilteredModel = filteredModel;
     }
 }
 
