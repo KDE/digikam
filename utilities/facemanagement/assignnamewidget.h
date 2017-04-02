@@ -114,8 +114,6 @@ public:
     AddTagsComboBox* comboBox() const;
     AddTagsLineEdit* lineEdit() const;
 
-    bool isCompleterPopupVisible() const;
-
 public Q_SLOTS:
 
     /** The identifying information emitted with the signals */

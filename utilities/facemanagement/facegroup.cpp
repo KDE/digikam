@@ -498,14 +498,6 @@ void FaceGroup::leaveEvent(QEvent*)
 {
     if (d->showOnHover && !isVisible())
     {
-        foreach(FaceItem* const item, d->items)
-        {
-            if (item->widget() && item->widget()->isCompleterPopupVisible())
-            {
-                return;
-            }
-        }
-
         setVisibleItem(0);
     }
 }

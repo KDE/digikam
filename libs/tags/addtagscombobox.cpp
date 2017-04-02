@@ -31,7 +31,8 @@
 // Qt includes
 
 #include <QKeyEvent>
-#include <QFontDatabase>
+#include <QApplication>
+#include <QGraphicsProxyWidget>
 
 // Local includes
 
@@ -65,38 +66,13 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
     setInsertPolicy(QComboBox::NoInsert); // do not let Qt interfere when Enter is pressed
     setCloseOnActivate(true);
     setCheckable(false);
+    setParent(0);
 
     d->lineEdit = new AddTagsLineEdit(this);
     setLineEdit(d->lineEdit);
 
-    QString stringFont;
-    QFont font  = QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont);
-    stringFont += (font.pointSize() == -1) ? QString::fromUtf8("font-size: %1px; ").arg(font.pixelSize())
-                                           : QString::fromUtf8("font-size: %1pt; ").arg(font.pointSize());
-    stringFont += QString::fromUtf8("font-family: \"%1\"; ").arg(font.family());
-
-    d->lineEdit->completer()->popup()->setStyleSheet(
-        QString::fromUtf8(
-            "QWidget { "
-            " %1 "
-            "} "
-
-            "QFrame {"
-            "  background-color: rgba(0, 0, 0, 66%); "
-            "  border: 1px solid rgba(100, 100, 100, 66%); "
-            "  border-radius: 4px; "
-            "} "
-
-            "QAbstractItemView, QListView::item:!selected { "
-            "  color: white; "
-            "  background-color: rgba(0,0,0,80%); "
-            "} "
-
-            "QLabel { "
-            "  color: white; background-color: transparent; border: none; "
-            "}"
-        ).arg(stringFont)
-    );
+    // See QTBUG-20531
+    d->lineEdit->completer()->popup()->setParent(d->lineEdit, Qt::Popup);
 
     connect(d->lineEdit, SIGNAL(taggingActionActivated(TaggingAction)),
             this, SLOT(slotLineEditActionActivated(TaggingAction)));
@@ -111,6 +87,7 @@ AddTagsComboBox::AddTagsComboBox(QWidget* const parent)
             this, SLOT(slotViewIndexActivated(QModelIndex)));
 
     d->lineEdit->completer()->popup()->installEventFilter(this);
+    installEventFilter(this);
 }
 
 AddTagsComboBox::~AddTagsComboBox()
@@ -201,17 +178,33 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
 {
     if (object == d->lineEdit->completer()->popup())
     {
-        if (event->type() == QEvent::Move)
+        if (event->type() == QEvent::Resize)
         {
-            if (parentWidget() && parentWidget()->parentWidget())
-            {
-                QPoint pos    = geometry().bottomLeft();
-                QPoint newPos = parentWidget()->parentWidget()->mapToGlobal(pos);
+            QGraphicsProxyWidget* const proxyWidget = d->lineEdit->completer()->popup()->graphicsProxyWidget();
 
-                if (d->lineEdit->completer()->popup()->pos() != newPos)
-                {
-                    d->lineEdit->completer()->popup()->move(newPos);
-                }
+            if (proxyWidget)
+            {
+                proxyWidget->setMinimumHeight(0);
+            }
+        }
+        else if (event->type() == QEvent::Hide)
+        {
+            d->lineEdit->completer()->popup()->setFocus();
+        }
+        else if (event->type() == QEvent::Show)
+        {
+            setFocus();
+        }
+
+        return false;
+    }
+    else if (object == this)
+    {
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
+        {
+            if (d->lineEdit->completer()->popup()->isVisible())
+            {
+                QApplication::sendEvent(d->lineEdit->completer()->popup(), event);
             }
         }
         else if (event->type() == QEvent::ShortcutOverride)
@@ -224,6 +217,15 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
                 event->accept();
             }
         }
+        else if (event->type() == QEvent::HoverMove)
+        {
+            if (d->lineEdit->completer()->popup()->isVisible())
+            {
+                d->lineEdit->completer()->popup()->hide();
+            }
+        }
+
+        return false;
     }
 
     return TagTreeViewSelectComboBox::eventFilter(object, event);
