@@ -440,6 +440,12 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesForImageWithThreshold
 {
     d->createLoadingBuffer();
     DImg image(imagePath);
+
+    if (image.isNull())
+    {
+        return QPair<double,QMap<qlonglong,double>>();
+    }
+
     d->data->fillPixelData(image);
 
     Haar::Calculator haar;

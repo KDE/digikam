@@ -13,4 +13,5 @@ BUGFIXES FROM BUGZILLA:
 005 ==> 378098 - Update meta data from selected images (generated outside digikam) does not work anymore.
 006 ==> 378219 - Optimize includes and polish
 007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item
-008 ==>
+008 ==> 378360 - Digikam 5.5 crashes on startup after update.
+009 ==> 
