@@ -582,6 +582,12 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesWithThreshold(qlonglo
     double percentageRange = 1.0 - requiredPercentage;
     // example: 0.2 + (0.3 * 0.3) = 0.2 + 0.09 = 0.29
     double requiredScore   = lowest + scoreRange * percentageRange;
+    // Set the supremum which solves the problem that if
+    // required == maximum, no results will be returned.
+    // Eg, id required == maximum == 50.0, only images with exactly this
+    // similarity are returned. But users expect also to see images
+    // with similarity 50,x.
+    double supremum = (floor(maximumPercentage*100 + 1.0))/100;
 
     QMap<qlonglong, double> bestMatches;
     double score, percentage, avgPercentage = 0.0;
@@ -599,7 +605,7 @@ QPair<double,QMap<qlonglong,double>> HaarIface::bestMatchesWithThreshold(qlonglo
         {
             percentage = 1.0 - (score - lowest) / scoreRange;
             // If the found image is the original one (check by id) or the percentage is below the maximum.
-            if ((id == imageid) || (percentage <= maximumPercentage))
+            if ((id == imageid) || (percentage < supremum))
             {
                 bestMatches.insert(id, percentage);
                 // If the current image is not the original, use the images similarity for the average percentage

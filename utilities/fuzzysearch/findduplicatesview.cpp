@@ -147,7 +147,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->minSimilarity->setSuffix(QLatin1String("%"));
 
     d->maxSimilarity = new QSpinBox();
-    d->maxSimilarity->setRange(90, 100);
+    d->maxSimilarity->setRange(d->minSimilarity->value(), 100);
     d->maxSimilarity->setValue(ApplicationSettings::instance()->getDuplicatesSearchLastMaxSimilarity());
     d->maxSimilarity->setSingleStep(1);
     d->maxSimilarity->setSuffix(QLatin1String("%"));

@@ -246,6 +246,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     sketchWidget->sketchImageToXML(writer);
     writer.finishField();
     writer.finishGroup();
+    writer.finish();
 
     SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
@@ -291,6 +292,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromDropped(const QString& pr
     writer.writeValue(filePath);
     writer.finishField();
     writer.finishGroup();
+    writer.finish();
 
     SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);
@@ -341,6 +343,7 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     writer.writeValue(image.id());
     writer.finishField();
     writer.finishGroup();
+    writer.finish();
 
     SAlbum* const salbum = AlbumManager::instance()->createSAlbum(name, DatabaseSearch::HaarSearch, writer.xml());
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << salbum);

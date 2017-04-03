@@ -49,6 +49,7 @@
 #include "fileactionmngr.h"
 #include "tagdragdrop.h"
 #include "tagmodificationhelper.h"
+#include "coredb.h"
 
 namespace Digikam
 {
@@ -766,14 +767,30 @@ void AbstractAlbumTreeView::doLoadState()
     const QStringList expansion = configGroup.readEntry(entryName(d->configExpansionEntry), QStringList());
     //qCDebug(DIGIKAM_GENERAL_LOG) << "expansion: " << expansion;
 
-    foreach (const QString& key, expansion)
+    // If no expansion was done, at least expand the root albums
+    if (expansion.isEmpty())
     {
-        bool validId;
-        const int id = key.toInt(&validId);
-
-        if (validId)
+        QList<AlbumRootInfo> roots = CoreDbAccess().db()->getAlbumRoots();
+        foreach(AlbumRootInfo info, roots)
         {
-            d->statesByAlbumId[id].expanded = true;
+            int albumId = CoreDbAccess().db()->getAlbumForPath(info.id,QLatin1String("/"),false);
+            if (albumId != -1)
+            {
+                d->statesByAlbumId[albumId].expanded = true;
+            }
+        }
+    }
+    else
+    {
+        foreach (const QString& key, expansion)
+        {
+            bool validId;
+            const int id = key.toInt(&validId);
+
+            if (validId)
+            {
+                d->statesByAlbumId[id].expanded = true;
+            }
         }
     }
 
@@ -1424,7 +1441,7 @@ void AbstractCheckableAlbumTreeView::restoreCheckState(const QModelIndex& index)
 {
     Album* const album = checkableModel()->albumForIndex(index);
 
-    if (!album)
+    if (!album || !(album->id()))
     {
         return;
     }

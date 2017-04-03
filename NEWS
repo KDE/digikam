@@ -12,4 +12,5 @@ BUGFIXES FROM BUGZILLA:
 004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue
 005 ==> 378098 - Update meta data from selected images (generated outside digikam) does not work anymore.
 006 ==> 378219 - Optimize includes and polish
-006 ==>
+007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item
+008 ==>
