@@ -410,7 +410,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "QFrame {"
                     "  background-color: rgba(0, 0, 0, 66%); "
                     "  border: 1px solid rgba(100, 100, 100, 66%); "
-                    "  border-radius: 8px; "
+                    "  border-radius: %2px; "
                     "} "
 
                     "QToolButton { "
@@ -455,6 +455,7 @@ void AssignNameWidget::Private::updateVisualStyle()
                     "  color: white; background-color: transparent; border: none; "
                     "}"
                 ).arg(styleSheetFontDescriptor(QFontDatabase::systemFont(QFontDatabase::SmallestReadableFont)))
+                 .arg((mode == ConfirmedMode) ? QLatin1String("8") : QLatin1String("4"))
             );
             break;
         }
