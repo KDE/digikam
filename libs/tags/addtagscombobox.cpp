@@ -199,6 +199,7 @@ bool AddTagsComboBox::eventFilter(QObject* object, QEvent* event)
             {
                 QPoint pos    = geometry().bottomLeft();
                 QPoint newPos = parentWidget()->mapToGlobal(pos);
+                newPos.ry()--;
 
                 if (d->lineEdit->completer()->popup()->pos() != newPos)
                 {
