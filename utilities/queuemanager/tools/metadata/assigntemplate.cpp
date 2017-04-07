@@ -148,8 +148,10 @@ bool AssignTemplate::toolOperations()
 
     if (image().isNull())
     {
+        m_lock.lock();
         QFile::remove(outputUrl().toLocalFile());
         ret = QFile::copy(inputUrl().toLocalFile(), outputUrl().toLocalFile());
+        m_lock.unlock();
 
         if (ret && !title.isEmpty())
         {

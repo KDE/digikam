@@ -24,6 +24,10 @@
 #ifndef ASSIGNTEMPLATE_H
 #define ASSIGNTEMPLATE_H
 
+// Qt includes
+
+#include <QMutex>
+
 // Local includes
 
 #include "batchtool.h"
@@ -61,6 +65,7 @@ private:
 
     TemplateSelector* m_templateSelector;
     TemplateViewer*   m_templateViewer;
+    QMutex            m_lock;
 };
 
 } // namespace Digikam

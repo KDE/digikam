@@ -24,6 +24,10 @@
 #ifndef TIMEADJUST_H
 #define TIMEADJUST_H
 
+// Qt includes
+
+#include <QMutex>
+
 // Local includes
 
 #include "batchtool.h"
@@ -60,6 +64,7 @@ private:
 
     TimeAdjustSettings* m_taWidget;
     int                 m_changeSettings;
+    QMutex              m_lock;
 };
 
 } // namespace Digikam
