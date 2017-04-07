@@ -24,10 +24,6 @@
 #ifndef REMOVEMETADATA_H
 #define REMOVEMETADATA_H
 
-// Qt includes
-
-#include <QMutex>
-
 // Local includes
 
 #include "batchtool.h"
@@ -72,7 +68,6 @@ private:
     QCheckBox* m_removeExif;
     QCheckBox* m_removeIptc;
     QCheckBox* m_removeXmp;
-    QMutex     m_lock;
 
 private:
 
