@@ -349,15 +349,18 @@ bool BatchTool::isLastChainedTool() const
 void BatchTool::setOutputUrlFromInputUrl()
 {
     QString path(workingUrl().toLocalFile());
+    QString fileName(inputUrl().fileName());
     QString suffix = outputSuffix();
 
     if (suffix.isEmpty())
     {
-        QFileInfo fi(inputUrl().fileName());
+        QFileInfo fi(fileName);
         suffix = fi.completeSuffix();
     }
 
-    SafeTemporaryFile temp(workingUrl().toLocalFile() + QLatin1String("/BatchTool-XXXXXX.digikamtempfile.") + suffix);
+    SafeTemporaryFile temp(workingUrl().toLocalFile() + QLatin1String("/BatchTool-XXXXXX-") +
+                           fileName + QLatin1String(".digikamtempfile.") + suffix);
+
     temp.setAutoRemove(false);
     temp.open();
     qCDebug(DIGIKAM_GENERAL_LOG) << "path: " << temp.fileName();
