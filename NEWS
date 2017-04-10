@@ -8,10 +8,11 @@ BUGFIXES FROM BUGZILLA:
 
 001 ==> 377432 : Crash on browsing images.
 002 ==> 377565 - Problem importing Person tags which are also "normal" tags.
-003 ==> 218297 - SETUP : Database location under control panel doesn't match when using database-directory command line option
-004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue
+003 ==> 218297 - SETUP : Database location under control panel doesn't match when using database-directory command line option.
+004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue.
 005 ==> 378098 - Update meta data from selected images (generated outside digikam) does not work anymore.
-006 ==> 378219 - Optimize includes and polish
-007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item
-008 ==> 378360 - Digikam 5.5 crashes on startup after update.
-009 ==> 
+006 ==> 378219 - Optimize includes and polish.
+007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item.
+008 ==> 378360 - digiKam 5.5 crashes on startup after update.
+009 ==> 378626 - Export menu empty.
+010 ==> 
