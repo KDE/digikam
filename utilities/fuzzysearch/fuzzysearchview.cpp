@@ -713,6 +713,7 @@ void FuzzySearchView::slotTabChanged(int tab)
 
         default:  // DUPLICATES
         {
+            d->findDuplicatesPanel->setActive(true);
             Album* const album = d->findDuplicatesPanel->currentFindDuplicatesAlbum();
 
             if(album)

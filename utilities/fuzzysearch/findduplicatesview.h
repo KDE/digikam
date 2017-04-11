@@ -49,6 +49,7 @@ public:
     virtual ~FindDuplicatesView();
 
     SAlbum* currentFindDuplicatesAlbum() const;
+    void setActive(bool val);
 
 public Q_SLOTS:
 

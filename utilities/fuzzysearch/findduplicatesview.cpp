@@ -75,10 +75,11 @@ public:
         similarityIntervalLabel = 0;
         minSimilarity           = 0;
         maxSimilarity           = 0;
-        restrictResultsLabel     = 0;
+        restrictResultsLabel    = 0;
         searchResultRestriction = 0;
         albumSelectors          = 0;
         settings                = 0;
+        active                  = false;
     }
 
     QLabel*                      includeAlbumsLabel;
@@ -101,6 +102,8 @@ public:
     AlbumSelectors*              albumSelectors;
 
     ApplicationSettings*         settings;
+
+    bool                         active;
 };
 
 FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
@@ -115,6 +118,7 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     // ---------------------------------------------------------------
 
     d->listView           = new FindDuplicatesAlbum();
+    d->listView->setSortingEnabled(false);
 
     d->updateFingerPrtBtn = new QPushButton(i18n("Update fingerprints"));
     d->updateFingerPrtBtn->setIcon(QIcon::fromTheme(QLatin1String("run-build")));
@@ -236,6 +240,11 @@ FindDuplicatesView::~FindDuplicatesView()
     delete d;
 }
 
+void FindDuplicatesView::setActive(bool val)
+{
+    d->active = val;
+}
+
 void FindDuplicatesView::populateTreeView()
 {
     const AlbumList& aList = AlbumManager::instance()->allSAlbums();
@@ -251,6 +260,7 @@ void FindDuplicatesView::populateTreeView()
         }
     }
 
+    d->listView->setSortingEnabled(true);
     d->listView->sortByColumn(1, Qt::DescendingOrder);
     d->listView->resizeColumnToContents(0);
 
@@ -282,6 +292,12 @@ void FindDuplicatesView::slotAlbumAdded(Album* a)
 
     if (!salbum->isDuplicatesSearch())
     {
+        return;
+    }
+
+    if (!d->active)
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Duplicates view is not active, returning";
         return;
     }
 
