@@ -132,7 +132,7 @@ void GPSImageList::setModelAndSelectionModel(GPSImageModel* const model, QItemSe
     connect(d->model, SIGNAL(signalThumbnailForIndexAvailable(QPersistentModelIndex,QPixmap)),
             this, SLOT(slotThumbnailFromModel(QPersistentModelIndex,QPixmap)));
 
-    connect(this, SIGNAL(activated(QModelIndex)),
+    connect(this, SIGNAL(clicked(QModelIndex)),
             this, SLOT(slotInternalTreeViewImageActivated(QModelIndex)));
 
     if (d->imageSortProxyModel->mappedSelectionModel())
