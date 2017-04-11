@@ -81,6 +81,7 @@ public:
     SAlbum* createFuzzySearchFromSketch(const QString& name,
                                         SketchWidget* sketchWidget,
                                         unsigned int numberOfResults,
+                                        QList<int>& targetAlbums,
                                         bool overwriteIfExisting = false);
 
     /**
@@ -91,6 +92,7 @@ public:
                                         const QString& filePath,
                                         float threshold,
                                         float maxThreshold,
+                                        QList<int>& targetAlbums,
                                         bool overwriteIfExisting = false);
 
     /**
@@ -101,6 +103,7 @@ public:
                                        const ImageInfo& image,
                                        float threshold,
                                        float maxThreshold,
+                                       QList<int>& targetAlbums,
                                        bool overwriteIfExisting = false);
 
 public Q_SLOTS:
@@ -142,6 +145,7 @@ public Q_SLOTS:
      * @param name name of the new sketch search
      * @param sketchWidget the widget containing the sketch of the user
      * @param numberOfResults max number of results to display
+     * @param targetAlbums The image must be in one of these albums
      * @param overwriteIfExisting if true, an existing search with the desired
      *                            name will be overwritten without prompting the
      *                            user for a new name
@@ -149,6 +153,7 @@ public Q_SLOTS:
     void slotCreateFuzzySearchFromSketch(const QString& name,
                                          SketchWidget* sketchWidget,
                                          unsigned int numberOfResults,
+                                         QList<int>& targetAlbums,
                                          bool overwriteIfExisting = false);
 
     /**
@@ -158,6 +163,8 @@ public Q_SLOTS:
      * @param name of the new search
      * @param image image to base this search on
      * @param threshold threshold for image search, 0 <= threshold <= 1
+     * @param maxThreshold the maximum threshold of similarity.
+     * @param targetAlbums The image must be in one of these albums
      * @param overwriteIfExisting if true, an existing search with the desired
      *                            name will be overwritten without prompting the
      *                            user for a new name
@@ -165,6 +172,8 @@ public Q_SLOTS:
     void slotCreateFuzzySearchFromImage(const QString& name,
                                         const ImageInfo& image,
                                         float threshold,
+                                        float maxThreshold,
+                                        QList<int>& targetAlbums,
                                         bool overwriteIfExisting = false);
 
     /**
@@ -176,6 +185,7 @@ public Q_SLOTS:
      * @param filePath path of the image to base this search on
      * @param threshold minimum threshold for image search
      * @param maxThreshold maximum threshold for image search
+     * @param targetAlbums The image must be in one of these albums
      * @param overwriteIfExisting if true, an existing search with the desired
      *                            name will be overwritten without prompting the
      *                            user for a new name
@@ -184,6 +194,7 @@ public Q_SLOTS:
                                           const QString& filePath,
                                           float threshold,
                                           float maxThreshold,
+                                          QList<int>& targetAlbums,
                                           bool overwriteIfExisting);
 
 private:

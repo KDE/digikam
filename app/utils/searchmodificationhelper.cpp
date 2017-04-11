@@ -215,6 +215,7 @@ SAlbum* SearchModificationHelper::slotCreateTimeLineSearch(const QString& desire
 SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& proposedName,
                                                               SketchWidget* sketchWidget,
                                                               unsigned int numberOfResults,
+                                                              QList<int>& targetAlbums,
                                                               bool overwriteIfExisting)
 {
     if (sketchWidget->isClear())
@@ -245,6 +246,13 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
     writer.writeValue(haarIface.signatureAsText(sketchWidget->sketchImage()));
     sketchWidget->sketchImageToXML(writer);
     writer.finishField();
+
+    // Add the target albums, i.e. define that the found similar images
+    // must be located in one of the target albums.
+    writer.writeField(QLatin1String("noeffect_targetAlbums"), SearchXml::OneOf);
+    writer.writeValue(targetAlbums);
+    writer.finishField();
+
     writer.finishGroup();
     writer.finish();
 
@@ -257,15 +265,17 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromSketch(const QString& pro
 void SearchModificationHelper::slotCreateFuzzySearchFromSketch(const QString& proposedName,
                                                                SketchWidget* sketchWidget,
                                                                unsigned int numberOfResults,
+                                                               QList<int>& targetAlbums,
                                                                bool overwriteIfExisting)
 {
-    createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults, overwriteIfExisting);
+    createFuzzySearchFromSketch(proposedName, sketchWidget, numberOfResults, targetAlbums, overwriteIfExisting);
 }
 
 SAlbum* SearchModificationHelper::createFuzzySearchFromDropped(const QString& proposedName,
                                                                const QString& filePath,
                                                                float threshold,
                                                                float maxThreshold,
+                                                               QList<int>& targetAlbums,
                                                                bool overwriteIfExisting)
 {
     QString name = proposedName;
@@ -291,6 +301,13 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromDropped(const QString& pr
     writer.writeAttribute(QLatin1String("sketchtype"), QLatin1String("scanned"));
     writer.writeValue(filePath);
     writer.finishField();
+
+    // Add the target albums, i.e. define that the found similar images
+    // must be located in one of the target albums.
+    writer.writeField(QLatin1String("noeffect_targetAlbums"), SearchXml::OneOf);
+    writer.writeValue(targetAlbums);
+    writer.finishField();
+
     writer.finishGroup();
     writer.finish();
 
@@ -304,15 +321,17 @@ void SearchModificationHelper::slotCreateFuzzySearchFromDropped(const QString& p
                                                                 const QString& filePath,
                                                                 float threshold,
                                                                 float maxThreshold,
+                                                                QList<int>& targetAlbums,
                                                                 bool overwriteIfExisting)
 {
-    createFuzzySearchFromDropped(proposedName, filePath, threshold, maxThreshold, overwriteIfExisting);
+    createFuzzySearchFromDropped(proposedName, filePath, threshold, maxThreshold, targetAlbums, overwriteIfExisting);
 }
 
 SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& proposedName,
                                                              const ImageInfo& image,
                                                              float threshold,
                                                              float maxThreshold,
+                                                             QList<int>& targetAlbums,
                                                              bool overwriteIfExisting)
 {
     if (image.isNull())
@@ -342,6 +361,13 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
     writer.writeAttribute(QLatin1String("sketchtype"), QLatin1String("scanned"));
     writer.writeValue(image.id());
     writer.finishField();
+
+    // Add the target albums, i.e. define that the found similar images
+    // must be located in one of the target albums.
+    writer.writeField(QLatin1String("noeffect_targetAlbums"), SearchXml::OneOf);
+    writer.writeValue(targetAlbums);
+    writer.finishField();
+
     writer.finishGroup();
     writer.finish();
 
@@ -354,9 +380,11 @@ SAlbum* SearchModificationHelper::createFuzzySearchFromImage(const QString& prop
 void SearchModificationHelper::slotCreateFuzzySearchFromImage(const QString& proposedName,
                                                               const ImageInfo& image,
                                                               float threshold,
+                                                              float maxThreshold,
+                                                              QList<int>& targetAlbums,
                                                               bool overwriteIfExisting)
 {
-    createFuzzySearchFromImage(proposedName, image, threshold, overwriteIfExisting);
+    createFuzzySearchFromImage(proposedName, image, threshold, maxThreshold, targetAlbums, overwriteIfExisting);
 }
 
 } // namespace Digikam

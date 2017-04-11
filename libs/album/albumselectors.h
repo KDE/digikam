@@ -29,14 +29,11 @@
 
 #include <QWidget>
 
-// Local incudes.
-
-#include "album.h"
-
 namespace Digikam
 {
 
 class Album;
+typedef QList<Album*> AlbumList;
 
 class AlbumSelectors : public QWidget
 {
@@ -47,7 +44,8 @@ public:
     enum AlbumType
     {
         PhysAlbum=0,
-        TagsAlbum
+        TagsAlbum,
+        All
     };
 
 public:
@@ -55,20 +53,28 @@ public:
     /** Default Contructor. 'label' is front text of label which title widget. 'configName' is name used to store
      *  Albums configuration in settings file. 'parent' is parent widget.
      */
-    explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0);
+    explicit AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent = 0, AlbumType albumType = All);
     ~AlbumSelectors();
 
-    /** Return list of Physical Albums selected.
-     */
-    AlbumList selectedPAlbums() const;
-
-    /** Return list of Tag Albums selected.
-     */
-    AlbumList selectedTAlbums() const;
-
-    /** Return list of Physical and Tag Albums selected.
+    /** Return list of selected physical albums
      */
     AlbumList selectedAlbums() const;
+
+    /** Return list of selected physical album ids
+     */
+    QList<int> selectedAlbumIds() const;
+
+    /** Return list of selected tag albums
+     */
+    AlbumList selectedTags() const;
+
+    /** Return list of selected tag album ids
+     */
+    QList<int> selectedTagIds() const;
+
+    /** Return list of selected physical and tag albums.
+     */
+    AlbumList selectedAlbumsAndTags() const;
 
     /** Reset all Physical and Tag Albums selection.
      */
@@ -77,25 +83,30 @@ public:
     /** Select Physical Album from list. If singleSelection is true, only this one is
      *  selected from tree-view and all others are deselected.
      */
-    void setPAlbumSelected(Album* const album, bool singleSelection=true);
+    void setAlbumSelected(Album* const album, bool singleSelection=true);
 
     /** Select Tag Album from list. If singleSelection is true, only this one is
      *  selected from tree-view and all others are deselected.
      */
-    void setTAlbumSelected(Album* const album, bool singleSelection=true);
+    void setTagSelected(Album* const album, bool singleSelection=true);
     
     /**
      * Sets the search type selection with the AlbumType.
      **/
     void setTypeSelection(int albumType);
 
+    /**
+     * Returns the selected album type.
+     **/
+    int typeSelection() const;
+
     /** Return true if whole Albums collection option is checked.
      */
-    bool wholeAlbumsCollection() const;
+    bool wholeAlbumsChecked() const;
 
     /** Return true if whole Tags collection option is checked.
      */
-    bool wholeTagsCollection() const;
+    bool wholeTagsChecked() const;
 
 public Q_SLOTS:
 
@@ -114,9 +125,13 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotUpdateClearButtons();
-    void slotWholePalbums(bool);
-    void slotWholeTalbums(bool);
-    void slotToggleTypeSelection(int);
+    void slotWholeAlbums(bool);
+    void slotWholeTags(bool);
+
+private:
+
+    void initAlbumWidget();
+    void initTagWidget();
 
 private:
 

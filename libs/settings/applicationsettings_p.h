@@ -141,6 +141,7 @@ public:
     static const QString                      configMinimumSimilarityBound;
     static const QString                      configDuplicatesSearchLastMinSimilarity;
     static const QString                      configDuplicatesSearchLastMaxSimilarity;
+    static const QString                      configDuplicatesSearchLastAlbumTagRelation;
     static const QString                      configDuplicatesSearchLastRestrictions;
 
     // start up setting
@@ -275,6 +276,7 @@ public:
     int                                       minimumSimilarityBound;
     int                                       duplicatesSearchLastMinSimilarity;
     int                                       duplicatesSearchLastMaxSimilarity;
+    int                                       duplicatesSearchLastAlbumTagRelation;
     int                                       duplicatesSearchLastRestrictions;
 
 private :

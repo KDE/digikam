@@ -270,6 +270,17 @@ int  ApplicationSettings::getDuplicatesSearchLastMaxSimilarity() const
     return d->duplicatesSearchLastMaxSimilarity;
 }
 
+void ApplicationSettings::setDuplicatesAlbumTagRelation(int val)
+{
+    d->duplicatesSearchLastAlbumTagRelation = val;
+}
+
+int  ApplicationSettings::getDuplicatesAlbumTagRelation() const
+{
+    return d->duplicatesSearchLastAlbumTagRelation;
+}
+
+
 void ApplicationSettings::setDuplicatesSearchRestrictions(int val)
 {
     d->duplicatesSearchLastRestrictions = val;

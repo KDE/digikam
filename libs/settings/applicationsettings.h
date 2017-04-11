@@ -437,6 +437,9 @@ public:
     void setDuplicatesSearchLastMaxSimilarity(int val);
     int  getDuplicatesSearchLastMaxSimilarity() const;
 
+    void setDuplicatesAlbumTagRelation(int val);
+    int  getDuplicatesAlbumTagRelation() const;
+
     void setDuplicatesSearchRestrictions(int val);
     int  getDuplicatesSearchRestrictions() const;
 

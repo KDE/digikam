@@ -3,6 +3,9 @@ digiKam 5.6.0 - Release date: 2017-05-07
 
 NEW FEATURES:
 Database    : We activated database shrinking for MySQL as part of the maintenance since now we can test the affected tables for integrity.
+Searches    : Users can now restrict the results of fuzzy image/drop/sketch search to be in specific albums.
+Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
+Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -15,4 +18,7 @@ BUGFIXES FROM BUGZILLA:
 007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item.
 008 ==> 378360 - digiKam 5.5 crashes on startup after update.
 009 ==> 378626 - Export menu empty.
-010 ==> 
+010 ==> 353331 - can’t limit fuzzy-search to albums [patch].
+011 ==> 300565 - When selecting folders, subfolders are not selected.
+012 ==> 183425 - Advanced search by tags : "any tags" option does not work
+013 ==> 

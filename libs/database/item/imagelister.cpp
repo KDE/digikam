@@ -765,6 +765,9 @@ void ImageLister::listImageTagPropertySearch(ImageListerReceiver* const receiver
 
 void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QString& xml)
 {
+    //qCDebug(DIGIKAM_GENERAL_LOG) << "Query: " << xml;
+    // ------------------------------------------------
+    // read basic info
     SearchXmlReader reader(xml);
     reader.readToFirstField();
 
@@ -785,28 +788,47 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
     int numberOfResults              = 20;
     HaarIface::SketchType sketchType = HaarIface::ScannedSketch;
 
+    QList<int> targetAlbums;
+
+    // ------------------------------------------------
+    // read target albums
+    SearchXmlReader albumsReader(xml);
+    SearchXml::Element element;
+
+    while ((element = albumsReader.readNext()) != SearchXml::End)
+    {
+        // Get the target albums, i.e. the albums in which the similar images must be located.
+        if ((element == SearchXml::Field) && (albumsReader.fieldName().compare(QLatin1String("noeffect_targetAlbums")) == 0))
+        {
+            targetAlbums = albumsReader.valueToIntList();
+            //qCDebug(DIGIKAM_GENERAL_LOG) << "Searching in " << targetAlbums.size() << " Albums";
+            break;
+        }
+    }
+
+    // -------------------------------------------------
+
     if (!numResultsString.isNull())
     {
-        numberOfResults = qMax(numResultsString.toString().toInt(), 1);
+        numberOfResults = numResultsString.toString().toInt();
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Returning " << numberOfResults << " results";
     }
 
     if (!thresholdString.isNull())
     {
         threshold = qMax(thresholdString.toString().toDouble(), 0.1);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Minimum threshold: " << threshold;
     }
 
     if (!maxThresholdString.isNull())
     {
-        maxThreshold = qMax(maxThresholdString.toString().toDouble(), 0.1);
+        maxThreshold = qMax(maxThresholdString.toString().toDouble(), threshold);
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "Maximum threshold: " << maxThreshold;
     }
 
-    if (sketchTypeString == QLatin1String("handdrawn"))
+    if (!sketchTypeString.isNull() && sketchTypeString == QLatin1String("handdrawn"))
     {
         sketchType = HaarIface::HanddrawnSketch;
-    }
-    else
-    {
-        sketchType = HaarIface::ScannedSketch;
     }
 
     QMap<qlonglong, double> imageSimilarityMap;
@@ -821,7 +843,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForSignature(sig, numberOfResults, sketchType);
+        imageSimilarityMap = iface.bestMatchesForSignature(sig, targetAlbums, numberOfResults, sketchType);
     }
     else if (type == QLatin1String("imageid"))
     {
@@ -833,7 +855,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold,maxThreshold, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(id, threshold, maxThreshold, targetAlbums, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
     else if (type == QLatin1String("image"))
     {
@@ -846,7 +868,7 @@ void ImageLister::listHaarSearch(ImageListerReceiver* const receiver, const QStr
             iface.setAlbumRootsToSearch(albumRootsToList());
         }
 
-        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
+        imageSimilarityMap = iface.bestMatchesForImageWithThreshold(path, threshold,maxThreshold, targetAlbums, HaarIface::DuplicatesSearchRestrictions::None, sketchType).second;
     }
 
     listFromHaarSearch(receiver, imageSimilarityMap);

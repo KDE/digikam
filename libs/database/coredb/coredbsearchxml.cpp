@@ -422,6 +422,10 @@ SearchXml::Relation SearchXmlReader::readRelation(const QString& attributeName,
     {
         return SearchXml::OneOf;
     }
+    else if (relation == QLatin1String("allof"))
+    {
+        return SearchXml::AllOf;
+    }
     else if (relation == QLatin1String("intree"))
     {
         return SearchXml::InTree;
@@ -769,6 +773,9 @@ void SearchXmlWriter::writeRelation(const QString& attributeName, SearchXml::Rel
             break;
         case SearchXml::OneOf:
             writeAttribute(attributeName, QLatin1String("oneof"));
+            break;
+        case SearchXml::AllOf:
+            writeAttribute(attributeName, QLatin1String("allof"));
             break;
         case SearchXml::InTree:
             writeAttribute(attributeName, QLatin1String("intree"));

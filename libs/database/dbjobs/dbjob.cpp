@@ -312,6 +312,7 @@ void SearchesJob::run()
         {
             iface.rebuildDuplicatesAlbums(m_jobInfo.albumsIds(),
                                           m_jobInfo.tagsIds(),
+                                          static_cast<HaarIface::AlbumTagRelation>(m_jobInfo.albumTagRelation()),
                                           m_jobInfo.minThreshold(),
                                           m_jobInfo.maxThreshold(),
                                           static_cast<HaarIface::DuplicatesSearchRestrictions>(m_jobInfo.searchResultRestriction()),

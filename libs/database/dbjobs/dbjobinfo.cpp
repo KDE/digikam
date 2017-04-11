@@ -200,6 +200,7 @@ SearchesDBJobInfo::SearchesDBJobInfo()
     m_albumUpdate             = false;
     m_minThreshold            = 0;
     m_maxThreshold            = 1;
+    m_albumTagRelation        = 0;
     m_searchResultRestriction = 0;
     m_searchIds               = QList<int>();
 }
@@ -222,6 +223,16 @@ void SearchesDBJobInfo::setAlbumUpdate()
 bool SearchesDBJobInfo::isAlbumUpdate() const
 {
     return m_albumUpdate;
+}
+
+void SearchesDBJobInfo::setAlbumTagRelation(int type)
+{
+    m_albumTagRelation = type;
+}
+
+int SearchesDBJobInfo::albumTagRelation() const
+{
+    return m_albumTagRelation;
 }
 
 void SearchesDBJobInfo::setSearchResultRestriction(int type)

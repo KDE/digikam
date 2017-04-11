@@ -104,6 +104,7 @@ private Q_SLOTS:
 
     void slotLevelImageChanged(int);
     void slotMaxLevelImageChanged(int);
+    void slotFuzzyAlbumsChanged();
     void slotTimerImageDone();
 
     void slotApplicationSettingsChanged();

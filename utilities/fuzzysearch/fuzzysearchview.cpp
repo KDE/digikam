@@ -57,6 +57,7 @@
 #include "coredbalbuminfo.h"
 #include "albummanager.h"
 #include "albummodel.h"
+#include "albumselectors.h"
 #include "coredbaccess.h"
 #include "ddragobjects.h"
 #include "editablesearchtreeview.h"
@@ -124,6 +125,8 @@ public:
         findDuplicatesPanel(0),
         imageSAlbum(0),
         sketchSAlbum(0),
+        fuzzySearchAlbumSelectors(0),
+        sketchSearchAlbumSelectors(0),
         searchModel(0),
         searchModificationHelper(0),
         settings(0)
@@ -189,6 +192,9 @@ public:
 
     AlbumPointer<SAlbum>      imageSAlbum;
     AlbumPointer<SAlbum>      sketchSAlbum;
+
+    AlbumSelectors*           fuzzySearchAlbumSelectors;
+    AlbumSelectors*           sketchSearchAlbumSelectors;
 
     SearchModel*              searchModel;
     SearchModificationHelper* searchModificationHelper;
@@ -302,6 +308,10 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     // ---------------------------------------------------------------
 
+    d->fuzzySearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"), QLatin1String("Fuzzy Search View"), 0, AlbumSelectors::AlbumType::PhysAlbum);
+
+    // ---------------------------------------------------------------
+
     QLabel* const resultsLabel = new QLabel(i18n("Similarity range:"));
     d->levelImage              = new QSpinBox();
     d->levelImage->setSuffix(QLatin1String("%"));
@@ -358,17 +368,18 @@ QWidget* FuzzySearchView::setupFindSimilarPanel() const
 
     QWidget* const mainWidget     = new QWidget();
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(imageBox,           0, 0, 1, 5);
-    mainLayout->addWidget(file,               1, 0, 1, 1);
-    mainLayout->addWidget(d->labelFile,       1, 1, 1, 4);
-    mainLayout->addWidget(folder,             2, 0, 1, 1);
-    mainLayout->addWidget(d->labelFolder,     2, 1, 1, 4);
-    mainLayout->addWidget(resultsLabel,       3, 0, 1, 1);
-    mainLayout->addWidget(d->levelImage,      3, 2, 1, 1);
-    mainLayout->addWidget(levelIntervalLabel, 3, 3, 1, 1);
-    mainLayout->addWidget(d->maxLevelImage,   3, 4, 1, 1);
-    mainLayout->addWidget(saveBox,            5, 0, 1, 5);
-    mainLayout->setRowStretch(4, 10);
+    mainLayout->addWidget(imageBox,                      0, 0, 1, 6);
+    mainLayout->addWidget(file,                          1, 0, 1, 1);
+    mainLayout->addWidget(d->labelFile,                  1, 1, 1, 5);
+    mainLayout->addWidget(folder,                        2, 0, 1, 1);
+    mainLayout->addWidget(d->labelFolder,                2, 1, 1, 5);
+    mainLayout->addWidget(d->fuzzySearchAlbumSelectors,  3, 0, 1, -1);
+    mainLayout->addWidget(resultsLabel,                  4, 0, 1, 1);
+    mainLayout->addWidget(d->levelImage,                 4, 2, 1, 1);
+    mainLayout->addWidget(levelIntervalLabel,            4, 3, 1, 1);
+    mainLayout->addWidget(d->maxLevelImage,              4, 4, 1, 1);
+    mainLayout->addWidget(saveBox,                       5, 0, 1, 6);
+    mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
@@ -445,6 +456,10 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     // ---------------------------------------------------------------
 
+    d->sketchSearchAlbumSelectors = new AlbumSelectors(i18nc("@label", "Search in albums:"), QLatin1String("Sketch Search View"), 0, AlbumSelectors::AlbumType::PhysAlbum);
+
+    // ---------------------------------------------------------------
+
     DHBox* const saveBox = new DHBox();
     saveBox->setContentsMargins(QMargins());
     saveBox->setSpacing(spacing);
@@ -472,12 +487,13 @@ QWidget* FuzzySearchView::setupSketchPanel() const
 
     QWidget* const mainWidget     = new QWidget;
     QGridLayout* const mainLayout = new QGridLayout();
-    mainLayout->addWidget(drawingBox,     0, 0, 1, 3);
-    mainLayout->addWidget(d->hsSelector,  1, 0, 1, 2);
-    mainLayout->addWidget(d->vSelector,   1, 2, 1, 1);
-    mainLayout->addLayout(settingsLayout, 2, 0, 1, 3);
-    mainLayout->addWidget(saveBox,        3, 0, 1, 3);
-    mainLayout->setRowStretch(5, 10);
+    mainLayout->addWidget(drawingBox,                    0, 0, 1, 3);
+    mainLayout->addWidget(d->hsSelector,                 1, 0, 1, 2);
+    mainLayout->addWidget(d->vSelector,                  1, 2, 1, 1);
+    mainLayout->addLayout(settingsLayout,                2, 0, 1, 3);
+    mainLayout->addWidget(d->sketchSearchAlbumSelectors, 3, 0, 1, 3);
+    mainLayout->addWidget(saveBox,                       4, 0, 1, 3);
+    mainLayout->setRowStretch(0, 10);
     mainLayout->setColumnStretch(1, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
@@ -508,6 +524,12 @@ void FuzzySearchView::setupConnections()
 
     connect(d->resultsSketch, SIGNAL(valueChanged(int)),
             this, SLOT(slotDirtySketch()));
+
+    connect(d->sketchSearchAlbumSelectors, SIGNAL(signalSelectionChanged()),
+            this, SLOT(slotDirtySketch()));
+
+    connect(d->fuzzySearchAlbumSelectors, SIGNAL(signalSelectionChanged()),
+            this, SLOT(slotFuzzyAlbumsChanged()));
 
     connect(d->levelImage, SIGNAL(valueChanged(int)),
             this, SLOT(slotLevelImageChanged(int)));
@@ -634,6 +656,8 @@ void FuzzySearchView::doLoadState()
     d->sketchWidget->setPenWidth(d->penSize->value());
 
     d->searchTreeView->loadState();
+    d->fuzzySearchAlbumSelectors->loadState();
+    d->sketchSearchAlbumSelectors->loadState();
 }
 
 void FuzzySearchView::doSaveState()
@@ -649,6 +673,8 @@ void FuzzySearchView::doSaveState()
     group.writeEntry(entryName(d->configSimilarsMaxThresholdEntry), d->maxLevelImage->value());
     d->searchTreeView->saveState();
     group.sync();
+    d->fuzzySearchAlbumSelectors->saveState();
+    d->sketchSearchAlbumSelectors->saveState();
 }
 
 void FuzzySearchView::setActive(bool val)
@@ -873,7 +899,12 @@ void FuzzySearchView::slotTimerSketchDone()
 void FuzzySearchView::createNewFuzzySearchAlbumFromSketch(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
-    d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(name, d->sketchWidget, d->resultsSketch->value(), force);
+
+    QList<int> albums = d->sketchSearchAlbumSelectors->selectedAlbumIds();
+
+    d->sketchSAlbum = d->searchModificationHelper->createFuzzySearchFromSketch(name, d->sketchWidget,
+                                                                               d->resultsSketch->value(),
+                                                                               albums, force);
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->sketchSAlbum);
 }
 
@@ -978,9 +1009,13 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
 
                     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
                     QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
+
+                    QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
+
                     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle, path,
                                                                                                d->levelImage->value() / 100.0,
-                                                                                               d->maxLevelImage->value() / 100.0, true);
+                                                                                               d->maxLevelImage->value() / 100.0,
+                                                                                               albums, true);
                     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
                     d->labelFile->setAdjustedText(urls.first().fileName());
                     d->labelFolder->setAdjustedText(urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
@@ -1039,16 +1074,40 @@ void FuzzySearchView::slotLevelImageChanged(int newValue)
     d->timerImage->start();
 }
 
+void FuzzySearchView::slotFuzzyAlbumsChanged()
+{
+    if (d->timerImage)
+    {
+        d->timerImage->stop();
+    }
+    else
+    {
+        d->timerImage = new QTimer(this);
+
+        connect(d->timerImage, SIGNAL(timeout()),
+                this, SLOT(slotTimerImageDone()));
+
+        d->timerImage->setSingleShot(true);
+        d->timerImage->setInterval(500);
+    }
+
+    d->timerImage->start();
+}
+
 void FuzzySearchView::slotTimerImageDone()
 {
     if (d->imageInfo.isNull() && d->imageInfo.id() == -1 && !d->imageUrl.isEmpty())
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
         QString haarTitle = SAlbum::getTemporaryHaarTitle(DatabaseSearch::HaarImageSearch);
+
+        QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
+
         d->imageSAlbum    = d->searchModificationHelper->createFuzzySearchFromDropped(haarTitle,
                                                                                       d->imageUrl.toLocalFile(),
                                                                                       d->levelImage->value() / 100.0,
-                                                                                      d->maxLevelImage->value() / 100.0, true);
+                                                                                      d->maxLevelImage->value() / 100.0,
+                                                                                      albums, true);
         d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
         return;
     }
@@ -1092,9 +1151,12 @@ void FuzzySearchView::slotThumbnailLoaded(const LoadingDescription& desc, const 
 void FuzzySearchView::createNewFuzzySearchAlbumFromImage(const QString& name, bool force)
 {
     AlbumManager::instance()->setCurrentAlbums(QList<Album*>());
+    QList<int> albums = d->fuzzySearchAlbumSelectors->selectedAlbumIds();
+
     d->imageSAlbum = d->searchModificationHelper->createFuzzySearchFromImage(name, d->imageInfo,
                                                                              d->levelImage->value() / 100.0,
-                                                                             d->maxLevelImage->value() / 100.0, force);
+                                                                             d->maxLevelImage->value() / 100.0,
+                                                                             albums, force);
     d->searchTreeView->setCurrentAlbums(QList<Album*>() << d->imageSAlbum);
 }
 

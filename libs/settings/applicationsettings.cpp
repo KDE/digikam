@@ -278,10 +278,11 @@ void ApplicationSettings::readSettings()
 
     group                    = config->group(d->configGroupDuplicatesSearch);
 
-    d->minimumSimilarityBound            = group.readEntry(d->configMinimumSimilarityBound,                 40);
-    d->duplicatesSearchLastMinSimilarity = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,      90);
-    d->duplicatesSearchLastMaxSimilarity = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,      100);
-    d->duplicatesSearchLastRestrictions  = group.readEntry(d->configDuplicatesSearchLastRestrictions,       0);
+    d->minimumSimilarityBound                = group.readEntry(d->configMinimumSimilarityBound,                 40);
+    d->duplicatesSearchLastMinSimilarity     = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,      90);
+    d->duplicatesSearchLastMaxSimilarity     = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,      100);
+    d->duplicatesSearchLastAlbumTagRelation  = group.readEntry(d->configDuplicatesSearchLastAlbumTagRelation,   0);
+    d->duplicatesSearchLastRestrictions      = group.readEntry(d->configDuplicatesSearchLastRestrictions,       0);
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -444,6 +445,7 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configMinimumSimilarityBound,                  d->minimumSimilarityBound);
     group.writeEntry(d->configDuplicatesSearchLastMinSimilarity,       d->duplicatesSearchLastMinSimilarity);
     group.writeEntry(d->configDuplicatesSearchLastMaxSimilarity,       d->duplicatesSearchLastMaxSimilarity);
+    group.writeEntry(d->configDuplicatesSearchLastAlbumTagRelation,    d->duplicatesSearchLastAlbumTagRelation);
     group.writeEntry(d->configDuplicatesSearchLastRestrictions,        d->duplicatesSearchLastRestrictions);
 
     config->sync();

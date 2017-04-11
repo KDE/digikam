@@ -51,7 +51,7 @@ namespace Digikam
 {
 
 class DAdjustableLabel;
-class AlbumSelectComboBox;
+class AbstractAlbumTreeViewSelectComboBox;
 class SearchFieldGroup;
 class SqueezedComboBox;
 class DDateEdit;
@@ -329,6 +329,11 @@ protected:
 
 class Album;
 class AbstractCheckableAlbumModel;
+//class AlbumSelectComboBox;
+class AbstractAlbumTreeViewSelectComboBox;
+class AlbumTreeViewSelectComboBox;
+class TagTreeViewSelectComboBox;
+class SqueezedComboBox;
 
 class SearchFieldAlbum : public SearchField
 {
@@ -340,6 +345,12 @@ public:
     {
         TypeAlbum,
         TypeTag
+    };
+
+    enum Operation
+    {
+        All,
+        OneOf
     };
 
 public:
@@ -359,9 +370,12 @@ protected Q_SLOTS:
 
 protected:
 
-    AlbumSelectComboBox*         m_comboBox;
-    Type                         m_type;
-    AbstractCheckableAlbumModel* m_model;
+    QWidget*                             m_wrapperBox;
+    AlbumTreeViewSelectComboBox*         m_albumComboBox;
+    TagTreeViewSelectComboBox*           m_tagComboBox;
+    SqueezedComboBox*                    m_operation;
+    Type                                 m_type;
+    AbstractCheckableAlbumModel*         m_model;
 };
 
 //-----------------------------------------------------------------------------

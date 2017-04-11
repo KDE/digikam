@@ -76,7 +76,9 @@ public:
         minSimilarity           = 0;
         maxSimilarity           = 0;
         restrictResultsLabel    = 0;
+        albumTagRelationLabel   = 0;
         searchResultRestriction = 0;
+        albumTagRelation        = 0;
         albumSelectors          = 0;
         settings                = 0;
         active                  = false;
@@ -86,11 +88,13 @@ public:
     QLabel*                      similarityLabel;
     QLabel*                      similarityIntervalLabel;
     QLabel*                      restrictResultsLabel;
+    QLabel*                      albumTagRelationLabel;
 
     QSpinBox*                    minSimilarity;
     QSpinBox*                    maxSimilarity;
 
     SqueezedComboBox*            searchResultRestriction;
+    SqueezedComboBox*            albumTagRelation;
 
     QPushButton*                 scanDuplicatesBtn;
     QPushButton*                 updateFingerPrtBtn;
@@ -168,30 +172,54 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "None"),                                 HaarIface::DuplicatesSearchRestrictions::None);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Restrict to reference album"), HaarIface::DuplicatesSearchRestrictions::SameAlbum);
     d->searchResultRestriction->addSqueezedItem(i18nc("@label:listbox", "Exclude reference album"),     HaarIface::DuplicatesSearchRestrictions::DifferentAlbum);
-    d->searchResultRestriction->setWhatsThis(i18n("Use this option to restrict the duplicate search "
-                                                  "with some criteria, as to limit search to the album "
-                                                  "of reference image, or to exclude the album of "
-                                                  "reference image of the search."));
+    d->searchResultRestriction->setToolTip(i18n("Use this option to restrict the duplicate search "
+                                                   "with some criteria, as to limit search to the album "
+                                                   "of reference image, or to exclude the album of "
+                                                   "reference image of the search."));
 
     // Load the last choice from application settings.
     HaarIface::DuplicatesSearchRestrictions restrictions = (HaarIface::DuplicatesSearchRestrictions) d->settings->getDuplicatesSearchRestrictions();
     d->searchResultRestriction->setCurrentIndex(d->searchResultRestriction->findData(restrictions));
 
+    d->albumTagRelationLabel    = new QLabel(i18n("Restrict to images being in:"));
+    d->albumTagRelationLabel->setBuddy(d->albumTagRelation);
+
+    d->albumTagRelation = new SqueezedComboBox();
+    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "One of"),              HaarIface::AlbumTagRelation::Union);
+    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Both"),                HaarIface::AlbumTagRelation::Intersection);
+    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Albums but not tags"), HaarIface::AlbumTagRelation::AlbumExclusive);
+    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Tags but not albums"), HaarIface::AlbumTagRelation::TagExclusive);
+    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Only selected tab") ,  HaarIface::AlbumTagRelation::NoMix);
+    d->albumTagRelation->setCurrentIndex(ApplicationSettings::instance()->getDuplicatesAlbumTagRelation());
+
+    d->albumTagRelation->setToolTip(i18n("Use this option to decide about the relation of the selected albums and tags.<br/>"
+                                         "<i>One of</i> means that the images are either in the selected albums or tags.<br/>"
+                                         "<i>Both</i> means that the images are both in the selected albums and tags.<br/>"
+                                         "<i>Albums but not tags</i> means that images must be in the selected albums but not tags.<br/>"
+                                         "<i>Tags but not albums</i> means that images must be in the selected tags but not albums.<br/>"
+                                         "<i>Only selected tab</i> means that only the selected tab is used."));
+
+    // Load the last choice from application settings.
+    HaarIface::AlbumTagRelation relation = (HaarIface::AlbumTagRelation) d->settings->getDuplicatesAlbumTagRelation();
+    d->albumTagRelation->setCurrentIndex(d->albumTagRelation->findData(relation));
+
     // ---------------------------------------------------------------
 
     QGridLayout* const mainLayout = new QGridLayout();
     mainLayout->addWidget(d->listView,                0, 0, 1, -1);
-    mainLayout->addWidget(d->albumSelectors,          1, 0, 1, -1);
-    mainLayout->addWidget(d->similarityLabel,         2, 0, 1, 1);
-    mainLayout->addWidget(d->minSimilarity,           2, 2, 1, 1);
-    mainLayout->addWidget(d->similarityIntervalLabel, 2, 3, 1, 1);
-    mainLayout->addWidget(d->maxSimilarity,           2, 4, 1, -1);
-    mainLayout->addWidget(d->restrictResultsLabel,    3, 0, 1, 2);
-    mainLayout->addWidget(d->searchResultRestriction, 3, 2, 1, -1);
-    mainLayout->addWidget(d->updateFingerPrtBtn,      4, 0, 1, -1);
-    mainLayout->addWidget(d->scanDuplicatesBtn,       5, 0, 1, -1);
+    mainLayout->addWidget(d->albumTagRelationLabel,   1, 0, 1, 2);
+    mainLayout->addWidget(d->albumTagRelation,        1, 2, 1, -1);
+    mainLayout->addWidget(d->albumSelectors,          2, 0, 1, -1);
+    mainLayout->addWidget(d->similarityLabel,         3, 0, 1, 1);
+    mainLayout->addWidget(d->minSimilarity,           3, 2, 1, 1);
+    mainLayout->addWidget(d->similarityIntervalLabel, 3, 3, 1, 1);
+    mainLayout->addWidget(d->maxSimilarity,           3, 4, 1, -1);
+    mainLayout->addWidget(d->restrictResultsLabel,    4, 0, 1, 2);
+    mainLayout->addWidget(d->searchResultRestriction, 4, 2, 1, -1);
+    mainLayout->addWidget(d->updateFingerPrtBtn,      5, 0, 1, -1);
+    mainLayout->addWidget(d->scanDuplicatesBtn,       6, 0, 1, -1);
     mainLayout->setRowStretch(0, 10);
-    mainLayout->setColumnStretch(1, 10);
+    mainLayout->setColumnStretch(2, 10);
     mainLayout->setContentsMargins(spacing, spacing, spacing, spacing);
     mainLayout->setSpacing(spacing);
     setLayout(mainLayout);
@@ -377,10 +405,29 @@ void FindDuplicatesView::slotFindDuplicates()
     slotClear();
     enableControlWidgets(false);
 
-    DuplicatesFinder* const finder = new DuplicatesFinder(d->albumSelectors->selectedPAlbums(),
-                                                          d->albumSelectors->selectedTAlbums(),
-                                                          d->minSimilarity->value(),
-                                                          d->maxSimilarity->value(),
+    AlbumList albums;
+    AlbumList tags;
+
+    if (d->albumTagRelation->itemData(d->albumTagRelation->currentIndex()).toInt() == HaarIface::AlbumTagRelation::NoMix)
+    {
+        if (d->albumSelectors->typeSelection() == AlbumSelectors::AlbumType::PhysAlbum)
+        {
+            albums = d->albumSelectors->selectedAlbums();
+        }
+        else if (d->albumSelectors->typeSelection() == AlbumSelectors::AlbumType::TagsAlbum )
+        {
+            tags  = d->albumSelectors->selectedTags();
+        }
+    }
+    else
+    {
+        albums = d->albumSelectors->selectedAlbums();
+        tags  = d->albumSelectors->selectedTags();
+    }
+
+    DuplicatesFinder* const finder = new DuplicatesFinder(albums, tags,
+                                                          d->albumTagRelation->itemData(d->albumTagRelation->currentIndex()).toInt(),
+                                                          d->minSimilarity->value(), d->maxSimilarity->value(),
                                                           d->searchResultRestriction->itemData(d->searchResultRestriction->currentIndex()).toInt());
 
     connect(finder, SIGNAL(signalComplete()),
@@ -440,7 +487,7 @@ void FindDuplicatesView::slotDuplicatesAlbumActived()
 
 void FindDuplicatesView::slotCheckForValidSettings()
 {
-    bool valid = d->albumSelectors->selectedPAlbums().count() || d->albumSelectors->selectedTAlbums().count();
+    bool valid = d->albumSelectors->selectedAlbums().count() || d->albumSelectors->selectedTags().count();
     d->scanDuplicatesBtn->setEnabled(valid);
 }
 
@@ -460,7 +507,7 @@ void FindDuplicatesView::slotSetSelectedAlbum(PAlbum* album)
     resetAlbumsAndTags();
 
     // @ODD : Why is singleton set to true? resetAlbumsAndTags already clears the selection.
-    d->albumSelectors->setPAlbumSelected(album, true);
+    d->albumSelectors->setAlbumSelected(album, true);
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
     slotCheckForValidSettings();
 }
@@ -472,7 +519,7 @@ void FindDuplicatesView::slotSetSelectedAlbums(QList<PAlbum*> albums)
 
     foreach(PAlbum* const album, albums)
     {
-        d->albumSelectors->setPAlbumSelected(album, false);
+        d->albumSelectors->setAlbumSelected(album, false);
     }
 
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::PhysAlbum);
@@ -485,7 +532,7 @@ void FindDuplicatesView::slotSetSelectedAlbums(QList<TAlbum*> albums)
 
     foreach(TAlbum* const album, albums)
     {
-        d->albumSelectors->setTAlbumSelected(album, false);
+        d->albumSelectors->setTagSelected(album, false);
     }
 
     d->albumSelectors->setTypeSelection(AlbumSelectors::AlbumType::TagsAlbum);

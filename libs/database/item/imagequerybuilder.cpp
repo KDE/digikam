@@ -838,6 +838,10 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
 
             sql += QLatin1String(" ))");
         }
+        else if (relation == SearchXml::OneOf)
+        {
+            fieldQuery.addChoiceIntField(QLatin1String("Images.album"));
+        }
     }
     else if (name == QLatin1String("albumname"))
     {
@@ -900,6 +904,46 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             }
 
             sql += QString::fromUtf8(" )) ");
+        }
+        else if (relation == SearchXml::OneOf)
+        {
+            QList<int> values  = reader.valueToIntList();
+            bool searchForNull = values.removeAll(-1);
+            sql               += QLatin1String(" (Images.id IN (");
+
+            if (searchForNull)
+            {
+                sql += QLatin1String(") OR ") + name + QLatin1String(" IS NULL) ");
+            }
+            else
+            {
+                sql += QString::fromUtf8(" SELECT imageid FROM ImageTags "
+                   "    WHERE tagid IN (");
+                CoreDB::addBoundValuePlaceholders(sql, values.size());
+                sql += QLatin1String("))) ");
+            }
+
+            foreach(int tagID, values)
+            {
+                *boundValues << tagID;
+            }
+        }
+        else if (relation == SearchXml::AllOf)
+        {
+            // there must be an entry in ImageTags for every given tag id
+            QList<int> ids = reader.valueToIntOrIntList();
+
+            bool firstCondition = true;
+
+            foreach(int tagID, ids)
+            {
+                addSqlOperator(sql, SearchXml::And, firstCondition);
+                firstCondition = false;
+                sql += QString::fromUtf8(" (Images.id IN "
+                   "   (SELECT imageid FROM ImageTags "
+                   "    WHERE tagid = ?)) ");
+                *boundValues << tagID;
+            }
         }
     }
     else if (name == QLatin1String("tagname"))

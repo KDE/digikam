@@ -144,6 +144,7 @@ const QString ApplicationSettings::Private::configCleanAtStartEntry(QLatin1Strin
 const QString ApplicationSettings::Private::configMinimumSimilarityBound(QLatin1String("Lower bound for minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMinSimilarity(QLatin1String("Last minimum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMaxSimilarity(QLatin1String("Last maximum similarity"));
+const QString ApplicationSettings::Private::configDuplicatesSearchLastAlbumTagRelation(QLatin1String("Last search album tag relation"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastRestrictions(QLatin1String("Last search results restriction"));
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)

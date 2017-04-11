@@ -75,6 +75,7 @@ enum Relation
     Interval,          // [a,b]
     IntervalOpen,      // (a,b)
     OneOf,
+    AllOf,
     InTree,
     NotInTree,
     Near,

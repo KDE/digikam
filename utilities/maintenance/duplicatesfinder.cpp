@@ -55,6 +55,7 @@ public:
     Private() :
         minSimilarity(90),
         maxSimilarity(100),
+        albumTagRelation(0),
         searchResultRestriction(0),
         isAlbumUpdate(false),
         job(0)
@@ -63,6 +64,7 @@ public:
 
     int                   minSimilarity;
     int                   maxSimilarity;
+    int                   albumTagRelation;
     int                   searchResultRestriction;
     bool                  isAlbumUpdate;
     QList<int>            albumsIdList;
@@ -83,12 +85,13 @@ DuplicatesFinder::DuplicatesFinder(const QList<qlonglong>& imageIds, int minSimi
     d->searchResultRestriction  = searchResultRestriction;
 }
 
-DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
+DuplicatesFinder::DuplicatesFinder(const AlbumList& albums, const AlbumList& tags, int albumTagRelation,int minSimilarity, int maxSimilarity, int searchResultRestriction, ProgressItem* const parent)
     : MaintenanceTool(QLatin1String("DuplicatesFinder"), parent),
       d(new Private)
 {
     d->minSimilarity            = minSimilarity;
     d->maxSimilarity            = maxSimilarity;
+    d->albumTagRelation         = albumTagRelation;
     d->searchResultRestriction  = searchResultRestriction;
 
     foreach(Album* const a, albums)
@@ -130,6 +133,7 @@ void DuplicatesFinder::slotStart()
     jobInfo.setMaxThreshold(maxThresh);
     jobInfo.setAlbumsIds(d->albumsIdList);
     jobInfo.setImageIds(d->imageIdList);
+    jobInfo.setAlbumTagRelation(d->albumTagRelation);
     jobInfo.setSearchResultRestriction(d->searchResultRestriction);
 
     if (d->isAlbumUpdate)
@@ -175,6 +179,7 @@ void DuplicatesFinder::slotDone()
     // save the min and max similarity in the configuration.
     ApplicationSettings::instance()->setDuplicatesSearchLastMinSimilarity(d->minSimilarity);
     ApplicationSettings::instance()->setDuplicatesSearchLastMaxSimilarity(d->maxSimilarity);
+    ApplicationSettings::instance()->setDuplicatesAlbumTagRelation(d->albumTagRelation);
     ApplicationSettings::instance()->setDuplicatesSearchRestrictions(d->searchResultRestriction);
 
     d->job = 0;

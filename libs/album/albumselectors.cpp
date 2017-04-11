@@ -27,10 +27,9 @@
 // Qt includes
 
 #include <QApplication>
-#include <QGridLayout>
+#include <QLayout>
 #include <QLabel>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QIcon>
@@ -78,56 +77,92 @@ public:
         tagSelectCB      = 0;
         albumClearButton = 0;
         tagClearButton   = 0;
-        wholePalbums     = 0;
-        wholeTalbums     = 0;
-        titleLabel       = 0;
-        pAlbumsBtn       = 0;
-        tAlbumsBtn       = 0;
-        btnGroup         = 0;
-        pAlbumsBox       = 0;
-        tAlbumsBox       = 0;
+        wholeAlbums      = 0;
+        wholeTags        = 0;
+        tabWidget        = 0;
+        albumWidget      = 0;
+        tagWidget        = 0;
+        selectionMode    = All;
     }
 
-    static const QString         configUseWholePAlbumsEntry;
-    static const QString         configUseWholeTAlbumsEntry;
+    static const QString         configUseWholeAlbumsEntry;
+    static const QString         configUseWholeTagsEntry;
     static const QString         configAlbumTypeEntry;
 
     QString                      configName;
-    QCheckBox*                   wholePalbums;
-    QCheckBox*                   wholeTalbums;
-    QLabel*                      titleLabel;
+    QCheckBox*                   wholeAlbums;
+    QCheckBox*                   wholeTags;
 
-    QGroupBox*                   pAlbumsBox;
-    QGroupBox*                   tAlbumsBox;
-    QRadioButton*                pAlbumsBtn;
-    QRadioButton*                tAlbumsBtn;
-    QButtonGroup*                btnGroup;
+    QTabWidget*                  tabWidget;
+    QWidget*                     albumWidget;
+    QWidget*                     tagWidget;
 
     AlbumTreeViewSelectComboBox* albumSelectCB;
     TagTreeViewSelectComboBox*   tagSelectCB;
     ModelClearButton*            albumClearButton;
     ModelClearButton*            tagClearButton;
+
+    AlbumType                    selectionMode;
 };
 
-const QString AlbumSelectors::Private::configUseWholePAlbumsEntry(QLatin1String("UseWholePAlbumsEntry"));
-const QString AlbumSelectors::Private::configUseWholeTAlbumsEntry(QLatin1String("UseWholeTAlbumsEntry"));
+const QString AlbumSelectors::Private::configUseWholeAlbumsEntry(QLatin1String("UseWholeAlbumsEntry"));
+const QString AlbumSelectors::Private::configUseWholeTagsEntry(QLatin1String("UseWholeTagsEntry"));
 const QString AlbumSelectors::Private::configAlbumTypeEntry(QLatin1String("AlbumTypeEntry"));
 
-AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent)
+AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, QWidget* const parent, AlbumType albumType)
     : QWidget(parent),
       d(new Private)
 {
-    d->configName           = configName;
-    QGridLayout* const grid = new QGridLayout(this);
-    d->titleLabel           = new QLabel(label, this);
+    d->configName = configName;
+    setObjectName(d->configName);
 
-    // ---------------
+    d->selectionMode = albumType;
 
-    d->pAlbumsBtn       = new QRadioButton(this);
-    d->pAlbumsBox       = new QGroupBox(i18n("Albums"), this);
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(new QLabel(label));
 
-    d->wholePalbums     = new QCheckBox(i18n("Whole albums collection"), d->pAlbumsBox);
-    d->albumSelectCB    = new AlbumTreeViewSelectComboBox(d->pAlbumsBox);
+    switch (d->selectionMode)
+    {
+        case All:
+        {
+            d->tabWidget = new QTabWidget(this);
+
+            initAlbumWidget();
+            d->tabWidget->insertTab(PhysAlbum, d->albumWidget, i18n("Albums"));
+
+            initTagWidget();
+            d->tabWidget->insertTab(TagsAlbum, d->tagWidget, i18n("Tags"));
+
+            mainLayout->addWidget(d->tabWidget);
+            break;
+        }
+        case PhysAlbum:
+        {
+            initAlbumWidget();
+            mainLayout->addWidget(d->albumWidget);
+            break;
+        }
+        case TagsAlbum:
+        {
+            initTagWidget();
+            mainLayout->addWidget(d->tagWidget);
+            break;
+        }
+    }
+
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+}
+
+AlbumSelectors::~AlbumSelectors()
+{
+    delete d;
+}
+
+void AlbumSelectors::initAlbumWidget()
+{
+    d->albumWidget   = new QWidget(this);
+    d->wholeAlbums   = new QCheckBox(i18n("Whole albums collection"), d->albumWidget);
+    d->albumSelectCB = new AlbumTreeViewSelectComboBox(d->albumWidget);
     d->albumSelectCB->setToolTip(i18nc("@info:tooltip", "Select all albums that should be processed."));
     d->albumSelectCB->setDefaultModel();
     d->albumSelectCB->setNoSelectionText(i18nc("@info:status", "Any albums"));
@@ -136,247 +171,287 @@ AlbumSelectors::AlbumSelectors(const QString& label, const QString& configName, 
     d->albumClearButton = new ModelClearButton(d->albumSelectCB->view()->albumModel());
     d->albumClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected albums"));
 
-    QGridLayout* const pAlbumsGrid = new QGridLayout(d->pAlbumsBox);
-    pAlbumsGrid->addWidget(d->wholePalbums,     0, 0, 1, 2);
+    QGridLayout* const pAlbumsGrid = new QGridLayout(d->albumWidget);
+    pAlbumsGrid->addWidget(d->wholeAlbums,      0, 0, 1, 2);
     pAlbumsGrid->addWidget(d->albumSelectCB,    1, 0, 1, 1);
     pAlbumsGrid->addWidget(d->albumClearButton, 1, 1, 1, 1);
     pAlbumsGrid->setSpacing(0);
-    d->pAlbumsBox->setLayout(pAlbumsGrid);
 
-    // ---------------
+    connect(d->wholeAlbums, SIGNAL(toggled(bool)),
+            this, SLOT(slotWholeAlbums(bool)));
 
-    d->tAlbumsBtn       = new QRadioButton(this);
-    d->tAlbumsBox       = new QGroupBox(i18n("Tags"), this);
+    connect(d->wholeAlbums, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSelectionChanged()));
 
-    d->wholeTalbums     = new QCheckBox(i18n("Whole tags collection"), d->tAlbumsBox);
-    d->tagSelectCB      = new TagTreeViewSelectComboBox(d->tAlbumsBox);
+    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotUpdateClearButtons()));
+
+    d->albumSelectCB->view()->setObjectName(d->configName);
+    d->albumSelectCB->view()->setEntryPrefix(QLatin1String("AlbumComboBox-"));
+    d->albumSelectCB->view()->setRestoreCheckState(true);
+
+}
+
+void AlbumSelectors::initTagWidget()
+{
+    d->tagWidget   = new QWidget(this);
+    d->wholeTags   = new QCheckBox(i18n("Whole tags collection"), d->tagWidget);
+    d->tagSelectCB = new TagTreeViewSelectComboBox(d->tagWidget);
     d->tagSelectCB->setToolTip(i18nc("@info:tooltip", "Select all tags that should be processed."));
     d->tagSelectCB->setDefaultModel();
     d->tagSelectCB->setNoSelectionText(i18nc("@info:status", "Any tags"));
     d->tagSelectCB->addCheckUncheckContextMenuActions();
 
-    d->tagClearButton   = new ModelClearButton(d->tagSelectCB->view()->albumModel());
+    d->tagClearButton = new ModelClearButton(d->tagSelectCB->view()->albumModel());
     d->tagClearButton->setToolTip(i18nc("@info:tooltip", "Reset selected tags"));
 
-    QGridLayout* const tAlbumsGrid = new QGridLayout(d->tAlbumsBox);
-    tAlbumsGrid->addWidget(d->wholeTalbums,   0, 0, 1, 2);
+    QGridLayout* const tAlbumsGrid = new QGridLayout(d->tagWidget);
+    tAlbumsGrid->addWidget(d->wholeTags,      0, 0, 1, 2);
     tAlbumsGrid->addWidget(d->tagSelectCB,    1, 0, 1, 1);
     tAlbumsGrid->addWidget(d->tagClearButton, 1, 1, 1, 1);
     tAlbumsGrid->setSpacing(0);
-    d->tAlbumsBox->setLayout(tAlbumsGrid);
 
-    // ---------------
+    connect(d->wholeTags, SIGNAL(toggled(bool)),
+            this, SIGNAL(signalSelectionChanged()));
 
-    d->btnGroup         = new QButtonGroup(this);
-    d->btnGroup->addButton(d->pAlbumsBtn);
-    d->btnGroup->addButton(d->tAlbumsBtn);
-    d->btnGroup->setId(d->pAlbumsBtn, PhysAlbum);
-    d->btnGroup->setId(d->tAlbumsBtn, TagsAlbum);
-    d->btnGroup->setExclusive(true);
-
-    // ---------------
-
-    grid->addWidget(d->titleLabel, 0, 0, 1, 2);
-    grid->addWidget(d->pAlbumsBtn, 1, 0, 1, 1);
-    grid->addWidget(d->pAlbumsBox, 1, 1, 1, 1);
-    grid->addWidget(d->tAlbumsBtn, 2, 0, 1, 1);
-    grid->addWidget(d->tAlbumsBox, 2, 1, 1, 1);
-    grid->setColumnStretch(1, 10);
-    grid->setAlignment(d->pAlbumsBtn, Qt::AlignTop);
-    grid->setAlignment(d->tAlbumsBtn, Qt::AlignTop);
-
-    // ---------------
-
-    connect(d->wholePalbums, SIGNAL(toggled(bool)),
-            this, SLOT(slotWholePalbums(bool)));
-
-    connect(d->wholeTalbums, SIGNAL(toggled(bool)),
-            this, SLOT(slotWholeTalbums(bool)));
-
-    connect(d->albumSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
-            this, SLOT(slotUpdateClearButtons()));
+    connect(d->wholeTags, SIGNAL(toggled(bool)),
+            this, SLOT(slotWholeTags(bool)));
 
     connect(d->tagSelectCB->view()->albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
             this, SLOT(slotUpdateClearButtons()));
 
-    connect(d->btnGroup, SIGNAL(buttonClicked(int)),
-            this, SLOT(slotToggleTypeSelection(int)));
-
-    setObjectName(d->configName);
-    d->albumSelectCB->view()->setObjectName(d->configName);
-    d->albumSelectCB->view()->setEntryPrefix(QLatin1String("AlbumComboBox-"));
-    d->albumSelectCB->view()->setRestoreCheckState(true);
     d->tagSelectCB->view()->setObjectName(d->configName);
     d->tagSelectCB->view()->setEntryPrefix(QLatin1String("TagComboBox-"));
     d->tagSelectCB->view()->setRestoreCheckState(true);
+
 }
 
-AlbumSelectors::~AlbumSelectors()
+void AlbumSelectors::slotWholeAlbums(bool b)
 {
-    delete d;
+    if (d->selectionMode == PhysAlbum || d->selectionMode == All)
+    {
+        d->albumSelectCB->setEnabled(!b);
+        d->albumClearButton->setEnabled(!b);
+    }
 }
 
-void AlbumSelectors::slotWholePalbums(bool b)
+void AlbumSelectors::slotWholeTags(bool b)
 {
-    d->albumSelectCB->setEnabled(!b);
-    d->albumClearButton->setEnabled(!b);
-}
-
-void AlbumSelectors::slotWholeTalbums(bool b)
-{
-    d->tagSelectCB->setEnabled(!b);
-    d->tagClearButton->setEnabled(!b);
+    if (d->selectionMode == TagsAlbum || d->selectionMode == All)
+    {
+        d->tagSelectCB->setEnabled(!b);
+        d->tagClearButton->setEnabled(!b);
+    }
 }
 
 void AlbumSelectors::slotUpdateClearButtons()
 {
-    d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
-    d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
+    bool selectionChanged = false;
 
-    emit signalSelectionChanged();
+    if (d->selectionMode == PhysAlbum || d->selectionMode == All)
+    {
+        d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
+        selectionChanged = true;
+    }
+
+    if (d->selectionMode == TagsAlbum || d->selectionMode == All)
+    {
+        d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
+        selectionChanged = true;
+    }
+
+    if (selectionChanged)
+    {
+        emit signalSelectionChanged();
+    }
+}
+
+bool AlbumSelectors::wholeAlbumsChecked() const
+{
+    return d->wholeAlbums && d->wholeAlbums->isChecked();
 }
 
 AlbumList AlbumSelectors::selectedAlbums() const
 {
     AlbumList albums;
-    albums << selectedPAlbums();
-    albums << selectedTAlbums();
-    return albums;
-}
 
-bool AlbumSelectors::wholeAlbumsCollection() const
-{
-    return d->wholePalbums->isChecked();
-}
-
-AlbumList AlbumSelectors::selectedPAlbums() const
-{
-    AlbumList albums;
-
-    if (d->btnGroup->checkedId() == PhysAlbum)
+    if (wholeAlbumsChecked())
     {
-        if (wholeAlbumsCollection())
-        {
-            albums << AlbumManager::instance()->allPAlbums();
-        }
-        else
-        {
-            albums << d->albumSelectCB->model()->checkedAlbums();
-        }
+        albums << AlbumManager::instance()->allPAlbums();
+    }
+    else if (d->albumSelectCB)
+    {
+        albums << d->albumSelectCB->model()->checkedAlbums();
     }
 
     return albums;
 }
 
-bool AlbumSelectors::wholeTagsCollection() const
+QList<int> AlbumSelectors::selectedAlbumIds() const
 {
-    return d->wholeTalbums->isChecked();
+    QList<int> albumIds;
+    AlbumList  albums = selectedAlbums();
+
+    foreach (Album* const album, albums)
+    {
+        albumIds << album->id();
+    }
+
+    return albumIds;
 }
 
-AlbumList AlbumSelectors::selectedTAlbums() const
+bool AlbumSelectors::wholeTagsChecked() const
+{
+    return d->wholeTags && d->wholeTags->isChecked();
+}
+
+AlbumList AlbumSelectors::selectedTags() const
 {
     AlbumList albums;
 
-    if (d->btnGroup->checkedId() == TagsAlbum)
+    if (wholeTagsChecked())
     {
-        if (wholeTagsCollection())
-        {
-            albums << AlbumManager::instance()->allTAlbums();
-        }
-        else
-        {
-            albums << d->tagSelectCB->model()->checkedAlbums();
-        }
+        albums << AlbumManager::instance()->allTAlbums();
+    }
+    else if (d->tagSelectCB)
+    {
+        albums << d->tagSelectCB->model()->checkedAlbums();
     }
 
     return albums;
 }
 
-void AlbumSelectors::setPAlbumSelected(Album* const album, bool singleSelection)
+QList<int> AlbumSelectors::selectedTagIds() const
 {
-    if (!album)
-        return;
+    QList<int> tagIds;
+    AlbumList  tags = selectedTags();
 
-    if (singleSelection)
-        d->albumSelectCB->model()->resetCheckedAlbums();
+    foreach (Album* const tag, tags)
+    {
+        tagIds << tag->id();
+    }
 
-    d->albumSelectCB->model()->setChecked(album, true);
-    d->wholePalbums->setChecked(false);
+    return tagIds;
 }
 
-void AlbumSelectors::setTAlbumSelected(Album* const album, bool singleSelection)
+AlbumList AlbumSelectors::selectedAlbumsAndTags() const
 {
-    if (!album)
-        return;
+    AlbumList albums;
+    albums << selectedAlbums();
+    albums << selectedTags();
+    return albums;
+}
 
-    if (singleSelection)
-        d->tagSelectCB->model()->resetCheckedAlbums();
+void AlbumSelectors::setAlbumSelected(Album* const album, bool singleSelection)
+{
+    if (d->albumWidget && album)
+    {
+        if (singleSelection)
+        {
+            d->albumSelectCB->model()->resetCheckedAlbums();
+        }
 
-    d->tagSelectCB->model()->setChecked(album, true);
-    d->wholeTalbums->setChecked(false);
+        d->albumSelectCB->model()->setChecked(album, true);
+        d->wholeAlbums->setChecked(false);
+    }
+}
+
+void AlbumSelectors::setTagSelected(Album* const album, bool singleSelection)
+{
+    if (d->tagWidget && album)
+    {
+        if (singleSelection)
+        {
+            d->tagSelectCB->model()->resetCheckedAlbums();
+        }
+
+        d->tagSelectCB->model()->setChecked(album, true);
+        d->wholeTags->setChecked(false);
+    }
 }
 
 void AlbumSelectors::setTypeSelection(int albumType)
 {
-    QAbstractButton* button = d->btnGroup->button(albumType);
-    if (button)
+    if (d->selectionMode == All)
     {
-        button->setChecked(true);
-        slotToggleTypeSelection(albumType);
+        d->tabWidget->setCurrentIndex(albumType);
     }
-    
+}
+
+int AlbumSelectors::typeSelection() const
+{
+    if (d->selectionMode == All)
+    {
+        return d->tabWidget->currentIndex();
+    }
+    else
+    {
+        return d->selectionMode;
+    }
+}
+
+void AlbumSelectors::resetSelection()
+{
+    if (d->albumWidget)
+    {
+        d->albumSelectCB->model()->resetCheckedAlbums();
+    }
+
+    if (d->tagWidget)
+    {
+        d->tagSelectCB->model()->resetCheckedAlbums();
+    }
 }
 
 void AlbumSelectors::loadState()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configName);
-    d->wholePalbums->setChecked(group.readEntry(d->configUseWholePAlbumsEntry, true));
-    d->wholeTalbums->setChecked(group.readEntry(d->configUseWholeTAlbumsEntry, true));
-    d->btnGroup->button(group.readEntry(d->configAlbumTypeEntry, (int)PhysAlbum))->setChecked(true);
 
-    d->albumSelectCB->view()->loadState();
-    d->tagSelectCB->view()->loadState();
+    if (d->albumWidget)
+    {
+        d->wholeAlbums->setChecked(group.readEntry(d->configUseWholeAlbumsEntry, true));
+        d->albumSelectCB->view()->loadState();
+        d->albumClearButton->animateVisible(!d->albumSelectCB->model()->checkedAlbums().isEmpty());
 
-    slotToggleTypeSelection(d->btnGroup->checkedId());
-    slotUpdateClearButtons();
+        slotWholeAlbums(wholeAlbumsChecked());
+    }
 
-    slotWholePalbums(wholeAlbumsCollection());
-    slotWholeTalbums(wholeTagsCollection());
+    if (d->tagWidget)
+    {
+        d->wholeTags->setChecked(group.readEntry(d->configUseWholeTagsEntry, true));
+        d->tagSelectCB->view()->loadState();
+        d->tagClearButton->animateVisible(!d->tagSelectCB->model()->checkedAlbums().isEmpty());
+
+        slotWholeTags(wholeTagsChecked());
+    }
+
+    if (d->selectionMode == All)
+    {
+        d->tabWidget->setCurrentIndex(group.readEntry(d->configAlbumTypeEntry, (int)PhysAlbum));
+    }
 }
 
 void AlbumSelectors::saveState()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
     KConfigGroup group        = config->group(d->configName);
-    group.writeEntry(d->configUseWholePAlbumsEntry, wholeAlbumsCollection());
-    group.writeEntry(d->configUseWholeTAlbumsEntry, wholeTagsCollection());
-    group.writeEntry(d->configAlbumTypeEntry,       d->btnGroup->checkedId());
 
-    d->albumSelectCB->view()->saveState();
-    d->tagSelectCB->view()->saveState();
-}
-
-void AlbumSelectors::resetSelection()
-{
-    d->albumSelectCB->model()->resetCheckedAlbums();
-    d->tagSelectCB->model()->resetCheckedAlbums();
-}
-
-void AlbumSelectors::slotToggleTypeSelection(int type)
-{
-    switch (type)
+    if (d->albumWidget)
     {
-        case PhysAlbum:
-            d->pAlbumsBox->setEnabled(true);
-            d->tAlbumsBox->setEnabled(false);
-            slotWholePalbums(d->wholePalbums->isChecked());
-            break;
-        default: // TagsAlbum
-            d->pAlbumsBox->setEnabled(false);
-            d->tAlbumsBox->setEnabled(true);
-            slotWholeTalbums(d->wholeTalbums->isChecked());
-            break;
+        group.writeEntry(d->configUseWholeAlbumsEntry, wholeAlbumsChecked());
+        d->albumSelectCB->view()->saveState();
+    }
+
+    if (d->tagWidget)
+    {
+        group.writeEntry(d->configUseWholeTagsEntry, wholeTagsChecked());
+        d->tagSelectCB->view()->saveState();
+    }
+
+    if (d->selectionMode == All)
+    {
+        group.writeEntry(d->configAlbumTypeEntry, typeSelection());
     }
 }
 

@@ -440,7 +440,7 @@ FaceScanSettings FaceScanDialog::settings() const
 
     settings.accuracy               = double(d->accuracyInput->value()) / 100;
 
-    settings.albums << d->albumSelectors->selectedAlbums();
+    settings.albums << d->albumSelectors->selectedAlbumsAndTags();
 
     settings.useFullCpu             = d->useFullCpuButton->isChecked();
 

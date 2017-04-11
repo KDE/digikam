@@ -418,10 +418,10 @@ void MaintenanceDlg::slotOk()
 MaintenanceSettings MaintenanceDlg::settings() const
 {
     MaintenanceSettings prm;
-    prm.wholeAlbums                         = d->albumSelectors->wholeAlbumsCollection();
-    prm.wholeTags                           = d->albumSelectors->wholeTagsCollection();
-    prm.albums                              = d->albumSelectors->selectedPAlbums();
-    prm.tags                                = d->albumSelectors->selectedTAlbums();
+    prm.wholeAlbums                         = d->albumSelectors->wholeAlbumsChecked();
+    prm.wholeTags                           = d->albumSelectors->wholeTagsChecked();
+    prm.albums                              = d->albumSelectors->selectedAlbums();
+    prm.tags                                = d->albumSelectors->selectedTags();
     prm.useMutiCoreCPU                      = d->useMutiCoreCPU->isChecked();
     prm.newItems                            = d->expanderBox->isChecked(Private::NewItems);
     prm.databaseCleanup                     = d->expanderBox->isChecked(Private::DbCleanup);

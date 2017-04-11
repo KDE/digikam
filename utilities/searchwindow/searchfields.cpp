@@ -59,6 +59,7 @@
 #include "albummanager.h"
 #include "albummodel.h"
 #include "dexpanderbox.h"
+#include "dwidgetutils.h"
 #include "albumselectcombobox.h"
 #include "choicesearchutilities.h"
 #include "dimg.h"
@@ -2191,7 +2192,10 @@ QList<int> SearchFieldChoice::values() const
 
 SearchFieldAlbum::SearchFieldAlbum(QObject* const parent, Type type)
     : SearchField(parent),
-      m_comboBox(0),
+      m_wrapperBox(0),
+      m_albumComboBox(0),
+      m_tagComboBox(0),
+      m_operation(0),
       m_type(type),
       m_model(0)
 {
@@ -2199,28 +2203,41 @@ SearchFieldAlbum::SearchFieldAlbum(QObject* const parent, Type type)
 
 void SearchFieldAlbum::setupValueWidgets(QGridLayout* layout, int row, int column)
 {
-    m_comboBox = new AlbumSelectComboBox;
-    m_comboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-
     if (m_type == TypeAlbum)
     {
-        m_comboBox->setDefaultAlbumModel();
-        m_comboBox->setNoSelectionText(i18n("Any Album"));
+        m_albumComboBox = new AlbumTreeViewSelectComboBox;
+        m_wrapperBox = m_albumComboBox;
+
+        m_albumComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        m_albumComboBox->setDefaultModel();
+        m_albumComboBox->setNoSelectionText(i18n("Any Album"));
+        m_albumComboBox->addCheckUncheckContextMenuActions();
+
+        m_model = m_albumComboBox->model();
+        layout->addWidget(m_wrapperBox, row, column, 1, 3);
     }
     else if (m_type == TypeTag)
     {
-        m_comboBox->setDefaultTagModel();
-        m_comboBox->setNoSelectionText(i18n("Any Tag"));
-    }
+        m_wrapperBox = new DHBox(0);
+        m_tagComboBox = new TagTreeViewSelectComboBox(m_wrapperBox);
 
-    m_model = m_comboBox->model();
+        m_operation = new SqueezedComboBox(m_wrapperBox);
+        m_operation->addSqueezedItem(i18nc("@label:listbox", "In All"),    Operation::All);
+        m_operation->addSqueezedItem(i18nc("@label:listbox", "In One of"), Operation::OneOf);
+
+        m_tagComboBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        m_tagComboBox->setDefaultModel();
+        m_tagComboBox->setNoSelectionText(i18n("Any Tag"));
+        m_tagComboBox->addCheckUncheckContextMenuActions();
+
+        m_model = m_tagComboBox->model();
+        layout->addWidget(m_wrapperBox, row, column, 1, 3);
+    }
 
     connect(m_model, SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
             this, SLOT(updateState()));
 
     updateState();
-
-    layout->addWidget(m_comboBox, row, column, 1, 3);
 }
 
 void SearchFieldAlbum::updateState()
@@ -2231,16 +2248,34 @@ void SearchFieldAlbum::updateState()
 void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
 {
     QList<int> ids = reader.valueToIntOrIntList();
+    Album* a       = 0;
 
-    foreach(int id, ids)
+    if (m_type == TypeAlbum)
     {
-        Album* a = 0;
-
-        if (m_type == TypeAlbum)
+        foreach(int id, ids)
         {
             a = AlbumManager::instance()->findPAlbum(id);
+            if (!a)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Search: Did not find album for ID" << id << "given in Search XML";
+                return;
+            }
+
+            m_model->setChecked(a, true);
         }
-        else if (m_type == TypeTag)
+    }
+    else if (m_type == TypeTag)
+    {
+        if (reader.fieldRelation() == SearchXml::AllOf)
+        {
+            m_operation->setCurrentIndex(Operation::All);
+        }
+        else
+        {
+            m_operation->setCurrentIndex(Operation::OneOf);
+        }
+
+        foreach(int id, ids)
         {
             a = AlbumManager::instance()->findTAlbum(id);
 
@@ -2249,15 +2284,15 @@ void SearchFieldAlbum::read(SearchXmlCachingReader& reader)
             {
                 a = 0;
             }
-        }
 
-        if (!a)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Search: Did not find album for ID" << id << "given in Search XML";
-            return;
-        }
+            if (!a)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Search: Did not find album for ID" << id << "given in Search XML";
+                return;
+            }
 
-        m_model->setChecked(a, true);
+            m_model->setChecked(a, true);
+        }
     }
 }
 
@@ -2277,14 +2312,24 @@ void SearchFieldAlbum::write(SearchXmlWriter& writer)
         albumIds << album->id();
     }
 
-    writer.writeField(m_name, SearchXml::InTree);
+    SearchXml::Relation relation = SearchXml::OneOf;
+
+    if (m_operation)
+    {
+        if (m_operation->itemData(m_operation->currentIndex()).toInt() == Operation::All)
+        {
+            relation = SearchXml::AllOf;
+        }
+    }
 
     if (albumIds.size() > 1)
     {
+        writer.writeField(m_name, relation);
         writer.writeValue(albumIds);
     }
     else
     {
+        writer.writeField(m_name, SearchXml::Equal);
         writer.writeValue(albumIds.first());
     }
 
@@ -2298,13 +2343,13 @@ void SearchFieldAlbum::reset()
 
 void SearchFieldAlbum::setValueWidgetsVisible(bool visible)
 {
-    m_comboBox->setVisible(visible);
+    m_wrapperBox->setVisible(visible);
 }
 
 QList<QRect> SearchFieldAlbum::valueWidgetRects() const
 {
     QList<QRect> rects;
-    rects << m_comboBox->geometry();
+    rects << m_wrapperBox->geometry();
     return rects;
 }
 
