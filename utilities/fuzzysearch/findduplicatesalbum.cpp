@@ -85,6 +85,43 @@ FindDuplicatesAlbum::~FindDuplicatesAlbum()
     delete d;
 }
 
+QTreeWidgetItem* FindDuplicatesAlbum::firstItem()
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
+
+        if (item)
+        {
+            return item;
+        }
+
+        ++it;
+    }
+
+    return 0;
+}
+
+void FindDuplicatesAlbum::selectFirstItem()
+{
+    QTreeWidgetItemIterator it(this);
+
+    while (*it)
+    {
+        FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(*it);
+
+        if (item)
+        {
+            setCurrentItem(item);
+            return;
+        }
+
+        ++it;
+    }
+}
+
 void FindDuplicatesAlbum::slotThumbnailLoaded(const LoadingDescription& desc,
                                               const QPixmap& pix)
 {

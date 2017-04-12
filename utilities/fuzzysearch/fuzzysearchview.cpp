@@ -740,10 +740,12 @@ void FuzzySearchView::slotTabChanged(int tab)
         default:  // DUPLICATES
         {
             d->findDuplicatesPanel->setActive(true);
-            Album* const album = d->findDuplicatesPanel->currentFindDuplicatesAlbum();
+            QList<SAlbum*> sAlbums = d->findDuplicatesPanel->currentFindDuplicatesAlbums();
 
-            if(album)
+            foreach(SAlbum* const album, sAlbums)
+            {
                 albums << album;
+            }
 
             AlbumManager::instance()->setCurrentAlbums(albums);
             d->folderView->setVisible(false);

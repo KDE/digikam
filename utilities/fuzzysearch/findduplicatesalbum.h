@@ -53,6 +53,9 @@ public:
     void updateDuplicatesAlbumItems(const QList<SAlbum*>& sAlbumsToRebuild,
                                     const QList<qlonglong>& deletedImages);
 
+    void selectFirstItem();
+    QTreeWidgetItem* firstItem();
+
 private :
 
     void drawRow(QPainter* p, const QStyleOptionViewItem& opt, const QModelIndex& index) const;

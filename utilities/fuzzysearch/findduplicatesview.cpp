@@ -293,20 +293,34 @@ void FindDuplicatesView::populateTreeView()
     d->listView->resizeColumnToContents(0);
 
     d->albumSelectors->loadState();
+
+    d->listView->selectFirstItem();
 }
 
-SAlbum* FindDuplicatesView::currentFindDuplicatesAlbum() const
+QList<SAlbum*> FindDuplicatesView::currentFindDuplicatesAlbums() const
 {
-    SAlbum* salbum = 0;
+    QList<QTreeWidgetItem*> selectedItems = d->listView->selectedItems();
 
-    FindDuplicatesAlbumItem* const item = dynamic_cast<FindDuplicatesAlbumItem*>(d->listView->currentItem());
-
-    if (item)
+    if (selectedItems.isEmpty())
     {
-        salbum = item->album();
+        QTreeWidgetItem* const item = d->listView->firstItem();
+        if (item)
+        {
+            selectedItems << item;
+        }
     }
 
-    return salbum;
+    QList<SAlbum*> albumList;
+    foreach(QTreeWidgetItem* const item, selectedItems)
+    {
+        FindDuplicatesAlbumItem* const albumItem = dynamic_cast<FindDuplicatesAlbumItem*>(item);
+        if (albumItem)
+        {
+            albumList << albumItem->album();
+        }
+    }
+
+    return albumList;
 }
 
 void FindDuplicatesView::slotAlbumAdded(Album* a)

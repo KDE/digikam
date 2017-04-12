@@ -48,7 +48,7 @@ public:
     explicit FindDuplicatesView(QWidget* const parent = 0);
     virtual ~FindDuplicatesView();
 
-    SAlbum* currentFindDuplicatesAlbum() const;
+    QList<SAlbum*> currentFindDuplicatesAlbums() const;
     void setActive(bool val);
 
 public Q_SLOTS:
