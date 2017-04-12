@@ -185,11 +185,11 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     d->albumTagRelationLabel->setBuddy(d->albumTagRelation);
 
     d->albumTagRelation = new SqueezedComboBox();
+    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Only selected tab") ,  HaarIface::AlbumTagRelation::NoMix);
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "One of"),              HaarIface::AlbumTagRelation::Union);
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Both"),                HaarIface::AlbumTagRelation::Intersection);
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Albums but not tags"), HaarIface::AlbumTagRelation::AlbumExclusive);
     d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Tags but not albums"), HaarIface::AlbumTagRelation::TagExclusive);
-    d->albumTagRelation->addSqueezedItem(i18nc("@label:listbox", "Only selected tab") ,  HaarIface::AlbumTagRelation::NoMix);
     d->albumTagRelation->setCurrentIndex(ApplicationSettings::instance()->getDuplicatesAlbumTagRelation());
 
     d->albumTagRelation->setToolTip(i18n("Use this option to decide about the relation of the selected albums and tags.<br/>"

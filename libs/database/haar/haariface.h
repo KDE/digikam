@@ -80,11 +80,11 @@ public:
 
     enum AlbumTagRelation
     {
-        Union          = 0,
-        Intersection   = 1,
-        AlbumExclusive = 2,
-        TagExclusive   = 3,
-        NoMix          = 4
+        NoMix          = 0,
+        Union          = 1,
+        Intersection   = 2,
+        AlbumExclusive = 3,
+        TagExclusive   = 4
     };
 
 public:

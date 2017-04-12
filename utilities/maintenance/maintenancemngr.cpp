@@ -281,7 +281,7 @@ void MaintenanceMngr::stage5()
 
     if (d->settings.duplicates)
     {
-        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, (int)HaarIface::AlbumTagRelation::Union,
+        d->duplicatesFinder = new DuplicatesFinder(d->settings.albums, d->settings.tags, (int)HaarIface::AlbumTagRelation::NoMix,
                                                    d->settings.minSimilarity, d->settings.maxSimilarity,(int)d->settings.duplicatesRestriction);
         d->duplicatesFinder->setNotificationEnabled(false);
         d->duplicatesFinder->start();
