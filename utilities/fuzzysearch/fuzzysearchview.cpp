@@ -273,6 +273,16 @@ FuzzySearchView::FuzzySearchView(SearchModel* const searchModel,
 
     // ---------------------------------------------------------------
 
+    d->timerSketch = new QTimer(this);
+    d->timerSketch->setSingleShot(true);
+    d->timerSketch->setInterval(500);
+
+    d->timerImage  = new QTimer(this);
+    d->timerImage->setSingleShot(true);
+    d->timerImage->setInterval(500);
+
+    // ---------------------------------------------------------------
+
     setupConnections();
 
     // ---------------------------------------------------------------
@@ -578,6 +588,13 @@ void FuzzySearchView::setupConnections()
 
     connect(d->thumbLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
             this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
+
+    connect(d->timerSketch, SIGNAL(timeout()),
+             this, SLOT(slotTimerSketchDone()));
+
+    connect(d->timerImage, SIGNAL(timeout()),
+            this, SLOT(slotTimerImageDone()));
+
 }
 
 FuzzySearchView::~FuzzySearchView()
@@ -877,19 +894,10 @@ void FuzzySearchView::slotSaveSketchSAlbum()
 
 void FuzzySearchView::slotDirtySketch()
 {
-    if (d->timerSketch)
+    if (d->active)
     {
-        d->timerSketch->stop();
-        delete d->timerSketch;
+        d->timerSketch->start();
     }
-
-    d->timerSketch = new QTimer(this);
-
-    connect( d->timerSketch, SIGNAL(timeout()),
-             this, SLOT(slotTimerSketchDone()) );
-
-    d->timerSketch->setSingleShot(true);
-    d->timerSketch->start(500);
 }
 
 void FuzzySearchView::slotTimerSketchDone()
@@ -1031,22 +1039,10 @@ void FuzzySearchView::dropEvent(QDropEvent* e)
 
 void FuzzySearchView::slotMaxLevelImageChanged(int /*newValue*/)
 {
-    if (d->timerImage)
+    if (d->active)
     {
-        d->timerImage->stop();
+        d->timerImage->start();
     }
-    else
-    {
-        d->timerImage = new QTimer(this);
-
-        connect(d->timerImage, SIGNAL(timeout()),
-                this, SLOT(slotTimerImageDone()));
-
-        d->timerImage->setSingleShot(true);
-        d->timerImage->setInterval(500);
-    }
-
-    d->timerImage->start();
 }
 
 void FuzzySearchView::slotLevelImageChanged(int newValue)
@@ -1058,42 +1054,18 @@ void FuzzySearchView::slotLevelImageChanged(int newValue)
         d->maxLevelImage->setValue(newValue);
     }
 
-    if (d->timerImage)
+    if (d->active)
     {
-        d->timerImage->stop();
+        d->timerImage->start();
     }
-    else
-    {
-        d->timerImage = new QTimer(this);
-
-        connect(d->timerImage, SIGNAL(timeout()),
-                this, SLOT(slotTimerImageDone()));
-
-        d->timerImage->setSingleShot(true);
-        d->timerImage->setInterval(500);
-    }
-
-    d->timerImage->start();
 }
 
 void FuzzySearchView::slotFuzzyAlbumsChanged()
 {
-    if (d->timerImage)
+    if (d->active)
     {
-        d->timerImage->stop();
+        d->timerImage->start();
     }
-    else
-    {
-        d->timerImage = new QTimer(this);
-
-        connect(d->timerImage, SIGNAL(timeout()),
-                this, SLOT(slotTimerImageDone()));
-
-        d->timerImage->setSingleShot(true);
-        d->timerImage->setInterval(500);
-    }
-
-    d->timerImage->start();
 }
 
 void FuzzySearchView::slotTimerImageDone()

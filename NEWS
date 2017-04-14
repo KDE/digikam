@@ -22,4 +22,5 @@ BUGFIXES FROM BUGZILLA:
 011 ==> 300565 - When selecting folders, subfolders are not selected.
 012 ==> 183425 - Advanced search by tags : "any tags" option does not work
 013 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
-014 ==> 
+014 ==> 376049 - Any album appears empty on startup until I select another album to view.
+015 ==> 
