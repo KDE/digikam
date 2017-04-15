@@ -37,7 +37,6 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
-#include <QProcess>
 #include <QSpinBox>
 #include <QSqlDatabase>
 #include <QSqlError>
