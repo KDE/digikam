@@ -228,6 +228,7 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       minimumSimilarityBound(40),
       duplicatesSearchLastMinSimilarity(90),
       duplicatesSearchLastMaxSimilarity(100),
+      duplicatesSearchLastAlbumTagRelation(0),
       duplicatesSearchLastRestrictions(0),
       q(qq)
 {
@@ -250,107 +251,108 @@ void ApplicationSettings::Private::init()
     albumCategoryNames.append(i18n("Miscellaneous"));
     albumCategoryNames.sort();
 
-    albumSortRole                       = ApplicationSettings::ByFolder;
-    imageSortOrder                      = ImageSortSettings::SortByFileName;
-    imageSorting                        = ImageSortSettings::AscendingOrder;
-    imageGroupMode                      = ImageSortSettings::CategoryByAlbum;
-    imageGroupSortOrder                 = ImageSortSettings::AscendingOrder;
+    albumSortRole                        = ApplicationSettings::ByFolder;
+    imageSortOrder                       = ImageSortSettings::SortByFileName;
+    imageSorting                         = ImageSortSettings::AscendingOrder;
+    imageGroupMode                       = ImageSortSettings::CategoryByAlbum;
+    imageGroupSortOrder                  = ImageSortSettings::AscendingOrder;
 
-    itemLeftClickAction                 = ApplicationSettings::ShowPreview;
+    itemLeftClickAction                  = ApplicationSettings::ShowPreview;
 
-    thumbnailSize                       = ThumbnailSize::Medium;
-    treeThumbnailSize                   = 22;
-    treeviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    sidebarTitleStyle                   = DMultiTabBar::AllIconsText;
+    thumbnailSize                        = ThumbnailSize::Medium;
+    treeThumbnailSize                    = 22;
+    treeviewFont                         = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    sidebarTitleStyle                    = DMultiTabBar::AllIconsText;
 
-    ratingFilterCond                    = ImageFilterSettings::GreaterEqualCondition;
+    ratingFilterCond                     = ImageFilterSettings::GreaterEqualCondition;
 
-    showSplash                          = true;
-    useTrash                            = true;
-    showTrashDeleteDialog               = true;
-    showPermanentDeleteDialog           = true;
-    sidebarApplyDirectly                = false;
-    scrollItemToCenter                  = false;
-    showOnlyPersonTagsInPeopleSidebar   = false;
+    showSplash                           = true;
+    useTrash                             = true;
+    showTrashDeleteDialog                = true;
+    showPermanentDeleteDialog            = true;
+    sidebarApplyDirectly                 = false;
+    scrollItemToCenter                   = false;
+    showOnlyPersonTagsInPeopleSidebar    = false;
 
-    iconShowName                        = false;
-    iconShowSize                        = false;
-    iconShowDate                        = false;
-    iconShowModDate                     = false;
-    iconShowTitle                       = false;
-    iconShowComments                    = false;
-    iconShowResolution                  = false;
-    iconShowAspectRatio                 = false;
-    iconShowTags                        = true;
-    iconShowOverlays                    = true;
-    iconShowFullscreen                  = true;
-    iconShowRating                      = true;
-    iconShowImageFormat                 = true;
-    iconShowCoordinates                 = true;
-    iconviewFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    toolTipsFont                        = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
-    showToolTips                        = false;
-    tooltipShowFileName                 = true;
-    tooltipShowFileDate                 = false;
-    tooltipShowFileSize                 = false;
-    tooltipShowImageType                = false;
-    tooltipShowImageDim                 = true;
-    tooltipShowImageAR                  = true;
-    tooltipShowPhotoMake                = true;
-    tooltipShowPhotoDate                = true;
-    tooltipShowPhotoFocal               = true;
-    tooltipShowPhotoExpo                = true;
-    tooltipShowPhotoMode                = true;
-    tooltipShowPhotoFlash               = false;
-    tooltipShowPhotoWb                  = false;
-    tooltipShowAlbumName                = false;
-    tooltipShowTitles                   = false;
-    tooltipShowComments                 = true;
-    tooltipShowTags                     = true;
-    tooltipShowLabelRating              = true;
+    iconShowName                         = false;
+    iconShowSize                         = false;
+    iconShowDate                         = false;
+    iconShowModDate                      = false;
+    iconShowTitle                        = false;
+    iconShowComments                     = false;
+    iconShowResolution                   = false;
+    iconShowAspectRatio                  = false;
+    iconShowTags                         = true;
+    iconShowOverlays                     = true;
+    iconShowFullscreen                   = true;
+    iconShowRating                       = true;
+    iconShowImageFormat                  = true;
+    iconShowCoordinates                  = true;
+    iconviewFont                         = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    toolTipsFont                         = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    showToolTips                         = false;
+    tooltipShowFileName                  = true;
+    tooltipShowFileDate                  = false;
+    tooltipShowFileSize                  = false;
+    tooltipShowImageType                 = false;
+    tooltipShowImageDim                  = true;
+    tooltipShowImageAR                   = true;
+    tooltipShowPhotoMake                 = true;
+    tooltipShowPhotoDate                 = true;
+    tooltipShowPhotoFocal                = true;
+    tooltipShowPhotoExpo                 = true;
+    tooltipShowPhotoMode                 = true;
+    tooltipShowPhotoFlash                = false;
+    tooltipShowPhotoWb                   = false;
+    tooltipShowAlbumName                 = false;
+    tooltipShowTitles                    = false;
+    tooltipShowComments                  = true;
+    tooltipShowTags                      = true;
+    tooltipShowLabelRating               = true;
 
-    tooltipShowVideoAspectRatio         = true;
-    tooltipShowVideoAudioBitRate        = true;
-    tooltipShowVideoAudioChannelType    = true;
-    tooltipShowVideoAudioCompressor     = true;
-    tooltipShowVideoDuration            = true;
-    tooltipShowVideoFrameRate           = true;
-    tooltipShowVideoVideoCodec          = true;
+    tooltipShowVideoAspectRatio          = true;
+    tooltipShowVideoAudioBitRate         = true;
+    tooltipShowVideoAudioChannelType     = true;
+    tooltipShowVideoAudioCompressor      = true;
+    tooltipShowVideoDuration             = true;
+    tooltipShowVideoFrameRate            = true;
+    tooltipShowVideoVideoCodec           = true;
 
-    showAlbumToolTips                   = false;
-    tooltipShowAlbumTitle               = true;
-    tooltipShowAlbumDate                = true;
-    tooltipShowAlbumCollection          = true;
-    tooltipShowAlbumCategory            = true;
-    tooltipShowAlbumCaption             = true;
-    tooltipShowAlbumPreview             = false;
+    showAlbumToolTips                    = false;
+    tooltipShowAlbumTitle                = true;
+    tooltipShowAlbumDate                 = true;
+    tooltipShowAlbumCollection           = true;
+    tooltipShowAlbumCategory             = true;
+    tooltipShowAlbumCaption              = true;
+    tooltipShowAlbumPreview              = false;
 
-    previewShowIcons                    = true;
-    showThumbbar                        = true;
+    previewShowIcons                     = true;
+    showThumbbar                         = true;
 
-    recursiveAlbums                     = false;
-    recursiveTags                       = true;
+    recursiveAlbums                      = false;
+    recursiveTags                        = true;
 
-    showFolderTreeViewItemsCount        = false;
+    showFolderTreeViewItemsCount         = false;
 
-    syncToDigikam                       = false;
-    syncToBaloo                         = false;
-    albumSortChanged                    = false;
+    syncToDigikam                        = false;
+    syncToBaloo                          = false;
+    albumSortChanged                     = false;
 
-    faceDetectionAccuracy               = 0.8;
+    faceDetectionAccuracy                = 0.8;
 
-    minimumSimilarityBound              = 40;
-    duplicatesSearchLastMinSimilarity   = 90;
-    duplicatesSearchLastMaxSimilarity   = 100;
-    duplicatesSearchLastRestrictions    = 0;
+    minimumSimilarityBound               = 40;
+    duplicatesSearchLastMinSimilarity    = 90;
+    duplicatesSearchLastMaxSimilarity    = 100;
+    duplicatesSearchLastAlbumTagRelation = 0;
+    duplicatesSearchLastRestrictions     = 0;
 
-    scanAtStart                         = true;
-    cleanAtStart                        = true;
-    databaseDirSetAtCmd                 = false;
-    stringComparisonType                = ApplicationSettings::Natural;
+    scanAtStart                          = true;
+    cleanAtStart                         = true;
+    databaseDirSetAtCmd                  = false;
+    stringComparisonType                 = ApplicationSettings::Natural;
 
-    applicationStyle                    = qApp->style()->objectName();
-    iconTheme                           = QString();
+    applicationStyle                     = qApp->style()->objectName();
+    iconTheme                            = QString();
 
     q->connect(q, SIGNAL(balooSettingsChanged()),
                q, SLOT(applyBalooSettings()));
