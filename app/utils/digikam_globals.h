@@ -22,13 +22,14 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMGLOBALS_H
-#define DIGIKAMGLOBALS_H
+#ifndef DIGIKAM_GLOBALS_H
+#define DIGIKAM_GLOBALS_H
 
 // Qt includes
 
 #include <QStringList>
 #include <QIODevice>
+#include <QProcessEnvironment>
 
 // Local includes
 
@@ -150,14 +151,25 @@ enum ChannelType
  */
 DIGIKAM_EXPORT QShortcut* defineShortcut(QWidget* const w, const QKeySequence& key, const QObject* receiver, const char* slot);
 
-/** Return list of supported image formats by Qt for reading or writing operations if suitable container used by QFileDialog.
+/** Return list of supported image formats by Qt for reading or writing operations if suitable
+ *  container used by QFileDialog.
  *  For simple container of type mime, use 'allTypes' string.
  *  Supported modes are QIODevice::ReadOnly, QIODevice::WriteOnly, and QIODevice::ReadWrite.
  */
 DIGIKAM_EXPORT QStringList supportedImageMimeTypes(QIODevice::OpenModeFlag mode, QString& allTypes);
 
+/** Show a dialog with all RAW camera supported by digiKam, through libraw.
+ */
 DIGIKAM_EXPORT void showRawCameraList();
+
+/** If digiKam run into AppImage, return a cleaned environnement for QProcess to execute a
+ *  program outside the bundle without broken run-time dependencies.
+ *  Use case : system based Hugin CLI tools called by Panorama wizard.
+ *  If digiKam do not run as AppImage bundle, this method return a QProcessEnvironment instance
+ *  based on system environment.
+ */
+DIGIKAM_EXPORT QProcessEnvironment adjustedEnvironmentForAppImage();
 
 } // namespace Digikam
 
-#endif /* DIGIKAMGLOBALS_H */
+#endif // DIGIKAM_GLOBALS_H

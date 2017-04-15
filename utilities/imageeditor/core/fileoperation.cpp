@@ -48,6 +48,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "metadatasettings.h"
 
 namespace Digikam
@@ -214,7 +215,7 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
     QStringList cmdArgs;
 
     QProcess* const process = new QProcess();
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment env = adjustedEnvironmentForAppImage();
 
     foreach(const QUrl& url, urls)
     {

@@ -46,6 +46,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "dnotificationpopup.h"
 
 namespace Digikam
@@ -149,8 +150,9 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
     else
 
 #else
-
-    Q_UNUSED(eventId);
+    {
+        Q_UNUSED(eventId);
+    }
 
 #endif
 
@@ -167,31 +169,36 @@ void DNotificationWrapper(const QString& eventId, const QString& message,
 
 #endif // Q_OS_DARWIN
 
-    // Other Linux Desktops
-
-    if (QProcess::execute(QLatin1String("notify-send"),
-                               QStringList() << windowTitle
-                                             << message
-                                             << QLatin1String("-a")
-                                             << QApplication::applicationName())
-             == 0)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to desktop notifier through DBUS";
-        return;
-    }
+        // Other Linux Desktops
 
-    else
-    {
-        if (!parent)
+        QProcess proc;
+
+        proc.setProcessEnvironment(adjustedEnvironmentForAppImage());
+        proc.start(QLatin1String("notify-send"),
+                   QStringList() << windowTitle
+                                 << message
+                                 << QLatin1String("-a")
+                                 << QApplication::applicationName());
+
+        if (proc.waitForFinished() && proc.exitCode() == 0)
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "parent is null";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched to desktop notifier through DBUS";
             return;
         }
+        else
+        {
+            if (!parent)
+            {
+                qCWarning(DIGIKAM_GENERAL_LOG) << "parent is null";
+                return;
+            }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched through a passive pop-up";
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Event is dispatched through a passive pop-up";
 
-        NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
-        popup->showNotification(windowTitle, message, logoPixmap);
+            NotificationPassivePopup* const popup = new NotificationPassivePopup(parent);
+            popup->showNotification(windowTitle, message, logoPixmap);
+        }
     }
 }
 

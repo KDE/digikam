@@ -38,6 +38,7 @@
 
 // Local includes
 
+#include "digikam_globals.h"
 #include "dimg.h"
 #include "dcombobox.h"
 #include "dmetadata.h"
@@ -213,7 +214,7 @@ bool UserScript::toolOperations()
 
     QProcess process(this);
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment env = adjustedEnvironmentForAppImage();
 
     QString tagPath = TagsCache::instance()->tagPaths(imageInfo().tagIds(), TagsCache::NoLeadingSlash,
                                                       TagsCache::NoHiddenTags).join(QLatin1Char(';'));

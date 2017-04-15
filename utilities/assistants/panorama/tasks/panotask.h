@@ -23,10 +23,6 @@
 #ifndef PANO_TASK_H
 #define PANO_TASK_H
 
-// Qt includes
-
-#include <QProcess>
-
 // KDE includes
 
 #include <ThreadWeaver/Job>
@@ -62,4 +58,4 @@ protected:
 
 }  // namespace Digikam
 
-#endif /* PANO_TASK_H */
+#endif // PANO_TASK_H

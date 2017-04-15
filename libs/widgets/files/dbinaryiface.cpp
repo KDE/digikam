@@ -38,6 +38,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {
@@ -287,7 +288,9 @@ bool DBinaryIface::checkDir(const QString& possibleDir)
     qCDebug(DIGIKAM_GENERAL_LOG) << "Testing " << possiblePath << "...";
     QProcess process;
     process.setProcessChannelMode(QProcess::MergedChannels);
+    process.setProcessEnvironment(adjustedEnvironmentForAppImage());
     process.start(possiblePath, m_binaryArguments);
+
     bool val = process.waitForFinished();
 
     if (val && (process.error() != QProcess::FailedToStart))

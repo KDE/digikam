@@ -29,6 +29,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {
@@ -59,11 +60,9 @@ void CommandTask::runProcess(QStringList& args)
     process.reset(new QProcess());
     process->setWorkingDirectory(tmpDir.toLocalFile());
     process->setProcessChannelMode(QProcess::MergedChannels);
-    process->setProcessEnvironment(QProcessEnvironment::systemEnvironment());
+    process->setProcessEnvironment(adjustedEnvironmentForAppImage());
     process->setProgram(commandPath);
-
     process->setArguments(args);
-
     process->start();
 
     successFlag = process->waitForFinished(-1) && process->exitStatus() == QProcess::NormalExit;

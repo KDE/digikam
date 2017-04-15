@@ -48,6 +48,7 @@
 
 #include "digikam_debug.h"
 #include "digikam_config.h"
+#include "digikam_globals.h"
 #include "template.h"
 #include "templatemanager.h"
 #include "gpcamera.h"
@@ -921,6 +922,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
 
             QProcess process;
             process.setProcessChannelMode(QProcess::SeparateChannels);
+            process.setProcessEnvironment(adjustedEnvironmentForAppImage());
 
             qCDebug(DIGIKAM_IMPORTUI_LOG) << "Running: " << s;
 

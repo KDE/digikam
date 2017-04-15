@@ -64,6 +64,7 @@
 
 #include "digikam_version.h"
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "drawdecoder.h"
 #include "metaengine.h"
 #include "dimg.h"
@@ -592,7 +593,7 @@ bool ExpoBlendingThread::startPreProcessing(const QList<QUrl>& inUrls,
         d->alignProcess.reset(new QProcess());
         d->alignProcess->setWorkingDirectory(d->preprocessingTmpDir->path());
         d->alignProcess->setProcessChannelMode(QProcess::MergedChannels);
-        d->alignProcess->setProcessEnvironment(QProcessEnvironment::systemEnvironment());
+        d->alignProcess->setProcessEnvironment(adjustedEnvironmentForAppImage());
 
         QStringList args;
         args << QLatin1String("-v");
@@ -785,7 +786,7 @@ bool ExpoBlendingThread::startEnfuse(const QList<QUrl>& inUrls, QUrl& outUrl,
     d->enfuseProcess.reset(new QProcess());
     d->enfuseProcess->setWorkingDirectory(d->preprocessingTmpDir->path());
     d->enfuseProcess->setProcessChannelMode(QProcess::MergedChannels);
-    d->enfuseProcess->setProcessEnvironment(QProcessEnvironment::systemEnvironment());
+    d->enfuseProcess->setProcessEnvironment(adjustedEnvironmentForAppImage());
 
     QStringList args;
 

@@ -153,4 +153,29 @@ void showRawCameraList()
     dlg->show();
 }
 
+QProcessEnvironment adjustedEnvironmentForAppImage()
+{
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+
+    // If we are running into AppImage bundle, switch env var to the right values.
+    if (env.contains(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")) &&
+        env.contains(QLatin1String("APPIMAGE_ORIGINAL_QT_PLUGIN_PATH"))  &&
+        env.contains(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS"))   &&
+        env.contains(QLatin1String("APPIMAGE_ORIGINAL_PATH")))
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Adjusting environment variables for AppImage bundle";
+
+        env.insert(QLatin1String("LD_LIBRARY_PATH"),
+                   env.value(QLatin1String("APPIMAGE_ORIGINAL_LD_LIBRARY_PATH")));
+        env.insert(QLatin1String("QT_PLUGIN_PATH"),
+                   env.value(QLatin1String("APPIMAGE_ORIGINAL_QT_PLUGIN_PATH")));
+        env.insert(QLatin1String("XDG_DATA_DIRS"),
+                   env.value(QLatin1String("APPIMAGE_ORIGINAL_XDG_DATA_DIRS")));
+        env.insert(QLatin1String("PATH"),
+                   env.value(QLatin1String("APPIMAGE_ORIGINAL_PATH")));
+    }
+
+    return env;
+}
+
 } // namespace Digikam

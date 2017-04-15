@@ -44,6 +44,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "digikam_globals.h"
 #include "dbengineparameters.h"
 #include "databaseserverstarter.h"
 
@@ -456,6 +457,7 @@ DatabaseServerError DatabaseServer::createMysqlFiles() const
 #endif
 
         QProcess initProcess;
+        initProcess.setProcessEnvironment(adjustedEnvironmentForAppImage());
         initProcess.start(d->mysqldInitPath, mysqlInitCmdArgs);
 
         qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database initializer:"
@@ -493,6 +495,7 @@ DatabaseServerError DatabaseServer::startMysqlServer()
     // Start the database server
 
     d->databaseProcess = new QProcess();
+    d->databaseProcess->setProcessEnvironment(adjustedEnvironmentForAppImage());
     d->databaseProcess->start(d->mysqldCmd, mysqldCmdArgs);
 
     qCDebug(DIGIKAM_DATABASESERVER_LOG) << "Database server:"

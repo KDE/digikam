@@ -34,10 +34,8 @@
 #include <QDateTime>
 #include <QDir>
 #include <QVariant>
-#include <QProcess>
 #include <QSystemSemaphore>
 #include <QApplication>
-#include <QProcess>
 #include <QCoreApplication>
 
 // Local includes
