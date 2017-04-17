@@ -25,6 +25,7 @@
 #include <QByteArray>
 #include <QCheckBox>
 #include <QString>
+#include <QtConcurrent>
 
 // Local includes
 
@@ -43,11 +44,16 @@ public:
     {
         iface    = 0;
         modifier = 0;
+        loop     = 0;
     }
+
+    DImg          tempImage;
 
     LensFunIface* iface;
 
     lfModifier*   modifier;
+
+    int           loop;
 };
 
 LensFunFilter::LensFunFilter(QObject* const parent)
@@ -78,6 +84,70 @@ LensFunFilter::~LensFunFilter()
 
     delete d->iface;
     delete d;
+}
+
+void LensFunFilter::filterCCAMultithreaded(uint start, uint stop)
+{
+    QScopedArrayPointer<float> pos(new float[m_orgImage.width() * 2 * 3]);
+
+    for (unsigned int y = start; runningFlag() && (y < stop); ++y)
+    {
+        if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos.data()))
+        {
+            float* src = pos.data();
+
+            for (unsigned x = 0; runningFlag() && (x < m_destImage.width()); ++x)
+            {
+                DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
+
+                destPixel.setRed(m_orgImage.getSubPixelColorFast(src[0],   src[1]).red());
+                destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green());
+                destPixel.setBlue(m_orgImage.getSubPixelColorFast(src[4],  src[5]).blue());
+
+                m_destImage.setPixelColor(x, y, destPixel);
+                src += 2 * 3;
+            }
+        }
+    }
+}
+
+void LensFunFilter::filterVIGMultithreaded(uint start, uint stop)
+{
+    uchar* data = m_destImage.bits();
+    data += m_destImage.width() * m_destImage.bytesDepth() * start;
+
+    for (unsigned int y = start; runningFlag() && (y < stop); ++y)
+    {
+        if (d->modifier->ApplyColorModification(data,
+                                                0.0,
+                                                y,
+                                                m_destImage.width(),
+                                                1,
+                                                LF_CR_4(RED, GREEN, BLUE, UNKNOWN),
+                                                0))
+        {
+            data += m_destImage.width() * m_destImage.bytesDepth();
+        }
+    }
+}
+
+void LensFunFilter::filterDSTMultithreaded(uint start, uint stop)
+{
+    QScopedArrayPointer<float> pos(new float[m_orgImage.width() * 2 * 3]);
+
+    for (unsigned int y = start; runningFlag() && (y < stop); ++y)
+    {
+        if (d->modifier->ApplyGeometryDistortion(0.0, y, d->tempImage.width(), 1, pos.data()))
+        {
+            float* src = pos.data();
+
+            for (unsigned int x = 0; runningFlag() && (x < d->tempImage.width()); ++x, ++d->loop)
+            {
+                d->tempImage.setPixelColor(x, y, m_destImage.getSubPixelColor(src[0], src[1]));
+                src += 2;
+            }
+        }
+    }
 }
 
 void LensFunFilter::filterImage()
@@ -159,13 +229,11 @@ void LensFunFilter::filterImage()
         return;
     }
 
-    // The real correction to do
+    qCDebug(DIGIKAM_DIMG_LOG) << "Image size to process: ("
+                              << m_orgImage.width()  << ", "
+                              << m_orgImage.height() << ")";
 
-    int loop   = 0;
-    int lwidth = m_orgImage.width() * 2 * 3;
-    QScopedArrayPointer<float> pos(new float[lwidth]);
-
-    qCDebug(DIGIKAM_DIMG_LOG) << "Image size to process: (" << m_orgImage.width() << ", " << m_orgImage.height() << ")";
+    QList<int> vals = multithreadedSteps(m_destImage.height());
 
     // Stage 1: Chromatic Aberation Corrections
 
@@ -173,118 +241,82 @@ void LensFunFilter::filterImage()
     {
         m_orgImage.prepareSubPixelAccess(); // init lanczos kernel
 
-        for (unsigned int y = 0; runningFlag() && (y < m_orgImage.height()); ++y)
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            if (d->modifier->ApplySubpixelDistortion(0.0, y, m_orgImage.width(), 1, pos.data()))
-            {
-                float* src = pos.data();
-
-                for (unsigned x = 0; runningFlag() && (x < m_destImage.width()); ++x)
-                {
-                    DColor destPixel(0, 0, 0, 0xFFFF, m_destImage.sixteenBit());
-
-                    destPixel.setRed(m_orgImage.getSubPixelColorFast(src[0],   src[1]).red());
-                    destPixel.setGreen(m_orgImage.getSubPixelColorFast(src[2], src[3]).green());
-                    destPixel.setBlue(m_orgImage.getSubPixelColorFast(src[4],  src[5]).blue());
-
-                    m_destImage.setPixelColor(x, y, destPixel);
-                    src += 2 * 3;
-                }
-
-                ++loop;
-            }
-
-            // Update progress bar in dialog.
-            int progress = (int)(((double)y * 100.0) / m_orgImage.height());
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress / steps);
-            }
+            tasks.append(QtConcurrent::run(this,
+                                           &LensFunFilter::filterCCAMultithreaded,
+                                           vals[j],
+                                           vals[j+1]));
         }
 
-        qCDebug(DIGIKAM_DIMG_LOG) << "Chromatic Aberation Corrections applied. (loop: " << loop << ")";
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
+
+        qCDebug(DIGIKAM_DIMG_LOG) << "Chromatic Aberation Corrections applied.";
     }
+
+    postProgress(30);
 
     // Stage 2: Color Corrections: Vignetting and Color Contribution Index
 
     if (d->iface->settings().filterVIG)
     {
-        uchar* data   = m_destImage.bits();
-        loop          = 0;
-        double offset = 0.0;
+        QList <QFuture<void> > tasks;
 
-        if (steps == 3)
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            offset = 33.3;
-        }
-        else if (steps == 2 && d->iface->settings().filterCCA)
-        {
-            offset = 50.0;
+            tasks.append(QtConcurrent::run(this,
+                                           &LensFunFilter::filterVIGMultithreaded,
+                                           vals[j],
+                                           vals[j+1]));
         }
 
-        for (unsigned int y = 0; runningFlag() && (y < m_destImage.height()); ++y)
-        {
-            if (d->modifier->ApplyColorModification(data, 0.0, y, m_destImage.width(), 1,
-                                                    LF_CR_4(RED, GREEN, BLUE, UNKNOWN), 0))
-            {
-                data += m_destImage.width() * m_destImage.bytesDepth();
-                ++loop;
-            }
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
-            // Update progress bar in dialog.
-            int progress = (int)(((double)y * 100.0) / m_destImage.height());
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress / steps + offset);
-            }
-        }
-
-        qCDebug(DIGIKAM_DIMG_LOG) << "Vignetting and Color Corrections applied. (loop: " << loop << ")";
+        qCDebug(DIGIKAM_DIMG_LOG) << "Vignetting and Color Corrections applied.";
     }
+
+    postProgress(60);
 
     // Stage 3: Distortion and Geometry Corrections
 
     if (d->iface->settings().filterDST || d->iface->settings().filterGEO)
     {
-        loop = 0;
+        d->loop = 0;
 
         // we need a deep copy first
-        DImg tempImage(m_destImage.width(), m_destImage.height(), m_destImage.sixteenBit(), m_destImage.hasAlpha());
+        d->tempImage = DImg(m_destImage.width(),
+                            m_destImage.height(),
+                            m_destImage.sixteenBit(),
+                            m_destImage.hasAlpha());
+
         m_destImage.prepareSubPixelAccess(); // init lanczos kernel
 
-        for (unsigned long y = 0; runningFlag() && (y < tempImage.height()); ++y)
+        QList <QFuture<void> > tasks;
+
+        for (int j = 0 ; runningFlag() && (j < vals.count()-1) ; ++j)
         {
-            if (d->modifier->ApplyGeometryDistortion(0.0, y, tempImage.width(), 1, pos.data()))
-            {
-                float* src = pos.data();
-
-                for (unsigned long x = 0; runningFlag() && (x < tempImage.width()); ++x, ++loop)
-                {
-                    //qCDebug(DIGIKAM_DIMG_LOG) << " ZZ " << src[0] << " " << src[1] << " " << (int)src[0] << " " << (int)src[1];
-
-                    tempImage.setPixelColor(x, y, m_destImage.getSubPixelColor(src[0], src[1]));
-                    src += 2;
-                }
-            }
-
-            // Update progress bar in dialog.
-            int progress = (int)(((double)y * 100.0) / tempImage.height());
-
-            if (progress % 5 == 0)
-            {
-                postProgress(progress / steps + 33.3 * (steps - 1));
-            }
+            tasks.append(QtConcurrent::run(this,
+                                           &LensFunFilter::filterDSTMultithreaded,
+                                           vals[j],
+                                           vals[j+1]));
         }
 
-        qCDebug(DIGIKAM_DIMG_LOG) << "Distortion and Geometry Corrections applied. (loop: " << loop << ")";
+        foreach(QFuture<void> t, tasks)
+            t.waitForFinished();
 
-        if (loop != 0)
+        qCDebug(DIGIKAM_DIMG_LOG) << "Distortion and Geometry Corrections applied.";
+
+        if (d->loop)
         {
-            m_destImage = tempImage;
+            m_destImage = d->tempImage;
         }
     }
+
+    postProgress(90);
 }
 
 bool LensFunFilter::registerSettingsToXmp(MetaEngineData& data) const

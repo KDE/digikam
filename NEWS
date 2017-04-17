@@ -24,4 +24,5 @@ BUGFIXES FROM BUGZILLA:
 013 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
 014 ==> 376049 - Any album appears empty on startup until I select another album to view.
 015 ==> 378836 - digiKam Crash when start searching for persons.
-016 ==> 
+016 ==> 378804 - lensfun uses only one core, pls. parallize [patch].
+017 ==> 

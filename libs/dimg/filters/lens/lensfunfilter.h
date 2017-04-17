@@ -114,6 +114,9 @@ public:
 private:
 
     void filterImage();
+    void filterCCAMultithreaded(uint start, uint stop);
+    void filterVIGMultithreaded(uint start, uint stop);
+    void filterDSTMultithreaded(uint start, uint stop);
 
 private:
 
