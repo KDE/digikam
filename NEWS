@@ -25,4 +25,5 @@ BUGFIXES FROM BUGZILLA:
 014 ==> 376049 - Any album appears empty on startup until I select another album to view.
 015 ==> 378836 - digiKam Crash when start searching for persons.
 016 ==> 378804 - lensfun uses only one core, pls. parallize [patch].
-017 ==> 
+017 ==> 378703 - Download page : add link to pre-version bundle repository from GDrive.
+018 ==> 
