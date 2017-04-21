@@ -148,7 +148,7 @@ QString ToolTipFiller::imageInfoTipContents(const ImageInfo& info)
         settings->getToolTipsShowPhotoFlash() ||
         settings->getToolTipsShowPhotoWB())
     {
-        if (!photoInfo.allFieldsNull)
+        if (!photoInfo.allFieldsNull || commonInfo.creationDate.isValid())
         {
             QString metaStr;
             tip += cnt.headBeg + i18n("Photograph Properties") + cnt.headEnd;

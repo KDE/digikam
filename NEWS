@@ -26,4 +26,5 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 378836 - digiKam Crash when start searching for persons.
 016 ==> 378804 - lensfun uses only one core, pls. parallize [patch].
 017 ==> 378703 - Download page : add link to pre-version bundle repository from GDrive.
-018 ==> 
+018 ==> 379038 - Camera date Tool-Tip Option Appears Ineffective.
+019 ==> 
