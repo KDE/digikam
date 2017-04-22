@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 016 ==> 378804 - lensfun uses only one core, pls. parallize [patch].
 017 ==> 378703 - Download page : add link to pre-version bundle repository from GDrive.
 018 ==> 379038 - Camera date Tool-Tip Option Appears Ineffective.
-019 ==> 
+019 ==> 378625 - Very slow start.
+020 ==> 
