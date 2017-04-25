@@ -201,14 +201,6 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
         d->slideCtrlWidget->setEnabledPrev( false );
     }
 
-#ifdef HAVE_MEDIAPLAYER
-
-    // -- playback widget -------------------------------
-
-    d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
-    d->playbackWidget->hide();
-    d->playbackWidget->move(d->deskX, d->deskY);
-
     connect(d->slideCtrlWidget, SIGNAL(signalPause()),
             this, SLOT(slotPause()));
 
@@ -223,6 +215,14 @@ PresentationWidget::PresentationWidget(PresentationContainer* const sharedData)
 
     connect(d->slideCtrlWidget, SIGNAL(signalClose()),
             this, SLOT(slotClose()));
+
+#ifdef HAVE_MEDIAPLAYER
+
+    // -- playback widget -------------------------------
+
+    d->playbackWidget = new PresentationAudioWidget(this, d->sharedData->soundtrackUrls, d->sharedData);
+    d->playbackWidget->hide();
+    d->playbackWidget->move(d->deskX, d->deskY);
 
     // -- video preview ---------------------------------
 

@@ -28,4 +28,5 @@ BUGFIXES FROM BUGZILLA:
 017 ==> 378703 - Download page : add link to pre-version bundle repository from GDrive.
 018 ==> 379038 - Camera date Tool-Tip Option Appears Ineffective.
 019 ==> 378625 - Very slow start.
-020 ==> 
+020 ==> 379152 - Presentation mode cannot be exited/quitted.
+021 ==> 
