@@ -29,4 +29,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 379038 - Camera date Tool-Tip Option Appears Ineffective.
 019 ==> 378625 - Very slow start.
 020 ==> 379152 - Presentation mode cannot be exited/quitted.
-021 ==> 
+021 ==> 374838 - Advanced Search not finding "Not Tagged" images.
+022 ==> 
