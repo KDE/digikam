@@ -458,7 +458,7 @@ QList<QUrl> ImageDialog::urls() const
 
 QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl& url, const QString& caption)
 {
-    ImageDialog dlg(parent, url, false, caption.isEmpty() ? i18n("Select an Item") : caption);
+    ImageDialog dlg(parent, url, true, caption.isEmpty() ? i18n("Select an Item") : caption);
 
     if (dlg.url() != QUrl())
     {
@@ -472,7 +472,7 @@ QUrl ImageDialog::getImageURL(QWidget* const parent, const QUrl& url, const QStr
 
 QList<QUrl> ImageDialog::getImageURLs(QWidget* const parent, const QUrl& url, const QString& caption)
 {
-    ImageDialog dlg(parent, url, true, caption.isEmpty() ? i18n("Select Items") : caption);
+    ImageDialog dlg(parent, url, false, caption.isEmpty() ? i18n("Select Items") : caption);
 
     if (!dlg.urls().isEmpty())
     {
