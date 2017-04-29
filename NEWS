@@ -30,4 +30,5 @@ BUGFIXES FROM BUGZILLA:
 019 ==> 378625 - Very slow start.
 020 ==> 379152 - Presentation mode cannot be exited/quitted.
 021 ==> 374838 - Advanced Search not finding "Not Tagged" images.
-022 ==> 
+022 ==> 379326 - Import-Tool doesn't rename properly.
+023 ==> 

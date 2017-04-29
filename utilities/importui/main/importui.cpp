@@ -1412,8 +1412,10 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
     if (!onlySelected)
     {
         d->view->slotSelectAll();
-        slotNewSelection(d->view->selectedUrls().count() > 0);
     }
+
+    // Update the download names.
+    slotNewSelection(d->view->selectedUrls().count() > 0);
 
     // -- Get the destination album from digiKam library ---------------
 
