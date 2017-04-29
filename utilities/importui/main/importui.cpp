@@ -950,7 +950,7 @@ void ImportUI::setInitialSorting()
 void ImportUI::slotCancelButton()
 {
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                          i18nc("@info:status", "Canceling current operation, please wait..."));
+                                             i18nc("@info:status", "Canceling current operation, please wait..."));
     d->controller->slotCancel();
     //d->historyUpdater->slotCancel();
     d->currentlyDeleting.clear();
@@ -1017,7 +1017,7 @@ bool ImportUI::dialogClosed()
     }
 
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                          i18nc("@info:status", "Disconnecting from camera, please wait..."));
+                                             i18nc("@info:status", "Disconnecting from camera, please wait..."));
 
     if (isBusy())
     {
@@ -1059,7 +1059,7 @@ void ImportUI::finishDialog()
         // over the folders we used. Bug: 119201
 
         d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                          i18nc("@info:status", "Scanning for new files, please wait..."));
+                                                 i18nc("@info:status", "Scanning for new files, please wait..."));
 
         NewItemsFinder* const tool = new NewItemsFinder(NewItemsFinder::ScheduleCollectionScan, d->foldersToScan.toList());
         tool->start();
@@ -1333,8 +1333,8 @@ void ImportUI::slotUploadItems(const QList<QUrl>& urls)
         while (d->view->hasImage(uploadInfo))
         {
             QString msg(i18nc("@info", "<qt>Camera Folder <resource>%1</resource> already contains the item <resource>%2</resource>.<br>"
-                             "Please enter a new filename (without extension):</qt>",
-                             QDir::toNativeSeparators(cameraFolder), fi.fileName()));
+                              "Please enter a new filename (without extension):</qt>",
+                              QDir::toNativeSeparators(cameraFolder), fi.fileName()));
             uploadInfo.name = QInputDialog::getText(this,
                                                     i18nc("@title:window", "File already exists"),
                                                     msg,
@@ -1477,7 +1477,7 @@ void ImportUI::slotDownload(bool onlySelected, bool deleteAfter, Album* album)
             }
 
             QString header(i18nc("@info", "<p>Please select the destination album from the digiKam library to "
-                                "import the camera pictures into.</p>"));
+                                 "import the camera pictures into.</p>"));
 
             album = AlbumSelectDialog::selectAlbum(this, dynamic_cast<PAlbum*>(album), header);
 
@@ -1565,11 +1565,17 @@ void ImportUI::slotDownloaded(const QString& folder, const QString& file, int st
             // Pop-up a notification to inform user when all is done, and inform if auto-rotation will take place.
             if (autoRotate)
             {
-                DNotificationWrapper(QLatin1String("cameradownloaded"), i18nc("@info Popup notification", "Images download finished, you can now detach your camera while the images will be auto-rotated"), this, windowTitle());
+                DNotificationWrapper(QLatin1String("cameradownloaded"),
+                                     i18nc("@info Popup notification",
+                                           "Images download finished, you can now detach your camera while the images will be auto-rotated"),
+                                     this, windowTitle());
             }
             else
             {
-                DNotificationWrapper(QLatin1String("cameradownloaded"), i18nc("@info Popup notification", "Images download finished"), this, windowTitle());
+                DNotificationWrapper(QLatin1String("cameradownloaded"),
+                                     i18nc("@info Popup notification",
+                                           "Images download finished"),
+                                     this, windowTitle());
             }
         }
     }
@@ -1959,8 +1965,8 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     if (!lockedList.isEmpty())
     {
         QString infoMsg(i18nc("@info", "The items listed below are locked by camera (read-only). "
-                             "These items will not be deleted. If you really want to delete these items, "
-                             "please unlock them and try again."));
+                              "These items will not be deleted. If you really want to delete these items, "
+                              "please unlock them and try again."));
         CameraMessageBox::informationList(d->camThumbsCtrl, this, i18n("Information"), infoMsg, lockedList);
     }
 
@@ -1970,12 +1976,12 @@ void ImportUI::deleteItems(bool onlySelected, bool onlyDownloaded)
     }
 
     QString warnMsg(i18ncp("@info", "About to delete this image. "
-                          "<b>Deleted file is unrecoverable.</b> "
-                          "Are you sure?",
-                          "About to delete these %1 images. "
-                          "<b>Deleted files are unrecoverable.</b> "
-                          "Are you sure?",
-                          deleteList.count()));
+                           "<b>Deleted file is unrecoverable.</b> "
+                           "Are you sure?",
+                           "About to delete these %1 images. "
+                           "<b>Deleted files are unrecoverable.</b> "
+                           "Are you sure?",
+                           deleteList.count()));
 
     if (CameraMessageBox::warningContinueCancelList(d->camThumbsCtrl,
                                                     this,
@@ -2329,9 +2335,11 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
     {
         case 0:
         {
-            d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "No item selected (%1 item)",
-                                                                                      "No item selected (%1 items)",
-                                                                                      num_images));
+            d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
+                                                     i18ncp("@info:status",
+                                                            "No item selected (%1 item)",
+                                                            "No item selected (%1 items)",
+                                                            num_images));
 
             d->rightSideBar->slotNoCurrentItem();
             break;
@@ -2346,26 +2354,28 @@ void ImportUI::slotImageSelected(const CamItemInfoList& selection, const CamItem
                 int index = listAll.indexOf(selection.first()) + 1;
 
                 d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                                      i18nc("@info:status Filename of first selected item of number of items",
-                                                            "<b>%1</b> (%2 of %3)",
-                                                            selection.first().url().fileName(), index, num_images));
+                                                         i18nc("@info:status Filename of first selected item of number of items",
+                                                               "<b>%1</b> (%2 of %3)",
+                                                               selection.first().url().fileName(), index, num_images));
             }
             else
             {
                 d->rightSideBar->slotNoCurrentItem();
                 d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                                      i18ncp("@info:status", "No item selected (%1 item)",
-                                                                             "No item selected (%1 items)",
-                                                                             num_images));
+                                                         i18ncp("@info:status",
+                                                                "No item selected (%1 item)",
+                                                                "No item selected (%1 items)",
+                                                                num_images));
             }
 
             break;
         }
         default:
         {
-            d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode, i18ncp("@info:status", "%2/%1 item selected",
-                                                                                      "%2/%1 items selected",
-                                                                                      num_images, selection.count()));
+            d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
+                                                     i18ncp("@info:status", "%2/%1 item selected",
+                                                            "%2/%1 items selected",
+                                                            num_images, selection.count()));
             break;
         }
     }
@@ -2441,7 +2451,7 @@ bool ImportUI::createAutoAlbum(const QUrl& parentURL, const QString& sub,
         else
         {
             errMsg = i18nc("@info", "A file with the same name (<b>%1</b>) already exists in folder <resource>%2</resource>.",
-                          sub, QDir::toNativeSeparators(parentURL.toLocalFile()));
+                           sub, QDir::toNativeSeparators(parentURL.toLocalFile()));
             return false;
         }
     }
