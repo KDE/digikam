@@ -48,7 +48,8 @@ public:
 
 public:
 
-    ImageGenerationFunctor(Generator* generator, GalleryInfo* info, const QString& destDir);
+    explicit ImageGenerationFunctor(Generator* const generator, GalleryInfo* const info, const QString& destDir);
+    ~ImageGenerationFunctor();
 
     void operator()(ImageElement& element);
 

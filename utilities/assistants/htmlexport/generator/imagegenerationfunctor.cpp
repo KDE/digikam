@@ -79,10 +79,14 @@ static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
     return image;
 }
 
-ImageGenerationFunctor::ImageGenerationFunctor(Generator* generator, GalleryInfo* info, const QString& destDir)
+ImageGenerationFunctor::ImageGenerationFunctor(Generator* const generator, GalleryInfo* const info, const QString& destDir)
     : mGenerator(generator),
       mInfo(info),
       mDestDir(destDir)
+{
+}
+
+ImageGenerationFunctor::~ImageGenerationFunctor()
 {
 }
 
