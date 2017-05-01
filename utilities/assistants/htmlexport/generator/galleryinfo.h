@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GALLERYINFO_H
-#define GALLERYINFO_H
+#ifndef GALLERY_INFO_H
+#define GALLERY_INFO_H
 
 // Qt includes
 
@@ -101,4 +101,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GALLERYINFO_H
+#endif // GALLERY_INFO_H

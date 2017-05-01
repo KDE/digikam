@@ -38,6 +38,7 @@ QString GalleryInfo::getThemeParameterValue(const QString& theme,
 {
     QString groupName  = QLatin1String(THEME_GROUP_PREFIX) + theme;
     KConfigGroup group = config()->group(groupName);
+
     return group.readEntry(parameter, defaultValue);
 }
 
