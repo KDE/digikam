@@ -106,8 +106,10 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
-struct Wizard::Private
+class Wizard::Private
 {
+public:
+
     GalleryInfo*                    mInfo;
     KConfigDialogManager*           mConfigManager;
 
@@ -119,6 +121,8 @@ struct Wizard::Private
     OutputPage*                     mOutputPage;
 
     QMap<QByteArray, QWidget*>      mThemeParameterWidgetFromName;
+
+public:
 
     void initThemePage()
     {
@@ -150,7 +154,7 @@ struct Wizard::Private
 
         // Create layout. We need to recreate it every time, to get rid of
         // spacers
-        QGridLayout* const layout = new QGridLayout(content);
+        QGridLayout* const layout     = new QGridLayout(content);
         layout->setContentsMargins(QMargins());
         layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -204,10 +208,10 @@ struct Wizard::Private
 };
 
 Wizard::Wizard(QWidget* const parent, GalleryInfo* const info)
-    : QWizard(parent)
+    : QWizard(parent),
+      d(new Private)
 {
-    d        = new Private;
-    d->mInfo = info;
+    d->mInfo                   = info;
 
     setWindowTitle(i18n("Export image collections to HTML pages"));
 
@@ -318,10 +322,9 @@ void Wizard::slotThemeSelectionChanged()
  */
 void Wizard::accept()
 {
-    d->mInfo->mCollectionList = d->mCollectionSelector->selectedImageCollections();
-
-    Theme::Ptr theme          = static_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme;
-    QString themeInternalName = theme->internalName();
+    d->mInfo->mCollectionList               = d->mCollectionSelector->selectedImageCollections();
+    Theme::Ptr theme                        = static_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme;
+    QString themeInternalName               = theme->internalName();
     d->mInfo->setTheme(themeInternalName);
 
     Theme::ParameterList parameterList      = theme->parameterList();

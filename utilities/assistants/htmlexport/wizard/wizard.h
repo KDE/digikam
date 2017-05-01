@@ -57,7 +57,7 @@ private Q_SLOTS:
 
 private:
 
-    struct Private;
+    class Private;
     Private* d;
 };
 

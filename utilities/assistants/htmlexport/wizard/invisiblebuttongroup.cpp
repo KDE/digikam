@@ -35,18 +35,19 @@
 namespace Digikam
 {
 
-class InvisibleButtonGroupPrivate
+class Private
 {
 public:
 
     QButtonGroup* mGroup;
 };
 
-InvisibleButtonGroup::InvisibleButtonGroup(QWidget* parent)
+InvisibleButtonGroup::InvisibleButtonGroup(QWidget* const parent)
     : QWidget(parent),
-      d(new InvisibleButtonGroupPrivate)
+      d(new Private)
 {
     hide();
+
     d->mGroup = new QButtonGroup(this);
     d->mGroup->setExclusive(true);
 

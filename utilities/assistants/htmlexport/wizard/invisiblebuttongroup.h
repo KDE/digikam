@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INVISIBLEBUTTONGROUP_H
-#define INVISIBLEBUTTONGROUP_H
+#ifndef INVISIBLE_BUTTON_GROUP_H
+#define INVISIBLE_BUTTON_GROUP_H
 
 // Qt includes
 
@@ -33,8 +33,6 @@ class QAbstractButton;
 namespace Digikam
 {
 
-class InvisibleButtonGroupPrivate;
-
 class InvisibleButtonGroup : public QWidget
 {
     Q_OBJECT
@@ -42,7 +40,7 @@ class InvisibleButtonGroup : public QWidget
 
 public:
 
-    explicit InvisibleButtonGroup(QWidget* parent = 0);
+    explicit InvisibleButtonGroup(QWidget* const parent = 0);
     virtual ~InvisibleButtonGroup();
 
     int selected() const;
@@ -59,9 +57,10 @@ Q_SIGNALS:
 
 private:
 
-    InvisibleButtonGroupPrivate* const d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
 
-#endif // INVISIBLEBUTTONGROUP_H
+#endif // INVISIBLE_BUTTON_GROUP_H
