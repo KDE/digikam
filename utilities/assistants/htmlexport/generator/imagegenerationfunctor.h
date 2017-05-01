@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEGENERATIONFUNCTOR_H
-#define IMAGEGENERATIONFUNCTOR_H
+#ifndef IMAGE_GENERATION_FUNCTOR_H
+#define IMAGE_GENERATION_FUNCTOR_H
 
 // Local includes
 
@@ -68,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEGENERATIONFUNCTOR_H
+#endif // IMAGE_GENERATION_FUNCTOR_H

@@ -161,8 +161,8 @@ struct Theme::Private
 };
 
 Theme::Theme()
+   : d(new Private)
 {
-    d = new Private;
 }
 
 Theme::~Theme()
@@ -202,7 +202,7 @@ Theme::Ptr Theme::findByInternalName(const QString& internalName)
     const Theme::List& lst        = getList();
     Theme::List::ConstIterator it = lst.constBegin(), end=lst.constEnd();
 
-    for (; it!=end; ++it)
+    for (; it != end ; ++it)
     {
         Theme::Ptr theme = *it;
 

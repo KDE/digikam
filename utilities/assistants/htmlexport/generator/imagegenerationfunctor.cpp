@@ -62,15 +62,16 @@ static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
 
     if (square && (image.width() != size || image.height() != size))
     {
-        int sx=0, sy=0;
+        int sx = 0;
+        int sy = 0;
 
         if (image.width() > size)
         {
-            sx=(image.width() - size) / 2;
+            sx = (image.width() - size) / 2;
         }
         else
         {
-            sy=(image.height() - size) / 2;
+            sy = (image.height() - size) / 2;
         }
 
         image = image.copy(sx, sy, size, size);
@@ -204,7 +205,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
     }
 
     // Save thumbnail
-    QString thumbnailFileName = QLatin1String("thumb_") + baseFileName + QLatin1Char('.') + 
+    QString thumbnailFileName = QLatin1String("thumb_") + baseFileName + QLatin1Char('.') +
                                 mInfo->thumbnailFormatString().toLower();
     QString destPath          = mDestDir + QLatin1Char('/') + thumbnailFileName;
 
