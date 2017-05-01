@@ -8,6 +8,7 @@ add_subdirectory(common)
 add_subdirectory(firstrun)
 add_subdirectory(expoblending)
 add_subdirectory(calendar)
+#add_subdirectory(htmlexport)
 
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     add_subdirectory(panorama)

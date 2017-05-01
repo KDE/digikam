@@ -1,0 +1,121 @@
+body {
+    background-color: #123456;
+    color: black;
+    margin: 0;
+	padding: 0;
+}
+
+a {
+    color: #2f5d2c;
+	text-decoration: none;
+}
+
+a:hover {
+    color: #456ff3;
+	text-decoration: underline;
+}
+
+h1 {
+	padding: 0;
+	margin: 0;
+	padding-top: 0.1em;
+	padding-bottom: 0.5em;
+	color: #EEEE20;
+    	font-size: 150%;
+	font-family: Bitstream Vera Serif, serif;
+	background-color: #123456;
+    	border-bottom: 1px dashed #cccbb9;
+	border-top: 1px dashed #cccbb9;
+	text-align: center;
+}
+
+#content {
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+}
+
+/* Collection page */
+#collectionPage ul {
+	padding: 0;
+	text-align: center;
+}
+
+#collectionPage li {
+    display: block;
+    float: left;
+    text-align: center;
+    margin: 6px;
+	padding: 5px;
+	background-color: #ffffbb;
+	border: 1px solid #000000;
+}
+
+
+#collectionPage img {
+	border: 0;
+}
+
+#collectionPage .image {
+	float: center;
+    text-align: center;
+    margin: 6px;
+}
+
+/*  Collect Page */
+
+#collectPage {
+    background-color: #012345;
+}
+
+#collectPage a:hover {
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+    color: #ff5d2c;
+
+    text-decoration: underline;
+}
+#collectPage a {
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+    color: #c5cf13;
+    text-decoration: none;
+}
+#CollectPageContent {
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
+    color: #ffffff;
+}
+
+
+/* Image page */
+#imagePage {
+	background-color:#123456;
+}
+
+#caption {
+	background-color:#123456;
+}
+
+#imagePage h1 {
+	text-align:center;
+	border: 1px solid #123456;
+	background-color: #123456;
+}
+}
+#nav {
+	background-color:#123456;
+	float: right;
+}
+
+#imagePage img {
+	text-align: right;
+	border: 1px solid #CECECE;
+}

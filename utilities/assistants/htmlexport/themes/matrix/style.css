@@ -1,0 +1,82 @@
+body {
+    background-color: black;
+    color: green;
+    margin: 0;
+}
+
+a {
+    color: #0c0;
+}
+
+a:hover {
+    color: #0f0;
+}
+
+h1 {
+    padding-bottom: 6px;
+    margin-bottom: 0px;
+    color: #0f0;
+    font-size: 16px;
+}
+
+img {
+    border: 0;
+}
+
+#content {
+    background-image: url("bg.png");
+    background-color: #020;
+    padding: 6px;
+    border-top: 2px solid #080;
+    border-bottom: 2px solid #080;
+}
+
+a.imageLink {
+    background-color: #040;
+    border: 1px solid #0c0;
+    padding: 6px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
+a.imageLink:hover {
+    border: 1px solid #0f0;
+    background-color: #050;
+}
+
+/* collectionPage */
+#collectionPage ul {
+    list-style-type: none;
+}
+
+#collectionPage li {
+    float: left;
+    margin: 6px;
+}
+
+
+/* imagePage */
+#imagePage #content {
+    text-align: center;
+    color: #0f0;
+}
+
+#full {
+    margin: auto;
+}
+
+#previous {
+    float: left;
+}
+
+#next {
+    float: right;
+}
+
+.endOfCollection {
+    padding: 6px;
+    background-color: #040;
+    border: 1px dotted #080;
+    color: #080;
+}

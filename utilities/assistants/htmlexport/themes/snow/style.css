@@ -1,0 +1,67 @@
+body {
+    background-color: white;
+    color: black;
+    margin: 0;
+}
+
+a {
+    color: #2f5d9c;
+}
+
+a:hover {
+    color: #456ff3;
+}
+
+img {
+    border: 0;
+}
+
+h1 {
+    background-color: #eef;
+    border-bottom: 1px solid #ddf;
+    height: 48px;
+    margin: 0;
+    padding: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+
+    text-align: center;
+    line-height: 48px;
+    height: 48px;
+    font-size: 14px;
+}
+
+#content {
+    overflow: auto;
+    margin-top: 57px;
+}
+
+/* Collection page */
+#collectionPage li {
+    display: block;
+    float: left;
+    text-align: center;
+    margin: 6px;
+}
+
+#collectionPage img {
+    display: block;
+}
+
+/* Image page */
+#previous {
+    float: left;
+}
+
+#next {
+    float: right;
+}
+
+#imagePage #content {
+    text-align:center;
+}

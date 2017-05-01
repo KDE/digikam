@@ -1,0 +1,5 @@
+# Would be nice
+- Support for remote URLs
+- Implement an "update" mode which would only generate files for new or
+  modified images
+- Support for videos.

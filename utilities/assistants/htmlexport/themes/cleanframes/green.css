@@ -1,0 +1,115 @@
+body {
+	    	background-color: #FFFFFF; /*background behind thumbnails, outside boxes*/
+    	color: #000055; /*default text color*/
+    	font-size: 14pt;
+    	text-align: center;
+    	font-family: Bitstream Vera Serif, serif;
+    	margin: 0in;
+    	padding: 0in;
+}
+
+a { /*links (album titles)*/
+    	color: #FFFFFF; 
+    	text-decoration: none;
+}
+
+a:hover { /*links when mouse is over them (album titles)*/
+    	color: #5555ff;
+	text-decoration: underline;
+}
+
+h1 { /*album title above thumbnails*/
+	padding-top: 0.1em;
+	color: #FFFFFF; 
+	background-color: #006633;
+	font-size: 16pt;
+
+	background-size: 100% auto;
+	background-origin: content;
+	background-repeat: no-repeat;
+	background-position: center;
+	display: block;
+	margin: 6px;
+	padding: 5px;
+	margin-top: 1em;
+
+}
+
+/* Collection page */
+#collectionPage {
+	background-image: url(star.png);
+}
+
+#collectionPage h1 {
+	margin-top: 12px;
+} 
+
+#collectionPage ul { /*affects list of thumbnails*/
+	padding: 0;
+	padding-left: 5%;
+	text-align: center;
+	width: 95%
+}
+
+#collectionPage li { /*affects stuff in boxes with thumbnails*/
+        display: block;
+        float: left;
+        margin-left: 6px;
+	margin-top: 6px;
+	padding: 5px;
+	color: #FFFFFF;
+	font-size: 8pt;
+	background-color: #006633;
+	border: 1px solid #000000;
+}
+
+/* Blank Page */
+#blank page {
+	background-color: #000055;
+}
+
+/*  Collect Page */
+#collectPage { /*album titles at top*/
+    	background-color: #006633;
+	font-size: 14pt;
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+    	color: #AAAAAA; /*number of pics in collection*/
+}
+
+#collectPage a { /*links (album titles)*/
+    	color: #FFFFFF; 
+    	text-decoration: none;
+}
+
+#collectPage a:hover { /*links when mouse is over them (album titles)*/
+    	color: #5555ff;
+	text-decoration: underline;
+}
+
+
+/* Image page */
+#imagePage {
+	padding: 0;
+	margin: 0;
+	background-color:#006633; /*background color behind the big image*/
+	text-align: center;
+}
+
+
+#caption { /*caption below photo*/
+	width: 90%;
+	margin-left: 3%;
+	padding:.5em;
+	color: #FFFFFF;
+	background-image: none;
+	background-color: #006633;
+	font-size: 16pt;
+	background-color:#006633; 
+}
+
+#imagePage img {
+	margin: 0.5em;
+	border: 1px solid #CECECE; /*border around picture*/
+}

@@ -1,0 +1,86 @@
+body {
+    	background-color: #9977DD; /*background behind thumbnails, outside boxes*/
+    	color: #000066; /*default text color*/
+    	font-size: 14pt;
+    	text-align: center;
+    	font-family: Bitstream Vera Serif, serif;
+    	margin: 0in;
+    	padding: 0in;
+}
+
+a { /*links (album titles)*/
+    	color: #9977DD; 
+    	text-decoration: none;
+}
+
+a:hover { /*links when mouse is over them (album titles)*/
+    	color: #000033;
+	text-decoration: underline;
+}
+
+h1 { /*album title above thumbnails*/
+	padding-top: 0.1em;
+	color: #FFFFFF; 
+	font-size: 16pt;
+}
+
+/* Collection page */
+#collectionPage h1 {
+	margin-top: 12px;
+} 
+
+#collectionPage ul { /*affects list of thumbnails*/
+	padding: 0;
+	padding-left: 5%;
+	text-align: center;
+	width: 95%
+}
+
+#collectionPage li { /*affects stuff in boxes with thumbnails*/
+        display: block;
+        float: left;
+        margin-left: 6px;
+	margin-top: 6px;
+	padding: 5px;
+	color: #660099;
+	font-size: 8pt;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+}
+
+/*  Collect Page */
+#collectPage { /*album titles at top*/
+    	background-color: #FFFFFF;
+	font-size: 12pt;
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+    	color: #9977DD; /*number of pics in collection*/
+}
+#collectPage a { /*links (album titles)*/
+    	color: #5533AA; 
+    	text-decoration: none;
+}
+
+#collectPage a:hover { /*links when mouse is over them (album titles)*/
+    	color: #000033;
+	text-decoration: underline;
+}
+
+
+/* Image page */
+#imagePage {
+	padding:.5em;
+	background-color:#9977DD; /*background color behind the big image*/
+}
+
+
+#caption { /*caption below photo*/
+	padding-bottom:1em;
+	color: #FFFFFF;
+	font-size: 16pt;
+}
+
+#imagePage img {
+	border: 1px solid #CECECE; /*border around picture*/
+}

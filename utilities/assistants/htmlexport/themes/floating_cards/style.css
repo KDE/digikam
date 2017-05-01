@@ -1,0 +1,321 @@
+body {
+	background-color: #111;
+	color: #888;
+	margin: 0;
+	font-family: sans-serif;
+}
+
+a {
+	color: #ccc;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #fff;
+}
+
+img {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+img.preload {
+	display: none;
+}
+
+/*********************************************************/
+/* back and forward picture selection tabs on page edges */
+
+div.select {
+	padding: 0 0 0 0;
+	background-color: #444;
+	background-repeat: no-repeat;
+	background-position: center;
+	position: fixed;
+	width: 0px;
+	height: 0; /* overriden by max-height from thumb_size.css */
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-left: 0;
+	margin-right: 0;
+	top: 26px;
+	bottom: 26px;
+}
+
+div.select:hover {
+	width: auto;
+	max-width: 80%;
+}
+
+div.select.back {
+	left: 0px;
+	background-image: url('back.png');
+	background-position: left;
+	padding-left: 20px;
+}
+div.select.forward {
+	right: 0px;
+	background-image: url('forward.png');
+	background-position: right;
+	padding-right: 20px;
+}
+
+
+div.select ul {
+	padding: 0 0 0 0;
+	margin: 0 0 0 0;
+	display:none;
+	height: 100%;
+}
+
+div.select.back ul {
+	float: left;	
+}
+div.select.forward ul {
+	float: right;
+}
+
+div.select:hover ul {
+	display: inline-block;
+}
+
+
+div.select ul li {
+	margin-top: 16px;
+	margin-bottom: 10000px;		/* hack; prevent other than the first line of cards from showing */
+	margin-left: 2px;
+	margin-right: 2px;
+	vertical-align: text-top;
+	border-bottom-color: #666;
+}
+
+div.select ul li a {
+	border-color: #666;
+}
+
+div.select ul li a:hover {
+	border-color: #fff;
+}
+
+
+div.select.back ul li {
+	float: right;
+	margin-right: 16px;
+}
+div.select.forward ul li {
+	float: left;
+	margin-left: 16px;
+}
+
+/*********************************************************/
+/* header and navigation buttons at top of page          */
+
+
+h1,h2 {
+	padding: 0 0 0 0;
+	margin: 0 125px 0 125px;	/* clear the (fixed-size) div.nav buttons in the corners */
+	text-align: center;
+	font-size: 100%;
+}
+
+h1 {
+	padding-top: 0.3em;
+	padding-bottom: 0px;
+}
+
+h2 {
+	font-weight: normal;
+	padding-bottom: 0px;
+	padding-bottom: 0.3em;
+}
+
+div.nav {
+	position: fixed;
+}
+
+div.nav.left {
+	left: 0;
+}
+
+div.nav.right {
+	right: 0;
+}
+
+div.nav a {
+	padding-left: 20px;
+	padding-right: 20px;
+	background-color: #444;
+	font-size: 16px;
+	height: 21px;
+	overflow: hidden;
+}
+
+
+div.nav a:hover {
+	background-color: #666;
+}
+
+	
+div.nav.right a {
+	margin-left: 5px;
+	float: right;
+}
+
+div.nav.left a {
+	margin-right: 5px;
+	float: left;
+}
+
+
+div.nav img {
+	margin-left: 5px;
+	margin-right: 5px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	vertical-align: top;
+}
+
+/*********************************************************/
+/* cards with descriptions                               */
+/* used by: collection, collection list, back/forward    */
+
+li {
+	margin: 24px;
+	float: left;
+	list-style: none;
+	overflow: hidden;
+	
+	/* when not hovered, bottom border of the li is shown */
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-color: #444;
+
+}
+
+li:hover {
+	/* allow the overflow to overlap other cards */
+	position: relative;	
+	overflow: visible;
+}
+
+li a {
+
+	background-color: #000;
+
+	display: block;
+	padding: 9px;
+	
+	text-align: center;
+	font-size: 10px;
+	margin: 0px;
+
+	border-style: solid;
+	border-width: 1px;
+	border-color: #444;
+
+
+}
+
+li a:hover {
+	border-color: #fff;
+}
+
+
+/*********************************************************/
+/* image page  			  			 */
+
+div.fix {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	position: absolute;
+}
+
+div.fix h1, div.fix h2 {
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+div.fix h1 {
+	top: 0px;
+	left: 125px;
+	right: 125px;
+	height: 1.2em;
+}
+
+div.fix h2 {
+	bottom: 0px;
+	left: 25px;
+	right: 25px;
+	height: 1.2em;
+}
+
+div.fix h1:hover, div.fix h2:hover {
+	height: auto;
+	min-height: 1.2em;
+	background-color: #444;
+	white-space: normal;
+	left: 0px;
+	right: 0px;
+}
+
+div.image {
+	position: absolute;
+	top: 1.5em;
+	bottom: 1.5em;
+	right: 25px;;
+	left: 25px;
+	text-align: center;
+}
+
+/* reserve for the padding of the contained img */
+div.image div {
+	position: absolute;
+	top: 10px; /* border + padding of img */
+	bottom: 10px;
+	right: 10px;
+	left: 10px;
+
+}
+
+div.image div img {
+	background-color: #111;
+	border: 0px solid #444;
+	max-width: 100%;
+	max-height: 100%;
+	position: absolute;
+	margin: auto;
+	padding: 10px;
+	top: -10px; /* -padding */
+	left: -10px;
+	right: -10px;
+	bottom: -10px;
+}
+
+
+/*********************************************************/
+/* very dark and non-disturbing footer                   */
+
+p.footer {
+	clear: both;	border-top: 1px solid #333;
+	border-top: 1px solid #333;
+	font-size: 70%;
+	text-align: right;
+	color: #333;
+}
+
+p.footer a {	
+	color: #444;
+}
+
+p.footer a:hover {	
+	color: #666;
+}

@@ -1,0 +1,70 @@
+#
+# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
+# TODO: move this dependencies on top level cmake file.
+find_package(LibXslt REQUIRED)
+find_package(LibXml2 REQUIRED)
+
+include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Sql,INTERFACE_INCLUDE_DIRECTORIES>
+
+                    $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::ConfigWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
+
+                    ${LIBXSLT_INCLUDE_DIR}
+                    ${LIBXML2_INCLUDE_DIR}
+
+                    ${CMAKE_CURRENT_SOURCE_DIR}/parameters/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/genrator/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/
+)
+
+add_definitions(${LIBXSLT_DEFINITIONS}
+                ${LIBXML2_DEFINITIONS}
+)
+
+set(libhtmlexport_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/parameters/abstractthemeparameter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/parameters/intthemeparameter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/parameters/listthemeparameter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/parameters/stringthemeparameter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/parameters/colorthemeparameter.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/imageelement.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/uniquenamehelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/xmlutils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/theme.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryinfo.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/imagegenerationfunctor.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/invisiblebuttongroup.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wizard.cpp
+)
+
+ki18n_wrap_ui(libhtmlexport_SRCS
+              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/imagesettingspage.ui
+              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/outputpage.ui
+              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/themepage.ui
+              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/themeparameterspage.ui
+)
+
+add_library(htmlexport_src OBJECT ${libhtmlexport_SRCS})
+
+# TODO: link digikam lib with these components
+#${LIBXSLT_EXSLT_LIBRARIES}
+#${LIBXSLT_LIBRARIES}
+#${LIBXML2_LIBRARIES}
+
+
+#install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kipiplugin_htmlexport)

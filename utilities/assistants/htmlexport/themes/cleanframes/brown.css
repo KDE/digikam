@@ -1,0 +1,82 @@
+body {
+    	background-color: #552211; /*background behind thumbnails, outside boxes*/
+    	color: #CCAA88; /*default text color*/
+    	font-size: 14pt;
+    	text-align: center;
+    	font-family: Bitstream Vera Serif, serif;
+    	margin: 0in;
+    	padding: 0in;
+}
+
+a { /*links (album titles)*/
+    	color: #FFDDBB; 
+    	text-decoration: none;
+}
+
+a:hover { /*links when mouse is over them (album titles)*/
+    	color: #FFFFFF;
+	text-decoration: underline;
+}
+
+h1 { /*album title above thumbnails*/
+	padding-top: 0.1em;
+	color: #CCAA88; 
+	font-size: 14pt;
+}
+
+/* Collection page */
+#collectionPage h1 {
+	margin-top: 12px;
+} 
+
+#collectionPage ul { /*affects list of thumbnails*/
+	padding: 0;
+	padding-left: 5%;
+	text-align: center;
+	width: 95%
+}
+
+#collectionPage li { /*affects stuff in boxes with thumbnails*/
+        display: block;
+        float: left;
+        margin-left: 6px;
+	margin-top: 6px;
+	padding: 5px;
+	color: #CCAA88;
+	font-size: 8pt;
+	background-color: #552211;
+	border: 1px solid #CCAA88;
+}
+
+/* Blank Page */
+#blankPage {
+	background-color: #FFFFFF;
+}
+
+/*  Collect Page */
+#collectPage { /*album titles at top*/
+    	background-color: #885544;
+	font-size: 12pt;
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+    	color: #BBBBBB; /*number of pics in collection*/
+}
+
+
+/* Image page */
+#imagePage {
+	padding:.5em;
+	background-color:#CCAA88; /*background color behind the big image*/
+}
+
+
+#caption { /*caption below photo*/
+	padding-bottom:1em;
+	color: #552211;
+	font-size: 16pt;
+}
+
+#imagePage img {
+	border: 1px solid #CECECE; /*border around picture*/
+}

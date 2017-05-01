@@ -1,0 +1,336 @@
+# HTML Export Plugin Theme Howto
+
+The HTML export plugin can easily be themed to produce very different sites.
+This document explains how to create themes.
+
+*This document can be converted to HTML using
+[Markdown](http://www.daringfireball.net/projects/markdown).*
+
+## Getting started
+
+A theme is a folder which contains at least two files: a desktop file describing
+the theme and a template.xsl file to generate the HTML files.
+
+When the plugin is run it does the following:
+
+- Create an output folder
+- For each image collection:
+ - Create a folder
+ - Generate thumbnails (square by default)
+ - Generate full images
+ - Optionally copy original images
+- Copy the theme folder to the output folder
+- Generate an XML file describing the image collections: gallery.xml
+- Generate the HTML files by applying template.xsl to gallery.xml
+
+## Presentation of the desktop file
+
+The desktop file describes the theme. The information it contains is used in the
+theme selection page of the plugin.
+
+It's a .ini-style file and looks like this:
+
+	[Desktop Entry]
+	Name=Hello World
+	Comment=A demonstration theme
+
+	[X-HTMLExport Author]
+	Name=The Author
+	Url=http://example.com/themes/helloworld
+
+	[X-HTMLExport Preview]
+	Name=Preview's Caption
+	Url=preview.png
+
+We use a desktop file format so that entries can be translated. If you look at
+the desktop file for one of the themes shipped with the plugin, you will find
+something like this:
+
+	[Desktop Entry]
+	Name=Simple
+	Name[br]=Eeun
+	Name[cs]=Jednoduchý
+	Name[cy]=Syml
+	Name[da]=Simpel
+	...
+
+The nice thing is that when your theme get integrated into HTML export default
+themes, KDE translators will translate the desktop file for you.
+
+Image preview file will be placed in the root theme folder.
+
+## Getting started: creating one theme from another
+
+The easiest way to get started is to copy one theme and modify it. Theme folders
+can be found in $KDEDIR/share/apps/kipiplugin_htmlexport/themes/, where $KDEDIR
+is the install folder of KDE on your machine (usually /usr or /opt/kde3).
+Writing in this folder requires root access, so we will not create our theme
+there, instead do the following:
+
+Create a theme folder in your home:
+
+	mkdir -p ~/.kde/share/apps/kipiplugin_htmlexport/themes/
+
+Cd to it:
+
+	cd ~/.kde/share/apps/kipiplugin_htmlexport/themes/
+	
+Copy the "snow" theme to this folder, under a new name: "snow2":
+
+	cp -r $KDEDIR/share/apps/kipiplugin_htmlexport/themes/snow snow2
+	
+Rename the desktop file accordingly:
+
+	cd snow2
+	mv snow.desktop snow2.desktop
+
+Edit "snow2.desktop": Remove all the `Name[...]` entries and replace `Name=Snow`
+with `Name=Snow 2`.
+
+You are done, you can now open your favorite KIPI enabled application and start the
+HTML Export plugin, the "Snow 2" theme should appear in the theme list.
+
+## Generating HTML files, template.xsl
+
+The template.xsl file is responsible for generating the HTML files from the 
+gallery.xml file.
+
+gallery.xml looks like this:
+
+	<?xml version="1.0" encoding="UTF-8"?>
+	<collections>
+	 <collection>
+	  <name>Name of first collection</name>
+	  <fileName>collection_folder</fileName>
+	  <comment>Collection comment</comment>
+	  <image>
+	   <title>Image Title</title>
+	   <description>Image Description</description>
+	   <date>2009-08-27T09:53:26</date>
+	   <full fileName="pict1279.jpeg" height="450" width="600"/>
+	   <thumbnail fileName="thumb_pict1279.jpeg" height="80" width="80"/>
+	   <!-- If there is an original image, you will get the 'original' tag -->
+	   <original fileName="original_pict1279.jpeg" height="3000" width="4000"/>
+	
+	  </image>
+	  <image>
+	   <title>Image Title</title>
+	   <date>2009-08-27T09:55:33</date>
+	   <description>Image Description</description>
+	   <full fileName="pict1280.jpeg" height="450" width="600"/>
+	   <thumbnail fileName="thumb_pict1280.jpeg" height="80" width="80"/>
+	   <original fileName="original_pict1279.jpeg" height="3000" width="4000"/>
+	  </image>
+	  ...
+	 </collection>
+
+	 <collection>
+	  <name>Name of second collection</name>
+	  ...
+	 </collection>
+	</collections>
+
+I won't explain XSLT here, you should be able to find the documentation you
+need on the web. I personally learned XSLT with the [XSLT tutorial from
+w3schools.com][1].
+
+It's worth noting nevertheless that you can make use of [EXSLT][2], a set of
+extensions to XSLT. In particular, the [`exslt:document` element][3] is
+extremely useful because it allows you to generate multiple documents from the
+same file.
+
+HTML Export Plugin imposes no constraint on the organisation of HTML files: you
+can generate one file per image, or only one per collection. One could imagine
+a theme which would only contains one HTML file and uses Javascript to show the
+different images, there is already one theme using frames, you can even
+generate CSS files on the fly if you want to.
+
+[1]: http://www.w3schools.com/xsl
+[2]: http://www.exslt.org
+[3]: http://www.exslt.org/exsl/elements/document
+
+### About translations
+
+You should not "hardcode" any text in the template, instead you should use the
+"i18n parameters". For example instead of using this:
+
+	<a href="previous">Previous</a>
+	| <a href="next">Next</a>
+
+Do this:
+
+	<a href="previous"><xsl:value-of select="$i18nPrevious"/></a> 
+	| <a href="next"><xsl:value-of select="$i18nNext"/></a>
+
+It's quite a lot more verbose, but this way your user will get localized HTML
+output.
+
+If you want to use "i18n parameters" in attributes, do it like this:
+
+	<a href="previous" title="{$i18nPrevious}"><img src="previous.png"/></a>
+	| <a href="next" title="{$i18nNext}"><img src="next.png"/></a>
+
+For now, the available general "i18n parameters" are:
+
+- i18nPrevious
+- i18nNext
+- i18nCollectionList
+- i18nOriginalImage
+- i18nUp
+
+and for the image details are:
+
+- i18nexifimagemake ("Make")
+- i18nexifimagemodel ("Model")
+- i18nexifimageorientation ("Image Orientation")
+- i18nexifimagexresolution ("Image X Resolution")
+- i18nexifimageyresolution ("Image Y Resolution")
+- i18nexifimageresolutionunit ("Image Resolution Unit")
+- i18nexifimagedatetime ("Image Date Time")
+- i18nexifimageycbcrpositioning ("YCBCR Positioning")
+- i18nexifphotoexposuretime ("Exposure Time")
+- i18nexifphotofnumber ("F Number")
+- i18nexifphotoexposureprogram ("Exposure Index")
+- i18nexifphotoisospeedratings ("ISO Speed Ratings")
+- i18nexifphotoshutterspeedvalue ("Shutter Speed Value")
+- i18nexifphotoaperturevalue ("Aperture Value")
+- i18nexifphotofocallength ("Focal Length")
+
+*generated from 'grep \"i18n generator.cpp'*
+
+If you need other i18n parameters, let us know.
+
+## Images, CSS files and others
+
+You are free to use images, CSS files or other files in your theme: just put
+them in the theme folder and the plugin will copy them in the output folder.
+
+## Original images
+
+As explained before, if the user selects the option "include original images",
+the gallery.xml file will contain `<original />` tags. If this tag is present,
+the image page should contain a link to download the original image. 
+
+Here is an example:
+
+	<xsl:if test="original/@fileName != ''">
+		<p>
+			<a href="{original/@fileName}"><xsl:value-of select="$i18nOriginalImage"/></a>
+		</p>
+	</xsl:if>
+
+## Non-square thumbnails
+
+By default, thumbnails are cropped so that they are square-shaped and all have
+an identical size. This makes it easier to create the HTML/CSS style.
+
+However, if your theme is ready to cope with thumbnails of different sizes,
+add this snippet to your desktop file:
+	
+	[X-HTMLExport Options]
+	Allow non-square thumbnails=true
+
+The user will then be able to select whether squares should or should not be
+square.  For non-square thumbnails, the specified thumbnail size becomes the
+size of the larger side of the thumbnail.
+
+
+## Going further, theme parameters
+
+You might want to provide a way for your user to customize your theme, for
+example you could provide a few alternative CSS files, or let the user
+customize the background color. This is easy to do.
+
+### Declaring a parameter
+
+First, you need to declare your parameter. Edit your desktop file and add
+something like this:
+
+	[X-HTMLExport Parameter bgColor]
+	Name=Background Color
+	Type=color
+	Default=#123456
+
+Now start the plugin and select your theme, after pressing next, you should
+see an option page with a color button initialized to the #123456 color.
+
+### Using the value of a parameter
+
+In template.xsl, you can get the value of your parameter like this:
+
+	<xsl:value-of select="$bgColor"/>
+
+To change the background color of the "body" tag, you would write something
+like this:
+
+	<body bgcolor="{$bgColor}">
+	...
+	</body>
+
+### Parameter reference
+Here is a more complete description of the way to declare parameters:
+
+A parameter is declared by a section named "X-HTMLExport Parameter someName".
+`someName` should be replaced with the name you want to use in template.xsl.
+
+- The `Name` key defines the text which will be shown in the option page. Since
+this is a desktop file, it can be translated like the other keys.
+- The `Type` key defines the type of the parameter. At the time
+of this writing it can be one of:
+ - string
+ - color
+ - list
+ - int
+- The `Default` key defines the default value of the
+parameter.
+
+#### List parameter keys
+
+A list parameter lets the user select an item from a list. To declare the
+available items, you must use two sets of keys: `Value_N` and `Caption_N`,
+where N is the position of the item, starting from 0.
+
+`Value_N` is the internal value of the item. This is the value which will be
+set to the parameter.
+
+`Caption_N` is the displayed value of the item. This is the text which will
+be shown in the list.
+
+Here is an example: the "style" parameter from the "Simple" theme:
+
+	[X-HTMLExport Parameter style]
+	Name=Style
+	Type=list
+	Default=natural.css
+	Value_0=natural.css
+	Caption_0=Natural
+	Value_1=dark.css
+	Caption_1=Dark
+
+As you can see, the user will be able to choose either "Natural" or "Dark".
+Depending on the user choice, `<xsl:value-of select='$style'/>` will expand to
+either "natural.css" or "dark.css".
+
+#### Int parameter keys
+
+An int parameter lets the user select an integer using a spinbox. In addition
+to the default value, you can define the minimum and maximum values, using the
+`Min` and `Max` keys.
+
+Here is an example:
+
+	[X-HTMLExport Parameter size]
+	Name=Size
+	Type=int
+	Default=12
+	Min=4
+	Max=28
+
+## Final words
+
+This is the end of this howto, now is the time for you to get creative and
+design awesome themes!
+
+When you are done, do not hesitate to contact the kde-imaging mailing
+list (<kde-imaging@kde.org>). If you want to get your theme included in the
+official theme list, we need more themes!
