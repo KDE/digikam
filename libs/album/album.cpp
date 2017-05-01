@@ -464,7 +464,8 @@ QString PAlbum::albumPath() const
 
 CoreDbUrl PAlbum::databaseUrl() const
 {
-    return CoreDbUrl::fromAlbumAndName(QString(), albumPath(), QUrl::fromLocalFile(albumRootPath()), m_albumRootId);
+    return CoreDbUrl::fromAlbumAndName(QString(), albumPath(),
+                                       QUrl::fromLocalFile(albumRootPath()), m_albumRootId);
 }
 
 QString PAlbum::prettyUrl() const

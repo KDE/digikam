@@ -23,8 +23,6 @@
  *
  * ============================================================ */
 
-/** @file album.h */
-
 #ifndef ALBUM_H
 #define ALBUM_H
 
@@ -414,7 +412,7 @@ public:
      *         The root TAlbum returns "/" resp. "".
      */
     QString                tagPath(bool leadingSlash = true) const;
-    CoreDbUrl            databaseUrl() const;
+    CoreDbUrl              databaseUrl() const;
     QString                prettyUrl() const;
     QString                icon() const;
     qlonglong              iconId() const;
@@ -455,8 +453,8 @@ public:
     explicit DAlbum(const QDate& date, bool root=false, Range range=Month);
     ~DAlbum();
 
-    QDate       date()        const;
-    Range       range()       const;
+    QDate       date()      const;
+    Range       range()     const;
     CoreDbUrl databaseUrl() const;
 
 private:
@@ -480,7 +478,7 @@ public:
     SAlbum(const QString& title, int id, bool root=false);
     ~SAlbum();
 
-    CoreDbUrl          databaseUrl()        const;
+    CoreDbUrl            databaseUrl()        const;
     QString              query()              const;
     DatabaseSearch::Type searchType()         const;
     bool                 isNormalSearch()     const;
@@ -579,4 +577,4 @@ private:
 
 Q_DECLARE_METATYPE(Digikam::Album*)
 
-#endif /* ALBUM_H */
+#endif // ALBUM_H
