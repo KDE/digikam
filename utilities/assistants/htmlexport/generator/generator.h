@@ -44,8 +44,8 @@ class Generator : public QObject
 
 public:
 
-    Generator(Interface* const, GalleryInfo* const, KPBatchProgressDialog* const);
-    ~Generator();
+    explicit Generator(Interface* const, GalleryInfo* const, KPBatchProgressDialog* const);
+    virtual ~Generator();
 
     bool run();
     bool warnings() const;
@@ -53,6 +53,7 @@ public:
     static QString webifyFileName(const QString&);
 
 Q_SIGNALS:
+
     /**
      * This signal is emitted from ImageGenerationFunctor. It uses a
      * QueuedConnection to switch between the ImageGenerationFunctor thread and

@@ -36,7 +36,6 @@
 
 // KDE includes
 
-#include <kaboutdata.h>
 #include <klocalizedstring.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
@@ -89,36 +88,36 @@ QByteArray makeXsltParam(const QString& txt)
     static const char apos  = '\'';
     static const char quote = '"';
 
-    if (txt.indexOf(apos)==-1)
+    if (txt.indexOf(apos) == -1)
     {
         // First or second case: no apos
-        param= apos + txt + apos;
-
+        param = apos + txt + apos;
     }
-    else if (txt.indexOf(quote)==-1)
+    else if (txt.indexOf(quote) == -1)
     {
         // Third case: only apos, no quote
-        param= quote + txt + quote;
-
+        param = quote + txt + quote;
     }
     else
     {
         // Forth case: both apos and quote :-(
         const QStringList lst = txt.split(apos, QString::KeepEmptyParts);
 
-        QStringList::ConstIterator it=lst.constBegin(), end=lst.constEnd();
-        param  = "concat(";
-        param += apos + *it + apos;
+        QStringList::ConstIterator it  = lst.constBegin();
+        QStringList::ConstIterator end = lst.constEnd();
+        param                          = "concat(";
+        param                         += apos + *it + apos;
         ++it;
 
-        for (;it!=end; ++it)
+        for (; it != end ; ++it)
         {
-            param+= ", \"'\", ";
-            param+= apos + *it + apos;
+            param += ", \"'\", ";
+            param += apos + *it + apos;
         }
 
-        param+= ')';
+        param += ')';
     }
+
     //qCDebug(DIGIKAM_GENERAL_LOG) << "param: " << txt << " => " << param;
     return param.toUtf8();
 }
@@ -138,7 +137,7 @@ struct Generator::Private
 
     bool init()
     {
-        mTheme=Theme::findByInternalName(mInfo->theme());
+        mTheme = Theme::findByInternalName(mInfo->theme());
 
         if (!mTheme)
         {
@@ -177,7 +176,7 @@ struct Generator::Private
     // Url => local temp path
     typedef QHash<QUrl, QString> RemoteUrlHash;
 
-    bool downloadRemoteUrls(const QString& collectionName, const QUrl::List& _list, RemoteUrlHash* hash)
+    bool downloadRemoteUrls(const QString& collectionName, const QUrl::List& _list, RemoteUrlHash* const hash)
     {
         Q_ASSERT(hash);
         QUrl::List list;
@@ -207,7 +206,7 @@ struct Generator::Private
                 return false;
             }
 
-            KTemporaryFile* tempFile = new KTemporaryFile;
+            KTemporaryFile* const tempFile = new KTemporaryFile;
             // Ensure the tempFile gets deleted when mProgressDialog is closed
             tempFile->setParent(mProgressDialog);
             tempFile->setPrefix("htmlexport-");
@@ -249,7 +248,7 @@ struct Generator::Private
         if (!createDir(baseDestDir))
             return false;
 
-        mXMLFileName = baseDestDir + QLatin1String("/gallery.xml");
+        mXMLFileName        = baseDestDir + QLatin1String("/gallery.xml");
         XMLWriter xmlWriter;
 
         if (!xmlWriter.open(mXMLFileName))
@@ -264,7 +263,7 @@ struct Generator::Private
         QList<ImageCollection>::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
         QList<ImageCollection>::ConstIterator collectionEnd = mInfo->mCollectionList.constEnd();
 
-        for (; collectionIt != collectionEnd; ++collectionIt)
+        for (; collectionIt != collectionEnd ; ++collectionIt)
         {
             ImageCollection collection =* collectionIt;
 
@@ -274,10 +273,10 @@ struct Generator::Private
             if (!createDir(destDir))
                 return false;
 
-            XMLElement collectionX(xmlWriter, "collection");
-            xmlWriter.writeElement("name", collection.name());
+            XMLElement collectionX(xmlWriter,  "collection");
+            xmlWriter.writeElement("name",     collection.name());
             xmlWriter.writeElement("fileName", collectionFileName);
-            xmlWriter.writeElement("comment", collection.comment());
+            xmlWriter.writeElement("comment",  collection.comment());
 
             // Gather image element list
             QUrl::List imageList = collection.images();
@@ -344,30 +343,30 @@ struct Generator::Private
      */
     void addI18nParameters(XsltParameterMap& map)
     {
-        map["i18nPrevious"] = makeXsltParam(i18n("Previous"));
-        map["i18nNext"] = makeXsltParam(i18n("Next"));
-        map["i18nCollectionList"] = makeXsltParam(i18n("Collection List"));
-        map["i18nOriginalImage"] = makeXsltParam(i18n("Original Image"));
-        map["i18nUp"] = makeXsltParam(i18n("Go Up"));
+        map["i18nPrevious"]                   = makeXsltParam(i18n("Previous"));
+        map["i18nNext"]                       = makeXsltParam(i18n("Next"));
+        map["i18nCollectionList"]             = makeXsltParam(i18n("Collection List"));
+        map["i18nOriginalImage"]              = makeXsltParam(i18n("Original Image"));
+        map["i18nUp"]                         = makeXsltParam(i18n("Go Up"));
         // Exif Tag
-        map["i18nexifimagemake"] = makeXsltParam(i18n("Make"));
-        map["i18nexifimagemodel"] = makeXsltParam(i18n("Model"));
-        map["i18nexifimageorientation"] = makeXsltParam(i18n("Image Orientation"));
-        map["i18nexifimagexresolution"] = makeXsltParam(i18n("Image X Resolution"));
-        map["i18nexifimageyresolution"] = makeXsltParam(i18n("Image Y Resolution"));
-        map["i18nexifimageresolutionunit"] = makeXsltParam(i18n("Image Resolution Unit"));
-        map["i18nexifimagedatetime"] = makeXsltParam(i18n("Image Date Time"));
-        map["i18nexifimageycbcrpositioning"] = makeXsltParam(i18n("YCBCR Positioning"));
-        map["i18nexifphotoexposuretime"] = makeXsltParam(i18n("Exposure Time"));
-        map["i18nexifphotofnumber"] = makeXsltParam(i18n("F Number"));
-        map["i18nexifphotoexposureprogram"] = makeXsltParam(i18n("Exposure Index"));
-        map["i18nexifphotoisospeedratings"] = makeXsltParam(i18n("ISO Speed Ratings"));
+        map["i18nexifimagemake"]              = makeXsltParam(i18n("Make"));
+        map["i18nexifimagemodel"]             = makeXsltParam(i18n("Model"));
+        map["i18nexifimageorientation"]       = makeXsltParam(i18n("Image Orientation"));
+        map["i18nexifimagexresolution"]       = makeXsltParam(i18n("Image X Resolution"));
+        map["i18nexifimageyresolution"]       = makeXsltParam(i18n("Image Y Resolution"));
+        map["i18nexifimageresolutionunit"]    = makeXsltParam(i18n("Image Resolution Unit"));
+        map["i18nexifimagedatetime"]          = makeXsltParam(i18n("Image Date Time"));
+        map["i18nexifimageycbcrpositioning"]  = makeXsltParam(i18n("YCBCR Positioning"));
+        map["i18nexifphotoexposuretime"]      = makeXsltParam(i18n("Exposure Time"));
+        map["i18nexifphotofnumber"]           = makeXsltParam(i18n("F Number"));
+        map["i18nexifphotoexposureprogram"]   = makeXsltParam(i18n("Exposure Index"));
+        map["i18nexifphotoisospeedratings"]   = makeXsltParam(i18n("ISO Speed Ratings"));
         map["i18nexifphotoshutterspeedvalue"] = makeXsltParam(i18n("Shutter Speed Value"));
-        map["i18nexifphotoaperturevalue"] = makeXsltParam(i18n("Aperture Value"));
-        map["i18nexifphotofocallength"] = makeXsltParam(i18n("Focal Length"));
-        map["i18nexifgpsaltitude"] = makeXsltParam(i18n("GPS Altitude"));
-        map["i18nexifgpslatitude"] = makeXsltParam(i18n("GPS Latitude"));
-        map["i18nexifgpslongitude"] = makeXsltParam(i18n("GPS Longitude"));
+        map["i18nexifphotoaperturevalue"]     = makeXsltParam(i18n("Aperture Value"));
+        map["i18nexifphotofocallength"]       = makeXsltParam(i18n("Focal Length"));
+        map["i18nexifgpsaltitude"]            = makeXsltParam(i18n("GPS Altitude"));
+        map["i18nexifgpslatitude"]            = makeXsltParam(i18n("GPS Latitude"));
+        map["i18nexifgpslongitude"]           = makeXsltParam(i18n("GPS Longitude"));
     }
 
     /**
@@ -385,10 +384,10 @@ struct Generator::Private
             AbstractThemeParameter* const themeParameter = *it;
             QByteArray internalName                      = themeParameter->internalName();
             QString value                                = mInfo->getThemeParameterValue(themeInternalName,
-                                                                                        internalName,
-                                                                                        themeParameter->defaultValue());
+                                                                                         internalName,
+                                                                                         themeParameter->defaultValue());
 
-            map[internalName] = makeXsltParam(value);
+            map[internalName]                            = makeXsltParam(value);
         }
     }
 
@@ -425,7 +424,7 @@ struct Generator::Private
         XsltParameterMap::Iterator end = map.end();
         const char** ptr               = params;
 
-        for (;it != end; ++it)
+        for ( ; it != end ; ++it)
         {
             *ptr = it.key().data();
             ++ptr;
@@ -437,7 +436,7 @@ struct Generator::Private
 
         // Move to the destination dir, so that external documents get correctly
         // produced
-        QString oldCD = QDir::currentPath();
+        QString oldCD                             = QDir::currentPath();
         QDir::setCurrent(mInfo->destUrl().toLocalFile());
 
         CWrapper<xmlDocPtr, xmlFreeDoc> xmlOutput = xsltApplyStylesheet(xslt, xmlGallery, params);
@@ -451,10 +450,10 @@ struct Generator::Private
             return false;
         }
 
-        QString destFileName = QDir::toNativeSeparators( mInfo->destUrl().toLocalFile() + "/index.html" );
+        QString destFileName = QDir::toNativeSeparators(mInfo->destUrl().toLocalFile() + "/index.html");
 
 #ifdef Q_CC_MSVC
-        if(-1 == xsltSaveResultToFilename(destFileName.toLocal8Bit().data(), xmlOutput, xslt, 0))
+        if (-1 == xsltSaveResultToFilename(destFileName.toLocal8Bit().data(), xmlOutput, xslt, 0))
         {
             logError(i18n("Could not open '%1' for writing", destFileName));
             return false;
@@ -518,9 +517,9 @@ struct Generator::Private
 Generator::Generator(Interface* const interface,
                      GalleryInfo* const info,
                      KPBatchProgressDialog* const progressDialog)
-    : QObject()
+    : QObject(),
+      d(new Private)
 {
-    d                  = new Private;
     d->that            = this;
     d->mInterface      = interface;
     d->mInfo           = info;
