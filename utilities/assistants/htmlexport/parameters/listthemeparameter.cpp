@@ -79,8 +79,7 @@ void ListThemeParameter::init(const QByteArray& internalName, const KConfigGroup
 
 QWidget* ListThemeParameter::createWidget(QWidget* parent, const QString& widgetDefaultValue) const
 {
-    QComboBox* const comboBox = new QComboBox(parent);
-
+    QComboBox* const comboBox      = new QComboBox(parent);
     QStringList::ConstIterator it  = d->mOrderedValueList.constBegin();
     QStringList::ConstIterator end = d->mOrderedValueList.constEnd();
 
@@ -103,6 +102,7 @@ QString ListThemeParameter::valueFromWidget(QWidget* widget) const
 {
     Q_ASSERT(widget);
     QComboBox* const comboBox = static_cast<QComboBox*>(widget);
+
     return d->mOrderedValueList[comboBox->currentIndex()];
 }
 

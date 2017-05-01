@@ -42,6 +42,7 @@ QString StringThemeParameter::valueFromWidget(QWidget* widget) const
 {
     Q_ASSERT(widget);
     QLineEdit* const edit = static_cast<QLineEdit*>(widget);
+
     return edit->text();
 }
 

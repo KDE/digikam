@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef COLORTHEMEPARAMETER_H
-#define COLORTHEMEPARAMETER_H
+#ifndef COLOR_THEME_PARAMETER_H
+#define COLOR_THEME_PARAMETER_H
 
 // Local includes
 
@@ -44,4 +44,4 @@ public:
 
 } // namespace Digikam
 
-#endif // COLORTHEMEPARAMETER_H
+#endif // COLOR_THEME_PARAMETER_H

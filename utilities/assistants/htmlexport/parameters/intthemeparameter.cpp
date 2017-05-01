@@ -69,12 +69,14 @@ QWidget* IntThemeParameter::createWidget(QWidget* parent, const QString& value) 
     spinBox->setValue(value.toInt());
     spinBox->setMinimum(d->mMinValue);
     spinBox->setMaximum(d->mMaxValue);
+
     return spinBox;
 }
 
 QString IntThemeParameter::valueFromWidget(QWidget* widget) const
 {
     QSpinBox* const spinBox = static_cast<QSpinBox*>(widget);
+
     return QString::number(spinBox->value());
 }
 

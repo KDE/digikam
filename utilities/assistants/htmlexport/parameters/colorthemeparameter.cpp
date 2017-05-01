@@ -35,12 +35,14 @@ QWidget* ColorThemeParameter::createWidget(QWidget* parent, const QString& value
     DColorSelector* const button = new DColorSelector(parent);
     QColor color(value);
     button->setColor(color);
+
     return button;
 }
 
 QString ColorThemeParameter::valueFromWidget(QWidget* widget) const
 {
     DColorSelector* const button = static_cast<DColorSelector*>(widget);
+
     return button->color().name();
 }
 

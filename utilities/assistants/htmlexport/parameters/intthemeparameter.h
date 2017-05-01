@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef INTTHEMEPARAMETER_H
-#define INTTHEMEPARAMETER_H
+#ifndef INT_THEME_PARAMETER_H
+#define INT_THEME_PARAMETER_H
 
 // Local includes
 
@@ -53,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // INTTHEMEPARAMETER_H
+#endif // INT_THEME_PARAMETER_H
