@@ -46,8 +46,8 @@ public:
 };
 
 IntThemeParameter::IntThemeParameter()
+    : d(new Private)
 {
-    d = new Private;
 }
 
 IntThemeParameter::~IntThemeParameter()

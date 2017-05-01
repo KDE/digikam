@@ -48,15 +48,14 @@ public:
 };
 
 AbstractThemeParameter::AbstractThemeParameter()
+    : d(new Private)
 {
-    d = new Private;
 }
 
 AbstractThemeParameter::~AbstractThemeParameter()
 {
     delete d;
 }
-
 
 void AbstractThemeParameter::init(const QByteArray& internalName, const KConfigGroup* group)
 {

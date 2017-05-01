@@ -37,15 +37,17 @@ namespace Digikam
 static const char* ITEM_VALUE_KEY   = "Value_";
 static const char* ITEM_CAPTION_KEY = "Caption_";
 
-struct ListThemeParameter::Private
+class ListThemeParameter::Private
 {
+public:
+
     QStringList            mOrderedValueList;
     QMap<QString, QString> mContentMap;
 };
 
 ListThemeParameter::ListThemeParameter()
+    : d(new Private)
 {
-    d = new Private;
 }
 
 ListThemeParameter::~ListThemeParameter()
@@ -57,7 +59,7 @@ void ListThemeParameter::init(const QByteArray& internalName, const KConfigGroup
 {
     AbstractThemeParameter::init(internalName, configGroup);
 
-    for (int pos=0 ; ; ++pos)
+    for (int pos = 0 ; ; ++pos)
     {
         QString valueKey   = QString::fromUtf8("%1%2").arg(QLatin1String(ITEM_VALUE_KEY)).arg(pos);
         QString captionKey = QString::fromUtf8("%1%2").arg(QLatin1String(ITEM_CAPTION_KEY)).arg(pos);
@@ -82,7 +84,7 @@ QWidget* ListThemeParameter::createWidget(QWidget* parent, const QString& widget
     QStringList::ConstIterator it  = d->mOrderedValueList.constBegin();
     QStringList::ConstIterator end = d->mOrderedValueList.constEnd();
 
-    for (;it!=end; ++it)
+    for (; it != end ; ++it)
     {
         QString value   = *it;
         QString caption = d->mContentMap[value];
