@@ -57,8 +57,10 @@ static const char* INT_PARAMETER_TYPE     = "int";
 
 static Theme::List sList;
 
-struct Theme::Private
+class Theme::Private
 {
+public:
+
     Private()
         : mDesktopFile(0)
     {
@@ -67,6 +69,8 @@ struct Theme::Private
     KDesktopFile* mDesktopFile;
     QUrl          mUrl;
     ParameterList mParameterList;
+
+public:
 
     /**
      * Return the list of parameters defined in the desktop file. We need to
@@ -120,9 +124,10 @@ struct Theme::Private
 
     void readParameters(const QStringList& list)
     {
-        QStringList::ConstIterator it=list.constBegin(), end=list.constEnd();
+        QStringList::ConstIterator it  = list.constBegin();
+        QStringList::ConstIterator end = list.constEnd();
 
-        for (;it!=end; ++it)
+        for (; it != end ; ++it)
         {
             QString groupName                 = QLatin1String(PARAMETER_GROUP_PREFIX) + *it;
             QByteArray internalName           = it->toUtf8();
@@ -149,8 +154,8 @@ struct Theme::Private
             else
             {
                 qCWarning(DIGIKAM_GENERAL_LOG) << "Parameter '" << internalName
-                                           << "' has unknown type '" << type
-                                           << "'. Falling back to string type\n";
+                                               << "' has unknown type '" << type
+                                               << "'. Falling back to string type\n";
                 parameter = new StringThemeParameter();
             }
 
@@ -177,7 +182,7 @@ const Theme::List& Theme::getList()
     {
         QStringList internalNameList;
         const QStringList list        = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                                  QLatin1String("kipiplugin_htmlexport/themes/*/*.desktop"));
+                                                                  QLatin1String("digikam/themes/*/*.desktop"));
         QStringList::ConstIterator it = list.constBegin(), end=list.constEnd();
 
         for (; it != end ; ++it)

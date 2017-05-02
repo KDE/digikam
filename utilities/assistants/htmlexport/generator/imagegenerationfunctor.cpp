@@ -80,7 +80,9 @@ static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
     return image;
 }
 
-ImageGenerationFunctor::ImageGenerationFunctor(Generator* const generator, GalleryInfo* const info, const QString& destDir)
+ImageGenerationFunctor::ImageGenerationFunctor(Generator* const generator,
+                                               GalleryInfo* const info,
+                                               const QString& destDir)
     : mGenerator(generator),
       mInfo(info),
       mDestDir(destDir)
@@ -129,7 +131,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
         imageFile.close();
         imageFile.open(QIODevice::ReadOnly);
 
-        imageData = imageFile.readAll();
+        imageData   = imageFile.readAll();
 
         if (!originalImage.loadFromData(imageData) )
         {
@@ -173,7 +175,6 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
         {
             return;
         }
-
     }
     else
     {
@@ -452,6 +453,7 @@ bool ImageGenerationFunctor::writeDataToFile(const QByteArray& data, const QStri
         emitWarning(i18n("Could not save image to file '%1'", destPath));
         return false;
     }
+
     return true;
 }
 

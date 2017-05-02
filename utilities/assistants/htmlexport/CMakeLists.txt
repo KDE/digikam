@@ -66,5 +66,4 @@ add_library(htmlexport_src OBJECT ${libhtmlexport_SRCS})
 #${LIBXSLT_LIBRARIES}
 #${LIBXML2_LIBRARIES}
 
-
-#install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/kipiplugin_htmlexport)
+install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)
