@@ -43,6 +43,7 @@
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "abstractthemeparameter.h"
+#include "albumselecttabs.h"
 #include "galleryinfo.h"
 #include "invisiblebuttongroup.h"
 #include "theme.h"
@@ -113,7 +114,7 @@ public:
     GalleryInfo*                    mInfo;
     KConfigDialogManager*           mConfigManager;
 
-    ImageCollectionSelector*        mCollectionSelector;
+    AlbumSelectTabs*                mCollectionSelector;
     QWizardPage*                    mCollectionSelectorPage;
     ThemePage*                      mThemePage;
     ThemeParametersPage*            mThemeParametersPage;
@@ -217,11 +218,11 @@ Wizard::Wizard(QWidget* const parent, GalleryInfo* const info)
 
     // ---------------------------------------------------------------
 
-    d->mCollectionSelector     = iface()->imageCollectionSelector(this);
-    d->mCollectionSelectorPage = addPage(d->mCollectionSelector, i18n("Collection Selection"));
+    d->mCollectionSelector     = new AlbumSelectTabs(this);
+    d->mCollectionSelectorPage = addPage(d->mCollectionSelector, i18n("Album Selection"));
     updateCollectionSelectorPageValidity();
 
-    connect(d->mCollectionSelector, SIGNAL(selectionChanged()),
+    connect(d->mCollectionSelector, SIGNAL(signalAlbumSelectionChanged()),
             this, SLOT(updateCollectionSelectorPageValidity()));
 
     d->mThemePage              = new ThemePage(this, i18n("Theme"));
@@ -259,7 +260,7 @@ void Wizard::updateFinishPageValidity()
 
 void Wizard::updateCollectionSelectorPageValidity()
 {
-    setValid(d->mCollectionSelectorPage, !d->mCollectionSelector->selectedImageCollections().empty());
+    setValid(d->mCollectionSelectorPage, !d->mCollectionSelector->selectedAlbums().empty());
 }
 
 void Wizard::slotThemeSelectionChanged()
@@ -322,7 +323,7 @@ void Wizard::slotThemeSelectionChanged()
  */
 void Wizard::accept()
 {
-    d->mInfo->mCollectionList               = d->mCollectionSelector->selectedImageCollections();
+    d->mInfo->mCollectionList               = d->mCollectionSelector->selectedAlbums();
     Theme::Ptr theme                        = static_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme;
     QString themeInternalName               = theme->internalName();
     d->mInfo->setTheme(themeInternalName);
