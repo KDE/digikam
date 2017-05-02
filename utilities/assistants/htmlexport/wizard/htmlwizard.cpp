@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "wizard.h"
+#include "htmlwizard.h"
 
 // Qt includes
 
@@ -80,7 +80,7 @@ public:
         : DWizardPage(dialog, title)
     {
         this->setupUi(this);
-        layout()->setContentsMargins(QMargins());
+        this->layout()->setContentsMargins(QMargins());
         setPageWidget(this);
     }
 };
@@ -89,7 +89,6 @@ public:
 
 typedef WizardPage<Ui_ThemePage>           ThemePage;
 typedef WizardPage<Ui_ThemeParametersPage> ThemeParametersPage;
-typedef WizardPage<HTMLOutputPage>         OutputPage;
 
 class ImageSettingsPage : public WizardPage<Ui_ImageSettingsPage>
 {
@@ -115,11 +114,11 @@ public:
     KConfigDialogManager*           mConfigManager;
 
     AlbumSelectTabs*                mCollectionSelector;
-    QWizardPage*                    mCollectionSelectorPage;
+    DWizardPage*                    mCollectionSelectorPage;
     ThemePage*                      mThemePage;
     ThemeParametersPage*            mThemeParametersPage;
     ImageSettingsPage*              mImageSettingsPage;
-    OutputPage*                     mOutputPage;
+    HTMLOutputPage*                 mOutputPage;
 
     QMap<QByteArray, QWidget*>      mThemeParameterWidgetFromName;
 
@@ -219,7 +218,8 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     // ---------------------------------------------------------------
 
     d->mCollectionSelector     = new AlbumSelectTabs(this);
-    d->mCollectionSelectorPage = addPage(d->mCollectionSelector, i18n("Album Selection"));
+    d->mCollectionSelectorPage = new DWizardPage(this, i18n("Album Selection"));
+    d->mCollectionSelectorPage->setPageWidget(d->mCollectionSelector);
     updateCollectionSelectorPageValidity();
 
     connect(d->mCollectionSelector, SIGNAL(signalAlbumSelectionChanged()),
@@ -233,7 +233,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
 
     d->mThemeParametersPage    = new ThemeParametersPage(this, i18n("Theme Parameters"));
     d->mImageSettingsPage      = new ImageSettingsPage(this, i18n("Image Settings"));
-    d->mOutputPage             = new OutputPage(this, i18n("Output"));
+    d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
     d->mOutputPage->kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
 
     connect(d->mOutputPage->kcfg_destUrl, SIGNAL(textChanged(QString)),
@@ -351,12 +351,12 @@ void HTMLWizard::accept()
 
 DHistoryView* HTMLWizard::progressView() const
 {
-    return OutputPage->progressView;
+    return d->mOutputPage->progressView;
 }
 
 DProgressWdg* HTMLWizard::progressBar() const
 {
-    return OutputPage->progressBar;
+    return d->mOutputPage->progressBar;
 }
 
 } // namespace Digikam

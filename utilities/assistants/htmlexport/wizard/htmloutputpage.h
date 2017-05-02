@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "dwizardpage.h"
 #include "dfileselector.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
@@ -38,11 +39,11 @@
 namespace Digikam
 {
 
-class HTMLOutputPage : public QWidget
+class HTMLOutputPage : public DWizardPage
 {
 public:
 
-    explicit HTMLOutputPage(QWidget* const parent);
+    explicit HTMLOutputPage(QWizard* const dialog, const QString& title);
     ~HTMLOutputPage();
 
 public:

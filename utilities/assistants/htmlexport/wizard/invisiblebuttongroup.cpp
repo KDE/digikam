@@ -35,7 +35,7 @@
 namespace Digikam
 {
 
-class Private
+class InvisibleButtonGroup::Private
 {
 public:
 

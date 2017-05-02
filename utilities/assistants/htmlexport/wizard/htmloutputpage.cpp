@@ -35,11 +35,10 @@
 namespace Digikam
 {
 
-HTMLOutputPage::HTMLOutputPage(QWidget* const parent)
-    : QWidget(parent)
+HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
+    : DWizardPage(dialog, title)
 {
     setObjectName(QLatin1String("OutputPage"));
-    resize(350, 200);
 
     textLabel1 = new QLabel(this);
     textLabel1->setObjectName(QLatin1String("textLabel1"));
