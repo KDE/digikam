@@ -53,6 +53,10 @@ public:
     QList<AbstractCheckableAlbumModel*> albumModels() const;
     AlbumLabelsSearchHandler* albumLabelsHandler()    const;
 
+Q_SIGNALS:
+
+    void signalAlbumSelectionChanged();
+
 private:
 
     class Private;
