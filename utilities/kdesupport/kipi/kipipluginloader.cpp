@@ -37,6 +37,7 @@
 #include <kactioncategory.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
+#include <klocalizedstring.h>
 
 // Libkipi includes
 

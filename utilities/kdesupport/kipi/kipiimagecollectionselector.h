@@ -35,11 +35,6 @@
 #include <KIPI/ImageCollection>
 #include <KIPI/ImageCollectionSelector>
 
-// Local includes
-
-#include "searchtextbar.h"
-#include "albummanager.h"
-
 namespace Digikam
 {
 
