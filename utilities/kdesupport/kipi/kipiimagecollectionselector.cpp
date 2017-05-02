@@ -110,6 +110,9 @@ KipiImageCollectionSelector::KipiImageCollectionSelector(KipiInterface* const if
     hlay->addWidget(d->tab);
     hlay->setContentsMargins(QMargins());
     hlay->setSpacing(0);
+
+    connect(d->tab, SIGNAL(signalAlbumSelectionChanged()),
+            this, SIGNAL(selectionChanged()));
 }
 
 KipiImageCollectionSelector::~KipiImageCollectionSelector()
