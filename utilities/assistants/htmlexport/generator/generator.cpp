@@ -33,14 +33,12 @@
 #include <QtConcurrentMap>
 #include <QApplication>
 #include <QUrl>
+#include <QList>
+#include <QTemporaryFile>
 
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kio/job.h>
-#include <kio/netaccess.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
 
 // libxslt includes
 
@@ -58,6 +56,11 @@
 #include "galleryinfo.h"
 #include "theme.h"
 #include "xmlutils.h"
+#include "htmlwizard.h"
+#include "iojob.h"
+#include "dprogresswdg.h"
+#include "dhistoryview.h"
+#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -72,7 +75,7 @@ QString Generator::webifyFileName(const QString& _fileName)
     QString fileName = _fileName.toLower();
 
     // Remove potentially troublesome chars
-    return fileName.replace(QRegExp("[^-0-9a-z]+"), "_");
+    return fileName.replace(QRegExp(QLatin1String("[^-0-9a-z]+")), QLatin1String("_"));
 }
 
 /**
@@ -88,37 +91,38 @@ QByteArray makeXsltParam(const QString& txt)
     static const char apos  = '\'';
     static const char quote = '"';
 
-    if (txt.indexOf(apos) == -1)
+    if (txt.indexOf(QLatin1Char(apos)) == -1)
     {
         // First or second case: no apos
-        param = apos + txt + apos;
+        param = QLatin1Char(apos) + txt + QLatin1Char(apos);
     }
-    else if (txt.indexOf(quote) == -1)
+    else if (txt.indexOf(QLatin1Char(quote)) == -1)
     {
         // Third case: only apos, no quote
-        param = quote + txt + quote;
+        param = QLatin1Char(quote) + txt + QLatin1Char(quote);
     }
     else
     {
         // Forth case: both apos and quote :-(
-        const QStringList lst = txt.split(apos, QString::KeepEmptyParts);
+        const QStringList lst = txt.split(QLatin1Char(apos), QString::KeepEmptyParts);
 
         QStringList::ConstIterator it  = lst.constBegin();
         QStringList::ConstIterator end = lst.constEnd();
-        param                          = "concat(";
-        param                         += apos + *it + apos;
+        param                          = QLatin1String("concat(");
+        param                         += QLatin1Char(apos) + *it + QLatin1Char(apos);
         ++it;
 
         for (; it != end ; ++it)
         {
-            param += ", \"'\", ";
-            param += apos + *it + apos;
+            param += QLatin1String(", \"'\", ");
+            param += QLatin1Char(apos) + *it + QLatin1Char(apos);
         }
 
-        param += ')';
+        param += QLatin1Char(')');
     }
 
     //qCDebug(DIGIKAM_GENERAL_LOG) << "param: " << txt << " => " << param;
+
     return param.toUtf8();
 }
 
@@ -128,21 +132,28 @@ class Generator::Private
 {
 public:
 
-    Generator*             that;
-    Interface*             mInterface;
-    GalleryInfo*           mInfo;
-    KPBatchProgressDialog* mProgressDialog;
-    Theme::Ptr             mTheme;
+    // Url => local temp path
+    typedef QHash<QUrl, QString> RemoteUrlHash;
+
+public:
+
+    Generator*    that;
+    GalleryInfo*  mInfo;
+    Theme::Ptr    mTheme;
 
     // State info
-    bool                   mWarnings;
-    QString                mXMLFileName;
+    bool          mWarnings;
+    QString       mXMLFileName;
+
+    bool          mCancel;
+    HTMLWizard*   wizard;
 
 public:
 
     bool init()
     {
-        mTheme = Theme::findByInternalName(mInfo->theme());
+        mCancel = false;
+        mTheme  = Theme::findByInternalName(mInfo->theme());
 
         if (!mTheme)
         {
@@ -150,24 +161,52 @@ public:
             return false;
         }
 
+        wizard->progressView()->setVisible(true);
+        wizard->progressBar()->setVisible(true);
+
+        return true;
+    }
+
+    bool createDir(const QString& dirName)
+    {
+        logInfo(i18n("Create directories"));
+
+        QStringList parts = dirName.split(QLatin1Char('/'), QString::SkipEmptyParts);
+        QDir dir          = QDir::root();
+
+        Q_FOREACH(const QString& part, parts)
+        {
+            if (!dir.exists(part))
+            {
+                if (!dir.mkdir(part))
+                {
+                    logError(i18n("Could not create folder '%1' in '%2'", part, dir.absolutePath()));
+                    return false;
+                }
+            }
+
+            dir.cd(part);
+        }
+
         return true;
     }
 
     bool copyTheme()
     {
-        mProgressDialog->progressWidget()->addedAction(i18n("Copying theme"), ProgressMessage);
+        logInfo(i18n("Copying theme"));
 
         QUrl srcUrl  = QUrl(mTheme->directory());
         QUrl destUrl = mInfo->destUrl();
 
         destUrl.addPath(srcUrl.fileName());
+        QFile file(destUrl.toLocalFile());
 
-        if (QFile::exists(destUrl.toLocalFile()))
+        if (file.exists())
         {
-            KIO::NetAccess::del(destUrl, mProgressDialog);
+            file.remove();
         }
 
-        bool ok = KIO::NetAccess::dircopy(srcUrl, destUrl, mProgressDialog);
+        bool ok = CopyJob::copyFolderRecursively(srcUrl.toLocalFile(), destUrl.toLocalFile());
 
         if (!ok)
         {
@@ -178,76 +217,9 @@ public:
         return true;
     }
 
-    // Url => local temp path
-    typedef QHash<QUrl, QString> RemoteUrlHash;
-
-    bool downloadRemoteUrls(const QString& collectionName, const QUrl::List& _list, RemoteUrlHash* const hash)
-    {
-        Q_ASSERT(hash);
-        QUrl::List list;
-
-        Q_FOREACH(const QUrl& url, _list)
-        {
-            if (!url.isLocalFile())
-            {
-                list << url;
-            }
-        }
-
-        if (list.count() == 0)
-        {
-            return true;
-        }
-
-        logInfo( i18n("Downloading remote files for \"%1\"", collectionName) );
-
-        mProgressDialog->progressWidget()->setTotal(list.count());
-        int count = 0;
-
-        Q_FOREACH(const QUrl& url, list)
-        {
-            if (mProgressDialog->isHidden())
-            {
-                return false;
-            }
-
-            KTemporaryFile* const tempFile = new KTemporaryFile;
-            // Ensure the tempFile gets deleted when mProgressDialog is closed
-            tempFile->setParent(mProgressDialog);
-            tempFile->setPrefix("htmlexport-");
-
-            if (!tempFile->open())
-            {
-                delete tempFile;
-                logError(i18n("Could not open temporary file"));
-                return false;
-            }
-
-            const QString tempPath = KStandardDirs::locate("tmp", tempFile->fileName());
-            KIO::Job* job          = KIO::file_copy(url,
-                                                    QUrl::fromLocalFile(tempPath),
-                                                    -1 /* permissions */,
-                                                    KIO::Overwrite);
-
-            if (KIO::NetAccess::synchronousRun(job, mProgressDialog))
-            {
-                hash->insert(url, tempFile->fileName());
-            }
-            else
-            {
-                logWarning(i18n("Could not download %1", url.prettyUrl()));
-                hash->insert(url, QString());
-            }
-
-            ++count;
-            mProgressDialog->progressWidget()->setProgress(count);
-        }
-
-        return true;
-    }
-
     bool generateImagesAndXML()
     {
+        logInfo(i18n("Generate images and XML files"));
         QString baseDestDir = mInfo->destUrl().toLocalFile();
 
         if (!createDir(baseDestDir))
@@ -262,7 +234,7 @@ public:
             return false;
         }
 
-        XMLElement collectionsX(xmlWriter, "collections");
+        XMLElement collectionsX(xmlWriter, QLatin1String("collections"));
 
         // Loop on collections
         QList<ImageCollection>::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
@@ -276,15 +248,17 @@ public:
             QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
 
             if (!createDir(destDir))
+            {
                 return false;
+            }
 
-            XMLElement collectionX(xmlWriter,  "collection");
+            XMLElement collectionX(xmlWriter,  QLatin1String("collection"));
             xmlWriter.writeElement("name",     collection.name());
             xmlWriter.writeElement("fileName", collectionFileName);
             xmlWriter.writeElement("comment",  collection.comment());
 
             // Gather image element list
-            QUrl::List imageList = collection.images();
+            QList<QUrl> imageList = collection.images();
             RemoteUrlHash remoteUrlHash;
 
             if (!downloadRemoteUrls(collection.name(), imageList, &remoteUrlHash))
@@ -303,29 +277,29 @@ public:
                     continue;
                 }
 
-                KPImageInfo info(url);
+                ImageInfo info(url.toLocalFile());
                 ImageElement element = ImageElement(info);
                 element.mPath        = remoteUrlHash.value(url, url.toLocalFile());
                 imageElementList << element;
             }
 
             // Generate images
-            logInfo( i18n("Generating files for \"%1\"", collection.name()) );
+            logInfo(i18n("Generating files for \"%1\"", collection.name()));
             ImageGenerationFunctor functor(that, mInfo, destDir);
             QFuture<void> future = QtConcurrent::map(imageElementList, functor);
             QFutureWatcher<void> watcher;
             watcher.setFuture(future);
 
             connect(&watcher, SIGNAL(progressValueChanged(int)),
-                    mProgressDialog->progressWidget(), SLOT(setProgress(int)));
+                    wizard->progressBar(), SLOT(setProgress(int)));
 
-            mProgressDialog->progressWidget()->setTotal(imageElementList.count());
+            wizard->progressBar()->setTotal(imageElementList.count());
 
             while (!future.isFinished())
             {
                 qApp->processEvents();
 
-                if (mProgressDialog->isHidden())
+                if (mCancel)
                 {
                     future.cancel();
                     future.waitForFinished();
@@ -341,59 +315,6 @@ public:
         }
 
         return true;
-    }
-
-    /**
-     * Add to map all the i18n parameters.
-     */
-    void addI18nParameters(XsltParameterMap& map)
-    {
-        map["i18nPrevious"]                   = makeXsltParam(i18n("Previous"));
-        map["i18nNext"]                       = makeXsltParam(i18n("Next"));
-        map["i18nCollectionList"]             = makeXsltParam(i18n("Collection List"));
-        map["i18nOriginalImage"]              = makeXsltParam(i18n("Original Image"));
-        map["i18nUp"]                         = makeXsltParam(i18n("Go Up"));
-        // Exif Tag
-        map["i18nexifimagemake"]              = makeXsltParam(i18n("Make"));
-        map["i18nexifimagemodel"]             = makeXsltParam(i18n("Model"));
-        map["i18nexifimageorientation"]       = makeXsltParam(i18n("Image Orientation"));
-        map["i18nexifimagexresolution"]       = makeXsltParam(i18n("Image X Resolution"));
-        map["i18nexifimageyresolution"]       = makeXsltParam(i18n("Image Y Resolution"));
-        map["i18nexifimageresolutionunit"]    = makeXsltParam(i18n("Image Resolution Unit"));
-        map["i18nexifimagedatetime"]          = makeXsltParam(i18n("Image Date Time"));
-        map["i18nexifimageycbcrpositioning"]  = makeXsltParam(i18n("YCBCR Positioning"));
-        map["i18nexifphotoexposuretime"]      = makeXsltParam(i18n("Exposure Time"));
-        map["i18nexifphotofnumber"]           = makeXsltParam(i18n("F Number"));
-        map["i18nexifphotoexposureprogram"]   = makeXsltParam(i18n("Exposure Index"));
-        map["i18nexifphotoisospeedratings"]   = makeXsltParam(i18n("ISO Speed Ratings"));
-        map["i18nexifphotoshutterspeedvalue"] = makeXsltParam(i18n("Shutter Speed Value"));
-        map["i18nexifphotoaperturevalue"]     = makeXsltParam(i18n("Aperture Value"));
-        map["i18nexifphotofocallength"]       = makeXsltParam(i18n("Focal Length"));
-        map["i18nexifgpsaltitude"]            = makeXsltParam(i18n("GPS Altitude"));
-        map["i18nexifgpslatitude"]            = makeXsltParam(i18n("GPS Latitude"));
-        map["i18nexifgpslongitude"]           = makeXsltParam(i18n("GPS Longitude"));
-    }
-
-    /**
-     * Add to map all the theme parameters, as specified by the user.
-     */
-    void addThemeParameters(XsltParameterMap& map)
-    {
-        Theme::ParameterList parameterList      = mTheme->parameterList();
-        QString themeInternalName               = mTheme->internalName();
-        Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
-        Theme::ParameterList::ConstIterator end = parameterList.constEnd();
-
-        for (; it!=end; ++it)
-        {
-            AbstractThemeParameter* const themeParameter = *it;
-            QByteArray internalName                      = themeParameter->internalName();
-            QString value                                = mInfo->getThemeParameterValue(themeInternalName,
-                                                                                         internalName,
-                                                                                         themeParameter->defaultValue());
-
-            map[internalName]                            = makeXsltParam(value);
-        }
     }
 
     bool generateHTML()
@@ -455,7 +376,8 @@ public:
             return false;
         }
 
-        QString destFileName = QDir::toNativeSeparators(mInfo->destUrl().toLocalFile() + "/index.html");
+        QString destFileName = QDir::toNativeSeparators(mInfo->destUrl().toLocalFile() + 
+                                                        QLatin1String("/index.html"));
 
 #ifdef Q_CC_MSVC
         if (-1 == xsltSaveResultToFilename(destFileName.toLocal8Bit().data(), xmlOutput, xslt, 0))
@@ -479,61 +401,158 @@ public:
         return true;
     }
 
-    bool createDir(const QString& dirName)
+    bool downloadRemoteUrls(const QString& collectionName,
+                            const QList<QUrl>& _list,
+                            RemoteUrlHash* const hash)
     {
-        QStringList parts = dirName.split(QLatin1Char('/'), QString::SkipEmptyParts);
-        QDir dir          = QDir::root();
+        Q_ASSERT(hash);
+        QList<QUrl> list;
 
-        Q_FOREACH(const QString& part, parts)
+        Q_FOREACH(const QUrl& url, _list)
         {
-            if (!dir.exists(part))
+            if (!url.isLocalFile())
             {
-                if (!dir.mkdir(part))
-                {
-                    logError(i18n("Could not create folder '%1' in '%2'", part, dir.absolutePath()));
-                    return false;
-                }
+                list << url;
+            }
+        }
+
+        if (list.count() == 0)
+        {
+            return true;
+        }
+
+        logInfo(i18n("Downloading remote files for \"%1\"", collectionName));
+
+        wizard->progressBar()->setTotal(list.count());
+        int count = 0;
+
+        Q_FOREACH(const QUrl& url, list)
+        {
+            if (mCancel)
+            {
+                return false;
             }
 
-            dir.cd(part);
+            QTemporaryFile tempFile;
+            tempFile.setPrefix("htmlexport-");
+
+            if (!tempFile.open())
+            {
+                logError(i18n("Could not open temporary file"));
+                return false;
+            }
+
+            QTemporaryFile tempPath;
+            tempPath.setFileTemplate(tempFile->fileName());
+            tempPath.setAutoRemove(false);
+
+            if (tempPath.open() &&
+                CopyJob::copyFiles(url, QUrl::fromLocalFile(temp.fileName())))
+            {
+                hash->insert(url, tempFile->fileName());
+            }
+            else
+            {
+                logWarning(i18n("Could not download %1", url.prettyUrl()));
+                hash->insert(url, QString());
+            }
+
+            tempPath.close();
+            tempFile.close();
+
+            ++count;
+            wizard->progressBar()->setProgress(count);
         }
 
         return true;
     }
 
+    /**
+     * Add to map all the i18n parameters.
+     */
+    void addI18nParameters(XsltParameterMap& map)
+    {
+        map["i18nPrevious"]                   = makeXsltParam(i18n("Previous"));
+        map["i18nNext"]                       = makeXsltParam(i18n("Next"));
+        map["i18nCollectionList"]             = makeXsltParam(i18n("Collection List"));
+        map["i18nOriginalImage"]              = makeXsltParam(i18n("Original Image"));
+        map["i18nUp"]                         = makeXsltParam(i18n("Go Up"));
+        // Exif Tag
+        map["i18nexifimagemake"]              = makeXsltParam(i18n("Make"));
+        map["i18nexifimagemodel"]             = makeXsltParam(i18n("Model"));
+        map["i18nexifimageorientation"]       = makeXsltParam(i18n("Image Orientation"));
+        map["i18nexifimagexresolution"]       = makeXsltParam(i18n("Image X Resolution"));
+        map["i18nexifimageyresolution"]       = makeXsltParam(i18n("Image Y Resolution"));
+        map["i18nexifimageresolutionunit"]    = makeXsltParam(i18n("Image Resolution Unit"));
+        map["i18nexifimagedatetime"]          = makeXsltParam(i18n("Image Date Time"));
+        map["i18nexifimageycbcrpositioning"]  = makeXsltParam(i18n("YCBCR Positioning"));
+        map["i18nexifphotoexposuretime"]      = makeXsltParam(i18n("Exposure Time"));
+        map["i18nexifphotofnumber"]           = makeXsltParam(i18n("F Number"));
+        map["i18nexifphotoexposureprogram"]   = makeXsltParam(i18n("Exposure Index"));
+        map["i18nexifphotoisospeedratings"]   = makeXsltParam(i18n("ISO Speed Ratings"));
+        map["i18nexifphotoshutterspeedvalue"] = makeXsltParam(i18n("Shutter Speed Value"));
+        map["i18nexifphotoaperturevalue"]     = makeXsltParam(i18n("Aperture Value"));
+        map["i18nexifphotofocallength"]       = makeXsltParam(i18n("Focal Length"));
+        map["i18nexifgpsaltitude"]            = makeXsltParam(i18n("GPS Altitude"));
+        map["i18nexifgpslatitude"]            = makeXsltParam(i18n("GPS Latitude"));
+        map["i18nexifgpslongitude"]           = makeXsltParam(i18n("GPS Longitude"));
+    }
+
+    /**
+     * Add to map all the theme parameters, as specified by the user.
+     */
+    void addThemeParameters(XsltParameterMap& map)
+    {
+        Theme::ParameterList parameterList      = mTheme->parameterList();
+        QString themeInternalName               = mTheme->internalName();
+        Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
+        Theme::ParameterList::ConstIterator end = parameterList.constEnd();
+
+        for (; it != end ; ++it)
+        {
+            AbstractThemeParameter* const themeParameter = *it;
+            QByteArray internalName                      = themeParameter->internalName();
+            QString value                                = mInfo->getThemeParameterValue(themeInternalName,
+                                                                QString::fromLatin1(internalName),
+                                                                themeParameter->defaultValue());
+
+            map[internalName]                            = makeXsltParam(value);
+        }
+    }
+
     void logInfo(const QString& msg)
     {
-        mProgressDialog->progressWidget()->addedAction(msg, ProgressMessage);
+        wizard->progressView()->addedAction(msg, ProgressMessage);
     }
 
     void logError(const QString& msg)
     {
-        mProgressDialog->progressWidget()->addedAction(msg, ErrorMessage);
+        wizard->progressView()->addedAction(msg, ErrorMessage);
     }
 
     void logWarning(const QString& msg)
     {
-        mProgressDialog->progressWidget()->addedAction(msg, WarningMessage);
+        wizard->progressView()->addedAction(msg, WarningMessage);
         mWarnings = true;
     }
 };
 
 // ----------------------------------------------------------------------
 
-Generator::Generator(Interface* const interface,
-                     GalleryInfo* const info,
-                     KPBatchProgressDialog* const progressDialog)
+Generator::Generator(GalleryInfo* const info, HTMLWizard* const wizard)
     : QObject(),
       d(new Private)
 {
-    d->that            = this;
-    d->mInterface      = interface;
-    d->mInfo           = info;
-    d->mProgressDialog = progressDialog;
-    d->mWarnings       = false;
+    d->that      = this;
+    d->mInfo     = info;
+    d->mWarnings = false;
+    d->wizard    = wizard;
 
     connect(this, SIGNAL(logWarningRequested(QString)),
             SLOT(logWarning(QString)), Qt::QueuedConnection);
+
+    connect(d->wizard->progressBar(), SIGNAL(signalProgressCanceled()),
+            this, SLOT(slotCancel()));
 }
 
 Generator::~Generator()
@@ -576,6 +595,11 @@ bool Generator::warnings() const
 void Generator::logWarning(const QString& text)
 {
     d->logWarning(text);
+}
+
+void Generator::slotCancel()
+{
+    d->mCancel = true;
 }
 
 } // namespace Digikam

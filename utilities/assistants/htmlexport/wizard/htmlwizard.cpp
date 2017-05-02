@@ -47,8 +47,8 @@
 #include "galleryinfo.h"
 #include "invisiblebuttongroup.h"
 #include "theme.h"
+#include "htmloutputpage.h"
 #include "ui_imagesettingspage.h"
-#include "ui_outputpage.h"
 #include "ui_themepage.h"
 #include "ui_themeparameterspage.h"
 
@@ -89,7 +89,7 @@ public:
 
 typedef WizardPage<Ui_ThemePage>           ThemePage;
 typedef WizardPage<Ui_ThemeParametersPage> ThemeParametersPage;
-typedef WizardPage<Ui_OutputPage>          OutputPage;
+typedef WizardPage<HTMLOutputPage>         OutputPage;
 
 class ImageSettingsPage : public WizardPage<Ui_ImageSettingsPage>
 {
@@ -107,7 +107,7 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
-class Wizard::Private
+class HTMLWizard::Private
 {
 public:
 
@@ -208,7 +208,7 @@ public:
     }
 };
 
-Wizard::Wizard(QWidget* const parent, GalleryInfo* const info)
+HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     : QWizard(parent),
       d(new Private)
 {
@@ -248,22 +248,22 @@ Wizard::Wizard(QWidget* const parent, GalleryInfo* const info)
     updateFinishPageValidity();
 }
 
-Wizard::~Wizard()
+HTMLWizard::~HTMLWizard()
 {
     delete d;
 }
 
-void Wizard::updateFinishPageValidity()
+void HTMLWizard::updateFinishPageValidity()
 {
     setValid(d->mOutputPage->page(), !d->mOutputPage->kcfg_destUrl->fileDlgPath().isEmpty());
 }
 
-void Wizard::updateCollectionSelectorPageValidity()
+void HTMLWizard::updateCollectionSelectorPageValidity()
 {
     setValid(d->mCollectionSelectorPage, !d->mCollectionSelector->selectedAlbums().empty());
 }
 
-void Wizard::slotThemeSelectionChanged()
+void HTMLWizard::slotThemeSelectionChanged()
 {
     QListWidget* const listWidget = d->mThemePage->mThemeList;
     QTextBrowser* const browser   = d->mThemePage->mThemeInfo;
@@ -321,7 +321,7 @@ void Wizard::slotThemeSelectionChanged()
 /**
  * Update mInfo
  */
-void Wizard::accept()
+void HTMLWizard::accept()
 {
     d->mInfo->mCollectionList               = d->mCollectionSelector->selectedAlbums();
     Theme::Ptr theme                        = static_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme;
@@ -347,6 +347,16 @@ void Wizard::accept()
     d->mConfigManager->updateSettings();
 
     QWizard::accept();
+}
+
+DHistoryView* HTMLWizard::progressView() const
+{
+    return OutputPage->progressView;
+}
+
+DProgressWdg* HTMLWizard::progressBar() const
+{
+    return OutputPage->progressBar;
 }
 
 } // namespace Digikam

@@ -47,14 +47,14 @@ set(libhtmlexport_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/imagegenerationfunctor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/invisiblebuttongroup.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/wizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmloutputpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlwizard.cpp
 )
 
 ki18n_wrap_ui(libhtmlexport_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/wizard/imagesettingspage.ui
-              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/outputpage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/wizard/themepage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/wizard/themeparameterspage.ui
 )

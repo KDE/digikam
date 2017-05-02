@@ -31,6 +31,7 @@
 namespace Digikam
 {
 
+class HTMLWizard;
 class GalleryInfo;
 class ImageGenerationFunctor;
 
@@ -44,7 +45,7 @@ class Generator : public QObject
 
 public:
 
-    explicit Generator(Interface* const, GalleryInfo* const, KPBatchProgressDialog* const);
+    explicit Generator(GalleryInfo* const, HTMLWizard* const wizard);
     virtual ~Generator();
 
     bool run();
@@ -59,16 +60,17 @@ Q_SIGNALS:
      * QueuedConnection to switch between the ImageGenerationFunctor thread and
      * the gui thread.
      */
-    void logWarningRequested(const QString& text);
+    void logWarningRequested(const QString&);
 
 private Q_SLOTS:
 
-    void logWarning(const QString& text);
+    void logWarning(const QString&);
+    void slotCancel();
 
 private:
 
     class Private;
-    Private* d;
+    Private* const d;
 
     friend class Private;
     friend class ImageGenerationFunctor;

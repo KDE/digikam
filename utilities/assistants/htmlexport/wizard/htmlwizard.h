@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WIZARD_H
-#define WIZARD_H
+#ifndef HTML_WIZARD_H
+#define HTML_WIZARD_H
 
 // Qt includes
 
@@ -32,18 +32,23 @@ namespace Digikam
 {
 
 class GalleryInfo;
+class DHistoryView;
+class DProgressWdg;
 
 /**
  * The wizard used by the user to select the various settings.
  */
-class Wizard : public QWizard
+class HTMLWizard : public QWizard
 {
     Q_OBJECT
 
 public:
 
-    Wizard(QWidget* const parent, GalleryInfo* const info);
-    ~Wizard();
+    HTMLWizard(QWidget* const parent, GalleryInfo* const info);
+    ~HTMLWizard();
+
+    DHistoryView* progressView() const;
+    DProgressWdg* progressBar()  const;
 
 protected Q_SLOTS:
 
@@ -63,4 +68,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WIZARD_H
+#endif // HTML_WIZARD_H
