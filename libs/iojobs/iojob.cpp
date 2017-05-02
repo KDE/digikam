@@ -84,6 +84,20 @@ bool CopyJob::copyFolderRecursively(const QString& srcPath, const QString& dstPa
     return true;
 }
 
+bool CopyJob::copyFiles(const QStringList& srcPaths, const QString& dstPath)
+{
+    foreach (const QString& path, srcPaths)
+    {
+        QFileInfo fileInfo(path);
+        QString copyPath = dstPath + QLatin1Char('/') + fileInfo.fileName();
+
+        if (!QFile::copy(fileInfo.filePath(), copyPath))
+            return false;
+    }
+
+    return true;
+}
+
 void CopyJob::run()
 {
     QFileInfo srcInfo(m_src.toLocalFile());
