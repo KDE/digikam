@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DIGIKAM_KIPIIMAGECOLLECTIONSELECTOR_H
+#endif // DIGIKAM_KIPIIMAGECOLLECTIONSELECTOR_H

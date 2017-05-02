@@ -104,7 +104,7 @@ public:
     }
 
     void fillCollectionsFromCheckedLabels(QList<KIPI::ImageCollection>& collectionList,
-                                                   const QString& ext)
+                                          const QString& ext)
     {
         Album* const album = labelsSearchHandler->albumForSelectedItems();
 
