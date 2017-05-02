@@ -18,6 +18,7 @@ set(libalbum_SRCS
     albumselectdialog.cpp
     albumselectiontreeview.cpp
     albumselectwidget.cpp
+    albumselecttabs.cpp
     albumthumbnailloader.cpp
     albumtreeview.cpp
     albumwatch.cpp

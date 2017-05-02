@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ALBUMSELECTWIDGET_H
-#define ALBUMSELECTWIDGET_H
+#ifndef ALBUM_SELECT_WIDGET_H
+#define ALBUM_SELECT_WIDGET_H
 
 // Qt includes
 
@@ -51,6 +51,7 @@ class AlbumModificationHelper;
 class AlbumSelectTreeView: public AlbumTreeView
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -115,6 +116,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // ALBUMSELECTWIDGET_H
+#endif // ALBUM_SELECT_WIDGET_H

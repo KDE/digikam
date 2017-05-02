@@ -53,6 +53,7 @@ namespace Digikam
 class AlbumSelectTreeView::Private
 {
 public:
+
     Private() :
         albumModificationHelper(0),
         newAlbumAction(0)
@@ -63,13 +64,16 @@ public:
     QAction*                 newAlbumAction;
 };
 
-AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* const model, AlbumModificationHelper* const albumModificationHelper, QWidget* const parent)
+AlbumSelectTreeView::AlbumSelectTreeView(AlbumModel* const model,
+                                         AlbumModificationHelper* const albumModificationHelper,
+                                         QWidget* const parent)
     : AlbumTreeView(parent),
       d(new Private)
 {
     setAlbumModel(model);
     d->albumModificationHelper = albumModificationHelper;
-    d->newAlbumAction          = new QAction(QIcon::fromTheme(QLatin1String("folder-new")), i18n("Create New Album"), this);
+    d->newAlbumAction          = new QAction(QIcon::fromTheme(QLatin1String("folder-new")),
+                                             i18n("Create New Album"), this);
 }
 
 AlbumSelectTreeView::~AlbumSelectTreeView()
@@ -259,4 +263,4 @@ void AlbumSelectWidget::slotAlbumRenamed(Album* album)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam
