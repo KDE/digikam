@@ -5,7 +5,6 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -107,7 +106,8 @@ public:
         return size;
     }
 
-    QPoint adjustPosition(PrintOptionsPage* const optionsPage, const QSize& imageSize, const QSize& viewportSize)
+    QPoint adjustPosition(PrintOptionsPage* const optionsPage, const QSize& imageSize,
+                          const QSize& viewportSize)
     {
         Qt::Alignment alignment = optionsPage->alignment();
         int posX, posY;

@@ -5,7 +5,6 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef PRINTOPTIONSPAGE_H
-#define PRINTOPTIONSPAGE_H
+#ifndef PRINT_OPTIONS_PAGE_H
+#define PRINT_OPTIONS_PAGE_H
 
 // Qt includes
 
@@ -90,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PRINTOPTIONSPAGE_H */
+#endif // PRINT_OPTIONS_PAGE_H

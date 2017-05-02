@@ -5,7 +5,6 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef _DIGIKAM_CONFIG_H_
-#define _DIGIKAM_CONFIG_H_
+#ifndef _PRINT_CONFIG_H_
+#define _PRINT_CONFIG_H_
 
 // Qt includes
 
@@ -224,4 +223,4 @@ class DIGIKAM_EXPORT PrintConfig : public KConfigSkeleton
 
 } // namespace Digikam
 
-#endif // _DIGIKAM_CONFIG_H_
+#endif // _PRINT_CONFIG_H_

@@ -5,7 +5,6 @@
  *
  * Date        : 2009-02-06
  * Description : image editor printing interface.
- *               inspired from  Gwenview code (Aurelien Gateau).
  *
  * Copyright (C) 2009-2011 by Angelo Naselli <anaselli at linux dot it>
  *
@@ -22,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef SIGNALBLOCKER_H
-#define SIGNALBLOCKER_H
+#ifndef SIGNAL_BLOCKER_H
+#define SIGNAL_BLOCKER_H
 
 // Qt includes
 
@@ -60,4 +59,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* SIGNALBLOCKER_H */
+#endif // SIGNAL_BLOCKER_H
