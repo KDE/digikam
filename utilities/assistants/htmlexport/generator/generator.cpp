@@ -122,9 +122,12 @@ QByteArray makeXsltParam(const QString& txt)
     return param.toUtf8();
 }
 
-//// Generator::Private ////
-struct Generator::Private
+// ----------------------------------------------------------------------
+
+class Generator::Private
 {
+public:
+
     Generator*             that;
     Interface*             mInterface;
     GalleryInfo*           mInfo;
@@ -134,6 +137,8 @@ struct Generator::Private
     // State info
     bool                   mWarnings;
     QString                mXMLFileName;
+
+public:
 
     bool init()
     {
@@ -474,7 +479,6 @@ struct Generator::Private
         return true;
     }
 
-
     bool createDir(const QString& dirName)
     {
         QStringList parts = dirName.split(QLatin1Char('/'), QString::SkipEmptyParts);
@@ -513,6 +517,8 @@ struct Generator::Private
         mWarnings = true;
     }
 };
+
+// ----------------------------------------------------------------------
 
 Generator::Generator(Interface* const interface,
                      GalleryInfo* const info,

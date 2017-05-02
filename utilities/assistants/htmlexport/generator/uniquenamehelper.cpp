@@ -26,6 +26,14 @@
 namespace Digikam
 {
 
+UniqueNameHelper::UniqueNameHelper()
+{
+}
+
+UniqueNameHelper::~UniqueNameHelper()
+{
+}
+
 QString UniqueNameHelper::makeNameUnique(const QString& name)
 {
     QString uname    = name;

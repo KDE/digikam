@@ -61,17 +61,17 @@ Q_SIGNALS:
      */
     void logWarningRequested(const QString& text);
 
-private:
-
-    struct Private;
-    Private* d;
-
-    friend struct Private;
-    friend class ImageGenerationFunctor;
-
 private Q_SLOTS:
 
     void logWarning(const QString& text);
+
+private:
+
+    class Private;
+    Private* d;
+
+    friend class Private;
+    friend class ImageGenerationFunctor;
 };
 
 } // namespace Digikam
