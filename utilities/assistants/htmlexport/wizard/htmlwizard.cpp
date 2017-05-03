@@ -76,7 +76,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
 {
     d->mInfo                   = info;
 
-    setWindowTitle(i18n("Export image collections to HTML pages"));
+    setWindowTitle(i18n("Export Albums to HTML Pages"));
 
     // ---------------------------------------------------------------
 
