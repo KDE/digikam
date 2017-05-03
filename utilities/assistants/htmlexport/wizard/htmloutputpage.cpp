@@ -27,6 +27,7 @@
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QVBoxLayout>
+#include <QUrl>
 
 // KDE includes
 
@@ -47,6 +48,7 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 
     kcfg_destUrl = new DFileSelector(this);
     kcfg_destUrl->setObjectName(QLatin1String("kcfg_destUrl"));
+    kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
     textLabel1->setBuddy(kcfg_destUrl);
 
     QHBoxLayout* const hboxLayout = new QHBoxLayout();
@@ -75,6 +77,9 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     vboxLayout->addWidget(progressView);
     vboxLayout->addWidget(progressBar);
     vboxLayout->addItem(spacer1);
+
+    connect(kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
+            this, SIGNAL(completeChanged()));
 }
 
 HTMLOutputPage::~HTMLOutputPage()

@@ -48,6 +48,7 @@ set(libhtmlexport_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/imagegenerationfunctor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/invisiblebuttongroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlalbumselectorpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmloutputpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlimagesettingspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlthemepage.cpp

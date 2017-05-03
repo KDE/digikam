@@ -43,11 +43,11 @@
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "abstractthemeparameter.h"
-#include "albumselecttabs.h"
 #include "galleryinfo.h"
 #include "invisiblebuttongroup.h"
 #include "theme.h"
 #include "htmloutputpage.h"
+#include "htmlalbumselectorpage.h"
 #include "htmlthemepage.h"
 #include "htmlparameterspage.h"
 #include "htmlimagesettingspage.h"
@@ -62,8 +62,7 @@ public:
     GalleryInfo*                    mInfo;
     KConfigDialogManager*           mConfigManager;
 
-    AlbumSelectTabs*                mCollectionSelector;
-    DWizardPage*                    mCollectionSelectorPage;
+    HTMLAlbumSeletorPage*           mCollectionSelectorPage;
     HTMLParametersPage*             mParametersPage;
     HTMLImageSettingsPage*          mImageSettingsPage;
     HTMLOutputPage*                 mOutputPage;
@@ -74,61 +73,29 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     : QWizard(parent),
       d(new Private)
 {
-    d->mInfo                   = info;
-
     setWindowTitle(i18n("Export Albums to HTML Pages"));
 
-    // ---------------------------------------------------------------
-
-    d->mCollectionSelector     = new AlbumSelectTabs(this);
-    d->mCollectionSelectorPage = new DWizardPage(this, i18n("Album Selection"));
-    d->mCollectionSelectorPage->setPageWidget(d->mCollectionSelector);
-    updateCollectionSelectorPageValidity();
-
-    connect(d->mCollectionSelector, SIGNAL(signalAlbumSelectionChanged()),
-            this, SLOT(updateCollectionSelectorPageValidity()));
-
-    // ---------------------------------------------------------------
-
+    d->mInfo                   = info;
+    d->mCollectionSelectorPage = new HTMLAlbumSeletorPage(this, i18n("Albums Selection"));
     d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
     d->mThemePage->initThemePage(d->mInfo);
+    d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
+    d->mImageSettingsPage      = new HTMLImageSettingsPage(this, i18n("Image Settings"));
+    d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
+    d->mConfigManager          = new KConfigDialogManager(this, d->mInfo);
+    d->mConfigManager->updateWidgets();
 
     connect(d->mThemePage->mThemeList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotThemeSelectionChanged()));
 
-    // ---------------------------------------------------------------
-
-    d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
-    d->mImageSettingsPage      = new HTMLImageSettingsPage(this, i18n("Image Settings"));
-
-    // ---------------------------------------------------------------
-
-    d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
-    d->mOutputPage->kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
-
-    connect(d->mOutputPage->kcfg_destUrl, SIGNAL(textChanged(QString)),
-            this, SLOT(updateFinishPageValidity()));
-
-    // ---------------------------------------------------------------
-
-    d->mConfigManager          = new KConfigDialogManager(this, d->mInfo);
-    d->mConfigManager->updateWidgets();
-
     // Set page states
     // Pages can only be disabled after they have *all* been added!
     slotThemeSelectionChanged();
-
-    //updateFinishPageValidity();
 }
 
 HTMLWizard::~HTMLWizard()
 {
     delete d;
-}
-
-void HTMLWizard::updateCollectionSelectorPageValidity()
-{
-    setValid(d->mCollectionSelectorPage, !d->mCollectionSelector->selectedAlbums().empty());
 }
 
 void HTMLWizard::slotThemeSelectionChanged()
@@ -168,7 +135,7 @@ void HTMLWizard::slotThemeSelectionChanged()
 
         // Enable theme parameter page if there is any parameter
         Theme::ParameterList parameterList = theme->parameterList();
-        setAppropriate(d->mThemeParametersPage->page(), parameterList.size() > 0);
+        setAppropriate(d->mParametersPage->page(), parameterList.size() > 0);
 
         d->mImageSettingsPage->kcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
 
@@ -177,7 +144,7 @@ void HTMLWizard::slotThemeSelectionChanged()
             d->mImageSettingsPage->kcfg_thumbnailSquare->setChecked(true);
         }
 
-        d->fillThemeParametersPage(theme);
+        d->mParametersPage->fillThemeParametersPage(theme, d->mInfo);
     }
     else
     {
@@ -191,7 +158,7 @@ void HTMLWizard::slotThemeSelectionChanged()
  */
 void HTMLWizard::accept()
 {
-    d->mInfo->mCollectionList               = d->mCollectionSelector->selectedAlbums();
+    d->mInfo->mCollectionList               = d->mCollectionSelectorPage->mCollectionSelector->selectedAlbums();
     Theme::Ptr theme                        = static_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme;
     QString themeInternalName               = theme->internalName();
     d->mInfo->setTheme(themeInternalName);
