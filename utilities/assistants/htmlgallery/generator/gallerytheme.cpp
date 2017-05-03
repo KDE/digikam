@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "theme.h"
+#include "gallerytheme.h"
 
 // Qt includes
 
@@ -57,9 +57,9 @@ static const char* LIST_PARAMETER_TYPE    = "list";
 static const char* COLOR_PARAMETER_TYPE   = "color";
 static const char* INT_PARAMETER_TYPE     = "int";
 
-static Theme::List sList;
+static GalleryTheme::List sList;
 
-class Theme::Private
+class GalleryTheme::Private
 {
 public:
 
@@ -167,18 +167,18 @@ public:
     }
 };
 
-Theme::Theme()
+GalleryTheme::GalleryTheme()
    : d(new Private)
 {
 }
 
-Theme::~Theme()
+GalleryTheme::~GalleryTheme()
 {
     delete d->mDesktopFile;
     delete d;
 }
 
-const Theme::List& Theme::getList()
+const GalleryTheme::List& GalleryTheme::getList()
 {
     if (sList.isEmpty())
     {
@@ -204,13 +204,13 @@ const Theme::List& Theme::getList()
 
         for (; it != end ; ++it)
         {
-            Theme* const theme   = new Theme;
+            GalleryTheme* const theme   = new GalleryTheme;
             theme->d->init(*it);
             QString internalName = theme->internalName();
 
             if (!internalNameList.contains(internalName))
             {
-                sList << Theme::Ptr(theme);
+                sList << GalleryTheme::Ptr(theme);
                 internalNameList << internalName;
             }
         }
@@ -219,14 +219,14 @@ const Theme::List& Theme::getList()
     return sList;
 }
 
-Theme::Ptr Theme::findByInternalName(const QString& internalName)
+GalleryTheme::Ptr GalleryTheme::findByInternalName(const QString& internalName)
 {
-    const Theme::List& lst        = getList();
-    Theme::List::ConstIterator it = lst.constBegin(), end=lst.constEnd();
+    const GalleryTheme::List& lst        = getList();
+    GalleryTheme::List::ConstIterator it = lst.constBegin(), end=lst.constEnd();
 
     for (; it != end ; ++it)
     {
-        Theme::Ptr theme = *it;
+        GalleryTheme::Ptr theme = *it;
 
         if (theme->internalName() == internalName)
         {
@@ -234,55 +234,55 @@ Theme::Ptr Theme::findByInternalName(const QString& internalName)
         }
     }
 
-    return Theme::Ptr(0);
+    return GalleryTheme::Ptr(0);
 }
 
-QString Theme::internalName() const
+QString GalleryTheme::internalName() const
 {
     return d->mUrl.fileName();
 }
 
-QString Theme::name() const
+QString GalleryTheme::name() const
 {
     return d->mDesktopFile->readName();
 }
 
-QString Theme::comment() const
+QString GalleryTheme::comment() const
 {
     return d->mDesktopFile->readComment();
 }
 
-QString Theme::directory() const
+QString GalleryTheme::directory() const
 {
     return d->mUrl.adjusted(QUrl::RemoveFilename).path();
 }
 
-QString Theme::authorName() const
+QString GalleryTheme::authorName() const
 {
     return d->mDesktopFile->group(AUTHOR_GROUP).readEntry("Name");
 }
 
-QString Theme::authorUrl() const
+QString GalleryTheme::authorUrl() const
 {
     return d->mDesktopFile->group(AUTHOR_GROUP).readEntry("Url");
 }
 
-QString Theme::previewName() const
+QString GalleryTheme::previewName() const
 {
-        return d->mDesktopFile->group(PREVIEW_GROUP).readEntry("Name");
+    return d->mDesktopFile->group(PREVIEW_GROUP).readEntry("Name");
 }
 
-QString Theme::previewUrl() const
+QString GalleryTheme::previewUrl() const
 {
-        return d->mDesktopFile->group(PREVIEW_GROUP).readEntry("Url");
+    return d->mDesktopFile->group(PREVIEW_GROUP).readEntry("Url");
 }
 
-bool Theme::allowNonsquareThumbnails() const
+bool GalleryTheme::allowNonsquareThumbnails() const
 {
     return d->mDesktopFile->group(OPTIONS_GROUP).readEntry("Allow non-square thumbnails", false);
 }
 
-Theme::ParameterList Theme::parameterList() const
+GalleryTheme::ParameterList GalleryTheme::parameterList() const
 {
     return d->mParameterList;
 }

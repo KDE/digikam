@@ -82,7 +82,7 @@ HTMLParametersPage::~HTMLParametersPage()
 {
 }
 
-void HTMLParametersPage::fillThemeParametersPage(Theme::Ptr theme, GalleryInfo* const info)
+void HTMLParametersPage::fillThemeParametersPage(GalleryTheme::Ptr theme, GalleryInfo* const info)
 {
     mThemeParameterWidgetFromName.clear();
 
@@ -93,10 +93,10 @@ void HTMLParametersPage::fillThemeParametersPage(Theme::Ptr theme, GalleryInfo* 
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Create widgets
-    Theme::ParameterList parameterList      = theme->parameterList();
-    QString themeInternalName               = theme->internalName();
-    Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
-    Theme::ParameterList::ConstIterator end = parameterList.constEnd();
+    GalleryTheme::ParameterList parameterList      = theme->parameterList();
+    QString themeInternalName                      = theme->internalName();
+    GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
+    GalleryTheme::ParameterList::ConstIterator end = parameterList.constEnd();
 
     for (; it != end ; ++it)
     {

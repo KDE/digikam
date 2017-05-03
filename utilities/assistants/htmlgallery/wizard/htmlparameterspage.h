@@ -34,7 +34,7 @@
 // Local includes
 
 #include "dwizardpage.h"
-#include "theme.h"
+#include "gallerytheme.h"
 
 namespace Digikam
 {
@@ -48,7 +48,7 @@ public:
     explicit HTMLParametersPage(QWizard* const dialog, const QString& title);
     ~HTMLParametersPage();
 
-    void fillThemeParametersPage(Theme::Ptr theme, GalleryInfo* const info);
+    void fillThemeParametersPage(GalleryTheme::Ptr theme, GalleryInfo* const info);
 
 public:
 

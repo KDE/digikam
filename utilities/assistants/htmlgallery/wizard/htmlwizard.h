@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "theme.h"
+#include "gallerytheme.h"
 #include "album.h"
 
 namespace Digikam
@@ -50,13 +50,13 @@ public:
     explicit HTMLWizard(QWidget* const parent);
     ~HTMLWizard();
 
-    int parametersPageId()       const;
-    int imageSettingPageId()     const;
+    int parametersPageId()                             const;
+    int imageSettingPageId()                           const;
 
-    GalleryInfo* galleryInfo()                          const;
-    Theme::Ptr   theme()                                const;
-    AlbumList    albums()                               const;
-    QWidget* parametersWidget(const QByteArray& iname)  const;
+    GalleryInfo* galleryInfo()                         const;
+    GalleryTheme::Ptr   theme()                        const;
+    AlbumList    albums()                              const;
+    QWidget* parametersWidget(const QByteArray& iname) const;
     void updateSettings();
 
 private Q_SLOTS:

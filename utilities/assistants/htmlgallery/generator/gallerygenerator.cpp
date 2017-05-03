@@ -60,7 +60,7 @@
 #include "imageelement.h"
 #include "imagegenerationfunctor.h"
 #include "galleryinfo.h"
-#include "theme.h"
+#include "gallerytheme.h"
 #include "xmlutils.h"
 #include "htmlwizard.h"
 #include "iojob.h"
@@ -83,24 +83,24 @@ public:
 
 public:
 
-    GalleryGenerator*    that;
-    GalleryInfo*  mInfo;
-    Theme::Ptr    mTheme;
+    GalleryGenerator* that;
+    GalleryInfo*      mInfo;
+    GalleryTheme::Ptr mTheme;
 
     // State info
-    bool          mWarnings;
-    QString       mXMLFileName;
+    bool              mWarnings;
+    QString           mXMLFileName;
 
-    bool          mCancel;
-    DHistoryView* mPview;
-    DProgressWdg* mPbar;
+    bool              mCancel;
+    DHistoryView*     mPview;
+    DProgressWdg*     mPbar;
 
 public:
 
     bool init()
     {
         mCancel = false;
-        mTheme  = Theme::findByInternalName(mInfo->theme());
+        mTheme  = GalleryTheme::findByInternalName(mInfo->theme());
 
         if (!mTheme)
         {
@@ -481,10 +481,10 @@ public:
      */
     void addThemeParameters(XsltParameterMap& map)
     {
-        Theme::ParameterList parameterList      = mTheme->parameterList();
+        GalleryTheme::ParameterList parameterList      = mTheme->parameterList();
         QString themeInternalName               = mTheme->internalName();
-        Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
-        Theme::ParameterList::ConstIterator end = parameterList.constEnd();
+        GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
+        GalleryTheme::ParameterList::ConstIterator end = parameterList.constEnd();
 
         for (; it != end ; ++it)
         {

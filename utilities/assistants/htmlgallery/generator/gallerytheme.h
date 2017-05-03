@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef THEME_H
-#define THEME_H
+#ifndef GALLERY_THEME_H
+#define GALLERY_THEME_H
 
 // Qt includes
 
@@ -39,17 +39,17 @@ class AbstractThemeParameter;
  * An HTML theme. This class gives access to the various theme properties,
  * including the theme parameters.
  */
-class Theme
+class GalleryTheme
 {
 public:
 
-    typedef QSharedPointer<Theme>          Ptr;
+    typedef QSharedPointer<GalleryTheme>   Ptr;
     typedef QList<Ptr>                     List;
     typedef QList<AbstractThemeParameter*> ParameterList;
 
 public:
 
-    ~Theme();
+    ~GalleryTheme();
 
     // Internal theme name == name of theme folder
     QString internalName()          const;
@@ -78,7 +78,7 @@ public:
 
 private:
 
-    Theme();
+    GalleryTheme();
 
     class Private;
     Private* const d;
@@ -86,4 +86,4 @@ private:
 
 } // namespace Digikam
 
-#endif // THEME_H
+#endif // GALLERY_THEME_H

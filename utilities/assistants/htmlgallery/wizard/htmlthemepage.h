@@ -32,7 +32,7 @@
 // Local includes
 
 #include "dwizardpage.h"
-#include "theme.h"
+#include "gallerytheme.h"
 
 namespace Digikam
 {
@@ -43,13 +43,13 @@ class ThemeListBoxItem : public QListWidgetItem
 {
 public:
 
-    ThemeListBoxItem(QListWidget* const list, Theme::Ptr theme)
+    ThemeListBoxItem(QListWidget* const list, GalleryTheme::Ptr theme)
         : QListWidgetItem(theme->name(), list),
           mTheme(theme)
     {
     }
 
-    Theme::Ptr mTheme;
+    GalleryTheme::Ptr mTheme;
 };
 
 // ------------------------------------------------------------------------

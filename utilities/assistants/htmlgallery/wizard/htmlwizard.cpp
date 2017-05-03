@@ -108,8 +108,7 @@ void HTMLWizard::slotThemeSelectionChanged()
 
     if (listWidget->currentItem())
     {
-        Theme::Ptr theme = static_cast<ThemeListBoxItem*>(listWidget->currentItem())->mTheme;
-
+        GalleryTheme::Ptr theme       = static_cast<ThemeListBoxItem*>(listWidget->currentItem())->mTheme;
         QString url                   = theme->authorUrl();
         QString author                = theme->authorName();
         bool allowNonsquareThumbnails = theme->allowNonsquareThumbnails();
@@ -165,7 +164,7 @@ GalleryInfo* HTMLWizard::galleryInfo() const
     return d->mInfo;
 }
 
-Theme::Ptr HTMLWizard::theme() const
+GalleryTheme::Ptr HTMLWizard::theme() const
 {
     return (dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme);
 }

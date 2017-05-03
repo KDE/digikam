@@ -63,13 +63,13 @@ HTMLThemePage::~HTMLThemePage()
 
 void HTMLThemePage::initThemePage(GalleryInfo* const info)
 {
-    Theme::List list               = Theme::getList();
-    Theme::List::ConstIterator it  = list.constBegin();
-    Theme::List::ConstIterator end = list.constEnd();
+    GalleryTheme::List list               = GalleryTheme::getList();
+    GalleryTheme::List::ConstIterator it  = list.constBegin();
+    GalleryTheme::List::ConstIterator end = list.constEnd();
 
     for (; it != end ; ++it)
     {
-        Theme::Ptr theme             = *it;
+        GalleryTheme::Ptr theme      = *it;
         ThemeListBoxItem* const item = new ThemeListBoxItem(mThemeList, theme);
 
         if (theme->internalName() == info->theme())
@@ -93,7 +93,7 @@ int HTMLThemePage::nextId() const
 {
     if (mThemeList->currentItem())
     {
-        Theme::Ptr theme = static_cast<ThemeListBoxItem*>(mThemeList->currentItem())->mTheme;
+        GalleryTheme::Ptr theme = static_cast<ThemeListBoxItem*>(mThemeList->currentItem())->mTheme;
 
         // Enable theme parameter page as next page if there is any parameter
 

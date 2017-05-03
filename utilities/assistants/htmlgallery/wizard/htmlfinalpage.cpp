@@ -70,14 +70,14 @@ void HTMLFinalPage::initializePage()
 
     GalleryInfo* const info                 = wizard->galleryInfo();
     info->mCollectionList                   = wizard->albums();
-    Theme::Ptr theme                        = wizard->theme();
+    GalleryTheme::Ptr theme                 = wizard->theme();
 
     QString themeInternalName               = theme->internalName();
     info->setTheme(themeInternalName);
 
-    Theme::ParameterList parameterList      = theme->parameterList();
-    Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
-    Theme::ParameterList::ConstIterator end = parameterList.constEnd();
+    GalleryTheme::ParameterList parameterList      = theme->parameterList();
+    GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
+    GalleryTheme::ParameterList::ConstIterator end = parameterList.constEnd();
 
     for (; it != end ; ++it)
     {
