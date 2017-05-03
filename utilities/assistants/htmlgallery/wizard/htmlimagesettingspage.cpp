@@ -42,9 +42,9 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 {
     setObjectName(QLatin1String("ImageSettingsPage"));
 
-    QWidget* const vb = new QWidget(this);
+    QWidget* const box = new QWidget(this);
 
-    label             = new QLabel(this);
+    label              = new QLabel(this);
     label->setObjectName(QLatin1String("label"));
     QFont font;
     font.setBold(true);
@@ -180,9 +180,8 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
     verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout       = new QGridLayout(vb);
-    gridLayout->setSpacing(6);
-    gridLayout->setContentsMargins(11, 11, 11, 11);
+    gridLayout       = new QGridLayout(box);
+    gridLayout->setContentsMargins(QMargins());
     gridLayout->setObjectName(QLatin1String("gridLayout"));
     gridLayout->addWidget(label,                    0, 0, 1, 2);
     gridLayout->addWidget(mSaveImageButton,         1, 0, 1, 2);
@@ -208,7 +207,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     gridLayout->addWidget(kcfg_thumbnailSquare,    12, 2, 1, 2);
     gridLayout->addItem(verticalSpacer_2,          13, 3, 1, 1);
 
-    setPageWidget(vb);
+    setPageWidget(box);
 
     QWidget::setTabOrder(mSaveImageButton,          kcfg_fullFormat);
     QWidget::setTabOrder(kcfg_fullFormat,           kcfg_fullQuality);

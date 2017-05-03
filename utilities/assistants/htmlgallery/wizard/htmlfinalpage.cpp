@@ -49,14 +49,15 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("FinalPage"));
 
-    DVBox* const vb = new DVBox(this);
+    DVBox* const vbox = new DVBox(this);
 
-    mProgressView = new DHistoryView(vb);
-    mProgressBar  = new DProgressWdg(vb);
+    mProgressView = new DHistoryView(vbox);
+    mProgressBar  = new DProgressWdg(vbox);
 
-    vb->setStretchFactor(mProgressBar, 10);
+    vbox->setStretchFactor(mProgressBar, 10);
+    vbox->setContentsMargins(QMargins());
 
-    setPageWidget(vb);
+    setPageWidget(vbox);
 }
 
 HTMLFinalPage::~HTMLFinalPage()

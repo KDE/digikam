@@ -41,9 +41,9 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("OutputPage"));
 
-    QWidget* const vb = new QWidget(this);
+    QWidget* const box = new QWidget(this);
 
-    textLabel1        = new QLabel(this);
+    textLabel1         = new QLabel(this);
     textLabel1->setObjectName(QLatin1String("textLabel1"));
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Destination folder:"));
@@ -65,15 +65,14 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 
     QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    QVBoxLayout* const vboxLayout = new QVBoxLayout(vb);
-    vboxLayout->setSpacing(6);
-    vboxLayout->setContentsMargins(0, 0, 0, 0);
+    QVBoxLayout* const vboxLayout = new QVBoxLayout(box);
+    vboxLayout->setContentsMargins(QMargins());
     vboxLayout->setObjectName(QLatin1String("vboxLayout"));
     vboxLayout->addLayout(hboxLayout);
     vboxLayout->addWidget(kcfg_openInBrowser);
     vboxLayout->addItem(spacer1);
 
-    setPageWidget(vb);
+    setPageWidget(box);
 
     connect(kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
             this, SIGNAL(completeChanged()));

@@ -44,15 +44,17 @@ HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("ThemePage"));
 
-    DHBox* const hb = new DHBox(this);
+    DHBox* const hbox = new DHBox(this);
 
-    mThemeList      = new QListWidget(hb);
+    mThemeList        = new QListWidget(hbox);
     mThemeList->setObjectName(QLatin1String("mThemeList"));
 
-    mThemeInfo = new QTextBrowser(hb);
+    mThemeInfo = new QTextBrowser(hbox);
     mThemeInfo->setObjectName(QLatin1String("mThemeInfo"));
 
-    setPageWidget(hb);
+    hbox->setContentsMargins(QMargins());
+
+    setPageWidget(hbox);
 }
 
 HTMLThemePage::~HTMLThemePage()
