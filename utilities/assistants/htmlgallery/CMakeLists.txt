@@ -31,7 +31,7 @@ add_definitions(${LIBXSLT_DEFINITIONS}
                 ${LIBXML2_DEFINITIONS}
 )
 
-set(libhtmlexport_SRCS
+set(libhtmlgallery_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/abstractthemeparameter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/intthemeparameter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/listthemeparameter.cpp
@@ -55,6 +55,6 @@ set(libhtmlexport_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.cpp
 )
 
-add_library(htmlexport_src OBJECT ${libhtmlexport_SRCS})
+add_library(htmlgallery_src OBJECT ${libhtmlgallery_SRCS})
 
 install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)
