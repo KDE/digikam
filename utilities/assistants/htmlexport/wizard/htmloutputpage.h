@@ -46,6 +46,8 @@ public:
     explicit HTMLOutputPage(QWizard* const dialog, const QString& title);
     ~HTMLOutputPage();
 
+    bool validatePage();
+
 public:
 
     QLabel*        textLabel1;
@@ -53,10 +55,6 @@ public:
     DFileSelector* kcfg_destUrl;
     DHistoryView*  progressView;
     DProgressWdg*  progressBar;
-
-protected:
-
-    bool validatePage();
 };
 
 } // namespace Digikam

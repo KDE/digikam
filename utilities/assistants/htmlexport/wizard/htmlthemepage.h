@@ -62,9 +62,7 @@ public:
     ~HTMLThemePage();
 
     void initThemePage(GalleryInfo* const info);
-
-protected:
-
+    int  nextId() const;
     bool validatePage();
 
 public:

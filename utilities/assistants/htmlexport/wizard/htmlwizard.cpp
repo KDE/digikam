@@ -59,14 +59,14 @@ class HTMLWizard::Private
 {
 public:
 
-    GalleryInfo*                    mInfo;
-    KConfigDialogManager*           mConfigManager;
+    GalleryInfo*           mInfo;
+    KConfigDialogManager*  mConfigManager;
 
-    HTMLAlbumSeletorPage*           mCollectionSelectorPage;
-    HTMLParametersPage*             mParametersPage;
-    HTMLImageSettingsPage*          mImageSettingsPage;
-    HTMLOutputPage*                 mOutputPage;
-    HTMLThemePage*                  mThemePage;
+    HTMLAlbumSelectorPage* mCollectionSelectorPage;
+    HTMLParametersPage*    mParametersPage;
+    HTMLImageSettingsPage* mImageSettingsPage;
+    HTMLOutputPage*        mOutputPage;
+    HTMLThemePage*         mThemePage;
 };
 
 HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
@@ -76,7 +76,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     setWindowTitle(i18n("Export Albums to HTML Pages"));
 
     d->mInfo                   = info;
-    d->mCollectionSelectorPage = new HTMLAlbumSeletorPage(this, i18n("Albums Selection"));
+    d->mCollectionSelectorPage = new HTMLAlbumSelectorPage(this, i18n("Albums Selection"));
     d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
     d->mThemePage->initThemePage(d->mInfo);
     d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
@@ -104,7 +104,7 @@ void HTMLWizard::slotThemeSelectionChanged()
 
     if (listWidget->currentItem())
     {
-        Theme::Ptr theme=static_cast<ThemeListBoxItem*>(listWidget->currentItem())->mTheme;
+        Theme::Ptr theme = static_cast<ThemeListBoxItem*>(listWidget->currentItem())->mTheme;
 
         QString url                   = theme->authorUrl();
         QString author                = theme->authorName();
@@ -130,11 +130,6 @@ void HTMLWizard::slotThemeSelectionChanged()
                       i18n("Author: %1", author);
 
         browser->setHtml(txt);
-
-        // Enable theme parameter page if there is any parameter
-
-        Theme::ParameterList parameterList = theme->parameterList();
-        setAppropriate(d->mParametersPage->page(), parameterList.size() > 0);
 
         d->mImageSettingsPage->kcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
 
@@ -190,6 +185,16 @@ DHistoryView* HTMLWizard::progressView() const
 DProgressWdg* HTMLWizard::progressBar() const
 {
     return d->mOutputPage->progressBar;
+}
+
+int HTMLWizard::parametersPageId() const
+{
+    return d->mParametersPage->id();
+}
+
+int HTMLWizard::imageSettingPageId() const
+{
+    return d->mImageSettingsPage->id();
 }
 
 } // namespace Digikam

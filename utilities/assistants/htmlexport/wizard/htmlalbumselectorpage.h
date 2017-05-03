@@ -36,14 +36,12 @@
 namespace Digikam
 {
 
-class HTMLAlbumSeletorPage : public DWizardPage
+class HTMLAlbumSelectorPage : public DWizardPage
 {
 public:
 
-    explicit HTMLAlbumSeletorPage(QWizard* const dialog, const QString& title);
-    ~HTMLAlbumSeletorPage();
-
-protected:
+    explicit HTMLAlbumSelectorPage(QWizard* const dialog, const QString& title);
+    ~HTMLAlbumSelectorPage();
 
     bool validatePage();
 

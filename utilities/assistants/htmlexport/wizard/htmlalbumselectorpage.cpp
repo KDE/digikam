@@ -25,10 +25,10 @@
 namespace Digikam
 {
 
-HTMLAlbumSeletorPage::HTMLAlbumSeletorPage(QWizard* const dialog, const QString& title)
+HTMLAlbumSelectorPage::HTMLAlbumSelectorPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title)
 {
-    setObjectName(QLatin1String("AlbumSeletorPage"));
+    setObjectName(QLatin1String("AlbumSelectorPage"));
 
     mCollectionSelector = new AlbumSelectTabs(this);
     setPageWidget(mCollectionSelector);
@@ -37,11 +37,11 @@ HTMLAlbumSeletorPage::HTMLAlbumSeletorPage(QWizard* const dialog, const QString&
             this, SIGNAL(completeChanged()));
 }
 
-HTMLAlbumSeletorPage::~HTMLAlbumSeletorPage()
+HTMLAlbumSelectorPage::~HTMLAlbumSelectorPage()
 {
 }
 
-bool HTMLAlbumSeletorPage::validatePage()
+bool HTMLAlbumSelectorPage::validatePage()
 {
     return (!mCollectionSelector->selectedAlbums().empty());
 }

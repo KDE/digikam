@@ -50,6 +50,9 @@ public:
     DHistoryView* progressView() const;
     DProgressWdg* progressBar()  const;
 
+    int parametersPageId()       const;
+    int imageSettingPageId()     const;
+
 protected Q_SLOTS:
 
     virtual void accept();
