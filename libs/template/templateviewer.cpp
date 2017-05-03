@@ -42,8 +42,6 @@
 #include "templatemanager.h"
 #include "countryselector.h"
 
-
-
 namespace Digikam
 {
 
