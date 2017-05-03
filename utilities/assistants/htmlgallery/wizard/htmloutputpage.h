@@ -23,12 +23,6 @@
 #ifndef HTML_OUTPUT_PAGE_H
 #define HTML_OUTPUT_PAGE_H
 
-// Qt includes
-
-#include <QCheckBox>
-#include <QLabel>
-#include <QWidget>
-
 // Local includes
 
 #include "dwizardpage.h"
@@ -48,8 +42,6 @@ public:
 
 public:
 
-    QLabel*        textLabel1;
-    QCheckBox*     kcfg_openInBrowser;
     DFileSelector* kcfg_destUrl;
 };
 

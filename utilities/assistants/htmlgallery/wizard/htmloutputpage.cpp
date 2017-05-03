@@ -27,7 +27,10 @@
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QVBoxLayout>
+#include <QLabel>
 #include <QUrl>
+#include <QCheckBox>
+#include <QWidget>
 
 // KDE includes
 
@@ -41,9 +44,9 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("OutputPage"));
 
-    QWidget* const box = new QWidget(this);
+    QWidget* const box       = new QWidget(this);
 
-    textLabel1         = new QLabel(this);
+    QLabel* const textLabel1 = new QLabel(this);
     textLabel1->setObjectName(QLatin1String("textLabel1"));
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Destination folder:"));
@@ -59,7 +62,7 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     hboxLayout->addWidget(textLabel1);
     hboxLayout->addWidget(kcfg_destUrl);
 
-    kcfg_openInBrowser = new QCheckBox(this);
+    QCheckBox* const kcfg_openInBrowser = new QCheckBox(this);
     kcfg_openInBrowser->setObjectName(QLatin1String("kcfg_openInBrowser"));
     kcfg_openInBrowser->setText(i18n("Open in browser"));
 
