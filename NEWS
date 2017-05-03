@@ -32,5 +32,6 @@ BUGFIXES FROM BUGZILLA:
 021 ==> 374838 - Advanced Search not finding "Not Tagged" images.
 022 ==> 379326 - Import-Tool doesn't rename properly.
 023 ==> 379442 - AppImage package does not find the files needed for panorama.
-024 ==> 
+024 ==> 379226 - digiKam Properties Metadata not shown in Editor Captions.
+025 ==> 
 
