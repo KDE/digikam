@@ -48,27 +48,12 @@
 #include "invisiblebuttongroup.h"
 #include "theme.h"
 #include "htmloutputpage.h"
+#include "htmlthemepage.h"
 #include "ui_imagesettingspage.h"
-#include "ui_themepage.h"
 #include "ui_themeparameterspage.h"
 
 namespace Digikam
 {
-
-class ThemeListBoxItem : public QListWidgetItem
-{
-public:
-
-    ThemeListBoxItem(QListWidget* const list, Theme::Ptr theme)
-        : QListWidgetItem(theme->name(), list),
-          mTheme(theme)
-    {
-    }
-
-    Theme::Ptr mTheme;
-};
-
-// ----------------------------------------------------------------------------------------------
 
 template <class Ui_Class>
 
@@ -87,7 +72,6 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
-typedef WizardPage<Ui_ThemePage>           ThemePage;
 typedef WizardPage<Ui_ThemeParametersPage> ThemeParametersPage;
 
 class ImageSettingsPage : public WizardPage<Ui_ImageSettingsPage>
@@ -115,10 +99,10 @@ public:
 
     AlbumSelectTabs*                mCollectionSelector;
     DWizardPage*                    mCollectionSelectorPage;
-    ThemePage*                      mThemePage;
     ThemeParametersPage*            mThemeParametersPage;
     ImageSettingsPage*              mImageSettingsPage;
     HTMLOutputPage*                 mOutputPage;
+    HTMLThemePage*                  mThemePage;
 
     QMap<QByteArray, QWidget*>      mThemeParameterWidgetFromName;
 
@@ -225,8 +209,8 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     connect(d->mCollectionSelector, SIGNAL(signalAlbumSelectionChanged()),
             this, SLOT(updateCollectionSelectorPageValidity()));
 
-    d->mThemePage              = new ThemePage(this, i18n("Theme"));
-    d->initThemePage();
+    d->mThemePage              = new HTMLThemePage(this, i18n("Theme"));
+    d->mThemePage->initThemePage(d->mInfo);
 
     connect(d->mThemePage->mThemeList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotThemeSelectionChanged()));

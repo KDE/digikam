@@ -26,7 +26,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     ${LIBXML2_INCLUDE_DIR}
 
                     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/
-                    ${CMAKE_CURRENT_SOURCE_DIR}/genrator/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/generator/
                     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/
 )
 
@@ -49,13 +49,13 @@ set(libhtmlexport_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/invisiblebuttongroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmloutputpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlthemepage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlwizard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.cpp
 )
 
 ki18n_wrap_ui(libhtmlexport_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/wizard/imagesettingspage.ui
-              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/themepage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/wizard/themeparameterspage.ui
 )
 
