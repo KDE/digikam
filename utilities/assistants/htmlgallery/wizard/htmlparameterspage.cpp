@@ -75,6 +75,7 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
     mScrollArea->setWidget(mContent);
 
     vbox->setContentsMargins(QMargins());
+    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(vbox);
 }
@@ -137,7 +138,9 @@ void HTMLParametersPage::fillThemeParametersPage(GalleryTheme::Ptr theme, Galler
 
     // Add spacer at the end, so that widgets aren't spread on the whole parent height
 
-    QSpacerItem* const spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem* const spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum,
+                                                QSizePolicy::Expanding);
+
     layout->addItem(spacer, layout->rowCount(), 0);
 }
 

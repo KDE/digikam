@@ -32,6 +32,8 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QRadioButton>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -112,6 +114,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
     QHBoxLayout* const horizontalLayout_2 = new QHBoxLayout(widget);
     horizontalLayout_2->setContentsMargins(QMargins());
+    horizontalLayout_2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     horizontalLayout_2->setObjectName(QLatin1String("horizontalLayout_2"));
     horizontalLayout_2->addWidget(kcfg_fullResize);
     horizontalLayout_2->addWidget(kcfg_fullSize);
@@ -127,6 +130,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
     QHBoxLayout* const horizontalLayout = new QHBoxLayout();
     horizontalLayout->setContentsMargins(QMargins());
+    horizontalLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     horizontalLayout->setObjectName(QLatin1String("horizontalLayout"));
     horizontalLayout->addWidget(kcfg_copyOriginalImage);
     horizontalLayout->addItem(horizontalSpacer_3);
@@ -197,6 +201,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
     QGridLayout* const gridLayout       = new QGridLayout(box);
     gridLayout->setContentsMargins(QMargins());
+    gridLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     gridLayout->setObjectName(QLatin1String("gridLayout"));
     gridLayout->addWidget(label,                    0, 0, 1, 2);
     gridLayout->addWidget(mSaveImageButton,         1, 0, 1, 2);

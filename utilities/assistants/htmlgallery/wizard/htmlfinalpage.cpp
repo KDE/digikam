@@ -28,6 +28,8 @@
 #include <QVBoxLayout>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -56,6 +58,7 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
 
     vbox->setStretchFactor(mProgressBar, 10);
     vbox->setContentsMargins(QMargins());
+    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(vbox);
 }

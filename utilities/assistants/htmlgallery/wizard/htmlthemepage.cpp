@@ -25,6 +25,8 @@
 // Qt includes
 
 #include <QHBoxLayout>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -53,6 +55,7 @@ HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
     mThemeInfo->setObjectName(QLatin1String("mThemeInfo"));
 
     hbox->setContentsMargins(QMargins());
+    hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(hbox);
 }

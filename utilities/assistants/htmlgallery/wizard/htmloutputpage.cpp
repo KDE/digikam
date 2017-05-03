@@ -31,6 +31,8 @@
 #include <QUrl>
 #include <QCheckBox>
 #include <QWidget>
+#include <QApplication>
+#include <QStyle>
 
 // KDE includes
 
@@ -57,7 +59,8 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     textLabel1->setBuddy(kcfg_destUrl);
 
     QHBoxLayout* const hboxLayout = new QHBoxLayout();
-    hboxLayout->setSpacing(6);
+    hboxLayout->setContentsMargins(QMargins());
+    hboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hboxLayout->setObjectName(QLatin1String("hboxLayout"));
     hboxLayout->addWidget(textLabel1);
     hboxLayout->addWidget(kcfg_destUrl);
@@ -66,10 +69,12 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     kcfg_openInBrowser->setObjectName(QLatin1String("kcfg_openInBrowser"));
     kcfg_openInBrowser->setText(i18n("Open in browser"));
 
-    QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum,
+                                                    QSizePolicy::Expanding);
 
     QVBoxLayout* const vboxLayout = new QVBoxLayout(box);
     vboxLayout->setContentsMargins(QMargins());
+    vboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vboxLayout->setObjectName(QLatin1String("vboxLayout"));
     vboxLayout->addLayout(hboxLayout);
     vboxLayout->addWidget(kcfg_openInBrowser);
