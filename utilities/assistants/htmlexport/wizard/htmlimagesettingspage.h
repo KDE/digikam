@@ -51,36 +51,36 @@ public:
 
 public:
 
-    QGridLayout *gridLayout;
-    QLabel *label;
-    QRadioButton *mSaveImageButton;
-    QLabel *textLabel2_2_2_2;
-    QComboBox *kcfg_fullFormat;
-    QSpacerItem *spacer4;
-    QLabel *textLabel4;
-    QSpinBox *kcfg_fullQuality;
-    QSpacerItem *horizontalSpacer_6;
-    QWidget *widget;
-    QHBoxLayout *horizontalLayout_2;
-    QCheckBox *kcfg_fullResize;
-    QSpinBox *kcfg_fullSize;
-    QSpacerItem *horizontalSpacer_2;
-    QHBoxLayout *horizontalLayout;
-    QCheckBox *kcfg_copyOriginalImage;
-    QSpacerItem *horizontalSpacer_3;
-    QRadioButton *mUseOriginalImageButton;
-    QSpacerItem *verticalSpacer;
-    QLabel *label_2;
-    QLabel *textLabel2_2_2;
-    QComboBox *kcfg_thumbnailFormat;
-    QSpacerItem *horizontalSpacer_7;
-    QLabel *textLabel4_2;
-    QSpinBox *kcfg_thumbnailQuality;
-    QSpacerItem *horizontalSpacer_4;
-    QLabel *textLabel2_2;
-    QSpinBox *kcfg_thumbnailSize;
-    QCheckBox *kcfg_thumbnailSquare;
-    QSpacerItem *verticalSpacer_2;
+    QGridLayout*    gridLayout;
+    QLabel*         label;
+    QRadioButton*   mSaveImageButton;
+    QLabel*         textLabel2_2_2_2;
+    QComboBox*      kcfg_fullFormat;
+    QSpacerItem*    spacer4;
+    QLabel*         textLabel4;
+    QSpinBox*       kcfg_fullQuality;
+    QSpacerItem*    horizontalSpacer_6;
+    QWidget*        widget;
+    QHBoxLayout*    horizontalLayout_2;
+    QCheckBox*      kcfg_fullResize;
+    QSpinBox*       kcfg_fullSize;
+    QSpacerItem*    horizontalSpacer_2;
+    QHBoxLayout*    horizontalLayout;
+    QCheckBox*      kcfg_copyOriginalImage;
+    QSpacerItem*    horizontalSpacer_3;
+    QRadioButton*   mUseOriginalImageButton;
+    QSpacerItem*    verticalSpacer;
+    QLabel*         label_2;
+    QLabel*         textLabel2_2_2;
+    QComboBox*      kcfg_thumbnailFormat;
+    QSpacerItem*    horizontalSpacer_7;
+    QLabel*         textLabel4_2;
+    QSpinBox*       kcfg_thumbnailQuality;
+    QSpacerItem*    horizontalSpacer_4;
+    QLabel*         textLabel2_2;
+    QSpinBox*       kcfg_thumbnailSize;
+    QCheckBox*      kcfg_thumbnailSquare;
+    QSpacerItem*    verticalSpacer_2;
 };
 
 } // namespace Digikam
