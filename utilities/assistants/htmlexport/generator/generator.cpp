@@ -153,7 +153,8 @@ public:
     QString       mXMLFileName;
 
     bool          mCancel;
-    HTMLWizard*   wizard;
+    DHistoryView* mPview;
+    DProgressWdg* mPbar;
 
 public:
 
@@ -168,8 +169,8 @@ public:
             return false;
         }
 
-        wizard->progressView()->setVisible(true);
-        wizard->progressBar()->setVisible(true);
+        mPview->setVisible(true);
+        mPbar->setVisible(true);
 
         return true;
     }
@@ -329,9 +330,9 @@ public:
             watcher.setFuture(future);
 
             connect(&watcher, SIGNAL(progressValueChanged(int)),
-                    wizard->progressBar(), SLOT(setProgress(int)));
+                    mPbar, SLOT(setProgress(int)));
 
-            wizard->progressBar()->setMaximum(imageElementList.count());
+            mPbar->setMaximum(imageElementList.count());
 
             while (!future.isFinished())
             {
@@ -461,7 +462,7 @@ public:
 
         logInfo(i18n("Downloading remote files for \"%1\"", collectionName));
 
-        wizard->progressBar()->setMaximum(list.count());
+        mPbar->setMaximum(list.count());
         int count = 0;
 
         Q_FOREACH(const QUrl& url, list)
@@ -499,7 +500,7 @@ public:
             tempFile.close();
 
             ++count;
-            wizard->progressBar()->setValue(count);
+            mPbar->setValue(count);
         }
 
         return true;
@@ -560,17 +561,17 @@ public:
 
     void logInfo(const QString& msg)
     {
-        wizard->progressView()->addEntry(msg, DHistoryView::ProgressEntry);
+        mPview->addEntry(msg, DHistoryView::ProgressEntry);
     }
 
     void logError(const QString& msg)
     {
-        wizard->progressView()->addEntry(msg, DHistoryView::ErrorEntry);
+        mPview->addEntry(msg, DHistoryView::ErrorEntry);
     }
 
     void logWarning(const QString& msg)
     {
-        wizard->progressView()->addEntry(msg, DHistoryView::WarningEntry);
+        mPview->addEntry(msg, DHistoryView::WarningEntry);
         mWarnings = true;
     }
 
@@ -640,20 +641,16 @@ public:
 
 // ----------------------------------------------------------------------
 
-Generator::Generator(GalleryInfo* const info, HTMLWizard* const wizard)
+Generator::Generator(GalleryInfo* const info)
     : QObject(),
       d(new Private)
 {
     d->that      = this;
     d->mInfo     = info;
     d->mWarnings = false;
-    d->wizard    = wizard;
 
     connect(this, SIGNAL(logWarningRequested(QString)),
             SLOT(logWarning(QString)), Qt::QueuedConnection);
-
-    connect(d->wizard->progressBar(), SIGNAL(signalProgressCanceled()),
-            this, SLOT(slotCancel()));
 }
 
 Generator::~Generator()
@@ -701,6 +698,15 @@ void Generator::logWarning(const QString& text)
 void Generator::slotCancel()
 {
     d->mCancel = true;
+}
+
+void Generator::setProgressWidgets(DHistoryView* const pView, DProgressWdg* const pBar)
+{
+    d->mPview = pView;
+    d->mPbar  = pBar;
+
+    connect(d->mPbar, SIGNAL(signalProgressCanceled()),
+            this, SLOT(slotCancel()));
 }
 
 } // namespace Digikam

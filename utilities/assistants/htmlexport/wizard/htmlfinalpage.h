@@ -6,7 +6,6 @@
  * Date        : 2006-04-04
  * Description : a tool to generate HTML image galleries
  *
- * Copyright (C) 2006-2010 by Aurelien Gateau <aurelien dot gateau at free dot fr>
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -21,54 +20,37 @@
  *
  * ============================================================ */
 
-#ifndef HTML_WIZARD_H
-#define HTML_WIZARD_H
+#ifndef HTML_FINAL_PAGE_H
+#define HTML_FINAL_PAGE_H
 
 // Qt includes
 
-#include <QWizard>
+#include <QWidget>
 
 // Local includes
 
-#include "theme.h"
-#include "album.h"
+#include "dwizardpage.h"
+#include "dprogresswdg.h"
+#include "dhistoryview.h"
 
 namespace Digikam
 {
 
-class GalleryInfo;
-
-/**
- * The wizard used by the user to select the various settings.
- */
-class HTMLWizard : public QWizard
+class HTMLFinalPage : public DWizardPage
 {
-    Q_OBJECT
-
 public:
 
-    explicit HTMLWizard(QWidget* const parent);
-    ~HTMLWizard();
+    explicit HTMLFinalPage(QWizard* const dialog, const QString& title);
+    ~HTMLFinalPage();
 
-    int parametersPageId()       const;
-    int imageSettingPageId()     const;
-
-    GalleryInfo* galleryInfo()                          const;
-    Theme::Ptr   theme()                                const;
-    AlbumList    albums()                               const;
-    QWidget* parametersWidget(const QByteArray& iname)  const;
-    void updateSettings();
-
-private Q_SLOTS:
-
-    void slotThemeSelectionChanged();
+    void initializePage();
 
 private:
 
-    class Private;
-    Private* const d;
+    DHistoryView* mProgressView;
+    DProgressWdg* mProgressBar;
 };
 
 } // namespace Digikam
 
-#endif // HTML_WIZARD_H
+#endif // HTML_FINAL_PAGE_H

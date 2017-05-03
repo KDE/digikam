@@ -61,11 +61,6 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     kcfg_openInBrowser->setObjectName(QLatin1String("kcfg_openInBrowser"));
     kcfg_openInBrowser->setText(i18n("Open in browser"));
 
-    progressView = new DHistoryView(this);
-    progressView->setVisible(false);
-    progressBar  = new DProgressWdg(this);
-    progressBar->setVisible(false);
-
     QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     QVBoxLayout* const vboxLayout = new QVBoxLayout(this);
@@ -74,8 +69,6 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     vboxLayout->setObjectName(QLatin1String("vboxLayout"));
     vboxLayout->addLayout(hboxLayout);
     vboxLayout->addWidget(kcfg_openInBrowser);
-    vboxLayout->addWidget(progressView);
-    vboxLayout->addWidget(progressBar);
     vboxLayout->addItem(spacer1);
 
     connect(kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),

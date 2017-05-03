@@ -33,8 +33,6 @@
 
 #include "dwizardpage.h"
 #include "dfileselector.h"
-#include "dprogresswdg.h"
-#include "dhistoryview.h"
 
 namespace Digikam
 {
@@ -53,8 +51,6 @@ public:
     QLabel*        textLabel1;
     QCheckBox*     kcfg_openInBrowser;
     DFileSelector* kcfg_destUrl;
-    DHistoryView*  progressView;
-    DProgressWdg*  progressBar;
 };
 
 } // namespace Digikam

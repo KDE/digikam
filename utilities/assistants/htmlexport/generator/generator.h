@@ -31,7 +31,8 @@
 namespace Digikam
 {
 
-class HTMLWizard;
+class DHistoryView;
+class DProgressWdg;
 class GalleryInfo;
 class ImageGenerationFunctor;
 
@@ -45,8 +46,10 @@ class Generator : public QObject
 
 public:
 
-    explicit Generator(GalleryInfo* const, HTMLWizard* const wizard);
+    explicit Generator(GalleryInfo* const);
     virtual ~Generator();
+
+    void setProgressWidgets(DHistoryView* const, DProgressWdg* const);
 
     bool run();
     bool warnings() const;

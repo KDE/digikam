@@ -45,12 +45,12 @@
 #include "abstractthemeparameter.h"
 #include "galleryinfo.h"
 #include "invisiblebuttongroup.h"
-#include "theme.h"
 #include "htmloutputpage.h"
 #include "htmlalbumselectorpage.h"
 #include "htmlthemepage.h"
 #include "htmlparameterspage.h"
 #include "htmlimagesettingspage.h"
+#include "htmlfinalpage.h"
 
 namespace Digikam
 {
@@ -67,21 +67,25 @@ public:
     HTMLImageSettingsPage* mImageSettingsPage;
     HTMLOutputPage*        mOutputPage;
     HTMLThemePage*         mThemePage;
+    HTMLFinalPage*         mFinalPage;
 };
 
-HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
+HTMLWizard::HTMLWizard(QWidget* const parent)
     : QWizard(parent),
       d(new Private)
 {
     setWindowTitle(i18n("Export Albums to HTML Pages"));
 
-    d->mInfo                   = info;
+    d->mInfo = new GalleryInfo;
+    d->mInfo->load();
+
     d->mCollectionSelectorPage = new HTMLAlbumSelectorPage(this, i18n("Albums Selection"));
     d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
     d->mThemePage->initThemePage(d->mInfo);
     d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
     d->mImageSettingsPage      = new HTMLImageSettingsPage(this, i18n("Image Settings"));
     d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
+    d->mFinalPage              = new HTMLFinalPage(this, i18n("Generating Gallery"));
     d->mConfigManager          = new KConfigDialogManager(this, d->mInfo);
     d->mConfigManager->updateWidgets();
 
@@ -146,47 +150,6 @@ void HTMLWizard::slotThemeSelectionChanged()
     }
 }
 
-/**
- * Update mInfo
- */
-void HTMLWizard::accept()
-{
-    d->mInfo->mCollectionList               = d->mCollectionSelectorPage->mCollectionSelector->selectedAlbums();
-    Theme::Ptr theme                        = static_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme;
-    QString themeInternalName               = theme->internalName();
-    d->mInfo->setTheme(themeInternalName);
-
-    Theme::ParameterList parameterList      = theme->parameterList();
-    Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
-    Theme::ParameterList::ConstIterator end = parameterList.constEnd();
-
-    for (; it != end ; ++it)
-    {
-        AbstractThemeParameter* const themeParameter = *it;
-        QByteArray parameterInternalName             = themeParameter->internalName();
-        QWidget* const widget                        = d->mParametersPage->mThemeParameterWidgetFromName[parameterInternalName];
-        QString value                                = themeParameter->valueFromWidget(widget);
-
-        d->mInfo->setThemeParameterValue(themeInternalName,
-                                         QString::fromLatin1(parameterInternalName),
-                                         value);
-    }
-
-    d->mConfigManager->updateSettings();
-
-    QWizard::accept();
-}
-
-DHistoryView* HTMLWizard::progressView() const
-{
-    return d->mOutputPage->progressView;
-}
-
-DProgressWdg* HTMLWizard::progressBar() const
-{
-    return d->mOutputPage->progressBar;
-}
-
 int HTMLWizard::parametersPageId() const
 {
     return d->mParametersPage->id();
@@ -195,6 +158,31 @@ int HTMLWizard::parametersPageId() const
 int HTMLWizard::imageSettingPageId() const
 {
     return d->mImageSettingsPage->id();
+}
+
+GalleryInfo* HTMLWizard::galleryInfo() const
+{
+    return d->mInfo;
+}
+
+Theme::Ptr HTMLWizard::theme() const
+{
+    return (dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme);
+}
+
+AlbumList HTMLWizard::albums() const
+{
+    return d->mCollectionSelectorPage->mCollectionSelector->selectedAlbums();
+}
+
+QWidget* HTMLWizard::parametersWidget(const QByteArray& iname) const
+{
+    return d->mParametersPage->mThemeParameterWidgetFromName[iname];
+}
+
+void HTMLWizard::updateSettings()
+{
+    d->mConfigManager->updateSettings();
 }
 
 } // namespace Digikam
