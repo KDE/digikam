@@ -57,7 +57,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     font.setBold(true);
     font.setWeight(75);
     label->setFont(font);
-    label->setText(i18n("Full Image"));
+    label->setText(i18n("Full Image Properties:"));
 
     QRadioButton* const mSaveImageButton = new QRadioButton(this);
     mSaveImageButton->setObjectName(QLatin1String("mSaveImageButton"));
@@ -111,8 +111,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
                                                             QSizePolicy::Minimum);
 
     QHBoxLayout* const horizontalLayout_2 = new QHBoxLayout(widget);
-    horizontalLayout_2->setSpacing(6);
-    horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
+    horizontalLayout_2->setContentsMargins(QMargins());
     horizontalLayout_2->setObjectName(QLatin1String("horizontalLayout_2"));
     horizontalLayout_2->addWidget(kcfg_fullResize);
     horizontalLayout_2->addWidget(kcfg_fullSize);
@@ -127,7 +126,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
                                                             QSizePolicy::Minimum);
 
     QHBoxLayout* const horizontalLayout = new QHBoxLayout();
-    horizontalLayout->setSpacing(6);
+    horizontalLayout->setContentsMargins(QMargins());
     horizontalLayout->setObjectName(QLatin1String("horizontalLayout"));
     horizontalLayout->addWidget(kcfg_copyOriginalImage);
     horizontalLayout->addItem(horizontalSpacer_3);
@@ -142,7 +141,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     QLabel* const label_2 = new QLabel(this);
     label_2->setObjectName(QLatin1String("label_2"));
     label_2->setFont(font);
-    label_2->setText(i18n("Thumbnail"));
+    label_2->setText(i18n("Thumbnail Properties:"));
 
     QLabel* const textLabel2_2_2 = new QLabel(this);
     textLabel2_2_2->setObjectName(QLatin1String("textLabel2_2_2"));
@@ -225,16 +224,16 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
     setPageWidget(box);
 
-    setTabOrder(mSaveImageButton,          kcfg_fullFormat);
-    setTabOrder(kcfg_fullFormat,           kcfg_fullQuality);
-    setTabOrder(kcfg_fullQuality,          kcfg_fullResize);
-    setTabOrder(kcfg_fullResize,           kcfg_fullSize);
-    setTabOrder(kcfg_fullSize,             kcfg_copyOriginalImage);
-    setTabOrder(kcfg_copyOriginalImage,    mUseOriginalImageButton);
-    setTabOrder(mUseOriginalImageButton,   kcfg_thumbnailFormat);
-    setTabOrder(kcfg_thumbnailFormat,      kcfg_thumbnailQuality);
-    setTabOrder(kcfg_thumbnailQuality,     kcfg_thumbnailSize);
-    setTabOrder(kcfg_thumbnailSize,        mKcfg_thumbnailSquare);
+    setTabOrder(mSaveImageButton,        kcfg_fullFormat);
+    setTabOrder(kcfg_fullFormat,         kcfg_fullQuality);
+    setTabOrder(kcfg_fullQuality,        kcfg_fullResize);
+    setTabOrder(kcfg_fullResize,         kcfg_fullSize);
+    setTabOrder(kcfg_fullSize,           kcfg_copyOriginalImage);
+    setTabOrder(kcfg_copyOriginalImage,  mUseOriginalImageButton);
+    setTabOrder(mUseOriginalImageButton, kcfg_thumbnailFormat);
+    setTabOrder(kcfg_thumbnailFormat,    kcfg_thumbnailQuality);
+    setTabOrder(kcfg_thumbnailQuality,   kcfg_thumbnailSize);
+    setTabOrder(kcfg_thumbnailSize,      mKcfg_thumbnailSquare);
 
     connect(kcfg_fullResize, SIGNAL(toggled(bool)),
             kcfg_fullSize, SLOT(setEnabled(bool)));
