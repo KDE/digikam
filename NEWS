@@ -31,4 +31,6 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 379152 - Presentation mode cannot be exited/quitted.
 021 ==> 374838 - Advanced Search not finding "Not Tagged" images.
 022 ==> 379326 - Import-Tool doesn't rename properly.
-023 ==> 
+023 ==> 379442 - AppImage package does not find the files needed for panorama.
+024 ==> 
+
