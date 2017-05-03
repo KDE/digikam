@@ -80,8 +80,8 @@ private:
 
     Theme();
 
-    struct Private;
-    Private* d;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
