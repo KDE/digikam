@@ -63,6 +63,10 @@ public:
 
     void initThemePage(GalleryInfo* const info);
 
+protected:
+
+    bool validatePage();
+
 public:
 
     QListWidget*  mThemeList;

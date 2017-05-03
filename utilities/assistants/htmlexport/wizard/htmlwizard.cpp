@@ -130,9 +130,9 @@ void HTMLWizard::slotThemeSelectionChanged()
                       i18n("Author: %1", author);
 
         browser->setHtml(txt);
-        setValid(d->mThemePage->page(), true);
 
         // Enable theme parameter page if there is any parameter
+
         Theme::ParameterList parameterList = theme->parameterList();
         setAppropriate(d->mParametersPage->page(), parameterList.size() > 0);
 
@@ -148,7 +148,6 @@ void HTMLWizard::slotThemeSelectionChanged()
     else
     {
         browser->clear();
-        setValid(d->mThemePage->page(), false);
     }
 }
 

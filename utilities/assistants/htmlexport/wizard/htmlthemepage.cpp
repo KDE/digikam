@@ -78,4 +78,14 @@ void HTMLThemePage::initThemePage(GalleryInfo* const info)
     }
 }
 
+bool HTMLThemePage::validatePage()
+{
+    if (mThemeList->currentItem())
+    {
+        return true;
+    }
+
+    return false;
+}
+
 } // namespace Digikam
