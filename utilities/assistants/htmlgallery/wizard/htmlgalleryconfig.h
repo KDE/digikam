@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_EXPORT_CONFIG_H
-#define HTML_EXPORT_CONFIG_H
+#ifndef HTML_GALLERY_CONFIG_H
+#define HTML_GALLERY_CONFIG_H
 
 // Qt includes
 
@@ -36,7 +36,7 @@
 namespace Digikam
 {
 
-class Config : public KConfigSkeleton
+class HTMLGalleryConfig : public KConfigSkeleton
 {
 public:
 
@@ -65,8 +65,8 @@ public:
 
 public:
 
-    explicit Config();
-    virtual ~Config();
+    explicit HTMLGalleryConfig();
+    virtual ~HTMLGalleryConfig();
 
     void setTheme(const QString& v)
     {
@@ -230,4 +230,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // HTML_EXPORT_CONFIG_H
+#endif // HTML_GALLERY_CONFIG_H

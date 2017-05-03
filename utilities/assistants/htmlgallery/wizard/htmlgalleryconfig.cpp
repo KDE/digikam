@@ -20,12 +20,12 @@
  *
  * ============================================================ */
 
-#include "htmlexportconfig.h"
+#include "htmlgalleryconfig.h"
 
 namespace Digikam
 {
 
-Config::Config()
+HTMLGalleryConfig::HTMLGalleryConfig()
     : KConfigSkeleton(QLatin1String("kipihtmlexportrc"))
 {
     setCurrentGroup(QLatin1String("general"));
@@ -124,7 +124,7 @@ Config::Config()
     addItem(itemOpenInBrowser, QLatin1String("openInBrowser"));
 }
 
-Config::~Config()
+HTMLGalleryConfig::~HTMLGalleryConfig()
 {
 }
 

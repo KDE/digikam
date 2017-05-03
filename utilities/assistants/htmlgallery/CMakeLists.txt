@@ -38,7 +38,7 @@ set(libhtmlgallery_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/stringthemeparameter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/parameters/colorthemeparameter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/invisiblebuttongroup.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlgalleryconfig.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlalbumselectorpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmloutputpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlfinalpage.cpp
