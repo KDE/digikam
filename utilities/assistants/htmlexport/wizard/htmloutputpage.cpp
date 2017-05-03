@@ -81,4 +81,9 @@ HTMLOutputPage::~HTMLOutputPage()
 {
 }
 
+bool HTMLOutputPage::validatePage()
+{
+    return (!kcfg_destUrl->fileDlgPath().isEmpty());
+}
+
 } // namespace Digikam

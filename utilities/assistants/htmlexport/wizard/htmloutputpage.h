@@ -53,6 +53,10 @@ public:
     DFileSelector* kcfg_destUrl;
     DHistoryView*  progressView;
     DProgressWdg*  progressBar;
+
+protected:
+
+    bool validatePage();
 };
 
 } // namespace Digikam

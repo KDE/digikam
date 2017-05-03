@@ -117,17 +117,13 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     // Set page states
     // Pages can only be disabled after they have *all* been added!
     slotThemeSelectionChanged();
-    updateFinishPageValidity();
+
+    //updateFinishPageValidity();
 }
 
 HTMLWizard::~HTMLWizard()
 {
     delete d;
-}
-
-void HTMLWizard::updateFinishPageValidity()
-{
-    setValid(d->mOutputPage->page(), !d->mOutputPage->kcfg_destUrl->fileDlgPath().isEmpty());
 }
 
 void HTMLWizard::updateCollectionSelectorPageValidity()

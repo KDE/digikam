@@ -57,7 +57,6 @@ protected Q_SLOTS:
 private Q_SLOTS:
 
     void updateCollectionSelectorPageValidity();
-    void updateFinishPageValidity();
     void slotThemeSelectionChanged();
 
 private:
