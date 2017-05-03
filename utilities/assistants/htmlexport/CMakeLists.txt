@@ -61,9 +61,12 @@ set(libhtmlexport_SRCS
 
 add_library(htmlexport_src OBJECT ${libhtmlexport_SRCS})
 
-# TODO: link digikam lib with these components
-#${LIBXSLT_EXSLT_LIBRARIES}
-#${LIBXSLT_LIBRARIES}
-#${LIBXML2_LIBRARIES}
+add_library(htmlexport STATIC $<TARGET_OBJECTS:htmlexport_src>)
+
+target_link_libraries(htmlexport
+                      PRIVATE
+                      ${LIBXSLT_EXSLT_LIBRARIES}
+                      ${LIBXSLT_LIBRARIES}
+                      ${LIBXML2_LIBRARIES})
 
 install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)
