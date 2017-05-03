@@ -49,14 +49,11 @@ set(libhtmlexport_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/invisiblebuttongroup.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlexportconfig.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmloutputpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlimagesettingspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlthemepage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlparameterspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlwizard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.cpp
-)
-
-ki18n_wrap_ui(libhtmlexport_SRCS
-              ${CMAKE_CURRENT_SOURCE_DIR}/wizard/imagesettingspage.ui
 )
 
 add_library(htmlexport_src OBJECT ${libhtmlexport_SRCS})

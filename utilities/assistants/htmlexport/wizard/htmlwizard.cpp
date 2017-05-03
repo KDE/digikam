@@ -50,43 +50,10 @@
 #include "htmloutputpage.h"
 #include "htmlthemepage.h"
 #include "htmlparameterspage.h"
-#include "ui_imagesettingspage.h"
+#include "htmlimagesettingspage.h"
 
 namespace Digikam
 {
-
-template <class Ui_Class>
-
-class WizardPage : public DWizardPage, public Ui_Class
-{
-public:
-
-    WizardPage(QWizard* const dialog, const QString& title)
-        : DWizardPage(dialog, title)
-    {
-        this->setupUi(this);
-        this->layout()->setContentsMargins(QMargins());
-        setPageWidget(this);
-    }
-};
-
-// ----------------------------------------------------------------------------------------------
-
-class HTMLImageSettingsPage : public WizardPage<Ui_ImageSettingsPage>
-{
-public:
-
-    HTMLImageSettingsPage(QWizard* const dialog, const QString& title)
-        : WizardPage<Ui_ImageSettingsPage>(dialog, title)
-    {
-        InvisibleButtonGroup* const group = new InvisibleButtonGroup(this);
-        group->setObjectName(QLatin1String("kcfg_useOriginalImageAsFullImage"));
-        group->addButton(mSaveImageButton, int(false));
-        group->addButton(mUseOriginalImageButton, int(true));
-    }
-};
-
-// ----------------------------------------------------------------------------------------------
 
 class HTMLWizard::Private
 {
