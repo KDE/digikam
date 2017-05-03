@@ -34,6 +34,7 @@
 
 #include "galleryinfo.h"
 #include "htmlwizard.h"
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -43,18 +44,15 @@ HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("ThemePage"));
 
-    mThemeList = new QListWidget(this);
+    DHBox* const hb = new DHBox(this);
+
+    mThemeList      = new QListWidget(hb);
     mThemeList->setObjectName(QLatin1String("mThemeList"));
 
-    mThemeInfo = new QTextBrowser(this);
+    mThemeInfo = new QTextBrowser(hb);
     mThemeInfo->setObjectName(QLatin1String("mThemeInfo"));
 
-    QHBoxLayout* const hboxLayout = new QHBoxLayout(this);
-    hboxLayout->setSpacing(6);
-    hboxLayout->setContentsMargins(0, 0, 0, 0);
-    hboxLayout->setObjectName(QLatin1String("hboxLayout"));
-    hboxLayout->addWidget(mThemeList);
-    hboxLayout->addWidget(mThemeInfo);
+    setPageWidget(hb);
 }
 
 HTMLThemePage::~HTMLThemePage()

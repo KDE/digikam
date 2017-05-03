@@ -24,11 +24,10 @@
 
 // Qt includes
 
-#include <QVBoxLayout>
-#include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
 #include <QSpacerItem>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -38,6 +37,7 @@
 
 #include "galleryinfo.h"
 #include "abstractthemeparameter.h"
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -47,7 +47,9 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
 {
     setObjectName(QLatin1String("ThemeParametersPage"));
 
-    QLabel* const textLabel1 = new QLabel(this);
+    DVBox* const vb          = new DVBox(this);
+
+    QLabel* const textLabel1 = new QLabel(vb);
     textLabel1->setObjectName(QLatin1String("textLabel1"));
     textLabel1->setText(i18n("In this page, you can change some theme parameters. "
                              "Depending on the theme, different parameters are available."));
@@ -61,7 +63,7 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
     textLabel1->setAlignment(Qt::AlignVCenter);
     textLabel1->setWordWrap(true);
 
-    mScrollArea = new QScrollArea(this);
+    mScrollArea = new QScrollArea(vb);
     mScrollArea->setObjectName(QLatin1String("mScrollArea"));
     mScrollArea->setFrameShape(QFrame::NoFrame);
     mScrollArea->setWidgetResizable(true);
@@ -71,12 +73,7 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
     mContent->setGeometry(QRect(0, 0, 592, 429));
     mScrollArea->setWidget(mContent);
 
-    QVBoxLayout* const verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setSpacing(6);
-    verticalLayout->setContentsMargins(0, 0, 0, 0);
-    verticalLayout->setObjectName(QLatin1String("verticalLayout"));
-    verticalLayout->addWidget(textLabel1);
-    verticalLayout->addWidget(mScrollArea);
+    setPageWidget(vb);
 }
 
 HTMLParametersPage::~HTMLParametersPage()

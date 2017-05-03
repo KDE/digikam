@@ -39,6 +39,7 @@
 #include "abstractthemeparameter.h"
 #include "galleryinfo.h"
 #include "generator.h"
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -48,16 +49,14 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("FinalPage"));
 
-    mProgressView = new DHistoryView(this);
-    mProgressBar  = new DProgressWdg(this);
+    DVBox* const vb = new DVBox(this);
 
-    QVBoxLayout* const vboxLayout = new QVBoxLayout(this);
-    vboxLayout->setSpacing(6);
-    vboxLayout->setContentsMargins(0, 0, 0, 0);
-    vboxLayout->setObjectName(QLatin1String("vboxLayout"));
-    vboxLayout->addWidget(mProgressView);
-    vboxLayout->addWidget(mProgressBar);
-    vboxLayout->setStretchFactor(mProgressBar, 10);
+    mProgressView = new DHistoryView(vb);
+    mProgressBar  = new DProgressWdg(vb);
+
+    vb->setStretchFactor(mProgressBar, 10);
+
+    setPageWidget(vb);
 }
 
 HTMLFinalPage::~HTMLFinalPage()
