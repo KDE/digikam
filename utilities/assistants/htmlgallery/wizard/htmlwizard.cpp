@@ -134,11 +134,11 @@ void HTMLWizard::slotThemeSelectionChanged()
 
         browser->setHtml(txt);
 
-        d->mImageSettingsPage->kcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
+        d->mImageSettingsPage->mKcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
 
         if (!allowNonsquareThumbnails)
         {
-            d->mImageSettingsPage->kcfg_thumbnailSquare->setChecked(true);
+            d->mImageSettingsPage->mKcfg_thumbnailSquare->setChecked(true);
         }
 
         d->mParametersPage->fillThemeParametersPage(theme, d->mInfo);

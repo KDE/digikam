@@ -25,10 +25,6 @@
 
 // Qt includes
 
-#include <QSpinBox>
-#include <QComboBox>
-#include <QRadioButton>
-#include <QWidget>
 #include <QCheckBox>
 
 // Local includes
@@ -47,18 +43,7 @@ public:
 
 public:
 
-    QRadioButton*   mSaveImageButton;
-    QComboBox*      kcfg_fullFormat;
-    QSpinBox*       kcfg_fullQuality;
-    QWidget*        widget;
-    QCheckBox*      kcfg_fullResize;
-    QSpinBox*       kcfg_fullSize;
-    QCheckBox*      kcfg_copyOriginalImage;
-    QRadioButton*   mUseOriginalImageButton;
-    QComboBox*      kcfg_thumbnailFormat;
-    QSpinBox*       kcfg_thumbnailQuality;
-    QSpinBox*       kcfg_thumbnailSize;
-    QCheckBox*      kcfg_thumbnailSquare;
+    QCheckBox* mKcfg_thumbnailSquare;
 };
 
 } // namespace Digikam

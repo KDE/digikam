@@ -24,10 +24,14 @@
 
 // Qt includes
 
+#include <QWidget>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QGridLayout>
 #include <QSpacerItem>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QRadioButton>
 
 // KDE includes
 
@@ -55,7 +59,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     label->setFont(font);
     label->setText(i18n("Full Image"));
 
-    mSaveImageButton = new QRadioButton(this);
+    QRadioButton* const mSaveImageButton = new QRadioButton(this);
     mSaveImageButton->setObjectName(QLatin1String("mSaveImageButton"));
     mSaveImageButton->setChecked(true);
     mSaveImageButton->setText(i18n("Save image"));
@@ -66,7 +70,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     textLabel2_2_2_2->setWordWrap(false);
     textLabel2_2_2_2->setText(i18n("Format:"));
 
-    kcfg_fullFormat = new QComboBox(this);
+    QComboBox* const kcfg_fullFormat = new QComboBox(this);
     kcfg_fullFormat->setObjectName(QLatin1String("kcfg_fullFormat"));
     kcfg_fullFormat->clear();
     kcfg_fullFormat->insertItems(0, QStringList() << i18n("JPEG") << i18n("PNG"));
@@ -81,7 +85,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     textLabel4->setWordWrap(false);
     textLabel4->setText(i18n("Quality:"));
 
-    kcfg_fullQuality = new QSpinBox(this);
+    QSpinBox* const kcfg_fullQuality = new QSpinBox(this);
     kcfg_fullQuality->setObjectName(QLatin1String("kcfg_fullQuality"));
     kcfg_fullQuality->setMaximum(100);
     textLabel4->setBuddy(kcfg_fullQuality);
@@ -89,15 +93,15 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     QSpacerItem* const horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Fixed,
                                                             QSizePolicy::Minimum);
 
-    widget = new QWidget(this);
+    QWidget* const widget = new QWidget(this);
     widget->setObjectName(QLatin1String("widget"));
 
-    kcfg_fullResize = new QCheckBox(widget);
+    QCheckBox* const kcfg_fullResize = new QCheckBox(widget);
     kcfg_fullResize->setObjectName(QLatin1String("kcfg_fullResize"));
     kcfg_fullResize->setChecked(true);
     kcfg_fullResize->setText(i18n("Max size:"));
 
-    kcfg_fullSize = new QSpinBox(widget);
+    QSpinBox* const kcfg_fullSize = new QSpinBox(widget);
     kcfg_fullSize->setObjectName(QLatin1String("kcfg_fullSize"));
     kcfg_fullSize->setMinimum(1);
     kcfg_fullSize->setMaximum(9999);
@@ -114,7 +118,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     horizontalLayout_2->addWidget(kcfg_fullSize);
     horizontalLayout_2->addItem(horizontalSpacer_2);
 
-    kcfg_copyOriginalImage = new QCheckBox(this);
+    QCheckBox* const kcfg_copyOriginalImage = new QCheckBox(this);
     kcfg_copyOriginalImage->setObjectName(QLatin1String("kcfg_copyOriginalImage"));
     kcfg_copyOriginalImage->setChecked(false);
     kcfg_copyOriginalImage->setText(i18n("Include full-size original images for download"));
@@ -128,7 +132,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     horizontalLayout->addWidget(kcfg_copyOriginalImage);
     horizontalLayout->addItem(horizontalSpacer_3);
 
-    mUseOriginalImageButton = new QRadioButton(this);
+    QRadioButton* const mUseOriginalImageButton = new QRadioButton(this);
     mUseOriginalImageButton->setObjectName(QLatin1String("mUseOriginalImageButton"));
     mUseOriginalImageButton->setText(i18n("Use original image"));
 
@@ -146,7 +150,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     textLabel2_2_2->setWordWrap(false);
     textLabel2_2_2->setText(i18n("Format:"));
 
-    kcfg_thumbnailFormat = new QComboBox(this);
+    QComboBox* const kcfg_thumbnailFormat = new QComboBox(this);
     kcfg_thumbnailFormat->setObjectName(QLatin1String("kcfg_thumbnailFormat"));
     kcfg_thumbnailFormat->clear();
     kcfg_thumbnailFormat->insertItems(0, QStringList() << i18n("JPEG") << i18n("PNG"));
@@ -161,7 +165,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     textLabel4_2->setWordWrap(false);
     textLabel4_2->setText(i18n("Quality:"));
 
-    kcfg_thumbnailQuality = new QSpinBox(this);
+    QSpinBox* const kcfg_thumbnailQuality = new QSpinBox(this);
     kcfg_thumbnailQuality->setObjectName(QLatin1String("kcfg_thumbnailQuality"));
     kcfg_thumbnailQuality->setMaximum(100);
     textLabel4_2->setBuddy(kcfg_thumbnailQuality);
@@ -175,19 +179,19 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     textLabel2_2->setWordWrap(false);
     textLabel2_2->setText(i18n("Size:"));
 
-    kcfg_thumbnailSize = new QSpinBox(this);
+    QSpinBox* const kcfg_thumbnailSize = new QSpinBox(this);
     kcfg_thumbnailSize->setObjectName(QLatin1String("kcfg_thumbnailSize"));
     kcfg_thumbnailSize->setMinimum(1);
     kcfg_thumbnailSize->setMaximum(9999);
     kcfg_thumbnailSize->setValue(160);
     textLabel2_2->setBuddy(kcfg_thumbnailSize);
 
-    kcfg_thumbnailSquare = new QCheckBox(this);
-    kcfg_thumbnailSquare->setObjectName(QLatin1String("kcfg_thumbnailSquare"));
-    kcfg_thumbnailSquare->setEnabled(false);
-    kcfg_thumbnailSquare->setCheckable(true);
-    kcfg_thumbnailSquare->setChecked(true);
-    kcfg_thumbnailSquare->setText(i18n("Square thumbnails"));
+    mKcfg_thumbnailSquare = new QCheckBox(this);
+    mKcfg_thumbnailSquare->setObjectName(QLatin1String("mKcfg_thumbnailSquare"));
+    mKcfg_thumbnailSquare->setEnabled(false);
+    mKcfg_thumbnailSquare->setCheckable(true);
+    mKcfg_thumbnailSquare->setChecked(true);
+    mKcfg_thumbnailSquare->setText(i18n("Square thumbnails"));
 
     QSpacerItem* const verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                           QSizePolicy::Expanding);
@@ -216,7 +220,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     gridLayout->addItem(horizontalSpacer_4,        10, 3, 1, 1);
     gridLayout->addWidget(textLabel2_2,            11, 1, 1, 1);
     gridLayout->addWidget(kcfg_thumbnailSize,      11, 2, 1, 1);
-    gridLayout->addWidget(kcfg_thumbnailSquare,    12, 2, 1, 2);
+    gridLayout->addWidget(mKcfg_thumbnailSquare,   12, 2, 1, 2);
     gridLayout->addItem(verticalSpacer_2,          13, 3, 1, 1);
 
     setPageWidget(box);
@@ -230,7 +234,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     setTabOrder(mUseOriginalImageButton,   kcfg_thumbnailFormat);
     setTabOrder(kcfg_thumbnailFormat,      kcfg_thumbnailQuality);
     setTabOrder(kcfg_thumbnailQuality,     kcfg_thumbnailSize);
-    setTabOrder(kcfg_thumbnailSize,        kcfg_thumbnailSquare);
+    setTabOrder(kcfg_thumbnailSize,        mKcfg_thumbnailSquare);
 
     connect(kcfg_fullResize, SIGNAL(toggled(bool)),
             kcfg_fullSize, SLOT(setEnabled(bool)));
