@@ -384,6 +384,7 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:queuemanager_src>
             $<TARGET_OBJECTS:importui_src>
             $<TARGET_OBJECTS:advancedrename_src>
+            $<TARGET_OBJECTS:htmlgallery_src>
 )
 
 if(KF5Kipi_FOUND)
@@ -427,6 +428,10 @@ target_link_libraries(digikamgui
                       KF5::I18n
 
                       ${OpenCV_LIBRARIES}
+
+                      ${LIBXSLT_EXSLT_LIBRARIES}
+                      ${LIBXSLT_LIBRARIES}
+                      ${LIBXML2_LIBRARIES}
 )
 
 if(ENABLE_DBUS)

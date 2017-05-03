@@ -209,6 +209,10 @@ find_package(Boost                      REQUIRED)
 find_package(LCMS2                      REQUIRED)
 find_package(EXPAT                      REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
 find_package(Threads                    REQUIRED)  # For DNGWriter and LibRaw which needs native threads support.
+
+find_package(LibXslt                    REQUIRED)  # For HTMLGallery tool.
+find_package(LibXml2                    REQUIRED)  # For HTMLGallery tool.
+
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
 set_package_properties("Exiv2"     PROPERTIES

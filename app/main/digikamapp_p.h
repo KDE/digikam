@@ -172,6 +172,7 @@ public:
         maintenanceAction(0),
         expoBendingAction(0),
         panoramaAction(0),
+        htmlAction(0),
         calendarAction(0),
         qualityAction(0),
         advSearchAction(0),
@@ -304,6 +305,7 @@ public:
     QAction*                            maintenanceAction;
     QAction*                            expoBendingAction;
     QAction*                            panoramaAction;
+    QAction*                            htmlAction;
     QAction*                            calendarAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;

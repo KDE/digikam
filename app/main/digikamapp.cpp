@@ -126,6 +126,7 @@
 #include "geolocationedit.h"
 #include "expoblendingmanager.h"
 #include "calwizard.h"
+#include "htmlwizard.h"
 
 #ifdef HAVE_DBUS
 #   include "digikamadaptor.h"
@@ -1347,6 +1348,13 @@ void DigikamApp::setupActions()
     connect(d->panoramaAction, SIGNAL(triggered(bool)), this, SLOT(slotPanorama()));
     ac->addAction(QLatin1String("panorama"), d->panoramaAction);
 #endif
+
+    d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
+                                i18nc("@action", "Create HTML gallery..."),
+                                this);
+    connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
+    ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
+    ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
 
     d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
                                     i18nc("@action", "Create Calendar..."),
@@ -2607,6 +2615,12 @@ void DigikamApp::slotPanorama()
     PanoManager::instance()->setItemsList(view()->selectedUrls());
     PanoManager::instance()->run();
 #endif
+}
+
+void DigikamApp::slotHtmlGallery()
+{
+    HTMLWizard w(this);
+    w.exec();
 }
 
 void DigikamApp::slotCalendar()
