@@ -50,6 +50,12 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "coredb.h"
+#include "applicationsettings.h"
+#include "digikamapp.h"
+#include "digikamview.h"
+#include "imagesortsettings.h"
+#include "coredbnamefilter.h"
 #include "abstractthemeparameter.h"
 #include "imageelement.h"
 #include "imagegenerationfunctor.h"
@@ -60,6 +66,7 @@
 #include "iojob.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
+#include "album.h"
 #include "imageinfo.h"
 
 namespace Digikam
@@ -195,10 +202,10 @@ public:
     {
         logInfo(i18n("Copying theme"));
 
-        QUrl srcUrl  = QUrl(mTheme->directory());
+        QUrl srcUrl  = QUrl::fromLocalFile(mTheme->directory());
         QUrl destUrl = mInfo->destUrl();
 
-        destUrl.addPath(srcUrl.fileName());
+        destUrl.setPath(srcUrl.fileName());
         QFile file(destUrl.toLocalFile());
 
         if (file.exists())
@@ -237,14 +244,14 @@ public:
         XMLElement collectionsX(xmlWriter, QLatin1String("collections"));
 
         // Loop on collections
-        QList<ImageCollection>::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
-        QList<ImageCollection>::ConstIterator collectionEnd = mInfo->mCollectionList.constEnd();
+        AlbumList::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
+        AlbumList::ConstIterator collectionEnd = mInfo->mCollectionList.constEnd();
 
         for (; collectionIt != collectionEnd ; ++collectionIt)
         {
-            ImageCollection collection =* collectionIt;
+            Album* const collection    = *collectionIt;
 
-            QString collectionFileName = webifyFileName(collection.name());
+            QString collectionFileName = webifyFileName(collection->title());
             QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
 
             if (!createDir(destDir))
@@ -253,15 +260,46 @@ public:
             }
 
             XMLElement collectionX(xmlWriter,  QLatin1String("collection"));
-            xmlWriter.writeElement("name",     collection.name());
+            xmlWriter.writeElement("name",     collection->title());
             xmlWriter.writeElement("fileName", collectionFileName);
-            xmlWriter.writeElement("comment",  collection.comment());
+            xmlWriter.writeElement("comment",  (collection->type() == Album::PHYSICAL) ?
+                                               dynamic_cast<PAlbum*>(collection)->caption() : QString());
 
             // Gather image element list
-            QList<QUrl> imageList = collection.images();
+            QList<QUrl> imageList;
+
+            switch (collection->type())
+            {
+                case Album::PHYSICAL:
+                {
+                    PAlbum* const p = dynamic_cast<PAlbum*>(collection);
+
+                    if (p)
+                        imageList = imagesFromPAlbum(p);
+
+                    break;
+                }
+
+                case Album::TAG:
+                {
+                    TAlbum* const p = dynamic_cast<TAlbum*>(collection);
+
+                    if (p)
+                        imageList = imagesFromTAlbum(p);
+
+                    break;
+                }
+
+                default:
+                {
+                    imageList = DigikamApp::instance()->view()->allUrls();
+                    break;
+                }
+            }
+
             RemoteUrlHash remoteUrlHash;
 
-            if (!downloadRemoteUrls(collection.name(), imageList, &remoteUrlHash))
+            if (!downloadRemoteUrls(collection->title(), imageList, &remoteUrlHash))
             {
                 return false;
             }
@@ -277,14 +315,14 @@ public:
                     continue;
                 }
 
-                ImageInfo info(url.toLocalFile());
+                ImageInfo info = ImageInfo::fromUrl(url);
                 ImageElement element = ImageElement(info);
                 element.mPath        = remoteUrlHash.value(url, url.toLocalFile());
                 imageElementList << element;
             }
 
             // Generate images
-            logInfo(i18n("Generating files for \"%1\"", collection.name()));
+            logInfo(i18n("Generating files for \"%1\"", collection->title()));
             ImageGenerationFunctor functor(that, mInfo, destDir);
             QFuture<void> future = QtConcurrent::map(imageElementList, functor);
             QFutureWatcher<void> watcher;
@@ -293,7 +331,7 @@ public:
             connect(&watcher, SIGNAL(progressValueChanged(int)),
                     wizard->progressBar(), SLOT(setProgress(int)));
 
-            wizard->progressBar()->setTotal(imageElementList.count());
+            wizard->progressBar()->setMaximum(imageElementList.count());
 
             while (!future.isFinished())
             {
@@ -423,7 +461,7 @@ public:
 
         logInfo(i18n("Downloading remote files for \"%1\"", collectionName));
 
-        wizard->progressBar()->setTotal(list.count());
+        wizard->progressBar()->setMaximum(list.count());
         int count = 0;
 
         Q_FOREACH(const QUrl& url, list)
@@ -434,7 +472,7 @@ public:
             }
 
             QTemporaryFile tempFile;
-            tempFile.setPrefix("htmlexport-");
+            tempFile.setFileTemplate("htmlexport-");
 
             if (!tempFile.open())
             {
@@ -443,17 +481,17 @@ public:
             }
 
             QTemporaryFile tempPath;
-            tempPath.setFileTemplate(tempFile->fileName());
+            tempPath.setFileTemplate(tempFile.fileName());
             tempPath.setAutoRemove(false);
 
             if (tempPath.open() &&
-                CopyJob::copyFiles(url, QUrl::fromLocalFile(temp.fileName())))
+                CopyJob::copyFiles(QStringList() << url.toLocalFile(), tempPath.fileName()))
             {
-                hash->insert(url, tempFile->fileName());
+                hash->insert(url, tempFile.fileName());
             }
             else
             {
-                logWarning(i18n("Could not download %1", url.prettyUrl()));
+                logWarning(i18n("Could not download %1", url.toDisplayString()));
                 hash->insert(url, QString());
             }
 
@@ -461,7 +499,7 @@ public:
             tempFile.close();
 
             ++count;
-            wizard->progressBar()->setProgress(count);
+            wizard->progressBar()->setValue(count);
         }
 
         return true;
@@ -522,18 +560,81 @@ public:
 
     void logInfo(const QString& msg)
     {
-        wizard->progressView()->addedAction(msg, ProgressMessage);
+        wizard->progressView()->addEntry(msg, DHistoryView::ProgressEntry);
     }
 
     void logError(const QString& msg)
     {
-        wizard->progressView()->addedAction(msg, ErrorMessage);
+        wizard->progressView()->addEntry(msg, DHistoryView::ErrorEntry);
     }
 
     void logWarning(const QString& msg)
     {
-        wizard->progressView()->addedAction(msg, WarningMessage);
+        wizard->progressView()->addEntry(msg, DHistoryView::WarningEntry);
         mWarnings = true;
+    }
+
+    /** get the images from the Physical album in database and return the items found.
+     */
+    QList<QUrl> imagesFromPAlbum(PAlbum* const album) const
+    {
+        // get the images from the database and return the items found
+
+        CoreDB::ItemSortOrder sortOrder = CoreDB::NoItemSorting;
+
+        switch (ApplicationSettings::instance()->getImageSortOrder())
+        {
+            default:
+            case ImageSortSettings::SortByFileName:
+                sortOrder = CoreDB::ByItemName;
+                break;
+
+            case ImageSortSettings::SortByFilePath:
+                sortOrder = CoreDB::ByItemPath;
+                break;
+
+            case ImageSortSettings::SortByCreationDate:
+                sortOrder = CoreDB::ByItemDate;
+                break;
+
+            case ImageSortSettings::SortByRating:
+                sortOrder = CoreDB::ByItemRating;
+                break;
+                // ByISize not supported
+        }
+
+        QStringList list = CoreDbAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
+        QList<QUrl> urlList;
+        CoreDbNameFilter  nameFilter(ApplicationSettings::instance()->getAllFileFilter());
+
+        for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+        {
+            if (nameFilter.matches(*it))
+            {
+                urlList << QUrl::fromLocalFile(*it);
+            }
+        }
+
+        return urlList;
+    }
+
+    /** get the images from the Tags album in database and return the items found.
+     */
+    QList<QUrl> imagesFromTAlbum(TAlbum* const album) const
+    {
+        QStringList list = CoreDbAccess().db()->getItemURLsInTag(album->id());
+        QList<QUrl> urlList;
+        CoreDbNameFilter  nameFilter(ApplicationSettings::instance()->getAllFileFilter());
+
+        for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+        {
+            if (nameFilter.matches(*it))
+            {
+                urlList << QUrl::fromLocalFile(*it);
+            }
+        }
+
+        return urlList;
     }
 };
 
