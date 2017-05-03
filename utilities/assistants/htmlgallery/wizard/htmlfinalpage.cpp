@@ -111,7 +111,7 @@ void HTMLFinalPage::initializePage()
     if (info->openInBrowser())
     {
         QUrl url = info->destUrl();
-        url.setPath("index.html");
+        url.setPath(QLatin1String("index.html"));
         QDesktopServices::openUrl(url);
     }
 }

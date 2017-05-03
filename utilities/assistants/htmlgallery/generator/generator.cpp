@@ -473,7 +473,7 @@ public:
             }
 
             QTemporaryFile tempFile;
-            tempFile.setFileTemplate("htmlexport-");
+            tempFile.setFileTemplate(QLatin1String("htmlexport-"));
 
             if (!tempFile.open())
             {
