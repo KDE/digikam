@@ -88,8 +88,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     connect(d->mThemePage->mThemeList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotThemeSelectionChanged()));
 
-    // Set page states
-    // Pages can only be disabled after they have *all* been added!
+    // Set page states, whoch can only be disabled after they have *all* been added.
     slotThemeSelectionChanged();
 }
 
