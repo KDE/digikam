@@ -25,6 +25,9 @@
 // Qt includes
 
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QGridLayout>
+#include <QSpacerItem>
 
 // KDE includes
 
@@ -42,9 +45,9 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 {
     setObjectName(QLatin1String("ImageSettingsPage"));
 
-    QWidget* const box = new QWidget(this);
+    QWidget* const box  = new QWidget(this);
 
-    label              = new QLabel(this);
+    QLabel* const label = new QLabel(this);
     label->setObjectName(QLatin1String("label"));
     QFont font;
     font.setBold(true);
@@ -57,7 +60,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     mSaveImageButton->setChecked(true);
     mSaveImageButton->setText(i18n("Save image"));
 
-    textLabel2_2_2_2 = new QLabel(this);
+    QLabel* const textLabel2_2_2_2 = new QLabel(this);
     textLabel2_2_2_2->setObjectName(QLatin1String("textLabel2_2_2_2"));
     textLabel2_2_2_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     textLabel2_2_2_2->setWordWrap(false);
@@ -69,9 +72,10 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_fullFormat->insertItems(0, QStringList() << i18n("JPEG") << i18n("PNG"));
     textLabel2_2_2_2->setBuddy(kcfg_fullFormat);
 
-    spacer4 = new QSpacerItem(312, 17, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem* const spacer4 = new QSpacerItem(312, 17, QSizePolicy::Expanding,
+                                                 QSizePolicy::Minimum);
 
-    textLabel4 = new QLabel(this);
+    QLabel* const textLabel4 = new QLabel(this);
     textLabel4->setObjectName(QLatin1String("textLabel4"));
     textLabel4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     textLabel4->setWordWrap(false);
@@ -82,7 +86,8 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_fullQuality->setMaximum(100);
     textLabel4->setBuddy(kcfg_fullQuality);
 
-    horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
+    QSpacerItem* const horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Fixed,
+                                                            QSizePolicy::Minimum);
 
     widget = new QWidget(this);
     widget->setObjectName(QLatin1String("widget"));
@@ -98,13 +103,15 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_fullSize->setMaximum(9999);
     kcfg_fullSize->setValue(800);
 
-    horizontalLayout_2 = new QHBoxLayout(widget);
+    QSpacerItem* const horizontalSpacer_2 = new QSpacerItem(188, 27, QSizePolicy::Expanding,
+                                                            QSizePolicy::Minimum);
+
+    QHBoxLayout* const horizontalLayout_2 = new QHBoxLayout(widget);
     horizontalLayout_2->setSpacing(6);
     horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
     horizontalLayout_2->setObjectName(QLatin1String("horizontalLayout_2"));
     horizontalLayout_2->addWidget(kcfg_fullResize);
     horizontalLayout_2->addWidget(kcfg_fullSize);
-    horizontalSpacer_2 = new QSpacerItem(188, 27, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout_2->addItem(horizontalSpacer_2);
 
     kcfg_copyOriginalImage = new QCheckBox(this);
@@ -112,9 +119,10 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_copyOriginalImage->setChecked(false);
     kcfg_copyOriginalImage->setText(i18n("Include full-size original images for download"));
 
-    horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem* const horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding,
+                                                            QSizePolicy::Minimum);
 
-    horizontalLayout = new QHBoxLayout();
+    QHBoxLayout* const horizontalLayout = new QHBoxLayout();
     horizontalLayout->setSpacing(6);
     horizontalLayout->setObjectName(QLatin1String("horizontalLayout"));
     horizontalLayout->addWidget(kcfg_copyOriginalImage);
@@ -124,14 +132,15 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     mUseOriginalImageButton->setObjectName(QLatin1String("mUseOriginalImageButton"));
     mUseOriginalImageButton->setText(i18n("Use original image"));
 
-    verticalSpacer = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Fixed);
+    QSpacerItem* const verticalSpacer = new QSpacerItem(20, 20, QSizePolicy::Minimum,
+                                                        QSizePolicy::Fixed);
 
-    label_2 = new QLabel(this);
+    QLabel* const label_2 = new QLabel(this);
     label_2->setObjectName(QLatin1String("label_2"));
     label_2->setFont(font);
     label_2->setText(i18n("Thumbnail"));
 
-    textLabel2_2_2 = new QLabel(this);
+    QLabel* const textLabel2_2_2 = new QLabel(this);
     textLabel2_2_2->setObjectName(QLatin1String("textLabel2_2_2"));
     textLabel2_2_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     textLabel2_2_2->setWordWrap(false);
@@ -143,9 +152,10 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_thumbnailFormat->insertItems(0, QStringList() << i18n("JPEG") << i18n("PNG"));
     textLabel2_2_2->setBuddy(kcfg_thumbnailFormat);
 
-    horizontalSpacer_7 = new QSpacerItem(40, 27, QSizePolicy::Fixed, QSizePolicy::Minimum);
+    QSpacerItem* const horizontalSpacer_7 = new QSpacerItem(40, 27, QSizePolicy::Fixed,
+                                                            QSizePolicy::Minimum);
 
-    textLabel4_2 = new QLabel(this);
+    QLabel* const textLabel4_2 = new QLabel(this);
     textLabel4_2->setObjectName(QLatin1String("textLabel4_2"));
     textLabel4_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     textLabel4_2->setWordWrap(false);
@@ -156,9 +166,10 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_thumbnailQuality->setMaximum(100);
     textLabel4_2->setBuddy(kcfg_thumbnailQuality);
 
-    horizontalSpacer_4 = new QSpacerItem(309, 27, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QSpacerItem* const horizontalSpacer_4 = new QSpacerItem(309, 27, QSizePolicy::Expanding,
+                                                            QSizePolicy::Minimum);
 
-    textLabel2_2 = new QLabel(this);
+    QLabel* const textLabel2_2 = new QLabel(this);
     textLabel2_2->setObjectName(QLatin1String("textLabel2_2"));
     textLabel2_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
     textLabel2_2->setWordWrap(false);
@@ -178,9 +189,10 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_thumbnailSquare->setChecked(true);
     kcfg_thumbnailSquare->setText(i18n("Square thumbnails"));
 
-    verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    QSpacerItem* const verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum,
+                                                          QSizePolicy::Expanding);
 
-    gridLayout       = new QGridLayout(box);
+    QGridLayout* const gridLayout       = new QGridLayout(box);
     gridLayout->setContentsMargins(QMargins());
     gridLayout->setObjectName(QLatin1String("gridLayout"));
     gridLayout->addWidget(label,                    0, 0, 1, 2);
@@ -209,37 +221,37 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
     setPageWidget(box);
 
-    QWidget::setTabOrder(mSaveImageButton,          kcfg_fullFormat);
-    QWidget::setTabOrder(kcfg_fullFormat,           kcfg_fullQuality);
-    QWidget::setTabOrder(kcfg_fullQuality,          kcfg_fullResize);
-    QWidget::setTabOrder(kcfg_fullResize,           kcfg_fullSize);
-    QWidget::setTabOrder(kcfg_fullSize,             kcfg_copyOriginalImage);
-    QWidget::setTabOrder(kcfg_copyOriginalImage,    mUseOriginalImageButton);
-    QWidget::setTabOrder(mUseOriginalImageButton,   kcfg_thumbnailFormat);
-    QWidget::setTabOrder(kcfg_thumbnailFormat,      kcfg_thumbnailQuality);
-    QWidget::setTabOrder(kcfg_thumbnailQuality,     kcfg_thumbnailSize);
-    QWidget::setTabOrder(kcfg_thumbnailSize,        kcfg_thumbnailSquare);
+    setTabOrder(mSaveImageButton,          kcfg_fullFormat);
+    setTabOrder(kcfg_fullFormat,           kcfg_fullQuality);
+    setTabOrder(kcfg_fullQuality,          kcfg_fullResize);
+    setTabOrder(kcfg_fullResize,           kcfg_fullSize);
+    setTabOrder(kcfg_fullSize,             kcfg_copyOriginalImage);
+    setTabOrder(kcfg_copyOriginalImage,    mUseOriginalImageButton);
+    setTabOrder(mUseOriginalImageButton,   kcfg_thumbnailFormat);
+    setTabOrder(kcfg_thumbnailFormat,      kcfg_thumbnailQuality);
+    setTabOrder(kcfg_thumbnailQuality,     kcfg_thumbnailSize);
+    setTabOrder(kcfg_thumbnailSize,        kcfg_thumbnailSquare);
 
-    QObject::connect(kcfg_fullResize, SIGNAL(toggled(bool)),
-                     kcfg_fullSize, SLOT(setEnabled(bool)));
+    connect(kcfg_fullResize, SIGNAL(toggled(bool)),
+            kcfg_fullSize, SLOT(setEnabled(bool)));
 
-    QObject::connect(mSaveImageButton, SIGNAL(toggled(bool)),
-                     kcfg_fullFormat, SLOT(setEnabled(bool)));
+    connect(mSaveImageButton, SIGNAL(toggled(bool)),
+            kcfg_fullFormat, SLOT(setEnabled(bool)));
 
-    QObject::connect(mSaveImageButton, SIGNAL(toggled(bool)),
-                     kcfg_fullQuality, SLOT(setEnabled(bool)));
+    connect(mSaveImageButton, SIGNAL(toggled(bool)),
+            kcfg_fullQuality, SLOT(setEnabled(bool)));
 
-    QObject::connect(mSaveImageButton, SIGNAL(toggled(bool)),
-                     kcfg_copyOriginalImage, SLOT(setEnabled(bool)));
+    connect(mSaveImageButton, SIGNAL(toggled(bool)),
+            kcfg_copyOriginalImage, SLOT(setEnabled(bool)));
 
-    QObject::connect(mSaveImageButton, SIGNAL(toggled(bool)),
-                     textLabel2_2_2_2, SLOT(setEnabled(bool)));
+    connect(mSaveImageButton, SIGNAL(toggled(bool)),
+            textLabel2_2_2_2, SLOT(setEnabled(bool)));
 
-    QObject::connect(mSaveImageButton, SIGNAL(toggled(bool)),
-                     textLabel4, SLOT(setEnabled(bool)));
+    connect(mSaveImageButton, SIGNAL(toggled(bool)),
+            textLabel4, SLOT(setEnabled(bool)));
 
-    QObject::connect(mSaveImageButton, SIGNAL(toggled(bool)),
-                     widget, SLOT(setEnabled(bool)));
+    connect(mSaveImageButton, SIGNAL(toggled(bool)),
+            widget, SLOT(setEnabled(bool)));
 
     InvisibleButtonGroup* const group = new InvisibleButtonGroup(this);
     group->setObjectName(QLatin1String("kcfg_useOriginalImageAsFullImage"));
