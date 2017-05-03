@@ -32,7 +32,7 @@ namespace Digikam
 {
 
 class GalleryInfo;
-class Generator;
+class GalleryGenerator;
 class ImageElement;
 
 /**
@@ -48,7 +48,7 @@ public:
 
 public:
 
-    explicit ImageGenerationFunctor(Generator* const generator,
+    explicit ImageGenerationFunctor(GalleryGenerator* const generator,
                                     GalleryInfo* const info,
                                     const QString& destDir);
     ~ImageGenerationFunctor();
@@ -62,10 +62,10 @@ private:
 
 private:
 
-    Generator*       mGenerator;
-    GalleryInfo*     mInfo;
-    QString          mDestDir;
-    UniqueNameHelper mUniqueNameHelper;
+    GalleryGenerator* mGenerator;
+    GalleryInfo*      mInfo;
+    QString           mDestDir;
+    UniqueNameHelper  mUniqueNameHelper;
 };
 
 } // namespace Digikam

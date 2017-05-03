@@ -48,11 +48,11 @@ set(libhtmlgallery_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlwizard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/imageelement.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/uniquenamehelper.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/imagegenerationfunctor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/xmlutils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/theme.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryinfo.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/generator/imagegenerationfunctor.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/generator/generator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/gallerygenerator.cpp
 )
 
 add_library(htmlgallery_src OBJECT ${libhtmlgallery_SRCS})

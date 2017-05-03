@@ -39,7 +39,7 @@
 
 #include "digikam_debug.h"
 #include "galleryinfo.h"
-#include "generator.h"
+#include "gallerygenerator.h"
 #include "imageelement.h"
 #include "metaengine_rotation.h"
 #include "drawdecoder.h"
@@ -80,7 +80,7 @@ static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
     return image;
 }
 
-ImageGenerationFunctor::ImageGenerationFunctor(Generator* const generator,
+ImageGenerationFunctor::ImageGenerationFunctor(GalleryGenerator* const generator,
                                                GalleryInfo* const info,
                                                const QString& destDir)
     : mGenerator(generator),
@@ -161,7 +161,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
     QImage thumbnail     = generateThumbnail(fullImage, mInfo->thumbnailSize(), mInfo->thumbnailSquare());
 
     // Save images
-    QString baseFileName = Generator::webifyFileName(element.mTitle);
+    QString baseFileName = GalleryGenerator::webifyFileName(element.mTitle);
     baseFileName         = mUniqueNameHelper.makeNameUnique(baseFileName);
 
     // Save full

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "generator.h"
+#include "gallerygenerator.h"
 
 // Qt includes
 
@@ -74,68 +74,7 @@ namespace Digikam
 
 typedef QMap<QByteArray, QByteArray> XsltParameterMap;
 
-/**
- * Produce a web-friendly file name
- */
-QString Generator::webifyFileName(const QString& _fileName)
-{
-    QString fileName = _fileName.toLower();
-
-    // Remove potentially troublesome chars
-    return fileName.replace(QRegExp(QLatin1String("[^-0-9a-z]+")), QLatin1String("_"));
-}
-
-/**
- * Prepare an XSLT param, managing quote mess.
- * abc   => 'abc'
- * a"bc  => 'a"bc'
- * a'bc  => "a'bc"
- * a"'bc => concat('a"', "'", 'bc')
- */
-QByteArray makeXsltParam(const QString& txt)
-{
-    QString param;
-    static const char apos  = '\'';
-    static const char quote = '"';
-
-    if (txt.indexOf(QLatin1Char(apos)) == -1)
-    {
-        // First or second case: no apos
-        param = QLatin1Char(apos) + txt + QLatin1Char(apos);
-    }
-    else if (txt.indexOf(QLatin1Char(quote)) == -1)
-    {
-        // Third case: only apos, no quote
-        param = QLatin1Char(quote) + txt + QLatin1Char(quote);
-    }
-    else
-    {
-        // Forth case: both apos and quote :-(
-        const QStringList lst = txt.split(QLatin1Char(apos), QString::KeepEmptyParts);
-
-        QStringList::ConstIterator it  = lst.constBegin();
-        QStringList::ConstIterator end = lst.constEnd();
-        param                          = QLatin1String("concat(");
-        param                         += QLatin1Char(apos) + *it + QLatin1Char(apos);
-        ++it;
-
-        for (; it != end ; ++it)
-        {
-            param += QLatin1String(", \"'\", ");
-            param += QLatin1Char(apos) + *it + QLatin1Char(apos);
-        }
-
-        param += QLatin1Char(')');
-    }
-
-    //qCDebug(DIGIKAM_GENERAL_LOG) << "param: " << txt << " => " << param;
-
-    return param.toUtf8();
-}
-
-// ----------------------------------------------------------------------
-
-class Generator::Private
+class GalleryGenerator::Private
 {
 public:
 
@@ -144,7 +83,7 @@ public:
 
 public:
 
-    Generator*    that;
+    GalleryGenerator*    that;
     GalleryInfo*  mInfo;
     Theme::Ptr    mTheme;
 
@@ -559,6 +498,54 @@ public:
         }
     }
 
+    /**
+     * Prepare an XSLT param, managing quote mess.
+     * abc   => 'abc'
+     * a"bc  => 'a"bc'
+     * a'bc  => "a'bc"
+     * a"'bc => concat('a"', "'", 'bc')
+     */
+    QByteArray makeXsltParam(const QString& txt)
+    {
+        QString param;
+        static const char apos  = '\'';
+        static const char quote = '"';
+
+        if (txt.indexOf(QLatin1Char(apos)) == -1)
+        {
+            // First or second case: no apos
+            param = QLatin1Char(apos) + txt + QLatin1Char(apos);
+        }
+        else if (txt.indexOf(QLatin1Char(quote)) == -1)
+        {
+            // Third case: only apos, no quote
+            param = QLatin1Char(quote) + txt + QLatin1Char(quote);
+        }
+        else
+        {
+            // Forth case: both apos and quote :-(
+            const QStringList lst = txt.split(QLatin1Char(apos), QString::KeepEmptyParts);
+
+            QStringList::ConstIterator it  = lst.constBegin();
+            QStringList::ConstIterator end = lst.constEnd();
+            param                          = QLatin1String("concat(");
+            param                         += QLatin1Char(apos) + *it + QLatin1Char(apos);
+            ++it;
+
+            for (; it != end ; ++it)
+            {
+                param += QLatin1String(", \"'\", ");
+                param += QLatin1Char(apos) + *it + QLatin1Char(apos);
+            }
+
+            param += QLatin1Char(')');
+        }
+
+        //qCDebug(DIGIKAM_GENERAL_LOG) << "param: " << txt << " => " << param;
+
+        return param.toUtf8();
+    }
+
     void logInfo(const QString& msg)
     {
         mPview->addEntry(msg, DHistoryView::ProgressEntry);
@@ -641,7 +628,7 @@ public:
 
 // ----------------------------------------------------------------------
 
-Generator::Generator(GalleryInfo* const info)
+GalleryGenerator::GalleryGenerator(GalleryInfo* const info)
     : QObject(),
       d(new Private)
 {
@@ -653,12 +640,12 @@ Generator::Generator(GalleryInfo* const info)
             SLOT(logWarning(QString)), Qt::QueuedConnection);
 }
 
-Generator::~Generator()
+GalleryGenerator::~GalleryGenerator()
 {
     delete d;
 }
 
-bool Generator::run()
+bool GalleryGenerator::run()
 {
     if (!d->init())
         return false;
@@ -685,28 +672,36 @@ bool Generator::run()
     return result;
 }
 
-bool Generator::warnings() const
+bool GalleryGenerator::warnings() const
 {
     return d->mWarnings;
 }
 
-void Generator::logWarning(const QString& text)
+void GalleryGenerator::logWarning(const QString& text)
 {
     d->logWarning(text);
 }
 
-void Generator::slotCancel()
+void GalleryGenerator::slotCancel()
 {
     d->mCancel = true;
 }
 
-void Generator::setProgressWidgets(DHistoryView* const pView, DProgressWdg* const pBar)
+void GalleryGenerator::setProgressWidgets(DHistoryView* const pView, DProgressWdg* const pBar)
 {
     d->mPview = pView;
     d->mPbar  = pBar;
 
     connect(d->mPbar, SIGNAL(signalProgressCanceled()),
             this, SLOT(slotCancel()));
+}
+
+QString GalleryGenerator::webifyFileName(const QString& _fileName)
+{
+    QString fileName = _fileName.toLower();
+
+    // Remove potentially troublesome chars
+    return fileName.replace(QRegExp(QLatin1String("[^-0-9a-z]+")), QLatin1String("_"));
 }
 
 } // namespace Digikam

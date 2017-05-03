@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GENERATOR_H
-#define GENERATOR_H
+#ifndef GALLERY_GENERATOR_H
+#define GALLERY_GENERATOR_H
 
 // Qt includes
 
@@ -40,20 +40,23 @@ class ImageGenerationFunctor;
  * This class is responsible for generating the HTML and scaling the images
  * according to the settings specified by the user.
  */
-class Generator : public QObject
+class GalleryGenerator : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit Generator(GalleryInfo* const);
-    virtual ~Generator();
+    explicit GalleryGenerator(GalleryInfo* const);
+    virtual ~GalleryGenerator();
 
     void setProgressWidgets(DHistoryView* const, DProgressWdg* const);
 
     bool run();
     bool warnings() const;
 
+    /**
+     * Produce a web-friendly file name
+     */
     static QString webifyFileName(const QString&);
 
 Q_SIGNALS:
@@ -81,4 +84,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GENERATOR_H
+#endif // GALLERY_GENERATOR_H

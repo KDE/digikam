@@ -38,7 +38,7 @@
 #include "htmlwizard.h"
 #include "abstractthemeparameter.h"
 #include "galleryinfo.h"
-#include "generator.h"
+#include "gallerygenerator.h"
 #include "dwidgetutils.h"
 
 namespace Digikam
@@ -95,7 +95,7 @@ void HTMLFinalPage::initializePage()
 
     // Generate GalleryInfo
 
-    Generator generator(info);
+    GalleryGenerator generator(info);
     generator.setProgressWidgets(mProgressView, mProgressBar);
 
     if (!generator.run())
