@@ -28,6 +28,7 @@
 #include <QStyle>
 #include <QSpacerItem>
 #include <QGridLayout>
+#include <QScrollArea>
 
 // KDE includes
 
@@ -63,14 +64,14 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
     textLabel1->setAlignment(Qt::AlignVCenter);
     textLabel1->setWordWrap(true);
 
-    mScrollArea = new QScrollArea(vbox);
+    QScrollArea* const mScrollArea = new QScrollArea(vbox);
     mScrollArea->setObjectName(QLatin1String("mScrollArea"));
     mScrollArea->setFrameShape(QFrame::NoFrame);
     mScrollArea->setWidgetResizable(true);
 
     mContent = new QWidget();
     mContent->setObjectName(QLatin1String("mContent"));
-    mContent->setGeometry(QRect(0, 0, 592, 429));
+    mContent->setGeometry(QRect(0, 0, 600, 430));
     mScrollArea->setWidget(mContent);
 
     vbox->setContentsMargins(QMargins());

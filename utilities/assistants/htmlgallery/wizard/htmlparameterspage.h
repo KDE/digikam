@@ -26,7 +26,6 @@
 // Qt includes
 
 #include <QLabel>
-#include <QScrollArea>
 #include <QWidget>
 #include <QByteArray>
 #include <QMap>
@@ -52,7 +51,6 @@ public:
 
 public:
 
-    QScrollArea*                mScrollArea;
     QWidget*                    mContent;
     QMap<QByteArray, QWidget*>  mThemeParameterWidgetFromName;
 };
