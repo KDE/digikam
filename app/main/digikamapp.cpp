@@ -1350,7 +1350,7 @@ void DigikamApp::setupActions()
 #endif
 
     d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
-                                i18nc("@action", "Create HTML gallery..."),
+                                i18nc("@action", "Create Html gallery..."),
                                 this);
     connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
     ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
