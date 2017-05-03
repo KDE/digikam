@@ -26,8 +26,10 @@
 // Qt includes
 
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 #include <QUrl>
+#include <QDir>
 
 // KDE includes
 
@@ -116,7 +118,7 @@ public:
     {
         delete mDesktopFile;
         mDesktopFile = new KDesktopFile(desktopFileName);
-        mUrl.setPath(desktopFileName);
+        mUrl = QUrl::fromLocalFile(desktopFileName);
 
         QStringList parameterNameList = readParameterNameList(desktopFileName);
         readParameters(parameterNameList);
@@ -180,9 +182,24 @@ const Theme::List& Theme::getList()
 {
     if (sList.isEmpty())
     {
+        QStringList list;
         QStringList internalNameList;
-        const QStringList list        = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                                  QLatin1String("digikam/themes/*/*.desktop"));
+        const QStringList filter     = QStringList() << QLatin1String("*.desktop");
+        const QStringList themesDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                                 QLatin1String("digikam/themes"),
+                                                                 QStandardPaths::LocateDirectory);
+
+        foreach(const QString& themeDir, themesDirs)
+        {
+            foreach(const QFileInfo& themeInfo, QDir(themeDir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+            {
+                foreach(const QFileInfo& deskFile, QDir(themeInfo.absoluteFilePath()).entryInfoList(filter))
+                {
+                    list << deskFile.absoluteFilePath();
+                }
+            }
+        }
+
         QStringList::ConstIterator it = list.constBegin(), end=list.constEnd();
 
         for (; it != end ; ++it)
@@ -222,11 +239,7 @@ Theme::Ptr Theme::findByInternalName(const QString& internalName)
 
 QString Theme::internalName() const
 {
-    QUrl url = d->mUrl;
-    url      = url.adjusted(QUrl::RemoveFilename);
-    url.setPath(url.path() + QLatin1String(""));
-
-    return url.fileName();
+    return d->mUrl.fileName();
 }
 
 QString Theme::name() const
