@@ -436,6 +436,8 @@ PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"        
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
+PRINT_LIBRARY_STATUS("libxml2"                "http://xmlsoft.org"                                               "(version >= 2.7.0)"                 LIBXML2_FOUND)
+PRINT_LIBRARY_STATUS("libxslt"                "http://xmlsoft.org/XSLT"                                          "(version >= 1.1.0)"                 LIBXSLT_FOUND)
 PRINT_LIBRARY_STATUS("libpthread"             "http://www.gnu.org/software/hurd/libpthread.html"                 "(version >= 2.0.0)"                 CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
 
 # ================================================================
@@ -475,6 +477,8 @@ if(Qt5_FOUND       AND
    EXIV2_FOUND     AND
    OpenCV_FOUND    AND
    EXPAT_FOUND     AND
+   LIBXML2_FOUND   AND
+   LIBXSLT_FOUND   AND
    (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
   )
     message(STATUS " digiKam can be compiled.................. YES")
