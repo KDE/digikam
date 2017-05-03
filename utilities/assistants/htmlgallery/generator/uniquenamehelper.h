@@ -38,7 +38,7 @@ class UniqueNameHelper
 {
 public:
 
-    UniqueNameHelper();
+    explicit UniqueNameHelper();
     ~UniqueNameHelper();
 
     QString makeNameUnique(const QString& name);

@@ -27,13 +27,11 @@
 // Qt includes
 
 #include <QList>
-#include <QUrl>
 
 // Local includes
 
-#include "album.h"
-#include "theme.h"
 #include "htmlgalleryconfig.h"
+#include "album.h"
 
 namespace Digikam
 {
@@ -46,19 +44,18 @@ class GalleryInfo : public HTMLGalleryConfig
 {
 public:
 
-    QString fullFormatString() const
-    {
-        return getEnumString(QLatin1String("fullFormat"));
-    }
+    explicit GalleryInfo();
+    ~GalleryInfo();
 
-    QString thumbnailFormatString() const
-    {
-        return getEnumString(QLatin1String("thumbnailFormat"));
-    }
+    QString fullFormatString() const;
 
-    QString getThemeParameterValue(const QString& theme, const QString& parameter, const QString& defaultValue) const;
+    QString thumbnailFormatString() const;
 
-    void setThemeParameterValue(const QString& theme, const QString& parameter, const QString& value);
+    QString getThemeParameterValue(const QString& theme, const QString& parameter,
+                                   const QString& defaultValue) const;
+
+    void setThemeParameterValue(const QString& theme, const QString& parameter,
+                                const QString& value);
 
 public:
 
@@ -70,33 +67,7 @@ private:
      * KConfigXT enums are mapped to ints.
      * This method returns the string associated to the enum value.
      */
-    QString getEnumString(const QString& itemName) const
-    {
-        // findItem is not marked const :-(
-        GalleryInfo* const that               = const_cast<GalleryInfo*>(this);
-        KConfigSkeletonItem* const tmp        = that->findItem(itemName);
-        KConfigSkeleton::ItemEnum* const item = dynamic_cast<KConfigSkeleton::ItemEnum*>(tmp);
-
-        Q_ASSERT(item);
-
-        if (!item)
-            return QString();
-
-        int value                                                   = item->value();
-        QList<KConfigSkeleton::ItemEnum::Choice> lst                = item->choices();
-        QList<KConfigSkeleton::ItemEnum::Choice>::ConstIterator it  = lst.constBegin();
-        QList<KConfigSkeleton::ItemEnum::Choice>::ConstIterator end = lst.constEnd();
-
-        for (int pos = 0 ; it != end ; ++it, pos++)
-        {
-            if (pos == value)
-            {
-                return (*it).name;
-            }
-        }
-
-        return QString();
-    }
+    QString getEnumString(const QString& itemName) const;
 };
 
 } // namespace Digikam

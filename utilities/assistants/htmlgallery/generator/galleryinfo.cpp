@@ -27,10 +27,32 @@
 
 #include <kconfigbase.h>
 
+// Local includes
+
+#include "album.h"
+
 namespace Digikam
 {
 
 static const char* THEME_GROUP_PREFIX = "Theme ";
+
+GalleryInfo::GalleryInfo()
+{
+}
+
+GalleryInfo::~GalleryInfo()
+{
+}
+
+QString GalleryInfo::fullFormatString() const
+{
+    return getEnumString(QLatin1String("fullFormat"));
+}
+
+QString GalleryInfo::thumbnailFormatString() const
+{
+    return getEnumString(QLatin1String("thumbnailFormat"));
+}
 
 QString GalleryInfo::getThemeParameterValue(const QString& theme,
                                             const QString& parameter,
@@ -51,6 +73,34 @@ void GalleryInfo::setThemeParameterValue(const QString& theme,
     QString groupName          = QLatin1String(THEME_GROUP_PREFIX) + theme;
     KConfigGroup group         = localConfig->group(groupName);
     group.writeEntry(parameter, value);
+}
+
+QString GalleryInfo::getEnumString(const QString& itemName) const
+{
+    // findItem is not marked const :-(
+    GalleryInfo* const that               = const_cast<GalleryInfo*>(this);
+    KConfigSkeletonItem* const tmp        = that->findItem(itemName);
+    KConfigSkeleton::ItemEnum* const item = dynamic_cast<KConfigSkeleton::ItemEnum*>(tmp);
+
+    Q_ASSERT(item);
+
+    if (!item)
+        return QString();
+
+    int value                                                   = item->value();
+    QList<KConfigSkeleton::ItemEnum::Choice> lst                = item->choices();
+    QList<KConfigSkeleton::ItemEnum::Choice>::ConstIterator it  = lst.constBegin();
+    QList<KConfigSkeleton::ItemEnum::Choice>::ConstIterator end = lst.constEnd();
+
+    for (int pos = 0 ; it != end ; ++it, pos++)
+    {
+        if (pos == value)
+        {
+            return (*it).name;
+        }
+    }
+
+    return QString();
 }
 
 } // namespace Digikam
