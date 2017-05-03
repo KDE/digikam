@@ -1,13 +1,41 @@
 [Desktop Entry]
 Name=Floating Cards
+Name[ca]=Targetes flotants
+Name[es]=Cartas flotantes
+Name[nl]=Drijvende kaarten
+Name[pt]=Cartas Flutuantes
+Name[sv]=Fria kort
+Name[uk]=Картки, що плавають
+Name[x-test]=xxFloating Cardsxx
 Comment=A dark theme with floating thumbnail/description cards. Fast navigation through the gallery.
+Comment[ca]=Un tema fosc amb targetes de miniatures/descripcions flotants. Navegació ràpida per la galeria.
+Comment[es]=Un tema oscuro con cartas flotantes de miniaturas/descripción. Navegación rápida a través de la galería.
+Comment[nl]=Een donket thema met drijvende miniatuur/beschrijvingskaarten. Snelle navigatie door de galerij.
+Comment[pt]=Um tema escuro com cartões com miniaturas/descrições. Navegação rápida pela galeria.
+Comment[sv]=Ett mörkt tema med fria miniatyrbilder och beskrivningskort. Fast navigering genom galleriet.
+Comment[uk]=Темна тема з картками мініатюр або описів, що неначебто плавають панеллю. Пришвидшує орієнтування у галереї.
+Comment[x-test]=xxA dark theme with floating thumbnail/description cards. Fast navigation through the gallery.xx
 
 [X-HTMLExport Author]
 Name=Jiří Boháč
+Name[ca]=Jiří Boháč
+Name[es]=Jiří Boháč
+Name[nl]=Jiří Boháč
+Name[pt]=Jiří Boháč
+Name[sv]=Jiří Boháč
+Name[uk]=Jiří Boháč
+Name[x-test]=xxJiří Boháčxx
 Url=mailto:jiri@boha.cz
 
 [X-HTMLExport Preview]
 Name=Floating Cards
+Name[ca]=Targetes flotants
+Name[es]=Cartas flotantes
+Name[nl]=Drijvende kaarten
+Name[pt]=Cartas Flutuantes
+Name[sv]=Fria kort
+Name[uk]=Картки, що плавають
+Name[x-test]=xxFloating Cardsxx
 Url=preview.png
 
 [X-HTMLExport Options]
@@ -15,6 +43,13 @@ Allow non-square thumbnails=true
 
 [X-HTMLExport Parameter keyboard_navigation]
 Name=Keyboard & swipe navigation
+Name[ca]=Navegació amb el teclat i lliscament
+Name[es]=Navegación con el teclado y con deslizamiento
+Name[nl]=Navigatie met het toetsenbord en met vegen
+Name[pt]=Navegação com o teclado & gestos
+Name[sv]=Tangentbords- och svepnavigering
+Name[uk]=Навігація за допомогою клавіатури і дотику
+Name[x-test]=xxKeyboard & swipe navigationxx
 Type=list
 Default=1
 Value_0=1
@@ -32,6 +67,13 @@ Caption_1[de]=Aus
 
 [X-HTMLExport Parameter preload]
 Name=Preload
+Name[ca]=Càrrega prèvia
+Name[es]=Precargar
+Name[nl]=vooraf laden
+Name[pt]=Pré-Carregar
+Name[sv]=Läs in i förväg
+Name[uk]=Попереднє завантаження
+Name[x-test]=xxPreloadxx
 Type=list
 Default=1
 Value_0=1

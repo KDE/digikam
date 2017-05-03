@@ -1,18 +1,53 @@
 [Desktop Entry]
 Comment=Yet another simple theme. Clean look with more image details.
+Comment[ca]=Un altre tema senzill. Una aparença neta amb més detalls d'imatges.
+Comment[es]=Otro tema sencillo. Aspecto limpio con más detalles sobre la imagen.
+Comment[nl]=Opnieuw een eenvoudig thema. Nette stijl met meer afbeeldingendetails.
+Comment[pt]=Ainda mais outro tema bonito. De aparência sóbria e com mais detalhes de imagem.
+Comment[sv]=Ytterligare ett enkelt tema. Rent utseende med fler bilddetaljer.
+Comment[uk]=Ще одна проста тема. Строгий вигляд з додатковими параметрами зображень.
+Comment[x-test]=xxYet another simple theme. Clean look with more image details.xx
 Icon=
 Name=Details
+Name[ca]=Detalls
+Name[es]=Detalles
+Name[nl]=Details
+Name[pt]=Detalhes
+Name[sv]=Detaljer
+Name[uk]=Подробиці
+Name[x-test]=xxDetailsxx
 
 [X-HTMLExport Author]
 Name=Gianluca Urgese
+Name[ca]=Gianluca Urgese
+Name[es]=Gianluca Urgese
+Name[nl]=Gianluca Urgese
+Name[pt]=Gianluca Urgese
+Name[sv]=Gianluca Urgese
+Name[uk]=Gianluca Urgese
+Name[x-test]=xxGianluca Urgesexx
 Url=mailto:g.urgese@jaone.it
 
 [X-HTMLExport Preview]
 Name=Details screenshot
+Name[ca]=Captura de pantalla dels detalls
+Name[es]=Captura de pantalla de detalles
+Name[nl]=Details schermafdruk
+Name[pt]=Imagem dos deetalhes
+Name[sv]=Skärmbild av Detaljer
+Name[uk]=Знімок вікна подробиць
+Name[x-test]=xxDetails screenshotxx
 Url=preview.png
 
 [X-HTMLExport Parameter footer]
 Name=Footer information
+Name[ca]=Informació del peu
+Name[es]=Información del pie
+Name[nl]=Voettekstinformatie
+Name[pt]=Informação do rodapé
+Name[sv]=Sidfotsinformation
+Name[uk]=Відомості нижнього колонтитула
+Name[x-test]=xxFooter informationxx
 
 Type=string
 Default=My personal gallery <a href="mailto:email@mydomain.tld">email@mydomain.tld</a> - Powered by <a href="http://www.digikam.org/drupal/node/17">Kipi Plugins - HTMLExport</a>

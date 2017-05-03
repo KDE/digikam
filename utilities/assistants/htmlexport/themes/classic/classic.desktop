@@ -1,17 +1,52 @@
 [Desktop Entry]
 Name=Classic
+Name[ca]=Clàssic
+Name[es]=Clásico
+Name[nl]=Klassiek
+Name[pt]=Clássico
+Name[sv]=Klassisk
+Name[uk]=Класична
+Name[x-test]=xxClassicxx
 Comment=A port of the old HTML Export plugin theme
+Comment[ca]=Un port de l'antic tema del connector d'exportació a HTML
+Comment[es]=Una adaptación del antiguo tema del complemento de exportación HTML
+Comment[nl]=Een port van het thema van de oude HTML-export
+Comment[pt]=Uma versão do tema do 'plugin' de Exportação para HTML
+Comment[sv]=En konvertering av det gamla HTML-exportinsticksprogrammets tema
+Comment[uk]=Портування старої теми додатка експорту HTML
+Comment[x-test]=xxA port of the old HTML Export plugin themexx
 
 [X-HTMLExport Preview]
 Name=Classic
+Name[ca]=Clàssic
+Name[es]=Clásico
+Name[nl]=Klassiek
+Name[pt]=Clássico
+Name[sv]=Klassisk
+Name[uk]=Класична
+Name[x-test]=xxClassicxx
 Url=preview.png
 
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
+Name[ca]=Aurélien Gâteau
+Name[es]=Aurélien Gâteau
+Name[nl]=Aurélien Gâteau
+Name[pt]=Aurélien Gâteau
+Name[sv]=Aurélien Gâteau
+Name[uk]=Aurélien Gâteau
+Name[x-test]=xxAurélien Gâteauxx
 Url=mailto:aurelien.gateau@free.fr
 
 [X-HTMLExport Parameter thumbnailPerRow]
 Name=Thumbnails per row
+Name[ca]=Miniatures per fila
+Name[es]=Miniaturas por fila
+Name[nl]=Miniaturen per rij
+Name[pt]=Miniaturas por linha
+Name[sv]=Miniatyrbilder per rad
+Name[uk]=Мініатюр на ряд
+Name[x-test]=xxThumbnails per rowxx
 Type=int
 Default=4
 Min=1
@@ -19,16 +54,37 @@ Max=100
 
 [X-HTMLExport Parameter bgColor]
 Name=Background Color
+Name[ca]=Color de fons
+Name[es]=Color del fondo
+Name[nl]=Achtergrondkleur
+Name[pt]=Cor de Fundo
+Name[sv]=Bakgrundsfärg
+Name[uk]=Колір тла
+Name[x-test]=xxBackground Colorxx
 Type=color
 Default=#333333
 
 [X-HTMLExport Parameter fgColor]
 Name=Foreground Color
+Name[ca]=Color de primer pla
+Name[es]=Color del primer plano
+Name[nl]=Voorgrondkleur
+Name[pt]=Cor Principal
+Name[sv]=Förgrundsfärg
+Name[uk]=Колір тексту
+Name[x-test]=xxForeground Colorxx
 Type=color
 Default=#d0ffd0
 
 [X-HTMLExport Parameter fontSize]
 Name=Font Size
+Name[ca]=Mida del tipus de lletra
+Name[es]=Tamaño del tipo de letra
+Name[nl]=Lettergrootte
+Name[pt]=Tamanho do Texto
+Name[sv]=Teckenstorlek
+Name[uk]=Розмір шрифту
+Name[x-test]=xxFont Sizexx
 Type=int
 Default=14
 Min=1
@@ -36,6 +92,13 @@ Max=100
 
 [X-HTMLExport Parameter imgBorderSize]
 Name=Image Border Size
+Name[ca]=Mida de la vora de la imatge
+Name[es]=Tamaño del borde de la imagen
+Name[nl]=Afbeeldingrandgrootte
+Name[pt]=Tamanho do Contorno da Imagem
+Name[sv]=Bildens kantstorlek
+Name[uk]=Розмір рамки зображення
+Name[x-test]=xxImage Border Sizexx
 Type=int
 Default=1
 Min=1
@@ -43,15 +106,36 @@ Max=50
 
 [X-HTMLExport Parameter imgBorderColor]
 Name=Image Border Color
+Name[ca]=Color de la vora de la imatge
+Name[es]=Color del borde de la imagen
+Name[nl]=Afbeeldingrandkleur
+Name[pt]=Cor do Contorno da Imagem
+Name[sv]=Bildens kantfärg
+Name[uk]=Колір рамки зображення
+Name[x-test]=xxImage Border Colorxx
 Type=color
 Default=#d0ffd0
 
 [X-HTMLExport Parameter linkColor]
 Name=Link Color
+Name[ca]=Color d'enllaç
+Name[es]=Color de los enlaces
+Name[nl]=Linkkleur
+Name[pt]=Cor da Ligação
+Name[sv]=Länkfärg
+Name[uk]=Колір посилання
+Name[x-test]=xxLink Colorxx
 Type=color
 Default=#b3b3b3
 
 [X-HTMLExport Parameter visitedLinkColor]
 Name=Visited Link Color
+Name[ca]=Color d'enllaç visitat
+Name[es]=Color de los enlaces visitados
+Name[nl]=Bezochte linkkleur
+Name[pt]=Cor da Ligação Visitada
+Name[sv]=Besökt länkfärg
+Name[uk]=Колір відвіданого посилання
+Name[x-test]=xxVisited Link Colorxx
 Type=color
 Default=#b3b3b3

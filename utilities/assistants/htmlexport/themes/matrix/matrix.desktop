@@ -1,11 +1,39 @@
 [Desktop Entry]
 Name=Matrix
+Name[ca]=Matrix
+Name[es]=Matrix
+Name[nl]=Matrix
+Name[pt]=Matrix
+Name[sv]=Matrix
+Name[uk]=Матриця
+Name[x-test]=xxMatrixxx
 Comment=Show your photos with Matrix style
+Comment[ca]=Visualitza les fotos a l'estil Matrix
+Comment[es]=Mostrar las fotos al estilo Matrix
+Comment[nl]=Toon uw foto's in matrix-stijl
+Comment[pt]=Mostrar as suas fotografias ao estilo Matrix
+Comment[sv]=Visa foton med Matrix-stil
+Comment[uk]=Показує фотографії в стилі Матриці
+Comment[x-test]=xxShow your photos with Matrix stylexx
 
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
+Name[ca]=Aurélien Gâteau
+Name[es]=Aurélien Gâteau
+Name[nl]=Aurélien Gâteau
+Name[pt]=Aurélien Gâteau
+Name[sv]=Aurélien Gâteau
+Name[uk]=Aurélien Gâteau
+Name[x-test]=xxAurélien Gâteauxx
 Url=mailto:aurelien.gateau@free.fr
 
 [X-HTMLExport Preview]
 Name=Matrix
+Name[ca]=Matrix
+Name[es]=Matrix
+Name[nl]=Matrix
+Name[pt]=Matrix
+Name[sv]=Matrix
+Name[uk]=Матриця
+Name[x-test]=xxMatrixxx
 Url=preview.png

@@ -1,13 +1,41 @@
 [Desktop Entry]
 Name=Simple
+Name[ca]=Simple
+Name[es]=Sencillo
+Name[nl]=Eenvoudig
+Name[pt]=Simples
+Name[sv]=Enkel
+Name[uk]=Проста
+Name[x-test]=xxSimplexx
 Comment=A simple and light theme
+Comment[ca]=Un tema simple i lluminós
+Comment[es]=Un tema sencillo y claro
+Comment[nl]=Een eenvoudig en licht thema
+Comment[pt]=Um tema simples e leve
+Comment[sv]=Ett enkelt och lätt tema
+Comment[uk]=Проста і легка тема
+Comment[x-test]=xxA simple and light themexx
 
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
+Name[ca]=Aurélien Gâteau
+Name[es]=Aurélien Gâteau
+Name[nl]=Aurélien Gâteau
+Name[pt]=Aurélien Gâteau
+Name[sv]=Aurélien Gâteau
+Name[uk]=Aurélien Gâteau
+Name[x-test]=xxAurélien Gâteauxx
 Url=mailto:aurelien.gateau@free.fr
 
 [X-HTMLExport Parameter style]
 Name=Style
+Name[ca]=Estil
+Name[es]=Estilo
+Name[nl]=Stijl
+Name[pt]=Estilo
+Name[sv]=Stil
+Name[uk]=Стиль
+Name[x-test]=xxStylexx
 Type=list
 Default=natural.css
 Value_0=natural.css
@@ -17,4 +45,11 @@ Caption_1=Dark
 
 [X-HTMLExport Preview]
 Name=Simple
+Name[ca]=Simple
+Name[es]=Sencillo
+Name[nl]=Eenvoudig
+Name[pt]=Simples
+Name[sv]=Enkel
+Name[uk]=Проста
+Name[x-test]=xxSimplexx
 Url=preview.png

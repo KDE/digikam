@@ -1,11 +1,39 @@
 [Desktop Entry]
 Name=Snow
+Name[ca]=Neu
+Name[es]=Nieve
+Name[nl]=Sneeuw
+Name[pt]=Neve
+Name[sv]=Snö
+Name[uk]=Сніг
+Name[x-test]=xxSnowxx
 Comment=A perfect match for your mountain holidays
+Comment[ca]=Una coincidència perfecta per a les vostres vacances de muntanya
+Comment[es]=Una pareja perfecta para las vacaciones en la montaña
+Comment[nl]=Perfect voor uw skivakanties
+Comment[pt]=Uma correspondência perfeita às suas férias na montanha
+Comment[sv]=En perfekt matchning till fjällsemestern
+Comment[uk]=Прекрасно пасує до вашої відпустки в горах
+Comment[x-test]=xxA perfect match for your mountain holidaysxx
 
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
+Name[ca]=Aurélien Gâteau
+Name[es]=Aurélien Gâteau
+Name[nl]=Aurélien Gâteau
+Name[pt]=Aurélien Gâteau
+Name[sv]=Aurélien Gâteau
+Name[uk]=Aurélien Gâteau
+Name[x-test]=xxAurélien Gâteauxx
 Url=mailto:aurelien.gateau@free.fr
 
 [X-HTMLExport Preview]
 Name=Snow
+Name[ca]=Neu
+Name[es]=Nieve
+Name[nl]=Sneeuw
+Name[pt]=Neve
+Name[sv]=Snö
+Name[uk]=Сніг
+Name[x-test]=xxSnowxx
 Url=preview.png

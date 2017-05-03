@@ -1,11 +1,39 @@
 [Desktop Entry]
 Name=Frames
+Name[ca]=Marcs
+Name[es]=Marcos
+Name[nl]=Frames
+Name[pt]=Molduras
+Name[sv]=Ramar
+Name[uk]=Рамки
+Name[x-test]=xxFramesxx
 Comment=A frame theme
+Comment[ca]=Un tema de marcs
+Comment[es]=Un tema de marcos
+Comment[nl]=Een frame-thema
+Comment[pt]=Um tema de molduras
+Comment[sv]=Ett ramtema
+Comment[uk]=Тема рамок
+Comment[x-test]=xxA frame themexx
 
 [X-HTMLExport Author]
 Name=Ruediger Bente
+Name[ca]=Ruediger Bente
+Name[es]=Ruediger Bente
+Name[nl]=Ruediger Bente
+Name[pt]=Ruediger Bente
+Name[sv]=Ruediger Bente
+Name[uk]=Ruediger Bente
+Name[x-test]=xxRuediger Bentexx
 Url=mailto:ruediger.bente@gmx.de
 
 [X-HTMLExport Preview]
 Name=Frames
+Name[ca]=Marcs
+Name[es]=Marcos
+Name[nl]=Frames
+Name[pt]=Molduras
+Name[sv]=Ramar
+Name[uk]=Рамки
+Name[x-test]=xxFramesxx
 Url=preview.png
