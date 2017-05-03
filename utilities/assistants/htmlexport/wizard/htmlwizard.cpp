@@ -49,8 +49,8 @@
 #include "theme.h"
 #include "htmloutputpage.h"
 #include "htmlthemepage.h"
+#include "htmlparameterspage.h"
 #include "ui_imagesettingspage.h"
-#include "ui_themeparameterspage.h"
 
 namespace Digikam
 {
@@ -72,13 +72,11 @@ public:
 
 // ----------------------------------------------------------------------------------------------
 
-typedef WizardPage<Ui_ThemeParametersPage> ThemeParametersPage;
-
-class ImageSettingsPage : public WizardPage<Ui_ImageSettingsPage>
+class HTMLImageSettingsPage : public WizardPage<Ui_ImageSettingsPage>
 {
 public:
 
-    ImageSettingsPage(QWizard* const dialog, const QString& title)
+    HTMLImageSettingsPage(QWizard* const dialog, const QString& title)
         : WizardPage<Ui_ImageSettingsPage>(dialog, title)
     {
         InvisibleButtonGroup* const group = new InvisibleButtonGroup(this);
@@ -99,96 +97,10 @@ public:
 
     AlbumSelectTabs*                mCollectionSelector;
     DWizardPage*                    mCollectionSelectorPage;
-    ThemeParametersPage*            mThemeParametersPage;
-    ImageSettingsPage*              mImageSettingsPage;
+    HTMLParametersPage*             mParametersPage;
+    HTMLImageSettingsPage*          mImageSettingsPage;
     HTMLOutputPage*                 mOutputPage;
     HTMLThemePage*                  mThemePage;
-
-    QMap<QByteArray, QWidget*>      mThemeParameterWidgetFromName;
-
-public:
-
-    void initThemePage()
-    {
-        QListWidget* const listWidget  = mThemePage->mThemeList;
-        Theme::List list               = Theme::getList();
-        Theme::List::ConstIterator it  = list.constBegin();
-        Theme::List::ConstIterator end = list.constEnd();
-
-        for (; it != end ; ++it)
-        {
-            Theme::Ptr theme             = *it;
-            ThemeListBoxItem* const item = new ThemeListBoxItem(listWidget, theme);
-
-            if (theme->internalName() == mInfo->theme())
-            {
-                listWidget->setCurrentItem(item);
-            }
-        }
-    }
-
-    void fillThemeParametersPage(Theme::Ptr theme)
-    {
-        // Create a new content page
-        delete mThemeParametersPage->content;
-        QWidget* const content        = new QWidget;
-        mThemeParametersPage->content = content;
-        mThemeParametersPage->scrollArea->setWidget(mThemeParametersPage->content);
-        mThemeParameterWidgetFromName.clear();
-
-        // Create layout. We need to recreate it every time, to get rid of
-        // spacers
-        QGridLayout* const layout     = new QGridLayout(content);
-        layout->setContentsMargins(QMargins());
-        layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-        // Create widgets
-        Theme::ParameterList parameterList      = theme->parameterList();
-        QString themeInternalName               = theme->internalName();
-        Theme::ParameterList::ConstIterator it  = parameterList.constBegin();
-        Theme::ParameterList::ConstIterator end = parameterList.constEnd();
-
-        for (; it != end ; ++it)
-        {
-            AbstractThemeParameter* const themeParameter = *it;
-            QByteArray internalName                      = themeParameter->internalName();
-            QString value                                = mInfo->getThemeParameterValue(themeInternalName,
-                                                                QString::fromLatin1(internalName),
-                                                                themeParameter->defaultValue());
-
-            QString name          = themeParameter->name();
-            name                  = i18nc("'%1' is a label for a theme parameter", "%1:", name);
-
-            QLabel* const label   = new QLabel(name, content);
-            label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-            QWidget* const widget = themeParameter->createWidget(content, value);
-            label->setBuddy(widget);
-
-            int row               = layout->rowCount();
-            layout->addWidget(label, row, 0);
-
-            if (widget->sizePolicy().expandingDirections() & Qt::Horizontal)
-            {
-                // Widget wants full width
-                layout->addWidget(widget, row, 1, 1, 2);
-            }
-            else
-            {
-                // Widget doesn't like to be stretched, add a spacer next to it
-                layout->addWidget(widget, row, 1);
-                QSpacerItem* const spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding,
-                                                            QSizePolicy::Minimum);
-                layout->addItem(spacer, row, 2);
-            }
-
-            mThemeParameterWidgetFromName[internalName] = widget;
-        }
-
-        // Add spacer at the end, so that widgets aren't spread on the whole
-        // parent height
-        QSpacerItem* const spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-        layout->addItem(spacer, layout->rowCount(), 0);
-    }
 };
 
 HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
@@ -209,19 +121,28 @@ HTMLWizard::HTMLWizard(QWidget* const parent, GalleryInfo* const info)
     connect(d->mCollectionSelector, SIGNAL(signalAlbumSelectionChanged()),
             this, SLOT(updateCollectionSelectorPageValidity()));
 
-    d->mThemePage              = new HTMLThemePage(this, i18n("Theme"));
+    // ---------------------------------------------------------------
+
+    d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
     d->mThemePage->initThemePage(d->mInfo);
 
     connect(d->mThemePage->mThemeList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotThemeSelectionChanged()));
 
-    d->mThemeParametersPage    = new ThemeParametersPage(this, i18n("Theme Parameters"));
-    d->mImageSettingsPage      = new ImageSettingsPage(this, i18n("Image Settings"));
+    // ---------------------------------------------------------------
+
+    d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
+    d->mImageSettingsPage      = new HTMLImageSettingsPage(this, i18n("Image Settings"));
+
+    // ---------------------------------------------------------------
+
     d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
     d->mOutputPage->kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
 
     connect(d->mOutputPage->kcfg_destUrl, SIGNAL(textChanged(QString)),
             this, SLOT(updateFinishPageValidity()));
+
+    // ---------------------------------------------------------------
 
     d->mConfigManager          = new KConfigDialogManager(this, d->mInfo);
     d->mConfigManager->updateWidgets();
@@ -320,7 +241,7 @@ void HTMLWizard::accept()
     {
         AbstractThemeParameter* const themeParameter = *it;
         QByteArray parameterInternalName             = themeParameter->internalName();
-        QWidget* const widget                        = d->mThemeParameterWidgetFromName[parameterInternalName];
+        QWidget* const widget                        = d->mParametersPage->mThemeParameterWidgetFromName[parameterInternalName];
         QString value                                = themeParameter->valueFromWidget(widget);
 
         d->mInfo->setThemeParameterValue(themeInternalName,
