@@ -38,12 +38,18 @@ namespace Digikam
 
 class HTMLFinalPage : public DWizardPage
 {
+    Q_OBJECT
+
 public:
 
     explicit HTMLFinalPage(QWizard* const dialog, const QString& title);
     ~HTMLFinalPage();
 
     void initializePage();
+
+private Q_SLOTS:
+
+    void slotProcess();
 
 private:
 

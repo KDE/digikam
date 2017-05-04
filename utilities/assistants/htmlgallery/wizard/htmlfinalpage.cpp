@@ -30,6 +30,7 @@
 #include <QUrl>
 #include <QApplication>
 #include <QStyle>
+#include <QTimer>
 
 // KDE includes
 
@@ -70,6 +71,11 @@ HTMLFinalPage::~HTMLFinalPage()
 }
 
 void HTMLFinalPage::initializePage()
+{
+    QTimer::singleShot(0, this, SLOT(slotProcess()));
+}
+
+void HTMLFinalPage::slotProcess()
 {
     HTMLWizard* const wizard                = dynamic_cast<HTMLWizard*>(assistant());
 
