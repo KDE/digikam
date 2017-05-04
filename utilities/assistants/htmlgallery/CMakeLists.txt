@@ -56,5 +56,3 @@ set(libhtmlgallery_SRCS
 )
 
 add_library(htmlgallery_src OBJECT ${libhtmlgallery_SRCS})
-
-install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)
