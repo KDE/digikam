@@ -101,7 +101,7 @@ public:
         return mFullResize;
     }
 
-    void setFullSize( int v )
+    void setFullSize(int v)
     {
         if (!isImmutable(QLatin1String("fullSize")))
             mFullSize = v;
@@ -112,7 +112,7 @@ public:
         return mFullSize;
     }
 
-    void setFullFormat( int v )
+    void setFullFormat(int v)
     {
         if (!isImmutable(QLatin1String("fullFormat")))
             mFullFormat = v;
@@ -123,7 +123,7 @@ public:
         return mFullFormat;
     }
 
-    void setFullQuality( int v )
+    void setFullQuality(int v)
     {
         if (!isImmutable(QLatin1String("fullQuality")))
             mFullQuality = v;
@@ -134,7 +134,7 @@ public:
         return mFullQuality;
     }
 
-    void setCopyOriginalImage( bool v )
+    void setCopyOriginalImage(bool v)
     {
         if (!isImmutable(QLatin1String("copyOriginalImage")))
             mCopyOriginalImage = v;
@@ -145,7 +145,7 @@ public:
         return mCopyOriginalImage;
     }
 
-    void setThumbnailSize( int v )
+    void setThumbnailSize(int v)
     {
         if (!isImmutable(QLatin1String("thumbnailSize")))
             mThumbnailSize = v;
@@ -156,7 +156,7 @@ public:
         return mThumbnailSize;
     }
 
-    void setThumbnailFormat( int v )
+    void setThumbnailFormat(int v)
     {
         if (!isImmutable(QLatin1String("thumbnailFormat")))
             mThumbnailFormat = v;
@@ -167,7 +167,7 @@ public:
         return mThumbnailFormat;
     }
 
-    void setThumbnailQuality( int v )
+    void setThumbnailQuality(int v)
     {
         if (!isImmutable(QLatin1String("thumbnailQuality")))
             mThumbnailQuality = v;
@@ -178,7 +178,7 @@ public:
         return mThumbnailQuality;
     }
 
-    void setThumbnailSquare( bool v )
+    void setThumbnailSquare(bool v)
     {
         if (!isImmutable(QLatin1String("thumbnailSquare")))
             mThumbnailSquare = v;
@@ -189,7 +189,7 @@ public:
         return mThumbnailSquare;
     }
 
-    void setDestUrl( const QUrl & v )
+    void setDestUrl(const QUrl& v)
     {
         if (!isImmutable(QLatin1String("destUrl")))
             mDestUrl = v;
@@ -200,7 +200,7 @@ public:
         return mDestUrl;
     }
 
-    void setOpenInBrowser( bool v )
+    void setOpenInBrowser(bool v)
     {
         if (!isImmutable(QLatin1String("openInBrowser")))
             mOpenInBrowser = v;

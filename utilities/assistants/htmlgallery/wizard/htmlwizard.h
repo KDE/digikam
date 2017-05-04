@@ -53,9 +53,9 @@ public:
     int parametersPageId()                             const;
     int imageSettingPageId()                           const;
 
-    GalleryInfo* galleryInfo()                         const;
-    GalleryTheme::Ptr   theme()                        const;
-    AlbumList    albums()                              const;
+    GalleryInfo*      galleryInfo()                    const;
+    GalleryTheme::Ptr theme()                          const;
+    AlbumList         albums()                         const;
     QWidget* parametersWidget(const QByteArray& iname) const;
     void updateSettings();
 

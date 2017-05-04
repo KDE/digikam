@@ -23,6 +23,10 @@
 #ifndef HTML_OUTPUT_PAGE_H
 #define HTML_OUTPUT_PAGE_H
 
+// Qt includes
+
+#include <QCheckBox>
+
 // Local includes
 
 #include "dwizardpage.h"
@@ -42,7 +46,8 @@ public:
 
 public:
 
-    DFileSelector* kcfg_destUrl;
+    DFileSelector* mKcfg_destUrl;
+    QCheckBox*     mKcfg_openInBrowser;
 };
 
 } // namespace Digikam

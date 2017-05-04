@@ -29,7 +29,6 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QUrl>
-#include <QCheckBox>
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
@@ -37,6 +36,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+
+// Local includes
+
+#include "htmlwizard.h"
+#include "galleryinfo.h"
 
 namespace Digikam
 {
@@ -53,21 +57,21 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Destination folder:"));
 
-    kcfg_destUrl = new DFileSelector(this);
-    kcfg_destUrl->setObjectName(QLatin1String("kcfg_destUrl"));
-    kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
-    textLabel1->setBuddy(kcfg_destUrl);
+    mKcfg_destUrl = new DFileSelector(this);
+    mKcfg_destUrl->setObjectName(QLatin1String("mKcfg_destUrl"));
+    mKcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
+    textLabel1->setBuddy(mKcfg_destUrl);
 
     QHBoxLayout* const hboxLayout = new QHBoxLayout();
     hboxLayout->setContentsMargins(QMargins());
     hboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hboxLayout->setObjectName(QLatin1String("hboxLayout"));
     hboxLayout->addWidget(textLabel1);
-    hboxLayout->addWidget(kcfg_destUrl);
+    hboxLayout->addWidget(mKcfg_destUrl);
 
-    QCheckBox* const kcfg_openInBrowser = new QCheckBox(this);
-    kcfg_openInBrowser->setObjectName(QLatin1String("kcfg_openInBrowser"));
-    kcfg_openInBrowser->setText(i18n("Open in browser"));
+    mKcfg_openInBrowser = new QCheckBox(this);
+    mKcfg_openInBrowser->setObjectName(QLatin1String("mKcfg_openInBrowser"));
+    mKcfg_openInBrowser->setText(i18n("Open in browser"));
 
     QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum,
                                                     QSizePolicy::Expanding);
@@ -77,12 +81,12 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     vboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vboxLayout->setObjectName(QLatin1String("vboxLayout"));
     vboxLayout->addLayout(hboxLayout);
-    vboxLayout->addWidget(kcfg_openInBrowser);
+    vboxLayout->addWidget(mKcfg_openInBrowser);
     vboxLayout->addItem(spacer1);
 
     setPageWidget(box);
 
-    connect(kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
+    connect(mKcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
             this, SIGNAL(completeChanged()));
 }
 
@@ -92,7 +96,16 @@ HTMLOutputPage::~HTMLOutputPage()
 
 bool HTMLOutputPage::validatePage()
 {
-    return (!kcfg_destUrl->fileDlgPath().isEmpty());
+    if (mKcfg_destUrl->fileDlgPath().isEmpty())
+        return false;
+
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryInfo* const info  = wizard->galleryInfo();
+
+    info->setDestUrl(QUrl::fromLocalFile(mKcfg_destUrl->fileDlgPath()));
+    info->setOpenInBrowser(mKcfg_openInBrowser->isChecked());
+
+    return true;
 }
 
 } // namespace Digikam
