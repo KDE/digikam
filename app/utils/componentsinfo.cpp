@@ -117,6 +117,12 @@ void showDigikamComponentsInfo()
     list.insert(i18n("Panorama support"), i18n("no"));
 #endif /* HAVE_PANORAMA */
 
+#ifdef HAVE_HTMLGALLERY
+    list.insert(i18n("HTML Gallery support"), i18n("yes"));
+#else
+    list.insert(i18n("HTML Gallery support"), i18n("no"));
+#endif /* HAVE_HTMLGALLERY */
+
 #ifdef HAVE_KCALENDAR
     list.insert(i18n("Calendar support"), i18n("yes"));
 #else
