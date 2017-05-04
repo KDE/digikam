@@ -233,6 +233,9 @@ AlbumList AlbumSelectTabs::selectedAlbums() const
     list << d->searchModel->checkedAlbums();
     list << d->labelsSearchHandler->albumForSelectedItems();
 
+    // Remove all null albums.
+    list.removeAll(0);
+
     qCDebug(DIGIKAM_GENERAL_LOG) << list.count() << " albums selected";
 
     return list;
