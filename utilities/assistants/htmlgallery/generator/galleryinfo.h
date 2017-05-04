@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QList>
+#include <QDebug>
 
 // Local includes
 
@@ -69,6 +70,9 @@ private:
      */
     QString getEnumString(const QString& itemName) const;
 };
+
+//! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
+QDebug operator<<(QDebug dbg, const GalleryInfo& t);
 
 } // namespace Digikam
 

@@ -103,4 +103,37 @@ QString GalleryInfo::getEnumString(const QString& itemName) const
     return QString();
 }
 
+QDebug operator<<(QDebug dbg, const GalleryInfo& t)
+{
+    dbg.nospace() << "GalleryInfo::Albums: "
+                  << t.mCollectionList << ", ";
+    dbg.nospace() << "GalleryInfo::Theme: "
+                  << t.theme() << ", ";
+    dbg.nospace() << "GalleryInfo::UseOriginalImageAsFullImage: "
+                  << t.useOriginalImageAsFullImage() << ", ";
+    dbg.nospace() << "GalleryInfo::FullResize: "
+                  << t.fullResize() << ", ";
+    dbg.nospace() << "GalleryInfo::FullSize: "
+                  << t.fullSize() << ", ";
+    dbg.nospace() << "GalleryInfo::FullFormat: "
+                  << t.fullFormat() << ", ";
+    dbg.nospace() << "GalleryInfo::FullQuality: "
+                  << t.fullQuality() << ", ";
+    dbg.nospace() << "GalleryInfo::CopyOriginalImage: "
+                  << t.copyOriginalImage() << ", ";
+    dbg.nospace() << "GalleryInfo::ThumbnailSize: "
+                  << t.thumbnailSize() << ", ";
+    dbg.nospace() << "GalleryInfo::ThumbnailFormat: "
+                  << t.thumbnailFormat() << ", ";
+    dbg.nospace() << "GalleryInfo::ThumbnailQuality: "
+                  << t.thumbnailQuality();
+    dbg.nospace() << "GalleryInfo::ThumbnailSquare: "
+                  << t.thumbnailSquare();
+    dbg.nospace() << "GalleryInfo::DestUrl: "
+                  << t.destUrl();
+    dbg.nospace() << "GalleryInfo::OpenInBrowser: "
+                  << t.openInBrowser();
+    return dbg.space();
+}
+
 } // namespace Digikam

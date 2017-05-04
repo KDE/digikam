@@ -42,6 +42,7 @@
 #include "galleryinfo.h"
 #include "gallerygenerator.h"
 #include "dwidgetutils.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -98,6 +99,8 @@ void HTMLFinalPage::initializePage()
     info->save();
 
     // Generate GalleryInfo
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << info;
 
     GalleryGenerator generator(info);
     generator.setProgressWidgets(mProgressView, mProgressBar);
