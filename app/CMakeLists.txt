@@ -384,8 +384,14 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:queuemanager_src>
             $<TARGET_OBJECTS:importui_src>
             $<TARGET_OBJECTS:advancedrename_src>
-            $<TARGET_OBJECTS:htmlgallery_src>
 )
+
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+    set(DIGIKAM_OBJECTS
+        ${DIGIKAM_OBJECTS}
+        $<TARGET_OBJECTS:htmlgallery_src>
+    )
+endif()
 
 if(KF5Kipi_FOUND)
     set(DIGIKAM_OBJECTS
@@ -428,11 +434,13 @@ target_link_libraries(digikamgui
                       KF5::I18n
 
                       ${OpenCV_LIBRARIES}
-
-                      ${LIBXSLT_EXSLT_LIBRARIES}
-                      ${LIBXSLT_LIBRARIES}
-                      ${LIBXML2_LIBRARIES}
 )
+
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+    target_link_libraries(digikamgui PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
+                                            ${LIBXSLT_LIBRARIES}
+                                            ${LIBXML2_LIBRARIES})
+endif()
 
 if(ENABLE_DBUS)
     target_link_libraries(digikamgui PUBLIC Qt5::DBus)

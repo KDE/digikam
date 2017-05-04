@@ -6,7 +6,7 @@
  * Date        : 2009-08-03
  * Description : digiKam config header
  *
- * Copyright (C) 2009-2016 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2009-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -80,6 +80,9 @@
 
 /* Define to 1 if Panorama tool is supported */
 #cmakedefine HAVE_PANORAMA 1
+
+/* Define to 1 if HTMLGallery tool is supported */
+#cmakedefine HAVE_HTMLGALLERY 1
 
 /* Define to 1 if we support mysql database */
 #cmakedefine HAVE_MYSQLSUPPORT 1

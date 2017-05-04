@@ -210,9 +210,6 @@ find_package(LCMS2                      REQUIRED)
 find_package(EXPAT                      REQUIRED)  # For DNGWriter: XMP SDK need Expat library to compile.
 find_package(Threads                    REQUIRED)  # For DNGWriter and LibRaw which needs native threads support.
 
-find_package(LibXslt                    REQUIRED)  # For HTMLGallery tool.
-find_package(LibXml2                    REQUIRED)  # For HTMLGallery tool.
-
 find_package(Exiv2 ${EXIV2_MIN_VERSION} REQUIRED)
 
 set_package_properties("Exiv2"     PROPERTIES
@@ -270,6 +267,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/app/utils/libopencv.h.cmake.in ${CMAK
 
 find_package(FLEX)                                 # For Panorama tool.
 find_package(BISON)                                # For Panorama tool.
+
+find_package(LibXslt)                              # For HTMLGallery tool.
+find_package(LibXml2)                              # For HTMLGallery tool.
 
 DETECT_LIBKIPI(${KIPI_MIN_VERSION})
 DETECT_LIBKSANE(${KSANE_MIN_VERSION})
@@ -376,6 +376,14 @@ else()
     set(HAVE_PANORAMA 0)
 endif()
 
+# -- Check dependencies for HTMLGallery tool -------------------------------------
+
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+    set(HAVE_HTMLGALLERY 1)
+else()
+    set(HAVE_HTMLGALLERY 0)
+endif()
+
 # -- compilation options definitions -----------------------------------------------------------
 
 MACRO_BOOL_TO_01(KF5Kipi_FOUND                                          HAVE_KIPI)
@@ -424,7 +432,6 @@ PRINT_COMPONENT_COMPILE_STATUS("MySQL Internal Support"     ENABLE_INTERNALMYSQL
 PRINT_COMPONENT_COMPILE_STATUS("DBUS Support"               ENABLE_DBUS)
 PRINT_COMPONENT_COMPILE_STATUS("App. Style Support"         ENABLE_APPSTYLES)
 
-
 # ================================================================
 
 PRINT_LIBRARY_STATUS("libqt"                  "http://www.qtsoftware.com"                                        "(version >= ${QT_MIN_VERSION})"     Qt5_FOUND)
@@ -436,8 +443,6 @@ PRINT_LIBRARY_STATUS("liblcms"                "http://www.littlecms.com"        
 PRINT_LIBRARY_STATUS("libboostgraph"          "http://www.boost.org/doc/libs"                                    "(version >= 1.43.0)"                Boost_FOUND)
 PRINT_LIBRARY_STATUS("libopencv"              "http://opencv.willowgarage.com"                                   "(version >= ${OPENCV_MIN_VERSION})" OpenCV_FOUND)
 PRINT_LIBRARY_STATUS("libexpat"               "http://expat.sourceforge.net"                                     "(version >= 2.0.0)"                 EXPAT_FOUND)
-PRINT_LIBRARY_STATUS("libxml2"                "http://xmlsoft.org"                                               "(version >= 2.7.0)"                 LIBXML2_FOUND)
-PRINT_LIBRARY_STATUS("libxslt"                "http://xmlsoft.org/XSLT"                                          "(version >= 1.1.0)"                 LIBXSLT_FOUND)
 PRINT_LIBRARY_STATUS("libpthread"             "http://www.gnu.org/software/hurd/libpthread.html"                 "(version >= 2.0.0)"                 CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
 
 # ================================================================
@@ -462,8 +467,10 @@ PRINT_OPTIONAL_LIBRARY_STATUS("liblqr-1"          "http://liblqr.wikidot.com"   
 PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"                                      "(version >= 3.0.0)"                   "digiKam will be compiled without Refocus tool support."                      EIGEN3_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                   "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                   "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpneGL support."                            HAVE_OPENGL)
+PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpenGL support."                            HAVE_OPENGL)
 PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= 1.11.0)"                  "digiKam will be compiled without Media Player support."                      QTAV_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libxml2"           "http://xmlsoft.org"                                              "(version >= 2.7.0)"                    "digiKam will be compiled without HTMLGallery support."                      LIBXML2_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libxslt"           "http://xmlsoft.org/XSLT"                                         "(version >= 1.1.0)"                    "digiKam will be compiled without HTMLGallery support."                      LIBXSLT_FOUND)
 
 # ================================================================
 
@@ -477,8 +484,6 @@ if(Qt5_FOUND       AND
    EXIV2_FOUND     AND
    OpenCV_FOUND    AND
    EXPAT_FOUND     AND
-   LIBXML2_FOUND   AND
-   LIBXSLT_FOUND   AND
    (CMAKE_USE_PTHREADS_INIT OR CMAKE_USE_WIN32_THREADS_INIT)
   )
     message(STATUS " digiKam can be compiled.................. YES")
