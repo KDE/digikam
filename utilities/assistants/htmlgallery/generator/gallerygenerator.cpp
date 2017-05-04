@@ -83,6 +83,16 @@ public:
 
 public:
 
+    Private()
+      : that(0),
+        mInfo(0),
+        mWarnings(false),
+        mCancel(false),
+        mPview(0),
+        mPbar(0)
+    {
+    }
+
     GalleryGenerator* that;
     GalleryInfo*      mInfo;
     GalleryTheme::Ptr mTheme;
@@ -179,7 +189,6 @@ public:
         for (; collectionIt != collectionEnd ; ++collectionIt)
         {
             Album* const collection    = *collectionIt;
-
             QString collectionFileName = webifyFileName(collection->title());
             QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
 
@@ -204,7 +213,9 @@ public:
                     PAlbum* const p = dynamic_cast<PAlbum*>(collection);
 
                     if (p)
+                    {
                         imageList = imagesFromPAlbum(p);
+                    }
 
                     break;
                 }
@@ -214,7 +225,9 @@ public:
                     TAlbum* const p = dynamic_cast<TAlbum*>(collection);
 
                     if (p)
+                    {
                         imageList = imagesFromTAlbum(p);
+                    }
 
                     break;
                 }
@@ -244,7 +257,7 @@ public:
                     continue;
                 }
 
-                ImageInfo info = ImageInfo::fromUrl(url);
+                ImageInfo info       = ImageInfo::fromUrl(url);
                 ImageElement element = ImageElement(info);
                 element.mPath        = remoteUrlHash.value(url, url.toLocalFile());
                 imageElementList << element;
@@ -471,7 +484,7 @@ public:
     void addThemeParameters(XsltParameterMap& map)
     {
         GalleryTheme::ParameterList parameterList      = mTheme->parameterList();
-        QString themeInternalName               = mTheme->internalName();
+        QString themeInternalName                      = mTheme->internalName();
         GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
         GalleryTheme::ParameterList::ConstIterator end = parameterList.constEnd();
 
@@ -582,9 +595,9 @@ public:
 
         QStringList list = CoreDbAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
         QList<QUrl> urlList;
-        CoreDbNameFilter  nameFilter(ApplicationSettings::instance()->getAllFileFilter());
+        CoreDbNameFilter nameFilter(ApplicationSettings::instance()->getAllFileFilter());
 
-        for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+        for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
             if (nameFilter.matches(*it))
             {
@@ -601,9 +614,9 @@ public:
     {
         QStringList list = CoreDbAccess().db()->getItemURLsInTag(album->id());
         QList<QUrl> urlList;
-        CoreDbNameFilter  nameFilter(ApplicationSettings::instance()->getAllFileFilter());
+        CoreDbNameFilter nameFilter(ApplicationSettings::instance()->getAllFileFilter());
 
-        for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
+        for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
         {
             if (nameFilter.matches(*it))
             {
@@ -685,9 +698,9 @@ void GalleryGenerator::setProgressWidgets(DHistoryView* const pView, DProgressWd
             this, SLOT(slotCancel()));
 }
 
-QString GalleryGenerator::webifyFileName(const QString& _fileName)
+QString GalleryGenerator::webifyFileName(const QString& fname)
 {
-    QString fileName = _fileName.toLower();
+    QString fileName = fname.toLower();
 
     // Remove potentially troublesome chars
     return fileName.replace(QRegExp(QLatin1String("[^-0-9a-z]+")), QLatin1String("_"));
