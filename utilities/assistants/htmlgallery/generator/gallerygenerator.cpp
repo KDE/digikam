@@ -271,7 +271,7 @@ public:
             watcher.setFuture(future);
 
             connect(&watcher, SIGNAL(progressValueChanged(int)),
-                    mPbar, SLOT(setProgress(int)));
+                    mPbar, SLOT(setValue(int)));
 
             mPbar->setMaximum(imageElementList.count());
 
