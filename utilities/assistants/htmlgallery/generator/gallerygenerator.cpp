@@ -118,21 +118,10 @@ public:
     {
         logInfo(i18n("Create directories"));
 
-        QStringList parts = dirName.split(QLatin1Char('/'), QString::SkipEmptyParts);
-        QDir dir          = QDir::root();
-
-        Q_FOREACH(const QString& part, parts)
+        if (!QDir().mkpath(dirName))
         {
-            if (!dir.exists(part))
-            {
-                if (!dir.mkdir(part))
-                {
-                    logError(i18n("Could not create folder '%1' in '%2'", part, dir.absolutePath()));
-                    return false;
-                }
-            }
-
-            dir.cd(part);
+            logError(i18n("Could not create folder '%1'", QDir::toNativeSeparators(dirName)));
+            return false;
         }
 
         return true;
