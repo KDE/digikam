@@ -132,9 +132,9 @@ public:
         logInfo(i18n("Copying theme"));
 
         QUrl srcUrl  = QUrl::fromLocalFile(mTheme->directory());
-        QUrl destUrl = mInfo->destUrl();
+        QUrl destUrl = mInfo->destUrl().adjusted(QUrl::StripTrailingSlash);
 
-        destUrl.setPath(srcUrl.fileName());
+        destUrl.setPath(destUrl.path() + QLatin1Char('/') + srcUrl.fileName());
         QFile file(destUrl.toLocalFile());
 
         if (file.exists())
