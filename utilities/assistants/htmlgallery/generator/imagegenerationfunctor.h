@@ -62,10 +62,8 @@ private:
 
 private:
 
-    GalleryGenerator* mGenerator;
-    GalleryInfo*      mInfo;
-    QString           mDestDir;
-    UniqueNameHelper  mUniqueNameHelper;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
