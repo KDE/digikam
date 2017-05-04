@@ -118,7 +118,7 @@ public:
     {
         delete mDesktopFile;
         mDesktopFile = new KDesktopFile(desktopFileName);
-        mUrl = QUrl::fromLocalFile(desktopFileName);
+        mUrl         = QUrl::fromLocalFile(desktopFileName);
 
         QStringList parameterNameList = readParameterNameList(desktopFileName);
         readParameters(parameterNameList);
@@ -204,9 +204,9 @@ const GalleryTheme::List& GalleryTheme::getList()
 
         for (; it != end ; ++it)
         {
-            GalleryTheme* const theme   = new GalleryTheme;
+            GalleryTheme* const theme = new GalleryTheme;
             theme->d->init(*it);
-            QString internalName = theme->internalName();
+            QString internalName      = theme->internalName();
 
             if (!internalNameList.contains(internalName))
             {

@@ -41,6 +41,12 @@ class IntThemeParameter::Private
 {
 public:
 
+    Private()
+      : mMinValue(0),
+        mMaxValue(99999)
+    {
+    }
+
     int mMinValue;
     int mMaxValue;
 };
