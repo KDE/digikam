@@ -43,6 +43,7 @@
 #include "gallerygenerator.h"
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
+#include "coredburl.h"
 
 namespace Digikam
 {
@@ -102,6 +103,21 @@ void HTMLFinalPage::initializePage()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << info;
 
+    mProgressView->addEntry(i18n("%1 albums to process:", info->mCollectionList.count()),
+                            DHistoryView::ProgressEntry);
+
+    foreach(Album* const album, info->mCollectionList)
+    {
+        if (album)
+        {
+            mProgressView->addEntry(album->databaseUrl().fileUrl().toString(),
+                                    DHistoryView::ProgressEntry);
+        }
+    }
+
+    mProgressView->addEntry(i18n("Output directory: %1", info->destUrl().toLocalFile()),
+                            DHistoryView::ProgressEntry);
+
     GalleryGenerator generator(info);
     generator.setProgressWidgets(mProgressView, mProgressBar);
 
@@ -112,7 +128,8 @@ void HTMLFinalPage::initializePage()
 
     if (generator.warnings())
     {
-        mProgressView->addEntry(i18n("Finished, but some warnings occurred."), DHistoryView::WarningEntry);
+        mProgressView->addEntry(i18n("Finished, but some warnings occurred."),
+                                DHistoryView::WarningEntry);
     }
 
     if (info->openInBrowser())
