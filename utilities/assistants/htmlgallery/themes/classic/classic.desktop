@@ -1,14 +1,17 @@
 [Desktop Entry]
 Name=Classic
 Name[ca]=Clàssic
+Name[cs]=Klasický
 Name[es]=Clásico
 Name[nl]=Klassiek
+Name[nn]=Klassisk
 Name[pt]=Clássico
 Name[sv]=Klassisk
 Name[uk]=Класична
 Name[x-test]=xxClassicxx
 Comment=A port of the old HTML Export plugin theme
 Comment[ca]=Un port de l'antic tema del connector d'exportació a HTML
+Comment[cs]=Port starého motivu pro modul HTML export
 Comment[es]=Una adaptación del antiguo tema del complemento de exportación HTML
 Comment[nl]=Een port van het thema van de oude HTML-export
 Comment[pt]=Uma versão do tema do 'plugin' de Exportação para HTML
@@ -19,8 +22,10 @@ Comment[x-test]=xxA port of the old HTML Export plugin themexx
 [X-HTMLExport Preview]
 Name=Classic
 Name[ca]=Clàssic
+Name[cs]=Klasický
 Name[es]=Clásico
 Name[nl]=Klassiek
+Name[nn]=Klassisk
 Name[pt]=Clássico
 Name[sv]=Klassisk
 Name[uk]=Класична
@@ -30,6 +35,7 @@ Url=preview.png
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
 Name[ca]=Aurélien Gâteau
+Name[cs]=Aurélien Gâteau
 Name[es]=Aurélien Gâteau
 Name[nl]=Aurélien Gâteau
 Name[pt]=Aurélien Gâteau
@@ -41,6 +47,7 @@ Url=mailto:aurelien.gateau@free.fr
 [X-HTMLExport Parameter thumbnailPerRow]
 Name=Thumbnails per row
 Name[ca]=Miniatures per fila
+Name[cs]=Náhledy na řádek
 Name[es]=Miniaturas por fila
 Name[nl]=Miniaturen per rij
 Name[pt]=Miniaturas por linha
@@ -55,6 +62,7 @@ Max=100
 [X-HTMLExport Parameter bgColor]
 Name=Background Color
 Name[ca]=Color de fons
+Name[cs]=Barva pozadí
 Name[es]=Color del fondo
 Name[nl]=Achtergrondkleur
 Name[pt]=Cor de Fundo
@@ -67,6 +75,7 @@ Default=#333333
 [X-HTMLExport Parameter fgColor]
 Name=Foreground Color
 Name[ca]=Color de primer pla
+Name[cs]=Barva popředí
 Name[es]=Color del primer plano
 Name[nl]=Voorgrondkleur
 Name[pt]=Cor Principal
@@ -79,6 +88,7 @@ Default=#d0ffd0
 [X-HTMLExport Parameter fontSize]
 Name=Font Size
 Name[ca]=Mida del tipus de lletra
+Name[cs]=Velikost písma
 Name[es]=Tamaño del tipo de letra
 Name[nl]=Lettergrootte
 Name[pt]=Tamanho do Texto
@@ -93,6 +103,7 @@ Max=100
 [X-HTMLExport Parameter imgBorderSize]
 Name=Image Border Size
 Name[ca]=Mida de la vora de la imatge
+Name[cs]=Velikost rámečku obrázku
 Name[es]=Tamaño del borde de la imagen
 Name[nl]=Afbeeldingrandgrootte
 Name[pt]=Tamanho do Contorno da Imagem
@@ -107,6 +118,7 @@ Max=50
 [X-HTMLExport Parameter imgBorderColor]
 Name=Image Border Color
 Name[ca]=Color de la vora de la imatge
+Name[cs]=Barva rámečku obrázku
 Name[es]=Color del borde de la imagen
 Name[nl]=Afbeeldingrandkleur
 Name[pt]=Cor do Contorno da Imagem
@@ -119,6 +131,7 @@ Default=#d0ffd0
 [X-HTMLExport Parameter linkColor]
 Name=Link Color
 Name[ca]=Color d'enllaç
+Name[cs]=Barva odkazu
 Name[es]=Color de los enlaces
 Name[nl]=Linkkleur
 Name[pt]=Cor da Ligação
@@ -131,6 +144,7 @@ Default=#b3b3b3
 [X-HTMLExport Parameter visitedLinkColor]
 Name=Visited Link Color
 Name[ca]=Color d'enllaç visitat
+Name[cs]=Barva navštíveného odkazu
 Name[es]=Color de los enlaces visitados
 Name[nl]=Bezochte linkkleur
 Name[pt]=Cor da Ligação Visitada

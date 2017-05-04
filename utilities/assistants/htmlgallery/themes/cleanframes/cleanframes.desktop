@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Clean Frames
 Name[ca]=Marcs nets
+Name[cs]=Vyčistit rámce
 Name[es]=Marcos limpios
 Name[nl]=Clean Frames
 Name[pt]=Molduras Limpas
@@ -9,6 +10,7 @@ Name[uk]=Чіткі рамки
 Name[x-test]=xxClean Framesxx
 Comment=A frame theme based on Ruediger Bente's frame theme
 Comment[ca]=Un tema de marcs basat en el tema de marcs del Ruediger Bente
+Comment[cs]=Motiv rámce založený na motivu Ruediger Bente
 Comment[es]=Un tema de marcos basado en el tema de Ruediger Bente
 Comment[nl]=Een framethema gebaseerd op het framethema van Ruediger Bente'
 Comment[pt]=Um tema de moldura baseado no tema de Ruediger Bente
@@ -19,6 +21,7 @@ Comment[x-test]=xxA frame theme based on Ruediger Bente's frame themexx
 [X-HTMLExport Author]
 Name=Elizabeth Marmorstein
 Name[ca]=Elizabeth Marmorstein
+Name[cs]=Elizabeth Marmorstein
 Name[es]=Elizabeth Marmorstein
 Name[nl]=Elizabeth Marmorstein
 Name[pt]=Elizabeth Marmorstein
@@ -30,6 +33,7 @@ Url=mailto:purplegamba@cox.net
 [X-HTMLExport Preview]
 Name=Clean Frames
 Name[ca]=Marcs nets
+Name[cs]=Vyčistit rámce
 Name[es]=Marcos limpios
 Name[nl]=Clean Frames
 Name[pt]=Molduras Limpas
@@ -41,8 +45,10 @@ Url=preview.png
 [X-HTMLExport Parameter style]
 Name=Style
 Name[ca]=Estil
+Name[cs]=Styl
 Name[es]=Estilo
 Name[nl]=Stijl
+Name[nn]=Stil
 Name[pt]=Estilo
 Name[sv]=Stil
 Name[uk]=Стиль

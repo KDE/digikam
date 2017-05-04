@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Yet another nice theme. Very simple and clean look with "calligraphics" icons.
 Comment[ca]=Un altre tema agradable. Amb una aparença molt simple i neta amb icones «cal·ligràfiques».
+Comment[cs]=Ještě další hezký motiv. Velmi jednoduchý a dokonale vypadající s "kaligrafickými" ikonami.
 Comment[es]=Otro tema agradable. Un aspecto muy sencillo y limpio con iconos de «caligrafía».
 Comment[nl]=Opnieuw een mooi thema. Heel eenvoudig en een nette stijl met "calligraphics"-pictogrammen.
 Comment[pt]=Ainda mais outro tema bonito. Muito simples e de aparência sóbria com ícones "caligráficos".
@@ -10,6 +11,7 @@ Comment[x-test]=xxYet another nice theme. Very simple and clean look with "calli
 Icon=
 Name=S0
 Name[ca]=S0
+Name[cs]=S0
 Name[es]=S0
 Name[nl]=S0
 Name[pt]=S0
@@ -20,6 +22,7 @@ Name[x-test]=xxS0xx
 [X-HTMLExport Author]
 Name=Petr Vaněk
 Name[ca]=Petr Vaněk
+Name[cs]=Petr Vaněk
 Name[es]=Petr Vaněk
 Name[nl]=Petr Vaněk
 Name[pt]=Petr Vaněk
@@ -31,6 +34,7 @@ Url=mailto:petr@scribus.info
 [X-HTMLExport Preview]
 Name=S0
 Name[ca]=S0
+Name[cs]=S0
 Name[es]=S0
 Name[nl]=S0
 Name[pt]=S0

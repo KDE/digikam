@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Floating Cards
 Name[ca]=Targetes flotants
+Name[cs]=Plovoucí karty
 Name[es]=Cartas flotantes
 Name[nl]=Drijvende kaarten
 Name[pt]=Cartas Flutuantes
@@ -9,6 +10,7 @@ Name[uk]=Картки, що плавають
 Name[x-test]=xxFloating Cardsxx
 Comment=A dark theme with floating thumbnail/description cards. Fast navigation through the gallery.
 Comment[ca]=Un tema fosc amb targetes de miniatures/descripcions flotants. Navegació ràpida per la galeria.
+Comment[cs]=Tmavý motiv s plovoucími kartami s náhledem / popisem. Rychlé prohledávání sbírky.
 Comment[es]=Un tema oscuro con cartas flotantes de miniaturas/descripción. Navegación rápida a través de la galería.
 Comment[nl]=Een donket thema met drijvende miniatuur/beschrijvingskaarten. Snelle navigatie door de galerij.
 Comment[pt]=Um tema escuro com cartões com miniaturas/descrições. Navegação rápida pela galeria.
@@ -19,6 +21,7 @@ Comment[x-test]=xxA dark theme with floating thumbnail/description cards. Fast n
 [X-HTMLExport Author]
 Name=Jiří Boháč
 Name[ca]=Jiří Boháč
+Name[cs]=Jiří Boháč
 Name[es]=Jiří Boháč
 Name[nl]=Jiří Boháč
 Name[pt]=Jiří Boháč
@@ -30,6 +33,7 @@ Url=mailto:jiri@boha.cz
 [X-HTMLExport Preview]
 Name=Floating Cards
 Name[ca]=Targetes flotants
+Name[cs]=Plovoucí karty
 Name[es]=Cartas flotantes
 Name[nl]=Drijvende kaarten
 Name[pt]=Cartas Flutuantes
@@ -68,6 +72,7 @@ Caption_1[de]=Aus
 [X-HTMLExport Parameter preload]
 Name=Preload
 Name[ca]=Càrrega prèvia
+Name[cs]=Předem načíst
 Name[es]=Precargar
 Name[nl]=vooraf laden
 Name[pt]=Pré-Carregar

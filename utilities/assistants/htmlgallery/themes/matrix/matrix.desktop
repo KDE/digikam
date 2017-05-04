@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Matrix
 Name[ca]=Matrix
+Name[cs]=Matrix
 Name[es]=Matrix
 Name[nl]=Matrix
 Name[pt]=Matrix
@@ -9,6 +10,7 @@ Name[uk]=Матриця
 Name[x-test]=xxMatrixxx
 Comment=Show your photos with Matrix style
 Comment[ca]=Visualitza les fotos a l'estil Matrix
+Comment[cs]=Zobrazit vaše fotografie ve stylu Matrix
 Comment[es]=Mostrar las fotos al estilo Matrix
 Comment[nl]=Toon uw foto's in matrix-stijl
 Comment[pt]=Mostrar as suas fotografias ao estilo Matrix
@@ -19,6 +21,7 @@ Comment[x-test]=xxShow your photos with Matrix stylexx
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
 Name[ca]=Aurélien Gâteau
+Name[cs]=Aurélien Gâteau
 Name[es]=Aurélien Gâteau
 Name[nl]=Aurélien Gâteau
 Name[pt]=Aurélien Gâteau
@@ -30,6 +33,7 @@ Url=mailto:aurelien.gateau@free.fr
 [X-HTMLExport Preview]
 Name=Matrix
 Name[ca]=Matrix
+Name[cs]=Matrix
 Name[es]=Matrix
 Name[nl]=Matrix
 Name[pt]=Matrix

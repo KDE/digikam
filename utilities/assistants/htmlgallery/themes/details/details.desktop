@@ -1,6 +1,7 @@
 [Desktop Entry]
 Comment=Yet another simple theme. Clean look with more image details.
 Comment[ca]=Un altre tema senzill. Una aparença neta amb més detalls d'imatges.
+Comment[cs]=Ještě další jednoduchý motiv.Čistý vzhled s více detaily obrázku.
 Comment[es]=Otro tema sencillo. Aspecto limpio con más detalles sobre la imagen.
 Comment[nl]=Opnieuw een eenvoudig thema. Nette stijl met meer afbeeldingendetails.
 Comment[pt]=Ainda mais outro tema bonito. De aparência sóbria e com mais detalhes de imagem.
@@ -10,8 +11,10 @@ Comment[x-test]=xxYet another simple theme. Clean look with more image details.x
 Icon=
 Name=Details
 Name[ca]=Detalls
+Name[cs]=Podrobnosti
 Name[es]=Detalles
 Name[nl]=Details
+Name[nn]=Detaljar
 Name[pt]=Detalhes
 Name[sv]=Detaljer
 Name[uk]=Подробиці
@@ -20,6 +23,7 @@ Name[x-test]=xxDetailsxx
 [X-HTMLExport Author]
 Name=Gianluca Urgese
 Name[ca]=Gianluca Urgese
+Name[cs]=Gianluca Urgese
 Name[es]=Gianluca Urgese
 Name[nl]=Gianluca Urgese
 Name[pt]=Gianluca Urgese
@@ -31,6 +35,7 @@ Url=mailto:g.urgese@jaone.it
 [X-HTMLExport Preview]
 Name=Details screenshot
 Name[ca]=Captura de pantalla dels detalls
+Name[cs]=Snímek podrobností
 Name[es]=Captura de pantalla de detalles
 Name[nl]=Details schermafdruk
 Name[pt]=Imagem dos deetalhes
@@ -42,6 +47,7 @@ Url=preview.png
 [X-HTMLExport Parameter footer]
 Name=Footer information
 Name[ca]=Informació del peu
+Name[cs]=Informace v zápatí
 Name[es]=Información del pie
 Name[nl]=Voettekstinformatie
 Name[pt]=Informação do rodapé

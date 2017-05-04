@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Snow
 Name[ca]=Neu
+Name[cs]=Sníh
 Name[es]=Nieve
 Name[nl]=Sneeuw
 Name[pt]=Neve
@@ -9,6 +10,7 @@ Name[uk]=Сніг
 Name[x-test]=xxSnowxx
 Comment=A perfect match for your mountain holidays
 Comment[ca]=Una coincidència perfecta per a les vostres vacances de muntanya
+Comment[cs]=Perfektně odpovídá vaší dovolené na horách
 Comment[es]=Una pareja perfecta para las vacaciones en la montaña
 Comment[nl]=Perfect voor uw skivakanties
 Comment[pt]=Uma correspondência perfeita às suas férias na montanha
@@ -19,6 +21,7 @@ Comment[x-test]=xxA perfect match for your mountain holidaysxx
 [X-HTMLExport Author]
 Name=Aurélien Gâteau
 Name[ca]=Aurélien Gâteau
+Name[cs]=Aurélien Gâteau
 Name[es]=Aurélien Gâteau
 Name[nl]=Aurélien Gâteau
 Name[pt]=Aurélien Gâteau
@@ -30,6 +33,7 @@ Url=mailto:aurelien.gateau@free.fr
 [X-HTMLExport Preview]
 Name=Snow
 Name[ca]=Neu
+Name[cs]=Sníh
 Name[es]=Nieve
 Name[nl]=Sneeuw
 Name[pt]=Neve
