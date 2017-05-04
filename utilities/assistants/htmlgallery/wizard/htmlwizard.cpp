@@ -71,7 +71,7 @@ public:
 };
 
 HTMLWizard::HTMLWizard(QWidget* const parent)
-    : QWizard(parent),
+    : DWizardDlg(parent, QLatin1String("HTML Gallery Dialog")),
       d(new Private)
 {
     setWindowTitle(i18n("Create Html Gallery"));

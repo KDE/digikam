@@ -24,12 +24,9 @@
 #ifndef HTML_WIZARD_H
 #define HTML_WIZARD_H
 
-// Qt includes
-
-#include <QWizard>
-
 // Local includes
 
+#include "dwizarddlg.h"
 #include "gallerytheme.h"
 #include "album.h"
 
@@ -41,7 +38,7 @@ class GalleryInfo;
 /**
  * The wizard used by the user to select the various settings.
  */
-class HTMLWizard : public QWizard
+class HTMLWizard : public DWizardDlg
 {
     Q_OBJECT
 

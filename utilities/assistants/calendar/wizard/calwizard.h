@@ -30,17 +30,17 @@
 // Qt includes
 
 #include <QMap>
-#include <QWizard>
 
 // Local includes
 
+#include "dwizarddlg.h"
 #include "dwizardpage.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT CalWizard : public QWizard
+class DIGIKAM_EXPORT CalWizard : public DWizardDlg
 {
     Q_OBJECT
 

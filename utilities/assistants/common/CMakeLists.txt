@@ -9,6 +9,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libassistants_SRCS dwizardpage.cpp
+                       dwizarddlg.cpp
                        dsavesettingswidget.cpp
                        dwizardpage.cpp
                        dpreviewmanager.cpp
@@ -21,6 +22,8 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
 
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
+
 )
 
 add_library(assistants_src OBJECT ${libassistants_SRCS})

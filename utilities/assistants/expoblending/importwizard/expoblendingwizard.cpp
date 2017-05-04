@@ -69,7 +69,7 @@ public:
 };
 
 ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget* const parent)
-    : QWizard(parent),
+    : DWizardDlg(parent, QLatin1String("ExpoBlending Dialog")),
       d(new Private)
 {
     setModal(false);
@@ -80,14 +80,6 @@ ExpoBlendingWizard::ExpoBlendingWizard(ExpoBlendingManager* const mngr, QWidget*
     d->itemsPage         = new ItemsPage(d->mngr, this);
     d->preProcessingPage = new ExpoBlendingPreProcessPage(d->mngr, this);
     d->lastPage          = new ExpoBlendingLastPage(d->mngr, this);
-
-    // ---------------------------------------------------------------
-
-    QDesktopWidget* const desktop = QApplication::desktop();
-    int screen                    = desktop->screenNumber();
-    QRect srect                   = desktop->availableGeometry(screen);
-    resize(800 <= srect.width()  ? 800 : srect.width(),
-           750 <= srect.height() ? 750 : srect.height());
 
     // ---------------------------------------------------------------
 

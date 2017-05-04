@@ -28,14 +28,17 @@
 // Qt includes
 
 #include <QWidget>
-#include <QWizard>
+
+// Local includes
+
+#include "dwizarddlg.h"
 
 namespace Digikam
 {
 
 class PanoManager;
 
-class PanoWizard : public QWizard
+class PanoWizard : public DWizardDlg
 {
 
 public:

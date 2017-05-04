@@ -103,7 +103,7 @@ public:
 };
 
 CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
-    : QWizard(parent),
+    : DWizardDlg(parent, QLatin1String("Calendar Dialog")),
       d(new Private)
 {
     setWindowTitle(i18n("Create Calendar"));

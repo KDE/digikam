@@ -72,7 +72,7 @@ struct PanoWizard::Private
 };
 
 PanoWizard::PanoWizard(PanoManager* const mngr, QWidget* const parent)
-    : QWizard(parent),
+    : DWizardDlg(parent, QLatin1String("Panorama Dialog")),
       d(new Private)
 {
     setModal(false);
@@ -85,26 +85,6 @@ PanoWizard::PanoWizard(PanoManager* const mngr, QWidget* const parent)
     d->optimizePage      = new PanoOptimizePage(d->mngr, this);
     d->previewPage       = new PanoPreviewPage(d->mngr, this);
     d->lastPage          = new PanoLastPage(d->mngr, this);
-
-    // ---------------------------------------------------------------
-
-    KConfig config;
-    KConfigGroup group = config.group("Panorama Dialog");
-
-    if (group.exists())
-    {
-        winId();
-        DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
-        resize(windowHandle()->size());
-    }
-    else
-    {
-        QDesktopWidget* const desktop = QApplication::desktop();
-        int screen                    = desktop->screenNumber();
-        QRect srect                   = desktop->availableGeometry(screen);
-        resize(800 <= srect.width()  ? 800 : srect.width(),
-               750 <= srect.height() ? 750 : srect.height());
-    }
 
     // ---------------------------------------------------------------
 
@@ -123,11 +103,6 @@ PanoWizard::PanoWizard(PanoManager* const mngr, QWidget* const parent)
 
 PanoWizard::~PanoWizard()
 {
-    KConfig config;
-    KConfigGroup group = config.group("Panorama Dialog");
-    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
-    config.sync();
-
     delete d;
 }
 

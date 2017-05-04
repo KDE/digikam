@@ -22,7 +22,6 @@
 
 #include "dwizardpage.h"
 
-
 // Qt includes
 
 #include <QHBoxLayout>
