@@ -45,7 +45,7 @@ public:
 
     bool validatePage();
 
-public:
+private:
 
     AlbumSelectTabs* mCollectionSelector;
 };

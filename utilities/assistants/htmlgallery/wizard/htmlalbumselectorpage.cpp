@@ -20,7 +20,11 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "htmlalbumselectorpage.h"
+#include "htmlwizard.h"
+#include "galleryinfo.h"
 
 namespace Digikam
 {
@@ -43,7 +47,14 @@ HTMLAlbumSelectorPage::~HTMLAlbumSelectorPage()
 
 bool HTMLAlbumSelectorPage::validatePage()
 {
-    return (!mCollectionSelector->selectedAlbums().empty());
+    if (mCollectionSelector->selectedAlbums().empty())
+        return false;
+
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryInfo* const info  = wizard->galleryInfo();
+    info->mCollectionList    = mCollectionSelector->selectedAlbums();
+
+    return true;
 }
 
 } // namespace Digikam

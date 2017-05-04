@@ -59,6 +59,19 @@ class HTMLWizard::Private
 {
 public:
 
+    Private()
+      : mInfo(0),
+        mConfigManager(0),
+        mCollectionSelectorPage(0),
+        mParametersPage(0),
+        mImageSettingsPage(0),
+        mOutputPage(0),
+        mThemePage(0),
+        mFinalPage(0)
+    {
+
+    }
+
     GalleryInfo*           mInfo;
     KConfigDialogManager*  mConfigManager;
 
@@ -166,11 +179,6 @@ GalleryInfo* HTMLWizard::galleryInfo() const
 GalleryTheme::Ptr HTMLWizard::theme() const
 {
     return (dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme);
-}
-
-AlbumList HTMLWizard::albums() const
-{
-    return d->mCollectionSelectorPage->mCollectionSelector->selectedAlbums();
 }
 
 QWidget* HTMLWizard::parametersWidget(const QByteArray& iname) const

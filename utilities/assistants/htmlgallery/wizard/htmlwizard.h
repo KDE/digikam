@@ -52,7 +52,6 @@ public:
 
     GalleryInfo*      galleryInfo()                    const;
     GalleryTheme::Ptr theme()                          const;
-    AlbumList         albums()                         const;
     QWidget* parametersWidget(const QByteArray& iname) const;
     void updateSettings();
 

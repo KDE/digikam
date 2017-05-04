@@ -77,13 +77,10 @@ void HTMLFinalPage::initializePage()
 
 void HTMLFinalPage::slotProcess()
 {
-    HTMLWizard* const wizard                = dynamic_cast<HTMLWizard*>(assistant());
-
-    GalleryInfo* const info                 = wizard->galleryInfo();
-    info->mCollectionList                   = wizard->albums();
-    GalleryTheme::Ptr theme                 = wizard->theme();
-
-    QString themeInternalName               = theme->internalName();
+    HTMLWizard* const wizard                       = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryInfo* const info                        = wizard->galleryInfo();
+    GalleryTheme::Ptr theme                        = wizard->theme();
+    QString themeInternalName                      = theme->internalName();
     info->setTheme(themeInternalName);
 
     GalleryTheme::ParameterList parameterList      = theme->parameterList();
