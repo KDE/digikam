@@ -94,6 +94,15 @@ HTMLOutputPage::~HTMLOutputPage()
 {
 }
 
+void HTMLOutputPage::initializePage()
+{
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryInfo* const info  = wizard->galleryInfo();
+
+    mKcfg_destUrl->setFileDlgPath(info->destUrl().toLocalFile());
+    mKcfg_openInBrowser->setChecked(info->openInBrowser());
+}
+
 bool HTMLOutputPage::validatePage()
 {
     if (mKcfg_destUrl->fileDlgPath().isEmpty())

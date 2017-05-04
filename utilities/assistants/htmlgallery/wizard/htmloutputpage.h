@@ -42,6 +42,7 @@ public:
     explicit HTMLOutputPage(QWizard* const dialog, const QString& title);
     ~HTMLOutputPage();
 
+    void initializePage();
     bool validatePage();
 
 public:
