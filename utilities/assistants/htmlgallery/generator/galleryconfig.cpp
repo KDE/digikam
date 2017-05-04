@@ -26,7 +26,7 @@ namespace Digikam
 {
 
 GalleryConfig::GalleryConfig()
-    : KConfigSkeleton(QLatin1String("kipihtmlexportrc"))
+    : KConfigSkeleton(QLatin1String("digikamrc"))
 {
     setCurrentGroup(QLatin1String("general"));
 
