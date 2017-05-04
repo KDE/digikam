@@ -4,5 +4,8 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-ADD_SUBDIRECTORY(editor)
-ADD_SUBDIRECTORY(geoiface)
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
+install(DIRECTORY themes DESTINATION ${DATA_INSTALL_DIR}/digikam/)

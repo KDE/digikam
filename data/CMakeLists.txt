@@ -16,3 +16,7 @@ add_subdirectory(profiles)
 add_subdirectory(hotplug)
 add_subdirectory(scripts)
 add_subdirectory(filters)
+
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+    add_subdirectory(htmlgallery)
+endif()

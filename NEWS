@@ -6,6 +6,7 @@ Database    : We activated database shrinking for MySQL as part of the maintenan
 Searches    : Users can now restrict the results of fuzzy image/drop/sketch search to be in specific albums.
 Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
 Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
+General     : New tool to export Albums to static HTML gallery.
 
 BUGFIXES FROM BUGZILLA:
 
