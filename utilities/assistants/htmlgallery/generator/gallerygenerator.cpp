@@ -135,11 +135,11 @@ public:
         QUrl destUrl = mInfo->destUrl().adjusted(QUrl::StripTrailingSlash);
 
         destUrl.setPath(destUrl.path() + QLatin1Char('/') + srcUrl.fileName());
-        QFile file(destUrl.toLocalFile());
+        QDir themeDir(destUrl.toLocalFile());
 
-        if (file.exists())
+        if (themeDir.exists())
         {
-            file.remove();
+            themeDir.removeRecursively();
         }
 
         bool ok = CopyJob::copyFolderRecursively(srcUrl.toLocalFile(), destUrl.toLocalFile());
