@@ -45,7 +45,7 @@ public:
     void initializePage();
     bool validatePage();
 
-public:
+private:
 
     DFileSelector* mKcfg_destUrl;
     QCheckBox*     mKcfg_openInBrowser;
