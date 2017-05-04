@@ -61,7 +61,7 @@ public:
     explicit HTMLThemePage(QWizard* const dialog, const QString& title);
     ~HTMLThemePage();
 
-    void initThemePage(GalleryInfo* const info);
+    void initializePage();
     int  nextId() const;
     bool validatePage();
 

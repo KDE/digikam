@@ -81,7 +81,6 @@ HTMLWizard::HTMLWizard(QWidget* const parent)
 
     d->mCollectionSelectorPage = new HTMLAlbumSelectorPage(this, i18n("Albums Selection"));
     d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
-    d->mThemePage->initThemePage(d->mInfo);
     d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
     d->mImageSettingsPage      = new HTMLImageSettingsPage(this, i18n("Image Settings"));
     d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
