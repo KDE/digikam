@@ -80,37 +80,17 @@ static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
     return image;
 }
 
-// ----------------------------------------------------------------------------------
-
-class ImageGenerationFunctor::Private
-{
-public:
-
-    Private()
-      : generator(0),
-        info(0)
-    {
-    }
-
-    GalleryGenerator* generator;
-    GalleryInfo*      info;
-    QString           destDir;
-    UniqueNameHelper  uniqueNameHelper;
-};
-
 ImageGenerationFunctor::ImageGenerationFunctor(GalleryGenerator* const generator,
                                                GalleryInfo* const info,
                                                const QString& destDir)
-    : d(new Private)
+    : mGenerator(generator),
+      mInfo(info),
+      mDestDir(destDir)
 {
-    d->generator = generator;
-    d->info      = info;
-    d->destDir   = destDir;
 }
 
 ImageGenerationFunctor::~ImageGenerationFunctor()
 {
-    delete d;
 }
 
 void ImageGenerationFunctor::operator()(ImageElement& element)
@@ -163,11 +143,11 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
     // Process images
     QImage fullImage = originalImage;
 
-    if (!d->info->useOriginalImageAsFullImage())
+    if (!mInfo->useOriginalImageAsFullImage())
     {
-        if (d->info->fullResize())
+        if (mInfo->fullResize())
         {
-            int size  = d->info->fullSize();
+            int size  = mInfo->fullSize();
             fullImage = fullImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
@@ -178,30 +158,30 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
         }
     }
 
-    QImage thumbnail     = generateThumbnail(fullImage, d->info->thumbnailSize(), d->info->thumbnailSquare());
+    QImage thumbnail     = generateThumbnail(fullImage, mInfo->thumbnailSize(), mInfo->thumbnailSquare());
 
     // Save images
     QString baseFileName = GalleryGenerator::webifyFileName(element.mTitle);
-    baseFileName         = d->uniqueNameHelper.makeNameUnique(baseFileName);
+    baseFileName         = mUniqueNameHelper.makeNameUnique(baseFileName);
 
     // Save full
     QString fullFileName;
 
-    if (d->info->useOriginalImageAsFullImage())
+    if (mInfo->useOriginalImageAsFullImage())
     {
         fullFileName = baseFileName + QLatin1Char('.') + imageFormat.toLower();
 
-        if (!writeDataToFile(imageData, d->destDir + QLatin1Char('/') + fullFileName))
+        if (!writeDataToFile(imageData, mDestDir + QLatin1Char('/') + fullFileName))
         {
             return;
         }
     }
     else
     {
-        fullFileName     = baseFileName + QLatin1Char('.') + d->info->fullFormatString().toLower();
-        QString destPath = d->destDir + QLatin1Char('/') + fullFileName;
+        fullFileName     = baseFileName + QLatin1Char('.') + mInfo->fullFormatString().toLower();
+        QString destPath = mDestDir + QLatin1Char('/') + fullFileName;
 
-        if (!fullImage.save(destPath, d->info->fullFormatString().toLatin1().data(), d->info->fullQuality()))
+        if (!fullImage.save(destPath, mInfo->fullFormatString().toLatin1().data(), mInfo->fullQuality()))
         {
             emitWarning(i18n("Could not save image '%1' to '%2'", path, destPath));
             return;
@@ -212,11 +192,11 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
     element.mFullSize     = fullImage.size();
 
     // Save original
-    if (d->info->copyOriginalImage())
+    if (mInfo->copyOriginalImage())
     {
         QString originalFileName = QLatin1String("original_") + fullFileName;
 
-        if (!writeDataToFile(imageData, d->destDir + QLatin1Char('/') + originalFileName))
+        if (!writeDataToFile(imageData, mDestDir + QLatin1Char('/') + originalFileName))
         {
             return;
         }
@@ -227,12 +207,12 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
 
     // Save thumbnail
     QString thumbnailFileName = QLatin1String("thumb_") + baseFileName + QLatin1Char('.') +
-                                d->info->thumbnailFormatString().toLower();
-    QString destPath          = d->destDir + QLatin1Char('/') + thumbnailFileName;
+                                mInfo->thumbnailFormatString().toLower();
+    QString destPath          = mDestDir + QLatin1Char('/') + thumbnailFileName;
 
-    if (!thumbnail.save(destPath, d->info->thumbnailFormatString().toLatin1().data(), d->info->thumbnailQuality()))
+    if (!thumbnail.save(destPath, mInfo->thumbnailFormatString().toLatin1().data(), mInfo->thumbnailQuality()))
     {
-        d->generator->logWarningRequested(i18n("Could not save thumbnail for image '%1' to '%2'", path, destPath));
+        mGenerator->logWarningRequested(i18n("Could not save thumbnail for image '%1' to '%2'", path, destPath));
         return;
     }
 
@@ -479,7 +459,7 @@ bool ImageGenerationFunctor::writeDataToFile(const QByteArray& data, const QStri
 
 void ImageGenerationFunctor::emitWarning(const QString& message)
 {
-    emit (d->generator->logWarningRequested(message));
+    emit (mGenerator->logWarningRequested(message));
 }
 
 } // namespace Digikam

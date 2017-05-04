@@ -62,8 +62,12 @@ private:
 
 private:
 
-    class Private;
-    Private* const d;
+    // NOTE: Do not use a d private internal container here.
+
+    GalleryGenerator* mGenerator;
+    GalleryInfo*      mInfo;
+    QString           mDestDir;
+    UniqueNameHelper  mUniqueNameHelper;
 };
 
 } // namespace Digikam
