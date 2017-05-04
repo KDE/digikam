@@ -108,7 +108,7 @@ int HTMLThemePage::nextId() const
         }
     }
 
-    return dynamic_cast<HTMLWizard*>(assistant())->imageSettingPageId();
+    return dynamic_cast<HTMLWizard*>(assistant())->imageSettingsPageId();
 }
 
 } // namespace Digikam

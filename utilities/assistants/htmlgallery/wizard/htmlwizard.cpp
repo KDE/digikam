@@ -166,7 +166,7 @@ int HTMLWizard::parametersPageId() const
     return d->mParametersPage->id();
 }
 
-int HTMLWizard::imageSettingPageId() const
+int HTMLWizard::imageSettingsPageId() const
 {
     return d->mImageSettingsPage->id();
 }

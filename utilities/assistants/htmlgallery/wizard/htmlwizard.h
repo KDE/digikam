@@ -48,7 +48,7 @@ public:
     ~HTMLWizard();
 
     int parametersPageId()                             const;
-    int imageSettingPageId()                           const;
+    int imageSettingsPageId()                          const;
 
     GalleryInfo*      galleryInfo()                    const;
     GalleryTheme::Ptr theme()                          const;
