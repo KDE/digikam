@@ -55,9 +55,8 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
     setObjectName(QLatin1String("FinalPage"));
 
     DVBox* const vbox = new DVBox(this);
-
-    mProgressView = new DHistoryView(vbox);
-    mProgressBar  = new DProgressWdg(vbox);
+    mProgressView     = new DHistoryView(vbox);
+    mProgressBar      = new DProgressWdg(vbox);
 
     vbox->setStretchFactor(mProgressBar, 10);
     vbox->setContentsMargins(QMargins());
@@ -106,6 +105,9 @@ void HTMLFinalPage::slotProcess()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << info;
 
+    mProgressView->addEntry(i18n("Starting to generate gallery..."),
+                            DHistoryView::ProgressEntry);
+
     mProgressView->addEntry(i18n("%1 albums to process:", info->mCollectionList.count()),
                             DHistoryView::ProgressEntry);
 
@@ -131,8 +133,13 @@ void HTMLFinalPage::slotProcess()
 
     if (generator.warnings())
     {
-        mProgressView->addEntry(i18n("Finished, but some warnings occurred."),
+        mProgressView->addEntry(i18n("Gallery is completed, but some warnings occurred."),
                                 DHistoryView::WarningEntry);
+    }
+    else
+    {
+        mProgressView->addEntry(i18n("Gallery completed."),
+                                DHistoryView::ProgressEntry);
     }
 
     if (info->openInBrowser())
@@ -140,6 +147,8 @@ void HTMLFinalPage::slotProcess()
         QUrl url = info->destUrl().adjusted(QUrl::StripTrailingSlash);
         url.setPath(url.path() + QLatin1String("/index.html"));
         QDesktopServices::openUrl(url);
+        mProgressView->addEntry(i18n("Openning gallery in browser..."),
+                                DHistoryView::ProgressEntry);
     }
 }
 
