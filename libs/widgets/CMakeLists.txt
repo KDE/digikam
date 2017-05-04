@@ -64,7 +64,6 @@ set(libmainview_SRCS
     mainview/dzoombar.cpp
     mainview/dlogoaction.cpp
     mainview/ditemtooltip.cpp
-    mainview/dhistoryview.cpp
     mainview/dcursortracker.cpp
     mainview/thumbbardock.cpp
     mainview/thememanager.cpp
