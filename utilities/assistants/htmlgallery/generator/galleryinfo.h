@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "htmlgalleryconfig.h"
+#include "galleryconfig.h"
 #include "album.h"
 
 namespace Digikam
@@ -41,7 +41,7 @@ namespace Digikam
  * This class stores all the export settings. It is initialized by the
  * Wizard and read by the Generator.
  */
-class GalleryInfo : public HTMLGalleryConfig
+class GalleryInfo : public GalleryConfig
 {
 public:
 

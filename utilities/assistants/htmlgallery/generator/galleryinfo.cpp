@@ -27,10 +27,6 @@
 
 #include <kconfigbase.h>
 
-// Local includes
-
-#include "album.h"
-
 namespace Digikam
 {
 
