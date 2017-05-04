@@ -86,6 +86,7 @@ HTMLParametersPage::~HTMLParametersPage()
 
 void HTMLParametersPage::fillThemeParametersPage(GalleryTheme::Ptr theme, GalleryInfo* const info)
 {
+    qDeleteAll(mContent->children());
     mThemeParameterWidgetFromName.clear();
 
     // Create layout. We need to recreate it every time, to get rid of
