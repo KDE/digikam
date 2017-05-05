@@ -200,8 +200,11 @@ public:
             XMLElement collectionX(xmlWriter,  QLatin1String("collection"));
             xmlWriter.writeElement("name",     collection->title());
             xmlWriter.writeElement("fileName", collectionFileName);
-            xmlWriter.writeElement("comment",  (collection->type() == Album::PHYSICAL) ?
-                                               dynamic_cast<PAlbum*>(collection)->caption() : QString());
+
+            if (collection->type() != Album::PHYSICAL)
+            {
+                xmlWriter.writeElement("comment", QString());
+            }
 
             // Gather image element list
             QList<QUrl> imageList;
@@ -214,6 +217,7 @@ public:
 
                     if (p)
                     {
+                        xmlWriter.writeElement("comment", p->caption());
                         imageList = imagesFromPAlbum(p);
                     }
 
