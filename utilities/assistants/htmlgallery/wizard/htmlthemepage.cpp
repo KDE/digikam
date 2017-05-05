@@ -100,23 +100,6 @@ bool HTMLThemePage::validatePage()
     return true;
 }
 
-int HTMLThemePage::nextId() const
-{
-    if (mThemeList->currentItem())
-    {
-        GalleryTheme::Ptr theme = static_cast<ThemeListBoxItem*>(mThemeList->currentItem())->mTheme;
-
-        // Enable theme parameter page as next page if there is any parameter
-
-        if (theme->parameterList().size() > 0)
-        {
-            return dynamic_cast<HTMLWizard*>(assistant())->parametersPageId();
-        }
-    }
-
-    return dynamic_cast<HTMLWizard*>(assistant())->imageSettingsPageId();
-}
-
 void HTMLThemePage::slotThemeSelectionChanged()
 {
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());

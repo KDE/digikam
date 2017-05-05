@@ -140,14 +140,22 @@ bool HTMLWizard::validateCurrentPage()
     return true;
 }
 
-int HTMLWizard::parametersPageId() const
+int HTMLWizard::nextId() const
 {
-    return d->mParametersPage->id();
-}
+    if (currentPage() == d->mThemePage)
+    {
+        GalleryTheme::Ptr theme = galleryTheme();
 
-int HTMLWizard::imageSettingsPageId() const
-{
-    return d->mImageSettingsPage->id();
+        if (theme && theme->parameterList().size() > 0)
+        {
+            // Enable theme parameters page as next page if there is any parameter.
+            return d->mParametersPage->id();
+        }
+
+        return d->mImageSettingsPage->id();
+    }
+
+    return DWizardDlg::nextId();
 }
 
 GalleryInfo* HTMLWizard::galleryInfo() const
@@ -157,7 +165,14 @@ GalleryInfo* HTMLWizard::galleryInfo() const
 
 GalleryTheme::Ptr HTMLWizard::galleryTheme() const
 {
-    return (dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme);
+    ThemeListBoxItem* const item = dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem());
+
+    if (item)
+    {
+        return item->mTheme;
+    }
+
+    return GalleryTheme::Ptr(0);
 }
 
 } // namespace Digikam

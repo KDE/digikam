@@ -47,13 +47,11 @@ public:
     explicit HTMLWizard(QWidget* const parent);
     ~HTMLWizard();
 
-    int parametersPageId()           const;
-    int imageSettingsPageId()        const;
-
     GalleryInfo*      galleryInfo()  const;
     GalleryTheme::Ptr galleryTheme() const;
 
     bool validateCurrentPage();
+    int  nextId()                    const;
 
 private:
 

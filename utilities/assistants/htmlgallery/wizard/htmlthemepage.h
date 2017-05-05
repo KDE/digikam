@@ -64,7 +64,6 @@ public:
     ~HTMLThemePage();
 
     void initializePage();
-    int  nextId() const;
     bool validatePage();
 
 private Q_SLOTS:
@@ -74,6 +73,9 @@ private Q_SLOTS:
 public:
 
     QListWidget*  mThemeList;
+
+private:
+
     QTextBrowser* mThemeInfo;
 };
 
