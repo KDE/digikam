@@ -22,6 +22,11 @@
 
 #include "galleryconfig.h"
 
+// Qt includes
+
+#include <QCoreApplication>
+#include <QDebug>
+
 namespace Digikam
 {
 
@@ -126,6 +131,149 @@ GalleryConfig::GalleryConfig()
 
 GalleryConfig::~GalleryConfig()
 {
+}
+
+void GalleryConfig::setTheme(const QString& v)
+{
+    if (!isImmutable(QLatin1String("theme")))
+        mTheme = v;
+}
+
+QString GalleryConfig::theme() const
+{
+    return mTheme;
+}
+
+void GalleryConfig::setUseOriginalImageAsFullImage(bool v)
+{
+    if (!isImmutable(QLatin1String("useOriginalImageAsFullImage")))
+        mUseOriginalImageAsFullImage = v;
+}
+
+bool GalleryConfig::GalleryConfig::useOriginalImageAsFullImage() const
+{
+    return mUseOriginalImageAsFullImage;
+}
+
+void GalleryConfig::setFullResize(bool v)
+{
+    if (!isImmutable(QStringLiteral("fullResize")))
+        mFullResize = v;
+}
+
+bool GalleryConfig::fullResize() const
+{
+    return mFullResize;
+}
+
+void GalleryConfig::setFullSize(int v)
+{
+    if (!isImmutable(QLatin1String("fullSize")))
+        mFullSize = v;
+}
+
+int GalleryConfig::fullSize() const
+{
+    return mFullSize;
+}
+
+void GalleryConfig::setFullFormat(int v)
+{
+    if (!isImmutable(QLatin1String("fullFormat")))
+        mFullFormat = v;
+}
+
+int GalleryConfig::fullFormat() const
+{
+    return mFullFormat;
+}
+
+void GalleryConfig::setFullQuality(int v)
+{
+    if (!isImmutable(QLatin1String("fullQuality")))
+        mFullQuality = v;
+}
+
+int GalleryConfig::fullQuality() const
+{
+    return mFullQuality;
+}
+
+void GalleryConfig::setCopyOriginalImage(bool v)
+{
+    if (!isImmutable(QLatin1String("copyOriginalImage")))
+        mCopyOriginalImage = v;
+}
+
+bool GalleryConfig::copyOriginalImage() const
+{
+    return mCopyOriginalImage;
+}
+
+void GalleryConfig::setThumbnailSize(int v)
+{
+    if (!isImmutable(QLatin1String("thumbnailSize")))
+        mThumbnailSize = v;
+}
+
+int GalleryConfig::thumbnailSize() const
+{
+    return mThumbnailSize;
+}
+
+void GalleryConfig::setThumbnailFormat(int v)
+{
+    if (!isImmutable(QLatin1String("thumbnailFormat")))
+        mThumbnailFormat = v;
+}
+
+int GalleryConfig::thumbnailFormat() const
+{
+    return mThumbnailFormat;
+}
+
+void GalleryConfig::setThumbnailQuality(int v)
+{
+    if (!isImmutable(QLatin1String("thumbnailQuality")))
+        mThumbnailQuality = v;
+}
+
+int GalleryConfig::thumbnailQuality() const
+{
+    return mThumbnailQuality;
+}
+
+void GalleryConfig::setThumbnailSquare(bool v)
+{
+    if (!isImmutable(QLatin1String("thumbnailSquare")))
+        mThumbnailSquare = v;
+}
+
+bool GalleryConfig::thumbnailSquare() const
+{
+    return mThumbnailSquare;
+}
+
+void GalleryConfig::setDestUrl(const QUrl& v)
+{
+    if (!isImmutable(QLatin1String("destUrl")))
+        mDestUrl = v;
+}
+
+QUrl GalleryConfig::destUrl() const
+{
+    return mDestUrl;
+}
+
+void GalleryConfig::setOpenInBrowser(bool v)
+{
+    if (!isImmutable(QLatin1String("openInBrowser")))
+        mOpenInBrowser = v;
+}
+
+bool GalleryConfig::openInBrowser() const
+{
+    return mOpenInBrowser;
 }
 
 } // namespace Digikam

@@ -25,9 +25,8 @@
 
 // Qt includes
 
-#include <qglobal.h>
-#include <QCoreApplication>
-#include <QDebug>
+#include <QUrl>
+#include <QString>
 
 // KDE includes
 
@@ -68,148 +67,44 @@ public:
     explicit GalleryConfig();
     virtual ~GalleryConfig();
 
-    void setTheme(const QString& v)
-    {
-        if (!isImmutable(QLatin1String("theme")))
-            mTheme = v;
-    }
+    void setTheme(const QString&);
+    QString theme() const;
 
-    QString theme() const
-    {
-        return mTheme;
-    }
+    void setUseOriginalImageAsFullImage(bool);
+    bool useOriginalImageAsFullImage() const;
 
-    void setUseOriginalImageAsFullImage(bool v)
-    {
-        if (!isImmutable(QLatin1String("useOriginalImageAsFullImage")))
-            mUseOriginalImageAsFullImage = v;
-    }
+    void setFullResize(bool);
+    bool fullResize() const;
 
-    bool useOriginalImageAsFullImage() const
-    {
-        return mUseOriginalImageAsFullImage;
-    }
+    void setFullSize(int);
+    int fullSize() const;
 
-    void setFullResize(bool v)
-    {
-        if (!isImmutable(QStringLiteral("fullResize")))
-            mFullResize = v;
-    }
+    void setFullFormat(int);
+    int fullFormat() const;
 
-    bool fullResize() const
-    {
-        return mFullResize;
-    }
+    void setFullQuality(int);
+    int fullQuality() const;
 
-    void setFullSize(int v)
-    {
-        if (!isImmutable(QLatin1String("fullSize")))
-            mFullSize = v;
-    }
+    void setCopyOriginalImage(bool);
+    bool copyOriginalImage() const;
 
-    int fullSize() const
-    {
-        return mFullSize;
-    }
+    void setThumbnailSize(int);
+    int thumbnailSize() const;
 
-    void setFullFormat(int v)
-    {
-        if (!isImmutable(QLatin1String("fullFormat")))
-            mFullFormat = v;
-    }
+    void setThumbnailFormat(int);
+    int thumbnailFormat() const;
 
-    int fullFormat() const
-    {
-        return mFullFormat;
-    }
+    void setThumbnailQuality(int);
+    int thumbnailQuality() const;
 
-    void setFullQuality(int v)
-    {
-        if (!isImmutable(QLatin1String("fullQuality")))
-            mFullQuality = v;
-    }
+    void setThumbnailSquare(bool);
+    bool thumbnailSquare() const;
 
-    int fullQuality() const
-    {
-        return mFullQuality;
-    }
+    void setDestUrl(const QUrl&);
+    QUrl destUrl() const;
 
-    void setCopyOriginalImage(bool v)
-    {
-        if (!isImmutable(QLatin1String("copyOriginalImage")))
-            mCopyOriginalImage = v;
-    }
-
-    bool copyOriginalImage() const
-    {
-        return mCopyOriginalImage;
-    }
-
-    void setThumbnailSize(int v)
-    {
-        if (!isImmutable(QLatin1String("thumbnailSize")))
-            mThumbnailSize = v;
-    }
-
-    int thumbnailSize() const
-    {
-        return mThumbnailSize;
-    }
-
-    void setThumbnailFormat(int v)
-    {
-        if (!isImmutable(QLatin1String("thumbnailFormat")))
-            mThumbnailFormat = v;
-    }
-
-    int thumbnailFormat() const
-    {
-        return mThumbnailFormat;
-    }
-
-    void setThumbnailQuality(int v)
-    {
-        if (!isImmutable(QLatin1String("thumbnailQuality")))
-            mThumbnailQuality = v;
-    }
-
-    int thumbnailQuality() const
-    {
-        return mThumbnailQuality;
-    }
-
-    void setThumbnailSquare(bool v)
-    {
-        if (!isImmutable(QLatin1String("thumbnailSquare")))
-            mThumbnailSquare = v;
-    }
-
-    bool thumbnailSquare() const
-    {
-        return mThumbnailSquare;
-    }
-
-    void setDestUrl(const QUrl& v)
-    {
-        if (!isImmutable(QLatin1String("destUrl")))
-            mDestUrl = v;
-    }
-
-    QUrl destUrl() const
-    {
-        return mDestUrl;
-    }
-
-    void setOpenInBrowser(bool v)
-    {
-        if (!isImmutable(QLatin1String("openInBrowser")))
-            mOpenInBrowser = v;
-    }
-
-    bool openInBrowser() const
-    {
-        return mOpenInBrowser;
-    }
+    void setOpenInBrowser(bool);
+    bool openInBrowser() const;
 
 protected:
 
