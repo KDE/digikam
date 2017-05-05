@@ -147,7 +147,7 @@ void HTMLFinalPage::slotProcess()
         QUrl url = info->destUrl().adjusted(QUrl::StripTrailingSlash);
         url.setPath(url.path() + QLatin1String("/index.html"));
         QDesktopServices::openUrl(url);
-        mProgressView->addEntry(i18n("Openning gallery in browser..."),
+        mProgressView->addEntry(i18n("Opening gallery in browser..."),
                                 DHistoryView::ProgressEntry);
     }
 }
