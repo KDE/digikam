@@ -97,7 +97,7 @@ void HTMLFinalPage::initializePage()
 
 void HTMLFinalPage::slotProcess()
 {
-    HTMLWizard* const wizard                       = dynamic_cast<HTMLWizard*>(assistant());
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
 
     if (!wizard)
     {
@@ -106,7 +106,7 @@ void HTMLFinalPage::slotProcess()
         return;
     }
 
-    GalleryInfo* const info                        = wizard->galleryInfo();
+    GalleryInfo* const info  = wizard->galleryInfo();
 
     // Generate GalleryInfo
 

@@ -293,6 +293,10 @@ HTMLImageSettingsPage::~HTMLImageSettingsPage()
 void HTMLImageSettingsPage::initializePage()
 {
     HTMLWizard* const wizard      = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return;
+
     GalleryTheme::Ptr theme       = wizard->galleryTheme();
     bool allowNonsquareThumbnails = theme->allowNonsquareThumbnails();
 
