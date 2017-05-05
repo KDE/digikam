@@ -1,0 +1,62 @@
+body {
+    background-color: black;
+    color: #888;
+}
+
+a {
+    color: #aaa;
+}
+
+a:hover {
+    color: #fff;
+}
+
+h1 {
+    color: #888888;
+    background-color: #222;
+    border-bottom: 1px solid #444;
+}
+
+.footer {
+    color: #555;
+    background-color: #222;
+    border-bottom: 1px solid #444;
+    border-top: 1px solid #444;
+}
+
+#content li img {
+    border: 1px solid #444;
+}
+
+#content li a {
+    background-color: #222;
+    border: 1px solid #444;
+}
+
+#content li a:hover {
+    border: 1px solid #ddd;
+    background-color: #555;
+}
+
+/* PAGINATION */
+.pagination li a,
+.pagination .disabled {
+    background-color: #222222;
+    border: 1px solid #444444;
+}
+
+.pagination .current,
+.pagination li a:hover {
+    border: 1px solid #555555 !important;
+    background-color: #dddddd !important;
+}
+
+/* Image page */
+#image {
+    border: 1px solid #444;
+    background-color: #222;
+}
+
+#image img {
+    border: 1px solid #444;
+}

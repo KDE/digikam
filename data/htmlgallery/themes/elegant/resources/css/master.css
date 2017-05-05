@@ -1,0 +1,116 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: arial, sans-serif;
+    font-size: 9pt;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img a:hover {
+    text-decoration: none;
+}
+    
+.caption a:hover {
+    color: #000;
+}
+
+h1 {
+    padding: 0;
+    margin: 0;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    font-size: 120%;
+    font-family: arial, sans-serif;
+    text-align: center;
+}
+
+.footer {
+    margin: 0;
+    padding: 0.5em;
+
+    font-size: 75%;
+    font-family: arial, sans-serif;
+    text-align: right;
+}
+
+#content {
+    width: 90%;
+    display: table;
+    text-align: center;
+    clear: both;
+    margin: 0 auto;
+    padding: 0 auto;
+    overflow: hidden;
+}
+
+#content ul {
+    display: table;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    list-style-type: none;
+}
+
+#content li {
+    float: left;
+}
+
+#content li a {
+    display: block;
+    margin: 6px;
+    padding: 5px;
+    text-align: center;
+}
+
+/* PAGINATION */
+.pagination {
+    display: table;
+    margin: 0 auto;
+    padding: 0;
+    clear: both;
+    overflow: hidden;
+}
+
+.pagination ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.pagination li a,
+.pagination .disabled,
+.pagination .current {
+    margin: 5px;
+    padding: 6px;
+    display: block;
+}
+
+/* Image page */
+#image {
+    display: table;
+    margin: 6px auto;
+    padding: 5px;
+    overflow: hidden;
+}
+
+#image img {
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
