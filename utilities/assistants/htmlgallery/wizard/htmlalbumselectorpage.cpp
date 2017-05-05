@@ -55,7 +55,7 @@ HTMLAlbumSelectorPage::HTMLAlbumSelectorPage(QWizard* const dialog, const QStrin
 
     d->collectionSelector = new AlbumSelectTabs(this);
     setPageWidget(d->collectionSelector);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-image")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
     connect(d->collectionSelector, SIGNAL(signalAlbumSelectionChanged()),
             this, SIGNAL(completeChanged()));
