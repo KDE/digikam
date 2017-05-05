@@ -25,6 +25,7 @@
 
 // Qt includes
 
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QImage>
@@ -101,7 +102,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
 
     if (!imageFile.open(QIODevice::ReadOnly))
     {
-        emitWarning(i18n("Could not read image '%1'", path));
+        emitWarning(i18n("Could not read image '%1'", QDir::toNativeSeparators(path)));
         return;
     }
 
@@ -114,7 +115,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
     {
         if (!DRawDecoder::loadRawPreview(originalImage, path))
         {
-            emitWarning(i18n("Error loading RAW image '%1'", path));
+            emitWarning(i18n("Error loading RAW image '%1'", QDir::toNativeSeparators(path)));
             return;
         }
     }
@@ -124,7 +125,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
 
         if (imageFormat.isEmpty())
         {
-            emitWarning(i18n("Format of image '%1' is unknown", path));
+            emitWarning(i18n("Format of image '%1' is unknown", QDir::toNativeSeparators(path)));
             return;
         }
 
@@ -135,7 +136,7 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
 
         if (!originalImage.loadFromData(imageData) )
         {
-            emitWarning(i18n("Error loading image '%1'", path));
+            emitWarning(i18n("Error loading image '%1'", QDir::toNativeSeparators(path)));
             return;
         }
     }
@@ -183,7 +184,9 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
 
         if (!fullImage.save(destPath, mInfo->fullFormatString().toLatin1().data(), mInfo->fullQuality()))
         {
-            emitWarning(i18n("Could not save image '%1' to '%2'", path, destPath));
+            emitWarning(i18n("Could not save image '%1' to '%2'",
+                             QDir::toNativeSeparators(path),
+                             QDir::toNativeSeparators(destPath)));
             return;
         }
     }
@@ -212,7 +215,9 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
 
     if (!thumbnail.save(destPath, mInfo->thumbnailFormatString().toLatin1().data(), mInfo->thumbnailQuality()))
     {
-        mGenerator->logWarningRequested(i18n("Could not save thumbnail for image '%1' to '%2'", path, destPath));
+        mGenerator->logWarningRequested(i18n("Could not save thumbnail for image '%1' to '%2'",
+                                             QDir::toNativeSeparators(path),
+                                             QDir::toNativeSeparators(destPath)));
         return;
     }
 
@@ -444,13 +449,13 @@ bool ImageGenerationFunctor::writeDataToFile(const QByteArray& data, const QStri
 
     if (!destFile.open(QIODevice::WriteOnly))
     {
-        emitWarning(i18n("Could not open file '%1' for writing", destPath));
+        emitWarning(i18n("Could not open file '%1' for writing", QDir::toNativeSeparators(destPath)));
         return false;
     }
 
     if (destFile.write(data) != data.size())
     {
-        emitWarning(i18n("Could not save image to file '%1'", destPath));
+        emitWarning(i18n("Could not save image to file '%1'", QDir::toNativeSeparators(destPath)));
         return false;
     }
 
