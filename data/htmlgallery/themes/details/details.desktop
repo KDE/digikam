@@ -65,4 +65,4 @@ Name[uk]=Відомості нижнього колонтитула
 Name[x-test]=xxFooter informationxx
 
 Type=string
-Default=My personal gallery <a href="mailto:email@mydomain.tld">email@mydomain.tld</a> - Powered by <a href="http://www.digikam.org/drupal/node/17">Kipi Plugins - HTMLExport</a>
+Default=My personal gallery <a href="mailto:email@mydomain.tld">email@mydomain.tld</a> - Powered by <a href="http://www.digikam.org">digiKam - HTMLGallery</a>

@@ -187,7 +187,7 @@
 	</ul>
 
 	<p class="footer">
-		HTML export <a href="http://www.digikam.org/">KIPI Plugin</a> (Floating Cards theme)
+		<a href="http://www.digikam.org/">digiKam</a> HTML Gallery (Floating Cards theme)
 		<a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0 Strict!</a>
 		<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS!</a>
 	</p>
@@ -248,7 +248,7 @@
 	</ul>
 	
 	<p class="footer">
-		HTML export <a href="http://www.digikam.org/">KIPI Plugin</a> (Floating Cards theme)
+		<a href="http://www.digikam.org/">digiKam</a> HTML Gallery (Floating Cards theme)
 		<a href="http://validator.w3.org/check?uri=referer">Valid XHTML 1.0 Strict!</a>
 		<a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS!</a>
 	</p>
