@@ -45,20 +45,37 @@
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
 #include "coredburl.h"
+#include "dprogresswdg.h"
+#include "dhistoryview.h"
 
 namespace Digikam
 {
 
+class HTMLFinalPage::Private
+{
+public:
+
+    Private()
+      : progressView(0),
+        progressBar(0)
+    {
+    }
+
+    DHistoryView* progressView;
+    DProgressWdg* progressBar;
+};
+
 HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     setObjectName(QLatin1String("FinalPage"));
 
     DVBox* const vbox = new DVBox(this);
-    mProgressView     = new DHistoryView(vbox);
-    mProgressBar      = new DProgressWdg(vbox);
+    d->progressView     = new DHistoryView(vbox);
+    d->progressBar      = new DProgressWdg(vbox);
 
-    vbox->setStretchFactor(mProgressBar, 10);
+    vbox->setStretchFactor(d->progressBar, 10);
     vbox->setContentsMargins(QMargins());
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -67,6 +84,7 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
 
 HTMLFinalPage::~HTMLFinalPage()
 {
+    delete d;
 }
 
 void HTMLFinalPage::initializePage()
@@ -105,26 +123,26 @@ void HTMLFinalPage::slotProcess()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << info;
 
-    mProgressView->addEntry(i18n("Starting to generate gallery..."),
+    d->progressView->addEntry(i18n("Starting to generate gallery..."),
                             DHistoryView::ProgressEntry);
 
-    mProgressView->addEntry(i18n("%1 albums to process:", info->mCollectionList.count()),
+    d->progressView->addEntry(i18n("%1 albums to process:", info->mCollectionList.count()),
                             DHistoryView::ProgressEntry);
 
     foreach(Album* const album, info->mCollectionList)
     {
         if (album)
         {
-            mProgressView->addEntry(album->databaseUrl().fileUrl().toString(),
+            d->progressView->addEntry(album->databaseUrl().fileUrl().toString(),
                                     DHistoryView::ProgressEntry);
         }
     }
 
-    mProgressView->addEntry(i18n("Output directory: %1", info->destUrl().toLocalFile()),
+    d->progressView->addEntry(i18n("Output directory: %1", info->destUrl().toLocalFile()),
                             DHistoryView::ProgressEntry);
 
     GalleryGenerator generator(info);
-    generator.setProgressWidgets(mProgressView, mProgressBar);
+    generator.setProgressWidgets(d->progressView, d->progressBar);
 
     if (!generator.run())
     {
@@ -133,12 +151,12 @@ void HTMLFinalPage::slotProcess()
 
     if (generator.warnings())
     {
-        mProgressView->addEntry(i18n("Gallery is completed, but some warnings occurred."),
+        d->progressView->addEntry(i18n("Gallery is completed, but some warnings occurred."),
                                 DHistoryView::WarningEntry);
     }
     else
     {
-        mProgressView->addEntry(i18n("Gallery completed."),
+        d->progressView->addEntry(i18n("Gallery completed."),
                                 DHistoryView::ProgressEntry);
     }
 
@@ -147,7 +165,7 @@ void HTMLFinalPage::slotProcess()
         QUrl url = info->destUrl().adjusted(QUrl::StripTrailingSlash);
         url.setPath(url.path() + QLatin1String("/index.html"));
         QDesktopServices::openUrl(url);
-        mProgressView->addEntry(i18n("Opening gallery in browser..."),
+        d->progressView->addEntry(i18n("Opening gallery in browser..."),
                                 DHistoryView::ProgressEntry);
     }
 }

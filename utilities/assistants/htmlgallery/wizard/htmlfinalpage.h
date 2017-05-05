@@ -25,13 +25,11 @@
 
 // Qt includes
 
-#include <QWidget>
+#include <QString>
 
 // Local includes
 
 #include "dwizardpage.h"
-#include "dprogresswdg.h"
-#include "dhistoryview.h"
 
 namespace Digikam
 {
@@ -53,8 +51,8 @@ private Q_SLOTS:
 
 private:
 
-    DHistoryView* mProgressView;
-    DProgressWdg* mProgressBar;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
