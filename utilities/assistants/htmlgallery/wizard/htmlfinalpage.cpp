@@ -31,6 +31,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QTimer>
+#include <QDir>
 
 // KDE includes
 
@@ -124,22 +125,23 @@ void HTMLFinalPage::slotProcess()
     qCDebug(DIGIKAM_GENERAL_LOG) << info;
 
     d->progressView->addEntry(i18n("Starting to generate gallery..."),
-                            DHistoryView::ProgressEntry);
+                              DHistoryView::ProgressEntry);
 
     d->progressView->addEntry(i18n("%1 albums to process:", info->mCollectionList.count()),
-                            DHistoryView::ProgressEntry);
+                              DHistoryView::ProgressEntry);
 
     foreach(Album* const album, info->mCollectionList)
     {
         if (album)
         {
-            d->progressView->addEntry(album->databaseUrl().fileUrl().toString(),
-                                    DHistoryView::ProgressEntry);
+            d->progressView->addEntry(QDir::toNativeSeparators(album->databaseUrl().fileUrl().toLocalFile()),
+                                      DHistoryView::ProgressEntry);
         }
     }
 
-    d->progressView->addEntry(i18n("Output directory: %1", info->destUrl().toLocalFile()),
-                            DHistoryView::ProgressEntry);
+    d->progressView->addEntry(i18n("Output directory: %1",
+                                   QDir::toNativeSeparators(info->destUrl().toLocalFile())),
+                                   DHistoryView::ProgressEntry);
 
     GalleryGenerator generator(info);
     generator.setProgressWidgets(d->progressView, d->progressBar);
@@ -152,12 +154,12 @@ void HTMLFinalPage::slotProcess()
     if (generator.warnings())
     {
         d->progressView->addEntry(i18n("Gallery is completed, but some warnings occurred."),
-                                DHistoryView::WarningEntry);
+                                  DHistoryView::WarningEntry);
     }
     else
     {
         d->progressView->addEntry(i18n("Gallery completed."),
-                                DHistoryView::ProgressEntry);
+                                  DHistoryView::ProgressEntry);
     }
 
     if (info->openInBrowser())
@@ -166,7 +168,7 @@ void HTMLFinalPage::slotProcess()
         url.setPath(url.path() + QLatin1String("/index.html"));
         QDesktopServices::openUrl(url);
         d->progressView->addEntry(i18n("Opening gallery in browser..."),
-                                DHistoryView::ProgressEntry);
+                                  DHistoryView::ProgressEntry);
     }
 }
 
