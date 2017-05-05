@@ -86,6 +86,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent)
     : DWizardDlg(parent, QLatin1String("HTML Gallery Dialog")),
       d(new Private)
 {
+    setOption(QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Create Html Gallery"));
 
     d->mInfo = new GalleryInfo;
