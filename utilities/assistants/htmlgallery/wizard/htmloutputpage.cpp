@@ -117,6 +117,10 @@ HTMLOutputPage::~HTMLOutputPage()
 void HTMLOutputPage::initializePage()
 {
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return;
+
     GalleryInfo* const info  = wizard->galleryInfo();
 
     d->kcfg_destUrl->setFileDlgPath(info->destUrl().toLocalFile());
@@ -129,6 +133,10 @@ bool HTMLOutputPage::validatePage()
         return false;
 
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return false;
+
     GalleryInfo* const info  = wizard->galleryInfo();
 
     info->setDestUrl(QUrl::fromLocalFile(d->kcfg_destUrl->fileDlgPath()));

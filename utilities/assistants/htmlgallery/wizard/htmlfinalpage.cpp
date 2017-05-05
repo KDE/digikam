@@ -98,6 +98,14 @@ void HTMLFinalPage::initializePage()
 void HTMLFinalPage::slotProcess()
 {
     HTMLWizard* const wizard                       = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+    {
+        d->progressView->addEntry(i18n("Internal Error"),
+                                  DHistoryView::ErrorEntry);
+        return;
+    }
+
     GalleryInfo* const info                        = wizard->galleryInfo();
 
     // Generate GalleryInfo

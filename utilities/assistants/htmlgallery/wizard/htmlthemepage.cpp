@@ -88,6 +88,10 @@ HTMLThemePage::~HTMLThemePage()
 void HTMLThemePage::initializePage()
 {
     HTMLWizard* const wizard              = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return;
+
     GalleryInfo* const info               = wizard->galleryInfo();
     GalleryTheme::List list               = GalleryTheme::getList();
     GalleryTheme::List::ConstIterator it  = list.constBegin();

@@ -72,6 +72,10 @@ bool HTMLAlbumSelectorPage::validatePage()
         return false;
 
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return false;
+
     GalleryInfo* const info  = wizard->galleryInfo();
     info->mCollectionList    = d->collectionSelector->selectedAlbums();
 
