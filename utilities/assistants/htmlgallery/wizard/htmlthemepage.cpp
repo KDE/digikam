@@ -142,10 +142,12 @@ void HTMLThemePage::slotThemeSelectionChanged()
                         .arg(curTheme->directory(), curTheme->previewUrl());
         }
 
-        QString txt = image +
-                      QString::fromUtf8("<b>%3</b><br/><br/>%4<br/><br/>")
-                          .arg(curTheme->name(), curTheme->comment()) + 
-                      i18n("Author: %1", author);
+        QString advSet = (theme->parameterList().size() > 0) ? i18n("can be customized")
+                                                             : i18n("no customization available");
+        QString txt    = image + QString::fromUtf8("<b>%3</b><br/><br/>%4<br/><br/>")
+                                   .arg(curTheme->name(), curTheme->comment())
+                               + i18n("Author: %1<br/><br/>", author)
+                               + QString::fromUtf8("<i>%1</i>").arg(advSet);
 
         mThemeInfo->setHtml(txt);
         theme       = curTheme;
