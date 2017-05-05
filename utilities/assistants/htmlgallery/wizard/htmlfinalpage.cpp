@@ -74,8 +74,8 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
     setObjectName(QLatin1String("FinalPage"));
 
     DVBox* const vbox = new DVBox(this);
-    d->progressView     = new DHistoryView(vbox);
-    d->progressBar      = new DProgressWdg(vbox);
+    d->progressView   = new DHistoryView(vbox);
+    d->progressBar    = new DProgressWdg(vbox);
 
     vbox->setStretchFactor(d->progressBar, 10);
     vbox->setContentsMargins(QMargins());

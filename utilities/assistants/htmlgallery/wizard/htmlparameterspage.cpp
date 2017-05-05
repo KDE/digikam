@@ -114,6 +114,10 @@ QWidget* HTMLParametersPage::themeParameterWidgetFromName(const QByteArray& name
 void HTMLParametersPage::initializePage()
 {
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return;
+
     GalleryInfo* const info  = wizard->galleryInfo();
     GalleryTheme::Ptr theme  = wizard->galleryTheme();
 
