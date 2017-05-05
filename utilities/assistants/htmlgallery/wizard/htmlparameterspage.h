@@ -51,8 +51,11 @@ public:
 
 public:
 
-    QWidget*                    mContent;
     QMap<QByteArray, QWidget*>  mThemeParameterWidgetFromName;
+
+private:
+
+    QWidget* mContent;
 };
 
 } // namespace Digikam

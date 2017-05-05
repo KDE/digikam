@@ -25,12 +25,11 @@
 
 // Qt includes
 
-#include <QCheckBox>
+#include <QString>
 
 // Local includes
 
 #include "dwizardpage.h"
-#include "dfileselector.h"
 
 namespace Digikam
 {
@@ -47,8 +46,8 @@ public:
 
 private:
 
-    DFileSelector* mKcfg_destUrl;
-    QCheckBox*     mKcfg_openInBrowser;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

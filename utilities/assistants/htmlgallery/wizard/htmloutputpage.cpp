@@ -32,6 +32,7 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QCheckBox>
 
 // KDE includes
 
@@ -41,12 +42,28 @@
 
 #include "htmlwizard.h"
 #include "galleryinfo.h"
+#include "dfileselector.h"
 
 namespace Digikam
 {
 
+class HTMLOutputPage::Private
+{
+public:
+
+    Private()
+      : kcfg_destUrl(0),
+        kcfg_openInBrowser(0)
+    {
+    }
+
+    DFileSelector* kcfg_destUrl;
+    QCheckBox*     kcfg_openInBrowser;
+};
+
 HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     setObjectName(QLatin1String("OutputPage"));
 
@@ -57,21 +74,21 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Destination folder:"));
 
-    mKcfg_destUrl = new DFileSelector(this);
-    mKcfg_destUrl->setObjectName(QLatin1String("mKcfg_destUrl"));
-    mKcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
-    textLabel1->setBuddy(mKcfg_destUrl);
+    d->kcfg_destUrl = new DFileSelector(this);
+    d->kcfg_destUrl->setObjectName(QLatin1String("d->kcfg_destUrl"));
+    d->kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
+    textLabel1->setBuddy(d->kcfg_destUrl);
 
     QHBoxLayout* const hboxLayout = new QHBoxLayout();
     hboxLayout->setContentsMargins(QMargins());
     hboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hboxLayout->setObjectName(QLatin1String("hboxLayout"));
     hboxLayout->addWidget(textLabel1);
-    hboxLayout->addWidget(mKcfg_destUrl);
+    hboxLayout->addWidget(d->kcfg_destUrl);
 
-    mKcfg_openInBrowser = new QCheckBox(this);
-    mKcfg_openInBrowser->setObjectName(QLatin1String("mKcfg_openInBrowser"));
-    mKcfg_openInBrowser->setText(i18n("Open in browser"));
+    d->kcfg_openInBrowser         = new QCheckBox(this);
+    d->kcfg_openInBrowser->setObjectName(QLatin1String("d->kcfg_openInBrowser"));
+    d->kcfg_openInBrowser->setText(i18n("Open in browser"));
 
     QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum,
                                                     QSizePolicy::Expanding);
@@ -81,17 +98,18 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     vboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     vboxLayout->setObjectName(QLatin1String("vboxLayout"));
     vboxLayout->addLayout(hboxLayout);
-    vboxLayout->addWidget(mKcfg_openInBrowser);
+    vboxLayout->addWidget(d->kcfg_openInBrowser);
     vboxLayout->addItem(spacer1);
 
     setPageWidget(box);
 
-    connect(mKcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
+    connect(d->kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
             this, SIGNAL(completeChanged()));
 }
 
 HTMLOutputPage::~HTMLOutputPage()
 {
+    delete d;
 }
 
 void HTMLOutputPage::initializePage()
@@ -99,20 +117,20 @@ void HTMLOutputPage::initializePage()
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
     GalleryInfo* const info  = wizard->galleryInfo();
 
-    mKcfg_destUrl->setFileDlgPath(info->destUrl().toLocalFile());
-    mKcfg_openInBrowser->setChecked(info->openInBrowser());
+    d->kcfg_destUrl->setFileDlgPath(info->destUrl().toLocalFile());
+    d->kcfg_openInBrowser->setChecked(info->openInBrowser());
 }
 
 bool HTMLOutputPage::validatePage()
 {
-    if (mKcfg_destUrl->fileDlgPath().isEmpty())
+    if (d->kcfg_destUrl->fileDlgPath().isEmpty())
         return false;
 
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
     GalleryInfo* const info  = wizard->galleryInfo();
 
-    info->setDestUrl(QUrl::fromLocalFile(mKcfg_destUrl->fileDlgPath()));
-    info->setOpenInBrowser(mKcfg_openInBrowser->isChecked());
+    info->setDestUrl(QUrl::fromLocalFile(d->kcfg_destUrl->fileDlgPath()));
+    info->setOpenInBrowser(d->kcfg_openInBrowser->isChecked());
 
     return true;
 }
