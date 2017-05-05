@@ -97,15 +97,7 @@ ImageGenerationFunctor::~ImageGenerationFunctor()
 void ImageGenerationFunctor::operator()(ImageElement& element)
 {
     // Load image
-    QString path = element.mPath;
-    QFile imageFile(path);
-
-    if (!imageFile.open(QIODevice::ReadOnly))
-    {
-        emitWarning(i18n("Could not read image '%1'", QDir::toNativeSeparators(path)));
-        return;
-    }
-
+    QString    path = element.mPath;
     QImage     originalImage;
     QString    imageFormat;
     QByteArray imageData;
@@ -121,6 +113,14 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
     }
     else
     {
+        QFile imageFile(path);
+
+        if (!imageFile.open(QIODevice::ReadOnly))
+        {
+            emitWarning(i18n("Could not read image '%1'", QDir::toNativeSeparators(path)));
+            return;
+        }
+
         imageFormat = QString::fromLatin1(QImageReader::imageFormat(&imageFile));
 
         if (imageFormat.isEmpty())
@@ -129,12 +129,9 @@ void ImageGenerationFunctor::operator()(ImageElement& element)
             return;
         }
 
-        imageFile.close();
-        imageFile.open(QIODevice::ReadOnly);
+        imageData = imageFile.readAll();
 
-        imageData   = imageFile.readAll();
-
-        if (!originalImage.loadFromData(imageData) )
+        if (!originalImage.loadFromData(imageData))
         {
             emitWarning(i18n("Error loading image '%1'", QDir::toNativeSeparators(path)));
             return;
