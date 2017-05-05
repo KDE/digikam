@@ -125,7 +125,7 @@ bool HTMLWizard::validateCurrentPage()
         {
             AbstractThemeParameter* const themeParameter = *it;
             QByteArray parameterInternalName             = themeParameter->internalName();
-            QWidget* const widget                        = d->mParametersPage->mThemeParameterWidgetFromName[parameterInternalName];
+            QWidget* const widget                        = d->mParametersPage->themeParameterWidgetFromName(parameterInternalName);
             QString value                                = themeParameter->valueFromWidget(widget);
 
             d->mInfo->setThemeParameterValue(themeInternalName,

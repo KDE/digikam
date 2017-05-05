@@ -25,15 +25,13 @@
 
 // Qt includes
 
-#include <QLabel>
-#include <QWidget>
 #include <QByteArray>
-#include <QMap>
+#include <QString>
+#include <QWidget>
 
 // Local includes
 
 #include "dwizardpage.h"
-#include "gallerytheme.h"
 
 namespace Digikam
 {
@@ -49,13 +47,12 @@ public:
 
     void initializePage();
 
-public:
-
-    QMap<QByteArray, QWidget*>  mThemeParameterWidgetFromName;
+    QWidget* themeParameterWidgetFromName(const QByteArray&) const;
 
 private:
 
-    QWidget* mContent;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

@@ -29,6 +29,9 @@
 #include <QSpacerItem>
 #include <QGridLayout>
 #include <QScrollArea>
+#include <QByteArray>
+#include <QMap>
+#include <QLabel>
 
 // KDE includes
 
@@ -40,12 +43,27 @@
 #include "galleryinfo.h"
 #include "abstractthemeparameter.h"
 #include "dwidgetutils.h"
+#include "gallerytheme.h"
 
 namespace Digikam
 {
 
+class HTMLParametersPage::Private
+{
+public:
+
+    Private()
+      : content(0)
+    {
+    }
+
+    QMap<QByteArray, QWidget*> themePrmWdgtList;
+    QWidget*                   content;
+};
+
 HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     setObjectName(QLatin1String("ThemeParametersPage"));
 
@@ -70,10 +88,10 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
     mScrollArea->setFrameShape(QFrame::NoFrame);
     mScrollArea->setWidgetResizable(true);
 
-    mContent = new QWidget();
-    mContent->setObjectName(QLatin1String("mContent"));
-    mContent->setGeometry(QRect(0, 0, 600, 430));
-    mScrollArea->setWidget(mContent);
+    d->content = new QWidget();
+    d->content->setObjectName(QLatin1String("d->content"));
+    d->content->setGeometry(QRect(0, 0, 600, 430));
+    mScrollArea->setWidget(d->content);
 
     vbox->setContentsMargins(QMargins());
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -83,6 +101,12 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
 
 HTMLParametersPage::~HTMLParametersPage()
 {
+    delete d;
+}
+
+QWidget* HTMLParametersPage::themeParameterWidgetFromName(const QByteArray& name) const
+{
+    return d->themePrmWdgtList[name];
 }
 
 void HTMLParametersPage::initializePage()
@@ -91,12 +115,12 @@ void HTMLParametersPage::initializePage()
     GalleryInfo* const info  = wizard->galleryInfo();
     GalleryTheme::Ptr theme  = wizard->galleryTheme();
 
-    qDeleteAll(mContent->children());
-    mThemeParameterWidgetFromName.clear();
+    qDeleteAll(d->content->children());
+    d->themePrmWdgtList.clear();
 
     // Create layout. We need to recreate it every time, to get rid of
     // spacers
-    QGridLayout* const layout = new QGridLayout(mContent);
+    QGridLayout* const layout = new QGridLayout(d->content);
     layout->setContentsMargins(QMargins());
     layout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
@@ -117,9 +141,9 @@ void HTMLParametersPage::initializePage()
         QString name          = themeParameter->name();
         name                  = i18nc("'%1' is a label for a theme parameter", "%1:", name);
 
-        QLabel* const label   = new QLabel(name, mContent);
+        QLabel* const label   = new QLabel(name, d->content);
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        QWidget* const widget = themeParameter->createWidget(mContent, value);
+        QWidget* const widget = themeParameter->createWidget(d->content, value);
         label->setBuddy(widget);
 
         int row               = layout->rowCount();
@@ -139,7 +163,7 @@ void HTMLParametersPage::initializePage()
             layout->addItem(spacer, row, 2);
         }
 
-        mThemeParameterWidgetFromName[internalName] = widget;
+        d->themePrmWdgtList[internalName] = widget;
     }
 
     // Add spacer at the end, so that widgets aren't spread on the whole parent height
