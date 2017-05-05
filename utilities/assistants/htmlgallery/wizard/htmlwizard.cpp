@@ -106,6 +106,40 @@ HTMLWizard::~HTMLWizard()
     delete d;
 }
 
+bool HTMLWizard::validateCurrentPage()
+{
+    if (!DWizardDlg::validateCurrentPage())
+        return false;
+
+    if (currentPage() == d->mOutputPage)
+    {
+        GalleryTheme::Ptr curtheme                     = theme();
+        QString themeInternalName                      = curtheme->internalName();
+        d->mInfo->setTheme(themeInternalName);
+
+        GalleryTheme::ParameterList parameterList      = curtheme->parameterList();
+        GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
+        GalleryTheme::ParameterList::ConstIterator end = parameterList.constEnd();
+
+        for (; it != end ; ++it)
+        {
+            AbstractThemeParameter* const themeParameter = *it;
+            QByteArray parameterInternalName             = themeParameter->internalName();
+            QWidget* const widget                        = d->mParametersPage->mThemeParameterWidgetFromName[parameterInternalName];
+            QString value                                = themeParameter->valueFromWidget(widget);
+
+            d->mInfo->setThemeParameterValue(themeInternalName,
+                                             QString::fromLatin1(parameterInternalName),
+                                             value);
+        }
+
+        d->mConfigManager->updateSettings();
+        d->mInfo->save();
+    }
+
+    return true;
+}
+
 int HTMLWizard::parametersPageId() const
 {
     return d->mParametersPage->id();
@@ -124,16 +158,6 @@ GalleryInfo* HTMLWizard::galleryInfo() const
 GalleryTheme::Ptr HTMLWizard::theme() const
 {
     return (dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme);
-}
-
-QWidget* HTMLWizard::parametersWidget(const QByteArray& iname) const
-{
-    return d->mParametersPage->mThemeParameterWidgetFromName[iname];
-}
-
-void HTMLWizard::updateSettings()
-{
-    d->mConfigManager->updateSettings();
 }
 
 } // namespace Digikam
