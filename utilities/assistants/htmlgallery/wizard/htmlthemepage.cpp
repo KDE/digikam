@@ -86,12 +86,12 @@ void HTMLThemePage::initializePage()
 
 bool HTMLThemePage::validatePage()
 {
-    if (mThemeList->currentItem())
+    if (!mThemeList->currentItem())
     {
-        return true;
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 int HTMLThemePage::nextId() const
