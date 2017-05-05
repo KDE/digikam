@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QStyle>
@@ -76,6 +77,7 @@ HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
             this, SLOT(slotThemeSelectionChanged()));
 
     setPageWidget(hbox);
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("application-x-theme")));
 }
 
 HTMLThemePage::~HTMLThemePage()

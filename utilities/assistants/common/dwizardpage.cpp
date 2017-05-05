@@ -69,7 +69,7 @@ DWizardPage::DWizardPage(QWizard* const dlg, const QString& title)
 {
     setTitle(title);
 
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing     = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     QScrollArea* const sv = new QScrollArea(this);
     QWidget* const panel  = new QWidget(sv->viewport());
@@ -155,6 +155,11 @@ void DWizardPage::removePageWidget(QWidget* const w)
 void DWizardPage::setLeftBottomPix(const QPixmap& pix)
 {
     d->leftBottomPix->setPixmap(pix);
+}
+
+void DWizardPage::setLeftBottomPix(const QIcon& icon)
+{
+    d->leftBottomPix->setPixmap(icon.pixmap(128));
 }
 
 QWizard* DWizardPage::assistant() const

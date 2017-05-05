@@ -20,6 +20,11 @@
  *
  * ============================================================ */
 
+// Qt includes
+
+#include <QIcon>
+#include <QPixmap>
+
 // Local includes
 
 #include "htmlalbumselectorpage.h"
@@ -50,6 +55,7 @@ HTMLAlbumSelectorPage::HTMLAlbumSelectorPage(QWizard* const dialog, const QStrin
 
     d->collectionSelector = new AlbumSelectTabs(this);
     setPageWidget(d->collectionSelector);
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-image")));
 
     connect(d->collectionSelector, SIGNAL(signalAlbumSelectionChanged()),
             this, SIGNAL(completeChanged()));

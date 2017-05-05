@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -244,6 +245,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     gridLayout->addItem(verticalSpacer_2,          13, 3, 1, 1);
 
     setPageWidget(box);
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("configure")));
 
     setTabOrder(mSaveImageButton,        kcfg_fullFormat);
     setTabOrder(kcfg_fullFormat,         kcfg_fullQuality);

@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QSpacerItem>
 #include <QVBoxLayout>
 #include <QDesktopServices>
@@ -81,6 +82,7 @@ HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(vbox);
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("system-run")));
 }
 
 HTMLFinalPage::~HTMLFinalPage()

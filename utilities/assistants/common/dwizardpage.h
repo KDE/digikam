@@ -49,6 +49,7 @@ public:
     void setPageWidget(QWidget* const w);
     void removePageWidget(QWidget* const w);
     void setLeftBottomPix(const QPixmap& pix);
+    void setLeftBottomPix(const QIcon& icon);
     void setShowLeftView(bool v);
 
     void setComplete(bool b);

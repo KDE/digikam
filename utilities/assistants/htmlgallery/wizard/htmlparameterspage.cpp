@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QApplication>
 #include <QStyle>
 #include <QSpacerItem>
@@ -97,6 +98,7 @@ HTMLParametersPage::HTMLParametersPage(QWizard* const dialog, const QString& tit
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     setPageWidget(vbox);
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-css")));
 }
 
 HTMLParametersPage::~HTMLParametersPage()

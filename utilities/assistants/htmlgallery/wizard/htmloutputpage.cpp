@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QHBoxLayout>
 #include <QSpacerItem>
 #include <QVBoxLayout>
@@ -102,6 +103,7 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     vboxLayout->addItem(spacer1);
 
     setPageWidget(box);
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 
     connect(d->kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
             this, SIGNAL(completeChanged()));
