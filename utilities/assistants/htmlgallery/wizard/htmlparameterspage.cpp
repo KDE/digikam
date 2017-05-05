@@ -36,6 +36,7 @@
 
 // Local includes
 
+#include "htmlwizard.h"
 #include "galleryinfo.h"
 #include "abstractthemeparameter.h"
 #include "dwidgetutils.h"
@@ -84,8 +85,12 @@ HTMLParametersPage::~HTMLParametersPage()
 {
 }
 
-void HTMLParametersPage::fillThemeParametersPage(GalleryTheme::Ptr theme, GalleryInfo* const info)
+void HTMLParametersPage::initializePage()
 {
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryInfo* const info  = wizard->galleryInfo();
+    GalleryTheme::Ptr theme  = wizard->theme();
+
     qDeleteAll(mContent->children());
     mThemeParameterWidgetFromName.clear();
 

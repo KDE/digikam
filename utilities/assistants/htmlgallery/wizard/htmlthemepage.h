@@ -56,6 +56,8 @@ public:
 
 class HTMLThemePage : public DWizardPage
 {
+    Q_OBJECT
+
 public:
 
     explicit HTMLThemePage(QWizard* const dialog, const QString& title);
@@ -64,6 +66,10 @@ public:
     void initializePage();
     int  nextId() const;
     bool validatePage();
+
+private Q_SLOTS:
+
+    void slotThemeSelectionChanged();
 
 public:
 

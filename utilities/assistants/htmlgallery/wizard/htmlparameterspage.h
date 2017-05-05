@@ -47,7 +47,7 @@ public:
     explicit HTMLParametersPage(QWizard* const dialog, const QString& title);
     ~HTMLParametersPage();
 
-    void fillThemeParametersPage(GalleryTheme::Ptr theme, GalleryInfo* const info);
+    void initializePage();
 
 public:
 

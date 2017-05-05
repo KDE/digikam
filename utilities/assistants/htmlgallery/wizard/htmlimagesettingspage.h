@@ -41,7 +41,9 @@ public:
     explicit HTMLImageSettingsPage(QWizard* const dialog, const QString& title);
     ~HTMLImageSettingsPage();
 
-public:
+    void initializePage();
+
+private:
 
     QCheckBox* mKcfg_thumbnailSquare;
 };

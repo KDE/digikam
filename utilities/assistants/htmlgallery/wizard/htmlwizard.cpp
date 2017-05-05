@@ -99,65 +99,11 @@ HTMLWizard::HTMLWizard(QWidget* const parent)
     d->mFinalPage              = new HTMLFinalPage(this, i18n("Generating Gallery"));
     d->mConfigManager          = new KConfigDialogManager(this, d->mInfo);
     d->mConfigManager->updateWidgets();
-
-    connect(d->mThemePage->mThemeList, SIGNAL(itemSelectionChanged()),
-            this, SLOT(slotThemeSelectionChanged()));
-
-    // Set page states, whoch can only be disabled after they have *all* been added.
-    slotThemeSelectionChanged();
 }
 
 HTMLWizard::~HTMLWizard()
 {
     delete d;
-}
-
-void HTMLWizard::slotThemeSelectionChanged()
-{
-    QListWidget* const listWidget = d->mThemePage->mThemeList;
-    QTextBrowser* const browser   = d->mThemePage->mThemeInfo;
-
-    if (listWidget->currentItem())
-    {
-        GalleryTheme::Ptr theme       = static_cast<ThemeListBoxItem*>(listWidget->currentItem())->mTheme;
-        QString url                   = theme->authorUrl();
-        QString author                = theme->authorName();
-        bool allowNonsquareThumbnails = theme->allowNonsquareThumbnails();
-
-        if (!url.isEmpty())
-        {
-            author = QString::fromUtf8("<a href='%1'>%2</a>").arg(url).arg(author);
-        }
-
-        QString preview               = theme->previewUrl();
-        QString image                 = QLatin1String("");
-
-        if (!preview.isEmpty())
-        {
-            image = QString::fromUtf8("<img src='%1/%2' /><br/><br/>").arg(theme->directory(),
-                                                                           theme->previewUrl());
-        }
-
-        QString txt = image +
-                      QString::fromUtf8("<b>%3</b><br/><br/>%4<br/><br/>")
-                          .arg(theme->name(), theme->comment()) + 
-                      i18n("Author: %1", author);
-
-        browser->setHtml(txt);
-
-        d->mImageSettingsPage->mKcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
-
-        if (!allowNonsquareThumbnails)
-        {
-            d->mImageSettingsPage->mKcfg_thumbnailSquare->setChecked(true);
-        }
-
-        d->mParametersPage->fillThemeParametersPage(theme, d->mInfo);
-    }
-    else
-    {
-        browser->clear();
-    }
 }
 
 int HTMLWizard::parametersPageId() const

@@ -55,10 +55,6 @@ public:
     QWidget* parametersWidget(const QByteArray& iname) const;
     void updateSettings();
 
-private Q_SLOTS:
-
-    void slotThemeSelectionChanged();
-
 private:
 
     class Private;

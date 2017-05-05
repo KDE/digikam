@@ -57,6 +57,9 @@ HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
     hbox->setContentsMargins(QMargins());
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
+    connect(mThemeList, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotThemeSelectionChanged()));
+
     setPageWidget(hbox);
 }
 
@@ -82,6 +85,9 @@ void HTMLThemePage::initializePage()
             mThemeList->setCurrentItem(item);
         }
     }
+
+    // Set page states, whoch can only be disabled after they have *all* been added.
+    slotThemeSelectionChanged();
 }
 
 bool HTMLThemePage::validatePage()
@@ -109,6 +115,45 @@ int HTMLThemePage::nextId() const
     }
 
     return dynamic_cast<HTMLWizard*>(assistant())->imageSettingsPageId();
+}
+
+void HTMLThemePage::slotThemeSelectionChanged()
+{
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryTheme::Ptr theme  = wizard->theme();
+
+    if (mThemeList->currentItem())
+    {
+        GalleryTheme::Ptr curTheme    = static_cast<ThemeListBoxItem*>(mThemeList->currentItem())->mTheme;
+        QString url                   = curTheme->authorUrl();
+        QString author                = curTheme->authorName();
+
+        if (!url.isEmpty())
+        {
+            author = QString::fromUtf8("<a href='%1'>%2</a>").arg(url).arg(author);
+        }
+
+        QString preview               = curTheme->previewUrl();
+        QString image                 = QLatin1String("");
+
+        if (!preview.isEmpty())
+        {
+            image = QString::fromUtf8("<img src='%1/%2' /><br/><br/>")
+                        .arg(curTheme->directory(), curTheme->previewUrl());
+        }
+
+        QString txt = image +
+                      QString::fromUtf8("<b>%3</b><br/><br/>%4<br/><br/>")
+                          .arg(curTheme->name(), curTheme->comment()) + 
+                      i18n("Author: %1", author);
+
+        mThemeInfo->setHtml(txt);
+        theme       = curTheme;
+    }
+    else
+    {
+        mThemeInfo->clear();
+    }
 }
 
 } // namespace Digikam

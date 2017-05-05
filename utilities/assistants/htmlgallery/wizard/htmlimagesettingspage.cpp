@@ -42,6 +42,8 @@
 // Local includes
 
 #include "invisiblebuttongroup.h"
+#include "galleryinfo.h"
+#include "htmlwizard.h"
 
 namespace Digikam
 {
@@ -269,6 +271,20 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
 HTMLImageSettingsPage::~HTMLImageSettingsPage()
 {
+}
+
+void HTMLImageSettingsPage::initializePage()
+{
+    HTMLWizard* const wizard      = dynamic_cast<HTMLWizard*>(assistant());
+    GalleryTheme::Ptr theme       = wizard->theme();
+    bool allowNonsquareThumbnails = theme->allowNonsquareThumbnails();
+
+    mKcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
+
+    if (!allowNonsquareThumbnails)
+    {
+        mKcfg_thumbnailSquare->setChecked(true);
+    }
 }
 
 } // namespace Digikam
