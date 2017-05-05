@@ -41,23 +41,38 @@
 namespace Digikam
 {
 
+class HTMLThemePage::Private
+{
+public:
+
+    Private()
+      : themeList(0),
+        themeInfo(0)
+    {
+    }
+
+    QListWidget*  themeList;
+    QTextBrowser* themeInfo;
+};
+
 HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     setObjectName(QLatin1String("ThemePage"));
 
     DHBox* const hbox = new DHBox(this);
 
-    mThemeList        = new QListWidget(hbox);
-    mThemeList->setObjectName(QLatin1String("mThemeList"));
+    d->themeList      = new QListWidget(hbox);
+    d->themeList->setObjectName(QLatin1String("d->themeList"));
 
-    mThemeInfo = new QTextBrowser(hbox);
-    mThemeInfo->setObjectName(QLatin1String("mThemeInfo"));
+    d->themeInfo      = new QTextBrowser(hbox);
+    d->themeInfo->setObjectName(QLatin1String("d->themeInfo"));
 
     hbox->setContentsMargins(QMargins());
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    connect(mThemeList, SIGNAL(itemSelectionChanged()),
+    connect(d->themeList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotThemeSelectionChanged()));
 
     setPageWidget(hbox);
@@ -65,6 +80,7 @@ HTMLThemePage::HTMLThemePage(QWizard* const dialog, const QString& title)
 
 HTMLThemePage::~HTMLThemePage()
 {
+    delete d;
 }
 
 void HTMLThemePage::initializePage()
@@ -75,14 +91,16 @@ void HTMLThemePage::initializePage()
     GalleryTheme::List::ConstIterator it  = list.constBegin();
     GalleryTheme::List::ConstIterator end = list.constEnd();
 
+    d->themeList->clear();
+
     for (; it != end ; ++it)
     {
         GalleryTheme::Ptr theme      = *it;
-        ThemeListBoxItem* const item = new ThemeListBoxItem(mThemeList, theme);
+        ThemeListBoxItem* const item = new ThemeListBoxItem(d->themeList, theme);
 
         if (theme->internalName() == info->theme())
         {
-            mThemeList->setCurrentItem(item);
+            d->themeList->setCurrentItem(item);
         }
     }
 
@@ -92,7 +110,7 @@ void HTMLThemePage::initializePage()
 
 bool HTMLThemePage::validatePage()
 {
-    if (!mThemeList->currentItem())
+    if (!d->themeList->currentItem())
     {
         return false;
     }
@@ -102,14 +120,11 @@ bool HTMLThemePage::validatePage()
 
 void HTMLThemePage::slotThemeSelectionChanged()
 {
-    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
-    GalleryTheme::Ptr theme  = wizard->galleryTheme();
-
-    if (mThemeList->currentItem())
+    if (d->themeList->currentItem())
     {
-        GalleryTheme::Ptr curTheme    = static_cast<ThemeListBoxItem*>(mThemeList->currentItem())->mTheme;
-        QString url                   = curTheme->authorUrl();
-        QString author                = curTheme->authorName();
+        GalleryTheme::Ptr curTheme = currentTheme();
+        QString url                = curTheme->authorUrl();
+        QString author             = curTheme->authorName();
 
         if (!url.isEmpty())
         {
@@ -125,20 +140,31 @@ void HTMLThemePage::slotThemeSelectionChanged()
                         .arg(curTheme->directory(), curTheme->previewUrl());
         }
 
-        QString advSet = (theme->parameterList().size() > 0) ? i18n("can be customized")
-                                                             : i18n("no customization available");
+        QString advSet = (curTheme->parameterList().size() > 0) ? i18n("can be customized")
+                                                                : i18n("no customization available");
         QString txt    = image + QString::fromUtf8("<b>%3</b><br/><br/>%4<br/><br/>")
                                    .arg(curTheme->name(), curTheme->comment())
                                + i18n("Author: %1<br/><br/>", author)
                                + QString::fromUtf8("<i>%1</i>").arg(advSet);
 
-        mThemeInfo->setHtml(txt);
-        theme       = curTheme;
+        d->themeInfo->setHtml(txt);
     }
     else
     {
-        mThemeInfo->clear();
+        d->themeInfo->clear();
     }
+}
+
+GalleryTheme::Ptr HTMLThemePage::currentTheme() const
+{
+    ThemeListBoxItem* const item = dynamic_cast<ThemeListBoxItem*>(d->themeList->currentItem());
+
+    if (item)
+    {
+        return item->mTheme;
+    }
+
+    return GalleryTheme::Ptr(0);
 }
 
 } // namespace Digikam

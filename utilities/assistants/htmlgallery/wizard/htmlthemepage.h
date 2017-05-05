@@ -66,17 +66,16 @@ public:
     void initializePage();
     bool validatePage();
 
+    GalleryTheme::Ptr currentTheme() const;
+
 private Q_SLOTS:
 
     void slotThemeSelectionChanged();
 
-public:
-
-    QListWidget*  mThemeList;
-
 private:
 
-    QTextBrowser* mThemeInfo;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

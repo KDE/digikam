@@ -165,14 +165,7 @@ GalleryInfo* HTMLWizard::galleryInfo() const
 
 GalleryTheme::Ptr HTMLWizard::galleryTheme() const
 {
-    ThemeListBoxItem* const item = dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem());
-
-    if (item)
-    {
-        return item->mTheme;
-    }
-
-    return GalleryTheme::Ptr(0);
+    return d->mThemePage->currentTheme();
 }
 
 } // namespace Digikam
