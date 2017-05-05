@@ -118,8 +118,13 @@ void HTMLFinalPage::slotProcess()
     }
 
     d->progressView->addEntry(i18n("Output directory: %1",
+<<<<<<< HEAD
                               QDir::toNativeSeparators(info->destUrl().toLocalFile())),
                               DHistoryView::ProgressEntry);
+=======
+                                   QDir::toNativeSeparators(info->destUrl().toLocalFile())),
+                                   DHistoryView::ProgressEntry);
+>>>>>>> dcfee90d7b40f7be7f0e8e8ef77aad51c0cab6d1
 
     GalleryGenerator generator(info);
     generator.setProgressWidgets(d->progressView, d->progressBar);
