@@ -26,12 +26,10 @@
 // Qt includes
 
 #include <QString>
-#include <QWidget>
 
 // Local includes
 
 #include "dwizardpage.h"
-#include "albumselecttabs.h"
 
 namespace Digikam
 {
@@ -47,7 +45,8 @@ public:
 
 private:
 
-    AlbumSelectTabs* mCollectionSelector;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

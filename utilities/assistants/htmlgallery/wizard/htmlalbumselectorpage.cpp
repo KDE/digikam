@@ -25,34 +25,49 @@
 #include "htmlalbumselectorpage.h"
 #include "htmlwizard.h"
 #include "galleryinfo.h"
+#include "albumselecttabs.h"
 
 namespace Digikam
 {
 
+class HTMLAlbumSelectorPage::Private
+{
+public:
+
+    Private()
+      : collectionSelector(0)
+    {
+    }
+
+    AlbumSelectTabs* collectionSelector;
+};
+
 HTMLAlbumSelectorPage::HTMLAlbumSelectorPage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     setObjectName(QLatin1String("AlbumSelectorPage"));
 
-    mCollectionSelector = new AlbumSelectTabs(this);
-    setPageWidget(mCollectionSelector);
+    d->collectionSelector = new AlbumSelectTabs(this);
+    setPageWidget(d->collectionSelector);
 
-    connect(mCollectionSelector, SIGNAL(signalAlbumSelectionChanged()),
+    connect(d->collectionSelector, SIGNAL(signalAlbumSelectionChanged()),
             this, SIGNAL(completeChanged()));
 }
 
 HTMLAlbumSelectorPage::~HTMLAlbumSelectorPage()
 {
+    delete d;
 }
 
 bool HTMLAlbumSelectorPage::validatePage()
 {
-    if (mCollectionSelector->selectedAlbums().empty())
+    if (d->collectionSelector->selectedAlbums().empty())
         return false;
 
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
     GalleryInfo* const info  = wizard->galleryInfo();
-    info->mCollectionList    = mCollectionSelector->selectedAlbums();
+    info->mCollectionList    = d->collectionSelector->selectedAlbums();
 
     return true;
 }

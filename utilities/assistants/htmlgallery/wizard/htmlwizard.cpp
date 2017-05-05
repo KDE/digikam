@@ -69,7 +69,6 @@ public:
         mThemePage(0),
         mFinalPage(0)
     {
-
     }
 
     GalleryInfo*           mInfo;
