@@ -9,6 +9,7 @@ Searches    : In extended search, the tags selection can also be restricted such
 General     : New tool to export Albums to static HTML gallery.
 HTMLGallery : New "Elegant" theme using javascript to render image as slideshow in web browser.
 HTMLGallery : new "SimpleRounded" theme that uses flat shapes with rounded corners.
+HTMLGallery : new "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -38,4 +39,6 @@ BUGFIXES FROM BUGZILLA:
 024 ==> 379226 - digiKam Properties Metadata not shown in Editor Captions.
 025 ==> 216359 - New "floating cards" theme for html gallery [patch].
 026 ==> 319606 - New "SimpleRounded" theme for html gallery [patch].
-027 ==>
+027 ==> 334589 - New "blue with curves" theme for html gallery [patch].
+028 ==> 
+

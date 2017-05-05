@@ -1,0 +1,84 @@
+body {
+  color: #527796;
+  background: #0b9cf8  url(./body.png);
+  position: relative;
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+
+
+table {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+td {
+  padding: 1em;
+}
+
+
+img.photo {
+  border: 2px solid #527796;
+}
+
+
+
+
+a:link {
+  color: #527796;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+
+a:visited {
+  color: #527796;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+
+
+div.rubrique {
+  top: 0px;
+  margin-top: 0px;
+  font-weight: bold;
+  font-size: 1.25em;
+  color: #ffffff;
+  background: #527796;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+
+div.titre {
+  font-weight: bold;
+  color: #527796;
+  background: #afbdc9;
+  text-align: center;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+
+/*
+ width  : to adjust with the icons size (64px)
+ height : to adjust with the height of 4 icons
+*/
+div.gauche {
+  background: url(./left.png) no-repeat;
+  display: block;
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 0px;
+  text-align: center;
+  width: 100px;
+  height: 300px;
+}
+
+
+

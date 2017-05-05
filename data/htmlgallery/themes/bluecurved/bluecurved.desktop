@@ -1,0 +1,109 @@
+[Desktop Entry]
+Name=Blue curves
+Name[fr]=Courbes bleues
+Comment=A stylised theme
+Comment[fr]=Un thème stylisé
+
+[X-HTMLExport Preview]
+Name=Blue curves
+Name[fr]=Blue curves
+Url=preview.png
+
+[X-HTMLExport Author]
+Name=Vincent Deroo Blanquart
+Name[fr]=Vincent Deroo Blanquart
+Url=mailto:vincent.deroo@free.fr
+
+[X-HTMLExport Parameter TitleOfPage]
+Name=Gallery Introduction
+Name[ast]=Galería d'entamu
+Name[bg]=Въведение на галерията
+Name[bs]=Uvod u galeriju
+Name[ca]=Introducció a galeries
+Name[ca@valencia]=Introducció a galeries
+Name[cs]=Představení galerie
+Name[da]=Galleri-introduktion
+Name[el]=Εισαγωγή στην πινακοθήκη
+Name[en_GB]=Gallery Introduction
+Name[es]=Introducción a Gallery
+Name[et]=Galerii sissejuhatus
+Name[eu]=Galeriaren sarrera
+Name[fr]=Introduction de collection
+Name[gl]=Introdución á galería
+Name[hu]=Galéria bevezetés
+Name[is]=Inngangur að myndasafni
+Name[it]=Introduzione alla galleria
+Name[km]=ការណែនាំ​អំពី​វិចិត្រសាល
+Name[lt]=Galerijos pristatymas
+Name[lv]=Galerijas ievads
+Name[nb]=Introduksjon til Gallery
+Name[nds]=Bildsammeln-Inföhren
+Name[nl]=Introductie tot de galerij
+Name[pl]=Wprowadzenie do galerii
+Name[pt]=Introdução à Galeria
+Name[pt_BR]=Introdução à galeria
+Name[ro]=Introducție la Gallery
+Name[ru]=Приветствие при открытии галереи
+Name[sl]=Predstavitev galerije
+Name[sq]=Hyrje në Galeri
+Name[sv]=Inledning till galleri
+Name[th]=แนะนำแกลเลอรี
+Name[tr]=Galeriye Giriş
+Name[uk]=Вступ до галереї
+Name[x-test]=xxGallery Introductionxx
+Name[zh_CN]=画册介绍
+Name[zh_TW]=藝廊介紹
+Type=string
+Default=Title of my web gallery
+
+
+[X-HTMLExport Parameter thumbnailPerRow]
+Name=Thumbnails per row
+Name[ast]=Miniatures per filera
+Name[bg]=Умалени копия на ред
+Name[bs]=Sličice po redovima
+Name[ca]=Miniatures per fila
+Name[ca@valencia]=Miniatures per fila
+Name[cs]=Náhledy na řádek
+Name[da]=Miniaturer pr række
+Name[de]=Vorschaubilder pro Reihe
+Name[el]=Επισκοπήσεις ανά γραμμή
+Name[en_GB]=Thumbnails per row
+Name[es]=Miniaturas por fila
+Name[et]=Pisipilte reas
+Name[eu]=Koadro txikiak errenkadako
+Name[fi]=Näyttökuvia per rivi
+Name[fr]=Miniatures par ligne
+Name[gl]=Miniaturas por fila
+Name[he]=תמונות ממוזערות לשורה
+Name[hne]=हर पंक्ति मं छोटेफोटू
+Name[hu]=Bélyegképek soronként
+Name[is]=Smámyndir í hverri röð:
+Name[it]=Miniature per riga
+Name[ja]=横一列あたりのサムネイル数
+Name[km]=រូបភាព​តូចៗ​ក្នុង​ជួរដេក
+Name[lt]=Miniatiūrų eilėje
+Name[lv]=Sīktēli rindā
+Name[nb]=Miniatyrer pr. rad
+Name[nds]=Vöransichtbiller per Reeg
+Name[nl]=Miniaturen per rij
+Name[pa]=ਪ੍ਰਤੀ ਕਤਾਰ ਵਿੱਚ ਥੰਮਨੇਲ
+Name[pl]=Miniaturek na wiersz
+Name[pt]=Miniaturas por linha
+Name[pt_BR]=Miniaturas por linha
+Name[ro]=Miniaturi pe rînd
+Name[ru]=Миниатюр в ряду
+Name[sk]=Náhľady pre riadok
+Name[sl]=Sličic na vrstico
+Name[sq]=Minipamje për rresht
+Name[sv]=Miniatyrbilder per rad
+Name[th]=จำนวนภาพตัวอย่างต่อแถว
+Name[tr]=Satır başına küçük resimler
+Name[uk]=Мініатюр на ряд
+Name[x-test]=xxThumbnails per rowxx
+Name[zh_CN]=每行缩略图
+Name[zh_TW]=每行縮圖數量
+Type=int
+Default=4
+Min=1
+Max=100
