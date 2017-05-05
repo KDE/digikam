@@ -120,7 +120,7 @@ int HTMLThemePage::nextId() const
 void HTMLThemePage::slotThemeSelectionChanged()
 {
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
-    GalleryTheme::Ptr theme  = wizard->theme();
+    GalleryTheme::Ptr theme  = wizard->galleryTheme();
 
     if (mThemeList->currentItem())
     {

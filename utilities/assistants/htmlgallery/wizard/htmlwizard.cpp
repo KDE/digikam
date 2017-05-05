@@ -113,7 +113,7 @@ bool HTMLWizard::validateCurrentPage()
 
     if (currentPage() == d->mOutputPage)
     {
-        GalleryTheme::Ptr curtheme                     = theme();
+        GalleryTheme::Ptr curtheme                     = galleryTheme();
         QString themeInternalName                      = curtheme->internalName();
         d->mInfo->setTheme(themeInternalName);
 
@@ -155,7 +155,7 @@ GalleryInfo* HTMLWizard::galleryInfo() const
     return d->mInfo;
 }
 
-GalleryTheme::Ptr HTMLWizard::theme() const
+GalleryTheme::Ptr HTMLWizard::galleryTheme() const
 {
     return (dynamic_cast<ThemeListBoxItem*>(d->mThemePage->mThemeList->currentItem())->mTheme);
 }

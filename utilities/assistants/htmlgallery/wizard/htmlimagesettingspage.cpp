@@ -291,7 +291,7 @@ HTMLImageSettingsPage::~HTMLImageSettingsPage()
 void HTMLImageSettingsPage::initializePage()
 {
     HTMLWizard* const wizard      = dynamic_cast<HTMLWizard*>(assistant());
-    GalleryTheme::Ptr theme       = wizard->theme();
+    GalleryTheme::Ptr theme       = wizard->galleryTheme();
     bool allowNonsquareThumbnails = theme->allowNonsquareThumbnails();
 
     d->kcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);

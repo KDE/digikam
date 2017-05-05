@@ -89,7 +89,7 @@ void HTMLParametersPage::initializePage()
 {
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
     GalleryInfo* const info  = wizard->galleryInfo();
-    GalleryTheme::Ptr theme  = wizard->theme();
+    GalleryTheme::Ptr theme  = wizard->galleryTheme();
 
     qDeleteAll(mContent->children());
     mThemeParameterWidgetFromName.clear();
