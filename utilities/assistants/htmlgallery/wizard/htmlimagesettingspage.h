@@ -25,7 +25,7 @@
 
 // Qt includes
 
-#include <QCheckBox>
+#include <QString>
 
 // Local includes
 
@@ -45,7 +45,8 @@ public:
 
 private:
 
-    QCheckBox* mKcfg_thumbnailSquare;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam

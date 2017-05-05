@@ -29,6 +29,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QSpacerItem>
+#include <QCheckBox>
 #include <QSpinBox>
 #include <QComboBox>
 #include <QRadioButton>
@@ -48,8 +49,21 @@
 namespace Digikam
 {
 
+class HTMLImageSettingsPage::Private
+{
+public:
+
+    Private()
+      : kcfg_thumbnailSquare(0)
+    {
+    }
+
+    QCheckBox* kcfg_thumbnailSquare;
+};
+
 HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     setObjectName(QLatin1String("ImageSettingsPage"));
 
@@ -191,12 +205,12 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     kcfg_thumbnailSize->setValue(160);
     textLabel2_2->setBuddy(kcfg_thumbnailSize);
 
-    mKcfg_thumbnailSquare = new QCheckBox(this);
-    mKcfg_thumbnailSquare->setObjectName(QLatin1String("mKcfg_thumbnailSquare"));
-    mKcfg_thumbnailSquare->setEnabled(false);
-    mKcfg_thumbnailSquare->setCheckable(true);
-    mKcfg_thumbnailSquare->setChecked(true);
-    mKcfg_thumbnailSquare->setText(i18n("Square thumbnails"));
+    d->kcfg_thumbnailSquare = new QCheckBox(this);
+    d->kcfg_thumbnailSquare->setObjectName(QLatin1String("kcfg_thumbnailSquare"));
+    d->kcfg_thumbnailSquare->setEnabled(false);
+    d->kcfg_thumbnailSquare->setCheckable(true);
+    d->kcfg_thumbnailSquare->setChecked(true);
+    d->kcfg_thumbnailSquare->setText(i18n("Square thumbnails"));
 
     QSpacerItem* const verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum,
                                                           QSizePolicy::Expanding);
@@ -226,7 +240,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     gridLayout->addItem(horizontalSpacer_4,        10, 3, 1, 1);
     gridLayout->addWidget(textLabel2_2,            11, 1, 1, 1);
     gridLayout->addWidget(kcfg_thumbnailSize,      11, 2, 1, 1);
-    gridLayout->addWidget(mKcfg_thumbnailSquare,   12, 2, 1, 2);
+    gridLayout->addWidget(d->kcfg_thumbnailSquare, 12, 2, 1, 2);
     gridLayout->addItem(verticalSpacer_2,          13, 3, 1, 1);
 
     setPageWidget(box);
@@ -240,7 +254,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
     setTabOrder(mUseOriginalImageButton, kcfg_thumbnailFormat);
     setTabOrder(kcfg_thumbnailFormat,    kcfg_thumbnailQuality);
     setTabOrder(kcfg_thumbnailQuality,   kcfg_thumbnailSize);
-    setTabOrder(kcfg_thumbnailSize,      mKcfg_thumbnailSquare);
+    setTabOrder(kcfg_thumbnailSize,      d->kcfg_thumbnailSquare);
 
     connect(kcfg_fullResize, SIGNAL(toggled(bool)),
             kcfg_fullSize, SLOT(setEnabled(bool)));
@@ -271,6 +285,7 @@ HTMLImageSettingsPage::HTMLImageSettingsPage(QWizard* const dialog, const QStrin
 
 HTMLImageSettingsPage::~HTMLImageSettingsPage()
 {
+    delete d;
 }
 
 void HTMLImageSettingsPage::initializePage()
@@ -279,11 +294,11 @@ void HTMLImageSettingsPage::initializePage()
     GalleryTheme::Ptr theme       = wizard->theme();
     bool allowNonsquareThumbnails = theme->allowNonsquareThumbnails();
 
-    mKcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
+    d->kcfg_thumbnailSquare->setEnabled(allowNonsquareThumbnails);
 
     if (!allowNonsquareThumbnails)
     {
-        mKcfg_thumbnailSquare->setChecked(true);
+        d->kcfg_thumbnailSquare->setChecked(true);
     }
 }
 
