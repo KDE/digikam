@@ -105,6 +105,9 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     setPageWidget(box);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 
+    connect(d->kcfg_destUrl->lineEdit(), SIGNAL(textEdited(QString)),
+            this, SIGNAL(completeChanged()));
+
     connect(d->kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
             this, SIGNAL(completeChanged()));
 }
@@ -143,6 +146,11 @@ bool HTMLOutputPage::validatePage()
     info->setOpenInBrowser(d->kcfg_openInBrowser->isChecked());
 
     return true;
+}
+
+bool HTMLOutputPage::isComplete() const
+{
+    return (!d->kcfg_destUrl->fileDlgPath().isEmpty());
 }
 
 } // namespace Digikam

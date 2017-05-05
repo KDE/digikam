@@ -59,12 +59,14 @@ public:
 
     Private()
       : progressView(0),
-        progressBar(0)
+        progressBar(0),
+        complete(false)
     {
     }
 
     DHistoryView* progressView;
     DProgressWdg* progressBar;
+    bool          complete;
 };
 
 HTMLFinalPage::HTMLFinalPage(QWizard* const dialog, const QString& title)
@@ -92,6 +94,8 @@ HTMLFinalPage::~HTMLFinalPage()
 
 void HTMLFinalPage::initializePage()
 {
+    d->complete = false;
+    emit completeChanged();
     QTimer::singleShot(0, this, SLOT(slotProcess()));
 }
 
@@ -158,6 +162,14 @@ void HTMLFinalPage::slotProcess()
         d->progressView->addEntry(i18n("Opening gallery in browser..."),
                                   DHistoryView::ProgressEntry);
     }
+
+    d->complete = true;
+    emit completeChanged();
+}
+
+bool HTMLFinalPage::isComplete() const
+{
+    return d->complete;
 }
 
 } // namespace Digikam

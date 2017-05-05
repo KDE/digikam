@@ -42,6 +42,7 @@ public:
     ~HTMLAlbumSelectorPage();
 
     bool validatePage();
+    bool isComplete() const;
 
 private:
 

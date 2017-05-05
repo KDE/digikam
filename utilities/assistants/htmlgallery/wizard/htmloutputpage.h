@@ -43,6 +43,7 @@ public:
 
     void initializePage();
     bool validatePage();
+    bool isComplete() const;
 
 private:
 

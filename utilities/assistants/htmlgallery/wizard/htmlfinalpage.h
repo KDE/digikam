@@ -44,6 +44,7 @@ public:
     ~HTMLFinalPage();
 
     void initializePage();
+    bool isComplete() const;
 
 private Q_SLOTS:
 

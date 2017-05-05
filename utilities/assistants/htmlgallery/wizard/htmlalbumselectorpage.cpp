@@ -82,4 +82,9 @@ bool HTMLAlbumSelectorPage::validatePage()
     return true;
 }
 
+bool HTMLAlbumSelectorPage::isComplete() const
+{
+    return (!d->collectionSelector->selectedAlbums().empty());
+}
+
 } // namespace Digikam
