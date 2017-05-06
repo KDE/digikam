@@ -40,5 +40,5 @@ BUGFIXES FROM BUGZILLA:
 025 ==> 216359 - New "floating cards" theme for html gallery [patch].
 026 ==> 319606 - New "SimpleRounded" theme for html gallery [patch].
 027 ==> 334589 - New "blue with curves" theme for html gallery [patch].
-028 ==> 
-
+028 ==> 379526 - Inconsistent separator use in mime setup
+029 ==>

@@ -1039,14 +1039,23 @@ static QStringList cleanUserFilterString(const QString& filterString, const bool
     QChar dot(QLatin1Char('.'));
     QString minusDot(QLatin1String("-."));
     QChar sep(QLatin1Char(';'));
-    int i = filterString.indexOf(sep);
-
-    if (i == -1 && filterString.indexOf(QLatin1Char(' ')) != -1)
-    {
-        sep = QLatin1Char(' ');
-    }
 
     QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
+    int i = 0;
+    foreach(const QString& entry, sepList)
+    {
+        if (entry.contains(QLatin1Char(' ')))
+        {
+            sepList.removeAt(i);
+            int j = 0;
+            foreach(const QString& subEntry, entry.split(QLatin1Char(' '), QString::SkipEmptyParts))
+            {
+                sepList.insert(i + j, subEntry);
+                ++j;
+            }
+        }
+        ++i;
+    }
 
     foreach(const QString& f, sepList)
     {

@@ -43,10 +43,10 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
-#include "coredb.h"
 #include "applicationsettings.h"
+#include "coredb.h"
 #include "coredbaccess.h"
+#include "dwidgetutils.h"
 #include "scancontroller.h"
 
 namespace Digikam
@@ -94,8 +94,9 @@ SetupMime::SetupMime(QWidget* const parent)
                                    "while being able to handle a few other important video and audio formats.</p> "
                                    "<p>You can add to the already-appreciable list of formats that digiKam handles by "
                                    "adding the extension of the type you want to add. "
-                                   "Multiple extensions need to be separated by a space.</p>"
-                                   "<p><b><u>Note:</u> all changes done in this view will perform a database re-scan in background.</b></p>"));
+                                   "Multiple extensions need to be separated by a semicolon or space.</p>"
+                                   "<p><b><u>Note:</u> changes done in this view will perform "
+                                   "a database rescan in the background.</b></p>"));
     explanationLabel->setWordWrap(true);
 
     // --------------------------------------------------------
@@ -136,7 +137,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid2            = new QGridLayout(movieFileFilterBox);
 
     QLabel* const logoLabel2 = new QLabel(movieFileFilterBox);
-    logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-x-generic")).pixmap(48));
+    logoLabel2->setPixmap(QIcon::fromTheme(QLatin1String("video-x-matroska")).pixmap(48));
 
     d->movieFileFilterLabel  = new QLabel(movieFileFilterBox);
     d->movieFileFilterLabel->setText(i18n("Additional &movie file extensions (<a href='video'>Currently-supported types</a>):"));
@@ -171,7 +172,7 @@ SetupMime::SetupMime(QWidget* const parent)
     QGridLayout* const grid3            = new QGridLayout(audioFileFilterBox);
 
     QLabel* const logoLabel3 = new QLabel(audioFileFilterBox);
-    logoLabel3->setPixmap(QIcon::fromTheme(QLatin1String("audio-x-generic")).pixmap(48));
+    logoLabel3->setPixmap(QIcon::fromTheme(QLatin1String("audio-x-mpeg")).pixmap(48));
 
     d->audioFileFilterLabel  = new QLabel(audioFileFilterBox);
     d->audioFileFilterLabel->setText(i18n("Additional &audio file extensions (<a href='audio'>Currently-supported types</a>):"));
