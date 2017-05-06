@@ -43,4 +43,6 @@ BUGFIXES FROM BUGZILLA:
 027 ==> 334589 - New "blue with curves" theme for html gallery [patch].
 028 ==> 379526 - Inconsistent separator use in mime setup.
 029 ==> 156900 - Allow to use selected images instead full album contents in html gallery.
-030 ==> 
+030 ==> 373247 - No chronological ordering of tags anymore.
+031 ==> 
+
