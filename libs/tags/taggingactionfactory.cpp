@@ -24,6 +24,8 @@
 
 #include "taggingactionfactory.h"
 #include "tagscache.h"
+#include "coredbaccess.h"
+#include "coredb.h"
 
 namespace Digikam
 {
@@ -179,6 +181,19 @@ QList<TaggingAction> TaggingActionFactory::actions() const
     }
 
     QList<TaggingAction> assignActions;
+
+    // order the matched tags by chronological order, based on
+    // recently assigned tags
+    QList<int> recentTagIDs = CoreDbAccess().db()->getRecentlyAssignedTags();
+
+    QListIterator<int> recent_iter(recentTagIDs);
+    recent_iter.toBack();
+    while(recent_iter.hasPrevious()){
+        int poz = completionEntries.indexOf(recent_iter.previous());
+        if(poz > 0){
+            completionEntries.move(poz,0);
+        }
+    }
 
     foreach(int id, completionEntries)
     {
