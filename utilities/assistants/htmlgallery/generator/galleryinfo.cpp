@@ -129,6 +129,8 @@ QDebug operator<<(QDebug dbg, const GalleryInfo& t)
                   << t.destUrl();
     dbg.nospace() << "GalleryInfo::OpenInBrowser: "
                   << t.openInBrowser();
+    dbg.nospace() << "GalleryInfo::ImageSelectionTitle: "
+                  << t.imageSelectionTitle();
     return dbg.space();
 }
 

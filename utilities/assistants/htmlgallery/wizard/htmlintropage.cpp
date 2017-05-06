@@ -78,14 +78,9 @@ HTMLIntroPage::HTMLIntroPage(QWizard* const dialog, const QString& title)
     DHBox* const hbox           = new DHBox(vbox);
     QLabel* const getImageLabel = new QLabel(i18n("&Choose image selection method:"), hbox);
     d->imageGetOption           = new QComboBox(hbox);
-    QString albums              = i18n("Albums");
-    QString images              = i18n("Images");
-    d->imageGetOption->insertItem(GalleryInfo::ALBUM,       albums);
-    d->imageGetOption->insertItem(GalleryInfo::IMAGEDIALOG, images);
+    d->imageGetOption->insertItem(GalleryInfo::ALBUMS, i18n("Albums"));
+    d->imageGetOption->insertItem(GalleryInfo::IMAGES, i18n("Images"));
     getImageLabel->setBuddy(d->imageGetOption);
-
-    // TODO
-    hbox->setVisible(false);
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-html")));

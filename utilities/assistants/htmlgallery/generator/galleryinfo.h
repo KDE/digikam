@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QList>
+#include <QUrl>
 #include <QDebug>
 
 // Local includes
@@ -47,8 +48,8 @@ public:
 
     enum ImageGetOption
     {
-        ALBUM = 0,
-        IMAGEDIALOG
+        ALBUMS = 0,
+        IMAGES
     };
 
 public:
@@ -68,9 +69,11 @@ public:
 
 public:
 
-    ImageGetOption mGetOption;        // Type of image selection (albums or images list).
+    ImageGetOption mGetOption;           // Type of image selection (albums or images list).
 
-    AlbumList      mCollectionList;   // Albums List for ImageGetOption::ALBUM selection method.
+    AlbumList      mCollectionList;      // Albums list for ImageGetOption::ALBUMS selection.
+
+    QList<QUrl>    mImageList;           // Images list for ImageGetOption::IMAGES selection.
 
 private:
 

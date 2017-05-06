@@ -39,6 +39,7 @@
 // Local includes
 
 #include "loadingdescription.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -46,7 +47,7 @@ namespace Digikam
 class DImagesList;
 class DImagesListView;
 
-class DImagesListViewItem : public QTreeWidgetItem
+class DIGIKAM_EXPORT DImagesListViewItem : public QTreeWidgetItem
 {
 
 public:
@@ -106,7 +107,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class DImagesListView : public QTreeWidget
+class DIGIKAM_EXPORT DImagesListView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -168,7 +169,7 @@ private:
 
 // -------------------------------------------------------------------------
 
-class CtrlButton : public QPushButton
+class DIGIKAM_EXPORT CtrlButton : public QPushButton
 {
     Q_OBJECT
 
@@ -180,7 +181,7 @@ public:
 
 // -------------------------------------------------------------------------
 
-class DImagesList : public QWidget
+class DIGIKAM_EXPORT DImagesList : public QWidget
 {
     Q_OBJECT
 

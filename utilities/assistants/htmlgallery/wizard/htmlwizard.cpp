@@ -47,7 +47,7 @@
 #include "invisiblebuttongroup.h"
 #include "htmlintropage.h"
 #include "htmloutputpage.h"
-#include "htmlalbumselectorpage.h"
+#include "htmlselectionpage.h"
 #include "htmlthemepage.h"
 #include "htmlparameterspage.h"
 #include "htmlimagesettingspage.h"
@@ -61,28 +61,28 @@ class HTMLWizard::Private
 public:
 
     Private()
-      : mInfo(0),
-        mConfigManager(0),
-        mIntroPage(0),
-        mCollectionSelectorPage(0),
-        mThemePage(0),
-        mParametersPage(0),
-        mImageSettingsPage(0),
-        mOutputPage(0),
-        mFinalPage(0)
+      : info(0),
+        configManager(0),
+        introPage(0),
+        selectionPage(0),
+        themePage(0),
+        parametersPage(0),
+        imageSettingsPage(0),
+        outputPage(0),
+        finalPage(0)
     {
     }
 
-    GalleryInfo*           mInfo;
-    KConfigDialogManager*  mConfigManager;
+    GalleryInfo*           info;
+    KConfigDialogManager*  configManager;
 
-    HTMLIntroPage*         mIntroPage;
-    HTMLAlbumSelectorPage* mCollectionSelectorPage;
-    HTMLThemePage*         mThemePage;
-    HTMLParametersPage*    mParametersPage;
-    HTMLImageSettingsPage* mImageSettingsPage;
-    HTMLOutputPage*        mOutputPage;
-    HTMLFinalPage*         mFinalPage;
+    HTMLIntroPage*         introPage;
+    HTMLSelectionPage*     selectionPage;
+    HTMLThemePage*         themePage;
+    HTMLParametersPage*    parametersPage;
+    HTMLImageSettingsPage* imageSettingsPage;
+    HTMLOutputPage*        outputPage;
+    HTMLFinalPage*         finalPage;
 };
 
 HTMLWizard::HTMLWizard(QWidget* const parent)
@@ -92,18 +92,18 @@ HTMLWizard::HTMLWizard(QWidget* const parent)
     setOption(QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Create Html Gallery"));
 
-    d->mInfo = new GalleryInfo;
-    d->mInfo->load();
+    d->info = new GalleryInfo;
+    d->info->load();
 
-    d->mIntroPage              = new HTMLIntroPage(this, i18n("Welcome to HTML Gallery Tool"));
-    d->mCollectionSelectorPage = new HTMLAlbumSelectorPage(this, i18n("Albums Selection"));
-    d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
-    d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));
-    d->mImageSettingsPage      = new HTMLImageSettingsPage(this, i18n("Image Settings"));
-    d->mOutputPage             = new HTMLOutputPage(this, i18n("Output Settings"));
-    d->mFinalPage              = new HTMLFinalPage(this, i18n("Generating Gallery"));
-    d->mConfigManager          = new KConfigDialogManager(this, d->mInfo);
-    d->mConfigManager->updateWidgets();
+    d->introPage         = new HTMLIntroPage(this, i18n("Welcome to HTML Gallery Tool"));
+    d->selectionPage     = new HTMLSelectionPage(this, i18n("Albums Selection"));
+    d->themePage         = new HTMLThemePage(this, i18n("Theme Selection"));
+    d->parametersPage    = new HTMLParametersPage(this, i18n("Theme Parameters"));
+    d->imageSettingsPage = new HTMLImageSettingsPage(this, i18n("Image Settings"));
+    d->outputPage        = new HTMLOutputPage(this, i18n("Output Settings"));
+    d->finalPage         = new HTMLFinalPage(this, i18n("Generating Gallery"));
+    d->configManager     = new KConfigDialogManager(this, d->info);
+    d->configManager->updateWidgets();
 }
 
 HTMLWizard::~HTMLWizard()
@@ -116,11 +116,11 @@ bool HTMLWizard::validateCurrentPage()
     if (!DWizardDlg::validateCurrentPage())
         return false;
 
-    if (currentPage() == d->mOutputPage)
+    if (currentPage() == d->outputPage)
     {
         GalleryTheme::Ptr curtheme                     = galleryTheme();
         QString themeInternalName                      = curtheme->internalName();
-        d->mInfo->setTheme(themeInternalName);
+        d->info->setTheme(themeInternalName);
 
         GalleryTheme::ParameterList parameterList      = curtheme->parameterList();
         GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
@@ -130,16 +130,16 @@ bool HTMLWizard::validateCurrentPage()
         {
             AbstractThemeParameter* const themeParameter = *it;
             QByteArray parameterInternalName             = themeParameter->internalName();
-            QWidget* const widget                        = d->mParametersPage->themeParameterWidgetFromName(parameterInternalName);
+            QWidget* const widget                        = d->parametersPage->themeParameterWidgetFromName(parameterInternalName);
             QString value                                = themeParameter->valueFromWidget(widget);
 
-            d->mInfo->setThemeParameterValue(themeInternalName,
+            d->info->setThemeParameterValue(themeInternalName,
                                              QString::fromLatin1(parameterInternalName),
                                              value);
         }
 
-        d->mConfigManager->updateSettings();
-        d->mInfo->save();
+        d->configManager->updateSettings();
+        d->info->save();
     }
 
     return true;
@@ -147,17 +147,17 @@ bool HTMLWizard::validateCurrentPage()
 
 int HTMLWizard::nextId() const
 {
-    if (currentPage() == d->mThemePage)
+    if (currentPage() == d->themePage)
     {
         GalleryTheme::Ptr theme = galleryTheme();
 
         if (theme && theme->parameterList().size() > 0)
         {
             // Enable theme parameters page as next page if there is any parameter.
-            return d->mParametersPage->id();
+            return d->parametersPage->id();
         }
 
-        return d->mImageSettingsPage->id();
+        return d->imageSettingsPage->id();
     }
 
     return DWizardDlg::nextId();
@@ -165,12 +165,12 @@ int HTMLWizard::nextId() const
 
 GalleryInfo* HTMLWizard::galleryInfo() const
 {
-    return d->mInfo;
+    return d->info;
 }
 
 GalleryTheme::Ptr HTMLWizard::galleryTheme() const
 {
-    return d->mThemePage->currentTheme();
+    return d->themePage->currentTheme();
 }
 
 } // namespace Digikam

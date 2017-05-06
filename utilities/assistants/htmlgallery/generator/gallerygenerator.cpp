@@ -182,14 +182,79 @@ public:
 
         XMLElement collectionsX(xmlWriter, QLatin1String("collections"));
 
-        // Loop on collections
-        AlbumList::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
-        AlbumList::ConstIterator collectionEnd = mInfo->mCollectionList.constEnd();
-
-        for (; collectionIt != collectionEnd ; ++collectionIt)
+        if (mInfo->mGetOption == GalleryInfo::ALBUMS)
         {
-            Album* const collection    = *collectionIt;
-            QString collectionFileName = webifyFileName(collection->title());
+            // Loop over albums selection
+
+            AlbumList::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
+            AlbumList::ConstIterator collectionEnd = mInfo->mCollectionList.constEnd();
+
+            for (; collectionIt != collectionEnd ; ++collectionIt)
+            {
+                Album* const collection    = *collectionIt;
+                QString title              = i18n("Selected Images");
+                QString collectionFileName = webifyFileName(title);
+                QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
+
+                if (!createDir(destDir))
+                {
+                    return false;
+                }
+
+                XMLElement collectionX(xmlWriter,  QLatin1String("collection"));
+                xmlWriter.writeElement("name",     title);
+                xmlWriter.writeElement("fileName", collectionFileName);
+
+                if (collection->type() != Album::PHYSICAL)
+                {
+                    xmlWriter.writeElement("comment", QString());
+                }
+
+                // Gather image element list
+                QList<QUrl> imageList;
+
+                switch (collection->type())
+                {
+                    case Album::PHYSICAL:
+                    {
+                        PAlbum* const p = dynamic_cast<PAlbum*>(collection);
+
+                        if (p)
+                        {
+                            xmlWriter.writeElement("comment", p->caption());
+                            imageList = imagesFromPAlbum(p);
+                        }
+
+                        break;
+                    }
+
+                    case Album::TAG:
+                    {
+                        TAlbum* const p = dynamic_cast<TAlbum*>(collection);
+
+                        if (p)
+                        {
+                            imageList = imagesFromTAlbum(p);
+                        }
+
+                        break;
+                    }
+
+                    default:
+                    {
+                        imageList = DigikamApp::instance()->view()->allUrls();
+                        break;
+                    }
+                }
+
+                if (!processImages(xmlWriter, imageList, title, destDir))
+                    return false;
+            }
+        }
+        else
+        {
+            QString title              = mInfo->imageSelectionTitle();
+            QString collectionFileName = webifyFileName(title);
             QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
 
             if (!createDir(destDir))
@@ -198,104 +263,71 @@ public:
             }
 
             XMLElement collectionX(xmlWriter,  QLatin1String("collection"));
-            xmlWriter.writeElement("name",     collection->title());
+            xmlWriter.writeElement("name",     title);
             xmlWriter.writeElement("fileName", collectionFileName);
 
-            if (collection->type() != Album::PHYSICAL)
+            if (!processImages(xmlWriter, mInfo->mImageList, title, destDir))
+                return false;
+        }
+
+        return true;
+    }
+
+    bool processImages(XMLWriter& xmlWriter, const QList<QUrl>& imageList,
+                       const QString& title, const QString& destDir)
+    {
+        RemoteUrlHash remoteUrlHash;
+
+        if (!downloadRemoteUrls(title, imageList, &remoteUrlHash))
+        {
+            return false;
+        }
+
+        QList<ImageElement> imageElementList;
+
+        Q_FOREACH(const QUrl& url, imageList)
+        {
+            const QString path = remoteUrlHash.value(url, url.toLocalFile());
+
+            if (path.isEmpty())
             {
-                xmlWriter.writeElement("comment", QString());
+                continue;
             }
 
-            // Gather image element list
-            QList<QUrl> imageList;
+            ImageInfo info       = ImageInfo::fromUrl(url);
+            ImageElement element = ImageElement(info);
+            element.mPath        = remoteUrlHash.value(url, url.toLocalFile());
+            imageElementList << element;
+        }
 
-            switch (collection->type())
+        // Generate images
+        logInfo(i18n("Generating files for \"%1\"", title));
+        ImageGenerationFunctor functor(that, mInfo, destDir);
+        QFuture<void> future = QtConcurrent::map(imageElementList, functor);
+        QFutureWatcher<void> watcher;
+        watcher.setFuture(future);
+
+        connect(&watcher, SIGNAL(progressValueChanged(int)),
+                mPbar, SLOT(setValue(int)));
+
+        mPbar->setMaximum(imageElementList.count());
+
+        while (!future.isFinished())
+        {
+            qApp->processEvents();
+
+            if (mCancel)
             {
-                case Album::PHYSICAL:
-                {
-                    PAlbum* const p = dynamic_cast<PAlbum*>(collection);
-
-                    if (p)
-                    {
-                        xmlWriter.writeElement("comment", p->caption());
-                        imageList = imagesFromPAlbum(p);
-                    }
-
-                    break;
-                }
-
-                case Album::TAG:
-                {
-                    TAlbum* const p = dynamic_cast<TAlbum*>(collection);
-
-                    if (p)
-                    {
-                        imageList = imagesFromTAlbum(p);
-                    }
-
-                    break;
-                }
-
-                default:
-                {
-                    imageList = DigikamApp::instance()->view()->allUrls();
-                    break;
-                }
-            }
-
-            RemoteUrlHash remoteUrlHash;
-
-            if (!downloadRemoteUrls(collection->title(), imageList, &remoteUrlHash))
-            {
+                future.cancel();
+                future.waitForFinished();
                 return false;
             }
+        }
 
-            QList<ImageElement> imageElementList;
-
-            Q_FOREACH(const QUrl& url, imageList)
-            {
-                const QString path = remoteUrlHash.value(url, url.toLocalFile());
-
-                if (path.isEmpty())
-                {
-                    continue;
-                }
-
-                ImageInfo info       = ImageInfo::fromUrl(url);
-                ImageElement element = ImageElement(info);
-                element.mPath        = remoteUrlHash.value(url, url.toLocalFile());
-                imageElementList << element;
-            }
-
-            // Generate images
-            logInfo(i18n("Generating files for \"%1\"", collection->title()));
-            ImageGenerationFunctor functor(that, mInfo, destDir);
-            QFuture<void> future = QtConcurrent::map(imageElementList, functor);
-            QFutureWatcher<void> watcher;
-            watcher.setFuture(future);
-
-            connect(&watcher, SIGNAL(progressValueChanged(int)),
-                    mPbar, SLOT(setValue(int)));
-
-            mPbar->setMaximum(imageElementList.count());
-
-            while (!future.isFinished())
-            {
-                qApp->processEvents();
-
-                if (mCancel)
-                {
-                    future.cancel();
-                    future.waitForFinished();
-                    return false;
-                }
-            }
-
-            // Generate xml
-            Q_FOREACH(const ImageElement& element, imageElementList)
-            {
-                element.appendToXML(xmlWriter, mInfo->copyOriginalImage());
-            }
+        // Generate xml
+        Q_FOREACH(const ImageElement& element, imageElementList)
+        {
+            element.appendToXML(xmlWriter, mInfo->copyOriginalImage());
         }
 
         return true;

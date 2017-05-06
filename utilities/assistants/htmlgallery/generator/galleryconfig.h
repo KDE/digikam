@@ -106,6 +106,9 @@ public:
     void setOpenInBrowser(bool);
     bool openInBrowser() const;
 
+    void setImageSelectionTitle(const QString&);
+    QString imageSelectionTitle() const;
+
 protected:
 
     QString mTheme;
@@ -121,6 +124,7 @@ protected:
     bool    mThumbnailSquare;
     QUrl    mDestUrl;
     bool    mOpenInBrowser;
+    QString mImageSelectionTitle; // Gallery title to use for GalleryInfo::ImageGetOption::IMAGES selection.
 };
 
 } // namespace Digikam

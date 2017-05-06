@@ -127,6 +127,11 @@ GalleryConfig::GalleryConfig()
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("openInBrowser"), mOpenInBrowser, true);
 
     addItem(itemOpenInBrowser, QLatin1String("openInBrowser"));
+
+    KConfigSkeleton::ItemString* const itemImageSelectionTitle
+        = new KConfigSkeleton::ItemString(currentGroup(), QLatin1String("imageSelectionTitle"), mImageSelectionTitle);
+
+    addItem(itemImageSelectionTitle, QLatin1String("imageSelectionTitle"));
 }
 
 GalleryConfig::~GalleryConfig()
@@ -274,6 +279,17 @@ void GalleryConfig::setOpenInBrowser(bool v)
 bool GalleryConfig::openInBrowser() const
 {
     return mOpenInBrowser;
+}
+
+void GalleryConfig::setImageSelectionTitle(const QString& v)
+{
+    if (!isImmutable(QLatin1String("imageSelectionTitle")))
+        mImageSelectionTitle = v;
+}
+
+QString GalleryConfig::imageSelectionTitle() const
+{
+    return mImageSelectionTitle;
 }
 
 } // namespace Digikam

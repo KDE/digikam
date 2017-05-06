@@ -25,15 +25,13 @@
 // Qt includes
 
 #include <QIcon>
-#include <QHBoxLayout>
-#include <QSpacerItem>
-#include <QVBoxLayout>
 #include <QLabel>
 #include <QUrl>
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
 #include <QCheckBox>
+#include <QLineEdit>
 
 // KDE includes
 
@@ -44,6 +42,7 @@
 #include "htmlwizard.h"
 #include "galleryinfo.h"
 #include "dfileselector.h"
+#include "dwidgetutils.h"
 
 namespace Digikam
 {
@@ -53,13 +52,17 @@ class HTMLOutputPage::Private
 public:
 
     Private()
-      : kcfg_destUrl(0),
-        kcfg_openInBrowser(0)
+      : destUrl(0),
+        titleBox(0),
+        openInBrowser(0),
+        imageSelectionTitle(0)
     {
     }
 
-    DFileSelector* kcfg_destUrl;
-    QCheckBox*     kcfg_openInBrowser;
+    DFileSelector* destUrl;
+    DVBox*         titleBox;
+    QCheckBox*     openInBrowser;
+    QLineEdit*     imageSelectionTitle;
 };
 
 HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
@@ -68,47 +71,61 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("OutputPage"));
 
-    QWidget* const box       = new QWidget(this);
+    DVBox* const vbox        = new DVBox(this);
+    vbox->setContentsMargins(QMargins());
+    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    QLabel* const textLabel1 = new QLabel(this);
+    // --------------------
+
+    d->titleBox              = new DVBox(vbox);
+    d->titleBox->setContentsMargins(QMargins());
+    d->titleBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QLabel* const textLabel2 = new QLabel(d->titleBox);
+    textLabel2->setObjectName(QLatin1String("textLabel2"));
+    textLabel2->setWordWrap(false);
+    textLabel2->setText(i18n("Gallery Title:"));
+
+    d->imageSelectionTitle   = new QLineEdit(d->titleBox);
+    textLabel2->setBuddy(d->imageSelectionTitle);
+
+    // --------------------
+
+    DVBox* const hbox1       = new DVBox(vbox);
+    hbox1->setContentsMargins(QMargins());
+    hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QLabel* const textLabel1 = new QLabel(hbox1);
     textLabel1->setObjectName(QLatin1String("textLabel1"));
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Destination folder:"));
 
-    d->kcfg_destUrl = new DFileSelector(this);
-    d->kcfg_destUrl->setObjectName(QLatin1String("d->kcfg_destUrl"));
-    d->kcfg_destUrl->setFileDlgMode(QFileDialog::Directory);
-    textLabel1->setBuddy(d->kcfg_destUrl);
+    d->destUrl = new DFileSelector(hbox1);
+    d->destUrl->setObjectName(QLatin1String("destUrl"));
+    d->destUrl->setFileDlgMode(QFileDialog::Directory);
+    textLabel1->setBuddy(d->destUrl);
 
-    QHBoxLayout* const hboxLayout = new QHBoxLayout();
-    hboxLayout->setContentsMargins(QMargins());
-    hboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    hboxLayout->setObjectName(QLatin1String("hboxLayout"));
-    hboxLayout->addWidget(textLabel1);
-    hboxLayout->addWidget(d->kcfg_destUrl);
+    // --------------------
 
-    d->kcfg_openInBrowser         = new QCheckBox(this);
-    d->kcfg_openInBrowser->setObjectName(QLatin1String("d->kcfg_openInBrowser"));
-    d->kcfg_openInBrowser->setText(i18n("Open in browser"));
+    d->openInBrowser         = new QCheckBox(vbox);
+    d->openInBrowser->setObjectName(QLatin1String("openInBrowser"));
+    d->openInBrowser->setText(i18n("Open in browser"));
 
-    QSpacerItem* const spacer1    = new QSpacerItem(20, 51, QSizePolicy::Minimum,
-                                                    QSizePolicy::Expanding);
+    // --------------------
 
-    QVBoxLayout* const vboxLayout = new QVBoxLayout(box);
-    vboxLayout->setContentsMargins(QMargins());
-    vboxLayout->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    vboxLayout->setObjectName(QLatin1String("vboxLayout"));
-    vboxLayout->addLayout(hboxLayout);
-    vboxLayout->addWidget(d->kcfg_openInBrowser);
-    vboxLayout->addItem(spacer1);
+    QWidget* const spacer    = new QWidget(vbox);
+    vbox->setStretchFactor(spacer, 10);
 
-    setPageWidget(box);
+    setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 
-    connect(d->kcfg_destUrl->lineEdit(), SIGNAL(textEdited(QString)),
+    connect(d->destUrl->lineEdit(), SIGNAL(textEdited(QString)),
             this, SIGNAL(completeChanged()));
 
-    connect(d->kcfg_destUrl, SIGNAL(signalUrlSelected(QUrl)),
+    connect(d->destUrl, SIGNAL(signalUrlSelected(QUrl)),
+            this, SIGNAL(completeChanged()));
+
+    connect(d->imageSelectionTitle, SIGNAL(textEdited(QString)),
             this, SIGNAL(completeChanged()));
 }
 
@@ -126,13 +143,16 @@ void HTMLOutputPage::initializePage()
 
     GalleryInfo* const info  = wizard->galleryInfo();
 
-    d->kcfg_destUrl->setFileDlgPath(info->destUrl().toLocalFile());
-    d->kcfg_openInBrowser->setChecked(info->openInBrowser());
+    d->destUrl->setFileDlgPath(info->destUrl().toLocalFile());
+    d->openInBrowser->setChecked(info->openInBrowser());
+    d->imageSelectionTitle->setText(info->imageSelectionTitle());
+
+    d->titleBox->setVisible(info->mGetOption == GalleryInfo::IMAGES);
 }
 
 bool HTMLOutputPage::validatePage()
 {
-    if (d->kcfg_destUrl->fileDlgPath().isEmpty())
+    if (d->destUrl->fileDlgPath().isEmpty())
         return false;
 
     HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
@@ -142,15 +162,31 @@ bool HTMLOutputPage::validatePage()
 
     GalleryInfo* const info  = wizard->galleryInfo();
 
-    info->setDestUrl(QUrl::fromLocalFile(d->kcfg_destUrl->fileDlgPath()));
-    info->setOpenInBrowser(d->kcfg_openInBrowser->isChecked());
+    if (info->mGetOption == GalleryInfo::IMAGES && d->imageSelectionTitle->text().isEmpty())
+        return false;
+
+    info->setDestUrl(QUrl::fromLocalFile(d->destUrl->fileDlgPath()));
+    info->setOpenInBrowser(d->openInBrowser->isChecked());
+    info->setImageSelectionTitle(d->imageSelectionTitle->text());
 
     return true;
 }
 
 bool HTMLOutputPage::isComplete() const
 {
-    return (!d->kcfg_destUrl->fileDlgPath().isEmpty());
+    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
+
+    if (!wizard)
+        return false;
+
+    GalleryInfo* const info  = wizard->galleryInfo();
+
+    bool b                   = !d->destUrl->fileDlgPath().isEmpty();
+
+    if (info->mGetOption == GalleryInfo::IMAGES)
+        b = b & !d->imageSelectionTitle->text().isEmpty();
+
+    return b;
 }
 
 } // namespace Digikam

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef HTML_ALBUM_SELECTOR_PAGE_H
-#define HTML_ALBUM_SELECTOR_PAGE_H
+#ifndef HTML_SELECTION_PAGE_H
+#define HTML_SELECTION_PAGE_H
 
 // Qt includes
 
@@ -34,13 +34,14 @@
 namespace Digikam
 {
 
-class HTMLAlbumSelectorPage : public DWizardPage
+class HTMLSelectionPage : public DWizardPage
 {
 public:
 
-    explicit HTMLAlbumSelectorPage(QWizard* const dialog, const QString& title);
-    ~HTMLAlbumSelectorPage();
+    explicit HTMLSelectionPage(QWizard* const dialog, const QString& title);
+    ~HTMLSelectionPage();
 
+    void initializePage();
     bool validatePage();
     bool isComplete() const;
 
@@ -52,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // HTML_ALBUM_SELECTOR_PAGE_H
+#endif // HTML_SELECTION_PAGE_H
