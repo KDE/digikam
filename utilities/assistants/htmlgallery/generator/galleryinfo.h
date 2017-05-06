@@ -34,6 +34,7 @@
 
 #include "galleryconfig.h"
 #include "album.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -54,7 +55,7 @@ public:
 
 public:
 
-    explicit GalleryInfo();
+    explicit GalleryInfo(DInfoInterface* const iface = 0);
     ~GalleryInfo();
 
     QString fullFormatString() const;
@@ -69,11 +70,13 @@ public:
 
 public:
 
-    ImageGetOption mGetOption;           // Type of image selection (albums or images list).
+    ImageGetOption  mGetOption;           // Type of image selection (albums or images list).
 
-    AlbumList      mCollectionList;      // Albums list for ImageGetOption::ALBUMS selection.
+    AlbumList       mCollectionList;      // Albums list for ImageGetOption::ALBUMS selection.
 
-    QList<QUrl>    mImageList;           // Images list for ImageGetOption::IMAGES selection.
+    QList<QUrl>     mImageList;           // Images list for ImageGetOption::IMAGES selection.
+
+    DInfoInterface* mIface;
 
 private:
 

@@ -76,6 +76,7 @@
 #include "albumselectdialog.h"
 #include "albumthumbnailloader.h"
 #include "cameratype.h"
+#include "dbinfoiface.h"
 #include "imagegps.h"
 #include "importui.h"
 #include "cameranamehelper.h"
@@ -2625,7 +2626,7 @@ void DigikamApp::slotPanorama()
 void DigikamApp::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this);
+    HTMLWizard w(this, new DBInfoIface(this));
     w.exec();
 #endif
 }

@@ -32,8 +32,9 @@ namespace Digikam
 
 static const char* THEME_GROUP_PREFIX = "Theme ";
 
-GalleryInfo::GalleryInfo()
+GalleryInfo::GalleryInfo(DInfoInterface* const iface)
 {
+    mIface = iface;
 }
 
 GalleryInfo::~GalleryInfo()

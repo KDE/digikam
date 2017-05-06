@@ -15,7 +15,7 @@ set(libassistants_SRCS dwizardpage.cpp
                        dpreviewmanager.cpp
                        dpreviewimage.cpp
                        dimageslist.cpp
-                       infointerface.cpp
+                       dinfointerface.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>

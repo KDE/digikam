@@ -40,6 +40,7 @@ set(libdatabaseutils_SRCS
     utils/dbstatdlg.cpp
     utils/dbsettingswidget.cpp
     utils/dbmigrationdlg.cpp
+    utils/dbinfoiface.cpp
     utils/dio.cpp
     utils/scancontroller.cpp
     utils/syncjob.cpp

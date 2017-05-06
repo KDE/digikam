@@ -40,6 +40,7 @@
 
 // Local includes
 
+#include "dinfointerface.h"
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "abstractthemeparameter.h"
@@ -85,14 +86,14 @@ public:
     HTMLFinalPage*         finalPage;
 };
 
-HTMLWizard::HTMLWizard(QWidget* const parent)
+HTMLWizard::HTMLWizard(QWidget* const parent, DInfoInterface* const iface)
     : DWizardDlg(parent, QLatin1String("HTML Gallery Dialog")),
       d(new Private)
 {
     setOption(QWizard::NoCancelButtonOnLastPage);
     setWindowTitle(i18n("Create Html Gallery"));
 
-    d->info = new GalleryInfo;
+    d->info = new GalleryInfo(iface);
     d->info->load();
 
     d->introPage         = new HTMLIntroPage(this, i18n("Welcome to HTML Gallery Tool"));

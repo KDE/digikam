@@ -34,6 +34,7 @@ namespace Digikam
 {
 
 class GalleryInfo;
+class DInfoInterface;
 
 /**
  * The wizard used by the user to select the various settings.
@@ -44,7 +45,7 @@ class HTMLWizard : public DWizardDlg
 
 public:
 
-    explicit HTMLWizard(QWidget* const parent);
+    explicit HTMLWizard(QWidget* const parent, DInfoInterface* const iface = 0);
     ~HTMLWizard();
 
     GalleryInfo*      galleryInfo()  const;

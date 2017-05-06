@@ -482,6 +482,7 @@ public:
         progressTimer          = 0;
         progressPix            = DWorkingPixmap();
         thumbLoadThread        = ThumbnailLoadThread::defaultThread();
+        iface                  = 0;
     }
 
     bool                       allowRAW;
@@ -504,6 +505,8 @@ public:
 
     DImagesListView*           listView;
     ThumbnailLoadThread*       thumbLoadThread;
+
+    DInfoInterface*            iface;
 };
 
 DImagesList::DImagesList(QWidget* const parent, int iconSize)
@@ -598,6 +601,12 @@ DImagesList::DImagesList(QWidget* const parent, int iconSize)
     // --------------------------------------------------------
 
     emit signalImageListChanged();
+}
+
+
+DImagesList::~DImagesList()
+{
+    delete d;
 }
 
 void DImagesList::enableControlButtons(bool enable)
@@ -699,9 +708,14 @@ void DImagesList::setControlButtons(ControlButtons buttonMask)
     d->saveButton->setVisible(buttonMask & Save);
 }
 
-DImagesList::~DImagesList()
+void DImagesList::setIface(DInfoInterface* const iface)
 {
-    delete d;
+    d->iface = iface;
+}
+
+DInfoInterface* DImagesList::iface() const
+{
+    return d->iface;
 }
 
 void DImagesList::setAllowDuplicate(bool allow)
@@ -741,19 +755,18 @@ void DImagesList::loadImagesFromCurrentSelection()
 
     if (selection == true)
     {
-/** FIXME
         if (!d->iface)
         {
             return;
         }
 
-        ImageCollection images = d->iface->currentSelection();
+        QList<QUrl> images = d->iface->currentSelection();
 
-        if (images.isValid())
+        if (!images.isEmpty())
         {
-            slotAddImages(images.images());
+            slotAddImages(images);
         }
-*/
+
     }
     else
     {
@@ -763,42 +776,29 @@ void DImagesList::loadImagesFromCurrentSelection()
 
 void DImagesList::loadImagesFromCurrentAlbum()
 {
-/** FIXME
     if (!d->iface)
     {
         return;
     }
 
-    ImageCollection images = d->iface->currentAlbum();
+    QList<QUrl> images = d->iface->currentAlbum();
 
-    if (images.isValid())
+    if (!images.isEmpty())
     {
-        slotAddImages(images.images());
+        slotAddImages(images);
     }
-*/
 }
 
 bool DImagesList::checkSelection()
 {
-/** FIXME
     if (!d->iface)
     {
         return false;
     }
 
-    ImageCollection images = d->iface->currentSelection();
-    bool check_empty       = images.images().empty();
+    QList<QUrl> images = d->iface->currentSelection();
 
-    if (check_empty == true)
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
-*/
-    return false;
+   return (!images.isEmpty());
 }
 
 void DImagesList::slotAddImages(const QList<QUrl>& list)

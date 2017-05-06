@@ -6,7 +6,7 @@
  * Date        : 2017-05-06
  * Description : template interface to image informations.
  *               This class do not depend of digiKam database library
- *               to permeit to re-use tools on Showfoto.
+ *               to permit to re-use tools on Showfoto.
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -23,42 +23,43 @@
  *
  * ============================================================ */
 
-#ifndef INFO_INTERFACE_H
-#define INFO_INTERFACE_H
-
-// Qt includes
-
-#include <QMap>
-#include <QString>
-#include <QObject>
-#include <QVariant>
-#include <QUrl>
-#include <QList>
+#include "dinfointerface.h"
 
 namespace Digikam
 {
 
-class InfoInterface : public QObject
+DInfoInterface::DInfoInterface(QObject* const parent)
+    : QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
+DInfoInterface::~DInfoInterface()
+{
+}
 
-    typedef QMap<QString, QVariant> InfoMap; // Map of properties name and value.
+QList<QUrl> DInfoInterface::currentAlbum() const
+{
+    return QList<QUrl>();
+}
 
-public:
+QList<QUrl> DInfoInterface::currentSelection() const
+{
+    return QList<QUrl>();
+}
 
-    explicit InfoInterface(QObject* const parent);
-    ~InfoInterface();
+QList<QUrl> DInfoInterface::allAlbums() const
+{
+    return QList<QUrl>();
+}
 
-    virtual QList<QUrl> currentSelection() const;
-    virtual QList<QUrl> currentAlbum()     const;
-    virtual QList<QUrl> allAlbums()        const;
+DInfoInterface::DInfoMap DInfoInterface::albumInfo(const QUrl&) const
+{
+    return DInfoMap();
+}
 
-    virtual InfoMap albumInfo(const QUrl&) const;
-    virtual InfoMap itemInfo(const QUrl&)  const;
-};
+DInfoInterface::DInfoMap DInfoInterface::itemInfo(const QUrl&) const
+{
+    return DInfoMap();
+}
 
 }  // namespace Digikam
-
-#endif  // INFO_INTERFACE_H

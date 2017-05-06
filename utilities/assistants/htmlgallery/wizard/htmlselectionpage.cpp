@@ -67,7 +67,6 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
 
     d->imageList          = new DImagesList(this);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
-    d->imageList->loadImagesFromCurrentSelection();
     d->stack->insertWidget(GalleryInfo::IMAGES, d->imageList);
 
     setPageWidget(d->stack);
@@ -92,6 +91,8 @@ void HTMLSelectionPage::initializePage()
     if (wizard)
     {
         GalleryInfo* const info  = wizard->galleryInfo();
+        d->imageList->setIface(info->mIface);
+        d->imageList->loadImagesFromCurrentSelection();
         d->stack->setCurrentIndex(info->mGetOption);
     }
 }

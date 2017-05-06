@@ -40,6 +40,7 @@
 
 #include "loadingdescription.h"
 #include "digikam_export.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
@@ -245,6 +246,9 @@ public:
     virtual QList<QUrl> imageUrls(bool onlyUnprocessed = false) const;
     virtual void        removeItemByUrl(const QUrl& url);
     QUrl                getCurrentUrl() const;
+
+    void setIface(DInfoInterface* const iface);
+    DInfoInterface* iface() const;
 
 Q_SIGNALS:
 
