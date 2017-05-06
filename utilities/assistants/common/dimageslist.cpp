@@ -86,7 +86,7 @@ public:
     QStringList       tags;           // List of keywords from Kipi host.
     QUrl              url;            // Image url provided by Kipi host.
     QPixmap           thumb;          // Image thumbnail.
-    DImagesListView* view;
+    DImagesListView*  view;
     State             state;
 };
 
