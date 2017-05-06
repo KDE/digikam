@@ -40,12 +40,12 @@ public:
     explicit DBInfoIface(QObject* const parent);
     ~DBInfoIface();
 
-    QList<QUrl> currentSelection()  const;
-    QList<QUrl> currentAlbum()      const;
-    QList<QUrl> allAlbums()         const;
+    QList<QUrl> currentSelectedItems() const;
+    QList<QUrl> currentAlbumItems()    const;
+    QList<QUrl> allAlbumItems()        const;
 
-    DInfoMap albumInfo(const QUrl&) const;
-    DInfoMap itemInfo(const QUrl&)  const;
+    DInfoMap albumInfo(const QUrl&)    const;
+    DInfoMap itemInfo(const QUrl&)     const;
 
 private:
 

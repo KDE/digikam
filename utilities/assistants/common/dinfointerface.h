@@ -47,19 +47,24 @@ class DIGIKAM_EXPORT DInfoInterface : public QObject
 
 public:
 
-    typedef QMap<QString, QVariant> DInfoMap; // Map of properties name and value.
+    typedef QMap<QString, QVariant> DInfoMap;  // Map of properties name and value.
+    typedef QList<int>              DAlbumLst; // List of Album ids.
+
 
 public:
 
     explicit DInfoInterface(QObject* const parent);
     ~DInfoInterface();
 
-    virtual QList<QUrl> currentSelection()  const;
-    virtual QList<QUrl> currentAlbum()      const;
-    virtual QList<QUrl> allAlbums()         const;
+    virtual QList<QUrl> currentSelectedItems() const;
+    virtual QList<QUrl> currentAlbumItems()    const;
+    virtual QList<QUrl> allAlbumItems()        const;
 
-    virtual DInfoMap albumInfo(const QUrl&) const;
-    virtual DInfoMap itemInfo(const QUrl&)  const;
+    virtual int currentAlbum()                 const;
+    virtual QList<QUrl> albumItems(int)        const;
+
+    virtual DInfoMap albumInfo(const QUrl&)    const;
+    virtual DInfoMap itemInfo(const QUrl&)     const;
 };
 
 }  // namespace Digikam

@@ -125,7 +125,7 @@ DBInfoIface::~DBInfoIface()
     delete d;
 }
 
-QList<QUrl> DBInfoIface::currentAlbum() const
+QList<QUrl> DBInfoIface::currentAlbumItems() const
 {
     if (d->albumManager->currentAlbums().isEmpty())
     {
@@ -175,12 +175,12 @@ QList<QUrl> DBInfoIface::currentAlbum() const
     return QList<QUrl>();
 }
 
-QList<QUrl> DBInfoIface::currentSelection() const
+QList<QUrl> DBInfoIface::currentSelectedItems() const
 {
     return DigikamApp::instance()->view()->selectedUrls();
 }
 
-QList<QUrl> DBInfoIface::allAlbums() const
+QList<QUrl> DBInfoIface::allAlbumItems() const
 {
     QList<QUrl> imageList;
     QString fileFilter(ApplicationSettings::instance()->getAllFileFilter());

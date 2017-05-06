@@ -760,7 +760,7 @@ void DImagesList::loadImagesFromCurrentSelection()
             return;
         }
 
-        QList<QUrl> images = d->iface->currentSelection();
+        QList<QUrl> images = d->iface->currentSelectedItems();
 
         if (!images.isEmpty())
         {
@@ -781,7 +781,7 @@ void DImagesList::loadImagesFromCurrentAlbum()
         return;
     }
 
-    QList<QUrl> images = d->iface->currentAlbum();
+    QList<QUrl> images = d->iface->currentAlbumItems();
 
     if (!images.isEmpty())
     {
@@ -796,7 +796,7 @@ bool DImagesList::checkSelection()
         return false;
     }
 
-    QList<QUrl> images = d->iface->currentSelection();
+    QList<QUrl> images = d->iface->currentSelectedItems();
 
    return (!images.isEmpty());
 }

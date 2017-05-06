@@ -37,17 +37,27 @@ DInfoInterface::~DInfoInterface()
 {
 }
 
-QList<QUrl> DInfoInterface::currentAlbum() const
+QList<QUrl> DInfoInterface::currentSelectedItems() const
 {
     return QList<QUrl>();
 }
 
-QList<QUrl> DInfoInterface::currentSelection() const
+QList<QUrl> DInfoInterface::currentAlbumItems() const
 {
     return QList<QUrl>();
 }
 
-QList<QUrl> DInfoInterface::allAlbums() const
+QList<QUrl> DInfoInterface::allAlbumItems() const
+{
+    return QList<QUrl>();
+}
+
+int DInfoInterface::currentAlbum() const
+{
+    return 0;
+}
+
+QList<QUrl> DInfoInterface::albumItems(int) const
 {
     return QList<QUrl>();
 }
