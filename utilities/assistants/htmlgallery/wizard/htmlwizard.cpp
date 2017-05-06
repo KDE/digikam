@@ -45,6 +45,7 @@
 #include "abstractthemeparameter.h"
 #include "galleryinfo.h"
 #include "invisiblebuttongroup.h"
+#include "htmlintropage.h"
 #include "htmloutputpage.h"
 #include "htmlalbumselectorpage.h"
 #include "htmlthemepage.h"
@@ -62,11 +63,12 @@ public:
     Private()
       : mInfo(0),
         mConfigManager(0),
+        mIntroPage(0),
         mCollectionSelectorPage(0),
+        mThemePage(0),
         mParametersPage(0),
         mImageSettingsPage(0),
         mOutputPage(0),
-        mThemePage(0),
         mFinalPage(0)
     {
     }
@@ -74,11 +76,12 @@ public:
     GalleryInfo*           mInfo;
     KConfigDialogManager*  mConfigManager;
 
+    HTMLIntroPage*         mIntroPage;
     HTMLAlbumSelectorPage* mCollectionSelectorPage;
+    HTMLThemePage*         mThemePage;
     HTMLParametersPage*    mParametersPage;
     HTMLImageSettingsPage* mImageSettingsPage;
     HTMLOutputPage*        mOutputPage;
-    HTMLThemePage*         mThemePage;
     HTMLFinalPage*         mFinalPage;
 };
 
@@ -92,6 +95,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent)
     d->mInfo = new GalleryInfo;
     d->mInfo->load();
 
+    d->mIntroPage              = new HTMLIntroPage(this, i18n("Welcome to HTML Gallery Tool"));
     d->mCollectionSelectorPage = new HTMLAlbumSelectorPage(this, i18n("Albums Selection"));
     d->mThemePage              = new HTMLThemePage(this, i18n("Theme Selection"));
     d->mParametersPage         = new HTMLParametersPage(this, i18n("Theme Parameters"));

@@ -45,6 +45,14 @@ class GalleryInfo : public GalleryConfig
 {
 public:
 
+    enum ImageGetOption
+    {
+        ALBUM = 0,
+        IMAGEDIALOG
+    };
+
+public:
+
     explicit GalleryInfo();
     ~GalleryInfo();
 
@@ -60,7 +68,9 @@ public:
 
 public:
 
-    AlbumList mCollectionList;
+    ImageGetOption mGetOption;        // Type of image selection (albums or images list).
+
+    AlbumList      mCollectionList;   // Albums List for ImageGetOption::ALBUM selection method.
 
 private:
 
