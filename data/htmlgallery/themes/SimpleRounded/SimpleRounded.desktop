@@ -2,10 +2,7 @@
 Version=0.1
 Encoding=UTF-8
 Name=Simple Rounded
-Name[xx]=xxSimple Roundedxx
-Name[de_DE]=Einfach Abgerundet
 Comment=A theme with rounded corners and page support on big galeries
-Comment[de]=Ein Stil mit abgerundeten Ecken und mehrseiten Support bei großen Gallerien.
 
 [X-HTMLExport Author]
 Name=Franz Dietrich
@@ -13,14 +10,12 @@ Url=mailto:enaut.w@googlemail.com
 
 [X-HTMLExport Parameter titlebar]
 Name=Title Bar
-Name[de]=Titelleiste
 Type=string
 Default=Gallery
 Default[de]=Galerie
 
 [X-HTMLExport Parameter thumbnailsPerPage]
 Name=Images per page
-Name[de]=Bilder pro Seite
 Type=int
 Default= 15
 Min=1
@@ -28,55 +23,46 @@ Max=75
 
 [X-HTMLExport Parameter homepage]
 Name=Name of the Homepage
-Name[de]=Homepagename
 Type=string
 Default=
 Default[de]=
 
 [X-HTMLExport Parameter homepageUrl]
 Name=Url to the Homepage
-Name[de]=Homepageurl
 Type=string
 Default=
 Default[de]=
 
 [X-HTMLExport Parameter background]
 Name=Background
-Name[de]=Hintergrund
 Type=color
 Default=#3e674c
 
 [X-HTMLExport Parameter content-bgc]
 Name=Content background
-Name[de]=Hintergrund des Inhalts
 Type=color
 Default=#d8ffd3
 
 [X-HTMLExport Parameter listBackground]
 Name=Icon background
-Name[de]=Hintergrund der Thumbnails
 Type=color
 Default=#78ca97
 
 [X-HTMLExport Parameter navigationColor]
 Name= Background of the navigation
-Name[de]=Hintergrund der Navigation
 Type=color
 Default=#a7dccf
 
 [X-HTMLExport Parameter thumbBorderColor]
 Name=Thumbnail border
-Name[de]=Rahmen der thumbnails
 Type=color
 Default=#41696d
 
 [X-HTMLExport Parameter urlColor]
 Name=Links
-Name[de]=Links
 Type=color
 Default=#519e64
 
 [X-HTMLExport Preview]
 Name=Simple Rounded Shapes
-Name[de]=Einfache abgerundete Formen
 Url=preview.png

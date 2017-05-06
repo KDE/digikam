@@ -53,21 +53,16 @@ Caption_4=10 seconds
 
 [X-HTMLExport Parameter style]
 Name=Style
-Name[br]=Giz
-Name[de]=Stil
-Name[el]=Στυλ
+Name[ca]=Estil
+Name[ca@valencia]=Estil
+Name[cs]=Styl
 Name[es]=Estilo
-Name[et]=Stiil
-Name[is]=Stíll
-Name[it]=Stile
-Name[ja]=スタイル
-Name[nds]=Stil
 Name[nl]=Stijl
+Name[nn]=Stil
 Name[pt]=Estilo
-Name[pt_BR]=Estilo
 Name[sv]=Stil
-Name[xh]=Uhlobo
-Name[zu]=Uhlobo
+Name[uk]=Стиль
+Name[x-test]=xxStylexx
 Type=list
 Default=dark.css
 Value_0=natural.css
@@ -80,47 +75,16 @@ Caption_2=Custom
 
 [X-HTMLExport Parameter bgColor]
 Name=Custom Background Color
-Name[ca]=Color de fons
-Name[de]=Hintergrundfarbe
-Name[el]=Χρώμα φόντου
-Name[es]=Color del fondo
-Name[fr]=Couleur d'arrière plan
-Name[is]=Bakgrunnslitur
-Name[it]=Colore di sfondo
-Name[ja]=背景色
-Name[nl]=Achtergrondkleur
-Name[pt]=Cor de Fundo
-Name[pt_BR]=Cor de Fundo
-Name[sv]=Bakgrundsfärg
 Type=color
 Default=#000000
 
 [X-HTMLExport Parameter fgColor]
 Name=Custom Foreground Color
-Name[ca]=Color de primer pla
-Name[de]=Vordergrundfarbe
-Name[el]=Χρώμα προσκηνίου
-Name[es]=Color del primer plano
-Name[fr]=Couleur d'avant plan
-Name[is]=Forgrunnslitur
-Name[it]=Colore di primo piano
-Name[ja]=前景色
-Name[nl]=Voorgrondkleur
-Name[pt]=Cor Principal
-Name[pt_BR]=Cor Principal
-Name[sv]=Förgrundsfärg
 Type=color
 Default=#888888
 
 [X-HTMLExport Parameter linkColor]
 Name=Custom Link Color
-Name[de]=Verknüpfungsfarbe
-Name[el]=Χρώμα δεσμού
-Name[it]=Colore dei collegamenti
-Name[ja]=リンクの色
-Name[pt]=Cor da Hiperligação
-Name[pt_BR]=Cor da Hiperligação
-Name[sv]=Länkfärg
 Type=color
 Default=#aaaaaa
 
@@ -131,13 +95,6 @@ Default=#ffffff
 
 [X-HTMLExport Parameter visitedLinkColor]
 Name=Custom Visited Link Color
-Name[de]=Farbe der besuchten Verknüpfungen
-Name[el]=Χρώμα ακολουθημένου δεσμού
-Name[it]=Colore dei collegamenti visitati
-Name[ja]=訪問済みリンクの色
-Name[pt]=Cor da Ligação Visitada
-Name[pt_BR]=Cor da Ligação Visitada
-Name[sv]=Besökt länkfärg
 Type=color
 Default=#aaaaaa
 
