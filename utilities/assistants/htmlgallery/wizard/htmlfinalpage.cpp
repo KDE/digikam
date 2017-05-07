@@ -109,6 +109,9 @@ void HTMLFinalPage::slotProcess()
         return;
     }
 
+    d->progressView->clear();
+    d->progressBar->reset();
+
     GalleryInfo* const info  = wizard->galleryInfo();
 
     // Generate GalleryInfo

@@ -365,7 +365,7 @@ public:
                                                         QLatin1String("/index.html"));
 
 #ifdef Q_CC_MSVC
-        if (-1 == xsltSaveResultToFilename(destFileName.toLocal8Bit().data(), xmlOutput, xslt, 0))
+        if (xsltSaveResultToFilename(destFileName.toLocal8Bit().data(), xmlOutput, xslt, 0) == -1)
         {
             logError(i18n("Could not open '%1' for writing", destFileName));
             return false;
@@ -459,7 +459,7 @@ public:
     {
         map["i18nPrevious"]                   = makeXsltParam(i18n("Previous"));
         map["i18nNext"]                       = makeXsltParam(i18n("Next"));
-        map["i18nCollectionList"]             = makeXsltParam(i18n("Collection List"));
+        map["i18nCollectionList"]             = makeXsltParam(i18n("ALbum List"));
         map["i18nOriginalImage"]              = makeXsltParam(i18n("Original Image"));
         map["i18nUp"]                         = makeXsltParam(i18n("Go Up"));
         // Exif Tag
