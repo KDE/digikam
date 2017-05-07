@@ -54,7 +54,7 @@ public:
         if (wizard)
         {
             info  = wizard->galleryInfo();
-            iface = info->mIface;
+            iface = info->m_iface;
         }
     }
 
@@ -102,7 +102,7 @@ void HTMLSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);
     d->imageList->loadImagesFromCurrentSelection();
-    d->stack->setCurrentIndex(d->info->mGetOption);
+    d->stack->setCurrentIndex(d->info->m_getOption);
 }
 
 bool HTMLSelectionPage::validatePage()
@@ -114,7 +114,7 @@ bool HTMLSelectionPage::validatePage()
             if (d->iface->albumChooserItems().empty())
                 return false;
 
-            d->info->mAlbumList = d->iface->albumChooserItems();
+            d->info->m_albumList = d->iface->albumChooserItems();
         }
         else
         {
@@ -126,7 +126,7 @@ bool HTMLSelectionPage::validatePage()
         if (d->imageList->imageUrls().empty())
             return false;
 
-        d->info->mImageList = d->imageList->imageUrls();
+        d->info->m_imageList = d->imageList->imageUrls();
     }
 
     return true;

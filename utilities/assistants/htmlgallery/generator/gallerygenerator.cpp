@@ -174,20 +174,20 @@ public:
 
         XMLElement collectionsX(xmlWriter, QLatin1String("collections"));
 
-        if (info->mGetOption == GalleryInfo::ALBUMS)
+        if (info->m_getOption == GalleryInfo::ALBUMS)
         {
             // Loop over albums selection
 
-            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = info->mAlbumList.constBegin();
-            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = info->mAlbumList.constEnd();
+            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = info->m_albumList.constBegin();
+            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = info->m_albumList.constEnd();
 
             for (; albumIt != albumEnd ; ++albumIt)
             {
                 int id                     = *albumIt;
                 DInfoInterface::DInfoMap   inf;
 
-                if (info->mIface)
-                    inf = info->mIface->albumInfo(id);
+                if (info->m_iface)
+                    inf = info->m_iface->albumInfo(id);
 
                 DAlbumInfo anf(inf);
                 QString title              = anf.title();
@@ -207,9 +207,9 @@ public:
                 // Gather image element list
                 QList<QUrl> imageList;
 
-                if (info->mIface)
+                if (info->m_iface)
                 {
-                    imageList = info->mIface->albumsItems(DInfoInterface::DAlbumIDs() << id);
+                    imageList = info->m_iface->albumsItems(DInfoInterface::DAlbumIDs() << id);
                 }
 
                 if (!processImages(xmlWriter, imageList, title, destDir))
@@ -231,7 +231,7 @@ public:
             xmlWriter.writeElement("name",     title);
             xmlWriter.writeElement("fileName", collectionFileName);
 
-            if (!processImages(xmlWriter, info->mImageList, title, destDir))
+            if (!processImages(xmlWriter, info->m_imageList, title, destDir))
                 return false;
         }
 
@@ -261,8 +261,8 @@ public:
 
             DInfoInterface::DInfoMap inf;
 
-            if (info->mIface)
-                inf = info->mIface->itemInfo(url);
+            if (info->m_iface)
+                inf = info->m_iface->itemInfo(url);
 
             GalleryElement element        = GalleryElement(inf);
             element.mPath                 = remoteUrlHash.value(url, url.toLocalFile());

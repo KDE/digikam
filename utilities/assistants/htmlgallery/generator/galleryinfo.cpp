@@ -34,7 +34,7 @@ static const char* THEME_GROUP_PREFIX = "Theme ";
 
 GalleryInfo::GalleryInfo(DInfoInterface* const iface)
 {
-    mIface = iface;
+    m_iface = iface;
 }
 
 GalleryInfo::~GalleryInfo()
@@ -103,7 +103,7 @@ QString GalleryInfo::getEnumString(const QString& itemName) const
 QDebug operator<<(QDebug dbg, const GalleryInfo& t)
 {
     dbg.nospace() << "GalleryInfo::Albums: "
-                  << t.mAlbumList << ", ";
+                  << t.m_albumList << ", ";
     dbg.nospace() << "GalleryInfo::Theme: "
                   << t.theme() << ", ";
     dbg.nospace() << "GalleryInfo::UseOriginalImageAsFullImage: "

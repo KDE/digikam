@@ -99,7 +99,7 @@ bool HTMLIntroPage::validatePage()
         return false;
 
     GalleryInfo* const info  = wizard->galleryInfo();
-    info->mGetOption         = (GalleryInfo::ImageGetOption)d->imageGetOption->currentIndex();
+    info->m_getOption        = (GalleryInfo::ImageGetOption)d->imageGetOption->currentIndex();
 
     return true;
 }

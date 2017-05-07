@@ -121,15 +121,15 @@ void HTMLFinalPage::slotProcess()
     d->progressView->addEntry(i18n("Starting to generate gallery..."),
                               DHistoryView::ProgressEntry);
 
-    if (info->mGetOption == GalleryInfo::ALBUMS)
+    if (info->m_getOption == GalleryInfo::ALBUMS)
     {
-        if (!info->mIface)
+        if (!info->m_iface)
             return;
 
-        d->progressView->addEntry(i18n("%1 albums to process:", info->mAlbumList.count()),
+        d->progressView->addEntry(i18n("%1 albums to process:", info->m_albumList.count()),
                                   DHistoryView::ProgressEntry);
 
-        foreach(QUrl url, info->mIface->albumsItems(info->mAlbumList))
+        foreach(QUrl url, info->m_iface->albumsItems(info->m_albumList))
         {
             d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
                                       DHistoryView::ProgressEntry);
@@ -137,7 +137,7 @@ void HTMLFinalPage::slotProcess()
     }
     else
     {
-        d->progressView->addEntry(i18n("%1 items to process", info->mImageList.count()),
+        d->progressView->addEntry(i18n("%1 items to process", info->m_imageList.count()),
                                   DHistoryView::ProgressEntry);
     }
 

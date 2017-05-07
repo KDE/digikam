@@ -147,7 +147,7 @@ void HTMLOutputPage::initializePage()
     d->openInBrowser->setChecked(info->openInBrowser());
     d->imageSelectionTitle->setText(info->imageSelectionTitle());
 
-    d->titleBox->setVisible(info->mGetOption == GalleryInfo::IMAGES);
+    d->titleBox->setVisible(info->m_getOption == GalleryInfo::IMAGES);
 }
 
 bool HTMLOutputPage::validatePage()
@@ -162,7 +162,7 @@ bool HTMLOutputPage::validatePage()
 
     GalleryInfo* const info  = wizard->galleryInfo();
 
-    if (info->mGetOption == GalleryInfo::IMAGES && d->imageSelectionTitle->text().isEmpty())
+    if (info->m_getOption == GalleryInfo::IMAGES && d->imageSelectionTitle->text().isEmpty())
         return false;
 
     info->setDestUrl(QUrl::fromLocalFile(d->destUrl->fileDlgPath()));
@@ -183,7 +183,7 @@ bool HTMLOutputPage::isComplete() const
 
     bool b                   = !d->destUrl->fileDlgPath().isEmpty();
 
-    if (info->mGetOption == GalleryInfo::IMAGES)
+    if (info->m_getOption == GalleryInfo::IMAGES)
         b = b & !d->imageSelectionTitle->text().isEmpty();
 
     return b;
