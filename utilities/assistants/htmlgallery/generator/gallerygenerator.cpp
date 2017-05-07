@@ -77,41 +77,41 @@ public:
 
     Private()
       : that(0),
-        mInfo(0),
-        mWarnings(false),
-        mCancel(false),
-        mPview(0),
-        mPbar(0)
+        info(0),
+        warnings(false),
+        cancel(false),
+        pview(0),
+        pbar(0)
     {
     }
 
     GalleryGenerator* that;
-    GalleryInfo*      mInfo;
-    GalleryTheme::Ptr mTheme;
+    GalleryInfo*      info;
+    GalleryTheme::Ptr theme;
 
     // State info
-    bool              mWarnings;
-    QString           mXMLFileName;
+    bool              warnings;
+    QString           xmlFileName;
 
-    bool              mCancel;
-    DHistoryView*     mPview;
-    DProgressWdg*     mPbar;
+    bool              cancel;
+    DHistoryView*     pview;
+    DProgressWdg*     pbar;
 
 public:
 
     bool init()
     {
-        mCancel = false;
-        mTheme  = GalleryTheme::findByInternalName(mInfo->theme());
+        cancel = false;
+        theme  = GalleryTheme::findByInternalName(info->theme());
 
-        if (!mTheme)
+        if (!theme)
         {
-            logError( i18n("Could not find theme in '%1'", mInfo->theme()) );
+            logError( i18n("Could not find theme in '%1'", info->theme()) );
             return false;
         }
 
-        mPview->setVisible(true);
-        mPbar->setVisible(true);
+        pview->setVisible(true);
+        pbar->setVisible(true);
 
         return true;
     }
@@ -133,8 +133,8 @@ public:
     {
         logInfo(i18n("Copying theme"));
 
-        QUrl srcUrl  = QUrl::fromLocalFile(mTheme->directory());
-        QUrl destUrl = mInfo->destUrl().adjusted(QUrl::StripTrailingSlash);
+        QUrl srcUrl  = QUrl::fromLocalFile(theme->directory());
+        QUrl destUrl = info->destUrl().adjusted(QUrl::StripTrailingSlash);
 
         destUrl.setPath(destUrl.path() + QLatin1Char('/') + srcUrl.fileName());
         QDir themeDir(destUrl.toLocalFile());
@@ -158,15 +158,15 @@ public:
     bool generateImagesAndXML()
     {
         logInfo(i18n("Generate images and XML files"));
-        QString baseDestDir = mInfo->destUrl().toLocalFile();
+        QString baseDestDir = info->destUrl().toLocalFile();
 
         if (!createDir(baseDestDir))
             return false;
 
-        mXMLFileName        = baseDestDir + QLatin1String("/gallery.xml");
+        xmlFileName        = baseDestDir + QLatin1String("/gallery.xml");
         XMLWriter xmlWriter;
 
-        if (!xmlWriter.open(mXMLFileName))
+        if (!xmlWriter.open(xmlFileName))
         {
             logError(i18n("Could not create gallery.xml"));
             return false;
@@ -174,20 +174,20 @@ public:
 
         XMLElement collectionsX(xmlWriter, QLatin1String("collections"));
 
-        if (mInfo->mGetOption == GalleryInfo::ALBUMS)
+        if (info->mGetOption == GalleryInfo::ALBUMS)
         {
             // Loop over albums selection
 
-            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = mInfo->mAlbumList.constBegin();
-            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = mInfo->mAlbumList.constEnd();
+            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = info->mAlbumList.constBegin();
+            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = info->mAlbumList.constEnd();
 
             for (; albumIt != albumEnd ; ++albumIt)
             {
                 int id                     = *albumIt;
                 DInfoInterface::DInfoMap   inf;
 
-                if (mInfo->mIface)
-                    inf = mInfo->mIface->albumInfo(id);
+                if (info->mIface)
+                    inf = info->mIface->albumInfo(id);
 
                 DAlbumInfo anf(inf);
                 QString title              = anf.title();
@@ -207,9 +207,9 @@ public:
                 // Gather image element list
                 QList<QUrl> imageList;
 
-                if (mInfo->mIface)
+                if (info->mIface)
                 {
-                    imageList = mInfo->mIface->albumsItems(DInfoInterface::DAlbumIDs() << id);
+                    imageList = info->mIface->albumsItems(DInfoInterface::DAlbumIDs() << id);
                 }
 
                 if (!processImages(xmlWriter, imageList, title, destDir))
@@ -218,7 +218,7 @@ public:
         }
         else
         {
-            QString title              = mInfo->imageSelectionTitle();
+            QString title              = info->imageSelectionTitle();
             QString collectionFileName = webifyFileName(title);
             QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
 
@@ -231,7 +231,7 @@ public:
             xmlWriter.writeElement("name",     title);
             xmlWriter.writeElement("fileName", collectionFileName);
 
-            if (!processImages(xmlWriter, mInfo->mImageList, title, destDir))
+            if (!processImages(xmlWriter, info->mImageList, title, destDir))
                 return false;
         }
 
@@ -259,33 +259,33 @@ public:
                 continue;
             }
 
-            DInfoInterface::DInfoMap info;
+            DInfoInterface::DInfoMap inf;
 
-            if (mInfo->mIface)
-                info = mInfo->mIface->itemInfo(url);
+            if (info->mIface)
+                inf = info->mIface->itemInfo(url);
 
-            GalleryElement element          = GalleryElement(info);
+            GalleryElement element        = GalleryElement(inf);
             element.mPath                 = remoteUrlHash.value(url, url.toLocalFile());
             imageElementList << element;
         }
 
         // Generate images
         logInfo(i18n("Generating files for \"%1\"", title));
-        GalleryElementFunctor functor(that, mInfo, destDir);
+        GalleryElementFunctor functor(that, info, destDir);
         QFuture<void> future = QtConcurrent::map(imageElementList, functor);
         QFutureWatcher<void> watcher;
         watcher.setFuture(future);
 
         connect(&watcher, SIGNAL(progressValueChanged(int)),
-                mPbar, SLOT(setValue(int)));
+                pbar, SLOT(setValue(int)));
 
-        mPbar->setMaximum(imageElementList.count());
+        pbar->setMaximum(imageElementList.count());
 
         while (!future.isFinished())
         {
             qApp->processEvents();
 
-            if (mCancel)
+            if (cancel)
             {
                 future.cancel();
                 future.waitForFinished();
@@ -296,7 +296,7 @@ public:
         // Generate xml
         Q_FOREACH(const GalleryElement& element, imageElementList)
         {
-            element.appendToXML(xmlWriter, mInfo->copyOriginalImage());
+            element.appendToXML(xmlWriter, info->copyOriginalImage());
         }
 
         return true;
@@ -306,7 +306,7 @@ public:
     {
         logInfo(i18n("Generating HTML files"));
 
-        QString xsltFileName                                 = mTheme->directory() + QLatin1String("/template.xsl");
+        QString xsltFileName                                 = theme->directory() + QLatin1String("/template.xsl");
         CWrapper<xsltStylesheetPtr, xsltFreeStylesheet> xslt = xsltParseStylesheetFile((const xmlChar*)
             QDir::toNativeSeparators(xsltFileName).toLocal8Bit().data());
 
@@ -317,11 +317,11 @@ public:
         }
 
         CWrapper<xmlDocPtr, xmlFreeDoc> xmlGallery =
-            xmlParseFile(QDir::toNativeSeparators(mXMLFileName).toLocal8Bit().data() );
+            xmlParseFile(QDir::toNativeSeparators(xmlFileName).toLocal8Bit().data() );
 
         if (!xmlGallery)
         {
-            logError(i18n("Could not load XML file '%1'", mXMLFileName));
+            logError(i18n("Could not load XML file '%1'", xmlFileName));
             return false;
         }
 
@@ -348,7 +348,7 @@ public:
         // Move to the destination dir, so that external documents get correctly
         // produced
         QString oldCD                             = QDir::currentPath();
-        QDir::setCurrent(mInfo->destUrl().toLocalFile());
+        QDir::setCurrent(info->destUrl().toLocalFile());
 
         CWrapper<xmlDocPtr, xmlFreeDoc> xmlOutput = xsltApplyStylesheet(xslt, xmlGallery, params);
 
@@ -361,7 +361,7 @@ public:
             return false;
         }
 
-        QString destFileName = QDir::toNativeSeparators(mInfo->destUrl().toLocalFile() + 
+        QString destFileName = QDir::toNativeSeparators(info->destUrl().toLocalFile() + 
                                                         QLatin1String("/index.html"));
 
 #ifdef Q_CC_MSVC
@@ -408,12 +408,12 @@ public:
 
         logInfo(i18n("Downloading remote files for \"%1\"", collectionName));
 
-        mPbar->setMaximum(list.count());
+        pbar->setMaximum(list.count());
         int count = 0;
 
         Q_FOREACH(const QUrl& url, list)
         {
-            if (mCancel)
+            if (cancel)
             {
                 return false;
             }
@@ -446,7 +446,7 @@ public:
             tempFile.close();
 
             ++count;
-            mPbar->setValue(count);
+            pbar->setValue(count);
         }
 
         return true;
@@ -488,8 +488,8 @@ public:
      */
     void addThemeParameters(XsltParameterMap& map)
     {
-        GalleryTheme::ParameterList parameterList      = mTheme->parameterList();
-        QString themeInternalName                      = mTheme->internalName();
+        GalleryTheme::ParameterList parameterList      = theme->parameterList();
+        QString themeInternalName                      = theme->internalName();
         GalleryTheme::ParameterList::ConstIterator it  = parameterList.constBegin();
         GalleryTheme::ParameterList::ConstIterator end = parameterList.constEnd();
 
@@ -497,7 +497,7 @@ public:
         {
             AbstractThemeParameter* const themeParameter = *it;
             QByteArray internalName                      = themeParameter->internalName();
-            QString value                                = mInfo->getThemeParameterValue(themeInternalName,
+            QString value                                = info->getThemeParameterValue(themeInternalName,
                                                                 QString::fromLatin1(internalName),
                                                                 themeParameter->defaultValue());
 
@@ -555,18 +555,18 @@ public:
 
     void logInfo(const QString& msg)
     {
-        mPview->addEntry(msg, DHistoryView::ProgressEntry);
+        pview->addEntry(msg, DHistoryView::ProgressEntry);
     }
 
     void logError(const QString& msg)
     {
-        mPview->addEntry(msg, DHistoryView::ErrorEntry);
+        pview->addEntry(msg, DHistoryView::ErrorEntry);
     }
 
     void logWarning(const QString& msg)
     {
-        mPview->addEntry(msg, DHistoryView::WarningEntry);
-        mWarnings = true;
+        pview->addEntry(msg, DHistoryView::WarningEntry);
+        warnings = true;
     }
 };
 
@@ -577,8 +577,8 @@ GalleryGenerator::GalleryGenerator(GalleryInfo* const info)
       d(new Private)
 {
     d->that      = this;
-    d->mInfo     = info;
-    d->mWarnings = false;
+    d->info     = info;
+    d->warnings = false;
 
     connect(this, SIGNAL(logWarningRequested(QString)),
             SLOT(logWarning(QString)), Qt::QueuedConnection);
@@ -594,7 +594,7 @@ bool GalleryGenerator::run()
     if (!d->init())
         return false;
 
-    QString destDir = d->mInfo->destUrl().toLocalFile();
+    QString destDir = d->info->destUrl().toLocalFile();
     qCDebug(DIGIKAM_GENERAL_LOG) << destDir;
 
     if (!d->createDir(destDir))
@@ -618,7 +618,7 @@ bool GalleryGenerator::run()
 
 bool GalleryGenerator::warnings() const
 {
-    return d->mWarnings;
+    return d->warnings;
 }
 
 void GalleryGenerator::logWarning(const QString& text)
@@ -628,15 +628,15 @@ void GalleryGenerator::logWarning(const QString& text)
 
 void GalleryGenerator::slotCancel()
 {
-    d->mCancel = true;
+    d->cancel = true;
 }
 
 void GalleryGenerator::setProgressWidgets(DHistoryView* const pView, DProgressWdg* const pBar)
 {
-    d->mPview = pView;
-    d->mPbar  = pBar;
+    d->pview = pView;
+    d->pbar  = pBar;
 
-    connect(d->mPbar, SIGNAL(signalProgressCanceled()),
+    connect(d->pbar, SIGNAL(signalProgressCanceled()),
             this, SLOT(slotCancel()));
 }
 
