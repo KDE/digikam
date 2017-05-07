@@ -42,13 +42,13 @@ class IntThemeParameter::Private
 public:
 
     Private()
-      : mMinValue(0),
-        mMaxValue(99999)
+      : minValue(0),
+        maxValue(99999)
     {
     }
 
-    int mMinValue;
-    int mMaxValue;
+    int minValue;
+    int maxValue;
 };
 
 IntThemeParameter::IntThemeParameter()
@@ -65,16 +65,16 @@ void IntThemeParameter::init(const QByteArray& internalName, const KConfigGroup*
 {
     AbstractThemeParameter::init(internalName, configGroup);
 
-    d->mMinValue = configGroup->readEntry(MIN_VALUE_KEY, 0);
-    d->mMaxValue = configGroup->readEntry(MAX_VALUE_KEY, 99999);
+    d->minValue = configGroup->readEntry(MIN_VALUE_KEY, 0);
+    d->maxValue = configGroup->readEntry(MAX_VALUE_KEY, 99999);
 }
 
 QWidget* IntThemeParameter::createWidget(QWidget* parent, const QString& value) const
 {
     QSpinBox* const spinBox = new QSpinBox(parent);
     spinBox->setValue(value.toInt());
-    spinBox->setMinimum(d->mMinValue);
-    spinBox->setMaximum(d->mMaxValue);
+    spinBox->setMinimum(d->minValue);
+    spinBox->setMaximum(d->maxValue);
 
     return spinBox;
 }

@@ -47,43 +47,43 @@ class CWrapper
 public:
 
     CWrapper(Ptr ptr)
-        : mPtr(ptr)
+        : m_ptr(ptr)
     {
     }
 
     CWrapper()
-        : mPtr(0)
+        : m_ptr(0)
     {
     }
 
     ~CWrapper()
     {
-        freeFcn(mPtr);
+        freeFcn(m_ptr);
     }
 
     operator Ptr() const
     {
-        return mPtr;
+        return m_ptr;
     }
 
     bool operator!() const
     {
-        return !mPtr;
+        return !m_ptr;
     }
 
     void assign(Ptr ptr)
     {
-        if (mPtr)
+        if (m_ptr)
         {
-            freeFcn(mPtr);
+            freeFcn(m_ptr);
         }
 
-        mPtr = ptr;
+        m_ptr = ptr;
     }
 
 private:
 
-    Ptr mPtr;
+    Ptr m_ptr;
 };
 
 /**
@@ -101,7 +101,7 @@ public:
 
 private:
 
-    CWrapper<xmlTextWriterPtr, xmlFreeTextWriter> mWriter;
+    CWrapper<xmlTextWriterPtr, xmlFreeTextWriter> m_writer;
 };
 
 /**
@@ -119,7 +119,7 @@ private:
 
     typedef QMap<QString, QString> Map;
 
-    Map mMap;
+    Map m_map;
 };
 
 /**
@@ -134,7 +134,7 @@ public:
 
 private:
 
-    XMLWriter& mWriter;
+    XMLWriter& m_writer;
 };
 
 } // namespace Digikam

@@ -64,10 +64,10 @@ private:
 
     // NOTE: Do not use a d private internal container here.
 
-    GalleryGenerator* mGenerator;
-    GalleryInfo*      mInfo;
-    QString           mDestDir;
-    GalleryNameHelper mUniqueNameHelper;
+    GalleryGenerator* m_generator;
+    GalleryInfo*      m_info;
+    QString           m_destDir;
+    GalleryNameHelper m_uniqueNameHelper;
 };
 
 } // namespace Digikam

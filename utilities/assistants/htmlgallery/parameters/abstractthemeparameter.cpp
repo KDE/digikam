@@ -42,9 +42,13 @@ class AbstractThemeParameter::Private
 {
 public:
 
-    QByteArray mInternalName;
-    QString    mName;
-    QString    mDefaultValue;
+    Private()
+    {
+    }
+
+    QByteArray internalName;
+    QString    name;
+    QString    defaultValue;
 };
 
 AbstractThemeParameter::AbstractThemeParameter()
@@ -59,24 +63,24 @@ AbstractThemeParameter::~AbstractThemeParameter()
 
 void AbstractThemeParameter::init(const QByteArray& internalName, const KConfigGroup* group)
 {
-    d->mInternalName = internalName;
-    d->mName         = group->readEntry(NAME_KEY);
-    d->mDefaultValue = group->readEntry(DEFAULT_VALUE_KEY);
+    d->internalName = internalName;
+    d->name         = group->readEntry(NAME_KEY);
+    d->defaultValue = group->readEntry(DEFAULT_VALUE_KEY);
 }
 
 QByteArray AbstractThemeParameter::internalName() const
 {
-    return d->mInternalName;
+    return d->internalName;
 }
 
 QString AbstractThemeParameter::name() const
 {
-    return d->mName;
+    return d->name;
 }
 
 QString AbstractThemeParameter::defaultValue() const
 {
-    return d->mDefaultValue;
+    return d->defaultValue;
 }
 
 } // namespace Digikam

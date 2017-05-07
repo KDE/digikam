@@ -35,13 +35,13 @@ bool XMLWriter::open(const QString& name)
         return false;
     }
 
-    mWriter.assign(ptr);
+    m_writer.assign(ptr);
 
     int rc = xmlTextWriterStartDocument(ptr, NULL, "UTF-8", NULL);
 
     if (rc < 0)
     {
-        mWriter.assign(0);
+        m_writer.assign(0);
         return false;
     }
 
@@ -52,12 +52,12 @@ bool XMLWriter::open(const QString& name)
 
 XMLWriter::operator xmlTextWriterPtr() const
 {
-    return mWriter;
+    return m_writer;
 }
 
 void XMLWriter::writeElement(const char* element, const QString& value)
 {
-    xmlTextWriterWriteElement(mWriter, BAD_CAST element, BAD_CAST value.toUtf8().data());
+    xmlTextWriterWriteElement(m_writer, BAD_CAST element, BAD_CAST value.toUtf8().data());
 }
 
 void XMLWriter::writeElement(const char* element, int value)
@@ -69,8 +69,8 @@ void XMLWriter::writeElement(const char* element, int value)
 
 void XMLAttributeList::write(XMLWriter& writer) const
 {
-    Map::const_iterator it  = mMap.begin();
-    Map::const_iterator end = mMap.end();
+    Map::const_iterator it  = m_map.begin();
+    Map::const_iterator end = m_map.end();
 
     for (; it != end ; ++it)
     {
@@ -82,18 +82,18 @@ void XMLAttributeList::write(XMLWriter& writer) const
 
 void XMLAttributeList::append(const QString& key, const QString& value)
 {
-    mMap[key] = value;
+    m_map[key] = value;
 }
 
 void XMLAttributeList::append(const QString& key, int value)
 {
-    mMap[key] = QString::number(value);
+    m_map[key] = QString::number(value);
 }
 
 // ------------------------------------------------------
 
 XMLElement::XMLElement(XMLWriter& writer, const QString& element, const XMLAttributeList* attributeList)
-    : mWriter(writer)
+    : m_writer(writer)
 {
     xmlTextWriterStartElement(writer, BAD_CAST element.toLatin1().data());
 
@@ -105,7 +105,7 @@ XMLElement::XMLElement(XMLWriter& writer, const QString& element, const XMLAttri
 
 XMLElement::~XMLElement()
 {
-    xmlTextWriterEndElement(mWriter);
+    xmlTextWriterEndElement(m_writer);
 }
 
 } // namespace Digikam

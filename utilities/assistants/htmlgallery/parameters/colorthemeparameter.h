@@ -39,7 +39,7 @@ class ColorThemeParameter : public AbstractThemeParameter
 public:
 
     virtual QWidget* createWidget(QWidget* parent, const QString& value) const;
-    virtual QString valueFromWidget(QWidget*) const;
+    virtual QString  valueFromWidget(QWidget*)                           const;
 };
 
 } // namespace Digikam

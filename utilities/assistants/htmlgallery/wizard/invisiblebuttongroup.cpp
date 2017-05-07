@@ -39,7 +39,12 @@ class InvisibleButtonGroup::Private
 {
 public:
 
-    QButtonGroup* mGroup;
+    Private()
+      : group(0)
+    {
+    }
+
+    QButtonGroup* group;
 };
 
 InvisibleButtonGroup::InvisibleButtonGroup(QWidget* const parent)
@@ -48,10 +53,10 @@ InvisibleButtonGroup::InvisibleButtonGroup(QWidget* const parent)
 {
     hide();
 
-    d->mGroup = new QButtonGroup(this);
-    d->mGroup->setExclusive(true);
+    d->group = new QButtonGroup(this);
+    d->group->setExclusive(true);
 
-    connect(d->mGroup, SIGNAL(buttonClicked(int)),
+    connect(d->group, SIGNAL(buttonClicked(int)),
             SIGNAL(selectionChanged(int)) );
 
     const QString name = QString::fromLatin1(metaObject()->className());
@@ -70,17 +75,17 @@ InvisibleButtonGroup::~InvisibleButtonGroup()
 
 int InvisibleButtonGroup::selected() const
 {
-    return d->mGroup->checkedId();
+    return d->group->checkedId();
 }
 
 void InvisibleButtonGroup::addButton(QAbstractButton* button, int id)
 {
-    d->mGroup->addButton(button, id);
+    d->group->addButton(button, id);
 }
 
 void InvisibleButtonGroup::setSelected(int id)
 {
-    QAbstractButton* const button = d->mGroup->button(id);
+    QAbstractButton* const button = d->group->button(id);
 
     if (button)
     {
