@@ -64,13 +64,13 @@ class GalleryTheme::Private
 public:
 
     Private()
-        : mDesktopFile(0)
+        : desktopFile(0)
     {
     }
 
-    KDesktopFile* mDesktopFile;
-    QUrl          mUrl;
-    ParameterList mParameterList;
+    KDesktopFile* desktopFile;
+    QUrl          url;
+    ParameterList parameterList;
 
 public:
 
@@ -116,9 +116,9 @@ public:
 
     void init(const QString& desktopFileName)
     {
-        delete mDesktopFile;
-        mDesktopFile = new KDesktopFile(desktopFileName);
-        mUrl         = QUrl::fromLocalFile(desktopFileName);
+        delete desktopFile;
+        desktopFile = new KDesktopFile(desktopFileName);
+        url         = QUrl::fromLocalFile(desktopFileName);
 
         QStringList parameterNameList = readParameterNameList(desktopFileName);
         readParameters(parameterNameList);
@@ -133,7 +133,7 @@ public:
         {
             QString groupName                 = QLatin1String(PARAMETER_GROUP_PREFIX) + *it;
             QByteArray internalName           = it->toUtf8();
-            KConfigGroup group                = mDesktopFile->group(groupName);
+            KConfigGroup group                = desktopFile->group(groupName);
             QString type                      = group.readEntry(PARAMETER_TYPE_KEY);
             AbstractThemeParameter* parameter = 0;
 
@@ -162,7 +162,7 @@ public:
             }
 
             parameter->init(internalName, &group);
-            mParameterList << parameter;
+            parameterList << parameter;
         }
     }
 };
@@ -174,7 +174,7 @@ GalleryTheme::GalleryTheme()
 
 GalleryTheme::~GalleryTheme()
 {
-    delete d->mDesktopFile;
+    delete d->desktopFile;
     delete d;
 }
 
@@ -239,52 +239,52 @@ GalleryTheme::Ptr GalleryTheme::findByInternalName(const QString& internalName)
 
 QString GalleryTheme::internalName() const
 {
-    return d->mUrl.fileName();
+    return d->url.fileName();
 }
 
 QString GalleryTheme::name() const
 {
-    return d->mDesktopFile->readName();
+    return d->desktopFile->readName();
 }
 
 QString GalleryTheme::comment() const
 {
-    return d->mDesktopFile->readComment();
+    return d->desktopFile->readComment();
 }
 
 QString GalleryTheme::directory() const
 {
-    return d->mUrl.adjusted(QUrl::RemoveFilename).path();
+    return d->url.adjusted(QUrl::RemoveFilename).path();
 }
 
 QString GalleryTheme::authorName() const
 {
-    return d->mDesktopFile->group(AUTHOR_GROUP).readEntry("Name");
+    return d->desktopFile->group(AUTHOR_GROUP).readEntry("Name");
 }
 
 QString GalleryTheme::authorUrl() const
 {
-    return d->mDesktopFile->group(AUTHOR_GROUP).readEntry("Url");
+    return d->desktopFile->group(AUTHOR_GROUP).readEntry("Url");
 }
 
 QString GalleryTheme::previewName() const
 {
-    return d->mDesktopFile->group(PREVIEW_GROUP).readEntry("Name");
+    return d->desktopFile->group(PREVIEW_GROUP).readEntry("Name");
 }
 
 QString GalleryTheme::previewUrl() const
 {
-    return d->mDesktopFile->group(PREVIEW_GROUP).readEntry("Url");
+    return d->desktopFile->group(PREVIEW_GROUP).readEntry("Url");
 }
 
 bool GalleryTheme::allowNonsquareThumbnails() const
 {
-    return d->mDesktopFile->group(OPTIONS_GROUP).readEntry("Allow non-square thumbnails", false);
+    return d->desktopFile->group(OPTIONS_GROUP).readEntry("Allow non-square thumbnails", false);
 }
 
 GalleryTheme::ParameterList GalleryTheme::parameterList() const
 {
-    return d->mParameterList;
+    return d->parameterList;
 }
 
 } // namespace Digikam
