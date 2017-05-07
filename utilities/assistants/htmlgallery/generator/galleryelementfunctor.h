@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "uniquenamehelper.h"
+#include "gallerynamehelper.h"
 
 namespace Digikam
 {
@@ -67,7 +67,7 @@ private:
     GalleryGenerator* mGenerator;
     GalleryInfo*      mInfo;
     QString           mDestDir;
-    UniqueNameHelper  mUniqueNameHelper;
+    GalleryNameHelper mUniqueNameHelper;
 };
 
 } // namespace Digikam

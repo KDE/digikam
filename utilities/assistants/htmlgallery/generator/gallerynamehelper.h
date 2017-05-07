@@ -21,34 +21,33 @@
  *
  * ============================================================ */
 
-#include "uniquenamehelper.h"
+#ifndef GALLERY_NAME_HELPER_H
+#define GALLERY_NAME_HELPER_H
+
+// Qt includes
+
+#include <QStringList>
 
 namespace Digikam
 {
 
-UniqueNameHelper::UniqueNameHelper()
+/**
+ * This helper class is used to make sure we use unique filenames
+ */
+class GalleryNameHelper
 {
-}
+public:
 
-UniqueNameHelper::~UniqueNameHelper()
-{
-}
+    explicit GalleryNameHelper();
+    ~GalleryNameHelper();
 
-QString UniqueNameHelper::makeNameUnique(const QString& name)
-{
-    QString uname    = name;
-    QString nameBase = name;
-    int count        = 2;
+    QString makeNameUnique(const QString& name);
 
-    while (mList.indexOf(uname) != -1)
-    {
-        uname = nameBase + QString::number(count);
-        ++count;
-    };
+private:
 
-    mList.append(uname);
-
-    return uname;
-}
+    QStringList mList;
+};
 
 } // namespace Digikam
+
+#endif // GALLERY_NAME_HELPER_H
