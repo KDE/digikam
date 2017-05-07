@@ -27,6 +27,11 @@ Name[uk]=Wojciech Jarosz
 Name[x-test]=xxWojciech Jaroszxx
 Url=mailto:wjarosz@ucsd.edu
 
+[X-HTMLExport Preview]
+Name=Elegant
+Name[x-test]=xxElegantxx
+Url=preview.png
+
 [X-HTMLExport Parameter author]
 Name=Author
 Name[ca]=Autor
@@ -127,7 +132,6 @@ Value_1=dark.css
 Caption_1=Dark
 Value_2=custom
 Caption_2=Custom
-
 
 [X-HTMLExport Parameter bgColor]
 Name=Custom Background Color
