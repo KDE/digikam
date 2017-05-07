@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_ELEMENT_H
-#define IMAGE_ELEMENT_H
+#ifndef GALLERY_ELEMENT_H
+#define GALLERY_ELEMENT_H
 
 // Qt includes
 
@@ -41,15 +41,15 @@ class XMLWriter;
 
 /**
  * This class stores all the necessary information to produce an XML
- * description of an image
+ * description of a gallery element.
  */
-class ImageElement
+class GalleryElement
 {
 public:
 
-    explicit ImageElement(const DInfoInterface::DInfoMap& info);
-    ImageElement();
-    ~ImageElement();
+    explicit GalleryElement(const DInfoInterface::DInfoMap& info);
+    GalleryElement();
+    ~GalleryElement();
 
     void appendToXML(XMLWriter& xmlWriter, bool copyOriginalImage) const;
 
@@ -98,4 +98,4 @@ public:
 
 } // namespace Digikam
 
-#endif // IMAGE_ELEMENT_H
+#endif // GALLERY_ELEMENT_H

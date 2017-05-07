@@ -33,18 +33,18 @@ namespace Digikam
 
 class GalleryInfo;
 class GalleryGenerator;
-class ImageElement;
+class GalleryElement;
 
 /**
  * This functor generates images (full and thumbnail) for an url and returns an
- * ImageElement initialized to fill the xml writer.
+ * GalleryElement initialized to fill the xml writer.
  * It is used as an argument to QtConcurrent::mapped().
  */
 class ImageGenerationFunctor
 {
 public:
 
-    typedef ImageElement result_type;
+    typedef GalleryElement result_type;
 
 public:
 
@@ -53,7 +53,7 @@ public:
                                     const QString& destDir);
     ~ImageGenerationFunctor();
 
-    void operator()(ImageElement& element);
+    void operator()(GalleryElement& element);
 
 private:
 

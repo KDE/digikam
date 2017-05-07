@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imageelement.h"
+#include "galleryelement.h"
 
 // Local includes
 
@@ -30,7 +30,7 @@
 namespace Digikam
 {
 
-ImageElement::ImageElement(const DInfoInterface::DInfoMap& info)
+GalleryElement::GalleryElement(const DInfoInterface::DInfoMap& info)
     : mValid(false)
 {
     DItemInfo item(info);
@@ -40,16 +40,16 @@ ImageElement::ImageElement(const DInfoInterface::DInfoMap& info)
     mTime        = item.dateTime();
 }
 
-ImageElement::ImageElement()
+GalleryElement::GalleryElement()
     : mValid(false)
 {
 }
 
-ImageElement::~ImageElement()
+GalleryElement::~GalleryElement()
 {
 }
 
-void ImageElement::appendToXML(XMLWriter& xmlWriter, bool copyOriginalImage) const
+void GalleryElement::appendToXML(XMLWriter& xmlWriter, bool copyOriginalImage) const
 {
     if (!mValid)
     {
@@ -95,7 +95,7 @@ void ImageElement::appendToXML(XMLWriter& xmlWriter, bool copyOriginalImage) con
     xmlWriter.writeElement("exifgpsaltitude",            mExifGPSAltitude);
 }
 
-void ImageElement::appendImageElementToXML(XMLWriter& xmlWriter,
+void GalleryElement::appendImageElementToXML(XMLWriter& xmlWriter,
                                            const QString& elementName,
                                            const QString& fileName,
                                            const QSize& size) const

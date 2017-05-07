@@ -41,7 +41,7 @@
 #include "digikam_debug.h"
 #include "galleryinfo.h"
 #include "gallerygenerator.h"
-#include "imageelement.h"
+#include "galleryelement.h"
 #include "metaengine_rotation.h"
 #include "drawdecoder.h"
 #include "rawinfo.h"
@@ -94,7 +94,7 @@ ImageGenerationFunctor::~ImageGenerationFunctor()
 {
 }
 
-void ImageGenerationFunctor::operator()(ImageElement& element)
+void ImageGenerationFunctor::operator()(GalleryElement& element)
 {
     // Load image
     QString    path = element.mPath;

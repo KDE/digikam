@@ -51,7 +51,7 @@
 
 #include "digikam_debug.h"
 #include "abstractthemeparameter.h"
-#include "imageelement.h"
+#include "galleryelement.h"
 #include "imagegenerationfunctor.h"
 #include "galleryinfo.h"
 #include "gallerytheme.h"
@@ -248,7 +248,7 @@ public:
             return false;
         }
 
-        QList<ImageElement> imageElementList;
+        QList<GalleryElement> imageElementList;
 
         Q_FOREACH(const QUrl& url, imageList)
         {
@@ -264,7 +264,7 @@ public:
             if (mInfo->mIface)
                 info = mInfo->mIface->itemInfo(url);
 
-            ImageElement element          = ImageElement(info);
+            GalleryElement element          = GalleryElement(info);
             element.mPath                 = remoteUrlHash.value(url, url.toLocalFile());
             imageElementList << element;
         }
@@ -294,7 +294,7 @@ public:
         }
 
         // Generate xml
-        Q_FOREACH(const ImageElement& element, imageElementList)
+        Q_FOREACH(const GalleryElement& element, imageElementList)
         {
             element.appendToXML(xmlWriter, mInfo->copyOriginalImage());
         }

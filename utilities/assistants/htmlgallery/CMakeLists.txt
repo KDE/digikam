@@ -44,11 +44,11 @@ set(libhtmlgallery_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlimagesettingspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlparameterspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/htmlwizard.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/generator/imageelement.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/uniquenamehelper.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/imagegenerationfunctor.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/xmlutils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryconfig.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryelement.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/gallerytheme.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/galleryinfo.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/generator/gallerygenerator.cpp
