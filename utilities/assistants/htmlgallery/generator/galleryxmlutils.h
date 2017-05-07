@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef XML_UTILS_H
-#define XML_UTILS_H
+#ifndef GALLERY_XML_UTILS_H
+#define GALLERY_XML_UTILS_H
 
 // Qt includes
 
@@ -139,4 +139,4 @@ private:
 
 } // namespace Digikam
 
-#endif // XML_UTILS_H
+#endif // GALLERY_XML_UTILS_H

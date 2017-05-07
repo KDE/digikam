@@ -55,7 +55,7 @@
 #include "galleryelementfunctor.h"
 #include "galleryinfo.h"
 #include "gallerytheme.h"
-#include "xmlutils.h"
+#include "galleryxmlutils.h"
 #include "htmlwizard.h"
 #include "iojob.h"
 #include "dprogresswdg.h"

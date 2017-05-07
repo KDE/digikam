@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "xmlutils.h"
+#include "galleryxmlutils.h"
 
 namespace Digikam
 {

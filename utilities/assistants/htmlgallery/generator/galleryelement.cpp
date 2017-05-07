@@ -21,11 +21,10 @@
  *
  * ============================================================ */
 
-#include "galleryelement.h"
-
 // Local includes
 
-#include "xmlutils.h"
+#include "galleryelement.h"
+#include "galleryxmlutils.h"
 
 namespace Digikam
 {
