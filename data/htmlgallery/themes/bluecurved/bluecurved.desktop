@@ -1,13 +1,41 @@
 [Desktop Entry]
 Name=Blue curves
+Name[ca]=Corbes blaves
+Name[es]=Curvas azules
+Name[nl]=Blauwe krommen
+Name[pt]=Curvas azuis
+Name[sv]=Blå kurvor
+Name[uk]=Сині криві
+Name[x-test]=xxBlue curvesxx
 Comment=A stylised theme
+Comment[ca]=Un tema estilitzat
+Comment[es]=Un tema estilizado
+Comment[nl]=Een gestileerd thema
+Comment[pt]=Um tema com estilo
+Comment[sv]=Ett stiliserat tema
+Comment[uk]=Стилізована тема
+Comment[x-test]=xxA stylised themexx
 
 [X-HTMLExport Preview]
 Name=Blue curves
+Name[ca]=Corbes blaves
+Name[es]=Curvas azules
+Name[nl]=Blauwe krommen
+Name[pt]=Curvas azuis
+Name[sv]=Blå kurvor
+Name[uk]=Сині криві
+Name[x-test]=xxBlue curvesxx
 Url=preview.png
 
 [X-HTMLExport Author]
 Name=Vincent Deroo Blanquart
+Name[ca]=Vincent Deroo Blanquart
+Name[es]=Vincent Deroo Blanquart
+Name[nl]=Vincent Deroo Blanquart
+Name[pt]=Vincent Deroo Blanquart
+Name[sv]=Vincent Deroo Blanquart
+Name[uk]=Vincent Deroo Blanquart
+Name[x-test]=xxVincent Deroo Blanquartxx
 Url=mailto:vincent.deroo@free.fr
 
 [X-HTMLExport Parameter TitleOfPage]

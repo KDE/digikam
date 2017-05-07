@@ -2,20 +2,55 @@
 Version=0.1
 Encoding=UTF-8
 Name=Simple Rounded
+Name[ca]=Arrodonit senzill
+Name[es]=Redondeado sencillo
+Name[nl]=Eenvoudig afgerond
+Name[pt]=Arredondado Simples
+Name[sv]=Enkelt avrundat
+Name[uk]=Прості заокруглені
+Name[x-test]=xxSimple Roundedxx
 Comment=A theme with rounded corners and page support on big galeries
+Comment[ca]=Un tema amb cantonades arrodonides que admet pàgines en galeries grans
+Comment[es]=Un tema con esquinas redondeadas y uso de páginas para galerías de gran tamaño
+Comment[nl]=Een thema met afgeronde hoeken en ondersteuning op grote galerijen met pagina's
+Comment[pt]=Um tema com cantos arredondados e suporte para páginas nas galerias grandes
+Comment[sv]=Ett tema med avrundade hörn och stöd för sidor med stora gallerier
+Comment[uk]=Тема із заокругленими кутами і підтримкою сторінки у великих галереях
+Comment[x-test]=xxA theme with rounded corners and page support on big galeriesxx
 
 [X-HTMLExport Author]
 Name=Franz Dietrich
+Name[ca]=Franz Dietrich
+Name[es]=Franz Dietrich
+Name[nl]=Franz Dietrich
+Name[pt]=Franz Dietrich
+Name[sv]=Franz Dietrich
+Name[uk]=Franz Dietrich
+Name[x-test]=xxFranz Dietrichxx
 Url=mailto:enaut.w@googlemail.com
 
 [X-HTMLExport Parameter titlebar]
 Name=Title Bar
+Name[ca]=Barra de títol
+Name[es]=Barra de título
+Name[nl]=Titelbalk
+Name[pt]=Barra de Título
+Name[sv]=Namnlist
+Name[uk]=Смужка заголовка
+Name[x-test]=xxTitle Barxx
 Type=string
 Default=Gallery
 Default[de]=Galerie
 
 [X-HTMLExport Parameter thumbnailsPerPage]
 Name=Images per page
+Name[ca]=Imatges per pàgina
+Name[es]=Imágenes por página
+Name[nl]=Afbeeldingen per pagina
+Name[pt]=Imagens por página
+Name[sv]=Bilder per sida
+Name[uk]=Кількість зображень на сторінку
+Name[x-test]=xxImages per pagexx
 Type=int
 Default= 15
 Min=1
@@ -23,46 +58,109 @@ Max=75
 
 [X-HTMLExport Parameter homepage]
 Name=Name of the Homepage
+Name[ca]=Nom de la pàgina web
+Name[es]=Nombre de la página web
+Name[nl]=Naam van de homepagina
+Name[pt]=Nome da Página Web
+Name[sv]=Hemsidans namn
+Name[uk]=Назва домашньої сторінки
+Name[x-test]=xxName of the Homepagexx
 Type=string
 Default=
 Default[de]=
 
 [X-HTMLExport Parameter homepageUrl]
 Name=Url to the Homepage
+Name[ca]=URL de la pàgina web
+Name[es]=URL de la página web
+Name[nl]=URL van de homepagina
+Name[pt]=URL da Página Web
+Name[sv]=Hemsidans webbadress
+Name[uk]=Адреса домашньої сторінки
+Name[x-test]=xxUrl to the Homepagexx
 Type=string
 Default=
 Default[de]=
 
 [X-HTMLExport Parameter background]
 Name=Background
+Name[ca]=Fons
+Name[es]=Fondo
+Name[nl]=Achtergrond
+Name[pt]=Fundo
+Name[sv]=Bakgrund
+Name[uk]=Тло
+Name[x-test]=xxBackgroundxx
 Type=color
 Default=#3e674c
 
 [X-HTMLExport Parameter content-bgc]
 Name=Content background
+Name[ca]=Fons del contingut
+Name[es]=Fondo del contenido
+Name[nl]=Achtergrond van inhoud
+Name[pt]=Fundo do conteúdo
+Name[sv]=Bakgrundens innehåll
+Name[uk]=Тло вмісту
+Name[x-test]=xxContent backgroundxx
 Type=color
 Default=#d8ffd3
 
 [X-HTMLExport Parameter listBackground]
 Name=Icon background
+Name[ca]=Fons de les icones
+Name[es]=Fondo de los iconos
+Name[nl]=Achtergrond van pictogrammen
+Name[pt]=Fundo dos ícones
+Name[sv]=Ikonbakgrund
+Name[uk]=Тло піктограм
+Name[x-test]=xxIcon backgroundxx
 Type=color
 Default=#78ca97
 
 [X-HTMLExport Parameter navigationColor]
 Name= Background of the navigation
+Name[ca]=Fons de la navegació
+Name[es]=Fondo de la navegación
+Name[nl]= Achtergrond van de navigatie
+Name[pt]=Fundo da navegação
+Name[sv]=Navigeringens bakgrund
+Name[uk]= Тло панелі навігації
+Name[x-test]=xx Background of the navigationxx
 Type=color
 Default=#a7dccf
 
 [X-HTMLExport Parameter thumbBorderColor]
 Name=Thumbnail border
+Name[ca]=Vora de les miniatures
+Name[es]=Borde de las miniaturas
+Name[nl]=Rand van de miniaturen
+Name[pt]=Contorno das miniaturas
+Name[sv]=Miniatyrbildskant
+Name[uk]=Рамка мініатюр
+Name[x-test]=xxThumbnail borderxx
 Type=color
 Default=#41696d
 
 [X-HTMLExport Parameter urlColor]
 Name=Links
+Name[ca]=Enllaços
+Name[es]=Enlaces
+Name[nl]=Koppelingen
+Name[pt]=Ligações
+Name[sv]=Länkar
+Name[uk]=Посилання
+Name[x-test]=xxLinksxx
 Type=color
 Default=#519e64
 
 [X-HTMLExport Preview]
 Name=Simple Rounded Shapes
+Name[ca]=Formes arrodonides senzilles
+Name[es]=Formas redondeadas sencillas
+Name[nl]=Eenvoudig afgeronde vormen
+Name[pt]=Formas Arredondadas Simples
+Name[sv]=Enkla avrundade former
+Name[uk]=Прості заокруглені форми
+Name[x-test]=xxSimple Rounded Shapesxx
 Url=preview.png

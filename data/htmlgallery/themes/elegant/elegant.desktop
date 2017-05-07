@@ -1,23 +1,65 @@
 [Desktop Entry]
 Name=Elegant
+Name[ca]=Elegant
+Name[es]=Elegante
+Name[nl]=Elegant
+Name[pt]=Elegante
+Name[sv]=Elegant
+Name[uk]=Елегантний
+Name[x-test]=xxElegantxx
 Comment=Based on the "Simple" theme. Uses Lytebox by Markus F. Hay to display the images in a slideshow.
+Comment[ca]=Basat en el tema «Senzill». Usa el Lytebox del Markus F. Hay per mostrar les imatges en un passi de dispositives.
+Comment[es]=Basado en el tema «Sencillo». Usa Lytebox, de Markus F. Hay, para mostrar una presentación con las imágenes.
+Comment[nl]=Gebaseerd op het thema "Eenvoudig". Gebruikt Lytebox door Markus F. Hay om de afbeeldingen in een diashow te tonen.
+Comment[pt]=Baseado no tema "Simples". Usa o Lytebox de Markus F. Hay para mostrar as imagens numa apresentação.
+Comment[sv]=Baserat på temat "Enkelt". Använder LyteBox av Markus F. Hay för att visa bilderna i ett bildspel.
+Comment[uk]=Заснована на темі «Проста». Використовує Lytebox, автором якого є Markus F. Hay для показу слайдів із зображень.
+Comment[x-test]=xxBased on the "Simple" theme. Uses Lytebox by Markus F. Hay to display the images in a slideshow.xx
 
 [X-HTMLExport Author]
 Name=Wojciech Jarosz
+Name[ca]=Wojciech Jarosz
+Name[es]=Wojciech Jarosz
+Name[nl]=Wojciech Jarosz
+Name[pt]=Wojciech Jarosz
+Name[sv]=Wojciech Jarosz
+Name[uk]=Wojciech Jarosz
+Name[x-test]=xxWojciech Jaroszxx
 Url=mailto:wjarosz@ucsd.edu
 
 [X-HTMLExport Parameter author]
 Name=Author
+Name[ca]=Autor
+Name[es]=Autor
+Name[nl]=Auteur
+Name[pt]=Autor
+Name[sv]=Upphovsman
+Name[uk]=Автор
+Name[x-test]=xxAuthorxx
 Type=string
 Default=
 
 [X-HTMLExport Parameter pageSize]
 Name=Images per page
+Name[ca]=Imatges per pàgina
+Name[es]=Imágenes por página
+Name[nl]=Afbeeldingen per pagina
+Name[pt]=Imagens por página
+Name[sv]=Bilder per sida
+Name[uk]=Кількість зображень на сторінку
+Name[x-test]=xxImages per pagexx
 Type=int
 Default=20
 
 [X-HTMLExport Parameter paginationLocation]
 Name=Page links location
+Name[ca]=La pàgina enllaça la ubicació
+Name[es]=Ubicación de los enlaces de páginas
+Name[nl]=Locatie van paginakoppelingen
+Name[pt]=Localização das ligações à página
+Name[sv]=Plats för sidlänkar
+Name[uk]=Розташування посилань на сторінці
+Name[x-test]=xxPage links locationxx
 Type=list
 Default=top
 Value_0=bottom
@@ -29,6 +71,13 @@ Caption_2=Both
 
 [X-HTMLExport Parameter useLyteBox]
 Name=Use LyteBox
+Name[ca]=Usa el LyteBox
+Name[es]=Usar LyteBox
+Name[nl]=LyteBox gebruiken
+Name[pt]=Usar o LyteBox
+Name[sv]=Använd LyteBox
+Name[uk]=Використання LyteBox
+Name[x-test]=xxUse LyteBoxxx
 Type=list
 Default=true
 Value_0=true
@@ -38,6 +87,13 @@ Caption_1=No
 
 [X-HTMLExport Parameter slideInterval]
 Name=LyteBox Slideshow Interval
+Name[ca]=Interval entre diapositives del LyteBox
+Name[es]=Intervalo de presentación de LyteBox
+Name[nl]=Interval LyteBox diavoorstelling
+Name[pt]=Intervalo da Apresentação do LyteBox
+Name[sv]=Intervall för LyteBox-bildspel
+Name[uk]=Інтервал показу слайдів LyteBox
+Name[x-test]=xxLyteBox Slideshow Intervalxx
 Type=list
 Default=6000
 Value_0=2000
@@ -75,45 +131,108 @@ Caption_2=Custom
 
 [X-HTMLExport Parameter bgColor]
 Name=Custom Background Color
+Name[ca]=Color personalitzat de fons
+Name[es]=Color del fondo personalizado
+Name[nl]=Aangepaste achtergrondkleur
+Name[pt]=Cor Personalizada de Fundo
+Name[sv]=Egen bakgrundsfärg
+Name[uk]=Нетиповий колір тла
+Name[x-test]=xxCustom Background Colorxx
 Type=color
 Default=#000000
 
 [X-HTMLExport Parameter fgColor]
 Name=Custom Foreground Color
+Name[ca]=Color personalitzat de primer pla
+Name[es]=Color del primer plano personalizado
+Name[nl]=Aangepaste voorgrondkleur
+Name[pt]=Cor Personalizada Principal
+Name[sv]=Egen förgrundsfärg
+Name[uk]=Нетиповий колір тексту
+Name[x-test]=xxCustom Foreground Colorxx
 Type=color
 Default=#888888
 
 [X-HTMLExport Parameter linkColor]
 Name=Custom Link Color
+Name[ca]=Color personalitzat d'enllaç
+Name[es]=Color de enlaces personalizado
+Name[nl]=Aangepaste kleur koppeling
+Name[pt]=Cor Personalizada da Ligação
+Name[sv]=Egen länkfärg
+Name[uk]=Нетиповий колір посилань
+Name[x-test]=xxCustom Link Colorxx
 Type=color
 Default=#aaaaaa
 
 [X-HTMLExport Parameter hoverLinkColor]
 Name=Custom Hover Link Color
+Name[ca]=Color personalitzat d'enllaç en passar-hi per sobre
+Name[es]=Color de los enlaces activos personalizado
+Name[nl]=Aangepaste kleur van koppeling bij erboven zweven
+Name[pt]=Cor Personalizada da Ligação à Passagem
+Name[sv]=Egen håll över länkfärg
+Name[uk]=Нетиповий колір наведення посилань
+Name[x-test]=xxCustom Hover Link Colorxx
 Type=color
 Default=#ffffff
 
 [X-HTMLExport Parameter visitedLinkColor]
 Name=Custom Visited Link Color
+Name[ca]=Color personalitzat d'enllaç visitat
+Name[es]=Color de los enlaces visitados personalizado
+Name[nl]=Aangepaste kleur bezochte koppeling
+Name[pt]=Cor Personalizada da Ligação Visitada
+Name[sv]=Egen besökt länkfärg
+Name[uk]=Нетиповий колір відвіданих посилань
+Name[x-test]=xxCustom Visited Link Colorxx
 Type=color
 Default=#aaaaaa
 
 [X-HTMLExport Parameter frameColor]
 Name=Custom Frame Color
+Name[ca]=Color personalitzat de marc
+Name[es]=Color de marco personalizado
+Name[nl]=Aangepaste framekleur
+Name[pt]=Cor Personalizada da Moldura
+Name[sv]=Egen ramfärg
+Name[uk]=Нетиповий колір рамки
+Name[x-test]=xxCustom Frame Colorxx
 Type=color
 Default=#222222
 
 [X-HTMLExport Parameter frameBorderColor]
 Name=Custom Frame Border Color
+Name[ca]=Color personalitzat de la vora del marc
+Name[es]=Color de borde del marco personalizado
+Name[nl]=Aangepaste framerandkleur
+Name[pt]=Cor Personalizada do Contorno da Moldura
+Name[sv]=Egen ramkantsfärg
+Name[uk]=Нетиповий колір краю рамки
+Name[x-test]=xxCustom Frame Border Colorxx
 Type=color
 Default=#444444
 
 [X-HTMLExport Parameter selectedFrameColor]
 Name=Custom Selected Frame Color
+Name[ca]=Color personalitzat de marc seleccionat
+Name[es]=Color de marco seleccionado personalizado
+Name[nl]=Aangepaste kleur geselecteerd frame
+Name[pt]=Cor Personalizada da Moldura Seleccionada
+Name[sv]=Egen markerad ramfärg
+Name[uk]=Нетиповий вибраний колір рамки
+Name[x-test]=xxCustom Selected Frame Colorxx
 Type=color
 Default=#555555
 
 [X-HTMLExport Parameter selectedFrameBorderColor]
 Name=Custom Selected Frame Border Color
+Name[ca]=Color personalitzat de la vora del marc seleccionat
+Name[es]=Color de borde del marco seleccionado personalizado
+Name[nl]=Aangepaste kleur rand geselecteerd frame
+Name[pt]=Cor Personalizada do Contorno da Moldura Seleccionada
+Name[sv]=Egen markerad ramkantsfärg
+Name[uk]=Нетиповий вибраний колір краю рамки
+Name[x-test]=xxCustom Selected Frame Border Colorxx
 Type=color
 Default=#dddddd
