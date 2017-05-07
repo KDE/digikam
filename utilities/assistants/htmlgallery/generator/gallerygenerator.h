@@ -34,7 +34,7 @@ namespace Digikam
 class DHistoryView;
 class DProgressWdg;
 class GalleryInfo;
-class ImageGenerationFunctor;
+class GalleryElementFunctor;
 
 /**
  * This class is responsible for generating the HTML and scaling the images
@@ -62,8 +62,8 @@ public:
 Q_SIGNALS:
 
     /**
-     * This signal is emitted from ImageGenerationFunctor. It uses a
-     * QueuedConnection to switch between the ImageGenerationFunctor thread and
+     * This signal is emitted from GalleryElementFunctor. It uses a
+     * QueuedConnection to switch between the GalleryElementFunctor thread and
      * the gui thread.
      */
     void logWarningRequested(const QString&);
@@ -79,7 +79,7 @@ private:
     Private* const d;
 
     friend class Private;
-    friend class ImageGenerationFunctor;
+    friend class GalleryElementFunctor;
 };
 
 } // namespace Digikam

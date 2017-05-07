@@ -52,7 +52,7 @@
 #include "digikam_debug.h"
 #include "abstractthemeparameter.h"
 #include "galleryelement.h"
-#include "imagegenerationfunctor.h"
+#include "galleryelementfunctor.h"
 #include "galleryinfo.h"
 #include "gallerytheme.h"
 #include "xmlutils.h"
@@ -271,7 +271,7 @@ public:
 
         // Generate images
         logInfo(i18n("Generating files for \"%1\"", title));
-        ImageGenerationFunctor functor(that, mInfo, destDir);
+        GalleryElementFunctor functor(that, mInfo, destDir);
         QFuture<void> future = QtConcurrent::map(imageElementList, functor);
         QFutureWatcher<void> watcher;
         watcher.setFuture(future);

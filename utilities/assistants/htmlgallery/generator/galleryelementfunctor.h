@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGE_GENERATION_FUNCTOR_H
-#define IMAGE_GENERATION_FUNCTOR_H
+#ifndef GALLERY_ELEMENT_FUNCTOR_H
+#define GALLERY_ELEMENT_FUNCTOR_H
 
 // Local includes
 
@@ -40,7 +40,7 @@ class GalleryElement;
  * GalleryElement initialized to fill the xml writer.
  * It is used as an argument to QtConcurrent::mapped().
  */
-class ImageGenerationFunctor
+class GalleryElementFunctor
 {
 public:
 
@@ -48,10 +48,10 @@ public:
 
 public:
 
-    explicit ImageGenerationFunctor(GalleryGenerator* const generator,
+    explicit GalleryElementFunctor(GalleryGenerator* const generator,
                                     GalleryInfo* const info,
                                     const QString& destDir);
-    ~ImageGenerationFunctor();
+    ~GalleryElementFunctor();
 
     void operator()(GalleryElement& element);
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGE_GENERATION_FUNCTOR_H
+#endif // GALLERY_ELEMENT_FUNCTOR_H

@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "imagegenerationfunctor.h"
+#include "galleryelementfunctor.h"
 
 // Qt includes
 
@@ -81,20 +81,20 @@ static QImage generateThumbnail(const QImage& fullImage, int size, bool square)
     return image;
 }
 
-ImageGenerationFunctor::ImageGenerationFunctor(GalleryGenerator* const generator,
-                                               GalleryInfo* const info,
-                                               const QString& destDir)
+GalleryElementFunctor::GalleryElementFunctor(GalleryGenerator* const generator,
+                                             GalleryInfo* const info,
+                                             const QString& destDir)
     : mGenerator(generator),
       mInfo(info),
       mDestDir(destDir)
 {
 }
 
-ImageGenerationFunctor::~ImageGenerationFunctor()
+GalleryElementFunctor::~GalleryElementFunctor()
 {
 }
 
-void ImageGenerationFunctor::operator()(GalleryElement& element)
+void GalleryElementFunctor::operator()(GalleryElement& element)
 {
     // Load image
     QString    path = element.mPath;
@@ -440,7 +440,7 @@ void ImageGenerationFunctor::operator()(GalleryElement& element)
         element.mExifGPSLongitude = unavailable;
 }
 
-bool ImageGenerationFunctor::writeDataToFile(const QByteArray& data, const QString& destPath)
+bool GalleryElementFunctor::writeDataToFile(const QByteArray& data, const QString& destPath)
 {
     QFile destFile(destPath);
 
@@ -459,7 +459,7 @@ bool ImageGenerationFunctor::writeDataToFile(const QByteArray& data, const QStri
     return true;
 }
 
-void ImageGenerationFunctor::emitWarning(const QString& message)
+void GalleryElementFunctor::emitWarning(const QString& message)
 {
     emit (mGenerator->logWarningRequested(message));
 }
