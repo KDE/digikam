@@ -26,18 +26,18 @@
 // Local includes
 
 #include "xmlutils.h"
-#include "imageinfo.h"
 
 namespace Digikam
 {
 
-ImageElement::ImageElement(const ImageInfo& info)
-    : mValid(false),
-      mTitle(info.name()),
-      mDescription(info.comment()),
-      mOrientation((MetaEngine::ImageOrientation)info.orientation()),
-      mTime(info.dateTime())
+ImageElement::ImageElement(const DInfoInterface::DInfoMap& info)
+    : mValid(false)
 {
+    DItemInfo item(info);
+    mTitle       = item.name();
+    mDescription = item.comment();
+    mOrientation = (MetaEngine::ImageOrientation)(item.orientation());
+    mTime        = item.dateTime();
 }
 
 ImageElement::ImageElement()

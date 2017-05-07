@@ -34,18 +34,23 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DBInfoIface : public DInfoInterface
 {
+    Q_OBJECT
 
 public:
 
     explicit DBInfoIface(QObject* const parent);
     ~DBInfoIface();
 
-    QList<QUrl> currentSelectedItems() const;
-    QList<QUrl> currentAlbumItems()    const;
-    QList<QUrl> allAlbumItems()        const;
+    QList<QUrl> currentSelectedItems()           const;
+    QList<QUrl> currentAlbumItems()              const;
+    QList<QUrl> allAlbumItems()                  const;
 
-    DInfoMap albumInfo(const QUrl&)    const;
-    DInfoMap itemInfo(const QUrl&)     const;
+    DInfoMap albumInfo(int)                      const;
+    DInfoMap itemInfo(const QUrl&)               const;
+    QList<QUrl> albumsItems(const DAlbumIDs&)    const;
+
+    QWidget* albumChooser(QWidget* const parent) const;
+    DAlbumIDs albumChooserItems()                const;
 
 private:
 

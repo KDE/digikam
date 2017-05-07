@@ -50,12 +50,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "coredb.h"
-#include "applicationsettings.h"
-#include "digikamapp.h"
-#include "digikamview.h"
-#include "imagesortsettings.h"
-#include "coredbnamefilter.h"
 #include "abstractthemeparameter.h"
 #include "imageelement.h"
 #include "imagegenerationfunctor.h"
@@ -66,8 +60,6 @@
 #include "iojob.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
-#include "album.h"
-#include "imageinfo.h"
 
 namespace Digikam
 {
@@ -186,13 +178,19 @@ public:
         {
             // Loop over albums selection
 
-            AlbumList::ConstIterator collectionIt  = mInfo->mCollectionList.constBegin();
-            AlbumList::ConstIterator collectionEnd = mInfo->mCollectionList.constEnd();
+            DInfoInterface::DAlbumIDs::ConstIterator albumIt  = mInfo->mAlbumList.constBegin();
+            DInfoInterface::DAlbumIDs::ConstIterator albumEnd = mInfo->mAlbumList.constEnd();
 
-            for (; collectionIt != collectionEnd ; ++collectionIt)
+            for (; albumIt != albumEnd ; ++albumIt)
             {
-                Album* const collection    = *collectionIt;
-                QString title              = i18n("Selected Images");
+                int id                     = *albumIt;
+                DInfoInterface::DInfoMap   inf;
+
+                if (mInfo->mIface)
+                    inf = mInfo->mIface->albumInfo(id);
+
+                DAlbumInfo anf(inf);
+                QString title              = anf.title();
                 QString collectionFileName = webifyFileName(title);
                 QString destDir            = baseDestDir + QLatin1Char('/') + collectionFileName;
 
@@ -204,47 +202,14 @@ public:
                 XMLElement collectionX(xmlWriter,  QLatin1String("collection"));
                 xmlWriter.writeElement("name",     title);
                 xmlWriter.writeElement("fileName", collectionFileName);
-
-                if (collection->type() != Album::PHYSICAL)
-                {
-                    xmlWriter.writeElement("comment", QString());
-                }
+                xmlWriter.writeElement("comment",  anf.caption());
 
                 // Gather image element list
                 QList<QUrl> imageList;
 
-                switch (collection->type())
+                if (mInfo->mIface)
                 {
-                    case Album::PHYSICAL:
-                    {
-                        PAlbum* const p = dynamic_cast<PAlbum*>(collection);
-
-                        if (p)
-                        {
-                            xmlWriter.writeElement("comment", p->caption());
-                            imageList = imagesFromPAlbum(p);
-                        }
-
-                        break;
-                    }
-
-                    case Album::TAG:
-                    {
-                        TAlbum* const p = dynamic_cast<TAlbum*>(collection);
-
-                        if (p)
-                        {
-                            imageList = imagesFromTAlbum(p);
-                        }
-
-                        break;
-                    }
-
-                    default:
-                    {
-                        imageList = DigikamApp::instance()->view()->allUrls();
-                        break;
-                    }
+                    imageList = mInfo->mIface->albumsItems(DInfoInterface::DAlbumIDs() << id);
                 }
 
                 if (!processImages(xmlWriter, imageList, title, destDir))
@@ -294,9 +259,13 @@ public:
                 continue;
             }
 
-            ImageInfo info       = ImageInfo::fromUrl(url);
-            ImageElement element = ImageElement(info);
-            element.mPath        = remoteUrlHash.value(url, url.toLocalFile());
+            DInfoInterface::DInfoMap info;
+
+            if (mInfo->mIface)
+                info = mInfo->mIface->itemInfo(url);
+
+            ImageElement element          = ImageElement(info);
+            element.mPath                 = remoteUrlHash.value(url, url.toLocalFile());
             imageElementList << element;
         }
 
@@ -598,69 +567,6 @@ public:
     {
         mPview->addEntry(msg, DHistoryView::WarningEntry);
         mWarnings = true;
-    }
-
-    /** get the images from the Physical album in database and return the items found.
-     */
-    QList<QUrl> imagesFromPAlbum(PAlbum* const album) const
-    {
-        // get the images from the database and return the items found
-
-        CoreDB::ItemSortOrder sortOrder = CoreDB::NoItemSorting;
-
-        switch (ApplicationSettings::instance()->getImageSortOrder())
-        {
-            default:
-            case ImageSortSettings::SortByFileName:
-                sortOrder = CoreDB::ByItemName;
-                break;
-
-            case ImageSortSettings::SortByFilePath:
-                sortOrder = CoreDB::ByItemPath;
-                break;
-
-            case ImageSortSettings::SortByCreationDate:
-                sortOrder = CoreDB::ByItemDate;
-                break;
-
-            case ImageSortSettings::SortByRating:
-                sortOrder = CoreDB::ByItemRating;
-                break;
-                // ByISize not supported
-        }
-
-        QStringList list = CoreDbAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
-        QList<QUrl> urlList;
-        CoreDbNameFilter nameFilter(ApplicationSettings::instance()->getAllFileFilter());
-
-        for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-        {
-            if (nameFilter.matches(*it))
-            {
-                urlList << QUrl::fromLocalFile(*it);
-            }
-        }
-
-        return urlList;
-    }
-
-    /** get the images from the Tags album in database and return the items found.
-     */
-    QList<QUrl> imagesFromTAlbum(TAlbum* const album) const
-    {
-        QStringList list = CoreDbAccess().db()->getItemURLsInTag(album->id());
-        QList<QUrl> urlList;
-        CoreDbNameFilter nameFilter(ApplicationSettings::instance()->getAllFileFilter());
-
-        for (QStringList::const_iterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-        {
-            if (nameFilter.matches(*it))
-            {
-                urlList << QUrl::fromLocalFile(*it);
-            }
-        }
-
-        return urlList;
     }
 };
 

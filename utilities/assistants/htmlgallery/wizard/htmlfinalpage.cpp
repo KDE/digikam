@@ -46,7 +46,6 @@
 #include "gallerygenerator.h"
 #include "dwidgetutils.h"
 #include "digikam_debug.h"
-#include "coredburl.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
 
@@ -121,16 +120,16 @@ void HTMLFinalPage::slotProcess()
 
     if (info->mGetOption == GalleryInfo::ALBUMS)
     {
-        d->progressView->addEntry(i18n("%1 albums to process:", info->mCollectionList.count()),
-                                DHistoryView::ProgressEntry);
+        if (!info->mIface)
+            return;
 
-        foreach(Album* const album, info->mCollectionList)
+        d->progressView->addEntry(i18n("%1 albums to process:", info->mAlbumList.count()),
+                                  DHistoryView::ProgressEntry);
+
+        foreach(QUrl url, info->mIface->albumsItems(info->mAlbumList))
         {
-            if (album)
-            {
-                d->progressView->addEntry(QDir::toNativeSeparators(album->databaseUrl().fileUrl().toLocalFile()),
-                                        DHistoryView::ProgressEntry);
-            }
+            d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
+                                      DHistoryView::ProgressEntry);
         }
     }
     else

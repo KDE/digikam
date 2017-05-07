@@ -32,11 +32,11 @@
 // Local includes
 
 #include "dmetadata.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
 
-class ImageInfo;
 class XMLWriter;
 
 /**
@@ -47,7 +47,7 @@ class ImageElement
 {
 public:
 
-    explicit ImageElement(const ImageInfo& info);
+    explicit ImageElement(const DInfoInterface::DInfoMap& info);
     ImageElement();
     ~ImageElement();
 

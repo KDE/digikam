@@ -32,7 +32,6 @@
 
 #include "htmlwizard.h"
 #include "galleryinfo.h"
-#include "albumselecttabs.h"
 #include "dimageslist.h"
 
 namespace Digikam
@@ -42,28 +41,43 @@ class HTMLSelectionPage::Private
 {
 public:
 
-    Private()
-      : collectionSelector(0),
+    Private(QWizard* const dialog)
+      : albumSelector(0),
         imageList(0),
-        stack(0)
+        stack(0),
+        wizard(0),
+        info(0),
+        iface(0)
     {
+        wizard = dynamic_cast<HTMLWizard*>(dialog);
+
+        if (wizard)
+        {
+            info  = wizard->galleryInfo();
+            iface = info->mIface;
+        }
     }
 
-    AlbumSelectTabs* collectionSelector;
+    QWidget*         albumSelector;
     DImagesList*     imageList;
     QStackedWidget*  stack;
+    HTMLWizard*      wizard;
+    GalleryInfo*     info;
+    DInfoInterface*  iface;
 };
 
 HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
-      d(new Private)
+      d(new Private(dialog))
 {
     setObjectName(QLatin1String("AlbumSelectorPage"));
 
     d->stack              = new QStackedWidget(this);
 
-    d->collectionSelector = new AlbumSelectTabs(this);
-    d->stack->insertWidget(GalleryInfo::ALBUMS, d->collectionSelector);
+    d->albumSelector = d->iface ? d->iface->albumChooser(this)
+                                : new QWidget(this);
+
+    d->stack->insertWidget(GalleryInfo::ALBUMS, d->albumSelector);
 
     d->imageList          = new DImagesList(this);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
@@ -72,7 +86,7 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
     setPageWidget(d->stack);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
-    connect(d->collectionSelector, SIGNAL(signalAlbumSelectionChanged()),
+    connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
             this, SIGNAL(completeChanged()));
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),
@@ -86,39 +100,33 @@ HTMLSelectionPage::~HTMLSelectionPage()
 
 void HTMLSelectionPage::initializePage()
 {
-    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
-
-    if (wizard)
-    {
-        GalleryInfo* const info  = wizard->galleryInfo();
-        d->imageList->setIface(info->mIface);
-        d->imageList->loadImagesFromCurrentSelection();
-        d->stack->setCurrentIndex(info->mGetOption);
-    }
+    d->imageList->setIface(d->iface);
+    d->imageList->loadImagesFromCurrentSelection();
+    d->stack->setCurrentIndex(d->info->mGetOption);
 }
 
 bool HTMLSelectionPage::validatePage()
 {
-    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
-
-    if (!wizard)
-        return false;
-
-    GalleryInfo* const info  = wizard->galleryInfo();
-
     if (d->stack->currentIndex() == GalleryInfo::ALBUMS)
     {
-        if (d->collectionSelector->selectedAlbums().empty())
-            return false;
+        if (d->iface)
+        {
+            if (d->iface->albumChooserItems().empty())
+                return false;
 
-        info->mCollectionList = d->collectionSelector->selectedAlbums();
+            d->info->mAlbumList = d->iface->albumChooserItems();
+        }
+        else
+        {
+            return false;
+        }
     }
     else
     {
         if (d->imageList->imageUrls().empty())
             return false;
 
-        info->mImageList = d->imageList->imageUrls();
+        d->info->mImageList = d->imageList->imageUrls();
     }
 
     return true;
@@ -127,7 +135,12 @@ bool HTMLSelectionPage::validatePage()
 bool HTMLSelectionPage::isComplete() const
 {
     if (d->stack->currentIndex() == GalleryInfo::ALBUMS)
-        return (!d->collectionSelector->selectedAlbums().empty());
+    {
+        if (!d->iface)
+            return false;
+
+        return (!d->iface->albumChooserItems().empty());
+    }
 
     return (!d->imageList->imageUrls().empty());
 }

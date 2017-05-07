@@ -34,6 +34,8 @@
 #include <QVariant>
 #include <QUrl>
 #include <QList>
+#include <QDateTime>
+#include <QDate>
 
 // Local includes
 
@@ -44,29 +46,86 @@ namespace Digikam
 
 class DIGIKAM_EXPORT DInfoInterface : public QObject
 {
+    Q_OBJECT
 
 public:
 
     typedef QMap<QString, QVariant> DInfoMap;  // Map of properties name and value.
-    typedef QList<int>              DAlbumLst; // List of Album ids.
-
+    typedef QList<int>              DAlbumIDs; // List of Album ids.
 
 public:
 
     explicit DInfoInterface(QObject* const parent);
     ~DInfoInterface();
 
-    virtual QList<QUrl> currentSelectedItems() const;
-    virtual QList<QUrl> currentAlbumItems()    const;
-    virtual QList<QUrl> allAlbumItems()        const;
+public:
 
-    virtual int currentAlbum()                 const;
-    virtual QList<QUrl> albumItems(int)        const;
+    // Low level items and albums methods
 
-    virtual DInfoMap albumInfo(const QUrl&)    const;
-    virtual DInfoMap itemInfo(const QUrl&)     const;
+    virtual QList<QUrl> currentSelectedItems()           const;
+    virtual QList<QUrl> currentAlbumItems()              const;
+    virtual QList<QUrl> allAlbumItems()                  const;
+
+    virtual int currentAlbum()                           const;
+    virtual QList<QUrl> albumItems(int)                  const;
+
+    virtual DInfoMap albumInfo(int)                      const;
+    virtual DInfoMap itemInfo(const QUrl&)               const;
+    virtual QList<QUrl> albumsItems(const DAlbumIDs&)    const;
+
+public:
+
+    // Album Selector view methods.
+
+    virtual QWidget* albumChooser(QWidget* const parent) const;
+    virtual DAlbumIDs albumChooserItems()                const;
+
+    Q_SIGNAL void signalAlbumChooserSelectionChanged();
 };
 
-}  // namespace Digikam
+// -----------------------------------------------------------------
 
-#endif  // DINFO_INTERFACE_H
+class DIGIKAM_EXPORT DItemInfo
+{
+
+public:
+
+    explicit DItemInfo(const DInfoInterface::DInfoMap&);
+    ~DItemInfo();
+
+public:
+
+    QString   name()        const;
+    QString   comment()     const;
+    int       orientation() const;
+    QDateTime dateTime()    const;
+
+private:
+
+    DInfoInterface::DInfoMap m_info;
+};
+
+// -----------------------------------------------------------------
+
+class DIGIKAM_EXPORT DAlbumInfo
+{
+
+public:
+
+    explicit DAlbumInfo(const DInfoInterface::DInfoMap&);
+    ~DAlbumInfo();
+
+public:
+
+    QString title()   const;
+    QString caption() const;
+    QDate   date()    const;
+
+private:
+
+    DInfoInterface::DInfoMap m_info;
+};
+
+} // namespace Digikam
+
+#endif // DINFO_INTERFACE_H

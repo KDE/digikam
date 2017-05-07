@@ -103,7 +103,7 @@ QString GalleryInfo::getEnumString(const QString& itemName) const
 QDebug operator<<(QDebug dbg, const GalleryInfo& t)
 {
     dbg.nospace() << "GalleryInfo::Albums: "
-                  << t.mCollectionList << ", ";
+                  << t.mAlbumList << ", ";
     dbg.nospace() << "GalleryInfo::Theme: "
                   << t.theme() << ", ";
     dbg.nospace() << "GalleryInfo::UseOriginalImageAsFullImage: "

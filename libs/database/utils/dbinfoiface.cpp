@@ -33,6 +33,7 @@
 #include "applicationsettings.h"
 #include "digikamapp.h"
 #include "digikamview.h"
+#include "albumselecttabs.h"
 
 namespace Digikam
 {
@@ -42,11 +43,13 @@ class DBInfoIface::Private
 public:
 
     Private()
-      : albumManager(0)
+      : albumManager(AlbumManager::instance()),
+        albumChooser(0)
     {
     }
 
-    AlbumManager* albumManager;
+    AlbumManager*    albumManager;
+    AlbumSelectTabs* albumChooser;
 
 public:
 
@@ -112,6 +115,49 @@ public:
 
         return urlList;
     }
+
+    QList<QUrl> albumItems(Album* const album) const
+    {
+        QList<QUrl> imageList;
+
+        if (album)
+        {
+            switch (album->type())
+            {
+                case Album::PHYSICAL:
+                {
+                    PAlbum* const p = dynamic_cast<PAlbum*>(album);
+
+                    if (p)
+                    {
+                        imageList = imagesFromPAlbum(p);
+                    }
+
+                    break;
+                }
+
+                case Album::TAG:
+                {
+                    TAlbum* const p = dynamic_cast<TAlbum*>(album);
+
+                    if (p)
+                    {
+                        imageList = imagesFromTAlbum(p);
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    // Not supported.
+                    break;
+                }
+            }
+        }
+
+        return imageList;
+    }
 };
 
 DBInfoIface::DBInfoIface(QObject* const parent)
@@ -133,46 +179,12 @@ QList<QUrl> DBInfoIface::currentAlbumItems() const
     }
 
     Album* const currAlbum = d->albumManager->currentAlbums().first();
+    QList<QUrl> imageList  = d->albumItems(currAlbum);
 
-    if (currAlbum)
-    {
-        QList<QUrl> imageList;
+    if (imageList.isEmpty())
+        imageList = DigikamApp::instance()->view()->allUrls();
 
-        switch (currAlbum->type())
-        {
-            case Album::PHYSICAL:
-            {
-                PAlbum* const p = dynamic_cast<PAlbum*>(currAlbum);
-
-                if (p)
-                {
-                    imageList = d->imagesFromPAlbum(p);
-                }
-
-                break;
-            }
-
-            case Album::TAG:
-            {
-                TAlbum* const p = dynamic_cast<TAlbum*>(currAlbum);
-
-                if (p)
-                {
-                    imageList = d->imagesFromTAlbum(p);
-                }
-
-                break;
-            }
-
-            default:
-            {
-                imageList = DigikamApp::instance()->view()->allUrls();
-                break;
-            }
-        }
-    }
-
-    return QList<QUrl>();
+    return imageList;
 }
 
 QList<QUrl> DBInfoIface::currentSelectedItems() const
@@ -183,7 +195,6 @@ QList<QUrl> DBInfoIface::currentSelectedItems() const
 QList<QUrl> DBInfoIface::allAlbumItems() const
 {
     QList<QUrl> imageList;
-    QString fileFilter(ApplicationSettings::instance()->getAllFileFilter());
 
     const AlbumList palbumList = d->albumManager->allPAlbums();
 
@@ -207,14 +218,91 @@ QList<QUrl> DBInfoIface::allAlbumItems() const
     return imageList;
 }
 
-DBInfoIface::DInfoMap DBInfoIface::albumInfo(const QUrl&) const
+DBInfoIface::DInfoMap DBInfoIface::albumInfo(int gid) const
 {
-    return DInfoMap();
+    Album* const a = d->albumManager->findAlbum(gid);
+
+    if (!a)
+        return DInfoMap();
+
+    DInfoMap map;
+    map.insert(QLatin1String("title"), a->title());
+
+    PAlbum* const p = dynamic_cast<PAlbum*>(a);
+
+    if (p)
+    {
+        map.insert(QLatin1String("caption"),  p->caption());
+        map.insert(QLatin1String("date"),     p->date());
+    }
+
+    return map;
 }
 
-DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl&) const
+DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
 {
-    return DInfoMap();
+    DInfoMap map;
+
+    ImageInfo info = ImageInfo::fromUrl(url);
+
+    if (!info.isNull())
+    {
+        map.insert(QLatin1String("name"),        info.name());
+        map.insert(QLatin1String("title"),       info.title());
+        map.insert(QLatin1String("comment"),     info.comment());
+        map.insert(QLatin1String("orientation"), info.orientation());
+        map.insert(QLatin1String("dateTime"),    info.dateTime());
+    }
+
+    return map;
+}
+
+QList<QUrl> DBInfoIface::albumsItems(const DAlbumIDs& lst) const
+{
+    QList<QUrl> imageList;
+
+    foreach(int gid, lst)
+    {
+        Album* const a = d->albumManager->findAlbum(gid);
+
+        if (a)
+        {
+            imageList << d->albumItems(a);
+        }
+    }
+
+    return imageList;
+}
+
+QWidget* DBInfoIface::albumChooser(QWidget* const parent) const
+{
+    if (!d->albumChooser)
+    {
+        d->albumChooser = new AlbumSelectTabs(parent);
+    }
+
+    connect(d->albumChooser, SIGNAL(signalAlbumSelectionChanged()),
+            this, SIGNAL(signalAlbumChooserSelectionChanged()));
+
+    return d->albumChooser;
+}
+
+DBInfoIface::DAlbumIDs DBInfoIface::albumChooserItems() const
+{
+    if (!d->albumChooser)
+    {
+        return DAlbumIDs();
+    }
+
+    AlbumList lst = d->albumChooser->selectedAlbums();
+    DAlbumIDs ids;
+
+    foreach(Album* const a, lst)
+    {
+        if (a) ids << a->id();
+    }
+
+    return ids;
 }
 
 }  // namespace Digikam
