@@ -45,7 +45,7 @@ public:
 
 private:
 
-    QStringList mList;
+    QStringList m_list;
 };
 
 } // namespace Digikam

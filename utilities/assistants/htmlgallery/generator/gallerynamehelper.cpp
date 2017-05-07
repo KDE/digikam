@@ -40,13 +40,13 @@ QString GalleryNameHelper::makeNameUnique(const QString& name)
     QString nameBase = name;
     int count        = 2;
 
-    while (mList.indexOf(uname) != -1)
+    while (m_list.indexOf(uname) != -1)
     {
         uname = nameBase + QString::number(count);
         ++count;
     };
 
-    mList.append(uname);
+    m_list.append(uname);
 
     return uname;
 }
