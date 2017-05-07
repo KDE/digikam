@@ -58,42 +58,42 @@ public:
 
 public:
 
-    bool                         mValid;
-    QString                      mTitle;
-    QString                      mDescription;
-    DMetadata::ImageOrientation  mOrientation;
-    QDateTime                    mTime;
+    bool                         m_valid;
+    QString                      m_title;
+    QString                      m_description;
+    DMetadata::ImageOrientation  m_orientation;
+    QDateTime                    m_time;
 
-    QString                      mPath;
+    QString                      m_path;
 
-    QString                      mThumbnailFileName;
-    QSize                        mThumbnailSize;
-    QString                      mFullFileName;
-    QSize                        mFullSize;
-    QString                      mOriginalFileName;
-    QSize                        mOriginalSize;
+    QString                      m_thumbnailFileName;
+    QSize                        m_thumbnailSize;
+    QString                      m_fullFileName;
+    QSize                        m_fullSize;
+    QString                      m_originalFileName;
+    QSize                        m_originalSize;
 
     // Exif Metadata
-    QString                      mExifImageMake;
-    QString                      mExifImageModel;
-    QString                      mExifImageOrientation;
-    QString                      mExifImageXResolution;
-    QString                      mExifImageYResolution;
-    QString                      mExifImageResolutionUnit;
-    QString                      mExifImageDateTime;
-    QString                      mExifImageYCbCrPositioning;
-    QString                      mExifPhotoExposureTime;
-    QString                      mExifPhotoFNumber;
-    QString                      mExifPhotoExposureProgram;
-    QString                      mExifPhotoISOSpeedRatings;
-    QString                      mExifPhotoShutterSpeedValue;
-    QString                      mExifPhotoApertureValue;
-    QString                      mExifPhotoFocalLength;
+    QString                      m_exifImageMake;
+    QString                      m_exifImageModel;
+    QString                      m_exifImageOrientation;
+    QString                      m_exifImageXResolution;
+    QString                      m_exifImageYResolution;
+    QString                      m_exifImageResolutionUnit;
+    QString                      m_exifImageDateTime;
+    QString                      m_exifImageYCbCrPositioning;
+    QString                      m_exifPhotoExposureTime;
+    QString                      m_exifPhotoFNumber;
+    QString                      m_exifPhotoExposureProgram;
+    QString                      m_exifPhotoISOSpeedRatings;
+    QString                      m_exifPhotoShutterSpeedValue;
+    QString                      m_exifPhotoApertureValue;
+    QString                      m_exifPhotoFocalLength;
 
     // GPS Metadata
-    QString                      mExifGPSLatitude;
-    QString                      mExifGPSLongitude;
-    QString                      mExifGPSAltitude;
+    QString                      m_exifGPSLatitude;
+    QString                      m_exifGPSLongitude;
+    QString                      m_exifGPSAltitude;
 };
 
 } // namespace Digikam

@@ -30,17 +30,17 @@ namespace Digikam
 {
 
 GalleryElement::GalleryElement(const DInfoInterface::DInfoMap& info)
-    : mValid(false)
+    : m_valid(false)
 {
     DItemInfo item(info);
-    mTitle       = item.name();
-    mDescription = item.comment();
-    mOrientation = (MetaEngine::ImageOrientation)(item.orientation());
-    mTime        = item.dateTime();
+    m_title       = item.name();
+    m_description = item.comment();
+    m_orientation = (MetaEngine::ImageOrientation)(item.orientation());
+    m_time        = item.dateTime();
 }
 
 GalleryElement::GalleryElement()
-    : mValid(false)
+    : m_valid(false)
 {
 }
 
@@ -50,48 +50,48 @@ GalleryElement::~GalleryElement()
 
 void GalleryElement::appendToXML(XMLWriter& xmlWriter, bool copyOriginalImage) const
 {
-    if (!mValid)
+    if (!m_valid)
     {
         return;
     }
 
     XMLElement imageX(xmlWriter, QLatin1String("image"));
-    xmlWriter.writeElement("title",       mTitle);
-    xmlWriter.writeElement("description", mDescription);
-    xmlWriter.writeElement("date",        mTime.toString(QLatin1String("yyyy-MM-ddThh:mm:ss")));
-    appendImageElementToXML(xmlWriter, QLatin1String("full"),      mFullFileName, mFullSize);
-    appendImageElementToXML(xmlWriter, QLatin1String("thumbnail"), mThumbnailFileName, mThumbnailSize);
+    xmlWriter.writeElement("title",       m_title);
+    xmlWriter.writeElement("description", m_description);
+    xmlWriter.writeElement("date",        m_time.toString(QLatin1String("yyyy-MM-ddThh:mm:ss")));
+    appendImageElementToXML(xmlWriter, QLatin1String("full"),      m_fullFileName, m_fullSize);
+    appendImageElementToXML(xmlWriter, QLatin1String("thumbnail"), m_thumbnailFileName, m_thumbnailSize);
 
     if (copyOriginalImage)
     {
         appendImageElementToXML(xmlWriter,
                                 QLatin1String("original"),
-                                mOriginalFileName, mOriginalSize);
+                                m_originalFileName, m_originalSize);
     }
 
     //Exif
     // TODO put all exif tags in a sub level
     XMLElement imageExif(xmlWriter, QLatin1String("exif"));
-    xmlWriter.writeElement("exifimagemake",              mExifImageMake);
-    xmlWriter.writeElement("exifimagemodel",             mExifImageModel);
-    xmlWriter.writeElement("exifimageorientation",       mExifImageOrientation);
-    xmlWriter.writeElement("exifimagexresolution",       mExifImageXResolution);
-    xmlWriter.writeElement("exifimageyresolution",       mExifImageYResolution);
-    xmlWriter.writeElement("exifimageresolutionunit",    mExifImageResolutionUnit);
-    xmlWriter.writeElement("exifimagedatetime",          mExifImageDateTime);
-    xmlWriter.writeElement("exifimageycbcrpositioning",  mExifImageYCbCrPositioning);
-    xmlWriter.writeElement("exifphotoexposuretime",      mExifPhotoExposureTime);
-    xmlWriter.writeElement("exifphotofnumber",           mExifPhotoFNumber);
-    xmlWriter.writeElement("exifphotoexposureprogram",   mExifPhotoExposureProgram);
-    xmlWriter.writeElement("exifphotoisospeedratings",   mExifPhotoISOSpeedRatings);
-    xmlWriter.writeElement("exifphotoshutterspeedvalue", mExifPhotoShutterSpeedValue);
-    xmlWriter.writeElement("exifphotoaperturevalue",     mExifPhotoApertureValue);
-    xmlWriter.writeElement("exifphotofocallength",       mExifPhotoFocalLength);
+    xmlWriter.writeElement("exifimagemake",              m_exifImageMake);
+    xmlWriter.writeElement("exifimagemodel",             m_exifImageModel);
+    xmlWriter.writeElement("exifimageorientation",       m_exifImageOrientation);
+    xmlWriter.writeElement("exifimagexresolution",       m_exifImageXResolution);
+    xmlWriter.writeElement("exifimageyresolution",       m_exifImageYResolution);
+    xmlWriter.writeElement("exifimageresolutionunit",    m_exifImageResolutionUnit);
+    xmlWriter.writeElement("exifimagedatetime",          m_exifImageDateTime);
+    xmlWriter.writeElement("exifimageycbcrpositioning",  m_exifImageYCbCrPositioning);
+    xmlWriter.writeElement("exifphotoexposuretime",      m_exifPhotoExposureTime);
+    xmlWriter.writeElement("exifphotofnumber",           m_exifPhotoFNumber);
+    xmlWriter.writeElement("exifphotoexposureprogram",   m_exifPhotoExposureProgram);
+    xmlWriter.writeElement("exifphotoisospeedratings",   m_exifPhotoISOSpeedRatings);
+    xmlWriter.writeElement("exifphotoshutterspeedvalue", m_exifPhotoShutterSpeedValue);
+    xmlWriter.writeElement("exifphotoaperturevalue",     m_exifPhotoApertureValue);
+    xmlWriter.writeElement("exifphotofocallength",       m_exifPhotoFocalLength);
 
     // GPS
-    xmlWriter.writeElement("exifgpslatitude",            mExifGPSLatitude);
-    xmlWriter.writeElement("exifgpslongitude",           mExifGPSLongitude);
-    xmlWriter.writeElement("exifgpsaltitude",            mExifGPSAltitude);
+    xmlWriter.writeElement("exifgpslatitude",            m_exifGPSLatitude);
+    xmlWriter.writeElement("exifgpslongitude",           m_exifGPSLongitude);
+    xmlWriter.writeElement("exifgpsaltitude",            m_exifGPSAltitude);
 }
 
 void GalleryElement::appendImageElementToXML(XMLWriter& xmlWriter,

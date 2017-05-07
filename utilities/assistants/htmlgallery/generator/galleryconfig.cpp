@@ -51,10 +51,10 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemFullResize, QLatin1String("fullResize"));
 
-    KConfigSkeleton::ItemInt* const itemFullSize
-        = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("fullSize"), mFullSize, 1024);
+    KConfigSkeleton::ItemInt* const item_fullSize
+        = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("fullSize"), m_fullSize, 1024);
 
-    addItem(itemFullSize, QLatin1String("fullSize"));
+    addItem(item_fullSize, QLatin1String("fullSize"));
 
     QList<KConfigSkeleton::ItemEnum::Choice> valuesfullFormat;
     {
@@ -84,10 +84,10 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemCopyOriginalImage, QLatin1String("copyOriginalImage"));
 
-    KConfigSkeleton::ItemInt* const itemThumbnailSize
-        = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("thumbnailSize"), mThumbnailSize, 120);
+    KConfigSkeleton::ItemInt* const item_thumbnailSize
+        = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("thumbnailSize"), m_thumbnailSize, 120);
 
-    addItem(itemThumbnailSize, QLatin1String("thumbnailSize"));
+    addItem(item_thumbnailSize, QLatin1String("thumbnailSize"));
 
     QList<KConfigSkeleton::ItemEnum::Choice> valuesthumbnailFormat;
     {
@@ -174,12 +174,12 @@ bool GalleryConfig::fullResize() const
 void GalleryConfig::setFullSize(int v)
 {
     if (!isImmutable(QLatin1String("fullSize")))
-        mFullSize = v;
+        m_fullSize = v;
 }
 
 int GalleryConfig::fullSize() const
 {
-    return mFullSize;
+    return m_fullSize;
 }
 
 void GalleryConfig::setFullFormat(int v)
@@ -218,12 +218,12 @@ bool GalleryConfig::copyOriginalImage() const
 void GalleryConfig::setThumbnailSize(int v)
 {
     if (!isImmutable(QLatin1String("thumbnailSize")))
-        mThumbnailSize = v;
+        m_thumbnailSize = v;
 }
 
 int GalleryConfig::thumbnailSize() const
 {
-    return mThumbnailSize;
+    return m_thumbnailSize;
 }
 
 void GalleryConfig::setThumbnailFormat(int v)

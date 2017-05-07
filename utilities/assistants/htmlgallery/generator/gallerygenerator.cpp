@@ -265,7 +265,7 @@ public:
                 inf = info->m_iface->itemInfo(url);
 
             GalleryElement element        = GalleryElement(inf);
-            element.mPath                 = remoteUrlHash.value(url, url.toLocalFile());
+            element.m_path                 = remoteUrlHash.value(url, url.toLocalFile());
             imageElementList << element;
         }
 

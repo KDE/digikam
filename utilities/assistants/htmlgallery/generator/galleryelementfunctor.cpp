@@ -97,7 +97,7 @@ GalleryElementFunctor::~GalleryElementFunctor()
 void GalleryElementFunctor::operator()(GalleryElement& element)
 {
     // Load image
-    QString    path = element.mPath;
+    QString    path = element.m_path;
     QImage     originalImage;
     QString    imageFormat;
     QByteArray imageData;
@@ -149,9 +149,9 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             fullImage = fullImage.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
         }
 
-        if (element.mOrientation != DMetadata::ORIENTATION_UNSPECIFIED )
+        if (element.m_orientation != DMetadata::ORIENTATION_UNSPECIFIED )
         {
-            QMatrix matrix = MetaEngineRotation::toMatrix(element.mOrientation);
+            QMatrix matrix = MetaEngineRotation::toMatrix(element.m_orientation);
             fullImage      = fullImage.transformed(matrix);
         }
     }
@@ -159,7 +159,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     QImage thumbnail     = generateThumbnail(fullImage, m_info->thumbnailSize(), m_info->thumbnailSquare());
 
     // Save images
-    QString baseFileName = GalleryGenerator::webifyFileName(element.mTitle);
+    QString baseFileName = GalleryGenerator::webifyFileName(element.m_title);
     baseFileName         = m_uniqueNameHelper.makeNameUnique(baseFileName);
 
     // Save full
@@ -188,8 +188,8 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
         }
     }
 
-    element.mFullFileName = fullFileName;
-    element.mFullSize     = fullImage.size();
+    element.m_fullFileName = fullFileName;
+    element.m_fullSize     = fullImage.size();
 
     // Save original
     if (m_info->copyOriginalImage())
@@ -201,8 +201,8 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
             return;
         }
 
-        element.mOriginalFileName = originalFileName;
-        element.mOriginalSize = originalImage.size();
+        element.m_originalFileName = originalFileName;
+        element.m_originalSize = originalImage.size();
     }
 
     // Save thumbnail
@@ -218,9 +218,9 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
         return;
     }
 
-    element.mThumbnailFileName = thumbnailFileName;
-    element.mThumbnailSize     = thumbnail.size();
-    element.mValid             = true;
+    element.m_thumbnailFileName = thumbnailFileName;
+    element.m_thumbnailSize     = thumbnail.size();
+    element.m_valid             = true;
 
     // Read Exif Metadata
     QString unavailable(i18n("unavailable"));
@@ -231,107 +231,107 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     {
         // Try to use image metadata to get image info
 
-        element.mExifImageMake = meta.getExifTagString("Exif.Image.Make");
+        element.m_exifImageMake = meta.getExifTagString("Exif.Image.Make");
 
-        if (element.mExifImageMake.isEmpty())
+        if (element.m_exifImageMake.isEmpty())
         {
-            element.mExifImageMake = meta.getXmpTagString("Xmp.tiff.Make");
+            element.m_exifImageMake = meta.getXmpTagString("Xmp.tiff.Make");
         }
 
-        element.mExifImageModel = meta.getExifTagString("Exif.Image.Model");
+        element.m_exifImageModel = meta.getExifTagString("Exif.Image.Model");
 
-        if (element.mExifImageModel.isEmpty())
+        if (element.m_exifImageModel.isEmpty())
         {
-            element.mExifImageModel = meta.getXmpTagString("Xmp.tiff.Model");
+            element.m_exifImageModel = meta.getXmpTagString("Xmp.tiff.Model");
         }
 
-        element.mExifImageOrientation = meta.getExifTagString("Exif.Image.Orientation");
+        element.m_exifImageOrientation = meta.getExifTagString("Exif.Image.Orientation");
 
-        if (element.mExifImageOrientation.isEmpty())
+        if (element.m_exifImageOrientation.isEmpty())
         {
-            element.mExifImageOrientation = meta.getXmpTagString("Xmp.tiff.Orientation");
+            element.m_exifImageOrientation = meta.getXmpTagString("Xmp.tiff.Orientation");
         }
 
-        element.mExifImageXResolution = meta.getExifTagString("Exif.Image.XResolution");
+        element.m_exifImageXResolution = meta.getExifTagString("Exif.Image.XResolution");
 
-        if (element.mExifImageXResolution.isEmpty())
+        if (element.m_exifImageXResolution.isEmpty())
         {
-            element.mExifImageXResolution = meta.getXmpTagString("Xmp.tiff.XResolution");
+            element.m_exifImageXResolution = meta.getXmpTagString("Xmp.tiff.XResolution");
         }
 
-        element.mExifImageYResolution = meta.getExifTagString("Exif.Image.YResolution");
+        element.m_exifImageYResolution = meta.getExifTagString("Exif.Image.YResolution");
 
-        if (element.mExifImageYResolution.isEmpty())
+        if (element.m_exifImageYResolution.isEmpty())
         {
-            element.mExifImageYResolution = meta.getXmpTagString("Xmp.tiff.YResolution");
+            element.m_exifImageYResolution = meta.getXmpTagString("Xmp.tiff.YResolution");
         }
 
-        element.mExifImageResolutionUnit = meta.getExifTagString("Exif.Image.ResolutionUnit");
+        element.m_exifImageResolutionUnit = meta.getExifTagString("Exif.Image.ResolutionUnit");
 
-        if (element.mExifImageResolutionUnit.isEmpty())
+        if (element.m_exifImageResolutionUnit.isEmpty())
         {
-            element.mExifImageResolutionUnit = meta.getXmpTagString("Xmp.tiff.ResolutionUnit");
+            element.m_exifImageResolutionUnit = meta.getXmpTagString("Xmp.tiff.ResolutionUnit");
         }
 
         if (meta.getImageDateTime().isValid())
         {
-            element.mExifImageDateTime = QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat);
+            element.m_exifImageDateTime = QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat);
         }
 
-        element.mExifImageYCbCrPositioning = meta.getExifTagString("Exif.Image.YCbCrPositioning");
+        element.m_exifImageYCbCrPositioning = meta.getExifTagString("Exif.Image.YCbCrPositioning");
 
-        if (element.mExifImageYCbCrPositioning.isEmpty())
+        if (element.m_exifImageYCbCrPositioning.isEmpty())
         {
-            element.mExifImageYCbCrPositioning = meta.getXmpTagString("Xmp.tiff.YCbCrPositioning");
+            element.m_exifImageYCbCrPositioning = meta.getXmpTagString("Xmp.tiff.YCbCrPositioning");
         }
 
-        element.mExifPhotoFNumber = meta.getExifTagString("Exif.Photo.FNumber");
+        element.m_exifPhotoFNumber = meta.getExifTagString("Exif.Photo.FNumber");
 
-        if (element.mExifPhotoFNumber.isEmpty())
+        if (element.m_exifPhotoFNumber.isEmpty())
         {
-            element.mExifPhotoFNumber = meta.getXmpTagString("Xmp.exif.FNumber");
+            element.m_exifPhotoFNumber = meta.getXmpTagString("Xmp.exif.FNumber");
         }
 
-        element.mExifPhotoApertureValue = meta.getExifTagString("Exif.Photo.ApertureValue");
+        element.m_exifPhotoApertureValue = meta.getExifTagString("Exif.Photo.ApertureValue");
 
-        if (element.mExifPhotoApertureValue.isEmpty())
+        if (element.m_exifPhotoApertureValue.isEmpty())
         {
-            element.mExifPhotoApertureValue = meta.getXmpTagString("Xmp.exif.ApertureValue");
+            element.m_exifPhotoApertureValue = meta.getXmpTagString("Xmp.exif.ApertureValue");
         }
 
-        element.mExifPhotoFocalLength = meta.getExifTagString("Exif.Photo.FocalLength");
+        element.m_exifPhotoFocalLength = meta.getExifTagString("Exif.Photo.FocalLength");
 
-        if (element.mExifPhotoFocalLength.isEmpty())
+        if (element.m_exifPhotoFocalLength.isEmpty())
         {
-            element.mExifPhotoFocalLength = meta.getXmpTagString("Xmp.exif.FocalLength");
+            element.m_exifPhotoFocalLength = meta.getXmpTagString("Xmp.exif.FocalLength");
         }
 
-        element.mExifPhotoExposureTime = meta.getExifTagString("Exif.Photo.ExposureTime");
+        element.m_exifPhotoExposureTime = meta.getExifTagString("Exif.Photo.ExposureTime");
 
-        if (element.mExifPhotoExposureTime.isEmpty())
+        if (element.m_exifPhotoExposureTime.isEmpty())
         {
-            element.mExifPhotoExposureTime = meta.getXmpTagString("Xmp.exif.ExposureTime");
+            element.m_exifPhotoExposureTime = meta.getXmpTagString("Xmp.exif.ExposureTime");
         }
 
-        element.mExifPhotoShutterSpeedValue = meta.getExifTagString("Exif.Photo.ShutterSpeedValue");
+        element.m_exifPhotoShutterSpeedValue = meta.getExifTagString("Exif.Photo.ShutterSpeedValue");
 
-        if (element.mExifPhotoShutterSpeedValue.isEmpty())
+        if (element.m_exifPhotoShutterSpeedValue.isEmpty())
         {
-            element.mExifPhotoShutterSpeedValue = meta.getXmpTagString("Xmp.exif.ShutterSpeedValue");
+            element.m_exifPhotoShutterSpeedValue = meta.getXmpTagString("Xmp.exif.ShutterSpeedValue");
         }
 
-        element.mExifPhotoISOSpeedRatings = meta.getExifTagString("Exif.Photo.ISOSpeedRatings");
+        element.m_exifPhotoISOSpeedRatings = meta.getExifTagString("Exif.Photo.ISOSpeedRatings");
 
-        if (element.mExifPhotoISOSpeedRatings.isEmpty())
+        if (element.m_exifPhotoISOSpeedRatings.isEmpty())
         {
-            element.mExifPhotoISOSpeedRatings = meta.getXmpTagString("Xmp.exif.ISOSpeedRatings");
+            element.m_exifPhotoISOSpeedRatings = meta.getXmpTagString("Xmp.exif.ISOSpeedRatings");
         }
 
-        element.mExifPhotoExposureProgram = meta.getExifTagString("Exif.Photo.ExposureIndex");
+        element.m_exifPhotoExposureProgram = meta.getExifTagString("Exif.Photo.ExposureIndex");
 
-        if (element.mExifPhotoExposureProgram.isEmpty())
+        if (element.m_exifPhotoExposureProgram.isEmpty())
         {
-            element.mExifPhotoExposureProgram = meta.getXmpTagString("Xmp.exif.ExposureIndex");
+            element.m_exifPhotoExposureProgram = meta.getXmpTagString("Xmp.exif.ExposureIndex");
         }
 
         // Get GPS values
@@ -339,17 +339,17 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
 
         if (meta.getGPSAltitude(&gpsvalue))
         {
-            element.mExifGPSAltitude = QString::number(gpsvalue, 'f', 3);
+            element.m_exifGPSAltitude = QString::number(gpsvalue, 'f', 3);
         }
 
         if (meta.getGPSLatitudeNumber(&gpsvalue))
         {
-            element.mExifGPSLatitude = QString::number(gpsvalue, 'f', 6);
+            element.m_exifGPSLatitude = QString::number(gpsvalue, 'f', 6);
         }
 
         if (meta.getGPSLongitudeNumber(&gpsvalue))
         {
-            element.mExifGPSLongitude = QString::number(gpsvalue, 'f', 6);
+            element.m_exifGPSLongitude = QString::number(gpsvalue, 'f', 6);
         }
     }
     else
@@ -363,81 +363,81 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
         if (info.isDecodable)
         {
             if (!info.make.isEmpty())
-                element.mExifImageMake = info.make;
+                element.m_exifImageMake = info.make;
 
             if (!info.model.isEmpty())
-                element.mExifImageModel = info.model;
+                element.m_exifImageModel = info.model;
 
             if (info.dateTime.isValid())
-                element.mExifImageDateTime = QLocale().toString(info.dateTime, QLocale::ShortFormat);
+                element.m_exifImageDateTime = QLocale().toString(info.dateTime, QLocale::ShortFormat);
 
             if (info.aperture != -1.0)
-                element.mExifPhotoApertureValue = QString::number(info.aperture);
+                element.m_exifPhotoApertureValue = QString::number(info.aperture);
 
             if (info.focalLength != -1.0)
-                element.mExifPhotoFocalLength = QString::number(info.focalLength);
+                element.m_exifPhotoFocalLength = QString::number(info.focalLength);
 
             if (info.exposureTime != -1.0)
-                element.mExifPhotoExposureTime = QString::number(info.exposureTime);
+                element.m_exifPhotoExposureTime = QString::number(info.exposureTime);
 
             if (info.sensitivity != -1)
-                element.mExifPhotoISOSpeedRatings = QString::number(info.sensitivity);
+                element.m_exifPhotoISOSpeedRatings = QString::number(info.sensitivity);
         }
     }
 
-    if (element.mExifImageMake.isEmpty())
-        element.mExifImageMake = unavailable;
+    if (element.m_exifImageMake.isEmpty())
+        element.m_exifImageMake = unavailable;
 
-    if (element.mExifImageModel.isEmpty())
-        element.mExifImageModel = unavailable;
+    if (element.m_exifImageModel.isEmpty())
+        element.m_exifImageModel = unavailable;
 
-    if (element.mExifImageOrientation.isEmpty())
-        element.mExifImageOrientation = unavailable;
+    if (element.m_exifImageOrientation.isEmpty())
+        element.m_exifImageOrientation = unavailable;
 
-    if (element.mExifImageXResolution.isEmpty())
-        element.mExifImageXResolution = unavailable;
+    if (element.m_exifImageXResolution.isEmpty())
+        element.m_exifImageXResolution = unavailable;
 
-    if (element.mExifImageYResolution.isEmpty())
-        element.mExifImageYResolution = unavailable;
+    if (element.m_exifImageYResolution.isEmpty())
+        element.m_exifImageYResolution = unavailable;
 
-    if (element.mExifImageResolutionUnit.isEmpty())
-        element.mExifImageResolutionUnit = unavailable;
+    if (element.m_exifImageResolutionUnit.isEmpty())
+        element.m_exifImageResolutionUnit = unavailable;
 
-    if (element.mExifImageDateTime.isEmpty())
-        element.mExifImageDateTime = unavailable;
+    if (element.m_exifImageDateTime.isEmpty())
+        element.m_exifImageDateTime = unavailable;
 
-    if (element.mExifImageYCbCrPositioning.isEmpty())
-        element.mExifImageYCbCrPositioning = unavailable;
+    if (element.m_exifImageYCbCrPositioning.isEmpty())
+        element.m_exifImageYCbCrPositioning = unavailable;
 
-    if (element.mExifPhotoApertureValue.isEmpty())
-        element.mExifPhotoApertureValue = unavailable;
+    if (element.m_exifPhotoApertureValue.isEmpty())
+        element.m_exifPhotoApertureValue = unavailable;
 
-    if (element.mExifPhotoFocalLength.isEmpty())
-        element.mExifPhotoFocalLength = unavailable;
+    if (element.m_exifPhotoFocalLength.isEmpty())
+        element.m_exifPhotoFocalLength = unavailable;
 
-    if (element.mExifPhotoFNumber.isEmpty())
-        element.mExifPhotoFNumber = unavailable;
+    if (element.m_exifPhotoFNumber.isEmpty())
+        element.m_exifPhotoFNumber = unavailable;
 
-    if (element.mExifPhotoExposureTime.isEmpty())
-        element.mExifPhotoExposureTime = unavailable;
+    if (element.m_exifPhotoExposureTime.isEmpty())
+        element.m_exifPhotoExposureTime = unavailable;
 
-    if (element.mExifPhotoShutterSpeedValue.isEmpty())
-        element.mExifPhotoShutterSpeedValue = unavailable;
+    if (element.m_exifPhotoShutterSpeedValue.isEmpty())
+        element.m_exifPhotoShutterSpeedValue = unavailable;
 
-    if (element.mExifPhotoISOSpeedRatings.isEmpty())
-        element.mExifPhotoISOSpeedRatings = unavailable;
+    if (element.m_exifPhotoISOSpeedRatings.isEmpty())
+        element.m_exifPhotoISOSpeedRatings = unavailable;
 
-    if (element.mExifPhotoExposureProgram.isEmpty())
-        element.mExifPhotoExposureProgram = unavailable;
+    if (element.m_exifPhotoExposureProgram.isEmpty())
+        element.m_exifPhotoExposureProgram = unavailable;
 
-    if (element.mExifGPSAltitude.isEmpty())
-        element.mExifGPSAltitude = unavailable;
+    if (element.m_exifGPSAltitude.isEmpty())
+        element.m_exifGPSAltitude = unavailable;
 
-    if (element.mExifGPSLatitude.isEmpty())
-        element.mExifGPSLatitude = unavailable;
+    if (element.m_exifGPSLatitude.isEmpty())
+        element.m_exifGPSLatitude = unavailable;
 
-    if (element.mExifGPSLongitude.isEmpty())
-        element.mExifGPSLongitude = unavailable;
+    if (element.m_exifGPSLongitude.isEmpty())
+        element.m_exifGPSLongitude = unavailable;
 }
 
 bool GalleryElementFunctor::writeDataToFile(const QByteArray& data, const QString& destPath)

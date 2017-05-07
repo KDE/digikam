@@ -114,11 +114,11 @@ protected:
     QString mTheme;
     bool    mUseOriginalImageAsFullImage;
     bool    mFullResize;
-    int     mFullSize;
+    int     m_fullSize;
     int     mFullFormat;
     int     mFullQuality;
     bool    mCopyOriginalImage;
-    int     mThumbnailSize;
+    int     m_thumbnailSize;
     int     mThumbnailFormat;
     int     mThumbnailQuality;
     bool    mThumbnailSquare;
