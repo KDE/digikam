@@ -1,82 +1,101 @@
+/*
+A theme for the digikam html gallery.
+Copyright 2009 Elizabeth Marmorstein (purplegamba@cox.net)
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
 body {
-    	background-color: #990000; /*background behind thumbnails, outside boxes*/
-    	color: #000055; /*default text color*/
-    	font-size: 14pt;
-    	text-align: center;
-    	font-family: Bitstream Vera Serif, serif;
-    	margin: 0in;
-    	padding: 0in;
+        background-color: #990000; /*background behind thumbnails, outside boxes*/
+        color: #000055; /*default text color*/
+        font-size: 14pt;
+        text-align: center;
+        font-family: Bitstream Vera Serif, serif;
+        margin: 0in;
+        padding: 0in;
 }
 
 a { /*links (album titles)*/
-    	color: #FFFFFF; 
-    	text-decoration: none;
+        color: #FFFFFF; 
+        text-decoration: none;
 }
 
 a:hover { /*links when mouse is over them (album titles)*/
-    	color: #5555FF;
-	text-decoration: underline;
+        color: #5555FF;
+    text-decoration: underline;
 }
 
 h1 { /*album title above thumbnails*/
-	padding-top: 0.1em;
-	color: #FFFFFF; 
-	font-size: 14pt;
+    padding-top: 0.1em;
+    color: #FFFFFF; 
+    font-size: 14pt;
 }
 
 /* Collection page */
 #collectionPage h1 {
-	margin-top: 12px;
+    margin-top: 12px;
 } 
 
 #collectionPage ul { /*affects list of thumbnails*/
-	padding: 0;
-	padding-left: 5%;
-	text-align: center;
-	width: 95%
+    padding: 0;
+    padding-left: 5%;
+    text-align: center;
+    width: 95%
 }
 
 #collectionPage li { /*affects stuff in boxes with thumbnails*/
         display: block;
         float: left;
         margin-left: 6px;
-	margin-top: 6px;
-	padding: 5px;
-	color: 990000;
-	font-size: 8pt;
-	background-color: #FFFFFF;
-	border: 1px solid #990000;
+    margin-top: 6px;
+    padding: 5px;
+    color: 990000;
+    font-size: 8pt;
+    background-color: #FFFFFF;
+    border: 1px solid #990000;
 }
 
 /* Blank Page */
 #blankPage {
-	background-color: #FFFFFF;
+    background-color: #FFFFFF;
 }
 
 /*  Collect Page */
 #collectPage { /*album titles at top*/
-    	background-color: #000000;
-	font-size: 12pt;
-	padding-top: 0.5em;
-	margin: 0 auto;
-	width: 95%;
-    	color: #AAAAAA; /*number of pics in collection*/
+        background-color: #000000;
+    font-size: 12pt;
+    padding-top: 0.5em;
+    margin: 0 auto;
+    width: 95%;
+        color: #AAAAAA; /*number of pics in collection*/
 }
 
 
 /* Image page */
 #imagePage {
-	padding:.5em;
-	background-color:#FFFFFF; /*background color behind the big image*/
+    padding:.5em;
+    background-color:#FFFFFF; /*background color behind the big image*/
 }
 
 
 #caption { /*caption below photo*/
-	padding-bottom:1em;
-	color: #990000;
-	font-size: 16pt;
+    padding-bottom:1em;
+    color: #990000;
+    font-size: 16pt;
 }
 
 #imagePage img {
-	border: 1px solid #CECECE; /*border around picture*/
+    border: 1px solid #CECECE; /*border around picture*/
 }
