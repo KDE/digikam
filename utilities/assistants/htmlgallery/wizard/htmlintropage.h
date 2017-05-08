@@ -41,6 +41,7 @@ public:
     explicit HTMLIntroPage(QWizard* const dialog, const QString& title);
     ~HTMLIntroPage();
 
+    void initializePage();
     bool validatePage();
 
 private:

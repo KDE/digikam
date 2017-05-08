@@ -47,17 +47,32 @@ class HTMLIntroPage::Private
 {
 public:
 
-    Private()
-      : imageGetOption(0)
+    Private(QWizard* const dialog)
+      : imageGetOption(0),
+        hbox(0),
+        wizard(0),
+        info(0),
+        iface(0)
     {
+        wizard = dynamic_cast<HTMLWizard*>(dialog);
+
+        if (wizard)
+        {
+            info  = wizard->galleryInfo();
+            iface = info->m_iface;
+        }
     }
 
-    QComboBox* imageGetOption;
+    QComboBox*       imageGetOption;
+    DHBox*           hbox;
+    HTMLWizard*      wizard;
+    GalleryInfo*     info;
+    DInfoInterface*  iface;
 };
 
 HTMLIntroPage::HTMLIntroPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
-      d(new Private)
+      d(new Private(dialog))
 {
     DVBox* const vbox  = new DVBox(this);
     QLabel* const desc = new QLabel(vbox);
@@ -75,9 +90,9 @@ HTMLIntroPage::HTMLIntroPage(QWizard* const dialog, const QString& title)
 
     // ComboBox for image selection method
 
-    DHBox* const hbox           = new DHBox(vbox);
-    QLabel* const getImageLabel = new QLabel(i18n("&Choose image selection method:"), hbox);
-    d->imageGetOption           = new QComboBox(hbox);
+    d->hbox                     = new DHBox(vbox);
+    QLabel* const getImageLabel = new QLabel(i18n("&Choose image selection method:"), d->hbox);
+    d->imageGetOption           = new QComboBox(d->hbox);
     d->imageGetOption->insertItem(GalleryInfo::ALBUMS, i18n("Albums"));
     d->imageGetOption->insertItem(GalleryInfo::IMAGES, i18n("Images"));
     getImageLabel->setBuddy(d->imageGetOption);
@@ -91,15 +106,18 @@ HTMLIntroPage::~HTMLIntroPage()
     delete d;
 }
 
+void HTMLIntroPage::initializePage()
+{
+    if (!d->iface)
+    {
+        d->imageGetOption->setCurrentIndex(GalleryInfo::IMAGES);
+        d->hbox->setEnabled(false);
+    }
+}
+
 bool HTMLIntroPage::validatePage()
 {
-    HTMLWizard* const wizard = dynamic_cast<HTMLWizard*>(assistant());
-
-    if (!wizard)
-        return false;
-
-    GalleryInfo* const info  = wizard->galleryInfo();
-    info->m_getOption        = (GalleryInfo::ImageGetOption)d->imageGetOption->currentIndex();
+    d->info->m_getOption = (GalleryInfo::ImageGetOption)d->imageGetOption->currentIndex();
 
     return true;
 }

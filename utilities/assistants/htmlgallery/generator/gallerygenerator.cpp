@@ -27,6 +27,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QFutureWatcher>
 #include <QRegExp>
 #include <QStringList>
@@ -57,7 +58,6 @@
 #include "gallerytheme.h"
 #include "galleryxmlutils.h"
 #include "htmlwizard.h"
-#include "iojob.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
 
@@ -144,7 +144,7 @@ public:
             themeDir.removeRecursively();
         }
 
-        bool ok = CopyJob::copyFolderRecursively(srcUrl.toLocalFile(), destUrl.toLocalFile());
+        bool ok = copyFolderRecursively(srcUrl.toLocalFile(), destUrl.toLocalFile());
 
         if (!ok)
         {
@@ -432,7 +432,7 @@ public:
             tempPath.setAutoRemove(false);
 
             if (tempPath.open() &&
-                CopyJob::copyFiles(QStringList() << url.toLocalFile(), tempPath.fileName()))
+                copyFiles(QStringList() << url.toLocalFile(), tempPath.fileName()))
             {
                 hash->insert(url, tempFile.fileName());
             }
@@ -447,6 +447,46 @@ public:
 
             ++count;
             pbar->setValue(count);
+        }
+
+        return true;
+    }
+
+    bool copyFolderRecursively(const QString& srcPath, const QString& dstPath)
+    {
+        QDir srcDir(srcPath);
+        QString newCopyPath = dstPath + QLatin1Char('/') + srcDir.dirName();
+
+        if (!srcDir.mkpath(newCopyPath))
+        {
+            return false;
+        }
+
+        foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Files))
+        {
+            QString copyPath = newCopyPath + QLatin1Char('/') + fileInfo.fileName();
+
+            if (!QFile::copy(fileInfo.filePath(), copyPath))
+                return false;
+        }
+
+        foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
+        {
+            copyFolderRecursively(fileInfo.filePath(), newCopyPath);
+        }
+
+        return true;
+    }
+
+    bool copyFiles(const QStringList& srcPaths, const QString& dstPath)
+    {
+        foreach (const QString& path, srcPaths)
+        {
+            QFileInfo fileInfo(path);
+            QString copyPath = dstPath + QLatin1Char('/') + fileInfo.fileName();
+
+            if (!QFile::copy(fileInfo.filePath(), copyPath))
+                return false;
         }
 
         return true;

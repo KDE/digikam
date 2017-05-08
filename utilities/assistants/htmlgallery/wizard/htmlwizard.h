@@ -28,7 +28,7 @@
 
 #include "dwizarddlg.h"
 #include "gallerytheme.h"
-#include "album.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -39,7 +39,7 @@ class DInfoInterface;
 /**
  * The wizard used by the user to select the various settings.
  */
-class HTMLWizard : public DWizardDlg
+class DIGIKAM_EXPORT HTMLWizard : public DWizardDlg
 {
     Q_OBJECT
 

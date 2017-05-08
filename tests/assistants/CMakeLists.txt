@@ -32,6 +32,21 @@ target_link_libraries(expoblending
 )
 
 # =======================================================
+# Stand alone version of HTML Gallery tool
+
+set(htmlgallery_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/htmlgallery.cpp)
+
+add_executable(htmlgallery ${htmlgallery_SRCS})
+
+target_link_libraries(htmlgallery
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
+)
+
+# =======================================================
 # Stand alone version of Calendar tool
 
 set(calendar_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/calendar.cpp)

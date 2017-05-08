@@ -74,6 +74,13 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     )
 endif()
 
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:htmlgallery_src>
+    )
+endif()
+
 include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
@@ -228,6 +235,12 @@ endif()
 
 if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     target_link_libraries(digikamcore PUBLIC KF5::ThreadWeaver)
+endif()
+
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+    target_link_libraries(digikamcore PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
+                                             ${LIBXSLT_LIBRARIES}
+                                             ${LIBXML2_LIBRARIES})
 endif()
 
 if(APPLE)
@@ -386,13 +399,6 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:advancedrename_src>
 )
 
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
-    set(DIGIKAM_OBJECTS
-        ${DIGIKAM_OBJECTS}
-        $<TARGET_OBJECTS:htmlgallery_src>
-    )
-endif()
-
 if(KF5Kipi_FOUND)
     set(DIGIKAM_OBJECTS
         ${DIGIKAM_OBJECTS}
@@ -435,12 +441,6 @@ target_link_libraries(digikamgui
 
                       ${OpenCV_LIBRARIES}
 )
-
-if(LIBXML2_FOUND AND LIBXSLT_FOUND)
-    target_link_libraries(digikamgui PUBLIC ${LIBXSLT_EXSLT_LIBRARIES}
-                                            ${LIBXSLT_LIBRARIES}
-                                            ${LIBXML2_LIBRARIES})
-endif()
 
 if(ENABLE_DBUS)
     target_link_libraries(digikamgui PUBLIC Qt5::DBus)

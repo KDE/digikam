@@ -86,8 +86,11 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
     setPageWidget(d->stack);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
-    connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
-            this, SIGNAL(completeChanged()));
+    if (d->iface)
+    {
+        connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
+                this, SIGNAL(completeChanged()));
+    }
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),
             this, SIGNAL(completeChanged()));
