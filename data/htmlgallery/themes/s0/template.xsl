@@ -7,29 +7,29 @@
     extension-element-prefixes="exsl">
 
 <xsl:template name="linkTagsImagePage">
-	<link rel="first" href="{../image[position()=1]/full/@fileName}.html"></link>
-	<link rel="last" href="{../image[position()=last()]/full/@fileName}.html"></link>
-	<xsl:if test="position() &gt; 1">
-		<link rel="prev" href="{preceding-sibling::image[position()=1]/full/@fileName}.html"></link>
-	</xsl:if>
-	<xsl:if test="position() &lt; last()">
-		<link rel="next" href="{following-sibling::image[position()=1]/full/@fileName}.html"></link>
-	</xsl:if>
-	<xsl:choose>
-		<xsl:when test="count(/collections/collection) &gt; 1">
-			<link rel="up" href="../{../fileName}.html"></link>
-			<link rel="top" href="../index.html"></link>
-		</xsl:when>
-		<xsl:otherwise>
-			<link rel="up" href="../index.html"></link>
-		</xsl:otherwise>
-	</xsl:choose>
+    <link rel="first" href="{../image[position()=1]/full/@fileName}.html"></link>
+    <link rel="last" href="{../image[position()=last()]/full/@fileName}.html"></link>
+    <xsl:if test="position() &gt; 1">
+        <link rel="prev" href="{preceding-sibling::image[position()=1]/full/@fileName}.html"></link>
+    </xsl:if>
+    <xsl:if test="position() &lt; last()">
+        <link rel="next" href="{following-sibling::image[position()=1]/full/@fileName}.html"></link>
+    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="count(/collections/collection) &gt; 1">
+            <link rel="up" href="../{../fileName}.html"></link>
+            <link rel="top" href="../index.html"></link>
+        </xsl:when>
+        <xsl:otherwise>
+            <link rel="up" href="../index.html"></link>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="linkTagsCollectionPage">
-	<xsl:if test="count(/collections/collection) &gt; 1">
-		<link rel="up" href="index.html"></link>
-	</xsl:if>
+    <xsl:if test="count(/collections/collection) &gt; 1">
+        <link rel="up" href="index.html"></link>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template name="imagePage">
@@ -38,7 +38,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title><xsl:value-of select="title"/></title>
         <link rel="stylesheet" type="text/css" href="../s0/style.css"/>
-	<xsl:call-template name="linkTagsImagePage"/>
+    <xsl:call-template name="linkTagsImagePage"/>
     </head>
     <body id="imagePage">
 
@@ -112,7 +112,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title><xsl:value-of select="name"/></title>
         <link rel="stylesheet" type="text/css" href="s0/style.css"/>
-	<xsl:call-template name="linkTagsCollectionPage"/>
+    <xsl:call-template name="linkTagsCollectionPage"/>
     </head>
     <body id="collectionPage">
     <h1>
@@ -159,8 +159,8 @@
                     <a href="{fileName}.html">
                         <!-- Use first image as collection image -->
                         <img src="{fileName}/{image[1]/thumbnail/@fileName}"
-                        	width="{image[1]/thumbnail/@width}"
-                        	height="{image[1]/thumbnail/@height}" />
+                            width="{image[1]/thumbnail/@width}"
+                            height="{image[1]/thumbnail/@height}" />
                         <xsl:value-of select="name"/>
                     </a>
                 </span>
