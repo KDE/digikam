@@ -100,7 +100,7 @@ void PreviewLoadingTask::execute()
             }
 
             // rotate if needed - images are unrotated in the cache,
-            // except for RAW images, which are already rotated by dcraw.
+            // except for RAW images, which are already rotated by Raw engine.
             if (MetadataSettings::instance()->settings().exifRotate)
             {
                 m_img = m_img.copy();

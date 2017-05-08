@@ -316,7 +316,7 @@ void DRawDecoderWidget::setup(int advSettings)
     d->RAWQualityLabel    = new QLabel(i18nc("@label:listbox", "Quality:"), d->demosaicingSettings);
     d->RAWQualityComboBox = new DComboBox(d->demosaicingSettings);
 
-    // Original dcraw demosaicing methods
+    // Original Raw engine demosaicing methods
     d->RAWQualityComboBox->insertItem(DRawDecoderSettings::BILINEAR, i18nc("@item:inlistbox Quality", "Bilinear"));
     d->RAWQualityComboBox->insertItem(DRawDecoderSettings::VNG,      i18nc("@item:inlistbox Quality", "VNG"));
     d->RAWQualityComboBox->insertItem(DRawDecoderSettings::PPG,      i18nc("@item:inlistbox Quality", "PPG"));
@@ -344,7 +344,7 @@ void DRawDecoderWidget::setup(int advSettings)
                                 "demosaicing. The following methods are available for demosaicing "
                                 "RAW images:</para>"
 
-                                // Original dcraw demosaicing methods
+                                // Original Raw engine demosaicing methods
 
                                 "<para><list><item><emphasis strong='true'>Bilinear</emphasis>: use "
                                 "high-speed but low-quality bilinear interpolation (default - for "

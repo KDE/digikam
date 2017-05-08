@@ -267,6 +267,7 @@ bool LoadSaveThread::querySendNotifyEvent()
 int LoadSaveThread::exifOrientation(const DImg& image, const QString& filePath)
 {
     QVariant attribute = image.attribute(QLatin1String("fromRawEmbeddedPreview"));
+
     return exifOrientation(filePath, DMetadata(image.getMetadata()),
                            image.detectedFormat() == DImg::RAW,
                            (attribute.isValid() && attribute.toBool()));
@@ -275,7 +276,7 @@ int LoadSaveThread::exifOrientation(const DImg& image, const QString& filePath)
 int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& metadata,
                                     bool isRaw, bool fromRawEmbeddedPreview)
 {
-    int dbOrientation = MetaEngine::ORIENTATION_UNSPECIFIED;
+    int dbOrientation   = MetaEngine::ORIENTATION_UNSPECIFIED;
 
     if (infoProvider())
     {
@@ -284,8 +285,8 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
 
     int exifOrientation = metadata.getImageOrientation();
 
-    // Raw files are already rotated properly by dcraw. Only perform auto-rotation with JPEG/PNG/TIFF file.
-    // We don't have a feedback from dcraw about auto-rotated RAW file during decoding.
+    // Raw files are already rotated properly by Raw engine. Only perform auto-rotation with JPEG/PNG/TIFF file.
+    // We don't have a feedback from Raw engine about auto-rotated RAW file during decoding.
 
     if (isRaw && !fromRawEmbeddedPreview)
     {
@@ -297,10 +298,10 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
         // Assume A is the orientation as from metadata, B is an additional operation applied by the user,
         // C is the current orientation in the database.
         // A*B = C and B = A_inv * C
-        QMatrix A = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)exifOrientation);
-        QMatrix C = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)dbOrientation);
+        QMatrix A     = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)exifOrientation);
+        QMatrix C     = MetaEngineRotation::toMatrix((MetaEngine::ImageOrientation)dbOrientation);
         QMatrix A_inv = A.inverted();
-        QMatrix B = A_inv * C;
+        QMatrix B     = A_inv * C;
         MetaEngineRotation m(B.m11(), B.m12(), B.m21(), B.m22());
         return m.exifOrientation();
     }
@@ -309,6 +310,7 @@ int LoadSaveThread::exifOrientation(const QString& filePath, const DMetadata& me
     {
         return dbOrientation;
     }
+
     return exifOrientation;
 }
 
@@ -339,6 +341,7 @@ bool LoadSaveThread::exifRotate(DImg& image, const QString& filePath)
 bool LoadSaveThread::reverseExifRotate(DImg& image, const QString& filePath)
 {
     bool rotatedOrFlipped = image.reverseRotateAndFlip(exifOrientation(image, filePath));
+
     return rotatedOrFlipped;
 }
 

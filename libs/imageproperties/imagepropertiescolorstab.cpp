@@ -523,7 +523,7 @@ void ImagePropertiesColorsTab::slotMoreCompleteLoadingAvailable(const LoadingDes
         newLoadingDescription.equalsOrBetterThan(d->currentLoadingDescription))
     {
         // Yes, we do want to stop our old time-optimized loading and chain to the current, more complete loading.
-        // Even the time-optimized raw loading takes significant time, and we must avoid two dcraw instances running
+        // Even the time-optimized raw loading takes significant time, and we must avoid two Raw engine instances running
         // at a time.
         d->currentLoadingDescription = newLoadingDescription;
         d->imageLoaderThread->load(newLoadingDescription,

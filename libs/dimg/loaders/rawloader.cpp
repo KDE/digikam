@@ -5,7 +5,6 @@
  *
  * Date        : 2005-11-01
  * Description : A digital camera RAW files loader for DImg
- *               framework using an external dcraw instance.
  *
  * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2005-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
@@ -242,7 +241,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
 
             for (int w = 0; w < width; ++w)
             {
-                // No need to adapt RGB components accordingly with rgbmax value because dcraw
+                // No need to adapt RGB components accordingly with rgbmax value because Raw engine
                 // always return rgbmax to 255 in 8 bits/color/pixels.
 
                 dst[0]  = src[2];    // Blue
@@ -256,7 +255,7 @@ bool RAWLoader::loadedFromRawData(const QByteArray& data, int width, int height,
         }
 
         // NOTE: if Color Management is not used here, output color space is in sRGB* color space.
-        // Gamma and White balance are previously adjusted by dcraw in 8 bits color depth.
+        // Gamma and White balance are previously adjusted by Raw engine in 8 bits color depth.
 
         imageData() = image;
     }

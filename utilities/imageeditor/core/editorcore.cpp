@@ -269,8 +269,8 @@ void EditorCore::slotImageLoaded(const LoadingDescription& loadingDescription, c
         d->resolvedInitialHistory = d->image.getOriginalImageHistory();
         d->resolvedInitialHistory.clearReferredImages(); // default empty, real values set by higher level
 
-        // Raw files are already rotated properly by dcraw. Only perform auto-rotation with non-RAW files.
-        // We don't have a feedback from dcraw about auto-rotated RAW file during decoding.
+        // Raw files are already rotated properly by Raw engine. Only perform auto-rotation with non-RAW files.
+        // We don't have a feedback from Raw engine about auto-rotated RAW file during decoding.
         // Setting rotatedOrFlipped to true will reset the exif flag on save (the data is then already rotated)
 
         if (d->image.detectedFormat() == DImg::RAW)

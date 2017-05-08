@@ -729,7 +729,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     }
 
     // In first we trying to check the file extension. This is mandatory because
-    // some tiff files are detected like RAW files by dcraw::identify method.
+    // some tiff files are detected like RAW files by RawEngine::identify method.
 
     QFileInfo fileInfo(filePath);
 
@@ -835,7 +835,7 @@ DImg::FORMAT DImg::fileFormat(const QString& filePath)
     else if (RawEngine::DRawDecoder::rawFileIdentify(dcrawIdentify, filePath)
              && dcrawIdentify.isDecodable)
     {
-        // RAW File test using dcraw::identify method.
+        // RAW File test using RawEngine::identify method.
         // Need to test it before TIFF because any RAW file
         // formats using TIFF header.
         return RAW;
