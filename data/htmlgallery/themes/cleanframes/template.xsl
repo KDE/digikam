@@ -157,11 +157,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
                 <exsl:document href="Thmbs{fileName}.html">
                     <xsl:call-template name="createThumbnailPage"/>
                 </exsl:document>
-                
+
             </xsl:for-each>
     </body>
     </html>
-    
+
 </xsl:template>
 
 <!-- ********************************************************************* -->
