@@ -354,7 +354,7 @@ void GalleryElementFunctor::operator()(GalleryElement& element)
     }
     else
     {
-        // Try to use libkdcraw interface to identify image.
+        // Try to use Raw decoder to identify image.
 
         RawInfo     info;
         DRawDecoder rawdecoder;
