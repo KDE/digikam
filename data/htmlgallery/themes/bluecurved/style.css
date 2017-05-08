@@ -1,3 +1,22 @@
+/*
+A theme for the digikam html gallery.
+Copyright 2009-2017 Vincent Deroo Blanquart (vincent.deroo@free.fr)
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
 body {
   color: #527796;
   background: #0b9cf8  url(./body.png);
@@ -7,25 +26,19 @@ body {
   font-weight: bold;
 }
 
-
 table {
   text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
 
-
 td {
   padding: 1em;
 }
 
-
 img.photo {
   border: 2px solid #527796;
 }
-
-
-
 
 a:link {
   color: #527796;
@@ -33,14 +46,11 @@ a:link {
   text-decoration: none;
 }
 
-
 a:visited {
   color: #527796;
   font-weight: bold;
   text-decoration: none;
 }
-
-
 
 div.rubrique {
   top: 0px;
@@ -54,7 +64,6 @@ div.rubrique {
   padding-bottom: 5px;
 }
 
-
 div.titre {
   font-weight: bold;
   color: #527796;
@@ -63,7 +72,6 @@ div.titre {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-
 
 /*
  width  : to adjust with the icons size (64px)
@@ -79,6 +87,3 @@ div.gauche {
   width: 100px;
   height: 300px;
 }
-
-
-
