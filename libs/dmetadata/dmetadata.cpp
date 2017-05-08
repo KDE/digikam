@@ -89,7 +89,7 @@ void DMetadata::setSettings(const MetadataSettingsContainer& settings)
 bool DMetadata::load(const QString& filePath) const
 {
     // In first, we trying to get metadata using Exiv2,
-    // else we will use dcraw to extract minimal information.
+    // else we will use Raw engine to extract minimal information.
 
     FileReadLocker lock(filePath);
 
