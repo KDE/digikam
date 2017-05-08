@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FILEREADWRITELOCK_H
-#define FILEREADWRITELOCK_H
+#ifndef FILE_READ_WRITE_LOCK_H
+#define FILE_READ_WRITE_LOCK_H
 
 // Qt includes
 
@@ -107,4 +107,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // FILEREADWRITELOCK_H
+#endif // FILE_READ_WRITE_LOCK_H

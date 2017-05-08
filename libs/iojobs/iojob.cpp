@@ -41,6 +41,7 @@
 #include "coredbaccess.h"
 #include "collectionmanager.h"
 #include "albummanager.h"
+#include "dfileoperations.h"
 
 namespace Digikam
 {
@@ -56,46 +57,6 @@ CopyJob::CopyJob(const QUrl& src, const QUrl& dest, bool isMove)
     m_src    = src;
     m_dest   = dest;
     m_isMove = isMove;
-}
-
-bool CopyJob::copyFolderRecursively(const QString& srcPath, const QString& dstPath)
-{
-    QDir srcDir(srcPath);
-    QString newCopyPath = dstPath + QLatin1Char('/') + srcDir.dirName();
-
-    if (!srcDir.mkpath(newCopyPath))
-    {
-        return false;
-    }
-
-    foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Files))
-    {
-        QString copyPath = newCopyPath + QLatin1Char('/') + fileInfo.fileName();
-
-        if (!QFile::copy(fileInfo.filePath(), copyPath))
-            return false;
-    }
-
-    foreach (const QFileInfo& fileInfo, srcDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
-    {
-        copyFolderRecursively(fileInfo.filePath(), newCopyPath);
-    }
-
-    return true;
-}
-
-bool CopyJob::copyFiles(const QStringList& srcPaths, const QString& dstPath)
-{
-    foreach (const QString& path, srcPaths)
-    {
-        QFileInfo fileInfo(path);
-        QString copyPath = dstPath + QLatin1Char('/') + fileInfo.fileName();
-
-        if (!QFile::copy(fileInfo.filePath(), copyPath))
-            return false;
-    }
-
-    return true;
 }
 
 void CopyJob::run()
@@ -140,7 +101,7 @@ void CopyJob::run()
             if (!srcDir.rename(srcDir.path(), destenation))
             {
                 // If QDir::rename fails, try copy and remove.
-                if (!copyFolderRecursively(srcDir.path(), dstDir.path()))
+                if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
                 {
                     emit error(i18n("Could not move folder %1 to album %2",
                                     QDir::toNativeSeparators(srcDir.path()),
@@ -173,7 +134,7 @@ void CopyJob::run()
         {
             QDir srcDir(srcInfo.filePath());
 
-            if (!copyFolderRecursively(srcDir.path(), dstDir.path()))
+            if (!DFileOperations::copyFolderRecursively(srcDir.path(), dstDir.path()))
             {
                 emit error(i18n("Could not copy folder %1 to album %2",
                                 QDir::toNativeSeparators(srcDir.path()),

@@ -62,9 +62,6 @@ public:
 
     CopyJob(const QUrl& src, const QUrl& dest, bool isMove);
 
-    static bool copyFolderRecursively(const QString& srcPath, const QString& dstPath);
-    static bool copyFiles(const QStringList& srcPaths, const QString& dstPath);
-
 protected:
 
     void run();

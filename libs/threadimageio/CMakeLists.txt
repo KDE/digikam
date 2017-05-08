@@ -10,6 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libthreadimageio_SRCS
+    dfileoperations.cpp
     filereadwritelock.cpp
     loadsavethread.cpp
     managedloadsavethread.cpp
