@@ -2,38 +2,38 @@ body {
     background-color: #dddcca;
     color: black;
     margin: 0;
-    padding: 0;
+	padding: 0;
 }
 
 a {
     color: #2f5d9c;
-    text-decoration: none;
+	text-decoration: none;
 }
 
 a:hover {
     color: #456ff3;
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 h1 {
-    padding: 0;
-    margin: 0;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
+	padding: 0;
+	margin: 0;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 
-    color: #460;
+	color: #460;
     font-size: 120%;
-    font-family: Bitstream Vera Serif, serif;
-    background-color: #fbfaf4;
+	font-family: Bitstream Vera Serif, serif;
+	background-color: #fbfaf4;
     border-bottom: 1px dashed #cccbb9;
-    text-align: center;
+	text-align: center;
 }
 
 #content {
-    padding-top: 0.5em;
-    margin: 0 auto;
-    width: 95%;
-    text-align: center;
+	padding-top: 0.5em;
+	margin: 0 auto;
+	width: 95%;
+	text-align: center;
 }
 
 ul {
@@ -41,32 +41,32 @@ ul {
 }
 
 li {
-    float: left;
+	float: left;
 }
 
 li a {
     display: block;
-    margin: 6px;
-    padding: 5px;
-    background-color: #eee;
-    border: 1px solid #cccbb9;
-    text-align: center;
+	margin: 6px;
+	padding: 5px;
+	background-color: #eee;
+	border: 1px solid #cccbb9;
+	text-align: center;
 }
 
 li a:hover {
-    border: 1px solid #456ff3;
+	border: 1px solid #456ff3;
 }
 
 /* Image page */
 #imagePage h1 {
-    text-align:left;
+	text-align:left;
 }
 #nav {
-    float: right;
+	float: right;
 }
 
 #imagePage img {
-    padding: 5px;
-    background-color: #eee;
-    border: 1px solid #cccbb9;
+	padding: 5px;
+	background-color: #eee;
+	border: 1px solid #cccbb9;
 }
