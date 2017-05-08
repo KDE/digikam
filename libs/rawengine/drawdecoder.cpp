@@ -459,7 +459,7 @@ bool DRawDecoder::extractRAWData(const QString& filePath, QByteArray& rawData, R
 }
 
 bool DRawDecoder::decodeHalfRAWImage(const QString& filePath, const DRawDecoderSettings& DRawDecoderSettings,
-                                QByteArray& imageData, int& width, int& height, int& rgbmax)
+                                     QByteArray& imageData, int& width, int& height, int& rgbmax)
 {
     m_decoderSettings                    = DRawDecoderSettings;
     m_decoderSettings.halfSizeColorImage = true;
@@ -467,7 +467,7 @@ bool DRawDecoder::decodeHalfRAWImage(const QString& filePath, const DRawDecoderS
 }
 
 bool DRawDecoder::decodeRAWImage(const QString& filePath, const DRawDecoderSettings& DRawDecoderSettings,
-                            QByteArray& imageData, int& width, int& height, int& rgbmax)
+                                 QByteArray& imageData, int& width, int& height, int& rgbmax)
 {
     m_decoderSettings = DRawDecoderSettings;
     return (d->loadFromLibraw(filePath, imageData, width, height, rgbmax));
