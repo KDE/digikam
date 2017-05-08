@@ -111,20 +111,20 @@ public:
 
 protected:
 
-    QString mTheme;
-    bool    mUseOriginalImageAsFullImage;
-    bool    mFullResize;
+    QString m_theme;
+    bool    m_useOriginalImageAsFullImage;
+    bool    m_fullResize;
     int     m_fullSize;
-    int     mFullFormat;
-    int     mFullQuality;
-    bool    mCopyOriginalImage;
+    int     m_fullFormat;
+    int     m_fullQuality;
+    bool    m_copyOriginalImage;
     int     m_thumbnailSize;
-    int     mThumbnailFormat;
-    int     mThumbnailQuality;
-    bool    mThumbnailSquare;
-    QUrl    mDestUrl;
-    bool    mOpenInBrowser;
-    QString mImageSelectionTitle; // Gallery title to use for GalleryInfo::ImageGetOption::IMAGES selection.
+    int     m_thumbnailFormat;
+    int     m_thumbnailQuality;
+    bool    m_thumbnailSquare;
+    QUrl    m_destUrl;
+    bool    m_openInBrowser;
+    QString m_imageSelectionTitle; // Gallery title to use for GalleryInfo::ImageGetOption::IMAGES selection.
 };
 
 } // namespace Digikam

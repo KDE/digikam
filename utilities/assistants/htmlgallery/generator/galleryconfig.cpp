@@ -35,21 +35,21 @@ GalleryConfig::GalleryConfig()
 {
     setCurrentGroup(QLatin1String("general"));
 
-    KConfigSkeleton::ItemString* const itemTheme
-        = new KConfigSkeleton::ItemString(currentGroup(), QLatin1String("theme"), mTheme);
+    KConfigSkeleton::ItemString* const item_theme
+        = new KConfigSkeleton::ItemString(currentGroup(), QLatin1String("theme"), m_theme);
 
-    addItem(itemTheme, QLatin1String("theme"));
+    addItem(item_theme, QLatin1String("theme"));
 
-    KConfigSkeleton::ItemBool* const itemUseOriginalImageAsFullImage
+    KConfigSkeleton::ItemBool* const item_useOriginalImageAsFullImage
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("useOriginalImageAsFullImage"),
-                                        mUseOriginalImageAsFullImage, false);
+                                        m_useOriginalImageAsFullImage, false);
 
-    addItem(itemUseOriginalImageAsFullImage, QLatin1String("useOriginalImageAsFullImage"));
+    addItem(item_useOriginalImageAsFullImage, QLatin1String("useOriginalImageAsFullImage"));
 
-    KConfigSkeleton::ItemBool* const itemFullResize
-        = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("fullResize"), mFullResize, true);
+    KConfigSkeleton::ItemBool* const item_fullResize
+        = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("fullResize"), m_fullResize, true);
 
-    addItem(itemFullResize, QLatin1String("fullResize"));
+    addItem(item_fullResize, QLatin1String("fullResize"));
 
     KConfigSkeleton::ItemInt* const item_fullSize
         = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("fullSize"), m_fullSize, 1024);
@@ -67,22 +67,22 @@ GalleryConfig::GalleryConfig()
     choice2.name = QLatin1String("PNG");
     valuesfullFormat.append(choice2);
 
-    KConfigSkeleton::ItemEnum* const itemFullFormat
+    KConfigSkeleton::ItemEnum* const item_fullFormat
         = new KConfigSkeleton::ItemEnum(currentGroup(), QLatin1String("fullFormat"),
-                                        mFullFormat, valuesfullFormat, EnumFullFormat::JPEG);
+                                        m_fullFormat, valuesfullFormat, EnumFullFormat::JPEG);
 
-    addItem(itemFullFormat, QLatin1String("fullFormat"));
+    addItem(item_fullFormat, QLatin1String("fullFormat"));
 
-    KConfigSkeleton::ItemInt* const itemFullQuality
-        = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("fullQuality"), mFullQuality, 80);
+    KConfigSkeleton::ItemInt* const item_fullQuality
+        = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("fullQuality"), m_fullQuality, 80);
 
-    addItem(itemFullQuality, QLatin1String("fullQuality"));
+    addItem(item_fullQuality, QLatin1String("fullQuality"));
 
-    KConfigSkeleton::ItemBool* const itemCopyOriginalImage
+    KConfigSkeleton::ItemBool* const item_copyOriginalImage
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("copyOriginalImage"),
-                                        mCopyOriginalImage, false);
+                                        m_copyOriginalImage, false);
 
-    addItem(itemCopyOriginalImage, QLatin1String("copyOriginalImage"));
+    addItem(item_copyOriginalImage, QLatin1String("copyOriginalImage"));
 
     KConfigSkeleton::ItemInt* const item_thumbnailSize
         = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("thumbnailSize"), m_thumbnailSize, 120);
@@ -100,38 +100,38 @@ GalleryConfig::GalleryConfig()
     choice4.name = QLatin1String("PNG");
     valuesthumbnailFormat.append(choice4);
 
-    KConfigSkeleton::ItemEnum* const itemThumbnailFormat
+    KConfigSkeleton::ItemEnum* const item_thumbnailFormat
         = new KConfigSkeleton::ItemEnum(currentGroup(), QLatin1String("thumbnailFormat"),
-                                        mThumbnailFormat, valuesthumbnailFormat, EnumThumbnailFormat::JPEG);
+                                        m_thumbnailFormat, valuesthumbnailFormat, EnumThumbnailFormat::JPEG);
 
-    addItem(itemThumbnailFormat, QLatin1String("thumbnailFormat"));
+    addItem(item_thumbnailFormat, QLatin1String("thumbnailFormat"));
 
-    KConfigSkeleton::ItemInt* const itemThumbnailQuality
+    KConfigSkeleton::ItemInt* const item_thumbnailQuality
         = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("thumbnailQuality"),
-                                       mThumbnailQuality, 80);
+                                       m_thumbnailQuality, 80);
 
-    addItem(itemThumbnailQuality, QLatin1String("thumbnailQuality"));
+    addItem(item_thumbnailQuality, QLatin1String("thumbnailQuality"));
 
-    KConfigSkeleton::ItemBool* const itemThumbnailSquare
+    KConfigSkeleton::ItemBool* const item_thumbnailSquare
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("thumbnailSquare"),
-                                        mThumbnailSquare, true);
+                                        m_thumbnailSquare, true);
 
-    addItem(itemThumbnailSquare, QLatin1String("thumbnailSquare"));
+    addItem(item_thumbnailSquare, QLatin1String("thumbnailSquare"));
 
-    KConfigSkeleton::ItemUrl* const itemDestUrl
-        = new KConfigSkeleton::ItemUrl(currentGroup(), QLatin1String("destUrl"), mDestUrl);
+    KConfigSkeleton::ItemUrl* const item_destUrl
+        = new KConfigSkeleton::ItemUrl(currentGroup(), QLatin1String("destUrl"), m_destUrl);
 
-    addItem(itemDestUrl, QLatin1String("destUrl"));
+    addItem(item_destUrl, QLatin1String("destUrl"));
 
-    KConfigSkeleton::ItemBool* const itemOpenInBrowser
-        = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("openInBrowser"), mOpenInBrowser, true);
+    KConfigSkeleton::ItemBool* const item_openInBrowser
+        = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("openInBrowser"), m_openInBrowser, true);
 
-    addItem(itemOpenInBrowser, QLatin1String("openInBrowser"));
+    addItem(item_openInBrowser, QLatin1String("openInBrowser"));
 
-    KConfigSkeleton::ItemString* const itemImageSelectionTitle
-        = new KConfigSkeleton::ItemString(currentGroup(), QLatin1String("imageSelectionTitle"), mImageSelectionTitle);
+    KConfigSkeleton::ItemString* const item_imageSelectionTitle
+        = new KConfigSkeleton::ItemString(currentGroup(), QLatin1String("imageSelectionTitle"), m_imageSelectionTitle);
 
-    addItem(itemImageSelectionTitle, QLatin1String("imageSelectionTitle"));
+    addItem(item_imageSelectionTitle, QLatin1String("imageSelectionTitle"));
 }
 
 GalleryConfig::~GalleryConfig()
@@ -141,34 +141,34 @@ GalleryConfig::~GalleryConfig()
 void GalleryConfig::setTheme(const QString& v)
 {
     if (!isImmutable(QLatin1String("theme")))
-        mTheme = v;
+        m_theme = v;
 }
 
 QString GalleryConfig::theme() const
 {
-    return mTheme;
+    return m_theme;
 }
 
 void GalleryConfig::setUseOriginalImageAsFullImage(bool v)
 {
     if (!isImmutable(QLatin1String("useOriginalImageAsFullImage")))
-        mUseOriginalImageAsFullImage = v;
+        m_useOriginalImageAsFullImage = v;
 }
 
 bool GalleryConfig::GalleryConfig::useOriginalImageAsFullImage() const
 {
-    return mUseOriginalImageAsFullImage;
+    return m_useOriginalImageAsFullImage;
 }
 
 void GalleryConfig::setFullResize(bool v)
 {
     if (!isImmutable(QStringLiteral("fullResize")))
-        mFullResize = v;
+        m_fullResize = v;
 }
 
 bool GalleryConfig::fullResize() const
 {
-    return mFullResize;
+    return m_fullResize;
 }
 
 void GalleryConfig::setFullSize(int v)
@@ -185,34 +185,34 @@ int GalleryConfig::fullSize() const
 void GalleryConfig::setFullFormat(int v)
 {
     if (!isImmutable(QLatin1String("fullFormat")))
-        mFullFormat = v;
+        m_fullFormat = v;
 }
 
 int GalleryConfig::fullFormat() const
 {
-    return mFullFormat;
+    return m_fullFormat;
 }
 
 void GalleryConfig::setFullQuality(int v)
 {
     if (!isImmutable(QLatin1String("fullQuality")))
-        mFullQuality = v;
+        m_fullQuality = v;
 }
 
 int GalleryConfig::fullQuality() const
 {
-    return mFullQuality;
+    return m_fullQuality;
 }
 
 void GalleryConfig::setCopyOriginalImage(bool v)
 {
     if (!isImmutable(QLatin1String("copyOriginalImage")))
-        mCopyOriginalImage = v;
+        m_copyOriginalImage = v;
 }
 
 bool GalleryConfig::copyOriginalImage() const
 {
-    return mCopyOriginalImage;
+    return m_copyOriginalImage;
 }
 
 void GalleryConfig::setThumbnailSize(int v)
@@ -229,67 +229,67 @@ int GalleryConfig::thumbnailSize() const
 void GalleryConfig::setThumbnailFormat(int v)
 {
     if (!isImmutable(QLatin1String("thumbnailFormat")))
-        mThumbnailFormat = v;
+        m_thumbnailFormat = v;
 }
 
 int GalleryConfig::thumbnailFormat() const
 {
-    return mThumbnailFormat;
+    return m_thumbnailFormat;
 }
 
 void GalleryConfig::setThumbnailQuality(int v)
 {
     if (!isImmutable(QLatin1String("thumbnailQuality")))
-        mThumbnailQuality = v;
+        m_thumbnailQuality = v;
 }
 
 int GalleryConfig::thumbnailQuality() const
 {
-    return mThumbnailQuality;
+    return m_thumbnailQuality;
 }
 
 void GalleryConfig::setThumbnailSquare(bool v)
 {
     if (!isImmutable(QLatin1String("thumbnailSquare")))
-        mThumbnailSquare = v;
+        m_thumbnailSquare = v;
 }
 
 bool GalleryConfig::thumbnailSquare() const
 {
-    return mThumbnailSquare;
+    return m_thumbnailSquare;
 }
 
 void GalleryConfig::setDestUrl(const QUrl& v)
 {
     if (!isImmutable(QLatin1String("destUrl")))
-        mDestUrl = v;
+        m_destUrl = v;
 }
 
 QUrl GalleryConfig::destUrl() const
 {
-    return mDestUrl;
+    return m_destUrl;
 }
 
 void GalleryConfig::setOpenInBrowser(bool v)
 {
     if (!isImmutable(QLatin1String("openInBrowser")))
-        mOpenInBrowser = v;
+        m_openInBrowser = v;
 }
 
 bool GalleryConfig::openInBrowser() const
 {
-    return mOpenInBrowser;
+    return m_openInBrowser;
 }
 
 void GalleryConfig::setImageSelectionTitle(const QString& v)
 {
     if (!isImmutable(QLatin1String("imageSelectionTitle")))
-        mImageSelectionTitle = v;
+        m_imageSelectionTitle = v;
 }
 
 QString GalleryConfig::imageSelectionTitle() const
 {
-    return mImageSelectionTitle;
+    return m_imageSelectionTitle;
 }
 
 } // namespace Digikam

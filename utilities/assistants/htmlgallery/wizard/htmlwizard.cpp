@@ -97,7 +97,7 @@ HTMLWizard::HTMLWizard(QWidget* const parent, DInfoInterface* const iface)
     d->info->load();
 
     d->introPage         = new HTMLIntroPage(this, i18n("Welcome to HTML Gallery Tool"));
-    d->selectionPage     = new HTMLSelectionPage(this, i18n("Albums Selection"));
+    d->selectionPage     = new HTMLSelectionPage(this, i18n("Items Selection"));
     d->themePage         = new HTMLThemePage(this, i18n("Theme Selection"));
     d->parametersPage    = new HTMLParametersPage(this, i18n("Theme Parameters"));
     d->imageSettingsPage = new HTMLImageSettingsPage(this, i18n("Image Settings"));

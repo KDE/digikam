@@ -45,11 +45,11 @@ public:
 
     ThemeListBoxItem(QListWidget* const list, GalleryTheme::Ptr theme)
         : QListWidgetItem(theme->name(), list),
-          mTheme(theme)
+          m_theme(theme)
     {
     }
 
-    GalleryTheme::Ptr mTheme;
+    GalleryTheme::Ptr m_theme;
 };
 
 // ------------------------------------------------------------------------

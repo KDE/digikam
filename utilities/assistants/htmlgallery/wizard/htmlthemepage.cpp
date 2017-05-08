@@ -167,7 +167,7 @@ GalleryTheme::Ptr HTMLThemePage::currentTheme() const
 
     if (item)
     {
-        return item->mTheme;
+        return item->m_theme;
     }
 
     return GalleryTheme::Ptr(0);
