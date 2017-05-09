@@ -77,16 +77,16 @@ public:
     void setContactInfo(const IptcCoreContactInfo& inf);
     void setIptcSubjects(const QStringList& subjects);
 
-    QStringList          authors()         const;
-    QString              authorsPosition() const;
-    QString              credit()          const;
-    MetaEngine::AltLangMap   copyright()       const;
-    MetaEngine::AltLangMap   rightUsageTerms() const;
-    QString              source()          const;
-    QString              instructions()    const;
-    IptcCoreLocationInfo locationInfo()    const;
-    IptcCoreContactInfo  contactInfo()     const;
-    QStringList          IptcSubjects()    const;
+    QStringList            authors()         const;
+    QString                authorsPosition() const;
+    QString                credit()          const;
+    MetaEngine::AltLangMap copyright()       const;
+    MetaEngine::AltLangMap rightUsageTerms() const;
+    QString                source()          const;
+    QString                instructions()    const;
+    IptcCoreLocationInfo   locationInfo()    const;
+    IptcCoreContactInfo    contactInfo()     const;
+    QStringList            IptcSubjects()    const;
 
     static QString removeTemplateTitle()
     {
@@ -97,19 +97,19 @@ protected:
 
     /** Template title used internaly. This value always exist and cannot be empty.
      */
-    QString              m_templateTitle;
+    QString                  m_templateTitle;
 
     /** List of author names.
      */
-    QStringList          m_authors;
+    QStringList              m_authors;
 
     /** Description of authors position.
      */
-    QString              m_authorsPosition;
+    QString                  m_authorsPosition;
 
     /** Credit description.
      */
-    QString              m_credit;
+    QString                  m_credit;
 
     /** Language alternative copyright notices.
      */
@@ -121,23 +121,23 @@ protected:
 
     /** Descriptions of contents source.
      */
-    QString              m_source;
+    QString                  m_source;
 
     /** Special instructions to process with contents.
      */
-    QString              m_instructions;
+    QString                  m_instructions;
 
     /** IPTC Location Information.
      */
-    IptcCoreLocationInfo m_locationInfo;
+    IptcCoreLocationInfo     m_locationInfo;
 
     /** IPTC Contact Information.
      */
-    IptcCoreContactInfo  m_contactInfo;
+    IptcCoreContactInfo      m_contactInfo;
 
     /** IPTC Subjects Information.
      */
-    QStringList          m_subjects;
+    QStringList              m_subjects;
 };
 
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.

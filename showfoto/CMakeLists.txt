@@ -45,6 +45,7 @@ set(showfoto_SRCS
     thumbbar/showfotocategorizedview.cpp
     thumbbar/showfotothumbnailbar.cpp
 
+    main/showfotoinfoiface.cpp
     main/showfotosettings.cpp
     main/main.cpp
     main/showfoto.cpp

@@ -89,6 +89,11 @@ DInfoInterface::DAlbumIDs DInfoInterface::albumChooserItems() const
     return DAlbumIDs();
 }
 
+bool DInfoInterface::supportAlbums() const
+{
+    return false;
+}
+
 // -----------------------------------------------------------------
 
 DItemInfo::DItemInfo(const DInfoInterface::DInfoMap& info)
@@ -100,241 +105,125 @@ DItemInfo::~DItemInfo()
 {
 }
 
-QString DItemInfo::name() const
+QVariant DItemInfo::parseInfoMap(const QString& key) const
 {
-    QString ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("name"));
+    QVariant ret;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(key);
 
     if (it != m_info.end())
     {
-        ret = it.value().toString();
+        ret = it.value();
     }
 
     return ret;
+}
+
+QString DItemInfo::name() const
+{
+    QVariant val = parseInfoMap(QLatin1String("name"));
+    return !val.isNull() ? val.toString() : QString();
 }
 
 QString DItemInfo::comment() const
 {
-    QString ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("comment"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toString();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("comment"));
+    return !val.isNull() ? val.toString() : QString();
 }
 
 QString DItemInfo::title() const
 {
-    QString ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("title"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toString();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("title"));
+    return !val.isNull() ? val.toString() : QString();
 }
 
 int DItemInfo::orientation() const
 {
-    int ret                                     = MetaEngine::ORIENTATION_UNSPECIFIED;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("orientation"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toInt();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("orientation"));
+    return !val.isNull() ? val.toInt() : MetaEngine::ORIENTATION_UNSPECIFIED;
 }
 
 QDateTime DItemInfo::dateTime() const
 {
-    QDateTime ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("datetime"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toDateTime();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("datetime"));
+    return !val.isNull() ? val.toDateTime() : QDateTime();
 }
 
 QStringList DItemInfo::keywords() const
 {
-    QStringList ret;
-
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("keywords"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toStringList();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("keywords"));
+    return !val.isNull() ? val.toStringList() : QStringList();
 }
 
 QStringList DItemInfo::tagsPath() const
 {
-    QStringList ret;
-
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("tagspath"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toStringList();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("tagspath"));
+    return !val.isNull() ? val.toStringList() : QStringList();
 }
 
 int DItemInfo::rating() const
 {
-    int ret                                     = RatingMin;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("rating"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toInt();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("rating"));
+    return !val.isNull() ? val.toInt() : RatingMin;
 }
 
 int DItemInfo::colorLabel() const
 {
-    int ret                                     = NoColorLabel;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("colorlabel"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toInt();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("colorlabel"));
+    return !val.isNull() ? val.toInt() : NoColorLabel;
 }
 
 int DItemInfo::pickLabel() const
 {
-    int ret                                     = NoPickLabel;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("picklabel"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toInt();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("picklabel"));
+    return !val.isNull() ? val.toInt() : NoPickLabel;
 }
 
 double DItemInfo::latitude() const
 {
-    double ret                                  = 0.0;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("latitude"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toDouble();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("latitude"));
+    return !val.isNull() ? val.toDouble() : 0.0;
 }
 
 double DItemInfo::longitude() const
 {
-    double ret                                  = 0.0;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("longitude"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toDouble();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("longitude"));
+    return !val.isNull() ? val.toDouble() : 0.0;
 }
 
 double DItemInfo::altitude() const
 {
-    double ret                                  = 0.0;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("altitude"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toDouble();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("altitude"));
+    return !val.isNull() ? val.toDouble() : 0.0;
 }
 
 qlonglong DItemInfo::fileSize() const
 {
-    qlonglong ret                               = 0;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("filesize"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toLongLong();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("filesize"));
+    return !val.isNull() ? val.toLongLong() : 0;
 }
 
 QStringList DItemInfo::creators() const
 {
-    QStringList ret;
-
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("creators"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toStringList();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("creators"));
+    return !val.isNull() ? val.toStringList() : QStringList();
 }
 
 QString DItemInfo::credit() const
 {
-    QString ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("credit"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toString();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("credit"));
+    return !val.isNull() ? val.toString() : QString();
 }
 
 QString DItemInfo::rights() const
 {
-    QString ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("rights"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toString();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("rights"));
+    return !val.isNull() ? val.toString() : QString();
 }
 
 QString DItemInfo::source() const
 {
-    QString ret;
-    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("source"));
-
-    if (it != m_info.end())
-    {
-        ret = it.value().toString();
-    }
-
-    return ret;
+    QVariant val = parseInfoMap(QLatin1String("source"));
+    return !val.isNull() ? val.toString() : QString();
 }
 
 // -----------------------------------------------------------------

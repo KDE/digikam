@@ -85,6 +85,7 @@ public:
         selectNoneAction(0),
         slideShowAction(0),
         presentationAction(0),
+        htmlAction(0),
         softProofOptionsAction(0),
         zoomFitToSelectAction(0),
         zoomMinusAction(0),
@@ -203,6 +204,7 @@ public:
     QAction*                     selectNoneAction;
     QAction*                     slideShowAction;
     QAction*                     presentationAction;
+    QAction*                     htmlAction;
     QAction*                     softProofOptionsAction;
     QAction*                     zoomFitToSelectAction;
     QAction*                     zoomMinusAction;

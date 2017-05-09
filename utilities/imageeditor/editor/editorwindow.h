@@ -294,6 +294,7 @@ protected Q_SLOTS:
     virtual void slotRevert() = 0;
     virtual void slotAddedDropedItems(QDropEvent* e) = 0;
     virtual void slotOpenWith(QAction* action=0) = 0;
+    virtual void slotHtmlGallery() = 0;
 
 private Q_SLOTS:
 

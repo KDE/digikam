@@ -38,19 +38,21 @@ class DIGIKAM_EXPORT DBInfoIface : public DInfoInterface
 
 public:
 
-    explicit DBInfoIface(QObject* const parent);
+    explicit DBInfoIface(QObject* const parent,
+                         const QList<QUrl>& lst = QList<QUrl>());
     ~DBInfoIface();
 
-    QList<QUrl> currentSelectedItems()           const;
-    QList<QUrl> currentAlbumItems()              const;
-    QList<QUrl> allAlbumItems()                  const;
+    QList<QUrl> currentSelectedItems()              const;
+    QList<QUrl> currentAlbumItems()                 const;
+    QList<QUrl> allAlbumItems()                     const;
 
-    DInfoMap albumInfo(int)                      const;
-    DInfoMap itemInfo(const QUrl&)               const;
-    QList<QUrl> albumsItems(const DAlbumIDs&)    const;
+    DInfoMap    albumInfo(int)                      const;
+    DInfoMap    itemInfo(const QUrl&)               const;
+    QList<QUrl> albumsItems(const DAlbumIDs&)       const;
 
-    QWidget* albumChooser(QWidget* const parent) const;
-    DAlbumIDs albumChooserItems()                const;
+    QWidget*    albumChooser(QWidget* const parent) const;
+    DAlbumIDs   albumChooserItems()                 const;
+    bool        supportAlbums()                     const;
 
 private:
 

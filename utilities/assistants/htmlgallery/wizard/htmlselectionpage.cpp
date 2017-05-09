@@ -42,7 +42,8 @@ class HTMLSelectionPage::Private
 public:
 
     Private(QWizard* const dialog)
-      : albumSelector(0),
+      : albumSupport(false),
+        albumSelector(0),
         imageList(0),
         stack(0),
         wizard(0),
@@ -58,6 +59,7 @@ public:
         }
     }
 
+    bool             albumSupport;
     QWidget*         albumSelector;
     DImagesList*     imageList;
     QStackedWidget*  stack;
@@ -73,9 +75,16 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
     setObjectName(QLatin1String("AlbumSelectorPage"));
 
     d->stack              = new QStackedWidget(this);
+    d->albumSupport       = (d->iface && d->iface->supportAlbums());
 
-    d->albumSelector = d->iface ? d->iface->albumChooser(this)
-                                : new QWidget(this);
+    if (d->albumSupport)
+    {
+        d->albumSelector = d->iface->albumChooser(this);
+    }
+    else
+    {
+        d->albumSelector = new QWidget(this);
+    }
 
     d->stack->insertWidget(GalleryInfo::ALBUMS, d->albumSelector);
 
@@ -86,7 +95,7 @@ HTMLSelectionPage::HTMLSelectionPage(QWizard* const dialog, const QString& title
     setPageWidget(d->stack);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-pictures")));
 
-    if (d->iface)
+    if (d->albumSupport)
     {
         connect(d->iface, SIGNAL(signalAlbumChooserSelectionChanged()),
                 this, SIGNAL(completeChanged()));
@@ -112,7 +121,7 @@ bool HTMLSelectionPage::validatePage()
 {
     if (d->stack->currentIndex() == GalleryInfo::ALBUMS)
     {
-        if (d->iface)
+        if (d->albumSupport)
         {
             if (d->iface->albumChooserItems().empty())
                 return false;
@@ -139,7 +148,7 @@ bool HTMLSelectionPage::isComplete() const
 {
     if (d->stack->currentIndex() == GalleryInfo::ALBUMS)
     {
-        if (!d->iface)
+        if (!d->albumSupport)
             return false;
 
         return (!d->iface->albumChooserItems().empty());

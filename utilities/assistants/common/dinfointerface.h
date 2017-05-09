@@ -62,23 +62,24 @@ public:
 
     // Low level items and albums methods
 
-    virtual QList<QUrl> currentSelectedItems()           const;
-    virtual QList<QUrl> currentAlbumItems()              const;
-    virtual QList<QUrl> allAlbumItems()                  const;
+    virtual QList<QUrl> currentSelectedItems()            const;
+    virtual QList<QUrl> currentAlbumItems()               const;
+    virtual QList<QUrl> allAlbumItems()                   const;
 
-    virtual int currentAlbum()                           const;
-    virtual QList<QUrl> albumItems(int)                  const;
+    virtual int         currentAlbum()                    const;
+    virtual QList<QUrl> albumItems(int)                   const;
 
-    virtual DInfoMap albumInfo(int)                      const;
-    virtual DInfoMap itemInfo(const QUrl&)               const;
-    virtual QList<QUrl> albumsItems(const DAlbumIDs&)    const;
+    virtual DInfoMap    albumInfo(int)                    const;
+    virtual DInfoMap    itemInfo(const QUrl&)             const;
+    virtual QList<QUrl> albumsItems(const DAlbumIDs&)     const;
 
 public:
 
     // Album Selector view methods.
 
-    virtual QWidget* albumChooser(QWidget* const parent) const;
-    virtual DAlbumIDs albumChooserItems()                const;
+    virtual QWidget*  albumChooser(QWidget* const parent) const;
+    virtual DAlbumIDs albumChooserItems()                 const;
+    virtual bool      supportAlbums()                     const;
 
     Q_SIGNAL void signalAlbumChooserSelectionChanged();
 };
@@ -113,6 +114,10 @@ public:
     QString     credit()      const;
     QString     rights()      const;
     QString     source()      const;
+
+private:
+
+    QVariant parseInfoMap(const QString& key) const;
 
 private:
 

@@ -461,6 +461,15 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcut(d->filePrintAction, Qt::CTRL + Qt::Key_P);
     d->filePrintAction->setEnabled(false);
 
+#ifdef HAVE_HTMLGALLERY
+    d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
+                                i18nc("@action", "Create Html gallery..."),
+                                this);
+    connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
+    ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
+    ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
+#endif
+
     d->openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
     d->openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(d->openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
@@ -708,7 +717,7 @@ void EditorWindow::setupStandardActions()
     connect(d->colorSpaceConverter, SIGNAL(triggered()),
             this, SLOT(slotProfileConversionTool()));
     d->colorSpaceConverter->setEnabled(false);
-    
+
     slotUpdateColorSpaceMenu();
 
     d->BWAction = new QAction(QIcon::fromTheme(QLatin1String("bwtonal")), i18n("Black && White..."), this);
@@ -1391,11 +1400,13 @@ void EditorWindow::toggleStandardActions(bool val)
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
+    d->htmlAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
+    d->presentationAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);

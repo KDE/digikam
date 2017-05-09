@@ -102,8 +102,10 @@
 #include "showfotothumbnailmodel.h"
 #include "showfotocategorizedview.h"
 #include "showfotosettings.h"
+#include "showfotoinfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
+#include "htmlwizard.h"
 
 namespace ShowFoto
 {
@@ -1373,6 +1375,14 @@ void ShowFoto::slotEditMetadata()
 
     // Update image information everywhere.
     slotChanged();
+}
+
+void ShowFoto::slotHtmlGallery()
+{
+#ifdef HAVE_HTMLGALLERY
+    HTMLWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
 }
 
 }   // namespace ShowFoto

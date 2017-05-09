@@ -108,7 +108,9 @@ HTMLIntroPage::~HTMLIntroPage()
 
 void HTMLIntroPage::initializePage()
 {
-    if (!d->iface)
+    bool albumSupport = (d->iface && d->iface->supportAlbums());
+
+    if (!albumSupport)
     {
         d->imageGetOption->setCurrentIndex(GalleryInfo::IMAGES);
         d->hbox->setEnabled(false);

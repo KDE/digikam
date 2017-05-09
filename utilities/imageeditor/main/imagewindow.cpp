@@ -123,6 +123,8 @@
 #include "imagewindow_p.h"
 #include "digikam_debug.h"
 #include "dexpanderbox.h"
+#include "dbinfoiface.h"
+#include "htmlwizard.h"
 
 namespace Digikam
 {
@@ -405,7 +407,7 @@ void ImageWindow::setupActions()
 {
     setupStandardActions();
 
-    KActionCollection *ac = actionCollection();
+    KActionCollection* const ac = actionCollection();
 
     d->toMainWindowAction = new QAction(QIcon::fromTheme(QLatin1String("view-list-icons")),
                                         i18nc("@action Finish editing, close editor, back to main window", "Close Editor"), this);
@@ -1774,6 +1776,14 @@ void ImageWindow::slotEditMetadata()
 
     // Refresh Database with new metadata from file.
     ScanController::instance()->scannedInfo(url.toLocalFile());
+}
+
+void ImageWindow::slotHtmlGallery()
+{
+#ifdef HAVE_HTMLGALLERY
+    HTMLWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
 }
 
 }  // namespace Digikam

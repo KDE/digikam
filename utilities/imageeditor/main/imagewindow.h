@@ -190,6 +190,7 @@ private Q_SLOTS:
 
     void slotEditMetadata();
     void slotEditGeolocation();
+    void slotHtmlGallery();
 
 private:
 

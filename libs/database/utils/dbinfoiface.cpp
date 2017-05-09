@@ -53,6 +53,8 @@ public:
     AlbumManager*    albumManager;
     AlbumSelectTabs* albumChooser;
 
+    QList<QUrl>      itemUrls;
+
 public:
 
     /** get the images from the Physical album in database and return the items found.
@@ -162,10 +164,11 @@ public:
     }
 };
 
-DBInfoIface::DBInfoIface(QObject* const parent)
+DBInfoIface::DBInfoIface(QObject* const parent, const QList<QUrl>& lst)
     : DInfoInterface(parent),
       d(new Private)
 {
+    d->itemUrls = lst;
 }
 
 DBInfoIface::~DBInfoIface()
@@ -175,6 +178,11 @@ DBInfoIface::~DBInfoIface()
 
 QList<QUrl> DBInfoIface::currentAlbumItems() const
 {
+    if (!d->itemUrls.isEmpty())
+    {
+        return d->itemUrls;
+    }
+
     if (d->albumManager->currentAlbums().isEmpty())
     {
         return QList<QUrl>();
@@ -191,6 +199,11 @@ QList<QUrl> DBInfoIface::currentAlbumItems() const
 
 QList<QUrl> DBInfoIface::currentSelectedItems() const
 {
+    if (!d->itemUrls.isEmpty())
+    {
+        return d->itemUrls;
+    }
+
     return DigikamApp::instance()->view()->selectedUrls();
 }
 
@@ -225,7 +238,9 @@ DBInfoIface::DInfoMap DBInfoIface::albumInfo(int gid) const
     Album* const a = d->albumManager->findAlbum(gid);
 
     if (!a)
+    {
         return DInfoMap();
+    }
 
     DInfoMap map;
     map.insert(QLatin1String("title"), a->title());
@@ -337,6 +352,11 @@ DBInfoIface::DAlbumIDs DBInfoIface::albumChooserItems() const
     }
 
     return ids;
+}
+
+bool DBInfoIface::supportAlbums() const
+{
+    return true;
 }
 
 }  // namespace Digikam

@@ -84,7 +84,7 @@ QDataStream& operator>>(QDataStream&, ShowfotoItemInfo&);
 
 typedef QList<ShowfotoItemInfo> ShowfotoItemInfoList;
 
-//! kDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
+//! qDebug() stream operator. Writes property @a info to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const ShowfotoItemInfo& info);
 
 } // namespace Showfoto

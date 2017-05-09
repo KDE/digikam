@@ -81,7 +81,7 @@ public:
     QList<QUrl>            selectedUrls()                   const;
 
     QList<ImageInfo>       imageInfos()                     const;
-    QList<QUrl>             urls()                           const;
+    QList<QUrl>            urls()                           const;
 
     /** Selects the index as current and scrolls to it.
      */
