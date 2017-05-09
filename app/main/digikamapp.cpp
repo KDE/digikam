@@ -1347,8 +1347,8 @@ void DigikamApp::setupActions()
 
 #ifdef HAVE_PANORAMA
     d->panoramaAction = new QAction(QIcon::fromTheme(QLatin1String("panorama")),
-                                       i18nc("@action", "Create panorama..."),
-                                       this);
+                                    i18nc("@action", "Create panorama..."),
+                                    this);
     connect(d->panoramaAction, SIGNAL(triggered(bool)), this, SLOT(slotPanorama()));
     ac->addAction(QLatin1String("panorama"), d->panoramaAction);
 #endif

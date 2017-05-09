@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOWIZARD_H
-#define PANOWIZARD_H
+#ifndef PANO_WIZARD_H
+#define PANO_WIZARD_H
 
 // Qt includes
 
@@ -52,6 +52,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOWIZARD_H */
+#endif // PANO_WIZARD_H
