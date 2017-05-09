@@ -25,6 +25,7 @@
 
 #include "dinfointerface.h"
 #include "metaengine.h"
+#include "digikam_globals.h"
 
 namespace Digikam
 {
@@ -125,9 +126,22 @@ QString DItemInfo::comment() const
     return ret;
 }
 
+QString DItemInfo::title() const
+{
+    QString ret;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("title"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toString();
+    }
+
+    return ret;
+}
+
 int DItemInfo::orientation() const
 {
-    int ret = MetaEngine::ORIENTATION_UNSPECIFIED;
+    int ret                                     = MetaEngine::ORIENTATION_UNSPECIFIED;
     DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("orientation"));
 
     if (it != m_info.end())
@@ -146,6 +160,178 @@ QDateTime DItemInfo::dateTime() const
     if (it != m_info.end())
     {
         ret = it.value().toDateTime();
+    }
+
+    return ret;
+}
+
+QStringList DItemInfo::keywords() const
+{
+    QStringList ret;
+
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("keywords"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toStringList();
+    }
+
+    return ret;
+}
+
+QStringList DItemInfo::tagsPath() const
+{
+    QStringList ret;
+
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("tagspath"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toStringList();
+    }
+
+    return ret;
+}
+
+int DItemInfo::rating() const
+{
+    int ret                                     = RatingMin;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("rating"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toInt();
+    }
+
+    return ret;
+}
+
+int DItemInfo::colorLabel() const
+{
+    int ret                                     = NoColorLabel;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("colorlabel"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toInt();
+    }
+
+    return ret;
+}
+
+int DItemInfo::pickLabel() const
+{
+    int ret                                     = NoPickLabel;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("picklabel"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toInt();
+    }
+
+    return ret;
+}
+
+double DItemInfo::latitude() const
+{
+    double ret                                  = 0.0;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("latitude"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toDouble();
+    }
+
+    return ret;
+}
+
+double DItemInfo::longitude() const
+{
+    double ret                                  = 0.0;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("longitude"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toDouble();
+    }
+
+    return ret;
+}
+
+double DItemInfo::altitude() const
+{
+    double ret                                  = 0.0;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("altitude"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toDouble();
+    }
+
+    return ret;
+}
+
+qlonglong DItemInfo::fileSize() const
+{
+    qlonglong ret                               = 0;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("filesize"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toLongLong();
+    }
+
+    return ret;
+}
+
+QStringList DItemInfo::creators() const
+{
+    QStringList ret;
+
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("creators"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toStringList();
+    }
+
+    return ret;
+}
+
+QString DItemInfo::credit() const
+{
+    QString ret;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("credit"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toString();
+    }
+
+    return ret;
+}
+
+QString DItemInfo::rights() const
+{
+    QString ret;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("rights"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toString();
+    }
+
+    return ret;
+}
+
+QString DItemInfo::source() const
+{
+    QString ret;
+    DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("source"));
+
+    if (it != m_info.end())
+    {
+        ret = it.value().toString();
     }
 
     return ret;

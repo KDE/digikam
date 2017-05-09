@@ -126,6 +126,8 @@ public:
         User6
     };
 
+public:
+
     explicit DImagesListView(DImagesList* const parent = 0);
     explicit DImagesListView(int iconSize, DImagesList* const parent = 0);
     ~DImagesListView();
@@ -137,6 +139,8 @@ public:
     DImagesListViewItem* findItem(const QUrl& url);
     QModelIndex indexFromItem(DImagesListViewItem* item, int column = 0) const;
     DImagesListViewItem* getCurrentItem() const;
+
+    DInfoInterface* iface() const;
 
 Q_SIGNALS:
 

@@ -34,6 +34,8 @@
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "albumselecttabs.h"
+#include "imageposition.h"
+#include "imagecopyright.h"
 
 namespace Digikam
 {
@@ -252,6 +254,38 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("comment"),     info.comment());
         map.insert(QLatin1String("orientation"), info.orientation());
         map.insert(QLatin1String("dateTime"),    info.dateTime());
+        map.insert(QLatin1String("rating"),      info.rating());
+        map.insert(QLatin1String("colorlabel"),  info.colorLabel());
+        map.insert(QLatin1String("picklabel"),   info.pickLabel());
+        map.insert(QLatin1String("filesize"),    info.fileSize());
+
+        // Get digiKam Tags Path list of picture from database.
+        // Ex.: "City/Paris/Monuments/Notre Dame"
+        QList<int> tagIds    = info.tagIds();
+        QStringList tagspath = AlbumManager::instance()->tagPaths(tagIds, false);
+        map.insert(QLatin1String("tagspath"),    tagspath);
+
+        // Get digiKam Tags name (keywords) list of picture from database.
+        // Ex.: "Notre Dame"
+        QStringList tags     = AlbumManager::instance()->tagNames(tagIds);
+        map.insert(QLatin1String("keywords"),    tags);
+
+        // Get GPS location of picture from database.
+        ImagePosition pos    = info.imagePosition();
+
+        if (!pos.isEmpty())
+        {
+            map.insert(QLatin1String("latitude"),  pos.latitudeNumber());
+            map.insert(QLatin1String("longitude"), pos.longitudeNumber());
+            map.insert(QLatin1String("altitude"),  pos.altitude());
+        }
+
+        // Get Copyright information of picture from database.
+        ImageCopyright rights = info.imageCopyright();
+        map.insert(QLatin1String("creators"),    rights.creator());
+        map.insert(QLatin1String("credit"),      rights.credit());
+        map.insert(QLatin1String("rights"),      rights.rights());
+        map.insert(QLatin1String("source"),      rights.source());
     }
 
     return map;

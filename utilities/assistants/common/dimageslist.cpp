@@ -118,26 +118,14 @@ bool DImagesListViewItem::hasValidThumbnail() const
 
 void DImagesListViewItem::updateInformation()
 {
-/* FIXME
     if (d->view->iface())
     {
-        KPImageInfo info(d->url);
+        DItemInfo info(d->view->iface()->itemInfo(d->url));
 
-        setComments(info.description());
-
-        setTags(QStringList());
-
-        if (d->view->iface()->hasFeature(HostSupportsTags))
-        {
-            setTags(info.keywords());
-        }
-
-        if (d->view->iface()->hasFeature(HostSupportsRating))
-        {
-            setRating(info.rating());
-        }
+        setComments(info.comment());
+        setTags(info.keywords());
+        setRating(info.rating());
     }
-*/
 }
 
 void DImagesListViewItem::setUrl(const QUrl& url)
@@ -266,6 +254,18 @@ DImagesListView::DImagesListView(int iconSize, DImagesList* const parent)
 
 DImagesListView::~DImagesListView()
 {
+}
+
+DInfoInterface* DImagesListView::iface() const
+{
+    DImagesList* const p = dynamic_cast<DImagesList*>(parent());
+
+    if (p)
+    {
+        return p->iface();
+    }
+
+    return 0;
 }
 
 void DImagesListView::setup(int iconSize)
