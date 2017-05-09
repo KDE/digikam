@@ -106,6 +106,7 @@
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
 #include "htmlwizard.h"
+#include "calwizard.h"
 
 namespace ShowFoto
 {
@@ -1383,6 +1384,12 @@ void ShowFoto::slotHtmlGallery()
     HTMLWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
     w.exec();
 #endif
+}
+
+void ShowFoto::slotCalendar()
+{
+    CalWizard w(d->thumbBar->urls(), this);
+    w.exec();
 }
 
 }   // namespace ShowFoto

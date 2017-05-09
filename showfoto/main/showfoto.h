@@ -136,6 +136,7 @@ private Q_SLOTS:
     void slotEditMetadata();
     void slotEditGeolocation();
     void slotHtmlGallery();
+    void slotCalendar();
 
 Q_SIGNALS:
 

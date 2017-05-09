@@ -125,6 +125,7 @@
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
 #include "htmlwizard.h"
+#include "calwizard.h"
 
 namespace Digikam
 {
@@ -1784,6 +1785,12 @@ void ImageWindow::slotHtmlGallery()
     HTMLWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
     w.exec();
 #endif
+}
+
+void ImageWindow::slotCalendar()
+{
+    CalWizard w(d->thumbBar->urls(), this);
+    w.exec();
 }
 
 }  // namespace Digikam

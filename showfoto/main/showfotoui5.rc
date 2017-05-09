@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="552" name="showfoto" translationDomain="digikam" >
+<gui version="553" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -14,10 +14,6 @@
         <Action name="editorwindow_first" />
         <Action name="editorwindow_last" />
         <Separator/>
-        <Action name="import_scan" />
-        <Action name="metadata_edit"/>
-        <Action name="geolocation_edit"/>
-        <Action name="htmlgallery" />
         <Action name="editorwindow_print" />
         <Action name="open_with_default_application" />
         <Separator/>
@@ -134,6 +130,17 @@
         <Action name="editorwindow_filter_distortionfx" />
         <Action name="editorwindow_filter_raindrop" />
         <Action name="editorwindow_filter_filmgrain" />
+    </Menu>
+
+    <Menu name="Tools"><text>&amp;Tools</text>
+        <Action name="import_scan" />
+        <Action name="metadata_edit"/>
+        <Action name="geolocation_edit"/>
+        <Separator/>
+        <Action name="expoblending" />
+        <Action name="panorama" />
+        <Action name="htmlgallery" />
+        <Action name="calendar" />
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

@@ -86,6 +86,7 @@ public:
         slideShowAction(0),
         presentationAction(0),
         htmlAction(0),
+        calendarAction(0),
         softProofOptionsAction(0),
         zoomFitToSelectAction(0),
         zoomMinusAction(0),
@@ -205,6 +206,7 @@ public:
     QAction*                     slideShowAction;
     QAction*                     presentationAction;
     QAction*                     htmlAction;
+    QAction*                     calendarAction;
     QAction*                     softProofOptionsAction;
     QAction*                     zoomFitToSelectAction;
     QAction*                     zoomMinusAction;

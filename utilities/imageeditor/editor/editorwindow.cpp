@@ -461,15 +461,6 @@ void EditorWindow::setupStandardActions()
     ac->setDefaultShortcut(d->filePrintAction, Qt::CTRL + Qt::Key_P);
     d->filePrintAction->setEnabled(false);
 
-#ifdef HAVE_HTMLGALLERY
-    d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
-                                i18nc("@action", "Create Html gallery..."),
-                                this);
-    connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
-    ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
-    ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
-#endif
-
     d->openWithAction = new QAction(QIcon::fromTheme(QLatin1String("preferences-desktop-filetype-association")), i18n("Open With Default Application"), this);
     d->openWithAction->setWhatsThis(i18n("Open the item with default assigned application."));
     connect(d->openWithAction, SIGNAL(triggered()), this, SLOT(slotFileWithDefaultApplication()));
@@ -485,21 +476,6 @@ void EditorWindow::setupStandardActions()
 
     QAction* const closeAction = buildStdAction(StdCloseAction, this, SLOT(close()), this);
     ac->addAction(QLatin1String("editorwindow_close"), closeAction);
-
-    createKSaneAction();
-    createMetadataEditAction();
-    createGeolocationEditAction();
-    m_metadataEditAction->setEnabled(false);
-
-#ifdef HAVE_KSANE
-    m_ksaneAction->setEnabled(false);
-#endif
-#ifdef HAVE_MARBLE
-    m_geolocationEditAction->setEnabled(false);
-#endif
-#ifdef HAVE_HTMLGALLERY
-    d->htmlAction->setEnabled(false);
-#endif
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
@@ -843,6 +819,40 @@ void EditorWindow::setupStandardActions()
 #endif // HAVE_LENSFUN
 
     HotPixelsTool::registerFilter();
+
+    // -- Standard 'Tools' menu actions ---------------------------------------------
+
+    createKSaneAction();
+    createMetadataEditAction();
+    createGeolocationEditAction();
+
+#ifdef HAVE_HTMLGALLERY
+    d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
+                                i18nc("@action", "Create Html gallery..."),
+                                this);
+    connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
+    ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
+    ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
+#endif
+
+    d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
+                                    i18nc("@action", "Create Calendar..."),
+                                    this);
+    connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));
+    ac->addAction(QLatin1String("calendar"), d->calendarAction);
+
+    m_metadataEditAction->setEnabled(false);
+    d->calendarAction->setEnabled(false);
+
+#ifdef HAVE_KSANE
+    m_ksaneAction->setEnabled(false);
+#endif
+#ifdef HAVE_MARBLE
+    m_geolocationEditAction->setEnabled(false);
+#endif
+#ifdef HAVE_HTMLGALLERY
+    d->htmlAction->setEnabled(false);
+#endif
 
     // --------------------------------------------------------
 
@@ -1408,6 +1418,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
     d->presentationAction->setEnabled(val);
+    d->calendarAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
@@ -2994,6 +3005,25 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(d->lensAutoFixAction,          enhanceCategory);
 #endif
 
+    QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
+    actionModel->addAction(d->calendarAction,             postCategory);
+    actionModel->addAction(m_metadataEditAction,          postCategory);
+    actionModel->addAction(d->presentationAction,         postCategory);
+
+#ifdef HAVE_HTMLGALLERY
+    actionModel->addAction(d->htmlAction,                 postCategory);
+#endif
+
+#ifdef HAVE_MARBLE
+    actionModel->addAction(m_geolocationEditAction,       postCategory);
+#endif
+
+    QString importCategory           = i18nc("@title Import Tools",          "Import");
+
+#ifdef HAVE_KSANE
+    actionModel->addAction(m_ksaneAction,                 importCategory);
+#endif
+
     // setup categorized view
     DCategorizedSortFilterProxyModel* const filterModel = actionModel->createFilterModel();
 
@@ -3374,7 +3404,7 @@ void EditorWindow::slotUpdateColorSpaceMenu()
 
         d->profileMenuAction->addProfiles(favoriteProfiles);
     }
-    
+
     d->profileMenuAction->addSeparator();
     d->profileMenuAction->addAction(d->colorSpaceConverter);
     d->colorSpaceConverter->setEnabled(m_actionEnabledState && IccSettings::instance()->isEnabled());

@@ -13,6 +13,8 @@ HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area 
 HTMLGallery : Add option to generate a Gallery from a selection of images instead an album list.
 ImageEditor : Add HTMLGallery support.
 Showfoto    : Add HTMLGallery support.
+ImageEditor : Add Calendar support.
+Showfoto    : Add Calendar support.
 
 BUGFIXES FROM BUGZILLA:
 
