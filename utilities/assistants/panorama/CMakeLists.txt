@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2016, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2011-2016, Benjamin Girault, <benjamin dot girault at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -10,7 +10,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard
+                    ${CMAKE_CURRENT_SOURCE_DIR}/wizard
                     ${CMAKE_CURRENT_SOURCE_DIR}/manager
                     ${CMAKE_CURRENT_SOURCE_DIR}/plugin
                     ${CMAKE_CURRENT_SOURCE_DIR}/ptoparser
@@ -60,13 +60,13 @@ set(libpanorama_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/cpfindbinary.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/panoactionthread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/panomanager.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panointropage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panoitemspage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panolastpage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panooptimizepage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panopreprocesspage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panopreviewpage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/panowizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panointropage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panoitemspage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panolastpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panooptimizepage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panopreprocesspage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panopreviewpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/panowizard.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>

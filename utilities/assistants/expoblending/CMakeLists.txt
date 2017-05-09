@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2010-2016, Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2010-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
 # Copyright (c) 2015,      Benjamin Girault, <benjamin dot girault at gmail dot com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -9,7 +9,7 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/importwizard
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/wizard
                     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg
                     ${CMAKE_CURRENT_SOURCE_DIR}/manager
 
@@ -27,11 +27,11 @@ set(libexpoblending_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/expoblendingmanager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/expoblendingthread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/enfusebinary.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingwizard.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingintropage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingitemspage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendingpreprocesspage.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/importwizard/expoblendinglastpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/expoblendingwizard.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/expoblendingintropage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/expoblendingitemspage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/expoblendingpreprocesspage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/expoblendinglastpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/enfusesettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/bracketstack.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/blendingdlg/enfusestack.cpp
