@@ -497,6 +497,9 @@ void EditorWindow::setupStandardActions()
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(false);
 #endif
+#ifdef HAVE_HTMLGALLERY
+    d->htmlAction->setEnabled(false);
+#endif
 
     // -- Standard 'Edit' menu actions ---------------------------------------------
 
@@ -1395,12 +1398,10 @@ void EditorWindow::toggleStandardActions(bool val)
     d->rotateRightAction->setEnabled(val);
     d->flipHorizAction->setEnabled(val);
     d->flipVertAction->setEnabled(val);
-    d->filePrintAction->setEnabled(val);
     m_fileDeleteAction->setEnabled(val);
     m_saveAsAction->setEnabled(val);
     d->openWithAction->setEnabled(val);
     d->filePrintAction->setEnabled(val);
-    d->htmlAction->setEnabled(val);
     m_metadataEditAction->setEnabled(val);
     m_exportAction->setEnabled(val);
     d->selectAllAction->setEnabled(val);
@@ -1413,6 +1414,9 @@ void EditorWindow::toggleStandardActions(bool val)
 #endif
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(val);
+#endif
+#ifdef HAVE_HTMLGALLERY
+    d->htmlAction->setEnabled(val);
 #endif
 
     // these actions are special: They are turned off if val is false,
