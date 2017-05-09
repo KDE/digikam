@@ -24,6 +24,7 @@
  * ============================================================ */
 
 #include "dinfointerface.h"
+#include "metaengine.h"
 
 namespace Digikam
 {
@@ -126,7 +127,7 @@ QString DItemInfo::comment() const
 
 int DItemInfo::orientation() const
 {
-    int ret;
+    int ret = MetaEngine::ORIENTATION_UNSPECIFIED;
     DInfoInterface::DInfoMap::const_iterator it = m_info.find(QLatin1String("orientation"));
 
     if (it != m_info.end())

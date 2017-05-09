@@ -117,10 +117,11 @@ public:
     void init(const QString& desktopFileName)
     {
         delete desktopFile;
-        desktopFile = new KDesktopFile(desktopFileName);
-        url         = QUrl::fromLocalFile(desktopFileName);
 
+        desktopFile                   = new KDesktopFile(desktopFileName);
+        url                           = QUrl::fromLocalFile(desktopFileName);
         QStringList parameterNameList = readParameterNameList(desktopFileName);
+
         readParameters(parameterNameList);
     }
 
@@ -200,7 +201,8 @@ const GalleryTheme::List& GalleryTheme::getList()
             }
         }
 
-        QStringList::ConstIterator it = list.constBegin(), end=list.constEnd();
+        QStringList::ConstIterator it  = list.constBegin();
+        QStringList::ConstIterator end = list.constEnd();
 
         for (; it != end ; ++it)
         {
@@ -221,8 +223,9 @@ const GalleryTheme::List& GalleryTheme::getList()
 
 GalleryTheme::Ptr GalleryTheme::findByInternalName(const QString& internalName)
 {
-    const GalleryTheme::List& lst        = getList();
-    GalleryTheme::List::ConstIterator it = lst.constBegin(), end=lst.constEnd();
+    const GalleryTheme::List& lst         = getList();
+    GalleryTheme::List::ConstIterator it  = lst.constBegin();
+    GalleryTheme::List::ConstIterator end = lst.constEnd();
 
     for (; it != end ; ++it)
     {

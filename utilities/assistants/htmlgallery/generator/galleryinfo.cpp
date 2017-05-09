@@ -34,7 +34,8 @@ static const char* THEME_GROUP_PREFIX = "Theme ";
 
 GalleryInfo::GalleryInfo(DInfoInterface* const iface)
 {
-    m_iface = iface;
+    m_iface     = iface;
+    m_getOption = IMAGES;
 }
 
 GalleryInfo::~GalleryInfo()

@@ -25,6 +25,7 @@
 
 #include "galleryelement.h"
 #include "galleryxmlutils.h"
+#include "metaengine.h"
 
 namespace Digikam
 {
@@ -40,7 +41,8 @@ GalleryElement::GalleryElement(const DInfoInterface::DInfoMap& info)
 }
 
 GalleryElement::GalleryElement()
-    : m_valid(false)
+    : m_valid(false),
+      m_orientation(MetaEngine::ORIENTATION_UNSPECIFIED)
 {
 }
 
