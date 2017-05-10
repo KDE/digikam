@@ -827,9 +827,11 @@ void EditorWindow::setupStandardActions()
     createGeolocationEditAction();
     createHtmlGalleryAction();
     createPanoramaAction();
+    createExpoBlendingAction();
     createCalendarAction();
 
     m_metadataEditAction->setEnabled(false);
+    m_expoBlendingAction->setEnabled(false);
     m_calendarAction->setEnabled(false);
 
 #ifdef HAVE_KSANE
@@ -1410,6 +1412,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->slideShowAction->setEnabled(val);
     m_presentationAction->setEnabled(val);
     m_calendarAction->setEnabled(val);
+    m_expoBlendingAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
@@ -3001,6 +3004,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
+    actionModel->addAction(m_expoBlendingAction,          postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);

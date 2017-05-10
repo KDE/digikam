@@ -1334,12 +1334,7 @@ void DigikamApp::setupActions()
     connect(d->maintenanceAction, SIGNAL(triggered()), this, SLOT(slotMaintenance()));
     ac->addAction(QLatin1String("maintenance"), d->maintenanceAction);
 
-    d->expoBendingAction = new QAction(QIcon::fromTheme(QLatin1String("expoblending")),
-                                       i18nc("@action", "Blend Bracketed or Focus Stack Images..."),
-                                       this);
-    connect(d->expoBendingAction, SIGNAL(triggered(bool)), this, SLOT(slotExpoBlending()));
-    ac->addAction(QLatin1String("expoblending"), d->expoBendingAction);
-
+    createExpoBlendingAction();
     createPanoramaAction();
     createHtmlGalleryAction();
     createCalendarAction();
@@ -3300,7 +3295,7 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(d->advSearchAction,            mainCategory);
 
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
-    actionModel->addAction(d->expoBendingAction,          postCategory);
+    actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);

@@ -169,7 +169,6 @@ public:
         slideShowRecursiveAction(0),
         bqmAction(0),
         maintenanceAction(0),
-        expoBendingAction(0),
         qualityAction(0),
         advSearchAction(0),
         addCameraSeparatorAction(0),
@@ -298,7 +297,6 @@ public:
     QAction*                            slideShowRecursiveAction;
     QAction*                            bqmAction;
     QAction*                            maintenanceAction;
-    QAction*                            expoBendingAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;
 

@@ -125,6 +125,7 @@
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
 #include "calwizard.h"
+#include "expoblendingmanager.h"
 
 #ifdef HAVE_HTMLGALLERY
 #   include "htmlwizard.h"
@@ -1807,6 +1808,13 @@ void ImageWindow::slotPanorama()
     PanoManager::instance()->setItemsList(d->thumbBar->urls());
     PanoManager::instance()->run();
 #endif
+}
+
+void ImageWindow::slotExpoBlending()
+{
+    ExpoBlendingManager::instance()->checkBinaries();
+    ExpoBlendingManager::instance()->setItemsList(d->thumbBar->urls());
+    ExpoBlendingManager::instance()->run();
 }
 
 }  // namespace Digikam

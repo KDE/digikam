@@ -121,6 +121,10 @@ public:
      */
     void createCalendarAction();
 
+    /** Create Exposure Blending tool action.
+     */
+    void createExpoBlendingAction();
+
     /** Create Panorama tool action.
      */
     void createPanoramaAction();
@@ -185,6 +189,7 @@ protected:
     QAction*     m_presentationAction;
     QAction*     m_calendarAction;
     QAction*     m_htmlGalleryAction;
+    QAction*     m_expoBlendingAction;
     QAction*     m_panoramaAction;
     DLogoAction* m_animLogo;
 
@@ -277,6 +282,9 @@ private Q_SLOTS:
 
     // Called by Panorama tool.
     virtual void slotPanorama()                {};
+
+    // Called by Exposure Blending tool.
+    virtual void slotExpoBlending()            {};
 
 private:
 

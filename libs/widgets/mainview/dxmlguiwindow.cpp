@@ -172,6 +172,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
+    m_expoBlendingAction    = 0;
     m_panoramaAction        = 0;
     m_htmlGalleryAction     = 0;
     m_calendarAction        = 0;
@@ -427,6 +428,19 @@ void DXmlGuiWindow::createPresentationAction()
 
     connect(m_presentationAction, SIGNAL(triggered()),
             this, SLOT(slotPresentation()));
+}
+
+void DXmlGuiWindow::createExpoBlendingAction()
+{
+    m_expoBlendingAction = new QAction(QIcon::fromTheme(QLatin1String("expoblending")),
+                                       i18nc("@action", "Blend Bracketed or Focus Stack Images..."),
+                                       this);
+
+    actionCollection()->addAction(QLatin1String("expoblending"), m_expoBlendingAction);
+
+    connect(m_expoBlendingAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotExpoBlending()));
+
 }
 
 void DXmlGuiWindow::createPanoramaAction()

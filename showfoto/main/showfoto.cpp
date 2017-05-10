@@ -106,6 +106,7 @@
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
 #include "calwizard.h"
+#include "expoblendingmanager.h"
 
 #ifdef HAVE_HTMLGALLERY
 #   include "htmlwizard.h"
@@ -1406,6 +1407,13 @@ void ShowFoto::slotPanorama()
     PanoManager::instance()->setItemsList(d->thumbBar->urls());
     PanoManager::instance()->run();
 #endif
+}
+
+void ShowFoto::slotExpoBlending()
+{
+    ExpoBlendingManager::instance()->checkBinaries();
+    ExpoBlendingManager::instance()->setItemsList(d->thumbBar->urls());
+    ExpoBlendingManager::instance()->run();
 }
 
 }   // namespace ShowFoto
