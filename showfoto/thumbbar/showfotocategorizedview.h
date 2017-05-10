@@ -69,10 +69,10 @@ public:
 
     QList<ShowfotoItemInfo>     selectedShowfotoItemInfos()             const;
     QList<ShowfotoItemInfo>     selectedShowfotoItemInfosCurrentFirst() const;
-    QList<QUrl>                  selectedUrls()                          const;
+    QList<QUrl>                 selectedUrls()                          const;
 
     QList<ShowfotoItemInfo>     showfotoItemInfos()                     const;
-    QList<QUrl>                  urls()                                  const;
+    QList<QUrl>                 urls()                                  const;
 
     /** Selects the index as current and scrolls to it
      */

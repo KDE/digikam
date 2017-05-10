@@ -1767,9 +1767,9 @@ void LightTableWindow::slotColorManagementOptionsChanged()
 void LightTableWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfo inf = d->thumbView->currentInfo();
+    ImageInfoList infos = d->thumbView->imageInfos();
 
-    if (inf.isNull())
+    if (infos.isEmpty())
     {
         return;
     }
@@ -1780,13 +1780,16 @@ void LightTableWindow::slotEditGeolocation()
     filterModel->sort(0);
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel, QApplication::activeWindow());
-    dialog->setItems(ImageGPS::infosToItems(ImageInfoList() << inf));
+    dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
+    foreach(const ImageInfo& inf, infos)
+    {
+        ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
+    }
 #endif
 }
 

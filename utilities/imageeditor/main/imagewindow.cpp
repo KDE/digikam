@@ -1752,10 +1752,12 @@ void ImageWindow::slotImportedImagefromScanner(const QUrl& url)
 void ImageWindow::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfo inf = d->currentImageInfo;
+    ImageInfoList infos = d->thumbBar->imageInfos();
 
-    if ( inf.isNull() )
+    if (infos.isEmpty())
+    {
         return;
+    }
 
     TagModel* const tagModel                    = new TagModel(AbstractAlbumModel::IgnoreRootAlbum, this);
     TagPropertiesFilterModel* const filterModel = new TagPropertiesFilterModel(this);
@@ -1763,13 +1765,16 @@ void ImageWindow::slotEditGeolocation()
     filterModel->sort(0);
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(filterModel, QApplication::activeWindow());
-    dialog->setItems(ImageGPS::infosToItems(ImageInfoList() << inf));
+    dialog->setItems(ImageGPS::infosToItems(infos));
     dialog->exec();
 
     delete dialog;
 
     // Refresh Database with new metadata from files.
-    ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
+    foreach(const ImageInfo& inf, infos)
+    {
+        ScanController::instance()->scannedInfo(inf.fileUrl().toLocalFile());
+    }
 #endif
 }
 

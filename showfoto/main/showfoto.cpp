@@ -1356,13 +1356,15 @@ void ShowFoto::slotImportedImagefromScanner(const QUrl& url)
 void ShowFoto::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    if (d->thumbBar->currentInfo().isNull())
+    QList<QUrl> infos = d->thumbBar->urls();
+
+    if (infos.isEmpty())
     {
         return;
     }
 
     QPointer<GeolocationEdit> dialog = new GeolocationEdit(0, QApplication::activeWindow());
-    dialog->setImages(QList<QUrl>() << d->thumbBar->currentInfo().url);
+    dialog->setImages(infos);
     dialog->exec();
 
     delete dialog;
