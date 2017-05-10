@@ -2855,11 +2855,6 @@ void EditorWindow::slotToggleSlideShow()
     slideShow(settings);
 }
 
-void EditorWindow::slotPresentation()
-{
-    presentation();
-}
-
 void EditorWindow::slotSelectionChanged(const QRect& sel)
 {
     slotSelectionSetText(sel);

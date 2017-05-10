@@ -1350,7 +1350,7 @@ void ImageWindow::slotFilePrint()
     printImage(d->currentUrl());
 }
 
-void ImageWindow::presentation()
+void ImageWindow::slotPresentation()
 {
     PresentationMngr* const mngr = new PresentationMngr(this);
 

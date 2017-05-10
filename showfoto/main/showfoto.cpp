@@ -1075,7 +1075,7 @@ void ShowFoto::slideShow(Digikam::SlideShowSettings& settings)
     }
 }
 
-void ShowFoto::presentation()
+void ShowFoto::slotPresentation()
 {
     Digikam::PresentationMngr* const mngr = new Digikam::PresentationMngr(this);
     Digikam::DMetadata meta;
