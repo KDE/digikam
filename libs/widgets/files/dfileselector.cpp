@@ -115,7 +115,7 @@ void DFileSelector::slotBtnClicked()
         return;
     }
 
-    QFileDialog* const fileDlg = new QFileDialog(this);
+    QFileDialog* const fileDlg = new QFileDialog;
 
     if (d->fdOptions != -1)
     {
