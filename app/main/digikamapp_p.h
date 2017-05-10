@@ -172,7 +172,6 @@ public:
         expoBendingAction(0),
         panoramaAction(0),
         htmlAction(0),
-        calendarAction(0),
         qualityAction(0),
         advSearchAction(0),
         addCameraSeparatorAction(0),
@@ -304,7 +303,6 @@ public:
     QAction*                            expoBendingAction;
     QAction*                            panoramaAction;
     QAction*                            htmlAction;
-    QAction*                            calendarAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;
 

@@ -172,6 +172,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
+    m_calendarAction        = 0;
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
     m_geolocationEditAction = 0;
@@ -424,6 +425,17 @@ void DXmlGuiWindow::createPresentationAction()
 
     connect(m_presentationAction, SIGNAL(triggered()),
             this, SLOT(slotPresentation()));
+}
+
+void DXmlGuiWindow::createCalendarAction()
+{
+    m_calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
+                                    i18nc("@action", "Create Calendar..."),
+                                    this);
+    actionCollection()->addAction(QLatin1String("calendar"), m_calendarAction);
+
+    connect(m_calendarAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotCalendar()));
 }
 
 void DXmlGuiWindow::createKSaneAction()

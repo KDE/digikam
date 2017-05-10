@@ -117,6 +117,10 @@ public:
      */
     void createPresentationAction();
 
+    /** Create Calendar tool action.
+     */
+    void createCalendarAction();
+
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -171,6 +175,7 @@ protected:
     QAction*     m_metadataEditAction;
     QAction*     m_geolocationEditAction;
     QAction*     m_presentationAction;
+    QAction*     m_calendarAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE

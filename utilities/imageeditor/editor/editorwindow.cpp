@@ -835,14 +835,10 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
 #endif
 
-    d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
-                                    i18nc("@action", "Create Calendar..."),
-                                    this);
-    connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));
-    ac->addAction(QLatin1String("calendar"), d->calendarAction);
+    createCalendarAction();
 
     m_metadataEditAction->setEnabled(false);
-    d->calendarAction->setEnabled(false);
+    m_calendarAction->setEnabled(false);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(false);
@@ -1415,7 +1411,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
     m_presentationAction->setEnabled(val);
-    d->calendarAction->setEnabled(val);
+    m_calendarAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
@@ -2998,7 +2994,7 @@ void EditorWindow::setupSelectToolsAction()
 #endif
 
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
-    actionModel->addAction(d->calendarAction,             postCategory);
+    actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
 

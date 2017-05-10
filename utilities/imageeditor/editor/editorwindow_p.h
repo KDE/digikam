@@ -85,7 +85,6 @@ public:
         selectNoneAction(0),
         slideShowAction(0),
         htmlAction(0),
-        calendarAction(0),
         softProofOptionsAction(0),
         zoomFitToSelectAction(0),
         zoomMinusAction(0),
@@ -204,7 +203,6 @@ public:
     QAction*                     selectNoneAction;
     QAction*                     slideShowAction;
     QAction*                     htmlAction;
-    QAction*                     calendarAction;
     QAction*                     softProofOptionsAction;
     QAction*                     zoomFitToSelectAction;
     QAction*                     zoomMinusAction;

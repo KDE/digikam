@@ -1357,11 +1357,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
 #endif
 
-    d->calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
-                                    i18nc("@action", "Create Calendar..."),
-                                    this);
-    connect(d->calendarAction, SIGNAL(triggered(bool)), this, SLOT(slotCalendar()));
-    ac->addAction(QLatin1String("calendar"), d->calendarAction);
+    createCalendarAction();
 
     // -----------------------------------------------------------
 
@@ -3320,7 +3316,7 @@ void DigikamApp::setupSelectToolsAction()
 
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(d->expoBendingAction,          postCategory);
-    actionModel->addAction(d->calendarAction,             postCategory);
+    actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
 
