@@ -83,11 +83,12 @@ QStringList WelcomePageView::featuresTabContent() const
     QStringList newFeatures;
     newFeatures << i18n("Port to Qt5 and KF5;");
     newFeatures << i18n("Replacing digiKam KIOSlaves by a multi-threaded interface to query the database;");
-    newFeatures << i18n("Replacing Qt5Multimedia dependency by QtAV framework to handle video files;");
+    newFeatures << i18n("Replacing Qt5::Multimedia dependency by QtAV framework to handle video files;");
     newFeatures << i18n("Add embedded trash support for each collection instead desktop trash;");
     newFeatures << i18n("Thumbs and preview video support is now delegate to QT5Multimedia framework;");
     newFeatures << i18n("Mysql internal server is now configurable as Sqlite to store database files at a customized place;");
     newFeatures << i18n("Mysql internal/remote server is now configurable with first run assistant;");
+    newFeatures << i18n("Add a new garbage collector tool to cleanup database;");
     newFeatures << i18n("Add a new batch queue manager tool to convert RAW files to DNG;");
     newFeatures << i18n("Add a new batch queue manager tool to adjust time and date metadata;");
     newFeatures << i18n("Add a new batch queue manager tool to detect and fix red-eyes automatically;");
