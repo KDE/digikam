@@ -57,7 +57,6 @@
 #include "albummanager.h"
 #include "loadingcacheinterface.h"
 #include "deletedialog.h"
-#include "geolocationedit.h"
 #include "iccsettings.h"
 #include "imagewindow.h"
 #include "imagegps.h"
@@ -80,6 +79,10 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
 
 #ifdef HAVE_HTMLGALLERY
 #   include "htmlwizard.h"

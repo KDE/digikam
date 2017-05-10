@@ -77,7 +77,6 @@
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileoperation.h"
-#include "geolocationedit.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imagepropertiessidebar.h"
@@ -107,6 +106,10 @@
 #include "dexpanderbox.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
 
 #ifdef HAVE_HTMLGALLERY
 #   include "htmlwizard.h"

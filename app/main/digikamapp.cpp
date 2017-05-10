@@ -124,9 +124,12 @@
 #include "imagesortsettings.h"
 #include "metadatahubmngr.h"
 #include "metadataedit.h"
-#include "geolocationedit.h"
 #include "expoblendingmanager.h"
 #include "calwizard.h"
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
 
 #ifdef HAVE_HTMLGALLERY
 #   include "htmlwizard.h"

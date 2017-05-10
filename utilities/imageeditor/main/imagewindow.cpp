@@ -97,7 +97,6 @@
 #include "imagescanner.h"
 #include "imagethumbnailbar.h"
 #include "iofilesettings.h"
-#include "geolocationedit.h"
 #include "dnotificationwrapper.h"
 #include "loadingcacheinterface.h"
 #include "metadatahub.h"
@@ -126,6 +125,10 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+
+#ifdef HAVE_MARBLE
+#   include "geolocationedit.h"
+#endif
 
 #ifdef HAVE_HTMLGALLERY
 #   include "htmlwizard.h"
