@@ -172,6 +172,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
+    m_panoramaAction        = 0;
     m_htmlGalleryAction     = 0;
     m_calendarAction        = 0;
     m_presentationAction    = 0;
@@ -428,6 +429,19 @@ void DXmlGuiWindow::createPresentationAction()
             this, SLOT(slotPresentation()));
 }
 
+void DXmlGuiWindow::createPanoramaAction()
+{
+#ifdef HAVE_PANORAMA
+    m_panoramaAction = new QAction(QIcon::fromTheme(QLatin1String("panorama")),
+                                    i18nc("@action", "Create panorama..."),
+                                    this);
+    actionCollection()->addAction(QLatin1String("panorama"), m_panoramaAction);
+
+    connect(m_panoramaAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotPanorama()));
+#endif
+}
+
 void DXmlGuiWindow::createCalendarAction()
 {
     m_calendarAction = new QAction(QIcon::fromTheme(QLatin1String("view-calendar")),
@@ -439,7 +453,7 @@ void DXmlGuiWindow::createCalendarAction()
             this, SLOT(slotCalendar()));
 }
 
-void DXmlGuiWindow::createHTMLGalleryAction()
+void DXmlGuiWindow::createHtmlGalleryAction()
 {
 #ifdef HAVE_HTMLGALLERY
     m_htmlGalleryAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),

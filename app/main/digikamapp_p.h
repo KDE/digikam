@@ -170,7 +170,6 @@ public:
         bqmAction(0),
         maintenanceAction(0),
         expoBendingAction(0),
-        panoramaAction(0),
         qualityAction(0),
         advSearchAction(0),
         addCameraSeparatorAction(0),
@@ -300,7 +299,6 @@ public:
     QAction*                            bqmAction;
     QAction*                            maintenanceAction;
     QAction*                            expoBendingAction;
-    QAction*                            panoramaAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;
 

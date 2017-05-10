@@ -137,6 +137,7 @@ private Q_SLOTS:
     void slotHtmlGallery();
     void slotCalendar();
     void slotPresentation();
+    void slotPanorama();
 
 Q_SIGNALS:
 

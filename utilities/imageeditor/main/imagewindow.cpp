@@ -124,8 +124,15 @@
 #include "digikam_debug.h"
 #include "dexpanderbox.h"
 #include "dbinfoiface.h"
-#include "htmlwizard.h"
 #include "calwizard.h"
+
+#ifdef HAVE_HTMLGALLERY
+#   include "htmlwizard.h"
+#endif
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
 
 namespace Digikam
 {
@@ -1791,6 +1798,15 @@ void ImageWindow::slotCalendar()
 {
     CalWizard w(d->thumbBar->urls(), this);
     w.exec();
+}
+
+void ImageWindow::slotPanorama()
+{
+#ifdef HAVE_PANORAMA
+    PanoManager::instance()->checkBinaries();
+    PanoManager::instance()->setItemsList(d->thumbBar->urls());
+    PanoManager::instance()->run();
+#endif
 }
 
 }  // namespace Digikam

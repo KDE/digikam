@@ -105,8 +105,15 @@
 #include "showfotoinfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
-#include "htmlwizard.h"
 #include "calwizard.h"
+
+#ifdef HAVE_HTMLGALLERY
+#   include "htmlwizard.h"
+#endif
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
 
 namespace ShowFoto
 {
@@ -1390,6 +1397,15 @@ void ShowFoto::slotCalendar()
 {
     CalWizard w(d->thumbBar->urls(), this);
     w.exec();
+}
+
+void ShowFoto::slotPanorama()
+{
+#ifdef HAVE_PANORAMA
+    PanoManager::instance()->checkBinaries();
+    PanoManager::instance()->setItemsList(d->thumbBar->urls());
+    PanoManager::instance()->run();
+#endif
 }
 
 }   // namespace ShowFoto

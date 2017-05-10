@@ -825,7 +825,8 @@ void EditorWindow::setupStandardActions()
     createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
-    createHTMLGalleryAction();
+    createHtmlGalleryAction();
+    createPanoramaAction();
     createCalendarAction();
 
     m_metadataEditAction->setEnabled(false);
@@ -834,11 +835,17 @@ void EditorWindow::setupStandardActions()
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(false);
 #endif
+
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(false);
 #endif
+
 #ifdef HAVE_HTMLGALLERY
     m_htmlGalleryAction->setEnabled(false);
+#endif
+
+#ifdef HAVE_PANORAMA
+    m_panoramaAction->setEnabled(false);
 #endif
 
     // --------------------------------------------------------
@@ -1407,11 +1414,17 @@ void EditorWindow::toggleStandardActions(bool val)
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
 #endif
+
 #ifdef HAVE_MARBLE
     m_geolocationEditAction->setEnabled(val);
 #endif
+
 #ifdef HAVE_HTMLGALLERY
     m_htmlGalleryAction->setEnabled(val);
+#endif
+
+#ifdef HAVE_PANORAMA
+    m_panoramaAction->setEnabled(val);
 #endif
 
     // these actions are special: They are turned off if val is false,
@@ -2991,6 +3004,10 @@ void EditorWindow::setupSelectToolsAction()
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);
+#endif
+
+#ifdef HAVE_PANORAMA
+    actionModel->addAction(m_panoramaAction,              postCategory);
 #endif
 
 #ifdef HAVE_MARBLE

@@ -121,9 +121,13 @@ public:
      */
     void createCalendarAction();
 
+    /** Create Panorama tool action.
+     */
+    void createPanoramaAction();
+
     /** Create HTML Gallery tool action.
      */
-    void createHTMLGalleryAction();
+    void createHtmlGalleryAction();
 
     /** Create Ksane action to import from scanner.
      */
@@ -181,6 +185,7 @@ protected:
     QAction*     m_presentationAction;
     QAction*     m_calendarAction;
     QAction*     m_htmlGalleryAction;
+    QAction*     m_panoramaAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -263,6 +268,15 @@ private Q_SLOTS:
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
+
+    // Called by HTML Gallery tool.
+    virtual void slotHTMLGallery()             {};
+
+    // Called by Panorama tool.
+    virtual void slotCalendar()                {};
+
+    // Called by Panorama tool.
+    virtual void slotPanorama()                {};
 
 private:
 

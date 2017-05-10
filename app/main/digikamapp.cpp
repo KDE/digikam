@@ -1340,15 +1340,8 @@ void DigikamApp::setupActions()
     connect(d->expoBendingAction, SIGNAL(triggered(bool)), this, SLOT(slotExpoBlending()));
     ac->addAction(QLatin1String("expoblending"), d->expoBendingAction);
 
-#ifdef HAVE_PANORAMA
-    d->panoramaAction = new QAction(QIcon::fromTheme(QLatin1String("panorama")),
-                                    i18nc("@action", "Create panorama..."),
-                                    this);
-    connect(d->panoramaAction, SIGNAL(triggered(bool)), this, SLOT(slotPanorama()));
-    ac->addAction(QLatin1String("panorama"), d->panoramaAction);
-#endif
-
-    createHTMLGalleryAction();
+    createPanoramaAction();
+    createHtmlGalleryAction();
     createCalendarAction();
 
     // -----------------------------------------------------------
@@ -3313,7 +3306,7 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_presentationAction,          postCategory);
 
 #ifdef HAVE_PANORAMA
-    actionModel->addAction(d->panoramaAction,             postCategory);
+    actionModel->addAction(m_panoramaAction,              postCategory);
 #endif
 
 #ifdef HAVE_HTMLGALLERY

@@ -192,6 +192,7 @@ private Q_SLOTS:
     void slotHtmlGallery();
     void slotCalendar();
     void slotPresentation();
+    void slotPanorama();
 
 private:
 
