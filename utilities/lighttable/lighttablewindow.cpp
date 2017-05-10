@@ -77,6 +77,17 @@
 #include "thumbnailsize.h"
 #include "thumbnailloadthread.h"
 #include "dexpanderbox.h"
+#include "dbinfoiface.h"
+#include "calwizard.h"
+#include "expoblendingmanager.h"
+
+#ifdef HAVE_HTMLGALLERY
+#   include "htmlwizard.h"
+#endif
+
+#ifdef HAVE_PANORAMA
+#   include "panomanager.h"
+#endif
 
 namespace Digikam
 {
@@ -488,10 +499,6 @@ void LightTableWindow::setupActions()
     ac->addAction(QLatin1String("open_with_default_application"), openWithAction);
     ac->setDefaultShortcut(openWithAction, Qt::META + Qt::Key_F4);
 
-    createKSaneAction();
-    createMetadataEditAction();
-    createGeolocationEditAction();
-
     d->removeItemAction = new QAction(QIcon::fromTheme(QLatin1String("list-remove")), i18n("Remove item from LightTable"), this);
     d->removeItemAction->setEnabled(false);
     connect(d->removeItemAction, SIGNAL(triggered()), this, SLOT(slotRemoveItem()));
@@ -558,6 +565,16 @@ void LightTableWindow::setupActions()
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
     createPresentationAction();
+
+    // -- Standard 'Tools' menu actions ------------------------
+
+    createKSaneAction();
+    createMetadataEditAction();
+    createGeolocationEditAction();
+    createHtmlGalleryAction();
+    createPanoramaAction();
+    createExpoBlendingAction();
+    createCalendarAction();
 
     // Left Panel Zoom Actions
 
@@ -1803,6 +1820,36 @@ void LightTableWindow::slotImportedImagefromScanner(const QUrl& url)
 {
     ImageInfo info = ScanController::instance()->scannedInfo(url.toLocalFile());
     loadImageInfos(ImageInfoList() << info, info, true);
+}
+
+void LightTableWindow::slotHtmlGallery()
+{
+#ifdef HAVE_HTMLGALLERY
+    HTMLWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
+#endif
+}
+
+void LightTableWindow::slotCalendar()
+{
+    CalWizard w(d->thumbView->urls(), this);
+    w.exec();
+}
+
+void LightTableWindow::slotPanorama()
+{
+#ifdef HAVE_PANORAMA
+    PanoManager::instance()->checkBinaries();
+    PanoManager::instance()->setItemsList(d->thumbView->urls());
+    PanoManager::instance()->run();
+#endif
+}
+
+void LightTableWindow::slotExpoBlending()
+{
+    ExpoBlendingManager::instance()->checkBinaries();
+    ExpoBlendingManager::instance()->setItemsList(d->thumbView->urls());
+    ExpoBlendingManager::instance()->run();
 }
 
 }  // namespace Digikam

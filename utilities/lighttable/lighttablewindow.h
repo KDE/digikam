@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef LIGHTTABLEWINDOW_H
-#define LIGHTTABLEWINDOW_H
+#ifndef LIGHT_TABLE_WINDOW_H
+#define LIGHT_TABLE_WINDOW_H
 
 // Qt includes
 
@@ -176,6 +176,10 @@ private Q_SLOTS:
 
     void slotEditMetadata();
     void slotEditGeolocation();
+    void slotHtmlGallery();
+    void slotCalendar();
+    void slotExpoBlending();
+    void slotPanorama();
 
 private:
 
@@ -185,6 +189,6 @@ private:
     static LightTableWindow* m_instance;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* LIGHTTABLEWINDOW_H */
+#endif // LIGHT_TABLE_WINDOW_H

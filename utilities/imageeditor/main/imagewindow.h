@@ -189,9 +189,9 @@ private Q_SLOTS:
 
     void slotEditMetadata();
     void slotEditGeolocation();
+    void slotPresentation();
     void slotHtmlGallery();
     void slotCalendar();
-    void slotPresentation();
     void slotExpoBlending();
     void slotPanorama();
 
