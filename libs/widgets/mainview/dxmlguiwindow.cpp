@@ -172,6 +172,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
+    m_presentationAction    = 0;
     m_metadataEditAction    = 0;
     m_geolocationEditAction = 0;
     m_animLogo              = 0;
@@ -412,6 +413,17 @@ void DXmlGuiWindow::createMetadataEditAction()
 
     connect(m_metadataEditAction, SIGNAL(triggered(bool)),
             this, SLOT(slotEditMetadata()));
+}
+
+void DXmlGuiWindow::createPresentationAction()
+{
+    m_presentationAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Presentation..."), this);
+
+    actionCollection()->addAction(QLatin1String("presentation"), m_presentationAction);
+    actionCollection()->setDefaultShortcut(m_presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
+
+    connect(m_presentationAction, SIGNAL(triggered()),
+            this, SLOT(slotPresentation()));
 }
 
 void DXmlGuiWindow::createKSaneAction()

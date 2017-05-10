@@ -61,7 +61,6 @@ public:
         fileDeleteAction(0),
         fileDeleteFinalAction(0),
         slideShowAction(0),
-        presentationAction(0),
         leftZoomPlusAction(0),
         leftZoomMinusAction(0),
         leftZoomTo100percents(0),
@@ -109,7 +108,6 @@ public:
     QAction*                  fileDeleteAction;
     QAction*                  fileDeleteFinalAction;
     QAction*                  slideShowAction;
-    QAction*                  presentationAction;
     QAction*                  leftZoomPlusAction;
     QAction*                  leftZoomMinusAction;
     QAction*                  leftZoomTo100percents;

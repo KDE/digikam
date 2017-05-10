@@ -1280,12 +1280,7 @@ void DigikamApp::setupActions()
     ac->setDefaultShortcut(d->slideShowRecursiveAction, Qt::SHIFT+Qt::Key_F9);
     d->slideShowAction->addAction(d->slideShowRecursiveAction);
 
-    d->presentationAction = new QAction(i18n("Presentation..."), this);
-    d->presentationAction->setIcon(QIcon::fromTheme(QString::fromLatin1("view-presentation")));
-    connect(d->presentationAction, SIGNAL(triggered()), d->view, SLOT(slotPresentation()));
-    ac->addAction(QLatin1String("presentation"), d->presentationAction);
-    ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
-    d->slideShowAction->addAction(d->presentationAction);
+    createPresentationAction();
 
     // -----------------------------------------------------------
 
@@ -3327,7 +3322,7 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(d->expoBendingAction,          postCategory);
     actionModel->addAction(d->calendarAction,             postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
-    actionModel->addAction(d->presentationAction,         postCategory);
+    actionModel->addAction(m_presentationAction,          postCategory);
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(d->panoramaAction,             postCategory);
@@ -3383,6 +3378,11 @@ void DigikamApp::setupSelectToolsAction()
             actionModel, SLOT(trigger(QModelIndex)));
 
     d->view->setToolsIconView(selectToolsActionView);
+}
+
+void DigikamApp::slotPresentation()
+{
+    d->view->presentation();
 }
 
 }  // namespace Digikam

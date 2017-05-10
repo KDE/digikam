@@ -864,10 +864,7 @@ void EditorWindow::setupStandardActions()
     ac->addAction(QLatin1String("editorwindow_slideshow"), d->slideShowAction);
     ac->setDefaultShortcut(d->slideShowAction, Qt::Key_F9);
 
-    d->presentationAction = new QAction(QIcon::fromTheme(QLatin1String("view-presentation")), i18n("Presentation..."), this);
-    connect(d->presentationAction, SIGNAL(triggered()), this, SLOT(slotPresentation()));
-    ac->addAction(QLatin1String("editorwindow_presentation"), d->presentationAction);
-    ac->setDefaultShortcut(d->presentationAction, Qt::ALT+Qt::SHIFT+Qt::Key_F9);
+    createPresentationAction();
 
     d->viewUnderExpoAction = new QAction(QIcon::fromTheme(QLatin1String("underexposure")), i18n("Under-Exposure Indicator"), this);
     d->viewUnderExpoAction->setCheckable(true);
@@ -1417,7 +1414,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->selectAllAction->setEnabled(val);
     d->selectNoneAction->setEnabled(val);
     d->slideShowAction->setEnabled(val);
-    d->presentationAction->setEnabled(val);
+    m_presentationAction->setEnabled(val);
     d->calendarAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
@@ -3003,7 +3000,7 @@ void EditorWindow::setupSelectToolsAction()
     QString postCategory             = i18nc("@title Post Processing Tools", "Post-Processing");
     actionModel->addAction(d->calendarAction,             postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
-    actionModel->addAction(d->presentationAction,         postCategory);
+    actionModel->addAction(m_presentationAction,          postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(d->htmlAction,                 postCategory);

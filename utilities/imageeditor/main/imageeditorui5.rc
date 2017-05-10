@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="553" name="imageeditor" translationDomain="digikam" >
+<gui version="555" name="imageeditor" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -40,7 +40,7 @@
     <Menu name="View" ><text>&amp;View</text>
         <Action name="editorwindow_fullscreen" />
         <Action name="editorwindow_slideshow" />
-        <Action name="editorwindow_presentation" />
+        <Action name="presentation" />
         <Separator/>
         <Action name="editorwindow_zoomplus" />
         <Action name="editorwindow_zoomminus" />

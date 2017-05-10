@@ -2135,7 +2135,7 @@ void DigikamView::slotSlideShowManualFrom(const ImageInfo& info)
    builder->run();
 }
 
-void DigikamView::slotPresentation()
+void DigikamView::presentation()
 {
     PresentationMngr* const mngr = new PresentationMngr(this);
 

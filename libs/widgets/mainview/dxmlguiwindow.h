@@ -113,6 +113,10 @@ public:
      */
     void createMetadataEditAction();
 
+    /** Create Presentation tool action.
+     */
+    void createPresentationAction();
+
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -166,6 +170,7 @@ protected:
 
     QAction*     m_metadataEditAction;
     QAction*     m_geolocationEditAction;
+    QAction*     m_presentationAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -245,6 +250,9 @@ private Q_SLOTS:
 
     // Called by Geolocation Edit tool.
     virtual void slotEditGeolocation()         {};
+
+    // Called by Presentation tool.
+    virtual void slotPresentation()            {};
 
 private:
 

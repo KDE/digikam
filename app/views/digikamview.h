@@ -101,6 +101,7 @@ public:
     double zoomMin()           const;
     double zoomMax()           const;
 
+    void presentation();
     void toggleTag(int tagID);
     void toggleFullScreen(bool set);
     QList<SidebarWidget*> leftSidebarWidgets() const;
@@ -140,7 +141,6 @@ public Q_SLOTS:
     void slotSlideShowRecursive();
     void slotSlideShowManualFromCurrent();
     void slotSlideShowManualFrom(const ImageInfo& info);
-    void slotPresentation();
 
     // Album action slots
     void slotRefresh();

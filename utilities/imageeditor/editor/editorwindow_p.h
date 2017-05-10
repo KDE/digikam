@@ -84,7 +84,6 @@ public:
         selectAllAction(0),
         selectNoneAction(0),
         slideShowAction(0),
-        presentationAction(0),
         htmlAction(0),
         calendarAction(0),
         softProofOptionsAction(0),
@@ -204,7 +203,6 @@ public:
     QAction*                     selectAllAction;
     QAction*                     selectNoneAction;
     QAction*                     slideShowAction;
-    QAction*                     presentationAction;
     QAction*                     htmlAction;
     QAction*                     calendarAction;
     QAction*                     softProofOptionsAction;

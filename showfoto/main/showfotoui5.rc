@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="553" name="showfoto" translationDomain="digikam" >
+<gui version="555" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -39,7 +39,7 @@
     <Menu name="View" ><text>&amp;View</text>
         <Action name="editorwindow_fullscreen" />
         <Action name="editorwindow_slideshow" />
-        <Action name="editorwindow_presentation" />
+        <Action name="presentation" />
         <Separator/>
         <Action name="editorwindow_zoomplus" />
         <Action name="editorwindow_zoomminus" />
@@ -145,9 +145,9 @@
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
         <Merge name="StandardToolBarMenuHandler" />
-        <Action name="options_show_menubar"/>
-        <Action name="options_show_statusbar"/>
-        <Action name="options_show_toolbar"/>
+        <Action name="options_show_menubar" />
+        <Action name="options_show_statusbar" />
+        <Action name="options_show_toolbar" />
         <Action name="editorwindow_showthumbs" />
         <Separator/>
         <Action name="theme_menu" />
@@ -157,13 +157,13 @@
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="help_rawcameralist"/>
-        <Action name="help_librariesinfo"/>
+        <Action name="help_rawcameralist" />
+        <Action name="help_librariesinfo" />
         <Separator/>
         <Action name="help_donatemoney" />
-        <Action name="help_recipesbook"/>
+        <Action name="help_recipesbook" />
         <Action name="help_contribute" />
-        <Action name="help_handbook"/>
+        <Action name="help_handbook" />
     </Menu>
 
     <Merge/>
