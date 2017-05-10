@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="553" name="digikam" translationDomain="digikam" >
+<gui version="554" name="digikam" translationDomain="digikam" >
 
  <MenuBar>
 
@@ -117,7 +117,6 @@
         <Action name="light_table" />
         <Action name="queue_manager" />
       <Separator/>
-        <Action name="script_console"/>
         <Action name="search_quick" />
         <Action name="search_advanced" />
         <Action name="find_duplicates" />
