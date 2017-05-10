@@ -171,7 +171,6 @@ public:
         maintenanceAction(0),
         expoBendingAction(0),
         panoramaAction(0),
-        htmlAction(0),
         qualityAction(0),
         advSearchAction(0),
         addCameraSeparatorAction(0),
@@ -302,7 +301,6 @@ public:
     QAction*                            maintenanceAction;
     QAction*                            expoBendingAction;
     QAction*                            panoramaAction;
-    QAction*                            htmlAction;
     QAction*                            qualityAction;
     QAction*                            advSearchAction;
 

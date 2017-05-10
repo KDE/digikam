@@ -1348,15 +1348,7 @@ void DigikamApp::setupActions()
     ac->addAction(QLatin1String("panorama"), d->panoramaAction);
 #endif
 
-#ifdef HAVE_HTMLGALLERY
-    d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
-                                i18nc("@action", "Create Html gallery..."),
-                                this);
-    connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
-    ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
-    ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
-#endif
-
+    createHTMLGalleryAction();
     createCalendarAction();
 
     // -----------------------------------------------------------
@@ -3325,7 +3317,7 @@ void DigikamApp::setupSelectToolsAction()
 #endif
 
 #ifdef HAVE_HTMLGALLERY
-    actionModel->addAction(d->htmlAction,                 postCategory);
+    actionModel->addAction(m_htmlGalleryAction,           postCategory);
 #endif
 
 #ifdef HAVE_MARBLE

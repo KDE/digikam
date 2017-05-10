@@ -825,16 +825,7 @@ void EditorWindow::setupStandardActions()
     createKSaneAction();
     createMetadataEditAction();
     createGeolocationEditAction();
-
-#ifdef HAVE_HTMLGALLERY
-    d->htmlAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
-                                i18nc("@action", "Create Html gallery..."),
-                                this);
-    connect(d->htmlAction, SIGNAL(triggered(bool)), this, SLOT(slotHtmlGallery()));
-    ac->setDefaultShortcut(d->htmlAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
-    ac->addAction(QLatin1String("htmlgallery"), d->htmlAction);
-#endif
-
+    createHTMLGalleryAction();
     createCalendarAction();
 
     m_metadataEditAction->setEnabled(false);
@@ -847,7 +838,7 @@ void EditorWindow::setupStandardActions()
     m_geolocationEditAction->setEnabled(false);
 #endif
 #ifdef HAVE_HTMLGALLERY
-    d->htmlAction->setEnabled(false);
+    m_htmlGalleryAction->setEnabled(false);
 #endif
 
     // --------------------------------------------------------
@@ -1420,7 +1411,7 @@ void EditorWindow::toggleStandardActions(bool val)
     m_geolocationEditAction->setEnabled(val);
 #endif
 #ifdef HAVE_HTMLGALLERY
-    d->htmlAction->setEnabled(val);
+    m_htmlGalleryAction->setEnabled(val);
 #endif
 
     // these actions are special: They are turned off if val is false,
@@ -2999,7 +2990,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_presentationAction,          postCategory);
 
 #ifdef HAVE_HTMLGALLERY
-    actionModel->addAction(d->htmlAction,                 postCategory);
+    actionModel->addAction(m_htmlGalleryAction,           postCategory);
 #endif
 
 #ifdef HAVE_MARBLE

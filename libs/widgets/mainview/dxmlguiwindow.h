@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DXMLGUIWINDOW_H
-#define DXMLGUIWINDOW_H
+#ifndef DXML_GUI_WINDOW_H
+#define DXML_GUI_WINDOW_H
 
 // Qt includes
 
@@ -121,6 +121,10 @@ public:
      */
     void createCalendarAction();
 
+    /** Create HTML Gallery tool action.
+     */
+    void createHTMLGalleryAction();
+
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -176,6 +180,7 @@ protected:
     QAction*     m_geolocationEditAction;
     QAction*     m_presentationAction;
     QAction*     m_calendarAction;
+    QAction*     m_htmlGalleryAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -277,4 +282,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DXMLGUIWINDOW_H */
+#endif // DXML_GUI_WINDOW_H

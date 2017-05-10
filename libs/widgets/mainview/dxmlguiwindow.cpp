@@ -172,6 +172,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       d(new Private)
 {
+    m_htmlGalleryAction     = 0;
     m_calendarAction        = 0;
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
@@ -436,6 +437,21 @@ void DXmlGuiWindow::createCalendarAction()
 
     connect(m_calendarAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCalendar()));
+}
+
+void DXmlGuiWindow::createHTMLGalleryAction()
+{
+#ifdef HAVE_HTMLGALLERY
+    m_htmlGalleryAction = new QAction(QIcon::fromTheme(QLatin1String("text-html")),
+                                      i18nc("@action", "Create Html gallery..."),
+                                      this);
+
+    actionCollection()->setDefaultShortcut(m_htmlGalleryAction, Qt::ALT+Qt::SHIFT+Qt::Key_H);
+    actionCollection()->addAction(QLatin1String("htmlgallery"), m_htmlGalleryAction);
+
+    connect(m_htmlGalleryAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHtmlGallery()));
+#endif
 }
 
 void DXmlGuiWindow::createKSaneAction()
