@@ -105,11 +105,11 @@ public:
     void setConfigGroupName(const QString& name);
     QString configGroupName() const;
 
-    /** Create Geolocation Edit action.
+    /** Create Geolocation Edit tool action.
      */
     void createGeolocationEditAction();
 
-    /** Create Metadata Edit action.
+    /** Create Metadata Edit tool action.
      */
     void createMetadataEditAction();
 
