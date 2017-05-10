@@ -177,8 +177,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->detailsBtn->setToolTip(i18n("See more information on the Internet"));
     d->detailsCombo->insertItem(MapQuest,      QLatin1String("MapQuest"));
     d->detailsCombo->insertItem(GoogleMaps,    QLatin1String("Google Maps"));
-    d->detailsCombo->insertItem(MsnMaps,       QLatin1String("MSN Maps"));
-    d->detailsCombo->insertItem(MultiMap,      QLatin1String("MultiMap"));
+    d->detailsCombo->insertItem(BingMaps,      QLatin1String("Bing Maps"));
     d->detailsCombo->insertItem(OpenStreetMap, QLatin1String("OpenStreetMap"));
     d->detailsCombo->insertItem(LocAlizeMaps,  QLatin1String("loc.alize.us Maps"));
 
@@ -283,27 +282,12 @@ void ImagePropertiesGPSTab::slotGPSDetails()
             break;
         }
 
-        case MsnMaps:
+        case BingMaps:
         {
-            url.append(QLatin1String("http://maps.msn.com/map.aspx?"));
-            url.append(QLatin1String("&lats1="));
+            url.append(QLatin1String("http://www.bing.com/maps/?v=2&where1="));
             url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append(QLatin1String("&lons1="));
+            url.append(QLatin1String(","));
             url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append(QLatin1String("&name=HERE"));
-            url.append(QLatin1String("&alts1=7"));
-            break;
-        }
-
-        case MultiMap:
-        {
-            url.append(QLatin1String("http://www.multimap.com/map/browse.cgi?"));
-            url.append(QLatin1String("lat="));
-            url.append(val.setNum(info.coordinates.lat(), 'g', 12));
-            url.append(QLatin1String("&lon="));
-            url.append(val.setNum(info.coordinates.lon(), 'g', 12));
-            url.append(QLatin1String("&scale=10000"));
-            url.append(QLatin1String("&icon=x"));
             break;
         }
 

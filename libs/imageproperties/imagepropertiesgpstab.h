@@ -49,8 +49,7 @@ public:
     {
         MapQuest = 0,
         GoogleMaps,
-        MsnMaps,
-        MultiMap,
+        BingMaps,
         OpenStreetMap,
         LocAlizeMaps
     };

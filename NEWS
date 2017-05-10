@@ -48,5 +48,5 @@ BUGFIXES FROM BUGZILLA:
 028 ==> 379526 - Inconsistent separator use in mime setup.
 029 ==> 156900 - Allow to use selected images instead full album contents in html gallery.
 030 ==> 373247 - No chronological ordering of tags anymore.
-031 ==> 
-
+031 ==> 379675 - Geolocation feature links to Multimap.com and MSN Maps.
+032 ==> 
