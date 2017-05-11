@@ -49,4 +49,5 @@ BUGFIXES FROM BUGZILLA:
 029 ==> 156900 - Allow to use selected images instead full album contents in html gallery.
 030 ==> 373247 - No chronological ordering of tags anymore.
 031 ==> 379675 - Geolocation feature links to Multimap.com and MSN Maps.
-032 ==> 
+032 ==> 140177 - HTML export plugin should autorotate images.
+033 ==> 
