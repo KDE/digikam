@@ -12,10 +12,8 @@ endif (POLICY CMP0063)
 set(libcommonwidgets_SRCS
     common/abstractitemdragdrophandler.cpp
     common/buttonicondisabler.cpp
-    common/comboboxutilities.cpp
     common/dsliderspinbox.cpp
     common/dnuminput.cpp
-    common/dcombobox.cpp
     common/dexpanderbox.cpp
     common/dactivelabel.cpp
     common/dragdropimplementations.cpp
@@ -25,7 +23,12 @@ set(libcommonwidgets_SRCS
     common/visibilitycontroller.cpp
     common/workingwidget.cpp
     common/dwidgetutils.cpp
-    common/squeezedcombobox.cpp
+)
+
+set(libcombotools_SRCS
+    combo/comboboxutilities.cpp
+    combo/dcombobox.cpp
+    combo/squeezedcombobox.cpp
 )
 
 set(libimagehistory_SRCS
@@ -162,6 +165,7 @@ add_library(digikamwidgetscore_src OBJECT
     ${libcolorstools_SRCS}
     ${libfontstools_SRCS}
     ${libfilestools_SRCS}
+    ${libcombotools_SRCS}
 )
 
 add_library(imagehistorywidgets_src OBJECT ${libimagehistory_SRCS})
