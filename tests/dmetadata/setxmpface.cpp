@@ -1,13 +1,12 @@
-/** ===========================================================
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2013-02-21
- * @brief  a command line tool to set faces in Picassa format
+ * Date        : 2013-02-21
+ * Description : a command line tool to set faces in Picassa format
  *
- * @author Copyright (C) 2013 by Munteanu Veaceslav
- *         <a href="mailto:slavuttici at gmail dot com">slavuttici at gmail dot com</a>
+ * Copyright (C) 2013 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -17,7 +16,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
