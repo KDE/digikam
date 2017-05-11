@@ -61,6 +61,7 @@
 #include "digikam_debug.h"
 #include "dwidgetutils.h"
 #include "thumbnailloadthread.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {

@@ -35,6 +35,7 @@
 // LibDRawDecoder includes
 
 #include "dwidgetutils.h"
+#include "dworkingpixmap.h"
 
 // Local includes
 

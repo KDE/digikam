@@ -25,17 +25,9 @@
 
 // Qt includes
 
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QApplication>
-#include <QFileInfo>
-#include <QPainter>
-#include <QStandardPaths>
-
-// KDE includes
-
-#include <klocalizedstring.h>
 
 // Local includes
 
@@ -148,83 +140,6 @@ DVBox::DVBox(QWidget* const parent)
 
 DVBox::~DVBox()
 {
-}
-
-// ---------------------------------------------------------------------------------------
-
-DWorkingPixmap::DWorkingPixmap()
-{
-    QPixmap pix(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                       QLatin1String("digikam/data/process-working.png")));
-    QSize   size(22, 22);
-
-    if (pix.isNull())
-    {
-        qCWarning(DIGIKAM_WIDGETS_LOG) << "Invalid pixmap specified.";
-        return;
-    }
-
-    if (!size.isValid())
-    {
-        size = QSize(pix.width(), pix.width());
-    }
-
-    if (pix.width() % size.width() || pix.height() % size.height())
-    {
-        qCWarning(DIGIKAM_WIDGETS_LOG) << "Invalid framesize.";
-        return;
-    }
-
-    const int rowCount = pix.height() / size.height();
-    const int colCount = pix.width()  / size.width();
-    m_frames.resize(rowCount * colCount);
-
-    int pos = 0;
-
-    for (int row = 0; row < rowCount; ++row)
-    {
-        for (int col = 0; col < colCount; ++col)
-        {
-            QPixmap frm     = pix.copy(col * size.width(), row * size.height(), size.width(), size.height());
-            m_frames[pos++] = frm;
-        }
-    }
-}
-
-DWorkingPixmap::~DWorkingPixmap()
-{
-}
-
-bool DWorkingPixmap::isEmpty() const
-{
-    return m_frames.isEmpty();
-}
-
-QSize DWorkingPixmap::frameSize() const
-{
-    if (isEmpty())
-    {
-        qCWarning(DIGIKAM_WIDGETS_LOG) << "No frame loaded.";
-        return QSize();
-    }
-
-    return m_frames[0].size();
-}
-
-int DWorkingPixmap::frameCount() const
-{
-    return m_frames.size();
-}
-
-QPixmap DWorkingPixmap::frameAt(int index) const
-{
-    if (isEmpty())
-    {
-        qCWarning(DIGIKAM_WIDGETS_LOG) << "No frame loaded.";
-        return QPixmap();
-    }
-
-    return m_frames.at(index);
 }
 
 } // namespace Digikam

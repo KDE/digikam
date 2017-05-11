@@ -45,6 +45,7 @@
 
 #include "dpreviewimage.h"
 #include "dwidgetutils.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {

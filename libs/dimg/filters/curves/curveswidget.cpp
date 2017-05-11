@@ -56,6 +56,7 @@
 #include "digikam_globals.h"
 #include "digikam_debug.h"
 #include "histogrampainter.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {

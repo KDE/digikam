@@ -42,10 +42,6 @@
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
 
-// LibDRawDecoder includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
 #include "digikam_debug.h"
@@ -60,6 +56,8 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "workflowmanager.h"
+#include "dwidgetutils.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {

@@ -49,6 +49,7 @@
 #include "expoblendingmanager.h"
 #include "expoblendingthread.h"
 #include "dwidgetutils.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {

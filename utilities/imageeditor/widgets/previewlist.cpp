@@ -35,16 +35,14 @@
 
 #include <klocalizedstring.h>
 
-// LibDRawDecoder includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
 #include "dimg.h"
 #include "dimgthreadedfilter.h"
 #include "imageiface.h"
 #include "digikam_debug.h"
+#include "dwidgetutils.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {

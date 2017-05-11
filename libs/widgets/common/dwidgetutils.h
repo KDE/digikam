@@ -26,10 +26,10 @@
 
 // Qt includes
 
-#include <QString>
+#include <QWidget>
 #include <QFrame>
 #include <QSize>
-#include <QPixmap>
+#include <QMargins>
 
 // Local includes
 
@@ -78,27 +78,6 @@ class DIGIKAM_EXPORT DVBox : public DHBox
 
     explicit DVBox(QWidget* const parent=0);
     virtual ~DVBox();
-};
-
-// --------------------------------------------------------------------------------------
-
-/** A widget to draw progress wheel indicator over thumbnails.
- */
-class DIGIKAM_EXPORT DWorkingPixmap
-{
-public:
-
-    explicit DWorkingPixmap();
-    virtual ~DWorkingPixmap();
-
-    bool    isEmpty()          const;
-    QSize   frameSize()        const;
-    int     frameCount()       const;
-    QPixmap frameAt(int index) const;
-
-private:
-
-    QVector<QPixmap> m_frames;
 };
 
 } // namespace Digikam

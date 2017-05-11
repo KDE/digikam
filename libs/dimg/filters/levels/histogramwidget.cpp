@@ -43,10 +43,6 @@
 
 #include <klocalizedstring.h>
 
-// LibDRawDecoder includes
-
-#include "dwidgetutils.h"
-
 // Local includes
 
 #include "dimg.h"
@@ -55,6 +51,8 @@
 #include "digikam_globals.h"
 #include "digikam_debug.h"
 #include "histogrampainter.h"
+#include "dwidgetutils.h"
+#include "dworkingpixmap.h"
 
 namespace Digikam
 {
