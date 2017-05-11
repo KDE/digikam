@@ -42,7 +42,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
 #include "objectattributesedit.h"

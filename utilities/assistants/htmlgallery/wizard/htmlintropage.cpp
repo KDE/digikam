@@ -38,7 +38,7 @@
 #include "digikam_debug.h"
 #include "htmlwizard.h"
 #include "galleryinfo.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

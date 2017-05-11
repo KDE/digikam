@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dfileselector.h"
 #include "digikam_config.h"
 #include "gpcamera.h"

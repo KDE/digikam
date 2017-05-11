@@ -49,7 +49,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "albummodel.h"

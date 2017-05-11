@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
 

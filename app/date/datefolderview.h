@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "albummanager.h"
 #include "statesavingobject.h"
 

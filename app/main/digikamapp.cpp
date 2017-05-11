@@ -68,7 +68,7 @@
 
 #include "actioncategorizedview.h"
 #include "drawdecoder.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "album.h"
 #include "coredb.h"

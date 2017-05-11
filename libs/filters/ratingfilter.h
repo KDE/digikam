@@ -28,7 +28,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "imagefiltersettings.h"
 #include "ratingwidget.h"
 

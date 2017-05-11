@@ -27,7 +27,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "camiteminfo.h"
 #include "sidebarwidget.h"
 #include "importui.h"

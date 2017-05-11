@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "applicationsettings.h"
 #include "importsettings.h"
 #include "setupcamera.h"

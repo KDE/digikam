@@ -57,7 +57,7 @@
 
 // local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "dmessagebox.h"
 #include "gpsimagemodel.h"

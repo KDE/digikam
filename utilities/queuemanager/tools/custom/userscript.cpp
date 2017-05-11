@@ -43,7 +43,7 @@
 #include "dcombobox.h"
 #include "dmetadata.h"
 #include "tagscache.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

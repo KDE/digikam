@@ -38,7 +38,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "metadatasettings.h"
 
 namespace Digikam

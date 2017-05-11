@@ -55,7 +55,7 @@
 // local includes
 
 #include "geoiface_types.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "gpsundocommand.h"
 #include "geolocationedit.h"
 #include "gpsimagemodel.h"

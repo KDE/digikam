@@ -39,7 +39,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "multistringsedit.h"
 #include "dmetadata.h"
 #include "dexpanderbox.h"

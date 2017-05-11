@@ -59,7 +59,7 @@
 #include "drawdecoder.h"
 #include "imagedialog.h"
 #include "digikam_debug.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "thumbnailloadthread.h"
 #include "dworkingpixmap.h"
 

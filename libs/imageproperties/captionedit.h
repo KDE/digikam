@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "captionvalues.h"
 
 namespace Digikam

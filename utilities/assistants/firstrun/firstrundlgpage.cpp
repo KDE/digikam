@@ -34,7 +34,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "firstrundlg.h"
 #include "dexpanderbox.h"
 

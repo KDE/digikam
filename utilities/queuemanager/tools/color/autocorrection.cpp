@@ -35,7 +35,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dimg.h"
 #include "autolevelsfilter.h"
 #include "equalizefilter.h"

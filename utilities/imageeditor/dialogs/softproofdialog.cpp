@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "iccprofilescombobox.h"
 #include "iccsettingscontainer.h"
 #include "iccsettings.h"

@@ -51,7 +51,7 @@
 #include "tagsactionmngr.h"
 #include "syncjob.h"
 #include "dexpanderbox.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

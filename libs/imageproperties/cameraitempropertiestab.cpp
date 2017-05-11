@@ -41,7 +41,7 @@
 // Local includes
 
 #include "imagepropertiestxtlabel.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "imagepropertiestab.h"
 
 namespace Digikam

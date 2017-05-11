@@ -44,7 +44,7 @@
 #include "abstractthemeparameter.h"
 #include "galleryinfo.h"
 #include "gallerygenerator.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "dprogresswdg.h"
 #include "dhistoryview.h"

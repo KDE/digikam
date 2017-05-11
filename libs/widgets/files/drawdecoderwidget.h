@@ -41,7 +41,7 @@
 // Local includes
 
 #include "drawdecodersettings.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dexpanderbox.h"
 #include "dfileselector.h"
 #include "digikam_export.h"

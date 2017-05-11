@@ -51,7 +51,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "coredb.h"
 #include "album.h"
 #include "albummanager.h"

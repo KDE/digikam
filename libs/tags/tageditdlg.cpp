@@ -56,7 +56,7 @@
 #include "digikam_debug.h"
 #include "dxmlguiwindow.h"
 #include "dexpanderbox.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

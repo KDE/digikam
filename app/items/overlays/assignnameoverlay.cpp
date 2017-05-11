@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "addtagslineedit.h"
 #include "albummodel.h"

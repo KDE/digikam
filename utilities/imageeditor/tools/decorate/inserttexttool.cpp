@@ -52,7 +52,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"

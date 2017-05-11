@@ -37,7 +37,7 @@
 
 #include "enfusebinary.h"
 #include "expoblendingmanager.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

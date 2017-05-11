@@ -46,7 +46,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dnuminput.h"
 #include "colorgradientwidget.h"
 #include "histogramwidget.h"

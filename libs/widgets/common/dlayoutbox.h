@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-12
- * Description : Simple helpher widgets collection.
+ * Description : Vertical and horizontal layout widget helpers.
  *
  * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DWIDGET_UTILS_H
-#define DWIDGET_UTILS_H
+#ifndef DLAYOUT_BOX_H
+#define DLAYOUT_BOX_H
 
 // Qt includes
 
@@ -82,4 +82,4 @@ class DIGIKAM_EXPORT DVBox : public DHBox
 
 } // namespace Digikam
 
-#endif // DWIDGET_UTILS_H
+#endif // DLAYOUT_BOX_H

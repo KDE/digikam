@@ -40,7 +40,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "thememanager.h"
 #include "batchtoolsmanager.h"
 

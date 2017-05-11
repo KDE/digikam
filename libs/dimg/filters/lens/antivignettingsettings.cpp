@@ -43,7 +43,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "dexpanderbox.h"
 #include "dnuminput.h"

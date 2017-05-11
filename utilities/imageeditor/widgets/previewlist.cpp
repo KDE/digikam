@@ -41,7 +41,7 @@
 #include "dimgthreadedfilter.h"
 #include "imageiface.h"
 #include "digikam_debug.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
 namespace Digikam

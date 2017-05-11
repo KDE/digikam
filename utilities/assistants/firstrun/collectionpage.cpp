@@ -45,7 +45,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dfileselector.h"
 #include "digikam_debug.h"
 #include "digikam_version.h"

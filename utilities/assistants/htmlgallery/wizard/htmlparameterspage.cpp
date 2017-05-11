@@ -43,7 +43,7 @@
 #include "htmlwizard.h"
 #include "galleryinfo.h"
 #include "abstractthemeparameter.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "gallerytheme.h"
 
 namespace Digikam

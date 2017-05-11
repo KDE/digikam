@@ -21,7 +21,7 @@ set(libcommonwidgets_SRCS
     common/searchtextbar.cpp
     common/statesavingobject.cpp
     common/visibilitycontroller.cpp
-    common/dwidgetutils.cpp
+    common/dlayoutbox.cpp
 )
 
 set(libcombotools_SRCS

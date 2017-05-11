@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "picklabelwidget.h"
 #include "dnuminput.h"
 #include "imagequalitysettings.h"

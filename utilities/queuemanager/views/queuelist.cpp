@@ -56,7 +56,7 @@
 #include "thumbnailloadthread.h"
 #include "thumbnailsize.h"
 #include "workflowmanager.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
 namespace Digikam

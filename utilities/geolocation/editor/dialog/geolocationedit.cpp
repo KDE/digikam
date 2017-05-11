@@ -66,7 +66,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_config.h"
 #include "mapwidget.h"
 #include "itemmarkertiler.h"

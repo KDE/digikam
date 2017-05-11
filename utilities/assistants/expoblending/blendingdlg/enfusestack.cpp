@@ -41,7 +41,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
 namespace Digikam

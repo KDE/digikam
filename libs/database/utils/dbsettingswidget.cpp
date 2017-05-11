@@ -62,7 +62,7 @@
 #include "dexpanderbox.h"
 #include "digikam_config.h"
 #include "digikam_debug.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "mysqlinitbinary.h"
 #include "mysqlservbinary.h"
 

@@ -40,7 +40,7 @@
 #include "dimageslist.h"
 #include "expoblendingmanager.h"
 #include "expoblendingthread.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

@@ -48,7 +48,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "mapwidget.h"
 #include "searchbackend.h"
 #include "searchresultmodel.h"

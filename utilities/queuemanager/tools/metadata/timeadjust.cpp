@@ -44,7 +44,7 @@ extern "C"
 // Local includes
 
 #include "dimg.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dmetadata.h"
 #include "timeadjustsettings.h"
 

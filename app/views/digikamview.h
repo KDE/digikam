@@ -41,7 +41,7 @@
 #include "digikammodelcollection.h"
 #include "sidebarwidget.h"
 #include "stackedview.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

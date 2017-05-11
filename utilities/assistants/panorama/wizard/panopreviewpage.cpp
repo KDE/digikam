@@ -49,7 +49,7 @@
 #include "nonabinary.h"
 #include "pto2mkbinary.h"
 #include "huginexecutorbinary.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

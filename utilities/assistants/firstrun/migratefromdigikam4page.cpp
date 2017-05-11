@@ -49,7 +49,7 @@
 
 #include "digikam_debug.h"
 #include "dbengineparameters.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

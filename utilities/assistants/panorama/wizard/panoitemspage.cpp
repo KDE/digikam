@@ -40,7 +40,7 @@
 
 #include "dimageslist.h"
 #include "panomanager.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

@@ -38,7 +38,7 @@
 #include "dbinarysearch.h"
 #include "alignbinary.h"
 #include "enfusebinary.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

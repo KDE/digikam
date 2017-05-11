@@ -43,7 +43,7 @@
 #include "imageversionsmodel.h"
 #include "thumbnailloadthread.h"
 #include "dcategorydrawer.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
 namespace Digikam

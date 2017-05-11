@@ -34,7 +34,7 @@
 
 #include "digikam_export.h"
 #include "slideshowsettings.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 class QAction;
 

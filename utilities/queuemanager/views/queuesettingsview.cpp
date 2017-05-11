@@ -44,7 +44,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "advancedrenamewidget.h"
 #include "defaultrenameparser.h"
 #include "album.h"

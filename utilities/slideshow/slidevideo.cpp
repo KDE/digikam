@@ -47,7 +47,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 using namespace QtAV;
 

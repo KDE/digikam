@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-09-12
- * Description : Simple helpher widgets collection.
+ * Description : Vertical and horizontal layout widget helpers.
  *
  * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,7 +21,7 @@
  *
  * ============================================================ */
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 // Qt includes
 

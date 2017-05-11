@@ -48,7 +48,7 @@
 #include "digikam_debug.h"
 #include "panomanager.h"
 #include "panoactionthread.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {

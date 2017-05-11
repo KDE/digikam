@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dimg.h"
 #include "mixerfilter.h"
 #include "mixersettings.h"

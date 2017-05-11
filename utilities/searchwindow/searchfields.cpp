@@ -59,7 +59,7 @@
 #include "albummanager.h"
 #include "albummodel.h"
 #include "dexpanderbox.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "albumselectcombobox.h"
 #include "choicesearchutilities.h"
 #include "dimg.h"

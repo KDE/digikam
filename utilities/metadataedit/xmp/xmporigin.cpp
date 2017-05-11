@@ -41,7 +41,7 @@
 // Local includes
 
 #include "squeezedcombobox.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "metadatacheckbox.h"
 #include "timezonecombobox.h"
 #include "dmetadata.h"

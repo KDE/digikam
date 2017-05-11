@@ -48,7 +48,7 @@
 #include "alignbinary.h"
 #include "expoblendingmanager.h"
 #include "expoblendingthread.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
 namespace Digikam

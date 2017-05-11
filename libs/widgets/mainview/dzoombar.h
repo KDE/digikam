@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "digikam_export.h"
 
 class QAction;

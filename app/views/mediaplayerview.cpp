@@ -49,7 +49,7 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "thememanager.h"
 
 using namespace QtAV;

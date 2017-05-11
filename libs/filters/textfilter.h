@@ -26,7 +26,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "searchtextbar.h"
 #include "imagefiltersettings.h"
 

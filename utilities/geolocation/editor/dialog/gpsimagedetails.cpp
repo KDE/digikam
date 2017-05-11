@@ -47,7 +47,7 @@
 
 // local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "gpsimagemodel.h"
 #include "gpsundocommand.h"
 #include "graphicsdimgview.h"

@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dnuminput.h"
 #include "dimg.h"
 #include "dimgbuiltinfilter.h"

@@ -51,7 +51,7 @@
 #include "panomodifybinary.h"
 #include "panomanager.h"
 #include "panoactionthread.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 #include "dworkingpixmap.h"
 
 namespace Digikam

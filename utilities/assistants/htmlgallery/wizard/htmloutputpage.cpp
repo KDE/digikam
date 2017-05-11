@@ -42,7 +42,7 @@
 #include "htmlwizard.h"
 #include "galleryinfo.h"
 #include "dfileselector.h"
-#include "dwidgetutils.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {
