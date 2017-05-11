@@ -17,6 +17,7 @@ set(libprogressmanager_SRCS
     progressmanager.cpp
     statusbarprogresswidget.cpp
     statusprogressbar.cpp
+    workingwidget.cpp
 )
 
 include_directories(
