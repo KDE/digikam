@@ -1119,6 +1119,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             if (values.isEmpty())
             {
                 qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
+                return false;
             }
 
             QList<double> ratioValues;
@@ -1173,6 +1174,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         if (values.size() != 2)
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
+            return false;
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.audioBitRate AS INTEGER)");
@@ -1194,6 +1196,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             if (values.isEmpty())
             {
                 qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
+                return false;
             }
 
             foreach(const QString& value, values)
@@ -1244,6 +1247,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         if (values.size() != 2)
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
+            return false;
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.duration AS INTEGER)");
@@ -1264,6 +1268,7 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
         if (values.size() != 2)
         {
             qCWarning(DIGIKAM_DATABASE_LOG) << "Relation Interval requires a list of two values";
+            return false;
         }
 
         sql += QString::fromUtf8(" ( CAST(VideoMetadata.frameRate AS REAL)");
@@ -1285,17 +1290,19 @@ bool ImageQueryBuilder::buildField(QString& sql, SearchXmlCachingReader& reader,
             if (values.isEmpty())
             {
                 qCDebug(DIGIKAM_DATABASE_LOG) << "List for OneOf is empty";
+                return false;
             }
 
             foreach(const QString& value, values)
             {
                 sql += QString::fromUtf8("( Upper(VideoMetadata.videoCodec) LIKE '%") + value.toUpper() + QString::fromUtf8("%' ");
 
-                if (value!=values.last())
+                if (value != values.last())
                 {
                     sql += QString::fromUtf8("OR ");
                 }
             }
+
             sql += QString::fromUtf8(") ");
         }
         else
