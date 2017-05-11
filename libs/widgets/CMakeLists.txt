@@ -24,7 +24,6 @@ set(libcommonwidgets_SRCS
     common/statesavingobject.cpp
     common/visibilitycontroller.cpp
     common/workingwidget.cpp
-    common/drawdecoderwidget.cpp
     common/dwidgetutils.cpp
     common/squeezedcombobox.cpp
 )
@@ -56,6 +55,7 @@ set(libfilestools_SRCS
     files/dfileselector.cpp
     files/dbinarysearch.cpp
     files/dbinaryiface.cpp
+    files/drawdecoderwidget.cpp
 )
 
 set(libmainview_SRCS
