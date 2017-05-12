@@ -371,7 +371,10 @@ void DbCleaner::slotCancel()
 
 void DbCleaner::slotDone()
 {
-    d->shrinkDlg->hide();
+    if (d->shrinkDlg)
+    {
+        d->shrinkDlg->hide();
+    }
     MaintenanceTool::slotDone();
 }
 
