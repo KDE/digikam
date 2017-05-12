@@ -317,10 +317,10 @@ void MetadataEditDialog::slotItemChanged()
     d->tabIptc->slotItemChanged();
     d->tabXmp->slotItemChanged();
 
-    setWindowTitle(i18n("%1 (%2/%3) - Edit Metadata")
-        .arg((*d->currItem).fileName())
-        .arg(d->urls.indexOf(*(d->currItem))+1)
-        .arg(d->urls.count()));
+    setWindowTitle(i18n("%1 (%2/%3) - Edit Metadata",
+        (*d->currItem).fileName(),
+        d->urls.indexOf(*(d->currItem))+1,
+        d->urls.count()));
 
     d->buttons->button(QDialogButtonBox::No)->setEnabled(*(d->currItem) != d->urls.last());
     d->buttons->button(QDialogButtonBox::Yes)->setEnabled(*(d->currItem) != d->urls.first());

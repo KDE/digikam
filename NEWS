@@ -51,4 +51,5 @@ BUGFIXES FROM BUGZILLA:
 031 ==> 379675 - Geolocation feature links to Multimap.com and MSN Maps.
 032 ==> 140177 - HTML export plugin should autorotate images.
 033 ==> 378855 - Crashes on startup.
-034 ==> 
+034 ==> 379751 - I18N_ARGUMENT_MISSING in Edit Metadata.
+035 ==> 

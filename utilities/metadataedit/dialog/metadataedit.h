@@ -80,6 +80,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  /* METADATAEDIT_H */
+#endif // METADATAEDIT_H
