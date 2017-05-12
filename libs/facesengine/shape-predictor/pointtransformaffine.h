@@ -52,7 +52,7 @@ public:
         b       = std::vector<float>(2, 0);
     }
 
-    PointTransformAffine(const std::vector<std::vector<float> > & m_,
+    PointTransformAffine(const std::vector<std::vector<float> >& m_,
                          const std::vector<float>& b_)
       : m(m_),
         b(b_)
@@ -66,7 +66,7 @@ public:
 
         for (unsigned int i = 0 ; i < m_.size() ; i++)
         {
-            for (unsigned int j =0 ; j < m_[0].size() ; j++)
+            for (unsigned int j = 0 ; j < m_[0].size() ; j++)
             {
                 if (j == 2)
                 {
@@ -97,6 +97,7 @@ public:
     }
 
 private:
+
     std::vector<std::vector<float> > m;
     std::vector<float>               b;
 };
@@ -201,7 +202,9 @@ PointTransformAffine find_similarity_transform(const std::vector<std::vector<flo
     float c = 1;
 
     if (sigma_from != 0)
+    {
         c = 1.0 / sigma_from * trace(d * s);
+    }
 
     std::vector<float> t = mean_to - r * mean_from * c;
 
