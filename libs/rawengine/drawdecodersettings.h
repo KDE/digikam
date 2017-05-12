@@ -1,18 +1,14 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2006-12-09
- * @brief  Raw decoding settings
+ * Date        : 2006-12-09
+ * Description : Raw decoding settings
  *
- * @author Copyright (C) 2006-2017 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2013 by Marcel Wiesweg
- *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
- * @author Copyright (C) 2007-2008 by Guillaume Castagnino
- *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
+ * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,7 +18,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -358,6 +354,6 @@ public:
 //! qDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const DRawDecoderSettings& s);
 
-}  // namespace RawEngine
+} // namespace RawEngine
 
-#endif /* DRAW_DECODER_SETTINGS_H */
+#endif // DRAW_DECODER_SETTINGS_H
