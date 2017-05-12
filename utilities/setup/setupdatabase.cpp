@@ -55,14 +55,15 @@
 
 // Local includes
 
-#include "digikam_debug.h"
-#include "applicationsettings.h"
-#include "dbsettingswidget.h"
-#include "dbengineparameters.h"
-#include "databaseserverstarter.h"
-#include "scancontroller.h"
-#include "coredbschemaupdater.h"
 #include "albummanager.h"
+#include "applicationsettings.h"
+#include "coredbschemaupdater.h"
+#include "databaseserverstarter.h"
+#include "dbengineparameters.h"
+#include "dbsettingswidget.h"
+#include "digikam_debug.h"
+#include "scancontroller.h"
+#include "setuputils.h"
 
 namespace Digikam
 {
@@ -188,7 +189,8 @@ void SetupDatabase::applySettings()
     CoreDbAccess().db()->getUserIgnoreDirectoryFilterSettings(&ignoreDirectory);
     if (d->ignoreEdit->text() != ignoreDirectory)
     {
-        CoreDbAccess().db()->setUserIgnoreDirectoryFilterSettings(d->ignoreEdit->text());
+        CoreDbAccess().db()->setUserIgnoreDirectoryFilterSettings(
+                    cleanUserFilterString(d->ignoreEdit->text(), true));
 
         ScanController::instance()->completeCollectionScanInBackground(false);
     }

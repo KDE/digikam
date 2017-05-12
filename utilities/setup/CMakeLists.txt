@@ -27,6 +27,7 @@ set(libsetup_SRCS
     setuplighttable.cpp
     setupdatabase.cpp
     setupimagequalitysorter.cpp
+    setuputils.cpp
 
     editor/setupeditor.cpp
     editor/setupeditoriface.cpp

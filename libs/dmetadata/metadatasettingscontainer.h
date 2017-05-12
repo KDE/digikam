@@ -27,7 +27,6 @@
 // Qt includes
 
 #include <QFlags>
-#include <QString>
 
 // Local includes
 
@@ -35,6 +34,7 @@
 #include "metaengine.h"
 
 class KConfigGroup;
+class QStringList;
 
 using namespace Digikam;
 
@@ -106,6 +106,8 @@ public:
     MetaEngine::MetadataWritingMode metadataWritingMode;
 
     RotationBehaviorFlags       rotationBehavior;
+
+    QStringList                 sidecarExtensions;
 };
 
 }  // namespace Digikam

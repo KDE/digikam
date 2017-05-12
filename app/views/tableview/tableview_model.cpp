@@ -964,7 +964,7 @@ QModelIndex TableViewModel::fromImageModelIndex(const QModelIndex& imageModelInd
     return indexFromImageId(imageId, 0);
 }
 
-ImageInfo TableViewModel::infoFromItem(Digikam::TableViewModel::Item* const item) const
+ImageInfo TableViewModel::infoFromItem(TableViewModel::Item* const item) const
 {
     /// @todo Is there a way to do it without first looking up the index in the ImageModel?
     const QModelIndex imageModelIndex = s->imageModel->indexForImageId(item->imageId);
@@ -979,6 +979,18 @@ ImageInfo TableViewModel::infoFromItem(Digikam::TableViewModel::Item* const item
     const ImageInfo info = s->imageModel->imageInfo(imageModelIndex);
 
     return info;
+}
+
+ImageInfoList TableViewModel::infosFromItems(QList<TableViewModel::Item*> const items) const
+{
+    ImageInfoList infos;
+
+    foreach(TableViewModel::Item* const item, items)
+    {
+        infos << infoFromItem(item);
+    }
+
+    return infos;
 }
 
 TableViewModel::DatabaseFieldsHashRaw TableViewModel::itemDatabaseFieldsRaw(TableViewModel::Item* const item, const DatabaseFields::Set requestedSet)
@@ -1333,23 +1345,7 @@ qlonglong TableViewModel::imageId(const QModelIndex& anIndex) const
 
 QList<ImageInfo> TableViewModel::allImageInfo() const
 {
-    QList<ImageInfo> infoList;
-    QList<Item*> itemsToList = d->rootItem->children;
-
-    while (!itemsToList.isEmpty())
-    {
-        ImageInfo const info = infoFromItem(itemsToList.takeFirst());
-        infoList << info;
-
-        if ((s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped ||
-             s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems) &&
-             info.hasGroupedImages())
-        {
-            infoList << info.groupedImages();
-        }
-    }
-
-    return infoList;
+    return infosFromItems(d->rootItem->children);
 }
 
 TableViewModel::GroupingMode TableViewModel::groupingMode() const

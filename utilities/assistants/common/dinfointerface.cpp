@@ -54,11 +54,6 @@ QList<QUrl> DInfoInterface::allAlbumItems() const
     return QList<QUrl>();
 }
 
-int DInfoInterface::currentAlbum() const
-{
-    return 0;
-}
-
 QList<QUrl> DInfoInterface::albumItems(int) const
 {
     return QList<QUrl>();

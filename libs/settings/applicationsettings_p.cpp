@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -24,10 +25,10 @@
 
 // Qt includes
 
-#include <QString>
-#include <QFont>
 #include <QApplication>
+#include <QFont>
 #include <QFontDatabase>
+#include <QString>
 
 // KDE includes
 
@@ -54,6 +55,7 @@ const QString ApplicationSettings::Private::configGroupGeneral(QLatin1String("Ge
 const QString ApplicationSettings::Private::configGroupVersioning(QLatin1String("Versioning Settings"));
 const QString ApplicationSettings::Private::configGroupFaceDetection(QLatin1String("Face Detection Settings"));
 const QString ApplicationSettings::Private::configGroupDuplicatesSearch(QLatin1String("Find Duplicates View"));
+const QString ApplicationSettings::Private::configGroupGrouping(QLatin1String("Grouping Behaviour"));
 const QString ApplicationSettings::Private::configAlbumCollectionsEntry(QLatin1String("Album Collections"));
 const QString ApplicationSettings::Private::configAlbumSortRoleEntry(QLatin1String("Album Sort Role"));
 const QString ApplicationSettings::Private::configImageSortOrderEntry(QLatin1String("Image Sort Order"));
@@ -146,6 +148,21 @@ const QString ApplicationSettings::Private::configDuplicatesSearchLastMinSimilar
 const QString ApplicationSettings::Private::configDuplicatesSearchLastMaxSimilarity(QLatin1String("Last maximum similarity"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastAlbumTagRelation(QLatin1String("Last search album tag relation"));
 const QString ApplicationSettings::Private::configDuplicatesSearchLastRestrictions(QLatin1String("Last search results restriction"));
+const ApplicationSettings::OperationStrings ApplicationSettings::Private::configGroupingOperateOnAll =
+        ApplicationSettings::Private::createConfigGroupingOperateOnAll();
+
+ApplicationSettings::OperationStrings ApplicationSettings::Private::createConfigGroupingOperateOnAll()
+{
+    ApplicationSettings::OperationStrings out;
+    out.insert(ApplicationSettings::Metadata, QLatin1String("Do metadata operations on all"));
+    out.insert(ApplicationSettings::Kipi, QLatin1String("Do Kipi operations on all"));
+    out.insert(ApplicationSettings::BQM, QLatin1String("Do BQM operations on all"));
+    out.insert(ApplicationSettings::LightTable, QLatin1String("Do light table operations on all"));
+    out.insert(ApplicationSettings::Slideshow, QLatin1String("Do slideshow operations on all"));
+    out.insert(ApplicationSettings::Rename, QLatin1String("Rename all"));
+    out.insert(ApplicationSettings::Tools, QLatin1String("Operate tools on all"));
+    return out;
+}
 
 ApplicationSettings::Private::Private(ApplicationSettings* const qq)
     : showSplash(false),
@@ -230,8 +247,14 @@ ApplicationSettings::Private::Private(ApplicationSettings* const qq)
       duplicatesSearchLastMaxSimilarity(100),
       duplicatesSearchLastAlbumTagRelation(0),
       duplicatesSearchLastRestrictions(0),
+      groupingOperateOnAll(ApplicationSettings::OperationModes()),
       q(qq)
 {
+    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    {
+        groupingOperateOnAll.insert((ApplicationSettings::OperationType)i,
+                ApplicationSettings::Ask);
+    }
 }
 
 ApplicationSettings::Private::~Private()
@@ -353,6 +376,12 @@ void ApplicationSettings::Private::init()
 
     applicationStyle                     = qApp->style()->objectName();
     iconTheme                            = QString();
+
+    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    {
+        groupingOperateOnAll.insert((ApplicationSettings::OperationType)i,
+                                    ApplicationSettings::Ask);
+    }
 
     q->connect(q, SIGNAL(balooSettingsChanged()),
                q, SLOT(applyBalooSettings()));

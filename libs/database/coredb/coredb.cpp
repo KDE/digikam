@@ -1028,106 +1028,6 @@ void CoreDB::setIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectory
     setSetting(QLatin1String("databaseIgnoreDirectoryFormats"), ignoreDirectoryFilter.join(QLatin1String(" ")));
 }
 
-// helper method
-static QStringList cleanUserFilterString(const QString& filterString, const bool caseSensitive = false)
-{
-    // splits by either ; or space, removes "*.", trims
-    QStringList filterList;
-
-    QString wildcard(QLatin1String("*."));
-    QString minusWildcard(QLatin1String("-*."));
-    QChar dot(QLatin1Char('.'));
-    QString minusDot(QLatin1String("-."));
-    QChar sep(QLatin1Char(';'));
-
-    QStringList sepList = filterString.split(sep, QString::SkipEmptyParts);
-    int i = 0;
-    foreach(const QString& entry, sepList)
-    {
-        if (entry.contains(QLatin1Char(' ')))
-        {
-            sepList.removeAt(i);
-            int j = 0;
-            foreach(const QString& subEntry, entry.split(QLatin1Char(' '), QString::SkipEmptyParts))
-            {
-                sepList.insert(i + j, subEntry);
-                ++j;
-            }
-        }
-        ++i;
-    }
-
-    foreach(const QString& f, sepList)
-    {
-        if (f.startsWith(wildcard))
-        {
-            if (caseSensitive)
-            {
-                filterList << f.mid(2).trimmed();
-            }
-            else
-            {
-                filterList << f.mid(2).trimmed().toLower();
-            }
-        }
-        else if (f.startsWith(minusWildcard))
-        {
-            if (caseSensitive)
-            {
-                filterList << QLatin1Char('-') + f.mid(3).trimmed();
-            }
-            else
-            {
-                filterList << QLatin1Char('-') + f.mid(3).trimmed().toLower();
-            }
-        }
-        else if (f.startsWith(dot))
-        {
-            if (caseSensitive)
-            {
-                filterList << f.mid(1).trimmed();
-            }
-            else
-            {
-                filterList << f.mid(1).trimmed().toLower();
-            }
-        }
-        else if (f.startsWith(minusDot))
-        {
-            if (caseSensitive)
-            {
-                filterList << QLatin1Char('-') + f.mid(2).trimmed();
-            }
-            else
-            {
-                filterList << QLatin1Char('-') + f.mid(2).trimmed().toLower();
-            }
-        }
-        else
-        {
-            if (caseSensitive)
-            {
-                filterList << f.trimmed();
-            }
-            else
-            {
-                filterList << f.trimmed().toLower();
-            }
-        }
-    }
-
-    return filterList;
-}
-
-void CoreDB::setUserFilterSettings(const QString& imageFilterString,
-                                   const QString& videoFilterString,
-                                   const QString& audioFilterString)
-{
-    setUserFilterSettings(cleanUserFilterString(imageFilterString),
-                          cleanUserFilterString(videoFilterString),
-                          cleanUserFilterString(audioFilterString));
-}
-
 void CoreDB::setUserFilterSettings(const QStringList& imageFilter,
                                    const QStringList& videoFilter,
                                    const QStringList& audioFilter)
@@ -1137,30 +1037,13 @@ void CoreDB::setUserFilterSettings(const QStringList& imageFilter,
     setSetting(QLatin1String("databaseUserAudioFormats"), audioFilter.join(QLatin1String(";")));
 }
 
-void CoreDB::setUserIgnoreDirectoryFilterSettings(const QString& ignoreDirectoryFilterString)
+void CoreDB::setUserIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilters)
 {
-    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setUserIgnoreDirectoryFilterSettings. ignoreDirectoryFilterString: " << ignoreDirectoryFilterString;
+    qCDebug(DIGIKAM_DATABASE_LOG) << "CoreDB::setUserIgnoreDirectoryFilterSettings. "
+                                     "ignoreDirectoryFilterString: "
+                                  << ignoreDirectoryFilters.join(QLatin1Char(' '));
 
-    QStringList ignoreDirectoryFilterList = cleanUserFilterString(ignoreDirectoryFilterString, true);
-
-    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilterList.join(QLatin1String(" ")));
-}
-
-void CoreDB::addToUserImageFilterSettings(const QString& filterString)
-{
-    QStringList addList     = cleanUserFilterString(filterString);
-    QStringList currentList = getSetting(QLatin1String("databaseUserImageFormats")).split(QLatin1Char(';'), QString::SkipEmptyParts);
-
-    // merge lists
-    foreach(const QString& addedFilter, addList)
-    {
-        if (!currentList.contains(addedFilter))
-        {
-            currentList << addedFilter;
-        }
-    }
-
-    setSetting(QLatin1String("databaseUserImageFormats"), currentList.join(QLatin1String(";")));
+    setSetting(QLatin1String("databaseUserIgnoreDirectoryFormats"), ignoreDirectoryFilters.join(QLatin1String(" ")));
 }
 
 QUuid CoreDB::databaseUuid()

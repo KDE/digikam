@@ -11,6 +11,7 @@
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -278,11 +279,22 @@ void ApplicationSettings::readSettings()
 
     group                    = config->group(d->configGroupDuplicatesSearch);
 
-    d->minimumSimilarityBound                = group.readEntry(d->configMinimumSimilarityBound,                 40);
-    d->duplicatesSearchLastMinSimilarity     = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,      90);
-    d->duplicatesSearchLastMaxSimilarity     = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,      100);
-    d->duplicatesSearchLastAlbumTagRelation  = group.readEntry(d->configDuplicatesSearchLastAlbumTagRelation,   0);
-    d->duplicatesSearchLastRestrictions      = group.readEntry(d->configDuplicatesSearchLastRestrictions,       0);
+    d->minimumSimilarityBound                = group.readEntry(d->configMinimumSimilarityBound,               40);
+    d->duplicatesSearchLastMinSimilarity     = group.readEntry(d->configDuplicatesSearchLastMinSimilarity,    90);
+    d->duplicatesSearchLastMaxSimilarity     = group.readEntry(d->configDuplicatesSearchLastMaxSimilarity,    100);
+    d->duplicatesSearchLastAlbumTagRelation  = group.readEntry(d->configDuplicatesSearchLastAlbumTagRelation, 0);
+    d->duplicatesSearchLastRestrictions      = group.readEntry(d->configDuplicatesSearchLastRestrictions,     0);
+
+    // ---------------------------------------------------------------------
+
+    group = config->group(d->configGroupGrouping);
+
+    for (ApplicationSettings::OperationModes::key_iterator it = d->groupingOperateOnAll.keyBegin();
+         it != d->groupingOperateOnAll.keyEnd(); ++it)
+    {
+        d->groupingOperateOnAll.insert(*it, (ApplicationSettings::ApplyToEntireGroup)group.readEntry(
+                                              d->configGroupingOperateOnAll.value(*it), (int)ApplicationSettings::Ask));
+    }
 
     emit setupChanged();
     emit recurseSettingsChanged();
@@ -447,6 +459,15 @@ void ApplicationSettings::saveSettings()
     group.writeEntry(d->configDuplicatesSearchLastMaxSimilarity,       d->duplicatesSearchLastMaxSimilarity);
     group.writeEntry(d->configDuplicatesSearchLastAlbumTagRelation,    d->duplicatesSearchLastAlbumTagRelation);
     group.writeEntry(d->configDuplicatesSearchLastRestrictions,        d->duplicatesSearchLastRestrictions);
+
+    group = config->group(d->configGroupGrouping);
+
+    for (ApplicationSettings::OperationModes::key_iterator it = d->groupingOperateOnAll.keyBegin();
+         it != d->groupingOperateOnAll.keyEnd(); ++it)
+    {
+        group.writeEntry(d->configGroupingOperateOnAll.value(*it),
+                         (int)d->groupingOperateOnAll.value(*it));
+    }
 
     config->sync();
 }

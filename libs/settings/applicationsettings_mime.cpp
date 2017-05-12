@@ -38,11 +38,6 @@ using namespace RawEngine;
 namespace Digikam
 {
 
-void ApplicationSettings::addToImageFileFilter(const QString& extensions)
-{
-    CoreDbAccess().db()->addToUserImageFilterSettings(extensions);
-}
-
 QString ApplicationSettings::getImageFileFilter() const
 {
     QStringList imageSettings;

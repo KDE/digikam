@@ -11,6 +11,7 @@
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
  * Copyright (C) 2014      by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,9 +26,17 @@
  *
  * ============================================================ */
 
+#include <stdexcept>
+
 // Qt includes
 
 #include <QApplication>
+#include <QCheckBox>
+#include <QMessageBox>
+
+// KDE includes
+
+#include <klocalizedstring.h>
 
 // Local includes
 
@@ -289,6 +298,119 @@ void ApplicationSettings::setDuplicatesSearchRestrictions(int val)
 int  ApplicationSettings::getDuplicatesSearchRestrictions() const
 {
     return d->duplicatesSearchLastRestrictions;
+}
+
+void ApplicationSettings::setGroupingOperateOnAll(ApplicationSettings::OperationType type,
+                                                  ApplicationSettings::ApplyToEntireGroup applyAll)
+{
+    if (!d->groupingOperateOnAll.contains(type))
+    {
+        throw std::invalid_argument("ApplicationSettings::setGroupingOperateOnAll: Invalid operation type.");
+    }
+
+    d->groupingOperateOnAll[type] = applyAll;
+    return;
+}
+
+ApplicationSettings::ApplyToEntireGroup ApplicationSettings::getGroupingOperateOnAll(
+        ApplicationSettings::OperationType type) const
+{
+    if (!d->groupingOperateOnAll.contains(type))
+    {
+        throw std::invalid_argument("ApplicationSettings::getGroupingOperateOnAll: Invalid operation type.");
+    }
+
+    if (type == ApplicationSettings::Unspecified)
+    {
+        return ApplicationSettings::No;
+    }
+
+    return d->groupingOperateOnAll[type];
+}
+
+bool ApplicationSettings::askGroupingOperateOnAll(ApplicationSettings::OperationType type)
+{
+    if (!d->groupingOperateOnAll.contains(type))
+    {
+        throw std::invalid_argument("ApplicationSettings::askGroupingOperateOnAll: Invalid operation type.");
+    }
+
+    if (type == ApplicationSettings::Unspecified)
+    {
+        return false;
+    }
+
+    QMessageBox msgBox(qApp->activeWindow());
+    msgBox.setWindowTitle(qApp->applicationName());
+    msgBox.setText(QLatin1String("<p>") + ApplicationSettings::operationTypeTitle(type)
+                   + QLatin1String("</p>") + i18n("Do you want to do this operation on all group items?"));
+    msgBox.setStandardButtons(QMessageBox::No | QMessageBox::Yes);
+    QCheckBox *chkBox = new QCheckBox(i18n("Remember choice for this operation"), &msgBox);
+    msgBox.setCheckBox(chkBox);
+
+    int result = msgBox.exec();
+
+    if (result == QMessageBox::No)
+    {
+        if (chkBox->isChecked())
+        {
+            setGroupingOperateOnAll(type, ApplicationSettings::No);
+        }
+        return false;
+    }
+    if (chkBox->isChecked())
+    {
+        setGroupingOperateOnAll(type, ApplicationSettings::Yes);
+    }
+    return true;
+}
+
+QString ApplicationSettings::operationTypeTitle(ApplicationSettings::OperationType type)
+{
+    switch (type)
+    {
+    case ApplicationSettings::Metadata:
+        return i18n("Metadata");
+    case ApplicationSettings::LightTable:
+        return i18n("Light Table");
+    case ApplicationSettings::BQM:
+        return i18n("Batch Queue Manager");
+    case ApplicationSettings::Slideshow:
+        return i18n("Slideshow");
+    case ApplicationSettings::Rename:
+        return i18n("Renaming");
+    case ApplicationSettings::Kipi:
+        return i18n("Import/Export) plugins");
+    case ApplicationSettings::Tools:
+        return i18n("Tools (editor, panorama, stack blending, calendar, "
+                    "external program)");
+    default:
+        throw std::invalid_argument("ApplicationSettings::operationTypeTitle: Invalid operation type.");
+    }
+}
+
+QString ApplicationSettings::operationTypeExplanation(ApplicationSettings::OperationType type)
+{
+    switch (type)
+    {
+    case ApplicationSettings::Metadata:
+        return i18n("Operations related to metadata, labels, ratings, tags, geolocation and rotation");
+    case ApplicationSettings::LightTable:
+        return i18n("Adding items to the Light Table");
+    case ApplicationSettings::BQM:
+        return i18n("Adding items to the Batch Queue Manager");
+    case ApplicationSettings::Slideshow:
+        return i18n("Opening items in the Slideshow");
+    case ApplicationSettings::Rename:
+        return i18n("Renaming items");
+    case ApplicationSettings::Kipi:
+        return i18n("Passing items to import/export plugins");
+    case ApplicationSettings::Tools:
+        return i18n("Several tools including the editor, panorama, stack blending, "
+                    "calendar, html gallery and opening with external programs");
+    default:
+        return QString();
+    }
 }
 
 }  // namespace Digikam

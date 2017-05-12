@@ -48,6 +48,7 @@
 #include "coredbaccess.h"
 #include "dlayoutbox.h"
 #include "scancontroller.h"
+#include "setuputils.h"
 
 namespace Digikam
 {
@@ -275,14 +276,13 @@ void SetupMime::applySettings()
 
     CoreDbAccess().db()->getUserFilterSettings(&imageFilterString, &movieFilterString, &audioFilterString);
 
-    if(d->imageFileFilterEdit->text() != imageFilterString ||
-       d->movieFileFilterEdit->text() != movieFilterString ||
-       d->audioFileFilterEdit->text() != audioFilterString)
+    if (d->imageFileFilterEdit->text() != imageFilterString ||
+        d->movieFileFilterEdit->text() != movieFilterString ||
+        d->audioFileFilterEdit->text() != audioFilterString)
     {
-        CoreDbAccess().db()->setUserFilterSettings(d->imageFileFilterEdit->text(),
-                                                   d->movieFileFilterEdit->text(),
-                                                   d->audioFileFilterEdit->text());
-
+        CoreDbAccess().db()->setUserFilterSettings(cleanUserFilterString(d->imageFileFilterEdit->text()),
+                                                   cleanUserFilterString(d->movieFileFilterEdit->text()),
+                                                   cleanUserFilterString(d->audioFileFilterEdit->text()));
         ScanController::instance()->completeCollectionScanInBackground(false);
     }
 }
@@ -295,9 +295,9 @@ void SetupMime::readSettings()
 
     CoreDbAccess().db()->getUserFilterSettings(&image, &video, &audio);
 
-    d->imageFileFilterEdit->setText(image);
-    d->movieFileFilterEdit->setText(video);
-    d->audioFileFilterEdit->setText(audio);
+    d->imageFileFilterEdit->setText(image.replace(QLatin1Char(';'), QLatin1Char(' ')));
+    d->movieFileFilterEdit->setText(video.replace(QLatin1Char(';'), QLatin1Char(' ')));
+    d->audioFileFilterEdit->setText(audio.replace(QLatin1Char(';'), QLatin1Char(' ')));
 }
 
 void SetupMime::slotShowCurrentImageSettings()

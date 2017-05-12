@@ -9,6 +9,7 @@
  * Copyright (C) 2003-2004 by Ralf Holzer <ralf at well dot com>
  * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -27,22 +28,23 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QButtonGroup>
 #include <QCheckBox>
+#include <QComboBox>
+#include <QDesktopServices>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QIcon>
 #include <QLabel>
+#include <QLineEdit>
+#include <QMessageBox>
 #include <QRadioButton>
+#include <QStandardPaths>
+#include <QStyle>
 #include <QToolButton>
 #include <QVBoxLayout>
-#include <QApplication>
-#include <QStyle>
-#include <QComboBox>
-#include <QDesktopServices>
-#include <QStandardPaths>
-#include <QIcon>
-#include <QMessageBox>
 
 // KDE includes
 
@@ -50,14 +52,15 @@
 
 // Local includes
 
-#include "metaengine.h"
-#include "digikam_debug.h"
+#include "advancedmetadatatab.h"
 #include "applicationsettings.h"
+#include "dactivelabel.h"
 #include "digikam_config.h"
+#include "digikam_debug.h"
+#include "metaengine.h"
 #include "metadatapanel.h"
 #include "metadatasettings.h"
-#include "advancedmetadatatab.h"
-#include "dactivelabel.h"
+#include "setuputils.h"
 
 namespace Digikam
 {
@@ -99,7 +102,8 @@ public:
         tab(0),
         displaySubTab(0),
         tagsCfgPanel(0),
-        advTab(0)
+        advTab(0),
+        extensionsEdit(0)
     {
     }
 
@@ -143,6 +147,8 @@ public:
 
     MetadataPanel*       tagsCfgPanel;
     AdvancedMetadataTab* advTab;
+
+    QLineEdit*           extensionsEdit;
 };
 
 SetupMetadata::SetupMetadata(QWidget* const parent)
@@ -243,28 +249,6 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->useLazySync->setWhatsThis(i18nc("@info:whatsthis",
                                              "Instead of synchronizing metadata, just schedule it for synchronization."
                                              "Synchronization can be done later by triggering the apply pending, or at digikam exit"));
-    d->readXMPSidecarBox  = new QCheckBox;
-    d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
-    d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
-                                             "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
-    d->readXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
-
-    d->writeXMPSidecarBox = new QCheckBox;
-    d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
-    d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
-                                              "Turn on this option to save, as specified, metadata to XMP sidecar files."));
-    d->writeXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
-
-    d->writingModeCombo   = new QComboBox;
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
-    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     MetaEngine::WRITETOSIDECARONLY);
-    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
-    d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
-    d->writingModeCombo->setEnabled(false);
-
-    connect(d->writeXMPSidecarBox, SIGNAL(toggled(bool)),
-            d->writingModeCombo, SLOT(setEnabled(bool)));
-
     d->writeRawFilesBox = new QCheckBox;
     d->writeRawFilesBox->setText(i18nc("@option:check", "If possible write Metadata to RAW files (experimental)"));
     d->writeRawFilesBox->setWhatsThis(i18nc("@info:whatsthis", "Turn on this option to write metadata into RAW TIFF/EP files. "
@@ -289,12 +273,9 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     readWriteLayout->addWidget(readWriteIconLabel,          0, 0, 2, 3);
     readWriteLayout->addWidget(readWriteLabel,              0, 1, 2, 3);
     readWriteLayout->addWidget(d->useLazySync,              2, 0, 1, 3);
-    readWriteLayout->addWidget(d->readXMPSidecarBox,        3, 0, 1, 3);
-    readWriteLayout->addWidget(d->writeXMPSidecarBox,       4, 0, 1, 3);
-    readWriteLayout->addWidget(d->writingModeCombo,         5, 1, 1, 2);
-    readWriteLayout->addWidget(d->writeRawFilesBox,         6, 0, 1, 3);
-    readWriteLayout->addWidget(d->updateFileTimeStampBox,   7, 0, 1, 3);
-    readWriteLayout->addWidget(d->rescanImageIfModifiedBox, 8, 0, 1, 3);
+    readWriteLayout->addWidget(d->writeRawFilesBox,         3, 0, 1, 3);
+    readWriteLayout->addWidget(d->updateFileTimeStampBox,   4, 0, 1, 3);
+    readWriteLayout->addWidget(d->rescanImageIfModifiedBox, 5, 0, 1, 3);
     readWriteLayout->setColumnStretch(3, 10);
     d->readWriteGroup->setLayout(readWriteLayout);
 
@@ -537,6 +518,97 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->advTab = new AdvancedMetadataTab(this);
     d->tab->insertTab(AdvancedConfig, d->advTab, i18nc("@title:tab", "Advanced"));
 
+    //------------------------Sidecars-------------------------
+
+    QWidget* const sidecarsPanel      = new QWidget(d->tab);
+    QVBoxLayout* const sidecarsLayout = new QVBoxLayout(sidecarsPanel);
+
+    // --------------------------------------------------------
+
+    QGroupBox* rwSidecarsGroup          = new QGroupBox;
+    QGridLayout* const rwSidecarsLayout = new QGridLayout;
+
+    QLabel* const rwSidecarsLabel       = new QLabel(i18nc("@label", "Reading and Writing to Sidecars"));
+
+    d->readXMPSidecarBox  = new QCheckBox;
+    d->readXMPSidecarBox->setText(i18nc("@option:check", "Read from sidecar files"));
+    d->readXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
+                                             "Turn on this option to read metadata from XMP sidecar files when reading metadata."));
+    d->readXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
+
+    d->writeXMPSidecarBox = new QCheckBox;
+    d->writeXMPSidecarBox->setText(i18nc("@option:check", "Write to sidecar files"));
+    d->writeXMPSidecarBox->setWhatsThis(i18nc("@info:whatsthis",
+                                              "Turn on this option to save, as specified, metadata to XMP sidecar files."));
+    d->writeXMPSidecarBox->setEnabled(MetaEngine::supportXmp());
+
+    d->writingModeCombo   = new QComboBox;
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar for read-only image only"), MetaEngine::WRITETOSIDECARONLY4READONLYFILES);
+    d->writingModeCombo->addItem(i18n("Write to XMP sidecar only"),                     MetaEngine::WRITETOSIDECARONLY);
+    d->writingModeCombo->addItem(i18n("Write to image and XMP Sidecar"),                MetaEngine::WRITETOSIDECARANDIMAGE);
+    d->writingModeCombo->setToolTip(i18nc("@info:tooltip", "Specify the exact mode of XMP sidecar writing"));
+    d->writingModeCombo->setEnabled(false);
+
+    connect(d->writeXMPSidecarBox, SIGNAL(toggled(bool)),
+            d->writingModeCombo, SLOT(setEnabled(bool)));
+
+    rwSidecarsLayout->addWidget(rwSidecarsLabel,       0, 0, 1, 3);
+    rwSidecarsLayout->addWidget(d->readXMPSidecarBox,  1, 0, 1, 3);
+    rwSidecarsLayout->addWidget(d->writeXMPSidecarBox, 2, 0, 1, 3);
+    rwSidecarsLayout->addWidget(d->writingModeCombo,   3, 1, 1, 2);
+    rwSidecarsLayout->setColumnStretch(3, 10);
+    rwSidecarsGroup->setLayout(rwSidecarsLayout);
+
+    // --------------------------------------------------------
+
+    QGroupBox* const extensionsGroup  = new QGroupBox(sidecarsPanel);
+    QGridLayout* const extensionsGrid = new QGridLayout(extensionsGroup);
+
+    QLabel* extensionsGroupLabel = new QLabel(
+                i18n("<p>Add file types to be recognised as sidecars.</p>"
+                     "<p>digiKam (optionally) writes metadata to *.xmp sidecar "
+                     "files. Other programs might use different types, which "
+                     "can be specified below. digiKam will neither display these "
+                     "nor read from or write to them. But whenever a matching album "
+                     "item (e.g. \"image.dng\" for \"image.dng.pp3\") is renamed, "
+                     "moved, copied or deleted, the same operation will be done"
+                     "on these sidecar files.</p>"
+                     "<p>Multiple extensions must be separated by a semicolon "
+                     "or a space.</p>"));
+    extensionsGroupLabel->setWordWrap(true);
+
+    QLabel* const extensionsLogo = new QLabel(extensionsGroup);
+    extensionsLogo->setPixmap(QIcon::fromTheme(QLatin1String("text-x-texinfo")).pixmap(48));
+
+    d->extensionsEdit = new QLineEdit(extensionsGroup);
+    d->extensionsEdit->setWhatsThis(i18n("<p>Here you can add extra extensions "
+                                         "of sidecars files to be processed alongside "
+                                         "regular items. These files won't be visible, "
+                                         "but regarded as an extension of the main file."
+                                         "Just write \"xyz abc\" to support files with "
+                                         "the *.xyz and *.abc extensions. The internally "
+                                         "used sidecars type *.xmp is always included.</p>"));
+    d->extensionsEdit->setClearButtonEnabled(true);
+    d->extensionsEdit->setPlaceholderText(i18n("Enter additional sidecars file extensions."));
+
+    QLabel* const extensionsLabel = new QLabel(extensionsGroup);
+    extensionsLabel->setText(i18n("Additional &sidecar file extensions"));
+    extensionsLabel->setBuddy(d->extensionsEdit);
+
+    extensionsGrid->addWidget(extensionsGroupLabel, 0, 0, 1, -1);
+    extensionsGrid->addWidget(extensionsLogo,       1, 0, 2, 1);
+    extensionsGrid->addWidget(extensionsLabel,      1, 1, 1, -1);
+    extensionsGrid->addWidget(d->extensionsEdit,    2, 1, 1, -1);
+    extensionsGrid->setColumnStretch(1, 10);
+
+    // --------------------------------------------------------
+
+    sidecarsLayout->addWidget(rwSidecarsGroup);
+    sidecarsLayout->addWidget(extensionsGroup);
+    sidecarsLayout->addStretch();
+
+    d->tab->insertTab(Sidecars, sidecarsPanel, i18nc("@title:tab", "Sidecars"));
+
     // --------------------------------------------------------
 
     readSettings();
@@ -617,6 +689,8 @@ void SetupMetadata::applySettings()
     set.updateFileTimeStamp   = d->updateFileTimeStampBox->isChecked();
     set.rescanImageIfModified = d->rescanImageIfModifiedBox->isChecked();
 
+    set.sidecarExtensions = cleanUserFilterString(d->extensionsEdit->text());
+
     mSettings->setSettings(set);
 
 
@@ -692,6 +766,8 @@ void SetupMetadata::readSettings()
         d->writeXMPSidecarBox->setChecked(true);
         d->writingModeCombo->setCurrentIndex(d->writingModeCombo->findData(set.metadataWritingMode));
     }
+
+    d->extensionsEdit->setText(set.sidecarExtensions.join(QLatin1Char(' ')));
 
 #ifdef HAVE_KFILEMETADATA
 

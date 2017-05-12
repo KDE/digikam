@@ -7,6 +7,7 @@
  * Description : Table view
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2017 by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,7 @@
 
 // Local includes
 
+#include "applicationsettings.h"
 #include "dcategorizedsortfilterproxymodel.h"
 #include "digikam_export.h"
 #include "imageviewutilities.h"
@@ -45,6 +47,7 @@ namespace Digikam
 {
 
 class Album;
+class ImageFilterModel;
 class ThumbnailSize;
 class TableViewShared;
 
@@ -61,23 +64,29 @@ public:
     virtual ~TableView();
 
     void setThumbnailSize(const ThumbnailSize& size);
-    ThumbnailSize getThumbnailSize()                  const;
-    ImageInfo currentInfo();
-    ImageInfoList allInfo()     const;
-    QList<QUrl> allUrls()        const;
-    int numberOfSelectedItems() const;
-    ImageInfo nextInfo()        const;
-    ImageInfo previousInfo()    const;
+    ThumbnailSize getThumbnailSize()                                     const;
+    ImageInfo currentInfo()                                              const;
+    Album* currentAlbum()                                                const;
+    ImageInfoList allInfo(bool grouping = false)                         const;
+    QList<QUrl> allUrls(bool grouping = false)                           const;
+    int numberOfSelectedItems()                                          const;
+    ImageInfo nextInfo()                                                 const;
+    ImageInfo previousInfo()                                             const;
     ImageInfo deepRowImageInfo(const int rowNumber, const bool relative) const;
+
     void selectAll();
     void clearSelection();
     void invertSelection();
 
-    ImageInfoList      selectedImageInfos()             const;
-    QModelIndexList    selectedIndexesCurrentFirst()    const;
-    ImageInfoList      selectedImageInfosCurrentFirst() const;
-    QList<qlonglong>   selectedImageIdsCurrentFirst()   const;
-    QList<QUrl>        selectedUrls()                   const;
+    QModelIndexList  selectedIndexesCurrentFirst()                               const;
+    ImageInfoList    selectedImageInfos(bool grouping = false)                   const;
+    ImageInfoList    selectedImageInfos(ApplicationSettings::OperationType type) const;
+    ImageInfoList    selectedImageInfosCurrentFirst(bool grouping = false)       const;
+    QList<qlonglong> selectedImageIdsCurrentFirst(bool grouping = false)         const;
+    QList<QUrl>      selectedUrls(bool grouping = false)                         const;
+
+    bool             needGroupResolving(ApplicationSettings::OperationType type,
+                                        bool all = false) const;
 
 protected:
 
@@ -85,13 +94,11 @@ protected:
     void doSaveState();
 
     virtual bool eventFilter(QObject* watched, QEvent* event);
-    void showTreeViewContextMenuOnItem(QContextMenuEvent* const event, const QModelIndex& indexAtMenu);
-    void showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event);
-    Album* currentAlbum();
-    QList<QAction*> getExtraGroupingActions(QObject*const parentObject) const;
+    QList<QAction*> getExtraGroupingActions();
 
-    // Converts indexes to imageInfos and adds group members when appropriate
+    // Adds group members when appropriate
     ImageInfoList resolveGrouping(const QList<QModelIndex>& indexes) const;
+    ImageInfoList resolveGrouping(const ImageInfoList& infos) const;
 
 public Q_SLOTS:
 
@@ -101,24 +108,12 @@ public Q_SLOTS:
     void slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
     void slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
     void slotSetActive(const bool isActive);
+    void slotPaste();
     void rename();
 
 protected Q_SLOTS:
 
     void slotItemActivated(const QModelIndex& tableViewIndex);
-    void slotAssignTagToSelected(const int tagID);
-    void slotRemoveTagFromSelected(const int tagID);
-    void slotAssignPickLabelToSelected(const int pickLabelID);
-    void slotAssignColorLabelToSelected(const int colorLabelID);
-    void slotAssignRatingToSelected(const int rating);
-    void slotInsertSelectedToExistingQueue(const int queueId);
-    void slotSetAsAlbumThumbnail(const ImageInfo& info);
-    void slotPaste();
-    void slotRemoveSelectedFromGroup();
-    void slotUngroupSelected();
-    void slotCreateGroupFromSelection();
-    void slotCreateGroupByTimeFromSelection();
-    void slotCreateGroupByFilenameFromSelection();
     void slotGroupingModeActionTriggered();
 
 Q_SIGNALS:
@@ -131,6 +126,12 @@ Q_SIGNALS:
     void signalGotoAlbumAndImageRequested(const ImageInfo& info);
     void signalGotoDateAndImageRequested(const ImageInfo& info);
     void signalItemsChanged();
+    void signalInsertSelectedToExistingQueue(int queue);
+    void signalShowContextMenu(QContextMenuEvent* event,
+                               const QList<QAction*>& actions);
+    void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+                                     const QList<QAction*>& actions,
+                                     ImageFilterModel* filterModel = 0);
 
 private:
 

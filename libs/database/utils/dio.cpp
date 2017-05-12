@@ -34,7 +34,6 @@
 
 #include "digikam_debug.h"
 #include "imageinfo.h"
-#include "applicationsettings.h"
 #include "albummanager.h"
 #include "coredb.h"
 #include "coredbaccess.h"
@@ -42,6 +41,7 @@
 #include "dmetadata.h"
 #include "imagelister.h"
 #include "loadingcacheinterface.h"
+#include "metadatasettings.h"
 #include "scancontroller.h"
 #include "thumbnailloadthread.h"
 #include "iojobsmanager.h"
@@ -79,15 +79,38 @@ void SidecarFinder::process(const QList<QUrl>& files)
             if (DMetadata::hasSidecar(url.toLocalFile()))
             {
                 localFiles << DMetadata::sidecarUrl(url);
+                localFileSuffixes << QLatin1String(".xmp");
                 qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
             }
 
+            foreach (QString suffix, MetadataSettings::instance()->settings().sidecarExtensions)
+            {
+                suffix = QLatin1String(".") + suffix;
+                QString sidecarName = url.toLocalFile() + suffix;
+                if (QFileInfo(sidecarName).exists())
+                {
+                    localFiles << QUrl::fromLocalFile(sidecarName);
+                    localFileSuffixes << suffix;
+                    qCDebug(DIGIKAM_DATABASE_LOG) << "Detected a sidecar" << localFiles.last();
+                }
+            }
+
             localFiles << url;
+            localFileSuffixes << QString();
         }
         else
         {
             possibleRemoteSidecars << DMetadata::sidecarUrl(url);
-            remoteFiles            << url;
+            possibleRemoteSidecarSuffixes << QLatin1String(".xmp");
+            foreach (QString suffix,  MetadataSettings::instance()->settings().sidecarExtensions)
+            {
+                suffix = QLatin1String(".") + suffix;
+                QString sidecarName = url.toLocalFile() + suffix;
+                possibleRemoteSidecars << QUrl::fromLocalFile(url.toLocalFile() + suffix);
+                possibleRemoteSidecarSuffixes << suffix;
+            }
+            remoteFiles << url;
+            remoteFileSuffixes << QString();
         }
     }
 }
@@ -161,14 +184,24 @@ void DIO::Private::processJob(int operation, const QList<QUrl>& srcList, const Q
 
 void DIO::Private::processRename(const QUrl& src, const QUrl& dest)
 {
-    QString sidecar = DMetadata::sidecarFilePathForFile(src.toLocalFile());
+    SidecarFinder finder(src);
 
-    if (QFileInfo(sidecar).exists())
+    if (src.isLocalFile())
     {
-        QString destSidecar = DMetadata::sidecarFilePathForFile(dest.toLocalFile());
-        emit jobToCreate(Rename, QList<QUrl>() << QUrl::fromLocalFile(sidecar), QUrl::fromLocalFile(destSidecar));
+        for(int i = 0; i < finder.localFiles.length(); ++i)
+        {
+            emit jobToCreate(Rename, QList<QUrl>() << finder.localFiles.at(i),
+                             QUrl::fromLocalFile(dest.toLocalFile() + finder.localFileSuffixes.at(i)));
+        }
+        return;
     }
 
+    for(int i = 0; i < finder.remoteFileSuffixes.length(); ++i)
+    {
+        emit jobToCreate(Rename | SourceStatusUnknown,
+                         QList<QUrl>() << finder.possibleRemoteSidecars.at(i),
+                         QUrl::fromLocalFile(dest.toLocalFile() + finder.possibleRemoteSidecarSuffixes.at(i)));
+    }
     emit jobToCreate(Rename, QList<QUrl>() << src, dest);
 }
 

@@ -100,24 +100,13 @@ public:
      */
     void setUserFilterSettings(const QStringList& imageFilter, const QStringList& videoFilter, const QStringList& audioFilter);
 
-    /**
-     * Sets the user-configurable filter settings. The strings shall be lists joined either by ";" or " ".
-     * Extra whitespace, dots and wildcard characters (*.) are removed.
-     */
-    void setUserFilterSettings(const QString& imageFilterString, const QString& videoFilterString, const QString& audioFilterString);
-
     void setIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilter);
 
-    void setUserIgnoreDirectoryFilterSettings(const QString& ignoreDirectoryFilterString);
+    void setUserIgnoreDirectoryFilterSettings(const QStringList& ignoreDirectoryFilters);
 
     void getUserIgnoreDirectoryFilterSettings(QString* ignoreDirectoryFilterString);
 
     void getIgnoreDirectoryFilterSettings(QStringList* ignoreDirectoryFilter);
-
-    /**
-     * Adds the given filters to the user image filter settings
-     */
-    void addToUserImageFilterSettings(const QString& filterString);
 
     /**
      * Returns a UUID for the database file.

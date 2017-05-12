@@ -919,13 +919,13 @@ QList<QAction*> ContextMenuHelper::groupMenuActions(const imageIds &ids)
             if (!d->imageFilterModel->isAllGroupsOpen())
             {
                 QAction* const openAction = new QAction(i18nc("@action:inmenu", "Open All Groups"), this);
-                connect(openAction, SIGNAL(triggered()), this, SLOT(slotOpenGroup()));
+                connect(openAction, SIGNAL(triggered()), this, SLOT(slotOpenGroups()));
                 actions << openAction;
             }
             else
             {
                 QAction* const closeAction = new QAction(i18nc("@action:inmenu", "Close All Groups"), this);
-                connect(closeAction, SIGNAL(triggered()), this, SLOT(slotOpenGroup()));
+                connect(closeAction, SIGNAL(triggered()), this, SLOT(slotCloseGroups()));
                 actions << closeAction;
             }
         }

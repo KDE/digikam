@@ -54,31 +54,14 @@ public Q_SLOTS:
 
     void openFile(const ImageInfo& info);
 
-    void insertSelectedToCurrentQueue();
-    void insertSelectedToNewQueue();
-    void insertSelectedToExistingQueue(int queueid);
-
     void deleteSelected(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
     void deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode = ImageViewUtilities::DeleteUseTrash);
-    void assignTagToSelected(int tagID);
-    void removeTagFromSelected(int tagID);
-    void assignPickLabelToSelected(int pickId);
-    void assignColorLabelToSelected(int colorId);
-    void assignRatingToSelected(int rating);
 
-    void setAsAlbumThumbnail(const ImageInfo& setAsThumbnail);
-    void createNewAlbumForSelected();
     void rename();
 
     void assignPickLabel(const QModelIndex& index, int pickId);
     void assignColorLabel(const QModelIndex& index, int colorId);
     void assignRating(const QList<QModelIndex>& index, int rating);
-
-    void createGroupFromSelection();
-    void createGroupByTimeFromSelection();
-    void createGroupByFilenameFromSelection();
-    void ungroupSelected();
-    void removeSelectedFromGroup();
 
     void setFaceMode(bool on);
     void confirmFaces(const QList<QModelIndex>& indexes, int tagId);
@@ -92,6 +75,12 @@ Q_SIGNALS:
     void gotoTagAndImageRequested(int tagId);
     void gotoDateAndImageRequested(const ImageInfo& info);
     void signalPopupTagsView();
+    void signalAddToExistingQueue(int queue);
+    void signalShowContextMenu(QContextMenuEvent* event,
+                               const QList<QAction*>& actions = QList<QAction*>());
+    void signalShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+                                     const QList<QAction*>& actions,
+                                     ImageFilterModel* filterModel);
 
 protected Q_SLOTS:
 

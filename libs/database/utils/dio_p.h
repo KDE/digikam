@@ -85,6 +85,10 @@ public:
     QList<QUrl> remoteFiles;
     QList<QUrl> possibleRemoteSidecars;
 
+    QList<QString> localFileSuffixes;
+    QList<QString> remoteFileSuffixes;
+    QList<QString> possibleRemoteSidecarSuffixes;
+
 private:
 
     void process(const QList<QUrl>&);

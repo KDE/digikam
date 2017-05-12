@@ -41,6 +41,7 @@ public:
     enum MetadataTab
     {
         Behavior = 0,
+        Sidecars,
         Rotation,
         Display,
         AdvancedConfig,

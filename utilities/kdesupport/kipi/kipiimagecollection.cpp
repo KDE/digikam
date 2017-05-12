@@ -38,6 +38,7 @@
 #include "applicationsettings.h"
 #include "collectionmanager.h"
 #include "coredbaccess.h"
+#include "dbinfoiface.h"
 #include "digikamapp.h"
 #include "digikamview.h"
 #include "imagesortsettings.h"
@@ -51,36 +52,28 @@ class KipiImageCollection::Private
 {
 public:
 
-    Private()
+    Private(Type type, Album* const album, const QString& filter, QList<QUrl> imagesUrlList) :
+        type(type),
+        album(album),
+        imgFilter(filter),
+        readyImageUrlList(imagesUrlList),
+        iface(new DBInfoIface(0, QList<QUrl>(), ApplicationSettings::Kipi))
     {
-        album = 0;
-        type  = SelectedItems;
     }
-
-    QList<QUrl> imagesFromPAlbum(PAlbum* const album) const;
-    QList<QUrl> imagesFromTAlbum(TAlbum* const album) const;
 
 public:
 
-    QString                   imgFilter;
     KipiImageCollection::Type type;
     Album*                    album;
+    QString                   imgFilter;
     QList<QUrl>               readyImageUrlList;
+    DBInfoIface*              iface;
 };
 
 KipiImageCollection::KipiImageCollection(Type type, Album* const album, const QString& filter, QList<QUrl> imagesUrlList)
     : ImageCollectionShared(),
-      d(new Private)
+      d(new Private(type, album, filter, imagesUrlList))
 {
-    d->type      = type;
-    d->album     = album;
-    d->imgFilter = filter;
-
-    if(!imagesUrlList.isEmpty())
-    {
-        d->readyImageUrlList = imagesUrlList;
-    }
-
     if (!album)
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "This should not happen. No album specified";
@@ -161,103 +154,16 @@ QList<QUrl> KipiImageCollection::images()
     {
         case AllItems:
         {
-            if (d->album->type() == Album::PHYSICAL)
-            {
-                PAlbum* const p = dynamic_cast<PAlbum*>(d->album);
-
-                if (p)
-                    return d->imagesFromPAlbum(p);
-            }
-            else if (d->album->type() == Album::TAG)
-            {
-                TAlbum* const p = dynamic_cast<TAlbum*>(d->album);
-
-                if (p)
-                    return d->imagesFromTAlbum(p);
-            }
-            else if (d->album->type() == Album::DATE ||
-                     d->album->type() == Album::SEARCH)
-            {
-                return DigikamApp::instance()->view()->allUrls();
-            }
-
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown album type";
-            break;
+            return d->iface->albumItems(d->album);
         }
 
         case SelectedItems:
         {
-            return DigikamApp::instance()->view()->selectedUrls();
+            return d->iface->currentSelectedItems();
         }
-
-        default:
-            break;
     }
 
     return QList<QUrl>();
-}
-
-/** get the images from the Physical album in database and return the items found.
- */
-QList<QUrl> KipiImageCollection::Private::imagesFromPAlbum(PAlbum* const album) const
-{
-    // get the images from the database and return the items found
-
-    CoreDB::ItemSortOrder sortOrder = CoreDB::NoItemSorting;
-
-    switch (ApplicationSettings::instance()->getImageSortOrder())
-    {
-        default:
-        case ImageSortSettings::SortByFileName:
-            sortOrder = CoreDB::ByItemName;
-            break;
-
-        case ImageSortSettings::SortByFilePath:
-            sortOrder = CoreDB::ByItemPath;
-            break;
-
-        case ImageSortSettings::SortByCreationDate:
-            sortOrder = CoreDB::ByItemDate;
-            break;
-
-        case ImageSortSettings::SortByRating:
-            sortOrder = CoreDB::ByItemRating;
-            break;
-            // ByISize not supported
-    }
-
-    QStringList list = CoreDbAccess().db()->getItemURLsInAlbum(album->id(), sortOrder);
-    QList<QUrl> urlList;
-    CoreDbNameFilter  nameFilter(imgFilter);
-
-    for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-    {
-        if (nameFilter.matches(*it))
-        {
-            urlList << QUrl::fromLocalFile(*it);
-        }
-    }
-
-    return urlList;
-}
-
-/** get the images from the Tags album in database and return the items found.
- */
-QList<QUrl> KipiImageCollection::Private::imagesFromTAlbum(TAlbum* const album) const
-{
-    QStringList list = CoreDbAccess().db()->getItemURLsInTag(album->id());
-    QList<QUrl> urlList;
-    CoreDbNameFilter  nameFilter(imgFilter);
-
-    for (QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it)
-    {
-        if (nameFilter.matches(*it))
-        {
-            urlList << QUrl::fromLocalFile(*it);
-        }
-    }
-
-    return urlList;
 }
 
 QUrl KipiImageCollection::url()

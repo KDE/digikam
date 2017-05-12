@@ -7,6 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,6 +27,7 @@
 
 // Local includes
 
+#include "applicationsettings.h"
 #include "imageinfo.h"
 #include "itemviewcategorized.h"
 #include "thumbnailsize.h"
@@ -76,12 +78,17 @@ public:
     ImageInfo              currentInfo()           const;
     QUrl                   currentUrl()            const;
 
-    ImageInfoList          selectedImageInfos()             const;
-    ImageInfoList          selectedImageInfosCurrentFirst() const;
-    QList<QUrl>            selectedUrls()                   const;
+    ImageInfoList          selectedImageInfos(bool grouping = false) const;
+    ImageInfoList          selectedImageInfos(ApplicationSettings::OperationType type) const;
+    ImageInfoList          selectedImageInfosCurrentFirst(bool grouping = false) const;
+    QList<QUrl>            selectedUrls(bool grouping = false) const;
+    QList<QUrl>            selectedUrls(ApplicationSettings::OperationType type) const;
 
-    QList<ImageInfo>       imageInfos()                     const;
-    QList<QUrl>            urls()                           const;
+    QList<ImageInfo>       imageInfos(bool grouping = false) const;
+    QList<QUrl>            urls(bool grouping = false) const;
+
+    bool                   needGroupResolving(ApplicationSettings::OperationType type,
+                                              bool all = false) const;
 
     /** Selects the index as current and scrolls to it.
      */

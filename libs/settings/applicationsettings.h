@@ -10,6 +10,7 @@
  * Copyright (C) 2003-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2007      by Arnd Baecker <arnd dot baecker at web dot de>
  * Copyright (C) 2014-2015 by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,10 +30,11 @@
 
 // Qt includes
 
-#include <QStringList>
-#include <QString>
 #include <QFont>
+#include <QHash>
 #include <QObject>
+#include <QString>
+#include <QStringList>
 
 // KDE includes
 
@@ -86,6 +88,36 @@ public:
          */
         Normal
     };
+
+    /**
+     * Types of operations
+     * Originally introduced for grouping to configure whether an operation
+     * should be done on all group members or only it's head.
+     */
+    enum OperationType
+    {
+        Metadata = 0,
+        Kipi,
+        BQM,
+        LightTable,
+        Slideshow,
+        Rename,
+        Tools,
+        Unspecified // This element must always come last
+    };
+
+    /**
+     *
+     */
+    enum ApplyToEntireGroup
+    {
+        No = 0,
+        Yes,
+        Ask
+    };
+
+    typedef QHash<ApplicationSettings::OperationType, QString> OperationStrings;
+    typedef QHash<ApplicationSettings::OperationType, ApplicationSettings::ApplyToEntireGroup> OperationModes;
 
 Q_SIGNALS:
 
@@ -436,6 +468,46 @@ public:
 
     void setDuplicatesSearchLastMaxSimilarity(int val);
     int  getDuplicatesSearchLastMaxSimilarity() const;
+
+    /**
+     * Defines whether an operation should be performed on all grouped items
+     * or just the head item.
+     *
+     * @param type Operation to be performed
+     * @param applyAll Whether to apply to all images or just one, or ask
+     */
+    void setGroupingOperateOnAll(OperationType type, ApplyToEntireGroup applyAll);
+    /**
+     * Tells whether an operation should be performed on all grouped items
+     * or just the head item.
+     *
+     * @param type Operation to be performed
+     * @return Whether to apply to all images or just one, or ask
+     */
+    ApplyToEntireGroup getGroupingOperateOnAll(OperationType type) const;
+    /**
+     * Asks the user whether the operation should be performed on all grouped
+     * images or just the first. Also supplies an option to remember the answer.
+     *
+     * @param type Operation to be performed
+     * @return Whether to apply to all images or just one
+     */
+    bool askGroupingOperateOnAll(OperationType type);
+    /**
+     * Gives the translated title/short explanation of the operation
+     *
+     * @param type Operation to be performed
+     * @return Translated operation title/short explanation
+     */
+    static QString operationTypeTitle(OperationType type);
+    /**
+     * Gives a translated explanation of the operation and an empty string,
+     * if there is none (e.g. for tooltips)
+     *
+     * @param type Operation to be performed
+     * @return Translated operation explanation
+     */
+    static QString operationTypeExplanation(OperationType type);
 
     void setDuplicatesAlbumTagRelation(int val);
     int  getDuplicatesAlbumTagRelation() const;

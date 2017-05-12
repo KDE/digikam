@@ -26,11 +26,14 @@
 
 // Local includes
 
+#include "applicationsettings.h"
 #include "dinfointerface.h"
 #include "digikam_export.h"
 
 namespace Digikam
 {
+
+class Album;
 
 class DIGIKAM_EXPORT DBInfoIface : public DInfoInterface
 {
@@ -39,16 +42,20 @@ class DIGIKAM_EXPORT DBInfoIface : public DInfoInterface
 public:
 
     explicit DBInfoIface(QObject* const parent,
-                         const QList<QUrl>& lst = QList<QUrl>());
+                         const QList<QUrl>& lst = QList<QUrl>(),
+                         const ApplicationSettings::OperationType type = ApplicationSettings::Unspecified);
     ~DBInfoIface();
 
     QList<QUrl> currentSelectedItems()              const;
     QList<QUrl> currentAlbumItems()                 const;
+
+    QList<QUrl> albumItems(Album* const album)      const;
+    QList<QUrl> albumItems(int id)                  const;
+    QList<QUrl> albumsItems(const DAlbumIDs&)       const;
     QList<QUrl> allAlbumItems()                     const;
 
     DInfoMap    albumInfo(int)                      const;
     DInfoMap    itemInfo(const QUrl&)               const;
-    QList<QUrl> albumsItems(const DAlbumIDs&)       const;
 
     QWidget*    albumChooser(QWidget* const parent) const;
     DAlbumIDs   albumChooserItems()                 const;

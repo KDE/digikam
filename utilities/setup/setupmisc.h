@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -29,6 +30,12 @@
 
 #include <QScrollArea>
 
+// local includes
+
+#include "applicationsettings.h"
+
+class QButtonGroup;
+
 namespace Digikam
 {
 
@@ -36,6 +43,12 @@ class SetupMisc : public QScrollArea
 {
 
 public:
+
+    enum MiscTab
+    {
+        Behaviour = 0,
+        Grouping
+    };
 
     explicit SetupMisc(QWidget* const parent = 0);
     virtual ~SetupMisc();

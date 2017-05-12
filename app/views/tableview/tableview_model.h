@@ -42,6 +42,7 @@ class ImageChangeset;
 class ImageFilterModel;
 class ImageFilterSettings;
 class ImageInfo;
+class ImageInfoList;
 class TableViewColumn;
 class TableViewColumnConfiguration;
 class TableViewColumnDescription;
@@ -105,6 +106,7 @@ public:
     Item* itemFromImageId(const qlonglong imageId) const;
     Item* itemFromIndex(const QModelIndex& i) const;
     ImageInfo infoFromItem(Item* const item) const;
+    ImageInfoList infosFromItems(QList<Item*> const items) const;
     QVariant itemDatabaseFieldRaw(Item* const item, const DatabaseFields::Set requestedField);
     DatabaseFieldsHashRaw itemDatabaseFieldsRaw(Item* const item, const DatabaseFields::Set requestedSet);
     qlonglong imageId(const QModelIndex& anIndex) const;

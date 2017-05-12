@@ -34,6 +34,7 @@
 
 // Local includes
 
+#include "applicationsettings.h"
 #include "metaengine_rotation.h"
 #include "digikam_config.h"
 #include "searchtextbar.h"
@@ -47,7 +48,6 @@ namespace Digikam
 {
 
 class AlbumIconItem;
-class ApplicationSettings;
 class Album;
 class PAlbum;
 class TAlbum;
@@ -55,6 +55,7 @@ class BatchSyncMetadata;
 class FilterStatusBar;
 class SlideShowSettings;
 class DCategorizedView;
+class ImageFilterModel;
 
 class DigikamView : public DHBox
 {
@@ -89,23 +90,55 @@ public:
 
     void connectIconViewFilter(FilterStatusBar* const filter);
 
-    QList<QUrl> allUrls()      const;
-    QList<QUrl> selectedUrls() const;
-    QUrl currentUrl()          const;
-    bool hasCurrentItem()      const;
+    QUrl      currentUrl()     const;
+    bool      hasCurrentItem() const;
     ImageInfo currentInfo()    const;
+    Album*    currentAlbum()   const;
 
-    QList<ImageInfo> selectedInfoList(const bool currentFirst = false) const;
-    ImageInfoList allInfo()    const;
+    /**
+     * Get currently selected items. By default only the first images in groups are
+     * given, while all can be obtained by setting the grouping parameter to true.
+     * Given an operation, it will be determined from settings/user query whether
+     * only the first or all items in a group are returned.
+     * Ideally only the latter (giving an operation) is used.
+     */
+    QList<QUrl>   selectedUrls(bool grouping = false)                         const;
+    QList<QUrl>   selectedUrls(const ApplicationSettings::OperationType type) const;
+    ImageInfoList selectedInfoList(const bool currentFirst = false,
+                                   const bool grouping = false)               const;
+    ImageInfoList selectedInfoList(const ApplicationSettings::OperationType type,
+                                   const bool currentFirst = false)           const;
+    /**
+     * Get all items in the current view.
+     * Whether only the first or all grouped items are returned is determined
+     * as described above.
+     */
+    QList<QUrl>   allUrls(bool grouping = false)                         const;
+    ImageInfoList allInfo(const bool grouping = false)                   const;
+    ImageInfoList allInfo(const ApplicationSettings::OperationType type) const;
 
-    double zoomMin()           const;
-    double zoomMax()           const;
+    /**
+     * Query whether the operation to be performed on currently selected items
+     * (all=false, default) or all items in the currently active view (all=true)
+     * should be performed on all grouped items or just the first.
+     *
+     * @brief needGroupResolving
+     * @param type Type of operation to be performed.
+     * @param all Whether to apply to all items in the current view or just selected
+     * @return Whether to perform operation on all grouped items or just the first
+     */
+    bool needGroupResolving(const ApplicationSettings::OperationType type,
+                            const bool all = false) const;
+
+    double zoomMin() const;
+    double zoomMax() const;
 
     void presentation();
     void toggleTag(int tagID);
     void toggleFullScreen(bool set);
-    QList<SidebarWidget*> leftSidebarWidgets() const;
-    StackedView::StackedViewMode viewMode()    const;
+
+    QList<SidebarWidget*>        leftSidebarWidgets() const;
+    StackedView::StackedViewMode viewMode()           const;
 
 Q_SIGNALS:
 
@@ -163,6 +196,8 @@ public Q_SLOTS:
     void slotSelectAlbum(const QUrl& url);
     void slotSetCurrentWhenAvailable(const qlonglong id);
 
+    void slotSetAsAlbumThumbnail(const ImageInfo& info);
+
     // Tag action slots
     void slotNewTag();
     void slotDeleteTag();
@@ -205,10 +240,13 @@ public Q_SLOTS:
     void slotGroupImages(int mode);
     void slotSortImageGroupOrder(int order);
     void slotMoveSelectionToAlbum();
+    void slotImagePaste();
 
     void slotAssignPickLabel(int pickId);
     void slotAssignColorLabel(int colorId);
     void slotAssignRating(int rating);
+    void slotAssignTag(int tagID);
+    void slotRemoveTag(int tagID);
 
     // Tools action slots.
     void slotEditor();
@@ -226,6 +264,12 @@ public Q_SLOTS:
     void slotRightSideBarActivateAssignedTags();
 
     void slotFocusAndNextImage();
+
+    void slotCreateGroupFromSelection();
+    void slotCreateGroupByTimeFromSelection();
+    void slotCreateGroupByFilenameFromSelection();
+    void slotRemoveSelectedFromGroup();
+    void slotUngroupSelected();
 
 private:
 
@@ -276,6 +320,12 @@ private Q_SLOTS:
     void slotSetupMetadataFilters(int);
 
     void slotAlbumRefreshComplete();
+
+    void slotShowContextMenu(QContextMenuEvent* event,
+                             const QList<QAction*>& extraGroupingActions = QList<QAction*>());
+    void slotShowContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info,
+                                   const QList<QAction*>& extraGroupingActions = QList<QAction*>(),
+                                   ImageFilterModel* imageFilterModel = 0);
 
 private:
 

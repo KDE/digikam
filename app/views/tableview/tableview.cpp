@@ -7,6 +7,7 @@
  * Description : Table view
  *
  * Copyright (C) 2013 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2017 by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -42,7 +43,6 @@
 #include "digikam_debug.h"
 #include "fileactionmngr.h"
 #include "album.h"
-#include "applicationsettings.h"
 #include "imageviewutilities.h"
 #include "tableview_columnfactory.h"
 #include "tableview_model.h"
@@ -204,11 +204,13 @@ bool TableView::eventFilter(QObject* watched, QEvent* event)
 
         if (contextMenuIndex.isValid())
         {
-            showTreeViewContextMenuOnItem(e, contextMenuIndex);
+            emit signalShowContextMenuOnInfo(
+                        e, s->tableViewModel->imageInfo(contextMenuIndex),
+                        getExtraGroupingActions());
         }
         else
         {
-            showTreeViewContextMenuOnEmptyArea(e);
+            emit signalShowContextMenu(e, getExtraGroupingActions());
         }
 
         // event has been filtered by us
@@ -216,161 +218,6 @@ bool TableView::eventFilter(QObject* watched, QEvent* event)
     }
 
     return QObject::eventFilter(watched, event);
-}
-
-void TableView::showTreeViewContextMenuOnEmptyArea(QContextMenuEvent* const event)
-{
-    Album* const album = currentAlbum();
-
-    if (!album          ||
-        album->isRoot() ||
-        (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
-    {
-        return;
-    }
-
-    QMenu menu(this);
-    ContextMenuHelper cmHelper(&menu);
-
-    cmHelper.addAction(QLatin1String("full_screen"));
-    cmHelper.addAction(QLatin1String("options_show_menubar"));
-    cmHelper.addSeparator();
-    cmHelper.addStandardActionPaste(this, SLOT(slotPaste()));
-    cmHelper.addSeparator();
-    cmHelper.addGroupMenu(QList<qlonglong>(), getExtraGroupingActions(&cmHelper));
-
-    cmHelper.exec(event->globalPos());
-}
-
-void TableView::showTreeViewContextMenuOnItem(QContextMenuEvent* const event, const QModelIndex& indexAtMenu)
-{
-    // get a list of currently selected images' ids
-    const QList<qlonglong> selectedImageIds =  selectedImageIdsCurrentFirst();
-
-    // Temporary actions --------------------------------------
-
-    QAction* const viewAction = new QAction(i18nc("View the selected image", "Preview"), this);
-    viewAction->setIcon(QIcon::fromTheme(QLatin1String("view-preview")));
-    viewAction->setEnabled(selectedImageIds.count() == 1);
-
-    // Creation of the menu -----------------------------------
-    QMenu menu(this);
-    ContextMenuHelper cmHelper(&menu);
-
-    cmHelper.addAction(QLatin1String("full_screen"));
-    cmHelper.addAction(QLatin1String("options_show_menubar"));
-    cmHelper.addSeparator();
-    // ---
-    cmHelper.addAction(QLatin1String("move_selection_to_album"));
-    cmHelper.addAction(viewAction);
-    /// @todo image_edit is grayed out on first invocation of the menu for some reason
-    cmHelper.addAction(QLatin1String("image_edit"));
-    cmHelper.addServicesMenu(selectedUrls());
-    cmHelper.addGotoMenu(selectedImageIds);
-    cmHelper.addAction(QLatin1String("image_rotate"));
-    cmHelper.addSeparator();
-    // ---
-    cmHelper.addAction(QLatin1String("image_find_similar"));
-    cmHelper.addStandardActionLightTable();
-    cmHelper.addQueueManagerMenu();
-    cmHelper.addSeparator();
-    // ---
-    cmHelper.addAction(QLatin1String("image_rename"));
-    cmHelper.addAction(QLatin1String("cut_album_selection"));
-    cmHelper.addAction(QLatin1String("copy_album_selection"));
-    cmHelper.addAction(QLatin1String("paste_album_selection"));
-    cmHelper.addStandardActionItemDelete(this, SLOT(slotDeleteSelected()), selectedImageIds.count());
-    cmHelper.addSeparator();
-    // ---
-    cmHelper.addStandardActionThumbnail(selectedImageIds, currentAlbum());
-    // ---
-    cmHelper.addAssignTagsMenu(selectedImageIds);
-    cmHelper.addRemoveTagsMenu(selectedImageIds);
-    cmHelper.addSeparator();
-    cmHelper.addLabelsAction();
-
-    /// @todo In digikamimageview.cpp, this is not available in face mode
-    cmHelper.addGroupMenu(selectedImageIds, getExtraGroupingActions(&cmHelper));
-
-    connect(&cmHelper, SIGNAL(signalAssignColorLabel(int)),
-            this, SLOT(slotAssignColorLabelToSelected(int)));
-
-    connect(&cmHelper, SIGNAL(signalAssignPickLabel(int)),
-            this, SLOT(slotAssignPickLabelToSelected(int)));
-
-    connect(&cmHelper, SIGNAL(signalAssignRating(int)),
-            this, SLOT(slotAssignRatingToSelected(int)));
-
-    connect(&cmHelper, SIGNAL(signalAssignTag(int)),
-            this, SLOT(slotAssignTagToSelected(int)));
-
-    connect(&cmHelper, SIGNAL(signalRemoveTag(int)),
-            this, SLOT(slotRemoveTagFromSelected(int)));
-
-    connect(&cmHelper, SIGNAL(signalAddToExistingQueue(int)),
-            this, SLOT(slotInsertSelectedToExistingQueue(int)));
-
-    connect(&cmHelper, SIGNAL(signalPopupTagsView()),
-            this, SIGNAL(signalPopupTagsView()));
-
-    connect(&cmHelper, SIGNAL(signalGotoTag(int)),
-            this, SIGNAL(signalGotoTagAndImageRequested(int)));
-
-    connect(&cmHelper, SIGNAL(signalGotoAlbum(ImageInfo)),
-            this, SIGNAL(signalGotoAlbumAndImageRequested(ImageInfo)));
-
-    connect(&cmHelper, SIGNAL(signalGotoDate(ImageInfo)),
-            this, SIGNAL(signalGotoDateAndImageRequested(ImageInfo)));
-
-    connect(&cmHelper, SIGNAL(signalSetThumbnail(ImageInfo)),
-            this, SLOT(slotSetAsAlbumThumbnail(ImageInfo)));
-
-    connect(&cmHelper, SIGNAL(signalCreateGroup()),
-            this, SLOT(slotCreateGroupFromSelection()));
-
-    connect(&cmHelper, SIGNAL(signalRemoveFromGroup()),
-            this, SLOT(slotRemoveSelectedFromGroup()));
-
-    connect(&cmHelper, SIGNAL(signalUngroup()),
-            this, SLOT(slotUngroupSelected()));
-
-    connect(&cmHelper, SIGNAL(signalCreateGroupByTime()),
-            this, SLOT(slotCreateGroupByTimeFromSelection()));
-
-    connect(&cmHelper, SIGNAL(signalCreateGroupByFilename()),
-            this, SLOT(slotCreateGroupByFilenameFromSelection()));
-
-    QAction* const choice = cmHelper.exec(event->globalPos());
-
-    if (choice && (choice == viewAction))
-    {
-        emit(signalPreviewRequested(s->tableViewModel->imageInfo(indexAtMenu)));
-    }
-}
-
-void TableView::slotAssignColorLabelToSelected(const int colorLabelID)
-{
-    FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorLabelID);
-}
-
-void TableView::slotAssignPickLabelToSelected(const int pickLabelID)
-{
-    FileActionMngr::instance()->assignPickLabel(selectedImageInfos(), pickLabelID);
-}
-
-void TableView::slotAssignRatingToSelected(const int rating)
-{
-    FileActionMngr::instance()->assignRating(selectedImageInfos(), rating);
-}
-
-void TableView::slotAssignTagToSelected(const int tagID)
-{
-    FileActionMngr::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
-}
-
-void TableView::slotRemoveTagFromSelected(const int tagID)
-{
-    FileActionMngr::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
 }
 
 void TableView::setThumbnailSize(const ThumbnailSize& size)
@@ -389,29 +236,7 @@ ThumbnailSize TableView::getThumbnailSize() const
     return d->thumbnailSize;
 }
 
-void TableView::slotInsertSelectedToExistingQueue(const int queueId)
-{
-    const ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->imageViewUtilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueId);
-    }
-}
-
-void TableView::slotSetAsAlbumThumbnail(const ImageInfo& info)
-{
-    Album* const theCurrentAlbum = currentAlbum();
-
-    if (!theCurrentAlbum)
-    {
-        return;
-    }
-
-    d->imageViewUtilities->setAsAlbumThumbnail(theCurrentAlbum, info);
-}
-
-Album* TableView::currentAlbum()
+Album* TableView::currentAlbum() const
 {
     ImageAlbumModel* const albumModel = qobject_cast<ImageAlbumModel*>(s->imageModel);
 
@@ -434,19 +259,24 @@ void TableView::slotPaste()
     dragDropViewImplementation->paste();
 }
 
-ImageInfo TableView::currentInfo()
+ImageInfo TableView::currentInfo() const
 {
     return s->tableViewModel->imageInfo(s->tableViewSelectionModel->currentIndex());
 }
 
-ImageInfoList TableView::allInfo() const
+ImageInfoList TableView::allInfo(bool grouping) const
 {
+    if (grouping)
+    {
+        return resolveGrouping(s->tableViewModel->allImageInfo());
+    }
+
     return s->tableViewModel->allImageInfo();
 }
 
 void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    const ImageInfoList infoList = selectedImageInfos();
+    const ImageInfoList infoList = selectedImageInfos(true);
 
     /// @todo Update parameter naming for deleteImages
     if (d->imageViewUtilities->deleteImages(infoList, deleteMode))
@@ -457,48 +287,19 @@ void TableView::slotDeleteSelected(const ImageViewUtilities::DeleteMode deleteMo
 
 void TableView::slotDeleteSelectedWithoutConfirmation(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    const ImageInfoList infoList = selectedImageInfos();
+    const ImageInfoList infoList = selectedImageInfos(true);
 
     d->imageViewUtilities->deleteImagesDirectly(infoList, deleteMode);
     slotAwayFromSelection();
 }
 
-void TableView::slotRemoveSelectedFromGroup()
-{
-    FileActionMngr::instance()->removeFromGroup(selectedImageInfos());
-}
-
-void TableView::slotUngroupSelected()
-{
-    FileActionMngr::instance()->ungroup(selectedImageInfos());
-}
-
-void TableView::slotCreateGroupFromSelection()
-{
-    const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    const ImageInfo groupLeader          = currentInfo();
-    FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
-}
-
-void TableView::slotCreateGroupByTimeFromSelection()
-{
-    const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    d->imageViewUtilities->createGroupByTimeFromInfoList(selectedInfos);
-}
-
-void TableView::slotCreateGroupByFilenameFromSelection()
-{
-    const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    d->imageViewUtilities->createGroupByFilenameFromInfoList(selectedInfos);
-}
-
-QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) const
+QList<QAction*> TableView::getExtraGroupingActions()
 {
     QList<QAction*> actionList;
 
     const TableViewModel::GroupingMode currentGroupingMode = s->tableViewModel->groupingMode();
 
-    QAction* const actionHideGrouped = new QAction(i18n("Hide grouped items"), parentObject);
+    QAction* const actionHideGrouped = new QAction(i18n("Hide grouped items"), this);
     actionHideGrouped->setCheckable(true);
     actionHideGrouped->setChecked(currentGroupingMode == TableViewModel::GroupingHideGrouped);
     actionHideGrouped->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingHideGrouped));
@@ -508,7 +309,7 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 
     actionList << actionHideGrouped;
 
-    QAction* const actionIgnoreGrouping = new QAction(i18n("Ignore grouping"), parentObject);
+    QAction* const actionIgnoreGrouping = new QAction(i18n("Ignore grouping"), this);
     actionIgnoreGrouping->setCheckable(true);
     actionIgnoreGrouping->setChecked(currentGroupingMode == TableViewModel::GroupingIgnoreGrouping);
     actionIgnoreGrouping->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingIgnoreGrouping));
@@ -518,7 +319,7 @@ QList<QAction*> TableView::getExtraGroupingActions(QObject* const parentObject) 
 
     actionList << actionIgnoreGrouping;
 
-    QAction* const actionShowSubItems = new QAction(i18n("Show grouping in tree"), parentObject);
+    QAction* const actionShowSubItems = new QAction(i18n("Show grouping in tree"), this);
     actionShowSubItems->setCheckable(true);
     actionShowSubItems->setChecked(currentGroupingMode == TableViewModel::GroupingShowSubItems);
     actionShowSubItems->setData(QVariant::fromValue<TableViewModel::GroupingMode>(TableViewModel::GroupingShowSubItems));
@@ -544,12 +345,12 @@ void TableView::slotGroupingModeActionTriggered()
     s->tableViewModel->setGroupingMode(newGroupingMode);
 }
 
-QList<QUrl> TableView::allUrls() const
+QList<QUrl> TableView::allUrls(bool grouping) const
 {
-    const ImageInfoList allInfo = s->tableViewModel->allImageInfo();
+    const ImageInfoList infos = allInfo(grouping);
     QList<QUrl> resultList;
 
-    Q_FOREACH(const ImageInfo& info, allInfo)
+    Q_FOREACH(const ImageInfo& info, infos)
     {
         resultList << info.fileUrl();
     }
@@ -766,9 +567,17 @@ void TableView::slotSetActive(const bool isActive)
     }
 }
 
-ImageInfoList TableView::selectedImageInfos() const
+ImageInfoList TableView::selectedImageInfos(bool grouping) const
 {
-    return resolveGrouping(s->tableViewSelectionModel->selectedRows());
+    if (grouping) {
+        return resolveGrouping(s->tableViewSelectionModel->selectedRows());
+    }
+    return s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows());
+}
+
+ImageInfoList TableView::selectedImageInfos(ApplicationSettings::OperationType type) const
+{
+    return selectedImageInfos(needGroupResolving(type));
 }
 
 QModelIndexList TableView::selectedIndexesCurrentFirst() const
@@ -790,46 +599,95 @@ QModelIndexList TableView::selectedIndexesCurrentFirst() const
     return indexes;
 }
 
-ImageInfoList TableView::selectedImageInfosCurrentFirst() const
+ImageInfoList TableView::selectedImageInfosCurrentFirst(bool grouping) const
 {
-    return resolveGrouping(selectedIndexesCurrentFirst());
+    if (grouping) {
+        return resolveGrouping(selectedIndexesCurrentFirst());
+    }
+    return s->tableViewModel->imageInfos(selectedIndexesCurrentFirst());
 }
 
-QList<qlonglong> TableView::selectedImageIdsCurrentFirst() const
+QList<qlonglong> TableView::selectedImageIdsCurrentFirst(bool grouping) const
 {
-    return resolveGrouping(selectedIndexesCurrentFirst()).toImageIdList();
+    return selectedImageInfosCurrentFirst(grouping).toImageIdList();
 }
 
-QList<QUrl> TableView::selectedUrls() const
+QList<QUrl> TableView::selectedUrls(bool grouping) const
 {
-    return resolveGrouping(s->tableViewSelectionModel->selectedRows()).toImageUrlList();
+    return selectedImageInfos(grouping).toImageUrlList();
 }
 
 ImageInfoList TableView::resolveGrouping(const QList<QModelIndex>& indexes) const
 {
-    ImageInfoList infos;
+    return resolveGrouping(s->tableViewModel->imageInfos(indexes));
+}
 
-    foreach(const QModelIndex& index, indexes)
+ImageInfoList TableView::resolveGrouping(const ImageInfoList& infos) const
+{
+    ImageInfoList out;
+
+    foreach(const ImageInfo& info, infos)
     {
-        ImageInfo info = s->tableViewModel->imageInfo(index);
+        QModelIndex index = s->tableViewModel->indexFromImageId(info.id(), 0);
 
-        infos << info;
+        out << info;
 
         if (info.hasGroupedImages()
             && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped
                 || (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems
                     && !s->treeView->isExpanded(index))))
         {
-            infos << info.groupedImages();
+            out << info.groupedImages();
         }
     }
 
-    return infos;
+    return out;
+}
+
+bool TableView::needGroupResolving(ApplicationSettings::OperationType type, bool all) const
+{
+    ApplicationSettings::ApplyToEntireGroup applyAll =
+            ApplicationSettings::instance()->getGroupingOperateOnAll(type);
+    if (applyAll == ApplicationSettings::No)
+    {
+        return false;
+    }
+    else if (applyAll == ApplicationSettings::Yes)
+    {
+        return true;
+    }
+
+    ImageInfoList infos;
+
+    if (all)
+    {
+        infos = s->tableViewModel->allImageInfo();
+    }
+    else
+    {
+        infos = s->tableViewModel->imageInfos(s->tableViewSelectionModel->selectedRows());
+    }
+
+    foreach(const ImageInfo& info, infos)
+    {
+        QModelIndex index = s->tableViewModel->indexFromImageId(info.id(), 0);
+
+        if (info.hasGroupedImages()
+            && (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingHideGrouped
+                || (s->tableViewModel->groupingMode() == s->tableViewModel->GroupingMode::GroupingShowSubItems
+                    && !s->treeView->isExpanded(index))))
+        {
+            // Ask whether should be performed on all and return info if no
+            return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
+        }
+    }
+
+    return false;
 }
 
 void TableView::rename()
 {
-    QList<QUrl>  urls = selectedUrls();
+    QList<QUrl>  urls = selectedUrls(ApplicationSettings::Rename);
     NewNamesList newNamesList;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;

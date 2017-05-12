@@ -64,14 +64,13 @@ public:
 
     virtual QList<QUrl> currentSelectedItems()            const;
     virtual QList<QUrl> currentAlbumItems()               const;
-    virtual QList<QUrl> allAlbumItems()                   const;
 
-    virtual int         currentAlbum()                    const;
     virtual QList<QUrl> albumItems(int)                   const;
+    virtual QList<QUrl> albumsItems(const DAlbumIDs&)     const;
+    virtual QList<QUrl> allAlbumItems()                   const;
 
     virtual DInfoMap    albumInfo(int)                    const;
     virtual DInfoMap    itemInfo(const QUrl&)             const;
-    virtual QList<QUrl> albumsItems(const DAlbumIDs&)     const;
 
 public:
 

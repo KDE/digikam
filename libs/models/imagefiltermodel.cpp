@@ -216,7 +216,7 @@ QModelIndex ImageSortFilterModel::indexForImageId(qlonglong id) const
 
 QList<ImageInfo> ImageSortFilterModel::imageInfosSorted() const
 {
-    QList<ImageInfo> infos;
+    QList<ImageInfo>  infos;
     const int         size  = rowCount();
     ImageModel* const model = sourceImageModel();
 

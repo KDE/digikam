@@ -113,7 +113,10 @@ HTMLSelectionPage::~HTMLSelectionPage()
 void HTMLSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);
-    d->imageList->loadImagesFromCurrentSelection();
+    if (d->info->m_getOption == GalleryInfo::IMAGES)
+    {
+        d->imageList->loadImagesFromCurrentSelection();
+    }
     d->stack->setCurrentIndex(d->info->m_getOption);
 }
 

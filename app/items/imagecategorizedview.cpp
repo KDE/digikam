@@ -7,6 +7,7 @@
  * Description : Qt item view for images
  *
  * Copyright (C) 2009-2012 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -25,6 +26,7 @@
 
 // Qt includes
 
+#include <QApplication>
 #include <QTimer>
 
 // Local includes
@@ -32,7 +34,6 @@
 #include "digikam_debug.h"
 #include "album.h"
 #include "albummanager.h"
-#include "applicationsettings.h"
 #include "coredbfields.h"
 #include "iccsettings.h"
 #include "imagealbummodel.h"
@@ -296,12 +297,22 @@ QUrl ImageCategorizedView::currentUrl() const
     return currentInfo().fileUrl();
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfos() const
+ImageInfoList ImageCategorizedView::selectedImageInfos(bool grouping) const
 {
-    return resolveGrouping(selectedIndexes());
+    if (grouping) {
+        return resolveGrouping(selectedIndexes());
+    }
+    return d->filterModel->imageInfos(selectedIndexes());
 }
 
-ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
+ImageInfoList ImageCategorizedView::selectedImageInfos(
+        ApplicationSettings::OperationType type) const
+{
+    return selectedImageInfos(needGroupResolving(type));
+}
+
+ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst(
+        bool grouping) const
 {
     QModelIndexList indexes = selectedIndexes();
     const QModelIndex current  = currentIndex();
@@ -317,17 +328,23 @@ ImageInfoList ImageCategorizedView::selectedImageInfosCurrentFirst() const
         }
     }
 
-    return resolveGrouping(indexes);
+    if (grouping) {
+        return resolveGrouping(indexes);
+    }
+    return d->filterModel->imageInfos(indexes);
 }
 
-QList<ImageInfo> ImageCategorizedView::imageInfos() const
+QList<ImageInfo> ImageCategorizedView::imageInfos(bool grouping) const
 {
-    return resolveGrouping(d->filterModel->imageInfosSorted());
+    if (grouping) {
+        return resolveGrouping(d->filterModel->imageInfosSorted());
+    }
+    return d->filterModel->imageInfosSorted();
 }
 
-QList<QUrl> ImageCategorizedView::urls() const
+QList<QUrl> ImageCategorizedView::urls(bool grouping) const
 {
-    ImageInfoList infos = imageInfos();
+    ImageInfoList infos = imageInfos(grouping);
     QList<QUrl>   urls;
 
     foreach(const ImageInfo& info, infos)
@@ -338,9 +355,44 @@ QList<QUrl> ImageCategorizedView::urls() const
     return urls;
 }
 
-QList<QUrl> ImageCategorizedView::selectedUrls() const
+bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType type, bool all) const
 {
-    ImageInfoList infos = selectedImageInfos();
+    ApplicationSettings::ApplyToEntireGroup applyAll =
+            ApplicationSettings::instance()->getGroupingOperateOnAll(type);
+    if (applyAll == ApplicationSettings::No)
+    {
+        return false;
+    }
+    else if (applyAll == ApplicationSettings::Yes)
+    {
+        return true;
+    }
+
+    ImageInfoList infos;
+    if (all)
+    {
+        infos = d->filterModel->imageInfosSorted();
+    }
+    else
+    {
+        infos = d->filterModel->imageInfos(selectedIndexes());
+    }
+
+    foreach(const ImageInfo& info, infos)
+    {
+        if (info.hasGroupedImages() && !imageFilterModel()->isGroupOpen(info.id()))
+        {
+            // Ask whether should be performed on all and return info if no
+            return ApplicationSettings::instance()->askGroupingOperateOnAll(type);
+        }
+    }
+
+    return false;
+}
+
+QList<QUrl> ImageCategorizedView::selectedUrls(bool grouping) const
+{
+    ImageInfoList infos = selectedImageInfos(grouping);
     QList<QUrl>   urls;
 
     foreach(const ImageInfo& info, infos)
@@ -349,6 +401,11 @@ QList<QUrl> ImageCategorizedView::selectedUrls() const
     }
 
     return urls;
+}
+
+QList<QUrl> ImageCategorizedView::selectedUrls(ApplicationSettings::OperationType type) const
+{
+    return selectedUrls(needGroupResolving(type));
 }
 
 void ImageCategorizedView::toIndex(const QUrl& url)

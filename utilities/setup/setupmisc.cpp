@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2004      by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2005-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -26,16 +27,19 @@
 
 // Qt includes
 
-#include <QCheckBox>
-#include <QGroupBox>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QStyleFactory>
 #include <QApplication>
-#include <QStyle>
+#include <QButtonGroup>
+#include <QCheckBox>
 #include <QComboBox>
-#include <QSpinBox>
 #include <QFile>
+#include <QGroupBox>
+#include <QHash>
+#include <QLabel>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QStyle>
+#include <QStyleFactory>
+#include <QVBoxLayout>
 
 // KDE includes
 
@@ -55,6 +59,7 @@ class SetupMisc::Private
 public:
 
     Private() :
+        tab(0),
         sidebarTypeLabel(0),
         stringComparisonTypeLabel(0),
         applicationStyleLabel(0),
@@ -72,46 +77,56 @@ public:
         stringComparisonType(0),
         applicationStyle(0),
         iconTheme(0),
-        minimumSimilarityBound(0)
+        minimumSimilarityBound(0),
+        groupingButtons(QHash<int, QButtonGroup*>())
     {
     }
 
-    QLabel*    sidebarTypeLabel;
-    QLabel*    stringComparisonTypeLabel;
-    QLabel*    applicationStyleLabel;
-    QLabel*    iconThemeLabel;
-    QLabel*    minSimilarityBoundLabel;
+    QTabWidget*                 tab;
 
-    QCheckBox* showSplashCheck;
-    QCheckBox* showTrashDeleteDialogCheck;
-    QCheckBox* showPermanentDeleteDialogCheck;
-    QCheckBox* sidebarApplyDirectlyCheck;
-    QCheckBox* scrollItemToCenterCheck;
-    QCheckBox* showOnlyPersonTagsInPeopleSidebarCheck;
-    QCheckBox* scanAtStart;
-    QCheckBox* cleanAtStart;
+    QLabel*                     sidebarTypeLabel;
+    QLabel*                     stringComparisonTypeLabel;
+    QLabel*                     applicationStyleLabel;
+    QLabel*                     iconThemeLabel;
+    QLabel*                     minSimilarityBoundLabel;
 
-    QComboBox* sidebarType;
-    QComboBox* stringComparisonType;
-    QComboBox* applicationStyle;
-    QComboBox* iconTheme;
+    QCheckBox*                  showSplashCheck;
+    QCheckBox*                  showTrashDeleteDialogCheck;
+    QCheckBox*                  showPermanentDeleteDialogCheck;
+    QCheckBox*                  sidebarApplyDirectlyCheck;
+    QCheckBox*                  scrollItemToCenterCheck;
+    QCheckBox*                  showOnlyPersonTagsInPeopleSidebarCheck;
+    QCheckBox*                  scanAtStart;
+    QCheckBox*                  cleanAtStart;
 
-    QSpinBox*  minimumSimilarityBound;
+    QComboBox*                  sidebarType;
+    QComboBox*                  stringComparisonType;
+    QComboBox*                  applicationStyle;
+    QComboBox*                  iconTheme;
+
+    QSpinBox*                   minimumSimilarityBound;
+
+    QHash<int, QButtonGroup*> groupingButtons;
 };
 
 SetupMisc::SetupMisc(QWidget* const parent)
     : QScrollArea(parent),
       d(new Private)
 {
-    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    QWidget* const panel      = new QWidget(viewport());
-    QVBoxLayout* const layout = new QVBoxLayout(panel);
-    setWidget(panel);
+    d->tab = new QTabWidget(viewport());
+    setWidget(d->tab);
     setWidgetResizable(true);
+
+    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+
+    QWidget* const behaviourPanel = new QWidget(d->tab);
+    QVBoxLayout* const layout     = new QVBoxLayout(behaviourPanel);
 
     // --------------------------------------------------------
 
-    DHBox* const stringComparisonHbox = new DHBox(panel);
+    DHBox* const stringComparisonHbox = new DHBox(behaviourPanel);
     d->stringComparisonTypeLabel      = new QLabel(i18n("String comparison type:"), stringComparisonHbox);
     d->stringComparisonType           = new QComboBox(stringComparisonHbox);
     d->stringComparisonType->addItem(i18nc("method to compare strings", "Natural"), ApplicationSettings::Natural);
@@ -126,10 +141,10 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), panel);
-    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), panel);
-    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), panel);
-    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), panel);
+    d->showTrashDeleteDialogCheck     = new QCheckBox(i18n("Confirm when moving items to the &trash"), behaviourPanel);
+    d->showPermanentDeleteDialogCheck = new QCheckBox(i18n("Confirm when permanently deleting items"), behaviourPanel);
+    d->sidebarApplyDirectlyCheck      = new QCheckBox(i18n("Do not confirm when applying changes in the &right sidebar"), behaviourPanel);
+    d->scanAtStart                    = new QCheckBox(i18n("&Scan for new items at startup (makes startup slower)"), behaviourPanel);
     d->scanAtStart->setToolTip(i18n("Set this option to force digiKam to scan all collections for new items to\n"
                                     "register new elements in database. The scan is performed in the background through\n"
                                     "the progress manager available in the statusbar\n when digiKam main interface\n"
@@ -139,7 +154,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "a manual scan through the maintenance tool at the right moment."));
 
     // ---------------------------------------------------------
-    d->cleanAtStart                   = new QCheckBox(i18n("Remove obsolete core database objects (makes startup slower)"), panel);
+    d->cleanAtStart                   = new QCheckBox(i18n("Remove obsolete core database objects (makes startup slower)"), behaviourPanel);
     d->cleanAtStart->setToolTip(i18n("Set this option to force digiKam to clean up the core database from obsolete item entries.\n"
                                     "Entries are only deleted if the connected image/video/audio file was already removed, i.e.\n"
                                     "the database object wastes space.\n"
@@ -147,7 +162,7 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "For clean up routines for other databases, please use the maintenance."));
     // -- Application Behavior Options --------------------------------------------------------
 
-    QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), panel);
+    QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), behaviourPanel);
     QVBoxLayout* const gLayout5     = new QVBoxLayout();
 
     d->scrollItemToCenterCheck                = new QCheckBox(i18n("Scroll current item to center of thumbbar"), abOptionsGroup);
@@ -244,6 +259,77 @@ SetupMisc::SetupMisc(QWidget* const parent)
     layout->addWidget(abOptionsGroup);
     layout->addStretch();
 
+    // --------------------------------------------------------
+
+    d->tab->insertTab(Behaviour, behaviourPanel, i18nc("@title:tab", "Behaviour"));
+
+    // --------------------------------------------------------
+    // --------------------------------------------------------
+
+    QWidget* const groupingPanel = new QWidget(d->tab);
+
+    // --------------------------------------------------------
+
+    QGridLayout* const grid = new QGridLayout(groupingPanel);
+
+    QLabel* description = new QLabel(i18n("Perform the following oparations on all group members:"), groupingPanel);
+    description->setToolTip(i18n("When images are grouped the following operations<br/>"
+                                 "are performed only on the displayed item (No)<br/>"
+                                 "or on all the hidden items in the group as well (Yes).<br/>"
+                                 "If Ask is selected, there will be a prompt every<br/>"
+                                 "time this operation is executed."));
+
+    QLabel* noLabel  = new QLabel(i18n("No"), groupingPanel);
+    QLabel* yesLabel = new QLabel(i18n("Yes"), groupingPanel);
+    QLabel* askLabel = new QLabel(i18n("Ask"), groupingPanel);
+
+    QHash<int, QLabel*> labels;
+    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    {
+        labels.insert(i, new QLabel(ApplicationSettings::operationTypeTitle(
+                    (ApplicationSettings::OperationType)i), groupingPanel));
+        QString explanation = ApplicationSettings::operationTypeExplanation(
+                    (ApplicationSettings::OperationType)i);
+        if (!explanation.isEmpty())
+        {
+            labels.value(i)->setToolTip(explanation);
+        }
+        d->groupingButtons.insert(i, new QButtonGroup(groupingPanel));
+        d->groupingButtons.value(i)->addButton(new QRadioButton(groupingPanel), 0);
+        d->groupingButtons.value(i)->addButton(new QRadioButton(groupingPanel), 1);
+        d->groupingButtons.value(i)->addButton(new QRadioButton(groupingPanel), 2);
+    }
+
+    // --------------------------------------------------------
+
+    grid->addWidget(description,                             0, 0, 1, 4);
+
+    grid->addWidget(noLabel,                                 1, 1, 1, 1);
+    grid->addWidget(yesLabel,                                1, 2, 1, 1);
+    grid->addWidget(askLabel,                                1, 3, 1, 1);
+
+    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    {
+        grid->addWidget(labels.value(i),                        i+2, 0, 1, 1);
+        grid->addWidget(d->groupingButtons.value(i)->button(0), i+2, 1, 1, 1);
+        grid->addWidget(d->groupingButtons.value(i)->button(1), i+2, 2, 1, 1);
+        grid->addWidget(d->groupingButtons.value(i)->button(2), i+2, 3, 1, 1);
+    }
+
+    grid->setContentsMargins(spacing, spacing, spacing, spacing);
+    grid->setSpacing(spacing);
+    grid->setColumnStretch(0, 10);
+    grid->setColumnMinimumWidth(1, 30);
+    grid->setColumnMinimumWidth(2, 30);
+    grid->setColumnMinimumWidth(3, 30);
+    grid->setRowStretch(20, 10);
+
+    // --------------------------------------------------------
+
+    d->tab->insertTab(Grouping, groupingPanel, i18nc("@title:tab", "Grouping"));
+
+    // --------------------------------------------------------
+
     readSettings();
     adjustSize();
 
@@ -271,6 +357,13 @@ void SetupMisc::applySettings()
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
     settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
 
+    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    {
+        settings->setGroupingOperateOnAll(
+                (ApplicationSettings::OperationType)i,
+                (ApplicationSettings::ApplyToEntireGroup)d->groupingButtons.value(i)->checkedId());
+    }
+
 #ifdef HAVE_APPSTYLE_SUPPORT
     settings->setApplicationStyle(d->applicationStyle->currentText());
 #endif
@@ -295,6 +388,11 @@ void SetupMisc::readSettings()
     d->showOnlyPersonTagsInPeopleSidebarCheck->setChecked(settings->showOnlyPersonTagsInPeopleSidebar());
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
+
+    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    {
+        d->groupingButtons.value(i)->button((int)settings->getGroupingOperateOnAll((ApplicationSettings::OperationType)i))->setChecked(true);
+    }
 
 #ifdef HAVE_APPSTYLE_SUPPORT
     d->applicationStyle->setCurrentIndex(d->applicationStyle->findText(settings->getApplicationStyle(),

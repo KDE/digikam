@@ -11,6 +11,7 @@
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at gmail dot com>
  * Copyright (C) 2013      by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2014      by Mohamed Anwer <m dot anwer at gmx dot com>
+ * Copyright (C) 2017      by Simon Frei <freisim93 at gmail dot com>
  *
  * This program is free software you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -329,120 +330,7 @@ void DigikamImageView::activated(const ImageInfo& info, Qt::KeyboardModifiers mo
 
 void DigikamImageView::showContextMenuOnInfo(QContextMenuEvent* event, const ImageInfo& info)
 {
-    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    QList<qlonglong> selectedImageIDs;
-
-    foreach (const ImageInfo& info, selectedInfos)
-    {
-        selectedImageIDs << info.id();
-    }
-
-    // Temporary actions --------------------------------------
-
-    QAction* const viewAction = new QAction(QIcon::fromTheme(QLatin1String("view-preview")), i18nc("View the selected image", "Preview"), this);
-    viewAction->setEnabled(selectedImageIDs.count() == 1);
-
-    // --------------------------------------------------------
-
-    QMenu popmenu(this);
-    ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setImageFilterModel(imageFilterModel());
-
-    cmhelper.addAction(QLatin1String("full_screen"));
-    cmhelper.addAction(QLatin1String("options_show_menubar"));
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction(QLatin1String("move_selection_to_album"));
-    cmhelper.addAction(viewAction);
-    cmhelper.addAction(QLatin1String("image_edit"));
-    cmhelper.addServicesMenu(selectedUrls());
-    cmhelper.addGotoMenu(selectedImageIDs);
-    cmhelper.addAction(QLatin1String("image_rotate"));
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction(QLatin1String("image_find_similar"));
-    cmhelper.addStandardActionLightTable();
-    cmhelper.addQueueManagerMenu();
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addAction(QLatin1String("image_rename"));
-    cmhelper.addAction(QLatin1String("cut_album_selection"));
-    cmhelper.addAction(QLatin1String("copy_album_selection"));
-    cmhelper.addAction(QLatin1String("paste_album_selection"));
-    cmhelper.addStandardActionItemDelete(this, SLOT(deleteSelected()), selectedImageIDs.count());
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addStandardActionThumbnail(selectedImageIDs, currentAlbum());
-    // --------------------------------------------------------
-    cmhelper.addAssignTagsMenu(selectedImageIDs);
-    cmhelper.addRemoveTagsMenu(selectedImageIDs);
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addLabelsAction();
-
-    if (!d->faceMode)
-    {
-        cmhelper.addGroupMenu(selectedImageIDs);
-    }
-
-    // special action handling --------------------------------
-
-    connect(&cmhelper, SIGNAL(signalAssignTag(int)),
-            this, SLOT(assignTagToSelected(int)));
-
-    connect(&cmhelper, SIGNAL(signalPopupTagsView()),
-            this, SIGNAL(signalPopupTagsView()));
-
-    connect(&cmhelper, SIGNAL(signalRemoveTag(int)),
-            this, SLOT(removeTagFromSelected(int)));
-
-    connect(&cmhelper, SIGNAL(signalGotoTag(int)),
-            this, SIGNAL(gotoTagAndImageRequested(int)));
-
-    connect(&cmhelper, SIGNAL(signalGotoAlbum(ImageInfo)),
-            this, SIGNAL(gotoAlbumAndImageRequested(ImageInfo)));
-
-    connect(&cmhelper, SIGNAL(signalGotoDate(ImageInfo)),
-            this, SIGNAL(gotoDateAndImageRequested(ImageInfo)));
-
-    connect(&cmhelper, SIGNAL(signalAssignPickLabel(int)),
-            this, SLOT(assignPickLabelToSelected(int)));
-
-    connect(&cmhelper, SIGNAL(signalAssignColorLabel(int)),
-            this, SLOT(assignColorLabelToSelected(int)));
-
-    connect(&cmhelper, SIGNAL(signalAssignRating(int)),
-            this, SLOT(assignRatingToSelected(int)));
-
-    connect(&cmhelper, SIGNAL(signalSetThumbnail(ImageInfo)),
-            this, SLOT(setAsAlbumThumbnail(ImageInfo)));
-
-    connect(&cmhelper, SIGNAL(signalAddToExistingQueue(int)),
-            this, SLOT(insertSelectedToExistingQueue(int)));
-
-    connect(&cmhelper, SIGNAL(signalCreateGroup()),
-            this, SLOT(createGroupFromSelection()));
-
-    connect(&cmhelper, SIGNAL(signalCreateGroupByTime()),
-            this, SLOT(createGroupByTimeFromSelection()));
-
-    connect(&cmhelper, SIGNAL(signalCreateGroupByFilename()),
-            this, SLOT(createGroupByFilenameFromSelection()));
-
-    connect(&cmhelper, SIGNAL(signalUngroup()),
-            this, SLOT(ungroupSelected()));
-
-    connect(&cmhelper, SIGNAL(signalRemoveFromGroup()),
-            this, SLOT(removeSelectedFromGroup()));
-
-    // --------------------------------------------------------
-
-    QAction* const choice = cmhelper.exec(event->globalPos());
-
-    if (choice && (choice == viewAction))
-    {
-        emit previewRequested(info);
-    }
+    emit signalShowContextMenuOnInfo(event, info, QList<QAction*>(), imageFilterModel());
 }
 
 void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMenuEvent* event)
@@ -484,27 +372,7 @@ void DigikamImageView::showGroupContextMenu(const QModelIndex& index, QContextMe
 
 void DigikamImageView::showContextMenu(QContextMenuEvent* event)
 {
-    Album* const album = currentAlbum();
-
-    if (!album          ||
-        album->isRoot() ||
-        (album->type() != Album::PHYSICAL && album->type() != Album::TAG) )
-    {
-        return;
-    }
-
-    QMenu popmenu(this);
-    ContextMenuHelper cmhelper(&popmenu);
-    cmhelper.setImageFilterModel(imageFilterModel());
-
-    cmhelper.addAction(QLatin1String("full_screen"));
-    cmhelper.addAction(QLatin1String("options_show_menubar"));
-    cmhelper.addSeparator();
-    // --------------------------------------------------------
-    cmhelper.addStandardActionPaste(this, SLOT(paste()));
-    // --------------------------------------------------------
-
-    cmhelper.exec(event->globalPos());
+    emit signalShowContextMenu(event);
 }
 
 void DigikamImageView::openFile(const ImageInfo& info)
@@ -512,39 +380,9 @@ void DigikamImageView::openFile(const ImageInfo& info)
     d->utilities->openInfos(info, imageInfos(), currentAlbum());
 }
 
-void DigikamImageView::insertSelectedToCurrentQueue()
-{
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), false);
-    }
-}
-
-void DigikamImageView::insertSelectedToNewQueue()
-{
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertToQueueManager(imageInfoList, imageInfoList.first(), true);
-    }
-}
-
-void DigikamImageView::insertSelectedToExistingQueue(int queueid)
-{
-    ImageInfoList imageInfoList = selectedImageInfos();
-
-    if (!imageInfoList.isEmpty())
-    {
-        d->utilities->insertSilentToQueueManager(imageInfoList, imageInfoList.first(), queueid);
-    }
-}
-
 void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    ImageInfoList imageInfoList = selectedImageInfos();
+    ImageInfoList imageInfoList = selectedImageInfos(true);
 
     if (d->utilities->deleteImages(imageInfoList, deleteMode))
     {
@@ -554,25 +392,10 @@ void DigikamImageView::deleteSelected(const ImageViewUtilities::DeleteMode delet
 
 void DigikamImageView::deleteSelectedDirectly(const ImageViewUtilities::DeleteMode deleteMode)
 {
-    ImageInfoList imageInfoList = selectedImageInfos();
+    ImageInfoList imageInfoList = selectedImageInfos(true);
 
     d->utilities->deleteImagesDirectly(imageInfoList, deleteMode);
     awayFromSelection();
-}
-
-void DigikamImageView::assignTagToSelected(int tagID)
-{
-    FileActionMngr::instance()->assignTags(selectedImageInfos(), QList<int>() << tagID);
-}
-
-void DigikamImageView::removeTagFromSelected(int tagID)
-{
-    FileActionMngr::instance()->removeTags(selectedImageInfos(), QList<int>() << tagID);
-}
-
-void DigikamImageView::assignPickLabelToSelected(int pickId)
-{
-    FileActionMngr::instance()->assignPickLabel(selectedImageInfos(), pickId);
 }
 
 void DigikamImageView::assignPickLabel(const QModelIndex& index, int pickId)
@@ -580,34 +403,14 @@ void DigikamImageView::assignPickLabel(const QModelIndex& index, int pickId)
     FileActionMngr::instance()->assignPickLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), pickId);
 }
 
-void DigikamImageView::assignColorLabelToSelected(int colorId)
-{
-    FileActionMngr::instance()->assignColorLabel(selectedImageInfos(), colorId);
-}
-
 void DigikamImageView::assignColorLabel(const QModelIndex& index, int colorId)
 {
     FileActionMngr::instance()->assignColorLabel(QList<ImageInfo>() << imageFilterModel()->imageInfo(index), colorId);
 }
 
-void DigikamImageView::assignRatingToSelected(int rating)
-{
-    FileActionMngr::instance()->assignRating(selectedImageInfos(), rating);
-}
-
 void DigikamImageView::assignRating(const QList<QModelIndex>& indexes, int rating)
 {
     FileActionMngr::instance()->assignRating(imageFilterModel()->imageInfos(indexes), rating);
-}
-
-void DigikamImageView::setAsAlbumThumbnail(const ImageInfo& setAsThumbnail)
-{
-    d->utilities->setAsAlbumThumbnail(currentAlbum(), setAsThumbnail);
-}
-
-void DigikamImageView::createNewAlbumForSelected()
-{
-    d->utilities->createNewAlbumForInfos(selectedImageInfos(), currentAlbum());
 }
 
 void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
@@ -624,38 +427,10 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
     imageAlbumModel()->ensureHasGroupedImages(info);
 }
 
-void DigikamImageView::createGroupFromSelection()
-{
-    QList<ImageInfo> selectedInfos = selectedImageInfosCurrentFirst();
-    ImageInfo groupLeader          = selectedInfos.takeFirst();
-    FileActionMngr::instance()->addToGroup(groupLeader, selectedInfos);
-}
-
-void DigikamImageView::createGroupByTimeFromSelection()
-{
-    const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    d->utilities->createGroupByTimeFromInfoList(selectedInfos);
-}
-
-void DigikamImageView::createGroupByFilenameFromSelection()
-{
-    const QList<ImageInfo> selectedInfos = selectedImageInfos();
-    d->utilities->createGroupByFilenameFromInfoList(selectedInfos);
-}
-
-void DigikamImageView::ungroupSelected()
-{
-    FileActionMngr::instance()->ungroup(selectedImageInfos());
-}
-
-void DigikamImageView::removeSelectedFromGroup()
-{
-    FileActionMngr::instance()->removeFromGroup(selectedImageInfos());
-}
-
 void DigikamImageView::rename()
 {
-    QList<QUrl>   urls = selectedUrls();
+    bool grouping = needGroupResolving(ApplicationSettings::Rename);
+    QList<QUrl>  urls = selectedUrls(grouping);
     NewNamesList newNamesList;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;
@@ -667,7 +442,7 @@ void DigikamImageView::rename()
     {
         newNamesList = dlg->newNames();
 
-        QUrl nextUrl = nextInOrder(selectedImageInfos().last(),1).fileUrl();
+        QUrl nextUrl = nextInOrder(selectedImageInfos(grouping).last(),1).fileUrl();
         setCurrentUrl(nextUrl);
     }
 

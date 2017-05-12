@@ -23,6 +23,10 @@
 
 #include "metadatasettingscontainer.h"
 
+// Qt includes
+
+#include <QStringList>
+
 // KDE includes
 
 #include <kconfiggroup.h>
@@ -53,6 +57,7 @@ MetadataSettingsContainer::MetadataSettingsContainer()
     rescanImageIfModified = false;
     rotationBehavior      = RotatingFlags | RotateByLosslessRotation;
     useLazySync           = false;
+    sidecarExtensions     = QStringList();
 }
 
 void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
@@ -79,6 +84,8 @@ void MetadataSettingsContainer::readFromConfig(KConfigGroup& group)
     useLazySync           = group.readEntry("Use Lazy Synchronization",    false);
 
     rotationBehavior      = NoRotation;
+
+    sidecarExtensions     = group.readEntry("Custom Sidecar Extensions",   QStringList());
 
     if (group.readEntry("Rotate By Internal Flag", true))
     {
@@ -127,6 +134,8 @@ void MetadataSettingsContainer::writeToConfig(KConfigGroup& group) const
     group.writeEntry("Rotate Contents Lossless",    bool(rotationBehavior & RotateByLosslessRotation));
     group.writeEntry("Rotate Contents Lossy",       bool(rotationBehavior & RotateByLossyRotation));
     group.writeEntry("Use Lazy Synchronization",    useLazySync);
+
+    group.writeEntry("Custom Sidecar Extensions",   sidecarExtensions);
 }
 
 }  // namespace Digikam

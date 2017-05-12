@@ -2584,7 +2584,7 @@ void DigikamApp::slotMaintenanceDone()
 void DigikamApp::slotExpoBlending()
 {
     ExpoBlendingManager::instance()->checkBinaries();
-    ExpoBlendingManager::instance()->setItemsList(view()->selectedUrls());
+    ExpoBlendingManager::instance()->setItemsList(view()->selectedUrls(ApplicationSettings::Tools));
     ExpoBlendingManager::instance()->run();
 }
 
@@ -2592,7 +2592,7 @@ void DigikamApp::slotPanorama()
 {
 #ifdef HAVE_PANORAMA
     PanoManager::instance()->checkBinaries();
-    PanoManager::instance()->setItemsList(view()->selectedUrls());
+    PanoManager::instance()->setItemsList(view()->selectedUrls(ApplicationSettings::Tools));
     PanoManager::instance()->run();
 #endif
 }
@@ -2600,14 +2600,14 @@ void DigikamApp::slotPanorama()
 void DigikamApp::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
-    HTMLWizard w(this, new DBInfoIface(this));
+    HTMLWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
     w.exec();
 #endif
 }
 
 void DigikamApp::slotCalendar()
 {
-    CalWizard w(view()->selectedUrls(), this);
+    CalWizard w(view()->selectedUrls(ApplicationSettings::Tools), this);
     w.exec();
 }
 
@@ -3231,7 +3231,7 @@ QString DigikamApp::scannerTargetPlace()
 void DigikamApp::slotEditGeolocation()
 {
 #ifdef HAVE_MARBLE
-    ImageInfoList infos = d->view->selectedInfoList();
+    ImageInfoList infos = d->view->selectedInfoList(ApplicationSettings::Metadata);
 
     if (infos.isEmpty())
         return;
@@ -3257,7 +3257,7 @@ void DigikamApp::slotEditGeolocation()
 
 void DigikamApp::slotEditMetadata()
 {
-    QList<QUrl> urls = view()->selectedUrls();
+    QList<QUrl> urls = view()->selectedUrls(ApplicationSettings::Metadata);
 
     if (urls.isEmpty())
         return;

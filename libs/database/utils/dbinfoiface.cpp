@@ -23,19 +23,20 @@
 
 // Local includes
 
-#include "dbinfoiface.h"
+#include "albumselecttabs.h"
+#include "applicationsettings.h"
 #include "album.h"
 #include "albummanager.h"
-#include "imageinfo.h"
-#include "imagesortsettings.h"
-#include "coredbnamefilter.h"
 #include "coredb.h"
-#include "applicationsettings.h"
+#include "coredbnamefilter.h"
+#include "dbinfoiface.h"
 #include "digikamapp.h"
+#include "digikam_debug.h"
 #include "digikamview.h"
-#include "albumselecttabs.h"
-#include "imageposition.h"
 #include "imagecopyright.h"
+#include "imageinfo.h"
+#include "imageposition.h"
+#include "imagesortsettings.h"
 
 namespace Digikam
 {
@@ -46,14 +47,20 @@ public:
 
     Private()
       : albumManager(AlbumManager::instance()),
-        albumChooser(0)
+        albumChooser(0),
+        withGroupedIsSet(false),
+        withGrouped(false)
     {
     }
 
-    AlbumManager*    albumManager;
-    AlbumSelectTabs* albumChooser;
+    AlbumManager*                      albumManager;
+    AlbumSelectTabs*                   albumChooser;
 
-    QList<QUrl>      itemUrls;
+    QList<QUrl>                        itemUrls;
+
+    ApplicationSettings::OperationType operationType;
+    bool                               withGroupedIsSet;
+    bool                               withGrouped;
 
 public:
 
@@ -120,55 +127,59 @@ public:
         return urlList;
     }
 
-    QList<QUrl> albumItems(Album* const album) const
+    /** Remove grouped images if user chose/chooses to.
+     */
+    QList<QUrl> resolveGroupsFromAlbums(QList<QUrl> urlList)
     {
-        QList<QUrl> imageList;
-
-        if (album)
+        if (!(withGroupedIsSet && withGrouped))
         {
-            switch (album->type())
+            foreach(const QUrl& url, urlList)
             {
-                case Album::PHYSICAL:
+                ImageInfo info = ImageInfo::fromUrl(url);
+                if (info.hasGroupedImages())
                 {
-                    PAlbum* const p = dynamic_cast<PAlbum*>(album);
-
-                    if (p)
+                    if (!withGroupedIsSet)
                     {
-                        imageList = imagesFromPAlbum(p);
+                        withGroupedIsSet = true;
+                        withGrouped = ApplicationSettings::instance()->askGroupingOperateOnAll(operationType);
+                        if (withGrouped)
+                        {
+                            break;
+                        }
                     }
 
-                    break;
-                }
-
-                case Album::TAG:
-                {
-                    TAlbum* const p = dynamic_cast<TAlbum*>(album);
-
-                    if (p)
+                    foreach(const ImageInfo& i, info.groupedImages())
                     {
-                        imageList = imagesFromTAlbum(p);
+                        urlList.removeOne(i.fileUrl());
                     }
-
-                    break;
-                }
-
-                default:
-                {
-                    // Not supported.
-                    break;
                 }
             }
         }
 
-        return imageList;
+        return urlList;
+    }
+
+    bool includeGroupedFromSelected()
+    {
+        if (withGroupedIsSet)
+        {
+            return withGrouped;
+        }
+
+        withGroupedIsSet = true;
+        withGrouped = DigikamApp::instance()->view()->needGroupResolving(operationType, true);
+
+        return withGrouped;
     }
 };
 
-DBInfoIface::DBInfoIface(QObject* const parent, const QList<QUrl>& lst)
+DBInfoIface::DBInfoIface(QObject* const parent, const QList<QUrl>& lst,
+                         const ApplicationSettings::OperationType type)
     : DInfoInterface(parent),
       d(new Private)
 {
-    d->itemUrls = lst;
+    d->itemUrls      = lst;
+    d->operationType = type;
 }
 
 DBInfoIface::~DBInfoIface()
@@ -189,10 +200,10 @@ QList<QUrl> DBInfoIface::currentAlbumItems() const
     }
 
     Album* const currAlbum = d->albumManager->currentAlbums().first();
-    QList<QUrl> imageList  = d->albumItems(currAlbum);
+    QList<QUrl> imageList  = d->resolveGroupsFromAlbums(albumItems(currAlbum));
 
     if (imageList.isEmpty())
-        imageList = DigikamApp::instance()->view()->allUrls();
+        imageList = DigikamApp::instance()->view()->allUrls(d->includeGroupedFromSelected());
 
     return imageList;
 }
@@ -204,7 +215,7 @@ QList<QUrl> DBInfoIface::currentSelectedItems() const
         return d->itemUrls;
     }
 
-    return DigikamApp::instance()->view()->selectedUrls();
+    return DigikamApp::instance()->view()->selectedUrls(d->includeGroupedFromSelected());
 }
 
 QList<QUrl> DBInfoIface::allAlbumItems() const
@@ -306,21 +317,66 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
     return map;
 }
 
+QList<QUrl> DBInfoIface::albumItems(Album* const album) const
+{
+    if (!album)
+    {
+        return QList<QUrl>();
+    }
+
+    QList<QUrl> imageList;
+
+    switch (album->type())
+    {
+        case Album::PHYSICAL:
+        {
+            PAlbum* const p = dynamic_cast<PAlbum*>(album);
+
+            if (p)
+            {
+                imageList = d->imagesFromPAlbum(p);
+            }
+
+            break;
+        }
+
+        case Album::TAG:
+        {
+            TAlbum* const p = dynamic_cast<TAlbum*>(album);
+
+            if (p)
+            {
+                imageList = d->imagesFromTAlbum(p);
+            }
+
+            break;
+        }
+
+        default:
+        {
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown album type";
+            break;
+        }
+    }
+
+    return d->resolveGroupsFromAlbums(imageList);
+}
+
+QList<QUrl> DBInfoIface::albumItems(int id) const
+{
+    return albumItems(d->albumManager->findAlbum(id));
+}
+
 QList<QUrl> DBInfoIface::albumsItems(const DAlbumIDs& lst) const
 {
     QList<QUrl> imageList;
 
     foreach(int gid, lst)
     {
-        Album* const a = d->albumManager->findAlbum(gid);
-
-        if (a)
-        {
-            imageList << d->albumItems(a);
-        }
+        imageList << albumItems(gid);
     }
 
-    return imageList;
+    return d->resolveGroupsFromAlbums(imageList);
 }
 
 QWidget* DBInfoIface::albumChooser(QWidget* const parent) const

@@ -799,7 +799,7 @@ bool DImagesList::checkSelection()
 
     QList<QUrl> images = d->iface->currentSelectedItems();
 
-   return (!images.isEmpty());
+    return (!images.isEmpty());
 }
 
 void DImagesList::slotAddImages(const QList<QUrl>& list)
