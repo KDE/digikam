@@ -1,23 +1,15 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
- * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * This file is a part of digiKam
  *
- * @date    2012-01-03
- * @brief   <a href="http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms">Face Recognition based on Local Binary Patterns Histograms</a>
+ * Date        : 2012-01-03
+ * Description : http://docs.opencv.org/modules/contrib/doc/facerec/facerec_tutorial.html#local-binary-patterns-histograms
  *          Ahonen T, Hadid A. and Pietikäinen M. "Face description with local binary
  *          patterns: Application to face recognition." IEEE Transactions on Pattern
  *          Analysis and Machine Intelligence, 28(12):2037-2041.
  *
- * @section DESCRIPTION
- *
- * @author Copyright (C) 2012-2013 by Marcel Wiesweg
- *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
- * @author Copyright (c) 2011-2012 Philipp Wagner
- *         <a href="mailto:bytefish at gmx dot de">bytefish at gmx dot de</a>
- *
- * @section LICENSE
+ * Copyright (C) 2012-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2011-2012 Philipp Wagner <bytefish at gmx dot de>
  *
  * Released to public domain under terms of the BSD Simplified license.
  *
@@ -32,7 +24,7 @@
  *     may be used to endorse or promote products derived from this software
  *     without specific prior written permission.
  *
- *   See <http://www.opensource.org/licenses/bsd-license>
+ *   See http://www.opensource.org/licenses/bsd-license
  *
  * ============================================================ */
 
