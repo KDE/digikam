@@ -1,14 +1,13 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-06-16
- * @brief  Functions to convert between OpenCV's cv::Mat and Qt's QImage and QPixmap.
- *         https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap
+ * Date        : 2013-06-16
+ * Description : Functions to convert between OpenCV's cv::Mat and Qt's QImage and QPixmap.
+ *               https://asmaloney.com/2013/11/code/converting-between-cvmat-and-qimage-or-qpixmap
  *
- * @author Copyright (C) 2013 by Andy Maloney <asmaloney@gmail.com>
+ * Copyright (C) 2013 by Andy Maloney <asmaloney at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +17,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */

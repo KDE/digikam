@@ -1,19 +1,17 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-06-16
- * @brief  Face Recognition CLI tool
- *         NOTE: This tool is able to use ORL database which are
- *         freely available set of images to test face recognition.
- *         It contain 10 photos of 20 different peoples from slightly
- *         different angles. See here for details:
- *         http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
+ * Date        : 2010-06-16
+ * Description : Face Recognition CLI tool
+ *               NOTE: This tool is able to use ORL database which are
+ *               freely available set of images to test face recognition.
+ *               It contain 10 photos of 20 different peoples from slightly
+ *               different angles. See here for details:
+ *               http://www.cl.cam.ac.uk/research/dtg/attarchive/facedatabase.html
  *
- * @author Copyright (C) 2010 by Aditya Bhatt
- *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,7 +21,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */

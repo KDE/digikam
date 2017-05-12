@@ -1,14 +1,12 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-06-16
- * @brief  Face alignment CLI tool
+ * Date        : 2010-06-16
+ * Description : Face alignment CLI tool
  *
- * @author Copyright (C) 2010 by Aditya Bhatt
- *         <a href="mailto:adityabhatt1991 at gmail dot com">adityabhatt1991 at gmail dot com</a>
+ * Copyright (C) 2010 by Aditya Bhatt <adityabhatt1991 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -18,7 +16,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */

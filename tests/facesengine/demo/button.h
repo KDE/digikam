@@ -1,15 +1,13 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-06-29
- * @brief  Pressable Button class using QGraphicsItem
+ * Date        : 2010-06-29
+ * Description : Pressable Button class using QGraphicsItem
  *
- * @author Copyright (C) 2010      by Frederico Duarte
- * @author Copyright (C) 2010-2017 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * Copyright (C) 2010      by Frederico Duarte
+ * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -19,7 +17,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
