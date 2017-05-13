@@ -202,4 +202,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* STATESAVINGOBJECT_H */
+#endif // STATESAVINGOBJECT_H

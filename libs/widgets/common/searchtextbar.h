@@ -201,6 +201,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* SEARCH_TEXT_BAR_H */
+#endif // SEARCH_TEXT_BAR_H

@@ -156,6 +156,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SQUEEZED_COMBOBOX_H

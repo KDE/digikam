@@ -59,6 +59,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* BUTTONICONDISABLER_H */
+#endif // BUTTONICONDISABLER_H

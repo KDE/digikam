@@ -81,6 +81,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* MODELCOMPLETER_H */
+#endif // MODELCOMPLETER_H
