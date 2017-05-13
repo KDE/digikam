@@ -1,18 +1,14 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2006-09-13
- * @brief  Raw Decoder settings widgets
+ * date        : 2006-09-13
+ * Description : Raw Decoder settings widgets
  *
- * @author Copyright (C) 2006-2017 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2011 by Marcel Wiesweg
- *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
- * @author Copyright (C) 2007-2008 by Guillaume Castagnino
- *         <a href="mailto:casta at xwing dot info">casta at xwing dot info</a>
+ * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2007-2008 by Guillaume Castagnino <casta at xwing dot info>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
