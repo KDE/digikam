@@ -1,16 +1,19 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2006-09-15
- * @brief  Exiv2 library interface
+ * Date        : 2006-09-15
+ * Description : Exiv2 library interface
+ *               Exiv2: http://www.exiv2.org
+ *               Exif : http://www.exif.org/Exif2-2.PDF
+ *               Iptc : http://www.iptc.org/std/IIM/4.1/specification/IIMV4.1.pdf
+ *               Xmp  : http://www.adobe.com/devnet/xmp/pdfs/xmp_specification.pdf
+ *                      http://www.iptc.org/std/Iptc4xmpCore/1.0/specification/Iptc4xmpCore_1.0-spec-XMPSchema_8.pdf
+ *               Paper: http://www.metadataworkinggroup.com/pdf/mwg_guidance.pdf
  *
- * @author Copyright (C) 2006-2017 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
- * @author Copyright (C) 2006-2013 by Marcel Wiesweg
- *         <a href="mailto:marcel dot wiesweg at gmx dot de">marcel dot wiesweg at gmx dot de</a>
+ * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2006-2013 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +23,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
