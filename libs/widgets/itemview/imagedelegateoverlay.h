@@ -337,4 +337,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* IMAGEDELEGATEOVERLAY_H */
+#endif // IMAGEDELEGATEOVERLAY_H

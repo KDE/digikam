@@ -78,4 +78,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ITEMVIEWTOOLTIP_H */
+#endif // ITEMVIEWTOOLTIP_H

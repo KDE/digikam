@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DLOGO_ACTION_H */
+#endif // DLOGO_ACTION_H

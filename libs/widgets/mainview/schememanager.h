@@ -466,6 +466,6 @@ private:
     QExplicitlySharedDataPointer<SchemeManagerPrivate> d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SCHEME_MANAGER_H

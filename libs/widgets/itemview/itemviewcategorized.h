@@ -201,4 +201,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ITEMVIEWCATEGORIZED_H */
+#endif // ITEMVIEWCATEGORIZED_H

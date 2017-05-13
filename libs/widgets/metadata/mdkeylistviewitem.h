@@ -61,6 +61,6 @@ private:
     QString m_decryptedKey;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* MDKEYLISTVIEWITEM_H */
+#endif // MDKEYLISTVIEWITEM_H

@@ -126,4 +126,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::RegionFrameItem::Flags)
 
-#endif /* REGION_FRAME_ITEM_H */
+#endif // REGION_FRAME_ITEM_H

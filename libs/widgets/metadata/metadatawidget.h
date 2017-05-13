@@ -122,6 +122,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* METADATAWIDGET_H */
+#endif // METADATAWIDGET_H

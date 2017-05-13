@@ -63,6 +63,6 @@ private:
     QStringList m_keysFilter;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* MAKERNOTEWIDGET_H */
+#endif // MAKERNOTEWIDGET_H

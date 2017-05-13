@@ -56,6 +56,6 @@ private:
     QString m_key;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* METADATALISTVIEWITEM_H */
+#endif // METADATALISTVIEWITEM_H

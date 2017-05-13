@@ -131,8 +131,8 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::MetadataSelectorView::ControlElements)
 
-#endif /* METADATA_SELECTOR_H */
+#endif // METADATA_SELECTOR_H

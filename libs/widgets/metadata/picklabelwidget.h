@@ -140,7 +140,7 @@ Q_SIGNALS:
     void signalPickLabelChanged(int);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(QList<Digikam::PickLabel>)
 

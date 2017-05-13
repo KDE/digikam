@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DCURSOR_TRACKER_H */
+#endif // DCURSOR_TRACKER_H

@@ -164,6 +164,6 @@ private:
     static QListWidget* createWidgetList(const QStringList& items);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif  // DMESSAGEBOX_H

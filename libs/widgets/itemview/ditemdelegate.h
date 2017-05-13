@@ -95,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* IMAGEDELEGATE_H */
+#endif // IMAGEDELEGATE_H

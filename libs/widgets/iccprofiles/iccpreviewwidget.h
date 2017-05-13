@@ -62,4 +62,4 @@ private :
 
 } // namespace Digikam
 
-#endif /* ICCPREVIEWWIDGET_H */
+#endif // ICCPREVIEWWIDGET_H

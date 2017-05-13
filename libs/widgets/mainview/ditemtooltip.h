@@ -100,6 +100,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DITEMTOOLTIP_H */
+#endif // DITEMTOOLTIP_H

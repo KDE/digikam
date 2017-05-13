@@ -147,4 +147,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ITEMVIEWIMAGEDELEGATE_H */
+#endif // ITEMVIEWIMAGEDELEGATE_H

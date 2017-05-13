@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* CIETONGUEWIDGET_H */
+#endif // CIETONGUEWIDGET_H

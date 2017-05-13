@@ -179,6 +179,6 @@ private:
     Private *const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DCATEGORY_DRAWER_H

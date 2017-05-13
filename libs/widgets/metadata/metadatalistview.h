@@ -83,6 +83,6 @@ private:
     MetadataWidget* m_parent;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // METADATALISTVIEW_H

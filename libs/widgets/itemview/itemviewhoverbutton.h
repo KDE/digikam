@@ -84,4 +84,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* ITEMVIEWHOVERBUTTON_H */
+#endif // ITEMVIEWHOVERBUTTON_H

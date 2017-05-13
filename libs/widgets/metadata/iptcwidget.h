@@ -62,6 +62,6 @@ private:
     QStringList m_keysFilter;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* IPTCWIDGET_H */
+#endif // IPTCWIDGET_H

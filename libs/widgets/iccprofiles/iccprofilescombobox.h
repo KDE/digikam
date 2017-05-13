@@ -142,4 +142,4 @@ protected:
 
 } // namespace Digikam
 
-#endif /* ICCPROFILESCOMBOBOX_H */
+#endif // ICCPROFILESCOMBOBOX_H

@@ -149,6 +149,6 @@ Q_SIGNALS:
     void signalRatingChanged(int);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // RATINGWIDGET_H

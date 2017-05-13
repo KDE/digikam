@@ -141,7 +141,7 @@ Q_SIGNALS:
     void signalColorLabelChanged(int);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(QList<Digikam::ColorLabel>)
 

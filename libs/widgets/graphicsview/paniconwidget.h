@@ -185,4 +185,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* PANICONWIDGET_H */
+#endif // PANICONWIDGET_H

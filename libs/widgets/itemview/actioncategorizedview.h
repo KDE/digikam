@@ -62,6 +62,6 @@ protected:
     bool                m_autoScroll;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* ACTIONCATEGORIZEDVIEW_H */
+#endif // ACTIONCATEGORIZEDVIEW_H

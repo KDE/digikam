@@ -137,4 +137,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* THUMBBARDOCK_H_ */
+#endif // THUMBBARDOCK_H_

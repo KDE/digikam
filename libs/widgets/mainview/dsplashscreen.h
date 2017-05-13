@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SPLASHSCREEN_H
+#endif // DSPLASHSCREEN_H

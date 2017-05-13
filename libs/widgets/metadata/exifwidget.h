@@ -66,6 +66,6 @@ private:
     QStringList m_keysFilter;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* EXIFWIDGET_H */
+#endif // EXIFWIDGET_H

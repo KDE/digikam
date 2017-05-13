@@ -81,6 +81,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* FILESAVEOPTIONSBOX_H */
+#endif // FILESAVEOPTIONSBOX_H
