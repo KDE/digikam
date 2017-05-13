@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DIO_P_H
-#define DIO_P_H
+#ifndef _DIGIKAM_IO_P_H_
+#define _DIGIKAM_IO_P_H_
 
 // Local includes
 
@@ -94,7 +94,7 @@ private:
     void process(const QList<QUrl>&);
 };
 
-// ------------------------
+// -----------------------------------------------------------------------------------------
 
 class GroupedImagesFinder
 {
@@ -126,4 +126,4 @@ enum Operation
 
 } // namespace Digikam
 
-#endif /* DIO_H */
+#endif // _DIGIKAM_IO_H_

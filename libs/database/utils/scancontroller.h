@@ -293,6 +293,6 @@ private Q_SLOTS:
     void slotImageChanged(const ImageChangeset& changeset);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* SCANCONTROLLER_H */
+#endif // SCANCONTROLLER_H

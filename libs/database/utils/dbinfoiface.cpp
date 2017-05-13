@@ -48,6 +48,7 @@ public:
     Private()
       : albumManager(AlbumManager::instance()),
         albumChooser(0),
+        operationType(ApplicationSettings::Unspecified),
         withGroupedIsSet(false),
         withGrouped(false)
     {
@@ -129,19 +130,23 @@ public:
 
     /** Remove grouped images if user chose/chooses to.
      */
-    QList<QUrl> resolveGroupsFromAlbums(QList<QUrl> urlList)
+    QList<QUrl> resolveGroupsFromAlbums(const QList<QUrl>& urlList)
     {
+        QList<QUrl> lst = urlList;
+
         if (!(withGroupedIsSet && withGrouped))
         {
             foreach(const QUrl& url, urlList)
             {
                 ImageInfo info = ImageInfo::fromUrl(url);
+
                 if (info.hasGroupedImages())
                 {
                     if (!withGroupedIsSet)
                     {
                         withGroupedIsSet = true;
-                        withGrouped = ApplicationSettings::instance()->askGroupingOperateOnAll(operationType);
+                        withGrouped      = ApplicationSettings::instance()->askGroupingOperateOnAll(operationType);
+
                         if (withGrouped)
                         {
                             break;
@@ -150,13 +155,13 @@ public:
 
                     foreach(const ImageInfo& i, info.groupedImages())
                     {
-                        urlList.removeOne(i.fileUrl());
+                        lst.removeOne(i.fileUrl());
                     }
                 }
             }
         }
 
-        return urlList;
+        return lst;
     }
 
     bool includeGroupedFromSelected()
@@ -167,7 +172,7 @@ public:
         }
 
         withGroupedIsSet = true;
-        withGrouped = DigikamApp::instance()->view()->needGroupResolving(operationType, true);
+        withGrouped      = DigikamApp::instance()->view()->needGroupResolving(operationType, true);
 
         return withGrouped;
     }
@@ -203,7 +208,9 @@ QList<QUrl> DBInfoIface::currentAlbumItems() const
     QList<QUrl> imageList  = d->resolveGroupsFromAlbums(albumItems(currAlbum));
 
     if (imageList.isEmpty())
+    {
         imageList = DigikamApp::instance()->view()->allUrls(d->includeGroupedFromSelected());
+    }
 
     return imageList;
 }

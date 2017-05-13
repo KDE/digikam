@@ -67,6 +67,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DB_INFO_IFACE_H
+#endif // DB_INFO_IFACE_H

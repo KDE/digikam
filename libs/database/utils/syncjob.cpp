@@ -133,4 +133,4 @@ void SyncJob::slotGotThumbnailFromIcon(Album* album, const QPixmap& pix)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

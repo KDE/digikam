@@ -59,4 +59,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // MYSQL_INIT_BINARY_H
+#endif // MYSQL_INIT_BINARY_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIO_H
-#define DIO_H
+#ifndef _DIGIKAM_IO_H_
+#define _DIGIKAM_IO_H_
 
 // Qt includes
 
@@ -113,4 +113,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DIO_H */
+#endif // _DIGIKAM_IO_H_

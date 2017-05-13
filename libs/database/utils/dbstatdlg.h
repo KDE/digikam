@@ -45,6 +45,6 @@ private:
     int generateItemsList(DatabaseItem::Category category, const QString& title);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // DATABASE_STATISTICS_DIALOG_H
+#endif // DATABASE_STATISTICS_DIALOG_H
