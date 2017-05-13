@@ -6,7 +6,7 @@
  * Date        : 1997-02-20
  * Description : color chooser widgets
  *
- * Copyright (C) 1997 by Martin Jones (mjones at kde dot org)
+ * Copyright (C)      1997 by Martin Jones (mjones at kde dot org)
  * Copyright (C) 2015-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
@@ -257,6 +257,6 @@ private:
     Q_DISABLE_COPY(DHueSaturationSelector)
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DHUESATURATIONSELECT_H */
+#endif // DHUESATURATIONSELECT_H
