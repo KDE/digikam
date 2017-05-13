@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DPROGRESS_WDG_H */
+#endif // DPROGRESS_WDG_H

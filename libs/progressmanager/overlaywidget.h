@@ -71,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* OVERLAY_WIDGET_H */
+#endif // OVERLAY_WIDGET_H

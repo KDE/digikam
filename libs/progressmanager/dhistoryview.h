@@ -76,6 +76,6 @@ private:
     void mouseMoveEvent(QMouseEvent*);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DHISTORY_VIEW_H

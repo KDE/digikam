@@ -89,6 +89,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* STATUSPROGRESSBAR_H */
+#endif // STATUSPROGRESSBAR_H
