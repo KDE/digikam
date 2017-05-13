@@ -380,7 +380,7 @@ QString ApplicationSettings::operationTypeTitle(ApplicationSettings::OperationTy
     case ApplicationSettings::Rename:
         return i18n("Renaming");
     case ApplicationSettings::Kipi:
-        return i18n("Import/Export) plugins");
+        return i18n("Import/Export plugins");
     case ApplicationSettings::Tools:
         return i18n("Tools (editor, panorama, stack blending, calendar, "
                     "external program)");

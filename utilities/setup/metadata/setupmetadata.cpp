@@ -571,7 +571,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
                      "can be specified below. digiKam will neither display these "
                      "nor read from or write to them. But whenever a matching album "
                      "item (e.g. \"image.dng\" for \"image.dng.pp3\") is renamed, "
-                     "moved, copied or deleted, the same operation will be done"
+                     "moved, copied or deleted, the same operation will be done "
                      "on these sidecar files.</p>"
                      "<p>Multiple extensions must be separated by a semicolon "
                      "or a space.</p>"));
@@ -584,7 +584,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent)
     d->extensionsEdit->setWhatsThis(i18n("<p>Here you can add extra extensions "
                                          "of sidecars files to be processed alongside "
                                          "regular items. These files won't be visible, "
-                                         "but regarded as an extension of the main file."
+                                         "but regarded as an extension of the main file. "
                                          "Just write \"xyz abc\" to support files with "
                                          "the *.xyz and *.abc extensions. The internally "
                                          "used sidecars type *.xmp is always included.</p>"));
