@@ -218,4 +218,4 @@ ModelHelper::Flags GPSGeoIfaceModelHelper::modelFlags() const
     return FlagMovable;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

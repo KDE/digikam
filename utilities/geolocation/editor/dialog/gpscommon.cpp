@@ -122,4 +122,4 @@ bool checkSidecarSettings()
     return true;
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

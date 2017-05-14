@@ -81,6 +81,6 @@ private:
     UndoInfo::List undoList;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* GPSUNDOCOMMAND_H */
+#endif // GPSUNDOCOMMAND_H

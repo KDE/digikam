@@ -50,8 +50,8 @@ void coordinatesToClipboard(const GeoIface::GeoCoordinates& coordinates, const Q
 
 bool checkSidecarSettings();
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::MapLayout)
 
-#endif /* GPS_COMMON_H */
+#endif // GPS_COMMON_H

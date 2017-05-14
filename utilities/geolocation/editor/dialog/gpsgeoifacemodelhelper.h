@@ -84,6 +84,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* GPSGEOIFACEMODELHELPER_H */
+#endif // GPSGEOIFACEMODELHELPER_H

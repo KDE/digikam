@@ -1106,4 +1106,4 @@ void GeolocationEdit::adjustMapLayout(const bool syncSettings)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

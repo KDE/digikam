@@ -89,4 +89,4 @@ void GPSUndoCommand::UndoInfo::readNewDataFromItem(const GPSImageItem* const ima
     this->newTagList = imageItem->getTagList();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

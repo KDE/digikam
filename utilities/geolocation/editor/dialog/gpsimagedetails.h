@@ -82,4 +82,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* GPSIMAGEDETAILS_H */
+#endif // GPSIMAGEDETAILS_H
