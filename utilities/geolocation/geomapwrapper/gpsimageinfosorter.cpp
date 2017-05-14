@@ -257,4 +257,4 @@ void GPSImageInfoSorter::slotSortOptionTriggered()
     }
 }
 
-} /* namespace Digikam */
+} // namespace Digikam

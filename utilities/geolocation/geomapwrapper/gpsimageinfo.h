@@ -51,8 +51,10 @@ public:
 
 public:
 
-    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id, const GeoIface::GeoCoordinates& p_coordinates,
-                                                        const int p_rating, const QDateTime& p_creationDate);
+    static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id,
+                                                        const GeoIface::GeoCoordinates& p_coordinates,
+                                                        const int p_rating,
+                                                        const QDateTime& p_creationDate);
 
 public:
 
@@ -65,8 +67,8 @@ public:
     typedef QList<GPSImageInfo> List;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
 
-#endif /* GPSIMAGEINFO_H */
+#endif // GPSIMAGEINFO_H

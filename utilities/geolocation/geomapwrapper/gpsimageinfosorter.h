@@ -91,8 +91,8 @@ private:
     Private* const d;
 };
 
-} /* namespace Digikam */
+} // namespace Digikam
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
 
-#endif /* GPSIMAGEINFOSOERTER_H */
+#endif // GPSIMAGEINFOSOERTER_H

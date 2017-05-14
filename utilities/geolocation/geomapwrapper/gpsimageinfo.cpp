@@ -39,8 +39,10 @@ GPSImageInfo::~GPSImageInfo()
 {
 }
 
-GPSImageInfo GPSImageInfo::fromIdCoordinatesRatingDateTime(const qlonglong p_id, const GeoIface::GeoCoordinates& p_coordinates,
-                                                           const int p_rating, const QDateTime& p_creationDate)
+GPSImageInfo GPSImageInfo::fromIdCoordinatesRatingDateTime(const qlonglong p_id,
+                                                           const GeoIface::GeoCoordinates& p_coordinates,
+                                                           const int p_rating,
+                                                           const QDateTime& p_creationDate)
 {
     GPSImageInfo info;
     info.id          = p_id;
@@ -51,4 +53,4 @@ GPSImageInfo GPSImageInfo::fromIdCoordinatesRatingDateTime(const qlonglong p_id,
     return info;
 }
 
-} /* namespace Digikam */
+} // namespace Digikam
