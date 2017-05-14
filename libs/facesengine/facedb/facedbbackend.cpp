@@ -28,7 +28,7 @@
 #include "dbenginebackend_p.h"
 #include "facedbschemaupdater.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 FaceDbBackend::FaceDbBackend(DbEngineLocking* const locking, const QString& backendName)
@@ -63,4 +63,4 @@ bool FaceDbBackend::initSchema(FaceDbSchemaUpdater* const updater)
     return false;
 }
 
-}  // namespace FacesEngine
+}  // namespace Digikam

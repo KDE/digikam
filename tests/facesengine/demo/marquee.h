@@ -34,7 +34,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FancyRect;
@@ -76,6 +76,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // MARQUEE_H

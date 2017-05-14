@@ -31,14 +31,14 @@
 #include "libopencv.h"
 
 #if !OPENCV_TEST_VERSION(3,0,0)
-#include "face.hpp"
+#   include "face.hpp"
 #endif
 
 // C++ includes
 
 #include <vector>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 #if OPENCV_TEST_VERSION(3,0,0)
@@ -236,4 +236,4 @@ private:
     cv::Mat              m_labels;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam

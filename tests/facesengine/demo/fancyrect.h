@@ -36,7 +36,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QWidget>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FancyRect : public QGraphicsRectItem
@@ -52,6 +52,6 @@ public:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif /* FANCYRECT_H */

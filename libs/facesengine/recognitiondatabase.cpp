@@ -45,7 +45,7 @@
 #include "facedb.h"
 #include "digikam_debug.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 /** Simple QImage training data container used by RecognitionDatabase::train(Identity, QImage, QString)
@@ -809,4 +809,4 @@ void RecognitionDatabase::vacuum()
     return FaceDbAccess().db()->vacuum();
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

@@ -72,7 +72,7 @@ public:
      */
     QList<FaceTagsIface> writeUnconfirmedResults(qlonglong imageid,
                                                 const QList<QRectF>& detectedFaces,
-                                                const QList<FacesEngine::Identity> recognitionResults,
+                                                const QList<Identity> recognitionResults,
                                                 const QSize& fullSize);
 
     // --- Status flags ---
@@ -97,7 +97,7 @@ public:
      */
 /*
     void                fillImageInFaces(ThumbnailImageCatcher* const catcher, const QString& filePath,
-                                         QList<FacesEngine::Face>& faceList, const QSize& scaleSize = QSize()) const;
+                                         QList<Face>& faceList, const QSize& scaleSize = QSize()) const;
 */
 
     /**
@@ -112,7 +112,7 @@ public:
      */
     QList<FaceTagsIface> toFaceTagsIfaces(qlonglong imageid,
                                         const QList<QRectF>& detectedFaces,
-                                        const QList<FacesEngine::Identity> recognitionResults,
+                                        const QList<Identity> recognitionResults,
                                         const QSize& fullSize) const;
 
     /**
@@ -122,8 +122,8 @@ public:
      */
     static int          faceRectDisplayMargin();
 
-    FacesEngine::Identity identityForTag(int tagId, FacesEngine::RecognitionDatabase& db) const;
-    int                  tagForIdentity(const FacesEngine::Identity& identity) const;
+    Identity identityForTag(int tagId, RecognitionDatabase& db) const;
+    int                  tagForIdentity(const Identity& identity) const;
 
 protected:
 

@@ -25,7 +25,7 @@
 #include "opencvmatdata.h"
 #include "digikam_debug.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 OpenCVMatData::OpenCVMatData()
@@ -76,4 +76,4 @@ void OpenCVMatData::clearData()
     data.clear();
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

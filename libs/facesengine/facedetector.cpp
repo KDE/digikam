@@ -34,7 +34,7 @@
 #include "digikam_debug.h"
 #include "facedetector.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDetector::Private : public QSharedData
@@ -120,7 +120,7 @@ FaceDetector::FaceDetector(const FaceDetector& other)
     d = other.d;
 }
 
-FaceDetector& FaceDetector::operator=(const FacesEngine::FaceDetector& other)
+FaceDetector& FaceDetector::operator=(const FaceDetector& other)
 {
     d = other.d;
     return *this;
@@ -289,4 +289,4 @@ QList<QRect> FaceDetector::toAbsoluteRects(const QList<QRectF>& relativeRects, c
     return result;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

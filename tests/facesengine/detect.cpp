@@ -35,7 +35,7 @@
 
 #include "facedetector.h"
 
-using namespace FacesEngine;
+using namespace Digikam;
 
 void detectFaces(const QString& file)
 {

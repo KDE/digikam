@@ -24,7 +24,7 @@
 #ifndef FACE_DATABASE_OPERATION_GROUP_H
 #define FACE_DATABASE_OPERATION_GROUP_H
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDbAccess;
@@ -77,6 +77,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACE_DATABASE_OPERATION_GROUP_H

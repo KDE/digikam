@@ -45,7 +45,7 @@
 
 #include "digikam_debug.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FunnelReal::Private
@@ -691,4 +691,4 @@ float FunnelReal::Private::computeLogLikelihood(const std::vector<std::vector<fl
     return l;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

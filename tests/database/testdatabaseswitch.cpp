@@ -48,7 +48,7 @@
 #include "digikam_version.h"
 
 using namespace Digikam;
-using namespace FacesEngine;
+
 
 const QString IMAGE_PATH(QFINDTESTDATA("data/testimages/"));
 

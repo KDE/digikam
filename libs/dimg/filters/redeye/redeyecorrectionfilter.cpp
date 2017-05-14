@@ -51,7 +51,7 @@ public:
     {
     }
 
-    FacesEngine::FaceDetector      facedetector;
+    FaceDetector      facedetector;
     static redeye::ShapePredictor* sp;
 
     RedEyeCorrectionContainer      settings;
@@ -152,7 +152,7 @@ void RedEyeCorrectionFilter::filterImage()
     if (runningFlag() && (qrectfdets.size() != 0))
     {
         std::vector<cv::Rect> dets;
-        QList<QRect> qrectdets = FacesEngine::FaceDetector::toAbsoluteRects(qrectfdets, temp.size());
+        QList<QRect> qrectdets = FaceDetector::toAbsoluteRects(qrectfdets, temp.size());
         QRectFtocvRect(qrectdets, dets);
 
         // Eye Detection

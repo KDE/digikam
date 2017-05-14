@@ -36,7 +36,7 @@
 #include "digikam_export.h"
 #include "dimg.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class DIGIKAM_DATABASE_EXPORT FaceDetector
@@ -114,6 +114,6 @@ private:
     QExplicitlySharedDataPointer<Private> d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACESENGINE_FACEDETECTOR_H

@@ -25,7 +25,7 @@
 
 #include "dataproviders.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 ImageListProvider::~ImageListProvider()
@@ -98,4 +98,4 @@ TrainingDataProvider::~TrainingDataProvider()
 {
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

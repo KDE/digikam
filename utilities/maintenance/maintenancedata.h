@@ -24,23 +24,20 @@
 #ifndef MAINTENANCE_DATA_H
 #define MAINTENANCE_DATA_H
 
-#include "imageinfo.h"
+// Local includes
 
-namespace FacesEngine
-{
-    class Identity;
-}
+#include "imageinfo.h"
 
 namespace Digikam
 {
 
-using FacesEngine::Identity;
-
+class Identity;
 class ImageQualitySettings;
 
 class MaintenanceData
 {
 public:
+
     explicit MaintenanceData();
     ~MaintenanceData();
 
@@ -62,5 +59,6 @@ private:
     Private* const d;
 };
 
-}
-#endif /* MAINTENANCE_DATA_H */
+} // namespace Digikam
+
+#endif // MAINTENANCE_DATA_H

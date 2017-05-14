@@ -188,8 +188,8 @@ void MaintenanceThread::computeDatabaseJunk(bool thumbsDb, bool facesDb)
     connect(t,SIGNAL(signalAddItemsToProcess(int)),
             this, SIGNAL(signalAddItemsToProcess(int)));
 
-    connect(t,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
-            this, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
+    connect(t,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)),
+            this, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)));
 
     connect(this, SIGNAL(signalCanceled()),
             t, SLOT(slotCancel()), Qt::QueuedConnection);
@@ -253,7 +253,7 @@ void MaintenanceThread::cleanThumbsDb(const QList<int>& thumbnailIds)
     appendJobs(collection);
 }
 
-void MaintenanceThread::cleanFacesDb(const QList<FacesEngine::Identity>& staleIdentities)
+void MaintenanceThread::cleanFacesDb(const QList<Identity>& staleIdentities)
 {
     ActionJobCollection collection;
 

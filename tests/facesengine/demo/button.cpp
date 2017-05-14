@@ -28,7 +28,7 @@
 
 #include <QGraphicsScene>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class Button::Private
@@ -144,4 +144,4 @@ void Button::mouseReleaseEvent(QGraphicsSceneMouseEvent* event)
     }
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

@@ -43,7 +43,7 @@
 #include "faceitem.h"
 
 using namespace std;
-using namespace FacesEngine;
+using namespace Digikam;
 
 // --------------------------------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ void MainWindow::clearScene()
 {
     QList<QGraphicsItem*> list = d->myScene->items();
 
-    for(int i = 0; i < list.size(); i++)
+    for(int i = 0 ; i < list.size() ; i++)
     {
         d->myScene->removeItem(list.at(i));
     }
@@ -210,7 +210,7 @@ void MainWindow::slotDetectFaces()
 
     d->faceitems.clear();
 
-    for(int i = 0; i < currentFaces.size(); ++i)
+    for(int i = 0 ; i < currentFaces.size() ; ++i)
     {
         QRect face = d->detector->toAbsoluteRect(currentFaces[i], d->currentPhoto.size());
         d->faceitems.append(new FaceItem(0, d->myScene, face, d->scale));

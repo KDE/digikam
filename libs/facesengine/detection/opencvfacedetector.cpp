@@ -43,7 +43,7 @@
 
 using namespace std;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class DetectObjectParameters
@@ -818,4 +818,4 @@ QList<QRect> OpenCVFaceDetector::detectFaces(const cv::Mat& inputImage, const cv
     return results;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

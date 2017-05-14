@@ -35,7 +35,7 @@
 
 using namespace Digikam;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class LBPHFaceModel;
@@ -82,6 +82,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACE_DATABASE_TRAINING_INTERFACE_H

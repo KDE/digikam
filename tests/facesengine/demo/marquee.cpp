@@ -38,7 +38,7 @@
 
 #include "fancyrect.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class Marquee::Private
@@ -257,4 +257,4 @@ void Marquee::mouseReleaseEvent(QGraphicsSceneMouseEvent* e)
     emit changed();
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

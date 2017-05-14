@@ -58,7 +58,7 @@ public:
     void computeDatabaseJunk(bool thumbsDb=false, bool facesDb=false);
     void cleanCoreDb(const QList<qlonglong>& imageIds);
     void cleanThumbsDb(const QList<int>& thumbnailIds);
-    void cleanFacesDb(const QList<FacesEngine::Identity>& staleIdentities);
+    void cleanFacesDb(const QList<Identity>& staleIdentities);
     void shrinkDatabases();
 
     void cancel();
@@ -91,7 +91,7 @@ Q_SIGNALS:
      */
     void signalData(const QList<qlonglong>& staleImageIds,
                     const QList<int>& staleThumbIds,
-                    const QList<FacesEngine::Identity>& staleIdentities);
+                    const QList<Identity>& staleIdentities);
 
     /**
      * Signal to emit the count of additional items to process.

@@ -46,7 +46,7 @@
 
 #include "dimg.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class Cascade;
@@ -116,6 +116,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif /* FACESENGINE_OPENCVFACEDETECTOR_H */

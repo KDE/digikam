@@ -36,7 +36,7 @@
 
 #include "libopencv.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class TanTriggsPreprocessor
@@ -71,6 +71,6 @@ public:
     float sigma1;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // TANTRIGGSPREPROCESSOR_H

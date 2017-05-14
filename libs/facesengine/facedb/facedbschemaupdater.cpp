@@ -35,7 +35,7 @@
 #include "facedbaccess.h"
 #include "facedb.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 int FaceDbSchemaUpdater::schemaVersion()
@@ -262,4 +262,4 @@ bool FaceDbSchemaUpdater::updateV1ToV2()
     return true;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

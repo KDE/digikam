@@ -41,7 +41,7 @@
 
 #include "maintenancetool.h"
 
-namespace FacesEngine
+namespace Digikam
 {
     class Identity;
 }
@@ -69,7 +69,7 @@ private Q_SLOTS:
 
     void slotFetchedData(const QList<qlonglong>& staleImageIds,
                          const QList<int>& staleThumbIds,
-                         const QList<FacesEngine::Identity>& staleIdentities);
+                         const QList<Identity>& staleIdentities);
 
     void slotAddItemsToProcess(int count);
 

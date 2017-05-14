@@ -63,7 +63,7 @@
 #include "applicationsettings.h"
 
 using namespace Digikam;
-using namespace FacesEngine;
+
 
 int main(int argc, char* argv[])
 {

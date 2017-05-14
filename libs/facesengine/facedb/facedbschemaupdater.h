@@ -31,7 +31,7 @@
 
 using namespace Digikam;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDbAccess;
@@ -66,6 +66,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACE_DATABASE_SCHEMA_UPDATER_H

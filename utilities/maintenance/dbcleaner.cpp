@@ -71,7 +71,7 @@ public:
 
     QList<qlonglong>             imagesToRemove;
     QList<int>                   staleThumbnails;
-    QList<FacesEngine::Identity> staleIdentities;
+    QList<Identity> staleIdentities;
 
     int                          databasesToAnalyseCount;
     int                          databasesToShrinkCount;
@@ -84,7 +84,7 @@ DbCleaner::DbCleaner(bool cleanThumbsDb, bool cleanFacesDb, bool shrinkDatabases
       d(new Private)
 {
     // register the identity list as meta type to be able to use it in signal/slot connection
-    qRegisterMetaType<QList<FacesEngine::Identity>>("QList<FacesEngine::Identity>");
+    qRegisterMetaType<QList<Identity>>("QList<Identity>");
 
     d->cleanThumbsDb   = cleanThumbsDb;
 
@@ -137,8 +137,8 @@ void DbCleaner::slotStart()
             this, SLOT(slotAddItemsToProcess(int)));
 
     // Set the wiring from the data signal to the data slot.
-    connect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)),
-            this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<FacesEngine::Identity>)));
+    connect(d->thread,SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)),
+            this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<Identity>)));
 
     // Compute the database junk. This will lead to the call of the slot
     // slotFetchedData.
@@ -153,7 +153,7 @@ void DbCleaner::slotAddItemsToProcess(int count)
 
 void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
                                 const QList<int>& staleThumbIds,
-                                const QList<FacesEngine::Identity>& staleIdentities)
+                                const QList<Identity>& staleIdentities)
 {
     // We have data now. Store it and trigger the core db cleaning
     d->imagesToRemove  = staleImageIds;
@@ -168,8 +168,8 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
         qCDebug(DIGIKAM_GENERAL_LOG) << "Nothing to do. Databases are clean.";
         if (d->shrinkDatabases)
         {
-            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>, QList<int>, QList<FacesEngine::Identity>)),
-                       this, SLOT(slotFetchedData(QList<qlonglong>, QList<int>, QList<FacesEngine::Identity>)));
+            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>, QList<int>, QList<Identity>)),
+                       this, SLOT(slotFetchedData(QList<qlonglong>, QList<int>, QList<Identity>)));
 
             disconnect(d->thread, SIGNAL(signalCompleted()),
                         this, SLOT(slotCleanItems()));

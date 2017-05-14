@@ -156,4 +156,4 @@ Identity MaintenanceData::getIdentity() const
     return identity;
 }
 
-}
+} // namespace Digikam

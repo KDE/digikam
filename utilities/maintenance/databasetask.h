@@ -28,7 +28,7 @@
 
 #include "actionthreadbase.h"
 
-namespace FacesEngine
+namespace Digikam
 {
     class Identity;
 }
@@ -70,7 +70,7 @@ Q_SIGNALS:
 
     void signalData(const QList<qlonglong>& staleImageIds,
                     const QList<int>& staleThumbIds,
-                    const QList<FacesEngine::Identity>& staleIdentities);
+                    const QList<Identity>& staleIdentities);
 
     void signalStarted();
 

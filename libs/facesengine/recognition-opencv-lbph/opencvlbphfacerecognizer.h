@@ -36,7 +36,7 @@
 
 #include "opencvmatdata.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class OpenCVLBPHFaceRecognizer
@@ -75,6 +75,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // OPENCV_LBPH_FACE_RECOGNIZER_H

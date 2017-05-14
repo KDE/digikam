@@ -183,11 +183,11 @@ void DatabaseTask::run()
             return;
         }
 
-        if (FacesEngine::RecognitionDatabase().integrityCheck())
+        if (RecognitionDatabase().integrityCheck())
         {
-            FacesEngine::RecognitionDatabase().vacuum();
+            RecognitionDatabase().vacuum();
 
-            if (!FacesEngine::RecognitionDatabase().integrityCheck())
+            if (!RecognitionDatabase().integrityCheck())
             {
                 qCWarning(DIGIKAM_DATABASE_LOG) << "Integrity check for recognition DB failed after vacuum. Something went wrong.";
                 // Signal that the database was vacuumed but failed the integrity check afterwards.
@@ -212,7 +212,7 @@ void DatabaseTask::run()
     {
         QList<qlonglong>              staleImageIds;
         QList<int>                    staleThumbIds;
-        QList<FacesEngine::Identity>  staleIdentities;
+        QList<Identity>  staleIdentities;
         int additionalItemsToProcess = 0;
 
         // Get the count of image entries in DB to delete.
@@ -227,7 +227,7 @@ void DatabaseTask::run()
         // get the count of items to process for identities cleanup it enabled.
         if (d->scanRecognitionDb)
         {
-            additionalItemsToProcess += FacesEngine::RecognitionDatabase().allIdentities().size();
+            additionalItemsToProcess += RecognitionDatabase().allIdentities().size();
         }
 
         if (additionalItemsToProcess > 0)
@@ -331,11 +331,11 @@ void DatabaseTask::run()
                 uuidSet << prop.value;
             }
 
-            QList<FacesEngine::Identity> identities = FacesEngine::RecognitionDatabase().allIdentities();
+            QList<Identity> identities = RecognitionDatabase().allIdentities();
 
             // Get all identitites to remove. Don't remove now in order to make sure no side effects occur.
 
-            foreach(FacesEngine::Identity identity, identities)
+            foreach(Identity identity, identities)
             {
                 QString value = identity.attribute(QLatin1String("uuid"));
 
@@ -445,7 +445,7 @@ void DatabaseTask::run()
                 break;
             }
 
-            FacesEngine::RecognitionDatabase().deleteIdentity(identity);
+            RecognitionDatabase().deleteIdentity(identity);
             emit signalFinished();
         }
     }

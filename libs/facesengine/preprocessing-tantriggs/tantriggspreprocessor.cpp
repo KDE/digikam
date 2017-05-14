@@ -31,7 +31,7 @@
 
 #include "tantriggspreprocessor.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 TanTriggsPreprocessor::TanTriggsPreprocessor()
@@ -147,4 +147,4 @@ cv::Mat TanTriggsPreprocessor::normalize(const cv::Mat& src)
     return dst;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

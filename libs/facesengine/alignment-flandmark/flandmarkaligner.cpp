@@ -37,7 +37,7 @@
 #include "digikam_debug.h"
 #include "flandmark_detector.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FlandmarkAligner::Private
@@ -120,4 +120,4 @@ cv::Mat FlandmarkAligner::align(const cv::Mat& inputImage)
     return inputImage;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

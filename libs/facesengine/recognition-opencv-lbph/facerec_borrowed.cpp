@@ -41,7 +41,7 @@
 
 using namespace cv;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 //------------------------------------------------------------------------------
@@ -575,4 +575,4 @@ Ptr<LBPHFaceRecognizer> LBPHFaceRecognizer::create(int radius, int neighbors, in
                       obj.info()->addParam(obj, "statistic",  obj.m_statisticsMode))     // modification: Add parameter
 #endif
 
-} // namespace FacesEngine
+} // namespace Digikam

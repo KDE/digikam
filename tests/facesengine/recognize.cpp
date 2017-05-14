@@ -41,7 +41,7 @@
 #include "dbengineparameters.h"
 
 using namespace Digikam;
-using namespace FacesEngine;
+
 
 // --------------------------------------------------------------------------------------------------
 

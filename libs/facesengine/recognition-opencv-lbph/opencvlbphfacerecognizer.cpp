@@ -31,7 +31,7 @@
 #include "lbphfacemodel.h"
 #include "digikam_debug.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class OpenCVLBPHFaceRecognizer::Private
@@ -158,4 +158,4 @@ void OpenCVLBPHFaceRecognizer::train(const std::vector<cv::Mat>& images, const s
     FaceDbAccess().db()->updateLBPHFaceModel(d->lbph());
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

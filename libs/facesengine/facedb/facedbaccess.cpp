@@ -42,7 +42,7 @@
 #include "dbengineparameters.h"
 #include "dbengineaccess.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDbAccessStaticPriv
@@ -331,4 +331,4 @@ FaceDbAccessUnlock::~FaceDbAccessUnlock()
     FaceDbAccess::d->lock.lockCount += count;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

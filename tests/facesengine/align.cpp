@@ -40,7 +40,7 @@
 
 #include "../../libs/facesengine/alignment-congealing/funnelreal.h"
 
-using namespace FacesEngine;
+using namespace Digikam;
 
 QStringList toPaths(char** const argv, int startIndex, int argc)
 {

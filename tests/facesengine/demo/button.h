@@ -32,7 +32,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class Button : public QObject, public QGraphicsItem
@@ -68,6 +68,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // BUTTON_H

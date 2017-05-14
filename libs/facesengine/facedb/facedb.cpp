@@ -29,7 +29,7 @@
 #include "facedb.h"
 #include "digikam_debug.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDb::Private
@@ -406,4 +406,4 @@ void FaceDb::vacuum()
     d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuumRecognitionDB")));
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

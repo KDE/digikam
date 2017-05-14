@@ -25,7 +25,7 @@
 
 #include "identity.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class Identity::Private : public QSharedData
@@ -53,7 +53,7 @@ Identity::Identity(const Identity& other)
     d = other.d;
 }
 
-Identity& Identity::operator=(const FacesEngine::Identity& other)
+Identity& Identity::operator=(const Identity& other)
 {
     d = other.d;
     return *this;
@@ -103,4 +103,4 @@ void Identity::setAttributesMap(const QMap<QString, QString>& attributes)
     d->attributes = attributes;
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

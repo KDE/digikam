@@ -946,10 +946,10 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 {
     FaceUtils utils;
 
-    for (int i=0; i<package->databaseFaces.size(); i++)
+    for (int i = 0 ; i < package->databaseFaces.size() ; i++)
     {
-        FacesEngine::Identity identity = utils.identityForTag(package->databaseFaces[i].tagId(), database);
-        Statistics& result             = results[package->databaseFaces[i].tagId()];
+        Identity identity  = utils.identityForTag(package->databaseFaces[i].tagId(), database);
+        Statistics& result = results[package->databaseFaces[i].tagId()];
         result.knownFaces++;
 
         if (identity == package->recognitionResults[i])
@@ -963,7 +963,7 @@ void RecognitionBenchmarker::process(FacePipelineExtendedPackage::Ptr package)
 
 // ----------------------------------------------------------------------------------------
 
-class MapListTrainingDataProvider : public FacesEngine::TrainingDataProvider
+class MapListTrainingDataProvider : public TrainingDataProvider
 {
 public:
 
@@ -971,11 +971,11 @@ public:
     {
     }
 
-    FacesEngine::ImageListProvider* newImages(const FacesEngine::Identity& identity)
+    ImageListProvider* newImages(const Identity& identity)
     {
         if (imagesToTrain.contains(identity.id()))
         {
-            FacesEngine::QListImageListProvider& provider = imagesToTrain[identity.id()];
+            QListImageListProvider& provider = imagesToTrain[identity.id()];
             provider.reset();
             return &provider;
         }
@@ -983,7 +983,7 @@ public:
         return &empty;
     }
 
-    FacesEngine::ImageListProvider* images(const FacesEngine::Identity&)
+    ImageListProvider* images(const Identity&)
     {
         // Unimplemented. Would be needed if we use a backend with a "holistic" approach that needs all images to train.
         return &empty;
@@ -991,8 +991,8 @@ public:
 
 public:
 
-    FacesEngine::EmptyImageListProvider            empty;
-    QMap<int, FacesEngine::QListImageListProvider> imagesToTrain;
+    EmptyImageListProvider            empty;
+    QMap<int, QListImageListProvider> imagesToTrain;
 };
 
 Trainer::Trainer(FacePipeline::Private* const d)
@@ -1008,7 +1008,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
 
     QList<FaceTagsIface> toTrain;
     QList<int> identities;
-    QList<FacesEngine::Identity> identitySet;
+    QList<Identity> identitySet;
     FaceUtils utils;
 
     foreach(const FacePipelineFaceTagsIface& face, package->databaseFaces)
@@ -1019,7 +1019,7 @@ void Trainer::process(FacePipelineExtendedPackage::Ptr package)
             dbFace.setType(FaceTagsIface::FaceForTraining);
             toTrain << dbFace;
 
-            FacesEngine::Identity identity = utils.identityForTag(dbFace.tagId(), database);
+            Identity identity = utils.identityForTag(dbFace.tagId(), database);
 
             identities  << identity.id();
 
@@ -1367,7 +1367,7 @@ ThumbnailLoadThread* FacePipeline::Private::createThumbnailLoadThread()
     ThumbnailLoadThread* const thumbnailLoadThread = new ThumbnailLoadThread;
     thumbnailLoadThread->setPixmapRequested(false);
     thumbnailLoadThread->setThumbnailSize(ThumbnailLoadThread::maximumThumbnailSize());
-    // FacesEngine::Image::recommendedSizeForRecognition()
+    // Image::recommendedSizeForRecognition()
     thumbnailLoadThread->setPriority(priority);
 
     thumbnailLoadThreads << thumbnailLoadThread;
@@ -1648,7 +1648,7 @@ bool FacePipeline::add(const ImageInfo& info, const QRect& rect, const DImg& ima
     FacePipelineExtendedPackage::Ptr package = d->buildPackage(info);
     package->image                           = image;
     package->detectionImage                  = image;
-    package->faces << FacesEngine::Face(rect);
+    package->faces << Face(rect);
     d->send(package);
 }
 */

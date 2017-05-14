@@ -90,14 +90,14 @@ void FaceUtils::markAsScanned(const ImageInfo& info, bool hasBeenScanned) const
 
 QList<FaceTagsIface> FaceUtils::toFaceTagsIfaces(qlonglong imageid,
                                                  const QList<QRectF>& detectedFaces,
-                                                 const QList<FacesEngine::Identity> recognitionResults,
+                                                 const QList<Identity> recognitionResults,
                                                  const QSize& fullSize) const
 {
     QList<FaceTagsIface> faces;
 
     for (int i=0; i<detectedFaces.size(); ++i)
     {
-        FacesEngine::Identity identity;
+        Identity identity;
 
         if (!recognitionResults.isEmpty())
         {
@@ -147,7 +147,7 @@ void FaceUtils::storeThumbnails(ThumbnailLoadThread* const thread, const QString
 
 QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
                                                         const QList<QRectF>& detectedFaces,
-                                                        const QList<FacesEngine::Identity> recognitionResults,
+                                                        const QList<Identity> recognitionResults,
                                                         const QSize& fullSize)
 {
     // Build list of new entries
@@ -262,10 +262,10 @@ QList<FaceTagsIface> FaceUtils::writeUnconfirmedResults(qlonglong imageid,
     return newFaces;
 }
 
-FacesEngine::Identity FaceUtils::identityForTag(int tagId, FacesEngine::RecognitionDatabase& db) const
+Identity FaceUtils::identityForTag(int tagId, RecognitionDatabase& db) const
 {
     QMap<QString, QString> attributes = FaceTags::identityAttributes(tagId);
-    FacesEngine::Identity identity    = db.findIdentity(attributes);
+    Identity identity    = db.findIdentity(attributes);
 
     if (!identity.isNull())
     {
@@ -281,7 +281,7 @@ FacesEngine::Identity FaceUtils::identityForTag(int tagId, FacesEngine::Recognit
     return identity;
 }
 
-int FaceUtils::tagForIdentity(const FacesEngine::Identity& identity) const
+int FaceUtils::tagForIdentity(const Identity& identity) const
 {
     return FaceTags::getOrCreateTagForIdentity(identity.attributesMap());
 }

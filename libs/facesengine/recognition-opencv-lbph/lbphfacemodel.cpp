@@ -31,7 +31,7 @@
 
 #include "digikam_debug.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 LBPHistogramMetadata::LBPHistogramMetadata()
@@ -64,7 +64,7 @@ LBPHFaceModel::~LBPHFaceModel()
 
 LBPHFaceRecognizer* LBPHFaceModel::ptr()
 {
-    LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator FacesEngine::LBPHFaceRecognizer*();
+    LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator Digikam::LBPHFaceRecognizer*();
 
     if (!ptr)
         qCWarning(DIGIKAM_FACESENGINE_LOG) << "LBPHFaceRecognizer pointer is null";
@@ -75,9 +75,9 @@ LBPHFaceRecognizer* LBPHFaceModel::ptr()
 const LBPHFaceRecognizer* LBPHFaceModel::ptr() const
 {
 #if OPENCV_TEST_VERSION(3,0,0)
-    const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator const FacesEngine::LBPHFaceRecognizer*();
+    const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator const Digikam::LBPHFaceRecognizer*();
 #else
-    const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator FacesEngine::LBPHFaceRecognizer*();
+    const LBPHFaceRecognizer* const ptr = cv::Ptr<LBPHFaceRecognizer>::operator Digikam::LBPHFaceRecognizer*();
 #endif
 
     if (!ptr)
@@ -277,4 +277,4 @@ void LBPHFaceModel::update(const std::vector<cv::Mat>& images, const std::vector
     }
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

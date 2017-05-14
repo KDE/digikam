@@ -34,7 +34,7 @@
 
 #include "digikam_export.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class DIGIKAM_DATABASE_EXPORT Identity
@@ -87,6 +87,6 @@ private:
     QExplicitlySharedDataPointer<Private> d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACESENGINE_IDENTITY_H

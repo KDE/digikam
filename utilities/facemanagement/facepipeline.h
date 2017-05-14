@@ -127,7 +127,7 @@ public:
     ImageInfo                     info;
     DImg                          image;
     QList<QRectF>                 detectedFaces;
-    QList<FacesEngine::Identity>  recognitionResults;
+    QList<Identity>  recognitionResults;
     FacePipelineFaceTagsIfaceList databaseFaces;
 
     ProcessFlags                  processFlags;

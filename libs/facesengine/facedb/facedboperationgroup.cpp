@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDbOperationGroup::Private
@@ -153,4 +153,4 @@ void FaceDbOperationGroup::allowLift()
     }
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

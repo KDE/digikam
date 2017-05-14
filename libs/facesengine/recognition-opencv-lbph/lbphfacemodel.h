@@ -37,7 +37,7 @@
 #include "opencvmatdata.h"
 #include "facerec_borrowed.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class LBPHistogramMetadata
@@ -107,6 +107,6 @@ protected:
     QList<LBPHistogramMetadata> m_histogramMetadata;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACESENGINE_LBPHFACEMODEL_H

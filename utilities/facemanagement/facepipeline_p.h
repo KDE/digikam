@@ -208,7 +208,7 @@ Q_SIGNALS:
 
 protected:
 
-    FacesEngine::FaceDetector     detector;
+    FaceDetector     detector;
     FacePipeline::Private* const d;
 };
 
@@ -261,7 +261,7 @@ Q_SIGNALS:
 protected:
 
     FaceImageRetriever               imageRetriever;
-    FacesEngine::RecognitionDatabase database;
+    RecognitionDatabase database;
     FacePipeline::Private* const     d;
 };
 
@@ -318,7 +318,7 @@ Q_SIGNALS:
 
 protected:
 
-    FacesEngine::RecognitionDatabase database;
+    RecognitionDatabase database;
     FaceImageRetriever               imageRetriever;
     FacePipeline::Private* const     d;
 };
@@ -392,7 +392,7 @@ protected:
     QMap<int, Statistics> results;
 
     FacePipeline::Private* const     d;
-    FacesEngine::RecognitionDatabase database;
+    RecognitionDatabase database;
 };
 
 // ----------------------------------------------------------------------------------------

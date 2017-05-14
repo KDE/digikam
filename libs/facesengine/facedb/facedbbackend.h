@@ -32,7 +32,7 @@
 
 using namespace Digikam;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDbSchemaUpdater;
@@ -59,6 +59,6 @@ private:
     Q_DECLARE_PRIVATE(BdEngineBackend)
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // _FACE_DATABASE_BACKEND_H_

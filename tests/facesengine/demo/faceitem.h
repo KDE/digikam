@@ -39,7 +39,7 @@
 
 #include "button.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceItem : public QGraphicsObject
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACEITEM_H

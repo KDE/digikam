@@ -39,7 +39,7 @@
 #include "identity.h"
 #include "dataproviders.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 /**
@@ -218,6 +218,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACESENGINE_RECOGNITIONDATABASE_H

@@ -33,7 +33,7 @@
 
 #include "libopencv.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FlandmarkAligner
@@ -52,6 +52,6 @@ private:
     Private* const d;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACESENGINE_ALIGNMENT_CONGEALING_FUNNELREAL_H

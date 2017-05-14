@@ -32,7 +32,7 @@
 #include <QRectF>
 #include <QPainter>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 FancyRect::FancyRect(QGraphicsItem* const parent)

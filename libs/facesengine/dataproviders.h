@@ -34,7 +34,7 @@
 #include "digikam_export.h"
 #include "identity.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 /**
@@ -121,6 +121,6 @@ public:
     virtual ImageListProvider* images(const Identity& identity) = 0;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // FACESENGINE_DATAPROVIDERS_H

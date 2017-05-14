@@ -33,7 +33,7 @@
 
 #include <QByteArray>
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class OpenCVMatData
@@ -59,6 +59,6 @@ public:
     QByteArray data;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // _OPENCV_MAT_DATA_H_

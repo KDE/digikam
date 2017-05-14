@@ -35,15 +35,12 @@
 #include <QTime>
 #include <QDebug>
 
-// Local includes
+// Implementation not exported with digiKam core.
 
 #include "../../libs/facesengine/preprocessing-tantriggs/tantriggspreprocessor.h"
-
-// Implementation not exported
-
 #include "../../libs/facesengine/preprocessing-tantriggs/tantriggspreprocessor.cpp"
 
-using namespace FacesEngine;
+using namespace Digikam;
 
 // --------------------------------------------------------------------------------------------------
 

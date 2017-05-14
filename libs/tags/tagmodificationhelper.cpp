@@ -604,7 +604,7 @@ void TagModificationHelper::slotMultipleFaceTagDel(QList<TAlbum*>& tags)
                 // Delete the UUID
                 props.removeProperties(TagPropertyName::faceEngineUuid());
                 // delete the faces db identity with this uuid.
-                FacesEngine::FaceDbAccess access;
+                FaceDbAccess access;
                 access.db()->deleteIdentity(uuid);
             }
         }

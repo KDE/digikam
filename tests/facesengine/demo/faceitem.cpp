@@ -42,7 +42,7 @@
 #include "marquee.h"
 #include "fancyrect.h"
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceItem::Private
@@ -365,4 +365,4 @@ void FaceItem::paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*)
 {
 }
 
-} // namespace FacesEngine
+} // namespace Digikam

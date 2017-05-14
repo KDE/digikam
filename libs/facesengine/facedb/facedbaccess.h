@@ -34,7 +34,7 @@
 
 using namespace Digikam;
 
-namespace FacesEngine
+namespace Digikam
 {
 
 class FaceDb;
@@ -101,6 +101,6 @@ private:
     int count;
 };
 
-} // namespace FacesEngine
+} // namespace Digikam
 
 #endif // _FACE_DATABASE_ACCESS_H_
