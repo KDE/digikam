@@ -1,16 +1,13 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-07-14
- * @brief  Common internal data structures for GeoIface
+ * Date        : 2010-07-14
+ * Description : Common internal data structures for GeoIface
  *
- * @author Copyright (C) 2010-2014 by Michael G. Hansen
- *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
- * @author Copyright (C) 2010-2017 by Gilles Caulier
- *         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+ * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -20,7 +17,7 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -79,9 +76,9 @@ public:
             << QLatin1String( "-selected" )
             << QLatin1String( "-someselected" );
 
-        for (QStringList::const_iterator it = markerColors.constBegin(); it != markerColors.constEnd(); ++it)
+        for (QStringList::const_iterator it = markerColors.constBegin() ; it != markerColors.constEnd() ; ++it)
         {
-            for (QStringList::const_iterator sit = stateNames.constBegin(); sit != stateNames.constEnd(); ++sit)
+            for (QStringList::const_iterator sit = stateNames.constBegin() ; sit != stateNames.constEnd() ; ++sit)
             {
                 const QString pixmapName  = *it + *sit;
                 const QUrl markerUrl      = GeoIfaceGlobalObject::instance()->locateDataFile(QString::fromLatin1( "marker-%1.png").arg(pixmapName));
@@ -214,7 +211,8 @@ bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString, QPoint* const p
 /**
  * @brief Parses a '((lat1, lon1), (lat2, lon2))' bounds string as returned by the JavaScript parts
  */
-bool GeoIfaceHelperParseBoundsString(const QString& boundsString, QPair<GeoCoordinates, GeoCoordinates>* const boundsCoordinates)
+bool GeoIfaceHelperParseBoundsString(const QString& boundsString,
+                                     QPair<GeoCoordinates, GeoCoordinates>* const boundsCoordinates)
 {
     // bounds are returned as ((lat1, lon1), (lat2, lon2))
 
@@ -294,7 +292,7 @@ GeoCoordinates::PairList GeoIfaceHelperNormalizeBounds(const GeoCoordinates::Pai
 
 void GeoIfaceGlobalObject::removeMyInternalWidgetFromPool(const MapBackend* const mapBackend)
 {
-    for (int i = 0; i < d->internalMapWidgetsPool.count(); ++i)
+    for (int i = 0 ; i < d->internalMapWidgetsPool.count() ; ++i)
     {
         if (d->internalMapWidgetsPool.at(i).currentOwner == static_cast<const QObject* const>(mapBackend))
         {
@@ -304,7 +302,8 @@ void GeoIfaceGlobalObject::removeMyInternalWidgetFromPool(const MapBackend* cons
     }
 }
 
-bool GeoIfaceGlobalObject::getInternalWidgetFromPool(const MapBackend* const mapBackend, GeoIfaceInternalWidgetInfo* const targetInfo)
+bool GeoIfaceGlobalObject::getInternalWidgetFromPool(const MapBackend* const mapBackend,
+                                                     GeoIfaceInternalWidgetInfo* const targetInfo)
 {
     const QString requestingBackendName = mapBackend->backendName();
 
@@ -313,7 +312,7 @@ bool GeoIfaceGlobalObject::getInternalWidgetFromPool(const MapBackend* const map
     int bestUndockedWidget              = -1;
     int bestReleasedWidget              = -1;
 
-    for (int i = 0; i < d->internalMapWidgetsPool.count(); ++i)
+    for (int i = 0 ; i < d->internalMapWidgetsPool.count() ; ++i)
     {
         const GeoIfaceInternalWidgetInfo& info = d->internalMapWidgetsPool.at(i);
 
@@ -370,14 +369,15 @@ void GeoIfaceGlobalObject::addMyInternalWidgetToPool(const GeoIfaceInternalWidge
     d->internalMapWidgetsPool.append(info);
 }
 
-void GeoIfaceGlobalObject::updatePooledWidgetState(const QWidget* const widget, const GeoIfaceInternalWidgetInfo::InternalWidgetState newState)
+void GeoIfaceGlobalObject::updatePooledWidgetState(const QWidget* const widget,
+                                                   const GeoIfaceInternalWidgetInfo::InternalWidgetState newState)
 {
-    for (int i = 0; i < d->internalMapWidgetsPool.count(); ++i)
+    for (int i = 0 ; i < d->internalMapWidgetsPool.count() ; ++i)
     {
         if (d->internalMapWidgetsPool.at(i).widget == widget)
         {
             GeoIfaceInternalWidgetInfo& info = d->internalMapWidgetsPool[i];
-            info.state                      = newState;
+            info.state                       = newState;
 
             if (newState == GeoIfaceInternalWidgetInfo::InternalWidgetReleased)
             {
@@ -407,9 +407,12 @@ void GeoIfaceGlobalObject::clearWidgetPool()
 
 void GeoIface_assert(const char* const condition, const char* const filename, const int lineNumber)
 {
-    const QString debugString = QString::fromLatin1( "ASSERT: %1 - %2:%3").arg(QLatin1String( condition )).arg(QLatin1String( filename )).arg(lineNumber);
+    const QString debugString = QString::fromLatin1( "ASSERT: %1 - %2:%3")
+        .arg(QLatin1String( condition ))
+        .arg(QLatin1String( filename ))
+        .arg(lineNumber);
 
     qCDebug(DIGIKAM_GEOIFACE_LOG) << debugString;
 }
 
-} /* namespace GeoIface */
+} // namespace GeoIface
