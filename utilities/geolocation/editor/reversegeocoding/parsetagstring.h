@@ -1,25 +1,23 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-05-12
- * @brief  Parses retrieved data into tag string.
+ * Date        : 2010-05-12
+ * Description : Parses retrieved data into tag string.
  *
- * @author Copyright (C) 2010 by Michael G. Hansen
- *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
- * @author Copyright (C) 2010 by Gabriel Voicu
- *         <a href="mailto:ping dot gabi at gmail dot com">ping dot gabi at gmail dot com</a>
+ * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
+ * Copyright (C) 2010 by Gabriel Voicu <ping dot gabi at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * ============================================================ */
@@ -278,4 +276,4 @@ QStringList makeTagString(const RGInfo& info,const QString& inputFormat,const QS
 
 } // namespace Digikam
 
-#endif /* PARSETAGSTRING_H */
+#endif // PARSETAGSTRING_H

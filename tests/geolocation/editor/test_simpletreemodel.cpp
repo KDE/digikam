@@ -33,6 +33,8 @@
 #include "simpletreemodel.h"
 #include "modeltest.h"
 
+using namespace Digikam;
+
 /**
  * @brief Dummy test that does nothing
  */
