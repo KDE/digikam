@@ -54,16 +54,14 @@ const QString DAboutData::digiKamSloganFormated()
     return i18nc("This is the slogan formated string displayed in splashscreen. "
                  "Please translate using short words else the slogan can be truncated.",
                  "<qt><font color=\"white\">"
-                 "<b>Manage</b> your <b>photographs</b> like <b>a professional</b> "
-                 "with the power of <b>open source</b>"
+                 "<b>Professional</b> Photo <b>Management</b> with the Power of <b>Open Source</b>"
                  "</font></qt>"
                  );
 }
 
 const QString DAboutData::digiKamSlogan()
 {
-    return i18n("Manage your photographs like a professional, "
-                "with the power of open source");
+    return i18n("Professional Photo Management with the Power of Open Source");
 }
 
 const QString DAboutData::copyright()
@@ -394,4 +392,4 @@ void DAboutData::authorsRegistration(KAboutData& aboutData)
                         );
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -54,6 +54,6 @@ public:
     static void          authorsRegistration(KAboutData& aboutData);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // DABOUT_DATA_H
