@@ -84,7 +84,7 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    GeoIface::MapWidget*           mapSearchWidget;
+    GeoIface::MapWidget*        mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
@@ -117,24 +117,24 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     /// @todo Really?
     setAcceptDrops(true);
 
-    d->imageAlbumModel       = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
-    d->selectionModel        = itemSelectionModel;
-    d->imageFilterModel      = imageFilterModel;
-    d->searchModel           = searchModel;
+    d->imageAlbumModel        = qobject_cast<ImageAlbumModel*>(imageFilterModel->sourceModel());
+    d->selectionModel         = itemSelectionModel;
+    d->imageFilterModel       = imageFilterModel;
+    d->searchModel            = searchModel;
 
     // ---------------------------------------------------------------
 
-    QVBoxLayout* const vlay  = new QVBoxLayout(this);
+    QVBoxLayout* const vlay   = new QVBoxLayout(this);
 
-    QFrame* const mapPanel   = new QFrame(this);
+    QFrame* const mapPanel    = new QFrame(this);
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
-    QVBoxLayout* const vlay2 = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget       = new GeoIface::MapWidget(mapPanel);
+    QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
+    d->mapSearchWidget        = new GeoIface::MapWidget(mapPanel);
     d->mapSearchWidget->setBackend(QLatin1String("marble"));
     d->mapSearchWidget->setShowThumbnails(true);
 
-    d->gpsMarkerTiler = new GPSMarkerTiler(this, d->imageFilterModel, d->selectionModel);
+    d->gpsMarkerTiler         = new GPSMarkerTiler(this, d->imageFilterModel, d->selectionModel);
     d->mapSearchWidget->setGroupedModel(d->gpsMarkerTiler);
 
     mapPanel->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
@@ -153,12 +153,12 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     hbox->setContentsMargins(QMargins());
     hbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    d->nameEdit = new QLineEdit(hbox);
+    d->nameEdit       = new QLineEdit(hbox);
     d->nameEdit->setClearButtonEnabled(true);
     d->nameEdit->setWhatsThis(i18n("Enter the name of the current map search to save in the "
                                    "\"Map Searches\" view."));
 
-    d->saveBtn  = new QToolButton(hbox);
+    d->saveBtn        = new QToolButton(hbox);
     d->saveBtn->setIcon(QIcon::fromTheme(QLatin1String("document-save")));
     d->saveBtn->setEnabled(false);
     d->saveBtn->setToolTip(i18n("Save current map search to a new virtual album."));
@@ -179,7 +179,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
 
     // ---------------------------------------------------------------
 
-    d->splitter = new QSplitter(Qt::Vertical, this);
+    d->splitter                = new QSplitter(Qt::Vertical, this);
 
     QFrame* const frameTop     = new QFrame(d->splitter);
     QVBoxLayout* const vlayTop = new QVBoxLayout(frameTop);
@@ -200,19 +200,19 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
 
     // construct a second row of control actions below the control widget
     /// @todo Should we still replace the icons of the actions with text as discussed during the sprint?
-    QWidget* const secondActionRow = new QWidget();
-    QHBoxLayout* const secondActionRowHBox = new QHBoxLayout();
+    QWidget* const secondActionRow            = new QWidget();
+    QHBoxLayout* const secondActionRowHBox    = new QHBoxLayout();
     secondActionRowHBox->setContentsMargins(QMargins());
     secondActionRow->setLayout(secondActionRowHBox);
 
-    QLabel* const secondActionRowLabel = new QLabel(i18n("Search by area:"));
+    QLabel* const secondActionRowLabel        = new QLabel(i18n("Search by area:"));
     secondActionRowHBox->addWidget(secondActionRowLabel);
 
-    QToolButton* const tbRegionSelection = new QToolButton(secondActionRow);
+    QToolButton* const tbRegionSelection      = new QToolButton(secondActionRow);
     tbRegionSelection->setDefaultAction(d->mapSearchWidget->getControlAction(QLatin1String("mousemode-regionselectionmode")));
     secondActionRowHBox->addWidget(tbRegionSelection);
 
-    QToolButton* const tbRegionFromIcon = new QToolButton(secondActionRow);
+    QToolButton* const tbRegionFromIcon       = new QToolButton(secondActionRow);
     tbRegionFromIcon->setDefaultAction(d->mapSearchWidget->getControlAction(QLatin1String("mousemode-regionselectionfromiconmode")));
     secondActionRowHBox->addWidget(tbRegionFromIcon);
 
@@ -232,7 +232,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     thirdActionRowVBox->setContentsMargins(QMargins());
     nonGeolocatedActionRow->setLayout(thirdActionRowVBox);
 
-    QPushButton* const nonGeolocatedBtn = new QPushButton(nonGeolocatedActionRow);
+    QPushButton* const nonGeolocatedBtn   = new QPushButton(nonGeolocatedActionRow);
     nonGeolocatedBtn->setText(i18n("Show Non-Geolocated Items"));
     nonGeolocatedBtn->setIcon(QIcon::fromTheme(QLatin1String("emblem-unmounted")));
     thirdActionRowVBox->addWidget(nonGeolocatedBtn);
@@ -400,7 +400,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
 void GPSSearchView::slotRegionSelectionChanged()
 {
     const GeoIface::GeoCoordinates::Pair newRegionSelection = d->mapSearchWidget->getRegionSelection();
-    const bool haveRegionSelection = newRegionSelection.first.hasCoordinates();
+    const bool haveRegionSelection                          = newRegionSelection.first.hasCoordinates();
 
     if (haveRegionSelection)
     {
@@ -433,7 +433,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
     // We query the database here
 
     const GeoIface::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getRegionSelection();
-    const bool haveCoordinates = coordinates.first.hasCoordinates();
+    const bool haveCoordinates                       = coordinates.first.hasCoordinates();
 
     if (haveCoordinates)
     {
@@ -631,7 +631,7 @@ void GPSSearchView::showNonGeolocatedItems()
 
     int id;
 
-    if(album)
+    if (album)
     {
         id = album->id();
         CoreDbAccess().db()->updateSearch(id,DatabaseSearch::AdvancedSearch,
@@ -645,7 +645,7 @@ void GPSSearchView::showNonGeolocatedItems()
 
     album = new SAlbum(i18n("Non Geo-located Items"), id);
 
-    if(album)
+    if (album)
     {
         AlbumManager::instance()->setCurrentAlbums(QList<Album*>() << album);
     }
@@ -665,4 +665,4 @@ void GPSSearchView::slotClearImages()
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

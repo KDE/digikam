@@ -6,8 +6,8 @@
  * Date        : 2010-07-20
  * Description : GPS search marker tiler
  *
- * Copyright (C) 2010       by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
- * Copyright (C) 2010       by Gabriel Voicu <ping dot gabi at gmail dot com>
+ * Copyright (C) 2010      by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
+ * Copyright (C) 2010      by Gabriel Voicu <ping dot gabi at gmail dot com>
  * Copyright (C) 2010-2011 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C) 2015      by Mohamed Anwer <m dot anwer at gmx dot com>
  *
@@ -46,6 +46,7 @@
 
 /// @todo Actually use this definition!
 typedef QPair<GeoIface::TileIndex, int> MapPair;
+
 Q_DECLARE_METATYPE(MapPair)
 
 namespace Digikam
@@ -193,7 +194,7 @@ void GPSMarkerTiler::prepareTiles(const GeoIface::GeoCoordinates& upperLeft, con
     qreal lng2 = lowerRight.lon();
     const QRectF requestedRect(lat1, lng1, lat2 - lat1, lng2 - lng1);
 
-    for (int i = 0; i < d->rectList.count(); ++i)
+    for (int i = 0 ; i < d->rectList.count() ; ++i)
     {
         if (level != d->rectLevel.at(i))
         {
@@ -262,8 +263,8 @@ void GPSMarkerTiler::prepareTiles(const GeoIface::GeoCoordinates& upperLeft, con
 
     Private::InternalJobs currentJobInfo;
 
-    currentJobInfo.jobThread = currentJob;
-    currentJobInfo.level  = level;
+    currentJobInfo.jobThread          = currentJob;
+    currentJobInfo.level              = level;
 
     d->jobs.append(currentJobInfo);
 
@@ -285,7 +286,7 @@ GeoIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const GeoIface::Til
 
     MyTile* tile = static_cast<MyTile*>(rootTile());
 
-    for (int level = 0; level < tileIndex.indexCount(); ++level)
+    for (int level = 0 ; level < tileIndex.indexCount() ; ++level)
     {
         const int currentIndex = tileIndex.linearIndex(level);
         MyTile* childTile      = 0;
@@ -297,12 +298,12 @@ GeoIface::AbstractMarkerTiler::Tile* GPSMarkerTiler::getTile(const GeoIface::Til
                 return 0;
             }
 
-            for (int i = 0; i < tile->imagesId.count(); ++i)
+            for (int i = 0 ; i < tile->imagesId.count() ; ++i)
             {
-                const int currentImageId = tile->imagesId.at(i);
-                const GPSImageInfo currentImageInfo = d->imagesHash[currentImageId];
+                const int currentImageId                  = tile->imagesId.at(i);
+                const GPSImageInfo currentImageInfo       = d->imagesHash[currentImageId];
                 const GeoIface::TileIndex markerTileIndex = GeoIface::TileIndex::fromCoordinates(currentImageInfo.coordinates, level);
-                const int newTileIndex = markerTileIndex.lastIndex();
+                const int newTileIndex                    = markerTileIndex.lastIndex();
 
                 MyTile* const newTile = static_cast<MyTile*>(tile->getChild(newTileIndex));
 
@@ -381,12 +382,12 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const GeoIface::TileIndex& 
         return QVariant();
     }
 
-    GPSImageInfo bestMarkerInfo              = d->imagesHash.value(tile->imagesId.first());
+    GPSImageInfo bestMarkerInfo               = d->imagesHash.value(tile->imagesId.first());
     GeoIface::GroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
 
-    for (int i = 1; i < tile->imagesId.count(); ++i)
+    for (int i = 1 ; i < tile->imagesId.count() ; ++i)
     {
-        const GPSImageInfo currentMarkerInfo              = d->imagesHash.value(tile->imagesId.at(i));
+        const GPSImageInfo currentMarkerInfo               = d->imagesHash.value(tile->imagesId.at(i));
         const GeoIface::GroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
 
         if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
@@ -415,16 +416,16 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
     }
 
     const QPair<GeoIface::TileIndex, int> firstIndex = indices.first().value<QPair<GeoIface::TileIndex, int> >();
-    GPSImageInfo bestMarkerInfo                     = d->imagesHash.value(firstIndex.second);
+    GPSImageInfo bestMarkerInfo                      = d->imagesHash.value(firstIndex.second);
     GeoIface::GroupState bestMarkerGroupState        = getImageState(firstIndex.second);
     GeoIface::TileIndex bestMarkerTileIndex          = firstIndex.first;
 
-    for (int i = 1; i < indices.count(); ++i)
+    for (int i = 1 ; i < indices.count() ; ++i)
     {
         const QPair<GeoIface::TileIndex, int> currentIndex = indices.at(i).value<QPair<GeoIface::TileIndex, int> >();
 
-        GPSImageInfo currentMarkerInfo              = d->imagesHash.value(currentIndex.second);
-        GeoIface::GroupState currentMarkerGroupState = getImageState(currentIndex.second);
+        GPSImageInfo currentMarkerInfo                     = d->imagesHash.value(currentIndex.second);
+        GeoIface::GroupState currentMarkerGroupState       = getImageState(currentIndex.second);
 
         if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
@@ -472,8 +473,8 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     QPair<GeoIface::TileIndex, int> firstIndex  = a.value<QPair<GeoIface::TileIndex, int> >();
     QPair<GeoIface::TileIndex, int> secondIndex = b.value<QPair<GeoIface::TileIndex, int> >();
 
-    QList<int> aIndicesList = firstIndex.first.toIntList();
-    QList<int> bIndicesList = secondIndex.first.toIntList();
+    QList<int> aIndicesList                     = firstIndex.first.toIntList();
+    QList<int> bIndicesList                     = secondIndex.first.toIntList();
 
     if (firstIndex.second == secondIndex.second && aIndicesList == bIndicesList)
     {
@@ -496,7 +497,7 @@ GeoIface::GroupState GPSMarkerTiler::getTileGroupState(const GeoIface::TileIndex
     MyTile* const tile = static_cast<MyTile*>(getTile(tileIndex, true));
     GeoIface::GroupStateComputer tileStateComputer;
 
-    for (int i = 0; i < tile->imagesId.count(); ++i)
+    for (int i = 0 ; i < tile->imagesId.count() ; ++i)
     {
         const GeoIface::GroupState imageState = getImageState(tile->imagesId.at(i));
 
@@ -518,7 +519,7 @@ void GPSMarkerTiler::slotMapImagesJobData(const QList<ImageListerRecord>& record
 
     Private::InternalJobs* internalJob = 0;
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (sender() == d->jobs.at(i).jobThread)
         {
@@ -559,7 +560,7 @@ void GPSMarkerTiler::slotMapImagesJobResult()
 {
     int foundIndex = -1;
 
-    for (int i = 0; i < d->jobs.count(); ++i)
+    for (int i = 0 ; i < d->jobs.count() ; ++i)
     {
         if (sender() == d->jobs.at(i).jobThread)
         {
@@ -601,7 +602,7 @@ void GPSMarkerTiler::slotMapImagesJobResult()
         return;
     }
 
-    for (int i = 0; i < returnedImageInfo.count(); ++i)
+    for (int i = 0 ; i < returnedImageInfo.count() ; ++i)
     {
         const GPSImageInfo currentImageInfo = returnedImageInfo.at(i);
 
@@ -672,7 +673,7 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
         {
             // the image has no coordinates any more
             // remove it from the tiles and the image list
-            const GPSImageInfo oldInfo = d->imagesHash.value(id);
+            const GPSImageInfo oldInfo                    = d->imagesHash.value(id);
             const GeoIface::GeoCoordinates oldCoordinates = oldInfo.coordinates;
             const GeoIface::TileIndex oldTileIndex        = GeoIface::TileIndex::fromCoordinates(oldCoordinates, GeoIface::TileIndex::MaxLevel);
 
@@ -695,19 +696,19 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
             // the image id is known, therefore the image has already been sorted into tiles.
             // We assume that the coordinates of the image have changed.
 
-            const GPSImageInfo oldInfo                   = d->imagesHash.value(id);
+            const GPSImageInfo oldInfo                    = d->imagesHash.value(id);
             const GeoIface::GeoCoordinates oldCoordinates = oldInfo.coordinates;
-            const GPSImageInfo currentImageInfo          = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
+            const GPSImageInfo currentImageInfo           = GPSImageInfo::fromIdCoordinatesRatingDateTime(id, newCoordinates, newImageInfo.rating(), newImageInfo.dateTime());
 
             d->imagesHash.insert(id, currentImageInfo);
 
-            const GeoIface::TileIndex oldTileIndex = GeoIface::TileIndex::fromCoordinates(oldCoordinates, GeoIface::TileIndex::MaxLevel);
-            const GeoIface::TileIndex newTileIndex = GeoIface::TileIndex::fromCoordinates(newCoordinates, GeoIface::TileIndex::MaxLevel);
+            const GeoIface::TileIndex oldTileIndex        = GeoIface::TileIndex::fromCoordinates(oldCoordinates, GeoIface::TileIndex::MaxLevel);
+            const GeoIface::TileIndex newTileIndex        = GeoIface::TileIndex::fromCoordinates(newCoordinates, GeoIface::TileIndex::MaxLevel);
 
             // find out up to which level the tile indices are equal
-            int separatorLevel = -1;
+            int separatorLevel                            = -1;
 
-            for (int i = 0; i < GeoIface::TileIndex::MaxLevel; ++i)
+            for (int i = 0 ; i < GeoIface::TileIndex::MaxLevel ; ++i)
             {
                 if (oldTileIndex.at(i) != newTileIndex.at(i))
                 {
@@ -724,18 +725,16 @@ void GPSMarkerTiler::slotImageChange(const ImageChangeset& changeset)
 
             MyTile* currentTileOld = static_cast<MyTile*>(rootTile());
             MyTile* currentTileNew = currentTileOld;
+            int level              = 0;
 
-            int level = 0;
-
-            for (level = 0; level <= oldTileIndex.level(); ++level)
+            for (level = 0 ; level <= oldTileIndex.level() ; ++level)
             {
                 if (currentTileOld->childrenEmpty())
                 {
                     break;
                 }
 
-                const int tileIndex = oldTileIndex.at(level);
-
+                const int tileIndex        = oldTileIndex.at(level);
                 MyTile* const childTileOld = static_cast<MyTile*>(currentTileOld->getChild(tileIndex));
 
                 if (childTileOld == 0)
@@ -841,7 +840,7 @@ void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
             (doSelect ? QItemSelectionModel::Select : QItemSelectionModel::Deselect)
             | QItemSelectionModel::Rows;
 
-        for (int i = 0; i < clickedImagesId.count(); ++i)
+        for (int i = 0 ; i < clickedImagesId.count() ; ++i)
         {
             const QModelIndex currentIndex = d->imageFilterModel->indexForImageId(clickedImagesId.at(i));
 
@@ -871,6 +870,7 @@ void GPSMarkerTiler::onIndicesClicked(const ClickInfo& clickInfo)
 QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const GeoIface::TileIndex& tileIndex)
 {
     Q_ASSERT(tileIndex.level() <= GeoIface::TileIndex::MaxLevel);
+
     const MyTile* const myTile = static_cast<MyTile*>(getTile(tileIndex, true));
 
     if (!myTile)
@@ -977,9 +977,9 @@ void GPSMarkerTiler::slotSelectionChanged(const QItemSelection& selected, const 
 void GPSMarkerTiler::removeMarkerFromTileAndChildren(const qlonglong imageId, const GeoIface::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile)
 {
     MyTile* currentParentTile = parentTile;
-    MyTile* currentTile = startTile;
+    MyTile* currentTile       = startTile;
 
-    for (int level = startTileLevel; level <= markerTileIndex.level(); ++level)
+    for (int level = startTileLevel ; level <= markerTileIndex.level() ; ++level)
     {
         if (!currentTile->imagesId.contains(imageId))
         {
@@ -1014,7 +1014,7 @@ void GPSMarkerTiler::addMarkerToTileAndChildren(const qlonglong imageId, const G
 {
     MyTile* currentTile = startTile;
 
-    for (int level = startTileLevel; level <= markerTileIndex.level(); ++level)
+    for (int level = startTileLevel ; level <= markerTileIndex.level() ; ++level)
     {
         /// @todo This could be possible until all code paths are checked
         if (!currentTile->imagesId.contains(imageId))

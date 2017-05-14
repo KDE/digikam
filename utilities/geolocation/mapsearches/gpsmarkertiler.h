@@ -118,10 +118,12 @@ private:
     void removeMarkerFromTileAndChildren(const qlonglong imageId, const GeoIface::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
     void addMarkerToTileAndChildren(const qlonglong imageId, const GeoIface::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 
+private:
+
     class Private;
     Private* const d;
 };
 
 } // namespace Digikam
 
-#endif //GPSMARKERTILER_H
+#endif // GPSMARKERTILER_H

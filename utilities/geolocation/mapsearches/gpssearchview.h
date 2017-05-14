@@ -106,6 +106,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* GPSSEARCHVIEW_H */
+#endif // GPSSEARCHVIEW_H
