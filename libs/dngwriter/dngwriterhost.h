@@ -47,6 +47,6 @@ private:
     DNGWriter::Private* const m_priv;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DNGWRITERHOST_H */
+#endif // DNGWRITERHOST_H

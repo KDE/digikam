@@ -66,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DNGSETTINGS_H */
+#endif // DNGSETTINGS_H

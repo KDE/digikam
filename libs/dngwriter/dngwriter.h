@@ -96,6 +96,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DNGWRITER_H */
+#endif // DNGWRITER_H

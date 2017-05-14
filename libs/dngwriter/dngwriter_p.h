@@ -61,8 +61,6 @@
 
 #include "dngwriter.h"
 
-
-
 namespace Digikam
 {
 
@@ -106,6 +104,6 @@ public:
     QString outputFile;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* DNGWRITER_P_H */
+#endif // DNGWRITER_P_H
