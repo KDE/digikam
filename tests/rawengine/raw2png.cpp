@@ -33,11 +33,11 @@
 #include "drawdecoder.h"
 #include "drawdecodersettings.h"
 
-using namespace RawEngine;
+using namespace Digikam;
 
 int main(int argc, char** argv)
 {
-    if(argc != 2)
+    if (argc != 2)
     {
         qDebug() << "raw2png - RAW Camera Image to PNG Converter";
         qDebug() << "Usage: <rawfile>";
@@ -98,6 +98,7 @@ int main(int argc, char** argv)
     qDebug() << "raw2png: Loading half RAW image";
 
     image = QImage();
+
     if (!rawProcessor.loadHalfPreview(image, filePath))
     {
         qDebug() << "raw2png: Loading half RAW image failed. Aborted...";
@@ -108,6 +109,7 @@ int main(int argc, char** argv)
              << halfOutput.fileName() << " size ("
              << image.width() << "x" << image.height()
              << ")";
+
     image.save(halfFilePath, "PNG");
 
     // -----------------------------------------------------------
@@ -131,6 +133,7 @@ int main(int argc, char** argv)
              << fullOutput.fileName() << " size ("
              << image.width() << "x" << image.height()
              << ")";
+
     image.save(fullFilePath, "PNG");
 
     return 0;

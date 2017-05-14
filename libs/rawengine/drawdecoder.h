@@ -43,7 +43,7 @@
 #include "rawinfo.h"
 #include "digikam_export.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT DRawDecoder : public QObject
@@ -239,6 +239,6 @@ private:
     friend class Private;
 };
 
-} // namespace RawEngine
+} // namespace Digikam
 
 #endif // DRAW_DECODER_H

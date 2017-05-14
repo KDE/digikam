@@ -24,6 +24,9 @@
 #ifndef _RAW_FILES_H_
 #define _RAW_FILES_H_
 
+namespace Digikam
+{
+
 // NOTE: extension list Version 1 and 2 are taken from http://www.cybercom.net/~dcoffin/dcraw/rawphoto.c
 
 //                                           Ext    Descriptions From
@@ -93,5 +96,7 @@ static const char raw_file_extentions[] =
 
 // increment this number whenever you change the above string
 static const int raw_file_extensions_version = 4;
+
+} // namespace Digikam
 
 #endif // _RAW_FILES_H_

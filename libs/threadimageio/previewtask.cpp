@@ -212,7 +212,7 @@ void PreviewLoadingTask::execute()
         {
             RawInfo container;
 
-            if (RawEngine::DRawDecoder::rawFileIdentify(container, m_loadingDescription.filePath))
+            if (DRawDecoder::rawFileIdentify(container, m_loadingDescription.filePath))
             {
                 originalSize = container.imageSize;
             }
@@ -528,7 +528,7 @@ bool PreviewLoadingTask::loadLibRawPreview(int sizeLimit)
     }
 
     QImage kdcrawPreview;
-    RawEngine::DRawDecoder::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
+    DRawDecoder::loadEmbeddedPreview(kdcrawPreview, m_loadingDescription.filePath);
 
     if (!kdcrawPreview.isNull() &&
         (sizeLimit == -1 || qMax(kdcrawPreview.width(), kdcrawPreview.height()) >= sizeLimit) )
@@ -548,7 +548,7 @@ bool PreviewLoadingTask::loadHalfSizeRaw()
         return false;
     }
 
-    RawEngine::DRawDecoder::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
+    DRawDecoder::loadHalfPreview(m_qimage, m_loadingDescription.filePath);
     return (!m_qimage.isNull());
 }
 

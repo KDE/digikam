@@ -77,7 +77,7 @@ dng_date_time DNGWriter::Private::dngDateTime(const QDateTime& qDT) const
     return dngDT;
 }
 
-bool DNGWriter::Private::fujiRotate(QByteArray& rawData, RawEngine::RawInfo& identify) const
+bool DNGWriter::Private::fujiRotate(QByteArray& rawData, RawInfo& identify) const
 {
     QByteArray tmpData(rawData);
     int height             = identify.outputSize.height();

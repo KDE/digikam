@@ -110,7 +110,7 @@ void DRawDecoderSettingsWriter::write()
 
     AddParameterEnum(whiteBalance);
 
-    if (settings.whiteBalance == RawEngine::DRawDecoderSettings::CUSTOM)
+    if (settings.whiteBalance == DRawDecoderSettings::CUSTOM)
     {
         AddParameter(customWhiteBalance);
         AddParameter(customWhiteBalanceGreen);
@@ -146,21 +146,21 @@ void DRawDecoderSettingsWriter::write()
 
     AddParameterEnum(inputColorSpace);
 
-    if (settings.inputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMINPUTCS)
+    if (settings.inputColorSpace == DRawDecoderSettings::CUSTOMINPUTCS)
     {
         AddParameter(inputProfile);
     }
 
     AddParameterEnum(outputColorSpace);
 
-    if (settings.outputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMOUTPUTCS)
+    if (settings.outputColorSpace == DRawDecoderSettings::CUSTOMOUTPUTCS)
     {
         AddParameter(outputProfile);
     }
 
     AddParameterIfNotDefault(deadPixelMap);
 
-    if (settings.whiteBalance == RawEngine::DRawDecoderSettings::AERA /*sic*/)
+    if (settings.whiteBalance == DRawDecoderSettings::AERA /*sic*/)
     {
         if (!settings.whiteBalanceArea.isNull())
         {
@@ -235,7 +235,7 @@ void DRawDecoderSettingsReader::read()
 
     ReadParameterEnum(whiteBalance);
 
-    if (settings.whiteBalance == RawEngine::DRawDecoderSettings::CUSTOM)
+    if (settings.whiteBalance == DRawDecoderSettings::CUSTOM)
     {
         ReadParameter(customWhiteBalance);
         ReadParameter(customWhiteBalanceGreen);
@@ -271,14 +271,14 @@ void DRawDecoderSettingsReader::read()
 
     ReadParameterEnum(inputColorSpace);
 
-    if (settings.inputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMINPUTCS)
+    if (settings.inputColorSpace == DRawDecoderSettings::CUSTOMINPUTCS)
     {
         ReadParameter(inputProfile);
     }
 
     ReadParameterEnum(outputColorSpace);
 
-    if (settings.outputColorSpace == RawEngine::DRawDecoderSettings::CUSTOMOUTPUTCS)
+    if (settings.outputColorSpace == DRawDecoderSettings::CUSTOMOUTPUTCS)
     {
         ReadParameter(outputProfile);
     }

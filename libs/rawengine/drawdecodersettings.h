@@ -36,7 +36,7 @@
 
 #include "digikam_export.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT DRawDecoderSettings
@@ -354,6 +354,6 @@ public:
 //! qDebug() stream operator. Writes settings @a s to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const DRawDecoderSettings& s);
 
-} // namespace RawEngine
+} // namespace Digikam
 
 #endif // DRAW_DECODER_SETTINGS_H

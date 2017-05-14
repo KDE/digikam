@@ -472,7 +472,7 @@ void CoreDbSchemaUpdater::defaultFilterSettings(QStringList& defaultImageFilter,
                        << QLatin1String("bmp") << QLatin1String("xcf")  << QLatin1String("pcx")
                        << QLatin1String("webp");
 
-    defaultImageFilter << RawEngine::DRawDecoder::rawFilesList();
+    defaultImageFilter << DRawDecoder::rawFilesList();
 
     defaultVideoFilter << QLatin1String("mpeg") << QLatin1String("mpg")  << QLatin1String("mpo") << QLatin1String("mpe") << QLatin1String("mts") << QLatin1String("vob")    // MPEG
                        << QLatin1String("avi")  << QLatin1String("divx")                                                                                                    // RIFF
@@ -501,7 +501,7 @@ bool CoreDbSchemaUpdater::createFilterSettings()
     d->albumDB->setFilterSettings(defaultImageFilter, defaultVideoFilter, defaultAudioFilter);
     d->albumDB->setIgnoreDirectoryFilterSettings(defaultIgnoreDirectoryFilter);
     d->albumDB->setSetting(QLatin1String("FilterSettingsVersion"),      QString::number(filterSettingsVersion()));
-    d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(RawEngine::DRawDecoder::rawFilesVersion()));
+    d->albumDB->setSetting(QLatin1String("DcrawFilterSettingsVersion"), QString::number(DRawDecoder::rawFilesVersion()));
 
     return true;
 }
@@ -512,7 +512,7 @@ bool CoreDbSchemaUpdater::updateFilterSettings()
     QString dcrawFilterVersion = d->albumDB->getSetting(QLatin1String("DcrawFilterSettingsVersion"));
 
     if (filterVersion.toInt() < filterSettingsVersion() ||
-        dcrawFilterVersion.toInt() < RawEngine::DRawDecoder::rawFilesVersion())
+        dcrawFilterVersion.toInt() < DRawDecoder::rawFilesVersion())
     {
         createFilterSettings();
     }

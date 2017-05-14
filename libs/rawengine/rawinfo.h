@@ -35,7 +35,7 @@
 
 #include "digikam_export.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT RawInfo
@@ -151,6 +151,6 @@ public:
 //! qDebug() stream operator. Writes container @a c to the debug output in a nicely formatted way.
 QDebug operator<<(QDebug dbg, const RawInfo& c);
 
-} // namespace RawEngine
+} // namespace Digikam
 
 #endif // _RAW_INFO_H_

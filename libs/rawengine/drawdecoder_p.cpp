@@ -32,7 +32,7 @@
 
 #include "digikam_debug.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 int callbackForLibRaw(void* data, enum LibRaw_progress p, int iteration, int expected)
@@ -684,4 +684,4 @@ bool DRawDecoder::Private::loadHalfPreview(QImage& image, LibRaw& raw)
     return true;
 }
 
-}  // namespace RawEngine
+}  // namespace Digikam

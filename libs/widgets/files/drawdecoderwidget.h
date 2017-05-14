@@ -42,7 +42,7 @@
 #include "dfileselector.h"
 #include "digikam_export.h"
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {

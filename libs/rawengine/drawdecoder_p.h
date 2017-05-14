@@ -57,7 +57,7 @@
 #include "rawinfo.h"
 #include "drawdecoder.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 extern "C"
@@ -102,6 +102,6 @@ private:
     friend class DRawDecoder;
 };
 
-} // namespace RawEngine
+} // namespace Digikam
 
 #endif // DRAW_DECODER_PRIVATE_H

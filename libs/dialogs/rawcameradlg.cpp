@@ -64,7 +64,7 @@ RawCameraDlg::RawCameraDlg(QWidget* const parent)
 {
     setWindowTitle(i18n("List of supported RAW cameras"));
 
-    QStringList list = RawEngine::DRawDecoder::supportedCamera();
+    QStringList list = DRawDecoder::supportedCamera();
 
     // --------------------------------------------------------
 
@@ -130,8 +130,8 @@ void RawCameraDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 
 void RawCameraDlg::updateHeader(int results)
 {
-    QString librawVer = RawEngine::DRawDecoder::librawVersion();
-    QStringList list  = RawEngine::DRawDecoder::supportedCamera();
+    QString librawVer = DRawDecoder::librawVersion();
+    QStringList list  = DRawDecoder::supportedCamera();
 
     if (!results)
     {

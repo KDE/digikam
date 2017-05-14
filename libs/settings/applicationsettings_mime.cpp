@@ -33,7 +33,7 @@
 #include "coredbaccess.h"
 #include "coredb.h"
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {

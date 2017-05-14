@@ -43,7 +43,7 @@
 #include "digikam_debug.h"
 #include "rawfiles.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 DRawDecoder::DRawDecoder()
@@ -527,4 +527,4 @@ bool DRawDecoder::isRawFile(const QUrl& url)
     return (rawFilesExt.toUpper().contains(fileInfo.suffix().toUpper()));
 }
 
-}  // namespace RawEngine
+}  // namespace Digikam

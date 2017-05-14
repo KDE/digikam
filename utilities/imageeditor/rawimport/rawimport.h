@@ -33,13 +33,10 @@
 #include "dimg.h"
 #include "digikam_export.h"
 
-namespace RawEngine
-{
-    class DRawDecoderSettings;
-}
-
 namespace Digikam
 {
+
+class DRawDecoderSettings;
 
 class DIGIKAM_EXPORT RawImport : public EditorToolThreaded
 {

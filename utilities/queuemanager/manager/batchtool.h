@@ -38,7 +38,7 @@
 
 class QWidget;
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {

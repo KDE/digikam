@@ -30,7 +30,7 @@
 
 #include "drawdecoder.h"
 
-using namespace RawEngine;
+using namespace Digikam;
 
 int main(int /*argc*/, char** /*argv*/)
 {

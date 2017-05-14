@@ -50,11 +50,11 @@ void DImgFilterActionTest::testDRawDecoding()
 
     params.rawPrm.sixteenBitsImage      = true;
     params.rawPrm.autoBrightness        = true;
-    params.rawPrm.whiteBalance          = RawEngine::DRawDecoderSettings::AERA;
+    params.rawPrm.whiteBalance          = DRawDecoderSettings::AERA;
     params.rawPrm.RGBInterpolate4Colors = true;
-    params.rawPrm.RAWQuality            = RawEngine::DRawDecoderSettings::AMAZE;
-    params.rawPrm.NRType                = RawEngine::DRawDecoderSettings::WAVELETSNR;
-    params.rawPrm.outputColorSpace      = RawEngine::DRawDecoderSettings::ADOBERGB;
+    params.rawPrm.RAWQuality            = DRawDecoderSettings::AMAZE;
+    params.rawPrm.NRType                = DRawDecoderSettings::WAVELETSNR;
+    params.rawPrm.outputColorSpace      = DRawDecoderSettings::ADOBERGB;
 
     FilterAction action;
     params.writeToFilterAction(action);

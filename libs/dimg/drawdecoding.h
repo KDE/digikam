@@ -41,7 +41,7 @@
 
 class QDomElement;
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {

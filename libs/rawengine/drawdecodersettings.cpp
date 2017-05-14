@@ -25,7 +25,7 @@
 
 #include "drawdecodersettings.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 DRawDecoderSettings::DRawDecoderSettings()
@@ -269,4 +269,4 @@ QDebug operator<<(QDebug dbg, const DRawDecoderSettings& s)
     return dbg.space();
 }
 
-}  // namespace RawEngine
+}  // namespace Digikam

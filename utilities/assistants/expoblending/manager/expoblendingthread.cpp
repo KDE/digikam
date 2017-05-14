@@ -72,7 +72,7 @@
 #include "drawdecoderwidget.h"
 #include "drawdecoding.h"
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {

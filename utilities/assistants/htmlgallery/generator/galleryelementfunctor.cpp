@@ -46,7 +46,7 @@
 #include "drawdecoder.h"
 #include "rawinfo.h"
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {

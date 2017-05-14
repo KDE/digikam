@@ -25,7 +25,7 @@
 
 #include "rawinfo.h"
 
-namespace RawEngine
+namespace Digikam
 {
 
 RawInfo::RawInfo()
@@ -48,7 +48,7 @@ RawInfo::RawInfo()
     cameraMult[3]     = 0.0;
     blackPoint        = 0;
 
-    for (int ch=0; ch<4; ch++)
+    for (int ch = 0 ; ch < 4 ; ch++)
     {
         blackPointCh[ch] = 0;
     }
@@ -58,9 +58,9 @@ RawInfo::RawInfo()
     leftMargin        = 0;
     orientation       = ORIENTATION_NONE;
 
-    for (int x=0 ; x<3 ; x++)
+    for (int x = 0 ; x < 3 ; x++)
     {
-        for (int y=0 ; y<4 ; y++)
+        for (int y = 0 ; y < 4 ; y++)
         {
             cameraColorMatrix1[x][y] = 0.0;
             cameraColorMatrix2[x][y] = 0.0;
@@ -168,4 +168,4 @@ QDebug operator<<(QDebug dbg, const RawInfo& c)
     return dbg.space();
 }
 
-} // namespace RawEngine
+} // namespace Digikam

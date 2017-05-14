@@ -250,7 +250,7 @@ bool ShowfotoThumbnailModel::getThumbnail(const ShowfotoItemInfo& itemInfo, QIma
 
     // RAW files : try to extract embedded thumbnail using RawEngine
 
-    RawEngine::DRawDecoder::loadRawPreview(thumbnail, path);
+    DRawDecoder::loadRawPreview(thumbnail, path);
 
     if (!thumbnail.isNull())
     {

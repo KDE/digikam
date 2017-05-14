@@ -34,7 +34,7 @@
 #include "drawdecodersettings.h"
 #include "actionthreadbase.h"
 
-using namespace RawEngine;
+
 using namespace Digikam;
 
 class MyActionThread : public ActionThreadBase

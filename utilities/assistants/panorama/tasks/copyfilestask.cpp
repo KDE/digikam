@@ -36,7 +36,7 @@
 #include "digikam_debug.h"
 #include "drawdecoder.h"
 
-using namespace RawEngine;
+
 
 namespace Digikam
 {
