@@ -32,10 +32,11 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kbookmarkmanager.h>
 
 // Local includes
 
+#include "bookmarksmngr.h"
+#include "bookmarknode.h"
 #include "gpsbookmarkowner.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
@@ -55,47 +56,55 @@ public:
     {
     }
 
-    void addBookmarkGroupToModel(const KBookmarkGroup& group);
+    void addBookmarkGroupToModel(BookmarkNode* const);
 
 public:
 
     QStandardItemModel* model;
-    KBookmarkManager*   bookmarkManager;
+    BookmarksManager*   bookmarkManager;
     GPSImageModel*      imageModel;
     QPixmap             pixmap;
     QUrl                bookmarkIconUrl;
     bool                visible;
 };
 
-void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(const KBookmarkGroup& group)
+void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(BookmarkNode* const node)
 {
-    KBookmark currentBookmark = group.first();
+    if (node->type() != BookmarkNode::Folder)
+        return;
 
-    while (!currentBookmark.isNull())
+    QList<BookmarkNode*> list = node->children();
+
+    if (list.isEmpty())
+        return;
+
+    foreach(BookmarkNode* const currentBookmark, list)
     {
-        if (currentBookmark.isGroup())
+        if (currentBookmark)
         {
-            addBookmarkGroupToModel(currentBookmark.toGroup());
-        }
-        else
-        {
-            bool okay                                 = false;
-            const GeoIface::GeoCoordinates coordinates = GeoIface::GeoCoordinates::fromGeoUrl(currentBookmark.url().url(), &okay);
-
-            if (okay)
+            if (currentBookmark->type() == BookmarkNode::Folder)
             {
-                QStandardItem* const item = new QStandardItem();
-                item->setData(currentBookmark.text(), Qt::DisplayRole);
-                item->setData(QVariant::fromValue(coordinates), GPSBookmarkModelHelper::CoordinatesRole);
-                model->appendRow(item);
+                addBookmarkGroupToModel(currentBookmark);
+            }
+            else
+            {
+                bool okay                                  = false;
+                const GeoIface::GeoCoordinates coordinates =
+                    GeoIface::GeoCoordinates::fromGeoUrl(currentBookmark->url, &okay);
+
+                if (okay)
+                {
+                    QStandardItem* const item = new QStandardItem();
+                    item->setData(currentBookmark->title, Qt::DisplayRole);
+                    item->setData(QVariant::fromValue(coordinates), GPSBookmarkModelHelper::CoordinatesRole);
+                    model->appendRow(item);
+                }
             }
         }
-
-        currentBookmark = group.next(currentBookmark);
     }
 }
 
-GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager,
+GPSBookmarkModelHelper::GPSBookmarkModelHelper(BookmarksManager* const bookmarkManager,
                                                GPSImageModel* const imageModel,
                                                QObject* const parent)
     : ModelHelper(parent),
@@ -108,10 +117,13 @@ GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkM
                                              QString::fromLatin1("digikam/geolocationedit/bookmarks-marker.png")));
     d->pixmap          = QPixmap(d->bookmarkIconUrl.toLocalFile());
 
-    connect(d->bookmarkManager, SIGNAL(bookmarksChanged(QString)),
+    connect(d->bookmarkManager, SIGNAL(entryChanged(BookmarkNode*)),
             this, SLOT(slotUpdateBookmarksModel()));
 
-    connect(d->bookmarkManager, SIGNAL(changed(QString,QString)),
+    connect(d->bookmarkManager, SIGNAL(entryAdded(BookmarkNode*)),
+            this, SLOT(slotUpdateBookmarksModel()));
+
+    connect(d->bookmarkManager, SIGNAL(entryRemoved(BookmarkNode*, int, BookmarkNode*)),
             this, SLOT(slotUpdateBookmarksModel()));
 
     slotUpdateBookmarksModel();
@@ -180,7 +192,7 @@ void GPSBookmarkModelHelper::slotUpdateBookmarksModel()
     d->model->clear();
 
     // iterate trough all bookmarks
-    d->addBookmarkGroupToModel(d->bookmarkManager->root());
+    d->addBookmarkGroupToModel(d->bookmarkManager->bookmarks());
 }
 
 void GPSBookmarkModelHelper::setVisible(const bool state)

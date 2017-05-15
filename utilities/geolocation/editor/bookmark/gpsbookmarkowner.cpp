@@ -29,16 +29,14 @@
 #include <QStandardItemModel>
 #include <QStandardPaths>
 
-// KDE includes
-
-#include <kactioncollection.h>
-#include <kbookmarkmenu.h>
-
 // Local includes
 
 #include "gpsbookmarkmodelhelper.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
+#include "bookmarknode.h"
+#include "bookmarksmenu.h"
+#include "bookmarksdlg.h"
 
 namespace Digikam
 {
@@ -49,9 +47,7 @@ public:
 
     Private()
       : parent(0),
-        actionCollection(0),
         bookmarkManager(0),
-        bookmarkMenuController(0),
         bookmarkMenu(0),
         addBookmarkEnabled(true),
         bookmarkModelHelper(0)
@@ -59,10 +55,8 @@ public:
     }
 
     QWidget*                 parent;
-    KActionCollection*       actionCollection;
-    KBookmarkManager*        bookmarkManager;
-    KBookmarkMenu*           bookmarkMenuController;
-    QMenu*                   bookmarkMenu;
+    BookmarksManager*        bookmarkManager;
+    BookmarksMenu*           bookmarkMenu;
     bool                     addBookmarkEnabled;
     GPSBookmarkModelHelper*  bookmarkModelHelper;
     GeoIface::GeoCoordinates lastCoordinates;
@@ -74,72 +68,51 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* 
 {
     d->parent = parent;
 
-    // TODO: where do we save the bookmarks? right now, they are application-specific
     const QString bookmarksFileName = 
         QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
                                          QLatin1Char('/') +
                                          QLatin1String("digikam/geobookmarks.xml");
-    d->actionCollection             = new KActionCollection(this);
-    d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QLatin1String("digikamgeobookmarks"));
-    d->bookmarkManager->setUpdate(true);
-    d->bookmarkMenu                 = new QMenu(parent);
-    d->bookmarkMenuController       = new KBookmarkMenu(d->bookmarkManager, this, d->bookmarkMenu, d->actionCollection);
-    d->bookmarkModelHelper          = new GPSBookmarkModelHelper(d->bookmarkManager, gpsImageModel, this);
+    d->bookmarkManager              = new BookmarksManager(bookmarksFileName, this);
+    d->bookmarkManager->load();
+    d->bookmarkMenu                 = new BookmarksMenu(d->bookmarkManager, d->parent);
+    d->bookmarkModelHelper          = new GPSBookmarkModelHelper(d->bookmarkManager,
+                                                                 gpsImageModel, this);
+
+    createBookmarksMenu();
 }
 
 GPSBookmarkOwner::~GPSBookmarkOwner()
 {
+    d->bookmarkManager->save();
     delete d;
 }
 
 QMenu* GPSBookmarkOwner::getMenu() const
 {
-    return d->bookmarkMenu;
-}
-
-bool GPSBookmarkOwner::supportsTabs() const
-{
-    return false;
+    return dynamic_cast<QMenu*>(d->bookmarkMenu);
 }
 
 QString GPSBookmarkOwner::currentTitle() const
 {
     if (d->lastTitle.isEmpty())
     {
-        return currentUrl().toString();
+        return currentUrl();
     }
 
     return d->lastTitle;
 }
 
-QUrl GPSBookmarkOwner::currentUrl() const
+QString GPSBookmarkOwner::currentUrl() const
 {
     // TODO : check if this QUrl from QString conversion is fine.
-    return QUrl(d->lastCoordinates.geoUrl());
+    return d->lastCoordinates.geoUrl();
 }
 
-bool GPSBookmarkOwner::enableOption(BookmarkOption option) const
+void GPSBookmarkOwner::slotOpenBookmark(const QUrl& url)
 {
-    switch (option)
-    {
-        case ShowAddBookmark:
-            return d->addBookmarkEnabled;
-
-        case ShowEditBookmark:
-            return true;
-
-        default:
-            return false;
-    }
-}
-
-void GPSBookmarkOwner::openBookmark(const KBookmark& bookmark,
-                                    Qt::MouseButtons,
-                                    Qt::KeyboardModifiers)
-{
-    const QString url                         = bookmark.url().url().toLower();
+    const QString gps                         = url.url().toLower();
     bool  okay                                = false;
-    const GeoIface::GeoCoordinates coordinate = GeoIface::GeoCoordinates::fromGeoUrl(url, &okay);
+    const GeoIface::GeoCoordinates coordinate = GeoIface::GeoCoordinates::fromGeoUrl(gps, &okay);
 
     if (okay)
     {
@@ -149,18 +122,56 @@ void GPSBookmarkOwner::openBookmark(const KBookmark& bookmark,
     }
 }
 
+void GPSBookmarkOwner::slotShowBookmarksDialog()
+{
+    BookmarksDialog* const dialog = new BookmarksDialog(d->parent, d->bookmarkManager);
+/*
+    connect(dialog, SIGNAL(openUrl(QUrl)),
+            m_tabWidget, SLOT(loadUrlInCurrentTab(QUrl)));
+*/
+    dialog->show();
+    d->bookmarkManager->save();
+}
+
+void GPSBookmarkOwner::slotAddBookmark()
+{
+    AddBookmarkDialog dialog(currentUrl(), currentTitle(), d->parent, d->bookmarkManager);
+    dialog.exec();
+    d->bookmarkManager->save();
+}
+
 void GPSBookmarkOwner::changeAddBookmark(const bool state)
 {
     d->addBookmarkEnabled = state;
 
-    // re-create the menus:
-    // TODO: is there an easier way?
-    delete d->bookmarkMenuController;
-    d->bookmarkMenu->clear();
-    d->bookmarkMenuController = new KBookmarkMenu(d->bookmarkManager, this, d->bookmarkMenu, d->actionCollection);
+    createBookmarksMenu();
 }
 
-KBookmarkManager* GPSBookmarkOwner::bookmarkManager() const
+void GPSBookmarkOwner::createBookmarksMenu()
+{
+    d->bookmarkMenu->clear();
+
+    QList<QAction*> bookmarksActions;
+
+    QAction* const showAllBookmarksAction = new QAction(i18n("Show All Bookmarks"), d->parent);
+    bookmarksActions.append(showAllBookmarksAction);
+
+    connect(showAllBookmarksAction, SIGNAL(triggered()),
+            this, SLOT(slotShowBookmarksDialog()));
+
+    QAction* const addBookmark = new QAction(i18n("Add Bookmark..."), d->parent);
+    bookmarksActions.append(addBookmark);
+
+    connect(addBookmark, SIGNAL(triggered()),
+            this, SLOT(slotAddBookmark()));
+
+    d->bookmarkMenu->setInitialActions(bookmarksActions);
+
+    connect(d->bookmarkMenu, SIGNAL(openUrl(QUrl)),
+            this, SLOT(slotOpenBookmark(QUrl)));
+}
+
+BookmarksManager* GPSBookmarkOwner::bookmarkManager() const
 {
     return d->bookmarkManager;
 }

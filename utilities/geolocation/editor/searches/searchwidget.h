@@ -48,10 +48,7 @@ namespace Digikam
 {
 
 class GPSUndoCommand;
-
-#ifdef HAVE_KBOOKMARKS
 class GPSBookmarkOwner;
-#endif
 
 class SearchWidget : public QWidget
 {
@@ -59,10 +56,7 @@ class SearchWidget : public QWidget
 
 public:
 
-    SearchWidget(
-#ifdef HAVE_KBOOKMARKS
-                 GPSBookmarkOwner* const gpsBookmarkOwner,
-#endif
+    SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
                  GPSImageModel* const gpsImageModel,
                  QItemSelectionModel* const gpsImageSelectionModel,
                  QWidget* const parent

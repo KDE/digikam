@@ -159,7 +159,6 @@ find_package(KF5 ${KF5_MIN_VERSION}
              OPTIONAL_COMPONENTS
              KIO                    # For Desktop integration (Widgets only).
              IconThemes             # For Desktop integration.
-             Bookmarks              # For geolocation editor.
              FileMetaData           # For KDE file indexer support.
              ThreadWeaver           # For Panorama tool.
              NotifyConfig           # KDE desktop application notify configuration.
@@ -390,7 +389,6 @@ MACRO_BOOL_TO_01(KF5Kipi_FOUND                                          HAVE_KIP
 MACRO_BOOL_TO_01(KF5Sane_FOUND                                          HAVE_KSANE)
 MACRO_BOOL_TO_01(KF5FileMetaData_FOUND                                  HAVE_KFILEMETADATA)
 MACRO_BOOL_TO_01(KF5AkonadiContact_FOUND                                HAVE_AKONADICONTACT)
-MACRO_BOOL_TO_01(KF5Bookmarks_FOUND                                     HAVE_KBOOKMARKS)
 MACRO_BOOL_TO_01(KF5CalendarCore_FOUND                                  HAVE_KCALENDAR)
 MACRO_BOOL_TO_01(KF5Notifications_FOUND                                 HAVE_KNOTIFICATIONS)
 MACRO_BOOL_TO_01(KF5NotifyConfig_FOUND                                  HAVE_KNOTIFYCONFIG)
@@ -454,7 +452,6 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libkfilemetadata"  "https://projects.kde.org/proj
 PRINT_OPTIONAL_LIBRARY_STATUS("libakonadicontact" "https://projects.kde.org/projects/kde/kdepimlibs"                "(version >= ${AKONADI_MIN_VERSION})"  "digiKam will be compiled without KDE address book support."                  KF5AkonadiContact_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkcalcore"       "https://projects.kde.org/projects/kde/pim/kcalcore"              "(version >= ${CALENDAR_MIN_VERSION})" "digiKam will be compiled without KDE calendar support."                      KF5CalendarCore_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libthreadweaver"   "https://projects.kde.org/projects/frameworks/threadweaver"       "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without Panorama support."                          KF5ThreadWeaver_FOUND)
-PRINT_OPTIONAL_LIBRARY_STATUS("libkbookmarks"     "https://projects.kde.org/projects/frameworks/kbookmarks"         "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop bookmarks support."             KF5Bookmarks_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libkiconthemes"    "https://projects.kde.org/projects/frameworks/kiconthemes"        "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop icon themes support."           KF5IconThemes_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libknotifications" "https://projects.kde.org/projects/frameworks/knotifications"     "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop notifications support."         KF5Notifications_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libknotifyconfig"  "https://projects.kde.org/projects/frameworks/knotifyconfig"      "(version >= ${KF5_MIN_VERSION})"      "digiKam will be compiled without KDE desktop notify configuration support."  KF5NotifyConfig_FOUND)

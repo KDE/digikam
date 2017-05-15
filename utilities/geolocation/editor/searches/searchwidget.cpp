@@ -40,6 +40,8 @@
 #include <QStandardPaths>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QItemSelectionModel>
+#include <QItemSelection>
 
 // KDE includes
 
@@ -56,16 +58,11 @@
 #include "gpscommon.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
-
-#ifdef HAVE_KBOOKMARKS
 #include "gpsbookmarkowner.h"
-#endif
 
 #ifdef GPSSYNC_MODELTEST
-#include <modeltest.h>
+#   include <modeltest.h>
 #endif
-
-
 
 namespace Digikam
 {
@@ -86,10 +83,8 @@ public:
 
     Private()
     {
-#ifdef HAVE_KBOOKMARKS
         gpsBookmarkOwner                              = 0;
         actionBookmark                                = 0;
-#endif
         mapWidget                                     = 0;
         gpsImageModel                                 = 0;
         gosImageSelectionModel                        = 0;
@@ -119,11 +114,8 @@ public:
     QItemSelectionModel*     gosImageSelectionModel;
     QLineEdit*               searchTermLineEdit;
     QPushButton*             searchButton;
-
-#ifdef HAVE_KBOOKMARKS
     GPSBookmarkOwner*        gpsBookmarkOwner;
     QAction*                 actionBookmark;
-#endif
 
     // Search: backend
     SearchBackend*           searchBackend;
@@ -146,10 +138,7 @@ public:
     QIcon                    actionToggleAllResultsVisibilityIconChecked;
 };
 
-SearchWidget::SearchWidget(
-#ifdef HAVE_KBOOKMARKS
-                           GPSBookmarkOwner* const gpsBookmarkOwner,
-#endif
+SearchWidget::SearchWidget(GPSBookmarkOwner* const gpsBookmarkOwner,
                            GPSImageModel* const gpsImageModel,
                            QItemSelectionModel* const gosImageSelectionModel,
                            QWidget* const parent
@@ -157,10 +146,7 @@ SearchWidget::SearchWidget(
     : QWidget(parent),
       d(new Private())
 {
-#ifdef HAVE_KBOOKMARKS
     d->gpsBookmarkOwner       = gpsBookmarkOwner;
-#endif
-
     d->gpsImageModel          = gpsImageModel;
     d->gosImageSelectionModel = gosImageSelectionModel;
     d->searchBackend          = new SearchBackend(this);
@@ -239,10 +225,8 @@ SearchWidget::SearchWidget(
     d->treeView->setSelectionModel(d->searchResultsSelectionModel);
     d->treeView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-#ifdef HAVE_KBOOKMARKS
     d->actionBookmark = new QAction(i18n("Bookmarks"), this);
     d->actionBookmark->setMenu(d->gpsBookmarkOwner->getMenu());
-#endif
 
     connect(d->actionMoveImagesToThisResult, SIGNAL(triggered(bool)),
             this, SLOT(slotMoveSelectedImagesToThisResult()));
@@ -331,7 +315,8 @@ GeoIface::ModelHelper* SearchWidget::getModelHelper() const
     return d->searchResultModelHelper;
 }
 
-void SearchWidget::slotCurrentlySelectedResultChanged(const QModelIndex& current, const QModelIndex& previous)
+void SearchWidget::slotCurrentlySelectedResultChanged(const QModelIndex& current,
+                                                      const QModelIndex& previous)
 {
     Q_UNUSED(previous)
 
@@ -391,9 +376,7 @@ bool SearchWidget::eventFilter(QObject *watched, QEvent *event)
             {
                 const QModelIndex currentIndex                         = d->searchResultsSelectionModel->currentIndex();
                 const SearchResultModel::SearchResultItem searchResult = d->searchResultsModel->resultItem(currentIndex);
-#ifdef HAVE_KBOOKMARKS
                 d->gpsBookmarkOwner->setPositionAndTitle(searchResult.result.coordinates, searchResult.result.name);
-#endif
             }
 
             slotUpdateActionAvailability();
@@ -403,10 +386,8 @@ bool SearchWidget::eventFilter(QObject *watched, QEvent *event)
             menu->addAction(d->actionCopyCoordinates);
             menu->addAction(d->actionMoveImagesToThisResult);
             menu->addAction(d->actionRemovedSelectedSearchResultsFromList);
-#ifdef HAVE_KBOOKMARKS
 //          menu->addAction(d->actionBookmark);
             d->gpsBookmarkOwner->changeAddBookmark(true);
-#endif
 
             QContextMenuEvent* const e = static_cast<QContextMenuEvent*>(event);
             menu->exec(e->globalPos());

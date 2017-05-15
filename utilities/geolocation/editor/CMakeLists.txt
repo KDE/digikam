@@ -43,25 +43,15 @@ set(libgeolocationedit_SRCS backends/backend-rg.cpp
                             dialog/gpsundocommand.cpp
                             dialog/geolocationedit.cpp
                             dialog/gpsgeoifacemodelhelper.cpp
-   )
 
-if(KF5Bookmarks_FOUND)
-    set(libgeolocationedit_SRCS ${libgeolocationedit_SRCS}
-                                bookmark/gpsbookmarkowner.cpp
-                                bookmark/gpsbookmarkmodelhelper.cpp
+                            bookmark/gpsbookmarkowner.cpp
+                            bookmark/gpsbookmarkmodelhelper.cpp
 
-                                bookmark/xbel.cpp
-                                bookmark/edittreeview.cpp
-                                bookmark/searchlineedit.cpp
-                                bookmark/modelmenu.cpp
-                                bookmark/bookmarks.cpp
-    )
-
-    ki18n_wrap_ui(libgeolocationedit_SRCS
-                  bookmark/bookmarks.ui
-                  bookmark/addbookmarkdialog.ui
-    )
-endif()
+                            bookmark/bookmarknode.cpp
+                            bookmark/bookmarksmenu.cpp
+                            bookmark/bookmarksmngr.cpp
+                            bookmark/bookmarksdlg.cpp
+)
 
 include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>

@@ -22,20 +22,18 @@
  *
  * ============================================================ */
 
-#ifndef GPSBOOKMARKOWNER_H
-#define GPSBOOKMARKOWNER_H
+#ifndef GPS_BOOK_MARK_OWNER_H
+#define GPS_BOOK_MARK_OWNER_H
 
 // Qt includes
 
 #include <QMenu>
-
-// KDE includes
-
-#include <kbookmarkmanager.h>
+#include <QUrl>
 
 // Local includes
 
 #include "gpsdatacontainer.h"
+#include "bookmarksmngr.h"
 
 namespace Digikam
 {
@@ -43,7 +41,7 @@ namespace Digikam
 class GPSImageModel;
 class GPSBookmarkModelHelper;
 
-class GPSBookmarkOwner : public QObject, public KBookmarkOwner
+class GPSBookmarkOwner : public QObject
 {
     Q_OBJECT
 
@@ -55,21 +53,25 @@ public:
     void changeAddBookmark(const bool state);
     void setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates, const QString& title);
 
-    QMenu* getMenu()                              const;
-    KBookmarkManager*       bookmarkManager()     const;
+    QMenu*                  getMenu()             const;
+    BookmarksManager*       bookmarkManager()     const;
     GPSBookmarkModelHelper* bookmarkModelHelper() const;
-
-public:
-
-    virtual bool    supportsTabs()                      const;
-    virtual QString currentTitle()                      const;
-    virtual QUrl    currentUrl()                        const;
-    virtual bool    enableOption(BookmarkOption option) const;
-    virtual void    openBookmark(const KBookmark&, Qt::MouseButtons, Qt::KeyboardModifiers);
+    QString                 currentTitle()        const;
+    QString                 currentUrl()          const;
 
 Q_SIGNALS:
 
     void positionSelected(const GPSDataContainer& position);
+
+private Q_SLOTS:
+
+    void slotOpenBookmark(const QUrl&);
+    void slotShowBookmarksDialog();
+    void slotAddBookmark();
+
+private:
+
+    void createBookmarksMenu();
 
 private:
 
@@ -79,4 +81,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSBOOKMARKOWNER_H
+#endif // GPS_BOOK_MARK_OWNER_H

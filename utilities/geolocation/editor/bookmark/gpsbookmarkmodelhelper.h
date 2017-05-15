@@ -22,18 +22,18 @@
  *
  * ============================================================ */
 
-#ifndef GPSBOOKMARKMODELHELPER_H
-#define GPSBOOKMARKMODELHELPER_H
+#ifndef GPS_BOOKMARK_MODEL_HELPER_H
+#define GPS_BOOKMARK_MODEL_HELPER_H
+
+// Qt includes
+
+#include <QObject>
 
 // Local includes
 
 #include "modelhelper.h"
-
-// Local includes
-
 #include "gpsdatacontainer.h"
-
-class KBookmarkManager;
+#include "bookmarksmngr.h"
 
 namespace Digikam
 {
@@ -54,18 +54,24 @@ public:
 
 public:
 
-    GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const imageModel, QObject* const parent = 0);
+    GPSBookmarkModelHelper(BookmarksManager* const bookmarkManager,
+                           GPSImageModel* const imageModel,
+                           QObject* const parent = 0);
     virtual ~GPSBookmarkModelHelper();
 
     void setVisible(const bool state);
 
     virtual QAbstractItemModel* model() const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
-    virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
+    virtual bool itemCoordinates(const QModelIndex& index,
+                                 GeoIface::GeoCoordinates* const coordinates) const;
+    virtual bool itemIcon(const QModelIndex& index, QPoint* const offset,
+                          QSize* const size, QPixmap* const pixmap,
+                          QUrl* const url) const;
     virtual Flags modelFlags() const;
     virtual Flags itemFlags(const QModelIndex& index) const;
-    virtual void snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices);
+    virtual void snapItemsTo(const QModelIndex& targetIndex,
+                             const QList<QModelIndex>& snappedIndices);
 
 private Q_SLOTS:
 
@@ -83,4 +89,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSBOOKMARKMODELHELPER_H
+#endif // GPS_BOOKMARK_MODEL_HELPER_H
