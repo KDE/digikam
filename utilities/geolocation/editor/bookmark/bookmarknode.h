@@ -47,18 +47,19 @@ public:
 
 public:
 
-    BookmarkNode(Type type = Root, BookmarkNode *parent = 0);
+    explicit BookmarkNode(Type type = Root, BookmarkNode* parent = 0);
     ~BookmarkNode();
 
-    bool operator==(const BookmarkNode &other);
+    bool operator==(const BookmarkNode& other);
 
     Type type() const;
     void setType(Type type);
-    QList<BookmarkNode *> children() const;
-    BookmarkNode *parent() const;
+    
+    QList<BookmarkNode*> children() const;
+    BookmarkNode* parent()          const;
 
-    void add(BookmarkNode *child, int offset = -1);
-    void remove(BookmarkNode *child);
+    void add(BookmarkNode* child, int offset = -1);
+    void remove(BookmarkNode* child);
 
 public:
 
@@ -80,18 +81,19 @@ class XbelReader : public QXmlStreamReader
 {
 public:
 
-    XbelReader();
-    BookmarkNode *read(const QString &fileName);
-    BookmarkNode *read(QIODevice *device);
+    explicit XbelReader();
+
+    BookmarkNode* read(const QString& fileName);
+    BookmarkNode* read(QIODevice* device);
 
 private:
 
-    void readXBEL(BookmarkNode *parent);
-    void readTitle(BookmarkNode *parent);
-    void readDescription(BookmarkNode *parent);
-    void readSeparator(BookmarkNode *parent);
-    void readFolder(BookmarkNode *parent);
-    void readBookmarkNode(BookmarkNode *parent);
+    void readXBEL(BookmarkNode* parent);
+    void readTitle(BookmarkNode* parent);
+    void readDescription(BookmarkNode* parent);
+    void readSeparator(BookmarkNode* parent);
+    void readFolder(BookmarkNode* parent);
+    void readBookmarkNode(BookmarkNode* parent);
 };
 
 // -----------------------------------------------------------
@@ -100,13 +102,14 @@ class XbelWriter : public QXmlStreamWriter
 {
 public:
 
-    XbelWriter();
-    bool write(const QString &fileName, const BookmarkNode *root);
-    bool write(QIODevice *device, const BookmarkNode *root);
+    explicit XbelWriter();
+
+    bool write(const QString& fileName, const BookmarkNode* root);
+    bool write(QIODevice* device, const BookmarkNode* root);
 
 private:
 
-    void writeItem(const BookmarkNode *parent);
+    void writeItem(const BookmarkNode* parent);
 };
 
 } // namespace Digikam
