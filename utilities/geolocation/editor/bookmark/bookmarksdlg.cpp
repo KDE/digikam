@@ -38,6 +38,10 @@
 #include <QToolButton>
 #include <QDebug>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "bookmarksmngr.h"
@@ -288,11 +292,11 @@ void BookmarksDialog::customContextMenuRequested(const QPoint &pos)
 
     if (index.isValid() && !tree->model()->hasChildren(index))
     {
-        menu.addAction(tr("Open"), this, SLOT(open()));
+        menu.addAction(i18n("Open"), this, SLOT(open()));
         menu.addSeparator();
     }
 
-    menu.addAction(tr("Delete"), this, SLOT(removeOne()));
+    menu.addAction(i18n("Delete"), this, SLOT(removeOne()));
     menu.exec(QCursor::pos());
 }
 
@@ -320,7 +324,7 @@ void BookmarksDialog::newFolder()
     idx                  = m_proxyModel->mapToSource(idx);
     BookmarkNode* parent = m_bookmarksManager->bookmarksModel()->node(idx);
     BookmarkNode* node   = new BookmarkNode(BookmarkNode::Folder);
-    node->title          = tr("New Folder");
+    node->title          = i18n("New Folder");
     m_bookmarksManager->addBookmark(parent, node, currentIndex.row() + 1);
 }
 

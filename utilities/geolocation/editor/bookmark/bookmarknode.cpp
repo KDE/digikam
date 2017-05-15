@@ -27,6 +27,10 @@
 
 #include <QFile>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 namespace Digikam
 {
 
@@ -127,7 +131,7 @@ BookmarkNode *XbelReader::read(QIODevice *device)
             && (version.isEmpty() || version == QLatin1String("1.0"))) {
             readXBEL(root);
         } else {
-            raiseError(QObject::tr("The file is not an XBEL version 1.0 file."));
+            raiseError(i18n("The file is not an XBEL version 1.0 file."));
         }
     }
     return root;
@@ -205,7 +209,7 @@ void XbelReader::readBookmarkNode(BookmarkNode *parent)
             skipCurrentElement();
     }
     if (bookmark->title.isEmpty())
-        bookmark->title = QObject::tr("Unknown title");
+        bookmark->title = i18n("Unknown title");
 }
 
 

@@ -38,6 +38,10 @@
 #include <QDebug>
 #include <QApplication>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "bookmarknode.h"
@@ -50,7 +54,7 @@ namespace Digikam
 {
 
 RemoveBookmarksCommand::RemoveBookmarksCommand(BookmarksManager* mngr, BookmarkNode* parent, int row)
-    : QUndoCommand(BookmarksManager::tr("Remove Bookmark"))
+    : QUndoCommand(i18n("Remove Bookmark"))
     , m_row(row)
     , m_bookmarkManager(mngr)
     , m_node(parent->children().value(row))
@@ -87,7 +91,7 @@ InsertBookmarksCommand::InsertBookmarksCommand(BookmarksManager *m_bookmarkManag
                 BookmarkNode *parent, BookmarkNode *node, int row)
     : RemoveBookmarksCommand(m_bookmarkManagaer, parent, row)
 {
-    setText(BookmarksManager::tr("Insert Bookmark"));
+    setText(i18n("Insert Bookmark"));
     m_node = node;
 }
 
@@ -104,12 +108,12 @@ ChangeBookmarkCommand::ChangeBookmarkCommand(BookmarksManager* mngr, BookmarkNod
     if (m_title)
     {
         m_oldValue = m_node->title;
-        setText(BookmarksManager::tr("Name Change"));
+        setText(i18n("Name Change"));
     }
     else
     {
         m_oldValue = m_node->url;
-        setText(BookmarksManager::tr("Address Change"));
+        setText(i18n("Address Change"));
     }
 }
 
@@ -210,8 +214,8 @@ QVariant BookmarksModel::headerData(int section, Qt::Orientation orientation, in
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
         switch (section) {
-            case 0: return tr("Title");
-            case 1: return tr("Address");
+            case 0: return i18n("Title");
+            case 1: return i18n("Address");
         }
     }
     return QAbstractItemModel::headerData(section, orientation, role);
@@ -511,7 +515,7 @@ void BookmarksManager::load()
     if (reader.error() != QXmlStreamReader::NoError)
     {
         QMessageBox::warning(0, QLatin1String("Loading Bookmark"),
-            tr("Error when loading bookmarks on line %1, column %2:\n"
+            i18n("Error when loading bookmarks on line %1, column %2:\n"
                "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
     }
 
@@ -526,23 +530,23 @@ void BookmarksManager::load()
         if (node->type() == BookmarkNode::Folder)
         {
             // Automatically convert
-            if (node->title == tr("Toolbar Bookmarks") && !toolbar)
+            if (node->title == i18n("Toolbar Bookmarks") && !toolbar)
             {
-                node->title = tr(BOOKMARKBAR);
+                node->title = i18n(BOOKMARKBAR);
             }
 
-            if (node->title == tr(BOOKMARKBAR) && !toolbar)
+            if (node->title == i18n(BOOKMARKBAR) && !toolbar)
             {
                 toolbar = node;
             }
 
             // Automatically convert
-            if (node->title == tr("Menu") && !menu)
+            if (node->title == i18n("Menu") && !menu)
             {
-                node->title = tr(BOOKMARKMENU);
+                node->title = i18n(BOOKMARKMENU);
             }
 
-            if (node->title == tr(BOOKMARKMENU) && !menu)
+            if (node->title == i18n(BOOKMARKMENU) && !menu)
             {
                 menu = node;
             }
@@ -560,7 +564,7 @@ void BookmarksManager::load()
     if (!toolbar)
     {
         toolbar = new BookmarkNode(BookmarkNode::Folder, m_bookmarkRootNode);
-        toolbar->title = tr(BOOKMARKBAR);
+        toolbar->title = i18n(BOOKMARKBAR);
     }
     else
     {
@@ -570,7 +574,7 @@ void BookmarksManager::load()
     if (!menu)
     {
         menu = new BookmarkNode(BookmarkNode::Folder, m_bookmarkRootNode);
-        menu->title = tr(BOOKMARKMENU);
+        menu->title = i18n(BOOKMARKMENU);
     }
     else
     {
@@ -653,7 +657,7 @@ BookmarkNode *BookmarksManager::menu()
     {
         BookmarkNode *node = m_bookmarkRootNode->children().at(i);
 
-        if (node->title == tr(BOOKMARKMENU))
+        if (node->title == i18n(BOOKMARKMENU))
             return node;
     }
 
@@ -671,7 +675,7 @@ BookmarkNode *BookmarksManager::toolbar()
     {
         BookmarkNode *node = m_bookmarkRootNode->children().at(i);
 
-        if (node->title == tr(BOOKMARKBAR))
+        if (node->title == i18n(BOOKMARKBAR))
             return node;
     }
 
@@ -690,9 +694,9 @@ BookmarksModel *BookmarksManager::bookmarksModel()
 
 void BookmarksManager::importBookmarks()
 {
-    QString fileName = QFileDialog::getOpenFileName(0, tr("Open File"),
+    QString fileName = QFileDialog::getOpenFileName(0, i18n("Open File"),
                                                      QString(),
-                                                     tr("XBEL (*.xbel *.xml)"));
+                                                     i18n("XBEL (*.xbel *.xml)"));
     if (fileName.isEmpty())
         return;
 
@@ -700,26 +704,26 @@ void BookmarksManager::importBookmarks()
     BookmarkNode *importRootNode = reader.read(fileName);
     if (reader.error() != QXmlStreamReader::NoError) {
         QMessageBox::warning(0, QLatin1String("Loading Bookmark"),
-            tr("Error when loading bookmarks on line %1, column %2:\n"
+            i18n("Error when loading bookmarks on line %1, column %2:\n"
                "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
     }
 
     importRootNode->setType(BookmarkNode::Folder);
-    importRootNode->title = (tr("Imported %1").arg(QDate::currentDate().toString(Qt::SystemLocaleShortDate)));
+    importRootNode->title = (i18n("Imported %1").arg(QDate::currentDate().toString(Qt::SystemLocaleShortDate)));
     addBookmark(menu(), importRootNode);
 }
 
 void BookmarksManager::exportBookmarks()
 {
-    QString fileName = QFileDialog::getSaveFileName(0, tr("Save File"),
-                                tr("%1 Bookmarks.xbel").arg(QCoreApplication::applicationName()),
-                                tr("XBEL (*.xbel *.xml)"));
+    QString fileName = QFileDialog::getSaveFileName(0, i18n("Save File"),
+                                i18n("%1 Bookmarks.xbel").arg(QCoreApplication::applicationName()),
+                                i18n("XBEL (*.xbel *.xml)"));
     if (fileName.isEmpty())
         return;
 
     XbelWriter writer;
     if (!writer.write(fileName, m_bookmarkRootNode))
-        QMessageBox::critical(0, tr("Export error"), tr("error saving bookmarks"));
+        QMessageBox::critical(0, i18n("Export error"), i18n("error saving bookmarks"));
 }
 
 } // namespace Digikam
