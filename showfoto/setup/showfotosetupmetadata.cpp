@@ -131,7 +131,7 @@ SetupMetadata::SetupMetadata(QWidget* const parent )
                     "an older standard used in digital photography to store "
                     "photographer information in images.</p>"));
 
-    if (MetaEngine::supportXmp())
+    if (Digikam::MetaEngine::supportXmp())
     {
         txt.append(i18n("<p><a href='http://en.wikipedia.org/wiki/Extensible_Metadata_Platform'>XMP</a> - "
                         "a new standard used in digital photography, designed to replace IPTC.</p>"));
