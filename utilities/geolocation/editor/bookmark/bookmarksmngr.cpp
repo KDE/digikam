@@ -44,6 +44,7 @@
 
 #define BOOKMARKBAR "Bookmarks Bar"
 #define BOOKMARKMENU "Bookmarks Menu"
+#define MIMETYPE QLatin1String("application/bookmarks.xbel")
 
 namespace Digikam
 {
@@ -337,8 +338,6 @@ Qt::DropActions BookmarksModel::supportedDropActions () const
     return Qt::CopyAction | Qt::MoveAction;
 }
 
-#define MIMETYPE QLatin1String("application/bookmarks.xbel")
-
 QStringList BookmarksModel::mimeTypes() const
 {
     QStringList types;
@@ -516,8 +515,8 @@ void BookmarksManager::load()
                "%3").arg(reader.lineNumber()).arg(reader.columnNumber()).arg(reader.errorString()));
     }
 
-    BookmarkNode *toolbar = 0;
-    BookmarkNode *menu = 0;
+    BookmarkNode* toolbar = 0;
+    BookmarkNode* menu    = 0;
     QList<BookmarkNode*> others;
 
     for (int i = m_bookmarkRootNode->children().count() - 1; i >= 0; --i)
