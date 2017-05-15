@@ -202,7 +202,7 @@ BookmarksDialog::BookmarksDialog(QWidget *parent, BookmarksManager *manager)
             m_proxyModel, SLOT(setFilterFixedString(QString)));
 
     connect(removeButton, SIGNAL(clicked()),
-            tree, SLOT(removeOne()));
+            this, SLOT(removeOne()));
 
     m_proxyModel->setSourceModel(m_bookmarksModel);
     tree->setModel(m_proxyModel);
@@ -290,7 +290,7 @@ void BookmarksDialog::customContextMenuRequested(const QPoint &pos)
         menu.addSeparator();
     }
 
-    menu.addAction(tr("Delete"), tree, SLOT(removeOne()));
+    menu.addAction(tr("Delete"), this, SLOT(removeOne()));
     menu.exec(QCursor::pos());
 }
 
@@ -320,6 +320,18 @@ void BookmarksDialog::newFolder()
     BookmarkNode *node   = new BookmarkNode(BookmarkNode::Folder);
     node->title          = tr("New Folder");
     m_bookmarksManager->addBookmark(parent, node, currentIndex.row() + 1);
+}
+
+void BookmarksDialog::removeOne()
+{
+    QModelIndex idx = tree->currentIndex();
+
+    if (idx.isValid())
+    {
+        idx                = m_proxyModel->mapToSource(idx);
+        BookmarkNode *node = m_bookmarksManager->bookmarksModel()->node(idx);
+        m_bookmarksManager->removeBookmark(node);
+    }
 }
 
 } // namespace Digikam

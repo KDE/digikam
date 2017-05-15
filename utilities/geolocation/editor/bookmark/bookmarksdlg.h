@@ -104,6 +104,7 @@ private Q_SLOTS:
     void customContextMenuRequested(const QPoint &pos);
     void open();
     void newFolder();
+    void removeOne();
 
 private:
 
