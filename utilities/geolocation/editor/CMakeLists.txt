@@ -49,6 +49,17 @@ if(KF5Bookmarks_FOUND)
     set(libgeolocationedit_SRCS ${libgeolocationedit_SRCS}
                                 bookmark/gpsbookmarkowner.cpp
                                 bookmark/gpsbookmarkmodelhelper.cpp
+
+                                bookmark/xbel.cpp
+                                bookmark/edittreeview.cpp
+                                bookmark/searchlineedit.cpp
+                                bookmark/modelmenu.cpp
+                                bookmark/bookmarks.cpp
+    )
+
+    ki18n_wrap_ui(libgeolocationedit_SRCS
+                  bookmark/bookmarks.ui
+                  bookmark/addbookmarkdialog.ui
     )
 endif()
 

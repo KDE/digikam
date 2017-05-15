@@ -75,8 +75,10 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* 
     d->parent = parent;
 
     // TODO: where do we save the bookmarks? right now, they are application-specific
-    const QString bookmarksFileName = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
-                                      QLatin1Char('/') + QLatin1String("digikam/geobookmarks.xml");
+    const QString bookmarksFileName = 
+        QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
+                                         QLatin1Char('/') +
+                                         QLatin1String("digikam/geobookmarks.xml");
     d->actionCollection             = new KActionCollection(this);
     d->bookmarkManager              = KBookmarkManager::managerForFile(bookmarksFileName, QLatin1String("digikamgeobookmarks"));
     d->bookmarkManager->setUpdate(true);
@@ -131,7 +133,9 @@ bool GPSBookmarkOwner::enableOption(BookmarkOption option) const
     }
 }
 
-void GPSBookmarkOwner::openBookmark(const KBookmark& bookmark, Qt::MouseButtons, Qt::KeyboardModifiers)
+void GPSBookmarkOwner::openBookmark(const KBookmark& bookmark,
+                                    Qt::MouseButtons,
+                                    Qt::KeyboardModifiers)
 {
     const QString url                         = bookmark.url().url().toLower();
     bool  okay                                = false;
@@ -166,7 +170,8 @@ GPSBookmarkModelHelper* GPSBookmarkOwner::bookmarkModelHelper() const
     return d->bookmarkModelHelper;
 }
 
-void GPSBookmarkOwner::setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates, const QString& title)
+void GPSBookmarkOwner::setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates,
+                                           const QString& title)
 {
     d->lastCoordinates = coordinates;
     d->lastTitle       = title;

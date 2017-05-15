@@ -32,6 +32,7 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kbookmarkmanager.h>
 
 // Local includes
 
@@ -94,7 +95,9 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(const KBookmarkGro
     }
 }
 
-GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager, GPSImageModel* const imageModel, QObject* const parent)
+GPSBookmarkModelHelper::GPSBookmarkModelHelper(KBookmarkManager* const bookmarkManager,
+                                               GPSImageModel* const imageModel,
+                                               QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
@@ -129,7 +132,8 @@ QItemSelectionModel* GPSBookmarkModelHelper::selectionModel() const
     return 0;
 }
 
-bool GPSBookmarkModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const
+bool GPSBookmarkModelHelper::itemCoordinates(const QModelIndex& index,
+                                             GeoIface::GeoCoordinates* const coordinates) const
 {
     const GeoIface::GeoCoordinates itemCoordinates = index.data(CoordinatesRole).value<GeoIface::GeoCoordinates>();
 
@@ -141,7 +145,11 @@ bool GPSBookmarkModelHelper::itemCoordinates(const QModelIndex& index, GeoIface:
     return itemCoordinates.hasCoordinates();
 }
 
-bool GPSBookmarkModelHelper::itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const
+bool GPSBookmarkModelHelper::itemIcon(const QModelIndex& index,
+                                      QPoint* const offset,
+                                      QSize* const size,
+                                      QPixmap* const pixmap,
+                                      QUrl* const url) const
 {
     Q_UNUSED(index)
 
@@ -186,12 +194,13 @@ GeoIface::ModelHelper::Flags GPSBookmarkModelHelper::modelFlags() const
     return FlagSnaps|(d->visible?FlagVisible:FlagNull);
 }
 
-GeoIface::ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex& /*index*/) const
+GeoIface::ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex&) const
 {
     return FlagVisible|FlagSnaps;
 }
 
-void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices)
+void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex,
+                                         const QList<QModelIndex>& snappedIndices)
 {
     GPSUndoCommand* const undoCommand = new GPSUndoCommand();
     GeoIface::GeoCoordinates targetCoordinates;

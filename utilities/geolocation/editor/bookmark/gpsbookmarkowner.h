@@ -37,8 +37,6 @@
 
 #include "gpsdatacontainer.h"
 
-class KBookmarkManager;
-
 namespace Digikam
 {
 
@@ -54,21 +52,20 @@ public:
     GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* const parent);
     virtual ~GPSBookmarkOwner();
 
-    QMenu* getMenu() const;
-
     void changeAddBookmark(const bool state);
     void setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates, const QString& title);
 
+    QMenu* getMenu()                              const;
     KBookmarkManager*       bookmarkManager()     const;
     GPSBookmarkModelHelper* bookmarkModelHelper() const;
 
 public:
 
-    virtual bool    supportsTabs() const;
-    virtual QString currentTitle() const;
-    virtual QUrl    currentUrl()   const;
-    virtual bool enableOption(BookmarkOption option) const;
-    virtual void openBookmark(const KBookmark&, Qt::MouseButtons, Qt::KeyboardModifiers);
+    virtual bool    supportsTabs()                      const;
+    virtual QString currentTitle()                      const;
+    virtual QUrl    currentUrl()                        const;
+    virtual bool    enableOption(BookmarkOption option) const;
+    virtual void    openBookmark(const KBookmark&, Qt::MouseButtons, Qt::KeyboardModifiers);
 
 Q_SIGNALS:
 
