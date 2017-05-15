@@ -124,8 +124,10 @@ void AddBookmarkDialog::accept()
 {
     QModelIndex index = location->view()->currentIndex();
     index = m_proxyModel->mapToSource(index);
+
     if (!index.isValid())
         index = m_bookmarksManager->bookmarksModel()->index(0, 0);
+
     BookmarkNode *parent = m_bookmarksManager->bookmarksModel()->node(index);
     BookmarkNode *bookmark = new BookmarkNode(BookmarkNode::Bookmark);
     bookmark->url = m_url;
@@ -266,7 +268,7 @@ void BookmarksDialog::expandNodes(BookmarkNode *node)
 {
     for (int i = 0; i < node->children().count(); ++i)
     {
-        BookmarkNode *childNode = node->children()[i];
+        BookmarkNode* childNode = node->children()[i];
 
         if (childNode->expanded)
         {
@@ -316,20 +318,20 @@ void BookmarksDialog::newFolder()
         idx = tree->rootIndex();
 
     idx                  = m_proxyModel->mapToSource(idx);
-    BookmarkNode *parent = m_bookmarksManager->bookmarksModel()->node(idx);
-    BookmarkNode *node   = new BookmarkNode(BookmarkNode::Folder);
+    BookmarkNode* parent = m_bookmarksManager->bookmarksModel()->node(idx);
+    BookmarkNode* node   = new BookmarkNode(BookmarkNode::Folder);
     node->title          = tr("New Folder");
     m_bookmarksManager->addBookmark(parent, node, currentIndex.row() + 1);
 }
 
 void BookmarksDialog::removeOne()
 {
-    QModelIndex idx = tree->currentIndex();
+    QModelIndex index = tree->currentIndex();
 
-    if (idx.isValid())
+    if (index.isValid())
     {
-        idx                = m_proxyModel->mapToSource(idx);
-        BookmarkNode *node = m_bookmarksManager->bookmarksModel()->node(idx);
+        index              = m_proxyModel->mapToSource(index);
+        BookmarkNode* node = m_bookmarksManager->bookmarksModel()->node(index);
         m_bookmarksManager->removeBookmark(node);
     }
 }
