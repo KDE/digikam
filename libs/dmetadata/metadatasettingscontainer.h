@@ -33,10 +33,9 @@
 #include "digikam_export.h"
 #include "metaengine.h"
 
-class KConfigGroup;
 class QStringList;
 
-using namespace Digikam;
+class KConfigGroup;
 
 namespace Digikam
 {
@@ -84,30 +83,30 @@ public:
 
 public:
 
-    bool                        exifRotate;
-    bool                        exifSetOrientation;
+    bool                            exifRotate;
+    bool                            exifSetOrientation;
 
-    bool                        saveComments;
-    bool                        saveDateTime;
-    bool                        savePickLabel;
-    bool                        saveColorLabel;
-    bool                        saveRating;
+    bool                            saveComments;
+    bool                            saveDateTime;
+    bool                            savePickLabel;
+    bool                            saveColorLabel;
+    bool                            saveRating;
 
-    bool                        saveTemplate;
-    bool                        saveTags;
-    bool                        saveFaceTags;
+    bool                            saveTemplate;
+    bool                            saveTags;
+    bool                            saveFaceTags;
 
-    bool                        writeRawFiles;
-    bool                        updateFileTimeStamp;
-    bool                        rescanImageIfModified;
-    bool                        useXMPSidecar4Reading;
-    bool                        useLazySync;
+    bool                            writeRawFiles;
+    bool                            updateFileTimeStamp;
+    bool                            rescanImageIfModified;
+    bool                            useXMPSidecar4Reading;
+    bool                            useLazySync;
 
     MetaEngine::MetadataWritingMode metadataWritingMode;
 
-    RotationBehaviorFlags       rotationBehavior;
+    RotationBehaviorFlags           rotationBehavior;
 
-    QStringList                 sidecarExtensions;
+    QStringList                     sidecarExtensions;
 };
 
 }  // namespace Digikam
