@@ -55,15 +55,10 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 
 #include "mapwidget.h"
 #include "itemmarkertiler.h"
-
-// Local includes
-
 #include "dlayoutbox.h"
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
 #include "dexpanderbox.h"
-
-
 
 namespace Digikam
 {
@@ -117,7 +112,8 @@ public:
 };
 
 ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
-    : QWidget(parent), d(new Private)
+    : QWidget(parent),
+      d(new Private)
 {
     QGridLayout* const layout = new QGridLayout(this);
 
@@ -131,11 +127,11 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
     d->map                    = new GeoIface::MapWidget(mapPanel);
-    d->map->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup);
-    d->map->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup);
+    d->map->setAvailableMouseModes(GeoIface::MouseModePan | GeoIface::MouseModeZoomIntoGroup);
+    d->map->setVisibleMouseModes(GeoIface::MouseModePan | GeoIface::MouseModeZoomIntoGroup);
     d->map->setEnabledExtraActions(GeoIface::ExtraActionSticky);
     d->map->setVisibleExtraActions(GeoIface::ExtraActionSticky);
-    d->gpsImageInfoSorter = new GPSImageInfoSorter(this);
+    d->gpsImageInfoSorter     = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
     vlay2->setContentsMargins(QMargins());
@@ -212,7 +208,8 @@ ImagePropertiesGPSTab::~ImagePropertiesGPSTab()
 
 void ImagePropertiesGPSTab::readSettings(const KConfigGroup& group)
 {
-    d->gpsImageInfoSorter->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"), int(d->gpsImageInfoSorter->getSortOptions()))));
+    d->gpsImageInfoSorter->setSortOptions(GPSImageInfoSorter::SortOptions(group.readEntry(QLatin1String("Sort Order"),
+                                          int(d->gpsImageInfoSorter->getSortOptions()))));
     setWebGPSLocator(group.readEntry(QLatin1String("Web GPS Locator"), getWebGPSLocator()));
 
     KConfigGroup groupMapWidget = KConfigGroup(&group, QLatin1String("Map Widget"));
@@ -381,7 +378,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
 
     if (list.count() == 1)
     {
-        const GPSImageInfo info = list.first();
+        const GPSImageInfo info                     = list.first();
         const GeoIface::GeoCoordinates& coordinates = info.coordinates;
 
         if (!coordinates.hasAltitude())
@@ -398,7 +395,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
         d->date->setAdjustedText(QLocale().toString(info.dateTime, QLocale::ShortFormat));
     }
 
-    for (int i=0; i<d->gpsInfoList.count(); ++i)
+    for (int i = 0 ; i < d->gpsInfoList.count() ; ++i)
     {
         QStandardItem* const currentImageGPSItem = new QStandardItem();
         currentImageGPSItem->setData(QVariant::fromValue(d->gpsInfoList.at(i)), RoleGPSImageInfo);

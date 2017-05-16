@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESGPSTAB_H
-#define IMAGEPROPERTIESGPSTAB_H
+#ifndef IMAGE_PROPERTIES_GPS_TAB_H
+#define IMAGE_PROPERTIES_GPS_TAB_H
 
 // Qt includes
 
@@ -83,6 +83,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* IMAGEPROPERTIESGPSTAB_H */
+#endif // IMAGE_PROPERTIES_GPS_TAB_H
