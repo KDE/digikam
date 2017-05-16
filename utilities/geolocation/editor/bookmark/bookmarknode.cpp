@@ -34,40 +34,59 @@
 namespace Digikam
 {
 
-BookmarkNode::BookmarkNode(BookmarkNode::Type type, BookmarkNode* const parent)
-   : expanded(false),
-     m_parent(parent),
-     m_type(type)
+class BookmarkNode::Private
 {
+public:
+
+    Private() :
+        parent(0),
+        type(BookmarkNode::Root)
+    {
+    }
+
+    BookmarkNode*        parent;
+    Type                 type;
+    QList<BookmarkNode*> children;
+};
+
+BookmarkNode::BookmarkNode(BookmarkNode::Type type, BookmarkNode* const parent)
+   : d(new Private)
+{
+    expanded  = false;
+    d->parent = parent;
+    d->type   = type;
+
     if (parent)
         parent->add(this);
 }
 
 BookmarkNode::~BookmarkNode()
 {
-    if (m_parent)
-        m_parent->remove(this);
+    if (d->parent)
+        d->parent->remove(this);
 
-    qDeleteAll(m_children);
-    m_parent = 0;
-    m_type   = BookmarkNode::Root;
+    qDeleteAll(d->children);
+    d->parent = 0;
+    d->type   = BookmarkNode::Root;
+
+    delete d;
 }
 
 bool BookmarkNode::operator==(const BookmarkNode& other)
 {
-    if (url != other.url           ||
-        title != other.title       ||
-        desc != other.desc         ||
-        expanded != other.expanded ||
-        m_type != other.m_type     ||
-        m_children.count() != other.m_children.count())
+    if (url                 != other.url      ||
+        title               != other.title    ||
+        desc                != other.desc     ||
+        expanded            != other.expanded ||
+        d->type             != other.d->type  ||
+        d->children.count() != other.d->children.count())
     {
         return false;
     }
 
-    for (int i = 0 ; i < m_children.count() ; i++)
+    for (int i = 0 ; i < d->children.count() ; i++)
     {
-        if (!((*(m_children[i])) == (*(other.m_children[i]))))
+        if (!((*(d->children[i])) == (*(other.d->children[i]))))
             return false;
     }
 
@@ -76,43 +95,43 @@ bool BookmarkNode::operator==(const BookmarkNode& other)
 
 BookmarkNode::Type BookmarkNode::type() const
 {
-    return m_type;
+    return d->type;
 }
 
 void BookmarkNode::setType(Type type)
 {
-    m_type = type;
+    d->type = type;
 }
 
 QList<BookmarkNode*> BookmarkNode::children() const
 {
-    return m_children;
+    return d->children;
 }
 
 BookmarkNode* BookmarkNode::parent() const
 {
-    return m_parent;
+    return d->parent;
 }
 
 void BookmarkNode::add(BookmarkNode* child, int offset)
 {
-    Q_ASSERT(child->m_type != Root);
+    Q_ASSERT(child->d->type != Root);
 
-    if (child->m_parent)
-        child->m_parent->remove(child);
+    if (child->d->parent)
+        child->d->parent->remove(child);
 
-    child->m_parent = this;
+    child->d->parent = this;
 
     if (offset == -1)
-        offset = m_children.size();
+        offset = d->children.size();
 
-    m_children.insert(offset, child);
+    d->children.insert(offset, child);
 }
 
 void BookmarkNode::remove(BookmarkNode* child)
 {
-    child->m_parent = 0;
-    m_children.removeAll(child);
+    child->d->parent = 0;
+    d->children.removeAll(child);
 }
 
 // -------------------------------------------------------

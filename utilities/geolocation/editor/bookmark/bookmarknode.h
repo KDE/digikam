@@ -70,9 +70,8 @@ public:
 
 private:
 
-    BookmarkNode*        m_parent;
-    Type                 m_type;
-    QList<BookmarkNode*> m_children;
+    class Private;
+    Private* const d;
 };
 
 // -----------------------------------------------------------
