@@ -63,9 +63,6 @@
 /* Define to 1 if you have Baloo shared libraries installed */
 #cmakedefine HAVE_KFILEMETADATA 1
 
-/* Define to 1 if you have KBookmarks shared libraries installed */
-#cmakedefine HAVE_KBOOKMARKS 1
-
 /* Define to 1 if you have KIconThemes shared libraries installed */
 #cmakedefine HAVE_KICONTHEMES 1
 
