@@ -56,7 +56,7 @@ void ModelMenu::postPopulated()
 {
 }
 
-void ModelMenu::setModel(QAbstractItemModel *model)
+void ModelMenu::setModel(QAbstractItemModel* model)
 {
     m_model = model;
 }
@@ -86,7 +86,7 @@ int ModelMenu::firstSeparator() const
     return m_firstSeparator;
 }
 
-void ModelMenu::setRootIndex(const QModelIndex &index)
+void ModelMenu::setRootIndex(const QModelIndex& index)
 {
     m_root = index;
 }
@@ -148,7 +148,7 @@ void ModelMenu::slotAboutToShow()
     postPopulated();
 }
 
-void ModelMenu::createMenu(const QModelIndex &parent, int max, QMenu *parentMenu, QMenu *menu)
+void ModelMenu::createMenu(const QModelIndex& parent, int max, QMenu* parentMenu, QMenu* menu)
 {
     if (!menu)
     {
@@ -178,7 +178,7 @@ void ModelMenu::createMenu(const QModelIndex &parent, int max, QMenu *parentMenu
     connect(menu, SIGNAL(hovered(QAction*)),
             this, SLOT(hovered(QAction*)));
 
-    for (int i = 0; i < end; ++i)
+    for (int i = 0 ; i < end ; ++i)
     {
         QModelIndex idx = m_model->index(i, 0, parent);
 
@@ -201,7 +201,7 @@ void ModelMenu::createMenu(const QModelIndex &parent, int max, QMenu *parentMenu
 
 QAction* ModelMenu::makeAction(const QModelIndex& index)
 {
-    QIcon icon      = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
+    QIcon icon            = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
     QAction* const action = makeAction(icon, index.data().toString(), this);
     QVariant v;
     v.setValue(index);
@@ -210,19 +210,19 @@ QAction* ModelMenu::makeAction(const QModelIndex& index)
     return action;
 }
 
-QAction *ModelMenu::makeAction(const QIcon &icon, const QString &text, QObject *parent)
+QAction *ModelMenu::makeAction(const QIcon& icon, const QString& text, QObject* parent)
 {
     QFontMetrics fm(font());
 
-    if (-1 == m_maxWidth)
+    if (m_maxWidth == -1)
         m_maxWidth = fm.width(QLatin1Char('m')) * 30;
 
     QString smallText = fm.elidedText(text, Qt::ElideMiddle, m_maxWidth);
 
-    return new QAction(icon, smallText, parent);
+    return (new QAction(icon, smallText, parent));
 }
 
-void ModelMenu::triggered(QAction *action)
+void ModelMenu::triggered(QAction* action)
 {
     QVariant v = action->data();
 
@@ -233,13 +233,13 @@ void ModelMenu::triggered(QAction *action)
     }
 }
 
-void ModelMenu::hovered(QAction *action)
+void ModelMenu::hovered(QAction* action)
 {
     QVariant v = action->data();
 
     if (v.canConvert<QModelIndex>())
     {
-        QModelIndex idx = qvariant_cast<QModelIndex>(v);
+        QModelIndex idx       = qvariant_cast<QModelIndex>(v);
         QString hoveredString = idx.data(m_hoverRole).toString();
 
         if (!hoveredString.isEmpty())
@@ -261,7 +261,7 @@ BookmarksMenu::BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent
     setSeparatorRole(BookmarksModel::SeparatorRole);
 }
 
-void BookmarksMenu::activated(const QModelIndex &index)
+void BookmarksMenu::activated(const QModelIndex& index)
 {
     emit openUrl(index.data(BookmarksModel::UrlRole).toUrl());
 }
@@ -298,4 +298,4 @@ void BookmarksMenu::setInitialActions(const QList<QAction*>& actions)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

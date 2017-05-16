@@ -42,17 +42,12 @@ class ModelMenu : public QMenu
 {
     Q_OBJECT
 
-Q_SIGNALS:
-
-    void activated(const QModelIndex &index);
-    void hovered(const QString &text);
-
 public:
 
-    ModelMenu(QWidget* const parent = 0);
+    explicit ModelMenu(QWidget* const parent = 0);
 
-    void setModel(QAbstractItemModel *model);
-    QAbstractItemModel *model() const;
+    void setModel(QAbstractItemModel* model);
+    QAbstractItemModel* model() const;
 
     void setMaxRows(int max);
     int maxRows() const;
@@ -60,7 +55,7 @@ public:
     void setFirstSeparator(int offset);
     int firstSeparator() const;
 
-    void setRootIndex(const QModelIndex &index);
+    void setRootIndex(const QModelIndex& index);
     QModelIndex rootIndex() const;
 
     void setHoverRole(int role);
@@ -69,7 +64,12 @@ public:
     void setSeparatorRole(int role);
     int separatorRole() const;
 
-    QAction* makeAction(const QIcon &icon, const QString &text, QObject *parent);
+    QAction* makeAction(const QIcon& icon, const QString& text, QObject* parent);
+
+Q_SIGNALS:
+
+    void activated(const QModelIndex& index);
+    void hovered(const QString& text);
 
 protected:
 
@@ -80,23 +80,26 @@ protected:
     virtual void postPopulated();
 
     // put all of the children of parent into menu up to max
-    void createMenu(const QModelIndex &parent, int max, QMenu *parentMenu = 0, QMenu *menu = 0);
+    void createMenu(const QModelIndex& parent, int max, QMenu* parentMenu = 0, QMenu* menu = 0);
 
 private Q_SLOTS:
 
     void slotAboutToShow();
-    void triggered(QAction *action);
-    void hovered(QAction *action);
+    void triggered(QAction* action);
+    void hovered(QAction* action);
 
 private:
 
-    QAction *makeAction(const QModelIndex &index);
-    int m_maxRows;
-    int m_firstSeparator;
-    int m_maxWidth;
-    int m_hoverRole;
-    int m_separatorRole;
-    QAbstractItemModel *m_model;
+    QAction* makeAction(const QModelIndex& index);
+
+private:
+
+    int                   m_maxRows;
+    int                   m_firstSeparator;
+    int                   m_maxWidth;
+    int                   m_hoverRole;
+    int                   m_separatorRole;
+    QAbstractItemModel*   m_model;
     QPersistentModelIndex m_root;
 };
 
@@ -108,15 +111,15 @@ class BookmarksMenu : public ModelMenu
 {
     Q_OBJECT
 
-Q_SIGNALS:
-
-    void openUrl(const QUrl &url);
-
 public:
 
      explicit BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent = 0);
 
      void setInitialActions(const QList<QAction*>& actions);
+
+Q_SIGNALS:
+
+    void openUrl(const QUrl& url);
 
 protected:
 
@@ -132,6 +135,6 @@ private:
     QList<QAction*>   m_initialActions;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // BOOKMARKS_MENU_H
