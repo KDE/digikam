@@ -190,7 +190,7 @@ Q_SIGNALS:
 
 protected:
 
-    bool filterAcceptsRow(int srow, const QModelIndex& psrc) const;
+    bool filterAcceptsRow(int srow, const QModelIndex& sparent) const;
 
 private:
 

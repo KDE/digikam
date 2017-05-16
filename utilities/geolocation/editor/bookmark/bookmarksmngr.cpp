@@ -601,9 +601,27 @@ int TreeProxyModel::columnCount(const QModelIndex&) const
 
 bool TreeProxyModel::filterAcceptsRow(int srow, const QModelIndex& sparent) const
 {
-    bool ret = QSortFilterProxyModel::filterAcceptsRow(srow, sparent);
+    QModelIndex index = sourceModel()->index(srow, 0, sparent);
 
-    return ret;
+    if (!index.isValid())
+    {
+        return false;
+    }
+
+    if (index.data().toString().contains(filterRegExp()))
+    {
+        return true;
+    }
+
+    for (int i = 0 ; i < sourceModel()->rowCount(index) ; i++)
+    {
+        if (filterAcceptsRow(i, index))
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void TreeProxyModel::emitResult(bool v)
