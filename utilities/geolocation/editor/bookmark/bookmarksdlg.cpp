@@ -333,9 +333,6 @@ void BookmarksDialog::expandNodes(BookmarkNode* const node)
 void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
 {
     QMenu menu;
-    QModelIndex index = d->tree->indexAt(pos);
-    index             = index.sibling(index.row(), 0);
-
     menu.addAction(i18n("Delete"), this, SLOT(slotRemoveOne()));
     menu.exec(QCursor::pos());
 }
