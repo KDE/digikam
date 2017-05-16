@@ -470,15 +470,22 @@ bool AddBookmarkProxyModel::filterAcceptsRow(int source_row, const QModelIndex &
 
 // --------------------------------------------------------------
 
-TreeProxyModel::TreeProxyModel(QObject *parent) : QSortFilterProxyModel(parent)
+TreeProxyModel::TreeProxyModel(QObject* const parent)
+    : QSortFilterProxyModel(parent)
 {
-    //setSortRole(HistoryModel::DateTimeRole);
     setFilterCaseSensitivity(Qt::CaseInsensitive);
 }
 
-bool TreeProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool TreeProxyModel::filterAcceptsRow(int srow, const QModelIndex& source_parent) const
 {
-    return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
+    bool ret = QSortFilterProxyModel::filterAcceptsRow(srow, source_parent);
+
+    return ret;
+}
+
+void TreeProxyModel::emitResult(bool v)
+{
+    emit signalFilterAccepts(v);
 }
 
 // --------------------------------------------------------------

@@ -124,19 +124,16 @@ void GPSBookmarkOwner::slotOpenBookmark(const QUrl& url)
 
 void GPSBookmarkOwner::slotShowBookmarksDialog()
 {
-    BookmarksDialog* const dialog = new BookmarksDialog(d->parent, d->bookmarkManager);
-/*
-    connect(dialog, SIGNAL(openUrl(QUrl)),
-            m_tabWidget, SLOT(loadUrlInCurrentTab(QUrl)));
-*/
-    dialog->show();
+    BookmarksDialog* const dlg = new BookmarksDialog(d->parent, d->bookmarkManager);
+    dlg->show();
     d->bookmarkManager->save();
 }
 
 void GPSBookmarkOwner::slotAddBookmark()
 {
-    AddBookmarkDialog dialog(currentUrl(), currentTitle(), d->parent, d->bookmarkManager);
-    dialog.exec();
+    AddBookmarkDialog* const dlg = new AddBookmarkDialog(currentUrl(), currentTitle(),
+                                                         d->parent, d->bookmarkManager);
+    dlg->exec();
     d->bookmarkManager->save();
 }
 

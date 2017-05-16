@@ -92,21 +92,20 @@ public:
     explicit BookmarksDialog(QWidget* const parent = 0, BookmarksManager* const mngr = 0);
     ~BookmarksDialog();
 
-
 Q_SIGNALS:
 
-    void openUrl(const QUrl& url);
+    void signalOpenUrl(const QUrl&);
 
 private Q_SLOTS:
 
-    void customContextMenuRequested(const QPoint& pos);
-    void open();
-    void newFolder();
-    void removeOne();
+    void slotCustomContextMenuRequested(const QPoint&);
+    void slotOpen();
+    void slotNewFolder();
+    void slotRemoveOne();
 
 private:
 
-    void expandNodes(BookmarkNode* node);
+    void expandNodes(BookmarkNode* const node);
     bool saveExpandedNodes(const QModelIndex& parent);
 
 private:
@@ -114,16 +113,8 @@ private:
     BookmarksManager* m_bookmarksManager;
     BookmarksModel*   m_bookmarksModel;
     TreeProxyModel*   m_proxyModel;
-
-    QGridLayout*      gridLayout;
-    QSpacerItem*      spacerItem;
-    SearchTextBar*    search;
-    QTreeView*        tree;
-    QHBoxLayout*      hboxLayout;
-    QPushButton*      removeButton;
-    QPushButton*      addFolderButton;
-    QSpacerItem*      spacerItem1;
-    QDialogButtonBox* buttonBox;
+    SearchTextBar*    m_search;
+    QTreeView*        m_tree;
 };
 
 } // namespace Digikam

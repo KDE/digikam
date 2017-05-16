@@ -179,11 +179,19 @@ class TreeProxyModel : public QSortFilterProxyModel
 
 public:
 
-    explicit TreeProxyModel(QObject* parent = 0);
+    explicit TreeProxyModel(QObject* const parent = 0);
+
+Q_SIGNALS:
+
+    void signalFilterAccepts(bool);
 
 protected:
 
-    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    bool filterAcceptsRow(int srow, const QModelIndex& psrc) const;
+
+private:
+
+    void emitResult(bool v);
 };
 
 /**
