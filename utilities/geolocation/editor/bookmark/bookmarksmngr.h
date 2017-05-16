@@ -60,27 +60,31 @@ protected:
     bool              m_done;
 };
 
+//---------------------------------------------------------------------------------
+
 class InsertBookmarksCommand : public RemoveBookmarksCommand
 {
 public:
 
-    InsertBookmarksCommand(BookmarksManager* mngr,
-                           BookmarkNode* parent,
-                           BookmarkNode* node,
-                           int row);
+    explicit InsertBookmarksCommand(BookmarksManager* mngr,
+                                    BookmarkNode* parent,
+                                    BookmarkNode* node,
+                                    int row);
 
     void undo() { RemoveBookmarksCommand::redo(); }
     void redo() { RemoveBookmarksCommand::undo(); }
 };
 
+//---------------------------------------------------------------------------------
+
 class ChangeBookmarkCommand : public QUndoCommand
 {
 public:
 
-    ChangeBookmarkCommand(BookmarksManager* mngr,
-                          BookmarkNode* node,
-                          const QString& newValue,
-                          bool title);
+    explicit ChangeBookmarkCommand(BookmarksManager* mngr,
+                                   BookmarkNode* node,
+                                   const QString& newValue,
+                                   bool title);
     void undo();
     void redo();
 
@@ -100,48 +104,52 @@ class BookmarksModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-public Q_SLOTS:
-
-    void entryAdded(BookmarkNode *item);
-    void entryRemoved(BookmarkNode *parent, int row, BookmarkNode *item);
-    void entryChanged(BookmarkNode *item);
-
 public:
 
     enum Roles
     {
-        TypeRole = Qt::UserRole + 1,
-        UrlRole = Qt::UserRole + 2,
+        TypeRole      = Qt::UserRole + 1,
+        UrlRole       = Qt::UserRole + 2,
         UrlStringRole = Qt::UserRole + 3,
         SeparatorRole = Qt::UserRole + 4
     };
 
-    BookmarksModel(BookmarksManager *bookmarkManager, QObject *parent = 0);
-    inline BookmarksManager *bookmarksManager() const { return m_bookmarksManager; }
+public:
+
+    explicit BookmarksModel(BookmarksManager* bookmarkManager, QObject* parent = 0);
+
+    inline BookmarksManager* bookmarksManager() const { return m_bookmarksManager; }
 
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex index(int, int, const QModelIndex& = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex& index= QModelIndex()) const;
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    Qt::DropActions supportedDropActions () const;
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-    QStringList mimeTypes() const;
-    bool dropMimeData(const QMimeData *data,
-        Qt::DropAction action, int row, int column, const QModelIndex &parent);
-    bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole)                       const;
+    int columnCount(const QModelIndex& parent = QModelIndex())                                const;
+    int rowCount(const QModelIndex& parent = QModelIndex())                                   const;
+    QModelIndex index(int, int, const QModelIndex& = QModelIndex())                           const;
+    QModelIndex parent(const QModelIndex& index= QModelIndex())                               const;
+    Qt::ItemFlags flags(const QModelIndex& index)                                             const;
+    Qt::DropActions supportedDropActions ()                                                   const;
+    QMimeData* mimeData(const QModelIndexList& indexes)                                       const;
+    QStringList mimeTypes()                                                                   const;
+    bool hasChildren(const QModelIndex& parent = QModelIndex())                               const;
+    BookmarkNode* node(const QModelIndex& index)                                              const;
+    QModelIndex index(BookmarkNode* node)                                                     const;
 
-    BookmarkNode *node(const QModelIndex &index) const;
-    QModelIndex index(BookmarkNode *node) const;
+    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row,
+                      int column, const QModelIndex& parent);
+
+    bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    bool setData(const QModelIndex &index, const QVariant& value, int role = Qt::EditRole);
+
+public Q_SLOTS:
+
+    void entryAdded(BookmarkNode* item);
+    void entryRemoved(BookmarkNode* parent, int row, BookmarkNode* item);
+    void entryChanged(BookmarkNode* item);
 
 private:
 
-    bool m_endMacro;
-    BookmarksManager *m_bookmarksManager;
+    bool              m_endMacro;
+    BookmarksManager* m_bookmarksManager;
 };
 
 /**
@@ -154,15 +162,16 @@ class AddBookmarkProxyModel : public QSortFilterProxyModel
 
 public:
 
-    AddBookmarkProxyModel(QObject * parent = 0);
-    int columnCount(const QModelIndex & parent = QModelIndex()) const;
+    explicit AddBookmarkProxyModel(QObject* parent = 0);
+
+    int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
 protected:
 
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 };
 
-//----------------
+//---------------------------------------------------------------------------------
 
 class TreeProxyModel : public QSortFilterProxyModel
 {
@@ -170,11 +179,11 @@ class TreeProxyModel : public QSortFilterProxyModel
 
 public:
 
-    TreeProxyModel(QObject *parent = 0);
+    explicit TreeProxyModel(QObject* parent = 0);
 
 protected:
 
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
 };
 
 /**
@@ -184,15 +193,10 @@ class BookmarksManager : public QObject
 {
     Q_OBJECT
 
-Q_SIGNALS:
-
-    void entryAdded(BookmarkNode *item);
-    void entryRemoved(BookmarkNode *parent, int row, BookmarkNode* item);
-    void entryChanged(BookmarkNode *item);
 
 public:
 
-    BookmarksManager(const QString& bookmarksFile, QObject* const parent = 0);
+    explicit BookmarksManager(const QString& bookmarksFile, QObject* const parent = 0);
     ~BookmarksManager();
 
     void addBookmark(BookmarkNode* parent, BookmarkNode* node, int row = -1);
@@ -213,6 +217,12 @@ public:
 
     void save();
     void load();
+
+Q_SIGNALS:
+
+    void entryAdded(BookmarkNode* item);
+    void entryRemoved(BookmarkNode* parent, int row, BookmarkNode* item);
+    void entryChanged(BookmarkNode* item);
 
 public Q_SLOTS:
 
