@@ -52,9 +52,6 @@
 namespace Digikam
 {
 
-/**
- *   Add bookmark dialog
- */
 class AddBookmarkDialog : public QDialog
 {
     Q_OBJECT
@@ -63,8 +60,8 @@ public:
 
     explicit AddBookmarkDialog(const QString& url,
                                const QString& title,
-                               QWidget* parent = 0,
-                               BookmarksManager* bookmarkManager = 0);
+                               QWidget* const parent = 0,
+                               BookmarksManager* const mngr = 0);
 
 private Q_SLOTS:
 
@@ -90,18 +87,19 @@ class BookmarksDialog : public QDialog
 {
     Q_OBJECT
 
+public:
+
+    explicit BookmarksDialog(QWidget* const parent = 0, BookmarksManager* const mngr = 0);
+    ~BookmarksDialog();
+
+
 Q_SIGNALS:
 
     void openUrl(const QUrl& url);
 
-public:
-
-    explicit BookmarksDialog(QWidget* parent = 0, BookmarksManager* manager = 0);
-    ~BookmarksDialog();
-
 private Q_SLOTS:
 
-    void customContextMenuRequested(const QPoint &pos);
+    void customContextMenuRequested(const QPoint& pos);
     void open();
     void newFolder();
     void removeOne();
@@ -109,7 +107,7 @@ private Q_SLOTS:
 private:
 
     void expandNodes(BookmarkNode* node);
-    bool saveExpandedNodes(const QModelIndex &parent);
+    bool saveExpandedNodes(const QModelIndex& parent);
 
 private:
 

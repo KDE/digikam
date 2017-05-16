@@ -50,13 +50,13 @@
 namespace Digikam
 {
 
-AddBookmarkDialog::AddBookmarkDialog(const QString &url,
-                                     const QString &title,
-                                     QWidget *parent,
-                                     BookmarksManager *bookmarkManager)
+AddBookmarkDialog::AddBookmarkDialog(const QString& url,
+                                     const QString& title,
+                                     QWidget* const parent,
+                                     BookmarksManager* const mngr)
     : QDialog(parent),
       m_url(url),
-      m_bookmarksManager(bookmarkManager)
+      m_bookmarksManager(mngr)
 {
     setWindowFlags(Qt::Sheet);
     setWindowTitle(tr2i18n("Add Bookmark", 0));
@@ -142,10 +142,10 @@ void AddBookmarkDialog::accept()
 
 // ----------------------------------------------------------------
 
-BookmarksDialog::BookmarksDialog(QWidget *parent, BookmarksManager *manager)
+BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const mngr)
     : QDialog(parent)
 {
-    m_bookmarksManager = manager;
+    m_bookmarksManager = mngr;
 
     setObjectName(QStringLiteral("BookmarksDialog"));
     resize(750, 450);
@@ -241,11 +241,11 @@ BookmarksDialog::~BookmarksDialog()
         m_bookmarksManager->changeExpanded();
 }
 
-bool BookmarksDialog::saveExpandedNodes(const QModelIndex &parent)
+bool BookmarksDialog::saveExpandedNodes(const QModelIndex& parent)
 {
     bool changed = false;
 
-    for (int i = 0; i < m_proxyModel->rowCount(parent); ++i)
+    for (int i = 0 ; i < m_proxyModel->rowCount(parent) ; ++i)
     {
         QModelIndex child             = m_proxyModel->index(i, 0, parent);
         QModelIndex sourceIndex       = m_proxyModel->mapToSource(child);
@@ -268,9 +268,9 @@ bool BookmarksDialog::saveExpandedNodes(const QModelIndex &parent)
     return changed;
 }
 
-void BookmarksDialog::expandNodes(BookmarkNode *node)
+void BookmarksDialog::expandNodes(BookmarkNode* node)
 {
-    for (int i = 0; i < node->children().count(); ++i)
+    for (int i = 0 ; i < node->children().count() ; ++i)
     {
         BookmarkNode* childNode = node->children()[i];
 
@@ -284,7 +284,7 @@ void BookmarksDialog::expandNodes(BookmarkNode *node)
     }
 }
 
-void BookmarksDialog::customContextMenuRequested(const QPoint &pos)
+void BookmarksDialog::customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu;
     QModelIndex index = tree->indexAt(pos);
