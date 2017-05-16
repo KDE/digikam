@@ -111,68 +111,113 @@ void InsertBookmarksCommand::redo()
 
 // --------------------------------------------------------------
 
+class ChangeBookmarkCommand::Private
+{
+public:
+
+    Private() :
+        manager(0),
+        title(false),
+        node(0)
+    {
+    }
+
+    BookmarksManager* manager;
+    bool              title;
+    QString           oldValue;
+    QString           newValue;
+    BookmarkNode*     node;
+};
+
 ChangeBookmarkCommand::ChangeBookmarkCommand(BookmarksManager* const mngr,
                                              BookmarkNode* const node,
                                              const QString& newValue,
                                              bool title)
     : QUndoCommand(),
-      m_bookmarkManager(mngr),
-      m_title(title),
-      m_newValue(newValue),
-      m_node(node)
+      d(new Private)
 {
-    if (m_title)
+    d->manager  = mngr;
+    d->title    = title;
+    d->newValue = newValue;
+    d->node     = node;
+
+    if (d->title)
     {
-        m_oldValue = m_node->title;
+        d->oldValue = d->node->title;
         setText(i18n("Name Change"));
     }
     else
     {
-        m_oldValue = m_node->url;
+        d->oldValue = d->node->url;
         setText(i18n("Address Change"));
     }
 }
 
+ChangeBookmarkCommand::~ChangeBookmarkCommand()
+{
+    delete d;
+}
+
 void ChangeBookmarkCommand::undo()
 {
-    if (m_title)
-        m_node->title = m_oldValue;
+    if (d->title)
+        d->node->title = d->oldValue;
     else
-        m_node->url = m_oldValue;
+        d->node->url = d->oldValue;
 
-    emit m_bookmarkManager->entryChanged(m_node);
+    emit d->manager->entryChanged(d->node);
 }
 
 void ChangeBookmarkCommand::redo()
 {
-    if (m_title)
-        m_node->title = m_newValue;
+    if (d->title)
+        d->node->title = d->newValue;
     else
-        m_node->url = m_newValue;
+        d->node->url = d->newValue;
 
-    emit m_bookmarkManager->entryChanged(m_node);
+    emit d->manager->entryChanged(d->node);
 }
 
 // --------------------------------------------------------------
 
+class BookmarksModel::Private
+{
+public:
+
+    Private() :
+        manager(0),
+        endMacro(false)
+    {
+    }
+
+    BookmarksManager* manager;
+    bool              endMacro;
+};
+
 BookmarksModel::BookmarksModel(BookmarksManager* const mngr, QObject* const parent)
     : QAbstractItemModel(parent),
-      m_endMacro(false),
-      m_bookmarksManager(mngr)
+      d(new Private)
 {
-    connect(m_bookmarksManager, SIGNAL(entryAdded(BookmarkNode*)),
+    d->manager = mngr;
+
+    connect(d->manager, SIGNAL(entryAdded(BookmarkNode*)),
             this, SLOT(entryAdded(BookmarkNode*)));
 
-    connect(m_bookmarksManager, SIGNAL(entryRemoved(BookmarkNode*,int,BookmarkNode*)),
+    connect(d->manager, SIGNAL(entryRemoved(BookmarkNode*,int,BookmarkNode*)),
             this, SLOT(entryRemoved(BookmarkNode*,int,BookmarkNode*)));
 
-    connect(m_bookmarksManager, SIGNAL(entryChanged(BookmarkNode*)),
+    connect(d->manager, SIGNAL(entryChanged(BookmarkNode*)),
             this, SLOT(entryChanged(BookmarkNode*)));
+}
+
+BookmarksModel::~BookmarksModel()
+{
+    delete d;
 }
 
 BookmarksManager* BookmarksModel::bookmarksManager() const
 {
-    return m_bookmarksManager;
+    return d->manager;
 }
 
 QModelIndex BookmarksModel::index(BookmarkNode* node) const
@@ -225,19 +270,19 @@ bool BookmarksModel::removeRows(int row, int count, const QModelIndex& parent)
     {
         BookmarkNode* const node = bookmarkNode->children().at(i);
 
-        if (node == m_bookmarksManager->menu() ||
-            node == m_bookmarksManager->toolbar())
+        if (node == d->manager->menu() ||
+            node == d->manager->toolbar())
         {
             continue;
         }
 
-        m_bookmarksManager->removeBookmark(node);
+        d->manager->removeBookmark(node);
     }
 
-    if (m_endMacro)
+    if (d->endMacro)
     {
-        m_bookmarksManager->undoRedoStack()->endMacro();
-        m_endMacro = false;
+        d->manager->undoRedoStack()->endMacro();
+        d->endMacro = false;
     }
 
     return true;
@@ -322,7 +367,7 @@ int BookmarksModel::rowCount(const QModelIndex& parent) const
         return 0;
 
     if (!parent.isValid())
-        return m_bookmarksManager->bookmarks()->children().count();
+        return d->manager->bookmarks()->children().count();
 
     const BookmarkNode* const item = static_cast<BookmarkNode*>(parent.internalPointer());
 
@@ -348,7 +393,7 @@ QModelIndex BookmarksModel::parent(const QModelIndex& index) const
     BookmarkNode* const itemNode   = node(index);
     BookmarkNode* const parentNode = (itemNode ? itemNode->parent() : 0);
 
-    if (!parentNode || parentNode == m_bookmarksManager->bookmarks())
+    if (!parentNode || parentNode == d->manager->bookmarks())
         return QModelIndex();
 
     // get the parent's row
@@ -378,8 +423,8 @@ Qt::ItemFlags BookmarksModel::flags(const QModelIndex& index) const
     Qt::ItemFlags flags              = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     BookmarkNode* const bookmarkNode = node(index);
 
-    if (bookmarkNode != m_bookmarksManager->menu() &&
-        bookmarkNode != m_bookmarksManager->toolbar())
+    if (bookmarkNode != d->manager->menu() &&
+        bookmarkNode != d->manager->toolbar())
     {
         flags |= Qt::ItemIsDragEnabled;
 
@@ -446,7 +491,7 @@ bool BookmarksModel::dropMimeData(const QMimeData* data,
     if (stream.atEnd())
         return false;
 
-    QUndoStack* const undoStack = m_bookmarksManager->undoRedoStack();
+    QUndoStack* const undoStack = d->manager->undoRedoStack();
     undoStack->beginMacro(QLatin1String("Move Bookmarks"));
 
     while (!stream.atEnd())
@@ -466,8 +511,8 @@ bool BookmarksModel::dropMimeData(const QMimeData* data,
             rootNode->remove(bookmarkNode);
             row                              = qMax(0, row);
             BookmarkNode* const parentNode   = node(parent);
-            m_bookmarksManager->addBookmark(parentNode, bookmarkNode, row);
-            m_endMacro                       = true;
+            d->manager->addBookmark(parentNode, bookmarkNode, row);
+            d->endMacro                      = true;
         }
 
         delete rootNode;
@@ -488,22 +533,22 @@ bool BookmarksModel::setData(const QModelIndex& index, const QVariant& value, in
         case Qt::DisplayRole:
             if (index.column() == 0)
             {
-                m_bookmarksManager->setTitle(item, value.toString());
+                d->manager->setTitle(item, value.toString());
                 break;
             }
 
             if (index.column() == 1)
             {
-                m_bookmarksManager->setUrl(item, value.toString());
+                d->manager->setUrl(item, value.toString());
                 break;
             }
 
             return false;
         case BookmarksModel::UrlRole:
-            m_bookmarksManager->setUrl(item, value.toUrl().toString());
+            d->manager->setUrl(item, value.toUrl().toString());
             break;
         case BookmarksModel::UrlStringRole:
-            m_bookmarksManager->setUrl(item, value.toString());
+            d->manager->setUrl(item, value.toString());
             break;
         default:
             return false;
@@ -517,7 +562,7 @@ BookmarkNode* BookmarksModel::node(const QModelIndex& index) const
     BookmarkNode* const itemNode = static_cast<BookmarkNode*>(index.internalPointer());
 
     if (!itemNode)
-        return m_bookmarksManager->bookmarks();
+        return d->manager->bookmarks();
 
     return itemNode;
 }
@@ -563,18 +608,35 @@ void TreeProxyModel::emitResult(bool v)
 
 // --------------------------------------------------------------
 
+class BookmarksManager::Private
+{
+public:
+
+    Private() :
+        loaded(false),
+        bookmarkRootNode(0),
+        bookmarkModel(0)
+    {
+    }
+
+    bool            loaded;
+    BookmarkNode*   bookmarkRootNode;
+    BookmarksModel* bookmarkModel;
+    QUndoStack      commands;
+    QString         bookmarksFile;
+};
+
 BookmarksManager::BookmarksManager(const QString& bookmarksFile, QObject* const parent)
     : QObject(parent),
-      m_loaded(false),
-      m_bookmarkRootNode(0),
-      m_bookmarkModel(0),
-      m_bookmarksFile(bookmarksFile)
+      d(new Private)
 {
+    d->bookmarksFile = bookmarksFile;
     load();
 }
 
 BookmarksManager::~BookmarksManager()
 {
+    delete d;
 }
 
 void BookmarksManager::changeExpanded()
@@ -583,14 +645,14 @@ void BookmarksManager::changeExpanded()
 
 void BookmarksManager::load()
 {
-    if (m_loaded)
+    if (d->loaded)
         return;
 
-    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Loading GPS bookmarks from" << m_bookmarksFile;
-    m_loaded = true;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Loading GPS bookmarks from" << d->bookmarksFile;
+    d->loaded = true;
 
     XbelReader reader;
-    m_bookmarkRootNode = reader.read(m_bookmarksFile);
+    d->bookmarkRootNode = reader.read(d->bookmarksFile);
 
     if (reader.error() != QXmlStreamReader::NoError)
     {
@@ -605,9 +667,9 @@ void BookmarksManager::load()
     BookmarkNode* menu    = 0;
     QList<BookmarkNode*> others;
 
-    for (int i = m_bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
+    for (int i = d->bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
     {
-        BookmarkNode* const node = m_bookmarkRootNode->children().at(i);
+        BookmarkNode* const node = d->bookmarkRootNode->children().at(i);
 
         if (node->type() == BookmarkNode::Folder)
         {
@@ -638,29 +700,29 @@ void BookmarksManager::load()
             others.append(node);
         }
 
-        m_bookmarkRootNode->remove(node);
+        d->bookmarkRootNode->remove(node);
     }
 
-    Q_ASSERT(m_bookmarkRootNode->children().count() == 0);
+    Q_ASSERT(d->bookmarkRootNode->children().count() == 0);
 
     if (!toolbar)
     {
-        toolbar        = new BookmarkNode(BookmarkNode::Folder, m_bookmarkRootNode);
+        toolbar        = new BookmarkNode(BookmarkNode::Folder, d->bookmarkRootNode);
         toolbar->title = i18n(BOOKMARKBAR);
     }
     else
     {
-        m_bookmarkRootNode->add(toolbar);
+        d->bookmarkRootNode->add(toolbar);
     }
 
     if (!menu)
     {
-        menu        = new BookmarkNode(BookmarkNode::Folder, m_bookmarkRootNode);
+        menu        = new BookmarkNode(BookmarkNode::Folder, d->bookmarkRootNode);
         menu->title = i18n(BOOKMARKMENU);
     }
     else
     {
-        m_bookmarkRootNode->add(menu);
+        d->bookmarkRootNode->add(menu);
     }
 
     for (int i = 0 ; i < others.count() ; i++)
@@ -671,33 +733,33 @@ void BookmarksManager::load()
 
 void BookmarksManager::save()
 {
-    if (!m_loaded)
+    if (!d->loaded)
         return;
 
-    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Saving GPS bookmarks to" << m_bookmarksFile;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Saving GPS bookmarks to" << d->bookmarksFile;
 
     XbelWriter writer;
 
-    if (!writer.write(m_bookmarksFile, m_bookmarkRootNode))
+    if (!writer.write(d->bookmarksFile, d->bookmarkRootNode))
     {
-        qCWarning(DIGIKAM_GEOIFACE_LOG) << "BookmarkManager: error saving to" << m_bookmarksFile;
+        qCWarning(DIGIKAM_GEOIFACE_LOG) << "BookmarkManager: error saving to" << d->bookmarksFile;
     }
 }
 
 void BookmarksManager::addBookmark(BookmarkNode* parent, BookmarkNode* node, int row)
 {
-    if (!m_loaded)
+    if (!d->loaded)
         return;
 
     Q_ASSERT(parent);
 
     InsertBookmarksCommand* const command = new InsertBookmarksCommand(this, parent, node, row);
-    m_commands.push(command);
+    d->commands.push(command);
 }
 
 void BookmarksManager::removeBookmark(BookmarkNode* node)
 {
-    if (!m_loaded)
+    if (!d->loaded)
         return;
 
     Q_ASSERT(node);
@@ -705,47 +767,47 @@ void BookmarksManager::removeBookmark(BookmarkNode* node)
     BookmarkNode* const parent            = node->parent();
     int row                               = parent->children().indexOf(node);
     RemoveBookmarksCommand* const command = new RemoveBookmarksCommand(this, parent, row);
-    m_commands.push(command);
+    d->commands.push(command);
 }
 
 void BookmarksManager::setTitle(BookmarkNode* node, const QString& newTitle)
 {
-    if (!m_loaded)
+    if (!d->loaded)
         return;
 
     Q_ASSERT(node);
 
     ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newTitle, true);
-    m_commands.push(command);
+    d->commands.push(command);
 }
 
 void BookmarksManager::setUrl(BookmarkNode* node, const QString& newUrl)
 {
-    if (!m_loaded)
+    if (!d->loaded)
         return;
 
     Q_ASSERT(node);
 
     ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newUrl, false);
-    m_commands.push(command);
+    d->commands.push(command);
 }
 
 BookmarkNode* BookmarksManager::bookmarks()
 {
-    if (!m_loaded)
+    if (!d->loaded)
         load();
 
-    return m_bookmarkRootNode;
+    return d->bookmarkRootNode;
 }
 
 BookmarkNode *BookmarksManager::menu()
 {
-    if (!m_loaded)
+    if (!d->loaded)
         load();
 
-    for (int i = m_bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
+    for (int i = d->bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
     {
-        BookmarkNode* const node = m_bookmarkRootNode->children().at(i);
+        BookmarkNode* const node = d->bookmarkRootNode->children().at(i);
 
         if (node->title == i18n(BOOKMARKMENU))
             return node;
@@ -758,12 +820,12 @@ BookmarkNode *BookmarksManager::menu()
 
 BookmarkNode* BookmarksManager::toolbar()
 {
-    if (!m_loaded)
+    if (!d->loaded)
         load();
 
-    for (int i = m_bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
+    for (int i = d->bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
     {
-        BookmarkNode* const node = m_bookmarkRootNode->children().at(i);
+        BookmarkNode* const node = d->bookmarkRootNode->children().at(i);
 
         if (node->title == i18n(BOOKMARKBAR))
             return node;
@@ -776,15 +838,15 @@ BookmarkNode* BookmarksManager::toolbar()
 
 BookmarksModel* BookmarksManager::bookmarksModel()
 {
-    if (!m_bookmarkModel)
-        m_bookmarkModel = new BookmarksModel(this, this);
+    if (!d->bookmarkModel)
+        d->bookmarkModel = new BookmarksModel(this, this);
 
-    return m_bookmarkModel;
+    return d->bookmarkModel;
 }
 
 QUndoStack* BookmarksManager::undoRedoStack()
 {
-    return &m_commands;
+    return &d->commands;
 }
 
 void BookmarksManager::importBookmarks()
@@ -824,7 +886,7 @@ void BookmarksManager::exportBookmarks()
 
     XbelWriter writer;
 
-    if (!writer.write(fileName, m_bookmarkRootNode))
+    if (!writer.write(fileName, d->bookmarkRootNode))
         QMessageBox::critical(0, i18n("Export error"), i18n("error saving bookmarks"));
 }
 

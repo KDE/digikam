@@ -87,16 +87,15 @@ public:
                                    BookmarkNode* const node,
                                    const QString& newValue,
                                    bool title);
+    ~ChangeBookmarkCommand();
+
     void undo();
     void redo();
 
 private:
 
-    BookmarksManager* m_bookmarkManager;
-    bool              m_title;
-    QString           m_oldValue;
-    QString           m_newValue;
-    BookmarkNode*     m_node;
+    class Private;
+    Private* const d;
 };
 
 /**
@@ -119,6 +118,7 @@ public:
 public:
 
     explicit BookmarksModel(BookmarksManager* const mngr, QObject* const parent = 0);
+    ~BookmarksModel();
 
     BookmarksManager* bookmarksManager()                                                      const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
@@ -149,8 +149,8 @@ public Q_SLOTS:
 
 private:
 
-    bool              m_endMacro;
-    BookmarksManager* m_bookmarksManager;
+    class Private;
+    Private* const d;
 };
 
 /**
@@ -235,11 +235,8 @@ public Q_SLOTS:
 
 private:
 
-    bool            m_loaded;
-    BookmarkNode*   m_bookmarkRootNode;
-    BookmarksModel* m_bookmarkModel;
-    QUndoStack      m_commands;
-    QString         m_bookmarksFile;
+    class Private;
+    Private* const d;
 
     friend class RemoveBookmarksCommand;
     friend class ChangeBookmarkCommand;
