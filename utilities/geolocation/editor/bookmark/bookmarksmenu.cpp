@@ -34,17 +34,40 @@ Q_DECLARE_METATYPE(QModelIndex)
 namespace Digikam
 {
 
+class ModelMenu::Private
+{
+public:
+
+    Private() :
+        maxRows(7),
+        firstSeparator(-1),
+        maxWidth(-1),
+        hoverRole(0),
+        separatorRole(0),
+        model(0)
+    {
+    }
+
+    int                   maxRows;
+    int                   firstSeparator;
+    int                   maxWidth;
+    int                   hoverRole;
+    int                   separatorRole;
+    QAbstractItemModel*   model;
+    QPersistentModelIndex root;
+};
+
 ModelMenu::ModelMenu(QWidget* const parent)
     : QMenu(parent),
-      m_maxRows(7),
-      m_firstSeparator(-1),
-      m_maxWidth(-1),
-      m_hoverRole(0),
-      m_separatorRole(0),
-      m_model(0)
+      d(new Private)
 {
     connect(this, SIGNAL(aboutToShow()),
             this, SLOT(slotAboutToShow()));
+}
+
+ModelMenu::~ModelMenu()
+{
+    delete d;
 }
 
 bool ModelMenu::prePopulated()
@@ -58,62 +81,62 @@ void ModelMenu::postPopulated()
 
 void ModelMenu::setModel(QAbstractItemModel* model)
 {
-    m_model = model;
+    d->model = model;
 }
 
 QAbstractItemModel* ModelMenu::model() const
 {
-    return m_model;
+    return d->model;
 }
 
 void ModelMenu::setMaxRows(int max)
 {
-    m_maxRows = max;
+    d->maxRows = max;
 }
 
 int ModelMenu::maxRows() const
 {
-    return m_maxRows;
+    return d->maxRows;
 }
 
 void ModelMenu::setFirstSeparator(int offset)
 {
-    m_firstSeparator = offset;
+    d->firstSeparator = offset;
 }
 
 int ModelMenu::firstSeparator() const
 {
-    return m_firstSeparator;
+    return d->firstSeparator;
 }
 
 void ModelMenu::setRootIndex(const QModelIndex& index)
 {
-    m_root = index;
+    d->root = index;
 }
 
 QModelIndex ModelMenu::rootIndex() const
 {
-    return m_root;
+    return d->root;
 }
 
 void ModelMenu::setHoverRole(int role)
 {
-    m_hoverRole = role;
+    d->hoverRole = role;
 }
 
 int ModelMenu::hoverRole() const
 {
-    return m_hoverRole;
+    return d->hoverRole;
 }
 
 void ModelMenu::setSeparatorRole(int role)
 {
-    m_separatorRole = role;
+    d->separatorRole = role;
 }
 
 int ModelMenu::separatorRole() const
 {
-    return m_separatorRole;
+    return d->separatorRole;
 }
 
 void ModelMenu::slotAboutToShow()
@@ -139,12 +162,12 @@ void ModelMenu::slotAboutToShow()
     if (prePopulated())
         addSeparator();
 
-    int max = m_maxRows;
+    int max = d->maxRows;
 
     if (max != -1)
-        max += m_firstSeparator;
+        max += d->firstSeparator;
 
-    createMenu(m_root, max, this, this);
+    createMenu(d->root, max, this, this);
     postPopulated();
 }
 
@@ -167,7 +190,7 @@ void ModelMenu::createMenu(const QModelIndex& parent, int max, QMenu* parentMenu
         return;
     }
 
-    int end = m_model->rowCount(parent);
+    int end = d->model->rowCount(parent);
 
     if (max != -1)
         end = qMin(max, end);
@@ -180,21 +203,21 @@ void ModelMenu::createMenu(const QModelIndex& parent, int max, QMenu* parentMenu
 
     for (int i = 0 ; i < end ; ++i)
     {
-        QModelIndex idx = m_model->index(i, 0, parent);
+        QModelIndex idx = d->model->index(i, 0, parent);
 
-        if (m_model->hasChildren(idx))
+        if (d->model->hasChildren(idx))
         {
             createMenu(idx, -1, menu);
         }
         else
         {
-            if (m_separatorRole != 0 && idx.data(m_separatorRole).toBool())
+            if (d->separatorRole != 0 && idx.data(d->separatorRole).toBool())
                 addSeparator();
             else
                 menu->addAction(makeAction(idx));
         }
 
-        if (menu == this && i == m_firstSeparator - 1)
+        if (menu == this && i == d->firstSeparator - 1)
             addSeparator();
     }
 }
@@ -210,14 +233,14 @@ QAction* ModelMenu::makeAction(const QModelIndex& index)
     return action;
 }
 
-QAction *ModelMenu::makeAction(const QIcon& icon, const QString& text, QObject* parent)
+QAction* ModelMenu::makeAction(const QIcon& icon, const QString& text, QObject* parent)
 {
     QFontMetrics fm(font());
 
-    if (m_maxWidth == -1)
-        m_maxWidth = fm.width(QLatin1Char('m')) * 30;
+    if (d->maxWidth == -1)
+        d->maxWidth = fm.width(QLatin1Char('m')) * 30;
 
-    QString smallText = fm.elidedText(text, Qt::ElideMiddle, m_maxWidth);
+    QString smallText = fm.elidedText(text, Qt::ElideMiddle, d->maxWidth);
 
     return (new QAction(icon, smallText, parent));
 }
@@ -240,7 +263,7 @@ void ModelMenu::hovered(QAction* action)
     if (v.canConvert<QModelIndex>())
     {
         QModelIndex idx       = qvariant_cast<QModelIndex>(v);
-        QString hoveredString = idx.data(m_hoverRole).toString();
+        QString hoveredString = idx.data(d->hoverRole).toString();
 
         if (!hoveredString.isEmpty())
             emit hovered(hoveredString);
@@ -249,16 +272,36 @@ void ModelMenu::hovered(QAction* action)
 
 // ------------------------------------------------------------------------------
 
+class BookmarksMenu::Private
+{
+public:
+
+    Private() :
+        manager(0)
+    {
+    }
+
+    BookmarksManager* manager;
+    QList<QAction*>   initActions;
+};
+
 BookmarksMenu::BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent)
     : ModelMenu(parent),
-      m_bookmarksManager(mngr)
+      d(new Private)
 {
+    d->manager = mngr;
+
     connect(this, SIGNAL(activated(QModelIndex)),
             this, SLOT(activated(QModelIndex)));
 
     setMaxRows(-1);
     setHoverRole(BookmarksModel::UrlStringRole);
     setSeparatorRole(BookmarksModel::SeparatorRole);
+}
+
+BookmarksMenu::~BookmarksMenu()
+{
+    delete d;
 }
 
 void BookmarksMenu::activated(const QModelIndex& index)
@@ -268,18 +311,18 @@ void BookmarksMenu::activated(const QModelIndex& index)
 
 bool BookmarksMenu::prePopulated()
 {
-    setModel(m_bookmarksManager->bookmarksModel());
-    setRootIndex(m_bookmarksManager->bookmarksModel()->index(1, 0));
+    setModel(d->manager->bookmarksModel());
+    setRootIndex(d->manager->bookmarksModel()->index(1, 0));
 
     // initial actions
 
-    foreach (QAction* const ac, m_initialActions)
+    foreach (QAction* const ac, d->initActions)
     {
         if (ac)
             addAction(ac);
     }
 
-    if (!m_initialActions.isEmpty())
+    if (!d->initActions.isEmpty())
         addSeparator();
 
     createMenu(model()->index(0, 0), 1, this);
@@ -289,9 +332,9 @@ bool BookmarksMenu::prePopulated()
 
 void BookmarksMenu::setInitialActions(const QList<QAction*>& actions)
 {
-    m_initialActions = actions;
+    d->initActions = actions;
 
-    foreach (QAction* const ac, m_initialActions)
+    foreach (QAction* const ac, d->initActions)
     {
         if (ac)
             addAction(ac);

@@ -45,6 +45,7 @@ class ModelMenu : public QMenu
 public:
 
     explicit ModelMenu(QWidget* const parent = 0);
+    ~ModelMenu();
 
     void setModel(QAbstractItemModel* model);
     QAbstractItemModel* model() const;
@@ -94,13 +95,8 @@ private:
 
 private:
 
-    int                   m_maxRows;
-    int                   m_firstSeparator;
-    int                   m_maxWidth;
-    int                   m_hoverRole;
-    int                   m_separatorRole;
-    QAbstractItemModel*   m_model;
-    QPersistentModelIndex m_root;
+    class Private;
+    Private* const d;
 };
 
 // ---------------------------------------------------------------------------
@@ -113,9 +109,10 @@ class BookmarksMenu : public ModelMenu
 
 public:
 
-     explicit BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent = 0);
+    explicit BookmarksMenu(BookmarksManager* const mngr, QWidget* const parent = 0);
+    ~BookmarksMenu();
 
-     void setInitialActions(const QList<QAction*>& actions);
+    void setInitialActions(const QList<QAction*>& actions);
 
 Q_SIGNALS:
 
@@ -131,8 +128,8 @@ private Q_SLOTS:
 
 private:
 
-    BookmarksManager* m_bookmarksManager;
-    QList<QAction*>   m_initialActions;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
