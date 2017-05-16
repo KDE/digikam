@@ -119,9 +119,9 @@ void BlackFrameParser::blackFrameParsing()
     // Now find the hot pixels and store them in a list
     QList<HotPixel> hpList;
 
-    // If you accidently open a normal image for a black frame, the plugin and host application will
+    // If you accidentally open a normal image for a black frame, the plugin and host application will
     // freeze due to heavy calculation.
-    // We should stop at a certain amount of hotpixels, to avoid the freeze.
+    // We should stop at a certain amount of hot pixels, to avoid the freeze.
     // 1000 of total hot pixels should be good enough for a trigger. Images with such an amount of hot pixels should
     // be considered as messed up anyway.
     const int maxHotPixels = 1000;
@@ -201,7 +201,7 @@ void BlackFrameParser::consolidatePixels(QList<HotPixel>& list)
 
             QList<HotPixel>::iterator point_below_it;
 
-            //find any intersecting hotpixels below tmp
+            //find any intersecting hot pixels below tmp
             int i = list.indexOf(tmp);
 
             if (i == -1)

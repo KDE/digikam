@@ -110,7 +110,7 @@ public:
      * Tells whether highlighting for found search results shall be used or not
      * (green and red).
      *
-     * Default behaviour has highlighting enabled.
+     * Default behavior has highlighting enabled.
      *
      * @param highlight <code>true</code> activates green and red highlighting,
      *                  with <code>false</code> the normal widget background
@@ -156,7 +156,7 @@ public:
      *
      * @param b if <code>true</code> the user can decide the toggle between
      *          case sensitivity, on <code>false</code> every search is case-
-     *          insensiive
+     *          insensitive
      */
     void setCaseSensitive(bool b);
     bool hasCaseSensitive() const;

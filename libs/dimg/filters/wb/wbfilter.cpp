@@ -126,7 +126,7 @@ void WBFilter::filterImage()
     setLUTv();
     setRGBmult();
 
-    // See bug #259223 : scaling down the rgb multipiers just enough to prevent clipping
+    // See bug #259223 : scaling down the rgb multipliers just enough to prevent clipping
     if (m_settings.maxr == -1 && m_settings.maxg == -1 && m_settings.maxb == -1)
     {
         findChanelsMax((const DImg*) &m_orgImage,

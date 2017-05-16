@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-10-18
- * Description : Auto Crop analyser
+ * Description : Auto Crop analyzer
  *
  * Copyright (C) 2013 by Sayantan Datta <sayantan dot knz at gmail dot com>
  * Copyright (C) 2013-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -50,7 +50,7 @@ public:
     explicit AutoCrop(DImg* const orgImage, QObject* const parent = 0);
     ~AutoCrop();
 
-    /** Perform auto-crop analyse to find best inner crop. Use autoInnerCrop()
+    /** Perform auto-crop analyze to find best inner crop. Use autoInnerCrop()
      *  to get computed area.
      */
     void startAnalyse();

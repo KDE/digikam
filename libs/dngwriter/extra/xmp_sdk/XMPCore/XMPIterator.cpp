@@ -239,7 +239,7 @@ AdvanceIterPos ( IterInfo & info )
         } else {
 
             // -------------------------------------------------------------------------------------------
-            // Decide what to do with this iteration node based on its state. Don't use a switch statment,
+            // Decide what to do with this iteration node based on its state. Don't use a switch statement,
             // some of the cases want to break from the loop. A break in a switch just exits the case.
 
             #if TraceIterators
@@ -690,7 +690,7 @@ enum {
 void
 XMPIterator::Skip ( XMP_OptionBits iterOptions )
 {
-//	if ( (info.currPos == kIter_NullPos) )  XMP_Throw ( "No prior postion to skip from", kXMPErr_BadIterPosition );
+//	if ( (info.currPos == kIter_NullPos) )  XMP_Throw ( "No prior position to skip from", kXMPErr_BadIterPosition );
     if ( iterOptions == 0 ) XMP_Throw ( "Must specify what to skip", kXMPErr_BadOptions );
     if ( (iterOptions & ~kXMP_ValidIterSkipOptions) != 0 ) XMP_Throw ( "Undefined options", kXMPErr_BadOptions );
 

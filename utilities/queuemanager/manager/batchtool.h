@@ -62,7 +62,7 @@ public:
         CustomTool,               // List of tools grouped and customized by users.
 
         ColorTool,                // Tools to manage image colors (Curves, BCG, etc...)
-        EnhanceTool,              // Tools to ehance images (NR, sharp, etc...)
+        EnhanceTool,              // Tools to enhance images (NR, sharp, etc...)
         TransformTool,            // Tools to transform images geometry (resize, rotate, flip, etc...)
         DecorateTool,             // Tools to decorate images (Border, watermark, etc...)
         FiltersTool,              // Tools to apply filters and special effects (film grain, BlurFx, etc...)
@@ -70,7 +70,7 @@ public:
         MetadataTool              // Tools to play with metadata.
     };
 
-/// Tool data and properties management. NOTE: these methods can be used safetly in multi-threading part (ActionThread).
+/// Tool data and properties management. NOTE: these methods can be used safely in multi-threading part (ActionThread).
 
 public:
 
@@ -205,14 +205,14 @@ public:
      */
     virtual int toolVersion() const { return 1; };
 
-    /** Re-implement this method is you want customize cancelization of tool, for ex. to call
+    /** Re-implement this method is you want customize cancellation of tool, for ex. to call
         a dedicated method to kill sub-threads parented to this tool instance.
         Unforget to call parent BatchTool::cancel() method in your customized implementation.
      */
     virtual void cancel();
 
-    /** Re-implemnt this method if tool change file extension during batch process (ex: "png").
-        Typicaly, this is used with tool which convert to new file format.
+    /** Re-implement this method if tool change file extension during batch process (ex: "png").
+        Typically, this is used with tool which convert to new file format.
         This method return and empty string by default.
      */
     virtual QString outputSuffix() const;

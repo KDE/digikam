@@ -731,7 +731,7 @@ XMPMeta::Initialize()
 
     if ( ! XMPIterator::Initialize() ) XMP_Throw ( "Failure from XMPIterator::Initialize", kXMPErr_InternalFailure );
     if ( ! XMPUtils::Initialize() ) XMP_Throw ( "Failure from XMPUtils::Initialize", kXMPErr_InternalFailure );
-    // Do miscelaneous semantic checks of types and arithmetic.
+    // Do miscellaneous semantic checks of types and arithmetic.
 
     XMP_Assert ( sizeof(XMP_Int8) == 1 );
     XMP_Assert ( sizeof(XMP_Int16) == 2 );

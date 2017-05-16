@@ -42,7 +42,7 @@ typedef enum UniCharKind	UniCharKind;
 
 #define UnsByte(c)	((unsigned char)(c))
 #define UCP(u)		((UniCodePoint)(u))
-    // ! Needed on Windows (& PC Linux?) for inequalities with literals ito avoid sign extension.
+    // ! Needed on Windows (& PC Linux?) for inequalities with literals to avoid sign extension.
 
 #ifndef TraceMultiFile
     #define TraceMultiFile	0
@@ -359,7 +359,7 @@ ApplyQuotes ( XMP_VarString * item, UniCodePoint openQuote, UniCodePoint closeQu
     UniCodePoint	uniChar;
 
     // -----------------------------------------------------------------------------------------
-    // See if there are any separators in the value. Stop at the first occurrance. This is a bit
+    // See if there are any separators in the value. Stop at the first occurrence. This is a bit
     // tricky in order to make typical typing work conveniently. The purpose of applying quotes
     // is to preserve the values when splitting them back apart. That is CatenateContainerItems
     // and SeparateContainerItems must round trip properly. For the most part we only look for
@@ -844,7 +844,7 @@ XMPUtils::CatenateArrayItems ( const XMPMeta & xmpObj,
     if ( arrayNode->children.empty() ) goto EXIT;	// ! Need to set the output pointer and length.
 
     // Build the result, quoting the array items, adding separators. Hurl if any item isn't simple.
-    // Start the result with the first value, then add the rest with a preceeding separator.
+    // Start the result with the first value, then add the rest with a preceding separator.
 
     currItem = arrayNode->children[0];
 

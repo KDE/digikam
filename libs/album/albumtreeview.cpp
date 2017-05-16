@@ -305,7 +305,7 @@ void AbstractAlbumTreeView::setAlbumFilterModel(AlbumFilterModel* const filterMo
         connect(m_albumFilterModel, SIGNAL(searchTextSettingsChanged(bool,bool)),
                 this, SLOT(slotSearchTextSettingsChanged(bool,bool)));
 
-        // NOTE: When only single selection was awailable, everything was
+        // NOTE: When only single selection was available, everything was
         //       implemented using currentAlbum() which was equal with selectedAlbum()
         //       after enabling multiple selection they are no longer the same
         //       and some options must use selected others only currentAlbum

@@ -1,14 +1,12 @@
-/** ===========================================================
- * @file
+/* ============================================================
  *
  * This file is a part of digiKam project
- * <a href="http://www.digikam.org">http://www.digikam.org</a>
+ * http://www.digikam.org
  *
- * @date   2010-03-21
- * @brief  An item to hold information about an image.
+ * Date        : 2010-03-21
+ * Description : An item to hold information about an image.
  *
- * @author Copyright (C) 2010,2014 by Michael G. Hansen
- *         <a href="mailto:mike at mghansen dot de">mike at mghansen dot de</a>
+ * Copyright (C) 2010,2014 by Michael G. Hansen <mike at mghansen dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General

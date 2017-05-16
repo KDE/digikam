@@ -492,7 +492,7 @@ void AltLangStrEdit::setLinesVisible(uint lines)
                                     );
     }
 
-    // It's not possible to display scrollbar properlly if size is too small
+    // It's not possible to display scrollbar properly if size is too small
     if (d->linesVisible < 3)
     {
         d->valueEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

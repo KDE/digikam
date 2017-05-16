@@ -191,7 +191,7 @@ void AdvancedRenameTest::testDirectoryNameToken_data()
     QTest::addColumn<QString>("parseString");
     QTest::addColumn<QString>("result");
 
-    // The main directory of digikam can have different names, depending on how the
+    // The main directory of digiKam can have different names, depending on how the
     // user named it. Therefore we have to detect the name here.
     QDir dir(QFINDTESTDATA(imagesDir));
     dir.cdUp();

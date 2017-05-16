@@ -72,7 +72,7 @@ double  panoScriptGetImagePhotometricCoeffD(pt_script* script, int i);
 int     panoScriptGetImagePhotometricCoeffDRef(pt_script* script, int i);
 double  panoScriptGetImagePhotometricCoeffE(pt_script* script, int i);
 int     panoScriptGetImagePhotometricCoeffERef(pt_script* script, int i);
-/* Bit0: radial, Bit1: flatfield, Bit2: proportionnal */
+/* Bit0: radial, Bit1: flatfield, Bit2: proportional */
 int     panoScriptGetImageVignettingMode(pt_script* script, int i);
 int     panoScriptGetImageVignettingModeRef(pt_script* script, int i);
 double  panoScriptGetImageVignettingCoeffA(pt_script* script, int i);

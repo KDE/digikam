@@ -104,7 +104,7 @@ public:
      *        class
      *
      * @param neededLabels is a QHash to restore the selection
-     *        from it, the hash is formated just like the hash
+     *        from it, the hash is formatted just like the hash
      *        generated from @see selectedLabels()
      */
     void restoreSelectionFromHistory(QHash<Labels, QList<int> > neededLabels);
@@ -217,7 +217,7 @@ private:
 
     /**
      * @return "Labels Album" if the tree-widget is not checkable
-     *         and returns "Exporting Album" if it was chackable
+     *         and returns "Exporting Album" if it was checkable
      */
     QString getDefaultTitle() const;
 

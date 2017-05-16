@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2012-10-18
- * Description : Auto Crop analyser
+ * Description : Auto Crop analyzer
  *
  * Algorithm based on black point detection on the basis of spiral
  * traversal
@@ -149,7 +149,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
         switch((counter%4))
         {
-            case 0 :    //travelling right
+            case 0 :    //traveling right
             {
                 if(fixtopmargin == true)
                 {
@@ -218,7 +218,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 break;
             }
-            case 1 :    //travelling down
+            case 1 :    //traveling down
             {
                 if(fixrightmargin == true)
                 {
@@ -235,7 +235,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
                     }
 
                     //endrightj--;
-                    // qCDebug(DIGIKAM_DIMG_LOG) << "Travelling down : Case Skipped\n";
+                    // qCDebug(DIGIKAM_DIMG_LOG) << "Traveling down : Case Skipped\n";
                     break;
                 }
                 traveldown += 2;
@@ -285,7 +285,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 break;
             }
-            case 2 :    //travelling left
+            case 2 :    //traveling left
             {
                 if(fixbottommargin == true)
                 {
@@ -351,7 +351,7 @@ QRect AutoCrop::spiralClockwiseTraversal(const QImage& source, int topCrop, int 
 
                 break;
             }
-            case 3 :    //travelling up
+            case 3 :    //traveling up
             {
                 if(fixleftmargin == true)
                 {

@@ -779,7 +779,7 @@ TouchUpDataModel ( XMPMeta * xmp )
 // ----------------------
 //
 // Try to determine the character encoding, making a guess if the input is too short. We make some
-// simplifying assumtions: the first character must be U+FEFF or ASCII, U+0000 is not allowed. The
+// simplifying assumptions: the first character must be U+FEFF or ASCII, U+0000 is not allowed. The
 // XML 1.1 spec is even more strict, UTF-16 XML documents must begin with U+FEFF, and the first
 // "real" character must be '<'. Ignoring the XML declaration, the first XML character could be '<',
 // space, tab, CR, or LF.
@@ -1067,7 +1067,7 @@ ProcessUTF8Portion ( XMLParserAdapter * xmlParser,
 //
 // Both the 8-bit special cases and the encoding determination are easier to do with 8 bytes or more
 // of input. The XMLParserAdapter class has a pending-input buffer for this. At the start of parsing
-// we (moght) try to fill this buffer before determining the input character encoding. After that,
+// we (might) try to fill this buffer before determining the input character encoding. After that,
 // we (might) use this buffer with the current input to simplify the logic in Process8BitInput. The
 // "(might)" part means that we don't actually use the pending-input buffer unless we have to. In
 // particular, the common case of single-buffer parsing won't use it.
@@ -1165,7 +1165,7 @@ XMPMeta::ParseFromBuffer ( XMP_StringPtr  buffer,
 
                 // We've got some leftover input, process it first then continue with the current
                 // buffer. Try to fill the pendingInput buffer before parsing further. We use a loop
-                // for wierd edge cases like a 2 byte input buffer, using 1 byte for pendingInput,
+                // for weird edge cases like a 2 byte input buffer, using 1 byte for pendingInput,
                 // then having a partial UTF-8 end and need to absorb more.
 
                 size_t pendingOverlap = kXMLPendingInputMax - parser.pendingCount;

@@ -150,7 +150,7 @@ public:
      * after the group methods (findGroup, preloadGroup, pregenerateGroup) the list can
      * be larger than 1.
      * There is no information if the description was ever scheduled in the thread,
-     * already processed, skipped or cancelled.
+     * already processed, skipped or canceled.
      */
     QList<LoadingDescription> lastDescriptions() const;
 

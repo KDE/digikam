@@ -137,7 +137,7 @@ public:
     void dropUnresolvedEntries();
 
     /**
-     * Sort vertex information priorizing for the given vertex
+     * Sort vertex information prioritizing for the given vertex
      */
     void sortForInfo(const ImageInfo& subject);
 

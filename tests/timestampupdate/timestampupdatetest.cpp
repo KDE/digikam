@@ -136,7 +136,7 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
 {
     // Setup metadata settings
     MetadataSettingsContainer set;
-    set.updateFileTimeStamp   = true; // Deafult value
+    set.updateFileTimeStamp   = true; // Default value
     set.rescanImageIfModified = true;
     MetadataSettings::instance()->setSettings(set);
 
@@ -175,15 +175,15 @@ void TimeStampUpdateTest::testRescanImageIfModifiedSet2True()
  * the database.
  * A CollectionScanner().completeScan() is then launched, simulating a
  * startup of Digikam.
- * The test verifies that the change in the file is disregarden and
+ * The test verifies that the change in the file is disregarded and
  * that the value of Exif.Image.Model is unchanged the database.
  */
 void TimeStampUpdateTest::testRescanImageIfModifiedSet2False()
 {
     // Setup metadata settings
     MetadataSettingsContainer set;
-    set.updateFileTimeStamp   = true;  // Deafult value
-    set.rescanImageIfModified = false; // Deafult value
+    set.updateFileTimeStamp   = true;  // Default value
+    set.rescanImageIfModified = false; // Default value
     MetadataSettings::instance()->setSettings(set);
 
     // Load the test image and verify that it's there

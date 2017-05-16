@@ -1,14 +1,13 @@
 # ===========================================================
 #
 # This file is a part of digiKam project
-# <a href="http://www.digikam.org">http://www.digikam.org</a>
+# http://www.digikam.org
 #
-# @date   2011-11-02
-# @brief  simple BASH script to check EOL of each file from LibRaw
-#         which can use CRLF and must be converted to LF for KDE git.
+# Date        : 2011-11-02
+# Description : simple BASH script to check EOL of each file from LibRaw
+#               which can use CRLF and must be converted to LF for KDE git.
 #
-# @author Copyright (C) 2011-2017 by Gilles Caulier
-#         <a href="mailto:caulier dot gilles at gmail dot com">caulier dot gilles at gmail dot com</a>
+# Copyright (C) 2011-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
 #
 # This program is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General

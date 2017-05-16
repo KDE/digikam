@@ -137,7 +137,7 @@ EstimateRDFSize ( const XMP_Node * currNode, XMP_Index indent, size_t indentLen 
 static void
 DeclareOneNamespace	( const XMP_VarString &	nsPrefix,
                       const XMP_VarString &	nsURI,
-                      XMP_VarString	&		usedNS,		// ! A catenation of the prefixes with colons.
+                      XMP_VarString	&		usedNS,		// ! A concatenation of the prefixes with colons.
                       XMP_VarString &		outputStr,
                       XMP_StringPtr			newline,
                       XMP_StringPtr			indentStr,

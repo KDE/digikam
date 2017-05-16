@@ -379,7 +379,7 @@ void BlurFXFilter::radialBlurMultithreaded(const Args& prm)
  *
  * Theory           => Similar to RadialBlur from Photoshop, its an amazing effect
  *                     Very easy to understand but a little hard to implement.
- *                     We have all the image and find the center pixel. Now, we analize
+ *                     We have all the image and find the center pixel. Now, we analyze
  *                     all the pixels and calc the radius from the center and find the
  *                     angle. After this, we sum this pixel with others with the same
  *                     radius, but different angles. Here I'm using degrees angles.
@@ -567,7 +567,7 @@ void BlurFXFilter::motionBlurMultithreaded(const Args& prm)
  * Angle            => Angle direction (degrees)
  *
  * Theory           => Similar to MotionBlur from Photoshop, the engine is very
- *                     simple to undertand, we take a pixel (duh!), with the angle we
+ *                     simple to understand, we take a pixel (duh!), with the angle we
  *                     will taking near pixels. After this we blur (add and do a
  *                     division).
  */
@@ -740,8 +740,8 @@ void BlurFXFilter::softenerBlurMultithreaded(const Args& prm)
  * Height           => Height of image.
  *
  * Theory           => An interesting blur-like function. In dark tones we apply a
- *                     blur with 3x3 dimentions, in light tones, we apply a blur with
- *                     5x5 dimentions. Easy, hun?
+ *                     blur with 3x3 dimensions, in light tones, we apply a blur with
+ *                     5x5 dimensions. Easy, hun?
  */
 void BlurFXFilter::softenerBlur(DImg* const orgImage, DImg* const destImage)
 {
@@ -988,7 +988,7 @@ void BlurFXFilter::focusBlurMultithreaded(const Args& prm)
 
         // In normal mode, the image is focused in the middle
         // and less focused towards the border.
-        // In inversed mode, the image is more focused towards the edge
+        // In inverse mode, the image is more focused towards the edge
         // and less focused in the middle.
         // This is achieved by swapping src and dest while blending.
         if (prm.bInversed)
@@ -1546,7 +1546,7 @@ void BlurFXFilter::mosaic(DImg* const orgImage, DImg* const destImage, int SizeW
     }
 }
 
-/* Function to get a color in a matriz with a determined size
+/* Function to get a color in a matrix with a determined size
  *
  * Bits              => Bits array
  * Width             => Image width

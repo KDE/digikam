@@ -351,7 +351,7 @@ public:
     PAlbum(int albumRoot, const QString& label);
     /// Constructor for normal albums
     PAlbum(int albumRoot, const QString& parentPath, const QString& title, int id);
-    /// Constrctor for Trash album
+    /// Constructor for Trash album
     PAlbum(const QString& parentPath, int albumRoot);
     ~PAlbum();
 
@@ -492,7 +492,7 @@ public:
     /**
      * Indicates whether this album is a temporary search or not.
      *
-     * @return true if this is á temporary search album, else false
+     * @return true if this is a temporary search album, else false
      */
     bool                 isTemporarySearch() const;
 

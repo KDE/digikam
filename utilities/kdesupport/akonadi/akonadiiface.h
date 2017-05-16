@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-02-15
- * Description : Akonadi Adress Book contacts interface
+ * Description : Akonadi Address Book contacts interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

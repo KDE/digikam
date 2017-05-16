@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-06-12
- * Description : Special line edit for adding or creatingtags
+ * Description : Special line edit for adding or creating tags
  *
  * Copyright (C) 2010-2011 by Marcel Wiesweg <marcel dot wiesweg at gmx dot de>
  *

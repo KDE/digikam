@@ -200,7 +200,7 @@ bool UserScript::toolOperations()
         return false;
     }
 
-    // Replace all occurences of $INPUT and $OUTPUT in script to file names. Case sensitive.
+    // Replace all occurrences of $INPUT and $OUTPUT in script to file names. Case sensitive.
 #ifndef Q_OS_WIN
     script.replace(QLatin1String("$INPUT"),  QLatin1Char('"') + inputUrl().toLocalFile()  + QLatin1Char('"'));
     script.replace(QLatin1String("$OUTPUT"), QLatin1Char('"') + outputUrl().toLocalFile() + QLatin1Char('"'));

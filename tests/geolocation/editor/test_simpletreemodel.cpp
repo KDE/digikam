@@ -36,7 +36,7 @@
 using namespace Digikam;
 
 /**
- * @brief Dummy test that does nothing
+ * Description : Dummy test that does nothing
  */
 void TestSimpleTreeModel::testNoOp()
 {

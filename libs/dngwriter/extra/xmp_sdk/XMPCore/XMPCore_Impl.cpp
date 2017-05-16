@@ -1331,7 +1331,7 @@ DeleteEmptySchema ( XMP_Node * schemaNode )
 // ==================
 //
 // Normalize an xml:lang value so that comparisons are effectively case insensitive as required by
-// RFC 3066 (which superceeds RFC 1766). The normalization rules:
+// RFC 3066 (which supersedes RFC 1766). The normalization rules:
 //
 //	- The primary subtag is lower case, the suggested practice of ISO 639.
 //	- All 2 letter secondary subtags are upper case, the suggested practice of ISO 3166.

@@ -944,7 +944,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
                 if (imageHasAlpha())
                 {
-                    // TIFF makes you pre-mutiply the RGB components by alpha
+                    // TIFF makes you pre-multiply the RGB components by alpha
 
                     a16          = pixel16[3];
                     alpha_factor = ((double)a16 / 65535.0);
@@ -975,7 +975,7 @@ bool TIFFLoader::save(const QString& filePath, DImgLoaderObserver* const observe
 
                 if (imageHasAlpha())
                 {
-                    // TIFF makes you pre-mutiply the RGB components by alpha
+                    // TIFF makes you pre-multiply the RGB components by alpha
 
                     a8           = (uint8)(pixel[3]);
                     alpha_factor = ((double)a8 / 255.0);

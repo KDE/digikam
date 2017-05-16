@@ -27,7 +27,7 @@ namespace DngXmpSdk {
 
 // ! The UTF16 and UTF32 counts are in storage units, not bytes! CodePoint values are always native.
 
-// *** MIght be better to return a status than throw an exception for errors?
+// *** Might be better to return a status than throw an exception for errors?
 
 typedef void (*CodePoint_to_UTF16_Proc) ( const UTF32Unit cpIn, UTF16Unit * utf16Out, const size_t utf16Len, size_t * utf16Written );
 

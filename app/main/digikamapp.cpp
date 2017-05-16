@@ -1030,8 +1030,8 @@ void DigikamApp::setupActions()
 
     // Pop up dialog to ask user whether to permanently delete
     // FIXME: This action is never used?? How can someone delete a album directly, without moving it to the trash first?
-    //        This is especially important when deleting from a different partiton or from a net source.
-    //        Also note that we use the wrong icon for the default album delete action, which should have a thrashcan icon instead
+    //        This is especially important when deleting from a different partition or from a net source.
+    //        Also note that we use the wrong icon for the default album delete action, which should have a trashcan icon instead
     //        of a red cross, it confuses users.
     d->imageDeletePermanentlyAction = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18n("Delete Permanently"), this);
     connect(d->imageDeletePermanentlyAction, SIGNAL(triggered()), d->view, SLOT(slotImageDeletePermanently()));
@@ -1368,7 +1368,7 @@ void DigikamApp::setupActions()
     cleanupActions();
 
     // NOTE: see bug #252130 and #283281 : we need to disable these actions when BQM is running.
-    // These connections must be done after loading color theme else theme menu cannot be pluged to Settings menu,
+    // These connections must be done after loading color theme else theme menu cannot be plugged to Settings menu,
 
     connect(QueueMgrWindow::queueManagerWindow(), SIGNAL(signalBqmIsBusy(bool)),
             d->bqmAction, SLOT(setDisabled(bool)));

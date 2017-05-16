@@ -41,7 +41,7 @@
 #include "highlighter.h"
 #include "parser.h"
 
-// Constantes
+// Constants
 
 namespace
 {

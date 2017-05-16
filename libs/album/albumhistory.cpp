@@ -476,7 +476,7 @@ bool AlbumHistory::isForwardEmpty() const
 bool AlbumHistory::isBackwardEmpty() const
 {
     // the last album of the backwardStack is the currently shown
-    // album, and therfore not really a previous album
+    // album, and therefore not really a previous album
     return (d->backwardStack.count() <= 1) ? true : false;
 }
 

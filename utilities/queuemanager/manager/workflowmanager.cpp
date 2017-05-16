@@ -532,7 +532,7 @@ bool WorkflowManager::load(QStringList& failed)
 
             if (versionOk)
             {
-                // We only instert workflow if all tools version are compatible
+                // We only insert workflow if all tools version are compatible
                 insertPrivate(q);
             }
             else

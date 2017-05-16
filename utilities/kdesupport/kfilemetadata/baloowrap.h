@@ -6,7 +6,7 @@
  * Date        : 2014-08-05
  * Description : KDE file indexer interface.
  *
- * Copyright (C) 2014 by Veaeceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2014 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -57,7 +57,7 @@ public:
 
 /**
  * @brief The BalooWrap class is a singleton class which offer
- *        functionatity for reading and writing image
+ *        functionality for reading and writing image
  *        comment, tags and rating from Baloo to digiKam
  *        and from digiKam to Baloo
  *
@@ -75,7 +75,7 @@ public:
     ~BalooWrap();
 
     /**
-     * @brief internalPtr - singleton inplementation
+     * @brief internalPtr - singleton implementation
      */
     static QPointer<BalooWrap> internalPtr;
     static BalooWrap*          instance();

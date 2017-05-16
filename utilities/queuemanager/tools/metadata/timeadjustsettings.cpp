@@ -204,7 +204,7 @@ TimeAdjustSettings::TimeAdjustSettings(QWidget* const parent)
     d->useButtonGroup->addButton(d->useCustomDateBtn, 3);
     d->useApplDateBtn->setChecked(true);
 
-    // -- Settings View TimesStamp Adjustements ---------------------------------------------------
+    // -- Settings View TimesStamp Adjustments ---------------------------------------------------
 
     d->adjustSettingsBox              = new QWidget(d->settingsExpander);
     QGridLayout* const adjustGBLayout = new QGridLayout(d->adjustSettingsBox);

@@ -6,7 +6,7 @@
  * Date        : 2014-08-05
  * Description : KDE file indexer interface.
  *
- * Copyright (C) 2014 by Veaeceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
+ * Copyright (C) 2014 by Veaceslav Munteanu <veaceslav dot munteanu90 at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -136,7 +136,7 @@ BalooInfo BalooWrap::getSemanticInfo(const QUrl& url) const
     //Baloo::File file = job->file();
     BalooInfo bInfo;
 
-    // Baloo have rating from 0 to 10, while digikam have only from 0 to 5
+    // Baloo have rating from 0 to 10, while digiKam have only from 0 to 5
     bInfo.rating  = md.rating() / 2;
     bInfo.comment = md.userComment();
 

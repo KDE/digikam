@@ -101,7 +101,7 @@ public:
     /**
      * Sets new database when chosen by the user in setup.
      * Handles user notification about problems.
-     * Call this instead of setDatabase when digikam is up and running.
+     * Call this instead of setDatabase when digiKam is up and running.
      */
     void changeDatabase(const DbEngineParameters& params);
 
@@ -117,7 +117,7 @@ public:
 
     /**
      * starts scanning the libraryPath and listing the albums. If the
-     * libraryPath has not changed since the lastscan, then nothing happens
+     * libraryPath has not changed since the last scan, then nothing happens
      * @see setLibraryPath
      * @see refresh
      */
@@ -168,7 +168,7 @@ public:
 
     /**
      * set current album to @p albums. It's similar to setCurrentAlbum,
-     * but suport multiple selected albums
+     * but supports multiple selected albums
      */
     void setCurrentAlbums(QList<Album*> albums);
 

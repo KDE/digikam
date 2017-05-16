@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2014-06-16
- * Description : CLI test program for trainign database
+ * Description : CLI test program for training database
  *
  * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

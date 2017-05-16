@@ -577,7 +577,7 @@ bool UMSCamera::cameraSummary(QString& summary)
     summary =  QString(i18n("<b>Mounted Camera</b> driver for USB/IEEE1394 mass storage cameras and "
                             "Flash disk card readers.<br/><br/>"));
 
-    // we do not expect titel/model/etc. to contain newlines,
+    // we do not expect title/model/etc. to contain newlines,
     // so we just escape HTML characters
     summary += i18nc("@info List of device properties",
                      "Title: <b>%1</b><br/>"

@@ -55,7 +55,7 @@ class AbstractAlbumTreeView;
  * displaying a context menu for albums.
  *
  * Context menu handling is implemented as template methods with hook methods
- * that can be implemented by subclasses to provide a custom behaviour. In
+ * that can be implemented by subclasses to provide a custom behavior. In
  * default mode no context menu is shown at all. It must be enabled via a call
  * to setEnableContextMenu.
  */
@@ -545,7 +545,7 @@ public:
     /**
      * @brief currentAlbum     - even if multiple selection is enabled current
      *                           Album can be only one, the last clicked item
-     *                          if you need selected items, see seletectedAlbums()
+     *                          if you need selected items, see selectedAlbums()
      *                          It's NOT the same as AlbumManager::currentAlbums()
      */
     TAlbum* currentAlbum() const;
