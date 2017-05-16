@@ -235,7 +235,7 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     buttonBox->setObjectName(QStringLiteral("buttonBox"));
     buttonBox->setStandardButtons(QDialogButtonBox::Ok);
 
-    QHBoxLayout* const hbox            = new QHBoxLayout();
+    QHBoxLayout* const hbox = new QHBoxLayout();
     hbox->setObjectName(QStringLiteral("hbox"));
     hbox->addWidget(removeButton);
     hbox->addWidget(addFolderButton);
@@ -244,9 +244,9 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 
     QGridLayout* const grid = new QGridLayout(this);
     grid->setObjectName(QStringLiteral("grid"));
-    grid->addWidget(d->search,   0, 0, 1, 2);
-    grid->addWidget(d->tree,     1, 0, 1, 2);
-    grid->addLayout(hbox,        2, 0, 1, 2);
+    grid->addWidget(d->search, 0, 0, 1, 2);
+    grid->addWidget(d->tree,   1, 0, 1, 2);
+    grid->addLayout(hbox,      2, 0, 1, 2);
 
     d->bookmarksModel       = d->manager->bookmarksModel();
     d->proxyModel           = new TreeProxyModel(this);
@@ -335,12 +335,6 @@ void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
     QMenu menu;
     QModelIndex index = d->tree->indexAt(pos);
     index             = index.sibling(index.row(), 0);
-
-    if (index.isValid() && !d->tree->model()->hasChildren(index))
-    {
-        menu.addAction(i18n("Open"), this, SLOT(slotOpen()));
-        menu.addSeparator();
-    }
 
     menu.addAction(i18n("Delete"), this, SLOT(slotRemoveOne()));
     menu.exec(QCursor::pos());
