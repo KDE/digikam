@@ -26,23 +26,10 @@
 
 // Qt includes
 
-#include <QObject>
-#include <QAbstractItemModel>
-#include <QUndoCommand>
-#include <QVariant>
-#include <QAction>
-#include <QApplication>
-#include <QButtonGroup>
 #include <QDialog>
-#include <QDialogButtonBox>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QHeaderView>
-#include <QPushButton>
-#include <QSpacerItem>
 #include <QTreeView>
-#include <QLabel>
 #include <QComboBox>
+#include <QAbstractItemModel>
 
 // Local includes
 
@@ -72,13 +59,8 @@ private:
     QString                m_url;
     BookmarksManager*      m_bookmarksManager;
     AddBookmarkProxyModel* m_proxyModel;
-
-    QVBoxLayout*           verticalLayout;
-    QLabel*                label;
-    QLineEdit*             name;
-    QComboBox*             location;
-    QSpacerItem*           verticalSpacer;
-    QDialogButtonBox*      buttonBox;
+    QComboBox*             m_location;
+    QLineEdit*             m_name;
 };
 
 // --------------------------------------------------------------------

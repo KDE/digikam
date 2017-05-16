@@ -37,6 +37,18 @@
 #include <QMessageBox>
 #include <QToolButton>
 #include <QDebug>
+#include <QAction>
+#include <QObject>
+#include <QUndoCommand>
+#include <QVariant>
+#include <QApplication>
+#include <QButtonGroup>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QLabel>
 
 // KDE includes
 
@@ -60,52 +72,42 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
 {
     setWindowFlags(Qt::Sheet);
     setWindowTitle(tr2i18n("Add Bookmark", 0));
-
     setObjectName(QStringLiteral("AddBookmarkDialog"));
     resize(300, 200);
 
-    verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-
-    label = new QLabel(this);
+    QLabel* const label = new QLabel(this);
     label->setText(tr2i18n("Type a name for the bookmark, and choose where to keep it.", 0));
     label->setObjectName(QStringLiteral("label"));
     label->setTextFormat(Qt::PlainText);
     label->setWordWrap(true);
 
-    verticalLayout->addWidget(label);
+    m_name = new QLineEdit(this);
+    m_name->setObjectName(QStringLiteral("name"));
+    m_name->setText(title);
 
-    name = new QLineEdit(this);
-    name->setObjectName(QStringLiteral("name"));
+    m_location = new QComboBox(this);
+    m_location->setObjectName(QStringLiteral("location"));
 
-    verticalLayout->addWidget(name);
+    QSpacerItem* const verticalSpacer = new QSpacerItem(20, 2, QSizePolicy::Minimum,
+                                                        QSizePolicy::Expanding);
 
-    location = new QComboBox(this);
-    location->setObjectName(QStringLiteral("location"));
-
-    verticalLayout->addWidget(location);
-
-    verticalSpacer = new QSpacerItem(20, 2, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-    verticalLayout->addItem(verticalSpacer);
-
-    buttonBox = new QDialogButtonBox(this);
+    QDialogButtonBox* const buttonBox = new QDialogButtonBox(this);
     buttonBox->setObjectName(QStringLiteral("buttonBox"));
     buttonBox->setOrientation(Qt::Horizontal);
     buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
     buttonBox->setCenterButtons(false);
 
-    verticalLayout->addWidget(buttonBox);
+    QVBoxLayout* const vbox = new QVBoxLayout(this);
+    vbox->setObjectName(QStringLiteral("vbox"));
+    vbox->addWidget(label);
+    vbox->addWidget(m_name);
+    vbox->addWidget(m_location);
+    vbox->addItem(verticalSpacer);
+    vbox->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()),
-            this, SLOT(accept()));
-
-    connect(buttonBox, SIGNAL(rejected()),
-            this, SLOT(reject()));
-
-    QTreeView *view = new QTreeView(this);
-    m_proxyModel = new AddBookmarkProxyModel(this);
-    BookmarksModel *model = m_bookmarksManager->bookmarksModel();
+    QTreeView* const view       = new QTreeView(this);
+    m_proxyModel                = new AddBookmarkProxyModel(this);
+    BookmarksModel* const model = m_bookmarksManager->bookmarksModel();
     m_proxyModel->setSourceModel(model);
     view->setModel(m_proxyModel);
     view->expandAll();
@@ -114,28 +116,35 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
     view->setItemsExpandable(false);
     view->setRootIsDecorated(false);
     view->setIndentation(10);
-    location->setModel(m_proxyModel);
     view->show();
-    location->setView(view);
-    BookmarkNode *menu = m_bookmarksManager->menu();
-    QModelIndex idx = m_proxyModel->mapFromSource(model->index(menu));
+
+    BookmarkNode* const menu = m_bookmarksManager->menu();
+    QModelIndex idx          = m_proxyModel->mapFromSource(model->index(menu));
     view->setCurrentIndex(idx);
-    location->setCurrentIndex(idx.row());
-    name->setText(title);
+
+    m_location->setModel(m_proxyModel);
+    m_location->setView(view);
+    m_location->setCurrentIndex(idx.row());
+
+    connect(buttonBox, SIGNAL(accepted()),
+            this, SLOT(accept()));
+
+    connect(buttonBox, SIGNAL(rejected()),
+            this, SLOT(reject()));
 }
 
 void AddBookmarkDialog::accept()
 {
-    QModelIndex index = location->view()->currentIndex();
-    index = m_proxyModel->mapToSource(index);
+    QModelIndex index = m_location->view()->currentIndex();
+    index             = m_proxyModel->mapToSource(index);
 
     if (!index.isValid())
         index = m_bookmarksManager->bookmarksModel()->index(0, 0);
 
-    BookmarkNode *parent = m_bookmarksManager->bookmarksModel()->node(index);
-    BookmarkNode *bookmark = new BookmarkNode(BookmarkNode::Bookmark);
-    bookmark->url = m_url;
-    bookmark->title = name->text();
+    BookmarkNode* const parent   = m_bookmarksManager->bookmarksModel()->node(index);
+    BookmarkNode* const bookmark = new BookmarkNode(BookmarkNode::Bookmark);
+    bookmark->url                = m_url;
+    bookmark->title              = m_name->text();
     m_bookmarksManager->addBookmark(parent, bookmark);
     QDialog::accept();
 }
