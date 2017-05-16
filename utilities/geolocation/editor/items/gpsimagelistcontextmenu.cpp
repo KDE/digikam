@@ -49,6 +49,7 @@
 #include "gpsimageitem.h"
 #include "lookupfactory.h"
 #include "gpsbookmarkowner.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -141,7 +142,7 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
         d->bookmarkOwner   = bookmarkOwner;
         d->actionBookmark  = new QAction(i18n("Bookmarks"), this);
         QMenu* const bmenu = d->bookmarkOwner->getMenu();
-        qDebug() << "Bookmarks Menu actions:" << bmenu->actions().count();
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << "Bookmarks Menu actions:" << bmenu->actions().count();
         d->actionBookmark->setMenu(bmenu);
 
         connect(d->bookmarkOwner, SIGNAL(positionSelected(GPSDataContainer)),

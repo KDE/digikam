@@ -45,6 +45,7 @@
 // Local includes
 
 #include "bookmarknode.h"
+#include "digikam_debug.h"
 
 #define BOOKMARKBAR "Bookmarks Bar"
 #define BOOKMARKMENU "Bookmarks Menu"
@@ -585,7 +586,7 @@ void BookmarksManager::load()
     if (m_loaded)
         return;
 
-    qDebug() << "Loading GPS bookmarks from" << m_bookmarksFile;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Loading GPS bookmarks from" << m_bookmarksFile;
     m_loaded = true;
 
     XbelReader reader;
@@ -673,13 +674,13 @@ void BookmarksManager::save()
     if (!m_loaded)
         return;
 
-    qDebug() << "Saving GPS bookmarks to" << m_bookmarksFile;
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "Saving GPS bookmarks to" << m_bookmarksFile;
 
     XbelWriter writer;
 
     if (!writer.write(m_bookmarksFile, m_bookmarkRootNode))
     {
-        qWarning() << "BookmarkManager: error saving to" << m_bookmarksFile;
+        qCWarning(DIGIKAM_GEOIFACE_LOG) << "BookmarkManager: error saving to" << m_bookmarksFile;
     }
 }
 
