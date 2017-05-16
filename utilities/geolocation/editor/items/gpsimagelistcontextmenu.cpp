@@ -141,9 +141,7 @@ GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
     {
         d->bookmarkOwner   = bookmarkOwner;
         d->actionBookmark  = new QAction(i18n("Bookmarks"), this);
-        QMenu* const bmenu = d->bookmarkOwner->getMenu();
-        qCDebug(DIGIKAM_GEOIFACE_LOG) << "Bookmarks Menu actions:" << bmenu->actions().count();
-        d->actionBookmark->setMenu(bmenu);
+        d->actionBookmark->setMenu(d->bookmarkOwner->getMenu());
 
         connect(d->bookmarkOwner, SIGNAL(positionSelected(GPSDataContainer)),
                 this, SLOT(slotBookmarkSelected(GPSDataContainer)));
@@ -178,7 +176,7 @@ bool GPSImageListContextMenu::eventFilter(QObject* watched, QEvent* event)
         bool removeSpeedAvailable            = false;
         bool lookupMissingAltitudesAvailable = false;
 
-        for (int i = 0; i < nSelected; ++i)
+        for (int i = 0 ; i < nSelected ; ++i)
         {
             GPSImageItem* const gpsItem = imageModel->itemFromIndex(selectedIndices.at(i));
 
@@ -493,7 +491,7 @@ void GPSImageListContextMenu::setGPSDataForSelectedItems(const GPSDataContainer&
     const int nSelected                       = selectedIndices.size();
     GPSUndoCommand* const undoCommand         = new GPSUndoCommand();
 
-    for (int i = 0; i < nSelected; ++i)
+    for (int i = 0 ; i < nSelected ; ++i)
     {
         const QModelIndex itemIndex = selectedIndices.at(i);
         GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
@@ -537,7 +535,7 @@ void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataC
     const int nSelected                       = selectedIndices.size();
     GPSUndoCommand* const undoCommand         = new GPSUndoCommand();
 
-    for (int i=0; i<nSelected; ++i)
+    for (int i = 0 ; i < nSelected ; ++i)
     {
         const QModelIndex itemIndex = selectedIndices.at(i);
         GPSImageItem* const gpsItem = imageModel->itemFromIndex(itemIndex);
@@ -610,7 +608,7 @@ void GPSImageListContextMenu::removeInformationFromSelectedImages(const GPSDataC
         }
     }
 
-    if (undoCommand->affectedItemCount()>0)
+    if (undoCommand->affectedItemCount() > 0)
     {
         undoCommand->setText(undoDescription);
         emit(signalUndoCommand(undoCommand));
