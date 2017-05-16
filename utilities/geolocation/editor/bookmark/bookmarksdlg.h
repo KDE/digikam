@@ -49,6 +49,7 @@ public:
                                const QString& title,
                                QWidget* const parent = 0,
                                BookmarksManager* const mngr = 0);
+    ~AddBookmarkDialog();
 
 private Q_SLOTS:
 
@@ -56,11 +57,8 @@ private Q_SLOTS:
 
 private:
 
-    QString                m_url;
-    BookmarksManager*      m_bookmarksManager;
-    AddBookmarkProxyModel* m_proxyModel;
-    QComboBox*             m_location;
-    QLineEdit*             m_name;
+    class Private;
+    Private* const d;
 };
 
 // --------------------------------------------------------------------
@@ -92,11 +90,8 @@ private:
 
 private:
 
-    BookmarksManager* m_bookmarksManager;
-    BookmarksModel*   m_bookmarksModel;
-    TreeProxyModel*   m_proxyModel;
-    SearchTextBar*    m_search;
-    QTreeView*        m_tree;
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
