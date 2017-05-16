@@ -32,6 +32,10 @@
 
 #include <klocalizedstring.h>
 
+// Local includes
+
+#include "digikam_debug.h"
+
 namespace Digikam
 {
 
@@ -219,26 +223,26 @@ void XbelReader::readFolder(BookmarkNode* parent)
     }
 }
 
-void XbelReader::readTitle(BookmarkNode *parent)
+void XbelReader::readTitle(BookmarkNode* parent)
 {
     Q_ASSERT(isStartElement() && name() == QLatin1String("title"));
     parent->title = readElementText();
 }
 
-void XbelReader::readDescription(BookmarkNode *parent)
+void XbelReader::readDescription(BookmarkNode* parent)
 {
     Q_ASSERT(isStartElement() && name() == QLatin1String("desc"));
     parent->desc = readElementText();
 }
 
-void XbelReader::readSeparator(BookmarkNode *parent)
+void XbelReader::readSeparator(BookmarkNode* parent)
 {
     new BookmarkNode(BookmarkNode::Separator, parent);
     // empty elements have a start and end element
     readNext();
 }
 
-void XbelReader::readBookmarkNode(BookmarkNode *parent)
+void XbelReader::readBookmarkNode(BookmarkNode* parent)
 {
     Q_ASSERT(isStartElement() && name() == QLatin1String("bookmark"));
 
@@ -266,7 +270,7 @@ XbelWriter::XbelWriter()
     setAutoFormatting(true);
 }
 
-bool XbelWriter::write(const QString &fileName, const BookmarkNode *root)
+bool XbelWriter::write(const QString& fileName, const BookmarkNode* root)
 {
     QFile file(fileName);
 
@@ -276,7 +280,7 @@ bool XbelWriter::write(const QString &fileName, const BookmarkNode *root)
     return write(&file, root);
 }
 
-bool XbelWriter::write(QIODevice *device, const BookmarkNode *root)
+bool XbelWriter::write(QIODevice* device, const BookmarkNode * root)
 {
     setDevice(device);
 
