@@ -56,4 +56,5 @@ BUGFIXES FROM BUGZILLA:
 036 ==> 286609 - Allow to manage images group to stitch images in a panorama
 037 ==> 378552 - Problem with grouped images
 038 ==> 193232 - Add advanced input side-car files support (as .pto, .pp2, .pp3, .pano, thm, etc...)
-038 ==>
+038 ==> 379806 - ShowFoto crashes when clicking Color Effects from menu.
+039 ==> 

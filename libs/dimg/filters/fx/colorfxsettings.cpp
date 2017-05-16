@@ -279,7 +279,7 @@ ColorFXContainer ColorFXSettings::settings() const
     prm.level       = d->levelInput->value();
     prm.iterations  = d->iterationInput->value();
     prm.intensity   = d->intensityInput->value();
-    prm.path        = d->luts[d->correctionTools->currentId()];
+    prm.path        = d->luts.value(d->correctionTools->currentId());
 
     return prm;
 }
