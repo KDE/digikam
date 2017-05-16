@@ -45,7 +45,9 @@ class RemoveBookmarksCommand : public QUndoCommand
 {
 public:
 
-    explicit RemoveBookmarksCommand(BookmarksManager* mngr, BookmarkNode* parent, int row);
+    explicit RemoveBookmarksCommand(BookmarksManager* const mngr,
+                                    BookmarkNode* const parent,
+                                    int row);
     ~RemoveBookmarksCommand();
 
     void undo();
@@ -66,13 +68,13 @@ class InsertBookmarksCommand : public RemoveBookmarksCommand
 {
 public:
 
-    explicit InsertBookmarksCommand(BookmarksManager* mngr,
-                                    BookmarkNode* parent,
-                                    BookmarkNode* node,
+    explicit InsertBookmarksCommand(BookmarksManager* const mngr,
+                                    BookmarkNode* const parent,
+                                    BookmarkNode* const node,
                                     int row);
 
-    void undo() { RemoveBookmarksCommand::redo(); }
-    void redo() { RemoveBookmarksCommand::undo(); }
+    void undo();
+    void redo();
 };
 
 //---------------------------------------------------------------------------------
@@ -81,8 +83,8 @@ class ChangeBookmarkCommand : public QUndoCommand
 {
 public:
 
-    explicit ChangeBookmarkCommand(BookmarksManager* mngr,
-                                   BookmarkNode* node,
+    explicit ChangeBookmarkCommand(BookmarksManager* const mngr,
+                                   BookmarkNode* const node,
                                    const QString& newValue,
                                    bool title);
     void undo();
@@ -116,10 +118,9 @@ public:
 
 public:
 
-    explicit BookmarksModel(BookmarksManager* bookmarkManager, QObject* parent = 0);
+    explicit BookmarksModel(BookmarksManager* const mngr, QObject* const parent = 0);
 
-    inline BookmarksManager* bookmarksManager() const { return m_bookmarksManager; }
-
+    BookmarksManager* bookmarksManager()                                                      const;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole)                       const;
     int columnCount(const QModelIndex& parent = QModelIndex())                                const;
@@ -138,7 +139,7 @@ public:
                       int column, const QModelIndex& parent);
 
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
-    bool setData(const QModelIndex &index, const QVariant& value, int role = Qt::EditRole);
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
 public Q_SLOTS:
 
@@ -162,13 +163,13 @@ class AddBookmarkProxyModel : public QSortFilterProxyModel
 
 public:
 
-    explicit AddBookmarkProxyModel(QObject* parent = 0);
+    explicit AddBookmarkProxyModel(QObject* const parent = 0);
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const;
 
 protected:
 
-    bool filterAcceptsRow(int source_row, const QModelIndex& source_parent) const;
+    bool filterAcceptsRow(int srow, const QModelIndex& sparent) const;
 };
 
 //---------------------------------------------------------------------------------
@@ -201,7 +202,6 @@ class BookmarksManager : public QObject
 {
     Q_OBJECT
 
-
 public:
 
     explicit BookmarksManager(const QString& bookmarksFile, QObject* const parent = 0);
@@ -217,11 +217,7 @@ public:
     BookmarkNode*   menu();
     BookmarkNode*   toolbar();
     BookmarksModel* bookmarksModel();
-
-    QUndoStack* undoRedoStack()
-    {
-        return &m_commands;
-    };
+    QUndoStack*     undoRedoStack();
 
     void save();
     void load();
