@@ -182,6 +182,8 @@ public:
 
     explicit TreeProxyModel(QObject* const parent = 0);
 
+    int columnCount(const QModelIndex&) const;
+
 Q_SIGNALS:
 
     void signalFilterAccepts(bool);

@@ -150,7 +150,7 @@ void GPSBookmarkOwner::createBookmarksMenu()
 
     QList<QAction*> bookmarksActions;
 
-    QAction* const showAllBookmarksAction = new QAction(i18n("Show All Bookmarks"), d->parent);
+    QAction* const showAllBookmarksAction = new QAction(i18n("Edit Bookmarks"), d->parent);
     bookmarksActions.append(showAllBookmarksAction);
 
     connect(showAllBookmarksAction, SIGNAL(triggered()),

@@ -127,7 +127,7 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
     vbox->addWidget(buttonBox);
 
     QTreeView* const view       = new QTreeView(this);
-    d->proxyModel                = new AddBookmarkProxyModel(this);
+    d->proxyModel               = new AddBookmarkProxyModel(this);
     BookmarksModel* const model = d->manager->bookmarksModel();
     d->proxyModel->setSourceModel(model);
     view->setModel(d->proxyModel);
@@ -211,7 +211,7 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     d->search = new SearchTextBar(this, QLatin1String("DigikamBookmarksSearchBar"));
     d->search->setObjectName(QStringLiteral("search"));
 
-    d->tree = new QTreeView(this);
+    d->tree   = new QTreeView(this);
     d->tree->setObjectName(QStringLiteral("tree"));
     d->tree->setUniformRowHeights(true);
     d->tree->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -235,7 +235,7 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     buttonBox->setObjectName(QStringLiteral("buttonBox"));
     buttonBox->setStandardButtons(QDialogButtonBox::Ok);
 
-    QHBoxLayout* const hbox = new QHBoxLayout();
+    QHBoxLayout* const hbox            = new QHBoxLayout();
     hbox->setObjectName(QStringLiteral("hbox"));
     hbox->addWidget(removeButton);
     hbox->addWidget(addFolderButton);
@@ -246,17 +246,14 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     grid->setObjectName(QStringLiteral("grid"));
     grid->addWidget(d->search,   0, 0, 1, 2);
     grid->addWidget(d->tree,     1, 0, 1, 2);
-    grid->addLayout(hbox,       2, 0, 1, 2);
+    grid->addLayout(hbox,        2, 0, 1, 2);
 
-    d->bookmarksModel = d->manager->bookmarksModel();
-    d->proxyModel     = new TreeProxyModel(this);
+    d->bookmarksModel       = d->manager->bookmarksModel();
+    d->proxyModel           = new TreeProxyModel(this);
     d->proxyModel->setSourceModel(d->bookmarksModel);
     d->tree->setModel(d->proxyModel);
     d->tree->setExpanded(d->proxyModel->index(0, 0), true);
-    QFontMetrics fm(font());
-    int header       = fm.width(QLatin1Char('m')) * 40;
-    d->tree->header()->resizeSection(0, header);
-    d->tree->header()->setStretchLastSection(true);
+    d->tree->header()->setSectionResizeMode(QHeaderView::Stretch);
 
     connect(buttonBox, SIGNAL(accepted()),
             this, SLOT(accept()));

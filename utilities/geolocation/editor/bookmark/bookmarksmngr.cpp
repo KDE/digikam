@@ -297,7 +297,7 @@ QVariant BookmarksModel::headerData(int section, Qt::Orientation orientation, in
             case 0:
                 return i18n("Title");
             case 1:
-                return i18n("Address");
+                return i18n("Location");
         }
     }
 
@@ -592,6 +592,11 @@ TreeProxyModel::TreeProxyModel(QObject* const parent)
     : QSortFilterProxyModel(parent)
 {
     setFilterCaseSensitivity(Qt::CaseInsensitive);
+}
+
+int TreeProxyModel::columnCount(const QModelIndex&) const
+{
+    return 2;
 }
 
 bool TreeProxyModel::filterAcceptsRow(int srow, const QModelIndex& sparent) const
