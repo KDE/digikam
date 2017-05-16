@@ -27,6 +27,10 @@
 // Qt includes
 
 #include <QMenu>
+#include <QList>
+#include <QAction>
+#include <QWidget>
+#include <QModelIndex>
 #include <QAbstractItemModel>
 
 // Local includes

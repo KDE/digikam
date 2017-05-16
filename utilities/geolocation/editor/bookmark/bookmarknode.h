@@ -26,8 +26,10 @@
 
 // Qt includes
 
+#include <QString>
+#include <QList>
+#include <QIODevice>
 #include <QXmlStreamReader>
-#include <QDateTime>
 #include <QXmlStreamWriter>
 
 namespace Digikam
