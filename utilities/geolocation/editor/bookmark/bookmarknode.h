@@ -47,14 +47,14 @@ public:
 
 public:
 
-    explicit BookmarkNode(Type type = Root, BookmarkNode* parent = 0);
+    explicit BookmarkNode(Type type = Root, BookmarkNode* const parent = 0);
     ~BookmarkNode();
 
     bool operator==(const BookmarkNode& other);
 
     Type type() const;
     void setType(Type type);
-    
+
     QList<BookmarkNode*> children() const;
     BookmarkNode* parent()          const;
 
