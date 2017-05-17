@@ -77,26 +77,26 @@ public:
     {
     }
 
-    bool                              enabled;
+    bool                               enabled;
 
-    QAction*                          actionBookmark;
-    GPSBookmarkOwner*                 bookmarkOwner;
+    QAction*                           actionBookmark;
+    GPSBookmarkOwner*                  bookmarkOwner;
 
-    QAction*                          actionCopy;
-    QAction*                          actionPaste;
-    QAction*                          actionRemoveCoordinates;
-    QAction*                          actionRemoveAltitude;
-    QAction*                          actionRemoveUncertainty;
-    QAction*                          actionRemoveSpeed;
-    QAction*                          actionLookupMissingAltitudes;
+    QAction*                           actionCopy;
+    QAction*                           actionPaste;
+    QAction*                           actionRemoveCoordinates;
+    QAction*                           actionRemoveAltitude;
+    QAction*                           actionRemoveUncertainty;
+    QAction*                           actionRemoveSpeed;
+    QAction*                           actionLookupMissingAltitudes;
 
-    GPSImageList*                     imagesList;
+    GPSImageList*                      imagesList;
 
     // Altitude lookup
     QPointer<GeoIface::LookupAltitude> altitudeLookup;
-    GPSUndoCommand*                   altitudeUndoCommand;
-    int                               altitudeRequestedCount;
-    int                               altitudeReceivedCount;
+    GPSUndoCommand*                    altitudeUndoCommand;
+    int                                altitudeRequestedCount;
+    int                                altitudeReceivedCount;
 };
 
 GPSImageListContextMenu::GPSImageListContextMenu(GPSImageList* const imagesList,
@@ -314,7 +314,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
     const QMimeData* mimedata   = clipboard->mimeData();
 
     GPSDataContainer gpsData;
-    bool foundData       = false;
+    bool foundData              = false;
 
     if (mimedata->hasFormat(QString::fromLatin1("application/gpx+xml")))
     {
@@ -361,8 +361,8 @@ void GPSImageListContextMenu::pasteActionTriggered()
                     bool haveAltitude     = false;
 
                     // Get GPS position. If not available continue to next point.
-                    const QString lat = wptElem.attribute(QString::fromLatin1("lat"));
-                    const QString lon = wptElem.attribute(QString::fromLatin1("lon"));
+                    const QString lat     = wptElem.attribute(QString::fromLatin1("lat"));
+                    const QString lon     = wptElem.attribute(QString::fromLatin1("lon"));
 
                     if (lat.isEmpty() || lon.isEmpty())
                     {
@@ -416,7 +416,9 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
         if (foundDoubleData)
         {
-            QMessageBox::information(d->imagesList, i18n("GPS Sync"), i18n("Found more than one point on the clipboard - can only assign one point at a time."));
+            QMessageBox::information(d->imagesList,
+                                     i18n("GPS Sync"),
+                                     i18n("Found more than one point on the clipboard - can only assign one point at a time."));
         }
     }
 
@@ -475,7 +477,9 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
     if (!foundData)
     {
-        QMessageBox::information(d->imagesList, i18n("Geolocation Editor"), i18n("Could not find any coordinates on the clipboard."));
+        QMessageBox::information(d->imagesList,
+                                 i18n("Geolocation Editor"),
+                                 i18n("Could not find any coordinates on the clipboard."));
         return;
     }
 

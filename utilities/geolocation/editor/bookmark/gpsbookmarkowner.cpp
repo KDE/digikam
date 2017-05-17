@@ -68,7 +68,7 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* 
 {
     d->parent = parent;
 
-    const QString bookmarksFileName = 
+    const QString bookmarksFileName =
         QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +
                                          QLatin1Char('/') +
                                          QLatin1String("digikam/geobookmarks.xml");

@@ -312,7 +312,7 @@ void BookmarksMenu::activated(const QModelIndex& index)
 bool BookmarksMenu::prePopulated()
 {
     setModel(d->manager->bookmarksModel());
-    setRootIndex(d->manager->bookmarksModel()->index(1, 0));
+    setRootIndex(d->manager->bookmarksModel()->index(d->manager->bookmarks()));
 
     // initial actions
 
@@ -325,7 +325,7 @@ bool BookmarksMenu::prePopulated()
     if (!d->initActions.isEmpty())
         addSeparator();
 
-    createMenu(model()->index(0, 0), 1, this);
+    createMenu(rootIndex(), 0, this, this);
 
     return true;
 }

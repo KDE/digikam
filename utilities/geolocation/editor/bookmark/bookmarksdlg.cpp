@@ -139,7 +139,7 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
     view->setIndentation(10);
     view->show();
 
-    BookmarkNode* const menu = d->manager->menu();
+    BookmarkNode* const menu = d->manager->bookmarks();
     QModelIndex idx          = d->proxyModel->mapFromSource(model->index(menu));
     view->setCurrentIndex(idx);
 
@@ -330,11 +330,17 @@ void BookmarksDialog::expandNodes(BookmarkNode* const node)
     }
 }
 
-void BookmarksDialog::slotCustomContextMenuRequested(const QPoint&)
+void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
 {
-    QMenu menu;
-    menu.addAction(i18n("Delete"), this, SLOT(slotRemoveOne()));
-    menu.exec(QCursor::pos());
+    QModelIndex index = d->tree->indexAt(pos);
+    index             = index.sibling(index.row(), 0);
+
+    if (index.isValid()/* && !d->tree->model()->hasChildren(index)*/)
+    {
+        QMenu menu;
+        menu.addAction(i18n("Remove"), this, SLOT(slotRemoveOne()));
+        menu.exec(QCursor::pos());
+    }
 }
 
 void BookmarksDialog::slotOpen()

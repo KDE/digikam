@@ -47,9 +47,6 @@
 #include "bookmarknode.h"
 #include "digikam_debug.h"
 
-#define BOOKMARKBAR "Bookmarks Bar"
-#define BOOKMARKMENU "Bookmarks Menu"
-
 namespace Digikam
 {
 
@@ -253,7 +250,7 @@ void BookmarksModel::entryRemoved(BookmarkNode* parent, int row, BookmarkNode* i
     endRemoveRows();
 }
 
-void BookmarksModel::entryChanged(BookmarkNode *item)
+void BookmarksModel::entryChanged(BookmarkNode* item)
 {
     QModelIndex idx = index(item);
     emit dataChanged(idx, idx);
@@ -269,13 +266,6 @@ bool BookmarksModel::removeRows(int row, int count, const QModelIndex& parent)
     for (int i = (row + count - 1) ; i >= row ; i--)
     {
         BookmarkNode* const node = bookmarkNode->children().at(i);
-
-        if (node == d->manager->menu() ||
-            node == d->manager->toolbar())
-        {
-            continue;
-        }
-
         d->manager->removeBookmark(node);
     }
 
@@ -423,14 +413,10 @@ Qt::ItemFlags BookmarksModel::flags(const QModelIndex& index) const
     Qt::ItemFlags flags              = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     BookmarkNode* const bookmarkNode = node(index);
 
-    if (bookmarkNode != d->manager->menu() &&
-        bookmarkNode != d->manager->toolbar())
-    {
-        flags |= Qt::ItemIsDragEnabled;
+    flags |= Qt::ItemIsDragEnabled;
 
-        if (bookmarkNode->type() != BookmarkNode::Separator)
-            flags |= Qt::ItemIsEditable;
-    }
+    if (bookmarkNode->type() != BookmarkNode::Separator)
+        flags |= Qt::ItemIsEditable;
 
     if (hasChildren(index))
         flags |= Qt::ItemIsDropEnabled;
@@ -465,7 +451,7 @@ QMimeData* BookmarksModel::mimeData(const QModelIndexList& indexes) const
         QBuffer buffer(&encodedData);
         buffer.open(QBuffer::ReadWrite);
         XbelWriter writer;
-        const BookmarkNode *parentNode = node(index);
+        const BookmarkNode* const parentNode = node(index);
         writer.write(&buffer, parentNode);
         stream << encodedData;
     }
@@ -685,73 +671,6 @@ void BookmarksManager::load()
                              .arg(reader.columnNumber())
                              .arg(reader.errorString()));
     }
-
-    BookmarkNode* toolbar = 0;
-    BookmarkNode* menu    = 0;
-    QList<BookmarkNode*> others;
-
-    for (int i = d->bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
-    {
-        BookmarkNode* const node = d->bookmarkRootNode->children().at(i);
-
-        if (node->type() == BookmarkNode::Folder)
-        {
-            // Automatically convert
-            if (node->title == i18n("Toolbar Bookmarks") && !toolbar)
-            {
-                node->title = i18n(BOOKMARKBAR);
-            }
-
-            if (node->title == i18n(BOOKMARKBAR) && !toolbar)
-            {
-                toolbar = node;
-            }
-
-            // Automatically convert
-            if (node->title == i18n("Menu") && !menu)
-            {
-                node->title = i18n(BOOKMARKMENU);
-            }
-
-            if (node->title == i18n(BOOKMARKMENU) && !menu)
-            {
-                menu = node;
-            }
-        }
-        else
-        {
-            others.append(node);
-        }
-
-        d->bookmarkRootNode->remove(node);
-    }
-
-    Q_ASSERT(d->bookmarkRootNode->children().count() == 0);
-
-    if (!toolbar)
-    {
-        toolbar        = new BookmarkNode(BookmarkNode::Folder, d->bookmarkRootNode);
-        toolbar->title = i18n(BOOKMARKBAR);
-    }
-    else
-    {
-        d->bookmarkRootNode->add(toolbar);
-    }
-
-    if (!menu)
-    {
-        menu        = new BookmarkNode(BookmarkNode::Folder, d->bookmarkRootNode);
-        menu->title = i18n(BOOKMARKMENU);
-    }
-    else
-    {
-        d->bookmarkRootNode->add(menu);
-    }
-
-    for (int i = 0 ; i < others.count() ; i++)
-    {
-        menu->add(others.at(i));
-    }
 }
 
 void BookmarksManager::save()
@@ -823,42 +742,6 @@ BookmarkNode* BookmarksManager::bookmarks()
     return d->bookmarkRootNode;
 }
 
-BookmarkNode *BookmarksManager::menu()
-{
-    if (!d->loaded)
-        load();
-
-    for (int i = d->bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
-    {
-        BookmarkNode* const node = d->bookmarkRootNode->children().at(i);
-
-        if (node->title == i18n(BOOKMARKMENU))
-            return node;
-    }
-
-    Q_ASSERT(false);
-
-    return 0;
-}
-
-BookmarkNode* BookmarksManager::toolbar()
-{
-    if (!d->loaded)
-        load();
-
-    for (int i = d->bookmarkRootNode->children().count() - 1 ; i >= 0 ; i--)
-    {
-        BookmarkNode* const node = d->bookmarkRootNode->children().at(i);
-
-        if (node->title == i18n(BOOKMARKBAR))
-            return node;
-    }
-
-    Q_ASSERT(false);
-
-    return 0;
-}
-
 BookmarksModel* BookmarksManager::bookmarksModel()
 {
     if (!d->bookmarkModel)
@@ -895,7 +778,7 @@ void BookmarksManager::importBookmarks()
     importRootNode->setType(BookmarkNode::Folder);
     importRootNode->title = i18n("Imported %1")
                             .arg(QDate::currentDate().toString(Qt::SystemLocaleShortDate));
-    addBookmark(menu(), importRootNode);
+    addBookmark(bookmarks(), importRootNode);
 }
 
 void BookmarksManager::exportBookmarks()

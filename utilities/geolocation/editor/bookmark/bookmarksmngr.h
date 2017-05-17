@@ -216,8 +216,6 @@ public:
     void changeExpanded();
 
     BookmarkNode*   bookmarks();
-    BookmarkNode*   menu();
-    BookmarkNode*   toolbar();
     BookmarksModel* bookmarksModel();
     QUndoStack*     undoRedoStack();
 
