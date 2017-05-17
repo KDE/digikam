@@ -330,7 +330,7 @@ void BookmarksDialog::expandNodes(BookmarkNode* const node)
     }
 }
 
-void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
+void BookmarksDialog::slotCustomContextMenuRequested(const QPoint&)
 {
     QMenu menu;
     menu.addAction(i18n("Delete"), this, SLOT(slotRemoveOne()));
