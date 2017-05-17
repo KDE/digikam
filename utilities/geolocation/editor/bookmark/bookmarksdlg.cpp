@@ -53,6 +53,8 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 // Local includes
 
@@ -285,13 +287,12 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     connect(addFolderButton, SIGNAL(clicked()),
             this, SLOT(slotNewFolder()));
 
-    expandNodes(d->manager->bookmarks());
+    readSettings();
 }
 
 BookmarksDialog::~BookmarksDialog()
 {
-    if (saveExpandedNodes(d->tree->rootIndex()))
-        d->manager->changeExpanded();
+    saveSettings();
 
     delete d;
 }
@@ -419,6 +420,27 @@ void BookmarksDialog::slotRemoveOne()
         BookmarkNode* const node = d->manager->bookmarksModel()->node(index);
         d->manager->removeBookmark(node);
     }
+}
+
+void BookmarksDialog::readSettings()
+{
+    expandNodes(d->manager->bookmarks());
+
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(objectName());
+    KConfigGroup groupGPSTab  = KConfigGroup(&group, QLatin1String("GPS Properties Tab"));
+    d->mapView->readSettings(groupGPSTab);
+}
+
+void BookmarksDialog::saveSettings()
+{
+    if (saveExpandedNodes(d->tree->rootIndex()))
+        d->manager->changeExpanded();
+
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KConfigGroup group        = config->group(objectName());
+    KConfigGroup groupGPSTab  = KConfigGroup(&group, QLatin1String("GPS Properties Tab"));
+    d->mapView->writeSettings(groupGPSTab);
 }
 
 } // namespace Digikam

@@ -54,7 +54,7 @@ public:
         if (host->objectName().isEmpty())
         {
             qCWarning(DIGIKAM_WIDGETS_LOG) << "Object name for " << host
-                       << " is empty. Returning the default config group";
+                                           << " is empty. Returning the default config group";
         }
 
         return config->group(host->objectName());
@@ -206,7 +206,7 @@ KConfigGroup StateSavingObject::getConfigGroup() const
     if (!d->group.isValid())
     {
         qCWarning(DIGIKAM_WIDGETS_LOG) << "KConfigGroup set via setConfigGroup is invalid. "
-                   << "Using object name based group.";
+                                       << "Using object name based group.";
         return d->getGroupFromObjectName();
     }
 

@@ -53,7 +53,7 @@
 #include "imagepropertiesversionstab.h"
 
 #ifdef HAVE_MARBLE
-#include "imagepropertiesgpstab.h"
+#   include "imagepropertiesgpstab.h"
 #endif // HAVE_MARBLE
 
 namespace Digikam
