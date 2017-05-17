@@ -72,15 +72,11 @@ public:
     explicit BookmarksDialog(QWidget* const parent = 0, BookmarksManager* const mngr = 0);
     ~BookmarksDialog();
 
-Q_SIGNALS:
-
-    void signalOpenUrl(const QUrl&);
-
 private Q_SLOTS:
 
     void slotCustomContextMenuRequested(const QPoint&);
     void accept();
-    void slotOpen();
+    void slotOpenInMap(const QModelIndex&);
     void slotNewFolder();
     void slotRemoveOne();
 

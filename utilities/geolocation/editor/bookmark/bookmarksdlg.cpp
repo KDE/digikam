@@ -58,6 +58,10 @@
 
 #include "bookmarksmngr.h"
 #include "bookmarknode.h"
+#include "imagepropertiesgpstab.h"
+#include "gpsimageinfo.h"
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -186,15 +190,17 @@ public:
         bookmarksModel(0),
         proxyModel(0),
         search(0),
-        tree(0)
+        tree(0),
+        mapView(0)
     {
     }
 
-    BookmarksManager* manager;
-    BookmarksModel*   bookmarksModel;
-    TreeProxyModel*   proxyModel;
-    SearchTextBar*    search;
-    QTreeView*        tree;
+    BookmarksManager*      manager;
+    BookmarksModel*        bookmarksModel;
+    TreeProxyModel*        proxyModel;
+    SearchTextBar*         search;
+    QTreeView*             tree;
+    ImagePropertiesGPSTab* mapView;
 };
 
 BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const mngr)
@@ -221,6 +227,8 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     d->tree->setAlternatingRowColors(true);
     d->tree->setContextMenuPolicy(Qt::CustomContextMenu);
 
+    d->mapView = new ImagePropertiesGPSTab(this);
+
     QPushButton* const removeButton    = new QPushButton(this);
     removeButton->setObjectName(QStringLiteral("removeButton"));
     removeButton->setText(i18n("&Remove"));
@@ -244,9 +252,11 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 
     QGridLayout* const grid = new QGridLayout(this);
     grid->setObjectName(QStringLiteral("grid"));
-    grid->addWidget(d->search, 0, 0, 1, 2);
-    grid->addWidget(d->tree,   1, 0, 1, 2);
-    grid->addLayout(hbox,      2, 0, 1, 2);
+    grid->addWidget(d->search,  0, 0, 1, 2);
+    grid->addWidget(d->tree,    1, 0, 1, 2);
+    grid->addLayout(hbox,       2, 0, 1, 3);
+    grid->addWidget(d->mapView, 0, 2, 2, 1);
+    grid->setColumnStretch(1, 10);
 
     d->bookmarksModel       = d->manager->bookmarksModel();
     d->proxyModel           = new TreeProxyModel(this);
@@ -267,8 +277,8 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     connect(removeButton, SIGNAL(clicked()),
             this, SLOT(slotRemoveOne()));
 
-    connect(d->tree, SIGNAL(activated(QModelIndex)),
-            this, SLOT(slotOpen()));
+    connect(d->tree, SIGNAL(clicked(QModelIndex)),
+            this, SLOT(slotOpenInMap(QModelIndex)));
 
     connect(d->tree, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(slotCustomContextMenuRequested(QPoint)));
@@ -341,7 +351,7 @@ void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
     QModelIndex index = d->tree->indexAt(pos);
     index             = index.sibling(index.row(), 0);
 
-    if (index.isValid()/* && !d->tree->model()->hasChildren(index)*/)
+    if (index.isValid())
     {
         QMenu menu;
         menu.addAction(i18n("Remove"), this, SLOT(slotRemoveOne()));
@@ -349,14 +359,37 @@ void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
     }
 }
 
-void BookmarksDialog::slotOpen()
+void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
 {
-    QModelIndex index = d->tree->currentIndex();
-
     if (!index.parent().isValid())
+    {
+        d->mapView->setGPSInfoList(GPSImageInfo::List());
+        d->mapView->setActive(false);
         return;
+    }
 
-    emit signalOpenUrl(index.sibling(index.row(), 1).data(BookmarksModel::UrlRole).toUrl());
+    QModelIndexList list = d->tree->selectionModel()->selectedIndexes();
+    GPSImageInfo::List ilst;
+
+    foreach (const QModelIndex& item, list)
+    {
+        QUrl url                  = item.sibling(index.row(), 1).data(BookmarksModel::UrlRole).toUrl();
+        bool ok                   = false;
+        GeoCoordinates coordinate = GeoCoordinates::fromGeoUrl(url.toString(), &ok);
+
+        if (ok)
+        {
+            GPSImageInfo gpsInfo;
+            gpsInfo.coordinates = coordinate;
+            gpsInfo.dateTime    = QDateTime();
+            gpsInfo.rating      = -1;
+            gpsInfo.url         = url;
+            ilst << gpsInfo;
+        }
+    }
+
+    d->mapView->setGPSInfoList(GPSImageInfo::List() << ilst);
+    d->mapView->setActive(!ilst.empty());
 }
 
 void BookmarksDialog::slotNewFolder()
