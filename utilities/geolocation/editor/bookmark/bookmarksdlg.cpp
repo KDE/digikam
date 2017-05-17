@@ -97,33 +97,33 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
 
     setWindowFlags(Qt::Sheet);
     setWindowTitle(tr2i18n("Add Bookmark", 0));
-    setObjectName(QStringLiteral("AddBookmarkDialog"));
+    setObjectName(QLatin1String("AddBookmarkDialog"));
     resize(300, 200);
 
     QLabel* const label = new QLabel(this);
     label->setText(tr2i18n("Type a name for the bookmark, and choose where to keep it.", 0));
-    label->setObjectName(QStringLiteral("label"));
+    label->setObjectName(QLatin1String("label"));
     label->setTextFormat(Qt::PlainText);
     label->setWordWrap(true);
 
-    d->name = new QLineEdit(this);
-    d->name->setObjectName(QStringLiteral("name"));
+    d->name             = new QLineEdit(this);
+    d->name->setObjectName(QLatin1String("name"));
     d->name->setText(title);
 
-    d->location = new QComboBox(this);
-    d->location->setObjectName(QStringLiteral("location"));
+    d->location         = new QComboBox(this);
+    d->location->setObjectName(QLatin1String("location"));
 
     QSpacerItem* const verticalSpacer = new QSpacerItem(20, 2, QSizePolicy::Minimum,
                                                         QSizePolicy::Expanding);
 
     QDialogButtonBox* const buttonBox = new QDialogButtonBox(this);
-    buttonBox->setObjectName(QStringLiteral("buttonBox"));
+    buttonBox->setObjectName(QLatin1String("buttonBox"));
     buttonBox->setOrientation(Qt::Horizontal);
     buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
     buttonBox->setCenterButtons(false);
 
     QVBoxLayout* const vbox = new QVBoxLayout(this);
-    vbox->setObjectName(QStringLiteral("vbox"));
+    vbox->setObjectName(QLatin1String("vbox"));
     vbox->addWidget(label);
     vbox->addWidget(d->name);
     vbox->addWidget(d->location);
@@ -149,7 +149,6 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
 
     d->location->setModel(d->proxyModel);
     d->location->setView(view);
-    d->location->setCurrentIndex(idx.row());
 
     connect(buttonBox, SIGNAL(accepted()),
             this, SLOT(accept()));
@@ -209,16 +208,16 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 {
     d->manager = mngr;
 
-    setObjectName(QStringLiteral("GeolocationBookmarksEditDialog"));
+    setObjectName(QLatin1String("GeolocationBookmarksEditDialog"));
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowTitle(i18n("Edit Geolocation Bookmarks"));
     resize(750, 450);
 
-    d->search = new SearchTextBar(this, QLatin1String("DigikamBookmarksGeolocationSearchBar"));
-    d->search->setObjectName(QStringLiteral("search"));
+    d->search  = new SearchTextBar(this, QLatin1String("DigikamBookmarksGeolocationSearchBar"));
+    d->search->setObjectName(QLatin1String("search"));
 
-    d->tree   = new QTreeView(this);
-    d->tree->setObjectName(QStringLiteral("tree"));
+    d->tree    = new QTreeView(this);
+    d->tree->setObjectName(QLatin1String("tree"));
     d->tree->setUniformRowHeights(true);
     d->tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->tree->setSelectionMode(QAbstractItemView::ContiguousSelection);
@@ -230,28 +229,28 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
     d->mapView = new ImagePropertiesGPSTab(this);
 
     QPushButton* const removeButton    = new QPushButton(this);
-    removeButton->setObjectName(QStringLiteral("removeButton"));
+    removeButton->setObjectName(QLatin1String("removeButton"));
     removeButton->setText(i18n("&Remove"));
 
     QPushButton* const addFolderButton = new QPushButton(this);
-    addFolderButton->setObjectName(QStringLiteral("addFolderButton"));
+    addFolderButton->setObjectName(QLatin1String("addFolderButton"));
     addFolderButton->setText(i18n("Add Folder"));
 
     QSpacerItem* const spacerItem1     = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     QDialogButtonBox* const buttonBox  = new QDialogButtonBox(this);
-    buttonBox->setObjectName(QStringLiteral("buttonBox"));
+    buttonBox->setObjectName(QLatin1String("buttonBox"));
     buttonBox->setStandardButtons(QDialogButtonBox::Ok);
 
     QHBoxLayout* const hbox = new QHBoxLayout();
-    hbox->setObjectName(QStringLiteral("hbox"));
+    hbox->setObjectName(QLatin1String("hbox"));
     hbox->addWidget(removeButton);
     hbox->addWidget(addFolderButton);
     hbox->addItem(spacerItem1);
     hbox->addWidget(buttonBox);
 
     QGridLayout* const grid = new QGridLayout(this);
-    grid->setObjectName(QStringLiteral("grid"));
+    grid->setObjectName(QLatin1String("grid"));
     grid->addWidget(d->search,  0, 0, 1, 2);
     grid->addWidget(d->tree,    1, 0, 1, 2);
     grid->addLayout(hbox,       2, 0, 1, 3);
