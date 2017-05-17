@@ -149,12 +149,10 @@ BookmarkNode* XbelReader::read(const QString& fileName)
 {
     QFile file(fileName);
 
-    if (!file.exists())
+    if (!file.exists() || !file.open(QFile::ReadOnly))
     {
         return new BookmarkNode(BookmarkNode::Root);
     }
-
-    file.open(QFile::ReadOnly);
 
     return read(&file);
 }
