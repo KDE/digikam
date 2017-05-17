@@ -407,7 +407,6 @@ void BookmarksDialog::slotNewFolder()
     BookmarkNode* const node   = new BookmarkNode(BookmarkNode::Folder);
     node->title                = i18n("New Folder");
     d->manager->addBookmark(parent, node, currentIndex.row() + 1);
-    d->manager->save();
 }
 
 void BookmarksDialog::slotRemoveOne()
@@ -419,7 +418,6 @@ void BookmarksDialog::slotRemoveOne()
         index                    = d->proxyModel->mapToSource(index);
         BookmarkNode* const node = d->manager->bookmarksModel()->node(index);
         d->manager->removeBookmark(node);
-        d->manager->save();
     }
 }
 
