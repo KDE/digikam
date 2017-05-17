@@ -80,6 +80,10 @@ private Q_SLOTS:
     void slotNewFolder();
     void slotRemoveOne();
 
+protected:
+
+    void closeEvent(QCloseEvent*);
+
 private:
 
     void expandNodes(BookmarkNode* const node);

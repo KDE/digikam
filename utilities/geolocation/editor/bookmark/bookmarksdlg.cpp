@@ -60,6 +60,7 @@
 
 #include "bookmarksmngr.h"
 #include "bookmarknode.h"
+#include "dxmlguiwindow.h"
 #include "imagepropertiesgpstab.h"
 #include "gpsimageinfo.h"
 
@@ -292,8 +293,6 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 
 BookmarksDialog::~BookmarksDialog()
 {
-    saveSettings();
-
     delete d;
 }
 
@@ -301,6 +300,14 @@ void BookmarksDialog::accept()
 {
     d->manager->save();
     QDialog::accept();
+}
+
+void BookmarksDialog::closeEvent(QCloseEvent* e)
+{
+    if (!e) return;
+
+    saveSettings();
+    e->accept();
 }
 
 bool BookmarksDialog::saveExpandedNodes(const QModelIndex& parent)
@@ -430,6 +437,11 @@ void BookmarksDialog::readSettings()
     KConfigGroup group        = config->group(objectName());
     KConfigGroup groupGPSTab  = KConfigGroup(&group, QLatin1String("GPS Properties Tab"));
     d->mapView->readSettings(groupGPSTab);
+
+    KConfigGroup groupDialog  = KConfigGroup(&group, "Dialog");
+    winId();
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), groupDialog);
+    resize(windowHandle()->size());
 }
 
 void BookmarksDialog::saveSettings()
@@ -441,6 +453,9 @@ void BookmarksDialog::saveSettings()
     KConfigGroup group        = config->group(objectName());
     KConfigGroup groupGPSTab  = KConfigGroup(&group, QLatin1String("GPS Properties Tab"));
     d->mapView->writeSettings(groupGPSTab);
+
+    KConfigGroup groupDialog = KConfigGroup(&group, "Dialog");
+    DXmlGuiWindow::saveWindowSize(windowHandle(), groupDialog);
 }
 
 } // namespace Digikam
