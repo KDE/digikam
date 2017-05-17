@@ -131,6 +131,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     d->map->setVisibleMouseModes(GeoIface::MouseModePan | GeoIface::MouseModeZoomIntoGroup);
     d->map->setEnabledExtraActions(GeoIface::ExtraActionSticky);
     d->map->setVisibleExtraActions(GeoIface::ExtraActionSticky);
+    d->map->setBackend(QLatin1String("marble"));
     d->gpsImageInfoSorter     = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->map);
     vlay2->addWidget(d->map);
