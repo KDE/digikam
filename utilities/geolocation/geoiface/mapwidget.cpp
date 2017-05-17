@@ -256,6 +256,7 @@ void MapWidget::createActions()
     d->actionShowThumbnails = new QAction(this);
     d->actionShowThumbnails->setToolTip(i18n("Switch between markers and thumbnails."));
     d->actionShowThumbnails->setCheckable(true);
+    d->actionShowThumbnails->setChecked(true);
 
     connect(d->actionShowThumbnails, &QAction::triggered, this, &MapWidget::slotShowThumbnailsChanged);
 
