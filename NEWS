@@ -57,4 +57,9 @@ BUGFIXES FROM BUGZILLA:
 037 ==> 378552 - Problem with grouped images
 038 ==> 193232 - Add advanced input side-car files support (as .pto, .pp2, .pp3, .pano, thm, etc...)
 038 ==> 379806 - ShowFoto crashes when clicking Color Effects from menu.
-039 ==> 
+039 ==> 376407 - Edit Bookmarks... Doesn't Do Anything.
+040 ==> 376391 - Add geolocation favorites to menu and shortcuts.
+041 ==> 376687 - GPS tagging usability of bookmarks.
+042 ==> 374710 - No dialogue opening on edit bookmarks in geolocation editor.
+043 ==> 376074 - Display-bookmarked-positions-on-the-map button doesn't work.
+044 ==> 
