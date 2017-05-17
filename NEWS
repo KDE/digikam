@@ -62,4 +62,6 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 376687 - GPS tagging usability of bookmarks.
 042 ==> 374710 - No dialogue opening on edit bookmarks in geolocation editor.
 043 ==> 376074 - Display-bookmarked-positions-on-the-map button doesn't work.
-044 ==> 
+044 ==> 288113 - Bookmark a GPS position is impossible.
+045 ==> 374841 - Geolocation Editor Cannot Edit Bookmarks.
+046 ==> 
