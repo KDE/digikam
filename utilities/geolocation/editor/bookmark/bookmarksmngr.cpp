@@ -582,7 +582,8 @@ TreeProxyModel::TreeProxyModel(QObject* const parent)
 
 int TreeProxyModel::columnCount(const QModelIndex&) const
 {
-    return 2;
+    // Just one column is enough to show only bookmark title. The GPS info are displayed on map view.
+    return 1;
 }
 
 bool TreeProxyModel::filterAcceptsRow(int srow, const QModelIndex& sparent) const

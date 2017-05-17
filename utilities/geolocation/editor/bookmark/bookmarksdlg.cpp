@@ -209,12 +209,12 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 {
     d->manager = mngr;
 
-    setObjectName(QStringLiteral("BookmarksDialog"));
+    setObjectName(QStringLiteral("GeolocationBookmarksEditDialog"));
     setAttribute(Qt::WA_DeleteOnClose);
-    setWindowTitle(i18n("Edit Bookmarks"));
+    setWindowTitle(i18n("Edit Geolocation Bookmarks"));
     resize(750, 450);
 
-    d->search = new SearchTextBar(this, QLatin1String("DigikamBookmarksSearchBar"));
+    d->search = new SearchTextBar(this, QLatin1String("DigikamBookmarksGeolocationSearchBar"));
     d->search->setObjectName(QStringLiteral("search"));
 
     d->tree   = new QTreeView(this);
