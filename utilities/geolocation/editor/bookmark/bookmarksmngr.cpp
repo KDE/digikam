@@ -339,7 +339,14 @@ QVariant BookmarksModel::data(const QModelIndex& index, int role) const
         case Qt::DecorationRole:
             if (index.column() == 0)
             {
-                return QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+                if (bookmarkNode->type() == BookmarkNode::Bookmark)
+                {
+                    return QIcon::fromTheme(QLatin1String("globe"));
+                }
+                else
+                {
+                    return QIcon::fromTheme(QLatin1String("folder"));
+                }
             }
     }
 
