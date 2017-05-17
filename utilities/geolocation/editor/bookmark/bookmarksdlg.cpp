@@ -287,6 +287,12 @@ BookmarksDialog::~BookmarksDialog()
     delete d;
 }
 
+void BookmarksDialog::accept()
+{
+    d->manager->save();
+    QDialog::accept();
+}
+
 bool BookmarksDialog::saveExpandedNodes(const QModelIndex& parent)
 {
     bool changed = false;

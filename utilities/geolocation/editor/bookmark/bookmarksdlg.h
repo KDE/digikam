@@ -79,6 +79,7 @@ Q_SIGNALS:
 private Q_SLOTS:
 
     void slotCustomContextMenuRequested(const QPoint&);
+    void accept();
     void slotOpen();
     void slotNewFolder();
     void slotRemoveOne();
