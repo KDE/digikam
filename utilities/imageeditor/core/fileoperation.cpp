@@ -239,6 +239,7 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
         else if (exec.isEmpty())
         {
             exec = cmd;
+            exec.remove(QLatin1Char('"'));
             continue;
         }
 
