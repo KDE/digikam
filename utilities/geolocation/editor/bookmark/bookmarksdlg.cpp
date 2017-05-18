@@ -26,18 +26,14 @@
 // Qt includes
 
 #include <QMenu>
-#include <QBuffer>
 #include <QFile>
-#include <QMimeData>
-#include <QDesktopServices>
-#include <QDragEnterEvent>
 #include <QIcon>
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QToolButton>
-#include <QDebug>
 #include <QAction>
+#include <QCloseEvent>
 #include <QObject>
 #include <QUndoCommand>
 #include <QVariant>
@@ -122,7 +118,7 @@ AddBookmarkDialog::AddBookmarkDialog(const QString& url,
     QDialogButtonBox* const buttonBox = new QDialogButtonBox(this);
     buttonBox->setObjectName(QLatin1String("buttonBox"));
     buttonBox->setOrientation(Qt::Horizontal);
-    buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
     buttonBox->setCenterButtons(false);
 
     QVBoxLayout* const vbox = new QVBoxLayout(this);
@@ -244,7 +240,7 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 
     QDialogButtonBox* const buttonBox  = new QDialogButtonBox(this);
     buttonBox->setObjectName(QLatin1String("buttonBox"));
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok);
+    buttonBox->setStandardButtons(QDialogButtonBox::Cancel | QDialogButtonBox::Ok);
 
     QHBoxLayout* const hbox = new QHBoxLayout();
     hbox->setObjectName(QLatin1String("hbox"));
@@ -270,6 +266,9 @@ BookmarksDialog::BookmarksDialog(QWidget* const parent, BookmarksManager* const 
 
     connect(buttonBox, SIGNAL(accepted()),
             this, SLOT(accept()));
+
+    connect(buttonBox, SIGNAL(rejected()),
+            this, SLOT(reject()));
 
     connect(d->search, SIGNAL(textChanged(QString)),
             d->proxyModel, SLOT(setFilterFixedString(QString)));
