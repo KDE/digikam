@@ -52,6 +52,8 @@
 #include "gpsmarkertiler.h"
 #include "gpsimageinfosorter.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
@@ -84,7 +86,7 @@ public:
     SearchTextBar*              searchGPSBar;
     EditableSearchTreeView*     searchTreeView;
     QSplitter*                  splitter;
-    GeoIface::MapWidget*        mapSearchWidget;
+    MapWidget*        mapSearchWidget;
     GPSMarkerTiler*             gpsMarkerTiler;
     ImageAlbumModel*            imageAlbumModel;
     ImageFilterModel*           imageFilterModel;
@@ -130,7 +132,7 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     mapPanel->setMinimumWidth(256);
     mapPanel->setMinimumHeight(256);
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->mapSearchWidget        = new GeoIface::MapWidget(mapPanel);
+    d->mapSearchWidget        = new MapWidget(mapPanel);
     d->mapSearchWidget->setBackend(QLatin1String("marble"));
     d->mapSearchWidget->setShowThumbnails(true);
 
@@ -186,17 +188,17 @@ GPSSearchView::GPSSearchView(QWidget* const parent,
     vlayTop->addWidget(mapPanel);
     vlayTop->addWidget(d->mapSearchWidget->getControlWidget());
 
-    d->mapSearchWidget->setAvailableMouseModes(GeoIface::MouseModePan                     |
-                                               GeoIface::MouseModeRegionSelection         |
-                                               GeoIface::MouseModeZoomIntoGroup           |
-                                               GeoIface::MouseModeRegionSelectionFromIcon |
-                                               GeoIface::MouseModeFilter                  |
-                                               GeoIface::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setAvailableMouseModes(MouseModePan                     |
+                                               MouseModeRegionSelection         |
+                                               MouseModeZoomIntoGroup           |
+                                               MouseModeRegionSelectionFromIcon |
+                                               MouseModeFilter                  |
+                                               MouseModeSelectThumbnail);
 
-    d->mapSearchWidget->setVisibleMouseModes(GeoIface::MouseModePan           |
-                                             GeoIface::MouseModeZoomIntoGroup |
-                                             GeoIface::MouseModeFilter        |
-                                             GeoIface::MouseModeSelectThumbnail);
+    d->mapSearchWidget->setVisibleMouseModes(MouseModePan           |
+                                             MouseModeZoomIntoGroup |
+                                             MouseModeFilter        |
+                                             MouseModeSelectThumbnail);
 
     // construct a second row of control actions below the control widget
     /// @todo Should we still replace the icons of the actions with text as discussed during the sprint?
@@ -399,7 +401,7 @@ void GPSSearchView::slotSaveGPSSAlbum()
  */
 void GPSSearchView::slotRegionSelectionChanged()
 {
-    const GeoIface::GeoCoordinates::Pair newRegionSelection = d->mapSearchWidget->getRegionSelection();
+    const GeoCoordinates::Pair newRegionSelection = d->mapSearchWidget->getRegionSelection();
     const bool haveRegionSelection                          = newRegionSelection.first.hasCoordinates();
 
     if (haveRegionSelection)
@@ -432,7 +434,7 @@ void GPSSearchView::createNewGPSSearchAlbum(const QString& name)
 
     // We query the database here
 
-    const GeoIface::GeoCoordinates::Pair coordinates = d->mapSearchWidget->getRegionSelection();
+    const GeoCoordinates::Pair coordinates = d->mapSearchWidget->getRegionSelection();
     const bool haveCoordinates                       = coordinates.first.hasCoordinates();
 
     if (haveCoordinates)
@@ -493,9 +495,9 @@ void GPSSearchView::slotAlbumSelected(Album* a)
     {
         const QList<double> list = reader.valueToDoubleList();
 
-        const GeoIface::GeoCoordinates::Pair coordinates(
-            GeoIface::GeoCoordinates(list.at(1), list.at(0)),
-            GeoIface::GeoCoordinates(list.at(3), list.at(2))
+        const GeoCoordinates::Pair coordinates(
+            GeoCoordinates(list.at(1), list.at(0)),
+            GeoCoordinates(list.at(3), list.at(2))
         );
 
         /// @todo Currently, invalid coordinates are stored as -200:

@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSSEARCHVIEW_H
-#define GPSSEARCHVIEW_H
+#ifndef GPS_SEARCH_VIEW_H
+#define GPS_SEARCH_VIEW_H
 
 // Qt includes
 
@@ -108,4 +108,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSSEARCHVIEW_H
+#endif // GPS_SEARCH_VIEW_H

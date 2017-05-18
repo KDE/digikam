@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSMARKERTILER_H
-#define GPSMARKERTILER_H
+#ifndef GPS_MARKER_TILER_H
+#define GPS_MARKER_TILER_H
 
 // Qt includes
 
@@ -55,12 +55,14 @@
 #include "imagealbummodel.h"
 #include "imagefiltermodel.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
 class GPSImageInfo;
 
-class GPSMarkerTiler : public GeoIface::AbstractMarkerTiler
+class GPSMarkerTiler : public AbstractMarkerTiler
 {
     Q_OBJECT
 
@@ -68,29 +70,31 @@ public:
 
     class MyTile;
 
-    explicit GPSMarkerTiler(QObject* const parent, ImageFilterModel* const imageFilterModel, QItemSelectionModel* const selectionModel);
+    explicit GPSMarkerTiler(QObject* const parent,
+                            ImageFilterModel* const imageFilterModel,
+                            QItemSelectionModel* const selectionModel);
     virtual ~GPSMarkerTiler();
 
     virtual Tile* tileNew();
     virtual void tileDelete(Tile* const tile);
-    virtual void prepareTiles(const GeoIface::GeoCoordinates& upperLeft, const GeoIface::GeoCoordinates& lowerRight, int level);
+    virtual void prepareTiles(const GeoCoordinates& upperLeft, const GeoCoordinates& lowerRight, int level);
     virtual void regenerateTiles();
-    virtual GeoIface::AbstractMarkerTiler::Tile* getTile(const GeoIface::TileIndex& tileIndex, const bool stopIfEmpty = false);
-    virtual int getTileMarkerCount(const GeoIface::TileIndex& tileIndex);
-    virtual int getTileSelectedCount(const GeoIface::TileIndex& tileIndex);
+    virtual AbstractMarkerTiler::Tile* getTile(const TileIndex& tileIndex, const bool stopIfEmpty = false);
+    virtual int getTileMarkerCount(const TileIndex& tileIndex);
+    virtual int getTileSelectedCount(const TileIndex& tileIndex);
 
-    virtual QVariant getTileRepresentativeMarker(const GeoIface::TileIndex& tileIndex, const int sortKey);
+    virtual QVariant getTileRepresentativeMarker(const TileIndex& tileIndex, const int sortKey);
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual GeoIface::GroupState getTileGroupState(const GeoIface::TileIndex& tileIndex);
-    virtual GeoIface::GroupState getGlobalGroupState();
+    virtual GroupState getTileGroupState(const TileIndex& tileIndex);
+    virtual GroupState getGlobalGroupState();
 
     virtual void onIndicesClicked(const ClickInfo& clickInfo);
 
     virtual void setActive(const bool state);
 
-    void setRegionSelection(const GeoIface::GeoCoordinates::Pair& sel);
+    void setRegionSelection(const GeoCoordinates::Pair& sel);
     void removeCurrentRegionSelection();
     void setPositiveFilterIsActive(const bool state);
 
@@ -113,10 +117,10 @@ private Q_SLOTS:
 
 private:
 
-    QList<qlonglong> getTileMarkerIds(const GeoIface::TileIndex& tileIndex);
-    GeoIface::GroupState getImageState(const qlonglong imageId);
-    void removeMarkerFromTileAndChildren(const qlonglong imageId, const GeoIface::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
-    void addMarkerToTileAndChildren(const qlonglong imageId, const GeoIface::TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
+    QList<qlonglong> getTileMarkerIds(const TileIndex& tileIndex);
+    GroupState getImageState(const qlonglong imageId);
+    void removeMarkerFromTileAndChildren(const qlonglong imageId, const TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
+    void addMarkerToTileAndChildren(const qlonglong imageId, const TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 
 private:
 
@@ -126,4 +130,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSMARKERTILER_H
+#endif // GPS_MARKER_TILER_H
