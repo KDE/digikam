@@ -23,7 +23,7 @@
 
 #include "myimageitem.h"
 
-MyImageItem::MyImageItem(const QUrl& url, const GeoIface::GeoCoordinates& itemCoordinates)
+MyImageItem::MyImageItem(const QUrl& url, const GeoCoordinates& itemCoordinates)
     : QTreeWidgetItem(),
       coordinates(itemCoordinates),
       imageUrl(url)
@@ -62,9 +62,9 @@ void MyImageItem::setData(int column, int role, const QVariant& value)
 {
     if (role == RoleCoordinates)
     {
-        if (value.canConvert<GeoIface::GeoCoordinates>())
+        if (value.canConvert<GeoCoordinates>())
         {
-            coordinates = value.value<GeoIface::GeoCoordinates>();
+            coordinates = value.value<GeoCoordinates>();
             emitDataChanged();
         }
 

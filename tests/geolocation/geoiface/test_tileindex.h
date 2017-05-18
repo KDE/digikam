@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-12
- * Description : Test the GeoIface::TileIndex class
+ * Description : Test the TileIndex class
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *

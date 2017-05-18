@@ -35,6 +35,8 @@
 #include "geoiface_types.h"
 #include "geocoordinates.h"
 
+using namespace GeoIface;
+
 const int RoleMyData      = Qt::UserRole+0;
 const int RoleCoordinates = Qt::UserRole+1;
 

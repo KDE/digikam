@@ -38,7 +38,9 @@
 
 class QCommandLineParser;
 
-class MarkerModelHelper : public GeoIface::ModelHelper
+using namespace GeoIface;
+
+class MarkerModelHelper : public ModelHelper
 {
     Q_OBJECT
 
@@ -50,8 +52,8 @@ public:
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
     virtual Flags                modelFlags()     const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
-    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoIface::GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
+    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
+    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
 
 private:
 
@@ -73,7 +75,7 @@ public:
 
     MyTrackModelHelper(QAbstractItemModel* const imageItemsModel);
 
-    virtual GeoIface::TrackManager::Track::List getTracks() const;
+    virtual TrackManager::Track::List getTracks() const;
 
 Q_SIGNALS:
 
@@ -85,8 +87,8 @@ public Q_SLOTS:
 
 private:
 
-    GeoIface::TrackManager::Track::List m_tracks;
-    QAbstractItemModel*                m_itemModel;
+    TrackManager::Track::List m_tracks;
+    QAbstractItemModel*       m_itemModel;
 };
 
 // ------------------------------------------------------------------------------------------------

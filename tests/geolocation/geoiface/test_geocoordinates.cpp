@@ -45,11 +45,11 @@ void TestGeoCoordinates::testGeoCoordinates()
     QVERIFY(!(coord1==coord3));
 
     GeoCoordinates coord4 = GeoCoordinates(52.0, 6.0);
-    QVERIFY(coord1==coord4);
+    QVERIFY(coord1 == coord4);
 }
 
 /**
- * GeoIface::GeoCoordinates are declared as Q_MOVABLE_TYPE, here we test whether the class still
+ * GeoCoordinates are declared as Q_MOVABLE_TYPE, here we test whether the class still
  * works with Qt's container classes.
  */
 void TestGeoCoordinates::testMovable()

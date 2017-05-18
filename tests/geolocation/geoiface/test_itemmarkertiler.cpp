@@ -664,7 +664,7 @@ void TestItemMarkerTiler::benchmarkIteratorWholeWorld()
         {
             for (qreal y = -50; y < 50; y+=1.0)
             {
-                itemModel->appendRow(MakeItemAt(GeoIface::GeoCoordinates(x,y)));
+                itemModel->appendRow(MakeItemAt(GeoCoordinates(x,y)));
             }
         }
 

@@ -34,6 +34,8 @@
 
 #include "dragdrophandler.h"
 
+using namespace GeoIface;
+
 class MyDragData : public QMimeData
 {
     Q_OBJECT
@@ -49,7 +51,7 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class MyDragDropHandler : public GeoIface::DragDropHandler
+class MyDragDropHandler : public DragDropHandler
 {
     Q_OBJECT
 
@@ -59,7 +61,7 @@ public:
     virtual ~MyDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);
-    virtual bool           dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates);
+    virtual bool           dropEvent(const QDropEvent* e, const GeoCoordinates& dropCoordinates);
     virtual QMimeData*     createMimeData(const QList<QPersistentModelIndex>& modelIndices);
 
 private:

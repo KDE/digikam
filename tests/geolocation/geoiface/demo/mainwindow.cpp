@@ -263,8 +263,8 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     d->mapWidget->setGroupedModel(mm);
     d->mapWidget->setActive(true);
     d->mapWidget->setDragDropHandler(new MyDragDropHandler(d->displayMarkersModel, d->mapWidget));
-    d->mapWidget->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
-    d->mapWidget->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
+    d->mapWidget->setVisibleMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
+    d->mapWidget->setAvailableMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
 //     d->mapWidget->setTrackModel(d->trackModelHelper);
 
     connect(d->markerModelHelper, SIGNAL(signalMarkersMoved(QList<QPersistentModelIndex>)),
@@ -558,7 +558,7 @@ void MainWindow::slotAltitudeRequestsReady(const QList<int>& readyRequests)
 
     for (int i = 0; i < readyRequests.count(); ++i)
     {
-        const GeoIface::LookupAltitude::Request& myLookup = myAltitudeLookup->getRequest(readyRequests.at(i));
+        const LookupAltitude::Request& myLookup = myAltitudeLookup->getRequest(readyRequests.at(i));
         const QPersistentModelIndex markerIndex          = myLookup.data.value<QPersistentModelIndex>();
 
         if (!markerIndex.isValid())
@@ -607,7 +607,7 @@ void MainWindow::createMenus()
             this, SLOT(slotAddImages()));
 }
 
-GeoIface::ModelHelper::Flags MarkerModelHelper::modelFlags() const
+ModelHelper::Flags MarkerModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

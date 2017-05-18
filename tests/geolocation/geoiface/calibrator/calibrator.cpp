@@ -89,13 +89,13 @@ QItemSelectionModel* CalibratorModelHelper::selectionModel() const
     return 0;
 }
 
-bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const
+bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
 {
     if (!index.isValid())
         return false;
 
     const QVariant coordinatesVariant       = index.data(CoordinatesRole);
-    GeoIface::GeoCoordinates itemCoordinates = coordinatesVariant.value<GeoIface::GeoCoordinates>();
+    GeoCoordinates itemCoordinates = coordinatesVariant.value<GeoCoordinates>();
 
     if (coordinates)
         *coordinates = itemCoordinates;
@@ -103,7 +103,7 @@ bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::
     return itemCoordinates.hasCoordinates();
 }
 
-void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index, const GeoIface::GeoCoordinates& coordinates)
+void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index, const GeoCoordinates& coordinates)
 {
     if (!index.isValid())
         return;
@@ -111,7 +111,7 @@ void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index, const G
     d->model->setData(index, QVariant::fromValue(coordinates), CoordinatesRole);
 }
 
-GeoIface::ModelHelper::Flags CalibratorModelHelper::modelFlags() const
+ModelHelper::Flags CalibratorModelHelper::modelFlags() const
 {
     return FlagVisible;
 }
@@ -135,10 +135,10 @@ public:
     }
 
     QHBoxLayout*                                     hBoxLayout;
-    QList<QPair<QWidget*, GeoIface::MapWidget*> >    extraWidgetHolders;
+    QList<QPair<QWidget*, MapWidget*> >    extraWidgetHolders;
     QStandardItemModel*                              model;
     CalibratorModelHelper*                           modelHelper;
-    GeoIface::ItemMarkerTiler*                       markerTiler;
+    ItemMarkerTiler*                       markerTiler;
 
     QButtonGroup*                                    groupingMode;
     QSpinBox*                                        sbLevel;
@@ -152,7 +152,7 @@ Calibrator::Calibrator()
 {
     d->model       = new QStandardItemModel(this);
     d->modelHelper = new CalibratorModelHelper(d->model, this);
-    d->markerTiler = new GeoIface::ItemMarkerTiler(d->modelHelper, this);
+    d->markerTiler = new ItemMarkerTiler(d->modelHelper, this);
 
     QVBoxLayout* const vboxLayout1 = new QVBoxLayout();
     QWidget* const dummy1          = new QWidget(this);
@@ -172,7 +172,7 @@ Calibrator::Calibrator()
 
     d->sbLevel                 = new QSpinBox(this);
     d->sbLevel->setMinimum(1);
-    d->sbLevel->setMaximum(GeoIface::TileIndex::MaxLevel);
+    d->sbLevel->setMaximum(TileIndex::MaxLevel);
     QLabel* const labelsbLevel = new QLabel(i18nc("Tile level", "Level:"), this);
     labelsbLevel->setBuddy(d->sbLevel);
 
@@ -234,7 +234,7 @@ void Calibrator::updateGroupingMode()
 
     for (int i = 0; i < d->extraWidgetHolders.count(); ++i)
     {
-        GeoIface::MapWidget* const mapWidget = d->extraWidgetHolders.at(i).second;
+        MapWidget* const mapWidget = d->extraWidgetHolders.at(i).second;
 
         if (shouldBeGrouped)
         {
@@ -249,7 +249,7 @@ void Calibrator::updateGroupingMode()
     }
 }
 
-void Calibrator::addMarkerAt(const GeoIface::GeoCoordinates& coordinates)
+void Calibrator::addMarkerAt(const GeoCoordinates& coordinates)
 {
     qDebug() << coordinates;
     QStandardItem* const item = new QStandardItem(coordinates.geoUrl());
@@ -263,7 +263,7 @@ void Calibrator::updateMarkers()
     d->model->clear();
 
     const int newLevel = d->sbLevel->value();
-    const int Tiling   = GeoIface::TileIndex::Tiling;
+    const int Tiling   = TileIndex::Tiling;
 
     // add markers in all four corners and in the middle of the edges:
     typedef QPair<int, int> QIntPair;
@@ -303,7 +303,7 @@ void Calibrator::updateMarkers()
         const int level0Index    = currentPair.first;
         const int followingIndex = currentPair.second;
 
-        GeoIface::TileIndex markerIndex;
+        TileIndex markerIndex;
         markerIndex.appendLinearIndex(level0Index);
 
         for (int level = 1; level < newLevel-2; level++)
@@ -323,13 +323,13 @@ void Calibrator::updateMarkers()
 
                     if ((newLinIndex >= 0) && (newLinIndex < Tiling*Tiling))
                     {
-                        GeoIface::TileIndex newIndex = markerIndex;
+                        TileIndex newIndex = markerIndex;
                         newIndex.appendLinearIndex(newLinIndex);
                         addMarkerAt(newIndex.toCoordinates());
 /*
                          for (int corner = 1; corner<=4; ++corner)
                          {
-                             addMarkerAt(newIndex.toCoordinates(GeoIface::TileIndex::CornerPosition(corner)));
+                             addMarkerAt(newIndex.toCoordinates(TileIndex::CornerPosition(corner)));
                          }
 */
                     }
@@ -348,7 +348,7 @@ void Calibrator::updateZoomView()
         return;
     }
 
-    GeoIface::MapWidget* const firstMapWidget = d->extraWidgetHolders.first().second;
+    MapWidget* const firstMapWidget = d->extraWidgetHolders.first().second;
     const QString newZoom                        = firstMapWidget->getZoom();
 
     if (newZoom!=d->zoomDisplay->text())
@@ -360,7 +360,7 @@ void Calibrator::updateZoomView()
 void Calibrator::slotAddMapWidget()
 {
     QVBoxLayout* const boxLayout            = new QVBoxLayout();
-    GeoIface::MapWidget* const mapWidget = new GeoIface::MapWidget();
+    MapWidget* const mapWidget = new MapWidget();
     boxLayout->addWidget(mapWidget);
     boxLayout->addWidget(mapWidget->getControlWidget());
 
@@ -376,7 +376,7 @@ void Calibrator::slotAddMapWidget()
 
     QWidget* const dummyWidget = new QWidget();
     dummyWidget->setLayout(boxLayout);
-    d->extraWidgetHolders.append(QPair<QWidget*, GeoIface::MapWidget*>(dummyWidget, mapWidget));
+    d->extraWidgetHolders.append(QPair<QWidget*, MapWidget*>(dummyWidget, mapWidget));
 
     d->hBoxLayout->addWidget(dummyWidget);
 
@@ -390,7 +390,7 @@ void Calibrator::slotRemoveMapWidget()
         return;
     }
 
-    QPair<QWidget*, GeoIface::MapWidget*> info = d->extraWidgetHolders.takeLast();
+    QPair<QWidget*, MapWidget*> info = d->extraWidgetHolders.takeLast();
     d->hBoxLayout->removeWidget(info.first);
     delete info.first;
 }
@@ -404,7 +404,7 @@ void Calibrator::slotActivateMapActionTriggered(bool state)
         return;
     }
 
-    GeoIface::MapWidget* const mapWidget = static_cast<GeoIface::MapWidget*>(senderAction->data().value<void*>());
+    MapWidget* const mapWidget = static_cast<MapWidget*>(senderAction->data().value<void*>());
     mapWidget->setActive(state);
 }
 

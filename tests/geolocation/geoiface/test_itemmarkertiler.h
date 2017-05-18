@@ -33,7 +33,9 @@
 #include "itemmarkertiler.h"
 #include "modelhelper.h"
 
-class MarkerModelHelper : public GeoIface::ModelHelper
+using namespace GeoIface;
+
+class MarkerModelHelper : public ModelHelper
 {
 Q_OBJECT
 
@@ -44,7 +46,7 @@ public:
 
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
 
 private Q_SLOTS:
 
