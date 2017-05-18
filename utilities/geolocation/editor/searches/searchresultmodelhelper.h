@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHRESULTMODELHELPER_H
-#define SEARCHRESULTMODELHELPER_H
+#ifndef SEARCH_RESULT_MODEL_HELPER_H
+#define SEARCH_RESULT_MODEL_HELPER_H
 
 // Qt includes
 
@@ -37,13 +37,15 @@
 
 #include "searchbackend.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
 class SearchResultModel;
 class GPSUndoCommand;
 
-class SearchResultModelHelper : public GeoIface::ModelHelper
+class SearchResultModelHelper : public ModelHelper
 {
     Q_OBJECT
 
@@ -59,7 +61,7 @@ public:
 
     virtual QAbstractItemModel* model() const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
     virtual Flags modelFlags() const;
     virtual Flags itemFlags(const QModelIndex& index) const;
@@ -77,4 +79,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHRESULTMODELHELPER_H
+#endif // SEARCH_RESULT_MODEL_HELPER_H

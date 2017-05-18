@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAPDRAGDROPHANDLER_H
-#define MAPDRAGDROPHANDLER_H
+#ifndef MAP_DRAG_DROP_HANDLER_H
+#define MAP_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -33,6 +33,8 @@
 // Local includes
 
 #include "dragdrophandler.h"
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -54,7 +56,7 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class MapDragDropHandler : public GeoIface::DragDropHandler
+class MapDragDropHandler : public DragDropHandler
 {
     Q_OBJECT
 
@@ -64,7 +66,7 @@ public:
     virtual ~MapDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e);
-    virtual bool dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates);
+    virtual bool dropEvent(const QDropEvent* e, const GeoCoordinates& dropCoordinates);
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices);
 
 private:
@@ -74,4 +76,4 @@ private:
 
 } // namespace Digikam
 
-#endif // MAPDRAGDROPHANDLER_H
+#endif // MAP_DRAG_DROP_HANDLER_H

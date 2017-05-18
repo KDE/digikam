@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHBACKEND_H
-#define SEARCHBACKEND_H
+#ifndef SEARCH_BACKEND_H
+#define SEARCH_BACKEND_H
 
 // Qt includes
 
@@ -37,6 +37,8 @@
 // Local includes
 
 #include "rgwidget.h"
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -56,9 +58,9 @@ public:
         }
 
         typedef QList<SearchResult>    List;
-        GeoIface::GeoCoordinates       coordinates;
+        GeoCoordinates                 coordinates;
         QString                        name;
-        GeoIface::GeoCoordinates::Pair boundingBox;
+        GeoCoordinates::Pair           boundingBox;
         QString                        internalId;
     };
 
@@ -86,4 +88,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHBACKEND_H
+#endif // SEARCH_BACKEND_H

@@ -103,7 +103,8 @@ QItemSelectionModel* SearchResultModelHelper::selectionModel() const
     return d->selectionModel;
 }
 
-bool SearchResultModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool SearchResultModelHelper::itemCoordinates(const QModelIndex& index,
+                                              GeoCoordinates* const coordinates) const
 {
     const SearchResultModel::SearchResultItem item = d->model->resultItem(index);
     *coordinates                                   = item.result.coordinates;
@@ -117,22 +118,27 @@ void SearchResultModelHelper::setVisibility(const bool state)
     emit(signalVisibilityChanged());
 }
 
-bool SearchResultModelHelper::itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const
+bool SearchResultModelHelper::itemIcon(const QModelIndex& index,
+                                       QPoint* const offset,
+                                       QSize* const size,
+                                       QPixmap* const pixmap,
+                                       QUrl* const url) const
 {
     return d->model->getMarkerIcon(index, offset, size, pixmap, url);
 }
 
-GeoIface::ModelHelper::Flags SearchResultModelHelper::modelFlags() const
+ModelHelper::Flags SearchResultModelHelper::modelFlags() const
 {
     return FlagSnaps|(d->visible?FlagVisible:FlagNull);
 }
 
-GeoIface::ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
+ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
     return FlagVisible|FlagSnaps;
 }
 
-void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices)
+void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,
+                                          const QList<QModelIndex>& snappedIndices)
 {
     GPSUndoCommand* const undoCommand              = new GPSUndoCommand();
     SearchResultModel::SearchResultItem targetItem = d->model->resultItem(targetIndex);

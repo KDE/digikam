@@ -109,7 +109,7 @@ public:
     }
 
     // Map
-    GeoIface::MapWidget*     mapWidget;
+    MapWidget*               mapWidget;
     GPSImageModel*           gpsImageModel;
     QItemSelectionModel*     gosImageSelectionModel;
     QLineEdit*               searchTermLineEdit;
@@ -310,7 +310,7 @@ void SearchWidget::slotTriggerSearch()
     slotUpdateActionAvailability();
 }
 
-GeoIface::ModelHelper* SearchWidget::getModelHelper() const
+ModelHelper* SearchWidget::getModelHelper() const
 {
     return d->searchResultModelHelper;
 }
@@ -433,7 +433,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
 {
     const QModelIndex currentIndex                        = d->searchResultsSelectionModel->currentIndex();
     const SearchResultModel::SearchResultItem currentItem = d->searchResultsModel->resultItem(currentIndex);
-    const GeoIface::GeoCoordinates& targetCoordinates      = currentItem.result.coordinates;
+    const GeoCoordinates& targetCoordinates      = currentItem.result.coordinates;
     const QModelIndexList selectedImageIndices            = d->gosImageSelectionModel->selectedRows();
 
     if (selectedImageIndices.isEmpty())
@@ -466,7 +466,7 @@ void SearchWidget::slotMoveSelectedImagesToThisResult()
     emit(signalUndoCommand(undoCommand));
 }
 
-void SearchWidget::setPrimaryMapWidget(GeoIface::MapWidget* const mapWidget)
+void SearchWidget::setPrimaryMapWidget(MapWidget* const mapWidget)
 {
     d->mapWidget = mapWidget;
 }

@@ -51,6 +51,8 @@
 #include "gpsbookmarkowner.h"
 #include "digikam_debug.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
@@ -93,7 +95,7 @@ public:
     GPSImageList*                      imagesList;
 
     // Altitude lookup
-    QPointer<GeoIface::LookupAltitude> altitudeLookup;
+    QPointer<LookupAltitude> altitudeLookup;
     GPSUndoCommand*                    altitudeUndoCommand;
     int                                altitudeRequestedCount;
     int                                altitudeReceivedCount;
@@ -402,7 +404,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
                     }
 
                     foundData = true;
-                    GeoIface::GeoCoordinates coordinates(ptLatitude, ptLongitude);
+                    GeoCoordinates coordinates(ptLatitude, ptLongitude);
 
                     if (haveAltitude)
                     {
@@ -426,7 +428,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
     {
         const QString textdata                   = mimedata->text();
         bool foundGeoUrl                         = false;
-        GeoIface::GeoCoordinates testCoordinates = GeoIface::GeoCoordinates::fromGeoUrl(textdata, &foundGeoUrl);
+        GeoCoordinates testCoordinates = GeoCoordinates::fromGeoUrl(textdata, &foundGeoUrl);
 
         if (foundGeoUrl)
         {
@@ -462,7 +464,7 @@ void GPSImageListContextMenu::pasteActionTriggered()
 
                 if (okay)
                 {
-                    GeoIface::GeoCoordinates coordinates(ptLatitude, ptLongitude);
+                    GeoCoordinates coordinates(ptLatitude, ptLongitude);
 
                     if (haveAltitude)
                     {
@@ -657,7 +659,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
 //  const int nSelected                       = selectedIndices.size();
 
     // find the indices which have coordinates but no altitude
-    GeoIface::LookupAltitude::Request::List altitudeQueries;
+    LookupAltitude::Request::List altitudeQueries;
 
     Q_FOREACH (const QModelIndex& currentIndex, selectedIndices)
     {
@@ -669,7 +671,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
         }
 
         const GPSDataContainer gpsData            = gpsItem->gpsData();
-        const GeoIface::GeoCoordinates coordinates = gpsData.getCoordinates();
+        const GeoCoordinates coordinates = gpsData.getCoordinates();
 
         if ((!coordinates.hasCoordinates()) || coordinates.hasAltitude())
         {
@@ -677,7 +679,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
         }
 
         // the item has coordinates but no altitude, create a query
-        GeoIface::LookupAltitude::Request myLookup;
+        LookupAltitude::Request myLookup;
         myLookup.coordinates = coordinates;
         myLookup.data        = QVariant::fromValue(QPersistentModelIndex(currentIndex));
 
@@ -689,7 +691,7 @@ void GPSImageListContextMenu::slotLookupMissingAltitudes()
         return;
     }
 
-    d->altitudeLookup = GeoIface::LookupFactory::getAltitudeLookup(QString::fromLatin1("geonames"), this);
+    d->altitudeLookup = LookupFactory::getAltitudeLookup(QString::fromLatin1("geonames"), this);
 
     connect(d->altitudeLookup, SIGNAL(signalRequestsReady(QList<int>)),
             this, SLOT(slotAltitudeLookupReady(QList<int>)));
@@ -713,7 +715,7 @@ void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyReq
 
     Q_FOREACH(const int requestIndex, readyRequests)
     {
-        const GeoIface::LookupAltitude::Request myLookup = d->altitudeLookup->getRequest(requestIndex);
+        const LookupAltitude::Request myLookup = d->altitudeLookup->getRequest(requestIndex);
         const QPersistentModelIndex markerIndex          = myLookup.data.value<QPersistentModelIndex>();
 
         if (!markerIndex.isValid())
@@ -745,9 +747,9 @@ void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyReq
 
 void GPSImageListContextMenu::slotAltitudeLookupDone()
 {
-    GeoIface::LookupAltitude::Status requestStatus = d->altitudeLookup->getStatus();
+    LookupAltitude::Status requestStatus = d->altitudeLookup->getStatus();
 
-    if (requestStatus == GeoIface::LookupAltitude::StatusError)
+    if (requestStatus == LookupAltitude::StatusError)
     {
         const QString errorMessage = i18n("Altitude lookup failed:\n%1", d->altitudeLookup->errorMessage());
         QMessageBox::information(d->imagesList, i18n("GPS Sync"),errorMessage);

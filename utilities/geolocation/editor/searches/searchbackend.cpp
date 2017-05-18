@@ -194,7 +194,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
             }
 
             SearchResult result;
-            result.coordinates = GeoIface::GeoCoordinates(lat, lon);
+            result.coordinates = GeoCoordinates(lat, lon);
             result.name        = displayName;
 
             if (!placeId.isEmpty())
@@ -283,7 +283,7 @@ void SearchBackend::slotFinished(QNetworkReply* reply)
             }
 
             SearchResult result;
-            result.coordinates = GeoIface::GeoCoordinates(lat, lon);
+            result.coordinates = GeoCoordinates(lat, lon);
             result.name        = displayName;
 
             if (!geoNameId.isEmpty())

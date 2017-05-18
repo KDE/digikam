@@ -35,7 +35,8 @@
 namespace Digikam
 {
 
-MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/, GPSGeoIfaceModelHelper* const parent)
+MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/,
+                                       GPSGeoIfaceModelHelper* const parent)
     : DragDropHandler(parent),
       gpsGeoIfaceModelHelper(parent)
 {
@@ -50,7 +51,7 @@ Qt::DropAction MapDragDropHandler::accepts(const QDropEvent* /*e*/)
     return Qt::CopyAction;
 }
 
-bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoIface::GeoCoordinates& dropCoordinates)
+bool MapDragDropHandler::dropEvent(const QDropEvent* e, const GeoCoordinates& dropCoordinates)
 {
     const MapDragData* const mimeData = qobject_cast<const MapDragData*>(e->mimeData());
 

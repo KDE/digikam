@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SEARCHWIDGET_H
-#define SEARCHWIDGET_H
+#ifndef SEARCH_WIDGET_H
+#define SEARCH_WIDGET_H
 
 // Qt includes
 
@@ -34,15 +34,13 @@
 
 #include "digikam_config.h"
 #include "modelhelper.h"
+#include "mapwidget.h"
 #include "searchbackend.h"
 
 class QEvent;
 class KConfigGroup;
 
-namespace GeoIface
-{
-    class MapWidget;
-}
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -63,11 +61,11 @@ public:
                 );
     ~SearchWidget();
 
-    GeoIface::ModelHelper* getModelHelper() const;
+    ModelHelper* getModelHelper() const;
 
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);
-    void setPrimaryMapWidget(GeoIface::MapWidget* const mapWidget);
+    void setPrimaryMapWidget(MapWidget* const mapWidget);
 
 private Q_SLOTS:
 
@@ -97,4 +95,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SEARCHWIDGET_H
+#endif // SEARCH_WIDGET_H
