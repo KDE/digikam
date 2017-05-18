@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MYIMAGEITEM_H
-#define MYIMAGEITEM_H
+#ifndef MY_IMAGE_ITEM_H
+#define MY_IMAGE_ITEM_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class MyImageItem : public QTreeWidgetItem
 {
 public:
 
-    MyImageItem(const QUrl& url, const GeoIface::GeoCoordinates& itemCoordinates);
+    MyImageItem(const QUrl& url, const GeoCoordinates& itemCoordinates);
     virtual ~MyImageItem();
 
     virtual QVariant data(int column, int role) const;
@@ -52,8 +52,8 @@ public:
 
 private:
 
-    GeoIface::GeoCoordinates coordinates;
-    QUrl                    imageUrl;
+    GeoCoordinates coordinates;
+    QUrl           imageUrl;
 };
 
-#endif /* MYIMAGEITEM_H */
+#endif // MY_IMAGE_ITEM_H
