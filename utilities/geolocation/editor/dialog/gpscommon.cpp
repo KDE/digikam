@@ -46,7 +46,9 @@ QString getUserAgentName()
     return QString::fromLatin1("KIPI-Plugins GPSSync - kde-imaging@kde.org");
 }
 
-void coordinatesToClipboard(const GeoIface::GeoCoordinates& coordinates, const QUrl& url, const QString& title)
+void coordinatesToClipboard(const GeoCoordinates& coordinates,
+                            const QUrl& url,
+                            const QString& title)
 {
     const QString lat       = coordinates.latString();
     const QString lon       = coordinates.lonString();

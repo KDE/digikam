@@ -34,6 +34,8 @@
 
 #include "geocoordinates.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
@@ -46,7 +48,9 @@ enum MapLayout
 
 QString getUserAgentName();
 
-void coordinatesToClipboard(const GeoIface::GeoCoordinates& coordinates, const QUrl& url, const QString& title);
+void coordinatesToClipboard(const GeoCoordinates& coordinates,
+                            const QUrl& url,
+                            const QString& title);
 
 bool checkSidecarSettings();
 

@@ -223,7 +223,7 @@ RGWidget::RGWidget(GPSImageModel* const imageModel, QItemSelectionModel* const s
 #ifdef GPSSYNC_MODELTEST
     new ModelTest(externTagModel, d->tagTreeView);
     new ModelTest(d->tagModel, d->tagTreeView);
-#endif /* GPSSYNC_MODELTEST */
+#endif // GPSSYNC_MODELTEST
 
     d->tagSelectionModel         = new QItemSelectionModel(d->tagModel);
     d->tagTreeView->setSelectionModel(d->tagSelectionModel);
@@ -454,7 +454,7 @@ void RGWidget::slotButtonRGSelected()
 
         RGInfo photoObj;
         photoObj.id           = itemIndex;
-        photoObj.coordinates  = GeoIface::GeoCoordinates(latitude, longitude);
+        photoObj.coordinates  = GeoCoordinates(latitude, longitude);
 
         photoList << photoObj;
 

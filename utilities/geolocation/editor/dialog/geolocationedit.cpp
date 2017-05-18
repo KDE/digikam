@@ -91,7 +91,7 @@
 #   include <modeltest.h>
 #endif
 
-
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -203,7 +203,7 @@ public:
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
     GPSImageListContextMenu*                 listViewContextMenu;
-    GeoIface::TrackManager*                  trackManager;
+    TrackManager*                  trackManager;
 
     // Loading and saving
     QFuture<QPair<QUrl,QString> >            fileIOFuture;
@@ -267,7 +267,7 @@ GeolocationEdit::GeolocationEdit(QAbstractItemModel* const externTagModel, QWidg
 
     d->imageModel     = new GPSImageModel(this);
     d->selectionModel = new QItemSelectionModel(d->imageModel);
-    d->trackManager   = new GeoIface::TrackManager(this);
+    d->trackManager   = new TrackManager(this);
 
 #ifdef GPSSYNC_MODELTEST
     new ModelTest(d->imageModel, this);
