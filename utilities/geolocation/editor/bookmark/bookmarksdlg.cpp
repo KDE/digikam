@@ -178,6 +178,7 @@ void AddBookmarkDialog::accept()
     bookmark->url                = d->url;
     bookmark->title              = d->name->text();
     d->manager->addBookmark(parent, bookmark);
+    d->manager->save();
     QDialog::accept();
 }
 

@@ -83,7 +83,6 @@ GPSBookmarkOwner::GPSBookmarkOwner(GPSImageModel* const gpsImageModel, QWidget* 
 
 GPSBookmarkOwner::~GPSBookmarkOwner()
 {
-    d->bookmarkManager->save();
     delete d;
 }
 
@@ -126,7 +125,6 @@ void GPSBookmarkOwner::slotShowBookmarksDialog()
 {
     BookmarksDialog* const dlg = new BookmarksDialog(d->parent, d->bookmarkManager);
     dlg->show();
-    d->bookmarkManager->save();
 }
 
 void GPSBookmarkOwner::slotAddBookmark()
@@ -134,7 +132,6 @@ void GPSBookmarkOwner::slotAddBookmark()
     AddBookmarkDialog* const dlg = new AddBookmarkDialog(currentUrl(), currentTitle(),
                                                          d->parent, d->bookmarkManager);
     dlg->exec();
-    d->bookmarkManager->save();
 }
 
 void GPSBookmarkOwner::changeAddBookmark(const bool state)
