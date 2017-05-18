@@ -425,6 +425,17 @@ void BookmarksDialog::slotRemoveOne()
     {
         index                    = d->proxyModel->mapToSource(index);
         BookmarkNode* const node = d->manager->bookmarksModel()->node(index);
+
+        if (QMessageBox::question(this, qApp->applicationName(),
+                                  i18nc("@info", "Do you want to remove \"%1\" "
+                                        "from your Bookmarks collection?",
+                                        node->title),
+                                  QMessageBox::Yes | QMessageBox::No
+                                 ) == QMessageBox::No)
+        {
+            return;
+        }
+
         d->manager->removeBookmark(node);
     }
 }
