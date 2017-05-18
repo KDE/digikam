@@ -59,7 +59,7 @@ public:
     BookmarksMenu*           bookmarkMenu;
     bool                     addBookmarkEnabled;
     GPSBookmarkModelHelper*  bookmarkModelHelper;
-    GeoIface::GeoCoordinates lastCoordinates;
+    GeoCoordinates           lastCoordinates;
     QString                  lastTitle;
 };
 
@@ -111,7 +111,7 @@ void GPSBookmarkOwner::slotOpenBookmark(const QUrl& url)
 {
     const QString gps                         = url.url().toLower();
     bool  okay                                = false;
-    const GeoIface::GeoCoordinates coordinate = GeoIface::GeoCoordinates::fromGeoUrl(gps, &okay);
+    const GeoCoordinates coordinate = GeoCoordinates::fromGeoUrl(gps, &okay);
 
     if (okay)
     {
@@ -175,7 +175,7 @@ GPSBookmarkModelHelper* GPSBookmarkOwner::bookmarkModelHelper() const
     return d->bookmarkModelHelper;
 }
 
-void GPSBookmarkOwner::setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates,
+void GPSBookmarkOwner::setPositionAndTitle(const GeoCoordinates& coordinates,
                                            const QString& title)
 {
     d->lastCoordinates = coordinates;

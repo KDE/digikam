@@ -35,13 +35,15 @@
 #include "gpsdatacontainer.h"
 #include "bookmarksmngr.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
 class GPSImageModel;
 class GPSUndoCommand;
 
-class GPSBookmarkModelHelper : public GeoIface::ModelHelper
+class GPSBookmarkModelHelper : public ModelHelper
 {
     Q_OBJECT
 
@@ -64,7 +66,7 @@ public:
     virtual QAbstractItemModel* model() const;
     virtual QItemSelectionModel* selectionModel() const;
     virtual bool itemCoordinates(const QModelIndex& index,
-                                 GeoIface::GeoCoordinates* const coordinates) const;
+                                 GeoCoordinates* const coordinates) const;
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset,
                           QSize* const size, QPixmap* const pixmap,
                           QUrl* const url) const;

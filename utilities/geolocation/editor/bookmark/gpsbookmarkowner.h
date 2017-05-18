@@ -35,6 +35,8 @@
 #include "gpsdatacontainer.h"
 #include "bookmarksmngr.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
@@ -51,7 +53,7 @@ public:
     virtual ~GPSBookmarkOwner();
 
     void changeAddBookmark(const bool state);
-    void setPositionAndTitle(const GeoIface::GeoCoordinates& coordinates, const QString& title);
+    void setPositionAndTitle(const GeoCoordinates& coordinates, const QString& title);
 
     QMenu*                  getMenu()             const;
     BookmarksManager*       bookmarkManager()     const;
