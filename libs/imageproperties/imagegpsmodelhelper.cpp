@@ -22,7 +22,6 @@
  * ============================================================ */
 
 #include "imagegpsmodelhelper.h"
-#include "gpsimageinfosorter.h"
 
 namespace Digikam
 {
@@ -44,7 +43,7 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-    : GeoIface::ModelHelper(parent),
+    : ModelHelper(parent),
       d(new Private())
 {
 
@@ -74,7 +73,7 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const
+bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
 {
     const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
     *coordinates                           = currentGPSImageInfo.coordinates;
@@ -125,10 +124,10 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
         const QModelIndex currentIndex(list.at(i));
         const GPSImageInfo currentGPSImageInfo = currentIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
         const bool currentFitsBetter           = GPSImageInfoSorter::fitsBetter(bestGPSImageInfo,
-                                                                                GeoIface::SelectedNone,
+                                                                                SelectedNone,
                                                                                 currentGPSImageInfo,
-                                                                                GeoIface::SelectedNone,
-                                                                                GeoIface::SelectedNone,
+                                                                                SelectedNone,
+                                                                                SelectedNone,
                                                                                 GPSImageInfoSorter::SortOptions(sortKey));
 
         if (currentFitsBetter)

@@ -101,8 +101,8 @@ public:
     DAdjustableLabel*          longitude;
     DAdjustableLabel*          date;
 
-    GeoIface::MapWidget*       map;
-    GeoIface::ItemMarkerTiler* itemMarkerTiler;
+    MapWidget*                 map;
+    ItemMarkerTiler*           itemMarkerTiler;
     GPSImageInfo::List         gpsInfoList;
 
     QStandardItemModel*        itemModel;
@@ -126,11 +126,11 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
     mapPanel->setLineWidth(style()->pixelMetric(QStyle::PM_DefaultFrameWidth));
 
     QVBoxLayout* const vlay2  = new QVBoxLayout(mapPanel);
-    d->map                    = new GeoIface::MapWidget(mapPanel);
-    d->map->setAvailableMouseModes(GeoIface::MouseModePan | GeoIface::MouseModeZoomIntoGroup);
-    d->map->setVisibleMouseModes(GeoIface::MouseModePan | GeoIface::MouseModeZoomIntoGroup);
-    d->map->setEnabledExtraActions(GeoIface::ExtraActionSticky);
-    d->map->setVisibleExtraActions(GeoIface::ExtraActionSticky);
+    d->map                    = new MapWidget(mapPanel);
+    d->map->setAvailableMouseModes(MouseModePan | MouseModeZoomIntoGroup);
+    d->map->setVisibleMouseModes(MouseModePan | MouseModeZoomIntoGroup);
+    d->map->setEnabledExtraActions(ExtraActionSticky);
+    d->map->setVisibleExtraActions(ExtraActionSticky);
     d->map->setBackend(QLatin1String("marble"));
     d->gpsImageInfoSorter     = new GPSImageInfoSorter(this);
     d->gpsImageInfoSorter->addToMapWidget(d->map);
@@ -142,7 +142,7 @@ ImagePropertiesGPSTab::ImagePropertiesGPSTab(QWidget* const parent)
 
     d->itemModel        = new QStandardItemModel(this);
     d->gpsModelHelper   = new ImageGPSModelHelper(d->itemModel, this);
-    d->itemMarkerTiler  = new GeoIface::ItemMarkerTiler(d->gpsModelHelper, this);
+    d->itemMarkerTiler  = new ItemMarkerTiler(d->gpsModelHelper, this);
     d->map->setGroupedModel(d->itemMarkerTiler);
 
     d->altLabel         = new QLabel(i18n("<b>Altitude</b>:"),  this);
@@ -329,7 +329,7 @@ void ImagePropertiesGPSTab::setMetadata(const DMetadata& meta, const QUrl& url)
         double alt;
         const bool haveAlt = meta.getGPSAltitude(&alt);
 
-        GeoIface::GeoCoordinates coordinates(lat, lng);
+        GeoCoordinates coordinates(lat, lng);
 
         if (haveAlt)
         {
@@ -380,7 +380,7 @@ void ImagePropertiesGPSTab::setGPSInfoList(const GPSImageInfo::List& list)
     if (list.count() == 1)
     {
         const GPSImageInfo info                     = list.first();
-        const GeoIface::GeoCoordinates& coordinates = info.coordinates;
+        const GeoCoordinates& coordinates = info.coordinates;
 
         if (!coordinates.hasAltitude())
         {
