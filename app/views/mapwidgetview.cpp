@@ -50,7 +50,6 @@
 #include "coredbfields.h"
 #include "imagepropertiessidebardb.h"
 #include "gpsimageinfosorter.h"
-
 #include "importui.h"
 
 namespace Digikam
@@ -83,7 +82,7 @@ public:
     }
 
     DVBox*                      vbox;
-    GeoIface::MapWidget*        mapWidget;
+    MapWidget*                  mapWidget;
     ImageFilterModel*           imageFilterModel;
     ImageAlbumModel*            imageModel;
     ImportFilterModel*          importFilterModel;
@@ -127,10 +126,10 @@ MapWidgetView::MapWidgetView(QItemSelectionModel* const selectionModel,
     }
 
     QVBoxLayout* const vBoxLayout = new QVBoxLayout(this);
-    d->mapWidget                  = new GeoIface::MapWidget(this);
-    d->mapWidget->setAvailableMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
-    d->mapWidget->setVisibleMouseModes(GeoIface::MouseModePan|GeoIface::MouseModeZoomIntoGroup|GeoIface::MouseModeSelectThumbnail);
-    GeoIface::ItemMarkerTiler* const geoifaceMarkerModel = new GeoIface::ItemMarkerTiler(d->mapViewModelHelper, this);
+    d->mapWidget                  = new MapWidget(this);
+    d->mapWidget->setAvailableMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
+    d->mapWidget->setVisibleMouseModes(MouseModePan|MouseModeZoomIntoGroup|MouseModeSelectThumbnail);
+    ItemMarkerTiler* const geoifaceMarkerModel = new ItemMarkerTiler(d->mapViewModelHelper, this);
     d->mapWidget->setGroupedModel(geoifaceMarkerModel);
     d->mapWidget->setBackend(QLatin1String("marble"));
 
@@ -226,7 +225,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        DCategorizedSortFilterProxyModel* const filterModel,
                                        QObject* const parent,
                                        const MapWidgetView::Application application)
-    : GeoIface::ModelHelper(parent),
+    : ModelHelper(parent),
       d(new Private())
 {
     d->selectionModel = selection;
@@ -296,7 +295,7 @@ QItemSelectionModel* MapViewModelHelper::selectionModel() const
  * @param coordinates Here will be returned the coordinates of the current marker.
  * @return True, if the marker has coordinates.
  */
-bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const
+bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
 {
     switch (d->application)
     {
@@ -309,7 +308,7 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::Geo
                 return false;
             }
 
-            *coordinates = GeoIface::GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
+            *coordinates = GeoCoordinates(info.latitudeNumber(), info.longitudeNumber());
             break;
         }
 
@@ -331,7 +330,7 @@ bool MapViewModelHelper::itemCoordinates(const QModelIndex& index, GeoIface::Geo
                 return false;
             }
 
-            GeoIface::GeoCoordinates tmpCoordinates(lat, lng);
+            GeoCoordinates tmpCoordinates(lat, lng);
 
             double     alt;
             const bool haveAlt = meta.getGPSAltitude(&alt);
@@ -451,9 +450,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             {
                 const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
-                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, GeoIface::SelectedNone,
-                                                   currentInfo, GeoIface::SelectedNone,
-                                                   GeoIface::SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, SelectedNone,
+                                                   currentInfo, SelectedNone,
+                                                   SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
                 {
                     bestIndex        = indexList.at(i);
                     bestGPSImageInfo = currentInfo;
@@ -480,7 +479,7 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
                     continue;
                 }
 
-                GeoIface::GeoCoordinates coordinates(lat, lng);
+                GeoCoordinates coordinates(lat, lng);
 
                 double alt;
                 const bool haveAlt = meta.getGPSAltitude(&alt);
@@ -512,9 +511,9 @@ QPersistentModelIndex MapViewModelHelper::bestRepresentativeIndexFromList(const 
             {
                 const GPSImageInfo& currentInfo = gpsImageInfoList.at(i);
 
-                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, GeoIface::SelectedNone,
-                                                   currentInfo, GeoIface::SelectedNone,
-                                                   GeoIface::SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
+                if (GPSImageInfoSorter::fitsBetter(bestGPSImageInfo, SelectedNone,
+                                                   currentInfo, SelectedNone,
+                                                   SelectedNone, GPSImageInfoSorter::SortOptions(sortKey)))
                 {
                     bestIndex        = indexList.at(i);
                     bestGPSImageInfo = currentInfo;
@@ -677,4 +676,4 @@ CamItemInfo MapWidgetView::currentCamItemInfo() const
     return d->importFilterModel->camItemInfo(currentIndex);
 }
 
-} //namespace Digikam
+} // namespace Digikam

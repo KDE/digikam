@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MAPWIDGETVIEW_H
-#define MAPWIDGETVIEW_H
+#ifndef MAP_WIDGET_VIEW_H
+#define MAP_WIDGET_VIEW_H
 
 // Qt includes
 
@@ -39,6 +39,8 @@
 #include "thumbnailloadthread.h"
 #include "imagefiltermodel.h"
 #include "camiteminfo.h"
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -82,22 +84,26 @@ private:
 
 // ------------------------------------------------------------------------------------------------------------
 
-class MapViewModelHelper : public GeoIface::ModelHelper
+class MapViewModelHelper : public ModelHelper
 {
     Q_OBJECT
 
 public:
 
-    MapViewModelHelper(QItemSelectionModel* const selection, DCategorizedSortFilterProxyModel* const filterModel,
+    MapViewModelHelper(QItemSelectionModel* const selection,
+                       DCategorizedSortFilterProxyModel* const filterModel,
                        QObject* const parent, const MapWidgetView::Application application);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model()                                                                const;
     virtual QItemSelectionModel* selectionModel()                                                      const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoIface::GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index,
+                                 GeoCoordinates* const coordinates) const;
 
-    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
-    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);
+    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+                                                  const QSize& size);
+    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+                                                                  const int sortKey);
 
     virtual void onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices);
 
@@ -119,4 +125,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // MAPWIDGETVIEW_H
+#endif // MAP_WIDGET_VIEW_H
