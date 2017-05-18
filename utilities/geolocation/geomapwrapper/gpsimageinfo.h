@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGEINFO_H
-#define GPSIMAGEINFO_H
+#ifndef GPS_IMAGE_INFO_H
+#define GPS_IMAGE_INFO_H
 
 // Qt includes
 
@@ -34,10 +34,7 @@
 #include "geocoordinates.h"
 #include "groupstate.h"
 
-namespace GeoIface
-{
-    class MapWidget;
-}
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -52,14 +49,14 @@ public:
 public:
 
     static GPSImageInfo fromIdCoordinatesRatingDateTime(const qlonglong p_id,
-                                                        const GeoIface::GeoCoordinates& p_coordinates,
+                                                        const GeoCoordinates& p_coordinates,
                                                         const int p_rating,
                                                         const QDateTime& p_creationDate);
 
 public:
 
     qlonglong                   id;
-    GeoIface::GeoCoordinates    coordinates;
+    GeoCoordinates              coordinates;
     int                         rating;
     QDateTime                   dateTime;
     QUrl                        url;
@@ -71,4 +68,4 @@ public:
 
 Q_DECLARE_METATYPE(Digikam::GPSImageInfo)
 
-#endif // GPSIMAGEINFO_H
+#endif // GPS_IMAGE_INFO_H

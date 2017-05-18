@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSIMAGEINFOSOERTER_H
-#define GPSIMAGEINFOSOERTER_H
+#ifndef GPS_IMAGE_INFO_SORTER_H
+#define GPS_IMAGE_INFO_SORTER_H
 
 // Qt includes
 
@@ -35,15 +35,10 @@
 
 #include "geocoordinates.h"
 #include "groupstate.h"
-
-// Local includes
-
 #include "gpsimageinfo.h"
+#include "mapwidget.h"
 
-namespace GeoIface
-{
-    class MapWidget;
-}
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -67,15 +62,15 @@ public:
     explicit GPSImageInfoSorter(QObject* const parent);
     ~GPSImageInfoSorter();
 
-    void addToMapWidget(GeoIface::MapWidget* const mapWidget);
+    void addToMapWidget(MapWidget* const mapWidget);
     void setSortOptions(const SortOptions sortOptions);
     SortOptions getSortOptions() const;
 
 public:
 
-    static bool fitsBetter(const GPSImageInfo& oldInfo, const GeoIface::GroupState oldState,
-                           const GPSImageInfo& newInfo, const GeoIface::GroupState newState,
-                           const GeoIface::GroupState globalGroupState, const SortOptions sortOptions);
+    static bool fitsBetter(const GPSImageInfo& oldInfo, const GroupState oldState,
+                           const GPSImageInfo& newInfo, const GroupState newState,
+                           const GroupState globalGroupState, const SortOptions sortOptions);
 
 private Q_SLOTS:
 
@@ -95,4 +90,4 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSImageInfoSorter::SortOptions)
 
-#endif // GPSIMAGEINFOSOERTER_H
+#endif // GPS_IMAGE_INFO_SORTER_H

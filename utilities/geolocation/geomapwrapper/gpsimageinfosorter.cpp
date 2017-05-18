@@ -55,7 +55,7 @@ public:
     {
     }
 
-    QList<QPointer<GeoIface::MapWidget> > mapWidgets;
+    QList<QPointer<MapWidget> > mapWidgets;
     GPSImageInfoSorter::SortOptions      sortOrder;
     QPointer<QMenu>                      sortMenu;
     QAction*                             sortActionOldestFirst;
@@ -80,9 +80,9 @@ GPSImageInfoSorter::~GPSImageInfoSorter()
     delete d;
 }
 
-bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoIface::GroupState oldState,
-                                    const GPSImageInfo& newInfo, const GeoIface::GroupState newState,
-                                    const GeoIface::GroupState globalGroupState, const SortOptions sortOptions)
+bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GroupState oldState,
+                                    const GPSImageInfo& newInfo, const GroupState newState,
+                                    const GroupState globalGroupState, const SortOptions sortOptions)
 {
     // the best index for a tile is determined like this:
     // region selected? -> prefer region selected markers
@@ -93,10 +93,10 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoIface:
     // next -> prefer the image with the higher image id
 
     // region selection part:
-    if (globalGroupState & GeoIface::RegionSelectedMask)
+    if (globalGroupState & RegionSelectedMask)
     {
-        const bool oldIsRegionSelected = oldState & GeoIface::RegionSelectedMask;
-        const bool newIsRegionSelected = newState & GeoIface::RegionSelectedMask;
+        const bool oldIsRegionSelected = oldState & RegionSelectedMask;
+        const bool newIsRegionSelected = newState & RegionSelectedMask;
 
         if (oldIsRegionSelected != newIsRegionSelected)
         {
@@ -105,10 +105,10 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoIface:
     }
 
     // positive filtering part:
-    if (globalGroupState & GeoIface::FilteredPositiveMask)
+    if (globalGroupState & FilteredPositiveMask)
     {
-        const bool oldIsFilteredPositive = oldState & GeoIface::FilteredPositiveMask;
-        const bool newIsFilteredPositive = newState & GeoIface::FilteredPositiveMask;
+        const bool oldIsFilteredPositive = oldState & FilteredPositiveMask;
+        const bool newIsFilteredPositive = newState & FilteredPositiveMask;
 
         if (oldIsFilteredPositive != newIsFilteredPositive)
         {
@@ -169,11 +169,11 @@ bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoIface:
     return oldInfo.id > newInfo.id;
 }
 
-void GPSImageInfoSorter::addToMapWidget(GeoIface::MapWidget* const mapWidget)
+void GPSImageInfoSorter::addToMapWidget(MapWidget* const mapWidget)
 {
     initializeSortMenu();
 
-    d->mapWidgets << QPointer<GeoIface::MapWidget>(mapWidget);
+    d->mapWidgets << QPointer<MapWidget>(mapWidget);
     mapWidget->setSortOptionsMenu(d->sortMenu);
 }
 
