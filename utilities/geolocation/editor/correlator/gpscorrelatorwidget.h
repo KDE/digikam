@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef GPSCORRELATORWIDGET_H
-#define GPSCORRELATORWIDGET_H
+#ifndef GPS_CORRELATOR_WIDGET_H
+#define GPS_CORRELATOR_WIDGET_H
 
 // Qt includes
 
@@ -36,6 +36,8 @@
 #include "track_correlator.h"
 
 class KConfigGroup;
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -49,13 +51,13 @@ class GPSCorrelatorWidget : public QWidget
 
 public:
 
-    explicit GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, GeoIface::TrackManager* const trackManager);
+    explicit GPSCorrelatorWidget(QWidget* const parent, GPSImageModel* const imageModel, TrackManager* const trackManager);
     virtual ~GPSCorrelatorWidget();
 
     void setUIEnabledExternal(const bool state);
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);
-    QList<GeoIface::GeoCoordinates::List> getTrackCoordinates() const;
+    QList<GeoCoordinates::List> getTrackCoordinates() const;
     bool getShowTracksOnMap() const;
 
 protected:
@@ -94,4 +96,4 @@ private:
 
 } // namespace Digikam
 
-#endif // GPSCORRELATORWIDGET_H
+#endif // GPS_CORRELATOR_WIDGET_H

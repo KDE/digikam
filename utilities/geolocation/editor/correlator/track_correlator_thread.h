@@ -33,6 +33,8 @@
 
 #include "track_correlator.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
@@ -49,7 +51,7 @@ public:
 
     TrackCorrelator::Correlation::List  itemsToCorrelate;
     TrackCorrelator::CorrelationOptions options;
-    GeoIface::TrackManager::Track::List fileList;
+    TrackManager::Track::List           fileList;
     bool                                doCancel;
     bool                                canceled;
 

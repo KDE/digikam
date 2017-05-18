@@ -35,14 +35,14 @@
 // Boost includes
 
 #if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wundef"
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wundef"
 #endif
 
 #include <boost/graph/graph_concepts.hpp>
 
 #if defined(__APPLE__) && defined(__clang__)
-#pragma clang diagnostic pop
+#   pragma clang diagnostic pop
 #endif
 
 namespace Digikam
@@ -64,10 +64,10 @@ public:
     {
     }
 
-    GeoIface::TrackManager* trackManager;
+    TrackManager* trackManager;
 };
 
-TrackListModel::TrackListModel(GeoIface::TrackManager* const trackManager, QObject* const parent)
+TrackListModel::TrackListModel(TrackManager* const trackManager, QObject* const parent)
     : QAbstractItemModel(parent),
       d(new Private())
 {
@@ -113,7 +113,7 @@ QVariant TrackListModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    GeoIface::TrackManager::Track track = d->trackManager->getTrackById(index.internalId());
+    TrackManager::Track track = d->trackManager->getTrackById(index.internalId());
 
     if (track.id == 0)
     {
@@ -163,7 +163,7 @@ QModelIndex TrackListModel::index(int row, int column, const QModelIndex& parent
         return QModelIndex();
     }
 
-    const GeoIface::TrackManager::Track track = d->trackManager->getTrack(row);
+    const TrackManager::Track track = d->trackManager->getTrack(row);
 
     /// @TODO We have to use quint32 for track ids
     return createIndex(row, column, quint32(track.id));

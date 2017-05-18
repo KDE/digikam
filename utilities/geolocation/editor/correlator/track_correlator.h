@@ -30,6 +30,8 @@
 #include "tracks.h"
 #include "digikam_export.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
 
@@ -75,7 +77,7 @@ public:
         int                           fixType;
         qreal                         speed;
         CorrelationFlags              flags;
-        GeoIface::GeoCoordinates      coordinates;
+        GeoCoordinates                coordinates;
     };
 
     // -------------------------------------
@@ -100,7 +102,7 @@ public:
 
 public:
 
-    explicit TrackCorrelator(GeoIface::TrackManager* const trackManager, QObject* const parent = 0);
+    explicit TrackCorrelator(TrackManager* const trackManager, QObject* const parent = 0);
     virtual ~TrackCorrelator();
 
     void correlate(const Correlation::List& itemsToCorrelate, const CorrelationOptions& options);

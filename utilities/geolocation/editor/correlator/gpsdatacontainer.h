@@ -22,12 +22,14 @@
  *
  * ============================================================ */
 
-#ifndef GPSDATACONTAINER_H
-#define GPSDATACONTAINER_H
+#ifndef GPS_DATA_CONTAINER_H
+#define GPS_DATA_CONTAINER_H
 
 // Local includes
 
 #include "geocoordinates.h"
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -60,16 +62,16 @@ public:
 
 private:
 
-    HasFlags                 m_hasFlags;
-    GeoIface::GeoCoordinates m_coordinates;
-    int                      m_nSatellites;
-    qreal                    m_dop;
-    int                      m_fixType;
-    qreal                    m_speed;
+    HasFlags       m_hasFlags;
+    GeoCoordinates m_coordinates;
+    int            m_nSatellites;
+    qreal          m_dop;
+    int            m_fixType;
+    qreal          m_speed;
 
 public:
 
-    /* general */
+    // general
 
     bool operator==(const GPSDataContainer& b) const
     {
@@ -125,14 +127,14 @@ public:
         m_hasFlags&= ~(HasNSatellites | HasDop | HasFixType | HasSpeed);
     }
 
-    /* coordinates */
+    // coordinates
 
-    inline GeoIface::GeoCoordinates getCoordinates() const
+    inline GeoCoordinates getCoordinates() const
     {
         return m_coordinates;
     }
 
-    inline void setCoordinates(const GeoIface::GeoCoordinates& coordinates)
+    inline void setCoordinates(const GeoCoordinates& coordinates)
     {
         m_coordinates = coordinates;
 
@@ -186,7 +188,7 @@ public:
         return m_hasFlags.testFlag(HasCoordinates);
     }
 
-    /* NSatellites */
+    // NSatellites
 
     inline int getNSatellites() const
     {
@@ -209,7 +211,7 @@ public:
         m_hasFlags |= HasNSatellites;
     }
 
-    /* DOP */
+    // DOP
 
     inline bool hasDop() const
     {
@@ -232,7 +234,7 @@ public:
         return m_dop;
     }
 
-    /* fix type */
+    // fix type
 
     inline bool hasFixType() const
     {
@@ -255,7 +257,7 @@ public:
         m_hasFlags &= ~HasFixType;
     }
 
-    /* speed */
+    // speed
 
     /**
      * @brief Return the speed in m/s
@@ -289,4 +291,4 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GPSDataContainer::HasFlags)
 
-#endif // GPSDATACONTAINER_H
+#endif // GPS_DATA_CONTAINER_H

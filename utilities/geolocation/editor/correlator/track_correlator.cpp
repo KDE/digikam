@@ -42,11 +42,12 @@ public:
     {
     }
 
-    GeoIface::TrackManager* trackManager;
+    TrackManager*           trackManager;
     TrackCorrelatorThread*  thread;
 };
 
-TrackCorrelator::TrackCorrelator(GeoIface::TrackManager* const trackManager, QObject* const parent)
+TrackCorrelator::TrackCorrelator(TrackManager* const trackManager,
+                                 QObject* const parent)
     : QObject(parent),
       d(new Private())
 {
@@ -62,7 +63,8 @@ TrackCorrelator::~TrackCorrelator()
 /**
  * @brief GPS-correlate items
  */
-void TrackCorrelator::correlate(const Correlation::List& itemsToCorrelate, const CorrelationOptions& options)
+void TrackCorrelator::correlate(const Correlation::List& itemsToCorrelate,
+                                const CorrelationOptions& options)
 {
     d->thread                   = new TrackCorrelatorThread(this);
     d->thread->options          = options;

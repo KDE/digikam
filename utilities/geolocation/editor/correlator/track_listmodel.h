@@ -29,10 +29,11 @@
 
 #include <QAbstractItemModel>
 
-namespace GeoIface
-{
-    class TrackManager;
-}
+// Local includes
+
+#include "trackmanager.h"
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -43,7 +44,7 @@ class TrackListModel : public QAbstractItemModel
 
 public:
 
-    explicit TrackListModel(GeoIface::TrackManager* const trackManager, QObject* const parent);
+    explicit TrackListModel(TrackManager* const trackManager, QObject* const parent);
     virtual ~TrackListModel();
 
     // QAbstractItemModel:
