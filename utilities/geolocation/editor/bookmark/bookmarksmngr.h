@@ -112,7 +112,8 @@ public:
         TypeRole      = Qt::UserRole + 1,
         UrlRole       = Qt::UserRole + 2,
         UrlStringRole = Qt::UserRole + 3,
-        SeparatorRole = Qt::UserRole + 4
+        SeparatorRole = Qt::UserRole + 4,
+        DateAddedRole = Qt::UserRole + 5
     };
 
 public:

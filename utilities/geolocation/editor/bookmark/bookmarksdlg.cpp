@@ -173,6 +173,7 @@ void AddBookmarkDialog::accept()
     BookmarkNode* const bookmark = new BookmarkNode(BookmarkNode::Bookmark);
     bookmark->url                = d->url;
     bookmark->title              = d->name->text();
+    bookmark->dateAdded          = QDateTime::currentDateTime();
     d->manager->addBookmark(parent, bookmark);
     d->manager->save();
     QDialog::accept();
@@ -380,7 +381,8 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
 
     foreach (const QModelIndex& item, list)
     {
-        QUrl url                  = item.sibling(index.row(), 1).data(BookmarksModel::UrlRole).toUrl();
+        QUrl url                  = item.sibling(index.row(), 1)
+                                        .data(BookmarksModel::UrlRole).toUrl();
         bool ok                   = false;
         GeoCoordinates coordinate = GeoCoordinates::fromGeoUrl(url.toString(), &ok);
 
@@ -388,7 +390,9 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
         {
             GPSImageInfo gpsInfo;
             gpsInfo.coordinates = coordinate;
-            gpsInfo.dateTime    = QDateTime();
+            gpsInfo.dateTime    = item.sibling(index.row(), 1)
+                                      .data(BookmarksModel::DateAddedRole).toDateTime();
+;
             gpsInfo.rating      = -1;
             gpsInfo.url         = url;
             ilst << gpsInfo;
