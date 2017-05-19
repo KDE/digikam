@@ -330,6 +330,9 @@ QVariant BookmarksModel::data(const QModelIndex& index, int role) const
         case BookmarksModel::UrlStringRole:
             return bookmarkNode->url;
             break;
+        case BookmarksModel::DateAddedRole:
+            return bookmarkNode->dateAdded;
+            break;
         case BookmarksModel::TypeRole:
             return bookmarkNode->type();
             break;

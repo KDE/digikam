@@ -28,6 +28,7 @@
 
 #include <QString>
 #include <QList>
+#include <QDateTime>
 #include <QIODevice>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
@@ -58,17 +59,18 @@ public:
     void setType(Type type);
 
     QList<BookmarkNode*> children() const;
-    BookmarkNode* parent()          const;
+    BookmarkNode*        parent()   const;
 
-    void add(BookmarkNode* child, int offset = -1);
-    void remove(BookmarkNode* child);
+    void add(BookmarkNode* const child, int offset = -1);
+    void remove(BookmarkNode* const child);
 
 public:
 
-    QString url;
-    QString title;
-    QString desc;
-    bool    expanded;
+    QString   url;
+    QString   title;
+    QString   desc;
+    QDateTime dateAdded;
+    bool      expanded;
 
 private:
 
@@ -85,16 +87,16 @@ public:
     explicit XbelReader();
 
     BookmarkNode* read(const QString& fileName);
-    BookmarkNode* read(QIODevice* device);
+    BookmarkNode* read(QIODevice* const device);
 
 private:
 
-    void readXBEL(BookmarkNode* parent);
-    void readTitle(BookmarkNode* parent);
-    void readDescription(BookmarkNode* parent);
-    void readSeparator(BookmarkNode* parent);
-    void readFolder(BookmarkNode* parent);
-    void readBookmarkNode(BookmarkNode* parent);
+    void readXBEL(BookmarkNode* const parent);
+    void readTitle(BookmarkNode* const parent);
+    void readDescription(BookmarkNode* const parent);
+    void readSeparator(BookmarkNode* const parent);
+    void readFolder(BookmarkNode* const parent);
+    void readBookmarkNode(BookmarkNode* const parent);
 };
 
 // -----------------------------------------------------------
@@ -105,12 +107,12 @@ public:
 
     explicit XbelWriter();
 
-    bool write(const QString& fileName, const BookmarkNode* root);
-    bool write(QIODevice* device, const BookmarkNode* root);
+    bool write(const QString& fileName, const BookmarkNode* const root);
+    bool write(QIODevice* const device, const BookmarkNode* const root);
 
 private:
 
-    void writeItem(const BookmarkNode* parent);
+    void writeItem(const BookmarkNode* const parent);
 };
 
 } // namespace Digikam
