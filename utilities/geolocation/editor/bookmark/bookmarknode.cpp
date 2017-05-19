@@ -77,7 +77,7 @@ BookmarkNode::~BookmarkNode()
     delete d;
 }
 
-bool BookmarkNode::operator==(const BookmarkNode& other)
+bool BookmarkNode::operator==(const BookmarkNode& other) const
 {
     if (url                 != other.url      ||
         title               != other.title    ||
