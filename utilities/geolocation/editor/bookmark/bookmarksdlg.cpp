@@ -392,7 +392,6 @@ void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
             gpsInfo.coordinates = coordinate;
             gpsInfo.dateTime    = item.sibling(index.row(), 1)
                                       .data(BookmarksModel::DateAddedRole).toDateTime();
-;
             gpsInfo.rating      = -1;
             gpsInfo.url         = url;
             ilst << gpsInfo;
