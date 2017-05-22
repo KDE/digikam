@@ -114,13 +114,13 @@ public:
 
     Private() :
         manager(0),
-        title(false),
+        type(Url),
         node(0)
     {
     }
 
     BookmarksManager* manager;
-    bool              title;
+    BookmarkData      type;
     QString           oldValue;
     QString           newValue;
     BookmarkNode*     node;
@@ -129,24 +129,29 @@ public:
 ChangeBookmarkCommand::ChangeBookmarkCommand(BookmarksManager* const mngr,
                                              BookmarkNode* const node,
                                              const QString& newValue,
-                                             bool title)
+                                             BookmarkData type)
     : QUndoCommand(),
       d(new Private)
 {
     d->manager  = mngr;
-    d->title    = title;
+    d->type     = type;
     d->newValue = newValue;
     d->node     = node;
 
-    if (d->title)
+    switch (d->type)
     {
-        d->oldValue = d->node->title;
-        setText(i18n("Name Change"));
-    }
-    else
-    {
-        d->oldValue = d->node->url;
-        setText(i18n("Address Change"));
+        case Title:
+            d->oldValue = d->node->title;
+            setText(i18n("Title Change"));
+            break;
+        case Desc:
+            d->oldValue = d->node->desc;
+            setText(i18n("Comment Change"));
+            break;
+        default:    // Url
+            d->oldValue = d->node->url;
+            setText(i18n("Address Change"));
+            break;
     }
 }
 
@@ -157,20 +162,36 @@ ChangeBookmarkCommand::~ChangeBookmarkCommand()
 
 void ChangeBookmarkCommand::undo()
 {
-    if (d->title)
-        d->node->title = d->oldValue;
-    else
-        d->node->url = d->oldValue;
+    switch (d->type)
+    {
+        case Title:
+            d->node->title = d->oldValue;
+            break;
+        case Desc:
+            d->node->desc  = d->oldValue;
+            break;
+        default:    // Url
+            d->node->url   = d->oldValue;
+            break;
+    }
 
     emit d->manager->entryChanged(d->node);
 }
 
 void ChangeBookmarkCommand::redo()
 {
-    if (d->title)
-        d->node->title = d->newValue;
-    else
-        d->node->url = d->newValue;
+    switch (d->type)
+    {
+        case Title:
+            d->node->title = d->newValue;
+            break;
+        case Desc:
+            d->node->desc  = d->newValue;
+            break;
+        default:    // Url
+            d->node->url   = d->newValue;
+            break;
+    }
 
     emit d->manager->entryChanged(d->node);
 }
@@ -287,7 +308,7 @@ QVariant BookmarksModel::headerData(int section, Qt::Orientation orientation, in
             case 0:
                 return i18n("Title");
             case 1:
-                return i18n("Location");
+                return i18n("Comment");
         }
     }
 
@@ -321,7 +342,7 @@ QVariant BookmarksModel::data(const QModelIndex& index, int role) const
                 case 0:
                     return bookmarkNode->title;
                 case 1:
-                    return bookmarkNode->url;
+                    return bookmarkNode->desc;
             }
             break;
         case BookmarksModel::UrlRole:
@@ -535,7 +556,7 @@ bool BookmarksModel::setData(const QModelIndex& index, const QVariant& value, in
 
             if (index.column() == 1)
             {
-                d->manager->setUrl(item, value.toString());
+                d->manager->setComment(item, value.toString());
                 break;
             }
 
@@ -592,8 +613,9 @@ TreeProxyModel::TreeProxyModel(QObject* const parent)
 
 int TreeProxyModel::columnCount(const QModelIndex&) const
 {
-    // Just one column is enough to show only bookmark title. The GPS info are displayed on map view.
-    return 1;
+    // 1th column : Title
+    // 2th column : Comment
+    return 2;
 }
 
 bool TreeProxyModel::filterAcceptsRow(int srow, const QModelIndex& sparent) const
@@ -730,7 +752,8 @@ void BookmarksManager::setTitle(BookmarkNode* const node, const QString& newTitl
 
     Q_ASSERT(node);
 
-    ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newTitle, true);
+    ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newTitle,
+                                                                     ChangeBookmarkCommand::Title);
     d->commands.push(command);
 }
 
@@ -741,7 +764,20 @@ void BookmarksManager::setUrl(BookmarkNode* const node, const QString& newUrl)
 
     Q_ASSERT(node);
 
-    ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newUrl, false);
+    ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newUrl,
+                                                                     ChangeBookmarkCommand::Url);
+    d->commands.push(command);
+}
+
+void BookmarksManager::setComment(BookmarkNode* const node, const QString& newDesc)
+{
+    if (!d->loaded)
+        return;
+
+    Q_ASSERT(node);
+
+    ChangeBookmarkCommand* const command = new ChangeBookmarkCommand(this, node, newDesc,
+                                                                     ChangeBookmarkCommand::Desc);
     d->commands.push(command);
 }
 

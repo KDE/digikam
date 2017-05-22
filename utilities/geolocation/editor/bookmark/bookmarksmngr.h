@@ -83,10 +83,19 @@ class ChangeBookmarkCommand : public QUndoCommand
 {
 public:
 
+    enum BookmarkData
+    {
+        Url = 0,
+        Title,
+        Desc
+    };
+
+public:
+
     explicit ChangeBookmarkCommand(BookmarksManager* const mngr,
                                    BookmarkNode* const node,
                                    const QString& newValue,
-                                   bool title);
+                                   BookmarkData type);
     ~ChangeBookmarkCommand();
 
     void undo();
@@ -214,6 +223,7 @@ public:
     void removeBookmark(BookmarkNode* const node);
     void setTitle(BookmarkNode* const node, const QString& newTitle);
     void setUrl(BookmarkNode* const node, const QString& newUrl);
+    void setComment(BookmarkNode* const node, const QString& newDesc);
     void changeExpanded();
 
     BookmarkNode*   bookmarks();
