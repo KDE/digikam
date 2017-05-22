@@ -91,6 +91,11 @@ QString KipiImageCollection::name()
     {
         return i18n("Tag: %1", d->album->title());
     }
+    else if ((d->album->type() == Album::SEARCH) && dynamic_cast<SAlbum*>(d->album)->isDuplicatesSearch())
+    {
+        ImageInfo imageInfo(d->album->title().toLongLong());
+        return i18n("Duplicates of %1", imageInfo.name());
+    }
     else
     {
         return d->album->title();
