@@ -7,6 +7,7 @@
  * Description : interface to database informations for shared tools.
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017 by Mario Frank <mafrank at uni minus potsdam dot de>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -37,6 +38,9 @@
 #include "imageinfo.h"
 #include "imageposition.h"
 #include "imagesortsettings.h"
+#include "coredbsearchxml.h"
+#include "imagelister.h"
+#include "imagelisterreceiver.h"
 
 namespace Digikam
 {
@@ -122,6 +126,81 @@ public:
             if (nameFilter.matches(*it))
             {
                 urlList << QUrl::fromLocalFile(*it);
+            }
+        }
+
+        return urlList;
+    }
+
+    /** get the images from the search album in database and return the items found.
+     */
+    QList<QUrl> imagesFromSAlbum(SAlbum* const album) const
+    {
+        QList<QUrl> urlList;
+        CoreDbNameFilter nameFilter(ApplicationSettings::instance()->getAllFileFilter());
+
+        if (album->isDuplicatesSearch())
+        {
+            // duplicates search album -> get the id list from the query
+            SearchXmlReader reader(album->query());
+            reader.readToFirstField();
+
+            // Get the defined image ids.
+            QList<int> list;
+            list << reader.valueToIntList();
+
+            foreach (int imageId, list)
+            {
+                ImageInfo imageInfo(imageId);
+                if (imageInfo.isVisible())
+                {
+                    // if the image is visible, i.e. existent and not deleted,
+                    // add the url if the name filter matches
+                    QUrl imageUrl = imageInfo.fileUrl();
+/*
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Duplicates search Image url "
+                                                 << imageUrl.toString();
+*/
+                    if (nameFilter.matches(imageUrl.toString()))
+                    {
+                        urlList << imageUrl;
+                    }
+                }
+            }
+        }
+        else
+        {
+            // If we do not have a duplicates search, we use the image lister to get the images.
+            ImageLister lister;
+            lister.setListOnlyAvailable(true);
+
+            ImageListerValueListReceiver receiver;
+
+            if (album->searchType() == DatabaseSearch::HaarSearch)
+            {
+                lister.listHaarSearch(&receiver, album->query());
+            }
+            else
+            {
+                lister.listSearch(&receiver, album->query(), 0, -1);
+            }
+
+            if (!receiver.hasError)
+            {
+                // if there were no error, fetch and process the results.
+                foreach (const ImageListerRecord &record, receiver.records)
+                {
+                    ImageInfo imageInfo(record);
+                    QUrl imageUrl = imageInfo.fileUrl();
+/*
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "Fuzzy/other search Image url "
+                                                 << imageUrl.toString();
+*/
+                    if (nameFilter.matches(imageUrl.toString()))
+                    {
+                        urlList << imageUrl;
+                    }
+                }
             }
         }
 
@@ -315,10 +394,10 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
 
         // Get Copyright information of picture from database.
         ImageCopyright rights = info.imageCopyright();
-        map.insert(QLatin1String("creators"),    rights.creator());
-        map.insert(QLatin1String("credit"),      rights.credit());
-        map.insert(QLatin1String("rights"),      rights.rights());
-        map.insert(QLatin1String("source"),      rights.source());
+        map.insert(QLatin1String("creators"), rights.creator());
+        map.insert(QLatin1String("credit"),   rights.credit());
+        map.insert(QLatin1String("rights"),   rights.rights());
+        map.insert(QLatin1String("source"),   rights.source());
     }
 
     return map;
@@ -354,6 +433,18 @@ QList<QUrl> DBInfoIface::albumItems(Album* const album) const
             if (p)
             {
                 imageList = d->imagesFromTAlbum(p);
+            }
+
+            break;
+        }
+
+        case Album::SEARCH:
+        {
+            SAlbum* const s = dynamic_cast<SAlbum*>(album);
+
+            if (s)
+            {
+                imageList = d->imagesFromSAlbum(s);
             }
 
             break;
