@@ -25,6 +25,10 @@ add_subdirectory(widgets)
 add_subdirectory(rawengine)
 add_subdirectory(presentation)
 
+if(ENABLE_MEDIAPLAYER)
+    add_subdirectory(video)
+endif()
+
 if(ENABLE_DIGIKAM_MODELTEST)
     message(STATUS "Modeltest enabled")
     set(libdigikamgui_SRCS ${libdigikamgui_SRCS}
