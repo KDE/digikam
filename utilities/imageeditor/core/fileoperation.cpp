@@ -223,8 +223,15 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
         files << url.toLocalFile();
     }
 
-    foreach(const QString& cmd, cmdList)
+    foreach(const QString& cmdString, cmdList)
     {
+        QString cmd = cmdString;
+
+        if (cmd.startsWith(QLatin1Char('"')) && cmd.endsWith(QLatin1Char('"')))
+        {
+            cmd.remove(0, 1).chop(1);
+        }
+
         if (exec.isEmpty() && cmd.contains(QLatin1Char('=')))
         {
             QStringList envList = cmd.split(QLatin1Char('='), QString::SkipEmptyParts);
@@ -239,7 +246,6 @@ bool FileOperation::runFiles(const QString& appCmd, const QList<QUrl>& urls, con
         else if (exec.isEmpty())
         {
             exec = cmd;
-            exec.remove(QLatin1Char('"'));
             continue;
         }
 
