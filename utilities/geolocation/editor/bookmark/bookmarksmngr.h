@@ -210,15 +210,15 @@ public:
     explicit BookmarksManager(const QString& bookmarksFile, QObject* const parent = 0);
     ~BookmarksManager();
 
-    void addBookmark(BookmarkNode* parent, BookmarkNode* node, int row = -1);
-    void removeBookmark(BookmarkNode* node);
-    void setTitle(BookmarkNode* node, const QString& newTitle);
-    void setUrl(BookmarkNode* node, const QString& newUrl);
+    void addBookmark(BookmarkNode* const parent, BookmarkNode* const node, int row = -1);
+    void removeBookmark(BookmarkNode* const node);
+    void setTitle(BookmarkNode* const node, const QString& newTitle);
+    void setUrl(BookmarkNode* const node, const QString& newUrl);
     void changeExpanded();
 
     BookmarkNode*   bookmarks();
     BookmarksModel* bookmarksModel();
-    QUndoStack*     undoRedoStack();
+    QUndoStack*     undoRedoStack() const;
 
     void save();
     void load();

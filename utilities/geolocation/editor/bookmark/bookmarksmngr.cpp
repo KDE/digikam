@@ -699,7 +699,7 @@ void BookmarksManager::save()
     }
 }
 
-void BookmarksManager::addBookmark(BookmarkNode* parent, BookmarkNode* node, int row)
+void BookmarksManager::addBookmark(BookmarkNode* const parent, BookmarkNode* const node, int row)
 {
     if (!d->loaded)
         return;
@@ -710,7 +710,7 @@ void BookmarksManager::addBookmark(BookmarkNode* parent, BookmarkNode* node, int
     d->commands.push(command);
 }
 
-void BookmarksManager::removeBookmark(BookmarkNode* node)
+void BookmarksManager::removeBookmark(BookmarkNode* const node)
 {
     if (!d->loaded)
         return;
@@ -723,7 +723,7 @@ void BookmarksManager::removeBookmark(BookmarkNode* node)
     d->commands.push(command);
 }
 
-void BookmarksManager::setTitle(BookmarkNode* node, const QString& newTitle)
+void BookmarksManager::setTitle(BookmarkNode* const node, const QString& newTitle)
 {
     if (!d->loaded)
         return;
@@ -734,7 +734,7 @@ void BookmarksManager::setTitle(BookmarkNode* node, const QString& newTitle)
     d->commands.push(command);
 }
 
-void BookmarksManager::setUrl(BookmarkNode* node, const QString& newUrl)
+void BookmarksManager::setUrl(BookmarkNode* const node, const QString& newUrl)
 {
     if (!d->loaded)
         return;
@@ -761,7 +761,7 @@ BookmarksModel* BookmarksManager::bookmarksModel()
     return d->bookmarkModel;
 }
 
-QUndoStack* BookmarksManager::undoRedoStack()
+QUndoStack* BookmarksManager::undoRedoStack() const
 {
     return &d->commands;
 }
