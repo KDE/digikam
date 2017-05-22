@@ -241,6 +241,24 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
             this, SLOT(populateTreeView()));
 
+    connect(AlbumManager::instance(), SIGNAL(signalAllAlbumsLoaded()),
+            this, SLOT(initAlbumUpdateConnections()));
+
+    connect(d->minSimilarity, SIGNAL(valueChanged(int)),
+            this,SLOT(slotMinimumChanged(int)));
+
+    connect(d->settings, SIGNAL(setupChanged()),
+            this, SLOT(slotApplicationSettingsChanged()));
+}
+
+FindDuplicatesView::~FindDuplicatesView()
+{
+    d->albumSelectors->saveState();
+    delete d;
+}
+
+void FindDuplicatesView::initAlbumUpdateConnections()
+{
     connect(AlbumManager::instance(), SIGNAL(signalAlbumAdded(Album*)),
             this, SLOT(slotAlbumAdded(Album*)));
 
@@ -253,19 +271,9 @@ FindDuplicatesView::FindDuplicatesView(QWidget* const parent)
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
 
-    connect(d->minSimilarity, SIGNAL(valueChanged(int)),this,SLOT(slotMinimumChanged(int)));
-
     connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<SAlbum*>, QList<qlonglong>)),
             this,SLOT(slotUpdateDuplicates(QList<SAlbum*>,QList<qlonglong>)));
 
-    connect(d->settings, SIGNAL(setupChanged()),
-            this, SLOT(slotApplicationSettingsChanged()));
-}
-
-FindDuplicatesView::~FindDuplicatesView()
-{
-    d->albumSelectors->saveState();
-    delete d;
 }
 
 void FindDuplicatesView::setActive(bool val)
