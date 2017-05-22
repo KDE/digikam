@@ -4,9 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2012-10-23
- * Description : a command line tool to test DImg image loader
+ * Description : a command line tool to encode images as a
+ *               video stream.
  *
- * Copyright (C) 2012-2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -44,7 +45,7 @@ int main(int argc, char** argv)
 {
     if (argc != 2)
     {
-        qDebug() << "testdimgloader - test DImg image loader";
+        qDebug() << "framesencoder - images to encode as video stream";
         qDebug() << "Usage: <image>";
         return -1;
     }
@@ -52,7 +53,6 @@ int main(int argc, char** argv)
     MetaEngine::initializeExiv2();
 
     QFileInfo input(QString::fromUtf8(argv[1]));
-    QString   outFilePath(input.baseName() + QLatin1String(".out.png"));
 
     DRawDecoderSettings settings;
     settings.halfSizeColorImage    = false;
@@ -90,7 +90,7 @@ int main(int argc, char** argv)
         if (!venc->open())
         {
             qWarning("failed to open encoder");
-            return 1;
+            return -1;
         }
     }
 
@@ -111,7 +111,9 @@ int main(int argc, char** argv)
     do
     {
         if (frame.pixelFormat() != venc->pixelFormat())
+        {
             frame = frame.to(venc->pixelFormat());
+        }
 
         if (venc->encode(frame))
         {
@@ -119,8 +121,8 @@ int main(int argc, char** argv)
             mux.writeVideo(pkt);
             count++;
 
-            qDebug() << "encode count:" << count << "frame size:" 
-                     << frame.width() << "x" <<  frame.height()
+            qDebug() << "encode count:" << count
+                     << "frame size:" << frame.width() << "x" <<  frame.height()
                      << "::" << frame.data().size();
         }
     }
@@ -130,7 +132,7 @@ int main(int argc, char** argv)
 
     while (venc->encode())
     {
-        qDebug("encode delayed frames...\r");
+        qDebug("encode delayed frames...");
         Packet pkt(venc->encoded());
         mux.writeVideo(pkt);
     }
