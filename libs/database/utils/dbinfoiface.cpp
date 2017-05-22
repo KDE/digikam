@@ -411,7 +411,7 @@ DBInfoIface::DAlbumIDs DBInfoIface::albumChooserItems() const
 
     foreach(Album* const a, lst)
     {
-        if (a) ids << a->id();
+        if (a) ids << a->globalID();
     }
 
     return ids;
