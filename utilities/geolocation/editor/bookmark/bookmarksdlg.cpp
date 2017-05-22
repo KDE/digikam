@@ -369,7 +369,7 @@ void BookmarksDialog::slotCustomContextMenuRequested(const QPoint& pos)
 
 void BookmarksDialog::slotOpenInMap(const QModelIndex& index)
 {
-    if (!index.parent().isValid())
+    if (!index.isValid())
     {
         d->mapView->setGPSInfoList(GPSImageInfo::List());
         d->mapView->setActive(false);
