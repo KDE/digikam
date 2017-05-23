@@ -33,3 +33,23 @@ target_link_libraries(framesencoder
 
                       ${OpenCV_LIBRARIES}
 )
+
+# -------------------------------------------------
+
+set(qtavcodecs_SRCS qtavcodecs.cpp)
+add_executable(qtavcodecs ${qtavcodecs_SRCS})
+ecm_mark_nongui_executable(qtavcodecs)
+
+target_link_libraries(qtavcodecs
+
+                      digikamcore
+                      libdng
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::I18n
+                      KF5::XmlGui
+
+                      ${OpenCV_LIBRARIES}
+)

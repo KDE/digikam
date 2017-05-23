@@ -22,7 +22,6 @@
  *
  * ============================================================ */
 
-#include <QFileInfo>
 #include <QDebug>
 
 // Local includes
