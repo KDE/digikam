@@ -84,6 +84,7 @@ int main(int argc, char** argv)
     mux.setMedia(outFile);
     mux.copyProperties(venc);
 
+    // Segments muxer ffmpeg options. See : https://www.ffmpeg.org/ffmpeg-formats.html#Options-11
     QVariantHash avfopt;
     avfopt[QLatin1String("segment_time")]      = 4;
     avfopt[QLatin1String("segment_list_size")] = 0;
