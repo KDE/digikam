@@ -65,4 +65,5 @@ BUGFIXES FROM BUGZILLA:
 044 ==> 288113 - Bookmark a GPS position is impossible.
 045 ==> 374841 - Geolocation Editor Cannot Edit Bookmarks.
 046 ==> 376251 - Number of photos in gallery
-047 ==> 
+047 ==> 379833 - Sidecar files are not being created for some files.
+048 ==> 
