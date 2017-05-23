@@ -359,8 +359,8 @@ public:
     qlonglong groupImageId() const;
 
     /**
-     * Returns the list of images grouped behind this image,
-     * if hasGroupedImages().
+     * Returns the list of images grouped behind this image (not including this
+     * image itself) and an empty list if there is none.
      */
     QList<ImageInfo> groupedImages() const;
 

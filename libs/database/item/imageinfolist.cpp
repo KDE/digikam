@@ -67,6 +67,42 @@ bool ImageInfoList::namefileLessThan(const ImageInfo &d1, const ImageInfo &d2)
     return d1.name().toLower() < d2.name().toLower(); // sort by name
 }
 
+ImageInfo ImageInfoList::singleGroupMainItem() const
+{
+    if (length() == 1) {
+        return first();
+    }
+
+    ImageInfo mainItem;
+    ImageInfoList grouped;
+    if (first().isGrouped())
+    {
+        mainItem = first().groupImage();
+        if (!this->contains(mainItem))
+        {
+            return ImageInfo();
+        }
+    }
+    else if (first().hasGroupedImages())
+    {
+        mainItem = first();
+    }
+    else
+    {
+        return ImageInfo();
+    }
+    grouped << mainItem << mainItem.groupedImages();
+
+    foreach(const ImageInfo& info, *this)
+    {
+        if (!grouped.contains(info))
+        {
+            return ImageInfo();
+        }
+    }
+    return mainItem;
+}
+
 // Implementations of batch loading methods: See imageinfo.cpp (next to the corresponding single-item implementation)
 
 } // namespace Digikam

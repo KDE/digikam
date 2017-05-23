@@ -1397,8 +1397,6 @@ void DigikamView::slotDispatchImageSelected()
     if (d->needDispatchSelection)
     {
         // the list of ImageInfos of currently selected items, currentItem first
-        // since the iconView tracks the changes also while we are in map widget mode,
-        // we can still pull the data from the iconView
         const ImageInfoList list      = selectedInfoList(true, true);
         const ImageInfoList allImages = allInfo(true);
 

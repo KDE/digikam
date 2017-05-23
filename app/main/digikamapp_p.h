@@ -325,7 +325,6 @@ public:
     TagsActionMngr*                     tagsActionManager;
     DZoomBar*                           zoomBar;
     DAdjustableLabel*                   statusLabel;
-    QString                             statusBarSelectionText;
 
     DigikamModelCollection*             modelCollection;
 };
