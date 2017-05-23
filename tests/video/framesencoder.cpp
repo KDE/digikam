@@ -63,48 +63,46 @@ int main(int argc, char** argv)
     DImg img(input.filePath(), 0, DRawDecoding(settings));
     VideoFrame frame(img.copyQImage());
 
-    QString outFile = QString::fromLatin1("./out.mp4");
-    QString cv = QString::fromLatin1("libx264");
+    // ---------------------------------------------
 
-    VideoEncoder* const venc = VideoEncoder::create("FFmpeg");
-    venc->setCodecName(cv);
+    VideoEncoder* const venc       = VideoEncoder::create("FFmpeg");
+    venc->setCodecName(QLatin1String("libx264"));
     venc->setBitRate(1024*1024);
+    venc->setWidth(frame.width());
+    venc->setHeight(frame.height());
 
+    if (!venc->open())
+    {
+        qWarning("failed to open encoder");
+        return -1;
+    }
+
+    // ---------------------------------------------
+
+    QString outFile                            = QLatin1String("./out.mp4");
     AVMuxer mux;
     mux.setMedia(outFile);
+    mux.copyProperties(venc);
 
-    QVariantHash muxopt, avfopt;
-    avfopt[QString::fromLatin1("segment_time")]      = 4;
-    avfopt[QString::fromLatin1("segment_list_size")] = 0;
-    avfopt[QString::fromLatin1("segment_list")]      = outFile.left(
+    QVariantHash avfopt;
+    avfopt[QLatin1String("segment_time")]      = 4;
+    avfopt[QLatin1String("segment_list_size")] = 0;
+    avfopt[QLatin1String("segment_format")]    = QLatin1String("mpegts");
+    avfopt[QLatin1String("segment_list")]      = outFile.left(
                                                             outFile.lastIndexOf(QLatin1Char('/'))+1)
-                                                            .append(QString::fromLatin1("index.m3u8"));
-    avfopt[QString::fromLatin1("segment_format")]    = QString::fromLatin1("mpegts");
-    muxopt[QString::fromLatin1("avformat")]          = avfopt;
+                                                            .append(QLatin1String("index.m3u8"));
+    QVariantHash muxopt;
+    muxopt[QLatin1String("avformat")]          = avfopt;
 
-    if (!venc->isOpen())
+    mux.setOptions(muxopt);
+
+    if (!mux.open())
     {
-        venc->setWidth(frame.width());
-        venc->setHeight(frame.height());
-
-        if (!venc->open())
-        {
-            qWarning("failed to open encoder");
-            return -1;
-        }
+        qWarning() << "failed to open muxer";
+        return -1;
     }
 
-    if (!mux.isOpen())
-    {
-        mux.copyProperties(venc);
-        mux.setOptions(muxopt);
-
-        if (!mux.open())
-        {
-            qWarning() << "failed to open muxer";
-            return -1;
-        }
-    }
+    // ---------------------------------------------
 
     int count = 0;
 
@@ -122,7 +120,8 @@ int main(int argc, char** argv)
             count++;
 
             qDebug() << "encode count:" << count
-                     << "frame size:" << frame.width() << "x" <<  frame.height()
+                     << "frame size:" << frame.width()
+                     << "x" <<  frame.height()
                      << "::" << frame.data().size();
         }
     }
@@ -136,6 +135,8 @@ int main(int argc, char** argv)
         Packet pkt(venc->encoded());
         mux.writeVideo(pkt);
     }
+
+    // ---------------------------------------------
 
     venc->close();
     mux.close();
