@@ -43,33 +43,54 @@ using namespace QtAV;
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    // ---------------------------------------------
+    // Get list of image files from CLI
+
+    QStringList list;
+
+    if (argc > 1)
+    {
+        for (int i = 1 ; i < argc ; i++)
+            list.append(QString::fromUtf8(argv[i]));
+    }
+
+    if (list.isEmpty())
     {
         qDebug() << "framesencoder - images to encode as video stream";
-        qDebug() << "Usage: <image>";
+        qDebug() << "Usage: <list of image files>";
         return -1;
     }
 
+    // ---------------------------------------------
+    // Common settings
+
     MetaEngine::initializeExiv2();
 
-    QFileInfo input(QString::fromUtf8(argv[1]));
-
+    // The Raw decoding settings for DImg loader.
     DRawDecoderSettings settings;
     settings.halfSizeColorImage    = false;
     settings.sixteenBitsImage      = false;
     settings.RGBInterpolate4Colors = false;
     settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
-    DImg img(input.filePath(), 0, DRawDecoding(settings));
-    VideoFrame frame(img.copyQImage());
+    // The output video size
+    QSize outSize(1024, 768);
+
+    // The output video file
+    QString outFile = QLatin1String("./out.mp4");
+
+    // Amount of frames to encode in video stream by image.
+    // ex: 120 frames = 5 s at 24 img/s.
+    int aframes = 120;
 
     // ---------------------------------------------
+    // Setup Encoder
 
     VideoEncoder* const venc       = VideoEncoder::create("FFmpeg");
     venc->setCodecName(QLatin1String("libx264"));
     venc->setBitRate(1024*1024);
-    venc->setWidth(frame.width());
-    venc->setHeight(frame.height());
+    venc->setWidth(outSize.width());
+    venc->setHeight(outSize.height());
 
     if (!venc->open())
     {
@@ -78,8 +99,8 @@ int main(int argc, char** argv)
     }
 
     // ---------------------------------------------
+    // Setup Muxer
 
-    QString outFile                            = QLatin1String("./out.mp4");
     AVMuxer mux;
     mux.setMedia(outFile);
     mux.copyProperties(venc);
@@ -104,31 +125,41 @@ int main(int argc, char** argv)
     }
 
     // ---------------------------------------------
+    // Loop to encode frames with images list
 
-    int count = 0;
-
-    do
+    foreach(const QString& file, list)
     {
-        if (frame.pixelFormat() != venc->pixelFormat())
-        {
-            frame = frame.to(venc->pixelFormat());
-        }
+        DImg img(file, 0, DRawDecoding(settings));
+        QImage qimg = img.copyQImage();
+        qimg        = qimg.scaled(outSize, Qt::KeepAspectRatio);
+        VideoFrame frame(qimg);
 
-        if (venc->encode(frame))
-        {
-            Packet pkt(venc->encoded());
-            mux.writeVideo(pkt);
-            count++;
+        int count = 0;
 
-            qDebug() << "encode count:" << count
-                     << "frame size:" << frame.width()
-                     << "x" <<  frame.height()
-                     << "::" << frame.data().size();
+        do
+        {
+            if (frame.pixelFormat() != venc->pixelFormat())
+            {
+                frame = frame.to(venc->pixelFormat());
+            }
+
+            if (venc->encode(frame))
+            {
+                Packet pkt(venc->encoded());
+                mux.writeVideo(pkt);
+                count++;
+
+                qDebug() << file
+                         << " => encode count:" << count
+                         << "frame size:"       << frame.width()
+                         << "x"                 << frame.height();
+            }
         }
+        while (count < aframes);
     }
-    while (count < 1000);
 
-    // get delayed frames
+    // ---------------------------------------------
+    // Get delayed frames
 
     while (venc->encode())
     {
@@ -138,6 +169,7 @@ int main(int argc, char** argv)
     }
 
     // ---------------------------------------------
+    // Cleanup
 
     venc->close();
     mux.close();
