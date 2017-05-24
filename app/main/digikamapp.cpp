@@ -1540,39 +1540,99 @@ void DigikamApp::slotAlbumSelected(Album* album)
 
 void DigikamApp::slotImageSelected(const ImageInfoList& selection, const ImageInfoList& listAll)
 {
-    /// @todo Currently only triggered by IconView, need to adapt to TableView
-    int num_images = listAll.count();
-    QString text;
+    int numImagesWithGrouped    = listAll.count();
+    int numImagesWithoutGrouped = d->view->allUrls(false).count();
+    ImageInfoList selectionWithoutGrouped = d->view->selectedInfoList(true, false);
+
+    QString statusBarSelectionText;
+    QString statusBarSelectionToolTip;
 
     switch (selection.count())
     {
         case 0:
         {
-            d->statusBarSelectionText = i18np("No item selected (%1 item)",
-                                              "No item selected (%1 items)",
-                                              num_images);
-            break;
-        }
-        case 1:
-        {
-            slotSetCheckedExifOrientationAction(selection.first());
-
-            int index = listAll.indexOf(selection.first()) + 1;
-
-            d->statusBarSelectionText = selection.first().fileUrl().fileName()
-                                        + i18n(" (%1 of %2)", index, num_images);
+            if (numImagesWithGrouped == numImagesWithoutGrouped)
+            {
+                statusBarSelectionText
+                        = i18np("No item selected (%1 item)", "No item selected (%1 items)",
+                                numImagesWithoutGrouped);
+                break;
+            }
+            statusBarSelectionText
+                        = i18np("No item selected (%1 [%2] item)",
+                                "No item selected (%1 [%2] items)",
+                                numImagesWithoutGrouped, numImagesWithGrouped);
+            statusBarSelectionToolTip
+                        = i18np("No item selected (%1 item. With grouped items: %2)",
+                                "No item selected (%1 items. With grouped items: %2)",
+                                numImagesWithoutGrouped, numImagesWithGrouped);
             break;
         }
         default:
         {
-            d->statusBarSelectionText = i18np("%2/%1 item selected",
-                                              "%2/%1 items selected",
-                                              num_images, selection.count());
+            if (numImagesWithGrouped == numImagesWithoutGrouped)
+            {
+                statusBarSelectionText = i18n("%1/%2 items selected",
+                                              selection.count(), numImagesWithoutGrouped);
+                break;
+            }
+            if (selectionWithoutGrouped.count() > 1)
+            {
+                if (selection.count() == selectionWithoutGrouped.count())
+                {
+                    statusBarSelectionText
+                            = i18n("%1/%2 [%3] items selected", selectionWithoutGrouped.count(),
+                                   numImagesWithoutGrouped, numImagesWithGrouped);
+                    statusBarSelectionToolTip
+                            = i18n("%1/%2 items selected. Total with grouped items: %3",
+                                   selectionWithoutGrouped.count(), numImagesWithoutGrouped,
+                                   numImagesWithGrouped);
+                }
+                else
+                {
+                    statusBarSelectionText
+                            = i18n("%1/%2 [%3/%4] items selected",
+                                   selectionWithoutGrouped.count(), numImagesWithoutGrouped,
+                                   selection.count(), numImagesWithGrouped);
+                    statusBarSelectionToolTip
+                            = i18n("%1/%2 items selected. With grouped items: %3/%4",
+                                   selectionWithoutGrouped.count(), numImagesWithoutGrouped,
+                                   selection.count(), numImagesWithGrouped);
+                }
+                break;
+            }
+            // no break; is completely intentional, arriving here is equivalent to case 1:
+        }
+        case 1:
+        {
+            slotSetCheckedExifOrientationAction(selectionWithoutGrouped.first());
+
+            int index = listAll.indexOf(selection.first()) + 1;
+            if (numImagesWithGrouped == numImagesWithoutGrouped)
+            {
+                statusBarSelectionText = selection.first().fileUrl().fileName()
+                                            + i18n(" (%1 of %2)",
+                                                   index, numImagesWithoutGrouped);
+            }
+            else
+            {
+                int indexWithoutGrouped
+                        = d->view->allInfo(false).indexOf(selectionWithoutGrouped.first()) + 1;
+                statusBarSelectionText
+                        = selection.first().fileUrl().fileName()
+                          + i18n(" (%1 of %2 [%3])", indexWithoutGrouped,
+                                 numImagesWithoutGrouped, numImagesWithGrouped);
+                statusBarSelectionToolTip
+                        = selection.first().fileUrl().fileName()
+                          + i18n(" (%1 of %2. Total with grouped items: %3)", indexWithoutGrouped,
+                                 numImagesWithoutGrouped, numImagesWithGrouped);
+            }
             break;
         }
     }
 
-    d->statusLabel->setAdjustedText(d->statusBarSelectionText);
+    d->statusLabel->setAdjustedText(statusBarSelectionText);
+    d->statusLabel->setToolTip(statusBarSelectionToolTip);
 }
 
 void DigikamApp::slotSelectionChanged(int selectionCount)

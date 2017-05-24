@@ -219,137 +219,88 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
 {
     setCursor(Qt::WaitCursor);
 
-    // No database data available, for example in the case of image editor is
-    // started from camera GUI.
-    if (d->currentInfos.isEmpty())
+    if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
     {
-        if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
+        m_propertiesTab->setCurrentURL(m_currentURL);
+        ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
+        m_dirtyPropertiesTab = true;
+    }
+    else if (tab == m_metadataTab && !m_dirtyMetadataTab)
+    {
+        if (d->currentInfos.count() > 1)
         {
-            m_propertiesTab->setCurrentURL(m_currentURL);
-            ImagePropertiesSideBar::setImagePropertiesInformation(m_currentURL);
-            m_dirtyPropertiesTab = true;
-        }
-        else if (tab == m_metadataTab && !m_dirtyMetadataTab)
-        {
-            if (m_image)
+            // No multiple selection supported. Only if all items belong to
+            // the same group display metadata of main item.
+            ImageInfo mainItem = d->currentInfos.singleGroupMainItem();
+            if (!mainItem.isNull())
             {
-                DMetadata data(m_image->getMetadata());
-                m_metadataTab->setCurrentData(data, m_currentURL.fileName());
+                m_metadataTab->setCurrentURL(mainItem.fileUrl());
             }
             else
             {
-                m_metadataTab->setCurrentURL(m_currentURL);
+                m_metadataTab->setCurrentURL();
             }
-
-            m_dirtyMetadataTab = true;
         }
-        else if (tab == m_colorTab && !m_dirtyColorTab)
+        else if (m_image)
+        {
+            DMetadata data(m_image->getMetadata());
+            m_metadataTab->setCurrentData(data, m_currentURL.fileName());
+        }
+        else
+        {
+            m_metadataTab->setCurrentURL(m_currentURL);
+        }
+        m_dirtyMetadataTab = true;
+    }
+    else if (tab == m_colorTab && !m_dirtyColorTab)
+    {
+        if (d->currentInfos.count() > 1)
+        {
+            // No multiple selection supported. Only if all items belong to
+            // the same group display metadata of main item.
+            ImageInfo mainItem = d->currentInfos.singleGroupMainItem();
+            if (!mainItem.isNull())
+            {
+                m_colorTab->setData(mainItem.fileUrl());
+            }
+            else
+            {
+                m_colorTab->setData();
+            }
+        }
+        else
         {
             m_colorTab->setData(m_currentURL, m_currentRect, m_image);
-            m_dirtyColorTab = true;
         }
-        else if (tab == d->desceditTab && !d->dirtyDesceditTab)
+        m_dirtyColorTab = true;
+    }
+    else if (tab == d->desceditTab && !d->dirtyDesceditTab)
+    {
+
+        if (d->currentInfos.count() == 0)
         {
             // Do nothing here. We cannot get data from database !
             d->desceditTab->setItem();
-            d->dirtyDesceditTab = true;
         }
-#ifdef HAVE_MARBLE
-        else if (tab == m_gpsTab && !m_dirtyGpsTab)
-        {
-            m_gpsTab->setCurrentURL(m_currentURL);
-            m_dirtyGpsTab = true;
-        }
-#endif // HAVE_MARBLE
-        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
-        {
-            //TODO: Make a database-less parent class with only the filters tab
-            d->versionsHistoryTab->clear();
-            m_dirtyHistoryTab = true;
-        }
-    }
-    else if (d->currentInfos.count() == 1)   // Data from database available...
-    {
-        if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
-        {
-            m_propertiesTab->setCurrentURL(m_currentURL);
-            setImagePropertiesInformation(m_currentURL);
-            m_dirtyPropertiesTab = true;
-        }
-        else if (tab == m_metadataTab && !m_dirtyMetadataTab)
-        {
-            if (m_image)
-            {
-                DMetadata data(m_image->getMetadata());
-                m_metadataTab->setCurrentData(data, m_currentURL.fileName());
-            }
-            else
-            {
-                m_metadataTab->setCurrentURL(m_currentURL);
-            }
-
-            m_dirtyMetadataTab = true;
-        }
-        else if (tab == m_colorTab && !m_dirtyColorTab)
-        {
-            m_colorTab->setData(m_currentURL, m_currentRect, m_image);
-            m_dirtyColorTab = true;
-        }
-        else if (tab == d->desceditTab && !d->dirtyDesceditTab)
+        else if (d->currentInfos.count() == 1)
         {
             d->desceditTab->setItem(d->currentInfos.first());
-            d->dirtyDesceditTab = true;
         }
-#ifdef HAVE_MARBLE
-        else if (tab == m_gpsTab && !m_dirtyGpsTab)
-        {
-            GPSImageInfo info;
-
-            if (!GPSImageInfofromImageInfo(d->currentInfos.first(), &info))
-            {
-                m_gpsTab->setCurrentURL();
-            }
-            else
-            {
-                m_gpsTab->setGPSInfoList(GPSImageInfo::List() << info);
-            }
-
-            m_dirtyGpsTab = true;
-        }
-#endif // HAVE_MARBLE
-        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
-        {
-            d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
-            m_dirtyHistoryTab = true;
-        }
-    }
-    else  // Data from database available, multiple selection
-    {
-        if (tab == m_propertiesTab && !m_dirtyPropertiesTab)
-        {
-            m_propertiesTab->setCurrentURL(m_currentURL);
-            setImagePropertiesInformation(m_currentURL);
-            m_dirtyPropertiesTab = true;
-        }
-        else if (tab == m_metadataTab && !m_dirtyMetadataTab)
-        {
-            // No multiple selection supported.
-            m_metadataTab->setCurrentURL();
-            m_dirtyMetadataTab = true;
-        }
-        else if (tab == m_colorTab && !m_dirtyColorTab)
-        {
-            // No multiple selection supported.
-            m_colorTab->setData();
-            m_dirtyColorTab = true;
-        }
-        else if (tab == d->desceditTab && !d->dirtyDesceditTab)
+        else
         {
             d->desceditTab->setItems(d->currentInfos);
-            d->dirtyDesceditTab = true;
         }
+        d->dirtyDesceditTab = true;
+    }
 #ifdef HAVE_MARBLE
-        else if (tab == m_gpsTab && !m_dirtyGpsTab)
+    else if (tab == m_gpsTab && !m_dirtyGpsTab)
+    {
+
+        if (d->currentInfos.count() == 0)
+        {
+            m_gpsTab->setCurrentURL(m_currentURL);
+        }
+        else
         {
             GPSImageInfo::List list;
 
@@ -372,16 +323,24 @@ void ImagePropertiesSideBarDB::slotChangedTab(QWidget* tab)
             {
                 m_gpsTab->setGPSInfoList(list);
             }
-
-            m_dirtyGpsTab = true;
         }
+
+        m_dirtyGpsTab = true;
+    }
 #endif // HAVE_MARBLE
-        else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
+    else if (tab == d->versionsHistoryTab && !m_dirtyHistoryTab)
+    {
+        //TODO: Make a database-less parent class with only the filters tab
+        if (d->currentInfos.count() == 0 || d->currentInfos.count() > 1)
         {
             // FIXME: Any sensible multi-selection functionality? Must scale for large n!
             d->versionsHistoryTab->clear();
-            m_dirtyHistoryTab = true;
         }
+        else
+        {
+            d->versionsHistoryTab->setItem(d->currentInfos.first(), d->currentHistory);
+        }
+        m_dirtyHistoryTab = true;
     }
 
 #ifdef HAVE_MARBLE

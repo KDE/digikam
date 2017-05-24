@@ -62,6 +62,13 @@ public:
     void loadTagIds() const;
 
     bool static namefileLessThan(const ImageInfo &d1, const ImageInfo &d2);
+
+    /**
+     * @brief singleGroupMainItem
+     * @return If the list contains of items of only one group including the
+     * main item, this main item is returned, otherwise a null ImageInfo.
+     */
+    ImageInfo singleGroupMainItem() const;
 };
 
 typedef ImageInfoList::iterator ImageInfoListIterator;
