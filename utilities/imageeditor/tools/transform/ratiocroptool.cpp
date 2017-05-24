@@ -398,8 +398,8 @@ RatioCropTool::RatioCropTool(QObject* const parent)
     mainLayout->addWidget(d->ratioCB,           0, 1, 1, 3);
     mainLayout->addWidget(d->preciseCrop,       0, 4, 1, 1);
     mainLayout->addWidget(d->customLabel,       1, 0, 1, 1);
-    mainLayout->addWidget(d->customRatioNInput, 1, 1, 1, 1);
-    mainLayout->addWidget(d->customRatioDInput, 2, 1, 1, 1);
+    mainLayout->addWidget(d->customRatioNInput, 1, 1, 1, 3);
+    mainLayout->addWidget(d->customRatioDInput, 2, 1, 1, 3);
     mainLayout->addWidget(d->orientLabel,       3, 0, 1, 1);
     mainLayout->addWidget(d->orientCB,          3, 1, 1, 3);
     mainLayout->addWidget(d->autoOrientation,   3, 4, 1, 1);
