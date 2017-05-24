@@ -45,6 +45,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:expoblending_src>
             $<TARGET_OBJECTS:assistants_src>
             $<TARGET_OBJECTS:presentation_src>
+            $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
             $<TARGET_OBJECTS:calendar_src>
 

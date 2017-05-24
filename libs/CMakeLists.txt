@@ -4,8 +4,10 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
-# Common DNG SDK definitions for DNGWriter and RAWEngine.
+#---------------------------------
 
+# Common DNG SDK definitions for DNGWriter and RAWEngine.
+#
 # Set platteforms flags.
 # NOTE: see bug #195735: do not enable Mac flags provided by Adobe.
 #       Sounds like all compile fine like under Linux.
@@ -79,3 +81,4 @@ add_subdirectory(settings)
 add_subdirectory(rawengine)
 add_subdirectory(album)
 add_subdirectory(tags)
+add_subdirectory(transitionmngr)

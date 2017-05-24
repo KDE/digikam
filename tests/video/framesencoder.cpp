@@ -29,6 +29,7 @@
 #include "metaengine.h"
 #include "dimg.h"
 #include "drawdecoding.h"
+#include "transitionmngr.h"
 
 // QtAv includes
 
@@ -39,6 +40,52 @@
 
 using namespace Digikam;
 using namespace QtAV;
+
+QImage makeFramedImage(const QString& file, const QSize& outSize)
+{
+    QImage qimg(outSize, QImage::Format_ARGB32);
+    qimg.fill(QColor(0, 0, 0, 0));
+
+    if (!file.isEmpty())
+    {
+        qDebug() << "Load frame from" << file;
+
+        // The Raw decoding settings for DImg loader.
+        DRawDecoderSettings settings;
+        settings.halfSizeColorImage    = false;
+        settings.sixteenBitsImage      = false;
+        settings.RGBInterpolate4Colors = false;
+        settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
+
+        DImg dimg(file, 0, DRawDecoding(settings));
+        QImage timg = dimg.copyQImage();
+        timg        = timg.scaled(outSize, Qt::KeepAspectRatio);
+
+        QPainter p(&qimg);
+        p.drawImage((qimg.width()  / 2) - (timg.width()  / 2),
+                    (qimg.height() / 2) - (timg.height() / 2),
+                    timg);
+    }
+
+    return qimg;
+}
+
+bool encodeFrame(VideoFrame& frame, VideoEncoder* const venc, AVMuxer& mux)
+{
+    if (frame.pixelFormat() != venc->pixelFormat())
+    {
+        frame = frame.to(venc->pixelFormat());
+    }
+
+    if (venc->encode(frame))
+    {
+        Packet pkt(venc->encoded());
+        mux.writeVideo(pkt);
+        return true;
+    }
+
+    return false;
+}
 
 int main(int argc, char** argv)
 {
@@ -64,13 +111,6 @@ int main(int argc, char** argv)
     // Common settings
 
     MetaEngine::initializeExiv2();
-
-    // The Raw decoding settings for DImg loader.
-    DRawDecoderSettings settings;
-    settings.halfSizeColorImage    = false;
-    settings.sixteenBitsImage      = false;
-    settings.RGBInterpolate4Colors = false;
-    settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
     // The output video size
     QSize outSize(1024, 768);
@@ -126,29 +166,47 @@ int main(int argc, char** argv)
     // ---------------------------------------------
     // Loop to encode frames with images list
 
-    foreach(const QString& file, list)
+    TransitionMngr tmngr;
+    tmngr.setOutputSize(outSize);
+    tmngr.setEffect(TransitionMngr::HorizontalLines);
+
+    for (int i = -1 ; i < list.count() ; i++)
     {
-        DImg img(file, 0, DRawDecoding(settings));
-        QImage qimg = img.copyQImage();
-        qimg        = qimg.scaled(outSize, Qt::KeepAspectRatio);
-        VideoFrame frame(qimg);
+        QString ifile = (i >= 0)             ? list[i]   : QString();
+        QString ofile = (i+1 < list.count()) ? list[i+1] : QString();
+        QImage qiimg  = makeFramedImage(ifile, outSize);
+        QImage qoimg  = makeFramedImage(ofile, outSize);
+
+        tmngr.setInImage(qiimg);
+        tmngr.setOutImage(qoimg);
+
+        qDebug() << "Making transition between" << ifile << "and" << ofile;
+
+        int tmout = 0;
+        int j     = 0;
+
+        do
+        {
+            VideoFrame frame(tmngr.currentframe(tmout));
+
+            if (encodeFrame(frame, venc, mux))
+            {
+                qDebug() << "Transition frame:" << j++ << tmout;
+            }
+        }
+        while (tmout != -1 && j < 120);
+
+        VideoFrame frame(qoimg);
 
         int count = 0;
 
         do
         {
-            if (frame.pixelFormat() != venc->pixelFormat())
+            if (encodeFrame(frame, venc, mux))
             {
-                frame = frame.to(venc->pixelFormat());
-            }
-
-            if (venc->encode(frame))
-            {
-                Packet pkt(venc->encoded());
-                mux.writeVideo(pkt);
                 count++;
 
-                qDebug() << file
+                qDebug() << ofile
                          << " => encode count:" << count
                          << "frame size:"       << frame.width()
                          << "x"                 << frame.height();
@@ -160,9 +218,10 @@ int main(int argc, char** argv)
     // ---------------------------------------------
     // Get delayed frames
 
+    qDebug("encode delayed frames...");
+
     while (venc->encode())
     {
-        qDebug("encode delayed frames...");
         Packet pkt(venc->encoded());
         mux.writeVideo(pkt);
     }
