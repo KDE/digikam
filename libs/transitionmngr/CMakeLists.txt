@@ -10,6 +10,7 @@ endif (POLICY CMP0063)
 
 set(libtransitionmngr_SRCS
     transitionmngr.cpp
+    transitionmngr_p.cpp
 )
 
 include_directories(

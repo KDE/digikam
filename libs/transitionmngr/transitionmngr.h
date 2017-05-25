@@ -62,8 +62,6 @@ public:
         Random,
     };
 
-    typedef int (TransitionMngr::*EffectMethod)(bool);
-
 public:
 
     explicit TransitionMngr();
@@ -77,25 +75,6 @@ public:
     QImage currentframe(int& tmout);
 
     static QMap<Effect, QString> effectNames();
-
-private:
-
-    void    registerEffects();
-
-    int     effectNone(bool);
-    int     effectChessboard(bool doInit);
-    int     effectMeltdown(bool doInit);
-    int     effectSweep(bool doInit);
-    int     effectMosaic(bool doInit);
-    int     effectCubism(bool doInit);
-    int     effectRandom(bool doInit);
-    int     effectGrowing(bool doInit);
-    int     effectHorizLines(bool doInit);
-    int     effectVertLines(bool doInit);
-    int     effectMultiCircleOut(bool doInit);
-    int     effectSpiralIn(bool doInit);
-    int     effectCircleOut(bool doInit);
-    int     effectBlobs(bool doInit);
 
 private:
 
