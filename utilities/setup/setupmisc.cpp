@@ -82,29 +82,29 @@ public:
     {
     }
 
-    QTabWidget*                 tab;
+    QTabWidget*               tab;
 
-    QLabel*                     sidebarTypeLabel;
-    QLabel*                     stringComparisonTypeLabel;
-    QLabel*                     applicationStyleLabel;
-    QLabel*                     iconThemeLabel;
-    QLabel*                     minSimilarityBoundLabel;
+    QLabel*                   sidebarTypeLabel;
+    QLabel*                   stringComparisonTypeLabel;
+    QLabel*                   applicationStyleLabel;
+    QLabel*                   iconThemeLabel;
+    QLabel*                   minSimilarityBoundLabel;
 
-    QCheckBox*                  showSplashCheck;
-    QCheckBox*                  showTrashDeleteDialogCheck;
-    QCheckBox*                  showPermanentDeleteDialogCheck;
-    QCheckBox*                  sidebarApplyDirectlyCheck;
-    QCheckBox*                  scrollItemToCenterCheck;
-    QCheckBox*                  showOnlyPersonTagsInPeopleSidebarCheck;
-    QCheckBox*                  scanAtStart;
-    QCheckBox*                  cleanAtStart;
+    QCheckBox*                showSplashCheck;
+    QCheckBox*                showTrashDeleteDialogCheck;
+    QCheckBox*                showPermanentDeleteDialogCheck;
+    QCheckBox*                sidebarApplyDirectlyCheck;
+    QCheckBox*                scrollItemToCenterCheck;
+    QCheckBox*                showOnlyPersonTagsInPeopleSidebarCheck;
+    QCheckBox*                scanAtStart;
+    QCheckBox*                cleanAtStart;
 
-    QComboBox*                  sidebarType;
-    QComboBox*                  stringComparisonType;
-    QComboBox*                  applicationStyle;
-    QComboBox*                  iconTheme;
+    QComboBox*                sidebarType;
+    QComboBox*                stringComparisonType;
+    QComboBox*                applicationStyle;
+    QComboBox*                iconTheme;
 
-    QSpinBox*                   minimumSimilarityBound;
+    QSpinBox*                 minimumSimilarityBound;
 
     QHash<int, QButtonGroup*> groupingButtons;
 };
@@ -117,8 +117,8 @@ SetupMisc::SetupMisc(QWidget* const parent)
     setWidget(d->tab);
     setWidgetResizable(true);
 
-    const int spacing         = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
-    // --------------------------------------------------------
+    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+
     // --------------------------------------------------------
 
     QWidget* const behaviourPanel = new QWidget(d->tab);
@@ -154,12 +154,14 @@ SetupMisc::SetupMisc(QWidget* const parent)
                                     "a manual scan through the maintenance tool at the right moment."));
 
     // ---------------------------------------------------------
+
     d->cleanAtStart                   = new QCheckBox(i18n("Remove obsolete core database objects (makes startup slower)"), behaviourPanel);
     d->cleanAtStart->setToolTip(i18n("Set this option to force digiKam to clean up the core database from obsolete item entries.\n"
-                                    "Entries are only deleted if the connected image/video/audio file was already removed, i.e.\n"
-                                    "the database object wastes space.\n"
-                                    "This option does not clean up other databases as the thumbnails or recognition db.\n"
-                                    "For clean up routines for other databases, please use the maintenance."));
+                                     "Entries are only deleted if the connected image/video/audio file was already removed, i.e.\n"
+                                     "the database object wastes space.\n"
+                                     "This option does not clean up other databases as the thumbnails or recognition db.\n"
+                                     "For clean up routines for other databases, please use the maintenance."));
+
     // -- Application Behavior Options --------------------------------------------------------
 
     QGroupBox* const abOptionsGroup = new QGroupBox(i18n("Application Behavior"), behaviourPanel);
@@ -264,36 +266,37 @@ SetupMisc::SetupMisc(QWidget* const parent)
     d->tab->insertTab(Behaviour, behaviourPanel, i18nc("@title:tab", "Behaviour"));
 
     // --------------------------------------------------------
-    // --------------------------------------------------------
 
     QWidget* const groupingPanel = new QWidget(d->tab);
+    QGridLayout* const grid      = new QGridLayout(groupingPanel);
 
     // --------------------------------------------------------
 
-    QGridLayout* const grid = new QGridLayout(groupingPanel);
-
-    QLabel* description = new QLabel(i18n("Perform the following operations on all group members:"), groupingPanel);
+    QLabel* const description    = new QLabel(i18n("Perform the following operations on all group members:"), groupingPanel);
     description->setToolTip(i18n("When images are grouped the following operations<br/>"
                                  "are performed only on the displayed item (No)<br/>"
                                  "or on all the hidden items in the group as well (Yes).<br/>"
                                  "If Ask is selected, there will be a prompt every<br/>"
                                  "time this operation is executed."));
 
-    QLabel* noLabel  = new QLabel(i18n("No"), groupingPanel);
-    QLabel* yesLabel = new QLabel(i18n("Yes"), groupingPanel);
-    QLabel* askLabel = new QLabel(i18n("Ask"), groupingPanel);
+    QLabel* const noLabel        = new QLabel(i18n("No"), groupingPanel);
+    QLabel* const yesLabel       = new QLabel(i18n("Yes"), groupingPanel);
+    QLabel* const askLabel       = new QLabel(i18n("Ask"), groupingPanel);
 
     QHash<int, QLabel*> labels;
-    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+
+    for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)
     {
         labels.insert(i, new QLabel(ApplicationSettings::operationTypeTitle(
-                    (ApplicationSettings::OperationType)i), groupingPanel));
+                                    (ApplicationSettings::OperationType)i), groupingPanel));
         QString explanation = ApplicationSettings::operationTypeExplanation(
-                    (ApplicationSettings::OperationType)i);
+                              (ApplicationSettings::OperationType)i);
+
         if (!explanation.isEmpty())
         {
             labels.value(i)->setToolTip(explanation);
         }
+
         d->groupingButtons.insert(i, new QButtonGroup(groupingPanel));
         d->groupingButtons.value(i)->addButton(new QRadioButton(groupingPanel), 0);
         d->groupingButtons.value(i)->addButton(new QRadioButton(groupingPanel), 1);
@@ -302,13 +305,12 @@ SetupMisc::SetupMisc(QWidget* const parent)
 
     // --------------------------------------------------------
 
-    grid->addWidget(description,                             0, 0, 1, 4);
+    grid->addWidget(description, 0, 0, 1, 4);
+    grid->addWidget(noLabel,     1, 1, 1, 1);
+    grid->addWidget(yesLabel,    1, 2, 1, 1);
+    grid->addWidget(askLabel,    1, 3, 1, 1);
 
-    grid->addWidget(noLabel,                                 1, 1, 1, 1);
-    grid->addWidget(yesLabel,                                1, 2, 1, 1);
-    grid->addWidget(askLabel,                                1, 3, 1, 1);
-
-    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)
     {
         grid->addWidget(labels.value(i),                        i+2, 0, 1, 1);
         grid->addWidget(d->groupingButtons.value(i)->button(0), i+2, 1, 1, 1);
@@ -355,13 +357,13 @@ void SetupMisc::applySettings()
     settings->setScrollItemToCenter(d->scrollItemToCenterCheck->isChecked());
     settings->setShowOnlyPersonTagsInPeopleSidebar(d->showOnlyPersonTagsInPeopleSidebarCheck->isChecked());
     settings->setSidebarTitleStyle(d->sidebarType->currentIndex() == 0 ? DMultiTabBar::ActiveIconText : DMultiTabBar::AllIconsText);
-    settings->setStringComparisonType((ApplicationSettings::StringComparisonType)d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
+    settings->setStringComparisonType((ApplicationSettings::StringComparisonType)
+                                      d->stringComparisonType->itemData(d->stringComparisonType->currentIndex()).toInt());
 
-    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)
     {
-        settings->setGroupingOperateOnAll(
-                (ApplicationSettings::OperationType)i,
-                (ApplicationSettings::ApplyToEntireGroup)d->groupingButtons.value(i)->checkedId());
+        settings->setGroupingOperateOnAll((ApplicationSettings::OperationType)i,
+                                          (ApplicationSettings::ApplyToEntireGroup)d->groupingButtons.value(i)->checkedId());
     }
 
 #ifdef HAVE_APPSTYLE_SUPPORT
@@ -389,7 +391,7 @@ void SetupMisc::readSettings()
     d->sidebarType->setCurrentIndex(settings->getSidebarTitleStyle() == DMultiTabBar::ActiveIconText ? 0 : 1);
     d->stringComparisonType->setCurrentIndex(settings->getStringComparisonType());
 
-    for (int i = 0; i != ApplicationSettings::Unspecified; ++i)
+    for (int i = 0 ; i != ApplicationSettings::Unspecified ; ++i)
     {
         d->groupingButtons.value(i)->button((int)settings->getGroupingOperateOnAll((ApplicationSettings::OperationType)i))->setChecked(true);
     }
