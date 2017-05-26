@@ -68,4 +68,5 @@ BUGFIXES FROM BUGZILLA:
 047 ==> 376251 - Number of photos in gallery
 048 ==> 379833 - Sidecar files are not being created for some files.
 049 ==> 139693 - Include videos to slideshow.
-050 ==> 
+050 ==> 121422 - Do not open videos using external application.
+051 ==> 
