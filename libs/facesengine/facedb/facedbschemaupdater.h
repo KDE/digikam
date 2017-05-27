@@ -29,8 +29,6 @@
 
 #include "collectionscannerobserver.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 

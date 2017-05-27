@@ -31,8 +31,6 @@
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -117,6 +115,6 @@ private:
     LevelsContainer m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* LEVELSFILTER_H */
+#endif // LEVELSFILTER_H

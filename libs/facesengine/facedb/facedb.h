@@ -33,8 +33,6 @@
 #include "identity.h"
 #include "facedbbackend.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 

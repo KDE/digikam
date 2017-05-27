@@ -36,8 +36,6 @@
 #include "digikam_export.h"
 #include "metaengine.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -89,7 +87,7 @@ public:
     MetaEngine::AltLangMap datesList() const;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::CaptionValues)
 Q_DECLARE_METATYPE(Digikam::CaptionsMap)

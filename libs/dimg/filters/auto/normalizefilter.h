@@ -30,8 +30,6 @@
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -91,6 +89,6 @@ private:
     DImg m_refImage;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* NORMALIZEFILTER_H */
+#endif // NORMALIZEFILTER_H

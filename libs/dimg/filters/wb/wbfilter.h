@@ -37,8 +37,6 @@
 #include "digikam_globals.h"
 #include "wbcontainer.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -115,6 +113,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* WBFILTER_H */
+#endif // WBFILTER_H

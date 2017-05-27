@@ -38,8 +38,6 @@
 #include "curvesfilter.h"
 #include "tonalityfilter.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -199,6 +197,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* BWSEPIAFILTER_H */
+#endif // BWSEPIAFILTER_H

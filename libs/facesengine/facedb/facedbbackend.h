@@ -30,8 +30,6 @@
 #include "digikam_export.h"
 #include "dbenginebackend.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 

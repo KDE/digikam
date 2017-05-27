@@ -32,8 +32,6 @@
 #include "facedbaccess.h"
 #include "facedbbackend.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 

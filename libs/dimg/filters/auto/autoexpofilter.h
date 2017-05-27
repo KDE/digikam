@@ -31,8 +31,6 @@
 #include "digikam_globals.h"
 #include "filteraction.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -85,6 +83,6 @@ private:
     DImg m_refImage;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* AUTOEXPOFILTER_H */
+#endif // AUTOEXPOFILTER_H

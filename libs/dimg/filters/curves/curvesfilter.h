@@ -36,8 +36,6 @@
 #include "digikam_globals.h"
 #include "imagecurves.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -91,6 +89,6 @@ private:
     CurvesContainer m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* CURVESFILTER_H */
+#endif // CURVESFILTER_H

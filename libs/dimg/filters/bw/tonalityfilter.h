@@ -31,8 +31,6 @@
 #include "dimgthreadedfilter.h"
 #include "digikam_globals.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -109,6 +107,6 @@ private:
     TonalityContainer m_settings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* TONALITYFILTER_H */
+#endif // TONALITYFILTER_H

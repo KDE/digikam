@@ -37,8 +37,6 @@
 #include "digikam_export.h"
 #include "metaengine.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -143,8 +141,8 @@ protected:
 //! qDebug() stream operator. Writes property @a t to the debug output in a nicely formatted way.
 DIGIKAM_EXPORT QDebug operator<<(QDebug dbg, const Template& t);
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::Template)
 
-#endif /* TEMPLATE_H */
+#endif // TEMPLATE_H

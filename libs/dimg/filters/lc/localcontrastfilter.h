@@ -38,8 +38,6 @@
 #include "digikam_globals.h"
 #include "localcontrastcontainer.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -125,4 +123,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LOCALCONTRASTFILTER_H */
+#endif // LOCALCONTRASTFILTER_H
