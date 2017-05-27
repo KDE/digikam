@@ -33,8 +33,6 @@
 
 #include "dsavesettingswidget.h"
 
-using namespace Digikam;
-
 class KConfigGroup;
 
 namespace Digikam
@@ -112,4 +110,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* ENFUSESETTINGS_H */
+#endif // ENFUSESETTINGS_H

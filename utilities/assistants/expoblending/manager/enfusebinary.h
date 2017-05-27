@@ -28,8 +28,6 @@
 
 #include "dbinaryiface.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -74,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // ENFUSEBINARY_H
+#endif // ENFUSEBINARY_H

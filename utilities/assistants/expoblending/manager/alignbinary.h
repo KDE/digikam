@@ -28,8 +28,6 @@
 
 #include "dbinaryiface.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
@@ -58,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif  // ALIGNBINARY_H
+#endif // ALIGNBINARY_H
