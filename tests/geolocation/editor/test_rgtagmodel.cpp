@@ -35,6 +35,8 @@
 #include "rgtagmodel.h"
 #include "modeltest.h"
 
+using namespace Digikam;
+
 /**
  * @brief Dummy test that does nothing
  */
@@ -50,7 +52,7 @@ void TestRGTagModel::testModelEmpty()
     SimpleTreeModel* const treeModel = new SimpleTreeModel(1, this);
     new ModelTest(treeModel, this);
 
-    Digikam::RGTagModel* const tagModel = new Digikam::RGTagModel(treeModel, this);
+    RGTagModel* const tagModel = new RGTagModel(treeModel, this);
     new ModelTest(tagModel, this);
 }
 
@@ -68,7 +70,7 @@ void TestRGTagModel::testModel2()
     SimpleTreeModel::Item* const treeItem2 = treeModel->addItem();
     const QPersistentModelIndex treeItem2Index = treeModel->itemToIndex(treeItem2);
 
-    Digikam::RGTagModel* const tagModel = new Digikam::RGTagModel(treeModel, this);
+    RGTagModel* const tagModel = new RGTagModel(treeModel, this);
     // modeltest will be created at the end of this function to make sure it does not influence the result!
 
     // first, verify the row and column counts:
@@ -121,7 +123,7 @@ void TestRGTagModel::testModel3()
     SimpleTreeModel::Item* const treeItem2 = treeModel->addItem();
     const QPersistentModelIndex treeItem2Index = treeModel->itemToIndex(treeItem2);
 
-    Digikam::RGTagModel* const tagModel = new Digikam::RGTagModel(treeModel, this);
+    RGTagModel* const tagModel = new RGTagModel(treeModel, this);
     // modeltest will be created at the end of this function to make sure it does not influence the result!
 
     // first, verify the row and column counts:
@@ -159,7 +161,7 @@ void TestRGTagModel::testModel1()
     SimpleTreeModel::Item* const treeItem11 = treeModel->addItem(treeItem1);
     QPersistentModelIndex treeItem11Index = treeModel->itemToIndex(treeItem11);
 
-    Digikam::RGTagModel* const tagModel = new Digikam::RGTagModel(treeModel, this);
+    RGTagModel* const tagModel = new RGTagModel(treeModel, this);
     // TODO: make sure the ModelTest does not find any errors, currently it does find errors ;-)
     //new ModelTest(tagModel, this);
 
@@ -248,7 +250,7 @@ void TestRGTagModel::testModelSpacerTags()
     SimpleTreeModel::Item* const treeItem11 = treeModel->addItem(treeItem1);
     QPersistentModelIndex treeItem11Index = treeModel->itemToIndex(treeItem11);
 
-    Digikam::RGTagModel* const tagModel = new Digikam::RGTagModel(treeModel, this);
+    RGTagModel* const tagModel = new RGTagModel(treeModel, this);
     // TODO: make sure the ModelTest does not find any errors, currently it does find errors ;-)
     new ModelTest(tagModel, this);
 
