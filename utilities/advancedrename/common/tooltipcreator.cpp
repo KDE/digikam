@@ -40,8 +40,6 @@
 #include "option.h"
 #include "parser.h"
 
-using namespace Digikam;
-
 namespace Digikam
 {
 
