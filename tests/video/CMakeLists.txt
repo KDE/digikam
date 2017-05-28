@@ -14,6 +14,7 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(framesencoder_SRCS framesencoder.cpp)
@@ -52,4 +53,19 @@ target_link_libraries(qtavcodecs
                       KF5::XmlGui
 
                       ${OpenCV_LIBRARIES}
+)
+
+# =======================================================
+# Stand alone version of VideoSlideshow tool
+
+set(videoslideshow_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/videoslideshow.cpp)
+
+add_executable(videoslideshow ${videoslideshow_SRCS})
+
+target_link_libraries(videoslideshow
+                      digikamcore
+                      libdng
+
+                      Qt5::Gui
+                      Qt5::Xml
 )

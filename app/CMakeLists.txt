@@ -82,6 +82,13 @@ if(LIBXML2_FOUND AND LIBXSLT_FOUND)
     )
 endif()
 
+if(ENABLE_MEDIAPLAYER)
+    set(DIGIKAMCORE_OBJECTS
+        ${DIGIKAMCORE_OBJECTS}
+        $<TARGET_OBJECTS:videoslideshow_src>
+    )
+endif()
+
 include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
