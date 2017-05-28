@@ -1,5 +1,3 @@
  * Fix thumbnails
    o and EV computation (most likely not triggered because of the missing thumbnail)
- * Delete temporary previews ".kipi[...]" after final save
-   o Alternative: put them in the temporary directory
  * Change the default name to match the panorama plugin/Hugin convention, appending "-enfuse" at the end

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGTHREAD_H
-#define EXPOBLENDINGTHREAD_H
+#ifndef EXPO_BLENDING_THREAD_H
+#define EXPO_BLENDING_THREAD_H
 
 // Qt includes
 
@@ -101,6 +101,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* EXPOBLENDINGTHREAD_H */
+#endif // EXPO_BLENDING_THREAD_H

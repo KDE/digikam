@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ALIGNBINARY_H
-#define ALIGNBINARY_H
+#ifndef ALIGN_BINARY_H
+#define ALIGN_BINARY_H
 
 // Local includes
 
@@ -56,4 +56,4 @@ public:
 
 } // namespace Digikam
 
-#endif // ALIGNBINARY_H
+#endif // ALIGN_BINARY_H

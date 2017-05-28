@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGACTIONS_H
-#define EXPOBLENDINGACTIONS_H
+#ifndef EXPO_BLENDING_ACTIONS_H
+#define EXPO_BLENDING_ACTIONS_H
 
 // Qt includes
 
@@ -101,9 +101,9 @@ public:
     ExpoBlendingAction action;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::ExpoBlendingActionData)
 Q_DECLARE_METATYPE(Digikam::ExpoBlendingItemPreprocessedUrls)
 
-#endif /* EXPOBLENDINGACTIONS_H */
+#endif // EXPO_BLENDING_ACTIONS_H

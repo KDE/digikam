@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGMANAGER_H
-#define EXPOBLENDINGMANAGER_H
+#ifndef EXPO_BLENDING_MANAGER_H
+#define EXPO_BLENDING_MANAGER_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* EXPOBLENDINGMANAGER_H */
+#endif // EXPO_BLENDING_MANAGER_H

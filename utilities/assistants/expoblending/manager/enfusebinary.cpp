@@ -68,4 +68,4 @@ bool EnfuseBinary::parseHeader(const QString& output)
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

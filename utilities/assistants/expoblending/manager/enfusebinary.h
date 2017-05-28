@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef ENFUSEBINARY_H
-#define ENFUSEBINARY_H
+#ifndef ENFUSE_BINARY_H
+#define ENFUSE_BINARY_H
 
 // Local includes
 
@@ -72,4 +72,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ENFUSEBINARY_H
+#endif // ENFUSE_BINARY_H

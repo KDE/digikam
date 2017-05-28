@@ -72,8 +72,6 @@
 #include "drawdecoderwidget.h"
 #include "drawdecoding.h"
 
-
-
 namespace Digikam
 {
 
@@ -1046,4 +1044,4 @@ bool ExpoBlendingThread::getXmpRational(const char* xmpTagName, long& num, long&
     return false;
 }
 
-}  // namespace Digikam
+} // namespace Digikam
