@@ -24,6 +24,7 @@
 #include "maintenancethread.h"
 
 // Qt includes
+
 #include <QQueue>
 #include <QMutex>
 
@@ -337,4 +338,4 @@ int MaintenanceThread::getChunkSize(int elementCount)
 }
 */
 
-}  // namespace Digikam
+} // namespace Digikam

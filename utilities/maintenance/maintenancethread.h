@@ -152,9 +152,8 @@ private:
     */
 
     MaintenanceData* const data;
-
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* MAINTENANCE_THREAD_H */
+#endif // MAINTENANCE_THREAD_H
