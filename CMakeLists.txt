@@ -53,11 +53,11 @@ set(DBCORECONFIG_XML_VERSION "3")
 set(CMAKE_MIN_VERSION    "3.0.0")
 set(ECM_MIN_VERSION      "1.7.0")
 set(KF5_MIN_VERSION      "5.1.0")
-set(QT_MIN_VERSION       "5.2.0")
+set(QT_MIN_VERSION       "5.6.0")
 set(KIPI_MIN_VERSION     "5.0.0")
 set(KSANE_MIN_VERSION    "5.0.0")
 set(LENSFUN_MIN_VERSION  "0.2.6.0")
-set(EXIV2_MIN_VERSION    "0.25")
+set(EXIV2_MIN_VERSION    "0.26")
 set(AKONADI_MIN_VERSION  "4.89.0")        # Akonadi Contact dependency
 set(CALENDAR_MIN_VERSION "4.81.0")        # Calendar Core dependency
 
