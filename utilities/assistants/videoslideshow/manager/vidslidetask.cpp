@@ -231,8 +231,6 @@ void VidSlideTask::run()
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);
 
-    emit signalStarting(d->settings->inputImages.count());
-
     for (int i = -1 ; i < d->settings->inputImages.count() ; i++)
     {
         QString ifile = (i >= 0)
@@ -264,23 +262,26 @@ void VidSlideTask::run()
         }
         while (tmout != -1);
 
-        VideoFrame frame(qoimg);
-
-        int count = 0;
-
-        do
+        if (i+1 < d->settings->inputImages.count())
         {
-            if (d->encodeFrame(frame, venc, mux))
-            {
-                count++;
+            VideoFrame frame(qoimg);
 
-                qCDebug(DIGIKAM_GENERAL_LOG) << ofile
-                                             << " => encode count:" << count
-                                             << "frame size:"       << frame.width()
-                                             << "x"                 << frame.height();
+            int count = 0;
+
+            do
+            {
+                if (d->encodeFrame(frame, venc, mux))
+                {
+                    count++;
+
+                    qCDebug(DIGIKAM_GENERAL_LOG) << ofile
+                                                 << " => encode count:" << count
+                                                 << "frame size:"       << frame.width()
+                                                 << "x"                 << frame.height();
+                }
             }
+            while (count < d->settings->aframes);
         }
-        while (count < d->settings->aframes);
 
         emit signalProgress(i);
     }

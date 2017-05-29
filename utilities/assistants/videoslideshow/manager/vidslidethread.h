@@ -46,7 +46,6 @@ public:
 
 Q_SIGNALS:
 
-    void signalStarting(int max);
     void signalProgress(int val);
     void signalDone();
 };

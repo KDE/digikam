@@ -48,9 +48,6 @@ void VidSlideThread::processStream(VidSlideSettings* const settings)
 
     VidSlideTask* const t = new VidSlideTask(settings);
 
-    connect(t, SIGNAL(signalStarting(int)),
-            this, SIGNAL(signalStarting(int)));
-
     connect(t, SIGNAL(signalProgress(int)),
             this, SIGNAL(signalProgress(int)));
 

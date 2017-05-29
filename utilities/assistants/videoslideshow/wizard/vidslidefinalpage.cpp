@@ -136,13 +136,18 @@ void VidSlideFinalPage::slotProcess()
 
         foreach(const QUrl& url, d->iface->albumsItems(d->settings->inputAlbums))
         {
-            d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
-                                      DHistoryView::ProgressEntry);
+            d->settings->inputImages << url;
         }
     }
     else
     {
         d->progressView->addEntry(i18n("%1 input images to process", d->settings->inputImages.count()),
+                                  DHistoryView::ProgressEntry);
+    }
+
+    foreach(const QUrl& url, d->settings->inputImages)
+    {
+        d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
                                   DHistoryView::ProgressEntry);
     }
 
@@ -163,11 +168,10 @@ void VidSlideFinalPage::slotProcess()
                               QDir::toNativeSeparators(d->settings->outputVideo.toLocalFile())),
                               DHistoryView::ProgressEntry);
 
-    d->progressBar->reset();
-    d->encoder = new VidSlideThread(this);
+    d->progressBar->setMinimum(0);
+    d->progressBar->setMaximum(d->settings->inputImages.count());
 
-    connect(d->encoder, SIGNAL(signalStarting(int)),
-            d->progressBar, SLOT(setMaximum(int)));
+    d->encoder = new VidSlideThread(this);
 
     connect(d->encoder, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
@@ -186,12 +190,12 @@ void VidSlideFinalPage::slotDone()
 /*
     if (generator.warnings())
     {
-        d->progressView->addEntry(i18n("Gallery is completed, but some warnings occurred."),
+        d->progressView->addEntry(i18n("Video Slideshow is completed, but some warnings occurred."),
                                   DHistoryView::WarningEntry);
     }
     else
     {
-        d->progressView->addEntry(i18n("Gallery completed."),
+        d->progressView->addEntry(i18n("Video Slideshow completed."),
                                   DHistoryView::ProgressEntry);
     }
 */
