@@ -54,18 +54,3 @@ target_link_libraries(qtavcodecs
 
                       ${OpenCV_LIBRARIES}
 )
-
-# =======================================================
-# Stand alone version of VideoSlideshow tool
-
-set(videoslideshow_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/videoslideshow.cpp)
-
-add_executable(videoslideshow ${videoslideshow_SRCS})
-
-target_link_libraries(videoslideshow
-                      digikamcore
-                      libdng
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
