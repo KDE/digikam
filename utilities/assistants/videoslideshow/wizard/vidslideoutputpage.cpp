@@ -33,6 +33,7 @@
 #include <QStyle>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -42,7 +43,6 @@
 
 #include "vidslidewizard.h"
 #include "dfileselector.h"
-#include "dlayoutbox.h"
 
 namespace Digikam
 {
@@ -83,33 +83,23 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
 {
     setObjectName(QLatin1String("OutputPage"));
 
-    DVBox* const vbox         = new DVBox(this);
-    vbox->setContentsMargins(QMargins());
-    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    QWidget* const main       = new QWidget(this);
 
     // --------------------
 
-    DVBox* const hbox1        = new DVBox(vbox);
-    hbox1->setContentsMargins(QMargins());
-    hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    QLabel* const framesLabel = new QLabel(hbox1);
+    QLabel* const framesLabel = new QLabel(main);
     framesLabel->setWordWrap(false);
     framesLabel->setText(i18n("Number of Frames by Image:"));
-    d->framesVal              = new QSpinBox(hbox1);
+    d->framesVal              = new QSpinBox(main);
     d->framesVal->setRange(1, 9999);
     framesLabel->setBuddy(d->framesVal);
 
     // --------------------
 
-    DVBox* const hbox2        = new DVBox(vbox);
-    hbox2->setContentsMargins(QMargins());
-    hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    QLabel* const typeLabel = new QLabel(hbox2);
+    QLabel* const typeLabel = new QLabel(main);
     typeLabel->setWordWrap(false);
     typeLabel->setText(i18n("Video Type:"));
-    d->typeVal              = new QComboBox(hbox2);
+    d->typeVal              = new QComboBox(main);
     d->typeVal->setEditable(false);
     d->typeVal->addItem(i18n("VCD"),      (int)VidSlideSettings::VCD);
     d->typeVal->addItem(i18n("SVCD"),     (int)VidSlideSettings::SVCD);
@@ -121,14 +111,10 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
 
     // --------------------
 
-    DVBox* const hbox3        = new DVBox(vbox);
-    hbox3->setContentsMargins(QMargins());
-    hbox3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    QLabel* const transLabel = new QLabel(hbox3);
+    QLabel* const transLabel = new QLabel(main);
     transLabel->setWordWrap(false);
     transLabel->setText(i18n("Transition Type:"));
-    d->transVal              = new QComboBox(hbox3);
+    d->transVal              = new QComboBox(main);
     d->transVal->setEditable(false);
 
     QMap<TransitionMngr::TransType, QString> map                = TransitionMngr::transitionNames();
@@ -144,30 +130,36 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
 
     // --------------------
 
-    DVBox* const hbox4        = new DVBox(vbox);
-    hbox4->setContentsMargins(QMargins());
-    hbox4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    QLabel* const fileLabel  = new QLabel(main);
+    fileLabel->setWordWrap(false);
+    fileLabel->setText(i18n("Output video file:"));
 
-    QLabel* const textLabel1  = new QLabel(hbox4);
-    textLabel1->setWordWrap(false);
-    textLabel1->setText(i18n("Output video file:"));
-
-    d->destUrl = new DFileSelector(hbox4);
+    d->destUrl = new DFileSelector(main);
     d->destUrl->setFileDlgMode(QFileDialog::AnyFile);
     d->destUrl->setFileDlgTitle(i18n("Output Video File"));
-    textLabel1->setBuddy(d->destUrl);
+    fileLabel->setBuddy(d->destUrl);
 
     // --------------------
 
-    d->openInPlayer           = new QCheckBox(vbox);
+    d->openInPlayer           = new QCheckBox(main);
     d->openInPlayer->setText(i18n("Open in video player"));
 
     // --------------------
 
-    QWidget* const spacer    = new QWidget(vbox);
-    vbox->setStretchFactor(spacer, 10);
+    QGridLayout* const grid = new QGridLayout(main);
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->addWidget(framesLabel,     0, 0, 1, 1);
+    grid->addWidget(d->framesVal,    0, 1, 1, 1);
+    grid->addWidget(typeLabel,       1, 0, 1, 1);
+    grid->addWidget(d->typeVal,      1, 1, 1, 1);
+    grid->addWidget(transLabel,      2, 0, 1, 1);
+    grid->addWidget(d->transVal,     2, 1, 1, 1);
+    grid->addWidget(fileLabel,       3, 0, 1, 1);
+    grid->addWidget(d->destUrl,      3, 1, 1, 1);
+    grid->addWidget(d->openInPlayer, 5, 0, 1, 2);
+    grid->setRowStretch(6, 10);
 
-    setPageWidget(vbox);
+    setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-video")));
 
     connect(d->destUrl->lineEdit(), SIGNAL(textEdited(QString)),
