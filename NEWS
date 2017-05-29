@@ -69,4 +69,6 @@ BUGFIXES FROM BUGZILLA:
 048 ==> 379833 - Sidecar files are not being created for some files.
 049 ==> 139693 - Include videos to slideshow.
 050 ==> 121422 - Do not open videos using external application.
-051 ==> 
+051 ==> 380260 - Sidecar files are not being created still.
+052 ==> 
+
