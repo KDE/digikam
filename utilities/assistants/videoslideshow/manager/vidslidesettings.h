@@ -29,6 +29,7 @@
 #include <QList>
 #include <QUrl>
 #include <QSize>
+#include <QMap>
 
 // Local includes
 
@@ -53,13 +54,19 @@ public:
     // See https://en.wikipedia.org/wiki/List_of_common_resolutions#Digital_TV_standards
     enum VidType
     {
-        VCD = 0,        // 352  x 240   (240p)
-        SVCD,           // 480  x 576   (576p)
-        DVD,            // 720  x 480   (480p)
-        HDTV,           // 1280 x 720   (720p)
-        BLUERAY,        // 1920 x 1080  (1080p)
-        UHD4K,          // 3840 x 2160  (4k)
-        UHD8K           // 7680 x 4320  (8k)
+        RIM240 = 0,     // 240  x 136
+        QVGA,           // 320  x 180
+        VCD,            // 352  x 240
+        HVGA,           // 480  x 270
+        SVCD,           // 480  x 576
+        VGA,            // 640  x 360
+        DVD,            // 720  x 576
+        WVGA,           // 800  x 450
+        XVGA,           // 1024 x 576
+        HDTV,           // 1280 x 720
+        BLUERAY,        // 1920 x 1080
+        UHD4K,          // 3840 x 2160
+        UHD8K           // 7680 x 4320
     };
 
 public:
@@ -67,8 +74,12 @@ public:
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
+    QSize typeToSize() const;
+
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
+
+    static QMap<VidType, QString> typeNames();
 
 public:
 

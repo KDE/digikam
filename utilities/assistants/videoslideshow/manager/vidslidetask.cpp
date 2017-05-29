@@ -149,43 +149,9 @@ void VidSlideTask::run()
     venc->setCodecName(QLatin1String("libx264"));
     venc->setBitRate(1024*1024);
 
-    switch(d->settings->outputType)
-    {
-        case VidSlideSettings::VCD:
-            venc->setWidth(352);
-            venc->setHeight(240);
-            break;
-
-        case VidSlideSettings::SVCD:
-            venc->setWidth(480);
-            venc->setHeight(576);
-            break;
-
-        case VidSlideSettings::DVD:
-            venc->setWidth(720);
-            venc->setHeight(480);
-            break;
-
-        case VidSlideSettings::HDTV:
-            venc->setWidth(1280);
-            venc->setHeight(720);
-            break;
-
-        case VidSlideSettings::UHD4K:
-            venc->setWidth(3840);
-            venc->setHeight(2160);
-            break;
-
-        case VidSlideSettings::UHD8K:
-            venc->setWidth(7680);
-            venc->setHeight(4320);
-            break;
-
-        default: // VidSlideSettings::BLUERAY
-            venc->setWidth(1920);
-            venc->setHeight(1080);
-            break;
-    }
+    QSize osize = d->settings->typeToSize();
+    venc->setWidth(osize.width());
+    venc->setHeight(osize.height());
 
     if (!venc->open())
     {
@@ -223,7 +189,6 @@ void VidSlideTask::run()
     // ---------------------------------------------
     // Loop to encode frames with images list
 
-    QSize osize(venc->width(), venc->height());
     TransitionMngr tmngr;
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);

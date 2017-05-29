@@ -101,12 +101,16 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     typeLabel->setText(i18n("Video Type:"));
     d->typeVal              = new QComboBox(main);
     d->typeVal->setEditable(false);
-    d->typeVal->addItem(i18n("VCD"),      (int)VidSlideSettings::VCD);
-    d->typeVal->addItem(i18n("SVCD"),     (int)VidSlideSettings::SVCD);
-    d->typeVal->addItem(i18n("DVD"),      (int)VidSlideSettings::DVD);
-    d->typeVal->addItem(i18n("HDTV"),     (int)VidSlideSettings::HDTV);
-    d->typeVal->addItem(i18n("Blue Ray"), (int)VidSlideSettings::BLUERAY);
-    d->typeVal->addItem(i18n("UHD 4K"),   (int)VidSlideSettings::UHD4K);
+
+    QMap<VidSlideSettings::VidType, QString> map                = VidSlideSettings::typeNames();
+    QMap<VidSlideSettings::VidType, QString>::const_iterator it = map.constBegin();
+
+    while (it != map.constEnd())
+    {
+        d->typeVal->addItem(it.value(), (int)it.key());
+        ++it;
+    }
+
     typeLabel->setBuddy(d->typeVal);
 
     // --------------------
@@ -117,13 +121,13 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     d->transVal              = new QComboBox(main);
     d->transVal->setEditable(false);
 
-    QMap<TransitionMngr::TransType, QString> map                = TransitionMngr::transitionNames();
-    QMap<TransitionMngr::TransType, QString>::const_iterator it = map.constBegin();
+    QMap<TransitionMngr::TransType, QString> map2                = TransitionMngr::transitionNames();
+    QMap<TransitionMngr::TransType, QString>::const_iterator it2 = map2.constBegin();
 
-    while (it != map.constEnd())
+    while (it2 != map2.constEnd())
     {
-        d->transVal->addItem(it.value(), (int)it.key());
-        ++it;
+        d->transVal->addItem(it2.value(), (int)it2.key());
+        ++it2;
     }
 
     transLabel->setBuddy(d->transVal);
