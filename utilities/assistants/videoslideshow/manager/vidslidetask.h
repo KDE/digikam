@@ -45,10 +45,6 @@ public:
     VidSlideTask(VidSlideSettings* const settings);
     ~VidSlideTask();
 
-public Q_SLOTS:
-
-    void slotCancel();
-
 Q_SIGNALS:
 
     void signalDone(bool);

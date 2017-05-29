@@ -56,16 +56,12 @@ public:
     Private()
     {
         settings = 0;
-        cancel   = false;
     }
-
 
     bool encodeFrame(VideoFrame& frame, VideoEncoder* const venc, AVMuxer& mux) const;
     QImage makeFramedImage(const QString& file, const QSize& outSize) const;
 
 public:
-
-    bool              cancel;
 
     VidSlideSettings* settings;
 };
@@ -128,13 +124,8 @@ VidSlideTask::VidSlideTask(VidSlideSettings* const settings)
 
 VidSlideTask::~VidSlideTask()
 {
-    slotCancel();
+    cancel();
     delete d;
-}
-
-void VidSlideTask::slotCancel()
-{
-    d->cancel = true;
 }
 
 void VidSlideTask::run()
@@ -194,7 +185,7 @@ void VidSlideTask::run()
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);
 
-    for (int i = -1 ; i < d->settings->inputImages.count() && !d->cancel ; i++)
+    for (int i = -1 ; i < d->settings->inputImages.count() && !m_cancel ; i++)
     {
         QString ifile = (i >= 0)
                         ? d->settings->inputImages[i].toLocalFile()
@@ -223,7 +214,7 @@ void VidSlideTask::run()
 //                qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
             }
         }
-        while (tmout != -1 && !d->cancel);
+        while (tmout != -1 && !m_cancel);
 
         if (i+1 < d->settings->inputImages.count())
         {
@@ -245,7 +236,7 @@ void VidSlideTask::run()
 */
                 }
             }
-            while (count < d->settings->aframes && !d->cancel);
+            while (count < d->settings->aframes && !m_cancel);
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i+1 << "done";
@@ -258,7 +249,7 @@ void VidSlideTask::run()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Encode delayed frames...";
 
-    while (venc->encode() && !d->cancel)
+    while (venc->encode() && !m_cancel)
     {
         Packet pkt(venc->encoded());
         mux.writeVideo(pkt);
@@ -270,7 +261,7 @@ void VidSlideTask::run()
     venc->close();
     mux.close();
 
-    emit signalDone(!d->cancel);
+    emit signalDone(!m_cancel);
 }
 
 }  // namespace Digikam

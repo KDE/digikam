@@ -101,6 +101,9 @@ VidSlideFinalPage::VidSlideFinalPage(QWizard* const dialog, const QString& title
 
 VidSlideFinalPage::~VidSlideFinalPage()
 {
+    if (d->encoder)
+        d->encoder->cancel();
+
     delete d;
 }
 
@@ -181,6 +184,12 @@ void VidSlideFinalPage::slotProcess()
 
     d->encoder->processStream(d->settings);
     d->encoder->start();
+}
+
+void VidSlideFinalPage::cleanupPage()
+{
+    if (d->encoder)
+        d->encoder->cancel();
 }
 
 void VidSlideFinalPage::slotDone(bool completed)
