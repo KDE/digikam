@@ -176,37 +176,36 @@ void VidSlideFinalPage::slotProcess()
     connect(d->encoder, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
 
-    connect(d->encoder, SIGNAL(signalDone()),
-            this, SLOT(slotDone()));
+    connect(d->encoder, SIGNAL(signalDone(bool)),
+            this, SLOT(slotDone(bool)));
 
     d->encoder->processStream(d->settings);
     d->encoder->start();
 }
 
-void VidSlideFinalPage::slotDone()
+void VidSlideFinalPage::slotDone(bool completed)
 {
     d->progressBar->progressCompleted();
+    d->complete = completed;
 
-/*
-    if (generator.warnings())
+    if (!d->complete)
     {
-        d->progressView->addEntry(i18n("Video Slideshow is completed, but some warnings occurred."),
+        d->progressView->addEntry(i18n("Video Slideshow is not completed"),
                                   DHistoryView::WarningEntry);
     }
     else
     {
         d->progressView->addEntry(i18n("Video Slideshow completed."),
                                   DHistoryView::ProgressEntry);
-    }
-*/
-    if (d->settings->openInPlayer)
-    {
-        QDesktopServices::openUrl(d->settings->outputVideo);
-        d->progressView->addEntry(i18n("Opening video stream in player..."),
-                                  DHistoryView::ProgressEntry);
+
+        if (d->settings->openInPlayer)
+        {
+            QDesktopServices::openUrl(d->settings->outputVideo);
+            d->progressView->addEntry(i18n("Opening video stream in player..."),
+                                    DHistoryView::ProgressEntry);
+        }
     }
 
-    d->complete = true;
     emit completeChanged();
 }
 

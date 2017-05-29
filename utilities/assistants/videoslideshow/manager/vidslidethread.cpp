@@ -51,8 +51,8 @@ void VidSlideThread::processStream(VidSlideSettings* const settings)
     connect(t, SIGNAL(signalProgress(int)),
             this, SIGNAL(signalProgress(int)));
 
-    connect(t, SIGNAL(signalDone()),
-            this, SIGNAL(signalDone()));
+    connect(t, SIGNAL(signalDone(bool)),
+            this, SIGNAL(signalDone(bool)));
 
     collection.insert(t, 0);
 

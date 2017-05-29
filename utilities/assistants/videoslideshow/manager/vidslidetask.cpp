@@ -139,11 +139,6 @@ void VidSlideTask::slotCancel()
 
 void VidSlideTask::run()
 {
-    if (d->cancel)
-    {
-        return;
-    }
-
     // The output video file
     QString outFile = d->settings->outputVideo.toLocalFile();
 
@@ -195,6 +190,7 @@ void VidSlideTask::run()
     if (!venc->open())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "failed to open encoder";
+        emit signalDone(false);
         return;
     }
 
@@ -220,6 +216,7 @@ void VidSlideTask::run()
     if (!mux.open())
     {
         qCWarning(DIGIKAM_GENERAL_LOG) << "failed to open muxer";
+        emit signalDone(false);
         return;
     }
 
@@ -231,7 +228,7 @@ void VidSlideTask::run()
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);
 
-    for (int i = -1 ; i < d->settings->inputImages.count() ; i++)
+    for (int i = -1 ; i < d->settings->inputImages.count() && !d->cancel ; i++)
     {
         QString ifile = (i >= 0)
                         ? d->settings->inputImages[i].toLocalFile()
@@ -260,7 +257,7 @@ void VidSlideTask::run()
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
             }
         }
-        while (tmout != -1);
+        while (tmout != -1 && !d->cancel);
 
         if (i+1 < d->settings->inputImages.count())
         {
@@ -280,10 +277,10 @@ void VidSlideTask::run()
                                                  << "x"                 << frame.height();
                 }
             }
-            while (count < d->settings->aframes);
+            while (count < d->settings->aframes && !d->cancel);
         }
 
-        emit signalProgress(i);
+        emit signalProgress(i+1);
     }
 
     // ---------------------------------------------
@@ -291,7 +288,7 @@ void VidSlideTask::run()
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "encode delayed frames...";
 
-    while (venc->encode())
+    while (venc->encode() && !d->cancel)
     {
         Packet pkt(venc->encoded());
         mux.writeVideo(pkt);
@@ -303,7 +300,7 @@ void VidSlideTask::run()
     venc->close();
     mux.close();
 
-    emit signalDone();
+    emit signalDone(!d->cancel);
 }
 
 }  // namespace Digikam
