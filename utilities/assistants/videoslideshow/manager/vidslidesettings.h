@@ -84,7 +84,6 @@ public:
 
 public:
 
-    bool                      openInPlayer;  // Open video stream in desktop player at end.
     Selection                 selMode;       // Items selection mode
 
     QList<QUrl>               inputImages;   // Selection::IMAGES
@@ -94,11 +93,15 @@ public:
 
     TransitionMngr::TransType transition;    // Transition type between images.
 
-    int                       aframes;       // Amount of frames to encode in video stream by image.
-                                             // ex: 120 frames = 5 s at 24 img/s.
+    int                       aframes;       // Amount of frames to encode by image in video stream.
+                                             // ex: 125 frames = 5 s at 25 img/s.
 
+    int                       vbitRate;      // Encoded Video stream bit rate in byte/s.
+    qreal                     frameRate;     // Encoded Video stream frame rate in img/s.
     VidType                   outputType;    // Encoded video type.
     QUrl                      outputVideo;   // Encoded video stream.
+
+    bool                      openInPlayer;  // Open video stream in desktop player at end.
 };
 
 } // namespace Digikam

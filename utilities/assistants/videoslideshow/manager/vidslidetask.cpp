@@ -147,7 +147,8 @@ void VidSlideTask::run()
 
     VideoEncoder* const venc       = VideoEncoder::create("FFmpeg");
     venc->setCodecName(QLatin1String("libx264"));
-    venc->setBitRate(1024*1024);
+    venc->setBitRate(d->settings->vbitRate);
+    venc->setFrameRate(d->settings->frameRate);
 
     QSize osize = d->settings->typeToSize();
     venc->setWidth(osize.width());

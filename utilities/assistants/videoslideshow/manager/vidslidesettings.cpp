@@ -36,7 +36,9 @@ VidSlideSettings::VidSlideSettings()
     openInPlayer = true;
     selMode      = IMAGES;
     outputType   = BLUERAY;
-    aframes      = 120;
+    aframes      = 125;
+    frameRate    = 25.0;
+    vbitRate     = 1024*1024;
     transition   = TransitionMngr::None;
     outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
 }
@@ -56,7 +58,11 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
                    (int)TransitionMngr::None);
     aframes      = group.readEntry("AFrames",
-                   120);
+                   125);
+    frameRate      = group.readEntry("FrameRate",
+                   25.0);
+    vbitRate      = group.readEntry("FrameRate",
+                   1024*1024);
     outputVideo  = group.readEntry("OutputVideo",
                    QUrl::fromLocalFile(QLatin1String("./out.mp4")));
 }
@@ -68,6 +74,8 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("OutputType",   (int)outputType);
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("AFrames",      aframes);
+    group.writeEntry("VBitRate",     vbitRate);
+    group.writeEntry("FramesRate",   frameRate);
     group.writeEntry("OutputVideo",  outputVideo);
 }
 
