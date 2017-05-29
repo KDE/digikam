@@ -80,7 +80,8 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     textLabel1->setText(i18n("Output video file:"));
 
     d->destUrl = new DFileSelector(hbox1);
-    d->destUrl->setFileDlgMode(QFileDialog::Directory);
+    d->destUrl->setFileDlgMode(QFileDialog::AnyFile);
+    d->destUrl->setFileDlgTitle(i18n("Output Video File"));
     textLabel1->setBuddy(d->destUrl);
 
     // --------------------
