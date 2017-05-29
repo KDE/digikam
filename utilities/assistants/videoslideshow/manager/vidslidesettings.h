@@ -34,6 +34,8 @@
 
 #include "dinfointerface.h"
 
+class KConfigGroup;
+
 namespace Digikam
 {
 
@@ -52,20 +54,23 @@ public:
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
 public:
 
-    bool                      openInPlayer;
-    Selection                 selMode;
+    bool                      openInPlayer;  // Open video stream in desktop player at end.
+    Selection                 selMode;       // Items selection mode
 
     QList<QUrl>               inputImages;   // Selection::IMAGES
     DInfoInterface::DAlbumIDs inputAlbums;   // Selection::ALBUMS
 
-    QList<QUrl>               inputAudio;    // Soundtracks stream
+    QList<QUrl>               inputAudio;    // Soundtracks streams.
 
-    // Amount of frames to encode in video stream by image.
-    // ex: 120 frames = 5 s at 24 img/s.
-    int                       aframes;
-    QSize                     outputSize;
+    int                       aframes;       // Amount of frames to encode in video stream by image.
+                                             // ex: 120 frames = 5 s at 24 img/s.
+
+    QSize                     outputSize;    // Encoded video size in pixels.
     QUrl                      outputVideo;   // Encoded video stream.
 };
 

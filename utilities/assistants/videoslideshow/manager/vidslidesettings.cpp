@@ -22,6 +22,11 @@
 
 #include "vidslidesettings.h"
 
+// KDE includes
+
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
 namespace Digikam
 {
 
@@ -36,6 +41,24 @@ VidSlideSettings::VidSlideSettings()
 
 VidSlideSettings::~VidSlideSettings()
 {
+}
+
+void VidSlideSettings::readSettings(KConfigGroup& group)
+{
+    openInPlayer = group.readEntry("OpenInPlayer",       true);
+    selMode      = (Selection)group.readEntry("SelMode", (int)IMAGES);
+    outputSize   = group.readEntry("OutputSize",         QSize(1024, 768));
+    aframes      = group.readEntry("AFrames",            120);
+    outputVideo  = group.readEntry("OutputVideo",        QUrl::fromLocalFile(QLatin1String("./out.mp4")));
+}
+
+void VidSlideSettings::writeSettings(KConfigGroup& group)
+{
+    group.writeEntry("OpenInPlayer", openInPlayer);
+    group.writeEntry("SelMode",      (int)selMode);
+    group.writeEntry("OutputSize",   outputSize);
+    group.writeEntry("AFrames",      aframes);
+    group.writeEntry("OutputVideo",  outputVideo);
 }
 
 } // namespace Digikam
