@@ -43,24 +43,24 @@ namespace Digikam
 
 void TransitionMngr::Private::registerEffects()
 {
-    effectList.insert(TransitionMngr::None,            &TransitionMngr::Private::effectNone);
-    effectList.insert(TransitionMngr::ChessBoard,      &TransitionMngr::Private::effectChessboard);
-    effectList.insert(TransitionMngr::MeltDown,        &TransitionMngr::Private::effectMeltdown);
-    effectList.insert(TransitionMngr::Sweep,           &TransitionMngr::Private::effectSweep);
-    effectList.insert(TransitionMngr::Mosaic,          &TransitionMngr::Private::effectMosaic);
-    effectList.insert(TransitionMngr::Cubism,          &TransitionMngr::Private::effectCubism);
-    effectList.insert(TransitionMngr::Growing,         &TransitionMngr::Private::effectGrowing);
-    effectList.insert(TransitionMngr::HorizontalLines, &TransitionMngr::Private::effectHorizLines);
-    effectList.insert(TransitionMngr::VerticalLines,   &TransitionMngr::Private::effectVertLines);
-    effectList.insert(TransitionMngr::CircleOut,       &TransitionMngr::Private::effectCircleOut);
-    effectList.insert(TransitionMngr::MultiCircleOut,  &TransitionMngr::Private::effectMultiCircleOut);
-    effectList.insert(TransitionMngr::SpiralIn,        &TransitionMngr::Private::effectSpiralIn);
-    effectList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
+    transList.insert(TransitionMngr::None,            &TransitionMngr::Private::effectNone);
+    transList.insert(TransitionMngr::ChessBoard,      &TransitionMngr::Private::effectChessboard);
+    transList.insert(TransitionMngr::MeltDown,        &TransitionMngr::Private::effectMeltdown);
+    transList.insert(TransitionMngr::Sweep,           &TransitionMngr::Private::effectSweep);
+    transList.insert(TransitionMngr::Mosaic,          &TransitionMngr::Private::effectMosaic);
+    transList.insert(TransitionMngr::Cubism,          &TransitionMngr::Private::effectCubism);
+    transList.insert(TransitionMngr::Growing,         &TransitionMngr::Private::effectGrowing);
+    transList.insert(TransitionMngr::HorizontalLines, &TransitionMngr::Private::effectHorizLines);
+    transList.insert(TransitionMngr::VerticalLines,   &TransitionMngr::Private::effectVertLines);
+    transList.insert(TransitionMngr::CircleOut,       &TransitionMngr::Private::effectCircleOut);
+    transList.insert(TransitionMngr::MultiCircleOut,  &TransitionMngr::Private::effectMultiCircleOut);
+    transList.insert(TransitionMngr::SpiralIn,        &TransitionMngr::Private::effectSpiralIn);
+    transList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
 }
 
-TransitionMngr::Effect TransitionMngr::Private::getRandomEffect() const
+TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
 {
-    QList<TransitionMngr::Effect> effs = effectList.keys();
+    QList<TransitionMngr::TransType> effs = transList.keys();
     effs.removeAt(effs.indexOf(TransitionMngr::None));
 
     int count = effs.count();

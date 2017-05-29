@@ -26,11 +26,13 @@
 
 #include <QIcon>
 #include <QLabel>
+#include <QSpinBox>
 #include <QUrl>
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
 #include <QCheckBox>
+#include <QComboBox>
 
 // KDE includes
 
@@ -49,44 +51,115 @@ class VidSlideOutputPage::Private
 {
 public:
 
-    Private()
+    Private(QWizard* const dialog)
       : destUrl(0),
-        openInPlayer(0)
+        framesVal(0),
+        typeVal(0),
+        transVal(0),
+        openInPlayer(0),
+        wizard(0),
+        settings(0)
     {
+        wizard = dynamic_cast<VidSlideWizard*>(dialog);
+
+        if (wizard)
+        {
+            settings = wizard->settings();
+        }
     }
 
-    DFileSelector* destUrl;
-    QCheckBox*     openInPlayer;
+    DFileSelector*    destUrl;
+    QSpinBox*         framesVal;
+    QComboBox*        typeVal;
+    QComboBox*        transVal;
+    QCheckBox*        openInPlayer;
+    VidSlideWizard*   wizard;
+    VidSlideSettings* settings;
 };
 
 VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
-      d(new Private)
+      d(new Private(dialog))
 {
     setObjectName(QLatin1String("OutputPage"));
 
-    DVBox* const vbox        = new DVBox(this);
+    DVBox* const vbox         = new DVBox(this);
     vbox->setContentsMargins(QMargins());
     vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // --------------------
 
-    DVBox* const hbox1       = new DVBox(vbox);
+    DVBox* const hbox1        = new DVBox(vbox);
     hbox1->setContentsMargins(QMargins());
     hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
-    QLabel* const textLabel1 = new QLabel(hbox1);
+    QLabel* const framesLabel = new QLabel(hbox1);
+    framesLabel->setWordWrap(false);
+    framesLabel->setText(i18n("Number of Frames by Image:"));
+    d->framesVal              = new QSpinBox(hbox1);
+    d->framesVal->setRange(1, 9999);
+    framesLabel->setBuddy(d->framesVal);
+
+    // --------------------
+
+    DVBox* const hbox2        = new DVBox(vbox);
+    hbox2->setContentsMargins(QMargins());
+    hbox2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QLabel* const typeLabel = new QLabel(hbox2);
+    typeLabel->setWordWrap(false);
+    typeLabel->setText(i18n("Video Type:"));
+    d->typeVal              = new QComboBox(hbox2);
+    d->typeVal->setEditable(false);
+    d->typeVal->addItem(i18n("VCD"),      (int)VidSlideSettings::VCD);
+    d->typeVal->addItem(i18n("SVCD"),     (int)VidSlideSettings::SVCD);
+    d->typeVal->addItem(i18n("DVD"),      (int)VidSlideSettings::DVD);
+    d->typeVal->addItem(i18n("HDTV"),     (int)VidSlideSettings::HDTV);
+    d->typeVal->addItem(i18n("Blue Ray"), (int)VidSlideSettings::BLUERAY);
+    d->typeVal->addItem(i18n("UHD 4K"),   (int)VidSlideSettings::UHD4K);
+    typeLabel->setBuddy(d->typeVal);
+
+    // --------------------
+
+    DVBox* const hbox3        = new DVBox(vbox);
+    hbox3->setContentsMargins(QMargins());
+    hbox3->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QLabel* const transLabel = new QLabel(hbox3);
+    transLabel->setWordWrap(false);
+    transLabel->setText(i18n("Transition Type:"));
+    d->transVal              = new QComboBox(hbox3);
+    d->transVal->setEditable(false);
+
+    QMap<TransitionMngr::TransType, QString> map                = TransitionMngr::transitionNames();
+    QMap<TransitionMngr::TransType, QString>::const_iterator it = map.constBegin();
+
+    while (it != map.constEnd())
+    {
+        d->transVal->addItem(it.value(), (int)it.key());
+        ++it;
+    }
+
+    transLabel->setBuddy(d->transVal);
+
+    // --------------------
+
+    DVBox* const hbox4        = new DVBox(vbox);
+    hbox4->setContentsMargins(QMargins());
+    hbox4->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QLabel* const textLabel1  = new QLabel(hbox4);
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Output video file:"));
 
-    d->destUrl = new DFileSelector(hbox1);
+    d->destUrl = new DFileSelector(hbox4);
     d->destUrl->setFileDlgMode(QFileDialog::AnyFile);
     d->destUrl->setFileDlgTitle(i18n("Output Video File"));
     textLabel1->setBuddy(d->destUrl);
 
     // --------------------
 
-    d->openInPlayer          = new QCheckBox(vbox);
+    d->openInPlayer           = new QCheckBox(vbox);
     d->openInPlayer->setText(i18n("Open in video player"));
 
     // --------------------
@@ -111,15 +184,11 @@ VidSlideOutputPage::~VidSlideOutputPage()
 
 void VidSlideOutputPage::initializePage()
 {
-    VidSlideWizard* const wizard = dynamic_cast<VidSlideWizard*>(assistant());
-
-    if (!wizard)
-        return;
-
-    VidSlideSettings* const settings  = wizard->settings();
-
-    d->destUrl->setFileDlgPath(settings->outputVideo.toLocalFile());
-    d->openInPlayer->setChecked(settings->openInPlayer);
+    d->destUrl->setFileDlgPath(d->settings->outputVideo.toLocalFile());
+    d->openInPlayer->setChecked(d->settings->openInPlayer);
+    d->framesVal->setValue(d->settings->aframes);
+    d->typeVal->setCurrentIndex(d->settings->outputType);
+    d->transVal->setCurrentIndex(d->settings->transition);
 }
 
 bool VidSlideOutputPage::validatePage()
@@ -127,15 +196,11 @@ bool VidSlideOutputPage::validatePage()
     if (d->destUrl->fileDlgPath().isEmpty())
         return false;
 
-    VidSlideWizard* const wizard = dynamic_cast<VidSlideWizard*>(assistant());
-
-    if (!wizard)
-        return false;
-
-    VidSlideSettings* const settings  = wizard->settings();
-
-    settings->outputVideo  = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
-    settings->openInPlayer = d->openInPlayer->isChecked();
+    d->settings->outputVideo  = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
+    d->settings->openInPlayer = d->openInPlayer->isChecked();
+    d->settings->aframes      = d->framesVal->value();
+    d->settings->outputType   = (VidSlideSettings::VidType)d->typeVal->currentIndex();
+    d->settings->transition   = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;
 }

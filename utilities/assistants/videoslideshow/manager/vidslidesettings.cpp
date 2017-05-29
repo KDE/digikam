@@ -34,8 +34,9 @@ VidSlideSettings::VidSlideSettings()
 {
     openInPlayer = true;
     selMode      = IMAGES;
-    outputSize   = QSize(1024, 768);
+    outputType   = BLUERAY;
     aframes      = 120;
+    transition   = TransitionMngr::None;
     outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
 }
 
@@ -45,18 +46,26 @@ VidSlideSettings::~VidSlideSettings()
 
 void VidSlideSettings::readSettings(KConfigGroup& group)
 {
-    openInPlayer = group.readEntry("OpenInPlayer",       true);
-    selMode      = (Selection)group.readEntry("SelMode", (int)IMAGES);
-    outputSize   = group.readEntry("OutputSize",         QSize(1024, 768));
-    aframes      = group.readEntry("AFrames",            120);
-    outputVideo  = group.readEntry("OutputVideo",        QUrl::fromLocalFile(QLatin1String("./out.mp4")));
+    openInPlayer = group.readEntry("OpenInPlayer",
+                   true);
+    selMode      = (Selection)group.readEntry("SelMode",
+                   (int)IMAGES);
+    outputType   = (VidType)group.readEntry("OutputType",
+                   (int)BLUERAY);
+    transition   = (TransitionMngr::TransType)group.readEntry("Transition",
+                   (int)TransitionMngr::None);
+    aframes      = group.readEntry("AFrames",
+                   120);
+    outputVideo  = group.readEntry("OutputVideo",
+                   QUrl::fromLocalFile(QLatin1String("./out.mp4")));
 }
 
 void VidSlideSettings::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("OpenInPlayer", openInPlayer);
     group.writeEntry("SelMode",      (int)selMode);
-    group.writeEntry("OutputSize",   outputSize);
+    group.writeEntry("OutputType",   (int)outputType);
+    group.writeEntry("Transition",   (int)transition);
     group.writeEntry("AFrames",      aframes);
     group.writeEntry("OutputVideo",  outputVideo);
 }

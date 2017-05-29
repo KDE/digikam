@@ -153,8 +153,44 @@ void VidSlideTask::run()
     VideoEncoder* const venc       = VideoEncoder::create("FFmpeg");
     venc->setCodecName(QLatin1String("libx264"));
     venc->setBitRate(1024*1024);
-    venc->setWidth(d->settings->outputSize.width());
-    venc->setHeight(d->settings->outputSize.height());
+
+    switch(d->settings->outputType)
+    {
+        case VidSlideSettings::VCD:
+            venc->setWidth(352);
+            venc->setHeight(240);
+            break;
+
+        case VidSlideSettings::SVCD:
+            venc->setWidth(480);
+            venc->setHeight(576);
+            break;
+
+        case VidSlideSettings::DVD:
+            venc->setWidth(720);
+            venc->setHeight(480);
+            break;
+
+        case VidSlideSettings::HDTV:
+            venc->setWidth(1280);
+            venc->setHeight(720);
+            break;
+
+        case VidSlideSettings::UHD4K:
+            venc->setWidth(3840);
+            venc->setHeight(2160);
+            break;
+
+        case VidSlideSettings::UHD8K:
+            venc->setWidth(7680);
+            venc->setHeight(4320);
+            break;
+
+        default: // VidSlideSettings::BLUERAY
+            venc->setWidth(1920);
+            venc->setHeight(1080);
+            break;
+    }
 
     if (!venc->open())
     {
@@ -190,9 +226,10 @@ void VidSlideTask::run()
     // ---------------------------------------------
     // Loop to encode frames with images list
 
+    QSize osize(venc->width(), venc->height());
     TransitionMngr tmngr;
-    tmngr.setOutputSize(d->settings->outputSize);
-    tmngr.setEffect(TransitionMngr::HorizontalLines);
+    tmngr.setOutputSize(osize);
+    tmngr.setTransition(d->settings->transition);
 
     emit signalStarting(d->settings->inputImages.count());
 
@@ -205,8 +242,8 @@ void VidSlideTask::run()
                         ? d->settings->inputImages[i+1].toLocalFile()
                         : QString();
 
-        QImage qiimg  = d->makeFramedImage(ifile, d->settings->outputSize);
-        QImage qoimg  = d->makeFramedImage(ofile, d->settings->outputSize);
+        QImage qiimg  = d->makeFramedImage(ifile, osize);
+        QImage qoimg  = d->makeFramedImage(ofile, osize);
 
         tmngr.setInImage(qiimg);
         tmngr.setOutImage(qoimg);

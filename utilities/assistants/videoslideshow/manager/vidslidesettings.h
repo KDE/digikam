@@ -33,6 +33,7 @@
 // Local includes
 
 #include "dinfointerface.h"
+#include "transitionmngr.h"
 
 class KConfigGroup;
 
@@ -47,6 +48,18 @@ public:
     {
         IMAGES = 0,
         ALBUMS
+    };
+
+    // See https://en.wikipedia.org/wiki/List_of_common_resolutions#Digital_TV_standards
+    enum VidType
+    {
+        VCD = 0,        // 352  x 240   (240p)
+        SVCD,           // 480  x 576   (576p)
+        DVD,            // 720  x 480   (480p)
+        HDTV,           // 1280 x 720   (720p)
+        BLUERAY,        // 1920 x 1080  (1080p)
+        UHD4K,          // 3840 x 2160  (4k)
+        UHD8K           // 7680 x 4320  (8k)
     };
 
 public:
@@ -67,10 +80,12 @@ public:
 
     QList<QUrl>               inputAudio;    // Soundtracks streams.
 
+    TransitionMngr::TransType transition;    // Transition type between images.
+
     int                       aframes;       // Amount of frames to encode in video stream by image.
                                              // ex: 120 frames = 5 s at 24 img/s.
 
-    QSize                     outputSize;    // Encoded video size in pixels.
+    VidType                   outputType;    // Encoded video type.
     QUrl                      outputVideo;   // Encoded video stream.
 };
 

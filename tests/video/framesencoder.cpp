@@ -168,7 +168,7 @@ int main(int argc, char** argv)
 
     TransitionMngr tmngr;
     tmngr.setOutputSize(outSize);
-    tmngr.setEffect(TransitionMngr::HorizontalLines);
+    tmngr.setTransition(TransitionMngr::HorizontalLines);
 
     for (int i = -1 ; i < list.count() ; i++)
     {

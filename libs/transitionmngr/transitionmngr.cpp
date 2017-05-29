@@ -51,14 +51,14 @@ void TransitionMngr::setOutputSize(const QSize& size)
     d->curFrame.fill(Qt::black);
 }
 
-void TransitionMngr::setEffect(TransitionMngr::Effect eff)
+void TransitionMngr::setTransition(TransType trans)
 {
-    if (eff == Random)
-        d->curEffect = d->getRandomEffect();
+    if (trans == Random)
+        d->curTransition = d->getRandomEffect();
     else
-        d->curEffect = eff;
+        d->curTransition = trans;
 
-    d->effectRunning = false;
+    d->isRunning = false;
 }
 
 void TransitionMngr::setInImage(const QImage& iimg)
@@ -73,45 +73,45 @@ void TransitionMngr::setOutImage(const QImage& oimg)
 
 QImage TransitionMngr::currentframe(int& tmout)
 {
-    if (!d->effectRunning)
+    if (!d->isRunning)
     {
         d->curFrame      = d->inImage;
-        tmout            = (this->d->*d->effectList[d->curEffect])(true);
-        d->effectRunning = true;
+        tmout            = (this->d->*d->transList[d->curTransition])(true);
+        d->isRunning = true;
     }
     else
     {
-        tmout = (this->d->*d->effectList[d->curEffect])(false);
+        tmout = (this->d->*d->transList[d->curTransition])(false);
     }
 
     if (tmout == -1)
     {
-        d->effectRunning = false;
+        d->isRunning = false;
     }
 
     return d->curFrame;
 }
 
-QMap<TransitionMngr::Effect, QString> TransitionMngr::effectNames()
+QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
 {
-    QMap<Effect, QString> effects;
+    QMap<TransType, QString> trans;
 
-    effects[None]            = i18nc("Transition Effect: No effect",        "None");
-    effects[ChessBoard]      = i18nc("Transition Effect: Chess Board",      "Chess Board");
-    effects[MeltDown]        = i18nc("Transition Effect: Melt Down",        "Melt Down");
-    effects[Sweep]           = i18nc("Transition Effect: Sweep",            "Sweep");
-    effects[Mosaic]          = i18nc("Transition Effect: Mosaic",           "Mosaic");
-    effects[Cubism]          = i18nc("Transition Effect: Cubism",           "Cubism");
-    effects[Growing]         = i18nc("Transition Effect: Growing",          "Growing");
-    effects[HorizontalLines] = i18nc("Transition Effect: Horizontal Lines", "Horizontal Lines");
-    effects[VerticalLines]   = i18nc("Transition Effect: Vertical Lines",   "Vertical Lines");
-    effects[CircleOut]       = i18nc("Transition Effect: Circle Out",       "Circle Out");
-    effects[MultiCircleOut]  = i18nc("Transition Effect: Multi-Circle Out", "Multi-Circle Out");
-    effects[SpiralIn]        = i18nc("Transition Effect: Spiral In",        "Spiral In");
-    effects[Blobs]           = i18nc("Transition Effect: Blobs",            "Blobs");
-    effects[Random]          = i18nc("Transition Effect: Random effect",    "Random");
+    trans[None]            = i18nc("Transition Effect: No effect",        "None");
+    trans[ChessBoard]      = i18nc("Transition Effect: Chess Board",      "Chess Board");
+    trans[MeltDown]        = i18nc("Transition Effect: Melt Down",        "Melt Down");
+    trans[Sweep]           = i18nc("Transition Effect: Sweep",            "Sweep");
+    trans[Mosaic]          = i18nc("Transition Effect: Mosaic",           "Mosaic");
+    trans[Cubism]          = i18nc("Transition Effect: Cubism",           "Cubism");
+    trans[Growing]         = i18nc("Transition Effect: Growing",          "Growing");
+    trans[HorizontalLines] = i18nc("Transition Effect: Horizontal Lines", "Horizontal Lines");
+    trans[VerticalLines]   = i18nc("Transition Effect: Vertical Lines",   "Vertical Lines");
+    trans[CircleOut]       = i18nc("Transition Effect: Circle Out",       "Circle Out");
+    trans[MultiCircleOut]  = i18nc("Transition Effect: Multi-Circle Out", "Multi-Circle Out");
+    trans[SpiralIn]        = i18nc("Transition Effect: Spiral In",        "Spiral In");
+    trans[Blobs]           = i18nc("Transition Effect: Blobs",            "Blobs");
+    trans[Random]          = i18nc("Transition Effect: Random effect",    "Random");
 
-    return effects;
+    return trans;
 }
 
 }  // namespace Digikam

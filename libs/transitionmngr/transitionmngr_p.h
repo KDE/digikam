@@ -38,8 +38,8 @@ public:
 
     explicit Private()
     {
-        curEffect        = TransitionMngr::None;
-        effectRunning    = false;
+        curTransition        = TransitionMngr::None;
+        isRunning    = false;
         x                = 0;
         y                = 0;
         w                = 0;
@@ -78,55 +78,55 @@ public:
             delete [] intArray;
     }
 
-    QMap<TransitionMngr::Effect, EffectMethod> effectList;
+    QMap<TransitionMngr::TransType, EffectMethod> transList;
 
-    QImage                                     inImage;
-    QImage                                     outImage;
-    QImage                                     curFrame;
+    QImage                                        inImage;
+    QImage                                        outImage;
+    QImage                                        curFrame;
 
-    bool                                       effectRunning;
-    TransitionMngr::Effect                     curEffect;
+    bool                                          isRunning;
+    TransitionMngr::TransType                     curTransition;
 
     // values for state of various effects:
-    int                                        x;
-    int                                        y;
-    int                                        w;
-    int                                        h;
-    int                                        dx;
-    int                                        dy;
-    int                                        ix;
-    int                                        iy;
-    int                                        i;
-    int                                        j;
-    int                                        subType;
-    int                                        x0;
-    int                                        y0;
-    int                                        x1;
-    int                                        y1;
-    int                                        wait;
-    double                                     fx;
-    double                                     fy;
-    double                                     alpha;
-    double                                     fd;
-    int*                                       intArray;
-    bool                                       pdone;
-    bool**                                     pixelMatrix;
+    int                                           x;
+    int                                           y;
+    int                                           w;
+    int                                           h;
+    int                                           dx;
+    int                                           dy;
+    int                                           ix;
+    int                                           iy;
+    int                                           i;
+    int                                           j;
+    int                                           subType;
+    int                                           x0;
+    int                                           y0;
+    int                                           x1;
+    int                                           y1;
+    int                                           wait;
+    double                                        fx;
+    double                                        fy;
+    double                                        alpha;
+    double                                        fd;
+    int*                                          intArray;
+    bool                                          pdone;
+    bool**                                        pixelMatrix;
 
-    QSize                                      outSize;
+    QSize                                         outSize;
 
     //static
-    QPolygon                                   pa;
+    QPolygon                                      pa;
 
-    int                                        px;
-    int                                        py;
-    int                                        psx;
-    int                                        psy;
+    int                                           px;
+    int                                           py;
+    int                                           psx;
+    int                                           psy;
 
 public:
 
     void registerEffects();
 
-    TransitionMngr::Effect getRandomEffect() const;
+    TransitionMngr::TransType getRandomEffect() const;
 
     int effectNone(bool);
     int effectChessboard(bool doInit);

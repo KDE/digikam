@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT TransitionMngr
 
 public:
 
-    enum Effect
+    enum TransType
     {
         None = 0,
         ChessBoard,
@@ -68,13 +68,13 @@ public:
     ~TransitionMngr();
 
     void setOutputSize(const QSize& size);
-    void setEffect(Effect eff);
+    void setTransition(TransType eff);
     void setInImage(const QImage& iimg);
     void setOutImage(const QImage& oimg);
 
     QImage currentframe(int& tmout);
 
-    static QMap<Effect, QString> effectNames();
+    static QMap<TransType, QString> transitionNames();
 
 private:
 
