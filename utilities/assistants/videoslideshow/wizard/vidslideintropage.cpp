@@ -81,9 +81,12 @@ VidSlideIntroPage::VidSlideIntroPage(QWizard* const dialog, const QString& title
                         "<p>This assistant will guide you to export</p>"
                         "<p>your images as a video stream.</p>"
                         "<p>You can generate quickly a "
-                        "<a href='https://en.wikipedia.org/wiki/Time-lapse_photography'>Time-lapse</a></p>"
-                        "<p>movie captured with a tripod mounted camera controlled with an "
+                        "<a href='https://en.wikipedia.org/wiki/Time-lapse_photography'>Time-lapse</a> "
+                        "movie from images</p>"
+                        "<p>captured with a tripod mounted camera controlled with an "
                         "<a href='https://en.wikipedia.org/wiki/Intervalometer#Photography'>intervalometer</a>.</p>"
+                        "<p></p><p>You can also create a video presentation with transition</p>"
+                        "<p>effects and audio tracks to show on a TV screen.</p>"
                         "</qt>"));
 
     // ComboBox for image selection method

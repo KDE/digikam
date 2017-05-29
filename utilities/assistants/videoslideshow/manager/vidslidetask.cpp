@@ -156,7 +156,7 @@ void VidSlideTask::run()
 
     if (!venc->open())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "failed to open encoder";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open encoder";
         emit signalDone(false);
         return;
     }
@@ -182,7 +182,7 @@ void VidSlideTask::run()
 
     if (!mux.open())
     {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "failed to open muxer";
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open muxer";
         emit signalDone(false);
         return;
     }
@@ -212,7 +212,7 @@ void VidSlideTask::run()
         qCDebug(DIGIKAM_GENERAL_LOG) << "Making transition between" << ifile << "and" << ofile;
 
         int tmout = 0;
-        int j     = 0;
+//        int j     = 0;
 
         do
         {
@@ -220,7 +220,7 @@ void VidSlideTask::run()
 
             if (d->encodeFrame(frame, venc, mux))
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
+//                qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
             }
         }
         while (tmout != -1 && !d->cancel);
@@ -235,16 +235,20 @@ void VidSlideTask::run()
             {
                 if (d->encodeFrame(frame, venc, mux))
                 {
-                    count++;
 
+                    count++;
+/*
                     qCDebug(DIGIKAM_GENERAL_LOG) << ofile
                                                  << " => encode count:" << count
                                                  << "frame size:"       << frame.width()
                                                  << "x"                 << frame.height();
+*/
                 }
             }
             while (count < d->settings->aframes && !d->cancel);
         }
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i+1 << "done";
 
         emit signalProgress(i+1);
     }
@@ -252,7 +256,7 @@ void VidSlideTask::run()
     // ---------------------------------------------
     // Get delayed frames
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "encode delayed frames...";
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Encode delayed frames...";
 
     while (venc->encode() && !d->cancel)
     {
