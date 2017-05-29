@@ -43,24 +43,24 @@ namespace Digikam
 
 void TransitionMngr::Private::registerEffects()
 {
-    transList.insert(TransitionMngr::None,            &TransitionMngr::Private::effectNone);
-    transList.insert(TransitionMngr::ChessBoard,      &TransitionMngr::Private::effectChessboard);
-    transList.insert(TransitionMngr::MeltDown,        &TransitionMngr::Private::effectMeltdown);
-    transList.insert(TransitionMngr::Sweep,           &TransitionMngr::Private::effectSweep);
-    transList.insert(TransitionMngr::Mosaic,          &TransitionMngr::Private::effectMosaic);
-    transList.insert(TransitionMngr::Cubism,          &TransitionMngr::Private::effectCubism);
-    transList.insert(TransitionMngr::Growing,         &TransitionMngr::Private::effectGrowing);
-    transList.insert(TransitionMngr::HorizontalLines, &TransitionMngr::Private::effectHorizLines);
-    transList.insert(TransitionMngr::VerticalLines,   &TransitionMngr::Private::effectVertLines);
-    transList.insert(TransitionMngr::CircleOut,       &TransitionMngr::Private::effectCircleOut);
-    transList.insert(TransitionMngr::MultiCircleOut,  &TransitionMngr::Private::effectMultiCircleOut);
-    transList.insert(TransitionMngr::SpiralIn,        &TransitionMngr::Private::effectSpiralIn);
-    transList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
+    eff_transList.insert(TransitionMngr::None,            &TransitionMngr::Private::effectNone);
+    eff_transList.insert(TransitionMngr::ChessBoard,      &TransitionMngr::Private::effectChessboard);
+    eff_transList.insert(TransitionMngr::MeltDown,        &TransitionMngr::Private::effectMeltdown);
+    eff_transList.insert(TransitionMngr::Sweep,           &TransitionMngr::Private::effectSweep);
+    eff_transList.insert(TransitionMngr::Mosaic,          &TransitionMngr::Private::effectMosaic);
+    eff_transList.insert(TransitionMngr::Cubism,          &TransitionMngr::Private::effectCubism);
+    eff_transList.insert(TransitionMngr::Growing,         &TransitionMngr::Private::effectGrowing);
+    eff_transList.insert(TransitionMngr::HorizontalLines, &TransitionMngr::Private::effectHorizLines);
+    eff_transList.insert(TransitionMngr::VerticalLines,   &TransitionMngr::Private::effectVertLines);
+    eff_transList.insert(TransitionMngr::CircleOut,       &TransitionMngr::Private::effectCircleOut);
+    eff_transList.insert(TransitionMngr::MultiCircleOut,  &TransitionMngr::Private::effectMultiCircleOut);
+    eff_transList.insert(TransitionMngr::SpiralIn,        &TransitionMngr::Private::effectSpiralIn);
+    eff_transList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
 }
 
 TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
 {
-    QList<TransitionMngr::TransType> effs = transList.keys();
+    QList<TransitionMngr::TransType> effs = eff_transList.keys();
     effs.removeAt(effs.indexOf(TransitionMngr::None));
 
     int count = effs.count();
@@ -68,9 +68,15 @@ TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
     return effs[i];
 }
 
+
+int TransitionMngr::Private::effectRandom(bool /*aInit*/)
+{
+    return -1;
+}
+
 int TransitionMngr::Private::effectNone(bool)
 {
-    curFrame = outImage;
+    eff_curFrame = eff_outImage;
     return -1;
 }
 
@@ -78,39 +84,39 @@ int TransitionMngr::Private::effectChessboard(bool aInit)
 {
     if (aInit)
     {
-        w    = outSize.width();
-        h    = outSize.height();
-        dx   = 8;                             // width of one tile
-        dy   = 8;                             // height of one tile
-        j    = (w + dx - 1) / dx;    // number of tiles
-        x    = j * dx;                  // shrinking x-offset from screen border
-        ix   = 0;                             // growing x-offset from screen border
-        iy   = 0;                             // 0 or dy for growing tiling effect
-        y    = (j & 1) ? 0 : dy;        // 0 or dy for shrinking tiling effect
-        wait = 800 / j;                    // timeout between effects
+        eff_w    = eff_outSize.width();
+        eff_h    = eff_outSize.height();
+        eff_dx   = 8;                                // width of one tile
+        eff_dy   = 8;                                // height of one tile
+        eff_j    = (eff_w + eff_dx - 1) / eff_dx;    // number of tiles
+        eff_x    = eff_j * eff_dx;                   // shrinking x-offset from screen border
+        eff_ix   = 0;                                // growing x-offset from screen border
+        eff_iy   = 0;                                // 0 or eff_dy for growing tiling effect
+        eff_y    = (eff_j & 1) ? 0 : eff_dy;         // 0 or eff_dy for shrinking tiling effect
+        eff_wait = 800 / eff_j;                      // timeout between effects
     }
 
-    if (ix >= w)
+    if (eff_ix >= eff_w)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    ix += dx;
-    x  -= dx;
-    iy  = iy ? 0 : dy;
-    y   = y  ? 0 : dy;
+    eff_ix += eff_dx;
+    eff_x  -= eff_dx;
+    eff_iy  = eff_iy ? 0 : eff_dy;
+    eff_y   = eff_y  ? 0 : eff_dy;
 
-    QPainter bufferPainter(&curFrame);
-    QBrush brush = QBrush(inImage);
+    QPainter bufferPainter(&eff_curFrame);
+    QBrush brush = QBrush(eff_outImage);
 
-    for (int y = 0 ; y < w ; y += (dy << 1))
+    for (int y = 0 ; y < eff_w ; y += (eff_dy << 1))
     {
-        bufferPainter.fillRect(ix, y + iy, dx, dy, brush);
-        bufferPainter.fillRect(x, y + y, dx, dy, brush);
+        bufferPainter.fillRect(eff_ix, y + eff_iy, eff_dx, eff_dy, brush);
+        bufferPainter.fillRect(eff_x, y + eff_y, eff_dx, eff_dy, brush);
     }
 
-    return wait;
+    return eff_wait;
 }
 
 int TransitionMngr::Private::effectMeltdown(bool aInit)
@@ -119,48 +125,48 @@ int TransitionMngr::Private::effectMeltdown(bool aInit)
 
     if (aInit)
     {
-        delete [] intArray;
-        w        = outSize.width();
-        h        = outSize.height();
-        dx       = 4;
-        dy       = 16;
-        ix       = w / dx;
-        intArray = new int[ix];
+        delete [] eff_intArray;
+        eff_w        = eff_outSize.width();
+        eff_h        = eff_outSize.height();
+        eff_dx       = 4;
+        eff_dy       = 16;
+        eff_ix       = eff_w / eff_dx;
+        eff_intArray = new int[eff_ix];
 
-        for (i = ix - 1 ; i >= 0 ; --i)
-            intArray[i] = 0;
+        for (i = eff_ix - 1 ; i >= 0 ; --i)
+            eff_intArray[i] = 0;
     }
 
-    pdone = true;
+    eff_pdone = true;
 
     int y, x;
-    QPainter bufferPainter(&curFrame);
+    QPainter bufferPainter(&eff_curFrame);
 
-    for (i = 0, x = 0 ; i < ix ; ++i, x += dx)
+    for (i = 0, x = 0 ; i < eff_ix ; ++i, x += eff_dx)
     {
-        y = intArray[i];
+        y = eff_intArray[i];
 
-        if (y >= h)
+        if (y >= eff_h)
             continue;
 
-        pdone = false;
+        eff_pdone = false;
 
         if ((qrand() & 15) < 6)
             continue;
 
-        bufferPainter.drawImage(x, y + dy, curFrame, x, y, dx, h - y - dy);
-        bufferPainter.drawImage(x, y, inImage, x, y, dx, dy);
+        bufferPainter.drawImage(x, y + eff_dy, eff_curFrame, x, y, eff_dx, eff_h - y - eff_dy);
+        bufferPainter.drawImage(x, y, eff_outImage, x, y, eff_dx, eff_dy);
 
-        intArray[i] += dy;
+        eff_intArray[i] += eff_dy;
     }
 
     bufferPainter.end();
 
-    if (pdone)
+    if (eff_pdone)
     {
-        delete [] intArray;
-        intArray = NULL;
-        curFrame = outImage;
+        delete [] eff_intArray;
+        eff_intArray = NULL;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
@@ -173,68 +179,68 @@ int TransitionMngr::Private::effectSweep(bool aInit)
     {
         // subtype: 0=sweep right to left, 1=sweep left to right
         //          2=sweep bottom to top, 3=sweep top to bottom
-        subType = qrand() % 4;
-        w       = outSize.width();
-        h       = outSize.height();
-        dx      = (subType == 1 ? 16 : -16);
-        dy      = (subType == 3 ? 16 : -16);
-        x       = (subType == 1 ? 0 : w);
-        y       = (subType == 3 ? 0 : h);
+        eff_subType = qrand() % 4;
+        eff_w       = eff_outSize.width();
+        eff_h       = eff_outSize.height();
+        eff_dx      = (eff_subType == 1 ? 16 : -16);
+        eff_dy      = (eff_subType == 3 ? 16 : -16);
+        eff_x       = (eff_subType == 1 ? 0  : eff_w);
+        eff_y       = (eff_subType == 3 ? 0  : eff_h);
     }
 
-    if (subType == 0 || subType == 1)
+    if (eff_subType == 0 || eff_subType == 1)
     {
         // horizontal sweep
-        if ((subType == 0 && x < -64) || (subType == 1 && x > w + 64))
+        if ((eff_subType == 0 && eff_x < -64) || (eff_subType == 1 && eff_x > eff_w + 64))
         {
-            curFrame = outImage;
+            eff_curFrame = eff_outImage;
             return -1;
         }
 
         int w;
-        int intx;
+        int x;
         int i;
 
-        for (w = 2, i = 4, intx = x ; i > 0 ; i--, w <<= 1, intx -= dx)
+        for (w = 2, i = 4, x = eff_x ; i > 0 ; i--, w <<= 1, x -= eff_dx)
         {
-            px  = intx;
-            py  = 0;
-            psx = w;
-            psy = h;
+            eff_px  = x;
+            eff_py  = 0;
+            eff_psx = w;
+            eff_psy = eff_h;
 
-            QPainter bufferPainter(&curFrame);
-            bufferPainter.fillRect(px, py, psx, psy, QBrush(inImage));
+            QPainter bufferPainter(&eff_curFrame);
+            bufferPainter.fillRect(eff_px, eff_py, eff_psx, eff_psy, QBrush(eff_outImage));
             bufferPainter.end();
         }
 
-        x += dx;
+        eff_x += eff_dx;
     }
     else
     {
         // vertical sweep
-        if ((subType == 2 && y < -64) || (subType == 3 && y > h + 64))
+        if ((eff_subType == 2 && eff_y < -64) || (eff_subType == 3 && eff_y > eff_h + 64))
         {
-            curFrame = outImage;
+            eff_curFrame = eff_outImage;
             return -1;
         }
 
         int h;
-        int inty;
+        int y;
         int i;
 
-        for (h = 2, i = 4, inty = y ; i > 0 ; i--, h <<= 1, inty -= dy)
+        for (h = 2, i = 4, y = eff_y ; i > 0 ; i--, h <<= 1, y -= eff_dy)
         {
-            px  = 0;
-            py  = inty;
-            psx = w;
-            psy = h;
+            eff_px  = 0;
+            eff_py  = y;
+            eff_psx = eff_w;
+            eff_psy = h;
 
-            QPainter bufferPainter(&curFrame);
-            bufferPainter.fillRect(px, py, psx, psy, QBrush(inImage));
+            QPainter bufferPainter(&eff_curFrame);
+            bufferPainter.fillRect(eff_px, eff_py, eff_psx, eff_psy, QBrush(eff_outImage));
             bufferPainter.end();
         }
 
-        y += dy;
+        eff_y += eff_dy;
     }
 
     return 20;
@@ -247,56 +253,56 @@ int TransitionMngr::Private::effectMosaic(bool aInit)
 
     if (aInit)
     {
-        i           = 30; // giri totaly
-        pixelMatrix = new bool*[outSize.width()];
+        eff_i           = 30; // giri totaly
+        eff_pixelMatrix = new bool*[eff_outSize.width()];
 
-        for (int x = 0 ; x < outSize.width() ; ++x)
+        for (int x = 0 ; x < eff_outSize.width() ; ++x)
         {
-            pixelMatrix[x] = new bool[outSize.height()];
+            eff_pixelMatrix[x] = new bool[eff_outSize.height()];
 
-            for (int y = 0 ; y < outSize.height() ; ++y)
+            for (int y = 0 ; y < eff_outSize.height() ; ++y)
             {
-                pixelMatrix[x][y] = false;
+                eff_pixelMatrix[x][y] = false;
             }
         }
     }
 
-    if (i <= 0)
+    if (eff_i <= 0)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    int w = outSize.width();
-    int h = outSize.height();
+    int w = eff_outSize.width();
+    int h = eff_outSize.height();
 
-    QPainter bufferPainter(&curFrame);
+    QPainter bufferPainter(&eff_curFrame);
 
     for (int x = 0 ; x < w ; x += (qrand() % margin) + dim)
     {
         for (int y = 0 ; y < h ; y += (qrand() % margin) + dim)
         {
-            if (pixelMatrix[x][y] == true)
+            if (eff_pixelMatrix[x][y] == true)
             {
                 if (y != 0) y--;
 
                 continue;
             }
 
-            bufferPainter.fillRect(x, y, dim, dim, QBrush(inImage));
+            bufferPainter.fillRect(x, y, dim, dim, QBrush(eff_outImage));
 
             for (int i = 0 ; i < dim && (x + i) < w ; ++i)
             {
                 for (int j = 0 ; j < dim && (y + j) < h ; ++j)
                 {
-                    pixelMatrix[x+i][y+j] = true;
+                    eff_pixelMatrix[x+i][y+j] = true;
                 }
             }
         }
     }
 
     bufferPainter.end();
-    i--;
+    eff_i--;
 
     return 20;
 }
@@ -305,76 +311,71 @@ int TransitionMngr::Private::effectCubism(bool aInit)
 {
     if (aInit)
     {
-        alpha = M_PI * 2;
-        w     = outSize.width();
-        h     = outSize.height();
-        i     = 150;
+        eff_alpha = M_PI * 2;
+        eff_w     = eff_outSize.width();
+        eff_h     = eff_outSize.height();
+        eff_i     = 150;
     }
 
-    if (i <= 0)
+    if (eff_i <= 0)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
     QPainterPath painterPath;
-    QPainter bufferPainter(&curFrame);
+    QPainter bufferPainter(&eff_curFrame);
 
-    x   = qrand() % w;
-    y   = qrand() % h;
+    eff_x   = qrand() % eff_w;
+    eff_y   = qrand() % eff_h;
     int r  = (qrand() % 100) + 100;
-    px   = x - r;
-    py   = y - r;
-    psx  = r;
-    psy  = r;
+    eff_px   = eff_x - r;
+    eff_py   = eff_y - r;
+    eff_psx  = r;
+    eff_psy  = r;
 
     QMatrix matrix;
     matrix.rotate((qrand() % 20) - 10);
-    QRect rect(px, py, psx, psy);
+    QRect rect(eff_px, eff_py, eff_psx, eff_psy);
     bufferPainter.setMatrix(matrix);
-    bufferPainter.fillRect(rect, QBrush(inImage));
+    bufferPainter.fillRect(rect, QBrush(eff_outImage));
     bufferPainter.end();
 
-    i--;
+    eff_i--;
 
     return 10;
-}
-
-int TransitionMngr::Private::effectRandom(bool /*aInit*/)
-{
-    return -1;
 }
 
 int TransitionMngr::Private::effectGrowing(bool aInit)
 {
     if (aInit)
     {
-        w  = outSize.width();
-        h  = outSize.height();
-        x  = w >> 1;
-        y  = h >> 1;
-        i  = 0;
-        fx = x / 100.0;
-        fy = y / 100.0;
+        eff_w  = eff_outSize.width();
+        eff_h  = eff_outSize.height();
+        eff_x  = eff_w >> 1;
+        eff_y  = eff_h >> 1;
+        eff_i  = 0;
+        eff_fx = eff_x / 100.0;
+        eff_fy = eff_y / 100.0;
     }
 
-    x = (w >> 1) - (int)(i * fx);
-    y = (h >> 1) - (int)(i * fy);
-    i++;
+    eff_x = (eff_w >> 1) - (int)(eff_i * eff_fx);
+    eff_y = (eff_h >> 1) - (int)(eff_i * eff_fy);
+    eff_i++;
 
-    if (x < 0 || y < 0)
+    if (eff_x < 0 || eff_y < 0)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    px  = x;
-    py  = y;
-    psx = w - (x << 1);
-    psy = h - (y << 1);
+    eff_px  = eff_x;
+    eff_py  = eff_y;
+    eff_psx = eff_w - (eff_x << 1);
+    eff_psy = eff_h - (eff_y << 1);
 
-    QPainter bufferPainter(&curFrame);
-    bufferPainter.fillRect(px, py, psx, psy, QBrush(inImage));
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.fillRect(eff_px, eff_py, eff_psx, eff_psy, QBrush(eff_outImage));
     bufferPainter.end();
 
     return 20;
@@ -386,30 +387,30 @@ int TransitionMngr::Private::effectHorizLines(bool aInit)
 
     if (aInit)
     {
-        w = outSize.width();
-        h = outSize.height();
-        i = 0;
+        eff_w = eff_outSize.width();
+        eff_h = eff_outSize.height();
+        eff_i = 0;
     }
 
-    if (iyPos[i] < 0)
+    if (iyPos[eff_i] < 0)
         return -1;
 
-    int until    = h;
+    int until    = eff_h;
 
-    QPainter bufferPainter(&curFrame);
-    QBrush brush = QBrush(outImage);
+    QPainter bufferPainter(&eff_curFrame);
+    QBrush brush = QBrush(eff_outImage);
 
-    for (int iPos = iyPos[i] ; iPos < until ; iPos += 8)
-        bufferPainter.fillRect(0, iPos, w, 1, brush);
+    for (int iPos = iyPos[eff_i] ; iPos < until ; iPos += 8)
+        bufferPainter.fillRect(0, iPos, eff_w, 1, brush);
 
     bufferPainter.end();
 
-    i++;
+    eff_i++;
 
-    if (iyPos[i] >= 0)
+    if (iyPos[eff_i] >= 0)
         return 160;
 
-    curFrame = outImage;
+    eff_curFrame = eff_outImage;
 
     return -1;
 }
@@ -420,31 +421,31 @@ int TransitionMngr::Private::effectVertLines(bool aInit)
 
     if (aInit)
     {
-        w = outSize.width();
-        h = outSize.height();
-        i = 0;
+        eff_w = eff_outSize.width();
+        eff_h = eff_outSize.height();
+        eff_i = 0;
     }
 
-    if (ixPos[i] < 0)
+    if (ixPos[eff_i] < 0)
         return -1;
 
     int iPos;
-    int until = w;
+    int until = eff_w;
 
-    QPainter bufferPainter(&curFrame);
-    QBrush brush = QBrush(inImage);
+    QPainter bufferPainter(&eff_curFrame);
+    QBrush brush = QBrush(eff_outImage);
 
-    for (iPos = ixPos[i] ; iPos < until ; iPos += 8)
-        bufferPainter.fillRect(iPos, 0, 1, h, brush);
+    for (iPos = ixPos[eff_i] ; iPos < until ; iPos += 8)
+        bufferPainter.fillRect(iPos, 0, 1, eff_h, brush);
 
     bufferPainter.end();
 
-    i++;
+    eff_i++;
 
-    if (ixPos[i] >= 0)
+    if (ixPos[eff_i] >= 0)
         return 160;
 
-    curFrame = outImage;
+    eff_curFrame = eff_outImage;
 
     return -1;
 }
@@ -456,116 +457,116 @@ int TransitionMngr::Private::effectMultiCircleOut(bool aInit)
 
     if (aInit)
     {
-        w     = outSize.width();
-        h     = outSize.height();
-        x     = w;
-        y     = h >> 1;
-        pa.setPoint(0, w >> 1, h >> 1);
-        pa.setPoint(3, w >> 1, h >> 1);
-        fy    = sqrt((double)w * w + h * h) / 2;
-        i     = qrand() % 15 + 2;
-        fd    = M_PI * 2 / i;
-        alpha = fd;
-        wait  = 10 * i;
-        fx    = M_PI / 32;  // divisor must be powers of 8
+        eff_w     = eff_outSize.width();
+        eff_h     = eff_outSize.height();
+        eff_x     = eff_w;
+        eff_y     = eff_h >> 1;
+        eff_pa.setPoint(0, eff_w >> 1, eff_h >> 1);
+        eff_pa.setPoint(3, eff_w >> 1, eff_h >> 1);
+        eff_fy    = sqrt((double)eff_w * eff_w + eff_h * eff_h) / 2;
+        eff_i     = qrand() % 15 + 2;
+        eff_fd    = M_PI * 2 / eff_i;
+        eff_alpha = eff_fd;
+        eff_wait  = 10 * eff_i;
+        eff_fx    = M_PI / 32;  // divisor must be powers of 8
     }
 
-    if (alpha < 0)
+    if (eff_alpha < 0)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    for (alpha = alpha, i = i ; i >= 0 ; i--, alpha += fd)
+    for (alpha = eff_alpha, i = eff_i ; i >= 0 ; i--, alpha += eff_fd)
     {
-        x    = (w >> 1) + (int)(fy * cos(-alpha));
-        y    = (h >> 1) + (int)(fy * sin(-alpha));
-        x = (w >> 1) + (int)(fy * cos(-alpha + fx));
-        y = (h >> 1) + (int)(fy * sin(-alpha + fx));
+        x     = (eff_w >> 1) + (int)(eff_fy * cos(-alpha));
+        y     = (eff_h >> 1) + (int)(eff_fy * sin(-alpha));
+        eff_x = (eff_w >> 1) + (int)(eff_fy * cos(-alpha + eff_fx));
+        eff_y = (eff_h >> 1) + (int)(eff_fy * sin(-alpha + eff_fx));
 
-        pa.setPoint(1, x, y);
-        pa.setPoint(2, x, y);
+        eff_pa.setPoint(1, x, y);
+        eff_pa.setPoint(2, eff_x, eff_y);
 
         QPainterPath painterPath;
-        painterPath.addPolygon(QPolygon(pa));
+        painterPath.addPolygon(QPolygon(eff_pa));
 
-        QPainter bufferPainter(&curFrame);
-        bufferPainter.fillPath(painterPath, QBrush(inImage));
+        QPainter bufferPainter(&eff_curFrame);
+        bufferPainter.fillPath(painterPath, QBrush(eff_outImage));
         bufferPainter.end();
     }
 
-    alpha -= fx;
+    eff_alpha -= eff_fx;
 
-    return wait;
+    return eff_wait;
 }
 
 int TransitionMngr::Private::effectSpiralIn(bool aInit)
 {
     if (aInit)
     {
-        w  = outSize.width();
-        h  = outSize.height();
-        ix = w / 8;
-        iy = h / 8;
-        x0 = 0;
-        x1 = w - ix;
-        y0 = iy;
-        y1 = h - iy;
-        dx = ix;
-        dy = 0;
-        i  = 0;
-        j  = 16 * 16;
-        x  = 0;
-        y  = 0;
+        eff_w  = eff_outSize.width();
+        eff_h  = eff_outSize.height();
+        eff_ix = eff_w / 8;
+        eff_iy = eff_h / 8;
+        eff_x0 = 0;
+        eff_x1 = eff_w - eff_ix;
+        eff_y0 = eff_iy;
+        eff_y1 = eff_h - eff_iy;
+        eff_dx = eff_ix;
+        eff_dy = 0;
+        eff_i  = 0;
+        eff_j  = 16 * 16;
+        eff_x  = 0;
+        eff_y  = 0;
     }
 
-    if (i == 0 && x0 >= x1)
+    if (eff_i == 0 && eff_x0 >= eff_x1)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    if (i == 0 && x >= x1)      // switch to: down on right side
+    if (eff_i == 0 && eff_x >= eff_x1)      // switch to: down on right side
     {
-        i   = 1;
-        dx  = 0;
-        dy  = iy;
-        x1 -= ix;
+        eff_i   = 1;
+        eff_dx  = 0;
+        eff_dy  = eff_iy;
+        eff_x1 -= eff_ix;
     }
-    else if (i == 1 && y >= y1) // switch to: right to left on bottom side
+    else if (eff_i == 1 && eff_y >= eff_y1) // switch to: right to left on bottom side
     {
-        i   = 2;
-        dx  = -ix;
-        dy  = 0;
-        y1 -= iy;
+        eff_i   = 2;
+        eff_dx  = -eff_ix;
+        eff_dy  = 0;
+        eff_y1 -= eff_iy;
     }
-    else if (i == 2 && x <= x0) // switch to: up on left side
+    else if (eff_i == 2 && eff_x <= eff_x0) // switch to: up on left side
     {
-        i   = 3;
-        dx  = 0;
-        dy  = -iy;
-        x0 += ix;
+        eff_i   = 3;
+        eff_dx  = 0;
+        eff_dy  = -eff_iy;
+        eff_x0 += eff_ix;
     }
-    else if (i == 3 && y <= y0) // switch to: left to right on top side
+    else if (eff_i == 3 && eff_y <= eff_y0) // switch to: left to right on top side
     {
-        i   = 0;
-        dx  = ix;
-        dy  = 0;
-        y0 += iy;
+        eff_i   = 0;
+        eff_dx  = eff_ix;
+        eff_dy  = 0;
+        eff_y0 += eff_iy;
     }
 
-    px  = x;
-    py  = y;
-    psx = ix;
-    psy = iy;
+    eff_px  = eff_x;
+    eff_py  = eff_y;
+    eff_psx = eff_ix;
+    eff_psy = eff_iy;
 
-    QPainter bufferPainter(&curFrame);
-    bufferPainter.fillRect(px, py, psx, psy, QBrush(inImage));
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.fillRect(eff_px, eff_py, eff_psx, eff_psy, QBrush(eff_outImage));
     bufferPainter.end();
 
-    x += dx;
-    y += dy;
-    j--;
+    eff_x += eff_dx;
+    eff_y += eff_dy;
+    eff_j--;
 
     return 8;
 }
@@ -576,36 +577,36 @@ int TransitionMngr::Private::effectCircleOut(bool aInit)
 
     if (aInit)
     {
-        w     = outSize.width();
-        h     = outSize.height();
-        x     = w;
-        y     = h >> 1;
-        alpha = 2 * M_PI;
-        pa.setPoint(0, w >> 1, h >> 1);
-        pa.setPoint(3, w >> 1, h >> 1);
-        fx    = M_PI / 16;                       // divisor must be powers of 8
-        fy    = sqrt((double)w * w + h * h) / 2;
+        eff_w     = eff_outSize.width();
+        eff_h     = eff_outSize.height();
+        eff_x     = eff_w;
+        eff_y     = eff_h >> 1;
+        eff_alpha = 2 * M_PI;
+        eff_pa.setPoint(0, eff_w >> 1, eff_h >> 1);
+        eff_pa.setPoint(3, eff_w >> 1, eff_h >> 1);
+        eff_fx    = M_PI / 16;                       // divisor must be powers of 8
+        eff_fy    = sqrt((double)eff_w * eff_w + eff_h * eff_h) / 2;
     }
 
-    if (alpha < 0)
+    if (eff_alpha < 0)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    x         = x;
-    y         = y;
-    x      = (w >> 1) + (int)(fy * cos(alpha));
-    y      = (h >> 1) + (int)(fy * sin(alpha));
-    alpha -= fx;
+    x          = eff_x;
+    y          = eff_y;
+    eff_x      = (eff_w >> 1) + (int)(eff_fy * cos(eff_alpha));
+    eff_y      = (eff_h >> 1) + (int)(eff_fy * sin(eff_alpha));
+    eff_alpha -= eff_fx;
 
-    pa.setPoint(1, x, y);
-    pa.setPoint(2, x, y);
+    eff_pa.setPoint(1, x, y);
+    eff_pa.setPoint(2, eff_x, eff_y);
 
     QPainterPath painterPath;
-    painterPath.addPolygon(QPolygon(pa));
-    QPainter bufferPainter(&curFrame);
-    bufferPainter.fillPath(painterPath, QBrush(inImage));
+    painterPath.addPolygon(QPolygon(eff_pa));
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.fillPath(painterPath, QBrush(eff_outImage));
     bufferPainter.end();
 
     return 20;
@@ -617,33 +618,33 @@ int TransitionMngr::Private::effectBlobs(bool aInit)
 
     if (aInit)
     {
-        alpha = M_PI * 2;
-        w     = outSize.width();
-        h     = outSize.height();
-        i     = 150;
+        eff_alpha = M_PI * 2;
+        eff_w     = eff_outSize.width();
+        eff_h     = eff_outSize.height();
+        eff_i     = 150;
     }
 
-    if (i <= 0)
+    if (eff_i <= 0)
     {
-        curFrame = outImage;
+        eff_curFrame = eff_outImage;
         return -1;
     }
 
-    x    = qrand() % w;
-    y    = qrand() % h;
-    r       = (qrand() % 200) + 50;
-    px   = x - r;
-    py   = y - r;
-    psx  = r;
-    psy  = r;
+    eff_x   = qrand() % eff_w;
+    eff_y   = qrand() % eff_h;
+    r      = (qrand() % 200) + 50;
+    eff_px   = eff_x - r;
+    eff_py   = eff_y - r;
+    eff_psx  = r;
+    eff_psy  = r;
 
     QPainterPath painterPath;
-    painterPath.addEllipse(px, py, psx, psy);
-    QPainter bufferPainter(&curFrame);
-    bufferPainter.fillPath(painterPath, QBrush(inImage));
+    painterPath.addEllipse(eff_px, eff_py, eff_psx, eff_psy);
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.fillPath(painterPath, QBrush(eff_outImage));
     bufferPainter.end();
 
-    i--;
+    eff_i--;
 
     return 10;
 }

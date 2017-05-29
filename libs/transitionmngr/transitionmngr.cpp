@@ -46,50 +46,50 @@ TransitionMngr::~TransitionMngr()
 
 void TransitionMngr::setOutputSize(const QSize& size)
 {
-    d->outSize  = size;
-    d->curFrame = QImage(d->outSize, QImage::Format_ARGB32);
-    d->curFrame.fill(Qt::black);
+    d->eff_outSize  = size;
+    d->eff_curFrame = QImage(d->eff_outSize, QImage::Format_ARGB32);
+    d->eff_curFrame.fill(Qt::black);
 }
 
 void TransitionMngr::setTransition(TransType trans)
 {
     if (trans == Random)
-        d->curTransition = d->getRandomEffect();
+        d->eff_curTransition = d->getRandomEffect();
     else
-        d->curTransition = trans;
+        d->eff_curTransition = trans;
 
-    d->isRunning = false;
+    d->eff_isRunning = false;
 }
 
 void TransitionMngr::setInImage(const QImage& iimg)
 {
-    d->inImage = iimg;
+    d->eff_inImage = iimg;
 }
 
 void TransitionMngr::setOutImage(const QImage& oimg)
 {
-    d->outImage = oimg;
+    d->eff_outImage = oimg;
 }
 
 QImage TransitionMngr::currentframe(int& tmout)
 {
-    if (!d->isRunning)
+    if (!d->eff_isRunning)
     {
-        d->curFrame      = d->inImage;
-        tmout            = (this->d->*d->transList[d->curTransition])(true);
-        d->isRunning = true;
+        d->eff_curFrame      = d->eff_inImage;
+        tmout            = (this->d->*d->eff_transList[d->eff_curTransition])(true);
+        d->eff_isRunning = true;
     }
     else
     {
-        tmout = (this->d->*d->transList[d->curTransition])(false);
+        tmout = (this->d->*d->eff_transList[d->eff_curTransition])(false);
     }
 
     if (tmout == -1)
     {
-        d->isRunning = false;
+        d->eff_isRunning = false;
     }
 
-    return d->curFrame;
+    return d->eff_curFrame;
 }
 
 QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()

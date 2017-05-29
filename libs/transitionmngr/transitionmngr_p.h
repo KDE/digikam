@@ -38,89 +38,88 @@ public:
 
     explicit Private()
     {
-        curTransition        = TransitionMngr::None;
-        isRunning    = false;
-        x                = 0;
-        y                = 0;
-        w                = 0;
-        h                = 0;
-        dx               = 0;
-        dy               = 0;
-        ix               = 0;
-        iy               = 0;
-        i                = 0;
-        j                = 0;
-        subType          = 0;
-        x0               = 0;
-        y0               = 0;
-        x1               = 0;
-        y1               = 0;
-        wait             = 0;
-        fx               = 0;
-        fy               = 0;
-        alpha            = 0;
-        fd               = 0;
-        intArray         = 0;
-        pdone            = 0;
-        pixelMatrix      = 0;
-        px               = 0;
-        py               = 0;
-        psx              = 0;
-        psy              = 0;
-        pa               = QPolygon(4);
+        eff_curTransition    = TransitionMngr::None;
+        eff_isRunning        = false;
+        eff_x                = 0;
+        eff_y                = 0;
+        eff_w                = 0;
+        eff_h                = 0;
+        eff_dx               = 0;
+        eff_dy               = 0;
+        eff_ix               = 0;
+        eff_iy               = 0;
+        eff_i                = 0;
+        eff_j                = 0;
+        eff_subType          = 0;
+        eff_x0               = 0;
+        eff_y0               = 0;
+        eff_x1               = 0;
+        eff_y1               = 0;
+        eff_wait             = 0;
+        eff_fx               = 0;
+        eff_fy               = 0;
+        eff_alpha            = 0;
+        eff_fd               = 0;
+        eff_intArray         = 0;
+        eff_pdone            = 0;
+        eff_pixelMatrix      = 0;
+        eff_px               = 0;
+        eff_py               = 0;
+        eff_psx              = 0;
+        eff_psy              = 0;
+        eff_pa               = QPolygon(4);
 
         registerEffects();
     }
 
     ~Private()
     {
-        if (intArray)
-            delete [] intArray;
+        if (eff_intArray)
+            delete [] eff_intArray;
     }
 
-    QMap<TransitionMngr::TransType, EffectMethod> transList;
+    QMap<TransitionMngr::TransType, EffectMethod> eff_transList;
 
-    QImage                                        inImage;
-    QImage                                        outImage;
-    QImage                                        curFrame;
+    QImage                                        eff_inImage;
+    QImage                                        eff_outImage;
+    QImage                                        eff_curFrame;
+    QSize                                         eff_outSize;
 
-    bool                                          isRunning;
-    TransitionMngr::TransType                     curTransition;
+    bool                                          eff_isRunning;
+    TransitionMngr::TransType                     eff_curTransition;
 
     // values for state of various effects:
-    int                                           x;
-    int                                           y;
-    int                                           w;
-    int                                           h;
-    int                                           dx;
-    int                                           dy;
-    int                                           ix;
-    int                                           iy;
-    int                                           i;
-    int                                           j;
-    int                                           subType;
-    int                                           x0;
-    int                                           y0;
-    int                                           x1;
-    int                                           y1;
-    int                                           wait;
-    double                                        fx;
-    double                                        fy;
-    double                                        alpha;
-    double                                        fd;
-    int*                                          intArray;
-    bool                                          pdone;
-    bool**                                        pixelMatrix;
-
-    QSize                                         outSize;
+    int                                           eff_x;
+    int                                           eff_y;
+    int                                           eff_w;
+    int                                           eff_h;
+    int                                           eff_dx;
+    int                                           eff_dy;
+    int                                           eff_ix;
+    int                                           eff_iy;
+    int                                           eff_i;
+    int                                           eff_j;
+    int                                           eff_subType;
+    int                                           eff_x0;
+    int                                           eff_y0;
+    int                                           eff_x1;
+    int                                           eff_y1;
+    int                                           eff_wait;
+    double                                        eff_fx;
+    double                                        eff_fy;
+    double                                        eff_alpha;
+    double                                        eff_fd;
+    int*                                          eff_intArray;
+    bool                                          eff_pdone;
+    bool**                                        eff_pixelMatrix;
 
     //static
-    QPolygon                                      pa;
+    QPolygon                                      eff_pa;
 
-    int                                           px;
-    int                                           py;
-    int                                           psx;
-    int                                           psy;
+    int                                           eff_px;
+    int                                           eff_py;
+    int                                           eff_psx;
+    int                                           eff_psy;
 
 public:
 
