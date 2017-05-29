@@ -99,7 +99,7 @@ VidSlideIntroPage::VidSlideIntroPage(QWizard* const dialog, const QString& title
     getImageLabel->setBuddy(d->imageGetOption);
 
     setPageWidget(vbox);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-html")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("view-presentation")));
 }
 
 VidSlideIntroPage::~VidSlideIntroPage()
