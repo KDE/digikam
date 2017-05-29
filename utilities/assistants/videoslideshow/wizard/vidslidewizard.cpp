@@ -35,6 +35,8 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
 
 // Local includes
 
@@ -79,6 +81,11 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
 
     d->iface             = iface;
     d->settings          = new VidSlideSettings;
+
+    KConfig config;
+    KConfigGroup group = config.group("Video SlideShow Dialog Settings");
+    d->settings->readSettings(group);
+
     d->introPage         = new VidSlideIntroPage(this, i18n("Welcome to Video Slideshow Tool"));
     d->selectionPage     = new VidSlideSelectionPage(this, i18n("Items Selection"));
     d->outputPage        = new VidSlideOutputPage(this, i18n("Output Settings"));
@@ -87,6 +94,10 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
 
 VidSlideWizard::~VidSlideWizard()
 {
+    KConfig config;
+    KConfigGroup group = config.group("Video SlideShow Dialog Settings");
+    d->settings->writeSettings(group);
+
     delete d;
 }
 

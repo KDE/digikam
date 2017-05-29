@@ -77,12 +77,13 @@ VidSlideIntroPage::VidSlideIntroPage(QWizard* const dialog, const QString& title
     desc->setWordWrap(true);
     desc->setOpenExternalLinks(true);
     desc->setText(i18n("<qt>"
-                        "<p><h1><b>Welcome to Videdo Slideshow tool</b></h1></p>"
-                        "<p>This assistant will guide you to export quickly</p><p></p>"
+                        "<p><h1><b>Welcome to Video Slideshow tool</b></h1></p>"
+                        "<p>This assistant will guide you to export</p>"
                         "<p>your images as a video stream.</p>"
                         "<p>You can generate quickly a "
                         "<a href='https://en.wikipedia.org/wiki/Time-lapse_photography'>Time-lapse</a></p>"
-                        "<p>movie captured with a triped mounted camera controlled with an intervalometer.</p>"
+                        "<p>movie captured with a tripod mounted camera controlled with an "
+                        "<a href='https://en.wikipedia.org/wiki/Intervalometer#Photography'>intervalometer</a>.</p>"
                         "</qt>"));
 
     // ComboBox for image selection method
