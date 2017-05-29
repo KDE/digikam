@@ -29,11 +29,12 @@
 #include "vidslidesettings.h"
 #include "vidslidetask.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class VidSlideThread : public ActionThreadBase
+class DIGIKAM_EXPORT VidSlideThread : public ActionThreadBase
 {
     Q_OBJECT
 

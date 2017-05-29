@@ -35,13 +35,14 @@
 
 #include "dinfointerface.h"
 #include "transitionmngr.h"
+#include "digikam_export.h"
 
 class KConfigGroup;
 
 namespace Digikam
 {
 
-class VidSlideSettings
+class DIGIKAM_EXPORT VidSlideSettings
 {
 public:
 
