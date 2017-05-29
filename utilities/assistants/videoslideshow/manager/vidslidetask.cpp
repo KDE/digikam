@@ -194,6 +194,8 @@ void VidSlideTask::run()
     tmngr.setOutputSize(d->settings->outputSize);
     tmngr.setEffect(TransitionMngr::HorizontalLines);
 
+    emit signalStarting(d->settings->inputImages.count());
+
     for (int i = -1 ; i < d->settings->inputImages.count() ; i++)
     {
         QString ifile = (i >= 0)
@@ -242,6 +244,8 @@ void VidSlideTask::run()
             }
         }
         while (count < d->settings->aframes);
+
+        emit signalProgress(i);
     }
 
     // ---------------------------------------------

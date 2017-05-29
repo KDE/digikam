@@ -48,14 +48,15 @@ void VidSlideThread::processStream(VidSlideSettings* const settings)
 
     VidSlideTask* const t = new VidSlideTask(settings);
 
-/*
-    connect(t, SIGNAL(signalStarting(Digikam::ActionData)),
-            this, SIGNAL(signalStarting(Digikam::ActionData)));
+    connect(t, SIGNAL(signalStarting(int)),
+            this, SIGNAL(signalStarting(int)));
 
-    connect(this, SIGNAL(signalCancelTask()),
-            t, SLOT(slotCancel()),
-            Qt::QueuedConnection);
-*/
+    connect(t, SIGNAL(signalProgress(int)),
+            this, SIGNAL(signalProgress(int)));
+
+    connect(t, SIGNAL(signalDone()),
+            this, SIGNAL(signalDone()));
+
     collection.insert(t, 0);
 
     appendJobs(collection);

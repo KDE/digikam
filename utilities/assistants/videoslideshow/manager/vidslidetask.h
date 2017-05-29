@@ -49,6 +49,10 @@ public Q_SLOTS:
 
     void slotCancel();
 
+Q_SIGNALS:
+
+    void signalStarting(int max);
+
 protected:
 
     void run();

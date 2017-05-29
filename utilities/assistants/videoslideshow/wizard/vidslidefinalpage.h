@@ -49,6 +49,7 @@ public:
 private Q_SLOTS:
 
     void slotProcess();
+    void slotDone();
 
 private:
 

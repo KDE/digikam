@@ -82,7 +82,7 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
     d->introPage         = new VidSlideIntroPage(this, i18n("Welcome to Video Slideshow Tool"));
     d->selectionPage     = new VidSlideSelectionPage(this, i18n("Items Selection"));
     d->outputPage        = new VidSlideOutputPage(this, i18n("Output Settings"));
-//    d->finalPage         = new VidSlideFinalPage(this, i18n("Generating Video Slideshow"));
+    d->finalPage         = new VidSlideFinalPage(this, i18n("Generating Video Slideshow"));
 }
 
 VidSlideWizard::~VidSlideWizard()
@@ -110,7 +110,6 @@ bool VidSlideWizard::validateCurrentPage()
 
 int VidSlideWizard::nextId() const
 {
-
     return DWizardDlg::nextId();
 }
 

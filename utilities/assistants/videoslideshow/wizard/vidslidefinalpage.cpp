@@ -54,21 +54,36 @@ class VidSlideFinalPage::Private
 {
 public:
 
-    Private()
+    Private(QWizard* const dialog)
       : progressView(0),
         progressBar(0),
-        complete(false)
+        complete(false),
+        encoder(0),
+        wizard(0),
+        settings(0),
+        iface(0)
     {
+        wizard = dynamic_cast<VidSlideWizard*>(dialog);
+
+        if (wizard)
+        {
+            iface    = wizard->iface();
+            settings = wizard->settings();
+        }
     }
 
-    DHistoryView* progressView;
-    DProgressWdg* progressBar;
-    bool          complete;
+    DHistoryView*     progressView;
+    DProgressWdg*     progressBar;
+    bool              complete;
+    VidSlideThread*   encoder;
+    VidSlideWizard*   wizard;
+    VidSlideSettings* settings;
+    DInfoInterface*   iface;
 };
 
 VidSlideFinalPage::VidSlideFinalPage(QWizard* const dialog, const QString& title)
     : DWizardPage(dialog, title),
-      d(new Private)
+      d(new Private(dialog))
 {
     setObjectName(QLatin1String("FinalPage"));
 
@@ -98,9 +113,7 @@ void VidSlideFinalPage::initializePage()
 
 void VidSlideFinalPage::slotProcess()
 {
-    VidSlideWizard* const wizard = dynamic_cast<VidSlideWizard*>(assistant());
-
-    if (!wizard)
+    if (!d->wizard)
     {
         d->progressView->addEntry(i18n("Internal Error"),
                                   DHistoryView::ErrorEntry);
@@ -110,20 +123,18 @@ void VidSlideFinalPage::slotProcess()
     d->progressView->clear();
     d->progressBar->reset();
 
-    VidSlideSettings* const settings  = wizard->settings();
-
     d->progressView->addEntry(i18n("Starting to generate video slideshow..."),
                               DHistoryView::ProgressEntry);
 
-    if (settings->selMode == VidSlideSettings::ALBUMS)
+    if (d->settings->selMode == VidSlideSettings::ALBUMS)
     {
-        if (!wizard->iface())
+        if (!d->wizard->iface())
             return;
 
-        d->progressView->addEntry(i18n("%1 input albums to process:", settings->inputAlbums.count()),
+        d->progressView->addEntry(i18n("%1 input albums to process:", d->settings->inputAlbums.count()),
                                   DHistoryView::ProgressEntry);
 
-        foreach(const QUrl& url, wizard->iface()->albumsItems(settings->inputAlbums))
+        foreach(const QUrl& url, d->iface->albumsItems(d->settings->inputAlbums))
         {
             d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
                                       DHistoryView::ProgressEntry);
@@ -131,16 +142,17 @@ void VidSlideFinalPage::slotProcess()
     }
     else
     {
-        d->progressView->addEntry(i18n("%1 input images to process", settings->inputImages.count()),
+        d->progressView->addEntry(i18n("%1 input images to process", d->settings->inputImages.count()),
                                   DHistoryView::ProgressEntry);
     }
 
-    if (!settings->inputAudio.isEmpty())
+    if (!d->settings->inputAudio.isEmpty())
     {
-        d->progressView->addEntry(i18n("%1 input audio stream to process:", settings->inputAlbums.count()),
+        d->progressView->addEntry(i18n("%1 input audio stream to process:",
+                                       d->settings->inputAlbums.count()),
                                   DHistoryView::ProgressEntry);
 
-        foreach(const QUrl& url, settings->inputAudio)
+        foreach(const QUrl& url, d->settings->inputAudio)
         {
             d->progressView->addEntry(QDir::toNativeSeparators(url.toLocalFile()),
                                       DHistoryView::ProgressEntry);
@@ -148,18 +160,30 @@ void VidSlideFinalPage::slotProcess()
     }
 
     d->progressView->addEntry(i18n("Output video stream: %1",
-                              QDir::toNativeSeparators(settings->outputVideo.toLocalFile())),
+                              QDir::toNativeSeparators(d->settings->outputVideo.toLocalFile())),
                               DHistoryView::ProgressEntry);
+
+    d->progressBar->reset();
+    d->encoder = new VidSlideThread(this);
+
+    connect(d->encoder, SIGNAL(signalStarting(int)),
+            d->progressBar, SLOT(setMaximum(int)));
+
+    connect(d->encoder, SIGNAL(signalProgress(int)),
+            d->progressBar, SLOT(setValue(int)));
+
+    connect(d->encoder, SIGNAL(signalDone()),
+            this, SLOT(slotDone()));
+
+    d->encoder->processStream(d->settings);
+    d->encoder->start();
+}
+
+void VidSlideFinalPage::slotDone()
+{
+    d->progressBar->progressCompleted();
+
 /*
-    VidSlideThread encoder(this);
-    encoder
-    generator.setProgressWidgets(d->progressView, d->progressBar);
-
-    if (!generator.run())
-    {
-        return;
-    }
-
     if (generator.warnings())
     {
         d->progressView->addEntry(i18n("Gallery is completed, but some warnings occurred."),
@@ -171,9 +195,9 @@ void VidSlideFinalPage::slotProcess()
                                   DHistoryView::ProgressEntry);
     }
 */
-    if (settings->openInPlayer)
+    if (d->settings->openInPlayer)
     {
-        QDesktopServices::openUrl(settings->outputVideo);
+        QDesktopServices::openUrl(d->settings->outputVideo);
         d->progressView->addEntry(i18n("Opening video stream in player..."),
                                   DHistoryView::ProgressEntry);
     }
