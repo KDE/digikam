@@ -582,6 +582,11 @@ RecognitionWorker::RecognitionWorker(FacePipeline::Private* const d)
 {
 }
 
+void RecognitionWorker::activeFaceRecognizer(int algorithmType)
+{
+    database.activeFaceRecognizer(algorithmType);
+}
+
 void RecognitionWorker::process(FacePipelineExtendedPackage::Ptr package)
 {
     FaceUtils     utils;
@@ -1599,6 +1604,14 @@ void FacePipeline::setPriority(QThread::Priority priority)
 QThread::Priority FacePipeline::priority() const
 {
     return d->priority;
+}
+
+void FacePipeline::activeFaceRecognizer(int algorithmType)
+{
+    if(d->recognitionWorker!=0)
+    {
+        d->recognitionWorker->activeFaceRecognizer(algorithmType);
+    }
 }
 
 void FacePipeline::cancel()

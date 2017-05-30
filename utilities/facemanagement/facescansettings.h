@@ -55,6 +55,13 @@ public:
         Rescan
     };
 
+    //for recognize algorithm option
+    enum RecognizeAlgorithm
+    {
+        LBP,
+        EigenFace
+    };
+
 public:
 
     FaceScanSettings()
@@ -63,6 +70,7 @@ public:
         accuracy               = 80;
         task                   = Detect;
         alreadyScannedHandling = Skip;
+        recognizeAlgorithm     = LBP;
     }
 
     // processing power
@@ -77,6 +85,8 @@ public:
     ScanTask               task;
 
     AlreadyScannedHandling alreadyScannedHandling;
+
+    RecognizeAlgorithm     recognizeAlgorithm;
 };
 
 } // namespace Digikam

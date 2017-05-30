@@ -245,6 +245,11 @@ public:
         wait();    // protect database
     }
 
+    /**
+     * Set the face recognition algorithm type
+     */
+    void activeFaceRecognizer(int algorithmType);
+
 public Q_SLOTS:
 
     void process(FacePipelineExtendedPackage::Ptr package);

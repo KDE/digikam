@@ -1,6 +1,8 @@
 /* ============================================================
+ * @file
  *
  * This file is a part of digiKam
+ * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
  * Date        : 2010-06-16
  * Description : A convenience class for a standalone face detector
@@ -23,6 +25,7 @@
  * ============================================================ */
 
 // OpenCV includes need to show up before Qt includes
+#include "opencveigenfacerecognizer.h"
 #include "opencvlbphfacerecognizer.h"
 #include "funnelreal.h"
 
@@ -89,10 +92,18 @@ class RecognitionDatabase::Private
 {
 public:
 
+    //for recognize algorithm option
+    enum RecognizeAlgorithm
+    {
+        LBP,
+        EigenFace
+    };
+
     bool                 dbAvailable;
     QMutex               mutex;
     QVariantMap          parameters;
     QHash<int, Identity> identityCache;
+    RecognizeAlgorithm   recognizeAlgorithm;
 
 public:
 
@@ -106,6 +117,7 @@ public:
     {
         if (!ptr)
         {
+            qCDebug(DIGIKAM_FACESENGINE_LOG) << "create recognizer";
             ptr = new T();
         }
 
@@ -122,8 +134,11 @@ public:
 
 public:
 
-    OpenCVLBPHFaceRecognizer* lbph()            { return getObjectOrCreate(opencvlbph); }
-    OpenCVLBPHFaceRecognizer* lbphConst() const { return opencvlbph;                    }
+    OpenCVLBPHFaceRecognizer* lbph()              { return getObjectOrCreate(opencvlbph);  }
+    OpenCVLBPHFaceRecognizer* lbphConst() const   { return opencvlbph;                     }
+
+    OpenCVEIGENFaceRecognizer* eigen()            { return getObjectOrCreate(opencveigen); }
+    OpenCVEIGENFaceRecognizer* eigenConst() const { return opencveigen;                    }
 
 public:
 
@@ -138,7 +153,10 @@ public:
 
     void train(OpenCVLBPHFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                TrainingDataProvider* const data, const QString& trainingContext);
+    void train(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+               TrainingDataProvider* const data, const QString& trainingContext);
     void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
+    void clear(OpenCVEIGENFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
 
     cv::Mat preprocessingChain(const QImage& image);
 
@@ -150,6 +168,7 @@ public:
 
 private:
 
+    OpenCVEIGENFaceRecognizer* opencveigen;
     OpenCVLBPHFaceRecognizer* opencvlbph;
     FunnelReal*               funnel;
 };
@@ -158,6 +177,7 @@ private:
 
 RecognitionDatabase::Private::Private()
     : mutex(QMutex::Recursive),
+      opencveigen(0),
       opencvlbph(0),
       funnel(0)
 {
@@ -165,6 +185,7 @@ RecognitionDatabase::Private::Private()
     params.setFaceDatabasePath(CoreDbAccess::parameters().faceParameters().getFaceDatabaseNameOrDir());
     FaceDbAccess::setParameters(params);
     dbAvailable               = FaceDbAccess::checkReadyForUse(0);
+    recognizeAlgorithm        = RecognizeAlgorithm::LBP;
 
     if (dbAvailable)
     {
@@ -183,6 +204,7 @@ RecognitionDatabase::Private::Private()
 
 RecognitionDatabase::Private::~Private()
 {
+    delete opencveigen;
     delete opencvlbph;
     delete funnel;
 }
@@ -455,6 +477,14 @@ void RecognitionDatabase::setIdentityAttributes(int id, const QMap<QString, QStr
 
 QString RecognitionDatabase::backendIdentifier() const
 {
+    if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::LBP)
+    {
+        return QString::fromLatin1("opencvlbph");
+    }
+    else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::EigenFace)
+    {
+        return QString::fromLatin1("eigenfaces");
+    }
     return QString::fromLatin1("opencvlbph");
 }
 
@@ -543,7 +573,20 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
 {
     try
     {
-        cv::Mat cvImage = recognizer()->prepareForRecognition(image);
+        //cv::Mat cvImage = recognizer()->prepareForRecognition(image);
+        cv::Mat cvImage;
+        if(recognizeAlgorithm==RecognizeAlgorithm::LBP)
+        {
+            cvImage = lbph()->prepareForRecognition(image);
+        }
+        else if(recognizeAlgorithm==RecognizeAlgorithm::EigenFace)
+        {
+            cvImage = eigen()->prepareForRecognition(image);
+        }
+        else
+        {
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
+        }
         //cvImage         = aligner()->align(cvImage);
         //TanTriggsPreprocessor preprocessor;
         //cvImage         = preprocessor.preprocess(cvImage);
@@ -559,6 +602,11 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
         qCCritical(DIGIKAM_FACESENGINE_LOG) << "Default exception from OpenCV";
         return cv::Mat();
     }
+}
+
+void RecognitionDatabase::activeFaceRecognizer(int algorithmType)
+{
+    d->recognizeAlgorithm = (Private::RecognizeAlgorithm)algorithmType;
 }
 
 QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const images)
@@ -578,7 +626,15 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
 
         try
         {
-            id = d->recognizer()->recognize(d->preprocessingChain(images->image()));
+            //id = d->recognizer()->recognize(d->preprocessingChain(images->image()));
+            if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::LBP)
+            {
+                id = d->lbph()->recognize(d->preprocessingChain(images->image()));
+            }
+            else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::EigenFace)
+            {
+                id = d->eigen()->recognize(d->preprocessingChain(images->image()));
+            }
         }
         catch (cv::Exception& e)
         {
@@ -614,6 +670,7 @@ void RecognitionDatabase::train(const Identity& identityToBeTrained, TrainingDat
 }
 
 /// Training where the train method takes one identity and one image
+/*
 template <class Recognizer>
 static void trainSingle(Recognizer* const r, const Identity& identity, TrainingDataProvider* const data,
                         const QString& trainingContext, RecognitionDatabase::Private* const d)
@@ -638,6 +695,7 @@ static void trainSingle(Recognizer* const r, const Identity& identity, TrainingD
         }
     }
 }
+*/
 
 /// Training where the train method takes a list of identities and images,
 /// and updating per-identity is non-inferior to updating all at once.
@@ -681,7 +739,7 @@ static void trainIdentityBatch(Recognizer* const r, const QList<Identity>& ident
         }
         catch (cv::Exception& e)
         {
-            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training LBPH:" << e.what();
+            qCCritical(DIGIKAM_FACESENGINE_LOG) << "cv::Exception training Recognizer:" << e.what();
         }
         catch(...)
         {
@@ -696,6 +754,13 @@ void RecognitionDatabase::Private::train(OpenCVLBPHFaceRecognizer* const r, cons
     trainIdentityBatch(r, identitiesToBeTrained, data, trainingContext, this);
 }
 
+void RecognitionDatabase::Private::train(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+                                         TrainingDataProvider* const data, const QString& trainingContext)
+{
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training using opencv eigenfaces";
+    trainIdentityBatch(r, identitiesToBeTrained, data, trainingContext, this);
+}
+
 void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* const data,
                                 const QString& trainingContext)
 {
@@ -706,7 +771,9 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
 
     QMutexLocker lock(&d->mutex);
 
-    d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
+    //d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
+    d->train(d->lbph(), identitiesToBeTrained, data, trainingContext);
+    d->train(d->eigen(), identitiesToBeTrained, data, trainingContext);
 }
 
 
@@ -743,6 +810,22 @@ void RecognitionDatabase::Private::clear(OpenCVLBPHFaceRecognizer* const, const 
     }
 }
 
+void RecognitionDatabase::Private::clear(OpenCVEIGENFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
+{
+    // force later reload
+    delete opencveigen;
+    opencveigen = 0;
+
+    if (idsToClear.isEmpty())
+    {
+        FaceDbAccess().db()->clearEIGENTraining(trainingContext);
+    }
+    else
+    {
+        FaceDbAccess().db()->clearEIGENTraining(idsToClear, trainingContext);
+    }
+}
+
 void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
 {
     if (!d || !d->dbAvailable)
@@ -751,7 +834,9 @@ void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
     }
 
     QMutexLocker lock(&d->mutex);
-    d->clear(d->recognizer(), QList<int>(), trainingContext);
+    //d->clear(d->recognizer(), QList<int>(), trainingContext);
+    d->clear(d->lbph(), QList<int>(), trainingContext);
+    d->clear(d->eigen(), QList<int>(), trainingContext);
 }
 
 void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext)

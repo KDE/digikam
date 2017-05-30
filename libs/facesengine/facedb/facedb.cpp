@@ -23,6 +23,7 @@
 
 // OpenCV includes need to show up before Qt includes
 #include "lbphfacemodel.h"
+#include "eigenfacemodel.h"
 
 // Local includes
 
@@ -351,6 +352,134 @@ void FaceDb::clearLBPHTraining(const QList<int>& identities, const QString& cont
         else
         {
             d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVLBPHistograms WHERE identity=? AND context=?;"), id, context);
+        }
+    }
+}
+
+void FaceDb::updateEIGENFaceModel(EigenFaceModel& model)
+{
+    QList<EigenFaceMatMetadata> metadataList = model.matMetadata();
+
+    for (int i = 0 ; i < metadataList.size() ; i++)
+    {
+        const EigenFaceMatMetadata& metadata = metadataList[i];
+
+        if (metadata.storageStatus == EigenFaceMatMetadata::Created)
+        {
+            OpenCVMatData data = model.matData(i);
+
+            if (data.data.isEmpty())
+            {
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Eigenface data to commit in database are empty for Identity " << metadata.identity;
+            }
+            else
+            {
+                QByteArray compressed = qCompress(data.data);
+
+                if (compressed.isEmpty())
+                {
+                    qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot compress mat data to commit in database for Identity " << metadata.identity;
+                }
+                else
+                {
+                    QVariantList histogramValues;
+                    QVariant     insertedId;
+
+                    histogramValues << metadata.identity
+                                    << metadata.context
+                                    << data.type
+                                    << data.rows
+                                    << data.cols
+                                    << compressed;
+
+                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data) "
+                                   "VALUES (?,?,?,?,?,?);"),
+                                   histogramValues, 0, &insertedId);
+
+                    model.setWrittenToDatabase(i, insertedId.toInt());
+
+                    qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed matData " << insertedId << " for identity " << metadata.identity << " with size " << compressed.size();
+                }
+            }
+        }
+    }
+}
+
+EigenFaceModel FaceDb::eigenFaceModel() const
+{
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Loading EIGEN model";
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
+                                                                      "FROM OpenCVEIGENMat;"));
+
+    EigenFaceModel model = EigenFaceModel();
+    QList<OpenCVMatData> mats;
+    QList<EigenFaceMatMetadata> matMetadata;
+
+    while(query.next())
+    {
+        EigenFaceMatMetadata metadata;
+        OpenCVMatData data;
+
+        metadata.databaseId    = query.value(0).toInt();
+        metadata.identity      = query.value(1).toInt();
+        metadata.context       = query.value(2).toString();
+        metadata.storageStatus = EigenFaceMatMetadata::InDatabase;
+
+        // cv::Mat
+        data.type              = query.value(3).toInt();
+        data.rows              = query.value(4).toInt();
+        data.cols              = query.value(5).toInt();
+        QByteArray cData       = query.value(6).toByteArray();
+
+        if (!cData.isEmpty())
+        {
+            data.data = qUncompress(cData);
+
+            if (data.data.isEmpty())
+            {
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot uncompress mat data to checkout from database for Identity " << metadata.identity;
+            }
+            else
+            {
+                qCDebug(DIGIKAM_FACEDB_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
+
+                mats        << data;
+                matMetadata << metadata;
+            }
+        }
+        else
+        {
+            qCWarning(DIGIKAM_FACEDB_LOG) << "Mat data to checkout from database are empty for Identity " << metadata.identity;
+        }
+    }
+    model.setMats(mats, matMetadata);
+
+    return model;
+}
+
+void FaceDb::clearEIGENTraining(const QString& context)
+{
+    if (context.isNull())
+    {
+        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat;"));
+    }
+    else
+    {
+        d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat WHERE context=?;"), context);
+    }
+}
+
+void FaceDb::clearEIGENTraining(const QList<int>& identities, const QString& context)
+{
+    foreach (int id, identities)
+    {
+        if (context.isNull())
+        {
+            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat WHERE identity=?;"), id);
+        }
+        else
+        {
+            d->db->execSql(QString::fromLatin1("DELETE FROM OpenCVEIGENMat WHERE identity=? AND context=?;"), id, context);
         }
     }
 }

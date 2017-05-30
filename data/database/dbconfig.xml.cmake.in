@@ -561,6 +561,19 @@
                 </statement>
             </dbaction>
 
+            <dbaction name="CreateFaceDBOpenCVEigen" mode="transaction">
+                <statement mode="plain">
+                    CREATE TABLE OpenCVEIGENMat
+                    (id INTEGER PRIMARY KEY,
+                    identity INTEGER,
+                    context TEXT,
+                    type INTEGER,
+                    rows INTEGER,
+                    cols INTEGER,
+                    data BLOB)
+                </statement>
+            </dbaction>
+
             <!-- SQlite Face Indexes -->
 
             <dbaction name="CreateFaceIndices" mode="transaction">
@@ -1552,6 +1565,18 @@ ORDER BY inf.rating DESC, img.name ASC
                 <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVLBPHistograms
                             (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             recognizerid INTEGER,
+                            identity INTEGER,
+                            context TEXT CHARACTER SET utf8 COLLATE utf8_bin,
+                            type INTEGER,
+                            rows INTEGER,
+                            cols INTEGER,
+                            data BLOB) ENGINE InnoDB;
+                </statement>
+            </dbaction>
+
+            <dbaction name="CreateFaceDBOpenCVEigen" mode="transaction">
+                <statement mode="plain">CREATE TABLE IF NOT EXISTS OpenCVEIGENMat
+                            (id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             identity INTEGER,
                             context TEXT CHARACTER SET utf8 COLLATE utf8_bin,
                             type INTEGER,

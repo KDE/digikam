@@ -234,7 +234,8 @@ bool FaceDbSchemaUpdater::createDatabase()
 bool FaceDbSchemaUpdater::createTables()
 {
     return d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDB"))) &&
-           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH")));
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVLBPH"))) &&
+           d->access->backend()->execDBAction(d->access->backend()->getDBAction(QString::fromLatin1("CreateFaceDBOpenCVEigen")));
 }
 
 bool FaceDbSchemaUpdater::createIndices()

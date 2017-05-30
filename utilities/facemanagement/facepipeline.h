@@ -212,6 +212,11 @@ public:
     void construct();
 
     /**
+     * Set the face recognition algorithm type
+     */
+    void activeFaceRecognizer(int algorithmType);
+
+    /**
      * Cancels all processing
      */
     void cancel();

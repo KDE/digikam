@@ -138,6 +138,11 @@ public:
     int recommendedImageSize(const QSize& availableSize = QSize()) const;
 
     /**
+     * Set the face recognition algorithm type
+     */
+    void activeFaceRecognizer(int algorithmType);
+
+    /**
      * Performs recognition.
      * The face details to be recognized are passed by the provider.
      * For each entry in the provider, in 1-to-1 mapping,
