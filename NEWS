@@ -75,5 +75,6 @@ BUGFIXES FROM BUGZILLA:
 054 ==> 375808 - Submit bug report is not working.
 055 ==> 377417 - Item - Open & Item - Open with Default Application not working for video files.
 056 ==> 376978 - The "right click->open with" does not work.
-057 ==> 
+057 ==> 361378 - Tags are not being removed from files metadata.
+058 ==> 
 
