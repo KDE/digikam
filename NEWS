@@ -76,5 +76,6 @@ BUGFIXES FROM BUGZILLA:
 055 ==> 377417 - Item - Open & Item - Open with Default Application not working for video files.
 056 ==> 376978 - The "right click->open with" does not work.
 057 ==> 361378 - Tags are not being removed from files metadata.
-058 ==> 
+058 ==> 375187 - Keywords under same tag in digikam do not match.
+059 ==> 
 
