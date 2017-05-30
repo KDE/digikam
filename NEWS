@@ -71,4 +71,5 @@ BUGFIXES FROM BUGZILLA:
 050 ==> 121422 - Do not open videos using external application.
 051 ==> 380260 - Sidecar files are not being created still.
 052 ==> 380342 - Add "Album sorting order" option.
-053 ==> 
+053 ==> 379956 - Can't open a file with a shell script from digiKam.
+054 ==> 
