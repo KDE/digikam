@@ -44,6 +44,7 @@
 #include "digikam_debug.h"
 #include "vidslideintropage.h"
 #include "vidslideselectionpage.h"
+#include "vidslidevideopage.h"
 #include "vidslideoutputpage.h"
 #include "vidslidefinalpage.h"
 
@@ -58,6 +59,7 @@ public:
       : iface(0),
         introPage(0),
         selectionPage(0),
+        videoPage(0),
         outputPage(0),
         finalPage(0),
         settings(0)
@@ -67,6 +69,7 @@ public:
     DInfoInterface*         iface;
     VidSlideIntroPage*      introPage;
     VidSlideSelectionPage*  selectionPage;
+    VidSlideVideoPage*      videoPage;
     VidSlideOutputPage*     outputPage;
     VidSlideFinalPage*      finalPage;
     VidSlideSettings*       settings;
@@ -88,6 +91,7 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
 
     d->introPage         = new VidSlideIntroPage(this, i18n("Welcome to Video Slideshow Tool"));
     d->selectionPage     = new VidSlideSelectionPage(this, i18n("Items Selection"));
+    d->videoPage         = new VidSlideVideoPage(this, i18n("Video Settings"));
     d->outputPage        = new VidSlideOutputPage(this, i18n("Output Settings"));
     d->finalPage         = new VidSlideFinalPage(this, i18n("Generating Video Slideshow"));
 }
