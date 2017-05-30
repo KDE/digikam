@@ -70,5 +70,5 @@ BUGFIXES FROM BUGZILLA:
 049 ==> 139693 - Include videos to slideshow.
 050 ==> 121422 - Do not open videos using external application.
 051 ==> 380260 - Sidecar files are not being created still.
-052 ==> 
-
+052 ==> 380342 - Add "Album sorting order" option.
+053 ==> 
