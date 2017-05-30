@@ -58,7 +58,7 @@ public:
         settings = 0;
     }
 
-    bool encodeFrame(VideoFrame& frame, VideoEncoder* const venc, AVMuxer& mux) const;
+    bool   encodeVideoFrame(VideoFrame& frame, VideoEncoder* const venc, AVMuxer& mux) const;
     QImage makeFramedImage(const QString& file, const QSize& outSize) const;
 
 public:
@@ -96,7 +96,9 @@ QImage VidSlideTask::Private::makeFramedImage(const QString& file, const QSize& 
     return qimg;
 }
 
-bool VidSlideTask::Private::encodeFrame(VideoFrame& frame, VideoEncoder* const venc, AVMuxer& mux) const
+bool VidSlideTask::Private::encodeVideoFrame(VideoFrame& frame,
+                                             VideoEncoder* const venc,
+                                             AVMuxer& mux) const
 {
     if (frame.pixelFormat() != venc->pixelFormat())
     {
@@ -209,7 +211,7 @@ void VidSlideTask::run()
         {
             VideoFrame frame(tmngr.currentframe(tmout));
 
-            if (d->encodeFrame(frame, venc, mux))
+            if (d->encodeVideoFrame(frame, venc, mux))
             {
 //                qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
             }
@@ -224,7 +226,7 @@ void VidSlideTask::run()
 
             do
             {
-                if (d->encodeFrame(frame, venc, mux))
+                if (d->encodeVideoFrame(frame, venc, mux))
                 {
 
                     count++;
