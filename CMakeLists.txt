@@ -113,7 +113,7 @@ option(ENABLE_INTERNALMYSQL         "Build digiKam with internal MySQL server ex
 option(ENABLE_DIGIKAM_MODELTEST     "Enable ModelTest on some models for debugging (default=OFF)"                        OFF)
 
 ############## Find Packages ###################
-set(Qt5WebKitWidgets_DIR "/home/yjwudi/anaconda2/lib/cmake/Qt5WebKitWidgets")
+
 find_package(Qt5 ${QT_MIN_VERSION}
              REQUIRED NO_MODULE COMPONENTS
              Core
