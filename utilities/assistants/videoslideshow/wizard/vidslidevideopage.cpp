@@ -53,6 +53,7 @@ public:
       : framesVal(0),
         typeVal(0),
         bitrateVal(0),
+        stdVal(0),
         transVal(0),
         wizard(0),
         settings(0)
@@ -68,6 +69,7 @@ public:
     QSpinBox*         framesVal;
     QComboBox*        typeVal;
     QComboBox*        bitrateVal;
+    QComboBox*        stdVal;
     QComboBox*        transVal;
     VidSlideWizard*   wizard;
     VidSlideSettings* settings;
@@ -89,6 +91,25 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     d->framesVal              = new QSpinBox(main);
     d->framesVal->setRange(1, 15000);
     framesLabel->setBuddy(d->framesVal);
+
+    // --------------------
+
+    QLabel* const stdLabel = new QLabel(main);
+    stdLabel->setWordWrap(false);
+    stdLabel->setText(i18n("Video Standard:"));
+    d->stdVal              = new QComboBox(main);
+    d->stdVal->setEditable(false);
+
+    QMap<VidSlideSettings::VidStd, QString> map3                = VidSlideSettings::videoStdNames();
+    QMap<VidSlideSettings::VidStd, QString>::const_iterator it3 = map3.constBegin();
+
+    while (it3 != map3.constEnd())
+    {
+        d->stdVal->addItem(it3.value(), (int)it3.key());
+        ++it3;
+    }
+
+    stdLabel->setBuddy(d->stdVal);
 
     // --------------------
 
@@ -136,13 +157,13 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     d->transVal              = new QComboBox(main);
     d->transVal->setEditable(false);
 
-    QMap<TransitionMngr::TransType, QString> map3                = TransitionMngr::transitionNames();
-    QMap<TransitionMngr::TransType, QString>::const_iterator it3 = map3.constBegin();
+    QMap<TransitionMngr::TransType, QString> map4                = TransitionMngr::transitionNames();
+    QMap<TransitionMngr::TransType, QString>::const_iterator it4 = map4.constBegin();
 
-    while (it3 != map3.constEnd())
+    while (it4 != map4.constEnd())
     {
-        d->transVal->addItem(it3.value(), (int)it3.key());
-        ++it3;
+        d->transVal->addItem(it4.value(), (int)it4.key());
+        ++it4;
     }
 
     transLabel->setBuddy(d->transVal);
@@ -153,13 +174,15 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->addWidget(framesLabel,     0, 0, 1, 1);
     grid->addWidget(d->framesVal,    0, 1, 1, 1);
-    grid->addWidget(typeLabel,       1, 0, 1, 1);
-    grid->addWidget(d->typeVal,      1, 1, 1, 1);
-    grid->addWidget(bitrateLabel,    2, 0, 1, 1);
-    grid->addWidget(d->bitrateVal,   2, 1, 1, 1);
-    grid->addWidget(transLabel,      3, 0, 1, 1);
-    grid->addWidget(d->transVal,     3, 1, 1, 1);
-    grid->setRowStretch(4, 10);
+    grid->addWidget(stdLabel,        1, 0, 1, 1);
+    grid->addWidget(d->stdVal,       1, 1, 1, 1);
+    grid->addWidget(typeLabel,       2, 0, 1, 1);
+    grid->addWidget(d->typeVal,      2, 1, 1, 1);
+    grid->addWidget(bitrateLabel,    3, 0, 1, 1);
+    grid->addWidget(d->bitrateVal,   3, 1, 1, 1);
+    grid->addWidget(transLabel,      4, 0, 1, 1);
+    grid->addWidget(d->transVal,     4, 1, 1, 1);
+    grid->setRowStretch(5, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("video-mp4")));
@@ -175,6 +198,7 @@ void VidSlideVideoPage::initializePage()
     d->framesVal->setValue(d->settings->aframes);
     d->typeVal->setCurrentIndex(d->settings->outputType);
     d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
+    d->stdVal->setCurrentIndex(d->settings->vStandard);
     d->transVal->setCurrentIndex(d->settings->transition);
 }
 
@@ -183,6 +207,7 @@ bool VidSlideVideoPage::validatePage()
     d->settings->aframes    = d->framesVal->value();
     d->settings->outputType = (VidSlideSettings::VidType)d->typeVal->currentIndex();
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
+    d->settings->vStandard   = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;

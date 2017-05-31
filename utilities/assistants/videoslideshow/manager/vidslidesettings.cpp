@@ -37,7 +37,7 @@ VidSlideSettings::VidSlideSettings()
     selMode      = IMAGES;
     outputType   = BLUERAY;
     aframes      = 125;
-    frameRate    = 25.0;
+    vStandard    = PAL;
     vbitRate     = VBR12;
     abitRate     = 64000;
     transition   = TransitionMngr::None;
@@ -60,8 +60,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)TransitionMngr::None);
     aframes      = group.readEntry("AFrames",
                    125);
-    frameRate    = group.readEntry("FrameRate",
-                   25.0);
+    vStandard    = (VidStd)group.readEntry("VStandard",
+                   (int)PAL);
     vbitRate     = (VidBitRate)group.readEntry("VBitRate",
                    (int)VBR12);
     abitRate     = group.readEntry("AudioRate",
@@ -79,7 +79,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("AFrames",      aframes);
     group.writeEntry("VBitRate",     (int)vbitRate);
     group.writeEntry("ABitRate",     abitRate);
-    group.writeEntry("FramesRate",   frameRate);
+    group.writeEntry("VStandard",    (int)vStandard);
     group.writeEntry("OutputVideo",  outputVideo);
 }
 
@@ -89,10 +89,6 @@ QSize VidSlideSettings::videoTypeSize() const
 
     switch(outputType)
     {
-        case RIM240:
-            s = QSize(240, 136);
-            break;
-
         case QVGA:
             s = QSize(320, 180);
             break;
@@ -135,7 +131,6 @@ QSize VidSlideSettings::videoTypeSize() const
 
         default: // BLUERAY
             s = QSize(1920, 1080);
-
             break;
     }
 
@@ -198,29 +193,45 @@ int VidSlideSettings::videoBitRate() const
 
         default: // VBR12
             b = 1200000;
-
             break;
     }
 
     return b;
 }
 
+qreal VidSlideSettings::videoFrameRate() const
+{
+    int fr;
+
+    switch(vStandard)
+    {
+        case NTSC:
+            fr = 29.97;
+            break;
+
+        default: // PAL
+            fr = 25.0;
+            break;
+    }
+
+    return fr;
+}
+
 QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
 {
     QMap<VidType, QString> types;
 
-    types[RIM240]  = i18nc("Video Type: RIM240",  "RIM240 - 240x136 - 25 FPS");
-    types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180 - 25 FPS");
-    types[VCD]     = i18nc("Video Type: VCD",     "VCD - 352x240 - 25 FPS");
-    types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270 - 25 FPS");
-    types[SVCD]    = i18nc("Video Type: SVCD",    "SVCD - 480x576 - 25 FPS");
-    types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360 - 25 FPS");
-    types[DVD]     = i18nc("Video Type: DVD",     "DVD - 720x576 - 25 FPS");
-    types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450 - 25 FPS");
-    types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576 - 25 FPS");
-    types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720 - 25 FPS");
-    types[BLUERAY] = i18nc("Video Type: BLUERAY", "BLUERAY - 1920x1080 - 25 FPS");
-    types[UHD4K]   = i18nc("Video Type: UHD4K",   "UHD4K - 3840x2160 - 25 FPS");
+    types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180");
+    types[VCD]     = i18nc("Video Type: VCD",     "VCD - 352x240");
+    types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270");
+    types[SVCD]    = i18nc("Video Type: SVCD",    "SVCD - 480x576");
+    types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360");
+    types[DVD]     = i18nc("Video Type: DVD",     "DVD - 720x576");
+    types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450");
+    types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576");
+    types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720");
+    types[BLUERAY] = i18nc("Video Type: BLUERAY", "BLUERAY - 1920x1080");
+    types[UHD4K]   = i18nc("Video Type: UHD4K",   "UHD4K - 3840x2160");
 
     return types;
 }
@@ -244,6 +255,16 @@ QMap<VidSlideSettings::VidBitRate, QString> VidSlideSettings::videoBitRateNames(
     br[VBR80]  = i18nc("Video Bit Rate 8000000", "8000k");
 
     return br;
+}
+
+QMap<VidSlideSettings::VidStd, QString> VidSlideSettings::videoStdNames()
+{
+    QMap<VidStd, QString> std;
+
+    std[PAL]  = i18nc("Video Standard PAL",  "PAL - 25 FPS");
+    std[NTSC] = i18nc("Video Standard NTSC", "NTSC - 29.97 FPS");
+
+    return std;
 }
 
 } // namespace Digikam
