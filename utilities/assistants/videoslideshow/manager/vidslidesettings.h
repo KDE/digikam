@@ -96,6 +96,7 @@ public:
     int                       aframes;       // Amount of frames to encode by image in video stream.
                                              // ex: 125 frames = 5 s at 25 img/s.
 
+    int                       abitRate;      // Encoded Audio stream bit rate in byte/s.
     int                       vbitRate;      // Encoded Video stream bit rate in byte/s.
     qreal                     frameRate;     // Encoded Video stream frame rate in img/s.
     VidType                   outputType;    // Encoded video type.

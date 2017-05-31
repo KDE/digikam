@@ -39,6 +39,7 @@ VidSlideSettings::VidSlideSettings()
     aframes      = 125;
     frameRate    = 25.0;
     vbitRate     = 1024*1024;
+    abitRate     = 64000;
     transition   = TransitionMngr::None;
     outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
 }
@@ -59,10 +60,12 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)TransitionMngr::None);
     aframes      = group.readEntry("AFrames",
                    125);
-    frameRate      = group.readEntry("FrameRate",
+    frameRate    = group.readEntry("FrameRate",
                    25.0);
-    vbitRate      = group.readEntry("FrameRate",
+    vbitRate     = group.readEntry("FrameRate",
                    1024*1024);
+    abitRate     = group.readEntry("AudioRate",
+                   64000);
     outputVideo  = group.readEntry("OutputVideo",
                    QUrl::fromLocalFile(QLatin1String("./out.mp4")));
 }
@@ -75,6 +78,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("AFrames",      aframes);
     group.writeEntry("VBitRate",     vbitRate);
+    group.writeEntry("ABitRate",     abitRate);
     group.writeEntry("FramesRate",   frameRate);
     group.writeEntry("OutputVideo",  outputVideo);
 }
