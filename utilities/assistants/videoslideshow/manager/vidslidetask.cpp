@@ -125,7 +125,7 @@ bool VidSlideTask::Private::encodeFrame(VideoFrame& vframe,
     Packet apkt;
     Packet vpkt;
 
-    if (curAudioFile == settings->inputAudio.constEnd())
+    if (curAudioFile != settings->inputAudio.constEnd())
     {
         AudioFrame aframe = nextAudioFrame(aenc->audioFormat());
 
