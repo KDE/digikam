@@ -75,12 +75,12 @@ public:
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
-    QSize typeToSize() const;
-
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    static QMap<VidType, QString> typeNames();
+    QSize videoTypeSize() const;
+
+    static QMap<VidType, QString> videoTypeNames();
 
 public:
 

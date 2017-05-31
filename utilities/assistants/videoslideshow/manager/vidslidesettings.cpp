@@ -83,7 +83,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("OutputVideo",  outputVideo);
 }
 
-QSize VidSlideSettings::typeToSize() const
+QSize VidSlideSettings::videoTypeSize() const
 {
     QSize s;
 
@@ -147,7 +147,7 @@ QSize VidSlideSettings::typeToSize() const
 }
 
 
-QMap<VidSlideSettings::VidType, QString> VidSlideSettings::typeNames()
+QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
 {
     QMap<VidType, QString> types;
 

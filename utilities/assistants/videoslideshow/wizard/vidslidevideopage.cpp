@@ -85,7 +85,7 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     framesLabel->setWordWrap(false);
     framesLabel->setText(i18n("Number of Frames by Image:"));
     d->framesVal              = new QSpinBox(main);
-    d->framesVal->setRange(1, 9999);
+    d->framesVal->setRange(1, 15000);
     framesLabel->setBuddy(d->framesVal);
 
     // --------------------
@@ -96,7 +96,7 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     d->typeVal              = new QComboBox(main);
     d->typeVal->setEditable(false);
 
-    QMap<VidSlideSettings::VidType, QString> map                = VidSlideSettings::typeNames();
+    QMap<VidSlideSettings::VidType, QString> map                = VidSlideSettings::videoTypeNames();
     QMap<VidSlideSettings::VidType, QString>::const_iterator it = map.constBegin();
 
     while (it != map.constEnd())

@@ -274,7 +274,7 @@ void VidSlideTask::run()
     venc->setBitRate(d->settings->vbitRate);
     venc->setFrameRate(d->settings->frameRate);
 
-    QSize osize = d->settings->typeToSize();
+    QSize osize = d->settings->videoTypeSize();
     venc->setWidth(osize.width());
     venc->setHeight(osize.height());
 
