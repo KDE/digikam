@@ -54,6 +54,7 @@ public:
         typeVal(0),
         bitrateVal(0),
         stdVal(0),
+        codecVal(0),
         transVal(0),
         duration(0),
         wizard(0),
@@ -71,6 +72,7 @@ public:
     QComboBox*        typeVal;
     QComboBox*        bitrateVal;
     QComboBox*        stdVal;
+    QComboBox*        codecVal;
     QComboBox*        transVal;
     QLabel*           duration;
     VidSlideWizard*   wizard;
@@ -153,6 +155,25 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     // --------------------
 
+    QLabel* const codecLabel = new QLabel(main);
+    codecLabel->setWordWrap(false);
+    codecLabel->setText(i18n("Video Codec:"));
+    d->codecVal              = new QComboBox(main);
+    d->codecVal->setEditable(false);
+
+    QMap<VidSlideSettings::VidCodec, QString> map5                = VidSlideSettings::videoCodecNames();
+    QMap<VidSlideSettings::VidCodec, QString>::const_iterator it5 = map5.constBegin();
+
+    while (it5 != map5.constEnd())
+    {
+        d->codecVal->addItem(it5.value(), (int)it5.key());
+        ++it5;
+    }
+
+    codecLabel->setBuddy(d->codecVal);
+
+    // --------------------
+
     QLabel* const transLabel = new QLabel(main);
     transLabel->setWordWrap(false);
     transLabel->setText(i18n("Transition Type:"));
@@ -186,10 +207,12 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     grid->addWidget(d->typeVal,      2, 1, 1, 1);
     grid->addWidget(bitrateLabel,    3, 0, 1, 1);
     grid->addWidget(d->bitrateVal,   3, 1, 1, 1);
-    grid->addWidget(transLabel,      4, 0, 1, 1);
-    grid->addWidget(d->transVal,     4, 1, 1, 1);
-    grid->addWidget(d->duration,     5, 0, 1, 2);
-    grid->setRowStretch(6, 10);
+    grid->addWidget(codecLabel,      4, 0, 1, 1);
+    grid->addWidget(d->codecVal,     4, 1, 1, 1);
+    grid->addWidget(transLabel,      5, 0, 1, 1);
+    grid->addWidget(d->transVal,     5, 1, 1, 1);
+    grid->addWidget(d->duration,     6, 0, 1, 2);
+    grid->setRowStretch(7, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("video-mp4")));
@@ -211,29 +234,31 @@ VidSlideVideoPage::~VidSlideVideoPage()
 void VidSlideVideoPage::slotSlideDuration()
 {
     VidSlideSettings tmp;
-    tmp.aframes   = d->framesVal->value();
+    tmp.imgFrames = d->framesVal->value();
     tmp.vStandard = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
-    qreal titem   = tmp.aframes / tmp.videoFrameRate();
+    qreal titem   = tmp.imgFrames / tmp.videoFrameRate();
     qreal ttotal  = titem * d->settings->inputImages.count();
     d->duration->setText(i18n("Duration : %1 seconds by item, total %2 seconds", titem, ttotal));
 }
 
 void VidSlideVideoPage::initializePage()
 {
-    d->framesVal->setValue(d->settings->aframes);
-    d->typeVal->setCurrentIndex(d->settings->outputType);
+    d->framesVal->setValue(d->settings->imgFrames);
+    d->typeVal->setCurrentIndex(d->settings->vType);
     d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
     d->stdVal->setCurrentIndex(d->settings->vStandard);
+    d->codecVal->setCurrentIndex(d->settings->vCodec);
     d->transVal->setCurrentIndex(d->settings->transition);
     slotSlideDuration();
 }
 
 bool VidSlideVideoPage::validatePage()
 {
-    d->settings->aframes    = d->framesVal->value();
-    d->settings->outputType = (VidSlideSettings::VidType)d->typeVal->currentIndex();
+    d->settings->imgFrames  = d->framesVal->value();
+    d->settings->vType      = (VidSlideSettings::VidType)d->typeVal->currentIndex();
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
     d->settings->vStandard  = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
+    d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentIndex();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;

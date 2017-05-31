@@ -33,15 +33,16 @@ namespace Digikam
 
 VidSlideSettings::VidSlideSettings()
 {
-    openInPlayer = true;
     selMode      = IMAGES;
-    outputType   = BLUERAY;
-    aframes      = 125;
+    imgFrames    = 125;
+    vType        = BLUERAY;
     vStandard    = PAL;
     vbitRate     = VBR12;
-    abitRate     = 64000;
+    vCodec       = X264;
     transition   = TransitionMngr::None;
+    abitRate     = 64000;
     outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
+    openInPlayer = true;
 }
 
 VidSlideSettings::~VidSlideSettings()
@@ -50,44 +51,47 @@ VidSlideSettings::~VidSlideSettings()
 
 void VidSlideSettings::readSettings(KConfigGroup& group)
 {
-    openInPlayer = group.readEntry("OpenInPlayer",
-                   true);
     selMode      = (Selection)group.readEntry("SelMode",
                    (int)IMAGES);
-    outputType   = (VidType)group.readEntry("OutputType",
-                   (int)BLUERAY);
-    transition   = (TransitionMngr::TransType)group.readEntry("Transition",
-                   (int)TransitionMngr::None);
-    aframes      = group.readEntry("AFrames",
+    imgFrames    = group.readEntry("AFrames",
                    125);
     vStandard    = (VidStd)group.readEntry("VStandard",
                    (int)PAL);
     vbitRate     = (VidBitRate)group.readEntry("VBitRate",
                    (int)VBR12);
-    abitRate     = group.readEntry("AudioRate",
+    vCodec       = (VidCodec)group.readEntry("VCodec",
+                   (int)X264);
+    vType        = (VidType)group.readEntry("OutputType",
+                   (int)BLUERAY);
+    abitRate     = group.readEntry("ABitRate",
                    64000);
+    transition   = (TransitionMngr::TransType)group.readEntry("Transition",
+                   (int)TransitionMngr::None);
     outputVideo  = group.readEntry("OutputVideo",
                    QUrl::fromLocalFile(QLatin1String("./out.mp4")));
+    openInPlayer = group.readEntry("OpenInPlayer",
+                   true);
 }
 
 void VidSlideSettings::writeSettings(KConfigGroup& group)
 {
-    group.writeEntry("OpenInPlayer", openInPlayer);
     group.writeEntry("SelMode",      (int)selMode);
-    group.writeEntry("OutputType",   (int)outputType);
-    group.writeEntry("Transition",   (int)transition);
-    group.writeEntry("AFrames",      aframes);
-    group.writeEntry("VBitRate",     (int)vbitRate);
-    group.writeEntry("ABitRate",     abitRate);
+    group.writeEntry("AFrames",      imgFrames);
     group.writeEntry("VStandard",    (int)vStandard);
+    group.writeEntry("VBitRate",     (int)vbitRate);
+    group.writeEntry("VCodec",       (int)vCodec);
+    group.writeEntry("OutputType",   (int)vType);
+    group.writeEntry("Transition",   (int)transition);
+    group.writeEntry("ABitRate",     abitRate);
     group.writeEntry("OutputVideo",  outputVideo);
+    group.writeEntry("OpenInPlayer", openInPlayer);
 }
 
-QSize VidSlideSettings::videoTypeSize() const
+QSize VidSlideSettings::videoSize() const
 {
     QSize s;
 
-    switch(outputType)
+    switch(vType)
     {
         case QVGA:
             s = QSize(320, 180);
@@ -217,6 +221,24 @@ qreal VidSlideSettings::videoFrameRate() const
     return fr;
 }
 
+QString VidSlideSettings::videoCodec() const
+{
+    QString c;
+
+    switch(vCodec)
+    {
+        case MPEG4:
+            c = QLatin1String("mpeg4");
+            break;
+
+        default: // X264
+            c = QLatin1String("libx264");
+            break;
+    }
+
+    return c;
+}
+
 QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
 {
     QMap<VidType, QString> types;
@@ -265,6 +287,16 @@ QMap<VidSlideSettings::VidStd, QString> VidSlideSettings::videoStdNames()
     std[NTSC] = i18nc("Video Standard NTSC", "NTSC - 29.97 FPS");
 
     return std;
+}
+
+QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
+{
+    QMap<VidCodec, QString> c;
+
+    c[X264]  = i18nc("Video Codec X264",  "H.264");
+    c[MPEG4] = i18nc("Video Codec MPEG4", "MPEG-4");
+
+    return c;
 }
 
 } // namespace Digikam

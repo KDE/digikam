@@ -52,14 +52,21 @@ public:
         ALBUMS
     };
 
-    // Video Standard
+    // Video Codecs
+    enum VidCodec
+    {
+        X264 = 0,    // https://en.wikipedia.org/wiki/X264
+        MPEG4        // https://en.wikipedia.org/wiki/MPEG-4
+    };
+
+    // Video Standards
     enum VidStd
     {
         PAL = 0,    // 25 FPS
         NTSC        // 29.97 FPS
     };
 
-    // Video type (size of screen)
+    // Video types (size of target screen)
     // See https://en.wikipedia.org/wiki/List_of_common_resolutions#Digital_TV_standards
     enum VidType
     {
@@ -76,7 +83,7 @@ public:
         UHD4K       // 3840 x 2160
     };
 
-    // Video rate in bits per seconds.
+    // Video rates in bits per seconds.
     enum VidBitRate
     {
         VBR04 = 0,  // 400000
@@ -102,13 +109,15 @@ public:
     void  readSettings(KConfigGroup& group);
     void  writeSettings(KConfigGroup& group);
 
-    QSize videoTypeSize()  const;
-    int   videoBitRate()   const;
-    qreal videoFrameRate() const;
+    QSize   videoSize()      const;
+    int     videoBitRate()   const;
+    qreal   videoFrameRate() const;
+    QString videoCodec()     const;
 
     static QMap<VidType,    QString> videoTypeNames();
     static QMap<VidBitRate, QString> videoBitRateNames();
     static QMap<VidStd,     QString> videoStdNames();
+    static QMap<VidCodec,   QString> videoCodecNames();
 
 public:
 
@@ -119,13 +128,14 @@ public:
 
     TransitionMngr::TransType transition;    // Transition type between images.
 
-    int                       aframes;       // Amount of frames to encode by image in video stream.
+    int                       imgFrames;     // Amount of frames to encode by image in video stream.
                                              // ex: 125 frames = 5 s at 25 img/s.
 
     int                       abitRate;      // Encoded Audio stream bit rate in bit/s.
     VidBitRate                vbitRate;      // Encoded Video stream bit rate in bit/s.
     VidStd                    vStandard;     // Encoded Video standard => frame rate in img/s.
-    VidType                   outputType;    // Encoded video type.
+    VidType                   vType;         // Encoded video type.
+    VidCodec                  vCodec;        // Encoded video codec.
     QUrl                      outputVideo;   // Encoded video stream.
 
     bool                      openInPlayer;  // Open video stream in desktop player at end.

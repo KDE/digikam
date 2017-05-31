@@ -274,12 +274,12 @@ void VidSlideTask::run()
     // ---------------------------------------------
     // Setup Video Encoder
 
-    VideoEncoder* const venc       = VideoEncoder::create("FFmpeg");
-    venc->setCodecName(QLatin1String("libx264"));
+    VideoEncoder* const venc = VideoEncoder::create("FFmpeg");
+    venc->setCodecName(d->settings->videoCodec());
     venc->setBitRate(d->settings->videoBitRate());
     venc->setFrameRate(d->settings->videoFrameRate());
 
-    QSize osize = d->settings->videoTypeSize();
+    QSize osize = d->settings->videoSize();
     venc->setWidth(osize.width());
     venc->setHeight(osize.height());
 
@@ -389,7 +389,7 @@ void VidSlideTask::run()
 */
                 }
             }
-            while (count < d->settings->aframes && !m_cancel);
+            while (count < d->settings->imgFrames && !m_cancel);
         }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i+1 << "done";
