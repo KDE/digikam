@@ -38,9 +38,15 @@
 
 #include <klocalizedstring.h>
 
+// QtAv includes
+
+#include <QtAV/VideoEncoder.h>
+
 // Local includes
 
 #include "vidslidewizard.h"
+
+using namespace QtAV;
 
 namespace Digikam
 {
@@ -166,7 +172,16 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     while (it5 != map5.constEnd())
     {
-        d->codecVal->addItem(it5.value(), (int)it5.key());
+        d->codecVal->insertItem((int)it5.key(), it5.value(), (int)it5.key());
+
+        // Disable codec entry if QtAV/ffmpeg codec is not available.
+
+        VidSlideSettings tmp;
+        tmp.vCodec = (VidSlideSettings::VidCodec)it5.key();
+
+        if (!VideoEncoder::supportedCodecs().contains(tmp.videoCodec()))
+            d->codecVal->setItemData((int)it5.key(), false, Qt::UserRole-1);
+
         ++it5;
     }
 
