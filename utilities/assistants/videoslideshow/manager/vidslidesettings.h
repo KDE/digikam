@@ -66,8 +66,25 @@ public:
         XVGA,           // 1024 x 576
         HDTV,           // 1280 x 720
         BLUERAY,        // 1920 x 1080
-        UHD4K,          // 3840 x 2160
-        UHD8K           // 7680 x 4320
+        UHD4K           // 3840 x 2160
+    };
+
+    // Video rate in bits per seconds.
+    enum VidBitRate
+    {
+        VBR04 = 0,  // 400000
+        VBR05,      // 500000,
+        VBR10,      // 1000000,
+        VBR12,      // 1200000,
+        VBR15,      // 1500000
+        VBR20,      // 2000000
+        VBR25,      // 2500000
+        VBR30,      // 3000000
+        VBR40,      // 4000000
+        VBR45,      // 4500000
+        VBR50,      // 5000000
+        VBR60,      // 6000000
+        VBR80       // 8000000
     };
 
 public:
@@ -75,12 +92,14 @@ public:
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
+    void  readSettings(KConfigGroup& group);
+    void  writeSettings(KConfigGroup& group);
 
     QSize videoTypeSize() const;
+    int   videoBitRate()  const;
 
-    static QMap<VidType, QString> videoTypeNames();
+    static QMap<VidType,    QString> videoTypeNames();
+    static QMap<VidBitRate, QString> videoBitRateNames();
 
 public:
 
@@ -96,8 +115,8 @@ public:
     int                       aframes;       // Amount of frames to encode by image in video stream.
                                              // ex: 125 frames = 5 s at 25 img/s.
 
-    int                       abitRate;      // Encoded Audio stream bit rate in byte/s.
-    int                       vbitRate;      // Encoded Video stream bit rate in byte/s.
+    int                       abitRate;      // Encoded Audio stream bit rate in bit/s.
+    VidBitRate                vbitRate;      // Encoded Video stream bit rate in bit/s.
     qreal                     frameRate;     // Encoded Video stream frame rate in img/s.
     VidType                   outputType;    // Encoded video type.
     QUrl                      outputVideo;   // Encoded video stream.

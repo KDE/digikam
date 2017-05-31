@@ -125,21 +125,24 @@ bool VidSlideTask::Private::encodeFrame(VideoFrame& vframe,
     Packet apkt;
     Packet vpkt;
 
-    AudioFrame aframe = nextAudioFrame(aenc->audioFormat());
+    if (curAudioFile == settings->inputAudio.constEnd())
+    {
+        AudioFrame aframe = nextAudioFrame(aenc->audioFormat());
 
-    if (!apkt.isValid())
-    {
-        qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid audio frame";
-    }
-    else
-    {
-        if (aenc->encode(aframe))
+        if (!apkt.isValid())
         {
-            apkt = aenc->encoded();
+            qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid audio frame";
         }
         else
         {
-            qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to encode audio frame";
+            if (aenc->encode(aframe))
+            {
+                apkt = aenc->encoded();
+            }
+            else
+            {
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to encode audio frame";
+            }
         }
     }
 
@@ -229,9 +232,11 @@ AudioFrame VidSlideTask::Private::nextAudioFrame(const AudioFormat& afmt)
             qDebug() << "Audio transcoding:";
             qDebug() << "current format =" << aframe.format();
             qDebug() << "target format  =" << afmt;
-/*            adec->resampler()->setOutAudioFormat(afmt);
+/*
+            adec->resampler()->setOutAudioFormat(afmt);
             adec->resampler()->prepare();
-            aframe.setAudioResampler(adec->resampler());*/
+            aframe.setAudioResampler(adec->resampler());
+*/
             aframe = aframe.to(afmt);
         }
 
@@ -271,7 +276,7 @@ void VidSlideTask::run()
 
     VideoEncoder* const venc       = VideoEncoder::create("FFmpeg");
     venc->setCodecName(QLatin1String("libx264"));
-    venc->setBitRate(d->settings->vbitRate);
+    venc->setBitRate(d->settings->videoBitRate());
     venc->setFrameRate(d->settings->frameRate);
 
     QSize osize = d->settings->videoTypeSize();

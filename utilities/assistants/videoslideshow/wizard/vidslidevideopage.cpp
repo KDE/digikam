@@ -52,6 +52,7 @@ public:
     Private(QWizard* const dialog)
       : framesVal(0),
         typeVal(0),
+        bitrateVal(0),
         transVal(0),
         wizard(0),
         settings(0)
@@ -66,6 +67,7 @@ public:
 
     QSpinBox*         framesVal;
     QComboBox*        typeVal;
+    QComboBox*        bitrateVal;
     QComboBox*        transVal;
     VidSlideWizard*   wizard;
     VidSlideSettings* settings;
@@ -109,19 +111,38 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     // --------------------
 
+    QLabel* const bitrateLabel = new QLabel(main);
+    bitrateLabel->setWordWrap(false);
+    bitrateLabel->setText(i18n("Video Bit Rate:"));
+    d->bitrateVal              = new QComboBox(main);
+    d->bitrateVal->setEditable(false);
+
+    QMap<VidSlideSettings::VidBitRate, QString> map2                = VidSlideSettings::videoBitRateNames();
+    QMap<VidSlideSettings::VidBitRate, QString>::const_iterator it2 = map2.constBegin();
+
+    while (it2 != map2.constEnd())
+    {
+        d->bitrateVal->addItem(it2.value(), (int)it2.key());
+        ++it2;
+    }
+
+    bitrateLabel->setBuddy(d->bitrateVal);
+
+    // --------------------
+
     QLabel* const transLabel = new QLabel(main);
     transLabel->setWordWrap(false);
     transLabel->setText(i18n("Transition Type:"));
     d->transVal              = new QComboBox(main);
     d->transVal->setEditable(false);
 
-    QMap<TransitionMngr::TransType, QString> map2                = TransitionMngr::transitionNames();
-    QMap<TransitionMngr::TransType, QString>::const_iterator it2 = map2.constBegin();
+    QMap<TransitionMngr::TransType, QString> map3                = TransitionMngr::transitionNames();
+    QMap<TransitionMngr::TransType, QString>::const_iterator it3 = map3.constBegin();
 
-    while (it2 != map2.constEnd())
+    while (it3 != map3.constEnd())
     {
-        d->transVal->addItem(it2.value(), (int)it2.key());
-        ++it2;
+        d->transVal->addItem(it3.value(), (int)it3.key());
+        ++it3;
     }
 
     transLabel->setBuddy(d->transVal);
@@ -134,9 +155,11 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     grid->addWidget(d->framesVal,    0, 1, 1, 1);
     grid->addWidget(typeLabel,       1, 0, 1, 1);
     grid->addWidget(d->typeVal,      1, 1, 1, 1);
-    grid->addWidget(transLabel,      2, 0, 1, 1);
-    grid->addWidget(d->transVal,     2, 1, 1, 1);
-    grid->setRowStretch(3, 10);
+    grid->addWidget(bitrateLabel,    2, 0, 1, 1);
+    grid->addWidget(d->bitrateVal,   2, 1, 1, 1);
+    grid->addWidget(transLabel,      3, 0, 1, 1);
+    grid->addWidget(d->transVal,     3, 1, 1, 1);
+    grid->setRowStretch(4, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("video-mp4")));
@@ -151,6 +174,7 @@ void VidSlideVideoPage::initializePage()
 {
     d->framesVal->setValue(d->settings->aframes);
     d->typeVal->setCurrentIndex(d->settings->outputType);
+    d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
     d->transVal->setCurrentIndex(d->settings->transition);
 }
 
@@ -158,6 +182,7 @@ bool VidSlideVideoPage::validatePage()
 {
     d->settings->aframes    = d->framesVal->value();
     d->settings->outputType = (VidSlideSettings::VidType)d->typeVal->currentIndex();
+    d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;
