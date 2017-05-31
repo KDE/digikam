@@ -26,6 +26,7 @@
 // Local includes
 
 #include "dwizarddlg.h"
+#include "dinfointerface.h"
 #include "digikam_export.h"
 #include "vidslidesettings.h"
 

@@ -33,7 +33,6 @@
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "transitionmngr.h"
 #include "digikam_export.h"
 
@@ -115,10 +114,8 @@ public:
 
     Selection                 selMode;       // Items selection mode
 
-    QList<QUrl>               inputImages;   // Selection::IMAGES
-    DInfoInterface::DAlbumIDs inputAlbums;   // Selection::ALBUMS
-
-    QList<QUrl>               inputAudio;    // Soundtracks streams.
+    QList<QUrl>               inputImages;   // Images stream.
+    QList<QUrl>               inputAudio;    // Soundtracks stream.
 
     TransitionMngr::TransType transition;    // Transition type between images.
 

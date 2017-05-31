@@ -55,6 +55,7 @@ public:
         bitrateVal(0),
         stdVal(0),
         transVal(0),
+        duration(0),
         wizard(0),
         settings(0)
     {
@@ -71,6 +72,7 @@ public:
     QComboBox*        bitrateVal;
     QComboBox*        stdVal;
     QComboBox*        transVal;
+    QLabel*           duration;
     VidSlideWizard*   wizard;
     VidSlideSettings* settings;
 };
@@ -170,6 +172,10 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     // --------------------
 
+    d->duration = new QLabel(main);
+
+    // --------------------
+
     QGridLayout* const grid = new QGridLayout(main);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->addWidget(framesLabel,     0, 0, 1, 1);
@@ -182,15 +188,34 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     grid->addWidget(d->bitrateVal,   3, 1, 1, 1);
     grid->addWidget(transLabel,      4, 0, 1, 1);
     grid->addWidget(d->transVal,     4, 1, 1, 1);
-    grid->setRowStretch(5, 10);
+    grid->addWidget(d->duration,     5, 0, 1, 2);
+    grid->setRowStretch(6, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("video-mp4")));
+
+    // --------------------
+
+    connect(d->framesVal, SIGNAL(valueChanged(int)),
+            this, SLOT(slotSlideDuration()));
+
+    connect(d->stdVal, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotSlideDuration()));
 }
 
 VidSlideVideoPage::~VidSlideVideoPage()
 {
     delete d;
+}
+
+void VidSlideVideoPage::slotSlideDuration()
+{
+    VidSlideSettings tmp;
+    tmp.aframes   = d->framesVal->value();
+    tmp.vStandard = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
+    qreal titem   = tmp.aframes / tmp.videoFrameRate();
+    qreal ttotal  = titem * d->settings->inputImages.count();
+    d->duration->setText(i18n("Duration : %1 seconds by item, total %2 seconds", titem, ttotal));
 }
 
 void VidSlideVideoPage::initializePage()
@@ -200,6 +225,7 @@ void VidSlideVideoPage::initializePage()
     d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
     d->stdVal->setCurrentIndex(d->settings->vStandard);
     d->transVal->setCurrentIndex(d->settings->transition);
+    slotSlideDuration();
 }
 
 bool VidSlideVideoPage::validatePage()
@@ -207,7 +233,7 @@ bool VidSlideVideoPage::validatePage()
     d->settings->aframes    = d->framesVal->value();
     d->settings->outputType = (VidSlideSettings::VidType)d->typeVal->currentIndex();
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
-    d->settings->vStandard   = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
+    d->settings->vStandard  = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;

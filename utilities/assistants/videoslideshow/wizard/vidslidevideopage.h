@@ -36,6 +36,8 @@ namespace Digikam
 
 class VidSlideVideoPage : public DWizardPage
 {
+    Q_OBJECT
+
 public:
 
     explicit VidSlideVideoPage(QWizard* const dialog, const QString& title);
@@ -43,6 +45,10 @@ public:
 
     void initializePage();
     bool validatePage();
+
+private Q_SLOTS:
+
+    void slotSlideDuration();
 
 private:
 

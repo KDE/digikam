@@ -129,24 +129,8 @@ void VidSlideFinalPage::slotProcess()
     d->progressView->addEntry(i18n("Starting to generate video slideshow..."),
                               DHistoryView::ProgressEntry);
 
-    if (d->settings->selMode == VidSlideSettings::ALBUMS)
-    {
-        if (!d->wizard->iface())
-            return;
-
-        d->progressView->addEntry(i18n("%1 input albums to process:", d->settings->inputAlbums.count()),
+    d->progressView->addEntry(i18n("%1 input images to process", d->settings->inputImages.count()),
                                   DHistoryView::ProgressEntry);
-
-        foreach(const QUrl& url, d->iface->albumsItems(d->settings->inputAlbums))
-        {
-            d->settings->inputImages << url;
-        }
-    }
-    else
-    {
-        d->progressView->addEntry(i18n("%1 input images to process", d->settings->inputImages.count()),
-                                  DHistoryView::ProgressEntry);
-    }
 
     foreach(const QUrl& url, d->settings->inputImages)
     {
@@ -157,7 +141,7 @@ void VidSlideFinalPage::slotProcess()
     if (!d->settings->inputAudio.isEmpty())
     {
         d->progressView->addEntry(i18n("%1 input audio stream to process:",
-                                       d->settings->inputAlbums.count()),
+                                       d->settings->inputAudio.count()),
                                   DHistoryView::ProgressEntry);
 
         foreach(const QUrl& url, d->settings->inputAudio)

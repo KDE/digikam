@@ -127,7 +127,11 @@ bool VidSlideSelectionPage::validatePage()
             if (d->iface->albumChooserItems().empty())
                 return false;
 
-            d->wizard->settings()->inputAlbums = d->iface->albumChooserItems();
+            // update image list with album contents.
+            foreach(const QUrl& url, d->iface->albumsItems(d->iface->albumChooserItems()))
+            {
+                d->wizard->settings()->inputImages << url;
+            }
         }
         else
         {
