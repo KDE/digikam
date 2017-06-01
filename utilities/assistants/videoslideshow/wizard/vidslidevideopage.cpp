@@ -253,7 +253,7 @@ void VidSlideVideoPage::slotSlideDuration()
     tmp.vStandard = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
     qreal titem   = tmp.imgFrames / tmp.videoFrameRate();
     qreal ttotal  = titem * d->settings->inputImages.count();
-    d->duration->setText(i18n("Duration : %1 seconds by item, total %2 seconds", titem, ttotal));
+    d->duration->setText(i18n("Duration : %1 seconds by item, total %2 seconds (without transitions)", titem, ttotal));
 }
 
 void VidSlideVideoPage::initializePage()
