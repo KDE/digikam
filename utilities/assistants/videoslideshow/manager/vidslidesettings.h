@@ -33,7 +33,6 @@
 
 // Local includes
 
-#include "dinfointerface.h"
 #include "transitionmngr.h"
 #include "digikam_export.h"
 
@@ -46,28 +45,60 @@ class DIGIKAM_EXPORT VidSlideSettings
 {
 public:
 
+    // Images selection mode
     enum Selection
     {
         IMAGES = 0,
         ALBUMS
     };
 
+    // Video Codecs
+    enum VidCodec
+    {
+        X264 = 0,    // https://en.wikipedia.org/wiki/X264
+        MPEG4        // https://en.wikipedia.org/wiki/MPEG-4
+    };
+
+    // Video Standards
+    enum VidStd
+    {
+        PAL = 0,    // 25 FPS
+        NTSC        // 29.97 FPS
+    };
+
+    // Video types (size of target screen)
     // See https://en.wikipedia.org/wiki/List_of_common_resolutions#Digital_TV_standards
     enum VidType
     {
-        RIM240 = 0,     // 240  x 136
-        QVGA,           // 320  x 180
-        VCD,            // 352  x 240
-        HVGA,           // 480  x 270
-        SVCD,           // 480  x 576
-        VGA,            // 640  x 360
-        DVD,            // 720  x 576
-        WVGA,           // 800  x 450
-        XVGA,           // 1024 x 576
-        HDTV,           // 1280 x 720
-        BLUERAY,        // 1920 x 1080
-        UHD4K,          // 3840 x 2160
-        UHD8K           // 7680 x 4320
+        QVGA = 0,   // 320  x 180
+        VCD,        // 352  x 240
+        HVGA,       // 480  x 270
+        SVCD,       // 480  x 576
+        VGA,        // 640  x 360
+        DVD,        // 720  x 576
+        WVGA,       // 800  x 450
+        XVGA,       // 1024 x 576
+        HDTV,       // 1280 x 720
+        BLUERAY,    // 1920 x 1080
+        UHD4K       // 3840 x 2160
+    };
+
+    // Video rates in bits per seconds.
+    enum VidBitRate
+    {
+        VBR04 = 0,  // 400000
+        VBR05,      // 500000
+        VBR10,      // 1000000
+        VBR12,      // 1200000
+        VBR15,      // 1500000
+        VBR20,      // 2000000
+        VBR25,      // 2500000
+        VBR30,      // 3000000
+        VBR40,      // 4000000
+        VBR45,      // 4500000
+        VBR50,      // 5000000
+        VBR60,      // 6000000
+        VBR80       // 8000000
     };
 
 public:
@@ -75,30 +106,36 @@ public:
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
-    QSize typeToSize() const;
+    void  readSettings(KConfigGroup& group);
+    void  writeSettings(KConfigGroup& group);
 
-    void readSettings(KConfigGroup& group);
-    void writeSettings(KConfigGroup& group);
+    QSize   videoSize()      const;
+    int     videoBitRate()   const;
+    qreal   videoFrameRate() const;
+    QString videoCodec()     const;
 
-    static QMap<VidType, QString> typeNames();
+    static QMap<VidType,    QString> videoTypeNames();
+    static QMap<VidBitRate, QString> videoBitRateNames();
+    static QMap<VidStd,     QString> videoStdNames();
+    static QMap<VidCodec,   QString> videoCodecNames();
 
 public:
 
     Selection                 selMode;       // Items selection mode
 
-    QList<QUrl>               inputImages;   // Selection::IMAGES
-    DInfoInterface::DAlbumIDs inputAlbums;   // Selection::ALBUMS
-
-    QList<QUrl>               inputAudio;    // Soundtracks streams.
+    QList<QUrl>               inputImages;   // Images stream.
+    QList<QUrl>               inputAudio;    // Soundtracks stream.
 
     TransitionMngr::TransType transition;    // Transition type between images.
 
-    int                       aframes;       // Amount of frames to encode by image in video stream.
+    int                       imgFrames;     // Amount of frames to encode by image in video stream.
                                              // ex: 125 frames = 5 s at 25 img/s.
 
-    int                       vbitRate;      // Encoded Video stream bit rate in byte/s.
-    qreal                     frameRate;     // Encoded Video stream frame rate in img/s.
-    VidType                   outputType;    // Encoded video type.
+    int                       abitRate;      // Encoded Audio stream bit rate in bit/s.
+    VidBitRate                vbitRate;      // Encoded Video stream bit rate in bit/s.
+    VidStd                    vStandard;     // Encoded Video standard => frame rate in img/s.
+    VidType                   vType;         // Encoded video type.
+    VidCodec                  vCodec;        // Encoded video codec.
     QUrl                      outputVideo;   // Encoded video stream.
 
     bool                      openInPlayer;  // Open video stream in desktop player at end.

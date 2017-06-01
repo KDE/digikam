@@ -26,13 +26,11 @@
 
 #include <QIcon>
 #include <QLabel>
-#include <QSpinBox>
 #include <QUrl>
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QGridLayout>
 
 // KDE includes
@@ -53,9 +51,6 @@ public:
 
     Private(QWizard* const dialog)
       : destUrl(0),
-        framesVal(0),
-        typeVal(0),
-        transVal(0),
         openInPlayer(0),
         wizard(0),
         settings(0)
@@ -69,9 +64,6 @@ public:
     }
 
     DFileSelector*    destUrl;
-    QSpinBox*         framesVal;
-    QComboBox*        typeVal;
-    QComboBox*        transVal;
     QCheckBox*        openInPlayer;
     VidSlideWizard*   wizard;
     VidSlideSettings* settings;
@@ -84,53 +76,6 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     setObjectName(QLatin1String("OutputPage"));
 
     QWidget* const main       = new QWidget(this);
-
-    // --------------------
-
-    QLabel* const framesLabel = new QLabel(main);
-    framesLabel->setWordWrap(false);
-    framesLabel->setText(i18n("Number of Frames by Image:"));
-    d->framesVal              = new QSpinBox(main);
-    d->framesVal->setRange(1, 9999);
-    framesLabel->setBuddy(d->framesVal);
-
-    // --------------------
-
-    QLabel* const typeLabel = new QLabel(main);
-    typeLabel->setWordWrap(false);
-    typeLabel->setText(i18n("Video Type:"));
-    d->typeVal              = new QComboBox(main);
-    d->typeVal->setEditable(false);
-
-    QMap<VidSlideSettings::VidType, QString> map                = VidSlideSettings::typeNames();
-    QMap<VidSlideSettings::VidType, QString>::const_iterator it = map.constBegin();
-
-    while (it != map.constEnd())
-    {
-        d->typeVal->addItem(it.value(), (int)it.key());
-        ++it;
-    }
-
-    typeLabel->setBuddy(d->typeVal);
-
-    // --------------------
-
-    QLabel* const transLabel = new QLabel(main);
-    transLabel->setWordWrap(false);
-    transLabel->setText(i18n("Transition Type:"));
-    d->transVal              = new QComboBox(main);
-    d->transVal->setEditable(false);
-
-    QMap<TransitionMngr::TransType, QString> map2                = TransitionMngr::transitionNames();
-    QMap<TransitionMngr::TransType, QString>::const_iterator it2 = map2.constBegin();
-
-    while (it2 != map2.constEnd())
-    {
-        d->transVal->addItem(it2.value(), (int)it2.key());
-        ++it2;
-    }
-
-    transLabel->setBuddy(d->transVal);
 
     // --------------------
 
@@ -152,16 +97,10 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
 
     QGridLayout* const grid = new QGridLayout(main);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->addWidget(framesLabel,     0, 0, 1, 1);
-    grid->addWidget(d->framesVal,    0, 1, 1, 1);
-    grid->addWidget(typeLabel,       1, 0, 1, 1);
-    grid->addWidget(d->typeVal,      1, 1, 1, 1);
-    grid->addWidget(transLabel,      2, 0, 1, 1);
-    grid->addWidget(d->transVal,     2, 1, 1, 1);
-    grid->addWidget(fileLabel,       3, 0, 1, 1);
-    grid->addWidget(d->destUrl,      3, 1, 1, 1);
-    grid->addWidget(d->openInPlayer, 5, 0, 1, 2);
-    grid->setRowStretch(6, 10);
+    grid->addWidget(fileLabel,       0, 0, 1, 1);
+    grid->addWidget(d->destUrl,      0, 1, 1, 1);
+    grid->addWidget(d->openInPlayer, 1, 0, 1, 2);
+    grid->setRowStretch(2, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-video")));
@@ -182,9 +121,6 @@ void VidSlideOutputPage::initializePage()
 {
     d->destUrl->setFileDlgPath(d->settings->outputVideo.toLocalFile());
     d->openInPlayer->setChecked(d->settings->openInPlayer);
-    d->framesVal->setValue(d->settings->aframes);
-    d->typeVal->setCurrentIndex(d->settings->outputType);
-    d->transVal->setCurrentIndex(d->settings->transition);
 }
 
 bool VidSlideOutputPage::validatePage()
@@ -194,9 +130,6 @@ bool VidSlideOutputPage::validatePage()
 
     d->settings->outputVideo  = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
     d->settings->openInPlayer = d->openInPlayer->isChecked();
-    d->settings->aframes      = d->framesVal->value();
-    d->settings->outputType   = (VidSlideSettings::VidType)d->typeVal->currentIndex();
-    d->settings->transition   = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;
 }

@@ -20,33 +20,35 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_WIZARD_H
-#define VIDSLIDE_WIZARD_H
+#ifndef VIDSLIDE_VIDEO_PAGE_H
+#define VIDSLIDE_VIDEO_PAGE_H
+
+// Qt includes
+
+#include <QString>
 
 // Local includes
 
-#include "dwizarddlg.h"
-#include "dinfointerface.h"
-#include "digikam_export.h"
-#include "vidslidesettings.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT VidSlideWizard : public DWizardDlg
+class VidSlideVideoPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit VidSlideWizard(QWidget* const parent, DInfoInterface* const iface = 0);
-    ~VidSlideWizard();
+    explicit VidSlideVideoPage(QWizard* const dialog, const QString& title);
+    ~VidSlideVideoPage();
 
-    bool validateCurrentPage();
-    int  nextId() const;
+    void initializePage();
+    bool validatePage();
 
-    DInfoInterface*   iface()    const;
-    VidSlideSettings* settings() const;
+private Q_SLOTS:
+
+    void slotSlideDuration();
 
 private:
 
@@ -56,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_WIZARD_H
+#endif // VIDSLIDE_VIDEO_PAGE_H

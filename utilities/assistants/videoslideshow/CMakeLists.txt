@@ -24,6 +24,7 @@ set(libvideoslideshow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidewizard.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslideintropage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslideselectionpage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidevideopage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslideoutputpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/vidslidefinalpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidesettings.cpp
