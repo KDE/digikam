@@ -77,9 +77,13 @@ public:
      */
     static KService::List servicesForOpenWith(const QList<QUrl>& urls);
 
+    /** Copy recursively a directory contents to another one.
+     */
     static bool copyFolderRecursively(const QString& srcPath,
                                       const QString& dstPath);
 
+    /** Copy a list of files to another place.
+     */
     static bool copyFiles(const QStringList& srcPaths,
                           const QString& dstPath);
 };
