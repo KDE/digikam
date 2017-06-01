@@ -55,8 +55,16 @@ public:
     // Video Codecs
     enum VidCodec
     {
-        X264 = 0,    // https://en.wikipedia.org/wiki/X264
-        MPEG4        // https://en.wikipedia.org/wiki/MPEG-4
+        MJPEG = 0,   // https://en.wikipedia.org/wiki/Motion_JPEG
+        MPEG2,       // https://en.wikipedia.org/wiki/MPEG-2
+        X264,        // https://en.wikipedia.org/wiki/X264
+        MPEG4,       // https://en.wikipedia.org/wiki/MPEG-4
+        WEBMVP8,     // https://en.wikipedia.org/wiki/VP8
+        FLASH,       // https://en.wikipedia.org/wiki/Adobe_Flash
+        THEORA,      // https://en.wikipedia.org/wiki/Theora
+        WMV7,        // https://en.wikipedia.org/wiki/Windows_Media_Video
+        WMV8,        // https://en.wikipedia.org/wiki/Windows_Media_Video
+        WMV9         // https://en.wikipedia.org/wiki/Windows_Media_Video
     };
 
     // Video Standards
@@ -110,14 +118,16 @@ public:
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
+    // Read and write settings in config file between sessions.
     void  readSettings(KConfigGroup& group);
     void  writeSettings(KConfigGroup& group);
 
-    QSize   videoSize()      const;
-    int     videoBitRate()   const;
-    qreal   videoFrameRate() const;
-    QString videoCodec()     const;
+    QSize   videoSize()      const;     // Return the current video size.
+    int     videoBitRate()   const;     // Return the current video bit rate.
+    qreal   videoFrameRate() const;     // Return the current video frame rate.
+    QString videoCodec()     const;     // Return the current video ffmpeg codec name.
 
+    // Helper methods to fill combobox from GUI.
     static QMap<VidType,    QString> videoTypeNames();
     static QMap<VidBitRate, QString> videoBitRateNames();
     static QMap<VidStd,     QString> videoStdNames();

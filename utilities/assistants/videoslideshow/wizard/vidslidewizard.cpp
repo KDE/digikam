@@ -105,6 +105,11 @@ VidSlideWizard::~VidSlideWizard()
     delete d;
 }
 
+void VidSlideWizard::setItemsList(const QList<QUrl>& urls)
+{
+    d->selectionPage->setItemsList(urls);
+}
+
 DInfoInterface* VidSlideWizard::iface() const
 {
     return d->iface;

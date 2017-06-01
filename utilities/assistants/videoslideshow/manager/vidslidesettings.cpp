@@ -239,8 +239,40 @@ QString VidSlideSettings::videoCodec() const
 
     switch(vCodec)
     {
+        case MJPEG:
+            c = QLatin1String("mjpeg");
+            break;
+
+        case MPEG2:
+            c = QLatin1String("mpeg2video");
+            break;
+
         case MPEG4:
             c = QLatin1String("mpeg4");
+            break;
+
+        case WEBMVP8:
+            c = QLatin1String("libvpx");
+            break;
+
+        case FLASH:
+            c = QLatin1String("flv");
+            break;
+
+        case THEORA:
+            c = QLatin1String("libtheora");
+            break;
+
+        case WMV7:
+            c = QLatin1String("wm1");
+            break;
+
+        case WMV8:
+            c = QLatin1String("wm2");
+            break;
+
+        case WMV9:
+            c = QLatin1String("wm3");
             break;
 
         default: // X264
@@ -306,12 +338,20 @@ QMap<VidSlideSettings::VidStd, QString> VidSlideSettings::videoStdNames()
 
 QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
 {
-    QMap<VidCodec, QString> c;
+    QMap<VidCodec, QString> codecs;
 
-    c[X264]  = i18nc("Video Codec X264",  "H.264");
-    c[MPEG4] = i18nc("Video Codec MPEG4", "MPEG-4");
+    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
+    codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
+    codecs[X264]    = i18nc("Video Codec X264",    "High Quality H.264 AVC/MPEG-4 AVC");
+    codecs[MPEG4]   = i18nc("Video Codec MPEG4",   "DivX/XVid/MPEG-4");
+    codecs[WEBMVP8] = i18nc("Video Codec WEBMVP8", "WebM-VP8");
+    codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
+    codecs[THEORA]  = i18nc("Video Codec THEORA",  "Theora-VP3");
+    codecs[WMV7]    = i18nc("Video Codec WMV7",    "Window Media Video 7");
+    codecs[WMV8]    = i18nc("Video Codec WMV8",    "Window Media Video 8");
+    codecs[WMV9]    = i18nc("Video Codec WMV9",    "Window Media Video 9");
 
-    return c;
+    return codecs;
 }
 
 } // namespace Digikam

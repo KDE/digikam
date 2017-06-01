@@ -106,6 +106,11 @@ VidSlideSelectionPage::~VidSlideSelectionPage()
     delete d;
 }
 
+void VidSlideSelectionPage::setItemsList(const QList<QUrl>& urls)
+{
+    d->imageList->slotAddImages(urls);
+}
+
 void VidSlideSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);
