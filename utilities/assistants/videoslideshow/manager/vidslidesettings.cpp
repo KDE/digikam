@@ -243,17 +243,17 @@ QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
 {
     QMap<VidType, QString> types;
 
-    types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180");
+    types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180 - 16:9");
     types[VCD]     = i18nc("Video Type: VCD",     "VCD - 352x240");
-    types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270");
+    types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270 - 16:9");
     types[SVCD]    = i18nc("Video Type: SVCD",    "SVCD - 480x576");
-    types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360");
+    types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360 - 16:9");
     types[DVD]     = i18nc("Video Type: DVD",     "DVD - 720x576");
-    types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450");
-    types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576");
-    types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720");
-    types[BLUERAY] = i18nc("Video Type: BLUERAY", "BLUERAY - 1920x1080");
-    types[UHD4K]   = i18nc("Video Type: UHD4K",   "UHD4K - 3840x2160");
+    types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450 - 16:9");
+    types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576 - 16:9");
+    types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720 - 16:9");
+    types[BLUERAY] = i18nc("Video Type: BLUERAY", "BLUERAY - 1920x1080 - 16:9");
+    types[UHD4K]   = i18nc("Video Type: UHD4K",   "UHD4K - 3840x2160 - 16:9");
 
     return types;
 }
