@@ -97,15 +97,23 @@ QSize VidSlideSettings::videoSize() const
             s = QSize(320, 180);
             break;
 
-        case VCD:
+        case VCD1:
             s = QSize(352, 240);
+            break;
+
+        case VCD2:
+            s = QSize(352, 288);
             break;
 
         case HVGA:
             s = QSize(480, 270);
             break;
 
-        case SVCD:
+        case SVCD1:
+            s = QSize(480, 480);
+            break;
+
+        case SVCD2:
             s = QSize(480, 576);
             break;
 
@@ -113,8 +121,12 @@ QSize VidSlideSettings::videoSize() const
             s = QSize(640, 360);
             break;
 
-        case DVD:
+        case DVD1:
             s = QSize(720, 480);
+            break;
+
+        case DVD2:
+            s = QSize(720, 576);
             break;
 
         case WVGA:
@@ -244,11 +256,14 @@ QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
     QMap<VidType, QString> types;
 
     types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180 - 16:9");
-    types[VCD]     = i18nc("Video Type: VCD",     "VCD - 352x240");
+    types[VCD1]    = i18nc("Video Type: VCD",     "VCD - 352x240");
+    types[VCD2]    = i18nc("Video Type: VCD",     "VCD - 352x288");
     types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270 - 16:9");
-    types[SVCD]    = i18nc("Video Type: SVCD",    "SVCD - 480x576");
+    types[SVCD1]   = i18nc("Video Type: SVCD",    "SVCD - 480x480");
+    types[SVCD2]   = i18nc("Video Type: SVCD",    "SVCD - 480x576");
     types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360 - 16:9");
-    types[DVD]     = i18nc("Video Type: DVD",     "DVD - 720x576");
+    types[DVD1]    = i18nc("Video Type: DVD",     "DVD - 720x480");
+    types[DVD2]    = i18nc("Video Type: DVD",     "DVD - 720x576");
     types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450 - 16:9");
     types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576 - 16:9");
     types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720 - 16:9");
