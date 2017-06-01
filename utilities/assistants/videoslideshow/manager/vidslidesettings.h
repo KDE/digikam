@@ -113,6 +113,14 @@ public:
         VBR80       // 8000000
     };
 
+    // Video Container Formats
+    enum VidFormat
+    {
+        AVI=0,      // https://en.wikipedia.org/wiki/Audio_Video_Interleave
+        MKV,        // https://en.wikipedia.org/wiki/Matroska
+        MP4         // https://en.wikipedia.org/wiki/MPEG-4_Part_14
+    };
+
 public:
 
     explicit VidSlideSettings();
@@ -126,12 +134,14 @@ public:
     int     videoBitRate()   const;     // Return the current video bit rate.
     qreal   videoFrameRate() const;     // Return the current video frame rate.
     QString videoCodec()     const;     // Return the current video ffmpeg codec name.
+    QString videoFormat()    const;     // Return the current video format extension.
 
     // Helper methods to fill combobox from GUI.
     static QMap<VidType,    QString> videoTypeNames();
     static QMap<VidBitRate, QString> videoBitRateNames();
     static QMap<VidStd,     QString> videoStdNames();
     static QMap<VidCodec,   QString> videoCodecNames();
+    static QMap<VidFormat,  QString> videoFormatNames();
 
 public:
 
@@ -150,6 +160,7 @@ public:
     VidStd                    vStandard;     // Encoded Video standard => frame rate in img/s.
     VidType                   vType;         // Encoded video type.
     VidCodec                  vCodec;        // Encoded video codec.
+    VidFormat                 vFormat;       // Encoded video container format.
     QUrl                      outputVideo;   // Encoded video stream.
 
     bool                      openInPlayer;  // Open video stream in desktop player at end.

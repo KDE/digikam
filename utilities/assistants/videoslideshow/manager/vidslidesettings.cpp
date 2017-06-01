@@ -39,6 +39,7 @@ VidSlideSettings::VidSlideSettings()
     vStandard    = PAL;
     vbitRate     = VBR12;
     vCodec       = X264;
+    vFormat      = MP4;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
     outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
@@ -61,8 +62,10 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)VBR12);
     vCodec       = (VidCodec)group.readEntry("VCodec",
                    (int)X264);
-    vType        = (VidType)group.readEntry("OutputType",
+    vType        = (VidType)group.readEntry("VType",
                    (int)BLUERAY);
+    vFormat      = (VidFormat)group.readEntry("VFormat",
+                   (int)MP4);
     abitRate     = group.readEntry("ABitRate",
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
@@ -80,7 +83,8 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("VStandard",    (int)vStandard);
     group.writeEntry("VBitRate",     (int)vbitRate);
     group.writeEntry("VCodec",       (int)vCodec);
-    group.writeEntry("OutputType",   (int)vType);
+    group.writeEntry("VType",        (int)vType);
+    group.writeEntry("VFormat",      (int)vFormat);
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("ABitRate",     abitRate);
     group.writeEntry("OutputVideo",  outputVideo);
@@ -235,52 +239,74 @@ qreal VidSlideSettings::videoFrameRate() const
 
 QString VidSlideSettings::videoCodec() const
 {
-    QString c;
+    QString cod;
 
     switch(vCodec)
     {
         case MJPEG:
-            c = QLatin1String("mjpeg");
+            cod = QLatin1String("mjpeg");
             break;
 
         case MPEG2:
-            c = QLatin1String("mpeg2video");
+            cod = QLatin1String("mpeg2video");
             break;
 
         case MPEG4:
-            c = QLatin1String("mpeg4");
+            cod = QLatin1String("mpeg4");
             break;
 
         case WEBMVP8:
-            c = QLatin1String("libvpx");
+            cod = QLatin1String("libvpx");
             break;
 
         case FLASH:
-            c = QLatin1String("flv");
+            cod = QLatin1String("flv");
             break;
 
         case THEORA:
-            c = QLatin1String("libtheora");
+            cod = QLatin1String("libtheora");
             break;
 
         case WMV7:
-            c = QLatin1String("wm1");
+            cod = QLatin1String("wm1");
             break;
 
         case WMV8:
-            c = QLatin1String("wm2");
+            cod = QLatin1String("wm2");
             break;
 
         case WMV9:
-            c = QLatin1String("wm3");
+            cod = QLatin1String("wm3");
             break;
 
         default: // X264
-            c = QLatin1String("libx264");
+            cod = QLatin1String("libx264");
             break;
     }
 
-    return c;
+    return cod;
+}
+
+QString VidSlideSettings::videoFormat() const
+{
+    QString frm;
+
+    switch(vFormat)
+    {
+        case AVI:
+            cod = QLatin1String("avi");
+            break;
+
+        case MKV:
+            cod = QLatin1String("mkv");
+            break;
+
+        default: // MP4
+            cod = QLatin1String("mp4");
+            break;
+    }
+
+    return cod;
 }
 
 QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
@@ -355,6 +381,17 @@ QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
 //    codecs[WMV9]    = i18nc("Video Codec WMV9",    "Window Media Video 9");
 
     return codecs;
+}
+
+QMap<VidSlideSettings::VidFormat, QString> VidSlideSettings::videoFormatNames()
+{
+    QMap<VidFormat, QString> frm;
+
+    frm[AVI] = i18nc("Video Standard AVI", "AVI - Audio Video Interleave");
+    frm[MKV] = i18nc("Video Standard MKV", "MKV - Matroska");
+    frm[MP4] = i18nc("Video Standard MP4", "MP4 - MPEG-4");
+
+    return frm;
 }
 
 } // namespace Digikam
