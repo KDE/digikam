@@ -294,19 +294,19 @@ QString VidSlideSettings::videoFormat() const
     switch(vFormat)
     {
         case AVI:
-            cod = QLatin1String("avi");
+            frm = QLatin1String("avi");
             break;
 
         case MKV:
-            cod = QLatin1String("mkv");
+            frm = QLatin1String("mkv");
             break;
 
         default: // MP4
-            cod = QLatin1String("mp4");
+            frm = QLatin1String("mp4");
             break;
     }
 
-    return cod;
+    return frm;
 }
 
 QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
