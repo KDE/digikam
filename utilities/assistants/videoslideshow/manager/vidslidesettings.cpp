@@ -340,16 +340,19 @@ QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
 {
     QMap<VidCodec, QString> codecs;
 
-    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
-    codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
+    // NOTE: Some video codecs are currently disabled due to QtAV incompatibility
+    //       with bits rate, frames rate, or video sizes. This need some investiguations.
+
+//    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
+//    codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
     codecs[X264]    = i18nc("Video Codec X264",    "High Quality H.264 AVC/MPEG-4 AVC");
     codecs[MPEG4]   = i18nc("Video Codec MPEG4",   "DivX/XVid/MPEG-4");
-    codecs[WEBMVP8] = i18nc("Video Codec WEBMVP8", "WebM-VP8");
-    codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
-    codecs[THEORA]  = i18nc("Video Codec THEORA",  "Theora-VP3");
-    codecs[WMV7]    = i18nc("Video Codec WMV7",    "Window Media Video 7");
-    codecs[WMV8]    = i18nc("Video Codec WMV8",    "Window Media Video 8");
-    codecs[WMV9]    = i18nc("Video Codec WMV9",    "Window Media Video 9");
+//     codecs[WEBMVP8] = i18nc("Video Codec WEBMVP8", "WebM-VP8");
+//     codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
+//     codecs[THEORA]  = i18nc("Video Codec THEORA",  "Theora-VP3");
+//     codecs[WMV7]    = i18nc("Video Codec WMV7",    "Window Media Video 7");
+//     codecs[WMV8]    = i18nc("Video Codec WMV8",    "Window Media Video 8");
+//     codecs[WMV9]    = i18nc("Video Codec WMV9",    "Window Media Video 9");
 
     return codecs;
 }
