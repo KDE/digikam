@@ -29,6 +29,10 @@
 #include <QSize>
 #include <QPainter>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // QtAv includes
 
 #include <QtAV/QtAV.h>
@@ -154,7 +158,9 @@ bool VidSlideTask::Private::encodeFrame(VideoFrame& vframe,
     if (venc->encode(vframe))
     {
         vpkt = venc->encoded();
-        mux.writeVideo(vpkt);
+
+        if (vpkt.isValid())
+            mux.writeVideo(vpkt);
 
         if (apkt.isValid())
             mux.writeAudio(apkt);
@@ -285,6 +291,7 @@ void VidSlideTask::run()
 
     if (!venc->open())
     {
+        emit signalMessage(i18n("Failed to open video encoder"), true);
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open video encoder";
         emit signalDone(false);
         return;
@@ -299,6 +306,7 @@ void VidSlideTask::run()
 
     if (!aenc->open())
     {
+        emit signalMessage(i18n("Failed to open audio encoder"), true);
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open audio encoder";
         emit signalDone(false);
         return;
@@ -326,6 +334,7 @@ void VidSlideTask::run()
 
     if (!mux.open())
     {
+        emit signalMessage(i18n("Failed to open muxer"), true);
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open muxer";
         emit signalDone(false);
         return;
@@ -394,6 +403,7 @@ void VidSlideTask::run()
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i+1 << "done";
 
+        emit signalMessage(i18n("Encoding %1 Done", ofile), false);
         emit signalProgress(i+1);
     }
 
@@ -405,7 +415,9 @@ void VidSlideTask::run()
     while (venc->encode() && !m_cancel)
     {
         Packet vpkt(venc->encoded());
-        mux.writeVideo(vpkt);
+
+        if (vpkt.isValid())
+            mux.writeVideo(vpkt);
 
         Packet apkt(aenc->encoded());
 

@@ -47,6 +47,7 @@ public:
 
 Q_SIGNALS:
 
+    void signalMessage(const QString&, bool);
     void signalDone(bool);
 
 protected:

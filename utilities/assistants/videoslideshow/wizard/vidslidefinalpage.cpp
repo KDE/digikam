@@ -163,6 +163,9 @@ void VidSlideFinalPage::slotProcess()
     connect(d->encoder, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
 
+    connect(d->encoder, SIGNAL(signalMessage(QString, bool)),
+            this, SLOT(slotMessage(QString, bool)));
+
     connect(d->encoder, SIGNAL(signalDone(bool)),
             this, SLOT(slotDone(bool)));
 
@@ -174,6 +177,12 @@ void VidSlideFinalPage::cleanupPage()
 {
     if (d->encoder)
         d->encoder->cancel();
+}
+
+void VidSlideFinalPage::slotMessage(const QString& mess, bool err)
+{
+    d->progressView->addEntry(mess, err ? DHistoryView::ErrorEntry
+                                        : DHistoryView::ProgressEntry);
 }
 
 void VidSlideFinalPage::slotDone(bool completed)

@@ -55,10 +55,10 @@ public:
     // Video Codecs
     enum VidCodec
     {
-        MJPEG = 0,   // https://en.wikipedia.org/wiki/Motion_JPEG
-        MPEG2,       // https://en.wikipedia.org/wiki/MPEG-2
-        X264,        // https://en.wikipedia.org/wiki/X264
+        X264=0,      // https://en.wikipedia.org/wiki/X264
         MPEG4,       // https://en.wikipedia.org/wiki/MPEG-4
+        MJPEG,       // https://en.wikipedia.org/wiki/Motion_JPEG
+        MPEG2,       // https://en.wikipedia.org/wiki/MPEG-2
         WEBMVP8,     // https://en.wikipedia.org/wiki/VP8
         FLASH,       // https://en.wikipedia.org/wiki/Adobe_Flash
         THEORA,      // https://en.wikipedia.org/wiki/Theora
