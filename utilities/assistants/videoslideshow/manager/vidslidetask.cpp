@@ -28,6 +28,7 @@
 #include <QImage>
 #include <QSize>
 #include <QPainter>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -48,6 +49,7 @@
 
 #include "dimg.h"
 #include "drawdecoding.h"
+#include "fileoperation.h"
 #include "transitionmngr.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
@@ -275,7 +277,11 @@ VidSlideTask::~VidSlideTask()
 void VidSlideTask::run()
 {
     // The output video file
-    QString outFile = d->settings->outputVideo.toLocalFile();
+
+    QUrl dest       = d->settings->outputDir;
+    dest            = dest.adjusted(QUrl::RemoveFilename);
+    dest.setPath(dest.path() + QLatin1String("videoslideshow.") + d->settings->videoFormat());
+    QString outFile = FileOperation::getUniqueFileUrl(dest).toLocalFile();
 
     // ---------------------------------------------
     // Setup Video Encoder
@@ -431,6 +437,12 @@ void VidSlideTask::run()
     venc->close();
     aenc->close();
     mux.close();
+
+    if (!m_cancel)
+    {
+        emit signalMessage(i18n("Output video is %1", outFile), false);
+        d->settings->outputVideo = outFile;
+    }
 
     emit signalDone(!m_cancel);
 }

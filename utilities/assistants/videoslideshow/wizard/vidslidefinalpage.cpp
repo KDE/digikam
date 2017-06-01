@@ -151,10 +151,6 @@ void VidSlideFinalPage::slotProcess()
         }
     }
 
-    d->progressView->addEntry(i18n("Output video stream: %1",
-                              QDir::toNativeSeparators(d->settings->outputVideo.toLocalFile())),
-                              DHistoryView::ProgressEntry);
-
     d->progressBar->setMinimum(0);
     d->progressBar->setMaximum(d->settings->inputImages.count());
 
@@ -202,7 +198,7 @@ void VidSlideFinalPage::slotDone(bool completed)
 
         if (d->settings->openInPlayer)
         {
-            QDesktopServices::openUrl(d->settings->outputVideo);
+            QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings->outputVideo));
             d->progressView->addEntry(i18n("Opening video stream in player..."),
                                     DHistoryView::ProgressEntry);
         }

@@ -22,6 +22,10 @@
 
 #include "vidslidesettings.h"
 
+// Qt includes
+
+#include <QStandardPaths>
+
 // KDE includes
 
 #include <kconfig.h>
@@ -42,7 +46,7 @@ VidSlideSettings::VidSlideSettings()
     vFormat      = MP4;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
-    outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
+    outputDir    = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
     openInPlayer = true;
 }
 
@@ -70,8 +74,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
                    (int)TransitionMngr::None);
-    outputVideo  = group.readEntry("OutputVideo",
-                   QUrl::fromLocalFile(QLatin1String("./out.mp4")));
+    outputDir    = group.readEntry("OutputDir",
+                   QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)));
     openInPlayer = group.readEntry("OpenInPlayer",
                    true);
 }
@@ -87,7 +91,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("VFormat",      (int)vFormat);
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("ABitRate",     abitRate);
-    group.writeEntry("OutputVideo",  outputVideo);
+    group.writeEntry("OutputDir",    outputDir);
     group.writeEntry("OpenInPlayer", openInPlayer);
 }
 
