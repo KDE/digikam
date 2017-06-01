@@ -68,19 +68,20 @@ public:
 
     // Video types (size of target screen)
     // See https://en.wikipedia.org/wiki/List_of_common_resolutions#Digital_TV_standards
+    //     https://en.wikipedia.org/wiki/Aspect_ratio_(image)
     enum VidType
     {
-        QVGA = 0,   // 320  x 180
+        QVGA = 0,   // 320  x 180  - 16:9
         VCD,        // 352  x 240
-        HVGA,       // 480  x 270
+        HVGA,       // 480  x 270  - 16:9
         SVCD,       // 480  x 576
-        VGA,        // 640  x 360
+        VGA,        // 640  x 360  - 16:9
         DVD,        // 720  x 576
-        WVGA,       // 800  x 450
-        XVGA,       // 1024 x 576
-        HDTV,       // 1280 x 720
-        BLUERAY,    // 1920 x 1080
-        UHD4K       // 3840 x 2160
+        WVGA,       // 800  x 450  - 16:9
+        XVGA,       // 1024 x 576  - 16:9
+        HDTV,       // 1280 x 720  - 16:9
+        BLUERAY,    // 1920 x 1080 - 19:9
+        UHD4K       // 3840 x 2160 - 19:9
     };
 
     // Video rates in bits per seconds.
