@@ -112,6 +112,11 @@ HTMLWizard::~HTMLWizard()
     delete d;
 }
 
+void HTMLWizard::setItemsList(const QList<QUrl>& urls)
+{
+    d->selectionPage->setItemsList(urls);
+}
+
 bool HTMLWizard::validateCurrentPage()
 {
     if (!DWizardDlg::validateCurrentPage())

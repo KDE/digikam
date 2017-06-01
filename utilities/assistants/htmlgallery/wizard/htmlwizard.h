@@ -24,6 +24,11 @@
 #ifndef HTML_WIZARD_H
 #define HTML_WIZARD_H
 
+// Qt includes
+
+#include <QList>
+#include <QUrl>
+
 // Local includes
 
 #include "dwizarddlg.h"
@@ -53,6 +58,8 @@ public:
 
     bool validateCurrentPage();
     int  nextId()                    const;
+
+    void setItemsList(const QList<QUrl>& urls);
 
 private:
 
