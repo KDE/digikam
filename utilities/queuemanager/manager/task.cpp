@@ -48,7 +48,7 @@ extern "C"
 #include "imageinfo.h"
 #include "batchtool.h"
 #include "batchtoolsmanager.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 
 namespace Digikam
 {
@@ -224,7 +224,7 @@ void Task::run()
     {
         if (d->settings.conflictRule != QueueSettings::OVERWRITE)
         {
-            dest       = FileOperation::getUniqueFileUrl(dest);
+            dest       = DFileOperations::getUniqueFileUrl(dest);
             renameMess = i18n("(renamed to %1)", dest.fileName());
         }
         else
@@ -237,7 +237,7 @@ void Task::run()
     {
         if (DMetadata::hasSidecar(outUrl.toLocalFile()))
         {
-            if (!FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
+            if (!DFileOperations::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                                 DMetadata::sidecarPath(outUrl.toLocalFile()),
                                                 DMetadata::sidecarPath(dest.toLocalFile()),
                                                 timeAdjust))
@@ -246,7 +246,7 @@ void Task::run()
             }
         }
 
-        if (FileOperation::localFileRename(d->tools.m_itemUrl.toLocalFile(),
+        if (DFileOperations::localFileRename(d->tools.m_itemUrl.toLocalFile(),
                                            outUrl.toLocalFile(),
                                            dest.toLocalFile(),
                                            timeAdjust))

@@ -51,7 +51,7 @@
 #include "queuemgrwindow.h"
 #include "thumbnailloadthread.h"
 #include "fileactionmngr.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "coredb.h"
 #include "coredbaccess.h"
 
@@ -356,7 +356,7 @@ void ImageViewUtilities::openInfosWithDefaultApplication(const QList<ImageInfo>&
         urls << inf.fileUrl();
     }
 
-    FileOperation::openFilesWithDefaultApplication(urls);
+    DFileOperations::openFilesWithDefaultApplication(urls);
 }
 
 namespace

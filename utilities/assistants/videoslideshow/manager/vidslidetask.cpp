@@ -49,7 +49,7 @@
 
 #include "dimg.h"
 #include "drawdecoding.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "transitionmngr.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
@@ -281,7 +281,7 @@ void VidSlideTask::run()
     QUrl dest       = d->settings->outputDir;
     dest            = dest.adjusted(QUrl::RemoveFilename);
     dest.setPath(dest.path() + QLatin1String("videoslideshow.") + d->settings->videoFormat());
-    QString outFile = FileOperation::getUniqueFileUrl(dest).toLocalFile();
+    QString outFile = DFileOperations::getUniqueFileUrl(dest).toLocalFile();
 
     // ---------------------------------------------
     // Setup Video Encoder

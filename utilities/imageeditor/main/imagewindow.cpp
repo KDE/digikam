@@ -82,7 +82,7 @@
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileactionmngr.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "digikam_globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
@@ -1701,7 +1701,7 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
 
 void ImageWindow::slotFileWithDefaultApplication()
 {
-    FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->currentUrl());
+    DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->currentUrl());
 }
 
 void ImageWindow::addServicesMenu()

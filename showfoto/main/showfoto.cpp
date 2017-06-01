@@ -76,7 +76,7 @@
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imagepropertiessidebar.h"
@@ -1308,7 +1308,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
 void ShowFoto::slotFileWithDefaultApplication()
 {
-    Digikam::FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
+    Digikam::DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
 }
 
 void ShowFoto::addServicesMenu()

@@ -50,7 +50,7 @@
 #include "dimg.h"
 #include "dio.h"
 #include "dmetadata.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "metadatasettings.h"
 #include "metadataedit.h"
 #include "applicationsettings.h"
@@ -1703,7 +1703,7 @@ void LightTableWindow::slotFileWithDefaultApplication()
 {
     if (!d->thumbView->currentInfo().isNull())
     {
-        FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl());
+        DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl());
     }
 }
 
