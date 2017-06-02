@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTOOL_H
-#define BATCHTOOL_H
+#ifndef BATCH_TOOL_H
+#define BATCH_TOOL_H
 
 // Qt includes
 
@@ -74,7 +74,7 @@ public:
 
 public:
 
-    BatchTool(const QString& name, BatchToolGroup group, QObject* const parent = 0);
+    explicit BatchTool(const QString& name, BatchToolGroup group, QObject* const parent = 0);
     ~BatchTool();
 
     /** Get description of an error which appear during apply() method.
@@ -315,6 +315,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* BATCHTOOL_H */
+#endif // BATCH_TOOL_H

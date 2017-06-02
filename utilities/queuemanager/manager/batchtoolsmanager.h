@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTOOLSMANAGER_H
-#define BATCHTOOLSMANAGER_H
+#ifndef BATCH_TOOLS_MANAGER_H
+#define BATCH_TOOLS_MANAGER_H
 
 // Qt includes
 
@@ -63,6 +63,6 @@ private:
     friend class BatchToolsManagerCreator;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* BATCHTOOLSMANAGER_H */
+#endif // BATCH_TOOLS_MANAGER_H

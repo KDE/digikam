@@ -215,14 +215,14 @@ void Task::run()
     // Move processed temp file to target
 
     QUrl dest = workUrl;
-    dest = dest.adjusted(QUrl::RemoveFilename);
+    dest      = dest.adjusted(QUrl::RemoveFilename);
     dest.setPath(dest.path() + d->tools.m_destFileName);
     QString renameMess;
     QFileInfo fi(dest.toLocalFile());
 
     if (fi.exists())
     {
-        if (d->settings.conflictRule != QueueSettings::OVERWRITE)
+        if (d->settings.conflictRule != FileSaveConflictBox::OVERWRITE)
         {
             dest       = DFileOperations::getUniqueFileUrl(dest);
             renameMess = i18n("(renamed to %1)", dest.fileName());

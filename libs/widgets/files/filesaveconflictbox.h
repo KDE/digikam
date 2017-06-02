@@ -31,10 +31,14 @@
 
 #include <kconfig.h>
 
+// Local includes
+
+#include "digikam_export.h"
+
 namespace Digikam
 {
 
-class FileSaveConflictBox : public QWidget
+class DIGIKAM_EXPORT FileSaveConflictBox : public QWidget
 {
     Q_OBJECT
 
