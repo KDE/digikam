@@ -8,6 +8,7 @@ Searches    : Users can now restrict the results of fuzzy image/drop/sketch sear
 Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
 Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
 General     : New tool to export Albums to static HTML gallery.
+General     : New tool to export Albums to video diaporama.
 HTMLGallery : New "Elegant" theme using javascript to render image as slideshow in web browser.
 HTMLGallery : New "SimpleRounded" theme that uses flat shapes with rounded corners.
 HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
@@ -78,4 +79,13 @@ BUGFIXES FROM BUGZILLA:
 057 ==> 361378 - Tags are not being removed from files metadata.
 058 ==> 375187 - Keywords under same tag in digikam do not match.
 059 ==> 380256 - digiKam crash when adding new collection.
-060 ==> 
+060 ==> 320725 - Video Slideshow segfaults.
+061 ==> 331625 - Trying to make a video Slideshow.
+062 ==> 337605 - Crash on "Export to Video Slide Show".
+063 ==> 324646 - digiKam hangs when producting "Video Slide Show".
+064 ==> 316791 - Starting video slideshow tool twice, the procedure will not finish any more.
+065 ==> 318297 - Creating Videos does not work.
+066 ==> 334089 - VideoSlideshow plugin port to QtAv needed.
+067 ==> 153061 - New tool to export image as video slideshow.
+068 ==> 176727 - Creation of video does not work.
+069 ==> 
