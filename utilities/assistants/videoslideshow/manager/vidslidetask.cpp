@@ -281,7 +281,13 @@ void VidSlideTask::run()
     QUrl dest       = d->settings->outputDir;
     dest            = dest.adjusted(QUrl::RemoveFilename);
     dest.setPath(dest.path() + QLatin1String("videoslideshow.") + d->settings->videoFormat());
-    QString outFile = DFileOperations::getUniqueFileUrl(dest).toLocalFile();
+    QString outFile = dest.toLocalFile();
+    QFileInfo fi(outFile);
+
+    if (fi.exists() && d->settings->conflictRule != FileSaveConflictBox::OVERWRITE)
+    {
+        outFile = DFileOperations::getUniqueFileUrl(dest).toLocalFile();
+    }
 
     // ---------------------------------------------
     // Setup Video Encoder

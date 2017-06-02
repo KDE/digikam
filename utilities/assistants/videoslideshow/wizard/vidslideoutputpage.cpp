@@ -46,6 +46,7 @@
 
 #include "vidslidewizard.h"
 #include "dfileselector.h"
+#include "filesaveconflictbox.h"
 
 using namespace QtAV;
 
@@ -58,6 +59,7 @@ public:
 
     Private(QWizard* const dialog)
       : destUrl(0),
+        conflictBox(0),
         openInPlayer(0),
         formatVal(0),
         wizard(0),
@@ -71,11 +73,12 @@ public:
         }
     }
 
-    DFileSelector*    destUrl;
-    QCheckBox*        openInPlayer;
-    QComboBox*        formatVal;
-    VidSlideWizard*   wizard;
-    VidSlideSettings* settings;
+    DFileSelector*       destUrl;
+    FileSaveConflictBox* conflictBox;
+    QCheckBox*           openInPlayer;
+    QComboBox*           formatVal;
+    VidSlideWizard*      wizard;
+    VidSlideSettings*    settings;
 };
 
 VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& title)
@@ -127,6 +130,12 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
 
     // --------------------
 
+    QLabel* const outputLbl = new QLabel(main);
+    outputLbl->setText(i18n("The video output file name will be generated automatically."));
+    d->conflictBox          = new FileSaveConflictBox(main);
+
+    // --------------------
+
     d->openInPlayer         = new QCheckBox(main);
     d->openInPlayer->setText(i18n("Open in Video Player"));
 
@@ -138,8 +147,10 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     grid->addWidget(d->formatVal,    0, 1, 1, 1);
     grid->addWidget(fileLabel,       1, 0, 1, 1);
     grid->addWidget(d->destUrl,      1, 1, 1, 1);
-    grid->addWidget(d->openInPlayer, 2, 0, 1, 2);
-    grid->setRowStretch(3, 10);
+    grid->addWidget(outputLbl,       2, 0, 1, 2);
+    grid->addWidget(d->conflictBox,  3, 0, 1, 2);
+    grid->addWidget(d->openInPlayer, 4, 0, 1, 2);
+    grid->setRowStretch(5, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-video")));
@@ -160,6 +171,7 @@ void VidSlideOutputPage::initializePage()
 {
     d->formatVal->setCurrentIndex(d->settings->vFormat);
     d->destUrl->setFileDlgPath(d->settings->outputDir.toLocalFile());
+    d->conflictBox->setConflictRule(d->settings->conflictRule);
     d->openInPlayer->setChecked(d->settings->openInPlayer);
 }
 
@@ -170,6 +182,7 @@ bool VidSlideOutputPage::validatePage()
 
     d->settings->vFormat      = (VidSlideSettings::VidFormat)d->formatVal->currentIndex();
     d->settings->outputDir    = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
+    d->settings->conflictRule = d->conflictBox->conflictRule();
     d->settings->openInPlayer = d->openInPlayer->isChecked();
 
     return true;

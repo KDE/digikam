@@ -24,11 +24,8 @@
 
 // Qt includes
 
-#include <QButtonGroup>
 #include <QGridLayout>
 #include <QLabel>
-#include <QRadioButton>
-#include <QVBoxLayout>
 #include <QApplication>
 #include <QStyle>
 #include <QComboBox>
@@ -47,26 +44,19 @@ public:
 
     Private()
     {
-        formatLabel         = 0;
-        conflictLabel       = 0;
-        conflictButtonGroup = 0;
-        formatComboBox      = 0;
-        storeDiffButton     = 0;
-        overwriteButton     = 0;
-        grid                = 0;
+        formatLabel    = 0;
+        formatComboBox = 0;
+        conflictBox    = 0;
+        grid           = 0;
     }
 
-    QLabel*       formatLabel;
-    QLabel*       conflictLabel;
+    QLabel*              formatLabel;
 
-    QGridLayout*  grid;
+    QGridLayout*         grid;
 
-    QButtonGroup* conflictButtonGroup;
+    QComboBox*           formatComboBox;
 
-    QComboBox*    formatComboBox;
-
-    QRadioButton* storeDiffButton;
-    QRadioButton* overwriteButton;
+    FileSaveConflictBox* conflictBox;
 };
 
 DSaveSettingsWidget::DSaveSettingsWidget(QWidget* const parent)
@@ -79,7 +69,7 @@ DSaveSettingsWidget::DSaveSettingsWidget(QWidget* const parent)
 
     d->grid           = new QGridLayout(this);
     d->formatLabel    = new QLabel(i18n("Output file format:"), this);
-    d->formatComboBox = new QComboBox( this );
+    d->formatComboBox = new QComboBox(this);
     d->formatComboBox->setWhatsThis(i18n("<p>Set the output file format to use here:</p>"
                                          "<p><b>JPEG</b>: output the processed image in JPEG format. "
                                          "This format will give smaller-sized files.</p>"
@@ -96,35 +86,20 @@ DSaveSettingsWidget::DSaveSettingsWidget(QWidget* const parent)
                                          "losing quality. Image is not compressed.</p>"));
     slotPopulateImageFormat(false);
 
-    d->conflictLabel           = new QLabel(i18n("If Target File Exists:"), this);
-    QWidget* const conflictBox = new QWidget(this);
-    QVBoxLayout* const vlay    = new QVBoxLayout(conflictBox);
-    d->conflictButtonGroup     = new QButtonGroup(conflictBox);
-    d->storeDiffButton         = new QRadioButton(i18n("Store as a different name"), conflictBox);
-    d->overwriteButton         = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
-    d->conflictButtonGroup->addButton(d->overwriteButton, OVERWRITE);
-    d->conflictButtonGroup->addButton(d->storeDiffButton, DIFFNAME);
-    d->conflictButtonGroup->setExclusive(true);
-    d->storeDiffButton->setChecked(true);
-
-    vlay->setContentsMargins(spacing, spacing, spacing, spacing);
-    vlay->setSpacing(spacing);
-    vlay->addWidget(d->storeDiffButton);
-    vlay->addWidget(d->overwriteButton);
+    d->conflictBox    = new FileSaveConflictBox(this);
 
     d->grid->addWidget(d->formatLabel,    0, 0, 1, 1);
     d->grid->addWidget(d->formatComboBox, 0, 1, 1, 1);
-    d->grid->addWidget(d->conflictLabel,  1, 0, 1, 2);
-    d->grid->addWidget(conflictBox,       2, 0, 1, 2);
-    d->grid->setRowStretch(4, 10);
+    d->grid->addWidget(d->conflictBox,    1, 0, 1, 2);
+    d->grid->setRowStretch(3, 10);
     d->grid->setContentsMargins(spacing, spacing, spacing, spacing);
     d->grid->setSpacing(spacing);
 
-    connect(d->formatComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
-            this, &DSaveSettingsWidget::signalSaveFormatChanged);
+    connect(d->formatComboBox, SIGNAL(activated(int)),
+            this, SIGNAL(signalSaveFormatChanged()));
 
-    connect(d->conflictButtonGroup, static_cast<void (QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),
-            this, &DSaveSettingsWidget::signalConflictButtonChanged);
+    connect(d->conflictBox, SIGNAL(signalConflictButtonChanged(int)),
+            this, SIGNAL(signalConflictButtonChanged(int)));
 }
 
 DSaveSettingsWidget::~DSaveSettingsWidget()
@@ -134,18 +109,18 @@ DSaveSettingsWidget::~DSaveSettingsWidget()
 
 void DSaveSettingsWidget::setCustomSettingsWidget(QWidget* const custom)
 {
-    d->grid->addWidget(custom, 3, 0, 1, 2);
+    d->grid->addWidget(custom, 2, 0, 1, 2);
 }
 
 void DSaveSettingsWidget::resetToDefault()
 {
     setFileFormat(OUTPUT_PNG);
-    setConflictRule(OVERWRITE);
+    d->conflictBox->resetToDefault();
 }
 
 DSaveSettingsWidget::OutputFormat DSaveSettingsWidget::fileFormat() const
 {
-    return(OutputFormat)(d->formatComboBox->currentIndex());
+    return (OutputFormat)(d->formatComboBox->currentIndex());
 }
 
 void DSaveSettingsWidget::setFileFormat(OutputFormat f)
@@ -153,26 +128,26 @@ void DSaveSettingsWidget::setFileFormat(OutputFormat f)
     d->formatComboBox->setCurrentIndex((int)f);
 }
 
-DSaveSettingsWidget::ConflictRule DSaveSettingsWidget::conflictRule() const
+FileSaveConflictBox::ConflictRule DSaveSettingsWidget::conflictRule() const
 {
-    return((ConflictRule)(d->conflictButtonGroup->checkedId()));
+    return d->conflictBox->conflictRule();
 }
 
-void DSaveSettingsWidget::setConflictRule(ConflictRule r)
+void DSaveSettingsWidget::setConflictRule(FileSaveConflictBox::ConflictRule r)
 {
-    d->conflictButtonGroup->button((int)r)->setChecked(true);
+    d->conflictBox->setConflictRule(r);
 }
 
 void DSaveSettingsWidget::readSettings(KConfigGroup& group)
 {
     setFileFormat((DSaveSettingsWidget::OutputFormat)group.readEntry("Output Format", (int)(DSaveSettingsWidget::OUTPUT_PNG)));
-    setConflictRule((DSaveSettingsWidget::ConflictRule)group.readEntry("Conflict",    (int)(DSaveSettingsWidget::DIFFNAME)));
+    d->conflictBox->readSettings(group);
 }
 
 void DSaveSettingsWidget::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("Output Format", (int)fileFormat());
-    group.writeEntry("Conflict",      (int)conflictRule());
+    d->conflictBox->writeSettings(group);
 }
 
 void DSaveSettingsWidget::slotPopulateImageFormat(bool sixteenBits)

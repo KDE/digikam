@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "filesaveconflictbox.h"
 #include "transitionmngr.h"
 #include "digikam_export.h"
 
@@ -147,25 +148,27 @@ public:
 
     // Generator settings
 
-    Selection                 selMode;       // Items selection mode
+    Selection                         selMode;       // Items selection mode
 
-    QList<QUrl>               inputImages;   // Images stream.
-    QList<QUrl>               inputAudio;    // Soundtracks stream.
+    QList<QUrl>                       inputImages;   // Images stream.
+    QList<QUrl>                       inputAudio;    // Soundtracks stream.
 
-    TransitionMngr::TransType transition;    // Transition type between images.
+    TransitionMngr::TransType         transition;    // Transition type between images.
 
-    int                       imgFrames;     // Amount of frames to encode by image in video stream.
-                                             // ex: 125 frames = 5 s at 25 img/s.
+    int                               imgFrames;     // Amount of frames by image to encode in video.
+                                                     // ex: 125 frames = 5 s at 25 img/s.
 
-    int                       abitRate;      // Encoded Audio stream bit rate in bit/s.
-    VidBitRate                vbitRate;      // Encoded Video stream bit rate in bit/s.
-    VidStd                    vStandard;     // Encoded Video standard => frame rate in img/s.
-    VidType                   vType;         // Encoded video type.
-    VidCodec                  vCodec;        // Encoded video codec.
-    VidFormat                 vFormat;       // Encoded video container format.
-    QUrl                      outputDir;     // Encoded video stream directory.
+    int                               abitRate;      // Encoded Audio stream bit rate in bit/s.
+    VidBitRate                        vbitRate;      // Encoded Video stream bit rate in bit/s.
+    VidStd                            vStandard;     // Encoded Video standard => frame rate in img/s.
+    VidType                           vType;         // Encoded video type.
+    VidCodec                          vCodec;        // Encoded video codec.
+    VidFormat                         vFormat;       // Encoded video container format.
 
-    bool                      openInPlayer;  // Open video stream in desktop player at end.
+    FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file alreay exists.
+    QUrl                              outputDir;     // Encoded video stream directory.
+
+    bool                              openInPlayer;  // Open video stream in desktop player at end.
 
     // ---------------------
 

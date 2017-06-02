@@ -46,6 +46,7 @@ VidSlideSettings::VidSlideSettings()
     vFormat      = MP4;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
+    conflictRule = FileSaveConflictBox::OVERWRITE;
     outputDir    = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
     openInPlayer = true;
 }
@@ -74,6 +75,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
                    (int)TransitionMngr::None);
+    conflictRule = (FileSaveConflictBox::ConflictRule)group.readEntry("ConflictRule",
+                   (int)FileSaveConflictBox::OVERWRITE);
     outputDir    = group.readEntry("OutputDir",
                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)));
     openInPlayer = group.readEntry("OpenInPlayer",
@@ -91,6 +94,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("VFormat",      (int)vFormat);
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("ABitRate",     abitRate);
+    group.writeEntry("ConflictRule", (int)conflictRule);
     group.writeEntry("OutputDir",    outputDir);
     group.writeEntry("OpenInPlayer", openInPlayer);
 }

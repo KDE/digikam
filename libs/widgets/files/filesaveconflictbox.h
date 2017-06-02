@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-09-13
- * Description : a widget to provide options to save image.
+ * Description : a widget to provide conflict rules to save image.
  *
  * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DSAVE_SETTINGS_WIDGET_H
-#define DSAVE_SETTINGS_WIDGET_H
+#ifndef FILE_SAVE_CONFLICT_BOX_H
+#define FILE_SAVE_CONFLICT_BOX_H
 
 // Qt includes
 
@@ -31,26 +31,14 @@
 
 #include <kconfig.h>
 
-// Local includes
-
-#include "filesaveconflictbox.h"
-
 namespace Digikam
 {
 
-class DSaveSettingsWidget : public QWidget
+class FileSaveConflictBox : public QWidget
 {
     Q_OBJECT
 
 public:
-
-    enum OutputFormat
-    {
-        OUTPUT_PNG = 0,
-        OUTPUT_TIFF,
-        OUTPUT_JPEG,
-        OUTPUT_PPM
-    };
 
     enum ConflictRule
     {
@@ -60,34 +48,19 @@ public:
 
 public:
 
-    DSaveSettingsWidget(QWidget* const parent);
-    ~DSaveSettingsWidget();
+    FileSaveConflictBox(QWidget* const parent);
+    ~FileSaveConflictBox();
 
-    void setCustomSettingsWidget(QWidget* const custom);
-
-    OutputFormat fileFormat() const;
-    void setFileFormat(OutputFormat f);
-
-    FileSaveConflictBox::ConflictRule conflictRule() const;
-    void setConflictRule(FileSaveConflictBox::ConflictRule r);
-
-    QString extension() const;
-    QString typeMime() const;
+    ConflictRule conflictRule() const;
+    void setConflictRule(ConflictRule r);
 
     void resetToDefault();
 
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    static QString extensionForFormat(OutputFormat format);
-
-public Q_SLOTS:
-
-    void slotPopulateImageFormat(bool sixteenBits);
-
 Q_SIGNALS:
 
-    void signalSaveFormatChanged();
     void signalConflictButtonChanged(int);
 
 private:
@@ -98,4 +71,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DSAVE_SETTINGS_WIDGET_H
+#endif // FILE_SAVE_CONFLICT_BOX_H
