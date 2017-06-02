@@ -459,7 +459,7 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
 {
     QUrl newUrl = QUrl::fromLocalFile(temp.adjusted(QUrl::RemoveFilename).toLocalFile() + settings.targetFileName);
 
-    if (d->saveSettingsBox->conflictRule() != DSaveSettingsWidget::OVERWRITE)
+    if (d->saveSettingsBox->conflictRule() != FileSaveConflictBox::OVERWRITE)
     {
         newUrl = DFileOperations::getUniqueFileUrl(newUrl);
     }

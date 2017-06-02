@@ -52,15 +52,9 @@ public:
         OUTPUT_PPM
     };
 
-    enum ConflictRule
-    {
-        OVERWRITE = 0,
-        DIFFNAME
-    };
-
 public:
 
-    DSaveSettingsWidget(QWidget* const parent);
+    explicit DSaveSettingsWidget(QWidget* const parent);
     ~DSaveSettingsWidget();
 
     void setCustomSettingsWidget(QWidget* const custom);
