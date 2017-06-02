@@ -112,7 +112,7 @@ QImage VidSlideTask::Private::makeFramedImage(const QString& file, const QSize& 
 
         DImg dimg(file, 0, DRawDecoding(settings));
         QImage timg = dimg.copyQImage();
-        timg        = timg.scaled(outSize, Qt::KeepAspectRatio);
+        timg        = timg.scaled(outSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         QPainter p(&qimg);
         p.drawImage((qimg.width()  / 2) - (timg.width()  / 2),
