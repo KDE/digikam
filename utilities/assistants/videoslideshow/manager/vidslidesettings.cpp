@@ -309,6 +309,10 @@ QString VidSlideSettings::videoFormat() const
             frm = QLatin1String("mkv");
             break;
 
+        case MPG:
+            frm = QLatin1String("mpg");
+            break;
+
         default: // MP4
             frm = QLatin1String("mp4");
             break;
@@ -380,7 +384,7 @@ QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
     codecs[X264]    = i18nc("Video Codec X264",    "High Quality H.264 AVC/MPEG-4 AVC");
     codecs[MPEG4]   = i18nc("Video Codec MPEG4",   "DivX/XVid/MPEG-4");
 //    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
-//    codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
+    codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
 //    codecs[WEBMVP8] = i18nc("Video Codec WEBMVP8", "WebM-VP8");
 //    codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
 //    codecs[THEORA]  = i18nc("Video Codec THEORA",  "Theora-VP3");
@@ -398,6 +402,7 @@ QMap<VidSlideSettings::VidFormat, QString> VidSlideSettings::videoFormatNames()
     frm[AVI] = i18nc("Video Standard AVI", "AVI - Audio Video Interleave");
     frm[MKV] = i18nc("Video Standard MKV", "MKV - Matroska");
     frm[MP4] = i18nc("Video Standard MP4", "MP4 - MPEG-4");
+    frm[MPG] = i18nc("Video Standard MPG", "MPG - MPEG-2");
 
     return frm;
 }

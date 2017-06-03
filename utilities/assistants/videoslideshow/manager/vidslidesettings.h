@@ -119,7 +119,8 @@ public:
     {
         AVI=0,      // https://en.wikipedia.org/wiki/Audio_Video_Interleave
         MKV,        // https://en.wikipedia.org/wiki/Matroska
-        MP4         // https://en.wikipedia.org/wiki/MPEG-4_Part_14
+        MP4,        // https://en.wikipedia.org/wiki/MPEG-4_Part_14
+        MPG         // https://en.wikipedia.org/wiki/MPEG-2
     };
 
 public:

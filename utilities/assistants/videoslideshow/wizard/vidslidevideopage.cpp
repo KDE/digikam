@@ -262,7 +262,7 @@ void VidSlideVideoPage::initializePage()
     d->typeVal->setCurrentIndex(d->settings->vType);
     d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
     d->stdVal->setCurrentIndex(d->settings->vStandard);
-    d->codecVal->setCurrentIndex(d->settings->vCodec);
+    d->codecVal->setCurrentIndex(d->codecVal->findData(d->settings->vCodec));
     d->transVal->setCurrentIndex(d->settings->transition);
     slotSlideDuration();
 }
@@ -273,7 +273,7 @@ bool VidSlideVideoPage::validatePage()
     d->settings->vType      = (VidSlideSettings::VidType)d->typeVal->currentIndex();
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
     d->settings->vStandard  = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
-    d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentIndex();
+    d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentData().toInt();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;
