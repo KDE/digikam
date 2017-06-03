@@ -829,6 +829,7 @@ void EditorWindow::setupStandardActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
+    createVideoSlideshowAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
@@ -848,6 +849,10 @@ void EditorWindow::setupStandardActions()
 
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(false);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction->setEnabled(false);
 #endif
 
     // --------------------------------------------------------
@@ -1428,6 +1433,10 @@ void EditorWindow::toggleStandardActions(bool val)
 
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(val);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction->setEnabled(val);
 #endif
 
     // these actions are special: They are turned off if val is false,
@@ -3012,6 +3021,10 @@ void EditorWindow::setupSelectToolsAction()
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    actionModel->addAction(m_videoslideshowAction,        postCategory);
 #endif
 
 #ifdef HAVE_MARBLE

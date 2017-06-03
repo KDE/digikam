@@ -138,6 +138,10 @@
 #   include "panomanager.h"
 #endif
 
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
+
 namespace Digikam
 {
 
@@ -1815,6 +1819,14 @@ void ImageWindow::slotPanorama()
     PanoManager::instance()->checkBinaries();
     PanoManager::instance()->setItemsList(d->thumbBar->urls());
     PanoManager::instance()->run();
+#endif
+}
+
+void ImageWindow::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
 #endif
 }
 

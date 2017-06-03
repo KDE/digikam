@@ -119,6 +119,10 @@
 #   include "panomanager.h"
 #endif
 
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
+
 namespace ShowFoto
 {
 
@@ -1419,6 +1423,14 @@ void ShowFoto::slotExpoBlending()
     ExpoBlendingManager::instance()->checkBinaries();
     ExpoBlendingManager::instance()->setItemsList(d->thumbBar->urls());
     ExpoBlendingManager::instance()->run();
+}
+
+void ShowFoto::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
 }
 
 }   // namespace ShowFoto
