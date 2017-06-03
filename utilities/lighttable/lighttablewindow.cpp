@@ -92,6 +92,10 @@
 #   include "panomanager.h"
 #endif
 
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
+
 namespace Digikam
 {
 
@@ -578,6 +582,7 @@ void LightTableWindow::setupActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
+    createVideoSlideshowAction();
 
     // Left Panel Zoom Actions
 
@@ -1856,6 +1861,14 @@ void LightTableWindow::slotExpoBlending()
     ExpoBlendingManager::instance()->checkBinaries();
     ExpoBlendingManager::instance()->setItemsList(d->thumbView->urls());
     ExpoBlendingManager::instance()->run();
+}
+
+void LightTableWindow::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
+#endif
 }
 
 }  // namespace Digikam
