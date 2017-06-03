@@ -88,4 +88,5 @@ BUGFIXES FROM BUGZILLA:
 066 ==> 334089 - VideoSlideshow plugin port to QtAv needed.
 067 ==> 153061 - New tool to export image as video slideshow.
 068 ==> 176727 - Creation of video does not work.
-069 ==> 
+069 ==> 380507 - Menu items missing.
+070 ==> 
