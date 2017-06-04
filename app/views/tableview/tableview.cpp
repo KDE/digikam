@@ -648,6 +648,7 @@ bool TableView::needGroupResolving(ApplicationSettings::OperationType type, bool
 {
     ApplicationSettings::ApplyToEntireGroup applyAll =
             ApplicationSettings::instance()->getGroupingOperateOnAll(type);
+
     if (applyAll == ApplicationSettings::No)
     {
         return false;

@@ -359,6 +359,7 @@ bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType
 {
     ApplicationSettings::ApplyToEntireGroup applyAll =
             ApplicationSettings::instance()->getGroupingOperateOnAll(type);
+
     if (applyAll == ApplicationSettings::No)
     {
         return false;
@@ -369,6 +370,7 @@ bool ImageCategorizedView::needGroupResolving(ApplicationSettings::OperationType
     }
 
     ImageInfoList infos;
+
     if (all)
     {
         infos = d->filterModel->imageInfosSorted();
