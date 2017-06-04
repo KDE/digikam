@@ -331,7 +331,7 @@ void VidSlideTask::run()
     mux.setMedia(outFile);
     mux.copyProperties(venc);  // Setup video encoder
     mux.copyProperties(aenc);  // Setup audio encoder
-
+/*
     // Segments muxer ffmpeg options. See : https://www.ffmpeg.org/ffmpeg-formats.html#Options-11
     QVariantHash avfopt;
     avfopt[QLatin1String("segment_time")]      = 4;
@@ -343,7 +343,7 @@ void VidSlideTask::run()
     muxopt[QLatin1String("avformat")]          = avfopt;
 
     mux.setOptions(muxopt);
-
+*/
     if (!mux.open())
     {
         emit signalMessage(i18n("Failed to open muxer"), true);
