@@ -80,7 +80,6 @@ public:
                            AudioEncoder* const aenc,
                            AVMuxer& mux);
 
-    QImage     makeFramedImage(const QString& file, const QSize& outSize) const;
     AudioFrame nextAudioFrame(const AudioFormat& afmt);
 
 public:
@@ -94,7 +93,7 @@ public:
     QList<QUrl>::const_iterator curAudioFile;
 };
 
-QImage VidSlideTask::Private::makeFramedImage(const QString& file, const QSize& outSize) const
+QImage VidSlideTask::makeFramedImage(const QString& file, const QSize& outSize)
 {
     QImage qimg(outSize, QImage::Format_ARGB32);
     qimg.fill(QColor(0, 0, 0, 0));
@@ -368,8 +367,8 @@ void VidSlideTask::run()
                         ? d->settings->inputImages[i+1].toLocalFile()
                         : QString();
 
-        QImage qiimg  = d->makeFramedImage(ifile, osize);
-        QImage qoimg  = d->makeFramedImage(ofile, osize);
+        QImage qiimg  = makeFramedImage(ifile, osize);
+        QImage qoimg  = makeFramedImage(ofile, osize);
 
         tmngr.setInImage(qiimg);
         tmngr.setOutImage(qoimg);

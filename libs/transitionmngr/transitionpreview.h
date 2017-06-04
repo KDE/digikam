@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2017-05-25
- * Description : a tool to generate video slideshow from images.
+ * Date        : 2017-06-04
+ * Description : A label to show transition preview
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -21,40 +21,41 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_TASK_H
-#define VIDSLIDE_TASK_H
+#ifndef TRANSITION_PREVIEW_H
+#define TRANSITION_PREVIEW_H
 
 // Qt includes
 
+#include <QLabel>
 #include <QString>
+#include <QList>
+#include <QUrl>
 
 // Local includes
 
-#include "vidslidesettings.h"
-#include "actionthreadbase.h"
+#include "transitionmngr.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class VidSlideTask : public ActionJob
+class DIGIKAM_EXPORT TransitionPreview : public QLabel
 {
     Q_OBJECT
 
 public:
 
-    VidSlideTask(VidSlideSettings* const settings);
-    ~VidSlideTask();
+    explicit TransitionPreview(QWidget* const parent=0);
+    ~TransitionPreview();
 
-    static QImage makeFramedImage(const QString& file, const QSize& outSize);
+    void setImagesList(const QList<QUrl>& images);
 
-Q_SIGNALS:
+    void startPreview(TransitionMngr::TransType eff);
+    void stopPreview();
 
-    void signalMessage(const QString&, bool);
-    void signalDone(bool);
+private Q_SLOTS:
 
-protected:
-
-    void run();
+    void slotProgressTransition();
 
 private:
 
@@ -64,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_TASK_H
+#endif // TRANSITION_PREVIEW_H
