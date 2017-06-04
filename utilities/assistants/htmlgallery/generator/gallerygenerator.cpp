@@ -136,9 +136,7 @@ public:
 
         QUrl srcUrl  = QUrl::fromLocalFile(theme->directory());
         QUrl destUrl = info->destUrl().adjusted(QUrl::StripTrailingSlash);
-
-        destUrl.setPath(destUrl.path() + QLatin1Char('/') + srcUrl.fileName());
-        QDir themeDir(destUrl.toLocalFile());
+        QDir themeDir(destUrl.toLocalFile() + QLatin1Char('/') + srcUrl.fileName());
 
         if (themeDir.exists())
         {
@@ -307,7 +305,7 @@ public:
     {
         logInfo(i18n("Generating HTML files"));
 
-        QString xsltFileName                                 = theme->directory() + QLatin1String("template.xsl");
+        QString xsltFileName                                 = theme->directory() + QLatin1String("/template.xsl");
         CWrapper<xsltStylesheetPtr, xsltFreeStylesheet> xslt = xsltParseStylesheetFile((const xmlChar*)
             QDir::toNativeSeparators(xsltFileName).toLocal8Bit().data());
 

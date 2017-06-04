@@ -90,4 +90,5 @@ BUGFIXES FROM BUGZILLA:
 068 ==> 176727 - Creation of video does not work.
 069 ==> 380507 - Menu items missing.
 070 ==> 380512 - digiKam crashes when trying to geotag a picture.
-071 ==> 
+071 ==> 380805 - Generating Gallery: "Could not load XSL file".
+072 ==> 
