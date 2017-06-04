@@ -164,7 +164,7 @@ public:
         if (!createDir(baseDestDir))
             return false;
 
-        xmlFileName        = baseDestDir + QLatin1String("/gallery.xml");
+        xmlFileName         = baseDestDir + QLatin1String("/gallery.xml");
         XMLWriter xmlWriter;
 
         if (!xmlWriter.open(xmlFileName))
@@ -265,8 +265,8 @@ public:
             if (info->m_iface)
                 inf = info->m_iface->itemInfo(url);
 
-            GalleryElement element        = GalleryElement(inf);
-            element.m_path                 = remoteUrlHash.value(url, url.toLocalFile());
+            GalleryElement element = GalleryElement(inf);
+            element.m_path         = remoteUrlHash.value(url, url.toLocalFile());
             imageElementList << element;
         }
 
@@ -577,7 +577,7 @@ GalleryGenerator::GalleryGenerator(GalleryInfo* const info)
     : QObject(),
       d(new Private)
 {
-    d->that      = this;
+    d->that     = this;
     d->info     = info;
     d->warnings = false;
 
