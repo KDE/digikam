@@ -257,7 +257,7 @@ QString GalleryTheme::comment() const
 
 QString GalleryTheme::directory() const
 {
-    return d->url.adjusted(QUrl::RemoveFilename).path();
+    return d->url.adjusted(QUrl::RemoveFilename).toLocalFile();
 }
 
 QString GalleryTheme::authorName() const

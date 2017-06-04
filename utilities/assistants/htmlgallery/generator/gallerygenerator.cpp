@@ -307,7 +307,7 @@ public:
     {
         logInfo(i18n("Generating HTML files"));
 
-        QString xsltFileName                                 = theme->directory() + QLatin1String("/template.xsl");
+        QString xsltFileName                                 = theme->directory() + QLatin1String("template.xsl");
         CWrapper<xsltStylesheetPtr, xsltFreeStylesheet> xslt = xsltParseStylesheetFile((const xmlChar*)
             QDir::toNativeSeparators(xsltFileName).toLocal8Bit().data());
 
