@@ -434,7 +434,7 @@ void DXmlGuiWindow::createPresentationAction()
 void DXmlGuiWindow::createExpoBlendingAction()
 {
     m_expoBlendingAction = new QAction(QIcon::fromTheme(QLatin1String("expoblending")),
-                                       i18nc("@action", "Blend Bracketed or Focus Stack Images..."),
+                                       i18nc("@action", "Create Stacked Images..."),
                                        this);
 
     actionCollection()->addAction(QLatin1String("expoblending"), m_expoBlendingAction);

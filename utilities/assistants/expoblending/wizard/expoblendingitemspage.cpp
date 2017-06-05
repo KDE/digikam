@@ -165,4 +165,4 @@ void ItemsPage::slotExpoBlendingAction(const Digikam::ExpoBlendingActionData& ad
     }
 }
 
-}   // namespace Digikam
+} // namespace Digikam
