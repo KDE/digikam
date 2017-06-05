@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_SELECTION_PAGE_H
-#define VIDSLIDE_SELECTION_PAGE_H
+#ifndef VIDSLIDE_IMAGES_PAGE_H
+#define VIDSLIDE_IMAGES_PAGE_H
 
 // Qt includes
 
@@ -36,12 +36,12 @@
 namespace Digikam
 {
 
-class VidSlideSelectionPage : public DWizardPage
+class VidSlideImagesPage : public DWizardPage
 {
 public:
 
-    explicit VidSlideSelectionPage(QWizard* const dialog, const QString& title);
-    ~VidSlideSelectionPage();
+    explicit VidSlideImagesPage(QWizard* const dialog, const QString& title);
+    ~VidSlideImagesPage();
 
     void initializePage();
     bool validatePage();
@@ -57,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_SELECTION_PAGE_H
+#endif // VIDSLIDE_IMAGES_PAGE_H
