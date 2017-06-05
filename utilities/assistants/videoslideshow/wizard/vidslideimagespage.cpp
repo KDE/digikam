@@ -68,7 +68,7 @@ VidSlideImagesPage::VidSlideImagesPage(QWizard* const dialog, const QString& tit
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
 
     setPageWidget(d->imageList);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("media-playlist-repeat")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),
             this, SIGNAL(completeChanged()));
@@ -87,6 +87,7 @@ void VidSlideImagesPage::setItemsList(const QList<QUrl>& urls)
 void VidSlideImagesPage::initializePage()
 {
     d->imageList->setIface(d->iface);
+    d->imageList->listView()->clear();
 
     if (d->wizard->settings()->selMode == VidSlideSettings::IMAGES)
     {
