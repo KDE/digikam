@@ -89,11 +89,11 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
     KConfigGroup group = config.group("Video SlideShow Dialog Settings");
     d->settings->readSettings(group);
 
-    d->introPage         = new VidSlideIntroPage(this, i18n("Welcome to Video Slideshow Tool"));
+    d->introPage         = new VidSlideIntroPage(this,     i18n("Welcome to Video Slideshow Tool"));
     d->selectionPage     = new VidSlideSelectionPage(this, i18n("Items Selection"));
-    d->videoPage         = new VidSlideVideoPage(this, i18n("Video Settings"));
-    d->outputPage        = new VidSlideOutputPage(this, i18n("Output Settings"));
-    d->finalPage         = new VidSlideFinalPage(this, i18n("Generating Video Slideshow"));
+    d->videoPage         = new VidSlideVideoPage(this,     i18n("Video Settings"));
+    d->outputPage        = new VidSlideOutputPage(this,    i18n("Output Settings"));
+    d->finalPage         = new VidSlideFinalPage(this,     i18n("Generating Video Slideshow"));
 }
 
 VidSlideWizard::~VidSlideWizard()
