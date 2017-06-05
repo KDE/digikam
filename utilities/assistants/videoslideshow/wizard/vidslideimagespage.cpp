@@ -26,12 +26,17 @@
 
 #include <QIcon>
 #include <QPixmap>
-#include <QStackedWidget>
+#include <QLabel>
+
+// KDE includes
+
+#include <klocalizedstring.h>
 
 // Local includes
 
 #include "vidslidewizard.h"
 #include "dimageslist.h"
+#include "dlayoutbox.h"
 
 namespace Digikam
 {
@@ -64,10 +69,16 @@ VidSlideImagesPage::VidSlideImagesPage(QWizard* const dialog, const QString& tit
 {
     setObjectName(QLatin1String("ImagesSelectorPage"));
 
-    d->imageList = new DImagesList(this);
+    DVBox* const vbox  = new DVBox(this);
+    QLabel* const desc = new QLabel(vbox);
+    desc->setText(i18n("<p>This view list all items to include on video stream.</p>"
+                       "<p>The first one is on top of the list, the last one</p>"
+                       "<p>on the bottom. You can adjust the order of each item.</p>"));
+
+    d->imageList       = new DImagesList(vbox);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsBelow);
 
-    setPageWidget(d->imageList);
+    setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 
     connect(d->imageList, SIGNAL(signalImageListChanged()),

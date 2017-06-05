@@ -26,12 +26,10 @@
 
 #include <QIcon>
 #include <QPixmap>
-#include <QStackedWidget>
 
 // Local includes
 
 #include "vidslidewizard.h"
-#include "dimageslist.h"
 
 namespace Digikam
 {
@@ -43,7 +41,6 @@ public:
     Private(QWizard* const dialog)
       : albumSupport(false),
         albumSelector(0),
-        imageList(0),
         wizard(0),
         iface(0)
     {
@@ -57,7 +54,6 @@ public:
 
     bool             albumSupport;
     QWidget*         albumSelector;
-    DImagesList*     imageList;
     VidSlideWizard*  wizard;
     DInfoInterface*  iface;
 };
