@@ -56,6 +56,7 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::MultiCircleOut,  &TransitionMngr::Private::effectMultiCircleOut);
     eff_transList.insert(TransitionMngr::SpiralIn,        &TransitionMngr::Private::effectSpiralIn);
     eff_transList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
+    eff_transList.insert(TransitionMngr::Blend,           &TransitionMngr::Private::effectBlend);
 }
 
 TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
@@ -647,6 +648,30 @@ int TransitionMngr::Private::effectBlobs(bool aInit)
     eff_i--;
 
     return 10;
+}
+
+int TransitionMngr::Private::effectBlend(bool aInit)
+{
+    if (aInit)
+    {
+        eff_fd = 1.0;
+    }
+
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.drawImage(0, 0, eff_outImage);
+    bufferPainter.setOpacity(eff_fd);
+    bufferPainter.drawImage(0, 0, eff_inImage);
+    bufferPainter.setOpacity(1.0);
+    bufferPainter.end();
+
+    eff_fd = eff_fd - 0.1;
+
+    if (eff_fd > 0.0)
+        return 15;
+
+    eff_curFrame = eff_outImage;
+
+    return -1;
 }
 
 }  // namespace Digikam

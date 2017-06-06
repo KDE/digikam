@@ -141,6 +141,7 @@ public:
     int effectSpiralIn(bool doInit);
     int effectCircleOut(bool doInit);
     int effectBlobs(bool doInit);
+    int effectBlend(bool doInit);
 };
 
 }  // namespace Digikam

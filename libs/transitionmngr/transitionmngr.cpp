@@ -109,6 +109,7 @@ QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
     trans[MultiCircleOut]  = i18nc("Transition Effect: Multi-Circle Out", "Multi-Circle Out");
     trans[SpiralIn]        = i18nc("Transition Effect: Spiral In",        "Spiral In");
     trans[Blobs]           = i18nc("Transition Effect: Blobs",            "Blobs");
+    trans[Blend]           = i18nc("Transition Effect: Blend",            "Blend");
     trans[Random]          = i18nc("Transition Effect: Random effect",    "Random");
 
     return trans;
