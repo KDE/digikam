@@ -13,9 +13,9 @@ HTMLGallery : New "Elegant" theme using javascript to render image as slideshow 
 HTMLGallery : New "SimpleRounded" theme that uses flat shapes with rounded corners.
 HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
 HTMLGallery : Add option to generate a Gallery from a selection of images instead an album list.
-ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
-Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
-LightTable  : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
+ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+LightTable  : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -92,4 +92,5 @@ BUGFIXES FROM BUGZILLA:
 070 ==> 380512 - digiKam crashes when trying to geotag a picture.
 071 ==> 380805 - Generating Gallery: "Could not load XSL file".
 072 ==> 379918 - digiKam writing tags in wrong order.
-073 ==> 
+073 ==> 380358 - ICC Profiles not detected.
+074 ==> 

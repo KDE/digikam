@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * date        : 2014-09-12
- * Description : Simple helpher widgets collection
+ * Description : a file or folder selector widget
  *
  * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

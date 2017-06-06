@@ -471,7 +471,7 @@ void RawSettingsBox::writeSettings()
     KConfigGroup group        = config->group(d->optionGroupName);
 
     group.writeEntry(d->optionHistogramChannelEntry, (int)histogramBox()->channel());
-    group.writeEntry(d->optionHistogramScaleEntry, (int)histogramBox()->scale());
+    group.writeEntry(d->optionHistogramScaleEntry,   (int)histogramBox()->scale());
 
     d->decodingSettingsBox->writeSettings(group);
 
