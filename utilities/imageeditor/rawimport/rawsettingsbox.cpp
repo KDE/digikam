@@ -56,8 +56,6 @@
 #include "digikam_debug.h"
 #include "drawdecoderwidget.h"
 
-
-
 namespace Digikam
 {
 
@@ -155,7 +153,8 @@ public:
 };
 
 RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
-    : EditorToolSettings(parent), d(new Private)
+    : EditorToolSettings(parent),
+      d(new Private)
 {
     setButtons(Default | Ok | Cancel);
     setTools(Histogram);
@@ -169,7 +168,8 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     d->rawdecodingBox               = new QWidget(d->tabView);
     QGridLayout* const rawGrid      = new QGridLayout(d->rawdecodingBox);
     d->decodingSettingsBox          = new DRawDecoderWidget(d->rawdecodingBox,
-                                                              DRawDecoderWidget::SIXTEENBITS | DRawDecoderWidget::COLORSPACE);
+                                                            DRawDecoderWidget::SIXTEENBITS |
+                                                            DRawDecoderWidget::COLORSPACE);
     d->decodingSettingsBox->setObjectName(QLatin1String("RawSettingsBox Expander"));
 
     // Note: do not touch the url edit's fileDialog() here.
@@ -277,12 +277,12 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
     ColorGradientWidget* const hGradient = new ColorGradientWidget(Qt::Horizontal, 10, d->curveBox);
     hGradient->setColors(QColor("black"), QColor("white"));
 
-    curveLayout->addWidget(vGradient,             0, 0, 1, 1);
-    curveLayout->addWidget(spacev,                0, 1, 1, 1);
-    curveLayout->addWidget(d->curveWidget,        0, 2, 1, 2);
-    curveLayout->addWidget(spaceh,                1, 2, 1, 2);
-    curveLayout->addWidget(hGradient,             2, 2, 1, 2);
-    curveLayout->addWidget(d->resetCurveBtn,      3, 3, 1, 1);
+    curveLayout->addWidget(vGradient,        0, 0, 1, 1);
+    curveLayout->addWidget(spacev,           0, 1, 1, 1);
+    curveLayout->addWidget(d->curveWidget,   0, 2, 1, 2);
+    curveLayout->addWidget(spaceh,           1, 2, 1, 2);
+    curveLayout->addWidget(hGradient,        2, 2, 1, 2);
+    curveLayout->addWidget(d->resetCurveBtn, 3, 3, 1, 1);
     curveLayout->setRowStretch(4, 10);
     curveLayout->setColumnStretch(2, 10);
     curveLayout->setContentsMargins(spacing, spacing, spacing, spacing);
@@ -303,10 +303,14 @@ RawSettingsBox::RawSettingsBox(const QUrl& url, QWidget* const parent)
 
     // ---------------------------------------------------------------
 
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::DEMOSAICING,     QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::WHITEBALANCE,    QIcon::fromTheme(QLatin1String("bordertool")));
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::CORRECTIONS,     QIcon::fromTheme(QLatin1String("zoom-draw")));
-    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::COLORMANAGEMENT, QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::DEMOSAICING,
+                                        QIcon::fromTheme(QLatin1String("image-x-adobe-dng")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::WHITEBALANCE,
+                                        QIcon::fromTheme(QLatin1String("bordertool")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::CORRECTIONS,
+                                        QIcon::fromTheme(QLatin1String("zoom-draw")));
+    d->decodingSettingsBox->setItemIcon(DRawDecoderWidget::COLORMANAGEMENT,
+                                        QIcon::fromTheme(QLatin1String("preferences-desktop-display-color")));
     d->decodingSettingsBox->updateMinimumWidth();
 
     d->tabView->insertTab(0, d->rawdecodingBox,         i18n("Raw Decoding"));
