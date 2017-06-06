@@ -33,6 +33,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QGridLayout>
+#include <QGroupBox>
 
 // KDE includes
 
@@ -63,6 +64,7 @@ public:
         stdVal(0),
         codecVal(0),
         transVal(0),
+        effVal(0),
         duration(0),
         wizard(0),
         settings(0),
@@ -82,6 +84,7 @@ public:
     QComboBox*         stdVal;
     QComboBox*         codecVal;
     QComboBox*         transVal;
+    QComboBox*         effVal;
     QLabel*            duration;
     VidSlideWizard*    wizard;
     VidSlideSettings*  settings;
@@ -192,10 +195,30 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     // --------------------
 
-    QLabel* const transLabel = new QLabel(main);
+    QLabel* const effLabel = new QLabel(main);
+    effLabel->setWordWrap(false);
+    effLabel->setText(i18n("Video Effect:"));
+    d->effVal              = new QComboBox(main);
+    d->effVal->setEditable(false);
+
+    QMap<VidSlideSettings::VidEffect, QString> map6                = VidSlideSettings::videoEffectNames();
+    QMap<VidSlideSettings::VidEffect, QString>::const_iterator it6 = map6.constBegin();
+
+    while (it6 != map6.constEnd())
+    {
+        d->effVal->insertItem((int)it6.key(), it6.value(), (int)it6.key());
+        ++it6;
+    }
+
+    effLabel->setBuddy(d->codecVal);
+
+    // --------------------
+
+    QGroupBox* const transGrp = new QGroupBox(i18n("Transition Between Images"), main);
+    QLabel* const transLabel  = new QLabel(transGrp);
     transLabel->setWordWrap(false);
-    transLabel->setText(i18n("Transition Type:"));
-    d->transVal              = new QComboBox(main);
+    transLabel->setText(i18n("Type:"));
+    d->transVal               = new QComboBox(transGrp);
     d->transVal->setEditable(false);
 
     QMap<TransitionMngr::TransType, QString> map4                = TransitionMngr::transitionNames();
@@ -209,9 +232,17 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     transLabel->setBuddy(d->transVal);
 
+    d->transPreview              = new TransitionPreview(transGrp);
+    QGridLayout* const transGrid = new QGridLayout(transGrp);
+    transGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    transGrid->addWidget(transLabel,      0, 0, 1, 1);
+    transGrid->addWidget(d->transVal,     1, 0, 1, 1);
+    transGrid->addWidget(d->transPreview, 0, 1, 3, 1);
+    transGrid->setColumnStretch(0, 10);
+    transGrid->setRowStretch(2, 10);
+
     // --------------------
 
-    d->transPreview = new TransitionPreview(main);
     d->duration     = new QLabel(main);
 
     // --------------------
@@ -228,9 +259,9 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     grid->addWidget(d->bitrateVal,   3, 1, 1, 1);
     grid->addWidget(codecLabel,      4, 0, 1, 1);
     grid->addWidget(d->codecVal,     4, 1, 1, 1);
-    grid->addWidget(transLabel,      5, 0, 1, 1);
-    grid->addWidget(d->transVal,     5, 1, 1, 1);
-    grid->addWidget(d->transPreview, 6, 0, 1, 2);
+    grid->addWidget(effLabel,        5, 0, 1, 1);
+    grid->addWidget(d->effVal,       5, 1, 1, 1);
+    grid->addWidget(transGrp,        6, 0, 1, 2);
     grid->addWidget(d->duration,     7, 0, 1, 2);
     grid->setRowStretch(8, 10);
 
@@ -278,6 +309,7 @@ void VidSlideVideoPage::initializePage()
     d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
     d->stdVal->setCurrentIndex(d->settings->vStandard);
     d->codecVal->setCurrentIndex(d->codecVal->findData(d->settings->vCodec));
+    d->effVal->setCurrentIndex(d->settings->vEffect);
     d->transVal->setCurrentIndex(d->settings->transition);
     d->transPreview->setImagesList(d->settings->inputImages);
     slotSlideDuration();
@@ -292,6 +324,7 @@ bool VidSlideVideoPage::validatePage()
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
     d->settings->vStandard  = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
     d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentData().toInt();
+    d->settings->vEffect    = (VidSlideSettings::VidEffect)d->effVal->currentData().toInt();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;

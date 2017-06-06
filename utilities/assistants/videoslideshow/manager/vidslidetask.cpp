@@ -23,6 +23,10 @@
 
 #include "vidslidetask.h"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QImage>
@@ -75,12 +79,13 @@ public:
         adec->close();
     }
 
-    bool       encodeFrame(VideoFrame& vframe,
-                           VideoEncoder* const venc,
-                           AudioEncoder* const aenc,
-                           AVMuxer& mux);
+    bool          encodeFrame(VideoFrame& vframe,
+                              VideoEncoder* const venc,
+                              AudioEncoder* const aenc,
+                              AVMuxer& mux);
 
-    AudioFrame nextAudioFrame(const AudioFormat& afmt);
+    QRect         kenBurnsRegion(const QRect& orgRect, int step);
+    AudioFrame    nextAudioFrame(const AudioFormat& afmt);
 
 public:
 
@@ -95,8 +100,7 @@ public:
 
 QImage VidSlideTask::makeFramedImage(const QString& file, const QSize& outSize)
 {
-    QImage qimg(outSize, QImage::Format_ARGB32);
-    qimg.fill(QColor(0, 0, 0, 0));
+    QImage timg;
 
     if (!file.isEmpty())
     {
@@ -110,8 +114,20 @@ QImage VidSlideTask::makeFramedImage(const QString& file, const QSize& outSize)
         settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
 
         DImg dimg(file, 0, DRawDecoding(settings));
-        QImage timg = dimg.copyQImage();
-        timg        = timg.scaled(outSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        timg = dimg.copyQImage();
+    }
+
+    return makeScaledImage(timg, outSize);
+}
+
+QImage VidSlideTask::makeScaledImage(QImage& timg, const QSize& outSize)
+{
+    QImage qimg(outSize, QImage::Format_ARGB32);
+    qimg.fill(QColor(0, 0, 0, 0));
+
+    if (!timg.isNull())
+    {
+        timg = timg.scaled(outSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
         QPainter p(&qimg);
         p.drawImage((qimg.width()  / 2) - (timg.width()  / 2),
@@ -253,6 +269,32 @@ AudioFrame VidSlideTask::Private::nextAudioFrame(const AudioFormat& afmt)
     return AudioFrame();
 }
 
+QRect VidSlideTask::Private::kenBurnsRegion(const QRect& orgRect, int step)
+{
+    QRect kbRect = orgRect;
+
+    switch (settings->vEffect)
+    {
+        case VidSlideSettings::KENBURNS:
+        {
+            QRectF fRect(orgRect);
+
+            // We will adjust to camera zoom speed accordingly with image frames to encode.
+            double nx    = step * ((orgRect.width() - orgRect.width() * 0.8)
+                                / (double)settings->imgFrames);
+            double ny    = nx / ((double)orgRect.width() / (double)orgRect.height());
+            fRect.setTopLeft(QPointF(nx, ny));
+            fRect.setBottomRight(QPointF((double)orgRect.width()-nx, (double)orgRect.height()-ny));
+            kbRect       = fRect.toAlignedRect();
+            break;
+        }
+        default: // VidSlideSettings::NONE
+            break;
+    }
+
+    return kbRect;
+}
+
 // -------------------------------------------------------
 
 VidSlideTask::VidSlideTask(VidSlideSettings* const settings)
@@ -370,6 +412,8 @@ void VidSlideTask::run()
         QImage qiimg  = makeFramedImage(ifile, osize);
         QImage qoimg  = makeFramedImage(ofile, osize);
 
+        // -- Transition endoding ----------
+
         tmngr.setInImage(qiimg);
         tmngr.setOutImage(qoimg);
 
@@ -389,14 +433,29 @@ void VidSlideTask::run()
         }
         while (tmout != -1 && !m_cancel);
 
+        // -- Images endoding ----------
+
         if (i+1 < d->settings->inputImages.count())
         {
-            VideoFrame frame(qoimg);
-
+            VideoFrame frame;
+            QRect kbRect;
             int count = 0;
 
             do
             {
+                if (d->settings->vEffect != VidSlideSettings::NONE)
+                {
+                    kbRect       = d->kenBurnsRegion(qoimg.rect(), count);
+                    QImage kbImg = qoimg.copy(kbRect).scaled(osize,
+                                                             Qt::KeepAspectRatioByExpanding,
+                                                             Qt::SmoothTransformation);
+                    frame        = VideoFrame(kbImg.convertToFormat(QImage::Format_ARGB32));
+                }
+                else
+                {
+                    frame = VideoFrame(qoimg);
+                }
+
                 if (d->encodeFrame(frame, venc, aenc, mux))
                 {
 

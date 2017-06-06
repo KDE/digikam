@@ -44,6 +44,7 @@ VidSlideSettings::VidSlideSettings()
     vbitRate     = VBR12;
     vCodec       = X264;
     vFormat      = MP4;
+    vEffect      = NONE;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
     conflictRule = FileSaveConflictBox::OVERWRITE;
@@ -71,6 +72,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)BLUERAY);
     vFormat      = (VidFormat)group.readEntry("VFormat",
                    (int)MP4);
+    vEffect      = (VidEffect)group.readEntry("VEffect",
+                   (int)NONE);
     abitRate     = group.readEntry("ABitRate",
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
@@ -92,6 +95,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("VCodec",       (int)vCodec);
     group.writeEntry("VType",        (int)vType);
     group.writeEntry("VFormat",      (int)vFormat);
+    group.writeEntry("VEffect",      (int)vEffect);
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("ABitRate",     abitRate);
     group.writeEntry("ConflictRule", (int)conflictRule);
@@ -383,11 +387,11 @@ QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
 
     codecs[X264]    = i18nc("Video Codec X264",    "High Quality H.264 AVC/MPEG-4 AVC");
     codecs[MPEG4]   = i18nc("Video Codec MPEG4",   "DivX/XVid/MPEG-4");
-//    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
     codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
+//    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
 //    codecs[WEBMVP8] = i18nc("Video Codec WEBMVP8", "WebM-VP8");
-//    codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
 //    codecs[THEORA]  = i18nc("Video Codec THEORA",  "Theora-VP3");
+//    codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
 //    codecs[WMV7]    = i18nc("Video Codec WMV7",    "Window Media Video 7");
 //    codecs[WMV8]    = i18nc("Video Codec WMV8",    "Window Media Video 8");
 //    codecs[WMV9]    = i18nc("Video Codec WMV9",    "Window Media Video 9");
@@ -405,6 +409,16 @@ QMap<VidSlideSettings::VidFormat, QString> VidSlideSettings::videoFormatNames()
     frm[MPG] = i18nc("Video Standard MPG", "MPG - MPEG-2");
 
     return frm;
+}
+
+QMap<VidSlideSettings::VidEffect, QString> VidSlideSettings::videoEffectNames()
+{
+    QMap<VidEffect, QString> eff;
+
+    eff[NONE]     = i18nc("Video Effect NONE",       "None - Static Camera");
+    eff[KENBURNS] = i18nc("Video Standard KENBURNS", "Ken Burns - Camera Zoom In");
+
+    return eff;
 }
 
 } // namespace Digikam
