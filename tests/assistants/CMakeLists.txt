@@ -19,6 +19,9 @@ include_directories(
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
+# =======================================================
+# Stand alone version of ExpoBlending tool
+
 set(expoblending_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/expoblending.cpp)
 
 add_executable(expoblending ${expoblending_SRCS})
@@ -31,20 +34,6 @@ target_link_libraries(expoblending
                       Qt5::Xml
 )
 
-# =======================================================
-# Stand alone version of HTML Gallery tool
-
-set(htmlgallery_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/htmlgallery.cpp)
-
-add_executable(htmlgallery ${htmlgallery_SRCS})
-
-target_link_libraries(htmlgallery
-                      digikamcore
-                      libdng
-
-                      Qt5::Gui
-                      Qt5::Xml
-)
 
 # =======================================================
 # Stand alone version of Calendar tool
@@ -90,10 +79,10 @@ if(FLEX_FOUND AND BISON_FOUND AND KF5ThreadWeaver_FOUND)
     )
 endif()
 
-if(ENABLE_MEDIAPLAYER)
+# =======================================================
+# Stand alone version of VideoSlideshow tool
 
-    # =======================================================
-    # Stand alone version of VideoSlideshow tool
+if(ENABLE_MEDIAPLAYER)
 
     set(videoslideshow_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/videoslideshow.cpp)
 
@@ -106,6 +95,22 @@ if(ENABLE_MEDIAPLAYER)
                           Qt5::Gui
                           Qt5::Xml
     )
-
 endif()
 
+# =======================================================
+# Stand alone version of HTML Gallery tool
+
+if(LIBXML2_FOUND AND LIBXSLT_FOUND)
+
+    set(htmlgallery_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/htmlgallery.cpp)
+
+    add_executable(htmlgallery ${htmlgallery_SRCS})
+
+    target_link_libraries(htmlgallery
+                          digikamcore
+                          libdng
+
+                          Qt5::Gui
+                          Qt5::Xml
+    )
+endif()

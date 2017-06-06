@@ -429,7 +429,7 @@ void DigikamImageView::groupIndicatorClicked(const QModelIndex& index)
 
 void DigikamImageView::rename()
 {
-    bool grouping = needGroupResolving(ApplicationSettings::Rename);
+    bool grouping     = needGroupResolving(ApplicationSettings::Rename);
     QList<QUrl>  urls = selectedUrls(grouping);
     NewNamesList newNamesList;
 

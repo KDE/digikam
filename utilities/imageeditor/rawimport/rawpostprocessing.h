@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWPOSTPROCESSING_H
-#define RAWPOSTPROCESSING_H
+#ifndef RAW_POST_PROCESSING_H
+#define RAW_POST_PROCESSING_H
 
 // Local includes
 
@@ -73,6 +73,6 @@ private:
     DRawDecoding m_customRawSettings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* RAWPOSTPROCESSING_H */
+#endif // RAW_POST_PROCESSING_H

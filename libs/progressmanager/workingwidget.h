@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef WORKINGWIDGET_H
-#define WORKINGWIDGET_H
+#ifndef WORKING_WIDGET_H
+#define WORKING_WIDGET_H
 
 // Qt includes
 
@@ -55,7 +55,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-    void changeImage();
+    void slotChangeImage();
 
 private:
 
@@ -65,4 +65,4 @@ private:
 
 } // namespace Digikam
 
-#endif // WORKINGWIDGET_H
+#endif // WORKING_WIDGET_H

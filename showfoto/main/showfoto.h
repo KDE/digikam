@@ -139,6 +139,7 @@ private Q_SLOTS:
     void slotPresentation();
     void slotExpoBlending();
     void slotPanorama();
+    void slotVideoSlideshow();
 
 Q_SIGNALS:
 

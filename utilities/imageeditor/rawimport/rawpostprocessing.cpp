@@ -127,4 +127,4 @@ void RawPostProcessing::rawPostProcessing()
     postProgress(100);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

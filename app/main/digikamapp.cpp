@@ -143,6 +143,10 @@
 #   include "panomanager.h"
 #endif
 
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
+#endif
+
 #ifdef HAVE_KIPI
 #   include "kipipluginloader.h"
 #endif
@@ -1341,6 +1345,7 @@ void DigikamApp::setupActions()
     createPanoramaAction();
     createHtmlGalleryAction();
     createCalendarAction();
+    createVideoSlideshowAction();
 
     // -----------------------------------------------------------
 
@@ -2657,6 +2662,14 @@ void DigikamApp::slotPanorama()
 #endif
 }
 
+void DigikamApp::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
+    w.exec();
+#endif
+}
+
 void DigikamApp::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
@@ -3365,6 +3378,10 @@ void DigikamApp::setupSelectToolsAction()
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    actionModel->addAction(m_videoslideshowAction,        postCategory);
 #endif
 
 #ifdef HAVE_HTMLGALLERY

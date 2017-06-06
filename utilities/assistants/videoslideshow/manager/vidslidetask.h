@@ -45,8 +45,12 @@ public:
     VidSlideTask(VidSlideSettings* const settings);
     ~VidSlideTask();
 
+    static QImage makeFramedImage(const QString& file, const QSize& outSize);
+    static QImage makeScaledImage(QImage& timg, const QSize& outSize);
+
 Q_SIGNALS:
 
+    void signalMessage(const QString&, bool);
     void signalDone(bool);
 
 protected:

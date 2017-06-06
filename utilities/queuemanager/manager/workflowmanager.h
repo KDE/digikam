@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef WORKFLOWMANAGER_H
-#define WORKFLOWMANAGER_H
+#ifndef WORKFLOW_MANAGER_H
+#define WORKFLOW_MANAGER_H
 
 // Qt includes
 
@@ -45,8 +45,8 @@ class Workflow
 {
 public:
 
-    Workflow(){};
-    ~Workflow(){};
+    explicit Workflow() {};
+    ~Workflow()         {};
 
 public:
 
@@ -108,6 +108,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* WORKFLOWMANAGER_H */
+#endif // WORKFLOW_MANAGER_H

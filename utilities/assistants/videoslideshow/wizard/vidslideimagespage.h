@@ -20,11 +20,13 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_SELECTION_PAGE_H
-#define VIDSLIDE_SELECTION_PAGE_H
+#ifndef VIDSLIDE_IMAGES_PAGE_H
+#define VIDSLIDE_IMAGES_PAGE_H
 
 // Qt includes
 
+#include <QList>
+#include <QUrl>
 #include <QString>
 
 // Local includes
@@ -34,16 +36,18 @@
 namespace Digikam
 {
 
-class VidSlideSelectionPage : public DWizardPage
+class VidSlideImagesPage : public DWizardPage
 {
 public:
 
-    explicit VidSlideSelectionPage(QWizard* const dialog, const QString& title);
-    ~VidSlideSelectionPage();
+    explicit VidSlideImagesPage(QWizard* const dialog, const QString& title);
+    ~VidSlideImagesPage();
 
     void initializePage();
     bool validatePage();
     bool isComplete() const;
+
+    void setItemsList(const QList<QUrl>& urls);
 
 private:
 
@@ -53,4 +57,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_SELECTION_PAGE_H
+#endif // VIDSLIDE_IMAGES_PAGE_H

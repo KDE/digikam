@@ -47,8 +47,9 @@ public:
 
 Q_SIGNALS:
 
-    void signalProgress(int val);
+    void signalProgress(int);
     void signalDone(bool);
+    void signalMessage(const QString&, bool);
 };
 
 } // namespace Digikam

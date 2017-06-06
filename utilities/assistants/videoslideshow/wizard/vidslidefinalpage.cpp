@@ -129,24 +129,8 @@ void VidSlideFinalPage::slotProcess()
     d->progressView->addEntry(i18n("Starting to generate video slideshow..."),
                               DHistoryView::ProgressEntry);
 
-    if (d->settings->selMode == VidSlideSettings::ALBUMS)
-    {
-        if (!d->wizard->iface())
-            return;
-
-        d->progressView->addEntry(i18n("%1 input albums to process:", d->settings->inputAlbums.count()),
+    d->progressView->addEntry(i18n("%1 input images to process", d->settings->inputImages.count()),
                                   DHistoryView::ProgressEntry);
-
-        foreach(const QUrl& url, d->iface->albumsItems(d->settings->inputAlbums))
-        {
-            d->settings->inputImages << url;
-        }
-    }
-    else
-    {
-        d->progressView->addEntry(i18n("%1 input images to process", d->settings->inputImages.count()),
-                                  DHistoryView::ProgressEntry);
-    }
 
     foreach(const QUrl& url, d->settings->inputImages)
     {
@@ -157,7 +141,7 @@ void VidSlideFinalPage::slotProcess()
     if (!d->settings->inputAudio.isEmpty())
     {
         d->progressView->addEntry(i18n("%1 input audio stream to process:",
-                                       d->settings->inputAlbums.count()),
+                                       d->settings->inputAudio.count()),
                                   DHistoryView::ProgressEntry);
 
         foreach(const QUrl& url, d->settings->inputAudio)
@@ -167,10 +151,6 @@ void VidSlideFinalPage::slotProcess()
         }
     }
 
-    d->progressView->addEntry(i18n("Output video stream: %1",
-                              QDir::toNativeSeparators(d->settings->outputVideo.toLocalFile())),
-                              DHistoryView::ProgressEntry);
-
     d->progressBar->setMinimum(0);
     d->progressBar->setMaximum(d->settings->inputImages.count());
 
@@ -178,6 +158,9 @@ void VidSlideFinalPage::slotProcess()
 
     connect(d->encoder, SIGNAL(signalProgress(int)),
             d->progressBar, SLOT(setValue(int)));
+
+    connect(d->encoder, SIGNAL(signalMessage(QString, bool)),
+            this, SLOT(slotMessage(QString, bool)));
 
     connect(d->encoder, SIGNAL(signalDone(bool)),
             this, SLOT(slotDone(bool)));
@@ -190,6 +173,12 @@ void VidSlideFinalPage::cleanupPage()
 {
     if (d->encoder)
         d->encoder->cancel();
+}
+
+void VidSlideFinalPage::slotMessage(const QString& mess, bool err)
+{
+    d->progressView->addEntry(mess, err ? DHistoryView::ErrorEntry
+                                        : DHistoryView::ProgressEntry);
 }
 
 void VidSlideFinalPage::slotDone(bool completed)
@@ -209,7 +198,7 @@ void VidSlideFinalPage::slotDone(bool completed)
 
         if (d->settings->openInPlayer)
         {
-            QDesktopServices::openUrl(d->settings->outputVideo);
+            QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings->outputVideo));
             d->progressView->addEntry(i18n("Opening video stream in player..."),
                                     DHistoryView::ProgressEntry);
         }
