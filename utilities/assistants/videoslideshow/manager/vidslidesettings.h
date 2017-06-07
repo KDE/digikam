@@ -53,10 +53,18 @@ public:
         ALBUMS
     };
 
+    // Video player to use
+    enum VidPlayer
+    {
+        NOPLAYER = 0,
+        INTERNAL,
+        DESKTOP
+    };
+
     // Video Codecs
     enum VidCodec
     {
-        X264=0,      // https://en.wikipedia.org/wiki/X264
+        X264 = 0,    // https://en.wikipedia.org/wiki/X264
         MPEG4,       // https://en.wikipedia.org/wiki/MPEG-4
         MPEG2,       // https://en.wikipedia.org/wiki/MPEG-2
         MJPEG,       // https://en.wikipedia.org/wiki/Motion_JPEG
@@ -117,7 +125,7 @@ public:
     // Video Container Formats
     enum VidFormat
     {
-        AVI=0,      // https://en.wikipedia.org/wiki/Audio_Video_Interleave
+        AVI = 0,    // https://en.wikipedia.org/wiki/Audio_Video_Interleave
         MKV,        // https://en.wikipedia.org/wiki/Matroska
         MP4,        // https://en.wikipedia.org/wiki/MPEG-4_Part_14
         MPG         // https://en.wikipedia.org/wiki/MPEG-2
@@ -126,7 +134,7 @@ public:
     // Video Effects while displaying image contents
     enum VidEffect
     {
-        NONE=0,     // Static camera
+        NONE = 0,   // Static camera
         KENBURNS    // https://en.wikipedia.org/wiki/Ken_Burns_effect
     };
 
@@ -152,6 +160,7 @@ public:
     static QMap<VidCodec,   QString> videoCodecNames();
     static QMap<VidFormat,  QString> videoFormatNames();
     static QMap<VidEffect,  QString> videoEffectNames();
+    static QMap<VidPlayer,  QString> videoPlayerNames();
 
 public:
 
@@ -178,11 +187,10 @@ public:
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file alreay exists.
     QUrl                              outputDir;     // Encoded video stream directory.
 
-    bool                              openInPlayer;  // Open video stream in desktop player at end.
-
     // ---------------------
 
     QString                           outputVideo;   // Target video file encoded at end.
+    VidPlayer                         outputPlayer;  // Open video stream in player at end.
 };
 
 } // namespace Digikam

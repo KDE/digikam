@@ -49,7 +49,7 @@ VidSlideSettings::VidSlideSettings()
     abitRate     = 64000;
     conflictRule = FileSaveConflictBox::OVERWRITE;
     outputDir    = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
-    openInPlayer = true;
+    outputPlayer = INTERNAL;
 }
 
 VidSlideSettings::~VidSlideSettings()
@@ -82,8 +82,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)FileSaveConflictBox::OVERWRITE);
     outputDir    = group.readEntry("OutputDir",
                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)));
-    openInPlayer = group.readEntry("OpenInPlayer",
-                   true);
+    outputPlayer = (VidPlayer)group.readEntry("OutputPlayer",
+                   (int)INTERNAL);
 }
 
 void VidSlideSettings::writeSettings(KConfigGroup& group)
@@ -100,7 +100,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("ABitRate",     abitRate);
     group.writeEntry("ConflictRule", (int)conflictRule);
     group.writeEntry("OutputDir",    outputDir);
-    group.writeEntry("OpenInPlayer", openInPlayer);
+    group.writeEntry("OutputPlayer", (int)outputPlayer);
 }
 
 QSize VidSlideSettings::videoSize() const
@@ -419,6 +419,17 @@ QMap<VidSlideSettings::VidEffect, QString> VidSlideSettings::videoEffectNames()
     eff[KENBURNS] = i18nc("Video Standard KENBURNS", "Ken Burns - Camera Zoom In");
 
     return eff;
+}
+
+QMap<VidSlideSettings::VidPlayer, QString> VidSlideSettings::videoPlayerNames()
+{
+    QMap<VidPlayer, QString> pla;
+
+    pla[NOPLAYER] = i18nc("Video Effect NOPLAYER",   "None");
+    pla[INTERNAL] = i18nc("Video Standard INTERNAL", "Internal");
+    pla[DESKTOP]  = i18nc("Video Standard DESKTOP",  "Default from Desktop");
+
+    return pla;
 }
 
 } // namespace Digikam
