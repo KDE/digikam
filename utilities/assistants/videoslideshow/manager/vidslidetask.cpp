@@ -373,7 +373,7 @@ void VidSlideTask::run()
 
         QImage qoimg = FrameUtils::makeFramedImage(ofile, osize);
 
-        // -- Transition endoding ----------
+        // -- Transition encoding ----------
 
         tmngr.setInImage(qiimg);
         tmngr.setOutImage(qoimg);
@@ -391,7 +391,7 @@ void VidSlideTask::run()
         }
         while (tmout != -1 && !m_cancel);
 
-        // -- Images endoding ----------
+        // -- Images encoding ----------
 
         if (i <= d->settings->inputImages.count())
         {
