@@ -51,8 +51,7 @@
 
 // Local includes
 
-#include "dimg.h"
-#include "drawdecoding.h"
+#include "frameutils.h"
 #include "dfileoperations.h"
 #include "transitionmngr.h"
 #include "digikam_debug.h"
@@ -97,46 +96,6 @@ public:
     AudioDecoder*               adec;
     QList<QUrl>::const_iterator curAudioFile;
 };
-
-QImage VidSlideTask::makeFramedImage(const QString& file, const QSize& outSize)
-{
-    QImage timg;
-
-    if (!file.isEmpty())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Load frame from" << file;
-
-        // The Raw decoding settings for DImg loader.
-        DRawDecoderSettings settings;
-        settings.halfSizeColorImage    = false;
-        settings.sixteenBitsImage      = false;
-        settings.RGBInterpolate4Colors = false;
-        settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
-
-        DImg dimg(file, 0, DRawDecoding(settings));
-        timg = dimg.copyQImage();
-    }
-
-    return makeScaledImage(timg, outSize);
-}
-
-QImage VidSlideTask::makeScaledImage(QImage& timg, const QSize& outSize)
-{
-    QImage qimg(outSize, QImage::Format_ARGB32);
-    qimg.fill(QColor(0, 0, 0, 0));
-
-    if (!timg.isNull())
-    {
-        timg = timg.scaled(outSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-        QPainter p(&qimg);
-        p.drawImage((qimg.width()  / 2) - (timg.width()  / 2),
-                    (qimg.height() / 2) - (timg.height() / 2),
-                    timg);
-    }
-
-    return qimg;
-}
 
 bool VidSlideTask::Private::encodeFrame(VideoFrame& vframe,
                                         VideoEncoder* const venc,
@@ -405,14 +364,14 @@ void VidSlideTask::run()
     for (int i = -1 ; i <= d->settings->inputImages.count() && !m_cancel ; i++)
     {
         if (i == -1 || i == d->settings->inputImages.count()-1)
-            qiimg = makeFramedImage(QString(), osize);
+            qiimg = FrameUtils::makeFramedImage(QString(), osize);
 
         QString ofile;
 
         if (i < d->settings->inputImages.count()-1)
             ofile = d->settings->inputImages[i+1].toLocalFile();
 
-        QImage qoimg = makeFramedImage(ofile, osize);
+        QImage qoimg = FrameUtils::makeFramedImage(ofile, osize);
 
         // -- Transition endoding ----------
 

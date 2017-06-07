@@ -9,6 +9,7 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libtransitionmngr_SRCS
+    frameutils.cpp
     transitionpreview.cpp
     transitionmngr.cpp
     transitionmngr_p.cpp

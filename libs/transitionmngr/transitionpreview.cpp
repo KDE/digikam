@@ -31,6 +31,7 @@
 
 // Local includes
 
+#include "frameutils.h"
 #include "vidslidetask.h"
 #include "digikam_debug.h"
 
@@ -85,11 +86,11 @@ void TransitionPreview::setImagesList(const QList<QUrl>& images)
 {
     if (!images.isEmpty())
     {
-        d->mngr->setInImage(VidSlideTask::makeFramedImage(images[0].toLocalFile(), d->previewSize));
+        d->mngr->setInImage(FrameUtils::makeFramedImage(images[0].toLocalFile(), d->previewSize));
 
         if (images.count() > 1)
         {
-            d->mngr->setOutImage(VidSlideTask::makeFramedImage(images[1].toLocalFile(), d->previewSize));
+            d->mngr->setOutImage(FrameUtils::makeFramedImage(images[1].toLocalFile(), d->previewSize));
         }
         else
         {
