@@ -9,9 +9,11 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libtransitionmngr_SRCS
+    transitionpreview.cpp
     transitionmngr.cpp
     transitionmngr_p.cpp
-    transitionpreview.cpp
+    transitionmngr_p_slide.cpp
+    transitionmngr_p_push.cpp
 )
 
 include_directories(
