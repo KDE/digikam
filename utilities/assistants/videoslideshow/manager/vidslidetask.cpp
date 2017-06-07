@@ -393,6 +393,8 @@ void VidSlideTask::run()
         return;
     }
 
+    QImage qiimg;
+
     // ---------------------------------------------
     // Loop to encode frames with images list
 
@@ -400,42 +402,39 @@ void VidSlideTask::run()
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);
 
-    for (int i = -1 ; i < d->settings->inputImages.count() && !m_cancel ; i++)
+    for (int i = -1 ; i <= d->settings->inputImages.count() && !m_cancel ; i++)
     {
-        QString ifile = (i >= 0)
-                        ? d->settings->inputImages[i].toLocalFile()
-                        : QString();
-        QString ofile = (i+1 < d->settings->inputImages.count())
-                        ? d->settings->inputImages[i+1].toLocalFile()
-                        : QString();
+        if (i == -1 || i == d->settings->inputImages.count()-1)
+            qiimg = makeFramedImage(QString(), osize);
 
-        QImage qiimg  = makeFramedImage(ifile, osize);
-        QImage qoimg  = makeFramedImage(ofile, osize);
+        QString ofile;
+
+        if (i < d->settings->inputImages.count()-1)
+            ofile = d->settings->inputImages[i+1].toLocalFile();
+
+        QImage qoimg = makeFramedImage(ofile, osize);
 
         // -- Transition endoding ----------
 
         tmngr.setInImage(qiimg);
         tmngr.setOutImage(qoimg);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Making transition between" << ifile << "and" << ofile;
-
         int tmout = 0;
-//        int j     = 0;
 
         do
         {
             VideoFrame frame(tmngr.currentframe(tmout));
 
-            if (d->encodeFrame(frame, venc, aenc, mux))
+            if (!d->encodeFrame(frame, venc, aenc, mux))
             {
-//                qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot encode transition frame";
             }
         }
         while (tmout != -1 && !m_cancel);
 
         // -- Images endoding ----------
 
-        if (i+1 < d->settings->inputImages.count())
+        if (i <= d->settings->inputImages.count())
         {
             VideoFrame frame;
             QRect kbRect;
@@ -449,12 +448,14 @@ void VidSlideTask::run()
                     QImage kbImg = qoimg.copy(kbRect).scaled(osize,
                                                              Qt::KeepAspectRatioByExpanding,
                                                              Qt::SmoothTransformation);
-                    frame        = VideoFrame(kbImg.convertToFormat(QImage::Format_ARGB32));
+                    qiimg        = kbImg.convertToFormat(QImage::Format_ARGB32);
                 }
                 else
                 {
-                    frame = VideoFrame(qoimg);
+                    qiimg = qoimg;
                 }
+
+                frame = VideoFrame(qiimg);
 
                 if (d->encodeFrame(frame, venc, aenc, mux))
                 {
