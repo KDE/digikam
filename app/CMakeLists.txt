@@ -349,13 +349,6 @@ set(libdigikamgui_SRCS
     ${digikamadaptor_SRCS}
 )
 
-if(ENABLE_MEDIAPLAYER)
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        views/mediaplayerview.cpp
-       )
-endif()
-
 if(${MARBLE_FOUND})
     set(libdigikamgui_SRCS
         ${libdigikamgui_SRCS}

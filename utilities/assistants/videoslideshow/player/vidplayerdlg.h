@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VID_PLAYER_H
-#define VID_PLAYER_H
+#ifndef VID_PLAYER_DLG_H
+#define VID_PLAYER_DLG_H
 
 // Qt include
 
@@ -37,25 +37,14 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT VidPlayer : public QDialog
+class DIGIKAM_EXPORT VidPlayerDlg : public QDialog
 {
     Q_OBJECT
 
 public:
 
-    explicit VidPlayer(const QString& file, QWidget* const parent = 0);
-    ~VidPlayer();
-
-private Q_SLOTS:
-
-    void slotOpenMedia();
-    void slotSeekBySlider(int value);
-    void slotSeekBySlider();
-    void slotPlay();
-    void slotPause();
-    void slotUpdateSlider(qint64 value);
-    void slotUpdateSlider();
-    void slotUpdateSliderUnit();
+    explicit VidPlayerDlg(const QString& file, QWidget* const parent = 0);
+    ~VidPlayerDlg();
 
 private:
 
@@ -65,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VID_PLAYER_H
+#endif // VID_PLAYER_DLG_H

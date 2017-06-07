@@ -46,7 +46,7 @@
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
 #include "vidslidethread.h"
-#include "vidplayer.h"
+#include "vidplayerdlg.h"
 
 namespace Digikam
 {
@@ -202,7 +202,7 @@ void VidSlideFinalPage::slotDone(bool completed)
             d->progressView->addEntry(i18n("Opening video stream in player..."),
                                       DHistoryView::ProgressEntry);
 
-            VidPlayer* const player = new VidPlayer(d->settings->outputVideo, this);
+            VidPlayerDlg* const player = new VidPlayerDlg(d->settings->outputVideo, this);
             player->show();
             player->resize(800, 600);
 

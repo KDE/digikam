@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-20-12
- * Description : a view to embed Phonon media player.
+ * Description : a view to embed QtAv media player.
  *
  * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -28,17 +28,20 @@
 
 #include <QStackedWidget>
 #include <QUrl>
+#include <QEvent>
 
 // QtAV includes
 
 #include <QtAV/QtAV.h>
 
-class QEvent;
+// Local includes
+
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class MediaPlayerView : public QStackedWidget
+class DIGIKAM_EXPORT MediaPlayerView : public QStackedWidget
 {
     Q_OBJECT
 

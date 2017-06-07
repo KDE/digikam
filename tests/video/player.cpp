@@ -29,7 +29,7 @@
 
 // Local includes
 
-#include "vidplayer.h"
+#include "vidplayerdlg.h"
 
 using namespace Digikam;
 
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    VidPlayer player(QString::fromUtf8(argv[1]));
+    VidPlayerDlg player(QString::fromUtf8(argv[1]));
     player.show();
     player.resize(800, 600);
 
