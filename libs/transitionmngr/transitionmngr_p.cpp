@@ -49,6 +49,10 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::PushR2L,         &TransitionMngr::Private::effectPushR2L);
     eff_transList.insert(TransitionMngr::PushT2B,         &TransitionMngr::Private::effectPushT2B);
     eff_transList.insert(TransitionMngr::PushB2T,         &TransitionMngr::Private::effectPushB2T);
+    eff_transList.insert(TransitionMngr::SwapL2R,         &TransitionMngr::Private::effectSwapL2R);
+    eff_transList.insert(TransitionMngr::SwapR2L,         &TransitionMngr::Private::effectSwapR2L);
+    eff_transList.insert(TransitionMngr::SwapT2B,         &TransitionMngr::Private::effectSwapT2B);
+    eff_transList.insert(TransitionMngr::SwapB2T,         &TransitionMngr::Private::effectSwapB2T);
     eff_transList.insert(TransitionMngr::BlurIn,          &TransitionMngr::Private::effectBlurIn);
     eff_transList.insert(TransitionMngr::BlurOut,         &TransitionMngr::Private::effectBlurOut);
 }

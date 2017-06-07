@@ -169,6 +169,10 @@ private:
     int effectPushR2L(bool aInit);
     int effectPushT2B(bool aInit);
     int effectPushB2T(bool aInit);
+    int effectSwapL2R(bool aInit);
+    int effectSwapR2L(bool aInit);
+    int effectSwapT2B(bool aInit);
+    int effectSwapB2T(bool aInit);
     int effectBlurIn(bool aInit);
     int effectBlurOut(bool aInit);
 

@@ -118,6 +118,10 @@ QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
     trans[PushR2L]         = i18nc("Transition Effect: PushR2L",          "Push Right to Left");
     trans[PushT2B]         = i18nc("Transition Effect: PushT2B",          "Push Top to Bottom");
     trans[PushB2T]         = i18nc("Transition Effect: PushB2T",          "Push Bottom to Top");
+    trans[SwapL2R]         = i18nc("Transition Effect: SwapL2R",          "Swap Left to Right");
+    trans[SwapR2L]         = i18nc("Transition Effect: SwapR2L",          "Swap Right to Left");
+    trans[SwapT2B]         = i18nc("Transition Effect: SwapT2B",          "Swap Top to Bottom");
+    trans[SwapB2T]         = i18nc("Transition Effect: SwapB2T",          "Swap Bottom to Top");
     trans[BlurIn]          = i18nc("Transition Effect: BlurIn",           "Blur In");
     trans[BlurOut]         = i18nc("Transition Effect: BlurOut",          "Blur Out");
     trans[Random]          = i18nc("Transition Effect: Random effect",    "Random");

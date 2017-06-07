@@ -19,6 +19,7 @@ set(libtransitionmngr_SRCS
     transitionmngr_p_push.cpp
     transitionmngr_p_slide.cpp
     transitionmngr_p_squares.cpp
+    transitionmngr_p_swap.cpp
 )
 
 include_directories(
