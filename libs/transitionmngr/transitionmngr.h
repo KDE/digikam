@@ -62,6 +62,8 @@ public:
         Fade,
         SlideL2R,
         SlideR2L,
+        SlideT2B,
+        SlideB2T,
         Random
     };
 

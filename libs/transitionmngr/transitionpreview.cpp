@@ -48,7 +48,8 @@ public:
         previewSize   = QSize(256, 192);
     }
 
-    QTimer                    timer;
+    QTimer                    restartTimer;
+    QTimer                    transTimer;
     TransitionMngr*           mngr;
     TransitionMngr::TransType curTransition;
     QSize                     previewSize;
@@ -68,8 +69,11 @@ TransitionPreview::TransitionPreview(QWidget* const parent)
     d->mngr = new TransitionMngr;
     d->mngr->setOutputSize(d->previewSize);
 
-    connect(&d->timer, SIGNAL(timeout()),
+    connect(&d->transTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTransition()));
+
+    connect(&d->restartTimer, SIGNAL(timeout()),
+            this, SLOT(slotRestart()));
 }
 
 TransitionPreview::~TransitionPreview()
@@ -101,7 +105,7 @@ void TransitionPreview::startPreview(TransitionMngr::TransType eff)
     stopPreview();
     d->curTransition = eff;
     d->mngr->setTransition(eff);
-    d->timer.start(100);
+    d->transTimer.start(100);
 }
 
 void TransitionPreview::slotProgressTransition()
@@ -113,13 +117,14 @@ void TransitionPreview::slotProgressTransition()
     if (tmout == -1)
     {
         stopPreview();
-        QTimer::singleShot(1000, this, SLOT(slotRestart()));
+        d->restartTimer.start(1000);
     }
 }
 
 void TransitionPreview::stopPreview()
 {
-    d->timer.stop();
+    d->transTimer.stop();
+    d->restartTimer.stop();
 }
 
 void TransitionPreview::slotRestart()

@@ -232,11 +232,18 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     transLabel->setBuddy(d->transVal);
 
+    QLabel* const transNote  = new QLabel(transGrp);
+    transNote->setWordWrap(true);
+    transNote->setText(i18n("<i>A transition is an visual effect applied between two images. "
+                            "For some effects, the duration can depend of random values and "
+                            "can change while the slideshow.</i>"));
+
     d->transPreview              = new TransitionPreview(transGrp);
     QGridLayout* const transGrid = new QGridLayout(transGrp);
     transGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     transGrid->addWidget(transLabel,      0, 0, 1, 1);
     transGrid->addWidget(d->transVal,     1, 0, 1, 1);
+    transGrid->addWidget(transNote,       2, 0, 1, 1);
     transGrid->addWidget(d->transPreview, 0, 1, 3, 1);
     transGrid->setColumnStretch(0, 10);
     transGrid->setRowStretch(2, 10);

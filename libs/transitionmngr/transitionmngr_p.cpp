@@ -59,6 +59,8 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::Fade,            &TransitionMngr::Private::effectFade);
     eff_transList.insert(TransitionMngr::SlideL2R,        &TransitionMngr::Private::effectSlideL2R);
     eff_transList.insert(TransitionMngr::SlideR2L,        &TransitionMngr::Private::effectSlideR2L);
+    eff_transList.insert(TransitionMngr::SlideT2B,        &TransitionMngr::Private::effectSlideT2B);
+    eff_transList.insert(TransitionMngr::SlideB2T,        &TransitionMngr::Private::effectSlideB2T);
 }
 
 TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
@@ -680,13 +682,59 @@ int TransitionMngr::Private::effectSlideL2R(bool aInit)
 {
     if (aInit)
     {
-        eff_fy = eff_outSize.height() / 25.0;
+        eff_fx = eff_outSize.width() / 25.0;
         eff_i  = 0;
     }
 
     QPainter bufferPainter(&eff_curFrame);
     bufferPainter.drawImage(0,     0, eff_outImage);
     bufferPainter.drawImage(eff_i, 0, eff_inImage);
+    bufferPainter.end();
+
+    eff_i = eff_i + lround(eff_fx);
+
+    if (eff_i <= eff_outSize.width())
+        return 15;
+
+    eff_curFrame = eff_outImage;
+
+    return -1;
+}
+
+int TransitionMngr::Private::effectSlideR2L(bool aInit)
+{
+    if (aInit)
+    {
+        eff_fx = eff_outSize.width() / 25.0;
+        eff_i  = 0;
+    }
+
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.drawImage(0,     0, eff_outImage);
+    bufferPainter.drawImage(eff_i, 0, eff_inImage);
+    bufferPainter.end();
+
+    eff_i = eff_i - lround(eff_fx);
+
+    if (eff_i >= -eff_outSize.width())
+        return 15;
+
+    eff_curFrame = eff_outImage;
+
+    return -1;
+}
+
+int TransitionMngr::Private::effectSlideT2B(bool aInit)
+{
+    if (aInit)
+    {
+        eff_fy = eff_outSize.height() / 25.0;
+        eff_i  = 0;
+    }
+
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.drawImage(0, 0,     eff_outImage);
+    bufferPainter.drawImage(0, eff_i, eff_inImage);
     bufferPainter.end();
 
     eff_i = eff_i + lround(eff_fy);
@@ -699,7 +747,7 @@ int TransitionMngr::Private::effectSlideL2R(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectSlideR2L(bool aInit)
+int TransitionMngr::Private::effectSlideB2T(bool aInit)
 {
     if (aInit)
     {
@@ -708,8 +756,8 @@ int TransitionMngr::Private::effectSlideR2L(bool aInit)
     }
 
     QPainter bufferPainter(&eff_curFrame);
-    bufferPainter.drawImage(0,     0, eff_outImage);
-    bufferPainter.drawImage(eff_i, 0, eff_inImage);
+    bufferPainter.drawImage(0, 0,     eff_outImage);
+    bufferPainter.drawImage(0, eff_i, eff_inImage);
     bufferPainter.end();
 
     eff_i = eff_i - lround(eff_fy);
