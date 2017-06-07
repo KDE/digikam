@@ -64,6 +64,10 @@ public:
         SlideR2L,
         SlideT2B,
         SlideB2T,
+        PushL2R,
+        PushR2L,
+        PushT2B,
+        PushB2T,
         Random
     };
 

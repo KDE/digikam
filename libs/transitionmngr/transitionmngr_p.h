@@ -153,6 +153,10 @@ private:
     int effectSlideR2L(bool aInit);
     int effectSlideT2B(bool aInit);
     int effectSlideB2T(bool aInit);
+    int effectPushL2R(bool aInit);
+    int effectPushR2L(bool aInit);
+    int effectPushT2B(bool aInit);
+    int effectPushB2T(bool aInit);
 };
 
 }  // namespace Digikam
