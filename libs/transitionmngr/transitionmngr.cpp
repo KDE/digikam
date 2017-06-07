@@ -111,6 +111,7 @@ QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
     trans[Blobs]           = i18nc("Transition Effect: Blobs",            "Blobs");
     trans[Fade]            = i18nc("Transition Effect: Fade",             "Fade");
     trans[SlideL2R]        = i18nc("Transition Effect: SlideL2R",         "Slide Left to Right");
+    trans[SlideR2L]        = i18nc("Transition Effect: SlideR2L",         "Slide Right to Left");
     trans[Random]          = i18nc("Transition Effect: Random effect",    "Random");
 
     return trans;

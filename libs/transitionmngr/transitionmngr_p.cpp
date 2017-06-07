@@ -58,6 +58,7 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
     eff_transList.insert(TransitionMngr::Fade,            &TransitionMngr::Private::effectFade);
     eff_transList.insert(TransitionMngr::SlideL2R,        &TransitionMngr::Private::effectSlideL2R);
+    eff_transList.insert(TransitionMngr::SlideR2L,        &TransitionMngr::Private::effectSlideR2L);
 }
 
 TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
@@ -690,7 +691,30 @@ int TransitionMngr::Private::effectSlideL2R(bool aInit)
 
     eff_i = eff_i + lround(eff_fy);
 
-    if (eff_i < eff_outSize.height())
+    if (eff_i <= eff_outSize.height())
+        return 15;
+
+    eff_curFrame = eff_outImage;
+
+    return -1;
+}
+
+int TransitionMngr::Private::effectSlideR2L(bool aInit)
+{
+    if (aInit)
+    {
+        eff_fy = eff_outSize.height() / 25.0;
+        eff_i  = 0;
+    }
+
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.drawImage(0,     0, eff_outImage);
+    bufferPainter.drawImage(eff_i, 0, eff_inImage);
+    bufferPainter.end();
+
+    eff_i = eff_i - lround(eff_fy);
+
+    if (eff_i >= -eff_outSize.height())
         return 15;
 
     eff_curFrame = eff_outImage;

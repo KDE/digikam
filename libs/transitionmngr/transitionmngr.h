@@ -61,6 +61,7 @@ public:
         Blobs,
         Fade,
         SlideL2R,
+        SlideR2L,
         Random
     };
 

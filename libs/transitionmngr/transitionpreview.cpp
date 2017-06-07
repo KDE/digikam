@@ -98,6 +98,7 @@ void TransitionPreview::setImagesList(const QList<QUrl>& images)
 
 void TransitionPreview::startPreview(TransitionMngr::TransType eff)
 {
+    stopPreview();
     d->curTransition = eff;
     d->mngr->setTransition(eff);
     d->timer.start(100);
@@ -110,12 +111,20 @@ void TransitionPreview::slotProgressTransition()
     setPixmap(QPixmap::fromImage(img));
 
     if (tmout == -1)
-        startPreview(d->curTransition);
+    {
+        stopPreview();
+        QTimer::singleShot(1000, this, SLOT(slotRestart()));
+    }
 }
 
 void TransitionPreview::stopPreview()
 {
     d->timer.stop();
+}
+
+void TransitionPreview::slotRestart()
+{
+    startPreview(d->curTransition);
 }
 
 } // namespace Digikam

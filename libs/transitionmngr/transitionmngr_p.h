@@ -127,6 +127,13 @@ public:
 
     TransitionMngr::TransType getRandomEffect() const;
 
+private:
+
+    // Internal functions to render an effect frame.
+    // aInit is to true when effect is initialized (first call).
+    // The integer value is a tempo in ms to wait between frames,
+    // or -1 if the effect is completed.
+
     int effectNone(bool aInit);
     int effectChessboard(bool aInit);
     int effectMeltdown(bool aInit);
@@ -143,6 +150,7 @@ public:
     int effectBlobs(bool aInit);
     int effectFade(bool aInit);
     int effectSlideL2R(bool aInit);
+    int effectSlideR2L(bool aInit);
 };
 
 }  // namespace Digikam
