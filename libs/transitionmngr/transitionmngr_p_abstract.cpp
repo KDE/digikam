@@ -60,7 +60,7 @@ int TransitionMngr::Private::effectMeltdown(bool aInit)
         if ((qrand() & 15) < 6)
             continue;
 
-        bufferPainter.drawImage(x, y + eff_dy, eff_curFrame, x, y, eff_dx, eff_h - y - eff_dy);
+        //bufferPainter.drawImage(x, y + eff_dy, eff_curFrame, x, y, eff_dx, eff_h - y - eff_dy);
         bufferPainter.drawImage(x, y, eff_outImage, x, y, eff_dx, eff_dy);
 
         eff_intArray[i] += eff_dy;
