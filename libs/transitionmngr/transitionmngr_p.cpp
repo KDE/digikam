@@ -49,6 +49,8 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::PushR2L,         &TransitionMngr::Private::effectPushR2L);
     eff_transList.insert(TransitionMngr::PushT2B,         &TransitionMngr::Private::effectPushT2B);
     eff_transList.insert(TransitionMngr::PushB2T,         &TransitionMngr::Private::effectPushB2T);
+    eff_transList.insert(TransitionMngr::BlurIn,          &TransitionMngr::Private::effectBlurIn);
+    eff_transList.insert(TransitionMngr::BlurOut,         &TransitionMngr::Private::effectBlurOut);
 }
 
 TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
@@ -70,30 +72,6 @@ int TransitionMngr::Private::effectRandom(bool /*aInit*/)
 int TransitionMngr::Private::effectNone(bool)
 {
     eff_curFrame = eff_outImage;
-    return -1;
-}
-
-int TransitionMngr::Private::effectFade(bool aInit)
-{
-    if (aInit)
-    {
-        eff_fd = 1.0;
-    }
-
-    QPainter bufferPainter(&eff_curFrame);
-    bufferPainter.drawImage(0, 0, eff_outImage);
-    bufferPainter.setOpacity(eff_fd);
-    bufferPainter.drawImage(0, 0, eff_inImage);
-    bufferPainter.setOpacity(1.0);
-    bufferPainter.end();
-
-    eff_fd = eff_fd - 0.1;
-
-    if (eff_fd > 0.0)
-        return 15;
-
-    eff_curFrame = eff_outImage;
-
     return -1;
 }
 

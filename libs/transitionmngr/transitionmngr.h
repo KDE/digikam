@@ -68,6 +68,8 @@ public:
         PushR2L,
         PushT2B,
         PushB2T,
+        BlurIn,
+        BlurOut,
         Random
     };
 

@@ -13,6 +13,7 @@ set(libtransitionmngr_SRCS
     transitionmngr.cpp
     transitionmngr_p.cpp
     transitionmngr_p_abstract.cpp
+    transitionmngr_p_blur.cpp
     transitionmngr_p_lines.cpp
     transitionmngr_p_push.cpp
     transitionmngr_p_slide.cpp

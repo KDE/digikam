@@ -169,6 +169,13 @@ private:
     int effectPushR2L(bool aInit);
     int effectPushT2B(bool aInit);
     int effectPushB2T(bool aInit);
+    int effectBlurIn(bool aInit);
+    int effectBlurOut(bool aInit);
+
+private:
+
+    QRgb   convertFromPremult(const QRgb& p) const;
+    QImage fastBlur(const QImage& img, int radius) const;
 };
 
 }  // namespace Digikam
