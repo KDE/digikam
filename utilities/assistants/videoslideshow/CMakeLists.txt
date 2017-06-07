@@ -30,6 +30,7 @@ set(libvideoslideshow_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidesettings.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidethread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manager/vidslidetask.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/player/vidplayer.cpp
 )
 
 add_library(videoslideshow_src OBJECT ${libvideoslideshow_SRCS})

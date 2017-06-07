@@ -471,4 +471,4 @@ void VidSlideTask::run()
     emit signalDone(!m_cancel);
 }
 
-}  // namespace Digikam
+} // namespace Digikam
