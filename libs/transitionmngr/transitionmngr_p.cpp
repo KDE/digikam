@@ -56,7 +56,8 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::MultiCircleOut,  &TransitionMngr::Private::effectMultiCircleOut);
     eff_transList.insert(TransitionMngr::SpiralIn,        &TransitionMngr::Private::effectSpiralIn);
     eff_transList.insert(TransitionMngr::Blobs,           &TransitionMngr::Private::effectBlobs);
-    eff_transList.insert(TransitionMngr::Blend,           &TransitionMngr::Private::effectBlend);
+    eff_transList.insert(TransitionMngr::Fade,            &TransitionMngr::Private::effectFade);
+    eff_transList.insert(TransitionMngr::SlideL2R,        &TransitionMngr::Private::effectSlideL2R);
 }
 
 TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
@@ -650,7 +651,7 @@ int TransitionMngr::Private::effectBlobs(bool aInit)
     return 10;
 }
 
-int TransitionMngr::Private::effectBlend(bool aInit)
+int TransitionMngr::Private::effectFade(bool aInit)
 {
     if (aInit)
     {
@@ -667,6 +668,29 @@ int TransitionMngr::Private::effectBlend(bool aInit)
     eff_fd = eff_fd - 0.1;
 
     if (eff_fd > 0.0)
+        return 15;
+
+    eff_curFrame = eff_outImage;
+
+    return -1;
+}
+
+int TransitionMngr::Private::effectSlideL2R(bool aInit)
+{
+    if (aInit)
+    {
+        eff_fy = eff_outSize.height() / 25.0;
+        eff_i  = 0;
+    }
+
+    QPainter bufferPainter(&eff_curFrame);
+    bufferPainter.drawImage(0,     0, eff_outImage);
+    bufferPainter.drawImage(eff_i, 0, eff_inImage);
+    bufferPainter.end();
+
+    eff_i = eff_i + lround(eff_fy);
+
+    if (eff_i < eff_outSize.height())
         return 15;
 
     eff_curFrame = eff_outImage;

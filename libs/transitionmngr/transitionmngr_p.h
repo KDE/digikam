@@ -127,21 +127,22 @@ public:
 
     TransitionMngr::TransType getRandomEffect() const;
 
-    int effectNone(bool);
-    int effectChessboard(bool doInit);
-    int effectMeltdown(bool doInit);
-    int effectSweep(bool doInit);
-    int effectMosaic(bool doInit);
-    int effectCubism(bool doInit);
-    int effectRandom(bool doInit);
-    int effectGrowing(bool doInit);
-    int effectHorizLines(bool doInit);
-    int effectVertLines(bool doInit);
-    int effectMultiCircleOut(bool doInit);
-    int effectSpiralIn(bool doInit);
-    int effectCircleOut(bool doInit);
-    int effectBlobs(bool doInit);
-    int effectBlend(bool doInit);
+    int effectNone(bool aInit);
+    int effectChessboard(bool aInit);
+    int effectMeltdown(bool aInit);
+    int effectSweep(bool aInit);
+    int effectMosaic(bool aInit);
+    int effectCubism(bool aInit);
+    int effectRandom(bool aInit);
+    int effectGrowing(bool aInit);
+    int effectHorizLines(bool aInit);
+    int effectVertLines(bool aInit);
+    int effectMultiCircleOut(bool aInit);
+    int effectSpiralIn(bool aInit);
+    int effectCircleOut(bool aInit);
+    int effectBlobs(bool aInit);
+    int effectFade(bool aInit);
+    int effectSlideL2R(bool aInit);
 };
 
 }  // namespace Digikam

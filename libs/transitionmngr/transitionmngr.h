@@ -59,7 +59,8 @@ public:
         MultiCircleOut,
         SpiralIn,
         Blobs,
-        Blend,
+        Fade,
+        SlideL2R,
         Random
     };
 
