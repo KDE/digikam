@@ -62,7 +62,7 @@ QImage FrameUtils::makeFramedImage(const QString& file, const QSize& outSize)
 QImage FrameUtils::makeScaledImage(QImage& timg, const QSize& outSize)
 {
     QImage qimg(outSize, QImage::Format_ARGB32);
-    qimg.fill(QColor(0, 0, 0, 0));
+    qimg.fill(QColor(0, 0, 0, 255));
 
     if (!timg.isNull())
     {
