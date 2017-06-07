@@ -12,8 +12,11 @@ set(libtransitionmngr_SRCS
     transitionpreview.cpp
     transitionmngr.cpp
     transitionmngr_p.cpp
-    transitionmngr_p_slide.cpp
+    transitionmngr_p_abstract.cpp
+    transitionmngr_p_lines.cpp
     transitionmngr_p_push.cpp
+    transitionmngr_p_slide.cpp
+    transitionmngr_p_squares.cpp
 )
 
 include_directories(
