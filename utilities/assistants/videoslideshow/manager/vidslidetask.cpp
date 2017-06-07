@@ -361,15 +361,15 @@ void VidSlideTask::run()
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);
 
-    for (int i = -1 ; i <= d->settings->inputImages.count() && !m_cancel ; i++)
+    for (int i = 0 ; i < d->settings->inputImages.count()+1 && !m_cancel ; i++)
     {
-        if (i == -1 || i == d->settings->inputImages.count()-1)
+        if (i == 0)
             qiimg = FrameUtils::makeFramedImage(QString(), osize);
 
         QString ofile;
 
-        if (i < d->settings->inputImages.count()-1)
-            ofile = d->settings->inputImages[i+1].toLocalFile();
+        if (i < d->settings->inputImages.count())
+            ofile = d->settings->inputImages[i].toLocalFile();
 
         QImage qoimg = FrameUtils::makeFramedImage(ofile, osize);
 
@@ -393,7 +393,7 @@ void VidSlideTask::run()
 
         // -- Images encoding ----------
 
-        if (i <= d->settings->inputImages.count())
+        if (i < d->settings->inputImages.count())
         {
             VideoFrame frame;
             QRect kbRect;
@@ -431,10 +431,10 @@ void VidSlideTask::run()
             while (count < d->settings->imgFrames && !m_cancel);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i+1 << "done";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i << "done";
 
         emit signalMessage(i18n("Encoding %1 Done", ofile), false);
-        emit signalProgress(i+1);
+        emit signalProgress(i);
     }
 
     // ---------------------------------------------
