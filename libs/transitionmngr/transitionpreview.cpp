@@ -94,7 +94,7 @@ void TransitionPreview::setImagesList(const QList<QUrl>& images)
         else
         {
             QImage blank(d->previewSize, QImage::Format_ARGB32);
-            blank.fill(0);
+            blank.fill(Qt::black);
             d->mngr->setOutImage(blank);
         }
     }
