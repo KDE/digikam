@@ -83,6 +83,7 @@ public:
 private:
 
     // Internal functions to render an effect frame.
+    // The effect mouvement must be adjusted accordingly with amount of image frames to encode.
     // aInit is to true when effect is initialized (first call).
     // The integer value is a tempo in ms to wait between frames,
     // or -1 if the effect is completed.

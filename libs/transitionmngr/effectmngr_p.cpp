@@ -70,7 +70,7 @@ int EffectMngr::Private::effectKenBurnsZoomIn(bool aInit)
 
     QRectF fRect(eff_image.rect());
 
-    // We will adjust to camera zoom speed accordingly with image frames to encode.
+    // This effect zoom in on the center of image from 100 to 80 percents.
     double nx    = eff_step * ((eff_image.width() - eff_image.width() * 0.8) / eff_imgFrames);
     double ny    = nx / ((double)eff_image.width() / (double)eff_image.height());
     fRect.setTopLeft(QPointF(nx, ny));
