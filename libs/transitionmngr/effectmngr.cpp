@@ -22,6 +22,10 @@
 
 #include "effectmngr_p.h"
 
+// Qt includes
+
+#include <QTime>
+
 // KDE includes
 
 #include <klocalizedstring.h>
@@ -37,6 +41,7 @@ namespace Digikam
 EffectMngr::EffectMngr()
     : d(new Private)
 {
+    qsrand(static_cast<quint64>(QTime::currentTime().msecsSinceStartOfDay()));
 }
 
 EffectMngr::~EffectMngr()

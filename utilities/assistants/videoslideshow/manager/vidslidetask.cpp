@@ -337,7 +337,6 @@ void VidSlideTask::run()
 
     EffectMngr effmngr;
     effmngr.setOutputSize(osize);
-    effmngr.setEffect(d->settings->vEffect);
     effmngr.setFrames(d->settings->imgFrames);
 
     for (int i = 0 ; i < d->settings->inputImages.count()+1 && !m_cancel ; i++)
@@ -372,6 +371,8 @@ void VidSlideTask::run()
         while (tmout != -1 && !m_cancel);
 
         // -- Images encoding ----------
+
+        effmngr.setEffect(d->settings->vEffect);
 
         if (i < d->settings->inputImages.count())
         {
