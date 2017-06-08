@@ -31,6 +31,8 @@ void EffectMngr::Private::registerEffects()
     eff_effectList.insert(EffectMngr::KenBurnsZoomIn, &EffectMngr::Private::effectKenBurnsZoomIn);
     eff_effectList.insert(EffectMngr::KenBurnsPanLR,  &EffectMngr::Private::effectKenBurnsPanLR);
     eff_effectList.insert(EffectMngr::KenBurnsPanRL,  &EffectMngr::Private::effectKenBurnsPanRL);
+    eff_effectList.insert(EffectMngr::KenBurnsPanTB,  &EffectMngr::Private::effectKenBurnsPanTB);
+    eff_effectList.insert(EffectMngr::KenBurnsPanBT,  &EffectMngr::Private::effectKenBurnsPanBT);
 }
 
 EffectMngr::EffectType EffectMngr::Private::getRandomEffect() const
@@ -125,13 +127,69 @@ int EffectMngr::Private::effectKenBurnsPanRL(bool aInit)
 
     QRectF fRect(eff_image.rect());
 
-    // This effect zoom to 80 percents and pan from left to right.
+    // This effect zoom to 80 percents and pan from right to left.
 
     double nx = eff_step * ((eff_image.width() - eff_image.width() * 0.8) / eff_imgFrames);
     double ny = (eff_image.height() - eff_image.height() * 0.8) / 2.0;
     double nh = eff_image.height() * 0.8;
     double nw = eff_image.width()  * 0.8;
     fRect.setTopLeft(QPointF(eff_image.width() - nw - nx, ny));
+    fRect.setSize(QSize(nw, nh));
+
+    updateCurrentFrame(fRect.toAlignedRect());
+
+    eff_step++;
+
+    if (eff_step != eff_imgFrames)
+        return 15;
+
+    return -1;
+}
+
+int EffectMngr::Private::effectKenBurnsPanTB(bool aInit)
+{
+    if (aInit)
+    {
+        eff_step = 0;
+    }
+
+    QRectF fRect(eff_image.rect());
+
+    // This effect zoom to 80 percents and pan from top to bottom.
+
+    double nx = (eff_image.width() - eff_image.width() * 0.8) / 2.0;
+    double ny = eff_step * ((eff_image.height() - eff_image.height() * 0.8) / eff_imgFrames);
+    double nh = eff_image.height() * 0.8;
+    double nw = eff_image.width()  * 0.8;
+    fRect.setTopLeft(QPointF(nx, ny));
+    fRect.setSize(QSize(nw, nh));
+
+    updateCurrentFrame(fRect.toAlignedRect());
+
+    eff_step++;
+
+    if (eff_step != eff_imgFrames)
+        return 15;
+
+    return -1;
+}
+
+int EffectMngr::Private::effectKenBurnsPanBT(bool aInit)
+{
+    if (aInit)
+    {
+        eff_step = 0;
+    }
+
+    QRectF fRect(eff_image.rect());
+
+    // This effect zoom to 80 percents and pan from bottom to top.
+
+    double nx = (eff_image.width() - eff_image.width() * 0.8) / 2.0;
+    double ny = eff_step * ((eff_image.height() - eff_image.height() * 0.8) / eff_imgFrames);
+    double nh = eff_image.height() * 0.8;
+    double nw = eff_image.width()  * 0.8;
+    fRect.setTopLeft(QPointF(nx, eff_image.height() - nh - ny));
     fRect.setSize(QSize(nw, nh));
 
     updateCurrentFrame(fRect.toAlignedRect());

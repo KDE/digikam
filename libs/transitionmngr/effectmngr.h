@@ -46,6 +46,8 @@ public:
         KenBurnsZoomIn,  // https://en.wikipedia.org/wiki/Ken_Burns_effect
         KenBurnsPanLR,
         KenBurnsPanRL,
+        KenBurnsPanTB,
+        KenBurnsPanBT,
         Random
     };
 

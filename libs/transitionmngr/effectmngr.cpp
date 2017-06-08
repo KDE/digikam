@@ -100,6 +100,8 @@ QMap<EffectMngr::EffectType, QString> EffectMngr::effectNames()
     eff[KenBurnsZoomIn] = i18nc("Effect: KenBurnsZoomIn", "Ken Burns - Camera Zoom In");
     eff[KenBurnsPanLR]  = i18nc("Effect: KenBurnsPanLR",  "Ken Burns - Camera Pan Left to Right");
     eff[KenBurnsPanRL]  = i18nc("Effect: KenBurnsPanRL",  "Ken Burns - Camera Pan Right to Left");
+    eff[KenBurnsPanTB]  = i18nc("Effect: KenBurnsPanTB",  "Ken Burns - Camera Pan Top to Bottom");
+    eff[KenBurnsPanBT]  = i18nc("Effect: KenBurnsPanBT",  "Ken Burns - Camera Pan Bottom to Top");
     eff[Random]         = i18nc("Effect: Random Effect",  "Random");
 
     return eff;
