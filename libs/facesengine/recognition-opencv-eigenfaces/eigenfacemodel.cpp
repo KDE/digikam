@@ -48,7 +48,7 @@ namespace Digikam
 {
 
 EigenFaceMatMetadata::EigenFaceMatMetadata()
-    : /*databaseId(0),*/
+    : databaseId(-1),
       identity(0),
       storageStatus(Created)
 {

@@ -57,7 +57,7 @@ public:
 
     // Initializes this Eigenfaces Model.
     EigenFaceRecognizer(double threshold = DBL_MAX):
-    m_threshold(threshold)
+    m_threshold(threshold), m_num_components(0)
     {
     }
 
@@ -65,7 +65,7 @@ public:
     EigenFaceRecognizer(cv::InputArrayOfArrays src,
                        cv::InputArray labels,
                        double threshold = DBL_MAX) :
-        m_threshold(threshold)
+        m_threshold(threshold), m_num_components(0)
     {
         train(src, labels);
     }
