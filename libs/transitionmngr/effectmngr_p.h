@@ -91,6 +91,8 @@ private:
     int effectNone(bool aInit);
     int effectRandom(bool aInit);
     int effectKenBurnsZoomIn(bool aInit);
+    int effectKenBurnsPanLR(bool aInit);
+    int effectKenBurnsPanRL(bool aInit);
 
     void updateCurrentFrame(const QRect& area);
 };

@@ -96,9 +96,11 @@ QMap<EffectMngr::EffectType, QString> EffectMngr::effectNames()
 {
     QMap<EffectType, QString> eff;
 
-    eff[None]            = i18nc("Transition Effect: No Effect",        "None");
-    eff[KenBurnsZoomIn]  = i18nc("Transition Effect: KenBurnsZoomIn",   "Ken Burns - Camera Zoom In");
-    eff[Random]          = i18nc("Transition Effect: Random effect",    "Random");
+    eff[None]           = i18nc("Effect: No Effect",      "None");
+    eff[KenBurnsZoomIn] = i18nc("Effect: KenBurnsZoomIn", "Ken Burns - Camera Zoom In");
+    eff[KenBurnsPanLR]  = i18nc("Effect: KenBurnsPanLR",  "Ken Burns - Camera Pan Left to Right");
+    eff[KenBurnsPanRL]  = i18nc("Effect: KenBurnsPanRL",  "Ken Burns - Camera Pan Right to Left");
+    eff[Random]         = i18nc("Effect: Random Effect",  "Random");
 
     return eff;
 }

@@ -44,6 +44,8 @@ public:
     {
         None = 0,        // Static camera
         KenBurnsZoomIn,  // https://en.wikipedia.org/wiki/Ken_Burns_effect
+        KenBurnsPanLR,
+        KenBurnsPanRL,
         Random
     };
 
