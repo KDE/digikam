@@ -41,6 +41,13 @@ EffectMngr::EffectType EffectMngr::Private::getRandomEffect() const
     return effs[i];
 }
 
+void EffectMngr::Private::updateCurrentFrame(const QRect& area)
+{
+    QImage kbImg = eff_image.copy(area).scaled(eff_outSize,
+                                               Qt::KeepAspectRatioByExpanding,
+                                               Qt::SmoothTransformation);
+    eff_curFrame = kbImg.convertToFormat(QImage::Format_ARGB32);
+}
 
 int EffectMngr::Private::effectRandom(bool /*aInit*/)
 {
@@ -68,12 +75,8 @@ int EffectMngr::Private::effectKenBurnsZoomIn(bool aInit)
     double ny    = nx / ((double)eff_image.width() / (double)eff_image.height());
     fRect.setTopLeft(QPointF(nx, ny));
     fRect.setBottomRight(QPointF((double)eff_image.width()-nx, (double)eff_image.height()-ny));
-    QRect kbRect = fRect.toAlignedRect();
 
-    QImage kbImg = eff_image.copy(kbRect).scaled(eff_outSize,
-                                                 Qt::KeepAspectRatioByExpanding,
-                                                 Qt::SmoothTransformation);
-    eff_curFrame = kbImg.convertToFormat(QImage::Format_ARGB32);
+    updateCurrentFrame(fRect.toAlignedRect());
 
     eff_step++;
 

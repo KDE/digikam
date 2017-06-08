@@ -27,6 +27,7 @@
 // Qt includes
 
 #include <QPointF>
+#include <QRect>
 #include <QRectF>
 #include <QImage>
 
@@ -89,6 +90,8 @@ private:
     int effectNone(bool aInit);
     int effectRandom(bool aInit);
     int effectKenBurnsZoomIn(bool aInit);
+
+    void updateCurrentFrame(const QRect& area);
 };
 
 }  // namespace Digikam
