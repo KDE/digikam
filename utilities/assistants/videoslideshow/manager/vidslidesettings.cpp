@@ -22,6 +22,10 @@
 
 #include "vidslidesettings.h"
 
+// Qt includes
+
+#include <QStandardPaths>
+
 // KDE includes
 
 #include <kconfig.h>
@@ -39,10 +43,13 @@ VidSlideSettings::VidSlideSettings()
     vStandard    = PAL;
     vbitRate     = VBR12;
     vCodec       = X264;
+    vFormat      = MP4;
+    vEffect      = NONE;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
-    outputVideo  = QUrl::fromLocalFile(QLatin1String("./out.mp4"));
-    openInPlayer = true;
+    conflictRule = FileSaveConflictBox::OVERWRITE;
+    outputDir    = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
+    outputPlayer = INTERNAL;
 }
 
 VidSlideSettings::~VidSlideSettings()
@@ -61,16 +68,22 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)VBR12);
     vCodec       = (VidCodec)group.readEntry("VCodec",
                    (int)X264);
-    vType        = (VidType)group.readEntry("OutputType",
+    vType        = (VidType)group.readEntry("VType",
                    (int)BLUERAY);
+    vFormat      = (VidFormat)group.readEntry("VFormat",
+                   (int)MP4);
+    vEffect      = (VidEffect)group.readEntry("VEffect",
+                   (int)NONE);
     abitRate     = group.readEntry("ABitRate",
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
                    (int)TransitionMngr::None);
-    outputVideo  = group.readEntry("OutputVideo",
-                   QUrl::fromLocalFile(QLatin1String("./out.mp4")));
-    openInPlayer = group.readEntry("OpenInPlayer",
-                   true);
+    conflictRule = (FileSaveConflictBox::ConflictRule)group.readEntry("ConflictRule",
+                   (int)FileSaveConflictBox::OVERWRITE);
+    outputDir    = group.readEntry("OutputDir",
+                   QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)));
+    outputPlayer = (VidPlayer)group.readEntry("OutputPlayer",
+                   (int)INTERNAL);
 }
 
 void VidSlideSettings::writeSettings(KConfigGroup& group)
@@ -80,11 +93,14 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("VStandard",    (int)vStandard);
     group.writeEntry("VBitRate",     (int)vbitRate);
     group.writeEntry("VCodec",       (int)vCodec);
-    group.writeEntry("OutputType",   (int)vType);
+    group.writeEntry("VType",        (int)vType);
+    group.writeEntry("VFormat",      (int)vFormat);
+    group.writeEntry("VEffect",      (int)vEffect);
     group.writeEntry("Transition",   (int)transition);
     group.writeEntry("ABitRate",     abitRate);
-    group.writeEntry("OutputVideo",  outputVideo);
-    group.writeEntry("OpenInPlayer", openInPlayer);
+    group.writeEntry("ConflictRule", (int)conflictRule);
+    group.writeEntry("OutputDir",    outputDir);
+    group.writeEntry("OutputPlayer", (int)outputPlayer);
 }
 
 QSize VidSlideSettings::videoSize() const
@@ -97,15 +113,23 @@ QSize VidSlideSettings::videoSize() const
             s = QSize(320, 180);
             break;
 
-        case VCD:
+        case VCD1:
             s = QSize(352, 240);
+            break;
+
+        case VCD2:
+            s = QSize(352, 288);
             break;
 
         case HVGA:
             s = QSize(480, 270);
             break;
 
-        case SVCD:
+        case SVCD1:
+            s = QSize(480, 480);
+            break;
+
+        case SVCD2:
             s = QSize(480, 576);
             break;
 
@@ -113,8 +137,12 @@ QSize VidSlideSettings::videoSize() const
             s = QSize(640, 360);
             break;
 
-        case DVD:
+        case DVD1:
             s = QSize(720, 480);
+            break;
+
+        case DVD2:
+            s = QSize(720, 576);
             break;
 
         case WVGA:
@@ -223,37 +251,98 @@ qreal VidSlideSettings::videoFrameRate() const
 
 QString VidSlideSettings::videoCodec() const
 {
-    QString c;
+    QString cod;
 
     switch(vCodec)
     {
+        case MJPEG:
+            cod = QLatin1String("mjpeg");
+            break;
+
+        case MPEG2:
+            cod = QLatin1String("mpeg2video");
+            break;
+
         case MPEG4:
-            c = QLatin1String("mpeg4");
+            cod = QLatin1String("mpeg4");
+            break;
+
+        case WEBMVP8:
+            cod = QLatin1String("libvpx");
+            break;
+
+        case FLASH:
+            cod = QLatin1String("flv");
+            break;
+
+        case THEORA:
+            cod = QLatin1String("libtheora");
+            break;
+
+        case WMV7:
+            cod = QLatin1String("wm1");
+            break;
+
+        case WMV8:
+            cod = QLatin1String("wm2");
+            break;
+
+        case WMV9:
+            cod = QLatin1String("wm3");
             break;
 
         default: // X264
-            c = QLatin1String("libx264");
+            cod = QLatin1String("libx264");
             break;
     }
 
-    return c;
+    return cod;
+}
+
+QString VidSlideSettings::videoFormat() const
+{
+    QString frm;
+
+    switch(vFormat)
+    {
+        case AVI:
+            frm = QLatin1String("avi");
+            break;
+
+        case MKV:
+            frm = QLatin1String("mkv");
+            break;
+
+        case MPG:
+            frm = QLatin1String("mpg");
+            break;
+
+        default: // MP4
+            frm = QLatin1String("mp4");
+            break;
+    }
+
+    return frm;
 }
 
 QMap<VidSlideSettings::VidType, QString> VidSlideSettings::videoTypeNames()
 {
     QMap<VidType, QString> types;
 
-    types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180");
-    types[VCD]     = i18nc("Video Type: VCD",     "VCD - 352x240");
-    types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270");
-    types[SVCD]    = i18nc("Video Type: SVCD",    "SVCD - 480x576");
-    types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360");
-    types[DVD]     = i18nc("Video Type: DVD",     "DVD - 720x576");
-    types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450");
-    types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576");
-    types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720");
-    types[BLUERAY] = i18nc("Video Type: BLUERAY", "BLUERAY - 1920x1080");
-    types[UHD4K]   = i18nc("Video Type: UHD4K",   "UHD4K - 3840x2160");
+    types[QVGA]    = i18nc("Video Type: QVGA",    "QVGA - 320x180 - 16:9");
+    types[VCD1]    = i18nc("Video Type: VCD",     "VCD - 352x240");
+    types[VCD2]    = i18nc("Video Type: VCD",     "VCD - 352x288");
+    types[HVGA]    = i18nc("Video Type: HVGA",    "HVGA - 480x270 - 16:9");
+    types[SVCD1]   = i18nc("Video Type: SVCD",    "SVCD - 480x480");
+    types[SVCD2]   = i18nc("Video Type: SVCD",    "SVCD - 480x576");
+    types[VGA]     = i18nc("Video Type: VGA",     "VGA - 640x360 - 16:9");
+    types[DVD1]    = i18nc("Video Type: DVD",     "DVD - 720x480");
+    types[DVD2]    = i18nc("Video Type: DVD",     "DVD - 720x576");
+    types[WVGA]    = i18nc("Video Type: WVGA",    "WVGA - 800x450 - 16:9");
+    types[XVGA]    = i18nc("Video Type: XVGA",    "XVGA - 1024x576 - 16:9");
+    types[HDTV]    = i18nc("Video Type: HDTV",    "HDTV - 1280x720 - 16:9");
+    types[BLUERAY] = i18nc("Video Type: BLUERAY", "BLUERAY - 1920x1080 - 16:9");
+    types[UHD4K]   = i18nc("Video Type: UHD4K",   "UHD4K - 3840x2160 - 16:9");
 
     return types;
 }
@@ -291,12 +380,56 @@ QMap<VidSlideSettings::VidStd, QString> VidSlideSettings::videoStdNames()
 
 QMap<VidSlideSettings::VidCodec, QString> VidSlideSettings::videoCodecNames()
 {
-    QMap<VidCodec, QString> c;
+    QMap<VidCodec, QString> codecs;
 
-    c[X264]  = i18nc("Video Codec X264",  "H.264");
-    c[MPEG4] = i18nc("Video Codec MPEG4", "MPEG-4");
+    // NOTE: Some video codecs are currently disabled due to QtAV incompatibility
+    //       with bits rate, frames rate, or video sizes. This need some investiguations.
 
-    return c;
+    codecs[X264]    = i18nc("Video Codec X264",    "High Quality H.264 AVC/MPEG-4 AVC");
+    codecs[MPEG4]   = i18nc("Video Codec MPEG4",   "DivX/XVid/MPEG-4");
+    codecs[MPEG2]   = i18nc("Video Codec MPEG2",   "MPEG-2 Video");
+//    codecs[MJPEG]   = i18nc("Video Codec MJPEG",   "Motion JPEG");
+//    codecs[WEBMVP8] = i18nc("Video Codec WEBMVP8", "WebM-VP8");
+//    codecs[THEORA]  = i18nc("Video Codec THEORA",  "Theora-VP3");
+//    codecs[FLASH]   = i18nc("Video Codec FLASH",   "Flash Video/Sorenson H.263");
+//    codecs[WMV7]    = i18nc("Video Codec WMV7",    "Window Media Video 7");
+//    codecs[WMV8]    = i18nc("Video Codec WMV8",    "Window Media Video 8");
+//    codecs[WMV9]    = i18nc("Video Codec WMV9",    "Window Media Video 9");
+
+    return codecs;
+}
+
+QMap<VidSlideSettings::VidFormat, QString> VidSlideSettings::videoFormatNames()
+{
+    QMap<VidFormat, QString> frm;
+
+    frm[AVI] = i18nc("Video Standard AVI", "AVI - Audio Video Interleave");
+    frm[MKV] = i18nc("Video Standard MKV", "MKV - Matroska");
+    frm[MP4] = i18nc("Video Standard MP4", "MP4 - MPEG-4");
+    frm[MPG] = i18nc("Video Standard MPG", "MPG - MPEG-2");
+
+    return frm;
+}
+
+QMap<VidSlideSettings::VidEffect, QString> VidSlideSettings::videoEffectNames()
+{
+    QMap<VidEffect, QString> eff;
+
+    eff[NONE]     = i18nc("Video Effect NONE",       "None - Static Camera");
+    eff[KENBURNS] = i18nc("Video Standard KENBURNS", "Ken Burns - Camera Zoom In");
+
+    return eff;
+}
+
+QMap<VidSlideSettings::VidPlayer, QString> VidSlideSettings::videoPlayerNames()
+{
+    QMap<VidPlayer, QString> pla;
+
+    pla[NOPLAYER] = i18nc("Video Effect NOPLAYER",   "None");
+    pla[INTERNAL] = i18nc("Video Standard INTERNAL", "Internal");
+    pla[DESKTOP]  = i18nc("Video Standard DESKTOP",  "Default from Desktop");
+
+    return pla;
 }
 
 } // namespace Digikam

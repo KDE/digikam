@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2006-20-12
- * Description : a view to embed QtAV media player.
+ * Description : a view to embed QtAv media player.
  *
  * Copyright (C) 2006-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -56,35 +56,6 @@ using namespace QtAV;
 
 namespace Digikam
 {
-/*
-class MediaPlayerThread : public QThread
-{
-public:
-
-    explicit MediaPlayerThread(AVPlayer* const player)
-      : QThread(0),
-        m_player(player)
-    {
-        m_player->moveToThread(this);
-    }
-
-    virtual ~MediaPlayerThread()
-    {
-    }
-
-private:
-
-    virtual void run()
-    {
-        exec();
-    }
-
-private:
-
-    AVPlayer* m_player;
-};
-*/
-// --------------------------------------------------------
 
 class MediaPlayerMouseClickFilter : public QObject
 {
@@ -161,7 +132,6 @@ public:
         toolBar(0),
         videoWidget(0),
         player(0),
-        //thread(0),
         slider(0),
         tlabel(0)
     {
@@ -178,7 +148,6 @@ public:
 
     WidgetRenderer*      videoWidget;
     AVPlayer*            player;
-    //MediaPlayerThread*   thread;
     QSlider*             slider;
     QLabel*              tlabel;
     QUrl                 currentItem;
@@ -217,7 +186,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
     d->playerView  = new QFrame(this);
     d->videoWidget = new WidgetRenderer(this);
     d->player      = new AVPlayer(this);
-    //d->thread      = new MediaPlayerThread(d->player);
 
     DHBox* const hbox = new DHBox(this);
     d->slider         = new QSlider(Qt::Horizontal, hbox);
@@ -294,10 +262,6 @@ MediaPlayerView::MediaPlayerView(QWidget* const parent)
 MediaPlayerView::~MediaPlayerView()
 {
     d->player->stop();
-    //d->thread->quit();
-    //d->thread->wait();
-    //delete d->thread;
-    //delete d->player;
     delete d;
 }
 
@@ -305,7 +269,6 @@ void MediaPlayerView::reload()
 {
     d->player->stop();
     d->player->setFile(d->currentItem.toLocalFile());
-    //d->thread->start();
     d->player->play();
 }
 
@@ -381,7 +344,6 @@ void MediaPlayerView::slotPausePlay()
 {
     if (!d->player->isPlaying())
     {
-        //d->thread->start();
         d->player->play();
         return;
     }
@@ -429,7 +391,6 @@ void MediaPlayerView::setCurrentItem(const QUrl& url, bool hasPrevious, bool has
     d->player->stop();
     setPreviewMode(Private::PlayerView);
     d->player->setFile(d->currentItem.toLocalFile());
-    //d->thread->start();
     d->player->play();
 }
 

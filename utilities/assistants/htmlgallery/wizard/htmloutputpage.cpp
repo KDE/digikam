@@ -96,20 +96,18 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
     hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QLabel* const textLabel1 = new QLabel(hbox1);
-    textLabel1->setObjectName(QLatin1String("textLabel1"));
     textLabel1->setWordWrap(false);
-    textLabel1->setText(i18n("Destination folder:"));
+    textLabel1->setText(i18n("Destination Folder:"));
 
     d->destUrl = new DFileSelector(hbox1);
-    d->destUrl->setObjectName(QLatin1String("destUrl"));
+    d->destUrl->setFileDlgTitle(i18n("Destination Folder"));
     d->destUrl->setFileDlgMode(QFileDialog::Directory);
     textLabel1->setBuddy(d->destUrl);
 
     // --------------------
 
     d->openInBrowser         = new QCheckBox(vbox);
-    d->openInBrowser->setObjectName(QLatin1String("openInBrowser"));
-    d->openInBrowser->setText(i18n("Open in browser"));
+    d->openInBrowser->setText(i18n("Open in Browser"));
 
     // --------------------
 

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGITEMS_PAGE_H
-#define EXPOBLENDINGITEMS_PAGE_H
+#ifndef EXPO_BLENDING_ITEMS_PAGE_H
+#define EXPO_BLENDING_ITEMS_PAGE_H
 
 // Local includes
 
@@ -40,7 +40,7 @@ class ItemsPage : public DWizardPage
 
 public:
 
-    ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
+    explicit ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
     ~ItemsPage();
 
     QList<QUrl> itemUrls() const;
@@ -66,6 +66,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* EXPOBLENDINGITEMS_PAGE_H */
+#endif // EXPO_BLENDING_ITEMS_PAGE_H

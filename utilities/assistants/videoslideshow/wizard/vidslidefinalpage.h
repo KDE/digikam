@@ -50,7 +50,8 @@ public:
 private Q_SLOTS:
 
     void slotProcess();
-    void slotDone(bool completed);
+    void slotDone(bool);
+    void slotMessage(const QString&, bool);
 
 private:
 

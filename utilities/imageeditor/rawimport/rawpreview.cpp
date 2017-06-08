@@ -73,7 +73,8 @@ public:
 };
 
 RawPreview::RawPreview(const QUrl& url, QWidget* const parent)
-    : GraphicsDImgView(parent), d(new Private)
+    : GraphicsDImgView(parent),
+      d(new Private)
 {
     d->item   = new ImagePreviewItem();
     setItem(d->item);
@@ -224,4 +225,4 @@ QImage RawPreview::previewToQImage() const
     return d->item->image().copyQImage();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

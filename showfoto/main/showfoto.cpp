@@ -76,7 +76,7 @@
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imagepropertiessidebar.h"
@@ -117,6 +117,10 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
 #endif
 
 namespace ShowFoto
@@ -1308,7 +1312,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
 void ShowFoto::slotFileWithDefaultApplication()
 {
-    Digikam::FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
+    Digikam::DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
 }
 
 void ShowFoto::addServicesMenu()
@@ -1419,6 +1423,14 @@ void ShowFoto::slotExpoBlending()
     ExpoBlendingManager::instance()->checkBinaries();
     ExpoBlendingManager::instance()->setItemsList(d->thumbBar->urls());
     ExpoBlendingManager::instance()->run();
+}
+
+void ShowFoto::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
 }
 
 }   // namespace ShowFoto

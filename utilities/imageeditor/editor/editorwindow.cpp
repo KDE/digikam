@@ -101,7 +101,7 @@
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "filereadwritelock.h"
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsdlg.h"
@@ -829,6 +829,7 @@ void EditorWindow::setupStandardActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
+    createVideoSlideshowAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
@@ -848,6 +849,10 @@ void EditorWindow::setupStandardActions()
 
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(false);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction->setEnabled(false);
 #endif
 
     // --------------------------------------------------------
@@ -1428,6 +1433,10 @@ void EditorWindow::toggleStandardActions(bool val)
 
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(val);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction->setEnabled(val);
 #endif
 
     // these actions are special: They are turned off if val is false,
@@ -2699,13 +2708,13 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
 
-        if (!FileOperation::localFileRename(source, sidecarOrg, sidecarDst))
+        if (!DFileOperations::localFileRename(source, sidecarOrg, sidecarDst))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to move sidecar file";
         }
     }
 
-    if (!FileOperation::localFileRename(source, org, dst))
+    if (!DFileOperations::localFileRename(source, org, dst))
     {
         QMessageBox::critical(this, i18n("Error Saving File"),
                               i18n("Failed to overwrite original file"));
@@ -3014,6 +3023,10 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_panoramaAction,              postCategory);
 #endif
 
+#ifdef HAVE_MEDIAPLAYER
+    actionModel->addAction(m_videoslideshowAction,        postCategory);
+#endif
+
 #ifdef HAVE_MARBLE
     actionModel->addAction(m_geolocationEditAction,       postCategory);
 #endif
@@ -3125,7 +3138,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
 
 void EditorWindow::addServicesMenuForUrl(const QUrl& url)
 {
-    KService::List offers = FileOperation::servicesForOpenWith(QList<QUrl>() << url);
+    KService::List offers = DFileOperations::servicesForOpenWith(QList<QUrl>() << url);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << offers.count() << " services found to open " << url;
 
@@ -3200,7 +3213,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                FileOperation::runFiles(dlg->text(), QList<QUrl>() << url);
+                DFileOperations::runFiles(dlg->text(), QList<QUrl>() << url);
             }
 
             delete dlg;
@@ -3215,7 +3228,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
-    FileOperation::runFiles(*service, QList<QUrl>() << url);
+    DFileOperations::runFiles(*service, QList<QUrl>() << url);
 }
 
 void EditorWindow::loadTool(EditorTool* const tool)

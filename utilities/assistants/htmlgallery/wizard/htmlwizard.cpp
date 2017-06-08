@@ -91,18 +91,18 @@ HTMLWizard::HTMLWizard(QWidget* const parent, DInfoInterface* const iface)
       d(new Private)
 {
     setOption(QWizard::NoCancelButtonOnLastPage);
-    setWindowTitle(i18n("Create Html Gallery"));
+    setWindowTitle(i18n("Create HTML Gallery"));
 
     d->info = new GalleryInfo(iface);
     d->info->load();
 
-    d->introPage         = new HTMLIntroPage(this, i18n("Welcome to HTML Gallery Tool"));
-    d->selectionPage     = new HTMLSelectionPage(this, i18n("Items Selection"));
-    d->themePage         = new HTMLThemePage(this, i18n("Theme Selection"));
-    d->parametersPage    = new HTMLParametersPage(this, i18n("Theme Parameters"));
+    d->introPage         = new HTMLIntroPage(this,         i18n("Welcome to HTML Gallery Tool"));
+    d->selectionPage     = new HTMLSelectionPage(this,     i18n("Items Selection"));
+    d->themePage         = new HTMLThemePage(this,         i18n("Theme Selection"));
+    d->parametersPage    = new HTMLParametersPage(this,    i18n("Theme Parameters"));
     d->imageSettingsPage = new HTMLImageSettingsPage(this, i18n("Image Settings"));
-    d->outputPage        = new HTMLOutputPage(this, i18n("Output Settings"));
-    d->finalPage         = new HTMLFinalPage(this, i18n("Generating Gallery"));
+    d->outputPage        = new HTMLOutputPage(this,        i18n("Output Settings"));
+    d->finalPage         = new HTMLFinalPage(this,         i18n("Generating Gallery"));
     d->configManager     = new KConfigDialogManager(this, d->info);
     d->configManager->updateWidgets();
 }
@@ -110,6 +110,11 @@ HTMLWizard::HTMLWizard(QWidget* const parent, DInfoInterface* const iface)
 HTMLWizard::~HTMLWizard()
 {
     delete d;
+}
+
+void HTMLWizard::setItemsList(const QList<QUrl>& urls)
+{
+    d->selectionPage->setItemsList(urls);
 }
 
 bool HTMLWizard::validateCurrentPage()

@@ -129,6 +129,10 @@ public:
      */
     void createPanoramaAction();
 
+    /** Create Video Slideshow tool action.
+     */
+    void createVideoSlideshowAction();
+
     /** Create HTML Gallery tool action.
      */
     void createHtmlGalleryAction();
@@ -191,6 +195,7 @@ protected:
     QAction*     m_htmlGalleryAction;
     QAction*     m_expoBlendingAction;
     QAction*     m_panoramaAction;
+    QAction*     m_videoslideshowAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -277,8 +282,11 @@ private Q_SLOTS:
     // Called by HTML Gallery tool.
     virtual void slotHTMLGallery()             {};
 
-    // Called by Panorama tool.
+    // Called by Calendar tool.
     virtual void slotCalendar()                {};
+
+    // Called by Video Slideshow tool.
+    virtual void slotVideoSlideshow()          {};
 
     // Called by Panorama tool.
     virtual void slotPanorama()                {};

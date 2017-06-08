@@ -56,7 +56,7 @@
 #include "abstractalbummodel.h"
 #include "coredbaccess.h"
 #include "digikamapp.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "imageinfo.h"
 #include "imagefiltermodel.h"
 #include "lighttablewindow.h"
@@ -254,7 +254,7 @@ void ContextMenuHelper::addServicesMenu(const QList<QUrl>& selectedItems)
 {
     setSelectedItems(selectedItems);
 
-    KService::List offers = FileOperation::servicesForOpenWith(selectedItems);
+    KService::List offers = DFileOperations::servicesForOpenWith(selectedItems);
 
     if (!offers.isEmpty())
     {
@@ -323,7 +323,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                FileOperation::runFiles(dlg->text(), list);
+                DFileOperations::runFiles(dlg->text(), list);
             }
 
             delete dlg;
@@ -338,7 +338,7 @@ void ContextMenuHelper::slotOpenWith(QAction* action)
         service = d->servicesMap[name];
     }
 
-    FileOperation::runFiles(*service, list);
+    DFileOperations::runFiles(*service, list);
 }
 
 bool ContextMenuHelper::imageIdsHaveSameCategory(const imageIds& ids, DatabaseItem::Category category)

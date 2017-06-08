@@ -50,7 +50,7 @@
 #include "dimg.h"
 #include "dio.h"
 #include "dmetadata.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "metadatasettings.h"
 #include "metadataedit.h"
 #include "applicationsettings.h"
@@ -90,6 +90,10 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
 #endif
 
 namespace Digikam
@@ -578,6 +582,7 @@ void LightTableWindow::setupActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
+    createVideoSlideshowAction();
 
     // Left Panel Zoom Actions
 
@@ -1703,7 +1708,7 @@ void LightTableWindow::slotFileWithDefaultApplication()
 {
     if (!d->thumbView->currentInfo().isNull())
     {
-        FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl());
+        DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbView->currentInfo().fileUrl());
     }
 }
 
@@ -1856,6 +1861,14 @@ void LightTableWindow::slotExpoBlending()
     ExpoBlendingManager::instance()->checkBinaries();
     ExpoBlendingManager::instance()->setItemsList(d->thumbView->urls());
     ExpoBlendingManager::instance()->run();
+}
+
+void LightTableWindow::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
+#endif
 }
 
 }  // namespace Digikam

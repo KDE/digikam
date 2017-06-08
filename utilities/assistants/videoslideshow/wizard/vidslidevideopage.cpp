@@ -33,6 +33,7 @@
 #include <QStyle>
 #include <QComboBox>
 #include <QGridLayout>
+#include <QGroupBox>
 
 // KDE includes
 
@@ -45,6 +46,7 @@
 // Local includes
 
 #include "vidslidewizard.h"
+#include "transitionpreview.h"
 
 using namespace QtAV;
 
@@ -62,9 +64,11 @@ public:
         stdVal(0),
         codecVal(0),
         transVal(0),
+        effVal(0),
         duration(0),
         wizard(0),
-        settings(0)
+        settings(0),
+        transPreview(0)
     {
         wizard = dynamic_cast<VidSlideWizard*>(dialog);
 
@@ -74,15 +78,17 @@ public:
         }
     }
 
-    QSpinBox*         framesVal;
-    QComboBox*        typeVal;
-    QComboBox*        bitrateVal;
-    QComboBox*        stdVal;
-    QComboBox*        codecVal;
-    QComboBox*        transVal;
-    QLabel*           duration;
-    VidSlideWizard*   wizard;
-    VidSlideSettings* settings;
+    QSpinBox*          framesVal;
+    QComboBox*         typeVal;
+    QComboBox*         bitrateVal;
+    QComboBox*         stdVal;
+    QComboBox*         codecVal;
+    QComboBox*         transVal;
+    QComboBox*         effVal;
+    QLabel*            duration;
+    VidSlideWizard*    wizard;
+    VidSlideSettings*  settings;
+    TransitionPreview* transPreview;
 };
 
 VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title)
@@ -189,10 +195,30 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     // --------------------
 
-    QLabel* const transLabel = new QLabel(main);
+    QLabel* const effLabel = new QLabel(main);
+    effLabel->setWordWrap(false);
+    effLabel->setText(i18n("Video Effect:"));
+    d->effVal              = new QComboBox(main);
+    d->effVal->setEditable(false);
+
+    QMap<VidSlideSettings::VidEffect, QString> map6                = VidSlideSettings::videoEffectNames();
+    QMap<VidSlideSettings::VidEffect, QString>::const_iterator it6 = map6.constBegin();
+
+    while (it6 != map6.constEnd())
+    {
+        d->effVal->insertItem((int)it6.key(), it6.value(), (int)it6.key());
+        ++it6;
+    }
+
+    effLabel->setBuddy(d->codecVal);
+
+    // --------------------
+
+    QGroupBox* const transGrp = new QGroupBox(i18n("Transition Between Images"), main);
+    QLabel* const transLabel  = new QLabel(transGrp);
     transLabel->setWordWrap(false);
-    transLabel->setText(i18n("Transition Type:"));
-    d->transVal              = new QComboBox(main);
+    transLabel->setText(i18n("Type:"));
+    d->transVal               = new QComboBox(transGrp);
     d->transVal->setEditable(false);
 
     QMap<TransitionMngr::TransType, QString> map4                = TransitionMngr::transitionNames();
@@ -206,9 +232,25 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     transLabel->setBuddy(d->transVal);
 
+    QLabel* const transNote  = new QLabel(transGrp);
+    transNote->setWordWrap(true);
+    transNote->setText(i18n("<i>A transition is an visual effect applied between two images. "
+                            "For some effects, the duration can depend of random values and "
+                            "can change while the slideshow.</i>"));
+
+    d->transPreview              = new TransitionPreview(transGrp);
+    QGridLayout* const transGrid = new QGridLayout(transGrp);
+    transGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    transGrid->addWidget(transLabel,      0, 0, 1, 1);
+    transGrid->addWidget(d->transVal,     1, 0, 1, 1);
+    transGrid->addWidget(transNote,       2, 0, 1, 1);
+    transGrid->addWidget(d->transPreview, 0, 1, 3, 1);
+    transGrid->setColumnStretch(0, 10);
+    transGrid->setRowStretch(2, 10);
+
     // --------------------
 
-    d->duration = new QLabel(main);
+    d->duration     = new QLabel(main);
 
     // --------------------
 
@@ -224,10 +266,11 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     grid->addWidget(d->bitrateVal,   3, 1, 1, 1);
     grid->addWidget(codecLabel,      4, 0, 1, 1);
     grid->addWidget(d->codecVal,     4, 1, 1, 1);
-    grid->addWidget(transLabel,      5, 0, 1, 1);
-    grid->addWidget(d->transVal,     5, 1, 1, 1);
-    grid->addWidget(d->duration,     6, 0, 1, 2);
-    grid->setRowStretch(7, 10);
+    grid->addWidget(effLabel,        5, 0, 1, 1);
+    grid->addWidget(d->effVal,       5, 1, 1, 1);
+    grid->addWidget(transGrp,        6, 0, 1, 2);
+    grid->addWidget(d->duration,     7, 0, 1, 2);
+    grid->setRowStretch(8, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("video-mp4")));
@@ -239,11 +282,20 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
 
     connect(d->stdVal, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotSlideDuration()));
+
+    connect(d->transVal, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotTransitionChanged()));
 }
 
 VidSlideVideoPage::~VidSlideVideoPage()
 {
     delete d;
+}
+
+void VidSlideVideoPage::slotTransitionChanged()
+{
+    d->transPreview->stopPreview();
+    d->transPreview->startPreview((TransitionMngr::TransType)d->transVal->currentIndex());
 }
 
 void VidSlideVideoPage::slotSlideDuration()
@@ -253,7 +305,8 @@ void VidSlideVideoPage::slotSlideDuration()
     tmp.vStandard = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
     qreal titem   = tmp.imgFrames / tmp.videoFrameRate();
     qreal ttotal  = titem * d->settings->inputImages.count();
-    d->duration->setText(i18n("Duration : %1 seconds by item, total %2 seconds", titem, ttotal));
+    d->duration->setText(i18n("Duration : %1 seconds by item, total %2 seconds (without transitions)",
+                              titem, ttotal));
 }
 
 void VidSlideVideoPage::initializePage()
@@ -262,18 +315,23 @@ void VidSlideVideoPage::initializePage()
     d->typeVal->setCurrentIndex(d->settings->vType);
     d->bitrateVal->setCurrentIndex(d->settings->vbitRate);
     d->stdVal->setCurrentIndex(d->settings->vStandard);
-    d->codecVal->setCurrentIndex(d->settings->vCodec);
+    d->codecVal->setCurrentIndex(d->codecVal->findData(d->settings->vCodec));
+    d->effVal->setCurrentIndex(d->settings->vEffect);
     d->transVal->setCurrentIndex(d->settings->transition);
+    d->transPreview->setImagesList(d->settings->inputImages);
     slotSlideDuration();
+    slotTransitionChanged();
 }
 
 bool VidSlideVideoPage::validatePage()
 {
+    d->transPreview->stopPreview();
     d->settings->imgFrames  = d->framesVal->value();
     d->settings->vType      = (VidSlideSettings::VidType)d->typeVal->currentIndex();
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
     d->settings->vStandard  = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
-    d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentIndex();
+    d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentData().toInt();
+    d->settings->vEffect    = (VidSlideSettings::VidEffect)d->effVal->currentData().toInt();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;

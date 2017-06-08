@@ -20,10 +20,22 @@
  *
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
+// Qt includes
+
+#include <QMatrix>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPolygon>
+
 // Local includes
 
 #include "transitionmngr.h"
 #include "digikam_config.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -127,20 +139,47 @@ public:
 
     TransitionMngr::TransType getRandomEffect() const;
 
-    int effectNone(bool);
-    int effectChessboard(bool doInit);
-    int effectMeltdown(bool doInit);
-    int effectSweep(bool doInit);
-    int effectMosaic(bool doInit);
-    int effectCubism(bool doInit);
-    int effectRandom(bool doInit);
-    int effectGrowing(bool doInit);
-    int effectHorizLines(bool doInit);
-    int effectVertLines(bool doInit);
-    int effectMultiCircleOut(bool doInit);
-    int effectSpiralIn(bool doInit);
-    int effectCircleOut(bool doInit);
-    int effectBlobs(bool doInit);
+private:
+
+    // Internal functions to render an effect frame.
+    // aInit is to true when effect is initialized (first call).
+    // The integer value is a tempo in ms to wait between frames,
+    // or -1 if the effect is completed.
+
+    int effectNone(bool aInit);
+    int effectChessboard(bool aInit);
+    int effectMeltdown(bool aInit);
+    int effectSweep(bool aInit);
+    int effectMosaic(bool aInit);
+    int effectCubism(bool aInit);
+    int effectRandom(bool aInit);
+    int effectGrowing(bool aInit);
+    int effectHorizLines(bool aInit);
+    int effectVertLines(bool aInit);
+    int effectMultiCircleOut(bool aInit);
+    int effectSpiralIn(bool aInit);
+    int effectCircleOut(bool aInit);
+    int effectBlobs(bool aInit);
+    int effectFade(bool aInit);
+    int effectSlideL2R(bool aInit);
+    int effectSlideR2L(bool aInit);
+    int effectSlideT2B(bool aInit);
+    int effectSlideB2T(bool aInit);
+    int effectPushL2R(bool aInit);
+    int effectPushR2L(bool aInit);
+    int effectPushT2B(bool aInit);
+    int effectPushB2T(bool aInit);
+    int effectSwapL2R(bool aInit);
+    int effectSwapR2L(bool aInit);
+    int effectSwapT2B(bool aInit);
+    int effectSwapB2T(bool aInit);
+    int effectBlurIn(bool aInit);
+    int effectBlurOut(bool aInit);
+
+private:
+
+    QRgb   convertFromPremult(const QRgb& p) const;
+    QImage fastBlur(const QImage& img, int radius) const;
 };
 
 }  // namespace Digikam

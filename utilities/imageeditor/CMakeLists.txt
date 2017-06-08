@@ -62,7 +62,6 @@ set(libeditorcore_SRCS
     core/undoaction.cpp
     core/undomanager.cpp
     core/editorcore.cpp
-    core/fileoperation.cpp
     core/iccpostloadingmanager.cpp
 )
 

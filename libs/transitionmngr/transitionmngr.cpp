@@ -109,6 +109,21 @@ QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
     trans[MultiCircleOut]  = i18nc("Transition Effect: Multi-Circle Out", "Multi-Circle Out");
     trans[SpiralIn]        = i18nc("Transition Effect: Spiral In",        "Spiral In");
     trans[Blobs]           = i18nc("Transition Effect: Blobs",            "Blobs");
+    trans[Fade]            = i18nc("Transition Effect: Fade",             "Fade");
+    trans[SlideL2R]        = i18nc("Transition Effect: SlideL2R",         "Slide Left to Right");
+    trans[SlideR2L]        = i18nc("Transition Effect: SlideR2L",         "Slide Right to Left");
+    trans[SlideT2B]        = i18nc("Transition Effect: SlideT2B",         "Slide Top to Bottom");
+    trans[SlideB2T]        = i18nc("Transition Effect: SlideB2T",         "Slide Bottom to Top");
+    trans[PushL2R]         = i18nc("Transition Effect: PushL2R",          "Push Left to Right");
+    trans[PushR2L]         = i18nc("Transition Effect: PushR2L",          "Push Right to Left");
+    trans[PushT2B]         = i18nc("Transition Effect: PushT2B",          "Push Top to Bottom");
+    trans[PushB2T]         = i18nc("Transition Effect: PushB2T",          "Push Bottom to Top");
+    trans[SwapL2R]         = i18nc("Transition Effect: SwapL2R",          "Swap Left to Right");
+    trans[SwapR2L]         = i18nc("Transition Effect: SwapR2L",          "Swap Right to Left");
+    trans[SwapT2B]         = i18nc("Transition Effect: SwapT2B",          "Swap Top to Bottom");
+    trans[SwapB2T]         = i18nc("Transition Effect: SwapB2T",          "Swap Bottom to Top");
+    trans[BlurIn]          = i18nc("Transition Effect: BlurIn",           "Blur In");
+    trans[BlurOut]         = i18nc("Transition Effect: BlurOut",          "Blur Out");
     trans[Random]          = i18nc("Transition Effect: Random effect",    "Random");
 
     return trans;

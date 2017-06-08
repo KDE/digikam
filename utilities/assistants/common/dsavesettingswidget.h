@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef DSAVESETTINGSWIDGET_H
-#define DSAVESETTINGSWIDGET_H
+#ifndef DSAVE_SETTINGS_WIDGET_H
+#define DSAVE_SETTINGS_WIDGET_H
 
 // Qt includes
 
@@ -30,6 +30,10 @@
 // KDE includes
 
 #include <kconfig.h>
+
+// Local includes
+
+#include "filesaveconflictbox.h"
 
 namespace Digikam
 {
@@ -48,15 +52,9 @@ public:
         OUTPUT_PPM
     };
 
-    enum ConflictRule
-    {
-        OVERWRITE = 0,
-        DIFFNAME
-    };
-
 public:
 
-    DSaveSettingsWidget(QWidget* const parent);
+    explicit DSaveSettingsWidget(QWidget* const parent);
     ~DSaveSettingsWidget();
 
     void setCustomSettingsWidget(QWidget* const custom);
@@ -64,8 +62,8 @@ public:
     OutputFormat fileFormat() const;
     void setFileFormat(OutputFormat f);
 
-    ConflictRule conflictRule() const;
-    void setConflictRule(ConflictRule r);
+    FileSaveConflictBox::ConflictRule conflictRule() const;
+    void setConflictRule(FileSaveConflictBox::ConflictRule r);
 
     QString extension() const;
     QString typeMime() const;
@@ -94,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DSAVESETTINGSWIDGET_H */
+#endif // DSAVE_SETTINGS_WIDGET_H

@@ -174,6 +174,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
 {
     m_expoBlendingAction    = 0;
     m_panoramaAction        = 0;
+    m_videoslideshowAction  = 0;
     m_htmlGalleryAction     = 0;
     m_calendarAction        = 0;
     m_presentationAction    = 0;
@@ -433,7 +434,7 @@ void DXmlGuiWindow::createPresentationAction()
 void DXmlGuiWindow::createExpoBlendingAction()
 {
     m_expoBlendingAction = new QAction(QIcon::fromTheme(QLatin1String("expoblending")),
-                                       i18nc("@action", "Blend Bracketed or Focus Stack Images..."),
+                                       i18nc("@action", "Create Stacked Images..."),
                                        this);
 
     actionCollection()->addAction(QLatin1String("expoblending"), m_expoBlendingAction);
@@ -453,6 +454,19 @@ void DXmlGuiWindow::createPanoramaAction()
 
     connect(m_panoramaAction, SIGNAL(triggered(bool)),
             this, SLOT(slotPanorama()));
+#endif
+}
+
+void DXmlGuiWindow::createVideoSlideshowAction()
+{
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction = new QAction(QIcon::fromTheme(QLatin1String("media-record")),
+                                         i18nc("@action", "Create video slideshow..."),
+                                         this);
+    actionCollection()->addAction(QLatin1String("videoslideshow"), m_videoslideshowAction);
+
+    connect(m_videoslideshowAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotVideoSlideshow()));
 #endif
 }
 

@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_THREAD_H
-#define VIDSLIDE_THREAD_H
+#ifndef VID_SLIDE_THREAD_H
+#define VID_SLIDE_THREAD_H
 
 // Local includes
 
@@ -47,10 +47,11 @@ public:
 
 Q_SIGNALS:
 
-    void signalProgress(int val);
+    void signalProgress(int);
     void signalDone(bool);
+    void signalMessage(const QString&, bool);
 };
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_THREAD_H
+#endif // VID_SLIDE_THREAD_H

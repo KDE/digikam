@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_SETTINGS_H
-#define VIDSLIDE_SETTINGS_H
+#ifndef VID_SLIDE_SETTINGS_H
+#define VID_SLIDE_SETTINGS_H
 
 // Qt includes
 
@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "filesaveconflictbox.h"
 #include "transitionmngr.h"
 #include "digikam_export.h"
 
@@ -52,11 +53,27 @@ public:
         ALBUMS
     };
 
+    // Video player to use
+    enum VidPlayer
+    {
+        NOPLAYER = 0,
+        INTERNAL,
+        DESKTOP
+    };
+
     // Video Codecs
     enum VidCodec
     {
         X264 = 0,    // https://en.wikipedia.org/wiki/X264
-        MPEG4        // https://en.wikipedia.org/wiki/MPEG-4
+        MPEG4,       // https://en.wikipedia.org/wiki/MPEG-4
+        MPEG2,       // https://en.wikipedia.org/wiki/MPEG-2
+        MJPEG,       // https://en.wikipedia.org/wiki/Motion_JPEG
+        FLASH,       // https://en.wikipedia.org/wiki/Adobe_Flash
+        WEBMVP8,     // https://en.wikipedia.org/wiki/VP8
+        THEORA,      // https://en.wikipedia.org/wiki/Theora
+        WMV7,        // https://en.wikipedia.org/wiki/Windows_Media_Video
+        WMV8,        // https://en.wikipedia.org/wiki/Windows_Media_Video
+        WMV9         // https://en.wikipedia.org/wiki/Windows_Media_Video
     };
 
     // Video Standards
@@ -68,19 +85,23 @@ public:
 
     // Video types (size of target screen)
     // See https://en.wikipedia.org/wiki/List_of_common_resolutions#Digital_TV_standards
+    //     https://en.wikipedia.org/wiki/Aspect_ratio_(image)
     enum VidType
     {
-        QVGA = 0,   // 320  x 180
-        VCD,        // 352  x 240
-        HVGA,       // 480  x 270
-        SVCD,       // 480  x 576
-        VGA,        // 640  x 360
-        DVD,        // 720  x 576
-        WVGA,       // 800  x 450
-        XVGA,       // 1024 x 576
-        HDTV,       // 1280 x 720
-        BLUERAY,    // 1920 x 1080
-        UHD4K       // 3840 x 2160
+        QVGA = 0,   // 320  x 180  - 16:9
+        VCD1,       // 352  x 240
+        VCD2,       // 352  x 288
+        HVGA,       // 480  x 270  - 16:9
+        SVCD1,      // 480  x 480
+        SVCD2,      // 480  x 576
+        VGA,        // 640  x 360  - 16:9
+        DVD1,       // 720  x 480
+        DVD2,       // 720  x 576
+        WVGA,       // 800  x 450  - 16:9
+        XVGA,       // 1024 x 576  - 16:9
+        HDTV,       // 1280 x 720  - 16:9
+        BLUERAY,    // 1920 x 1080 - 19:9
+        UHD4K       // 3840 x 2160 - 19:9
     };
 
     // Video rates in bits per seconds.
@@ -101,46 +122,77 @@ public:
         VBR80       // 8000000
     };
 
+    // Video Container Formats
+    enum VidFormat
+    {
+        AVI = 0,    // https://en.wikipedia.org/wiki/Audio_Video_Interleave
+        MKV,        // https://en.wikipedia.org/wiki/Matroska
+        MP4,        // https://en.wikipedia.org/wiki/MPEG-4_Part_14
+        MPG         // https://en.wikipedia.org/wiki/MPEG-2
+    };
+
+    // Video Effects while displaying image contents
+    enum VidEffect
+    {
+        NONE = 0,   // Static camera
+        KENBURNS    // https://en.wikipedia.org/wiki/Ken_Burns_effect
+    };
+
 public:
 
     explicit VidSlideSettings();
     ~VidSlideSettings();
 
+    // Read and write settings in config file between sessions.
     void  readSettings(KConfigGroup& group);
     void  writeSettings(KConfigGroup& group);
 
-    QSize   videoSize()      const;
-    int     videoBitRate()   const;
-    qreal   videoFrameRate() const;
-    QString videoCodec()     const;
+    QSize   videoSize()      const;     // Return the current video size.
+    int     videoBitRate()   const;     // Return the current video bit rate.
+    qreal   videoFrameRate() const;     // Return the current video frame rate.
+    QString videoCodec()     const;     // Return the current video ffmpeg codec name.
+    QString videoFormat()    const;     // Return the current video format extension.
 
+    // Helper methods to fill combobox from GUI.
     static QMap<VidType,    QString> videoTypeNames();
     static QMap<VidBitRate, QString> videoBitRateNames();
     static QMap<VidStd,     QString> videoStdNames();
     static QMap<VidCodec,   QString> videoCodecNames();
+    static QMap<VidFormat,  QString> videoFormatNames();
+    static QMap<VidEffect,  QString> videoEffectNames();
+    static QMap<VidPlayer,  QString> videoPlayerNames();
 
 public:
 
-    Selection                 selMode;       // Items selection mode
+    Selection                         selMode;       // Items selection mode
 
-    QList<QUrl>               inputImages;   // Images stream.
-    QList<QUrl>               inputAudio;    // Soundtracks stream.
+    // -- Generator settings ------
 
-    TransitionMngr::TransType transition;    // Transition type between images.
+    QList<QUrl>                       inputImages;   // Images stream.
+    QList<QUrl>                       inputAudio;    // Soundtracks stream.
 
-    int                       imgFrames;     // Amount of frames to encode by image in video stream.
-                                             // ex: 125 frames = 5 s at 25 img/s.
+    TransitionMngr::TransType         transition;    // Transition type between images.
 
-    int                       abitRate;      // Encoded Audio stream bit rate in bit/s.
-    VidBitRate                vbitRate;      // Encoded Video stream bit rate in bit/s.
-    VidStd                    vStandard;     // Encoded Video standard => frame rate in img/s.
-    VidType                   vType;         // Encoded video type.
-    VidCodec                  vCodec;        // Encoded video codec.
-    QUrl                      outputVideo;   // Encoded video stream.
+    int                               imgFrames;     // Amount of frames by image to encode in video.
+                                                     // ex: 125 frames = 5 s at 25 img/s.
 
-    bool                      openInPlayer;  // Open video stream in desktop player at end.
+    int                               abitRate;      // Encoded Audio stream bit rate in bit/s.
+    VidBitRate                        vbitRate;      // Encoded Video stream bit rate in bit/s.
+    VidStd                            vStandard;     // Encoded Video standard => frame rate in img/s.
+    VidType                           vType;         // Encoded video type.
+    VidCodec                          vCodec;        // Encoded video codec.
+    VidFormat                         vFormat;       // Encoded video container format.
+    VidEffect                         vEffect;       // Encoded video effect while displaying images.
+
+    FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file alreay exists.
+    QUrl                              outputDir;     // Encoded video stream directory.
+
+    // ---------------------
+
+    QString                           outputVideo;   // Target video file encoded at end.
+    VidPlayer                         outputPlayer;  // Open video stream in player at end.
 };
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_SETTINGS_H
+#endif // VID_SLIDE_SETTINGS_H

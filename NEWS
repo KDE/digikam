@@ -8,13 +8,14 @@ Searches    : Users can now restrict the results of fuzzy image/drop/sketch sear
 Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
 Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
 General     : New tool to export Albums to static HTML gallery.
+General     : New tool to export Albums to video diaporama.
 HTMLGallery : New "Elegant" theme using javascript to render image as slideshow in web browser.
 HTMLGallery : New "SimpleRounded" theme that uses flat shapes with rounded corners.
 HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
 HTMLGallery : Add option to generate a Gallery from a selection of images instead an album list.
-ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
-Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
-LightTable  : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
+ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+LightTable  : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -52,10 +53,10 @@ BUGFIXES FROM BUGZILLA:
 032 ==> 140177 - HTML export plugin should autorotate images.
 033 ==> 378855 - Crashes on startup.
 034 ==> 379751 - I18N_ARGUMENT_MISSING in Edit Metadata.
-035 ==> 377197 - Customize grouping behaviour
-036 ==> 286609 - Allow to manage images group to stitch images in a panorama
-037 ==> 378552 - Problem with grouped images
-038 ==> 193232 - Add advanced input side-car files support (as .pto, .pp2, .pp3, .pano, thm, etc...)
+035 ==> 377197 - Customize grouping behaviour.
+036 ==> 286609 - Allow to manage images group to stitch images in a panorama.
+037 ==> 378552 - Problem with grouped images.
+038 ==> 193232 - Add advanced input side-car files support (as .pto, .pp2, .pp3, .pano, thm, etc...).
 038 ==> 379806 - ShowFoto crashes when clicking Color Effects from menu.
 039 ==> 376407 - Edit Bookmarks... Doesn't Do Anything.
 040 ==> 376391 - Add geolocation favorites to menu and shortcuts.
@@ -65,7 +66,7 @@ BUGFIXES FROM BUGZILLA:
 044 ==> 139692 - Include videos to slideshow.
 045 ==> 288113 - Bookmark a GPS position is impossible.
 046 ==> 374841 - Geolocation Editor Cannot Edit Bookmarks.
-047 ==> 376251 - Number of photos in gallery
+047 ==> 376251 - Number of photos in gallery.
 048 ==> 379833 - Sidecar files are not being created for some files.
 049 ==> 139693 - Include videos to slideshow.
 050 ==> 121422 - Do not open videos using external application.
@@ -78,4 +79,18 @@ BUGFIXES FROM BUGZILLA:
 057 ==> 361378 - Tags are not being removed from files metadata.
 058 ==> 375187 - Keywords under same tag in digikam do not match.
 059 ==> 380256 - digiKam crash when adding new collection.
-060 ==> 
+060 ==> 320725 - Video Slideshow segfaults.
+061 ==> 331625 - Trying to make a video Slideshow.
+062 ==> 337605 - Crash on "Export to Video Slide Show".
+063 ==> 324646 - digiKam hangs when producting "Video Slide Show".
+064 ==> 316791 - Starting video slideshow tool twice, the procedure will not finish any more.
+065 ==> 318297 - Creating Videos does not work.
+066 ==> 334089 - VideoSlideshow plugin port to QtAv needed.
+067 ==> 153061 - New tool to export image as video slideshow.
+068 ==> 176727 - Creation of video does not work.
+069 ==> 380507 - Menu items missing.
+070 ==> 380512 - digiKam crashes when trying to geotag a picture.
+071 ==> 380805 - Generating Gallery: "Could not load XSL file".
+072 ==> 379918 - digiKam writing tags in wrong order.
+073 ==> 380358 - ICC Profiles not detected.
+074 ==> 

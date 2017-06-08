@@ -4,14 +4,15 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-25
- * Description : a tool to generate video slideshow from images.
+ * Description : a stand alone tool to play a video file.
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,37 +21,32 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_SELECTION_PAGE_H
-#define VIDSLIDE_SELECTION_PAGE_H
-
 // Qt includes
 
-#include <QString>
+#include <QApplication>
+#include <QUrl>
+#include <QDebug>
 
 // Local includes
 
-#include "dwizardpage.h"
+#include "vidplayerdlg.h"
 
-namespace Digikam
+using namespace Digikam;
+
+int main(int argc, char* argv[])
 {
+    QApplication a(argc, argv);
 
-class VidSlideSelectionPage : public DWizardPage
-{
-public:
+    if (argc == 1)
+    {
+        qDebug() << "player - video file to play";
+        qDebug() << "Usage: video files";
+        return -1;
+    }
 
-    explicit VidSlideSelectionPage(QWizard* const dialog, const QString& title);
-    ~VidSlideSelectionPage();
+    VidPlayerDlg player(QString::fromUtf8(argv[1]));
+    player.show();
+    player.resize(800, 600);
 
-    void initializePage();
-    bool validatePage();
-    bool isComplete() const;
-
-private:
-
-    class Private;
-    Private* const d;
-};
-
-} // namespace Digikam
-
-#endif // VIDSLIDE_SELECTION_PAGE_H
+    return a.exec();
+}

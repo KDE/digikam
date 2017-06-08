@@ -59,6 +59,21 @@ public:
         MultiCircleOut,
         SpiralIn,
         Blobs,
+        Fade,
+        SlideL2R,
+        SlideR2L,
+        SlideT2B,
+        SlideB2T,
+        PushL2R,
+        PushR2L,
+        PushT2B,
+        PushB2T,
+        SwapL2R,
+        SwapR2L,
+        SwapT2B,
+        SwapB2T,
+        BlurIn,
+        BlurOut,
         Random
     };
 

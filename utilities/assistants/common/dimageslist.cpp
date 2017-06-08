@@ -102,9 +102,10 @@ DImagesListViewItem::DImagesListViewItem(DImagesListView* const view, const QUrl
     d->view      = view;
     int iconSize = d->view->iconSize().width();
     setThumb(QIcon::fromTheme(QString::fromLatin1("view-preview")).pixmap(iconSize, iconSize, QIcon::Disabled), false);
-
+/*
     qCDebug(DIGIKAM_GENERAL_LOG) << "Creating new ImageListViewItem with url " << d->url
                                  << " for list view " << d->view;
+*/
 }
 
 DImagesListViewItem::~DImagesListViewItem()
@@ -185,9 +186,10 @@ void DImagesListViewItem::setPixmap(const QPixmap& pix)
 
 void DImagesListViewItem::setThumb(const QPixmap& pix, bool hasThumb)
 {
+/*
     qCDebug(DIGIKAM_GENERAL_LOG) << "Received new thumbnail for url " << d->url
                              << ". My view is " << d->view;
-
+*/
     if (!d->view)
     {
         qCCritical(DIGIKAM_GENERAL_LOG) << "This item doesn't have a tree view. "

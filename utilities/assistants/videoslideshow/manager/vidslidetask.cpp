@@ -23,11 +23,20 @@
 
 #include "vidslidetask.h"
 
+// C++ includes
+
+#include <cmath>
+
 // Qt includes
 
 #include <QImage>
 #include <QSize>
 #include <QPainter>
+#include <QFileInfo>
+
+// KDE includes
+
+#include <klocalizedstring.h>
 
 // QtAv includes
 
@@ -42,8 +51,8 @@
 
 // Local includes
 
-#include "dimg.h"
-#include "drawdecoding.h"
+#include "frameutils.h"
+#include "dfileoperations.h"
 #include "transitionmngr.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
@@ -69,13 +78,13 @@ public:
         adec->close();
     }
 
-    bool       encodeFrame(VideoFrame& vframe,
-                           VideoEncoder* const venc,
-                           AudioEncoder* const aenc,
-                           AVMuxer& mux);
+    bool          encodeFrame(VideoFrame& vframe,
+                              VideoEncoder* const venc,
+                              AudioEncoder* const aenc,
+                              AVMuxer& mux);
 
-    QImage     makeFramedImage(const QString& file, const QSize& outSize) const;
-    AudioFrame nextAudioFrame(const AudioFormat& afmt);
+    QRect         kenBurnsRegion(const QRect& orgRect, int step);
+    AudioFrame    nextAudioFrame(const AudioFormat& afmt);
 
 public:
 
@@ -87,35 +96,6 @@ public:
     AudioDecoder*               adec;
     QList<QUrl>::const_iterator curAudioFile;
 };
-
-QImage VidSlideTask::Private::makeFramedImage(const QString& file, const QSize& outSize) const
-{
-    QImage qimg(outSize, QImage::Format_ARGB32);
-    qimg.fill(QColor(0, 0, 0, 0));
-
-    if (!file.isEmpty())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Load frame from" << file;
-
-        // The Raw decoding settings for DImg loader.
-        DRawDecoderSettings settings;
-        settings.halfSizeColorImage    = false;
-        settings.sixteenBitsImage      = false;
-        settings.RGBInterpolate4Colors = false;
-        settings.RAWQuality            = DRawDecoderSettings::BILINEAR;
-
-        DImg dimg(file, 0, DRawDecoding(settings));
-        QImage timg = dimg.copyQImage();
-        timg        = timg.scaled(outSize, Qt::KeepAspectRatio);
-
-        QPainter p(&qimg);
-        p.drawImage((qimg.width()  / 2) - (timg.width()  / 2),
-                    (qimg.height() / 2) - (timg.height() / 2),
-                    timg);
-    }
-
-    return qimg;
-}
 
 bool VidSlideTask::Private::encodeFrame(VideoFrame& vframe,
                                         VideoEncoder* const venc,
@@ -154,7 +134,9 @@ bool VidSlideTask::Private::encodeFrame(VideoFrame& vframe,
     if (venc->encode(vframe))
     {
         vpkt = venc->encoded();
-        mux.writeVideo(vpkt);
+
+        if (vpkt.isValid())
+            mux.writeVideo(vpkt);
 
         if (apkt.isValid())
             mux.writeAudio(apkt);
@@ -246,6 +228,32 @@ AudioFrame VidSlideTask::Private::nextAudioFrame(const AudioFormat& afmt)
     return AudioFrame();
 }
 
+QRect VidSlideTask::Private::kenBurnsRegion(const QRect& orgRect, int step)
+{
+    QRect kbRect = orgRect;
+
+    switch (settings->vEffect)
+    {
+        case VidSlideSettings::KENBURNS:
+        {
+            QRectF fRect(orgRect);
+
+            // We will adjust to camera zoom speed accordingly with image frames to encode.
+            double nx    = step * ((orgRect.width() - orgRect.width() * 0.8)
+                                / (double)settings->imgFrames);
+            double ny    = nx / ((double)orgRect.width() / (double)orgRect.height());
+            fRect.setTopLeft(QPointF(nx, ny));
+            fRect.setBottomRight(QPointF((double)orgRect.width()-nx, (double)orgRect.height()-ny));
+            kbRect       = fRect.toAlignedRect();
+            break;
+        }
+        default: // VidSlideSettings::NONE
+            break;
+    }
+
+    return kbRect;
+}
+
 // -------------------------------------------------------
 
 VidSlideTask::VidSlideTask(VidSlideSettings* const settings)
@@ -269,7 +277,17 @@ VidSlideTask::~VidSlideTask()
 void VidSlideTask::run()
 {
     // The output video file
-    QString outFile = d->settings->outputVideo.toLocalFile();
+
+    QUrl dest       = d->settings->outputDir;
+    dest            = dest.adjusted(QUrl::StripTrailingSlash);
+    dest.setPath(dest.path() + QLatin1String("/videoslideshow.") + d->settings->videoFormat());
+    QString outFile = dest.toLocalFile();
+    QFileInfo fi(outFile);
+
+    if (fi.exists() && d->settings->conflictRule != FileSaveConflictBox::OVERWRITE)
+    {
+        outFile = DFileOperations::getUniqueFileUrl(dest).toLocalFile();
+    }
 
     // ---------------------------------------------
     // Setup Video Encoder
@@ -285,6 +303,7 @@ void VidSlideTask::run()
 
     if (!venc->open())
     {
+        emit signalMessage(i18n("Failed to open video encoder"), true);
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open video encoder";
         emit signalDone(false);
         return;
@@ -299,6 +318,7 @@ void VidSlideTask::run()
 
     if (!aenc->open())
     {
+        emit signalMessage(i18n("Failed to open audio encoder"), true);
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open audio encoder";
         emit signalDone(false);
         return;
@@ -311,7 +331,7 @@ void VidSlideTask::run()
     mux.setMedia(outFile);
     mux.copyProperties(venc);  // Setup video encoder
     mux.copyProperties(aenc);  // Setup audio encoder
-
+/*
     // Segments muxer ffmpeg options. See : https://www.ffmpeg.org/ffmpeg-formats.html#Options-11
     QVariantHash avfopt;
     avfopt[QLatin1String("segment_time")]      = 4;
@@ -323,13 +343,16 @@ void VidSlideTask::run()
     muxopt[QLatin1String("avformat")]          = avfopt;
 
     mux.setOptions(muxopt);
-
+*/
     if (!mux.open())
     {
+        emit signalMessage(i18n("Failed to open muxer"), true);
         qCWarning(DIGIKAM_GENERAL_LOG) << "Failed to open muxer";
         emit signalDone(false);
         return;
     }
+
+    QImage qiimg;
 
     // ---------------------------------------------
     // Loop to encode frames with images list
@@ -338,45 +361,61 @@ void VidSlideTask::run()
     tmngr.setOutputSize(osize);
     tmngr.setTransition(d->settings->transition);
 
-    for (int i = -1 ; i < d->settings->inputImages.count() && !m_cancel ; i++)
+    for (int i = 0 ; i < d->settings->inputImages.count()+1 && !m_cancel ; i++)
     {
-        QString ifile = (i >= 0)
-                        ? d->settings->inputImages[i].toLocalFile()
-                        : QString();
-        QString ofile = (i+1 < d->settings->inputImages.count())
-                        ? d->settings->inputImages[i+1].toLocalFile()
-                        : QString();
+        if (i == 0)
+            qiimg = FrameUtils::makeFramedImage(QString(), osize);
 
-        QImage qiimg  = d->makeFramedImage(ifile, osize);
-        QImage qoimg  = d->makeFramedImage(ofile, osize);
+        QString ofile;
+
+        if (i < d->settings->inputImages.count())
+            ofile = d->settings->inputImages[i].toLocalFile();
+
+        QImage qoimg = FrameUtils::makeFramedImage(ofile, osize);
+
+        // -- Transition encoding ----------
 
         tmngr.setInImage(qiimg);
         tmngr.setOutImage(qoimg);
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Making transition between" << ifile << "and" << ofile;
-
         int tmout = 0;
-//        int j     = 0;
 
         do
         {
             VideoFrame frame(tmngr.currentframe(tmout));
 
-            if (d->encodeFrame(frame, venc, aenc, mux))
+            if (!d->encodeFrame(frame, venc, aenc, mux))
             {
-//                qCDebug(DIGIKAM_GENERAL_LOG) << "Transition frame:" << j++ << tmout;
+                qCWarning(DIGIKAM_GENERAL_LOG) << "Cannot encode transition frame";
             }
         }
         while (tmout != -1 && !m_cancel);
 
-        if (i+1 < d->settings->inputImages.count())
-        {
-            VideoFrame frame(qoimg);
+        // -- Images encoding ----------
 
+        if (i < d->settings->inputImages.count())
+        {
+            VideoFrame frame;
+            QRect kbRect;
             int count = 0;
 
             do
             {
+                if (d->settings->vEffect != VidSlideSettings::NONE)
+                {
+                    kbRect       = d->kenBurnsRegion(qoimg.rect(), count);
+                    QImage kbImg = qoimg.copy(kbRect).scaled(osize,
+                                                             Qt::KeepAspectRatioByExpanding,
+                                                             Qt::SmoothTransformation);
+                    qiimg        = kbImg.convertToFormat(QImage::Format_ARGB32);
+                }
+                else
+                {
+                    qiimg = qoimg;
+                }
+
+                frame = VideoFrame(qiimg);
+
                 if (d->encodeFrame(frame, venc, aenc, mux))
                 {
 
@@ -392,9 +431,10 @@ void VidSlideTask::run()
             while (count < d->settings->imgFrames && !m_cancel);
         }
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i+1 << "done";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Encoded image" << i << "done";
 
-        emit signalProgress(i+1);
+        emit signalMessage(i18n("Encoding %1 Done", ofile), false);
+        emit signalProgress(i);
     }
 
     // ---------------------------------------------
@@ -405,7 +445,9 @@ void VidSlideTask::run()
     while (venc->encode() && !m_cancel)
     {
         Packet vpkt(venc->encoded());
-        mux.writeVideo(vpkt);
+
+        if (vpkt.isValid())
+            mux.writeVideo(vpkt);
 
         Packet apkt(aenc->encoded());
 
@@ -420,7 +462,13 @@ void VidSlideTask::run()
     aenc->close();
     mux.close();
 
+    if (!m_cancel)
+    {
+        emit signalMessage(i18n("Output video is %1", outFile), false);
+        d->settings->outputVideo = outFile;
+    }
+
     emit signalDone(!m_cancel);
 }
 
-}  // namespace Digikam
+} // namespace Digikam
