@@ -166,4 +166,4 @@ private:
 
 } // namespace Digikam
 
-#endif  // DMESSAGEBOX_H
+#endif // DMESSAGEBOX_H

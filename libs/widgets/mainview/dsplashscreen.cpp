@@ -221,7 +221,7 @@ void DSplashScreen::drawContents(QPainter* p)
 
     // NOTE: splashscreen size is 469*288 pixels
     r = rect();
-    r.setCoords(r.x() + 210, r.y() + 235, r.x() + 462, r.y() + 275);
+    r.setCoords(r.x() + 210, r.y() + 225, r.x() + 462, r.y() + 275);
     p->translate(r.x(), r.y());
     QTextDocument slogan;
     slogan.setDefaultTextOption(QTextOption(Qt::AlignRight | Qt::AlignVCenter));
