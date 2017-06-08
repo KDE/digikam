@@ -3,15 +3,16 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2017-05-25
- * Description : a tool to generate video slideshow from images.
+ * Date        : 2017-06-04
+ * Description : A label to show video frame effect preview
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
  * Public License as published by the Free Software Foundation;
- * either version 2, or (at your option) any later version.
+ * either version 2, or (at your option)
+ * any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,37 +21,42 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_VIDEO_PAGE_H
-#define VIDSLIDE_VIDEO_PAGE_H
+#ifndef EFFECT_PREVIEW_H
+#define EFFECT_PREVIEW_H
 
 // Qt includes
 
+#include <QLabel>
 #include <QString>
+#include <QList>
+#include <QUrl>
 
 // Local includes
 
-#include "dwizardpage.h"
+#include "effectmngr.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
 
-class VidSlideVideoPage : public DWizardPage
+class DIGIKAM_EXPORT EffectPreview : public QLabel
 {
     Q_OBJECT
 
 public:
 
-    explicit VidSlideVideoPage(QWizard* const dialog, const QString& title);
-    ~VidSlideVideoPage();
+    explicit EffectPreview(QWidget* const parent=0);
+    ~EffectPreview();
 
-    void initializePage();
-    bool validatePage();
+    void setImagesList(const QList<QUrl>& images);
+
+    void startPreview(EffectMngr::EffectType eff);
+    void stopPreview();
 
 private Q_SLOTS:
 
-    void slotSlideDuration();
-    void slotTransitionChanged();
-    void slotEffectChanged();
+    void slotProgressEffect();
+    void slotRestart();
 
 private:
 
@@ -60,4 +66,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_VIDEO_PAGE_H
+#endif // EFFECT_PREVIEW_H
