@@ -1032,7 +1032,7 @@ int PresentationWidget::effectMeltdown(bool aInit)
         if ((qrand() & 15) < 6)
             continue;
 
-        bufferPainter.drawPixmap(x, y + d->dy, m_buffer, x, y, d->dx, d->h - y - d->dy);
+        //bufferPainter.drawPixmap(x, y + d->dy, m_buffer, x, y, d->dx, d->h - y - d->dy);
         bufferPainter.drawPixmap(x, y, d->currImage, x, y, d->dx, d->dy);
 
         d->intArray[i] += d->dy;
