@@ -25,7 +25,7 @@
 namespace Digikam
 {
 
-void TransitionMngr::Private::registerEffects()
+void TransitionMngr::Private::registerTransitions()
 {
     eff_transList.insert(TransitionMngr::None,            &TransitionMngr::Private::effectNone);
     eff_transList.insert(TransitionMngr::ChessBoard,      &TransitionMngr::Private::effectChessboard);
@@ -57,16 +57,16 @@ void TransitionMngr::Private::registerEffects()
     eff_transList.insert(TransitionMngr::BlurOut,         &TransitionMngr::Private::effectBlurOut);
 }
 
-TransitionMngr::TransType TransitionMngr::Private::getRandomEffect() const
+TransitionMngr::TransType TransitionMngr::Private::getRandomTransition() const
 {
     QList<TransitionMngr::TransType> effs = eff_transList.keys();
     effs.removeAt(effs.indexOf(TransitionMngr::None));
 
     int count = effs.count();
     int i     = qrand() % count;
+
     return effs[i];
 }
-
 
 int TransitionMngr::Private::effectRandom(bool /*aInit*/)
 {
@@ -76,6 +76,7 @@ int TransitionMngr::Private::effectRandom(bool /*aInit*/)
 int TransitionMngr::Private::effectNone(bool)
 {
     eff_curFrame = eff_outImage;
+
     return -1;
 }
 

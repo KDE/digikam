@@ -44,7 +44,7 @@ class TransitionMngr::Private
 {
 public:
 
-    typedef int (TransitionMngr::Private::*EffectMethod)(bool);
+    typedef int (TransitionMngr::Private::*TransMethod)(bool);
 
 public:
 
@@ -81,7 +81,7 @@ public:
         eff_psy              = 0;
         eff_pa               = QPolygon(4);
 
-        registerEffects();
+        registerTransitions();
     }
 
     ~Private()
@@ -90,7 +90,7 @@ public:
             delete [] eff_intArray;
     }
 
-    QMap<TransitionMngr::TransType, EffectMethod> eff_transList;
+    QMap<TransitionMngr::TransType, TransMethod>  eff_transList;
 
     QImage                                        eff_inImage;
     QImage                                        eff_outImage;
@@ -100,7 +100,7 @@ public:
     bool                                          eff_isRunning;
     TransitionMngr::TransType                     eff_curTransition;
 
-    // values for state of various effects:
+    // values for state of various transitions:
     int                                           eff_x;
     int                                           eff_y;
     int                                           eff_w;
@@ -135,9 +135,9 @@ public:
 
 public:
 
-    void registerEffects();
+    void registerTransitions();
 
-    TransitionMngr::TransType getRandomEffect() const;
+    TransitionMngr::TransType getRandomTransition() const;
 
 private:
 

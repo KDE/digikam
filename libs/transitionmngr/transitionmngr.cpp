@@ -51,12 +51,12 @@ void TransitionMngr::setOutputSize(const QSize& size)
     d->eff_curFrame.fill(Qt::black);
 }
 
-void TransitionMngr::setTransition(TransType trans)
+void TransitionMngr::setTransition(TransType type)
 {
-    if (trans == Random)
-        d->eff_curTransition = d->getRandomEffect();
+    if (type == Random)
+        d->eff_curTransition = d->getRandomTransition();
     else
-        d->eff_curTransition = trans;
+        d->eff_curTransition = type;
 
     d->eff_isRunning = false;
 }
@@ -75,7 +75,7 @@ QImage TransitionMngr::currentframe(int& tmout)
 {
     if (!d->eff_isRunning)
     {
-        d->eff_curFrame      = d->eff_inImage;
+        d->eff_curFrame  = d->eff_inImage;
         tmout            = (this->d->*d->eff_transList[d->eff_curTransition])(true);
         d->eff_isRunning = true;
     }
@@ -96,7 +96,7 @@ QMap<TransitionMngr::TransType, QString> TransitionMngr::transitionNames()
 {
     QMap<TransType, QString> trans;
 
-    trans[None]            = i18nc("Transition Effect: No effect",        "None");
+    trans[None]            = i18nc("Transition Effect: No Transition",    "None");
     trans[ChessBoard]      = i18nc("Transition Effect: Chess Board",      "Chess Board");
     trans[MeltDown]        = i18nc("Transition Effect: Melt Down",        "Melt Down");
     trans[Sweep]           = i18nc("Transition Effect: Sweep",            "Sweep");

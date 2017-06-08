@@ -25,11 +25,8 @@
 
 // Qt includes
 
-#include <QList>
 #include <QMap>
-#include <QPair>
 #include <QString>
-#include <QStringList>
 #include <QImage>
 
 // Local includes
@@ -41,7 +38,6 @@ namespace Digikam
 
 class DIGIKAM_EXPORT TransitionMngr
 {
-
 public:
 
     enum TransType
@@ -83,7 +79,7 @@ public:
     ~TransitionMngr();
 
     void setOutputSize(const QSize& size);
-    void setTransition(TransType eff);
+    void setTransition(TransType type);
     void setInImage(const QImage& iimg);
     void setOutImage(const QImage& oimg);
 
