@@ -45,7 +45,7 @@ public:
     {
         mngr          = 0;
         curTransition = TransitionMngr::None;
-        previewSize   = QSize(256, 192);
+        previewSize   = QSize(192, 144);
     }
 
     QTimer                    restartTimer;

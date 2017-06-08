@@ -226,11 +226,11 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     QGridLayout* const effGrid = new QGridLayout(effGrp);
     effGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     effGrid->addWidget(effLabel,      0, 0, 1, 1);
-    effGrid->addWidget(d->effVal,     1, 0, 1, 1);
-    effGrid->addWidget(effNote,       2, 0, 1, 1);
-    effGrid->addWidget(d->effPreview, 0, 1, 3, 1);
-    effGrid->setColumnStretch(0, 10);
-    effGrid->setRowStretch(2, 10);
+    effGrid->addWidget(d->effVal,     0, 1, 1, 1);
+    effGrid->addWidget(effNote,       1, 0, 1, 2);
+    effGrid->addWidget(d->effPreview, 0, 2, 2, 1);
+    effGrid->setColumnStretch(1, 10);
+    effGrid->setRowStretch(1, 10);
 
     // --------------------
 
@@ -262,11 +262,11 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     QGridLayout* const transGrid = new QGridLayout(transGrp);
     transGrid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     transGrid->addWidget(transLabel,      0, 0, 1, 1);
-    transGrid->addWidget(d->transVal,     1, 0, 1, 1);
-    transGrid->addWidget(transNote,       2, 0, 1, 1);
-    transGrid->addWidget(d->transPreview, 0, 1, 3, 1);
-    transGrid->setColumnStretch(0, 10);
-    transGrid->setRowStretch(2, 10);
+    transGrid->addWidget(d->transVal,     0, 1, 1, 1);
+    transGrid->addWidget(transNote,       1, 0, 1, 2);
+    transGrid->addWidget(d->transPreview, 0, 2, 2, 1);
+    transGrid->setColumnStretch(1, 10);
+    transGrid->setRowStretch(1, 10);
 
     // --------------------
 
