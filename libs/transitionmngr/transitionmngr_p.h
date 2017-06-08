@@ -146,35 +146,35 @@ private:
     // The integer value is a tempo in ms to wait between frames,
     // or -1 if the effect is completed.
 
-    int effectNone(bool aInit);
-    int effectChessboard(bool aInit);
-    int effectMeltdown(bool aInit);
-    int effectSweep(bool aInit);
-    int effectMosaic(bool aInit);
-    int effectCubism(bool aInit);
-    int effectRandom(bool aInit);
-    int effectGrowing(bool aInit);
-    int effectHorizLines(bool aInit);
-    int effectVertLines(bool aInit);
-    int effectMultiCircleOut(bool aInit);
-    int effectSpiralIn(bool aInit);
-    int effectCircleOut(bool aInit);
-    int effectBlobs(bool aInit);
-    int effectFade(bool aInit);
-    int effectSlideL2R(bool aInit);
-    int effectSlideR2L(bool aInit);
-    int effectSlideT2B(bool aInit);
-    int effectSlideB2T(bool aInit);
-    int effectPushL2R(bool aInit);
-    int effectPushR2L(bool aInit);
-    int effectPushT2B(bool aInit);
-    int effectPushB2T(bool aInit);
-    int effectSwapL2R(bool aInit);
-    int effectSwapR2L(bool aInit);
-    int effectSwapT2B(bool aInit);
-    int effectSwapB2T(bool aInit);
-    int effectBlurIn(bool aInit);
-    int effectBlurOut(bool aInit);
+    int transitionNone(bool aInit);
+    int transitionChessboard(bool aInit);
+    int transitionMeltdown(bool aInit);
+    int transitionSweep(bool aInit);
+    int transitionMosaic(bool aInit);
+    int transitionCubism(bool aInit);
+    int transitionRandom(bool aInit);
+    int transitionGrowing(bool aInit);
+    int transitionHorizLines(bool aInit);
+    int transitionVertLines(bool aInit);
+    int transitionMultiCircleOut(bool aInit);
+    int transitionSpiralIn(bool aInit);
+    int transitionCircleOut(bool aInit);
+    int transitionBlobs(bool aInit);
+    int transitionFade(bool aInit);
+    int transitionSlideL2R(bool aInit);
+    int transitionSlideR2L(bool aInit);
+    int transitionSlideT2B(bool aInit);
+    int transitionSlideB2T(bool aInit);
+    int transitionPushL2R(bool aInit);
+    int transitionPushR2L(bool aInit);
+    int transitionPushT2B(bool aInit);
+    int transitionPushB2T(bool aInit);
+    int transitionSwapL2R(bool aInit);
+    int transitionSwapR2L(bool aInit);
+    int transitionSwapT2B(bool aInit);
+    int transitionSwapB2T(bool aInit);
+    int transitionBlurIn(bool aInit);
+    int transitionBlurOut(bool aInit);
 
 private:
 
