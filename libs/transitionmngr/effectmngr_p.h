@@ -91,6 +91,7 @@ private:
     int effectNone(bool aInit);
     int effectRandom(bool aInit);
     int effectKenBurnsZoomIn(bool aInit);
+    int effectKenBurnsZoomOut(bool aInit);
     int effectKenBurnsPanLR(bool aInit);
     int effectKenBurnsPanRL(bool aInit);
     int effectKenBurnsPanTB(bool aInit);

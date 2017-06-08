@@ -27,12 +27,13 @@ namespace Digikam
 
 void EffectMngr::Private::registerEffects()
 {
-    eff_effectList.insert(EffectMngr::None,           &EffectMngr::Private::effectNone);
-    eff_effectList.insert(EffectMngr::KenBurnsZoomIn, &EffectMngr::Private::effectKenBurnsZoomIn);
-    eff_effectList.insert(EffectMngr::KenBurnsPanLR,  &EffectMngr::Private::effectKenBurnsPanLR);
-    eff_effectList.insert(EffectMngr::KenBurnsPanRL,  &EffectMngr::Private::effectKenBurnsPanRL);
-    eff_effectList.insert(EffectMngr::KenBurnsPanTB,  &EffectMngr::Private::effectKenBurnsPanTB);
-    eff_effectList.insert(EffectMngr::KenBurnsPanBT,  &EffectMngr::Private::effectKenBurnsPanBT);
+    eff_effectList.insert(EffectMngr::None,            &EffectMngr::Private::effectNone);
+    eff_effectList.insert(EffectMngr::KenBurnsZoomIn,  &EffectMngr::Private::effectKenBurnsZoomIn);
+    eff_effectList.insert(EffectMngr::KenBurnsZoomOut, &EffectMngr::Private::effectKenBurnsZoomOut);
+    eff_effectList.insert(EffectMngr::KenBurnsPanLR,   &EffectMngr::Private::effectKenBurnsPanLR);
+    eff_effectList.insert(EffectMngr::KenBurnsPanRL,   &EffectMngr::Private::effectKenBurnsPanRL);
+    eff_effectList.insert(EffectMngr::KenBurnsPanTB,   &EffectMngr::Private::effectKenBurnsPanTB);
+    eff_effectList.insert(EffectMngr::KenBurnsPanBT,   &EffectMngr::Private::effectKenBurnsPanBT);
 }
 
 EffectMngr::EffectType EffectMngr::Private::getRandomEffect() const
@@ -85,6 +86,31 @@ int EffectMngr::Private::effectKenBurnsZoomIn(bool aInit)
     eff_step++;
 
     if (eff_step != eff_imgFrames)
+        return 15;
+
+    return -1;
+}
+
+int EffectMngr::Private::effectKenBurnsZoomOut(bool aInit)
+{
+    if (aInit)
+    {
+        eff_step = eff_imgFrames;
+    }
+
+    QRectF fRect(eff_image.rect());
+
+    // This effect zoom out on the center of image from 80 to 100 percents.
+    double nx    = eff_step * ((eff_image.width() - eff_image.width() * 0.8) / eff_imgFrames);
+    double ny    = nx / ((double)eff_image.width() / (double)eff_image.height());
+    fRect.setTopLeft(QPointF(nx, ny));
+    fRect.setBottomRight(QPointF((double)eff_image.width()-nx, (double)eff_image.height()-ny));
+
+    updateCurrentFrame(fRect.toAlignedRect());
+
+    eff_step--;
+
+    if (eff_step != 0)
         return 15;
 
     return -1;
