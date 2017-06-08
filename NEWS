@@ -93,4 +93,5 @@ BUGFIXES FROM BUGZILLA:
 071 ==> 380805 - Generating Gallery: "Could not load XSL file".
 072 ==> 379918 - digiKam writing tags in wrong order.
 073 ==> 380358 - ICC Profiles not detected.
-074 ==> 
+074 ==> 380949 - Bad quality image view.
+075 ==> 
