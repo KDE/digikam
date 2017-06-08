@@ -349,8 +349,6 @@ void VidSlideVideoPage::initializePage()
     d->transPreview->setImagesList(d->settings->inputImages);
     d->effPreview->setImagesList(d->settings->inputImages);
     slotSlideDuration();
-    slotTransitionChanged();
-    slotEffectChanged();
 }
 
 bool VidSlideVideoPage::validatePage()
