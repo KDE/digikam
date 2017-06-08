@@ -35,6 +35,7 @@
 
 #include "filesaveconflictbox.h"
 #include "transitionmngr.h"
+#include "effectmngr.h"
 #include "digikam_export.h"
 
 class KConfigGroup;
@@ -131,13 +132,6 @@ public:
         MPG         // https://en.wikipedia.org/wiki/MPEG-2
     };
 
-    // Video Effects while displaying image contents
-    enum VidEffect
-    {
-        NONE = 0,   // Static camera
-        KENBURNS    // https://en.wikipedia.org/wiki/Ken_Burns_effect
-    };
-
 public:
 
     explicit VidSlideSettings();
@@ -159,7 +153,6 @@ public:
     static QMap<VidStd,     QString> videoStdNames();
     static QMap<VidCodec,   QString> videoCodecNames();
     static QMap<VidFormat,  QString> videoFormatNames();
-    static QMap<VidEffect,  QString> videoEffectNames();
     static QMap<VidPlayer,  QString> videoPlayerNames();
 
 public:
@@ -182,7 +175,7 @@ public:
     VidType                           vType;         // Encoded video type.
     VidCodec                          vCodec;        // Encoded video codec.
     VidFormat                         vFormat;       // Encoded video container format.
-    VidEffect                         vEffect;       // Encoded video effect while displaying images.
+    EffectMngr::EffectType            vEffect;       // Encoded video effect while displaying images.
 
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file alreay exists.
     QUrl                              outputDir;     // Encoded video stream directory.

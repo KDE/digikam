@@ -201,8 +201,8 @@ VidSlideVideoPage::VidSlideVideoPage(QWizard* const dialog, const QString& title
     d->effVal              = new QComboBox(main);
     d->effVal->setEditable(false);
 
-    QMap<VidSlideSettings::VidEffect, QString> map6                = VidSlideSettings::videoEffectNames();
-    QMap<VidSlideSettings::VidEffect, QString>::const_iterator it6 = map6.constBegin();
+    QMap<EffectMngr::EffectType, QString> map6                = EffectMngr::effectNames();
+    QMap<EffectMngr::EffectType, QString>::const_iterator it6 = map6.constBegin();
 
     while (it6 != map6.constEnd())
     {
@@ -331,7 +331,7 @@ bool VidSlideVideoPage::validatePage()
     d->settings->vbitRate   = (VidSlideSettings::VidBitRate)d->bitrateVal->currentIndex();
     d->settings->vStandard  = (VidSlideSettings::VidStd)d->stdVal->currentIndex();
     d->settings->vCodec     = (VidSlideSettings::VidCodec)d->codecVal->currentData().toInt();
-    d->settings->vEffect    = (VidSlideSettings::VidEffect)d->effVal->currentData().toInt();
+    d->settings->vEffect    = (EffectMngr::EffectType)d->effVal->currentIndex();
     d->settings->transition = (TransitionMngr::TransType)d->transVal->currentIndex();
 
     return true;

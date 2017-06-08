@@ -71,7 +71,7 @@ void TransitionMngr::setOutImage(const QImage& oimg)
     d->eff_outImage = oimg;
 }
 
-QImage TransitionMngr::currentframe(int& tmout)
+QImage TransitionMngr::currentFrame(int& tmout)
 {
     if (!d->eff_isRunning)
     {
