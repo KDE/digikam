@@ -334,7 +334,6 @@ void VidSlideTask::run()
 
     TransitionMngr transmngr;
     transmngr.setOutputSize(osize);
-    transmngr.setTransition(d->settings->transition);
 
     EffectMngr effmngr;
     effmngr.setOutputSize(osize);
@@ -357,6 +356,7 @@ void VidSlideTask::run()
 
         transmngr.setInImage(qiimg);
         transmngr.setOutImage(qoimg);
+        transmngr.setTransition(d->settings->transition);
 
         int tmout = 0;
 
