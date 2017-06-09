@@ -372,15 +372,13 @@ void VidSlideTask::run()
 
         // -- Images encoding ----------
 
-        effmngr.setEffect(d->settings->vEffect);
-
         if (i < d->settings->inputImages.count())
         {
             VideoFrame frame;
-            QRect kbRect;
             int count = 0;
             int tmout = 0;
             effmngr.setImage(qoimg);
+            effmngr.setEffect(d->settings->vEffect);
 
             do
             {
