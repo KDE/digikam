@@ -40,7 +40,7 @@ int EffectMngr::Private::effectKenBurnsZoomIn(bool aInit)
     fRect.setTopLeft(QPointF(nx, ny));
     fRect.setBottomRight(QPointF((double)eff_image.width()-nx, (double)eff_image.height()-ny));
 
-    updateCurrentFrame(fRect.toAlignedRect());
+    updateCurrentFrame(fRect);
 
     eff_step++;
 
@@ -65,7 +65,7 @@ int EffectMngr::Private::effectKenBurnsZoomOut(bool aInit)
     fRect.setTopLeft(QPointF(nx, ny));
     fRect.setBottomRight(QPointF((double)eff_image.width()-nx, (double)eff_image.height()-ny));
 
-    updateCurrentFrame(fRect.toAlignedRect());
+    updateCurrentFrame(fRect);
 
     eff_step--;
 

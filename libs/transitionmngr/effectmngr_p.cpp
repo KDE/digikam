@@ -46,11 +46,12 @@ EffectMngr::EffectType EffectMngr::Private::getRandomEffect() const
     return effs[i];
 }
 
-void EffectMngr::Private::updateCurrentFrame(const QRect& area)
+void EffectMngr::Private::updateCurrentFrame(const QRectF& area)
 {
-    QImage kbImg = eff_image.copy(area).scaled(eff_outSize,
-                                               Qt::KeepAspectRatioByExpanding,
-                                               Qt::SmoothTransformation);
+    QImage kbImg = eff_image.copy(area.toAlignedRect())
+                            .scaled(eff_outSize,
+                                    Qt::KeepAspectRatioByExpanding,
+                                    Qt::SmoothTransformation);
     eff_curFrame = kbImg.convertToFormat(QImage::Format_ARGB32);
 }
 

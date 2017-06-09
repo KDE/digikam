@@ -97,7 +97,7 @@ private:
     int effectKenBurnsPanTB(bool aInit);
     int effectKenBurnsPanBT(bool aInit);
 
-    void updateCurrentFrame(const QRect& area);
+    void updateCurrentFrame(const QRectF& area);
 };
 
 }  // namespace Digikam

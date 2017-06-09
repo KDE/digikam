@@ -43,7 +43,7 @@ int EffectMngr::Private::effectKenBurnsPanLR(bool aInit)
     fRect.setTopLeft(QPointF(nx, ny));
     fRect.setSize(QSize(nw, nh));
 
-    updateCurrentFrame(fRect.toAlignedRect());
+    updateCurrentFrame(fRect);
 
     eff_step++;
 
@@ -71,7 +71,7 @@ int EffectMngr::Private::effectKenBurnsPanRL(bool aInit)
     fRect.setTopLeft(QPointF(eff_image.width() - nw - nx, ny));
     fRect.setSize(QSize(nw, nh));
 
-    updateCurrentFrame(fRect.toAlignedRect());
+    updateCurrentFrame(fRect);
 
     eff_step++;
 
@@ -99,7 +99,7 @@ int EffectMngr::Private::effectKenBurnsPanTB(bool aInit)
     fRect.setTopLeft(QPointF(nx, ny));
     fRect.setSize(QSize(nw, nh));
 
-    updateCurrentFrame(fRect.toAlignedRect());
+    updateCurrentFrame(fRect);
 
     eff_step++;
 
@@ -127,7 +127,7 @@ int EffectMngr::Private::effectKenBurnsPanBT(bool aInit)
     fRect.setTopLeft(QPointF(nx, eff_image.height() - nh - ny));
     fRect.setSize(QSize(nw, nh));
 
-    updateCurrentFrame(fRect.toAlignedRect());
+    updateCurrentFrame(fRect);
 
     eff_step++;
 
