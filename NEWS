@@ -95,5 +95,4 @@ BUGFIXES FROM BUGZILLA:
 073 ==> 380358 - ICC Profiles not detected.
 074 ==> 380949 - Bad quality image view.
 075 ==> 377842 - Export slide show as movie.
-076 ==> 
-
+076 ==> 379855 - QtAV is not detected but assumed present on MacOS [patch].

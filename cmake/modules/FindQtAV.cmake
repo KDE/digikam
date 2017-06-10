@@ -62,8 +62,27 @@ if (NOT APPLE)
 
 else()
 
-    set(QTAV_INCLUDE_DIRS ${_qt5_install_prefix}/../../include/QtAV ${_qt5_install_prefix}/../../include/QtAVWidgets)
-    set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
+    find_path(QTAV_CORE_INCLUDE_DIR
+              NAMES QtAV.h
+              HINTS ${_qt5_install_prefix}
+                    ${_qt5_install_prefix}/../../include
+              PATH_SUFFIXES QtAV
+    )
+
+    find_path(QTAV_WIDGETS_INCLUDE_DIR
+              NAMES QtAVWidgets.h
+              HINTS ${_qt5_install_prefix}
+                    ${_qt5_install_prefix}/../../include
+              PATH_SUFFIXES QtAVWidgets
+    )
+
+    if (QTAV_CORE_INCLUDE_DIR AND QTAV_WIDGETS_INCLUDE_DIR)
+        set(QTAV_INCLUDE_DIRS "${QTAV_CORE_INCLUDE_DIR} ${QTAV_WIDGETS_INCLUDE_DIR}")
+        set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
+    else()
+        set(QTAV_INCLUDE_DIRS ${_qt5_install_prefix}/../../include/QtAV ${_qt5_install_prefix}/../../include/QtAVWidgets)
+        set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
+    endif()
 
 endif()
 
