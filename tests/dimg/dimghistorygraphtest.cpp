@@ -466,25 +466,6 @@ void DImgHistoryGraphTest::testGraph()
     QList<qlonglong> leavesFromTwo   = mapList(graph.data().leavesFrom(idToVertex.value(2)), vertexToId);
     qSort(leavesFromTwo);
     QVERIFY(leavesFromTwo == controlLeavesFromTwo);
-
-    qDebug() << graph.data().shortestDistancesFrom(idToVertex.value(1));
-    qDebug() << graph.data().shortestDistancesFrom(idToVertex.value(2));
-
-    ImageHistoryGraphModel model;
-    ModelTest test(&model);
-    model.setMode(ImageHistoryGraphModel::CombinedTreeMode);
-    model.setHistory(ImageInfo(16), graph);
-
-    // main path 1 - 7 - 16
-    QCOMPARE(model.rowCount(), 3);
-
-    model.setMode(ImageHistoryGraphModel::ImagesTreeMode);
-    model.setMode(ImageHistoryGraphModel::ImagesListMode);
-    QTreeView view;
-    view.setModel(&model);
-    view.show();
-    QTest::qWaitForWindowExposed(&view);
-    QTest::qWait(25000);
 }
 
 void DImgHistoryGraphTest::slotImageLoaded(const QString& fileName, bool success)
