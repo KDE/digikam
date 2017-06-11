@@ -24,7 +24,6 @@ set(albummodeltest_SRCS
 )
 
 add_executable(albummodeltest ${albummodeltest_SRCS})
-add_test(albummodeltest albummodeltest)
 ecm_mark_nongui_executable(albummodeltest)
 
 target_link_libraries(albummodeltest
