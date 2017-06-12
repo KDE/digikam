@@ -75,7 +75,8 @@ public:
           configSettingsVisible(QLatin1String("Settings Widget Visible")),
           configRecognizeTask(QLatin1String("Face Recognize Main Task")),
           configRecognizeLBP(QLatin1String("Recognize Using LBP")), 
-          configRecognizeEigenFace(QLatin1String("Recognize Using EigenFace"))
+          configRecognizeEigenFace(QLatin1String("Recognize Using EigenFace")),
+          configRecognizeFisherFace(QLatin1String("Recognize Using FisherFace"))
     {
         buttons                    = 0;
         optionGroupBox             = 0;
@@ -90,7 +91,8 @@ public:
         retrainAllButton           = 0;
         recognizeGroupBox          = 0;
         recognizeLBPButton         = 0;
-        recognizeEigenFaceButton  = 0;
+        recognizeEigenFaceButton   = 0;
+        recognizeFisherFaceButton  = 0;
     }
 
     QDialogButtonBox*            buttons;
@@ -113,6 +115,7 @@ public:
     QGroupBox*                   recognizeGroupBox;
     QRadioButton*                recognizeLBPButton;
     QRadioButton*                recognizeEigenFaceButton;
+    QRadioButton*                recognizeFisherFaceButton;
 
     const QString                configName;
     const QString                configMainTask;
@@ -125,6 +128,7 @@ public:
     const QString                configRecognizeTask;
     const QString                configRecognizeLBP;
     const QString                configRecognizeEigenFace;
+    const QString                configRecognizeFisherFace;
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* const parent)
@@ -201,9 +205,13 @@ void FaceScanDialog::doLoadState()
     {
         d->recognizeLBPButton->setChecked(true);
     }
-    else
+    else if(recognizeTask==d->configRecognizeEigenFace)
     {
         d->recognizeEigenFaceButton->setChecked(true);
+    }
+    else
+    {
+        d->recognizeFisherFaceButton->setChecked(true);
     }
 
     // do not load retrainAllButton state from config, dangerous
@@ -268,6 +276,10 @@ void FaceScanDialog::doSaveState()
     else if(d->recognizeEigenFaceButton->isChecked())
     {
         recognizeTask = d->configRecognizeEigenFace;
+    }
+    else if(d->recognizeFisherFaceButton->isChecked())
+    {
+        recognizeTask = d->configRecognizeFisherFace;
     }
     group.writeEntry(entryName(d->configRecognizeTask), recognizeTask);
 }
@@ -383,9 +395,11 @@ void FaceScanDialog::setupUi()
     d->recognizeLBPButton              = new QRadioButton(i18nc("@option:radio", "Recognize faces using LBP algorithm"));
     d->recognizeLBPButton->setChecked(true);
     d->recognizeEigenFaceButton        = new QRadioButton(i18nc("@option:radio", "Recognize faces using EigenFaces algorithm"));
+    d->recognizeFisherFaceButton        = new QRadioButton(i18nc("@option:radio", "Recognize faces using FisherFaces algorithm"));
 
     recognizeLayout->addWidget(d->recognizeLBPButton,         0, 0);
     recognizeLayout->addWidget(d->recognizeEigenFaceButton,   1, 0);
+    recognizeLayout->addWidget(d->recognizeFisherFaceButton,  2, 0);
 
     QStyleOptionButton buttonRecognizeOption;
     buttonRecognizeOption.initFrom(d->recognizeLBPButton);
@@ -504,6 +518,10 @@ FaceScanSettings FaceScanDialog::settings() const
     else if(d->recognizeEigenFaceButton->isChecked())
     {
         settings.recognizeAlgorithm = FaceScanSettings::RecognizeAlgorithm::EigenFace;
+    }
+    else if(d->recognizeFisherFaceButton->isChecked())
+    {
+        settings.recognizeAlgorithm = FaceScanSettings::RecognizeAlgorithm::FisherFace;
     }
 
     return settings;

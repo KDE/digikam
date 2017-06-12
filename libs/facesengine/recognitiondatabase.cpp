@@ -25,6 +25,7 @@
  * ============================================================ */
 
 // OpenCV includes need to show up before Qt includes
+#include "opencvfisherfacerecognizer.h"
 #include "opencveigenfacerecognizer.h"
 #include "opencvlbphfacerecognizer.h"
 #include "funnelreal.h"
@@ -96,7 +97,8 @@ public:
     enum RecognizeAlgorithm
     {
         LBP,
-        EigenFace
+        EigenFace,
+        FisherFace
     };
 
     bool                 dbAvailable;
@@ -134,11 +136,14 @@ public:
 
 public:
 
-    OpenCVLBPHFaceRecognizer* lbph()              { return getObjectOrCreate(opencvlbph);  }
-    OpenCVLBPHFaceRecognizer* lbphConst() const   { return opencvlbph;                     }
+    OpenCVLBPHFaceRecognizer* lbph()                { return getObjectOrCreate(opencvlbph);  }
+    OpenCVLBPHFaceRecognizer* lbphConst() const     { return opencvlbph;                     }
 
-    OpenCVEIGENFaceRecognizer* eigen()            { return getObjectOrCreate(opencveigen); }
-    OpenCVEIGENFaceRecognizer* eigenConst() const { return opencveigen;                    }
+    OpenCVEIGENFaceRecognizer* eigen()              { return getObjectOrCreate(opencveigen); }
+    OpenCVEIGENFaceRecognizer* eigenConst() const   { return opencveigen;                    }
+
+    OpenCVFISHERFaceRecognizer* fisher()            { return getObjectOrCreate(opencvfisher); }
+    OpenCVFISHERFaceRecognizer* fisherConst() const { return opencvfisher;                    }
 
 public:
 
@@ -155,8 +160,11 @@ public:
                TrainingDataProvider* const data, const QString& trainingContext);
     void train(OpenCVEIGENFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
                TrainingDataProvider* const data, const QString& trainingContext);
+    void train(OpenCVFISHERFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+               TrainingDataProvider* const data, const QString& trainingContext);
     void clear(OpenCVLBPHFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
     void clear(OpenCVEIGENFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
+    void clear(OpenCVFISHERFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext);
 
     cv::Mat preprocessingChain(const QImage& image);
 
@@ -168,6 +176,7 @@ public:
 
 private:
 
+    OpenCVFISHERFaceRecognizer* opencvfisher;
     OpenCVEIGENFaceRecognizer* opencveigen;
     OpenCVLBPHFaceRecognizer* opencvlbph;
     FunnelReal*               funnel;
@@ -177,6 +186,7 @@ private:
 
 RecognitionDatabase::Private::Private()
     : mutex(QMutex::Recursive),
+      opencvfisher(0),
       opencveigen(0),
       opencvlbph(0),
       funnel(0)
@@ -204,6 +214,7 @@ RecognitionDatabase::Private::Private()
 
 RecognitionDatabase::Private::~Private()
 {
+    delete opencvfisher;
     delete opencveigen;
     delete opencvlbph;
     delete funnel;
@@ -485,6 +496,11 @@ QString RecognitionDatabase::backendIdentifier() const
     {
         return QString::fromLatin1("eigenfaces");
     }
+    else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::FisherFace)
+    {
+        return QString::fromLatin1("fisherfaces");
+    }
+
     return QString::fromLatin1("opencvlbph");
 }
 
@@ -583,6 +599,10 @@ cv::Mat RecognitionDatabase::Private::preprocessingChain(const QImage& image)
         {
             cvImage = eigen()->prepareForRecognition(image);
         }
+        else if(recognizeAlgorithm==RecognizeAlgorithm::FisherFace)
+        {
+            cvImage = fisher()->prepareForRecognition(image);
+        }
         else
         {
             qCCritical(DIGIKAM_FACESENGINE_LOG) << "No obvious recognize algorithm";
@@ -634,6 +654,10 @@ QList<Identity> RecognitionDatabase::recognizeFaces(ImageListProvider* const ima
             else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::EigenFace)
             {
                 id = d->eigen()->recognize(d->preprocessingChain(images->image()));
+            }
+            else if(d->recognizeAlgorithm==Private::RecognizeAlgorithm::FisherFace)
+            {
+                id = d->fisher()->recognize(d->preprocessingChain(images->image()));
             }
         }
         catch (cv::Exception& e)
@@ -761,6 +785,13 @@ void RecognitionDatabase::Private::train(OpenCVEIGENFaceRecognizer* const r, con
     trainIdentityBatch(r, identitiesToBeTrained, data, trainingContext, this);
 }
 
+void RecognitionDatabase::Private::train(OpenCVFISHERFaceRecognizer* const r, const QList<Identity>& identitiesToBeTrained,
+                                         TrainingDataProvider* const data, const QString& trainingContext)
+{
+    qCDebug(DIGIKAM_FACESENGINE_LOG) << "Training using opencv fisherfaces";
+    trainIdentityBatch(r, identitiesToBeTrained, data, trainingContext, this);
+}
+
 void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, TrainingDataProvider* const data,
                                 const QString& trainingContext)
 {
@@ -774,6 +805,7 @@ void RecognitionDatabase::train(const QList<Identity>& identitiesToBeTrained, Tr
     //d->train(d->recognizer(), identitiesToBeTrained, data, trainingContext);
     d->train(d->lbph(), identitiesToBeTrained, data, trainingContext);
     d->train(d->eigen(), identitiesToBeTrained, data, trainingContext);
+    //d->train(d->fisher(), identitiesToBeTrained, data, trainingContext);
 }
 
 
@@ -826,6 +858,22 @@ void RecognitionDatabase::Private::clear(OpenCVEIGENFaceRecognizer* const, const
     }
 }
 
+void RecognitionDatabase::Private::clear(OpenCVFISHERFaceRecognizer* const, const QList<int>& idsToClear, const QString& trainingContext)
+{
+    // force later reload
+    delete opencvfisher;
+    opencvfisher = 0;
+
+    if (idsToClear.isEmpty())
+    {
+        FaceDbAccess().db()->clearEIGENTraining(trainingContext);
+    }
+    else
+    {
+        FaceDbAccess().db()->clearEIGENTraining(idsToClear, trainingContext);
+    }
+}
+
 void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
 {
     if (!d || !d->dbAvailable)
@@ -837,6 +885,7 @@ void RecognitionDatabase::clearAllTraining(const QString& trainingContext)
     //d->clear(d->recognizer(), QList<int>(), trainingContext);
     d->clear(d->lbph(), QList<int>(), trainingContext);
     d->clear(d->eigen(), QList<int>(), trainingContext);
+    d->clear(d->fisher(), QList<int>(), trainingContext);
 }
 
 void RecognitionDatabase::clearTraining(const QList<Identity>& identitiesToClean, const QString& trainingContext)

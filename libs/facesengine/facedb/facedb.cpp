@@ -24,6 +24,7 @@
 // OpenCV includes need to show up before Qt includes
 #include "lbphfacemodel.h"
 #include "eigenfacemodel.h"
+#include "fisherfacemodel.h"
 
 // Local includes
 
@@ -424,6 +425,107 @@ EigenFaceModel FaceDb::eigenFaceModel() const
         metadata.identity      = query.value(1).toInt();
         metadata.context       = query.value(2).toString();
         metadata.storageStatus = EigenFaceMatMetadata::InDatabase;
+
+        // cv::Mat
+        data.type              = query.value(3).toInt();
+        data.rows              = query.value(4).toInt();
+        data.cols              = query.value(5).toInt();
+        QByteArray cData       = query.value(6).toByteArray();
+
+        if (!cData.isEmpty())
+        {
+            data.data = qUncompress(cData);
+
+            if (data.data.isEmpty())
+            {
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot uncompress mat data to checkout from database for Identity " << metadata.identity;
+            }
+            else
+            {
+                qCDebug(DIGIKAM_FACEDB_LOG) << "Checkout compressed histogram " << metadata.databaseId << " for identity " << metadata.identity << " with size " << cData.size();
+
+                mats        << data;
+                matMetadata << metadata;
+            }
+        }
+        else
+        {
+            qCWarning(DIGIKAM_FACEDB_LOG) << "Mat data to checkout from database are empty for Identity " << metadata.identity;
+        }
+    }
+    model.setMats(mats, matMetadata);
+
+    return model;
+}
+
+void FaceDb::updateFISHERFaceModel(FisherFaceModel& model)
+{
+    QList<FisherFaceMatMetadata> metadataList = model.matMetadata();
+
+    for (int i = 0 ; i < metadataList.size() ; i++)
+    {
+        const FisherFaceMatMetadata& metadata = metadataList[i];
+
+        if (metadata.storageStatus == FisherFaceMatMetadata::Created)
+        {
+            OpenCVMatData data = model.matData(i);
+
+            if (data.data.isEmpty())
+            {
+                qCWarning(DIGIKAM_FACEDB_LOG) << "Fisherface data to commit in database are empty for Identity " << metadata.identity;
+            }
+            else
+            {
+                QByteArray compressed = qCompress(data.data);
+
+                if (compressed.isEmpty())
+                {
+                    qCWarning(DIGIKAM_FACEDB_LOG) << "Cannot compress mat data to commit in database for Identity " << metadata.identity;
+                }
+                else
+                {
+                    QVariantList histogramValues;
+                    QVariant     insertedId;
+
+                    histogramValues << metadata.identity
+                                    << metadata.context
+                                    << data.type
+                                    << data.rows
+                                    << data.cols
+                                    << compressed;
+
+                    d->db->execSql(QString::fromLatin1("INSERT INTO OpenCVEIGENMat (identity, context, type, rows, cols, data) "
+                                   "VALUES (?,?,?,?,?,?);"),
+                                   histogramValues, 0, &insertedId);
+
+                    model.setWrittenToDatabase(i, insertedId.toInt());
+
+                    qCDebug(DIGIKAM_FACEDB_LOG) << "Commit compressed matData " << insertedId << " for identity " << metadata.identity << " with size " << compressed.size();
+                }
+            }
+        }
+    }
+}
+
+FisherFaceModel FaceDb::fisherFaceModel() const
+{
+    qCDebug(DIGIKAM_FACEDB_LOG) << "Loading FISHER model from OpenCVEIGENMat";
+    DbEngineSqlQuery query = d->db->execQuery(QString::fromLatin1("SELECT id, identity, context, type, rows, cols, data "
+                                                                      "FROM OpenCVEIGENMat;"));
+
+    FisherFaceModel model = FisherFaceModel();
+    QList<OpenCVMatData> mats;
+    QList<FisherFaceMatMetadata> matMetadata;
+
+    while(query.next())
+    {
+        FisherFaceMatMetadata metadata;
+        OpenCVMatData data;
+
+        metadata.databaseId    = query.value(0).toInt();
+        metadata.identity      = query.value(1).toInt();
+        metadata.context       = query.value(2).toString();
+        metadata.storageStatus = FisherFaceMatMetadata::InDatabase;
 
         // cv::Mat
         data.type              = query.value(3).toInt();
