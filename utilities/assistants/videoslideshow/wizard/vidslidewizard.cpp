@@ -98,6 +98,9 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
     d->videoPage         = new VidSlideVideoPage(this,  i18n("Video Settings"));
     d->outputPage        = new VidSlideOutputPage(this, i18n("Output Settings"));
     d->finalPage         = new VidSlideFinalPage(this,  i18n("Generating Video Slideshow"));
+
+    connect(this, SIGNAL(currentIdChanged(int)),
+            this, SLOT(slotCurrentIdChanged(int)));
 }
 
 VidSlideWizard::~VidSlideWizard()
@@ -146,6 +149,15 @@ int VidSlideWizard::nextId() const
     }
 
     return DWizardDlg::nextId();
+}
+
+void VidSlideWizard::slotCurrentIdChanged(int id)
+{
+    if (page(id) == d->videoPage)
+    {
+        d->videoPage->slotTransitionChanged();
+        d->videoPage->slotEffectChanged();
+    }
 }
 
 } // namespace Digikam

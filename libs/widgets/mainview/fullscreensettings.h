@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT FullScreenSettings : public QGroupBox
 public:
 
     explicit FullScreenSettings(int options, QWidget* const parent);
-    virtual ~FullScreenSettings();
+    ~FullScreenSettings();
 
     void readSettings(const KConfigGroup& group);
     void saveSettings(KConfigGroup& group);

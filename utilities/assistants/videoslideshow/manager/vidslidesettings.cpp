@@ -44,7 +44,7 @@ VidSlideSettings::VidSlideSettings()
     vbitRate     = VBR12;
     vCodec       = X264;
     vFormat      = MP4;
-    vEffect      = NONE;
+    vEffect      = EffectMngr::None;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
     conflictRule = FileSaveConflictBox::OVERWRITE;
@@ -60,7 +60,7 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
 {
     selMode      = (Selection)group.readEntry("SelMode",
                    (int)IMAGES);
-    imgFrames    = group.readEntry("AFrames",
+    imgFrames    = group.readEntry("ImgFrames",
                    125);
     vStandard    = (VidStd)group.readEntry("VStandard",
                    (int)PAL);
@@ -72,8 +72,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)BLUERAY);
     vFormat      = (VidFormat)group.readEntry("VFormat",
                    (int)MP4);
-    vEffect      = (VidEffect)group.readEntry("VEffect",
-                   (int)NONE);
+    vEffect      = (EffectMngr::EffectType)group.readEntry("VEffect",
+                   (int)EffectMngr::None);
     abitRate     = group.readEntry("ABitRate",
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
@@ -89,7 +89,7 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
 void VidSlideSettings::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("SelMode",      (int)selMode);
-    group.writeEntry("AFrames",      imgFrames);
+    group.writeEntry("ImgFrames",    imgFrames);
     group.writeEntry("VStandard",    (int)vStandard);
     group.writeEntry("VBitRate",     (int)vbitRate);
     group.writeEntry("VCodec",       (int)vCodec);
@@ -409,16 +409,6 @@ QMap<VidSlideSettings::VidFormat, QString> VidSlideSettings::videoFormatNames()
     frm[MPG] = i18nc("Video Standard MPG", "MPG - MPEG-2");
 
     return frm;
-}
-
-QMap<VidSlideSettings::VidEffect, QString> VidSlideSettings::videoEffectNames()
-{
-    QMap<VidEffect, QString> eff;
-
-    eff[NONE]     = i18nc("Video Effect NONE",       "None - Static Camera");
-    eff[KENBURNS] = i18nc("Video Standard KENBURNS", "Ken Burns - Camera Zoom In");
-
-    return eff;
 }
 
 QMap<VidSlideSettings::VidPlayer, QString> VidSlideSettings::videoPlayerNames()

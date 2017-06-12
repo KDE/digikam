@@ -141,7 +141,7 @@ QImage TransitionMngr::Private::fastBlur(const QImage& img, int radius) const
     return buffer.convertToFormat(QImage::Format_ARGB32_Premultiplied);
 }
 
-int TransitionMngr::Private::effectFade(bool aInit)
+int TransitionMngr::Private::transitionFade(bool aInit)
 {
     if (aInit)
     {
@@ -165,7 +165,7 @@ int TransitionMngr::Private::effectFade(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectBlurIn(bool aInit)
+int TransitionMngr::Private::transitionBlurIn(bool aInit)
 {
     if (aInit)
     {
@@ -187,7 +187,7 @@ int TransitionMngr::Private::effectBlurIn(bool aInit)
 
 }
 
-int TransitionMngr::Private::effectBlurOut(bool aInit)
+int TransitionMngr::Private::transitionBlurOut(bool aInit)
 {
     if (aInit)
     {

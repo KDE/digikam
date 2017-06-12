@@ -25,7 +25,7 @@
 namespace Digikam
 {
 
-int TransitionMngr::Private::effectMeltdown(bool aInit)
+int TransitionMngr::Private::transitionMeltdown(bool aInit)
 {
     int i;
 
@@ -79,7 +79,7 @@ int TransitionMngr::Private::effectMeltdown(bool aInit)
     return 15;
 }
 
-int TransitionMngr::Private::effectMosaic(bool aInit)
+int TransitionMngr::Private::transitionMosaic(bool aInit)
 {
     int dim    = 10;         // Size of a cell (dim x dim)
     int margin = dim + (int)(dim / 4);
@@ -140,7 +140,7 @@ int TransitionMngr::Private::effectMosaic(bool aInit)
     return 20;
 }
 
-int TransitionMngr::Private::effectCubism(bool aInit)
+int TransitionMngr::Private::transitionCubism(bool aInit)
 {
     if (aInit)
     {
@@ -179,7 +179,7 @@ int TransitionMngr::Private::effectCubism(bool aInit)
     return 10;
 }
 
-int TransitionMngr::Private::effectBlobs(bool aInit)
+int TransitionMngr::Private::transitionBlobs(bool aInit)
 {
     int r;
 

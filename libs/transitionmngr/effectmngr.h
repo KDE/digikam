@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-05-24
- * Description : images transition manager.
+ * Description : video frame effects manager.
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TRANSITION_MNGR_H
-#define TRANSITION_MNGR_H
+#ifndef EFFECT_MNGR_H
+#define EFFECT_MNGR_H
 
 // Qt includes
 
@@ -36,56 +36,36 @@
 namespace Digikam
 {
 
-class DIGIKAM_EXPORT TransitionMngr
+class DIGIKAM_EXPORT EffectMngr
 {
 public:
 
-    enum TransType
+    // See KEn Burns effect description: https://en.wikipedia.org/wiki/Ken_Burns_effect
+    enum EffectType
     {
-        None = 0,
-        ChessBoard,
-        MeltDown,
-        Sweep,
-        Mosaic,
-        Cubism,
-        Growing,
-        HorizontalLines,
-        VerticalLines,
-        CircleOut,
-        MultiCircleOut,
-        SpiralIn,
-        Blobs,
-        Fade,
-        SlideL2R,
-        SlideR2L,
-        SlideT2B,
-        SlideB2T,
-        PushL2R,
-        PushR2L,
-        PushT2B,
-        PushB2T,
-        SwapL2R,
-        SwapR2L,
-        SwapT2B,
-        SwapB2T,
-        BlurIn,
-        BlurOut,
+        None = 0,        // Static camera
+        KenBurnsZoomIn,
+        KenBurnsZoomOut,
+        KenBurnsPanLR,
+        KenBurnsPanRL,
+        KenBurnsPanTB,
+        KenBurnsPanBT,
         Random
     };
 
 public:
 
-    explicit TransitionMngr();
-    ~TransitionMngr();
+    explicit EffectMngr();
+    ~EffectMngr();
 
     void setOutputSize(const QSize& size);
-    void setTransition(TransType type);
-    void setInImage(const QImage& iimg);
-    void setOutImage(const QImage& oimg);
+    void setEffect(EffectType eff);
+    void setImage(const QImage& img);
+    void setFrames(int ifrms);
 
     QImage currentFrame(int& tmout);
 
-    static QMap<TransType, QString> transitionNames();
+    static QMap<EffectType, QString> effectNames();
 
 private:
 
@@ -95,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // TRANSITION_MNGR_H
+#endif // EFFECT_MNGR_H

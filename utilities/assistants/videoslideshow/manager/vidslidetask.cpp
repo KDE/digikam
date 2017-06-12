@@ -54,6 +54,7 @@
 #include "frameutils.h"
 #include "dfileoperations.h"
 #include "transitionmngr.h"
+#include "effectmngr.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
 
@@ -83,7 +84,6 @@ public:
                               AudioEncoder* const aenc,
                               AVMuxer& mux);
 
-    QRect         kenBurnsRegion(const QRect& orgRect, int step);
     AudioFrame    nextAudioFrame(const AudioFormat& afmt);
 
 public:
@@ -228,32 +228,6 @@ AudioFrame VidSlideTask::Private::nextAudioFrame(const AudioFormat& afmt)
     return AudioFrame();
 }
 
-QRect VidSlideTask::Private::kenBurnsRegion(const QRect& orgRect, int step)
-{
-    QRect kbRect = orgRect;
-
-    switch (settings->vEffect)
-    {
-        case VidSlideSettings::KENBURNS:
-        {
-            QRectF fRect(orgRect);
-
-            // We will adjust to camera zoom speed accordingly with image frames to encode.
-            double nx    = step * ((orgRect.width() - orgRect.width() * 0.8)
-                                / (double)settings->imgFrames);
-            double ny    = nx / ((double)orgRect.width() / (double)orgRect.height());
-            fRect.setTopLeft(QPointF(nx, ny));
-            fRect.setBottomRight(QPointF((double)orgRect.width()-nx, (double)orgRect.height()-ny));
-            kbRect       = fRect.toAlignedRect();
-            break;
-        }
-        default: // VidSlideSettings::NONE
-            break;
-    }
-
-    return kbRect;
-}
-
 // -------------------------------------------------------
 
 VidSlideTask::VidSlideTask(VidSlideSettings* const settings)
@@ -276,7 +250,8 @@ VidSlideTask::~VidSlideTask()
 
 void VidSlideTask::run()
 {
-    // The output video file
+    // ---------------------------------------------
+    // Setup output video file
 
     QUrl dest       = d->settings->outputDir;
     dest            = dest.adjusted(QUrl::StripTrailingSlash);
@@ -357,9 +332,12 @@ void VidSlideTask::run()
     // ---------------------------------------------
     // Loop to encode frames with images list
 
-    TransitionMngr tmngr;
-    tmngr.setOutputSize(osize);
-    tmngr.setTransition(d->settings->transition);
+    TransitionMngr transmngr;
+    transmngr.setOutputSize(osize);
+
+    EffectMngr effmngr;
+    effmngr.setOutputSize(osize);
+    effmngr.setFrames(d->settings->imgFrames);
 
     for (int i = 0 ; i < d->settings->inputImages.count()+1 && !m_cancel ; i++)
     {
@@ -375,14 +353,15 @@ void VidSlideTask::run()
 
         // -- Transition encoding ----------
 
-        tmngr.setInImage(qiimg);
-        tmngr.setOutImage(qoimg);
+        transmngr.setInImage(qiimg);
+        transmngr.setOutImage(qoimg);
+        transmngr.setTransition(d->settings->transition);
 
         int tmout = 0;
 
         do
         {
-            VideoFrame frame(tmngr.currentframe(tmout));
+            VideoFrame frame(transmngr.currentFrame(tmout));
 
             if (!d->encodeFrame(frame, venc, aenc, mux))
             {
@@ -396,24 +375,14 @@ void VidSlideTask::run()
         if (i < d->settings->inputImages.count())
         {
             VideoFrame frame;
-            QRect kbRect;
             int count = 0;
+            int tmout = 0;
+            effmngr.setImage(qoimg);
+            effmngr.setEffect(d->settings->vEffect);
 
             do
             {
-                if (d->settings->vEffect != VidSlideSettings::NONE)
-                {
-                    kbRect       = d->kenBurnsRegion(qoimg.rect(), count);
-                    QImage kbImg = qoimg.copy(kbRect).scaled(osize,
-                                                             Qt::KeepAspectRatioByExpanding,
-                                                             Qt::SmoothTransformation);
-                    qiimg        = kbImg.convertToFormat(QImage::Format_ARGB32);
-                }
-                else
-                {
-                    qiimg = qoimg;
-                }
-
+                qiimg = effmngr.currentFrame(tmout);
                 frame = VideoFrame(qiimg);
 
                 if (d->encodeFrame(frame, venc, aenc, mux))

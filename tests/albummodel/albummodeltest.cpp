@@ -74,6 +74,10 @@ AlbumModelTest::~AlbumModelTest()
 {
 }
 
+/**
+ * TODO: this test case needs to be removed, since it depends on database,
+ * threading etc, therefore it is not predictable and very hard to fix
+ */
 void AlbumModelTest::initTestCase()
 {
     tempSuffix = QLatin1String("albummodeltest-") + QTime::currentTime().toString();

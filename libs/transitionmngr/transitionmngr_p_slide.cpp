@@ -25,7 +25,7 @@
 namespace Digikam
 {
 
-int TransitionMngr::Private::effectSlideL2R(bool aInit)
+int TransitionMngr::Private::transitionSlideL2R(bool aInit)
 {
     if (aInit)
     {
@@ -48,7 +48,7 @@ int TransitionMngr::Private::effectSlideL2R(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectSlideR2L(bool aInit)
+int TransitionMngr::Private::transitionSlideR2L(bool aInit)
 {
     if (aInit)
     {
@@ -71,7 +71,7 @@ int TransitionMngr::Private::effectSlideR2L(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectSlideT2B(bool aInit)
+int TransitionMngr::Private::transitionSlideT2B(bool aInit)
 {
     if (aInit)
     {
@@ -94,7 +94,7 @@ int TransitionMngr::Private::effectSlideT2B(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectSlideB2T(bool aInit)
+int TransitionMngr::Private::transitionSlideB2T(bool aInit)
 {
     if (aInit)
     {

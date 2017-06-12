@@ -390,4 +390,4 @@ QListWidget* DMessageBox::createWidgetList(const QStringList& items)
     return listWidget;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -25,7 +25,7 @@
 namespace Digikam
 {
 
-int TransitionMngr::Private::effectSweep(bool aInit)
+int TransitionMngr::Private::transitionSweep(bool aInit)
 {
     if (aInit)
     {
@@ -98,7 +98,7 @@ int TransitionMngr::Private::effectSweep(bool aInit)
     return 20;
 }
 
-int TransitionMngr::Private::effectHorizLines(bool aInit)
+int TransitionMngr::Private::transitionHorizLines(bool aInit)
 {
     static int iyPos[] = { 0, 4, 2, 6, 1, 5, 3, 7, -1 };
 
@@ -132,7 +132,7 @@ int TransitionMngr::Private::effectHorizLines(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectVertLines(bool aInit)
+int TransitionMngr::Private::transitionVertLines(bool aInit)
 {
     static int ixPos[] = { 0, 4, 2, 6, 1, 5, 3, 7, -1 };
 
@@ -167,7 +167,7 @@ int TransitionMngr::Private::effectVertLines(bool aInit)
     return -1;
 }
 
-int TransitionMngr::Private::effectMultiCircleOut(bool aInit)
+int TransitionMngr::Private::transitionMultiCircleOut(bool aInit)
 {
     int x, y, i;
     double alpha;
@@ -217,7 +217,7 @@ int TransitionMngr::Private::effectMultiCircleOut(bool aInit)
     return eff_wait;
 }
 
-int TransitionMngr::Private::effectCircleOut(bool aInit)
+int TransitionMngr::Private::transitionCircleOut(bool aInit)
 {
     int x, y;
 
