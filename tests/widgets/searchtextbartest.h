@@ -43,8 +43,6 @@ private Q_SLOTS:
 
     void testHighlighting();
     void testSearchTextSettings();
-    void testModelParsing();
-
     void newSearchTextSettings(const SearchTextSettings& settings);
 
 private:

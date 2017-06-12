@@ -25,7 +25,7 @@
 namespace Digikam
 {
 
-int TransitionMngr::Private::effectChessboard(bool aInit)
+int TransitionMngr::Private::transitionChessboard(bool aInit)
 {
     if (aInit)
     {
@@ -64,7 +64,7 @@ int TransitionMngr::Private::effectChessboard(bool aInit)
     return eff_wait;
 }
 
-int TransitionMngr::Private::effectGrowing(bool aInit)
+int TransitionMngr::Private::transitionGrowing(bool aInit)
 {
     if (aInit)
     {
@@ -99,7 +99,7 @@ int TransitionMngr::Private::effectGrowing(bool aInit)
     return 20;
 }
 
-int TransitionMngr::Private::effectSpiralIn(bool aInit)
+int TransitionMngr::Private::transitionSpiralIn(bool aInit)
 {
     if (aInit)
     {

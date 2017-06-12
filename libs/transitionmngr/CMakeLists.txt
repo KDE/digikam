@@ -9,6 +9,11 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libtransitionmngr_SRCS
+    effectpreview.cpp
+    effectmngr.cpp
+    effectmngr_p.cpp
+    effectmngr_p_pan.cpp
+    effectmngr_p_zoom.cpp
     frameutils.cpp
     transitionpreview.cpp
     transitionmngr.cpp

@@ -77,7 +77,7 @@ class DIGIKAM_EXPORT DItemToolTip : public QLabel
 public:
 
     explicit DItemToolTip(QWidget* const parent = 0);
-    virtual ~DItemToolTip();
+    ~DItemToolTip();
 
 protected:
 

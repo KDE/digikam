@@ -55,6 +55,10 @@ public:
 
     void setItemsList(const QList<QUrl>& urls);
 
+private Q_SLOTS:
+
+    void slotCurrentIdChanged(int);
+
 private:
 
     class Private;

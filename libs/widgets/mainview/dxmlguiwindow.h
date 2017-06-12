@@ -98,7 +98,7 @@ class DIGIKAM_EXPORT DXmlGuiWindow : public KXmlGuiWindow
 public:
 
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
-    virtual ~DXmlGuiWindow();
+    ~DXmlGuiWindow();
 
     /** Manage config group name used by window instance to get/set settings from config file
      */
