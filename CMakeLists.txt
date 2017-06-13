@@ -16,7 +16,7 @@ message(STATUS "Starting CMake configuration for: ${PROJECT_NAME}")
 
 # digiKam version
 set(DIGIKAM_MAJOR_VERSION "5")
-set(DIGIKAM_MINOR_VERSION "6")
+set(DIGIKAM_MINOR_VERSION "7")
 set(DIGIKAM_PATCH_VERSION "0")
 
 # Suffix to add at end of version string. Usual values are:
