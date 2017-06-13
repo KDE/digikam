@@ -6,4 +6,5 @@ NEW FEATURES:
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 
+001 ==> 381143 - Camera not removed between invocations.
+002 ==> 
