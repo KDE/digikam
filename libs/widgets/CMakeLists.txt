@@ -72,8 +72,6 @@ set(libmainview_SRCS
     mainview/thememanager.cpp
     mainview/schememanager.cpp
     mainview/sidebar.cpp
-    mainview/dmessagebox.cpp
-    mainview/dsplashscreen.cpp
     mainview/fullscreensettings.cpp
     ../../app/utils/digikam_globals.cpp
    )

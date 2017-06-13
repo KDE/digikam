@@ -23,6 +23,8 @@ set(libdialogs_SRCS
     dconfigdlgview.cpp
     dconfigdlgview_p.cpp
     dconfigdlgwidgets.cpp
+    dmessagebox.cpp
+    dsplashscreen.cpp
 )
 
 set(libdeletedialog_SRCS
