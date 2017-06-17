@@ -7,4 +7,5 @@ NEW FEATURES:
 BUGFIXES FROM BUGZILLA:
 
 001 ==> 381143 - Camera not removed between invocations.
-002 ==> 
+002 ==> 381306 - Error with import from Fujifilm X-T10.
+003 ==> 
