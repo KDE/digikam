@@ -49,7 +49,7 @@ namespace GeoIface
 {
 
 class AbstractMarkerTiler;
-class DragDropHandler;
+class GeoDragDropHandler;
 class GeoIfaceSharedData;
 class ModelHelper;
 class TrackManager;
@@ -71,7 +71,7 @@ public:
     void addUngroupedModel(ModelHelper* const modelHelper);
     void removeUngroupedModel(ModelHelper* const modelHelper);
     void setGroupedModel(AbstractMarkerTiler* const markerModel);
-    void setDragDropHandler(DragDropHandler* const dragDropHandler);
+    void setDragDropHandler(GeoDragDropHandler* const dragDropHandler);
     void setTrackManager(TrackManager* const trackManager);
     //@}
 

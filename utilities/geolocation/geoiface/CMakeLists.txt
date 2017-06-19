@@ -15,7 +15,7 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      backends/backendgooglemaps.cpp
 
                      abstractmarkertiler.cpp
-                     dragdrophandler.cpp
+                     geodragdrophandler.cpp
                      geocoordinates.cpp
                      groupstatecomputer.cpp
                      itemmarkertiler.cpp

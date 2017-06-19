@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "dragdrophandler.h"
+#include "geodragdrophandler.h"
 
 // local includes
 
@@ -31,12 +31,12 @@
 namespace GeoIface
 {
 
-DragDropHandler::DragDropHandler(QObject* const parent)
+GeoDragDropHandler::GeoDragDropHandler(QObject* const parent)
     : QObject(parent)
 {
 }
 
-DragDropHandler::~DragDropHandler()
+GeoDragDropHandler::~GeoDragDropHandler()
 {
 }
 

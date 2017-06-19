@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "dragdrophandler.h"
+#include "geodragdrophandler.h"
 
 using namespace GeoIface;
 
@@ -56,7 +56,7 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class MapDragDropHandler : public DragDropHandler
+class MapDragDropHandler : public GeoDragDropHandler
 {
     Q_OBJECT
 

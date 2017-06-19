@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef MYDRAGDROPHANDLER_H
-#define MYDRAGDROPHANDLER_H
+#ifndef MY_DRAG_DROP_HANDLER_H
+#define MY_DRAG_DROP_HANDLER_H
 
 // Qt includes
 
@@ -32,7 +32,7 @@
 
 // geoiface includes
 
-#include "dragdrophandler.h"
+#include "geodragdrophandler.h"
 
 using namespace GeoIface;
 
@@ -51,7 +51,7 @@ public:
     QList<QPersistentModelIndex> draggedIndices;
 };
 
-class MyDragDropHandler : public DragDropHandler
+class MyDragDropHandler : public GeoDragDropHandler
 {
     Q_OBJECT
 
@@ -69,4 +69,4 @@ private:
     QAbstractItemModel* const model;
 };
 
-#endif /* MYDRAGDROPHANDLER_H */
+#endif // MY_DRAG_DROP_HANDLER_H

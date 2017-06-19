@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DRAG_DROP_HANDLER_H
-#define DRAG_DROP_HANDLER_H
+#ifndef GEO_DRAG_DROP_HANDLER_H
+#define GEO_DRAG_DROP_HANDLER_H
 
 // local includes
 
@@ -36,14 +36,14 @@ class QDropEvent;
 namespace GeoIface
 {
 
-class DIGIKAM_EXPORT DragDropHandler : public QObject
+class DIGIKAM_EXPORT GeoDragDropHandler : public QObject
 {
     Q_OBJECT
 
 public:
 
-    explicit DragDropHandler(QObject* const parent = 0);
-    virtual ~DragDropHandler();
+    explicit GeoDragDropHandler(QObject* const parent = 0);
+    virtual ~GeoDragDropHandler();
 
     virtual Qt::DropAction accepts(const QDropEvent* e) = 0;
     virtual bool dropEvent(const QDropEvent* e, const GeoCoordinates& dropCoordinates) = 0;
@@ -52,4 +52,4 @@ public:
 
 } // namespace GeoIface
 
-#endif // DRAG_DROP_HANDLER_H
+#endif // GEO_DRAG_DROP_HANDLER_H
