@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
 namespace GeoIface
 {
@@ -48,27 +48,33 @@ namespace Digikam
 class GPSImageModel;
 class GPSUndoCommand;
 
-class GPSGeoIfaceModelHelper : public ModelHelper
+class GPSGeoIfaceModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
 public:
 
-    GPSGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent = 0);
+    GPSGeoIfaceModelHelper(GPSImageModel* const model,
+                           QItemSelectionModel* const selectionModel,
+                           QObject* const parent = 0);
     virtual ~GPSGeoIfaceModelHelper();
 
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index,
+                                 GeoCoordinates* const coordinates) const;
     virtual PropertyFlags modelFlags() const;
 
-    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
-    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);
+    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+                                                  const QSize& size);
+    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+                                                                  const int sortKey);
 
     virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedMarkers,
-                                const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
+                                const GeoCoordinates& targetCoordinates,
+                                const QPersistentModelIndex& targetSnapIndex);
 
-    void addUngroupedModelHelper(ModelHelper* const newModelHelper);
+    void addUngroupedModelHelper(GeoModelHelper* const newModelHelper);
 
 private Q_SLOTS:
 

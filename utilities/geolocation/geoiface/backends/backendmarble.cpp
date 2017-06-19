@@ -59,7 +59,7 @@
 
 #include "abstractmarkertiler.h"
 #include "mapwidget.h"
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "tracks.h"
 #include "digikam_debug.h"
 
@@ -711,9 +711,9 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
 
     for (int i = 0; i < s->ungroupedModels.count(); ++i)
     {
-        ModelHelper* const modelHelper = s->ungroupedModels.at(i);
+        GeoModelHelper* const modelHelper = s->ungroupedModels.at(i);
 
-        if (!modelHelper->modelFlags().testFlag(ModelHelper::FlagVisible))
+        if (!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagVisible))
             continue;
 
         QAbstractItemModel* const model = modelHelper->model();
@@ -1603,11 +1603,11 @@ bool BackendMarble::findSnapPoint(const QPoint& actualPoint, QPoint* const snapP
     // now handle snapping: is there any object close by?
     for (int im = 0; im < s->ungroupedModels.count(); ++im)
     {
-        ModelHelper* const modelHelper = s->ungroupedModels.at(im);
+        GeoModelHelper* const modelHelper = s->ungroupedModels.at(im);
 
         // TODO: test for active snapping
-        if ((!modelHelper->modelFlags().testFlag(ModelHelper::FlagVisible)) ||
-            (!modelHelper->modelFlags().testFlag(ModelHelper::FlagSnaps)))
+        if ((!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagVisible)) ||
+            (!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagSnaps)))
         {
             continue;
         }

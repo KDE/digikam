@@ -22,16 +22,16 @@
  *
  * ============================================================ */
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
 namespace GeoIface
 {
 
 /**
- * @class ModelHelper
+ * @class GeoModelHelper
  * @brief Helper class to access data in models.
  *
- * @c ModelHelper is used to access data held in models, which is not suitable for transfer using the
+ * @c GeoModelHelper is used to access data held in models, which is not suitable for transfer using the
  * the Qt-style API, like coordinates or custom sized thumbnails.
  *
  * The basic functions which have to be implemented are:
@@ -51,16 +51,16 @@ namespace GeoIface
  * @li pixmapFromRepresentativeIndex(): Find a thumbnail for an item.
  */
 
-ModelHelper::ModelHelper(QObject* const parent)
+GeoModelHelper::GeoModelHelper(QObject* const parent)
     : QObject(parent)
 {
 }
 
-ModelHelper::~ModelHelper()
+GeoModelHelper::~GeoModelHelper()
 {
 }
 
-void ModelHelper::snapItemsTo(const QModelIndex& targetIndex,
+void GeoModelHelper::snapItemsTo(const QModelIndex& targetIndex,
                               const QList<QPersistentModelIndex>& snappedIndices)
 {
     QList<QModelIndex> result;
@@ -73,7 +73,7 @@ void ModelHelper::snapItemsTo(const QModelIndex& targetIndex,
     snapItemsTo(targetIndex, result);
 }
 
-QPersistentModelIndex ModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+QPersistentModelIndex GeoModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
                                                                    const int /*sortKey*/)
 {
     // this is only a stub to provide some default implementation
@@ -88,7 +88,7 @@ QPersistentModelIndex ModelHelper::bestRepresentativeIndexFromList(const QList<Q
  *
  * The icon can either be returned as a URL to an image, or as a QPixmap. If the caller
  * can handle URLs (for example, to display them in HTML), he can provide the URL parameter.
- * However, the ModelHelper may still choose to return a QPixmap instead, if no URL is
+ * However, the GeoModelHelper may still choose to return a QPixmap instead, if no URL is
  * available.
  *
  * @param index Modelindex of the marker.
@@ -97,7 +97,7 @@ QPersistentModelIndex ModelHelper::bestRepresentativeIndexFromList(const QList<Q
  * @param pixmap Holder for the pixmap of the icon.
  * @param url URL of the icon if available.
  */
-bool ModelHelper::itemIcon(const QModelIndex& index,
+bool GeoModelHelper::itemIcon(const QModelIndex& index,
                            QPoint* const offset,
                            QSize* const size,
                            QPixmap* const pixmap,
@@ -112,33 +112,33 @@ bool ModelHelper::itemIcon(const QModelIndex& index,
     return false;
 }
 
-ModelHelper::PropertyFlags ModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags GeoModelHelper::modelFlags() const
 {
     return PropertyFlags();
 }
 
-ModelHelper::PropertyFlags ModelHelper::itemFlags(const QModelIndex& /*index*/) const
+GeoModelHelper::PropertyFlags GeoModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
     return PropertyFlags();
 }
 
-void ModelHelper::snapItemsTo(const QModelIndex& /*targetIndex*/,
+void GeoModelHelper::snapItemsTo(const QModelIndex& /*targetIndex*/,
                               const QList<QModelIndex>& /*snappedIndices*/)
 {
 }
 
-QPixmap ModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& /*index*/,
+QPixmap GeoModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& /*index*/,
                                                    const QSize& /*size*/)
 {
     return QPixmap();
 }
 
-void ModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
+void GeoModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices)
 {
     Q_UNUSED(clickedIndices);
 }
 
-void ModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
+void GeoModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
                                  const GeoCoordinates& targetCoordinates,
                                  const QPersistentModelIndex& targetSnapIndex)
 {

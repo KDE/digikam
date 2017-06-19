@@ -67,8 +67,9 @@ public:
     QStandardItemModel* model;
 };
 
-CalibratorModelHelper::CalibratorModelHelper(QStandardItemModel* const model, QObject* const parent)
-    : ModelHelper(parent),
+CalibratorModelHelper::CalibratorModelHelper(QStandardItemModel* const model,
+                                             QObject* const parent)
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->model = model;
@@ -89,7 +90,8 @@ QItemSelectionModel* CalibratorModelHelper::selectionModel() const
     return 0;
 }
 
-bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index,
+                                            GeoCoordinates* const coordinates) const
 {
     if (!index.isValid())
         return false;
@@ -103,7 +105,8 @@ bool CalibratorModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordin
     return itemCoordinates.hasCoordinates();
 }
 
-void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index, const GeoCoordinates& coordinates)
+void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index,
+                                               const GeoCoordinates& coordinates)
 {
     if (!index.isValid())
         return;
@@ -111,7 +114,7 @@ void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index, const G
     d->model->setData(index, QVariant::fromValue(coordinates), CoordinatesRole);
 }
 
-ModelHelper::PropertyFlags CalibratorModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags CalibratorModelHelper::modelFlags() const
 {
     return FlagVisible;
 }
@@ -135,10 +138,10 @@ public:
     }
 
     QHBoxLayout*                                     hBoxLayout;
-    QList<QPair<QWidget*, MapWidget*> >    extraWidgetHolders;
+    QList<QPair<QWidget*, MapWidget*> >              extraWidgetHolders;
     QStandardItemModel*                              model;
     CalibratorModelHelper*                           modelHelper;
-    ItemMarkerTiler*                       markerTiler;
+    ItemMarkerTiler*                                 markerTiler;
 
     QButtonGroup*                                    groupingMode;
     QSpinBox*                                        sbLevel;

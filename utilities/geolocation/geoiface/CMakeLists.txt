@@ -24,7 +24,7 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      lookupaltitudegeonames.cpp
                      lookupfactory.cpp
                      mapwidget.cpp
-                     modelhelper.cpp
+                     geomodelhelper.cpp
                      placeholderwidget.cpp
                      tilegrouper.cpp
                      tileindex.cpp

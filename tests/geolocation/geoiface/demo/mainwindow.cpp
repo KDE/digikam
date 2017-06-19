@@ -73,8 +73,9 @@
 using namespace Digikam;
 using namespace GeoIface;
 
-MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel)
-    : ModelHelper(itemModel),
+MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel,
+                                     QItemSelectionModel* const itemSelectionModel)
+    : GeoModelHelper(itemModel),
       m_itemModel(itemModel),
       m_itemSelectionModel(itemSelectionModel)
 {
@@ -96,7 +97,8 @@ QItemSelectionModel* MarkerModelHelper::selectionModel() const
     return m_itemSelectionModel;
 }
 
-bool MarkerModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool MarkerModelHelper::itemCoordinates(const QModelIndex& index,
+                                        GeoCoordinates* const coordinates) const
 {
     if (!index.data(RoleCoordinates).canConvert<GeoCoordinates>())
         return false;
@@ -115,7 +117,8 @@ void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& moved
 
     for (int i = 0; i < movedIndices.count(); ++i)
     {
-        m_itemModel->setData(movedIndices.at(i), QVariant::fromValue(targetCoordinates), RoleCoordinates);
+        m_itemModel->setData(movedIndices.at(i),
+                             QVariant::fromValue(targetCoordinates), RoleCoordinates);
     }
 
     emit(signalMarkersMoved(movedIndices));
@@ -609,7 +612,7 @@ void MainWindow::createMenus()
             this, SLOT(slotAddImages()));
 }
 
-ModelHelper::PropertyFlags MarkerModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags MarkerModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

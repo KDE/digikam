@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "gpsdatacontainer.h"
 #include "bookmarksmngr.h"
 
@@ -43,7 +43,7 @@ namespace Digikam
 class GPSImageModel;
 class GPSUndoCommand;
 
-class GPSBookmarkModelHelper : public ModelHelper
+class GPSBookmarkModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 

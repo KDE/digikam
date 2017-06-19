@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
 // local includes
 
@@ -45,7 +45,7 @@ namespace Digikam
 class SearchResultModel;
 class GPSUndoCommand;
 
-class SearchResultModelHelper : public ModelHelper
+class SearchResultModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 

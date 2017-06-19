@@ -30,13 +30,13 @@
 
 // local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
 class QStandardItemModel;
 
 using namespace GeoIface;
 
-class CalibratorModelHelper : public ModelHelper
+class CalibratorModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
@@ -93,4 +93,4 @@ private:
     Q_DISABLE_COPY(Calibrator)
 };
 
-#endif /* CALIBRATOR_H */
+#endif // CALIBRATOR_H

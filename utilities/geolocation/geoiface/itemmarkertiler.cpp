@@ -26,7 +26,7 @@
 
 // local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "digikam_debug.h"
 #include "geoiface_common.h"
 
@@ -106,18 +106,18 @@ public:
     {
     }
 
-    ModelHelper*         modelHelper;
+    GeoModelHelper*         modelHelper;
     QItemSelectionModel* selectionModel;
     QAbstractItemModel*  markerModel;
     bool                 activeState;
 };
 
-ItemMarkerTiler::ItemMarkerTiler(ModelHelper* const modelHelper, QObject* const parent)
+ItemMarkerTiler::ItemMarkerTiler(GeoModelHelper* const modelHelper, QObject* const parent)
     : AbstractMarkerTiler(parent),
       d(new Private())
 {
     resetRootTile();
-    setMarkerModelHelper(modelHelper);
+    setMarkerGeoModelHelper(modelHelper);
 }
 
 ItemMarkerTiler::~ItemMarkerTiler()
@@ -129,7 +129,7 @@ ItemMarkerTiler::~ItemMarkerTiler()
     delete d;
 }
 
-void ItemMarkerTiler::setMarkerModelHelper(ModelHelper* const modelHelper)
+void ItemMarkerTiler::setMarkerGeoModelHelper(GeoModelHelper* const modelHelper)
 {
     d->modelHelper    = modelHelper;
     d->markerModel    = modelHelper->model();
@@ -146,13 +146,13 @@ void ItemMarkerTiler::setMarkerModelHelper(ModelHelper* const modelHelper)
 //         connect(d->markerModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
 //                 this, SLOT(slotSourceModelDataChanged(QModelIndex,QModelIndex)));
 
-        connect(d->modelHelper, &ModelHelper::signalModelChangedDrastically, this, &ItemMarkerTiler::slotSourceModelReset);
+        connect(d->modelHelper, &GeoModelHelper::signalModelChangedDrastically, this, &ItemMarkerTiler::slotSourceModelReset);
 
         connect(d->markerModel, &QAbstractItemModel::modelReset, this, &ItemMarkerTiler::slotSourceModelReset);
 
         connect(d->markerModel, &QAbstractItemModel::layoutChanged, this, &ItemMarkerTiler::slotSourceModelLayoutChanged);
 
-        connect(d->modelHelper, &ModelHelper::signalThumbnailAvailableForIndex, this, &ItemMarkerTiler::slotThumbnailAvailableForIndex);
+        connect(d->modelHelper, &GeoModelHelper::signalThumbnailAvailableForIndex, this, &ItemMarkerTiler::slotThumbnailAvailableForIndex);
 
         if (d->selectionModel)
         {
@@ -755,7 +755,7 @@ AbstractMarkerTiler::TilerFlags ItemMarkerTiler::tilerFlags() const
 {
     TilerFlags resultFlags = FlagNull;
 
-    if (d->modelHelper->modelFlags().testFlag(ModelHelper::FlagMovable))
+    if (d->modelHelper->modelFlags().testFlag(GeoModelHelper::FlagMovable))
     {
         resultFlags |= FlagMovable;
     }

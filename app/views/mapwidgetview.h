@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "digikam_export.h"
 #include "dcategorizedsortfilterproxymodel.h"
 #include "statesavingobject.h"
@@ -84,7 +84,7 @@ private:
 
 // ------------------------------------------------------------------------------------------------------------
 
-class MapViewModelHelper : public ModelHelper
+class MapViewModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 

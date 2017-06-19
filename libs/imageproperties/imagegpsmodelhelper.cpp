@@ -43,7 +43,7 @@ public:
 };
 
 ImageGPSModelHelper::ImageGPSModelHelper(QStandardItemModel* const itemModel, QObject* const parent)
-    : ModelHelper(parent),
+    : GeoModelHelper(parent),
       d(new Private())
 {
 
@@ -73,7 +73,8 @@ QItemSelectionModel* ImageGPSModelHelper::selectionModel() const
     return d->itemSelectionModel;
 }
 
-bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index,
+                                          GeoCoordinates* const coordinates) const
 {
     const GPSImageInfo currentGPSImageInfo = index.data(RoleGPSImageInfo).value<GPSImageInfo>();
     *coordinates                           = currentGPSImageInfo.coordinates;
@@ -88,7 +89,8 @@ bool ImageGPSModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinat
     }
 }
 
-QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
+QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+                                                           const QSize& size)
 {
     if (!index.isValid())
     {
@@ -114,7 +116,8 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
     }
 }
 
-QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
+QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+                                                                           const int sortKey)
 {
     QModelIndex bestIndex         = list.first();
     GPSImageInfo bestGPSImageInfo = bestIndex.data(RoleGPSImageInfo).value<GPSImageInfo>();
@@ -140,7 +143,8 @@ QPersistentModelIndex ImageGPSModelHelper::bestRepresentativeIndexFromList(const
     return QPersistentModelIndex(bestIndex);
 }
 
-void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription, const QPixmap& thumb)
+void ImageGPSModelHelper::slotThumbnailLoaded(const LoadingDescription& loadingDescription,
+                                              const QPixmap& thumb)
 {
     for (int i = 0; i < d->itemModel->rowCount(); ++i)
     {

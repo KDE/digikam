@@ -33,7 +33,7 @@
 
 // Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "mapwidget.h"
 
 // Local includes

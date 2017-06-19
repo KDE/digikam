@@ -48,7 +48,7 @@
 #include "htmlwidget.h"
 #include "mapwidget.h"
 #include "abstractmarkertiler.h"
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "digikam_debug.h"
 
 namespace GeoIface
@@ -408,12 +408,12 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
     if (mindex>s->ungroupedModels.count())
         return;
 
-    ModelHelper* const modelHelper = s->ungroupedModels.at(mindex);
+    GeoModelHelper* const modelHelper = s->ungroupedModels.at(mindex);
 
     if (!modelHelper)
         return;
 
-    if (!modelHelper->modelFlags().testFlag(ModelHelper::FlagVisible))
+    if (!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagVisible))
         return;
 
     QAbstractItemModel* const model = modelHelper->model();
@@ -421,10 +421,10 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
     for (int row = 0; row < model->rowCount(); ++row)
     {
         const QModelIndex currentIndex             = model->index(row, 0);
-        const ModelHelper::PropertyFlags itemFlags = modelHelper->itemFlags(currentIndex);
+        const GeoModelHelper::PropertyFlags itemFlags = modelHelper->itemFlags(currentIndex);
 
         // TODO: this is untested! We need to make sure the indices stay correct inside the JavaScript part!
-        if (!itemFlags.testFlag(ModelHelper::FlagVisible))
+        if (!itemFlags.testFlag(GeoModelHelper::FlagVisible))
             continue;
 
         GeoCoordinates currentCoordinates;
@@ -437,8 +437,8 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
                 .arg(row)
                 .arg(currentCoordinates.latString())
                 .arg(currentCoordinates.lonString())
-                .arg(itemFlags.testFlag(ModelHelper::FlagMovable)?QLatin1String("true" ):QLatin1String("false"))
-                .arg(itemFlags.testFlag(ModelHelper::FlagSnaps)?QLatin1String("true" ):QLatin1String("false"))
+                .arg(itemFlags.testFlag(GeoModelHelper::FlagMovable)?QLatin1String("true" ):QLatin1String("false"))
+                .arg(itemFlags.testFlag(GeoModelHelper::FlagSnaps)?QLatin1String("true" ):QLatin1String("false"))
             );
 
         QPoint     markerCenterPoint;
@@ -584,7 +584,7 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
                 continue;
 
             /// @todo emit signal here or later?
-            ModelHelper* const modelHelper  = s->ungroupedModels.at(snapModelId);
+            GeoModelHelper* const modelHelper  = s->ungroupedModels.at(snapModelId);
             QAbstractItemModel* const model = modelHelper->model();
             QPair<int, QModelIndex> snapTargetIndex(snapModelId, model->index(snapMarkerId, 0));
             emit(signalClustersMoved(QIntList() << clusterIndex, snapTargetIndex));

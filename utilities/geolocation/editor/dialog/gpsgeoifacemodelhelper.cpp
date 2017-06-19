@@ -63,15 +63,15 @@ public:
         selectionModel = 0;
     }
 
-    GPSImageModel*       model;
-    QItemSelectionModel* selectionModel;
-    QList<ModelHelper*>  ungroupedModelHelpers;
+    GPSImageModel*         model;
+    QItemSelectionModel*   selectionModel;
+    QList<GeoModelHelper*> ungroupedModelHelpers;
 };
 
 GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model,
                                                QItemSelectionModel* const selectionModel,
                                                QObject* const parent)
-    : ModelHelper(parent),
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->model          = model;
@@ -122,13 +122,14 @@ QPixmap GPSGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentM
     return d->model->getPixmapForIndex(index, qMax(size.width(), size.height()));
 }
 
-QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
+QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+                                                                              const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QPersistentModelIndex bestIndex;
     QDateTime             bestTime;
 
-    for (int i = 0; i < list.count(); ++i)
+    for (int i = 0 ; i < list.count() ; ++i)
     {
         const QPersistentModelIndex currentIndex = list.at(i);
         const GPSImageItem* const currentItem   = static_cast<GPSImageItem*>(d->model->itemFromIndex(currentIndex));
@@ -173,9 +174,9 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
 
         for (int i = 0; i < d->ungroupedModelHelpers.count(); ++i)
         {
-            ModelHelper* const ungroupedHelper = d->ungroupedModelHelpers.at(i);
+            GeoModelHelper* const ungroupedHelper = d->ungroupedModelHelpers.at(i);
 
-            if (ungroupedHelper->model()==targetModel)
+            if (ungroupedHelper->model() == targetModel)
             {
                 QList<QModelIndex> iMovedMarkers;
 
@@ -213,12 +214,12 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSGeoIfaceModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
+void GPSGeoIfaceModelHelper::addUngroupedModelHelper(GeoModelHelper* const newModelHelper)
 {
     d->ungroupedModelHelpers << newModelHelper;
 }
 
-ModelHelper::PropertyFlags GPSGeoIfaceModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags GPSGeoIfaceModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

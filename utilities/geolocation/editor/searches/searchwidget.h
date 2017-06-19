@@ -33,11 +33,12 @@
 // Local includes
 
 #include "digikam_config.h"
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "mapwidget.h"
 #include "searchbackend.h"
 
 class QEvent;
+
 class KConfigGroup;
 
 using namespace GeoIface;
@@ -61,7 +62,7 @@ public:
                 );
     ~SearchWidget();
 
-    ModelHelper* getModelHelper() const;
+    GeoModelHelper* getModelHelper() const;
 
     void saveSettingsToGroup(KConfigGroup* const group);
     void readSettingsFromGroup(const KConfigGroup* const group);

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MODEL_HELPER_H
-#define MODEL_HELPER_H
+#ifndef GEO_MODEL_HELPER_H
+#define GEO_MODEL_HELPER_H
 
 // Qt includes
 
@@ -43,7 +43,7 @@
 namespace GeoIface
 {
 
-class DIGIKAM_EXPORT ModelHelper : public QObject
+class DIGIKAM_EXPORT GeoModelHelper : public QObject
 {
     Q_OBJECT
 
@@ -61,38 +61,50 @@ public:
 
 public:
 
-    explicit ModelHelper(QObject* const parent = 0);
-    virtual ~ModelHelper();
+    explicit GeoModelHelper(QObject* const parent = 0);
+    virtual ~GeoModelHelper();
 
-    void snapItemsTo(const QModelIndex& targetIndex, const QList<QPersistentModelIndex>& snappedIndices);
+    void snapItemsTo(const QModelIndex& targetIndex,
+                     const QList<QPersistentModelIndex>& snappedIndices);
 
     // these are necessary for grouped and ungrouped models
     virtual QAbstractItemModel* model() const = 0;
     virtual QItemSelectionModel* selectionModel() const = 0;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const = 0;
+    virtual bool itemCoordinates(const QModelIndex& index,
+                                 GeoCoordinates* const coordinates) const = 0;
     virtual PropertyFlags modelFlags() const;
 
     // these are necessary for ungrouped models
-    virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
+    virtual bool itemIcon(const QModelIndex& index,
+                          QPoint* const offset,
+                          QSize* const size,
+                          QPixmap* const pixmap,
+                          QUrl* const url) const;
     virtual PropertyFlags itemFlags(const QModelIndex& index) const;
-    virtual void snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices);
+    virtual void snapItemsTo(const QModelIndex& targetIndex,
+                             const QList<QModelIndex>& snappedIndices);
 
     // these are used by MarkerModel for grouped models
-    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size);
-    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey);
+    virtual QPixmap pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+                                                  const QSize& size);
+    virtual QPersistentModelIndex bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+                                                                  const int sortKey);
 
     virtual void onIndicesClicked(const QList<QPersistentModelIndex>& clickedIndices);
-    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
+    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
+                                const GeoCoordinates& targetCoordinates,
+                                const QPersistentModelIndex& targetSnapIndex);
 
 Q_SIGNALS:
 
     void signalVisibilityChanged();
-    void signalThumbnailAvailableForIndex(const QPersistentModelIndex& index, const QPixmap& pixmap);
+    void signalThumbnailAvailableForIndex(const QPersistentModelIndex& index,
+                                          const QPixmap& pixmap);
     void signalModelChangedDrastically();
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ModelHelper::PropertyFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(GeoModelHelper::PropertyFlags)
 
 } // namespace GeoIface
 
-#endif // MODEL_HELPER_H
+#endif // GEO_MODEL_HELPER_H

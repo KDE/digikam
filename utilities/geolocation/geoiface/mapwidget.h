@@ -51,7 +51,7 @@ namespace GeoIface
 class AbstractMarkerTiler;
 class GeoDragDropHandler;
 class GeoIfaceSharedData;
-class ModelHelper;
+class GeoModelHelper;
 class TrackManager;
 
 class DIGIKAM_EXPORT MapWidget : public QWidget
@@ -68,8 +68,8 @@ public:
 
     /// @name Data
     //@{
-    void addUngroupedModel(ModelHelper* const modelHelper);
-    void removeUngroupedModel(ModelHelper* const modelHelper);
+    void addUngroupedModel(GeoModelHelper* const modelHelper);
+    void removeUngroupedModel(GeoModelHelper* const modelHelper);
     void setGroupedModel(AbstractMarkerTiler* const markerModel);
     void setDragDropHandler(GeoDragDropHandler* const dragDropHandler);
     void setTrackManager(TrackManager* const trackManager);

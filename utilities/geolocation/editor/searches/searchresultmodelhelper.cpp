@@ -80,7 +80,7 @@ SearchResultModelHelper::SearchResultModelHelper(SearchResultModel* const result
                                                  QItemSelectionModel* const selectionModel,
                                                  GPSImageModel* const imageModel,
                                                  QObject* const parent)
-    : ModelHelper(parent),
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->model          = resultModel;
@@ -127,12 +127,12 @@ bool SearchResultModelHelper::itemIcon(const QModelIndex& index,
     return d->model->getMarkerIcon(index, offset, size, pixmap, url);
 }
 
-ModelHelper::PropertyFlags SearchResultModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags SearchResultModelHelper::modelFlags() const
 {
     return FlagSnaps | (d->visible ? FlagVisible:FlagNull);
 }
 
-ModelHelper::PropertyFlags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
+GeoModelHelper::PropertyFlags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
     return FlagVisible | FlagSnaps;
 }

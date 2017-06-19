@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEGPSMODELHELPER_H
-#define IMAGEGPSMODELHELPER_H
+#ifndef IMAGE_GPS_MODEL_HELPER_H
+#define IMAGE_GPS_MODEL_HELPER_H
 
 // Qt includes
 
@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
 // Local includes
 
@@ -46,7 +46,7 @@ namespace Digikam
 
 const int RoleGPSImageInfo = Qt::UserRole + 1;
 
-class ImageGPSModelHelper : public ModelHelper
+class ImageGPSModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
@@ -75,4 +75,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEGPSMODELHELPER_H
+#endif // IMAGE_GPS_MODEL_HELPER_H

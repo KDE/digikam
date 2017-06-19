@@ -60,7 +60,7 @@
 
 #include "geoiface_common.h"
 #include "geodragdrophandler.h"
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "tracks.h"
 #include "placeholderwidget.h"
 #include "tilegrouper.h"
@@ -87,10 +87,10 @@ namespace GeoIface
  *
  * Now, a brief introduction on how to get GeoIface working is provided:
  * @li First, an instance of @c GeoIfaceWidget has to be created.
- * @li Next, @c ModelHelper has to be subclassed and at least the pure virtual functions have to be implemented.
+ * @li Next, @c GeoModelHelper has to be subclassed and at least the pure virtual functions have to be implemented.
  * @li To show the model's data ungrouped, the model helper has to be added to @c GeoIfaceWidget instance using addUngroupedModel.
  * @li To show the model's data grouped, an instance of @c AbstractMarkerTiler has to be created and the model helper has to be
- *     set to it using setMarkerModelHelper. The @c AbstractMarkerTiler has then to be given to GeoIfaceWidget using setGroupedModel. If
+ *     set to it using setMarkerGeoModelHelper. The @c AbstractMarkerTiler has then to be given to GeoIfaceWidget using setGroupedModel. If
  *     the items to be displayed do not reside in a model, a subclass of @c AbstractMarkerTiler can be created which returns
  *     just the number of items in a particular area, and picks representative items for thumbnails.
  * @li To handle dropping of items from the host applications UI onto the map, @c DragDropHandler has to be subclassed
@@ -1265,7 +1265,7 @@ void MapWidget::slotClustersMoved(const QIntList& clusterIndices,
      */
 }
 
-void MapWidget::addUngroupedModel(ModelHelper* const modelHelper)
+void MapWidget::addUngroupedModel(GeoModelHelper* const modelHelper)
 {
     s->ungroupedModels << modelHelper;
 
@@ -1291,7 +1291,7 @@ void MapWidget::addUngroupedModel(ModelHelper* const modelHelper)
     emit(signalUngroupedModelChanged(s->ungroupedModels.count() - 1));
 }
 
-void MapWidget::removeUngroupedModel(ModelHelper* const modelHelper)
+void MapWidget::removeUngroupedModel(GeoModelHelper* const modelHelper)
 {
     if (!modelHelper)
         return;
@@ -2008,7 +2008,7 @@ void MapWidget::slotUngroupedModelChanged()
         return;
     }
 
-    ModelHelper* const senderHelper = qobject_cast<ModelHelper*>(senderObject);
+    GeoModelHelper* const senderHelper = qobject_cast<GeoModelHelper*>(senderObject);
 
     if (senderHelper)
     {

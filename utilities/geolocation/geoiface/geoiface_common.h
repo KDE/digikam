@@ -48,7 +48,7 @@ namespace GeoIface
 class AbstractMarkerTiler;
 class MapWidget;
 class MapBackend;
-class ModelHelper;
+class GeoModelHelper;
 class TileGrouper;
 class TrackManager;
 
@@ -249,7 +249,7 @@ public:
     TileGrouper*              tileGrouper;
     AbstractMarkerTiler*      markerModel;
     GeoIfaceCluster::List      clusterList;
-    QList<ModelHelper*>       ungroupedModels;
+    QList<GeoModelHelper*>       ungroupedModels;
     TrackManager*             trackManager;
     //@}
 

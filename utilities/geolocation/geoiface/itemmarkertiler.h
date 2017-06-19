@@ -37,7 +37,7 @@
 namespace GeoIface
 {
 
-class ModelHelper;
+class GeoModelHelper;
 
 class DIGIKAM_EXPORT ItemMarkerTiler : public AbstractMarkerTiler
 {
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT ItemMarkerTiler : public AbstractMarkerTiler
 
 public:
 
-    explicit ItemMarkerTiler(ModelHelper* const modelHelper, QObject* const parent = 0);
+    explicit ItemMarkerTiler(GeoModelHelper* const modelHelper, QObject* const parent = 0);
     virtual ~ItemMarkerTiler();
 
     virtual TilerFlags tilerFlags() const;
@@ -68,7 +68,7 @@ public:
     virtual void onIndicesMoved(const TileIndex::List& tileIndicesList, const GeoCoordinates& targetCoordinates,
                                 const QPersistentModelIndex& targetSnapIndex);
 
-    void setMarkerModelHelper(ModelHelper* const modelHelper);
+    void setMarkerGeoModelHelper(GeoModelHelper* const modelHelper);
     void removeMarkerIndexFromGrid(const QModelIndex& markerIndex, const bool ignoreSelection = false);
     void addMarkerIndexToGrid(const QPersistentModelIndex& markerIndex);
 
