@@ -8,4 +8,5 @@ BUGFIXES FROM BUGZILLA:
 
 001 ==> 381143 - Camera not removed between invocations.
 002 ==> 381306 - Error with import from Fujifilm X-T10.
-003 ==> 
+003 ==> 379869 - Crash of digikam after ending digiam writing changed tags into photos.
+004 ==> 
