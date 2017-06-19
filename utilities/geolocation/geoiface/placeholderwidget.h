@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PLACEHOLDERWIDGET_H
-#define PLACEHOLDERWIDGET_H
+#ifndef PLACE_HOLDER_WIDGET_H
+#define PLACE_HOLDER_WIDGET_H
 
 // Qt includes
 
@@ -57,4 +57,4 @@ private:
 
 } // namespace GeoIface
 
-#endif // PLACEHOLDERWIDGET_H
+#endif // PLACE_HOLDER_WIDGET_H

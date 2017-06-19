@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ITEMMARKERTILER_H
-#define ITEMMARKERTILER_H
+#ifndef ITEM_MARKER_TILER_H
+#define ITEM_MARKER_TILER_H
 
 // Qt includes
 
@@ -48,7 +48,7 @@ public:
     explicit ItemMarkerTiler(ModelHelper* const modelHelper, QObject* const parent = 0);
     virtual ~ItemMarkerTiler();
 
-    virtual Flags tilerFlags() const;
+    virtual TilerFlags tilerFlags() const;
     virtual Tile* tileNew();
     virtual void tileDeleteInternal(Tile* const tile);
     virtual void prepareTiles(const GeoCoordinates& upperLeft, const GeoCoordinates& lowerRight, int level);
@@ -98,4 +98,4 @@ private:
 
 } // namespace GeoIface
 
-#endif // ITEMMARKERTILER_H
+#endif // ITEM_MARKER_TILER_H

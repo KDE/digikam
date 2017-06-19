@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GROUPSTATECOMPUTER_H
-#define GROUPSTATECOMPUTER_H
+#ifndef GROUP_STATE_COMPUTER_H
+#define GROUP_STATE_COMPUTER_H
 
 #include "groupstate.h"
 
@@ -62,4 +62,4 @@ private:
 
 } // namespace GeoIface
 
-#endif // GROUPSTATECOMPUTER_H
+#endif // GROUP_STATE_COMPUTER_H

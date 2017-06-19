@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef MAPWIDGET_H
-#define MAPWIDGET_H
+#ifndef MAP_WIDGET_H
+#define MAP_WIDGET_H
 
 // Qt includes
 
@@ -39,10 +39,11 @@
 #include "digikam_export.h"
 
 class QAction;
-class KConfigGroup;
 class QDragEnterEvent;
 class QDropEvent;
 class QMenu;
+
+class KConfigGroup;
 
 namespace GeoIface
 {
@@ -229,4 +230,4 @@ private:
 
 } // namespace GeoIface
 
-#endif // MAPWIDGET_H
+#endif // MAP_WIDGET_H

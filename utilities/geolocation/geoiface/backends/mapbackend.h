@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_MAP_H
-#define BACKEND_MAP_H
+#ifndef MAP_BACKEND_H
+#define MAP_BACKEND_H
 
 // Qt includes
 
@@ -36,11 +36,12 @@
 
 class QMenu;
 class QWidget;
+
 class KConfigGroup;
 
 namespace Marble
 {
-class GeoDataLatLonBox;
+    class GeoDataLatLonBox;
 }
 
 namespace GeoIface
@@ -121,4 +122,4 @@ Q_SIGNALS:
 
 } // namespace GeoIface
 
-#endif // BACKEND_MAP_H
+#endif // MAP_BACKEND_H

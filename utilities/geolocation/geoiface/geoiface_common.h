@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef GEOIFACE_COMMON_H
-#define GEOIFACE_COMMON_H
+#ifndef GEO_IFACE_COMMON_H
+#define GEO_IFACE_COMMON_H
 
 // Qt includes
 
@@ -281,15 +281,23 @@ public:
 
 // helper functions:
 
-DIGIKAM_EXPORT bool GeoIfaceHelperParseLatLonString(const QString& latLonString, GeoCoordinates* const coordinates);
-DIGIKAM_EXPORT bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString, QPoint* const point);
-DIGIKAM_EXPORT bool GeoIfaceHelperParseBoundsString(const QString& boundsString, QPair<GeoCoordinates, GeoCoordinates>* const boundsCoordinates);
+DIGIKAM_EXPORT bool GeoIfaceHelperParseLatLonString(const QString& latLonString,
+                                                    GeoCoordinates* const coordinates);
+
+DIGIKAM_EXPORT bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString,
+                                                       QPoint* const point);
+
+DIGIKAM_EXPORT bool GeoIfaceHelperParseBoundsString(const QString& boundsString,
+                                                    QPair<GeoCoordinates, GeoCoordinates>* const boundsCoordinates);
+
 DIGIKAM_EXPORT GeoCoordinates::PairList GeoIfaceHelperNormalizeBounds(const GeoCoordinates::Pair& boundsPair);
 
-DIGIKAM_EXPORT void GeoIface_assert(const char* const condition, const char* const filename, const int lineNumber);
+DIGIKAM_EXPORT void GeoIface_assert(const char* const condition,
+                                    const char* const filename,
+                                    const int lineNumber);
 
 } // namespace GeoIface
 
 #define GEOIFACE_ASSERT(cond) ((!(cond)) ? GeoIface::GeoIface_assert(#cond,__FILE__,__LINE__) : qt_noop())
 
-#endif // GEOIFACE_COMMON_H
+#endif // GEO_IFACE_COMMON_H

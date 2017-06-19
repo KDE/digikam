@@ -51,7 +51,8 @@ public:
 };
 
 AbstractMarkerTiler::AbstractMarkerTiler(QObject* const parent)
-    : QObject(parent), d(new Private())
+    : QObject(parent),
+      d(new Private())
 {
 }
 
@@ -142,7 +143,9 @@ void AbstractMarkerTiler::tileDeleteChildren(AbstractMarkerTiler::Tile* const ti
     }
 }
 
-void AbstractMarkerTiler::tileDeleteChild(AbstractMarkerTiler::Tile* const parentTile, AbstractMarkerTiler::Tile* const childTile, const int knownLinearIndex)
+void AbstractMarkerTiler::tileDeleteChild(AbstractMarkerTiler::Tile* const parentTile,
+                                          AbstractMarkerTiler::Tile* const childTile,
+                                          const int knownLinearIndex)
 {
     int tileIndex = knownLinearIndex;
 
@@ -156,7 +159,7 @@ void AbstractMarkerTiler::tileDeleteChild(AbstractMarkerTiler::Tile* const paren
     tileDelete(childTile);
 }
 
-AbstractMarkerTiler::Flags AbstractMarkerTiler::tilerFlags() const
+AbstractMarkerTiler::TilerFlags AbstractMarkerTiler::tilerFlags() const
 {
     return FlagNull;
 }
@@ -202,7 +205,8 @@ AbstractMarkerTiler::NonEmptyIterator::~NonEmptyIterator()
     delete d;
 }
 
-AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* const model, const int level)
+AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* const model,
+                                                        const int level)
     : d(new Private())
 {
     d->model = model;
@@ -215,7 +219,7 @@ AbstractMarkerTiler::NonEmptyIterator::NonEmptyIterator(AbstractMarkerTiler* con
     for (int i = 0 ; i <= level ; i++)
     {
         startIndex.appendLinearIndex(0);
-        endIndex.appendLinearIndex(TileIndex::Tiling*TileIndex::Tiling-1);
+        endIndex.appendLinearIndex(TileIndex::Tiling * TileIndex::Tiling - 1);
     }
 //     qCDebug(DIGIKAM_GEOIFACE_LOG) << d->startIndexLinear << d->endIndexLinear;
 

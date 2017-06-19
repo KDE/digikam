@@ -74,7 +74,7 @@ public:
 
     Request::List        requests;
     MergedRequests::List mergedRequests;
-    Status               status;
+    StatusAltitude       status;
     QString              errorMessage;
 
     int                  currentMergedRequestIndex;
@@ -260,7 +260,7 @@ void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
     startNextRequest();
 }
 
-LookupAltitude::Status LookupAltitudeGeonames::getStatus() const
+LookupAltitude::StatusAltitude LookupAltitudeGeonames::getStatus() const
 {
     return d->status;
 }
@@ -282,4 +282,4 @@ void LookupAltitudeGeonames::cancel()
     emit(signalDone());
 }
 
-} /* namespace GeoIface */
+} // namespace GeoIface

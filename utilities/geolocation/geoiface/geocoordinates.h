@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GEOCOORDINATES_H
-#define GEOCOORDINATES_H
+#ifndef GEO_COORDINATES_H
+#define GEO_COORDINATES_H
 
 // Qt includes
 
@@ -59,9 +59,9 @@ public:
 
     Q_DECLARE_FLAGS(HasFlags, HasFlag)
 
-    typedef QList<GeoCoordinates>                   List;
-    typedef QPair<GeoCoordinates, GeoCoordinates>   Pair;
-    typedef QList<GeoCoordinates::Pair>             PairList;
+    typedef QList<GeoCoordinates>                 List;
+    typedef QPair<GeoCoordinates, GeoCoordinates> Pair;
+    typedef QList<GeoCoordinates::Pair>           PairList;
 
 public:
 
@@ -114,11 +114,11 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::GeoCoordinates::HasFlags)
 
-DIGIKAM_EXPORT QDebug operator<<(QDebug debugOut, const GeoIface::GeoCoordinates& coordinate);
-
 Q_DECLARE_TYPEINFO(GeoIface::GeoCoordinates, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(GeoIface::GeoCoordinates)
 Q_DECLARE_METATYPE(GeoIface::GeoCoordinates::Pair)
 Q_DECLARE_METATYPE(GeoIface::GeoCoordinates::PairList)
 
-#endif // GEOCOORDINATES_H
+DIGIKAM_EXPORT QDebug operator<<(QDebug debugOut, const GeoIface::GeoCoordinates& coordinate);
+
+#endif // GEO_COORDINATES_H

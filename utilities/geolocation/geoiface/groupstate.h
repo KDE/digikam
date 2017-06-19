@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GROUPSTATE_H
-#define GROUPSTATE_H
+#ifndef GROUP_STATE_H
+#define GROUP_STATE_H
 
 // Qt includes
 
@@ -69,8 +69,9 @@ enum GroupStateEnum
 
 /// @todo GroupState -> GroupStates?
 Q_DECLARE_FLAGS(GroupState, GroupStateEnum)
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(GroupState)
 
 } // namespace GeoIface
 
-#endif // GROUPSTATE_H
+#endif // GROUP_STATE_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TILEINDEX_H
-#define TILEINDEX_H
+#ifndef TILE_INDEX_H
+#define TILE_INDEX_H
 
 // Qt includes
 
@@ -111,4 +111,4 @@ QDebug operator<<(QDebug debugOut, const GeoIface::TileIndex& tileIndex);
 
 Q_DECLARE_TYPEINFO(GeoIface::TileIndex, Q_MOVABLE_TYPE);
 
-#endif // TILEINDEX_H
+#endif // TILE_INDEX_H

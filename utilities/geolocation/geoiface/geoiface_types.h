@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GEOIFACE_TYPES_H
-#define GEOIFACE_TYPES_H
+#ifndef GEO_IFACE_TYPES_H
+#define GEO_IFACE_TYPES_H
 
 // Qt includes
 
@@ -62,4 +62,4 @@ typedef QList<int> QIntList;
 
 Q_DECLARE_METATYPE(GeoIface::MouseModes)
 
-#endif // GEOIFACE_TYPES_H
+#endif // GEO_IFACE_TYPES_H

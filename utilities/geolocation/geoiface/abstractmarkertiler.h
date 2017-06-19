@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef ABSTRACTMARKERTILER_H
-#define ABSTRACTMARKERTILER_H
+#ifndef ABSTRACT_MARKER_TILER_H
+#define ABSTRACT_MARKER_TILER_H
 
 // Qt includes
 
@@ -47,13 +47,13 @@ class DIGIKAM_EXPORT AbstractMarkerTiler : public QObject
 
 public:
 
-    enum Flag
+    enum TilerFlag
     {
         FlagNull    = 0,
         FlagMovable = 1
     };
 
-    Q_DECLARE_FLAGS(Flags, Flag)
+    Q_DECLARE_FLAGS(TilerFlags, TilerFlag)
 
 public:
 
@@ -154,7 +154,7 @@ public:
     void tileDeleteChild(Tile* const parentTile, Tile* const childTile, const int knownLinearIndex = -1);
 
     // these have to be implemented
-    virtual Flags tilerFlags() const;
+    virtual TilerFlags tilerFlags() const;
     virtual Tile* tileNew();
     virtual void tileDeleteInternal(Tile* const tile);
     virtual void prepareTiles(const GeoCoordinates& upperLeft, const GeoCoordinates& lowerRight, int level) = 0;
@@ -203,6 +203,6 @@ private:
 
 } // namespace GeoIface
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::AbstractMarkerTiler::Flags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::AbstractMarkerTiler::TilerFlags)
 
-#endif // ABSTRACTMARKERTILER_H
+#endif // ABSTRACT_MARKER_TILER_H

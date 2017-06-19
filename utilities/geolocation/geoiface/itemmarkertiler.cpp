@@ -113,7 +113,8 @@ public:
 };
 
 ItemMarkerTiler::ItemMarkerTiler(ModelHelper* const modelHelper, QObject* const parent)
-    : AbstractMarkerTiler(parent), d(new Private())
+    : AbstractMarkerTiler(parent),
+      d(new Private())
 {
     resetRootTile();
     setMarkerModelHelper(modelHelper);
@@ -750,13 +751,13 @@ void ItemMarkerTiler::tileDeleteInternal(AbstractMarkerTiler::Tile* const tile)
     delete static_cast<MyTile*>(tile);
 }
 
-AbstractMarkerTiler::Flags ItemMarkerTiler::tilerFlags() const
+AbstractMarkerTiler::TilerFlags ItemMarkerTiler::tilerFlags() const
 {
-    Flags resultFlags = FlagNull;
+    TilerFlags resultFlags = FlagNull;
 
     if (d->modelHelper->modelFlags().testFlag(ModelHelper::FlagMovable))
     {
-        resultFlags|=FlagMovable;
+        resultFlags |= FlagMovable;
     }
 
     return resultFlags;

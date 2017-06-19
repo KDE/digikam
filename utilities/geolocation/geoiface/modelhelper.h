@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MODELHELPER_H
-#define MODELHELPER_H
+#ifndef MODEL_HELPER_H
+#define MODEL_HELPER_H
 
 // Qt includes
 
@@ -95,4 +95,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ModelHelper::PropertyFlags)
 
 } // namespace GeoIface
 
-#endif // MODELHELPER_H
+#endif // MODEL_HELPER_H

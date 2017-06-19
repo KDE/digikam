@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DRAGDROPHANDLER_H
-#define DRAGDROPHANDLER_H
+#ifndef DRAG_DROP_HANDLER_H
+#define DRAG_DROP_HANDLER_H
 
 // local includes
 
@@ -52,4 +52,4 @@ public:
 
 } // namespace GeoIface
 
-#endif // DRAGDROPHANDLER_H
+#endif // DRAG_DROP_HANDLER_H

@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TILEGROUPER_H
-#define TILEGROUPER_H
+#ifndef TILE_GROUPER_H
+#define TILE_GROUPER_H
 
 // Local includes
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace GeoIface
 
-#endif // TILEGROUPER_H
+#endif // TILE_GROUPER_H

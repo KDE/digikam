@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QtCore/QPointer>
+#include <QPointer>
 
 // Marble includes
 

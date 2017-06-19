@@ -70,7 +70,7 @@ public:
         StatusCanceled   = 2,
         StatusError      = 3
     };
-    Q_DECLARE_FLAGS(Status, StatusEnum)
+    Q_DECLARE_FLAGS(StatusAltitude, StatusEnum)
 
 public:
 
@@ -85,7 +85,7 @@ public:
     virtual Request getRequest(const int index) const = 0;
 
     virtual void startLookup() = 0;
-    virtual Status getStatus() const = 0;
+    virtual StatusAltitude getStatus() const = 0;
     virtual QString errorMessage() const = 0;
     virtual void cancel() = 0;
 
@@ -97,6 +97,6 @@ Q_SIGNALS:
 
 } // namespace GeoIface
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::LookupAltitude::Status)
+Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::LookupAltitude::StatusAltitude)
 
 #endif // LOOKUP_ALTITUDE_H

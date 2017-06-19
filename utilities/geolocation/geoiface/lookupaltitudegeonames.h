@@ -54,7 +54,7 @@ public:
     virtual Request getRequest(const int index) const;
 
     virtual void startLookup();
-    virtual Status getStatus() const;
+    virtual StatusAltitude getStatus() const;
     virtual QString errorMessage() const;
     virtual void cancel();
 
