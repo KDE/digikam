@@ -30,7 +30,7 @@
 
 // Local includes
 
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 using namespace GeoIface;
 

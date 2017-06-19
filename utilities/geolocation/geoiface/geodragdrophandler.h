@@ -28,7 +28,7 @@
 // local includes
 
 #include "geocoordinates.h"
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "digikam_export.h"
 
 class QDropEvent;

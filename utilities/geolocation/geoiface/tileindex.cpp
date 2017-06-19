@@ -23,7 +23,7 @@
  * ============================================================ */
 
 #include "tileindex.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 namespace GeoIface
 {

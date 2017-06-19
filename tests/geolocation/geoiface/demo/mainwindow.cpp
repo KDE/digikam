@@ -62,7 +62,7 @@
 #include "lookupfactory.h"
 #include "mapwidget.h"
 #include "itemmarkertiler.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 // local includes
 

@@ -33,7 +33,7 @@
 
 // local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "geocoordinates.h"
 #include "geogroupstate.h"
 #include "digikam_export.h"
@@ -81,16 +81,16 @@ public:
     QWidget* getControlWidget();
     void addWidgetToControlWidget(QWidget* const newWidget);
     void setSortOptionsMenu(QMenu* const sortMenu);
-    void setMouseMode(const MouseModes mouseMode);
-    void setAvailableMouseModes(const MouseModes mouseModes);
-    void setVisibleMouseModes(const MouseModes mouseModes);
+    void setMouseMode(const GeoMouseModes mouseMode);
+    void setAvailableMouseModes(const GeoMouseModes mouseModes);
+    void setVisibleMouseModes(const GeoMouseModes mouseModes);
     void setAllowModifications(const bool state);
     void setActive(const bool state);
     bool getActiveState();
     bool getStickyModeState() const;
     void setStickyModeState(const bool state);
-    void setVisibleExtraActions(const ExtraActions actions);
-    void setEnabledExtraActions(const ExtraActions actions);
+    void setVisibleExtraActions(const GeoExtraActions actions);
+    void setEnabledExtraActions(const GeoExtraActions actions);
     //@}
 
     /// @name Map related functions
@@ -174,7 +174,7 @@ Q_SIGNALS:
     void signalRegionSelectionChanged();
     void signalRemoveCurrentFilter();
     void signalStickyModeChanged();
-    void signalMouseModeChanged(const GeoIface::MouseModes& currentMouseMode);
+    void signalMouseModeChanged(const GeoIface::GeoMouseModes& currentMouseMode);
 
 public:
 

@@ -34,7 +34,7 @@
 // local includes
 
 #include "tileindex.h"
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "digikam_export.h"
 #include "geogroupstate.h"
 
@@ -64,7 +64,7 @@ public:
         TileIndex::List   tileIndicesList;
         QVariant          representativeIndex;
         GeoGroupState        groupSelectionState;
-        MouseModes        currentMouseMode;
+        GeoMouseModes        currentMouseMode;
     };
 
 public:

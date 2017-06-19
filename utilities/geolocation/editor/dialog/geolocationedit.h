@@ -36,9 +36,9 @@
 
 // Local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "geomodelhelper.h"
-#include "tracks.h"
+#include "trackmanager.h"
 #include "gpsimageitem.h"
 #include "digikam_export.h"
 

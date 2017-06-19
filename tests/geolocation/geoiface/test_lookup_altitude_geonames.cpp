@@ -27,7 +27,7 @@
 
 #include "lookupaltitudegeonames.h"
 #include "lookupfactory.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 using namespace GeoIface;
 

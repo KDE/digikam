@@ -58,10 +58,10 @@
 
 // local includes
 
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 #include "geodragdrophandler.h"
 #include "geomodelhelper.h"
-#include "tracks.h"
+#include "trackmanager.h"
 #include "placeholderwidget.h"
 #include "tilegrouper.h"
 #include "digikam_debug.h"
@@ -205,8 +205,8 @@ public:
     int                     thumbnailTimerCount;
     bool                    thumbnailsHaveBeenLoaded;
 
-    ExtraActions            availableExtraActions;
-    ExtraActions            visibleExtraActions;
+    GeoExtraActions            availableExtraActions;
+    GeoExtraActions            visibleExtraActions;
     QAction*                actionStickyMode;
     QToolButton*            buttonStickyMode;
 
@@ -244,26 +244,30 @@ void MapWidget::createActions()
     d->actionZoomIn->setIcon(QIcon::fromTheme( QLatin1String("zoom-in") ));
     d->actionZoomIn->setToolTip(i18n("Zoom in"));
 
-    connect(d->actionZoomIn, &QAction::triggered, this, &MapWidget::slotZoomIn);
+    connect(d->actionZoomIn, &QAction::triggered,
+            this, &MapWidget::slotZoomIn);
 
     d->actionZoomOut = new QAction(this);
     d->actionZoomOut->setIcon(QIcon::fromTheme( QLatin1String("zoom-out") ));
     d->actionZoomOut->setToolTip(i18n("Zoom out"));
 
-    connect(d->actionZoomOut, &QAction::triggered, this, &MapWidget::slotZoomOut);
+    connect(d->actionZoomOut, &QAction::triggered,
+            this, &MapWidget::slotZoomOut);
 
     d->actionShowThumbnails = new QAction(this);
     d->actionShowThumbnails->setToolTip(i18n("Switch between markers and thumbnails."));
     d->actionShowThumbnails->setCheckable(true);
     d->actionShowThumbnails->setChecked(true);
 
-    connect(d->actionShowThumbnails, &QAction::triggered, this, &MapWidget::slotShowThumbnailsChanged);
+    connect(d->actionShowThumbnails, &QAction::triggered,
+            this, &MapWidget::slotShowThumbnailsChanged);
 
     // create backend selection entries:
     d->actionGroupBackendSelection = new QActionGroup(this);
     d->actionGroupBackendSelection->setExclusive(true);
 
-    connect(d->actionGroupBackendSelection, &QActionGroup::triggered, this, &MapWidget::slotChangeBackend);
+    connect(d->actionGroupBackendSelection, &QActionGroup::triggered,
+            this, &MapWidget::slotChangeBackend);
 
     createActionsForBackendSelection();
 
@@ -295,32 +299,32 @@ void MapWidget::createActions()
     d->actionSetRegionSelectionMode->setCheckable(true);
     d->actionSetRegionSelectionMode->setIcon(QIcon::fromTheme( QLatin1String("select-rectangular") ));
     d->actionSetRegionSelectionMode->setToolTip(i18n("Select images by drawing a rectangle"));
-    d->actionSetRegionSelectionMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModeRegionSelection));
+    d->actionSetRegionSelectionMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeRegionSelection));
 
     d->actionSetPanMode = new QAction(d->mouseModeActionGroup);
     d->actionSetPanMode->setCheckable(true);
     d->actionSetPanMode->setToolTip(i18n("Pan mode"));
     d->actionSetPanMode->setIcon(QIcon::fromTheme( QLatin1String("transform-move") ));
     d->actionSetPanMode->setChecked(true);
-    d->actionSetPanMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModePan));
+    d->actionSetPanMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModePan));
 
     d->actionSetZoomIntoGroupMode = new QAction(d->mouseModeActionGroup);
     d->actionSetZoomIntoGroupMode->setCheckable(true);
     d->actionSetZoomIntoGroupMode->setToolTip(i18n("Zoom into a group"));
     d->actionSetZoomIntoGroupMode->setIcon(QIcon::fromTheme( QLatin1String("zoom-fit-best") ));
-    d->actionSetZoomIntoGroupMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModeZoomIntoGroup));
+    d->actionSetZoomIntoGroupMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeZoomIntoGroup));
 
     d->actionSetRegionSelectionFromIconMode = new QAction(d->mouseModeActionGroup);
     d->actionSetRegionSelectionFromIconMode->setCheckable(true);
     d->actionSetRegionSelectionFromIconMode->setToolTip(i18n("Create a region selection from a thumbnail"));
     d->actionSetRegionSelectionFromIconMode->setIcon(QIcon::fromTheme( QLatin1String("edit-node") ));
-    d->actionSetRegionSelectionFromIconMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModeRegionSelectionFromIcon));
+    d->actionSetRegionSelectionFromIconMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeRegionSelectionFromIcon));
 
     d->actionSetFilterMode = new QAction(d->mouseModeActionGroup);
     d->actionSetFilterMode->setCheckable(true);
     d->actionSetFilterMode->setToolTip(i18n("Filter images"));
     d->actionSetFilterMode->setIcon(QIcon::fromTheme( QLatin1String("view-filter") ));
-    d->actionSetFilterMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModeFilter));
+    d->actionSetFilterMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeFilter));
 
     d->actionRemoveFilter = new QAction(this);
     d->actionRemoveFilter->setToolTip(i18n("Remove the current filter"));
@@ -330,7 +334,7 @@ void MapWidget::createActions()
     d->actionSetSelectThumbnailMode->setCheckable(true);
     d->actionSetSelectThumbnailMode->setToolTip(i18n("Select images"));
     d->actionSetSelectThumbnailMode->setIcon(QIcon::fromTheme( QLatin1String("edit-select") ));
-    d->actionSetSelectThumbnailMode->setData(QVariant::fromValue<GeoIface::MouseModes>(MouseModeSelectThumbnail));
+    d->actionSetSelectThumbnailMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeSelectThumbnail));
 
     d->actionStickyMode = new QAction(this);
     d->actionStickyMode->setCheckable(true);
@@ -677,7 +681,7 @@ void MapWidget::readSettingsFromGroup(const KConfigGroup* const group)
     const GeoCoordinates centerCoordinate = GeoCoordinates::fromGeoUrl(centerGeoUrl, &centerGeoUrlValid);
     d->cacheCenterCoordinate              = centerGeoUrlValid ? centerCoordinate : centerDefault;
     d->cacheZoom                          = group->readEntry("Zoom", d->cacheZoom);
-    s->currentMouseMode                   = MouseModes(group->readEntry("Mouse Mode", int(s->currentMouseMode)));
+    s->currentMouseMode                   = GeoMouseModes(group->readEntry("Mouse Mode", int(s->currentMouseMode)));
 
     // propagate the loaded values to the map, if appropriate
     applyCacheToBackend();
@@ -944,7 +948,7 @@ void MapWidget::slotUpdateActionsEnabled()
 
     foreach(QAction* const action, mouseModeActions)
     {
-        if (action->data().value<MouseModes>() == s->currentMouseMode)
+        if (action->data().value<GeoMouseModes>() == s->currentMouseMode)
         {
             action->setChecked(true);
             break;
@@ -2107,7 +2111,7 @@ bool MapWidget::getActiveState()
     return s->activeState;
 }
 
-void MapWidget::setVisibleMouseModes(const MouseModes mouseModes)
+void MapWidget::setVisibleMouseModes(const GeoMouseModes mouseModes)
 {
     s->visibleMouseModes = mouseModes;
 
@@ -2125,7 +2129,7 @@ void MapWidget::setVisibleMouseModes(const MouseModes mouseModes)
     }
 }
 
-void MapWidget::setAvailableMouseModes(const MouseModes mouseModes)
+void MapWidget::setAvailableMouseModes(const GeoMouseModes mouseModes)
 {
     s->availableMouseModes = mouseModes;
 }
@@ -2141,7 +2145,7 @@ void MapWidget::setStickyModeState(const bool state)
     slotUpdateActionsEnabled();
 }
 
-void MapWidget::setVisibleExtraActions(const ExtraActions actions)
+void MapWidget::setVisibleExtraActions(const GeoExtraActions actions)
 {
     d->visibleExtraActions = actions;
 
@@ -2153,7 +2157,7 @@ void MapWidget::setVisibleExtraActions(const ExtraActions actions)
     slotUpdateActionsEnabled();
 }
 
-void MapWidget::setEnabledExtraActions(const ExtraActions actions)
+void MapWidget::setEnabledExtraActions(const GeoExtraActions actions)
 {
     d->availableExtraActions = actions;
 
@@ -2273,7 +2277,7 @@ void MapWidget::slotMouseModeChanged(QAction* triggeredAction)
 {
     // determine the new mouse mode:
     const QVariant triggeredActionData = triggeredAction->data();
-    const MouseModes newMouseMode      = triggeredActionData.value<GeoIface::MouseModes>();
+    const GeoMouseModes newMouseMode      = triggeredActionData.value<GeoIface::GeoMouseModes>();
 
     if (newMouseMode == s->currentMouseMode)
     {
@@ -2303,7 +2307,7 @@ bool MapWidget::currentBackendReady() const
     return d->currentBackend->isReady();
 }
 
-void MapWidget::setMouseMode(const MouseModes mouseMode)
+void MapWidget::setMouseMode(const GeoMouseModes mouseMode)
 {
     s->currentMouseMode = mouseMode;
 

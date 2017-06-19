@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "geocoordinates.h"
 
 namespace GeoIface
@@ -52,7 +52,7 @@ public:
     void loadInitialHTML(const QString& initialHTML);
     QVariant runScript(const QString& scriptCode);
     bool runScript2Coordinates(const QString& scriptCode, GeoCoordinates* const coordinates);
-    void mouseModeChanged(const MouseModes mouseMode);
+    void mouseModeChanged(const GeoMouseModes mouseMode);
     void setSelectionRectangle(const GeoCoordinates::Pair& searchCoordinates);
     void removeSelectionRectangle();
     void centerOn(const qreal west, const qreal north, const qreal east, const qreal south, const bool useSaneZoomLevel = true);

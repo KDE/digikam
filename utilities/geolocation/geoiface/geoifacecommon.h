@@ -37,7 +37,7 @@
 
 // Local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "tileindex.h"
 #include "groupstatecomputer.h"
 #include "digikam_export.h"
@@ -270,9 +270,9 @@ public:
     //@{
     GeoCoordinates::Pair      selectionRectangle;
     bool                      haveMovingCluster;
-    MouseModes                currentMouseMode;
-    MouseModes                availableMouseModes;
-    MouseModes                visibleMouseModes;
+    GeoMouseModes                currentMouseMode;
+    GeoMouseModes                availableMouseModes;
+    GeoMouseModes                visibleMouseModes;
     bool                      activeState;
     //@}
 };

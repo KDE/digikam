@@ -32,7 +32,7 @@
 
 // geoiface includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "geocoordinates.h"
 
 using namespace GeoIface;

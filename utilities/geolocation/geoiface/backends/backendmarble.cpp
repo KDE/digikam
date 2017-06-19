@@ -60,7 +60,7 @@
 #include "abstractmarkertiler.h"
 #include "mapwidget.h"
 #include "geomodelhelper.h"
-#include "tracks.h"
+#include "trackmanager.h"
 #include "digikam_debug.h"
 
 namespace GeoIface

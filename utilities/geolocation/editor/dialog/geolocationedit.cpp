@@ -66,7 +66,7 @@
 #include "digikam_config.h"
 #include "mapwidget.h"
 #include "itemmarkertiler.h"
-#include "tracks.h"
+#include "trackmanager.h"
 #include "gpscommon.h"
 #include "gpsimagemodel.h"
 #include "mapdragdrophandler.h"

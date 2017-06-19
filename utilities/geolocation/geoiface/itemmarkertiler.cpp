@@ -28,7 +28,7 @@
 
 #include "geomodelhelper.h"
 #include "digikam_debug.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 namespace GeoIface
 {

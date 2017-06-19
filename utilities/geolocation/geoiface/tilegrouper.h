@@ -28,7 +28,7 @@
 // Local includes
 
 #include "digikam_export.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 namespace GeoIface
 {

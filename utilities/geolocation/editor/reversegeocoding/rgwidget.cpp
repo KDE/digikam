@@ -52,7 +52,7 @@
 
 // local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "dlayoutbox.h"
 #include "gpsundocommand.h"
 #include "geolocationedit.h"

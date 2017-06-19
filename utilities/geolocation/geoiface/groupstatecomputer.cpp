@@ -25,7 +25,7 @@
 // Local includes
 
 #include "groupstatecomputer.h"
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "digikam_debug.h"
 
 namespace GeoIface

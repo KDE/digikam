@@ -22,7 +22,7 @@
  *
  * ============================================================ */
 
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 // Qt includes
 

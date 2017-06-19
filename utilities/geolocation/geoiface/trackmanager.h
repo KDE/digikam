@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef TRACKS_H
-#define TRACKS_H
+#ifndef TRACK_MANAGER_H
+#define TRACK_MANAGER_H
 
 // Qt includes
 
@@ -33,7 +33,7 @@
 
 // local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "geocoordinates.h"
 #include "digikam_export.h"
 
@@ -166,4 +166,4 @@ private:
 
 } // namespace GeoIface
 
-#endif // TRACKS_H
+#endif // TRACK_MANAGER_H

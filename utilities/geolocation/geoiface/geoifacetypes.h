@@ -34,7 +34,7 @@ Q_DECLARE_METATYPE(QPersistentModelIndex)
 namespace GeoIface
 {
 
-enum MouseMode
+enum GeoMouseMode
 {
     MouseModePan                     = 1,
     MouseModeRegionSelection         = 2,
@@ -45,21 +45,21 @@ enum MouseMode
     MouseModeLast                    = 32
 };
 
-Q_DECLARE_FLAGS(MouseModes, MouseMode)
-Q_DECLARE_OPERATORS_FOR_FLAGS(MouseModes)
+Q_DECLARE_FLAGS(GeoMouseModes, GeoMouseMode)
+Q_DECLARE_OPERATORS_FOR_FLAGS(GeoMouseModes)
 
-enum ExtraAction
+enum GeoExtraAction
 {
     ExtraActionSticky = 1
 };
 
-Q_DECLARE_FLAGS(ExtraActions, ExtraAction)
-Q_DECLARE_OPERATORS_FOR_FLAGS(ExtraActions)
+Q_DECLARE_FLAGS(GeoExtraActions, GeoExtraAction)
+Q_DECLARE_OPERATORS_FOR_FLAGS(GeoExtraActions)
 
 typedef QList<int> QIntList;
 
 } // namespace GeoIface
 
-Q_DECLARE_METATYPE(GeoIface::MouseModes)
+Q_DECLARE_METATYPE(GeoIface::GeoMouseModes)
 
 #endif // GEO_IFACE_TYPES_H

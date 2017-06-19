@@ -29,7 +29,7 @@
 // Local includes
 
 #include "mapbackend.h"
-#include "tracks.h"
+#include "trackmanager.h"
 
 namespace GeoIface
 {

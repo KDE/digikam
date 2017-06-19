@@ -30,7 +30,7 @@
 
 // local includes
 
-#include "tracks.h"
+#include "trackmanager.h"
 #include "trackreader.h"
 
 using namespace GeoIface;

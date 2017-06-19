@@ -32,7 +32,7 @@
 
 // Local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "gpsdatacontainer.h"
 #include "digikam_export.h"
 

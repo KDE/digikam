@@ -22,11 +22,11 @@
  *
  * ============================================================ */
 
-#include "tracks.h"
+#include "trackmanager.h"
 
 // Qt includes
 
-#include <QtConcurrent/QtConcurrentMap>
+#include <QtConcurrentMap>
 #include <QFuture>
 #include <QFutureWatcher>
 

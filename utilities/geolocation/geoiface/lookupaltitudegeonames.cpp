@@ -23,7 +23,7 @@
  * ============================================================ */
 
 #include "lookupaltitudegeonames.h"
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 
 // Qt includes
 

@@ -34,8 +34,8 @@
 
 // Local includes
 
-#include "geoiface_common.h"
-#include "geoiface_types.h"
+#include "geoifacecommon.h"
+#include "geoifacetypes.h"
 #include "digikam_debug.h"
 
 namespace GeoIface
@@ -316,7 +316,7 @@ void HTMLWidget::removeSelectionRectangle()
     runScript(QLatin1String("kgeomapRemoveSelectionRectangle();"));
 }
 
-void HTMLWidget::mouseModeChanged(const MouseModes mouseMode)
+void HTMLWidget::mouseModeChanged(const GeoMouseModes mouseMode)
 {
     const bool inSelectionMode = (mouseMode == MouseModeRegionSelection);
 

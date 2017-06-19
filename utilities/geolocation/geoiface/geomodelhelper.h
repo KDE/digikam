@@ -36,7 +36,7 @@
 
 // Local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "geocoordinates.h"
 #include "digikam_export.h"
 
