@@ -1006,7 +1006,7 @@ void MapWidget::getColorInfos(const int clusterIndex,
                               Qt::PenStyle* strokeStyle,
                               QString* labelText,
                               QColor* labelColor,
-                              const GroupState* const overrideSelection,
+                              const GeoGroupState* const overrideSelection,
                               const int* const overrideCount) const
 {
     /// @todo Call the new getColorInfos function!
@@ -1020,7 +1020,7 @@ void MapWidget::getColorInfos(const int clusterIndex,
                   fillColor, strokeColor, strokeStyle, labelText, labelColor);
 }
 
-void MapWidget::getColorInfos(const GroupState groupState,
+void MapWidget::getColorInfos(const GeoGroupState groupState,
                        const int nMarkers,
                        QColor* fillColor, QColor* strokeColor,
                        Qt::PenStyle* strokeStyle, QString* labelText,
@@ -1634,13 +1634,13 @@ void MapWidget::setSortKey(const int sortKey)
 }
 
 QPixmap MapWidget::getDecoratedPixmapForCluster(const int clusterId,
-                                                const GroupState* const selectedStateOverride,
+                                                const GeoGroupState* const selectedStateOverride,
                                                 const int* const countOverride,
                                                 QPoint* const centerPoint)
 {
     GeoIfaceCluster& cluster = s->clusterList[clusterId];
     int markerCount          = cluster.markerCount;
-    GroupState groupState    = cluster.groupState;
+    GeoGroupState groupState    = cluster.groupState;
 
     if (selectedStateOverride)
     {
@@ -1648,7 +1648,7 @@ QPixmap MapWidget::getDecoratedPixmapForCluster(const int clusterId,
         markerCount = *countOverride;
     }
 
-    const GroupState selectedState = groupState & SelectedMask;
+    const GeoGroupState selectedState = groupState & SelectedMask;
 
     // first determine all the color and style values
     QColor       fillColor;
@@ -1727,7 +1727,7 @@ QPixmap MapWidget::getDecoratedPixmapForCluster(const int clusterId,
             borderPen.setWidth(borderWidth);
             borderPen.setJoinStyle(Qt::MiterJoin);
 
-            GroupState globalState = s->markerModel->getGlobalGroupState();
+            GeoGroupState globalState = s->markerModel->getGlobalGroupState();
 
             /// @todo What about partially in the region or positively filtered?
             const bool clusterIsNotInRegionSelection  = (globalState & RegionSelectedMask) &&

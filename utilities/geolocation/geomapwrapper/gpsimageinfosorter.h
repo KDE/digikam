@@ -34,7 +34,7 @@
 // Local includes
 
 #include "geocoordinates.h"
-#include "groupstate.h"
+#include "geogroupstate.h"
 #include "gpsimageinfo.h"
 #include "mapwidget.h"
 
@@ -68,9 +68,9 @@ public:
 
 public:
 
-    static bool fitsBetter(const GPSImageInfo& oldInfo, const GroupState oldState,
-                           const GPSImageInfo& newInfo, const GroupState newState,
-                           const GroupState globalGroupState, const SortOptions sortOptions);
+    static bool fitsBetter(const GPSImageInfo& oldInfo, const GeoGroupState oldState,
+                           const GPSImageInfo& newInfo, const GeoGroupState newState,
+                           const GeoGroupState globalGroupState, const SortOptions sortOptions);
 
 private Q_SLOTS:
 

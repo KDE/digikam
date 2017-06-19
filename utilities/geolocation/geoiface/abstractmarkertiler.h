@@ -36,7 +36,7 @@
 #include "tileindex.h"
 #include "geoiface_types.h"
 #include "digikam_export.h"
-#include "groupstate.h"
+#include "geogroupstate.h"
 
 namespace GeoIface
 {
@@ -63,7 +63,7 @@ public:
 
         TileIndex::List   tileIndicesList;
         QVariant          representativeIndex;
-        GroupState        groupSelectionState;
+        GeoGroupState        groupSelectionState;
         MouseModes        currentMouseMode;
     };
 
@@ -168,8 +168,8 @@ public:
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey) = 0;
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size) = 0;
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const = 0;
-    virtual GroupState getTileGroupState(const TileIndex& tileIndex) = 0;
-    virtual GroupState getGlobalGroupState() = 0;
+    virtual GeoGroupState getTileGroupState(const TileIndex& tileIndex) = 0;
+    virtual GeoGroupState getGlobalGroupState() = 0;
 
     // these can be implemented if you want to react to actions in GeoIface
     virtual void onIndicesClicked(const ClickInfo& clickInfo);

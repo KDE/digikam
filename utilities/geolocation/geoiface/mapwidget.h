@@ -35,7 +35,7 @@
 
 #include "geoiface_types.h"
 #include "geocoordinates.h"
-#include "groupstate.h"
+#include "geogroupstate.h"
 #include "digikam_export.h"
 
 class QAction;
@@ -137,16 +137,16 @@ public:
 
     void getColorInfos(const int clusterIndex, QColor* fillColor, QColor* strokeColor,
                        Qt::PenStyle* strokeStyle, QString* labelText, QColor* labelColor,
-                       const GroupState* const overrideSelection = 0,
+                       const GeoGroupState* const overrideSelection = 0,
                        const int* const overrideCount = 0) const;
 
-    void getColorInfos(const GroupState groupState,
+    void getColorInfos(const GeoGroupState groupState,
                        const int nMarkers,
                        QColor* fillColor, QColor* strokeColor,
                        Qt::PenStyle* strokeStyle, QString* labelText, QColor* labelColor) const;
 
     QString convertZoomToBackendZoom(const QString& someZoom, const QString& targetBackend) const;
-    QPixmap getDecoratedPixmapForCluster(const int clusterId, const GroupState* const selectedStateOverride, const int* const countOverride, QPoint* const centerPoint);
+    QPixmap getDecoratedPixmapForCluster(const int clusterId, const GeoGroupState* const selectedStateOverride, const int* const countOverride, QPoint* const centerPoint);
     QVariant getClusterRepresentativeMarker(const int clusterIndex, const int sortKey);
     //@}
 

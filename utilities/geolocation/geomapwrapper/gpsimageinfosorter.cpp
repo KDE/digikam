@@ -80,9 +80,9 @@ GPSImageInfoSorter::~GPSImageInfoSorter()
     delete d;
 }
 
-bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GroupState oldState,
-                                    const GPSImageInfo& newInfo, const GroupState newState,
-                                    const GroupState globalGroupState, const SortOptions sortOptions)
+bool GPSImageInfoSorter::fitsBetter(const GPSImageInfo& oldInfo, const GeoGroupState oldState,
+                                    const GPSImageInfo& newInfo, const GeoGroupState newState,
+                                    const GeoGroupState globalGroupState, const SortOptions sortOptions)
 {
     // the best index for a tile is determined like this:
     // region selected? -> prefer region selected markers

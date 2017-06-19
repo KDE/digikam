@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef GROUP_STATE_H
-#define GROUP_STATE_H
+#ifndef GEO_GROUP_STATE_H
+#define GEO_GROUP_STATE_H
 
 // Qt includes
 
@@ -49,7 +49,7 @@ namespace GeoIface
  *                   means that not-positively-filtered objects should be hidden.
  * RegionSelected___: An object is inside a region of interest on the map.
  */
-enum GroupStateEnum
+enum GeoGroupStateEnum
 {
     SelectedMask         = 0x03 << 0,
     SelectedNone         = 0x00 << 0,
@@ -67,11 +67,10 @@ enum GroupStateEnum
     RegionSelectedAll    = 0x02 << 4
 };
 
-/// @todo GroupState -> GroupStates?
-Q_DECLARE_FLAGS(GroupState, GroupStateEnum)
+Q_DECLARE_FLAGS(GeoGroupState, GeoGroupStateEnum)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GroupState)
+Q_DECLARE_OPERATORS_FOR_FLAGS(GeoGroupState)
 
 } // namespace GeoIface
 
-#endif // GROUP_STATE_H
+#endif // GEO_GROUP_STATE_H

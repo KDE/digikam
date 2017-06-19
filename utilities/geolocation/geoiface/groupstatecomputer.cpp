@@ -41,8 +41,8 @@ public:
     {
     }
 
-    GroupState state;
-    GroupState stateMask;
+    GeoGroupState state;
+    GeoGroupState stateMask;
 };
 
 GroupStateComputer::GroupStateComputer()
@@ -54,7 +54,7 @@ GroupStateComputer::~GroupStateComputer()
 {
 }
 
-GroupState GroupStateComputer::getState() const
+GeoGroupState GroupStateComputer::getState() const
 {
     return d->state;
 }
@@ -65,14 +65,14 @@ void GroupStateComputer::clear()
     d->stateMask = SelectedNone;
 }
 
-void GroupStateComputer::addState(const GroupState state)
+void GroupStateComputer::addState(const GeoGroupState state)
 {
     addSelectedState(state);
     addFilteredPositiveState(state);
     addRegionSelectedState(state);
 }
 
-void GroupStateComputer::addSelectedState(const GroupState state)
+void GroupStateComputer::addSelectedState(const GeoGroupState state)
 {
     if (!(d->stateMask & SelectedMask))
     {
@@ -96,7 +96,7 @@ void GroupStateComputer::addSelectedState(const GroupState state)
     }
 }
 
-void GroupStateComputer::addFilteredPositiveState(const GroupState state)
+void GroupStateComputer::addFilteredPositiveState(const GeoGroupState state)
 {
     if (!(d->stateMask & FilteredPositiveMask))
     {
@@ -120,7 +120,7 @@ void GroupStateComputer::addFilteredPositiveState(const GroupState state)
     }
 }
 
-void GroupStateComputer::addRegionSelectedState(const GroupState state)
+void GroupStateComputer::addRegionSelectedState(const GeoGroupState state)
 {
     if (!(d->stateMask & RegionSelectedMask))
     {

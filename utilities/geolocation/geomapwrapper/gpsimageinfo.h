@@ -32,7 +32,7 @@
 // Local includes
 
 #include "geocoordinates.h"
-#include "groupstate.h"
+#include "geogroupstate.h"
 
 using namespace GeoIface;
 

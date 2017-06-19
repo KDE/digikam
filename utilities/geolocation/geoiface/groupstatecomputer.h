@@ -25,7 +25,7 @@
 #ifndef GROUP_STATE_COMPUTER_H
 #define GROUP_STATE_COMPUTER_H
 
-#include "groupstate.h"
+#include "geogroupstate.h"
 
 // Qt includes
 
@@ -45,14 +45,14 @@ public:
     GroupStateComputer();
     virtual ~GroupStateComputer();
 
-    GroupState getState() const;
+    GeoGroupState getState() const;
 
     void clear();
 
-    void addState(const GroupState state);
-    void addSelectedState(const GroupState state);
-    void addFilteredPositiveState(const GroupState state);
-    void addRegionSelectedState(const GroupState state);
+    void addState(const GeoGroupState state);
+    void addSelectedState(const GeoGroupState state);
+    void addFilteredPositiveState(const GeoGroupState state);
+    void addRegionSelectedState(const GeoGroupState state);
 
 private:
 

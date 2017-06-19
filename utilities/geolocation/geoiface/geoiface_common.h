@@ -173,7 +173,7 @@ public:
     int                 markerSelectedCount;
     GeoCoordinates      coordinates;
     QPoint              pixelPos;
-    GroupState          groupState;
+    GeoGroupState          groupState;
     QMap<int, QVariant> representativeMarkers;
 
     QSize               pixmapSize;

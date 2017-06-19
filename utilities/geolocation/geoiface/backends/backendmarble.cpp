@@ -768,7 +768,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             const GeoIfaceCluster& cluster            = s->clusterList.at(i);
             GeoCoordinates clusterCoordinates        = cluster.coordinates;
             int markerCountOverride                  = cluster.markerCount;
-            GroupState selectionStateOverride = cluster.groupState;
+            GeoGroupState selectionStateOverride = cluster.groupState;
 
             if (d->haveMouseMovingObject && (d->mouseMoveClusterIndex >= 0))
             {
@@ -811,7 +811,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         const GeoIfaceCluster& cluster            = s->clusterList.at(d->mouseMoveClusterIndex);
         GeoCoordinates clusterCoordinates        = d->mouseMoveObjectCoordinates;
         int markerCountOverride                  = (markersInMovingCluster>0)?markersInMovingCluster:cluster.markerCount;
-        GroupState selectionStateOverride = cluster.groupState;
+        GeoGroupState selectionStateOverride = cluster.groupState;
         QPoint clusterPoint;
 
         if (screenCoordinates(clusterCoordinates, &clusterPoint))

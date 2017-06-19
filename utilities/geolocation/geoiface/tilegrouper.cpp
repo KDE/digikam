@@ -348,7 +348,7 @@ void TileGrouper::updateClusters()
         for (int iTile = 0; (iTile < cluster.tileIndicesList.count()); ++iTile)
         {
             const TileIndex tileIndex              = cluster.tileIndicesList.at(iTile);
-            const GroupState tileGroupState = s->markerModel->getTileGroupState(tileIndex);
+            const GeoGroupState tileGroupState = s->markerModel->getTileGroupState(tileIndex);
             clusterStateComputer.addState(tileGroupState);
             clusterSelectedCount                  += s->markerModel->getTileSelectedCount(tileIndex);
         }

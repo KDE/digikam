@@ -432,7 +432,7 @@ int ItemMarkerTiler::getTileSelectedCount(const TileIndex& tileIndex)
     return myTile->selectedCount;
 }
 
-GroupState ItemMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
+GeoGroupState ItemMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
 {
     if (isDirty())
     {
@@ -763,7 +763,7 @@ AbstractMarkerTiler::TilerFlags ItemMarkerTiler::tilerFlags() const
     return resultFlags;
 }
 
-GroupState ItemMarkerTiler::getGlobalGroupState()
+GeoGroupState ItemMarkerTiler::getGlobalGroupState()
 {
     if (d->selectionModel)
     {

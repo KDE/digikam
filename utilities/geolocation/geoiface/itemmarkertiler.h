@@ -61,8 +61,8 @@ public:
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual GroupState getTileGroupState(const TileIndex& tileIndex);
-    virtual GroupState getGlobalGroupState();
+    virtual GeoGroupState getTileGroupState(const TileIndex& tileIndex);
+    virtual GeoGroupState getGlobalGroupState();
 
     virtual void onIndicesClicked(const ClickInfo& clickInfo);
     virtual void onIndicesMoved(const TileIndex::List& tileIndicesList, const GeoCoordinates& targetCoordinates,
