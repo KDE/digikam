@@ -70,8 +70,8 @@ public:
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset,
                           QSize* const size, QPixmap* const pixmap,
                           QUrl* const url) const;
-    virtual Flags modelFlags() const;
-    virtual Flags itemFlags(const QModelIndex& index) const;
+    virtual PropertyFlags modelFlags() const;
+    virtual PropertyFlags itemFlags(const QModelIndex& index) const;
     virtual void snapItemsTo(const QModelIndex& targetIndex,
                              const QList<QModelIndex>& snappedIndices);
 

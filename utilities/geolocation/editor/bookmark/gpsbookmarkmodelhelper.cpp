@@ -201,12 +201,12 @@ void GPSBookmarkModelHelper::setVisible(const bool state)
     emit(signalVisibilityChanged());
 }
 
-ModelHelper::Flags GPSBookmarkModelHelper::modelFlags() const
+ModelHelper::PropertyFlags GPSBookmarkModelHelper::modelFlags() const
 {
     return FlagSnaps|(d->visible?FlagVisible:FlagNull);
 }
 
-ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex&) const
+ModelHelper::PropertyFlags GPSBookmarkModelHelper::itemFlags(const QModelIndex&) const
 {
     return FlagVisible|FlagSnaps;
 }

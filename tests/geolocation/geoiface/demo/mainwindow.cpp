@@ -107,7 +107,9 @@ bool MarkerModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates
     return true;
 }
 
-void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex)
+void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
+                                       const GeoCoordinates& targetCoordinates,
+                                       const QPersistentModelIndex& targetSnapIndex)
 {
     Q_UNUSED(targetSnapIndex);
 
@@ -488,7 +490,7 @@ void MainWindow::slotScheduleImagesForLoading(const QList<QUrl> imagesToSchedule
 
 void MainWindow::slotImageLoadingBunchReady()
 {
-    qDebug()<<"slotImageLoadingBunchReady";
+    qDebug() << "slotImageLoadingBunchReady";
 
     for (int i = 0; i < d->imageLoadingBuncher.count(); ++i)
     {
@@ -592,7 +594,7 @@ void MainWindow::slotAddImages()
     if (fileNames.isEmpty())
         return;
 
-    d->lastImageOpenDir        = fileNames.first().resolved(QUrl(QString::fromLatin1("../")));
+    d->lastImageOpenDir         = fileNames.first().resolved(QUrl(QString::fromLatin1("../")));
 
     slotScheduleImagesForLoading(fileNames);
 }
@@ -607,7 +609,7 @@ void MainWindow::createMenus()
             this, SLOT(slotAddImages()));
 }
 
-ModelHelper::Flags MarkerModelHelper::modelFlags() const
+ModelHelper::PropertyFlags MarkerModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

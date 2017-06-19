@@ -60,7 +60,8 @@ ModelHelper::~ModelHelper()
 {
 }
 
-void ModelHelper::snapItemsTo(const QModelIndex& targetIndex, const QList<QPersistentModelIndex>& snappedIndices)
+void ModelHelper::snapItemsTo(const QModelIndex& targetIndex,
+                              const QList<QPersistentModelIndex>& snappedIndices)
 {
     QList<QModelIndex> result;
 
@@ -96,8 +97,11 @@ QPersistentModelIndex ModelHelper::bestRepresentativeIndexFromList(const QList<Q
  * @param pixmap Holder for the pixmap of the icon.
  * @param url URL of the icon if available.
  */
-bool ModelHelper::itemIcon(const QModelIndex& index, QPoint* const offset,
-                           QSize* const size, QPixmap* const pixmap, QUrl* const url) const
+bool ModelHelper::itemIcon(const QModelIndex& index,
+                           QPoint* const offset,
+                           QSize* const size,
+                           QPixmap* const pixmap,
+                           QUrl* const url) const
 {
     Q_UNUSED(index)
     Q_UNUSED(offset)
@@ -108,21 +112,23 @@ bool ModelHelper::itemIcon(const QModelIndex& index, QPoint* const offset,
     return false;
 }
 
-ModelHelper::Flags ModelHelper::modelFlags() const
+ModelHelper::PropertyFlags ModelHelper::modelFlags() const
 {
-    return Flags();
+    return PropertyFlags();
 }
 
-ModelHelper::Flags ModelHelper::itemFlags(const QModelIndex& /*index*/) const
+ModelHelper::PropertyFlags ModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
-    return Flags();
+    return PropertyFlags();
 }
 
-void ModelHelper::snapItemsTo(const QModelIndex& /*targetIndex*/, const QList<QModelIndex>& /*snappedIndices*/)
+void ModelHelper::snapItemsTo(const QModelIndex& /*targetIndex*/,
+                              const QList<QModelIndex>& /*snappedIndices*/)
 {
 }
 
-QPixmap ModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& /*index*/, const QSize& /*size*/)
+QPixmap ModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& /*index*/,
+                                                   const QSize& /*size*/)
 {
     return QPixmap();
 }
@@ -132,7 +138,9 @@ void ModelHelper::onIndicesClicked(const QList<QPersistentModelIndex>& clickedIn
     Q_UNUSED(clickedIndices);
 }
 
-void ModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex)
+void ModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
+                                 const GeoCoordinates& targetCoordinates,
+                                 const QPersistentModelIndex& targetSnapIndex)
 {
     Q_UNUSED(movedIndices);
     Q_UNUSED(targetCoordinates);

@@ -49,7 +49,7 @@ class DIGIKAM_EXPORT ModelHelper : public QObject
 
 public:
 
-    enum Flag
+    enum PropertyFlag
     {
         FlagNull    = 0,
         FlagVisible = 1,
@@ -57,7 +57,7 @@ public:
         FlagSnaps   = 4
     };
 
-    Q_DECLARE_FLAGS(Flags, Flag)
+    Q_DECLARE_FLAGS(PropertyFlags, PropertyFlag)
 
 public:
 
@@ -70,11 +70,11 @@ public:
     virtual QAbstractItemModel* model() const = 0;
     virtual QItemSelectionModel* selectionModel() const = 0;
     virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const = 0;
-    virtual Flags modelFlags() const;
+    virtual PropertyFlags modelFlags() const;
 
     // these are necessary for ungrouped models
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
-    virtual Flags itemFlags(const QModelIndex& index) const;
+    virtual PropertyFlags itemFlags(const QModelIndex& index) const;
     virtual void snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices);
 
     // these are used by MarkerModel for grouped models
@@ -91,8 +91,8 @@ Q_SIGNALS:
     void signalModelChangedDrastically();
 };
 
-} // namespace GeoIface
+Q_DECLARE_OPERATORS_FOR_FLAGS(ModelHelper::PropertyFlags)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::ModelHelper::Flags)
+} // namespace GeoIface
 
 #endif // MODELHELPER_H

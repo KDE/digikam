@@ -127,14 +127,14 @@ bool SearchResultModelHelper::itemIcon(const QModelIndex& index,
     return d->model->getMarkerIcon(index, offset, size, pixmap, url);
 }
 
-ModelHelper::Flags SearchResultModelHelper::modelFlags() const
+ModelHelper::PropertyFlags SearchResultModelHelper::modelFlags() const
 {
-    return FlagSnaps|(d->visible?FlagVisible:FlagNull);
+    return FlagSnaps | (d->visible ? FlagVisible:FlagNull);
 }
 
-ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
+ModelHelper::PropertyFlags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
-    return FlagVisible|FlagSnaps;
+    return FlagVisible | FlagSnaps;
 }
 
 void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,

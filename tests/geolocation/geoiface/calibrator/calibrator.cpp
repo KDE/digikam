@@ -111,12 +111,12 @@ void CalibratorModelHelper::setItemCoordinates(const QModelIndex& index, const G
     d->model->setData(index, QVariant::fromValue(coordinates), CoordinatesRole);
 }
 
-ModelHelper::Flags CalibratorModelHelper::modelFlags() const
+ModelHelper::PropertyFlags CalibratorModelHelper::modelFlags() const
 {
     return FlagVisible;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
 
 class Calibrator::Private
 {

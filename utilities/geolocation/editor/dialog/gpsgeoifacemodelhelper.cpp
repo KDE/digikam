@@ -68,7 +68,9 @@ public:
     QList<ModelHelper*>  ungroupedModelHelpers;
 };
 
-GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
+GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model,
+                                               QItemSelectionModel* const selectionModel,
+                                               QObject* const parent)
     : ModelHelper(parent),
       d(new Private())
 {
@@ -92,7 +94,8 @@ QItemSelectionModel* GPSGeoIfaceModelHelper::selectionModel() const
     return d->selectionModel;
 }
 
-bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index,
+                                             GeoCoordinates* const coordinates) const
 {
     GPSImageItem* const item = d->model->itemFromIndex(index);
 
@@ -113,7 +116,8 @@ GPSGeoIfaceModelHelper::~GPSGeoIfaceModelHelper()
     delete d;
 }
 
-QPixmap GPSGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
+QPixmap GPSGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+                                                              const QSize& size)
 {
     return d->model->getPixmapForIndex(index, qMax(size.width(), size.height()));
 }
@@ -153,7 +157,8 @@ QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(co
     return bestIndex;
 }
 
-void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
+void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index,
+                                                    const QPixmap& pixmap)
 {
     emit(signalThumbnailAvailableForIndex(index, pixmap));
 }
@@ -213,7 +218,7 @@ void GPSGeoIfaceModelHelper::addUngroupedModelHelper(ModelHelper* const newModel
     d->ungroupedModelHelpers << newModelHelper;
 }
 
-ModelHelper::Flags GPSGeoIfaceModelHelper::modelFlags() const
+ModelHelper::PropertyFlags GPSGeoIfaceModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

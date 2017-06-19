@@ -420,8 +420,8 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
 
     for (int row = 0; row < model->rowCount(); ++row)
     {
-        const QModelIndex currentIndex     = model->index(row, 0);
-        const ModelHelper::Flags itemFlags = modelHelper->itemFlags(currentIndex);
+        const QModelIndex currentIndex             = model->index(row, 0);
+        const ModelHelper::PropertyFlags itemFlags = modelHelper->itemFlags(currentIndex);
 
         // TODO: this is untested! We need to make sure the indices stay correct inside the JavaScript part!
         if (!itemFlags.testFlag(ModelHelper::FlagVisible))
