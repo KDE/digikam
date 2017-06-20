@@ -49,13 +49,14 @@ using namespace GeoIface;
 
 namespace GeoIface
 {
-    class GeoDragDropHandler;
     class GeoIfaceSharedData;
     class GeoModelHelper;
 }
 
 namespace Digikam
 {
+
+class GeoDragDropHandler;
 class AbstractMarkerTiler;
 class TrackManager;
 

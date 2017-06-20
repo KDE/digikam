@@ -33,7 +33,9 @@
 
 class QDropEvent;
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT GeoDragDropHandler : public QObject
@@ -50,6 +52,6 @@ public:
     virtual QMimeData* createMimeData(const QList<QPersistentModelIndex>& modelIndices) = 0;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // GEO_DRAG_DROP_HANDLER_H

@@ -22,13 +22,12 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "geodragdrophandler.h"
-
-// local includes
-
 #include "geoifacetypes.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 GeoDragDropHandler::GeoDragDropHandler(QObject* const parent)
@@ -40,4 +39,4 @@ GeoDragDropHandler::~GeoDragDropHandler()
 {
 }
 
-} // namespace GeoIface
+} // namespace Digikam

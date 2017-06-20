@@ -28,7 +28,7 @@
 #include <QDropEvent>
 #include <QDebug>
 
-// local includes
+// Local includes
 
 #include "mytreewidget.h"
 

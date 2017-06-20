@@ -30,11 +30,11 @@
 #include <QMimeData>
 #include <QTreeWidgetItem>
 
-// geoiface includes
+// Local includes
 
 #include "geodragdrophandler.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 class MyDragData : public QMimeData
 {
