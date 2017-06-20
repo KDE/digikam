@@ -44,22 +44,12 @@
 
 namespace Digikam
 {
-    class MapWidget;
-}
-
-namespace Digikam
-{
-    class AbstractMarkerTiler;
-    class TileGrouper;
-    class TrackManager;
-    class MapBackend;
-    class GeoModelHelper;
-}
-
-using namespace Digikam;
-
-namespace GeoIface
-{
+class MapWidget;
+class AbstractMarkerTiler;
+class TileGrouper;
+class TrackManager;
+class MapBackend;
+class GeoModelHelper;
 
 /**
  * @brief Class to hold information about map widgets stored in the GeoIfaceGlobalObject
@@ -305,8 +295,8 @@ DIGIKAM_EXPORT void GeoIface_assert(const char* const condition,
                                     const char* const filename,
                                     const int lineNumber);
 
-} // namespace GeoIface
+} // namespace Digikam
 
-#define GEOIFACE_ASSERT(cond) ((!(cond)) ? GeoIface::GeoIface_assert(#cond,__FILE__,__LINE__) : qt_noop())
+#define GEOIFACE_ASSERT(cond) ((!(cond)) ? Digikam::GeoIface_assert(#cond,__FILE__,__LINE__) : qt_noop())
 
 #endif // GEO_IFACE_COMMON_H

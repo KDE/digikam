@@ -34,7 +34,7 @@
 #include "mapbackend.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class GeoIfaceGlobalObjectCreator
@@ -415,4 +415,4 @@ void GeoIface_assert(const char* const condition, const char* const filename, co
     qCDebug(DIGIKAM_GEOIFACE_LOG) << debugString;
 }
 
-} // namespace GeoIface
+} // namespace Digikam

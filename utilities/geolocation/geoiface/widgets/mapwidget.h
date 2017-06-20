@@ -45,16 +45,12 @@ class QMenu;
 
 class KConfigGroup;
 
-namespace GeoIface
-{
-    class GeoIfaceSharedData;
-}
-
 using namespace GeoIface;
 
 namespace Digikam
 {
 
+class GeoIfaceSharedData;
 class GeoModelHelper;
 class GeoDragDropHandler;
 class AbstractMarkerTiler;
