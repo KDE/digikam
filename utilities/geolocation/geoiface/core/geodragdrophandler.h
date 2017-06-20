@@ -25,7 +25,7 @@
 #ifndef GEO_DRAG_DROP_HANDLER_H
 #define GEO_DRAG_DROP_HANDLER_H
 
-// local includes
+// Local includes
 
 #include "geocoordinates.h"
 #include "geoifacetypes.h"

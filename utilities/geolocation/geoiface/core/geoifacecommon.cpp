@@ -29,7 +29,7 @@
 #include <QStandardPaths>
 #include <QUrl>
 
-// local includes
+// Local includes
 
 #include "mapbackend.h"
 #include "digikam_debug.h"
@@ -46,19 +46,17 @@ public:
 
 Q_GLOBAL_STATIC(GeoIfaceGlobalObjectCreator, geoifaceGlobalObjectCreator)
 
+// -------------------------------------------------------------------------
+
 class GeoIfaceGlobalObject::Private
 {
 public:
+
     Private()
         : internalMapWidgetsPool(),
           markerPixmaps()
     {
     }
-
-    QList<GeoIfaceInternalWidgetInfo> internalMapWidgetsPool;
-
-    // marker pixmaps:
-    QMap<QString, QPixmap>    markerPixmaps;
 
     void loadMarkerPixmaps()
     {
@@ -89,10 +87,18 @@ public:
         const QUrl markerIconUrl                            = GeoIfaceGlobalObject::instance()->locateDataFile(QLatin1String( "marker-icon-16x16.png" ));
         markerPixmaps[QLatin1String( "marker-icon-16x16" )] = QPixmap(markerIconUrl.toLocalFile());
     }
+
+public:
+
+    QList<GeoIfaceInternalWidgetInfo> internalMapWidgetsPool;
+
+    // marker pixmaps:
+    QMap<QString, QPixmap>            markerPixmaps;
 };
 
 GeoIfaceGlobalObject::GeoIfaceGlobalObject()
-    : QObject(), d(new Private())
+    : QObject(),
+      d(new Private())
 {
 }
 
@@ -135,7 +141,7 @@ QUrl GeoIfaceGlobalObject::locateDataFile(const QString& filename)
 bool GeoIfaceHelperParseLatLonString(const QString& latLonString, GeoCoordinates* const coordinates)
 {
     // parse a 'lat,lon' string:
-    const QStringList coordinateStrings = latLonString.trimmed().split(QLatin1Char( ',' ));
+    const QStringList coordinateStrings = latLonString.trimmed().split(QLatin1Char(','));
     bool valid                          = ( coordinateStrings.size() == 2 );
 
     if (valid)
@@ -170,12 +176,12 @@ bool GeoIfaceHelperParseXYStringToPoint(const QString& xyString, QPoint* const p
     // a point is returned as (X.xxx, Y.yyy)
 
     const QString myXYString = xyString.trimmed();
-    bool          valid      = myXYString.startsWith(QLatin1Char( '(' )) && myXYString.endsWith(QLatin1Char( ')' ));
+    bool          valid      = myXYString.startsWith(QLatin1Char('(')) && myXYString.endsWith(QLatin1Char(')'));
     QStringList   pointStrings;
 
     if (valid)
     {
-        pointStrings = myXYString.mid(1, myXYString.length()-2).split(QLatin1Char( ',' ));
+        pointStrings = myXYString.mid(1, myXYString.length()-2).split(QLatin1Char(','));
         valid        = ( pointStrings.size() == 2 );
     }
 
@@ -220,7 +226,7 @@ bool GeoIfaceHelperParseBoundsString(const QString& boundsString,
 
     // check for minimum length
     bool valid                   =  myBoundsString.size() >= 13;
-    valid                       &= myBoundsString.startsWith(QLatin1Char( '(' )) && myBoundsString.endsWith(QLatin1Char( ')' ));
+    valid                       &= myBoundsString.startsWith(QLatin1Char('(')) && myBoundsString.endsWith(QLatin1Char(')'));
 
     if (valid)
     {
@@ -228,16 +234,16 @@ bool GeoIfaceHelperParseBoundsString(const QString& boundsString,
         const QString string1 = myBoundsString.mid(1, myBoundsString.length()-2).trimmed();
 
         // split the string at the middle comma:
-        const int dumpComma   = string1.indexOf(QLatin1String("," ), 0);
-        const int splitComma  = string1.indexOf(QLatin1String("," ), dumpComma+1);
-        valid                 = (dumpComma>=0) && (splitComma>=0);
+        const int dumpComma   = string1.indexOf(QLatin1String(","), 0);
+        const int splitComma  = string1.indexOf(QLatin1String(","), dumpComma+1);
+        valid                 = (dumpComma >= 0) && (splitComma >= 0);
 
         if (valid)
         {
             const QString coord1String  = string1.mid(0, splitComma).trimmed();
-            const QString coord2String  = string1.mid(splitComma+1).trimmed();
-            valid                      &= coord1String.startsWith(QLatin1Char( '(' )) && coord1String.endsWith(QLatin1Char( ')' ));
-            valid                      &= coord2String.startsWith(QLatin1Char( '(' )) && coord2String.endsWith(QLatin1Char( ')' ));
+            const QString coord2String  = string1.mid(splitComma + 1).trimmed();
+            valid                      &= coord1String.startsWith(QLatin1Char('(')) && coord1String.endsWith(QLatin1Char(')'));
+            valid                      &= coord2String.startsWith(QLatin1Char('(')) && coord2String.endsWith(QLatin1Char(')'));
 
             GeoCoordinates coord1, coord2;
 
@@ -407,7 +413,7 @@ void GeoIfaceGlobalObject::clearWidgetPool()
 
 void GeoIface_assert(const char* const condition, const char* const filename, const int lineNumber)
 {
-    const QString debugString = QString::fromLatin1( "ASSERT: %1 - %2:%3")
+    const QString debugString = QString::fromLatin1("ASSERT: %1 - %2:%3")
         .arg(QLatin1String( condition ))
         .arg(QLatin1String( filename ))
         .arg(lineNumber);
