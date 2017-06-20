@@ -92,7 +92,7 @@ public:
     TileIndex mid(const int first, const int len) const;
     void oneUp();
 
-    static TileIndex fromCoordinates(const GeoIface::GeoCoordinates& coordinate, const int getLevel);
+    static TileIndex fromCoordinates(const Digikam::GeoCoordinates& coordinate, const int getLevel);
     static TileIndex fromIntList(const QIntList& intList);
     static bool indicesEqual(const TileIndex& a, const TileIndex& b, const int upToLevel);
     static QList<QIntList> listToIntListList(const QList<TileIndex>& tileIndexList);

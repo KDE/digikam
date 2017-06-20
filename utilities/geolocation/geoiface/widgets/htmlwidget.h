@@ -77,7 +77,7 @@ Q_SIGNALS:
 
     void signalHTMLEvents(const QStringList& events);
     void signalJavaScriptReady();
-    void selectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& coordinatesRect);
+    void selectionHasBeenMade(const Digikam::GeoCoordinates::Pair& coordinatesRect);
 
 private:
 

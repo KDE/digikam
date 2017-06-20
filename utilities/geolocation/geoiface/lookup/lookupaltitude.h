@@ -34,8 +34,6 @@
 #include "digikam_export.h"
 #include "geocoordinates.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

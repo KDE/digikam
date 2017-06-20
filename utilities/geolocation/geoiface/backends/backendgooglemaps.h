@@ -113,7 +113,7 @@ private Q_SLOTS:
     void slotMapTypeActionTriggered(QAction* action);
     void slotHTMLEvents(const QStringList& eventStrings);
     void slotFloatSettingsTriggered(QAction* action);
-    void slotSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& searchCoordinates);
+    void slotSelectionHasBeenMade(const Digikam::GeoCoordinates::Pair& searchCoordinates);
     void slotTrackManagerChanged();
     void slotTracksChanged(const QList<TrackManager::TrackChanges> trackChanges);
     void slotTrackVisibilityChanged(const bool newState);

@@ -243,8 +243,8 @@ QWidget* BackendGoogleMaps::mapWidget()
         connect(d->htmlWidget, SIGNAL(signalHTMLEvents(QStringList)),
                 this, SLOT(slotHTMLEvents(QStringList)));
 
-        connect(d->htmlWidget, SIGNAL(selectionHasBeenMade(GeoIface::GeoCoordinates::Pair)),
-                this, SLOT(slotSelectionHasBeenMade(GeoIface::GeoCoordinates::Pair)));
+        connect(d->htmlWidget, SIGNAL(selectionHasBeenMade(Digikam::GeoCoordinates::Pair)),
+                this, SLOT(slotSelectionHasBeenMade(Digikam::GeoCoordinates::Pair)));
 
         d->htmlWidget->setSharedGeoIfaceObject(s.data());
         d->htmlWidgetWrapper->installEventFilter(this);
@@ -1136,7 +1136,7 @@ void BackendGoogleMaps::mouseModeChanged()
     d->htmlWidget->mouseModeChanged(s->currentMouseMode);
 }
 
-void BackendGoogleMaps::slotSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& searchCoordinates)
+void BackendGoogleMaps::slotSelectionHasBeenMade(const Digikam::GeoCoordinates::Pair& searchCoordinates)
 {
     emit signalSelectionHasBeenMade(searchCoordinates);
 }
@@ -1214,8 +1214,8 @@ void BackendGoogleMaps::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
     disconnect(d->htmlWidget, SIGNAL(signalHTMLEvents(QStringList)),
                this, SLOT(slotHTMLEvents(QStringList)));
 
-    disconnect(d->htmlWidget, SIGNAL(selectionHasBeenMade(GeoIface::GeoCoordinates::Pair)),
-               this, SLOT(slotSelectionHasBeenMade(GeoIface::GeoCoordinates::Pair)));
+    disconnect(d->htmlWidget, SIGNAL(selectionHasBeenMade(Digikam::GeoCoordinates::Pair)),
+               this, SLOT(slotSelectionHasBeenMade(Digikam::GeoCoordinates::Pair)));
 
     d->htmlWidget->setSharedGeoIfaceObject(0);
     d->htmlWidgetWrapper->removeEventFilter(this);

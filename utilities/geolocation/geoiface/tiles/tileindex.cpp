@@ -181,7 +181,7 @@ QList<QIntList> TileIndex::listToIntListList(const QList<TileIndex>& tileIndexLi
     return result;
 }
 
-TileIndex TileIndex::fromCoordinates(const GeoIface::GeoCoordinates& coordinate, const int getLevel)
+TileIndex TileIndex::fromCoordinates(const Digikam::GeoCoordinates& coordinate, const int getLevel)
 {
     GEOIFACE_ASSERT(getLevel <= MaxLevel);
 

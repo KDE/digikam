@@ -122,7 +122,7 @@ Q_SIGNALS:
     void signalClustersClicked(const QIntList& clusterIndices);
     void signalMarkersMoved(const QIntList& markerIndices);
     void signalZoomChanged(const QString& newZoom);
-    void signalSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& coordinates);
+    void signalSelectionHasBeenMade(const Digikam::GeoCoordinates::Pair& coordinates);
 };
 
 } // namespace Digikam

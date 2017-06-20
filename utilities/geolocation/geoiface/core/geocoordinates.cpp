@@ -28,7 +28,7 @@
 
 #include <marble/GeoDataCoordinates.h>
 
-namespace GeoIface
+namespace Digikam
 {
 
 GeoCoordinates::GeoCoordinates()
@@ -39,7 +39,8 @@ GeoCoordinates::GeoCoordinates()
 {
 }
 
-GeoCoordinates::GeoCoordinates(const double inLat, const double inLon)
+GeoCoordinates::GeoCoordinates(const double inLat,
+                               const double inLon)
     : m_lat(inLat),
       m_lon(inLon),
       m_alt(0.0),
@@ -47,7 +48,9 @@ GeoCoordinates::GeoCoordinates(const double inLat, const double inLon)
 {
 }
 
-GeoCoordinates::GeoCoordinates(const double inLat, const double inLon, const double inAlt)
+GeoCoordinates::GeoCoordinates(const double inLat,
+                               const double inLon,
+                               const double inAlt)
     : m_lat(inLat),
       m_lon(inLon),
       m_alt(inAlt),
@@ -101,7 +104,8 @@ bool GeoCoordinates::hasLongitude() const
     return m_hasFlags.testFlag(HasLongitude);
 }
 
-void GeoCoordinates::setLatLon(const double inLat, const double inLon)
+void GeoCoordinates::setLatLon(const double inLat,
+                               const double inLon)
 {
     m_lat       = inLat;
     m_lon       = inLon;
@@ -137,17 +141,20 @@ void GeoCoordinates::clear()
 
 QString GeoCoordinates::altString() const
 {
-    return m_hasFlags.testFlag(HasAltitude)  ? QString::number(m_alt, 'g', 12) : QString();
+    return m_hasFlags.testFlag(HasAltitude)  ? QString::number(m_alt, 'g', 12)
+                                             : QString();
 }
 
 QString GeoCoordinates::latString() const
 {
-    return m_hasFlags.testFlag(HasLatitude)  ? QString::number(m_lat, 'g', 12) : QString();
+    return m_hasFlags.testFlag(HasLatitude)  ? QString::number(m_lat, 'g', 12)
+                                             : QString();
 }
 
 QString GeoCoordinates::lonString() const
 {
-    return m_hasFlags.testFlag(HasLongitude) ? QString::number(m_lon, 'g', 12) : QString();
+    return m_hasFlags.testFlag(HasLongitude) ? QString::number(m_lon, 'g', 12)
+                                             : QString();
 }
 
 QString GeoCoordinates::geoUrl() const
@@ -174,12 +181,13 @@ bool GeoCoordinates::sameLonLatAs(const GeoCoordinates& other) const
            (m_lat == other.m_lat)&&(m_lon == other.m_lon);
 }
 
-GeoCoordinates GeoCoordinates::fromGeoUrl(const QString& url, bool* const parsedOkay)
+GeoCoordinates GeoCoordinates::fromGeoUrl(const QString& url,
+                                          bool* const parsedOkay)
 {
     // parse geo:-uri according to (only partially implemented):
     // http://tools.ietf.org/html/draft-ietf-geopriv-geo-uri-04
     // TODO: verify that we follow the spec fully!
-    if (!url.startsWith(QLatin1String( "geo:" )))
+    if (!url.startsWith(QLatin1String("geo:")))
     {
         // TODO: error
         if (parsedOkay)
@@ -188,7 +196,7 @@ GeoCoordinates GeoCoordinates::fromGeoUrl(const QString& url, bool* const parsed
         return GeoCoordinates();
     }
 
-    const QStringList parts = url.mid(4).split(QLatin1Char( ',' ));
+    const QStringList parts = url.mid(4).split(QLatin1Char(','));
 
     GeoCoordinates position;
 
@@ -261,15 +269,18 @@ GeoCoordinates GeoCoordinates::fromMarbleCoordinates(const Marble::GeoDataCoordi
         );
 }
 
-GeoCoordinates::Pair GeoCoordinates::makePair(const qreal lat1, const qreal lon1, const qreal lat2, const qreal lon2)
+GeoCoordinates::Pair GeoCoordinates::makePair(const qreal lat1,
+                                              const qreal lon1,
+                                              const qreal lat2,
+                                              const qreal lon2)
 {
     return Pair(GeoCoordinates(lat1, lon1), GeoCoordinates(lat2, lon2));
 }
 
-} // namespace GeoIface
+} // namespace Digikam
 
-QDebug operator<<(QDebug debugOut, const GeoIface::GeoCoordinates& coordinate)
+QDebug operator<<(QDebug debug, const Digikam::GeoCoordinates& coordinate)
 {
-    debugOut << coordinate.geoUrl();
-    return debugOut;
+    debug << coordinate.geoUrl();
+    return debug;
 }

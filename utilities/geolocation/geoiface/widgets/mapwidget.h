@@ -45,12 +45,12 @@ class QMenu;
 
 class KConfigGroup;
 
-using namespace GeoIface;
-
 namespace GeoIface
 {
     class GeoIfaceSharedData;
 }
+
+using namespace GeoIface;
 
 namespace Digikam
 {
@@ -216,7 +216,7 @@ protected Q_SLOTS:
     void slotLazyReclusteringRequestCallBack();
     void slotItemDisplaySettingsChanged();
     void slotUngroupedModelChanged();
-    void slotNewSelectionFromMap(const GeoIface::GeoCoordinates::Pair& sel);
+    void slotNewSelectionFromMap(const Digikam::GeoCoordinates::Pair& sel);
 
     /// @name Mouse modes
     //@{

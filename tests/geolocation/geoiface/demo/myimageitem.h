@@ -36,6 +36,7 @@
 #include "geocoordinates.h"
 
 using namespace GeoIface;
+using namespace Digikam;
 
 const int RoleMyData      = Qt::UserRole+0;
 const int RoleCoordinates = Qt::UserRole+1;

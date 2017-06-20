@@ -41,7 +41,7 @@ namespace Marble
     class GeoDataCoordinates;
 }
 
-namespace GeoIface
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT GeoCoordinates
@@ -110,15 +110,15 @@ private:
     HasFlags m_hasFlags;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::GeoCoordinates::HasFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GeoCoordinates::HasFlags)
 
-Q_DECLARE_TYPEINFO(GeoIface::GeoCoordinates, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(GeoIface::GeoCoordinates)
-Q_DECLARE_METATYPE(GeoIface::GeoCoordinates::Pair)
-Q_DECLARE_METATYPE(GeoIface::GeoCoordinates::PairList)
+Q_DECLARE_TYPEINFO(Digikam::GeoCoordinates, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Digikam::GeoCoordinates)
+Q_DECLARE_METATYPE(Digikam::GeoCoordinates::Pair)
+Q_DECLARE_METATYPE(Digikam::GeoCoordinates::PairList)
 
-DIGIKAM_EXPORT QDebug operator<<(QDebug debugOut, const GeoIface::GeoCoordinates& coordinate);
+DIGIKAM_EXPORT QDebug operator<<(QDebug debug, const Digikam::GeoCoordinates& coordinate);
 
 #endif // GEO_COORDINATES_H

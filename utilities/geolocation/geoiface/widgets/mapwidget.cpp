@@ -450,8 +450,8 @@ bool MapWidget::setBackend(const QString& backendName)
                        d->currentBackend, SLOT(slotThumbnailAvailableForIndex(QVariant,QPixmap)));
         }
 
-        disconnect(d->currentBackend, SIGNAL(signalSelectionHasBeenMade(GeoIface::GeoCoordinates::Pair)),
-                   this, SLOT(slotNewSelectionFromMap(GeoIface::GeoCoordinates::Pair)));
+        disconnect(d->currentBackend, SIGNAL(signalSelectionHasBeenMade(Digikam::GeoCoordinates::Pair)),
+                   this, SLOT(slotNewSelectionFromMap(Digikam::GeoCoordinates::Pair)));
 
     }
 
@@ -1974,7 +1974,7 @@ void MapWidget::clearRegionSelection()
     slotUpdateActionsEnabled();
 }
 
-void MapWidget::slotNewSelectionFromMap(const GeoIface::GeoCoordinates::Pair& sel)
+void MapWidget::slotNewSelectionFromMap(const Digikam::GeoCoordinates::Pair& sel)
 {
     /// @todo Should the backend update s on its own?
     s->selectionRectangle = sel;
@@ -2277,7 +2277,7 @@ void MapWidget::slotMouseModeChanged(QAction* triggeredAction)
 {
     // determine the new mouse mode:
     const QVariant triggeredActionData = triggeredAction->data();
-    const GeoMouseModes newMouseMode      = triggeredActionData.value<GeoIface::GeoMouseModes>();
+    const GeoMouseModes newMouseMode   = triggeredActionData.value<GeoIface::GeoMouseModes>();
 
     if (newMouseMode == s->currentMouseMode)
     {
