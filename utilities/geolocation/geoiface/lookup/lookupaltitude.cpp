@@ -24,7 +24,7 @@
 
 #include "lookupaltitude.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 LookupAltitude::LookupAltitude(QObject* const parent)
@@ -36,4 +36,4 @@ LookupAltitude::~LookupAltitude()
 {
 }
 
-} // namespace GeoIface
+} // namespace Digikam

@@ -23,7 +23,6 @@
  * ============================================================ */
 
 #include "lookupaltitudegeonames.h"
-#include "geoifacetypes.h"
 
 // Qt includes
 
@@ -34,7 +33,11 @@
 
 #include <klocalizedstring.h>
 
-namespace GeoIface
+// Local includes
+
+#include "geoifacetypes.h"
+
+namespace Digikam
 {
 
 class MergedRequests
@@ -47,7 +50,7 @@ public:
 
     bool addRequestIfCoordinatesAreThere(const LookupAltitude::Request& request, const int requestIndex)
     {
-        for (int i = 0; i < groupedRequestIndices.size(); ++i)
+        for (int i = 0 ; i < groupedRequestIndices.size() ; ++i)
         {
             if (groupedRequestIndices.at(i).first.sameLonLatAs(request.coordinates))
             {
@@ -59,6 +62,8 @@ public:
         return false;
     }
 };
+
+// ------------------------------------------------------------
 
 class Q_DECL_HIDDEN LookupAltitudeGeonames::Private
 {
@@ -81,6 +86,8 @@ public:
 
     QNetworkReply*       netReply;
 };
+
+// ------------------------------------------------------------
 
 LookupAltitudeGeonames::LookupAltitudeGeonames(QObject* const parent)
     : LookupAltitude(parent),
@@ -121,14 +128,14 @@ void LookupAltitudeGeonames::startLookup()
 {
     MergedRequests currentMergedRequest;
 
-    for (int i = 0; i < d->requests.size(); ++i)
+    for (int i = 0 ; i < d->requests.size() ; ++i)
     {
         const Request& currentRequest = d->requests.at(i);
 
         // is there another request with the same coordinates?
         bool requestAdded = currentMergedRequest.addRequestIfCoordinatesAreThere(currentRequest, i);
 
-        for (int j = 0; (!requestAdded) && j < d->mergedRequests.size(); ++j)
+        for (int j = 0 ; (!requestAdded) && j < d->mergedRequests.size() ; ++j)
         {
             requestAdded = d->mergedRequests[j].addRequestIfCoordinatesAreThere(currentRequest, i);
         }
@@ -220,7 +227,7 @@ void LookupAltitudeGeonames::slotFinished(QNetworkReply* reply)
     const MergedRequests& currentMergedRequest = d->mergedRequests.at(d->currentMergedRequestIndex);
     QIntList readyRequests;
 
-    for (int i = 0; i < qMin(altitudes.count(), currentMergedRequest.groupedRequestIndices.count()); ++i)
+    for (int i = 0 ; i < qMin(altitudes.count(), currentMergedRequest.groupedRequestIndices.count()) ; ++i)
     {
         const QString& altitudeString = altitudes.at(i);
         bool haveAltitude             = false;
@@ -282,4 +289,4 @@ void LookupAltitudeGeonames::cancel()
     emit(signalDone());
 }
 
-} // namespace GeoIface
+} // namespace Digikam

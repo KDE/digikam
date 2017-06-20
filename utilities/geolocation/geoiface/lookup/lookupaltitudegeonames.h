@@ -29,12 +29,12 @@
 
 #include <QNetworkReply>
 
-// local includes
+// Local includes
 
 #include "lookupaltitude.h"
 #include "digikam_export.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT LookupAltitudeGeonames : public LookupAltitude
@@ -72,6 +72,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // LOOKUP_ALTITUDE_GEONAMES_H

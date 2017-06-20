@@ -34,7 +34,9 @@
 #include "digikam_export.h"
 #include "geocoordinates.h"
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT LookupAltitude : public QObject
@@ -95,8 +97,8 @@ Q_SIGNALS:
     void signalDone();
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::LookupAltitude::StatusAltitude)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::LookupAltitude::StatusAltitude)
 
 #endif // LOOKUP_ALTITUDE_H

@@ -25,12 +25,12 @@
 #ifndef LOOKUP_FACTORY_H
 #define LOOKUP_FACTORY_H
 
-// local includes
+// Local includes
 
 #include "geoifacetypes.h"
 #include "digikam_export.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class LookupAltitude;
@@ -39,9 +39,10 @@ class DIGIKAM_EXPORT LookupFactory
 {
 public:
 
-    static LookupAltitude* getAltitudeLookup(const QString& backendName, QObject* const parent);
+    static LookupAltitude* getAltitudeLookup(const QString& backendName,
+                                             QObject* const parent);
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // LOOKUP_FACTORY_H

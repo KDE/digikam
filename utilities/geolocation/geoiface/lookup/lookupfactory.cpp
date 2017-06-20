@@ -22,16 +22,16 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "lookupfactory.h"
-
-// local includes
-
 #include "lookupaltitudegeonames.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
-LookupAltitude* LookupFactory::getAltitudeLookup(const QString& backendName, QObject* const parent)
+LookupAltitude* LookupFactory::getAltitudeLookup(const QString& backendName,
+                                                 QObject* const parent)
 {
     if (backendName == QLatin1String("geonames"))
     {
@@ -41,4 +41,4 @@ LookupAltitude* LookupFactory::getAltitudeLookup(const QString& backendName, QOb
     return 0;
 }
 
-} // namespace GeoIface
+} // namespace Digikam
