@@ -31,14 +31,16 @@
 #include <QObject>
 #include <QPoint>
 
-// local includes
+// Local includes
 
 #include "tileindex.h"
 #include "geoifacetypes.h"
 #include "digikam_export.h"
 #include "geogroupstate.h"
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT AbstractMarkerTiler : public QObject
@@ -201,8 +203,8 @@ private:
     Private* const d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoIface::AbstractMarkerTiler::TilerFlags)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::AbstractMarkerTiler::TilerFlags)
 
 #endif // ABSTRACT_MARKER_TILER_H

@@ -38,7 +38,9 @@
 #include "geoifacetypes.h"
 #include "digikam_export.h"
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT  TileIndex
@@ -105,10 +107,10 @@ private:
     int m_indices[MaxIndexCount];
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-QDebug operator<<(QDebug debugOut, const GeoIface::TileIndex& tileIndex);
+QDebug operator<<(QDebug debugOut, const Digikam::TileIndex& tileIndex);
 
-Q_DECLARE_TYPEINFO(GeoIface::TileIndex, Q_MOVABLE_TYPE);
+Q_DECLARE_TYPEINFO(Digikam::TileIndex, Q_MOVABLE_TYPE);
 
 #endif // TILE_INDEX_H

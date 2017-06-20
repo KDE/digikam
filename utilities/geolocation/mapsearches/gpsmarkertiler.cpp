@@ -45,7 +45,7 @@
 #include "dbjobsmanager.h"
 
 /// @todo Actually use this definition!
-typedef QPair<TileIndex, int> MapPair;
+typedef QPair<Digikam::TileIndex, int> MapPair;
 
 Q_DECLARE_METATYPE(MapPair)
 

@@ -25,13 +25,13 @@
 #include "tileindex.h"
 #include "geoifacecommon.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 TileIndex::TileIndex()
     : m_indicesCount(0)
 {
-    for (int i = 0; i < MaxIndexCount; ++i)
+    for (int i = 0 ; i < MaxIndexCount ; ++i)
     {
         m_indices[i] = 0;
     }
@@ -58,7 +58,7 @@ void TileIndex::clear()
 
 void TileIndex::appendLinearIndex(const int newIndex)
 {
-    GEOIFACE_ASSERT(m_indicesCount+1<=MaxIndexCount);
+    GEOIFACE_ASSERT(m_indicesCount + 1 <= MaxIndexCount);
     m_indices[m_indicesCount] = newIndex;
     m_indicesCount++;
 }
@@ -114,7 +114,7 @@ QIntList TileIndex::toIntList() const
 {
     QIntList result;
 
-    for (int i = 0; i < m_indicesCount; ++i)
+    for (int i = 0 ; i < m_indicesCount ; ++i)
     {
         result << m_indices[i];
     }
@@ -126,7 +126,7 @@ TileIndex TileIndex::fromIntList(const QIntList& intList)
 {
     TileIndex result;
 
-    for (int i = 0; i < intList.count(); ++i)
+    for (int i = 0 ; i < intList.count() ; ++i)
     {
         result.appendLinearIndex(intList.at(i));
     }
@@ -139,9 +139,9 @@ bool TileIndex::indicesEqual(const TileIndex& a, const TileIndex& b, const int u
     GEOIFACE_ASSERT(a.level() >= upToLevel);
     GEOIFACE_ASSERT(b.level() >= upToLevel);
 
-    for (int i = 0; i <= upToLevel; ++i)
+    for (int i = 0 ; i <= upToLevel ; ++i)
     {
-        if (a.linearIndex(i)!=b.linearIndex(i))
+        if (a.linearIndex(i) != b.linearIndex(i))
         {
             return false;
         }
@@ -155,7 +155,7 @@ TileIndex TileIndex::mid(const int first, const int len) const
     GEOIFACE_ASSERT(first+(len-1) <= m_indicesCount);
     TileIndex result;
 
-    for (int i = first; i < first+len; ++i)
+    for (int i = first ; i < first + len ; ++i)
     {
         result.appendLinearIndex(m_indices[i]);
     }
@@ -165,7 +165,7 @@ TileIndex TileIndex::mid(const int first, const int len) const
 
 void TileIndex::oneUp()
 {
-    GEOIFACE_ASSERT(m_indicesCount>0);
+    GEOIFACE_ASSERT(m_indicesCount > 0);
     m_indicesCount--;
 }
 
@@ -173,7 +173,7 @@ QList<QIntList> TileIndex::listToIntListList(const QList<TileIndex>& tileIndexLi
 {
     QList<QIntList> result;
 
-    for (int i = 0; i < tileIndexList.count(); ++i)
+    for (int i = 0 ; i < tileIndexList.count() ; ++i)
     {
         result << tileIndexList.at(i).toIntList();
     }
@@ -183,7 +183,7 @@ QList<QIntList> TileIndex::listToIntListList(const QList<TileIndex>& tileIndexLi
 
 TileIndex TileIndex::fromCoordinates(const GeoIface::GeoCoordinates& coordinate, const int getLevel)
 {
-    GEOIFACE_ASSERT(getLevel<=MaxLevel);
+    GEOIFACE_ASSERT(getLevel <= MaxLevel);
 
     if (!coordinate.hasCoordinates())
         return TileIndex();
@@ -195,7 +195,7 @@ TileIndex TileIndex::fromCoordinates(const GeoIface::GeoCoordinates& coordinate,
 
     TileIndex resultIndex;
 
-    for (int l = 0; l <= getLevel; ++l)
+    for (int l = 0 ; l <= getLevel ; ++l)
     {
         // how many tiles at this level?
         const qreal latDivisor = TileIndex::Tiling;
@@ -260,7 +260,7 @@ GeoCoordinates TileIndex::toCoordinates() const
     qreal tileLatHeight = 180.0;
     qreal tileLonWidth  = 360.0;
 
-    for (int l = 0; l < m_indicesCount; ++l)
+    for (int l = 0 ; l < m_indicesCount ; ++l)
     {
         // how many tiles are at this level?
         const qreal latDivisor = TileIndex::Tiling;
@@ -291,7 +291,7 @@ GeoCoordinates TileIndex::toCoordinates(const CornerPosition ofCorner) const
     qreal tileLatHeight = 180.0;
     qreal tileLonWidth  = 360.0;
 
-    for (int l = 0; l < m_indicesCount; ++l)
+    for (int l = 0 ; l < m_indicesCount ; ++l)
     {
         // how many tiles are at this level?
         const qreal latDivisor = TileIndex::Tiling;
@@ -341,10 +341,10 @@ GeoCoordinates TileIndex::toCoordinates(const CornerPosition ofCorner) const
     return GeoCoordinates(tileLatBL, tileLonBL);
 }
 
-QDebug operator<<(QDebug debugOut, const GeoIface::TileIndex& tileIndex)
-{
-    debugOut << tileIndex.toIntList();
-    return debugOut;
-}
+} // namespace Digikam
 
-} // namespace GeoIface
+QDebug operator<<(QDebug debug, const Digikam::TileIndex& tileIndex)
+{
+    debug << tileIndex.toIntList();
+    return debug;
+}

@@ -49,7 +49,6 @@ using namespace GeoIface;
 
 namespace GeoIface
 {
-    class AbstractMarkerTiler;
     class GeoDragDropHandler;
     class GeoIfaceSharedData;
     class GeoModelHelper;
@@ -57,6 +56,7 @@ namespace GeoIface
 
 namespace Digikam
 {
+class AbstractMarkerTiler;
 class TrackManager;
 
 class DIGIKAM_EXPORT MapWidget : public QWidget

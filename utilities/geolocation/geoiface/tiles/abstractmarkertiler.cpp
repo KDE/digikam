@@ -33,7 +33,7 @@
 #include "digikam_debug.h"
 #include "geoifacecommon.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class AbstractMarkerTiler::Private
@@ -598,4 +598,4 @@ void AbstractMarkerTiler::Tile::prepareForChildren()
     children = QVector<Tile*>(maxChildCount(), 0);
 }
 
-} // namespace GeoIface
+} // namespace Digikam

@@ -34,7 +34,7 @@
 #include "mapbackend.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class TileGrouper::Private
@@ -157,14 +157,15 @@ void TileGrouper::updateClusters()
     int debugTilesSearched      = 0;
 
     /// @todo Review this
-    for(int i = 0; i < mapBounds.count(); ++i)
+    for(int i = 0 ; i < mapBounds.count() ; ++i)
     {
         s->markerModel->prepareTiles(mapBounds.at(i).first, mapBounds.at(i).second, markerLevel);
     }
 
-    for (AbstractMarkerTiler::NonEmptyIterator tileIterator(s->markerModel, markerLevel, mapBounds); !tileIterator.atEnd(); tileIterator.nextIndex())
+    for (AbstractMarkerTiler::NonEmptyIterator tileIterator(s->markerModel, markerLevel, mapBounds) ;
+         !tileIterator.atEnd() ; tileIterator.nextIndex())
     {
-        const TileIndex tileIndex = tileIterator.currentIndex();
+        const TileIndex tileIndex           = tileIterator.currentIndex();
 
         // find out where the tile is on the map:
         const GeoCoordinates tileCoordinate = tileIndex.toCoordinates();
@@ -191,9 +192,9 @@ void TileGrouper::updateClusters()
     /// @todo Cleanup this list every ... iterations in the next loop, too
     QIntList nonEmptyPixelIndices;
 
-    for (int i = 0; i < gridWidth*gridHeight; ++i)
+    for (int i = 0 ; i < gridWidth*gridHeight ; ++i)
     {
-        if (pixelCountGrid.at(i)>0)
+        if (pixelCountGrid.at(i) > 0)
             nonEmptyPixelIndices << i;
     }
 
@@ -238,7 +239,7 @@ void TileGrouper::updateClusters()
 //                 }
 
                 // now check all other clusters:
-                for (int i = 0; (!tooClose) && (i < s->clusterList.size()); ++i)
+                for (int i = 0 ; (!tooClose) && (i < s->clusterList.size()) ; ++i)
                 {
                     if (i == index)
                         continue;
@@ -292,9 +293,9 @@ void TileGrouper::updateClusters()
         const int xEnd      = qMin( (markerX+eatRadius), gridWidth-1);
         const int yEnd      = qMin( (markerY+eatRadius), gridHeight-1);
 
-        for (int indexX = xStart; indexX <= xEnd; ++indexX)
+        for (int indexX = xStart ; indexX <= xEnd ; ++indexX)
         {
-            for (int indexY = yStart; indexY <= yEnd; ++indexY)
+            for (int indexY = yStart ; indexY <= yEnd ; ++indexY)
             {
                 const int index       = indexX + indexY*gridWidth;
                 cluster.tileIndicesList << pixelNonEmptyTileIndexGrid.at(index);
@@ -313,7 +314,7 @@ void TileGrouper::updateClusters()
 
     // now move all leftover markers into clusters:
     for (QList<QPair<QPoint, QPair<int, QList<TileIndex> > > >::const_iterator it = leftOverList.constBegin();
-         it!=leftOverList.constEnd(); ++it)
+         it != leftOverList.constEnd() ; ++it)
     {
         const QPoint markerPosition = it->first;
 
@@ -340,13 +341,13 @@ void TileGrouper::updateClusters()
     }
 
     // determine the selected states of the clusters:
-    for (int i = 0; i < s->clusterList.count(); ++i)
+    for (int i = 0 ; i < s->clusterList.count() ; ++i)
     {
-        GeoIfaceCluster& cluster  = s->clusterList[i];
+        GeoIfaceCluster& cluster = s->clusterList[i];
         int clusterSelectedCount = 0;
         GroupStateComputer clusterStateComputer;
 
-        for (int iTile = 0; (iTile < cluster.tileIndicesList.count()); ++iTile)
+        for (int iTile = 0 ; (iTile < cluster.tileIndicesList.count()) ; ++iTile)
         {
             const TileIndex tileIndex              = cluster.tileIndicesList.at(iTile);
             const GeoGroupState tileGroupState = s->markerModel->getTileGroupState(tileIndex);
@@ -368,4 +369,4 @@ void TileGrouper::updateClusters()
     d->currentBackend->updateClusters();
 }
 
-} // namespace GeoIface
+} // namespace Digikam

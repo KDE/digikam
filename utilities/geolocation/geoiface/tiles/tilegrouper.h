@@ -30,15 +30,11 @@
 #include "digikam_export.h"
 #include "geoifacecommon.h"
 
+using namespace GeoIface;
+
 namespace Digikam
 {
-    class MapBackend;
-}
-
-using namespace Digikam;
-
-namespace GeoIface
-{
+class MapBackend;
 
 class DIGIKAM_EXPORT TileGrouper : public QObject
 {
@@ -66,6 +62,6 @@ private:
     const QExplicitlySharedDataPointer<GeoIfaceSharedData> s;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // TILE_GROUPER_H

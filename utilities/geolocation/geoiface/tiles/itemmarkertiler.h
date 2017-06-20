@@ -36,8 +36,13 @@
 
 namespace GeoIface
 {
+    class GeoModelHelper;
+}
 
-class GeoModelHelper;
+using namespace GeoIface;
+
+namespace Digikam
+{
 
 class DIGIKAM_EXPORT ItemMarkerTiler : public AbstractMarkerTiler
 {
@@ -96,6 +101,6 @@ private:
     Private* const d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // ITEM_MARKER_TILER_H

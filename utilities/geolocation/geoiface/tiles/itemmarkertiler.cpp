@@ -30,7 +30,7 @@
 #include "digikam_debug.h"
 #include "geoifacecommon.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class ItemMarkerTiler::MyTile : public Tile
@@ -776,4 +776,4 @@ GeoGroupState ItemMarkerTiler::getGlobalGroupState()
     return SelectedNone;
 }
 
-} // namespace GeoIface
+} // namespace Digikam

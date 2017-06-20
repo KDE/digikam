@@ -49,6 +49,8 @@ namespace Digikam
 
 namespace Digikam
 {
+    class AbstractMarkerTiler;
+    class TileGrouper;
     class TrackManager;
     class MapBackend;
 }
@@ -58,9 +60,7 @@ using namespace Digikam;
 namespace GeoIface
 {
 
-class AbstractMarkerTiler;
 class GeoModelHelper;
-class TileGrouper;
 
 /**
  * @brief Class to hold information about map widgets stored in the GeoIfaceGlobalObject
