@@ -55,7 +55,7 @@ PlaceholderWidget::PlaceholderWidget(QWidget* const parent)
     QVBoxLayout* const vboxlayout = new QVBoxLayout();
     setLayout(vboxlayout);
 
-    d->messageLabel = new QLabel(i18n("GeoIface"), this);
+    d->messageLabel = new QLabel(i18n("Geolocation Interface"), this);
 }
 
 PlaceholderWidget::~PlaceholderWidget()

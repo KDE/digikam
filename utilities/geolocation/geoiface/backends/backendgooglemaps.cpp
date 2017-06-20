@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : Google-Maps-backend for GeoIface
+ * Description : Google-Maps-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -50,8 +50,6 @@
 #include "abstractmarkertiler.h"
 #include "geomodelhelper.h"
 #include "digikam_debug.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {

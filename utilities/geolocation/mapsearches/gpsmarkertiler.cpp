@@ -456,7 +456,8 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, qMax(size.width() + 2, size.height() + 2)))
     {
-        // digikam returns thumbnails with a border around them, but GeoIface expects them without a border
+        // digikam returns thumbnails with a border around them,
+        // but geolocation interface expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width() - 2, thumbnail.size().height() - 2);
     }
     else

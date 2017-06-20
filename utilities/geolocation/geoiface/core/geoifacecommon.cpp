@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-07-14
- * Description : Common internal data structures for GeoIface
+ * Description : Common internal data structures for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010-2014 by Michael G. Hansen <mike at mghansen dot de>

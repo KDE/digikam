@@ -4,7 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2010-09-18
- * Description : A tool to calibrate the tiling levels used in GeoIface
+ * Description : A tool to calibrate the tiling levels
+ *               used in geolocation interface
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *

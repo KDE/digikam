@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-08
- * Description : Marble-backend for GeoIface
+ * Description : Marble-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>

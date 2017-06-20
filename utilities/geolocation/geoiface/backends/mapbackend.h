@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : Base-class for backends for GeoIface
+ * Description : Base-class for backends for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -43,13 +43,6 @@ namespace Marble
 {
     class GeoDataLatLonBox;
 }
-
-namespace GeoIface
-{
-    class GeoIfaceSharedData;
-}
-
-using namespace GeoIface;
 
 namespace Digikam
 {

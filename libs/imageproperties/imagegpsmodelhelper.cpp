@@ -107,7 +107,8 @@ QPixmap ImageGPSModelHelper::pixmapFromRepresentativeIndex(const QPersistentMode
 
     if (d->thumbnailLoadThread->find(thumbId, thumbnail, qMax(size.width(), size.height())))
     {
-        // digikam returns thumbnails with a border around them, but GeoIface expects them without a border
+        // digikam returns thumbnails with a border around them,
+        // but the geolocation interface expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width()-2, thumbnail.size().height()-2);
     }
     else

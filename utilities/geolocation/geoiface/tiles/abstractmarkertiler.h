@@ -171,7 +171,7 @@ public:
     virtual GeoGroupState getTileGroupState(const TileIndex& tileIndex) = 0;
     virtual GeoGroupState getGlobalGroupState() = 0;
 
-    // these can be implemented if you want to react to actions in GeoIface
+    // these can be implemented if you want to react to actions in geolocation interface
     virtual void onIndicesClicked(const ClickInfo& clickInfo);
     virtual void onIndicesMoved(const TileIndex::List& tileIndicesList, const GeoCoordinates& targetCoordinates,
                                 const QPersistentModelIndex& targetSnapIndex);

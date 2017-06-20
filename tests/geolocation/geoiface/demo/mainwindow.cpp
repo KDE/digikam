@@ -244,9 +244,9 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     ItemMarkerTiler* const mm = new ItemMarkerTiler(d->markerModelHelper, this);
 
     resize(512, 512);
-    setWindowTitle(i18n("GeoIface demo"));
+    setWindowTitle(i18n("Geolocation Interface demo"));
     setWindowIcon(QIcon::fromTheme(QString::fromLatin1("globe")));
-    setObjectName(QLatin1String("Demo-GeoIface" ));
+    setObjectName(QLatin1String("DemoGeoLocationInterface" ));
 
     d->cmdLineArgs = cmdLineArgs;
 

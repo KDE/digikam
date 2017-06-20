@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2011-01-06
- * Description : Helper functions for GeoIface interaction
+ * Description : Helper functions for geolocation interface interaction
  *
  * Copyright (C) 2011 by Michael G. Hansen <mike at mghansen dot de>
  *

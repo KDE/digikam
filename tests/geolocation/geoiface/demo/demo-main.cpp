@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : demo-program for GeoIface
+ * Description : demo-program for geolocation interface
  *
  * Copyright (C) 2009-2010 by Michael G. Hansen <mike at mghansen dot de>
  * Copyright (C)      2014 by Justus Schwartz <justus at gmx dot li>
