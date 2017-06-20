@@ -28,7 +28,7 @@
 #include "geoifacetypes.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class Q_DECL_HIDDEN GroupStateComputer::Private
@@ -144,4 +144,4 @@ void GroupStateComputer::addRegionSelectedState(const GeoGroupState state)
     }
 }
 
-} // namespace GeoIface
+} // namespace Digikam

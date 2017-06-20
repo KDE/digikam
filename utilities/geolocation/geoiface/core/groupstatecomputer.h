@@ -35,7 +35,9 @@
 
 #include "digikam_export.h"
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT GroupStateComputer
@@ -60,6 +62,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // GROUP_STATE_COMPUTER_H
