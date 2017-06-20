@@ -13,23 +13,22 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      backends/backendmarble.cpp
                      backends/backendmarblelayer.cpp
                      backends/backendgooglemaps.cpp
-
-                     geodragdrophandler.cpp
-                     geocoordinates.cpp
-                     geoifacecommon.cpp
-                     geomodelhelper.cpp
-                     groupstatecomputer.cpp
-                     lookupaltitude.cpp
-                     lookupaltitudegeonames.cpp
-                     lookupfactory.cpp
-                     abstractmarkertiler.cpp
-                     itemmarkertiler.cpp
-                     mapwidget.cpp
-                     placeholderwidget.cpp
-                     tilegrouper.cpp
-                     tileindex.cpp
-                     trackreader.cpp
-                     trackmanager.cpp
+                     tracks/trackreader.cpp
+                     tracks/trackmanager.cpp
+                     lookup/lookupaltitude.cpp
+                     lookup/lookupaltitudegeonames.cpp
+                     lookup/lookupfactory.cpp
+                     core/geodragdrophandler.cpp
+                     core/geocoordinates.cpp
+                     core/geoifacecommon.cpp
+                     core/geomodelhelper.cpp
+                     core/groupstatecomputer.cpp
+                     tiles/abstractmarkertiler.cpp
+                     tiles/itemmarkertiler.cpp
+                     tiles/tilegrouper.cpp
+                     tiles/tileindex.cpp
+                     widgets/mapwidget.cpp
+                     widgets/placeholderwidget.cpp
 )
 
 include_directories($<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
