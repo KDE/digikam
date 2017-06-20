@@ -35,8 +35,6 @@
 
 #include "digikam_export.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 
@@ -44,7 +42,7 @@ class DIGIKAM_EXPORT GroupStateComputer
 {
 public:
 
-    GroupStateComputer();
+    explicit GroupStateComputer();
     virtual ~GroupStateComputer();
 
     GeoGroupState getState() const;

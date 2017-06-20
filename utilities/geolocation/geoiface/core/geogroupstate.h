@@ -29,7 +29,7 @@
 
 #include <QFlags>
 
-namespace GeoIface
+namespace Digikam
 {
 
 /**
@@ -69,8 +69,8 @@ enum GeoGroupStateEnum
 
 Q_DECLARE_FLAGS(GeoGroupState, GeoGroupStateEnum)
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoGroupState)
+} // namespace Digikam
 
-} // namespace GeoIface
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GeoGroupState)
 
 #endif // GEO_GROUP_STATE_H
