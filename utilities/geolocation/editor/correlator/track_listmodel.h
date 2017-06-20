@@ -33,8 +33,6 @@
 
 #include "trackmanager.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

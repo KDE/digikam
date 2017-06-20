@@ -91,8 +91,6 @@
 #   include <modeltest.h>
 #endif
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

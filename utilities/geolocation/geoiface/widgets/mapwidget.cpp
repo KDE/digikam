@@ -299,32 +299,32 @@ void MapWidget::createActions()
     d->actionSetRegionSelectionMode->setCheckable(true);
     d->actionSetRegionSelectionMode->setIcon(QIcon::fromTheme( QLatin1String("select-rectangular") ));
     d->actionSetRegionSelectionMode->setToolTip(i18n("Select images by drawing a rectangle"));
-    d->actionSetRegionSelectionMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeRegionSelection));
+    d->actionSetRegionSelectionMode->setData(QVariant::fromValue<Digikam::GeoMouseModes>(MouseModeRegionSelection));
 
     d->actionSetPanMode = new QAction(d->mouseModeActionGroup);
     d->actionSetPanMode->setCheckable(true);
     d->actionSetPanMode->setToolTip(i18n("Pan mode"));
     d->actionSetPanMode->setIcon(QIcon::fromTheme( QLatin1String("transform-move") ));
     d->actionSetPanMode->setChecked(true);
-    d->actionSetPanMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModePan));
+    d->actionSetPanMode->setData(QVariant::fromValue<Digikam::GeoMouseModes>(MouseModePan));
 
     d->actionSetZoomIntoGroupMode = new QAction(d->mouseModeActionGroup);
     d->actionSetZoomIntoGroupMode->setCheckable(true);
     d->actionSetZoomIntoGroupMode->setToolTip(i18n("Zoom into a group"));
     d->actionSetZoomIntoGroupMode->setIcon(QIcon::fromTheme( QLatin1String("zoom-fit-best") ));
-    d->actionSetZoomIntoGroupMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeZoomIntoGroup));
+    d->actionSetZoomIntoGroupMode->setData(QVariant::fromValue<Digikam::GeoMouseModes>(MouseModeZoomIntoGroup));
 
     d->actionSetRegionSelectionFromIconMode = new QAction(d->mouseModeActionGroup);
     d->actionSetRegionSelectionFromIconMode->setCheckable(true);
     d->actionSetRegionSelectionFromIconMode->setToolTip(i18n("Create a region selection from a thumbnail"));
     d->actionSetRegionSelectionFromIconMode->setIcon(QIcon::fromTheme( QLatin1String("edit-node") ));
-    d->actionSetRegionSelectionFromIconMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeRegionSelectionFromIcon));
+    d->actionSetRegionSelectionFromIconMode->setData(QVariant::fromValue<Digikam::GeoMouseModes>(MouseModeRegionSelectionFromIcon));
 
     d->actionSetFilterMode = new QAction(d->mouseModeActionGroup);
     d->actionSetFilterMode->setCheckable(true);
     d->actionSetFilterMode->setToolTip(i18n("Filter images"));
     d->actionSetFilterMode->setIcon(QIcon::fromTheme( QLatin1String("view-filter") ));
-    d->actionSetFilterMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeFilter));
+    d->actionSetFilterMode->setData(QVariant::fromValue<Digikam::GeoMouseModes>(MouseModeFilter));
 
     d->actionRemoveFilter = new QAction(this);
     d->actionRemoveFilter->setToolTip(i18n("Remove the current filter"));
@@ -334,7 +334,7 @@ void MapWidget::createActions()
     d->actionSetSelectThumbnailMode->setCheckable(true);
     d->actionSetSelectThumbnailMode->setToolTip(i18n("Select images"));
     d->actionSetSelectThumbnailMode->setIcon(QIcon::fromTheme( QLatin1String("edit-select") ));
-    d->actionSetSelectThumbnailMode->setData(QVariant::fromValue<GeoIface::GeoMouseModes>(MouseModeSelectThumbnail));
+    d->actionSetSelectThumbnailMode->setData(QVariant::fromValue<Digikam::GeoMouseModes>(MouseModeSelectThumbnail));
 
     d->actionStickyMode = new QAction(this);
     d->actionStickyMode->setCheckable(true);
@@ -2277,7 +2277,7 @@ void MapWidget::slotMouseModeChanged(QAction* triggeredAction)
 {
     // determine the new mouse mode:
     const QVariant triggeredActionData = triggeredAction->data();
-    const GeoMouseModes newMouseMode   = triggeredActionData.value<GeoIface::GeoMouseModes>();
+    const GeoMouseModes newMouseMode   = triggeredActionData.value<Digikam::GeoMouseModes>();
 
     if (newMouseMode == s->currentMouseMode)
     {

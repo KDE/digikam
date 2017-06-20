@@ -35,8 +35,6 @@
 
 #include "geomodelhelper.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

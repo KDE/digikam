@@ -72,8 +72,6 @@
 #   include <modeltest.h>
 #endif // GPSSYNC_MODELTEST
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

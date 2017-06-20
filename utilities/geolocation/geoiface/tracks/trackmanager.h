@@ -39,8 +39,6 @@
 
 class TestGPXParsing;
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

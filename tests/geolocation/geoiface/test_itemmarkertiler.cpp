@@ -32,7 +32,7 @@
 
 #include "geoifacecommon.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 const int CoordinatesRole = Qt::UserRole + 0;
 

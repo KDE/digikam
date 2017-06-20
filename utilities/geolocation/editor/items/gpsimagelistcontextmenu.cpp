@@ -51,8 +51,6 @@
 #include "gpsbookmarkowner.h"
 #include "digikam_debug.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

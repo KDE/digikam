@@ -64,14 +64,13 @@
 #include "itemmarkertiler.h"
 #include "geoifacecommon.h"
 
-// local includes
+// Local includes
 
 #include "mydragdrophandler.h"
 #include "mytreewidget.h"
 #include "myimageitem.h"
 
 using namespace Digikam;
-using namespace GeoIface;
 
 MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel,
                                      QItemSelectionModel* const itemSelectionModel)

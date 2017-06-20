@@ -43,8 +43,6 @@
 #include "dmetadata.h"
 #include "rginfo.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 
@@ -61,7 +59,6 @@ typedef struct TagData
     Type    tagType;
 
 } TagData;
-
 
 class SaveProperties
 {

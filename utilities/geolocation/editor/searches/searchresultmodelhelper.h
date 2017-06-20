@@ -32,12 +32,7 @@
 // Local includes
 
 #include "geomodelhelper.h"
-
-// local includes
-
 #include "searchbackend.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {

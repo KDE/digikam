@@ -30,12 +30,11 @@
 #include <QPersistentModelIndex>
 #include <QUrl>
 
-// geoiface includes
+// Local includes
 
 #include "geoifacetypes.h"
 #include "geocoordinates.h"
 
-using namespace GeoIface;
 using namespace Digikam;
 
 const int RoleMyData      = Qt::UserRole+0;

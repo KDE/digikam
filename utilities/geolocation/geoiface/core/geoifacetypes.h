@@ -31,7 +31,7 @@
 
 Q_DECLARE_METATYPE(QPersistentModelIndex)
 
-namespace GeoIface
+namespace Digikam
 {
 
 enum GeoMouseMode
@@ -46,7 +46,6 @@ enum GeoMouseMode
 };
 
 Q_DECLARE_FLAGS(GeoMouseModes, GeoMouseMode)
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoMouseModes)
 
 enum GeoExtraAction
 {
@@ -54,12 +53,14 @@ enum GeoExtraAction
 };
 
 Q_DECLARE_FLAGS(GeoExtraActions, GeoExtraAction)
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoExtraActions)
 
 typedef QList<int> QIntList;
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_METATYPE(GeoIface::GeoMouseModes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GeoMouseModes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GeoExtraActions)
+
+Q_DECLARE_METATYPE(Digikam::GeoMouseModes)
 
 #endif // GEO_IFACE_TYPES_H

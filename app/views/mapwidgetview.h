@@ -40,8 +40,6 @@
 #include "imagefiltermodel.h"
 #include "camiteminfo.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

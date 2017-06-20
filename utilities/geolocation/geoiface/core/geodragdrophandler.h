@@ -33,8 +33,6 @@
 
 class QDropEvent;
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

@@ -46,14 +46,12 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "searchresultmodel.h"
 #include "gpscommon.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {

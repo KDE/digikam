@@ -52,8 +52,6 @@
 #include "gpsmarkertiler.h"
 #include "gpsimageinfosorter.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

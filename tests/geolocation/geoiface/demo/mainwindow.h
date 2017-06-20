@@ -39,7 +39,6 @@
 class QCommandLineParser;
 
 using namespace Digikam;
-using namespace GeoIface;
 
 class MarkerModelHelper : public GeoModelHelper
 {

@@ -38,8 +38,6 @@
 #include "gpsimageinfo.h"
 #include "mapwidget.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

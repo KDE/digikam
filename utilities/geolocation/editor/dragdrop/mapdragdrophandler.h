@@ -34,8 +34,6 @@
 
 #include "geodragdrophandler.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

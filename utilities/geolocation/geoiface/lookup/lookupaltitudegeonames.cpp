@@ -37,8 +37,6 @@
 
 #include "geoifacetypes.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

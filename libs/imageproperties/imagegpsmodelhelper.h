@@ -39,8 +39,6 @@
 #include "thumbnailloadthread.h"
 #include "gpsimageinfosorter.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

@@ -30,8 +30,6 @@
 #include "digikam_export.h"
 #include "geoifacecommon.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 class MapBackend;

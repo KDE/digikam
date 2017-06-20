@@ -44,8 +44,6 @@
 
 class QAbstractItemModel;
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

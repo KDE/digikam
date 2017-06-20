@@ -41,7 +41,7 @@ class GPSImageInfo
 {
 public:
 
-    GPSImageInfo();
+    explicit GPSImageInfo();
     ~GPSImageInfo();
 
 public:

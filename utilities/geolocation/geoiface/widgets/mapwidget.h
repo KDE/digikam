@@ -45,8 +45,6 @@ class QMenu;
 
 class KConfigGroup;
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 
@@ -176,7 +174,7 @@ Q_SIGNALS:
     void signalRegionSelectionChanged();
     void signalRemoveCurrentFilter();
     void signalStickyModeChanged();
-    void signalMouseModeChanged(const GeoIface::GeoMouseModes& currentMouseMode);
+    void signalMouseModeChanged(const Digikam::GeoMouseModes& currentMouseMode);
 
 public:
 

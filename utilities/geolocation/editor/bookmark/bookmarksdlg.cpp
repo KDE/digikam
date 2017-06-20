@@ -60,8 +60,6 @@
 #include "imagepropertiesgpstab.h"
 #include "gpsimageinfo.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

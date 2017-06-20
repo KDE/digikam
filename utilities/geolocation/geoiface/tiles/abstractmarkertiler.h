@@ -38,8 +38,6 @@
 #include "digikam_export.h"
 #include "geogroupstate.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 
