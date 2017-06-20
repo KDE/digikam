@@ -35,11 +35,6 @@
 
 #include "geomodelhelper.h"
 
-namespace GeoIface
-{
-    class MapWidget;
-}
-
 using namespace GeoIface;
 
 namespace Digikam
@@ -47,6 +42,7 @@ namespace Digikam
 
 class GPSImageModel;
 class GPSUndoCommand;
+class MapWidget;
 
 class GPSGeoIfaceModelHelper : public GeoModelHelper
 {

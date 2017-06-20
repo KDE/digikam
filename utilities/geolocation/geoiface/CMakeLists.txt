@@ -9,7 +9,6 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 set(libgeoiface_SRCS backends/mapbackend.cpp
-                     backends/htmlwidget.cpp
                      backends/backendmarble.cpp
                      backends/backendmarblelayer.cpp
                      backends/backendgooglemaps.cpp
@@ -27,6 +26,7 @@ set(libgeoiface_SRCS backends/mapbackend.cpp
                      tiles/itemmarkertiler.cpp
                      tiles/tilegrouper.cpp
                      tiles/tileindex.cpp
+                     widgets/htmlwidget.cpp
                      widgets/mapwidget.cpp
                      widgets/placeholderwidget.cpp
 )

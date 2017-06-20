@@ -51,6 +51,8 @@
 #include "geomodelhelper.h"
 #include "digikam_debug.h"
 
+using namespace Digikam;
+
 namespace GeoIface
 {
 

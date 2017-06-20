@@ -203,7 +203,7 @@ public:
     QItemSelectionModel*                     selectionModel;
     bool                                     uiEnabled;
     GPSImageListContextMenu*                 listViewContextMenu;
-    TrackManager*                  trackManager;
+    TrackManager*                            trackManager;
 
     // Loading and saving
     QFuture<QPair<QUrl,QString> >            fileIOFuture;

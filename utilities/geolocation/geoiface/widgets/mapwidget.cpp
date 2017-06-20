@@ -69,7 +69,7 @@
 #include "backendgooglemaps.h"
 #include "backendmarble.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 /**
@@ -205,8 +205,8 @@ public:
     int                     thumbnailTimerCount;
     bool                    thumbnailsHaveBeenLoaded;
 
-    GeoExtraActions            availableExtraActions;
-    GeoExtraActions            visibleExtraActions;
+    GeoExtraActions         availableExtraActions;
+    GeoExtraActions         visibleExtraActions;
     QAction*                actionStickyMode;
     QToolButton*            buttonStickyMode;
 
@@ -2331,4 +2331,4 @@ void MapWidget::setTrackManager(TrackManager* const trackManager)
     }
 }
 
-} // namespace GeoIface
+} // namespace Digikam

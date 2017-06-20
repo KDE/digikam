@@ -33,7 +33,7 @@
 
 #include "digikam_export.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT PlaceholderWidget : public QFrame
@@ -55,6 +55,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // PLACE_HOLDER_WIDGET_H

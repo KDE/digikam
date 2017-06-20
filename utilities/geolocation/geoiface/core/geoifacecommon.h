@@ -42,11 +42,17 @@
 #include "groupstatecomputer.h"
 #include "digikam_export.h"
 
+namespace Digikam
+{
+    class MapWidget;
+}
+
+using namespace Digikam;
+
 namespace GeoIface
 {
 
 class AbstractMarkerTiler;
-class MapWidget;
 class MapBackend;
 class GeoModelHelper;
 class TileGrouper;
@@ -248,8 +254,8 @@ public:
     MapWidget*                worldMapWidget;
     TileGrouper*              tileGrouper;
     AbstractMarkerTiler*      markerModel;
-    GeoIfaceCluster::List      clusterList;
-    QList<GeoModelHelper*>       ungroupedModels;
+    GeoIfaceCluster::List     clusterList;
+    QList<GeoModelHelper*>    ungroupedModels;
     TrackManager*             trackManager;
     //@}
 
@@ -270,9 +276,9 @@ public:
     //@{
     GeoCoordinates::Pair      selectionRectangle;
     bool                      haveMovingCluster;
-    GeoMouseModes                currentMouseMode;
-    GeoMouseModes                availableMouseModes;
-    GeoMouseModes                visibleMouseModes;
+    GeoMouseModes             currentMouseMode;
+    GeoMouseModes             availableMouseModes;
+    GeoMouseModes             visibleMouseModes;
     bool                      activeState;
     //@}
 };

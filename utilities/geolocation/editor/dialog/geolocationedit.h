@@ -44,16 +44,13 @@
 
 class QAbstractItemModel;
 
-namespace GeoIface
-{
-    class MapWidget;
-}
 using namespace GeoIface;
 
 namespace Digikam
 {
 
 class GPSUndoCommand;
+class MapWidget;
 
 class DIGIKAM_EXPORT GeolocationEdit : public QDialog
 {

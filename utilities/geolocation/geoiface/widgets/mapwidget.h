@@ -45,14 +45,19 @@ class QMenu;
 
 class KConfigGroup;
 
+using namespace GeoIface;
+
 namespace GeoIface
 {
+    class AbstractMarkerTiler;
+    class GeoDragDropHandler;
+    class GeoIfaceSharedData;
+    class GeoModelHelper;
+    class TrackManager;
+}
 
-class AbstractMarkerTiler;
-class GeoDragDropHandler;
-class GeoIfaceSharedData;
-class GeoModelHelper;
-class TrackManager;
+namespace Digikam
+{
 
 class DIGIKAM_EXPORT MapWidget : public QWidget
 {
@@ -228,6 +233,6 @@ private:
     Q_DISABLE_COPY(MapWidget)
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // MAP_WIDGET_H

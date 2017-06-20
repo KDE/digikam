@@ -45,13 +45,15 @@
 
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "abstractmarkertiler.h"
 #include "itemmarkertiler.h"
 #include "mapwidget.h"
 #include "geocoordinates.h"
 #include "digikam_version.h"
+
+using namespace Digikam;
 
 const int CoordinatesRole = Qt::UserRole + 1;
 

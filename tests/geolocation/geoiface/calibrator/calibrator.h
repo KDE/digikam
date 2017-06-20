@@ -28,7 +28,7 @@
 
 #include <QMainWindow>
 
-// local includes
+// Local includes
 
 #include "geomodelhelper.h"
 
@@ -69,7 +69,7 @@ class Calibrator : public QMainWindow
 
 public:
 
-    Calibrator();
+    explicit Calibrator();
     ~Calibrator();
 
 private:

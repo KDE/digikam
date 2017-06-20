@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GeoIface
+namespace Digikam
 {
 
 class PlaceholderWidget::Private
@@ -67,4 +67,4 @@ void PlaceholderWidget::setMessage(const QString& message)
     d->messageLabel->setText(message);
 }
 
-} // namespace GeoIface
+} // namespace Digikam

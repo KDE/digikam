@@ -32,13 +32,14 @@
 
 // Local includes
 
+#include "geoifacecommon.h"
 #include "geoifacetypes.h"
 #include "geocoordinates.h"
 
-namespace GeoIface
-{
+using namespace GeoIface;
 
-class GeoIfaceSharedData;
+namespace Digikam
+{
 
 class HTMLWidget : public QWebView
 {
@@ -55,7 +56,8 @@ public:
     void mouseModeChanged(const GeoMouseModes mouseMode);
     void setSelectionRectangle(const GeoCoordinates::Pair& searchCoordinates);
     void removeSelectionRectangle();
-    void centerOn(const qreal west, const qreal north, const qreal east, const qreal south, const bool useSaneZoomLevel = true);
+    void centerOn(const qreal west, const qreal north, const qreal east, const qreal south,
+                  const bool useSaneZoomLevel = true);
     void setSharedGeoIfaceObject(GeoIfaceSharedData* const sharedData);
 
 protected:
@@ -85,6 +87,6 @@ private:
     GeoIfaceSharedData* s;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // HTML_WIDGET_H

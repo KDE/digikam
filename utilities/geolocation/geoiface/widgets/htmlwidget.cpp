@@ -38,7 +38,7 @@
 #include "geoifacetypes.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class HTMLWidget::Private
@@ -308,7 +308,8 @@ void HTMLWidget::setSelectionRectangle(const GeoCoordinates::Pair& searchCoordin
     qreal East  = searchCoordinates.second.lon();
     qreal South = searchCoordinates.second.lat();
 
-    runScript(QString::fromLatin1("kgeomapSetSelectionRectangle(%1, %2, %3, %4);").arg(West).arg(North).arg(East).arg(South));
+    runScript(QString::fromLatin1("kgeomapSetSelectionRectangle(%1, %2, %3, %4);")
+              .arg(West).arg(North).arg(East).arg(South));
 }
 
 void HTMLWidget::removeSelectionRectangle()
@@ -336,7 +337,12 @@ void HTMLWidget::centerOn(const qreal west, const qreal north,
                           const qreal east, const qreal south,
                           const bool useSaneZoomLevel)
 {
-//    qCDebug(DIGIKAM_GEOIFACE_LOG) << "West:" << west << " North:" << north << " East:" << east << " South:" << south;
+/*
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << "West:" << west
+                                  << " North:" << north
+                                  << " East:" << east
+                                  << " South:" << south;
+*/
     runScript(QString::fromLatin1("kgeomapSetMapBoundaries(%1, %2, %3, %4, %5);")
               .arg(west)
               .arg(north)
@@ -350,4 +356,4 @@ void HTMLWidget::setSharedGeoIfaceObject(GeoIfaceSharedData* const sharedData)
     s = sharedData;
 }
 
-} // namespace GeoIface
+} // namespace Digikam
