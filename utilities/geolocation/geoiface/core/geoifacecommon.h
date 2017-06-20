@@ -53,14 +53,13 @@ namespace Digikam
     class TileGrouper;
     class TrackManager;
     class MapBackend;
+    class GeoModelHelper;
 }
 
 using namespace Digikam;
 
 namespace GeoIface
 {
-
-class GeoModelHelper;
 
 /**
  * @brief Class to hold information about map widgets stored in the GeoIfaceGlobalObject

@@ -24,7 +24,7 @@
 
 #include "geomodelhelper.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 /**
@@ -61,7 +61,7 @@ GeoModelHelper::~GeoModelHelper()
 }
 
 void GeoModelHelper::snapItemsTo(const QModelIndex& targetIndex,
-                              const QList<QPersistentModelIndex>& snappedIndices)
+                                 const QList<QPersistentModelIndex>& snappedIndices)
 {
     QList<QModelIndex> result;
 
@@ -98,10 +98,10 @@ QPersistentModelIndex GeoModelHelper::bestRepresentativeIndexFromList(const QLis
  * @param url URL of the icon if available.
  */
 bool GeoModelHelper::itemIcon(const QModelIndex& index,
-                           QPoint* const offset,
-                           QSize* const size,
-                           QPixmap* const pixmap,
-                           QUrl* const url) const
+                              QPoint* const offset,
+                              QSize* const size,
+                              QPixmap* const pixmap,
+                              QUrl* const url) const
 {
     Q_UNUSED(index)
     Q_UNUSED(offset)
@@ -123,12 +123,12 @@ GeoModelHelper::PropertyFlags GeoModelHelper::itemFlags(const QModelIndex& /*ind
 }
 
 void GeoModelHelper::snapItemsTo(const QModelIndex& /*targetIndex*/,
-                              const QList<QModelIndex>& /*snappedIndices*/)
+                                 const QList<QModelIndex>& /*snappedIndices*/)
 {
 }
 
 QPixmap GeoModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& /*index*/,
-                                                   const QSize& /*size*/)
+                                                      const QSize& /*size*/)
 {
     return QPixmap();
 }
@@ -147,4 +147,4 @@ void GeoModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedInd
     Q_UNUSED(targetSnapIndex);
 }
 
-} // namespace GeoIface
+} // namespace Digikam

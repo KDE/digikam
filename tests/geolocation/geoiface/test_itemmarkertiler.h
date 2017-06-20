@@ -28,12 +28,12 @@
 
 #include <QtTest>
 
-// local includes
+// Local includes
 
 #include "itemmarkertiler.h"
 #include "geomodelhelper.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 class MarkerModelHelper : public GeoModelHelper
 {

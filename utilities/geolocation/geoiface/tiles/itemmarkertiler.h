@@ -34,15 +34,9 @@
 #include "digikam_export.h"
 #include "abstractmarkertiler.h"
 
-namespace GeoIface
-{
-    class GeoModelHelper;
-}
-
-using namespace GeoIface;
-
 namespace Digikam
 {
+class GeoModelHelper;
 
 class DIGIKAM_EXPORT ItemMarkerTiler : public AbstractMarkerTiler
 {

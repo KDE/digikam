@@ -40,7 +40,9 @@
 #include "geocoordinates.h"
 #include "digikam_export.h"
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT GeoModelHelper : public QObject
@@ -103,8 +105,8 @@ Q_SIGNALS:
     void signalModelChangedDrastically();
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(GeoModelHelper::PropertyFlags)
+} // namespace Digikam
 
-} // namespace GeoIface
+Q_DECLARE_OPERATORS_FOR_FLAGS(Digikam::GeoModelHelper::PropertyFlags)
 
 #endif // GEO_MODEL_HELPER_H

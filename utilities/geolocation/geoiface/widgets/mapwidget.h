@@ -50,12 +50,12 @@ using namespace GeoIface;
 namespace GeoIface
 {
     class GeoIfaceSharedData;
-    class GeoModelHelper;
 }
 
 namespace Digikam
 {
 
+class GeoModelHelper;
 class GeoDragDropHandler;
 class AbstractMarkerTiler;
 class TrackManager;

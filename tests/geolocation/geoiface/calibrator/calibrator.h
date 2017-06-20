@@ -34,7 +34,7 @@
 
 class QStandardItemModel;
 
-using namespace GeoIface;
+using namespace Digikam;
 
 class CalibratorModelHelper : public GeoModelHelper
 {
