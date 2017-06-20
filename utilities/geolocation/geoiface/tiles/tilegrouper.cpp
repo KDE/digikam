@@ -51,7 +51,8 @@ public:
     MapBackend* currentBackend;
 };
 
-TileGrouper::TileGrouper(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData, QObject* const parent)
+TileGrouper::TileGrouper(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
+                         QObject* const parent)
     : QObject(parent),
       d(new Private),
       s(sharedData)

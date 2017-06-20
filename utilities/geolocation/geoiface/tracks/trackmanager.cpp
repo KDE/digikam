@@ -34,7 +34,7 @@
 
 #include "trackreader.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 // TrackManager::TrackPoint ---------------------------------------------------
@@ -221,4 +221,4 @@ QColor TrackManager::getNextFreeTrackColor()
     return nextColor;
 }
 
-} // namespace GeoIface
+} // namespace Digikam

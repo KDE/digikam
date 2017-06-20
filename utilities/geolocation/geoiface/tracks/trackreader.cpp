@@ -33,7 +33,7 @@
 
 #include <klocalizedstring.h>
 
-namespace GeoIface
+namespace Digikam
 {
 
 static QString GPX10(QString::fromLatin1("http://www.topografix.com/GPX/1/0"));
@@ -335,4 +335,4 @@ TrackReader::TrackReadResult TrackReader::loadTrackFile(const QUrl& url)
     return parsedData;
 }
 
-} // namespace GeoIface
+} // namespace Digikam

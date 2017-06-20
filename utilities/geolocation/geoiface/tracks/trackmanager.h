@@ -39,7 +39,9 @@
 
 class TestGPXParsing;
 
-namespace GeoIface
+using namespace GeoIface;
+
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT TrackManager : public QObject
@@ -164,6 +166,6 @@ private:
     const QScopedPointer<Private> d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // TRACK_MANAGER_H

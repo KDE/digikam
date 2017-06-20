@@ -53,11 +53,11 @@ namespace GeoIface
     class GeoDragDropHandler;
     class GeoIfaceSharedData;
     class GeoModelHelper;
-    class TrackManager;
 }
 
 namespace Digikam
 {
+class TrackManager;
 
 class DIGIKAM_EXPORT MapWidget : public QWidget
 {

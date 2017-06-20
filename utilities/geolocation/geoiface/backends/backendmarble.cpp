@@ -63,7 +63,7 @@
 #include "trackmanager.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BMInternalWidgetInfo
@@ -82,11 +82,11 @@ public:
 #endif
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_METATYPE(GeoIface::BMInternalWidgetInfo)
+Q_DECLARE_METATYPE(Digikam::BMInternalWidgetInfo)
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendMarble::Private
@@ -180,7 +180,8 @@ public:
 
 BackendMarble::BackendMarble(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
                              QObject* const parent)
-    : MapBackend(sharedData, parent), d(new Private())
+    : MapBackend(sharedData, parent),
+      d(new Private())
 {
     createActions();
 }
@@ -1877,4 +1878,4 @@ void BackendMarble::slotScheduleUpdate()
     }
 }
 
-} // namespace GeoIface
+} // namespace Digikam

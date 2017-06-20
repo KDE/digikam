@@ -31,7 +31,7 @@
 #include "mapbackend.h"
 #include "trackmanager.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendGoogleMaps : public MapBackend
@@ -130,6 +130,6 @@ private:
     Private* const d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // BACKEND_MAP_GOOGLEMAPS_H

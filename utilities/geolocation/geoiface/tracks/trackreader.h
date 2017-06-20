@@ -36,7 +36,7 @@
 
 class TestTracks;
 
-namespace GeoIface
+namespace Digikam
 {
 
 class DIGIKAM_EXPORT TrackReader : public QXmlDefaultHandler
@@ -85,6 +85,6 @@ private:
     friend class ::TestTracks;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // TRACK_READER_H

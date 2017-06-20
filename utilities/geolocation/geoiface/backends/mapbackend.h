@@ -46,8 +46,13 @@ namespace Marble
 
 namespace GeoIface
 {
+    class GeoIfaceSharedData;
+}
 
-class GeoIfaceSharedData;
+using namespace GeoIface;
+
+namespace Digikam
+{
 
 class MapBackend : public QObject
 {
@@ -120,6 +125,6 @@ Q_SIGNALS:
     void signalSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& coordinates);
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // MAP_BACKEND_H

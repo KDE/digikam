@@ -32,7 +32,7 @@
 
 #include "backendmarble.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 BackendMarbleLayer::BackendMarbleLayer(BackendMarble* const pMarbleBackend)
@@ -70,4 +70,4 @@ void BackendMarbleLayer::setBackend(BackendMarble* const pMarbleBackend)
     marbleBackend = pMarbleBackend;
 }
 
-} // namespace GeoIface
+} // namespace Digikam

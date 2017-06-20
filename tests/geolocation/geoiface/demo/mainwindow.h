@@ -30,7 +30,7 @@
 #include <QItemSelection>
 #include <QMainWindow>
 
-// geoiface includes
+// Local includes
 
 #include "geoifacetypes.h"
 #include "geomodelhelper.h"
@@ -38,6 +38,7 @@
 
 class QCommandLineParser;
 
+using namespace Digikam;
 using namespace GeoIface;
 
 class MarkerModelHelper : public GeoModelHelper

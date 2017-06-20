@@ -24,11 +24,13 @@
 
 #include "mapbackend.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
-MapBackend::MapBackend(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData, QObject* const parent)
-    : QObject(parent), s(sharedData)
+MapBackend::MapBackend(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
+                       QObject* const parent)
+    : QObject(parent),
+      s(sharedData)
 {
 }
 
@@ -46,4 +48,4 @@ void MapBackend::slotTrackManagerChanged()
 {
 }
 
-} // namespace GeoIface
+} // namespace Digikam

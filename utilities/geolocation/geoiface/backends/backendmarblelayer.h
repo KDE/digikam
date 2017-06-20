@@ -42,7 +42,7 @@ namespace Marble
 }
 /// @endcond
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendMarble;
@@ -67,6 +67,6 @@ private:
     QPointer<BackendMarble> marbleBackend;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // BACKEND_MAP_MARBLE_LAYER_H

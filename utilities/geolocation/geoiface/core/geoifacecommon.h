@@ -47,16 +47,20 @@ namespace Digikam
     class MapWidget;
 }
 
+namespace Digikam
+{
+    class TrackManager;
+    class MapBackend;
+}
+
 using namespace Digikam;
 
 namespace GeoIface
 {
 
 class AbstractMarkerTiler;
-class MapBackend;
 class GeoModelHelper;
 class TileGrouper;
-class TrackManager;
 
 /**
  * @brief Class to hold information about map widgets stored in the GeoIfaceGlobalObject

@@ -31,7 +31,7 @@
 
 // local includes
 
-#include "backends/mapbackend.h"
+#include "mapbackend.h"
 #include "digikam_debug.h"
 
 namespace GeoIface

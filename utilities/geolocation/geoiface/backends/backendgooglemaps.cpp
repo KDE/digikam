@@ -51,9 +51,9 @@
 #include "geomodelhelper.h"
 #include "digikam_debug.h"
 
-using namespace Digikam;
+using namespace GeoIface;
 
-namespace GeoIface
+namespace Digikam
 {
 
 class GMInternalWidgetInfo
@@ -68,11 +68,11 @@ public:
     HTMLWidget* htmlWidget;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_METATYPE(GeoIface::GMInternalWidgetInfo)
+Q_DECLARE_METATYPE(Digikam::GMInternalWidgetInfo)
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendGoogleMaps::Private
@@ -1419,4 +1419,4 @@ void BackendGoogleMaps::slotTrackVisibilityChanged(const bool newState)
     }
 }
 
-} // namespace GeoIface
+} // namespace Digikam

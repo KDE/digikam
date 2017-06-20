@@ -38,7 +38,7 @@ namespace Marble
 }
 /// @endcond
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendMarble : public MapBackend
@@ -139,6 +139,6 @@ private:
     Private* const d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // BACKEND_MAP_MARBLE_H
