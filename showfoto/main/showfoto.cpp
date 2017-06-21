@@ -32,7 +32,6 @@
 // Qt includes
 
 #include <QCursor>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>

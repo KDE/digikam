@@ -77,7 +77,6 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
-#include <QDesktopServices>
 
 // KDE includes
 

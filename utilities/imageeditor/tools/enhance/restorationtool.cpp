@@ -35,7 +35,6 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QComboBox>
-#include <QDesktopServices>
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>

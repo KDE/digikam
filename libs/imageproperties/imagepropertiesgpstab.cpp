@@ -42,7 +42,6 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QComboBox>
-#include <QDesktopServices>
 #include <QIcon>
 #include <QLocale>
 
