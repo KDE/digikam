@@ -59,6 +59,7 @@ http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=16593
 #include "digikam_debug.h"
 #include "imagegpsmodelhelper.h"
 #include "dexpanderbox.h"
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -303,7 +304,9 @@ void ImagePropertiesGPSTab::slotGPSDetails()
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << url;
-    QDesktopServices::openUrl(QUrl(url));
+
+    WebBrowserDlg* const browser = new WebBrowserDlg(QUrl(url), this);
+    browser->show();
 }
 
 void ImagePropertiesGPSTab::setCurrentURL(const QUrl& url)
@@ -428,4 +431,4 @@ void ImagePropertiesGPSTab::setActive(const bool state)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

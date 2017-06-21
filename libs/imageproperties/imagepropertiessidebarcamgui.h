@@ -23,19 +23,18 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESSIDEBARCAMGUI_H
-#define IMAGEPROPERTIESSIDEBARCAMGUI_H
+#ifndef IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
+#define IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H
 
 // Qt includes
 
 #include <QUrl>
+#include <QWidget>
 
 // Local includes
 
 #include "sidebar.h"
 #include "digikam_export.h"
-
-class QWidget;
 
 namespace Digikam
 {
@@ -50,9 +49,10 @@ class DIGIKAM_EXPORT ImagePropertiesSideBarCamGui : public Sidebar
 
 public:
 
-    ImagePropertiesSideBarCamGui(QWidget* const parent, SidebarSplitter* const splitter,
-                                 Qt::Edge side=Qt::LeftEdge, bool mimimizedDefault=false);
-
+    explicit ImagePropertiesSideBarCamGui(QWidget* const parent,
+                                          SidebarSplitter* const splitter,
+                                          Qt::Edge side=Qt::LeftEdge,
+                                          bool mimimizedDefault=false);
     ~ImagePropertiesSideBarCamGui();
 
     void applySettings();
@@ -94,6 +94,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // IMAGEPROPERTIESSIDEBARCAMGUI_H
+#endif // IMAGE_PROPERTIES_SIDEBAR_CAMGUI_H

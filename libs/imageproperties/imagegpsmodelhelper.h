@@ -33,9 +33,6 @@
 // Local includes
 
 #include "geomodelhelper.h"
-
-// Local includes
-
 #include "thumbnailloadthread.h"
 #include "gpsimageinfosorter.h"
 
