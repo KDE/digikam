@@ -53,12 +53,12 @@ private Q_SLOTS:
 
     void slotUrlChanged(const QUrl&);
     void slotLoadingStarted();
-    void slotLoadingProgress(int);
     void slotLoadingFinished(bool);
     void slotIconChanged(const QIcon&);
     void slotTitleChanged(const QString&);
     void slotSearchTextChanged(const SearchTextSettings&);
     void slotGoHome();
+    void slotDesktopWebBrowser();
 
 private:
 

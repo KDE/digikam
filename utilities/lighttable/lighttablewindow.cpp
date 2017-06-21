@@ -764,8 +764,9 @@ bool LightTableWindow::isEmpty() const
 void LightTableWindow::slotRefreshStatusBar()
 {
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                          i18np("%1 item on Light Table", "%1 items on Light Table",
-                                                d->thumbView->countItems()));
+                                             i18np("%1 item on Light Table",
+                                                   "%1 items on Light Table",
+                                             d->thumbView->countItems()));
 }
 
 void LightTableWindow::slotFileChanged(const QString& path)
@@ -1436,7 +1437,7 @@ void LightTableWindow::slotSlideShowAll()
    SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
 
    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                         i18n("Preparing slideshow. Please wait..."));
+                                            i18n("Preparing slideshow. Please wait..."));
 
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
@@ -1463,7 +1464,7 @@ void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
    builder->setAutoPlayEnabled(false);
 
    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                         i18n("Preparing slideshow. Please wait..."));
+                                            i18n("Preparing slideshow. Please wait..."));
 
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
@@ -1871,4 +1872,4 @@ void LightTableWindow::slotVideoSlideshow()
 #endif
 }
 
-}  // namespace Digikam
+} // namespace Digikam

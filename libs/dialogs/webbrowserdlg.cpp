@@ -31,6 +31,7 @@
 #include <QIcon>
 #include <QWebEngineView>
 #include <QToolBar>
+#include <QDesktopServices>
 #include <QDebug>
 
 // KDE includes
@@ -74,6 +75,8 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
     d->home    = url;
     d->browser = new QWebEngineView(this);
 
+    // --------------------------
+
     d->toolbar = new QToolBar(this);
     d->toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Back));
@@ -81,16 +84,25 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
     d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Reload));
     d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Stop));
 
-    QAction* const gohome = new QAction(QIcon::fromTheme(QLatin1String("go-home")),
-                                        i18n("Home"), this);
+    QAction* const gohome  = new QAction(QIcon::fromTheme(QLatin1String("go-home")),
+                                         i18n("Home"), this);
+    gohome->setToolTip(i18n("Go back to Home page"));
     d->toolbar->addAction(gohome);
+
+    QAction* const deskweb = new QAction(QIcon::fromTheme(QLatin1String("internet-web-browser")),
+                                         i18n("Desktop Browser"), this);
+    deskweb->setToolTip(i18n("Open Home page with default desktop Web browser"));
+    d->toolbar->addAction(deskweb);
+
+    // --------------------------
 
     d->searchbar = new SearchTextBar(this, QLatin1String("WebBrowserDlgSearchBar"));
     d->searchbar->setHighlightOnResult(true);
 
     d->progressbar = new StatusProgressBar(this);
     d->progressbar->setProgressTotalSteps(100);
-    d->progressbar->setProgressText(i18n("Loading..."));
+    d->progressbar->setAlignment(Qt::AlignLeft);
+    d->progressbar->setNotify(false);
 
     // ----------------------
 
@@ -129,6 +141,11 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
     connect(gohome, SIGNAL(triggered()),
             this, SLOT(slotGoHome()));
 
+    connect(deskweb, SIGNAL(triggered()),
+            this, SLOT(slotDesktopWebBrowser()));
+
+    // ----------------------
+
     slotGoHome();
 }
 
@@ -154,20 +171,19 @@ void WebBrowserDlg::slotIconChanged(const QIcon& icon)
 
 void WebBrowserDlg::slotLoadingStarted()
 {
-    d->progressbar->setEnabled(StatusProgressBar::ProgressBarMode);
+    d->progressbar->setProgressBarMode(StatusProgressBar::ProgressBarMode);
 }
 
 void WebBrowserDlg::slotLoadingFinished(bool b)
 {
-    d->progressbar->setEnabled(StatusProgressBar::TextMode);
+    QString curUrl = d->browser->url().toString();
+
+    d->progressbar->setProgressBarMode(StatusProgressBar::TextMode, curUrl);
 
     if (!b)
-        d->progressbar->setText(i18n("Cannot load page..."));
-}
-
-void WebBrowserDlg::slotLoadingProgress(int v)
-{
-    d->progressbar->setProgressValue(v);
+    {
+        d->progressbar->setText(i18n("Cannot load page %1", curUrl));
+    }
 }
 
 void WebBrowserDlg::slotSearchTextChanged(const SearchTextSettings& settings)
@@ -186,6 +202,11 @@ void WebBrowserDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 void WebBrowserDlg::slotGoHome()
 {
     d->browser->setUrl(d->home);
+}
+
+void WebBrowserDlg::slotDesktopWebBrowser()
+{
+    QDesktopServices::openUrl(d->home);
 }
 
 } // namespace Digikam
