@@ -33,7 +33,6 @@
 #include <QTimer>
 #include <QWidget>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QStandardPaths>
 
 // KDE includes
@@ -46,6 +45,7 @@
 #include "daboutdata.h"
 #include "thememanager.h"
 #include "digikam_version.h"
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -59,7 +59,9 @@ WelcomePageViewPage::~WelcomePageViewPage()
 {
 }
 
-bool WelcomePageViewPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool)
+bool WelcomePageViewPage::acceptNavigationRequest(const QUrl& url,
+                                                  QWebEnginePage::NavigationType type,
+                                                  bool)
 {
     if (type == QWebEnginePage::NavigationTypeLinkClicked)
     {
@@ -98,7 +100,8 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const QUrl& url)
 {
-    QDesktopServices::openUrl(url);
+    WebBrowserDlg* const browser = new WebBrowserDlg(url, this);
+    browser->show();
 }
 
 QStringList WelcomePageView::featuresTabContent() const
@@ -214,4 +217,4 @@ void WelcomePageView::slotThemeChanged()
     setHtml(content, QUrl::fromLocalFile(locationHtml));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -58,8 +58,10 @@ public:
         ApplicationImportUI = 2
     };
 
-    MapWidgetView(QItemSelectionModel* const selectionModel,
-                  DCategorizedSortFilterProxyModel* const imageFilterModel, QWidget* const parent, const Application application);
+    explicit MapWidgetView(QItemSelectionModel* const selectionModel,
+                           DCategorizedSortFilterProxyModel* const imageFilterModel,
+                           QWidget* const parent,
+                           const Application application);
     ~MapWidgetView();
 
     void openAlbum(Album* const album);
@@ -80,7 +82,7 @@ private:
     const QScopedPointer<Private> d;
 };
 
-// ------------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------
 
 class MapViewModelHelper : public GeoModelHelper
 {
@@ -88,9 +90,10 @@ class MapViewModelHelper : public GeoModelHelper
 
 public:
 
-    MapViewModelHelper(QItemSelectionModel* const selection,
-                       DCategorizedSortFilterProxyModel* const filterModel,
-                       QObject* const parent, const MapWidgetView::Application application);
+    explicit MapViewModelHelper(QItemSelectionModel* const selection,
+                                DCategorizedSortFilterProxyModel* const filterModel,
+                                QObject* const parent,
+                                const MapWidgetView::Application application);
     virtual ~MapViewModelHelper();
 
     virtual QAbstractItemModel* model()                                                                const;
