@@ -37,11 +37,13 @@
 // KDE includes
 
 #include <klocalizedstring.h>
+#include <ksharedconfig.h>
 
 // Local includes
 
 #include "statusprogressbar.h"
 #include "searchtextbar.h"
+#include "dxmlguiwindow.h"
 
 namespace Digikam
 {
@@ -146,12 +148,26 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
 
     // ----------------------
 
+    KConfigGroup group = KSharedConfig::openConfig()->group("WebBrowserDlg");
+
+    winId();
+    DXmlGuiWindow::restoreWindowSize(windowHandle(), group);
+    resize(windowHandle()->size());
+
     slotGoHome();
 }
 
 WebBrowserDlg::~WebBrowserDlg()
 {
     delete d;
+}
+
+void WebBrowserDlg::closeEvent(QCloseEvent* e)
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group(QLatin1String("WebBrowserDlg"));
+    DXmlGuiWindow::saveWindowSize(windowHandle(), group);
+
+    e->accept();
 }
 
 void WebBrowserDlg::slotUrlChanged(const QUrl& url)

@@ -182,7 +182,6 @@ void HTMLFinalPage::slotProcess()
         {
             WebBrowserDlg* const browser = new WebBrowserDlg(url, this);
             browser->show();
-            browser->resize(800, 600);
             d->progressView->addEntry(i18n("Opening gallery with internal browser..."),
                                       DHistoryView::ProgressEntry);
             break;

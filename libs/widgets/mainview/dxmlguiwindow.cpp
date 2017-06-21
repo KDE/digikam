@@ -41,7 +41,6 @@
 #include <QMenu>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QDesktopServices>
 #include <QIcon>
 #include <QDir>
 #include <QFileInfo>
@@ -70,6 +69,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "daboutdata.h"
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -818,7 +818,8 @@ void DXmlGuiWindow::openHandbook()
     QUrl url = QUrl(QString::fromUtf8("https://docs.kde.org/trunk5/en/extragear-graphics/%1/index.html")
                .arg(QApplication::applicationName()));
 
-    QDesktopServices::openUrl(url);
+    WebBrowserDlg* const browser = new WebBrowserDlg(url, qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::restoreWindowSize(QWindow* const win, const KConfigGroup& group)
@@ -888,17 +889,26 @@ void DXmlGuiWindow::slotRawCameraList()
 
 void DXmlGuiWindow::slotDonateMoney()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/donate/")));
+    WebBrowserDlg* const browser
+        = new WebBrowserDlg(QUrl(QLatin1String("https://www.digikam.org/donate/")),
+                            qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::slotRecipesBook()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/recipes_book/")));
+    WebBrowserDlg* const browser
+        = new WebBrowserDlg(QUrl(QLatin1String("https://www.digikam.org/recipes_book/")),
+                            qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::slotContribute()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/contribute/")));
+    WebBrowserDlg* const browser
+        = new WebBrowserDlg(QUrl(QLatin1String("https://www.digikam.org/contribute/")),
+                            qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::setupIconTheme()

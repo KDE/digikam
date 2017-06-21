@@ -40,13 +40,12 @@ int main(int argc, char* argv[])
     if (argc == 1)
     {
         qDebug() << "browser - web page url to show";
-        qDebug() << "Usage: url";
+        qDebug() << "Usage: url top open";
         return -1;
     }
 
     WebBrowserDlg browser(QUrl(QString::fromUtf8(argv[1])));
     browser.show();
-    browser.resize(800, 600);
 
     return a.exec();
 }

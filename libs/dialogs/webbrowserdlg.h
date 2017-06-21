@@ -30,6 +30,7 @@
 #include <QWidget>
 #include <QUrl>
 #include <QString>
+#include <QCloseEvent>
 
 // Local includes
 
@@ -59,6 +60,10 @@ private Q_SLOTS:
     void slotSearchTextChanged(const SearchTextSettings&);
     void slotGoHome();
     void slotDesktopWebBrowser();
+
+protected:
+
+    void closeEvent(QCloseEvent*);
 
 private:
 
