@@ -158,7 +158,7 @@ QStringList WelcomePageView::aboutTabContent() const
              i18n("digiKam is an open source photo management program designed to import, organize, enhance, search and export your digital images to and from your computer."),
              i18n("Currently, you are in the Album view mode of digiKam. Albums are the places where your files are stored, and are identical to the folders on your hard disk."),
              i18n("<li>%1</li><li>%2</li>",
-                  i18n("digiKam has many powerful features which are described in the <a href=\"help:/digikam/index.html\">documentation</a>"),
+                  i18n("digiKam has many powerful features which are described in the <a href=\"https://docs.kde.org/trunk5/en/extragear-graphics/digikam/index.html\">documentation</a>"),
                   i18n("The <a href=\"http://www.digikam.org\">digiKam homepage</a> provides information about new versions of digiKam."))
             );
     return QStringList() << tabHeader << tabContent;
