@@ -888,17 +888,17 @@ void DXmlGuiWindow::slotRawCameraList()
 
 void DXmlGuiWindow::slotDonateMoney()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=donation")));
+    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/donate/")));
 }
 
 void DXmlGuiWindow::slotRecipesBook()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/node/543")));
+    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/recipes_book/")));
 }
 
 void DXmlGuiWindow::slotContribute()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=contrib")));
+    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/contribute/")));
 }
 
 void DXmlGuiWindow::setupIconTheme()
