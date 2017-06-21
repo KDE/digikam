@@ -232,7 +232,7 @@ QWidget* BackendGoogleMaps::mapWidget()
             d->htmlWidgetWrapper = new QWidget();
             d->htmlWidgetWrapper->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             d->htmlWidget        = new HTMLWidget(d->htmlWidgetWrapper);
-            d->htmlWidgetWrapper->resize(400,400);
+            d->htmlWidgetWrapper->resize(400, 400);
         }
 
         connect(d->htmlWidget, SIGNAL(signalJavaScriptReady()),
@@ -273,7 +273,7 @@ void BackendGoogleMaps::setCenter(const GeoCoordinates& coordinate)
 
     if (isReady())
     {
-        d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetCenter(%1, %2);").arg(d->cacheCenter.latString()).arg(d->cacheCenter.lonString()));
+        d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetCenter(%1, %2);").arg(d->cacheCenter.latString()).arg(d->cacheCenter.lonString()));
     }
 }
 
@@ -285,7 +285,7 @@ bool BackendGoogleMaps::isReady() const
 void BackendGoogleMaps::slotHTMLInitialized()
 {
     d->isReady = true;
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)").arg(d->htmlWidgetWrapper->width()).arg(d->htmlWidgetWrapper->height()));
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)").arg(d->htmlWidgetWrapper->width()).arg(d->htmlWidgetWrapper->height()));
 
     // TODO: call javascript directly here and update action availability in one shot
     setMapType(d->cacheMapType);
@@ -293,7 +293,7 @@ void BackendGoogleMaps::slotHTMLInitialized()
     setShowNavigationControl(d->cacheShowNavigationControl);
     setShowScaleControl(d->cacheShowNavigationControl);
     setCenter(d->cacheCenter);
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetZoom(%1);").arg(d->cacheZoom));
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetZoom(%1);").arg(d->cacheZoom));
     emit(signalBackendReadyChanged(backendName()));
 }
 
@@ -302,7 +302,7 @@ void BackendGoogleMaps::zoomIn()
     if (!d->isReady)
         return;
 
-    d->htmlWidget->runScript(QLatin1String("kgeomapZoomIn();"));
+    d->htmlWidget->setToScript(QLatin1String("kgeomapZoomIn();"));
 }
 
 void BackendGoogleMaps::zoomOut()
@@ -310,7 +310,7 @@ void BackendGoogleMaps::zoomOut()
     if (!d->isReady)
         return;
 
-    d->htmlWidget->runScript(QLatin1String("kgeomapZoomOut();"));
+    d->htmlWidget->setToScript(QLatin1String("kgeomapZoomOut();"));
 }
 
 QString BackendGoogleMaps::getMapType() const
@@ -325,7 +325,7 @@ void BackendGoogleMaps::setMapType(const QString& newMapType)
 
     if (isReady())
     {
-        d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetMapType(\"%1\");").arg(newMapType));
+        d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetMapType(\"%1\");").arg(newMapType));
         updateZoomMinMaxCache();
         updateActionAvailability();
     }
@@ -402,7 +402,7 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
     if (!isReady())
         return;
 
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapClearMarkers(%1);").arg(mindex));
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapClearMarkers(%1);").arg(mindex));
 
     // this can happen when a model was removed and we are simply asked to remove its markers
     if (mindex>s->ungroupedModels.count())
@@ -432,7 +432,7 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
             continue;
 
         // TODO: use the pixmap supplied by the modelHelper
-        d->htmlWidget->runScript(QString::fromLatin1("kgeomapAddMarker(%1, %2, %3, %4, %5, %6);")
+        d->htmlWidget->setToScript(QString::fromLatin1("kgeomapAddMarker(%1, %2, %3, %4, %5, %6);")
                 .arg(mindex)
                 .arg(row)
                 .arg(currentCoordinates.latString())
@@ -676,7 +676,7 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
 
     if (zoomProbablyChanged)
     {
-        d->cacheZoom = d->htmlWidget->runScript(QLatin1String("kgeomapGetZoom();")).toInt();
+        d->cacheZoom = d->htmlWidget->getFromScript(QLatin1String("kgeomapGetZoom();")).toInt();
         emit(signalZoomChanged(QString::fromLatin1("googlemaps:%1").arg(d->cacheZoom)));
     }
 
@@ -694,7 +694,7 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
 
     if (mapBoundsProbablyChanged)
     {
-        const QString mapBoundsString = d->htmlWidget->runScript(QLatin1String("kgeomapGetBounds();")).toString();
+        const QString mapBoundsString = d->htmlWidget->getFromScript(QLatin1String("kgeomapGetBounds();")).toString();
         GeoIfaceHelperParseBoundsString(mapBoundsString, &d->cacheBounds);
     }
 
@@ -718,14 +718,14 @@ void BackendGoogleMaps::updateClusters()
 
     // re-transfer all markers to the javascript-part:
     const bool canMoveItems = s->modificationsAllowed && s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable) && !s->showThumbnails;
-    d->htmlWidget->runScript(QLatin1String("kgeomapClearClusters();"));
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetIsInEditMode(%1);").arg(s->showThumbnails?QLatin1String("false" ):QLatin1String("true" )));
+    d->htmlWidget->setToScript(QLatin1String("kgeomapClearClusters();"));
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetIsInEditMode(%1);").arg(s->showThumbnails?QLatin1String("false" ):QLatin1String("true" )));
 
     for (int currentIndex = 0; currentIndex < s->clusterList.size(); ++currentIndex)
     {
         const GeoIfaceCluster& currentCluster = s->clusterList.at(currentIndex);
 
-        d->htmlWidget->runScript(QString::fromLatin1("kgeomapAddCluster(%1, %2, %3, %4, %5, %6);")
+        d->htmlWidget->setToScript(QString::fromLatin1("kgeomapAddCluster(%1, %2, %3, %4, %5, %6);")
                 .arg(currentIndex)
                 .arg(currentCluster.coordinates.latString())
                 .arg(currentCluster.coordinates.lonString())
@@ -754,7 +754,7 @@ bool BackendGoogleMaps::screenCoordinates(const GeoCoordinates& coordinates, QPo
     if (!d->isReady)
         return false;
 
-    const QString pointStringResult=d->htmlWidget->runScript(
+    const QString pointStringResult = d->htmlWidget->getFromScript(
                 QString::fromLatin1("kgeomapLatLngToPixel(%1, %2);")
                     .arg(coordinates.latString())
                     .arg(coordinates.lonString())
@@ -818,7 +818,7 @@ void BackendGoogleMaps::setShowScaleControl(const bool state)
     if (!isReady())
         return;
 
-    d->htmlWidget->runScript(
+    d->htmlWidget->setToScript(
         QString::fromLatin1("kgeomapSetShowScaleControl(%1);")
         .arg(state ? QLatin1String("true") : QLatin1String("false")));
 }
@@ -833,7 +833,7 @@ void BackendGoogleMaps::setShowNavigationControl(const bool state)
     if (!isReady())
         return;
 
-    d->htmlWidget->runScript(
+    d->htmlWidget->setToScript(
         QString::fromLatin1("kgeomapSetShowNavigationControl(%1);")
         .arg(state ? QLatin1String("true") : QLatin1String("false")));
 }
@@ -848,7 +848,7 @@ void BackendGoogleMaps::setShowMapTypeControl(const bool state)
     if (!isReady())
         return;
 
-    d->htmlWidget->runScript(
+    d->htmlWidget->setToScript(
         QString::fromLatin1("kgeomapSetShowMapTypeControl(%1);")
         .arg(state ? QLatin1String("true") : QLatin1String("false")));
 }
@@ -870,7 +870,7 @@ void BackendGoogleMaps::setZoom(const QString& newZoom)
 
     if (isReady())
     {
-        d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetZoom(%1);").arg(d->cacheZoom));
+        d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetZoom(%1);").arg(d->cacheZoom));
     }
 }
 
@@ -937,11 +937,11 @@ GeoCoordinates::PairList BackendGoogleMaps::getNormalizedBounds()
 //
 //     if (!dragData)
 //     {
-//         d->htmlWidget->runScript("kgeomapRemoveDragMarker();");
+//         d->htmlWidget->setToScript("kgeomapRemoveDragMarker();");
 //     }
 //     else
 //     {
-//         d->htmlWidget->runScript(QLatin1String("kgeomapSetDragMarker(%1, %2, %3, %4);")
+//         d->htmlWidget->setToScript(QLatin1String("kgeomapSetDragMarker(%1, %2, %3, %4);")
 //                 .arg(pos.x())
 //                 .arg(pos.y())
 //                 .arg(dragData->itemCount)
@@ -958,7 +958,7 @@ GeoCoordinates::PairList BackendGoogleMaps::getNormalizedBounds()
 //     if (!isReady())
 //         return;
 //
-//     d->htmlWidget->runScript(QLatin1String("kgeomapMoveDragMarker(%1, %2);")
+//     d->htmlWidget->setToScript(QLatin1String("kgeomapMoveDragMarker(%1, %2);")
 //             .arg(pos.x())
 //             .arg(pos.y())
 //         );
@@ -986,8 +986,8 @@ void BackendGoogleMaps::updateActionAvailability()
 void BackendGoogleMaps::updateZoomMinMaxCache()
 {
     // TODO: these functions seem to cause problems, the map is not fully updated after a few calls
-//     d->cacheMaxZoom = d->htmlWidget->runScript("kgeomapGetMaxZoom();").toInt();
-//     d->cacheMinZoom = d->htmlWidget->runScript("kgeomapGetMinZoom();").toInt();
+//     d->cacheMaxZoom = d->htmlWidget->getFromScript("kgeomapGetMaxZoom();").toInt();
+//     d->cacheMinZoom = d->htmlWidget->getFromScript("kgeomapGetMinZoom();").toInt();
 }
 
 void BackendGoogleMaps::slotThumbnailAvailableForIndex(const QVariant& index, const QPixmap& pixmap)
@@ -1035,7 +1035,7 @@ void BackendGoogleMaps::setClusterPixmap(const int clusterId, const QPoint& cent
 
     // http://www.faqs.org/rfcs/rfc2397.html
     const QString imageData = QString::fromLatin1("data:image/png;base64,%1").arg(QString::fromLatin1(bytes.toBase64()));
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetClusterPixmap(%1,%5,%6,%2,%3,'%4');")
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetClusterPixmap(%1,%5,%6,%2,%3,'%4');")
                     .arg(clusterId)
                     .arg(centerPoint.x())
                     .arg(centerPoint.y())
@@ -1055,7 +1055,7 @@ void BackendGoogleMaps::setMarkerPixmap(const int modelId, const int markerId,
 
     // http://www.faqs.org/rfcs/rfc2397.html
     const QString imageData = QString::fromLatin1("data:image/png;base64,%1").arg(QString::fromLatin1(bytes.toBase64()));
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetMarkerPixmap(%7,%1,%5,%6,%2,%3,'%4');")
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetMarkerPixmap(%7,%1,%5,%6,%2,%3,'%4');")
                     .arg(markerId)
                     .arg(centerPoint.x())
                     .arg(centerPoint.y())
@@ -1072,7 +1072,7 @@ void BackendGoogleMaps::setMarkerPixmap(const int modelId, const int markerId,
                                        )
 {
     /// @todo Sort the parameters
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapSetMarkerPixmap(%7,%1,%5,%6,%2,%3,'%4');")
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapSetMarkerPixmap(%7,%1,%5,%6,%2,%3,'%4');")
                     .arg(markerId)
                     .arg(centerPoint.x())
                     .arg(centerPoint.y())
@@ -1097,7 +1097,7 @@ bool BackendGoogleMaps::eventFilter(QObject* object, QEvent* event)
                 //       therefore we adjust it manually here
                 if (d->isReady)
                 {
-                    d->htmlWidget->runScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)").arg(d->htmlWidgetWrapper->width()).arg(d->htmlWidgetWrapper->height()));
+                    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapWidgetResized(%1, %2)").arg(d->htmlWidgetWrapper->width()).arg(d->htmlWidgetWrapper->height()));
                 }
             }
         }
@@ -1204,7 +1204,7 @@ void BackendGoogleMaps::setActive(const bool state)
 void BackendGoogleMaps::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
 {
     // clear all tracks
-    d->htmlWidget->runScript(QString::fromLatin1("kgeomapClearTracks();"));
+    d->htmlWidget->setToScript(QString::fromLatin1("kgeomapClearTracks();"));
 
     disconnect(d->htmlWidget, SIGNAL(signalJavaScriptReady()),
                this, SLOT(slotHTMLInitialized()));
@@ -1315,7 +1315,7 @@ void BackendGoogleMaps::slotTracksChanged(const QList<TrackManager::TrackChanges
     if (!s->trackManager)
     {
         // no track manager, clear all tracks
-        const QVariant successClear = d->htmlWidget->runScript(QString::fromLatin1("kgeomapClearTracks();"));
+        const QVariant successClear = d->htmlWidget->getFromScript(QString::fromLatin1("kgeomapClearTracks();"));
 
         return;
     }
@@ -1324,12 +1324,12 @@ void BackendGoogleMaps::slotTracksChanged(const QList<TrackManager::TrackChanges
     {
         if (tc.second & TrackManager::ChangeRemoved)
         {
-            d->htmlWidget->runScript(QString::fromLatin1("kgeomapRemoveTrack(%1);").arg(tc.first));
+            d->htmlWidget->setToScript(QString::fromLatin1("kgeomapRemoveTrack(%1);").arg(tc.first));
         }
         else
         {
             /// @TODO For now, remove the track and re-add it.
-            d->htmlWidget->runScript(QString::fromLatin1("kgeomapRemoveTrack(%1);").arg(tc.first));
+            d->htmlWidget->setToScript(QString::fromLatin1("kgeomapRemoveTrack(%1);").arg(tc.first));
 
             const TrackManager::Track track = s->trackManager->getTrackById(tc.first);
 
@@ -1344,7 +1344,7 @@ void BackendGoogleMaps::slotTracksChanged(const QList<TrackManager::TrackChanges
                         )
                         .arg(track.id)
                         .arg(track.color.name()); // QColor::name() returns #ff00ff
-            d->htmlWidget->runScript(createTrackScript);
+            d->htmlWidget->setToScript(createTrackScript);
 
             QDateTime t1                    = QDateTime::currentDateTime();
             const int numPointsToPassAtOnce = 1000;
@@ -1392,7 +1392,7 @@ void BackendGoogleMaps::addPointsToTrack(const quint64 trackId, TrackManager::Tr
 
     jsonBuilder << ']';
     const QString addTrackScript = QString::fromLatin1("kgeomapAddToTrack(%1,'%2');").arg(trackId).arg(json);
-    d->htmlWidget->runScript(addTrackScript);
+    d->htmlWidget->setToScript(addTrackScript);
 }
 
 void BackendGoogleMaps::slotTrackVisibilityChanged(const bool newState)
@@ -1413,7 +1413,7 @@ void BackendGoogleMaps::slotTrackVisibilityChanged(const bool newState)
     }
     else if (d->htmlWidget)
     {
-        const QVariant successClear = d->htmlWidget->runScript(QString::fromLatin1("kgeomapClearTracks();"));
+        const QVariant successClear = d->htmlWidget->getFromScript(QString::fromLatin1("kgeomapClearTracks();"));
     }
 }
 

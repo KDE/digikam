@@ -21,7 +21,6 @@
 
 var mapDiv;
 var map;
-var eventBuffer = new Array();
 var markerList = new Object();
 var clusterList = new Object();
 var clusterDataList = new Object();
@@ -47,17 +46,7 @@ var projectionHelper = null;
 
 function kgeomapPostEventString(eventString)
 {
-    eventBuffer.push(eventString);
-    window.status = '(event)';
-}
-
-function kgeomapReadEventStrings()
-{
-    var eventBufferString = eventBuffer.join('|');
-    eventBuffer = new Array();
-    // let the application know that there are no more events waiting:
-    window.status = '()';
-    return eventBufferString;
+    console.log('(event)'+eventString);
 }
 
 function kgeomapDebugOut(someString)
@@ -760,9 +749,10 @@ function kgeomapInitialize()
     //       google.maps.event.addListener(map, 'bounds_changed', function() {
     //           kgeomapPostEventString('MB');
     //       });
-    //       google.maps.event.addListener(map, 'zoom_changed', function() {
-    //           kgeomapPostEventString('ZC');
-    //       });
+    google.maps.event.addListener(map, 'zoom_changed', function()
+        {
+            kgeomapPostEventString('ZC');
+        });
     google.maps.event.addListener(map, 'idle', function()
         {
             kgeomapPostEventString('id');

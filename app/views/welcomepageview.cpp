@@ -50,18 +50,41 @@
 namespace Digikam
 {
 
+WelcomePageViewPage::WelcomePageViewPage(QObject* const parent)
+    : QWebEnginePage(parent)
+{
+}
+
+WelcomePageViewPage::~WelcomePageViewPage()
+{
+}
+
+bool WelcomePageViewPage::acceptNavigationRequest(const QUrl& url, QWebEnginePage::NavigationType type, bool)
+{
+    if (type == QWebEnginePage::NavigationTypeLinkClicked)
+    {
+        emit linkClicked(url);
+        return false;
+    }
+
+    return true;
+}
+
+// ----------------------------------------------------------------------------
+
 WelcomePageView::WelcomePageView(QWidget* const parent)
-    : QWebView(parent)
+    : QWebEngineView(parent)
 {
     setFocusPolicy(Qt::WheelFocus);
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    setRenderHint(QPainter::TextAntialiasing);
     setContextMenuPolicy(Qt::NoContextMenu);
+
+    WelcomePageViewPage* const wpage = new WelcomePageViewPage(this);
+    setPage(wpage);
 
     // ------------------------------------------------------------
 
-    connect(this,SIGNAL(linkClicked(QUrl)),
-            this,SLOT(slotUrlOpen(const QUrl&)));
+    connect(wpage, SIGNAL(linkClicked(const QUrl&)),
+            this, SLOT(slotUrlOpen(const QUrl&)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
