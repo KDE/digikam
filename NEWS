@@ -12,4 +12,5 @@ BUGFIXES FROM BUGZILLA:
 003 ==> 379869 - Crash of digikam after ending digiam writing changed tags into photos.
 004 ==> 361047 - Wishlist: make grouped images more prominently visible [patch].
 005 ==> 363859 - digiKam core port from QWebKit to QWebEngine [patch].
-006 ==> 
+006 ==> 381510 - "open with" on multiple images only passes first image.
+007 ==> 
