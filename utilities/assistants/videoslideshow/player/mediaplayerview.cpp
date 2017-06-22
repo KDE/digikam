@@ -38,9 +38,19 @@
 
 // QtAV includes
 
-#include <QtAV/AVError.h>
-#include <QtAV/AVPlayer.h>
+#include <QtAV/version.h>
+
+#if QTAV_VERSION <= QTAV_VERSION_CHK(1, 11, 0)
+#   define slots Q_SLOTS
+#   define signals Q_SIGNALS
+#endif
+
 #include <QtAVWidgets/WidgetRenderer.h>
+
+#if QTAV_VERSION <= QTAV_VERSION_CHK(1, 11, 0)
+#   undef slots
+#   undef signals
+#endif
 
 // KDE includes
 
@@ -426,4 +436,4 @@ void MediaPlayerView::slotHandlePlayerError(const QtAV::AVError& err)
     qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << err.string();
 }
 
-}  // namespace Digikam
+} // namespace Digikam
