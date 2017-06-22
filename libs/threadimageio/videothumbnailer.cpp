@@ -39,12 +39,13 @@
 #endif
 
 #include <QtAV/AVDemuxer.h>
-#include <QtAV/VideoFrameExtractor.h>
 
 #if QTAV_VERSION <= QTAV_VERSION_CHK(1, 11, 0)
 #   undef slots
 #   undef signals
 #endif
+
+#include <QtAV/VideoFrameExtractor.h>
 
 // Local includes
 
