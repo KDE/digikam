@@ -2,12 +2,13 @@
 #
 # Once done this will define
 #
-#  QTAV_FOUND         - The system has libqtav
-#  QTAV_INCLUDE_DIRS  - The libqtav include directory
-#  QTAV_LIBRARIES     - Link these to use libqtav
-#  QTAV_MAJOR_VERSION - The major value of QtAV version ID defined in QtAV/version.h
-#  QTAV_MINOR_VERSION - The minor value of QtAV version ID defined in QtAV/version.h
-#  QTAV_PATCH_VERSION - The patch value of QtAV version ID defined in QtAV/version.h
+#  QTAV_FOUND          - The system has libqtav
+#  QTAV_INCLUDE_DIRS   - The libqtav include directory
+#  QTAV_LIBRARIES      - Link these to use libqtav
+#  QTAV_MAJOR_VERSION  - The major value of QtAV version ID defined in QtAV/version.h as "1".
+#  QTAV_MINOR_VERSION  - The minor value of QtAV version ID defined in QtAV/version.h as "12".
+#  QTAV_PATCH_VERSION  - The patch value of QtAV version ID defined in QtAV/version.h as "0".
+#  QTAV_VERSION_STRING - Version string e.g. "1.12.0"
 #
 # Copyright (c) 2016-2017, Gilles Caulier, <caulier dot gilles at gmail dot com>
 #
@@ -107,7 +108,9 @@ if(QTAV_FOUND)
        NOT QTAV_MINOR_VERSION STREQUAL "" AND
        NOT QTAV_PATCH_VERSION STREQUAL "")
 
-            message(STATUS "Found QtAV version ${QTAV_MAJOR_VERSION}.${QTAV_MINOR_VERSION}.${QTAV_PATCH_VERSION}, ${QTAV_LIBRARIES}")
+            set(QTAV_VERSION_STRING "${QTAV_MAJOR_VERSION}.${QTAV_MINOR_VERSION}.${QTAV_PATCH_VERSION}")
+
+            message(STATUS "Found QtAV version ${QTAV_VERSION_STRING}")
 
     else()
 
@@ -115,15 +118,16 @@ if(QTAV_FOUND)
         set(QTAV_MAJOR_VERSION NOTFOUND)
         set(QTAV_MINOR_VERSION NOTFOUND)
         set(QTAV_PATCH_VERSION NOTFOUND)
+        set(QTAV_VERSION_STRING NOTFOUND)
 
     endif()
 
 endif()
 
-mark_as_advanced(QTAV_INCLUDE_DIRS QTAV_LIBRARIES
+mark_as_advanced(QTAV_INCLUDE_DIRS QTAV_LIBRARIES QTAV_VERSION_STRING
                  QTAV_MAJOR_VERSION QTAV_MINOR_VERSION QTAV_PATCH_VERSION)
 
 message(STATUS "QtAV_FOUND       = ${QTAV_FOUND}")
 message(STATUS "QtAV_INCLUDE_DIR = ${QTAV_INCLUDE_DIRS}")
 message(STATUS "QtAV_LIBRARIES   = ${QTAV_LIBRARIES}")
-message(STATUS "QtAV_VERSION     = ${QTAV_MAJOR_VERSION}.${QTAV_MINOR_VERSION}.${QTAV_PATCH_VERSION}")
+message(STATUS "QtAV_VERSION     = ${QTAV_VERSION_STRING}")

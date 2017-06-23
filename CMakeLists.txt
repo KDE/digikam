@@ -220,14 +220,27 @@ set_package_properties("Exiv2"     PROPERTIES
 
 # -- check Media player --------------------------------------------------------------------------
 
+set(QTAV_MIN_VERSION "1.12.0")
 find_package(QtAV)
 
 if(ENABLE_MEDIAPLAYER)
 
     if(NOT ${QTAV_FOUND})
+
         set(ENABLE_MEDIAPLAYER OFF)
+
     else()
-        include_directories(${QTAV_INCLUDE_DIRS})
+
+        if("${QTAV_VERSION_STRING}" VERSION_GREATER ${QTAV_MIN_VERSION})
+
+            include_directories(${QTAV_INCLUDE_DIRS})
+
+        else()
+
+            set(ENABLE_MEDIAPLAYER OFF)
+
+        endif()
+
     endif()
 
 endif()
@@ -465,7 +478,7 @@ PRINT_OPTIONAL_LIBRARY_STATUS("libeigen3"         "http://eigen.tuxfamily.org"  
 PRINT_OPTIONAL_LIBRARY_STATUS("libgphoto2"        "http://www.gphoto.org"                                           "(version >= 2.4.0)"                   "digiKam will be compiled without GPhoto2 camera drivers support."            GPHOTO2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("doxygen"           "http://www.doxygen.org"                                          "(version >= 1.8.0)"                   "digiKam will be compiled without API documentation building support."        DOXYGEN_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("OpenGL"            "http://www.mesa3d.org"                                           "(version >= 11.0.0)"                  "digiKam will be compiled without OpenGL support."                            HAVE_OPENGL)
-PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= 1.11.0)"                  "digiKam will be compiled without Media Player support."                      QTAV_FOUND)
+PRINT_OPTIONAL_LIBRARY_STATUS("libqtav"           "http://www.qtav.org/"                                            "(version >= ${QTAV_MIN_VERSION})"     "digiKam will be compiled without Media Player support."                      QTAV_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libxml2"           "http://xmlsoft.org"                                              "(version >= 2.7.0)"                    "digiKam will be compiled without HTMLGallery support."                      LIBXML2_FOUND)
 PRINT_OPTIONAL_LIBRARY_STATUS("libxslt"           "http://xmlsoft.org/XSLT"                                         "(version >= 1.1.0)"                    "digiKam will be compiled without HTMLGallery support."                      LIBXSLT_FOUND)
 
