@@ -41,20 +41,8 @@
 
 // QtAV includes
 
-#include <QtAV/version.h>
-
-#if QTAV_VERSION <= QTAV_VERSION_CHK(1, 11, 0)
-#   define slots Q_SLOTS
-#   define signals Q_SIGNALS
-#endif
-
 #include <QtAV/AVPlayer.h>
 #include <QtAV/Statistics.h>
-
-#if QTAV_VERSION <= QTAV_VERSION_CHK(1, 11, 0)
-#   undef slots
-#   undef signals
-#endif
 
 // KDE includes
 
