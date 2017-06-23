@@ -225,21 +225,13 @@ find_package(QtAV)
 
 if(ENABLE_MEDIAPLAYER)
 
-    if(NOT ${QTAV_FOUND})
+    if(NOT ${QTAV_FOUND} OR ${QTAV_VERSION_STRING} VERSION_LESS ${QTAV_MIN_VERSION})
 
         set(ENABLE_MEDIAPLAYER OFF)
 
     else()
 
-        if("${QTAV_VERSION_STRING}" VERSION_GREATER ${QTAV_MIN_VERSION})
-
-            include_directories(${QTAV_INCLUDE_DIRS})
-
-        else()
-
-            set(ENABLE_MEDIAPLAYER OFF)
-
-        endif()
+        include_directories(${QTAV_INCLUDE_DIRS})
 
     endif()
 
