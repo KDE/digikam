@@ -13,4 +13,5 @@ BUGFIXES FROM BUGZILLA:
 004 ==> 361047 - Wishlist: make grouped images more prominently visible [patch].
 005 ==> 363859 - digiKam core port from QWebKit to QWebEngine [patch].
 006 ==> 381510 - "open with" on multiple images only passes first image.
-007 ==> 
+007 ==> 378475 - digiKam crashed after connecting a Camera.
+008 ==> 
