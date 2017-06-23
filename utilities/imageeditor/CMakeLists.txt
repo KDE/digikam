@@ -114,6 +114,7 @@ set(libeditortools_SRCS
     tools/enhance/inpaintingtool.cpp
     tools/enhance/antivignettingtool.cpp
     tools/enhance/lensdistortiontool.cpp
+    tools/enhance/healingclonetool.cpp
     tools/enhance/hotpixels/weights.cpp
     tools/enhance/hotpixels/blackframeparser.cpp
     tools/enhance/hotpixels/blackframelistview.cpp
