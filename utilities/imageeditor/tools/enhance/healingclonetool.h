@@ -58,5 +58,6 @@ private:
     Private* const d;
 };
 
-#endif /* HEALINGCLONETOOL_H */
 } // namespace Digikam
+
+#endif /* HEALINGCLONETOOL_H */
