@@ -29,7 +29,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QIcon>
-#include <QWebEngineView>
+#include <QWebView>
 #include <QToolBar>
 #include <QDesktopServices>
 #include <QDebug>
@@ -63,7 +63,7 @@ public:
 public:
 
     QUrl               home;
-    QWebEngineView*    browser;
+    QWebView*          browser;
     QToolBar*          toolbar;
     StatusProgressBar* progressbar;
     SearchTextBar*     searchbar;
@@ -75,16 +75,16 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
 {
     setModal(false);
     d->home    = url;
-    d->browser = new QWebEngineView(this);
+    d->browser = new QWebView(this);
 
     // --------------------------
 
     d->toolbar = new QToolBar(this);
     d->toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Back));
-    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Forward));
-    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Reload));
-    d->toolbar->addAction(d->browser->pageAction(QWebEnginePage::Stop));
+    d->toolbar->addAction(d->browser->pageAction(QWebPage::Back));
+    d->toolbar->addAction(d->browser->pageAction(QWebPage::Forward));
+    d->toolbar->addAction(d->browser->pageAction(QWebPage::Reload));
+    d->toolbar->addAction(d->browser->pageAction(QWebPage::Stop));
 
     QAction* const gohome  = new QAction(QIcon::fromTheme(QLatin1String("go-home")),
                                          i18n("Home"), this);
@@ -119,12 +119,12 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
     setLayout(grid);
 
     // ----------------------
-
+/*
 #if QT_VERSION >= 0x050700
     connect(d->browser, SIGNAL(iconChanged(const QIcon&)),
             this, SLOT(slotIconChanged(const QIcon&)));
 #endif
-
+*/
     connect(d->browser, SIGNAL(urlChanged(const QUrl&)),
             this, SLOT(slotUrlChanged(const QUrl&)));
 
@@ -204,15 +204,11 @@ void WebBrowserDlg::slotLoadingFinished(bool b)
 
 void WebBrowserDlg::slotSearchTextChanged(const SearchTextSettings& settings)
 {
-    d->browser->findText(
-        settings.text,
-        (settings.caseSensitive == Qt::CaseInsensitive) ? QWebEnginePage::FindCaseSensitively 
-                                                        : QWebEnginePage::FindFlags(),
-        [this](bool found)
-        {
-            d->searchbar->slotSearchResult(found);
-        }
-    );
+    bool found = d->browser->findText(
+                    settings.text,
+                    (settings.caseSensitive == Qt::CaseInsensitive) ? QWebPage::FindCaseSensitively 
+                                                                    : QWebPage::FindFlags());
+    d->searchbar->slotSearchResult(found);
 }
 
 void WebBrowserDlg::slotGoHome()

@@ -32,8 +32,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QUrl>
-#include <QWebEngineView>
-#include <QWebEnginePage>
+#include <QWebView>
 
 // Local includes
 
@@ -42,26 +41,7 @@
 namespace Digikam
 {
 
-class WelcomePageViewPage : public QWebEnginePage
-{
-    Q_OBJECT
-
-public:
-
-    explicit WelcomePageViewPage(QObject* const parent = 0);
-    virtual ~WelcomePageViewPage();
-
-    bool acceptNavigationRequest(const QUrl&, QWebEnginePage::NavigationType, bool);
-
-Q_SIGNALS:
-
-    void linkClicked(const QUrl&);
-
-};
-
-// -------------------------------------------------------------------
-
-class WelcomePageView : public QWebEngineView
+class WelcomePageView : public QWebView
 {
     Q_OBJECT
 

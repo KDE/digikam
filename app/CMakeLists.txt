@@ -89,7 +89,7 @@ if(ENABLE_MEDIAPLAYER)
     )
 endif()
 
-include_directories($<TARGET_PROPERTY:Qt5::WebEngineWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -136,7 +136,7 @@ target_link_libraries(digikamcore
                       Qt5::Xml
                       Qt5::Widgets
                       Qt5::Sql
-                      Qt5::WebEngineWidgets
+                      Qt5::WebKitWidgets
                       Qt5::PrintSupport
                       Qt5::Concurrent
 
@@ -428,7 +428,7 @@ target_link_libraries(digikamgui
                       Qt5::Gui
                       Qt5::Widgets
                       Qt5::Sql
-                      Qt5::WebEngineWidgets
+                      Qt5::WebKitWidgets
                       Qt5::PrintSupport
 
                       KF5::Solid

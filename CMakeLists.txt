@@ -123,7 +123,7 @@ find_package(Qt5 ${QT_MIN_VERSION}
              Sql
              Xml
              PrintSupport
-             WebEngineWidgets
+             WebKitWidgets
              Network
 )
 
