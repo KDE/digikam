@@ -38,6 +38,7 @@ class HealingCloneTool : public EditorToolThreaded
 
 public:
     explicit HealingCloneTool(QObject* const parent);
+    ~HealingCloneTool();
 
 private Q_SLOTS:
 
