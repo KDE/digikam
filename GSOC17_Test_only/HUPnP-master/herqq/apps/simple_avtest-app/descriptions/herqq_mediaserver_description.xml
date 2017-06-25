@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+    <specVersion>
+        <major>1</major>
+        <minor>1</minor>
+    </specVersion>
+    <device>
+        <deviceType>urn:schemas-upnp-org:device:MediaServer:3</deviceType>
+        <friendlyName>HUPnPAv Test Media Server</friendlyName>
+        <manufacturer>Herqq</manufacturer>
+        <manufacturerURL>www.herqq.org</manufacturerURL>
+        <modelDescription>Media Server for testing HUPnPAv</modelDescription>
+        <modelName>HerqqTestMediaServer</modelName>
+        <modelNumber>0.1</modelNumber>
+        <modelURL>www.herqq.org</modelURL>
+		<serialNumber>0123456789</serialNumber>
+        <UDN>uuid:5d794fd2-5f5e-4660-90b3-c07a51363f0a</UDN>
+        <serviceList>
+            <service>
+                <serviceType>urn:schemas-upnp-org:service:ConnectionManager:2</serviceType> 
+                <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+                <SCPDURL>herqq_connectionmanager_source_scpd.xml</SCPDURL>
+                <controlURL>HerqqTestMediaServer/ConnectionManager/Control</controlURL>
+                <eventSubURL>HerqqTestMediaServer/ConnectionManager/Events</eventSubURL>
+            </service>
+			<service>
+                <serviceType>urn:schemas-upnp-org:service:ContentDirectory:3</serviceType>
+                <serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+                <SCPDURL>herqq_contentdirectory_scpd.xml</SCPDURL>
+                <controlURL>HerqqTestMediaServer/ContentDirectory/Control</controlURL>
+                <eventSubURL>HerqqTestMediaServer/ContentDirectory/Events</eventSubURL>
+            </service>
+        </serviceList>
+    </device>
+</root>
