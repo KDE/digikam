@@ -228,10 +228,13 @@ if(ENABLE_MEDIAPLAYER)
     if(NOT ${QTAV_FOUND} OR ${QTAV_VERSION_STRING} VERSION_LESS ${QTAV_MIN_VERSION})
 
         set(ENABLE_MEDIAPLAYER OFF)
+        set(QTAV_FOUND OFF)
+        message(STATUS "ENABLE_MEDIAPLAYER option is enabled but QtAV cannot be found. Media player support is disabled.")
 
     else()
 
         include_directories(${QTAV_INCLUDE_DIRS})
+        message(STATUS "Media player support is enabled.")
 
     endif()
 
