@@ -157,6 +157,7 @@
 #include "filmtool.h"
 #include "restorationtool.h"
 #include "blurtool.h"
+#include "healingclonetool.h"
 #include "sharpentool.h"
 #include "noisereductiontool.h"
 #include "localcontrasttool.h"
@@ -760,6 +761,12 @@ void EditorWindow::setupStandardActions()
     connect(d->blurAction, SIGNAL(triggered(bool)),
             this, SLOT(slotBlur()));
     d->blurAction->setEnabled(false);
+
+    d->healCloneAction = new QAction(QIcon::fromTheme(QLatin1String("healimage")), i18n("Healing Clone..."), this);
+    actionCollection()->addAction(QLatin1String("editorwindow_enhance_healingclone"), d->healCloneAction);
+    connect(d->healCloneAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotHealingClone()));
+    d->healCloneAction->setEnabled(false);
 
     d->noiseReductionAction = new QAction(QIcon::fromTheme(QLatin1String("noisereduction")), i18n("Noise Reduction..."), this);
     actionCollection()->addAction(QLatin1String("editorwindow_enhance_noisereduction"), d->noiseReductionAction);
@@ -1488,6 +1495,7 @@ void EditorWindow::toggleStandardActions(bool val)
     d->filmAction->setEnabled(val);
     d->restorationAction->setEnabled(val);
     d->blurAction->setEnabled(val);
+    d->healCloneAction->setEnabled(val);
     d->sharpenAction->setEnabled(val);
     d->noiseReductionAction->setEnabled(val);
     d->localContrastAction->setEnabled(val);
@@ -2996,6 +3004,7 @@ void EditorWindow::setupSelectToolsAction()
     QString enhanceCategory             = i18nc("@title Image Enhance",  "Enhance");
     actionModel->addAction(d->restorationAction,          enhanceCategory);
     actionModel->addAction(d->blurAction,                 enhanceCategory);
+    actionModel->addAction(d->healCloneAction,            enhanceCategory);
     actionModel->addAction(d->sharpenAction,              enhanceCategory);
     actionModel->addAction(d->noiseReductionAction,       enhanceCategory);
     actionModel->addAction(d->localContrastAction,        enhanceCategory);
@@ -3501,6 +3510,11 @@ void EditorWindow::slotRestoration()
 void EditorWindow::slotBlur()
 {
     loadTool(new BlurTool(this));
+}
+
+void EditorWindow::slotHealingClone()
+{
+    loadTool(new HealingCloneTool(this));
 }
 
 void EditorWindow::slotSharpen()
