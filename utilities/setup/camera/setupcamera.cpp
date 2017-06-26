@@ -829,8 +829,8 @@ void SetupCamera::slotAddCamera()
 {
     CameraSelection* const select = new CameraSelection;
 
-    connect(select, SIGNAL(signalOkClicked(QString, QString, QString, QString)),
-            this,   SLOT(slotAddedCamera(QString, QString, QString, QString)));
+    connect(select, SIGNAL(signalOkClicked(QString,QString,QString,QString)),
+            this,   SLOT(slotAddedCamera(QString,QString,QString,QString)));
 
     select->show();
 }

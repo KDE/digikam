@@ -71,14 +71,14 @@ VideoThumbnailerJob::VideoThumbnailerJob(QObject* const parent)
 {
     d->vthumb = new VideoThumbnailer(this);
 
-    connect(this, SIGNAL(signalGetThumbnail(const QString&,int,bool)),
-            d->vthumb, SLOT(slotGetThumbnail(const QString&,int,bool)));
+    connect(this, SIGNAL(signalGetThumbnail(QString,int,bool)),
+            d->vthumb, SLOT(slotGetThumbnail(QString,int,bool)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailDone(const QString&, const QImage&)),
-            this, SLOT(slotThumbnailDone(const QString&, const QImage&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailDone(QString,QImage)),
+            this, SLOT(slotThumbnailDone(QString,QImage)));
 
-    connect(d->vthumb, SIGNAL(signalThumbnailFailed(const QString&)),
-            this, SLOT(slotThumbnailFailed(const QString&)));
+    connect(d->vthumb, SIGNAL(signalThumbnailFailed(QString)),
+            this, SLOT(slotThumbnailFailed(QString)));
 }
 
 VideoThumbnailerJob::~VideoThumbnailerJob()

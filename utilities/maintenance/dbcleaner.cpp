@@ -168,8 +168,8 @@ void DbCleaner::slotFetchedData(const QList<qlonglong>& staleImageIds,
         qCDebug(DIGIKAM_GENERAL_LOG) << "Nothing to do. Databases are clean.";
         if (d->shrinkDatabases)
         {
-            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>, QList<int>, QList<Identity>)),
-                       this, SLOT(slotFetchedData(QList<qlonglong>, QList<int>, QList<Identity>)));
+            disconnect(d->thread, SIGNAL(signalData(QList<qlonglong>,QList<int>,QList<Identity>)),
+                       this, SLOT(slotFetchedData(QList<qlonglong>,QList<int>,QList<Identity>)));
 
             disconnect(d->thread, SIGNAL(signalCompleted()),
                         this, SLOT(slotCleanItems()));
@@ -300,7 +300,7 @@ void DbCleaner::slotShrinkDatabases()
             d->shrinkDlg, SLOT(exec()));
 
     connect(d->thread, SIGNAL(signalFinished(bool,bool)),
-                this, SLOT(slotShrinkNextDBInfo(bool, bool)));
+                this, SLOT(slotShrinkNextDBInfo(bool,bool)));
 
     connect(d->thread, SIGNAL(signalCompleted()),
             this, SLOT(slotDone()));

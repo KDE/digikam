@@ -510,7 +510,7 @@ void PersistentWidgetDelegateOverlay::setActive(bool active)
         connect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                 this, SLOT(leavePersistentMode()));
 
-        connect(m_view, SIGNAL(viewportClicked(const QMouseEvent*)),
+        connect(m_view, SIGNAL(viewportClicked(constQMouseEvent*)),
                 this, SLOT(leavePersistentMode()));
     }
     else
@@ -520,7 +520,7 @@ void PersistentWidgetDelegateOverlay::setActive(bool active)
             disconnect(m_view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
                        this, SLOT(leavePersistentMode()));
 
-            disconnect(m_view, SIGNAL(viewportClicked(const QMouseEvent*)),
+            disconnect(m_view, SIGNAL(viewportClicked(constQMouseEvent*)),
                        this, SLOT(leavePersistentMode()));
         }
     }

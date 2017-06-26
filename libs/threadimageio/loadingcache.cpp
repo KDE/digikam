@@ -171,8 +171,8 @@ LoadingCache::LoadingCache()
     qRegisterMetaType<DImg>("DImg");
     qRegisterMetaType<DMetadata>("DMetadata");
 
-    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer, ICCSettingsContainer)),
-            this, SLOT(iccSettingsChanged(ICCSettingsContainer, ICCSettingsContainer)));
+    connect(IccSettings::instance(), SIGNAL(settingsChanged(ICCSettingsContainer,ICCSettingsContainer)),
+            this, SLOT(iccSettingsChanged(ICCSettingsContainer,ICCSettingsContainer)));
 }
 
 LoadingCache::~LoadingCache()

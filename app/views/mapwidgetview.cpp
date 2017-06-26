@@ -237,8 +237,8 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
             d->model               = dynamic_cast<ImageFilterModel*>(filterModel);
             d->thumbnailLoadThread = new ThumbnailLoadThread(this);
 
-            connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription, QPixmap)),
-                    this, SLOT(slotThumbnailLoaded(LoadingDescription, QPixmap)));
+            connect(d->thumbnailLoadThread, SIGNAL(signalThumbnailLoaded(LoadingDescription,QPixmap)),
+                    this, SLOT(slotThumbnailLoaded(LoadingDescription,QPixmap)));
 
             // Note: Here we only monitor changes to the database, because changes to the model
             //       are also sent when thumbnails are generated, and we don't want to update

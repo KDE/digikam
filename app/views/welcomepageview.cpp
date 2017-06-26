@@ -60,8 +60,8 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
 
     // ------------------------------------------------------------
 
-    connect(this, SIGNAL(linkClicked(const QUrl&)),
-            this, SLOT(slotUrlOpen(const QUrl&)));
+    connect(this, SIGNAL(linkClicked(QUrl)),
+            this, SLOT(slotUrlOpen(QUrl)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));

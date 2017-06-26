@@ -96,7 +96,7 @@ ImageRegionWidget::ImageRegionWidget(QWidget* const parent)
     connect(d_ptr->delay, SIGNAL(timeout()),
             this, SLOT(slotOriginalImageRegionChanged()));
 
-    connect(this, SIGNAL(viewportRectChanged(const QRectF&)),
+    connect(this, SIGNAL(viewportRectChanged(QRectF)),
             this, SLOT(slotOriginalImageRegionChangedDelayed()));
 
     layout()->fitToWindow();

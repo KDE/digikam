@@ -271,7 +271,7 @@ void FindDuplicatesView::initAlbumUpdateConnections()
     connect(AlbumManager::instance(), SIGNAL(signalAlbumsCleared()),
             this, SLOT(slotClear()));
 
-    connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<SAlbum*>, QList<qlonglong>)),
+    connect(AlbumManager::instance(),SIGNAL(signalUpdateDuplicatesAlbums(QList<SAlbum*>,QList<qlonglong>)),
             this,SLOT(slotUpdateDuplicates(QList<SAlbum*>,QList<qlonglong>)));
 
 }

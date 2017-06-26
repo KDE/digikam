@@ -63,8 +63,8 @@ protected:
 
         if (mPageWidget)
         {
-            q->connect(mPageWidget, SIGNAL(currentPageChanged(DConfigDlgWdgItem*, DConfigDlgWdgItem*)),
-                       q, SIGNAL(currentPageChanged(DConfigDlgWdgItem*, DConfigDlgWdgItem*)));
+            q->connect(mPageWidget, SIGNAL(currentPageChanged(DConfigDlgWdgItem*,DConfigDlgWdgItem*)),
+                       q, SIGNAL(currentPageChanged(DConfigDlgWdgItem*,DConfigDlgWdgItem*)));
 
             q->connect(mPageWidget, &DConfigDlgWdg::pageRemoved,
                        q, &DConfigDlg::pageRemoved);
