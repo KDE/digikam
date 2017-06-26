@@ -125,6 +125,9 @@ WebBrowserDlg::WebBrowserDlg(const QUrl& url, QWidget* const parent)
             this, SLOT(slotIconChanged(const QIcon&)));
 #endif
 */
+    connect(d->browser, SIGNAL(titleChanged(const QString&)),
+            this, SLOT(slotTitleChanged(const QString&)));
+
     connect(d->browser, SIGNAL(urlChanged(const QUrl&)),
             this, SLOT(slotUrlChanged(const QUrl&)));
 
