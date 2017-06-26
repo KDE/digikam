@@ -167,7 +167,7 @@ SetupKipi::SetupKipi(QWidget* const parent)
     connect(d->clearBtn, SIGNAL(clicked()),
             this, SLOT(slotClearList()));
 
-    connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
+    connect(d->pluginsList, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
             this, SLOT(slotItemClicked()));
 
     connect(d->pluginsList, SIGNAL(signalSearchResult(int)),

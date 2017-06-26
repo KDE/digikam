@@ -137,7 +137,7 @@ void TestTracks::testFileLoading()
 
     TrackManager myParser;
 
-    QSignalSpy spyTrackFiles(&myParser, SIGNAL(signalTracksChanged(QList<TrackManager::TrackChanges>)));
+    QSignalSpy spyTrackFiles(&myParser, SIGNAL(signalTracksChanged(const QList<TrackManager::TrackChanges>)));
     QSignalSpy spyAllDone(&myParser, SIGNAL(signalAllTrackFilesReady()));
 
     myParser.loadTrackFiles(fileList);

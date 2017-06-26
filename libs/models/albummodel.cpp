@@ -50,8 +50,8 @@ AlbumModel::AlbumModel(RootAlbumBehavior rootBehavior, QObject* const parent)
     m_columnHeader = i18n("Albums");
     setupThumbnailLoading();
 
-    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int,int>)),
-            this, SLOT(setCountMap(QMap<int,int>)));
+    connect(AlbumManager::instance(), SIGNAL(signalPAlbumsDirty(QMap<int, int>)),
+            this, SLOT(setCountMap(QMap<int, int>)));
 
     setCountMap(AlbumManager::instance()->getPAlbumsCount());
 }

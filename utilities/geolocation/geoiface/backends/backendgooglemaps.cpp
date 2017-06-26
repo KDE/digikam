@@ -1272,8 +1272,8 @@ void BackendGoogleMaps::slotTrackManagerChanged()
 
     if (s->trackManager)
     {
-        connect(s->trackManager, SIGNAL(signalTracksChanged(QList<TrackManager::TrackChanges>)),
-                this, SLOT(slotTracksChanged(QList<TrackManager::TrackChanges>)));
+        connect(s->trackManager, SIGNAL(signalTracksChanged(const QList<TrackManager::TrackChanges>)),
+                this, SLOT(slotTracksChanged(const QList<TrackManager::TrackChanges>)));
 
         connect(s->trackManager, SIGNAL(signalVisibilityChanged(bool)),
                 this, SLOT(slotTrackVisibilityChanged(bool)));

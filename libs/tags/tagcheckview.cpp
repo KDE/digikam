@@ -100,8 +100,8 @@ TagCheckView::TagCheckView(QWidget* const parent, TagModel* const tagModel)
     connect(d->toggleAutoAction, SIGNAL(triggered(QAction*)),
             this, SLOT(toggleAutoActionSelected(QAction*)));
 
-    connect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-            this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
+    connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 }
 
 TagCheckView::~TagCheckView()
@@ -120,8 +120,8 @@ void TagCheckView::slotCheckStateChange(Album* album, Qt::CheckState state)
     Q_UNUSED(state);
 
     // handle custom toggle modes
-    disconnect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-               this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
+    disconnect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+               this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     // avoid signal recursion here
     switch (d->toggleAutoTags)
@@ -140,8 +140,8 @@ void TagCheckView::slotCheckStateChange(Album* album, Qt::CheckState state)
             break;
     }
 
-    connect(albumModel(), SIGNAL(checkStateChanged(Album*,Qt::CheckState)),
-            this, SLOT(slotCheckStateChange(Album*,Qt::CheckState)));
+    connect(albumModel(), SIGNAL(checkStateChanged(Album*, Qt::CheckState)),
+            this, SLOT(slotCheckStateChange(Album*, Qt::CheckState)));
 
     emit checkedTagsChanged(getCheckedTags(), getPartiallyCheckedTags());
 }

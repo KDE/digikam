@@ -83,8 +83,8 @@ void AlbumsDBJobsThread::albumsListing(const AlbumsDBJobInfo& info)
 
     if (info.isFoldersJob())
     {
-        connect(j, SIGNAL(foldersData(QMap<int,int>)),
-                this, SIGNAL(foldersData(QMap<int,int>)));
+        connect(j, SIGNAL(foldersData(QMap<int, int>)),
+                this, SIGNAL(foldersData(QMap<int, int>)));
     }
     else
     {
@@ -117,13 +117,13 @@ void TagsDBJobsThread::tagsListing(const TagsDBJobInfo& info)
 
     if (info.isFoldersJob())
     {
-        connect(j, SIGNAL(foldersData(QMap<int,int>)),
-                this, SIGNAL(foldersData(QMap<int,int>)));
+        connect(j, SIGNAL(foldersData(QMap<int, int>)),
+                this, SIGNAL(foldersData(QMap<int, int>)));
     }
     else if (info.isFaceFoldersJob())
     {
-        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int>>)),
-                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int>>)));
+        connect(j, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)),
+                this, SIGNAL(faceFoldersData(QMap<QString,QMap<int, int> >)));
     }
     else
     {
@@ -156,13 +156,13 @@ void DatesDBJobsThread::datesListing(const DatesDBJobInfo& info)
 
     if (info.isFoldersJob())
     {
-        connect(j, SIGNAL(foldersData(QMap<QDateTime,int>)),
-                this, SIGNAL(foldersData(QMap<QDateTime,int>)));
+        connect(j, SIGNAL(foldersData(const QMap<QDateTime, int>&)),
+                this, SIGNAL(foldersData(const QMap<QDateTime, int>&)));
     }
     else
     {
-        connect(j, SIGNAL(data(QList<ImageListerRecord>)),
-                this, SIGNAL(data(QList<ImageListerRecord>)));
+        connect(j, SIGNAL(data(const QList<ImageListerRecord>&)),
+                this, SIGNAL(data(const QList<ImageListerRecord>&)));
     }
 
     ActionJobCollection collection;

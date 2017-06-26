@@ -63,8 +63,8 @@ MetadataListView::MetadataListView(QWidget* const parent)
 
     m_parent = dynamic_cast<MetadataWidget*>(parent);
 
-    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-            this, SLOT(slotSelectionChanged(QTreeWidgetItem*,int)));
+    connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)),
+            this, SLOT(slotSelectionChanged(QTreeWidgetItem*, int)));
 }
 
 MetadataListView::~MetadataListView()

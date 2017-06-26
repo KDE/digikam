@@ -111,8 +111,8 @@ QueuePool::QueuePool(QWidget* const parent)
     connect(this, SIGNAL(tabCloseRequested(int)),
             this, SLOT(slotCloseQueueRequest(int)));
 
-    connect(tabBar(), SIGNAL(signalTestCanDecode(constQDragMoveEvent*,bool&)),
-            this, SLOT(slotTestCanDecode(constQDragMoveEvent*,bool&)));
+    connect(tabBar(), SIGNAL(signalTestCanDecode(const QDragMoveEvent*, bool&)),
+            this, SLOT(slotTestCanDecode(const QDragMoveEvent*, bool&)));
 
     // -- FileWatch connections ------------------------------
 

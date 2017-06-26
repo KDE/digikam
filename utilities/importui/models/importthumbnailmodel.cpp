@@ -70,8 +70,8 @@ void ImportThumbnailModel::setCameraThumbsController(CameraThumbsCtrl* const thu
 {
     d->thumbsCtrl = thumbsCtrl;
 
-    connect(d->thumbsCtrl, SIGNAL(signalThumbInfoReady(CamItemInfo)),
-            this, SLOT(slotThumbInfoReady(CamItemInfo)));
+    connect(d->thumbsCtrl, SIGNAL(signalThumbInfoReady(const CamItemInfo&)),
+            this, SLOT(slotThumbInfoReady(const CamItemInfo&)));
 
     ImportImageModel::setCameraThumbsController(d->thumbsCtrl);
 }

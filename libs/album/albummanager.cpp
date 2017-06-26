@@ -1710,8 +1710,8 @@ void AlbumManager::personItemsCount()
     connect(d->personListJob, SIGNAL(finished()),
             this, SLOT(slotPeopleJobResult()));
 
-    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int>>)),
-            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int>>)));
+    connect(d->personListJob, SIGNAL(faceFoldersData(QMap<QString,QMap<int,int> >)),
+            this, SLOT(slotPeopleJobData(QMap<QString,QMap<int,int> >)));
 }
 
 void AlbumManager::scanSAlbums()
@@ -1821,7 +1821,7 @@ void AlbumManager::scanDAlbums()
             this, SLOT(slotDatesJobResult()));
 
     connect(d->dateListJob, SIGNAL(foldersData(QMap<QDateTime,int>)),
-            this, SLOT(slotDatesJobData(QMap<QDateTime,int>)));
+            this, SLOT(slotDatesJobData(QMap<QDateTime, int>)));
 }
 
 AlbumList AlbumManager::allPAlbums() const

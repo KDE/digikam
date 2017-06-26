@@ -91,8 +91,8 @@ ItemsPage::ItemsPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
     connect(d->mngr->thread(), SIGNAL(finished(Digikam::ExpoBlendingActionData)),
             this, SLOT(slotExpoBlendingAction(Digikam::ExpoBlendingActionData)));
 
-    connect(d->list, SIGNAL(signalAddItems(QList<QUrl>)),
-            this, SLOT(slotAddItems(QList<QUrl>)));
+    connect(d->list, SIGNAL(signalAddItems(const QList<QUrl>&)),
+            this, SLOT(slotAddItems(const QList<QUrl>&)));
 
     connect(d->list, SIGNAL(signalImageListChanged()),
             this, SLOT(slotImageListChanged()));

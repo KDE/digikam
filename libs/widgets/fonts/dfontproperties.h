@@ -282,10 +282,10 @@ private:
     Q_DISABLE_COPY(DFontProperties)
 
     Q_PRIVATE_SLOT(d, void _d_toggled_checkbox())
-    Q_PRIVATE_SLOT(d, void _d_family_chosen_slot(QString))
-    Q_PRIVATE_SLOT(d, void _d_size_chosen_slot(QString))
-    Q_PRIVATE_SLOT(d, void _d_style_chosen_slot(QString))
-    Q_PRIVATE_SLOT(d, void _d_displaySample(QFont font))
+    Q_PRIVATE_SLOT(d, void _d_family_chosen_slot(const QString&))
+    Q_PRIVATE_SLOT(d, void _d_size_chosen_slot(const QString&))
+    Q_PRIVATE_SLOT(d, void _d_style_chosen_slot(const QString&))
+    Q_PRIVATE_SLOT(d, void _d_displaySample(const QFont& font))
     Q_PRIVATE_SLOT(d, void _d_size_value_slot(double))
 };
 

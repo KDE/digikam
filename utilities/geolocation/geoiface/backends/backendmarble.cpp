@@ -1591,8 +1591,8 @@ void BackendMarble::slotTrackManagerChanged()
 
     if (s->trackManager)
     {
-        connect(s->trackManager, SIGNAL(signalTracksChanged(QList<TrackManager::TrackChanges>)),
-                this, SLOT(slotTracksChanged(QList<TrackManager::TrackChanges>)));
+        connect(s->trackManager, SIGNAL(signalTracksChanged(const QList<TrackManager::TrackChanges>)),
+                this, SLOT(slotTracksChanged(const QList<TrackManager::TrackChanges>)));
 
         // when the visibility of the tracks is changed, we simple schedule a redraw
         connect(s->trackManager, SIGNAL(signalVisibilityChanged(bool)),
