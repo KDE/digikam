@@ -4,6 +4,7 @@
 
 #include <QGridLayout>
 #include <QLabel>
+#include <QPushButton>
 #include <QIcon>
 
 // KDE includes
@@ -13,6 +14,7 @@
 
 // Local includes
 
+#include "dexpanderbox.h"
 #include "dnuminput.h"
 #include "editortoolsettings.h"
 #include "imageiface.h"
@@ -35,6 +37,7 @@ public:
     static const QString configRadiusAdjustmentEntry;
 
     DIntNumInput*        radiusInput;
+    DDoubleNumInput*     blurPercent;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
 };
@@ -67,13 +70,36 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
                                       "that determines the size of parts copied in the image."));
 
     // --------------------------------------------------------
+    QLabel* const label2  = new QLabel(i18n("Radial Blur Percent:"));
+    d->blurPercent = new DDoubleNumInput();
+    d->blurPercent->setRange(0,100, 0.1);
+    d->blurPercent->setDefaultValue(0);
+    d->blurPercent->setWhatsThis(i18n("A percent of 0 has no effect, and the prush just copies "
+                                      "above than 0 represents a ratio mixing"
+                                      " the destination color with source."));
+    // --------------------------------------------------------
+    QLabel* const label_src  = new QLabel(i18n("Source:"));
+    QLabel* const label_dst  = new QLabel(i18n("Destination:"));
+    QPushButton* src = new QPushButton(i18n("click to set"), d->gboxSettings->plainPage());
+    QPushButton* dst = new QPushButton(i18n("click to set"),d->gboxSettings->plainPage());
+    QPushButton* start = new QPushButton(i18n("start"),d->gboxSettings->plainPage());
+
+    // --------------------------------------------------------
 
     const int spacing = d->gboxSettings->spacingHint();
 
     QGridLayout* const grid = new QGridLayout( );
-    grid->addWidget(label,          0, 0, 1, 2);
-    grid->addWidget(d->radiusInput, 1, 0, 1, 2);
-    grid->setRowStretch(2, 10);
+    grid->addWidget(label_src,      1, 0, 1, 2);
+    grid->addWidget(start,          3, 1, 3, 1);
+    grid->addWidget(src,            2, 0, 1, 1);
+    grid->addWidget(label_dst,      3, 0, 1, 2);
+    grid->addWidget(dst,            4, 0, 1, 1);
+    grid->addWidget(new DLineWidget(Qt::Horizontal, d->gboxSettings->plainPage()), 5, 0, 1, 2);
+    grid->addWidget(label,          6, 0, 1, 2);
+    grid->addWidget(d->radiusInput, 7, 0, 1, 2);
+    grid->addWidget(label2,         8, 0, 1, 2);
+    grid->addWidget(d->blurPercent, 9, 0, 1, 2);
+    grid->setRowStretch(10, 10);
     grid->setContentsMargins(spacing, spacing, spacing, spacing);
     grid->setSpacing(spacing);
     d->gboxSettings->plainPage()->setLayout(grid);
