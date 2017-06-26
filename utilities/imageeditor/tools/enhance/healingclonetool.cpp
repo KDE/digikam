@@ -40,6 +40,12 @@ public:
     DDoubleNumInput*     blurPercent;
     ImageRegionWidget*   previewWidget;
     EditorToolSettings*  gboxSettings;
+    QPoint               sourcePoint;
+    QPoint               destinationPoint;
+
+    QPushButton*         autoAdjustBtn;
+    QPushButton*         sourcePointBtn;
+    QPushButton*         destinationPointBtn;
 };
 
 const QString HealingCloneTool::Private::configGroupName(QLatin1String("Healing Clone Tool"));
@@ -79,10 +85,12 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
                                       " the destination color with source."));
     // --------------------------------------------------------
     QLabel* const label_src  = new QLabel(i18n("Source:"));
-    QLabel* const label_dst  = new QLabel(i18n("Destination:"));
+    QLabel* const label_dst  = new QLabel(i18n("Destination:    "));
     QPushButton* src = new QPushButton(i18n("click to set"), d->gboxSettings->plainPage());
     QPushButton* dst = new QPushButton(i18n("click to set"),d->gboxSettings->plainPage());
     QPushButton* start = new QPushButton(i18n("start"),d->gboxSettings->plainPage());
+    start->setSizePolicy(QSizePolicy::MinimumExpanding,
+                         QSizePolicy::Expanding);
 
     // --------------------------------------------------------
 
@@ -90,7 +98,7 @@ HealingCloneTool::HealingCloneTool(QObject * const parent)
 
     QGridLayout* const grid = new QGridLayout( );
     grid->addWidget(label_src,      1, 0, 1, 2);
-    grid->addWidget(start,          3, 1, 3, 1);
+    grid->addWidget(start,          2, 1, 3, 1);
     grid->addWidget(src,            2, 0, 1, 1);
     grid->addWidget(label_dst,      3, 0, 1, 2);
     grid->addWidget(dst,            4, 0, 1, 1);
