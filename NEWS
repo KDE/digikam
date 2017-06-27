@@ -14,4 +14,5 @@ BUGFIXES FROM BUGZILLA:
 006 ==> 378475 - digiKam crashed after connecting a Camera.
 007 ==> 381697 - Cannot remove an image whose file has already been deleted by another application.
 008 ==> 380189 - digiKam Import Menu doesn't show all plugins.
-009 ==> 
+009 ==> 376422 - Rotate crashes.
+010 ==> 
