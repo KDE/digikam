@@ -271,4 +271,4 @@ QDate DAlbumInfo::date() const
     return ret;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

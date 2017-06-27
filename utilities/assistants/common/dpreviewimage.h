@@ -175,4 +175,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DPREVIEW_IMAGE_H */
+#endif // DPREVIEW_IMAGE_H

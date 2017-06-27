@@ -1322,4 +1322,4 @@ QUrl DImagesList::getCurrentUrl() const
     return currentItem->url();
 }
 
-}  // namespace Digikam
+} // namespace Digikam
