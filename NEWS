@@ -3,7 +3,6 @@ digiKam 5.7.0 - Release date: 2017-07-23
 
 NEW FEATURES:
 
-General     : Porting QWebkit to QWebEngine of digiKam core.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -14,4 +13,5 @@ BUGFIXES FROM BUGZILLA:
 005 ==> 381510 - "open with" on multiple images only passes first image.
 006 ==> 378475 - digiKam crashed after connecting a Camera.
 007 ==> 381697 - Cannot remove an image whose file has already been deleted by another application.
-008 ==> 
+008 ==> 380189 - digiKam Import Menu doesn't show all plugins.
+009 ==> 
