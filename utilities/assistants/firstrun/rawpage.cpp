@@ -62,8 +62,8 @@ public:
     QButtonGroup* rawHandling;
 };
 
-RawPage::RawPage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
+RawPage::RawPage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Configure Raw File Handling</b>")),
       d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);

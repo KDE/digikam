@@ -12,7 +12,6 @@ endif (POLICY CMP0063)
 set(libfirstrun_SRCS
     firstrundlg.cpp
     migratefromdigikam4page.cpp
-    firstrundlgpage.cpp
     welcomepage.cpp
     collectionpage.cpp
     databasepage.cpp
