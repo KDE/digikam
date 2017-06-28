@@ -19,4 +19,5 @@ BUGFIXES FROM BUGZILLA:
 011 ==> 367692 - digiKam crashed trying to save an edited image.
 012 ==> 369636 - Batch time stamp adjusting causes digikam to crash and destroys photos.
 013 ==> 381762 - Crash on Windows installer.
-014 ==> 
+014 ==> 381766 - Problem compiling digikam from GIT repository.
+015 ==> 
