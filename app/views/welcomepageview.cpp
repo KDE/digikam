@@ -93,6 +93,7 @@ QStringList WelcomePageView::featuresTabContent() const
     newFeatures << i18n("Add a new batch queue manager tool to convert RAW files to DNG;");
     newFeatures << i18n("Add a new tool to export contents in html gallery;");
     newFeatures << i18n("Add a new tool to export contents as a video slideshow;");
+    newFeatures << i18n("Add a new tool to export contents by email;");
     newFeatures << i18n("Add a new batch queue manager tool to adjust time and date metadata;");
     newFeatures << i18n("Add a new batch queue manager tool to detect and fix red-eyes automatically;");
     newFeatures << i18n("Add a new option in editor and light table to import images from a digital scanner;");
