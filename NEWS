@@ -23,4 +23,5 @@ BUGFIXES FROM BUGZILLA:
 014 ==> 381766 - Problem compiling digikam from GIT repository.
 015 ==> 380359 - Shouldn't "Email Images" be in "Export" menu instead of "Tools" menu?
 016 ==> 281921 - Send Images by mail tool cannot process albums.
-017 ==> 
+017 ==> 114508 - Send images by mail tool does not delete its temporary files.
+018 ==> 
