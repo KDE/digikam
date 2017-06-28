@@ -3,6 +3,7 @@ digiKam 5.7.0 - Release date: 2017-07-23
 
 NEW FEATURES:
 
+General : New tool to export albums by email.
 
 BUGFIXES FROM BUGZILLA:
 
@@ -21,4 +22,5 @@ BUGFIXES FROM BUGZILLA:
 013 ==> 381762 - Crash on Windows installer.
 014 ==> 381766 - Problem compiling digikam from GIT repository.
 015 ==> 380359 - Shouldn't "Email Images" be in "Export" menu instead of "Tools" menu?
-016 ==> 
+016 ==> 281921 - Send Images by mail tool cannot process albums.
+017 ==> 
