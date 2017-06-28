@@ -18,4 +18,5 @@ BUGFIXES FROM BUGZILLA:
 010 ==> 314089 - Tagging faces is not working.
 011 ==> 367692 - digiKam crashed trying to save an edited image.
 012 ==> 369636 - Batch time stamp adjusting causes digikam to crash and destroys photos.
-013 ==> 
+013 ==> 381762 - Crash on Windows installer.
+014 ==> 
