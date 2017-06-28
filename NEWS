@@ -24,4 +24,5 @@ BUGFIXES FROM BUGZILLA:
 015 ==> 380359 - Shouldn't "Email Images" be in "Export" menu instead of "Tools" menu?
 016 ==> 281921 - Send Images by mail tool cannot process albums.
 017 ==> 114508 - Send images by mail tool does not delete its temporary files.
-018 ==> 
+018 ==> 151327 - Send Images by mail dialog is not resizable.
+019 ==> 
