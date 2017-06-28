@@ -25,4 +25,5 @@ BUGFIXES FROM BUGZILLA:
 016 ==> 281921 - Send Images by mail tool cannot process albums.
 017 ==> 114508 - Send images by mail tool does not delete its temporary files.
 018 ==> 151327 - Send Images by mail dialog is not resizable.
-019 ==> 
+019 ==> 108234 - Thunderbird will not open when sending emails in digiKam.
+020 ==> 
