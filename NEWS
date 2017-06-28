@@ -27,4 +27,5 @@ BUGFIXES FROM BUGZILLA:
 018 ==> 151327 - Send Images by mail dialog is not resizable.
 019 ==> 108234 - Thunderbird will not open when sending emails in digiKam.
 020 ==> 149915 - Sending selected pictures makes PC hang for 15 minutes + crash.
-021 ==> 
+021 ==> 104918 - digiKam crashes while converting for email purposes.
+022 ==> 
