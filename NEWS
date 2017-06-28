@@ -29,4 +29,13 @@ BUGFIXES FROM BUGZILLA:
 020 ==> 149915 - Sending selected pictures makes PC hang for 15 minutes + crash.
 021 ==> 104918 - digiKam crashes while converting for email purposes.
 022 ==> 096507 - Bug in email client selection.
-023 ==> 
+023 ==> 280923 - The command Email messages does not attach the images to the email.
+024 ==> 228609 - Sending images with thunderbird from albums with spaces in the name failes.
+025 ==> 158585 - digiKam crashes after attempt to email pictures.
+026 ==> 126493 - Mozilla does not start when sending emailed images.
+027 ==> 139646 - "send by email" function does not work with Thunderbird 1.5.0.9 (it use to work before).
+028 ==> 158916 - Error with non ascii characters in album names when sending images.
+029 ==> 365733 - Tool «export by email» does not work properly.
+030 ==> 366086 - No attachment in mail when using resizing option.
+031 ==> 276428 - Send by emails fails for pgf pictures because they cannot be resized.
+032 ==> 
