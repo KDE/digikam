@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMAPP_H
-#define DIGIKAMAPP_H
+#ifndef DIGIKAM_APP_H
+#define DIGIKAM_APP_H
 
 // Qt includes
 
@@ -198,6 +198,7 @@ private Q_SLOTS:
     void slotExpoBlending();
     void slotPanorama();
     void slotVideoSlideshow();
+    void slotSendByMail();
     void slotHtmlGallery();
     void slotCalendar();
     void slotPresentation();
@@ -232,4 +233,4 @@ private:
 
 }  // namespace Digikam
 
-#endif  // DIGIKAMAPP_H
+#endif  // DIGIKAM_APP_H

@@ -176,6 +176,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_panoramaAction        = 0;
     m_videoslideshowAction  = 0;
     m_htmlGalleryAction     = 0;
+    m_sendByMailAction      = 0;
     m_calendarAction        = 0;
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
@@ -479,6 +480,17 @@ void DXmlGuiWindow::createCalendarAction()
 
     connect(m_calendarAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCalendar()));
+}
+
+void DXmlGuiWindow::createSendByMailAction()
+{
+    m_sendByMailAction = new QAction(QIcon::fromTheme(QLatin1String("mail-send")),
+                                    i18nc("@action", "Send by Mail..."),
+                                    this);
+    actionCollection()->addAction(QLatin1String("sendbymail"), m_sendByMailAction);
+
+    connect(m_sendByMailAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotSendByMail()));
 }
 
 void DXmlGuiWindow::createHtmlGalleryAction()

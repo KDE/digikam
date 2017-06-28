@@ -137,6 +137,10 @@ public:
      */
     void createHtmlGalleryAction();
 
+    /** Create Send by Mail tool action.
+     */
+    void createSendByMailAction();
+
     /** Create Ksane action to import from scanner.
      */
     void createKSaneAction();
@@ -193,6 +197,7 @@ protected:
     QAction*     m_presentationAction;
     QAction*     m_calendarAction;
     QAction*     m_htmlGalleryAction;
+    QAction*     m_sendByMailAction;
     QAction*     m_expoBlendingAction;
     QAction*     m_panoramaAction;
     QAction*     m_videoslideshowAction;
@@ -278,6 +283,9 @@ private Q_SLOTS:
 
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
+
+    // Called by SendByMail tool.
+    virtual void slotSendByMail()              {};
 
     // Called by HTML Gallery tool.
     virtual void slotHTMLGallery()             {};

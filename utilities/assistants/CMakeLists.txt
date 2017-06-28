@@ -8,6 +8,7 @@ add_subdirectory(common)
 add_subdirectory(firstrun)
 add_subdirectory(expoblending)
 add_subdirectory(calendar)
+add_subdirectory(sendbymail)
 
 if(LIBXML2_FOUND AND LIBXSLT_FOUND)
     add_subdirectory(htmlgallery)

@@ -126,6 +126,7 @@
 #include "metadataedit.h"
 #include "expoblendingmanager.h"
 #include "calwizard.h"
+#include "mailwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1346,6 +1347,7 @@ void DigikamApp::setupActions()
     createHtmlGalleryAction();
     createCalendarAction();
     createVideoSlideshowAction();
+    createSendByMailAction();
 
     // -----------------------------------------------------------
 
@@ -2684,6 +2686,12 @@ void DigikamApp::slotCalendar()
     w.exec();
 }
 
+void DigikamApp::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
+    w.exec();
+}
+
 void DigikamApp::slotRecurseAlbums(bool checked)
 {
     d->view->setRecurseAlbums(checked);
@@ -3375,6 +3383,7 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
+    actionModel->addAction(m_sendByMailAction,            postCategory);
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);

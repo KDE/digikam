@@ -48,6 +48,7 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
             $<TARGET_OBJECTS:calendar_src>
+            $<TARGET_OBJECTS:sendbymail_src>
 
             utils/digikam_debug.cpp
 )
