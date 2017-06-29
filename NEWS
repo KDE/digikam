@@ -43,5 +43,6 @@ BUGFIXES FROM BUGZILLA:
 031 ==> 276428 - Send by emails fails for pgf pictures because they cannot be resized.
 032 ==> 191872 - Use the send image tool in showfoto.
 033 ==> 330274 - I downloaded showfoto photo program. Tried to open ShowFoto Handbook, got message could not find 'Khelpcenter'.
-034 ==> 
+034 ==> 240220 - Help button not working properly.
+035 ==> 
 
