@@ -59,5 +59,5 @@ BUGFIXES FROM BUGZILLA:
 046 ==> 281269 - Allow to share a remote image by e-mail.
 047 ==> 346577 - digiKam does not show help when not running in KDE.
 048 ==> 256262 - "Help / digiKam Handbook" menu item is misleading.
-049 ==> 
-
+049 ==> 099497 - Please add a dummy handbook until there's a real one.
+050 ==> 
