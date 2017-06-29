@@ -80,7 +80,7 @@ MailIntroPage::MailIntroPage(QWizard* const dialog, const QString& title)
                        "<p><h1><b>Welcome to Email Tool</b></h1></p>"
                        "<p>This assistant will guide you to send "
                        "your items with a mail client application.</p>"
-                       "<p>Before to export contents, you will be able to adjust attachements "
+                       "<p>Before to export contents, you will be able to adjust attachments "
                        "properties accordingly with your mail service capabilities.</p>"
                        "</qt>"));
 

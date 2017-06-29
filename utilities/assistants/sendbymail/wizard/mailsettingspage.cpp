@@ -162,10 +162,10 @@ MailSettingsPage::MailSettingsPage(QWizard* const dialog, const QString& title)
     d->imagesResize->setSingleStep(1);
     d->imagesResize->setValue(1024);
     d->imagesResize->setSuffix(i18n(" px"));
-    d->imagesResize->setWhatsThis(i18n("Select the lenght of the images that are to be sent. "
+    d->imagesResize->setWhatsThis(i18n("Select the length of the images that are to be sent. "
                                        "The aspect ratio is preserved."));
 
-    d->labelImagesResize = new QLabel(i18n("Image Lenght:"), groupBox);
+    d->labelImagesResize = new QLabel(i18n("Image Length:"), groupBox);
     d->labelImagesResize->setBuddy(d->imagesResize);
 
     //---------------------------------------------
