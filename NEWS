@@ -47,6 +47,6 @@ BUGFIXES FROM BUGZILLA:
 035 ==> 110899 - All DigiKam ImagePlugins don't work in Showfoto.
 036 ==> 132162 - Load image plugins on demand.
 037 ==> 240222 - ShowFoto Handbook menu item not working.
-038 ==> 
-
+038 ==> 211117 - Showfoto no filters or decorate menu.
+039 ==> 
 
