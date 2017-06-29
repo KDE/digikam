@@ -67,27 +67,23 @@ if (NOT APPLE)
 else()
 
     find_path(QTAV_CORE_INCLUDE_DIR
-              NAMES QtAV.h
+              NAMES QtAV/QtAV.h
               HINTS ${_qt5_install_prefix}
                     ${_qt5_install_prefix}/../../include
-                    ${_qt5_install_prefix}/../../include/QtAV
               PATH_SUFFIXES QtAV
     )
 
     find_path(QTAV_WIDGETS_INCLUDE_DIR
-              NAMES QtAVWidgets.h
+              NAMES QtAVWidgets/QtAVWidgets.h
               HINTS ${_qt5_install_prefix}
                     ${_qt5_install_prefix}/../../include
-                    ${_qt5_install_prefix}/../../include/QtAVWidgets
               PATH_SUFFIXES QtAVWidgets
     )
 
     if (QTAV_CORE_INCLUDE_DIR AND QTAV_WIDGETS_INCLUDE_DIR)
-    message(STATUS "pipo1")
         set(QTAV_INCLUDE_DIRS "${QTAV_CORE_INCLUDE_DIR};${QTAV_WIDGETS_INCLUDE_DIR}")
         set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
     else()
-    message(STATUS "pipo2")
         set(QTAV_INCLUDE_DIRS "${_qt5_install_prefix}/../../include/QtAV;${_qt5_install_prefix}/../../include/QtAVWidgets")
         set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
     endif()
@@ -99,7 +95,8 @@ find_package_handle_standard_args(QtAV REQUIRED_VARS QTAV_LIBRARIES QTAV_INCLUDE
 
 if(QTAV_FOUND)
 
-    file(READ ${QTAV_CORE_INCLUDE_DIR}/version.h QTAV_VERSION_CONTENT)
+    message(STATUS "Parse header ${QTAV_CORE_INCLUDE_DIR}/QtAV/version.h")
+    file(READ ${QTAV_CORE_INCLUDE_DIR}/QtAV/version.h QTAV_VERSION_CONTENT)
 
     string(REGEX MATCH "#define QTAV_MAJOR ([0-9]+)" QTAV_MAJOR_MATCH ${QTAV_VERSION_CONTENT})
     string(REPLACE "#define QTAV_MAJOR " "" QTAV_MAJOR_VERSION ${QTAV_MAJOR_MATCH})
