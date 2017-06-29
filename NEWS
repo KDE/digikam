@@ -52,7 +52,8 @@ BUGFIXES FROM BUGZILLA:
 040 ==> 190208 - Change image properties options should be grayed out when the check box is unchecked.
 041 ==> 147513 - it's non possible to send the file of photo because kmail don't start.
 042 ==> 144247 - No file attachment in thunderbird.
-043 ==> 
+043 ==> 134910 - Using email image tool (while having kontact open) results in a detachement of kmail from kontact.
+044 ==> 
 
 
 
