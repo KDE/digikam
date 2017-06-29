@@ -55,11 +55,11 @@ class MailProcess::Private
 public:
 
     Private()
+      : cancel(false),
+        settings(0),
+        iface(0),
+        threadImgResize(0)
     {
-        cancel          = false;
-        threadImgResize = 0;
-        settings        = 0;
-        iface           = 0;
     }
 
     bool               cancel;
@@ -268,7 +268,7 @@ void MailProcess::buildPropertiesFile()
             propertiesText.append(QLatin1String("\n"));
         }
 
-        QFile propertiesFile(d->settings->tempPath + i18n("properties.txt"));
+        QFile propertiesFile(d->settings->tempPath + QLatin1Char('/') + i18n("properties.txt"));
         QTextStream stream(&propertiesFile);
         stream.setCodec(QTextCodec::codecForName("UTF-8"));
         stream.setAutoDetectUnicode(true);
@@ -276,14 +276,15 @@ void MailProcess::buildPropertiesFile()
         if (!propertiesFile.open(QIODevice::WriteOnly))
         {
             emit signalMessage(i18n("Image properties file cannot be opened"), true);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "File open error:" << d->settings->tempPath + i18n("properties.txt");
+            qCDebug(DIGIKAM_GENERAL_LOG) << "File open error:" << propertiesFile.fileName();
             return;
         }
 
         stream << propertiesText << QLatin1String("\n");
         propertiesFile.close();
-        d->attachementFiles << QUrl(propertiesFile.fileName());
+        d->attachementFiles << QUrl::fromLocalFile(propertiesFile.fileName());
 
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Image properties file done" << propertiesFile.fileName();
         emit signalMessage(i18n("Image properties file done"), false);
     }
 }
