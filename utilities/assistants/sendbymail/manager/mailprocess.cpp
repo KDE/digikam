@@ -235,7 +235,7 @@ void MailProcess::buildPropertiesFile()
 {
     if (d->cancel) return;
 
-    if (d->iface && d->settings->addCommentsAndTags)
+    if (d->iface && d->settings->addFileProperties)
     {
         emit signalMessage(i18n("Build images properties file"), false);
 

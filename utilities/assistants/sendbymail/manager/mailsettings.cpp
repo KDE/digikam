@@ -34,14 +34,15 @@ namespace Digikam
 
 MailSettings::MailSettings()
 {
-    selMode            = IMAGES;
-    addCommentsAndTags = false;
-    imagesChangeProp   = false;
-    attLimitInMbytes   = 17;
-    imageCompression   = 75;
-    mailProgram        = THUNDERBIRD;
-    imageSize          = 1024;
-    imageFormat        = JPEG;
+    selMode           = IMAGES;
+    addFileProperties = false;
+    imagesChangeProp  = false;
+    removeMetadata    = false;
+    attLimitInMbytes  = 17;
+    imageCompression  = 75;
+    mailProgram       = THUNDERBIRD;
+    imageSize         = 1024;
+    imageFormat       = JPEG;
 }
 
 MailSettings::~MailSettings()
@@ -50,29 +51,32 @@ MailSettings::~MailSettings()
 
 void MailSettings::readSettings(KConfigGroup& group)
 {
-    selMode            = (Selection)group.readEntry("SelMode",
-                         (int)IMAGES);
-    addCommentsAndTags = group.readEntry("AddCommentsAndTags",
-                         false);
-    imagesChangeProp   = group.readEntry("ImagesChangeProp",
-                         false);
-    attLimitInMbytes   = group.readEntry("AttLimitInMbytes",
-                         17);
-    imageCompression   = group.readEntry("ImageCompression",
-                         75);
-    mailProgram        = (MailClient)group.readEntry("MailProgram",
-                         (int)THUNDERBIRD);
-    imageSize          = group.readEntry("ImageSize",
-                         1024);
-    imageFormat        = (ImageFormat)group.readEntry("ImageFormat",
-                         (int)JPEG);
+    selMode           = (Selection)group.readEntry("SelMode",
+                        (int)IMAGES);
+    addFileProperties = group.readEntry("AddCommentsAndTags",
+                        false);
+    imagesChangeProp  = group.readEntry("ImagesChangeProp",
+                        false);
+    removeMetadata    = group.readEntry("RemoveMetadata",
+                        false);
+    attLimitInMbytes  = group.readEntry("AttLimitInMbytes",
+                        17);
+    imageCompression  = group.readEntry("ImageCompression",
+                        75);
+    mailProgram       = (MailClient)group.readEntry("MailProgram",
+                        (int)THUNDERBIRD);
+    imageSize         = group.readEntry("ImageSize",
+                        1024);
+    imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
+                        (int)JPEG);
 }
 
 void MailSettings::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("SelMode",            (int)selMode);
-    group.writeEntry("AddCommentsAndTags", addCommentsAndTags);
+    group.writeEntry("AddCommentsAndTags", addFileProperties);
     group.writeEntry("ImagesChangeProp",   imagesChangeProp);
+    group.writeEntry("RemoveMetadata",     removeMetadata);
     group.writeEntry("AttLimitInMbytes",   attLimitInMbytes);
     group.writeEntry("ImageCompression",   imageCompression);
     group.writeEntry("MailProgram",        (int)mailProgram);

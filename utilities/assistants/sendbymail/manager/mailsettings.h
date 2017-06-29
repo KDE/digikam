@@ -96,8 +96,10 @@ public:
 
     QList<QUrl>      inputImages;         // Selected items to send.
 
-    bool             addCommentsAndTags;
+    bool             addFileProperties;
     bool             imagesChangeProp;
+
+    bool             removeMetadata;
 
     int              imageCompression;
 

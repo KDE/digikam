@@ -62,7 +62,8 @@ public:
         mailAgentName(0),
         imagesFormat(0),
         changeImagesProp(0),
-        addComments(0),
+        addFileProperties(0),
+        removeMetadata(0),
         imageCompression(0),
         attachmentlimit(0),
         imagesResize(0),
@@ -88,7 +89,8 @@ public:
     QComboBox*      imagesFormat;
 
     QCheckBox*      changeImagesProp;
-    QCheckBox*      addComments;
+    QCheckBox*      addFileProperties;
+    QCheckBox*      removeMetadata;
 
     QSpinBox*       imageCompression;
     QSpinBox*       attachmentlimit;
@@ -128,10 +130,10 @@ MailSettingsPage::MailSettingsPage(QWizard* const dialog, const QString& title)
 
     //---------------------------------------------
 
-    d->addComments = new QCheckBox(i18n("Attach a file with items properties"), main);
-    d->addComments->setWhatsThis(i18n("If you enable this option, all item properties "
-                                      "as Comments, Rating, or Tags, will be added as "
-                                      "an attached file."));
+    d->addFileProperties = new QCheckBox(i18n("Attach a file with items properties"), main);
+    d->addFileProperties->setWhatsThis(i18n("If you enable this option, all item properties "
+                                            "as Comments, Rating, or Tags, will be added as "
+                                            "an attached file."));
 
     // --------------------------------------------
 
@@ -209,12 +211,19 @@ MailSettingsPage::MailSettingsPage(QWizard* const dialog, const QString& title)
 
     // --------------------
 
+    d->removeMetadata = new QCheckBox(i18n("Remove all metadata"), main);
+    d->removeMetadata->setWhatsThis(i18n("If you enable this option, all metadata "
+                                         "as Exif, Iptc, and Xmp will be removed."));
+
+    // --------------------
+
     grid2->addWidget(d->labelImagesResize,     0, 0, 1, 1);
     grid2->addWidget(d->imagesResize,          0, 1, 1, 2);
     grid2->addWidget(d->labelImagesFormat,     1, 0, 1, 1);
     grid2->addWidget(d->imagesFormat,          1, 1, 1, 2);
     grid2->addWidget(d->labelImageCompression, 2, 0, 1, 1);
     grid2->addWidget(d->imageCompression,      2, 1, 1, 2);
+    grid2->addWidget(d->removeMetadata,        3, 0, 1, 2);
     grid2->setRowStretch(4, 10);
     grid2->setColumnStretch(2, 10);
     grid2->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
@@ -228,7 +237,7 @@ MailSettingsPage::MailSettingsPage(QWizard* const dialog, const QString& title)
     grid->addWidget(d->mailAgentName,       0, 1, 1, 2);
     grid->addWidget(d->labelAttachmentLimit,1, 0, 1, 1);
     grid->addWidget(d->attachmentlimit,     1, 1, 1, 4);
-    grid->addWidget(d->addComments,         2, 0, 1, 4);
+    grid->addWidget(d->addFileProperties,   2, 0, 1, 4);
     grid->addWidget(d->changeImagesProp,    3, 0, 1, 4);
     grid->addWidget(groupBox,               4, 0, 1, 4);
     grid->setRowStretch(5, 10);
@@ -254,9 +263,13 @@ MailSettingsPage::~MailSettingsPage()
 void MailSettingsPage::slotImagesFormatChanged(int i)
 {
     if (i == MailSettings::JPEG)
+    {
         d->imageCompression->setEnabled(true);
+    }
     else
+    {
         d->imageCompression->setEnabled(false);
+    }
 }
 
 void MailSettingsPage::initializePage()
@@ -267,26 +280,28 @@ void MailSettingsPage::initializePage()
 
     d->changeImagesProp->setChecked(d->settings->imagesChangeProp);
 
-    d->addComments->setChecked(d->iface ? d->settings->addCommentsAndTags : false);
-    d->addComments->setEnabled(d->iface);
+    d->addFileProperties->setChecked(d->iface ? d->settings->addFileProperties : false);
+    d->addFileProperties->setEnabled(d->iface);
 
     d->imageCompression->setValue(d->settings->imageCompression);
     d->attachmentlimit->setValue(d->settings->attLimitInMbytes);
+    d->removeMetadata->setChecked(d->settings->removeMetadata);
 
     slotImagesFormatChanged(d->imagesFormat->currentIndex());
 }
 
 bool MailSettingsPage::validatePage()
 {
-    d->settings->mailProgram        = MailSettings::MailClient(d->mailAgentName->currentIndex());
-    d->settings->imageSize          = d->imagesResize->value();
-    d->settings->imageFormat        = MailSettings::ImageFormat(d->imagesFormat->currentIndex());
+    d->settings->mailProgram       = MailSettings::MailClient(d->mailAgentName->currentIndex());
+    d->settings->imageSize         = d->imagesResize->value();
+    d->settings->imageFormat       = MailSettings::ImageFormat(d->imagesFormat->currentIndex());
 
-    d->settings->imagesChangeProp   = d->changeImagesProp->isChecked();
-    d->settings->addCommentsAndTags = d->addComments->isChecked();
+    d->settings->imagesChangeProp  = d->changeImagesProp->isChecked();
+    d->settings->addFileProperties = d->addFileProperties->isChecked();
+    d->settings->removeMetadata    = d->removeMetadata->isChecked();
 
-    d->settings->imageCompression   = d->imageCompression->value();
-    d->settings->attLimitInMbytes   = d->attachmentlimit->value();
+    d->settings->imageCompression  = d->imageCompression->value();
+    d->settings->attLimitInMbytes  = d->attachmentlimit->value();
 
     return true;
 }

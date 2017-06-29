@@ -4,6 +4,7 @@ digiKam 5.7.0 - Release date: 2017-07-23
 NEW FEATURES:
 
 General     : New tool to export albums by email.
+Genreal     : Send by Mail tool can remove all metadat to attached items.
 ImageEditor : Add SendByMail tool support.
 Showfoto    : Add SendByMail tool support.
 LightTable  : Add SendByMail tool support.
@@ -53,7 +54,8 @@ BUGFIXES FROM BUGZILLA:
 041 ==> 147513 - it's non possible to send the file of photo because kmail don't start.
 042 ==> 144247 - No file attachment in thunderbird.
 043 ==> 134910 - Using email image tool (while having kontact open) results in a detachement of kmail from kontact.
-044 ==> 
+044 ==> 377306 - Optionally remove all metadata.
+045 ==> 
 
 
 

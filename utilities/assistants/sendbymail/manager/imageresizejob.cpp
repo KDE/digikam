@@ -37,6 +37,7 @@
 #include "digikam_debug.h"
 #include "dimg.h"
 #include "previewloadthread.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -170,6 +171,25 @@ bool ImageResizeJob::imageResize(MailSettings* const settings,
             if (!img.save(destName, settings->format()))
             {
                 err = i18n("Cannot save resized image (PNG). Aborting.");
+                return false;
+            }
+        }
+
+        if (settings->removeMetadata)
+        {
+            DMetadata meta;
+
+            if (!meta.load(destName))
+            {
+                return false;
+            }
+
+            meta.clearExif();
+            meta.clearIptc();
+            meta.clearXmp();
+
+            if (!meta.save(destName))
+            {
                 return false;
             }
         }
