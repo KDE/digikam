@@ -49,5 +49,10 @@ BUGFIXES FROM BUGZILLA:
 037 ==> 240222 - ShowFoto Handbook menu item not working.
 038 ==> 211117 - Showfoto no filters or decorate menu.
 039 ==> 252796 - "Save as" doesn't reuse previously selected dialog.
-040 ==> 
+040 ==> 190208 - Change image properties options should be grayed out when the check box is unchecked.
+041 ==> 147513 - it's non possible to send the file of photo because kmail don't start.
+042 ==> 144247 - No file attachment in thunderbird.
+043 ==> 
+
+
 
