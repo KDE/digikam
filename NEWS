@@ -57,4 +57,7 @@ BUGFIXES FROM BUGZILLA:
 044 ==> 377306 - Optionally remove all metadata.
 045 ==> 204040 - Allow to share images by e-mail in message body instead as attachments.
 046 ==> 281269 - Allow to share a remote image by e-mail.
-047 ==> 
+047 ==> 346577 - digiKam does not show help when not running in KDE.
+048 ==> 256262 - "Help / digiKam Handbook" menu item is misleading.
+049 ==> 
+
