@@ -55,7 +55,5 @@ BUGFIXES FROM BUGZILLA:
 042 ==> 144247 - No file attachment in thunderbird.
 043 ==> 134910 - Using email image tool (while having kontact open) results in a detachement of kmail from kontact.
 044 ==> 377306 - Optionally remove all metadata.
-045 ==> 
-
-
-
+045 ==> 204040 - Allow to share images by e-mail in message body instead as attachments.
+046 ==> 
