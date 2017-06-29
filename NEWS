@@ -42,5 +42,6 @@ BUGFIXES FROM BUGZILLA:
 030 ==> 366086 - No attachment in mail when using resizing option.
 031 ==> 276428 - Send by emails fails for pgf pictures because they cannot be resized.
 032 ==> 191872 - Use the send image tool in showfoto.
-033 ==> 
+033 ==> 330274 - I downloaded showfoto photo program. Tried to open ShowFoto Handbook, got message could not find 'Khelpcenter'.
+034 ==> 
 
