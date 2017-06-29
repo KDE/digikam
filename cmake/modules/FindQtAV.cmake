@@ -70,6 +70,7 @@ else()
               NAMES QtAV.h
               HINTS ${_qt5_install_prefix}
                     ${_qt5_install_prefix}/../../include
+                    ${_qt5_install_prefix}/../../include/QtAV
               PATH_SUFFIXES QtAV
     )
 
@@ -77,14 +78,17 @@ else()
               NAMES QtAVWidgets.h
               HINTS ${_qt5_install_prefix}
                     ${_qt5_install_prefix}/../../include
+                    ${_qt5_install_prefix}/../../include/QtAVWidgets
               PATH_SUFFIXES QtAVWidgets
     )
 
     if (QTAV_CORE_INCLUDE_DIR AND QTAV_WIDGETS_INCLUDE_DIR)
-        set(QTAV_INCLUDE_DIRS "${QTAV_CORE_INCLUDE_DIR} ${QTAV_WIDGETS_INCLUDE_DIR}")
+    message(STATUS "pipo1")
+        set(QTAV_INCLUDE_DIRS "${QTAV_CORE_INCLUDE_DIR};${QTAV_WIDGETS_INCLUDE_DIR}")
         set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
     else()
-        set(QTAV_INCLUDE_DIRS ${_qt5_install_prefix}/../../include/QtAV ${_qt5_install_prefix}/../../include/QtAVWidgets)
+    message(STATUS "pipo2")
+        set(QTAV_INCLUDE_DIRS "${_qt5_install_prefix}/../../include/QtAV;${_qt5_install_prefix}/../../include/QtAVWidgets")
         set(QTAV_LIBRARIES    "${_qt5_install_prefix}/../QtAV.framework/QtAV;${_qt5_install_prefix}/../QtAVWidgets.framework/QtAVWidgets")
     endif()
 
