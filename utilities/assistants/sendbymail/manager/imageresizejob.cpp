@@ -43,9 +43,10 @@ namespace Digikam
 {
 
 ImageResizeJob::ImageResizeJob(int* count)
-    : ActionJob()
+    : ActionJob(),
+      m_settings(0),
+      m_count(count)
 {
-    m_count = count;
 }
 
 ImageResizeJob::~ImageResizeJob()
