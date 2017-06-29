@@ -69,6 +69,6 @@ BUGFIXES FROM BUGZILLA:
 055 ==> 108949 - send image as email attachment.
 056 ==> 297798 - digiKam crashed (Export-Email Images).
 057 ==> 337146 - Crash when exporting (to e-mail).
-058 ==> 
-
-
+058 ==> 094157 - Can't email images with special characters in file name.
+059 ==> 296776 - Crash while trying to send pictures via default email software.
+060 ==> 
