@@ -79,6 +79,7 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -583,6 +584,7 @@ void LightTableWindow::setupActions()
     createExpoBlendingAction();
     createCalendarAction();
     createVideoSlideshowAction();
+    createSendByMailAction();
 
     // Left Panel Zoom Actions
 
@@ -1870,6 +1872,12 @@ void LightTableWindow::slotVideoSlideshow()
     VidSlideWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
     w.exec();
 #endif
+}
+
+void LightTableWindow::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
 }
 
 } // namespace Digikam

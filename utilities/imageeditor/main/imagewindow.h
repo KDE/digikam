@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEWINDOW_H
-#define IMAGEWINDOW_H
+#ifndef IMAGE_WINDOW_H
+#define IMAGE_WINDOW_H
 
 // Qt includes
 
@@ -195,6 +195,7 @@ private Q_SLOTS:
     void slotExpoBlending();
     void slotPanorama();
     void slotVideoSlideshow();
+    void slotSendByMail();
 
 private:
 
@@ -204,6 +205,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* IMAGEWINDOW_H */
+#endif // IMAGE_WINDOW_H

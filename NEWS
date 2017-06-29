@@ -3,7 +3,10 @@ digiKam 5.7.0 - Release date: 2017-07-23
 
 NEW FEATURES:
 
-General : New tool to export albums by email.
+General     : New tool to export albums by email.
+ImageEditor : Add SendByMail tool support.
+Showfoto    : Add SendByMail tool support.
+LightTable  : Add SendByMail tool support.
 
 BUGFIXES FROM BUGZILLA:
 

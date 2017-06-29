@@ -105,6 +105,7 @@
 #include "dexpanderbox.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1432,6 +1433,12 @@ void ShowFoto::slotVideoSlideshow()
 #endif
 }
 
-}   // namespace ShowFoto
+void ShowFoto::slotSendByMail()
+{
+    MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+} // namespace ShowFoto
 
 #include "moc_showfoto.cpp"
