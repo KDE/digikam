@@ -233,7 +233,7 @@ int VidSlideSettings::videoBitRate() const
 
 qreal VidSlideSettings::videoFrameRate() const
 {
-    int fr;
+    qreal fr;
 
     switch(vStandard)
     {
