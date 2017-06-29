@@ -61,4 +61,11 @@ BUGFIXES FROM BUGZILLA:
 047 ==> 346577 - digiKam does not show help when not running in KDE.
 048 ==> 256262 - "Help / digiKam Handbook" menu item is misleading.
 049 ==> 099497 - Please add a dummy handbook until there's a real one.
-050 ==> 
+050 ==> 147865 - Image>email image>add image dialog does not show most thumbnails - but does show some.
+051 ==> 172651 - Send image by email missing.
+052 ==> 244649 - Cannot load and use tool such as SendMail.
+053 ==> 132313 - Provide a simple way to email photos.
+054 ==> 108956 - send image as email attachment from within the imageviewer.
+055 ==> 108949 - send image as email attachment.
+056 ==> 
+
