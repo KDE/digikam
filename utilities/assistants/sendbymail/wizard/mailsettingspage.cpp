@@ -68,6 +68,7 @@ public:
         attachmentlimit(0),
         imagesResize(0),
         wizard(0),
+        iface(0),
         settings(0)
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
