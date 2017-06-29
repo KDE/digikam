@@ -24,7 +24,7 @@
  * ============================================================ */
 
 #ifndef IMAGE_PROPERTIES_SIDEBAR_DB_H
-#define IMAGEPROPERTIESSIDEBARIMAGE_PROPERTIES_SIDEBAR_DB_HDB_H
+#define IMAGE_PROPERTIES_SIDEBAR_DB_H
 
 // Qt includes
 
