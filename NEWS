@@ -67,5 +67,8 @@ BUGFIXES FROM BUGZILLA:
 053 ==> 132313 - Provide a simple way to email photos.
 054 ==> 108956 - send image as email attachment from within the imageviewer.
 055 ==> 108949 - send image as email attachment.
-056 ==> 
+056 ==> 297798 - digiKam crashed (Export-Email Images).
+057 ==> 337146 - Crash when exporting (to e-mail).
+058 ==> 
+
 
