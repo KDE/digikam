@@ -45,5 +45,7 @@ BUGFIXES FROM BUGZILLA:
 033 ==> 330274 - I downloaded showfoto photo program. Tried to open ShowFoto Handbook, got message could not find 'Khelpcenter'.
 034 ==> 240220 - Help button not working properly.
 035 ==> 110899 - All DigiKam ImagePlugins don't work in Showfoto.
-036 ==> 
+036 ==> 132162 - Load image plugins on demand.
+037 ==> 
+
 
