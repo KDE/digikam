@@ -95,8 +95,11 @@ find_package_handle_standard_args(QtAV REQUIRED_VARS QTAV_LIBRARIES QTAV_INCLUDE
 
 if(QTAV_FOUND)
 
-    message(STATUS "Parse header ${QTAV_CORE_INCLUDE_DIR}/QtAV/version.h")
-    file(READ ${QTAV_CORE_INCLUDE_DIR}/QtAV/version.h QTAV_VERSION_CONTENT)
+    if (NOT APPLE)
+        file(READ ${QTAV_CORE_INCLUDE_DIR}/version.h QTAV_VERSION_CONTENT)
+    else()
+        file(READ ${QTAV_CORE_INCLUDE_DIR}/QtAV/version.h QTAV_VERSION_CONTENT)
+    endif()
 
     string(REGEX MATCH "#define QTAV_MAJOR ([0-9]+)" QTAV_MAJOR_MATCH ${QTAV_VERSION_CONTENT})
     string(REPLACE "#define QTAV_MAJOR " "" QTAV_MAJOR_VERSION ${QTAV_MAJOR_MATCH})
