@@ -105,4 +105,5 @@ BUGFIXES FROM BUGZILLA:
 091 ==> 143979 - Create an mpeg slideshow fails after the encoding.
 092 ==> 121045 - Images 2 mpg.
 093 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencoderplugin-PID/" after each encoding process.
-094 ==> 
+094 ==> 101656 - Image gallery use irretating filenames foo.jpeg.jpeg for images.
+095 ==> 
