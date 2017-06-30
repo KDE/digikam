@@ -73,4 +73,11 @@ BUGFIXES FROM BUGZILLA:
 059 ==> 296776 - Crash while trying to send pictures via default email software.
 060 ==> 197341 - Html pages do not sort pictures as they are sorted in the album.
 061 ==> 116960 - Html Export tool appends ".jpg" to files who already has .jpg suffix.
-062 ==> 
+062 ==> 158083 - Html interface for camera raw images.
+063 ==> 164749 - background picture/logo for html.
+064 ==> 095115 - killer feature: recursive HTML gallery from a category.
+065 ==> 190293 - Export as html gallery has the forward button disabled before changing the selected folder.
+066 ==> 125002 - Tmp is deleted no html.
+067 ==> 127888 - Images not sorted in HTML Album Export.
+068 ==> 128125 - Album title from digiKam are not converted into html entities.
+069 ==> 
