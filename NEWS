@@ -72,4 +72,5 @@ BUGFIXES FROM BUGZILLA:
 058 ==> 094157 - Can't email images with special characters in file name.
 059 ==> 296776 - Crash while trying to send pictures via default email software.
 060 ==> 197341 - Html pages do not sort pictures as they are sorted in the album.
-061 ==> 
+061 ==> 116960 - Html Export tool appends ".jpg" to files who already has .jpg suffix.
+062 ==> 
