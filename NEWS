@@ -81,5 +81,6 @@ BUGFIXES FROM BUGZILLA:
 067 ==> 127888 - Images not sorted in HTML Album Export.
 068 ==> 128125 - Album title from digiKam are not converted into html entities.
 069 ==> 113722 - Mpeg encoding fails.
-070 ==> 
+070 ==> 118343 - Mjpeg slide stops with error.
+071 ==> 
 
