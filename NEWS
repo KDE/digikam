@@ -112,5 +112,5 @@ BUGFIXES FROM BUGZILLA:
 098 ==> 243531 - Mjpeg encoder.
 099 ==> 151115 - Error encoding image files; unable to open file.
 100 ==> 297287 - Remove metadata option when email exporting.
-101 ==> 
-
+101 ==> 112550 - Stopping encoding mjpegtools digikam error.
+102 ==> 
