@@ -114,4 +114,6 @@ BUGFIXES FROM BUGZILLA:
 100 ==> 297287 - Remove metadata option when email exporting.
 101 ==> 112550 - Stopping encoding mjpegtools digikam error.
 102 ==> 149971 - Encoding process finishes with unclear message.
-103 ==> 
+103 ==> 119425 - Works one time not twice.
+104 ==> 
+
