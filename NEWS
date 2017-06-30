@@ -52,7 +52,7 @@ BUGFIXES FROM BUGZILLA:
 038 ==> 211117 - Showfoto no filters or decorate menu.
 039 ==> 252796 - "Save as" doesn't reuse previously selected dialog.
 040 ==> 190208 - Change image properties options should be grayed out when the check box is unchecked.
-041 ==> 147513 - it's non possible to send the file of photo because kmail don't start.
+041 ==> 147513 - It's non possible to send the file of photo because kmail don't start.
 042 ==> 144247 - No file attachment in thunderbird.
 043 ==> 134910 - Using email image tool (while having kontact open) results in a detachement of kmail from kontact.
 044 ==> 377306 - Optionally remove all metadata.
@@ -65,10 +65,11 @@ BUGFIXES FROM BUGZILLA:
 051 ==> 172651 - Send image by email missing.
 052 ==> 244649 - Cannot load and use tool such as SendMail.
 053 ==> 132313 - Provide a simple way to email photos.
-054 ==> 108956 - send image as email attachment from within the imageviewer.
-055 ==> 108949 - send image as email attachment.
+054 ==> 108956 - Send image as email attachment from within the imageviewer.
+055 ==> 108949 - Send image as email attachment.
 056 ==> 297798 - digiKam crashed (Export-Email Images).
 057 ==> 337146 - Crash when exporting (to e-mail).
 058 ==> 094157 - Can't email images with special characters in file name.
 059 ==> 296776 - Crash while trying to send pictures via default email software.
-060 ==> 
+060 ==> 197341 - Html pages do not sort pictures as they are sorted in the album.
+061 ==> 
