@@ -111,4 +111,6 @@ BUGFIXES FROM BUGZILLA:
 097 ==> 154363 - Encoding MPEG file error.
 098 ==> 243531 - Mjpeg encoder.
 099 ==> 151115 - Error encoding image files; unable to open file.
-100 ==> 
+100 ==> 297287 - Remove metadata option when email exporting.
+101 ==> 
+
