@@ -84,5 +84,25 @@ BUGFIXES FROM BUGZILLA:
 070 ==> 118343 - Mjpeg slide stops with error.
 071 ==> 125413 - "create MPEG slideshow" tool fails.
 072 ==> 127532 - Images to mpg wrong directory error.
-073 ==> 
-
+073 ==> 112558 - Mpeg plugin framerate adjustment.
+074 ==> 091547 - focus stealing when 'mpeg slideshow' is selected, but mp2enc is missing.
+075 ==> 131606 - Images 2 mpg with SVCD changes the proportion of the pictures.
+076 ==> 168266 - digiKam mpeg enconding failure.
+077 ==> 116040 - Merging MPEG flux. Unable to open file for reading.
+078 ==> 114515 - Verify the existence of the MPEG output file path and the existence of the audio input file before launching the encoding process.
+079 ==> 101110 - Cannot create MPEG from photos using transitions.
+080 ==> 119070 - Difficult behaviour of MPEG slide slide show kipi plugin.
+081 ==> 127219 - Creation of mpeg slide show fails.
+082 ==> 171242 - Encoding of mpeg slideshow does not work.
+083 ==> 145771 - Gnome Desktop crashes and restarts when select Cancel option for Mpeg Slideshow plugin.
+084 ==> 145536 - MPEG SlideShow creates color lines on the first image processed.
+085 ==> 119940 - Failed when trying to create MPEG Slide Show file from some jpg images.
+086 ==> 153962 - Dependency Error the package doesn't check for the presence of mpg123.
+087 ==> 138916 - Creating MPEG slideshow fails if previously attempted - background file not found.
+088 ==> 140507 - Create MPEG diashow in HDV formats (720i/p, 1080i/p).
+089 ==> 131239 - Adjust lenght of music at mpeg.
+090 ==> 162240 - The encoder start and finish imediately and there isn't any mpeg file.
+091 ==> 143979 - Create an mpeg slideshow fails after the encoding.
+092 ==> 121045 - Images 2 mpg.
+093 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencoderplugin-PID/" after each encoding process.
+094 ==> 
