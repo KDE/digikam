@@ -115,5 +115,6 @@ BUGFIXES FROM BUGZILLA:
 101 ==> 112550 - Stopping encoding mjpegtools digikam error.
 102 ==> 149971 - Encoding process finishes with unclear message.
 103 ==> 119425 - Works one time not twice.
-104 ==> 
+104 ==> 139781 - WISH - add song loop checkbox.
+105 ==> 
 
