@@ -3,12 +3,10 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2003-11-03
- * Description : calendar widget used to preview the active template.
+ * Date        : 2017-06-27
+ * Description : a tool to create calendar.
  *
- * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
- * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
+ * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -22,43 +20,29 @@
  *
  * ============================================================ */
 
-#ifndef CAL_WIDGET_H
-#define CAL_WIDGET_H
+#ifndef CAL_INTRO_PAGE_H
+#define CAL_INTRO_PAGE_H
 
 // Qt includes
 
-#include <QWidget>
+#include <QString>
 
-class QPaintEvent;
+// Local includes
+
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class CalWidget : public QWidget
+class CalIntroPage : public DWizardPage
 {
-    Q_OBJECT
 
 public:
 
-    explicit CalWidget(QWidget* const parent);
-    ~CalWidget();
-
-    void setCurrent(int curr);
-    int current() const;
-
-public Q_SLOTS:
-
-    void recreate();
-
-protected:
-
-    void paintEvent(QPaintEvent* e);
-
-protected:
-
-    int m_current;
+    explicit CalIntroPage(QWizard* const dialog, const QString& title);
+    ~CalIntroPage();
 };
 
-} // Namespace Digikam
+} // namespace Digikam
 
-#endif // CAL_WIDGET_H
+#endif // CAL_INTRO_PAGE_H

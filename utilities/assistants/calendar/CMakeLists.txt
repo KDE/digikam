@@ -28,6 +28,7 @@ set(libcalendar_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calpainter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calprinter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print/calsystem.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calintropage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calmonthwidget.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/caltemplate.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/calwidget.cpp
