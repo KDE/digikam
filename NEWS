@@ -107,7 +107,8 @@ BUGFIXES FROM BUGZILLA:
 093 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencoderplugin-PID/" after each encoding process.
 094 ==> 101656 - Image gallery use irretating filenames foo.jpeg.jpeg for images.
 095 ==> 098968 - Cannot encode to VCD, DVD, XVCD.
-096 ==> 109739 - yuvscaler error in digiKam.
+096 ==> 109739 - Yuvscaler error in digiKam.
 097 ==> 154363 - Encoding MPEG file error.
-098 ==> 243531 - mjpegencoder.
-099 ==> 
+098 ==> 243531 - Mjpeg encoder.
+099 ==> 151115 - Error encoding image files; unable to open file.
+100 ==> 
