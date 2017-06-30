@@ -113,4 +113,5 @@ BUGFIXES FROM BUGZILLA:
 099 ==> 151115 - Error encoding image files; unable to open file.
 100 ==> 297287 - Remove metadata option when email exporting.
 101 ==> 112550 - Stopping encoding mjpegtools digikam error.
-102 ==> 
+102 ==> 149971 - Encoding process finishes with unclear message.
+103 ==> 
