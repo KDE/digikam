@@ -109,4 +109,5 @@ BUGFIXES FROM BUGZILLA:
 095 ==> 098968 - Cannot encode to VCD, DVD, XVCD.
 096 ==> 109739 - yuvscaler error in digiKam.
 097 ==> 154363 - Encoding MPEG file error.
-098 ==> 
+098 ==> 243531 - mjpegencoder.
+099 ==> 
