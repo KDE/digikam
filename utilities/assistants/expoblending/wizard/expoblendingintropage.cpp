@@ -58,7 +58,7 @@ public:
 };
 
 ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
-    : DWizardPage(dlg, i18nc("@title:window", "Welcome to Exposure Blending Tool")),
+    : DWizardPage(dlg, i18nc("@title:window", "Welcome to Stacked Images Tool")),
       d(new Private(mngr))
 {
     DVBox* const vbox   = new DVBox(this);
@@ -66,6 +66,7 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     title->setWordWrap(true);
     title->setOpenExternalLinks(true);
     title->setText(i18n("<qt>"
+                        "<p><h1><b>Welcome to Stacked Images Tool</b></h1></p>"
                         "<p>This tool fuses bracketed images with different exposure to make pseudo "
                         "<a href='http://en.wikipedia.org/wiki/High_dynamic_range_imaging'>HDR image</a>.</p>"
                         "<p>It can also be used to <a href='https://en.wikipedia.org/wiki/Focus_stacking'>merge focus bracketed stack</a> "
