@@ -8,10 +8,7 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/wizard
-                    ${CMAKE_CURRENT_SOURCE_DIR}/print
-
-                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
@@ -36,9 +33,9 @@ set(libcalendar_SRCS
 )
 
 ki18n_wrap_ui(libcalendar_SRCS
-              ui/caltemplate.ui
-              ui/calevents.ui
-              ui/calprogress.ui
+              ${CMAKE_CURRENT_SOURCE_DIR}/ui/caltemplate.ui
+              ${CMAKE_CURRENT_SOURCE_DIR}/ui/calevents.ui
+              ${CMAKE_CURRENT_SOURCE_DIR}/ui/calprogress.ui
 )
 
 add_library(calendar_src OBJECT ${libcalendar_SRCS})
