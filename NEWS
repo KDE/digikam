@@ -99,22 +99,20 @@ BUGFIXES FROM BUGZILLA:
 085 ==> 119940 - Failed when trying to create MPEG Slide Show file from some jpg images.
 086 ==> 153962 - Dependency Error the package doesn't check for the presence of mpg123.
 087 ==> 138916 - Creating MPEG slideshow fails if previously attempted - background file not found.
-088 ==> 140507 - Create MPEG diashow in HDV formats (720i/p, 1080i/p).
-089 ==> 131239 - Adjust lenght of music at mpeg.
-090 ==> 162240 - The encoder start and finish imediately and there isn't any mpeg file.
-091 ==> 143979 - Create an mpeg slideshow fails after the encoding.
-092 ==> 121045 - Images 2 mpg.
-093 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencoderplugin-PID/" after each encoding process.
-094 ==> 101656 - Image gallery use irretating filenames foo.jpeg.jpeg for images.
-095 ==> 098968 - Cannot encode to VCD, DVD, XVCD.
-096 ==> 109739 - Yuvscaler error in digiKam.
-097 ==> 154363 - Encoding MPEG file error.
-098 ==> 243531 - Mjpeg encoder.
-099 ==> 151115 - Error encoding image files; unable to open file.
-100 ==> 297287 - Remove metadata option when email exporting.
-101 ==> 112550 - Stopping encoding mjpegtools digikam error.
-102 ==> 149971 - Encoding process finishes with unclear message.
-103 ==> 119425 - Works one time not twice.
-104 ==> 139781 - WISH - add song loop checkbox.
-105 ==> 
+088 ==> 140507 - Create MPEG diagshow in HDV formats (720i/p, 1080i/p).
+089 ==> 162240 - The encoder start and finish imediately and there isn't any mpeg file.
+090 ==> 143979 - Create an mpeg slideshow fails after the encoding.
+091 ==> 121045 - Images 2 mpg.
+092 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencoderplugin-PID/" after each encoding process.
+093 ==> 101656 - Image gallery use irretating filenames foo.jpeg.jpeg for images.
+094 ==> 098968 - Cannot encode to VCD, DVD, XVCD.
+095 ==> 109739 - Yuvscaler error in digiKam.
+096 ==> 154363 - Encoding MPEG file error.
+097 ==> 243531 - Mjpeg encoder.
+098 ==> 151115 - Error encoding image files; unable to open file.
+099 ==> 297287 - Remove metadata option when email exporting.
+100 ==> 112550 - Stopping encoding mjpegtools digiKam error.
+101 ==> 149971 - Encoding process finishes with unclear message.
+102 ==> 119425 - Works one time not twice.
+103 ==> 
 
