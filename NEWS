@@ -83,5 +83,6 @@ BUGFIXES FROM BUGZILLA:
 069 ==> 113722 - Mpeg encoding fails.
 070 ==> 118343 - Mjpeg slide stops with error.
 071 ==> 125413 - "create MPEG slideshow" tool fails.
-072 ==> 
+072 ==> 127532 - Images to mpg wrong directory error.
+073 ==> 
 
