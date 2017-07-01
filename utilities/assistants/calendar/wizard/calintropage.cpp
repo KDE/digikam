@@ -53,7 +53,7 @@ CalIntroPage::CalIntroPage(QWizard* const dialog, const QString& title)
     desc->setText(i18n("<qt>"
                        "<p><h1><b>Welcome to Calendar Tool</b></h1></p>"
                        "<p>This assistant will guide you to create "
-                       "and print a calendar with a selction of images taken "
+                       "and print a calendar with a selection of images taken "
                        "from your collection.</p>"
 #ifdef HAVE_KCALENDAR
                        "<p>This tool will also permit to set specific dates "
