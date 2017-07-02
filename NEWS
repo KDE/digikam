@@ -119,5 +119,5 @@ BUGFIXES FROM BUGZILLA:
 105 ==> 381380 - Item Edit / Metadata doesn't work.
 106 ==> 381639 - Map filter (left side bar) doesn't show images anymore.
 107 ==> 149970 - MPEG slideshow : incorrect warrning about missing runtime files.
-108 ==> 
-
+108 ==> 381916 - digiKam crash when add person names.
+109 ==> 
