@@ -886,7 +886,7 @@ void DImagesList::slotRemoveItems()
 
         if (item)
         {
-            emit signalRemovingItem(item);
+            emit signalRemovingItem(d->listView->indexFromItem(item).row());
             urls.append(item->url());
 
             if (d->processItems.contains(item->url()))
@@ -1087,8 +1087,7 @@ void DImagesList::slotSaveItems()
 
             xmlWriter.writeAttribute(QString::fromLatin1("url"), lvItem->url().toDisplayString());
 
-            // emit xmlWriter, item?
-            emit signalXMLSaveItem(xmlWriter, lvItem);
+            emit signalXMLSaveItem(xmlWriter, listView()->indexFromItem(lvItem).row());
 
             xmlWriter.writeEndElement(); // Image
         }
@@ -1121,7 +1120,7 @@ void DImagesList::removeItemByUrl(const QUrl& url)
 
             if (item && item->url() == url)
             {
-                emit signalRemovingItem(item);
+                emit signalRemovingItem(d->listView->indexFromItem(item).row());
 
                 if (d->processItems.contains(item->url()))
                 {

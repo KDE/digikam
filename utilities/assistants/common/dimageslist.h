@@ -260,12 +260,12 @@ Q_SIGNALS:
     void signalMoveUpItem();
     void signalMoveDownItem();
     void signalRemovedItems(const QList<QUrl>&);
-    void signalRemovingItem(Digikam::DImagesListViewItem*);
+    void signalRemovingItem(int);
     void signalImageListChanged();
     void signalFoundRAWImages(bool);
     void signalItemClicked(QTreeWidgetItem*);
     void signalContextMenuRequested();
-    void signalXMLSaveItem(QXmlStreamWriter&, Digikam::DImagesListViewItem*);
+    void signalXMLSaveItem(QXmlStreamWriter&, int);
     void signalXMLLoadImageElement(QXmlStreamReader&);
     void signalXMLCustomElements(QXmlStreamWriter&);
     void signalXMLCustomElements(QXmlStreamReader&);
