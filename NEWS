@@ -115,5 +115,5 @@ BUGFIXES FROM BUGZILLA:
 101 ==> 149971 - Encoding process finishes with unclear message.
 102 ==> 119425 - Works one time not twice.
 103 ==> 355509 - DNGkonverter crash when trying to convert raw file from Nikon D750.
-104 ==> 
-
+104 ==> 379884 - Item Metadata Editor doesn't save changes.
+105 ==> 
