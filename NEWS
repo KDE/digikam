@@ -118,4 +118,6 @@ BUGFIXES FROM BUGZILLA:
 104 ==> 379884 - Item Metadata Editor doesn't save changes.
 105 ==> 381380 - Item Edit / Metadata doesn't work.
 106 ==> 381639 - Map filter (left side bar) doesn't show images anymore.
-107 ==> 
+107 ==> 149970 - MPEG slideshow : incorrect warrning about missing runtime files.
+108 ==> 
+
