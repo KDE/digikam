@@ -55,7 +55,7 @@ AdvPrintIntroPage::AdvPrintIntroPage(QWizard* const dialog, const QString& title
                        "<p>This assistant will guide you to assemble images "
                        "to be printed following specific templates as Photo Album, "
                        "Photo Collage, or Framed Photo.</p>"
-                       "<p>An adaptative photo collection page layout can be also used, "
+                       "<p>An adaptive photo collection page layout can be also used, "
                        "based on Atkins algorithm.</p>"
                        "</qt>"));
 
