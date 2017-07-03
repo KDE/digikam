@@ -27,6 +27,8 @@
 
 #include <QString>
 #include <QPrinter>
+#include <QList>
+#include <QUrl>
 
 // Local includes
 
@@ -51,6 +53,7 @@ public:
     QPrinter*             printer()    const;
     DImagesList*          imagesList() const;
     Ui_AdvPrintPhotoPage* ui()         const;
+    bool                  isComplete() const;
 
     void updateUi();
 
