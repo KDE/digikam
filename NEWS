@@ -121,4 +121,5 @@ BUGFIXES FROM BUGZILLA:
 106 ==> 381639 - Map filter (left side bar) doesn't show images anymore.
 107 ==> 149970 - MPEG slideshow : incorrect warrning about missing runtime files.
 108 ==> 381916 - digiKam crash when add person names.
-109 ==> 
+109 ==> 328848 - Print Assistant window not resizable nor scrollable.
+110 ==> 
