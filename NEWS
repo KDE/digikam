@@ -125,5 +125,6 @@ BUGFIXES FROM BUGZILLA:
 110 ==> 100311 - digikam crashes when using print wizard.
 112 ==> 162085 - digikam freezes while printing.
 113 ==> 160810 - digikam crop photos next button does not work.
-114 ==> 
+114 ==> 118868 - A recto-verso printing wizard.
+115 ==> 
 
