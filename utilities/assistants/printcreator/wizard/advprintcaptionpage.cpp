@@ -100,7 +100,7 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
     // -----------------------------------
 
     setPageWidget(d->captionUi);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("imagecomment")));
 }
 
 AdvPrintCaptionPage::~AdvPrintCaptionPage()
