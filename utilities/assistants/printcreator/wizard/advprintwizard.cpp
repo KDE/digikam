@@ -759,12 +759,23 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
     // %a aperture
     // %l focal length
 
-    DItemInfo info(d->iface->itemInfo(photo->m_filename));
     format.replace(QString::fromUtf8("%r"), resolution);
     format.replace(QString::fromUtf8("%f"), fi.fileName());
-    format.replace(QString::fromUtf8("%c"), info.comment());
-    format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(), 
-                                            QLocale::ShortFormat));
+
+    if (d->iface)
+    {
+        DItemInfo info(d->iface->itemInfo(photo->m_filename));
+        format.replace(QString::fromUtf8("%c"), info.comment());
+        format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
+                                                QLocale::ShortFormat));
+    }
+    else
+    {
+        format.replace(QString::fromUtf8("%c"),
+            meta.getImageComments()[QLatin1String("x-default")].caption);
+        format.replace(QString::fromUtf8("%d"),
+            QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
+    }
 
     format.replace(QString::fromUtf8("%t"),
         meta.getExifTagString("Exif.Photo.ExposureTime"));

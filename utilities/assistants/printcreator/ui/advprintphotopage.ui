@@ -529,7 +529,7 @@
             <item>
              <widget class="QCheckBox" name="m_sameCaption">
               <property name="text">
-               <string>same to all</string>
+               <string>Same to all</string>
               </property>
               <property name="checked">
                <bool>true</bool>
