@@ -100,29 +100,6 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->m_printer_choice, SIGNAL(activated(QString)),
             this, SLOT(slotOutputChanged(QString)));
 
-    // -----------------
-
-    connect(d->photoUi->m_captions, SIGNAL(activated(QString)),
-            wizard, SLOT(slotCaptionChanged(QString)));
-
-    connect(d->photoUi->m_FreeCaptionFormat , SIGNAL(editingFinished()),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_sameCaption , SIGNAL(stateChanged(int)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_font_name , SIGNAL(currentFontChanged(QFont)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_font_size , SIGNAL(valueChanged(int)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_font_color , SIGNAL(signalColorSelected(QColor)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_setDefault , SIGNAL(clicked()),
-            wizard, SLOT(slotSaveCaptionSettings()));
-
     connect(d->photoUi->BtnPreviewPageUp, SIGNAL(clicked()),
             wizard, SLOT(slotBtnPreviewPageUpClicked()));
 

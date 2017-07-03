@@ -65,6 +65,7 @@
 #include "advprintcustomdlg.h"
 #include "advprintintropage.h"
 #include "advprintphotopage.h"
+#include "advprintcaptionpage.h"
 #include "advprintcroppage.h"
 #include "digikam_debug.h"
 #include "templateicon.h"
@@ -75,6 +76,7 @@ namespace Digikam
 {
 
 const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
+const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption Settings");
 const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop photos");
 const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
@@ -87,6 +89,7 @@ public:
     {
         introPage            = 0;
         photoPage            = 0;
+        captionPage          = 0;
         cropPage             = 0;
         infopageCurrentPhoto = 0;
         currentPreviewPage   = 0;
@@ -100,6 +103,7 @@ public:
 
     AdvPrintIntroPage*        introPage;
     AdvPrintPhotoPage*        photoPage;
+    AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
 
     // Page Size in mm
@@ -125,10 +129,11 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 {
     setWindowTitle(i18n("Print Creator"));
 
-    d->iface     = iface;
-    d->introPage = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
-    d->photoPage = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
-    d->cropPage  = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
+    d->iface       = iface;
+    d->introPage   = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
+    d->photoPage   = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
+    d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
+    d->cropPage    = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
 
     // -----------------------------------
 
@@ -1145,32 +1150,32 @@ void AdvPrintWizard::manageBtnPreviewPage()
     }
 }
 
-void AdvPrintWizard::infopage_setCaptionButtons()
+void AdvPrintWizard::setCaptionButtons()
 {
     if (d->photos.size())
     {
         AdvPrintPhoto* const pPhoto = d->photos.at(d->infopageCurrentPhoto);
 
-        if (pPhoto && !d->photoPage->ui()->m_sameCaption->isChecked())
+        if (pPhoto && !d->captionPage->ui()->m_sameCaption->isChecked())
         {
-            infopage_blockCaptionButtons();
+            blockCaptionButtons();
 
             if (pPhoto->m_pAdvPrintCaptionInfo)
             {
-                d->photoPage->ui()->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_caption_color);
-                d->photoPage->ui()->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size);
-                d->photoPage->ui()->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_caption_font);
-                d->photoPage->ui()->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
-                d->photoPage->ui()->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
-                enableCaptionGroup(d->photoPage->ui()->m_captions->currentText());
+                d->captionPage->ui()->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_caption_color);
+                d->captionPage->ui()->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size);
+                d->captionPage->ui()->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_caption_font);
+                d->captionPage->ui()->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
+                d->captionPage->ui()->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
+                enableCaptionGroup(d->captionPage->ui()->m_captions->currentText());
             }
             else
             {
-                infopage_readCaptionSettings();
-                slotCaptionChanged(d->photoPage->ui()->m_captions->currentText());
+                readCaptionSettings();
+                slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
             }
 
-            infopage_blockCaptionButtons(false);
+            blockCaptionButtons(false);
         }
     }
 }
@@ -1296,9 +1301,9 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
             if (xmlReader.name() == QLatin1String("pa_caption"))
             {
-                d->photoPage->ui()->m_sameCaption->blockSignals(true);
-                d->photoPage->ui()->m_sameCaption->setCheckState( Qt::Unchecked );
-                d->photoPage->ui()->m_sameCaption->blockSignals(false);
+                d->captionPage->ui()->m_sameCaption->blockSignals(true);
+                d->captionPage->ui()->m_sameCaption->setCheckState( Qt::Unchecked );
+                d->captionPage->ui()->m_sameCaption->blockSignals(false);
 
                 //useless this item has been added now
                 if (pPhoto->m_pAdvPrintCaptionInfo)
@@ -1350,7 +1355,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_text = attr.toString();
                 }
 
-                infopage_setCaptionButtons();
+                setCaptionButtons();
             }
         }
     }
@@ -1400,7 +1405,7 @@ void AdvPrintWizard::slotImageSelected(QTreeWidgetItem* item)
     qCDebug(DIGIKAM_GENERAL_LOG) << " current row now is " << itemIndex;
     d->infopageCurrentPhoto = itemIndex;
 
-    infopage_setCaptionButtons();
+    setCaptionButtons();
 }
 
 void AdvPrintWizard::slotDecreaseCopies()
@@ -1638,15 +1643,23 @@ void AdvPrintWizard::slotPageChanged(int curr)
                 d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
         }
 
-        // update captions only the first time to avoid missing old changes when
-        // back to this page
-        if (!before)
-            slotInfoPageUpdateCaptions();
-
         // reset preview page number
         d->currentPreviewPage = 0;
         // create our photo sizes list
         previewPhotos();
+    }
+    else if (current->title() == i18n(CAPTION_PAGE_NAME))
+    {
+        // readSettings only the first time
+
+        if (!before)
+            readSettings(current->title());
+
+        // update captions only the first time to avoid missing old changes when
+        // back to this page
+
+        if (!before)
+            slotInfoPageUpdateCaptions();
     }
     else if (current->title() == i18n(CROP_PAGE_NAME))
     {
@@ -1675,12 +1688,12 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
     if (pPhoto)
     {
         if (!pPhoto->m_pAdvPrintCaptionInfo &&
-            d->photoPage->ui()->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
+            d->captionPage->ui()->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
         {
             pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
         }
         else if (pPhoto->m_pAdvPrintCaptionInfo &&
-            d->photoPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
+            d->captionPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
         {
             delete pPhoto->m_pAdvPrintCaptionInfo;
             pPhoto->m_pAdvPrintCaptionInfo = NULL;
@@ -1688,11 +1701,11 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
 
         if (pPhoto->m_pAdvPrintCaptionInfo)
         {
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_color = d->photoPage->ui()->m_font_color->color();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_size  = d->photoPage->ui()->m_font_size->value();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_font  = d->photoPage->ui()->m_font_name->currentFont();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_type  = (AdvPrintCaptionInfo::AvailableCaptions)d->photoPage->ui()->m_captions->currentIndex();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_text  = d->photoPage->ui()->m_FreeCaptionFormat->text();
+            pPhoto->m_pAdvPrintCaptionInfo->m_caption_color = d->captionPage->ui()->m_font_color->color();
+            pPhoto->m_pAdvPrintCaptionInfo->m_caption_size  = d->captionPage->ui()->m_font_size->value();
+            pPhoto->m_pAdvPrintCaptionInfo->m_caption_font  = d->captionPage->ui()->m_font_name->currentFont();
+            pPhoto->m_pAdvPrintCaptionInfo->m_caption_type  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionPage->ui()->m_captions->currentIndex();
+            pPhoto->m_pAdvPrintCaptionInfo->m_caption_text  = d->captionPage->ui()->m_FreeCaptionFormat->text();
         }
     }
 }
@@ -1701,7 +1714,7 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
 {
     if (d->photos.size())
     {
-        if (d->photoPage->ui()->m_sameCaption->isChecked())
+        if (d->captionPage->ui()->m_sameCaption->isChecked())
         {
             QList<AdvPrintPhoto*>::iterator it;
 
@@ -1740,25 +1753,28 @@ void AdvPrintWizard::enableCaptionGroup(const QString& text)
     if (text == i18n("No captions"))
     {
         fontSettingsEnabled = false;
-        d->photoPage->ui()->m_FreeCaptionFormat->setEnabled(false);
-        d->photoPage->ui()->m_free_label->setEnabled(false);
+        d->captionPage->ui()->m_FreeCaptionFormat->setEnabled(false);
+        d->captionPage->ui()->m_free_label1->setEnabled(false);
+        d->captionPage->ui()->m_free_label2->setEnabled(false);
     }
     else if (text == i18n("Free"))
     {
         fontSettingsEnabled = true;
-        d->photoPage->ui()->m_FreeCaptionFormat->setEnabled(true);
-        d->photoPage->ui()->m_free_label->setEnabled(true);
+        d->captionPage->ui()->m_FreeCaptionFormat->setEnabled(true);
+        d->captionPage->ui()->m_free_label1->setEnabled(true);
+        d->captionPage->ui()->m_free_label2->setEnabled(true);
     }
     else
     {
         fontSettingsEnabled = true;
-        d->photoPage->ui()->m_FreeCaptionFormat->setEnabled(false);
-        d->photoPage->ui()->m_free_label->setEnabled(false);
+        d->captionPage->ui()->m_FreeCaptionFormat->setEnabled(false);
+        d->captionPage->ui()->m_free_label1->setEnabled(false);
+        d->captionPage->ui()->m_free_label2->setEnabled(false);
     }
 
-    d->photoPage->ui()->m_font_name->setEnabled(fontSettingsEnabled);
-    d->photoPage->ui()->m_font_size->setEnabled(fontSettingsEnabled);
-    d->photoPage->ui()->m_font_color->setEnabled(fontSettingsEnabled);
+    d->captionPage->ui()->m_font_name->setEnabled(fontSettingsEnabled);
+    d->captionPage->ui()->m_font_size->setEnabled(fontSettingsEnabled);
+    d->captionPage->ui()->m_font_color->setEnabled(fontSettingsEnabled);
 }
 
 void AdvPrintWizard::slotCaptionChanged(const QString& text)
@@ -2089,6 +2105,10 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
         group.writeEntry(QLatin1String("IconSize"),
                          d->photoPage->ui()->ListPhotoSizes->iconSize());
     }
+    else if (pageName == i18n(CAPTION_PAGE_NAME))
+    {
+        // Nothing to do
+    }
     else if (pageName == i18n(CROP_PAGE_NAME))
     {
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
@@ -2100,27 +2120,27 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
     }
 }
 
-void AdvPrintWizard::infopage_readCaptionSettings()
+void AdvPrintWizard::readCaptionSettings()
 {
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
 
     // image captions
-    d->photoPage->ui()->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
+    d->captionPage->ui()->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
     // caption color
     QColor defColor(Qt::yellow);
     QColor color = group.readEntry(QLatin1String("CaptionColor"), defColor);
-    d->photoPage->ui()->m_font_color->setColor(color);
+    d->captionPage->ui()->m_font_color->setColor(color);
     // caption font
     QFont defFont(QLatin1String("Sans Serif"));
     QFont font = group.readEntry(QLatin1String("CaptionFont"), defFont);
-    d->photoPage->ui()->m_font_name->setCurrentFont(font.family());
+    d->captionPage->ui()->m_font_name->setCurrentFont(font.family());
     // caption size
     int fontSize = group.readEntry(QLatin1String("CaptionSize"), 4);
-    d->photoPage->ui()->m_font_size->setValue(fontSize);
+    d->captionPage->ui()->m_font_size->setValue(fontSize);
     // free caption
     QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
-    d->photoPage->ui()->m_FreeCaptionFormat->setText(captionTxt);
+    d->captionPage->ui()->m_FreeCaptionFormat->setText(captionTxt);
 }
 
 void AdvPrintWizard::readSettings(const QString& pageName)
@@ -2149,14 +2169,17 @@ void AdvPrintWizard::readSettings(const QString& pageName)
 
         // photo size
         d->savedPhotoSize = group.readEntry("PhotoSize");
-        //caption
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
-        infopage_readCaptionSettings();
+    }
+    else if (pageName == i18n(CAPTION_PAGE_NAME))
+    {
+        //caption
+        readCaptionSettings();
 
         bool same_to_all = group.readEntry("SameCaptionToAll", 0) == 1;
-        d->photoPage->ui()->m_sameCaption->setChecked(same_to_all);
+        d->captionPage->ui()->m_sameCaption->setChecked(same_to_all);
         //enable right caption stuff
-        slotCaptionChanged(d->photoPage->ui()->m_captions->currentText());
+        slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
     }
     else if (pageName == i18n(CROP_PAGE_NAME))
     {
@@ -2569,14 +2592,15 @@ void AdvPrintWizard::slotPagesetupclicked()
     previewPhotos();
 }
 
-void AdvPrintWizard::infopage_blockCaptionButtons(bool block)
+void AdvPrintWizard::blockCaptionButtons(bool block)
 {
-    d->photoPage->ui()->m_captions->blockSignals(block);
-    d->photoPage->ui()->m_free_label->blockSignals(block);
-    d->photoPage->ui()->m_sameCaption->blockSignals(block);
-    d->photoPage->ui()->m_font_name->blockSignals(block);
-    d->photoPage->ui()->m_font_size->blockSignals(block);
-    d->photoPage->ui()->m_font_color->blockSignals(block);
+    d->captionPage->ui()->m_captions->blockSignals(block);
+    d->captionPage->ui()->m_free_label1->blockSignals(block);
+    d->captionPage->ui()->m_free_label2->blockSignals(block);
+    d->captionPage->ui()->m_sameCaption->blockSignals(block);
+    d->captionPage->ui()->m_font_name->blockSignals(block);
+    d->captionPage->ui()->m_font_size->blockSignals(block);
+    d->captionPage->ui()->m_font_color->blockSignals(block);
 }
 
 void AdvPrintWizard::slotSaveCaptionSettings()
@@ -2585,17 +2609,17 @@ void AdvPrintWizard::slotSaveCaptionSettings()
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
     // image captions
-    group.writeEntry(QLatin1String("Captions"),         d->photoPage->ui()->m_captions->currentIndex());
+    group.writeEntry(QLatin1String("Captions"),         d->captionPage->ui()->m_captions->currentIndex());
     // caption color
-    group.writeEntry(QLatin1String("CaptionColor"),     d->photoPage->ui()->m_font_color->color());
+    group.writeEntry(QLatin1String("CaptionColor"),     d->captionPage->ui()->m_font_color->color());
     // caption font
-    group.writeEntry(QLatin1String("CaptionFont"),      QFont(d->photoPage->ui()->m_font_name->currentFont()));
+    group.writeEntry(QLatin1String("CaptionFont"),      QFont(d->captionPage->ui()->m_font_name->currentFont()));
     // caption size
-    group.writeEntry(QLatin1String("CaptionSize"),      d->photoPage->ui()->m_font_size->value());
+    group.writeEntry(QLatin1String("CaptionSize"),      d->captionPage->ui()->m_font_size->value());
     // free caption
-    group.writeEntry(QLatin1String("FreeCaption"),      d->photoPage->ui()->m_FreeCaptionFormat->text());
+    group.writeEntry(QLatin1String("FreeCaption"),      d->captionPage->ui()->m_FreeCaptionFormat->text());
     // same to all
-    group.writeEntry(QLatin1String("SameCaptionToAll"), (d->photoPage->ui()->m_sameCaption->isChecked() ? 1 : 0));
+    group.writeEntry(QLatin1String("SameCaptionToAll"), (d->captionPage->ui()->m_sameCaption->isChecked() ? 1 : 0));
 }
 
 } // namespace Digikam
