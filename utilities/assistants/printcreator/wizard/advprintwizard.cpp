@@ -141,9 +141,6 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     connect(button(QWizard::CancelButton), SIGNAL(clicked()),
             this, SLOT(reject()));
 
-    connect(this, SIGNAL(pageRemoved(int)),
-            this, SLOT(slotPageRemoved(int)));
-
     if (d->iface)
         setItemsList();
 }
@@ -2323,12 +2320,6 @@ void AdvPrintWizard::removeGimpFiles()
             }
         }
     }
-}
-
-//TODO not needed at the moment maybe we can remove it
-void AdvPrintWizard::slotPageRemoved(int id)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << page(id)->title();
 }
 
 // this is called when Cancel is clicked.

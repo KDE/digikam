@@ -85,7 +85,6 @@ public Q_SLOTS:
     virtual void ListPhotoSizes_selected();
 
     virtual void reject();
-    virtual void slotPageRemoved(int);
 
     virtual void pagesetupclicked();
     virtual void pagesetupdialogexit();
