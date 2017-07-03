@@ -122,5 +122,6 @@ BUGFIXES FROM BUGZILLA:
 107 ==> 149970 - MPEG slideshow : incorrect warrning about missing runtime files.
 108 ==> 381916 - digiKam crash when add person names.
 109 ==> 328848 - Print Assistant window not resizable nor scrollable.
-110 ==> 100311 - digikam crashes when using print wizard or HTML export.
-112 ==> 
+110 ==> 100311 - digikam crashes when using print wizard.
+112 ==> 162085 - digikam freezes while printing.
+113 ==> 
