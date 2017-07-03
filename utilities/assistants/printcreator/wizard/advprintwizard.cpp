@@ -59,57 +59,26 @@
 
 // Local includes
 
-#include "dwizardpage.h"
-#include "dinfointerface.h"
 #include "advprintphoto.h"
 #include "advprintutils.h"
-#include "advprintintropage.h"
-#include "templateicon.h"
 #include "advprintcustomdlg.h"
+#include "advprintintropage.h"
 #include "advprintphotopage.h"
-#include "ui_advprintcroppage.h"
+#include "advprintcroppage.h"
 #include "digikam_debug.h"
+#include "templateicon.h"
+#include "dwizardpage.h"
+#include "dinfointerface.h"
 
 namespace Digikam
 {
 
-const float FONT_HEIGHT_RATIO = 0.8F;
-
-template <class Ui_Class>
-
-class WizardUI : public QWidget, public Ui_Class
-{
-public:
-
-    WizardUI(QWidget* const parent)
-        : QWidget(parent)
-    {
-        this->setupUi(this);
-        layout()->setContentsMargins(QMargins());
-    }
-};
-
-typedef WizardUI<Ui_AdvPrintCropPage>  CropUI;
-
-class WizardPage : public DWizardPage
-{
-public:
-
-    WizardPage(DWizardDlg* const dialog, const QString& title, QWidget* const ui)
-        : DWizardPage(dialog, title)
-    {
-        setPageWidget(ui);
-        setShowLeftView(false);
-    }
-};
-
-typedef WizardPage CropPage;
-
-// ---------------------------------------------------------------------------
+const float FONT_HEIGHT_RATIO    = 0.8F;
 
 // some title name definitions (managed by translators)
 const char* photoPageName        = I18N_NOOP("Select page layout");
 const char* cropPageName         = I18N_NOOP("Crop photos");
+
 // custom page layout
 const char* customPageLayoutName = I18N_NOOP("Custom");
 
@@ -124,7 +93,6 @@ public:
         introPage            = 0;
         photoPage            = 0;
         cropPage             = 0;
-        cropUi               = 0;
         infopageCurrentPhoto = 0;
         currentPreviewPage   = 0;
         currentCropPhoto     = 0;
@@ -135,9 +103,7 @@ public:
 
     AdvPrintIntroPage*        introPage;
     AdvPrintPhotoPage*        photoPage;
-    CropPage*                 cropPage;
-
-    CropUI*                   cropUi;
+    AdvPrintCropPage*         cropPage;
 
     // Page Size in mm
     QSizeF                    pageSize;
@@ -162,42 +128,15 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 {
     setWindowTitle(i18n("Print Creator"));
 
-    d->iface       = iface;
-    d->introPage   = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
-    d->photoPage   = new AdvPrintPhotoPage(this, i18n(photoPageName));
-
-    // -----------------------------------
-
-    d->cropUi   = new CropUI(this);
-    d->cropPage = new CropPage(this, i18n(cropPageName), d->cropUi) ;
-
-    d->cropUi->BtnCropRotateRight->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-right"))
-                                           .pixmap(16, 16));
-    d->cropUi->BtnCropRotateLeft->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-left"))
-                                          .pixmap(16, 16));
-
-    connect(d->cropUi->BtnCropPrev, SIGNAL(clicked()),
-            this, SLOT(BtnCropPrev_clicked()));
-
-    connect(d->cropUi->BtnCropNext, SIGNAL(clicked()),
-            this, SLOT(BtnCropNext_clicked()));
-
-    connect(d->cropUi->BtnCropRotateRight, SIGNAL(clicked()),
-            this, SLOT(BtnCropRotateRight_clicked()));
-
-    connect(d->cropUi->BtnCropRotateLeft, SIGNAL(clicked()),
-            this, SLOT(BtnCropRotateLeft_clicked()));
-
-    connect(d->cropUi->m_disableCrop, SIGNAL(stateChanged(int)),
-            this, SLOT(crop_selection(int)));
-
-    connect(d->cropUi->BtnSaveAs, SIGNAL (clicked()),
-            this, SLOT (BtnSaveAs_clicked()));
+    d->iface     = iface;
+    d->introPage = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
+    d->photoPage = new AdvPrintPhotoPage(this, i18n(photoPageName));
+    d->cropPage  = new AdvPrintCropPage(this, i18n(cropPageName));
 
     // -----------------------------------
 
     // select a different page to force a refresh in initPhotoSizes.
-    d->pageSize    = QSizeF(-1, -1);
+    d->pageSize  = QSizeF(-1, -1);
 
     connect(this, SIGNAL(currentIdChanged(int)),
             this, SLOT(pageChanged(int)));
@@ -265,10 +204,10 @@ void AdvPrintWizard::print(const QList<QUrl>& fileList, const QString& tempPath)
     }
 
     d->tempPath = tempPath;
-    d->cropUi->BtnCropPrev->setEnabled(false);
+    d->cropPage->ui()->BtnCropPrev->setEnabled(false);
 
     if (d->photos.count() == 1)
-        d->cropUi->BtnCropNext->setEnabled(false);
+        d->cropPage->ui()->BtnCropNext->setEnabled(false);
 
     emit currentIdChanged(d->photoPage->id());
 }
@@ -923,7 +862,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             int h  = AdvPrintNint((double) photo->m_cropRegion.height() * yRatio);
             img    = img.copy(QRect(x1, y1, w, h));
         }
-        else if (!cropDisabled)       //d->cropUi->m_disableCrop->isChecked() )
+        else if (!cropDisabled)       //d->cropPage->ui()->m_disableCrop->isChecked() )
         {
             img = img.copy(photo->m_cropRegion);
         }
@@ -1056,11 +995,11 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
 void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
     AdvPrintPhotoSize* const s = d->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
-    d->cropUi->cropFrame->init(photo,
+    d->cropPage->ui()->cropFrame->init(photo,
                                  getLayout(photoIndex)->width(),
                                  getLayout(photoIndex)->height(),
                                  s->autoRotate);
-    d->cropUi->LblCropPhoto->setText(i18n("Photo %1 of %2",
+    d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                             photoIndex + 1,
                                             QString::number(d->photos.count())));
 }
@@ -1116,7 +1055,7 @@ void AdvPrintWizard::previewPhotos()
             photo->m_rotation = 0;
             int w             = s->layouts.at(count + 1)->width();
             int h             = s->layouts.at(count + 1)->height();
-            d->cropUi->cropFrame->init(photo, w, h, s->autoRotate, false);
+            d->cropPage->ui()->cropFrame->init(photo, w, h, s->autoRotate, false);
         }
 
         count++;
@@ -1142,7 +1081,7 @@ void AdvPrintWizard::previewPhotos()
         //p.setCompositionMode(QPainter::CompositionMode_Destination );
         p.fillRect(img.rect(), Qt::color0); //Qt::transparent );
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        paintOnePage(p, d->photos, s->layouts, current, d->cropUi->m_disableCrop->isChecked(), true);
+        paintOnePage(p, d->photos, s->layouts, current, d->cropPage->ui()->m_disableCrop->isChecked(), true);
         p.end();
 
         d->photoPage->ui()->BmpFirstPagePreview->clear();
@@ -1837,14 +1776,14 @@ void AdvPrintWizard::BtnCropRotateRight_clicked()
 void AdvPrintWizard::setBtnCropEnabled()
 {
     if (d->currentCropPhoto == 0)
-        d->cropUi->BtnCropPrev->setEnabled(false);
+        d->cropPage->ui()->BtnCropPrev->setEnabled(false);
     else
-        d->cropUi->BtnCropPrev->setEnabled(true);
+        d->cropPage->ui()->BtnCropPrev->setEnabled(true);
 
     if (d->currentCropPhoto == (int) d->photos.count() - 1)
-        d->cropUi->BtnCropNext->setEnabled(false);
+        d->cropPage->ui()->BtnCropNext->setEnabled(false);
     else
-        d->cropUi->BtnCropNext->setEnabled(true);
+        d->cropPage->ui()->BtnCropNext->setEnabled(true);
 }
 
 void AdvPrintWizard::BtnCropNext_clicked()
@@ -2102,7 +2041,7 @@ void AdvPrintWizard::BtnSaveAs_clicked()
     QString filename   = QFileDialog::getSaveFileName(qApp->activeWindow(),
                                                       i18n("Output Path"),
                                                       QLatin1String(".jpeg") );
-    d->cropUi->m_fileName->setText(filename);
+    d->cropPage->ui()->m_fileName->setText(filename);
 }
 
 void AdvPrintWizard::saveSettings(const QString& pageName)
@@ -2131,7 +2070,7 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
         {
             // output path
-            QString outputPath = d->cropUi->m_fileName->text();
+            QString outputPath = d->cropPage->ui()->m_fileName->text();
             group.writePathEntry(QLatin1String("OutputPath"), outputPath);
         }
     }
@@ -2204,15 +2143,15 @@ void AdvPrintWizard::readSettings(const QString& pageName)
             QUrl outputPath; // force to get current directory as default
             outputPath = QUrl(group.readPathEntry("OutputPath", outputPath.url()));
 
-            d->cropUi->m_fileName->setVisible(true);
-            d->cropUi->m_fileName->setEnabled(true);
-            d->cropUi->m_fileName->setText(outputPath.path());
-            d->cropUi->BtnSaveAs->setVisible(true);
+            d->cropPage->ui()->m_fileName->setVisible(true);
+            d->cropPage->ui()->m_fileName->setEnabled(true);
+            d->cropPage->ui()->m_fileName->setText(outputPath.path());
+            d->cropPage->ui()->BtnSaveAs->setVisible(true);
         }
         else
         {
-            d->cropUi->m_fileName->setVisible(false);
-            d->cropUi->BtnSaveAs->setVisible(false);
+            d->cropPage->ui()->m_fileName->setVisible(false);
+            d->cropPage->ui()->BtnSaveAs->setVisible(false);
 
         }
     }
@@ -2239,7 +2178,7 @@ void AdvPrintWizard::printPhotos(const QList<AdvPrintPhoto*>& photos,
                                 photos,
                                 layouts,
                                 current,
-                                d->cropUi->m_disableCrop->isChecked());
+                                d->cropPage->ui()->m_disableCrop->isChecked());
 
         if (printing)
             printer.newPage();
@@ -2326,7 +2265,7 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
                                 photos,
                                 layouts->layouts,
                                 current,
-                                d->cropUi->m_disableCrop->isChecked());
+                                d->cropPage->ui()->m_disableCrop->isChecked());
         painter.end();
 
         if (saveFile)
@@ -2378,7 +2317,7 @@ void AdvPrintWizard::slotPageRemoved(int id)
 
 void AdvPrintWizard::crop_selection(int)
 {
-    d->cropUi->cropFrame->drawCropRectangle(!d->cropUi->m_disableCrop->isChecked());
+    d->cropPage->ui()->cropFrame->drawCropRectangle(!d->cropPage->ui()->m_disableCrop->isChecked());
     update();
 }
 
@@ -2412,7 +2351,7 @@ void AdvPrintWizard::accept()
 
         if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
         {
-            d->cropUi->cropFrame->init(photo,
+            d->cropPage->ui()->cropFrame->init(photo,
                                          getLayout(i)->width(),
                                          getLayout(i)->height(),
                                          s->autoRotate);
@@ -2525,7 +2464,7 @@ void AdvPrintWizard::accept()
     {
         // now output the items
         //TODO manage URL
-        QString path = d->cropUi->m_fileName->text();
+        QString path = d->cropPage->ui()->m_fileName->text();
 
         if (path.isEmpty())
         {
