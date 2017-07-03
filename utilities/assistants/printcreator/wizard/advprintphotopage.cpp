@@ -103,37 +103,37 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     // -----------------
 
     connect(d->photoUi->m_captions, SIGNAL(activated(QString)),
-            wizard, SLOT(captionChanged(QString)));
+            wizard, SLOT(slotCaptionChanged(QString)));
 
     connect(d->photoUi->m_FreeCaptionFormat , SIGNAL(editingFinished()),
-            wizard, SLOT(infopage_updateCaptions()));
+            wizard, SLOT(slotInfoPageUpdateCaptions()));
 
     connect(d->photoUi->m_sameCaption , SIGNAL(stateChanged(int)),
-            wizard, SLOT(infopage_updateCaptions()));
+            wizard, SLOT(slotInfoPageUpdateCaptions()));
 
     connect(d->photoUi->m_font_name , SIGNAL(currentFontChanged(QFont)),
-            wizard, SLOT(infopage_updateCaptions()));
+            wizard, SLOT(slotInfoPageUpdateCaptions()));
 
     connect(d->photoUi->m_font_size , SIGNAL(valueChanged(int)),
-            wizard, SLOT(infopage_updateCaptions()));
+            wizard, SLOT(slotInfoPageUpdateCaptions()));
 
     connect(d->photoUi->m_font_color , SIGNAL(signalColorSelected(QColor)),
-            wizard, SLOT(infopage_updateCaptions()));
+            wizard, SLOT(slotInfoPageUpdateCaptions()));
 
     connect(d->photoUi->m_setDefault , SIGNAL(clicked()),
-            wizard, SLOT(saveCaptionSettings()));
+            wizard, SLOT(slotSaveCaptionSettings()));
 
     connect(d->photoUi->BtnPreviewPageUp, SIGNAL(clicked()),
-            wizard, SLOT(BtnPreviewPageUp_clicked()));
+            wizard, SLOT(slotBtnPreviewPageUpClicked()));
 
     connect(d->photoUi->BtnPreviewPageDown, SIGNAL(clicked()),
-            wizard, SLOT(BtnPreviewPageDown_clicked()));
+            wizard, SLOT(slotBtnPreviewPageDownClicked()));
 
     connect(d->photoUi->ListPhotoSizes, SIGNAL(currentRowChanged(int)),
-            wizard, SLOT(ListPhotoSizes_selected()));
+            wizard, SLOT(slotListPhotoSizesSelected()));
 
     connect(d->photoUi->m_pagesetup, SIGNAL(clicked()),
-            wizard, SLOT(pagesetupclicked()));
+            wizard, SLOT(slotPagesetupclicked()));
 
     if (d->photoUi->mPrintList->layout())
     {
@@ -164,10 +164,10 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     d->photoUi->BmpFirstPagePreview->setAlignment(Qt::AlignHCenter);
 
     connect(d->imageList, SIGNAL(signalMoveDownItem()),
-            wizard, SLOT(BtnPrintOrderDown_clicked()));
+            wizard, SLOT(slotBtnPrintOrderDownClicked()));
 
     connect(d->imageList, SIGNAL(signalMoveUpItem()),
-            wizard, SLOT(BtnPrintOrderUp_clicked()));
+            wizard, SLOT(slotBtnPrintOrderUpClicked()));
 
     connect(d->imageList, SIGNAL(signalAddItems(QList<QUrl>)),
             wizard, SLOT(slotAddItems(QList<QUrl>)));
@@ -176,7 +176,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             wizard, SLOT(slotRemovingItem(int)));
 
     connect(d->imageList, SIGNAL(signalItemClicked(QTreeWidgetItem*)),
-            wizard, SLOT(imageSelected(QTreeWidgetItem*)));
+            wizard, SLOT(slotImageSelected(QTreeWidgetItem*)));
 
     connect(d->imageList, SIGNAL(signalContextMenuRequested()),
             wizard, SLOT(slotContextMenuRequested()));

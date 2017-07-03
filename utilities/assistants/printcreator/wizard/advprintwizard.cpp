@@ -1156,7 +1156,7 @@ void AdvPrintWizard::infopage_setCaptionButtons()
             else
             {
                 infopage_readCaptionSettings();
-                captionChanged(d->photoPage->ui()->m_captions->currentText());
+                slotCaptionChanged(d->photoPage->ui()->m_captions->currentText());
             }
 
             infopage_blockCaptionButtons(false);
@@ -1377,7 +1377,7 @@ void AdvPrintWizard::slotContextMenuRequested()
     }
 }
 
-void AdvPrintWizard::imageSelected(QTreeWidgetItem* item)
+void AdvPrintWizard::slotImageSelected(QTreeWidgetItem* item)
 {
     DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(item);
 
@@ -1536,7 +1536,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
     }
 
     d->photoPage->imagesList()->blockSignals(false);
-    infopage_updateCaptions();
+    slotInfoPageUpdateCaptions();
     //previewPhotos();
 
     if (d->photos.size())
@@ -1630,7 +1630,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
         // update captions only the first time to avoid missing old changes when
         // back to this page
         if (!before)
-            infopage_updateCaptions();
+            slotInfoPageUpdateCaptions();
 
         // reset preview page number
         d->currentPreviewPage = 0;
@@ -1686,7 +1686,7 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
     }
 }
 
-void AdvPrintWizard::infopage_updateCaptions()
+void AdvPrintWizard::slotInfoPageUpdateCaptions()
 {
     if (d->photos.size())
     {
@@ -1750,13 +1750,13 @@ void AdvPrintWizard::enableCaptionGroup(const QString& text)
     d->photoPage->ui()->m_font_color->setEnabled(fontSettingsEnabled);
 }
 
-void AdvPrintWizard::captionChanged(const QString& text)
+void AdvPrintWizard::slotCaptionChanged(const QString& text)
 {
     enableCaptionGroup(text);
-    infopage_updateCaptions();
+    slotInfoPageUpdateCaptions();
 }
 
-void AdvPrintWizard::BtnCropRotateLeft_clicked()
+void AdvPrintWizard::slotBtnCropRotateLeftClicked()
 {
     // by definition, the cropRegion should be set by now,
     // which means that after our rotation it will become invalid,
@@ -1770,7 +1770,7 @@ void AdvPrintWizard::BtnCropRotateLeft_clicked()
     updateCropFrame(photo, d->currentCropPhoto);
 }
 
-void AdvPrintWizard::BtnCropRotateRight_clicked()
+void AdvPrintWizard::slotBtnCropRotateRightClicked()
 {
     // by definition, the cropRegion should be set by now,
     // which means that after our rotation it will become invalid,
@@ -1797,7 +1797,7 @@ void AdvPrintWizard::setBtnCropEnabled()
         d->cropPage->ui()->BtnCropNext->setEnabled(true);
 }
 
-void AdvPrintWizard::BtnCropNext_clicked()
+void AdvPrintWizard::slotBtnCropNextClicked()
 {
     AdvPrintPhoto* const photo = d->photos[++d->currentCropPhoto];
     setBtnCropEnabled();
@@ -1811,7 +1811,7 @@ void AdvPrintWizard::BtnCropNext_clicked()
     updateCropFrame(photo, d->currentCropPhoto);
 }
 
-void AdvPrintWizard::BtnCropPrev_clicked()
+void AdvPrintWizard::slotBtnCropPrevClicked()
 {
     AdvPrintPhoto* const photo = d->photos[--d->currentCropPhoto];
 
@@ -1826,7 +1826,7 @@ void AdvPrintWizard::BtnCropPrev_clicked()
     updateCropFrame(photo, d->currentCropPhoto);
 }
 
-void AdvPrintWizard::BtnPrintOrderUp_clicked()
+void AdvPrintWizard::slotBtnPrintOrderUpClicked()
 {
     d->photoPage->imagesList()->blockSignals(true);
     int currentIndex = d->photoPage->imagesList()->listView()->currentIndex().row();
@@ -1838,7 +1838,7 @@ void AdvPrintWizard::BtnPrintOrderUp_clicked()
     previewPhotos();
 }
 
-void AdvPrintWizard::ListPhotoSizes_selected()
+void AdvPrintWizard::slotListPhotoSizesSelected()
 {
     AdvPrintPhotoSize* s = NULL;
     QSizeF size, sizeManaged;
@@ -2009,7 +2009,7 @@ void AdvPrintWizard::ListPhotoSizes_selected()
     previewPhotos();
 }
 
-void AdvPrintWizard::BtnPrintOrderDown_clicked()
+void AdvPrintWizard::slotBtnPrintOrderDownClicked()
 {
     d->photoPage->imagesList()->blockSignals(true);
     int currentIndex = d->photoPage->imagesList()->listView()->currentIndex().row();
@@ -2024,7 +2024,7 @@ void AdvPrintWizard::BtnPrintOrderDown_clicked()
     previewPhotos();
 }
 
-void AdvPrintWizard::BtnPreviewPageDown_clicked()
+void AdvPrintWizard::slotBtnPreviewPageDownClicked()
 {
     if (d->currentPreviewPage == 0)
         return;
@@ -2033,7 +2033,7 @@ void AdvPrintWizard::BtnPreviewPageDown_clicked()
     previewPhotos();
 }
 
-void AdvPrintWizard::BtnPreviewPageUp_clicked()
+void AdvPrintWizard::slotBtnPreviewPageUpClicked()
 {
     if (d->currentPreviewPage == getPageCount() - 1)
         return;
@@ -2042,7 +2042,7 @@ void AdvPrintWizard::BtnPreviewPageUp_clicked()
     previewPhotos();
 }
 
-void AdvPrintWizard::BtnSaveAs_clicked()
+void AdvPrintWizard::slotBtnSaveAsClicked()
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << "Save As Clicked";
     KConfig config;
@@ -2145,7 +2145,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         bool same_to_all = group.readEntry("SameCaptionToAll", 0) == 1;
         d->photoPage->ui()->m_sameCaption->setChecked(same_to_all);
         //enable right caption stuff
-        captionChanged(d->photoPage->ui()->m_captions->currentText());
+        slotCaptionChanged(d->photoPage->ui()->m_captions->currentText());
     }
     else if (pageName == i18n(CROP_PAGE_NAME))
     {
@@ -2521,7 +2521,7 @@ void AdvPrintWizard::slotPageSetupDialogExit()
 #endif
 }
 
-void AdvPrintWizard::pagesetupclicked()
+void AdvPrintWizard::slotPagesetupclicked()
 {
     delete d->pageSetupDlg;
     d->pageSetupDlg = new QPageSetupDialog(d->photoPage->printer(), this);
@@ -2568,7 +2568,7 @@ void AdvPrintWizard::infopage_blockCaptionButtons(bool block)
     d->photoPage->ui()->m_font_color->blockSignals(block);
 }
 
-void AdvPrintWizard::saveCaptionSettings()
+void AdvPrintWizard::slotSaveCaptionSettings()
 {
     // Save the current settings
     KConfig config;

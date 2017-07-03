@@ -85,19 +85,19 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
     // -----------------------------------
 
     connect(d->cropUi->BtnCropPrev, SIGNAL(clicked()),
-            wizard, SLOT(BtnCropPrev_clicked()));
+            wizard, SLOT(slotBtnCropPrevClicked()));
 
     connect(d->cropUi->BtnCropNext, SIGNAL(clicked()),
-            wizard, SLOT(BtnCropNext_clicked()));
+            wizard, SLOT(slotBtnCropNextClicked()));
 
     connect(d->cropUi->BtnCropRotateRight, SIGNAL(clicked()),
-            wizard, SLOT(BtnCropRotateRight_clicked()));
+            wizard, SLOT(slotBtnCropRotateRightClicked()));
 
     connect(d->cropUi->BtnCropRotateLeft, SIGNAL(clicked()),
-            wizard, SLOT(BtnCropRotateLeft_clicked()));
+            wizard, SLOT(slotBtnCropRotateLeftClicked()));
 
     connect(d->cropUi->BtnSaveAs, SIGNAL (clicked()),
-            wizard, SLOT (BtnSaveAs_clicked()));
+            wizard, SLOT (slotBtnSaveAsClicked()));
 
     // -----------------------------------
 

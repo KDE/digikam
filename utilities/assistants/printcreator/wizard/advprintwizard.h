@@ -68,23 +68,23 @@ public:
 
 public Q_SLOTS:
 
-    void captionChanged(const QString& text);
-    void saveCaptionSettings();
-    void BtnPrintOrderUp_clicked();
-    void BtnPrintOrderDown_clicked();
+    void slotCaptionChanged(const QString& text);
+    void slotSaveCaptionSettings();
+    void slotBtnPrintOrderUpClicked();
+    void slotBtnPrintOrderDownClicked();
 
-    void BtnPreviewPageDown_clicked();
-    void BtnPreviewPageUp_clicked();
-    void BtnCropRotateLeft_clicked();
-    void BtnCropRotateRight_clicked();
-    void BtnCropNext_clicked();
-    void BtnCropPrev_clicked();
-    void BtnSaveAs_clicked();
-    void ListPhotoSizes_selected();
+    void slotBtnPreviewPageDownClicked();
+    void slotBtnPreviewPageUpClicked();
+    void slotBtnCropRotateLeftClicked();
+    void slotBtnCropRotateRightClicked();
+    void slotBtnCropNextClicked();
+    void slotBtnCropPrevClicked();
+    void slotBtnSaveAsClicked();
+    void slotListPhotoSizesSelected();
 
-    void pagesetupclicked();
-    void imageSelected(QTreeWidgetItem*);
-    void infopage_updateCaptions();
+    void slotPagesetupclicked();
+    void slotImageSelected(QTreeWidgetItem*);
+    void slotInfoPageUpdateCaptions();
 
     void slotAddItems(const QList<QUrl>&);
     void slotRemovingItem(int);
