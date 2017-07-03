@@ -65,7 +65,6 @@ public:
     ~AdvPrintWizard();
 
     void print(const QList<QUrl>& fileList, const QString& tempPath);
-    DInfoInterface* iface() const;
 
 public Q_SLOTS:
 

@@ -2589,9 +2589,4 @@ void AdvPrintWizard::saveCaptionSettings()
     group.writeEntry(QLatin1String("SameCaptionToAll"), (d->photoPage->ui()->m_sameCaption->isChecked() ? 1 : 0));
 }
 
-DInfoInterface* AdvPrintWizard::iface() const
-{
-    return d->iface;
-}
-
 } // namespace Digikam
