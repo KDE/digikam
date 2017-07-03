@@ -106,6 +106,7 @@
 #include "calwizard.h"
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -1436,6 +1437,12 @@ void ShowFoto::slotVideoSlideshow()
 void ShowFoto::slotSendByMail()
 {
     MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ShowFoto::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
     w.exec();
 }
 

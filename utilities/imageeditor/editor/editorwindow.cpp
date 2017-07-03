@@ -831,11 +831,13 @@ void EditorWindow::setupStandardActions()
     createCalendarAction();
     createVideoSlideshowAction();
     createSendByMailAction();
+    createPrintCreatorAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
     m_calendarAction->setEnabled(false);
     m_sendByMailAction->setEnabled(false);
+    m_printCreatorAction->setEnabled(false);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(false);
@@ -1421,6 +1423,7 @@ void EditorWindow::toggleStandardActions(bool val)
     m_calendarAction->setEnabled(val);
     m_expoBlendingAction->setEnabled(val);
     m_sendByMailAction->setEnabled(val);
+    m_printCreatorAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
@@ -3018,6 +3021,7 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_expoBlendingAction,          postCategory);
     actionModel->addAction(m_sendByMailAction,            postCategory);
+    actionModel->addAction(m_printCreatorAction,          postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);

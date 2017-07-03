@@ -48,6 +48,7 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QListWidgetItem>
+#include <QTemporaryDir>
 
 // KDE includes
 
@@ -73,21 +74,16 @@
 namespace Digikam
 {
 
-
-
-// some title name definitions (managed by translators)
-
-// ---------------------------------------------------------------------------
+const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
+const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop photos");
+const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
 class AdvPrintWizard::Private
 {
 public:
 
     Private()
-      : FONT_HEIGHT_RATIO(0.8F),
-        PHOTO_PAGE_NAME(I18N_NOOP("Select page layout")),
-        CROP_PAGE_NAME(I18N_NOOP("Crop photos")),
-        CUSTOM_PAGE_LAYOUT_NAME(I18N_NOOP("Custom"))
+      : FONT_HEIGHT_RATIO(0.8F)
     {
         introPage            = 0;
         photoPage            = 0;
@@ -101,9 +97,6 @@ public:
     }
 
     const float               FONT_HEIGHT_RATIO;
-    const char*               PHOTO_PAGE_NAME;
-    const char*               CROP_PAGE_NAME;
-    const char*               CUSTOM_PAGE_LAYOUT_NAME;
 
     AdvPrintIntroPage*        introPage;
     AdvPrintPhotoPage*        photoPage;
@@ -134,8 +127,8 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     d->iface     = iface;
     d->introPage = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
-    d->photoPage = new AdvPrintPhotoPage(this, i18n(d->PHOTO_PAGE_NAME));
-    d->cropPage  = new AdvPrintCropPage(this, i18n(d->CROP_PAGE_NAME));
+    d->photoPage = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
+    d->cropPage  = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
 
     // -----------------------------------
 
@@ -150,6 +143,9 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     connect(this, SIGNAL(pageRemoved(int)),
             this, SLOT(slotPageRemoved(int)));
+
+    if (d->iface)
+        setItemsList();
 }
 
 AdvPrintWizard::~AdvPrintWizard()
@@ -191,27 +187,39 @@ void AdvPrintWizard::createPhotoGrid(AdvPrintPhotoSize* const p,
     }
 }
 
-void AdvPrintWizard::print(const QList<QUrl>& fileList, const QString& tempPath)
+void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
 {
+    QList<QUrl> list = fileList;
+
     for (int i = 0 ; i < d->photos.count() ; ++i)
+    {
         delete d->photos.at(i);
+    }
 
     d->photos.clear();
-    //d->photoPage->m_PictureInfo->setRowCount(fileList.count());
+    //d->photoPage->m_PictureInfo->setRowCount(list.count());
 
-    for (int i = 0; i < fileList.count(); ++i)
+    if (list.isEmpty() && d->iface)
+    {
+        list = d->iface->currentSelectedItems();
+    }
+
+    for (int i = 0; i < list.count(); ++i)
     {
         AdvPrintPhoto* const photo = new AdvPrintPhoto(150, d->iface);
-        photo->m_filename          = fileList[i];
+        photo->m_filename          = list[i];
         photo->m_first             = true;
         d->photos.append(photo);
     }
 
-    d->tempPath = tempPath;
+    QTemporaryDir tempPath;
+    d->tempPath = tempPath.path();
     d->cropPage->ui()->BtnCropPrev->setEnabled(false);
 
     if (d->photos.count() == 1)
+    {
         d->cropPage->ui()->BtnCropNext->setEnabled(false);
+    }
 
     emit currentIdChanged(d->photoPage->id());
 }
@@ -527,7 +535,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     }
 
     // Adding custom choice
-    QListWidgetItem* const pWItem = new QListWidgetItem(d->CUSTOM_PAGE_LAYOUT_NAME);
+    QListWidgetItem* const pWItem = new QListWidgetItem(CUSTOM_PAGE_LAYOUT_NAME);
 
     //TODO FREE STYLE ICON
     TemplateIcon ti(80, pageSize.toSize());
@@ -1463,9 +1471,9 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
         if (pPhotoToRemove)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
-                                            << pPhotoToRemove->m_filename.fileName()
-                                            << " copy number "
-                                            << copies;
+                                         << pPhotoToRemove->m_filename.fileName()
+                                         << " copy number "
+                                         << copies;
         }
 
         d->photos.removeAt(itemIndex);
@@ -1562,7 +1570,7 @@ void AdvPrintWizard::pageChanged(int curr)
 
     if (!current) return;
 
-    QWizardPage* const before  = visitedPages().isEmpty() ? 0 : page(visitedPages().last());
+    QWizardPage* const before = visitedPages().isEmpty() ? 0 : page(visitedPages().last());
 
     //Change cursor to waitCursor during transition
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -1570,12 +1578,12 @@ void AdvPrintWizard::pageChanged(int curr)
     if (before)
     {
         saveSettings(before->title());
-        qCDebug(DIGIKAM_GENERAL_LOG) << " before " << before->title();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Previous Page: " << before->title();
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << " current " << current->title();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Current Page:" << current->title();
 
-    if (current->title() == i18n(d->PHOTO_PAGE_NAME))
+    if (current->title() == i18n(PHOTO_PAGE_NAME))
     {
         // readSettings only the first time
         if (!before)
@@ -1586,7 +1594,9 @@ void AdvPrintWizard::pageChanged(int curr)
         d->photoPage->imagesList()->listView()->clear();
         QList<QUrl> list;
 
-        for (int i = 0; i < d->photos.count();++i)
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->photos.count();
+
+        for (int i = 0 ; i < d->photos.count() ; ++i)
         {
             AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
@@ -1606,7 +1616,7 @@ void AdvPrintWizard::pageChanged(int curr)
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
         // restore photoSize
 
-        if (before && d->savedPhotoSize == i18n(d->CUSTOM_PAGE_LAYOUT_NAME))
+        if (before && d->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
         {
             d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
         }
@@ -1630,7 +1640,7 @@ void AdvPrintWizard::pageChanged(int curr)
         // create our photo sizes list
         previewPhotos();
     }
-    else if (current->title() == i18n(d->CROP_PAGE_NAME))
+    else if (current->title() == i18n(CROP_PAGE_NAME))
     {
         readSettings(current->title());
         d->currentCropPhoto = 0;
@@ -1843,7 +1853,7 @@ void AdvPrintWizard::ListPhotoSizes_selected()
     QListWidgetItem* item = d->photoPage->ui()->ListPhotoSizes->item(curr);
 
     // if custom page layout we launch a dialog to choose what kind
-    if (item->text() == i18n(d->CUSTOM_PAGE_LAYOUT_NAME))
+    if (item->text() == i18n(CUSTOM_PAGE_LAYOUT_NAME))
     {
         // check if a custom layout has already been added
         if (curr >= 0 && curr < d->photosizes.size())
@@ -2056,21 +2066,23 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
 
-    if (pageName == i18n(d->PHOTO_PAGE_NAME))
+    if (pageName == i18n(PHOTO_PAGE_NAME))
     {
         group.writeEntry(QLatin1String("Printer"),
                          d->photoPage->ui()->m_printer_choice->currentText());
-        // PhotoPage
-        // photo size
-        d->savedPhotoSize = d->photoPage->ui()->ListPhotoSizes->currentItem()->text();
+
+        if (d->photoPage->ui()->ListPhotoSizes->currentItem())
+        {
+            d->savedPhotoSize = d->photoPage->ui()->ListPhotoSizes->currentItem()->text();
+        }
+
         group.writeEntry(QLatin1String("PhotoSize"),
                          d->savedPhotoSize);
         group.writeEntry(QLatin1String("IconSize"),
                          d->photoPage->ui()->ListPhotoSizes->iconSize());
     }
-    else if (pageName == i18n(d->CROP_PAGE_NAME))
+    else if (pageName == i18n(CROP_PAGE_NAME))
     {
-        // CropPage
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
         {
             // output path
@@ -2110,7 +2122,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << pageName;
 
-    if (pageName == i18n(d->PHOTO_PAGE_NAME))
+    if (pageName == i18n(PHOTO_PAGE_NAME))
     {
         // InfoPage
         QString printerName = group.readEntry("Printer", i18n("Print to PDF"));
@@ -2138,7 +2150,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         //enable right caption stuff
         captionChanged(d->photoPage->ui()->m_captions->currentText());
     }
-    else if (pageName == i18n(d->CROP_PAGE_NAME))
+    else if (pageName == i18n(CROP_PAGE_NAME))
     {
         // CropPage
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
@@ -2541,7 +2553,7 @@ void AdvPrintWizard::pagesetupclicked()
     initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
-    if (d->savedPhotoSize == i18n(d->CUSTOM_PAGE_LAYOUT_NAME))
+    if (d->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
     {
         d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
     }

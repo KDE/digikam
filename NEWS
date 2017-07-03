@@ -5,10 +5,11 @@ NEW FEATURES:
 
 General     : Add online handbook reader not dependant of desktop.
 General     : New tool to export albums by email.
-Genreal     : Send by Mail tool can remove all metadat to attached items.
-ImageEditor : Add SendByMail tool support.
-Showfoto    : Add SendByMail tool support.
-LightTable  : Add SendByMail tool support.
+General     : New tool to create advance print layout.
+General     : Send by Mail tool can remove all metadata to attached items.
+ImageEditor : Add SendByMail and PrintCreator tools support.
+Showfoto    : Add SendByMail and PrintCreator tools support.
+LightTable  : Add SendByMail and PrintCreator tools support.
 
 BUGFIXES FROM BUGZILLA:
 

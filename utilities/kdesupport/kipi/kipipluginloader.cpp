@@ -140,6 +140,7 @@ void KipiPluginLoader::Private::loadPlugins()
 
     // These plugins are replaced by tools from core.
     ignores.append(QLatin1String("SendImages"));
+    ignores.append(QLatin1String("PrintImages"));
 
     // List of obsolete tool actions to not load
 

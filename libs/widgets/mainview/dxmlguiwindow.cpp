@@ -166,7 +166,7 @@ public:
     QString                  configGroupName;
 };
 
-// --------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
 
 DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
@@ -177,6 +177,7 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_videoslideshowAction  = 0;
     m_htmlGalleryAction     = 0;
     m_sendByMailAction      = 0;
+    m_printCreatorAction    = 0;
     m_calendarAction        = 0;
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
@@ -491,6 +492,17 @@ void DXmlGuiWindow::createSendByMailAction()
 
     connect(m_sendByMailAction, SIGNAL(triggered(bool)),
             this, SLOT(slotSendByMail()));
+}
+
+void DXmlGuiWindow::createPrintCreatorAction()
+{
+    m_printCreatorAction = new QAction(QIcon::fromTheme(QLatin1String("document-print")),
+                                    i18nc("@action", "Print Creator..."),
+                                    this);
+    actionCollection()->addAction(QLatin1String("printcreator"), m_printCreatorAction);
+
+    connect(m_printCreatorAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotPrintCreator()));
 }
 
 void DXmlGuiWindow::createHtmlGalleryAction()

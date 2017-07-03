@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-06-28
- * Description : stand alone test application for sendbymail tool.
+ * Description : stand alone test application for print creator tool.
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -27,7 +27,6 @@
 #include <QCommandLineParser>
 #include <QUrl>
 #include <QIcon>
-#include <QTemporaryDir>
 
 // Local includes
 
@@ -55,10 +54,8 @@ int main(int argc, char* argv[])
         urlList.append(QUrl::fromLocalFile(arg));
     }
 
-    QTemporaryDir tempPath;
-
     AdvPrintWizard wzrd(0);
-    wzrd.print(urlList, tempPath.path());
+    wzrd.setItemsList(urlList);
     wzrd.exec();
 
     MetaEngine::cleanupExiv2();

@@ -64,7 +64,7 @@ public:
     explicit AdvPrintWizard(QWidget* const, DInfoInterface* const iface = 0);
     ~AdvPrintWizard();
 
-    void print(const QList<QUrl>& fileList, const QString& tempPath);
+    void setItemsList(const QList<QUrl>& fileList = QList<QUrl>());
 
 public Q_SLOTS:
 

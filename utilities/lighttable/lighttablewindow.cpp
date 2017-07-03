@@ -80,6 +80,7 @@
 #include "calwizard.h"
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -585,6 +586,7 @@ void LightTableWindow::setupActions()
     createCalendarAction();
     createVideoSlideshowAction();
     createSendByMailAction();
+    createPrintCreatorAction();
 
     // Left Panel Zoom Actions
 
@@ -1877,6 +1879,12 @@ void LightTableWindow::slotVideoSlideshow()
 void LightTableWindow::slotSendByMail()
 {
     MailWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
+}
+
+void LightTableWindow::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
     w.exec();
 }
 

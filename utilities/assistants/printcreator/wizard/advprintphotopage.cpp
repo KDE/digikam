@@ -199,6 +199,8 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     setPageWidget(d->photoUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
+
+    slotOutputChanged(d->photoUi->m_printer_choice->currentText());
 }
 
 AdvPrintPhotoPage::~AdvPrintPhotoPage()
@@ -235,10 +237,8 @@ void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
     }
     else // real printer
     {
-        QList<QPrinterInfo>::iterator it;
-        //d->printerList = QPrinterInfo::availablePrinters();
-
-        for (it = d->printerList.begin(); it != d->printerList.end(); ++it)
+        for (QList<QPrinterInfo>::iterator it = d->printerList.begin() ;
+             it != d->printerList.end() ; ++it)
         {
             if (it->printerName() == text)
             {
