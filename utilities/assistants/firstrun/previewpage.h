@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class PreviewPage : public FirstRunDlgPage
+class PreviewPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit PreviewPage(FirstRunDlg* const dlg);
+    explicit PreviewPage(QWizard* const dlg);
     ~PreviewPage();
 
     void saveSettings();
@@ -48,6 +48,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
 #endif /* PREVIEW_PAGE_H */

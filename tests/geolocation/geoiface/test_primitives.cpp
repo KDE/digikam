@@ -25,10 +25,10 @@
 
 // local includes
 
-#include "geoiface_types.h"
-#include "geoiface_common.h"
+#include "geoifacetypes.h"
+#include "geoifacecommon.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 void TestPrimitives::testNoOp()
 {

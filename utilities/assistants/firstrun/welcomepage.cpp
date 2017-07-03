@@ -39,9 +39,9 @@
 namespace Digikam
 {
 
-WelcomePage::WelcomePage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("Welcome to digiKam %1",
-                                QLatin1String(digikam_version_short)))
+WelcomePage::WelcomePage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("Welcome to digiKam %1",
+                       QLatin1String(digikam_version_short)))
 {
     DVBox* const vbox   = new DVBox(this);
     QLabel* const title = new QLabel(vbox);
@@ -93,4 +93,4 @@ WelcomePage::~WelcomePage()
 {
 }
 
-}   // namespace Digikam
+} // namespace Digikam

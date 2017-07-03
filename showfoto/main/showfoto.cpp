@@ -32,7 +32,6 @@
 // Qt includes
 
 #include <QCursor>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -76,7 +75,7 @@
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imagepropertiessidebar.h"
@@ -106,6 +105,8 @@
 #include "dexpanderbox.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -117,6 +118,10 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
 #endif
 
 namespace ShowFoto
@@ -1308,7 +1313,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
 void ShowFoto::slotFileWithDefaultApplication()
 {
-    Digikam::FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
+    Digikam::DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
 }
 
 void ShowFoto::addServicesMenu()
@@ -1421,6 +1426,26 @@ void ShowFoto::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-}   // namespace ShowFoto
+void ShowFoto::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
+}
+
+void ShowFoto::slotSendByMail()
+{
+    MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ShowFoto::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+} // namespace ShowFoto
 
 #include "moc_showfoto.cpp"

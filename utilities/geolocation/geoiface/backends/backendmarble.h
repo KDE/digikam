@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-08
- * Description : Marble-backend for GeoIface
+ * Description : Marble-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -29,7 +29,7 @@
 // Local includes
 
 #include "mapbackend.h"
-#include "tracks.h"
+#include "trackmanager.h"
 
 /// @cond false
 namespace Marble
@@ -38,7 +38,7 @@ namespace Marble
 }
 /// @endcond
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendMarble : public MapBackend
@@ -139,6 +139,6 @@ private:
     Private* const d;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // BACKEND_MAP_MARBLE_H

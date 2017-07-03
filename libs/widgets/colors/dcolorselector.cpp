@@ -43,10 +43,12 @@ class Q_DECL_HIDDEN DColorSelector::Private
 public:
 
     Private()
+      : alpha(false)
     {
     }
 
     QColor color;
+    bool   alpha;
 };
 
 DColorSelector::DColorSelector(QWidget* const parent)
@@ -76,9 +78,18 @@ QColor DColorSelector::color() const
     return d->color;
 }
 
+void DColorSelector::setAlphaChannelEnabled(bool b)
+{
+    d->alpha = b;
+}
+
 void DColorSelector::slotBtnClicked()
 {
-    QColor color = QColorDialog::getColor(d->color, this);
+    QColor color = QColorDialog::getColor(d->color,
+                                          this,
+                                          QString(),
+                                          d->alpha ? QColorDialog::ShowAlphaChannel
+                                                   : QColorDialog::ColorDialogOptions());
 
     if (color.isValid())
     {

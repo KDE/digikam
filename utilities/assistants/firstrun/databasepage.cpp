@@ -57,8 +57,8 @@ public:
     DatabaseSettingsWidget* dbsettingswidget;
 };
 
-DatabasePage::DatabasePage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Configure where you will store databases</b>")),
+DatabasePage::DatabasePage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Configure where you will store databases</b>")),
       d(new Private)
 {
     d->dbsettingswidget = new DatabaseSettingsWidget(this);
@@ -97,4 +97,4 @@ bool DatabasePage::checkSettings()
     return d->dbsettingswidget->checkDatabaseSettings();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

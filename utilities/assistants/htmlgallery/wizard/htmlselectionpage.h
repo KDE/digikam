@@ -25,6 +25,8 @@
 
 // Qt includes
 
+#include <QList>
+#include <QUrl>
 #include <QString>
 
 // Local includes
@@ -44,6 +46,8 @@ public:
     void initializePage();
     bool validatePage();
     bool isComplete() const;
+
+    void setItemsList(const QList<QUrl>& urls);
 
 private:
 

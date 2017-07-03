@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESHISTORYTAB_H
-#define IMAGEPROPERTIESHISTORYTAB_H
+#ifndef IMAGE_PROPERTIES_HISTORY_TAB_H
+#define IMAGE_PROPERTIES_HISTORY_TAB_H
 
 // Qt includes
 
@@ -45,7 +45,9 @@ class DIGIKAM_EXPORT RemoveFilterAction : public QAction
 
 public:
 
-    RemoveFilterAction(const QString& label, const QModelIndex& index, QObject* const parent = 0);
+    explicit RemoveFilterAction(const QString& label,
+                                const QModelIndex& index,
+                                QObject* const parent = 0);
     ~RemoveFilterAction()
     {
     }
@@ -98,4 +100,4 @@ private:
 
 } // namespace Digikam
 
-#endif // IMAGEPROPERTIESHISTORYTAB_H
+#endif // IMAGE_PROPERTIES_HISTORY_TAB_H

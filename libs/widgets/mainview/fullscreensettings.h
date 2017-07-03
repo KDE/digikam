@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FULLSCREENSETTINGS_H
-#define FULLSCREENSETTINGS_H
+#ifndef FULL_SCREEN_SETTINGS_H
+#define FULL_SCREEN_SETTINGS_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class DIGIKAM_EXPORT FullScreenSettings : public QGroupBox
 public:
 
     explicit FullScreenSettings(int options, QWidget* const parent);
-    virtual ~FullScreenSettings();
+    ~FullScreenSettings();
 
     void readSettings(const KConfigGroup& group);
     void saveSettings(KConfigGroup& group);
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FULLSCREENSETTINGS_H
+#endif // FULL_SCREEN_SETTINGS_H

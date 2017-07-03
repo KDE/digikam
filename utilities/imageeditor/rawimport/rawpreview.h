@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWPREVIEW_H
-#define RAWPREVIEW_H
+#ifndef RAW_PREVIEW_H
+#define RAW_PREVIEW_H
 
 // Qt includes
 
@@ -50,7 +50,7 @@ class DIGIKAM_EXPORT RawPreview : public GraphicsDImgView
 
 public:
 
-    RawPreview(const QUrl& url, QWidget* const parent);
+    explicit RawPreview(const QUrl& url, QWidget* const parent);
     ~RawPreview();
 
     DImg& demosaicedImage()    const;
@@ -93,6 +93,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* RAWPREVIEW_H */
+#endif // RAW_PREVIEW_H

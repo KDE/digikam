@@ -25,8 +25,8 @@
  *
  * ============================================================ */
 
-#ifndef SHOWFOTO_H
-#define SHOWFOTO_H
+#ifndef SHOW_FOTO_H
+#define SHOW_FOTO_H
 
 // Qt includes
 
@@ -139,6 +139,9 @@ private Q_SLOTS:
     void slotPresentation();
     void slotExpoBlending();
     void slotPanorama();
+    void slotVideoSlideshow();
+    void slotSendByMail();
+    void slotPrintCreator();
 
 Q_SIGNALS:
 
@@ -153,6 +156,6 @@ private:
     Private* const d;
 };
 
-}   // namespace ShowFoto
+} // namespace ShowFoto
 
-#endif /* SHOWFOTO_H */
+#endif // SHOW_FOTO_H

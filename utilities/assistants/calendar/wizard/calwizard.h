@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2003-11-03
- * Description : main dialog.
+ * Description : a tool to create calendar.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006      by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2006      by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef CALWIZARD_H
-#define CALWIZARD_H
+#ifndef CAL_WIZARD_H
+#define CAL_WIZARD_H
 
 // Qt includes
 
@@ -47,7 +47,7 @@ class DIGIKAM_EXPORT CalWizard : public DWizardDlg
 public:
 
     explicit CalWizard(const QList<QUrl>& urlList, QWidget* const parent=0);
-    virtual ~CalWizard();
+    ~CalWizard();
 
 private:
 
@@ -65,6 +65,6 @@ private:
     Private* const d;
 };
 
-}  // Namespace Digikam
+} // Namespace Digikam
 
-#endif // CALWIZARD_H
+#endif // CAL_WIZARD_H

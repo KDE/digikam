@@ -648,6 +648,7 @@ bool TableView::needGroupResolving(ApplicationSettings::OperationType type, bool
 {
     ApplicationSettings::ApplyToEntireGroup applyAll =
             ApplicationSettings::instance()->getGroupingOperateOnAll(type);
+
     if (applyAll == ApplicationSettings::No)
     {
         return false;
@@ -687,7 +688,8 @@ bool TableView::needGroupResolving(ApplicationSettings::OperationType type, bool
 
 void TableView::rename()
 {
-    QList<QUrl>  urls = selectedUrls(ApplicationSettings::Rename);
+    bool grouping     = needGroupResolving(ApplicationSettings::Rename);
+    QList<QUrl>  urls = selectedUrls(grouping);
     NewNamesList newNamesList;
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Selected URLs to rename: " << urls;

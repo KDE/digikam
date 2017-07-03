@@ -47,7 +47,6 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>

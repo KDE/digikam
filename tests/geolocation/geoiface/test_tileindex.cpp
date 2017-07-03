@@ -21,13 +21,12 @@
  *
  * ============================================================ */
 
-#include "test_tileindex.h"
-
 // local includes
 
+#include "test_tileindex.h"
 #include "tileindex.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 void TestTileIndex::testNoOp()
 {

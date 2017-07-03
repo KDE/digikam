@@ -50,7 +50,6 @@
 
 #ifdef HAVE_MARBLE
 #include "mapwidget.h"
-using namespace GeoIface;
 #endif // HAVE_MARBLE
 
 // C ANSI includes

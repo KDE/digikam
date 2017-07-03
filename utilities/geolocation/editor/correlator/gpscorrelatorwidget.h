@@ -37,8 +37,6 @@
 
 class KConfigGroup;
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

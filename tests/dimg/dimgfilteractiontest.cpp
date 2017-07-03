@@ -65,6 +65,14 @@ void DImgFilterActionTest::testDRawDecoding()
     QVERIFY(params == params2);
 }
 
+/**
+ * The data for this test had to be regenerated because the test was failing
+ * The regeneration was performed like this:
+ * 1. Create a folder in digikam and add the DSC00636.JPG
+ * 2. Go to image editor and choose auto-levels
+ * 3. Apply first option and then Save As New Version -> Save in new Format: PNG
+ * 4. Repeat the operation until you get multiple versions of this file
+ */
 void DImgFilterActionTest::testActions()
 {
     QStringList files = imageDir().entryList(QDir::Files);
@@ -104,7 +112,6 @@ void DImgFilterActionTest::testActions()
 
                 if (cref.red() != cres.red() || cref.green() != cres.green() || cref.blue() != cres.blue())
                 {
-                    //qDebug() << x << y;
                     diff.setPixelColor(x,y, DColor(Qt::white));
                     isEqual = false;
                 }

@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWIMPORTDLG_H
-#define RAWIMPORTDLG_H
+#ifndef RAW_IMPORT_DLG_H
+#define RAW_IMPORT_DLG_H
 
 // Qt includes
 
@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT RawImport : public EditorToolThreaded
 
 public:
 
-    RawImport(const QUrl& url, QObject* const parent);
+    explicit RawImport(const QUrl& url, QObject* const parent);
     ~RawImport();
 
     DRawDecoding rawDecodingSettings()      const;
@@ -85,4 +85,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAWIMPORTDLG_H
+#endif // RAW_IMPORT_DLG_H

@@ -225,7 +225,7 @@ MapViewModelHelper::MapViewModelHelper(QItemSelectionModel* const selection,
                                        DCategorizedSortFilterProxyModel* const filterModel,
                                        QObject* const parent,
                                        const MapWidgetView::Application application)
-    : ModelHelper(parent),
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->selectionModel = selection;

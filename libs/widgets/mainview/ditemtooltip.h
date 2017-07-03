@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DITEMTOOLTIP_H
-#define DITEMTOOLTIP_H
+#ifndef DITEM_TOOL_TIP_H
+#define DITEM_TOOL_TIP_H
 
 // Qt includes
 
@@ -77,7 +77,7 @@ class DIGIKAM_EXPORT DItemToolTip : public QLabel
 public:
 
     explicit DItemToolTip(QWidget* const parent = 0);
-    virtual ~DItemToolTip();
+    ~DItemToolTip();
 
 protected:
 
@@ -102,4 +102,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DITEMTOOLTIP_H
+#endif // DITEM_TOOL_TIP_H

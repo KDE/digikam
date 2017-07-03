@@ -35,8 +35,6 @@
 #include "gpsdatacontainer.h"
 #include "bookmarksmngr.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

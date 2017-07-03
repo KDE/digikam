@@ -36,24 +36,19 @@
 
 // Local includes
 
-#include "geoiface_types.h"
-#include "modelhelper.h"
-#include "tracks.h"
+#include "geoifacetypes.h"
+#include "geomodelhelper.h"
+#include "trackmanager.h"
 #include "gpsimageitem.h"
 #include "digikam_export.h"
 
 class QAbstractItemModel;
 
-namespace GeoIface
-{
-    class MapWidget;
-}
-using namespace GeoIface;
-
 namespace Digikam
 {
 
 class GPSUndoCommand;
+class MapWidget;
 
 class DIGIKAM_EXPORT GeolocationEdit : public QDialog
 {

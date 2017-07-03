@@ -116,6 +116,10 @@ void VidSlideIntroPage::initializePage()
         d->imageGetOption->setCurrentIndex(VidSlideSettings::IMAGES);
         d->hbox->setEnabled(false);
     }
+    else
+    {
+        d->imageGetOption->setCurrentIndex(d->wizard->settings()->selMode);
+    }
 }
 
 bool VidSlideIntroPage::validatePage()

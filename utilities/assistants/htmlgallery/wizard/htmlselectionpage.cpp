@@ -110,6 +110,12 @@ HTMLSelectionPage::~HTMLSelectionPage()
     delete d;
 }
 
+
+void HTMLSelectionPage::setItemsList(const QList<QUrl>& urls)
+{
+    d->imageList->slotAddImages(urls);
+}
+
 void HTMLSelectionPage::initializePage()
 {
     d->imageList->setIface(d->iface);

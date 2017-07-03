@@ -32,6 +32,7 @@
 
 #include "vidslidesettings.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -47,6 +48,7 @@ public:
 
 Q_SIGNALS:
 
+    void signalMessage(const QString&, bool);
     void signalDone(bool);
 
 protected:

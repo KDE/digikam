@@ -1,0 +1,98 @@
+*****************************************************************************************************
+digiKam 5.6.0 - Release date: 2017-06-11
+
+NEW FEATURES:
+
+Database    : We activated database shrinking for MySQL as part of the maintenance since now we can test the affected tables for integrity.
+Searches    : Users can now restrict the results of fuzzy image/drop/sketch search to be in specific albums.
+Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
+Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
+General     : New tool to export Albums to static HTML gallery.
+General     : New tool to export Albums to video diaporama.
+HTMLGallery : New "Elegant" theme using javascript to render image as slideshow in web browser.
+HTMLGallery : New "SimpleRounded" theme that uses flat shapes with rounded corners.
+HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
+HTMLGallery : Add option to generate a Gallery from a selection of images instead an album list.
+ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+LightTable  : Add HTMLGallery, Calendar, ExpoBlending, VideSlideshow, and Panorama tools support.
+
+BUGFIXES FROM BUGZILLA:
+
+001 ==> 377432 : Crash on browsing images.
+002 ==> 377565 - Problem importing Person tags which are also "normal" tags.
+003 ==> 218297 - SETUP : Database location under control panel doesn't match when using database-directory command line option.
+004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue.
+005 ==> 378098 - Update meta data from selected images (generated outside digikam) does not work anymore.
+006 ==> 378219 - Optimize includes and polish.
+007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item.
+008 ==> 378360 - digiKam 5.5 crashes on startup after update.
+009 ==> 378626 - Export menu empty.
+010 ==> 353331 - can’t limit fuzzy-search to albums [patch].
+011 ==> 300565 - When selecting folders, subfolders are not selected.
+012 ==> 183425 - Advanced search by tags : "any tags" option does not work.
+013 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
+014 ==> 376049 - Any album appears empty on startup until I select another album to view.
+015 ==> 378836 - digiKam Crash when start searching for persons.
+016 ==> 378804 - lensfun uses only one core, pls. parallize [patch].
+017 ==> 378703 - Download page : add link to pre-version bundle repository from GDrive.
+018 ==> 379038 - Camera date Tool-Tip Option Appears Ineffective.
+019 ==> 378625 - Very slow start.
+020 ==> 379152 - Presentation mode cannot be exited/quitted.
+021 ==> 374838 - Advanced Search not finding "Not Tagged" images.
+022 ==> 379326 - Import-Tool doesn't rename properly.
+023 ==> 379442 - AppImage package does not find the files needed for panorama.
+024 ==> 379226 - digiKam Properties Metadata not shown in Editor Captions.
+025 ==> 216359 - New "floating cards" theme for html gallery [patch].
+026 ==> 319606 - New "SimpleRounded" theme for html gallery [patch].
+027 ==> 334589 - New "blue with curves" theme for html gallery [patch].
+028 ==> 379526 - Inconsistent separator use in mime setup.
+029 ==> 156900 - Allow to use selected images instead full album contents in html gallery.
+030 ==> 373247 - No chronological ordering of tags anymore.
+031 ==> 379675 - Geolocation feature links to Multimap.com and MSN Maps.
+032 ==> 140177 - HTML export plugin should autorotate images.
+033 ==> 378855 - Crashes on startup.
+034 ==> 379751 - I18N_ARGUMENT_MISSING in Edit Metadata.
+035 ==> 377197 - Customize grouping behaviour.
+036 ==> 286609 - Allow to manage images group to stitch images in a panorama.
+037 ==> 378552 - Problem with grouped images.
+038 ==> 193232 - Add advanced input side-car files support (as .pto, .pp2, .pp3, .pano, thm, etc...).
+038 ==> 379806 - ShowFoto crashes when clicking Color Effects from menu.
+039 ==> 376407 - Edit Bookmarks... Doesn't Do Anything.
+040 ==> 376391 - Add geolocation favorites to menu and shortcuts.
+041 ==> 376687 - GPS tagging usability of bookmarks.
+042 ==> 374710 - No dialogue opening on edit bookmarks in geolocation editor.
+043 ==> 376074 - Display-bookmarked-positions-on-the-map button doesn't work.
+044 ==> 139692 - Include videos to slideshow.
+045 ==> 288113 - Bookmark a GPS position is impossible.
+046 ==> 374841 - Geolocation Editor Cannot Edit Bookmarks.
+047 ==> 376251 - Number of photos in gallery.
+048 ==> 379833 - Sidecar files are not being created for some files.
+049 ==> 139693 - Include videos to slideshow.
+050 ==> 121422 - Do not open videos using external application.
+051 ==> 380260 - Sidecar files are not being created still.
+052 ==> 380342 - Add "Album sorting order" option.
+053 ==> 379956 - Can't open a file with a shell script from digiKam.
+054 ==> 375808 - Submit bug report is not working.
+055 ==> 377417 - Item - Open & Item - Open with Default Application not working for video files.
+056 ==> 376978 - The "right click->open with" does not work.
+057 ==> 361378 - Tags are not being removed from files metadata.
+058 ==> 375187 - Keywords under same tag in digikam do not match.
+059 ==> 380256 - digiKam crash when adding new collection.
+060 ==> 320725 - Video Slideshow segfaults.
+061 ==> 331625 - Trying to make a video Slideshow.
+062 ==> 337605 - Crash on "Export to Video Slide Show".
+063 ==> 324646 - digiKam hangs when producting "Video Slide Show".
+064 ==> 316791 - Starting video slideshow tool twice, the procedure will not finish any more.
+065 ==> 318297 - Creating Videos does not work.
+066 ==> 334089 - VideoSlideshow plugin port to QtAv needed.
+067 ==> 153061 - New tool to export image as video slideshow.
+068 ==> 176727 - Creation of video does not work.
+069 ==> 380507 - Menu items missing.
+070 ==> 380512 - digiKam crashes when trying to geotag a picture.
+071 ==> 380805 - Generating Gallery: "Could not load XSL file".
+072 ==> 379918 - digiKam writing tags in wrong order.
+073 ==> 380358 - ICC Profiles not detected.
+074 ==> 380949 - Bad quality image view.
+075 ==> 377842 - Export slide show as movie.
+076 ==> 379855 - QtAV is not detected but assumed present on MacOS [patch].

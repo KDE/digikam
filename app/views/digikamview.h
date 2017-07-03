@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMVIEW_H
-#define DIGIKAMVIEW_H
+#ifndef DIGIKAM_VIEW_H
+#define DIGIKAM_VIEW_H
 
 // Qt includes
 
@@ -63,7 +63,8 @@ class DigikamView : public DHBox
 
 public:
 
-    DigikamView(QWidget* const parent, DigikamModelCollection* const modelCollection);
+    explicit DigikamView(QWidget* const parent,
+                         DigikamModelCollection* const modelCollection);
     ~DigikamView();
 
     void applySettings();
@@ -333,6 +334,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // DIGIKAMVIEW_H
+#endif // DIGIKAM_VIEW_H

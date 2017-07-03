@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-08
- * Description : Internal part of the Marble-backend for GeoIface
+ * Description : Internal part of the Marble-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Michael G. Hansen <mike at mghansen dot de>
@@ -27,7 +27,7 @@
 
 // Qt includes
 
-#include <QtCore/QPointer>
+#include <QPointer>
 
 // Marble includes
 
@@ -42,7 +42,7 @@ namespace Marble
 }
 /// @endcond
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendMarble;
@@ -67,6 +67,6 @@ private:
     QPointer<BackendMarble> marbleBackend;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
 #endif // BACKEND_MAP_MARBLE_LAYER_H

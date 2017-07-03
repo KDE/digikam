@@ -28,7 +28,6 @@
 #include <QBuffer>
 #include <QFile>
 #include <QMimeData>
-#include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QIcon>
 #include <QFileDialog>

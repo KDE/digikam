@@ -62,8 +62,8 @@ public:
     QButtonGroup* openFileBehavior;
 };
 
-OpenFilePage::OpenFilePage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
+OpenFilePage::OpenFilePage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Configure Open File Behavior</b>")),
       d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -122,4 +122,4 @@ void OpenFilePage::saveSettings()
     config->sync();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

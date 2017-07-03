@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef TRASHVIEW_H
-#define TRASHVIEW_H
+#ifndef TRASH_VIEW_H
+#define TRASH_VIEW_H
 
 // Qt includes
 
@@ -104,4 +104,4 @@ public:
 
 } // namespace Digikam
 
-#endif // TRASHVIEW_H
+#endif // TRASH_VIEW_H

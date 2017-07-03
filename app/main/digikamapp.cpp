@@ -126,6 +126,8 @@
 #include "metadataedit.h"
 #include "expoblendingmanager.h"
 #include "calwizard.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -141,6 +143,10 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
 #endif
 
 #ifdef HAVE_KIPI
@@ -1341,6 +1347,9 @@ void DigikamApp::setupActions()
     createPanoramaAction();
     createHtmlGalleryAction();
     createCalendarAction();
+    createVideoSlideshowAction();
+    createSendByMailAction();
+    createPrintCreatorAction();
 
     // -----------------------------------------------------------
 
@@ -2657,6 +2666,14 @@ void DigikamApp::slotPanorama()
 #endif
 }
 
+void DigikamApp::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
+    w.exec();
+#endif
+}
+
 void DigikamApp::slotHtmlGallery()
 {
 #ifdef HAVE_HTMLGALLERY
@@ -2668,6 +2685,18 @@ void DigikamApp::slotHtmlGallery()
 void DigikamApp::slotCalendar()
 {
     CalWizard w(view()->selectedUrls(ApplicationSettings::Tools), this);
+    w.exec();
+}
+
+void DigikamApp::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
+    w.exec();
+}
+
+void DigikamApp::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new DBInfoIface(this, QList<QUrl>(), ApplicationSettings::Tools));
     w.exec();
 }
 
@@ -3362,9 +3391,15 @@ void DigikamApp::setupSelectToolsAction()
     actionModel->addAction(m_calendarAction,              postCategory);
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
+    actionModel->addAction(m_sendByMailAction,            postCategory);
+    actionModel->addAction(m_printCreatorAction,          postCategory);
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    actionModel->addAction(m_videoslideshowAction,        postCategory);
 #endif
 
 #ifdef HAVE_HTMLGALLERY

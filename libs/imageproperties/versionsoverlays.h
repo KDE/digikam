@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONSOVERLAYS_H
-#define VERSIONSOVERLAYS_H
+#ifndef VERSIONS_OVERLAYS_H
+#define VERSIONS_OVERLAYS_H
 
 #include <QString>
 #include <QIcon>
@@ -76,7 +76,10 @@ class ActionVersionsOverlay : public HoverButtonDelegateOverlay
 
 public:
 
-    ActionVersionsOverlay(QObject* const parent, const QIcon& icon, const QString& text, const QString& tip = QString());
+    explicit ActionVersionsOverlay(QObject* const parent,
+                                   const QIcon& icon,
+                                   const QString& text,
+                                   const QString& tip = QString());
     virtual void setActive(bool active);
 
     void setReferenceModel(const ImageModel* model);
@@ -110,4 +113,4 @@ protected:
 
 } // namespace Digikam
 
-#endif // VERSIONSOVERLAYS_H
+#endif // VERSIONS_OVERLAYS_H

@@ -55,6 +55,7 @@ int main(int argc, char* argv[])
     }
 
     HTMLWizard wzrd(0);
+    wzrd.setItemsList(urlList);
     wzrd.exec();
 
     MetaEngine::cleanupExiv2();

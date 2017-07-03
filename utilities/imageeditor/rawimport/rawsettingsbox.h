@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef RAWSETTINGSBOX_H
-#define RAWSETTINGSBOX_H
+#ifndef RAW_SETTINGS_BOX_H
+#define RAW_SETTINGS_BOX_H
 
 // Qt includes
 
@@ -30,8 +30,8 @@
 // Local includes
 
 #include "editortoolsettings.h"
-#include "dimg.h"
 #include "digikam_export.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -44,7 +44,7 @@ class DIGIKAM_EXPORT RawSettingsBox : public EditorToolSettings
 
 public:
 
-    RawSettingsBox(const QUrl& url, QWidget* const parent);
+    explicit RawSettingsBox(const QUrl& url, QWidget* const parent);
     ~RawSettingsBox();
 
     void setBusy(bool b);
@@ -83,4 +83,4 @@ private:
 
 } // namespace Digikam
 
-#endif // RAWSETTINGSBOX_H
+#endif // RAW_SETTINGS_BOX_H

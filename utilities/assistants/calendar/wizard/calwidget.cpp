@@ -4,8 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2003-11-03
- * Description :  calendar widget used for showing a preview
- *                of the active template.
+ * Description : calendar widget used to preview the active template.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
@@ -77,4 +76,4 @@ void CalWidget::recreate()
     update();
 }
 
-}  // Namespace Digikam
+} // Namespace Digikam

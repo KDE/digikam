@@ -31,7 +31,7 @@
 
 // geoiface includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 
 // local includes
 

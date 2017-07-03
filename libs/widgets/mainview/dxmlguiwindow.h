@@ -98,7 +98,7 @@ class DIGIKAM_EXPORT DXmlGuiWindow : public KXmlGuiWindow
 public:
 
     explicit DXmlGuiWindow(QWidget* const parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
-    virtual ~DXmlGuiWindow();
+    ~DXmlGuiWindow();
 
     /** Manage config group name used by window instance to get/set settings from config file
      */
@@ -129,9 +129,21 @@ public:
      */
     void createPanoramaAction();
 
+    /** Create Video Slideshow tool action.
+     */
+    void createVideoSlideshowAction();
+
     /** Create HTML Gallery tool action.
      */
     void createHtmlGalleryAction();
+
+    /** Create Print Creator tool action.
+     */
+    void createPrintCreatorAction();
+
+    /** Create Send by Mail tool action.
+     */
+    void createSendByMailAction();
 
     /** Create Ksane action to import from scanner.
      */
@@ -175,7 +187,10 @@ public:
     static void restoreWindowSize(QWindow* const win, const KConfigGroup& group);
     static void saveWindowSize(QWindow* const win, KConfigGroup& group);
 
-    static QAction* buildStdAction(StdActionType type, const QObject* const recvr, const char* const slot, QObject* const parent);
+    static QAction* buildStdAction(StdActionType type,
+                                   const QObject* const recvr,
+                                   const char* const slot,
+                                   QObject* const parent);
 
     /**
      * If we have some local breeze icon resource, prefer it.
@@ -189,8 +204,11 @@ protected:
     QAction*     m_presentationAction;
     QAction*     m_calendarAction;
     QAction*     m_htmlGalleryAction;
+    QAction*     m_printCreatorAction;
+    QAction*     m_sendByMailAction;
     QAction*     m_expoBlendingAction;
     QAction*     m_panoramaAction;
+    QAction*     m_videoslideshowAction;
     DLogoAction* m_animLogo;
 
 #ifdef HAVE_KSANE
@@ -274,11 +292,20 @@ private Q_SLOTS:
     // Called by Presentation tool.
     virtual void slotPresentation()            {};
 
+    // Called by SendByMail tool.
+    virtual void slotSendByMail()              {};
+
+    // Called by PrintCreator tool.
+    virtual void slotPrintCreator()            {};
+
     // Called by HTML Gallery tool.
     virtual void slotHTMLGallery()             {};
 
-    // Called by Panorama tool.
+    // Called by Calendar tool.
     virtual void slotCalendar()                {};
+
+    // Called by Video Slideshow tool.
+    virtual void slotVideoSlideshow()          {};
 
     // Called by Panorama tool.
     virtual void slotPanorama()                {};

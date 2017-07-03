@@ -93,12 +93,13 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
     : DWizardPage(dlg, i18nc("@title:window", "<b>Welcome to Panorama Tool</b>")),
       d(new Private(mngr))
 {
-    DVBox* const vbox = new DVBox(this);
+    DVBox* const vbox   = new DVBox(this);
 
     QLabel* const title = new QLabel(vbox);
     title->setWordWrap(true);
     title->setOpenExternalLinks(true);
     title->setText(i18n("<qt>"
+                        "<p><h1><b>Welcome to Panorama Tool</b></h1></p>"
                         "<p>This tool stitches several images together to create a panorama, making the "
                         "seam between images not visible.</p>"
                         "<p>This assistant will help you to configure how to import images before "
@@ -288,4 +289,4 @@ void PanoIntroPage::initializePage()
     emit completeChanged();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

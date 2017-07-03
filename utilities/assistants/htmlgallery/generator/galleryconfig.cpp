@@ -40,11 +40,15 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemtheme, QLatin1String("theme"));
 
+    // -------------------
+
     KConfigSkeleton::ItemBool* const itemuseOriginalImageAsFullImage
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("useOriginalImageAsFullImage"),
                                         m_useOriginalImageAsFullImage, false);
 
     addItem(itemuseOriginalImageAsFullImage, QLatin1String("useOriginalImageAsFullImage"));
+
+    // -------------------
 
     KConfigSkeleton::ItemBool* const itemfullResize
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("fullResize"), m_fullResize, true);
@@ -56,12 +60,13 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemfullSize, QLatin1String("fullSize"));
 
+    // -------------------
+
     QList<KConfigSkeleton::ItemEnum::Choice> valuesfullFormat;
-    {
-        KConfigSkeleton::ItemEnum::Choice choice1;
-        choice1.name = QLatin1String("JPEG");
-        valuesfullFormat.append(choice1);
-    }
+
+    KConfigSkeleton::ItemEnum::Choice choice1;
+    choice1.name = QLatin1String("JPEG");
+    valuesfullFormat.append(choice1);
 
     KConfigSkeleton::ItemEnum::Choice choice2;
     choice2.name = QLatin1String("PNG");
@@ -72,6 +77,8 @@ GalleryConfig::GalleryConfig()
                                         m_fullFormat, valuesfullFormat, EnumFullFormat::JPEG);
 
     addItem(itemfullFormat, QLatin1String("fullFormat"));
+
+    // -------------------
 
     KConfigSkeleton::ItemInt* const itemfullQuality
         = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("fullQuality"), m_fullQuality, 80);
@@ -84,17 +91,20 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemcopyOriginalImage, QLatin1String("copyOriginalImage"));
 
+    // -------------------
+
     KConfigSkeleton::ItemInt* const itemthumbnailSize
         = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("thumbnailSize"), m_thumbnailSize, 120);
 
     addItem(itemthumbnailSize, QLatin1String("thumbnailSize"));
 
+    // -------------------
+
     QList<KConfigSkeleton::ItemEnum::Choice> valuesthumbnailFormat;
-    {
-        KConfigSkeleton::ItemEnum::Choice choice3;
-        choice3.name = QLatin1String("JPEG");
-        valuesthumbnailFormat.append(choice3);
-    }
+
+    KConfigSkeleton::ItemEnum::Choice choice3;
+    choice3.name = QLatin1String("JPEG");
+    valuesthumbnailFormat.append(choice3);
 
     KConfigSkeleton::ItemEnum::Choice choice4;
     choice4.name = QLatin1String("PNG");
@@ -106,11 +116,15 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemthumbnailFormat, QLatin1String("thumbnailFormat"));
 
+    // -------------------
+
     KConfigSkeleton::ItemInt* const itemthumbnailQuality
         = new KConfigSkeleton::ItemInt(currentGroup(), QLatin1String("thumbnailQuality"),
                                        m_thumbnailQuality, 80);
 
     addItem(itemthumbnailQuality, QLatin1String("thumbnailQuality"));
+
+    // -------------------
 
     KConfigSkeleton::ItemBool* const itemthumbnailSquare
         = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("thumbnailSquare"),
@@ -118,15 +132,37 @@ GalleryConfig::GalleryConfig()
 
     addItem(itemthumbnailSquare, QLatin1String("thumbnailSquare"));
 
+    // -------------------
+
     KConfigSkeleton::ItemUrl* const itemdestUrl
         = new KConfigSkeleton::ItemUrl(currentGroup(), QLatin1String("destUrl"), m_destUrl);
 
     addItem(itemdestUrl, QLatin1String("destUrl"));
 
-    KConfigSkeleton::ItemBool* const itemopenInBrowser
-        = new KConfigSkeleton::ItemBool(currentGroup(), QLatin1String("openInBrowser"), m_openInBrowser, true);
+    // -------------------
 
-    addItem(itemopenInBrowser, QLatin1String("openInBrowser"));
+    QList<KConfigSkeleton::ItemEnum::Choice> valueswebBrowser;
+
+    KConfigSkeleton::ItemEnum::Choice choice5;
+    choice5.name = QLatin1String("NONE");
+    valueswebBrowser.append(choice5);
+
+    KConfigSkeleton::ItemEnum::Choice choice6;
+    choice6.name = QLatin1String("INTERNAL");
+    valueswebBrowser.append(choice6);
+
+    KConfigSkeleton::ItemEnum::Choice choice7;
+    choice7.name = QLatin1String("DESKTOP");
+    valueswebBrowser.append(choice7);
+
+    KConfigSkeleton::ItemEnum* const itemwebBrowser
+        = new KConfigSkeleton::ItemEnum(currentGroup(), QLatin1String("openInBrowser"),
+                                        m_openInBrowser, valueswebBrowser,
+                                        EnumWebBrowser::INTERNAL);
+
+    addItem(itemwebBrowser, QLatin1String("openInBrowser"));
+
+    // -------------------
 
     KConfigSkeleton::ItemString* const itemimageSelectionTitle
         = new KConfigSkeleton::ItemString(currentGroup(), QLatin1String("imageSelectionTitle"), m_imageSelectionTitle);
@@ -270,13 +306,13 @@ QUrl GalleryConfig::destUrl() const
     return m_destUrl;
 }
 
-void GalleryConfig::setOpenInBrowser(bool v)
+void GalleryConfig::setOpenInBrowser(int v)
 {
     if (!isImmutable(QLatin1String("openInBrowser")))
         m_openInBrowser = v;
 }
 
-bool GalleryConfig::openInBrowser() const
+int GalleryConfig::openInBrowser() const
 {
     return m_openInBrowser;
 }

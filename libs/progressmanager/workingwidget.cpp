@@ -52,18 +52,19 @@ public:
     }
 
     DWorkingPixmap pixmaps;
-    int                        currentPixmap;
-    QTimer                     timer;
+    int            currentPixmap;
+    QTimer         timer;
 };
 
 WorkingWidget::WorkingWidget(QWidget* const parent)
-    : QLabel(parent), d(new Private)
+    : QLabel(parent),
+      d(new Private)
 {
     connect(&d->timer, SIGNAL(timeout()),
-            this, SLOT(changeImage()));
+            this, SLOT(slotChangeImage()));
 
     d->timer.start(100);
-    changeImage();
+    slotChangeImage();
 }
 
 WorkingWidget::~WorkingWidget()
@@ -71,7 +72,7 @@ WorkingWidget::~WorkingWidget()
     delete d;
 }
 
-void WorkingWidget::changeImage()
+void WorkingWidget::slotChangeImage()
 {
     if (d->currentPixmap >= d->pixmaps.frameCount())
     {

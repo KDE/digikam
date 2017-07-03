@@ -58,7 +58,7 @@ public:
 };
 
 ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
-    : DWizardPage(dlg, i18nc("@title:window", "Welcome to Exposure Blending Tool")),
+    : DWizardPage(dlg, i18nc("@title:window", "Welcome to Stacked Images Tool")),
       d(new Private(mngr))
 {
     DVBox* const vbox   = new DVBox(this);
@@ -66,10 +66,11 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     title->setWordWrap(true);
     title->setOpenExternalLinks(true);
     title->setText(i18n("<qt>"
+                        "<p><h1><b>Welcome to Stacked Images Tool</b></h1></p>"
                         "<p>This tool fuses bracketed images with different exposure to make pseudo "
                         "<a href='http://en.wikipedia.org/wiki/High_dynamic_range_imaging'>HDR image</a>.</p>"
-                        "<p>It can also be used to merge focus bracketed stack to get a single image "
-                        "with increased depth of field.</p>"
+                        "<p>It can also be used to <a href='https://en.wikipedia.org/wiki/Focus_stacking'>merge focus bracketed stack</a> "
+                        "to get a single image with increased depth of field.</p>"
                         "<p>This assistant will help you to configure how to import images before "
                         "merging them to a single one.</p>"
                         "<p>Bracketed images must be taken with the same camera, "
@@ -118,4 +119,4 @@ bool ExpoBlendingIntroPage::binariesFound()
     return d->binariesWidget->allBinariesFound();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

@@ -28,12 +28,12 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-// local includes
+// Local includes
 
-#include "tracks.h"
+#include "trackmanager.h"
 #include "trackreader.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 namespace
 {

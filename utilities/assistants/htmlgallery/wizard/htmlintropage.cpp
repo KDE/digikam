@@ -115,6 +115,10 @@ void HTMLIntroPage::initializePage()
         d->imageGetOption->setCurrentIndex(GalleryInfo::IMAGES);
         d->hbox->setEnabled(false);
     }
+    else
+    {
+        d->imageGetOption->setCurrentIndex(d->info->m_getOption);
+    }
 }
 
 bool HTMLIntroPage::validatePage()

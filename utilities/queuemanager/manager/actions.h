@@ -52,7 +52,7 @@ public:
 
 public:
 
-    ActionData()
+    explicit ActionData()
     {
         status = None;
     }
@@ -65,8 +65,8 @@ public:
     QUrl         destUrl;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 Q_DECLARE_METATYPE(Digikam::ActionData)
 
-#endif /* ACTIONS_H */
+#endif // ACTIONS_H

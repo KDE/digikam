@@ -31,19 +31,19 @@
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class CollectionPage : public FirstRunDlgPage
+class CollectionPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit CollectionPage(FirstRunDlg* const dlg);
-    virtual ~CollectionPage();
+    explicit CollectionPage(QWizard* const dlg);
+    ~CollectionPage();
 
     bool checkSettings();
     void saveSettings();

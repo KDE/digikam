@@ -79,4 +79,4 @@ void DWizardDlg::saveDialogSize()
     config.sync();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

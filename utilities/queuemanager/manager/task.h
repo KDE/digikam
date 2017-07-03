@@ -45,7 +45,7 @@ class Task : public ActionJob
 
 public:
 
-    Task();
+    explicit Task();
     ~Task();
 
     void setSettings(const QueueSettings& settings);
@@ -66,7 +66,9 @@ protected:
 
 private:
 
-    void emitActionData(ActionData::ActionStatus st, const QString& mess=QString(), const QUrl& dest=QUrl());
+    void emitActionData(ActionData::ActionStatus st,
+                        const QString& mess=QString(),
+                        const QUrl& dest=QUrl());
 
 private:
 
@@ -74,6 +76,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* TASK_H */
+#endif // TASK_H

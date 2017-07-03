@@ -21,13 +21,12 @@
  *
  * ============================================================ */
 
+// Local includes
+
 #include "test_geocoordinates.h"
-
-// local includes
-
 #include "geocoordinates.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 void TestGeoCoordinates::testNoOp()
 {
