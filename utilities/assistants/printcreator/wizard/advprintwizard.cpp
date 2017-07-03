@@ -2331,12 +2331,6 @@ void AdvPrintWizard::slotPageRemoved(int id)
     qCDebug(DIGIKAM_GENERAL_LOG) << page(id)->title();
 }
 
-void AdvPrintWizard::crop_selection(int)
-{
-    d->cropPage->ui()->cropFrame->drawCropRectangle(!d->cropPage->ui()->m_disableCrop->isChecked());
-    update();
-}
-
 // this is called when Cancel is clicked.
 void AdvPrintWizard::reject()
 {

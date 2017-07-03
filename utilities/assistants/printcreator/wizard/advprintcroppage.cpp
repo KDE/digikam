@@ -25,15 +25,9 @@
 // Qt includes
 
 #include <QIcon>
-#include <QLabel>
-#include <QPrinter>
-#include <QPrinterInfo>
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
-#include <QComboBox>
-#include <QGridLayout>
-#include <QGroupBox>
 
 // KDE includes
 
@@ -85,6 +79,11 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
     d->cropUi->BtnCropRotateLeft->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-left"))
                                           .pixmap(16, 16));
 
+    connect(d->cropUi->m_disableCrop, SIGNAL(stateChanged(int)),
+            this, SLOT(slotCropSelection(int)));
+
+    // -----------------------------------
+
     connect(d->cropUi->BtnCropPrev, SIGNAL(clicked()),
             wizard, SLOT(BtnCropPrev_clicked()));
 
@@ -96,9 +95,6 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
 
     connect(d->cropUi->BtnCropRotateLeft, SIGNAL(clicked()),
             wizard, SLOT(BtnCropRotateLeft_clicked()));
-
-    connect(d->cropUi->m_disableCrop, SIGNAL(stateChanged(int)),
-            wizard, SLOT(crop_selection(int)));
 
     connect(d->cropUi->BtnSaveAs, SIGNAL (clicked()),
             wizard, SLOT (BtnSaveAs_clicked()));
@@ -122,6 +118,12 @@ Ui_AdvPrintCropPage* AdvPrintCropPage::ui() const
 void AdvPrintCropPage::updateUi()
 {
     d->cropUi->update();
+}
+
+void AdvPrintCropPage::slotCropSelection(int)
+{
+    d->cropUi->cropFrame->drawCropRectangle(!d->cropUi->m_disableCrop->isChecked());
+    updateUi();
 }
 
 } // namespace Digikam
