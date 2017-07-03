@@ -25,6 +25,7 @@ set(libprintcreator_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/advprintlayouttree.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/advprintphoto.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcropframe.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintphotopage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcustomdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintoptionspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintintropage.cpp

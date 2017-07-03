@@ -67,13 +67,12 @@ public:
     void print(const QList<QUrl>& fileList, const QString& tempPath);
     DInfoInterface* iface() const;
 
-protected Q_SLOTS:
+public Q_SLOTS:
 
     virtual void accept();
     virtual void pageChanged(int curr);
     virtual void captionChanged(const QString& text);
     virtual void saveCaptionSettings();
-    virtual void outputChanged(const QString&);
     virtual void BtnPrintOrderUp_clicked();
     virtual void BtnPrintOrderDown_clicked();
 
