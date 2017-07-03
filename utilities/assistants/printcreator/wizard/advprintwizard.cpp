@@ -532,7 +532,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     }
 
     // Adding custom choice
-    QListWidgetItem* const pWItem = new QListWidgetItem(CUSTOM_PAGE_LAYOUT_NAME);
+    QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
 
     //TODO FREE STYLE ICON
     TemplateIcon ti(80, pageSize.toSize());
