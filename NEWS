@@ -126,5 +126,5 @@ BUGFIXES FROM BUGZILLA:
 112 ==> 162085 - digikam freezes while printing.
 113 ==> 160810 - digikam crop photos next button does not work.
 114 ==> 118868 - A recto-verso printing wizard.
-115 ==> 
-
+115 ==> 308963 - Add the ability to Export photos to a PDF file.
+116 ==> 
