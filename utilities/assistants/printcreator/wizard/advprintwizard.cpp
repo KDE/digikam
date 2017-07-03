@@ -73,14 +73,9 @@
 namespace Digikam
 {
 
-const float FONT_HEIGHT_RATIO    = 0.8F;
+
 
 // some title name definitions (managed by translators)
-const char* photoPageName        = I18N_NOOP("Select page layout");
-const char* cropPageName         = I18N_NOOP("Crop photos");
-
-// custom page layout
-const char* customPageLayoutName = I18N_NOOP("Custom");
 
 // ---------------------------------------------------------------------------
 
@@ -89,6 +84,10 @@ class AdvPrintWizard::Private
 public:
 
     Private()
+      : FONT_HEIGHT_RATIO(0.8F),
+        PHOTO_PAGE_NAME(I18N_NOOP("Select page layout")),
+        CROP_PAGE_NAME(I18N_NOOP("Crop photos")),
+        CUSTOM_PAGE_LAYOUT_NAME(I18N_NOOP("Custom"))
     {
         introPage            = 0;
         photoPage            = 0;
@@ -100,6 +99,11 @@ public:
         pageSetupDlg         = 0;
         iface                = 0;
     }
+
+    const float               FONT_HEIGHT_RATIO;
+    const char*               PHOTO_PAGE_NAME;
+    const char*               CROP_PAGE_NAME;
+    const char*               CUSTOM_PAGE_LAYOUT_NAME;
 
     AdvPrintIntroPage*        introPage;
     AdvPrintPhotoPage*        photoPage;
@@ -130,8 +134,8 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     d->iface     = iface;
     d->introPage = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
-    d->photoPage = new AdvPrintPhotoPage(this, i18n(photoPageName));
-    d->cropPage  = new AdvPrintCropPage(this, i18n(cropPageName));
+    d->photoPage = new AdvPrintPhotoPage(this, i18n(d->PHOTO_PAGE_NAME));
+    d->cropPage  = new AdvPrintCropPage(this, i18n(d->CROP_PAGE_NAME));
 
     // -----------------------------------
 
@@ -523,7 +527,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     }
 
     // Adding custom choice
-    QListWidgetItem* const pWItem = new QListWidgetItem(i18n(customPageLayoutName));
+    QListWidgetItem* const pWItem = new QListWidgetItem(d->CUSTOM_PAGE_LAYOUT_NAME);
 
     //TODO FREE STYLE ICON
     TemplateIcon ti(80, pageSize.toSize());
@@ -676,7 +680,7 @@ void AdvPrintWizard::printCaption(QPainter& p,
 
     QFont font(photo->m_pAdvPrintCaptionInfo->m_caption_font);
     font.setStyleHint(QFont::SansSerif);
-    font.setPixelSize((int)(captionH * FONT_HEIGHT_RATIO));
+    font.setPixelSize((int)(captionH * d->FONT_HEIGHT_RATIO));
     font.setWeight(QFont::Normal);
 
     QFontMetrics fm(font);
@@ -1571,7 +1575,7 @@ void AdvPrintWizard::pageChanged(int curr)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << " current " << current->title();
 
-    if (current->title() == i18n(photoPageName))
+    if (current->title() == i18n(d->PHOTO_PAGE_NAME))
     {
         // readSettings only the first time
         if (!before)
@@ -1602,7 +1606,7 @@ void AdvPrintWizard::pageChanged(int curr)
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
         // restore photoSize
 
-        if (before && d->savedPhotoSize == i18n(customPageLayoutName))
+        if (before && d->savedPhotoSize == i18n(d->CUSTOM_PAGE_LAYOUT_NAME))
         {
             d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
         }
@@ -1626,7 +1630,7 @@ void AdvPrintWizard::pageChanged(int curr)
         // create our photo sizes list
         previewPhotos();
     }
-    else if (current->title() == i18n(cropPageName))
+    else if (current->title() == i18n(d->CROP_PAGE_NAME))
     {
         readSettings(current->title());
         d->currentCropPhoto = 0;
@@ -1839,7 +1843,7 @@ void AdvPrintWizard::ListPhotoSizes_selected()
     QListWidgetItem* item = d->photoPage->ui()->ListPhotoSizes->item(curr);
 
     // if custom page layout we launch a dialog to choose what kind
-    if (item->text() == i18n(customPageLayoutName))
+    if (item->text() == i18n(d->CUSTOM_PAGE_LAYOUT_NAME))
     {
         // check if a custom layout has already been added
         if (curr >= 0 && curr < d->photosizes.size())
@@ -2052,7 +2056,7 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
 
-    if (pageName == i18n(photoPageName))
+    if (pageName == i18n(d->PHOTO_PAGE_NAME))
     {
         group.writeEntry(QLatin1String("Printer"),
                          d->photoPage->ui()->m_printer_choice->currentText());
@@ -2064,7 +2068,7 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
         group.writeEntry(QLatin1String("IconSize"),
                          d->photoPage->ui()->ListPhotoSizes->iconSize());
     }
-    else if (pageName == i18n(cropPageName))
+    else if (pageName == i18n(d->CROP_PAGE_NAME))
     {
         // CropPage
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
@@ -2106,7 +2110,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << pageName;
 
-    if (pageName == i18n(photoPageName))
+    if (pageName == i18n(d->PHOTO_PAGE_NAME))
     {
         // InfoPage
         QString printerName = group.readEntry("Printer", i18n("Print to PDF"));
@@ -2134,7 +2138,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         //enable right caption stuff
         captionChanged(d->photoPage->ui()->m_captions->currentText());
     }
-    else if (pageName == i18n(cropPageName))
+    else if (pageName == i18n(d->CROP_PAGE_NAME))
     {
         // CropPage
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
@@ -2537,7 +2541,7 @@ void AdvPrintWizard::pagesetupclicked()
     initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
-    if (d->savedPhotoSize == i18n(customPageLayoutName))
+    if (d->savedPhotoSize == i18n(d->CUSTOM_PAGE_LAYOUT_NAME))
     {
         d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
     }
