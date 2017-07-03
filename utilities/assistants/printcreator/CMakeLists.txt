@@ -42,5 +42,3 @@ ki18n_wrap_ui(libprintcreator_SRCS
 )
 
 add_library(printcreator_src OBJECT ${libprintcreator_SRCS})
-
-install(DIRECTORY templates DESTINATION ${DATA_INSTALL_DIR}/digikam/)

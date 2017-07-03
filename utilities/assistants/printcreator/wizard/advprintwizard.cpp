@@ -2547,8 +2547,9 @@ void AdvPrintWizard::pagesetupclicked()
     }
     else
     {
-        QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->savedPhotoSize,
-                                                                               Qt::MatchExactly);
+        QList<QListWidgetItem*> list =
+            d->photoPage->ui()->ListPhotoSizes->findItems(d->savedPhotoSize,
+                                                          Qt::MatchExactly);
 
         if (list.count())
             d->photoPage->ui()->ListPhotoSizes->setCurrentItem(list[0]);
