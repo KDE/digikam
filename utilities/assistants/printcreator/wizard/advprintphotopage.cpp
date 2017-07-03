@@ -202,7 +202,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     // -----------------------------------
 
     setPageWidget(d->photoUi);
-    setLeftBottomPix(QIcon::fromTheme(QLatin1String("video-mp4")));
+    setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 }
 
 AdvPrintPhotoPage::~AdvPrintPhotoPage()
