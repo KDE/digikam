@@ -136,7 +136,7 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     d->pageSize  = QSizeF(-1, -1);
 
     connect(this, SIGNAL(currentIdChanged(int)),
-            this, SLOT(pageChanged(int)));
+            this, SLOT(slotPageChanged(int)));
 
     connect(button(QWizard::CancelButton), SIGNAL(clicked()),
             this, SLOT(reject()));
@@ -1355,7 +1355,7 @@ void AdvPrintWizard::slotContextMenuRequested()
         QAction* const action = menu.addAction(i18n("Add again"));
 
         connect(action, SIGNAL(triggered()),
-                this , SLOT(increaseCopies()));
+                this , SLOT(slotIncreaseCopies()));
 
         AdvPrintPhoto* const pPhoto  = d->photos[itemIndex];
 
@@ -1369,7 +1369,7 @@ void AdvPrintWizard::slotContextMenuRequested()
             QAction* const actionr = menu.addAction(i18n("Remove"));
 
             connect(actionr, SIGNAL(triggered()),
-                    this, SLOT(decreaseCopies()));
+                    this, SLOT(slotDecreaseCopies()));
         }
 
         menu.exec(QCursor::pos());
@@ -1392,7 +1392,7 @@ void AdvPrintWizard::imageSelected(QTreeWidgetItem* item)
     infopage_setCaptionButtons();
 }
 
-void AdvPrintWizard::decreaseCopies()
+void AdvPrintWizard::slotDecreaseCopies()
 {
     if (d->photos.size())
     {
@@ -1545,7 +1545,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
     }
 }
 
-void AdvPrintWizard::increaseCopies()
+void AdvPrintWizard::slotIncreaseCopies()
 {
     if (d->photos.size())
     {
@@ -1561,7 +1561,7 @@ void AdvPrintWizard::increaseCopies()
     }
 }
 
-void AdvPrintWizard::pageChanged(int curr)
+void AdvPrintWizard::slotPageChanged(int curr)
 {
     QWizardPage* const current = page(curr);
 
@@ -2483,7 +2483,7 @@ void AdvPrintWizard::accept()
     DWizardDlg::accept();
 }
 
-void AdvPrintWizard::pagesetupdialogexit()
+void AdvPrintWizard::slotPageSetupDialogExit()
 {
     QPrinter* const printer = d->pageSetupDlg->printer();
 
@@ -2508,7 +2508,7 @@ void AdvPrintWizard::pagesetupdialogexit()
     //initPhotoSizes ( d->photoPage->printer().paperSize(QPrinter::Millimeter));
 
     //     d->pageSize = d->photoPage->printer().paperSize(QPrinter::Millimeter);
-#ifdef NOT_YET
+#ifdef DEBUG
     qCDebug(DIGIKAM_GENERAL_LOG) << " dialog exited num of copies: "
                                  << printer->numCopies()
                                  << " inside:   "
@@ -2526,12 +2526,12 @@ void AdvPrintWizard::pagesetupclicked()
     delete d->pageSetupDlg;
     d->pageSetupDlg = new QPageSetupDialog(d->photoPage->printer(), this);
     // TODO next line should work but it doesn't because of a QT bug
-    //d->pageSetupDlg->open(this, SLOT(pagesetupdialogexit()));
+    //d->pageSetupDlg->open(this, SLOT(slotPageSetupDialogExit()));
     int ret   = d->pageSetupDlg->exec();
 
     if (ret == QDialog::Accepted)
     {
-        pagesetupdialogexit();
+        slotPageSetupDialogExit();
     }
 
     // FIX page size dialog and preview PhotoPage

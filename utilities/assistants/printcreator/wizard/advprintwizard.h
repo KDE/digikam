@@ -68,38 +68,40 @@ public:
 
 public Q_SLOTS:
 
-    virtual void accept();
-    virtual void pageChanged(int curr);
-    virtual void captionChanged(const QString& text);
-    virtual void saveCaptionSettings();
-    virtual void BtnPrintOrderUp_clicked();
-    virtual void BtnPrintOrderDown_clicked();
+    void captionChanged(const QString& text);
+    void saveCaptionSettings();
+    void BtnPrintOrderUp_clicked();
+    void BtnPrintOrderDown_clicked();
 
-    virtual void BtnPreviewPageDown_clicked();
-    virtual void BtnPreviewPageUp_clicked();
-    virtual void BtnCropRotateLeft_clicked();
-    virtual void BtnCropRotateRight_clicked();
-    virtual void BtnCropNext_clicked();
-    virtual void BtnCropPrev_clicked();
-    virtual void BtnSaveAs_clicked();
-    virtual void ListPhotoSizes_selected();
+    void BtnPreviewPageDown_clicked();
+    void BtnPreviewPageUp_clicked();
+    void BtnCropRotateLeft_clicked();
+    void BtnCropRotateRight_clicked();
+    void BtnCropNext_clicked();
+    void BtnCropPrev_clicked();
+    void BtnSaveAs_clicked();
+    void ListPhotoSizes_selected();
 
-    virtual void reject();
+    void pagesetupclicked();
+    void imageSelected(QTreeWidgetItem*);
+    void infopage_updateCaptions();
 
-    virtual void pagesetupclicked();
-    virtual void pagesetupdialogexit();
-    virtual void imageSelected(QTreeWidgetItem*);
-    virtual void decreaseCopies();
-    virtual void increaseCopies();
-    virtual void infopage_updateCaptions();
+    void slotAddItems(const QList<QUrl>&);
+    void slotRemovingItem(int);
+    void slotContextMenuRequested();
+    void slotXMLSaveItem(QXmlStreamWriter&, int);
+    void slotXMLLoadElement(QXmlStreamReader&);
+    void slotXMLCustomElement(QXmlStreamWriter&);
+    void slotXMLCustomElement(QXmlStreamReader&);
 
-    virtual void slotAddItems(const QList<QUrl>&);
-    virtual void slotRemovingItem(int);
-    virtual void slotContextMenuRequested();
-    virtual void slotXMLSaveItem(QXmlStreamWriter&, int);
-    virtual void slotXMLLoadElement(QXmlStreamReader&);
-    virtual void slotXMLCustomElement(QXmlStreamWriter&);
-    virtual void slotXMLCustomElement(QXmlStreamReader&);
+private Q_SLOTS:
+
+    void accept();
+    void reject();
+    void slotPageChanged(int);
+    void slotPageSetupDialogExit();
+    void slotDecreaseCopies();
+    void slotIncreaseCopies();
 
 private:
 
