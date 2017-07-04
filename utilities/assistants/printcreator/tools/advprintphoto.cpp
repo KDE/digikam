@@ -146,7 +146,7 @@ QSize& AdvPrintPhoto::size()  // private
 
 DMetadata& AdvPrintPhoto::metaIface()
 {
-    if (m_url.url().isEmpty())
+    if (!m_url.url().isEmpty())
     {
         if (m_meta.load(m_url.url()))
         {
