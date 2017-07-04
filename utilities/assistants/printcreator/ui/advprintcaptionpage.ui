@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>920</width>
-    <height>487</height>
+    <height>657</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -79,49 +79,57 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QLineEdit" name="m_FreeCaptionFormat">
-              <property name="enabled">
-               <bool>false</bool>
+             <widget class="QGroupBox" name="m_customCaptionGB">
+              <property name="title">
+               <string>Custom Caption</string>
               </property>
-              <property name="minimumSize">
-               <size>
-                <width>400</width>
-                <height>0</height>
-               </size>
-              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <item>
+                  <widget class="QLineEdit" name="m_FreeCaptionFormat">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>400</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Enter here your customized caption string...</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="m_free_label">
+                   <property name="text">
+                    <string>The fields listed below can be used with the customizaton:
+
+&quot;%f&quot; : print file name
+&quot;%t&quot; : print camera exposure time
+&quot;%c&quot; : print item comment
+&quot;%i&quot; : print ISO sensibility from camera
+&quot;%d&quot; : print date and time from camera
+&quot;%r&quot; : print camera sensor resolution
+&quot;%a&quot; : print camera aperture
+&quot;%l&quot; : print focal length from camera
+&quot;\n&quot; : add a new line</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+              <zorder></zorder>
              </widget>
             </item>
             <item>
-             <layout class="QGridLayout" name="gridLayout_3">
-              <item row="0" column="0">
-               <widget class="QLabel" name="m_free_label1">
-                <property name="text">
-                 <string>&quot;%f&quot; : file name
-&quot;%t&quot; : camera exposure time
-&quot;%c&quot; : item comment
-&quot;%i&quot; : ISO sensibility from camera
-&quot;%d&quot; : date and time from camera
-</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLabel" name="m_free_label2">
-                <property name="text">
-                 <string>&quot;%r&quot; : camera sensor resolution
-&quot;%a&quot; : camera aperture
-&quot;%l&quot; : focal length from camera
-&quot;\n&quot; : new line</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <layout class="QVBoxLayout" name="verticalLayout"/>
             </item>
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -224,16 +232,16 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QPushButton" name="m_setDefault">
-                <property name="text">
-                 <string>Use these settings as default</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="m_setDefault">
+            <property name="text">
+             <string>Save these settings as default</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

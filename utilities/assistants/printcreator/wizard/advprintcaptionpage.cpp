@@ -107,6 +107,8 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     setPageWidget(d->captionUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("imagecomment")));
+
+    readCaptionSettings();
 }
 
 AdvPrintCaptionPage::~AdvPrintCaptionPage()
@@ -127,8 +129,7 @@ void AdvPrintCaptionPage::updateUi()
 void AdvPrintCaptionPage::blockCaptionButtons(bool block)
 {
     d->captionUi->m_captions->blockSignals(block);
-    d->captionUi->m_free_label1->blockSignals(block);
-    d->captionUi->m_free_label2->blockSignals(block);
+    d->captionUi->m_free_label->blockSignals(block);
     d->captionUi->m_sameCaption->blockSignals(block);
     d->captionUi->m_font_name->blockSignals(block);
     d->captionUi->m_font_size->blockSignals(block);
@@ -142,17 +143,22 @@ void AdvPrintCaptionPage::readCaptionSettings()
 
     // image captions
     d->captionUi->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
+    enableCaptionGroup(d->captionUi->m_captions->currentText());
+
     // caption color
     QColor defColor(Qt::yellow);
     QColor color = group.readEntry(QLatin1String("CaptionColor"), defColor);
     d->captionUi->m_font_color->setColor(color);
+
     // caption font
     QFont defFont(QLatin1String("Sans Serif"));
     QFont font = group.readEntry(QLatin1String("CaptionFont"), defFont);
     d->captionUi->m_font_name->setCurrentFont(font.family());
+
     // caption size
     int fontSize = group.readEntry(QLatin1String("CaptionSize"), 4);
     d->captionUi->m_font_size->setValue(fontSize);
+
     // free caption
     QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
     d->captionUi->m_FreeCaptionFormat->setText(captionTxt);
@@ -190,23 +196,17 @@ void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)
     if (text == i18n("No captions"))
     {
         fontSettingsEnabled = false;
-        d->captionUi->m_FreeCaptionFormat->setEnabled(false);
-        d->captionUi->m_free_label1->setEnabled(false);
-        d->captionUi->m_free_label2->setEnabled(false);
+        d->captionUi->m_customCaptionGB->setEnabled(false);
     }
     else if (text == i18n("Free"))
     {
         fontSettingsEnabled = true;
-        d->captionUi->m_FreeCaptionFormat->setEnabled(true);
-        d->captionUi->m_free_label1->setEnabled(true);
-        d->captionUi->m_free_label2->setEnabled(true);
+        d->captionUi->m_customCaptionGB->setEnabled(true);
     }
     else
     {
         fontSettingsEnabled = true;
-        d->captionUi->m_FreeCaptionFormat->setEnabled(false);
-        d->captionUi->m_free_label1->setEnabled(false);
-        d->captionUi->m_free_label2->setEnabled(false);
+        d->captionUi->m_customCaptionGB->setEnabled(false);
     }
 
     d->captionUi->m_font_name->setEnabled(fontSettingsEnabled);

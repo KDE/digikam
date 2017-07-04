@@ -1032,13 +1032,16 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 // update the pages to be printed and preview first/last pages
 void AdvPrintWizard::previewPhotos()
 {
+    if (d->photosizes.isEmpty())
+        return;
+
     //Change cursor to waitCursor during transition
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // get the selected layout
+    int photoCount             = d->photos.count();
     int curr                   = d->photoPage->ui()->ListPhotoSizes->currentRow();
     AdvPrintPhotoSize* const s = d->photosizes.at(curr);
-    int photoCount             =  d->photos.count();
     int emptySlots             = 0;
     int pageCount              = 0;
     int photosPerPage          = 0;
@@ -1280,7 +1283,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
             if (xmlReader.name() == QLatin1String("pa_caption"))
             {
                 d->captionPage->ui()->m_sameCaption->blockSignals(true);
-                d->captionPage->ui()->m_sameCaption->setCheckState( Qt::Unchecked );
+                d->captionPage->ui()->m_sameCaption->setCheckState(Qt::Unchecked);
                 d->captionPage->ui()->m_sameCaption->blockSignals(false);
 
                 //useless this item has been added now
