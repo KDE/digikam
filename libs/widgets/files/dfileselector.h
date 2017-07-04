@@ -29,12 +29,12 @@
 #include <QUrl>
 #include <QString>
 #include <QLineEdit>
-#include <QFileDialog>
 #include <QPushButton>
 
 // Local includes
 
 #include "dlayoutbox.h"
+#include "dfiledialog.h"
 #include "digikam_export.h"
 
 namespace Digikam
@@ -57,10 +57,10 @@ public:
     void setFileDlgPath(const QString& path);
     QString fileDlgPath() const;
 
-    void setFileDlgMode(QFileDialog::FileMode mode);
+    void setFileDlgMode(DFileDialog::FileMode mode);
     void setFileDlgFilter(const QString& filter);
     void setFileDlgTitle(const QString& title);
-    void setFileDlgOptions(QFileDialog::Options opts);
+    void setFileDlgOptions(DFileDialog::Options opts);
 
 Q_SIGNALS:
 
