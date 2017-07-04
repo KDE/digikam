@@ -130,4 +130,5 @@ BUGFIXES FROM BUGZILLA:
 116 ==> 260994 - Print error when print with "print assistant.
 117 ==> 155084 - Printing comments and EXIF tags.
 118 ==> 103153 - Add print icon to main toolbar of digiKam.
-119 ==> 
+119 ==> 178983 - next/back-buttons in print-assistant should be labeled.
+120 ==> 
