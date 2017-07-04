@@ -1154,29 +1154,7 @@ void AdvPrintWizard::setCaptionButtons()
 {
     if (d->photos.size())
     {
-        AdvPrintPhoto* const pPhoto = d->photos.at(d->infopageCurrentPhoto);
-
-        if (pPhoto && !d->captionPage->ui()->m_sameCaption->isChecked())
-        {
-            d->captionPage->blockCaptionButtons();
-
-            if (pPhoto->m_pAdvPrintCaptionInfo)
-            {
-                d->captionPage->ui()->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_caption_color);
-                d->captionPage->ui()->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size);
-                d->captionPage->ui()->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_caption_font);
-                d->captionPage->ui()->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
-                d->captionPage->ui()->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
-                enableCaptionGroup(d->captionPage->ui()->m_captions->currentText());
-            }
-            else
-            {
-                d->captionPage->readCaptionSettings();
-                slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
-            }
-
-            d->captionPage->blockCaptionButtons(false);
-        }
+        d->captionPage->setCaptionButtons(d->photos.at(d->infopageCurrentPhoto));
     }
 }
 
@@ -1746,43 +1724,6 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
     previewPhotos();
 }
 
-void AdvPrintWizard::enableCaptionGroup(const QString& text)
-{
-    bool fontSettingsEnabled;
-
-    if (text == i18n("No captions"))
-    {
-        fontSettingsEnabled = false;
-        d->captionPage->ui()->m_FreeCaptionFormat->setEnabled(false);
-        d->captionPage->ui()->m_free_label1->setEnabled(false);
-        d->captionPage->ui()->m_free_label2->setEnabled(false);
-    }
-    else if (text == i18n("Free"))
-    {
-        fontSettingsEnabled = true;
-        d->captionPage->ui()->m_FreeCaptionFormat->setEnabled(true);
-        d->captionPage->ui()->m_free_label1->setEnabled(true);
-        d->captionPage->ui()->m_free_label2->setEnabled(true);
-    }
-    else
-    {
-        fontSettingsEnabled = true;
-        d->captionPage->ui()->m_FreeCaptionFormat->setEnabled(false);
-        d->captionPage->ui()->m_free_label1->setEnabled(false);
-        d->captionPage->ui()->m_free_label2->setEnabled(false);
-    }
-
-    d->captionPage->ui()->m_font_name->setEnabled(fontSettingsEnabled);
-    d->captionPage->ui()->m_font_size->setEnabled(fontSettingsEnabled);
-    d->captionPage->ui()->m_font_color->setEnabled(fontSettingsEnabled);
-}
-
-void AdvPrintWizard::slotCaptionChanged(const QString& text)
-{
-    enableCaptionGroup(text);
-    slotInfoPageUpdateCaptions();
-}
-
 void AdvPrintWizard::slotBtnCropRotateLeftClicked()
 {
     // by definition, the cropRegion should be set by now,
@@ -2156,7 +2097,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         bool same_to_all = (group.readEntry("SameCaptionToAll", 0) == 1);
         d->captionPage->ui()->m_sameCaption->setChecked(same_to_all);
         //enable right caption stuff
-        slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
+        d->captionPage->slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
     }
     else if (pageName == i18n(CROP_PAGE_NAME))
     {

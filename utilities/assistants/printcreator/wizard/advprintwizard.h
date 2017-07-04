@@ -68,7 +68,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotCaptionChanged(const QString& text);
     void slotSaveCaptionSettings();
     void slotBtnPrintOrderUpClicked();
     void slotBtnPrintOrderDownClicked();
@@ -150,9 +149,6 @@ private:
     double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
                      int current);
-
-    /// Fix caption group layout according to captions combobox text
-    void enableCaptionGroup(const QString& text);
 
     void saveSettings(const QString& pageName);
     void readSettings(const QString& pageName);

@@ -41,6 +41,7 @@
 
 #include "digikam_debug.h"
 #include "advprintwizard.h"
+#include "advprintphoto.h"
 
 namespace Digikam
 {
@@ -78,8 +79,11 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
     : DWizardPage(wizard, title),
       d(new Private(this))
 {
+    connect(this, SIGNAL(signalInfoPageUpdateCaptions()),
+            wizard, SLOT(slotInfoPageUpdateCaptions()));
+
     connect(d->captionUi->m_captions, SIGNAL(activated(QString)),
-            wizard, SLOT(slotCaptionChanged(QString)));
+            this, SLOT(slotCaptionChanged(QString)));
 
     connect(d->captionUi->m_FreeCaptionFormat , SIGNAL(editingFinished()),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
@@ -152,6 +156,68 @@ void AdvPrintCaptionPage::readCaptionSettings()
     // free caption
     QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
     d->captionUi->m_FreeCaptionFormat->setText(captionTxt);
+}
+
+void AdvPrintCaptionPage::setCaptionButtons(AdvPrintPhoto* const pPhoto)
+{
+    if (pPhoto && !d->captionUi->m_sameCaption->isChecked())
+    {
+        blockCaptionButtons();
+
+        if (pPhoto->m_pAdvPrintCaptionInfo)
+        {
+            d->captionUi->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_caption_color);
+            d->captionUi->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size);
+            d->captionUi->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_caption_font);
+            d->captionUi->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
+            d->captionUi->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
+            enableCaptionGroup(d->captionUi->m_captions->currentText());
+        }
+        else
+        {
+            readCaptionSettings();
+            slotCaptionChanged(d->captionUi->m_captions->currentText());
+        }
+
+        blockCaptionButtons(false);
+    }
+}
+
+void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)
+{
+    bool fontSettingsEnabled;
+
+    if (text == i18n("No captions"))
+    {
+        fontSettingsEnabled = false;
+        d->captionUi->m_FreeCaptionFormat->setEnabled(false);
+        d->captionUi->m_free_label1->setEnabled(false);
+        d->captionUi->m_free_label2->setEnabled(false);
+    }
+    else if (text == i18n("Free"))
+    {
+        fontSettingsEnabled = true;
+        d->captionUi->m_FreeCaptionFormat->setEnabled(true);
+        d->captionUi->m_free_label1->setEnabled(true);
+        d->captionUi->m_free_label2->setEnabled(true);
+    }
+    else
+    {
+        fontSettingsEnabled = true;
+        d->captionUi->m_FreeCaptionFormat->setEnabled(false);
+        d->captionUi->m_free_label1->setEnabled(false);
+        d->captionUi->m_free_label2->setEnabled(false);
+    }
+
+    d->captionUi->m_font_name->setEnabled(fontSettingsEnabled);
+    d->captionUi->m_font_size->setEnabled(fontSettingsEnabled);
+    d->captionUi->m_font_color->setEnabled(fontSettingsEnabled);
+}
+
+void AdvPrintCaptionPage::slotCaptionChanged(const QString& text)
+{
+    enableCaptionGroup(text);
+    emit signalInfoPageUpdateCaptions();
 }
 
 } // namespace Digikam
