@@ -129,4 +129,5 @@ BUGFIXES FROM BUGZILLA:
 115 ==> 308963 - Add the ability to Export photos to a PDF file.
 116 ==> 260994 - Print error when print with "print assistant.
 117 ==> 155084 - Printing comments and EXIF tags.
-118 ==> 
+118 ==> 103153 - Add print icon to main toolbar of digiKam.
+119 ==> 
