@@ -128,4 +128,5 @@ BUGFIXES FROM BUGZILLA:
 114 ==> 118868 - A recto-verso printing wizard.
 115 ==> 308963 - Add the ability to Export photos to a PDF file.
 116 ==> 260994 - Print error when print with "print assistant.
-117 ==> 
+117 ==> 155084 - Printing comments and EXIF tags.
+118 ==> 
