@@ -17,6 +17,22 @@
    </sizepolicy>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QWidget" name="mPrintList" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
@@ -64,12 +80,12 @@
               </item>
               <item>
                <property name="text">
-                <string>Comments</string>
+                <string>Item comments</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Free</string>
+                <string>Custom format</string>
                </property>
               </item>
              </widget>
@@ -85,45 +101,62 @@
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
                <item>
-                <layout class="QGridLayout" name="gridLayout_2">
-                 <item row="3" column="0">
-                  <widget class="QLabel" name="label">
-                   <property name="text">
-                    <string>&quot;%f&quot; : print file name
-&quot;%t&quot; : print camera exposure time
-&quot;%c&quot; : print item comment
-&quot;%i&quot; : print ISO sensibility from camera
-&quot;%d&quot; : print date and time from camera</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-                   </property>
-                  </widget>
-                 </item>
+                <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,10,0,10">
                  <item row="3" column="1">
                   <widget class="QLabel" name="label_5">
                    <property name="text">
-                    <string>&quot;%r&quot; : print camera sensor resolution
-&quot;%a&quot; : print camera aperture
-&quot;%l&quot; : print focal length from camera
-&quot;\n&quot; : add a new line</string>
+                    <string>print file name
+print camera exposure time
+print item comment
+print ISO sensibility from camera
+print date and time from camera</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="0" colspan="2">
-                  <widget class="QLabel" name="m_free_label">
+                 <item row="3" column="2">
+                  <widget class="QLabel" name="label_6">
                    <property name="text">
-                    <string>The fields listed below can be used with the customizaton:</string>
+                    <string>&quot;%r&quot; :
+&quot;%a&quot; :
+&quot;%l&quot; :
+&quot;\n&quot; :</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="0" colspan="2">
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>&quot;%f&quot; :
+&quot;%t&quot; :
+&quot;%c&quot; :
+&quot;%i&quot; :
+&quot;%d&quot; :</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="3">
+                  <widget class="QLabel" name="label_7">
+                   <property name="text">
+                    <string>print camera sensor resolution
+print camera aperture
+print focal length from camera
+add a new line</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0" colspan="4">
                   <widget class="QLineEdit" name="m_FreeCaptionFormat">
                    <property name="enabled">
                     <bool>true</bool>
@@ -136,6 +169,16 @@
                    </property>
                    <property name="placeholderText">
                     <string>Enter here your customized caption string...</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" colspan="4">
+                  <widget class="QLabel" name="m_free_label">
+                   <property name="text">
+                    <string>The fields listed below can be used with the customizaton:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
                    </property>
                   </widget>
                  </item>
@@ -262,37 +305,6 @@
          </layout>
         </item>
        </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox_2">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>240</height>
-      </size>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_7">
-      <item>
-       <widget class="QWidget" name="mPrintList" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

@@ -89,22 +89,22 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
     connect(d->captionUi->m_captions, SIGNAL(activated(QString)),
             this, SLOT(slotCaptionChanged(QString)));
 
-    connect(d->captionUi->m_FreeCaptionFormat , SIGNAL(editingFinished()),
+    connect(d->captionUi->m_FreeCaptionFormat, SIGNAL(editingFinished()),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
-    connect(d->captionUi->m_sameCaption , SIGNAL(stateChanged(int)),
+    connect(d->captionUi->m_sameCaption, SIGNAL(stateChanged(int)),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
-    connect(d->captionUi->m_font_name , SIGNAL(currentFontChanged(QFont)),
+    connect(d->captionUi->m_font_name, SIGNAL(currentFontChanged(QFont)),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
-    connect(d->captionUi->m_font_size , SIGNAL(valueChanged(int)),
+    connect(d->captionUi->m_font_size, SIGNAL(valueChanged(int)),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
-    connect(d->captionUi->m_font_color , SIGNAL(signalColorSelected(QColor)),
+    connect(d->captionUi->m_font_color, SIGNAL(signalColorSelected(QColor)),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
-    connect(d->captionUi->m_setDefault , SIGNAL(clicked()),
+    connect(d->captionUi->m_setDefault, SIGNAL(clicked()),
             wizard, SLOT(slotSaveCaptionSettings()));
 
     // -----------------------------------
@@ -116,6 +116,9 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
     d->imageList = new DImagesList(d->captionUi->mPrintList, 32);
     d->imageList->setAllowDuplicate(true);
     d->imageList->setControlButtonsPlacement(DImagesList::NoControlButtons);
+    d->imageList->listView()->setColumn(DImagesListView::User1,
+                                        i18nc("@title:column", "Caption"),
+                                        true);
 
     printListLayout->addWidget(d->imageList);
     d->captionUi->mPrintList->setLayout(printListLayout);

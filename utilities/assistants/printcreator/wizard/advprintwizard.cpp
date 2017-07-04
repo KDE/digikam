@@ -1722,30 +1722,46 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
     {
         if (d->captionPage->ui()->m_sameCaption->isChecked())
         {
-            for (QList<AdvPrintPhoto*>::iterator it = d->photos.begin() ;
-                 it != d->photos.end() ; ++it)
+            foreach(AdvPrintPhoto* const pPhoto, d->photos)
             {
-                AdvPrintPhoto* const pPhoto = static_cast<AdvPrintPhoto*>(*it);
                 updateCaption(pPhoto);
+
+                if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
+                {
+                    DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
+
+                    if (lvItem)
+                    {
+                        QString cap;
+
+                        if (pPhoto->m_pAdvPrintCaptionInfo->m_caption_type != AdvPrintCaptionInfo::NoCaptions)
+                            cap = captionFormatter(pPhoto);
+
+                        lvItem->setText(DImagesListView::User1, cap);
+                    }
+                }
             }
         }
         else
         {
             QList <QTreeWidgetItem*> list = d->captionPage->imagesList()->listView()->selectedItems();
 
-            foreach(QTreeWidgetItem* const item, list)
+            foreach(AdvPrintPhoto* const pPhoto, d->photos)
             {
-                DImagesListViewItem* const lvItem = dynamic_cast<DImagesListViewItem*>(item);
+                updateCaption(pPhoto);
 
-                if (lvItem)
+                if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
                 {
-                    foreach(AdvPrintPhoto* const pPhoto, d->photos)
+                    DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
+
+                    if (lvItem && list.contains(lvItem))
                     {
-                        if (lvItem->url() == pPhoto->m_url)
-                        {
-                            updateCaption(pPhoto);
-                            break;
-                        }
+                        QString cap;
+
+                        if (pPhoto->m_pAdvPrintCaptionInfo->m_caption_type != AdvPrintCaptionInfo::NoCaptions)
+                            cap = captionFormatter(pPhoto);
+
+                        lvItem->setText(DImagesListView::User1, cap);
                     }
                 }
             }
