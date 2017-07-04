@@ -109,9 +109,7 @@ private:
     void initPhotoSizes(const QSizeF& pageSize);
     void previewPhotos();
 
-    void blockCaptionButtons(bool block=true);
     void setCaptionButtons();
-    void readCaptionSettings();
 
     /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
     void parseTemplateFile( const QString& fn, const QSizeF& pageSize );

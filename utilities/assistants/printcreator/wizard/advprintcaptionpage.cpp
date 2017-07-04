@@ -33,6 +33,8 @@
 
 // KDE includes
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -116,6 +118,40 @@ Ui_AdvPrintCaptionPage* AdvPrintCaptionPage::ui() const
 void AdvPrintCaptionPage::updateUi()
 {
     d->captionUi->update();
+}
+
+void AdvPrintCaptionPage::blockCaptionButtons(bool block)
+{
+    d->captionUi->m_captions->blockSignals(block);
+    d->captionUi->m_free_label1->blockSignals(block);
+    d->captionUi->m_free_label2->blockSignals(block);
+    d->captionUi->m_sameCaption->blockSignals(block);
+    d->captionUi->m_font_name->blockSignals(block);
+    d->captionUi->m_font_size->blockSignals(block);
+    d->captionUi->m_font_color->blockSignals(block);
+}
+
+void AdvPrintCaptionPage::readCaptionSettings()
+{
+    KConfig config;
+    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
+
+    // image captions
+    d->captionUi->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
+    // caption color
+    QColor defColor(Qt::yellow);
+    QColor color = group.readEntry(QLatin1String("CaptionColor"), defColor);
+    d->captionUi->m_font_color->setColor(color);
+    // caption font
+    QFont defFont(QLatin1String("Sans Serif"));
+    QFont font = group.readEntry(QLatin1String("CaptionFont"), defFont);
+    d->captionUi->m_font_name->setCurrentFont(font.family());
+    // caption size
+    int fontSize = group.readEntry(QLatin1String("CaptionSize"), 4);
+    d->captionUi->m_font_size->setValue(fontSize);
+    // free caption
+    QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
+    d->captionUi->m_FreeCaptionFormat->setText(captionTxt);
 }
 
 } // namespace Digikam

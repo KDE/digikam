@@ -1158,7 +1158,7 @@ void AdvPrintWizard::setCaptionButtons()
 
         if (pPhoto && !d->captionPage->ui()->m_sameCaption->isChecked())
         {
-            blockCaptionButtons();
+            d->captionPage->blockCaptionButtons();
 
             if (pPhoto->m_pAdvPrintCaptionInfo)
             {
@@ -1171,11 +1171,11 @@ void AdvPrintWizard::setCaptionButtons()
             }
             else
             {
-                readCaptionSettings();
+                d->captionPage->readCaptionSettings();
                 slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
             }
 
-            blockCaptionButtons(false);
+            d->captionPage->blockCaptionButtons(false);
         }
     }
 }
@@ -2120,29 +2120,6 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
     }
 }
 
-void AdvPrintWizard::readCaptionSettings()
-{
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-
-    // image captions
-    d->captionPage->ui()->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
-    // caption color
-    QColor defColor(Qt::yellow);
-    QColor color = group.readEntry(QLatin1String("CaptionColor"), defColor);
-    d->captionPage->ui()->m_font_color->setColor(color);
-    // caption font
-    QFont defFont(QLatin1String("Sans Serif"));
-    QFont font = group.readEntry(QLatin1String("CaptionFont"), defFont);
-    d->captionPage->ui()->m_font_name->setCurrentFont(font.family());
-    // caption size
-    int fontSize = group.readEntry(QLatin1String("CaptionSize"), 4);
-    d->captionPage->ui()->m_font_size->setValue(fontSize);
-    // free caption
-    QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
-    d->captionPage->ui()->m_FreeCaptionFormat->setText(captionTxt);
-}
-
 void AdvPrintWizard::readSettings(const QString& pageName)
 {
     KConfig config;
@@ -2174,9 +2151,9 @@ void AdvPrintWizard::readSettings(const QString& pageName)
     else if (pageName == i18n(CAPTION_PAGE_NAME))
     {
         //caption
-        readCaptionSettings();
+        d->captionPage->readCaptionSettings();
 
-        bool same_to_all = group.readEntry("SameCaptionToAll", 0) == 1;
+        bool same_to_all = (group.readEntry("SameCaptionToAll", 0) == 1);
         d->captionPage->ui()->m_sameCaption->setChecked(same_to_all);
         //enable right caption stuff
         slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
@@ -2590,17 +2567,6 @@ void AdvPrintWizard::slotPagesetupclicked()
 
     // create our photo sizes list
     previewPhotos();
-}
-
-void AdvPrintWizard::blockCaptionButtons(bool block)
-{
-    d->captionPage->ui()->m_captions->blockSignals(block);
-    d->captionPage->ui()->m_free_label1->blockSignals(block);
-    d->captionPage->ui()->m_free_label2->blockSignals(block);
-    d->captionPage->ui()->m_sameCaption->blockSignals(block);
-    d->captionPage->ui()->m_font_name->blockSignals(block);
-    d->captionPage->ui()->m_font_size->blockSignals(block);
-    d->captionPage->ui()->m_font_color->blockSignals(block);
 }
 
 void AdvPrintWizard::slotSaveCaptionSettings()

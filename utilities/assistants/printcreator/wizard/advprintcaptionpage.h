@@ -50,6 +50,9 @@ public:
     Ui_AdvPrintCaptionPage* ui() const;
     void updateUi();
 
+    void blockCaptionButtons(bool block=true);
+    void readCaptionSettings();
+
 private:
 
     class Private;
