@@ -119,19 +119,19 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     // -----------------------------------
 
-    QVBoxLayout* printListLayout = new QVBoxLayout;
+    QVBoxLayout* const printListLayout = new QVBoxLayout;
     printListLayout->setContentsMargins(QMargins());
     printListLayout->setSpacing(0);
 
     d->imageList = new DImagesList(d->photoUi->mPrintList, 32);
     d->imageList->setAllowDuplicate(true);
     d->imageList->setControlButtons(DImagesList::Add      |
-                                             DImagesList::Remove   |
-                                             DImagesList::MoveUp   |
-                                             DImagesList::MoveDown |
-                                             DImagesList::Clear    |
-                                             DImagesList::Save     |
-                                             DImagesList::Load);
+                                    DImagesList::Remove   |
+                                    DImagesList::MoveUp   |
+                                    DImagesList::MoveDown |
+                                    DImagesList::Clear    |
+                                    DImagesList::Save     |
+                                    DImagesList::Load);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsAbove);
     d->imageList->enableDragAndDrop(false);
 

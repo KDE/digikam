@@ -151,8 +151,7 @@ public:
 
 public:
 
-    // full path
-    QUrl                    m_filename;
+    QUrl                    m_url;
 
     int                     m_thumbnailSize;
 

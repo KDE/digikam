@@ -48,7 +48,7 @@ AdvPrintPhoto::AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface)
 
     m_copies               = 1;
     //TODO mPrintPosition;
-    m_filename             = QUrl();
+    m_url             = QUrl();
 
     m_iface                = iface;
     m_thumbnail            = 0;
@@ -62,7 +62,7 @@ AdvPrintPhoto::AdvPrintPhoto (const AdvPrintPhoto& photo)
 {
     m_thumbnailSize = photo.m_thumbnailSize;
     m_cropRegion    = photo.m_cropRegion;
-    m_filename      = photo.m_filename;
+    m_url      = photo.m_url;
     m_first         = photo.m_first;
     m_copies        = photo.m_copies;
     m_rotation      = photo.m_rotation;
@@ -122,13 +122,13 @@ QImage AdvPrintPhoto::loadPhoto()
 
     if (m_iface)
     {
-        photo = PreviewLoadThread::loadHighQualitySynchronously(m_filename.toLocalFile())
+        photo = PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
                 .copyQImage();
     }
 
     if (photo.isNull())
     {
-        photo.load(m_filename.toLocalFile());
+        photo.load(m_url.toLocalFile());
     }
 
     return photo;
@@ -146,11 +146,11 @@ QSize& AdvPrintPhoto::size()  // private
 
 DMetadata& AdvPrintPhoto::metaIface()
 {
-    if (m_filename.url().isEmpty())
+    if (m_url.url().isEmpty())
     {
-        if (m_meta.load(m_filename.url()))
+        if (m_meta.load(m_url.url()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load metadata from file " << m_filename;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load metadata from file " << m_url;
         }
     }
 

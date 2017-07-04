@@ -65,6 +65,9 @@ public:
     ~AdvPrintWizard();
 
     void setItemsList(const QList<QUrl>& fileList = QList<QUrl>());
+    QList<QUrl> itemsList() const;
+
+    DInfoInterface* iface() const;
 
 public Q_SLOTS:
 

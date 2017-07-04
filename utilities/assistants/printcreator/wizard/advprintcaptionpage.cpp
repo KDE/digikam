@@ -67,17 +67,21 @@ public:
 
 public:
 
-    Private(QWidget* const parent)
+    Private(QWizard* const dialog)
     {
-        captionUi = new CaptionUI(parent);
+        wizard    = dynamic_cast<AdvPrintWizard*>(dialog);
+        captionUi = new CaptionUI(dialog);
+        imageList = 0;
     }
 
-    CaptionUI* captionUi;
+    CaptionUI*      captionUi;
+    AdvPrintWizard* wizard;
+    DImagesList*    imageList;
 };
 
 AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& title)
     : DWizardPage(wizard, title),
-      d(new Private(this))
+      d(new Private(wizard))
 {
     connect(this, SIGNAL(signalInfoPageUpdateCaptions()),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
@@ -105,6 +109,19 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     // -----------------------------------
 
+    QVBoxLayout* const printListLayout = new QVBoxLayout;
+    printListLayout->setContentsMargins(QMargins());
+    printListLayout->setSpacing(0);
+
+    d->imageList = new DImagesList(d->captionUi->mPrintList, 32);
+    d->imageList->setAllowDuplicate(true);
+    d->imageList->setControlButtonsPlacement(DImagesList::NoControlButtons);
+
+    printListLayout->addWidget(d->imageList);
+    d->captionUi->mPrintList->setLayout(printListLayout);
+
+    // -----------------------------------
+
     setPageWidget(d->captionUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("imagecomment")));
 
@@ -124,6 +141,23 @@ Ui_AdvPrintCaptionPage* AdvPrintCaptionPage::ui() const
 void AdvPrintCaptionPage::updateUi()
 {
     d->captionUi->update();
+}
+
+DImagesList* AdvPrintCaptionPage::imagesList() const
+{
+    return d->imageList;
+}
+
+void AdvPrintCaptionPage::initializePage()
+{
+    d->imageList->setIface(d->wizard->iface());
+    slotUpdateImagesList();
+}
+
+void AdvPrintCaptionPage::slotUpdateImagesList()
+{
+    d->imageList->listView()->clear();
+    d->imageList->slotAddImages(d->wizard->itemsList());
 }
 
 void AdvPrintCaptionPage::blockCaptionButtons(bool block)

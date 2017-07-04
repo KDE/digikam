@@ -39,6 +39,7 @@ namespace Digikam
 {
 
 class AdvPrintPhoto;
+class DImagesList;
 
 class AdvPrintCaptionPage : public DWizardPage
 {
@@ -48,6 +49,8 @@ public:
 
     explicit AdvPrintCaptionPage(QWizard* const wizard, const QString& title);
     ~AdvPrintCaptionPage();
+
+    DImagesList* imagesList() const;
 
     Ui_AdvPrintCaptionPage* ui() const;
     void updateUi();
@@ -60,6 +63,8 @@ public:
     /// Fix caption group layout according to captions combobox text
     void enableCaptionGroup(const QString& text);
 
+    void initializePage();
+
 Q_SIGNALS:
 
     void signalInfoPageUpdateCaptions();
@@ -67,6 +72,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotCaptionChanged(const QString&);
+    void slotUpdateImagesList();
 
 private:
 

@@ -146,6 +146,12 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     connect(button(QWizard::CancelButton), SIGNAL(clicked()),
             this, SLOT(reject()));
 
+    connect(d->photoPage->imagesList(), SIGNAL(signalImageListChanged()),
+            d->captionPage, SLOT(slotUpdateImagesList()));
+
+    connect(d->captionPage->imagesList(), SIGNAL(signalImageListChanged()),
+            this, SLOT(slotInfoPageUpdateCaptions()));
+
     if (d->iface)
         setItemsList();
 }
@@ -159,6 +165,25 @@ AdvPrintWizard::~AdvPrintWizard()
 
     d->photos.clear();
     delete d;
+}
+
+DInfoInterface* AdvPrintWizard::iface() const
+{
+    return d->iface;
+}
+
+QList<QUrl> AdvPrintWizard::itemsList() const
+{
+    QList<QUrl> urls;
+
+    for (QList<AdvPrintPhoto*>::iterator it = d->photos.begin() ;
+         it != d->photos.end() ; ++it)
+    {
+        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
+        urls << photo->m_url;
+    }
+
+    return urls;
 }
 
 void AdvPrintWizard::createPhotoGrid(AdvPrintPhotoSize* const p,
@@ -199,7 +224,6 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
     }
 
     d->photos.clear();
-    //d->photoPage->m_PictureInfo->setRowCount(list.count());
 
     if (list.isEmpty() && d->iface)
     {
@@ -209,7 +233,7 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
     for (int i = 0; i < list.count(); ++i)
     {
         AdvPrintPhoto* const photo = new AdvPrintPhoto(150, d->iface);
-        photo->m_filename          = list[i];
+        photo->m_url          = list[i];
         photo->m_first             = true;
         d->photos.append(photo);
     }
@@ -741,7 +765,7 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
             break;
     }
 
-    QFileInfo fi(photo->m_filename.toLocalFile());
+    QFileInfo fi(photo->m_url.toLocalFile());
     QString resolution;
     QSize imageSize;
     DMetadata meta = photo->metaIface();
@@ -769,7 +793,7 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
 
     if (d->iface)
     {
-        DItemInfo info(d->iface->itemInfo(photo->m_filename));
+        DItemInfo info(d->iface->itemInfo(photo->m_url));
         format.replace(QString::fromUtf8("%c"), info.comment());
         format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
                                                 QLocale::ShortFormat));
@@ -1278,7 +1302,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
         while (xmlReader.readNextStartElement())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << pPhoto->m_filename << " " << xmlReader.name();
+            qCDebug(DIGIKAM_GENERAL_LOG) << pPhoto->m_url << " " << xmlReader.name();
 
             if (xmlReader.name() == QLatin1String("pa_caption"))
             {
@@ -1429,7 +1453,7 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
                 {
                     AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
-                    if (pCurrentPhoto && pCurrentPhoto->m_filename == pPhotoToRemove->m_filename)
+                    if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
                     {
                         pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
                         copies                  = pCurrentPhoto->m_copies;
@@ -1447,7 +1471,7 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
                 AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
                 if (pCurrentPhoto &&
-                    pCurrentPhoto->m_filename == pPhotoToRemove->m_filename &&
+                    pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
                     pCurrentPhoto->m_first)
                 {
                     pCurrentPhoto->m_copies--;
@@ -1465,7 +1489,7 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
         if (pPhotoToRemove)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
-                                         << pPhotoToRemove->m_filename.fileName()
+                                         << pPhotoToRemove->m_url.fileName()
                                          << " copy number "
                                          << copies;
         }
@@ -1506,7 +1530,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
             AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
             if (pCurrentPhoto &&
-                pCurrentPhoto->m_filename == imageUrl &&
+                pCurrentPhoto->m_url == imageUrl &&
                 pCurrentPhoto->m_first)
             {
                 pCurrentPhoto->m_copies++;
@@ -1515,7 +1539,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
                 pPhoto->m_first             = false;
                 d->photos.append(pPhoto);
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Added fileName: "
-                                             << pPhoto->m_filename.fileName()
+                                             << pPhoto->m_url.fileName()
                                              << " copy number "
                                              << pCurrentPhoto->m_copies;
             }
@@ -1524,17 +1548,15 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
         if (!found)
         {
             AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(150, d->iface);
-            pPhoto->m_filename          = *it;
+            pPhoto->m_url          = *it;
             pPhoto->m_first             = true;
             d->photos.append(pPhoto);
             qCDebug(DIGIKAM_GENERAL_LOG) << "Added new fileName: "
-                                         << pPhoto->m_filename.fileName();
+                                         << pPhoto->m_url.fileName();
         }
     }
 
     d->photoPage->imagesList()->blockSignals(false);
-    slotInfoPageUpdateCaptions();
-    //previewPhotos();
 
     if (d->photos.size())
     {
@@ -1596,7 +1618,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
 
             if (pCurrentPhoto)
             {
-                list.push_back(pCurrentPhoto->m_filename);
+                list.push_back(pCurrentPhoto->m_url);
             }
         }
 
@@ -1626,6 +1648,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
 
         // reset preview page number
         d->currentPreviewPage = 0;
+
         // create our photo sizes list
         previewPhotos();
     }
@@ -1674,7 +1697,7 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
             pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
         }
         else if (pPhoto->m_pAdvPrintCaptionInfo &&
-            d->captionPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
+                 d->captionPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
         {
             delete pPhoto->m_pAdvPrintCaptionInfo;
             pPhoto->m_pAdvPrintCaptionInfo = NULL;
@@ -1687,6 +1710,8 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
             pPhoto->m_pAdvPrintCaptionInfo->m_caption_font  = d->captionPage->ui()->m_font_name->currentFont();
             pPhoto->m_pAdvPrintCaptionInfo->m_caption_type  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionPage->ui()->m_captions->currentIndex();
             pPhoto->m_pAdvPrintCaptionInfo->m_caption_text  = d->captionPage->ui()->m_FreeCaptionFormat->text();
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for" << pPhoto->m_url;
         }
     }
 }
@@ -1697,9 +1722,8 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
     {
         if (d->captionPage->ui()->m_sameCaption->isChecked())
         {
-            QList<AdvPrintPhoto*>::iterator it;
-
-            for (it = d->photos.begin() ; it != d->photos.end() ; ++it)
+            for (QList<AdvPrintPhoto*>::iterator it = d->photos.begin() ;
+                 it != d->photos.end() ; ++it)
             {
                 AdvPrintPhoto* const pPhoto = static_cast<AdvPrintPhoto*>(*it);
                 updateCaption(pPhoto);
@@ -1707,17 +1731,22 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
         }
         else
         {
-            QList <QTreeWidgetItem*> list = d->photoPage->imagesList()->listView()->selectedItems();
+            QList <QTreeWidgetItem*> list = d->captionPage->imagesList()->listView()->selectedItems();
 
             foreach(QTreeWidgetItem* const item, list)
             {
                 DImagesListViewItem* const lvItem = dynamic_cast<DImagesListViewItem*>(item);
 
-                if (item)
+                if (lvItem)
                 {
-                    int itemIndex               = d->photoPage->imagesList()->listView()->indexFromItem(lvItem).row();
-                    AdvPrintPhoto* const pPhoto = d->photos.at(itemIndex);
-                    updateCaption(pPhoto);
+                    foreach(AdvPrintPhoto* const pPhoto, d->photos)
+                    {
+                        if (lvItem->url() == pPhoto->m_url)
+                        {
+                            updateCaption(pPhoto);
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -1802,7 +1831,10 @@ void AdvPrintWizard::slotBtnPrintOrderUpClicked()
     d->photoPage->imagesList()->blockSignals(true);
     int currentIndex = d->photoPage->imagesList()->listView()->currentIndex().row();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo " << currentIndex << " to  " << currentIndex + 1;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
+                                 << currentIndex
+                                 << " to  "
+                                 << currentIndex + 1;
 
     d->photos.swap(currentIndex, currentIndex + 1);
     d->photoPage->imagesList()->blockSignals(false);
