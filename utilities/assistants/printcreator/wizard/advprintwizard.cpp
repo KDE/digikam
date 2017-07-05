@@ -76,8 +76,8 @@ namespace Digikam
 {
 
 const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
-const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption Settings");
-const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop photos");
+const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
+const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
 const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
 class AdvPrintWizard::Private
