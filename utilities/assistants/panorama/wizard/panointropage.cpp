@@ -138,10 +138,14 @@ PanoIntroPage::PanoIntroPage(PanoManager* const mngr, QWizard* const dlg)
 #ifdef Q_OS_OSX
     // Hugin bundle PKG install
     d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/Hugin.app/Contents/MacOS"));
     d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/tools_mac"));
 
-    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
-    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
+    // Std Macports install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));
+
+    // digiKam Bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));
 #endif
 
 #ifdef Q_OS_WIN
