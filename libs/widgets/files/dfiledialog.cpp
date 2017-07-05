@@ -66,6 +66,16 @@ QUrl DFileDialog::getExistingDirectoryUrl(QWidget* const parent, const QString& 
     return QFileDialog::getExistingDirectoryUrl(parent, caption, dir, options, supportedSchemes);
 }
 
+QString DFileDialog::getOpenFileName(QWidget* const parent, const QString& caption,
+                                                            const QString& dir,
+                                                            const QString& filter,
+                                                            QString* selectedFilter,
+                                                            Options options)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getOpenFileName(parent, caption, dir, filter, selectedFilter, options);
+}
+
 QUrl DFileDialog::getOpenFileUrl(QWidget* const parent, const QString& caption,
                                                         const QUrl& dir,
                                                         const QString& filter,
@@ -75,6 +85,16 @@ QUrl DFileDialog::getOpenFileUrl(QWidget* const parent, const QString& caption,
 {
     options |= QFileDialog::DontUseNativeDialog;
     return QFileDialog::getOpenFileUrl(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
+}
+
+QString DFileDialog::getSaveFileName(QWidget* const parent, const QString& caption,
+                                                            const QString& dir,
+                                                            const QString& filter,
+                                                            QString* selectedFilter,
+                                                            Options options)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getSaveFileName(parent, caption, dir, filter, selectedFilter, options);
 }
 
 QUrl DFileDialog::getSaveFileUrl(QWidget* const parent, const QString& caption,

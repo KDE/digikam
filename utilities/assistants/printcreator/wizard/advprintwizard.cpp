@@ -30,7 +30,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QFileDialog>
 #include <QPainter>
 #include <QPalette>
 #include <QtGlobal>
@@ -71,6 +70,7 @@
 #include "templateicon.h"
 #include "dwizardpage.h"
 #include "dinfointerface.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -2068,7 +2068,7 @@ void AdvPrintWizard::slotBtnSaveAsClicked()
     KConfigGroup group = config.group( QLatin1String( "PrintCreator" ) );
     QUrl outputPath; // force to get current directory as default
     outputPath         = QUrl(group.readPathEntry( "OutputPath", outputPath.url() ));
-    QString filename   = QFileDialog::getSaveFileName(qApp->activeWindow(),
+    QString filename   = DFileDialog::getSaveFileName(qApp->activeWindow(),
                                                       i18n("Output Path"),
                                                       QLatin1String(".jpeg") );
     d->cropPage->ui()->m_fileName->setText(filename);

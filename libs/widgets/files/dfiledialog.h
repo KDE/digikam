@@ -57,12 +57,24 @@ public:
                                                                    Options options = ShowDirsOnly,
                                                                    const QStringList& supportedSchemes = QStringList());
 
+    static QString getOpenFileName(QWidget* const parent = 0, const QString& caption = QString(),
+                                                              const QString& dir = QString(),
+                                                              const QString& filter = QString(),
+                                                              QString* selectedFilter = 0,
+                                                              Options options = Options());
+
     static QUrl getOpenFileUrl(QWidget* const parent = 0, const QString& caption = QString(),
                                                           const QUrl& dir = QUrl(),
                                                           const QString& filter = QString(),
                                                           QString* selectedFilter = 0,
                                                           Options options = Options(),
                                                           const QStringList& supportedSchemes = QStringList());
+
+    static QString getSaveFileName(QWidget* const parent = 0, const QString& caption = QString(),
+                                                              const QString& dir = QString(),
+                                                              const QString& filter = QString(),
+                                                              QString* selectedFilter = 0,
+                                                              Options options = Options());
 
     static QUrl getSaveFileUrl(QWidget* const parent = 0, const QString& caption = QString(),
                                                           const QUrl& dir = QUrl(),

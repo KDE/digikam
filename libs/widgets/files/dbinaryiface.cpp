@@ -27,7 +27,6 @@
 
 #include <QProcess>
 #include <QMessageBox>
-#include <QFileDialog>
 
 // KDE includes
 
@@ -37,6 +36,7 @@
 
 // Local includes
 
+#include "dfiledialog.h"
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 
@@ -196,7 +196,7 @@ void DBinaryIface::slotNavigateAndCheck()
 #endif
     }
 
-    QString f = QFileDialog::getOpenFileName(0, i18n("Navigate to %1", m_binaryBaseName),
+    QString f = DFileDialog::getOpenFileName(0, i18n("Navigate to %1", m_binaryBaseName),
                                              start.toLocalFile(),
                                              m_binaryBaseName);
 

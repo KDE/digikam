@@ -90,7 +90,7 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 
     d->destUrl = new DFileSelector(main);
     d->destUrl->setFileDlgTitle(i18n("Destination Folder"));
-    d->destUrl->setFileDlgMode(QFileDialog::Directory);
+    d->destUrl->setFileDlgMode(DFileDialog::Directory);
     textLabel1->setBuddy(d->destUrl);
 
     // --------------------
