@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>764</width>
+    <width>834</width>
     <height>597</height>
    </rect>
   </property>
@@ -163,9 +163,7 @@ Enable &quot;Do not crop&quot; to avoid cropping all of the photos.</string>
       </layout>
      </item>
      <item>
-      <widget class="QWidget" name="m_fileSaveBox" native="true">
-       <zorder>cropFrame</zorder>
-      </widget>
+      <widget class="Digikam::DFileSelector" name="m_fileSaveBox" native="true"/>
      </item>
     </layout>
    </item>
@@ -176,6 +174,12 @@ Enable &quot;Do not crop&quot; to avoid cropping all of the photos.</string>
    <class>Digikam::AdvPrintCropFrame</class>
    <extends>QWidget</extends>
    <header>advprintcropframe.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Digikam::DFileSelector</class>
+   <extends>QWidget</extends>
+   <header>dfileselector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

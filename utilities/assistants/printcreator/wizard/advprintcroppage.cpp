@@ -28,9 +28,7 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
-#include <QVBoxLayout>
 #include <QStandardPaths>
-#include <QFileInfo>
 
 // KDE includes
 
@@ -41,7 +39,6 @@
 // Local includes
 
 #include "digikam_debug.h"
-#include "dfileselector.h"
 #include "advprintwizard.h"
 
 namespace Digikam
@@ -71,11 +68,9 @@ public:
     Private(QWidget* const parent)
     {
         cropUi     = new CropUI(parent);
-        fileSelect = 0;
     }
 
     CropUI*        cropUi;
-    DFileSelector* fileSelect;
 };
 
 AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
@@ -87,17 +82,9 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
     d->cropUi->BtnCropRotateLeft->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-left"))
                                           .pixmap(16, 16));
 
-    QVBoxLayout* const vlay = new QVBoxLayout;
-    vlay->setContentsMargins(QMargins(0, 0, 0, 0));
-    vlay->setSpacing(0);
-
-    d->fileSelect = new DFileSelector(d->cropUi->m_fileSaveBox);
-    d->fileSelect->setFileDlgTitle(i18n("Select Output Path"));
-    d->fileSelect->setFileDlgMode(DFileDialog::DirectoryOnly);
-    d->fileSelect->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
-
-    vlay->addWidget(d->fileSelect);
-    d->cropUi->m_fileSaveBox->setLayout(vlay);
+    d->cropUi->m_fileSaveBox->setFileDlgTitle(i18n("Select Output Path"));
+    d->cropUi->m_fileSaveBox->setFileDlgMode(DFileDialog::DirectoryOnly);
+    d->cropUi->m_fileSaveBox->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
 
     // -----------------------------------
 
@@ -147,20 +134,20 @@ void AdvPrintCropPage::initializePage()
 {
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-    d->fileSelect->setFileDlgPath(group.readPathEntry("OutputPath",
+    d->cropUi->m_fileSaveBox->setFileDlgPath(group.readPathEntry("OutputPath",
         QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
 }
 
 bool AdvPrintCropPage::validatePage()
 {
-    if (d->fileSelect->isEnabled())
+    if (d->cropUi->m_fileSaveBox->isEnabled())
     {
-        if (d->fileSelect->fileDlgPath().isEmpty())
+        if (d->cropUi->m_fileSaveBox->fileDlgPath().isEmpty())
             return false;
 
         KConfig config;
         KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-        group.writePathEntry(QLatin1String("OutputPath"), d->fileSelect->fileDlgPath());
+        group.writePathEntry(QLatin1String("OutputPath"), d->cropUi->m_fileSaveBox->fileDlgPath());
     }
 
     return true;
@@ -168,7 +155,7 @@ bool AdvPrintCropPage::validatePage()
 
 QString AdvPrintCropPage::outputPath() const
 {
-    return d->fileSelect->fileDlgPath();
+    return d->cropUi->m_fileSaveBox->fileDlgPath();
 }
 
 } // namespace Digikam

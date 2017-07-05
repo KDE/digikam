@@ -145,7 +145,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
-           <widget class="QWidget" name="mPrintList" native="true">
+           <widget class="Digikam::DImagesList" name="mPrintList" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -375,6 +375,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Digikam::DImagesList</class>
+   <extends>QWidget</extends>
+   <header>dimageslist.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>ListPhotoSizes</tabstop>
   <tabstop>BtnPreviewPageDown</tabstop>

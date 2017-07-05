@@ -71,12 +71,10 @@ public:
     {
         wizard    = dynamic_cast<AdvPrintWizard*>(dialog);
         captionUi = new CaptionUI(dialog);
-        imageList = 0;
     }
 
     CaptionUI*      captionUi;
     AdvPrintWizard* wizard;
-    DImagesList*    imageList;
 };
 
 AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& title)
@@ -103,19 +101,11 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     // -----------------------------------
 
-    QVBoxLayout* const vlay = new QVBoxLayout;
-    vlay->setContentsMargins(QMargins(0, 0, 0, 0));
-    vlay->setSpacing(0);
-
-    d->imageList = new DImagesList(d->captionUi->mPrintList, 32);
-    d->imageList->setAllowDuplicate(true);
-    d->imageList->setControlButtonsPlacement(DImagesList::NoControlButtons);
-    d->imageList->listView()->setColumn(DImagesListView::User1,
+    d->captionUi->mPrintList->setAllowDuplicate(true);
+    d->captionUi->mPrintList->setControlButtonsPlacement(DImagesList::NoControlButtons);
+    d->captionUi->mPrintList->listView()->setColumn(DImagesListView::User1,
                                         i18nc("@title:column", "Caption"),
                                         true);
-
-    vlay->addWidget(d->imageList);
-    d->captionUi->mPrintList->setLayout(vlay);
 
     // -----------------------------------
 
@@ -142,12 +132,12 @@ void AdvPrintCaptionPage::updateUi()
 
 DImagesList* AdvPrintCaptionPage::imagesList() const
 {
-    return d->imageList;
+    return d->captionUi->mPrintList;
 }
 
 void AdvPrintCaptionPage::initializePage()
 {
-    d->imageList->setIface(d->wizard->iface());
+    d->captionUi->mPrintList->setIface(d->wizard->iface());
     slotUpdateImagesList();
 }
 
@@ -172,8 +162,8 @@ bool AdvPrintCaptionPage::validatePage()
 
 void AdvPrintCaptionPage::slotUpdateImagesList()
 {
-    d->imageList->listView()->clear();
-    d->imageList->slotAddImages(d->wizard->itemsList());
+    d->captionUi->mPrintList->listView()->clear();
+    d->captionUi->mPrintList->slotAddImages(d->wizard->itemsList());
 }
 
 void AdvPrintCaptionPage::blockCaptionButtons(bool block)

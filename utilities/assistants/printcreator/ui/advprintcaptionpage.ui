@@ -18,7 +18,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
-    <widget class="QWidget" name="mPrintList" native="true">
+    <widget class="Digikam::DImagesList" name="mPrintList" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -298,6 +298,17 @@ add a new line</string>
    <class>Digikam::DColorSelector</class>
    <extends>QPushButton</extends>
    <header>dcolorselector.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Digikam::DImagesList</class>
+   <extends>QWidget</extends>
+   <header>dimageslist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Digikam::AdvPrintCropFrame</class>
+   <extends>QWidget</extends>
+   <header>advprintcropframe.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

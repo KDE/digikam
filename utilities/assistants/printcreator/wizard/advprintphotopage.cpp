@@ -65,8 +65,7 @@ public:
 public:
 
     Private(QWidget* const parent)
-      : printer(0),
-        imageList(0)
+      : printer(0)
     {
         photoUi = new PhotoUI(parent);
     }
@@ -74,7 +73,6 @@ public:
     PhotoUI*            photoUi;
     QPrinter*           printer;
     QList<QPrinterInfo> printerList;
-    DImagesList*        imageList;
 };
 
 AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title)
@@ -119,57 +117,49 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     // -----------------------------------
 
-    QVBoxLayout* const printListLayout = new QVBoxLayout;
-    printListLayout->setContentsMargins(QMargins());
-    printListLayout->setSpacing(0);
-
-    d->imageList = new DImagesList(d->photoUi->mPrintList, 32);
-    d->imageList->setAllowDuplicate(true);
-    d->imageList->setControlButtons(DImagesList::Add      |
+    d->photoUi->mPrintList->setAllowDuplicate(true);
+    d->photoUi->mPrintList->setControlButtons(DImagesList::Add      |
                                     DImagesList::Remove   |
                                     DImagesList::MoveUp   |
                                     DImagesList::MoveDown |
                                     DImagesList::Clear    |
                                     DImagesList::Save     |
                                     DImagesList::Load);
-    d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsAbove);
-    d->imageList->enableDragAndDrop(false);
-
-    printListLayout->addWidget(d->imageList);
-    d->photoUi->mPrintList->setLayout(printListLayout);
+    d->photoUi->mPrintList->setControlButtonsPlacement(DImagesList::ControlButtonsAbove);
+    d->photoUi->mPrintList->enableDragAndDrop(false);
 
     d->photoUi->BmpFirstPagePreview->setAlignment(Qt::AlignHCenter);
 
-    connect(d->imageList, SIGNAL(signalMoveDownItem()),
+    connect(d->photoUi->mPrintList, SIGNAL(signalMoveDownItem()),
             wizard, SLOT(slotBtnPrintOrderDownClicked()));
 
-    connect(d->imageList, SIGNAL(signalMoveUpItem()),
+    connect(d->photoUi->mPrintList, SIGNAL(signalMoveUpItem()),
             wizard, SLOT(slotBtnPrintOrderUpClicked()));
 
-    connect(d->imageList, SIGNAL(signalAddItems(QList<QUrl>)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalAddItems(QList<QUrl>)),
             wizard, SLOT(slotAddItems(QList<QUrl>)));
 
-    connect(d->imageList, SIGNAL(signalRemovingItem(int)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalRemovingItem(int)),
             wizard, SLOT(slotRemovingItem(int)));
 
-    connect(d->imageList, SIGNAL(signalItemClicked(QTreeWidgetItem*)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalItemClicked(QTreeWidgetItem*)),
             wizard, SLOT(slotImageSelected(QTreeWidgetItem*)));
 
-    connect(d->imageList, SIGNAL(signalContextMenuRequested()),
+    connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             wizard, SLOT(slotContextMenuRequested()));
 
     // Save item list => we catch the signal to add our PA attributes and elements Image children
-    connect(d->imageList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&, int)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&, int)),
             wizard, SLOT(slotXMLSaveItem(QXmlStreamWriter&, int)));
 
     // Save item list => we catch the signal to add our PA elements (not per image)
-    connect(d->imageList, SIGNAL(signalXMLCustomElements(QXmlStreamWriter&)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamWriter&)),
             wizard, SLOT(slotXMLCustomElement(QXmlStreamWriter&)));
 
-    connect(d->imageList, SIGNAL(signalXMLLoadImageElement(QXmlStreamReader&)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalXMLLoadImageElement(QXmlStreamReader&)),
             wizard, SLOT(slotXMLLoadElement(QXmlStreamReader&)));
 
-    connect(d->imageList, SIGNAL(signalXMLCustomElements(QXmlStreamReader&)),
+    connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamReader&)),
             wizard, SLOT(slotXMLCustomElement(QXmlStreamReader&)));
 
     // -----------------------------------
@@ -193,7 +183,7 @@ QPrinter* AdvPrintPhotoPage::printer() const
 
 DImagesList* AdvPrintPhotoPage::imagesList() const
 {
-    return d->imageList;
+    return d->photoUi->mPrintList;
 }
 
 Ui_AdvPrintPhotoPage* AdvPrintPhotoPage::ui() const
@@ -241,7 +231,7 @@ void AdvPrintPhotoPage::updateUi()
 
 bool AdvPrintPhotoPage::isComplete() const
 {
-    return (!d->imageList->imageUrls().empty());
+    return (!d->photoUi->mPrintList->imageUrls().empty());
 }
 
 } // namespace Digikam
