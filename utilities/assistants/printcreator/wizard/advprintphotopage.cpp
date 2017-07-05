@@ -225,11 +225,11 @@ void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
             }
         }
 
-        //d->printer->setPrinterName(text);
         d->printer->setOutputFormat(QPrinter::NativeFormat);
     }
 
-    //default no margins
+    // default no margins
+
     d->printer->setFullPage(true);
     d->printer->setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
 }

@@ -2322,7 +2322,7 @@ void AdvPrintWizard::accept()
         QPrinter::PaperSize paperSize =  d->photoPage->printer()->paperSize();
 
         QPrintDialog* const dialog    = new QPrintDialog(d->photoPage->printer(), this);
-        dialog->setWindowTitle(i18n("Print assistant"));
+        dialog->setWindowTitle(i18n("Print Creator"));
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "(2) paper page "
                                      << dialog->printer()->paperSize()
@@ -2374,7 +2374,7 @@ void AdvPrintWizard::accept()
         if (!AdvPrintCheckTempPath(this, path))
             return;
 
-        path = path + QLatin1String("kipi_tmp_");
+        path = path + QLatin1String("PrintCreator_tmp_");
 
         if (d->gimpFiles.count() > 0)
             removeGimpFiles();
@@ -2392,7 +2392,8 @@ void AdvPrintWizard::accept()
         if (!AdvPrintLaunchExternalApp(prog, args))
         {
             QMessageBox::information(this, QString(),
-                                     i18n("There was an error launching the GIMP. Please make sure it is properly installed."));
+                                     i18n("There was an error launching the external Gimp "
+                                     "Remote program. Please make sure it is properly installed."));
             return;
         }
     }
