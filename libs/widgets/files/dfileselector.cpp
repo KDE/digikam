@@ -43,7 +43,7 @@ public:
         edit      = 0;
         btn       = 0;
         fdMode    = DFileDialog::ExistingFile;
-        fdOptions = -1;
+        fdOptions = DFileDialog::Options();
     }
 
     QLineEdit*            edit;
@@ -52,7 +52,7 @@ public:
     DFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
-    int                   fdOptions;
+    DFileDialog::Options  fdOptions;
 };
 
 DFileSelector::DFileSelector(QWidget* const parent)
@@ -104,7 +104,7 @@ void DFileSelector::setFileDlgTitle(const QString& title)
 
 void DFileSelector::setFileDlgOptions(DFileDialog::Options opts)
 {
-    d->fdOptions = (int)opts;
+    d->fdOptions = opts;
 }
 
 void DFileSelector::slotBtnClicked()
@@ -118,12 +118,8 @@ void DFileSelector::slotBtnClicked()
     // Never pass a parent to File Dialog, else dupplicate dialogs will be shown
     DFileDialog* const fileDlg = new DFileDialog;
 
-    if (d->fdOptions != -1)
-    {
-        fileDlg->setOptions((DFileDialog::Options)d->fdOptions);
-    }
-
     fileDlg->setDirectory(QFileInfo(fileDlgPath()).filePath());
+    fileDlg->setOptions(d->fdOptions);
     fileDlg->setFileMode(d->fdMode);
 
     if (!d->fdFilter.isNull())
