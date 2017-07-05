@@ -135,4 +135,5 @@ BUGFIXES FROM BUGZILLA:
 121 ==> 195960 - Error printing A4 size miniatures.
 122 ==> 101495 - Raster effect on printout - using printwizard.
 123 ==> 171439 - Before printing more than 1 picture could be possible all of them cut to set size - only first can be.
-124 ==> 
+124 ==> 233970 - PrintWizard do not retaining settings.
+125 ==> 
