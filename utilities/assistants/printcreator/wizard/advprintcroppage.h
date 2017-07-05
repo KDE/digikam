@@ -26,6 +26,7 @@
 // Qt includes
 
 #include <QString>
+#include <QUrl>
 
 // Local includes
 
@@ -49,6 +50,11 @@ public:
     Ui_AdvPrintCropPage* ui() const;
 
     void updateUi();
+
+    void initializePage();
+    bool validatePage();
+
+    QString outputPath() const;
 
 private Q_SLOTS:
 

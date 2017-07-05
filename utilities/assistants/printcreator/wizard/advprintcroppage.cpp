@@ -28,14 +28,20 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QVBoxLayout>
+#include <QStandardPaths>
+#include <QFileInfo>
 
 // KDE includes
 
+#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // Local includes
 
 #include "digikam_debug.h"
+#include "dfileselector.h"
 #include "advprintwizard.h"
 
 namespace Digikam
@@ -64,10 +70,12 @@ public:
 
     Private(QWidget* const parent)
     {
-        cropUi = new CropUI(parent);
+        cropUi     = new CropUI(parent);
+        fileSelect = 0;
     }
 
-    CropUI* cropUi;
+    CropUI*        cropUi;
+    DFileSelector* fileSelect;
 };
 
 AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
@@ -79,10 +87,22 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
     d->cropUi->BtnCropRotateLeft->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-left"))
                                           .pixmap(16, 16));
 
-    connect(d->cropUi->m_disableCrop, SIGNAL(stateChanged(int)),
-            this, SLOT(slotCropSelection(int)));
+    QVBoxLayout* const vlay = new QVBoxLayout;
+    vlay->setContentsMargins(QMargins(0, 0, 0, 0));
+    vlay->setSpacing(0);
+
+    d->fileSelect = new DFileSelector(d->cropUi->m_fileSaveBox);
+    d->fileSelect->setFileDlgTitle(i18n("Select Output Path"));
+    d->fileSelect->setFileDlgMode(DFileDialog::DirectoryOnly);
+    d->fileSelect->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
+
+    vlay->addWidget(d->fileSelect);
+    d->cropUi->m_fileSaveBox->setLayout(vlay);
 
     // -----------------------------------
+
+    connect(d->cropUi->m_disableCrop, SIGNAL(stateChanged(int)),
+            this, SLOT(slotCropSelection(int)));
 
     connect(d->cropUi->BtnCropPrev, SIGNAL(clicked()),
             wizard, SLOT(slotBtnCropPrevClicked()));
@@ -95,9 +115,6 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
 
     connect(d->cropUi->BtnCropRotateLeft, SIGNAL(clicked()),
             wizard, SLOT(slotBtnCropRotateLeftClicked()));
-
-    connect(d->cropUi->BtnSaveAs, SIGNAL (clicked()),
-            wizard, SLOT (slotBtnSaveAsClicked()));
 
     // -----------------------------------
 
@@ -124,6 +141,34 @@ void AdvPrintCropPage::slotCropSelection(int)
 {
     d->cropUi->cropFrame->drawCropRectangle(!d->cropUi->m_disableCrop->isChecked());
     updateUi();
+}
+
+void AdvPrintCropPage::initializePage()
+{
+    KConfig config;
+    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
+    d->fileSelect->setFileDlgPath(group.readPathEntry("OutputPath",
+        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+}
+
+bool AdvPrintCropPage::validatePage()
+{
+    if (d->fileSelect->isEnabled())
+    {
+        if (d->fileSelect->fileDlgPath().isEmpty())
+            return false;
+
+        KConfig config;
+        KConfigGroup group = config.group(QLatin1String("PrintCreator"));
+        group.writePathEntry(QLatin1String("OutputPath"), d->fileSelect->fileDlgPath());
+    }
+
+    return true;
+}
+
+QString AdvPrintCropPage::outputPath() const
+{
+    return d->fileSelect->fileDlgPath();
 }
 
 } // namespace Digikam

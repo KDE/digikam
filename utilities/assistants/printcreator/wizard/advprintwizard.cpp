@@ -2030,19 +2030,6 @@ void AdvPrintWizard::slotBtnPreviewPageUpClicked()
     previewPhotos();
 }
 
-void AdvPrintWizard::slotBtnSaveAsClicked()
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Save As Clicked";
-    KConfig config;
-    KConfigGroup group = config.group( QLatin1String( "PrintCreator" ) );
-    QUrl outputPath; // force to get current directory as default
-    outputPath         = QUrl(group.readPathEntry( "OutputPath", outputPath.url() ));
-    QString filename   = DFileDialog::getSaveFileName(qApp->activeWindow(),
-                                                      i18n("Output Path"),
-                                                      QLatin1String(".jpeg") );
-    d->cropPage->ui()->m_fileName->setText(filename);
-}
-
 void AdvPrintWizard::saveSettings(const QString& pageName)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << pageName;
@@ -2065,19 +2052,6 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
                          d->savedPhotoSize);
         group.writeEntry(QLatin1String("IconSize"),
                          d->photoPage->ui()->ListPhotoSizes->iconSize());
-    }
-    else if (pageName == i18n(CAPTION_PAGE_NAME))
-    {
-        // Nothing to do
-    }
-    else if (pageName == i18n(CROP_PAGE_NAME))
-    {
-        if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
-        {
-            // output path
-            QString outputPath = d->cropPage->ui()->m_fileName->text();
-            group.writePathEntry(QLatin1String("OutputPath"), outputPath);
-        }
     }
 }
 
@@ -2122,20 +2096,11 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         // CropPage
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
         {
-            // set the last output path
-            QUrl outputPath; // force to get current directory as default
-            outputPath = QUrl(group.readPathEntry("OutputPath", outputPath.url()));
-
-            d->cropPage->ui()->m_fileName->setVisible(true);
-            d->cropPage->ui()->m_fileName->setEnabled(true);
-            d->cropPage->ui()->m_fileName->setText(outputPath.path());
-            d->cropPage->ui()->BtnSaveAs->setVisible(true);
+            d->cropPage->ui()->m_fileSaveBox->setEnabled(true);
         }
         else
         {
-            d->cropPage->ui()->m_fileName->setVisible(false);
-            d->cropPage->ui()->BtnSaveAs->setVisible(false);
-
+            d->cropPage->ui()->m_fileSaveBox->setEnabled(false);
         }
     }
 }
@@ -2434,7 +2399,7 @@ void AdvPrintWizard::accept()
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
     {
         // now output the items
-        QString path = d->cropPage->ui()->m_fileName->text();
+        QString path = d->cropPage->outputPath();
 
         if (path.isEmpty())
         {

@@ -103,9 +103,9 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     // -----------------------------------
 
-    QVBoxLayout* const printListLayout = new QVBoxLayout;
-    printListLayout->setContentsMargins(QMargins());
-    printListLayout->setSpacing(0);
+    QVBoxLayout* const vlay = new QVBoxLayout;
+    vlay->setContentsMargins(QMargins(0, 0, 0, 0));
+    vlay->setSpacing(0);
 
     d->imageList = new DImagesList(d->captionUi->mPrintList, 32);
     d->imageList->setAllowDuplicate(true);
@@ -114,8 +114,8 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
                                         i18nc("@title:column", "Caption"),
                                         true);
 
-    printListLayout->addWidget(d->imageList);
-    d->captionUi->mPrintList->setLayout(printListLayout);
+    vlay->addWidget(d->imageList);
+    d->captionUi->mPrintList->setLayout(vlay);
 
     // -----------------------------------
 

@@ -83,7 +83,7 @@ AdvPrintCropFrame::~AdvPrintCropFrame()
     delete d;
 }
 
-// FIXME:  This method is doing way too much.  The cropFrame initialization
+// FIXME:  This method is doing way too much. The cropFrame initialization
 // should be a AdvPrintPhoto method, and should not require the scaling of
 // pixmaps to get the desired effect, which are too slow.
 

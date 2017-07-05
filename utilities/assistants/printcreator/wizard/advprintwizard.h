@@ -80,7 +80,6 @@ public Q_SLOTS:
     void slotBtnCropRotateRightClicked();
     void slotBtnCropNextClicked();
     void slotBtnCropPrevClicked();
-    void slotBtnSaveAsClicked();
     void slotListPhotoSizesSelected();
 
     void slotPagesetupclicked();
