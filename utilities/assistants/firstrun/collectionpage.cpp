@@ -101,8 +101,8 @@ CollectionPage::CollectionPage(QWizard* const dlg)
     textLabel1->setText(message);
 
     d->rootAlbumPathRequester = new DFileSelector(widget);
-    d->rootAlbumPathRequester->setFileDlgMode(QFileDialog::Directory);
-    d->rootAlbumPathRequester->setFileDlgOptions(QFileDialog::ShowDirsOnly);
+    d->rootAlbumPathRequester->setFileDlgMode(DFileDialog::Directory);
+    d->rootAlbumPathRequester->setFileDlgOptions(DFileDialog::ShowDirsOnly);
     d->rootAlbumPathRequester->setFileDlgPath(picturesPath);
 
     vlayout->addWidget(textLabel1);

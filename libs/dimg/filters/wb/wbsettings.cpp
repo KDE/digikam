@@ -41,7 +41,6 @@
 #include <QApplication>
 #include <QStyle>
 #include <QUrl>
-#include <QFileDialog>
 #include <QMessageBox>
 
 // KDE includes
@@ -52,10 +51,10 @@
 
 #include "dlayoutbox.h"
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "dcombobox.h"
-#include "dexpanderbox.h"
 
 namespace Digikam
 {
@@ -525,7 +524,7 @@ void WBSettings::writeSettings(KConfigGroup& group)
 
 void WBSettings::loadSettings()
 {
-    QUrl loadWhiteBalanceFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Load"),
+    QUrl loadWhiteBalanceFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Load"),
                                                             QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                             QLatin1String("*"));
 
@@ -572,7 +571,7 @@ void WBSettings::loadSettings()
 
 void WBSettings::saveAsSettings()
 {
-    QUrl saveWhiteBalanceFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Save"),
+    QUrl saveWhiteBalanceFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("White Color Balance Settings File to Save"),
                                                             QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                             QLatin1String("*"));
 

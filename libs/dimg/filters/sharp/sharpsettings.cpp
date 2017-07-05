@@ -32,7 +32,6 @@
 #include <QTextStream>
 #include <QCheckBox>
 #include <QStackedWidget>
-#include <QFileDialog>
 #include <QUrl>
 #include <QStandardPaths>
 #include <QApplication>
@@ -46,12 +45,12 @@
 // Local includes
 
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "dlayoutbox.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "digikam_config.h"
 #include "dcombobox.h"
-#include "dexpanderbox.h"
 
 #ifdef HAVE_EIGEN3
 #   include "refocusfilter.h"
@@ -499,7 +498,7 @@ void SharpSettings::writeSettings(KConfigGroup& group)
 
 void SharpSettings::loadSettings()
 {
-    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Load"),
+    QUrl loadRestorationFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Load"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 
@@ -546,7 +545,7 @@ void SharpSettings::loadSettings()
 
 void SharpSettings::saveAsSettings()
 {
-    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Save"),
+    QUrl saveRestorationFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Refocus Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 

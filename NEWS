@@ -122,4 +122,18 @@ BUGFIXES FROM BUGZILLA:
 107 ==> 149970 - MPEG slideshow : incorrect warrning about missing runtime files.
 108 ==> 381916 - digiKam crash when add person names.
 109 ==> 328848 - Print Assistant window not resizable nor scrollable.
-110 ==> 
+110 ==> 100311 - digikam crashes when using print wizard.
+112 ==> 162085 - digikam freezes while printing.
+113 ==> 160810 - digikam crop photos next button does not work.
+114 ==> 118868 - A recto-verso printing wizard.
+115 ==> 308963 - Add the ability to Export photos to a PDF file.
+116 ==> 260994 - Print error when print with "print assistant.
+117 ==> 155084 - Printing comments and EXIF tags.
+118 ==> 103153 - Add print icon to main toolbar of digiKam.
+119 ==> 178983 - next/back-buttons in print-assistant should be labeled.
+120 ==> 126863 - print thumbnails on A4 produces 210x297 pixel (instead of mm) image.
+121 ==> 195960 - Error printing A4 size miniatures.
+122 ==> 101495 - Raster effect on printout - using printwizard.
+123 ==> 171439 - Before printing more than 1 picture could be possible all of them cut to set size - only first can be.
+124 ==> 233970 - PrintWizard do not retaining settings.
+125 ==> 

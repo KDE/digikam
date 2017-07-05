@@ -28,7 +28,6 @@
 #include <QMenu>
 #include <QFile>
 #include <QIcon>
-#include <QFileDialog>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QToolButton>

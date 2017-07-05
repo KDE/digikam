@@ -171,6 +171,7 @@
 #include "sheartool.h"
 #include "resizetool.h"
 #include "ratiocroptool.h"
+#include "dfiledialog.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -2236,11 +2237,11 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 {
     QString all;
     QStringList list                       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
-    QFileDialog* const imageFileSaveDialog = new QFileDialog(this);
+    DFileDialog* const imageFileSaveDialog = new DFileDialog(this);
     imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
     imageFileSaveDialog->setDirectoryUrl(initialUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash));
-    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
-    imageFileSaveDialog->setFileMode(QFileDialog::AnyFile);
+    imageFileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
+    imageFileSaveDialog->setFileMode(DFileDialog::AnyFile);
     imageFileSaveDialog->setNameFilters(list);
 
     // restore old settings for the dialog
@@ -2290,7 +2291,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != QFileDialog::Accepted || !imageFileSaveDialog)
+    if (result != DFileDialog::Accepted || !imageFileSaveDialog)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "File Save Dialog rejected";
         return false;

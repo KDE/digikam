@@ -153,11 +153,11 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
 #ifdef HAVE_KCALENDAR
     d->calEventsUI.ohUrlRequester->setFileDlgFilter(i18n("%1|Calendar Data File", QLatin1String("*.ics")));
     d->calEventsUI.ohUrlRequester->setFileDlgTitle(i18n("Select Calendar Data File"));
-    d->calEventsUI.ohUrlRequester->setFileDlgMode(QFileDialog::ExistingFile);
+    d->calEventsUI.ohUrlRequester->setFileDlgMode(DFileDialog::ExistingFile);
 
     d->calEventsUI.fhUrlRequester->setFileDlgFilter(i18n("%1|Calendar Data File", QLatin1String("*.ics")));
     d->calEventsUI.fhUrlRequester->setFileDlgTitle(i18n("Select Calendar Data File"));
-    d->calEventsUI.fhUrlRequester->setFileDlgMode(QFileDialog::ExistingFile);
+    d->calEventsUI.fhUrlRequester->setFileDlgMode(DFileDialog::ExistingFile);
 #endif
 
     // ------------------------------------------

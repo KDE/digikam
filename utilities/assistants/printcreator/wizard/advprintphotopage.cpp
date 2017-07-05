@@ -100,29 +100,6 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->m_printer_choice, SIGNAL(activated(QString)),
             this, SLOT(slotOutputChanged(QString)));
 
-    // -----------------
-
-    connect(d->photoUi->m_captions, SIGNAL(activated(QString)),
-            wizard, SLOT(slotCaptionChanged(QString)));
-
-    connect(d->photoUi->m_FreeCaptionFormat , SIGNAL(editingFinished()),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_sameCaption , SIGNAL(stateChanged(int)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_font_name , SIGNAL(currentFontChanged(QFont)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_font_size , SIGNAL(valueChanged(int)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_font_color , SIGNAL(signalColorSelected(QColor)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->photoUi->m_setDefault , SIGNAL(clicked()),
-            wizard, SLOT(slotSaveCaptionSettings()));
-
     connect(d->photoUi->BtnPreviewPageUp, SIGNAL(clicked()),
             wizard, SLOT(slotBtnPreviewPageUpClicked()));
 
@@ -142,19 +119,19 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     // -----------------------------------
 
-    QVBoxLayout* printListLayout = new QVBoxLayout;
+    QVBoxLayout* const printListLayout = new QVBoxLayout;
     printListLayout->setContentsMargins(QMargins());
     printListLayout->setSpacing(0);
 
     d->imageList = new DImagesList(d->photoUi->mPrintList, 32);
     d->imageList->setAllowDuplicate(true);
     d->imageList->setControlButtons(DImagesList::Add      |
-                                             DImagesList::Remove   |
-                                             DImagesList::MoveUp   |
-                                             DImagesList::MoveDown |
-                                             DImagesList::Clear    |
-                                             DImagesList::Save     |
-                                             DImagesList::Load);
+                                    DImagesList::Remove   |
+                                    DImagesList::MoveUp   |
+                                    DImagesList::MoveDown |
+                                    DImagesList::Clear    |
+                                    DImagesList::Save     |
+                                    DImagesList::Load);
     d->imageList->setControlButtonsPlacement(DImagesList::ControlButtonsAbove);
     d->imageList->enableDragAndDrop(false);
 

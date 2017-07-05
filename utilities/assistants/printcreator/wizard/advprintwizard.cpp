@@ -30,7 +30,6 @@
 // Qt includes
 
 #include <QFileInfo>
-#include <QFileDialog>
 #include <QPainter>
 #include <QPalette>
 #include <QtGlobal>
@@ -65,16 +64,19 @@
 #include "advprintcustomdlg.h"
 #include "advprintintropage.h"
 #include "advprintphotopage.h"
+#include "advprintcaptionpage.h"
 #include "advprintcroppage.h"
 #include "digikam_debug.h"
 #include "templateicon.h"
 #include "dwizardpage.h"
 #include "dinfointerface.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
 
 const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
+const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption Settings");
 const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop photos");
 const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
@@ -87,6 +89,7 @@ public:
     {
         introPage            = 0;
         photoPage            = 0;
+        captionPage          = 0;
         cropPage             = 0;
         infopageCurrentPhoto = 0;
         currentPreviewPage   = 0;
@@ -100,6 +103,7 @@ public:
 
     AdvPrintIntroPage*        introPage;
     AdvPrintPhotoPage*        photoPage;
+    AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
 
     // Page Size in mm
@@ -125,10 +129,11 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 {
     setWindowTitle(i18n("Print Creator"));
 
-    d->iface     = iface;
-    d->introPage = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
-    d->photoPage = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
-    d->cropPage  = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
+    d->iface       = iface;
+    d->introPage   = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
+    d->photoPage   = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
+    d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
+    d->cropPage    = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
 
     // -----------------------------------
 
@@ -140,6 +145,12 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     connect(button(QWizard::CancelButton), SIGNAL(clicked()),
             this, SLOT(reject()));
+
+    connect(d->photoPage->imagesList(), SIGNAL(signalImageListChanged()),
+            d->captionPage, SLOT(slotUpdateImagesList()));
+
+    connect(d->captionPage->imagesList(), SIGNAL(signalImageListChanged()),
+            this, SLOT(slotInfoPageUpdateCaptions()));
 
     if (d->iface)
         setItemsList();
@@ -154,6 +165,25 @@ AdvPrintWizard::~AdvPrintWizard()
 
     d->photos.clear();
     delete d;
+}
+
+DInfoInterface* AdvPrintWizard::iface() const
+{
+    return d->iface;
+}
+
+QList<QUrl> AdvPrintWizard::itemsList() const
+{
+    QList<QUrl> urls;
+
+    for (QList<AdvPrintPhoto*>::iterator it = d->photos.begin() ;
+         it != d->photos.end() ; ++it)
+    {
+        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
+        urls << photo->m_url;
+    }
+
+    return urls;
 }
 
 void AdvPrintWizard::createPhotoGrid(AdvPrintPhotoSize* const p,
@@ -194,7 +224,6 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
     }
 
     d->photos.clear();
-    //d->photoPage->m_PictureInfo->setRowCount(list.count());
 
     if (list.isEmpty() && d->iface)
     {
@@ -204,7 +233,7 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
     for (int i = 0; i < list.count(); ++i)
     {
         AdvPrintPhoto* const photo = new AdvPrintPhoto(150, d->iface);
-        photo->m_filename          = list[i];
+        photo->m_url          = list[i];
         photo->m_first             = true;
         d->photos.append(photo);
     }
@@ -532,7 +561,9 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     }
 
     // Adding custom choice
-    QListWidgetItem* const pWItem = new QListWidgetItem(CUSTOM_PAGE_LAYOUT_NAME);
+
+    QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
+
 
     //TODO FREE STYLE ICON
     TemplateIcon ti(80, pageSize.toSize());
@@ -683,7 +714,7 @@ void AdvPrintWizard::printCaption(QPainter& p,
         captionByLines.prepend(newLine.trimmed());
     }
 
-    QFont font(photo->m_pAdvPrintCaptionInfo->m_caption_font);
+    QFont font(photo->m_pAdvPrintCaptionInfo->m_captionFont);
     font.setStyleHint(QFont::SansSerif);
     font.setPixelSize((int)(captionH * d->FONT_HEIGHT_RATIO));
     font.setWeight(QFont::Normal);
@@ -692,7 +723,7 @@ void AdvPrintWizard::printCaption(QPainter& p,
     int pixelsHigh = fm.height();
 
     p.setFont(font);
-    p.setPen(photo->m_pAdvPrintCaptionInfo->m_caption_color);
+    p.setPen(photo->m_pAdvPrintCaptionInfo->m_captionColor);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Number of lines " << (int) captionByLines.count() ;
 
@@ -716,7 +747,7 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
 
     QString format;
 
-    switch (photo->m_pAdvPrintCaptionInfo->m_caption_type)
+    switch (photo->m_pAdvPrintCaptionInfo->m_captionType)
     {
         case AdvPrintCaptionInfo::FileNames:
             format = QLatin1String("%f");
@@ -727,16 +758,16 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
         case AdvPrintCaptionInfo::Comment:
             format = QLatin1String("%c");
             break;
-        case AdvPrintCaptionInfo::Free:
-            format =  photo->m_pAdvPrintCaptionInfo->m_caption_text;
+        case AdvPrintCaptionInfo::Custom:
+            format =  photo->m_pAdvPrintCaptionInfo->m_captionText;
             break;
         default:
             qCWarning(DIGIKAM_GENERAL_LOG) << "UNKNOWN caption type "
-                                           << photo->m_pAdvPrintCaptionInfo->m_caption_type;
+                                           << photo->m_pAdvPrintCaptionInfo->m_captionType;
             break;
     }
 
-    QFileInfo fi(photo->m_filename.toLocalFile());
+    QFileInfo fi(photo->m_url.toLocalFile());
     QString resolution;
     QSize imageSize;
     DMetadata meta = photo->metaIface();
@@ -764,7 +795,7 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
 
     if (d->iface)
     {
-        DItemInfo info(d->iface->itemInfo(photo->m_filename));
+        DItemInfo info(d->iface->itemInfo(photo->m_url));
         format.replace(QString::fromUtf8("%c"), info.comment());
         format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
                                                 QLocale::ShortFormat));
@@ -882,7 +913,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             int h  = AdvPrintNint((double) photo->m_cropRegion.height() * yRatio);
             img    = img.copy(QRect(x1, y1, w, h));
         }
-        else if (!cropDisabled)       //d->cropPage->ui()->m_disableCrop->isChecked() )
+        else if (!cropDisabled)
         {
             img = img.copy(photo->m_cropRegion);
         }
@@ -901,7 +932,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
 
         QPoint point;
 
-        if (cropDisabled)  //->cropPage->m_disableCrop->isChecked() )
+        if (cropDisabled)
         {
             imageSize.scale(newRectViewPort.size(), Qt::KeepAspectRatio);
             int spaceLeft = (newRectViewPort.width() - imageSize.width()) / 2;
@@ -923,7 +954,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
         p.setBrushOrigin(point);
 
         if (photo->m_pAdvPrintCaptionInfo &&
-            photo->m_pAdvPrintCaptionInfo->m_caption_type != AdvPrintCaptionInfo::NoCaptions)
+            photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
         {
             p.save();
             QString caption;
@@ -934,7 +965,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             // before drawing so the text will be in the correct location
             // next, do we rotate?
             int captionW        = w - 2;
-            double ratio        = photo->m_pAdvPrintCaptionInfo->m_caption_size * 0.01;
+            double ratio        = photo->m_pAdvPrintCaptionInfo->m_captionSize * 0.01;
             int captionH        = (int)(qMin(w, h) * ratio);
             int exifOrientation = DMetadata::ORIENTATION_NORMAL;
             int orientatation   = photo->m_rotation;
@@ -1027,13 +1058,16 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 // update the pages to be printed and preview first/last pages
 void AdvPrintWizard::previewPhotos()
 {
+    if (d->photosizes.isEmpty())
+        return;
+
     //Change cursor to waitCursor during transition
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // get the selected layout
+    int photoCount             = d->photos.count();
     int curr                   = d->photoPage->ui()->ListPhotoSizes->currentRow();
     AdvPrintPhotoSize* const s = d->photosizes.at(curr);
-    int photoCount             =  d->photos.count();
     int emptySlots             = 0;
     int pageCount              = 0;
     int photosPerPage          = 0;
@@ -1145,33 +1179,11 @@ void AdvPrintWizard::manageBtnPreviewPage()
     }
 }
 
-void AdvPrintWizard::infopage_setCaptionButtons()
+void AdvPrintWizard::setCaptionButtons()
 {
     if (d->photos.size())
     {
-        AdvPrintPhoto* const pPhoto = d->photos.at(d->infopageCurrentPhoto);
-
-        if (pPhoto && !d->photoPage->ui()->m_sameCaption->isChecked())
-        {
-            infopage_blockCaptionButtons();
-
-            if (pPhoto->m_pAdvPrintCaptionInfo)
-            {
-                d->photoPage->ui()->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_caption_color);
-                d->photoPage->ui()->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size);
-                d->photoPage->ui()->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_caption_font);
-                d->photoPage->ui()->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
-                d->photoPage->ui()->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
-                enableCaptionGroup(d->photoPage->ui()->m_captions->currentText());
-            }
-            else
-            {
-                infopage_readCaptionSettings();
-                slotCaptionChanged(d->photoPage->ui()->m_captions->currentText());
-            }
-
-            infopage_blockCaptionButtons(false);
-        }
+        d->captionPage->setCaptionButtons(d->photos.at(d->infopageCurrentPhoto));
     }
 }
 
@@ -1203,15 +1215,15 @@ void AdvPrintWizard::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemIndex)
         {
             xmlWriter.writeStartElement(QLatin1String("pa_caption"));
             xmlWriter.writeAttribute(QLatin1String("type"),
-                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
+                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_captionType));
             xmlWriter.writeAttribute(QLatin1String("font"),
-                                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_font.toString());
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.toString());
             xmlWriter.writeAttribute(QLatin1String("size"),
-                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size));
+                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_captionSize));
             xmlWriter.writeAttribute(QLatin1String("color"),
-                                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_color.name());
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.name());
             xmlWriter.writeAttribute(QLatin1String("text"),
-                                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionText);
             xmlWriter.writeEndElement(); // pa_caption
         }
     }
@@ -1292,14 +1304,10 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
         while (xmlReader.readNextStartElement())
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << pPhoto->m_filename << " " << xmlReader.name();
+            qCDebug(DIGIKAM_GENERAL_LOG) << pPhoto->m_url << " " << xmlReader.name();
 
             if (xmlReader.name() == QLatin1String("pa_caption"))
             {
-                d->photoPage->ui()->m_sameCaption->blockSignals(true);
-                d->photoPage->ui()->m_sameCaption->setCheckState( Qt::Unchecked );
-                d->photoPage->ui()->m_sameCaption->blockSignals(false);
-
                 //useless this item has been added now
                 if (pPhoto->m_pAdvPrintCaptionInfo)
                     delete pPhoto->m_pAdvPrintCaptionInfo;
@@ -1314,7 +1322,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_type =
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
                         (AdvPrintCaptionInfo::AvailableCaptions)attr.toString().toInt(&ok);
                 }
 
@@ -1323,7 +1331,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_font.fromString(attr.toString());
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.fromString(attr.toString());
                 }
 
                 attr = attrs.value(QLatin1String("color"));
@@ -1331,7 +1339,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_color.setNamedColor(attr.toString());
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.setNamedColor(attr.toString());
                 }
 
                 attr = attrs.value(QLatin1String("size"));
@@ -1339,7 +1347,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_size = attr.toString().toInt(&ok);
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionSize = attr.toString().toInt(&ok);
                 }
 
                 attr = attrs.value(QLatin1String("text"));
@@ -1347,10 +1355,10 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_text = attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionText = attr.toString();
                 }
 
-                infopage_setCaptionButtons();
+                setCaptionButtons();
             }
         }
     }
@@ -1400,7 +1408,7 @@ void AdvPrintWizard::slotImageSelected(QTreeWidgetItem* item)
     qCDebug(DIGIKAM_GENERAL_LOG) << " current row now is " << itemIndex;
     d->infopageCurrentPhoto = itemIndex;
 
-    infopage_setCaptionButtons();
+    setCaptionButtons();
 }
 
 void AdvPrintWizard::slotDecreaseCopies()
@@ -1443,7 +1451,7 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
                 {
                     AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
-                    if (pCurrentPhoto && pCurrentPhoto->m_filename == pPhotoToRemove->m_filename)
+                    if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
                     {
                         pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
                         copies                  = pCurrentPhoto->m_copies;
@@ -1461,7 +1469,7 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
                 AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
                 if (pCurrentPhoto &&
-                    pCurrentPhoto->m_filename == pPhotoToRemove->m_filename &&
+                    pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
                     pCurrentPhoto->m_first)
                 {
                     pCurrentPhoto->m_copies--;
@@ -1479,7 +1487,7 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
         if (pPhotoToRemove)
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
-                                         << pPhotoToRemove->m_filename.fileName()
+                                         << pPhotoToRemove->m_url.fileName()
                                          << " copy number "
                                          << copies;
         }
@@ -1520,7 +1528,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
             AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
 
             if (pCurrentPhoto &&
-                pCurrentPhoto->m_filename == imageUrl &&
+                pCurrentPhoto->m_url == imageUrl &&
                 pCurrentPhoto->m_first)
             {
                 pCurrentPhoto->m_copies++;
@@ -1529,7 +1537,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
                 pPhoto->m_first             = false;
                 d->photos.append(pPhoto);
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Added fileName: "
-                                             << pPhoto->m_filename.fileName()
+                                             << pPhoto->m_url.fileName()
                                              << " copy number "
                                              << pCurrentPhoto->m_copies;
             }
@@ -1538,17 +1546,15 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
         if (!found)
         {
             AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(150, d->iface);
-            pPhoto->m_filename          = *it;
+            pPhoto->m_url          = *it;
             pPhoto->m_first             = true;
             d->photos.append(pPhoto);
             qCDebug(DIGIKAM_GENERAL_LOG) << "Added new fileName: "
-                                         << pPhoto->m_filename.fileName();
+                                         << pPhoto->m_url.fileName();
         }
     }
 
     d->photoPage->imagesList()->blockSignals(false);
-    slotInfoPageUpdateCaptions();
-    //previewPhotos();
 
     if (d->photos.size())
     {
@@ -1610,7 +1616,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
 
             if (pCurrentPhoto)
             {
-                list.push_back(pCurrentPhoto->m_filename);
+                list.push_back(pCurrentPhoto->m_url);
             }
         }
 
@@ -1638,15 +1644,24 @@ void AdvPrintWizard::slotPageChanged(int curr)
                 d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
         }
 
-        // update captions only the first time to avoid missing old changes when
-        // back to this page
-        if (!before)
-            slotInfoPageUpdateCaptions();
-
         // reset preview page number
         d->currentPreviewPage = 0;
+
         // create our photo sizes list
         previewPhotos();
+    }
+    else if (current->title() == i18n(CAPTION_PAGE_NAME))
+    {
+        // readSettings only the first time
+
+        if (!before)
+            readSettings(current->title());
+
+        // update captions only the first time to avoid missing old changes when
+        // back to this page
+
+        if (!before)
+            slotInfoPageUpdateCaptions();
     }
     else if (current->title() == i18n(CROP_PAGE_NAME))
     {
@@ -1675,12 +1690,12 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
     if (pPhoto)
     {
         if (!pPhoto->m_pAdvPrintCaptionInfo &&
-            d->photoPage->ui()->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
+            d->captionPage->ui()->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
         {
             pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
         }
         else if (pPhoto->m_pAdvPrintCaptionInfo &&
-            d->photoPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
+                 d->captionPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
         {
             delete pPhoto->m_pAdvPrintCaptionInfo;
             pPhoto->m_pAdvPrintCaptionInfo = NULL;
@@ -1688,11 +1703,13 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
 
         if (pPhoto->m_pAdvPrintCaptionInfo)
         {
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_color = d->photoPage->ui()->m_font_color->color();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_size  = d->photoPage->ui()->m_font_size->value();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_font  = d->photoPage->ui()->m_font_name->currentFont();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_type  = (AdvPrintCaptionInfo::AvailableCaptions)d->photoPage->ui()->m_captions->currentIndex();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_text  = d->photoPage->ui()->m_FreeCaptionFormat->text();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionColor = d->captionPage->ui()->m_font_color->color();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionSize  = d->captionPage->ui()->m_font_size->value();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  = d->captionPage->ui()->m_font_name->currentFont();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionType  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionPage->ui()->m_captions->currentIndex();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionText  = d->captionPage->ui()->m_FreeCaptionFormat->text();
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for" << pPhoto->m_url;
         }
     }
 }
@@ -1701,29 +1718,22 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
 {
     if (d->photos.size())
     {
-        if (d->photoPage->ui()->m_sameCaption->isChecked())
+        foreach(AdvPrintPhoto* const pPhoto, d->photos)
         {
-            QList<AdvPrintPhoto*>::iterator it;
+            updateCaption(pPhoto);
 
-            for (it = d->photos.begin() ; it != d->photos.end() ; ++it)
+            if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
             {
-                AdvPrintPhoto* const pPhoto = static_cast<AdvPrintPhoto*>(*it);
-                updateCaption(pPhoto);
-            }
-        }
-        else
-        {
-            QList <QTreeWidgetItem*> list = d->photoPage->imagesList()->listView()->selectedItems();
+                DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
 
-            foreach(QTreeWidgetItem* const item, list)
-            {
-                DImagesListViewItem* const lvItem = dynamic_cast<DImagesListViewItem*>(item);
-
-                if (item)
+                if (lvItem)
                 {
-                    int itemIndex               = d->photoPage->imagesList()->listView()->indexFromItem(lvItem).row();
-                    AdvPrintPhoto* const pPhoto = d->photos.at(itemIndex);
-                    updateCaption(pPhoto);
+                    QString cap;
+
+                    if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
+                        cap = captionFormatter(pPhoto);
+
+                    lvItem->setText(DImagesListView::User1, cap);
                 }
             }
         }
@@ -1731,40 +1741,6 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
 
     // create our photo sizes list
     previewPhotos();
-}
-
-void AdvPrintWizard::enableCaptionGroup(const QString& text)
-{
-    bool fontSettingsEnabled;
-
-    if (text == i18n("No captions"))
-    {
-        fontSettingsEnabled = false;
-        d->photoPage->ui()->m_FreeCaptionFormat->setEnabled(false);
-        d->photoPage->ui()->m_free_label->setEnabled(false);
-    }
-    else if (text == i18n("Free"))
-    {
-        fontSettingsEnabled = true;
-        d->photoPage->ui()->m_FreeCaptionFormat->setEnabled(true);
-        d->photoPage->ui()->m_free_label->setEnabled(true);
-    }
-    else
-    {
-        fontSettingsEnabled = true;
-        d->photoPage->ui()->m_FreeCaptionFormat->setEnabled(false);
-        d->photoPage->ui()->m_free_label->setEnabled(false);
-    }
-
-    d->photoPage->ui()->m_font_name->setEnabled(fontSettingsEnabled);
-    d->photoPage->ui()->m_font_size->setEnabled(fontSettingsEnabled);
-    d->photoPage->ui()->m_font_color->setEnabled(fontSettingsEnabled);
-}
-
-void AdvPrintWizard::slotCaptionChanged(const QString& text)
-{
-    enableCaptionGroup(text);
-    slotInfoPageUpdateCaptions();
 }
 
 void AdvPrintWizard::slotBtnCropRotateLeftClicked()
@@ -1842,7 +1818,10 @@ void AdvPrintWizard::slotBtnPrintOrderUpClicked()
     d->photoPage->imagesList()->blockSignals(true);
     int currentIndex = d->photoPage->imagesList()->listView()->currentIndex().row();
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo " << currentIndex << " to  " << currentIndex + 1;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
+                                 << currentIndex
+                                 << " to  "
+                                 << currentIndex + 1;
 
     d->photos.swap(currentIndex, currentIndex + 1);
     d->photoPage->imagesList()->blockSignals(false);
@@ -2060,7 +2039,7 @@ void AdvPrintWizard::slotBtnSaveAsClicked()
     KConfigGroup group = config.group( QLatin1String( "PrintCreator" ) );
     QUrl outputPath; // force to get current directory as default
     outputPath         = QUrl(group.readPathEntry( "OutputPath", outputPath.url() ));
-    QString filename   = QFileDialog::getSaveFileName(qApp->activeWindow(),
+    QString filename   = DFileDialog::getSaveFileName(qApp->activeWindow(),
                                                       i18n("Output Path"),
                                                       QLatin1String(".jpeg") );
     d->cropPage->ui()->m_fileName->setText(filename);
@@ -2089,6 +2068,10 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
         group.writeEntry(QLatin1String("IconSize"),
                          d->photoPage->ui()->ListPhotoSizes->iconSize());
     }
+    else if (pageName == i18n(CAPTION_PAGE_NAME))
+    {
+        // Nothing to do
+    }
     else if (pageName == i18n(CROP_PAGE_NAME))
     {
         if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
@@ -2098,29 +2081,6 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
             group.writePathEntry(QLatin1String("OutputPath"), outputPath);
         }
     }
-}
-
-void AdvPrintWizard::infopage_readCaptionSettings()
-{
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-
-    // image captions
-    d->photoPage->ui()->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
-    // caption color
-    QColor defColor(Qt::yellow);
-    QColor color = group.readEntry(QLatin1String("CaptionColor"), defColor);
-    d->photoPage->ui()->m_font_color->setColor(color);
-    // caption font
-    QFont defFont(QLatin1String("Sans Serif"));
-    QFont font = group.readEntry(QLatin1String("CaptionFont"), defFont);
-    d->photoPage->ui()->m_font_name->setCurrentFont(font.family());
-    // caption size
-    int fontSize = group.readEntry(QLatin1String("CaptionSize"), 4);
-    d->photoPage->ui()->m_font_size->setValue(fontSize);
-    // free caption
-    QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
-    d->photoPage->ui()->m_FreeCaptionFormat->setText(captionTxt);
 }
 
 void AdvPrintWizard::readSettings(const QString& pageName)
@@ -2149,14 +2109,15 @@ void AdvPrintWizard::readSettings(const QString& pageName)
 
         // photo size
         d->savedPhotoSize = group.readEntry("PhotoSize");
-        //caption
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
-        infopage_readCaptionSettings();
+    }
+    else if (pageName == i18n(CAPTION_PAGE_NAME))
+    {
+        //caption
+        d->captionPage->readCaptionSettings();
 
-        bool same_to_all = group.readEntry("SameCaptionToAll", 0) == 1;
-        d->photoPage->ui()->m_sameCaption->setChecked(same_to_all);
         //enable right caption stuff
-        slotCaptionChanged(d->photoPage->ui()->m_captions->currentText());
+        d->captionPage->slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
     }
     else if (pageName == i18n(CROP_PAGE_NAME))
     {
@@ -2296,7 +2257,7 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
         {
             files.append(filename);
 
-            if (!pixmap.save(filename,0,100))
+            if (!pixmap.save(filename, 0, 100))
             {
                 QMessageBox::information(this,
                                          QString(),
@@ -2475,7 +2436,6 @@ void AdvPrintWizard::accept()
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
     {
         // now output the items
-        //TODO manage URL
         QString path = d->cropPage->ui()->m_fileName->text();
 
         if (path.isEmpty())
@@ -2536,6 +2496,7 @@ void AdvPrintWizard::slotPagesetupclicked()
 {
     delete d->pageSetupDlg;
     d->pageSetupDlg = new QPageSetupDialog(d->photoPage->printer(), this);
+
     // TODO next line should work but it doesn't because of a QT bug
     //d->pageSetupDlg->open(this, SLOT(slotPageSetupDialogExit()));
     int ret   = d->pageSetupDlg->exec();
@@ -2545,7 +2506,7 @@ void AdvPrintWizard::slotPagesetupclicked()
         slotPageSetupDialogExit();
     }
 
-    // FIX page size dialog and preview PhotoPage
+    // Fix the page size dialog and preview PhotoPage
     initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
@@ -2567,35 +2528,6 @@ void AdvPrintWizard::slotPagesetupclicked()
 
     // create our photo sizes list
     previewPhotos();
-}
-
-void AdvPrintWizard::infopage_blockCaptionButtons(bool block)
-{
-    d->photoPage->ui()->m_captions->blockSignals(block);
-    d->photoPage->ui()->m_free_label->blockSignals(block);
-    d->photoPage->ui()->m_sameCaption->blockSignals(block);
-    d->photoPage->ui()->m_font_name->blockSignals(block);
-    d->photoPage->ui()->m_font_size->blockSignals(block);
-    d->photoPage->ui()->m_font_color->blockSignals(block);
-}
-
-void AdvPrintWizard::slotSaveCaptionSettings()
-{
-    // Save the current settings
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-    // image captions
-    group.writeEntry(QLatin1String("Captions"),         d->photoPage->ui()->m_captions->currentIndex());
-    // caption color
-    group.writeEntry(QLatin1String("CaptionColor"),     d->photoPage->ui()->m_font_color->color());
-    // caption font
-    group.writeEntry(QLatin1String("CaptionFont"),      QFont(d->photoPage->ui()->m_font_name->currentFont()));
-    // caption size
-    group.writeEntry(QLatin1String("CaptionSize"),      d->photoPage->ui()->m_font_size->value());
-    // free caption
-    group.writeEntry(QLatin1String("FreeCaption"),      d->photoPage->ui()->m_FreeCaptionFormat->text());
-    // same to all
-    group.writeEntry(QLatin1String("SameCaptionToAll"), (d->photoPage->ui()->m_sameCaption->isChecked() ? 1 : 0));
 }
 
 } // namespace Digikam

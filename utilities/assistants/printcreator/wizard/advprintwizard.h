@@ -65,11 +65,12 @@ public:
     ~AdvPrintWizard();
 
     void setItemsList(const QList<QUrl>& fileList = QList<QUrl>());
+    QList<QUrl> itemsList() const;
+
+    DInfoInterface* iface() const;
 
 public Q_SLOTS:
 
-    void slotCaptionChanged(const QString& text);
-    void slotSaveCaptionSettings();
     void slotBtnPrintOrderUpClicked();
     void slotBtnPrintOrderDownClicked();
 
@@ -109,9 +110,7 @@ private:
     void initPhotoSizes(const QSizeF& pageSize);
     void previewPhotos();
 
-    void infopage_blockCaptionButtons(bool block=true);
-    void infopage_setCaptionButtons();
-    void infopage_readCaptionSettings();
+    void setCaptionButtons();
 
     /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
     void parseTemplateFile( const QString& fn, const QSizeF& pageSize );
@@ -152,9 +151,6 @@ private:
     double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
                      int current);
-
-    /// Fix caption group layout according to captions combobox text
-    void enableCaptionGroup(const QString& text);
 
     void saveSettings(const QString& pageName);
     void readSettings(const QString& pageName);

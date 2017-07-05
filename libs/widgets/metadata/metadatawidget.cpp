@@ -48,7 +48,6 @@
 #include <QMenu>
 #include <QApplication>
 #include <QStyle>
-#include <QFileDialog>
 
 // KDE includes
 
@@ -62,6 +61,7 @@
 #include "mdkeylistviewitem.h"
 #include "searchtextbar.h"
 #include "setup.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -431,9 +431,9 @@ void MetadataWidget::slotPrintMetadata()
 
 QUrl MetadataWidget::saveMetadataToFile(const QString& caption, const QString& fileFilter)
 {
-    QPointer<QFileDialog> fileSaveDialog = new QFileDialog(this, caption, QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
-    fileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
-    fileSaveDialog->setFileMode(QFileDialog::AnyFile);
+    QPointer<DFileDialog> fileSaveDialog = new DFileDialog(this, caption, QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    fileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
+    fileSaveDialog->setFileMode(DFileDialog::AnyFile);
     fileSaveDialog->selectFile(d->fileName);
     fileSaveDialog->setNameFilter(fileFilter);
 

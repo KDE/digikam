@@ -74,6 +74,7 @@
 #include "dnotificationwrapper.h"
 #include "scancontroller.h"
 
+
 namespace Digikam
 {
 

@@ -55,6 +55,7 @@ set(libfontstools_SRCS
 set(libfilestools_SRCS
     files/filesaveoptionsbox.cpp
     files/filesaveconflictbox.cpp
+    files/dfiledialog.cpp
     files/dfileselector.cpp
     files/dbinarysearch.cpp
     files/dbinaryiface.cpp

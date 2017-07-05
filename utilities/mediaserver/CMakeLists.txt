@@ -1,0 +1,327 @@
+#
+# Copyright (c) 2010-2017 by Gilles Caulier, <caulier dot gilles at gmail dot com>
+# Copyright (c) 2017      by Ahmed Fathi, <ahmed dot fathi dot abdelmageed at gmail dot com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+if (POLICY CMP0063)
+    cmake_policy(SET CMP0063 NEW)
+endif (POLICY CMP0063)
+
+
+
+add_subdirectory(hupnp)
+add_subdirectory(hupnp/lib)
+add_subdirectory(hupnp/lib/qtsoap-2.7-opensource)
+add_subdirectory(hupnp/lib/qtsoap-2.7-opensource/lib)
+add_subdirectory(hupnp/lib/qtsoap-2.7-opensource/src)
+add_subdirectory(hupnp/lib/qtsoap-2.7-opensource/buildlib)
+add_subdirectory(hupnp/src)
+add_subdirectory(hupnp/src/ssdp)
+add_subdirectory(hupnp/src/devicehosting)
+add_subdirectory(hupnp/src/devicehosting/devicehost)
+add_subdirectory(hupnp/src/devicehosting/controlpoint)
+add_subdirectory(hupnp/src/devicehosting/messages)
+add_subdirectory(hupnp/src/devicemodel)
+add_subdirectory(hupnp/src/devicemodel/client)
+add_subdirectory(hupnp/src/devicemodel/server)
+add_subdirectory(hupnp/src/general)
+add_subdirectory(hupnp/src/socket)
+add_subdirectory(hupnp/src/utils)
+add_subdirectory(hupnp/src/http)
+add_subdirectory(hupnp/src/dataelements)
+add_subdirectory(hupnp/include)
+add_subdirectory(hupnp/include/HUpnpCore)
+add_subdirectory(hupnp/include/HUpnpCore/public)
+add_subdirectory(hupnp/include/HUpnpCore/private)
+add_subdirectory(hupnp_av)
+add_subdirectory(hupnp_av/src)
+add_subdirectory(hupnp_av/src/mediarenderer)
+add_subdirectory(hupnp_av/src/transport)
+add_subdirectory(hupnp_av/src/connectionmanager)
+add_subdirectory(hupnp_av/src/renderingcontrol)
+add_subdirectory(hupnp_av/src/common)
+add_subdirectory(hupnp_av/src/mediaserver)
+add_subdirectory(hupnp_av/src/contentdirectory)
+add_subdirectory(hupnp_av/src/cds_model)
+add_subdirectory(hupnp_av/src/cds_model/model_mgmt)
+add_subdirectory(hupnp_av/src/cds_model/cds_objects)
+add_subdirectory(hupnp_av/src/cds_model/datasource)
+add_subdirectory(hupnp_av/include)
+add_subdirectory(hupnp_av/include/HUpnpAv)
+add_subdirectory(hupnp_av/include/HUpnpAv/public)
+add_subdirectory(apps)
+add_subdirectory(apps/simple_avtest-app)
+add_subdirectory(apps/simple_avtest-app/descriptions)
+
+
+
+include_directories(  
+           apps/simple_avtest-app
+           hupnp_av/src
+           hupnp/src/dataelements
+           hupnp/src/devicehosting 
+           hupnp/src/devicemodel
+           hupnp/src/general
+           hupnp/src/http
+           hupnp/src/socket
+           hupnp/src/ssdp
+           hupnp/src/utils
+           hupnp_av/src/cds_model
+           hupnp_av/src/common
+           hupnp_av/src/connectionmanager
+           hupnp_av/src/contentdirectory
+           hupnp_av/src/mediarenderer
+           hupnp_av/src/mediaserver
+           hupnp_av/src/renderingcontrol
+           hupnp_av/src/transport
+           hupnp/include/HUpnpCore/private
+           hupnp/include/HUpnpCore/public
+           hupnp/src/devicehosting/controlpoint
+           hupnp/src/devicehosting/devicehost
+           hupnp/src/devicehosting/messages
+           hupnp/src/devicemodel/client
+           hupnp/src/devicemodel/server
+           hupnp_a/include/HUpnpAv/public
+           hupnp_av/src/cds_model/cds_objects                                   
+           hupnp_av/src/cds_model/datasource      
+           hupnp_av/src/cds_model/datasource                                                              
+           hupnp/include/                  
+           hupnp_av/include                   
+           hupnp/lib/qtsoap-2.7-opensource/src           
+    )
+
+
+
+set(libmediaserver_SRCS
+          # apps/simple_avtest-app/main.cpp 
+          # apps/simple_avtest-app/mediaserver_introductionwindow.cpp 
+           apps/simple_avtest-app/mediaserver_window.cpp 
+           hupnp_av/src/hav_devicemodel_creator.cpp 
+           hupnp_av/src/hav_devicemodel_infoprovider.cpp 
+           hupnp_av/src/hav_global.cpp 
+           hupnp_av/src/hupnpavinfo.cpp 
+           hupnp/src/dataelements/hactioninfo.cpp 
+           hupnp/src/dataelements/hdeviceinfo.cpp 
+           hupnp/src/dataelements/hdiscoverytype.cpp 
+           hupnp/src/dataelements/hproduct_tokens.cpp 
+           hupnp/src/dataelements/hresourcetype.cpp 
+           hupnp/src/dataelements/hserviceid.cpp 
+           hupnp/src/dataelements/hserviceinfo.cpp 
+           hupnp/src/dataelements/hstatevariableinfo.cpp 
+           hupnp/src/dataelements/hudn.cpp 
+           hupnp/src/dataelements/hvaluerange_p.cpp 
+           hupnp/src/devicehosting/hddoc_parser_p.cpp 
+           hupnp/src/devicehosting/hdevicestorage_p.cpp 
+           hupnp/src/devicehosting/hmodelcreation_p.cpp 
+           hupnp/src/devicemodel/hactionarguments.cpp 
+           hupnp/src/devicemodel/hactions_setupdata.cpp 
+           hupnp/src/devicemodel/hasyncop.cpp 
+           hupnp/src/devicemodel/hdevicemodel_infoprovider.cpp 
+           hupnp/src/devicemodel/hdevicemodel_validator.cpp 
+           hupnp/src/devicemodel/hdevices_setupdata.cpp 
+           hupnp/src/devicemodel/hexecargs.cpp 
+           hupnp/src/devicemodel/hservices_setupdata.cpp 
+           hupnp/src/devicemodel/hstatevariable_event.cpp 
+           hupnp/src/devicemodel/hstatevariables_setupdata.cpp 
+           hupnp/src/general/hclonable.cpp 
+           hupnp/src/general/hlogger_p.cpp 
+           hupnp/src/general/hupnp_datatypes.cpp 
+           hupnp/src/general/hupnp_global.cpp 
+           hupnp/src/general/hupnpinfo.cpp 
+           hupnp/src/http/hhttp_asynchandler_p.cpp 
+           hupnp/src/http/hhttp_header_p.cpp 
+           hupnp/src/http/hhttp_messagecreator_p.cpp 
+           hupnp/src/http/hhttp_messaginginfo_p.cpp 
+           hupnp/src/http/hhttp_server_p.cpp 
+           hupnp/src/http/hhttp_utils_p.cpp 
+           hupnp/src/socket/hendpoint.cpp 
+           hupnp/src/socket/hmulticast_socket.cpp 
+           hupnp/src/ssdp/hdiscovery_messages.cpp 
+           hupnp/src/ssdp/hssdp.cpp 
+           hupnp/src/ssdp/hssdp_messagecreator_p.cpp 
+           hupnp/src/utils/hmisc_utils_p.cpp 
+           hupnp/src/utils/hsysutils_p.cpp 
+           hupnp/src/utils/hthreadpool_p.cpp 
+           hupnp_av/src/cds_model/hcdsclassinfo.cpp 
+           hupnp_av/src/cds_model/hchannel_id.cpp 
+           hupnp_av/src/cds_model/hchannelgroupname.cpp 
+           hupnp_av/src/cds_model/hcontentduration.cpp 
+           hupnp_av/src/cds_model/hdatetimerange.cpp 
+           hupnp_av/src/cds_model/hdeviceudn.cpp 
+           hupnp_av/src/cds_model/hforeignmetadata.cpp 
+           hupnp_av/src/cds_model/hgenre.cpp 
+           hupnp_av/src/cds_model/hmatching_id.cpp 
+           hupnp_av/src/cds_model/hpersonwithrole.cpp 
+           hupnp_av/src/cds_model/hprice.cpp 
+           hupnp_av/src/cds_model/hprogramcode.cpp 
+           hupnp_av/src/cds_model/hscheduledtime.cpp 
+           hupnp_av/src/cds_model/hsortinfo.cpp 
+           hupnp_av/src/cds_model/hstatevariablecollection.cpp 
+           hupnp_av/src/common/hprotocolinfo.cpp 
+           hupnp_av/src/common/hradioband.cpp 
+           hupnp_av/src/common/hrating.cpp 
+           hupnp_av/src/common/hresource.cpp 
+           hupnp_av/src/common/hstoragemedium.cpp 
+           hupnp_av/src/connectionmanager/habstractconnectionmanager_service.cpp 
+           hupnp_av/src/connectionmanager/hconnectioninfo.cpp 
+           hupnp_av/src/connectionmanager/hconnectionmanager_adapter.cpp 
+           hupnp_av/src/connectionmanager/hconnectionmanager_id.cpp 
+           hupnp_av/src/connectionmanager/hconnectionmanager_info.cpp 
+           hupnp_av/src/connectionmanager/hconnectionmanager_service_p.cpp 
+           hupnp_av/src/connectionmanager/hconnectionmanager_serviceconfiguration.cpp 
+           hupnp_av/src/connectionmanager/hprepareforconnection_result.cpp 
+           hupnp_av/src/connectionmanager/hprotocolinforesult.cpp 
+           hupnp_av/src/contentdirectory/habstractcontentdirectory_service.cpp 
+           hupnp_av/src/contentdirectory/hcontentdirectory_adapter.cpp 
+           hupnp_av/src/contentdirectory/hcontentdirectory_info.cpp 
+           hupnp_av/src/contentdirectory/hcontentdirectory_service.cpp 
+           hupnp_av/src/contentdirectory/hcontentdirectory_serviceconfiguration.cpp 
+           hupnp_av/src/contentdirectory/hcreateobjectresult.cpp 
+           hupnp_av/src/contentdirectory/hfreeformqueryresult.cpp 
+           hupnp_av/src/contentdirectory/hsearchresult.cpp 
+           hupnp_av/src/contentdirectory/htransferprogressinfo.cpp 
+           hupnp_av/src/mediarenderer/habstractmediarenderer_device.cpp 
+           hupnp_av/src/mediarenderer/havt_lastchange_info.cpp 
+           hupnp_av/src/mediarenderer/hconnection.cpp 
+           hupnp_av/src/mediarenderer/hconnectionmanager_sinkservice_p.cpp 
+           hupnp_av/src/mediarenderer/hmediarenderer_adapter.cpp 
+           hupnp_av/src/mediarenderer/hmediarenderer_device_p.cpp 
+           hupnp_av/src/mediarenderer/hmediarenderer_deviceconfiguration.cpp 
+           hupnp_av/src/mediarenderer/hmediarenderer_info.cpp 
+           hupnp_av/src/mediarenderer/hrcs_lastchange_info.cpp 
+           hupnp_av/src/mediarenderer/hrendererconnection.cpp 
+           hupnp_av/src/mediarenderer/hrendererconnection_info.cpp 
+           hupnp_av/src/mediarenderer/hrendererconnection_manager.cpp 
+           hupnp_av/src/mediarenderer/htransport_sinkservice_p.cpp 
+           hupnp_av/src/mediaserver/habstractmediaserver_device.cpp 
+           hupnp_av/src/mediaserver/hconnectionmanager_sourceservice_p.cpp 
+           hupnp_av/src/mediaserver/hmediaserver_adapter.cpp 
+           hupnp_av/src/mediaserver/hmediaserver_device_p.cpp 
+           hupnp_av/src/mediaserver/hmediaserver_deviceconfiguration.cpp 
+           hupnp_av/src/mediaserver/hmediaserver_info.cpp 
+           hupnp_av/src/renderingcontrol/habstractrenderingcontrol_service.cpp 
+           hupnp_av/src/renderingcontrol/hchannel.cpp 
+           hupnp_av/src/renderingcontrol/hrenderingcontrol_adapter.cpp 
+           hupnp_av/src/renderingcontrol/hrenderingcontrol_info.cpp 
+           hupnp_av/src/renderingcontrol/hrenderingcontrol_service_p.cpp 
+           hupnp_av/src/renderingcontrol/hvolumedbrange_result.cpp 
+           hupnp_av/src/transport/habstract_avtransport_service.cpp 
+           hupnp_av/src/transport/havtransport_adapter.cpp 
+           hupnp_av/src/transport/havtransport_info.cpp 
+           hupnp_av/src/transport/hdevicecapabilities.cpp 
+           hupnp_av/src/transport/hduration.cpp 
+           hupnp_av/src/transport/hmediainfo.cpp 
+           hupnp_av/src/transport/hplaymode.cpp 
+           hupnp_av/src/transport/hpositioninfo.cpp 
+           hupnp_av/src/transport/hrecordmediumwritestatus.cpp 
+           hupnp_av/src/transport/hrecordqualitymode.cpp 
+           hupnp_av/src/transport/hseekinfo.cpp 
+           hupnp_av/src/transport/htransportaction.cpp 
+           hupnp_av/src/transport/htransportinfo.cpp 
+           hupnp_av/src/transport/htransportsettings.cpp 
+           hupnp_av/src/transport/htransportstate.cpp 
+           hupnp/lib/qtsoap-2.7-opensource/src/qtsoap.cpp 
+           hupnp/src/devicehosting/controlpoint/hclientmodel_creator_p.cpp 
+           hupnp/src/devicehosting/controlpoint/hcontrolpoint.cpp 
+           hupnp/src/devicehosting/controlpoint/hcontrolpoint_configuration.cpp 
+           hupnp/src/devicehosting/controlpoint/hcontrolpoint_dataretriever_p.cpp 
+           hupnp/src/devicehosting/controlpoint/hdevicebuild_p.cpp 
+           hupnp/src/devicehosting/controlpoint/hevent_subscription_p.cpp 
+           hupnp/src/devicehosting/controlpoint/hevent_subscriptionmanager_p.cpp 
+           hupnp/src/devicehosting/devicehost/hdevicehost.cpp 
+           hupnp/src/devicehosting/devicehost/hdevicehost_configuration.cpp 
+           hupnp/src/devicehosting/devicehost/hdevicehost_dataretriever_p.cpp 
+           hupnp/src/devicehosting/devicehost/hdevicehost_http_server_p.cpp 
+           hupnp/src/devicehosting/devicehost/hdevicehost_ssdp_handler_p.cpp 
+           hupnp/src/devicehosting/devicehost/hevent_notifier_p.cpp 
+           hupnp/src/devicehosting/devicehost/hevent_subscriber_p.cpp 
+           hupnp/src/devicehosting/devicehost/hservermodel_creator_p.cpp 
+           hupnp/src/devicehosting/messages/hcontrol_messages_p.cpp 
+           hupnp/src/devicehosting/messages/hevent_messages_p.cpp 
+           hupnp/src/devicehosting/messages/hnt_p.cpp 
+           hupnp/src/devicehosting/messages/hsid_p.cpp 
+           hupnp/src/devicehosting/messages/htimeout_p.cpp 
+           hupnp/src/devicemodel/client/hclientaction.cpp 
+           hupnp/src/devicemodel/client/hclientactionop.cpp 
+           hupnp/src/devicemodel/client/hclientadapterop.cpp 
+           hupnp/src/devicemodel/client/hclientdevice.cpp 
+           hupnp/src/devicemodel/client/hclientdevice_adapter.cpp 
+           hupnp/src/devicemodel/client/hclientservice.cpp 
+           hupnp/src/devicemodel/client/hclientservice_adapter.cpp 
+           hupnp/src/devicemodel/client/hclientstatevariable.cpp 
+           hupnp/src/devicemodel/server/hdevicemodelcreator.cpp 
+           hupnp/src/devicemodel/server/hserveraction.cpp 
+           hupnp/src/devicemodel/server/hserverdevice.cpp 
+           hupnp/src/devicemodel/server/hserverservice.cpp 
+           hupnp/src/devicemodel/server/hserverstatevariable.cpp 
+           hupnp_av/src/cds_model/cds_objects/halbum.cpp 
+           hupnp_av/src/cds_model/cds_objects/haudiobook.cpp 
+           hupnp_av/src/cds_model/cds_objects/haudiobroadcast.cpp 
+           hupnp_av/src/cds_model/cds_objects/haudiochannelgroup.cpp 
+           hupnp_av/src/cds_model/cds_objects/haudioitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/haudioprogram.cpp 
+           hupnp_av/src/cds_model/cds_objects/hbookmarkfolder.cpp 
+           hupnp_av/src/cds_model/cds_objects/hbookmarkitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hchannelgroup.cpp 
+           hupnp_av/src/cds_model/cds_objects/hcontainer.cpp 
+           hupnp_av/src/cds_model/cds_objects/hepgcontainer.cpp 
+           hupnp_av/src/cds_model/cds_objects/hepgitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hgenrecontainer.cpp 
+           hupnp_av/src/cds_model/cds_objects/himageitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmovie.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmoviegenre.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmusicalbum.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmusicartist.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmusicgenre.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmusictrack.cpp 
+           hupnp_av/src/cds_model/cds_objects/hmusicvideoclip.cpp 
+           hupnp_av/src/cds_model/cds_objects/hobject.cpp 
+           hupnp_av/src/cds_model/cds_objects/hperson.cpp 
+           hupnp_av/src/cds_model/cds_objects/hphoto.cpp 
+           hupnp_av/src/cds_model/cds_objects/hphotoalbum.cpp 
+           hupnp_av/src/cds_model/cds_objects/hplaylistcontainer.cpp 
+           hupnp_av/src/cds_model/cds_objects/hplaylistitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hstoragefolder.cpp 
+           hupnp_av/src/cds_model/cds_objects/hstoragesystem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hstoragevolume.cpp 
+           hupnp_av/src/cds_model/cds_objects/htextitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hvideobroadcast.cpp 
+           hupnp_av/src/cds_model/cds_objects/hvideochannelgroup.cpp 
+           hupnp_av/src/cds_model/cds_objects/hvideoitem.cpp 
+           hupnp_av/src/cds_model/cds_objects/hvideoprogram.cpp 
+           hupnp_av/src/cds_model/datasource/habstract_cds_datasource.cpp 
+           hupnp_av/src/cds_model/datasource/hcds_datasource.cpp 
+           hupnp_av/src/cds_model/datasource/hcds_datasource_configuration.cpp 
+           hupnp_av/src/cds_model/datasource/hfsys_datasource.cpp 
+           hupnp_av/src/cds_model/datasource/hfsys_datasource_configuration.cpp 
+           hupnp_av/src/cds_model/datasource/hrootdir.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcds_dlite_serializer.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcds_fsys_reader_p.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcdsobjectdata_p.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcdsproperties.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcdsproperty.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcdsproperty_db.cpp 
+           hupnp_av/src/cds_model/model_mgmt/hcdspropertyinfo.cpp
+)
+
+
+set ( UIS
+# apps/simple_avtest-app/invokeactiondialog.ui 
+# apps/simple_avtest-app/mediaserver_introductionwindow.ui 
+ apps/simple_avtest-app/mediaserver_window.ui
+)
+
+
+
+
+include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Test,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::Network,INTERFACE_INCLUDE_DIRECTORIES>
+                    )
+
+
+add_library(mediaserver_src OBJECT ${libmediaserver_SRCS})

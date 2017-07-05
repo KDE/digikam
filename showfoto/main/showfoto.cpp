@@ -50,7 +50,6 @@
 #include <QKeySequence>
 #include <QApplication>
 #include <QAction>
-#include <QFileDialog>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeDatabase>
@@ -103,6 +102,7 @@
 #include "showfotoinfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
 #include "mailwizard.h"
@@ -739,7 +739,7 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    QUrl url = QUrl::fromLocalFile(QFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
+    QUrl url = QUrl::fromLocalFile(DFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
                                                                      d->lastOpenedDirectory.toLocalFile()));
     if (!url.isEmpty())
     {

@@ -37,6 +37,60 @@
 namespace Digikam
 {
 
+AdvPrintAdditionalInfo::AdvPrintAdditionalInfo()
+    : m_unit(0),
+      m_printPosition(0),
+      m_scaleMode(0),
+      m_keepRatio(true),
+      m_autoRotate(true),
+      m_printWidth(0.0),
+      m_printHeight(0.0),
+      m_enlargeSmallerImages(false)
+{
+}
+
+AdvPrintAdditionalInfo::AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai)
+{
+    m_unit                 = ai.m_unit;
+    m_printPosition        = ai.m_printPosition;
+    m_scaleMode            = ai.m_scaleMode;
+    m_keepRatio            = ai.m_keepRatio;
+    m_autoRotate           = ai.m_autoRotate;
+    m_printWidth           = ai.m_printWidth;
+    m_printHeight          = ai.m_printHeight;
+    m_enlargeSmallerImages = ai.m_enlargeSmallerImages;
+}
+
+AdvPrintAdditionalInfo::~AdvPrintAdditionalInfo()
+{
+}
+
+// -----------------------------
+
+AdvPrintCaptionInfo::AdvPrintCaptionInfo()
+    : m_captionType(NoCaptions),
+      m_captionFont(QLatin1String("Sans Serif")),
+      m_captionColor(Qt::yellow),
+      m_captionSize(2),
+      m_captionText(QLatin1String(""))
+{
+}
+
+AdvPrintCaptionInfo::AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci)
+{
+    m_captionType  = ci.m_captionType;
+    m_captionFont  = ci.m_captionFont;
+    m_captionColor = ci.m_captionColor;
+    m_captionSize  = ci.m_captionSize;
+    m_captionText  = ci.m_captionText;
+}
+
+AdvPrintCaptionInfo::~AdvPrintCaptionInfo()
+{
+}
+
+// -----------------------------
+
 AdvPrintPhoto::AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface)
     : m_pAddInfo(0),
       m_pAdvPrintCaptionInfo(0)
@@ -48,7 +102,7 @@ AdvPrintPhoto::AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface)
 
     m_copies               = 1;
     //TODO mPrintPosition;
-    m_filename             = QUrl();
+    m_url             = QUrl();
 
     m_iface                = iface;
     m_thumbnail            = 0;
@@ -62,7 +116,7 @@ AdvPrintPhoto::AdvPrintPhoto (const AdvPrintPhoto& photo)
 {
     m_thumbnailSize = photo.m_thumbnailSize;
     m_cropRegion    = photo.m_cropRegion;
-    m_filename      = photo.m_filename;
+    m_url           = photo.m_url;
     m_first         = photo.m_first;
     m_copies        = photo.m_copies;
     m_rotation      = photo.m_rotation;
@@ -122,13 +176,13 @@ QImage AdvPrintPhoto::loadPhoto()
 
     if (m_iface)
     {
-        photo = PreviewLoadThread::loadHighQualitySynchronously(m_filename.toLocalFile())
+        photo = PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
                 .copyQImage();
     }
 
     if (photo.isNull())
     {
-        photo.load(m_filename.toLocalFile());
+        photo.load(m_url.toLocalFile());
     }
 
     return photo;
@@ -146,11 +200,11 @@ QSize& AdvPrintPhoto::size()  // private
 
 DMetadata& AdvPrintPhoto::metaIface()
 {
-    if (m_filename.url().isEmpty())
+    if (!m_url.url().isEmpty())
     {
-        if (m_meta.load(m_filename.url()))
+        if (m_meta.load(m_url.url()))
         {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load metadata from file " << m_filename;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load metadata from file " << m_url;
         }
     }
 
@@ -172,10 +226,10 @@ double AdvPrintPhoto::scaleWidth(double unitToInches)
     Q_ASSERT(m_pAddInfo != 0);
 
     m_cropRegion = QRect(0, 0,
-                         (int)(m_pAddInfo->mPrintWidth  * unitToInches),
-                         (int)(m_pAddInfo->mPrintHeight * unitToInches));
+                         (int)(m_pAddInfo->m_printWidth  * unitToInches),
+                         (int)(m_pAddInfo->m_printHeight * unitToInches));
 
-    return m_pAddInfo->mPrintWidth * unitToInches;
+    return m_pAddInfo->m_printWidth * unitToInches;
 }
 
 double AdvPrintPhoto::scaleHeight(double unitToInches)
@@ -184,10 +238,10 @@ double AdvPrintPhoto::scaleHeight(double unitToInches)
 
     m_cropRegion = QRect(0,
                          0,
-                         (int)(m_pAddInfo->mPrintWidth  * unitToInches),
-                         (int)(m_pAddInfo->mPrintHeight * unitToInches));
+                         (int)(m_pAddInfo->m_printWidth  * unitToInches),
+                         (int)(m_pAddInfo->m_printHeight * unitToInches));
 
-    return m_pAddInfo->mPrintHeight * unitToInches;
+    return m_pAddInfo->m_printHeight * unitToInches;
 }
 
 } // Namespace Digikam
