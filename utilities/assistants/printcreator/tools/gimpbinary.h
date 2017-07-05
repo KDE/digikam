@@ -35,7 +35,12 @@ class GimpBinary : public DBinaryIface
 public:
 
     GimpBinary()
-        : DBinaryIface(QLatin1String("gimp"),
+        : DBinaryIface(
+#ifdef Q_OS_OSX
+                       QLatin1String("GIMP-bin"),
+#else
+                       QLatin1String("gimp"),
+#endif
                        QLatin1String("2.8"),
                        QLatin1String("GNU Image Manipulation Program version "),
                        0,
