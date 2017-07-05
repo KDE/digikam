@@ -48,7 +48,6 @@ public:
     AdvPrintImagesConfig* q;
 };
 
-
 Q_GLOBAL_STATIC(AdvPrintImagesConfigHelper, s_globalAdvPrintImagesConfig)
 
 AdvPrintImagesConfig* AdvPrintImagesConfig::self()

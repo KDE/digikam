@@ -42,162 +42,128 @@ namespace Digikam
 
 class AdvPrintImagesConfig : public KConfigSkeleton
 {
-    public:
+public:
 
-        static AdvPrintImagesConfig* self();
-        ~AdvPrintImagesConfig();
+    static AdvPrintImagesConfig* self();
+    ~AdvPrintImagesConfig();
 
-        /**
-         * Set PrintPosition
-         */
-        static void setPrintPosition( int v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintPosition" ) ))
-                self()->mPrintPosition = v;
-        }
+    static void setPrintPosition( int v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintPosition" ) ))
+            self()->mPrintPosition = v;
+    }
 
-        /**
-         * Get PrintPosition
-         */
-        static int printPosition()
-        {
-            return self()->mPrintPosition;
-        }
+    static int printPosition()
+    {
+        return self()->mPrintPosition;
+    }
 
-        /**
-         * Set PrintScaleMode
-         */
-        static void setPrintScaleMode(AdvPrintOptionsPage::ScaleMode v)
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintScaleMode" ) ))
-                self()->mPrintScaleMode = v;
-        }
+    // -------------------
 
-        /**
-         * Get PrintScaleMode
-         */
-        static AdvPrintOptionsPage::ScaleMode printScaleMode()
-        {
-            return static_cast<AdvPrintOptionsPage::ScaleMode>(self()->mPrintScaleMode);
-        }
+    static void setPrintScaleMode(AdvPrintOptionsPage::ScaleMode v)
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintScaleMode" ) ))
+            self()->mPrintScaleMode = v;
+    }
 
-        /**
-         * Set PrintEnlargeSmallerImages
-         */
-        static void setPrintEnlargeSmallerImages( bool v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintEnlargeSmallerImages" ) ))
-                self()->mPrintEnlargeSmallerImages = v;
-        }
+    static AdvPrintOptionsPage::ScaleMode printScaleMode()
+    {
+        return static_cast<AdvPrintOptionsPage::ScaleMode>(self()->mPrintScaleMode);
+    }
 
-        /**
-         * Get PrintEnlargeSmallerImages
-         */
-        static bool printEnlargeSmallerImages()
-        {
-            return self()->mPrintEnlargeSmallerImages;
-        }
+    // -------------------
 
-        /**
-         * Set PrintWidth
-         */
-        static void setPrintWidth( double v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintWidth" ) ))
-                self()->mPrintWidth = v;
-        }
+    static void setPrintEnlargeSmallerImages( bool v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintEnlargeSmallerImages" ) ))
+            self()->mPrintEnlargeSmallerImages = v;
+    }
 
-        /**
-         * Get PrintWidth
-         */
-        static double printWidth()
-        {
-            return self()->mPrintWidth;
-        }
+    static bool printEnlargeSmallerImages()
+    {
+        return self()->mPrintEnlargeSmallerImages;
+    }
 
-        /**
-         * Set PrintHeight
-         */
-        static void setPrintHeight( double v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintHeight" ) ))
-                self()->mPrintHeight = v;
-        }
+    // -------------------
 
-        /**
-         * Get PrintHeight
-         */
-        static double printHeight()
-        {
-            return self()->mPrintHeight;
-        }
+    static void setPrintWidth( double v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintWidth" ) ))
+            self()->mPrintWidth = v;
+    }
 
-        /**
-         * Set PrintUnit
-         */
-        static void setPrintUnit( AdvPrintOptionsPage::Unit v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintUnit" ) ))
-                self()->mPrintUnit = v;
-        }
+    static double printWidth()
+    {
+        return self()->mPrintWidth;
+    }
 
-        /**
-         * Get PrintUnit
-         */
-        static AdvPrintOptionsPage::Unit printUnit()
-        {
-            return static_cast<AdvPrintOptionsPage::Unit>(self()->mPrintUnit);
-        }
+    // -------------------
 
-        /**
-         * Set PrintKeepRatio
-        */
-        static void setPrintKeepRatio( bool v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintKeepRatio" ) ))
-                self()->mPrintKeepRatio = v;
-        }
+    static void setPrintHeight( double v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintHeight" ) ))
+            self()->mPrintHeight = v;
+    }
 
-        /**
-         * Get PrintKeepRatio
-         */
-        static bool printKeepRatio()
-        {
-            return self()->mPrintKeepRatio;
-        }
+    static double printHeight()
+    {
+        return self()->mPrintHeight;
+    }
 
-        /**
-         * Set PrintAutoRotate
-         */
-        static void setPrintAutoRotate( bool v )
-        {
-            if (!self()->isImmutable( QString::fromLatin1( "PrintAutoRotate" ) ))
-                self()->mPrintAutoRotate = v;
-        }
+    // -------------------
 
-        /**
-         * Get PrintAutoRotate
-         */
-        static bool printAutoRotate()
-        {
-            return self()->mPrintAutoRotate;
-        }
+    static void setPrintUnit( AdvPrintOptionsPage::Unit v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintUnit" ) ))
+            self()->mPrintUnit = v;
+    }
 
-    protected:
+    static AdvPrintOptionsPage::Unit printUnit()
+    {
+        return static_cast<AdvPrintOptionsPage::Unit>(self()->mPrintUnit);
+    }
 
-        AdvPrintImagesConfig();
-        friend class AdvPrintImagesConfigHelper;
+    // -------------------
 
-    protected:
+    static void setPrintKeepRatio( bool v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintKeepRatio" ) ))
+            self()->mPrintKeepRatio = v;
+    }
 
-        int     mPrintPosition;
-        int     mPrintScaleMode;
-        bool    mPrintEnlargeSmallerImages;
-        double  mPrintWidth;
-        double  mPrintHeight;
-        int     mPrintUnit;
-        bool    mPrintKeepRatio;
-        bool    mPrintAutoRotate;
+    static bool printKeepRatio()
+    {
+        return self()->mPrintKeepRatio;
+    }
+
+    // -------------------
+
+    static void setPrintAutoRotate( bool v )
+    {
+        if (!self()->isImmutable( QString::fromLatin1( "PrintAutoRotate" ) ))
+            self()->mPrintAutoRotate = v;
+    }
+
+    static bool printAutoRotate()
+    {
+        return self()->mPrintAutoRotate;
+    }
+
+protected:
+
+    AdvPrintImagesConfig();
+    friend class AdvPrintImagesConfigHelper;
+
+protected:
+
+    int     mPrintPosition;
+    int     mPrintScaleMode;
+    bool    mPrintEnlargeSmallerImages;
+    double  mPrintWidth;
+    double  mPrintHeight;
+    int     mPrintUnit;
+    bool    mPrintKeepRatio;
+    bool    mPrintAutoRotate;
 };
 
 } // namespace Digikam
