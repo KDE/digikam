@@ -2065,6 +2065,15 @@ void AdvPrintWizard::readSettings(const QString& pageName)
     if (pageName == i18n(PHOTO_PAGE_NAME))
     {
         // InfoPage
+
+        int gid = d->photoPage->ui()->m_printer_choice->findText(i18n("Print with Gimp"));
+
+        if (d->introPage->gimpPath().isEmpty())
+        {
+            // Gimp is not available : we disable the option.
+            d->photoPage->ui()->m_printer_choice->setItemData(gid, false, Qt::UserRole-1);
+        }
+
         QString printerName = group.readEntry("Printer", i18n("Print to PDF"));
         int index           = d->photoPage->ui()->m_printer_choice->findText(printerName);
 
@@ -2381,7 +2390,7 @@ void AdvPrintWizard::accept()
 
         d->gimpFiles = printPhotosToFile(d->photos, path, s);
         QStringList args;
-        QString prog = QLatin1String("gimp");
+        QString prog = d->introPage->gimpPath();
 
         for (QStringList::ConstIterator it = d->gimpFiles.constBegin() ;
              it != d->gimpFiles.constEnd() ; ++it)

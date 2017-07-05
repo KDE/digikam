@@ -27,6 +27,8 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QIcon>
+#include <QGroupBox>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -37,13 +39,28 @@
 #include "digikam_config.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
-#include "calwizard.h"
+#include "gimpbinary.h"
+#include "dbinarysearch.h"
 
 namespace Digikam
 {
 
+class AdvPrintIntroPage::Private
+{
+public:
+
+    Private()
+      : binSearch(0)
+    {
+    }
+
+    GimpBinary     gimpBin;
+    DBinarySearch* binSearch;
+};
+
 AdvPrintIntroPage::AdvPrintIntroPage(QWizard* const dialog, const QString& title)
-    : DWizardPage(dialog, title)
+    : DWizardPage(dialog, title),
+      d(new Private)
 {
     DVBox* const vbox  = new DVBox(this);
     QLabel* const desc = new QLabel(vbox);
@@ -59,12 +76,44 @@ AdvPrintIntroPage::AdvPrintIntroPage(QWizard* const dialog, const QString& title
                        "based on Atkins algorithm.</p>"
                        "</qt>"));
 
+    QGroupBox* const binaryBox      = new QGroupBox(vbox);
+    QGridLayout* const binaryLayout = new QGridLayout;
+    binaryBox->setLayout(binaryLayout);
+    binaryBox->setTitle(i18nc("@title:group", "Optional Gimp Binaries"));
+    d->binSearch = new DBinarySearch(binaryBox);
+    d->binSearch->addBinary(d->gimpBin);
+
+#ifdef Q_OS_OSX
+    d->binSearch->addDirectory(QLatin1String("/Applications/Gimp"));                // Gimp bundle PKG install
+    d->binSearch->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
+    d->binSearch->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
+#endif
+
+#ifdef Q_OS_WIN
+    d->binSearch->addDirectory(QLatin1String("C:/Program Files/Gimp/bin"));
+    d->binSearch->addDirectory(QLatin1String("C:/Program Files (x86)/Gimp/bin"));
+#endif
+
+    vbox->setStretchFactor(desc,      10);
+    vbox->setStretchFactor(binaryBox, 5);
+
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("document-print")));
 }
 
 AdvPrintIntroPage::~AdvPrintIntroPage()
 {
+    delete d;
+}
+
+QString AdvPrintIntroPage::gimpPath() const
+{
+    return d->gimpBin.isValid() ? d->gimpBin.path() : QString();
+}
+
+void AdvPrintIntroPage::initializePage()
+{
+    d->binSearch->allBinariesFound();
 }
 
 } // namespace Digikam

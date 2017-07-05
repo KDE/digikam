@@ -36,11 +36,18 @@ namespace Digikam
 
 class AdvPrintIntroPage : public DWizardPage
 {
-
 public:
 
     explicit AdvPrintIntroPage(QWizard* const dialog, const QString& title);
     ~AdvPrintIntroPage();
+
+    void initializePage();
+    QString gimpPath() const;
+
+private:
+
+    class Private;
+    Private* const d;
 };
 
 } // namespace Digikam
