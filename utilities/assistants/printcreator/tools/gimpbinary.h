@@ -38,6 +38,8 @@ public:
         : DBinaryIface(
 #ifdef Q_OS_OSX
                        QLatin1String("GIMP-bin"),
+#elif defined Q_OS_WIN
+                       QLatin1String("gimp-2.8"),
 #else
                        QLatin1String("gimp"),
 #endif
