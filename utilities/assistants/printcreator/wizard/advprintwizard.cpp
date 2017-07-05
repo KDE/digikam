@@ -911,7 +911,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             int h  = AdvPrintNint((double) photo->m_cropRegion.height() * yRatio);
             img    = img.copy(QRect(x1, y1, w, h));
         }
-        else if (!cropDisabled)       //d->cropPage->ui()->m_disableCrop->isChecked() )
+        else if (!cropDisabled)
         {
             img = img.copy(photo->m_cropRegion);
         }
@@ -930,7 +930,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
 
         QPoint point;
 
-        if (cropDisabled)  //->cropPage->m_disableCrop->isChecked() )
+        if (cropDisabled)
         {
             imageSize.scale(newRectViewPort.size(), Qt::KeepAspectRatio);
             int spaceLeft = (newRectViewPort.width() - imageSize.width()) / 2;
@@ -2255,7 +2255,7 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
         {
             files.append(filename);
 
-            if (!pixmap.save(filename,0,100))
+            if (!pixmap.save(filename, 0, 100))
             {
                 QMessageBox::information(this,
                                          QString(),
@@ -2434,7 +2434,6 @@ void AdvPrintWizard::accept()
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
     {
         // now output the items
-        //TODO manage URL
         QString path = d->cropPage->ui()->m_fileName->text();
 
         if (path.isEmpty())
@@ -2495,6 +2494,7 @@ void AdvPrintWizard::slotPagesetupclicked()
 {
     delete d->pageSetupDlg;
     d->pageSetupDlg = new QPageSetupDialog(d->photoPage->printer(), this);
+
     // TODO next line should work but it doesn't because of a QT bug
     //d->pageSetupDlg->open(this, SLOT(slotPageSetupDialogExit()));
     int ret   = d->pageSetupDlg->exec();
@@ -2504,7 +2504,7 @@ void AdvPrintWizard::slotPagesetupclicked()
         slotPageSetupDialogExit();
     }
 
-    // FIX page size dialog and preview PhotoPage
+    // Fix the page size dialog and preview PhotoPage
     initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
