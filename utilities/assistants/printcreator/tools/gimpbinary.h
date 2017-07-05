@@ -41,13 +41,11 @@ public:
 #else
                        QLatin1String("gimp"),
 #endif
-                       QLatin1String("2.8"),
-                       QLatin1String("GNU Image Manipulation Program version "),
-                       0,
                        QLatin1String("The Gimp"),
                        QLatin1String("https://www.gimp.org/downloads/"),
                        QLatin1String("PrintCreator"),
-                       QStringList(QLatin1String("-v"))
+                       QStringList(QLatin1String("-v")),
+                       i18n("The GNU Image Manipulation Program.")
                       )
         {
             setup();
