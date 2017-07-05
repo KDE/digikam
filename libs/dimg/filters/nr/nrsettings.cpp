@@ -35,7 +35,6 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QStyle>
-#include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>
 
@@ -46,10 +45,9 @@
 // Local includes
 
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
-
-
 
 namespace Digikam
 {
@@ -373,7 +371,7 @@ void NRSettings::writeSettings(KConfigGroup& group)
 
 void NRSettings::loadSettings()
 {
-    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Load"),
+    QUrl loadRestorationFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Load"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 
@@ -419,7 +417,7 @@ void NRSettings::loadSettings()
 
 void NRSettings::saveAsSettings()
 {
-    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Save"),
+    QUrl saveRestorationFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Noise Reduction Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 

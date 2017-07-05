@@ -43,7 +43,6 @@
 #include <QStringRef>
 #include <QString>
 #include <QStandardPaths>
-#include <QFileDialog>
 #include <QIcon>
 #include <QApplication>
 #include <QStyle>
@@ -60,6 +59,7 @@
 #include "imagedialog.h"
 #include "digikam_debug.h"
 #include "dlayoutbox.h"
+#include "dfiledialog.h"
 #include "thumbnailloadthread.h"
 #include "dworkingpixmap.h"
 
@@ -976,7 +976,7 @@ void DImagesList::slotLoadItems()
     QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Images List Path",
                                            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     QUrl loadLevelsFile;
-    loadLevelsFile = QFileDialog::getOpenFileUrl(this, i18n("Select the image file list to load"), lastFileUrl,
+    loadLevelsFile = DFileDialog::getOpenFileUrl(this, i18n("Select the image file list to load"), lastFileUrl,
                                                  i18n("All Files (*)"));
 
     if (loadLevelsFile.isEmpty())
@@ -1048,7 +1048,7 @@ void DImagesList::slotSaveItems()
     QUrl lastFileUrl = QUrl::fromLocalFile(grp.readEntry("Last Images List Path",
                                            QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     QUrl saveLevelsFile;
-    saveLevelsFile = QFileDialog::getSaveFileUrl(this, i18n("Select the image file list to save"), lastFileUrl,
+    saveLevelsFile = DFileDialog::getSaveFileUrl(this, i18n("Select the image file list to save"), lastFileUrl,
                                                  i18n("All Files (*)"));
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "file url " << saveLevelsFile.toDisplayString();

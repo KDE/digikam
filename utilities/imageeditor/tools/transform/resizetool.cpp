@@ -47,7 +47,6 @@
 #include <QIcon>
 #include <QStandardPaths>
 #include <QApplication>
-#include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>
 
@@ -71,8 +70,7 @@
 #include "greycstorationsettings.h"
 #include "dactivelabel.h"
 #include "dexpanderbox.h"
-
-
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -565,7 +563,7 @@ void ResizeTool::slotRestorationToggled(bool b)
 
 void ResizeTool::slotLoadSettings()
 {
-    QUrl loadBlowupFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Load"),
+    QUrl loadBlowupFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Load"),
                                                       QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                       QLatin1String("*"));
 
@@ -598,7 +596,7 @@ void ResizeTool::slotLoadSettings()
 
 void ResizeTool::slotSaveAsSettings()
 {
-    QUrl saveBlowupFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Save"),
+    QUrl saveBlowupFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Resizing Settings File to Save"),
                                                       QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                       QLatin1String("*"));
 

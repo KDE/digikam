@@ -49,6 +49,14 @@ DFileDialog::~DFileDialog()
 {
 }
 
+QString DFileDialog::getExistingDirectory(QWidget* const parent, const QString& caption,
+                                                                 const QString& dir,
+                                                                 Options options)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getExistingDirectory(parent, caption, dir, options);
+}
+
 QUrl DFileDialog::getExistingDirectoryUrl(QWidget* const parent, const QString& caption,
                                                                  const QUrl& dir,
                                                                  Options options,
@@ -56,6 +64,28 @@ QUrl DFileDialog::getExistingDirectoryUrl(QWidget* const parent, const QString& 
 {
     options |= QFileDialog::DontUseNativeDialog;
     return QFileDialog::getExistingDirectoryUrl(parent, caption, dir, options, supportedSchemes);
+}
+
+QUrl DFileDialog::getOpenFileUrl(QWidget* const parent, const QString& caption,
+                                                        const QUrl& dir,
+                                                        const QString& filter,
+                                                        QString* selectedFilter,
+                                                        Options options,
+                                                        const QStringList& supportedSchemes)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getOpenFileUrl(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
+}
+
+QUrl DFileDialog::getSaveFileUrl(QWidget* const parent, const QString& caption,
+                                                        const QUrl& dir,
+                                                        const QString& filter,
+                                                        QString* selectedFilter,
+                                                        Options options,
+                                                        const QStringList& supportedSchemes)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getSaveFileUrl(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
 }
 
 } // namespace Digikam

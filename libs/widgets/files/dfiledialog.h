@@ -48,10 +48,28 @@ public:
                                                     const QString& filter = QString());
     virtual ~DFileDialog();
 
+    static QString getExistingDirectory(QWidget* const parent = 0, const QString& caption = QString(),
+                                                                   const QString& dir = QString(),
+                                                                   Options options = ShowDirsOnly);
+
     static QUrl getExistingDirectoryUrl(QWidget* const parent = 0, const QString& caption = QString(),
                                                                    const QUrl& dir = QUrl(),
                                                                    Options options = ShowDirsOnly,
                                                                    const QStringList& supportedSchemes = QStringList());
+
+    static QUrl getOpenFileUrl(QWidget* const parent = 0, const QString& caption = QString(),
+                                                          const QUrl& dir = QUrl(),
+                                                          const QString& filter = QString(),
+                                                          QString* selectedFilter = 0,
+                                                          Options options = Options(),
+                                                          const QStringList& supportedSchemes = QStringList());
+
+    static QUrl getSaveFileUrl(QWidget* const parent = 0, const QString& caption = QString(),
+                                                          const QUrl& dir = QUrl(),
+                                                          const QString& filter = QString(),
+                                                          QString* selectedFilter = 0,
+                                                          Options options = Options(),
+                                                          const QStringList& supportedSchemes = QStringList());
 
 };
 

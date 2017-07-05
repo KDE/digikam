@@ -44,7 +44,6 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QApplication>
-#include <QFileDialog>
 
 // KDE includes
 
@@ -53,6 +52,7 @@
 // Local includes
 
 #include "dmessagebox.h"
+#include "dfiledialog.h"
 #include "applicationsettings.h"
 #include "collectionlocation.h"
 #include "collectionmanager.h"
@@ -497,7 +497,7 @@ void SetupCollectionModel::addCollection(int category)
         picturesPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     }
 
-    QUrl curl = QFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
+    QUrl curl = DFileDialog::getExistingDirectoryUrl(m_dialogParentWidget,
                                                      i18n("Choose the folder containing your collection"),
                                                      QUrl::fromLocalFile(picturesPath));
 

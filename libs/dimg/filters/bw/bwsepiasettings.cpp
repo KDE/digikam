@@ -36,7 +36,6 @@
 #include <QStyle>
 #include <QUrl>
 #include <QMessageBox>
-#include <QFileDialog>
 #include <QIcon>
 
 // KDE includes
@@ -47,14 +46,13 @@
 
 #include "dlayoutbox.h"
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "previewlist.h"
 #include "curvesbox.h"
 #include "curveswidget.h"
 #include "imagecurves.h"
-
-
 
 namespace Digikam
 {
@@ -530,7 +528,7 @@ void BWSepiaSettings::writeSettings(KConfigGroup& group)
 
 void BWSepiaSettings::loadSettings()
 {
-    QUrl loadFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Load"),
+    QUrl loadFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Load"),
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                 QLatin1String("*"));
 
@@ -601,7 +599,7 @@ void BWSepiaSettings::loadSettings()
 
 void BWSepiaSettings::saveAsSettings()
 {
-    QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Save"),
+    QUrl saveFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Black & White Settings File to Save"),
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                 QLatin1String("*"));
 

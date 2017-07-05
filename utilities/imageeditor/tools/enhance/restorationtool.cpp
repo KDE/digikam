@@ -35,7 +35,6 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QComboBox>
-#include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>
 
@@ -52,6 +51,7 @@
 #include "imageiface.h"
 #include "imageregionwidget.h"
 #include "dactivelabel.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -352,7 +352,7 @@ void RestorationTool::setFinalImage()
 
 void RestorationTool::slotLoadSettings()
 {
-    QUrl loadRestorationFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Load"),
+    QUrl loadRestorationFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Load"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 
@@ -391,7 +391,7 @@ void RestorationTool::slotLoadSettings()
 
 void RestorationTool::slotSaveAsSettings()
 {
-    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Save"),
+    QUrl saveRestorationFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Restoration Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 
