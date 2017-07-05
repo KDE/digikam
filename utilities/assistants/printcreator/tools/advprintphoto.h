@@ -45,6 +45,12 @@ class AdvPrintAdditionalInfo
 {
 public:
 
+    AdvPrintAdditionalInfo();
+    AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai);
+    virtual ~AdvPrintAdditionalInfo();
+
+public:
+
     int    mUnit;
     int    mPrintPosition;
     int    mScaleMode;
@@ -52,32 +58,6 @@ public:
     bool   mAutoRotate;
     double mPrintWidth, mPrintHeight;
     bool   mEnlargeSmallerImages;
-
-public:
-
-    AdvPrintAdditionalInfo()
-        : mUnit(0),
-          mPrintPosition(0),
-          mScaleMode(0),
-          mKeepRatio(true),
-          mAutoRotate(true),
-          mPrintWidth(0.0),
-          mPrintHeight(0.0),
-          mEnlargeSmallerImages(false)
-    {
-    }
-
-    AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai)
-    {
-        mUnit                 = ai.mUnit;
-        mPrintPosition        = ai.mPrintPosition;
-        mScaleMode            = ai.mScaleMode;
-        mKeepRatio            = ai.mKeepRatio;
-        mAutoRotate           = ai.mAutoRotate;
-        mPrintWidth           = ai.mPrintWidth;
-        mPrintHeight          = ai.mPrintHeight;
-        mEnlargeSmallerImages = ai.mEnlargeSmallerImages;
-    }
 };
 
 // -----------------------------------------------------------
@@ -97,35 +77,17 @@ public:
 
 public:
 
+    AdvPrintCaptionInfo();
+    AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci);
+    virtual ~AdvPrintCaptionInfo();
+
+public:
+
     AvailableCaptions m_caption_type;
     QFont             m_caption_font;
     QColor            m_caption_color;
     int               m_caption_size;
     QString           m_caption_text;
-
-public:
-
-    AdvPrintCaptionInfo()
-        : m_caption_type(NoCaptions),
-          m_caption_font(QLatin1String("Sans Serif")),
-          m_caption_color(Qt::yellow),
-          m_caption_size(2),
-          m_caption_text(QLatin1String(""))
-    {
-    }
-
-    AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci)
-    {
-        m_caption_type  = ci.m_caption_type;
-        m_caption_font  = ci.m_caption_font;
-        m_caption_color = ci.m_caption_color;
-        m_caption_size  = ci.m_caption_size;
-        m_caption_text  = ci.m_caption_text;
-    }
-
-    virtual ~AdvPrintCaptionInfo()
-    {
-    }
 };
 
 // -----------------------------------------------------------
@@ -174,9 +136,9 @@ private:
 
 private:
 
-    QPixmap*  m_thumbnail;
-    QSize*    m_size;
-    DMetadata m_meta;
+    QPixmap*                m_thumbnail;
+    QSize*                  m_size;
+    DMetadata               m_meta;
 };
 
 } // Namespace Digikam
