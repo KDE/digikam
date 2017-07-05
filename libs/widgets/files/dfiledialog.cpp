@@ -76,6 +76,16 @@ QString DFileDialog::getOpenFileName(QWidget* const parent, const QString& capti
     return QFileDialog::getOpenFileName(parent, caption, dir, filter, selectedFilter, options);
 }
 
+QStringList DFileDialog::getOpenFileNames(QWidget* const parent, const QString& caption,
+                                                                 const QString& dir,
+                                                                 const QString& filter,
+                                                                 QString* selectedFilter,
+                                                                 Options options)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getOpenFileNames(parent, caption, dir, filter, selectedFilter, options);
+}
+
 QUrl DFileDialog::getOpenFileUrl(QWidget* const parent, const QString& caption,
                                                         const QUrl& dir,
                                                         const QString& filter,
@@ -85,6 +95,17 @@ QUrl DFileDialog::getOpenFileUrl(QWidget* const parent, const QString& caption,
 {
     options |= QFileDialog::DontUseNativeDialog;
     return QFileDialog::getOpenFileUrl(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
+}
+
+QList<QUrl> DFileDialog::getOpenFileUrls(QWidget* const parent, const QString& caption,
+                                                                const QUrl& dir,
+                                                                const QString& filter,
+                                                                QString* selectedFilter,
+                                                                Options options,
+                                                                const QStringList& supportedSchemes)
+{
+    options |= QFileDialog::DontUseNativeDialog;
+    return QFileDialog::getOpenFileUrls(parent, caption, dir, filter, selectedFilter, options, supportedSchemes);
 }
 
 QString DFileDialog::getSaveFileName(QWidget* const parent, const QString& caption,

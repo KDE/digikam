@@ -43,7 +43,6 @@
 #include <QtConcurrentMap>
 #include <QCommandLineParser>
 #include <QMenuBar>
-#include <QFileDialog>
 #include <QStatusBar>
 #include <QPointer>
 #include <QProgressBar>
@@ -69,6 +68,7 @@
 #include "mydragdrophandler.h"
 #include "mytreewidget.h"
 #include "myimageitem.h"
+#include "dfiledialog.h"
 
 using namespace Digikam;
 
@@ -591,7 +591,7 @@ void MainWindow::slotAltitudeLookupDone()
 
 void MainWindow::slotAddImages()
 {
-    const QList<QUrl> fileNames = QFileDialog::getOpenFileUrls(this, i18n("Add image files"), d->lastImageOpenDir, i18n("Images (*.jpg *.jpeg *.png *.tif *.tiff)"));
+    const QList<QUrl> fileNames = DFileDialog::getOpenFileUrls(this, i18n("Add image files"), d->lastImageOpenDir, i18n("Images (*.jpg *.jpeg *.png *.tif *.tiff)"));
 
     if (fileNames.isEmpty())
         return;
