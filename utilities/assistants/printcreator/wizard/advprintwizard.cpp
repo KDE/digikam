@@ -2297,7 +2297,7 @@ void AdvPrintWizard::accept()
     }
 
     if (d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print to JPG") &&
-        d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print to gimp"))
+        d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print with Gimp"))
     {
         // tell him again!
         d->photoPage->printer()->setFullPage(true);
@@ -2366,7 +2366,7 @@ void AdvPrintWizard::accept()
         printPhotos(d->photos, s->layouts, *d->photoPage->printer());
         QApplication::restoreOverrideCursor();
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to gimp"))
+    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print with Gimp"))
     {
         // now output the items
         QString path = d->tempPath;
@@ -2381,7 +2381,7 @@ void AdvPrintWizard::accept()
 
         d->gimpFiles = printPhotosToFile(d->photos, path, s);
         QStringList args;
-        QString prog = QLatin1String("gimp-remote");
+        QString prog = QLatin1String("gimp");
 
         for (QStringList::ConstIterator it = d->gimpFiles.constBegin() ;
              it != d->gimpFiles.constEnd() ; ++it)
@@ -2393,7 +2393,7 @@ void AdvPrintWizard::accept()
         {
             QMessageBox::information(this, QString(),
                                      i18n("There was an error launching the external Gimp "
-                                     "Remote program. Please make sure it is properly installed."));
+                                     "program. Please make sure it is properly installed."));
             return;
         }
     }

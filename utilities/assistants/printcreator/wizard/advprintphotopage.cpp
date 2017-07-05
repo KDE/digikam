@@ -205,7 +205,7 @@ void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 {
     if (text == i18n("Print to PDF") ||
         text == i18n("Print to JPG") ||
-        text == i18n("Print to gimp"))
+        text == i18n("Print with Gimp"))
     {
         delete d->printer;
 
