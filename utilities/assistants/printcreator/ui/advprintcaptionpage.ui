@@ -175,7 +175,7 @@ add a new line</string>
                  <item row="2" column="0" colspan="4">
                   <widget class="QLabel" name="m_free_label">
                    <property name="text">
-                    <string>The fields listed below can be used with the customizaton:</string>
+                    <string>The fields listed below can be used with the customization:</string>
                    </property>
                    <property name="alignment">
                     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
