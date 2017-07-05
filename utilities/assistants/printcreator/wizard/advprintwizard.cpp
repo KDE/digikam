@@ -1306,10 +1306,6 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
             if (xmlReader.name() == QLatin1String("pa_caption"))
             {
-                d->captionPage->ui()->m_sameCaption->blockSignals(true);
-                d->captionPage->ui()->m_sameCaption->setCheckState(Qt::Unchecked);
-                d->captionPage->ui()->m_sameCaption->blockSignals(false);
-
                 //useless this item has been added now
                 if (pPhoto->m_pAdvPrintCaptionInfo)
                     delete pPhoto->m_pAdvPrintCaptionInfo;
@@ -1720,49 +1716,22 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
 {
     if (d->photos.size())
     {
-        if (d->captionPage->ui()->m_sameCaption->isChecked())
+        foreach(AdvPrintPhoto* const pPhoto, d->photos)
         {
-            foreach(AdvPrintPhoto* const pPhoto, d->photos)
+            updateCaption(pPhoto);
+
+            if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
             {
-                updateCaption(pPhoto);
+                DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
 
-                if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
+                if (lvItem)
                 {
-                    DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
+                    QString cap;
 
-                    if (lvItem)
-                    {
-                        QString cap;
+                    if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
+                        cap = captionFormatter(pPhoto);
 
-                        if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
-                            cap = captionFormatter(pPhoto);
-
-                        lvItem->setText(DImagesListView::User1, cap);
-                    }
-                }
-            }
-        }
-        else
-        {
-            QList <QTreeWidgetItem*> list = d->captionPage->imagesList()->listView()->selectedItems();
-
-            foreach(AdvPrintPhoto* const pPhoto, d->photos)
-            {
-                updateCaption(pPhoto);
-
-                if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
-                {
-                    DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
-
-                    if (lvItem && list.contains(lvItem))
-                    {
-                        QString cap;
-
-                        if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
-                            cap = captionFormatter(pPhoto);
-
-                        lvItem->setText(DImagesListView::User1, cap);
-                    }
+                    lvItem->setText(DImagesListView::User1, cap);
                 }
             }
         }
@@ -2145,8 +2114,6 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         //caption
         d->captionPage->readCaptionSettings();
 
-        bool same_to_all = (group.readEntry("SameCaptionToAll", 0) == 1);
-        d->captionPage->ui()->m_sameCaption->setChecked(same_to_all);
         //enable right caption stuff
         d->captionPage->slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
     }
@@ -2559,25 +2526,6 @@ void AdvPrintWizard::slotPagesetupclicked()
 
     // create our photo sizes list
     previewPhotos();
-}
-
-void AdvPrintWizard::slotSaveCaptionSettings()
-{
-    // Save the current settings
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-    // image captions
-    group.writeEntry(QLatin1String("Captions"),         d->captionPage->ui()->m_captions->currentIndex());
-    // caption color
-    group.writeEntry(QLatin1String("CaptionColor"),     d->captionPage->ui()->m_font_color->color());
-    // caption font
-    group.writeEntry(QLatin1String("CaptionFont"),      QFont(d->captionPage->ui()->m_font_name->currentFont()));
-    // caption size
-    group.writeEntry(QLatin1String("CaptionSize"),      d->captionPage->ui()->m_font_size->value());
-    // free caption
-    group.writeEntry(QLatin1String("FreeCaption"),      d->captionPage->ui()->m_FreeCaptionFormat->text());
-    // same to all
-    group.writeEntry(QLatin1String("SameCaptionToAll"), (d->captionPage->ui()->m_sameCaption->isChecked() ? 1 : 0));
 }
 
 } // namespace Digikam

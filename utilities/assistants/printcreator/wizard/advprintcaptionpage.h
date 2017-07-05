@@ -64,6 +64,7 @@ public:
     void enableCaptionGroup(const QString& text);
 
     void initializePage();
+    bool validatePage();
 
 Q_SIGNALS:
 

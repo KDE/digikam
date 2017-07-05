@@ -280,27 +280,9 @@ add a new line</string>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_4">
-              <item>
-               <widget class="QCheckBox" name="m_sameCaption">
-                <property name="text">
-                 <string>Same to all</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <layout class="QHBoxLayout" name="horizontalLayout_4"/>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QPushButton" name="m_setDefault">
-            <property name="text">
-             <string>Save these settings as default</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>

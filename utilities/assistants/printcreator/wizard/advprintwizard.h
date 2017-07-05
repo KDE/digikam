@@ -71,7 +71,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotSaveCaptionSettings();
     void slotBtnPrintOrderUpClicked();
     void slotBtnPrintOrderDownClicked();
 

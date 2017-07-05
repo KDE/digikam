@@ -92,9 +92,6 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
     connect(d->captionUi->m_FreeCaptionFormat, SIGNAL(editingFinished()),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
-    connect(d->captionUi->m_sameCaption, SIGNAL(stateChanged(int)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
     connect(d->captionUi->m_font_name, SIGNAL(currentFontChanged(QFont)),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
 
@@ -103,9 +100,6 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     connect(d->captionUi->m_font_color, SIGNAL(signalColorSelected(QColor)),
             wizard, SLOT(slotInfoPageUpdateCaptions()));
-
-    connect(d->captionUi->m_setDefault, SIGNAL(clicked()),
-            wizard, SLOT(slotSaveCaptionSettings()));
 
     // -----------------------------------
 
@@ -157,6 +151,25 @@ void AdvPrintCaptionPage::initializePage()
     slotUpdateImagesList();
 }
 
+bool AdvPrintCaptionPage::validatePage()
+{
+    // Save the current settings
+    KConfig config;
+    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
+    group.writeEntry(QLatin1String("Captions"),
+                     d->captionUi->m_captions->currentIndex());
+    group.writeEntry(QLatin1String("CaptionColor"),
+                     d->captionUi->m_font_color->color());
+    group.writeEntry(QLatin1String("CaptionFont"),
+                     QFont(d->captionUi->m_font_name->currentFont()));
+    group.writeEntry(QLatin1String("CaptionSize"),
+                     d->captionUi->m_font_size->value());
+    group.writeEntry(QLatin1String("CustomCaption"),
+                     d->captionUi->m_FreeCaptionFormat->text());
+
+    return true;
+}
+
 void AdvPrintCaptionPage::slotUpdateImagesList()
 {
     d->imageList->listView()->clear();
@@ -167,7 +180,6 @@ void AdvPrintCaptionPage::blockCaptionButtons(bool block)
 {
     d->captionUi->m_captions->blockSignals(block);
     d->captionUi->m_free_label->blockSignals(block);
-    d->captionUi->m_sameCaption->blockSignals(block);
     d->captionUi->m_font_name->blockSignals(block);
     d->captionUi->m_font_size->blockSignals(block);
     d->captionUi->m_font_color->blockSignals(block);
@@ -197,13 +209,13 @@ void AdvPrintCaptionPage::readCaptionSettings()
     d->captionUi->m_font_size->setValue(fontSize);
 
     // free caption
-    QString captionTxt = group.readEntry(QLatin1String("FreeCaption"));
+    QString captionTxt = group.readEntry(QLatin1String("CustomCaption"));
     d->captionUi->m_FreeCaptionFormat->setText(captionTxt);
 }
 
 void AdvPrintCaptionPage::setCaptionButtons(AdvPrintPhoto* const pPhoto)
 {
-    if (pPhoto && !d->captionUi->m_sameCaption->isChecked())
+    if (pPhoto)
     {
         blockCaptionButtons();
 
