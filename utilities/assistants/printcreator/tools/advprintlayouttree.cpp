@@ -40,7 +40,7 @@ namespace Digikam
 
 AdvPrintLayoutNode::AdvPrintLayoutNode(double aspectRatio,
                                        double relativeArea,
-                                       int index)
+                                       int    index)
     : m_a(aspectRatio),
       m_e(relativeArea),
       m_division(0),
@@ -53,7 +53,8 @@ AdvPrintLayoutNode::AdvPrintLayoutNode(double aspectRatio,
 
 AdvPrintLayoutNode::AdvPrintLayoutNode(AdvPrintLayoutNode* const subtree,
                                        AdvPrintLayoutNode* const terminalChild,
-                                       bool horizontal, int index)
+                                       bool horizontal,
+                                       int  index)
     : m_a(0),
       m_e(0),
       m_division(0),
@@ -89,8 +90,8 @@ AdvPrintLayoutNode &AdvPrintLayoutNode::operator=(const AdvPrintLayoutNode& othe
 }
 
 // replace one child with a new one
-void AdvPrintLayoutNode::takeAndSetChild(AdvPrintLayoutNode* oldChild,
-                                         AdvPrintLayoutNode* newChild)
+void AdvPrintLayoutNode::takeAndSetChild(AdvPrintLayoutNode* const oldChild,
+                                         AdvPrintLayoutNode* const newChild)
 {
     if (m_leftChild == oldChild)
         m_leftChild = newChild;
@@ -116,7 +117,7 @@ AdvPrintLayoutNode* AdvPrintLayoutNode::nodeForIndex(int index)
 }
 
 // retrieve the parent node of the given child in the hierarchy of this node
-AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* child)
+AdvPrintLayoutNode* AdvPrintLayoutNode::parentOf(AdvPrintLayoutNode* const child)
 {
     if (m_type == TerminalNode)
         return 0;
@@ -189,7 +190,42 @@ void AdvPrintLayoutNode::computeDivisions()
     }
 }
 
-// --------------------------------------------- //
+double AdvPrintLayoutNode::aspectRatio() const
+{
+    return m_a;
+}
+
+double AdvPrintLayoutNode::relativeArea() const
+{
+    return m_e;
+}
+
+double AdvPrintLayoutNode::division() const
+{
+    return m_division;
+}
+
+AdvPrintLayoutNode::Type AdvPrintLayoutNode::type() const
+{
+    return m_type;
+}
+
+int AdvPrintLayoutNode::index() const
+{
+    return m_index;
+}
+
+AdvPrintLayoutNode* AdvPrintLayoutNode::leftChild() const
+{
+    return m_leftChild;
+}
+
+AdvPrintLayoutNode* AdvPrintLayoutNode::rightChild() const
+{
+    return m_rightChild;
+}
+
+// ------------------------------------------------------------------------------------
 
 AdvPrintLayoutTree::AdvPrintLayoutTree(double aspectRatioPage, double absoluteAreaPage)
     : m_root(0),
@@ -204,7 +240,7 @@ AdvPrintLayoutTree::AdvPrintLayoutTree(const AdvPrintLayoutTree& other)
     (*this) = other;
 }
 
-AdvPrintLayoutTree &AdvPrintLayoutTree::operator=(const AdvPrintLayoutTree& other)
+AdvPrintLayoutTree& AdvPrintLayoutTree::operator=(const AdvPrintLayoutTree& other)
 {
     delete m_root;
     m_root             = new AdvPrintLayoutNode(*(other.m_root));
@@ -233,11 +269,11 @@ int AdvPrintLayoutTree::addImage(double aspectRatio, double relativeArea)
 
     // Section 2.1
     AdvPrintLayoutNode* bestTree = NULL;
-    double highScore     = 0;
+    double highScore             = 0;
 
-    for (int i=0; i< m_count; ++i)
+    for (int i = 0 ; i < m_count ; ++i)
     {
-        for (int horizontal=0; horizontal<2; ++horizontal)
+        for (int horizontal = 0 ; horizontal < 2 ; ++horizontal)
         {
             // create temporary tree
             AdvPrintLayoutNode* candidateTree          = new AdvPrintLayoutNode(*m_root);
@@ -289,16 +325,16 @@ int AdvPrintLayoutTree::addImage(double aspectRatio, double relativeArea)
 }
 
 // Section 2.2.1
-double AdvPrintLayoutTree::score(AdvPrintLayoutNode* root, int nodeCount)
+double AdvPrintLayoutTree::score(AdvPrintLayoutNode* const root, int nodeCount)
 {
     if (!root)
         return 0;
 
     double areaSum = 0;
 
-    for (int i = 0; i<nodeCount; ++i)
+    for (int i = 0 ; i < nodeCount ; ++i)
     {
-        AdvPrintLayoutNode* node = root->nodeForIndex(i);
+        AdvPrintLayoutNode* const node = root->nodeForIndex(i);
 
         if (node->type() == AdvPrintLayoutNode::TerminalNode)
             areaSum += node->relativeArea();
@@ -317,7 +353,7 @@ double AdvPrintLayoutTree::G() const
 }
 
 // Section 2.2.2
-double AdvPrintLayoutTree::absoluteArea(AdvPrintLayoutNode* node)
+double AdvPrintLayoutTree::absoluteArea(AdvPrintLayoutNode* const node)
 {
     // min(a_pbb, a_page), max(a_pbb, a_page)
     double minRatioPage     = m_root->aspectRatio() < m_aspectRatioPage ? m_root->aspectRatio() : m_aspectRatioPage;
@@ -355,7 +391,7 @@ QRectF AdvPrintLayoutTree::drawingArea(int index, const QRectF& absoluteRectPage
 
     // go along the line of ancestry and narrow down the bounding rectangle,
     // as described in section 2.2.2
-    for (int i=0; i<treePath.count() - 1; ++i)
+    for (int i = 0 ; i < treePath.count() - 1 ; ++i)
     {
         AdvPrintLayoutNode* const parent = treePath[i];
         AdvPrintLayoutNode* const child  = treePath[i+1]; // only iterating to count-1
@@ -404,6 +440,7 @@ QRectF AdvPrintLayoutTree::rectInRect(const QRectF &rect, double aspectRatio, do
     double height = std::sqrt(absoluteArea * aspectRatio);
     double x      = rect.x() + (rect.width()  - width)  / 2;
     double y      = rect.y() + (rect.height() - height) / 2;
+
     return QRectF(x,y,width, height);
 }
 

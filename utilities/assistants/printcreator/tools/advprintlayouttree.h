@@ -77,20 +77,21 @@ public:
     AdvPrintLayoutNode(const AdvPrintLayoutNode&);
     ~AdvPrintLayoutNode();
 
-    double aspectRatio()  const { return m_a;        }
-    double relativeArea() const { return m_e;        }
-    double division()     const { return m_division; }
+    double aspectRatio()  const;
+    double relativeArea() const;
+    double division()     const;
 
-    Type type() const { return m_type;  }
-    int index() const { return m_index; }
+    Type type() const;
+    int index() const;
 
-    AdvPrintLayoutNode* leftChild()  const { return m_leftChild;  }
-    AdvPrintLayoutNode* rightChild() const { return m_rightChild; }
+    AdvPrintLayoutNode* leftChild()  const;
+    AdvPrintLayoutNode* rightChild() const;
 
-    void takeAndSetChild(AdvPrintLayoutNode* oldChild, AdvPrintLayoutNode* newChild);
+    void takeAndSetChild(AdvPrintLayoutNode* const oldChild,
+                         AdvPrintLayoutNode* const newChild);
 
     AdvPrintLayoutNode* nodeForIndex(int index);
-    AdvPrintLayoutNode* parentOf(AdvPrintLayoutNode* child);
+    AdvPrintLayoutNode* parentOf(AdvPrintLayoutNode* const child);
 
     void computeRelativeSizes();
     void computeDivisions();
@@ -99,13 +100,13 @@ public:
 
 private:
 
-    double      m_a;
-    double      m_e;
-    double      m_division;
+    double              m_a;
+    double              m_e;
+    double              m_division;
 
-    Type        m_type;
+    Type                m_type;
 
-    int         m_index;
+    int                 m_index;
 
     AdvPrintLayoutNode* m_leftChild;
     AdvPrintLayoutNode* m_rightChild;
@@ -125,14 +126,14 @@ public:
     QRectF drawingArea(int index, const QRectF& absoluteRectPage);
 
     int count() const;
-    double score(AdvPrintLayoutNode* root, int nodeCount);
+    double score(AdvPrintLayoutNode* const root, int nodeCount);
     double G() const;
 
     AdvPrintLayoutTree& operator=(const AdvPrintLayoutTree& other);
 
 private:
 
-    double absoluteArea(AdvPrintLayoutNode* node);
+    double absoluteArea(AdvPrintLayoutNode* const node);
     QRectF rectInRect(const QRectF& rect, double aspectRatio, double absoluteArea);
 
 private:
