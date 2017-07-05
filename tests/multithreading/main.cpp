@@ -37,6 +37,8 @@
 #include "processordlg.h"
 #include "dfiledialog.h"
 
+using namespace Digikam;
+
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
