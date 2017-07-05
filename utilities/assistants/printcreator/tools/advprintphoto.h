@@ -72,7 +72,7 @@ public:
         FileNames,
         ExifDateTime,
         Comment,
-        Free
+        Custom
     };
 
 public:

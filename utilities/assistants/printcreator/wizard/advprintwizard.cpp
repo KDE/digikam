@@ -756,7 +756,7 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
         case AdvPrintCaptionInfo::Comment:
             format = QLatin1String("%c");
             break;
-        case AdvPrintCaptionInfo::Free:
+        case AdvPrintCaptionInfo::Custom:
             format =  photo->m_pAdvPrintCaptionInfo->m_caption_text;
             break;
         default:

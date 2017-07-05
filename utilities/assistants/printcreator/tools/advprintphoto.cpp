@@ -116,7 +116,7 @@ AdvPrintPhoto::AdvPrintPhoto (const AdvPrintPhoto& photo)
 {
     m_thumbnailSize = photo.m_thumbnailSize;
     m_cropRegion    = photo.m_cropRegion;
-    m_url      = photo.m_url;
+    m_url           = photo.m_url;
     m_first         = photo.m_first;
     m_copies        = photo.m_copies;
     m_rotation      = photo.m_rotation;
