@@ -27,16 +27,12 @@
 
 // Qt includes
 
-#include <QLabel>
-
-// Local includes
-
-#include "advprintphoto.h"
-
-class QPixmap;
+#include <QWidget>
 
 namespace Digikam
 {
+
+class AdvPrintPhoto;
 
 class AdvPrintCropFrame : public QWidget
 {
@@ -47,10 +43,14 @@ public:
     explicit AdvPrintCropFrame(QWidget* const parent);
     ~AdvPrintCropFrame();
 
-    void   init(AdvPrintPhoto* const photo, int width, int height, bool autoRotate, bool paint = true);
+    void   init(AdvPrintPhoto* const photo,
+                int width,
+                int height,
+                bool autoRotate,
+                bool paint = true);
     void   setColor(const QColor&);
     QColor color() const;
-    void   drawCropRectangle(bool draw=true) { m_drawRec=draw; };
+    void   drawCropRectangle(bool draw = true);
 
 protected:
 
@@ -62,21 +62,13 @@ protected:
 
 private:
 
-    QRect _screenToPhotoRect(const QRect& r) const;
-    QRect _photoToScreenRect(const QRect& r) const;
+    QRect screenToPhotoRect(const QRect& r) const;
+    QRect photoToScreenRect(const QRect& r) const;
 
 private:
 
-    AdvPrintPhoto*  m_photo;
-    bool            m_mouseDown;
-    QPixmap*        m_pixmap;
-    int             m_pixmapX;
-    int             m_pixmapY;
-
-    QColor          m_color;
-
-    QRect           m_cropRegion;
-    bool            m_drawRec;
+    class Private;
+    Private* const d;
 };
 
 } // Namespace Digikam
