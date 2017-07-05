@@ -247,7 +247,7 @@ Qt::Alignment AdvPrintOptionsPage::alignment() const
 
 AdvPrintOptionsPage::Unit AdvPrintOptionsPage::scaleUnit() const
 {
-    d->m_photos->at(d->m_currentPhoto)->m_pAddInfo->mUnit =
+    d->m_photos->at(d->m_currentPhoto)->m_pAddInfo->m_unit =
         AdvPrintOptionsPage::Unit(d->kcfg_PrintUnit->currentIndex());
 
     return AdvPrintOptionsPage::Unit(d->kcfg_PrintUnit->currentIndex());
@@ -280,10 +280,10 @@ void AdvPrintOptionsPage::adjustWidthToRatio()
 
     double width = d->m_photos->at ( d->m_currentPhoto )->width() * d->kcfg_PrintHeight->value() /
                    d->m_photos->at ( d->m_currentPhoto )->height();
-    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintHeight = d->kcfg_PrintHeight->value();
-    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintWidth  =  width ? width : 1.;
+    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printHeight = d->kcfg_PrintHeight->value();
+    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printWidth  =  width ? width : 1.;
     SignalBlocker blocker ( d->kcfg_PrintWidth );
-    d->kcfg_PrintWidth->setValue ( d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintWidth );
+    d->kcfg_PrintWidth->setValue ( d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printWidth );
 /*
     qCDebug(DIGIKAM_GENERAL_LOG) << " width "
                                  << d->m_photos->at ( d->m_currentPhoto )->pAddInfo->mPrintWidth
@@ -300,10 +300,10 @@ void AdvPrintOptionsPage::adjustHeightToRatio()
     }
 
     double height = d->m_photos->at ( d->m_currentPhoto )->height() * d->kcfg_PrintWidth->value() / d->m_photos->at ( d->m_currentPhoto )->width();
-    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintWidth  = d->kcfg_PrintWidth->value();
-    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintHeight =  height ? height : 1. ;
+    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printWidth  = d->kcfg_PrintWidth->value();
+    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printHeight = height ? height : 1. ;
     SignalBlocker blocker ( d->kcfg_PrintHeight );
-    d->kcfg_PrintHeight->setValue ( d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintHeight );
+    d->kcfg_PrintHeight->setValue ( d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printHeight );
 
 /*
     qCDebug(DIGIKAM_GENERAL_LOG) << "height "
@@ -381,7 +381,7 @@ void AdvPrintOptionsPage::selectNext()
 
 //     qCDebug(DIGIKAM_GENERAL_LOG) << d->m_currentPhoto;
 
-    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintPosition = alignment();
+    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printPosition = alignment();
 
     if ( d->m_currentPhoto+1 < d->m_photos->size() )
       d->m_currentPhoto++;
@@ -398,7 +398,7 @@ void AdvPrintOptionsPage::selectPrev()
     QApplication::setOverrideCursor ( QCursor ( Qt::WaitCursor ) );
 
 //     qCDebug(DIGIKAM_GENERAL_LOG) << d->m_currentPhoto;
-    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->mPrintPosition = alignment();
+    d->m_photos->at ( d->m_currentPhoto )->m_pAddInfo->m_printPosition = alignment();
 
     if ( d->m_currentPhoto-1 >= 0 )
       d->m_currentPhoto--;
@@ -417,19 +417,19 @@ void AdvPrintOptionsPage::setAdvPrintAdditionalInfo()
 
         if ( pPhoto )
         {
-            pPhoto->m_pAddInfo->mUnit                 = AdvPrintImagesConfig::printUnit();
-            pPhoto->m_pAddInfo->mPrintPosition        = AdvPrintImagesConfig::printPosition();
-            pPhoto->m_pAddInfo->mKeepRatio            = AdvPrintImagesConfig::printKeepRatio();
-            pPhoto->m_pAddInfo->mScaleMode            = AdvPrintImagesConfig::printScaleMode();
-            pPhoto->m_pAddInfo->mAutoRotate           = AdvPrintImagesConfig::printAutoRotate();
-            pPhoto->m_pAddInfo->mPrintWidth           = AdvPrintImagesConfig::printWidth();
-            pPhoto->m_pAddInfo->mPrintHeight          = AdvPrintImagesConfig::printHeight();
-            pPhoto->m_pAddInfo->mEnlargeSmallerImages = AdvPrintImagesConfig::printEnlargeSmallerImages();
+            pPhoto->m_pAddInfo->m_unit                 = AdvPrintImagesConfig::printUnit();
+            pPhoto->m_pAddInfo->m_printPosition        = AdvPrintImagesConfig::printPosition();
+            pPhoto->m_pAddInfo->m_keepRatio            = AdvPrintImagesConfig::printKeepRatio();
+            pPhoto->m_pAddInfo->m_scaleMode            = AdvPrintImagesConfig::printScaleMode();
+            pPhoto->m_pAddInfo->m_autoRotate           = AdvPrintImagesConfig::printAutoRotate();
+            pPhoto->m_pAddInfo->m_printWidth           = AdvPrintImagesConfig::printWidth();
+            pPhoto->m_pAddInfo->m_printHeight          = AdvPrintImagesConfig::printHeight();
+            pPhoto->m_pAddInfo->m_enlargeSmallerImages = AdvPrintImagesConfig::printEnlargeSmallerImages();
 
-            if (pPhoto->m_pAddInfo->mKeepRatio)
+            if (pPhoto->m_pAddInfo->m_keepRatio)
             {
-                double height = d->m_photos->at(i)->height() * pPhoto->m_pAddInfo->mPrintWidth / d->m_photos->at(i)->width();
-                d->m_photos->at(i)->m_pAddInfo->mPrintHeight =  height ? height : AdvPrintImagesConfig::printHeight();
+                double height = d->m_photos->at(i)->height() * pPhoto->m_pAddInfo->m_printWidth / d->m_photos->at(i)->width();
+                d->m_photos->at(i)->m_pAddInfo->m_printHeight =  height ? height : AdvPrintImagesConfig::printHeight();
             }
 /*
            qCDebug(DIGIKAM_GENERAL_LOG) << " photo "
@@ -451,8 +451,8 @@ void AdvPrintOptionsPage::showAdvPrintAdditionalInfo()
 
     if ( pPhoto )
     {
-        d->kcfg_PrintUnit->setCurrentIndex ( pPhoto->m_pAddInfo->mUnit );
-        button = d->m_positionGroup->button ( pPhoto->m_pAddInfo->mPrintPosition );
+        d->kcfg_PrintUnit->setCurrentIndex ( pPhoto->m_pAddInfo->m_unit );
+        button = d->m_positionGroup->button ( pPhoto->m_pAddInfo->m_printPosition );
 
         if ( button )
         {
@@ -463,7 +463,7 @@ void AdvPrintOptionsPage::showAdvPrintAdditionalInfo()
             qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown button for position group";
         }
 
-        button = d->m_scaleGroup->button ( pPhoto->m_pAddInfo->mScaleMode );
+        button = d->m_scaleGroup->button ( pPhoto->m_pAddInfo->m_scaleMode );
 
         if ( button )
         {
@@ -474,11 +474,11 @@ void AdvPrintOptionsPage::showAdvPrintAdditionalInfo()
             qCWarning(DIGIKAM_GENERAL_LOG) << "Unknown button for scale group";
         }
 
-        d->kcfg_PrintKeepRatio->setChecked ( pPhoto->m_pAddInfo->mKeepRatio );
-        d->kcfg_PrintAutoRotate->setChecked ( pPhoto->m_pAddInfo->mAutoRotate );
-        d->kcfg_PrintEnlargeSmallerImages->setChecked ( pPhoto->m_pAddInfo->mEnlargeSmallerImages );
-        d->kcfg_PrintWidth->setValue ( pPhoto->m_pAddInfo->mPrintWidth );
-        d->kcfg_PrintHeight->setValue ( pPhoto->m_pAddInfo->mPrintHeight );
+        d->kcfg_PrintKeepRatio->setChecked ( pPhoto->m_pAddInfo->m_keepRatio );
+        d->kcfg_PrintAutoRotate->setChecked ( pPhoto->m_pAddInfo->m_autoRotate );
+        d->kcfg_PrintEnlargeSmallerImages->setChecked ( pPhoto->m_pAddInfo->m_enlargeSmallerImages );
+        d->kcfg_PrintWidth->setValue ( pPhoto->m_pAddInfo->m_printWidth );
+        d->kcfg_PrintHeight->setValue ( pPhoto->m_pAddInfo->m_printHeight );
 
         if ( d->kcfg_PrintKeepRatio->isChecked() )
         {
@@ -627,7 +627,7 @@ void AdvPrintOptionsPage::scaleOption()
 
     if (pPhoto)
     {
-        pPhoto->m_pAddInfo->mScaleMode = scaleMode;
+        pPhoto->m_pAddInfo->m_scaleMode = scaleMode;
     }
 
     if (scaleMode == ScaleToCustomSize && d->kcfg_PrintKeepRatio->isChecked())
@@ -643,7 +643,7 @@ void AdvPrintOptionsPage::autoRotate ( bool value )
 
     if ( pPhoto )
     {
-        pPhoto->m_pAddInfo->mAutoRotate = value;
+        pPhoto->m_pAddInfo->m_autoRotate = value;
     }
 }
 
@@ -655,7 +655,7 @@ void AdvPrintOptionsPage::positionChosen(int id)
                                  << "position "
                                  << id;
 */
-    d->m_photos->at(d->m_currentPhoto)->m_pAddInfo->mPrintPosition = Qt::Alignment(id);
+    d->m_photos->at(d->m_currentPhoto)->m_pAddInfo->m_printPosition = Qt::Alignment(id);
 }
 
 } // namespace Digikam

@@ -712,7 +712,7 @@ void AdvPrintWizard::printCaption(QPainter& p,
         captionByLines.prepend(newLine.trimmed());
     }
 
-    QFont font(photo->m_pAdvPrintCaptionInfo->m_caption_font);
+    QFont font(photo->m_pAdvPrintCaptionInfo->m_captionFont);
     font.setStyleHint(QFont::SansSerif);
     font.setPixelSize((int)(captionH * d->FONT_HEIGHT_RATIO));
     font.setWeight(QFont::Normal);
@@ -721,7 +721,7 @@ void AdvPrintWizard::printCaption(QPainter& p,
     int pixelsHigh = fm.height();
 
     p.setFont(font);
-    p.setPen(photo->m_pAdvPrintCaptionInfo->m_caption_color);
+    p.setPen(photo->m_pAdvPrintCaptionInfo->m_captionColor);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Number of lines " << (int) captionByLines.count() ;
 
@@ -745,7 +745,7 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
 
     QString format;
 
-    switch (photo->m_pAdvPrintCaptionInfo->m_caption_type)
+    switch (photo->m_pAdvPrintCaptionInfo->m_captionType)
     {
         case AdvPrintCaptionInfo::FileNames:
             format = QLatin1String("%f");
@@ -757,11 +757,11 @@ QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
             format = QLatin1String("%c");
             break;
         case AdvPrintCaptionInfo::Custom:
-            format =  photo->m_pAdvPrintCaptionInfo->m_caption_text;
+            format =  photo->m_pAdvPrintCaptionInfo->m_captionText;
             break;
         default:
             qCWarning(DIGIKAM_GENERAL_LOG) << "UNKNOWN caption type "
-                                           << photo->m_pAdvPrintCaptionInfo->m_caption_type;
+                                           << photo->m_pAdvPrintCaptionInfo->m_captionType;
             break;
     }
 
@@ -952,7 +952,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
         p.setBrushOrigin(point);
 
         if (photo->m_pAdvPrintCaptionInfo &&
-            photo->m_pAdvPrintCaptionInfo->m_caption_type != AdvPrintCaptionInfo::NoCaptions)
+            photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
         {
             p.save();
             QString caption;
@@ -963,7 +963,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             // before drawing so the text will be in the correct location
             // next, do we rotate?
             int captionW        = w - 2;
-            double ratio        = photo->m_pAdvPrintCaptionInfo->m_caption_size * 0.01;
+            double ratio        = photo->m_pAdvPrintCaptionInfo->m_captionSize * 0.01;
             int captionH        = (int)(qMin(w, h) * ratio);
             int exifOrientation = DMetadata::ORIENTATION_NORMAL;
             int orientatation   = photo->m_rotation;
@@ -1213,15 +1213,15 @@ void AdvPrintWizard::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemIndex)
         {
             xmlWriter.writeStartElement(QLatin1String("pa_caption"));
             xmlWriter.writeAttribute(QLatin1String("type"),
-                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
+                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_captionType));
             xmlWriter.writeAttribute(QLatin1String("font"),
-                                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_font.toString());
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.toString());
             xmlWriter.writeAttribute(QLatin1String("size"),
-                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size));
+                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_captionSize));
             xmlWriter.writeAttribute(QLatin1String("color"),
-                                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_color.name());
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.name());
             xmlWriter.writeAttribute(QLatin1String("text"),
-                                     pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionText);
             xmlWriter.writeEndElement(); // pa_caption
         }
     }
@@ -1324,7 +1324,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_type =
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
                         (AdvPrintCaptionInfo::AvailableCaptions)attr.toString().toInt(&ok);
                 }
 
@@ -1333,7 +1333,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_font.fromString(attr.toString());
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.fromString(attr.toString());
                 }
 
                 attr = attrs.value(QLatin1String("color"));
@@ -1341,7 +1341,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_color.setNamedColor(attr.toString());
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.setNamedColor(attr.toString());
                 }
 
                 attr = attrs.value(QLatin1String("size"));
@@ -1349,7 +1349,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_size = attr.toString().toInt(&ok);
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionSize = attr.toString().toInt(&ok);
                 }
 
                 attr = attrs.value(QLatin1String("text"));
@@ -1357,7 +1357,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
                 if (!attr.isEmpty())
                 {
                     qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                    pPhoto->m_pAdvPrintCaptionInfo->m_caption_text = attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionText = attr.toString();
                 }
 
                 setCaptionButtons();
@@ -1705,11 +1705,11 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
 
         if (pPhoto->m_pAdvPrintCaptionInfo)
         {
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_color = d->captionPage->ui()->m_font_color->color();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_size  = d->captionPage->ui()->m_font_size->value();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_font  = d->captionPage->ui()->m_font_name->currentFont();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_type  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionPage->ui()->m_captions->currentIndex();
-            pPhoto->m_pAdvPrintCaptionInfo->m_caption_text  = d->captionPage->ui()->m_FreeCaptionFormat->text();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionColor = d->captionPage->ui()->m_font_color->color();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionSize  = d->captionPage->ui()->m_font_size->value();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  = d->captionPage->ui()->m_font_name->currentFont();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionType  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionPage->ui()->m_captions->currentIndex();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionText  = d->captionPage->ui()->m_FreeCaptionFormat->text();
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for" << pPhoto->m_url;
         }
@@ -1734,7 +1734,7 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
                     {
                         QString cap;
 
-                        if (pPhoto->m_pAdvPrintCaptionInfo->m_caption_type != AdvPrintCaptionInfo::NoCaptions)
+                        if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
                             cap = captionFormatter(pPhoto);
 
                         lvItem->setText(DImagesListView::User1, cap);
@@ -1758,7 +1758,7 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
                     {
                         QString cap;
 
-                        if (pPhoto->m_pAdvPrintCaptionInfo->m_caption_type != AdvPrintCaptionInfo::NoCaptions)
+                        if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
                             cap = captionFormatter(pPhoto);
 
                         lvItem->setText(DImagesListView::User1, cap);

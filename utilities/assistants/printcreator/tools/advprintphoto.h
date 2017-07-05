@@ -51,13 +51,14 @@ public:
 
 public:
 
-    int    mUnit;
-    int    mPrintPosition;
-    int    mScaleMode;
-    bool   mKeepRatio;
-    bool   mAutoRotate;
-    double mPrintWidth, mPrintHeight;
-    bool   mEnlargeSmallerImages;
+    int    m_unit;
+    int    m_printPosition;
+    int    m_scaleMode;
+    bool   m_keepRatio;
+    bool   m_autoRotate;
+    double m_printWidth;
+    double m_printHeight;
+    bool   m_enlargeSmallerImages;
 };
 
 // -----------------------------------------------------------
@@ -83,11 +84,11 @@ public:
 
 public:
 
-    AvailableCaptions m_caption_type;
-    QFont             m_caption_font;
-    QColor            m_caption_color;
-    int               m_caption_size;
-    QString           m_caption_text;
+    AvailableCaptions m_captionType;
+    QFont             m_captionFont;
+    QColor            m_captionColor;
+    int               m_captionSize;
+    QString           m_captionText;
 };
 
 // -----------------------------------------------------------

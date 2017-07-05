@@ -209,11 +209,11 @@ void AdvPrintCaptionPage::setCaptionButtons(AdvPrintPhoto* const pPhoto)
 
         if (pPhoto->m_pAdvPrintCaptionInfo)
         {
-            d->captionUi->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_caption_color);
-            d->captionUi->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_caption_size);
-            d->captionUi->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_caption_font);
-            d->captionUi->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_caption_type));
-            d->captionUi->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_caption_text);
+            d->captionUi->m_font_color->setColor(pPhoto->m_pAdvPrintCaptionInfo->m_captionColor);
+            d->captionUi->m_font_size->setValue(pPhoto->m_pAdvPrintCaptionInfo->m_captionSize);
+            d->captionUi->m_font_name->setCurrentFont(pPhoto->m_pAdvPrintCaptionInfo->m_captionFont);
+            d->captionUi->m_captions->setCurrentIndex(int(pPhoto->m_pAdvPrintCaptionInfo->m_captionType));
+            d->captionUi->m_FreeCaptionFormat->setText(pPhoto->m_pAdvPrintCaptionInfo->m_captionText);
             enableCaptionGroup(d->captionUi->m_captions->currentText());
         }
         else

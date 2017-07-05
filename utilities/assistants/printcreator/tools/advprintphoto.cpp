@@ -38,27 +38,27 @@ namespace Digikam
 {
 
 AdvPrintAdditionalInfo::AdvPrintAdditionalInfo()
-    : mUnit(0),
-      mPrintPosition(0),
-      mScaleMode(0),
-      mKeepRatio(true),
-      mAutoRotate(true),
-      mPrintWidth(0.0),
-      mPrintHeight(0.0),
-      mEnlargeSmallerImages(false)
+    : m_unit(0),
+      m_printPosition(0),
+      m_scaleMode(0),
+      m_keepRatio(true),
+      m_autoRotate(true),
+      m_printWidth(0.0),
+      m_printHeight(0.0),
+      m_enlargeSmallerImages(false)
 {
 }
 
 AdvPrintAdditionalInfo::AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai)
 {
-    mUnit                 = ai.mUnit;
-    mPrintPosition        = ai.mPrintPosition;
-    mScaleMode            = ai.mScaleMode;
-    mKeepRatio            = ai.mKeepRatio;
-    mAutoRotate           = ai.mAutoRotate;
-    mPrintWidth           = ai.mPrintWidth;
-    mPrintHeight          = ai.mPrintHeight;
-    mEnlargeSmallerImages = ai.mEnlargeSmallerImages;
+    m_unit                 = ai.m_unit;
+    m_printPosition        = ai.m_printPosition;
+    m_scaleMode            = ai.m_scaleMode;
+    m_keepRatio            = ai.m_keepRatio;
+    m_autoRotate           = ai.m_autoRotate;
+    m_printWidth           = ai.m_printWidth;
+    m_printHeight          = ai.m_printHeight;
+    m_enlargeSmallerImages = ai.m_enlargeSmallerImages;
 }
 
 AdvPrintAdditionalInfo::~AdvPrintAdditionalInfo()
@@ -68,21 +68,21 @@ AdvPrintAdditionalInfo::~AdvPrintAdditionalInfo()
 // -----------------------------
 
 AdvPrintCaptionInfo::AdvPrintCaptionInfo()
-    : m_caption_type(NoCaptions),
-      m_caption_font(QLatin1String("Sans Serif")),
-      m_caption_color(Qt::yellow),
-      m_caption_size(2),
-      m_caption_text(QLatin1String(""))
+    : m_captionType(NoCaptions),
+      m_captionFont(QLatin1String("Sans Serif")),
+      m_captionColor(Qt::yellow),
+      m_captionSize(2),
+      m_captionText(QLatin1String(""))
 {
 }
 
 AdvPrintCaptionInfo::AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci)
 {
-    m_caption_type  = ci.m_caption_type;
-    m_caption_font  = ci.m_caption_font;
-    m_caption_color = ci.m_caption_color;
-    m_caption_size  = ci.m_caption_size;
-    m_caption_text  = ci.m_caption_text;
+    m_captionType  = ci.m_captionType;
+    m_captionFont  = ci.m_captionFont;
+    m_captionColor = ci.m_captionColor;
+    m_captionSize  = ci.m_captionSize;
+    m_captionText  = ci.m_captionText;
 }
 
 AdvPrintCaptionInfo::~AdvPrintCaptionInfo()
@@ -226,10 +226,10 @@ double AdvPrintPhoto::scaleWidth(double unitToInches)
     Q_ASSERT(m_pAddInfo != 0);
 
     m_cropRegion = QRect(0, 0,
-                         (int)(m_pAddInfo->mPrintWidth  * unitToInches),
-                         (int)(m_pAddInfo->mPrintHeight * unitToInches));
+                         (int)(m_pAddInfo->m_printWidth  * unitToInches),
+                         (int)(m_pAddInfo->m_printHeight * unitToInches));
 
-    return m_pAddInfo->mPrintWidth * unitToInches;
+    return m_pAddInfo->m_printWidth * unitToInches;
 }
 
 double AdvPrintPhoto::scaleHeight(double unitToInches)
@@ -238,10 +238,10 @@ double AdvPrintPhoto::scaleHeight(double unitToInches)
 
     m_cropRegion = QRect(0,
                          0,
-                         (int)(m_pAddInfo->mPrintWidth  * unitToInches),
-                         (int)(m_pAddInfo->mPrintHeight * unitToInches));
+                         (int)(m_pAddInfo->m_printWidth  * unitToInches),
+                         (int)(m_pAddInfo->m_printHeight * unitToInches));
 
-    return m_pAddInfo->mPrintHeight * unitToInches;
+    return m_pAddInfo->m_printHeight * unitToInches;
 }
 
 } // Namespace Digikam
