@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2017-07-04
- * Description : Autodetect gimp binary program and version
+ * Description : Autodetect gimp binary program
  *
  * Copyright (C) 2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *

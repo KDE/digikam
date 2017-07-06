@@ -84,14 +84,19 @@ AdvPrintIntroPage::AdvPrintIntroPage(QWizard* const dialog, const QString& title
     d->binSearch->addBinary(d->gimpBin);
 
 #ifdef Q_OS_OSX
-    d->binSearch->addDirectory(QLatin1String("/Applications/Gimp.app/Contents/MacOS"));                // Gimp bundle PKG install
-    d->binSearch->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
-    d->binSearch->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
+    // Gimp bundle PKG install
+    d->binSearch->addDirectory(QLatin1String("/Applications/Gimp.app/Contents/MacOS"));
+
+    // Std Macports install
+    d->binSearch->addDirectory(QLatin1String("/opt/local/bin"));
+
+    // digiKam Bundle PKG install
+    d->binSearch->addDirectory(QLatin1String("/opt/digikam/bin"));
 #endif
 
 #ifdef Q_OS_WIN
     d->binSearch->addDirectory(QLatin1String("C:/Program Files/GIMP 2/bin"));
-    
+
     d->binSearch->addDirectory(QLatin1String("C:/Program Files (x86)/GIMP 2/bin"));
 #endif
 
