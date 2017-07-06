@@ -121,9 +121,8 @@ QMap<MailSettings::MailClient, QString> MailSettings::mailClientNames()
     clients[CLAWSMAIL]     = i18nc("Mail client: CLAWSMAIL",     "Clawsmail");
     clients[EVOLUTION]     = i18nc("Mail client: EVOLUTION",     "Evolution");
     clients[KMAIL]         = i18nc("Mail client: KMAIL",         "Kmail");
-    clients[NETSCAPE]      = i18nc("Mail client: NETSCAPE",      "Netscape");
+    clients[NETSCAPE]      = i18nc("Mail client: NETSCAPE",      "Netscape Messenger");
     clients[SYLPHEED]      = i18nc("Mail client: SYLPHEED",      "Sylpheed");
-    clients[SYLPHEEDCLAWS] = i18nc("Mail client: SYLPHEEDCLAWS", "Sylpheed Claws");
     clients[THUNDERBIRD]   = i18nc("Mail client: THUNDERBIRD",   "Thunderbird");
 
     return clients;

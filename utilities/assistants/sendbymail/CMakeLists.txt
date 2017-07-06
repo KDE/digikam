@@ -8,7 +8,9 @@ if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif (POLICY CMP0063)
 
-include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/tools
+
+                    $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Concurrent,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
 
