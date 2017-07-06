@@ -50,7 +50,7 @@ QString numToCsvString(const QList<T>& list)
     qint32 size = list.size();
     for(qint32 i = 0; i < size - 1; ++i)
     {
-        retVal.append(QString::number(list[i])).append(',');
+        retVal.append(QString::number(list[i])).append(QLatin1Char(','));
     }
     if (size > 0)
     {
@@ -85,7 +85,7 @@ QString strToCsvString(const QList<T>& list)
     qint32 size = list.size();
     for(qint32 i = 0; i < size - 1; ++i)
     {
-        retVal.append(list[i].toString()).append(',');
+        retVal.append(list[i].toString()).append(QLatin1Char(','));
     }
     if (size > 0)
     {

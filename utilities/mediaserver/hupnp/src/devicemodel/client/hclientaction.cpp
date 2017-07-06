@@ -124,12 +124,12 @@ void HActionProxy::error(QNetworkReply::NetworkError err)
             return;
         }
 
-        HLOG_WARN("Action invocation failed: Couldn't connect to the device");
+        HLOG_WARN(QLatin1String("Action invocation failed: Couldn't connect to the device"));
         m_iNextLocationToTry = 0;
     }
 
-    HLOG_WARN(QString(
-        "Action invocation failed: [%1]").arg(m_reply->errorString()));
+    HLOG_WARN(QString(QLatin1String(
+        "Action invocation failed: [%1]")).arg(m_reply->errorString()));
 
     QVariant statusCode =
         m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);

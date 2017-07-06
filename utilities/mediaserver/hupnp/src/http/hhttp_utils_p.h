@@ -61,13 +61,13 @@ public:
     template<typename Hdr>
     static bool keepAlive(const Hdr& hdr)
     {
-        QString connection = hdr.value("CONNECTION");
+        QString connection = hdr.value(QLatin1String("CONNECTION"));
         if (hdr.minorVersion() == 1)
         {
-            return connection.compare("close", Qt::CaseInsensitive) != 0;
+            return connection.compare(QLatin1String("close"), Qt::CaseInsensitive) != 0;
         }
 
-        return connection.compare("Keep-Alive", Qt::CaseInsensitive) == 0;
+        return connection.compare(QLatin1String("Keep-Alive"), Qt::CaseInsensitive) == 0;
     }
 
     // returns the URLs as a string inside brackets. This is the format used in
@@ -77,7 +77,7 @@ public:
     // the date format used in UPnP
     inline static QString rfc1123DateFormat()
     {
-        QString retVal = "ddd, dd MMM yyyy HH:mm:ss";
+        QString retVal = QString(QLatin1String("ddd, dd MMM yyyy HH:mm:ss"));
         return retVal;
     }
 

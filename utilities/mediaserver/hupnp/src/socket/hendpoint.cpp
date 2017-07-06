@@ -58,7 +58,7 @@ HEndpoint::HEndpoint(const QUrl& url) :
 HEndpoint::HEndpoint(const QString& arg) :
     m_hostAddress(), m_portNumber(0)
 {
-    qint32 delim = arg.indexOf(':');
+    qint32 delim = arg.indexOf(QLatin1Char(':'));
     if (delim < 0)
     {
         m_hostAddress = arg;
@@ -92,7 +92,7 @@ bool HEndpoint::isMulticast() const
 QString HEndpoint::toString() const
 {
     return isNull() ? QString() :
-        m_hostAddress.toString().append(":").append(QString::number(m_portNumber));
+        m_hostAddress.toString().append(QLatin1String(":")).append(QString::number(m_portNumber));
 }
 
 bool operator==(const HEndpoint& ep1, const HEndpoint& ep2)

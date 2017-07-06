@@ -1393,37 +1393,37 @@ QString upnpErrorCodeToString(qint32 errCode)
     switch(errCode)
     {
     case UpnpSuccess:
-        retVal = "Success";
+        retVal = QLatin1String("Success");
         break;
     case UpnpInvalidAction:
-        retVal = "InvalidAction";
+        retVal = QLatin1String("InvalidAction");
         break;
     case UpnpInvalidArgs:
-        retVal = "InvalidArgs";
+        retVal = QLatin1String("InvalidArgs");
         break;
     case UpnpActionFailed:
-        retVal = "ActionFailed";
+        retVal = QLatin1String("ActionFailed");
         break;
     case UpnpArgumentValueInvalid:
-        retVal = "ArgumentValueInvalid";
+        retVal = QLatin1String("ArgumentValueInvalid");
         break;
     case UpnpArgumentValueOutOfRange:
-        retVal = "ArgumentValueOutOfRange";
+        retVal = QLatin1String("ArgumentValueOutOfRange");
         break;
     case UpnpOptionalActionNotImplemented:
-        retVal = "OptionalActionNotImplemented";
+        retVal = QLatin1String("OptionalActionNotImplemented");
         break;
     case UpnpOutOfMemory:
-        retVal = "OutOfMemory";
+        retVal = QLatin1String("OutOfMemory");
         break;
     case UpnpHumanInterventionRequired:
-        retVal = "HumanInterventionRequired";
+        retVal = QLatin1String("HumanInterventionRequired");
         break;
     case UpnpStringArgumentTooLong:
-        retVal = "StringArgumentTooLong";
+        retVal = QLatin1String("StringArgumentTooLong");
         break;
     case UpnpUndefinedFailure:
-        retVal = "UndefinedFailure";
+        retVal = QLatin1String("UndefinedFailure");
         break;
     default:
         retVal = QString::number(errCode);
@@ -1456,7 +1456,7 @@ QString readElementValue(
             *wasDefined = false;
         }
 
-        return "";
+        return QLatin1String("");
     }
 
     if (wasDefined)
@@ -1553,19 +1553,19 @@ void HSysInfo::createProductTokens()
     struct utsname sysinfo;
     if (!uname(&sysinfo))
     {
-        server = QString("%1/%2").arg(sysinfo.sysname, sysinfo.release);
+        server = QString(QLatin1String("%1/%2")).arg(QLatin1String(sysinfo.sysname), QLatin1String(sysinfo.release));
     }
     else
     {
-        server = "Undefined/-1";
+        server = QLatin1String("Undefined/-1");
     }
 #else
     QString server = "Undefined/-1";
 #endif
 
     m_productTokens.reset(
-        new HProductTokens(QString("%1 UPnP/1.1 HUPnP/%2.%3 DLNADOC/1.50").arg(
-            server, STRX(HUPNP_CORE_MAJOR_VERSION), STRX(HUPNP_CORE_MINOR_VERSION))));
+        new HProductTokens(QString(QLatin1String("%1 UPnP/1.1 HUPnP/%2.%3 DLNADOC/1.50")).arg(
+            server, QLatin1String(STRX(HUPNP_CORE_MAJOR_VERSION)), QLatin1String(STRX(HUPNP_CORE_MINOR_VERSION)))));
 }
 
 QList<QPair<quint32, quint32> > HSysInfo::createLocalNetworks()
@@ -1595,7 +1595,7 @@ bool HSysInfo::localNetwork(const QHostAddress& ha, quint32* retVal) const
 
     QList<QPair<quint32, quint32> > localNetworks = createLocalNetworks();
 
-    QList<QPair<quint32, quint32> >::const_iterator ci;
+    QList<QPair<quint32, quint32> >::iterator ci;
     for(ci = localNetworks.begin(); ci != localNetworks.end(); ++ci)
     {
         if ((ha.toIPv4Address() & ci->second) == ci->first)
@@ -1656,28 +1656,28 @@ bool verifyName(const QString& name, QString* err)
     {
         if (err)
         {
-            *err = "[name] cannot be empty";
+            *err = QLatin1String("[name] cannot be empty");
         }
         return false;
     }
 
-    if (!name[0].isLetterOrNumber() && name[0] != '_')
+    if (!name[0].isLetterOrNumber() && name[0] != QLatin1Char('_'))
     {
         if (err)
         {
-            *err = QString("[name: %1] has invalid first character").arg(name);
+            *err = QString(QLatin1String("[name: %1] has invalid first character")).arg(name);
         }
         return false;
     }
 
     foreach(const QChar& c, name)
     {
-        if (!c.isLetterOrNumber() && c != '_' && c != '.')
+        if (!c.isLetterOrNumber() && c != QLatin1Char('_') && c != QLatin1Char('.'))
         {
             if (err)
             {
                 *err = QString(
-                    "[name: %1] contains invalid character(s)").arg(name);
+                    QLatin1String("[name: %1] contains invalid character(s)")).arg(name);
             }
             return false;
         }
@@ -1685,7 +1685,7 @@ bool verifyName(const QString& name, QString* err)
 
     if (name.size() > 32)
     {
-        HLOG_WARN(QString("[name: %1] longer than 32 characters").arg(name));
+        HLOG_WARN(QString(QLatin1String("[name: %1] longer than 32 characters")).arg(name));
     }
 
     return true;
@@ -1697,7 +1697,7 @@ QString urlsAsStr(const QList<QUrl>& urls)
 
     for(qint32 i = 0; i < urls.size(); ++i)
     {
-        retVal.append(QString("#%1 %2\n").arg(
+        retVal.append(QString(QLatin1String("#%1 %2\n")).arg(
             QString::number(i), urls[i].toString()));
     }
 
@@ -1706,16 +1706,16 @@ QString urlsAsStr(const QList<QUrl>& urls)
 
 QString extractBaseUrl(const QString& url)
 {
-    if (url.endsWith('/'))
+    if (url.endsWith(QLatin1Char('/')))
     {
         return url;
     }
-    else if (!url.contains('/'))
+    else if (!url.contains(QLatin1Char('/')))
     {
-        return "";
+        return QLatin1String("");
     }
 
-    QString base = url.section('/', 0, -2, QString::SectionIncludeTrailingSep);
+    QString base = url.section(QLatin1Char('/'), 0, -2, QString::SectionIncludeTrailingSep);
     return base;
 }
 
@@ -1723,19 +1723,19 @@ QUrl resolveUri(const QUrl& baseUrl, const QUrl& other)
 {
     QString otherReq(extractRequestPart(other));
 
-    if (otherReq.startsWith('/'))
+    if (otherReq.startsWith(QLatin1Char('/')))
     {
-        return QString("%1%2").arg(extractHostPart(baseUrl), otherReq);
+        return QUrl(QString(QLatin1String("%1%2")).arg(extractHostPart(baseUrl), otherReq));
     }
 
     QString basePath(baseUrl.toString());
 
-    if (!basePath.endsWith('/'))  { basePath.append('/'); }
-    if (otherReq.startsWith('/')) { otherReq.remove(0, 1); }
+    if (!basePath.endsWith(QLatin1Char('/')))  { basePath.append(QLatin1Char('/')); }
+    if (otherReq.startsWith(QLatin1Char('/'))) { otherReq.remove(0, 1); }
 
     basePath.append(otherReq);
 
-    return basePath;
+    return QUrl(basePath);
 }
 
 QUrl appendUrls(const QUrl& baseUrl, const QUrl& other)
@@ -1744,12 +1744,12 @@ QUrl appendUrls(const QUrl& baseUrl, const QUrl& other)
 
     QString basePath(baseUrl.toString());
 
-    if (!basePath.endsWith('/'))  { basePath.append('/'); }
-    if (otherReq.startsWith('/')) { otherReq.remove(0, 1); }
+    if (!basePath.endsWith(QLatin1Char('/')))  { basePath.append(QLatin1Char('/')); }
+    if (otherReq.startsWith(QLatin1Char('/'))) { otherReq.remove(0, 1); }
 
     basePath.append(otherReq);
 
-    return basePath;
+    return QUrl(basePath);
 }
 
 }

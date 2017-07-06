@@ -73,7 +73,7 @@ ControlPointHttpServer::ControlPointHttpServer(HControlPointPrivate* owner) :
 
 ControlPointHttpServer::~ControlPointHttpServer()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     close();
 }
 
@@ -154,13 +154,13 @@ HControlPointPrivate::HControlPointPrivate() :
 
 HControlPointPrivate::~HControlPointPrivate()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 }
 
 HDefaultClientDevice* HControlPointPrivate::buildDevice(
     const QUrl& deviceLocation, qint32 maxAgeInSecs, QString* err)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HDataRetriever dataRetriever(m_loggingIdentifier);
 
@@ -201,7 +201,7 @@ HDefaultClientDevice* HControlPointPrivate::buildDevice(
 
 bool HControlPointPrivate::addRootDevice(HDefaultClientDevice* newRootDevice)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -255,7 +255,7 @@ bool HControlPointPrivate::addRootDevice(HDefaultClientDevice* newRootDevice)
 
 void HControlPointPrivate::deviceExpired(HDefaultClientDevice* source)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
     // according to the UDA v1.1 a "device tree" (root, embedded and services)
@@ -275,7 +275,7 @@ void HControlPointPrivate::deviceExpired(HDefaultClientDevice* source)
 
 void HControlPointPrivate::unsubscribed(HClientService* service)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(service);
     emit q_ptr->subscriptionCanceled(service);
 }
@@ -284,7 +284,7 @@ bool HControlPointPrivate::processDeviceOffline(
     const HResourceUnavailable& msg, const HEndpoint& /*source*/,
     HControlPointSsdpHandler* /*origin*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
     HDefaultClientDevice* device =
@@ -331,7 +331,7 @@ template<typename Msg>
 bool HControlPointPrivate::processDeviceDiscovery(
     const Msg& msg, const HEndpoint& source, HControlPointSsdpHandler*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     const HUdn& resourceUdn = msg.usn().udn();
 
@@ -418,7 +418,7 @@ bool HControlPointPrivate::processDeviceDiscovery(
 void HControlPointPrivate::processDeviceOnline(
     HDefaultClientDevice* device, bool newDevice)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HControlPoint::DeviceDiscoveryAction actionToTake =
         q_ptr->acceptRootDevice(device);
@@ -474,7 +474,7 @@ void HControlPointPrivate::processDeviceOnline(
 
 void HControlPointPrivate::deviceModelBuildDone(const Herqq::Upnp::HUdn& udn)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     DeviceBuildTask* build = m_deviceBuildTasks.get(udn);
     Q_ASSERT(build);
@@ -677,7 +677,7 @@ bool HControlPoint::init()
         if (!ssdp->init(ha))
         {
             delete ssdp;
-            setError(CommunicationsError, "Failed to start SSDP");
+            setError(CommunicationsError, QLatin1String("Failed to start SSDP"));
             ok = false;
             goto end;
         }
@@ -686,15 +686,15 @@ bool HControlPoint::init()
 
     if (h_ptr->m_configuration->autoDiscovery())
     {
-        HLOG_DBG("Searching for UPnP devices");
+        HLOG_DBG(QLatin1String("Searching for UPnP devices"));
 
         for(qint32 i = 0; i < h_ptr->m_ssdps.size(); ++i)
         {
             QString ep =
                 h_ptr->m_ssdps[i].second->unicastEndpoint().toString();
 
-            HLOG_DBG(QString(
-                "Sending discovery request using endpoint [%1]").arg(ep));
+            HLOG_DBG(QString(QLatin1String(
+                "Sending discovery request using endpoint [%1]")).arg(ep));
 
             qint32 messagesSent =
                 h_ptr->m_ssdps[i].second->sendDiscoveryRequest(
@@ -705,15 +705,15 @@ bool HControlPoint::init()
 
             if (!messagesSent)
             {
-                HLOG_WARN(QString(
+                HLOG_WARN(QString(QLatin1String(
                     "Failed to send discovery request using endpoint "
-                    "[%1]").arg(ep));
+                    "[%1]")).arg(ep));
             }
         }
     }
     else
     {
-        HLOG_DBG("Omitting initial device discovery as configured");
+        HLOG_DBG(QLatin1String("Omitting initial device discovery as configured"));
     }
 
     h_ptr->m_state = HControlPointPrivate::Initialized;
@@ -725,7 +725,7 @@ end:
         h_ptr->m_state = HControlPointPrivate::Exiting;
         quit();
 
-        HLOG_INFO("ControlPoint initialization failed.");
+        HLOG_INFO(QLatin1String("ControlPoint initialization failed."));
         return false;
     }
 
@@ -797,7 +797,7 @@ HClientDevices HControlPoint::rootDevices() const
 
     if (!isStarted())
     {
-        HLOG_WARN("The control point is not started");
+        HLOG_WARN(QLatin1String("The control point is not started"));
         return HClientDevices();
     }
 
@@ -812,7 +812,7 @@ HClientDevices HControlPoint::devices(
 
     if (!isStarted())
     {
-        HLOG_WARN("The control point is not started");
+        HLOG_WARN(QLatin1String("The control point is not started"));
         return HClientDevices();
     }
 
@@ -826,7 +826,7 @@ HClientDevice* HControlPoint::device(
 
     if (!isStarted())
     {
-        HLOG_WARN("The control point is not started");
+        HLOG_WARN(QLatin1String("The control point is not started"));
         return 0;
     }
 

@@ -42,7 +42,7 @@ namespace
 {
 HEndpoint multicastEndpoint()
 {
-    static HEndpoint retVal(QHostAddress("239.255.255.250"), 1900);
+    static HEndpoint retVal(QHostAddress(QLatin1String("239.255.255.250")), 1900);
     return retVal;
 }
 
@@ -51,14 +51,14 @@ QString getTarget(const HDiscoveryType& ri)
     switch(ri.type())
     {
         case HDiscoveryType::Undefined:
-            return "";
+            return QLatin1String("");
         case HDiscoveryType::All:
         case HDiscoveryType::RootDevices:
         case HDiscoveryType::SpecificDevice:
             return ri.toString();
 
         case HDiscoveryType::SpecificRootDevice:
-            return "upnp:rootdevice";
+            return QLatin1String("upnp:rootdevice");
 
         default:
             return ri.resourceType().toString();

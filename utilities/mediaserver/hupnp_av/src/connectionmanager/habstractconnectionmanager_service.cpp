@@ -59,7 +59,7 @@ HAbstractConnectionManagerServicePrivate::~HAbstractConnectionManagerServicePriv
 qint32 HAbstractConnectionManagerServicePrivate::getProtocolInfo(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractConnectionManagerService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -71,12 +71,12 @@ qint32 HAbstractConnectionManagerServicePrivate::getProtocolInfo(
         if (!result.source().isEmpty())
         {
             QString sourceProtocolInfos = strToCsvString(result.source());
-            outArgs->setValue("Source", sourceProtocolInfos);
+            outArgs->setValue(QLatin1String("Source"), sourceProtocolInfos);
         }
         if (!result.sink().isEmpty())
         {
             QString sinkProtocolInfos = strToCsvString(result.sink());
-            outArgs->setValue("Sink", sinkProtocolInfos);
+            outArgs->setValue(QLatin1String("Sink"), sinkProtocolInfos);
         }
     }
 
@@ -86,22 +86,22 @@ qint32 HAbstractConnectionManagerServicePrivate::getProtocolInfo(
 qint32 HAbstractConnectionManagerServicePrivate::prepareForConnection(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractConnectionManagerService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
     HPrepareForConnectionResult pfcResult;
     qint32 retVal = q->prepareForConnection(
-        HProtocolInfo(inArgs.value("RemoteProtocolInfo").toString()),
-        HConnectionManagerId(inArgs.value("PeerConnectionManager").toString()),
-        inArgs.value("PeerConnectionID").toInt(),
-        HConnectionManagerInfo::directionFromString(inArgs.value("Direction").toString()),
+        HProtocolInfo(inArgs.value(QLatin1String("RemoteProtocolInfo")).toString()),
+        HConnectionManagerId(inArgs.value(QLatin1String("PeerConnectionManager")).toString()),
+        inArgs.value(QLatin1String("PeerConnectionID")).toInt(),
+        HConnectionManagerInfo::directionFromString(inArgs.value(QLatin1String("Direction")).toString()),
         &pfcResult);
 
-    outArgs->setValue("ConnectionID", pfcResult.connectionId());
-    outArgs->setValue("AVTransportID", pfcResult.avTransportId());
-    outArgs->setValue("RcsID", pfcResult.rcsId());
+    outArgs->setValue(QLatin1String("ConnectionID"), pfcResult.connectionId());
+    outArgs->setValue(QLatin1String("AVTransportID"), pfcResult.avTransportId());
+    outArgs->setValue(QLatin1String("RcsID"), pfcResult.rcsId());
 
     return retVal;
 }
@@ -109,16 +109,16 @@ qint32 HAbstractConnectionManagerServicePrivate::prepareForConnection(
 qint32 HAbstractConnectionManagerServicePrivate::connectionComplete(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractConnectionManagerService);
 
-    return q->connectionComplete(inArgs.value("ConnectionID").toInt());
+    return q->connectionComplete(inArgs.value(QLatin1String("ConnectionID")).toInt());
 }
 
 qint32 HAbstractConnectionManagerServicePrivate::getCurrentConnectionIDs(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractConnectionManagerService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -128,7 +128,7 @@ qint32 HAbstractConnectionManagerServicePrivate::getCurrentConnectionIDs(
     if (retVal == UpnpSuccess)
     {
         QString idsAsCsv = numToCsvString(connectionIds);
-        outArgs->setValue("ConnectionIDs", idsAsCsv);
+        outArgs->setValue(QLatin1String("ConnectionIDs"), idsAsCsv);
     }
 
     return retVal;
@@ -137,24 +137,24 @@ qint32 HAbstractConnectionManagerServicePrivate::getCurrentConnectionIDs(
 qint32 HAbstractConnectionManagerServicePrivate::getCurrentConnectionInfo(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractConnectionManagerService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
     HConnectionInfo connectionInfo;
     qint32 retVal = q->getCurrentConnectionInfo(
-        inArgs.value("ConnectionID").toInt(), &connectionInfo);
+        inArgs.value(QLatin1String("ConnectionID")).toInt(), &connectionInfo);
 
     if (retVal == UpnpSuccess && connectionInfo.isValid())
     {
-        outArgs->setValue("RcsID", connectionInfo.rcsId());
-        outArgs->setValue("AVTransportID", connectionInfo.avTransportId());
-        outArgs->setValue("ProtocolInfo", connectionInfo.protocolInfo().toString());
-        outArgs->setValue("PeerConnectionManager", connectionInfo.peerConnectionManager().toString());
-        outArgs->setValue("PeerConnectionID", connectionInfo.peerConnectionId());
-        outArgs->setValue("Direction", HConnectionManagerInfo::directionToString(connectionInfo.direction()));
-        outArgs->setValue("Status", HConnectionManagerInfo::statusToString(connectionInfo.status()));
+        outArgs->setValue(QLatin1String("RcsID"), connectionInfo.rcsId());
+        outArgs->setValue(QLatin1String("AVTransportID"), connectionInfo.avTransportId());
+        outArgs->setValue(QLatin1String("ProtocolInfo"), connectionInfo.protocolInfo().toString());
+        outArgs->setValue(QLatin1String("PeerConnectionManager"), connectionInfo.peerConnectionManager().toString());
+        outArgs->setValue(QLatin1String("PeerConnectionID"), connectionInfo.peerConnectionId());
+        outArgs->setValue(QLatin1String("Direction"), HConnectionManagerInfo::directionToString(connectionInfo.direction()));
+        outArgs->setValue(QLatin1String("Status"), HConnectionManagerInfo::statusToString(connectionInfo.status()));
     }
 
     return retVal;
@@ -184,19 +184,19 @@ HServerService::HActionInvokes HAbstractConnectionManagerService::createActionIn
 
     HActionInvokes retVal;
 
-    retVal.insert("GetProtocolInfo",
+    retVal.insert(QLatin1String("GetProtocolInfo"),
         HActionInvoke(h, &HAbstractConnectionManagerServicePrivate::getProtocolInfo));
 
-    retVal.insert("PrepareForConnection",
+    retVal.insert(QLatin1String("PrepareForConnection"),
         HActionInvoke(h, &HAbstractConnectionManagerServicePrivate::prepareForConnection));
 
-    retVal.insert("ConnectionComplete",
+    retVal.insert(QLatin1String("ConnectionComplete"),
         HActionInvoke(h, &HAbstractConnectionManagerServicePrivate::connectionComplete));
 
-    retVal.insert("GetCurrentConnectionIDs",
+    retVal.insert(QLatin1String("GetCurrentConnectionIDs"),
         HActionInvoke(h, &HAbstractConnectionManagerServicePrivate::getCurrentConnectionIDs));
 
-    retVal.insert("GetCurrentConnectionInfo",
+    retVal.insert(QLatin1String("GetCurrentConnectionInfo"),
         HActionInvoke(h, &HAbstractConnectionManagerServicePrivate::getCurrentConnectionInfo));
 
     return retVal;

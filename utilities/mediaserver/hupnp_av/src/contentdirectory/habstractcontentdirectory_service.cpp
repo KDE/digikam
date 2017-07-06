@@ -63,7 +63,7 @@ HAbstractContentDirectoryServicePrivate::~HAbstractContentDirectoryServicePrivat
 qint32 HAbstractContentDirectoryServicePrivate::getSearchCapabilities(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -81,7 +81,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSearchCapabilities(
 qint32 HAbstractContentDirectoryServicePrivate::getSortCapabilities(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -99,7 +99,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSortCapabilities(
 qint32 HAbstractContentDirectoryServicePrivate::getSortExtensionCapabilities(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -117,7 +117,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSortExtensionCapabilities(
 qint32 HAbstractContentDirectoryServicePrivate::getFeatureList(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -135,7 +135,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getFeatureList(
 qint32 HAbstractContentDirectoryServicePrivate::getSystemUpdateID(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -153,7 +153,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSystemUpdateID(
 qint32 HAbstractContentDirectoryServicePrivate::getServiceResetToken(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -171,7 +171,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getServiceResetToken(
 qint32 HAbstractContentDirectoryServicePrivate::browse(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -200,7 +200,7 @@ qint32 HAbstractContentDirectoryServicePrivate::browse(
 qint32 HAbstractContentDirectoryServicePrivate::search(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -229,7 +229,7 @@ qint32 HAbstractContentDirectoryServicePrivate::search(
 qint32 HAbstractContentDirectoryServicePrivate::createObject(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -252,7 +252,7 @@ qint32 HAbstractContentDirectoryServicePrivate::createObject(
 qint32 HAbstractContentDirectoryServicePrivate::destroyObject(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
     return q->destroyObject(inArgs.value("ObjectID").toString());
 }
@@ -260,7 +260,7 @@ qint32 HAbstractContentDirectoryServicePrivate::destroyObject(
 qint32 HAbstractContentDirectoryServicePrivate::updateObject(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
     return q->updateObject(
         inArgs.value("ObjectID").toString(),
@@ -271,7 +271,7 @@ qint32 HAbstractContentDirectoryServicePrivate::updateObject(
 qint32 HAbstractContentDirectoryServicePrivate::moveObject(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -293,7 +293,7 @@ qint32 HAbstractContentDirectoryServicePrivate::moveObject(
 qint32 HAbstractContentDirectoryServicePrivate::importResource(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     quint32 transferId;
@@ -313,7 +313,7 @@ qint32 HAbstractContentDirectoryServicePrivate::importResource(
 qint32 HAbstractContentDirectoryServicePrivate::exportResource(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     quint32 transferId;
@@ -333,7 +333,7 @@ qint32 HAbstractContentDirectoryServicePrivate::exportResource(
 qint32 HAbstractContentDirectoryServicePrivate::deleteResource(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
     return q->deleteResource(inArgs.value("ResourceURI").toUrl());
 }
@@ -341,7 +341,7 @@ qint32 HAbstractContentDirectoryServicePrivate::deleteResource(
 qint32 HAbstractContentDirectoryServicePrivate::stopTransferResource(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
     return q->stopTransferResource(inArgs.value("TransferID").toUInt());
 }
@@ -349,7 +349,7 @@ qint32 HAbstractContentDirectoryServicePrivate::stopTransferResource(
 qint32 HAbstractContentDirectoryServicePrivate::getTransferProgress(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -370,7 +370,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getTransferProgress(
 qint32 HAbstractContentDirectoryServicePrivate::createReference(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -392,7 +392,7 @@ qint32 HAbstractContentDirectoryServicePrivate::createReference(
 qint32 HAbstractContentDirectoryServicePrivate::freeFormQuery(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -416,7 +416,7 @@ qint32 HAbstractContentDirectoryServicePrivate::freeFormQuery(
 qint32 HAbstractContentDirectoryServicePrivate::getFreeFormQueryCapabilities(
     const HActionArguments& /*inArgs*/, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");

@@ -108,7 +108,7 @@ HEventNotifier::HEventNotifier(
 
 HEventNotifier::~HEventNotifier()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     qDeleteAll(m_subscribers);
 }
 
@@ -147,7 +147,7 @@ bool isSameService(HServerService* srv1, HServerService* srv2)
 
 HServiceEventSubscriber* HEventNotifier::remoteClient(const HSid& sid) const
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<HServiceEventSubscriber*>::const_iterator it =
         m_subscribers.constBegin();
@@ -166,7 +166,7 @@ HServiceEventSubscriber* HEventNotifier::remoteClient(const HSid& sid) const
 StatusCode HEventNotifier::addSubscriber(
     HServerService* service, const HSubscribeRequest& sreq, HSid* sid)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(sid);
 
@@ -228,7 +228,7 @@ StatusCode HEventNotifier::addSubscriber(
 
 bool HEventNotifier::removeSubscriber(const HUnsubscribeRequest& req)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     bool found = false;
 
@@ -272,7 +272,7 @@ bool HEventNotifier::removeSubscriber(const HUnsubscribeRequest& req)
 StatusCode HEventNotifier::renewSubscription(
     const HSubscribeRequest& req, HSid* sid)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(sid);
 
@@ -347,7 +347,7 @@ void HEventNotifier::stateChanged(const HServerService* source)
 void HEventNotifier::initialNotify(
     HServiceEventSubscriber* rc, HMessagingInfo* mi)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QByteArray msgBody;
     getCurrentValues(msgBody, rc->service());

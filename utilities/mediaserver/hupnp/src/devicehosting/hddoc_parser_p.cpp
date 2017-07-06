@@ -50,7 +50,7 @@ HStateVariableInfo HDocParser::parseStateVariableInfo_str(
     const QString& name, const QVariant& defValue, const QDomElement& svElement,
     HStateVariableInfo::EventingType evType, HInclusionRequirement incReq)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QStringList allowedValues;
 
@@ -80,7 +80,7 @@ HStateVariableInfo HDocParser::parseStateVariableInfo_numeric(
     HStateVariableInfo::EventingType evType, HInclusionRequirement incReq,
     HUpnpDataTypes::DataType dataTypeEnumValue)
 {
-   // HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QDomElement allowedValueRangeElement =
         svElement.firstChildElement(QLatin1String("allowedValueRange"));
@@ -168,7 +168,7 @@ bool HDocParser::parseActionArguments(
     QVector<HActionArgument>* outArgs,
     bool* hasRetVal)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     bool firstOutArgFound  = false;
 
@@ -271,7 +271,7 @@ bool HDocParser::parseActionArguments(
 
 QList<QUrl> HDocParser::parseIconList(const QDomElement& iconListElement)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<QUrl> retVal;
 
@@ -292,7 +292,7 @@ QList<QUrl> HDocParser::parseIconList(const QDomElement& iconListElement)
 bool HDocParser::parseRoot(
     const QString& docStr, QDomDocument* doc, QDomElement* rootEl)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(doc);
     Q_ASSERT(rootEl);
@@ -352,7 +352,7 @@ bool HDocParser::parseRoot(
 
 qint32 HDocParser::readConfigId(const QDomElement& rootElement)
 {
-   // HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+   // HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     bool ok = false;
 
@@ -369,7 +369,7 @@ qint32 HDocParser::readConfigId(const QDomElement& rootElement)
 bool HDocParser::parseDeviceInfo(
     const QDomElement& deviceElement, HDeviceInfo* info)
 {
-   // HLOG2(H_AT, H_FUN,QLatin1String( m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN,(char*)( m_loggingIdentifier.data()));
     Q_ASSERT(info);
 
     QString deviceType       =
@@ -466,7 +466,7 @@ bool HDocParser::parseDeviceInfo(
 bool HDocParser::parseServiceInfo(
     const QDomElement& serviceDefinition, HServiceInfo* serviceInfo)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(serviceInfo);
     Q_ASSERT(!serviceDefinition.isNull());
@@ -563,7 +563,7 @@ bool HDocParser::parseServiceDescription(
     const QString& docStr, QDomDocument* doc,
     QDomElement* stateVarElement, QDomElement* retVal)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(stateVarElement);
     Q_ASSERT(retVal);
@@ -671,7 +671,7 @@ bool HDocParser::parseServiceDescription(
 bool HDocParser::parseStateVariable(
     const QDomElement& stateVariableElement, HStateVariableInfo* svInfo)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(svInfo);
 
@@ -781,7 +781,7 @@ bool HDocParser::parseActionInfo(
     const QHash<QString, HStateVariableInfo>& stateVars,
     HActionInfo* ai)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QString name = readElementValue(QLatin1String("name"), actionElement);
 
@@ -831,7 +831,7 @@ bool HDocParser::parseActionInfo(
 
 bool HDocParser::verifySpecVersion(const QDomElement& rootElement, QString* err)
 {
-    //HLOG2(H_AT, H_FUN, QLatin1String(m_loggingIdentifier));
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QDomElement specVersionElement = rootElement.firstChildElement(QLatin1String("specVersion"));
     if (specVersionElement.isNull())

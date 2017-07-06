@@ -59,124 +59,124 @@ QString HStorageMedium::toString(Type type)
     switch(type)
     {
     case Unknown:
-        retVal = "UNKNOWN";
+        retVal = QLatin1String("UNKNOWN");
         break;
     case DigitalVideo:
-        retVal = "DV";
+        retVal = QLatin1String("DV");
         break;
     case MiniDigitalVideo:
-        retVal = "MINI-DV";
+        retVal = QLatin1String("MINI-DV");
         break;
     case VHS:
-        retVal = "VHS";
+        retVal = QLatin1String("VHS");
         break;
     case W_VHS:
-        retVal = "W-VHS";
+        retVal = QLatin1String("W-VHS");
         break;
     case S_VHS:
-        retVal = "S-VHS";
+        retVal = QLatin1String("S-VHS");
         break;
     case D_VHS:
-        retVal = "D-VHS";
+        retVal = QLatin1String("D-VHS");
         break;
     case VHSC:
-        retVal = "VHSC";
+        retVal = QLatin1String("VHSC");
         break;
     case Video8:
-        retVal = "VIDEO8";
+        retVal = QLatin1String("VIDEO8");
         break;
     case HI8:
-        retVal = "HI8";
+        retVal = QLatin1String("HI8");
         break;
     case CD_ROM:
-        retVal = "CD-ROM";
+        retVal = QLatin1String("CD-ROM");
         break;
     case CD_DA:
-        retVal = "CD-DA";
+        retVal = QLatin1String("CD-DA");
         break;
     case CD_R:
-        retVal = "CD-R";
+        retVal = QLatin1String("CD-R");
         break;
     case CD_RW:
-        retVal = "CD-RW";
+        retVal = QLatin1String("CD-RW");
         break;
     case Video_CD:
-        retVal = "VIDEO-CD";
+        retVal = QLatin1String("VIDEO-CD");
         break;
     case SACD:
-        retVal = "SACD";
+        retVal = QLatin1String("SACD");
         break;
     case MiniDiscAudio:
-        retVal = "MD-AUDIO";
+        retVal = QLatin1String("MD-AUDIO");
         break;
     case MiniDiscPicture:
-        retVal = "MD-PICTURE";
+        retVal = QLatin1String("MD-PICTURE");
         break;
     case DVD_ROM:
-        retVal = "DVD-ROM";
+        retVal = QLatin1String("DVD-ROM");
         break;
     case DVD_Video:
-        retVal = "DVD-VIDEO";
+        retVal = QLatin1String("DVD-VIDEO");
         break;
     case DVD_PlusRecordable:
-        retVal = "DVD+R";
+        retVal = QLatin1String("DVD+R");
         break;
     case DVD_MinusRecordable:
-        retVal = "DVD-R";
+        retVal = QLatin1String("DVD-R");
         break;
     case DVD_PlusRewritable:
-        retVal = "DVD+RW";
+        retVal = QLatin1String("DVD+RW");
         break;
     case DVD_MinusRewritable:
-        retVal = "DVD-RW";
+        retVal = QLatin1String("DVD-RW");
         break;
     case DVD_RAM:
-        retVal = "DVD-RAM";
+        retVal = QLatin1String("DVD-RAM");
         break;
     case DVD_Audio:
-        retVal = "DVD-AUDIO";
+        retVal = QLatin1String("DVD-AUDIO");
         break;
     case DAT:
-        retVal = "DAT";
+        retVal = QLatin1String("DAT");
         break;
     case LD:
-        retVal = "LD";
+        retVal = QLatin1String("LD");
         break;
     case HDD:
-        retVal = "HDD";
+        retVal = QLatin1String("HDD");
         break;
     case MicroMV:
-        retVal = "MICRO-MV";
+        retVal = QLatin1String("MICRO-MV");
         break;
     case Network:
-        retVal = "NETWORK";
+        retVal = QLatin1String("NETWORK");
         break;
     case None:
-        retVal = "NONE";
+        retVal = QLatin1String("NONE");
         break;
     case NotImplemented:
-        retVal = "NOT_IMPLEMENTED";
+        retVal = QLatin1String("NOT_IMPLEMENTED");
         break;
     case SecureDigital:
-        retVal = "SD";
+        retVal = QLatin1String("SD");
         break;
     case PC_Card:
-        retVal = "PC-CARD";
+        retVal = QLatin1String("PC-CARD");
         break;
     case MultimediaCard:
-        retVal = "MMC";
+        retVal = QLatin1String("MMC");
         break;
     case CompactFlash:
-        retVal = "CF";
+        retVal = QLatin1String("CF");
         break;
     case BluRay:
-        retVal = "BD";
+        retVal = QLatin1String("BD");
         break;
     case MemoryStick:
-        retVal = "MS";
+        retVal = QLatin1String("MS");
         break;
     case HD_DVD:
-        retVal = "HD_DVD";
+        retVal = QLatin1String("HD_DVD");
         break;
     default:
         break;
@@ -187,155 +187,155 @@ QString HStorageMedium::toString(Type type)
 HStorageMedium::Type HStorageMedium::fromString(const QString& type)
 {
     Type retVal = Unknown;
-    if (type.compare("UNKNOWN", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("UNKNOWN"), Qt::CaseInsensitive) == 0)
     {
         retVal = Unknown;
     }
-    else if (type.compare("DV", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DV"), Qt::CaseInsensitive) == 0)
     {
         retVal = DigitalVideo;
     }
-    else if (type.compare("VHS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("VHS"), Qt::CaseInsensitive) == 0)
     {
         retVal = VHS;
     }
-    else if (type.compare("W-VHS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("W-VHS"), Qt::CaseInsensitive) == 0)
     {
         retVal = W_VHS;
     }
-    else if (type.compare("S-VHS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("S-VHS"), Qt::CaseInsensitive) == 0)
     {
         retVal = S_VHS;
     }
-    else if (type.compare("D_VHS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("D_VHS"), Qt::CaseInsensitive) == 0)
     {
         retVal = D_VHS;
     }
-    else if (type.compare("VHSC", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("VHSC"), Qt::CaseInsensitive) == 0)
     {
         retVal = VHSC;
     }
-    else if (type.compare("VIDEO8", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("VIDEO8"), Qt::CaseInsensitive) == 0)
     {
         retVal = Video8;
     }
-    else if (type.compare("HI8", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("HI8"), Qt::CaseInsensitive) == 0)
     {
         retVal = HI8;
     }
-    else if (type.compare("CD-ROM", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("CD-ROM"), Qt::CaseInsensitive) == 0)
     {
         retVal = CD_ROM;
     }
-    else if (type.compare("CD-DA", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("CD-DA"), Qt::CaseInsensitive) == 0)
     {
         retVal = CD_DA;
     }
-    else if (type.compare("CD-R", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("CD-R"), Qt::CaseInsensitive) == 0)
     {
         retVal = CD_R;
     }
-    else if (type.compare("CD-RW", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("CD-RW"), Qt::CaseInsensitive) == 0)
     {
         retVal = CD_RW;
     }
-    else if (type.compare("VIDEO-CD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("VIDEO-CD"), Qt::CaseInsensitive) == 0)
     {
         retVal = Video_CD;
     }
-    else if (type.compare("SACD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SACD"), Qt::CaseInsensitive) == 0)
     {
         retVal = SACD;
     }
-    else if (type.compare("MD-AUDIO", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("MD-AUDIO"), Qt::CaseInsensitive) == 0)
     {
         retVal = MiniDiscAudio;
     }
-    else if (type.compare("MD-PICTURE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("MD-PICTURE"), Qt::CaseInsensitive) == 0)
     {
         retVal = MiniDiscPicture;
     }
-    else if (type.compare("DVD-ROM", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD-ROM"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_ROM;
     }
-    else if (type.compare("DVD-VIDEO", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD-VIDEO"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_Video;
     }
-    else if (type.compare("DVD+R", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD+R"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_PlusRecordable;
     }
-    else if (type.compare("DVD-R", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD-R"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_MinusRecordable;
     }
-    else if (type.compare("DVD+RW", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD+RW"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_PlusRewritable;
     }
-    else if (type.compare("DVD-RW", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD-RW"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_MinusRewritable;
     }
-    else if (type.compare("DVD-RAM", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DVD-RAM"), Qt::CaseInsensitive) == 0)
     {
         retVal = DVD_RAM;
     }
-    else if (type.compare("DAT", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DAT"), Qt::CaseInsensitive) == 0)
     {
         retVal = DAT;
     }
-    else if (type.compare("LD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("LD"), Qt::CaseInsensitive) == 0)
     {
         retVal = LD;
     }
-    else if (type.compare("HDD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("HDD"), Qt::CaseInsensitive) == 0)
     {
         retVal = HDD;
     }
-    else if (type.compare("MICRO-MV", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("MICRO-MV"), Qt::CaseInsensitive) == 0)
     {
         retVal = MicroMV;
     }
-    else if (type.compare("NETWORK", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("NETWORK"), Qt::CaseInsensitive) == 0)
     {
         retVal = Network;
     }
-    else if (type.compare("NONE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("NONE"), Qt::CaseInsensitive) == 0)
     {
         retVal = None;
     }
-    else if (type.compare("NOT_IMPLEMENTED", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("NOT_IMPLEMENTED"), Qt::CaseInsensitive) == 0)
     {
         retVal = NotImplemented;
     }
-    else if (type.compare("SD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SD"), Qt::CaseInsensitive) == 0)
     {
         retVal = SecureDigital;
     }
-    else if (type.compare("PC-CARD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("PC-CARD"), Qt::CaseInsensitive) == 0)
     {
         retVal = PC_Card;
     }
-    else if (type.compare("MMC", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("MMC"), Qt::CaseInsensitive) == 0)
     {
         retVal = MultimediaCard;
     }
-    else if (type.compare("CF", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("CF"), Qt::CaseInsensitive) == 0)
     {
         retVal = CompactFlash;
     }
-    else if (type.compare("BD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("BD"), Qt::CaseInsensitive) == 0)
     {
         retVal = BluRay;
     }
-    else if (type.compare("MS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("MS"), Qt::CaseInsensitive) == 0)
     {
         retVal = MemoryStick;
     }
-    else if (type.compare("HD_DVD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("HD_DVD"), Qt::CaseInsensitive) == 0)
     {
         retVal = HD_DVD;
     }

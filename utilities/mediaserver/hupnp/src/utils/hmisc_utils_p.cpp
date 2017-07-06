@@ -68,12 +68,12 @@ end:
 bool toBool(const QString& arg, bool* ok)
 {
     bool retVal = false, match = true;
-    if (arg == "1") { retVal = true; }
-    else if (arg == "0") { retVal = false; }
-    else if (arg.compare("true", Qt::CaseInsensitive) == 0) { retVal = true; }
-    else if (arg.compare("false", Qt::CaseInsensitive) == 0) { retVal =  false; }
-    else if (arg.compare("yes", Qt::CaseInsensitive) == 0) { retVal = true; }
-    else if (arg.compare("no", Qt::CaseInsensitive) == 0) { retVal = false; }
+    if (arg == QLatin1String("1")) { retVal = true; }
+    else if (arg == QLatin1String("0")) { retVal = false; }
+    else if (arg.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0) { retVal = true; }
+    else if (arg.compare(QLatin1String("false"), Qt::CaseInsensitive) == 0) { retVal =  false; }
+    else if (arg.compare(QLatin1String("yes"), Qt::CaseInsensitive) == 0) { retVal = true; }
+    else if (arg.compare(QLatin1String("no"), Qt::CaseInsensitive) == 0) { retVal = false; }
     else { match = false; }
 
     if (ok) { *ok = match; }

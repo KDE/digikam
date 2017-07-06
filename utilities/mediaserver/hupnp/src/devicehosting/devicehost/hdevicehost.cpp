@@ -122,19 +122,19 @@ HDeviceHostPrivate::HDeviceHostPrivate() :
         m_deviceStorage(m_loggingIdentifier),
         m_nam(0)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     qsrand(time(0));
 }
 
 HDeviceHostPrivate::~HDeviceHostPrivate()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 }
 
 void HDeviceHostPrivate::announcementTimedout(
     HServerDeviceController* controller)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<ResourceAvailableAnnouncement> announcements;
     m_presenceAnnouncer->createAnnouncementMessagesForRootDevice(
@@ -147,7 +147,7 @@ void HDeviceHostPrivate::announcementTimedout(
 
 bool HDeviceHostPrivate::createRootDevice(const HDeviceConfiguration* deviceconfig)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QString baseDir = extractBaseUrl(deviceconfig->pathToDeviceDescription());
 
@@ -228,7 +228,7 @@ bool HDeviceHostPrivate::createRootDevice(const HDeviceConfiguration* deviceconf
 
 bool HDeviceHostPrivate::createRootDevices()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<const HDeviceConfiguration*> diParams =
         m_config->deviceConfigurations();
@@ -246,7 +246,7 @@ bool HDeviceHostPrivate::createRootDevices()
 
 void HDeviceHostPrivate::connectSelfToServiceSignals(HServerDevice* device)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HServerServices services(device->services());
     for(qint32 i = 0; i < services.size(); ++i)
@@ -270,7 +270,7 @@ void HDeviceHostPrivate::connectSelfToServiceSignals(HServerDevice* device)
 
 void HDeviceHostPrivate::startNotifiers(HServerDeviceController* controller)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(controller);
 
     bool ok = connect(
@@ -284,7 +284,7 @@ void HDeviceHostPrivate::startNotifiers(HServerDeviceController* controller)
 
 void HDeviceHostPrivate::startNotifiers()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<HServerDeviceController*> controllers = m_deviceStorage.controllers();
     foreach(HServerDeviceController* controller, controllers)
@@ -295,7 +295,7 @@ void HDeviceHostPrivate::startNotifiers()
 
 void HDeviceHostPrivate::stopNotifiers()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<HServerDeviceController*> controllers = m_deviceStorage.controllers();
     foreach(HServerDeviceController* controller, controllers)
@@ -454,7 +454,7 @@ bool HDeviceHost::init(const HDeviceHostConfiguration& config)
 
 err:
     quit();
-    HLOG_WARN("DeviceHost initialization failed");
+    HLOG_WARN(QLatin1String("DeviceHost initialization failed"));
     return false;
 }
 
@@ -548,7 +548,7 @@ HServerDevices HDeviceHost::rootDevices() const
 
     if (!isStarted())
     {
-        HLOG_WARN("The device host is not started");
+        HLOG_WARN(QLatin1String("The device host is not started"));
         return HServerDevices();
     }
 
@@ -561,7 +561,7 @@ HServerDevice* HDeviceHost::device(const HUdn& udn, TargetDeviceType dts) const
 
     if (!isStarted())
     {
-        HLOG_WARN("The device host is not started");
+        HLOG_WARN(QLatin1String("The device host is not started"));
         return 0;
     }
 

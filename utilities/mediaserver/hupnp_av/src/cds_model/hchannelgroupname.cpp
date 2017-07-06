@@ -43,7 +43,7 @@ namespace
 {
 inline bool verifyId(const QString& id)
 {
-    return id.indexOf("_") > 3;
+    return id.indexOf(QLatin1String("_")) > 3;
     // You really cannot express a domain in less than four characters.
 }
 }

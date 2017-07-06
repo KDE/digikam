@@ -45,27 +45,27 @@ namespace
 HRating::MpaaValues convertMpaa(const QString& arg)
 {
     HRating::MpaaValues retVal = HRating::MPAA_Undefined;
-    if (arg == "G")
+    if (arg == QLatin1String("G"))
     {
         retVal = HRating::MPAA_GeneralAudiences;
     }
-    else if (arg == "PG")
+    else if (arg == QLatin1String("PG"))
     {
         retVal = HRating::MPAA_ParentalGuidanceSuggested;
     }
-    else if (arg == "PG-13")
+    else if (arg == QLatin1String("PG-13"))
     {
         retVal = HRating::MPAA_ParentsStronglyCautioned;
     }
-    else if (arg == "R")
+    else if (arg == QLatin1String("R"))
     {
         retVal = HRating::MPAA_Restricted;
     }
-    else if (arg == "NC-17")
+    else if (arg == QLatin1String("NC-17"))
     {
         retVal = HRating::MPAA_NoOneSeventeenAndUnderAdmitted;
     }
-    else if (arg == "NR")
+    else if (arg == QLatin1String("NR"))
     {
         retVal = HRating::MPAA_NotRatedYet;
     }
@@ -74,7 +74,7 @@ HRating::MpaaValues convertMpaa(const QString& arg)
 HRating::RiaaValues convertRiaa(const QString& arg)
 {
     HRating::RiaaValues retVal = HRating::RIAA_Undefined;
-    if (arg == "PA-EC")
+    if (arg == QLatin1String("PA-EC"))
     {
         retVal = HRating::RIAA_ExplicitContent;
     }
@@ -87,31 +87,31 @@ HRating::RiaaValues convertRiaa(const QString& arg)
 HRating::EsrbValues convertEsrb(const QString& arg)
 {
     HRating::EsrbValues retVal = HRating::ESRB_Undefined;
-    if (arg == "EC")
+    if (arg == QLatin1String("EC"))
     {
         retVal = HRating::ESRB_EarlyChildhood;
     }
-    else if (arg == "E")
+    else if (arg == QLatin1String("E"))
     {
         retVal = HRating::ESRB_Everyone;
     }
-    else if (arg == "E10+")
+    else if (arg == QLatin1String("E10+"))
     {
         retVal = HRating::ESRB_EveryoneTenAndOlder;
     }
-    else if (arg == "T")
+    else if (arg == QLatin1String("T"))
     {
         retVal = HRating::ESRB_Teen;
     }
-    else if (arg == "M")
+    else if (arg == QLatin1String("M"))
     {
         retVal = HRating::ESRB_Mature;
     }
-    else if (arg == "AO")
+    else if (arg == QLatin1String("AO"))
     {
         retVal = HRating::ESRB_AdultsOnly;
     }
-    else if (arg == "RP")
+    else if (arg == QLatin1String("RP"))
     {
         retVal = HRating::ESRB_RatingPending;
     }
@@ -120,27 +120,27 @@ HRating::EsrbValues convertEsrb(const QString& arg)
 HRating::TvGuidelinesValues convertTvg(const QString& arg)
 {
     HRating::TvGuidelinesValues retVal = HRating::TVG_Undefined;
-    if (arg == "TV-Y")
+    if (arg == QLatin1String("TV-Y"))
     {
         retVal = HRating::TVG_AllChildren;
     }
-    else if (arg == "TV-Y7")
+    else if (arg == QLatin1String("TV-Y7"))
     {
         retVal = HRating::TVG_OlderChildren;
     }
-    else if (arg == "TV-Y7FV")
+    else if (arg == QLatin1String("TV-Y7FV"))
     {
         retVal = HRating::TVG_OlderChildren_FantasyViolence;
     }
-    else if (arg == "TV-G")
+    else if (arg == QLatin1String("TV-G"))
     {
         retVal = HRating::TVG_GeneralAudience;
     }
-    else if (arg == "TV-14")
+    else if (arg == QLatin1String("TV-14"))
     {
         retVal = HRating::TVG_ParentsStronglyCautioned;
     }
-    else if (arg == "TV-MA")
+    else if (arg == QLatin1String("TV-MA"))
     {
         retVal = HRating::TVG_MatureAudienceOnly;
     }
@@ -237,16 +237,16 @@ QString HRating::toString(HRating::Type type)
     switch(type)
     {
     case MPAA:
-        retVal = "MPAA.ORG";
+        retVal = QLatin1String("MPAA.ORG");
         break;
     case RIAA:
-        retVal = "RIAA.ORG";
+        retVal = QLatin1String("RIAA.ORG");
         break;
     case ESRB:
-        retVal = "ESRB.ORG";
+        retVal = QLatin1String("ESRB.ORG");
         break;
     case TvGuidelines:
-        retVal = "TVGUIDELINES.ORG";
+        retVal = QLatin1String("TVGUIDELINES.ORG");
         break;
     default:
         break;
@@ -260,22 +260,22 @@ QString HRating::toString(HRating::MpaaValues type)
     switch(type)
     {
     case MPAA_GeneralAudiences:
-        retVal = "G";
+        retVal = QLatin1String("G");
         break;
     case MPAA_ParentalGuidanceSuggested:
-        retVal = "PG";
+        retVal = QLatin1String("PG");
         break;
     case MPAA_ParentsStronglyCautioned:
-        retVal = "PG-13";
+        retVal = QLatin1String("PG-13");
         break;
     case MPAA_Restricted:
-        retVal = "R";
+        retVal = QLatin1String("R");
         break;
     case MPAA_NoOneSeventeenAndUnderAdmitted:
-        retVal = "NC-17";
+        retVal = QLatin1String("NC-17");
         break;
     case MPAA_NotRatedYet:
-        retVal = "NR";
+        retVal = QLatin1String("NR");
         break;
     default:
         break;
@@ -291,7 +291,7 @@ QString HRating::toString(HRating::RiaaValues type)
     case RIAA_NonExplicitContent:
         break;
     case RIAA_ExplicitContent:
-        retVal = "PA-EC";
+        retVal = QLatin1String("PA-EC");
         break;
     default:
         break;
@@ -305,25 +305,25 @@ QString HRating::toString(HRating::EsrbValues type)
     switch(type)
     {
     case ESRB_EarlyChildhood:
-        retVal = "EC";
+        retVal = QLatin1String("EC");
         break;
     case ESRB_Everyone:
-        retVal = "E";
+        retVal = QLatin1String("E");
         break;
     case ESRB_EveryoneTenAndOlder:
-        retVal = "E10+";
+        retVal = QLatin1String("E10+");
         break;
     case ESRB_Teen:
-        retVal = "T";
+        retVal = QLatin1String("T");
         break;
     case ESRB_Mature:
-        retVal = "M";
+        retVal = QLatin1String("M");
         break;
     case ESRB_AdultsOnly:
-        retVal = "AO";
+        retVal = QLatin1String("AO");
         break;
     case ESRB_RatingPending:
-        retVal = "RB";
+        retVal = QLatin1String("RB");
         break;
     default:
         break;
@@ -337,25 +337,25 @@ QString HRating::toString(HRating::TvGuidelinesValues type)
     switch(type)
     {
     case TVG_AllChildren:
-        retVal = "TV-Y";
+        retVal = QLatin1String("TV-Y");
         break;
     case TVG_OlderChildren:
-        retVal = "TV-Y7";
+        retVal = QLatin1String("TV-Y7");
         break;
     case TVG_OlderChildren_FantasyViolence:
-        retVal = "TV-Y7FV";
+        retVal = QLatin1String("TV-Y7FV");
         break;
     case TVG_GeneralAudience:
-        retVal = "TV-G";
+        retVal = QLatin1String("TV-G");
         break;
     case TVG_ParentalGuidanceSuggested:
-        retVal = "TV-PG";
+        retVal = QLatin1String("TV-PG");
         break;
     case TVG_ParentsStronglyCautioned:
-        retVal = "TV-14";
+        retVal = QLatin1String("TV-14");
         break;
     case TVG_MatureAudienceOnly:
-        retVal = "TV-MA";
+        retVal = QLatin1String("TV-MA");
         break;
     default:
         break;

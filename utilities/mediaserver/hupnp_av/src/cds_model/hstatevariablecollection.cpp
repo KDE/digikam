@@ -183,10 +183,10 @@ QString HStateVariableCollection::toString(RcsInstanceType type)
     switch(type)
     {
     case PreMix:
-        retVal = "pre-mix";
+        retVal = QLatin1String("pre-mix");
         break;
     case PostMix:
-        retVal = "post-mix";
+        retVal = QLatin1String("post-mix");
         break;
     default:
         break;
@@ -198,11 +198,11 @@ HStateVariableCollection::RcsInstanceType HStateVariableCollection::fromString(
     const QString& type)
 {
     RcsInstanceType retVal = Undefined;
-    if (type.compare("pre-mix", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("pre-mix"), Qt::CaseInsensitive) == 0)
     {
         retVal = PreMix;
     }
-    else if (type.compare("post-mix", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("post-mix"), Qt::CaseInsensitive) == 0)
     {
         retVal = PostMix;
     }

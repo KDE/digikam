@@ -62,7 +62,7 @@ HProtocolInfo::HProtocolInfo() :
 HProtocolInfo::HProtocolInfo(const QString& arg) :
     h_ptr(new HProtocolInfoPrivate())
 {
-    QStringList tmp = arg.split(":");
+    QStringList tmp = arg.split(QLatin1String(":"));
     if (tmp.size() != 4)
     {
         return;
@@ -124,7 +124,7 @@ QString HProtocolInfo::additionalInfo() const
 
 void HProtocolInfo::setProtocol(const QString& arg)
 {
-    if (!arg.contains(':'))
+    if (!arg.contains(QLatin1Char(':')))
     {
         h_ptr->m_protocol = arg.trimmed();
     }
@@ -132,7 +132,7 @@ void HProtocolInfo::setProtocol(const QString& arg)
 
 void HProtocolInfo::setNetwork(const QString& arg)
 {
-    if (!arg.contains(':'))
+    if (!arg.contains(QLatin1Char(':')))
     {
         h_ptr->m_network = arg.trimmed();
     }
@@ -140,7 +140,7 @@ void HProtocolInfo::setNetwork(const QString& arg)
 
 void HProtocolInfo::setContentFormat(const QString& arg)
 {
-    if (!arg.contains(':'))
+    if (!arg.contains(QLatin1Char(':')))
     {
         h_ptr->m_contentFormat = arg.trimmed();
     }
@@ -148,7 +148,7 @@ void HProtocolInfo::setContentFormat(const QString& arg)
 
 void HProtocolInfo::setAdditionalInfo(const QString& arg)
 {
-    if (!arg.contains(':'))
+    if (!arg.contains(QLatin1Char(':')))
     {
         h_ptr->m_additionalInfo = arg.trimmed();
     }
@@ -173,13 +173,13 @@ QString HProtocolInfo::toString() const
         return QString();
     }
 
-    return QString("%1:%2:%3:%4").arg(
+    return QString(QLatin1String("%1:%2:%3:%4")).arg(
         protocol(), network(), contentFormat(), additionalInfo());
 }
 
 HProtocolInfo HProtocolInfo::createUsingWildcards()
 {
-    return HProtocolInfo("*:*:*:*");
+    return HProtocolInfo(QLatin1String("*:*:*:*"));
 }
 
 bool operator==(const HProtocolInfo& obj1, const HProtocolInfo& obj2)

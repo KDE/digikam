@@ -72,7 +72,7 @@ HSubscribeRequest::HSubscribeRequest(
     }
     else if (sid.isEmpty())
     {
-        HLOG_WARN("Empty SID");
+        HLOG_WARN(QLatin1String("Empty SID"));
         return;
     }
 

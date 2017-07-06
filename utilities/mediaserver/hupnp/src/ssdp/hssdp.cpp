@@ -128,7 +128,7 @@ namespace
 {
 inline QHostAddress multicastAddress()
 {
-    static QHostAddress retVal("239.255.255.250");
+    static QHostAddress retVal(QLatin1String("239.255.255.250"));
     return retVal;
 }
 
@@ -140,7 +140,7 @@ inline qint16 multicastPort()
 
 inline HEndpoint multicastEndpoint()
 {
-    static HEndpoint retVal = HEndpoint("239.255.255.250:1900");
+    static HEndpoint retVal = HEndpoint(QLatin1String("239.255.255.250:1900"));
     return retVal;
 }
 }
@@ -169,12 +169,12 @@ bool HSsdpPrivate::parseCacheControl(const QString& str, qint32* retVal)
     bool ok = false;
 
     QString cacheControl = str.simplified();
-    QStringList slist = cacheControl.split('=');
+    QStringList slist = cacheControl.split(QLatin1Char('='));
 
-    if (slist.size() != 2 || slist[0].simplified() != "max-age")
+    if (slist.size() != 2 || slist[0].simplified() != QLatin1String("max-age"))
     {
         m_lastError =
-            QString("Invalid Cache-Control field value: %1").arg(str);
+            QString(QLatin1String("Invalid Cache-Control field value: %1")).arg(str);
         return false;
     }
 
@@ -182,7 +182,7 @@ bool HSsdpPrivate::parseCacheControl(const QString& str, qint32* retVal)
     if (!ok)
     {
         m_lastError =
-            QString("Invalid Cache-Control field value: %1").arg(str);
+            QString(QLatin1String("Invalid Cache-Control field value: %1")).arg(str);
         return false;
     }
 
@@ -192,11 +192,11 @@ bool HSsdpPrivate::parseCacheControl(const QString& str, qint32* retVal)
 
 bool HSsdpPrivate::checkHost(const QString& host)
 {
-    QStringList slist = host.split(':');
-    if (slist.size() < 1 || slist[0].simplified() != "239.255.255.250")
+    QStringList slist = host.split(QLatin1Char(':'));
+    if (slist.size() < 1 || slist[0].simplified() != QLatin1String("239.255.255.250"))
     {
         m_lastError =
-            QString("HOST header field is invalid: %1").arg(host);
+            QString(QLatin1String("HOST header field is invalid: %1")).arg(host);
         return false;
     }
 
@@ -206,27 +206,27 @@ bool HSsdpPrivate::checkHost(const QString& host)
 bool HSsdpPrivate::parseDiscoveryResponse(
     const HHttpResponseHeader& hdr, HDiscoveryResponse* retVal)
 {
-    QString   cacheControl  = hdr.value("CACHE-CONTROL");
-    QDateTime date          = QDateTime::fromString(hdr.value("DATE"));
-    QUrl      location      = hdr.value("LOCATION");
-    QString   server        = hdr.value("SERVER");
+    QString   cacheControl  = hdr.value(QLatin1String("CACHE-CONTROL"));
+    QDateTime date          = QDateTime::fromString(hdr.value(QLatin1String("DATE")));
+    QUrl      location      = QUrl(hdr.value(QLatin1String("LOCATION")));
+    QString   server        = hdr.value(QLatin1String("SERVER"));
     //QString   st            = hdr.value("ST");
-    QString   usn           = hdr.value("USN");
-    QString   bootIdStr     = hdr.value("BOOTID.UPNP.ORG");
-    QString   configIdStr   = hdr.value("CONFIGID.UPNP.ORG");
-    QString   searchPortStr = hdr.value("SEARCHPORT.UPNP.ORG");
+    QString   usn           = hdr.value(QLatin1String("USN"));
+    QString   bootIdStr     = hdr.value(QLatin1String("BOOTID.UPNP.ORG"));
+    QString   configIdStr   = hdr.value(QLatin1String("CONFIGID.UPNP.ORG"));
+    QString   searchPortStr = hdr.value(QLatin1String("SEARCHPORT.UPNP.ORG"));
 
-    if (!hdr.hasKey("EXT"))
+    if (!hdr.hasKey(QLatin1String("EXT")))
     {
-        m_lastError = QString("EXT field is missing:\n%1").arg(
+        m_lastError = QString(QLatin1String("EXT field is missing:\n%1")).arg(
             hdr.toString());
 
         return false;
     }
-    else if (!hdr.value("EXT").isEmpty())
+    else if (!hdr.value(QLatin1String("EXT")).isEmpty())
     {
         m_lastError =
-            QString("EXT field is not empty, although it should be:\n%1").
+            QString(QLatin1String("EXT field is not empty, although it should be:\n%1")).
                 arg(hdr.toString());
 
         return false;
@@ -264,7 +264,7 @@ bool HSsdpPrivate::parseDiscoveryResponse(
         HProductTokens(server),
         HDiscoveryType(usn, LooseChecks),
         bootId,
-        hdr.hasKey("CONFIGID.UPNP.ORG") ? configId : 0,
+        hdr.hasKey(QLatin1String("CONFIGID.UPNP.ORG")) ? configId : 0,
         // ^^ configid is optional even in UDA v1.1 ==> cannot provide -1
         // unless the header field is specified and the value is invalid
         searchPort);
@@ -275,27 +275,27 @@ bool HSsdpPrivate::parseDiscoveryResponse(
 bool HSsdpPrivate::parseDiscoveryRequest(
     const HHttpRequestHeader& hdr, HDiscoveryRequest* retVal)
 {
-    QString host = hdr.value("HOST");
-    QString man  = hdr.value("MAN").simplified();
+    QString host = hdr.value(QLatin1String("HOST"));
+    QString man  = hdr.value(QLatin1String("MAN")).simplified();
 
     bool ok = false;
-    qint32 mx = hdr.value("MX").toInt(&ok);
+    qint32 mx = hdr.value(QLatin1String("MX")).toInt(&ok);
 
     if (!ok)
     {
-        m_lastError = QString("MX is not specified.");
+        m_lastError = QString(QLatin1String("MX is not specified."));
         return false;
     }
 
-    QString st = hdr.value("ST");
-    QString ua = hdr.value("USER-AGENT");
+    QString st = hdr.value(QLatin1String("ST"));
+    QString ua = hdr.value(QLatin1String("USER-AGENT"));
 
     checkHost(host);
 
-    if (man.compare(QString("\"ssdp:discover\""), Qt::CaseInsensitive) != 0)
+    if (man.compare(QString(QLatin1String("\"ssdp:discover\"")), Qt::CaseInsensitive) != 0)
     {
         m_lastError =
-            QString("MAN header field is invalid: [%1].").arg(man);
+            QString(QLatin1String("MAN header field is invalid: [%1].")).arg(man);
 
         return false;
     }
@@ -309,15 +309,15 @@ bool HSsdpPrivate::parseDiscoveryRequest(
 bool HSsdpPrivate::parseDeviceAvailable(
     const HHttpRequestHeader& hdr, HResourceAvailable* retVal)
 {
-    QString host          = hdr.value("HOST");
-    QString server        = hdr.value("SERVER");
-    QString usn           = hdr.value("USN");
+    QString host          = hdr.value(QLatin1String("HOST"));
+    QString server        = hdr.value(QLatin1String("SERVER"));
+    QString usn           = hdr.value(QLatin1String("USN"));
     //QString nt            = hdr.value("NT");
-    QUrl    location      = hdr.value("LOCATION");
-    QString cacheControl  = hdr.value("CACHE-CONTROL");
-    QString bootIdStr     = hdr.value("BOOTID.UPNP.ORG");
-    QString configIdStr   = hdr.value("CONFIGID.UPNP.ORG");
-    QString searchPortStr = hdr.value("SEARCHPORT.UPNP.ORG");
+    QUrl    location      = (QUrl)hdr.value(QLatin1String("LOCATION"));
+    QString cacheControl  = hdr.value(QLatin1String("CACHE-CONTROL"));
+    QString bootIdStr     = hdr.value(QLatin1String("BOOTID.UPNP.ORG"));
+    QString configIdStr   = hdr.value(QLatin1String("CONFIGID.UPNP.ORG"));
+    QString searchPortStr = hdr.value(QLatin1String("SEARCHPORT.UPNP.ORG"));
 
     qint32 maxAge;
     if (!parseCacheControl(cacheControl, &maxAge))
@@ -361,11 +361,11 @@ bool HSsdpPrivate::parseDeviceAvailable(
 bool HSsdpPrivate::parseDeviceUnavailable(
     const HHttpRequestHeader& hdr, HResourceUnavailable* retVal)
 {
-    QString host        = hdr.value("HOST");
+    QString host        = hdr.value(QLatin1String("HOST"));
     //QString nt          = hdr.value("NT");
-    QString usn         = hdr.value("USN");
-    QString bootIdStr   = hdr.value("BOOTID.UPNP.ORG");
-    QString configIdStr = hdr.value("CONFIGID.UPNP.ORG");
+    QString usn         = hdr.value(QLatin1String("USN"));
+    QString bootIdStr   = hdr.value(QLatin1String("BOOTID.UPNP.ORG"));
+    QString configIdStr = hdr.value(QLatin1String("CONFIGID.UPNP.ORG"));
 
     bool ok = false;
     qint32 bootId = bootIdStr.toInt(&ok);
@@ -391,14 +391,14 @@ bool HSsdpPrivate::parseDeviceUnavailable(
 bool HSsdpPrivate::parseDeviceUpdate(
     const HHttpRequestHeader& hdr, HResourceUpdate* retVal)
 {
-    QString host          = hdr.value("HOST");
-    QUrl    location      = hdr.value("LOCATION");
+    QString host          = hdr.value(QLatin1String("HOST"));
+    QUrl    location      = (QUrl)hdr.value(QLatin1String("LOCATION"));
     //QString nt            = hdr.value("NT");
-    QString usn           = hdr.value("USN");
-    QString bootIdStr     = hdr.value("BOOTID.UPNP.ORG");
-    QString configIdStr   = hdr.value("CONFIGID.UPNP.ORG");
-    QString nextBootIdStr = hdr.value("NEXTBOOTID.UPNP.ORG");
-    QString searchPortStr = hdr.value("SEARCHPORT.UPNP.ORG");
+    QString usn           = hdr.value(QLatin1String("USN"));
+    QString bootIdStr     = hdr.value(QLatin1String("BOOTID.UPNP.ORG"));
+    QString configIdStr   = hdr.value(QLatin1String("CONFIGID.UPNP.ORG"));
+    QString nextBootIdStr = hdr.value(QLatin1String("NEXTBOOTID.UPNP.ORG"));
+    QString searchPortStr = hdr.value(QLatin1String("SEARCHPORT.UPNP.ORG"));
 
     bool ok = false;
     qint32 bootId = bootIdStr.toInt(&ok);
@@ -453,12 +453,12 @@ bool HSsdpPrivate::send(const QByteArray& data, const HEndpoint& receiver)
 
 void HSsdpPrivate::processResponse(const QString& msg, const HEndpoint& source)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HHttpResponseHeader hdr(msg);
     if (!hdr.isValid())
     {
-        HLOG_WARN("Ignoring a malformed HTTP response.");
+        HLOG_WARN(QLatin1String("Ignoring a malformed HTTP response."));
         return;
     }
 
@@ -467,7 +467,7 @@ void HSsdpPrivate::processResponse(const QString& msg, const HEndpoint& source)
         HDiscoveryResponse rcvdMsg;
         if (!parseDiscoveryResponse(hdr, &rcvdMsg))
         {
-            HLOG_WARN(QString("Ignoring invalid message from [%1]: %2").arg(
+            HLOG_WARN(QString(QLatin1String("Ignoring invalid message from [%1]: %2")).arg(
                 source.toString(), msg));
         }
         else if (!q_ptr->incomingDiscoveryResponse(rcvdMsg, source))
@@ -479,25 +479,25 @@ void HSsdpPrivate::processResponse(const QString& msg, const HEndpoint& source)
 
 void HSsdpPrivate::processNotify(const QString& msg, const HEndpoint& source)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HHttpRequestHeader hdr(msg);
     if (!hdr.isValid())
     {
-        HLOG_WARN("Ignoring an invalid HTTP NOTIFY request.");
+        HLOG_WARN(QLatin1String("Ignoring an invalid HTTP NOTIFY request."));
         return;
     }
 
-    QString nts = hdr.value("NTS");
-    if (nts.compare(QString("ssdp:alive"), Qt::CaseInsensitive) == 0)
+    QString nts = hdr.value(QLatin1String("NTS"));
+    if (nts.compare(QString(QLatin1String("ssdp:alive")), Qt::CaseInsensitive) == 0)
     {
         if (m_allowedMessages & HSsdp::DeviceAvailable)
         {
             HResourceAvailable rcvdMsg;
             if (!parseDeviceAvailable(hdr, &rcvdMsg))
             {
-                HLOG_WARN(QString(
-                    "Ignoring an invalid ssdp:alive announcement:\n%1").arg(msg));
+                HLOG_WARN(QString(QLatin1String(
+                    "Ignoring an invalid ssdp:alive announcement:\n%1")).arg(msg));
             }
             else if (!q_ptr->incomingDeviceAvailableAnnouncement(rcvdMsg, source))
             {
@@ -505,15 +505,15 @@ void HSsdpPrivate::processNotify(const QString& msg, const HEndpoint& source)
             }
         }
     }
-    else if (nts.compare(QString("ssdp:byebye"), Qt::CaseInsensitive) == 0)
+    else if (nts.compare(QString(QLatin1String("ssdp:byebye")), Qt::CaseInsensitive) == 0)
     {
         if (m_allowedMessages & HSsdp::DeviceUnavailable)
         {
             HResourceUnavailable rcvdMsg;
             if (!parseDeviceUnavailable(hdr, &rcvdMsg))
             {
-                HLOG_WARN(QString(
-                    "Ignoring an invalid ssdp:byebye announcement:\n%1").arg(msg));
+                HLOG_WARN(QString(QLatin1String(
+                    "Ignoring an invalid ssdp:byebye announcement:\n%1")).arg(msg));
             }
             else if (!q_ptr->incomingDeviceUnavailableAnnouncement(rcvdMsg, source))
             {
@@ -521,15 +521,15 @@ void HSsdpPrivate::processNotify(const QString& msg, const HEndpoint& source)
             }
         }
     }
-    else if (nts.compare(QString("ssdp:update"), Qt::CaseInsensitive) == 0)
+    else if (nts.compare(QString(QLatin1String("ssdp:update")), Qt::CaseInsensitive) == 0)
     {
         if (m_allowedMessages & HSsdp::DeviceUpdate)
         {
             HResourceUpdate rcvdMsg;
             if (!parseDeviceUpdate(hdr, &rcvdMsg))
             {
-                HLOG_WARN(QString(
-                    "Ignoring invalid ssdp:update announcement:\n%1").arg(msg));
+                HLOG_WARN(QString(QLatin1String(
+                    "Ignoring invalid ssdp:update announcement:\n%1")).arg(msg));
             }
             else if (!q_ptr->incomingDeviceUpdateAnnouncement(rcvdMsg, source))
             {
@@ -539,20 +539,20 @@ void HSsdpPrivate::processNotify(const QString& msg, const HEndpoint& source)
     }
     else
     {
-        HLOG_WARN(QString(
-            "Ignoring an invalid SSDP presence announcement: [%1].").arg(nts));
+        HLOG_WARN(QString(QLatin1String(
+            "Ignoring an invalid SSDP presence announcement: [%1].")).arg(nts));
     }
 }
 
 void HSsdpPrivate::processSearch(
     const QString& msg, const HEndpoint& source, const HEndpoint& destination)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HHttpRequestHeader hdr(msg);
     if (!hdr.isValid())
     {
-        HLOG_WARN("Ignoring an invalid HTTP M-SEARCH request.");
+        HLOG_WARN(QLatin1String("Ignoring an invalid HTTP M-SEARCH request."));
         return;
     }
 
@@ -564,7 +564,7 @@ void HSsdpPrivate::processSearch(
         HDiscoveryRequest rcvdMsg;
         if (!parseDiscoveryRequest(hdr, &rcvdMsg))
         {
-            HLOG_WARN(QString("Ignoring invalid message from [%1]: %2").arg(
+            HLOG_WARN(QString(QLatin1String("Ignoring invalid message from [%1]: %2")).arg(
                 source.toString(), msg));
         }
         else if (!q_ptr->incomingDiscoveryRequest(rcvdMsg, source, type))
@@ -576,7 +576,7 @@ void HSsdpPrivate::processSearch(
 
 void HSsdpPrivate::clear()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     if (m_multicastSocket &&
         m_multicastSocket->state() == QUdpSocket::BoundState)
     {
@@ -589,7 +589,7 @@ void HSsdpPrivate::clear()
 
 bool HSsdpPrivate::init(const QHostAddress& addressToBind)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(!isInitialized());
 
     m_multicastSocket = new HMulticastSocket(q_ptr);
@@ -609,34 +609,34 @@ bool HSsdpPrivate::init(const QHostAddress& addressToBind)
 
     if (!m_multicastSocket->bind(1900))
     {
-        HLOG_WARN("Failed to bind multicast socket for listening");
+        HLOG_WARN(QLatin1String("Failed to bind multicast socket for listening"));
         return false;
     }
 
     if (!m_multicastSocket->joinMulticastGroup(
             multicastAddress(), addressToBind))
     {
-        HLOG_WARN(QString("Could not join %1").arg(
+        HLOG_WARN(QString(QLatin1String("Could not join %1")).arg(
             multicastAddress().toString()));
 
         //return false;
     }
 
-    HLOG_DBG(QString(
-        "Attempting to use address [%1] for SSDP communications").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to use address [%1] for SSDP communications")).arg(
             addressToBind.toString()));
 
     // always attempt to bind to the 1900 first
     if (!m_unicastSocket->bind(addressToBind, 1900))
     {
-        HLOG_DBG("Could not bind UDP unicast socket to port 1900");
+        HLOG_DBG(QLatin1String("Could not bind UDP unicast socket to port 1900"));
 
         // the range is specified by the UDA 1.1 standard
         for(qint32 i = 49152; i < 65535; ++i)
         {
             if (m_unicastSocket->bind(addressToBind, i))
             {
-                HLOG_DBG(QString("Unicast UDP socket bound to port [%1].").arg(
+                HLOG_DBG(QString(QLatin1String("Unicast UDP socket bound to port [%1].")).arg(
                     QString::number(i)));
 
                 break;
@@ -645,13 +645,13 @@ bool HSsdpPrivate::init(const QHostAddress& addressToBind)
     }
     else
     {
-        HLOG_DBG("Unicast UDP socket bound to port 1900");
+        HLOG_DBG(QLatin1String("Unicast UDP socket bound to port 1900"));
     }
 
     if (m_unicastSocket->state() != QUdpSocket::BoundState)
     {
-        HLOG_WARN(QString(
-            "Failed to bind UDP unicast socket on address.").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Failed to bind UDP unicast socket on address.")).arg(
                 addressToBind.toString()));
 
         clear();
@@ -663,7 +663,7 @@ bool HSsdpPrivate::init(const QHostAddress& addressToBind)
 
 void HSsdpPrivate::messageReceived(QUdpSocket* socket, const HEndpoint* dest)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QHostAddress ha; quint16 port;
 
@@ -673,22 +673,22 @@ void HSsdpPrivate::messageReceived(QUdpSocket* socket, const HEndpoint* dest)
     qint64 read = socket->readDatagram(buf.data(), buf.size(), &ha, &port);
     if (read < 0)
     {
-        HLOG_WARN(QString("Read failed: %1").arg(socket->errorString()));
+        HLOG_WARN(QString(QLatin1String("Read failed: %1")).arg(socket->errorString()));
         Q_ASSERT(false);
         return;
     }
 
-    QString msg(QString::fromUtf8(buf, read));
+    QString msg(QString::fromUtf8((char*)buf.data(), read));
     HEndpoint source(ha, port);
     HEndpoint destination(
         dest ? *dest : HEndpoint(socket->localAddress(), socket->localPort()));
 
-    if (msg.startsWith("NOTIFY * HTTP/1.1", Qt::CaseInsensitive))
+    if (msg.startsWith(QLatin1String("NOTIFY * HTTP/1.1"), Qt::CaseInsensitive))
     {
         // Possible presence announcement
         processNotify(msg, source);
     }
-    else if (msg.startsWith("M-SEARCH * HTTP/1.1", Qt::CaseInsensitive))
+    else if (msg.startsWith(QLatin1String("M-SEARCH * HTTP/1.1"), Qt::CaseInsensitive))
     {
         // Possible discovery request.
         processSearch(msg, source, destination);
@@ -743,7 +743,7 @@ HSsdp::AllowedMessages HSsdp::filter() const
 
 bool HSsdp::init()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char *) h_ptr->m_loggingIdentifier.data());
 
     if (isInitialized())
     {
@@ -756,7 +756,7 @@ bool HSsdp::init()
 
 bool HSsdp::init(const QHostAddress& unicastAddress)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char *) h_ptr->m_loggingIdentifier.data());
 
     if (isInitialized())
     {

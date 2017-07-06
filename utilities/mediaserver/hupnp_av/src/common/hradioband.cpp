@@ -57,22 +57,22 @@ QString HRadioBand::toString(Type type)
     switch (type)
     {
     case AM:
-        retVal = "AM";
+        retVal = QLatin1String("AM");
         break;
     case FM:
-        retVal = "FM";
+        retVal = QLatin1String("FM");
         break;
     case ShortWave:
-        retVal = "ShortWave";
+        retVal = QLatin1String("ShortWave");
         break;
     case Internet:
-        retVal = "Internet";
+        retVal = QLatin1String("Internet");
         break;
     case Satellite:
-        retVal = "Satellite";
+        retVal = QLatin1String("Satellite");
         break;
     case VendorDefined:
-        retVal = "VendorDefined";
+        retVal = QLatin1String("VendorDefined");
         break;
     default:
         break;
@@ -83,23 +83,23 @@ QString HRadioBand::toString(Type type)
 HRadioBand::Type HRadioBand::fromString(const QString& arg)
 {
     Type retVal = Undefined;
-    if (arg.compare("am", Qt::CaseInsensitive) == 0)
+    if (arg.compare(QLatin1String("am"), Qt::CaseInsensitive) == 0)
     {
         retVal = AM;
     }
-    else if (arg.compare("fm", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("fm"), Qt::CaseInsensitive) == 0)
     {
         retVal = FM;
     }
-    else if (arg.compare("shortwave", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("shortwave"), Qt::CaseInsensitive) == 0)
     {
         retVal = ShortWave;
     }
-    else if (arg.compare("internet", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("internet"), Qt::CaseInsensitive) == 0)
     {
         retVal = Internet;
     }
-    else if (arg.compare("satellite", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("satellite"), Qt::CaseInsensitive) == 0)
     {
         retVal = Satellite;
     }

@@ -86,7 +86,7 @@ void HMessagingInfo::setHostInfo(const QUrl& hostInfo)
 
     if (hostInfo.port(0) > 0)
     {
-        tmp.append(':').append(QString::number(hostInfo.port()));
+        tmp.append(QLatin1Char(':')).append(QString::number(hostInfo.port()));
     }
 
     m_hostInfo = tmp;
@@ -97,7 +97,7 @@ QString HMessagingInfo::hostInfo() const
     if (m_hostInfo.isEmpty())
     {
         // fall back to the ip address if no host information was provided.
-        return QString("%1:%2").arg(
+        return QString(QLatin1String("%1:%2")).arg(
             socket().peerName(), QString::number(socket().peerPort()));
     }
 

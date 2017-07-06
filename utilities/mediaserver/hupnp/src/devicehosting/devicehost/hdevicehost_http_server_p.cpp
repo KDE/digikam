@@ -89,7 +89,7 @@ HDeviceHostHttpServer::HDeviceHostHttpServer(
 
 HDeviceHostHttpServer::~HDeviceHostHttpServer()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QList<QPair<QPointer<HHttpAsyncOperation>, HOpInfo> >::iterator it = m_ops.begin();
     for(; it != m_ops.end(); ++it)
@@ -104,9 +104,9 @@ HDeviceHostHttpServer::~HDeviceHostHttpServer()
 void HDeviceHostHttpServer::incomingSubscriptionRequest(
     HMessagingInfo* mi, const HSubscribeRequest& sreq)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    HLOG_DBG("Subscription received.");
+    HLOG_DBG(QLatin1String("Subscription received."));
 
     QUuid udn = extractUdn(sreq.eventUrl());
 
@@ -197,8 +197,8 @@ void HDeviceHostHttpServer::incomingSubscriptionRequest(
 void HDeviceHostHttpServer::incomingUnsubscriptionRequest(
     HMessagingInfo* mi, const HUnsubscribeRequest& usreq)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_DBG("Unsubscription received.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_DBG(QLatin1String("Unsubscription received."));
 
     bool ok = m_eventNotifier.removeSubscriber(usreq);
 
@@ -210,7 +210,7 @@ void HDeviceHostHttpServer::incomingUnsubscriptionRequest(
 void HDeviceHostHttpServer::incomingControlRequest(
     HMessagingInfo* mi, const HInvokeActionRequest& invokeActionRequest)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HLOG_DBG(QString("Control message to [%1] received.").arg(
         invokeActionRequest.soapAction()));
@@ -269,7 +269,7 @@ void HDeviceHostHttpServer::incomingControlRequest(
     const QtSoapType& method = soapMsg->method();
     if (!method.isValid())
     {
-        HLOG_WARN("Invalid control method.");
+        HLOG_WARN(QLatin1String("Invalid control method."));
 
         mi->setKeepAlive(false);
 
@@ -353,19 +353,19 @@ void HDeviceHostHttpServer::incomingControlRequest(
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(
         Ok, *mi, xml.toUtf8(), ContentType_TextXml));
 
-    HLOG_DBG("Control message successfully handled.");
+    HLOG_DBG(QLatin1String("Control message successfully handled."));
 }
 
 void HDeviceHostHttpServer::incomingUnknownGetRequest(
     HMessagingInfo* mi, const HHttpRequestHeader& requestHdr)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QString peer = peerAsStr(mi->socket());
     QString requestPath = requestHdr.path();
 
-    HLOG_DBG(QString(
-        "HTTP GET request received from [%1] to [%2].").arg(peer, requestPath));
+    HLOG_DBG(QString(QLatin1String(
+        "HTTP GET request received from [%1] to [%2].")).arg(peer, requestPath));
 
     QUuid searchedUdn(requestPath.section('/', 1, 1));
     if (searchedUdn.isNull())
@@ -380,8 +380,8 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
 
         if (service)
         {
-            HLOG_DBG(QString(
-                "Sending service description to [%1] as requested.").arg(peer));
+            HLOG_DBG(QString(QLatin1String(
+                "Sending service description to [%1] as requested.")).arg(peer));
 
             m_httpHandler->send(mi, HHttpMessageCreator::createResponse(
                 Ok, *mi, service->description().toUtf8(), ContentType_TextXml));
@@ -389,7 +389,7 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
             return;
         }
 
-        HLOG_WARN(QString("Responding NOT_FOUND [%1] to [%2].").arg(
+        HLOG_WARN(QString(QLatin1String("Responding NOT_FOUND [%1] to [%2].")).arg(
             requestHdr.path(), peerAsStr(mi->socket())));
 
         m_httpHandler->send(mi, HHttpMessageCreator::createResponse(NotFound, *mi));
@@ -401,7 +401,7 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
 
     if (!device)
     {
-        HLOG_WARN(QString("Responding NOT_FOUND [%1] to [%2].").arg(
+        HLOG_WARN(QString(QLatin1String("Responding NOT_FOUND [%1] to [%2].")).arg(
             requestHdr.path(), peerAsStr(mi->socket())));
 
         m_httpHandler->send(mi, HHttpMessageCreator::createResponse(NotFound, *mi));
@@ -410,8 +410,8 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
 
     if (requestPath.endsWith(m_ddPostFix))
     {
-        HLOG_DBG(QString(
-            "Sending device description to [%1] as requested.").arg(peer));
+        HLOG_DBG(QString(QLatin1String(
+            "Sending device description to [%1] as requested.")).arg(peer));
 
         m_httpHandler->send(mi, HHttpMessageCreator::createResponse(
             Ok, *mi, device->description().toUtf8(), ContentType_TextXml));
@@ -426,8 +426,8 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
 
     if (service)
     {
-        HLOG_DBG(QString(
-            "Sending service description to [%1] as requested.").arg(peer));
+        HLOG_DBG(QString(QLatin1String(
+            "Sending service description to [%1] as requested.")).arg(peer));
 
         m_httpHandler->send(mi, HHttpMessageCreator::createResponse(
             Ok, *mi, service->description().toUtf8(), ContentType_TextXml));
@@ -442,12 +442,12 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
         QFile iconFile(icon.toLocalFile());
         if (!iconFile.open(QIODevice::ReadOnly))
         {
-            HLOG_WARN(QString("Could not open icon file.").arg(icon.toLocalFile()));
+            HLOG_WARN(QString(QLatin1String("Could not open icon file.")).arg(icon.toLocalFile()));
             m_httpHandler->send(mi, HHttpMessageCreator::createResponse(InternalServerError, *mi));
             return;
         }
 
-        HLOG_DBG(QString("Sending icon to [%1] as requested.").arg(peer));
+        HLOG_DBG(QString(QLatin1String("Sending icon to [%1] as requested.")).arg(peer));
 
         m_httpHandler->send(mi, HHttpMessageCreator::createResponse(
             Ok, *mi, iconFile.readAll(), ContentType_TextXml));
@@ -455,7 +455,7 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
         return;
     }
 
-    HLOG_WARN(QString("Responding NOT_FOUND [%1] to [%2].").arg(
+    HLOG_WARN(QString(QLatin1String("Responding NOT_FOUND [%1] to [%2].")).arg(
         requestHdr.path(), peerAsStr(mi->socket())));
 
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(NotFound, *mi));

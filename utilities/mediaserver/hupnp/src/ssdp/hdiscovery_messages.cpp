@@ -101,19 +101,19 @@ HResourceAvailable::HResourceAvailable(
 
     if (usn.type() == HDiscoveryType::Undefined)
     {
-        HLOG_WARN("USN is not defined");
+        HLOG_WARN(QLatin1String("USN is not defined"));
         return;
     }
 
     if (!location.isValid() || location.isEmpty())
     {
-        HLOG_WARN(QString("Location is not defined"));
+        HLOG_WARN(QString(QLatin1String("Location is not defined")));
         return;
     }
 
     if (!serverTokens.hasUpnpToken())
     {
-        HLOG_WARN_NONSTD(QString("Server tokens are not defined"));
+        HLOG_WARN_NONSTD(QString(QLatin1String("Server tokens are not defined")));
         // although mandatory according to UDA, some UPnP software
         // do not define this ==> cannot require it
     }
@@ -122,7 +122,7 @@ HResourceAvailable::HResourceAvailable(
     {
         if (bootId < 0 || configId < 0)
         {
-            HLOG_WARN("bootId and configId must both be >= 0.");
+            HLOG_WARN(QLatin1String("bootId and configId must both be >= 0."));
             return;
         }
         if (searchPort < 49152 || searchPort > 65535)
@@ -235,7 +235,10 @@ public: // methods
 };
 
 HResourceUnavailablePrivate::HResourceUnavailablePrivate() :
-    m_usn(), m_bootId(0), m_configId(0), m_sourceLocation(0)
+    m_usn(),
+    m_bootId(0),
+    m_configId(0),
+    m_sourceLocation(QLatin1String("0"))
 {
 }
 
@@ -259,13 +262,13 @@ HResourceUnavailable::HResourceUnavailable(
 
     if (usn.type() == HDiscoveryType::Undefined)
     {
-        HLOG_WARN("USN is not defined");
+        HLOG_WARN(QLatin1String("USN is not defined"));
         return;
     }
 
     if ((bootId < 0 && configId >= 0) || (configId < 0 && bootId >= 0))
     {
-        HLOG_WARN("If either bootId or configId is specified they both must be >= 0");
+        HLOG_WARN(QLatin1String("If either bootId or configId is specified they both must be >= 0"));
         return;
     }
 
@@ -380,13 +383,13 @@ HResourceUpdate::HResourceUpdate(
 
     if (usn.type() == HDiscoveryType::Undefined)
     {
-        HLOG_WARN("USN is not defined");
+        HLOG_WARN(QLatin1String("USN is not defined"));
         return;
     }
 
     if (!location.isValid())
     {
-        HLOG_WARN("Location is not defined");
+        HLOG_WARN(QLatin1String("Location is not defined"));
         return;
     }
 
@@ -394,8 +397,8 @@ HResourceUpdate::HResourceUpdate(
         (configId   < 0 && (bootId   >= 0 || nextBootId >= 0)) ||
         (nextBootId < 0 && (bootId   >= 0 || configId   >= 0)))
     {
-        HLOG_WARN("If bootId, configId or nextBootId is specified, " \
-                  "they all must be >= 0.");
+        HLOG_WARN(QLatin1String("If bootId, configId or nextBootId is specified, " \
+                  "they all must be >= 0."));
         return;
     }
 
@@ -503,14 +506,14 @@ public: // methods
 
         if (st.type() == HDiscoveryType::Undefined)
         {
-            HLOG_WARN("Search Target is not specified");
+            HLOG_WARN(QLatin1String("Search Target is not specified"));
             return false;
         }
 
         bool treatAsUpnp1_0 = true;
         if (!userAgent.hasUpnpToken())
         {
-            HLOG_WARN_NONSTD(QString("Invalid user agent: [%1]").arg(
+            HLOG_WARN_NONSTD(QString(QLatin1String("Invalid user agent: [%1]")).arg(
                 userAgent.toString()));
         }
         else if (userAgent.upnpToken().minorVersion() >= 1)
@@ -522,16 +525,16 @@ public: // methods
         {
             if (mx < 0)
             {
-                HLOG_WARN("MX cannot be negative");
+                HLOG_WARN(QLatin1String("MX cannot be negative"));
                 return false;
             }
             else if (mx < 1)
             {
-                HLOG_WARN("MX should be between 1 and 120 inclusive");
+                HLOG_WARN(QLatin1String("MX should be between 1 and 120 inclusive"));
             }
             else if (mx > 120)
             {
-                HLOG_WARN("MX should be between 1 and 120 inclusive, using 120");
+                HLOG_WARN(QLatin1String("MX should be between 1 and 120 inclusive, using 120"));
                 mx = 120;
                 // UDA 1.0 instructs to treat MX values larger than 120 as 120
             }
@@ -540,12 +543,12 @@ public: // methods
         {
             if (mx < 1)
             {
-                HLOG_WARN("MX cannot be smaller than 1");
+                HLOG_WARN(QLatin1String("MX cannot be smaller than 1"));
                 return false;
             }
             else if (mx > 5)
             {
-                HLOG_WARN("MX should be less than 5 inclusive, setting it to 5");
+                HLOG_WARN(QLatin1String("MX should be less than 5 inclusive, setting it to 5"));
                 mx = 5; // UDA 1.1 instructs to treat MX values larger than 5 as 5
             }
         }
@@ -674,20 +677,20 @@ HDiscoveryResponse::HDiscoveryResponse(
 
     if (usn.type() == HDiscoveryType::Undefined)
     {
-        HLOG_WARN("Unique Service Name (USN) is not defined");
+        HLOG_WARN(QLatin1String("Unique Service Name (USN) is not defined"));
         return;
     }
     else if (!usn.udn().isValid(LooseChecks))
     {
         // TODO should this be a parameter?
-        HLOG_WARN(QString("Unique Service Name (USN) is missing the "
-            "Unique Device Name (UDN): [%1]").arg(usn.toString()));
+        HLOG_WARN(QString(QLatin1String("Unique Service Name (USN) is missing the "
+            "Unique Device Name (UDN): [%1]")).arg(usn.toString()));
         return;
     }
 
     if (!location.isValid())
     {
-        HLOG_WARN("Invalid resource location");
+        HLOG_WARN(QLatin1String("Invalid resource location"));
         return;
     }
 
@@ -695,7 +698,7 @@ HDiscoveryResponse::HDiscoveryResponse(
     {
         if (bootId < 0 || configId < 0)
         {
-            HLOG_WARN("bootId and configId must both be positive.");
+            HLOG_WARN(QLatin1String("bootId and configId must both be positive."));
             return;
         }
     }

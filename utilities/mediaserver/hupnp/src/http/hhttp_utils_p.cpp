@@ -38,7 +38,7 @@ QString HHttpUtils::callbackAsStr(const QList<QUrl>& callbacks)
 
     foreach(const QUrl& cb, callbacks)
     {
-        retVal.append(QString("<%1>").arg(cb.toString()));
+        retVal.append(QString(QLatin1String("<%1>")).arg(cb.toString()));
     }
 
     return retVal;

@@ -63,10 +63,10 @@ QString HMatchingId::toString(Type type)
     switch(type)
     {
     case SeriesId:
-        retVal = "SI_SERIESID";
+        retVal = QLatin1String("SI_SERIESID");
         break;
     case ProgramId:
-        retVal = "SI_PROGRAMID";
+        retVal = QLatin1String("SI_PROGRAMID");
         break;
     default:
         break;
@@ -77,11 +77,11 @@ QString HMatchingId::toString(Type type)
 HMatchingId::Type HMatchingId::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("SI_SERIESID", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("SI_SERIESID"), Qt::CaseInsensitive) == 0)
     {
         retVal = SeriesId;
     }
-    else if (type.compare("SI_PROGRAMID", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SI_PROGRAMID"), Qt::CaseInsensitive) == 0)
     {
         retVal = ProgramId;
     }
@@ -118,22 +118,22 @@ QStringList trim(const QStringList& arg)
 HMatchingId::HMatchingId(const QString& arg, const QString& type) :
     h_ptr(new HMatchingIdPrivate())
 {
-    QStringList argTrimmed = trim(arg.split(","));
+    QStringList argTrimmed = trim(arg.split(QLatin1String(",")));
     QString typeTrimmed = type.trimmed();
-    if (typeTrimmed == "SI_SERIESID")
+    if (typeTrimmed == QLatin1String("SI_SERIESID"))
     {
         if (argTrimmed.size() == 4)
         {
-            h_ptr->m_value = argTrimmed.join(",");
+            h_ptr->m_value = argTrimmed.join(QLatin1String(","));
             h_ptr->m_type = SeriesId;
             h_ptr->m_typeAsString = typeTrimmed;
         }
     }
-    else if (typeTrimmed == "SI_PROGRAMID")
+    else if (typeTrimmed == QLatin1String("SI_PROGRAMID"))
     {
         if (argTrimmed.size() == 4)
         {
-            h_ptr->m_value = argTrimmed.join(",");
+            h_ptr->m_value = argTrimmed.join(QLatin1String(","));
             h_ptr->m_type = ProgramId;
             h_ptr->m_typeAsString = typeTrimmed;
         }
@@ -141,7 +141,7 @@ HMatchingId::HMatchingId(const QString& arg, const QString& type) :
     else if (!typeTrimmed.isEmpty())
     {
         QString argTrimmed = arg.trimmed();
-        if (typeTrimmed.indexOf("_") > 3 && !argTrimmed.isEmpty())
+        if (typeTrimmed.indexOf(QLatin1String("_")) > 3 && !argTrimmed.isEmpty())
         {
             // Simple (and frail) check to ensure that the Type format is followed
             // (it is impossible for a proper ICANN name to be less than 5 characters).

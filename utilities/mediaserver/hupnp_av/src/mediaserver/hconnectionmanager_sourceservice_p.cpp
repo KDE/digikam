@@ -137,7 +137,7 @@ HConnectionManagerHttpServer::~HConnectionManagerHttpServer()
 void HConnectionManagerHttpServer::incomingUnknownGetRequest(
     HMessagingInfo* mi, const HHttpRequestHeader& hdr)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QScopedPointer<QIODevice> dev(
         m_owner->m_dataSource->loadItemData(hdr.path().remove('/')));
@@ -303,7 +303,7 @@ bool HConnectionManagerSourceService::init()
 
     if (!m_httpServer->init())
     {
-        HLOG_WARN("Failed to initialize HTTP server");
+        HLOG_WARN(QLatin1String("Failed to initialize HTTP server"));
         return false;
     }
     else if (m_httpServer->rootUrls().isEmpty())

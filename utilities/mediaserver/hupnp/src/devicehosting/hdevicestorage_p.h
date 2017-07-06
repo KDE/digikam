@@ -478,7 +478,7 @@ public: // instance methods
 
     bool addRootDevice(Device* root, Controller* controller = 0)
     {
-        HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+        HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
         Q_ASSERT(root);
         Q_ASSERT(root);
@@ -500,7 +500,7 @@ public: // instance methods
 
     bool removeRootDevice(Device* root)
     {
-        HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+        HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
         Q_ASSERT(root);
         Q_ASSERT(!root->parentDevice());

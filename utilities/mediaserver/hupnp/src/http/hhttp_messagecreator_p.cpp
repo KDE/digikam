@@ -53,49 +53,49 @@ void checkForActionError(
     if (actionRetVal == UpnpInvalidArgs)
     {
         *httpStatusCode   = 402;
-        *httpReasonPhrase = "Invalid Args";
+        *httpReasonPhrase = QLatin1String("Invalid Args");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpActionFailed)
     {
         *httpStatusCode   = 501;
-        *httpReasonPhrase = "Action Failed";
+        *httpReasonPhrase = QLatin1String("Action Failed");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpArgumentValueInvalid)
     {
         *httpStatusCode   = 600;
-        *httpReasonPhrase = "Argument Value Invalid";
+        *httpReasonPhrase = QLatin1String("Argument Value Invalid");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpArgumentValueOutOfRange)
     {
         *httpStatusCode   = 601;
-        *httpReasonPhrase = "Argument Value Out of Range";
+        *httpReasonPhrase = QLatin1String("Argument Value Out of Range");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpOptionalActionNotImplemented)
     {
         *httpStatusCode   = 602;
-        *httpReasonPhrase = "Optional Action Not Implemented";
+        *httpReasonPhrase = QLatin1String("Optional Action Not Implemented");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpOutOfMemory)
     {
         *httpStatusCode   = 603;
-        *httpReasonPhrase = "Out of Memory";
+        *httpReasonPhrase = QLatin1String("Out of Memory");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpHumanInterventionRequired)
     {
         *httpStatusCode   = 604;
-        *httpReasonPhrase = "Human Intervention Required";
+        *httpReasonPhrase = QLatin1String("Human Intervention Required");
         *soapFault        = QtSoapMessage::Client;
     }
     else if (actionRetVal == UpnpStringArgumentTooLong)
     {
         *httpStatusCode   = 605;
-        *httpReasonPhrase = "String Argument Too Long";
+        *httpReasonPhrase = QLatin1String("String Argument Too Long");
         *soapFault        = QtSoapMessage::Client;
     }
     else
@@ -112,10 +112,10 @@ QString contentTypeToString(ContentType ct)
     switch(ct)
     {
     case ContentType_TextXml:
-        retVal = "text/xml; charset=\"utf-8\"";
+        retVal = QLatin1String("text/xml; charset=\"utf-8\"");
         break;
     case ContentType_OctetStream:
-        retVal = "application/octet-stream";
+        retVal = QLatin1String("application/octet-stream");
         break;
     default:
         ;
@@ -129,52 +129,52 @@ void getStatusInfo(StatusCode sc, qint32* statusCode, QString* reasonPhrase)
     {
     case Ok:
         *statusCode = 200;
-        *reasonPhrase = "OK";
+        *reasonPhrase = QLatin1String("OK");
         break;
 
     case BadRequest:
         *statusCode = 400;
-        *reasonPhrase = "Bad Request";
+        *reasonPhrase = QLatin1String("Bad Request");
         break;
 
     case IncompatibleHeaderFields:
         *statusCode = 400;
-        *reasonPhrase = "Incompatible header fields";
+        *reasonPhrase = QLatin1String("Incompatible header fields");
         break;
 
     case Unauthorized:
         *statusCode = 401;
-        *reasonPhrase = "Unauthorized";
+        *reasonPhrase = QLatin1String("Unauthorized");
         break;
 
     case Forbidden:
         *statusCode = 403;
-        *reasonPhrase = "Forbidden";
+        *reasonPhrase = QLatin1String("Forbidden");
         break;
 
     case NotFound:
         *statusCode = 404;
-        *reasonPhrase = "Not Found";
+        *reasonPhrase = QLatin1String("Not Found");
         break;
 
     case MethotNotAllowed:
         *statusCode = 405;
-        *reasonPhrase = "Method Not Allowed";
+        *reasonPhrase = QLatin1String("Method Not Allowed");
         break;
 
     case PreconditionFailed:
         *statusCode = 412;
-        *reasonPhrase = "Precondition Failed";
+        *reasonPhrase = QLatin1String("Precondition Failed");
         break;
 
     case InternalServerError:
         *statusCode = 500;
-        *reasonPhrase = "Internal Server Error";
+        *reasonPhrase = QLatin1String("Internal Server Error");
         break;
 
     case ServiceUnavailable:
         *statusCode = 503;
-        *reasonPhrase = "Service Unavailable";
+        *reasonPhrase = QLatin1String("Service Unavailable");
         break;
 
     default:
@@ -206,7 +206,7 @@ QByteArray HHttpMessageCreator::setupData(
     Q_ASSERT(reqHdr.isValid());
 
     reqHdr.setValue(
-        "DATE",
+        QLatin1String("DATE"),
         QDateTime::currentDateTime().toString(HHttpUtils::rfc1123DateFormat()));
 
     QString contentType = contentTypeToString(ct);
@@ -215,25 +215,25 @@ QByteArray HHttpMessageCreator::setupData(
         reqHdr.setContentType(contentType);
     }
 
-    reqHdr.setValue("EXT", "");
+    reqHdr.setValue(QLatin1String("EXT"), QLatin1String(""));
 
     HProductTokens serverTokens = mi.serverInfo();
     if (!serverTokens.isEmpty())
     {
-        reqHdr.setValue("Server", serverTokens.toString());
+        reqHdr.setValue(QLatin1String("Server"), serverTokens.toString());
     }
 
     if (!mi.keepAlive() && reqHdr.minorVersion() == 1)
     {
-        reqHdr.setValue("Connection", "close");
+        reqHdr.setValue(QLatin1String("Connection"), QLatin1String("close"));
     }
 
-    reqHdr.setValue("HOST", mi.hostInfo());
+    reqHdr.setValue(QLatin1String("HOST"), mi.hostInfo());
 
     if (mi.chunkedInfo().max() > 0 &&
         bodySizeInBytes > mi.chunkedInfo().max())
     {
-        reqHdr.setValue("Transfer-Encoding", "chunked");
+        reqHdr.setValue(QLatin1String("Transfer-Encoding"), QLatin1String("chunked"));
     }
     else
     {
@@ -268,7 +268,7 @@ QByteArray HHttpMessageCreator::createHeaderData(
     ContentType ct)
 {
     qint32 statusCode = 0;
-    QString reasonPhrase = "";
+    QString reasonPhrase = QLatin1String("");
 
     getStatusInfo(sc, &statusCode, &reasonPhrase);
 
@@ -308,11 +308,11 @@ QByteArray HHttpMessageCreator::createResponse(
 
     QtSoapMessage soapFaultResponse;
     soapFaultResponse.setFaultCode(soapFault);
-    soapFaultResponse.setFaultString("UPnPError");
+    soapFaultResponse.setFaultString(QLatin1String("UPnPError"));
 
-    QtSoapStruct* detail = new QtSoapStruct(QtSoapQName("UPnPError"));
-    detail->insert(new QtSoapSimpleType(QtSoapQName("errorCode"), actionErrCode));
-    detail->insert(new QtSoapSimpleType(QtSoapQName("errorDescription"), description));
+    QtSoapStruct* detail = new QtSoapStruct(QtSoapQName(QLatin1String("UPnPError")));
+    detail->insert(new QtSoapSimpleType(QtSoapQName(QLatin1String("errorCode")), actionErrCode));
+    detail->insert(new QtSoapSimpleType(QtSoapQName(QLatin1String("errorDescription")), description));
     soapFaultResponse.addFaultDetail(detail);
 
     return setupData(
@@ -329,17 +329,17 @@ QByteArray HHttpMessageCreator::create(
     Q_ASSERT(req.isValid(true));
 
     HHttpRequestHeader reqHdr;
-    reqHdr.setContentType("Content-type: text/xml; charset=\"utf-8\"");
+    reqHdr.setContentType(QLatin1String("Content-type: text/xml; charset=\"utf-8\""));
 
     reqHdr.setRequest(
-        "NOTIFY", extractRequestPart(req.callback().toString()));
+        QLatin1String("NOTIFY"), extractRequestPart(QUrl(req.callback().toString())));
 
     mi->setHostInfo(req.callback());
 
-    reqHdr.setValue("SID", req.sid().toString());
-    reqHdr.setValue("SEQ", QString::number(req.seq()));
-    reqHdr.setValue("NT" , "upnp:event");
-    reqHdr.setValue("NTS", "upnp:propchange");
+    reqHdr.setValue(QLatin1String("SID"), req.sid().toString());
+    reqHdr.setValue(QLatin1String("SEQ"), QString::number(req.seq()));
+    reqHdr.setValue(QLatin1String("NT") , QLatin1String("upnp:event"));
+    reqHdr.setValue(QLatin1String("NTS"), QLatin1String("upnp:propchange"));
 
     return setupData(reqHdr, req.data(), *mi, ContentType_TextXml);
 }
@@ -349,21 +349,21 @@ QByteArray HHttpMessageCreator::create(
 {
     Q_ASSERT(req.isValid(false));
 
-    HHttpRequestHeader requestHdr("SUBSCRIBE", extractRequestPart(req.eventUrl()));
-    requestHdr.setValue("TIMEOUT", req.timeout().toString());
+    HHttpRequestHeader requestHdr(QLatin1String("SUBSCRIBE"), extractRequestPart(req.eventUrl()));
+    requestHdr.setValue(QLatin1String("TIMEOUT"), req.timeout().toString());
 
     if (!req.isRenewal())
     {
         if (req.hasUserAgent())
         {
-            requestHdr.setValue("USER-AGENT", req.userAgent().toString());
+            requestHdr.setValue(QLatin1String("USER-AGENT"), req.userAgent().toString());
         }
-        requestHdr.setValue("CALLBACK", HHttpUtils::callbackAsStr(req.callbacks()));
-        requestHdr.setValue("NT", req.nt().typeToString());
+        requestHdr.setValue(QLatin1String("CALLBACK"), HHttpUtils::callbackAsStr(req.callbacks()));
+        requestHdr.setValue(QLatin1String("NT"), req.nt().typeToString());
     }
     else
     {
-        requestHdr.setValue("SID", req.sid().toString());
+        requestHdr.setValue(QLatin1String("SID"), req.sid().toString());
     }
 
     return setupData(requestHdr, mi);
@@ -375,11 +375,11 @@ QByteArray HHttpMessageCreator::create(
     Q_ASSERT(req.isValid(false));
 
     HHttpRequestHeader requestHdr(
-        "UNSUBSCRIBE", extractRequestPart(req.eventUrl()));
+        QLatin1String("UNSUBSCRIBE"), extractRequestPart(req.eventUrl()));
 
     mi->setHostInfo(req.eventUrl());
 
-    requestHdr.setValue("SID", req.sid().toString());
+    requestHdr.setValue(QLatin1String("SID"), req.sid().toString());
 
     return setupData(requestHdr, *mi);
 }
@@ -389,12 +389,12 @@ QByteArray HHttpMessageCreator::create(
 {
     Q_ASSERT(response.isValid(true));
 
-    HHttpResponseHeader responseHdr(200, "OK");
+    HHttpResponseHeader responseHdr(200, QLatin1String("OK"));
     responseHdr.setContentLength(0);
 
-    responseHdr.setValue("SID"    , response.sid().toString());
-    responseHdr.setValue("TIMEOUT", response.timeout().toString());
-    responseHdr.setValue("SERVER" , response.server().toString());
+    responseHdr.setValue(QLatin1String("SID")    , response.sid().toString());
+    responseHdr.setValue(QLatin1String("TIMEOUT"), response.timeout().toString());
+    responseHdr.setValue(QLatin1String("SERVER") , response.server().toString());
 
     return setupData(responseHdr, mi);
 }
@@ -404,23 +404,23 @@ int HHttpMessageCreator::create(
 {
     HLOG(H_AT, H_FUN);
 
-    QString nt     = reqHdr.value("NT" );
-    QString nts    = reqHdr.value("NTS");
-    QString sid    = reqHdr.value("SID");
-    QString seqStr = reqHdr.value("SEQ");
-    QString host   = reqHdr.value("HOST").trimmed();
+    QString nt     = reqHdr.value(QLatin1String("NT") );
+    QString nts    = reqHdr.value(QLatin1String("NTS"));
+    QString sid    = reqHdr.value(QLatin1String("SID"));
+    QString seqStr = reqHdr.value(QLatin1String("SEQ"));
+    QString host   = reqHdr.value(QLatin1String("HOST")).trimmed();
 
     QString deliveryPath = reqHdr.path().trimmed();
-    if (!deliveryPath.startsWith('/'))
+    if (!deliveryPath.startsWith(QLatin1Char('/')))
     {
-        deliveryPath.insert(0, '/');
+        deliveryPath.insert(0, QLatin1Char('/'));
     }
 
-    QUrl callbackUrl(QString("http://%1%2").arg(host, deliveryPath));
+    QUrl callbackUrl(QString(QLatin1String("http://%1%2")).arg(host, deliveryPath));
 
     HNotifyRequest nreq;
     HNotifyRequest::RetVal retVal =
-        nreq.setContents(callbackUrl, nt, nts, sid, seqStr, body);
+        nreq.setContents(callbackUrl, nt, nts, sid, seqStr, QLatin1String(body.data()));
 
     switch(retVal)
     {
@@ -449,18 +449,18 @@ int HHttpMessageCreator::create(
 {
     HLOG(H_AT, H_FUN);
 
-    QString nt         = reqHdr.value("NT");
-    QString callback   = reqHdr.value("CALLBACK").trimmed();
-    QString timeoutStr = reqHdr.value("TIMEOUT");
-    QString sid        = reqHdr.value("SID");
-    QString userAgent  = reqHdr.value("USER-AGENT");
-    QString host       = reqHdr.value("HOST");
-    QUrl servicePath   = reqHdr.path().trimmed();
+    QString nt         = reqHdr.value(QLatin1String("NT"));
+    QString callback   = reqHdr.value(QLatin1String("CALLBACK")).trimmed();
+    QString timeoutStr = reqHdr.value(QLatin1String("TIMEOUT"));
+    QString sid        = reqHdr.value(QLatin1String("SID"));
+    QString userAgent  = reqHdr.value(QLatin1String("USER-AGENT"));
+    QString host       = reqHdr.value(QLatin1String("HOST"));
+    QUrl servicePath   = QUrl(reqHdr.path().trimmed());
 
     HSubscribeRequest sreq;
     HSubscribeRequest::RetVal retVal =
         sreq.setContents(
-            nt, appendUrls("http://"+host, servicePath),
+            nt, appendUrls(QUrl(QString(QLatin1String("http://"))+host), servicePath),
             sid, callback, timeoutStr, userAgent);
 
     switch(retVal)
@@ -492,9 +492,9 @@ int HHttpMessageCreator::create(
 {
     HLOG(H_AT, H_FUN);
 
-    QString sid     = reqHdr.value("SID");
-    QUrl callback   = reqHdr.value("CALLBACK").trimmed();
-    QString hostStr = reqHdr.value("HOST").trimmed();
+    QString sid     = reqHdr.value(QLatin1String("SID"));
+    QUrl callback   = QUrl(reqHdr.value(QLatin1String("CALLBACK")).trimmed());
+    QString hostStr = reqHdr.value(QLatin1String("HOST")).trimmed();
 
     if (!callback.isEmpty())
     {
@@ -504,7 +504,7 @@ int HHttpMessageCreator::create(
     HUnsubscribeRequest usreq;
     HUnsubscribeRequest::RetVal retVal =
         usreq.setContents(
-            appendUrls("http://"+hostStr, reqHdr.path().trimmed()), sid);
+            appendUrls(QUrl(QString(QLatin1String("http://"))+hostStr), QUrl(reqHdr.path().trimmed())), sid);
 
     switch(retVal)
     {
@@ -534,11 +534,11 @@ bool HHttpMessageCreator::create(
         return false;
     }
 
-    HSid      sid     = HSid(respHdr.value("SID"));
-    HTimeout  timeout = HTimeout(respHdr.value("TIMEOUT"));
-    QString   server  = respHdr.value("SERVER");
+    HSid      sid     = HSid(respHdr.value(QLatin1String("SID")));
+    HTimeout  timeout = HTimeout(respHdr.value(QLatin1String("TIMEOUT")));
+    QString   server  = respHdr.value(QLatin1String("SERVER"));
     QDateTime date    =
-        QDateTime::fromString(respHdr.value("DATE"), HHttpUtils::rfc1123DateFormat());
+        QDateTime::fromString(respHdr.value(QLatin1String("DATE")), HHttpUtils::rfc1123DateFormat());
 
     resp = HSubscribeResponse(sid, HProductTokens(server), timeout, date);
     return resp.isValid(false);

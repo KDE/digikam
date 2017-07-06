@@ -120,7 +120,7 @@ public:
     CHECK_LEVEL(Warning) herqqLog__.logWarning(text, at);
 
 #define HLOG_WARN_NONSTD(text) \
-    CHECK_LEVEL(Warning) herqqLog__.logWarningNonStd(text);
+    CHECK_LEVEL(Debug) herqqLog__.logDebug(text);
 
 #define HLOG_WARN_NONSTD_AT(text, at) \
     CHECK_LEVEL(Warning) herqqLog__.logWarning(text, at);

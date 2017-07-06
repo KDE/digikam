@@ -58,7 +58,7 @@ HAbstractRenderingControlServicePrivate::~HAbstractRenderingControlServicePrivat
 qint32 HAbstractRenderingControlServicePrivate::listPresets(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -78,7 +78,7 @@ qint32 HAbstractRenderingControlServicePrivate::listPresets(
 qint32 HAbstractRenderingControlServicePrivate::selectPreset(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -90,7 +90,7 @@ qint32 HAbstractRenderingControlServicePrivate::selectPreset(
 qint32 HAbstractRenderingControlServicePrivate::getBrightness(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -110,7 +110,7 @@ qint32 HAbstractRenderingControlServicePrivate::getBrightness(
 qint32 HAbstractRenderingControlServicePrivate::setBrightness(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -122,7 +122,7 @@ qint32 HAbstractRenderingControlServicePrivate::setBrightness(
 qint32 HAbstractRenderingControlServicePrivate::getContrast(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -142,7 +142,7 @@ qint32 HAbstractRenderingControlServicePrivate::getContrast(
 qint32 HAbstractRenderingControlServicePrivate::setContrast(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -154,7 +154,7 @@ qint32 HAbstractRenderingControlServicePrivate::setContrast(
 qint32 HAbstractRenderingControlServicePrivate::getSharpness(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -174,7 +174,7 @@ qint32 HAbstractRenderingControlServicePrivate::getSharpness(
 qint32 HAbstractRenderingControlServicePrivate::setSharpness(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -186,7 +186,7 @@ qint32 HAbstractRenderingControlServicePrivate::setSharpness(
 qint32 HAbstractRenderingControlServicePrivate::getRedVideoGain(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -206,7 +206,7 @@ qint32 HAbstractRenderingControlServicePrivate::getRedVideoGain(
 qint32 HAbstractRenderingControlServicePrivate::setRedVideoGain(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -218,7 +218,7 @@ qint32 HAbstractRenderingControlServicePrivate::setRedVideoGain(
 qint32 HAbstractRenderingControlServicePrivate::getGreenVideoGain(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -238,7 +238,7 @@ qint32 HAbstractRenderingControlServicePrivate::getGreenVideoGain(
 qint32 HAbstractRenderingControlServicePrivate::setGreenVideoGain(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -250,7 +250,7 @@ qint32 HAbstractRenderingControlServicePrivate::setGreenVideoGain(
 qint32 HAbstractRenderingControlServicePrivate::getBlueVideoGain(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -270,7 +270,7 @@ qint32 HAbstractRenderingControlServicePrivate::getBlueVideoGain(
 qint32 HAbstractRenderingControlServicePrivate::setBlueVideoGain(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -282,7 +282,7 @@ qint32 HAbstractRenderingControlServicePrivate::setBlueVideoGain(
 qint32 HAbstractRenderingControlServicePrivate::getRedVideoBlackLevel(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -302,7 +302,7 @@ qint32 HAbstractRenderingControlServicePrivate::getRedVideoBlackLevel(
 qint32 HAbstractRenderingControlServicePrivate::setRedVideoBlackLevel(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -314,7 +314,7 @@ qint32 HAbstractRenderingControlServicePrivate::setRedVideoBlackLevel(
 qint32 HAbstractRenderingControlServicePrivate::getGreenVideoBlackLevel(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -334,7 +334,7 @@ qint32 HAbstractRenderingControlServicePrivate::getGreenVideoBlackLevel(
 qint32 HAbstractRenderingControlServicePrivate::setGreenVideoBlackLevel(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -346,7 +346,7 @@ qint32 HAbstractRenderingControlServicePrivate::setGreenVideoBlackLevel(
 qint32 HAbstractRenderingControlServicePrivate::getBlueVideoBlackLevel(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -366,7 +366,7 @@ qint32 HAbstractRenderingControlServicePrivate::getBlueVideoBlackLevel(
 qint32 HAbstractRenderingControlServicePrivate::setBlueVideoBlackLevel(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -378,7 +378,7 @@ qint32 HAbstractRenderingControlServicePrivate::setBlueVideoBlackLevel(
 qint32 HAbstractRenderingControlServicePrivate::getColorTemperature(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -398,7 +398,7 @@ qint32 HAbstractRenderingControlServicePrivate::getColorTemperature(
 qint32 HAbstractRenderingControlServicePrivate::setColorTemperature(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -410,7 +410,7 @@ qint32 HAbstractRenderingControlServicePrivate::setColorTemperature(
 qint32 HAbstractRenderingControlServicePrivate::getHorizontalKeystone(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -430,7 +430,7 @@ qint32 HAbstractRenderingControlServicePrivate::getHorizontalKeystone(
 qint32 HAbstractRenderingControlServicePrivate::setHorizontalKeystone(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -442,7 +442,7 @@ qint32 HAbstractRenderingControlServicePrivate::setHorizontalKeystone(
 qint32 HAbstractRenderingControlServicePrivate::getVerticalKeystone(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -462,7 +462,7 @@ qint32 HAbstractRenderingControlServicePrivate::getVerticalKeystone(
 qint32 HAbstractRenderingControlServicePrivate::setVerticalKeystone(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -474,7 +474,7 @@ qint32 HAbstractRenderingControlServicePrivate::setVerticalKeystone(
 qint32 HAbstractRenderingControlServicePrivate::getMute(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -495,7 +495,7 @@ qint32 HAbstractRenderingControlServicePrivate::getMute(
 qint32 HAbstractRenderingControlServicePrivate::setMute(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -508,7 +508,7 @@ qint32 HAbstractRenderingControlServicePrivate::setMute(
 qint32 HAbstractRenderingControlServicePrivate::getVolume(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -529,7 +529,7 @@ qint32 HAbstractRenderingControlServicePrivate::getVolume(
 qint32 HAbstractRenderingControlServicePrivate::setVolume(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -542,7 +542,7 @@ qint32 HAbstractRenderingControlServicePrivate::setVolume(
 qint32 HAbstractRenderingControlServicePrivate::getVolumeDB(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -563,7 +563,7 @@ qint32 HAbstractRenderingControlServicePrivate::getVolumeDB(
 qint32 HAbstractRenderingControlServicePrivate::setVolumeDB(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -576,7 +576,7 @@ qint32 HAbstractRenderingControlServicePrivate::setVolumeDB(
 qint32 HAbstractRenderingControlServicePrivate::getVolumeDBRange(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -598,7 +598,7 @@ qint32 HAbstractRenderingControlServicePrivate::getVolumeDBRange(
 qint32 HAbstractRenderingControlServicePrivate::getLoudness(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -619,7 +619,7 @@ qint32 HAbstractRenderingControlServicePrivate::getLoudness(
 qint32 HAbstractRenderingControlServicePrivate::setLoudness(
     const HActionArguments& inArgs, HActionArguments*)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -632,7 +632,7 @@ qint32 HAbstractRenderingControlServicePrivate::setLoudness(
 qint32 HAbstractRenderingControlServicePrivate::getStateVariables(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -653,7 +653,7 @@ qint32 HAbstractRenderingControlServicePrivate::getStateVariables(
 qint32 HAbstractRenderingControlServicePrivate::setStateVariables(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");

@@ -69,12 +69,12 @@ bool HSortModifier::ascending(bool* ok) const
 		break;
 	case VendorDefined:
 	default:
-		if (m_typeAsString.endsWith('+'))
+        if (m_typeAsString.endsWith(QLatin1Char('+')))
 		{
 			b = true;
 			determined = true;
 		}
-		else if (m_typeAsString.endsWith('-'))
+        else if (m_typeAsString.endsWith(QLatin1Char('-')))
 		{
 			determined = true;
 		}
@@ -95,16 +95,16 @@ QString HSortModifier::toString(Type type)
     switch(type)
     {
     case AscendingByValue:
-        retVal = "+";
+        retVal = QLatin1String("+");
         break;
     case AscendingByTime:
-        retVal = "TIME+";
+        retVal = QLatin1String("TIME+");
         break;
     case DescendingByValue:
-        retVal = "-";
+        retVal = QLatin1String("-");
         break;
     case DescendingByTime:
-        retVal = "TIME-";
+        retVal = QLatin1String("TIME-");
         break;
     default:
         break;
@@ -115,19 +115,19 @@ QString HSortModifier::toString(Type type)
 HSortModifier::Type HSortModifier::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("+", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("+"), Qt::CaseInsensitive) == 0)
     {
         retVal = AscendingByValue;
     }
-    else if (type.compare("-", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("-"), Qt::CaseInsensitive) == 0)
     {
         retVal = DescendingByValue;
     }
-    else if (type.compare("TIME+", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("TIME+"), Qt::CaseInsensitive) == 0)
     {
         retVal = AscendingByTime;
     }
-    else if (type.compare("TIME-", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("TIME-"), Qt::CaseInsensitive) == 0)
     {
         retVal = DescendingByTime;
     }

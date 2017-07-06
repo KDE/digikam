@@ -128,7 +128,7 @@ void HHttpAsyncOperation::sendChunked()
             bytesWritten = m_mi->socket().write(sizeLine);
             if (bytesWritten != sizeLine.size())
             {
-                m_mi->setLastErrorDescription("failed to send chunked data");
+                m_mi->setLastErrorDescription(QLatin1String("failed to send chunked data"));
                 done_(Internal_Failed);
                 return;
             }
@@ -142,7 +142,7 @@ void HHttpAsyncOperation::sendChunked()
 
         if (bytesWritten < 0)
         {
-            m_mi->setLastErrorDescription("failed to send chunked data");
+            m_mi->setLastErrorDescription(QLatin1String("failed to send chunked data"));
             done_(Internal_Failed);
             return;
         }
@@ -167,7 +167,7 @@ void HHttpAsyncOperation::sendChunked()
         bytesWritten = m_mi->socket().write(crlf, 2);
         if (bytesWritten != 2)
         {
-            m_mi->setLastErrorDescription("failed to send chunked data");
+            m_mi->setLastErrorDescription(QLatin1String("failed to send chunked data"));
             done_(Internal_Failed);
             return;
         }
@@ -203,7 +203,7 @@ void HHttpAsyncOperation::readBlob()
         if (retVal < 0)
         {
             m_mi->setLastErrorDescription(
-                QString("failed to read data: %1").arg(
+                QString(QLatin1String("failed to read data: %1")).arg(
                     m_mi->socket().errorString()));
 
             done_(Internal_Failed);
@@ -238,7 +238,7 @@ bool HHttpAsyncOperation::readChunkedSizeLine()
     if (!HHttpUtils::readLines(m_mi->socket(), buf, 1))
     {
         // No size line. It should be available at this point.
-        m_mi->setLastErrorDescription("missing chunk-size line");
+        m_mi->setLastErrorDescription(QLatin1String("missing chunk-size line"));
         done_(Internal_Failed);
         return false;
     }
@@ -256,7 +256,7 @@ bool HHttpAsyncOperation::readChunkedSizeLine()
     if (!ok || chunkSize < 0)
     {
         m_mi->setLastErrorDescription(
-            QString("invalid chunk-size line: %1").arg(
+            QString(QLatin1String("invalid chunk-size line: %1")).arg(
                   QString::fromUtf8(sizeLine)));
 
         done_(Internal_Failed);
@@ -286,7 +286,7 @@ bool HHttpAsyncOperation::readChunk()
     if (read < 0)
     {
         m_mi->setLastErrorDescription(QString(
-            "failed to read chunk: %1").arg(m_mi->socket().errorString()));
+            QLatin1String("failed to read chunk: %1")).arg(m_mi->socket().errorString()));
 
         done_(Internal_Failed);
         return false;
@@ -324,7 +324,7 @@ bool HHttpAsyncOperation::readHeader()
     if (!HHttpUtils::readLines(m_mi->socket(), m_dataRead, 2))
     {
         m_mi->setLastErrorDescription(QString(
-            "failed to read HTTP header: %1").arg(m_mi->socket().errorString()));
+           QLatin1String( "failed to read HTTP header: %1")).arg(m_mi->socket().errorString()));
 
         done_(Internal_Failed);
         return false;
@@ -343,7 +343,7 @@ bool HHttpAsyncOperation::readHeader()
 
     if (!m_headerRead->isValid())
     {
-        m_mi->setLastErrorDescription("read invalid HTTP header");
+        m_mi->setLastErrorDescription(QLatin1String("read invalid HTTP header"));
         done_(Internal_Failed);
         return false;
     }
@@ -359,7 +359,7 @@ bool HHttpAsyncOperation::readHeader()
             return false;
         }
     }
-    else if (m_headerRead->value("TRANSFER-ENCODING") != "chunked")
+    else if (m_headerRead->value(QLatin1String("TRANSFER-ENCODING")) != QLatin1String("chunked"))
     {
         done_(Internal_FinishedSuccessfully);
         return false;
@@ -376,13 +376,13 @@ bool HHttpAsyncOperation::readData()
         return false;
     }
 
-    bool chunked = m_headerRead->value("TRANSFER-ENCODING") == "chunked";
+    bool chunked = m_headerRead->value(QLatin1String("TRANSFER-ENCODING")) == QLatin1String("chunked");
     if (chunked)
     {
         if (m_headerRead->hasContentLength())
         {
-            m_mi->setLastErrorDescription("read invalid HTTP header where both "
-                "TRANSFER-ENCODING and CONTENT-LENGTH where defined");
+            m_mi->setLastErrorDescription(QLatin1String("read invalid HTTP header where both "
+                "TRANSFER-ENCODING and CONTENT-LENGTH where defined"));
 
             done_(Internal_Failed);
             return false;
@@ -421,7 +421,7 @@ bool HHttpAsyncOperation::run()
 
     if (m_mi->socket().state() != QTcpSocket::ConnectedState)
     {
-        m_mi->setLastErrorDescription("socket is not connected");
+        m_mi->setLastErrorDescription(QLatin1String("socket is not connected"));
         return false;
     }
 
@@ -440,8 +440,8 @@ bool HHttpAsyncOperation::run()
 
         if (m_dataSent != endOfHdr)
         {
-            m_mi->setLastErrorDescription(QString(
-                "failed to send HTTP header %1").arg(
+            m_mi->setLastErrorDescription(QString(QLatin1String(
+                "failed to send HTTP header %1")).arg(
                     m_mi->socket().errorString()));
 
             done_(Internal_Failed, false);
@@ -458,7 +458,7 @@ bool HHttpAsyncOperation::run()
         if (m_dataSent < 0)
         {
             m_mi->setLastErrorDescription(
-                QString("failed to send data: %1").arg(
+                QString(QLatin1String("failed to send data: %1")).arg(
                     m_mi->socket().errorString()));
 
             done_(Internal_Failed, false);
@@ -475,8 +475,8 @@ bool HHttpAsyncOperation::run()
             }
             else
             {
-                m_mi->setLastErrorDescription(QString(
-                    "failed to send data %1").arg(m_mi->socket().errorString()));
+                m_mi->setLastErrorDescription(QString(QLatin1String(
+                    "failed to send data %1")).arg(m_mi->socket().errorString()));
                 done_(Internal_Failed, false);
                 return false;
             }
@@ -513,7 +513,7 @@ void HHttpAsyncOperation::bytesWritten(qint64)
             if (dataSent < 0)
             {
                 m_mi->setLastErrorDescription(
-                    QString("failed to send data: %1").arg(
+                    QString(QLatin1String("failed to send data: %1")).arg(
                         m_mi->socket().errorString()));
 
                 done_(Internal_Failed);
@@ -599,8 +599,8 @@ void HHttpAsyncOperation::error(QAbstractSocket::SocketError err)
     }
     else if (m_dataToRead > 0)
     {
-        m_mi->setLastErrorDescription(
-            "remote host closed connection before all data could be read");
+        m_mi->setLastErrorDescription(QLatin1String(
+            "remote host closed connection before all data could be read"));
 
         done_(Internal_Failed);
         return;
@@ -610,7 +610,7 @@ void HHttpAsyncOperation::error(QAbstractSocket::SocketError err)
         if (m_dataRead.size() <= 0)
         {
             m_mi->setLastErrorDescription(
-                QString("failed to read HTTP header: %1").arg(m_mi->socket().errorString()));
+                QString(QLatin1String("failed to read HTTP header: %1")).arg(m_mi->socket().errorString()));
             done_(Internal_Failed);
             return;
         }
@@ -626,7 +626,7 @@ void HHttpAsyncOperation::error(QAbstractSocket::SocketError err)
 
         if (!m_headerRead->isValid())
         {
-            m_mi->setLastErrorDescription("read invalid HTTP header");
+            m_mi->setLastErrorDescription(QLatin1String("read invalid HTTP header"));
             done_(Internal_Failed);
             return;
         }

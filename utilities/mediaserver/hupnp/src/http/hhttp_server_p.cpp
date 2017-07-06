@@ -83,7 +83,7 @@ HHttpServer::HHttpServer(const QByteArray& loggingIdentifier, QObject* parent) :
 
 HHttpServer::~HHttpServer()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     close();
     qDeleteAll(m_servers);
@@ -91,7 +91,7 @@ HHttpServer::~HHttpServer()
 
 void HHttpServer::processRequest(HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HMessagingInfo* mi = op->messagingInfo();
 
@@ -107,7 +107,7 @@ void HHttpServer::processRequest(HHttpAsyncOperation* op)
         return;
     }
 
-    QString host = hdr->value("HOST");
+    QString host = hdr->value(QLatin1String("HOST"));
     if (host.isEmpty())
     {
         m_httpHandler->send(
@@ -121,27 +121,27 @@ void HHttpServer::processRequest(HHttpAsyncOperation* op)
     mi->setKeepAlive(HHttpUtils::keepAlive(*hdr));
 
     QString method = hdr->method();
-    if (method.compare("GET", Qt::CaseInsensitive) == 0)
+    if (method.compare(QLatin1String("GET"), Qt::CaseInsensitive) == 0)
     {
         processGet(op->takeMessagingInfo(), *hdr);
     }
-    else if (method.compare("HEAD"), Qt::CaseInsensitive)
+    else if (method.compare(QLatin1String("HEAD")), Qt::CaseInsensitive)
     {
         processHead(op->takeMessagingInfo(), *hdr);
     }
-    else if (method.compare("POST", Qt::CaseInsensitive) == 0)
+    else if (method.compare(QLatin1String("POST"), Qt::CaseInsensitive) == 0)
     {
         processPost(op->takeMessagingInfo(), *hdr, op->dataRead());
     }
-    else if (method.compare("NOTIFY", Qt::CaseInsensitive) == 0)
+    else if (method.compare(QLatin1String("NOTIFY"), Qt::CaseInsensitive) == 0)
     {
         processNotifyMessage(op->takeMessagingInfo(), *hdr, op->dataRead());
     }
-    else if (method.compare("SUBSCRIBE", Qt::CaseInsensitive) == 0)
+    else if (method.compare(QLatin1String("SUBSCRIBE"), Qt::CaseInsensitive) == 0)
     {
         processSubscription(op->takeMessagingInfo(), *hdr);
     }
-    else if (method.compare("UNSUBSCRIBE", Qt::CaseInsensitive) == 0)
+    else if (method.compare(QLatin1String("UNSUBSCRIBE"), Qt::CaseInsensitive) == 0)
     {
         processUnsubscription(op->takeMessagingInfo(), *hdr);
     }
@@ -155,11 +155,11 @@ void HHttpServer::processRequest(HHttpAsyncOperation* op)
 
 void HHttpServer::processResponse(HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     if (op->state() == HHttpAsyncOperation::Failed)
     {
-        HLOG_DBG(QString("HTTP failure: [%1]").arg(
+        HLOG_DBG(QString(QLatin1String("HTTP failure: [%1]")).arg(
             op->messagingInfo()->lastErrorDescription()));
     }
 
@@ -168,14 +168,14 @@ void HHttpServer::processResponse(HHttpAsyncOperation* op)
 
 void HHttpServer::msgIoComplete(HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     op->deleteLater();
 
     HMessagingInfo* mi = op->messagingInfo();
     if (op->state() == HHttpAsyncOperation::Failed)
     {
-        HLOG_DBG(QString("HTTP failure: [%1]").arg(mi->lastErrorDescription()));
+        HLOG_DBG(QString(QLatin1String("HTTP failure: [%1]")).arg(mi->lastErrorDescription()));
         return;
     }
 
@@ -188,8 +188,8 @@ void HHttpServer::msgIoComplete(HHttpAsyncOperation* op)
             {
                 if (!m_httpHandler->receive(op->takeMessagingInfo(), true))
                 {
-                    HLOG_WARN(QString(
-                        "Failed to read data from: [%1]. Disconnecting.").arg(
+                    HLOG_WARN(QString(QLatin1String(
+                        "Failed to read data from: [%1]. Disconnecting.")).arg(
                             peerAsStr(mi->socket())));
                 }
             }
@@ -212,28 +212,28 @@ void HHttpServer::msgIoComplete(HHttpAsyncOperation* op)
 
 void HHttpServer::processRequest(qint32 socketDescriptor)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QTcpSocket* client = new QTcpSocket(this);
     client->setSocketDescriptor(socketDescriptor);
 
     QString peer = peerAsStr(*client);
-    HLOG_DBG(QString("Incoming connection from [%1]").arg(peer));
+    HLOG_DBG(QString(QLatin1String("Incoming connection from [%1]")).arg(peer));
 
     HMessagingInfo* mi = new HMessagingInfo(qMakePair(client, true));
     mi->setChunkedInfo(m_chunkedInfo);
     mi->setServerInfo(HSysInfo::instance().herqqProductTokens());
     if (!m_httpHandler->receive(mi, true))
     {
-        HLOG_WARN(QString(
-            "Failed to read data from: [%1]. Disconnecting.").arg(peer));
+        HLOG_WARN(QString(QLatin1String(
+            "Failed to read data from: [%1]. Disconnecting.")).arg(peer));
     }
 }
 
 void HHttpServer::processNotifyMessage(
     HMessagingInfo* mi, const HHttpRequestHeader& hdr, const QByteArray& body)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HNotifyRequest nreq;
     HNotifyRequest::RetVal retVal =
@@ -263,23 +263,23 @@ void HHttpServer::processNotifyMessage(
         return;
     }
 
-    HLOG_DBG("Dispatching event notification.");
+    HLOG_DBG(QLatin1String("Dispatching event notification."));
     incomingNotifyMessage(mi, nreq);
 }
 
 void HHttpServer::processGet(
     HMessagingInfo* mi, const HHttpRequestHeader& requestHdr)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_DBG("Dispatching unknown GET request.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_DBG(QLatin1String("Dispatching unknown GET request."));
     incomingUnknownGetRequest(mi, requestHdr);
 }
 
 void HHttpServer::processHead(
     HMessagingInfo* mi, const HHttpRequestHeader& requestHdr)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_DBG("Dispatching unknown HEAD request.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_DBG(QLatin1String("Dispatching unknown HEAD request."));
     incomingUnknownHeadRequest(mi, requestHdr);
 }
 
@@ -287,20 +287,20 @@ void HHttpServer::processPost(
     HMessagingInfo* mi, const HHttpRequestHeader& requestHdr,
     const QByteArray& body)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    QString soapAction  = requestHdr.value("SOAPACTION");
-    if (soapAction.indexOf("#") <= 0)
+    QString soapAction  = requestHdr.value(QLatin1String("SOAPACTION"));
+    if (soapAction.indexOf(QLatin1String("#")) <= 0)
     {
-        HLOG_DBG("Dispatching unknown POST request.");
+        HLOG_DBG(QLatin1String("Dispatching unknown POST request."));
         incomingUnknownPostRequest(mi, requestHdr, body);
         return;
     }
 
-    QString actionName = soapAction.mid(soapAction.indexOf("#"));
+    QString actionName = soapAction.mid(soapAction.indexOf(QLatin1String("#")));
     if (actionName.isEmpty())
     {
-        HLOG_DBG("Dispatching unknown POST request.");
+        HLOG_DBG(QLatin1String("Dispatching unknown POST request."));
         incomingUnknownPostRequest(mi, requestHdr, body);
         return;
     }
@@ -321,15 +321,15 @@ void HHttpServer::processPost(
         return;
     }
 
-    HInvokeActionRequest iareq(soapAction, soapMsg, controlUrl);
-    HLOG_DBG("Dispatching control request.");
+    HInvokeActionRequest iareq(soapAction, soapMsg, QUrl(controlUrl));
+    HLOG_DBG(QLatin1String("Dispatching control request."));
     incomingControlRequest(mi, iareq);
 }
 
 void HHttpServer::processSubscription(
     HMessagingInfo* mi, const HHttpRequestHeader& hdr)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HSubscribeRequest sreq;
     HSubscribeRequest::RetVal retVal =
@@ -363,14 +363,14 @@ void HHttpServer::processSubscription(
         return;
     }
 
-    HLOG_DBG("Dispatching subscription request.");
+    HLOG_DBG(QLatin1String("Dispatching subscription request."));
     incomingSubscriptionRequest(mi, sreq);
 }
 
 void HHttpServer::processUnsubscription(
     HMessagingInfo* mi, const HHttpRequestHeader& hdr)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HUnsubscribeRequest usreq;
     HUnsubscribeRequest::RetVal retVal =
@@ -404,13 +404,13 @@ void HHttpServer::processUnsubscription(
         return;
     }
 
-    HLOG_DBG("Dispatching unsubscription request.");
+    HLOG_DBG(QLatin1String("Dispatching unsubscription request."));
     incomingUnsubscriptionRequest(mi, usreq);
 }
 
 bool HHttpServer::setupIface(const HEndpoint& ep)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QHostAddress ha = ep.hostAddress();
     if (ha == QHostAddress::Null || ha == QHostAddress::Any ||
@@ -423,7 +423,7 @@ bool HHttpServer::setupIface(const HEndpoint& ep)
     bool b = server->listen(ha, ep.portNumber());
     if (b)
     {
-        HLOG_INFO(QString("HTTP server bound to %1:%2").arg(
+        HLOG_INFO(QString(QLatin1String("HTTP server bound to %1:%2")).arg(
             server->serverAddress().toString(),
             QString::number(server->serverPort())));
 
@@ -431,7 +431,7 @@ bool HHttpServer::setupIface(const HEndpoint& ep)
     }
     else
     {
-        HLOG_INFO(QString("Failed to bind HTTP server to %1").arg(
+        HLOG_INFO(QString(QLatin1String("Failed to bind HTTP server to %1")).arg(
             ep.hostAddress().toString()));
     }
 
@@ -441,8 +441,8 @@ bool HHttpServer::setupIface(const HEndpoint& ep)
 void HHttpServer::incomingSubscriptionRequest(
     HMessagingInfo* mi, const HSubscribeRequest&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingSubscriptionRequest] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingSubscriptionRequest] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -450,8 +450,8 @@ void HHttpServer::incomingSubscriptionRequest(
 void HHttpServer::incomingUnsubscriptionRequest(
     HMessagingInfo* mi, const HUnsubscribeRequest&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingUnsubscriptionRequest] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingUnsubscriptionRequest] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -459,8 +459,8 @@ void HHttpServer::incomingUnsubscriptionRequest(
 void HHttpServer::incomingControlRequest(
     HMessagingInfo* mi, const HInvokeActionRequest&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingControlRequest] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingControlRequest] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -468,8 +468,8 @@ void HHttpServer::incomingControlRequest(
 void HHttpServer::incomingNotifyMessage(
     HMessagingInfo* mi, const HNotifyRequest&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingNotifyMessage] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingNotifyMessage] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -477,8 +477,8 @@ void HHttpServer::incomingNotifyMessage(
 void HHttpServer::incomingUnknownHeadRequest(
     HMessagingInfo* mi, const HHttpRequestHeader&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingUnknownHeadRequest] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingUnknownHeadRequest] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -486,8 +486,8 @@ void HHttpServer::incomingUnknownHeadRequest(
 void HHttpServer::incomingUnknownGetRequest(
     HMessagingInfo* mi, const HHttpRequestHeader&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingUnknownGetRequest] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingUnknownGetRequest] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -495,8 +495,8 @@ void HHttpServer::incomingUnknownGetRequest(
 void HHttpServer::incomingUnknownPostRequest(
     HMessagingInfo* mi, const HHttpRequestHeader&, const QByteArray&)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingUnknownGetRequest] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingUnknownGetRequest] implementation, which does nothing."));
     mi->setKeepAlive(false);
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(MethotNotAllowed, *mi));
 }
@@ -504,8 +504,8 @@ void HHttpServer::incomingUnknownPostRequest(
 void HHttpServer::incomingResponse(
     HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
-    HLOG_WARN("Calling default [incomingResponse] implementation, which does nothing.");
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
+    HLOG_WARN(QLatin1String("Calling default [incomingResponse] implementation, which does nothing."));
     op->messagingInfo()->setKeepAlive(false);
 }
 
@@ -519,7 +519,7 @@ QList<QUrl> HHttpServer::rootUrls() const
     QList<QUrl> retVal;
     foreach(const Server* server, m_servers)
     {
-        QUrl url(QString("http://%1:%2").arg(
+        QUrl url(QString(QLatin1String("http://%1:%2")).arg(
             server->serverAddress().toString(),
             QString::number(server->serverPort())));
 
@@ -535,7 +535,7 @@ QUrl HHttpServer::rootUrl(const QHostAddress& ha) const
     {
         if (ha == server->serverAddress())
         {
-            QUrl url(QString("http://%1:%2").arg(
+            QUrl url(QString(QLatin1String("http://%1:%2")).arg(
                 server->serverAddress().toString(),
                 QString::number(server->serverPort())));
 
@@ -558,7 +558,7 @@ QList<HEndpoint> HHttpServer::endpoints() const
 
 bool HHttpServer::init()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
     if (isInitialized())
@@ -572,7 +572,7 @@ bool HHttpServer::init()
 
 bool HHttpServer::init(const HEndpoint& ep)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
     if (isInitialized())
@@ -585,7 +585,7 @@ bool HHttpServer::init(const HEndpoint& ep)
 
 bool HHttpServer::init(const QList<HEndpoint>& eps)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
     if (isInitialized())
@@ -615,7 +615,7 @@ bool HHttpServer::isInitialized() const
 
 void HHttpServer::close()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT_X(
         thread() == QThread::currentThread(), H_AT,

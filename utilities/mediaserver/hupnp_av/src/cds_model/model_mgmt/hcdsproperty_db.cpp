@@ -214,7 +214,7 @@ bool HCdsPropertyDbPrivate::serializeClassInfoIn(
         inc = toBool(attrs.value("includeDerived").toString(), &ok);
         if (!ok)
         {
-            HLOG_WARN("Value of attribute [includeDerived] is invalid.");
+            HLOG_WARN(QLatin1String("Value of attribute [includeDerived] is invalid."));
             inc = true;
         }
     }

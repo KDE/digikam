@@ -64,10 +64,10 @@ QString HChannelId::toString(Type type)
     switch(type)
     {
     case SeriesId:
-        retVal = "SI_SERIESID";
+        retVal = QLatin1String("SI_SERIESID");
         break;
     case ProgramId:
-        retVal = "SI_PROGRAMID";
+        retVal = QLatin1String("SI_PROGRAMID");
         break;
     default:
         break;
@@ -83,18 +83,18 @@ HChannelId::HChannelId() :
 HChannelId::HChannelId(const QString& arg, const QString& type) :
     h_ptr(new HChannelIdPrivate())
 {
-    if (type == "SI_SERIESID")
+    if (type == QLatin1String("SI_SERIESID"))
     {
-        if (arg.split(",").size() == 4)
+        if (arg.split(QLatin1String(",")).size() == 4)
         {
             h_ptr->m_value = arg;
             h_ptr->m_type = SeriesId;
             h_ptr->m_typeAsString = type;
         }
     }
-    else if (type == "SI_PROGRAMID")
+    else if (type == QLatin1String("SI_PROGRAMID"))
     {
-        if (arg.split(",").size() == 4)
+        if (arg.split(QLatin1String(",")).size() == 4)
         {
             h_ptr->m_value = arg;
             h_ptr->m_type = ProgramId;
@@ -103,7 +103,7 @@ HChannelId::HChannelId(const QString& arg, const QString& type) :
     }
     else if (!type.isEmpty())
     {
-        if (arg.indexOf("_") > 1)
+        if (arg.indexOf(QLatin1String("_")) > 1)
         {
             h_ptr->m_value = arg;
             h_ptr->m_type = VendorDefined;

@@ -94,10 +94,10 @@ QString HScheduledTime::toString(Type type)
     switch(type)
     {
     case ScheduledProgram:
-        retVal = "SCHEDULED_PROGRAM";
+        retVal = QLatin1String("SCHEDULED_PROGRAM");
         break;
     case OnDemand:
-        retVal = "ON_DEMAND";
+        retVal = QLatin1String("ON_DEMAND");
         break;
     default:
         break;
@@ -108,11 +108,11 @@ QString HScheduledTime::toString(Type type)
 HScheduledTime::Type HScheduledTime::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("SCHEDULED_PROGRAM", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("SCHEDULED_PROGRAM"), Qt::CaseInsensitive) == 0)
     {
         retVal = ScheduledProgram;
     }
-    else if (type.compare("ON_DEMAND", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("ON_DEMAND"), Qt::CaseInsensitive) == 0)
     {
         retVal = OnDemand;
     }

@@ -98,7 +98,7 @@ HServiceEventSubscriber::HServiceEventSubscriber(
             m_expired(false),
             m_loggingIdentifier(loggingIdentifier)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(service);
     Q_ASSERT(location.isValid());
@@ -127,7 +127,7 @@ HServiceEventSubscriber::HServiceEventSubscriber(
 
 HServiceEventSubscriber::~HServiceEventSubscriber()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
     HLOG_DBG(QString(
@@ -137,7 +137,7 @@ HServiceEventSubscriber::~HServiceEventSubscriber()
 
 bool HServiceEventSubscriber::connectToHost()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(QThread::currentThread() == m_socket->thread());
     Q_ASSERT(m_socket.data());
@@ -161,7 +161,7 @@ bool HServiceEventSubscriber::connectToHost()
 
 void HServiceEventSubscriber::msgIoComplete(HHttpAsyncOperation* operation)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     operation->deleteLater();
 
@@ -201,7 +201,7 @@ void HServiceEventSubscriber::msgIoComplete(HHttpAsyncOperation* operation)
 
 void HServiceEventSubscriber::send()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     if (m_messagesToSend.isEmpty() || !connectToHost() || !m_socket->isValid())
     {
@@ -242,7 +242,7 @@ void HServiceEventSubscriber::send()
 
 void HServiceEventSubscriber::subscriptionTimeout()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     m_expired = true;
 
@@ -258,7 +258,7 @@ void HServiceEventSubscriber::subscriptionTimeout()
 
 bool HServiceEventSubscriber::isInterested(const HServerService* service) const
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     return !expired() && m_seq && m_service->isEvented() &&
             m_service->info().serviceId() == service->info().serviceId();
@@ -266,7 +266,7 @@ bool HServiceEventSubscriber::isInterested(const HServerService* service) const
 
 void HServiceEventSubscriber::renew(const HTimeout& newTimeout)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -285,7 +285,7 @@ void HServiceEventSubscriber::renew(const HTimeout& newTimeout)
 
 void HServiceEventSubscriber::notify(const QByteArray& msgBody)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(QThread::currentThread() == thread());
 
     m_messagesToSend.enqueue(msgBody);
@@ -300,7 +300,7 @@ void HServiceEventSubscriber::notify(const QByteArray& msgBody)
 bool HServiceEventSubscriber::initialNotify(
     const QByteArray& msg, HMessagingInfo* mi)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(!m_seq);
 

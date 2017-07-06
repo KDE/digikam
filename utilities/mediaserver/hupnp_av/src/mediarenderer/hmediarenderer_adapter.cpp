@@ -255,7 +255,7 @@ void HMediaRendererAdapter::getCurrentConnectionIDsCompleted(
 
         if (curConInfoOp.isNull())
         {
-            HLOG_WARN("Failed to dispatch GetCurrentConnectionInfo() request");
+            HLOG_WARN(QLatin1String("Failed to dispatch GetCurrentConnectionInfo() request"));
             continue;
         }
 

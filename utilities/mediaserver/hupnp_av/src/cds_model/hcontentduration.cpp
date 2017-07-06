@@ -65,10 +65,10 @@ HContentDuration::HContentDuration() :
 HContentDuration::HContentDuration(const QString& arg) :
     h_ptr(new HContentDurationPrivate())
 {
-    if (arg.size() >= 6 && arg[0] == 'P')
+    if (arg.size() >= 6 && arg[0] == QLatin1Char('P'))
     {
         int days = 0;
-        int iDays = arg.indexOf('D');
+        int iDays = arg.indexOf(QLatin1Char('D'));
         if (iDays > 1)
         {
             bool ok = false;
@@ -138,8 +138,8 @@ QString HContentDuration::toString() const
         return QString();
     }
 
-    return QString("P%1%2").arg(
-        days() > 1 ? QString::number(days()).append(QString('D')) : QString(),
+    return QString(QLatin1String("P%1%2")).arg(
+        days() > 1 ? QString::number(days()).append(QString(QLatin1Char('D'))) : QString(),
         time().toString(Qt::ISODate));
 }
 

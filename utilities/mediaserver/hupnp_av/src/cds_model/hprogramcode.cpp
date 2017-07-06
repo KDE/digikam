@@ -58,7 +58,7 @@ HProgramCode::HProgramCode(const QString& value, const QString& type) :
     QString typeTrimmed = type.trimmed();
     if (!valueTrimmed.isEmpty())
     {
-        int index = typeTrimmed.indexOf("_");
+        int index = typeTrimmed.indexOf(QLatin1String("_"));
         if (index > 3 && !typeTrimmed.mid(index+1).isEmpty())
         {
             // You really cannot express a valid domain in less than four characters.

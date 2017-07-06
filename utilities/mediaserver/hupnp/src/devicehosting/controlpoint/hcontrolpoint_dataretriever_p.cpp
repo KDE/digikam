@@ -46,7 +46,7 @@ HDataRetriever::HDataRetriever(const QByteArray& loggingId) :
 
 void HDataRetriever::finished()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     quit();
 
@@ -64,7 +64,7 @@ void HDataRetriever::finished()
 bool HDataRetriever::retrieveData(
     const QUrl& baseUrl, const QUrl& query, QByteArray* data)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QString queryPart = extractRequestPart(query);
 
@@ -101,7 +101,7 @@ bool HDataRetriever::retrieveData(
 
 void HDataRetriever::timerEvent(QTimerEvent* event)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HLOG_WARN(QString("Request timed out."));
 
@@ -114,7 +114,7 @@ void HDataRetriever::timerEvent(QTimerEvent* event)
 bool HDataRetriever::retrieveServiceDescription(
     const QUrl& deviceLocation, const QUrl& scpdUrl, QString* data)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HLOG_DBG(QString(
         "Attempting to fetch a service description for [%1] from: [%2]").arg(
@@ -133,7 +133,7 @@ bool HDataRetriever::retrieveServiceDescription(
 bool HDataRetriever::retrieveIcon(
     const QUrl& deviceLocation, const QUrl& iconUrl, QByteArray* data)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HLOG_DBG(QString(
         "Attempting to retrieve icon [%1] from: [%2]").arg(
@@ -145,7 +145,7 @@ bool HDataRetriever::retrieveIcon(
 bool HDataRetriever::retrieveDeviceDescription(
     const QUrl& deviceLocation, QString* data)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     HLOG_DBG(QString(
         "Attempting to fetch a device description from: [%1]").arg(

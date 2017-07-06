@@ -41,7 +41,7 @@ DeviceHostDataRetriever::DeviceHostDataRetriever(
 bool DeviceHostDataRetriever::retrieveServiceDescription(
     const QUrl& /*deviceLocation*/, const QUrl& scpdUrl, QString* retVal)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     QString localScpdPath;
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
@@ -85,7 +85,7 @@ bool DeviceHostDataRetriever::retrieveServiceDescription(
 bool DeviceHostDataRetriever::retrieveIcon(
     const QUrl& /*devLoc*/, const QUrl& iconUrl, QByteArray* retVal)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QString localIconPath = iconUrl.toLocalFile();
     if (localIconPath.startsWith('/'))
@@ -122,7 +122,7 @@ bool DeviceHostDataRetriever::retrieveIcon(
 bool DeviceHostDataRetriever::retrieveDeviceDescription(
     const QString& filePath, QString* retVal)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly))

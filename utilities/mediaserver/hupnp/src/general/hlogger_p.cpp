@@ -41,8 +41,7 @@ HLogger::HLogger(const char* at, const char* methodName, const char* logPrefix) 
 {
     if (traceLevel() == All)
     {
-        QString stmt = (m_logPrefix ? QString(m_logPrefix) : QString()).append(
-            QString("Entering %1 @ %2").arg(m_methodName, at));
+        QString stmt = (m_logPrefix ? QString(QLatin1String(m_logPrefix)) : QString()).append(QString(QLatin1String("Entering %1 @ %2")).arg(QLatin1String(m_methodName), QLatin1String(at)));
 
         qDebug() << stmt;
     }
@@ -52,8 +51,7 @@ HLogger::~HLogger()
 {
     if (traceLevel() == All)
     {
-        QString stmt = (m_logPrefix ? QString(m_logPrefix) : QString()).append(
-            QString("Exiting %1").arg(m_methodName));
+        QString stmt = (m_logPrefix ? QString(QLatin1String(m_logPrefix)) : QString()).append(QString(QLatin1String("Exiting %1")).arg(QLatin1String(m_methodName)));
 
         qDebug() << stmt;
     }
@@ -63,7 +61,7 @@ namespace
 {
 inline QString stmt(const char* prefix, const QString& text)
 {
-    return (prefix ? QString(prefix) : QString()).append(text);
+    return (prefix ? QString(QLatin1String(prefix)) : QString()).append(text);
 }
 }
 
@@ -82,7 +80,7 @@ void HLogger::logWarningNonStd(const QString& text)
     if (s_nonStdWarningsEnabled)
     {
         qWarning() << stmt(
-            m_logPrefix, QString("**NON-STANDARD BEHAVIOR**: %1").arg(text));
+            m_logPrefix, QString(QLatin1String("**NON-STANDARD BEHAVIOR**: %1")).arg(text));
     }
 }
 
@@ -121,7 +119,7 @@ void HLogger::logWarningNonStd_(const QString& text)
 {
     if (traceLevel() && s_nonStdWarningsEnabled)
     {
-        qWarning() << QString("**NON-STANDARD BEHAVIOR**: %1").arg(text);
+        qWarning() << QString(QLatin1String("**NON-STANDARD BEHAVIOR**: %1")).arg(text);
     }
 }
 

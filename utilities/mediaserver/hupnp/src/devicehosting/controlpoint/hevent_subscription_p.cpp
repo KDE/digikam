@@ -65,7 +65,7 @@ HEventSubscription::HEventSubscription(
             m_nextOpType(Op_None),
             m_subscribed(false)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(m_service);
     Q_ASSERT(!m_serverRootUrl.isEmpty());
@@ -108,12 +108,12 @@ HEventSubscription::HEventSubscription(
 
 HEventSubscription::~HEventSubscription()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 }
 
 void HEventSubscription::subscriptionTimeout()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     m_subscriptionTimer.stop();
 
@@ -129,13 +129,13 @@ void HEventSubscription::subscriptionTimeout()
 
 void HEventSubscription::announcementTimeout()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     m_announcementTimedOut = true;
 }
 
 void HEventSubscription::resetSubscription()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     m_seq = 0;
     m_sid = HSid();
@@ -155,7 +155,7 @@ void HEventSubscription::resetSubscription()
 
 void HEventSubscription::runNextOp()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     OperationType curOp = m_currentOpType;
     m_currentOpType = Op_None;
@@ -181,7 +181,7 @@ void HEventSubscription::runNextOp()
 
 void HEventSubscription::connected()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     bool ok = disconnect(
         &m_socket, SIGNAL(error(QAbstractSocket::SocketError)),
@@ -195,7 +195,7 @@ void HEventSubscription::connected()
 
 void HEventSubscription::msgIoComplete(HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(op);
 
@@ -252,7 +252,7 @@ void HEventSubscription::msgIoComplete(HHttpAsyncOperation* op)
 
 void HEventSubscription::renewSubscription_done(HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(!m_sid.isEmpty());
     Q_ASSERT(m_currentOpType == Op_Renew);
@@ -305,7 +305,7 @@ void HEventSubscription::renewSubscription_done(HHttpAsyncOperation* op)
 
 void HEventSubscription::renewSubscription()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     if (m_currentOpType != Op_None || m_sid.isEmpty())
     {
@@ -344,7 +344,7 @@ void HEventSubscription::renewSubscription()
 
 void HEventSubscription::resubscribe()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     if (m_sid.isEmpty())
     {
@@ -358,7 +358,7 @@ void HEventSubscription::resubscribe()
 
 void HEventSubscription::error(QAbstractSocket::SocketError /*err*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     // this can be called only when connecting to host
 
@@ -381,7 +381,7 @@ void HEventSubscription::error(QAbstractSocket::SocketError /*err*/)
 
 bool HEventSubscription::connectToDevice(qint32 msecsToWait)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(m_currentOpType != Op_None);
 
@@ -414,7 +414,7 @@ bool HEventSubscription::connectToDevice(qint32 msecsToWait)
 
 void HEventSubscription::subscribe_done(HHttpAsyncOperation* op)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(m_sid.isEmpty());
     Q_ASSERT(m_currentOpType == Op_Subscribe);
@@ -459,7 +459,7 @@ void HEventSubscription::subscribe_done(HHttpAsyncOperation* op)
 
 void HEventSubscription::subscribe()
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     switch(m_currentOpType)
     {
@@ -486,7 +486,7 @@ void HEventSubscription::subscribe()
 
     if (!m_sid.isEmpty())
     {
-        HLOG_DBG("Ignoring subscription request, since subscription is already active");
+        HLOG_DBG(QLatin1String("Ignoring subscription request, since subscription is already active"));
         return;
     }
 
@@ -526,7 +526,7 @@ void HEventSubscription::subscribe()
 
 StatusCode HEventSubscription::processNotify(const HNotifyRequest& req)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     HLOG_DBG(QString("Processing notification [sid: %1, seq: %2].").arg(
         m_sid.toString(), QString::number(req.seq())));
 
@@ -570,7 +570,7 @@ StatusCode HEventSubscription::processNotify(const HNotifyRequest& req)
 
 StatusCode HEventSubscription::onNotify(const HNotifyRequest& req)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     if (!m_subscribed)
     {
         if (m_currentOpType == Op_Subscribe || m_currentOpType == Op_Renew)
@@ -580,7 +580,7 @@ StatusCode HEventSubscription::onNotify(const HNotifyRequest& req)
         }
         else
         {
-            HLOG_WARN("Ignoring notify: subscription inactive.");
+            HLOG_WARN(QLatin1String("Ignoring notify: subscription inactive."));
             return PreconditionFailed;
         }
     }
@@ -590,7 +590,7 @@ StatusCode HEventSubscription::onNotify(const HNotifyRequest& req)
 
 void HEventSubscription::unsubscribe_done(HHttpAsyncOperation* /*op*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     Q_ASSERT(!m_sid.isEmpty());
     Q_ASSERT(m_currentOpType == Op_Unsubscribe);
@@ -604,7 +604,7 @@ void HEventSubscription::unsubscribe_done(HHttpAsyncOperation* /*op*/)
 
 void HEventSubscription::unsubscribe(qint32 msecsToWait)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     switch(m_currentOpType)
     {
@@ -673,7 +673,7 @@ void HEventSubscription::unsubscribe(qint32 msecsToWait)
 
 HEventSubscription::SubscriptionStatus HEventSubscription::subscriptionStatus() const
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     if (m_subscribed)
     {
         return Status_Subscribed;

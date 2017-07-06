@@ -66,7 +66,7 @@ HDateTimeRange::HDateTimeRange() :
 HDateTimeRange::HDateTimeRange(const QString& value, HDaylightSaving dlSaving) :
     h_ptr(new HDateTimeRangePrivate())
 {
-    int index = value.indexOf('/');
+    int index = value.indexOf(QLatin1Char('/'));
     if (index > 0)
     {
         QDateTime start = QDateTime::fromString(value.left(index), Qt::ISODate);
@@ -126,7 +126,7 @@ QString HDateTimeRange::toString() const
     {
         return QString();
     }
-    return QString("%1/%2").arg(
+    return QString(QLatin1String("%1/%2")).arg(
             startTime().toString(Qt::ISODate), endTime().toString(Qt::ISODate));
 }
 

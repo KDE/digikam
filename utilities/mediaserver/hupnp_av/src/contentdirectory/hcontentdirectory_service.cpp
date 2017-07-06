@@ -121,7 +121,7 @@ public:
 qint32 HContentDirectoryServicePrivate::sort(
     const QStringList& sortCriteria, QList<HObject*>& objects)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HContentDirectoryService);
 
     QStringList sortExtensions;
@@ -197,7 +197,7 @@ qint32 HContentDirectoryServicePrivate::browseDirectChildren(
     const QStringList& sortCriteria, quint32 startingIndex,
     quint32 requestedCount, HSearchResult* result)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HContentDirectoryService);
 
     HContainer* container = m_dataSource->findContainer(containerId);
@@ -261,7 +261,7 @@ qint32 HContentDirectoryServicePrivate::browseMetadata(
     const QString& objectId, const QSet<QString>& filter, quint32 startingIndex,
     HSearchResult* result)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HContentDirectoryService);
 
     if (startingIndex)

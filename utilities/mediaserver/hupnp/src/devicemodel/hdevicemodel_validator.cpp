@@ -83,7 +83,7 @@ HDeviceModelValidator::ValidationResult
                 if (serviceSetup.inclusionRequirement() == InclusionMandatory)
                 {
                     m_lastErrorDescription =
-                        QString("Mandatory service [%1] is missing").arg(
+                        QString(QLatin1String("Mandatory service [%1] is missing")).arg(
                             srvId.toString());
 
                     return HDeviceModelValidator::MandatoryServiceMissing;
@@ -116,7 +116,7 @@ HDeviceModelValidator::ValidationResult
                 deviceSetup.inclusionRequirement() == InclusionMandatory)
             {
                 m_lastErrorDescription =
-                    QString("Mandatory device [%1] is missing").arg(
+                    QString(QLatin1String("Mandatory device [%1] is missing")).arg(
                         devType.toString());
 
                 return HDeviceModelValidator::MandatoryDeviceMissing;
@@ -177,7 +177,7 @@ HDeviceModelValidator::ValidationResult
                 if (actionSetup.inclusionRequirement() == InclusionMandatory)
                 {
                     m_lastErrorDescription =
-                        QString("Mandatory action [%1] is missing").arg(
+                        QString(QLatin1String("Mandatory action [%1] is missing")).arg(
                             actionName);
 
                     return HDeviceModelValidator::MandatoryActionMissing;
@@ -191,7 +191,7 @@ HDeviceModelValidator::ValidationResult
                 if (res != HDeviceModelValidator::ValidationSucceeded)
                 {
                     m_lastErrorDescription =
-                        QString("Action [%1] failed validation: %2").arg(
+                        QString(QLatin1String("Action [%1] failed validation: %2")).arg(
                             actionName, m_lastErrorDescription);
 
                     return res;
@@ -217,7 +217,7 @@ HDeviceModelValidator::ValidationResult
                 if (svInfo.inclusionRequirement() == InclusionMandatory)
                 {
                     m_lastErrorDescription =
-                        QString("Mandatory state variable [%1] is missing").arg(
+                        QString(QLatin1String("Mandatory state variable [%1] is missing")).arg(
                             svName);
 
                     return HDeviceModelValidator::MandatoryStateVariableMissing;
@@ -231,7 +231,7 @@ HDeviceModelValidator::ValidationResult
                 if (res != HDeviceModelValidator::ValidationSucceeded)
                 {
                     m_lastErrorDescription =
-                        QString("State Variable [%1] failed validation: %2").arg(
+                        QString(QLatin1String("State Variable [%1] failed validation: %2")).arg(
                             svName, m_lastErrorDescription);
 
                     return res;
@@ -262,7 +262,7 @@ HDeviceModelValidator::ValidationResult
         if (!arg.isValid())
         {
             m_lastErrorDescription =
-                QString("Mandatory action argument [%1] is missing").arg(
+                QString(QLatin1String("Mandatory action argument [%1] is missing")).arg(
                     argName);
 
             return HDeviceModelValidator::MandatoryActionArgumentMissing;
@@ -270,7 +270,7 @@ HDeviceModelValidator::ValidationResult
         else if (arg.dataType() != argSetup.dataType())
         {
             m_lastErrorDescription =
-                QString("Invalid data type specified in action argument [%1]").arg(
+                QString(QLatin1String("Invalid data type specified in action argument [%1]")).arg(
                     argName);
 
             return HDeviceModelValidator::InvalidArgumentDefinition;
@@ -285,7 +285,7 @@ HDeviceModelValidator::ValidationResult
         if (!arg.isValid())
         {
             m_lastErrorDescription =
-                QString("Mandatory action argument [%1] is missing").arg(
+                QString(QLatin1String("Mandatory action argument [%1] is missing")).arg(
                     argName);
 
             return HDeviceModelValidator::MandatoryActionArgumentMissing;
@@ -293,7 +293,7 @@ HDeviceModelValidator::ValidationResult
         else if (arg.dataType() != argSetup.dataType())
         {
             m_lastErrorDescription =
-                QString("Invalid data type specified in action argument [%1]").arg(
+                QString(QLatin1String("Invalid data type specified in action argument [%1]")).arg(
                     argName);
 
             return HDeviceModelValidator::InvalidArgumentDefinition;
@@ -331,7 +331,7 @@ HDeviceModelValidator::ValidationResult
     if (stateVar->info().dataType() != svInfo.dataType())
     {
         m_lastErrorDescription =
-            QString("Invalid data type specified. Was [%1], expected [%2].").arg(
+            QString(QLatin1String("Invalid data type specified. Was [%1], expected [%2].")).arg(
                 HUpnpDataTypes::toString(stateVar->info().dataType()),
                 HUpnpDataTypes::toString(svInfo.dataType()));
 

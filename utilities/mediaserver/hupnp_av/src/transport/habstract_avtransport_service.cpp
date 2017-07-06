@@ -71,7 +71,7 @@ HAbstractTransportServicePrivate::~HAbstractTransportServicePrivate()
 qint32 HAbstractTransportServicePrivate::setAVTransportURI(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -84,7 +84,7 @@ qint32 HAbstractTransportServicePrivate::setAVTransportURI(
 qint32 HAbstractTransportServicePrivate::setNextAVTransportURI(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -97,7 +97,7 @@ qint32 HAbstractTransportServicePrivate::setNextAVTransportURI(
 qint32 HAbstractTransportServicePrivate::getMediaInfo(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -125,7 +125,7 @@ qint32 HAbstractTransportServicePrivate::getMediaInfo(
 qint32 HAbstractTransportServicePrivate::getMediaInfo_ext(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -154,7 +154,7 @@ qint32 HAbstractTransportServicePrivate::getMediaInfo_ext(
 qint32 HAbstractTransportServicePrivate::getTransportInfo(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -176,7 +176,7 @@ qint32 HAbstractTransportServicePrivate::getTransportInfo(
 qint32 HAbstractTransportServicePrivate::getPositionInfo(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -203,7 +203,7 @@ qint32 HAbstractTransportServicePrivate::getPositionInfo(
 qint32 HAbstractTransportServicePrivate::getDeviceCapabilities(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -247,7 +247,7 @@ qint32 HAbstractTransportServicePrivate::getDeviceCapabilities(
 qint32 HAbstractTransportServicePrivate::getTransportSettings(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -268,7 +268,7 @@ qint32 HAbstractTransportServicePrivate::getTransportSettings(
 qint32 HAbstractTransportServicePrivate::stop(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -279,7 +279,7 @@ qint32 HAbstractTransportServicePrivate::stop(
 qint32 HAbstractTransportServicePrivate::play(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -291,7 +291,7 @@ qint32 HAbstractTransportServicePrivate::play(
 qint32 HAbstractTransportServicePrivate::pause(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -302,7 +302,7 @@ qint32 HAbstractTransportServicePrivate::pause(
 qint32 HAbstractTransportServicePrivate::record(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -313,7 +313,7 @@ qint32 HAbstractTransportServicePrivate::record(
 qint32 HAbstractTransportServicePrivate::seek(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -327,7 +327,7 @@ qint32 HAbstractTransportServicePrivate::seek(
 qint32 HAbstractTransportServicePrivate::next(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -338,7 +338,7 @@ qint32 HAbstractTransportServicePrivate::next(
 qint32 HAbstractTransportServicePrivate::previous(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -349,7 +349,7 @@ qint32 HAbstractTransportServicePrivate::previous(
 qint32 HAbstractTransportServicePrivate::setPlayMode(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -361,7 +361,7 @@ qint32 HAbstractTransportServicePrivate::setPlayMode(
 qint32 HAbstractTransportServicePrivate::setRecordQualityMode(
     const HActionArguments& inArgs, HActionArguments* /*outArgs*/)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     quint32 instanceId = inArgs.value("InstanceID").toUInt();
@@ -374,7 +374,7 @@ qint32 HAbstractTransportServicePrivate::setRecordQualityMode(
 qint32 HAbstractTransportServicePrivate::getCurrentTransportActions(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -400,7 +400,7 @@ qint32 HAbstractTransportServicePrivate::getCurrentTransportActions(
 qint32 HAbstractTransportServicePrivate::getDRMState(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -420,7 +420,7 @@ qint32 HAbstractTransportServicePrivate::getDRMState(
 qint32 HAbstractTransportServicePrivate::getStateVariables(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
@@ -441,7 +441,7 @@ qint32 HAbstractTransportServicePrivate::getStateVariables(
 qint32 HAbstractTransportServicePrivate::setStateVariables(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
