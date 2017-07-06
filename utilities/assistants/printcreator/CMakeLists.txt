@@ -29,9 +29,7 @@ set(libprintcreator_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcaptionpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcroppage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcustomdlg.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintoptionspage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcropframe.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintimagesconfig.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintwizard.cpp
 )
 
@@ -40,7 +38,6 @@ ki18n_wrap_ui(libprintcreator_SRCS
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcroppage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcaptionpage.ui
               ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintcustomlayout.ui
-              ${CMAKE_CURRENT_SOURCE_DIR}/ui/advprintoptionspage.ui
 )
 
 add_library(printcreator_src OBJECT ${libprintcreator_SRCS})
