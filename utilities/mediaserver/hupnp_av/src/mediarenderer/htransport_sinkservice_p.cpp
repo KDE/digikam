@@ -402,7 +402,7 @@ qint32 HTransportSinkService::getStateVariables(
     quint32 instanceId, const QSet<QString>& stateVariableNames,
     QString* stateVariableValuePairs)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     Q_ASSERT(stateVariableValuePairs);
 
@@ -417,21 +417,21 @@ qint32 HTransportSinkService::getStateVariables(
 
     writer.setCodec("UTF-8");
     writer.writeStartDocument();
-    writer.writeStartElement("stateVariableValuePairs");
-    writer.writeDefaultNamespace("urn:schemas-upnp-org:av:avs");
-    writer.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    writer.writeAttribute("xsi:schemaLocation",
+    writer.writeStartElement(QLatin1String("stateVariableValuePairs"));
+    writer.writeDefaultNamespace(QLatin1String("urn:schemas-upnp-org:av:avs"));
+    writer.writeAttribute(QLatin1String("xmlns:xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
+    writer.writeAttribute(QLatin1String("xsi:schemaLocation"),QLatin1String(
         "urn:schemas-upnp-org:av:avs " \
-        "http://www.upnp.org/schemas/av/avs.xsd");
+        "http://www.upnp.org/schemas/av/avs.xsd"));
 
     QSet<QString> stateVarNames;
-    if (stateVariableNames.contains("*"))
+    if (stateVariableNames.contains(QLatin1String("*")))
     {
         stateVarNames = HAvTransportInfo::stateVariablesSetupData().names();
         QSet<QString>::iterator it = stateVarNames.begin();
         for(; it != stateVarNames.end();)
         {
-            if (it->startsWith("A_ARG") || *it == "LastChange")
+            if (it->startsWith(QLatin1String("A_ARG")) || *it == QLatin1String("LastChange"))
             {
                 it = stateVarNames.erase(it);
             }
@@ -449,8 +449,8 @@ qint32 HTransportSinkService::getStateVariables(
     foreach(QString svName, stateVarNames)
     {
         svName = svName.trimmed();
-        if (svName.compare("LastChange", Qt::CaseInsensitive) == 0 ||
-            svName.startsWith("A_ARG", Qt::CaseInsensitive))
+        if (svName.compare(QLatin1String("LastChange"), Qt::CaseInsensitive) == 0 ||
+            svName.startsWith(QLatin1String("A_ARG"), Qt::CaseInsensitive))
         {
             return HAvTransportInfo::InvalidStateVariableList;
         }
@@ -459,14 +459,14 @@ qint32 HTransportSinkService::getStateVariables(
         QString value = mediaConnection->rendererConnectionInfo()->value(svName, &ok);
         if (ok)
         {
-            writer.writeStartElement("stateVariable");
-            writer.writeAttribute("variableName", svName);
+            writer.writeStartElement(QLatin1String("stateVariable"));
+            writer.writeAttribute(QLatin1String("variableName"), svName);
             writer.writeCharacters(value);
             writer.writeEndElement();
         }
         else
         {
-            HLOG_WARN(QString("Could not get the value of state variable [%1]").arg(svName));
+            HLOG_WARN(QString(QLatin1String("Could not get the value of state variable [%1]")).arg(svName));
             return HAvTransportInfo::InvalidStateVariableList;
         }
     }
@@ -481,7 +481,7 @@ qint32 HTransportSinkService::setStateVariables(
     const HResourceType& serviceType, const HServiceId& serviceId,
     const QString& stateVariableValuePairs, QStringList* stateVariableList)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     Q_ASSERT(stateVariableList);
 
@@ -493,7 +493,7 @@ qint32 HTransportSinkService::setStateVariables(
 
     if (avtUdn.isValid(LooseChecks) && avtUdn != parentDevice()->info().udn())
     {
-        HLOG_WARN(QString("setStateVariables() invoked with invalid UDN [%1]").arg(avtUdn.toString()));
+        HLOG_WARN(QString(QLatin1String("setStateVariables() invoked with invalid UDN [%1]")).arg(avtUdn.toString()));
         return UpnpInvalidArgs;
     }
     else if (serviceType.isValid() &&
@@ -521,7 +521,7 @@ qint32 HTransportSinkService::setStateVariables(
     {
         if (reader.error() != QXmlStreamReader::NoError)
         {
-            HLOG_WARN(QString("XML parse failed: %1").arg(reader.errorString()));
+            HLOG_WARN(QString(QLatin1String("XML parse failed: %1")).arg(reader.errorString()));
         }
         return UpnpInvalidArgs;
     }
@@ -530,16 +530,16 @@ qint32 HTransportSinkService::setStateVariables(
     while(!reader.atEnd() && reader.readNextStartElement())
     {
         QStringRef name = reader.name();
-        if (name == "stateVariable")
+        if (name == QLatin1String("stateVariable"))
         {
             QXmlStreamAttributes attrs = reader.attributes();
-            if (!attrs.hasAttribute(QString("variableName")))
+            if (!attrs.hasAttribute(QString(QLatin1String("variableName"))))
             {
-                HLOG_WARN(QString("Ignoring state variable value pair definition that lacks the [variableName] attribute."));
+                HLOG_WARN(QString(QLatin1String("Ignoring state variable value pair definition that lacks the [variableName] attribute.")));
             }
             else
             {
-                QString svName = attrs.value("variableName").toString();
+                QString svName = attrs.value(QLatin1String("variableName")).toString();
                 QString value = reader.readElementText().trimmed();
 
                 if (mediaConnection->setValue(svName, value))
@@ -548,7 +548,7 @@ qint32 HTransportSinkService::setStateVariables(
                 }
                 else
                 {
-                    HLOG_WARN(QString("Could not set the value of state variable [%1]").arg(svName));
+                    HLOG_WARN(QString(QLatin1String("Could not set the value of state variable [%1]")).arg(svName));
                     stateVariableList->removeDuplicates();
                     return HAvTransportInfo::InvalidStateVariableValue;
                 }
@@ -556,7 +556,7 @@ qint32 HTransportSinkService::setStateVariables(
         }
         else
         {
-            HLOG_WARN(QString("Encountered unknown XML element: [%1]").arg(name.toString()));
+            HLOG_WARN(QString(QLatin1String("Encountered unknown XML element: [%1]")).arg(name.toString()));
         }
     }
 

@@ -54,7 +54,7 @@ class HDataRetriever :
 Q_OBJECT
 H_DISABLE_COPY(HDataRetriever)
 
-private slots:
+private Q_SLOTS :
 
     void finished();
 

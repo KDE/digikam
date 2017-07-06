@@ -86,7 +86,7 @@ void HHttpStreamer::bytesWritten(qint64 written)
         m_read = m_dataToSend->read(m_buf, m_bufSize);
         if (m_read <= 0)
         {
-            HLOG_WARN(QString("Failed to read data from the data source: [%1]").arg(
+            HLOG_WARN(QString(QLatin1String("Failed to read data from the data source: [%1]")).arg(
                 m_dataToSend->errorString()));
 
             deleteLater();
@@ -99,7 +99,7 @@ void HHttpStreamer::bytesWritten(qint64 written)
     written = m_mi->socket().write(m_buf + m_written, m_read - m_written);
     if (written == -1)
     {
-        HLOG_WARN(QString("Failed to send data: %1").arg(m_mi->socket().errorString()));
+        HLOG_WARN(QString(QLatin1String("Failed to send data: %1")).arg(m_mi->socket().errorString()));
         deleteLater();
     }
 }
@@ -112,9 +112,9 @@ void HHttpStreamer::send()
     qint64 wrote = m_mi->socket().write(m_header);
     if (wrote < m_header.size())
     {
-        HLOG_WARN(QString(
+        HLOG_WARN(QString(QLatin1String(
             "Failed to send HTTP header to the destination: [%1]. "
-            "Aborting data transfer.").arg(m_mi->socket().errorString()));
+            "Aborting data transfer.")).arg(m_mi->socket().errorString()));
 
         deleteLater();
     }
@@ -140,7 +140,7 @@ void HConnectionManagerHttpServer::incomingUnknownGetRequest(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QScopedPointer<QIODevice> dev(
-        m_owner->m_dataSource->loadItemData(hdr.path().remove('/')));
+        m_owner->m_dataSource->loadItemData(hdr.path().remove(QLatin1Char('/'))));
 
     if (dev)
     {
@@ -194,7 +194,7 @@ HConnectionManagerSourceService::HConnectionManagerSourceService(
 
 HConnectionManagerSourceService::~HConnectionManagerSourceService()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
     delete m_httpServer;
 }
 
@@ -202,7 +202,7 @@ bool HConnectionManagerSourceService::finalizeInit(QString* /*errDescription*/)
 {
     if (sourceProtocolInfo().isEmpty())
     {
-        setSourceProtocolInfo(HProtocolInfo("http-get:*:*:*"));
+        setSourceProtocolInfo(HProtocolInfo(QLatin1String("http-get:*:*:*")));
     }
 
     if (connectionIds().isEmpty())
@@ -261,12 +261,12 @@ void HConnectionManagerSourceService::addLocation(HItem* item)
             {
                 QString rootUrl =
                     rootUrls[urlsIndex++ % rootUrls.size()].
-                        toString().append('/').append(item->id());
+                        toString().append(QLatin1Char('/')).append(item->id());
 
-                resources[i].setLocation(rootUrl);
+                resources[i].setLocation((QUrl)rootUrl);
 
                 HProtocolInfo pi = resources[i].protocolInfo();
-                pi.setProtocol("http-get");
+                pi.setProtocol(QLatin1String("http-get"));
 
                 resources[i].setProtocolInfo(pi);
 
@@ -276,10 +276,10 @@ void HConnectionManagerSourceService::addLocation(HItem* item)
         if (!added)
         {
             HProtocolInfo pi = resources[0].protocolInfo();
-            pi.setProtocol("http-get");
+            pi.setProtocol(QLatin1String("http-get"));
 
-            HResource res(
-                rootUrls[0].toString().append('/').append(item->id()), pi);
+            HResource res((QUrl)
+                rootUrls[0].toString().append(QLatin1Char('/')).append(item->id()), pi);
 
             resources.append(res);
         }
@@ -288,7 +288,7 @@ void HConnectionManagerSourceService::addLocation(HItem* item)
     {
         foreach(const QUrl& rootUrl, rootUrls)
         {
-            QUrl location(rootUrl.toString().append('/').append(item->id()));
+            QUrl location(rootUrl.toString().append(QLatin1Char('/')).append(item->id()));
             HResource resource(location, sourceProtocolInfo()[0]);
             resources.append(resource);
         }
@@ -299,7 +299,7 @@ void HConnectionManagerSourceService::addLocation(HItem* item)
 
 bool HConnectionManagerSourceService::init()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!m_httpServer->init())
     {

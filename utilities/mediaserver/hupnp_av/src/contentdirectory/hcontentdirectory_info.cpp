@@ -58,16 +58,16 @@ HContentDirectoryInfo::~HContentDirectoryInfo()
 
 QString HContentDirectoryInfo::browseFlagToString(BrowseFlag flag)
 {
-    QString retVal = "";
+    QString retVal = QLatin1String("");
     switch(flag)
     {
     case Undefined:
         break;;
     case BrowseMetadata:
-        retVal = "BrowseMetadata";
+        retVal = QLatin1String("BrowseMetadata");
         break;
     case BrowseDirectChildren:
-        retVal = "BrowseDirectChildren";
+        retVal = QLatin1String("BrowseDirectChildren");
         break;
     default:
         Q_ASSERT(false);
@@ -80,11 +80,11 @@ HContentDirectoryInfo::BrowseFlag
     HContentDirectoryInfo::browseFlagFromString(const QString& arg)
 {
     BrowseFlag retVal = Undefined;
-    if (arg.compare("BrowseMetadata", Qt::CaseInsensitive) == 0)
+    if (arg.compare(QLatin1String("BrowseMetadata"), Qt::CaseInsensitive) == 0)
     {
         retVal = BrowseMetadata;
     }
-    else if (arg.compare("BrowseDirectChildren", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("BrowseDirectChildren"), Qt::CaseInsensitive) == 0)
     {
         retVal = BrowseDirectChildren;
     }
@@ -93,8 +93,8 @@ HContentDirectoryInfo::BrowseFlag
 
 const HResourceType& HContentDirectoryInfo::supportedServiceType()
 {
-    static HResourceType retVal(
-        "urn:schemas-upnp-org:service:ContentDirectory:3");
+    static HResourceType retVal(QLatin1String(
+        "urn:schemas-upnp-org:service:ContentDirectory:3"));
 
     return retVal;
 }
@@ -103,41 +103,41 @@ HActionsSetupData HContentDirectoryInfo::actionsSetupData()
 {
     HActionsSetupData retVal;
 
-    retVal.insert(HActionSetup("GetSearchCapabilities"));
-    retVal.insert(HActionSetup("GetSortCapabilities"));
+    retVal.insert(HActionSetup(QLatin1String("GetSearchCapabilities")));
+    retVal.insert(HActionSetup(QLatin1String("GetSortCapabilities")));
 
-    HActionSetup setup("GetSortExtensionCapabilities", InclusionOptional);
+    HActionSetup setup(QLatin1String("GetSortExtensionCapabilities"), InclusionOptional);
     setup.setVersion(2);
     retVal.insert(setup);
 
-    setup = HActionSetup("GetFeatureList");
+    setup = HActionSetup(QLatin1String("GetFeatureList"));
     setup.setVersion(2);
     retVal.insert(setup);
 
-    retVal.insert(HActionSetup("GetSystemUpdateID"));
+    retVal.insert(HActionSetup(QLatin1String("GetSystemUpdateID")));
 
-    setup = HActionSetup("GetServiceResetToken");
+    setup = HActionSetup(QLatin1String("GetServiceResetToken"));
     setup.setVersion(3);
     retVal.insert(setup);
 
-    retVal.insert(HActionSetup("Browse"));
-    retVal.insert(HActionSetup("Search", InclusionOptional));
-    retVal.insert(HActionSetup("CreateObject", InclusionOptional));
-    retVal.insert(HActionSetup("DestroyObject", InclusionOptional));
-    retVal.insert(HActionSetup("UpdateObject", InclusionOptional));
-    retVal.insert(HActionSetup("MoveObject", InclusionOptional));
-    retVal.insert(HActionSetup("ImportResource", InclusionOptional));
-    retVal.insert(HActionSetup("ExportResource", InclusionOptional));
-    retVal.insert(HActionSetup("DeleteResource", InclusionOptional));
-    retVal.insert(HActionSetup("StopTransferResource", InclusionOptional));
-    retVal.insert(HActionSetup("GetTransferProgress", InclusionOptional));
-    retVal.insert(HActionSetup("CreateReference", InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("Browse")));
+    retVal.insert(HActionSetup(QLatin1String("Search"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("CreateObject"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("DestroyObject"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("UpdateObject"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("MoveObject"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("ImportResource"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("ExportResource"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("DeleteResource"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("StopTransferResource"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("GetTransferProgress"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("CreateReference"), InclusionOptional));
 
-    setup = HActionSetup("FreeFormQuery", InclusionOptional);
+    setup = HActionSetup(QLatin1String("FreeFormQuery"), InclusionOptional);
     setup.setVersion(3);
     retVal.insert(setup);
 
-    setup = HActionSetup("GetFreeFormQueryCapabilities", InclusionOptional);
+    setup = HActionSetup(QLatin1String("GetFreeFormQueryCapabilities"), InclusionOptional);
     setup.setVersion(3);
     retVal.insert(setup);
 
@@ -148,63 +148,63 @@ HStateVariablesSetupData HContentDirectoryInfo::stateVariablesSetupData()
 {
     HStateVariablesSetupData retVal;
 
-    retVal.insert(HStateVariableInfo("SearchCapabilities", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("SortCapabilities", HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("SearchCapabilities"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("SortCapabilities"), HUpnpDataTypes::string));
 
-    HStateVariableInfo svInfo("SortExtensionCapabilities", HUpnpDataTypes::string, InclusionOptional);
+    HStateVariableInfo svInfo(QLatin1String("SortExtensionCapabilities"), HUpnpDataTypes::string, InclusionOptional);
     svInfo.setVersion(2);
     retVal.insert(svInfo);
 
-    retVal.insert(HStateVariableInfo("SystemUpdateID", HUpnpDataTypes::ui4));
-    retVal.insert(HStateVariableInfo("ContainerUpdateIDs", HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("SystemUpdateID"), HUpnpDataTypes::ui4));
+    retVal.insert(HStateVariableInfo(QLatin1String("ContainerUpdateIDs"), HUpnpDataTypes::string, InclusionOptional));
 
-    svInfo = HStateVariableInfo("ServiceResetToken", HUpnpDataTypes::string);
+    svInfo = HStateVariableInfo(QLatin1String("ServiceResetToken"), HUpnpDataTypes::string);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 
-    svInfo = HStateVariableInfo("LastChange", HUpnpDataTypes::string, InclusionOptional);
+    svInfo = HStateVariableInfo(QLatin1String("LastChange"), HUpnpDataTypes::string, InclusionOptional);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 
-    retVal.insert(HStateVariableInfo("TransferIDs", HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("TransferIDs"), HUpnpDataTypes::string, InclusionOptional));
 
-    svInfo = HStateVariableInfo("FeatureList", HUpnpDataTypes::string);
+    svInfo = HStateVariableInfo(QLatin1String("FeatureList"), HUpnpDataTypes::string);
     svInfo.setVersion(2);
     retVal.insert(svInfo);
 
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_ObjectID", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_Result", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_SearchCriteria", HUpnpDataTypes::string, InclusionOptional));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_BrowseFlag", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_Filter", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_SortCriteria", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_Index", HUpnpDataTypes::ui4));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_Count", HUpnpDataTypes::ui4));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_UpdateID", HUpnpDataTypes::ui4));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_TransferID", HUpnpDataTypes::ui4, InclusionOptional));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_TransferStatus", HUpnpDataTypes::string, InclusionOptional));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_TransferLength", HUpnpDataTypes::string, InclusionOptional));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_TransferTotal", HUpnpDataTypes::string, InclusionOptional));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_TagValueList", HUpnpDataTypes::string, InclusionOptional));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_URI", HUpnpDataTypes::uri, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_ObjectID"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_Result"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_SearchCriteria"), HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_BrowseFlag"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_Filter"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_SortCriteria"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_Index"), HUpnpDataTypes::ui4));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_Count"), HUpnpDataTypes::ui4));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_UpdateID"), HUpnpDataTypes::ui4));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_TransferID"), HUpnpDataTypes::ui4, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_TransferStatus"), HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_TransferLength"), HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_TransferTotal"), HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_TagValueList"), HUpnpDataTypes::string, InclusionOptional));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_URI"), HUpnpDataTypes::uri, InclusionOptional));
 
-    svInfo = HStateVariableInfo("A_ARG_TYPE_CDSView", HUpnpDataTypes::ui4, InclusionOptional);
+    svInfo = HStateVariableInfo(QLatin1String("A_ARG_TYPE_CDSView"), HUpnpDataTypes::ui4, InclusionOptional);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 
-    svInfo = HStateVariableInfo("A_ARG_TYPE_TagValueList", HUpnpDataTypes::string, InclusionOptional);
+    svInfo = HStateVariableInfo(QLatin1String("A_ARG_TYPE_TagValueList"), HUpnpDataTypes::string, InclusionOptional);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 
-    svInfo = HStateVariableInfo("A_ARG_TYPE_QueryRequest", HUpnpDataTypes::string, InclusionOptional);
+    svInfo = HStateVariableInfo(QLatin1String("A_ARG_TYPE_QueryRequest"), HUpnpDataTypes::string, InclusionOptional);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 
-    svInfo = HStateVariableInfo("A_ARG_TYPE_QueryResult", HUpnpDataTypes::string, InclusionOptional);
+    svInfo = HStateVariableInfo(QLatin1String("A_ARG_TYPE_QueryResult"), HUpnpDataTypes::string, InclusionOptional);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 
-    svInfo = HStateVariableInfo("A_ARG_TYPE_FFQCapabilities", HUpnpDataTypes::string, InclusionOptional);
+    svInfo = HStateVariableInfo(QLatin1String("A_ARG_TYPE_FFQCapabilities"), HUpnpDataTypes::string, InclusionOptional);
     svInfo.setVersion(3);
     retVal.insert(svInfo);
 

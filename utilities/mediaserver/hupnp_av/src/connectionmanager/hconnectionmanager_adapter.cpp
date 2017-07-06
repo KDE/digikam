@@ -55,7 +55,7 @@ namespace
 HProtocolInfos parse(const QString& protocolInfos)
 {
     HProtocolInfos retVal;
-    QStringList sourceCsv = protocolInfos.split(',');
+    QStringList sourceCsv = protocolInfos.split(QLatin1Char(','));
     foreach(const QString& str, sourceCsv)
     {
         HProtocolInfo pi = str;
@@ -70,7 +70,7 @@ HProtocolInfos parse(const QString& protocolInfos)
 QList<quint32> parseIDs(const QString& ids)
 {
     QList<quint32> retVal;
-    QStringList idsCsv = ids.split(",");
+    QStringList idsCsv = ids.split(QLatin1String(","));
     foreach(const QString& str, idsCsv)
     {
         bool ok = false;
@@ -107,8 +107,8 @@ bool HConnectionManagerAdapterPrivate::getProtocolInfo(
     {
         HActionArguments outArgs = op.outputArguments();
 
-        QString sourceStr = outArgs.value("Source").toString();
-        QString sinkStr   = outArgs.value("Sink").toString();
+        QString sourceStr = outArgs.value(QLatin1String("Source")).toString();
+        QString sinkStr   = outArgs.value(QLatin1String("Sink")).toString();
 
         source = parse(sourceStr);
         sink = parse(sinkStr);
@@ -130,9 +130,9 @@ bool HConnectionManagerAdapterPrivate::prepareForConnection(
     {
         HActionArguments outArgs = op.outputArguments();
 
-        qint32 connectionId = outArgs.value("ConnectionID").toInt();
-        qint32 avTransportId = outArgs.value("AVTransportID").toInt();
-        qint32 rcsId = outArgs.value("RcsID").toInt();
+        qint32 connectionId = outArgs.value(QLatin1String("ConnectionID")).toInt();
+        qint32 avTransportId = outArgs.value(QLatin1String("AVTransportID")).toInt();
+        qint32 rcsId = outArgs.value(QLatin1String("RcsID")).toInt();
 
         result.setConnectionId(connectionId);
         result.setAvTransportId(avTransportId);
@@ -159,7 +159,7 @@ bool HConnectionManagerAdapterPrivate::getCurrentConnectionIDs(
     QList<quint32> connectionIds;
     if (op.returnValue() == UpnpSuccess)
     {
-        connectionIds = parseIDs(op.outputArguments().value("ConnectionIDs").toString());
+        connectionIds = parseIDs(op.outputArguments().value(QLatin1String("ConnectionIDs")).toString());
     }
     emit q->getCurrentConnectionIDsCompleted(q, takeOp(op, connectionIds));
 
@@ -177,22 +177,22 @@ bool HConnectionManagerAdapterPrivate::getCurrentConnectionInfo(
     {
         HActionArguments outArgs = op.outputArguments();
 
-        qint32 rcsId = outArgs.value("RcsID").toInt();
-        qint32 avTransportId = outArgs.value("AVTransportID").toInt();
-        QString protocolInfo = outArgs.value("ProtocolInfo").toString();
-        QString peerCm = outArgs.value("PeerConnectionManager").toString();
-        qint32 peerCid = outArgs.value("PeerConnectionID").toInt();
-        QString dirStr = outArgs.value("Direction").toString();
-        QString statusStr = outArgs.value("Status").toString();
+        qint32 rcsId = outArgs.value(QLatin1String("RcsID")).toInt();
+        qint32 avTransportId = outArgs.value(QLatin1String("AVTransportID")).toInt();
+        QString protocolInfo = outArgs.value(QLatin1String("ProtocolInfo")).toString();
+        QString peerCm = outArgs.value(QLatin1String("PeerConnectionManager")).toString();
+        qint32 peerCid = outArgs.value(QLatin1String("PeerConnectionID")).toInt();
+        QString dirStr = outArgs.value(QLatin1String("Direction")).toString();
+        QString statusStr = outArgs.value(QLatin1String("Status")).toString();
 
         qint32 connectionId = m_connectionIds.value(op.id());
 
         HProtocolInfo pinfo(protocolInfo);
         if (!pinfo.isValid())
         {
-            HLOG_WARN_NONSTD(
+            HLOG_WARN_NONSTD(QLatin1String(
                 "Received invalid ProtocolInfo information. Assuming all fields were "
-                "meant to be wild-cards");
+                "meant to be wild-cards"));
             pinfo = HProtocolInfo::createUsingWildcards();
         }
 
@@ -249,7 +249,7 @@ void HConnectionManagerAdapter::currentConnectionIDsChanged_(
 bool HConnectionManagerAdapter::prepareService(HClientService* service)
 {
     const HClientStateVariable* source =
-        service->stateVariables().value("SourceProtocolInfo");
+        service->stateVariables().value(QLatin1String("SourceProtocolInfo"));
 
     bool ok = connect(
         source,
@@ -263,7 +263,7 @@ bool HConnectionManagerAdapter::prepareService(HClientService* service)
     Q_ASSERT(ok); Q_UNUSED(ok)
 
     const HClientStateVariable* sink =
-        service->stateVariables().value("SinkProtocolInfo");
+        service->stateVariables().value(QLatin1String("SinkProtocolInfo"));
 
     ok = connect(
         sink,
@@ -277,7 +277,7 @@ bool HConnectionManagerAdapter::prepareService(HClientService* service)
     Q_ASSERT(ok);
 
     const HClientStateVariable* cids =
-        service->stateVariables().value("CurrentConnectionIDs");
+        service->stateVariables().value(QLatin1String("CurrentConnectionIDs"));
 
     ok = connect(
         cids,
@@ -298,10 +298,10 @@ HClientAdapterOp<HProtocolInfoResult> HConnectionManagerAdapter::getProtocolInfo
     H_D(HConnectionManagerAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetProtocolInfo", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetProtocolInfo"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HProtocolInfoResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HProtocolInfoResult>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -315,10 +315,10 @@ HClientAdapterOp<QList<quint32> > HConnectionManagerAdapter::getCurrentConnectio
     H_D(HConnectionManagerAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetCurrentConnectionIDs", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetCurrentConnectionIDs"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QList<quint32> >::createInvalid(rc, "");
+        return HClientAdapterOp<QList<quint32> >::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -333,14 +333,14 @@ HClientAdapterOp<HConnectionInfo>
     H_D(HConnectionManagerAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetCurrentConnectionInfo", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetCurrentConnectionInfo"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HConnectionInfo>::createInvalid(rc, "");
+        return HClientAdapterOp<HConnectionInfo>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("ConnectionID", QString::number(connectionId));
+    inArgs.setValue(QLatin1String("ConnectionID"), QString::number(connectionId));
 
     HClientActionOp op = action->beginInvoke(inArgs,
         HActionInvokeCallback(h, &HConnectionManagerAdapterPrivate::getCurrentConnectionInfo));
@@ -359,28 +359,28 @@ HClientAdapterOp<HPrepareForConnectionResult> HConnectionManagerAdapter::prepare
     H_D(HConnectionManagerAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("PrepareForConnection", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("PrepareForConnection"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("RemoteProtocolInfo", remoteProtocolInfo.toString()))
+    if (!inArgs.setValue(QLatin1String("RemoteProtocolInfo"), remoteProtocolInfo.toString()))
     {
-        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("PeerConnectionManager", peerConnectionManager.toString()))
+    if (!inArgs.setValue(QLatin1String("PeerConnectionManager"), peerConnectionManager.toString()))
     {
-        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("PeerConnectionID", QString::number(peerConnectionId)))
+    if (!inArgs.setValue(QLatin1String("PeerConnectionID"), QString::number(peerConnectionId)))
     {
-        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("Direction", HConnectionManagerInfo::directionToString(direction)))
+    if (!inArgs.setValue(QLatin1String("Direction"), HConnectionManagerInfo::directionToString(direction)))
     {
-        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HPrepareForConnectionResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<HPrepareForConnectionResult>(
@@ -393,14 +393,14 @@ HClientAdapterOpNull HConnectionManagerAdapter::connectionComplete(qint32 connec
     H_D(HConnectionManagerAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("ConnectionComplete", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("ConnectionComplete"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("ConnectionID", QString::number(connectionId));
+    inArgs.setValue(QLatin1String("ConnectionID"), QString::number(connectionId));
 
     return h_ptr->beginInvoke(
         action, inArgs,

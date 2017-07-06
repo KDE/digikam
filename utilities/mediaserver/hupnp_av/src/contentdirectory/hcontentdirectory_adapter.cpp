@@ -64,9 +64,9 @@ bool HContentDirectoryAdapterPrivate::getSearchCapabilities(
     H_Q(HContentDirectoryAdapter);
 
     QStringList capabilities =
-        op.outputArguments().value("SearchCaps").toString().split(",");
+        op.outputArguments().value(QLatin1String("SearchCaps")).toString().split(QLatin1String(","));
 
-    capabilities.removeAll("");
+    capabilities.removeAll(QLatin1String(""));
 
     emit q->getSearchCapabilitiesCompleted(q, takeOp(op, capabilities));
 
@@ -79,7 +79,7 @@ bool HContentDirectoryAdapterPrivate::getSortCapabilities(
     H_Q(HContentDirectoryAdapter);
 
     QStringList capabilities =
-        op.outputArguments().value("SortCaps").toString().split(",");
+        op.outputArguments().value(QLatin1String("SortCaps")).toString().split(QLatin1String(","));
 
     emit q->getSortCapabilitiesCompleted(q, takeOp(op, capabilities));
 
@@ -92,7 +92,7 @@ bool HContentDirectoryAdapterPrivate::getSortExtensionCapabilities(
     H_Q(HContentDirectoryAdapter);
 
     QStringList capabilities =
-        op.outputArguments().value("SortExtensionCaps").toString().split(",");
+        op.outputArguments().value(QLatin1String("SortExtensionCaps")).toString().split(QLatin1String(","));
 
     emit q->getSortExtensionCapabilitiesCompleted(q, takeOp(op, capabilities));
 
@@ -104,7 +104,7 @@ bool HContentDirectoryAdapterPrivate::getFeatureList(
 {
     H_Q(HContentDirectoryAdapter);
 
-    QString features = op.outputArguments().value("FeatureList").toString();
+    QString features = op.outputArguments().value(QLatin1String("FeatureList")).toString();
 
     emit q->getFeatureListCompleted(q, takeOp(op, features));
 
@@ -116,7 +116,7 @@ bool HContentDirectoryAdapterPrivate::getSystemUpdateID(
 {
     H_Q(HContentDirectoryAdapter);
 
-    quint32 updateId = op.outputArguments().value("Id").toUInt();
+    quint32 updateId = op.outputArguments().value(QLatin1String("Id")).toUInt();
     emit q->getSystemUpdateIdCompleted(q, takeOp(op, updateId));
 
     return false;
@@ -128,7 +128,7 @@ bool HContentDirectoryAdapterPrivate::getServiceResetToken(
     H_Q(HContentDirectoryAdapter);
 
     QString resetToken =
-        op.outputArguments().value("ResetToken").toString();
+        op.outputArguments().value(QLatin1String("ResetToken")).toString();
 
     emit q->getServiceResetTokenCompleted(q, takeOp(op, resetToken));
 
@@ -144,10 +144,10 @@ bool HContentDirectoryAdapterPrivate::browse(
     if (op.returnValue() == UpnpSuccess)
     {
         HActionArguments outArgs = op.outputArguments();
-        QString result = outArgs.value("Result").toString();
-        quint32 numReturned = outArgs.value("NumberReturned").toUInt();
-        quint32 totalMatches = outArgs.value("TotalMatches").toUInt();
-        quint32 updateId = outArgs.value("UpdateID").toUInt();
+        QString result = outArgs.value(QLatin1String("Result")).toString();
+        quint32 numReturned = outArgs.value(QLatin1String("NumberReturned")).toUInt();
+        quint32 totalMatches = outArgs.value(QLatin1String("TotalMatches")).toUInt();
+        quint32 updateId = outArgs.value(QLatin1String("UpdateID")).toUInt();
 
         searchResult = HSearchResult(result, numReturned, totalMatches, updateId);
     }
@@ -165,10 +165,10 @@ bool HContentDirectoryAdapterPrivate::search(
     if (op.returnValue() == UpnpSuccess)
     {
         HActionArguments outArgs = op.outputArguments();
-        QString result = outArgs.value("Result").toString();
-        quint32 numReturned = outArgs.value("NumberReturned").toUInt();
-        quint32 totalMatches = outArgs.value("TotalMatches").toUInt();
-        quint32 updateId = outArgs.value("UpdateID").toUInt();
+        QString result = outArgs.value(QLatin1String("Result")).toString();
+        quint32 numReturned = outArgs.value(QLatin1String("NumberReturned")).toUInt();
+        quint32 totalMatches = outArgs.value(QLatin1String("TotalMatches")).toUInt();
+        quint32 updateId = outArgs.value(QLatin1String("UpdateID")).toUInt();
 
         searchResult = HSearchResult(result, numReturned, totalMatches, updateId);
     }
@@ -184,8 +184,8 @@ bool HContentDirectoryAdapterPrivate::createObject(
 
     HActionArguments outArgs = op.outputArguments();
 
-    QString objectId = outArgs.value("ObjectID").toString();
-    QString result = outArgs.value("Result").toString();
+    QString objectId = outArgs.value(QLatin1String("ObjectID")).toString();
+    QString result = outArgs.value(QLatin1String("Result")).toString();
 
     HCreateObjectResult coResult(objectId, result);
 
@@ -218,7 +218,7 @@ bool HContentDirectoryAdapterPrivate::moveObject(
     H_Q(HContentDirectoryAdapter);
 
     QString newObjectId =
-        op.outputArguments().value("NewObjectId").toString();
+        op.outputArguments().value(QLatin1String("NewObjectId")).toString();
 
     emit q->moveObjectCompleted(q, takeOp(op, newObjectId));
 
@@ -230,7 +230,7 @@ bool HContentDirectoryAdapterPrivate::importResource(
 {
     H_Q(HContentDirectoryAdapter);
 
-    quint32 transferId = op.outputArguments().value("TransferID").toUInt();
+    quint32 transferId = op.outputArguments().value(QLatin1String("TransferID")).toUInt();
     emit q->importResourceCompleted(q, takeOp(op, transferId));
 
     return false;
@@ -241,7 +241,7 @@ bool HContentDirectoryAdapterPrivate::exportResource(
 {
     H_Q(HContentDirectoryAdapter);
 
-    quint32 transferId = op.outputArguments().value("TransferID").toUInt();
+    quint32 transferId = op.outputArguments().value(QLatin1String("TransferID")).toUInt();
     emit q->exportResourceCompleted(q, takeOp(op, transferId));
 
     return false;
@@ -279,10 +279,10 @@ bool HContentDirectoryAdapterPrivate::getTransferProgress(
 
         HTransferProgressInfo::Status ts =
             HTransferProgressInfo::fromString(
-                op.outputArguments().value("TransferStatus").toString());
+                op.outputArguments().value(QLatin1String("TransferStatus")).toString());
 
-        quint32 tl = outArgs.value("TransferLength").toUInt();
-        quint32 tt = outArgs.value("TransferTotal").toUInt();
+        quint32 tl = outArgs.value(QLatin1String("TransferLength")).toUInt();
+        quint32 tt = outArgs.value(QLatin1String("TransferTotal")).toUInt();
 
         info = HTransferProgressInfo(tl, ts, tt);
     }
@@ -296,7 +296,7 @@ bool HContentDirectoryAdapterPrivate::createReference(
 {
     H_Q(HContentDirectoryAdapter);
 
-    QString newId = op.outputArguments().value("NewID").toString();
+    QString newId = op.outputArguments().value(QLatin1String("NewID")).toString();
     emit q->createReferenceCompleted(q, takeOp(op, newId));
 
     return false;
@@ -309,8 +309,8 @@ bool HContentDirectoryAdapterPrivate::freeFormQuery(
 
     HActionArguments outArgs = op.outputArguments();
 
-    QString queryResult = outArgs.value("QueryResult").toString();
-    quint32 updateId = outArgs.value("UpdateID").toUInt();
+    QString queryResult = outArgs.value(QLatin1String("QueryResult")).toString();
+    quint32 updateId = outArgs.value(QLatin1String("UpdateID")).toUInt();
 
     HFreeFormQueryResult result(queryResult, updateId);
 
@@ -325,7 +325,7 @@ bool HContentDirectoryAdapterPrivate::getFreeFormQueryCapabilities(
     H_Q(HContentDirectoryAdapter);
 
     QString ffqCapabilities =
-        op.outputArguments().value("FFQCapabilities").toString();
+        op.outputArguments().value(QLatin1String("FFQCapabilities")).toString();
 
     emit q->getFreeFormQueryCapabilitiesCompleted(
         q, takeOp(op, ffqCapabilities));
@@ -355,7 +355,7 @@ void HContentDirectoryAdapter::lastChange(
 
 bool HContentDirectoryAdapter::prepareService(HClientService* service)
 {
-    const HClientStateVariable* lastChange = service->stateVariables().value("LastChange");
+    const HClientStateVariable* lastChange = service->stateVariables().value(QLatin1String("LastChange"));
     if (lastChange)
     {
         bool ok = connect(
@@ -370,7 +370,7 @@ bool HContentDirectoryAdapter::prepareService(HClientService* service)
 
 bool HContentDirectoryAdapter::isLastChangeEnabled() const
 {
-    return h_ptr->m_service->stateVariables().contains("LastChange");
+    return h_ptr->m_service->stateVariables().contains(QLatin1String("LastChange"));
 }
 
 HClientAdapterOp<QStringList> HContentDirectoryAdapter::getSearchCapabilities()
@@ -378,10 +378,10 @@ HClientAdapterOp<QStringList> HContentDirectoryAdapter::getSearchCapabilities()
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetSearchCapabilities", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetSearchCapabilities"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QStringList>::createInvalid(rc, "");
+        return HClientAdapterOp<QStringList>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -395,10 +395,10 @@ HClientAdapterOp<QStringList> HContentDirectoryAdapter::getSortCapabilities()
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetSortCapabilities", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetSortCapabilities"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QStringList>::createInvalid(rc, "");
+        return HClientAdapterOp<QStringList>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -412,10 +412,10 @@ HClientAdapterOp<QStringList> HContentDirectoryAdapter::getSortExtensionCapabili
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetSortExtensionCapabilities", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetSortExtensionCapabilities"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QStringList>::createInvalid(rc, "");
+        return HClientAdapterOp<QStringList>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -429,10 +429,10 @@ HClientAdapterOp<QString> HContentDirectoryAdapter::getFeatureList()
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetFeatureList", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetFeatureList"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -446,10 +446,10 @@ HClientAdapterOp<quint32> HContentDirectoryAdapter::getSystemUpdateId()
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetSystemUpdateID", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetSystemUpdateID"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint32>::createInvalid(rc, "");
+        return HClientAdapterOp<quint32>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -463,10 +463,10 @@ HClientAdapterOp<QString> HContentDirectoryAdapter::getServiceResetToken()
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetServiceResetToken", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetServiceResetToken"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
@@ -487,36 +487,36 @@ HClientAdapterOp<HSearchResult> HContentDirectoryAdapter::browse(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Browse", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Browse"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ObjectID", objectId))
+    if (!inArgs.setValue(QLatin1String("ObjectID"), objectId))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("BrowseFlag", HContentDirectoryInfo::browseFlagToString(browseFlag)))
+    if (!inArgs.setValue(QLatin1String("BrowseFlag"), HContentDirectoryInfo::browseFlagToString(browseFlag)))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("Filter", QStringList(filter.toList()).join(",")))
+    if (!inArgs.setValue(QLatin1String("Filter"), QStringList(filter.toList()).join(QLatin1String(","))))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("StartingIndex", startingIndex))
+    if (!inArgs.setValue(QLatin1String("StartingIndex"), startingIndex))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("RequestedCount", requestedCount))
+    if (!inArgs.setValue(QLatin1String("RequestedCount"), requestedCount))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("SortCriteria", sortCriteria.join(",")))
+    if (!inArgs.setValue(QLatin1String("SortCriteria"), sortCriteria.join(QLatin1String(","))))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<HSearchResult>(
@@ -535,36 +535,36 @@ HClientAdapterOp<HSearchResult> HContentDirectoryAdapter::search(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Search", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Search"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ContainerID", containerId))
+    if (!inArgs.setValue(QLatin1String("ContainerID"), containerId))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("SearchCriteria", searchCriteria))
+    if (!inArgs.setValue(QLatin1String("SearchCriteria"), searchCriteria))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("Filter", QStringList(filter.toList()).join(",")))
+    if (!inArgs.setValue(QLatin1String("Filter"), QStringList(filter.toList()).join(QLatin1String(","))))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("StartingIndex", startingIndex))
+    if (!inArgs.setValue(QLatin1String("StartingIndex"), startingIndex))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("RequestedCount", requestedCount))
+    if (!inArgs.setValue(QLatin1String("RequestedCount"), requestedCount))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("SortCriteria", sortCriteria.join(",")))
+    if (!inArgs.setValue(QLatin1String("SortCriteria"), sortCriteria.join(QLatin1String(","))))
     {
-        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HSearchResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<HSearchResult>(
@@ -578,20 +578,20 @@ HClientAdapterOp<HCreateObjectResult> HContentDirectoryAdapter::createObject(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("CreateObject", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("CreateObject"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HCreateObjectResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HCreateObjectResult>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ContainerID", containerId))
+    if (!inArgs.setValue(QLatin1String("ContainerID"), containerId))
     {
-        return HClientAdapterOp<HCreateObjectResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HCreateObjectResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("Elements", elements))
+    if (!inArgs.setValue(QLatin1String("Elements"), elements))
     {
-        return HClientAdapterOp<HCreateObjectResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HCreateObjectResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<HCreateObjectResult>(
@@ -604,16 +604,16 @@ HClientAdapterOpNull HContentDirectoryAdapter::destroyObject(const QString& obje
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("DestroyObject", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("DestroyObject"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ObjectID", objectId))
+    if (!inArgs.setValue(QLatin1String("ObjectID"), objectId))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(
@@ -629,24 +629,24 @@ HClientAdapterOpNull HContentDirectoryAdapter::updateObject(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("UpdateObject", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("UpdateObject"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ObjectID", objectId))
+    if (!inArgs.setValue(QLatin1String("ObjectID"), objectId))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("CurrentTagValue", currentTagValues.join(",")))
+    if (!inArgs.setValue(QLatin1String("CurrentTagValue"), currentTagValues.join(QLatin1String(","))))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("NewTagValue", newTagValues.join(",")))
+    if (!inArgs.setValue(QLatin1String("NewTagValue"), newTagValues.join(QLatin1String(","))))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -659,20 +659,20 @@ HClientAdapterOp<QString> HContentDirectoryAdapter::moveObject(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("MoveObject", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("MoveObject"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ObjectID", objectId))
+    if (!inArgs.setValue(QLatin1String("ObjectID"), objectId))
     {
-        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("NewParentID", newParentId))
+    if (!inArgs.setValue(QLatin1String("NewParentID"), newParentId))
     {
-        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<QString>(
@@ -685,20 +685,20 @@ HClientAdapterOp<quint32> HContentDirectoryAdapter::importResource(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("ImportResource", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("ImportResource"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint32>::createInvalid(rc, "");
+        return HClientAdapterOp<quint32>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("SourceURI", source))
+    if (!inArgs.setValue(QLatin1String("SourceURI"), source))
     {
-        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("DestinationURI", destination))
+    if (!inArgs.setValue(QLatin1String("DestinationURI"), destination))
     {
-        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<quint32>(
@@ -712,20 +712,20 @@ HClientAdapterOp<quint32> HContentDirectoryAdapter::exportResource(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("ExportResource", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("ExportResource"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint32>::createInvalid(rc, "");
+        return HClientAdapterOp<quint32>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("SourceURI", source))
+    if (!inArgs.setValue(QLatin1String("SourceURI"), source))
     {
-        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("DestinationURI", destination))
+    if (!inArgs.setValue(QLatin1String("DestinationURI"), destination))
     {
-        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<quint32>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<quint32>(
@@ -738,16 +738,16 @@ HClientAdapterOpNull HContentDirectoryAdapter::deleteResource(const QUrl& resour
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("DeleteResource", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("DeleteResource"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ResourceURI", resourceUrl))
+    if (!inArgs.setValue(QLatin1String("ResourceURI"), resourceUrl))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(
@@ -760,14 +760,14 @@ HClientAdapterOpNull HContentDirectoryAdapter::stopTransferResource(quint32 tran
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("StopTransferResource", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("StopTransferResource"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("TransferID", transferId);
+    inArgs.setValue(QLatin1String("TransferID"), transferId);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -779,14 +779,14 @@ HClientAdapterOp<HTransferProgressInfo> HContentDirectoryAdapter::getTransferPro
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetTransferProgress", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetTransferProgress"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HTransferProgressInfo>::createInvalid(rc, "");
+        return HClientAdapterOp<HTransferProgressInfo>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("TransferID", transferId);
+    inArgs.setValue(QLatin1String("TransferID"), transferId);
 
     return h_ptr->beginInvoke<HTransferProgressInfo>(
         action, inArgs,
@@ -799,20 +799,20 @@ HClientAdapterOp<QString> HContentDirectoryAdapter::createReference(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("CreateReference", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("CreateReference"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ContainerID", containerId))
+    if (!inArgs.setValue(QLatin1String("ContainerID"), containerId))
     {
-        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("ObjectID", objectId))
+    if (!inArgs.setValue(QLatin1String("ObjectID"), objectId))
     {
-        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<QString>(
@@ -826,24 +826,24 @@ HClientAdapterOp<HFreeFormQueryResult> HContentDirectoryAdapter::freeFormQuery(
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("FreeFormQuery", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("FreeFormQuery"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    if (!inArgs.setValue("ContainerID", containerId))
+    if (!inArgs.setValue(QLatin1String("ContainerID"), containerId))
     {
-        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("CDSView", cdsView))
+    if (!inArgs.setValue(QLatin1String("CDSView"), cdsView))
     {
-        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("QueryRequest", queryRequest))
+    if (!inArgs.setValue(QLatin1String("QueryRequest"), queryRequest))
     {
-        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<HFreeFormQueryResult>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<HFreeFormQueryResult>(
@@ -856,10 +856,10 @@ HClientAdapterOp<QString> HContentDirectoryAdapter::getFreeFormQueryCapabilities
     H_D(HContentDirectoryAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetFreeFormQueryCapabilities", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetFreeFormQueryCapabilities"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();

@@ -80,10 +80,10 @@ ControlPointHttpServer::~ControlPointHttpServer()
 void ControlPointHttpServer::incomingNotifyMessage(
     HMessagingInfo* mi, const HNotifyRequest& req)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) m_creationParameters->m_loggingIdentifier.data());
 
-    HLOG_DBG(QString(
-        "Incoming event notify from [%1]").arg(peerAsStr(mi->socket())));
+    HLOG_DBG(QString(QLatin1String(
+        "Incoming event notify from [%1]").arg(peerAsStr(mi->socket()))));
 
     QString serviceCallbackId = req.callback().path().remove('/');
     StatusCode statusCode =

@@ -74,11 +74,11 @@ qint32 HAbstractTransportServicePrivate::setAVTransportURI(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QString currentUri = inArgs.value("CurrentURI").toString();
-    QString metadata = inArgs.value("CurrentURIMetaData").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QString currentUri = inArgs.value(QLatin1String("CurrentURI")).toString();
+    QString metadata = inArgs.value(QLatin1String("CurrentURIMetaData")).toString();
 
-    return q->setAVTransportURI(instanceId, currentUri, metadata);
+    return q->setAVTransportURI(instanceId, (QUrl)currentUri, metadata);
 }
 
 qint32 HAbstractTransportServicePrivate::setNextAVTransportURI(
@@ -87,11 +87,11 @@ qint32 HAbstractTransportServicePrivate::setNextAVTransportURI(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QString currentUri = inArgs.value("NextURI").toString();
-    QString metadata = inArgs.value("NextURIMetaData").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QString currentUri = inArgs.value(QLatin1String("NextURI")).toString();
+    QString metadata = inArgs.value(QLatin1String("NextURIMetaData")).toString();
 
-    return q->setNextAVTransportURI(instanceId, currentUri, metadata);
+    return q->setNextAVTransportURI(instanceId, (QUrl)currentUri, metadata);
 }
 
 qint32 HAbstractTransportServicePrivate::getMediaInfo(
@@ -102,21 +102,21 @@ qint32 HAbstractTransportServicePrivate::getMediaInfo(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HMediaInfo arg;
     qint32 retVal = q->getMediaInfo(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("NrTracks", arg.numberOfTracks());
-        outArgs->setValue("MediaDuration", arg.mediaDuration().toString());
-        outArgs->setValue("CurrentURI", arg.currentUri().toString());
-        outArgs->setValue("CurrentURIMetaData", arg.currentUriMetadata());
-        outArgs->setValue("NextURI", arg.nextUri().toString());
-        outArgs->setValue("NextURIMetaData", arg.nextUriMetadata());
-        outArgs->setValue("PlayMedium", arg.playMedium().toString());
-        outArgs->setValue("RecordMedium", arg.recordMedium().toString());
-        outArgs->setValue("WriteStatus", arg.writeStatus().toString());
+        outArgs->setValue(QLatin1String("NrTracks"), arg.numberOfTracks());
+        outArgs->setValue(QLatin1String("MediaDuration"), arg.mediaDuration().toString());
+        outArgs->setValue(QLatin1String("CurrentURI"), arg.currentUri().toString());
+        outArgs->setValue(QLatin1String("CurrentURIMetaData"), arg.currentUriMetadata());
+        outArgs->setValue(QLatin1String("NextURI"), arg.nextUri().toString());
+        outArgs->setValue(QLatin1String("NextURIMetaData"), arg.nextUriMetadata());
+        outArgs->setValue(QLatin1String("PlayMedium"), arg.playMedium().toString());
+        outArgs->setValue(QLatin1String("RecordMedium"), arg.recordMedium().toString());
+        outArgs->setValue(QLatin1String("WriteStatus"), arg.writeStatus().toString());
     }
 
     return retVal;
@@ -130,22 +130,22 @@ qint32 HAbstractTransportServicePrivate::getMediaInfo_ext(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HMediaInfo arg;
     qint32 retVal = q->getMediaInfo_ext(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentType", HMediaInfo::toString(arg.mediaCategory()));
-        outArgs->setValue("NrTracks", arg.numberOfTracks());
-        outArgs->setValue("MediaDuration", arg.mediaDuration().toString());
-        outArgs->setValue("CurrentURI", arg.currentUri().toString());
-        outArgs->setValue("CurrentURIMetaData", arg.currentUriMetadata());
-        outArgs->setValue("NextURI", arg.nextUri().toString());
-        outArgs->setValue("NextURIMetaData", arg.nextUriMetadata());
-        outArgs->setValue("PlayMedium", arg.playMedium().toString());
-        outArgs->setValue("RecordMedium", arg.recordMedium().toString());
-        outArgs->setValue("WriteStatus", arg.writeStatus().toString());
+        outArgs->setValue(QLatin1String("CurrentType"), HMediaInfo::toString(arg.mediaCategory()));
+        outArgs->setValue(QLatin1String("NrTracks"), arg.numberOfTracks());
+        outArgs->setValue(QLatin1String("MediaDuration"), arg.mediaDuration().toString());
+        outArgs->setValue(QLatin1String("CurrentURI"), arg.currentUri().toString());
+        outArgs->setValue(QLatin1String("CurrentURIMetaData"), arg.currentUriMetadata());
+        outArgs->setValue(QLatin1String("NextURI"), arg.nextUri().toString());
+        outArgs->setValue(QLatin1String("NextURIMetaData"), arg.nextUriMetadata());
+        outArgs->setValue(QLatin1String("PlayMedium"), arg.playMedium().toString());
+        outArgs->setValue(QLatin1String("RecordMedium"), arg.recordMedium().toString());
+        outArgs->setValue(QLatin1String("WriteStatus"), arg.writeStatus().toString());
     }
 
     return retVal;
@@ -159,15 +159,15 @@ qint32 HAbstractTransportServicePrivate::getTransportInfo(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HTransportInfo arg;
     qint32 retVal = q->getTransportInfo(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentTransportState", arg.state().toString());
-        outArgs->setValue("CurrentTransportStatus", arg.status().toString());
-        outArgs->setValue("CurrentSpeed", arg.speed());
+        outArgs->setValue(QLatin1String("CurrentTransportState"), arg.state().toString());
+        outArgs->setValue(QLatin1String("CurrentTransportStatus"), arg.status().toString());
+        outArgs->setValue(QLatin1String("CurrentSpeed"), arg.speed());
     }
 
     return retVal;
@@ -181,20 +181,20 @@ qint32 HAbstractTransportServicePrivate::getPositionInfo(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HPositionInfo arg;
     qint32 retVal = q->getPositionInfo(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("Track", arg.track());
-        outArgs->setValue("TrackDuration", arg.trackDuration().toString());
-        outArgs->setValue("TrackMetaData", arg.trackMetadata());
-        outArgs->setValue("TrackURI", arg.trackUri().toString());
-        outArgs->setValue("RelTime", arg.relativeTimePosition().toString());
-        outArgs->setValue("AbsTime", arg.absoluteTimePosition().toString());
-        outArgs->setValue("RelCount", arg.relativeCounterPosition());
-        outArgs->setValue("AbsCount", arg.absoluteCounterPosition());
+        outArgs->setValue(QLatin1String("Track"), arg.track());
+        outArgs->setValue(QLatin1String("TrackDuration"), arg.trackDuration().toString());
+        outArgs->setValue(QLatin1String("TrackMetaData"), arg.trackMetadata());
+        outArgs->setValue(QLatin1String("TrackURI"), arg.trackUri().toString());
+        outArgs->setValue(QLatin1String("RelTime"), arg.relativeTimePosition().toString());
+        outArgs->setValue(QLatin1String("AbsTime"), arg.absoluteTimePosition().toString());
+        outArgs->setValue(QLatin1String("RelCount"), arg.relativeCounterPosition());
+        outArgs->setValue(QLatin1String("AbsCount"), arg.absoluteCounterPosition());
     }
 
     return retVal;
@@ -208,7 +208,7 @@ qint32 HAbstractTransportServicePrivate::getDeviceCapabilities(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HDeviceCapabilities arg;
     qint32 retVal = q->getDeviceCapabilities(instanceId, &arg);
@@ -223,7 +223,7 @@ qint32 HAbstractTransportServicePrivate::getDeviceCapabilities(
         tmp.append(medium.toString());
     }
 
-    outArgs->setValue("PlayMedia", tmp.join(","));
+    outArgs->setValue(QLatin1String("PlayMedia"), tmp.join(QLatin1String(",")));
 
     tmp.clear();
     foreach(const HStorageMedium& medium, arg.recordMedia())
@@ -231,7 +231,7 @@ qint32 HAbstractTransportServicePrivate::getDeviceCapabilities(
         tmp.append(medium.toString());
     }
 
-    outArgs->setValue("RecMedia", tmp.join(","));
+    outArgs->setValue(QLatin1String("RecMedia"), tmp.join(QLatin1String(",")));
 
     tmp.clear();
     foreach(const HRecordQualityMode& mode, arg.recordQualityModes())
@@ -239,7 +239,7 @@ qint32 HAbstractTransportServicePrivate::getDeviceCapabilities(
         tmp.append(mode.toString());
     }
 
-    outArgs->setValue("RecQualityModes", tmp.join(","));
+    outArgs->setValue(QLatin1String("RecQualityModes"), tmp.join(QLatin1String(",")));
 
     return UpnpSuccess;
 }
@@ -252,14 +252,14 @@ qint32 HAbstractTransportServicePrivate::getTransportSettings(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HTransportSettings settings;
     qint32 retVal = q->getTransportSettings(instanceId, &settings);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("PlayMode", settings.playMode().toString());
-        outArgs->setValue("RecQualityMode", settings.recordQualityMode().toString());
+        outArgs->setValue(QLatin1String("PlayMode"), settings.playMode().toString());
+        outArgs->setValue(QLatin1String("RecQualityMode"), settings.recordQualityMode().toString());
     }
 
     return retVal;
@@ -271,7 +271,7 @@ qint32 HAbstractTransportServicePrivate::stop(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     return q->stop(instanceId);
 }
@@ -282,8 +282,8 @@ qint32 HAbstractTransportServicePrivate::play(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QString playSpeed = inArgs.value("Speed").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QString playSpeed = inArgs.value(QLatin1String("Speed")).toString();
 
     return q->play(instanceId, playSpeed);
 }
@@ -294,7 +294,7 @@ qint32 HAbstractTransportServicePrivate::pause(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     return q->pause(instanceId);
 }
@@ -305,7 +305,7 @@ qint32 HAbstractTransportServicePrivate::record(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     return q->record(instanceId);
 }
@@ -316,9 +316,9 @@ qint32 HAbstractTransportServicePrivate::seek(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QString unitAsStr = inArgs.value("Unit").toString();
-    QString target = inArgs.value("Target").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QString unitAsStr = inArgs.value(QLatin1String("Unit")).toString();
+    QString target = inArgs.value(QLatin1String("Target")).toString();
 
     HSeekInfo arg(unitAsStr, target);
     return q->seek(instanceId, arg);
@@ -330,7 +330,7 @@ qint32 HAbstractTransportServicePrivate::next(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     return q->next(instanceId);
 }
@@ -341,7 +341,7 @@ qint32 HAbstractTransportServicePrivate::previous(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     return q->previous(instanceId);
 }
@@ -352,8 +352,8 @@ qint32 HAbstractTransportServicePrivate::setPlayMode(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HPlayMode playMode = inArgs.value("NewPlayMode").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HPlayMode playMode = inArgs.value(QLatin1String("NewPlayMode")).toString();
 
     return q->setPlayMode(instanceId, playMode);
 }
@@ -364,9 +364,9 @@ qint32 HAbstractTransportServicePrivate::setRecordQualityMode(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractTransportService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
     QString recQualityMode =
-        inArgs.value("NewRecordQualityMode").toString();
+        inArgs.value(QLatin1String("NewRecordQualityMode")).toString();
 
     return q->setRecordQualityMode(instanceId, HRecordQualityMode(recQualityMode));
 }
@@ -379,7 +379,7 @@ qint32 HAbstractTransportServicePrivate::getCurrentTransportActions(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     QSet<HTransportAction> arg;
     qint32 retVal = q->getCurrentTransportActions(instanceId, &arg);
@@ -391,7 +391,7 @@ qint32 HAbstractTransportServicePrivate::getCurrentTransportActions(
             tmp.append(action.toString());
         }
 
-        outArgs->setValue("Actions", tmp.join(","));
+        outArgs->setValue(QLatin1String("Actions"), tmp.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -405,13 +405,13 @@ qint32 HAbstractTransportServicePrivate::getDRMState(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     HAvTransportInfo::DrmState arg;
     qint32 retVal = q->getDrmState(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentDRMState", HAvTransportInfo::drmStateToString(arg));
+        outArgs->setValue(QLatin1String("CurrentDRMState"), HAvTransportInfo::drmStateToString(arg));
     }
 
     return retVal;
@@ -425,14 +425,14 @@ qint32 HAbstractTransportServicePrivate::getStateVariables(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QSet<QString> svNames = inArgs.value("StateVariableList").toString().split(",").toSet();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QSet<QString> svNames = inArgs.value(QLatin1String("StateVariableList")).toString().split(QLatin1String(",")).toSet();
 
     QString arg;
     qint32 retVal = q->getStateVariables(instanceId, svNames, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("StateVariableValuePairs", arg);
+        outArgs->setValue(QLatin1String("StateVariableValuePairs"), arg);
     }
 
     return retVal;
@@ -446,11 +446,11 @@ qint32 HAbstractTransportServicePrivate::setStateVariables(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HUdn udn = inArgs.value("RenderingControlUDN").toString();
-    HResourceType rt = HResourceType(inArgs.value("ServiceType").toString());
-    HServiceId sid = inArgs.value("ServiceId").toString();
-    QString svValuePairs = inArgs.value("StateVariableValuePairs").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HUdn udn = inArgs.value(QLatin1String("RenderingControlUDN")).toString();
+    HResourceType rt = HResourceType(inArgs.value(QLatin1String("ServiceType")).toString());
+    HServiceId sid = inArgs.value(QLatin1String("ServiceId")).toString();
+    QString svValuePairs = inArgs.value(QLatin1String("StateVariableValuePairs")).toString();
 
     QStringList arg;
     qint32 retVal = q->setStateVariables(
@@ -458,7 +458,7 @@ qint32 HAbstractTransportServicePrivate::setStateVariables(
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("StateVariableList", arg.join(","));
+        outArgs->setValue(QLatin1String("StateVariableList"), arg.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -489,86 +489,86 @@ HAbstractTransportService::HActionInvokes
 
     HActionInvokes retVal;
 
-    retVal.insert(
-        "SetAVTransportURI",
+    retVal.insert(QLatin1String(
+        "SetAVTransportURI"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::setAVTransportURI));
 
-    retVal.insert(
-        "SetNextAVTransportURI",
+    retVal.insert(QLatin1String(
+        "SetNextAVTransportURI"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::setNextAVTransportURI));
 
-    retVal.insert(
-        "GetMediaInfo",
+    retVal.insert(QLatin1String(
+        "GetMediaInfo"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getMediaInfo));
 
-    retVal.insert(
-        "GetMediaInfo_Ext",
+    retVal.insert(QLatin1String(
+        "GetMediaInfo_Ext"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getMediaInfo_ext));
 
-    retVal.insert(
-        "GetTransportInfo",
+    retVal.insert(QLatin1String(
+        "GetTransportInfo"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getTransportInfo));
 
-    retVal.insert(
-        "GetPositionInfo",
+    retVal.insert(QLatin1String(
+        "GetPositionInfo"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getPositionInfo));
 
-    retVal.insert(
-        "GetDeviceCapabilities",
+    retVal.insert(QLatin1String(
+        "GetDeviceCapabilities"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getDeviceCapabilities));
 
-    retVal.insert(
-        "GetTransportSettings",
+    retVal.insert(QLatin1String(
+        "GetTransportSettings"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getTransportSettings));
 
-    retVal.insert("Stop",
+    retVal.insert(QLatin1String("Stop"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::stop));
 
-    retVal.insert("Play",
+    retVal.insert(QLatin1String("Play"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::play));
 
-    retVal.insert(
-        "Pause",
+    retVal.insert(QLatin1String(
+        "Pause"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::pause));
 
-    retVal.insert(
-        "Record",
+    retVal.insert(QLatin1String(
+        "Record"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::record));
 
-    retVal.insert(
-        "Seek",
+    retVal.insert(QLatin1String(
+        "Seek"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::seek));
 
-    retVal.insert(
-        "Next",
+    retVal.insert(QLatin1String(
+        "Next"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::next));
 
-    retVal.insert(
-        "Previous",
+    retVal.insert(QLatin1String(
+        "Previous"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::previous));
 
-    retVal.insert(
-        "SetPlayMode",
+    retVal.insert(QLatin1String(
+        "SetPlayMode"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::setPlayMode));
 
-    retVal.insert(
-        "SetRecordQualityMode",
+    retVal.insert(QLatin1String(
+        "SetRecordQualityMode"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::setRecordQualityMode));
 
-    retVal.insert(
-        "GetCurrentTransportActions",
+    retVal.insert(QLatin1String(
+        "GetCurrentTransportActions"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getCurrentTransportActions));
 
-    retVal.insert(
-        "GetDRMState",
+    retVal.insert(QLatin1String(
+        "GetDRMState"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getDRMState));
 
-    retVal.insert(
-        "GetStateVariables",
+    retVal.insert(QLatin1String(
+        "GetStateVariables"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::getStateVariables));
 
-    retVal.insert(
-        "SetStateVariables",
+    retVal.insert(QLatin1String(
+        "SetStateVariables"),
         HActionInvoke(h, &HAbstractTransportServicePrivate::setStateVariables));
 
     return retVal;

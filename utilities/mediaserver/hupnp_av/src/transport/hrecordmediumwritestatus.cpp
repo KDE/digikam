@@ -57,19 +57,19 @@ QString HRecordMediumWriteStatus::toString(Type type)
     switch(type)
     {
     case Unknown:
-        retVal = "UNKNOWN";
+        retVal = QLatin1String("UNKNOWN");
         break;
     case Writable:
-        retVal = "WRITABLE";
+        retVal = QLatin1String("WRITABLE");
         break;
     case Protected:
-        retVal = "PROTECTED";
+        retVal = QLatin1String("PROTECTED");
         break;
     case NotWritable:
-        retVal = "NOT_WRITABLE";
+        retVal = QLatin1String("NOT_WRITABLE");
         break;
     case NotImplemented:
-        retVal = "NOT_IMPLEMENTED";
+        retVal = QLatin1String("NOT_IMPLEMENTED");
         break;
     default:
         break;
@@ -81,23 +81,23 @@ HRecordMediumWriteStatus::Type HRecordMediumWriteStatus::fromString(
     const QString& type)
 {
     Type retVal = Unknown;
-    if (type.compare("WRITABLE", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("WRITABLE"), Qt::CaseInsensitive) == 0)
     {
         retVal = Writable;
     }
-    else if (type.compare("PROTECTED", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("PROTECTED"), Qt::CaseInsensitive) == 0)
     {
         retVal = Protected;
     }
-    else if (type.compare("NOT_WRITABLE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("NOT_WRITABLE"), Qt::CaseInsensitive) == 0)
     {
         retVal = NotWritable;
     }
-    else if (type.compare("NOT_IMPLEMENTED", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("NOT_IMPLEMENTED"), Qt::CaseInsensitive) == 0)
     {
         retVal = NotImplemented;
     }
-    else if (type.compare("UNKNOWN", Qt::CaseInsensitive) != 0 && !type.isEmpty())
+    else if (type.compare(QLatin1String("UNKNOWN"), Qt::CaseInsensitive) != 0 && !type.isEmpty())
     {
         retVal = VendorDefined;
     }

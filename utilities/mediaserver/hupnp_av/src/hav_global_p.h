@@ -70,7 +70,7 @@ QString strToCsvString(const T& collection)
     typename T::const_iterator ci = collection.constBegin();
     for(; ci != collection.constEnd()-1; ++ci)
     {
-        retVal.append(ci->toString()).append(',');
+        retVal.append(ci->toString()).append(QLatin1Char(','));
     }
     retVal.append(ci->toString());
 

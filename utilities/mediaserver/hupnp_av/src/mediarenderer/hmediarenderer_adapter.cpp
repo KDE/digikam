@@ -162,7 +162,7 @@ HMediaRendererAdapter::~HMediaRendererAdapter()
 
 bool HMediaRendererAdapter::canPrepareNewConnection() const
 {
-    return connectionManager()->implementsAction("PrepareForConnection");
+    return connectionManager()->implementsAction(QLatin1String("PrepareForConnection"));
 }
 
 void HMediaRendererAdapter::getProtocolInfoCompleted(
@@ -175,7 +175,7 @@ void HMediaRendererAdapter::prepareForConnectionCompleted(
     HConnectionManagerAdapter*,
     const HClientAdapterOp<HPrepareForConnectionResult>& op)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
     H_D(HMediaRendererAdapter);
 
     HPrepareForConnectionOp pOp = h_ptr->takeOp<HPrepareForConnectionOp>(op);
@@ -199,7 +199,7 @@ void HMediaRendererAdapter::prepareForConnectionCompleted(
             static_cast<quint32>(result.avTransportId()));
 
         bool ok = transport->setService(h->m_transportService, HClientServiceAdapter::MinimalValidation);
-        Q_ASSERT_X(ok, "", transport->lastErrorDescription().toLocal8Bit()); Q_UNUSED(ok)
+        Q_ASSERT_X(ok, "",(char*) transport->lastErrorDescription().toLocal8Bit().data()); Q_UNUSED(ok)
     }
 
     HRenderingControlAdapter* rc = 0;
@@ -238,7 +238,7 @@ void HMediaRendererAdapter::getCurrentConnectionIDsCompleted(
     const HClientAdapterOp<QList<quint32> >& curConIDsOp)
 {
     H_D(HMediaRendererAdapter);
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     HClientAdapterOp<qint32> pOp =
         h->takeOp<HClientAdapterOp<qint32> >(curConIDsOp);
@@ -282,11 +282,11 @@ void HMediaRendererAdapter::getCurrentConnectionInfoCompleted(
 
     HAvTransportAdapter* transport = new HAvTransportAdapter(result.avTransportId());
     bool ok = transport->setService(h->m_transportService);
-    Q_ASSERT_X(ok, "", transport->lastErrorDescription().toLocal8Bit());
+    Q_ASSERT_X(ok, "",(char*) transport->lastErrorDescription().toLocal8Bit().data());
 
     HRenderingControlAdapter* rc = new HRenderingControlAdapter(result.rcsId());
     ok = rc->setService(h->m_renderingControlService);
-    Q_ASSERT_X(ok, "", rc->lastErrorDescription().toLocal8Bit());
+    Q_ASSERT_X(ok, "",(char*) rc->lastErrorDescription().toLocal8Bit().data());
 
     pOp.setValue(result.connectionId());
 
@@ -299,7 +299,7 @@ bool HMediaRendererAdapter::prepareDevice(HClientDevice* device)
 {
     H_D(HMediaRendererAdapter);
     HClientService* cmService = device->serviceById(
-        HServiceId("urn:upnp-org:serviceId:ConnectionManager"));
+        HServiceId(QLatin1String("urn:upnp-org:serviceId:ConnectionManager")));
 
     if (!cmService)
     {
@@ -310,7 +310,7 @@ bool HMediaRendererAdapter::prepareDevice(HClientDevice* device)
 
         if (cmServices.isEmpty())
         {
-            setLastErrorDescription("Mandatory service [ConnectionManager] is missing");
+            setLastErrorDescription(QLatin1String("Mandatory service [ConnectionManager] is missing"));
             return false;
         }
         else
@@ -320,7 +320,7 @@ bool HMediaRendererAdapter::prepareDevice(HClientDevice* device)
     }
 
     HClientService* tsService = device->serviceById(
-        HServiceId("urn:upnp-org:serviceId:AVTransport"));
+        HServiceId(QLatin1String("urn:upnp-org:serviceId:AVTransport")));
 
     if (!tsService)
     {
@@ -331,7 +331,7 @@ bool HMediaRendererAdapter::prepareDevice(HClientDevice* device)
 
         if (tsServices.isEmpty())
         {
-            setLastErrorDescription("Mandatory service [AVTransport] is missing");
+            setLastErrorDescription(QLatin1String("Mandatory service [AVTransport] is missing"));
             return false;
         }
         else
@@ -341,7 +341,7 @@ bool HMediaRendererAdapter::prepareDevice(HClientDevice* device)
     }
 
     HClientService* rcService = device->serviceById(
-        HServiceId("urn:upnp-org:serviceId:RenderingControl"));
+        HServiceId(QLatin1String("urn:upnp-org:serviceId:RenderingControl")));
 
     if (!rcService)
     {
@@ -352,7 +352,7 @@ bool HMediaRendererAdapter::prepareDevice(HClientDevice* device)
 
         if (rcServices.isEmpty())
         {
-            setLastErrorDescription("Mandatory service [RenderingControl] is missing");
+            setLastErrorDescription(QLatin1String("Mandatory service [RenderingControl] is missing"));
             return false;
         }
         else
@@ -394,13 +394,13 @@ HClientAdapterOp<qint32> HMediaRendererAdapter::prepareNewConnection(
 {
     if (!h_ptr->m_device)
     {
-        return HClientAdapterOp<qint32>::createInvalid(UpnpUndefinedFailure, "");
+        return HClientAdapterOp<qint32>::createInvalid(UpnpUndefinedFailure, QLatin1String(""));
     }
 
     HConnectionManagerAdapter* conMgr = connectionManager();
-    if (!conMgr->implementsAction("PrepareForConnection"))
+    if (!conMgr->implementsAction(QLatin1String("PrepareForConnection")))
     {
-        return HClientAdapterOp<qint32>::createInvalid(UpnpOptionalActionNotImplemented, "");
+        return HClientAdapterOp<qint32>::createInvalid(UpnpOptionalActionNotImplemented, QLatin1String(""));
     }
 
     HClientAdapterOp<HPrepareForConnectionResult> op =
@@ -409,7 +409,7 @@ HClientAdapterOp<qint32> HMediaRendererAdapter::prepareNewConnection(
 
     if (op.isNull())
     {
-        return HClientAdapterOp<qint32>::createInvalid(op.returnValue(), "");
+        return HClientAdapterOp<qint32>::createInvalid(op.returnValue(), QLatin1String(""));
     }
 
     HPrepareForConnectionOp retVal(protocolInfo, peerCm);
@@ -421,7 +421,7 @@ HClientAdapterOp<qint32> HMediaRendererAdapter::getCurrentConnections()
 {
     if (!h_ptr->m_device)
     {
-        return HClientAdapterOp<qint32>::createInvalid(UpnpUndefinedFailure, "");
+        return HClientAdapterOp<qint32>::createInvalid(UpnpUndefinedFailure, QLatin1String(""));
     }
 
     HConnectionManagerAdapter* conMgr = connectionManager();
@@ -429,7 +429,7 @@ HClientAdapterOp<qint32> HMediaRendererAdapter::getCurrentConnections()
 
     if (op.isNull())
     {
-        return HClientAdapterOp<qint32>::createInvalid(op.returnValue(), "");
+        return HClientAdapterOp<qint32>::createInvalid(op.returnValue(), QLatin1String(""));
     }
 
     HClientAdapterOp<qint32> retVal;
@@ -441,7 +441,7 @@ HClientAdapterOp<qint32> HMediaRendererAdapter::getConnection(qint32 connectionI
 {
     if (!h_ptr->m_device)
     {
-        return HClientAdapterOp<qint32>::createInvalid(UpnpUndefinedFailure, "");
+        return HClientAdapterOp<qint32>::createInvalid(UpnpUndefinedFailure, QLatin1String(""));
     }
 
     HConnectionManagerAdapter* conMgr = connectionManager();
@@ -451,7 +451,7 @@ HClientAdapterOp<qint32> HMediaRendererAdapter::getConnection(qint32 connectionI
 
     if (op.isNull())
     {
-        return HClientAdapterOp<qint32>::createInvalid(op.returnValue(), "");
+        return HClientAdapterOp<qint32>::createInvalid(op.returnValue(), QLatin1String(""));
     }
 
     HClientAdapterOp<qint32> retVal;

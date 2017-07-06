@@ -86,23 +86,23 @@ bool generateLastChange(
     writer.setCodec("UTF-8");
     writer.writeStartDocument();
 
-    writer.writeStartElement("Event");
+    writer.writeStartElement(QLatin1String("Event"));
 
     if (rcs)
     {
-        writer.writeDefaultNamespace("urn:schemas-upnp-org:metadata-1-0/RCS/");
-        writer.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        writer.writeAttribute("xsi:schemaLocation",
-            "urn:schemas-upnp-org:metadata-1-0/RCS/ " \
-            "http://www.upnp.org/schemas/av/rcs-event-v1.xsd");
+        writer.writeDefaultNamespace(QLatin1String("urn:schemas-upnp-org:metadata-1-0/RCS/"));
+        writer.writeAttribute(QLatin1String("xmlns:xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
+        writer.writeAttribute(QLatin1String("xsi:schemaLocation"),
+            QLatin1String("urn:schemas-upnp-org:metadata-1-0/RCS/ " \
+            "http://www.upnp.org/schemas/av/rcs-event-v1.xsd"));
     }
     else
     {
-        writer.writeDefaultNamespace("urn:schemas-upnp-org:metadata-1-0/AVT/");
-        writer.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        writer.writeAttribute("xsi:schemaLocation",
-            "urn:schemas-upnp-org:metadata-1-0/AVT/ " \
-            "http://www.upnp.org/schemas/av/avt-event-v2.xsd");
+        writer.writeDefaultNamespace(QLatin1String("urn:schemas-upnp-org:metadata-1-0/AVT/"));
+        writer.writeAttribute(QLatin1String("xmlns:xsi"),QLatin1String( "http://www.w3.org/2001/XMLSchema-instance"));
+        writer.writeAttribute(QLatin1String("xsi:schemaLocation"),
+           QLatin1String("urn:schemas-upnp-org:metadata-1-0/AVT/ " \
+            "http://www.upnp.org/schemas/av/avt-event-v2.xsd"));
     }
 
     int count = 0;
@@ -110,8 +110,8 @@ bool generateLastChange(
     {
         if (event->m_changedProperties.size() > 0)
         {
-            writer.writeStartElement("InstanceID");
-            writer.writeAttribute("val", QString::number(event->m_instanceId));
+            writer.writeStartElement(QLatin1String("InstanceID"));
+            writer.writeAttribute(QLatin1String("val"), QString::number(event->m_instanceId));
 
             QHash<QString, QPair<QString, QString> >::const_iterator ci =
                 event->m_changedProperties.constBegin();
@@ -119,10 +119,10 @@ bool generateLastChange(
             while(ci != event->m_changedProperties.constEnd())
             {
                 writer.writeStartElement(ci.key());
-                writer.writeAttribute("val", ci.value().first);
+                writer.writeAttribute(QLatin1String("val"), ci.value().first);
                 if (!ci.value().second.isEmpty())
                 {
-                    writer.writeAttribute("channel", ci.value().second);
+                    writer.writeAttribute(QLatin1String("channel"), ci.value().second);
                 }
                 writer.writeEndElement();
                 ++ci;
@@ -147,7 +147,7 @@ void HMediaRendererDevice::timeout()
     {
         if (generateLastChange(m_avtInstanceEvents, false, &lastChangeData))
         {
-            bool ok = avTransport()->setValue("LastChange", lastChangeData);
+            bool ok = avTransport()->setValue(QLatin1String("LastChange"), lastChangeData);
             Q_ASSERT(ok); Q_UNUSED(ok)
             clear(&m_avtInstanceEvents);
         }
@@ -156,7 +156,7 @@ void HMediaRendererDevice::timeout()
     {
         if (generateLastChange(m_rcsInstanceEvents, true, &lastChangeData))
         {
-            bool ok = renderingControl()->setValue("LastChange", lastChangeData);
+            bool ok = renderingControl()->setValue(QLatin1String("LastChange"), lastChangeData);
             Q_ASSERT(ok); Q_UNUSED(ok)
             clear(&m_rcsInstanceEvents);
         }
@@ -245,7 +245,7 @@ bool HMediaRendererDevice::finalizeInit(QString* errDescription)
     {
         if (errDescription)
         {
-            *errDescription = "Renderer Connection Manager was not set";
+            *errDescription = QLatin1String("Renderer Connection Manager was not set");
         }
         return false;
     }
@@ -257,7 +257,7 @@ bool HMediaRendererDevice::finalizeInit(QString* errDescription)
     {
         if (errDescription)
         {
-            *errDescription = "Failed to initialize ConnectionManager";
+            *errDescription = QLatin1String("Failed to initialize ConnectionManager");
         }
         return false;
     }
@@ -269,7 +269,7 @@ bool HMediaRendererDevice::finalizeInit(QString* errDescription)
     {
         if (errDescription)
         {
-            *errDescription = "Failed to initialize AV Transport";
+            *errDescription = QLatin1String("Failed to initialize AV Transport");
         }
         return false;
     }
@@ -281,7 +281,7 @@ bool HMediaRendererDevice::finalizeInit(QString* errDescription)
     {
         if (errDescription)
         {
-            *errDescription = "Failed to initialize RenderingControl";
+            *errDescription = QLatin1String("Failed to initialize RenderingControl");
         }
         return false;
     }
@@ -291,14 +291,14 @@ bool HMediaRendererDevice::finalizeInit(QString* errDescription)
         m_configuration->rendererConnectionManager()->setParent(this);
     }
 
-    if (!connectionManager()->actions().value("PrepareForConnection"))
+    if (!connectionManager()->actions().value(QLatin1String("PrepareForConnection")))
     {
         // The ConnectionManager does not implement the action "PrepareForConnection",
         // which means that the ConnectionManager has to have a single connection with
         // ID zero. This connection handles whatever the Renderer is supposed to handle,
         // and this is why we have to create the default RendererConnection here:
 
-        HProtocolInfo pinfo("http-get:*:*:*");
+        HProtocolInfo pinfo(QLatin1String("http-get:*:*:*"));
 
         HConnectionInfo connectionInfo(0, pinfo);
         connectionInfo.setAvTransportId(0);
@@ -311,7 +311,7 @@ bool HMediaRendererDevice::finalizeInit(QString* errDescription)
         {
             if (errDescription)
             {
-                *errDescription = "Could not create the default media renderer connection";
+                *errDescription = QLatin1String("Could not create the default media renderer connection");
             }
             return false;
         }

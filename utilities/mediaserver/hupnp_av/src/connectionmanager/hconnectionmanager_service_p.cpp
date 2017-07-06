@@ -55,7 +55,7 @@ HConnectionManagerService::~HConnectionManagerService()
 void HConnectionManagerService::updateConnectionsList()
 {
     QString newStateVarValue = numToCsvString(m_currentConnectionIDs.keys());
-    HServerStateVariable* sv = stateVariables().value("CurrentConnectionIDs");
+    HServerStateVariable* sv = stateVariables().value(QLatin1String("CurrentConnectionIDs"));
     if (sv->value() != newStateVarValue)
     {
         bool ok = sv->setValue(newStateVarValue);
@@ -147,7 +147,7 @@ void HConnectionManagerService::setSourceProtocolInfo(const HProtocolInfos& arg)
     m_sourceProtocolInfo = arg;
 
     QString sourceProtocolInfos = strToCsvString(m_sourceProtocolInfo);
-    HServerStateVariable* sv = stateVariables().value("SourceProtocolInfo");
+    HServerStateVariable* sv = stateVariables().value(QLatin1String("SourceProtocolInfo"));
     bool ok = sv->setValue(sourceProtocolInfos);
     Q_ASSERT(ok); Q_UNUSED(ok)
 }
@@ -157,7 +157,7 @@ void HConnectionManagerService::setSinkProtocolInfo(const HProtocolInfos& arg)
     m_sinkProtocolInfo = arg;
 
     QString sinkProtocolInfos = strToCsvString(m_sinkProtocolInfo);
-    HServerStateVariable* sv = stateVariables().value("SinkProtocolInfo");
+    HServerStateVariable* sv = stateVariables().value(QLatin1String("SinkProtocolInfo"));
     bool ok = sv->setValue(sinkProtocolInfos);
     Q_ASSERT(ok); Q_UNUSED(ok)
 }
@@ -168,7 +168,7 @@ bool HConnectionManagerService::isMimetypeValid(
     foreach(const HProtocolInfo& pinfo, protocolInfos)
     {
         if (pinfo.contentFormat() == contentFormat ||
-            pinfo.contentFormat() == "*")
+            pinfo.contentFormat() == QLatin1String("*"))
         {
             return true;
         }

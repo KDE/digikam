@@ -186,97 +186,97 @@ HRendererConnectionInfoPrivate::HRendererConnectionInfoPrivate() :
     m_verticalKeystone(0),
     m_channelInfo()
 {
-    m_valueSetters.insert("TransportState", ValueSetter(this, &HRendererConnectionInfoPrivate::setTransportState));
-    m_valueSetters.insert("TransportStatus", ValueSetter(this, &HRendererConnectionInfoPrivate::setTransportStatus));
-    m_valueSetters.insert("CurrentMediaCategory", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentMediaCategory));
-    m_valueSetters.insert("PlaybackStorageMedium", ValueSetter(this, &HRendererConnectionInfoPrivate::setPlaybackStorageMedium));
-    m_valueSetters.insert("RecordStorageMedium", ValueSetter(this, &HRendererConnectionInfoPrivate::setRecordStorageMedium));
-    m_valueSetters.insert("PossiblePlaybackStorageMedia", ValueSetter(this, &HRendererConnectionInfoPrivate::setPossiblePlaybackStorageMedia));
-    m_valueSetters.insert("PossibleRecordStorageMedia", ValueSetter(this, &HRendererConnectionInfoPrivate::setPossibleRecordStorageMedia));
-    m_valueSetters.insert("CurrentPlayMode", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentPlayMode));
-    m_valueSetters.insert("TransportPlaySpeed", ValueSetter(this, &HRendererConnectionInfoPrivate::setTransportPlaySpeed));
-    m_valueSetters.insert("RecordMediumWriteStatus", ValueSetter(this, &HRendererConnectionInfoPrivate::setRecordMediumWriteStatus));
-    m_valueSetters.insert("CurrentRecordQualityMode", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentRecordQualityMode));
-    m_valueSetters.insert("PossibleRecordQualityModes", ValueSetter(this, &HRendererConnectionInfoPrivate::setPossibleRecordQualityModes));
-    m_valueSetters.insert("NumberOfTracks", ValueSetter(this, &HRendererConnectionInfoPrivate::setNumberOfTracks));
-    m_valueSetters.insert("CurrentTrack", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrack));
-    m_valueSetters.insert("CurrentTrackDuration", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrackDuration));
-    m_valueSetters.insert("CurrentMediaDuration", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentMediaDuration));
-    m_valueSetters.insert("CurrentTrackMetaData", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrackMetaData));
-    m_valueSetters.insert("CurrentTrackURI", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrackURI));
-    m_valueSetters.insert("AVTransportURI", ValueSetter(this, &HRendererConnectionInfoPrivate::setAVTransportURI));
-    m_valueSetters.insert("AVTransportURIMetaData", ValueSetter(this, &HRendererConnectionInfoPrivate::setAVTransportURIMetaData));
-    m_valueSetters.insert("NextAVTransportURI", ValueSetter(this, &HRendererConnectionInfoPrivate::setNextAVTransportURI));
-    m_valueSetters.insert("NextAVTransportURIMetaData", ValueSetter(this, &HRendererConnectionInfoPrivate::setNextAVTransportURIMetaData));
-    m_valueSetters.insert("RelativeTimePosition", ValueSetter(this, &HRendererConnectionInfoPrivate::setRelativeTimePosition));
-    m_valueSetters.insert("AbsoluteTimePosition", ValueSetter(this, &HRendererConnectionInfoPrivate::setAbsoluteTimePosition));
-    m_valueSetters.insert("RelativeCounterPosition", ValueSetter(this, &HRendererConnectionInfoPrivate::setRelativeCounterPosition));
-    m_valueSetters.insert("AbsoluteCounterPosition", ValueSetter(this, &HRendererConnectionInfoPrivate::setAbsoluteCounterPosition));
-    m_valueSetters.insert("CurrentTransportActions", ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTransportActions));
-    m_valueSetters.insert("DRMState", ValueSetter(this, &HRendererConnectionInfoPrivate::setDrmState));
+    m_valueSetters.insert(QLatin1String("TransportState"), ValueSetter(this, &HRendererConnectionInfoPrivate::setTransportState));
+    m_valueSetters.insert(QLatin1String("TransportStatus"), ValueSetter(this, &HRendererConnectionInfoPrivate::setTransportStatus));
+    m_valueSetters.insert(QLatin1String("CurrentMediaCategory"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentMediaCategory));
+    m_valueSetters.insert(QLatin1String("PlaybackStorageMedium"), ValueSetter(this, &HRendererConnectionInfoPrivate::setPlaybackStorageMedium));
+    m_valueSetters.insert(QLatin1String("RecordStorageMedium"), ValueSetter(this, &HRendererConnectionInfoPrivate::setRecordStorageMedium));
+    m_valueSetters.insert(QLatin1String("PossiblePlaybackStorageMedia"), ValueSetter(this, &HRendererConnectionInfoPrivate::setPossiblePlaybackStorageMedia));
+    m_valueSetters.insert(QLatin1String("PossibleRecordStorageMedia"), ValueSetter(this, &HRendererConnectionInfoPrivate::setPossibleRecordStorageMedia));
+    m_valueSetters.insert(QLatin1String("CurrentPlayMode"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentPlayMode));
+    m_valueSetters.insert(QLatin1String("TransportPlaySpeed"), ValueSetter(this, &HRendererConnectionInfoPrivate::setTransportPlaySpeed));
+    m_valueSetters.insert(QLatin1String("RecordMediumWriteStatus"), ValueSetter(this, &HRendererConnectionInfoPrivate::setRecordMediumWriteStatus));
+    m_valueSetters.insert(QLatin1String("CurrentRecordQualityMode"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentRecordQualityMode));
+    m_valueSetters.insert(QLatin1String("PossibleRecordQualityModes"), ValueSetter(this, &HRendererConnectionInfoPrivate::setPossibleRecordQualityModes));
+    m_valueSetters.insert(QLatin1String("NumberOfTracks"), ValueSetter(this, &HRendererConnectionInfoPrivate::setNumberOfTracks));
+    m_valueSetters.insert(QLatin1String("CurrentTrack"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrack));
+    m_valueSetters.insert(QLatin1String("CurrentTrackDuration"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrackDuration));
+    m_valueSetters.insert(QLatin1String("CurrentMediaDuration"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentMediaDuration));
+    m_valueSetters.insert(QLatin1String("CurrentTrackMetaData"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrackMetaData));
+    m_valueSetters.insert(QLatin1String("CurrentTrackURI"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTrackURI));
+    m_valueSetters.insert(QLatin1String("AVTransportURI"), ValueSetter(this, &HRendererConnectionInfoPrivate::setAVTransportURI));
+    m_valueSetters.insert(QLatin1String("AVTransportURIMetaData"), ValueSetter(this, &HRendererConnectionInfoPrivate::setAVTransportURIMetaData));
+    m_valueSetters.insert(QLatin1String("NextAVTransportURI"), ValueSetter(this, &HRendererConnectionInfoPrivate::setNextAVTransportURI));
+    m_valueSetters.insert(QLatin1String("NextAVTransportURIMetaData"), ValueSetter(this, &HRendererConnectionInfoPrivate::setNextAVTransportURIMetaData));
+    m_valueSetters.insert(QLatin1String("RelativeTimePosition"), ValueSetter(this, &HRendererConnectionInfoPrivate::setRelativeTimePosition));
+    m_valueSetters.insert(QLatin1String("AbsoluteTimePosition"), ValueSetter(this, &HRendererConnectionInfoPrivate::setAbsoluteTimePosition));
+    m_valueSetters.insert(QLatin1String("RelativeCounterPosition"), ValueSetter(this, &HRendererConnectionInfoPrivate::setRelativeCounterPosition));
+    m_valueSetters.insert(QLatin1String("AbsoluteCounterPosition"), ValueSetter(this, &HRendererConnectionInfoPrivate::setAbsoluteCounterPosition));
+    m_valueSetters.insert(QLatin1String("CurrentTransportActions"), ValueSetter(this, &HRendererConnectionInfoPrivate::setCurrentTransportActions));
+    m_valueSetters.insert(QLatin1String("DRMState"), ValueSetter(this, &HRendererConnectionInfoPrivate::setDrmState));
 
-    m_valueSetters.insert("Brightness", ValueSetter(this, &HRendererConnectionInfoPrivate::setBrightness));
-    m_valueSetters.insert("Contrast", ValueSetter(this, &HRendererConnectionInfoPrivate::setContrast));
-    m_valueSetters.insert("Sharpness", ValueSetter(this, &HRendererConnectionInfoPrivate::setSharpness));
-    m_valueSetters.insert("RedVideoGain", ValueSetter(this, &HRendererConnectionInfoPrivate::setRedVideoGain));
-    m_valueSetters.insert("GreenVideoGain", ValueSetter(this, &HRendererConnectionInfoPrivate::setGreenVideoGain));
-    m_valueSetters.insert("BlueVideoGain", ValueSetter(this, &HRendererConnectionInfoPrivate::setBlueVideoGain));
-    m_valueSetters.insert("RedVideoBlackLevel", ValueSetter(this, &HRendererConnectionInfoPrivate::setRedVideoBlackLevel));
-    m_valueSetters.insert("GreenVideoBlackLevel", ValueSetter(this, &HRendererConnectionInfoPrivate::setGreenVideoBlackLevel));
-    m_valueSetters.insert("BlueVideoBlackLevel", ValueSetter(this, &HRendererConnectionInfoPrivate::setBlueVideoBlackLevel));
-    m_valueSetters.insert("ColorTemperature", ValueSetter(this, &HRendererConnectionInfoPrivate::setColorTemperature));
-    m_valueSetters.insert("HorizontalKeystone", ValueSetter(this, &HRendererConnectionInfoPrivate::setHorizontalKeystone));
-    m_valueSetters.insert("VerticalKeystone", ValueSetter(this, &HRendererConnectionInfoPrivate::setVerticalKeystone));
-    m_valueSetters.insert("Mute", ValueSetter(this, &HRendererConnectionInfoPrivate::setMute));
-    m_valueSetters.insert("Volume", ValueSetter(this, &HRendererConnectionInfoPrivate::setVolume));
-    m_valueSetters.insert("VolumeDB", ValueSetter(this, &HRendererConnectionInfoPrivate::setVolumeDB));
-    m_valueSetters.insert("Loudness", ValueSetter(this, &HRendererConnectionInfoPrivate::setLoudness));
+    m_valueSetters.insert(QLatin1String("Brightness"), ValueSetter(this, &HRendererConnectionInfoPrivate::setBrightness));
+    m_valueSetters.insert(QLatin1String("Contrast"), ValueSetter(this, &HRendererConnectionInfoPrivate::setContrast));
+    m_valueSetters.insert(QLatin1String("Sharpness"), ValueSetter(this, &HRendererConnectionInfoPrivate::setSharpness));
+    m_valueSetters.insert(QLatin1String("RedVideoGain"), ValueSetter(this, &HRendererConnectionInfoPrivate::setRedVideoGain));
+    m_valueSetters.insert(QLatin1String("GreenVideoGain"), ValueSetter(this, &HRendererConnectionInfoPrivate::setGreenVideoGain));
+    m_valueSetters.insert(QLatin1String("BlueVideoGain"), ValueSetter(this, &HRendererConnectionInfoPrivate::setBlueVideoGain));
+    m_valueSetters.insert(QLatin1String("RedVideoBlackLevel"), ValueSetter(this, &HRendererConnectionInfoPrivate::setRedVideoBlackLevel));
+    m_valueSetters.insert(QLatin1String("GreenVideoBlackLevel"), ValueSetter(this, &HRendererConnectionInfoPrivate::setGreenVideoBlackLevel));
+    m_valueSetters.insert(QLatin1String("BlueVideoBlackLevel"), ValueSetter(this, &HRendererConnectionInfoPrivate::setBlueVideoBlackLevel));
+    m_valueSetters.insert(QLatin1String("ColorTemperature"), ValueSetter(this, &HRendererConnectionInfoPrivate::setColorTemperature));
+    m_valueSetters.insert(QLatin1String("HorizontalKeystone"), ValueSetter(this, &HRendererConnectionInfoPrivate::setHorizontalKeystone));
+    m_valueSetters.insert(QLatin1String("VerticalKeystone"), ValueSetter(this, &HRendererConnectionInfoPrivate::setVerticalKeystone));
+    m_valueSetters.insert(QLatin1String("Mute"), ValueSetter(this, &HRendererConnectionInfoPrivate::setMute));
+    m_valueSetters.insert(QLatin1String("Volume"), ValueSetter(this, &HRendererConnectionInfoPrivate::setVolume));
+    m_valueSetters.insert(QLatin1String("VolumeDB"), ValueSetter(this, &HRendererConnectionInfoPrivate::setVolumeDB));
+    m_valueSetters.insert(QLatin1String("Loudness"), ValueSetter(this, &HRendererConnectionInfoPrivate::setLoudness));
 
-    m_valueGetters.insert("TransportState", ValueGetter(this, &HRendererConnectionInfoPrivate::getTransportState));
-    m_valueGetters.insert("TransportStatus", ValueGetter(this, &HRendererConnectionInfoPrivate::getTransportStatus));
-    m_valueGetters.insert("CurrentMediaCategory", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentMediaCategory));
-    m_valueGetters.insert("PlaybackStorageMedium", ValueGetter(this, &HRendererConnectionInfoPrivate::getPlaybackStorageMedium));
-    m_valueGetters.insert("RecordStorageMedium", ValueGetter(this, &HRendererConnectionInfoPrivate::getRecordStorageMedium));
-    m_valueGetters.insert("PossiblePlaybackStorageMedia", ValueGetter(this, &HRendererConnectionInfoPrivate::getPossiblePlaybackStorageMedia));
-    m_valueGetters.insert("PossibleRecordStorageMedia", ValueGetter(this, &HRendererConnectionInfoPrivate::getPossibleRecordStorageMedia));
-    m_valueGetters.insert("CurrentPlayMode", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentPlayMode));
-    m_valueGetters.insert("TransportPlaySpeed", ValueGetter(this, &HRendererConnectionInfoPrivate::getTransportPlaySpeed));
-    m_valueGetters.insert("RecordMediumWriteStatus", ValueGetter(this, &HRendererConnectionInfoPrivate::getRecordMediumWriteStatus));
-    m_valueGetters.insert("CurrentRecordQualityMode", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentRecordQualityMode));
-    m_valueGetters.insert("PossibleRecordQualityModes", ValueGetter(this, &HRendererConnectionInfoPrivate::getPossibleRecordQualityModes));
-    m_valueGetters.insert("NumberOfTracks", ValueGetter(this, &HRendererConnectionInfoPrivate::getNumberOfTracks));
-    m_valueGetters.insert("CurrentTrack", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrack));
-    m_valueGetters.insert("CurrentTrackDuration", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrackDuration));
-    m_valueGetters.insert("CurrentMediaDuration", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentMediaDuration));
-    m_valueGetters.insert("CurrentTrackMetaData", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrackMetaData));
-    m_valueGetters.insert("CurrentTrackURI", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrackURI));
-    m_valueGetters.insert("AVTransportURI", ValueGetter(this, &HRendererConnectionInfoPrivate::getAVTransportURI));
-    m_valueGetters.insert("AVTransportURIMetaData", ValueGetter(this, &HRendererConnectionInfoPrivate::getAVTransportURIMetaData));
-    m_valueGetters.insert("NextAVTransportURI", ValueGetter(this, &HRendererConnectionInfoPrivate::getNextAVTransportURI));
-    m_valueGetters.insert("NextAVTransportURIMetaData", ValueGetter(this, &HRendererConnectionInfoPrivate::getNextAVTransportURIMetaData));
-    m_valueGetters.insert("RelativeTimePosition", ValueGetter(this, &HRendererConnectionInfoPrivate::getRelativeTimePosition));
-    m_valueGetters.insert("AbsoluteTimePosition", ValueGetter(this, &HRendererConnectionInfoPrivate::getAbsoluteTimePosition));
-    m_valueGetters.insert("RelativeCounterPosition", ValueGetter(this, &HRendererConnectionInfoPrivate::getRelativeCounterPosition));
-    m_valueGetters.insert("AbsoluteCounterPosition", ValueGetter(this, &HRendererConnectionInfoPrivate::getAbsoluteCounterPosition));
-    m_valueGetters.insert("CurrentTransportActions", ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTransportActions));
-    m_valueGetters.insert("DRMState", ValueGetter(this, &HRendererConnectionInfoPrivate::getDrmState));
+    m_valueGetters.insert(QLatin1String("TransportState"), ValueGetter(this, &HRendererConnectionInfoPrivate::getTransportState));
+    m_valueGetters.insert(QLatin1String("TransportStatus"), ValueGetter(this, &HRendererConnectionInfoPrivate::getTransportStatus));
+    m_valueGetters.insert(QLatin1String("CurrentMediaCategory"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentMediaCategory));
+    m_valueGetters.insert(QLatin1String("PlaybackStorageMedium"), ValueGetter(this, &HRendererConnectionInfoPrivate::getPlaybackStorageMedium));
+    m_valueGetters.insert(QLatin1String("RecordStorageMedium"), ValueGetter(this, &HRendererConnectionInfoPrivate::getRecordStorageMedium));
+    m_valueGetters.insert(QLatin1String("PossiblePlaybackStorageMedia"), ValueGetter(this, &HRendererConnectionInfoPrivate::getPossiblePlaybackStorageMedia));
+    m_valueGetters.insert(QLatin1String("PossibleRecordStorageMedia"), ValueGetter(this, &HRendererConnectionInfoPrivate::getPossibleRecordStorageMedia));
+    m_valueGetters.insert(QLatin1String("CurrentPlayMode"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentPlayMode));
+    m_valueGetters.insert(QLatin1String("TransportPlaySpeed"), ValueGetter(this, &HRendererConnectionInfoPrivate::getTransportPlaySpeed));
+    m_valueGetters.insert(QLatin1String("RecordMediumWriteStatus"), ValueGetter(this, &HRendererConnectionInfoPrivate::getRecordMediumWriteStatus));
+    m_valueGetters.insert(QLatin1String("CurrentRecordQualityMode"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentRecordQualityMode));
+    m_valueGetters.insert(QLatin1String("PossibleRecordQualityModes"), ValueGetter(this, &HRendererConnectionInfoPrivate::getPossibleRecordQualityModes));
+    m_valueGetters.insert(QLatin1String("NumberOfTracks"), ValueGetter(this, &HRendererConnectionInfoPrivate::getNumberOfTracks));
+    m_valueGetters.insert(QLatin1String("CurrentTrack"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrack));
+    m_valueGetters.insert(QLatin1String("CurrentTrackDuration"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrackDuration));
+    m_valueGetters.insert(QLatin1String("CurrentMediaDuration"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentMediaDuration));
+    m_valueGetters.insert(QLatin1String("CurrentTrackMetaData"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrackMetaData));
+    m_valueGetters.insert(QLatin1String("CurrentTrackURI"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTrackURI));
+    m_valueGetters.insert(QLatin1String("AVTransportURI"), ValueGetter(this, &HRendererConnectionInfoPrivate::getAVTransportURI));
+    m_valueGetters.insert(QLatin1String("AVTransportURIMetaData"), ValueGetter(this, &HRendererConnectionInfoPrivate::getAVTransportURIMetaData));
+    m_valueGetters.insert(QLatin1String("NextAVTransportURI"), ValueGetter(this, &HRendererConnectionInfoPrivate::getNextAVTransportURI));
+    m_valueGetters.insert(QLatin1String("NextAVTransportURIMetaData"), ValueGetter(this, &HRendererConnectionInfoPrivate::getNextAVTransportURIMetaData));
+    m_valueGetters.insert(QLatin1String("RelativeTimePosition"), ValueGetter(this, &HRendererConnectionInfoPrivate::getRelativeTimePosition));
+    m_valueGetters.insert(QLatin1String("AbsoluteTimePosition"), ValueGetter(this, &HRendererConnectionInfoPrivate::getAbsoluteTimePosition));
+    m_valueGetters.insert(QLatin1String("RelativeCounterPosition"), ValueGetter(this, &HRendererConnectionInfoPrivate::getRelativeCounterPosition));
+    m_valueGetters.insert(QLatin1String("AbsoluteCounterPosition"), ValueGetter(this, &HRendererConnectionInfoPrivate::getAbsoluteCounterPosition));
+    m_valueGetters.insert(QLatin1String("CurrentTransportActions"), ValueGetter(this, &HRendererConnectionInfoPrivate::getCurrentTransportActions));
+    m_valueGetters.insert(QLatin1String("DRMState"), ValueGetter(this, &HRendererConnectionInfoPrivate::getDrmState));
 
-    m_valueGetters.insert("Brightness", ValueGetter(this, &HRendererConnectionInfoPrivate::getBrightness));
-    m_valueGetters.insert("Contrast", ValueGetter(this, &HRendererConnectionInfoPrivate::getContrast));
-    m_valueGetters.insert("Sharpness", ValueGetter(this, &HRendererConnectionInfoPrivate::getSharpness));
-    m_valueGetters.insert("RedVideoGain", ValueGetter(this, &HRendererConnectionInfoPrivate::getRedVideoGain));
-    m_valueGetters.insert("GreenVideoGain", ValueGetter(this, &HRendererConnectionInfoPrivate::getGreenVideoGain));
-    m_valueGetters.insert("BlueVideoGain", ValueGetter(this, &HRendererConnectionInfoPrivate::getBlueVideoGain));
-    m_valueGetters.insert("RedVideoBlackLevel", ValueGetter(this, &HRendererConnectionInfoPrivate::getRedVideoBlackLevel));
-    m_valueGetters.insert("GreenVideoBlackLevel", ValueGetter(this, &HRendererConnectionInfoPrivate::getGreenVideoBlackLevel));
-    m_valueGetters.insert("BlueVideoBlackLevel", ValueGetter(this, &HRendererConnectionInfoPrivate::getBlueVideoBlackLevel));
-    m_valueGetters.insert("ColorTemperature", ValueGetter(this, &HRendererConnectionInfoPrivate::getColorTemperature));
-    m_valueGetters.insert("HorizontalKeystone", ValueGetter(this, &HRendererConnectionInfoPrivate::getHorizontalKeystone));
-    m_valueGetters.insert("VerticalKeystone", ValueGetter(this, &HRendererConnectionInfoPrivate::getVerticalKeystone));
-    m_valueGetters.insert("Mute", ValueGetter(this, &HRendererConnectionInfoPrivate::getMute));
-    m_valueGetters.insert("Volume", ValueGetter(this, &HRendererConnectionInfoPrivate::getVolume));
-    m_valueGetters.insert("VolumeDB", ValueGetter(this, &HRendererConnectionInfoPrivate::getVolumeDB));
-    m_valueGetters.insert("Loudness", ValueGetter(this, &HRendererConnectionInfoPrivate::getLoudness));
+    m_valueGetters.insert(QLatin1String("Brightness"), ValueGetter(this, &HRendererConnectionInfoPrivate::getBrightness));
+    m_valueGetters.insert(QLatin1String("Contrast"), ValueGetter(this, &HRendererConnectionInfoPrivate::getContrast));
+    m_valueGetters.insert(QLatin1String("Sharpness"), ValueGetter(this, &HRendererConnectionInfoPrivate::getSharpness));
+    m_valueGetters.insert(QLatin1String("RedVideoGain"), ValueGetter(this, &HRendererConnectionInfoPrivate::getRedVideoGain));
+    m_valueGetters.insert(QLatin1String("GreenVideoGain"), ValueGetter(this, &HRendererConnectionInfoPrivate::getGreenVideoGain));
+    m_valueGetters.insert(QLatin1String("BlueVideoGain"), ValueGetter(this, &HRendererConnectionInfoPrivate::getBlueVideoGain));
+    m_valueGetters.insert(QLatin1String("RedVideoBlackLevel"), ValueGetter(this, &HRendererConnectionInfoPrivate::getRedVideoBlackLevel));
+    m_valueGetters.insert(QLatin1String("GreenVideoBlackLevel"), ValueGetter(this, &HRendererConnectionInfoPrivate::getGreenVideoBlackLevel));
+    m_valueGetters.insert(QLatin1String("BlueVideoBlackLevel"), ValueGetter(this, &HRendererConnectionInfoPrivate::getBlueVideoBlackLevel));
+    m_valueGetters.insert(QLatin1String("ColorTemperature"), ValueGetter(this, &HRendererConnectionInfoPrivate::getColorTemperature));
+    m_valueGetters.insert(QLatin1String("HorizontalKeystone"), ValueGetter(this, &HRendererConnectionInfoPrivate::getHorizontalKeystone));
+    m_valueGetters.insert(QLatin1String("VerticalKeystone"), ValueGetter(this, &HRendererConnectionInfoPrivate::getVerticalKeystone));
+    m_valueGetters.insert(QLatin1String("Mute"), ValueGetter(this, &HRendererConnectionInfoPrivate::getMute));
+    m_valueGetters.insert(QLatin1String("Volume"), ValueGetter(this, &HRendererConnectionInfoPrivate::getVolume));
+    m_valueGetters.insert(QLatin1String("VolumeDB"), ValueGetter(this, &HRendererConnectionInfoPrivate::getVolumeDB));
+    m_valueGetters.insert(QLatin1String("Loudness"), ValueGetter(this, &HRendererConnectionInfoPrivate::getLoudness));
 }
 
 HRendererConnectionInfoPrivate::~HRendererConnectionInfoPrivate()
@@ -316,7 +316,7 @@ HChannelInformation* HRendererConnectionInfoPrivate::getChannel(const HChannel& 
 void HRendererConnectionInfoPrivate::setCurrentTransportActions(const QString& value, const HChannel&)
 {
     QSet<HTransportAction> actions;
-    foreach(const QString& arg, value.split(','))
+    foreach(const QString& arg, value.split(QLatin1Char(',')))
     {
         HTransportAction action = arg;
         if (action.isValid())
@@ -340,7 +340,7 @@ void HRendererConnectionInfoPrivate::setDrmState(const QString& value, const HCh
 void HRendererConnectionInfoPrivate::setPossiblePlaybackStorageMedia(const QString& value, const HChannel&)
 {
     QSet<HStorageMedium> mediums;
-    foreach(const QString& arg, value.split(','))
+    foreach(const QString& arg, value.split(QLatin1Char(',')))
     {
         HStorageMedium medium = arg;
         if (medium.isValid())
@@ -354,7 +354,7 @@ void HRendererConnectionInfoPrivate::setPossiblePlaybackStorageMedia(const QStri
 void HRendererConnectionInfoPrivate::setPossibleRecordStorageMedia(const QString& value, const HChannel&)
 {
     QSet<HStorageMedium> mediums;
-    foreach(const QString& arg, value.split(','))
+    foreach(const QString& arg, value.split(QLatin1Char(',')))
     {
         HStorageMedium medium = arg;
         if (medium.isValid())
@@ -368,7 +368,7 @@ void HRendererConnectionInfoPrivate::setPossibleRecordStorageMedia(const QString
 void HRendererConnectionInfoPrivate::setPossibleRecordQualityModes(const QString& value, const HChannel&)
 {
     QSet<HRecordQualityMode> modes;
-    foreach(const QString& arg, value.split(','))
+    foreach(const QString& arg, value.split(QLatin1Char(',')))
     {
         HRecordQualityMode mode = arg;
         if (mode.isValid())
@@ -391,7 +391,7 @@ void HRendererConnectionInfoPrivate::setCurrentMediaDuration(const QString& valu
 
 void HRendererConnectionInfoPrivate::setAVTransportURI(const QString& value, const HChannel&)
 {
-    q_ptr->setCurrentResourceUri(value);
+    q_ptr->setCurrentResourceUri(QUrl(value));
 }
 
 void HRendererConnectionInfoPrivate::setAVTransportURIMetaData(const QString& value, const HChannel&)
@@ -401,7 +401,7 @@ void HRendererConnectionInfoPrivate::setAVTransportURIMetaData(const QString& va
 
 void HRendererConnectionInfoPrivate::setNextAVTransportURI(const QString& value, const HChannel&)
 {
-    q_ptr->setNextResourceUri(value);
+    q_ptr->setNextResourceUri(QUrl(value));
 }
 
 void HRendererConnectionInfoPrivate::setNextAVTransportURIMetaData(const QString& value, const HChannel&)
@@ -441,7 +441,7 @@ void HRendererConnectionInfoPrivate::setCurrentTrackMetaData(const QString& valu
 
 void HRendererConnectionInfoPrivate::setCurrentTrackURI(const QString& value, const HChannel&)
 {
-    q_ptr->setCurrentTrackUri(value);
+    q_ptr->setCurrentTrackUri(QUrl(value));
 }
 
 void HRendererConnectionInfoPrivate::setRelativeTimePosition(const QString& value, const HChannel&)
@@ -776,7 +776,7 @@ QString HRendererConnectionInfoPrivate::getVerticalKeystone(const HChannel&) con
 QString HRendererConnectionInfoPrivate::getMute(const HChannel& ch) const
 {
     HChannelInformation* chInfo = getChannel(ch);
-    return chInfo ? (chInfo->muted ? "1" : "0") : QString();
+    return chInfo ? (chInfo->muted ? QLatin1String("1") : QLatin1String("0")) : QString();
 }
 
 QString HRendererConnectionInfoPrivate::getVolume(const HChannel& ch) const
@@ -794,7 +794,7 @@ QString HRendererConnectionInfoPrivate::getVolumeDB(const HChannel& ch) const
 QString HRendererConnectionInfoPrivate::getLoudness(const HChannel& ch) const
 {
     HChannelInformation* chInfo = getChannel(ch);
-    return chInfo ? (chInfo->loudness ? "1" : "0") : QString();
+    return chInfo ? (chInfo->loudness ? QLatin1String("1") : QLatin1String("0")) : QString();
 }
 
 /*******************************************************************************
@@ -991,38 +991,38 @@ QSet<QString> HRendererConnectionInfo::presets() const
 
 QString HRendererConnectionInfo::rcsAttributeToString(RcsAttribute arg)
 {
-    QString retVal = "";
+    QString retVal = QLatin1String("");
     switch(arg)
     {
     case Brightness:
-        retVal = "Brightness";
+        retVal = QLatin1String("Brightness");
         break;
     case Contrast:
-        retVal = "Contrast";
+        retVal = QLatin1String("Contrast");
         break;
     case Sharpness:
-        retVal = "Sharpness";
+        retVal = QLatin1String("Sharpness");
         break;
     case RedVideoGain:
-        retVal = "RedVideoGain";
+        retVal = QLatin1String("RedVideoGain");
         break;
     case GreenVideoGain:
-        retVal = "GreenVideoGain";
+        retVal = QLatin1String("GreenVideoGain");
         break;
     case BlueVideoGain:
-        retVal = "BlueVideoGain";
+        retVal = QLatin1String("BlueVideoGain");
         break;
     case RedVideoBlackLevel:
-        retVal = "RedVideoBlackLevel";
+        retVal = QLatin1String("RedVideoBlackLevel");
         break;
     case GreenVideoBlackLevel:
-        retVal = "GreenVideoBlackLevel";
+        retVal = QLatin1String("GreenVideoBlackLevel");
         break;
     case BlueVideoBlackLevel:
-        retVal = "BlueVideoBlackLevel";
+        retVal = QLatin1String("BlueVideoBlackLevel");
         break;
     case ColorTemperature:
-        retVal = "ColorTemperature";
+        retVal = QLatin1String("ColorTemperature");
         break;
     default:
         Q_ASSERT(false);
@@ -1116,7 +1116,7 @@ void HRendererConnectionInfo::setTransportState(const HTransportState& arg)
     {
         h_ptr->m_transportInfo.setState(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "TransportState", h_ptr->getTransportState()));
+            QLatin1String("TransportState"), h_ptr->getTransportState()));
     }
 }
 
@@ -1126,7 +1126,7 @@ void HRendererConnectionInfo::setTransportStatus(const HTransportStatus& arg)
     {
         h_ptr->m_transportInfo.setStatus(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "TransportStatus", h_ptr->getTransportStatus()));
+           QLatin1String("TransportStatus"), h_ptr->getTransportStatus()));
     }
 }
 
@@ -1136,7 +1136,7 @@ void HRendererConnectionInfo::setCurrentMediaCategory(HMediaInfo::MediaCategory 
     {
         h_ptr->m_mediaInfo.setMediaCategory(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentMediaCategory", h_ptr->getCurrentMediaCategory()));
+            QLatin1String("CurrentMediaCategory"), h_ptr->getCurrentMediaCategory()));
     }
 }
 
@@ -1146,7 +1146,7 @@ void HRendererConnectionInfo::setPlaybackStorageMedium(const HStorageMedium& arg
     {
         h_ptr->m_mediaInfo.setPlayMedium(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "PlaybackStorageMedium", h_ptr->getPlaybackStorageMedium()));
+            QLatin1String("PlaybackStorageMedium"), h_ptr->getPlaybackStorageMedium()));
     }
 }
 
@@ -1156,7 +1156,7 @@ void HRendererConnectionInfo::setRecordStorageMedium(const HStorageMedium& arg)
     {
         h_ptr->m_mediaInfo.setRecordMedium(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "RecordStorageMedium", h_ptr->getRecordStorageMedium()));
+            QLatin1String("RecordStorageMedium"), h_ptr->getRecordStorageMedium()));
     }
 }
 
@@ -1167,7 +1167,7 @@ void HRendererConnectionInfo::setPossiblePlaybackStorageMedia(
     {
         h_ptr->m_deviceCapabilities.setPlayMedia(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "PossiblePlaybackStorageMedia", h_ptr->getPossiblePlaybackStorageMedia()));
+            QLatin1String("PossiblePlaybackStorageMedia"), h_ptr->getPossiblePlaybackStorageMedia()));
     }
 }
 
@@ -1178,7 +1178,7 @@ void HRendererConnectionInfo::setPossibleRecordStorageMedia(
     {
         h_ptr->m_deviceCapabilities.setRecordMedia(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "PossibleRecordStorageMedia", h_ptr->getPossibleRecordStorageMedia()));
+            QLatin1String("PossibleRecordStorageMedia"), h_ptr->getPossibleRecordStorageMedia()));
     }
 }
 
@@ -1188,7 +1188,7 @@ void HRendererConnectionInfo::setCurrentPlayMode(const HPlayMode& arg)
     {
         h_ptr->m_transportSettings.setPlayMode(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentPlayMode", h_ptr->getCurrentPlayMode()));
+            QLatin1String("CurrentPlayMode"), h_ptr->getCurrentPlayMode()));
     }
 }
 
@@ -1198,7 +1198,7 @@ void HRendererConnectionInfo::setTransportPlaySpeed(const QString& arg)
     {
         h_ptr->m_transportInfo.setSpeed(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "TransportPlaySpeed", h_ptr->getTransportPlaySpeed()));
+            QLatin1String("TransportPlaySpeed"), h_ptr->getTransportPlaySpeed()));
     }
 }
 
@@ -1209,7 +1209,7 @@ void HRendererConnectionInfo::setRecordMediumWriteStatus(
     {
         h_ptr->m_mediaInfo.setWriteStatus(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "RecordMediumWriteStatus", h_ptr->getRecordMediumWriteStatus()));
+            QLatin1String("RecordMediumWriteStatus"), h_ptr->getRecordMediumWriteStatus()));
     }
 }
 
@@ -1220,7 +1220,7 @@ void HRendererConnectionInfo::setCurrentRecordQualityMode(
     {
         h_ptr->m_transportSettings.setRecordQualityMode(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentRecordQualityMode", h_ptr->getCurrentRecordQualityMode()));
+            QLatin1String("CurrentRecordQualityMode"), h_ptr->getCurrentRecordQualityMode()));
     }
 }
 
@@ -1231,7 +1231,7 @@ void HRendererConnectionInfo::setPossibleRecordQualityModes(
     {
         h_ptr->m_deviceCapabilities.setRecordQualityModes(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "PossibleRecordQualityModes", h_ptr->getPossibleRecordQualityModes()));
+            QLatin1String("PossibleRecordQualityModes"), h_ptr->getPossibleRecordQualityModes()));
     }
 }
 
@@ -1241,7 +1241,7 @@ void HRendererConnectionInfo::setNumberOfTracks(quint32 arg)
     {
         h_ptr->m_mediaInfo.setNumberOfTracks(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "NumberOfTracks", h_ptr->getNumberOfTracks()));
+            QLatin1String("NumberOfTracks"), h_ptr->getNumberOfTracks()));
     }
 }
 
@@ -1251,7 +1251,7 @@ void HRendererConnectionInfo::setCurrentTrack(quint32 arg)
     {
         h_ptr->m_positionInfo.setTrack(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentTrack", h_ptr->getCurrentTrack()));
+            QLatin1String("CurrentTrack"), h_ptr->getCurrentTrack()));
     }
 }
 
@@ -1261,7 +1261,7 @@ void HRendererConnectionInfo::setCurrentTrackDuration(const HDuration& arg)
     {
         h_ptr->m_positionInfo.setTrackDuration(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentTrackDuration", h_ptr->getCurrentTrackDuration()));
+            QLatin1String("CurrentTrackDuration"), h_ptr->getCurrentTrackDuration()));
     }
 }
 
@@ -1271,7 +1271,7 @@ void HRendererConnectionInfo::setCurrentMediaDuration(const HDuration& arg)
     {
         h_ptr->m_mediaInfo.setMediaDuration(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentMediaDuration", h_ptr->getCurrentMediaDuration()));
+            QLatin1String("CurrentMediaDuration"), h_ptr->getCurrentMediaDuration()));
     }
 }
 
@@ -1281,7 +1281,7 @@ void HRendererConnectionInfo::setCurrentTrackMetadata(const QString& arg)
     {
         h_ptr->m_positionInfo.setTrackMetadata(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentTrackMetaData", h_ptr->getCurrentTrackMetaData()));
+            QLatin1String("CurrentTrackMetaData"), h_ptr->getCurrentTrackMetaData()));
     }
 }
 
@@ -1291,7 +1291,7 @@ void HRendererConnectionInfo::setCurrentTrackUri(const QUrl& arg)
     {
         h_ptr->m_positionInfo.setTrackUri(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentTrackURI", h_ptr->getCurrentTrackURI()));
+            QLatin1String("CurrentTrackURI"), h_ptr->getCurrentTrackURI()));
     }
 }
 
@@ -1301,7 +1301,7 @@ void HRendererConnectionInfo::setCurrentResourceUri(const QUrl& arg)
     {
         h_ptr->m_mediaInfo.setCurrentUri(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "AVTransportURI", h_ptr->getAVTransportURI()));
+            QLatin1String("AVTransportURI"), h_ptr->getAVTransportURI()));
     }
 }
 
@@ -1311,7 +1311,7 @@ void HRendererConnectionInfo::setCurrentResourceMetadata(const QString& arg)
     {
         h_ptr->m_mediaInfo.setCurrentUriMetadata(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "AVTransportURIMetaData", h_ptr->getAVTransportURIMetaData()));
+            QLatin1String("AVTransportURIMetaData"), h_ptr->getAVTransportURIMetaData()));
     }
 }
 
@@ -1321,7 +1321,7 @@ void HRendererConnectionInfo::setNextResourceUri(const QUrl& arg)
     {
         h_ptr->m_mediaInfo.setNextUri(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "NextAVTransportURI", h_ptr->getNextAVTransportURI()));
+            QLatin1String("NextAVTransportURI"), h_ptr->getNextAVTransportURI()));
     }
 }
 
@@ -1331,7 +1331,7 @@ void HRendererConnectionInfo::setNextResourceMetadata(const QString& arg)
     {
         h_ptr->m_mediaInfo.setNextUriMetadata(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "NextAVTransportURIMetaData", h_ptr->getNextAVTransportURIMetaData()));
+            QLatin1String("NextAVTransportURIMetaData"), h_ptr->getNextAVTransportURIMetaData()));
     }
 }
 
@@ -1341,7 +1341,7 @@ void HRendererConnectionInfo::setRelativeTimePosition(const HDuration& arg)
     {
         h_ptr->m_positionInfo.setRelativeTimePosition(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "RelativeTimePosition", h_ptr->getRelativeTimePosition()));
+            QLatin1String("RelativeTimePosition"), h_ptr->getRelativeTimePosition()));
     }
 }
 
@@ -1351,7 +1351,7 @@ void HRendererConnectionInfo::setAbsoluteTimePosition(const HDuration& arg)
     {
         h_ptr->m_positionInfo.setAbsoluteTimePosition(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "AbsoluteTimePosition", h_ptr->getAbsoluteTimePosition()));
+            QLatin1String("AbsoluteTimePosition"), h_ptr->getAbsoluteTimePosition()));
     }
 }
 
@@ -1361,7 +1361,7 @@ void HRendererConnectionInfo::setRelativeCounterPosition(qint32 arg)
     {
         h_ptr->m_positionInfo.setRelativeCounterPosition(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "RelativeCounterPosition", h_ptr->getRelativeCounterPosition()));
+            QLatin1String("RelativeCounterPosition"), h_ptr->getRelativeCounterPosition()));
     }
 }
 
@@ -1371,7 +1371,7 @@ void HRendererConnectionInfo::setAbsoluteCounterPosition(qint32 arg)
     {
         h_ptr->m_positionInfo.setAbsoluteCounterPosition(arg);
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "AbsoluteCounterPosition", h_ptr->getAbsoluteCounterPosition()));
+            QLatin1String("AbsoluteCounterPosition"), h_ptr->getAbsoluteCounterPosition()));
     }
 }
 
@@ -1382,7 +1382,7 @@ void HRendererConnectionInfo::setCurrentTransportActions(
     {
         h_ptr->m_transportActions = arg;
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "CurrentTransportActions", h_ptr->getCurrentTransportActions()));
+            QLatin1String("CurrentTransportActions"), h_ptr->getCurrentTransportActions()));
     }
 }
 
@@ -1392,7 +1392,7 @@ void HRendererConnectionInfo::setDrmState(HAvTransportInfo::DrmState arg)
     {
         h_ptr->m_drmState = arg;
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "DRMState", h_ptr->getDrmState()));
+            QLatin1String("DRMState"), h_ptr->getDrmState()));
     }
 }
 
@@ -1464,7 +1464,7 @@ void HRendererConnectionInfo::setHorizontalKeystone(qint16 value)
     {
         h_ptr->m_horizontalKeystone = value;
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "HorizontalKeystone", QString::number(value)));
+            QLatin1String("HorizontalKeystone"), QString::number(value)));
     }
 }
 
@@ -1474,7 +1474,7 @@ void HRendererConnectionInfo::setVerticalKeystone(qint16 value)
     {
         h_ptr->m_verticalKeystone = value;
         emit propertyChanged(this, HRendererConnectionEventInfo(
-            "VerticalKeystone", QString::number(value)));
+            QLatin1String("VerticalKeystone"), QString::number(value)));
     }
 }
 
@@ -1487,7 +1487,7 @@ bool HRendererConnectionInfo::setMute(const HChannel& channel, bool enabled)
         {
             info->muted = enabled;
             emit propertyChanged(this, HRendererConnectionEventInfo(
-                "Mute", enabled ? "1" : "0"));
+                QLatin1String("Mute"), enabled ? QLatin1String("1") : QLatin1String("0")));
         }
     }
     return info;
@@ -1502,7 +1502,7 @@ bool HRendererConnectionInfo::setVolume(const HChannel& channel, quint16 value)
         {
             info->volume = value;
             emit propertyChanged(this, HRendererConnectionEventInfo(
-                "Volume", QString::number(value)));
+                QLatin1String("Volume"), QString::number(value)));
         }
     }
     return info;
@@ -1517,7 +1517,7 @@ bool HRendererConnectionInfo::setVolumeDb(const HChannel& channel, qint16 value)
         {
             info->volumeDb = value;
             emit propertyChanged(this, HRendererConnectionEventInfo(
-                "VolumeDB", QString::number(value)));
+                QLatin1String("VolumeDB"), QString::number(value)));
         }
     }
     return info;
@@ -1532,7 +1532,7 @@ bool HRendererConnectionInfo::setLoudness(const HChannel& channel, bool enabled)
         {
             info->loudness = enabled;
             emit propertyChanged(this, HRendererConnectionEventInfo(
-                "Loudness", enabled ? "1" : "0"));
+                QLatin1String("Loudness"), enabled ? QLatin1String("1") : QLatin1String("0")));
         }
     }
     return info;
@@ -1578,19 +1578,19 @@ bool HRendererConnectionInfo::hasChannelAssociated(const QString& svName)
 {
     bool retVal = false;
     QString trimmed = svName.trimmed();
-    if (trimmed.compare("Mute", Qt::CaseInsensitive) == 0)
+    if (trimmed.compare(QLatin1String("Mute"), Qt::CaseInsensitive) == 0)
     {
         retVal = true;
     }
-    else if (trimmed.compare("Volume", Qt::CaseInsensitive) == 0)
+    else if (trimmed.compare(QLatin1String("Volume"), Qt::CaseInsensitive) == 0)
     {
         retVal = true;
     }
-    else if (trimmed.compare("VolumeDB", Qt::CaseInsensitive) == 0)
+    else if (trimmed.compare(QLatin1String("VolumeDB"), Qt::CaseInsensitive) == 0)
     {
         retVal = true;
     }
-    else if (trimmed.compare("Loudness", Qt::CaseInsensitive) == 0)
+    else if (trimmed.compare(QLatin1String("Loudness"), Qt::CaseInsensitive) == 0)
     {
         retVal = true;
     }

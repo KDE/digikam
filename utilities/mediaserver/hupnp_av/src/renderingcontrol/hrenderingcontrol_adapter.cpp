@@ -70,8 +70,8 @@ bool HRenderingControlAdapterPrivate::listPresets(
     H_Q(HRenderingControlAdapter);
 
     QStringList currentPresetNameList =
-        op.outputArguments().value(
-            "CurrentPresetNameList").toString().split(",");
+        op.outputArguments().value(QLatin1String(
+            "CurrentPresetNameList")).toString().split(QLatin1String(","));
 
     emit q->listPresetsCompleted(q, takeOp(op, currentPresetNameList));
 
@@ -92,7 +92,7 @@ bool HRenderingControlAdapterPrivate::getBrightness(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentBrightness =
-        op.outputArguments().value("CurrentBrightness").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentBrightness")).toUInt();
 
     emit q->getBrightnessCompleted(q, takeOp(op, currentBrightness));
 
@@ -113,7 +113,7 @@ bool HRenderingControlAdapterPrivate::getContrast(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentContrast =
-        op.outputArguments().value("CurrentContrast").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentContrast")).toUInt();
 
     emit q->getContrastCompleted(q, takeOp(op, currentContrast));
 
@@ -134,7 +134,7 @@ bool HRenderingControlAdapterPrivate::getSharpness(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentSharpness =
-        op.outputArguments().value("CurrentSharpness").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentSharpness")).toUInt();
 
     emit q->getSharpnessCompleted(q, takeOp(op, currentSharpness));
 
@@ -155,7 +155,7 @@ bool HRenderingControlAdapterPrivate::getRedVideoGain(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentRedVideoGain =
-        op.outputArguments().value("CurrentRedVideoGain").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentRedVideoGain")).toUInt();
 
     emit q->getRedVideoGainCompleted(q, takeOp(op, currentRedVideoGain));
 
@@ -176,7 +176,7 @@ bool HRenderingControlAdapterPrivate::getGreenVideoGain(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentGreenVideoGain =
-        op.outputArguments().value("CurrentGreenVideoGain").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentGreenVideoGain")).toUInt();
 
     emit q->getGreenVideoGainCompleted(q, takeOp(op, currentGreenVideoGain));
 
@@ -197,7 +197,7 @@ bool HRenderingControlAdapterPrivate::getBlueVideoGain(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentBlueVideoGain =
-        op.outputArguments().value("CurrentBlueVideoGain").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentBlueVideoGain")).toUInt();
 
     emit q->getBlueVideoGainCompleted(q, takeOp(op, currentBlueVideoGain));
 
@@ -218,7 +218,7 @@ bool HRenderingControlAdapterPrivate::getRedVideoBlackLevel(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentRedVideoBlackLevel =
-        op.outputArguments().value("CurrentRedVideoBlackLevel").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentRedVideoBlackLevel")).toUInt();
 
     emit q->getRedVideoBlackLevelCompleted(
         q, takeOp(op, currentRedVideoBlackLevel));
@@ -240,7 +240,7 @@ bool HRenderingControlAdapterPrivate::getGreenVideoBlackLevel(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentGreenVideoBlackLevel =
-        op.outputArguments().value("CurrentGreenVideoBlackLevel").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentGreenVideoBlackLevel")).toUInt();
 
     emit q->getGreenVideoBlackLevelCompleted(
         q, takeOp(op, currentGreenVideoBlackLevel));
@@ -262,7 +262,7 @@ bool HRenderingControlAdapterPrivate::getBlueVideoBlackLevel(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentBlueVideoBlackLevel =
-        op.outputArguments().value("CurrentBlueVideoBlackLevel").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentBlueVideoBlackLevel")).toUInt();
 
     emit q->getBlueVideoBlackLevelCompleted(
         q, takeOp(op, currentBlueVideoBlackLevel));
@@ -284,7 +284,7 @@ bool HRenderingControlAdapterPrivate::getColorTemperature(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentColorTemperature =
-        op.outputArguments().value("CurrentColorTemperature").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentColorTemperature")).toUInt();
 
     emit q->getColorTemperatureCompleted(q, takeOp(op, currentColorTemperature));
 
@@ -305,7 +305,7 @@ bool HRenderingControlAdapterPrivate::getHorizontalKeystone(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentHorizontalKeyStone =
-        op.outputArguments().value("CurrentHorizontalKeystone").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentHorizontalKeystone")).toUInt();
 
     emit q->getHorizontalKeystoneCompleted(
         q, takeOp(op, currentHorizontalKeyStone));
@@ -327,7 +327,7 @@ bool HRenderingControlAdapterPrivate::getVerticalKeystone(
     H_Q(HRenderingControlAdapter);
 
     quint16 currentVerticalKeyStone =
-        op.outputArguments().value("CurrentVerticalKeystone").toUInt();
+        op.outputArguments().value(QLatin1String("CurrentVerticalKeystone")).toUInt();
 
     emit q->getVerticalKeystoneCompleted(
         q, takeOp(op, currentVerticalKeyStone));
@@ -348,7 +348,7 @@ bool HRenderingControlAdapterPrivate::getMute(
 {
     H_Q(HRenderingControlAdapter);
 
-    bool currentlyMuted = op.outputArguments().value("CurrentMute").toBool();
+    bool currentlyMuted = op.outputArguments().value(QLatin1String("CurrentMute")).toBool();
     emit q->getMuteCompleted(q, takeOp(op, currentlyMuted));
 
     return false;
@@ -367,7 +367,7 @@ bool HRenderingControlAdapterPrivate::getVolume(
 {
     H_Q(HRenderingControlAdapter);
 
-    quint16 currentVolume = op.outputArguments().value("CurrentVolume").toUInt();
+    quint16 currentVolume = op.outputArguments().value(QLatin1String("CurrentVolume")).toUInt();
     emit q->getVolumeCompleted(q, takeOp(op, currentVolume));
 
     return false;
@@ -386,7 +386,7 @@ bool HRenderingControlAdapterPrivate::getVolumeDB(
 {
     H_Q(HRenderingControlAdapter);
 
-    qint16 currentVolumeDb = op.outputArguments().value("CurrentVolume").toInt();
+    qint16 currentVolumeDb = op.outputArguments().value(QLatin1String("CurrentVolume")).toInt();
     emit q->getVolumeDBCompleted(q, takeOp(op, currentVolumeDb));
 
     return false;
@@ -405,8 +405,8 @@ bool HRenderingControlAdapterPrivate::getVolumeDBRange(
 {
     H_Q(HRenderingControlAdapter);
 
-    qint32 minValue = op.outputArguments().value("MinValue").toInt();
-    qint32 maxValue = op.outputArguments().value("MaxValue").toInt();
+    qint32 minValue = op.outputArguments().value(QLatin1String("MinValue")).toInt();
+    qint32 maxValue = op.outputArguments().value(QLatin1String("MaxValue")).toInt();
 
     HVolumeDbRangeResult result(minValue, maxValue);
 
@@ -420,7 +420,7 @@ bool HRenderingControlAdapterPrivate::getLoudness(
 {
     H_Q(HRenderingControlAdapter);
 
-    bool loudnessOn = op.outputArguments().value("CurrentLoudness").toBool();
+    bool loudnessOn = op.outputArguments().value(QLatin1String("CurrentLoudness")).toBool();
     emit q->getLoudnessCompleted(q, takeOp(op, loudnessOn));
 
     return false;
@@ -440,7 +440,7 @@ bool HRenderingControlAdapterPrivate::getStateVariables(
     H_Q(HRenderingControlAdapter);
 
     QString stateVariableValuePairs =
-        op.outputArguments().value("StateVariableValuePairs").toString();
+        op.outputArguments().value(QLatin1String("StateVariableValuePairs")).toString();
 
     emit q->getStateVariablesCompleted(q, takeOp(op, stateVariableValuePairs));
 
@@ -453,7 +453,7 @@ bool HRenderingControlAdapterPrivate::setStateVariables(
     H_Q(HRenderingControlAdapter);
 
     QStringList stateVariableList =
-        op.outputArguments().value("StateVariableList").toString().split(",");
+        op.outputArguments().value(QLatin1String("StateVariableList")).toString().split(QLatin1String(","));
 
     emit q->setStateVariablesCompleted(q, takeOp(op, stateVariableList));
 
@@ -483,7 +483,7 @@ void HRenderingControlAdapter::lastChange(
 
 bool HRenderingControlAdapter::prepareService(HClientService* service)
 {
-    const HClientStateVariable* lastChange = service->stateVariables().value("LastChange");
+    const HClientStateVariable* lastChange = service->stateVariables().value(QLatin1String("LastChange"));
     if (lastChange)
     {
         bool ok = connect(
@@ -499,15 +499,15 @@ bool HRenderingControlAdapter::prepareService(HClientService* service)
 HClientAdapterOp<QStringList> HRenderingControlAdapter::listPresets()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("ListPresets", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("ListPresets"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QStringList>::createInvalid(rc, "");
+        return HClientAdapterOp<QStringList>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<QStringList>(
         action, inArgs,
@@ -517,16 +517,16 @@ HClientAdapterOp<QStringList> HRenderingControlAdapter::listPresets()
 HClientAdapterOpNull HRenderingControlAdapter::selectPreset(const QString& presetName)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SelectPreset", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SelectPreset"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("PresetName", presetName);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("PresetName"), presetName);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -536,15 +536,15 @@ HClientAdapterOpNull HRenderingControlAdapter::selectPreset(const QString& prese
 HClientAdapterOp<quint16> HRenderingControlAdapter::getBrightness()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetBrightness", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetBrightness"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -555,16 +555,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setBrightness(
     quint16 desiredBrightness)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetBrightness", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetBrightness"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredBrightness", desiredBrightness);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredBrightness"), desiredBrightness);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -574,15 +574,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setBrightness(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getContrast()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetContrast", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetContrast"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -593,16 +593,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setContrast(
     quint16 desiredContrast)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetContrast", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetContrast"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredContrast", desiredContrast);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredContrast"), desiredContrast);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -612,15 +612,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setContrast(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getSharpness()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetSharpness", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetSharpness"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -631,16 +631,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setSharpness(
     quint16 desiredSharpness)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetSharpness", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetSharpness"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredSharpness", desiredSharpness);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredSharpness"), desiredSharpness);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -650,15 +650,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setSharpness(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getRedVideoGain()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetRedVideoGain", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetRedVideoGain"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -669,16 +669,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setRedVideoGain(
     quint16 desiredRedVideoGain)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetRedVideoGain", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetRedVideoGain"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredRedVideoGain", desiredRedVideoGain);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredRedVideoGain"), desiredRedVideoGain);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -688,15 +688,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setRedVideoGain(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getGreenVideoGain()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetGreenVideoGain", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetGreenVideoGain"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -707,16 +707,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setGreenVideoGain(
     quint16 desiredGreenVideoGain)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetGreenVideoGain", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetGreenVideoGain"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredGreenVideoGain", desiredGreenVideoGain);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredGreenVideoGain"), desiredGreenVideoGain);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -726,15 +726,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setGreenVideoGain(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getBlueVideoGain()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetBlueVideoGain", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetBlueVideoGain"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -745,16 +745,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setBlueVideoGain(
     quint16 desiredBlueVideoGain)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetBlueVideoGain", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetBlueVideoGain"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredBlueVideoGain", desiredBlueVideoGain);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredBlueVideoGain"), desiredBlueVideoGain);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -764,15 +764,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setBlueVideoGain(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getRedVideoBlackLevel()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetRedVideoBlackLevel", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetRedVideoBlackLevel"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -783,16 +783,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setRedVideoBlackLevel(
     quint16 desiredRedVideoBlackLevel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetRedVideoBlackLevel", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetRedVideoBlackLevel"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredRedVideoBlackLevel", desiredRedVideoBlackLevel);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredRedVideoBlackLevel"), desiredRedVideoBlackLevel);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -802,15 +802,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setRedVideoBlackLevel(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getGreenVideoBlackLevel()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetGreenVideoBlackLevel", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetGreenVideoBlackLevel"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -821,16 +821,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setGreenVideoBlackLevel(
     quint16 desiredGreenVideoBlackLevel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetGreenVideoBlackLevel", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetGreenVideoBlackLevel"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredGreenVideoBlackLevel",
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredGreenVideoBlackLevel"),
         desiredGreenVideoBlackLevel);
 
     return h_ptr->beginInvoke(
@@ -841,15 +841,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setGreenVideoBlackLevel(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getBlueVideoBlackLevel()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetBlueVideoBlackLevel", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetBlueVideoBlackLevel"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -860,16 +860,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setBlueVideoBlackLevel(
     quint16 desiredBlueVideoBlackLevel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetBlueVideoBlackLevel", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetBlueVideoBlackLevel"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredBlueVideoBlackLevel", desiredBlueVideoBlackLevel);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredBlueVideoBlackLevel"), desiredBlueVideoBlackLevel);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -879,15 +879,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setBlueVideoBlackLevel(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getColorTemperature()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetColorTemperature", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetColorTemperature"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -898,16 +898,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setColorTemperature(
     quint16 desiredColorTemperature)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetColorTemperature", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetColorTemperature"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredColorTemperature", desiredColorTemperature);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredColorTemperature"), desiredColorTemperature);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -917,15 +917,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setColorTemperature(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getHorizontalKeystone()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetHorizontalKeystone", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetHorizontalKeystone"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -936,16 +936,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setHorizontalKeystone(
     qint16 desiredHorizontalKeyStone)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetHorizontalKeystone", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetHorizontalKeystone"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredHorizontalKeystone", desiredHorizontalKeyStone);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredHorizontalKeystone"), desiredHorizontalKeyStone);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -955,15 +955,15 @@ HClientAdapterOpNull HRenderingControlAdapter::setHorizontalKeystone(
 HClientAdapterOp<quint16> HRenderingControlAdapter::getVerticalKeystone()
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetVerticalKeystone", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetVerticalKeystone"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -974,16 +974,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setVerticalKeystone(
     qint16 desiredVerticalKeyStone)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetVerticalKeystone", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetVerticalKeystone"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("DesiredVerticalKeystone", desiredVerticalKeyStone);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("DesiredVerticalKeystone"), desiredVerticalKeyStone);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -994,16 +994,16 @@ HClientAdapterOp<bool> HRenderingControlAdapter::getMute(
     const HChannel& channel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetMute", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetMute"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<bool>::createInvalid(rc, "");
+        return HClientAdapterOp<bool>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
 
     return h_ptr->beginInvoke<bool>(
         action, inArgs,
@@ -1014,17 +1014,17 @@ HClientAdapterOpNull HRenderingControlAdapter::setMute(
     const HChannel& channel, bool desiredMute)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetMute", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetMute"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
-    inArgs.setValue("DesiredMute", desiredMute);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
+    inArgs.setValue(QLatin1String("DesiredMute"), desiredMute);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -1035,16 +1035,16 @@ HClientAdapterOp<quint16> HRenderingControlAdapter::getVolume(
     const HChannel& channel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetVolume", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetVolume"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<quint16>::createInvalid(rc, "");
+        return HClientAdapterOp<quint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
 
     return h_ptr->beginInvoke<quint16>(
         action, inArgs,
@@ -1055,17 +1055,17 @@ HClientAdapterOpNull HRenderingControlAdapter::setVolume(
     const HChannel& channel, quint16 desiredVolume)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetVolume", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetVolume"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
-    inArgs.setValue("DesiredVolume", desiredVolume);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
+    inArgs.setValue(QLatin1String("DesiredVolume"), desiredVolume);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -1075,16 +1075,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setVolume(
 HClientAdapterOp<qint16> HRenderingControlAdapter::getVolumeDB(const HChannel& channel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetVolumeDB", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetVolumeDB"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<qint16>::createInvalid(rc, "");
+        return HClientAdapterOp<qint16>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
 
     return h_ptr->beginInvoke<qint16>(
         action, inArgs,
@@ -1095,17 +1095,17 @@ HClientAdapterOpNull HRenderingControlAdapter::setVolumeDB(
     const HChannel& channel, qint16 desiredVolumeDb)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetVolumeDB", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetVolumeDB"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
-    inArgs.setValue("DesiredVolume", desiredVolumeDb);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
+    inArgs.setValue(QLatin1String("DesiredVolume"), desiredVolumeDb);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -1115,16 +1115,16 @@ HClientAdapterOpNull HRenderingControlAdapter::setVolumeDB(
 HClientAdapterOp<HVolumeDbRangeResult> HRenderingControlAdapter::getVolumeDBRange(const HChannel& channel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetVolumeDBRange", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetVolumeDBRange"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HVolumeDbRangeResult>::createInvalid(rc, "");
+        return HClientAdapterOp<HVolumeDbRangeResult>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
 
     return h_ptr->beginInvoke<HVolumeDbRangeResult>(
         action, inArgs,
@@ -1135,16 +1135,16 @@ HClientAdapterOp<bool> HRenderingControlAdapter::getLoudness(
     const HChannel& channel)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetLoudness", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetLoudness"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<bool>::createInvalid(rc, "");
+        return HClientAdapterOp<bool>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
 
     return h_ptr->beginInvoke<bool>(
         action, inArgs,
@@ -1155,17 +1155,17 @@ HClientAdapterOpNull HRenderingControlAdapter::setLoudness(
     const HChannel& channel, bool loudnessOn)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetLoudness", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetLoudness"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("Channel", channel.toString());
-    inArgs.setValue("DesiredLoudness", loudnessOn);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("Channel"), channel.toString());
+    inArgs.setValue(QLatin1String("DesiredLoudness"), loudnessOn);
 
     return h_ptr->beginInvoke(
         action, inArgs,
@@ -1176,16 +1176,16 @@ HClientAdapterOp<QString> HRenderingControlAdapter::getStateVariables(
     const QSet<QString>& stateVariableNames)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetStateVariables", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetStateVariables"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("StateVariableList", QStringList(stateVariableNames.toList()).join(","));
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("StateVariableList"), QStringList(stateVariableNames.toList()).join(QLatin1String(",")));
 
     return h_ptr->beginInvoke<QString>(
         action, inArgs,
@@ -1198,19 +1198,19 @@ HClientAdapterOp<QStringList> HRenderingControlAdapter::setStateVariables(
     const QString& stateVariableValuePairs)
 {
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetStateVariables", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetStateVariables"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QStringList>::createInvalid(rc, "");
+        return HClientAdapterOp<QStringList>::createInvalid(rc, QLatin1String(""));
     }
 
     H_D(HRenderingControlAdapter);
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    inArgs.setValue("RenderingControlUDN", renderingControlUdn.toString());
-    inArgs.setValue("ServiceType", serviceType.toString());
-    inArgs.setValue("ServiceId", serviceId.toString());
-    inArgs.setValue("StateVariableValuePairs", stateVariableValuePairs);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    inArgs.setValue(QLatin1String("RenderingControlUDN"), renderingControlUdn.toString());
+    inArgs.setValue(QLatin1String("ServiceType"), serviceType.toString());
+    inArgs.setValue(QLatin1String("ServiceId"), serviceId.toString());
+    inArgs.setValue(QLatin1String("StateVariableValuePairs"), stateVariableValuePairs);
 
     return h_ptr->beginInvoke<QStringList>(
         action, inArgs,

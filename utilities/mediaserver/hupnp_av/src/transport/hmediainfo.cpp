@@ -161,13 +161,13 @@ QString HMediaInfo::toString(MediaCategory category)
     case Undefined:
         break;
     case NoMedia:
-        retVal = "NO_MEDIA";
+        retVal = QLatin1String("NO_MEDIA");
         break;
     case TrackAware:
-        retVal = "TRACK_AWARE";
+        retVal = QLatin1String("TRACK_AWARE");
         break;
     case TrackUnaware:
-        retVal = "TRACK_UNAWARE";
+        retVal = QLatin1String("TRACK_UNAWARE");
         break;
     default:
         Q_ASSERT(false);
@@ -180,15 +180,15 @@ HMediaInfo::MediaCategory HMediaInfo::mediaCategoryFromString(
     const QString& category)
 {
     MediaCategory retVal = Undefined;
-    if (category.compare("NO_MEDIA", Qt::CaseInsensitive) == 0)
+    if (category.compare(QLatin1String("NO_MEDIA"), Qt::CaseInsensitive) == 0)
     {
         retVal = NoMedia;
     }
-    else if (category.compare("TRACK_AWARE", Qt::CaseInsensitive) == 0)
+    else if (category.compare(QLatin1String("TRACK_AWARE"), Qt::CaseInsensitive) == 0)
     {
         retVal = TrackAware;
     }
-    else if (category.compare("TRACK_UNAWARE", Qt::CaseInsensitive) == 0)
+    else if (category.compare(QLatin1String("TRACK_UNAWARE"), Qt::CaseInsensitive) == 0)
     {
         retVal = TrackUnaware;
     }

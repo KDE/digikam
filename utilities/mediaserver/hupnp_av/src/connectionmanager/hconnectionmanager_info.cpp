@@ -57,11 +57,11 @@ HConnectionManagerInfo::Direction
     HConnectionManagerInfo::directionFromString(const QString& arg)
 {
     Direction retVal = DirectionUndefined;
-    if (arg.compare("Input", Qt::CaseInsensitive) == 0)
+    if (arg.compare(QLatin1String("Input"), Qt::CaseInsensitive) == 0)
     {
         retVal = DirectionInput;
     }
-    else if (arg.compare("Output", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("Output"), Qt::CaseInsensitive) == 0)
     {
         retVal = DirectionOutput;
     }
@@ -76,10 +76,10 @@ QString HConnectionManagerInfo::directionToString(Direction arg)
     case DirectionUndefined:
         break;
     case DirectionInput:
-        retVal = "Input";
+        retVal = QLatin1String("Input");
         break;
     case DirectionOutput:
-        retVal = "Output";
+        retVal = QLatin1String("Output");
         break;
     default:
         Q_ASSERT(false);
@@ -92,23 +92,23 @@ HConnectionManagerInfo::ConnectionStatus
     HConnectionManagerInfo::statusFromString(const QString& arg)
 {
     ConnectionStatus retVal = StatusUnknown;
-    if (arg.compare("Ok", Qt::CaseInsensitive) == 0)
+    if (arg.compare(QLatin1String("Ok"), Qt::CaseInsensitive) == 0)
     {
         retVal = StatusOk;
     }
-    else if (arg.compare("Unknown", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("Unknown"), Qt::CaseInsensitive) == 0)
     {
         retVal = StatusUnknown;
     }
-    else if (arg.compare("ContentFormatMismatch", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("ContentFormatMismatch"), Qt::CaseInsensitive) == 0)
     {
         retVal = StatusContentFormatMismatch;
     }
-    else if (arg.compare("InsufficientBandwidth", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("InsufficientBandwidth"), Qt::CaseInsensitive) == 0)
     {
         retVal = StatusInsufficientBandwidth;
     }
-    else if (arg.compare("UnreliableChannel", Qt::CaseInsensitive) == 0)
+    else if (arg.compare(QLatin1String("UnreliableChannel"), Qt::CaseInsensitive) == 0)
     {
         retVal = StatusUnreliableChannel;
     }
@@ -121,19 +121,19 @@ QString HConnectionManagerInfo::statusToString(ConnectionStatus arg)
     switch(arg)
     {
     case StatusUnknown:
-        retVal = "Unknown";
+        retVal = QLatin1String("Unknown");
         break;
     case StatusOk:
-        retVal = "OK";
+        retVal = QLatin1String("OK");
         break;
     case StatusContentFormatMismatch:
-        retVal = "ContentFormatMismatch";
+        retVal = QLatin1String("ContentFormatMismatch");
         break;
     case StatusInsufficientBandwidth:
-        retVal = "InsufficientBandwidth";
+        retVal = QLatin1String("InsufficientBandwidth");
         break;
     case StatusUnreliableChannel:
-        retVal = "UnreliableChannel";
+        retVal = QLatin1String("UnreliableChannel");
         break;
     default:
         Q_ASSERT(false);
@@ -144,7 +144,7 @@ QString HConnectionManagerInfo::statusToString(ConnectionStatus arg)
 
 const HResourceType& HConnectionManagerInfo::supportedServiceType()
 {
-    static const HResourceType retVal("urn:schemas-upnp-org:service:ConnectionManager:2");
+    static const HResourceType retVal(QLatin1String("urn:schemas-upnp-org:service:ConnectionManager:2"));
     return retVal;
 }
 
@@ -152,12 +152,12 @@ HActionsSetupData HConnectionManagerInfo::actionsSetupData()
 {
     HActionsSetupData retVal;
 
-    retVal.insert(HActionSetup("GetProtocolInfo"));
-    retVal.insert(HActionSetup("PrepareForConnection", InclusionOptional));
-    retVal.insert(HActionSetup("ConnectionComplete", InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("GetProtocolInfo")));
+    retVal.insert(HActionSetup(QLatin1String("PrepareForConnection"), InclusionOptional));
+    retVal.insert(HActionSetup(QLatin1String("ConnectionComplete"), InclusionOptional));
 
-    retVal.insert(HActionSetup("GetCurrentConnectionIDs"));
-    retVal.insert(HActionSetup("GetCurrentConnectionInfo"));
+    retVal.insert(HActionSetup(QLatin1String("GetCurrentConnectionIDs")));
+    retVal.insert(HActionSetup(QLatin1String("GetCurrentConnectionInfo")));
 
     return retVal;
 }
@@ -166,15 +166,15 @@ HStateVariablesSetupData HConnectionManagerInfo::stateVariablesSetupData()
 {
     HStateVariablesSetupData retVal;
 
-    retVal.insert(HStateVariableInfo("SourceProtocolInfo", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("SinkProtocolInfo", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("CurrentConnectionIDs", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_ConnectionStatus", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_ConnectionManager",HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_ProtocolInfo", HUpnpDataTypes::string));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_ConnectionID", HUpnpDataTypes::i4));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_AVTransportID", HUpnpDataTypes::i4));
-    retVal.insert(HStateVariableInfo("A_ARG_TYPE_RcsID", HUpnpDataTypes::i4));
+    retVal.insert(HStateVariableInfo(QLatin1String("SourceProtocolInfo"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("SinkProtocolInfo"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("CurrentConnectionIDs"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_ConnectionStatus"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_ConnectionManager"),HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_ProtocolInfo"), HUpnpDataTypes::string));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_ConnectionID"), HUpnpDataTypes::i4));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_AVTransportID"), HUpnpDataTypes::i4));
+    retVal.insert(HStateVariableInfo(QLatin1String("A_ARG_TYPE_RcsID"), HUpnpDataTypes::i4));
 
     return retVal;
 }

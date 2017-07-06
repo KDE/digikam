@@ -57,32 +57,32 @@ HTransportAction::HTransportAction(const QString& arg) :
 
 QString HTransportAction::toString(Type type)
 {
-    QString retVal = "";
+    QString retVal = QLatin1String("");
     switch(type)
     {
     case Undefined:
     case VendorDefined:
         break;
     case Play:
-        retVal = "PLAY";
+        retVal = QLatin1String("PLAY");
         break;
     case Stop:
-        retVal = "STOP";
+        retVal = QLatin1String("STOP");
         break;
     case Pause:
-        retVal = "PAUSE";
+        retVal = QLatin1String("PAUSE");
         break;
     case Seek:
-        retVal = "SEEK";
+        retVal = QLatin1String("SEEK");
         break;
     case Next:
-        retVal = "NEXT";
+        retVal = QLatin1String("NEXT");
         break;
     case Previous:
-        retVal = "PREVIOUS";
+        retVal = QLatin1String("PREVIOUS");
         break;
     case Record:
-        retVal = "RECORD";
+        retVal = QLatin1String("RECORD");
         break;
     }
     return retVal;
@@ -91,31 +91,31 @@ QString HTransportAction::toString(Type type)
 HTransportAction::Type HTransportAction::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("PLAY", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("PLAY"), Qt::CaseInsensitive) == 0)
     {
         retVal = Play;
     }
-    else if (type.compare("STOP", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("STOP"), Qt::CaseInsensitive) == 0)
     {
         retVal = Stop;
     }
-    else if (type.compare("PAUSE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("PAUSE"), Qt::CaseInsensitive) == 0)
     {
         retVal = Pause;
     }
-    else if (type.compare("SEEK", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SEEK"), Qt::CaseInsensitive) == 0)
     {
         retVal = Seek;
     }
-    else if (type.compare("NEXT", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("NEXT"), Qt::CaseInsensitive) == 0)
     {
         retVal = Next;
     }
-    else if (type.compare("PREVIOUS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("PREVIOUS"), Qt::CaseInsensitive) == 0)
     {
         retVal = Previous;
     }
-    else if (type.compare("RECORD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("RECORD"), Qt::CaseInsensitive) == 0)
     {
         retVal = Record;
     }

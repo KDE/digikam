@@ -120,7 +120,7 @@ bool HClientModelCreator::parseStateVariables(
         Q_ASSERT(ok); Q_UNUSED(ok)
 
         stateVariableElement =
-            stateVariableElement.nextSiblingElement("stateVariable");
+            stateVariableElement.nextSiblingElement(QLatin1String("stateVariable"));
     }
 
     return true;
@@ -151,7 +151,7 @@ bool HClientModelCreator::parseActions(
 
         service->addAction(action);
 
-        actionElement = actionElement.nextSiblingElement("action");
+        actionElement = actionElement.nextSiblingElement(QLatin1String("action"));
     }
 
     return true;
@@ -159,7 +159,7 @@ bool HClientModelCreator::parseActions(
 
 bool HClientModelCreator::parseServiceDescription(HDefaultClientService* service)
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) m_creationParameters->m_loggingIdentifier.data());
     Q_ASSERT(service);
 
     QDomDocument doc;
@@ -191,12 +191,12 @@ bool HClientModelCreator::parseServiceList(
     const QDomElement& serviceListElement, HDefaultClientDevice* device,
     QList<HDefaultClientService*>* retVal)
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) m_creationParameters->m_loggingIdentifier.data());
 
     Q_ASSERT(device);
     Q_ASSERT(!serviceListElement.isNull());
 
-    QDomElement serviceElement = serviceListElement.firstChildElement("service");
+    QDomElement serviceElement = serviceListElement.firstChildElement(QLatin1String("service"));
     while(!serviceElement.isNull())
     {
         HServiceInfo info;
@@ -216,8 +216,8 @@ bool HClientModelCreator::parseServiceList(
                 info.scpdUrl(), &description))
         {
             m_lastError = FailedToGetDataError;
-            m_lastErrorDescription = QString(
-                "Could not retrieve service description from [%1]").arg(
+            m_lastErrorDescription = QString(QLatin1String(
+                "Could not retrieve service description from [%1]")).arg(
                     info.scpdUrl().toString());
 
             return false;
@@ -231,7 +231,7 @@ bool HClientModelCreator::parseServiceList(
 
         retVal->push_back(service.take());
 
-        serviceElement = serviceElement.nextSiblingElement("service");
+        serviceElement = serviceElement.nextSiblingElement(QLatin1String("service"));
     }
 
     return true;
@@ -240,7 +240,7 @@ bool HClientModelCreator::parseServiceList(
 HDefaultClientDevice* HClientModelCreator::parseDevice(
     const QDomElement& deviceElement, HDefaultClientDevice* parentDevice)
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) m_creationParameters->m_loggingIdentifier.data());
 
     HDeviceInfo deviceInfo;
     if (!m_docParser.parseDeviceInfo(deviceElement, &deviceInfo))
@@ -259,7 +259,7 @@ HDefaultClientDevice* HClientModelCreator::parseDevice(
             parentDevice));
 
     QDomElement serviceListElement =
-        deviceElement.firstChildElement("serviceList");
+        deviceElement.firstChildElement(QLatin1String("serviceList"));
 
     if (!serviceListElement.isNull())
     {
@@ -271,13 +271,13 @@ HDefaultClientDevice* HClientModelCreator::parseDevice(
         device->setServices(services);
     }
 
-    QDomElement deviceListElement = deviceElement.firstChildElement("deviceList");
+    QDomElement deviceListElement = deviceElement.firstChildElement(QLatin1String("deviceList"));
     if (!deviceListElement.isNull())
     {
         QList<HDefaultClientDevice*> embeddedDevices;
 
         QDomElement embeddedDeviceElement =
-            deviceListElement.firstChildElement("device");
+            deviceListElement.firstChildElement(QLatin1String("device"));
 
         while(!embeddedDeviceElement.isNull())
         {
@@ -294,7 +294,7 @@ HDefaultClientDevice* HClientModelCreator::parseDevice(
             embeddedDevices.push_back(embeddedDevice);
 
             embeddedDeviceElement =
-                embeddedDeviceElement.nextSiblingElement("device");
+                embeddedDeviceElement.nextSiblingElement(QLatin1String("device"));
         }
 
         device->setEmbeddedDevices(embeddedDevices);
@@ -305,7 +305,7 @@ HDefaultClientDevice* HClientModelCreator::parseDevice(
 
 HDefaultClientDevice* HClientModelCreator::createRootDevice()
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) m_creationParameters->m_loggingIdentifier.data());
 
     QDomDocument doc;
     QDomElement rootElement;

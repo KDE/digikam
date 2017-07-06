@@ -57,10 +57,10 @@ QString HTransportStatus::toString(HTransportStatus::Type type)
     switch(type)
     {
     case HTransportStatus::OK:
-        retVal = "OK";
+        retVal = QLatin1String("OK");
         break;
     case HTransportStatus::ErrorOccurred:
-        retVal = "ERROR_OCCURRED";
+        retVal = QLatin1String("ERROR_OCCURRED");
         break;
     default:
         break;
@@ -71,11 +71,11 @@ QString HTransportStatus::toString(HTransportStatus::Type type)
 HTransportStatus::Type HTransportStatus::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("OK", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("OK"), Qt::CaseInsensitive) == 0)
     {
         retVal = OK;
     }
-    else if (type.compare("ERROR_OCCURRED", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("ERROR_OCCURRED"), Qt::CaseInsensitive) == 0)
     {
         retVal = ErrorOccurred;
     }

@@ -56,7 +56,7 @@ bool HConnectionManagerSinkService::finalizeInit(QString* errDescription)
 
     if (sinkProtocolInfo().isEmpty())
     {
-        setSinkProtocolInfo(HProtocolInfo("http-get:*:*:*"));
+        setSinkProtocolInfo(HProtocolInfo(QLatin1String("http-get:*:*:*")));
     }
 
     HMediaRendererDevice* parentDev = qobject_cast<HMediaRendererDevice*>(parent());
@@ -99,7 +99,7 @@ qint32 HConnectionManagerSinkService::prepareForConnection(
 {
     Q_ASSERT(result);
 
-    if (!actions().value("PrepareForConnection"))
+    if (!actions().value(QLatin1String("PrepareForConnection")))
     {
         return UpnpOptionalActionNotImplemented;
     }
@@ -109,8 +109,8 @@ qint32 HConnectionManagerSinkService::prepareForConnection(
         return HConnectionManagerInfo::IncompatibleDirections;
     }
 
-    if (remoteProtocolInfo.protocol().compare("http-get", Qt::CaseInsensitive) &&
-        remoteProtocolInfo.protocol() != "*")
+    if (remoteProtocolInfo.protocol().compare(QLatin1String("http-get"), Qt::CaseInsensitive) &&
+        remoteProtocolInfo.protocol() != QLatin1String("*"))
     {
         return HConnectionManagerInfo::IncompatibleProtocolInfo;
     }
@@ -147,7 +147,7 @@ qint32 HConnectionManagerSinkService::prepareForConnection(
 
 qint32 HConnectionManagerSinkService::connectionComplete(qint32 connectionId)
 {
-    if (!actions().value("ConnectionComplete"))
+    if (!actions().value(QLatin1String("ConnectionComplete")))
     {
         return UpnpOptionalActionNotImplemented;
     }

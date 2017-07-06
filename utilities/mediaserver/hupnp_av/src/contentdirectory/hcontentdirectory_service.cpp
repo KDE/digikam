@@ -146,19 +146,19 @@ qint32 HContentDirectoryServicePrivate::sort(
         for(; j < tmp.size(); ++j)
         {
             ch = tmp[j];
-            if (ch == '+' || ch == '-')
+            if (ch == QLatin1Char('+') || ch == QLatin1Char('-'))
             {
                 break;
             }
             sortExtension.append(ch);
         }
 
-        if (ch != '+' && ch != '-')
+        if (ch != QLatin1Char('+') && ch != QLatin1Char('-'))
         {
             return HContentDirectoryInfo::InvalidSortCriteria;
         }
 
-        bool ascending = ch == '+';
+        bool ascending = ch == QLatin1Char('+');
 
         if (!sortExtension.isEmpty() && !sortExtension.contains(
             sortExtension, Qt::CaseInsensitive))
@@ -174,14 +174,14 @@ qint32 HContentDirectoryServicePrivate::sort(
         }
 
         if (!sortCapabilities.contains(sortProperty, Qt::CaseInsensitive) &&
-            !sortCapabilities.contains("*"))
+            !sortCapabilities.contains(QLatin1String("*")))
         {
             return HContentDirectoryInfo::InvalidSortCriteria;
         }
 
         HSortModifier modifier(
-            QString("%1%2").arg(
-                sortExtension, ascending ? QString("+") : QString("-")));
+            QString(QLatin1String("%1%2")).arg(
+                sortExtension, ascending ? QString(QLatin1String("+")) : QString(QLatin1String("-"))));
 
         HSortInfo so(sortProperty, modifier);
         sortInfoObjects.append(so);
@@ -203,21 +203,21 @@ qint32 HContentDirectoryServicePrivate::browseDirectChildren(
     HContainer* container = m_dataSource->findContainer(containerId);
     if (!container)
     {
-        HLOG_WARN(QString(
-            "The specified object ID [%1] does not map to a container").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "The specified object ID [%1] does not map to a container")).arg(
                 containerId));
 
         return HContentDirectoryInfo::InvalidObjectId;
     }
 
-    HLOG_DBG(QString(
+    HLOG_DBG(QString(QLatin1String(
         "Browsing container [id: %1, startingIndex: %2, "
-        "requestedCount: %3, filter: %4, sortCriteria: %5]").arg(
+        "requestedCount: %3, filter: %4, sortCriteria: %5]")).arg(
             containerId,
             QString::number(startingIndex),
             QString::number(requestedCount),
-            QStringList(filter.toList()).join(","),
-            sortCriteria.join(",")));
+            QStringList(filter.toList()).join(QLatin1String(",")),
+            sortCriteria.join(QLatin1String(","))));
 
     QSet<QString> childIDs = container->childIds();
     quint32 childCount = static_cast<quint32>(childIDs.size());
@@ -250,7 +250,7 @@ qint32 HContentDirectoryServicePrivate::browseDirectChildren(
 
     HSearchResult retVal(
         dliteDoc, numberReturned, childCount,
-        q->stateVariables().value("A_ARG_TYPE_UpdateID")->value().toUInt());
+        q->stateVariables().value(QLatin1String("A_ARG_TYPE_UpdateID"))->value().toUInt());
 
     *result = retVal;
 
@@ -266,9 +266,9 @@ qint32 HContentDirectoryServicePrivate::browseMetadata(
 
     if (startingIndex)
     {
-        HLOG_WARN(QString(
+        HLOG_WARN(QString(QLatin1String(
             "The starting index was specified as [%1], although it "
-            "should be zero when browsing meta data").arg(
+            "should be zero when browsing meta data")).arg(
                 QString::number(startingIndex)));
 
         return UpnpInvalidArgs;
@@ -277,8 +277,8 @@ qint32 HContentDirectoryServicePrivate::browseMetadata(
     HObject* object = m_dataSource->findObject(objectId);
     if (!object)
     {
-        HLOG_WARN(QString(
-            "No object was found with the specified object ID [%1]").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "No object was found with the specified object ID [%1]")).arg(
                 objectId));
 
         return HContentDirectoryInfo::InvalidObjectId;
@@ -290,7 +290,7 @@ qint32 HContentDirectoryServicePrivate::browseMetadata(
 
     HSearchResult retVal(
         dliteDoc, 1, 1,
-        q->stateVariables().value("A_ARG_TYPE_UpdateID")->value().toUInt());
+        q->stateVariables().value(QLatin1String("A_ARG_TYPE_UpdateID"))->value().toUInt());
 
     *result = retVal;
 
@@ -332,14 +332,14 @@ QString HContentDirectoryServicePrivate::generateLastChange()
 
     writer.setCodec("UTF-8");
     writer.writeStartDocument();
-    writer.writeStartElement("StateEvent");
-    writer.writeDefaultNamespace("urn:schemas-upnp-org:av:cds-event");
-    writer.writeAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-    writer.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    writer.writeStartElement(QLatin1String("StateEvent"));
+    writer.writeDefaultNamespace(QLatin1String("urn:schemas-upnp-org:av:cds-event"));
+    writer.writeAttribute(QLatin1String("xmlns:xsd"), QLatin1String("http://www.w3.org/2001/XMLSchema"));
+    writer.writeAttribute(QLatin1String("xmlns:xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
 
-    writer.writeAttribute("xsi:schemaLocation",
-        "urn:schemas-upnp-org:av:cds-event" \
-        "http://www.upnp.org/schemas/av/cds-events.xsd");
+    writer.writeAttribute(QLatin1String("xsi:schemaLocation"),
+       QLatin1String( "urn:schemas-upnp-org:av:cds-event" \
+        "http://www.upnp.org/schemas/av/cds-events.xsd"));
 
     foreach(const HModificationEvent* event, m_modificationEvents)
     {
@@ -355,26 +355,26 @@ QString HContentDirectoryServicePrivate::generateLastChange()
                     HObject* newObj = m_dataSource->findObject(cEvent.childId());
                     if (newObj)
                     {
-                        writer.writeStartElement("objAdd");
-                        writer.writeAttribute("objParentID", event->source()->id());
-                        writer.writeAttribute("objClass", newObj->clazz());
+                        writer.writeStartElement(QLatin1String("objAdd"));
+                        writer.writeAttribute(QLatin1String("objParentID"), event->source()->id());
+                        writer.writeAttribute(QLatin1String("objClass"), newObj->clazz());
                     }
                 }
                 break;
             case HContainerEventInfo::ChildRemoved:
-                writer.writeStartElement("objDel");
+                writer.writeStartElement(QLatin1String("objDel"));
                 break;
             case HContainerEventInfo::ChildModified:
-                writer.writeStartElement("objMod");
+                writer.writeStartElement(QLatin1String("objMod"));
                 break;
             default:
                 Q_ASSERT(false);
                 break;
             }
 
-            writer.writeAttribute("objID", cEvent.childId());
-            writer.writeAttribute("updateID", QString::number(cEvent.updateId()));
-            writer.writeAttribute("stUpdate", "0");
+            writer.writeAttribute(QLatin1String("objID"), cEvent.childId());
+            writer.writeAttribute(QLatin1String("updateID"), QString::number(cEvent.updateId()));
+            writer.writeAttribute(QLatin1String("stUpdate"), QLatin1String("0"));
             writer.writeEndElement();
         }
         else
@@ -382,10 +382,10 @@ QString HContentDirectoryServicePrivate::generateLastChange()
             if (event->source())
             {
                 HObjectEventInfo oEvent = event->objectEvent();
-                writer.writeStartElement("objMod");
-                writer.writeAttribute("objID", event->source()->id());
-                writer.writeAttribute("updateID", QString::number(oEvent.updateId()));
-                writer.writeAttribute("stUpdate", "0");
+                writer.writeStartElement(QLatin1String("objMod"));
+                writer.writeAttribute(QLatin1String("objID"), event->source()->id());
+                writer.writeAttribute(QLatin1String("updateID"), QString::number(oEvent.updateId()));
+                writer.writeAttribute(QLatin1String("stUpdate"), QLatin1String("0"));
                 writer.writeEndElement();
             }
         }
@@ -426,7 +426,7 @@ void HContentDirectoryService::timeout()
     if (!h->m_lastEventSent && h->m_modificationEvents.size())
     {
         QString lastChangeData = h->generateLastChange();
-        bool ok = setValue("LastChange", lastChangeData);
+        bool ok = setValue(QLatin1String("LastChange"), lastChangeData);
         h->m_lastEventSent = true;
         Q_ASSERT(ok); Q_UNUSED(ok)
     }
@@ -465,7 +465,7 @@ void HContentDirectoryService::containerModified(
         HItem* item = h->m_dataSource->findItem(eventInfo.childId());
         if (item)
         {
-            if (stateVariables().contains("LastChange"))
+            if (stateVariables().contains(QLatin1String("LastChange")))
             {
                 item->setTrackChangesOption(true);
             }
@@ -501,7 +501,7 @@ bool HContentDirectoryService::init()
 {
     H_D(HContentDirectoryService);
 
-    if (stateVariables().contains("LastChange"))
+    if (stateVariables().contains(QLatin1String("LastChange")))
     {
         h->enableChangeTracking();
     }
@@ -515,7 +515,7 @@ HContentDirectoryService::~HContentDirectoryService()
 
 qint32 HContentDirectoryService::getSearchCapabilities(QStringList* oarg) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char *) h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(oarg, H_AT, "Out argument(s) cannot be null");
 
     oarg->clear();
@@ -530,31 +530,31 @@ qint32 HContentDirectoryService::getSearchCapabilities(QStringList* oarg) const
 
 qint32 HContentDirectoryService::getSortCapabilities(QStringList* oarg) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(oarg, H_AT, "Out argument(s) cannot be null");
 
-    *oarg = QString("dc:title,dc:creator,dc:date,res@size,upnp:class,upnp:album,upnp:originalTrackNumber").split(',');
+    *oarg = QString(QLatin1String("dc:title,dc:creator,dc:date,res@size,upnp:class,upnp:album,upnp:originalTrackNumber")).split(QLatin1Char(','));
     return UpnpSuccess;
 }
 
 qint32 HContentDirectoryService::getSortExtensionCapabilities(
     QStringList* oarg) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(oarg, H_AT, "Out argument(s) cannot be null");
 
-    if (!actions().value("GetSortExtensionCapabilities"))
+    if (!actions().value(QLatin1String("GetSortExtensionCapabilities")))
     {
         return UpnpOptionalActionNotImplemented;
     }
 
-    *oarg = QString("+,-,TIME+,TIME-").split(',');
+    *oarg = QString(QLatin1String("+,-,TIME+,TIME-")).split(QLatin1Char(','));
     return UpnpSuccess;
 }
 
 qint32 HContentDirectoryService::getFeatureList(QString* oarg) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(oarg, H_AT, "Out argument(s) cannot be null");
 
     *oarg = QString();
@@ -563,19 +563,19 @@ qint32 HContentDirectoryService::getFeatureList(QString* oarg) const
 
 qint32 HContentDirectoryService::getSystemUpdateId(quint32* oarg) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(oarg, H_AT, "Out argument(s) cannot be null");
 
-    *oarg = stateVariables().value("SystemUpdateID")->value().toUInt();
+    *oarg = stateVariables().value(QLatin1String("SystemUpdateID"))->value().toUInt();
     return UpnpSuccess;
 }
 
 qint32 HContentDirectoryService::getServiceResetToken(QString* oarg) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(oarg, H_AT, "Out argument(s) cannot be null");
 
-    *oarg = stateVariables().value("ServiceResetToken")->value().toString();
+    *oarg = stateVariables().value(QLatin1String("ServiceResetToken"))->value().toString();
     return UpnpSuccess;
 }
 
@@ -584,7 +584,7 @@ qint32 HContentDirectoryService::browse(
     const QSet<QString>& filter, quint32 startingIndex, quint32 requestedCount,
     const QStringList& sortCriteria, HSearchResult* result)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT_X(result, H_AT, "Out argument(s) cannot be null");
 
     H_D(HContentDirectoryService);
@@ -595,7 +595,7 @@ qint32 HContentDirectoryService::browse(
         return UpnpInvalidArgs;
     }
 
-    HLOG_INFO(QString("processing browse request to object id %1").arg(objectId));
+    HLOG_INFO(QString(QLatin1String("processing browse request to object id %1")).arg(objectId));
 
     qint32 retVal = 0;
     switch(browseFlag)
@@ -614,7 +614,7 @@ qint32 HContentDirectoryService::browse(
         break;
 
     default:
-        HLOG_WARN(QString("received invalid browse flag"));
+        HLOG_WARN(QString(QLatin1String("received invalid browse flag")));
         retVal = UpnpInvalidArgs;
         break;
     }
@@ -624,9 +624,9 @@ qint32 HContentDirectoryService::browse(
         return retVal;
     }
 
-    HLOG_INFO(QString(
+    HLOG_INFO(QString(QLatin1String(
         "Browse handled successfully: returned: [%1] matching objects of [%2] "
-        "possible totals.").arg(
+        "possible totals.")).arg(
             QString::number(result->numberReturned()),
             QString::number(result->totalMatches())));
 
@@ -640,7 +640,7 @@ qint32 HContentDirectoryService::search(
     HSearchResult* result)
 {
     H_D(HContentDirectoryService);
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!result)
     {
@@ -648,12 +648,12 @@ qint32 HContentDirectoryService::search(
         return UpnpInvalidArgs;
     }
 
-    if (!actions().value("Search"))
+    if (!actions().value(QLatin1String("Search")))
     {
         return UpnpOptionalActionNotImplemented;
     }
 
-    HLOG_INFO(QString("attempting to locate container with id %1").arg(
+    HLOG_INFO(QString(QLatin1String("attempting to locate container with id %1")).arg(
         containerId));
 
     HContainer* container = qobject_cast<HContainer*>(

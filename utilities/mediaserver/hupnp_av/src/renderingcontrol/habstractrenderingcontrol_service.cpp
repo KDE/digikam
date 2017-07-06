@@ -63,13 +63,13 @@ qint32 HAbstractRenderingControlServicePrivate::listPresets(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     QStringList currentPresetNameList;
     qint32 retVal = q->listPresets(instanceId, &currentPresetNameList);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentPresetNameList", currentPresetNameList.join(","));
+        outArgs->setValue(QLatin1String("CurrentPresetNameList"), currentPresetNameList.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -81,8 +81,8 @@ qint32 HAbstractRenderingControlServicePrivate::selectPreset(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QString preset = inArgs.value("PresetName").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QString preset = inArgs.value(QLatin1String("PresetName")).toString();
 
     return q->selectPreset(instanceId, preset);
 }
@@ -95,13 +95,13 @@ qint32 HAbstractRenderingControlServicePrivate::getBrightness(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getBrightness(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentBrightness", arg);
+        outArgs->setValue(QLatin1String("CurrentBrightness"), arg);
     }
 
     return retVal;
@@ -113,8 +113,8 @@ qint32 HAbstractRenderingControlServicePrivate::setBrightness(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredBrightness").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredBrightness")).toUInt();
 
     return q->setBrightness(instanceId, arg);
 }
@@ -127,13 +127,13 @@ qint32 HAbstractRenderingControlServicePrivate::getContrast(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getContrast(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentContrast", arg);
+        outArgs->setValue(QLatin1String("CurrentContrast"), arg);
     }
 
     return retVal;
@@ -145,8 +145,8 @@ qint32 HAbstractRenderingControlServicePrivate::setContrast(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredContrast").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredContrast")).toUInt();
 
     return q->setContrast(instanceId, arg);
 }
@@ -159,13 +159,13 @@ qint32 HAbstractRenderingControlServicePrivate::getSharpness(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getSharpness(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentSharpness", arg);
+        outArgs->setValue(QLatin1String("CurrentSharpness"), arg);
     }
 
     return retVal;
@@ -177,8 +177,8 @@ qint32 HAbstractRenderingControlServicePrivate::setSharpness(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredSharpness").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredSharpness")).toUInt();
 
     return q->setSharpness(instanceId, arg);
 }
@@ -191,13 +191,13 @@ qint32 HAbstractRenderingControlServicePrivate::getRedVideoGain(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getRedVideoGain(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentRedVideoGain", arg);
+        outArgs->setValue(QLatin1String("CurrentRedVideoGain"), arg);
     }
 
     return retVal;
@@ -209,8 +209,8 @@ qint32 HAbstractRenderingControlServicePrivate::setRedVideoGain(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredRedVideoGain").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredRedVideoGain")).toUInt();
 
     return q->setRedVideoGain(instanceId, arg);
 }
@@ -223,13 +223,13 @@ qint32 HAbstractRenderingControlServicePrivate::getGreenVideoGain(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getGreenVideoGain(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentGreenVideoGain", arg);
+        outArgs->setValue(QLatin1String("CurrentGreenVideoGain"), arg);
     }
 
     return retVal;
@@ -241,8 +241,8 @@ qint32 HAbstractRenderingControlServicePrivate::setGreenVideoGain(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredGreenVideoGain").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredGreenVideoGain")).toUInt();
 
     return q->setGreenVideoGain(instanceId, arg);
 }
@@ -255,13 +255,13 @@ qint32 HAbstractRenderingControlServicePrivate::getBlueVideoGain(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getBlueVideoGain(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentBlueVideoGain", arg);
+        outArgs->setValue(QLatin1String("CurrentBlueVideoGain"), arg);
     }
 
     return retVal;
@@ -273,8 +273,8 @@ qint32 HAbstractRenderingControlServicePrivate::setBlueVideoGain(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredBlueVideoGain").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredBlueVideoGain")).toUInt();
 
     return q->setBlueVideoGain(instanceId, arg);
 }
@@ -287,13 +287,13 @@ qint32 HAbstractRenderingControlServicePrivate::getRedVideoBlackLevel(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getRedVideoBlackLevel(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentRedVideoBlackLevel", arg);
+        outArgs->setValue(QLatin1String("CurrentRedVideoBlackLevel"), arg);
     }
 
     return retVal;
@@ -305,8 +305,8 @@ qint32 HAbstractRenderingControlServicePrivate::setRedVideoBlackLevel(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredRedVideoBlackLevel").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredRedVideoBlackLevel")).toUInt();
 
     return q->setRedVideoBlackLevel(instanceId, arg);
 }
@@ -319,13 +319,13 @@ qint32 HAbstractRenderingControlServicePrivate::getGreenVideoBlackLevel(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getGreenVideoBlackLevel(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentGreenVideoBlackLevel", arg);
+        outArgs->setValue(QLatin1String("CurrentGreenVideoBlackLevel"), arg);
     }
 
     return retVal;
@@ -337,8 +337,8 @@ qint32 HAbstractRenderingControlServicePrivate::setGreenVideoBlackLevel(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredGreenVideoBlackLevel").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredGreenVideoBlackLevel")).toUInt();
 
     return q->setGreenVideoBlackLevel(instanceId, arg);
 }
@@ -351,13 +351,13 @@ qint32 HAbstractRenderingControlServicePrivate::getBlueVideoBlackLevel(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getBlueVideoBlackLevel(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentBlueVideoBlackLevel", arg);
+        outArgs->setValue(QLatin1String("CurrentBlueVideoBlackLevel"), arg);
     }
 
     return retVal;
@@ -369,8 +369,8 @@ qint32 HAbstractRenderingControlServicePrivate::setBlueVideoBlackLevel(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredBlueVideoBlackLevel").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredBlueVideoBlackLevel")).toUInt();
 
     return q->setBlueVideoBlackLevel(instanceId, arg);
 }
@@ -383,13 +383,13 @@ qint32 HAbstractRenderingControlServicePrivate::getColorTemperature(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     quint16 arg;
     qint32 retVal = q->getColorTemperature(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentColorTemperature", arg);
+        outArgs->setValue(QLatin1String("CurrentColorTemperature"), arg);
     }
 
     return retVal;
@@ -401,8 +401,8 @@ qint32 HAbstractRenderingControlServicePrivate::setColorTemperature(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredColorTemperature").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredColorTemperature")).toUInt();
 
     return q->setColorTemperature(instanceId, arg);
 }
@@ -415,13 +415,13 @@ qint32 HAbstractRenderingControlServicePrivate::getHorizontalKeystone(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     qint16 arg;
     qint32 retVal = q->getHorizontalKeystone(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentHorizontalKeystone", arg);
+        outArgs->setValue(QLatin1String("CurrentHorizontalKeystone"), arg);
     }
 
     return retVal;
@@ -433,8 +433,8 @@ qint32 HAbstractRenderingControlServicePrivate::setHorizontalKeystone(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredHorizontalKeystone").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredHorizontalKeystone")).toUInt();
 
     return q->setHorizontalKeystone(instanceId, arg);
 }
@@ -447,13 +447,13 @@ qint32 HAbstractRenderingControlServicePrivate::getVerticalKeystone(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
 
     qint16 arg;
     qint32 retVal = q->getVerticalKeystone(instanceId, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentVerticalKeystone", arg);
+        outArgs->setValue(QLatin1String("CurrentVerticalKeystone"), arg);
     }
 
     return retVal;
@@ -465,8 +465,8 @@ qint32 HAbstractRenderingControlServicePrivate::setVerticalKeystone(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    quint16 arg = inArgs.value("DesiredVerticalKeystone").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    quint16 arg = inArgs.value(QLatin1String("DesiredVerticalKeystone")).toUInt();
 
     return q->setVerticalKeystone(instanceId, arg);
 }
@@ -479,14 +479,14 @@ qint32 HAbstractRenderingControlServicePrivate::getMute(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     bool arg;
     qint32 retVal = q->getMute(instanceId, channel, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentMute", arg);
+        outArgs->setValue(QLatin1String("CurrentMute"), arg);
     }
 
     return retVal;
@@ -498,9 +498,9 @@ qint32 HAbstractRenderingControlServicePrivate::setMute(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    bool arg = inArgs.value("DesiredMute").toBool();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    bool arg = inArgs.value(QLatin1String("DesiredMute")).toBool();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     return q->setMute(instanceId, channel, arg);
 }
@@ -513,14 +513,14 @@ qint32 HAbstractRenderingControlServicePrivate::getVolume(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     quint16 arg;
     qint32 retVal = q->getVolume(instanceId, channel, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentVolume", arg);
+        outArgs->setValue(QLatin1String("CurrentVolume"), arg);
     }
 
     return retVal;
@@ -532,9 +532,9 @@ qint32 HAbstractRenderingControlServicePrivate::setVolume(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HChannel channel = inArgs.value("Channel").toString();
-    quint16 arg = inArgs.value("DesiredVolume").toUInt();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
+    quint16 arg = inArgs.value(QLatin1String("DesiredVolume")).toUInt();
 
     return q->setVolume(instanceId, channel, arg);
 }
@@ -547,14 +547,14 @@ qint32 HAbstractRenderingControlServicePrivate::getVolumeDB(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     qint16 arg;
     qint32 retVal = q->getVolumeDB(instanceId, channel, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentVolume", arg);
+        outArgs->setValue(QLatin1String("CurrentVolume"), arg);
     }
 
     return retVal;
@@ -566,9 +566,9 @@ qint32 HAbstractRenderingControlServicePrivate::setVolumeDB(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    qint16 arg = inArgs.value("DesiredVolume").toInt();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    qint16 arg = inArgs.value(QLatin1String("DesiredVolume")).toInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     return q->setVolumeDB(instanceId, channel, arg);
 }
@@ -581,15 +581,15 @@ qint32 HAbstractRenderingControlServicePrivate::getVolumeDBRange(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     HVolumeDbRangeResult result;
     qint32 retVal = q->getVolumeDBRange(instanceId, channel, &result);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("MinValue", result.minValue());
-        outArgs->setValue("MaxValue", result.maxValue());
+        outArgs->setValue(QLatin1String("MinValue"), result.minValue());
+        outArgs->setValue(QLatin1String("MaxValue"), result.maxValue());
     }
 
     return retVal;
@@ -603,14 +603,14 @@ qint32 HAbstractRenderingControlServicePrivate::getLoudness(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     bool arg;
     qint32 retVal = q->getLoudness(instanceId, channel, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("CurrentLoudness", arg);
+        outArgs->setValue(QLatin1String("CurrentLoudness"), arg);
     }
 
     return retVal;
@@ -622,9 +622,9 @@ qint32 HAbstractRenderingControlServicePrivate::setLoudness(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractRenderingControlService);
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    bool arg = inArgs.value("DesiredLoudness").toBool();
-    HChannel channel = inArgs.value("Channel").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    bool arg = inArgs.value(QLatin1String("DesiredLoudness")).toBool();
+    HChannel channel = inArgs.value(QLatin1String("Channel")).toString();
 
     return q->setLoudness(instanceId, channel, arg);
 }
@@ -637,14 +637,14 @@ qint32 HAbstractRenderingControlServicePrivate::getStateVariables(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    QSet<QString> svList = inArgs.value("StateVariableList").toString().split(",").toSet();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    QSet<QString> svList = inArgs.value(QLatin1String("StateVariableList")).toString().split(QLatin1String(",")).toSet();
 
     QString arg;
     qint32 retVal = q->getStateVariables(instanceId, svList, &arg);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("StateVariableValuePairs", arg);
+        outArgs->setValue(QLatin1String("StateVariableValuePairs"), arg);
     }
 
     return retVal;
@@ -658,11 +658,11 @@ qint32 HAbstractRenderingControlServicePrivate::setStateVariables(
 
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
-    quint32 instanceId = inArgs.value("InstanceID").toUInt();
-    HUdn udn = inArgs.value("RenderingControlUDN").toString();
-    HResourceType rt = HResourceType(inArgs.value("ServiceType").toString());
-    HServiceId sid = inArgs.value("ServiceId").toString();
-    QString svValuePairs = inArgs.value("StateVariableValuePairs").toString();
+    quint32 instanceId = inArgs.value(QLatin1String("InstanceID")).toUInt();
+    HUdn udn = inArgs.value(QLatin1String("RenderingControlUDN")).toString();
+    HResourceType rt = HResourceType(inArgs.value(QLatin1String("ServiceType")).toString());
+    HServiceId sid = inArgs.value(QLatin1String("ServiceId")).toString();
+    QString svValuePairs = inArgs.value(QLatin1String("StateVariableValuePairs")).toString();
 
     QStringList arg;
     qint32 retVal = q->setStateVariables(
@@ -670,7 +670,7 @@ qint32 HAbstractRenderingControlServicePrivate::setStateVariables(
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("StateVariableList", arg.join(","));
+        outArgs->setValue(QLatin1String("StateVariableList"), arg.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -701,151 +701,151 @@ HServerService::HActionInvokes HAbstractRenderingControlService::createActionInv
     HActionInvokes retVal;
 
     retVal.insert(
-        "ListPresets",
+        QLatin1String("ListPresets"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::listPresets));
 
     retVal.insert(
-        "SelectPreset",
+       QLatin1String("SelectPreset"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::selectPreset));
 
     retVal.insert(
-        "GetBrightness",
+        QLatin1String("GetBrightness"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getBrightness));
 
     retVal.insert(
-        "SetBrightness",
+        QLatin1String("SetBrightness"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setBrightness));
 
     retVal.insert(
-        "GetContrast",
+        QLatin1String("GetContrast"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getContrast));
 
     retVal.insert(
-        "SetContrast",
+        QLatin1String("SetContrast"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setContrast));
 
     retVal.insert(
-        "GetSharpness",
+        QLatin1String("GetSharpness"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getSharpness));
 
     retVal.insert(
-        "SetSharpness",
+        QLatin1String("SetSharpness"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setSharpness));
 
     retVal.insert(
-        "GetRedVideoGain",
+        QLatin1String("GetRedVideoGain"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getRedVideoGain));
 
     retVal.insert(
-        "SetRedVideoGain",
+        QLatin1String("SetRedVideoGain"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setRedVideoGain));
 
     retVal.insert(
-        "GetGreenVideoGain",
+        QLatin1String("GetGreenVideoGain"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getGreenVideoGain));
 
     retVal.insert(
-        "SetGreenVideoGain",
+        QLatin1String("SetGreenVideoGain"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setGreenVideoGain));
 
     retVal.insert(
-        "GetBlueVideoGain",
+        QLatin1String("GetBlueVideoGain"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getBlueVideoGain));
 
     retVal.insert(
-        "SetBlueVideoGain",
+        QLatin1String("SetBlueVideoGain"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setBlueVideoGain));
 
     retVal.insert(
-        "GetRedVideoBlackLevel",
+        QLatin1String("GetRedVideoBlackLevel"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getRedVideoBlackLevel));
 
     retVal.insert(
-        "SetRedVideoBlackLevel",
+        QLatin1String("SetRedVideoBlackLevel"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setRedVideoBlackLevel));
 
     retVal.insert(
-        "GetGreenVideoBlackLevel",
+        QLatin1String("GetGreenVideoBlackLevel"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getGreenVideoBlackLevel));
 
     retVal.insert(
-        "SetGreenVideoBlackLevel",
+        QLatin1String("SetGreenVideoBlackLevel"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setGreenVideoBlackLevel));
 
     retVal.insert(
-        "GetBlueVideoBlackLevel",
+        QLatin1String("GetBlueVideoBlackLevel"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getBlueVideoBlackLevel));
 
     retVal.insert(
-        "SetBlueVideoBlackLevel",
+        QLatin1String("SetBlueVideoBlackLevel"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setBlueVideoBlackLevel));
 
     retVal.insert(
-        "GetColorTemperature",
+        QLatin1String("GetColorTemperature"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getColorTemperature));
 
     retVal.insert(
-        "SetColorTemperature",
+        QLatin1String("SetColorTemperature"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setColorTemperature));
 
     retVal.insert(
-        "GetHorizontalKeystone",
+        QLatin1String("GetHorizontalKeystone"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getHorizontalKeystone));
 
     retVal.insert(
-        "SetHorizontalKeystone",
+        QLatin1String("SetHorizontalKeystone"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setHorizontalKeystone));
 
     retVal.insert(
-        "GetVerticalKeystone",
+        QLatin1String("GetVerticalKeystone"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getVerticalKeystone));
 
     retVal.insert(
-        "SetVerticalKeystone",
+        QLatin1String("SetVerticalKeystone"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setVerticalKeystone));
 
     retVal.insert(
-        "GetMute",
+        QLatin1String("GetMute"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getMute));
 
     retVal.insert(
-        "SetMute",
+        QLatin1String("SetMute"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setMute));
 
     retVal.insert(
-        "GetVolume",
+        QLatin1String("GetVolume"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getVolume));
 
     retVal.insert(
-        "SetVolume",
+        QLatin1String("SetVolume"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setVolume));
 
     retVal.insert(
-        "GetVolumeDB",
+        QLatin1String("GetVolumeDB"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getVolumeDB));
 
     retVal.insert(
-        "SetVolumeDB",
+        QLatin1String("SetVolumeDB"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setVolumeDB));
 
     retVal.insert(
-        "GetVolumeDBRange",
+        QLatin1String("GetVolumeDBRange"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getVolumeDBRange));
 
     retVal.insert(
-        "GetLoudness",
+        QLatin1String("GetLoudness"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getLoudness));
 
     retVal.insert(
-        "SetLoudness",
+        QLatin1String("SetLoudness"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setLoudness));
 
     retVal.insert(
-        "GetStateVariables",
+        QLatin1String("GetStateVariables"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::getStateVariables));
 
     retVal.insert(
-        "SetStateVariables",
+        QLatin1String("SetStateVariables"),
         HActionInvoke(h, &HAbstractRenderingControlServicePrivate::setStateVariables));
 
     return retVal;

@@ -73,7 +73,7 @@ bool HMediaServerAdapter::prepareDevice(HClientDevice* device)
     H_D(HMediaServerAdapter);
 
     HClientService* avTransport =
-        device->serviceById(HServiceId("urn:upnp-org:serviceId:AVTransport"));
+        device->serviceById(HServiceId(QLatin1String("urn:upnp-org:serviceId:AVTransport")));
 
     if (!avTransport)
     {
@@ -89,7 +89,7 @@ bool HMediaServerAdapter::prepareDevice(HClientDevice* device)
     }
 
     HClientService* cds = device->serviceById(
-        HServiceId("urn:upnp-org:serviceId:ContentDirectory"));
+        HServiceId(QLatin1String("urn:upnp-org:serviceId:ContentDirectory")));
 
     if (!cds)
     {
@@ -109,7 +109,7 @@ bool HMediaServerAdapter::prepareDevice(HClientDevice* device)
     }
 
     HClientService* cm = device->serviceById(
-        HServiceId("urn:upnp-org:serviceId:ConnectionManager"));
+        HServiceId(QLatin1String("urn:upnp-org:serviceId:ConnectionManager")));
 
     if (!cm)
     {

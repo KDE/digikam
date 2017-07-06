@@ -104,15 +104,15 @@ bool HAvTransportAdapterPrivate::getMediaInfo(
     {
         const HActionArguments& outArgs = op.outputArguments();
 
-        quint32 nrTracks = outArgs.value("NrTracks").toUInt();
-        HDuration duration = outArgs.value("MediaDuration").toString();
-        QUrl curUri = outArgs.value("CurrentURI").toUrl();
-        QString curUriMetadata = outArgs.value("CurrentURIMetaData").toString();
-        QUrl nextUri = outArgs.value("NextURI").toUrl();
-        QString nextUriMetadata = outArgs.value("NextURIMetaData").toString();
-        HStorageMedium playMedium = outArgs.value("PlayMedium").toString();
-        HStorageMedium recMedium  = outArgs.value("RecordMedium").toString();
-        HRecordMediumWriteStatus ws = outArgs.value("WriteStatus").toString();
+        quint32 nrTracks = outArgs.value(QLatin1String("NrTracks")).toUInt();
+        HDuration duration = outArgs.value(QLatin1String("MediaDuration")).toString();
+        QUrl curUri = outArgs.value(QLatin1String("CurrentURI")).toUrl();
+        QString curUriMetadata = outArgs.value(QLatin1String("CurrentURIMetaData")).toString();
+        QUrl nextUri = outArgs.value(QLatin1String("NextURI")).toUrl();
+        QString nextUriMetadata = outArgs.value(QLatin1String("NextURIMetaData")).toString();
+        HStorageMedium playMedium = outArgs.value(QLatin1String("PlayMedium")).toString();
+        HStorageMedium recMedium  = outArgs.value(QLatin1String("RecordMedium")).toString();
+        HRecordMediumWriteStatus ws = outArgs.value(QLatin1String("WriteStatus")).toString();
 
         mediaInfo = HMediaInfo(
             nrTracks, duration, curUri, curUriMetadata, nextUri, nextUriMetadata,
@@ -133,16 +133,16 @@ bool HAvTransportAdapterPrivate::getMediaInfo_ext(
     {
         const HActionArguments& outArgs = op.outputArguments();
 
-        QString currentType = outArgs.value("CurrentType").toString();
-        quint32 nrTracks = outArgs.value("NrTracks").toUInt();
-        HDuration duration = outArgs.value("MediaDuration").toString();
-        QUrl curUri = outArgs.value("CurrentURI").toUrl();
-        QString curUriMetadata = outArgs.value("CurrentURIMetaData").toString();
-        QUrl nextUri = outArgs.value("NextURI").toUrl();
-        QString nextUriMetadata = outArgs.value("NextURIMetaData").toString();
-        HStorageMedium playMedium = outArgs.value("PlayMedium").toString();
-        HStorageMedium recMedium  = outArgs.value("RecordMedium").toString();
-        HRecordMediumWriteStatus ws = outArgs.value("WriteStatus").toString();
+        QString currentType = outArgs.value(QLatin1String("CurrentType")).toString();
+        quint32 nrTracks = outArgs.value(QLatin1String("NrTracks")).toUInt();
+        HDuration duration = outArgs.value(QLatin1String("MediaDuration")).toString();
+        QUrl curUri = outArgs.value(QLatin1String("CurrentURI")).toUrl();
+        QString curUriMetadata = outArgs.value(QLatin1String("CurrentURIMetaData")).toString();
+        QUrl nextUri = outArgs.value(QLatin1String("NextURI")).toUrl();
+        QString nextUriMetadata = outArgs.value(QLatin1String("NextURIMetaData")).toString();
+        HStorageMedium playMedium = outArgs.value(QLatin1String("PlayMedium")).toString();
+        HStorageMedium recMedium  = outArgs.value(QLatin1String("RecordMedium")).toString();
+        HRecordMediumWriteStatus ws = outArgs.value(QLatin1String("WriteStatus")).toString();
 
         mediaInfo = HMediaInfo(
             nrTracks, duration, curUri, curUriMetadata, nextUri, nextUriMetadata,
@@ -164,9 +164,9 @@ bool HAvTransportAdapterPrivate::getTransportInfo(
     {
         const HActionArguments& outArgs = op.outputArguments();
 
-        QString state = outArgs.value("CurrentTransportState").toString();
-        QString status = outArgs.value("CurrentTransportStatus").toString();
-        QString speed = outArgs.value("CurrentSpeed").toString();
+        QString state = outArgs.value(QLatin1String("CurrentTransportState")).toString();
+        QString status = outArgs.value(QLatin1String("CurrentTransportStatus")).toString();
+        QString speed = outArgs.value(QLatin1String("CurrentSpeed")).toString();
 
        info = HTransportInfo(state, status, speed);
     }
@@ -185,14 +185,14 @@ bool HAvTransportAdapterPrivate::getPositionInfo(
     {
         const HActionArguments& outArgs = op.outputArguments();
 
-        quint32 track = outArgs.value("Track").toUInt();
-        HDuration trackDuration = outArgs.value("TrackDuration").toString();
-        QString trackMd = outArgs.value("TrackMetaData").toString();
-        QUrl trackUri = outArgs.value("TrackURI").toString();
-        HDuration relTime = outArgs.value("RelTime").toString();
-        HDuration absTime = outArgs.value("AbsTime").toString();
-        qint32 relCountPos = outArgs.value("RelCount").toInt();
-        quint32 absCountPos = outArgs.value("AbsCount").toUInt();
+        quint32 track = outArgs.value(QLatin1String("Track")).toUInt();
+        HDuration trackDuration = outArgs.value(QLatin1String("TrackDuration")).toString();
+        QString trackMd = outArgs.value(QLatin1String("TrackMetaData")).toString();
+        QUrl trackUri = (QUrl) outArgs.value(QLatin1String("TrackURI")).toString();
+        HDuration relTime = outArgs.value(QLatin1String("RelTime")).toString();
+        HDuration absTime = outArgs.value(QLatin1String("AbsTime")).toString();
+        qint32 relCountPos = outArgs.value(QLatin1String("RelCount")).toInt();
+        quint32 absCountPos = outArgs.value(QLatin1String("AbsCount")).toUInt();
 
        info = HPositionInfo(
            track, trackDuration, trackMd, trackUri, relTime, absTime,
@@ -213,9 +213,9 @@ bool HAvTransportAdapterPrivate::getDeviceCapabilities(
     {
         const HActionArguments& outArgs = op.outputArguments();
 
-        QStringList pmedia = outArgs.value("PlayMedia").toString().split(",");
-        QStringList rmedia = outArgs.value("RecMedia").toString().split(",");
-        QStringList rqMode = outArgs.value("RecQualityModes").toString().split(",");
+        QStringList pmedia = outArgs.value(QLatin1String("PlayMedia")).toString().split(QLatin1String(","));
+        QStringList rmedia = outArgs.value(QLatin1String("RecMedia")).toString().split(QLatin1String(","));
+        QStringList rqMode = outArgs.value(QLatin1String("RecQualityModes")).toString().split(QLatin1String(","));
 
         capabilities =
             HDeviceCapabilities(pmedia.toSet(), rmedia.toSet(), rqMode.toSet());
@@ -235,8 +235,8 @@ bool HAvTransportAdapterPrivate::getTransportSettings(
     {
         const HActionArguments& outArgs = op.outputArguments();
 
-        HPlayMode pm = outArgs.value("PlayMode").toString();
-        QString rqMode = outArgs.value("RecQualityMode").toString();
+        HPlayMode pm = outArgs.value(QLatin1String("PlayMode")).toString();
+        QString rqMode = outArgs.value(QLatin1String("RecQualityMode")).toString();
 
         settings = HTransportSettings(pm, rqMode);
     }
@@ -328,7 +328,7 @@ bool HAvTransportAdapterPrivate::getCurrentTransportActions(
     QSet<HTransportAction> actions;
     if (op.returnValue() == UpnpSuccess)
     {
-        QStringList slist = op.outputArguments().value("Actions").toString().split(",");
+        QStringList slist = op.outputArguments().value(QLatin1String("Actions")).toString().split(QLatin1String(","));
 
         foreach(const QString& action, slist)
         {
@@ -353,7 +353,7 @@ bool HAvTransportAdapterPrivate::getDRMState(
     if (op.returnValue() == UpnpSuccess)
     {
         drmState = HAvTransportInfo::drmStateFromString(
-            op.outputArguments().value("CurrentDRMState").toString());
+            op.outputArguments().value(QLatin1String("CurrentDRMState")).toString());
     }
     emit q->getDrmStateCompleted(q, takeOp(op, drmState));
 
@@ -369,7 +369,7 @@ bool HAvTransportAdapterPrivate::getStateVariables(
     if (op.returnValue() == UpnpSuccess)
     {
         stateVariableValuePairs =
-            op.outputArguments().value("StateVariableValuePairs").toString();
+            op.outputArguments().value(QLatin1String("StateVariableValuePairs")).toString();
     }
     emit q->getStateVariablesCompleted(q, takeOp(op, stateVariableValuePairs));
 
@@ -384,7 +384,7 @@ bool HAvTransportAdapterPrivate::setStateVariables(
     QStringList retVal;
     if (op.returnValue() == UpnpSuccess)
     {
-        retVal = op.outputArguments().value("StateVariableList").toString().split(",");
+        retVal = op.outputArguments().value(QLatin1String("StateVariableList")).toString().split(QLatin1String(","));
     }
     emit q->setStateVariablesCompleted(q, takeOp(op, retVal));
 
@@ -414,7 +414,7 @@ void HAvTransportAdapter::lastChange(
 
 bool HAvTransportAdapter::prepareService(HClientService* service)
 {
-    const HClientStateVariable* lastChange = service->stateVariables().value("LastChange");
+    const HClientStateVariable* lastChange = service->stateVariables().value(QLatin1String("LastChange"));
     if (lastChange)
     {
         bool ok = connect(
@@ -433,21 +433,21 @@ HClientAdapterOpNull HAvTransportAdapter::setAVTransportURI(
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetAVTransportURI", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetAVTransportURI"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("CurrentURI", currentUri))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("CurrentURI"), currentUri))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("CurrentURIMetaData", currentUriMetaData))
+    if (!inArgs.setValue(QLatin1String("CurrentURIMetaData"), currentUriMetaData))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -460,21 +460,21 @@ HClientAdapterOpNull HAvTransportAdapter::setNextAVTransportURI(
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetNextAVTransportURI", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetNextAVTransportURI"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("NextURI", currentUri))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("NextURI"), currentUri))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("NextURIMetaData", currentUriMetaData))
+    if (!inArgs.setValue(QLatin1String("NextURIMetaData"), currentUriMetaData))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -486,14 +486,14 @@ HClientAdapterOp<HMediaInfo> HAvTransportAdapter::getMediaInfo()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetMediaInfo", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetMediaInfo"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HMediaInfo>::createInvalid(rc, "");
+        return HClientAdapterOp<HMediaInfo>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HMediaInfo>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getMediaInfo));
@@ -504,14 +504,14 @@ HClientAdapterOp<HMediaInfo> HAvTransportAdapter::getMediaInfo_ext()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetMediaInfo_Ext", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetMediaInfo_Ext"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HMediaInfo>::createInvalid(rc, "");
+        return HClientAdapterOp<HMediaInfo>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HMediaInfo>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getMediaInfo_ext));
@@ -522,14 +522,14 @@ HClientAdapterOp<HTransportInfo> HAvTransportAdapter::getTransportInfo()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetTransportInfo", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetTransportInfo"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HTransportInfo>::createInvalid(rc, "");
+        return HClientAdapterOp<HTransportInfo>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HTransportInfo>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getTransportInfo));
@@ -540,14 +540,14 @@ HClientAdapterOp<HPositionInfo> HAvTransportAdapter::getPositionInfo()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetPositionInfo", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetPositionInfo"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HPositionInfo>::createInvalid(rc, "");
+        return HClientAdapterOp<HPositionInfo>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HPositionInfo>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getPositionInfo));
@@ -558,14 +558,14 @@ HClientAdapterOp<HDeviceCapabilities> HAvTransportAdapter::getDeviceCapabilities
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetDeviceCapabilities", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetDeviceCapabilities"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HDeviceCapabilities>::createInvalid(rc, "");
+        return HClientAdapterOp<HDeviceCapabilities>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HDeviceCapabilities>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getDeviceCapabilities));
@@ -576,14 +576,14 @@ HClientAdapterOp<HTransportSettings> HAvTransportAdapter::getTransportSettings()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetTransportSettings", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetTransportSettings"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HTransportSettings>::createInvalid(rc, "");
+        return HClientAdapterOp<HTransportSettings>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HTransportSettings>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getTransportSettings));
@@ -594,14 +594,14 @@ HClientAdapterOpNull HAvTransportAdapter::stop()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Stop", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Stop"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::stop));
@@ -612,17 +612,17 @@ HClientAdapterOpNull HAvTransportAdapter::play(const QString& speed)
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Play", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Play"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("Speed", speed))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("Speed"), speed))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -634,14 +634,14 @@ HClientAdapterOpNull HAvTransportAdapter::pause()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Pause", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Pause"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::pause));
@@ -652,14 +652,14 @@ HClientAdapterOpNull HAvTransportAdapter::record()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Record", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Record"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::record));
@@ -670,21 +670,21 @@ HClientAdapterOpNull HAvTransportAdapter::seek(const HSeekInfo& info)
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Seek", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Seek"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("Unit", info.unit().toString()))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("Unit"), info.unit().toString()))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("Target", info.target()))
+    if (!inArgs.setValue(QLatin1String("Target"), info.target()))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -696,14 +696,14 @@ HClientAdapterOpNull HAvTransportAdapter::next()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Next", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Next"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::next));
@@ -714,14 +714,14 @@ HClientAdapterOpNull HAvTransportAdapter::previous()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("Previous", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("Previous"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::previous));
@@ -732,17 +732,17 @@ HClientAdapterOpNull HAvTransportAdapter::setPlayMode(const HPlayMode& mode)
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetPlayMode", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetPlayMode"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("NewPlayMode", mode.toString()))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("NewPlayMode"), mode.toString()))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -754,17 +754,17 @@ HClientAdapterOpNull HAvTransportAdapter::setRecordQualityMode(const HRecordQual
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetRecordQualityMode", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetRecordQualityMode"), &rc);
     if (!action)
     {
-        return HClientAdapterOpNull::createInvalid(rc, "");
+        return HClientAdapterOpNull::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("NewRecordQualityMode", mode.toString()))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("NewRecordQualityMode"), mode.toString()))
     {
-        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOpNull::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke(action,
@@ -776,14 +776,14 @@ HClientAdapterOp<QSet<HTransportAction> > HAvTransportAdapter::getCurrentTranspo
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetCurrentTransportActions", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetCurrentTransportActions"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QSet<HTransportAction> >::createInvalid(rc, "");
+        return HClientAdapterOp<QSet<HTransportAction> >::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<QSet<HTransportAction> >(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getCurrentTransportActions));
@@ -794,14 +794,14 @@ HClientAdapterOp<HAvTransportInfo::DrmState> HAvTransportAdapter::getDrmState()
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetDRMState", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetDRMState"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<HAvTransportInfo::DrmState>::createInvalid(rc, "");
+        return HClientAdapterOp<HAvTransportInfo::DrmState>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
 
     return h_ptr->beginInvoke<HAvTransportInfo::DrmState>(action,
         inArgs, HActionInvokeCallback(h, &HAvTransportAdapterPrivate::getDRMState));
@@ -813,18 +813,18 @@ HClientAdapterOp<QString> HAvTransportAdapter::getStateVariables(
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("GetStateVariables", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("GetStateVariables"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QString>::createInvalid(rc, "");
+        return HClientAdapterOp<QString>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
     if (!inArgs.setValue(
-        "StateVariableList", QStringList(stateVariableNames.toList()).join(",")))
+        QLatin1String("StateVariableList"), QStringList(stateVariableNames.toList()).join(QLatin1String(","))))
     {
-        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QString>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<QString>(action,
@@ -838,29 +838,29 @@ HClientAdapterOp<QStringList> HAvTransportAdapter::setStateVariables(
     H_D(HAvTransportAdapter);
 
     qint32 rc = UpnpUndefinedFailure;
-    HClientAction* action = h_ptr->getAction("SetStateVariables", &rc);
+    HClientAction* action = h_ptr->getAction(QLatin1String("SetStateVariables"), &rc);
     if (!action)
     {
-        return HClientAdapterOp<QStringList>::createInvalid(rc, "");
+        return HClientAdapterOp<QStringList>::createInvalid(rc, QLatin1String(""));
     }
 
     HActionArguments inArgs = action->info().inputArguments();
-    inArgs.setValue("InstanceID", h->m_instanceId);
-    if (!inArgs.setValue("AVTransportUDN", avTransportUdn.toSimpleUuid()))
+    inArgs.setValue(QLatin1String("InstanceID"), h->m_instanceId);
+    if (!inArgs.setValue(QLatin1String("AVTransportUDN"), avTransportUdn.toSimpleUuid()))
     {
-        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("ServiceType", serviceType.toString()))
+    if (!inArgs.setValue(QLatin1String("ServiceType"), serviceType.toString()))
     {
-        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("ServiceId", serviceId.toString()))
+    if (!inArgs.setValue(QLatin1String("ServiceId"), serviceId.toString()))
     {
-        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
-    if (!inArgs.setValue("StateVariableValuePairs", stateVariableValuePairs))
+    if (!inArgs.setValue(QLatin1String("StateVariableValuePairs"), stateVariableValuePairs))
     {
-        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, "");
+        return HClientAdapterOp<QStringList>::createInvalid(UpnpInvalidArgs, QLatin1String(""));
     }
 
     return h_ptr->beginInvoke<QStringList>(action,

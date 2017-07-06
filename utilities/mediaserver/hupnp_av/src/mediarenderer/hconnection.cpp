@@ -164,7 +164,7 @@ void HConnection::lastChangeReceived(
             continue;
         }
 
-        if (reader.attributes().value("val").toString().toInt() !=
+        if (reader.attributes().value(QLatin1String("val")).toString().toInt() !=
             h_ptr->m_connectionInfo.connectionId())
         {
             continue;
@@ -175,8 +175,8 @@ void HConnection::lastChangeReceived(
             name = reader.name();
 
             QXmlStreamAttributes attrs = reader.attributes();
-            QString value = attrs.value("val").toString();
-            QString channel = attrs.value("channel").toString();
+            QString value = attrs.value(QLatin1String("val")).toString();
+            QString channel = attrs.value(QLatin1String("channel")).toString();
 
             HRcsLastChangeInfo info(name.toString(), value);
             if (info.isValid())
@@ -225,7 +225,7 @@ void HConnection::lastChangeReceived(HAvTransportAdapter*, const QString& data)
             continue;
         }
 
-        if (reader.attributes().value("val").toString().toInt() !=
+        if (reader.attributes().value(QLatin1String("val")).toString().toInt() !=
             h_ptr->m_connectionInfo.connectionId())
         {
             continue;
@@ -236,7 +236,7 @@ void HConnection::lastChangeReceived(HAvTransportAdapter*, const QString& data)
             name = reader.name();
 
             QXmlStreamAttributes attrs = reader.attributes();
-            QString value = attrs.value("val").toString();
+            QString value = attrs.value(QLatin1String("val")).toString();
 
             HAvtLastChangeInfo info(name.toString(), value);
             if (info.isValid())

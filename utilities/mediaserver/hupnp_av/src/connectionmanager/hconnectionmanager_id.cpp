@@ -44,7 +44,7 @@ HConnectionManagerId::HConnectionManagerId(
     const QString& arg, HValidityCheckLevel checkLevel) :
         m_udn(), m_serviceId()
 {
-    qint32 sepIndex = arg.indexOf('/');
+    qint32 sepIndex = arg.indexOf(QLatin1Char('/'));
     if (sepIndex < 0)
     {
         return;
@@ -86,7 +86,7 @@ QString HConnectionManagerId::toString() const
         return QString();
     }
 
-    return QString("%1/%2").arg(m_udn.toString(), m_serviceId.toString());
+    return QString(QLatin1String("%1/%2")).arg(m_udn.toString(), m_serviceId.toString());
 }
 
 bool operator==(const HConnectionManagerId& obj1, const HConnectionManagerId& obj2)

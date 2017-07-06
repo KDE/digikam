@@ -89,7 +89,7 @@ bool HMediaServerDevice::finalizeInit(QString* errDescr)
     {
         if (errDescr)
         {
-            *errDescr = "Failed to initialize ConnectionManager";
+            *errDescr = QLatin1String("Failed to initialize ConnectionManager");
         }
 
         return false;
@@ -99,7 +99,7 @@ bool HMediaServerDevice::finalizeInit(QString* errDescr)
     {
         if (errDescr)
         {
-            *errDescr = "Failed to initialize the data source";
+            *errDescr = QLatin1String("Failed to initialize the data source");
         }
 
         return false;
@@ -112,7 +112,7 @@ bool HMediaServerDevice::finalizeInit(QString* errDescr)
     {
         if (errDescr)
         {
-            *errDescr = "Failed to initialize ContentDirectory";
+            *errDescr = QLatin1String("Failed to initialize ContentDirectory");
         }
 
         return false;

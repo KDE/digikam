@@ -59,25 +59,25 @@ QString HRecordQualityMode::toString(Type mode)
     switch(mode)
     {
     case Ep:
-        retVal = "0:EP";
+        retVal = QLatin1String("0:EP");
         break;
     case Lp:
-        retVal = "1:LP";
+        retVal = QLatin1String("1:LP");
         break;
     case Sp:
-        retVal = "2:SP";
+        retVal = QLatin1String("2:SP");
         break;
     case Basic:
-        retVal = "0:BASIC";
+        retVal = QLatin1String("0:BASIC");
         break;
     case Medium:
-        retVal = "1:MEDIUM";
+        retVal = QLatin1String("1:MEDIUM");
         break;
     case High:
-        retVal = "2:HIGH";
+        retVal = QLatin1String("2:HIGH");
         break;
     case NotImplemented:
-        retVal = "NOT_IMPLEMENTED";
+        retVal = QLatin1String("NOT_IMPLEMENTED");
         break;
     default:
         break;
@@ -88,31 +88,31 @@ QString HRecordQualityMode::toString(Type mode)
 HRecordQualityMode::Type HRecordQualityMode::fromString(const QString& mode)
 {
     Type retVal = Undefined;
-    if (mode.compare("0:EP", Qt::CaseInsensitive) == 0)
+    if (mode.compare(QLatin1String("0:EP"), Qt::CaseInsensitive) == 0)
     {
         retVal = Ep;
     }
-    else if (mode.compare("1:LP", Qt::CaseInsensitive) == 0)
+    else if (mode.compare(QLatin1String("1:LP"), Qt::CaseInsensitive) == 0)
     {
         retVal = Lp;
     }
-    else if (mode.compare("2:SP", Qt::CaseInsensitive) == 0)
+    else if (mode.compare(QLatin1String("2:SP"), Qt::CaseInsensitive) == 0)
     {
         retVal = Sp;
     }
-    else if (mode.compare("0:BASIC", Qt::CaseInsensitive) == 0)
+    else if (mode.compare(QLatin1String("0:BASIC"), Qt::CaseInsensitive) == 0)
     {
         retVal = Basic;
     }
-    else if (mode.compare("1:MEDIUM", Qt::CaseInsensitive) == 0)
+    else if (mode.compare(QLatin1String("1:MEDIUM"), Qt::CaseInsensitive) == 0)
     {
         retVal = Medium;
     }
-    else if (mode.compare("2:HIGH", Qt::CaseInsensitive) == 0)
+    else if (mode.compare(QLatin1String("2:HIGH"), Qt::CaseInsensitive) == 0)
     {
         retVal = High;
     }
-    else if (mode.compare("NOT_IMPLEMENTED", Qt::CaseInsensitive) == 0)
+    else if (mode.compare(QLatin1String("NOT_IMPLEMENTED"), Qt::CaseInsensitive) == 0)
     {
         retVal = NotImplemented;
     }
@@ -131,7 +131,7 @@ bool operator==(const HRecordQualityMode& obj1, const HRecordQualityMode& obj2)
 quint32 qHash(const HRecordQualityMode& key)
 {
     QString str = key.toString();
-    return hash(key.toString().toLocal8Bit(), str.size());
+    return hash((char*)key.toString().toLocal8Bit().data(), str.size());
 }
 
 }

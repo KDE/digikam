@@ -49,7 +49,7 @@ public:
     bool m_positive;
 
     HDurationPrivate() :
-        m_duration("00:00:00"),
+        m_duration(QLatin1String("00:00:00")),
         m_hours(0), m_minutes(0), m_seconds(0), m_fractions(0),
         m_positive(true)
     {
@@ -70,8 +70,8 @@ qreal calculateFraction(const QString& arg, bool* ok)
 {
     qreal retVal = 0;
 
-    int index = arg.indexOf('.');
-    int index2 = arg.indexOf('/');
+    int index = arg.indexOf(QLatin1Char('.'));
+    int index2 = arg.indexOf(QLatin1Char('/'));
     if (index > 0)
     {
         retVal = arg.mid(index+1, index2-(index+1)).toDouble(ok);
@@ -100,13 +100,13 @@ HDuration::HDuration(const QString& arg) :
     h_ptr(new HDurationPrivate())
 {
     QString trimmed = arg.trimmed();
-    QStringList tmp = trimmed.split(":");
+    QStringList tmp = trimmed.split(QLatin1String(":"));
     if (tmp.size() != 3)
     {
-        h_ptr->m_duration = QString("00:00:00");
+        h_ptr->m_duration = QString(QLatin1String("00:00:00"));
         return;
     }
-    else if (tmp.at(0).startsWith("-"))
+    else if (tmp.at(0).startsWith(QLatin1String("-")))
     {
         h_ptr->m_positive = false;
         tmp.first().remove(0, 1);
@@ -119,7 +119,7 @@ HDuration::HDuration(const QString& arg) :
         qint32 minutes = tmp.at(1).toInt(&ok);
         if (ok)
         {
-            int index = tmp.at(2).indexOf('.');
+            int index = tmp.at(2).indexOf(QLatin1Char('.'));
             qint32 seconds = tmp.at(2).mid(0, index).toInt(&ok);
             if (ok)
             {
@@ -197,7 +197,7 @@ bool HDuration::isZero() const
 
 QString HDuration::toString() const
 {
-    return QString("%1%2").arg(!h_ptr->m_positive ? "-" : "", h_ptr->m_duration);
+    return QString(QLatin1String("%1%2")).arg(!h_ptr->m_positive ? QLatin1String("-") : QLatin1String(""), h_ptr->m_duration);
 }
 
 QTime HDuration::toTime() const

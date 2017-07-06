@@ -60,46 +60,46 @@ QString HChannel::toString(Type type)
     switch(type)
     {
     case Master:
-        retVal = "Master";
+        retVal = QLatin1String("Master");
         break;
     case LeftFront:
-        retVal = "LF";
+        retVal = QLatin1String("LF");
         break;
     case RightFront:
-        retVal = "RF";
+        retVal = QLatin1String("RF");
         break;
     case CenterFront:
-        retVal = "CF";
+        retVal = QLatin1String("CF");
         break;
     case LFE:
-        retVal = "LFE";
+        retVal = QLatin1String("LFE");
         break;
     case LeftSurround:
-        retVal = "LS";
+        retVal = QLatin1String("LS");
         break;
     case RightSurround:
-        retVal = "RS";
+        retVal = QLatin1String("RS");
         break;
     case LeftOfCenter:
-        retVal = "LFC";
+        retVal = QLatin1String("LFC");
         break;
     case RightOfCenter:
-        retVal = "RFC";
+        retVal = QLatin1String("RFC");
         break;
     case Surround:
-        retVal = "SD";
+        retVal = QLatin1String("SD");
         break;
     case SideLeft:
-        retVal = "SL";
+        retVal = QLatin1String("SL");
         break;
     case SideRight:
-        retVal = "SR";
+        retVal = QLatin1String("SR");
         break;
     case Top:
-        retVal = "T";
+        retVal = QLatin1String("T");
         break;
     case Bottom:
-        retVal = "B";
+        retVal = QLatin1String("B");
         break;
     default:
         break;
@@ -110,59 +110,59 @@ QString HChannel::toString(Type type)
 HChannel::Type HChannel::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("MASTER", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("MASTER"), Qt::CaseInsensitive) == 0)
     {
         retVal = Master;
     }
-    else if (type.compare("LF", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("LF"), Qt::CaseInsensitive) == 0)
     {
         retVal = LeftFront;
     }
-    else if (type.compare("RF", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("RF"), Qt::CaseInsensitive) == 0)
     {
         retVal = RightFront;
     }
-    else if (type.compare("CF", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("CF"), Qt::CaseInsensitive) == 0)
     {
         retVal = CenterFront;
     }
-    else if (type.compare("LFE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("LFE"), Qt::CaseInsensitive) == 0)
     {
         retVal = LFE;
     }
-    else if (type.compare("LS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("LS"), Qt::CaseInsensitive) == 0)
     {
         retVal = LeftSurround;
     }
-    else if (type.compare("RS", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("RS"), Qt::CaseInsensitive) == 0)
     {
         retVal = RightSurround;
     }
-    else if (type.compare("LFC", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("LFC"), Qt::CaseInsensitive) == 0)
     {
         retVal = LeftOfCenter;
     }
-    else if (type.compare("RFC", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("RFC"), Qt::CaseInsensitive) == 0)
     {
         retVal = RightOfCenter;
     }
-    else if (type.compare("SD", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SD"), Qt::CaseInsensitive) == 0)
     {
         retVal = Surround;
     }
-    else if (type.compare("SL", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SL"), Qt::CaseInsensitive) == 0)
     {
         retVal = SideLeft;
     }
-    else if (type.compare("SR", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SR"), Qt::CaseInsensitive) == 0)
     {
         retVal = SideRight;
     }
-    else if (type.compare("T", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("T"), Qt::CaseInsensitive) == 0)
     {
         retVal = Top;
     }
-    else if (type.compare("B", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("B"), Qt::CaseInsensitive) == 0)
     {
         retVal = Bottom;
     }

@@ -55,7 +55,7 @@ HMediaRendererInfo::~HMediaRendererInfo()
 
 const HResourceType& HMediaRendererInfo::supportedDeviceType()
 {
-    static HResourceType retVal("urn:schemas-upnp-org:device:MediaRenderer:2");
+    static HResourceType retVal(QLatin1String("urn:schemas-upnp-org:device:MediaRenderer:2"));
     return retVal;
 }
 
@@ -83,19 +83,19 @@ HServicesSetupData HMediaRendererInfo::servicesSetupData()
 
 const HServiceId& HMediaRendererInfo::defaultConnectionManagerId()
 {
-    static const HServiceId retVal("urn:upnp-org:serviceId:ConnectionManager");
+    static const HServiceId retVal(QLatin1String("urn:upnp-org:serviceId:ConnectionManager"));
     return retVal;
 }
 
 const HServiceId& HMediaRendererInfo::defaultRenderingControlId()
 {
-    static const HServiceId retVal("urn:upnp-org:serviceId:RenderingControl");
+    static const HServiceId retVal(QLatin1String("urn:upnp-org:serviceId:RenderingControl"));
     return retVal;
 }
 
 const HServiceId& HMediaRendererInfo::defaultAvTransportId()
 {
-    static const HServiceId retVal("urn:upnp-org:serviceId:AVTransport");
+    static const HServiceId retVal(QLatin1String("urn:upnp-org:serviceId:AVTransport"));
     return retVal;
 }
 

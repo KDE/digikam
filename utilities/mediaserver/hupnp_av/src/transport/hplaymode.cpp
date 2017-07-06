@@ -60,25 +60,25 @@ QString HPlayMode::toString(HPlayMode::Type type)
     case VendorDefined:
         break;
     case Normal:
-        retVal = "NORMAL";
+        retVal = QLatin1String("NORMAL");
         break;
     case Shuffle:
-        retVal = "SHUFFLE";
+        retVal = QLatin1String("SHUFFLE");
         break;
     case RepeatOne:
-        retVal = "REPEAT_ONE";
+        retVal = QLatin1String("REPEAT_ONE");
         break;
     case RepeatAll:
-        retVal = "REPEAT_ALL";
+        retVal = QLatin1String("REPEAT_ALL");
         break;
     case Random:
-        retVal = "RANDOM";
+        retVal = QLatin1String("RANDOM");
         break;
     case Direct_1:
-        retVal = "DIRECT_1";
+        retVal = QLatin1String("DIRECT_1");
         break;
     case Intro:
-        retVal = "INTRO";
+        retVal = QLatin1String("INTRO");
         break;
     }
     return retVal;
@@ -87,31 +87,31 @@ QString HPlayMode::toString(HPlayMode::Type type)
 HPlayMode::Type HPlayMode::fromString(const QString& type)
 {
     Type retVal = Undefined;
-    if (type.compare("NORMAL", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("NORMAL"), Qt::CaseInsensitive) == 0)
     {
         retVal = Normal;
     }
-    else if (type.compare("SHUFFLE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("SHUFFLE"), Qt::CaseInsensitive) == 0)
     {
         retVal = Shuffle;
     }
-    else if (type.compare("REPEAT_ONE", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("REPEAT_ONE"), Qt::CaseInsensitive) == 0)
     {
         retVal = RepeatOne;
     }
-    else if (type.compare("REPEAT_ALL", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("REPEAT_ALL"), Qt::CaseInsensitive) == 0)
     {
         retVal = RepeatAll;
     }
-    else if (type.compare("RANDOM", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("RANDOM"), Qt::CaseInsensitive) == 0)
     {
         retVal = Random;
     }
-    else if (type.compare("DIRECT_1", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("DIRECT_1"), Qt::CaseInsensitive) == 0)
     {
         retVal = Direct_1;
     }
-    else if (type.compare("INTRO", Qt::CaseInsensitive) == 0)
+    else if (type.compare(QLatin1String("INTRO"), Qt::CaseInsensitive) == 0)
     {
         retVal = Intro;
     }

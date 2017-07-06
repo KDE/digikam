@@ -69,22 +69,22 @@ namespace Av
 HRendererConnectionPrivate::HRendererConnectionPrivate() :
     m_info(0), m_connectionInfo(0), m_service(0), q_ptr(0), m_valueSetters()
 {
-    m_valueSetters.insert("Brightness", ValueSetter(this, &HRendererConnectionPrivate::setBrightness));
-    m_valueSetters.insert("Contrast", ValueSetter(this, &HRendererConnectionPrivate::setContrast));
-    m_valueSetters.insert("Sharpness", ValueSetter(this, &HRendererConnectionPrivate::setSharpness));
-    m_valueSetters.insert("RedVideoGain", ValueSetter(this, &HRendererConnectionPrivate::setRedVideoGain));
-    m_valueSetters.insert("GreenVideoGain", ValueSetter(this, &HRendererConnectionPrivate::setGreenVideoGain));
-    m_valueSetters.insert("BlueVideoGain", ValueSetter(this, &HRendererConnectionPrivate::setBlueVideoGain));
-    m_valueSetters.insert("RedVideoBlackLevel", ValueSetter(this, &HRendererConnectionPrivate::setRedVideoBlackLevel));
-    m_valueSetters.insert("GreenVideoBlackLevel", ValueSetter(this, &HRendererConnectionPrivate::setGreenVideoBlackLevel));
-    m_valueSetters.insert("BlueVideoBlackLevel", ValueSetter(this, &HRendererConnectionPrivate::setBlueVideoBlackLevel));
-    m_valueSetters.insert("ColorTemperature", ValueSetter(this, &HRendererConnectionPrivate::setColorTemperature));
-    m_valueSetters.insert("HorizontalKeystone", ValueSetter(this, &HRendererConnectionPrivate::setHorizontalKeystone));
-    m_valueSetters.insert("VerticalKeystone", ValueSetter(this, &HRendererConnectionPrivate::setVerticalKeystone));
-    m_valueSetters.insert("Mute", ValueSetter(this, &HRendererConnectionPrivate::setMute));
-    m_valueSetters.insert("Volume", ValueSetter(this, &HRendererConnectionPrivate::setVolume));
-    m_valueSetters.insert("VolumeDB", ValueSetter(this, &HRendererConnectionPrivate::setVolumeDB));
-    m_valueSetters.insert("Loudness", ValueSetter(this, &HRendererConnectionPrivate::setLoudness));
+    m_valueSetters.insert(QLatin1String("Brightness"), ValueSetter(this, &HRendererConnectionPrivate::setBrightness));
+    m_valueSetters.insert(QLatin1String("Contrast"), ValueSetter(this, &HRendererConnectionPrivate::setContrast));
+    m_valueSetters.insert(QLatin1String("Sharpness"), ValueSetter(this, &HRendererConnectionPrivate::setSharpness));
+    m_valueSetters.insert(QLatin1String("RedVideoGain"), ValueSetter(this, &HRendererConnectionPrivate::setRedVideoGain));
+    m_valueSetters.insert(QLatin1String("GreenVideoGain"), ValueSetter(this, &HRendererConnectionPrivate::setGreenVideoGain));
+    m_valueSetters.insert(QLatin1String("BlueVideoGain"), ValueSetter(this, &HRendererConnectionPrivate::setBlueVideoGain));
+    m_valueSetters.insert(QLatin1String("RedVideoBlackLevel"), ValueSetter(this, &HRendererConnectionPrivate::setRedVideoBlackLevel));
+    m_valueSetters.insert(QLatin1String("GreenVideoBlackLevel"), ValueSetter(this, &HRendererConnectionPrivate::setGreenVideoBlackLevel));
+    m_valueSetters.insert(QLatin1String("BlueVideoBlackLevel"), ValueSetter(this, &HRendererConnectionPrivate::setBlueVideoBlackLevel));
+    m_valueSetters.insert(QLatin1String("ColorTemperature"), ValueSetter(this, &HRendererConnectionPrivate::setColorTemperature));
+    m_valueSetters.insert(QLatin1String("HorizontalKeystone"), ValueSetter(this, &HRendererConnectionPrivate::setHorizontalKeystone));
+    m_valueSetters.insert(QLatin1String("VerticalKeystone"), ValueSetter(this, &HRendererConnectionPrivate::setVerticalKeystone));
+    m_valueSetters.insert(QLatin1String("Mute"), ValueSetter(this, &HRendererConnectionPrivate::setMute));
+    m_valueSetters.insert(QLatin1String("Volume"), ValueSetter(this, &HRendererConnectionPrivate::setVolume));
+    m_valueSetters.insert(QLatin1String("VolumeDB"), ValueSetter(this, &HRendererConnectionPrivate::setVolumeDB));
+    m_valueSetters.insert(QLatin1String("Loudness"), ValueSetter(this, &HRendererConnectionPrivate::setLoudness));
 }
 
 HRendererConnectionPrivate::~HRendererConnectionPrivate()
@@ -703,8 +703,8 @@ qint32 HRendererConnection::setMute(const HChannel& channel, bool muted)
     {
         if (!h_ptr->m_info->setMute(channel, muted))
         {
-            HLOG_WARN(QString(
-                "Failed to update the value for [Mute] using channel: [%1]").arg(
+            HLOG_WARN(QString(QLatin1String(
+                "Failed to update the value for [Mute] using channel: [%1]")).arg(
                 channel.toString()));
 
             return HRenderingControlInfo::InvalidChannel;
@@ -727,8 +727,8 @@ qint32 HRendererConnection::setVolume(const HChannel& channel, quint16 volume)
     {
         if (!h_ptr->m_info->setVolume(channel, volume))
         {
-            HLOG_WARN(QString(
-                "Failed to update the value for [Volume] using channel: [%1]").arg(
+            HLOG_WARN(QString(QLatin1String(
+                "Failed to update the value for [Volume] using channel: [%1]")).arg(
                 channel.toString()));
 
             return HRenderingControlInfo::InvalidChannel;
@@ -751,8 +751,8 @@ qint32 HRendererConnection::setVolumeDb(const HChannel& channel, qint16 volume)
     {
         if (!h_ptr->m_info->setVolumeDb(channel, volume))
         {
-            HLOG_WARN(QString(
-                "Failed to update the value for [VolumeDB] using channel: [%1]").arg(
+            HLOG_WARN(QString(QLatin1String(
+                "Failed to update the value for [VolumeDB] using channel: [%1]")).arg(
                 channel.toString()));
 
             return HRenderingControlInfo::InvalidChannel;
@@ -775,8 +775,8 @@ qint32 HRendererConnection::setLoudness(const HChannel& channel, bool enabled)
     {
         if (!h_ptr->m_info->setLoudness(channel, enabled))
         {
-            HLOG_WARN(QString(
-                "Failed to update the value for [Loudness] using channel: [%1]").arg(
+            HLOG_WARN(QString(QLatin1String(
+                "Failed to update the value for [Loudness] using channel: [%1]")).arg(
                 channel.toString()));
 
             return HRenderingControlInfo::InvalidChannel;

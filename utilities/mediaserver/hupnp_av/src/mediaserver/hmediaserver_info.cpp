@@ -59,7 +59,7 @@ HMediaServerInfo::~HMediaServerInfo()
 
 const HResourceType& HMediaServerInfo::supportedDeviceType()
 {
-    static HResourceType retVal("urn:schemas-upnp-org:device:MediaServer:3");
+    static HResourceType retVal(QLatin1String("urn:schemas-upnp-org:device:MediaServer:3"));
     return retVal;
 }
 
@@ -94,19 +94,19 @@ HServicesSetupData HMediaServerInfo::servicesSetupData()
 
 const HServiceId& HMediaServerInfo::defaultContentDirectoryId()
 {
-    static const HServiceId retVal("urn:upnp-org:serviceId:ContentDirectory");
+    static const HServiceId retVal(QLatin1String("urn:upnp-org:serviceId:ContentDirectory"));
     return retVal;
 }
 
 const HServiceId& HMediaServerInfo::defaultConnectionManagerId()
 {
-    static const HServiceId retVal("urn:upnp-org:serviceId:ConnectionManager");
+    static const HServiceId retVal(QLatin1String("urn:upnp-org:serviceId:ConnectionManager"));
     return retVal;
 }
 
 const HServiceId& HMediaServerInfo::defaultAvTransportId()
 {
-    static const HServiceId retVal("urn:upnp-org:serviceId:AVTransport");
+    static const HServiceId retVal(QLatin1String("urn:upnp-org:serviceId:AVTransport"));
     return retVal;
 }
 

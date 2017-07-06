@@ -72,7 +72,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSearchCapabilities(
     qint32 retVal = q->getSearchCapabilities(&searchCapabilities);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("SearchCaps", searchCapabilities.join(","));
+        outArgs->setValue(QLatin1String("SearchCaps"), searchCapabilities.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -90,7 +90,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSortCapabilities(
     qint32 retVal = q->getSortCapabilities(&sortCapabilities);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("SortCaps", sortCapabilities.join(","));
+        outArgs->setValue(QLatin1String("SortCaps"), sortCapabilities.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -108,7 +108,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSortExtensionCapabilities(
     qint32 retVal = q->getSortExtensionCapabilities(&sortExtCapabilities);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("SortExtensionCaps", sortExtCapabilities.join(","));
+        outArgs->setValue(QLatin1String("SortExtensionCaps"), sortExtCapabilities.join(QLatin1String(",")));
     }
 
     return retVal;
@@ -126,7 +126,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getFeatureList(
     qint32 retVal = q->getFeatureList(&featureList);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("FeatureList", featureList);
+        outArgs->setValue(QLatin1String("FeatureList"), featureList);
     }
 
     return retVal;
@@ -144,7 +144,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getSystemUpdateID(
     qint32 retVal = q->getSystemUpdateId(&systemUpdateId);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("Id", systemUpdateId);
+        outArgs->setValue(QLatin1String("Id"), systemUpdateId);
     }
 
     return retVal;
@@ -162,7 +162,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getServiceResetToken(
     qint32 retVal = q->getServiceResetToken(&serviceResetToken);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("ResetToken", serviceResetToken);
+        outArgs->setValue(QLatin1String("ResetToken"), serviceResetToken);
     }
 
     return retVal;
@@ -178,20 +178,20 @@ qint32 HAbstractContentDirectoryServicePrivate::browse(
 
     HSearchResult result;
     qint32 retVal = q->browse(
-           inArgs.value("ObjectID").toString(),
-           HContentDirectoryInfo::browseFlagFromString(inArgs.value("BrowseFlag").toString()),
-           inArgs.value("Filter").toString().split(',').toSet(),
-           inArgs.value("StartingIndex").toUInt(),
-           inArgs.value("RequestedCount").toUInt(),
-           inArgs.value("SortCriteria").toString().split(',', QString::SkipEmptyParts),
+           inArgs.value(QLatin1String("ObjectID")).toString(),
+           HContentDirectoryInfo::browseFlagFromString(inArgs.value(QLatin1String("BrowseFlag")).toString()),
+           inArgs.value(QLatin1String("Filter")).toString().split(QLatin1Char(',')).toSet(),
+           inArgs.value(QLatin1String("StartingIndex")).toUInt(),
+           inArgs.value(QLatin1String("RequestedCount")).toUInt(),
+           inArgs.value(QLatin1String("SortCriteria")).toString().split(QLatin1Char(','), QString::SkipEmptyParts),
            &result);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("Result", result.result());
-        outArgs->setValue("NumberReturned", result.numberReturned());
-        outArgs->setValue("TotalMatches", result.totalMatches());
-        outArgs->setValue("UpdateID", result.updateId());
+        outArgs->setValue(QLatin1String("Result"), result.result());
+        outArgs->setValue(QLatin1String("NumberReturned"), result.numberReturned());
+        outArgs->setValue(QLatin1String("TotalMatches"), result.totalMatches());
+        outArgs->setValue(QLatin1String("UpdateID"), result.updateId());
     }
 
     return retVal;
@@ -207,20 +207,20 @@ qint32 HAbstractContentDirectoryServicePrivate::search(
 
     HSearchResult result;
     qint32 retVal = q->search(
-          inArgs.value("ContainerID").toString(),
-          inArgs.value("SearchCriteria").toString(),
-          inArgs.value("Filter").toString().split(',').toSet(),
-          inArgs.value("StartingIndex").toUInt(),
-          inArgs.value("RequestedCount").toUInt(),
-          inArgs.value("SortCriteria").toString().split(',', QString::SkipEmptyParts),
+          inArgs.value(QLatin1String("ContainerID")).toString(),
+          inArgs.value(QLatin1String("SearchCriteria")).toString(),
+          inArgs.value(QLatin1String("Filter")).toString().split(QLatin1Char(',')).toSet(),
+          inArgs.value(QLatin1String("StartingIndex")).toUInt(),
+          inArgs.value(QLatin1String("RequestedCount")).toUInt(),
+          inArgs.value(QLatin1String("SortCriteria")).toString().split(QLatin1Char(','), QString::SkipEmptyParts),
           &result);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("Result", result.result());
-        outArgs->setValue("NumberReturned", result.numberReturned());
-        outArgs->setValue("TotalMatches", result.totalMatches());
-        outArgs->setValue("UpdateID", result.updateId());
+        outArgs->setValue(QLatin1String("Result"), result.result());
+        outArgs->setValue(QLatin1String("NumberReturned"), result.numberReturned());
+        outArgs->setValue(QLatin1String("TotalMatches"), result.totalMatches());
+        outArgs->setValue(QLatin1String("UpdateID"), result.updateId());
     }
 
     return retVal;
@@ -236,14 +236,14 @@ qint32 HAbstractContentDirectoryServicePrivate::createObject(
 
     HCreateObjectResult result;
     qint32 retVal = q->createObject(
-        inArgs.value("ContainerID").toString(),
-        inArgs.value("Elements").toString(),
+        inArgs.value(QLatin1String("ContainerID")).toString(),
+        inArgs.value(QLatin1String("Elements")).toString(),
         &result);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("ObjectID", result.objectId());
-        outArgs->setValue("Result", result.result());
+        outArgs->setValue(QLatin1String("ObjectID"), result.objectId());
+        outArgs->setValue(QLatin1String("Result"), result.result());
     }
 
     return retVal;
@@ -254,7 +254,7 @@ qint32 HAbstractContentDirectoryServicePrivate::destroyObject(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
-    return q->destroyObject(inArgs.value("ObjectID").toString());
+    return q->destroyObject(inArgs.value(QLatin1String("ObjectID")).toString());
 }
 
 qint32 HAbstractContentDirectoryServicePrivate::updateObject(
@@ -263,9 +263,9 @@ qint32 HAbstractContentDirectoryServicePrivate::updateObject(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
     return q->updateObject(
-        inArgs.value("ObjectID").toString(),
-        inArgs.value("CurrentTagValue").toString().split(','),
-        inArgs.value("NewTagValue").toString().split(','));
+        inArgs.value(QLatin1String("ObjectID")).toString(),
+        inArgs.value(QLatin1String("CurrentTagValue")).toString().split(QLatin1Char(',')),
+        inArgs.value(QLatin1String("NewTagValue")).toString().split(QLatin1Char(',')));
 }
 
 qint32 HAbstractContentDirectoryServicePrivate::moveObject(
@@ -278,13 +278,13 @@ qint32 HAbstractContentDirectoryServicePrivate::moveObject(
 
     QString newObjectId;
     qint32 retVal = q->moveObject(
-        inArgs.value("ObjectID").toString(),
-        inArgs.value("NewParentID").toString(),
+        inArgs.value(QLatin1String("ObjectID")).toString(),
+        inArgs.value(QLatin1String("NewParentID")).toString(),
         &newObjectId);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("NewObjectId", newObjectId);
+        outArgs->setValue(QLatin1String("NewObjectId"), newObjectId);
     }
 
     return retVal;
@@ -298,13 +298,13 @@ qint32 HAbstractContentDirectoryServicePrivate::importResource(
 
     quint32 transferId;
     qint32 retVal = q->importResource(
-        inArgs.value("SourceURI").toUrl(),
-        inArgs.value("DestinationURI").toUrl(),
+        inArgs.value(QLatin1String("SourceURI")).toUrl(),
+        inArgs.value(QLatin1String("DestinationURI")).toUrl(),
         &transferId);
 
     if (retVal == UpnpSuccess && outArgs)
     {
-        outArgs->setValue("TransferID", transferId);
+        outArgs->setValue(QLatin1String("TransferID"), transferId);
     }
 
     return retVal;
@@ -318,13 +318,13 @@ qint32 HAbstractContentDirectoryServicePrivate::exportResource(
 
     quint32 transferId;
     qint32 retVal = q->exportResource(
-        inArgs.value("SourceURI").toUrl(),
-        inArgs.value("DestinationURI").toUrl(),
+        inArgs.value(QLatin1String("SourceURI")).toUrl(),
+        inArgs.value(QLatin1String("DestinationURI")).toUrl(),
         &transferId);
 
     if (retVal == UpnpSuccess && outArgs)
     {
-        outArgs->setValue("TransferID", transferId);
+        outArgs->setValue(QLatin1String("TransferID"), transferId);
     }
 
     return retVal;
@@ -335,7 +335,7 @@ qint32 HAbstractContentDirectoryServicePrivate::deleteResource(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
-    return q->deleteResource(inArgs.value("ResourceURI").toUrl());
+    return q->deleteResource(inArgs.value(QLatin1String("ResourceURI")).toUrl());
 }
 
 qint32 HAbstractContentDirectoryServicePrivate::stopTransferResource(
@@ -343,7 +343,7 @@ qint32 HAbstractContentDirectoryServicePrivate::stopTransferResource(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     H_Q(HAbstractContentDirectoryService);
-    return q->stopTransferResource(inArgs.value("TransferID").toUInt());
+    return q->stopTransferResource(inArgs.value(QLatin1String("TransferID")).toUInt());
 }
 
 qint32 HAbstractContentDirectoryServicePrivate::getTransferProgress(
@@ -355,13 +355,13 @@ qint32 HAbstractContentDirectoryServicePrivate::getTransferProgress(
     Q_ASSERT_X(outArgs, "", "An object for output arguments have to be defined");
 
     HTransferProgressInfo info;
-    qint32 retVal = q->getTransferProgress(inArgs.value("TransferID").toUInt(), &info);
+    qint32 retVal = q->getTransferProgress(inArgs.value(QLatin1String("TransferID")).toUInt(), &info);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("TransferStatus", info.status());
-        outArgs->setValue("TransferLength", info.length());
-        outArgs->setValue("TransferTotal", info.total());
+        outArgs->setValue(QLatin1String("TransferStatus"), info.status());
+        outArgs->setValue(QLatin1String("TransferLength"), info.length());
+        outArgs->setValue(QLatin1String("TransferTotal"), info.total());
     }
 
     return retVal;
@@ -377,13 +377,13 @@ qint32 HAbstractContentDirectoryServicePrivate::createReference(
 
     QString newId;
     qint32 retVal = q->createReference(
-       inArgs.value("ContainerID").toString(),
-       inArgs.value("ObjectID").toString(),
+       inArgs.value(QLatin1String("ContainerID")).toString(),
+       inArgs.value(QLatin1String("ObjectID")).toString(),
        &newId);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("NewID", newId);
+        outArgs->setValue(QLatin1String("NewID"), newId);
     }
 
     return retVal;
@@ -399,15 +399,15 @@ qint32 HAbstractContentDirectoryServicePrivate::freeFormQuery(
 
     HFreeFormQueryResult queryResult;
     qint32 retVal = q->freeFormQuery(
-        inArgs.value("ContainerID").toString(),
-        inArgs.value("CDSView").toUInt(),
-        inArgs.value("QueryRequest").toString(),
+        inArgs.value(QLatin1String("ContainerID")).toString(),
+        inArgs.value(QLatin1String("CDSView")).toUInt(),
+        inArgs.value(QLatin1String("QueryRequest")).toString(),
         &queryResult);
 
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("QueryResult", queryResult.queryResult());
-        outArgs->setValue("UpdateID", queryResult.updateId());
+        outArgs->setValue(QLatin1String("QueryResult"), queryResult.queryResult());
+        outArgs->setValue(QLatin1String("UpdateID"), queryResult.updateId());
     }
 
     return retVal;
@@ -425,7 +425,7 @@ qint32 HAbstractContentDirectoryServicePrivate::getFreeFormQueryCapabilities(
     qint32 retVal = q->getFreeFormQueryCapabilities(&ffqCapabilities);
     if (retVal == UpnpSuccess)
     {
-        outArgs->setValue("FFQCapabilities", ffqCapabilities);
+        outArgs->setValue(QLatin1String("FFQCapabilities"), ffqCapabilities);
     }
 
     return retVal;
@@ -447,74 +447,74 @@ HAbstractContentDirectoryService::HAbstractContentDirectoryService() :
 
 HAbstractContentDirectoryService::~HAbstractContentDirectoryService()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 }
 
 HServerService::HActionInvokes HAbstractContentDirectoryService::createActionInvokes()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, (char *)H_FUN, h_ptr->m_loggingIdentifier.data());
     H_D(HAbstractContentDirectoryService);
 
     HActionInvokes retVal;
 
-    retVal.insert("GetSearchCapabilities",
+    retVal.insert(QLatin1String("GetSearchCapabilities"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getSearchCapabilities));
 
-    retVal.insert("GetSortCapabilities",
+    retVal.insert(QLatin1String("GetSortCapabilities"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getSortCapabilities));
 
-    retVal.insert("GetSortExtensionCapabilities",
+    retVal.insert(QLatin1String("GetSortExtensionCapabilities"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getSortExtensionCapabilities));
 
-    retVal.insert("GetFeatureList",
+    retVal.insert(QLatin1String("GetFeatureList"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getFeatureList));
 
-    retVal.insert("GetSystemUpdateID",
+    retVal.insert(QLatin1String("GetSystemUpdateID"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getSystemUpdateID));
 
-    retVal.insert("GetServiceResetToken",
+    retVal.insert(QLatin1String("GetServiceResetToken"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getServiceResetToken));
 
-    retVal.insert("Browse",
+    retVal.insert(QLatin1String("Browse"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::browse));
 
-    retVal.insert("Search",
+    retVal.insert(QLatin1String("Search"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::search));
 
-    retVal.insert("CreateObject",
+    retVal.insert(QLatin1String("CreateObject"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::createObject));
 
-    retVal.insert("DestroyObject",
+    retVal.insert(QLatin1String("DestroyObject"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::destroyObject));
 
-    retVal.insert("UpdateObject",
+    retVal.insert(QLatin1String("UpdateObject"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::updateObject));
 
-    retVal.insert("MoveObject",
+    retVal.insert(QLatin1String("MoveObject"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::moveObject));
 
-    retVal.insert("ImportResource",
+    retVal.insert(QLatin1String("ImportResource"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::importResource));
 
-    retVal.insert("ExportResource",
+    retVal.insert(QLatin1String("ExportResource"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::exportResource));
 
-    retVal.insert("DeleteResource",
+    retVal.insert(QLatin1String("DeleteResource"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::deleteResource));
 
-    retVal.insert("StopTransferResource",
+    retVal.insert(QLatin1String("StopTransferResource"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::stopTransferResource));
 
-    retVal.insert("GetTransferProgress",
+    retVal.insert(QLatin1String("GetTransferProgress"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getTransferProgress));
 
-    retVal.insert("CreateReference",
+    retVal.insert(QLatin1String("CreateReference"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::createReference));
 
-    retVal.insert("FreeFormQuery",
+    retVal.insert(QLatin1String("FreeFormQuery"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::freeFormQuery));
 
-    retVal.insert("GetFreeFormQueryCapabilities",
+    retVal.insert(QLatin1String("GetFreeFormQueryCapabilities"),
         HActionInvoke(h, &HAbstractContentDirectoryServicePrivate::getFreeFormQueryCapabilities));
 
     return retVal;
@@ -527,8 +527,8 @@ bool HAbstractContentDirectoryService::finalizeInit(QString* errDescription)
         return false;
     }
 
-    stateVariables().value("ServiceResetToken")->setValue(
-        QUuid::createUuid().toString().remove("{").remove("}"));
+    stateVariables().value(QLatin1String("ServiceResetToken"))->setValue(
+        QUuid::createUuid().toString().remove(QLatin1String("{")).remove(QLatin1String("}")));
 
     return true;
 }
