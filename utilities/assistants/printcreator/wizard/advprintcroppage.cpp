@@ -67,10 +67,10 @@ public:
 
     Private(QWidget* const parent)
     {
-        cropUi     = new CropUI(parent);
+        cropUi = new CropUI(parent);
     }
 
-    CropUI*        cropUi;
+    CropUI* cropUi;
 };
 
 AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)

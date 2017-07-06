@@ -24,12 +24,14 @@
 #ifndef ADV_PRINT_CUSTOM_DLG_H
 #define ADV_PRINT_CUSTOM_DLG_H
 
-#include "ui_advprintcustomlayout.h"
-
 // Qt includes
 
 #include <QDialog>
 #include <QWidget>
+
+// Local includes
+
+#include "ui_advprintcustomlayout.h"
 
 namespace Digikam
 {
@@ -44,10 +46,17 @@ public:
     explicit AdvPrintCustomLayoutDlg(QWidget* const parent = 0);
     ~AdvPrintCustomLayoutDlg();
 
-    // retrieve last used data
     void readSettings();
-    // save used data
     void saveSettings();
+
+private:
+
+    enum CustomChoice
+    {
+        PHOTO_GRID              = 1,
+        FIT_AS_MANY_AS_POSSIBLE = 2,
+        PHOTOS_PER_PAGE         = 3
+    };
 };
 
 } // namespace Digikam
