@@ -281,8 +281,6 @@ void MailSettingsPage::initializePage()
 
     while (it != map.constEnd())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << it.key() << d->settings->binPaths[it.key()];
-
         if (d->settings->binPaths[it.key()].isEmpty())
         {
             d->mailAgentName->setItemData((int)it.key(), false, Qt::UserRole-1);

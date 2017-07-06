@@ -149,6 +149,9 @@ MailIntroPage::MailIntroPage(QWizard* const dialog, const QString& title)
 
     setPageWidget(vbox);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("view-presentation")));
+
+    connect(d->binSearch, SIGNAL(signalBinariesFound(bool)),
+            this, SLOT(slotBinariesFound()));
 }
 
 MailIntroPage::~MailIntroPage()
@@ -171,12 +174,18 @@ void MailIntroPage::initializePage()
     }
 
     d->binSearch->allBinariesFound();
+    emit completeChanged();
 }
 
 bool MailIntroPage::validatePage()
 {
     d->wizard->settings()->selMode = (MailSettings::Selection)d->imageGetOption->currentIndex();
 
+    return true;
+}
+
+void MailIntroPage::slotBinariesFound()
+{
     d->wizard->settings()->binPaths.insert(MailSettings::BALSA, d->balsaBin.isValid() ?
                                            d->balsaBin.path() : QString());
 
@@ -198,9 +207,15 @@ bool MailIntroPage::validatePage()
     d->wizard->settings()->binPaths.insert(MailSettings::THUNDERBIRD, d->thundBin.isValid() ?
                                            d->thundBin.path() : QString());
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << d->wizard->settings()->binPaths;
+    emit completeChanged();
+}
 
-    return true;
+bool MailIntroPage::isComplete() const
+{
+    QString val = d->wizard->settings()->binPaths.values().join(QString());
+    qCDebug(DIGIKAM_GENERAL_LOG) << val;
+
+    return (!val.isEmpty());
 }
 
 } // namespace Digikam
