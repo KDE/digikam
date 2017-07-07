@@ -41,7 +41,7 @@ public:
                        QLatin1String("https://www.mozilla.org/en-US/thunderbird/"),
                        QLatin1String("SendByMail"),
                        QStringList(QLatin1String("-v")),
-                       i18n("Mozilla Fundation Mail Client.")
+                       i18n("Mozilla Foundation Mail Client.")
                       )
         {
             setup();
