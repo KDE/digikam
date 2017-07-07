@@ -65,12 +65,10 @@ public:
     /// Initialize page layout to the given pageSize in mm
     void initPhotoSizes(const QSizeF& pageSize);
 
+    void updateCropFrame(AdvPrintPhoto* const, int);
+
 public Q_SLOTS:
 
-    void slotBtnCropRotateLeftClicked();
-    void slotBtnCropRotateRightClicked();
-    void slotBtnCropNextClicked();
-    void slotBtnCropPrevClicked();
     void slotListPhotoSizesSelected();
 
     void slotPageSetup();
@@ -90,8 +88,6 @@ private:
                            const QSizeF& pageSize);
 
     void updateCaption(AdvPrintPhoto* const);
-    void updateCropFrame(AdvPrintPhoto* const, int);
-    void setBtnCropEnabled();
     void removeGimpFiles();
     void printPhotos(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,

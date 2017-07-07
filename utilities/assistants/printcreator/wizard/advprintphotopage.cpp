@@ -161,11 +161,9 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             this, SLOT(slotContextMenuRequested()));
 
-    // Save item list => we catch the signal to add our PA attributes and elements Image children
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&, int)),
             this, SLOT(slotXMLSaveItem(QXmlStreamWriter&, int)));
 
-    // Save item list => we catch the signal to add our PA elements (not per image)
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamWriter&)),
             this, SLOT(slotXMLCustomElement(QXmlStreamWriter&)));
 

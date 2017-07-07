@@ -50,6 +50,7 @@ public:
     Ui_AdvPrintCropPage* ui() const;
 
     void updateUi();
+    void setBtnCropEnabled();
 
     void initializePage();
     bool validatePage();
@@ -59,6 +60,10 @@ public:
 private Q_SLOTS:
 
     void slotCropSelection(int);
+    void slotBtnCropPrevClicked();
+    void slotBtnCropNextClicked();
+    void slotBtnCropRotateLeftClicked();
+    void slotBtnCropRotateRightClicked();
 
 private:
 

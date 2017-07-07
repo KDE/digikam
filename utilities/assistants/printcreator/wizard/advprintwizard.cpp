@@ -90,7 +90,6 @@ public:
         photoPage            = 0;
         captionPage          = 0;
         cropPage             = 0;
-        currentCropPhoto     = 0;
         cancelPrinting       = false;
         pageSetupDlg         = 0;
         iface                = 0;
@@ -103,7 +102,6 @@ public:
     AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
 
-    int                       currentCropPhoto;
     bool                      cancelPrinting;
 
     AdvPrintSettings*         settings;
@@ -458,7 +456,8 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                             qCDebug(DIGIKAM_GENERAL_LOG) << "? "
                                                          <<  ep.tagName()
                                                          << " attr="
-                                                         << ep.attribute(QLatin1String("name"), QLatin1String("??"));
+                                                         << ep.attribute(QLatin1String("name"),
+                                                                         QLatin1String("??"));
                         }
                     }
 
@@ -511,8 +510,10 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
         parseTemplateFile(dir.absolutePath() + QLatin1String("/") + fn, pageSize);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes count() ="   << d->settings->photosizes.count();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes isEmpty() =" << d->settings->photosizes.isEmpty();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes count() ="
+                                 << d->settings->photosizes.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes isEmpty() ="
+                                 << d->settings->photosizes.isEmpty();
 
     if (d->settings->photosizes.isEmpty())
     {
@@ -549,7 +550,6 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     // Adding custom choice
     QListWidgetItem* const pWItem = new QListWidgetItem(i18n(CUSTOM_PAGE_LAYOUT_NAME));
 
-    //TODO FREE STYLE ICON
     TemplateIcon ti(80, pageSize.toSize());
     ti.begin();
     QPainter& painter = ti.getPainter();
@@ -1008,8 +1008,8 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
                                  getLayout(photoIndex)->height(),
                                  s->autoRotate);
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
-                                            photoIndex + 1,
-                                            QString::number(d->settings->photos.count())));
+                                             photoIndex + 1,
+                                             QString::number(d->settings->photos.count())));
 }
 
 void AdvPrintWizard::previewPhotos()
@@ -1224,14 +1224,14 @@ void AdvPrintWizard::slotPageChanged(int curr)
     else if (current->title() == i18n(CROP_PAGE_NAME))
     {
         readSettings(current->title());
-        d->currentCropPhoto = 0;
+        d->settings->currentCropPhoto = 0;
 
         if (d->settings->photos.size())
         {
-            AdvPrintPhoto* const photo = d->settings->photos[d->currentCropPhoto];
-            setBtnCropEnabled();
+            AdvPrintPhoto* const photo = d->settings->photos[d->settings->currentCropPhoto];
+            d->cropPage->setBtnCropEnabled();
             this->update();
-            updateCropFrame(photo, d->currentCropPhoto);
+            updateCropFrame(photo, d->settings->currentCropPhoto);
         }
         else
         {
@@ -1299,76 +1299,6 @@ void AdvPrintWizard::slotInfoPageUpdateCaptions()
 
     // create our photo sizes list
     previewPhotos();
-}
-
-void AdvPrintWizard::slotBtnCropRotateLeftClicked()
-{
-    // by definition, the cropRegion should be set by now,
-    // which means that after our rotation it will become invalid,
-    // so we will initialize it to -2 in an awful hack (this
-    // tells the cropFrame to reset the crop region, but don't
-    // automagically rotate the image to fit.
-    AdvPrintPhoto* const photo = d->settings->photos[d->currentCropPhoto];
-    photo->m_cropRegion        = QRect(-2, -2, -2, -2);
-    photo->m_rotation          = (photo->m_rotation - 90) % 360;
-
-    updateCropFrame(photo, d->currentCropPhoto);
-}
-
-void AdvPrintWizard::slotBtnCropRotateRightClicked()
-{
-    // by definition, the cropRegion should be set by now,
-    // which means that after our rotation it will become invalid,
-    // so we will initialize it to -2 in an awful hack (this
-    // tells the cropFrame to reset the crop region, but don't
-    // automagically rotate the image to fit.
-    AdvPrintPhoto* const photo = d->settings->photos[d->currentCropPhoto];
-    photo->m_cropRegion        = QRect(-2, -2, -2, -2);
-    photo->m_rotation          = (photo->m_rotation + 90) % 360;
-
-    updateCropFrame(photo, d->currentCropPhoto);
-}
-
-void AdvPrintWizard::setBtnCropEnabled()
-{
-    if (d->currentCropPhoto == 0)
-        d->cropPage->ui()->BtnCropPrev->setEnabled(false);
-    else
-        d->cropPage->ui()->BtnCropPrev->setEnabled(true);
-
-    if (d->currentCropPhoto == (int) d->settings->photos.count() - 1)
-        d->cropPage->ui()->BtnCropNext->setEnabled(false);
-    else
-        d->cropPage->ui()->BtnCropNext->setEnabled(true);
-}
-
-void AdvPrintWizard::slotBtnCropNextClicked()
-{
-    AdvPrintPhoto* const photo = d->settings->photos[++d->currentCropPhoto];
-    setBtnCropEnabled();
-
-    if (!photo)
-    {
-        d->currentCropPhoto = d->settings->photos.count() - 1;
-        return;
-    }
-
-    updateCropFrame(photo, d->currentCropPhoto);
-}
-
-void AdvPrintWizard::slotBtnCropPrevClicked()
-{
-    AdvPrintPhoto* const photo = d->settings->photos[--d->currentCropPhoto];
-
-    setBtnCropEnabled();
-
-    if (!photo)
-    {
-        d->currentCropPhoto = 0;
-        return;
-    }
-
-    updateCropFrame(photo, d->currentCropPhoto);
 }
 
 void AdvPrintWizard::slotListPhotoSizesSelected()
@@ -1444,16 +1374,21 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
             //photo size must be less than page size
             static const float round_value = 0.01F;
 
-            if ((height > (size.height() + round_value) || width  > (size.width() + round_value)))
+            if ((height > (size.height() + round_value) ||
+                 width  > (size.width()  + round_value)))
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "photo size " << QSize(width, height) << "> page size " << size;
+                qCDebug(DIGIKAM_GENERAL_LOG) << "photo size "
+                                             << QSize(width, height)
+                                             << "> page size "
+                                             << size;
                 delete s;
                 s = NULL;
             }
             else
             {
                 // fit as many photos of given size as possible
-                s->layouts.append(new QRect(0, 0, (int)sizeManaged.width(), (int)sizeManaged.height()));
+                s->layouts.append(new QRect(0, 0, (int)sizeManaged.width(),
+                                            (int)sizeManaged.height()));
                 s->autoRotate  = custDlg.m_autorotate->isChecked();
                 s->label       = item->text();
                 s->dpi         = 0;
@@ -1494,17 +1429,28 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
                         for (int col = 0 ; col < nColumns ; ++col)
                         {
                             photoX = dx * (col + 1) + (col * width);
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "photo at P(" << photoX << ", " << photoY << ") size(" << width << ", " << height;
+                            qCDebug(DIGIKAM_GENERAL_LOG) << "photo at P("
+                                                         << photoX
+                                                         << ", "
+                                                         << photoY
+                                                         << ") size("
+                                                         << width
+                                                         << ", "
+                                                         << height;
 
                             s->layouts.append(new QRect(photoX, photoY,
                                                         width, height));
-                            iconpreview.fillRect(photoX, photoY, width, height, Qt::color1);
+                            iconpreview.fillRect(photoX, photoY,
+                                                 width, height, Qt::color1);
                         }
                     }
                 }
                 else
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "I can't go on, rows " << nRows << "> columns " << nColumns;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "I can't go on, rows "
+                                                 << nRows
+                                                 << "> columns "
+                                                 << nColumns;
                     delete s;
                     s = NULL;
                 }

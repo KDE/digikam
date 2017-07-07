@@ -80,6 +80,7 @@ public:
     QString                   savedPhotoSize;
 
     int                       currentPreviewPage;
+    int                       currentCropPhoto;
 };
 
 } // namespace Digikam

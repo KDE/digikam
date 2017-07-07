@@ -67,8 +67,17 @@ public Q_SLOTS:
 private Q_SLOTS:
 
     void slotXMLLoadElement(QXmlStreamReader&);
+
+    /** Save item list => we catch the signal to add
+     *  our PA attributes and elements Image children
+     */
     void slotXMLSaveItem(QXmlStreamWriter&, int);
+
+    /** Save item list => we catch the signal to add
+     *  our PA elements (not per image)
+     */
     void slotXMLCustomElement(QXmlStreamWriter&);
+
     void slotXMLCustomElement(QXmlStreamReader&);
     void slotContextMenuRequested();
     void slotIncreaseCopies();
