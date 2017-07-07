@@ -30,6 +30,8 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QMenu>
+#include <QAction>
 
 // KDE includes
 
@@ -154,7 +156,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             wizard, SLOT(slotRemovingItem(int)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
-            wizard, SLOT(slotContextMenuRequested()));
+            this, SLOT(slotContextMenuRequested()));
 
     // Save item list => we catch the signal to add our PA attributes and elements Image children
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&, int)),
@@ -350,6 +352,69 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
     xmlWriter.writeAttribute(QLatin1String("PageSize"),  QString::fromUtf8("%1").arg(d->printer->paperSize()));
     xmlWriter.writeAttribute(QLatin1String("PhotoSize"), d->photoUi->ListPhotoSizes->currentItem()->text());
     xmlWriter.writeEndElement(); // pa_layout
+}
+
+void AdvPrintPhotoPage::slotContextMenuRequested()
+{
+    if (d->settings->photos.size())
+    {
+        int itemIndex         = d->photoUi->mPrintList->listView()->currentIndex().row();
+        d->photoUi->mPrintList->listView()->blockSignals(true);
+        QMenu menu(d->photoUi->mPrintList->listView());
+        QAction* const action = menu.addAction(i18n("Add again"));
+
+        connect(action, SIGNAL(triggered()),
+                this , SLOT(slotIncreaseCopies()));
+
+        AdvPrintPhoto* const pPhoto  = d->settings->photos[itemIndex];
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << " copies "
+                                     << pPhoto->m_copies
+                                     << " first "
+                                     << pPhoto->m_first;
+
+        if (pPhoto->m_copies > 1 || !pPhoto->m_first)
+        {
+            QAction* const actionr = menu.addAction(i18n("Remove"));
+
+            connect(actionr, SIGNAL(triggered()),
+                    this, SLOT(slotDecreaseCopies()));
+        }
+
+        menu.exec(QCursor::pos());
+        d->photoUi->mPrintList->listView()->blockSignals(false);
+    }
+}
+
+void AdvPrintPhotoPage::slotIncreaseCopies()
+{
+    if (d->settings->photos.size())
+    {
+        QList<QUrl> list;
+        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(d->photoUi->mPrintList->listView()->currentItem());
+
+        if (!item)
+            return;
+
+        list.append(item->url());
+        qCDebug(DIGIKAM_GENERAL_LOG) << " Adding a copy of " << item->url();
+        d->photoUi->mPrintList->slotAddImages(list);
+    }
+}
+
+void AdvPrintPhotoPage::slotDecreaseCopies()
+{
+    if (d->settings->photos.size())
+    {
+        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>
+            (d->photoUi->mPrintList->listView()->currentItem());
+
+        if (!item)
+            return;
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << " Removing a copy of " << item->url();
+        d->photoUi->mPrintList->slotRemoveItems();
+    }
 }
 
 } // namespace Digikam

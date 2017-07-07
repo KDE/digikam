@@ -1230,53 +1230,6 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
     previewPhotos();
 }
 
-void AdvPrintWizard::slotContextMenuRequested()
-{
-    if (d->settings->photos.size())
-    {
-        int itemIndex         = d->photoPage->imagesList()->listView()->currentIndex().row();
-        d->photoPage->imagesList()->listView()->blockSignals(true);
-        QMenu menu(d->photoPage->imagesList()->listView());
-        QAction* const action = menu.addAction(i18n("Add again"));
-
-        connect(action, SIGNAL(triggered()),
-                this , SLOT(slotIncreaseCopies()));
-
-        AdvPrintPhoto* const pPhoto  = d->settings->photos[itemIndex];
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << " copies "
-                                     << pPhoto->m_copies
-                                     << " first "
-                                     << pPhoto->m_first;
-
-        if (pPhoto->m_copies > 1 || !pPhoto->m_first)
-        {
-            QAction* const actionr = menu.addAction(i18n("Remove"));
-
-            connect(actionr, SIGNAL(triggered()),
-                    this, SLOT(slotDecreaseCopies()));
-        }
-
-        menu.exec(QCursor::pos());
-        d->photoPage->imagesList()->listView()->blockSignals(false);
-    }
-}
-
-void AdvPrintWizard::slotDecreaseCopies()
-{
-    if (d->settings->photos.size())
-    {
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>
-            (d->photoPage->imagesList()->listView()->currentItem());
-
-        if (!item)
-            return;
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << " Removing a copy of " << item->url();
-        d->photoPage->imagesList()->slotRemoveItems();
-    }
-}
-
 void AdvPrintWizard::slotRemovingItem(int itemIndex)
 {
     if (d->settings->photos.size() && itemIndex >= 0)
@@ -1410,22 +1363,6 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
     if (d->settings->photos.size())
     {
         d->photoPage->setComplete(true);
-    }
-}
-
-void AdvPrintWizard::slotIncreaseCopies()
-{
-    if (d->settings->photos.size())
-    {
-        QList<QUrl> list;
-        DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(d->photoPage->imagesList()->listView()->currentItem());
-
-        if (!item)
-            return;
-
-        list.append(item->url());
-        qCDebug(DIGIKAM_GENERAL_LOG) << " Adding a copy of " << item->url();
-        d->photoPage->imagesList()->slotAddImages(list);
     }
 }
 
