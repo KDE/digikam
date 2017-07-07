@@ -513,8 +513,8 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
         parseTemplateFile(dir.absolutePath() + QLatin1String("/") + fn, pageSize);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "d->settings->photosizes.count()="   << d->settings->photosizes.count();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "d->settings->photosizes.isEmpty()=" << d->settings->photosizes.isEmpty();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes count() ="   << d->settings->photosizes.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "photosizes isEmpty() =" << d->settings->photosizes.isEmpty();
 
     if (d->settings->photosizes.isEmpty())
     {
@@ -1180,7 +1180,7 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
             if (!attr.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                 int index = d->photoPage->ui()->m_printer_choice->findText(attr.toString());
 
                 if (index != -1)
@@ -1195,7 +1195,7 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
             if (!attr.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                 QPrinter::PaperSize paperSize = (QPrinter::PaperSize)attr.toString().toInt(&ok);
                 d->photoPage->printer()->setPaperSize(paperSize);
             }
@@ -1204,7 +1204,7 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
             if (!attr.isEmpty())
             {
-                qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                 d->settings->savedPhotoSize = attr.toString();
             }
         }
