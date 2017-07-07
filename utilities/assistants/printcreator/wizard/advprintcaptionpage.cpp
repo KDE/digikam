@@ -261,11 +261,16 @@ void AdvPrintCaptionPage::updateCaption(AdvPrintPhoto* const pPhoto)
 
         if (pPhoto->m_pAdvPrintCaptionInfo)
         {
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionColor = d->captionUi->m_font_color->color();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionSize  = d->captionUi->m_font_size->value();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  = d->captionUi->m_font_name->currentFont();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionType  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionUi->m_captions->currentIndex();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionText  = d->captionUi->m_FreeCaptionFormat->text();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionColor =
+                d->captionUi->m_font_color->color();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionSize  =
+                d->captionUi->m_font_size->value();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  =
+                d->captionUi->m_font_name->currentFont();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionType  =
+                (AdvPrintCaptionInfo::AvailableCaptions)d->captionUi->m_captions->currentIndex();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionText  =
+                d->captionUi->m_FreeCaptionFormat->text();
 
             qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for"
                                          << pPhoto->m_url;
@@ -289,7 +294,8 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
                 {
                     QString cap;
 
-                    if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
+                    if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType !=
+                        AdvPrintCaptionInfo::NoCaptions)
                         cap = captionFormatter(pPhoto);
 
                     lvItem->setText(DImagesListView::User1, cap);

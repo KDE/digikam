@@ -125,9 +125,6 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     connect(d->photoPage->imagesList(), SIGNAL(signalImageListChanged()),
             d->captionPage, SLOT(slotUpdateImagesList()));
-
-    if (d->iface)
-        setItemsList();
 }
 
 AdvPrintWizard::~AdvPrintWizard()
