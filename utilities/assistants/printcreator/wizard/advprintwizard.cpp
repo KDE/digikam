@@ -288,14 +288,20 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                          (size.height() > (pageSize.height() + round_value) ||
                           size.width()  > (pageSize.width() + round_value)))
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "skipping size " << size << " page size " << pageSize;
+                    qCDebug(DIGIKAM_GENERAL_LOG) << "skipping size "
+                                                 << size
+                                                 << " page size "
+                                                 << pageSize;
                     // skipping layout it can't fit
                     n = n.nextSibling();
                     continue;
                 }
 
                 // Next templates are good
-                qCDebug(DIGIKAM_GENERAL_LOG) << "layout size " << size << " page size " << pageSize;
+                qCDebug(DIGIKAM_GENERAL_LOG) << "layout size "
+                                             << size
+                                             << " page size "
+                                             << pageSize;
                 QDomNode np = e.firstChild();
 
                 while (!np.isNull())
@@ -314,7 +320,8 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                             {
                                 sizeManaged = size * scaleValue;
                             }
-                            else if (unit == QLatin1String("inches") || unit == QLatin1String("inch"))
+                            else if (unit == QLatin1String("inches") ||
+                                     unit == QLatin1String("inch"))
                             {
                                 sizeManaged = pageSize * scaleValue / 25.4;
                             }
@@ -341,7 +348,8 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                                                             QStandardPaths::LocateDirectory));
                             const QStringList list  = dir.entryList(QStringList() << desktopFileName);
 
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "Template desktop files list: " << list;
+                            qCDebug(DIGIKAM_GENERAL_LOG) << "Template desktop files list: "
+                                                         << list;
 
                             QStringList::ConstIterator it  = list.constBegin();
                             QStringList::ConstIterator end = list.constEnd();
@@ -353,7 +361,8 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                             else
                             {
                                 p->label = ep.attribute(QLatin1String("name"), QLatin1String("XXX"));
-                                qCWarning(DIGIKAM_GENERAL_LOG) << "missed template translation " << desktopFileName;
+                                qCWarning(DIGIKAM_GENERAL_LOG) << "missed template translation "
+                                                               << desktopFileName;
                             }
 
                             p->dpi        = ep.attribute(QLatin1String("dpi"), QLatin1String("0")).toInt();
@@ -397,12 +406,17 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                                         }
                                         else
                                         {
-                                            qCWarning(DIGIKAM_GENERAL_LOG) << " Wrong grid configuration, rows " << rows << ", columns " << columns;
+                                            qCWarning(DIGIKAM_GENERAL_LOG)
+                                                << " Wrong grid configuration, rows "
+                                                << rows
+                                                << ", columns "
+                                                << columns;
                                         }
                                     }
                                     else
                                     {
-                                        qCDebug(DIGIKAM_GENERAL_LOG) << "    " <<  et.tagName();
+                                        qCDebug(DIGIKAM_GENERAL_LOG) << "    "
+                                                                     <<  et.tagName();
                                     }
                                 }
 
@@ -453,7 +467,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     d->settings->pageSize = pageSize;
 
     // cleaning pageSize memory before invoking clear()
-    for (int i = 0; i < d->settings->photosizes.count(); ++i)
+    for (int i = 0 ; i < d->settings->photosizes.count() ; ++i)
         delete d->settings->photosizes.at(i);
 
     d->settings->photosizes.clear();
@@ -465,7 +479,8 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
                                     QStandardPaths::LocateDirectory));
     const QStringList list = dir.entryList(QStringList() << QLatin1String("*.xml"));
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Template XML files list: " << list;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Template XML files list: "
+                                 << list;
 
     foreach(const QString& fn, list)
     {
@@ -479,12 +494,13 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
 
     if (d->settings->photosizes.isEmpty())
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Empty photoSize-list, create default size\n";
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Empty photoSize-list, create default size";
+
         // There is no valid page size yet.  Create a default page (B10) to prevent crashes.
         AdvPrintPhotoSize* const p = new AdvPrintPhotoSize;
-        p->dpi              = 0;
-        p->autoRotate       = false;
-        p->label            = i18n("Unsupported Paper Size");
+        p->dpi                     = 0;
+        p->autoRotate              = false;
+        p->label                   = i18n("Unsupported Paper Size");
         // page size: B10 (32 x 45 mm)
         p->layouts.append(new QRect(0, 0, 3200, 4500));
         p->layouts.append(new QRect(0, 0, 3200, 4500));
@@ -497,7 +513,8 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     d->photoPage->ui()->ListPhotoSizes->clear();
     QList<AdvPrintPhotoSize*>::iterator it;
 
-    for (it = d->settings->photosizes.begin() ; it != d->settings->photosizes.end() ; ++it)
+    for (it = d->settings->photosizes.begin() ;
+         it != d->settings->photosizes.end() ; ++it)
     {
         AdvPrintPhotoSize* const s = static_cast<AdvPrintPhotoSize*>(*it);
 
@@ -644,11 +661,13 @@ void AdvPrintWizard::printCaption(QPainter& p,
     p.setFont(font);
     p.setPen(photo->m_pAdvPrintCaptionInfo->m_captionColor);
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of lines " << (int) captionByLines.count() ;
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Number of lines "
+                                 << (int) captionByLines.count() ;
 
     // Now draw the caption
     // TODO allow printing captions  per photo and on top, bottom and vertically
-    for (int lineNumber = 0 ; lineNumber < (int) captionByLines.count() ; ++lineNumber)
+    for (int lineNumber = 0 ;
+         lineNumber < (int) captionByLines.count() ; ++lineNumber)
     {
         if (lineNumber > 0)
             p.translate(0, - (int)(pixelsHigh));
@@ -886,9 +905,9 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
     AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
     d->cropPage->ui()->cropFrame->init(photo,
-                                 getLayout(photoIndex)->width(),
-                                 getLayout(photoIndex)->height(),
-                                 s->autoRotate);
+                                       getLayout(photoIndex)->width(),
+                                       getLayout(photoIndex)->height(),
+                                       s->autoRotate);
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                              photoIndex + 1,
                                              QString::number(d->settings->photos.count())));
