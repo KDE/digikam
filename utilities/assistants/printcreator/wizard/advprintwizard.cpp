@@ -1085,7 +1085,8 @@ void AdvPrintWizard::previewPhotos()
     int current = 0;
     QList<AdvPrintPhoto*>::iterator it;
 
-    for (it = d->settings->photos.begin() ; it != d->settings->photos.end() ; ++it)
+    for (it = d->settings->photos.begin() ;
+         it != d->settings->photos.end() ; ++it)
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
 
@@ -1307,62 +1308,6 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
     {
         // No photos => disabling next button (e.g. crop page)
         d->photoPage->setComplete(false);
-    }
-}
-
-void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
-{
-    if (list.count() == 0)
-    {
-        return;
-    }
-
-    QList<QUrl> urls;
-    d->photoPage->imagesList()->blockSignals(true);
-
-    for (QList<QUrl>::ConstIterator it = list.constBegin() ; it != list.constEnd() ; ++it)
-    {
-        QUrl imageUrl = *it;
-
-        // Check if the new item already exist in the list.
-        bool found    = false;
-
-        for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
-        {
-            AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
-
-            if (pCurrentPhoto &&
-                pCurrentPhoto->m_url == imageUrl &&
-                pCurrentPhoto->m_first)
-            {
-                pCurrentPhoto->m_copies++;
-                found                       = true;
-                AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(*pCurrentPhoto);
-                pPhoto->m_first             = false;
-                d->settings->photos.append(pPhoto);
-                qCDebug(DIGIKAM_GENERAL_LOG) << "Added fileName: "
-                                             << pPhoto->m_url.fileName()
-                                             << " copy number "
-                                             << pCurrentPhoto->m_copies;
-            }
-        }
-
-        if (!found)
-        {
-            AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(150, d->iface);
-            pPhoto->m_url          = *it;
-            pPhoto->m_first             = true;
-            d->settings->photos.append(pPhoto);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Added new fileName: "
-                                         << pPhoto->m_url.fileName();
-        }
-    }
-
-    d->photoPage->imagesList()->blockSignals(false);
-
-    if (d->settings->photos.size())
-    {
-        d->photoPage->setComplete(true);
     }
 }
 

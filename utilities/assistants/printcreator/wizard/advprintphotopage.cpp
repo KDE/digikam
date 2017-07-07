@@ -69,7 +69,8 @@ public:
     Private(QWizard* const dialog)
       : printer(0),
         wizard(0),
-        settings(0)
+        settings(0),
+        iface(0)
     {
         photoUi = new PhotoUI(dialog);
         wizard  = dynamic_cast<AdvPrintWizard*>(dialog);
@@ -77,6 +78,7 @@ public:
         if (wizard)
         {
             settings = wizard->settings();
+            iface    = wizard->iface();
         }
     }
 
@@ -86,6 +88,7 @@ public:
 
     AdvPrintWizard*     wizard;
     AdvPrintSettings*   settings;
+    DInfoInterface*     iface;
 };
 
 AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title)
@@ -150,7 +153,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             wizard, SLOT(slotBtnPrintOrderUpClicked()));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalAddItems(QList<QUrl>)),
-            wizard, SLOT(slotAddItems(QList<QUrl>)));
+            this, SLOT(slotAddItems(QList<QUrl>)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalRemovingItem(int)),
             wizard, SLOT(slotRemovingItem(int)));
@@ -414,6 +417,65 @@ void AdvPrintPhotoPage::slotDecreaseCopies()
 
         qCDebug(DIGIKAM_GENERAL_LOG) << " Removing a copy of " << item->url();
         d->photoUi->mPrintList->slotRemoveItems();
+    }
+}
+
+void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
+{
+    if (list.count() == 0)
+    {
+        return;
+    }
+
+    QList<QUrl> urls;
+    d->photoUi->mPrintList->blockSignals(true);
+
+    for (QList<QUrl>::ConstIterator it = list.constBegin() ;
+         it != list.constEnd() ; ++it)
+    {
+        QUrl imageUrl = *it;
+
+        // Check if the new item already exist in the list.
+        bool found    = false;
+
+        for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+        {
+            AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+            if (pCurrentPhoto &&
+                (pCurrentPhoto->m_url == imageUrl) &&
+                pCurrentPhoto->m_first)
+            {
+                pCurrentPhoto->m_copies++;
+                found                       = true;
+                AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(*pCurrentPhoto);
+                pPhoto->m_first             = false;
+                d->settings->photos.append(pPhoto);
+
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Added fileName: "
+                                             << pPhoto->m_url.fileName()
+                                             << " copy number "
+                                             << pCurrentPhoto->m_copies;
+            }
+        }
+
+        if (!found)
+        {
+            AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(150, d->iface);
+            pPhoto->m_url               = *it;
+            pPhoto->m_first             = true;
+            d->settings->photos.append(pPhoto);
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Added new fileName: "
+                                         << pPhoto->m_url.fileName();
+        }
+    }
+
+    d->photoUi->mPrintList->blockSignals(false);
+
+    if (d->settings->photos.size())
+    {
+        setComplete(true);
     }
 }
 

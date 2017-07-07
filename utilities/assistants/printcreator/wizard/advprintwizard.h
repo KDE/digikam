@@ -75,7 +75,6 @@ public Q_SLOTS:
     void slotPageSetup();
     void slotInfoPageUpdateCaptions();
 
-    void slotAddItems(const QList<QUrl>&);
     void slotRemovingItem(int);
     void slotXMLCustomElement(QXmlStreamReader&);
 

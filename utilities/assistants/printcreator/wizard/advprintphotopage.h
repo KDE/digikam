@@ -71,6 +71,7 @@ private Q_SLOTS:
     void slotContextMenuRequested();
     void slotIncreaseCopies();
     void slotDecreaseCopies();
+    void slotAddItems(const QList<QUrl>&);
 
 private:
 
