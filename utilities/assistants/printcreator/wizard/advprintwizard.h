@@ -73,7 +73,6 @@ public Q_SLOTS:
     void slotListPhotoSizesSelected();
 
     void slotPageSetup();
-    void slotImageSelected(QTreeWidgetItem*);
     void slotInfoPageUpdateCaptions();
 
     void slotAddItems(const QList<QUrl>&);
@@ -98,8 +97,6 @@ private:
     /// Initialize page layout to the given pageSize in mm
     void initPhotoSizes(const QSizeF& pageSize);
     void previewPhotos();
-
-    void setCaptionButtons();
 
     /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
     void parseTemplateFile(const QString& fn,

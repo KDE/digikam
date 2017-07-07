@@ -90,7 +90,6 @@ public:
         photoPage            = 0;
         captionPage          = 0;
         cropPage             = 0;
-        infopageCurrentPhoto = 0;
         currentPreviewPage   = 0;
         currentCropPhoto     = 0;
         cancelPrinting       = false;
@@ -105,7 +104,6 @@ public:
     AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
 
-    int                       infopageCurrentPhoto;
     int                       currentPreviewPage;
     int                       currentCropPhoto;
     bool                      cancelPrinting;
@@ -1167,14 +1165,6 @@ void AdvPrintWizard::manageBtnPreviewPage()
     }
 }
 
-void AdvPrintWizard::setCaptionButtons()
-{
-    if (d->settings->photos.size())
-    {
-        d->captionPage->setCaptionButtons(d->settings->photos.at(d->infopageCurrentPhoto));
-    }
-}
-
 void AdvPrintWizard::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
 {
     xmlWriter.writeStartElement(QLatin1String("pa_layout"));
@@ -1302,14 +1292,14 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
                 // get all attributes and its value of a tag in attrs variable.
-                QXmlStreamAttributes attrs = xmlReader.attributes();
+                QXmlStreamAttributes attrs     = xmlReader.attributes();
                 // get value of each attribute from QXmlStreamAttributes
-                QStringRef attr      = attrs.value(QLatin1String("type"));
+                QStringRef attr                = attrs.value(QLatin1String("type"));
                 bool ok;
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
                         (AdvPrintCaptionInfo::AvailableCaptions)attr.toString().toInt(&ok);
                 }
@@ -1318,7 +1308,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.fromString(attr.toString());
                 }
 
@@ -1326,7 +1316,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.setNamedColor(attr.toString());
                 }
 
@@ -1334,7 +1324,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionSize = attr.toString().toInt(&ok);
                 }
 
@@ -1342,11 +1332,9 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
                 if (!attr.isEmpty())
                 {
-                    qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
                     pPhoto->m_pAdvPrintCaptionInfo->m_captionText = attr.toString();
                 }
-
-                setCaptionButtons();
             }
         }
     }
@@ -1382,21 +1370,6 @@ void AdvPrintWizard::slotContextMenuRequested()
         menu.exec(QCursor::pos());
         d->photoPage->imagesList()->listView()->blockSignals(false);
     }
-}
-
-void AdvPrintWizard::slotImageSelected(QTreeWidgetItem* item)
-{
-    DImagesListViewItem* const l_item = dynamic_cast<DImagesListViewItem*>(item);
-
-    if (!l_item)
-        return;
-
-    int itemIndex = d->photoPage->imagesList()->listView()->indexFromItem(l_item).row();
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << " current row now is " << itemIndex;
-    d->infopageCurrentPhoto = itemIndex;
-
-    setCaptionButtons();
 }
 
 void AdvPrintWizard::slotDecreaseCopies()
@@ -1592,7 +1565,6 @@ void AdvPrintWizard::slotPageChanged(int curr)
             readSettings(current->title());
 
         // set to first photo
-        d->infopageCurrentPhoto = 0;
         d->photoPage->imagesList()->listView()->clear();
         QList<QUrl> list;
 
@@ -2463,7 +2435,7 @@ void AdvPrintWizard::slotPageSetup()
 
     // TODO next line should work but it doesn't because of a QT bug
     //d->pageSetupDlg->open(this, SLOT(slotPageSetupDialogExit()));
-    int ret   = d->pageSetupDlg->exec();
+    int ret         = d->pageSetupDlg->exec();
 
     if (ret == QDialog::Accepted)
     {

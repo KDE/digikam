@@ -58,8 +58,6 @@ public:
     void blockCaptionButtons(bool block=true);
     void readCaptionSettings();
 
-    void setCaptionButtons(AdvPrintPhoto* const pPhoto);
-
     /// Fix caption group layout according to captions combobox text
     void enableCaptionGroup(const QString& text);
 

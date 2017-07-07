@@ -142,9 +142,6 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->mPrintList, SIGNAL(signalRemovingItem(int)),
             wizard, SLOT(slotRemovingItem(int)));
 
-    connect(d->photoUi->mPrintList, SIGNAL(signalItemClicked(QTreeWidgetItem*)),
-            wizard, SLOT(slotImageSelected(QTreeWidgetItem*)));
-
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             wizard, SLOT(slotContextMenuRequested()));
 
