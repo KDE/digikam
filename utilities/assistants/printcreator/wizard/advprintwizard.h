@@ -63,9 +63,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotBtnPrintOrderUpClicked();
-    void slotBtnPrintOrderDownClicked();
-
     void slotBtnPreviewPageDownClicked();
     void slotBtnPreviewPageUpClicked();
     void slotBtnCropRotateLeftClicked();

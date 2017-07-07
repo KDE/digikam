@@ -148,10 +148,10 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     d->photoUi->BmpFirstPagePreview->setAlignment(Qt::AlignHCenter);
 
     connect(d->photoUi->mPrintList, SIGNAL(signalMoveDownItem()),
-            wizard, SLOT(slotBtnPrintOrderDownClicked()));
+            this, SLOT(slotBtnPrintOrderDownClicked()));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalMoveUpItem()),
-            wizard, SLOT(slotBtnPrintOrderUpClicked()));
+            this, SLOT(slotBtnPrintOrderUpClicked()));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalAddItems(QList<QUrl>)),
             this, SLOT(slotAddItems(QList<QUrl>)));
@@ -558,6 +558,36 @@ void AdvPrintPhotoPage::slotRemovingItem(int itemIndex)
         // No photos => disabling next button (e.g. crop page)
         setComplete(false);
     }
+}
+
+void AdvPrintPhotoPage::slotBtnPrintOrderDownClicked()
+{
+    d->photoUi->mPrintList->blockSignals(true);
+    int currentIndex = d->photoUi->mPrintList->listView()->currentIndex().row();
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
+                                 << currentIndex - 1
+                                 << " to  "
+                                 << currentIndex;
+
+    d->settings->photos.swap(currentIndex, currentIndex - 1);
+    d->photoUi->mPrintList->blockSignals(false);
+    d->wizard->previewPhotos();
+}
+
+void AdvPrintPhotoPage::slotBtnPrintOrderUpClicked()
+{
+    d->photoUi->mPrintList->blockSignals(true);
+    int currentIndex = d->photoUi->mPrintList->listView()->currentIndex().row();
+
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
+                                 << currentIndex
+                                 << " to  "
+                                 << currentIndex + 1;
+
+    d->settings->photos.swap(currentIndex, currentIndex + 1);
+    d->photoUi->mPrintList->blockSignals(false);
+    d->wizard->previewPhotos();
 }
 
 } // namespace Digikam

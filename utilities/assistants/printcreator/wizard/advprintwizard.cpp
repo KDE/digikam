@@ -1465,21 +1465,6 @@ void AdvPrintWizard::slotBtnCropPrevClicked()
     updateCropFrame(photo, d->currentCropPhoto);
 }
 
-void AdvPrintWizard::slotBtnPrintOrderUpClicked()
-{
-    d->photoPage->imagesList()->blockSignals(true);
-    int currentIndex = d->photoPage->imagesList()->listView()->currentIndex().row();
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
-                                 << currentIndex
-                                 << " to  "
-                                 << currentIndex + 1;
-
-    d->settings->photos.swap(currentIndex, currentIndex + 1);
-    d->photoPage->imagesList()->blockSignals(false);
-    previewPhotos();
-}
-
 void AdvPrintWizard::slotListPhotoSizesSelected()
 {
     AdvPrintPhotoSize* s = NULL;
@@ -1648,21 +1633,6 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
 
     // reset preview page number
     d->currentPreviewPage = 0;
-    previewPhotos();
-}
-
-void AdvPrintWizard::slotBtnPrintOrderDownClicked()
-{
-    d->photoPage->imagesList()->blockSignals(true);
-    int currentIndex = d->photoPage->imagesList()->listView()->currentIndex().row();
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Moved photo "
-                                 << currentIndex - 1
-                                 << " to  "
-                                 << currentIndex;
-
-    d->settings->photos.swap(currentIndex, currentIndex - 1);
-    d->photoPage->imagesList()->blockSignals(false);
     previewPhotos();
 }
 
