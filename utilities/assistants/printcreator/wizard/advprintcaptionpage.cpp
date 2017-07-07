@@ -207,12 +207,12 @@ void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)
 {
     bool fontSettingsEnabled;
 
-    if (text == i18n("No captions"))
+    if (text == i18n("No caption"))
     {
         fontSettingsEnabled = false;
         d->captionUi->m_customCaptionGB->setEnabled(false);
     }
-    else if (text == i18n("Free"))
+    else if (text == i18n("Custom format"))
     {
         fontSettingsEnabled = true;
         d->captionUi->m_customCaptionGB->setEnabled(true);

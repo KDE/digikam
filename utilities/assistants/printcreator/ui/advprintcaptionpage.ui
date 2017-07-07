@@ -65,7 +65,7 @@
              <widget class="QComboBox" name="m_captions">
               <item>
                <property name="text">
-                <string>No captions</string>
+                <string>No caption</string>
                </property>
               </item>
               <item>
