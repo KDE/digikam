@@ -72,7 +72,7 @@ public Q_SLOTS:
     void slotBtnCropPrevClicked();
     void slotListPhotoSizesSelected();
 
-    void slotPagesetupclicked();
+    void slotPageSetup();
     void slotImageSelected(QTreeWidgetItem*);
     void slotInfoPageUpdateCaptions();
 
@@ -102,7 +102,8 @@ private:
     void setCaptionButtons();
 
     /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
-    void parseTemplateFile( const QString& fn, const QSizeF& pageSize );
+    void parseTemplateFile(const QString& fn,
+                           const QSizeF& pageSize);
 
     void updateCaption(AdvPrintPhoto* const);
     void updateCropFrame(AdvPrintPhoto* const, int);
@@ -115,8 +116,8 @@ private:
                                   const QString& baseFilename,
                                   AdvPrintPhotoSize* const layouts);
 
-    int     getPageCount()                        const;
-    QRect*  getLayout(int photoIndex)             const;
+    int     getPageCount()                               const;
+    QRect*  getLayout(int photoIndex)                    const;
     QString captionFormatter(AdvPrintPhoto* const photo) const;
     void    printCaption(QPainter& p,
                          AdvPrintPhoto* photo,

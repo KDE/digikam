@@ -108,7 +108,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             wizard, SLOT(slotListPhotoSizesSelected()));
 
     connect(d->photoUi->m_pagesetup, SIGNAL(clicked()),
-            wizard, SLOT(slotPagesetupclicked()));
+            wizard, SLOT(slotPageSetup()));
 
     if (d->photoUi->mPrintList->layout())
     {

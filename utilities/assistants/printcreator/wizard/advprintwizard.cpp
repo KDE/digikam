@@ -2456,7 +2456,7 @@ void AdvPrintWizard::slotPageSetupDialogExit()
 #endif
 }
 
-void AdvPrintWizard::slotPagesetupclicked()
+void AdvPrintWizard::slotPageSetup()
 {
     delete d->pageSetupDlg;
     d->pageSetupDlg = new QPageSetupDialog(d->photoPage->printer(), this);
