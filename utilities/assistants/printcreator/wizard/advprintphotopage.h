@@ -68,6 +68,7 @@ private Q_SLOTS:
     void slotXMLLoadElement(QXmlStreamReader&);
     void slotXMLSaveItem(QXmlStreamWriter&, int);
     void slotXMLCustomElement(QXmlStreamWriter&);
+    void slotXMLCustomElement(QXmlStreamReader&);
     void slotContextMenuRequested();
     void slotIncreaseCopies();
     void slotDecreaseCopies();

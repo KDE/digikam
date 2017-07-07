@@ -100,12 +100,11 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     d->photoUi->BtnPreviewPageDown->setIcon(QIcon::fromTheme(QLatin1String("go-previous"))
                                               .pixmap(16, 16));
 
-    QList<QPrinterInfo>::iterator it;
     d->printerList = QPrinterInfo::availablePrinters();
 
     qCDebug(DIGIKAM_GENERAL_LOG) << " printers: " << d->printerList.count();
 
-    for (it = d->printerList.begin() ;
+    for (QList<QPrinterInfo>::iterator it = d->printerList.begin() ;
          it != d->printerList.end() ; ++it)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << " printer: " << it->printerName();
@@ -174,7 +173,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             this, SLOT(slotXMLLoadElement(QXmlStreamReader&)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamReader&)),
-            wizard, SLOT(slotXMLCustomElement(QXmlStreamReader&)));
+            this, SLOT(slotXMLCustomElement(QXmlStreamReader&)));
 
     // -----------------------------------
 
@@ -587,6 +586,74 @@ void AdvPrintPhotoPage::slotBtnPrintOrderUpClicked()
 
     d->settings->photos.swap(currentIndex, currentIndex + 1);
     d->photoUi->mPrintList->blockSignals(false);
+    d->wizard->previewPhotos();
+}
+
+void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
+{
+    qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
+
+    while (!xmlReader.atEnd())
+    {
+        if (xmlReader.isStartElement() && xmlReader.name() == QLatin1String("pa_layout"))
+        {
+            bool ok;
+            QXmlStreamAttributes attrs = xmlReader.attributes();
+            // get value of each attribute from QXmlStreamAttributes
+            QStringRef attr            = attrs.value(QLatin1String("Printer"));
+
+            if (!attr.isEmpty())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                int index = d->photoUi->m_printer_choice->findText(attr.toString());
+
+                if (index != -1)
+                {
+                    d->photoUi->m_printer_choice->setCurrentIndex(index);
+                }
+
+                slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+            }
+
+            attr = attrs.value(QLatin1String("PageSize"));
+
+            if (!attr.isEmpty())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                QPrinter::PaperSize paperSize = (QPrinter::PaperSize)attr.toString().toInt(&ok);
+                d->printer->setPaperSize(paperSize);
+            }
+
+            attr = attrs.value(QLatin1String("PhotoSize"));
+
+            if (!attr.isEmpty())
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                d->settings->savedPhotoSize = attr.toString();
+            }
+        }
+
+        xmlReader.readNext();
+    }
+
+    // reset preview page number
+    d->settings->currentPreviewPage = 0;
+
+    d->wizard->initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+
+    QList<QListWidgetItem*> list    = d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize,
+                                                                            Qt::MatchExactly);
+
+    if (list.count())
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << " PhotoSize " << list[0]->text();
+        d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);
+    }
+    else
+    {
+        d->photoUi->ListPhotoSizes->setCurrentRow(0);
+    }
+
     d->wizard->previewPhotos();
 }
 

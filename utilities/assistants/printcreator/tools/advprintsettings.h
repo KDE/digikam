@@ -78,6 +78,8 @@ public:
     QString                   tempPath;
     QStringList               gimpFiles;
     QString                   savedPhotoSize;
+
+    int                       currentPreviewPage;
 };
 
 } // namespace Digikam

@@ -33,9 +33,10 @@ namespace Digikam
 
 AdvPrintSettings::AdvPrintSettings()
 {
-    selMode   = IMAGES;
+    selMode            = IMAGES;
     // select a different page to force a refresh in initPhotoSizes.
-    pageSize  = QSizeF(-1, -1);
+    pageSize           = QSizeF(-1, -1);
+    currentPreviewPage = 0;
 }
 
 AdvPrintSettings::~AdvPrintSettings()

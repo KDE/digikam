@@ -90,7 +90,6 @@ public:
         photoPage            = 0;
         captionPage          = 0;
         cropPage             = 0;
-        currentPreviewPage   = 0;
         currentCropPhoto     = 0;
         cancelPrinting       = false;
         pageSetupDlg         = 0;
@@ -104,7 +103,6 @@ public:
     AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
 
-    int                       currentPreviewPage;
     int                       currentCropPhoto;
     bool                      cancelPrinting;
 
@@ -1090,7 +1088,7 @@ void AdvPrintWizard::previewPhotos()
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
 
-        if (page == d->currentPreviewPage)
+        if (page == d->settings->currentPreviewPage)
         {
             photo->m_cropRegion.setRect(-1, -1, -1, -1);
             photo->m_rotation = 0;
@@ -1103,7 +1101,7 @@ void AdvPrintWizard::previewPhotos()
 
         if (count >= photosPerPage)
         {
-            if (page == d->currentPreviewPage)
+            if (page == d->settings->currentPreviewPage)
                 break;
 
             page++;
@@ -1127,7 +1125,7 @@ void AdvPrintWizard::previewPhotos()
 
         d->photoPage->ui()->BmpFirstPagePreview->clear();
         d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
-        d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2", d->currentPreviewPage + 1, getPageCount()));
+        d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2", d->settings->currentPreviewPage + 1, getPageCount()));
     }
     else
     {
@@ -1154,81 +1152,16 @@ void AdvPrintWizard::manageBtnPreviewPage()
         d->photoPage->ui()->BtnPreviewPageDown->setEnabled(true);
         d->photoPage->ui()->BtnPreviewPageUp->setEnabled(true);
 
-        if (d->currentPreviewPage == 0)
+        if (d->settings->currentPreviewPage == 0)
         {
             d->photoPage->ui()->BtnPreviewPageDown->setEnabled(false);
         }
 
-        if ((d->currentPreviewPage + 1) == getPageCount())
+        if ((d->settings->currentPreviewPage + 1) == getPageCount())
         {
             d->photoPage->ui()->BtnPreviewPageUp->setEnabled(false);
         }
     }
-}
-
-void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
-{
-    qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
-
-    while (!xmlReader.atEnd())
-    {
-        if (xmlReader.isStartElement() && xmlReader.name() == QLatin1String("pa_layout"))
-        {
-            bool ok;
-            QXmlStreamAttributes attrs = xmlReader.attributes();
-            // get value of each attribute from QXmlStreamAttributes
-            QStringRef attr            = attrs.value(QLatin1String("Printer"));
-
-            if (!attr.isEmpty())
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
-                int index = d->photoPage->ui()->m_printer_choice->findText(attr.toString());
-
-                if (index != -1)
-                {
-                    d->photoPage->ui()->m_printer_choice->setCurrentIndex(index);
-                }
-
-                d->photoPage->slotOutputChanged(d->photoPage->ui()->m_printer_choice->currentText());
-            }
-
-            attr = attrs.value(QLatin1String("PageSize"));
-
-            if (!attr.isEmpty())
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
-                QPrinter::PaperSize paperSize = (QPrinter::PaperSize)attr.toString().toInt(&ok);
-                d->photoPage->printer()->setPaperSize(paperSize);
-            }
-
-            attr = attrs.value(QLatin1String("PhotoSize"));
-
-            if (!attr.isEmpty())
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
-                d->settings->savedPhotoSize = attr.toString();
-            }
-        }
-
-        xmlReader.readNext();
-    }
-
-    // reset preview page number
-    d->currentPreviewPage      = 0;
-    initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
-    QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
-
-    if (list.count())
-    {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " PhotoSize " << list[0]->text();
-        d->photoPage->ui()->ListPhotoSizes->setCurrentItem(list[0]);
-    }
-    else
-    {
-        d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
-    }
-
-    previewPhotos();
 }
 
 void AdvPrintWizard::slotPageChanged(int curr)
@@ -1297,7 +1230,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
         }
 
         // reset preview page number
-        d->currentPreviewPage = 0;
+        d->settings->currentPreviewPage = 0;
 
         // create our photo sizes list
         previewPhotos();
@@ -1632,25 +1565,25 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
     }
 
     // reset preview page number
-    d->currentPreviewPage = 0;
+    d->settings->currentPreviewPage = 0;
     previewPhotos();
 }
 
 void AdvPrintWizard::slotBtnPreviewPageDownClicked()
 {
-    if (d->currentPreviewPage == 0)
+    if (d->settings->currentPreviewPage == 0)
         return;
 
-    d->currentPreviewPage--;
+    d->settings->currentPreviewPage--;
     previewPhotos();
 }
 
 void AdvPrintWizard::slotBtnPreviewPageUpClicked()
 {
-    if (d->currentPreviewPage == getPageCount() - 1)
+    if (d->settings->currentPreviewPage == getPageCount() - 1)
         return;
 
-    d->currentPreviewPage++;
+    d->settings->currentPreviewPage++;
     previewPhotos();
 }
 

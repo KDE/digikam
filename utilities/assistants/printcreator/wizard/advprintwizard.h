@@ -61,6 +61,9 @@ public:
 
     void previewPhotos();
 
+    /// Initialize page layout to the given pageSize in mm
+    void initPhotoSizes(const QSizeF& pageSize);
+
 public Q_SLOTS:
 
     void slotBtnPreviewPageDownClicked();
@@ -74,8 +77,6 @@ public Q_SLOTS:
     void slotPageSetup();
     void slotInfoPageUpdateCaptions();
 
-    void slotXMLCustomElement(QXmlStreamReader&);
-
 private Q_SLOTS:
 
     void accept();
@@ -84,9 +85,6 @@ private Q_SLOTS:
     void slotPageSetupDialogExit();
 
 private:
-
-    /// Initialize page layout to the given pageSize in mm
-    void initPhotoSizes(const QSizeF& pageSize);
 
     /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
     void parseTemplateFile(const QString& fn,
