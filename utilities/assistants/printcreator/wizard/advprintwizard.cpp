@@ -613,33 +613,6 @@ QRect* AdvPrintWizard::getLayout(int photoIndex) const
     return s->layouts.at(retVal);
 }
 
-int AdvPrintWizard::getPageCount() const
-{
-    int pageCount   = 0;
-    int photoCount  =  d->settings->photos.count();
-
-    if (photoCount > 0)
-    {
-        // get the selected layout
-        AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
-
-        // how many pages?  Recall that the first layout item is the paper size
-        int photosPerPage   = s->layouts.count() - 1;
-        int remainder       = photoCount % photosPerPage;
-        int emptySlots      = 0;
-
-        if (remainder > 0)
-            emptySlots = photosPerPage - remainder;
-
-        pageCount = photoCount / photosPerPage;
-
-        if (emptySlots > 0)
-            pageCount++;
-    }
-
-    return pageCount;
-}
-
 void AdvPrintWizard::printCaption(QPainter& p,
                                   AdvPrintPhoto* const photo,
                                   int captionW,
@@ -1039,7 +1012,6 @@ void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
                                             QString::number(d->settings->photos.count())));
 }
 
-// update the pages to be printed and preview first/last pages
 void AdvPrintWizard::previewPhotos()
 {
     if (d->settings->photosizes.isEmpty())
@@ -1117,15 +1089,16 @@ void AdvPrintWizard::previewPhotos()
                    QImage::Format_ARGB32_Premultiplied);
         QPainter p(&img);
         p.setCompositionMode(QPainter::CompositionMode_Clear);
-        //p.setCompositionMode(QPainter::CompositionMode_Destination );
-        p.fillRect(img.rect(), Qt::color0); //Qt::transparent );
+        p.fillRect(img.rect(), Qt::color0);
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
         paintOnePage(p, d->settings->photos, s->layouts, current, d->cropPage->ui()->m_disableCrop->isChecked(), true);
         p.end();
 
         d->photoPage->ui()->BmpFirstPagePreview->clear();
         d->photoPage->ui()->BmpFirstPagePreview->setPixmap(QPixmap::fromImage(img));
-        d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2", d->settings->currentPreviewPage + 1, getPageCount()));
+        d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2",
+                                                     d->settings->currentPreviewPage + 1,
+                                                     d->photoPage->getPageCount()));
     }
     else
     {
@@ -1157,7 +1130,7 @@ void AdvPrintWizard::manageBtnPreviewPage()
             d->photoPage->ui()->BtnPreviewPageDown->setEnabled(false);
         }
 
-        if ((d->settings->currentPreviewPage + 1) == getPageCount())
+        if ((d->settings->currentPreviewPage + 1) == d->photoPage->getPageCount())
         {
             d->photoPage->ui()->BtnPreviewPageUp->setEnabled(false);
         }
@@ -1566,24 +1539,6 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
 
     // reset preview page number
     d->settings->currentPreviewPage = 0;
-    previewPhotos();
-}
-
-void AdvPrintWizard::slotBtnPreviewPageDownClicked()
-{
-    if (d->settings->currentPreviewPage == 0)
-        return;
-
-    d->settings->currentPreviewPage--;
-    previewPhotos();
-}
-
-void AdvPrintWizard::slotBtnPreviewPageUpClicked()
-{
-    if (d->settings->currentPreviewPage == getPageCount() - 1)
-        return;
-
-    d->settings->currentPreviewPage++;
     previewPhotos();
 }
 

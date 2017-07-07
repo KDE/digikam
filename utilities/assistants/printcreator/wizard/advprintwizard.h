@@ -59,6 +59,7 @@ public:
     DInfoInterface*   iface()    const;
     AdvPrintSettings* settings() const;
 
+    /// update the pages to be printed and preview first/last pages
     void previewPhotos();
 
     /// Initialize page layout to the given pageSize in mm
@@ -66,8 +67,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotBtnPreviewPageDownClicked();
-    void slotBtnPreviewPageUpClicked();
     void slotBtnCropRotateLeftClicked();
     void slotBtnCropRotateRightClicked();
     void slotBtnCropNextClicked();
@@ -101,7 +100,6 @@ private:
                                   const QString& baseFilename,
                                   AdvPrintPhotoSize* const layouts);
 
-    int     getPageCount()                               const;
     QRect*  getLayout(int photoIndex)                    const;
     QString captionFormatter(AdvPrintPhoto* const photo) const;
     void    printCaption(QPainter& p,

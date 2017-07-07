@@ -115,10 +115,10 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             this, SLOT(slotOutputChanged(QString)));
 
     connect(d->photoUi->BtnPreviewPageUp, SIGNAL(clicked()),
-            wizard, SLOT(slotBtnPreviewPageUpClicked()));
+            this, SLOT(slotBtnPreviewPageUpClicked()));
 
     connect(d->photoUi->BtnPreviewPageDown, SIGNAL(clicked()),
-            wizard, SLOT(slotBtnPreviewPageDownClicked()));
+            this, SLOT(slotBtnPreviewPageDownClicked()));
 
     connect(d->photoUi->ListPhotoSizes, SIGNAL(currentRowChanged(int)),
             wizard, SLOT(slotListPhotoSizesSelected()));
@@ -655,6 +655,51 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
     }
 
     d->wizard->previewPhotos();
+}
+
+void AdvPrintPhotoPage::slotBtnPreviewPageDownClicked()
+{
+    if (d->settings->currentPreviewPage == 0)
+        return;
+
+    d->settings->currentPreviewPage--;
+    d->wizard->previewPhotos();
+}
+
+void AdvPrintPhotoPage::slotBtnPreviewPageUpClicked()
+{
+    if (d->settings->currentPreviewPage == getPageCount() - 1)
+        return;
+
+    d->settings->currentPreviewPage++;
+    d->wizard->previewPhotos();
+}
+
+int AdvPrintPhotoPage::getPageCount() const
+{
+    int pageCount   = 0;
+    int photoCount  =  d->settings->photos.count();
+
+    if (photoCount > 0)
+    {
+        // get the selected layout
+        AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoUi->ListPhotoSizes->currentRow());
+
+        // how many pages?  Recall that the first layout item is the paper size
+        int photosPerPage   = s->layouts.count() - 1;
+        int remainder       = photoCount % photosPerPage;
+        int emptySlots      = 0;
+
+        if (remainder > 0)
+            emptySlots = photosPerPage - remainder;
+
+        pageCount = photoCount / photosPerPage;
+
+        if (emptySlots > 0)
+            pageCount++;
+    }
+
+    return pageCount;
 }
 
 } // namespace Digikam
