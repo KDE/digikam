@@ -67,16 +67,11 @@ public:
 
     void updateCropFrame(AdvPrintPhoto* const, int);
 
-public Q_SLOTS:
-
-    void slotPageSetup();
-
 private Q_SLOTS:
 
     void accept();
     void reject();
     void slotPageChanged(int);
-    void slotPageSetupDialogExit();
 
 private:
 
@@ -85,14 +80,16 @@ private:
                            const QSizeF& pageSize);
 
     void removeGimpFiles();
+
     void printPhotos(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
                      QPrinter& printer);
+
     QStringList printPhotosToFile(const QList<AdvPrintPhoto*>& photos,
                                   const QString& baseFilename,
                                   AdvPrintPhotoSize* const layouts);
 
-    QRect*  getLayout(int photoIndex)                    const;
+    QRect*  getLayout(int photoIndex) const;
 
     void    printCaption(QPainter& p,
                          AdvPrintPhoto* photo,

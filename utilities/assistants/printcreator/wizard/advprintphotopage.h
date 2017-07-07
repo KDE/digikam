@@ -100,6 +100,7 @@ private Q_SLOTS:
     void slotBtnPreviewPageDownClicked();
     void slotBtnPreviewPageUpClicked();
     void slotListPhotoSizesSelected();
+    void slotPageSetup();
 
 private:
 

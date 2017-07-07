@@ -32,6 +32,9 @@
 #include <QStyle>
 #include <QMenu>
 #include <QAction>
+#include <QPageSetupDialog>
+#include <QXmlStreamWriter>
+#include <QXmlStreamAttributes>
 
 // KDE includes
 
@@ -69,7 +72,8 @@ public:
 public:
 
     Private(QWizard* const dialog)
-      : printer(0),
+      : pageSetupDlg(0),
+        printer(0),
         wizard(0),
         settings(0),
         iface(0)
@@ -85,6 +89,7 @@ public:
     }
 
     PhotoUI*            photoUi;
+    QPageSetupDialog*   pageSetupDlg;
     QPrinter*           printer;
     QList<QPrinterInfo> printerList;
 
@@ -126,7 +131,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             this, SLOT(slotListPhotoSizesSelected()));
 
     connect(d->photoUi->m_pagesetup, SIGNAL(clicked()),
-            wizard, SLOT(slotPageSetup()));
+            this, SLOT(slotPageSetup()));
 
     if (d->photoUi->mPrintList->layout())
     {
@@ -186,6 +191,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 AdvPrintPhotoPage::~AdvPrintPhotoPage()
 {
     delete d->printer;
+    delete d->pageSetupDlg;
     delete d;
 }
 
@@ -918,6 +924,77 @@ void AdvPrintPhotoPage::slotListPhotoSizesSelected()
 
     // reset preview page number
     d->settings->currentPreviewPage = 0;
+    d->wizard->previewPhotos();
+}
+
+void AdvPrintPhotoPage::slotPageSetup()
+{
+    delete d->pageSetupDlg;
+    d->pageSetupDlg = new QPageSetupDialog(d->printer, this);
+    int ret         = d->pageSetupDlg->exec();
+
+    if (ret == QDialog::Accepted)
+    {
+        QPrinter* const printer = d->pageSetupDlg->printer();
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Dialog exit, new size "
+                                     << printer->paperSize(QPrinter::Millimeter)
+                                     << " internal size "
+                                     << d->printer->paperSize(QPrinter::Millimeter);
+
+        qreal left, top, right, bottom;
+        d->printer->getPageMargins(&left, &top,
+                                   &right, &bottom,
+                                   QPrinter::Millimeter);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Dialog exit, new margins: left "
+                                     << left
+                                     << " right "
+                                     << right
+                                     << " top "
+                                     << top
+                                     << " bottom "
+                                     << bottom;
+
+        // next should be useless invoke once changing wizard page
+        //d->wizard->initPhotoSizes(d->printer.paperSize(QPrinter::Millimeter));
+
+        //d->settings->pageSize = d->printer.paperSize(QPrinter::Millimeter);
+
+#ifdef DEBUG
+        qCDebug(DIGIKAM_GENERAL_LOG) << " dialog exited num of copies: "
+                                     << printer->numCopies()
+                                     << " inside:   "
+                                     << d->printer->numCopies();
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << " dialog exited from : "
+                                     << printer->fromPage()
+                                     << " to:   "
+                                     << d->printer->toPage();
+#endif
+    }
+
+    // Fix the page size dialog and preview PhotoPage
+    d->wizard->initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+
+    // restore photoSize
+    if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+    {
+        d->photoUi->ListPhotoSizes->setCurrentRow(0);
+    }
+    else
+    {
+        QList<QListWidgetItem*> list =
+            d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize,
+                                                  Qt::MatchExactly);
+
+        if (list.count())
+            d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);
+        else
+            d->photoUi->ListPhotoSizes->setCurrentRow(0);
+    }
+
+    // create our photo sizes list
     d->wizard->previewPhotos();
 }
 
