@@ -67,6 +67,7 @@ private Q_SLOTS:
 
     void slotXMLLoadElement(QXmlStreamReader&);
     void slotXMLSaveItem(QXmlStreamWriter&, int);
+    void slotXMLCustomElement(QXmlStreamWriter&);
 
 private:
 

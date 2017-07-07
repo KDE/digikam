@@ -162,7 +162,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     // Save item list => we catch the signal to add our PA elements (not per image)
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamWriter&)),
-            wizard, SLOT(slotXMLCustomElement(QXmlStreamWriter&)));
+            this, SLOT(slotXMLCustomElement(QXmlStreamWriter&)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLLoadImageElement(QXmlStreamReader&)),
             this, SLOT(slotXMLLoadElement(QXmlStreamReader&)));
@@ -341,6 +341,15 @@ void AdvPrintPhotoPage::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemInd
             xmlWriter.writeEndElement(); // pa_caption
         }
     }
+}
+
+void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
+{
+    xmlWriter.writeStartElement(QLatin1String("pa_layout"));
+    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->currentText());
+    xmlWriter.writeAttribute(QLatin1String("PageSize"),  QString::fromUtf8("%1").arg(d->printer->paperSize()));
+    xmlWriter.writeAttribute(QLatin1String("PhotoSize"), d->photoUi->ListPhotoSizes->currentItem()->text());
+    xmlWriter.writeEndElement(); // pa_layout
 }
 
 } // namespace Digikam

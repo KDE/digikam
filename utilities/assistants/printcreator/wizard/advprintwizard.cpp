@@ -1165,15 +1165,6 @@ void AdvPrintWizard::manageBtnPreviewPage()
     }
 }
 
-void AdvPrintWizard::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
-{
-    xmlWriter.writeStartElement(QLatin1String("pa_layout"));
-    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoPage->ui()->m_printer_choice->currentText());
-    xmlWriter.writeAttribute(QLatin1String("PageSize"),  QString::fromUtf8("%1").arg(d->photoPage->printer()->paperSize()));
-    xmlWriter.writeAttribute(QLatin1String("PhotoSize"), d->photoPage->ui()->ListPhotoSizes->currentItem()->text());
-    xmlWriter.writeEndElement(); // pa_layout
-}
-
 void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 {
     qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
