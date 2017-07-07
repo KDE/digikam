@@ -41,6 +41,7 @@ class KConfigGroup;
 namespace Digikam
 {
 
+static const char* const INTRO_PAGE_NAME         = I18N_NOOP("Welcome to Print Creator");
 static const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
 static const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
 static const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
@@ -63,16 +64,11 @@ public:
     explicit AdvPrintSettings();
     ~AdvPrintSettings();
 
-    // Read and write settings in config file between sessions.
-    void  readSettings(KConfigGroup& group);
-    void  writeSettings(KConfigGroup& group);
-
-    // Helper methods to fill combobox from GUI.
-//    static QMap<ImageFormat, QString> imageFormatNames();
-
 public:
 
     Selection                 selMode;             // Items selection mode
+
+    QList<QUrl>               inputImages;
 
     // Page Size in mm
     QSizeF                    pageSize;

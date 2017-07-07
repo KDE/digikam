@@ -195,6 +195,21 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
     delete d;
 }
 
+void AdvPrintPhotoPage::initializePage()
+{
+    d->photoUi->mPrintList->setIface(d->iface);
+    d->photoUi->mPrintList->listView()->clear();
+
+    if (d->wizard->settings()->selMode == AdvPrintSettings::IMAGES)
+    {
+        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
+    }
+    else
+    {
+        d->wizard->setItemsList(d->wizard->settings()->inputImages);
+    }
+}
+
 QPrinter* AdvPrintPhotoPage::printer() const
 {
     return d->printer;

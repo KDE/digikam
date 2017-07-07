@@ -67,6 +67,8 @@ public:
 
     void updateCropFrame(AdvPrintPhoto* const, int);
 
+    int  nextId() const;
+
 private Q_SLOTS:
 
     void accept();

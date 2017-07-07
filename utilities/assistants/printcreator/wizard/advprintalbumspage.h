@@ -20,11 +20,13 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_INTRO_PAGE_H
-#define ADV_PRINT_INTRO_PAGE_H
+#ifndef ADV_PRINT_ALBUMS_PAGE_H
+#define ADV_PRINT_ALBUMS_PAGE_H
 
 // Qt includes
 
+#include <QList>
+#include <QUrl>
 #include <QString>
 
 // Local includes
@@ -34,16 +36,15 @@
 namespace Digikam
 {
 
-class AdvPrintIntroPage : public DWizardPage
+class AdvPrintAlbumsPage : public DWizardPage
 {
 public:
 
-    explicit AdvPrintIntroPage(QWizard* const dialog, const QString& title);
-    ~AdvPrintIntroPage();
+    explicit AdvPrintAlbumsPage(QWizard* const dialog, const QString& title);
+    ~AdvPrintAlbumsPage();
 
     bool validatePage();
-    void initializePage();
-    QString gimpPath() const;
+    bool isComplete() const;
 
 private:
 
@@ -53,4 +54,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_INTRO_PAGE_H
+#endif // ADV_PRINT_ALBUMS_PAGE_H

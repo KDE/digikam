@@ -63,7 +63,6 @@ public:
         wizard(0),
         iface(0),
         binSearch(0)
-
     {
         wizard = dynamic_cast<MailWizard*>(dialog);
 

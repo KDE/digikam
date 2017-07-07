@@ -58,6 +58,7 @@
 
 #include "advprintutils.h"
 #include "advprintintropage.h"
+#include "advprintalbumspage.h"
 #include "advprintphotopage.h"
 #include "advprintcaptionpage.h"
 #include "advprintcroppage.h"
@@ -78,6 +79,7 @@ public:
       : FONT_HEIGHT_RATIO(0.8F)
     {
         introPage            = 0;
+        albumsPage           = 0;
         photoPage            = 0;
         captionPage          = 0;
         cropPage             = 0;
@@ -88,6 +90,7 @@ public:
     const float               FONT_HEIGHT_RATIO;
 
     AdvPrintIntroPage*        introPage;
+    AdvPrintAlbumsPage*       albumsPage;
     AdvPrintPhotoPage*        photoPage;
     AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
@@ -106,7 +109,8 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     d->iface       = iface;
     d->settings    = new AdvPrintSettings;
-    d->introPage   = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
+    d->introPage   = new AdvPrintIntroPage(this, i18n(INTRO_PAGE_NAME));
+    d->albumsPage  = new AdvPrintAlbumsPage(this,   i18n("Albums Selection"));
     d->photoPage   = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
     d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
     d->cropPage    = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
@@ -141,6 +145,22 @@ AdvPrintSettings* AdvPrintWizard::settings() const
     return d->settings;
 }
 
+int AdvPrintWizard::nextId() const
+{
+    if (d->settings->selMode == AdvPrintSettings::ALBUMS)
+    {
+        if (currentPage() == d->introPage)
+            return d->albumsPage->id();
+    }
+    else
+    {
+        if (currentPage() == d->introPage)
+            return d->photoPage->id();
+    }
+
+    return DWizardDlg::nextId();
+}
+
 QList<QUrl> AdvPrintWizard::itemsList() const
 {
     QList<QUrl> urls;
@@ -171,10 +191,10 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
         list = d->iface->currentSelectedItems();
     }
 
-    for (int i = 0; i < list.count(); ++i)
+    for (int i = 0 ; i < list.count() ; ++i)
     {
         AdvPrintPhoto* const photo = new AdvPrintPhoto(150, d->iface);
-        photo->m_url          = list[i];
+        photo->m_url               = list[i];
         photo->m_first             = true;
         d->settings->photos.append(photo);
     }
@@ -1057,7 +1077,13 @@ void AdvPrintWizard::slotPageChanged(int curr)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Current Page:" << current->title();
 
-    if (current->title() == i18n(PHOTO_PAGE_NAME))
+    if (current->title() == i18n(INTRO_PAGE_NAME))
+    {
+        // readSettings only the first time
+        if (!before)
+            readSettings(current->title());
+    }
+    else if (current->title() == i18n(PHOTO_PAGE_NAME))
     {
         // readSettings only the first time
         if (!before)
@@ -1152,7 +1178,11 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
 
-    if (pageName == i18n(PHOTO_PAGE_NAME))
+    if (pageName == i18n(INTRO_PAGE_NAME))
+    {
+        group.writeEntry("SelMode", (int)d->settings->selMode);
+    }
+    else if (pageName == i18n(PHOTO_PAGE_NAME))
     {
         group.writeEntry(QLatin1String("Printer"),
                          d->photoPage->ui()->m_printer_choice->currentText());
@@ -1176,7 +1206,12 @@ void AdvPrintWizard::readSettings(const QString& pageName)
 
     qCDebug(DIGIKAM_GENERAL_LOG) << pageName;
 
-    if (pageName == i18n(PHOTO_PAGE_NAME))
+    if (pageName == i18n(INTRO_PAGE_NAME))
+    {
+        d->settings->selMode = (AdvPrintSettings::Selection)group.readEntry("SelMode",
+                               (int)AdvPrintSettings::IMAGES);
+    }
+    else if (pageName == i18n(PHOTO_PAGE_NAME))
     {
         // InfoPage
 

@@ -48,27 +48,4 @@ AdvPrintSettings::~AdvPrintSettings()
     photos.clear();
 }
 
-void AdvPrintSettings::readSettings(KConfigGroup& group)
-{
-    selMode  = (Selection)group.readEntry("SelMode",
-               (int)IMAGES);
-
-}
-
-void AdvPrintSettings::writeSettings(KConfigGroup& group)
-{
-    group.writeEntry("SelMode",  (int)selMode);
-}
-
-/*
-QMap<AdvPrintSettings::ImageFormat, QString> AdvPrintSettings::imageFormatNames()
-{
-    QMap<ImageFormat, QString> frms;
-
-    frms[JPEG] = i18nc("Image format: JPEG", "Jpeg");
-    frms[PNG]  = i18nc("Image format: PNG",  "Png");
-
-    return frms;
-}
-*/
 } // namespace Digikam

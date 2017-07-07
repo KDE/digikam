@@ -61,6 +61,7 @@ public:
     int                   getPageCount() const;
 
     void updateUi();
+    void initializePage();
 
     /** Create a MxN grid of photos, fitting on the page.
      */
