@@ -59,6 +59,8 @@ public:
     DInfoInterface*   iface()    const;
     AdvPrintSettings* settings() const;
 
+    void previewPhotos();
+
 public Q_SLOTS:
 
     void slotBtnPrintOrderUpClicked();
@@ -75,7 +77,6 @@ public Q_SLOTS:
     void slotPageSetup();
     void slotInfoPageUpdateCaptions();
 
-    void slotRemovingItem(int);
     void slotXMLCustomElement(QXmlStreamReader&);
 
 private Q_SLOTS:
@@ -89,7 +90,6 @@ private:
 
     /// Initialize page layout to the given pageSize in mm
     void initPhotoSizes(const QSizeF& pageSize);
-    void previewPhotos();
 
     /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
     void parseTemplateFile(const QString& fn,

@@ -105,7 +105,8 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     qCDebug(DIGIKAM_GENERAL_LOG) << " printers: " << d->printerList.count();
 
-    for (it = d->printerList.begin() ; it != d->printerList.end() ; ++it)
+    for (it = d->printerList.begin() ;
+         it != d->printerList.end() ; ++it)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << " printer: " << it->printerName();
         d->photoUi->m_printer_choice->addItem(it->printerName());
@@ -156,7 +157,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
             this, SLOT(slotAddItems(QList<QUrl>)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalRemovingItem(int)),
-            wizard, SLOT(slotRemovingItem(int)));
+            this, SLOT(slotRemovingItem(int)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             this, SLOT(slotContextMenuRequested()));
@@ -476,6 +477,86 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
     if (d->settings->photos.size())
     {
         setComplete(true);
+    }
+}
+
+void AdvPrintPhotoPage::slotRemovingItem(int itemIndex)
+{
+    if (d->settings->photos.size() && itemIndex >= 0)
+    {
+        /// Debug data: found and copies
+        bool found = false;
+        int copies = 0;
+
+        d->photoUi->mPrintList->blockSignals(true);
+        AdvPrintPhoto* const pPhotoToRemove = d->settings->photos.at(itemIndex);
+
+        // photo to be removed could be:
+        // 1) unique => just remove it
+        // 2) first of n, =>
+        //    search another with the same url
+        //    and set it a first and with a count to n-1 then remove it
+        // 3) one of n, search the first one and set count to n-1 then remove it
+        if (pPhotoToRemove && pPhotoToRemove->m_first)
+        {
+            if (pPhotoToRemove->m_copies > 0)
+            {
+                for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+                {
+                    AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+                    if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
+                    {
+                        pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
+                        copies                  = pCurrentPhoto->m_copies;
+                        pCurrentPhoto->m_first  = true;
+                        found                   = true;
+                    }
+                }
+            }
+            // otherwise it's unique
+        }
+        else if (pPhotoToRemove)
+        {
+            for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+            {
+                AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+                if (pCurrentPhoto &&
+                    pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
+                    pCurrentPhoto->m_first)
+                {
+                    pCurrentPhoto->m_copies--;
+                    copies = pCurrentPhoto->m_copies;
+                    found  = true;
+                }
+            }
+        }
+        else
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << " NULL AdvPrintPhoto object ";
+            return;
+        }
+
+        if (pPhotoToRemove)
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
+                                         << pPhotoToRemove->m_url.fileName()
+                                         << " copy number "
+                                         << copies;
+        }
+
+        d->settings->photos.removeAt(itemIndex);
+        delete pPhotoToRemove;
+
+        d->photoUi->mPrintList->blockSignals(false);
+        d->wizard->previewPhotos();
+    }
+
+    if (d->settings->photos.empty())
+    {
+        // No photos => disabling next button (e.g. crop page)
+        setComplete(false);
     }
 }
 

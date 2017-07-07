@@ -72,6 +72,7 @@ private Q_SLOTS:
     void slotIncreaseCopies();
     void slotDecreaseCopies();
     void slotAddItems(const QList<QUrl>&);
+    void slotRemovingItem(int);
 
 private:
 
