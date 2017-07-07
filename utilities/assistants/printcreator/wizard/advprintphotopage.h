@@ -36,12 +36,14 @@
 
 #include "dwizardpage.h"
 #include "dimageslist.h"
+#include "advprintphoto.h"
 #include "ui_advprintphotopage.h"
 
 namespace Digikam
 {
 
 class DImagesList;
+class TemplateIcon;
 
 class AdvPrintPhotoPage : public DWizardPage
 {
@@ -59,6 +61,15 @@ public:
     int                   getPageCount() const;
 
     void updateUi();
+
+    /** Create a MxN grid of photos, fitting on the page.
+     */
+    void createPhotoGrid(AdvPrintPhotoSize* const p,
+                         int pageWidth,
+                         int pageHeight,
+                         int rows,
+                         int columns,
+                         TemplateIcon* const iconpreview);
 
 public Q_SLOTS:
 
@@ -88,6 +99,7 @@ private Q_SLOTS:
     void slotBtnPrintOrderUpClicked();
     void slotBtnPreviewPageDownClicked();
     void slotBtnPreviewPageUpClicked();
+    void slotListPhotoSizesSelected();
 
 private:
 

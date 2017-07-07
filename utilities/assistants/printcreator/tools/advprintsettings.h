@@ -41,6 +41,11 @@ class KConfigGroup;
 namespace Digikam
 {
 
+static const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
+static const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
+static const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
+static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
+
 class AdvPrintSettings
 {
 

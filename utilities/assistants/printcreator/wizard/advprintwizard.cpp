@@ -60,7 +60,6 @@
 // Local includes
 
 #include "advprintutils.h"
-#include "advprintcustomdlg.h"
 #include "advprintintropage.h"
 #include "advprintphotopage.h"
 #include "advprintcaptionpage.h"
@@ -73,11 +72,6 @@
 
 namespace Digikam
 {
-
-const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
-const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
-const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
-const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
 class AdvPrintWizard::Private
 {
@@ -165,34 +159,6 @@ QList<QUrl> AdvPrintWizard::itemsList() const
     }
 
     return urls;
-}
-
-void AdvPrintWizard::createPhotoGrid(AdvPrintPhotoSize* const p,
-                                     int pageWidth,
-                                     int pageHeight,
-                                     int rows,
-                                     int columns,
-                                     TemplateIcon* const iconpreview)
-{
-    int MARGIN      = (int)(((double)pageWidth + (double)pageHeight) / 2.0 * 0.04 + 0.5);
-    int GAP         = MARGIN / 4;
-    int photoWidth  = (pageWidth  - (MARGIN * 2) - ((columns - 1) * GAP)) / columns;
-    int photoHeight = (pageHeight - (MARGIN * 2) - ((rows - 1)    * GAP)) / rows;
-    int row         = 0;
-
-    for (int y = MARGIN ; row < rows && y < pageHeight - MARGIN ; y += photoHeight + GAP)
-    {
-        int col = 0;
-
-        for (int x = MARGIN ; col < columns && x < pageWidth - MARGIN ; x += photoWidth + GAP)
-        {
-            p->layouts.append(new QRect(x, y, photoWidth, photoHeight));
-            iconpreview->fillRect(x, y, photoWidth, photoHeight, Qt::color1);
-            col++;
-        }
-
-        row++;
-    }
 }
 
 void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
@@ -428,7 +394,12 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
 
                                         if (rows > 0 && columns > 0)
                                         {
-                                            createPhotoGrid(p, pageWidth, pageHeight, rows, columns, &iconpreview);
+                                            d->photoPage->createPhotoGrid(p,
+                                                                          pageWidth,
+                                                                          pageHeight,
+                                                                          rows,
+                                                                          columns,
+                                                                          &iconpreview);
                                         }
                                         else
                                         {
@@ -1158,193 +1129,6 @@ void AdvPrintWizard::slotPageChanged(int curr)
     }
 
     QApplication::restoreOverrideCursor();
-}
-
-void AdvPrintWizard::slotListPhotoSizesSelected()
-{
-    AdvPrintPhotoSize* s = NULL;
-    QSizeF size, sizeManaged;
-
-    // TODO FREE STYLE
-    // check if layout is managed by templates or free one
-    // get the selected layout
-    int curr              = d->photoPage->ui()->ListPhotoSizes->currentRow();
-    QListWidgetItem* item = d->photoPage->ui()->ListPhotoSizes->item(curr);
-
-    // if custom page layout we launch a dialog to choose what kind
-    if (item->text() == i18n(CUSTOM_PAGE_LAYOUT_NAME))
-    {
-        // check if a custom layout has already been added
-        if (curr >= 0 && curr < d->settings->photosizes.size())
-        {
-            s = d->settings->photosizes.at(curr);
-            d->settings->photosizes.removeAt(curr);
-            delete s;
-            s = NULL;
-        }
-
-        AdvPrintCustomLayoutDlg custDlg(this);
-        custDlg.readSettings();
-        custDlg.exec();
-        custDlg.saveSettings();
-
-        // get parameters from dialog
-        size           = d->settings->pageSize;
-        int scaleValue = 10; // 0.1 mm
-
-        // convert to mm
-        if (custDlg.m_photoUnits->currentText() == i18n("inches"))
-        {
-            size       /= 25.4;
-            scaleValue  = 1000;
-        }
-        else if (custDlg.m_photoUnits->currentText() == i18n("cm"))
-        {
-            size       /= 10;
-            scaleValue  = 100;
-        }
-
-        sizeManaged = size * scaleValue;
-
-        s = new AdvPrintPhotoSize;
-        TemplateIcon iconpreview(80, sizeManaged.toSize());
-        iconpreview.begin();
-
-        if (custDlg.m_photoGridCheck->isChecked())
-        {
-            // custom photo grid
-            int rows       = custDlg.m_gridRows->value();
-            int columns    = custDlg.m_gridColumns->value();
-
-            s->layouts.append(new QRect(0, 0, (int)sizeManaged.width(), (int)sizeManaged.height()));
-            s->autoRotate  = custDlg.m_autorotate->isChecked();
-            s->label       = item->text();
-            s->dpi         = 0;
-
-            int pageWidth  = (int)(size.width()) * scaleValue;
-            int pageHeight = (int)(size.height()) * scaleValue;
-            createPhotoGrid(s, pageWidth, pageHeight, rows, columns, &iconpreview);
-        }
-        else if (custDlg.m_fitAsManyCheck->isChecked())
-        {
-            int width  = custDlg.m_photoWidth->value();
-            int height = custDlg.m_photoHeight->value();
-
-            //photo size must be less than page size
-            static const float round_value = 0.01F;
-
-            if ((height > (size.height() + round_value) ||
-                 width  > (size.width()  + round_value)))
-            {
-                qCDebug(DIGIKAM_GENERAL_LOG) << "photo size "
-                                             << QSize(width, height)
-                                             << "> page size "
-                                             << size;
-                delete s;
-                s = NULL;
-            }
-            else
-            {
-                // fit as many photos of given size as possible
-                s->layouts.append(new QRect(0, 0, (int)sizeManaged.width(),
-                                            (int)sizeManaged.height()));
-                s->autoRotate  = custDlg.m_autorotate->isChecked();
-                s->label       = item->text();
-                s->dpi         = 0;
-                int nColumns   = int(size.width()  / width);
-                int nRows      = int(size.height() / height);
-                int spareWidth = int(size.width())  % width;
-
-                // check if there's no room left to separate photos
-                if (nColumns > 1 &&  spareWidth == 0)
-                {
-                    nColumns  -= 1;
-                    spareWidth = width;
-                }
-
-                int spareHeight = int(size.height()) % height;
-
-                // check if there's no room left to separate photos
-                if (nRows > 1 && spareHeight == 0)
-                {
-                    nRows      -= 1;
-                    spareHeight = height;
-                }
-
-                if (nRows > 0 && nColumns > 0)
-                {
-                    // n photos => dx1, photo1, dx2, photo2,... photoN, dxN+1
-                    int dx      = spareWidth  * scaleValue / (nColumns + 1);
-                    int dy      = spareHeight * scaleValue / (nRows + 1);
-                    int photoX  = 0;
-                    int photoY  = 0;
-                    width      *= scaleValue;
-                    height     *= scaleValue;
-
-                    for (int row = 0 ; row < nRows ; ++row)
-                    {
-                        photoY = dy * (row + 1) + (row * height);
-
-                        for (int col = 0 ; col < nColumns ; ++col)
-                        {
-                            photoX = dx * (col + 1) + (col * width);
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "photo at P("
-                                                         << photoX
-                                                         << ", "
-                                                         << photoY
-                                                         << ") size("
-                                                         << width
-                                                         << ", "
-                                                         << height;
-
-                            s->layouts.append(new QRect(photoX, photoY,
-                                                        width, height));
-                            iconpreview.fillRect(photoX, photoY,
-                                                 width, height, Qt::color1);
-                        }
-                    }
-                }
-                else
-                {
-                    qCDebug(DIGIKAM_GENERAL_LOG) << "I can't go on, rows "
-                                                 << nRows
-                                                 << "> columns "
-                                                 << nColumns;
-                    delete s;
-                    s = NULL;
-                }
-            }
-        }
-        else
-        {
-            // Atckin's layout
-        }
-
-        // TODO not for Atckin's layout
-        iconpreview.end();
-
-        if (s)
-        {
-            s->icon = iconpreview.getIcon();
-            d->settings->photosizes.append(s);
-        }
-    }
-    else
-    {
-        s = d->settings->photosizes.at(curr);
-    }
-
-    if (!s)
-    {
-        // change position to top
-        d->photoPage->ui()->ListPhotoSizes->blockSignals(true);
-        d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0, QItemSelectionModel::Select);
-        d->photoPage->ui()->ListPhotoSizes->blockSignals(false);
-    }
-
-    // reset preview page number
-    d->settings->currentPreviewPage = 0;
-    previewPhotos();
 }
 
 void AdvPrintWizard::saveSettings(const QString& pageName)

@@ -69,7 +69,6 @@ public:
 
 public Q_SLOTS:
 
-    void slotListPhotoSizesSelected();
     void slotPageSetup();
 
 private Q_SLOTS:
@@ -105,14 +104,6 @@ private:
                       int& current, bool cropDisabled, bool useThumbnails = false);
 
     void manageBtnPreviewPage();
-
-    /// Create a MxN grid of photos, fitting on the page
-    void createPhotoGrid(AdvPrintPhotoSize* const p,
-                         int pageWidth,
-                         int pageHeight,
-                         int rows,
-                         int columns,
-                         TemplateIcon* const iconpreview);
 
     double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
