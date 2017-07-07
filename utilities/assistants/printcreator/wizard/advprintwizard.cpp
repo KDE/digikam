@@ -109,11 +109,11 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 
     d->iface       = iface;
     d->settings    = new AdvPrintSettings;
-    d->introPage   = new AdvPrintIntroPage(this, i18n(INTRO_PAGE_NAME));
-    d->albumsPage  = new AdvPrintAlbumsPage(this,   i18n("Albums Selection"));
-    d->photoPage   = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
+    d->introPage   = new AdvPrintIntroPage(this,   i18n(INTRO_PAGE_NAME));
+    d->albumsPage  = new AdvPrintAlbumsPage(this,  i18n("Albums Selection"));
+    d->photoPage   = new AdvPrintPhotoPage(this,   i18n(PHOTO_PAGE_NAME));
     d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
-    d->cropPage    = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
+    d->cropPage    = new AdvPrintCropPage(this,    i18n(CROP_PAGE_NAME));
 
     // -----------------------------------
 
