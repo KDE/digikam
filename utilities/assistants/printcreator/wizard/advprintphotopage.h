@@ -29,6 +29,8 @@
 #include <QPrinter>
 #include <QList>
 #include <QUrl>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
 // Local includes
 
@@ -60,6 +62,11 @@ public:
 public Q_SLOTS:
 
     void slotOutputChanged(const QString&);
+
+private Q_SLOTS:
+
+    void slotXMLLoadElement(QXmlStreamReader&);
+    void slotXMLSaveItem(QXmlStreamWriter&, int);
 
 private:
 

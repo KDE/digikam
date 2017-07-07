@@ -78,8 +78,6 @@ public Q_SLOTS:
     void slotAddItems(const QList<QUrl>&);
     void slotRemovingItem(int);
     void slotContextMenuRequested();
-    void slotXMLSaveItem(QXmlStreamWriter&, int);
-    void slotXMLLoadElement(QXmlStreamReader&);
     void slotXMLCustomElement(QXmlStreamWriter&);
     void slotXMLCustomElement(QXmlStreamReader&);
 

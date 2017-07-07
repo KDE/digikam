@@ -64,20 +64,31 @@ public:
 
 public:
 
-    Private(QWidget* const parent)
-      : printer(0)
+    Private(QWizard* const dialog)
+      : printer(0),
+        wizard(0),
+        settings(0)
     {
-        photoUi = new PhotoUI(parent);
+        photoUi = new PhotoUI(dialog);
+        wizard  = dynamic_cast<AdvPrintWizard*>(dialog);
+
+        if (wizard)
+        {
+            settings = wizard->settings();
+        }
     }
 
     PhotoUI*            photoUi;
     QPrinter*           printer;
     QList<QPrinterInfo> printerList;
+
+    AdvPrintWizard*     wizard;
+    AdvPrintSettings*   settings;
 };
 
 AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title)
     : DWizardPage(wizard, title),
-      d(new Private(this))
+      d(new Private(wizard))
 {
     d->photoUi->BtnPreviewPageUp->setIcon(QIcon::fromTheme(QLatin1String("go-next"))
                                             .pixmap(16, 16));
@@ -147,14 +158,14 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     // Save item list => we catch the signal to add our PA attributes and elements Image children
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLSaveItem(QXmlStreamWriter&, int)),
-            wizard, SLOT(slotXMLSaveItem(QXmlStreamWriter&, int)));
+            this, SLOT(slotXMLSaveItem(QXmlStreamWriter&, int)));
 
     // Save item list => we catch the signal to add our PA elements (not per image)
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamWriter&)),
             wizard, SLOT(slotXMLCustomElement(QXmlStreamWriter&)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLLoadImageElement(QXmlStreamReader&)),
-            wizard, SLOT(slotXMLLoadElement(QXmlStreamReader&)));
+            this, SLOT(slotXMLLoadElement(QXmlStreamReader&)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalXMLCustomElements(QXmlStreamReader&)),
             wizard, SLOT(slotXMLCustomElement(QXmlStreamReader&)));
@@ -229,6 +240,107 @@ void AdvPrintPhotoPage::updateUi()
 bool AdvPrintPhotoPage::isComplete() const
 {
     return (!d->photoUi->mPrintList->imageUrls().empty());
+}
+
+void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
+{
+    if (d->settings->photos.size())
+    {
+        // read image is the last.
+        AdvPrintPhoto* const pPhoto = d->settings->photos[d->settings->photos.size()-1];
+        qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
+
+        while (xmlReader.readNextStartElement())
+        {
+            qCDebug(DIGIKAM_GENERAL_LOG) << pPhoto->m_url << " " << xmlReader.name();
+
+            if (xmlReader.name() == QLatin1String("pa_caption"))
+            {
+                //useless this item has been added now
+                if (pPhoto->m_pAdvPrintCaptionInfo)
+                    delete pPhoto->m_pAdvPrintCaptionInfo;
+
+                pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
+                // get all attributes and its value of a tag in attrs variable.
+                QXmlStreamAttributes attrs     = xmlReader.attributes();
+                // get value of each attribute from QXmlStreamAttributes
+                QStringRef attr                = attrs.value(QLatin1String("type"));
+                bool ok;
+
+                if (!attr.isEmpty())
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionType =
+                        (AdvPrintCaptionInfo::AvailableCaptions)attr.toString().toInt(&ok);
+                }
+
+                attr = attrs.value(QLatin1String("font"));
+
+                if (!attr.isEmpty())
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.fromString(attr.toString());
+                }
+
+                attr = attrs.value(QLatin1String("color"));
+
+                if (!attr.isEmpty())
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.setNamedColor(attr.toString());
+                }
+
+                attr = attrs.value(QLatin1String("size"));
+
+                if (!attr.isEmpty())
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionSize = attr.toString().toInt(&ok);
+                }
+
+                attr = attrs.value(QLatin1String("text"));
+
+                if (!attr.isEmpty())
+                {
+                    qCDebug(DIGIKAM_GENERAL_LOG) << " found " << attr.toString();
+                    pPhoto->m_pAdvPrintCaptionInfo->m_captionText = attr.toString();
+                }
+            }
+        }
+    }
+}
+
+void AdvPrintPhotoPage::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemIndex)
+{
+    if (d->settings->photos.size())
+    {
+        AdvPrintPhoto* const pPhoto = d->settings->photos[itemIndex];
+        // TODO: first and copies could be removed since they are not useful any more
+        xmlWriter.writeAttribute(QLatin1String("first"),
+                                 QString::fromUtf8("%1")
+                                 .arg(pPhoto->m_first));
+
+        xmlWriter.writeAttribute(QLatin1String("copies"),
+                                 QString::fromUtf8("%1")
+                                 .arg(pPhoto->m_first ? pPhoto->m_copies : 0));
+
+        // additional info (caption... etc)
+        if (pPhoto->m_pAdvPrintCaptionInfo)
+        {
+            xmlWriter.writeStartElement(QLatin1String("pa_caption"));
+            xmlWriter.writeAttribute(QLatin1String("type"),
+                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_captionType));
+            xmlWriter.writeAttribute(QLatin1String("font"),
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionFont.toString());
+            xmlWriter.writeAttribute(QLatin1String("size"),
+                                     QString::fromUtf8("%1").arg(pPhoto->m_pAdvPrintCaptionInfo->m_captionSize));
+            xmlWriter.writeAttribute(QLatin1String("color"),
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionColor.name());
+            xmlWriter.writeAttribute(QLatin1String("text"),
+                                     pPhoto->m_pAdvPrintCaptionInfo->m_captionText);
+            xmlWriter.writeEndElement(); // pa_caption
+        }
+    }
 }
 
 } // namespace Digikam
