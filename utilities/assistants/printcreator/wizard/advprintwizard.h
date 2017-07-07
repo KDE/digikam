@@ -70,9 +70,7 @@ public:
 public Q_SLOTS:
 
     void slotListPhotoSizesSelected();
-
     void slotPageSetup();
-    void slotInfoPageUpdateCaptions();
 
 private Q_SLOTS:
 
@@ -87,7 +85,6 @@ private:
     void parseTemplateFile(const QString& fn,
                            const QSizeF& pageSize);
 
-    void updateCaption(AdvPrintPhoto* const);
     void removeGimpFiles();
     void printPhotos(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
@@ -97,7 +94,7 @@ private:
                                   AdvPrintPhotoSize* const layouts);
 
     QRect*  getLayout(int photoIndex)                    const;
-    QString captionFormatter(AdvPrintPhoto* const photo) const;
+
     void    printCaption(QPainter& p,
                          AdvPrintPhoto* photo,
                          int captionW,

@@ -133,9 +133,6 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     connect(d->photoPage->imagesList(), SIGNAL(signalImageListChanged()),
             d->captionPage, SLOT(slotUpdateImagesList()));
 
-    connect(d->captionPage->imagesList(), SIGNAL(signalImageListChanged()),
-            this, SLOT(slotInfoPageUpdateCaptions()));
-
     if (d->iface)
         setItemsList();
 }
@@ -692,89 +689,9 @@ void AdvPrintWizard::printCaption(QPainter& p,
             p.translate(0, - (int)(pixelsHigh));
 
         QRect r(0, 0, captionW, captionH);
-        //TODO check if ok
+
         p.drawText(r, Qt::AlignLeft, captionByLines[lineNumber], &r);
     }
-}
-
-QString AdvPrintWizard::captionFormatter(AdvPrintPhoto* const photo) const
-{
-    if (!photo->m_pAdvPrintCaptionInfo)
-        return QString();
-
-    QString format;
-
-    switch (photo->m_pAdvPrintCaptionInfo->m_captionType)
-    {
-        case AdvPrintCaptionInfo::FileNames:
-            format = QLatin1String("%f");
-            break;
-        case AdvPrintCaptionInfo::ExifDateTime:
-            format = QLatin1String("%d");
-            break;
-        case AdvPrintCaptionInfo::Comment:
-            format = QLatin1String("%c");
-            break;
-        case AdvPrintCaptionInfo::Custom:
-            format =  photo->m_pAdvPrintCaptionInfo->m_captionText;
-            break;
-        default:
-            qCWarning(DIGIKAM_GENERAL_LOG) << "UNKNOWN caption type "
-                                           << photo->m_pAdvPrintCaptionInfo->m_captionType;
-            break;
-    }
-
-    QFileInfo fi(photo->m_url.toLocalFile());
-    QString resolution;
-    QSize imageSize;
-    DMetadata meta = photo->metaIface();
-
-    imageSize = meta.getImageDimensions();
-
-    if (imageSize.isValid())
-    {
-        resolution = QString::fromUtf8("%1x%2").arg(imageSize.width()).arg(imageSize.height());
-    }
-
-    format.replace(QLatin1String("\\n"), QLatin1String("\n"));
-
-    // %f filename
-    // %c comment
-    // %d date-time
-    // %t exposure time
-    // %i iso
-    // %r resolution
-    // %a aperture
-    // %l focal length
-
-    format.replace(QString::fromUtf8("%r"), resolution);
-    format.replace(QString::fromUtf8("%f"), fi.fileName());
-
-    if (d->iface)
-    {
-        DItemInfo info(d->iface->itemInfo(photo->m_url));
-        format.replace(QString::fromUtf8("%c"), info.comment());
-        format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
-                                                QLocale::ShortFormat));
-    }
-    else
-    {
-        format.replace(QString::fromUtf8("%c"),
-            meta.getImageComments()[QLatin1String("x-default")].caption);
-        format.replace(QString::fromUtf8("%d"),
-            QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
-    }
-
-    format.replace(QString::fromUtf8("%t"),
-        meta.getExifTagString("Exif.Photo.ExposureTime"));
-    format.replace(QString::fromUtf8("%i"),
-        meta.getExifTagString("Exif.Photo.ISOSpeedRatings"));
-    format.replace(QString::fromUtf8("%a"),
-        meta.getExifTagString("Exif.Photo.FNumber"));
-    format.replace(QString::fromUtf8("%l"),
-        meta.getExifTagString("Exif.Photo.FocalLength"));
-
-    return format;
 }
 
 bool AdvPrintWizard::paintOnePage(QPainter& p,
@@ -915,7 +832,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
         {
             p.save();
             QString caption;
-            caption = captionFormatter(photo);
+            caption = d->captionPage->captionFormatter(photo);
             qCDebug(DIGIKAM_GENERAL_LOG) << "Caption " << caption ;
 
             // draw the text at (0,0), but we will translate and rotate the world
@@ -1219,7 +1136,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
         // back to this page
 
         if (!before)
-            slotInfoPageUpdateCaptions();
+            d->captionPage->slotUpdateCaptions();
     }
     else if (current->title() == i18n(CROP_PAGE_NAME))
     {
@@ -1241,64 +1158,6 @@ void AdvPrintWizard::slotPageChanged(int curr)
     }
 
     QApplication::restoreOverrideCursor();
-}
-
-void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
-{
-    if (pPhoto)
-    {
-        if (!pPhoto->m_pAdvPrintCaptionInfo &&
-            d->captionPage->ui()->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
-        {
-            pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
-        }
-        else if (pPhoto->m_pAdvPrintCaptionInfo &&
-                 d->captionPage->ui()->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
-        {
-            delete pPhoto->m_pAdvPrintCaptionInfo;
-            pPhoto->m_pAdvPrintCaptionInfo = NULL;
-        }
-
-        if (pPhoto->m_pAdvPrintCaptionInfo)
-        {
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionColor = d->captionPage->ui()->m_font_color->color();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionSize  = d->captionPage->ui()->m_font_size->value();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  = d->captionPage->ui()->m_font_name->currentFont();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionType  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionPage->ui()->m_captions->currentIndex();
-            pPhoto->m_pAdvPrintCaptionInfo->m_captionText  = d->captionPage->ui()->m_FreeCaptionFormat->text();
-
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for" << pPhoto->m_url;
-        }
-    }
-}
-
-void AdvPrintWizard::slotInfoPageUpdateCaptions()
-{
-    if (d->settings->photos.size())
-    {
-        foreach(AdvPrintPhoto* const pPhoto, d->settings->photos)
-        {
-            updateCaption(pPhoto);
-
-            if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
-            {
-                DImagesListViewItem* const lvItem = d->captionPage->imagesList()->listView()->findItem(pPhoto->m_url);
-
-                if (lvItem)
-                {
-                    QString cap;
-
-                    if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
-                        cap = captionFormatter(pPhoto);
-
-                    lvItem->setText(DImagesListView::User1, cap);
-                }
-            }
-        }
-    }
-
-    // create our photo sizes list
-    previewPhotos();
 }
 
 void AdvPrintWizard::slotListPhotoSizesSelected()

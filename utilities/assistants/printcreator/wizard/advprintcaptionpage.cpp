@@ -30,6 +30,7 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
+#include <QFileInfo>
 
 // KDE includes
 
@@ -69,35 +70,43 @@ public:
 
     Private(QWizard* const dialog)
     {
-        wizard    = dynamic_cast<AdvPrintWizard*>(dialog);
         captionUi = new CaptionUI(dialog);
+        wizard    = dynamic_cast<AdvPrintWizard*>(dialog);
+
+        if (wizard)
+        {
+            settings = wizard->settings();
+            iface    = wizard->iface();
+        }
     }
 
-    CaptionUI*      captionUi;
-    AdvPrintWizard* wizard;
+    CaptionUI*        captionUi;
+    AdvPrintWizard*   wizard;
+    AdvPrintSettings* settings;
+    DInfoInterface*   iface;
 };
 
 AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& title)
     : DWizardPage(wizard, title),
       d(new Private(wizard))
 {
-    connect(this, SIGNAL(signalInfoPageUpdateCaptions()),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
-
     connect(d->captionUi->m_captions, SIGNAL(activated(QString)),
             this, SLOT(slotCaptionChanged(QString)));
 
     connect(d->captionUi->m_FreeCaptionFormat, SIGNAL(editingFinished()),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
+            this, SLOT(slotUpdateCaptions()));
 
     connect(d->captionUi->m_font_name, SIGNAL(currentFontChanged(QFont)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
+            this, SLOT(slotUpdateCaptions()));
 
     connect(d->captionUi->m_font_size, SIGNAL(valueChanged(int)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
+            this, SLOT(slotUpdateCaptions()));
 
     connect(d->captionUi->m_font_color, SIGNAL(signalColorSelected(QColor)),
-            wizard, SLOT(slotInfoPageUpdateCaptions()));
+            this, SLOT(slotUpdateCaptions()));
+
+    connect(d->captionUi->mPrintList, SIGNAL(signalImageListChanged()),
+            this, SLOT(slotUpdateCaptions()));
 
     // -----------------------------------
 
@@ -231,7 +240,145 @@ void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)
 void AdvPrintCaptionPage::slotCaptionChanged(const QString& text)
 {
     enableCaptionGroup(text);
-    emit signalInfoPageUpdateCaptions();
+    slotUpdateCaptions();
+}
+
+void AdvPrintCaptionPage::updateCaption(AdvPrintPhoto* const pPhoto)
+{
+    if (pPhoto)
+    {
+        if (!pPhoto->m_pAdvPrintCaptionInfo &&
+            d->captionUi->m_captions->currentIndex() != AdvPrintCaptionInfo::NoCaptions)
+        {
+            pPhoto->m_pAdvPrintCaptionInfo = new AdvPrintCaptionInfo();
+        }
+        else if (pPhoto->m_pAdvPrintCaptionInfo &&
+                 d->captionUi->m_captions->currentIndex() == AdvPrintCaptionInfo::NoCaptions)
+        {
+            delete pPhoto->m_pAdvPrintCaptionInfo;
+            pPhoto->m_pAdvPrintCaptionInfo = NULL;
+        }
+
+        if (pPhoto->m_pAdvPrintCaptionInfo)
+        {
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionColor = d->captionUi->m_font_color->color();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionSize  = d->captionUi->m_font_size->value();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionFont  = d->captionUi->m_font_name->currentFont();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionType  = (AdvPrintCaptionInfo::AvailableCaptions)d->captionUi->m_captions->currentIndex();
+            pPhoto->m_pAdvPrintCaptionInfo->m_captionText  = d->captionUi->m_FreeCaptionFormat->text();
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Update caption properties for"
+                                         << pPhoto->m_url;
+        }
+    }
+}
+
+void AdvPrintCaptionPage::slotUpdateCaptions()
+{
+    if (d->settings->photos.size())
+    {
+        foreach(AdvPrintPhoto* const pPhoto, d->settings->photos)
+        {
+            updateCaption(pPhoto);
+
+            if (pPhoto && pPhoto->m_pAdvPrintCaptionInfo)
+            {
+                DImagesListViewItem* const lvItem = d->captionUi->mPrintList->listView()->findItem(pPhoto->m_url);
+
+                if (lvItem)
+                {
+                    QString cap;
+
+                    if (pPhoto->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
+                        cap = captionFormatter(pPhoto);
+
+                    lvItem->setText(DImagesListView::User1, cap);
+                }
+            }
+        }
+    }
+
+    // create our photo sizes list
+    d->wizard->previewPhotos();
+}
+
+QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
+{
+    if (!photo->m_pAdvPrintCaptionInfo)
+        return QString();
+
+    QString format;
+
+    switch (photo->m_pAdvPrintCaptionInfo->m_captionType)
+    {
+        case AdvPrintCaptionInfo::FileNames:
+            format = QLatin1String("%f");
+            break;
+        case AdvPrintCaptionInfo::ExifDateTime:
+            format = QLatin1String("%d");
+            break;
+        case AdvPrintCaptionInfo::Comment:
+            format = QLatin1String("%c");
+            break;
+        case AdvPrintCaptionInfo::Custom:
+            format =  photo->m_pAdvPrintCaptionInfo->m_captionText;
+            break;
+        default:
+            qCWarning(DIGIKAM_GENERAL_LOG) << "UNKNOWN caption type "
+                                           << photo->m_pAdvPrintCaptionInfo->m_captionType;
+            break;
+    }
+
+    QFileInfo fi(photo->m_url.toLocalFile());
+    QString resolution;
+    QSize imageSize;
+    DMetadata meta = photo->metaIface();
+    imageSize      = meta.getImageDimensions();
+
+    if (imageSize.isValid())
+    {
+        resolution = QString::fromUtf8("%1x%2").arg(imageSize.width()).arg(imageSize.height());
+    }
+
+    format.replace(QLatin1String("\\n"), QLatin1String("\n"));
+
+    // %f filename
+    // %c comment
+    // %d date-time
+    // %t exposure time
+    // %i iso
+    // %r resolution
+    // %a aperture
+    // %l focal length
+
+    format.replace(QString::fromUtf8("%r"), resolution);
+    format.replace(QString::fromUtf8("%f"), fi.fileName());
+
+    if (d->iface)
+    {
+        DItemInfo info(d->iface->itemInfo(photo->m_url));
+        format.replace(QString::fromUtf8("%c"), info.comment());
+        format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
+                                                QLocale::ShortFormat));
+    }
+    else
+    {
+        format.replace(QString::fromUtf8("%c"),
+            meta.getImageComments()[QLatin1String("x-default")].caption);
+        format.replace(QString::fromUtf8("%d"),
+            QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
+    }
+
+    format.replace(QString::fromUtf8("%t"),
+        meta.getExifTagString("Exif.Photo.ExposureTime"));
+    format.replace(QString::fromUtf8("%i"),
+        meta.getExifTagString("Exif.Photo.ISOSpeedRatings"));
+    format.replace(QString::fromUtf8("%a"),
+        meta.getExifTagString("Exif.Photo.FNumber"));
+    format.replace(QString::fromUtf8("%l"),
+        meta.getExifTagString("Exif.Photo.FocalLength"));
+
+    return format;
 }
 
 } // namespace Digikam

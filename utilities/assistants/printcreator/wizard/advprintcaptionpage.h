@@ -57,6 +57,7 @@ public:
 
     void blockCaptionButtons(bool block=true);
     void readCaptionSettings();
+    QString captionFormatter(AdvPrintPhoto* const photo) const;
 
     /// Fix caption group layout according to captions combobox text
     void enableCaptionGroup(const QString& text);
@@ -64,14 +65,15 @@ public:
     void initializePage();
     bool validatePage();
 
-Q_SIGNALS:
-
-    void signalInfoPageUpdateCaptions();
-
 public Q_SLOTS:
 
     void slotCaptionChanged(const QString&);
     void slotUpdateImagesList();
+    void slotUpdateCaptions();
+
+private:
+
+    void updateCaption(AdvPrintPhoto* const);
 
 private:
 
