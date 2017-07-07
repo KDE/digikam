@@ -33,6 +33,7 @@
 
 // Local includes
 
+#include "advprintsettings.h"
 #include "dimageslist.h"
 #include "dinfointerface.h"
 #include "dwizarddlg.h"
@@ -42,18 +43,6 @@ namespace Digikam
 {
 
 class TemplateIcon;
-class AdvPrintPhoto;
-
-typedef struct _AdvPrintPhotoSize
-{
-    QString       label;
-    int           dpi;
-    bool          autoRotate;
-    QList<QRect*> layouts;     // first element is page size
-    QIcon         icon;
-} AdvPrintPhotoSize;
-
-// ---------------------------------------------------------------------------
 
 class DIGIKAM_EXPORT AdvPrintWizard : public DWizardDlg
 {
@@ -67,7 +56,8 @@ public:
     void setItemsList(const QList<QUrl>& fileList = QList<QUrl>());
     QList<QUrl> itemsList() const;
 
-    DInfoInterface* iface() const;
+    DInfoInterface*   iface()    const;
+    AdvPrintSettings* settings() const;
 
 public Q_SLOTS:
 

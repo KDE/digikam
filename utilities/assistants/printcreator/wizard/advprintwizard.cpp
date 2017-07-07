@@ -59,7 +59,6 @@
 
 // Local includes
 
-#include "advprintphoto.h"
 #include "advprintutils.h"
 #include "advprintcustomdlg.h"
 #include "advprintintropage.h"
@@ -106,19 +105,12 @@ public:
     AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
 
-    // Page Size in mm
-    QSizeF                    pageSize;
-
-    QList<AdvPrintPhoto*>     photos;
-    QList<AdvPrintPhotoSize*> photosizes;
     int                       infopageCurrentPhoto;
     int                       currentPreviewPage;
     int                       currentCropPhoto;
     bool                      cancelPrinting;
-    QString                   tempPath;
-    QStringList               gimpFiles;
-    QString                   savedPhotoSize;
 
+    AdvPrintSettings*         settings;
     QPageSetupDialog*         pageSetupDlg;
     DInfoInterface*           iface;
 };
@@ -130,15 +122,13 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     setWindowTitle(i18n("Print Creator"));
 
     d->iface       = iface;
+    d->settings    = new AdvPrintSettings;
     d->introPage   = new AdvPrintIntroPage(this, i18n("Welcome to Print Creator"));
     d->photoPage   = new AdvPrintPhotoPage(this, i18n(PHOTO_PAGE_NAME));
     d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
     d->cropPage    = new AdvPrintCropPage(this, i18n(CROP_PAGE_NAME));
 
     // -----------------------------------
-
-    // select a different page to force a refresh in initPhotoSizes.
-    d->pageSize  = QSizeF(-1, -1);
 
     connect(this, SIGNAL(currentIdChanged(int)),
             this, SLOT(slotPageChanged(int)));
@@ -159,11 +149,6 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
 AdvPrintWizard::~AdvPrintWizard()
 {
     delete d->pageSetupDlg;
-
-    for (int i = 0 ; i < d->photos.count() ; ++i)
-        delete d->photos.at(i);
-
-    d->photos.clear();
     delete d;
 }
 
@@ -172,12 +157,17 @@ DInfoInterface* AdvPrintWizard::iface() const
     return d->iface;
 }
 
+AdvPrintSettings* AdvPrintWizard::settings() const
+{
+    return d->settings;
+}
+
 QList<QUrl> AdvPrintWizard::itemsList() const
 {
     QList<QUrl> urls;
 
-    for (QList<AdvPrintPhoto*>::iterator it = d->photos.begin() ;
-         it != d->photos.end() ; ++it)
+    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
+         it != d->settings->photos.end() ; ++it)
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
         urls << photo->m_url;
@@ -218,12 +208,12 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
 {
     QList<QUrl> list = fileList;
 
-    for (int i = 0 ; i < d->photos.count() ; ++i)
+    for (int i = 0 ; i < d->settings->photos.count() ; ++i)
     {
-        delete d->photos.at(i);
+        delete d->settings->photos.at(i);
     }
 
-    d->photos.clear();
+    d->settings->photos.clear();
 
     if (list.isEmpty() && d->iface)
     {
@@ -235,14 +225,14 @@ void AdvPrintWizard::setItemsList(const QList<QUrl>& fileList)
         AdvPrintPhoto* const photo = new AdvPrintPhoto(150, d->iface);
         photo->m_url          = list[i];
         photo->m_first             = true;
-        d->photos.append(photo);
+        d->settings->photos.append(photo);
     }
 
     QTemporaryDir tempPath;
-    d->tempPath = tempPath.path();
+    d->settings->tempPath = tempPath.path();
     d->cropPage->ui()->BtnCropPrev->setEnabled(false);
 
-    if (d->photos.count() == 1)
+    if (d->settings->photos.count() == 1)
     {
         d->cropPage->ui()->BtnCropNext->setEnabled(false);
     }
@@ -465,7 +455,7 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
 
                             iconpreview.end();
                             p->icon = iconpreview.getIcon();
-                            d->photosizes.append(p);
+                            d->settings->photosizes.append(p);
                         }
                         else
                         {
@@ -497,19 +487,19 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     qCDebug(DIGIKAM_GENERAL_LOG) << "New page size "
                                  << pageSize
                                  << ", old page size "
-                                 << d->pageSize;
+                                 << d->settings->pageSize;
 
     // don't refresh anything if we haven't changed page sizes.
-    if (pageSize == d->pageSize)
+    if (pageSize == d->settings->pageSize)
         return;
 
-    d->pageSize = pageSize;
+    d->settings->pageSize = pageSize;
 
     // cleaning pageSize memory before invoking clear()
-    for (int i = 0; i < d->photosizes.count(); ++i)
-        delete d->photosizes.at(i);
+    for (int i = 0; i < d->settings->photosizes.count(); ++i)
+        delete d->settings->photosizes.at(i);
 
-    d->photosizes.clear();
+    d->settings->photosizes.clear();
 
     // get template-files and parse them
 
@@ -525,10 +515,10 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
         parseTemplateFile(dir.absolutePath() + QLatin1String("/") + fn, pageSize);
     }
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << "d->photosizes.count()="   << d->photosizes.count();
-    qCDebug(DIGIKAM_GENERAL_LOG) << "d->photosizes.isEmpty()=" << d->photosizes.isEmpty();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "d->settings->photosizes.count()="   << d->settings->photosizes.count();
+    qCDebug(DIGIKAM_GENERAL_LOG) << "d->settings->photosizes.isEmpty()=" << d->settings->photosizes.isEmpty();
 
-    if (d->photosizes.isEmpty())
+    if (d->settings->photosizes.isEmpty())
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "Empty photoSize-list, create default size\n";
         // There is no valid page size yet.  Create a default page (B10) to prevent crashes.
@@ -540,7 +530,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
         p->layouts.append(new QRect(0, 0, 3200, 4500));
         p->layouts.append(new QRect(0, 0, 3200, 4500));
         // add to the list
-        d->photosizes.append(p);
+        d->settings->photosizes.append(p);
     }
 
     // load the photo sizes into the listbox
@@ -548,7 +538,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
     d->photoPage->ui()->ListPhotoSizes->clear();
     QList<AdvPrintPhotoSize*>::iterator it;
 
-    for (it = d->photosizes.begin() ; it != d->photosizes.end() ; ++it)
+    for (it = d->settings->photosizes.begin() ; it != d->settings->photosizes.end() ; ++it)
     {
         AdvPrintPhotoSize* const s = static_cast<AdvPrintPhotoSize*>(*it);
 
@@ -611,7 +601,7 @@ double AdvPrintWizard::getMaxDPI(const QList<AdvPrintPhoto*>& photos,
 
 QRect* AdvPrintWizard::getLayout(int photoIndex) const
 {
-    AdvPrintPhotoSize* const s = d->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
 
     // how many photos would actually be printed, including copies?
     int photoCount      = (photoIndex + 1);
@@ -630,12 +620,12 @@ QRect* AdvPrintWizard::getLayout(int photoIndex) const
 int AdvPrintWizard::getPageCount() const
 {
     int pageCount   = 0;
-    int photoCount  =  d->photos.count();
+    int photoCount  =  d->settings->photos.count();
 
     if (photoCount > 0)
     {
         // get the selected layout
-        AdvPrintPhotoSize* const s = d->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+        AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
 
         // how many pages?  Recall that the first layout item is the paper size
         int photosPerPage   = s->layouts.count() - 1;
@@ -1043,29 +1033,29 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
 
 void AdvPrintWizard::updateCropFrame(AdvPrintPhoto* const photo, int photoIndex)
 {
-    AdvPrintPhotoSize* const s = d->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
     d->cropPage->ui()->cropFrame->init(photo,
                                  getLayout(photoIndex)->width(),
                                  getLayout(photoIndex)->height(),
                                  s->autoRotate);
     d->cropPage->ui()->LblCropPhoto->setText(i18n("Photo %1 of %2",
                                             photoIndex + 1,
-                                            QString::number(d->photos.count())));
+                                            QString::number(d->settings->photos.count())));
 }
 
 // update the pages to be printed and preview first/last pages
 void AdvPrintWizard::previewPhotos()
 {
-    if (d->photosizes.isEmpty())
+    if (d->settings->photosizes.isEmpty())
         return;
 
     //Change cursor to waitCursor during transition
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // get the selected layout
-    int photoCount             = d->photos.count();
+    int photoCount             = d->settings->photos.count();
     int curr                   = d->photoPage->ui()->ListPhotoSizes->currentRow();
-    AdvPrintPhotoSize* const s = d->photosizes.at(curr);
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(curr);
     int emptySlots             = 0;
     int pageCount              = 0;
     int photosPerPage          = 0;
@@ -1097,7 +1087,7 @@ void AdvPrintWizard::previewPhotos()
     int current = 0;
     QList<AdvPrintPhoto*>::iterator it;
 
-    for (it = d->photos.begin() ; it != d->photos.end() ; ++it)
+    for (it = d->settings->photos.begin() ; it != d->settings->photos.end() ; ++it)
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
 
@@ -1133,7 +1123,7 @@ void AdvPrintWizard::previewPhotos()
         //p.setCompositionMode(QPainter::CompositionMode_Destination );
         p.fillRect(img.rect(), Qt::color0); //Qt::transparent );
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        paintOnePage(p, d->photos, s->layouts, current, d->cropPage->ui()->m_disableCrop->isChecked(), true);
+        paintOnePage(p, d->settings->photos, s->layouts, current, d->cropPage->ui()->m_disableCrop->isChecked(), true);
         p.end();
 
         d->photoPage->ui()->BmpFirstPagePreview->clear();
@@ -1155,7 +1145,7 @@ void AdvPrintWizard::previewPhotos()
 
 void AdvPrintWizard::manageBtnPreviewPage()
 {
-    if (d->photos.empty())
+    if (d->settings->photos.empty())
     {
         d->photoPage->ui()->BtnPreviewPageDown->setEnabled(false);
         d->photoPage->ui()->BtnPreviewPageUp->setEnabled(false);
@@ -1179,9 +1169,9 @@ void AdvPrintWizard::manageBtnPreviewPage()
 
 void AdvPrintWizard::setCaptionButtons()
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
-        d->captionPage->setCaptionButtons(d->photos.at(d->infopageCurrentPhoto));
+        d->captionPage->setCaptionButtons(d->settings->photos.at(d->infopageCurrentPhoto));
     }
 }
 
@@ -1196,9 +1186,9 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
 
 void AdvPrintWizard::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemIndex)
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
-        AdvPrintPhoto* const pPhoto = d->photos[itemIndex];
+        AdvPrintPhoto* const pPhoto = d->settings->photos[itemIndex];
         // TODO: first and copies could be removed since they are not useful any more
         xmlWriter.writeAttribute(QLatin1String("first"),
                                  QString::fromUtf8("%1")
@@ -1267,7 +1257,7 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
             if (!attr.isEmpty())
             {
                 qCDebug(DIGIKAM_GENERAL_LOG) <<  " found " << attr.toString();
-                d->savedPhotoSize = attr.toString();
+                d->settings->savedPhotoSize = attr.toString();
             }
         }
 
@@ -1277,7 +1267,7 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
     // reset preview page number
     d->currentPreviewPage      = 0;
     initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
-    QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->savedPhotoSize, Qt::MatchExactly);
+    QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
 
     if (list.count())
     {
@@ -1294,10 +1284,10 @@ void AdvPrintWizard::slotXMLCustomElement(QXmlStreamReader& xmlReader)
 
 void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
         // read image is the last.
-        AdvPrintPhoto* const pPhoto = d->photos[d->photos.size()-1];
+        AdvPrintPhoto* const pPhoto = d->settings->photos[d->settings->photos.size()-1];
         qCDebug(DIGIKAM_GENERAL_LOG) << " invoked " << xmlReader.name();
 
         while (xmlReader.readNextStartElement())
@@ -1364,7 +1354,7 @@ void AdvPrintWizard::slotXMLLoadElement(QXmlStreamReader& xmlReader)
 
 void AdvPrintWizard::slotContextMenuRequested()
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
         int itemIndex         = d->photoPage->imagesList()->listView()->currentIndex().row();
         d->photoPage->imagesList()->listView()->blockSignals(true);
@@ -1374,7 +1364,7 @@ void AdvPrintWizard::slotContextMenuRequested()
         connect(action, SIGNAL(triggered()),
                 this , SLOT(slotIncreaseCopies()));
 
-        AdvPrintPhoto* const pPhoto  = d->photos[itemIndex];
+        AdvPrintPhoto* const pPhoto  = d->settings->photos[itemIndex];
 
         qCDebug(DIGIKAM_GENERAL_LOG) << " copies "
                                      << pPhoto->m_copies
@@ -1411,7 +1401,7 @@ void AdvPrintWizard::slotImageSelected(QTreeWidgetItem* item)
 
 void AdvPrintWizard::slotDecreaseCopies()
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
         DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>
             (d->photoPage->imagesList()->listView()->currentItem());
@@ -1426,14 +1416,14 @@ void AdvPrintWizard::slotDecreaseCopies()
 
 void AdvPrintWizard::slotRemovingItem(int itemIndex)
 {
-    if (d->photos.size() && itemIndex >= 0)
+    if (d->settings->photos.size() && itemIndex >= 0)
     {
         /// Debug data: found and copies
         bool found = false;
         int copies = 0;
 
         d->photoPage->imagesList()->blockSignals(true);
-        AdvPrintPhoto* const pPhotoToRemove = d->photos.at(itemIndex);
+        AdvPrintPhoto* const pPhotoToRemove = d->settings->photos.at(itemIndex);
 
         // photo to be removed could be:
         // 1) unique => just remove it
@@ -1445,9 +1435,9 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
         {
             if (pPhotoToRemove->m_copies > 0)
             {
-                for (int i = 0 ; i < d->photos.count() && !found ; ++i)
+                for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
                 {
-                    AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
+                    AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
 
                     if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
                     {
@@ -1462,9 +1452,9 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
         }
         else if (pPhotoToRemove)
         {
-            for (int i = 0 ; i < d->photos.count() && !found ; ++i)
+            for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
             {
-                AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
+                AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
 
                 if (pCurrentPhoto &&
                     pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
@@ -1490,14 +1480,14 @@ void AdvPrintWizard::slotRemovingItem(int itemIndex)
                                          << copies;
         }
 
-        d->photos.removeAt(itemIndex);
+        d->settings->photos.removeAt(itemIndex);
         delete pPhotoToRemove;
 
         d->photoPage->imagesList()->blockSignals(false);
         previewPhotos();
     }
 
-    if (d->photos.empty())
+    if (d->settings->photos.empty())
     {
         // No photos => disabling next button (e.g. crop page)
         d->photoPage->setComplete(false);
@@ -1521,9 +1511,9 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
         // Check if the new item already exist in the list.
         bool found    = false;
 
-        for (int i = 0 ; i < d->photos.count() && !found ; ++i)
+        for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
         {
-            AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
+            AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
 
             if (pCurrentPhoto &&
                 pCurrentPhoto->m_url == imageUrl &&
@@ -1533,7 +1523,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
                 found                       = true;
                 AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(*pCurrentPhoto);
                 pPhoto->m_first             = false;
-                d->photos.append(pPhoto);
+                d->settings->photos.append(pPhoto);
                 qCDebug(DIGIKAM_GENERAL_LOG) << "Added fileName: "
                                              << pPhoto->m_url.fileName()
                                              << " copy number "
@@ -1546,7 +1536,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
             AdvPrintPhoto* const pPhoto = new AdvPrintPhoto(150, d->iface);
             pPhoto->m_url          = *it;
             pPhoto->m_first             = true;
-            d->photos.append(pPhoto);
+            d->settings->photos.append(pPhoto);
             qCDebug(DIGIKAM_GENERAL_LOG) << "Added new fileName: "
                                          << pPhoto->m_url.fileName();
         }
@@ -1554,7 +1544,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
 
     d->photoPage->imagesList()->blockSignals(false);
 
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
         d->photoPage->setComplete(true);
     }
@@ -1562,7 +1552,7 @@ void AdvPrintWizard::slotAddItems(const QList<QUrl>& list)
 
 void AdvPrintWizard::slotIncreaseCopies()
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
         QList<QUrl> list;
         DImagesListViewItem* const item = dynamic_cast<DImagesListViewItem*>(d->photoPage->imagesList()->listView()->currentItem());
@@ -1606,11 +1596,11 @@ void AdvPrintWizard::slotPageChanged(int curr)
         d->photoPage->imagesList()->listView()->clear();
         QList<QUrl> list;
 
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->photos.count();
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
 
-        for (int i = 0 ; i < d->photos.count() ; ++i)
+        for (int i = 0 ; i < d->settings->photos.count() ; ++i)
         {
-            AdvPrintPhoto* const pCurrentPhoto = d->photos.at(i);
+            AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
 
             if (pCurrentPhoto)
             {
@@ -1622,19 +1612,19 @@ void AdvPrintWizard::slotPageChanged(int curr)
         d->photoPage->imagesList()->slotAddImages(list);
         d->photoPage->imagesList()->listView()->setCurrentItem(d->photoPage->imagesList()->listView()->itemAt(0, 0));
         d->photoPage->imagesList()->blockSignals(false);
-        d->photoPage->ui()->LblPhotoCount->setText(QString::number(d->photos.count()));
+        d->photoPage->ui()->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
         // PhotoPage
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
         // restore photoSize
 
-        if (before && d->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+        if (before && d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
         {
             d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
         }
         else
         {
-            QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->savedPhotoSize, Qt::MatchExactly);
+            QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
 
             if (list.count())
                 d->photoPage->ui()->ListPhotoSizes->setCurrentItem(list[0]);
@@ -1666,9 +1656,9 @@ void AdvPrintWizard::slotPageChanged(int curr)
         readSettings(current->title());
         d->currentCropPhoto = 0;
 
-        if (d->photos.size())
+        if (d->settings->photos.size())
         {
-            AdvPrintPhoto* const photo = d->photos[d->currentCropPhoto];
+            AdvPrintPhoto* const photo = d->settings->photos[d->currentCropPhoto];
             setBtnCropEnabled();
             this->update();
             updateCropFrame(photo, d->currentCropPhoto);
@@ -1714,9 +1704,9 @@ void AdvPrintWizard::updateCaption(AdvPrintPhoto* pPhoto)
 
 void AdvPrintWizard::slotInfoPageUpdateCaptions()
 {
-    if (d->photos.size())
+    if (d->settings->photos.size())
     {
-        foreach(AdvPrintPhoto* const pPhoto, d->photos)
+        foreach(AdvPrintPhoto* const pPhoto, d->settings->photos)
         {
             updateCaption(pPhoto);
 
@@ -1748,7 +1738,7 @@ void AdvPrintWizard::slotBtnCropRotateLeftClicked()
     // so we will initialize it to -2 in an awful hack (this
     // tells the cropFrame to reset the crop region, but don't
     // automagically rotate the image to fit.
-    AdvPrintPhoto* const photo = d->photos[d->currentCropPhoto];
+    AdvPrintPhoto* const photo = d->settings->photos[d->currentCropPhoto];
     photo->m_cropRegion        = QRect(-2, -2, -2, -2);
     photo->m_rotation          = (photo->m_rotation - 90) % 360;
 
@@ -1762,7 +1752,7 @@ void AdvPrintWizard::slotBtnCropRotateRightClicked()
     // so we will initialize it to -2 in an awful hack (this
     // tells the cropFrame to reset the crop region, but don't
     // automagically rotate the image to fit.
-    AdvPrintPhoto* const photo = d->photos[d->currentCropPhoto];
+    AdvPrintPhoto* const photo = d->settings->photos[d->currentCropPhoto];
     photo->m_cropRegion        = QRect(-2, -2, -2, -2);
     photo->m_rotation          = (photo->m_rotation + 90) % 360;
 
@@ -1776,7 +1766,7 @@ void AdvPrintWizard::setBtnCropEnabled()
     else
         d->cropPage->ui()->BtnCropPrev->setEnabled(true);
 
-    if (d->currentCropPhoto == (int) d->photos.count() - 1)
+    if (d->currentCropPhoto == (int) d->settings->photos.count() - 1)
         d->cropPage->ui()->BtnCropNext->setEnabled(false);
     else
         d->cropPage->ui()->BtnCropNext->setEnabled(true);
@@ -1784,12 +1774,12 @@ void AdvPrintWizard::setBtnCropEnabled()
 
 void AdvPrintWizard::slotBtnCropNextClicked()
 {
-    AdvPrintPhoto* const photo = d->photos[++d->currentCropPhoto];
+    AdvPrintPhoto* const photo = d->settings->photos[++d->currentCropPhoto];
     setBtnCropEnabled();
 
     if (!photo)
     {
-        d->currentCropPhoto = d->photos.count() - 1;
+        d->currentCropPhoto = d->settings->photos.count() - 1;
         return;
     }
 
@@ -1798,7 +1788,7 @@ void AdvPrintWizard::slotBtnCropNextClicked()
 
 void AdvPrintWizard::slotBtnCropPrevClicked()
 {
-    AdvPrintPhoto* const photo = d->photos[--d->currentCropPhoto];
+    AdvPrintPhoto* const photo = d->settings->photos[--d->currentCropPhoto];
 
     setBtnCropEnabled();
 
@@ -1821,7 +1811,7 @@ void AdvPrintWizard::slotBtnPrintOrderUpClicked()
                                  << " to  "
                                  << currentIndex + 1;
 
-    d->photos.swap(currentIndex, currentIndex + 1);
+    d->settings->photos.swap(currentIndex, currentIndex + 1);
     d->photoPage->imagesList()->blockSignals(false);
     previewPhotos();
 }
@@ -1841,10 +1831,10 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
     if (item->text() == i18n(CUSTOM_PAGE_LAYOUT_NAME))
     {
         // check if a custom layout has already been added
-        if (curr >= 0 && curr < d->photosizes.size())
+        if (curr >= 0 && curr < d->settings->photosizes.size())
         {
-            s = d->photosizes.at(curr);
-            d->photosizes.removeAt(curr);
+            s = d->settings->photosizes.at(curr);
+            d->settings->photosizes.removeAt(curr);
             delete s;
             s = NULL;
         }
@@ -1855,7 +1845,7 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
         custDlg.saveSettings();
 
         // get parameters from dialog
-        size           = d->pageSize;
+        size           = d->settings->pageSize;
         int scaleValue = 10; // 0.1 mm
 
         // convert to mm
@@ -1976,12 +1966,12 @@ void AdvPrintWizard::slotListPhotoSizesSelected()
         if (s)
         {
             s->icon = iconpreview.getIcon();
-            d->photosizes.append(s);
+            d->settings->photosizes.append(s);
         }
     }
     else
     {
-        s = d->photosizes.at(curr);
+        s = d->settings->photosizes.at(curr);
     }
 
     if (!s)
@@ -2007,7 +1997,7 @@ void AdvPrintWizard::slotBtnPrintOrderDownClicked()
                                  << " to  "
                                  << currentIndex;
 
-    d->photos.swap(currentIndex, currentIndex - 1);
+    d->settings->photos.swap(currentIndex, currentIndex - 1);
     d->photoPage->imagesList()->blockSignals(false);
     previewPhotos();
 }
@@ -2045,11 +2035,11 @@ void AdvPrintWizard::saveSettings(const QString& pageName)
 
         if (d->photoPage->ui()->ListPhotoSizes->currentItem())
         {
-            d->savedPhotoSize = d->photoPage->ui()->ListPhotoSizes->currentItem()->text();
+            d->settings->savedPhotoSize = d->photoPage->ui()->ListPhotoSizes->currentItem()->text();
         }
 
         group.writeEntry(QLatin1String("PhotoSize"),
-                         d->savedPhotoSize);
+                         d->settings->savedPhotoSize);
         group.writeEntry(QLatin1String("IconSize"),
                          d->photoPage->ui()->ListPhotoSizes->iconSize());
     }
@@ -2089,7 +2079,7 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         d->photoPage->ui()->ListPhotoSizes->setIconSize(iconSize);
 
         // photo size
-        d->savedPhotoSize = group.readEntry("PhotoSize");
+        d->settings->savedPhotoSize = group.readEntry("PhotoSize");
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
     }
     else if (pageName == i18n(CAPTION_PAGE_NAME))
@@ -2251,7 +2241,8 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
 
 void AdvPrintWizard::removeGimpFiles()
 {
-    for (QStringList::ConstIterator it = d->gimpFiles.constBegin(); it != d->gimpFiles.constEnd(); ++it)
+    for (QStringList::ConstIterator it = d->settings->gimpFiles.constBegin() ;
+         it != d->settings->gimpFiles.constEnd() ; ++it)
     {
         if (QFile::exists(*it))
         {
@@ -2271,7 +2262,7 @@ void AdvPrintWizard::reject()
 {
     d->cancelPrinting = true;
 
-    if (d->gimpFiles.count() > 0)
+    if (d->settings->gimpFiles.count() > 0)
         removeGimpFiles();
 
     QDialog::reject();
@@ -2279,18 +2270,18 @@ void AdvPrintWizard::reject()
 
 void AdvPrintWizard::accept()
 {
-    if (d->photos.empty())
+    if (d->settings->photos.empty())
     {
         DWizardDlg::reject();
         return;
     }
 
     // set the default crop regions if not already set
-    AdvPrintPhotoSize* const s = d->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
     QList<AdvPrintPhoto*>::iterator it;
     int i                      = 0;
 
-    for (it = d->photos.begin() ; it != d->photos.end() ; ++it)
+    for (it = d->settings->photos.begin() ; it != d->settings->photos.end() ; ++it)
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto* >(*it);
 
@@ -2372,28 +2363,28 @@ void AdvPrintWizard::accept()
                                      << bottom;
 
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        printPhotos(d->photos, s->layouts, *d->photoPage->printer());
+        printPhotos(d->settings->photos, s->layouts, *d->photoPage->printer());
         QApplication::restoreOverrideCursor();
     }
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print with Gimp"))
     {
         // now output the items
-        QString path = d->tempPath;
+        QString path = d->settings->tempPath;
 
         if (!AdvPrintCheckTempPath(this, path))
             return;
 
         path = path + QLatin1String("PrintCreator_tmp_");
 
-        if (d->gimpFiles.count() > 0)
+        if (d->settings->gimpFiles.count() > 0)
             removeGimpFiles();
 
-        d->gimpFiles = printPhotosToFile(d->photos, path, s);
+        d->settings->gimpFiles = printPhotosToFile(d->settings->photos, path, s);
         QStringList args;
         QString prog = d->introPage->gimpPath();
 
-        for (QStringList::ConstIterator it = d->gimpFiles.constBegin() ;
-             it != d->gimpFiles.constEnd() ; ++it)
+        for (QStringList::ConstIterator it = d->settings->gimpFiles.constBegin() ;
+             it != d->settings->gimpFiles.constEnd() ; ++it)
         {
             args << (*it);
         }
@@ -2419,7 +2410,7 @@ void AdvPrintWizard::accept()
 
         qCDebug(DIGIKAM_GENERAL_LOG) << path;
         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-        printPhotosToFile(d->photos, path, s);
+        printPhotosToFile(d->settings->photos, path, s);
         QApplication::restoreOverrideCursor();
     }
 
@@ -2451,7 +2442,7 @@ void AdvPrintWizard::slotPageSetupDialogExit()
     // next should be useless invoke once changing wizard page
     //initPhotoSizes ( d->photoPage->printer().paperSize(QPrinter::Millimeter));
 
-    //     d->pageSize = d->photoPage->printer().paperSize(QPrinter::Millimeter);
+    //     d->settings->pageSize = d->photoPage->printer().paperSize(QPrinter::Millimeter);
 #ifdef DEBUG
     qCDebug(DIGIKAM_GENERAL_LOG) << " dialog exited num of copies: "
                                  << printer->numCopies()
@@ -2483,14 +2474,14 @@ void AdvPrintWizard::slotPagesetupclicked()
     initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
 
     // restore photoSize
-    if (d->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+    if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
     {
         d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
     }
     else
     {
         QList<QListWidgetItem*> list =
-            d->photoPage->ui()->ListPhotoSizes->findItems(d->savedPhotoSize,
+            d->photoPage->ui()->ListPhotoSizes->findItems(d->settings->savedPhotoSize,
                                                           Qt::MatchExactly);
 
         if (list.count())

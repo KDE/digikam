@@ -32,6 +32,8 @@
 #include <QColor>
 #include <QUrl>
 #include <QPointer>
+#include <QIcon>
+#include <QList>
 
 // Local includes
 
@@ -40,6 +42,17 @@
 
 namespace Digikam
 {
+
+typedef struct _AdvPrintPhotoSize
+{
+    QString       label;
+    int           dpi;
+    bool          autoRotate;
+    QList<QRect*> layouts;     // first element is page size
+    QIcon         icon;
+} AdvPrintPhotoSize;
+
+// -----------------------------------------------------------
 
 class AdvPrintAdditionalInfo
 {
