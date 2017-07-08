@@ -141,5 +141,5 @@ BUGFIXES FROM BUGZILLA:
 128 ==> 251705 - Remove Red Eyes process wrong image regions, fill image parts with green color.
 129 ==> 222992 - Crash in digikam when correcting red eyes.
 130 ==> 342475 - Crash by open red Eyes correction tool.
-131 ==> 
-
+131 ==> 164916 - With RAWs the burning crashes.
+132 ==> 
