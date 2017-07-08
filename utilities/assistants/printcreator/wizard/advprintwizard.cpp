@@ -259,9 +259,10 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                               e.attribute(QLatin1String("height"), QLatin1String("0")).toFloat());
                 unit = e.attribute(QLatin1String("unit"), QLatin1String("mm"));
 
-                qCDebug(DIGIKAM_GENERAL_LOG) <<  e.tagName()
+                qCDebug(DIGIKAM_GENERAL_LOG) << e.tagName()
                                              << QLatin1String(" name=")
-                                             << e.attribute(QLatin1String("name"), QLatin1String("??"))
+                                             << e.attribute(QLatin1String("name"),
+                                                            QLatin1String("??"))
                                              << " size= " << size
                                              << " unit= " << unit;
 
@@ -280,17 +281,25 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                     {
                         size      *= 25.4;
                         scaleValue = 1000;
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size " << size << " page size " << pageSize;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size "
+                                                     << size
+                                                     << " page size "
+                                                     << pageSize;
                     }
                     else if (unit == QLatin1String("cm"))
                     {
                         size      *= 10;
                         scaleValue = 100;
-                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size " << size << " page size " << pageSize;
+                        qCDebug(DIGIKAM_GENERAL_LOG) << "template size "
+                                                     << size
+                                                     << " page size "
+                                                     << pageSize;
                     }
                     else
                     {
-                        qCWarning(DIGIKAM_GENERAL_LOG) << "Wrong unit " << unit << " skipping layout";
+                        qCWarning(DIGIKAM_GENERAL_LOG) << "Wrong unit "
+                                                       << unit
+                                                       << " skipping layout";
                         n = n.nextSibling();
                         continue;
                     }
@@ -303,7 +312,7 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                     size = pageSize;
                     unit = QLatin1String("mm");
                 }
-                else if (pageSize     != QSizeF(0, 0) &&
+                else if (pageSize != QSizeF(0, 0) &&
                          (size.height() > (pageSize.height() + round_value) ||
                           size.width()  > (pageSize.width() + round_value)))
                 {
@@ -359,13 +368,15 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                             TemplateIcon iconpreview(80, sizeManaged.toSize());
                             iconpreview.begin();
 
-                            QString desktopFileName = ep.attribute(QLatin1String("name"), QLatin1String("XXX")) +
+                            QString desktopFileName = ep.attribute(QLatin1String("name"),
+                                                                   QLatin1String("XXX")) +
                                                                    QLatin1String(".desktop");
 
                             QDir dir(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                             QLatin1String("digikam/templates"),
                                                             QStandardPaths::LocateDirectory));
-                            const QStringList list  = dir.entryList(QStringList() << desktopFileName);
+                            const QStringList list  = dir.entryList(QStringList()
+                                                      << desktopFileName);
 
                             qCDebug(DIGIKAM_GENERAL_LOG) << "Template desktop files list: "
                                                          << list;
@@ -375,7 +386,8 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
 
                             if (it != end)
                             {
-                                p->label = KDesktopFile(dir.absolutePath() + QLatin1String("/") + *it).readName();
+                                p->label = KDesktopFile(dir.absolutePath() + 
+                                           QLatin1String("/") + *it).readName();
                             }
                             else
                             {
@@ -384,8 +396,11 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                                                                << desktopFileName;
                             }
 
-                            p->dpi        = ep.attribute(QLatin1String("dpi"), QLatin1String("0")).toInt();
-                            p->autoRotate = (ep.attribute(QLatin1String("autorotate"), QLatin1String("false")) == QLatin1String("true")) ? true : false;
+                            p->dpi        = ep.attribute(QLatin1String("dpi"),
+                                                         QLatin1String("0")).toInt();
+                            p->autoRotate = (ep.attribute(QLatin1String("autorotate"),
+                                            QLatin1String("false")) == QLatin1String("true")) ?
+                                            true : false;
                             QDomNode nt   = ep.firstChild();
 
                             while (!nt.isNull())
@@ -396,23 +411,42 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                                 {
                                     if (et.tagName() == QLatin1String("photo"))
                                     {
-                                        float value = et.attribute(QLatin1String("width"), QLatin1String("0")).toFloat();
-                                        int width   = (int)((value == 0 ? size.width() : value) * scaleValue);
-                                        value       = et.attribute(QLatin1String("height"), QLatin1String("0")).toFloat();
-                                        int height  = (int)((value == 0 ? size.height() : value) * scaleValue);
-                                        int photoX  = (int)((et.attribute(QLatin1String("x"), QLatin1String("0")).toFloat() * scaleValue));
-                                        int photoY  = (int)((et.attribute(QLatin1String("y"), QLatin1String("0")).toFloat() * scaleValue));
-                                        p->layouts.append(new QRect(photoX, photoY, width, height));
-                                        iconpreview.fillRect(photoX, photoY, width, height, Qt::color1);
+                                        float value = et.attribute(QLatin1String("width"),
+                                                                   QLatin1String("0")).toFloat();
+                                        int width   = (int)((value == 0 ? size.width() : value) *
+                                                            scaleValue);
+                                        value       = et.attribute(QLatin1String("height"),
+                                                                   QLatin1String("0")).toFloat();
+                                        int height  = (int)((value == 0 ? size.height() : value) *
+                                                            scaleValue);
+                                        int photoX  = (int)((et.attribute(QLatin1String("x"),
+                                                      QLatin1String("0")).toFloat() * scaleValue));
+                                        int photoY  = (int)((et.attribute(QLatin1String("y"),
+                                                      QLatin1String("0")).toFloat() * scaleValue));
+
+                                        p->layouts.append(new QRect(photoX,
+                                                                    photoY,
+                                                                    width,
+                                                                    height));
+                                        iconpreview.fillRect(photoX,
+                                                             photoY,
+                                                             width,
+                                                             height,
+                                                             Qt::color1);
                                     }
                                     else if (et.tagName() == QLatin1String("photogrid"))
                                     {
-                                        float value    = et.attribute(QLatin1String("pageWidth"), QLatin1String("0")).toFloat();
-                                        int pageWidth  = (int)((value == 0 ? size.width() : value) * scaleValue);
-                                        value          = et.attribute(QLatin1String("pageHeight"), QLatin1String("0")).toFloat();
+                                        float value    = et.attribute(QLatin1String("pageWidth"),
+                                                                      QLatin1String("0")).toFloat();
+                                        int pageWidth  = (int)((value == 0 ? size.width() : value) *
+                                                               scaleValue);
+                                        value          = et.attribute(QLatin1String("pageHeight"),
+                                                                      QLatin1String("0")).toFloat();
                                         int pageHeight = (int)((value == 0 ? size.height() : value) * scaleValue);
-                                        int rows       = et.attribute(QLatin1String("rows"), QLatin1String("0")).toInt();
-                                        int columns    = et.attribute(QLatin1String("columns"), QLatin1String("0")).toInt();
+                                        int rows       = et.attribute(QLatin1String("rows"),
+                                                                      QLatin1String("0")).toInt();
+                                        int columns    = et.attribute(QLatin1String("columns"),
+                                                                      QLatin1String("0")).toInt();
 
                                         if (rows > 0 && columns > 0)
                                         {
@@ -625,14 +659,15 @@ void AdvPrintWizard::printCaption(QPainter& p,
     while (captionIndex < caption.length())
     {
         QString newLine;
-        bool breakLine            = false; // End Of Line found
-        int currIndex;                     //  Caption QString current index
+        bool breakLine = false; // End Of Line found
+        int currIndex;          //  Caption QString current index
 
         // Check minimal lines dimension
         //TODO fix length, maybe useless
         int captionLineLocalLength = 40;
 
-        for (currIndex = captionIndex; currIndex < caption.length() && !breakLine; ++currIndex)
+        for (currIndex = captionIndex ;
+             currIndex < caption.length() && !breakLine ; ++currIndex)
         {
             if (caption[currIndex] == QLatin1Char('\n') || caption[currIndex].isSpace())
                 breakLine = true;
@@ -644,7 +679,8 @@ void AdvPrintWizard::printCaption(QPainter& p,
         breakLine = false;
 
         for (currIndex = captionIndex;
-             (currIndex <= captionIndex + captionLineLocalLength) && (currIndex < caption.length()) && !breakLine;
+             (currIndex <= captionIndex + captionLineLocalLength) &&
+             (currIndex < caption.length()) && !breakLine;
              ++currIndex)
         {
             breakLine = (caption[currIndex] == QLatin1Char('\n')) ? true : false;
@@ -752,7 +788,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
                 AdvPrintNint((double) srcPage->width()  * xRatio),
                 AdvPrintNint((double) srcPage->height() * yRatio));
 
-    for (; current < photos.count(); ++current)
+    for (; current < photos.count() ; ++current)
     {
         AdvPrintPhoto* const photo = photos.at(current);
         // crop
@@ -815,10 +851,14 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
         if (cropDisabled)
         {
             imageSize.scale(newRectViewPort.size(), Qt::KeepAspectRatio);
-            int spaceLeft = (newRectViewPort.width() - imageSize.width()) / 2;
+            int spaceLeft = (newRectViewPort.width()  - imageSize.width())  / 2;
             int spaceTop  = (newRectViewPort.height() - imageSize.height()) / 2;
-            p.setViewport(spaceLeft + newRectViewPort.x(), spaceTop + newRectViewPort.y(), imageSize.width(), imageSize.height());
-            point         = QPoint(newRectViewPort.x() + spaceLeft + imageSize.width(), newRectViewPort.y() + spaceTop + imageSize.height());
+            p.setViewport(spaceLeft + newRectViewPort.x(),
+                          spaceTop + newRectViewPort.y(),
+                          imageSize.width(),
+                          imageSize.height());
+            point         = QPoint(newRectViewPort.x() + spaceLeft + imageSize.width(),
+                                   newRectViewPort.y() + spaceTop + imageSize.height());
         }
         else
         {
@@ -1083,7 +1123,8 @@ void AdvPrintWizard::slotPageChanged(int curr)
 {
     QWizardPage* const current = page(curr);
 
-    if (!current) return;
+    if (!current)
+        return;
 
     QWizardPage* const before = visitedPages().isEmpty() ? 0 : page(visitedPages().last());
 
@@ -1373,7 +1414,8 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
         if (QFile::exists(filename))
         {
             int result = QMessageBox::question(this, i18n("Overwrite File"),
-                                               i18n("The following file will be overwritten. Are you sure you want to overwrite it?") +
+                                               i18n("The following file will be overwritten. "
+                                                    "Are you sure you want to overwrite it?") +
                                                QLatin1String("\n\n") + filename,
                                                QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel),
                                                QMessageBox::No);
@@ -1468,9 +1510,9 @@ void AdvPrintWizard::accept()
         if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
         {
             d->cropPage->ui()->cropFrame->init(photo,
-                                         getLayout(i)->width(),
-                                         getLayout(i)->height(),
-                                         s->autoRotate);
+                                               getLayout(i)->width(),
+                                               getLayout(i)->height(),
+                                               s->autoRotate);
         }
 
         i++;
@@ -1483,7 +1525,9 @@ void AdvPrintWizard::accept()
         d->photoPage->printer()->setFullPage(true);
 
         qreal left, top, right, bottom;
-        d->photoPage->printer()->getPageMargins(&left, &top, &right, &bottom, QPrinter::Millimeter);
+        d->photoPage->printer()->getPageMargins(&left, &top,
+                                                &right, &bottom,
+                                                QPrinter::Millimeter);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Margins before print dialog: left "
                                      << left
@@ -1509,11 +1553,8 @@ void AdvPrintWizard::accept()
                                      << " size "
                                      << dialog->printer()->paperSize(QPrinter::Millimeter);
 
-        bool wantToPrint = (dialog->exec() == QDialog::Accepted);
-
-        if (!wantToPrint)
+        if (dialog->exec() != QDialog::Accepted)
         {
-            DWizardDlg::accept();
             return;
         }
 
@@ -1573,7 +1614,7 @@ void AdvPrintWizard::accept()
         {
             QMessageBox::information(this, QString(),
                                      i18n("There was an error launching the external Gimp "
-                                     "program. Please make sure it is properly installed."));
+                                          "program. Please make sure it is properly installed."));
             return;
         }
     }
