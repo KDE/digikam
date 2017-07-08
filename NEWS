@@ -92,7 +92,7 @@ BUGFIXES FROM BUGZILLA:
 077 ==> 116040 - Merging MPEG flux. Unable to open file for reading.
 078 ==> 114515 - Verify the existence of the MPEG output file path and the existence of the audio input file before launching the encoding process.
 079 ==> 101110 - Cannot create MPEG from photos using transitions.
-080 ==> 119070 - Difficult behaviour of MPEG slide slide show kipi plugin.
+080 ==> 119070 - Difficult behaviour of MPEG slide slide show.
 081 ==> 127219 - Creation of mpeg slide show fails.
 082 ==> 171242 - Encoding of mpeg slideshow does not work.
 083 ==> 145771 - Gnome Desktop crashes and restarts when select Cancel option for Mpeg Slideshow plugin.
@@ -104,7 +104,7 @@ BUGFIXES FROM BUGZILLA:
 089 ==> 162240 - The encoder start and finish imediately and there isn't any mpeg file.
 090 ==> 143979 - Create an mpeg slideshow fails after the encoding.
 091 ==> 121045 - Images 2 mpg.
-092 ==> 114514 - Do not delete the temporary folder "~/tmp/kde-user/kipi-mpegencoderplugin-PID/" after each encoding process.
+092 ==> 114514 - Do not delete the temporary folder after each encoding process.
 093 ==> 101656 - Image gallery use irretating filenames foo.jpeg.jpeg for images.
 094 ==> 098968 - Cannot encode to VCD, DVD, XVCD.
 095 ==> 109739 - Yuvscaler error in digiKam.
