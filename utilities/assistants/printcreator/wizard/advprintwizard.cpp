@@ -845,7 +845,15 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             int exifOrientation = DMetadata::ORIENTATION_NORMAL;
             int orientatation   = photo->m_rotation;
 
-            exifOrientation     = photo->metaIface().getImageOrientation();
+            if (d->iface)
+            {
+                DItemInfo info(d->iface->itemInfo(photo->m_url));
+                exifOrientation = info.orientation();
+            }
+            else
+            {
+                exifOrientation = photo->metaIface().getImageOrientation();
+            }
 
             // ROT_90_HFLIP .. ROT_270
 

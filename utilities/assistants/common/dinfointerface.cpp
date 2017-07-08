@@ -137,6 +137,12 @@ int DItemInfo::orientation() const
     return !val.isNull() ? val.toInt() : MetaEngine::ORIENTATION_UNSPECIFIED;
 }
 
+QSize DItemInfo::dimensions() const
+{
+    QVariant val = parseInfoMap(QLatin1String("dimensions"));
+    return !val.isNull() ? val.toSize() : QSize();
+}
+
 QDateTime DItemInfo::dateTime() const
 {
     QVariant val = parseInfoMap(QLatin1String("datetime"));
@@ -218,6 +224,30 @@ QString DItemInfo::rights() const
 QString DItemInfo::source() const
 {
     QVariant val = parseInfoMap(QLatin1String("source"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::exposureTime() const
+{
+    QVariant val = parseInfoMap(QLatin1String("exposuretime"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::sensitivity() const
+{
+    QVariant val = parseInfoMap(QLatin1String("sensitivity"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::aperture() const
+{
+    QVariant val = parseInfoMap(QLatin1String("aperture"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::focalLength() const
+{
+    QVariant val = parseInfoMap(QLatin1String("focallength"));
     return !val.isNull() ? val.toString() : QString();
 }
 

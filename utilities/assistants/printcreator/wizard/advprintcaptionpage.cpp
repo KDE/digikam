@@ -313,7 +313,18 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
     if (!photo->m_pAdvPrintCaptionInfo)
         return QString();
 
+    QString resolution;
+    QSize   imageSize;
     QString format;
+
+    // %f filename
+    // %c comment
+    // %d date-time
+    // %t exposure time
+    // %i iso
+    // %r resolution
+    // %a aperture
+    // %l focal length
 
     switch (photo->m_pAdvPrintCaptionInfo->m_captionType)
     {
@@ -335,54 +346,47 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
             break;
     }
 
-    QFileInfo fi(photo->m_url.toLocalFile());
-    QString resolution;
-    QSize imageSize;
-    DMetadata meta = photo->metaIface();
-    imageSize      = meta.getImageDimensions();
+    format.replace(QLatin1String("\\n"), QLatin1String("\n"));
+
+    if (d->iface)
+    {
+        DItemInfo info(d->iface->itemInfo(photo->m_url));
+        imageSize = info.dimensions();
+
+        format.replace(QString::fromUtf8("%c"), info.comment());
+        format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
+                                                QLocale::ShortFormat));
+        format.replace(QString::fromUtf8("%f"), info.name());
+        format.replace(QString::fromUtf8("%t"), info.exposureTime());
+        format.replace(QString::fromUtf8("%i"), info.sensitivity());
+        format.replace(QString::fromUtf8("%a"), info.aperture());
+        format.replace(QString::fromUtf8("%l"), info.focalLength());
+    }
+    else
+    {
+        QFileInfo fi(photo->m_url.toLocalFile());
+        DMetadata meta = photo->metaIface();
+        imageSize      = meta.getImageDimensions();
+
+        format.replace(QString::fromUtf8("%c"),
+            meta.getImageComments()[QLatin1String("x-default")].caption);
+        format.replace(QString::fromUtf8("%d"),
+            QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
+        format.replace(QString::fromUtf8("%f"), fi.fileName());
+
+        PhotoInfoContainer photoInfo = meta.getPhotographInformation();
+        format.replace(QString::fromUtf8("%t"), photoInfo.exposureTime);
+        format.replace(QString::fromUtf8("%i"), photoInfo.sensitivity);
+        format.replace(QString::fromUtf8("%a"), photoInfo.aperture);
+        format.replace(QString::fromUtf8("%l"), photoInfo.focalLength);
+    }
 
     if (imageSize.isValid())
     {
         resolution = QString::fromUtf8("%1x%2").arg(imageSize.width()).arg(imageSize.height());
     }
 
-    format.replace(QLatin1String("\\n"), QLatin1String("\n"));
-
-    // %f filename
-    // %c comment
-    // %d date-time
-    // %t exposure time
-    // %i iso
-    // %r resolution
-    // %a aperture
-    // %l focal length
-
     format.replace(QString::fromUtf8("%r"), resolution);
-    format.replace(QString::fromUtf8("%f"), fi.fileName());
-
-    if (d->iface)
-    {
-        DItemInfo info(d->iface->itemInfo(photo->m_url));
-        format.replace(QString::fromUtf8("%c"), info.comment());
-        format.replace(QString::fromUtf8("%d"), QLocale().toString(info.dateTime(),
-                                                QLocale::ShortFormat));
-    }
-    else
-    {
-        format.replace(QString::fromUtf8("%c"),
-            meta.getImageComments()[QLatin1String("x-default")].caption);
-        format.replace(QString::fromUtf8("%d"),
-            QLocale().toString(meta.getImageDateTime(), QLocale::ShortFormat));
-    }
-
-    format.replace(QString::fromUtf8("%t"),
-        meta.getExifTagString("Exif.Photo.ExposureTime"));
-    format.replace(QString::fromUtf8("%i"),
-        meta.getExifTagString("Exif.Photo.ISOSpeedRatings"));
-    format.replace(QString::fromUtf8("%a"),
-        meta.getExifTagString("Exif.Photo.FNumber"));
-    format.replace(QString::fromUtf8("%l"),
-        meta.getExifTagString("Exif.Photo.FocalLength"));
 
     return format;
 }
