@@ -173,7 +173,7 @@ void MailIntroPage::initializePage()
     }
 
     d->binSearch->allBinariesFound();
-    emit completeChanged();
+    slotBinariesFound();
 }
 
 bool MailIntroPage::validatePage()
