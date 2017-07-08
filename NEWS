@@ -145,4 +145,5 @@ BUGFIXES FROM BUGZILLA:
 132 ==> 321879 - digiKam crash while viewing images.
 133 ==> 232957 - digikam crashes while importing images (about 60000 files).
 134 ==> 316994 - Crash with Red Eyes Correction tool.
-135 ==> 
+135 ==> 322558 - Crash when i click on Red Eyes tool.
+136 ==> 
