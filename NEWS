@@ -154,4 +154,5 @@ BUGFIXES FROM BUGZILLA:
 141 ==> 219068 - Export items to html gallery using tags doesn't sort by date or file-name.
 142 ==> 140374 - HTML Gallery export fails to parse xml from non-UTF8 metadata in jpeg.
 143 ==> 194947 - Original Image link is 'hidden' by css colour setting.
-144 ==> 
+144 ==> 169952 - Pictures on nfs-drive crashes digikam when i send picture as mail.
+145 ==>
