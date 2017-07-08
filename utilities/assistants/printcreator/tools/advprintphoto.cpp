@@ -95,22 +95,18 @@ AdvPrintPhoto::AdvPrintPhoto(int thumbnailSize, DInfoInterface* const iface)
     : m_pAddInfo(0),
       m_pAdvPrintCaptionInfo(0)
 {
-    m_size                 = 0;
-    m_cropRegion           = QRect(-1, -1, -1, -1);
-    m_rotation             = 0;
-    m_first                = false;
-
-    m_copies               = 1;
-    //TODO mPrintPosition;
-    m_url             = QUrl();
-
-    m_iface                = iface;
-    m_thumbnail            = 0;
-    m_thumbnailSize        = thumbnailSize;
+    m_size          = 0;
+    m_cropRegion    = QRect(-1, -1, -1, -1);
+    m_rotation      = 0;
+    m_first         = false;
+    m_copies        = 1;
+    m_url           = QUrl();
+    m_iface         = iface;
+    m_thumbnail     = 0;
+    m_thumbnailSize = thumbnailSize;
 }
 
-//to get old photo info
-AdvPrintPhoto::AdvPrintPhoto (const AdvPrintPhoto& photo)
+AdvPrintPhoto::AdvPrintPhoto(const AdvPrintPhoto& photo)
     : m_pAddInfo(0),
       m_pAdvPrintCaptionInfo(0)
 {
@@ -157,7 +153,7 @@ void AdvPrintPhoto::loadCache()
     painter.end();
 
     delete m_size;
-    m_size = new QSize(photo.width(), photo.height());
+    m_size       = new QSize(photo.width(), photo.height());
 }
 
 QPixmap& AdvPrintPhoto::thumbnail()
@@ -188,7 +184,7 @@ QImage AdvPrintPhoto::loadPhoto()
     return photo;
 }
 
-QSize& AdvPrintPhoto::size()  // private
+QSize& AdvPrintPhoto::size()
 {
     if (m_size == 0)
     {
@@ -202,7 +198,7 @@ DMetadata& AdvPrintPhoto::metaIface()
 {
     if (!m_url.url().isEmpty())
     {
-        if (m_meta.load(m_url.url()))
+        if (m_meta.load(m_url.toLocalFile()))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load metadata from file " << m_url;
         }

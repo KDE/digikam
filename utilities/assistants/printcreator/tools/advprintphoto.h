@@ -43,14 +43,16 @@
 namespace Digikam
 {
 
-typedef struct _AdvPrintPhotoSize
+class AdvPrintPhotoSize
 {
+public:
+
     QString       label;
     int           dpi;
     bool          autoRotate;
     QList<QRect*> layouts;     // first element is page size
     QIcon         icon;
-} AdvPrintPhotoSize;
+};
 
 // -----------------------------------------------------------
 
@@ -58,9 +60,9 @@ class AdvPrintAdditionalInfo
 {
 public:
 
-    AdvPrintAdditionalInfo();
+    explicit AdvPrintAdditionalInfo();
     AdvPrintAdditionalInfo(const AdvPrintAdditionalInfo& ai);
-    virtual ~AdvPrintAdditionalInfo();
+    ~AdvPrintAdditionalInfo();
 
 public:
 
@@ -91,9 +93,10 @@ public:
 
 public:
 
-    AdvPrintCaptionInfo();
+    explicit AdvPrintCaptionInfo();
+    /// Copy constructor to get old photo info.
     AdvPrintCaptionInfo(const AdvPrintCaptionInfo& ci);
-    virtual ~AdvPrintCaptionInfo();
+    ~AdvPrintCaptionInfo();
 
 public:
 
