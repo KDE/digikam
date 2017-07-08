@@ -147,4 +147,11 @@ BUGFIXES FROM BUGZILLA:
 134 ==> 316994 - Crash with Red Eyes Correction tool.
 135 ==> 322558 - Crash when i click on Red Eyes tool.
 136 ==> 382133 - processing fails, caused by too long filename.
-137 ==> 
+137 ==> 294062 - digiKam crashes on HTML export.
+138 ==> 210228 - Next button is disabled in html gallery.
+139 ==> 311510 - HTML export crashing.
+140 ==> 342645 - Export button inoperable.
+141 ==> 219068 - Export items to html gallery using tags doesn't sort by date or file-name.
+142 ==> 140374 - HTML Gallery export fails to parse xml from non-UTF8 metadata in jpeg.
+143 ==> 194947 - Original Image link is 'hidden' by css colour setting.
+144 ==> 
