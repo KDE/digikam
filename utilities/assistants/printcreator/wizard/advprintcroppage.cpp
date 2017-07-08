@@ -129,15 +129,10 @@ Ui_AdvPrintCropPage* AdvPrintCropPage::ui() const
     return d->cropUi;
 }
 
-void AdvPrintCropPage::updateUi()
-{
-    d->cropUi->update();
-}
-
 void AdvPrintCropPage::slotCropSelection(int)
 {
     d->cropUi->cropFrame->drawCropRectangle(!d->cropUi->m_disableCrop->isChecked());
-    updateUi();
+    d->cropUi->update();
 }
 
 void AdvPrintCropPage::initializePage()

@@ -32,6 +32,10 @@
 #include <QUrl>
 #include <QMap>
 
+// KDE includes
+
+#include <klocalizedstring.h>
+
 // Local includes
 
 #include "advprintphoto.h"

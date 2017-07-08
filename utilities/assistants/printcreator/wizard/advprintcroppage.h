@@ -49,7 +49,6 @@ public:
 
     Ui_AdvPrintCropPage* ui() const;
 
-    void updateUi();
     void setBtnCropEnabled();
 
     void initializePage();

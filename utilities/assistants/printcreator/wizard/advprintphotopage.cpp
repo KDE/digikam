@@ -140,6 +140,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     // -----------------------------------
 
+    d->photoUi->mPrintList->setIface(d->iface);
     d->photoUi->mPrintList->setAllowDuplicate(true);
     d->photoUi->mPrintList->setControlButtons(DImagesList::Add      |
                                     DImagesList::Remove   |
@@ -197,7 +198,6 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 
 void AdvPrintPhotoPage::initializePage()
 {
-    d->photoUi->mPrintList->setIface(d->iface);
     d->photoUi->mPrintList->listView()->clear();
 
     if (d->wizard->settings()->selMode == AdvPrintSettings::IMAGES)
@@ -256,11 +256,6 @@ void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 
     d->printer->setFullPage(true);
     d->printer->setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
-}
-
-void AdvPrintPhotoPage::updateUi()
-{
-    d->photoUi->update();
 }
 
 bool AdvPrintPhotoPage::isComplete() const

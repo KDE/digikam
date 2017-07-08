@@ -194,19 +194,6 @@ QSize& AdvPrintPhoto::size()
     return *m_size;
 }
 
-DMetadata& AdvPrintPhoto::metaIface()
-{
-    if (!m_url.url().isEmpty())
-    {
-        if (m_meta.load(m_url.toLocalFile()))
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Cannot load metadata from file " << m_url;
-        }
-    }
-
-    return m_meta;
-}
-
 int AdvPrintPhoto::width()
 {
     return size().width();

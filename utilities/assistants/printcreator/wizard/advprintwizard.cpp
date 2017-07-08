@@ -67,6 +67,7 @@
 #include "dwizardpage.h"
 #include "dinfointerface.h"
 #include "dfiledialog.h"
+#include "dmetadata.h"
 
 namespace Digikam
 {
@@ -852,7 +853,8 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             }
             else
             {
-                exifOrientation = photo->metaIface().getImageOrientation();
+                DMetadata meta(photo->m_url.toLocalFile());
+                exifOrientation = meta.getImageOrientation();
             }
 
             // ROT_90_HFLIP .. ROT_270

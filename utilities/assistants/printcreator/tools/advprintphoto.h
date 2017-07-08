@@ -37,7 +37,6 @@
 
 // Local includes
 
-#include "dmetadata.h"
 #include "dinfointerface.h"
 
 namespace Digikam
@@ -123,7 +122,6 @@ public:
     int        width();
     int        height();
     QSize&     size();
-    DMetadata& metaIface();
 
     double scaleWidth(double unitToInches);
     double scaleHeight(double unitToInches);
@@ -155,7 +153,6 @@ private:
 
     QPixmap*                m_thumbnail;
     QSize*                  m_size;
-    DMetadata               m_meta;
 };
 
 } // Namespace Digikam

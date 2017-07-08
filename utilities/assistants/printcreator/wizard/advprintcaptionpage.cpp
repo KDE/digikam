@@ -41,6 +41,7 @@
 // Local includes
 
 #include "digikam_debug.h"
+#include "dmetadata.h"
 #include "advprintwizard.h"
 #include "advprintphoto.h"
 
@@ -110,6 +111,7 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     // -----------------------------------
 
+    d->captionUi->mPrintList->setIface(d->iface);
     d->captionUi->mPrintList->setAllowDuplicate(true);
     d->captionUi->mPrintList->setControlButtonsPlacement(DImagesList::NoControlButtons);
     d->captionUi->mPrintList->listView()->setColumn(DImagesListView::User1,
@@ -134,11 +136,6 @@ Ui_AdvPrintCaptionPage* AdvPrintCaptionPage::ui() const
     return d->captionUi;
 }
 
-void AdvPrintCaptionPage::updateUi()
-{
-    d->captionUi->update();
-}
-
 DImagesList* AdvPrintCaptionPage::imagesList() const
 {
     return d->captionUi->mPrintList;
@@ -146,7 +143,6 @@ DImagesList* AdvPrintCaptionPage::imagesList() const
 
 void AdvPrintCaptionPage::initializePage()
 {
-    d->captionUi->mPrintList->setIface(d->wizard->iface());
     slotUpdateImagesList();
 }
 
@@ -365,8 +361,8 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
     else
     {
         QFileInfo fi(photo->m_url.toLocalFile());
-        DMetadata meta = photo->metaIface();
-        imageSize      = meta.getImageDimensions();
+        DMetadata meta(photo->m_url.toLocalFile());
+        imageSize = meta.getImageDimensions();
 
         format.replace(QString::fromUtf8("%c"),
             meta.getImageComments()[QLatin1String("x-default")].caption);
