@@ -137,4 +137,5 @@ BUGFIXES FROM BUGZILLA:
 123 ==> 171439 - Before printing more than 1 picture could be possible all of them cut to set size - only first can be.
 124 ==> 233970 - PrintWizard do not retaining settings.
 125 ==> 294563 - digiKam - DVD Slideshow.
-126 ==> 
+126 ==> 117073 - Album export to HTMLGallery would benefit from a treeview widget.
+128 ==> 
