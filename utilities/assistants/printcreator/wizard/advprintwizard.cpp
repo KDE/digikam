@@ -779,15 +779,15 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             double yRatio = 0.0;
 
             if (photo->thumbnail().width() != 0)
-                xRatio = (double) photo->thumbnail().width() / (double) photo->width();
+                xRatio = (double)photo->thumbnail().width() / (double)photo->width();
 
             if (photo->thumbnail().height() != 0)
-                yRatio = (double) photo->thumbnail().height() / (double) photo->height();
+                yRatio = (double)photo->thumbnail().height() / (double)photo->height();
 
-            int x1 = AdvPrintNint((double) photo->m_cropRegion.left()   * xRatio);
-            int y1 = AdvPrintNint((double) photo->m_cropRegion.top()    * yRatio);
-            int w  = AdvPrintNint((double) photo->m_cropRegion.width()  * xRatio);
-            int h  = AdvPrintNint((double) photo->m_cropRegion.height() * yRatio);
+            int x1 = AdvPrintNint((double)photo->m_cropRegion.left()   * xRatio);
+            int y1 = AdvPrintNint((double)photo->m_cropRegion.top()    * yRatio);
+            int w  = AdvPrintNint((double)photo->m_cropRegion.width()  * xRatio);
+            int h  = AdvPrintNint((double)photo->m_cropRegion.height() * yRatio);
             img    = img.copy(QRect(x1, y1, w, h));
         }
         else if (!cropDisabled)
@@ -803,10 +803,13 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
         QRect rectViewPort    = p.viewport();
         QRect newRectViewPort = QRect(x1 + left, y1 + top, w, h);
         QSize imageSize       = img.size();
-
-        //     qCDebug(DIGIKAM_GENERAL_LOG) << "Image         " << photo->filename << " size " << imageSize;
-        //     qCDebug(DIGIKAM_GENERAL_LOG) << "viewport size " << newRectViewPort.size();
-
+/*
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Image         "
+                                     << photo->filename
+                                     << " size " << imageSize;
+        qCDebug(DIGIKAM_GENERAL_LOG) << "viewport size "
+                                     << newRectViewPort.size();
+*/
         QPoint point;
 
         if (cropDisabled)
@@ -836,7 +839,9 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             p.save();
             QString caption = d->captionPage->captionFormatter(photo);
 
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Caption " << caption;
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Caption for"
+                                         << photo->m_url
+                                         << ":" << caption;
 
             // draw the text at (0,0), but we will translate and rotate the world
             // before drawing so the text will be in the correct location
@@ -995,7 +1000,11 @@ void AdvPrintWizard::previewPhotos()
             photo->m_rotation = 0;
             int w             = s->layouts.at(count + 1)->width();
             int h             = s->layouts.at(count + 1)->height();
-            d->cropPage->ui()->cropFrame->init(photo, w, h, s->autoRotate, false);
+            d->cropPage->ui()->cropFrame->init(photo,
+                                               w,
+                                               h,
+                                               s->autoRotate,
+                                               false);
         }
 
         count++;
@@ -1020,7 +1029,12 @@ void AdvPrintWizard::previewPhotos()
         p.setCompositionMode(QPainter::CompositionMode_Clear);
         p.fillRect(img.rect(), Qt::color0);
         p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        paintOnePage(p, d->settings->photos, s->layouts, current, d->cropPage->ui()->m_disableCrop->isChecked(), true);
+        paintOnePage(p,
+                     d->settings->photos,
+                     s->layouts,
+                     current,
+                     d->cropPage->ui()->m_disableCrop->isChecked(),
+                     true);
         p.end();
 
         d->photoPage->ui()->BmpFirstPagePreview->clear();
@@ -1033,7 +1047,6 @@ void AdvPrintWizard::previewPhotos()
     {
         d->photoPage->ui()->BmpFirstPagePreview->clear();
         d->photoPage->ui()->LblPreview->clear();
-//       d->photoPage->ui()->BmpFirstPagePreview->setPixmap ( QPixmap() );
         d->photoPage->ui()->LblPreview->setText(i18n("Page %1 of %2", 0, 0));
     }
 
