@@ -138,4 +138,6 @@ BUGFIXES FROM BUGZILLA:
 124 ==> 233970 - PrintWizard do not retaining settings.
 125 ==> 294563 - digiKam - DVD Slideshow.
 126 ==> 117073 - Album export to HTMLGallery would benefit from a treeview widget.
-128 ==> 
+128 ==> 251705 - Remove Red Eyes process wrong image regions, fill image parts with green color.
+129 ==> 
+
