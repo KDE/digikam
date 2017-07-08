@@ -833,9 +833,9 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             photo->m_pAdvPrintCaptionInfo->m_captionType != AdvPrintCaptionInfo::NoCaptions)
         {
             p.save();
-            QString caption;
-            caption = d->captionPage->captionFormatter(photo);
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Caption " << caption ;
+            QString caption = d->captionPage->captionFormatter(photo);
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Caption " << caption;
 
             // draw the text at (0,0), but we will translate and rotate the world
             // before drawing so the text will be in the correct location
@@ -876,7 +876,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             qCDebug(DIGIKAM_GENERAL_LOG) << "rotation "
                                          << photo->m_rotation
                                          << " orientation "
-                                         << orientatation ;
+                                         << orientatation;
             int tx = left;
             int ty = top;
 

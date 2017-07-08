@@ -294,6 +294,8 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
                         AdvPrintCaptionInfo::NoCaptions)
                         cap = captionFormatter(pPhoto);
 
+                    qCDebug(DIGIKAM_GENERAL_LOG) << cap;
+
                     lvItem->setText(DImagesListView::User1, cap);
                 }
             }
@@ -307,7 +309,11 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
 QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
 {
     if (!photo->m_pAdvPrintCaptionInfo)
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Internal caption info container is NULL for"
+                                       << photo->m_url;
         return QString();
+    }
 
     QString resolution;
     QSize   imageSize;

@@ -406,6 +406,13 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("sensitivity"),  photoInfo.sensitivity);
         map.insert(QLatin1String("aperture"),     photoInfo.aperture);
         map.insert(QLatin1String("focallength"),  photoInfo.focalLength);
+
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Database Info populated for" << url;
+    }
+    else
+    {
+        qCDebug(DIGIKAM_GENERAL_LOG) << "Database Info is NULL for" << url;
+
     }
 
     return map;
