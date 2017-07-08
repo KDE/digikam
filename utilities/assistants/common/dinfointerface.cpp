@@ -26,6 +26,7 @@
 #include "dinfointerface.h"
 #include "metaengine.h"
 #include "digikam_globals.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -94,6 +95,7 @@ bool DInfoInterface::supportAlbums() const
 DItemInfo::DItemInfo(const DInfoInterface::DInfoMap& info)
     : m_info(info)
 {
+    //qCDebug(DIGIKAM_GENERAL_LOG) << m_info;
 }
 
 DItemInfo::~DItemInfo()

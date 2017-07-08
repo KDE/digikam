@@ -392,6 +392,9 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
 
     format.replace(QString::fromUtf8("%r"), resolution);
 
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Caption for"
+                                 << photo->m_url
+                                 << ":" << format;
     return format;
 }
 

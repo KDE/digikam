@@ -366,7 +366,7 @@ DBInfoIface::DInfoMap DBInfoIface::itemInfo(const QUrl& url) const
         map.insert(QLatin1String("title"),       info.title());
         map.insert(QLatin1String("comment"),     info.comment());
         map.insert(QLatin1String("orientation"), info.orientation());
-        map.insert(QLatin1String("dateTime"),    info.dateTime());
+        map.insert(QLatin1String("datetime"),    info.dateTime());
         map.insert(QLatin1String("rating"),      info.rating());
         map.insert(QLatin1String("colorlabel"),  info.colorLabel());
         map.insert(QLatin1String("picklabel"),   info.pickLabel());
