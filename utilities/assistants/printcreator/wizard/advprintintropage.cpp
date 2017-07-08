@@ -52,7 +52,10 @@ class AdvPrintIntroPage::Private
 public:
 
     Private(QWizard* const dialog)
-      : binSearch(0)
+      : imageGetOption(0),
+        hbox(0),
+        binSearch(0),
+        iface(0)
     {
         wizard = dynamic_cast<AdvPrintWizard*>(dialog);
 

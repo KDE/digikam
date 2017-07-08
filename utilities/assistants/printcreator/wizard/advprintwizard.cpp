@@ -77,15 +77,16 @@ class AdvPrintWizard::Private
 public:
 
     Private()
-      : FONT_HEIGHT_RATIO(0.8F)
+      : FONT_HEIGHT_RATIO(0.8F),
+        introPage(0),
+        albumsPage(0),
+        photoPage(0),
+        captionPage(0),
+        cropPage(0),
+        cancelPrinting(false),
+        settings(0),
+        iface(0)
     {
-        introPage            = 0;
-        albumsPage           = 0;
-        photoPage            = 0;
-        captionPage          = 0;
-        cropPage             = 0;
-        cancelPrinting       = false;
-        iface                = 0;
     }
 
     const float               FONT_HEIGHT_RATIO;
