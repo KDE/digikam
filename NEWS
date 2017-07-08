@@ -142,4 +142,5 @@ BUGFIXES FROM BUGZILLA:
 129 ==> 222992 - Crash in digikam when correcting red eyes.
 130 ==> 342475 - Crash by open red Eyes correction tool.
 131 ==> 164916 - With RAWs the burning crashes.
-132 ==> 
+132 ==> 321879 - digiKam crash while viewing images.
+133 ==> 
