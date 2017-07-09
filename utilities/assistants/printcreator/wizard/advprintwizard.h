@@ -59,15 +59,19 @@ public:
     DInfoInterface*   iface()    const;
     AdvPrintSettings* settings() const;
 
-    /// update the pages to be printed and preview first/last pages
+    /** Update the pages to be printed and preview first/last pages.
+     */
     void previewPhotos();
 
-    /// Initialize page layout to the given pageSize in mm
+    /** Initialize page layout to the given pageSize in mm.
+     */
     void initPhotoSizes(const QSizeF& pageSize);
 
     void updateCropFrame(AdvPrintPhoto* const, int);
 
     int  nextId() const;
+
+    static int normalizedInt(double n);
 
 private Q_SLOTS:
 
@@ -75,7 +79,8 @@ private Q_SLOTS:
 
 private:
 
-    /// To parse template file with 'fn' as filename, and 'pageSize' in mm.
+    /** To parse template file with 'fn' as filename, and 'pageSize' in mm.
+     */
     void parseTemplateFile(const QString& fn,
                            const QSizeF& pageSize);
 
@@ -84,6 +89,8 @@ private:
     void saveSettings(const QString& pageName);
     void readSettings(const QString& pageName);
     void startPrinting();
+
+    bool AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const;
 
 private:
 

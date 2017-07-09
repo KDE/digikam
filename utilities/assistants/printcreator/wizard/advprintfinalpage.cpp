@@ -42,7 +42,6 @@
 
 // Local includes
 
-#include "advprintutils.h"
 #include "advprintwizard.h"
 #include "advprintcaptionpage.h"
 #include "dlayoutbox.h"
@@ -216,8 +215,8 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
             dpi = getMaxDPI(photos, layouts->layouts, current) * 1.1;
         }
 
-        int w            = AdvPrintNint(srcPage->width());
-        int h            = AdvPrintNint(srcPage->height());
+        int w            = AdvPrintWizard::normalizedInt(srcPage->width());
+        int h            = AdvPrintWizard::normalizedInt(srcPage->height());
 
         QPixmap pixmap(w, h);
         QPainter painter;
@@ -330,22 +329,22 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
 
     if (destW < destH)
     {
-        destH = AdvPrintNint((double) destW * ((double) srcH / (double) srcW));
+        destH = AdvPrintWizard::normalizedInt((double) destW * ((double) srcH / (double) srcW));
 
         if (destH > p.window().height())
         {
             destH = p.window().height();
-            destW = AdvPrintNint((double) destH * ((double) srcW / (double) srcH));
+            destW = AdvPrintWizard::normalizedInt((double) destH * ((double) srcW / (double) srcH));
         }
     }
     else
     {
-        destW = AdvPrintNint((double) destH * ((double) srcW / (double) srcH));
+        destW = AdvPrintWizard::normalizedInt((double) destH * ((double) srcW / (double) srcH));
 
         if (destW > p.window().width())
         {
             destW = p.window().width();
-            destH = AdvPrintNint((double) destW * ((double) srcH / (double) srcW));
+            destH = AdvPrintWizard::normalizedInt((double) destW * ((double) srcH / (double) srcW));
         }
     }
 
@@ -356,8 +355,8 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
 
     // FIXME: may not want to erase the background page
     p.eraseRect(left, top,
-                AdvPrintNint((double) srcPage->width()  * xRatio),
-                AdvPrintNint((double) srcPage->height() * yRatio));
+                AdvPrintWizard::normalizedInt((double) srcPage->width()  * xRatio),
+                AdvPrintWizard::normalizedInt((double) srcPage->height() * yRatio));
 
     for (; current < photos.count() ; ++current)
     {
@@ -391,10 +390,10 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
             if (photo->thumbnail().height() != 0)
                 yRatio = (double)photo->thumbnail().height() / (double)photo->height();
 
-            int x1 = AdvPrintNint((double)photo->m_cropRegion.left()   * xRatio);
-            int y1 = AdvPrintNint((double)photo->m_cropRegion.top()    * yRatio);
-            int w  = AdvPrintNint((double)photo->m_cropRegion.width()  * xRatio);
-            int h  = AdvPrintNint((double)photo->m_cropRegion.height() * yRatio);
+            int x1 = AdvPrintWizard::normalizedInt((double)photo->m_cropRegion.left()   * xRatio);
+            int y1 = AdvPrintWizard::normalizedInt((double)photo->m_cropRegion.top()    * yRatio);
+            int w  = AdvPrintWizard::normalizedInt((double)photo->m_cropRegion.width()  * xRatio);
+            int h  = AdvPrintWizard::normalizedInt((double)photo->m_cropRegion.height() * yRatio);
             img    = img.copy(QRect(x1, y1, w, h));
         }
         else if (!cropDisabled)
@@ -402,10 +401,10 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
             img = img.copy(photo->m_cropRegion);
         }
 
-        int x1 = AdvPrintNint((double) layout->left()   * xRatio);
-        int y1 = AdvPrintNint((double) layout->top()    * yRatio);
-        int w  = AdvPrintNint((double) layout->width()  * xRatio);
-        int h  = AdvPrintNint((double) layout->height() * yRatio);
+        int x1 = AdvPrintWizard::normalizedInt((double) layout->left()   * xRatio);
+        int y1 = AdvPrintWizard::normalizedInt((double) layout->top()    * yRatio);
+        int w  = AdvPrintWizard::normalizedInt((double) layout->width()  * xRatio);
+        int h  = AdvPrintWizard::normalizedInt((double) layout->height() * yRatio);
 
         QRect rectViewPort    = p.viewport();
         QRect newRectViewPort = QRect(x1 + left, y1 + top, w, h);

@@ -48,8 +48,10 @@ public:
                 int height,
                 bool autoRotate,
                 bool paint = true);
+
     void   setColor(const QColor&);
     QColor color() const;
+
     void   drawCropRectangle(bool draw = true);
 
 protected:

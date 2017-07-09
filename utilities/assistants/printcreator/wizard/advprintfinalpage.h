@@ -75,7 +75,7 @@ public:
 private:
 
     void printCaption(QPainter& p,
-                      AdvPrintPhoto* photo,
+                      AdvPrintPhoto* const photo,
                       int captionW,
                       int captionH,
                       const QString& caption);

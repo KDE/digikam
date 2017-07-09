@@ -45,6 +45,7 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include <QTemporaryDir>
+#include <QProcess>
 
 // KDE includes
 
@@ -56,14 +57,14 @@
 
 // Local includes
 
-#include "advprintutils.h"
+#include "digikam_globals.h"
+#include "digikam_debug.h"
 #include "advprintintropage.h"
 #include "advprintalbumspage.h"
 #include "advprintphotopage.h"
 #include "advprintcaptionpage.h"
 #include "advprintcroppage.h"
 #include "advprintfinalpage.h"
-#include "digikam_debug.h"
 #include "templateicon.h"
 #include "dwizardpage.h"
 #include "dinfointerface.h"
@@ -1062,7 +1063,10 @@ void AdvPrintWizard::startPrinting()
             args << (*it);
         }
 
-        if (!AdvPrintLaunchExternalApp(prog, args))
+        QProcess process;
+        process.setProcessEnvironment(adjustedEnvironmentForAppImage());
+
+        if (!process.startDetached(prog, args))
         {
             QMessageBox::information(this, QString(),
                                      i18n("There was an error launching the external Gimp "
@@ -1087,6 +1091,30 @@ void AdvPrintWizard::startPrinting()
     }
 
     saveSettings(currentPage()->title());
+}
+
+bool AdvPrintWizard::AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const
+{
+    // does the temp path exist?
+    QDir tempDir(tempPath);
+
+    if (!tempDir.exists())
+    {
+        if (!tempDir.mkdir(tempDir.path()))
+        {
+            QMessageBox::information(parent, QString(),
+                                     i18n("Unable to create a temporary folder. "
+                                          "Please make sure you have proper permissions to this folder and try again."));
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int AdvPrintWizard::normalizedInt(double n)
+{
+    return (int)(n + 0.5);
 }
 
 } // namespace Digikam

@@ -39,7 +39,7 @@
 // Local includes
 
 #include "advprintphoto.h"
-#include "advprintutils.h"
+#include "advprintwizard.h"
 
 namespace Digikam
 {
@@ -56,7 +56,6 @@ public:
         pixmapY(0),
         drawRec(true)
     {
-
     }
 
     AdvPrintPhoto*  photo;
@@ -147,22 +146,22 @@ void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
 
     if (w < h)
     {
-        h = AdvPrintNint((double)w * ((double)hphoto / (double)wphoto));
+        h = AdvPrintWizard::normalizedInt((double)w * ((double)hphoto / (double)wphoto));
 
         if (h > d->pixmap->height())
         {
             h = d->pixmap->height();
-            w = AdvPrintNint((double)h * ((double)wphoto / (double)hphoto));
+            w = AdvPrintWizard::normalizedInt((double)h * ((double)wphoto / (double)hphoto));
         }
     }
     else
     {
-        w = AdvPrintNint((double)h * ((double)wphoto / (double)hphoto));
+        w = AdvPrintWizard::normalizedInt((double)h * ((double)wphoto / (double)hphoto));
 
         if (w > d->pixmap->width())
         {
             w = d->pixmap->width();
-            h = AdvPrintNint((double)w * ((double)hphoto / (double)wphoto));
+            h = AdvPrintWizard::normalizedInt((double)w * ((double)hphoto / (double)wphoto));
         }
     }
 
@@ -211,11 +210,11 @@ QRect AdvPrintCropFrame::screenToPhotoRect(const QRect& r) const
         yRatio = (double) photoH / (double) d->pixmap->height();
 
 
-    int x1 = AdvPrintNint((r.left() - d->pixmapX) * xRatio);
-    int y1 = AdvPrintNint((r.top()  - d->pixmapY) * yRatio);
+    int x1 = AdvPrintWizard::normalizedInt((r.left() - d->pixmapX) * xRatio);
+    int y1 = AdvPrintWizard::normalizedInt((r.top()  - d->pixmapY) * yRatio);
 
-    int w  = AdvPrintNint(r.width()  * xRatio);
-    int h  = AdvPrintNint(r.height() * yRatio);
+    int w  = AdvPrintWizard::normalizedInt(r.width()  * xRatio);
+    int h  = AdvPrintWizard::normalizedInt(r.height() * yRatio);
 
     QRect result;
     result.setRect(x1, y1, w, h);
@@ -252,11 +251,11 @@ QRect AdvPrintCropFrame::photoToScreenRect(const QRect& r) const
         yRatio = (double)d->pixmap->height() / (double)photoH;
 
 
-    int x1 = AdvPrintNint(r.left() * xRatio + d->pixmapX);
-    int y1 = AdvPrintNint(r.top()  * yRatio + d->pixmapY);
+    int x1 = AdvPrintWizard::normalizedInt(r.left() * xRatio + d->pixmapX);
+    int y1 = AdvPrintWizard::normalizedInt(r.top()  * yRatio + d->pixmapY);
 
-    int w  = AdvPrintNint(r.width() * xRatio);
-    int h  = AdvPrintNint(r.height() * yRatio);
+    int w  = AdvPrintWizard::normalizedInt(r.width() * xRatio);
+    int h  = AdvPrintWizard::normalizedInt(r.height() * yRatio);
 
     QRect result;
     result.setRect(x1, y1, w, h);
