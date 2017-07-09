@@ -167,4 +167,5 @@ BUGFIXES FROM BUGZILLA:
 154 ==> 141362 - Get rid of any mention of core image tool.
 155 ==> 105514 - Some menu items are displayed twice when displaying/editing a picture. E.g. sharpen.
 156 ==> 103147 - digikam image tools appear multiple times in menus.
-157 ==> 
+157 ==> 110015 - digikam tools not found - error in config file.
+158 ==> 
