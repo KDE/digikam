@@ -38,6 +38,7 @@ AdvPrintSettings::AdvPrintSettings()
     pageSize           = QSizeF(-1, -1);
     currentPreviewPage = 0;
     currentCropPhoto   = 0;
+    disableCrop        = false;
 }
 
 AdvPrintSettings::~AdvPrintSettings()

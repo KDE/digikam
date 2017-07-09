@@ -30,6 +30,7 @@ set(libprintcreator_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintphotopage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcaptionpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcroppage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintfinalpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcustomdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcropframe.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintwizard.cpp

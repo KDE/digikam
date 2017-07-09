@@ -61,6 +61,7 @@ public:
     int                   getPageCount() const;
 
     void initializePage();
+    bool validatePage();
 
     /** Create a MxN grid of photos, fitting on the page.
      */
@@ -70,6 +71,8 @@ public:
                          int rows,
                          int columns,
                          TemplateIcon* const iconpreview);
+
+    void manageBtnPreviewPage();
 
 public Q_SLOTS:
 

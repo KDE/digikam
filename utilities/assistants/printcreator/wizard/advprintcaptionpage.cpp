@@ -308,7 +308,7 @@ void AdvPrintCaptionPage::slotUpdateCaptions()
     d->wizard->previewPhotos();
 }
 
-QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
+QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo)
 {
     if (!photo->m_pAdvPrintCaptionInfo)
     {
@@ -352,9 +352,9 @@ QString AdvPrintCaptionPage::captionFormatter(AdvPrintPhoto* const photo) const
 
     format.replace(QLatin1String("\\n"), QLatin1String("\n"));
 
-    if (d->iface)
+    if (photo->m_iface)
     {
-        DItemInfo info(d->iface->itemInfo(photo->m_url));
+        DItemInfo info(photo->m_iface->itemInfo(photo->m_url));
         imageSize = info.dimensions();
 
         format.replace(QString::fromUtf8("%c"), info.comment());

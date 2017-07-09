@@ -71,8 +71,6 @@ public:
 
 private Q_SLOTS:
 
-    void accept();
-    void reject();
     void slotPageChanged(int);
 
 private:
@@ -81,35 +79,11 @@ private:
     void parseTemplateFile(const QString& fn,
                            const QSizeF& pageSize);
 
-    void removeGimpFiles();
-
-    void printPhotos(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     QPrinter& printer);
-
-    QStringList printPhotosToFile(const QList<AdvPrintPhoto*>& photos,
-                                  const QString& baseFilename,
-                                  AdvPrintPhotoSize* const layouts);
-
-    QRect*  getLayout(int photoIndex) const;
-
-    void    printCaption(QPainter& p,
-                         AdvPrintPhoto* photo,
-                         int captionW,
-                         int captionH,
-                         const QString& caption);
-
-    bool paintOnePage(QPainter& p, const QList<AdvPrintPhoto*>& photos, const QList<QRect*>& layouts,
-                      int& current, bool cropDisabled, bool useThumbnails = false);
-
-    void manageBtnPreviewPage();
-
-    double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     int current);
+    QRect* getLayout(int photoIndex) const;
 
     void saveSettings(const QString& pageName);
     void readSettings(const QString& pageName);
+    void startPrinting();
 
 private:
 

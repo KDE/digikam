@@ -210,6 +210,18 @@ void AdvPrintPhotoPage::initializePage()
     }
 }
 
+bool AdvPrintPhotoPage::validatePage()
+{
+    d->settings->inputImages = d->photoUi->mPrintList->imageUrls();
+
+    return true;
+}
+
+bool AdvPrintPhotoPage::isComplete() const
+{
+    return (!d->photoUi->mPrintList->imageUrls().empty());
+}
+
 QPrinter* AdvPrintPhotoPage::printer() const
 {
     return d->printer;
@@ -256,11 +268,6 @@ void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 
     d->printer->setFullPage(true);
     d->printer->setPageMargins(0, 0, 0, 0, QPrinter::Millimeter);
-}
-
-bool AdvPrintPhotoPage::isComplete() const
-{
-    return (!d->photoUi->mPrintList->imageUrls().empty());
 }
 
 void AdvPrintPhotoPage::slotXMLLoadElement(QXmlStreamReader& xmlReader)
@@ -1006,6 +1013,30 @@ void AdvPrintPhotoPage::slotPageSetup()
 
     // create our photo sizes list
     d->wizard->previewPhotos();
+}
+
+void AdvPrintPhotoPage::manageBtnPreviewPage()
+{
+    if (d->settings->photos.empty())
+    {
+        d->photoUi->BtnPreviewPageDown->setEnabled(false);
+        d->photoUi->BtnPreviewPageUp->setEnabled(false);
+    }
+    else
+    {
+        d->photoUi->BtnPreviewPageDown->setEnabled(true);
+        d->photoUi->BtnPreviewPageUp->setEnabled(true);
+
+        if (d->settings->currentPreviewPage == 0)
+        {
+            d->photoUi->BtnPreviewPageDown->setEnabled(false);
+        }
+
+        if ((d->settings->currentPreviewPage + 1) == getPageCount())
+        {
+            d->photoUi->BtnPreviewPageUp->setEnabled(false);
+        }
+    }
 }
 
 } // namespace Digikam

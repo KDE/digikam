@@ -158,6 +158,8 @@ bool AdvPrintCropPage::validatePage()
                              d->cropUi->m_fileSaveBox->fileDlgPath());
     }
 
+    d->settings->disableCrop = d->cropUi->m_disableCrop->isChecked();
+
     return true;
 }
 
@@ -214,7 +216,7 @@ void AdvPrintCropPage::slotBtnCropRotateLeftClicked()
     // which means that after our rotation it will become invalid,
     // so we will initialize it to -2 in an awful hack (this
     // tells the cropFrame to reset the crop region, but don't
-    // automagically rotate the image to fit.
+    // automatically rotate the image to fit.
     AdvPrintPhoto* const photo = d->settings->photos[d->settings->currentCropPhoto];
     photo->m_cropRegion        = QRect(-2, -2, -2, -2);
     photo->m_rotation          = (photo->m_rotation - 90) % 360;
@@ -228,7 +230,7 @@ void AdvPrintCropPage::slotBtnCropRotateRightClicked()
     // which means that after our rotation it will become invalid,
     // so we will initialize it to -2 in an awful hack (this
     // tells the cropFrame to reset the crop region, but don't
-    // automagically rotate the image to fit.
+    // automatically rotate the image to fit.
     AdvPrintPhoto* const photo = d->settings->photos[d->settings->currentCropPhoto];
     photo->m_cropRegion        = QRect(-2, -2, -2, -2);
     photo->m_rotation          = (photo->m_rotation + 90) % 360;

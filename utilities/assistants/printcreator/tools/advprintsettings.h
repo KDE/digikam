@@ -49,6 +49,7 @@ static const char* const INTRO_PAGE_NAME         = I18N_NOOP("Welcome to Print C
 static const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
 static const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
 static const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
+static const char* const FINAL_PAGE_NAME         = I18N_NOOP("Render printing");
 static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
 class AdvPrintSettings
@@ -86,6 +87,8 @@ public:
 
     int                       currentPreviewPage;
     int                       currentCropPhoto;
+
+    bool                      disableCrop;
 };
 
 } // namespace Digikam
