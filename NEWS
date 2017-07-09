@@ -180,4 +180,5 @@ BUGFIXES FROM BUGZILLA:
 166 ==> 306993 - Crash with Edit all metadata.
 167 ==> 146293 - Metadata editor menu untranslated.
 168 ==> 167379 - Image selection or Album Selection for HTML Gallery tool.
-169 ==> 
+169 ==> 301688 - Crash while browsing.
+170 ==> 
