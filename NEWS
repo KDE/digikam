@@ -169,4 +169,5 @@ BUGFIXES FROM BUGZILLA:
 156 ==> 103147 - digikam image tools appear multiple times in menus.
 157 ==> 110015 - digikam tools not found - error in config file.
 158 ==> 096853 - Tools from the digikam image editor are not available in the UI.
-159 ==> 
+159 ==> 176140 - Red eyes tool is not working fine.
+160 ==> 
