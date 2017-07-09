@@ -157,4 +157,6 @@ BUGFIXES FROM BUGZILLA:
 144 ==> 169952 - Pictures on nfs-drive crashes digikam when i send picture as mail.
 145 ==> 173203 - When sending images via email, tool fails to convert PNG to JPG.
 146 ==> 146487 - Export to email fails when email too large.
-147 ==> 
+147 ==> 128341 - Html export should not resize images if "resize target images" is not checked.
+148 ==> 
+
