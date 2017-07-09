@@ -172,5 +172,6 @@ BUGFIXES FROM BUGZILLA:
 159 ==> 176140 - Red eyes tool is not working fine.
 160 ==> 103644 - Red eyes remover make green eyes instead of blue eyes.
 161 ==> 293321 - Open Red Eyes tool crash.
-162 ==> 
+162 ==> 243186 - Crash when clicking on Red Eyes tool in menu list.
+163 ==> 
 
