@@ -161,4 +161,5 @@ BUGFIXES FROM BUGZILLA:
 148 ==> 089541 - Exporting to HTML from Digikam doesn't seem to work due to unsafe thread access.
 149 ==> 116605 - HTML Gallery crashing when exporting to an existing dir an choosing no to overwrite [Patch].
 150 ==> 090943 - Html export tool: add css functionality.
-151 ==> 
+151 ==> 089068 - Improvement for the HTML export tool.
+152 ==> 
