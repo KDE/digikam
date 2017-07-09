@@ -237,7 +237,7 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
 
     // print out the element names of all elements that are direct children
     // of the outermost element.
-    QDomElement docElem = doc.documentElement();
+    QDomElement docElem  = doc.documentElement();
     qCDebug(DIGIKAM_GENERAL_LOG) << docElem.tagName(); // the node really is an element.
 
     QSizeF size;
@@ -255,9 +255,12 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
         {
             if (e.tagName() == QLatin1String("paper"))
             {
-                size = QSizeF(e.attribute(QLatin1String("width"),  QLatin1String("0")).toFloat(),
-                              e.attribute(QLatin1String("height"), QLatin1String("0")).toFloat());
-                unit = e.attribute(QLatin1String("unit"), QLatin1String("mm"));
+                size = QSizeF(e.attribute(QLatin1String("width"),
+                                          QLatin1String("0")).toFloat(),
+                              e.attribute(QLatin1String("height"),
+                                          QLatin1String("0")).toFloat());
+                unit = e.attribute(QLatin1String("unit"),
+                                   QLatin1String("mm"));
 
                 qCDebug(DIGIKAM_GENERAL_LOG) << e.tagName()
                                              << QLatin1String(" name=")
@@ -442,7 +445,8 @@ void AdvPrintWizard::parseTemplateFile(const QString& fn, const QSizeF& pageSize
                                                                scaleValue);
                                         value          = et.attribute(QLatin1String("pageHeight"),
                                                                       QLatin1String("0")).toFloat();
-                                        int pageHeight = (int)((value == 0 ? size.height() : value) * scaleValue);
+                                        int pageHeight = (int)((value == 0 ? size.height() : value) *
+                                                                scaleValue);
                                         int rows       = et.attribute(QLatin1String("rows"),
                                                                       QLatin1String("0")).toInt();
                                         int columns    = et.attribute(QLatin1String("columns"),
@@ -584,7 +588,7 @@ void AdvPrintWizard::initPhotoSizes(const QSizeF& pageSize)
 
     TemplateIcon ti(80, pageSize.toSize());
     ti.begin();
-    QPainter& painter = ti.getPainter();
+    QPainter& painter             = ti.getPainter();
     painter.setPen(Qt::color1);
     painter.drawText(painter.viewport(), Qt::AlignCenter, i18n("Custom layout"));
     ti.end();
@@ -632,12 +636,12 @@ QRect* AdvPrintWizard::getLayout(int photoIndex) const
     AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
 
     // how many photos would actually be printed, including copies?
-    int photoCount      = (photoIndex + 1);
+    int photoCount             = (photoIndex + 1);
 
     // how many pages?  Recall that the first layout item is the paper size
-    int photosPerPage   = s->layouts.count() - 1;
-    int remainder       = photoCount % photosPerPage;
-    int retVal          = remainder;
+    int photosPerPage          = s->layouts.count() - 1;
+    int remainder              = photoCount % photosPerPage;
+    int retVal                 = remainder;
 
     if (remainder == 0)
         retVal = photosPerPage;
@@ -815,7 +819,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             double yRatio = 0.0;
 
             if (photo->thumbnail().width() != 0)
-                xRatio = (double)photo->thumbnail().width() / (double)photo->width();
+                xRatio = (double)photo->thumbnail().width()  / (double)photo->width();
 
             if (photo->thumbnail().height() != 0)
                 yRatio = (double)photo->thumbnail().height() / (double)photo->height();
@@ -831,9 +835,9 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             img = img.copy(photo->m_cropRegion);
         }
 
-        int x1 = AdvPrintNint((double) layout->left() * xRatio);
-        int y1 = AdvPrintNint((double) layout->top()  * yRatio);
-        int w  = AdvPrintNint((double) layout->width() * xRatio);
+        int x1 = AdvPrintNint((double) layout->left()   * xRatio);
+        int y1 = AdvPrintNint((double) layout->top()    * yRatio);
+        int w  = AdvPrintNint((double) layout->width()  * xRatio);
         int h  = AdvPrintNint((double) layout->height() * yRatio);
 
         QRect rectViewPort    = p.viewport();
@@ -854,11 +858,11 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
             int spaceLeft = (newRectViewPort.width()  - imageSize.width())  / 2;
             int spaceTop  = (newRectViewPort.height() - imageSize.height()) / 2;
             p.setViewport(spaceLeft + newRectViewPort.x(),
-                          spaceTop + newRectViewPort.y(),
+                          spaceTop  + newRectViewPort.y(),
                           imageSize.width(),
                           imageSize.height());
             point         = QPoint(newRectViewPort.x() + spaceLeft + imageSize.width(),
-                                   newRectViewPort.y() + spaceTop + imageSize.height());
+                                   newRectViewPort.y() + spaceTop  + imageSize.height());
         }
         else
         {
@@ -961,7 +965,7 @@ bool AdvPrintWizard::paintOnePage(QPainter& p,
 
         // iterate to the next position
         ++it;
-        layout = it == layouts.end() ? 0 : static_cast<QRect*>(*it);
+        layout = (it == layouts.end()) ? 0 : static_cast<QRect*>(*it);
 
         if (layout == 0)
         {
@@ -1027,9 +1031,8 @@ void AdvPrintWizard::previewPhotos()
     int count   = 0;
     int page    = 0;
     int current = 0;
-    QList<AdvPrintPhoto*>::iterator it;
 
-    for (it = d->settings->photos.begin() ;
+    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
          it != d->settings->photos.end() ; ++it)
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
@@ -1370,17 +1373,16 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
 {
     Q_ASSERT(layouts->layouts.count() > 1);
 
-    d->cancelPrinting = false;
+    d->cancelPrinting    = false;
     QProgressDialog pbar(this);
     pbar.setRange(0, photos.count());
 
     QApplication::processEvents();
 
-    int current   = 0;
-    int pageCount = 1;
-    bool printing = true;
     QStringList files;
-
+    int current          = 0;
+    int pageCount        = 1;
+    bool printing        = true;
     QRect* const srcPage = layouts->layouts.at(0);
 
     while (printing)
@@ -1392,8 +1394,6 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
         if (dpi == 0.0)
             dpi = getMaxDPI(photos, layouts->layouts, current) * 1.1;
 
-        //int w = AdvPrintNint(srcPage->width() / 1000.0 * dpi);
-        //int h = AdvPrintNint(srcPage->height()  / 1000.0 * dpi);
         int w = AdvPrintNint(srcPage->width());
         int h = AdvPrintNint(srcPage->height());
 
@@ -1404,7 +1404,10 @@ QStringList AdvPrintWizard::printPhotosToFile(const QList<AdvPrintPhoto*>& photo
         // save this page out to file
         QFileInfo fi(baseFilename);
         QString ext  = fi.completeSuffix();  // ext = ".jpeg"
-        if (ext.isEmpty()) ext = QLatin1String(".jpeg");
+
+        if (ext.isEmpty())
+            ext = QLatin1String(".jpeg");
+
         QString name = fi.baseName();
         QString path = fi.absolutePath();
 
@@ -1500,10 +1503,10 @@ void AdvPrintWizard::accept()
 
     // set the default crop regions if not already set
     AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
-    QList<AdvPrintPhoto*>::iterator it;
     int i                      = 0;
 
-    for (it = d->settings->photos.begin() ; it != d->settings->photos.end() ; ++it)
+    for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
+         it != d->settings->photos.end() ; ++it)
     {
         AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto* >(*it);
 
@@ -1525,8 +1528,10 @@ void AdvPrintWizard::accept()
         d->photoPage->printer()->setFullPage(true);
 
         qreal left, top, right, bottom;
-        d->photoPage->printer()->getPageMargins(&left, &top,
-                                                &right, &bottom,
+        d->photoPage->printer()->getPageMargins(&left,
+                                                &top,
+                                                &right,
+                                                &bottom,
                                                 QPrinter::Millimeter);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "Margins before print dialog: left "
@@ -1543,8 +1548,7 @@ void AdvPrintWizard::accept()
                                      << " size "
                                      << d->photoPage->printer()->paperSize(QPrinter::Millimeter);
 
-        QPrinter::PaperSize paperSize =  d->photoPage->printer()->paperSize();
-
+        QPrinter::PaperSize paperSize = d->photoPage->printer()->paperSize();
         QPrintDialog* const dialog    = new QPrintDialog(d->photoPage->printer(), this);
         dialog->setWindowTitle(i18n("Print Creator"));
 
@@ -1564,7 +1568,7 @@ void AdvPrintWizard::accept()
                                      << dialog->printer()->paperSize(QPrinter::Millimeter);
 
         // Why paperSize changes if printer properties is not pressed?
-        if (paperSize !=  d->photoPage->printer()->paperSize())
+        if (paperSize != d->photoPage->printer()->paperSize())
             d->photoPage->printer()->setPaperSize(paperSize);
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "(4) paper page "
@@ -1600,9 +1604,9 @@ void AdvPrintWizard::accept()
         if (d->settings->gimpFiles.count() > 0)
             removeGimpFiles();
 
-        d->settings->gimpFiles = printPhotosToFile(d->settings->photos, path, s);
         QStringList args;
-        QString prog = d->introPage->gimpPath();
+        d->settings->gimpFiles = printPhotosToFile(d->settings->photos, path, s);
+        QString prog           = d->introPage->gimpPath();
 
         for (QStringList::ConstIterator it = d->settings->gimpFiles.constBegin() ;
              it != d->settings->gimpFiles.constEnd() ; ++it)
