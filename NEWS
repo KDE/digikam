@@ -170,4 +170,5 @@ BUGFIXES FROM BUGZILLA:
 157 ==> 110015 - digikam tools not found - error in config file.
 158 ==> 096853 - Tools from the digikam image editor are not available in the UI.
 159 ==> 176140 - Red eyes tool is not working fine.
-160 ==> 
+160 ==> 103644 - Red eyes remover make green eyes instead of blue eyes.
+161 ==> 
