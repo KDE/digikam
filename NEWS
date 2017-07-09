@@ -155,4 +155,6 @@ BUGFIXES FROM BUGZILLA:
 142 ==> 140374 - HTML Gallery export fails to parse xml from non-UTF8 metadata in jpeg.
 143 ==> 194947 - Original Image link is 'hidden' by css colour setting.
 144 ==> 169952 - Pictures on nfs-drive crashes digikam when i send picture as mail.
-145 ==>
+145 ==> 173203 - When sending images via email, tool fails to convert PNG to JPG.
+146 ==> 146487 - Export to email fails when email too large.
+147 ==> 
