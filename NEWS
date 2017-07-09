@@ -7,6 +7,7 @@ General     : Add online handbook reader not dependant of desktop.
 General     : New tool to export albums by email.
 General     : New tool to create advance print layout.
 General     : Send by Mail tool can remove all metadata to attached items.
+PrintCreator: Add option to create printing from albums or images selection.
 ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.
