@@ -173,5 +173,6 @@ BUGFIXES FROM BUGZILLA:
 160 ==> 103644 - Red eyes remover make green eyes instead of blue eyes.
 161 ==> 293321 - Open Red Eyes tool crash.
 162 ==> 243186 - Crash when clicking on Red Eyes tool in menu list.
-163 ==> 
+163 ==> 103150 - Have print wizard tool replace default printing function.
+164 ==> 
 
