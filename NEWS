@@ -165,4 +165,6 @@ BUGFIXES FROM BUGZILLA:
 152 ==> 087188 - Send by mail tool attach empty comments for images even if photos have them.
 153 ==> 115850 - Remove all the Image tools menu entries when unchecking the tools in Settings->Configure ShowFoto.
 154 ==> 141362 - Get rid of any mention of core image tool.
-155 ==> 
+155 ==> 105514 - Some menu items are displayed twice when displaying/editing a picture. E.g. sharpen.
+156 ==> 103147 - digikam image tools appear multiple times in menus.
+157 ==> 
