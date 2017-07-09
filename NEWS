@@ -176,5 +176,5 @@ BUGFIXES FROM BUGZILLA:
 163 ==> 103150 - Have print wizard tool replace default printing function.
 164 ==> 097187 - Calendar tool still messing with fonts and locales.
 165 ==> 318661 - Send by mail tool does not convert to sRGB and strips existing ICC profile.
-166 ==> 
-
+166 ==> 306993 - Crash with Edit all metadata.
+167 ==> 
