@@ -164,5 +164,5 @@ BUGFIXES FROM BUGZILLA:
 151 ==> 089068 - Improvement for the HTML export tool.
 152 ==> 087188 - Send by mail tool attach empty comments for images even if photos have them.
 153 ==> 115850 - Remove all the Image tools menu entries when unchecking the tools in Settings->Configure ShowFoto.
-154 ==> 
-
+154 ==> 141362 - Get rid of any mention of core image tool.
+155 ==> 
