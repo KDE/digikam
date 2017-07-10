@@ -234,7 +234,7 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
         QString name     = fi.baseName();
 
         if (name.isEmpty())
-            name = QLatin1String("output")
+            name = QLatin1String("output");
 
         QString path     = fi.absolutePath();
 
