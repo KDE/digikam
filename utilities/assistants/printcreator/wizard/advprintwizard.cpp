@@ -1059,32 +1059,36 @@ void AdvPrintWizard::startPrinting()
 
         QStringList args;
         d->settings->gimpFiles = d->finalPage->printPhotosToFile(d->settings->photos, path, s);
-        QString prog           = d->introPage->gimpPath();
 
-        for (QStringList::ConstIterator it = d->settings->gimpFiles.constBegin() ;
-             it != d->settings->gimpFiles.constEnd() ; ++it)
+        if (!d->settings->gimpFiles.isEmpty())
         {
-            args << (*it);
-        }
+            QString prog = d->introPage->gimpPath();
 
-        QProcess process;
-        process.setProcessEnvironment(adjustedEnvironmentForAppImage());
+            for (QStringList::ConstIterator it = d->settings->gimpFiles.constBegin() ;
+                it != d->settings->gimpFiles.constEnd() ; ++it)
+            {
+                args << (*it);
+            }
 
-        if (!process.startDetached(prog, args))
-        {
-            QMessageBox::information(this, QString(),
-                                     i18n("There was an error launching the external Gimp "
-                                          "program. Please make sure it is properly installed."));
-            return;
+            QProcess process;
+            process.setProcessEnvironment(adjustedEnvironmentForAppImage());
+
+            if (!process.startDetached(prog, args))
+            {
+                QMessageBox::information(this, QString(),
+                                        i18n("There was an error to launch the external Gimp "
+                                             "program. Please make sure it is properly installed."));
+                return;
+            }
         }
     }
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
     {
-        d->finalPage->printPhotosToFile(d->settings->photos,
-                                        d->settings->outputDir.toLocalFile(),
-                                        s);
+        QStringList files = d->finalPage->printPhotosToFile(d->settings->photos,
+                                                            d->settings->outputDir.toLocalFile(),
+                                                            s);
 
-        if (d->settings->openInFileBrowser)
+        if (d->settings->openInFileBrowser && !files.isEmpty())
         {
             QDesktopServices::openUrl(d->settings->outputDir);
         }
