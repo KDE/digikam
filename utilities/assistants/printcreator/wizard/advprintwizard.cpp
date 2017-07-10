@@ -760,9 +760,6 @@ void AdvPrintWizard::slotPageChanged(int curr)
 
     QWizardPage* const before = visitedPages().isEmpty() ? 0 : page(visitedPages().last());
 
-    //Change cursor to waitCursor during transition
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
     if (before)
     {
         saveSettings(before->title());
@@ -805,7 +802,6 @@ void AdvPrintWizard::slotPageChanged(int curr)
         d->photoPage->imagesList()->blockSignals(false);
         d->photoPage->ui()->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
 
-        // PhotoPage
         initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
         // restore photoSize
 
@@ -864,8 +860,6 @@ void AdvPrintWizard::slotPageChanged(int curr)
     {
         startPrinting();
     }
-
-    QApplication::restoreOverrideCursor();
 }
 
 void AdvPrintWizard::saveSettings(const QString& pageName)
@@ -941,10 +935,10 @@ void AdvPrintWizard::readSettings(const QString& pageName)
     }
     else if (pageName == i18n(CAPTION_PAGE_NAME))
     {
-        //caption
+        // caption
         d->captionPage->readCaptionSettings();
 
-        //enable right caption stuff
+        // enable right caption stuff
         d->captionPage->slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
     }
 }
@@ -1108,7 +1102,8 @@ bool AdvPrintWizard::AdvPrintCheckTempPath(QWidget* const parent, const QString&
         {
             QMessageBox::information(parent, QString(),
                                      i18n("Unable to create a temporary folder. "
-                                          "Please make sure you have proper permissions to this folder and try again."));
+                                          "Please make sure you have proper permissions "
+                                          "to this folder and try again."));
             return false;
         }
     }
