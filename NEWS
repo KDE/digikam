@@ -182,4 +182,5 @@ BUGFIXES FROM BUGZILLA:
 168 ==> 167379 - Image selection or Album Selection for HTML Gallery tool.
 169 ==> 301688 - Crash while browsing.
 170 ==> 137014 - "Email Images" should be reached under "Album" > "Export".
-171 ==> 
+171 ==> 137392 - add "send images by email" to context menu.
+172 ==> 
