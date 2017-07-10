@@ -87,8 +87,8 @@ AdvPrintCropFrame::~AdvPrintCropFrame()
 // pixmaps to get the desired effect, which are too slow.
 
 void AdvPrintCropFrame::init(AdvPrintPhoto* const photo,
-                             int wphoto,
-                             int hphoto,
+                             int  wphoto,
+                             int  hphoto,
                              bool autoRotate,
                              bool paint)
 {
@@ -254,7 +254,7 @@ QRect AdvPrintCropFrame::photoToScreenRect(const QRect& r) const
     int x1 = AdvPrintWizard::normalizedInt(r.left() * xRatio + d->pixmapX);
     int y1 = AdvPrintWizard::normalizedInt(r.top()  * yRatio + d->pixmapY);
 
-    int w  = AdvPrintWizard::normalizedInt(r.width() * xRatio);
+    int w  = AdvPrintWizard::normalizedInt(r.width()  * xRatio);
     int h  = AdvPrintWizard::normalizedInt(r.height() * yRatio);
 
     QRect result;
@@ -278,11 +278,12 @@ void AdvPrintCropFrame::paintEvent(QPaintEvent*)
         // draw the rectangle
         p.setPen(QPen(d->color, 2));
         p.drawRect(d->cropRegion);
+
         // draw the crosshairs
-        int midX = d->cropRegion.left() + d->cropRegion.width() / 2;
+        int midX = d->cropRegion.left() + d->cropRegion.width()  / 2;
         int midY = d->cropRegion.top()  + d->cropRegion.height() / 2;
-        p.drawLine(midX - 10, midY, midX + 10, midY);
-        p.drawLine(midX, midY - 10, midX, midY + 10);
+        p.drawLine(midX - 10, midY,      midX + 10, midY);
+        p.drawLine(midX,      midY - 10, midX,      midY + 10);
     }
     p.end();
 
@@ -292,16 +293,16 @@ void AdvPrintCropFrame::paintEvent(QPaintEvent*)
 
 void AdvPrintCropFrame::mousePressEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e && e->button() == Qt::LeftButton)
     {
         d->mouseDown = true;
-        this->mouseMoveEvent(e);
+        QWidget::mouseMoveEvent(e);
     }
 }
 
 void AdvPrintCropFrame::mouseReleaseEvent(QMouseEvent* e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e && e->button() == Qt::LeftButton)
         d->mouseDown = false;
 }
 
