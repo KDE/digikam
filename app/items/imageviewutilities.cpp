@@ -268,6 +268,8 @@ void ImageViewUtilities::insertToQueueManager(const QList<ImageInfo>& list, cons
 {
     Q_UNUSED(current);
 
+
+
     QueueMgrWindow* const bqmview = QueueMgrWindow::queueManagerWindow();
 
     if (bqmview->isHidden())

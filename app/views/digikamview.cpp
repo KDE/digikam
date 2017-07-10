@@ -92,6 +92,8 @@
 #include "mapwidgetview.h"
 #endif // HAVE_MARBLE
 
+#include<../mediaserver/apps/simple_avtest-app/mediaserver_window.h>
+
 namespace Digikam
 {
 
@@ -284,6 +286,12 @@ DigikamView::DigikamView(QWidget* const parent, DigikamModelCollection* const mo
     d->trashView = d->stackedview->trashView();
 
     d->utilities = new ImageViewUtilities(this);
+
+
+
+    MediaServerWindow* msw = new MediaServerWindow(this);
+    connect(msw, SIGNAL(closed()), msw, SLOT(deleteLater()));
+    msw->show();
 
     d->addPageUpDownActions(this, d->stackedview->imagePreviewView());
     d->addPageUpDownActions(this, d->stackedview->thumbBar());

@@ -61,13 +61,13 @@ HDelayedWriter::HDelayedWriter(
 
 void HDelayedWriter::timerEvent(QTimerEvent*)
 {
-    HLOG2(H_AT, H_FUN, m_ssdp.loggingIdentifier());
+    HLOG2(H_AT, H_FUN,(char *) m_ssdp.loggingIdentifier().data());
     foreach(const HDiscoveryResponse& resp, m_responses)
     {
         qint32 count = m_ssdp.sendDiscoveryResponse(resp, m_source);
         if (count <= 0)
         {
-            HLOG_WARN(QString("Failed to send discovery response [%1] to: [%2].").arg(
+            HLOG_WARN(QString(QLatin1String("Failed to send discovery response [%1] to: [%2].")).arg(
                 resp.usn().toString(), m_source.toString()));
         }
     }
@@ -101,13 +101,13 @@ bool HDeviceHostSsdpHandler::processSearchRequest_specificDevice(
     const HDiscoveryRequest& req, const HEndpoint& source,
     QList<HDiscoveryResponse>* responses)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     HDiscoveryType st = req.searchTarget();
     QUuid uuid = st.udn().value();
     if (uuid.isNull())
     {
-        HLOG_DBG(QString("Invalid device-UUID: [%1]").arg(st.udn().toString()));
+        HLOG_DBG(QString(QLatin1String("Invalid device-UUID: [%1]")).arg(st.udn().toString()));
         return false;
     }
 
@@ -116,7 +116,7 @@ bool HDeviceHostSsdpHandler::processSearchRequest_specificDevice(
 
     if (!device)
     {
-        HLOG_DBG(QString("No device with the specified UUID: [%1]").arg(
+        HLOG_DBG(QString(QLatin1String("No device with the specified UUID: [%1]")).arg(
             uuid.toString()));
 
         return false;
@@ -125,9 +125,9 @@ bool HDeviceHostSsdpHandler::processSearchRequest_specificDevice(
     QUrl location;
     if (!m_deviceStorage.searchValidLocation(device, source, &location))
     {
-        HLOG_DBG(QString(
+        HLOG_DBG(QString(QLatin1String(
             "Found a device with uuid: [%1], but it is not "
-            "available on the interface that has address: [%2]").arg(
+            "available on the interface that has address: [%2]")).arg(
                 uuid.toString(), source.toString()));
 
         return false;
@@ -156,7 +156,7 @@ bool HDeviceHostSsdpHandler::processSearchRequest_deviceType(
     const HDiscoveryRequest& req, const HEndpoint& source,
     QList<HDiscoveryResponse>* responses)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     HDiscoveryType st = req.searchTarget();
 
@@ -168,7 +168,7 @@ bool HDeviceHostSsdpHandler::processSearchRequest_deviceType(
 
     if (!foundDevices.size())
     {
-        HLOG_DBG(QString("No devices match the specified type: [%1]").arg(
+        HLOG_DBG(QString(QLatin1String("No devices match the specified type: [%1]")).arg(
             st.resourceType().toString()));
 
         return false;
@@ -180,9 +180,9 @@ bool HDeviceHostSsdpHandler::processSearchRequest_deviceType(
         QUrl location;
         if (!m_deviceStorage.searchValidLocation(device, source, &location))
         {
-            HLOG_DBG(QString(
+            HLOG_DBG(QString(QLatin1String(
                 "Found a matching device, but it is not "
-                "available on the interface that has address: [%1]").arg(
+                "available on the interface that has address: [%1]")).arg(
                     source.toString()));
 
             continue;
@@ -214,7 +214,7 @@ bool HDeviceHostSsdpHandler::processSearchRequest_serviceType(
     const HDiscoveryRequest& req, const HEndpoint& source,
     QList<HDiscoveryResponse>* responses)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     HDiscoveryType st = req.searchTarget();
 
@@ -225,8 +225,8 @@ bool HDeviceHostSsdpHandler::processSearchRequest_serviceType(
 
     if (!foundServices.size())
     {
-       HLOG_DBG(QString(
-           "No services match the specified type: [%1]").arg(
+       HLOG_DBG(QString(QLatin1String(
+           "No services match the specified type: [%1]")).arg(
                st.resourceType().toString()));
 
        return false;
@@ -241,9 +241,9 @@ bool HDeviceHostSsdpHandler::processSearchRequest_serviceType(
         QUrl location;
         if (!m_deviceStorage.searchValidLocation(device, source, &location))
         {
-            HLOG_DBG(QString(
+            HLOG_DBG(QString(QLatin1String(
                 "Found a matching device, but it is not "
-                "available on the interface that has address: [%1]").arg(
+                "available on the interface that has address: [%1]")).arg(
                     source.toString()));
 
             continue;
@@ -282,7 +282,7 @@ void HDeviceHostSsdpHandler::processSearchRequest(
     const HServerDevice* device, const QUrl& location,
     QList<HDiscoveryResponse>* responses)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT(device);
 
     HDeviceInfo deviceInfo = device->info();
@@ -339,7 +339,7 @@ bool HDeviceHostSsdpHandler::processSearchRequest_AllDevices(
     const HDiscoveryRequest& /*req*/, const HEndpoint& source,
     QList<HDiscoveryResponse>* responses)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT(responses);
 
     const HProductTokens& pt = HSysInfo::instance().herqqProductTokens();
@@ -352,9 +352,9 @@ bool HDeviceHostSsdpHandler::processSearchRequest_AllDevices(
         QUrl location;
         if (!m_deviceStorage.searchValidLocation(rootDevice, source, &location))
         {
-            HLOG_DBG(QString(
+            HLOG_DBG(QString(QLatin1String(
                 "Found a device, but it is not "
-                "available on the interface that has address: [%1]").arg(
+                "available on the interface that has address: [%1]")).arg(
                     source.toString()));
 
             continue;
@@ -390,9 +390,9 @@ bool HDeviceHostSsdpHandler::processSearchRequest_AllDevices(
                 // on the network interface to which the request came,
                 // but at least one of its embedded devices is not.
 
-                HLOG_DBG(QString(
+                HLOG_DBG(QString(QLatin1String(
                     "Skipping an embedded device that is not "
-                    "available on the interface that has address: [%1]").arg(
+                    "available on the interface that has address: [%1]")).arg(
                         source.toString()));
 
                 continue;
@@ -409,7 +409,7 @@ bool HDeviceHostSsdpHandler::processSearchRequest_RootDevice(
     const HDiscoveryRequest& /*req*/, const HEndpoint& source,
     QList<HDiscoveryResponse>* responses)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
     Q_ASSERT(responses);
 
     const HServerDevices& rootDevices = m_deviceStorage.rootDevices();
@@ -420,9 +420,9 @@ bool HDeviceHostSsdpHandler::processSearchRequest_RootDevice(
         QUrl location;
         if (!m_deviceStorage.searchValidLocation(rootDevice, source, &location))
         {
-            HLOG_DBG(QString(
+            HLOG_DBG(QString(QLatin1String(
                 "Found a root device, but it is not "
-                "available on the interface that has address: [%1]").arg(
+                "available on the interface that has address: [%1]")).arg(
                     source.hostAddress().toString()));
 
             continue;
@@ -453,9 +453,9 @@ bool HDeviceHostSsdpHandler::incomingDiscoveryRequest(
     const HDiscoveryRequest& msg, const HEndpoint& source,
     DiscoveryRequestMethod requestType)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
-    HLOG_DBG(QString("Received discovery request for [%1] from [%2]").arg(
+    HLOG_DBG(QString(QLatin1String("Received discovery request for [%1] from [%2]")).arg(
         msg.searchTarget().toString(), source.toString()));
 
     bool ok = false;
@@ -512,8 +512,8 @@ bool HDeviceHostSsdpHandler::incomingDiscoveryRequest(
     }
     else
     {
-        HLOG_DBG(QString(
-            "No resources found for discovery request [%1] from [%2]").arg(
+        HLOG_DBG(QString(QLatin1String(
+            "No resources found for discovery request [%1] from [%2]")).arg(
                 msg.searchTarget().toString(), source.toString()));
     }
 

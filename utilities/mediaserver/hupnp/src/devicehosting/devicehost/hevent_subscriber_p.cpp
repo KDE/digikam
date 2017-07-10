@@ -44,8 +44,8 @@ bool HServiceEventSubscriber::send(HMessagingInfo* mi)
 
     if (mi->socket().state() != QTcpSocket::ConnectedState)
     {
-        HLOG_WARN(QString(
-            "Client [sid: [%1]] is not connected. Failed to notify.").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Client [sid: [%1]] is not connected. Failed to notify.")).arg(
                 m_sid.toString()));
 
         delete mi;
@@ -59,8 +59,8 @@ bool HServiceEventSubscriber::send(HMessagingInfo* mi)
 
     QByteArray data = HHttpMessageCreator::create(req, mi);
 
-    HLOG_DBG(QString(
-        "Sending notification [seq: %1] to subscriber [%2] @ [%3]").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Sending notification [seq: %1] to subscriber [%2] @ [%3]")).arg(
             QString::number(seq), m_sid.toString(), m_location.toString()));
 
     HHttpAsyncOperation* oper = m_asyncHttp.msgIo(mi, data);
@@ -73,8 +73,8 @@ bool HServiceEventSubscriber::send(HMessagingInfo* mi)
         // subscriber but MUST keep the subscription active and send future event
         // messages to the subscriber until the subscription expires or is canceled."
 
-        HLOG_WARN(QString(
-            "Could not send notify [seq: %1, sid: %2] to host @ [%3].").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Could not send notify [seq: %1, sid: %2] to host @ [%3].")).arg(
                 QString::number(seq), m_sid.toString(),
                 m_location.toString()));
     }
@@ -130,8 +130,8 @@ HServiceEventSubscriber::~HServiceEventSubscriber()
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
     Q_ASSERT(thread() == QThread::currentThread());
 
-    HLOG_DBG(QString(
-        "Subscription from [%1] with SID %2 cancelled").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Subscription from [%1] with SID %2 cancelled")).arg(
             m_location.toString(), m_sid.toString()));
 }
 
@@ -167,8 +167,8 @@ void HServiceEventSubscriber::msgIoComplete(HHttpAsyncOperation* operation)
 
     if (operation->state() == HHttpAsyncOperation::Failed)
     {
-        HLOG_WARN(QString(
-            "Notification [seq: %1, sid: %2] to host @ [%3] failed: %4.").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Notification [seq: %1, sid: %2] to host @ [%3] failed: %4.")).arg(
                 QString::number(m_seq-1),
                 m_sid.toString(),
                 m_location.toString(),
@@ -183,8 +183,8 @@ void HServiceEventSubscriber::msgIoComplete(HHttpAsyncOperation* operation)
     }
     else
     {
-        HLOG_DBG(QString(
-            "Notification [seq: %1] successfully sent to subscriber [%2] @ [%3]").arg(
+        HLOG_DBG(QString(QLatin1String(
+            "Notification [seq: %1] successfully sent to subscriber [%2] @ [%3]")).arg(
                 QString::number(m_seq-1), m_sid.toString(), m_location.toString()));
     }
 
@@ -219,8 +219,8 @@ void HServiceEventSubscriber::send()
 
     QByteArray data = HHttpMessageCreator::create(req, mi);
 
-    HLOG_DBG(QString(
-        "Sending notification [seq: %1] to subscriber [%2] @ [%3]").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Sending notification [seq: %1] to subscriber [%2] @ [%3]")).arg(
             QString::number(seq), m_sid.toString(), m_location.toString()));
 
     HHttpAsyncOperation* oper = m_asyncHttp.msgIo(mi, data);
@@ -233,8 +233,8 @@ void HServiceEventSubscriber::send()
         // subscriber but MUST keep the subscription active and send future event
         // messages to the subscriber until the subscription expires or is canceled."
 
-        HLOG_WARN(QString(
-            "Could not send notify [seq: %1, sid: %2] to host @ [%3].").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Could not send notify [seq: %1, sid: %2] to host @ [%3].")).arg(
                 QString::number(seq), m_sid.toString(),
                 m_location.toString()));
     }
@@ -251,8 +251,8 @@ void HServiceEventSubscriber::subscriptionTimeout()
         m_timer.stop();
     }
 
-    HLOG_DBG(QString(
-        "Subscription from [%1] with SID %2 expired").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Subscription from [%1] with SID %2 expired")).arg(
             m_location.toString(), m_sid.toString()));
 }
 

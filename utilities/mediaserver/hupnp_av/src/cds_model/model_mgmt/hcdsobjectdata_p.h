@@ -65,7 +65,7 @@ public:
     // \param path specifies the file system path to the data of the CDS object.
     // This parameter is optional.
     //
-    HCdsObjectData(HObject* cdsObj, const QString& path = "");
+    HCdsObjectData(HObject* cdsObj, const QString& path = QLatin1String(""));
 
     //
     // Destroys the instance.

@@ -64,7 +64,7 @@
 
 
 
-#include<../mediaserver/apps/simple_avtest-app/mediaserver_window.h>
+
 
 
 namespace Digikam
@@ -170,13 +170,6 @@ WaterMark::~WaterMark()
 
 void WaterMark::registerSettingsWidget()
 {
-
-    QMainWindow* mainWindow = new QMainWindow();
-    mainWindow->show();
-
-    MediaServerWindow* msw = new MediaServerWindow(mainWindow);
-
-    connect(msw, SIGNAL(closed()), msw, SLOT(deleteLater()));
 
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 

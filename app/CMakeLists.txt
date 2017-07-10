@@ -397,6 +397,7 @@ set(DIGIKAM_OBJECTS
             $<TARGET_OBJECTS:queuemanager_src>
             $<TARGET_OBJECTS:importui_src>
             $<TARGET_OBJECTS:advancedrename_src>
+            $<TARGET_OBJECTS:mediaserver_src>
 )
 
 if(KF5Kipi_FOUND)

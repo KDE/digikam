@@ -103,7 +103,7 @@ bool HItem::hasContentFormat() const
     foreach(const HResource& resource, resources())
     {
         QString contentFormat = resource.protocolInfo().contentFormat();
-        if (!contentFormat.isEmpty() && contentFormat != "*")
+        if (!contentFormat.isEmpty() && contentFormat != QLatin1String("*"))
         {
             return true;
         }

@@ -112,7 +112,7 @@ public:
      *
      * \return The class identifier specified by the AV Working Committee.
      */
-    inline static QString sClass() { return "object.container.genre.movieGenre"; }
+    inline static QString sClass() { return QLatin1String("object.container.genre.movieGenre"); }
 
     /*!
      * Creates a new instance with no title or parentID.

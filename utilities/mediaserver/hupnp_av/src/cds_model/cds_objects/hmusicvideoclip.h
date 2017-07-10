@@ -263,7 +263,7 @@ public:
      *
      * \return The class identifier specified by the AV Working Committee.
      */
-    inline static QString sClass() { return "object.item.videoItem.musicVideoClip"; }
+    inline static QString sClass() { return QLatin1String("object.item.videoItem.musicVideoClip"); }
 
     /*!
      * Creates a new instance with no title or parentID.

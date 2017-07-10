@@ -85,7 +85,7 @@ private:
     void invocationDone(qint32 rc, const HActionArguments* outArgs = 0);
     void deleteReply();
 
-private slots:
+private Q_SLOTS:
 
     void locationsChanged();
     void error(QNetworkReply::NetworkError);

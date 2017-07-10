@@ -44,7 +44,7 @@ namespace
 inline bool isValidCallback(const QUrl& callback)
 {
     return callback.isValid() && !callback.isEmpty() &&
-           callback.scheme() == "http" && !(QHostAddress(callback.host()).isNull());
+           callback.scheme() == QLatin1String("http") && !(QHostAddress(callback.host()).isNull());
 }
 
 inline bool isValidEventUrl(const QUrl& eventUrl)
@@ -67,12 +67,12 @@ HSubscribeRequest::HSubscribeRequest(
 
     if (!isValidEventUrl(eventUrl))
     {
-        HLOG_WARN(QString("Invalid eventURL: [%1]").arg(eventUrl.toString()));
+        HLOG_WARN(QString(QLatin1String("Invalid eventURL: [%1]")).arg(eventUrl.toString()));
         return;
     }
     else if (sid.isEmpty())
     {
-        HLOG_WARN(QLatin1String("Empty SID"));
+        HLOG_WARN(QLatin1String(QLatin1String("Empty SID")));
         return;
     }
 
@@ -90,12 +90,12 @@ HSubscribeRequest::HSubscribeRequest(
 
     if (!isValidEventUrl(eventUrl))
     {
-        HLOG_WARN(QString("Invalid eventURL: [%1]").arg(eventUrl.toString()));
+        HLOG_WARN(QString(QLatin1String("Invalid eventURL: [%1]")).arg(eventUrl.toString()));
         return;
     }
     else if (!isValidCallback(callback))
     {
-        HLOG_WARN(QString("Invalid callback: [%1]").arg(callback.toString()));
+        HLOG_WARN(QString(QLatin1String("Invalid callback: [%1]")).arg(callback.toString()));
         return;
     }
 
@@ -115,7 +115,7 @@ HSubscribeRequest::HSubscribeRequest(
 
     if (!isValidEventUrl(eventUrl))
     {
-        HLOG_WARN(QString("Invalid eventURL: [%1]").arg(eventUrl.toString()));
+        HLOG_WARN(QString(QLatin1String("Invalid eventURL: [%1]")).arg(eventUrl.toString()));
         return;
     }
 
@@ -123,7 +123,7 @@ HSubscribeRequest::HSubscribeRequest(
     {
         if (!isValidCallback(callback))
         {
-            HLOG_WARN(QString("Invalid callback: [%1]").arg(callback.toString()));
+            HLOG_WARN(QString(QLatin1String("Invalid callback: [%1]")).arg(callback.toString()));
             return;
         }
     }
@@ -145,12 +145,12 @@ QList<QUrl> parseCallbacks(const QString& arg)
     QList<QUrl> retVal;
 
     QStringList callbacks =
-        arg.split(QRegExp("<[.]*>"), QString::SkipEmptyParts);
+        arg.split(QRegExp(QLatin1String("<[.]*>")), QString::SkipEmptyParts);
 
     foreach(QString callbackStr, callbacks)
     {
-        QUrl callback(callbackStr.remove('<').remove('>'));
-        if (!callback.isValid() || callback.isEmpty() || callback.scheme() != "http")
+        QUrl callback(callbackStr.remove(QLatin1Char('<')).remove(QLatin1Char('>')));
+        if (!callback.isValid() || callback.isEmpty() || callback.scheme() != QLatin1String("http"))
         {
             return QList<QUrl>();
         }
@@ -171,7 +171,7 @@ HSubscribeRequest::RetVal HSubscribeRequest::setContents(
     // this has to be properly defined no matter what
     if (!isValidEventUrl(eventUrl))
     {
-        HLOG_WARN(QString("Invalid eventURL: [%1]").arg(eventUrl.toString()));
+        HLOG_WARN(QString(QLatin1String("Invalid eventURL: [%1]")).arg(eventUrl.toString()));
         return BadRequest;
     }
 
@@ -197,7 +197,7 @@ HSubscribeRequest::RetVal HSubscribeRequest::setContents(
 
     // this appears to be an initial subscription
 
-    if (nt.simplified().compare("upnp:event", Qt::CaseInsensitive) != 0)
+    if (nt.simplified().compare(QLatin1String("upnp:event"), Qt::CaseInsensitive) != 0)
     {
         return PreConditionFailed;
     }
@@ -302,7 +302,7 @@ HNotifyRequest::RetVal parseData(
     //QDomNodeList propertySetNodes =
       //  dd.elementsByTagNameNS("urn:schemas-upnp.org:event-1-0", "propertyset");
 
-    QDomElement propertySetElement = dd.firstChildElement("propertyset");
+    QDomElement propertySetElement = dd.firstChildElement(QLatin1String("propertyset"));
 
     if (propertySetElement.isNull())
     {
@@ -310,7 +310,7 @@ HNotifyRequest::RetVal parseData(
     }
 
     QDomElement propertyElement =
-        propertySetElement.firstChildElement("property");
+        propertySetElement.firstChildElement(QLatin1String("property"));
         //propertySetNodes.at(0).toElement().elementsByTagNameNS(
           //  "urn:schemas-upnp.org:event-1-0", "property");
 
@@ -327,7 +327,7 @@ HNotifyRequest::RetVal parseData(
         tmp.push_back(
             qMakePair(variableElement.localName(), variableValue.data()));
 
-        propertyElement = propertyElement.nextSiblingElement("property");
+        propertyElement = propertyElement.nextSiblingElement(QLatin1String("property"));
     }
 
     parsedData = tmp;

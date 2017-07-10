@@ -70,7 +70,7 @@ HEventSubscription::HEventSubscription(
     Q_ASSERT(m_service);
     Q_ASSERT(!m_serverRootUrl.isEmpty());
     Q_ASSERT_X(m_serverRootUrl.isValid(), H_AT,
-             m_serverRootUrl.toString().toLocal8Bit());
+             (char *)m_serverRootUrl.toString().toLocal8Bit().data());
 
     m_deviceLocations = service->parentDevice()->locations();
 
@@ -79,7 +79,7 @@ HEventSubscription::HEventSubscription(
     {
         Q_ASSERT(!m_deviceLocations[i].isEmpty());
         Q_ASSERT_X(m_deviceLocations[i].isValid(), H_AT,
-                   m_deviceLocations[i].toString().toLocal8Bit());
+                  (char *) m_deviceLocations[i].toString().toLocal8Bit().data());
     }
 
     bool ok = connect(
@@ -259,7 +259,7 @@ void HEventSubscription::renewSubscription_done(HHttpAsyncOperation* op)
 
     if (op->state() == HHttpAsyncOperation::Failed)
     {
-        HLOG_WARN(QString("Event subscription renewal [sid: %1] failed.").arg(
+        HLOG_WARN(QString(QLatin1String("Event subscription renewal [sid: %1] failed.")).arg(
             m_sid.toString()));
 
         emit subscriptionFailed(this);
@@ -274,8 +274,8 @@ void HEventSubscription::renewSubscription_done(HHttpAsyncOperation* op)
     HSubscribeResponse response;
     if (!HHttpMessageCreator::create(*hdr, response))
     {
-        HLOG_WARN(QString("Received an invalid response to event "
-                  "subscription renewal: %1.").arg(hdr->toString()));
+        HLOG_WARN(QString(QLatin1String("Received an invalid response to event "
+                  "subscription renewal: %1.")).arg(hdr->toString()));
 
         emit subscriptionFailed(this);
         return;
@@ -284,8 +284,8 @@ void HEventSubscription::renewSubscription_done(HHttpAsyncOperation* op)
     if (response.sid() != m_sid)
     {
         // TODO, in this case could re-subscribe
-        HLOG_WARN(QString(
-            "Received an invalid SID [%1] to event subscription [%2] renewal").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Received an invalid SID [%1] to event subscription [%2] renewal")).arg(
                 response.sid().toString(), m_sid.toString()));
         emit subscriptionFailed(this);
         return;
@@ -293,7 +293,7 @@ void HEventSubscription::renewSubscription_done(HHttpAsyncOperation* op)
 
     m_subscribed = true;
 
-    HLOG_DBG(QString("Subscription renewal to [%1] succeeded [sid: %2].").arg(
+    HLOG_DBG(QString(QLatin1String("Subscription renewal to [%1] succeeded [sid: %2].")).arg(
         m_eventUrl.toString(), m_sid.toString()));
 
     m_timeout = response.timeout();
@@ -321,7 +321,7 @@ void HEventSubscription::renewSubscription()
         return;
     }
 
-    HLOG_DBG(QString("Renewing subscription [sid: %1].").arg(
+    HLOG_DBG(QString(QLatin1String("Renewing subscription [sid: %1].")).arg(
         m_sid.toString()));
 
     QUrl eventUrl = resolveUri(
@@ -336,7 +336,7 @@ void HEventSubscription::renewSubscription()
 
     if (!m_http.msgIo(mi, data))
     {
-        HLOG_WARN(QString("Failed to renew subscription [sid %1].").arg(
+        HLOG_WARN(QString(QLatin1String("Failed to renew subscription [sid %1].")).arg(
             m_sid.toString()));
         emit subscriptionFailed(this);
     }
@@ -421,7 +421,7 @@ void HEventSubscription::subscribe_done(HHttpAsyncOperation* op)
 
     if (op->state() == HHttpAsyncOperation::Failed)
     {
-        HLOG_WARN(QString("Event subscription failed: [%1]").arg(
+        HLOG_WARN(QString(QLatin1String("Event subscription failed: [%1]")).arg(
             op->messagingInfo()->lastErrorDescription()));
 
         emit subscriptionFailed(this);
@@ -436,7 +436,7 @@ void HEventSubscription::subscribe_done(HHttpAsyncOperation* op)
     HSubscribeResponse response;
     if (!HHttpMessageCreator::create(*hdr, response))
     {
-        HLOG_WARN(QString("Failed to subscribe: %1.").arg(hdr->toString()));
+        HLOG_WARN(QString(QLatin1String("Failed to subscribe: %1.")).arg(hdr->toString()));
         emit subscriptionFailed(this);
         return;
     }
@@ -446,7 +446,7 @@ void HEventSubscription::subscribe_done(HHttpAsyncOperation* op)
     m_subscribed = true;
     m_timeout = response.timeout();
 
-    HLOG_DBG(QString("Subscription to [%1] succeeded. Received SID: [%2]").arg(
+    HLOG_DBG(QString(QLatin1String("Subscription to [%1] succeeded. Received SID: [%2]")).arg(
         m_eventUrl.toString(), m_sid.toString()));
 
     if (!m_timeout.isInfinite())
@@ -504,20 +504,20 @@ void HEventSubscription::subscribe()
 
     HSubscribeRequest req(
         m_eventUrl,
-        HSysInfo::instance().herqqProductTokens(),
-        m_serverRootUrl.toString().append("/").append(
-            m_randomIdentifier.toString().remove('{').remove('}')),
+        HSysInfo::instance().herqqProductTokens(),(QUrl)
+        m_serverRootUrl.toString().append(QLatin1String("/")).append(
+            m_randomIdentifier.toString().remove(QLatin1Char('{')).remove(QLatin1Char('}'))),
         m_desiredTimeout);
 
     QByteArray data = HHttpMessageCreator::create(req, *mi);
 
-    HLOG_DBG(QString("Attempting to subscribe to [%1]").arg(
+    HLOG_DBG(QString(QLatin1String("Attempting to subscribe to [%1]")).arg(
         m_eventUrl.toString()));
 
     if (!m_http.msgIo(mi, data))
     {
-        HLOG_WARN(QString(
-            "Failed to subscribe to events @ [%1]: %2").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Failed to subscribe to events @ [%1]: %2")).arg(
                 urlsAsStr(m_deviceLocations), m_socket.errorString()));
 
         emit subscriptionFailed(this);
@@ -527,21 +527,21 @@ void HEventSubscription::subscribe()
 StatusCode HEventSubscription::processNotify(const HNotifyRequest& req)
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
-    HLOG_DBG(QString("Processing notification [sid: %1, seq: %2].").arg(
+    HLOG_DBG(QString(QLatin1String("Processing notification [sid: %1, seq: %2].")).arg(
         m_sid.toString(), QString::number(req.seq())));
 
     if (m_sid != req.sid())
     {
-        HLOG_WARN(QString("Invalid SID [%1]").arg(req.sid().toString()));
+        HLOG_WARN(QString(QLatin1String("Invalid SID [%1]")).arg(req.sid().toString()));
         return PreconditionFailed;
     }
 
     qint32 seq = req.seq();
     if (seq != m_seq)
     {
-        HLOG_WARN(QString(
+        HLOG_WARN(QString(QLatin1String(
             "Received sequence number is not expected. Expected [%1], got [%2]. "
-            "Re-subscribing...").arg(
+            "Re-subscribing...")).arg(
                 QString::number(m_seq), QString::number(seq)));
 
         // in this case the received sequence number does not match to what is
@@ -556,15 +556,15 @@ StatusCode HEventSubscription::processNotify(const HNotifyRequest& req)
 
     if (srv->updateVariables(req.variables(), m_seq > 0))
     {
-        HLOG_DBG(QString(
-            "Notify [sid: %1, seq: %2] OK. State variable(s) were updated.").arg(
+        HLOG_DBG(QString(QLatin1String(
+            "Notify [sid: %1, seq: %2] OK. State variable(s) were updated.")).arg(
                 m_sid.toString(), QString::number(m_seq)));
 
         ++m_seq;
         return Ok;
     }
 
-    HLOG_WARN(QString("Notify failed. State variable(s) were not updated."));
+    HLOG_WARN(QString(QLatin1String("Notify failed. State variable(s) were not updated.")));
     return InternalServerError;
 }
 
@@ -595,7 +595,7 @@ void HEventSubscription::unsubscribe_done(HHttpAsyncOperation* /*op*/)
     Q_ASSERT(!m_sid.isEmpty());
     Q_ASSERT(m_currentOpType == Op_Unsubscribe);
 
-    HLOG_DBG(QString("Subscription to [%1] canceled").arg(
+    HLOG_DBG(QString(QLatin1String("Subscription to [%1] canceled")).arg(
         m_eventUrl.toString()));
 
     resetSubscription();
@@ -645,8 +645,8 @@ void HEventSubscription::unsubscribe(qint32 msecsToWait)
         extractBaseUrl(m_deviceLocations[m_nextLocationToTry]),
         m_service->info().eventSubUrl());
 
-    HLOG_DBG(QString(
-        "Attempting to cancel event subscription from [%1]").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to cancel event subscription from [%1]")).arg(
             m_eventUrl.toString()));
 
     HMessagingInfo* mi = new HMessagingInfo(m_socket, false);
@@ -657,8 +657,8 @@ void HEventSubscription::unsubscribe(qint32 msecsToWait)
 
     if (!m_http.msgIo(mi, data))
     {
-        HLOG_WARN(QString(
-            "Encountered an error during subscription cancellation: %1").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Encountered an error during subscription cancellation: %1")).arg(
                 mi->lastErrorDescription()));
 
         // if the unsubscription "failed", there's nothing much to do, but to log

@@ -112,7 +112,7 @@ bool HClientDeviceAdapter::setDevice(HClientDevice* device, ValidationType vt)
 
     if (!device || !dt.compare(deviceType(), HResourceType::Inclusive))
     {
-        setLastErrorDescription(QString("Unsupported device type: [%1]").arg(dt.toString()));
+        setLastErrorDescription(QString(QLatin1String("Unsupported device type: [%1]")).arg(dt.toString()));
         return false;
     }
 

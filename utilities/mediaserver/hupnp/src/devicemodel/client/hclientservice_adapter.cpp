@@ -177,7 +177,7 @@ bool HClientServiceAdapter::setService(
 
     if (!service || !st.compare(serviceType(), HResourceType::Inclusive))
     {
-        setLastErrorDescription(QString("Unsupported service type: [%1]").arg(st.toString()));
+        setLastErrorDescription(QString(QLatin1String("Unsupported service type: [%1]")).arg(st.toString()));
         return false;
     }
 

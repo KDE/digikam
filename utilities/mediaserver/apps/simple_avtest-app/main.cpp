@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     Herqq::Upnp::SetLoggingLevel(Herqq::Upnp::Debug);
 
     QApplication app(argc, argv);
-    app.setApplicationName("HUpnpAvSimpleTestApp");
+    app.setApplicationName(QLatin1String("HUpnpAvSimpleTestApp"));
 
     MediaServerIntroductionWindow mw;
     mw.show();

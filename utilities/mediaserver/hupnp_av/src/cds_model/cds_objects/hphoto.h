@@ -129,7 +129,7 @@ public:
      *
      * \return The class identifier specified by the AV Working Committee.
      */
-    inline static QString sClass() { return "object.item.imageItem.photo"; }
+    inline static QString sClass() { return QLatin1String("object.item.imageItem.photo"); }
 
     /*!
      * Creates a new instance with no title or parentID.

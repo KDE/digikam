@@ -50,15 +50,15 @@ bool DeviceHostDataRetriever::retrieveServiceDescription(
     localScpdPath = scpdUrl.toString();
 #endif
 
-    if (localScpdPath.startsWith('/'))
+    if (localScpdPath.startsWith(QLatin1Char('/')))
     {
         localScpdPath = localScpdPath.mid(1);
     }
 
     QString fullScpdPath = m_rootDir.toString();
-    if (!fullScpdPath.endsWith('/'))
+    if (!fullScpdPath.endsWith(QLatin1Char('/')))
     {
-        fullScpdPath.append('/');
+        fullScpdPath.append(QLatin1Char('/'));
     }
     fullScpdPath.append(localScpdPath);
     // UDA mandates that the paths inside a device description are treated relative
@@ -66,13 +66,13 @@ bool DeviceHostDataRetriever::retrieveServiceDescription(
 
     QFile file(fullScpdPath);
 
-    HLOG_DBG(QString(
-        "Attempting to open service description from [%1]").arg(fullScpdPath));
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to open service description from [%1]")).arg(fullScpdPath));
 
     if (!file.open(QIODevice::ReadOnly))
     {
         m_lastError =
-            QString("Could not open the service description file [%1].").arg(
+            QString(QLatin1String("Could not open the service description file [%1].")).arg(
                 fullScpdPath);
 
         return false;
@@ -88,29 +88,29 @@ bool DeviceHostDataRetriever::retrieveIcon(
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
     QString localIconPath = iconUrl.toLocalFile();
-    if (localIconPath.startsWith('/'))
+    if (localIconPath.startsWith(QLatin1Char('/')))
     {
         localIconPath = localIconPath.mid(1);
     }
 
     QString fullIconPath = m_rootDir.toString();
-    if (!fullIconPath.endsWith('/'))
+    if (!fullIconPath.endsWith(QLatin1Char('/')))
     {
-        fullIconPath.append('/');
+        fullIconPath.append(QLatin1Char('/'));
     }
     fullIconPath.append(localIconPath);
     // UDA mandates that the paths inside a device description are treated relative
     // to the device description location.
 
-    HLOG_DBG(QString(
-        "Attempting to open a file [%1] that should contain an icon").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to open a file [%1] that should contain an icon")).arg(
             fullIconPath));
 
     QFile iconFile(fullIconPath);
     if (!iconFile.open(QIODevice::ReadOnly))
     {
         m_lastError =
-            QString("Could not open the icon file [%1]").arg(fullIconPath);
+            QString(QLatin1String("Could not open the icon file [%1]")).arg(fullIconPath);
 
         return false;
     }
@@ -128,7 +128,7 @@ bool DeviceHostDataRetriever::retrieveDeviceDescription(
     if (!file.open(QIODevice::ReadOnly))
     {
         m_lastError =
-            QString("Could not open the device description file: [%1].").arg(
+            QString(QLatin1String("Could not open the device description file: [%1].")).arg(
                 filePath);
 
         return false;

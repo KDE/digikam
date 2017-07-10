@@ -145,7 +145,7 @@ public:
 
 HServerService::HActionInvokes HServerService::createActionInvokes()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
 
     HActionInvokes retVal;
 
@@ -155,8 +155,8 @@ HServerService::HActionInvokes HServerService::createActionInvokes()
     {
         QMetaMethod mm = mob->method(i);
 
-        QString typeName = mm.typeName();
-        if (typeName != "int" && typeName != "qint32")
+        QString typeName =QLatin1String( mm.typeName());
+        if (typeName != QLatin1String("int") && typeName != QLatin1String("qint32"))
         {
             continue;
         }
@@ -167,25 +167,25 @@ HServerService::HActionInvokes HServerService::createActionInvokes()
             continue;
         }
 
-        QString firstPar = parTypes.at(0);
-        if (firstPar != "Herqq::Upnp::HActionArguments" &&
-            firstPar != "HActionArguments")
+        QString firstPar = QLatin1String((char*)parTypes.at(0).data());
+        if (firstPar != QLatin1String("Herqq::Upnp::HActionArguments") &&
+            firstPar != QLatin1String("HActionArguments"))
         {
             continue;
         }
 
-        QString secondPar = parTypes.at(1);
-        if (secondPar != "Herqq::Upnp::HActionArguments*" &&
-            secondPar != "HActionArguments*")
+        QString secondPar = QLatin1String((char *)parTypes.at(1).data());
+        if (secondPar != QLatin1String("Herqq::Upnp::HActionArguments*") &&
+            secondPar != QLatin1String("HActionArguments*"))
         {
             continue;
         }
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
         QString signature = mm.signature();
 #else
-        QString signature = mm.methodSignature();
+        QString signature =QLatin1String((char*) mm.methodSignature().data());
 #endif
-        signature = signature.left(signature.indexOf('('));
+        signature = signature.left(signature.indexOf(QLatin1Char('(')));
 
         Q_ASSERT(!retVal.contains(signature));
 

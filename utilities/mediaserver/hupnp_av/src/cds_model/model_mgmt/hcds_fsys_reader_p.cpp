@@ -78,44 +78,44 @@ QHash<QString, MimeAndItemCreator> initializeCreatorFunctions()
 {
     QHash<QString, MimeAndItemCreator> retVal;
 
-    retVal["mp3"] = MimeAndItemCreator("audio/mpeg", createMusicTrack);
-    retVal["wav"] = MimeAndItemCreator("audio/x-wav", createMusicTrack);
-    retVal["ogg"] = MimeAndItemCreator("audio/ogg", createMusicTrack);
-    retVal["oga"] = MimeAndItemCreator("audio/ogg", createMusicTrack);
-    retVal["flac"] = MimeAndItemCreator("audio/flac", createMusicTrack);
+    retVal[QLatin1String("mp3")] = MimeAndItemCreator("audio/mpeg", createMusicTrack);
+    retVal[QLatin1String("wav")] = MimeAndItemCreator("audio/x-wav", createMusicTrack);
+    retVal[QLatin1String("ogg")] = MimeAndItemCreator("audio/ogg", createMusicTrack);
+    retVal[QLatin1String("oga")] = MimeAndItemCreator("audio/ogg", createMusicTrack);
+    retVal[QLatin1String("flac")] = MimeAndItemCreator("audio/flac", createMusicTrack);
 
-    retVal["mp2"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["mp4"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["mpa"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["mpe"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["mpeg"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["wmv"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["mpg"] = MimeAndItemCreator("video/mpeg", createVideoItem);
-    retVal["mov"] = MimeAndItemCreator("video/quicktime", createVideoItem);
-    retVal["qt"] = MimeAndItemCreator("video/quicktime", createVideoItem);
-    retVal["avi"] = MimeAndItemCreator("video/x-msvideo", createVideoItem);
-    retVal["asf"] = MimeAndItemCreator("video/x-ms-asf", createVideoItem);
-    retVal["asr"] = MimeAndItemCreator("video/x-ms-asf", createVideoItem);
+    retVal[QLatin1String("mp2")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("mp4")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("mpa")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("mpe")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("mpeg")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("wmv")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("mpg")] = MimeAndItemCreator("video/mpeg", createVideoItem);
+    retVal[QLatin1String("mov")] = MimeAndItemCreator("video/quicktime", createVideoItem);
+    retVal[QLatin1String("qt")] = MimeAndItemCreator("video/quicktime", createVideoItem);
+    retVal[QLatin1String("avi")] = MimeAndItemCreator("video/x-msvideo", createVideoItem);
+    retVal[QLatin1String("asf")] = MimeAndItemCreator("video/x-ms-asf", createVideoItem);
+    retVal[QLatin1String("asr")] = MimeAndItemCreator("video/x-ms-asf", createVideoItem);
 
-    retVal["bmp"] = MimeAndItemCreator("image/bmp", createPhotoItem);
-    retVal["gif"] = MimeAndItemCreator("image/gif", createPhotoItem);
-    retVal["jpe"] = MimeAndItemCreator("image/jpeg", createPhotoItem);
-    retVal["jpg"] = MimeAndItemCreator("image/jpeg", createPhotoItem);
-    retVal["jpeg"] = MimeAndItemCreator("image/jpeg", createPhotoItem);
-    retVal["png"] = MimeAndItemCreator("image/png", createPhotoItem);
-    retVal["tif"] = MimeAndItemCreator("image/tiff", createPhotoItem);
-    retVal["tiff"] = MimeAndItemCreator("image/tiff", createPhotoItem);
+    retVal[QLatin1String("bmp")] = MimeAndItemCreator("image/bmp", createPhotoItem);
+    retVal[QLatin1String("gif")] = MimeAndItemCreator("image/gif", createPhotoItem);
+    retVal[QLatin1String("jpe")] = MimeAndItemCreator("image/jpeg", createPhotoItem);
+    retVal[QLatin1String("jpg")] = MimeAndItemCreator("image/jpeg", createPhotoItem);
+    retVal[QLatin1String("jpeg")] = MimeAndItemCreator("image/jpeg", createPhotoItem);
+    retVal[QLatin1String("png")] = MimeAndItemCreator("image/png", createPhotoItem);
+    retVal[QLatin1String("tif")] = MimeAndItemCreator("image/tiff", createPhotoItem);
+    retVal[QLatin1String("tiff")] = MimeAndItemCreator("image/tiff", createPhotoItem);
 
-    retVal["css"] = MimeAndItemCreator("text/css", createTextItem);
-    retVal["html"] = MimeAndItemCreator("text/htm", createTextItem);
-    retVal["html"] = MimeAndItemCreator("text/html", createTextItem);
-    retVal["cs"] = MimeAndItemCreator("text/plain", createTextItem);
-    retVal["hpp"] = MimeAndItemCreator("text/plain", createTextItem);
-    retVal["cpp"] = MimeAndItemCreator("text/plain", createTextItem);
-    retVal["c"] = MimeAndItemCreator("text/plain", createTextItem);
-    retVal["h"] = MimeAndItemCreator("text/plain", createTextItem);
-    retVal["txt"] = MimeAndItemCreator("text/plain", createTextItem);
-    retVal["xml"] = MimeAndItemCreator("text/xml", createTextItem);
+    retVal[QLatin1String("css")] = MimeAndItemCreator("text/css", createTextItem);
+    retVal[QLatin1String("html")] = MimeAndItemCreator("text/htm", createTextItem);
+    retVal[QLatin1String("html")] = MimeAndItemCreator("text/html", createTextItem);
+    retVal[QLatin1String("cs")] = MimeAndItemCreator("text/plain", createTextItem);
+    retVal[QLatin1String("hpp")] = MimeAndItemCreator("text/plain", createTextItem);
+    retVal[QLatin1String("cpp")] = MimeAndItemCreator("text/plain", createTextItem);
+    retVal[QLatin1String("c")] = MimeAndItemCreator("text/plain", createTextItem);
+    retVal[QLatin1String("h")] = MimeAndItemCreator("text/plain", createTextItem);
+    retVal[QLatin1String("txt")] = MimeAndItemCreator("text/plain", createTextItem);
+    retVal[QLatin1String("xml")] = MimeAndItemCreator("text/xml", createTextItem);
 
     return retVal;
 }
@@ -165,13 +165,13 @@ HCdsObjectData* HCdsFileSystemReaderPrivate::indexFile(
     MimeAndItemCreator creator = creatorFunctions[sufx];
     if (!creator.second)
     {
-        HLOG_WARN(QString("File type [%1] is not supported.").arg(sufx));
+        HLOG_WARN(QString(QLatin1String("File type [%1] is not supported.")).arg(sufx));
         return 0;
     }
 
     HItem* item = creator.second(file, parentId);
     Q_ASSERT(item);
-    item->setContentFormat(creator.first);
+    item->setContentFormat(QLatin1String(creator.first));
 
     return new HCdsObjectData(item, file.absoluteFilePath());
 }
@@ -182,7 +182,7 @@ HCdsObjectData* HCdsFileSystemReaderPrivate::scan(
     HLOG(H_AT, H_FUN);
 
     QDir dir = rdir.dir();
-    HLOG_DBG(QString("Entering directory %1").arg(dir.absolutePath()));
+    HLOG_DBG(QString(QLatin1String("Entering directory %1")).arg(dir.absolutePath()));
 
     HStorageFolder* folder = new HStorageFolder(dir.dirName(), parentId);
     QString id = folder->id();
@@ -260,21 +260,21 @@ bool HCdsFileSystemReader::scan(
 
 QString HCdsFileSystemReader::deduceMimeType(const QString& filename)
 {
-    QString fileSuffix = filename.mid(filename.lastIndexOf('.')+1).toLower();
+    QString fileSuffix = filename.mid(filename.lastIndexOf(QLatin1Char('.'))+1).toLower();
 
     MimeAndItemCreator creator = creatorFunctions[fileSuffix];
     if (!creator.second)
     {
-        return "";
+        return QLatin1String("");
     }
 
-    return creator.first;
+    return QLatin1String(creator.first);
 }
 
 HItem* HCdsFileSystemReader::createItem(
     const QString& filename, const QString& parentId)
 {
-    QString fileSuffix = filename.mid(filename.lastIndexOf('.')+1).toLower();
+    QString fileSuffix = filename.mid(filename.lastIndexOf(QLatin1Char('.'))+1).toLower();
 
     MimeAndItemCreator creator = creatorFunctions[fileSuffix];
     if (!creator.second)

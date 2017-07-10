@@ -36,7 +36,7 @@ HSid::HSid() :
 
 HSid::HSid(const QUuid& sid) :
     m_value(sid), m_valueAsStr(
-        QString("uuid:%1").arg(sid.toString().remove('{').remove('}')))
+        QString(QLatin1String("uuid:%1")).arg(sid.toString().remove(QLatin1Char('{')).remove(QLatin1Char('}'))))
 {
 }
 
@@ -59,7 +59,7 @@ HSid::HSid(const QString& sid) :
         // enforced, there can be no "minimum" requirement for an "invalid" UUID.
         return;
     }
-    else if (tmp.startsWith("uuid:", Qt::CaseInsensitive))
+    else if (tmp.startsWith(QLatin1String("uuid:"), Qt::CaseInsensitive))
     {
         m_value = tmp.trimmed().mid(5);
         m_valueAsStr = tmp;
@@ -67,7 +67,7 @@ HSid::HSid(const QString& sid) :
     else
     {
         m_value = QUuid(tmp);
-        m_valueAsStr = QString("uuid:%1").arg(tmp);
+        m_valueAsStr = QString(QLatin1String("uuid:%1")).arg(tmp);
     }
 }
 

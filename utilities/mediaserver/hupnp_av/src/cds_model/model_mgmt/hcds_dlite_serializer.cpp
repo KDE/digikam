@@ -88,13 +88,13 @@ namespace
 void addNamespaces(QXmlStreamReader& reader)
 {
     QXmlStreamNamespaceDeclaration didl(
-        "DIDL-Lite", "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/");
+        QLatin1String("DIDL-Lite"), QLatin1String("urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"));
     QXmlStreamNamespaceDeclaration dc(
-        "dc", "http://purl.org/dc/elements/1.1/");
-    QXmlStreamNamespaceDeclaration upnp(
-        "upnp", "urn:schemas-upnp-org:metadata-1-0/upnp/");
+        QLatin1String("dc"), QLatin1String("http://purl.org/dc/elements/1.1/"));
+    QXmlStreamNamespaceDeclaration upnp(QLatin1String(
+        "upnp"), QLatin1String("urn:schemas-upnp-org:metadata-1-0/upnp/"));
     QXmlStreamNamespaceDeclaration xsi(
-        "xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        QLatin1String("xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
 
     reader.addExtraNamespaceDeclaration(didl);
     reader.addExtraNamespaceDeclaration(dc);
@@ -104,7 +104,7 @@ void addNamespaces(QXmlStreamReader& reader)
 
 QString saveItemToXml(QXmlStreamReader& reader)
 {
-    Q_ASSERT(reader.name() == "item" || reader.name() == "container");
+    Q_ASSERT(reader.name() == QLatin1String("item") || reader.name() == QLatin1String("container"));
 
     QString retVal;
     QXmlStreamWriter writer(&retVal);
@@ -116,7 +116,7 @@ QString saveItemToXml(QXmlStreamReader& reader)
         switch(reader.tokenType())
         {
         case QXmlStreamReader::StartElement:
-            if (reader.name() == "item" || reader.name() == "container")
+            if (reader.name() == QLatin1String("item") || reader.name() == QLatin1String("container"))
             {
                 goto end;
             }
@@ -126,7 +126,7 @@ QString saveItemToXml(QXmlStreamReader& reader)
             break;
 
         case QXmlStreamReader::EndElement:
-            if (reader.name() == "item" || reader.name() == "container")
+            if (reader.name() == QLatin1String("item") || reader.name() == QLatin1String("container"))
             {
                 goto end;
             }
@@ -242,7 +242,7 @@ bool HCdsDidlLiteSerializerPrivate::serializePropertyFromAttribute(
 {
     HLOG(H_AT, H_FUN);
 
-    QString cdsName = QString("@%1").arg(xmlTokenName);
+    QString cdsName = QString(QLatin1String("@%1")).arg(xmlTokenName);
     if (!object->hasCdsProperty(cdsName))
     {
         return false;
@@ -331,7 +331,7 @@ bool HCdsDidlLiteSerializerPrivate::serializeProperty(
         return false;
     }
 
-    bool filterOk = filter.contains("*") || filter.contains(propName);
+    bool filterOk = filter.contains(QLatin1String("*")) || filter.contains(propName);
 
     HCdsProperty prop = HCdsPropertyDb::instance().property(propName);
 
@@ -341,12 +341,12 @@ bool HCdsDidlLiteSerializerPrivate::serializeProperty(
         {
             if (!object.serialize(propName, value, writer))
             {
-                HLOG_DBG(QString("Failed to serialize property: [%1]").arg(propName));
+                HLOG_DBG(QString(QLatin1String("Failed to serialize property: [%1]")).arg(propName));
             }
         }
         else
         {
-            HLOG_DBG(QString("Failed to serialize property: [%1]").arg(propName));
+            HLOG_DBG(QString(QLatin1String("Failed to serialize property: [%1]")).arg(propName));
         }
         return false;
     }
@@ -362,7 +362,7 @@ bool HCdsDidlLiteSerializerPrivate::serializeProperty(
         {
             if (prop.handler().outSerializer()(propName, var, writer) == false)
             {
-                HLOG_DBG(QString("Failed to serialize property: [%1]").arg(propName));
+                HLOG_DBG(QString(QLatin1String("Failed to serialize property: [%1]")).arg(propName));
             }
         }
     }
@@ -370,7 +370,7 @@ bool HCdsDidlLiteSerializerPrivate::serializeProperty(
     {
         if (prop.handler().outSerializer()(propName, value, writer) == false)
         {
-            HLOG_DBG(QString("Failed to serialize property: [%1]").arg(propName));
+            HLOG_DBG(QString(QLatin1String("Failed to serialize property: [%1]")).arg(propName));
         }
     }
 
@@ -383,7 +383,7 @@ bool HCdsDidlLiteSerializerPrivate::serializeObject(
 {
     HLOG(H_AT, H_FUN);
 
-    writer.writeStartElement(HObject::isItem(object.type()) ? "item" : "container");
+    writer.writeStartElement(HObject::isItem(object.type()) ? QLatin1String("item") : QLatin1String("container"));
 
     QHash<QString, QVariant> cdsProps = object.cdsProperties();
 
@@ -434,7 +434,7 @@ HObject* HCdsDidlLiteSerializerPrivate::parseObject(
     {
         if (itemReader.tokenType() == QXmlStreamReader::StartElement)
         {
-            if (itemReader.qualifiedName() != "upnp:class")
+            if (itemReader.qualifiedName() != QLatin1String("upnp:class"))
             {
                 continue;
             }
@@ -448,7 +448,7 @@ HObject* HCdsDidlLiteSerializerPrivate::parseObject(
         HObjectCreator creator = m_creatorFunctions.value(clazz);
         if (!creator)
         {
-            m_lastErrorDescription =  QString("Unknown class: [%1]").arg(clazz);
+            m_lastErrorDescription =  QString(QLatin1String("Unknown class: [%1]")).arg(clazz);
             return 0;
         }
 
@@ -479,19 +479,19 @@ HObject* HCdsDidlLiteSerializerPrivate::parseObject(
             {
                 QString name = itemReader.qualifiedName().toString();
 
-                if (name == "upnp:class")
+                if (name == QLatin1String("upnp:class"))
                 {
                     continue;
                 }
                 else if (!serializePropertyFromElement(object.data(), name, itemReader))
                 {
-                    if (name == "item" || name == "container")
+                    if (name == QLatin1String("item") || name == QLatin1String("container"))
                     {
                         continue;
                     }
                     else
                     {
-                        HLOG_DBG(QString("Couldn't serialize property: %1").arg(name));
+                        HLOG_DBG(QString(QLatin1String("Couldn't serialize property: %1")).arg(name));
                     }
                 }
                 else if (!tcoEnabled)
@@ -525,16 +525,16 @@ void HCdsDidlLiteSerializerPrivate::writeDidlLiteDocumentInfo(
 {
     writer.setCodec("UTF-8");
     writer.writeStartDocument();
-    writer.writeStartElement("DIDL-Lite");
-    writer.writeDefaultNamespace("urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/");
-    writer.writeAttribute("xmlns:dc", "http://purl.org/dc/elements/1.1/");
-    writer.writeAttribute("xmlns:upnp", "urn:schemas-upnp-org:metadata-1-0/upnp/");
-    writer.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    writer.writeAttribute("xsi:schemaLocation",
-                      "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/ " \
+    writer.writeStartElement(QLatin1String("DIDL-Lite"));
+    writer.writeDefaultNamespace(QLatin1String("urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"));
+    writer.writeAttribute(QLatin1String("xmlns:dc"), QLatin1String("http://purl.org/dc/elements/1.1/"));
+    writer.writeAttribute(QLatin1String("xmlns:upnp"), QLatin1String("urn:schemas-upnp-org:metadata-1-0/upnp/"));
+    writer.writeAttribute(QLatin1String("xmlns:xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
+    writer.writeAttribute(QLatin1String("xsi:schemaLocation"),
+                      QLatin1String("urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/ " \
                       "http://www.upnp.org/schemas/av/didl-lite.xsd " \
                       "urn:schemas-upnp-org:metadata-1-0/upnp/ " \
-                      "http://www.upnp.org/schemas/av/upnp.xsd");
+                      "http://www.upnp.org/schemas/av/upnp.xsd"));
 }
 
 /*******************************************************************************
@@ -570,7 +570,7 @@ bool HCdsDidlLiteSerializer::serializeFromXml(
         {
             if (reader.name().compare(QLatin1String("DIDL-Lite"), Qt::CaseInsensitive) != 0)
             {
-                h_ptr->m_lastErrorDescription = "Missing mandatory DIDL-Lite element";
+                h_ptr->m_lastErrorDescription = QLatin1String("Missing mandatory DIDL-Lite element");
                 return false;
             }
         }
@@ -588,7 +588,7 @@ bool HCdsDidlLiteSerializer::serializeFromXml(
         case QXmlStreamReader::StartElement:
             {
                 QStringRef name = reader.name();
-                if (name == "item" || name == "container")
+                if (name == QLatin1String("item") || name == QLatin1String("container"))
                 {
                      HObject* obj = h_ptr->parseObject(reader, inputType);
                      if (!obj)
@@ -607,7 +607,7 @@ bool HCdsDidlLiteSerializer::serializeFromXml(
     if (reader.error() != QXmlStreamReader::NoError)
     {
         h_ptr->m_lastErrorDescription =
-            QString("Parse failed: [%1]").arg(reader.errorString());
+            QString(QLatin1String("Parse failed: [%1]")).arg(reader.errorString());
 
         return false;
     }
@@ -619,7 +619,7 @@ bool HCdsDidlLiteSerializer::serializeFromXml(
 QString HCdsDidlLiteSerializer::serializeToXml(
     const HObject& object, XmlType xmlType)
 {
-    QSet<QString> filter; filter.insert("*");
+    QSet<QString> filter; filter.insert(QLatin1String("*"));
     return serializeToXml(object, filter, xmlType);
 }
 
@@ -636,7 +636,7 @@ QString HCdsDidlLiteSerializer::serializeToXml(
 
     if (!h_ptr->serializeObject(object, filter, writer))
     {
-        return "";
+        return QLatin1String("");
     }
 
     if (xmlType == Document)
@@ -649,7 +649,7 @@ QString HCdsDidlLiteSerializer::serializeToXml(
 
 QString HCdsDidlLiteSerializer::serializeToXml(const HObjects& objects)
 {
-    QSet<QString> filter; filter.insert("*");
+    QSet<QString> filter; filter.insert(QLatin1String("*"));
     return serializeToXml(objects, filter);
 }
 
@@ -665,7 +665,7 @@ QString HCdsDidlLiteSerializer::serializeToXml(
     {
         if (!h_ptr->serializeObject(*obj, filter, writer))
         {
-            return "";
+            return QLatin1String("");
         }
     }
 

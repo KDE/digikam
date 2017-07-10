@@ -130,8 +130,8 @@ public: // methods
 
             if (!stateVar)
             {
-                m_lastError = QString(
-                    "Cannot update state variable: no state variable [%1]").arg(
+                m_lastError = QString(QLatin1String(
+                    "Cannot update state variable: no state variable [%1]")).arg(
                         variables[i].first);
 
                 return Failed;
@@ -142,8 +142,8 @@ public: // methods
                     HUpnpDataTypes::convertToRightVariantType(
                         variables[i].second, info.dataType())))
             {
-                m_lastError = QString(
-                    "Cannot update state variable [%1]. New value is invalid: [%2]").
+                m_lastError = QString(QLatin1String(
+                    "Cannot update state variable [%1]. New value is invalid: [%2]")).
                         arg(info.name(), variables[i].second);
 
                 return Failed;

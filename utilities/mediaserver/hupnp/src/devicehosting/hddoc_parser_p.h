@@ -175,9 +175,9 @@ public:
                 if (serviceIds.contains(serviceId))
                 {
                     m_lastError = InvalidDeviceDescriptionError;
-                    m_lastErrorDescription = QString(
+                    m_lastErrorDescription = QString(QLatin1String(
                         "ServiceId [%1] encountered more than once. "
-                        "ServiceIDs MUST be unique within a device tree.").arg(
+                        "ServiceIDs MUST be unique within a device tree.")).arg(
                             serviceId.toString());
 
                     return false;
@@ -193,9 +193,9 @@ public:
                     if (eventUrls.contains(eventUrl))
                     {
                         m_lastError = InvalidDeviceDescriptionError;
-                        m_lastErrorDescription = QString(
+                        m_lastErrorDescription = QString(QLatin1String(
                             "EventSubUrl [%1] encountered more than once."
-                            "EventSubUrls MUST be unique within a device tree.").arg(eventUrl);
+                            "EventSubUrls MUST be unique within a device tree.")).arg(eventUrl);
 
                         return false;
                     }
@@ -209,9 +209,9 @@ public:
                 if (scpdUrls.contains(scpdUrl))
                 {
                     m_lastError = InvalidDeviceDescriptionError;
-                    m_lastErrorDescription = QString(
+                    m_lastErrorDescription = QString(QLatin1String(
                         "ScpdUrl [%1] encountered more than once."
-                        "ScpdUrls MUST be unique within a device tree.").arg(eventUrl);
+                        "ScpdUrls MUST be unique within a device tree.")).arg(eventUrl);
 
                     return false;
                 }
@@ -224,9 +224,9 @@ public:
                 if (controlUrls.contains(controlUrl))
                 {
                     m_lastError = InvalidDeviceDescriptionError;
-                    m_lastErrorDescription = QString(
+                    m_lastErrorDescription = QString(QLatin1String(
                         "ControlUrl [%1] encountered more than once. "
-                        "ControlUrls MUST be unique within a device tree.").arg(controlUrl);
+                        "ControlUrls MUST be unique within a device tree.")).arg(controlUrl);
 
                     return false;
                 }

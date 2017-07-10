@@ -43,9 +43,9 @@ HTimeout::HTimeout(const QString& timeout) :
     m_value(-1)
 {
     QString tmp(timeout.simplified());
-    if (tmp.compare("infinite", Qt::CaseInsensitive) != 0)
+    if (tmp.compare(QLatin1String("infinite"), Qt::CaseInsensitive) != 0)
     {
-        if (tmp.startsWith("Second-", Qt::CaseInsensitive))
+        if (tmp.startsWith(QLatin1String("Second-"), Qt::CaseInsensitive))
         {
             tmp = tmp.mid(7);
         }
@@ -79,8 +79,8 @@ HTimeout& HTimeout::operator=(const QString& value)
 
 QString HTimeout::toString() const
 {
-    return QString("Second-%1").arg(
-        m_value < 0 ? "infinite" : QString::number(m_value));
+    return QString(QLatin1String("Second-%1")).arg(
+        m_value < 0 ? QLatin1String("infinite") : QString::number(m_value));
 }
 
 bool operator==(const HTimeout& obj1, const HTimeout& obj2)

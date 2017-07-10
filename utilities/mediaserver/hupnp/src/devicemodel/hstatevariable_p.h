@@ -65,7 +65,7 @@ public:
         {
             if (err)
             {
-                *err = QString("The new and the old value are equal: [%1]").arg(
+                *err = QString(QLatin1String("The new and the old value are equal: [%1]")).arg(
                     value.toString());
             }
             return false;

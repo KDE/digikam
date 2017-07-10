@@ -10,6 +10,10 @@ if (POLICY CMP0063)
 endif (POLICY CMP0063)
 
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC_RELAXED_MODE ON)
+
+#qt5_generate_moc(hserverdevicecontroller_p.h moc_hserverdevicecontroller_p.o)
 
 add_subdirectory(hupnp)
 add_subdirectory(hupnp/lib)
@@ -95,8 +99,8 @@ include_directories(
 
 
 set(libmediaserver_SRCS
-          # apps/simple_avtest-app/main.cpp 
-          # apps/simple_avtest-app/mediaserver_introductionwindow.cpp 
+           apps/simple_avtest-app/main.cpp 
+           apps/simple_avtest-app/mediaserver_introductionwindow.cpp 
            apps/simple_avtest-app/mediaserver_window.cpp 
            hupnp_av/src/hav_devicemodel_creator.cpp 
            hupnp_av/src/hav_devicemodel_infoprovider.cpp 
@@ -238,6 +242,8 @@ set(libmediaserver_SRCS
            hupnp/src/devicehosting/devicehost/hevent_notifier_p.cpp 
            hupnp/src/devicehosting/devicehost/hevent_subscriber_p.cpp 
            hupnp/src/devicehosting/devicehost/hservermodel_creator_p.cpp 
+           hupnp/src/devicehosting/devicehost/moc_file.cpp
+           hupnp/src/devicemodel/client/moc_file2.cpp
            hupnp/src/devicehosting/messages/hcontrol_messages_p.cpp 
            hupnp/src/devicehosting/messages/hevent_messages_p.cpp 
            hupnp/src/devicehosting/messages/hnt_p.cpp 

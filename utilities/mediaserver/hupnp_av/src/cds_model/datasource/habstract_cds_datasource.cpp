@@ -122,7 +122,7 @@ bool HAbstractCdsDataSourcePrivate::add(
         Q_ASSERT(false);
     }
 
-    if (retVal && pid != "-1")
+    if (retVal && pid != QLatin1String("-1"))
     {
         if (!m_objectsById.contains(pid))
         {

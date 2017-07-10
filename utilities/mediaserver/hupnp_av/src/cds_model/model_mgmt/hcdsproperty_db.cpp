@@ -75,7 +75,7 @@ void HCdsPropertyDbPrivate::insert(const HCdsProperty& prop)
 {
     QString name = prop.info().name();
     m_properties.insert(name, prop);
-    if (name.startsWith('@'))
+    if (name.startsWith(QLatin1Char('@')))
     {
         m_didlLiteDependentProperties.insert(name);
     }
@@ -93,7 +93,7 @@ QString HCdsPropertyDbPrivate::variantAsString(const QVariant& var) const
     switch(var.type())
     {
     case QVariant::Bool:
-        retVal = var.toBool() ? "1": "0";
+        retVal = var.toBool() ? QLatin1String("1"): QLatin1String("0");
         break;
     case QVariant::Date:
         retVal = var.toDate().toString(Qt::ISODate);
@@ -105,7 +105,7 @@ QString HCdsPropertyDbPrivate::variantAsString(const QVariant& var) const
         retVal = var.toDateTime().toString(Qt::ISODate);
         break;
     case QVariant::StringList:
-        retVal = var.toStringList().join(",");
+        retVal = var.toStringList().join(QLatin1String(","));
         break;
     default:
         retVal = var.toString();
@@ -120,7 +120,7 @@ bool HCdsPropertyDbPrivate::serializeHResourceOut(
     HResource res = value.value<HResource>();
 
     writer.writeStartElement(property);
-    writer.writeAttribute("protocolInfo", res.protocolInfo().toString());
+    writer.writeAttribute(QLatin1String("protocolInfo"), res.protocolInfo().toString());
 
     QHash<QString, QString>::const_iterator ci = res.mediaInfo().constBegin();
     for(; ci != res.mediaInfo().constEnd(); ++ci)
@@ -130,7 +130,7 @@ bool HCdsPropertyDbPrivate::serializeHResourceOut(
 
     if (res.trackChangesOptionEnabled())
     {
-        writer.writeAttribute("updateCount", QString::number(res.updateCount()));
+        writer.writeAttribute(QLatin1String("updateCount"), QString::number(res.updateCount()));
     }
 
     writer.writeCharacters(res.location().toString());
@@ -150,17 +150,17 @@ bool HCdsPropertyDbPrivate::serializeHResourceIn(
     QXmlStreamAttributes attrs = reader->attributes();
     QString location = reader->readElementText().trimmed();
 
-    if (attrs.hasAttribute("protocolInfo"))
+    if (attrs.hasAttribute(QLatin1String("protocolInfo")))
     {
-        QString pinfo = attrs.value("protocolInfo").toString();
+        QString pinfo = attrs.value(QLatin1String("protocolInfo")).toString();
 
-        retVal.setLocation(location);
+        retVal.setLocation((QUrl)location);
         retVal.setProtocolInfo(pinfo);
     }
 
-    if (attrs.hasAttribute("updateCount"))
+    if (attrs.hasAttribute(QLatin1String("updateCount")))
     {
-        QString updateCount = attrs.value("updateCount").toString();
+        QString updateCount = attrs.value(QLatin1String("updateCount")).toString();
 
         bool ok;
         quint32 value = updateCount.toUInt(&ok);
@@ -187,10 +187,10 @@ bool HCdsPropertyDbPrivate::serializeClassInfoOut(
 
     if (!cinfo.name().isEmpty())
     {
-        writer.writeAttribute("name", cinfo.name());
+        writer.writeAttribute(QLatin1String("name"), cinfo.name());
     }
 
-    writer.writeAttribute("includeDerived", cinfo.includeDerived() ? "1" : "0");
+    writer.writeAttribute(QLatin1String("includeDerived"), cinfo.includeDerived() ? QLatin1String("1") : QLatin1String("0"));
     writer.writeCharacters(cinfo.className());
     writer.writeEndElement();
 
@@ -205,13 +205,13 @@ bool HCdsPropertyDbPrivate::serializeClassInfoIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString name = attrs.value("name").toString();
+    QString name = attrs.value(QLatin1String("name")).toString();
 
     bool inc = true;
-    if (attrs.hasAttribute("includeDerived"))
+    if (attrs.hasAttribute(QLatin1String("includeDerived")))
     {
         bool ok = false;
-        inc = toBool(attrs.value("includeDerived").toString(), &ok);
+        inc = toBool(attrs.value(QLatin1String("includeDerived")).toString(), &ok);
         if (!ok)
         {
             HLOG_WARN(QLatin1String("Value of attribute [includeDerived] is invalid."));
@@ -241,7 +241,7 @@ bool HCdsPropertyDbPrivate::serializeRoledPersonOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("role", person.role());
+    writer.writeAttribute(QLatin1String("role"), person.role());
     writer.writeCharacters(person.name());
     writer.writeEndElement();
 
@@ -255,7 +255,7 @@ bool HCdsPropertyDbPrivate::serializeRoledPersonIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString role = attrs.value("role").toString();
+    QString role = attrs.value(QLatin1String("role")).toString();
 
     QString name = reader->readElementText().trimmed();
 
@@ -330,7 +330,7 @@ bool HCdsPropertyDbPrivate::serializeMatchedIdOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("type", id.typeAsString());
+    writer.writeAttribute(QLatin1String("type"), id.typeAsString());
     writer.writeCharacters(id.value());
     writer.writeEndElement();
 
@@ -341,7 +341,7 @@ bool HCdsPropertyDbPrivate::serializeMatchedIdIn(
     const QString&, QVariant* value, QXmlStreamReader* reader) const
 {
     QXmlStreamAttributes attrs = reader->attributes();
-    QString type = attrs.value("type").toString();
+    QString type = attrs.value(QLatin1String("type")).toString();
 
     QString midValue = reader->readElementText().trimmed();
 
@@ -365,7 +365,7 @@ bool HCdsPropertyDbPrivate::serializeProgramCodeOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("type", pc.type());
+    writer.writeAttribute(QLatin1String("type"), pc.type());
     writer.writeCharacters(pc.value());
     writer.writeEndElement();
 
@@ -376,7 +376,7 @@ bool HCdsPropertyDbPrivate::serializeProgramCodeIn(
     const QString& /*property*/, QVariant* value, QXmlStreamReader* reader) const
 {
     QXmlStreamAttributes attrs = reader->attributes();
-    QString type = attrs.value("type").toString();
+    QString type = attrs.value(QLatin1String("type")).toString();
 
     QString valueAsStr = reader->readElementText().trimmed();
 
@@ -400,7 +400,7 @@ bool HCdsPropertyDbPrivate::serializeRatingOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("type", rating.typeAsString());
+    writer.writeAttribute(QLatin1String("type"), rating.typeAsString());
     writer.writeCharacters(rating.value());
     writer.writeEndElement();
 
@@ -411,7 +411,7 @@ bool HCdsPropertyDbPrivate::serializeRatingIn(
     const QString&, QVariant* value, QXmlStreamReader* reader) const
 {
     QXmlStreamAttributes attrs = reader->attributes();
-    QString type = attrs.value("type").toString();
+    QString type = attrs.value(QLatin1String("type")).toString();
 
     QString ratingValue = reader->readElementText().trimmed();
 
@@ -469,7 +469,7 @@ bool HCdsPropertyDbPrivate::serializeChGroupNameOut(
     writer.writeStartElement(property);
     if (!group.id().isEmpty())
     {
-        writer.writeAttribute("id", group.id());
+        writer.writeAttribute(QLatin1String("id"), group.id());
     }
     writer.writeCharacters(group.name());
     writer.writeEndElement();
@@ -484,7 +484,7 @@ bool HCdsPropertyDbPrivate::serializeChGroupNameIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString id = attrs.value("id").toString();
+    QString id = attrs.value(QLatin1String("id")).toString();
 
     QString name = reader->readElementText().trimmed();
 
@@ -508,7 +508,7 @@ bool HCdsPropertyDbPrivate::serializePriceOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("currency", price.currency());
+    writer.writeAttribute(QLatin1String("currency"), price.currency());
     writer.writeCharacters(QString::number(price.value()));
     writer.writeEndElement();
 
@@ -522,7 +522,7 @@ bool HCdsPropertyDbPrivate::serializePriceIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString currency = attrs.value("currency").toString();
+    QString currency = attrs.value(QLatin1String("currency")).toString();
 
     QString valueAsStr = reader->readElementText().trimmed();
 
@@ -555,7 +555,7 @@ bool HCdsPropertyDbPrivate::serializeDtRangeOut(
     writer.writeStartElement(property);
     if (dtRange.daylightSaving() != Unknown_DaylightSaving)
     {
-        writer.writeAttribute("daylightSaving", toString(dtRange.daylightSaving()));
+        writer.writeAttribute(QLatin1String("daylightSaving"), toString(dtRange.daylightSaving()));
     }
     writer.writeCharacters(dtRange.toString());
     writer.writeEndElement();
@@ -569,7 +569,7 @@ bool HCdsPropertyDbPrivate::serializeDtRangeIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString daylightSaving = attrs.value("daylightSaving").toString();
+    QString daylightSaving = attrs.value(QLatin1String("daylightSaving")).toString();
 
     QString valueAsStr = reader->readElementText().trimmed();
 
@@ -593,10 +593,10 @@ bool HCdsPropertyDbPrivate::serializeScheduledTimeOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("usage", HScheduledTime::toString(time.type()));
+    writer.writeAttribute(QLatin1String("usage"), HScheduledTime::toString(time.type()));
     if (time.daylightSaving() != Unknown_DaylightSaving)
     {
-        writer.writeAttribute("daylightSaving", toString(time.daylightSaving()));
+        writer.writeAttribute(QLatin1String("daylightSaving"), toString(time.daylightSaving()));
     }
 
     writer.writeCharacters(time.value().toString(Qt::ISODate));
@@ -611,8 +611,8 @@ bool HCdsPropertyDbPrivate::serializeScheduledTimeIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString usage = attrs.value("usage").toString();
-    QString daylightSaving = attrs.value("daylightSaving").toString();
+    QString usage = attrs.value(QLatin1String("usage")).toString();
+    QString daylightSaving = attrs.value(QLatin1String("daylightSaving")).toString();
 
     QString valueAsStr = reader->readElementText().trimmed();
     QDateTime dt = QDateTime::fromString(valueAsStr, Qt::ISODate);
@@ -641,8 +641,8 @@ bool HCdsPropertyDbPrivate::serializeStateInfoOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("serviceType", info.serviceType().toString());
-    writer.writeAttribute("serviceId", info.serviceId().toString());
+    writer.writeAttribute(QLatin1String("serviceType"), info.serviceType().toString());
+    writer.writeAttribute(QLatin1String("serviceId"), info.serviceId().toString());
     writer.writeCharacters(info.udn().toString());
     writer.writeEndElement();
 
@@ -656,8 +656,8 @@ bool HCdsPropertyDbPrivate::serializeStateInfoIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString serviceType = attrs.value("serviceType").toString();
-    QString serviceId = attrs.value("serviceId").toString();
+    QString serviceType = attrs.value(QLatin1String("serviceType")).toString();
+    QString serviceId = attrs.value(QLatin1String("serviceId")).toString();
 
     HUdn udn = reader->readElementText().trimmed();
 
@@ -681,29 +681,29 @@ bool HCdsPropertyDbPrivate::serializeSvCollectionOut(
     }
 
     writer.writeStartElement(property);
-    writer.writeAttribute("serviceName", svCol.serviceName());
-    writer.writeAttribute("rcsInstanceType", HStateVariableCollection::toString(svCol.rcsInstanceType()));
+    writer.writeAttribute(QLatin1String("serviceName"), svCol.serviceName());
+    writer.writeAttribute(QLatin1String("rcsInstanceType"), HStateVariableCollection::toString(svCol.rcsInstanceType()));
 
     QString buf;
     QXmlStreamWriter stateVariableWriter(&buf);
 
     stateVariableWriter.setCodec("UTF-8");
     stateVariableWriter.writeStartDocument();
-    stateVariableWriter.writeStartElement("stateVariableValuePairs");
-    stateVariableWriter.writeDefaultNamespace("urn:schemas-upnp-org:av:avs");
-    stateVariableWriter.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    stateVariableWriter.writeAttribute("xsi:schemaLocation",
-        "urn:schemas-upnp-org:av:avs" \
-        "http://www.upnp.org/schemas/av/avs.xsd");
+    stateVariableWriter.writeStartElement(QLatin1String("stateVariableValuePairs"));
+    stateVariableWriter.writeDefaultNamespace(QLatin1String("urn:schemas-upnp-org:av:avs"));
+    stateVariableWriter.writeAttribute(QLatin1String("xmlns:xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
+    stateVariableWriter.writeAttribute(QLatin1String("xsi:schemaLocation"),
+        QLatin1String("urn:schemas-upnp-org:av:avs" \
+        "http://www.upnp.org/schemas/av/avs.xsd"));
 
     foreach(const HStateVariableData& sv, svCol.stateVariables())
     {
-        stateVariableWriter.writeStartElement("stateVariable");
+        stateVariableWriter.writeStartElement(QLatin1String("stateVariable"));
         if (sv.channel().isValid())
         {
-            writer.writeAttribute("channel", sv.channel().toString());
+            writer.writeAttribute(QLatin1String("channel"), sv.channel().toString());
         }
-        stateVariableWriter.writeAttribute("variableName", sv.name());
+        stateVariableWriter.writeAttribute(QLatin1String("variableName"), sv.name());
         stateVariableWriter.writeCharacters(sv.value());
         stateVariableWriter.writeEndElement();
     }
@@ -718,12 +718,12 @@ namespace
 {
 void addNamespaces(QXmlStreamReader& reader)
 {
-    QXmlStreamNamespaceDeclaration def(
-        "", "urn:schemas-upnp-org:av:avs");
+    QXmlStreamNamespaceDeclaration def(QLatin1String(
+        ""), QLatin1String("urn:schemas-upnp-org:av:avs"));
     QXmlStreamNamespaceDeclaration xsi(
-        "xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        QLatin1String("xsi"), QLatin1String("http://www.w3.org/2001/XMLSchema-instance"));
     QXmlStreamNamespaceDeclaration xsiSchemaLocation(
-        "xsi:schemaLocation", "urn:schemas-upnp-org:av:avs\r\nhttp://www.upnp.org/schemas/av/avs.xsd");
+        QLatin1String("xsi:schemaLocation"), QLatin1String("urn:schemas-upnp-org:av:avs\r\nhttp://www.upnp.org/schemas/av/avs.xsd"));
 
     reader.addExtraNamespaceDeclaration(def);
     reader.addExtraNamespaceDeclaration(xsi);
@@ -740,8 +740,8 @@ bool HCdsPropertyDbPrivate::serializeSvCollectionIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString serviceName = attrs.value("serviceName").toString();
-    QString rcsInstanceType = attrs.value("rcsInstanceType").toString();
+    QString serviceName = attrs.value(QLatin1String("serviceName")).toString();
+    QString rcsInstanceType = attrs.value(QLatin1String("rcsInstanceType")).toString();
 
     QString valueAsStr = reader->readElementText().trimmed();
     QXmlStreamReader stateVariableReader(valueAsStr);
@@ -756,8 +756,8 @@ bool HCdsPropertyDbPrivate::serializeSvCollectionIn(
     }
     else
     {
-        HLOG_WARN(QString("Failed to parse stateVariableValuePairs data: %1\r\n"
-                          "Document: %2").arg(
+        HLOG_WARN(QString(QLatin1String("Failed to parse stateVariableValuePairs data: %1\r\n"
+                          "Document: %2")).arg(
             stateVariableReader.errorString(), valueAsStr));
 
         return false;
@@ -767,18 +767,18 @@ bool HCdsPropertyDbPrivate::serializeSvCollectionIn(
     while(!stateVariableReader.atEnd() && stateVariableReader.readNextStartElement())
     {
         QStringRef name = stateVariableReader.name();
-        if (name == "stateVariable")
+        if (name == QLatin1String("stateVariable"))
         {
             QXmlStreamAttributes attrs = stateVariableReader.attributes();
-            if (!attrs.hasAttribute(QString("variableName")))
+            if (!attrs.hasAttribute(QString(QLatin1String("variableName"))))
             {
-                HLOG_WARN(QString("Ignoring state variable definition that lacks the [variableName] attribute."));
+                HLOG_WARN(QString(QLatin1String("Ignoring state variable definition that lacks the [variableName] attribute.")));
                 continue;
             }
             else
             {
-                QString channel = attrs.value("channel").toString();
-                QString svName = attrs.value("variableName").toString();
+                QString channel = attrs.value(QLatin1String("channel")).toString();
+                QString svName = attrs.value(QLatin1String("variableName")).toString();
                 QString value = stateVariableReader.readElementText().trimmed();
 
                 HStateVariableData svData(svName, value);
@@ -791,7 +791,7 @@ bool HCdsPropertyDbPrivate::serializeSvCollectionIn(
         }
         else
         {
-            HLOG_WARN(QString("Encountered unknown XML element: [%1]").arg(name.toString()));
+            HLOG_WARN(QString(QLatin1String("Encountered unknown XML element: [%1]")).arg(name.toString()));
         }
     }
 
@@ -855,11 +855,11 @@ bool HCdsPropertyDbPrivate::serializeGenreElementOut(
     writer.writeStartElement(property);
     if (!genre.id().isEmpty())
     {
-        writer.writeAttribute("id", genre.id());
+        writer.writeAttribute(QLatin1String("id"), genre.id());
     }
     if (!genre.extended().isEmpty())
     {
-        writer.writeAttribute("extended", genre.extended().join(","));
+        writer.writeAttribute(QLatin1String("extended"), genre.extended().join(QLatin1String(",")));
     }
     writer.writeCharacters(genre.name());
     writer.writeEndElement();
@@ -874,12 +874,12 @@ bool HCdsPropertyDbPrivate::serializeGenreElementIn(
     Q_ASSERT(reader);
 
     QXmlStreamAttributes attrs = reader->attributes();
-    QString id = attrs.value("id").toString();
-    QString extended = attrs.value("extended").toString();
+    QString id = attrs.value(QLatin1String("id")).toString();
+    QString extended = attrs.value(QLatin1String("extended")).toString();
 
     QString name = reader->readElementText().trimmed();
 
-    HGenre retVal(name, id, extended.isEmpty() ? QStringList() : extended.split(","));
+    HGenre retVal(name, id, extended.isEmpty() ? QStringList() : extended.split(QLatin1String(",")));
     if (!retVal.isValid())
     {
         return false;
@@ -965,7 +965,7 @@ bool HCdsPropertyDbPrivate::serializeCDSListElementIn(
     Q_ASSERT(value);
     Q_ASSERT(reader);
 
-    value->setValue(reader->readElementText().split(","));
+    value->setValue(reader->readElementText().split(QLatin1String(",")));
     return true;
 }
 
@@ -1045,7 +1045,7 @@ bool HCdsPropertyDbPrivate::serializeUriElementIn(
     Q_ASSERT(value);
     Q_ASSERT(reader);
 
-    QUrl uriValue = reader->readElementText();
+    QUrl uriValue =(QUrl) reader->readElementText();
     if (!uriValue.isValid() || uriValue.isEmpty())
     {
         return false;
@@ -1093,7 +1093,7 @@ bool HCdsPropertyDbPrivate::serializeAttributeOut(
     const QString& property, const QVariant& value,
     QXmlStreamWriter& writer) const
 {
-    if (property.startsWith('@'))
+    if (property.startsWith(QLatin1Char('@')))
     {
         writer.writeAttribute(property.mid(1), variantAsString(value));
     }

@@ -97,7 +97,7 @@ void HActionProxy::locationsChanged()
 
 void HActionProxy::error(QNetworkReply::NetworkError err)
 {
-    HLOG2(H_AT, H_FUN, m_owner->loggingIdentifier());
+    HLOG2(H_AT, H_FUN, (char *)m_owner->loggingIdentifier().data());
 
     if (!m_reply)
     {
@@ -111,7 +111,7 @@ void HActionProxy::error(QNetworkReply::NetworkError err)
     else if (err == QNetworkReply::ConnectionRefusedError ||
              err == QNetworkReply::HostNotFoundError)
     {
-        HLOG_WARN(QString("Couldn't connect to the device [%1] @ [%2].").arg(
+        HLOG_WARN(QString(QLatin1String("Couldn't connect to the device [%1] @ [%2].")).arg(
             m_owner->parentService()->parentDevice()->info().udn().toSimpleUuid(),
             m_lastUsedLocation.toString()));
 
@@ -139,7 +139,7 @@ void HActionProxy::error(QNetworkReply::NetworkError err)
 
 void HActionProxy::finished()
 {
-    HLOG2(H_AT, H_FUN, m_owner->loggingIdentifier());
+    HLOG2(H_AT, H_FUN, (char *)m_owner->loggingIdentifier().data());
 
     if (!m_reply)
     {
@@ -155,8 +155,8 @@ void HActionProxy::finished()
         // the status code might not be available if the remote host closed
         // the connection.
 
-        HLOG_WARN(QString(
-            "Action invocation failed. Server responded: [%1, %2]").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Action invocation failed. Server responded: [%1, %2]")).arg(
                 QString::number(statusCode), m_reply->attribute(
                     QNetworkRequest::HttpReasonPhraseAttribute).toString()));
 
@@ -168,9 +168,9 @@ void HActionProxy::finished()
     QtSoapMessage response;
     if (!response.setContent(data))
     {
-        HLOG_WARN(QString(
+        HLOG_WARN(QString(QLatin1String(
             "Received an invalid SOAP message as a response to "
-            "action invocation: [%1]").arg(QString::fromUtf8(data)));
+            "action invocation: [%1]")).arg(QString::fromUtf8(data)));
 
         invocationDone(UpnpUndefinedFailure);
         return;
@@ -178,12 +178,12 @@ void HActionProxy::finished()
 
     if (response.isFault())
     {
-        HLOG_WARN(QString(
-            "Action invocation failed: [%1, %2]").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Action invocation failed: [%1, %2]")).arg(
                 response.faultString().toString(),
                 response.faultDetail().toString()));
 
-        QtSoapType errCode = response.faultDetail()["errorCode"];
+        QtSoapType errCode = response.faultDetail()[QLatin1String("errorCode")];
         invocationDone(errCode.isValid() ?
             errCode.value().toInt() : UpnpUndefinedFailure);
         return;
@@ -200,8 +200,8 @@ void HActionProxy::finished()
     const QtSoapType& root = response.method();
     if (!root.isValid())
     {
-        HLOG_WARN(QString(
-            "Received an invalid response to action invocation: [%1]").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Received an invalid response to action invocation: [%1]")).arg(
                 response.toXmlString()));
 
         invocationDone(UpnpUndefinedFailure);
@@ -233,7 +233,7 @@ void HActionProxy::finished()
 
 bool HActionProxy::send()
 {
-    HLOG2(H_AT, H_FUN, m_owner->loggingIdentifier());
+    HLOG2(H_AT, H_FUN, (char *)m_owner->loggingIdentifier().data());
 
     Q_ASSERT(!invocationInProgress());
 
@@ -250,7 +250,7 @@ bool HActionProxy::send()
     Q_ASSERT(m_iNextLocationToTry < m_locations.size());
 
     QtSoapNamespaces::instance().registerNamespace(
-        "u", m_owner->parentService()->info().serviceType().toString());
+        QLatin1String("u"), m_owner->parentService()->info().serviceType().toString());
 
     QtSoapMessage soapMsg;
     soapMsg.setMethod(
@@ -278,13 +278,13 @@ bool HActionProxy::send()
 
     req.setHeader(
         QNetworkRequest::ContentTypeHeader,
-        QString("text/xml; charset=\"utf-8\""));
+        QString(QLatin1String("text/xml; charset=\"utf-8\"")));
 
-    QString soapActionHdrField("\"");
+    QString soapActionHdrField(QLatin1String("\""));
     soapActionHdrField.append(
         m_owner->parentService()->info().serviceType().toString());
 
-    soapActionHdrField.append("#").append(m_owner->info().name()).append("\"");
+    soapActionHdrField.append(QLatin1String("#")).append(m_owner->info().name()).append(QLatin1String("\""));
     req.setRawHeader("SOAPAction", soapActionHdrField.toUtf8());
 
     m_lastUsedLocation = m_locations[m_iNextLocationToTry];
@@ -460,7 +460,7 @@ HClientActionOp HClientAction::beginInvoke(
         h_ptr->m_proxy->setInputArgs(inArgs);
         if (!h_ptr->m_proxy->send())
         {
-            return HClientActionOp(UpnpActionFailed, "Failed to dispatch action invocation");
+            return HClientActionOp(UpnpActionFailed, QLatin1String("Failed to dispatch action invocation"));
         }
     }
 

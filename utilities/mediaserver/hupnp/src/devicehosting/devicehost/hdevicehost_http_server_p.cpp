@@ -55,7 +55,7 @@ QUuid extractUdn(const QUrl& arg)
 {
     QString path = extractRequestPart(arg);
 
-    QUuid udn(path.section('/', 1, 1));
+    QUuid udn(path.section(QLatin1Char('/'), 1, 1));
     if (udn.isNull())
     {
         return QUuid();
@@ -67,7 +67,7 @@ QUuid extractUdn(const QUrl& arg)
 inline QString extractRequestExludingUdn(const QUrl& arg)
 {
     QString pathToSearch = extractRequestPart(arg).section(
-        '/', 2, -1, QString::SectionIncludeLeadingSep);
+        QLatin1Char('/'), 2, -1, QString::SectionIncludeLeadingSep);
 
     return pathToSearch;
 }
@@ -125,8 +125,8 @@ void HDeviceHostHttpServer::incomingSubscriptionRequest(
         service = m_deviceStorage.searchServiceByEventUrl(sreq.eventUrl());
         if (!service)
         {
-            HLOG_WARN(QString(
-                "Ignoring invalid event subscription to: [%1].").arg(
+            HLOG_WARN(QString(QLatin1String(
+                "Ignoring invalid event subscription to: [%1].")).arg(
                     sreq.eventUrl().toString()));
 
             mi->setKeepAlive(false);
@@ -139,12 +139,12 @@ void HDeviceHostHttpServer::incomingSubscriptionRequest(
     else if (!service)
     {
         service = m_deviceStorage.searchServiceByEventUrl(
-            device, extractRequestExludingUdn(sreq.eventUrl()));
+            device, (QUrl)extractRequestExludingUdn(sreq.eventUrl()));
     }
 
     if (!service)
     {
-        HLOG_WARN(QString("Subscription defined as [%1] is invalid.").arg(
+        HLOG_WARN(QString(QLatin1String("Subscription defined as [%1] is invalid.")).arg(
             sreq.eventUrl().path()));
 
         mi->setKeepAlive(false);
@@ -212,7 +212,7 @@ void HDeviceHostHttpServer::incomingControlRequest(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    HLOG_DBG(QString("Control message to [%1] received.").arg(
+    HLOG_DBG(QString(QLatin1String("Control message to [%1] received.")).arg(
         invokeActionRequest.soapAction()));
 
     QUuid udn = extractUdn(invokeActionRequest.serviceUrl());
@@ -234,8 +234,8 @@ void HDeviceHostHttpServer::incomingControlRequest(
 
         if (!service)
         {
-            HLOG_WARN(QString(
-                "Ignoring invalid action invocation to: [%1].").arg(
+            HLOG_WARN(QString(QLatin1String(
+                "Ignoring invalid action invocation to: [%1].")).arg(
                     invokeActionRequest.serviceUrl().toString()));
 
             mi->setKeepAlive(false);
@@ -249,12 +249,12 @@ void HDeviceHostHttpServer::incomingControlRequest(
     else if (!service)
     {
         service = m_deviceStorage.searchServiceByControlUrl(
-            device, extractRequestExludingUdn(invokeActionRequest.serviceUrl()));
+            device, (QUrl)extractRequestExludingUdn(invokeActionRequest.serviceUrl()));
     }
 
     if (!service)
     {
-        HLOG_WARN(QString("Ignoring invalid action invocation to: [%1].").arg(
+        HLOG_WARN(QString(QLatin1String("Ignoring invalid action invocation to: [%1].")).arg(
             invokeActionRequest.serviceUrl().toString()));
 
         mi->setKeepAlive(false);
@@ -283,7 +283,7 @@ void HDeviceHostHttpServer::incomingControlRequest(
 
     if (!action)
     {
-        HLOG_WARN(QString("The service has no action named [%1].").arg(
+        HLOG_WARN(QString(QLatin1String("The service has no action named [%1].")).arg(
             method.name().name()));
 
         mi->setKeepAlive(false);
@@ -333,11 +333,11 @@ void HDeviceHostHttpServer::incomingControlRequest(
     }
 
     QtSoapNamespaces::instance().registerNamespace(
-        "u", service->info().serviceType().toString());
+        QLatin1String("u"), service->info().serviceType().toString());
 
     QtSoapMessage soapResponse;
     soapResponse.setMethod(QtSoapQName(
-        QString("%1%2").arg(action->info().name(), "Response"),
+        QString(QLatin1String("%1%2")).arg(action->info().name(), QLatin1String("Response")),
         service->info().serviceType().toString()));
 
     foreach(const HActionArgument& oarg, outArgs)
@@ -348,7 +348,7 @@ void HDeviceHostHttpServer::incomingControlRequest(
         soapResponse.addMethodArgument(soapArg);
     }
 
-    QString xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + soapResponse.toXmlString();
+    QString xml = QLatin1String("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n") + soapResponse.toXmlString();
 
     m_httpHandler->send(mi, HHttpMessageCreator::createResponse(
         Ok, *mi, xml.toUtf8(), ContentType_TextXml));
@@ -367,7 +367,7 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
     HLOG_DBG(QString(QLatin1String(
         "HTTP GET request received from [%1] to [%2].")).arg(peer, requestPath));
 
-    QUuid searchedUdn(requestPath.section('/', 1, 1));
+    QUuid searchedUdn(requestPath.section(QLatin1Char('/'), 1, 1));
     if (searchedUdn.isNull())
     {
         // the request did not have the UDN prefix, which means that either
@@ -376,7 +376,7 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
         // 2) the request is invalid
 
         HServerService* service =
-            m_deviceStorage.searchServiceByScpdUrl(requestPath);
+            m_deviceStorage.searchServiceByScpdUrl((QUrl)requestPath);
 
         if (service)
         {
@@ -419,10 +419,10 @@ void HDeviceHostHttpServer::incomingUnknownGetRequest(
         return;
     }
 
-    QString extractedRequestPart = extractRequestExludingUdn(requestPath);
+    QString extractedRequestPart = extractRequestExludingUdn((QUrl)requestPath);
 
     HServerService* service =
-        m_deviceStorage.searchServiceByScpdUrl(device, extractedRequestPart);
+        m_deviceStorage.searchServiceByScpdUrl(device, (QUrl)extractedRequestPart);
 
     if (service)
     {

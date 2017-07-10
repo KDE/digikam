@@ -127,7 +127,7 @@ public: // methods
 
     inline static const QString& deviceDescriptionPostFix()
     {
-        static QString retVal = "device_description.xml";
+        static QString retVal = QLatin1String("device_description.xml");
         return retVal;
     }
 };

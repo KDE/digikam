@@ -28,42 +28,42 @@ namespace Upnp
 {
 
 HNt::HNt() :
-    m_typeValue(qMakePair(Type_Undefined   , QString(""))),
-    m_subTypeValue(qMakePair(SubType_Undefined, QString("")))
+    m_typeValue(qMakePair(Type_Undefined   , QString(QLatin1String("")))),
+    m_subTypeValue(qMakePair(SubType_Undefined, QString(QLatin1String(""))))
 {
 }
 
 HNt::HNt(const QString& type) :
-    m_typeValue(qMakePair(Type_Undefined, QString(""))),
-    m_subTypeValue(qMakePair(SubType_Undefined, QString("")))
+    m_typeValue(qMakePair(Type_Undefined, QString(QLatin1String("")))),
+    m_subTypeValue(qMakePair(SubType_Undefined, QString(QLatin1String(""))))
 {
-    if (type.compare("upnp:event", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("upnp:event"), Qt::CaseInsensitive) == 0)
     {
         m_typeValue.first  = Type_UpnpEvent;
-        m_typeValue.second = "upnp:event";
+        m_typeValue.second = QLatin1String("upnp:event");
     }
 }
 
 HNt::HNt(const QString& type, const QString& subtype) :
-    m_typeValue(qMakePair(Type_Undefined, QString(""))),
-    m_subTypeValue(qMakePair(SubType_Undefined, QString("")))
+    m_typeValue(qMakePair(Type_Undefined, QString(QLatin1String("")))),
+    m_subTypeValue(qMakePair(SubType_Undefined, QString(QLatin1String(""))))
 {
-    if (type.compare("upnp:event", Qt::CaseInsensitive) == 0)
+    if (type.compare(QLatin1String("upnp:event"), Qt::CaseInsensitive) == 0)
     {
         m_typeValue.first  = Type_UpnpEvent;
-        m_typeValue.second = "upnp:event";
+        m_typeValue.second = QLatin1String("upnp:event");
     }
 
-    if (subtype.compare("upnp:propchange", Qt::CaseInsensitive) == 0)
+    if (subtype.compare(QLatin1String("upnp:propchange"), Qt::CaseInsensitive) == 0)
     {
         m_subTypeValue.first  = SubType_UpnpPropChange;
-        m_subTypeValue.second = "upnp:propchange";
+        m_subTypeValue.second = QLatin1String("upnp:propchange");
     }
 }
 
 HNt::HNt(Type type) :
     m_typeValue(qMakePair(type, toString(type))),
-    m_subTypeValue(qMakePair(SubType_Undefined, QString("")))
+    m_subTypeValue(qMakePair(SubType_Undefined, QString(QLatin1String(""))))
 {
 }
 
@@ -99,12 +99,12 @@ QString HNt::toString(Type type)
     switch(type)
     {
     case Type_Undefined:
-        return "";
+        return QLatin1String("");
     case Type_UpnpEvent:
-        return "upnp:event";
+        return QLatin1String("upnp:event");
     }
 
-    return "";
+    return QLatin1String("");
 }
 
 QString HNt::toString(SubType subType)
@@ -112,12 +112,12 @@ QString HNt::toString(SubType subType)
     switch(subType)
     {
     case SubType_Undefined:
-        return "";
+        return QLatin1String("");
     case SubType_UpnpPropChange:
-        return "upnp:propchange";
+        return QLatin1String("upnp:propchange");
     }
 
-    return "";
+    return QLatin1String("");
 }
 
 }

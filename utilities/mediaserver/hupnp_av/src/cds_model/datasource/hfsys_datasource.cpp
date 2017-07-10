@@ -116,7 +116,7 @@ bool HFileSystemDataSource::doInit()
 {
     H_D(HFileSystemDataSource);
 
-    HStorageFolder* rootContainer = new HStorageFolder("Contents", "-1", "0");
+    HStorageFolder* rootContainer = new HStorageFolder(QLatin1String("Contents"), QLatin1String("-1"), QLatin1String("0"));
     HCdsObjectData root(rootContainer);
     h->add(&root);
 
@@ -127,7 +127,7 @@ bool HFileSystemDataSource::doInit()
     foreach(const HRootDir& rootDir, rootDirs)
     {
         QList<HCdsObjectData*> items;
-        if (h->m_fsysReader->scan(rootDir, "0", &items))
+        if (h->m_fsysReader->scan(rootDir, QLatin1String("0"), &items))
         {
             if (!h->add(items))
             {
@@ -166,14 +166,14 @@ QIODevice* HFileSystemDataSource::loadItemData(const QString& itemId)
     }
 
     HLOG(H_AT, H_FUN);
-    HLOG_INFO(QString("Attempting to load item [%1]").arg(itemId));
+    HLOG_INFO(QString(QLatin1String("Attempting to load item [%1]")).arg(itemId));
 
     QString path = getPath(itemId);
     if (path.isEmpty())
     {
         QString err =
-            QString("The specified objectId [%1] does not correspond to any "
-            "item that can be loaded").arg(itemId);
+            QString(QLatin1String("The specified objectId [%1] does not correspond to any "
+            "item that can be loaded")).arg(itemId);
 
         HLOG_WARN(err);
         return 0;
@@ -182,7 +182,7 @@ QIODevice* HFileSystemDataSource::loadItemData(const QString& itemId)
     QFile* file = new QFile(path);
     if (!file->open(QIODevice::ReadOnly))
     {
-        QString err = QString("Could not open file [%1] for reading").arg(path);
+        QString err = QString(QLatin1String("Could not open file [%1] for reading")).arg(path);
         HLOG_WARN(err);
         delete file;
         return 0;
@@ -204,7 +204,7 @@ void HFileSystemDataSource::clear()
     h->configuration()->clear();
     h->m_itemPaths.clear();
 
-    HStorageFolder* rootContainer = new HStorageFolder("Contents", "-1", "0");
+    HStorageFolder* rootContainer = new HStorageFolder(QLatin1String("Contents"), QLatin1String("-1"), QLatin1String("0"));
     HCdsObjectData root(rootContainer);
     h->add(&root);
 }
@@ -289,7 +289,7 @@ qint32 HFileSystemDataSource::add(const HRootDir& rootDir, AddFlag addFlag)
     }
 
     QList<HCdsObjectData*> items;
-    if (h->m_fsysReader->scan(rootDir, "0", &items))
+    if (h->m_fsysReader->scan(rootDir, QLatin1String("0"), &items))
     {
         if (!h->add(items, addFlag))
         {

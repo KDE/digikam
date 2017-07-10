@@ -1,0 +1,2 @@
+1- I generated two mocs myself. one called moc_file.cpp , and the other called moc_file2.cpp . I also added them manually in the cmakelists file
+2- I put the full path of descriptions folder for the server not relative path

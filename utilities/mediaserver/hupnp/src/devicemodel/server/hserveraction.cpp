@@ -88,7 +88,7 @@ const HActionInfo& HServerAction::info() const
 qint32 HServerAction::invoke(
     const HActionArguments& inArgs, HActionArguments* outArgs)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)h_ptr->m_loggingIdentifier.data());
     *outArgs = h_ptr->m_info->outputArguments();
     return h_ptr->m_actionInvoke(inArgs, outArgs);
 }

@@ -80,12 +80,12 @@ ControlPointHttpServer::~ControlPointHttpServer()
 void ControlPointHttpServer::incomingNotifyMessage(
     HMessagingInfo* mi, const HNotifyRequest& req)
 {
-    HLOG2(H_AT, H_FUN, (char*) m_creationParameters->m_loggingIdentifier.data());
+    HLOG2(H_AT, H_FUN, (char*) m_loggingIdentifier.data());
 
     HLOG_DBG(QString(QLatin1String(
-        "Incoming event notify from [%1]").arg(peerAsStr(mi->socket()))));
+        "Incoming event notify from [%1]")).arg(peerAsStr(mi->socket())));
 
-    QString serviceCallbackId = req.callback().path().remove('/');
+    QString serviceCallbackId = req.callback().path().remove(QLatin1Char('/'));
     StatusCode statusCode =
         m_owner->m_eventSubscriber->onNotify(serviceCallbackId, req);
 
@@ -109,7 +109,7 @@ HControlPointSsdpHandler::HControlPointSsdpHandler(
 
 HControlPointSsdpHandler::~HControlPointSsdpHandler()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*) h_ptr->m_loggingIdentifier.data());
 }
 
 bool HControlPointSsdpHandler::incomingDiscoveryResponse(
@@ -137,7 +137,7 @@ HControlPointPrivate::HControlPointPrivate() :
     QObject(),
         m_deviceBuildTasks(),
         m_loggingIdentifier(
-            QString("__CONTROL POINT %1__: ").arg(
+            QString(QLatin1String("__CONTROL POINT %1__: ")).arg(
                 QUuid::createUuid().toString()).toLocal8Bit()),
         m_configuration(),
         m_ssdps(),
@@ -225,7 +225,7 @@ bool HControlPointPrivate::addRootDevice(HDefaultClientDevice* newRootDevice)
 
     if (q_ptr->acceptRootDevice(newRootDevice) == HControlPoint::IgnoreDevice)
     {
-        HLOG_DBG(QString("Device [%1] rejected").arg(
+        HLOG_DBG(QString(QLatin1String("Device [%1] rejected")).arg(
             newRootDevice->info().udn().toString()));
         return false;
     }
@@ -241,8 +241,8 @@ bool HControlPointPrivate::addRootDevice(HDefaultClientDevice* newRootDevice)
 
     if (!m_deviceStorage.addRootDevice(newRootDevice))
     {
-        HLOG_WARN(QString(
-            "Failed to add root device [UDN: %1]: %2").arg(
+        HLOG_WARN(QString(QLatin1String(
+            "Failed to add root device [UDN: %1]: %2")).arg(
                 newRootDevice->info().udn().toSimpleUuid(),
                 m_deviceStorage.lastError()));
 
@@ -302,7 +302,7 @@ bool HControlPointPrivate::processDeviceOffline(
     if (device->deviceStatus()->online())
     {
 
-        HLOG_INFO(QString("Resource [%1] is unavailable.").arg(
+        HLOG_INFO(QString(QLatin1String("Resource [%1] is unavailable.")).arg(
             msg.usn().resourceType().toString()));
 
         // according to the UDA v1.1 specification, if a bye bye message of any kind
@@ -355,7 +355,7 @@ bool HControlPointPrivate::processDeviceDiscovery(
         // tree has to be available at that location.
         if (device->addLocation(msg.location()))
         {
-            HLOG_DBG(QString("Existing device [%1] now available at [%2]").arg(
+            HLOG_DBG(QString(QLatin1String("Existing device [%1] now available at [%2]")).arg(
                 resourceUdn.toString(), msg.location().toString()));
         }
 
@@ -387,7 +387,7 @@ bool HControlPointPrivate::processDeviceDiscovery(
 
     if (!q_ptr->acceptResource(msg.usn(), source))
     {
-        HLOG_DBG(QString("Resource advertisement [%1] rejected").arg(
+        HLOG_DBG(QString(QLatin1String("Resource advertisement [%1] rejected")).arg(
             msg.usn().toString()));
 
         return true;
@@ -405,9 +405,9 @@ bool HControlPointPrivate::processDeviceDiscovery(
 
     Q_ASSERT(ok); Q_UNUSED(ok)
 
-    HLOG_INFO(QString(
+    HLOG_INFO(QString(QLatin1String(
         "New resource [%1] is available @ [%2]. "
-        "Attempting to build the device model.").arg(
+        "Attempting to build the device model.")).arg(
             msg.usn().toString(), msg.location().toString()));
 
     m_threadPool->start(newBuildTask);
@@ -428,7 +428,7 @@ void HControlPointPrivate::processDeviceOnline(
     {
     case HControlPoint::IgnoreDevice:
 
-        HLOG_DBG(QString("Discarding device with UDN %1").arg(
+        HLOG_DBG(QString(QLatin1String("Discarding device with UDN %1")).arg(
             device->info().udn().toString()));
 
         if (newDevice)
@@ -485,7 +485,7 @@ void HControlPointPrivate::deviceModelBuildDone(const Herqq::Upnp::HUdn& udn)
         // HControlPoint::quit() before this event is delivered.
         if (build->completionValue() == 0)
         {
-            HLOG_INFO(QString("Device model for [%1] built successfully.").arg(
+            HLOG_INFO(QString(QLatin1String("Device model for [%1] built successfully.")).arg(
                 udn.toString()));
 
             HDefaultClientDevice* device = build->createdDevice();
@@ -500,7 +500,7 @@ void HControlPointPrivate::deviceModelBuildDone(const Herqq::Upnp::HUdn& udn)
         }
         else
         {
-            HLOG_WARN(QString("Device model for [%1] could not be built: %2.").arg(
+            HLOG_WARN(QString(QLatin1String("Device model for [%1] could not be built: %2.")).arg(
                 udn.toString(), build->errorString()));
         }
     }
@@ -514,7 +514,7 @@ void HControlPointPrivate::deviceModelBuildDone(const Herqq::Upnp::HUdn& udn)
 HControlPoint::HControlPoint(QObject* parent) :
     QObject(parent), h_ptr(new HControlPointPrivate())
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     h_ptr->m_configuration.reset(new HControlPointConfiguration());
 
@@ -534,7 +534,7 @@ HControlPoint::HControlPoint(
     const HControlPointConfiguration& configuration, QObject* parent) :
         QObject(parent), h_ptr(new HControlPointPrivate())
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char *) h_ptr->m_loggingIdentifier.data());
 
     h_ptr->m_configuration.reset(configuration.clone());
 
@@ -547,7 +547,7 @@ HControlPoint::HControlPoint(
     QObject* parent) :
         QObject(parent), h_ptr(&dd)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     h_ptr->m_configuration.reset(configuration ?
         configuration->clone() : new HControlPointConfiguration());
@@ -592,7 +592,7 @@ const HControlPointConfiguration* HControlPoint::configuration() const
 
 void HControlPoint::setError(ControlPointError error, const QString& errorStr)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     h_ptr->m_lastError = error;
     h_ptr->m_lastErrorDescription = errorStr;
@@ -600,7 +600,7 @@ void HControlPoint::setError(ControlPointError error, const QString& errorStr)
 
 bool HControlPoint::init()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     Q_ASSERT_X(
         thread() == QThread::currentThread(), H_AT,
@@ -611,7 +611,7 @@ bool HControlPoint::init()
     {
         setError(
             AlreadyInitializedError,
-            "The control point is already initialized");
+           QLatin1String("The control point is already initialized"));
 
         return false;
     }
@@ -624,7 +624,7 @@ bool HControlPoint::init()
 
     h_ptr->m_state = HControlPointPrivate::Initializing;
 
-    HLOG_INFO("ControlPoint initializing.");
+    HLOG_INFO(QLatin1String("ControlPoint initializing."));
 
     h_ptr->m_eventSubscriber = new HEventSubscriptionManager(h_ptr);
 
@@ -662,7 +662,7 @@ bool HControlPoint::init()
 
     if (!h_ptr->m_server->init(convertHostAddressesToEndpoints(addrs)))
     {
-        setError(CommunicationsError, "Failed to start HTTP server");
+        setError(CommunicationsError, QLatin1String("Failed to start HTTP server"));
         ok = false;
         goto end;
     }
@@ -729,8 +729,8 @@ end:
         return false;
     }
 
-    setError(UndefinedError, "");
-    HLOG_INFO("ControlPoint initialized.");
+    setError(UndefinedError, QLatin1String(""));
+    HLOG_INFO(QLatin1String("ControlPoint initialized."));
     return true;
 }
 
@@ -746,7 +746,7 @@ QString HControlPoint::errorDescription() const
 
 void HControlPoint::quit()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     Q_ASSERT_X(
         thread() == QThread::currentThread(), H_AT,
@@ -758,7 +758,7 @@ void HControlPoint::quit()
         return;
     }
 
-    HLOG_INFO("Shutting down.");
+    HLOG_INFO(QLatin1String("Shutting down."));
 
     h_ptr->m_state = HControlPointPrivate::Exiting;
 
@@ -783,7 +783,7 @@ void HControlPoint::quit()
     delete h_ptr->m_eventSubscriber; h_ptr->m_eventSubscriber = 0;
 
     h_ptr->m_state = HControlPointPrivate::Uninitialized;
-    HLOG_INFO("Shut down.");
+    HLOG_INFO(QLatin1String("Shut down."));
 }
 
 bool HControlPoint::isStarted() const
@@ -793,7 +793,7 @@ bool HControlPoint::isStarted() const
 
 HClientDevices HControlPoint::rootDevices() const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
@@ -808,7 +808,7 @@ HClientDevices HControlPoint::devices(
     const HResourceType& deviceType, HResourceType::VersionMatch vm,
     TargetDeviceType dts)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
@@ -822,7 +822,7 @@ HClientDevices HControlPoint::devices(
 HClientDevice* HControlPoint::device(
     const HUdn& udn, TargetDeviceType dts) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
@@ -836,23 +836,23 @@ HClientDevice* HControlPoint::device(
 bool HControlPoint::subscribeEvents(
     HClientDevice* device, DeviceVisitType visitType)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (!device)
     {
-        setError(InvalidArgumentError, "Null pointer error");
+        setError(InvalidArgumentError, QLatin1String("Null pointer error"));
         return false;
     }
     else if (!h_ptr->m_deviceStorage.searchDeviceByUdn(
         device->info().udn(), AllDevices))
     {
         setError(InvalidArgumentError,
-            "The specified device was not found in this control point");
+            QLatin1String("The specified device was not found in this control point"));
 
         return false;
     }
@@ -866,9 +866,9 @@ bool HControlPoint::subscribeEvents(
     {
         setError(
             InvalidArgumentError,
-            "Could not subscribe to any of the services contained by the device; "
+            QLatin1String("Could not subscribe to any of the services contained by the device; "
                "The device may not have services or none of them are evented, or "
-               "there is active subscription to every one of them already");
+               "there is active subscription to every one of them already"));
 
         return false;
     }
@@ -878,23 +878,23 @@ bool HControlPoint::subscribeEvents(
 
 bool HControlPoint::subscribeEvents(HClientService* service)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (!service)
     {
-        setError(InvalidArgumentError, "Null pointer error");
+        setError(InvalidArgumentError, QLatin1String("Null pointer error"));
         return false;
     }
     else if (!h_ptr->m_deviceStorage.searchDeviceByUdn(
                 service->parentDevice()->info().udn(), AllDevices))
     {
         setError(InvalidArgumentError,
-            "The specified service was not found in this control point");
+            QLatin1String("The specified service was not found in this control point"));
 
         return false;
     }
@@ -912,14 +912,14 @@ bool HControlPoint::subscribeEvents(HClientService* service)
     case HEventSubscriptionManager::Sub_AlreadySubscribed:
         setError(
             InvalidArgumentError,
-            "Already subscribed to the specified service");
+            QLatin1String("Already subscribed to the specified service"));
 
         break;
 
     case HEventSubscriptionManager::Sub_Failed_NotEvented:
         setError(
             InvalidArgumentError,
-            "The specified service is not evented");
+            QLatin1String("The specified service is not evented"));
 
         break;
 
@@ -933,7 +933,7 @@ bool HControlPoint::subscribeEvents(HClientService* service)
 HControlPoint::SubscriptionStatus HControlPoint::subscriptionStatus(
     const HClientService* service) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     return static_cast<HControlPoint::SubscriptionStatus>(
         h_ptr->m_eventSubscriber->subscriptionStatus(service));
@@ -942,16 +942,16 @@ HControlPoint::SubscriptionStatus HControlPoint::subscriptionStatus(
 bool HControlPoint::cancelEvents(
     HClientDevice* device, DeviceVisitType visitType)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (!device)
     {
-        setError(InvalidArgumentError, "Null pointer error");
+        setError(InvalidArgumentError, QLatin1String("Null pointer error"));
         return false;
     }
     else if (!h_ptr->m_deviceStorage.searchDeviceByUdn(
@@ -959,7 +959,7 @@ bool HControlPoint::cancelEvents(
     {
         setError(
             InvalidArgumentError,
-            "The specified device was not found in this control point");
+            QLatin1String("The specified device was not found in this control point"));
 
         return false;
     }
@@ -971,23 +971,23 @@ bool HControlPoint::cancelEvents(
 
     setError(
         InvalidArgumentError,
-        "No active subscriptions to any of the services contained by the device");
+        QLatin1String("No active subscriptions to any of the services contained by the device"));
 
     return false;
 }
 
 bool HControlPoint::cancelEvents(HClientService* service)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (!service)
     {
-        setError(InvalidArgumentError, "Null pointer error");
+        setError(InvalidArgumentError, QLatin1String("Null pointer error"));
         return false;
     }
     else if (!h_ptr->m_deviceStorage.searchDeviceByUdn(
@@ -995,7 +995,7 @@ bool HControlPoint::cancelEvents(HClientService* service)
     {
         setError(
             InvalidArgumentError,
-            "The specified service was not found in this control point");
+            QLatin1String("The specified service was not found in this control point"));
 
         return false;
     }
@@ -1007,28 +1007,28 @@ bool HControlPoint::cancelEvents(HClientService* service)
 
     setError(
         InvalidArgumentError,
-        "No active subscription to the specified service");
+        QLatin1String("No active subscription to the specified service"));
 
     return false;
 }
 
 bool HControlPoint::removeRootDevice(HClientDevice* rootDevice)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (!rootDevice)
     {
-        setError(InvalidArgumentError, "Null pointer error");
+        setError(InvalidArgumentError, QLatin1String("Null pointer error"));
         return false;
     }
     else if (rootDevice->parentDevice())
     {
-        setError(InvalidArgumentError, "Cannot remove embedded devices");
+        setError(InvalidArgumentError, QLatin1String("Cannot remove embedded devices"));
         return false;
     }
 
@@ -1046,30 +1046,30 @@ bool HControlPoint::removeRootDevice(HClientDevice* rootDevice)
 
     setError(
         InvalidArgumentError,
-        "The device was not found in this control point");
+        QLatin1String("The device was not found in this control point"));
 
     return false;
 }
 
 bool HControlPoint::scan(const HDiscoveryType& discoveryType, qint32 count)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (discoveryType.type() == HDiscoveryType::Undefined)
     {
-        setError(InvalidArgumentError, "Discovery type was undefined");
+        setError(InvalidArgumentError, QLatin1String("Discovery type was undefined"));
         return false;
     }
     else if (count <= 0)
     {
         setError(
             InvalidArgumentError,
-            "The number of messages has to be greater than zero");
+            QLatin1String("The number of messages has to be greater than zero"));
 
         return false;
     }
@@ -1095,23 +1095,23 @@ bool HControlPoint::scan(
     const HDiscoveryType& discoveryType, const HEndpoint& destination,
     qint32 count)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotInitializedError, "The control point is not initialized");
+        setError(NotInitializedError, QLatin1String("The control point is not initialized"));
         return false;
     }
     else if (discoveryType.type() == HDiscoveryType::Undefined)
     {
-        setError(InvalidArgumentError, "Discovery type was undefined");
+        setError(InvalidArgumentError, QLatin1String("Discovery type was undefined"));
         return false;
     }
     else if (count <= 0)
     {
         setError(
             InvalidArgumentError,
-            "The number of messages has to be greater than zero");
+            QLatin1String("The number of messages has to be greater than zero"));
 
         return false;
     }

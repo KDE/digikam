@@ -654,22 +654,22 @@ const HItem* HObject::asItem() const
 
 QString HObject::writeStatusToString(WriteStatus status)
 {
-    QString retVal = "Unknown";
+    QString retVal = QLatin1String("Unknown");
     switch (status)
     {
     case UnknownWriteStatus:
         break;
     case WritableWriteStatus:
-        retVal = "Writable";
+        retVal = QLatin1String("Writable");
         break;
     case ProtectedWriteStatus:
-        retVal = "Protected";
+        retVal = QLatin1String("Protected");
         break;
     case NotWritableWriteStatus:
-        retVal = "NotWritable";
+        retVal = QLatin1String("NotWritable");
         break;
     case MixedWriteStatus:
-        retVal = "Mixed";
+        retVal = QLatin1String("Mixed");
         break;
     default:
         break;
@@ -680,15 +680,15 @@ QString HObject::writeStatusToString(WriteStatus status)
 HObject::WriteStatus HObject::writeStatusFromString(const QString& status)
 {
     WriteStatus retVal = UnknownWriteStatus;
-    if (status.compare("writable", Qt::CaseInsensitive) == 0)
+    if (status.compare(QLatin1String("writable"), Qt::CaseInsensitive) == 0)
     {
         retVal = WritableWriteStatus;
     }
-    else if (status.compare("protected", Qt::CaseInsensitive) == 0)
+    else if (status.compare(QLatin1String("protected"), Qt::CaseInsensitive) == 0)
     {
         retVal = ProtectedWriteStatus;
     }
-    else if (status.compare("mixed", Qt::CaseInsensitive) == 0)
+    else if (status.compare(QLatin1String("mixed"), Qt::CaseInsensitive) == 0)
     {
         retVal = MixedWriteStatus;
     }

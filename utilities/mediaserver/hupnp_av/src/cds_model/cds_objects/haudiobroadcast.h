@@ -306,7 +306,7 @@ public:
      *
      * \return The class identifier specified by the AV Working Committee.
      */
-    inline static QString sClass() { return "object.item.audioItem.audioBroadcast"; }
+    inline static QString sClass() { return QLatin1String("object.item.audioItem.audioBroadcast"); }
 
     /*!
      * Creates a new instance with no title or parentID.

@@ -37,7 +37,7 @@ namespace Upnp
  ******************************************************************************/
 DeviceBuildTask::~DeviceBuildTask()
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)m_owner->m_loggingIdentifier.data());
 
     if (m_createdDevice.data())
     {
@@ -54,7 +54,7 @@ HDefaultClientDevice* DeviceBuildTask::createdDevice()
 
 void DeviceBuildTask::run()
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)m_owner->m_loggingIdentifier.data());
 
     QString err;
     QScopedPointer<HDefaultClientDevice> device;
@@ -65,7 +65,7 @@ void DeviceBuildTask::run()
     // otherwise, the creation failed
     if (!device.data())
     {
-        HLOG_WARN(QString("Couldn't create a device: %1").arg(err));
+        HLOG_WARN(QString(QLatin1String("Couldn't create a device: %1")).arg(err));
 
         m_completionValue = -1;
         m_errorString = err;

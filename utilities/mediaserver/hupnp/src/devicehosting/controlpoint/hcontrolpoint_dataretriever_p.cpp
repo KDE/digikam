@@ -53,7 +53,7 @@ void HDataRetriever::finished()
     if (m_reply->error() != QNetworkReply::NoError)
     {
         m_success = false;
-        HLOG_WARN(QString("Request failed: %1").arg(m_reply->errorString()));
+        HLOG_WARN(QString(QLatin1String("Request failed: %1")).arg(m_reply->errorString()));
     }
     else
     {
@@ -68,22 +68,23 @@ bool HDataRetriever::retrieveData(
 
     QString queryPart = extractRequestPart(query);
 
-    QString request = queryPart.startsWith('/') ?
-                      extractHostPart(baseUrl.toString()) : baseUrl.toString();
+    QString request = queryPart.startsWith(QLatin1Char('/')) ?
+                      extractHostPart(baseUrl) : baseUrl.toString();
 
     if (!query.isEmpty())
     {
-        if (!request.endsWith('/')) { request.append('/'); }
-        if (queryPart.startsWith('/')) { queryPart.remove(0, 1); }
+        if (!request.endsWith(QLatin1Char('/'))) { request.append(QLatin1Char('/')); }
+        if (queryPart.startsWith(QLatin1Char('/'))) { queryPart.remove(0, 1); }
         request.append(queryPart);
     }
 
     if (request.isEmpty())
     {
-        request.append('/');
+        request.append(QLatin1Char('/'));
     }
 
-    QNetworkRequest req(request);
+    QUrl _url(request);
+    QNetworkRequest req(_url);
     m_reply = m_nam.get(req);
 
     int id = startTimer(3000);
@@ -103,7 +104,7 @@ void HDataRetriever::timerEvent(QTimerEvent* event)
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    HLOG_WARN(QString("Request timed out."));
+    HLOG_WARN(QString(QLatin1String("Request timed out.")));
 
     quit();
     killTimer(event->timerId());
@@ -116,8 +117,8 @@ bool HDataRetriever::retrieveServiceDescription(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    HLOG_DBG(QString(
-        "Attempting to fetch a service description for [%1] from: [%2]").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to fetch a service description for [%1] from: [%2]")).arg(
             scpdUrl.toString(), deviceLocation.toString()));
 
     QByteArray tmp;
@@ -135,8 +136,8 @@ bool HDataRetriever::retrieveIcon(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    HLOG_DBG(QString(
-        "Attempting to retrieve icon [%1] from: [%2]").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to retrieve icon [%1] from: [%2]")).arg(
             iconUrl.toString(), deviceLocation.toString()));
 
     return retrieveData(deviceLocation, iconUrl, data);
@@ -147,8 +148,8 @@ bool HDataRetriever::retrieveDeviceDescription(
 {
     HLOG2(H_AT, H_FUN, (char*) (m_loggingIdentifier.data()));
 
-    HLOG_DBG(QString(
-        "Attempting to fetch a device description from: [%1]").arg(
+    HLOG_DBG(QString(QLatin1String(
+        "Attempting to fetch a device description from: [%1]")).arg(
             deviceLocation.toString()));
 
     QByteArray tmp;

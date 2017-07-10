@@ -412,7 +412,7 @@ public: // instance methods
             }*/
     // TODO
             if (interface.hostAddress().isInSubnet(
-                QHostAddress::parseSubnet(ci->host().append("/24"))))
+                QHostAddress::parseSubnet(ci->host().append(QLatin1String("/24")))))
             {
                 *location = *ci;
                 return true;
@@ -458,7 +458,7 @@ public: // instance methods
         if (searchDeviceByUdn(device->info().udn(), RootDevices))
         {
             m_lastError =
-                QString("Cannot host multiple devices with the same UDN [%1]").arg(
+                QString(QLatin1String("Cannot host multiple devices with the same UDN [%1]")).arg(
                     device->info().udn().toSimpleUuid());
 
             return false;
@@ -492,7 +492,7 @@ public: // instance methods
         m_rootDevices.push_back(root);
         m_deviceControllers.append(qMakePair(root, controller));
 
-        HLOG_DBG(QString("New root device [%1] added. Current device count is %2").arg(
+        HLOG_DBG(QString(QLatin1String("New root device [%1] added. Current device count is %2")).arg(
             root->info().friendlyName(), QString::number(m_rootDevices.size())));
 
         return true;
@@ -510,7 +510,7 @@ public: // instance methods
         bool ok = m_rootDevices.removeOne(root);
         if (!ok)
         {
-            HLOG_WARN(QString("Device [%1] was not found.").arg(
+            HLOG_WARN(QString(QLatin1String("Device [%1] was not found.")).arg(
                 devInfo.friendlyName()));
 
             return false;
@@ -531,7 +531,7 @@ public: // instance methods
         delete root;
         Q_ASSERT(found);
 
-        HLOG_DBG(QString("Root device [%1] removed. Current device count is %2").arg(
+        HLOG_DBG(QString(QLatin1String("Root device [%1] removed. Current device count is %2")).arg(
             devInfo.friendlyName(), QString::number(m_rootDevices.size())));
 
         return true;

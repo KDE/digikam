@@ -56,12 +56,12 @@ void getCurrentValues(QByteArray& msgBody, const HServerService* service)
     QDomDocument dd;
 
     QDomProcessingInstruction proc =
-        dd.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"utf-8\"");
+        dd.createProcessingInstruction(QLatin1String("xml"), QLatin1String("version=\"1.0\" encoding=\"utf-8\""));
 
     dd.appendChild(proc);
 
     QDomElement propertySetElem =
-        dd.createElementNS("urn:schemas-upnp-org:event-1-0", "e:propertyset");
+        dd.createElementNS(QLatin1String("urn:schemas-upnp-org:event-1-0"), QLatin1String("e:propertyset"));
 
     dd.appendChild(propertySetElem);
 
@@ -79,7 +79,7 @@ void getCurrentValues(QByteArray& msgBody, const HServerService* service)
         }
 
         QDomElement propertyElem =
-            dd.createElementNS("urn:schemas-upnp-org:event-1-0", "e:property");
+            dd.createElementNS(QLatin1String("urn:schemas-upnp-org:event-1-0"), QLatin1String("e:property"));
 
         QDomElement variableElem = dd.createElement(info.name());
         variableElem.appendChild(dd.createTextNode(stateVar->value().toString()));
@@ -184,9 +184,9 @@ StatusCode HEventNotifier::addSubscriber(
         if (isSameService(rc->service(), service) &&
             sreq.callbacks().contains(rc->location()))
         {
-            HLOG_WARN(QString(
+            HLOG_WARN(QString(QLatin1String(
                 "subscriber [%1] to the specified service URL [%2] already "
-                "exists").arg(
+                "exists")).arg(
                     rc->location().toString(),
                     service->info().scpdUrl().toString()));
 
@@ -194,7 +194,7 @@ StatusCode HEventNotifier::addSubscriber(
         }
     }
 
-    HLOG_INFO(QString("adding subscriber from [%1]").arg(
+    HLOG_INFO(QString(QLatin1String("adding subscriber from [%1]")).arg(
         sreq.callbacks().at(0).toString()));
 
     HTimeout timeout;
@@ -204,9 +204,9 @@ StatusCode HEventNotifier::addSubscriber(
     }
     else
     {
-        HLOG_WARN(QString(
+        HLOG_WARN(QString(QLatin1String(
             "Received subscription request to a service [%1] that has no evented state variables. "
-            "No events will be sent to this subscriber.").arg(
+            "No events will be sent to this subscriber.")).arg(
                 service->info().serviceType().toString()));
         timeout = HTimeout(60*60*24);
     }
@@ -237,7 +237,7 @@ bool HEventNotifier::removeSubscriber(const HUnsubscribeRequest& req)
     {
         if ((*it)->sid() == req.sid())
         {
-            HLOG_INFO(QString("removing subscriber [SID [%1]] from [%2]").arg(
+            HLOG_INFO(QString(QLatin1String("removing subscriber [SID [%1]] from [%2]")).arg(
                 req.sid().toString(), (*it)->location().toString()));
 
             delete *it;
@@ -247,8 +247,8 @@ bool HEventNotifier::removeSubscriber(const HUnsubscribeRequest& req)
         }
         else if ((*it)->expired())
         {
-            HLOG_INFO(QString(
-                "removing an expired subscription [SID [%1]] from [%2]").arg(
+            HLOG_INFO(QString(QLatin1String(
+                "removing an expired subscription [SID [%1]] from [%2]")).arg(
                     (*it)->sid().toString(), (*it)->location().toString()));
 
             delete *it;
@@ -262,7 +262,7 @@ bool HEventNotifier::removeSubscriber(const HUnsubscribeRequest& req)
 
     if (!found)
     {
-        HLOG_WARN(QString("Could not cancel subscription. Invalid SID [%1]").arg(
+        HLOG_WARN(QString(QLatin1String("Could not cancel subscription. Invalid SID [%1]")).arg(
             req.sid().toString()));
     }
 
@@ -282,7 +282,7 @@ StatusCode HEventNotifier::renewSubscription(
         HServiceEventSubscriber* sub = (*it);
         if (sub->sid() == req.sid())
         {
-            HLOG_INFO(QString("renewing subscription from [%1]").arg(
+            HLOG_INFO(QString(QLatin1String("renewing subscription from [%1]")).arg(
                 (*it)->location().toString()));
 
             sub->renew(getSubscriptionTimeout(req));
@@ -291,7 +291,7 @@ StatusCode HEventNotifier::renewSubscription(
         }
         else if (sub->expired())
         {
-            HLOG_INFO(QString("removing subscriber [SID [%1]] from [%2]").arg(
+            HLOG_INFO(QString(QLatin1String("removing subscriber [SID [%1]] from [%2]")).arg(
                 sub->sid().toString(), sub->location().toString()));
 
             delete *it;
@@ -303,7 +303,7 @@ StatusCode HEventNotifier::renewSubscription(
         }
     }
 
-    HLOG_WARN(QString("Cannot renew subscription. Invalid SID: [%1]").arg(
+    HLOG_WARN(QString(QLatin1String("Cannot renew subscription. Invalid SID: [%1]")).arg(
         req.sid().toString()));
 
     return PreconditionFailed;
@@ -329,7 +329,7 @@ void HEventNotifier::stateChanged(const HServerService* source)
         }
         else if ((*it)->expired())
         {
-            HLOG_INFO(QString("removing subscriber [SID [%1]] from [%2]").arg(
+            HLOG_INFO(QString(QLatin1String("removing subscriber [SID [%1]] from [%2]")).arg(
                 sub->sid().toString(), sub->location().toString()));
 
             delete *it;
@@ -374,9 +374,9 @@ void HEventNotifier::initialNotify(
 
         if (!rc->initialNotify(msgBody, mi))
         {
-            HLOG_WARN_NONSTD(QString(
+            HLOG_WARN_NONSTD(QString(QLatin1String(
                 "Initial notify to SID [%1] failed. The device does not seem to " \
-                "respect HTTP keep-alive. Re-sending the initial notify using a new connection.").arg(
+                "respect HTTP keep-alive. Re-sending the initial notify using a new connection.")).arg(
                     rc->sid().toString()));
         }
 

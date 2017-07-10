@@ -53,7 +53,7 @@ HServerDeviceController::HServerDeviceController(
         QObject(parent),
             m_statusNotifier(new QTimer(this)),
             m_deviceStatus(new HDeviceStatus()),
-            m_device(device)
+                m_device(device)
 {
     Q_ASSERT(m_device);
     //m_device->setParent(this);
@@ -108,7 +108,7 @@ bool HServerDeviceController::isTimedout() const
 HDeviceHostPrivate::HDeviceHostPrivate() :
     QObject(),
         m_loggingIdentifier(
-            QString("__DEVICE HOST %1__: ").arg(
+            QString(QLatin1String("__DEVICE HOST %1__: ")).arg(
                 QUuid::createUuid().toString()).toLocal8Bit()),
         m_config           (),
         m_ssdps            (),
@@ -151,7 +151,7 @@ bool HDeviceHostPrivate::createRootDevice(const HDeviceConfiguration* deviceconf
 
     QString baseDir = extractBaseUrl(deviceconfig->pathToDeviceDescription());
 
-    DeviceHostDataRetriever dataRetriever(m_loggingIdentifier, baseDir);
+    DeviceHostDataRetriever dataRetriever(m_loggingIdentifier, (QUrl)baseDir);
 
     QString deviceDescr;
     if (!dataRetriever.retrieveDeviceDescription(
@@ -352,7 +352,7 @@ const HDeviceHostRuntimeStatus* HDeviceHost::runtimeStatus() const
 
 void HDeviceHost::setError(DeviceHostError error, const QString& errorStr)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     h_ptr->m_lastError = error;
     h_ptr->m_lastErrorDescription = errorStr;
@@ -360,7 +360,7 @@ void HDeviceHost::setError(DeviceHostError error, const QString& errorStr)
 
 bool HDeviceHost::init(const HDeviceHostConfiguration& config)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     Q_ASSERT_X(
         thread() == QThread::currentThread(), H_AT,
@@ -369,18 +369,18 @@ bool HDeviceHost::init(const HDeviceHostConfiguration& config)
 
     if (h_ptr->m_initialized)
     {
-        setError(AlreadyInitializedError, "The device host is already initialized");
+        setError(AlreadyInitializedError, QLatin1String("The device host is already initialized"));
         return false;
     }
 
     if (!config.isValid())
     {
-        setError(InvalidConfigurationError, "The provided configuration is not valid");
+        setError(InvalidConfigurationError, QLatin1String("The provided configuration is not valid"));
         return false;
     }
 
     bool ok = false;
-    HLOG_INFO("DeviceHost Initializing.");
+    HLOG_INFO(QLatin1String("DeviceHost Initializing."));
 
     h_ptr->m_config.reset(config.clone());
 
@@ -400,7 +400,7 @@ bool HDeviceHost::init(const HDeviceHostConfiguration& config)
     QList<QHostAddress> addrs = config.networkAddressesToUse();
     if (!h_ptr->m_httpServer->init(convertHostAddressesToEndpoints(addrs)))
     {
-        setError(CommunicationsError, "Failed to initialize HTTP server");
+        setError(CommunicationsError, QLatin1String("Failed to initialize HTTP server"));
         goto err;
     }
     else
@@ -420,7 +420,7 @@ bool HDeviceHost::init(const HDeviceHostConfiguration& config)
 
             if (!ssdp->init(ha))
             {
-                setError(CommunicationsError, "Failed to initialize SSDP");
+                setError(CommunicationsError, QLatin1String("Failed to initialize SSDP"));
                 goto err;
             }
         }
@@ -448,7 +448,7 @@ bool HDeviceHost::init(const HDeviceHostConfiguration& config)
 
         h_ptr->m_initialized = true;
 
-        HLOG_INFO("DeviceHost initialized.");
+        HLOG_INFO(QLatin1String("DeviceHost initialized."));
         return true;
     }
 
@@ -470,7 +470,7 @@ QString HDeviceHost::errorDescription() const
 
 void HDeviceHost::quit()
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     Q_ASSERT_X(
         thread() == QThread::currentThread(), H_AT,
@@ -482,7 +482,7 @@ void HDeviceHost::quit()
         return;
     }
 
-    HLOG_INFO("Shutting down.");
+    HLOG_INFO(QLatin1String("Shutting down."));
 
     h_ptr->stopNotifiers();
 
@@ -506,7 +506,7 @@ void HDeviceHost::quit()
 
     h_ptr->m_deviceStorage.clear();
 
-    HLOG_INFO("Shut down.");
+    HLOG_INFO(QLatin1String("Shut down."));
 }
 
 bool HDeviceHost::isStarted() const
@@ -516,16 +516,16 @@ bool HDeviceHost::isStarted() const
 
 bool HDeviceHost::add(const HDeviceConfiguration& configuration)
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
-        setError(NotStarted, "The device host is not started");
+        setError(NotStarted, QLatin1String("The device host is not started"));
         return false;
     }
     else if (!configuration.isValid())
     {
-        setError(InvalidConfigurationError, "The provided configuration is not valid");
+        setError(InvalidConfigurationError, QLatin1String("The provided configuration is not valid"));
         return false;
     }
 
@@ -544,7 +544,7 @@ bool HDeviceHost::add(const HDeviceConfiguration& configuration)
 
 HServerDevices HDeviceHost::rootDevices() const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
@@ -557,7 +557,7 @@ HServerDevices HDeviceHost::rootDevices() const
 
 HServerDevice* HDeviceHost::device(const HUdn& udn, TargetDeviceType dts) const
 {
-    HLOG2(H_AT, H_FUN, h_ptr->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char *)h_ptr->m_loggingIdentifier.data());
 
     if (!isStarted())
     {
@@ -609,3 +609,5 @@ QList<HEndpoint> HDeviceHostRuntimeStatus::httpEndpoints() const
 
 }
 }
+
+

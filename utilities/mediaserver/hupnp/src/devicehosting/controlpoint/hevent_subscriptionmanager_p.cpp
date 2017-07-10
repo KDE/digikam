@@ -49,13 +49,13 @@ HEventSubscriptionManager::HEventSubscriptionManager(HControlPointPrivate* owner
 
 HEventSubscriptionManager::~HEventSubscriptionManager()
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     removeAll();
 }
 
 void HEventSubscriptionManager::subscribed_slot(HEventSubscription* sub)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(sub);
 
     emit subscribed(sub->service());
@@ -63,7 +63,7 @@ void HEventSubscriptionManager::subscribed_slot(HEventSubscription* sub)
 
 void HEventSubscriptionManager::subscriptionFailed_slot(HEventSubscription* sub)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(sub);
 
     HClientService* service = sub->service();
@@ -73,7 +73,7 @@ void HEventSubscriptionManager::subscriptionFailed_slot(HEventSubscription* sub)
 
 void HEventSubscriptionManager::unsubscribed(HEventSubscription* sub)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(sub);
 
     emit unsubscribed(sub->service());
@@ -82,7 +82,7 @@ void HEventSubscriptionManager::unsubscribed(HEventSubscription* sub)
 HEventSubscription* HEventSubscriptionManager::createSubscription(
     HClientService* service, qint32 timeout)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
 
     Q_ASSERT(service);
     Q_ASSERT(thread() == QThread::currentThread());
@@ -128,7 +128,7 @@ HEventSubscription* HEventSubscriptionManager::createSubscription(
 QUrl HEventSubscriptionManager::getSuitableHttpServerRootUrl(
     const QList<QUrl>& deviceLocations)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
 
     if (m_owner->m_server->endpointCount() == 1)
     {
@@ -157,7 +157,7 @@ bool HEventSubscriptionManager::subscribe(
     HClientDevice* device, DeviceVisitType visitType,
     qint32 timeout)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(device);
 
     bool ok = false;
@@ -197,13 +197,13 @@ bool HEventSubscriptionManager::subscribe(
 HEventSubscriptionManager::SubscriptionResult
     HEventSubscriptionManager::subscribe(HClientService* service, qint32 timeout)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(service);
 
     if (!service->isEvented())
     {
         HLOG_WARN(QString(
-            "Cannot subscribe to a service [%1] that is not evented").arg(
+            QLatin1String("Cannot subscribe to a service [%1] that is not evented")).arg(
                 service->info().serviceId().toString()));
 
         return Sub_Failed_NotEvented;
@@ -228,7 +228,7 @@ HEventSubscriptionManager::SubscriptionResult
             {
                 if (sub->subscriptionStatus() == HEventSubscription::Status_Subscribed)
                 {
-                    HLOG_WARN(QString("Subscription to service [%1] exists").arg(
+                    HLOG_WARN(QString(QLatin1String("Subscription to service [%1] exists")).arg(
                         service->info().serviceId().toString()));
                     return Sub_AlreadySubscribed;
                 }
@@ -257,7 +257,7 @@ HEventSubscription::SubscriptionStatus
     HEventSubscriptionManager::subscriptionStatus(
         const HClientService* service) const
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(service);
 
     HUdn udn = service->parentDevice()->info().udn();
@@ -287,7 +287,7 @@ bool HEventSubscriptionManager::cancel(
     HClientDevice* device, DeviceVisitType visitType,
     bool unsubscribe)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(device);
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -332,7 +332,7 @@ bool HEventSubscriptionManager::cancel(
 
 bool HEventSubscriptionManager::remove(HClientDevice* device, bool recursive)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(device);
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -370,7 +370,7 @@ bool HEventSubscriptionManager::remove(HClientDevice* device, bool recursive)
 
 bool HEventSubscriptionManager::cancel(HClientService* service, bool unsubscribe)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(service);
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -412,7 +412,7 @@ bool HEventSubscriptionManager::cancel(HClientService* service, bool unsubscribe
 
 bool HEventSubscriptionManager::remove(HClientService* service)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(service);
     Q_ASSERT(thread() == QThread::currentThread());
 
@@ -455,7 +455,7 @@ bool HEventSubscriptionManager::remove(HClientService* service)
 
 void HEventSubscriptionManager::cancelAll(qint32 msecsToWait)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(thread() == QThread::currentThread());
 
     QHash<QUuid, HEventSubscription*>::iterator it =
@@ -469,7 +469,7 @@ void HEventSubscriptionManager::cancelAll(qint32 msecsToWait)
 
 void HEventSubscriptionManager::removeAll()
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(thread() == QThread::currentThread());
 
     qDeleteAll(m_subscribtionsByUuid);
@@ -482,15 +482,15 @@ void HEventSubscriptionManager::removeAll()
 StatusCode HEventSubscriptionManager::onNotify(
     const QUuid& id, const HNotifyRequest& req)
 {
-    HLOG2(H_AT, H_FUN, m_owner->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN, (char*)m_owner->m_loggingIdentifier.data());
     Q_ASSERT(thread() == QThread::currentThread());
 
     HEventSubscription* sub = m_subscribtionsByUuid.value(id);
     if (!sub)
     {
-        HLOG_WARN(QString(
+        HLOG_WARN(QString(QLatin1String(
             "Ignoring notification [seq: %1] due to invalid callback ID [%2]: "
-            "no such subscription found.").arg(
+            "no such subscription found.")).arg(
                 QString::number(req.seq()), id.toString()));
 
         return BadRequest;

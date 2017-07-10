@@ -110,7 +110,7 @@ public:
      *
      * \return The class identifier specified by the AV Working Committee.
      */
-    inline static QString sClass() { return "object.container.channelGroup.audioChannelGroup"; }
+    inline static QString sClass() { return QLatin1String("object.container.channelGroup.audioChannelGroup"); }
 
     /*!
      * Creates a new instance with no title or parentID.

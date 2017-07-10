@@ -173,9 +173,9 @@ bool HServerModelCreator::parseStateVariables(
             HStateVariablesSetupData::Deny)
         {
             m_lastError = InvalidServiceDescription;
-            m_lastErrorDescription = QString(
+            m_lastErrorDescription = QString(QLatin1String(
                 "Implementation of service [%1] does not support state variable"
-                "[%2]").arg(service->info().serviceId().toString(), name);
+                "[%2]")).arg(service->info().serviceId().toString(), name);
 
             return false;
         }
@@ -185,7 +185,7 @@ bool HServerModelCreator::parseStateVariables(
         {
             m_lastError = InvalidServiceDescription;
             m_lastErrorDescription =
-                QString("Service [%1] validation error: %2").arg(
+                QString(QLatin1String("Service [%1] validation error: %2")).arg(
                     service->info().serviceId().toString(),
                     validator.lastErrorDescription());
 
@@ -208,7 +208,7 @@ bool HServerModelCreator::parseStateVariables(
         Q_ASSERT(ok); Q_UNUSED(ok)
 
         stateVariableElement =
-            stateVariableElement.nextSiblingElement("stateVariable");
+            stateVariableElement.nextSiblingElement(QLatin1String("stateVariable"));
 
         stateVariablesSetup.remove(name);
     }
@@ -222,9 +222,9 @@ bool HServerModelCreator::parseStateVariables(
                 svSetup.version() <= service->info().serviceType().version())
             {
                 m_lastError = InvalidServiceDescription;
-                m_lastErrorDescription = QString(
+                m_lastErrorDescription = QString(QLatin1String(
                     "Service description is missing a mandatory state variable "
-                    "[%1]").arg(name);
+                    "[%1]")).arg(name);
 
                 return false;
             }
@@ -259,8 +259,8 @@ bool HServerModelCreator::parseActions(
         if (!actionInvoke)
         {
             m_lastError = UnimplementedAction;
-            m_lastErrorDescription = QString(
-                "Service [%1]: action [%2] lacks an implementation").arg(
+            m_lastErrorDescription = QString(QLatin1String(
+                "Service [%1]: action [%2] lacks an implementation")).arg(
                     service->info().serviceId().toString(), name);
 
             return false;
@@ -274,7 +274,7 @@ bool HServerModelCreator::parseActions(
         {
             m_lastError = InvalidServiceDescription;
             m_lastErrorDescription =
-                QString("Service [%1] validation error: %2").arg(
+                QString(QLatin1String("Service [%1] validation error: %2")).arg(
                     service->info().serviceId().toString(),
                     validator.lastErrorDescription());
 
@@ -283,7 +283,7 @@ bool HServerModelCreator::parseActions(
 
         service->h_ptr->m_actions.insert(name, action.take());
 
-        actionElement = actionElement.nextSiblingElement("action");
+        actionElement = actionElement.nextSiblingElement(QLatin1String("action"));
 
         actionsSetupData.remove(name);
     }
@@ -297,9 +297,9 @@ bool HServerModelCreator::parseActions(
                 setupInfo.version() <= service->info().serviceType().version())
             {
                 m_lastError = InvalidServiceDescription;
-                m_lastErrorDescription = QString(
+                m_lastErrorDescription = QString(QLatin1String(
                     "Service description for [%1] is missing a mandatory action "
-                    "[%2]").arg(service->info().serviceId().toString(), name);
+                    "[%2]")).arg(service->info().serviceId().toString(), name);
 
                 return false;
             }
@@ -311,7 +311,7 @@ bool HServerModelCreator::parseActions(
 
 bool HServerModelCreator::parseServiceDescription(HServerService* service)
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) m_creationParameters->m_loggingIdentifier.data());
     Q_ASSERT(service);
 
     QDomDocument doc;
@@ -343,13 +343,13 @@ bool HServerModelCreator::parseServiceList(
     const QDomElement& serviceListElement, HServerDevice* device,
     QList<HServerService*>* retVal)
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) m_creationParameters->m_loggingIdentifier.data());
 
     Q_ASSERT(device);
     Q_ASSERT(!serviceListElement.isNull());
 
     QDomElement serviceElement =
-        serviceListElement.firstChildElement("service");
+        serviceListElement.firstChildElement(QLatin1String("service"));
 
     HServicesSetupData setupData = getServicesSetupData(device);
 
@@ -370,7 +370,7 @@ bool HServerModelCreator::parseServiceList(
         {
             m_lastError = UndefinedTypeError;
             m_lastErrorDescription =
-                QString("No object for service type [%1] was created").arg(
+                QString(QLatin1String("No object for service type [%1] was created")).arg(
                     info.serviceType().toString());
 
             return 0;
@@ -380,7 +380,7 @@ bool HServerModelCreator::parseServiceList(
         {
             m_lastError = InitializationError;
             m_lastErrorDescription =
-                QString("Failed to initialize service [%1]").arg(
+                QString(QLatin1String("Failed to initialize service [%1]")).arg(
                     info.serviceId().toString());
 
             return false;
@@ -392,7 +392,7 @@ bool HServerModelCreator::parseServiceList(
         {
             m_lastError = FailedToGetDataError;
             m_lastErrorDescription = QString(
-                "Could not retrieve service description from [%1]").arg(
+                QLatin1String("Could not retrieve service description from [%1]")).arg(
                     info.scpdUrl().toString());
 
             return false;
@@ -414,7 +414,7 @@ bool HServerModelCreator::parseServiceList(
 
         retVal->push_back(service.take());
 
-        serviceElement = serviceElement.nextSiblingElement("service");
+        serviceElement = serviceElement.nextSiblingElement(QLatin1String("service"));
 
         setupData.remove(info.serviceId());
     }
@@ -428,9 +428,9 @@ bool HServerModelCreator::parseServiceList(
                 setupInfo.version() <= device->info().deviceType().version())
             {
                 m_lastError = InvalidServiceDescription;
-                m_lastErrorDescription = QString(
+                m_lastErrorDescription = QString(QLatin1String(
                     "Device description for [%1] is missing a mandatory service "
-                    "[%2]").arg(device->info().deviceType().toString(),
+                    "[%2]")).arg(device->info().deviceType().toString(),
                                 id.toString());
 
                 return false;
@@ -450,12 +450,12 @@ QList<QUrl> generateLocations(
     foreach(const QUrl& location, locations)
     {
         QString locStr = location.toString();
-        if (!locStr.endsWith('/'))
+        if (!locStr.endsWith(QLatin1Char('/')))
         {
-            locStr.append(QString("/%1/%2").arg(udn.toSimpleUuid(), ddPostFix));
+            locStr.append(QString(QLatin1String("/%1/%2")).arg(udn.toSimpleUuid(), ddPostFix));
         }
 
-        retVal.append(locStr);
+        retVal.append((QUrl)locStr);
     }
 
     return retVal;
@@ -465,7 +465,7 @@ QList<QUrl> generateLocations(
 HServerDevice* HServerModelCreator::parseDevice(
     const QDomElement& deviceElement, HServerDevice* parentDevice)
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) m_creationParameters->m_loggingIdentifier.data());
 
     HDeviceInfo deviceInfo;
     if (!m_docParser.parseDeviceInfo(deviceElement, &deviceInfo))
@@ -480,7 +480,7 @@ HServerDevice* HServerModelCreator::parseDevice(
 
     if (!device.data())
     {
-        HLOG_DBG(QString("Creating default device for [%1]").arg(
+        HLOG_DBG(QString(QLatin1String("Creating default device for [%1]")).arg(
             deviceInfo.deviceType().toString()));
 
         device.reset(new HDefaultServerDevice());
@@ -490,7 +490,7 @@ HServerDevice* HServerModelCreator::parseDevice(
     {
         m_lastError = InitializationError;
         m_lastErrorDescription =
-            QString("Failed to initialize device [%1]").arg(
+            QString(QLatin1String("Failed to initialize device [%1]")).arg(
                 deviceInfo.udn().toString());
 
         return 0;
@@ -500,7 +500,7 @@ HServerDevice* HServerModelCreator::parseDevice(
         m_creationParameters->m_deviceDescription;
 
     QDomElement serviceListElement =
-        deviceElement.firstChildElement("serviceList");
+        deviceElement.firstChildElement(QLatin1String("serviceList"));
 
     if (!serviceListElement.isNull())
     {
@@ -516,13 +516,13 @@ HServerDevice* HServerModelCreator::parseDevice(
 
     HDevicesSetupData setupData = getDevicesSetupData(device.data());
 
-    QDomElement deviceListElement = deviceElement.firstChildElement("deviceList");
+    QDomElement deviceListElement = deviceElement.firstChildElement(QLatin1String("deviceList"));
     if (!deviceListElement.isNull())
     {
         QList<HServerDevice*> embeddedDevices;
 
         QDomElement embeddedDeviceElement =
-            deviceListElement.firstChildElement("device");
+            deviceListElement.firstChildElement(QLatin1String("device"));
 
         while(!embeddedDeviceElement.isNull())
         {
@@ -538,7 +538,7 @@ HServerDevice* HServerModelCreator::parseDevice(
             embeddedDevices.push_back(embeddedDevice);
 
             embeddedDeviceElement =
-                embeddedDeviceElement.nextSiblingElement("device");
+                embeddedDeviceElement.nextSiblingElement(QLatin1String("device"));
         }
 
         device->h_ptr->m_embeddedDevices = embeddedDevices;
@@ -555,9 +555,9 @@ HServerDevice* HServerModelCreator::parseDevice(
                 setupInfo.version() <= device->info().deviceType().version())
             {
                 m_lastError = InvalidServiceDescription;
-                m_lastErrorDescription = QString(
+                m_lastErrorDescription = QString(QLatin1String(
                     "Device description for [%1] is missing a mandatory embedded device "
-                    "[%2]").arg(device->info().deviceType().toString(),
+                    "[%2]")).arg(device->info().deviceType().toString(),
                                 dt.toString());
 
                 return 0;
@@ -576,7 +576,7 @@ HServerDevice* HServerModelCreator::parseDevice(
 
 HServerDevice* HServerModelCreator::createRootDevice()
 {
-    HLOG2(H_AT, H_FUN, m_creationParameters->m_loggingIdentifier);
+    HLOG2(H_AT, H_FUN,(char*) m_creationParameters->m_loggingIdentifier.data());
 
     QDomDocument doc;
     QDomElement rootElement;
