@@ -194,4 +194,5 @@ BUGFIXES FROM BUGZILLA:
 180 ==> 101925 - HTML Export stop to work.
 181 ==> 150479 - Provide export to pdf file.
 182 ==> 121589 - Generate web-album from digiKam.
-183 ==> 
+183 ==> 358843 - Add link to source code web interface to main menu.
+184 ==> 
