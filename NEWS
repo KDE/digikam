@@ -187,4 +187,5 @@ BUGFIXES FROM BUGZILLA:
 173 ==> 140319 - Filetype incorrectly added to pictures sent in email.
 174 ==> 163395 - digikam and encoding errors in mail attachments.
 175 ==> 091596 - Send images stopped working, telling me the path to firefox was wrong.
-176 ==> 
+176 ==> 096191 - "Email Images" feature requires Thunderbird.
+177 ==> 
