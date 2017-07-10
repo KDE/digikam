@@ -3,8 +3,8 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-04-04
- * Description : a tool to generate HTML image galleries
+ * Date        : 2017-05-25
+ * Description : a tool to print images
  *
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -49,6 +49,7 @@
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
 #include "dmetadata.h"
+#include "dfileoperations.h"
 
 namespace Digikam
 {
@@ -222,45 +223,30 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
         QPainter painter;
         painter.begin(&pixmap);
 
-        // save this page out to file
         QFileInfo fi(baseFilename);
-        QString ext      = fi.completeSuffix();  // ext = ".jpeg"
+        QString ext      = fi.completeSuffix();  // ext = ".jpg"
 
         if (ext.isEmpty())
         {
-            ext = QLatin1String(".jpeg");
+            ext = QLatin1String(".jpg");
         }
 
         QString name     = fi.baseName();
+
+        if (name.isEmpty())
+            name = QLatin1String("output")
+
         QString path     = fi.absolutePath();
 
         QString filename = path + QLatin1String("/")  +
                            name + QLatin1String("_")  +
                            QString::number(pageCount) +
-                           QLatin1String(".") + ext;
-        bool saveFile    = true;
+                           ext;
 
-        if (QFile::exists(filename))
+        if (QFile::exists(filename) &&
+            d->settings->conflictRule != FileSaveConflictBox::OVERWRITE)
         {
-            int result = QMessageBox::question(this, i18n("Overwrite File"),
-                                               i18n("The following file will be overwritten. "
-                                                    "Are you sure you want to overwrite it?") +
-                                               QLatin1String("\n\n") + filename,
-                                               QMessageBox::StandardButtons(QMessageBox::Yes |
-                                                    QMessageBox::No |QMessageBox::Cancel),
-                                               QMessageBox::No);
-
-            if (result == QMessageBox::No)
-            {
-                saveFile = false;
-            }
-            else if (result == QMessageBox::Cancel)
-            {
-                d->progressView->addEntry(i18n("Printing %1 aborted", filename),
-                                          DHistoryView::WarningEntry);
-
-                break;
-            }
+            filename = DFileOperations::getUniqueFileUrl(QUrl::fromLocalFile(filename)).toLocalFile();
         }
 
         d->progressView->addEntry(i18n("Processing page %1", pageCount),
@@ -273,16 +259,18 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
                                 d->settings->disableCrop);
         painter.end();
 
-        if (saveFile)
-        {
-            files.append(filename);
+        files.append(filename);
 
-            if (!pixmap.save(filename, 0, 100))
-            {
-                d->progressView->addEntry(i18n("Could not save file, please check your system."),
-                                          DHistoryView::ErrorEntry);
-                break;
-            }
+        if (!pixmap.save(filename, 0, 100))
+        {
+            d->progressView->addEntry(i18n("Could not save file %1.", filename),
+                                      DHistoryView::ErrorEntry);
+            break;
+        }
+        else
+        {
+            d->progressView->addEntry(i18n("Page %1 saved as %2", pageCount, filename),
+                                      DHistoryView::ProgressEntry);
         }
 
         pageCount++;

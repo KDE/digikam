@@ -20,46 +20,30 @@
  *
  * ============================================================ */
 
-#ifndef ADV_PRINT_CROP_PAGE_H
-#define ADV_PRINT_CROP_PAGE_H
+#ifndef ADV_PRINT_OUTPUT_PAGE_H
+#define ADV_PRINT_OUTPUT_PAGE_H
 
 // Qt includes
 
 #include <QString>
-#include <QUrl>
 
 // Local includes
 
 #include "dwizardpage.h"
-#include "ui_advprintcroppage.h"
 
 namespace Digikam
 {
 
-class DImagesList;
-
-class AdvPrintCropPage : public DWizardPage
+class AdvPrintOutputPage : public DWizardPage
 {
-    Q_OBJECT
-
 public:
 
-    explicit AdvPrintCropPage(QWizard* const wizard, const QString& title);
-    ~AdvPrintCropPage();
+    explicit AdvPrintOutputPage(QWizard* const dialog, const QString& title);
+    ~AdvPrintOutputPage();
 
-    Ui_AdvPrintCropPage* ui() const;
-
-    void setBtnCropEnabled();
-
+    void initializePage();
     bool validatePage();
-
-private Q_SLOTS:
-
-    void slotCropSelection(int);
-    void slotBtnCropPrevClicked();
-    void slotBtnCropNextClicked();
-    void slotBtnCropRotateLeftClicked();
-    void slotBtnCropRotateRightClicked();
+    bool isComplete() const;
 
 private:
 
@@ -69,4 +53,4 @@ private:
 
 } // namespace Digikam
 
-#endif // ADV_PRINT_CROP_PAGE_H
+#endif // ADV_PRINT_OUTPUT_PAGE_H

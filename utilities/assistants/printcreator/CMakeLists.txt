@@ -16,6 +16,7 @@ include_directories($<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES
                     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::ConfigCore,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:KF5::Service,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 set(libprintcreator_SRCS
@@ -29,6 +30,7 @@ set(libprintcreator_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintphotopage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcaptionpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcroppage.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintoutputpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintfinalpage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcustomdlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/wizard/advprintcropframe.cpp

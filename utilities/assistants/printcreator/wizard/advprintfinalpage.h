@@ -3,7 +3,7 @@
  * This file is a part of digiKam project
  * http://www.digikam.org
  *
- * Date        : 2006-04-04
+ * Date        : 2017-05-25
  * Description : a tool to print images
  *
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>

@@ -46,6 +46,7 @@
 #include <QListWidgetItem>
 #include <QTemporaryDir>
 #include <QProcess>
+#include <QDesktopServices>
 
 // KDE includes
 
@@ -64,6 +65,7 @@
 #include "advprintphotopage.h"
 #include "advprintcaptionpage.h"
 #include "advprintcroppage.h"
+#include "advprintoutputpage.h"
 #include "advprintfinalpage.h"
 #include "templateicon.h"
 #include "dwizardpage.h"
@@ -84,6 +86,7 @@ public:
         photoPage(0),
         captionPage(0),
         cropPage(0),
+        outputPage(0),
         finalPage(0),
         settings(0),
         iface(0)
@@ -95,6 +98,7 @@ public:
     AdvPrintPhotoPage*        photoPage;
     AdvPrintCaptionPage*      captionPage;
     AdvPrintCropPage*         cropPage;
+    AdvPrintOutputPage*       outputPage;
     AdvPrintFinalPage*        finalPage;
     AdvPrintSettings*         settings;
     DInfoInterface*           iface;
@@ -113,6 +117,7 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     d->photoPage   = new AdvPrintPhotoPage(this,   i18n(PHOTO_PAGE_NAME));
     d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
     d->cropPage    = new AdvPrintCropPage(this,    i18n(CROP_PAGE_NAME));
+    d->outputPage  = new AdvPrintOutputPage(this,  i18n(OUTPUT_PAGE_NAME));
     d->finalPage   = new AdvPrintFinalPage(this,   i18n(FINAL_PAGE_NAME));
 
     // -----------------------------------
@@ -153,6 +158,17 @@ int AdvPrintWizard::nextId() const
     {
         if (currentPage() == d->introPage)
             return d->photoPage->id();
+    }
+
+    if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
+    {
+        if (currentPage() == d->cropPage)
+            return d->outputPage->id();
+    }
+    else
+    {
+        if (currentPage() == d->cropPage)
+            return d->finalPage->id();
     }
 
     return DWizardDlg::nextId();
@@ -931,18 +947,6 @@ void AdvPrintWizard::readSettings(const QString& pageName)
         //enable right caption stuff
         d->captionPage->slotCaptionChanged(d->captionPage->ui()->m_captions->currentText());
     }
-    else if (pageName == i18n(CROP_PAGE_NAME))
-    {
-        // CropPage
-        if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
-        {
-            d->cropPage->ui()->m_fileSaveBox->setEnabled(true);
-        }
-        else
-        {
-            d->cropPage->ui()->m_fileSaveBox->setEnabled(false);
-        }
-    }
 }
 
 void AdvPrintWizard::startPrinting()
@@ -1076,18 +1080,14 @@ void AdvPrintWizard::startPrinting()
     }
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
     {
-        // now output the items
-        QString path = d->cropPage->outputPath();
+        d->finalPage->printPhotosToFile(d->settings->photos,
+                                        d->settings->outputDir.toLocalFile(),
+                                        s);
 
-        if (path.isEmpty())
+        if (d->settings->openInFileBrowser)
         {
-            QMessageBox::information(this, QString(), i18n("Empty output path."));
-            return;
+            QDesktopServices::openUrl(d->settings->outputDir);
         }
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << path;
-
-        d->finalPage->printPhotosToFile(d->settings->photos, path, s);
     }
 
     saveSettings(currentPage()->title());

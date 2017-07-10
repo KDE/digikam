@@ -94,10 +94,6 @@ AdvPrintCropPage::AdvPrintCropPage(QWizard* const wizard, const QString& title)
     d->cropUi->BtnCropRotateLeft->setIcon(QIcon::fromTheme(QLatin1String("object-rotate-left"))
                                           .pixmap(16, 16));
 
-    d->cropUi->m_fileSaveBox->setFileDlgTitle(i18n("Select Output Path"));
-    d->cropUi->m_fileSaveBox->setFileDlgMode(DFileDialog::DirectoryOnly);
-    d->cropUi->m_fileSaveBox->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
-
     // -----------------------------------
 
     connect(d->cropUi->m_disableCrop, SIGNAL(stateChanged(int)),
@@ -137,35 +133,11 @@ void AdvPrintCropPage::slotCropSelection(int)
     d->cropUi->update();
 }
 
-void AdvPrintCropPage::initializePage()
-{
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-    d->cropUi->m_fileSaveBox->setFileDlgPath(group.readPathEntry("OutputPath",
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-}
-
 bool AdvPrintCropPage::validatePage()
 {
-    if (d->cropUi->m_fileSaveBox->isEnabled())
-    {
-        if (d->cropUi->m_fileSaveBox->fileDlgPath().isEmpty())
-            return false;
-
-        KConfig config;
-        KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-        group.writePathEntry(QLatin1String("OutputPath"),
-                             d->cropUi->m_fileSaveBox->fileDlgPath());
-    }
-
     d->settings->disableCrop = d->cropUi->m_disableCrop->isChecked();
 
     return true;
-}
-
-QString AdvPrintCropPage::outputPath() const
-{
-    return d->cropUi->m_fileSaveBox->fileDlgPath();
 }
 
 void AdvPrintCropPage::slotBtnCropPrevClicked()

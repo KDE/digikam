@@ -12,7 +12,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="10,1,1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="10,1">
      <item>
       <widget class="Digikam::AdvPrintCropFrame" name="cropFrame" native="true">
        <property name="sizePolicy">
@@ -162,9 +162,6 @@ Enable &quot;Do not crop&quot; to avoid cropping all of the photos.</string>
        </item>
       </layout>
      </item>
-     <item>
-      <widget class="Digikam::DFileSelector" name="m_fileSaveBox" native="true"/>
-     </item>
     </layout>
    </item>
   </layout>
@@ -174,12 +171,6 @@ Enable &quot;Do not crop&quot; to avoid cropping all of the photos.</string>
    <class>Digikam::AdvPrintCropFrame</class>
    <extends>QWidget</extends>
    <header>advprintcropframe.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Digikam::DFileSelector</class>
-   <extends>QWidget</extends>
-   <header>dfileselector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

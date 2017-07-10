@@ -39,6 +39,7 @@
 // Local includes
 
 #include "advprintphoto.h"
+#include "filesaveconflictbox.h"
 
 class KConfigGroup;
 
@@ -49,6 +50,7 @@ static const char* const INTRO_PAGE_NAME         = I18N_NOOP("Welcome to Print C
 static const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
 static const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
 static const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
+static const char* const OUTPUT_PAGE_NAME        = I18N_NOOP("Images output");
 static const char* const FINAL_PAGE_NAME         = I18N_NOOP("Render printing");
 static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
 
@@ -71,24 +73,28 @@ public:
 
 public:
 
-    Selection                 selMode;             // Items selection mode
+    Selection                         selMode;       // Items selection mode
 
-    QList<QUrl>               inputImages;
+    QList<QUrl>                       inputImages;
 
-    // Page Size in mm
-    QSizeF                    pageSize;
 
-    QList<AdvPrintPhoto*>     photos;
-    QList<AdvPrintPhotoSize*> photosizes;
+    QSizeF                            pageSize;      // Page Size in mm
 
-    QString                   tempPath;
-    QStringList               gimpFiles;
-    QString                   savedPhotoSize;
+    QList<AdvPrintPhoto*>             photos;
+    QList<AdvPrintPhotoSize*>         photosizes;
 
-    int                       currentPreviewPage;
-    int                       currentCropPhoto;
+    QString                           tempPath;
+    QStringList                       gimpFiles;
+    QString                           savedPhotoSize;
 
-    bool                      disableCrop;
+    int                               currentPreviewPage;
+    int                               currentCropPhoto;
+
+    bool                              disableCrop;
+
+    FileSaveConflictBox::ConflictRule conflictRule;  // Rule if output image files already exists.
+    QUrl                              outputDir;     // Directory where to store output images.
+    bool                              openInFileBrowser;
 };
 
 } // namespace Digikam
