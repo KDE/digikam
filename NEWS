@@ -183,4 +183,8 @@ BUGFIXES FROM BUGZILLA:
 169 ==> 301688 - Crash while browsing.
 170 ==> 137014 - "Email Images" should be reached under "Album" > "Export".
 171 ==> 137392 - add "send images by email" to context menu.
-172 ==> 
+172 ==> 146601 - Error during renaming of images being sent via email.
+173 ==> 140319 - Filetype incorrectly added to pictures sent in email.
+174 ==> 163395 - digikam and encoding errors in mail attachments.
+175 ==> 091596 - Send images stopped working, telling me the path to firefox was wrong.
+176 ==> 
