@@ -189,4 +189,5 @@ BUGFIXES FROM BUGZILLA:
 175 ==> 091596 - Send images stopped working, telling me the path to firefox was wrong.
 176 ==> 096191 - "Email Images" feature requires Thunderbird.
 177 ==> 189984 - Impossible to email images if the path contains characters such as éèà.
-178 ==> 
+178 ==> 148186 - "send by email" function does not attach images in Thunderbird.
+179 ==> 
