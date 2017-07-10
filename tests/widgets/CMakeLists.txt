@@ -31,3 +31,21 @@ target_link_libraries(searchtextbartest
                       KF5::I18n
 )
 
+##################################################################
+
+set(dimagelisttest_SRCS
+    dimageslisttest.cpp
+    actionthread.cpp
+)
+
+add_executable(dimagelisttest ${dimagelisttest_SRCS})
+add_test(dimagelisttest dimagelisttest)
+
+target_link_libraries(dimagelisttest
+                      digikamcore
+                      libdng
+
+                      Qt5::Test
+
+                      KF5::I18n
+)
