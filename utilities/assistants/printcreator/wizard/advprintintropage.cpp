@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QLabel>
-#include <QPixmap>
 #include <QIcon>
 #include <QGroupBox>
 #include <QGridLayout>

@@ -25,7 +25,6 @@
 // Qt includes
 
 #include <QIcon>
-#include <QPixmap>
 
 // Local includes
 

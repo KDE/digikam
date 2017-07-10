@@ -219,9 +219,9 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
         int w            = AdvPrintWizard::normalizedInt(srcPage->width());
         int h            = AdvPrintWizard::normalizedInt(srcPage->height());
 
-        QPixmap pixmap(w, h);
+        QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
         QPainter painter;
-        painter.begin(&pixmap);
+        painter.begin(&image);
 
         QFileInfo fi(baseFilename);
         QString ext      = fi.completeSuffix();  // ext = ".jpg"
@@ -261,7 +261,7 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
 
         files.append(filename);
 
-        if (!pixmap.save(filename, 0, 100))
+        if (!image.save(filename, 0, 100))
         {
             d->progressView->addEntry(i18n("Could not save file %1.", filename),
                                       DHistoryView::ErrorEntry);
@@ -353,7 +353,7 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
         QImage img;
 
         if (useThumbnails)
-            img = photo->thumbnail().toImage();
+            img = photo->thumbnail();
         else
             img = photo->loadPhoto();
 

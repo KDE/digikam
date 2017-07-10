@@ -147,7 +147,8 @@ void AdvPrintPhoto::loadCache()
 
     QImage photo = loadPhoto();
     QImage image = photo.scaled(m_thumbnailSize, m_thumbnailSize, Qt::KeepAspectRatio);
-    m_thumbnail  = new QPixmap(image.width(), image.height());
+    m_thumbnail  = new QImage(image.width(), image.height(),
+                              QImage::Format_ARGB32_Premultiplied);
     QPainter painter(m_thumbnail);
     painter.drawImage(0, 0, image );
     painter.end();
@@ -156,7 +157,7 @@ void AdvPrintPhoto::loadCache()
     m_size       = new QSize(photo.width(), photo.height());
 }
 
-QPixmap& AdvPrintPhoto::thumbnail()
+QImage& AdvPrintPhoto::thumbnail()
 {
     if (!m_thumbnail)
     {
@@ -219,8 +220,7 @@ double AdvPrintPhoto::scaleHeight(double unitToInches)
 {
     Q_ASSERT(m_pAddInfo != 0);
 
-    m_cropRegion = QRect(0,
-                         0,
+    m_cropRegion = QRect(0, 0,
                          (int)(m_pAddInfo->m_printWidth  * unitToInches),
                          (int)(m_pAddInfo->m_printHeight * unitToInches));
 

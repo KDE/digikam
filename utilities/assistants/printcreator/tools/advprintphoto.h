@@ -117,11 +117,11 @@ public:
     AdvPrintPhoto(const AdvPrintPhoto&);
     ~AdvPrintPhoto();
 
-    QPixmap&   thumbnail();
-    QImage     loadPhoto();
-    int        width();
-    int        height();
-    QSize&     size();
+    QImage& thumbnail();
+    QImage  loadPhoto();
+    int     width();
+    int     height();
+    QSize&  size();
 
     double scaleWidth(double unitToInches);
     double scaleHeight(double unitToInches);
@@ -151,7 +151,7 @@ private:
 
 private:
 
-    QPixmap*                m_thumbnail;
+    QImage*                 m_thumbnail;
     QSize*                  m_size;
 };
 
