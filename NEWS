@@ -181,4 +181,5 @@ BUGFIXES FROM BUGZILLA:
 167 ==> 146293 - Metadata editor menu untranslated.
 168 ==> 167379 - Image selection or Album Selection for HTML Gallery tool.
 169 ==> 301688 - Crash while browsing.
-170 ==> 
+170 ==> 137014 - "Email Images" should be reached under "Album" > "Export".
+171 ==> 
