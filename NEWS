@@ -192,5 +192,5 @@ BUGFIXES FROM BUGZILLA:
 178 ==> 148186 - "send by email" function does not attach images in Thunderbird.
 179 ==> 335163 - Digikam crashing when exporting to html with theme "floating frames".
 180 ==> 101925 - HTML Export stop to work.
-181 ==> 
-
+181 ==> 150479 - Provide export to pdf file.
+182 ==> 
