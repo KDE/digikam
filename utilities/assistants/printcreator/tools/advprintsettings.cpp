@@ -39,6 +39,7 @@ AdvPrintSettings::AdvPrintSettings()
     currentPreviewPage = 0;
     currentCropPhoto   = 0;
     disableCrop        = false;
+    imageFormat        = JPEG;
 }
 
 AdvPrintSettings::~AdvPrintSettings()
@@ -48,5 +49,27 @@ AdvPrintSettings::~AdvPrintSettings()
 
     photos.clear();
 }
+
+QString AdvPrintSettings::format() const
+{
+    if (imageFormat == JPEG)
+        return QLatin1String("JPEG");
+    else if (imageFormat == TIFF)
+        return QLatin1String("TIF");
+
+    return QLatin1String("PNG");
+}
+
+QMap<AdvPrintSettings::ImageFormat, QString> AdvPrintSettings::imageFormatNames()
+{
+    QMap<ImageFormat, QString> frms;
+
+    frms[JPEG] = i18nc("Image format: JPEG", "Jpeg");
+    frms[PNG]  = i18nc("Image format: PNG",  "Png");
+    frms[TIFF] = i18nc("Image format: TIFF", "Tiff");
+
+    return frms;
+}
+
 
 } // namespace Digikam

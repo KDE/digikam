@@ -160,7 +160,7 @@ int AdvPrintWizard::nextId() const
             return d->photoPage->id();
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
+    if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to Image File"))
     {
         if (currentPage() == d->cropPage)
             return d->outputPage->id();
@@ -970,7 +970,7 @@ void AdvPrintWizard::startPrinting()
         i++;
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print to JPG") &&
+    if (d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print to Image File") &&
         d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print with Gimp"))
     {
         // tell him again!
@@ -1040,19 +1040,19 @@ void AdvPrintWizard::startPrinting()
     }
     else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print with Gimp"))
     {
+        d->settings->imageFormat = AdvPrintSettings::JPEG;
+
         // now output the items
         QString path = d->settings->tempPath;
 
         if (!AdvPrintCheckTempPath(this, path))
             return;
 
-        path = path + QLatin1String("PrintCreator_tmp_");
-
         if (d->settings->gimpFiles.count() > 0)
             d->finalPage->removeGimpFiles();
 
         QStringList args;
-        d->settings->gimpFiles = d->finalPage->printPhotosToFile(d->settings->photos, path, s);
+        d->settings->gimpFiles = d->finalPage->printPhotosToFile(path, s);
 
         if (!d->settings->gimpFiles.isEmpty())
         {
@@ -1071,15 +1071,15 @@ void AdvPrintWizard::startPrinting()
             {
                 QMessageBox::information(this, QString(),
                                         i18n("There was an error to launch the external Gimp "
-                                             "program. Please make sure it is properly installed."));
+                                             "program. Please make sure it is properly "
+                                             "installed."));
                 return;
             }
         }
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to JPG"))
+    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to Image File"))
     {
-        QStringList files = d->finalPage->printPhotosToFile(d->settings->photos,
-                                                            d->settings->outputDir.toLocalFile(),
+        QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile(),
                                                             s);
 
         if (d->settings->openInFileBrowser && !files.isEmpty())

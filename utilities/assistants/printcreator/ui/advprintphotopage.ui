@@ -187,7 +187,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Print to JPG</string>
+             <string>Print to Image File</string>
             </property>
            </item>
            <item>

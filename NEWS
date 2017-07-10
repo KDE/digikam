@@ -8,6 +8,7 @@ General     : New tool to export albums by email.
 General     : New tool to create advance print layout.
 General     : Send by Mail tool can remove all metadata to attached items.
 PrintCreator: Add option to create printing from albums or images selection.
+PrintCreator: Add option to customize output image properties to render printing.
 ImageEditor : Add SendByMail and PrintCreator tools support.
 Showfoto    : Add SendByMail and PrintCreator tools support.
 LightTable  : Add SendByMail and PrintCreator tools support.

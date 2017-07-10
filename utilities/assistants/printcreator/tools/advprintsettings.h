@@ -66,10 +66,22 @@ public:
         ALBUMS
     };
 
+    enum ImageFormat
+    {
+        JPEG = 0,
+        PNG,
+        TIFF
+    };
+
 public:
 
     explicit AdvPrintSettings();
     ~AdvPrintSettings();
+
+    QString format() const;
+
+    // Helper methods to fill combobox from GUI.
+    static QMap<ImageFormat, QString> imageFormatNames();
 
 public:
 
@@ -91,6 +103,8 @@ public:
     int                               currentCropPhoto;
 
     bool                              disableCrop;
+
+    ImageFormat                       imageFormat;
 
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule if output image files already exists.
     QUrl                              outputDir;     // Directory where to store output images.

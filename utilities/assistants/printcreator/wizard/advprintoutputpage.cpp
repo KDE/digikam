@@ -32,6 +32,7 @@
 #include <QStyle>
 #include <QCheckBox>
 #include <QGridLayout>
+#include <QComboBox>
 
 // KDE includes
 
@@ -53,8 +54,10 @@ class AdvPrintOutputPage::Private
 public:
 
     Private(QWizard* const dialog)
-      : destUrl(0),
+      : labelImagesFormat(0),
+        destUrl(0),
         conflictBox(0),
+        imagesFormat(0),
         fileBrowserCB(0),
         wizard(0),
         settings(0)
@@ -67,8 +70,10 @@ public:
         }
     }
 
+    QLabel*              labelImagesFormat;
     DFileSelector*       destUrl;
     FileSaveConflictBox* conflictBox;
+    QComboBox*           imagesFormat;
     QCheckBox*           fileBrowserCB;
     AdvPrintWizard*      wizard;
     AdvPrintSettings*    settings;
@@ -78,7 +83,28 @@ AdvPrintOutputPage::AdvPrintOutputPage(QWizard* const dialog, const QString& tit
     : DWizardPage(dialog, title),
       d(new Private(dialog))
 {
-    QWidget* const main     = new QWidget(this);
+    QWidget* const main  = new QWidget(this);
+
+    // --------------------
+
+    d->labelImagesFormat = new QLabel(main);
+    d->labelImagesFormat->setWordWrap(false);
+    d->labelImagesFormat->setText(i18n("Image Format:"));
+
+    d->imagesFormat      = new QComboBox(main);
+    d->imagesFormat->setEditable(false);
+    d->imagesFormat->setWhatsThis(i18n("Select your preferred format to export printing as image."));
+
+    QMap<AdvPrintSettings::ImageFormat, QString> map2                = AdvPrintSettings::imageFormatNames();
+    QMap<AdvPrintSettings::ImageFormat, QString>::const_iterator it2 = map2.constBegin();
+
+    while (it2 != map2.constEnd())
+    {
+        d->imagesFormat->addItem(it2.value(), (int)it2.key());
+        ++it2;
+    }
+
+    d->labelImagesFormat->setBuddy(d->imagesFormat);
 
     // --------------------
 
@@ -107,12 +133,14 @@ AdvPrintOutputPage::AdvPrintOutputPage(QWizard* const dialog, const QString& tit
 
     QGridLayout* const grid = new QGridLayout(main);
     grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    grid->addWidget(fileLabel,        0, 0, 1, 1);
-    grid->addWidget(d->destUrl,       0, 1, 1, 1);
-    grid->addWidget(outputLbl,        1, 0, 1, 2);
-    grid->addWidget(d->conflictBox,   2, 0, 1, 2);
-    grid->addWidget(d->fileBrowserCB, 3, 0, 1, 2);
-    grid->setRowStretch(4, 10);
+    grid->addWidget(d->labelImagesFormat, 0, 0, 1, 1);
+    grid->addWidget(d->imagesFormat,      0, 1, 1, 2);
+    grid->addWidget(fileLabel,            1, 0, 1, 1);
+    grid->addWidget(d->destUrl,           1, 1, 1, 1);
+    grid->addWidget(outputLbl,            2, 0, 1, 2);
+    grid->addWidget(d->conflictBox,       3, 0, 1, 2);
+    grid->addWidget(d->fileBrowserCB,     4, 0, 1, 2);
+    grid->setRowStretch(5, 10);
 
     setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-image")));
@@ -135,14 +163,19 @@ void AdvPrintOutputPage::initializePage()
     KConfigGroup group             = config.group(QLatin1String("PrintCreator"));
     d->settings->outputDir         = group.readEntry("OutputPath",
         QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-    d->settings->conflictRule      = (FileSaveConflictBox::ConflictRule)group.readEntry("ConflictRule",
+    d->settings->conflictRule      =
+        (FileSaveConflictBox::ConflictRule)group.readEntry("ConflictRule",
         (int)FileSaveConflictBox::OVERWRITE);
     d->settings->openInFileBrowser = group.readEntry("OpenInFileBrowser",
         true);
+    d->settings->imageFormat       =
+        (AdvPrintSettings::ImageFormat)group.readEntry("ImageFormat",
+        (int)AdvPrintSettings::JPEG);
 
     d->destUrl->setFileDlgPath(d->settings->outputDir.toLocalFile());
     d->conflictBox->setConflictRule(d->settings->conflictRule);
     d->fileBrowserCB->setChecked(d->settings->openInFileBrowser);
+    d->imagesFormat->setCurrentIndex((int)d->settings->imageFormat);
 }
 
 bool AdvPrintOutputPage::validatePage()
@@ -153,13 +186,14 @@ bool AdvPrintOutputPage::validatePage()
     d->settings->outputDir         = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
     d->settings->conflictRule      = d->conflictBox->conflictRule();
     d->settings->openInFileBrowser = d->fileBrowserCB->isChecked();
-
+    d->settings->imageFormat       = AdvPrintSettings::ImageFormat(d->imagesFormat->currentIndex());
 
     KConfig config;
     KConfigGroup group = config.group(QLatin1String("PrintCreator"));
     group.writeEntry(QLatin1String("OutputPath"),        d->settings->outputDir);
     group.writeEntry(QLatin1String("ConflictRule"),      (int)d->settings->conflictRule);
     group.writeEntry(QLatin1String("OpenInFileBrowser"), d->settings->openInFileBrowser);
+    group.writeEntry(QLatin1String("ImageFormat"),       (int)d->settings->imageFormat);
 
     return true;
 }

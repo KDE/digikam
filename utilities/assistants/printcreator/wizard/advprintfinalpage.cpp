@@ -50,6 +50,7 @@
 #include "dhistoryview.h"
 #include "dmetadata.h"
 #include "dfileoperations.h"
+#include "dimg.h"
 
 namespace Digikam
 {
@@ -188,13 +189,13 @@ void AdvPrintFinalPage::printPhotos(const QList<AdvPrintPhoto*>& photos,
     emit completeChanged();
 }
 
-QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& photos,
-                                                 const QString& baseFilename,
+QStringList AdvPrintFinalPage::printPhotosToFile(const QString& dir,
                                                  AdvPrintPhotoSize* const layouts)
 {
     Q_ASSERT(layouts->layouts.count() > 1);
 
-    d->cancelPrinting    = false;
+    QList<AdvPrintPhoto*> photos = d->settings->photos;
+    d->cancelPrinting            = false;
     d->progressBar->setRange(0, photos.count());
 
     QApplication::processEvents();
@@ -223,25 +224,12 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
         QPainter painter;
         painter.begin(&image);
 
-        QFileInfo fi(baseFilename);
-        QString ext      = fi.completeSuffix();  // ext = ".jpg"
-
-        if (ext.isEmpty())
-        {
-            ext = QLatin1String(".jpg");
-        }
-
-        QString name     = fi.baseName();
-
-        if (name.isEmpty())
-            name = QLatin1String("output");
-
-        QString path     = fi.absolutePath();
-
-        QString filename = path + QLatin1String("/")  +
+        QString ext      = d->settings->format();
+        QString name     = QLatin1String("output");
+        QString filename = dir + QLatin1String("/")  +
                            name + QLatin1String("_")  +
                            QString::number(pageCount) +
-                           ext;
+                           QLatin1String(".") + ext;
 
         if (QFile::exists(filename) &&
             d->settings->conflictRule != FileSaveConflictBox::OVERWRITE)
@@ -259,16 +247,15 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QList<AdvPrintPhoto*>& ph
                                 d->settings->disableCrop);
         painter.end();
 
-        files.append(filename);
-
         if (!image.save(filename, 0, 100))
         {
-            d->progressView->addEntry(i18n("Could not save file %1.", filename),
+            d->progressView->addEntry(i18n("Could not save file %1", filename),
                                       DHistoryView::ErrorEntry);
             break;
         }
         else
         {
+            files.append(filename);
             d->progressView->addEntry(i18n("Page %1 saved as %2", pageCount, filename),
                                       DHistoryView::ProgressEntry);
         }

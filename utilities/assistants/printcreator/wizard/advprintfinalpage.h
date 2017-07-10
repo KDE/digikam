@@ -59,8 +59,7 @@ public:
                      const QList<QRect*>& layouts,
                      QPrinter& printer);
 
-    QStringList printPhotosToFile(const QList<AdvPrintPhoto*>& photos,
-                                  const QString& baseFilename,
+    QStringList printPhotosToFile(const QString& dir,
                                   AdvPrintPhotoSize* const layouts);
 
     bool paintOnePage(QPainter& p,

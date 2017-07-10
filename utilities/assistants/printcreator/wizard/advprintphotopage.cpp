@@ -240,7 +240,7 @@ Ui_AdvPrintPhotoPage* AdvPrintPhotoPage::ui() const
 void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 {
     if (text == i18n("Print to PDF") ||
-        text == i18n("Print to JPG") ||
+        text == i18n("Print to Image File") ||
         text == i18n("Print with Gimp"))
     {
         delete d->printer;
