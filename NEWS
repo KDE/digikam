@@ -200,4 +200,12 @@ BUGFIXES FROM BUGZILLA:
 185 ==> 118831 - First image from avi as icon.
 186 ==> 141132 - digiKam is hung reading a file avi.
 187 ==> 362472 - Provide a way to install Digikam 4.14 in (K)Ubuntu 16.04 (Xenial).
-188 ==> 
+188 ==> 151604 - Print Wizard does not recognize raw images.
+189 ==> 202480 - PrintWizard doesn't add comments properly but shows them in the preview.
+190 ==> 146457 - Rotation is not done correctly exif.
+191 ==> 188426 - Add support for different size printwizard templates.
+192 ==> 100471 - Can't print the same image more than once on the same page.
+193 ==> 133730 - Tool to print images on photo paper.
+194 ==> 209165 - Print Assistant does not print svgz images.
+195 ==> 
+

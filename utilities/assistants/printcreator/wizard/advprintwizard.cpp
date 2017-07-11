@@ -50,7 +50,6 @@
 
 // KDE includes
 
-//#include <kconfigdialogmanager.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
@@ -116,13 +115,13 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     KConfigGroup group = config.group("PrintCreator");
     d->settings->readSettings(group);
 
-    d->introPage   = new AdvPrintIntroPage(this,   i18n(INTRO_PAGE_NAME));
+    d->introPage   = new AdvPrintIntroPage(this,   i18n("Welcome to Print Creator"));
     d->albumsPage  = new AdvPrintAlbumsPage(this,  i18n("Albums Selection"));
-    d->photoPage   = new AdvPrintPhotoPage(this,   i18n(PHOTO_PAGE_NAME));
-    d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
-    d->cropPage    = new AdvPrintCropPage(this,    i18n(CROP_PAGE_NAME));
-    d->outputPage  = new AdvPrintOutputPage(this,  i18n(OUTPUT_PAGE_NAME));
-    d->finalPage   = new AdvPrintFinalPage(this,   i18n(FINAL_PAGE_NAME));
+    d->photoPage   = new AdvPrintPhotoPage(this,   i18n("Select Page Layout"));
+    d->captionPage = new AdvPrintCaptionPage(this, i18n("Caption Settings"));
+    d->cropPage    = new AdvPrintCropPage(this,    i18n("Crop and Rotate Photos"));
+    d->outputPage  = new AdvPrintOutputPage(this,  i18n("Images Output Settings"));
+    d->finalPage   = new AdvPrintFinalPage(this,   i18n("Render Printing"));
 
     // -----------------------------------
 
@@ -168,7 +167,8 @@ int AdvPrintWizard::nextId() const
             return d->photoPage->id();
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to Image File"))
+    if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
+        d->settings->outputName(AdvPrintSettings::FILES))
     {
         if (currentPage() == d->cropPage)
             return d->outputPage->id();
@@ -356,84 +356,7 @@ void AdvPrintWizard::slotPageChanged(int curr)
 {
     QWizardPage* const current = page(curr);
 
-    if (!current)
-        return;
-
-    QWizardPage* const before = visitedPages().isEmpty() ? 0 : page(visitedPages().last());
-
-    qCDebug(DIGIKAM_GENERAL_LOG) << "Current Page:" << current->title();
-
-    if (current->title() == i18n(PHOTO_PAGE_NAME))
-    {
-        // set to first photo
-        d->photoPage->imagesList()->listView()->clear();
-        QList<QUrl> list;
-
-        qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
-
-        for (int i = 0 ; i < d->settings->photos.count() ; ++i)
-        {
-            AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
-
-            if (pCurrentPhoto)
-            {
-                list.push_back(pCurrentPhoto->m_url);
-            }
-        }
-
-        d->photoPage->imagesList()->blockSignals(true);
-        d->photoPage->imagesList()->slotAddImages(list);
-        d->photoPage->imagesList()->listView()->setCurrentItem(d->photoPage->imagesList()->listView()->itemAt(0, 0));
-        d->photoPage->imagesList()->blockSignals(false);
-        d->photoPage->ui()->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
-
-        d->photoPage->initPhotoSizes(d->photoPage->printer()->paperSize(QPrinter::Millimeter));
-        // restore photoSize
-
-        if (before && d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
-        {
-            d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
-        }
-        else
-        {
-            QList<QListWidgetItem*> list = d->photoPage->ui()->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
-
-            if (list.count())
-                d->photoPage->ui()->ListPhotoSizes->setCurrentItem(list[0]);
-            else
-                d->photoPage->ui()->ListPhotoSizes->setCurrentRow(0);
-        }
-
-        // reset preview page number
-        d->settings->currentPreviewPage = 0;
-
-        // create our photo sizes list
-        previewPhotos();
-    }
-    else if (current->title() == i18n(CAPTION_PAGE_NAME))
-    {
-        // update captions only the first time to avoid missing old changes when
-        // back to this page
-
-        if (!before)
-            d->captionPage->slotUpdateCaptions();
-    }
-    else if (current->title() == i18n(CROP_PAGE_NAME))
-    {
-        if (d->settings->photos.size())
-        {
-            AdvPrintPhoto* const photo = d->settings->photos[d->settings->currentCropPhoto];
-            d->cropPage->setBtnCropEnabled();
-            this->update();
-            updateCropFrame(photo, d->settings->currentCropPhoto);
-        }
-        else
-        {
-            // NOTE it should not pass here
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Not any photos selected cropping is disabled";
-        }
-    }
-    else if (current->title() == i18n(FINAL_PAGE_NAME))
+    if (current == d->finalPage)
     {
         startPrinting();
     }
@@ -466,8 +389,10 @@ void AdvPrintWizard::startPrinting()
         i++;
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print to Image File") &&
-        d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print with Gimp"))
+    if (d->photoPage->ui()->m_printer_choice->itemHighlighted() !=
+        d->settings->outputName(AdvPrintSettings::FILES)        &&
+        d->photoPage->ui()->m_printer_choice->itemHighlighted() !=
+        d->settings->outputName(AdvPrintSettings::GIMP))
     {
         // tell him again!
         d->photoPage->printer()->setFullPage(true);
@@ -534,7 +459,8 @@ void AdvPrintWizard::startPrinting()
 
         d->finalPage->printPhotos(d->settings->photos, s->layouts, *d->photoPage->printer());
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print with Gimp"))
+    else if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
+             d->settings->outputName(AdvPrintSettings::GIMP))
     {
         d->settings->imageFormat = AdvPrintSettings::JPEG;
 
@@ -573,7 +499,8 @@ void AdvPrintWizard::startPrinting()
             }
         }
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to Image File"))
+    else if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
+             d->settings->outputName(AdvPrintSettings::FILES))
     {
         QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile(),
                                                             s);

@@ -129,11 +129,6 @@ AdvPrintCaptionPage::~AdvPrintCaptionPage()
     delete d;
 }
 
-Ui_AdvPrintCaptionPage* AdvPrintCaptionPage::ui() const
-{
-    return d->captionUi;
-}
-
 DImagesList* AdvPrintCaptionPage::imagesList() const
 {
     return d->captionUi->mPrintList;
@@ -149,6 +144,7 @@ void AdvPrintCaptionPage::initializePage()
     d->captionUi->m_FreeCaptionFormat->setText(d->settings->captionTxt);
     slotCaptionChanged(d->captionUi->m_captions->currentText());
     slotUpdateImagesList();
+    slotUpdateCaptions();
 }
 
 bool AdvPrintCaptionPage::validatePage()

@@ -98,7 +98,8 @@ public:
     void initColorManagement()
     {
         QHBoxLayout* const hlay = new QHBoxLayout(cmbox);
-        colorManaged            = new QCheckBox(i18n("Use Color Management for Printing"), cmbox);
+        colorManaged            = new QCheckBox(i18n("Use Color Management for Printing"),
+                                                cmbox);
         colorManaged->setChecked(false);
         cmPreferences           = new QPushButton(i18n("Settings..."), cmbox);
         QWidget* const space    = new QWidget(cmbox);
@@ -176,7 +177,8 @@ public:
     }
 };
 
-PrintOptionsPage::PrintOptionsPage(QWidget* const parent, const QSize& imageSize)
+PrintOptionsPage::PrintOptionsPage(QWidget* const parent,
+                                   const QSize& imageSize)
     : QWidget(),
       d(new Private)
 {
@@ -190,9 +192,9 @@ PrintOptionsPage::PrintOptionsPage(QWidget* const parent, const QSize& imageSize
     //color management
     d->initColorManagement();
 
-    d->mScaleGroup.addButton(d->mNoScale, NoScale);
+    d->mScaleGroup.addButton(d->mNoScale,     NoScale);
     d->mScaleGroup.addButton(d->mScaleToPage, ScaleToPage);
-    d->mScaleGroup.addButton(d->mScaleTo, ScaleToCustomSize);
+    d->mScaleGroup.addButton(d->mScaleTo,     ScaleToCustomSize);
 
     connect(d->kcfg_PrintWidth, SIGNAL(valueChanged(double)),
             this, SLOT(adjustHeightToRatio()));
@@ -234,6 +236,7 @@ Qt::Alignment PrintOptionsPage::alignment() const
 {
     int id = d->mPositionGroup.checkedId();
     qCWarning(DIGIKAM_GENERAL_LOG) << "alignment=" << id;
+
     return Qt::Alignment(id);
 }
 
@@ -269,7 +272,8 @@ void PrintOptionsPage::adjustWidthToRatio()
         return;
     }
 
-    double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() / d->mImageSize.height();
+    double width = d->mImageSize.width() * d->kcfg_PrintHeight->value() /
+                   d->mImageSize.height();
 
     SignalBlocker blocker(d->kcfg_PrintWidth);
     d->kcfg_PrintWidth->setValue(width ? width : 1.);
@@ -282,7 +286,8 @@ void PrintOptionsPage::adjustHeightToRatio()
         return;
     }
 
-    double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() / d->mImageSize.width();
+    double height = d->mImageSize.height() * d->kcfg_PrintWidth->value() /
+                    d->mImageSize.width();
 
     SignalBlocker blocker(d->kcfg_PrintHeight);
     d->kcfg_PrintHeight->setValue(height ? height : 1.0);
@@ -343,7 +348,8 @@ void PrintOptionsPage::slotAlertSettings(bool t)
     if (t && !d->cmEnabled)
     {
         QString message = i18n("<p>Color Management is disabled.</p> "
-                               "<p>You can enable it now by clicking on the \"Settings\" button.</p>");
+                               "<p>You can enable it now by clicking "
+                               "on the \"Settings\" button.</p>");
         QMessageBox::information(this, qApp->applicationName(), message);
         d->colorManaged->setChecked(!t);
     }

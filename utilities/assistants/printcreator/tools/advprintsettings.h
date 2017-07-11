@@ -48,14 +48,6 @@ class KConfigGroup;
 namespace Digikam
 {
 
-static const char* const INTRO_PAGE_NAME         = I18N_NOOP("Welcome to Print Creator");
-static const char* const PHOTO_PAGE_NAME         = I18N_NOOP("Select page layout");
-static const char* const CAPTION_PAGE_NAME       = I18N_NOOP("Caption settings");
-static const char* const CROP_PAGE_NAME          = I18N_NOOP("Crop and rotate photos");
-static const char* const OUTPUT_PAGE_NAME        = I18N_NOOP("Images output");
-static const char* const FINAL_PAGE_NAME         = I18N_NOOP("Render printing");
-static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
-
 class AdvPrintSettings
 {
 
@@ -68,6 +60,15 @@ public:
         ALBUMS
     };
 
+    // Print output destination, outside real printers configured
+    enum Output
+    {
+        PDF = 0,
+        FILES,
+        GIMP
+    };
+
+    // Image format for Output::FILES
     enum ImageFormat
     {
         JPEG = 0,
@@ -84,9 +85,11 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    QString format() const;
+    QString format()               const;
+    QString outputName(Output out) const;
 
     // Helper methods to fill combobox from GUI.
+    static QMap<Output,      QString> outputNames();
     static QMap<ImageFormat, QString> imageFormatNames();
 
 public:

@@ -55,6 +55,8 @@
 namespace Digikam
 {
 
+static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
+
 class AdvPrintPhotoPage::Private
 {
 public:
@@ -112,15 +114,30 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     d->photoUi->BtnPreviewPageDown->setIcon(QIcon::fromTheme(QLatin1String("go-previous"))
                                               .pixmap(16, 16));
 
-    d->printerList = QPrinterInfo::availablePrinters();
+    // ----------------------
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << " printers: " << d->printerList.count();
+    d->photoUi->m_printer_choice->setEditable(false);
+    d->photoUi->m_printer_choice->setWhatsThis(i18n("Select your preferred print output."));
+
+    // Populate hardcoded printers
+
+    QMap<AdvPrintSettings::Output, QString> map2                = AdvPrintSettings::outputNames();
+    QMap<AdvPrintSettings::Output, QString>::const_iterator it2 = map2.constBegin();
+
+    while (it2 != map2.constEnd())
+    {
+        d->photoUi->m_printer_choice->addSqueezedItem(it2.value(), (int)it2.key());
+        ++it2;
+    }
+
+    // Populate real printers
+
+    d->printerList = QPrinterInfo::availablePrinters();
 
     for (QList<QPrinterInfo>::iterator it = d->printerList.begin() ;
          it != d->printerList.end() ; ++it)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " printer: " << it->printerName();
-        d->photoUi->m_printer_choice->addItem(it->printerName());
+        d->photoUi->m_printer_choice->addSqueezedItem(it->printerName());
     }
 
     connect(d->photoUi->m_printer_choice, SIGNAL(activated(QString)),
@@ -191,7 +208,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     setPageWidget(d->photoUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 
-    slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+    slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 }
 
 AdvPrintPhotoPage::~AdvPrintPhotoPage()
@@ -204,17 +221,51 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 void AdvPrintPhotoPage::initializePage()
 {
     d->photoUi->mPrintList->listView()->clear();
+    QList<QUrl> list;
 
-    if (d->settings->selMode == AdvPrintSettings::IMAGES)
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
+
+    for (int i = 0 ; i < d->settings->photos.count() ; ++i)
     {
-        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
+        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+        if (pCurrentPhoto)
+        {
+            list.push_back(pCurrentPhoto->m_url);
+        }
+    }
+
+    d->photoUi->mPrintList->blockSignals(true);
+    d->photoUi->mPrintList->slotAddImages(list);
+    d->photoUi->mPrintList->listView()->setCurrentItem(d->photoUi->mPrintList->listView()->itemAt(0, 0));
+    d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
+
+    initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+
+    // restore photoSize
+
+    if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+    {
+        d->photoUi->ListPhotoSizes->setCurrentRow(0);
     }
     else
     {
-        d->wizard->setItemsList(d->settings->inputImages);
+        QList<QListWidgetItem*> list = d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
+
+        if (list.count())
+            d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);
+        else
+            d->photoUi->ListPhotoSizes->setCurrentRow(0);
     }
 
-    int gid = d->photoUi->m_printer_choice->findText(i18n("Print with Gimp"));
+    // reset preview page number
+    d->settings->currentPreviewPage = 0;
+
+    // create our photo sizes list
+    d->wizard->previewPhotos();
+
+    int gid = d->photoUi->m_printer_choice->findText(d->settings->outputName(AdvPrintSettings::GIMP));
 
     if (d->settings->gimpPath.isEmpty())
     {
@@ -229,16 +280,30 @@ void AdvPrintPhotoPage::initializePage()
         d->photoUi->m_printer_choice->setCurrentIndex(index);
     }
 
-    slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+    slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 
     d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
 }
 
+void AdvPrintPhotoPage::cleanupPage()
+{
+    d->photoUi->mPrintList->listView()->clear();
+
+    if (d->settings->selMode == AdvPrintSettings::IMAGES)
+    {
+        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
+    }
+    else
+    {
+        d->wizard->setItemsList(d->settings->inputImages);
+    }
+}
+
 bool AdvPrintPhotoPage::validatePage()
 {
     d->settings->inputImages = d->photoUi->mPrintList->imageUrls();
-    d->settings->printerName = d->photoUi->m_printer_choice->currentText();
+    d->settings->printerName = d->photoUi->m_printer_choice->itemHighlighted();
 
     if (d->photoUi->ListPhotoSizes->currentItem())
     {
@@ -272,9 +337,7 @@ Ui_AdvPrintPhotoPage* AdvPrintPhotoPage::ui() const
 
 void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 {
-    if (text == i18n("Print to PDF") ||
-        text == i18n("Print to Image File") ||
-        text == i18n("Print with Gimp"))
+    if (AdvPrintSettings::outputNames().values().contains(text))
     {
         delete d->printer;
 
@@ -407,7 +470,7 @@ void AdvPrintPhotoPage::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemInd
 void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
 {
     xmlWriter.writeStartElement(QLatin1String("pa_layout"));
-    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->currentText());
+    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->itemHighlighted());
     xmlWriter.writeAttribute(QLatin1String("PageSize"),  QString::fromUtf8("%1").arg(d->printer->paperSize()));
     xmlWriter.writeAttribute(QLatin1String("PhotoSize"), d->photoUi->ListPhotoSizes->currentItem()->text());
     xmlWriter.writeEndElement(); // pa_layout
@@ -668,7 +731,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
                     d->photoUi->m_printer_choice->setCurrentIndex(index);
                 }
 
-                slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+                slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
             }
 
             attr = attrs.value(QLatin1String("PageSize"));
