@@ -33,6 +33,8 @@
 
 #include "actionthreadbase.h"
 
+using namespace Digikam;
+
 class ActionThread : public ActionThreadBase
 {
     Q_OBJECT

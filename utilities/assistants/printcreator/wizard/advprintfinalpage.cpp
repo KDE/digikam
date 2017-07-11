@@ -132,7 +132,9 @@ void AdvPrintFinalPage::cleanupPage()
     d->cancelPrinting = true;
 
     if (d->settings->gimpFiles.count() > 0)
+    {
         removeGimpFiles();
+    }
 }
 
 bool AdvPrintFinalPage::isComplete() const
@@ -167,7 +169,9 @@ void AdvPrintFinalPage::printPhotos(const QList<AdvPrintPhoto*>& photos,
                                 d->settings->disableCrop);
 
         if (printing)
+        {
             printer.newPage();
+        }
 
         pageCount++;
         d->progressBar->setValue(current);
@@ -226,7 +230,7 @@ QStringList AdvPrintFinalPage::printPhotosToFile(const QString& dir,
 
         QString ext      = d->settings->format();
         QString name     = QLatin1String("output");
-        QString filename = dir + QLatin1String("/")  +
+        QString filename = dir  + QLatin1String("/")  +
                            name + QLatin1String("_")  +
                            QString::number(pageCount) +
                            QLatin1String(".") + ext;
@@ -288,7 +292,10 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
     Q_ASSERT(layouts.count() > 1);
 
     if (photos.count() == 0)
-        return true;   // no photos => last photo
+    {
+        // no photos => last photo
+        return true;
+    }
 
     QList<QRect*>::const_iterator it = layouts.begin();
     QRect* const srcPage             = static_cast<QRect*>(*it);
@@ -340,9 +347,13 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
         QImage img;
 
         if (useThumbnails)
+        {
             img = photo->thumbnail();
+        }
         else
+        {
             img = photo->loadPhoto();
+        }
 
         // next, do we rotate?
         if (photo->m_rotation != 0)
@@ -360,10 +371,14 @@ bool AdvPrintFinalPage::paintOnePage(QPainter& p,
             double yRatio = 0.0;
 
             if (photo->thumbnail().width() != 0)
+            {
                 xRatio = (double)photo->thumbnail().width()  / (double)photo->width();
+            }
 
             if (photo->thumbnail().height() != 0)
+            {
                 yRatio = (double)photo->thumbnail().height() / (double)photo->height();
+            }
 
             int x1 = AdvPrintWizard::normalizedInt((double)photo->m_cropRegion.left()   * xRatio);
             int y1 = AdvPrintWizard::normalizedInt((double)photo->m_cropRegion.top()    * yRatio);
@@ -532,11 +547,11 @@ double AdvPrintFinalPage::getMaxDPI(const QList<AdvPrintPhoto*>& photos,
 
     for (; current < photos.count(); ++current)
     {
-        AdvPrintPhoto* const photo = photos.at(current);
-        double dpi          = ((double) photo->m_cropRegion.width() +
-                               (double) photo->m_cropRegion.height()) /
-                              (((double) layout->width() / 1000.0) +
-                               ((double) layout->height() / 1000.0));
+        AdvPrintPhoto* const photo   = photos.at(current);
+        double dpi                   = ((double) photo->m_cropRegion.width() +
+                                        (double) photo->m_cropRegion.height()) /
+                                       (((double) layout->width()  / 1000.0) +
+                                        ((double) layout->height() / 1000.0));
 
         if (dpi > maxDPI)
             maxDPI = dpi;
@@ -568,21 +583,26 @@ void AdvPrintFinalPage::printCaption(QPainter& p,
     {
         QString newLine;
         bool breakLine = false; // End Of Line found
-        int currIndex;          //  Caption QString current index
+        int currIndex;          // Caption QString current index
 
         // Check minimal lines dimension
-        //TODO fix length, maybe useless
+        // TODO: fix length, maybe useless
         int captionLineLocalLength = 40;
 
         for (currIndex = captionIndex ;
              currIndex < caption.length() && !breakLine ; ++currIndex)
         {
-            if (caption[currIndex] == QLatin1Char('\n') || caption[currIndex].isSpace())
+            if (caption[currIndex] == QLatin1Char('\n') ||
+                caption[currIndex].isSpace())
+            {
                 breakLine = true;
+            }
         }
 
         if (captionLineLocalLength <= (currIndex - captionIndex))
+        {
             captionLineLocalLength = (currIndex - captionIndex);
+        }
 
         breakLine = false;
 
@@ -633,7 +653,9 @@ void AdvPrintFinalPage::printCaption(QPainter& p,
          lineNumber < (int) captionByLines.count() ; ++lineNumber)
     {
         if (lineNumber > 0)
+        {
             p.translate(0, - (int)(pixelsHigh));
+        }
 
         QRect r(0, 0, captionW, captionH);
 
