@@ -31,6 +31,8 @@
 #include <QStringList>
 #include <QUrl>
 #include <QMap>
+#include <QColor>
+#include <QFont>
 
 // KDE includes
 
@@ -78,6 +80,10 @@ public:
     explicit AdvPrintSettings();
     ~AdvPrintSettings();
 
+    // Read and write settings in config file between sessions.
+    void readSettings(KConfigGroup& group);
+    void writeSettings(KConfigGroup& group);
+
     QString format() const;
 
     // Helper methods to fill combobox from GUI.
@@ -89,14 +95,23 @@ public:
 
     QList<QUrl>                       inputImages;
 
+    QString                           printerName;
+    QSize                             iconSize;
 
     QSizeF                            pageSize;      // Page Size in mm
 
     QList<AdvPrintPhoto*>             photos;
     QList<AdvPrintPhotoSize*>         photosizes;
 
+    int                               captions;
+    QColor                            captionColor;
+    QFont                             captionFont;
+    int                               captionSize;
+    QString                           captionTxt;
+
     QString                           tempPath;
     QStringList                       gimpFiles;
+    QString                           gimpPath;
     QString                           savedPhotoSize;
 
     int                               currentPreviewPage;

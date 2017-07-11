@@ -34,8 +34,6 @@
 
 // KDE includes
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
 // Local includes
@@ -124,8 +122,6 @@ AdvPrintCaptionPage::AdvPrintCaptionPage(QWizard* const wizard, const QString& t
 
     setPageWidget(d->captionUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("imagecomment")));
-
-    readCaptionSettings();
 }
 
 AdvPrintCaptionPage::~AdvPrintCaptionPage()
@@ -145,24 +141,23 @@ DImagesList* AdvPrintCaptionPage::imagesList() const
 
 void AdvPrintCaptionPage::initializePage()
 {
+    d->captionUi->m_captions->setCurrentIndex(d->settings->captions);
+    enableCaptionGroup(d->captionUi->m_captions->currentText());
+    d->captionUi->m_font_color->setColor(d->settings->captionColor);
+    d->captionUi->m_font_name->setCurrentFont(d->settings->captionFont.family());
+    d->captionUi->m_font_size->setValue(d->settings->captionSize);
+    d->captionUi->m_FreeCaptionFormat->setText(d->settings->captionTxt);
+    slotCaptionChanged(d->captionUi->m_captions->currentText());
     slotUpdateImagesList();
 }
 
 bool AdvPrintCaptionPage::validatePage()
 {
-    // Save the current settings
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-    group.writeEntry(QLatin1String("Captions"),
-                     d->captionUi->m_captions->currentIndex());
-    group.writeEntry(QLatin1String("CaptionColor"),
-                     d->captionUi->m_font_color->color());
-    group.writeEntry(QLatin1String("CaptionFont"),
-                     QFont(d->captionUi->m_font_name->currentFont()));
-    group.writeEntry(QLatin1String("CaptionSize"),
-                     d->captionUi->m_font_size->value());
-    group.writeEntry(QLatin1String("CustomCaption"),
-                     d->captionUi->m_FreeCaptionFormat->text());
+    d->settings->captions     = d->captionUi->m_captions->currentIndex();
+    d->settings->captionColor = d->captionUi->m_font_color->color();
+    d->settings->captionFont  = QFont(d->captionUi->m_font_name->currentFont());
+    d->settings->captionSize  = d->captionUi->m_font_size->value();
+    d->settings->captionTxt   = d->captionUi->m_FreeCaptionFormat->text();
 
     return true;
 }
@@ -180,34 +175,6 @@ void AdvPrintCaptionPage::blockCaptionButtons(bool block)
     d->captionUi->m_font_name->blockSignals(block);
     d->captionUi->m_font_size->blockSignals(block);
     d->captionUi->m_font_color->blockSignals(block);
-}
-
-void AdvPrintCaptionPage::readCaptionSettings()
-{
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-
-    // image captions
-    d->captionUi->m_captions->setCurrentIndex(group.readEntry(QLatin1String("Captions"), 0));
-    enableCaptionGroup(d->captionUi->m_captions->currentText());
-
-    // caption color
-    QColor defColor(Qt::yellow);
-    QColor color = group.readEntry(QLatin1String("CaptionColor"), defColor);
-    d->captionUi->m_font_color->setColor(color);
-
-    // caption font
-    QFont defFont(QLatin1String("Sans Serif"));
-    QFont font = group.readEntry(QLatin1String("CaptionFont"), defFont);
-    d->captionUi->m_font_name->setCurrentFont(font.family());
-
-    // caption size
-    int fontSize = group.readEntry(QLatin1String("CaptionSize"), 4);
-    d->captionUi->m_font_size->setValue(fontSize);
-
-    // free caption
-    QString captionTxt = group.readEntry(QLatin1String("CustomCaption"));
-    d->captionUi->m_FreeCaptionFormat->setText(captionTxt);
 }
 
 void AdvPrintCaptionPage::enableCaptionGroup(const QString& text)

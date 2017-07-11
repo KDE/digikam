@@ -34,12 +34,20 @@ namespace Digikam
 AdvPrintSettings::AdvPrintSettings()
 {
     selMode            = IMAGES;
-    // select a different page to force a refresh in initPhotoSizes.
+
+    // Select a different page to force a refresh in initPhotoSizes.
     pageSize           = QSizeF(-1, -1);
+
+    iconSize           = QSize(24, 24);
     currentPreviewPage = 0;
     currentCropPhoto   = 0;
     disableCrop        = false;
     imageFormat        = JPEG;
+    printerName        = i18n("Print to PDF");
+    captions           = 0;
+    captionColor       = QColor(Qt::yellow);
+    captionFont        = QFont(QLatin1String("Sans Serif"));
+    captionSize        = 4;
 }
 
 AdvPrintSettings::~AdvPrintSettings()
@@ -48,6 +56,57 @@ AdvPrintSettings::~AdvPrintSettings()
         delete photos.at(i);
 
     photos.clear();
+}
+
+void AdvPrintSettings::readSettings(KConfigGroup& group)
+{
+    selMode           = (Selection)group.readEntry("SelMode",
+                        (int)IMAGES);
+    imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
+                        (int)JPEG);
+    savedPhotoSize    = group.readEntry("PhotoSize",
+                        QString());
+    iconSize          = group.readEntry("IconSize",
+                        QSize(24, 24));
+    printerName       = group.readEntry("Printer",
+                        i18n("Print to PDF"));
+    captions          = group.readEntry(QLatin1String("Captions"),
+                        0);
+    captionColor      = group.readEntry(QLatin1String("CaptionColor"),
+                        QColor(Qt::yellow));
+    captionFont       = group.readEntry(QLatin1String("CaptionFont"),
+                        QFont(QLatin1String("Sans Serif")));
+    captionSize       = group.readEntry(QLatin1String("CaptionSize"),
+                        4);
+    captionTxt        = group.readEntry(QLatin1String("CustomCaption"),
+                        QString());
+    outputDir         = group.readEntry("OutputPath",
+                        QUrl::fromLocalFile(QStandardPaths::writableLocation
+                            (QStandardPaths::DocumentsLocation)));
+    conflictRule      = (FileSaveConflictBox::ConflictRule)group.readEntry("ConflictRule",
+                        (int)FileSaveConflictBox::OVERWRITE);
+    openInFileBrowser = group.readEntry("OpenInFileBrowser",
+                        true);
+    imageFormat       = (ImageFormat)group.readEntry("ImageFormat",
+                        (int)JPEG);
+}
+
+void AdvPrintSettings::writeSettings(KConfigGroup& group)
+{
+    group.writeEntry("SelMode",           (int)selMode);
+    group.writeEntry("ImageFormat",       (int)imageFormat);
+    group.writeEntry("PhotoSize",         savedPhotoSize);
+    group.writeEntry("IconSize",          iconSize);
+    group.writeEntry("Printer",           printerName);
+    group.writeEntry("Captions",          captions);
+    group.writeEntry("CaptionColor",      captionColor);
+    group.writeEntry("CaptionFont",       captionFont);
+    group.writeEntry("CaptionSize",       captionSize);
+    group.writeEntry("CustomCaption",     captionTxt);
+    group.writeEntry("OutputPath",        outputDir);
+    group.writeEntry("ConflictRule",      (int)conflictRule);
+    group.writeEntry("OpenInFileBrowser", openInFileBrowser);
+    group.writeEntry("ImageFormat",       (int)imageFormat);
 }
 
 QString AdvPrintSettings::format() const

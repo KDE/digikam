@@ -59,6 +59,7 @@ public:
     Ui_AdvPrintPhotoPage* ui()           const;
     bool                  isComplete()   const;
     int                   getPageCount() const;
+    QRect*                getLayout(int) const;
 
     void initializePage();
     bool validatePage();
@@ -73,6 +74,17 @@ public:
                          TemplateIcon* const iconpreview);
 
     void manageBtnPreviewPage();
+
+    /** Initialize page layout to the given pageSize in mm.
+     */
+    void initPhotoSizes(const QSizeF& pageSize);
+
+private:
+
+    /** To parse template file with 'fn' as filename, and 'pageSize' in mm.
+     */
+    void parseTemplateFile(const QString& fn,
+                           const QSizeF& pageSize);
 
 public Q_SLOTS:
 

@@ -43,7 +43,6 @@ public:
 
     bool validatePage();
     void initializePage();
-    QString gimpPath() const;
 
 private:
 

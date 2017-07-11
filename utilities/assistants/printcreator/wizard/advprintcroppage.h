@@ -51,6 +51,7 @@ public:
 
     void setBtnCropEnabled();
 
+    void initializePage();
     bool validatePage();
 
 private Q_SLOTS:

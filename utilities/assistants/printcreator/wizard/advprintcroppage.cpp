@@ -133,6 +133,11 @@ void AdvPrintCropPage::slotCropSelection(int)
     d->cropUi->update();
 }
 
+void AdvPrintCropPage::initializePage()
+{
+    d->settings->currentCropPhoto = 0;
+}
+
 bool AdvPrintCropPage::validatePage()
 {
     d->settings->disableCrop = d->cropUi->m_disableCrop->isChecked();

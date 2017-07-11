@@ -55,7 +55,6 @@ public:
     Ui_AdvPrintCaptionPage* ui() const;
 
     void blockCaptionButtons(bool block=true);
-    void readCaptionSettings();
 
     void initializePage();
     bool validatePage();

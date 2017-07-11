@@ -37,8 +37,6 @@
 // KDE includes
 
 #include <klocalizedstring.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
 
 // Local includes
 
@@ -159,19 +157,6 @@ AdvPrintOutputPage::~AdvPrintOutputPage()
 
 void AdvPrintOutputPage::initializePage()
 {
-    KConfig config;
-    KConfigGroup group             = config.group(QLatin1String("PrintCreator"));
-    d->settings->outputDir         = group.readEntry("OutputPath",
-        QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-    d->settings->conflictRule      =
-        (FileSaveConflictBox::ConflictRule)group.readEntry("ConflictRule",
-        (int)FileSaveConflictBox::OVERWRITE);
-    d->settings->openInFileBrowser = group.readEntry("OpenInFileBrowser",
-        true);
-    d->settings->imageFormat       =
-        (AdvPrintSettings::ImageFormat)group.readEntry("ImageFormat",
-        (int)AdvPrintSettings::JPEG);
-
     d->destUrl->setFileDlgPath(d->settings->outputDir.toLocalFile());
     d->conflictBox->setConflictRule(d->settings->conflictRule);
     d->fileBrowserCB->setChecked(d->settings->openInFileBrowser);
@@ -187,13 +172,6 @@ bool AdvPrintOutputPage::validatePage()
     d->settings->conflictRule      = d->conflictBox->conflictRule();
     d->settings->openInFileBrowser = d->fileBrowserCB->isChecked();
     d->settings->imageFormat       = AdvPrintSettings::ImageFormat(d->imagesFormat->currentIndex());
-
-    KConfig config;
-    KConfigGroup group = config.group(QLatin1String("PrintCreator"));
-    group.writeEntry(QLatin1String("OutputPath"),        d->settings->outputDir);
-    group.writeEntry(QLatin1String("ConflictRule"),      (int)d->settings->conflictRule);
-    group.writeEntry(QLatin1String("OpenInFileBrowser"), d->settings->openInFileBrowser);
-    group.writeEntry(QLatin1String("ImageFormat"),       (int)d->settings->imageFormat);
 
     return true;
 }

@@ -138,11 +138,6 @@ AdvPrintIntroPage::~AdvPrintIntroPage()
     delete d;
 }
 
-QString AdvPrintIntroPage::gimpPath() const
-{
-    return d->gimpBin.isValid() ? d->gimpBin.path() : QString();
-}
-
 void AdvPrintIntroPage::initializePage()
 {
     bool albumSupport = (d->iface && d->iface->supportAlbums());
@@ -162,7 +157,8 @@ void AdvPrintIntroPage::initializePage()
 
 bool AdvPrintIntroPage::validatePage()
 {
-    d->wizard->settings()->selMode = (AdvPrintSettings::Selection)d->imageGetOption->currentIndex();
+    d->wizard->settings()->selMode  = (AdvPrintSettings::Selection)d->imageGetOption->currentIndex();
+    d->wizard->settings()->gimpPath = d->gimpBin.isValid() ? d->gimpBin.path() : QString();
 
     return true;
 }

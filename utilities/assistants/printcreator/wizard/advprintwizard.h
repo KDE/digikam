@@ -42,8 +42,6 @@
 namespace Digikam
 {
 
-class TemplateIcon;
-
 class DIGIKAM_EXPORT AdvPrintWizard : public DWizardDlg
 {
     Q_OBJECT
@@ -63,10 +61,6 @@ public:
      */
     void previewPhotos();
 
-    /** Initialize page layout to the given pageSize in mm.
-     */
-    void initPhotoSizes(const QSizeF& pageSize);
-
     void updateCropFrame(AdvPrintPhoto* const, int);
 
     int  nextId() const;
@@ -79,15 +73,6 @@ private Q_SLOTS:
 
 private:
 
-    /** To parse template file with 'fn' as filename, and 'pageSize' in mm.
-     */
-    void parseTemplateFile(const QString& fn,
-                           const QSizeF& pageSize);
-
-    QRect* getLayout(int photoIndex) const;
-
-    void saveSettings(const QString& pageName);
-    void readSettings(const QString& pageName);
     void startPrinting();
 
     bool AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const;
