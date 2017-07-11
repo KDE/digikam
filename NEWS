@@ -199,5 +199,5 @@ BUGFIXES FROM BUGZILLA:
 184 ==> 167281 - Replace the Konqueror as the default external webbrowser by a system call.
 185 ==> 118831 - First image from avi as icon.
 186 ==> 141132 - digiKam is hung reading a file avi.
-187 ==> 
-
+187 ==> 362472 - Provide a way to install Digikam 4.14 in (K)Ubuntu 16.04 (Xenial).
+188 ==> 
