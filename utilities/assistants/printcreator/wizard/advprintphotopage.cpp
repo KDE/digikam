@@ -126,7 +126,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
 
     while (it2 != map2.constEnd())
     {
-        d->photoUi->m_printer_choice->addItem(it2.value(), (int)it2.key());
+        d->photoUi->m_printer_choice->addSqueezedItem(it2.value(), (int)it2.key());
         ++it2;
     }
 
@@ -137,7 +137,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     for (QList<QPrinterInfo>::iterator it = d->printerList.begin() ;
          it != d->printerList.end() ; ++it)
     {
-        d->photoUi->m_printer_choice->addItem(it->printerName());
+        d->photoUi->m_printer_choice->addSqueezedItem(it->printerName());
     }
 
     connect(d->photoUi->m_printer_choice, SIGNAL(activated(QString)),
@@ -208,7 +208,7 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     setPageWidget(d->photoUi);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("image-stack")));
 
-    slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+    slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 }
 
 AdvPrintPhotoPage::~AdvPrintPhotoPage()
@@ -280,7 +280,7 @@ void AdvPrintPhotoPage::initializePage()
         d->photoUi->m_printer_choice->setCurrentIndex(index);
     }
 
-    slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+    slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
 
     d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
@@ -303,7 +303,7 @@ void AdvPrintPhotoPage::cleanupPage()
 bool AdvPrintPhotoPage::validatePage()
 {
     d->settings->inputImages = d->photoUi->mPrintList->imageUrls();
-    d->settings->printerName = d->photoUi->m_printer_choice->currentText();
+    d->settings->printerName = d->photoUi->m_printer_choice->itemHighlighted();
 
     if (d->photoUi->ListPhotoSizes->currentItem())
     {
@@ -470,7 +470,7 @@ void AdvPrintPhotoPage::slotXMLSaveItem(QXmlStreamWriter& xmlWriter, int itemInd
 void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamWriter& xmlWriter)
 {
     xmlWriter.writeStartElement(QLatin1String("pa_layout"));
-    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->currentText());
+    xmlWriter.writeAttribute(QLatin1String("Printer"),   d->photoUi->m_printer_choice->itemHighlighted());
     xmlWriter.writeAttribute(QLatin1String("PageSize"),  QString::fromUtf8("%1").arg(d->printer->paperSize()));
     xmlWriter.writeAttribute(QLatin1String("PhotoSize"), d->photoUi->ListPhotoSizes->currentItem()->text());
     xmlWriter.writeEndElement(); // pa_layout
@@ -731,7 +731,7 @@ void AdvPrintPhotoPage::slotXMLCustomElement(QXmlStreamReader& xmlReader)
                     d->photoUi->m_printer_choice->setCurrentIndex(index);
                 }
 
-                slotOutputChanged(d->photoUi->m_printer_choice->currentText());
+                slotOutputChanged(d->photoUi->m_printer_choice->itemHighlighted());
             }
 
             attr = attrs.value(QLatin1String("PageSize"));

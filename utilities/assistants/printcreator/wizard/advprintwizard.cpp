@@ -168,7 +168,7 @@ int AdvPrintWizard::nextId() const
             return d->photoPage->id();
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() ==
+    if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
         d->settings->outputName(AdvPrintSettings::FILES))
     {
         if (currentPage() == d->cropPage)
@@ -390,9 +390,9 @@ void AdvPrintWizard::startPrinting()
         i++;
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() !=
+    if (d->photoPage->ui()->m_printer_choice->itemHighlighted() !=
         d->settings->outputName(AdvPrintSettings::FILES)        &&
-        d->photoPage->ui()->m_printer_choice->currentText() !=
+        d->photoPage->ui()->m_printer_choice->itemHighlighted() !=
         d->settings->outputName(AdvPrintSettings::GIMP))
     {
         // tell him again!
@@ -460,7 +460,7 @@ void AdvPrintWizard::startPrinting()
 
         d->finalPage->printPhotos(d->settings->photos, s->layouts, *d->photoPage->printer());
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() ==
+    else if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
              d->settings->outputName(AdvPrintSettings::GIMP))
     {
         d->settings->imageFormat = AdvPrintSettings::JPEG;
@@ -500,7 +500,7 @@ void AdvPrintWizard::startPrinting()
             }
         }
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() ==
+    else if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
              d->settings->outputName(AdvPrintSettings::FILES))
     {
         QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile(),
