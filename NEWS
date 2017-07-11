@@ -204,4 +204,5 @@ BUGFIXES FROM BUGZILLA:
 189 ==> 202480 - PrintWizard doesn't add comments properly but shows them in the preview.
 190 ==> 146457 - Rotation is not done correctly exif.
 191 ==> 188426 - Add support for different size printwizard templates.
-192 ==> 
+192 ==> 100471 - Can't print the same image more than once on the same page.
+193 ==> 
