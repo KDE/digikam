@@ -159,24 +159,31 @@ int AdvPrintWizard::nextId() const
     if (d->settings->selMode == AdvPrintSettings::ALBUMS)
     {
         if (currentPage() == d->introPage)
+        {
             return d->albumsPage->id();
+        }
     }
     else
     {
         if (currentPage() == d->introPage)
+        {
             return d->photoPage->id();
+        }
     }
 
-    if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
-        d->settings->outputName(AdvPrintSettings::FILES))
+    if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::FILES))
     {
         if (currentPage() == d->cropPage)
+        {
             return d->outputPage->id();
+        }
     }
     else
     {
         if (currentPage() == d->cropPage)
+        {
             return d->finalPage->id();
+        }
     }
 
     return DWizardDlg::nextId();
@@ -389,10 +396,8 @@ void AdvPrintWizard::startPrinting()
         i++;
     }
 
-    if (d->photoPage->ui()->m_printer_choice->itemHighlighted() !=
-        d->settings->outputName(AdvPrintSettings::FILES)        &&
-        d->photoPage->ui()->m_printer_choice->itemHighlighted() !=
-        d->settings->outputName(AdvPrintSettings::GIMP))
+    if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
+        d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
     {
         // tell him again!
         d->photoPage->printer()->setFullPage(true);
@@ -439,7 +444,9 @@ void AdvPrintWizard::startPrinting()
 
         // Why paperSize changes if printer properties is not pressed?
         if (paperSize != d->photoPage->printer()->paperSize())
+        {
             d->photoPage->printer()->setPaperSize(paperSize);
+        }
 
         qCDebug(DIGIKAM_GENERAL_LOG) << "(4) paper page "
                                      << dialog->printer()->paperSize()
@@ -459,8 +466,7 @@ void AdvPrintWizard::startPrinting()
 
         d->finalPage->printPhotos(d->settings->photos, s->layouts, *d->photoPage->printer());
     }
-    else if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
-             d->settings->outputName(AdvPrintSettings::GIMP))
+    else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
     {
         d->settings->imageFormat = AdvPrintSettings::JPEG;
 
@@ -499,8 +505,7 @@ void AdvPrintWizard::startPrinting()
             }
         }
     }
-    else if (d->photoPage->ui()->m_printer_choice->itemHighlighted() ==
-             d->settings->outputName(AdvPrintSettings::FILES))
+    else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::FILES))
     {
         QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile(),
                                                             s);
