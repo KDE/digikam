@@ -114,14 +114,29 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     d->photoUi->BtnPreviewPageDown->setIcon(QIcon::fromTheme(QLatin1String("go-previous"))
                                               .pixmap(16, 16));
 
-    d->printerList = QPrinterInfo::availablePrinters();
+    // ----------------------
 
-    qCDebug(DIGIKAM_GENERAL_LOG) << " printers: " << d->printerList.count();
+    d->photoUi->m_printer_choice->setEditable(false);
+    d->photoUi->m_printer_choice->setWhatsThis(i18n("Select your preferred print output."));
+
+    // Populate hardcoded printers
+
+    QMap<AdvPrintSettings::Output, QString> map2                = AdvPrintSettings::outputNames();
+    QMap<AdvPrintSettings::Output, QString>::const_iterator it2 = map2.constBegin();
+
+    while (it2 != map2.constEnd())
+    {
+        d->photoUi->m_printer_choice->addItem(it2.value(), (int)it2.key());
+        ++it2;
+    }
+
+    // Populate real printers
+
+    d->printerList = QPrinterInfo::availablePrinters();
 
     for (QList<QPrinterInfo>::iterator it = d->printerList.begin() ;
          it != d->printerList.end() ; ++it)
     {
-        qCDebug(DIGIKAM_GENERAL_LOG) << " printer: " << it->printerName();
         d->photoUi->m_printer_choice->addItem(it->printerName());
     }
 
@@ -250,7 +265,7 @@ void AdvPrintPhotoPage::initializePage()
     // create our photo sizes list
     d->wizard->previewPhotos();
 
-    int gid = d->photoUi->m_printer_choice->findText(i18n("Print with Gimp"));
+    int gid = d->photoUi->m_printer_choice->findText(d->settings->outputName(AdvPrintSettings::GIMP));
 
     if (d->settings->gimpPath.isEmpty())
     {
@@ -322,9 +337,7 @@ Ui_AdvPrintPhotoPage* AdvPrintPhotoPage::ui() const
 
 void AdvPrintPhotoPage::slotOutputChanged(const QString& text)
 {
-    if (text == i18n("Print to PDF") ||
-        text == i18n("Print to Image File") ||
-        text == i18n("Print with Gimp"))
+    if (AdvPrintSettings::outputNames().values().contains(text))
     {
         delete d->printer;
 

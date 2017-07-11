@@ -60,6 +60,15 @@ public:
         ALBUMS
     };
 
+    // Print output destination, outside real printers configured
+    enum Output
+    {
+        PDF = 0,
+        FILES,
+        GIMP
+    };
+
+    // Image format for Output::FILES
     enum ImageFormat
     {
         JPEG = 0,
@@ -76,9 +85,11 @@ public:
     void readSettings(KConfigGroup& group);
     void writeSettings(KConfigGroup& group);
 
-    QString format() const;
+    QString format()               const;
+    QString outputName(Output out) const;
 
     // Helper methods to fill combobox from GUI.
+    static QMap<Output,      QString> outputNames();
     static QMap<ImageFormat, QString> imageFormatNames();
 
 public:

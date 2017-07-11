@@ -180,21 +180,6 @@
            <property name="insertPolicy">
             <enum>QComboBox::InsertAtTop</enum>
            </property>
-           <item>
-            <property name="text">
-             <string>Print to PDF</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Print to Image File</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Print with Gimp</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>

@@ -168,7 +168,8 @@ int AdvPrintWizard::nextId() const
             return d->photoPage->id();
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to Image File"))
+    if (d->photoPage->ui()->m_printer_choice->currentText() ==
+        d->settings->outputName(AdvPrintSettings::FILES))
     {
         if (currentPage() == d->cropPage)
             return d->outputPage->id();
@@ -389,8 +390,10 @@ void AdvPrintWizard::startPrinting()
         i++;
     }
 
-    if (d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print to Image File") &&
-        d->photoPage->ui()->m_printer_choice->currentText() != i18n("Print with Gimp"))
+    if (d->photoPage->ui()->m_printer_choice->currentText() !=
+        d->settings->outputName(AdvPrintSettings::FILES)        &&
+        d->photoPage->ui()->m_printer_choice->currentText() !=
+        d->settings->outputName(AdvPrintSettings::GIMP))
     {
         // tell him again!
         d->photoPage->printer()->setFullPage(true);
@@ -457,7 +460,8 @@ void AdvPrintWizard::startPrinting()
 
         d->finalPage->printPhotos(d->settings->photos, s->layouts, *d->photoPage->printer());
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print with Gimp"))
+    else if (d->photoPage->ui()->m_printer_choice->currentText() ==
+             d->settings->outputName(AdvPrintSettings::GIMP))
     {
         d->settings->imageFormat = AdvPrintSettings::JPEG;
 
@@ -496,7 +500,8 @@ void AdvPrintWizard::startPrinting()
             }
         }
     }
-    else if (d->photoPage->ui()->m_printer_choice->currentText() == i18n("Print to Image File"))
+    else if (d->photoPage->ui()->m_printer_choice->currentText() ==
+             d->settings->outputName(AdvPrintSettings::FILES))
     {
         QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile(),
                                                             s);

@@ -43,7 +43,7 @@ AdvPrintSettings::AdvPrintSettings()
     currentCropPhoto   = 0;
     disableCrop        = false;
     imageFormat        = JPEG;
-    printerName        = i18n("Print to PDF");
+    printerName        = outputName(PDF);
     captions           = 0;
     captionColor       = QColor(Qt::yellow);
     captionFont        = QFont(QLatin1String("Sans Serif"));
@@ -69,7 +69,7 @@ void AdvPrintSettings::readSettings(KConfigGroup& group)
     iconSize          = group.readEntry("IconSize",
                         QSize(24, 24));
     printerName       = group.readEntry("Printer",
-                        i18n("Print to PDF"));
+                        outputName(PDF));
     captions          = group.readEntry(QLatin1String("Captions"),
                         0);
     captionColor      = group.readEntry(QLatin1String("CaptionColor"),
@@ -109,6 +109,27 @@ void AdvPrintSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("ImageFormat",       (int)imageFormat);
 }
 
+QString AdvPrintSettings::outputName(Output out) const
+{
+    QMap<Output, QString> outputs = outputNames();
+
+    if (outputs.contains(out))
+        return outputs[out];
+
+    return QString();
+}
+
+QMap<AdvPrintSettings::Output, QString> AdvPrintSettings::outputNames()
+{
+    QMap<Output, QString> out;
+
+    out[PDF]   = i18nc("Output: PDF",  "Print to PDF");
+    out[FILES] = i18nc("Output: FILE", "Print to Image File");
+    out[GIMP]  = i18nc("Output: GIMP", "Print with Gimp");
+
+    return out;
+}
+
 QString AdvPrintSettings::format() const
 {
     if (imageFormat == JPEG)
@@ -129,6 +150,5 @@ QMap<AdvPrintSettings::ImageFormat, QString> AdvPrintSettings::imageFormatNames(
 
     return frms;
 }
-
 
 } // namespace Digikam
