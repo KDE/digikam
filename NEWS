@@ -201,4 +201,6 @@ BUGFIXES FROM BUGZILLA:
 186 ==> 141132 - digiKam is hung reading a file avi.
 187 ==> 362472 - Provide a way to install Digikam 4.14 in (K)Ubuntu 16.04 (Xenial).
 188 ==> 151604 - Print Wizard does not recognize raw images.
-189 ==> 
+189 ==> 202480 - PrintWizard doesn't add comments properly but shows them in the preview.
+190 ==> 146457 - Rotation is not done correctly exif.
+191 ==> 
