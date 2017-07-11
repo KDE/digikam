@@ -205,4 +205,5 @@ BUGFIXES FROM BUGZILLA:
 190 ==> 146457 - Rotation is not done correctly exif.
 191 ==> 188426 - Add support for different size printwizard templates.
 192 ==> 100471 - Can't print the same image more than once on the same page.
-193 ==> 
+193 ==> 133730 - Tool to print images on photo paper.
+194 ==> 
