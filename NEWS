@@ -200,4 +200,5 @@ BUGFIXES FROM BUGZILLA:
 185 ==> 118831 - First image from avi as icon.
 186 ==> 141132 - digiKam is hung reading a file avi.
 187 ==> 362472 - Provide a way to install Digikam 4.14 in (K)Ubuntu 16.04 (Xenial).
-188 ==> 
+188 ==> 151604 - Print Wizard does not recognize raw images.
+189 ==> 
