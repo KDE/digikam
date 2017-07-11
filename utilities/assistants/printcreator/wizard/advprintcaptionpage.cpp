@@ -129,11 +129,6 @@ AdvPrintCaptionPage::~AdvPrintCaptionPage()
     delete d;
 }
 
-Ui_AdvPrintCaptionPage* AdvPrintCaptionPage::ui() const
-{
-    return d->captionUi;
-}
-
 DImagesList* AdvPrintCaptionPage::imagesList() const
 {
     return d->captionUi->mPrintList;

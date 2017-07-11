@@ -52,8 +52,6 @@ public:
 
     DImagesList* imagesList() const;
 
-    Ui_AdvPrintCaptionPage* ui() const;
-
     void blockCaptionButtons(bool block=true);
 
     void initializePage();
