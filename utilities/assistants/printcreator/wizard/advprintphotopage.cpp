@@ -204,15 +204,49 @@ AdvPrintPhotoPage::~AdvPrintPhotoPage()
 void AdvPrintPhotoPage::initializePage()
 {
     d->photoUi->mPrintList->listView()->clear();
+    QList<QUrl> list;
 
-    if (d->settings->selMode == AdvPrintSettings::IMAGES)
+    qCDebug(DIGIKAM_GENERAL_LOG) << "Items: " << d->settings->photos.count();
+
+    for (int i = 0 ; i < d->settings->photos.count() ; ++i)
     {
-        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
+        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+        if (pCurrentPhoto)
+        {
+            list.push_back(pCurrentPhoto->m_url);
+        }
+    }
+
+    d->photoUi->mPrintList->blockSignals(true);
+    d->photoUi->mPrintList->slotAddImages(list);
+    d->photoUi->mPrintList->listView()->setCurrentItem(d->photoUi->mPrintList->listView()->itemAt(0, 0));
+    d->photoUi->mPrintList->blockSignals(false);
+    d->photoUi->LblPhotoCount->setText(QString::number(d->settings->photos.count()));
+
+    initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+
+    // restore photoSize
+
+    if (d->settings->savedPhotoSize == i18n(CUSTOM_PAGE_LAYOUT_NAME))
+    {
+        d->photoUi->ListPhotoSizes->setCurrentRow(0);
     }
     else
     {
-        d->wizard->setItemsList(d->settings->inputImages);
+        QList<QListWidgetItem*> list = d->photoUi->ListPhotoSizes->findItems(d->settings->savedPhotoSize, Qt::MatchExactly);
+
+        if (list.count())
+            d->photoUi->ListPhotoSizes->setCurrentItem(list[0]);
+        else
+            d->photoUi->ListPhotoSizes->setCurrentRow(0);
     }
+
+    // reset preview page number
+    d->settings->currentPreviewPage = 0;
+
+    // create our photo sizes list
+    d->wizard->previewPhotos();
 
     int gid = d->photoUi->m_printer_choice->findText(i18n("Print with Gimp"));
 
@@ -233,6 +267,20 @@ void AdvPrintPhotoPage::initializePage()
 
     d->photoUi->ListPhotoSizes->setIconSize(d->settings->iconSize);
     initPhotoSizes(d->printer->paperSize(QPrinter::Millimeter));
+}
+
+void AdvPrintPhotoPage::cleanupPage()
+{
+    d->photoUi->mPrintList->listView()->clear();
+
+    if (d->settings->selMode == AdvPrintSettings::IMAGES)
+    {
+        d->photoUi->mPrintList->loadImagesFromCurrentSelection();
+    }
+    else
+    {
+        d->wizard->setItemsList(d->settings->inputImages);
+    }
 }
 
 bool AdvPrintPhotoPage::validatePage()

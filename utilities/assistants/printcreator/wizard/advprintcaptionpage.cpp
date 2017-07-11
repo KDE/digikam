@@ -149,6 +149,7 @@ void AdvPrintCaptionPage::initializePage()
     d->captionUi->m_FreeCaptionFormat->setText(d->settings->captionTxt);
     slotCaptionChanged(d->captionUi->m_captions->currentText());
     slotUpdateImagesList();
+    slotUpdateCaptions();
 }
 
 bool AdvPrintCaptionPage::validatePage()
