@@ -27,6 +27,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/..
                     ${CMAKE_CURRENT_SOURCE_DIR}/detection
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-lbph
                     ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-eigenfaces
+                    ${CMAKE_CURRENT_SOURCE_DIR}/recognition-opencv-fisherfaces
                     ${CMAKE_CURRENT_SOURCE_DIR}/alignment-congealing
                     ${CMAKE_CURRENT_SOURCE_DIR}/shape-predictor
 
@@ -60,6 +61,9 @@ set(facesengine_database_LIB_SRCS recognitiondatabase.cpp
                                   recognition-opencv-eigenfaces/eigenfacemodel.cpp
                                   recognition-opencv-eigenfaces/opencveigenfacerecognizer.cpp
                                   recognition-opencv-eigenfaces/facerec_eigenborrowed.cpp
+                                  recognition-opencv-fisherfaces/fisherfacemodel.cpp
+                                  recognition-opencv-fisherfaces/opencvfisherfacerecognizer.cpp
+                                  recognition-opencv-fisherfaces/facerec_fisherborrowed.cpp
                                   recognition-opencv-lbph/lbphfacemodel.cpp
                                   recognition-opencv-lbph/opencvlbphfacerecognizer.cpp
                                   recognition-opencv-lbph/opencvmatdata.cpp

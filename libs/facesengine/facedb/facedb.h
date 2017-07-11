@@ -38,6 +38,7 @@ namespace Digikam
 
 class LBPHFaceModel;
 class EigenFaceModel;
+class FisherFaceModel;
 
 class FaceDb
 {
@@ -69,6 +70,10 @@ public:
     EigenFaceModel eigenFaceModel() const;
     void clearEIGENTraining(const QString& context = QString());
     void clearEIGENTraining(const QList<int>& identities, const QString& context = QString());
+
+    /// OpenCV FISHER
+    void updateFISHERFaceModel(FisherFaceModel& model);
+    FisherFaceModel fisherFaceModel() const;
 
     // ----------- Database shrinking methods ----------
 

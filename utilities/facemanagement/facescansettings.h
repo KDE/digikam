@@ -59,7 +59,8 @@ public:
     enum RecognizeAlgorithm
     {
         LBP,
-        EigenFace
+        EigenFace,
+        FisherFace
     };
 
 public:

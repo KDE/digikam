@@ -75,7 +75,8 @@ public:
           configSettingsVisible(QLatin1String("Settings Widget Visible")),
           configRecognizeTask(QLatin1String("Face Recognize Main Task")),
           configRecognizeLBP(QLatin1String("Recognize Using LBP")), 
-          configRecognizeEigenFace(QLatin1String("Recognize Using EigenFace"))
+          configRecognizeEigenFace(QLatin1String("Recognize Using EigenFace")),
+          configRecognizeFisherFace(QLatin1String("Recognize Using FisherFace"))
     {
         buttons                    = 0;
         optionGroupBox             = 0;
@@ -88,9 +89,13 @@ public:
         accuracyInput              = 0;
         useFullCpuButton           = 0;
         retrainAllButton           = 0;
+        recognizeBox               = 0;
+        /*
         recognizeGroupBox          = 0;
         recognizeLBPButton         = 0;
-        recognizeEigenFaceButton  = 0;
+        recognizeEigenFaceButton   = 0;
+        recognizeFisherFaceButton  = 0;
+        */
     }
 
     QDialogButtonBox*            buttons;
@@ -110,9 +115,13 @@ public:
     QCheckBox*                   useFullCpuButton;
     QCheckBox*                   retrainAllButton;
 
+    QComboBox*                   recognizeBox;
+    /*
     QGroupBox*                   recognizeGroupBox;
     QRadioButton*                recognizeLBPButton;
     QRadioButton*                recognizeEigenFaceButton;
+    QRadioButton*                recognizeFisherFaceButton;
+    */
 
     const QString                configName;
     const QString                configMainTask;
@@ -125,6 +134,7 @@ public:
     const QString                configRecognizeTask;
     const QString                configRecognizeLBP;
     const QString                configRecognizeEigenFace;
+    const QString                configRecognizeFisherFace;
 };
 
 FaceScanDialog::FaceScanDialog(QWidget* const parent)
@@ -196,15 +206,22 @@ void FaceScanDialog::doLoadState()
     d->useFullCpuButton->setChecked(group.readEntry(entryName(d->configUseFullCpu), false));
 
     QString recognizeTask = group.readEntry(entryName(d->configRecognizeTask), d->configRecognizeLBP);
+    FaceScanSettings::RecognizeAlgorithm recAlgorithm;
 
     if(recognizeTask==d->configRecognizeLBP)
     {
-        d->recognizeLBPButton->setChecked(true);
+        recAlgorithm = FaceScanSettings::LBP;
+    }
+    else if(recognizeTask==d->configRecognizeEigenFace)
+    {
+        recAlgorithm = FaceScanSettings::EigenFace;
     }
     else
     {
-        d->recognizeEigenFaceButton->setChecked(true);
+        recAlgorithm = FaceScanSettings::FisherFace;
     }
+
+    d->recognizeBox->setCurrentIndex(d->recognizeBox->findData(recAlgorithm));
 
     // do not load retrainAllButton state from config, dangerous
 
@@ -261,6 +278,21 @@ void FaceScanDialog::doSaveState()
     group.writeEntry(entryName(d->configSettingsVisible), d->tabWidget->isVisible());
 
     QString recognizeTask;
+    switch ((FaceScanSettings::RecognizeAlgorithm)(d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt()))
+    {
+        case FaceScanSettings::LBP:
+            recognizeTask = d->configRecognizeLBP;
+            break;
+
+        case FaceScanSettings::EigenFace:
+            recognizeTask = d->configRecognizeEigenFace;
+            break;
+
+        case FaceScanSettings::FisherFace:
+            recognizeTask = d->configRecognizeFisherFace;
+            break;
+    }
+    /*
     if(d->recognizeLBPButton->isChecked())
     {
         recognizeTask = d->configRecognizeLBP;
@@ -269,6 +301,11 @@ void FaceScanDialog::doSaveState()
     {
         recognizeTask = d->configRecognizeEigenFace;
     }
+    else if(d->recognizeFisherFaceButton->isChecked())
+    {
+        recognizeTask = d->configRecognizeFisherFace;
+    }
+    */
     group.writeEntry(entryName(d->configRecognizeTask), recognizeTask);
 }
 
@@ -376,21 +413,32 @@ void FaceScanDialog::setupUi()
     d->useFullCpuButton = new QCheckBox(advancedTab);
     d->useFullCpuButton->setText(i18nc("@option:check", "Work on all processor cores (experimental)"));
 
+    //Recognize algorithm ComboBox
+    d->recognizeBox        = new QComboBox;
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using LBP algorithm"),         FaceScanSettings::LBP);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using EigenFaces algorithm"),  FaceScanSettings::EigenFace);
+    d->recognizeBox->addItem(i18nc("@label:listbox", "Recognize faces using FisherFaces algorithm"), FaceScanSettings::FisherFace);
+    d->recognizeBox->setCurrentIndex(FaceScanSettings::Skip);
+
     //Recognize algorithm options
+    /*
     d->recognizeGroupBox = new QGroupBox;
     QGridLayout* const recognizeLayout = new QGridLayout;
 
     d->recognizeLBPButton              = new QRadioButton(i18nc("@option:radio", "Recognize faces using LBP algorithm"));
     d->recognizeLBPButton->setChecked(true);
     d->recognizeEigenFaceButton        = new QRadioButton(i18nc("@option:radio", "Recognize faces using EigenFaces algorithm"));
+    d->recognizeFisherFaceButton        = new QRadioButton(i18nc("@option:radio", "Recognize faces using FisherFaces algorithm"));
 
     recognizeLayout->addWidget(d->recognizeLBPButton,         0, 0);
     recognizeLayout->addWidget(d->recognizeEigenFaceButton,   1, 0);
+    recognizeLayout->addWidget(d->recognizeFisherFaceButton,  2, 0);
 
     QStyleOptionButton buttonRecognizeOption;
     buttonRecognizeOption.initFrom(d->recognizeLBPButton);
 
     d->recognizeGroupBox->setLayout(recognizeLayout);
+    */
 
     d->retrainAllButton = new QCheckBox(advancedTab);
     d->retrainAllButton->setText(i18nc("@option:check", "Clear and rebuild all training data"));
@@ -402,7 +450,7 @@ void FaceScanDialog::setupUi()
     advancedLayout->addWidget(d->useFullCpuButton,             1, 0);
     advancedLayout->addWidget(new DLineWidget(Qt::Horizontal), 2, 0);
     advancedLayout->addWidget(d->retrainAllButton,             3, 0);
-    advancedLayout->addWidget(d->recognizeGroupBox,            4, 0);
+    advancedLayout->addWidget(d->recognizeBox,                 4, 0);
     advancedLayout->setRowStretch(5, 10);
 
     d->tabWidget->addTab(advancedTab, i18nc("@title:tab", "Advanced"));
@@ -461,7 +509,7 @@ void FaceScanDialog::retrainAllButtonToggled(bool on)
 {
     d->optionGroupBox->setEnabled(!on);
     d->albumSelectors->setEnabled(!on);
-    d->recognizeGroupBox->setEnabled(!on);
+    d->recognizeBox->setEnabled(!on);
 }
 
 FaceScanSettings FaceScanDialog::settings() const
@@ -497,6 +545,9 @@ FaceScanSettings FaceScanDialog::settings() const
 
     settings.useFullCpu             = d->useFullCpuButton->isChecked();
 
+    settings.recognizeAlgorithm     = (FaceScanSettings::RecognizeAlgorithm)
+                                      d->recognizeBox->itemData(d->recognizeBox->currentIndex()).toInt(); 
+/*
     if(d->recognizeLBPButton->isChecked())
     {
         settings.recognizeAlgorithm = FaceScanSettings::RecognizeAlgorithm::LBP;
@@ -505,7 +556,11 @@ FaceScanSettings FaceScanDialog::settings() const
     {
         settings.recognizeAlgorithm = FaceScanSettings::RecognizeAlgorithm::EigenFace;
     }
-
+    else if(d->recognizeFisherFaceButton->isChecked())
+    {
+        settings.recognizeAlgorithm = FaceScanSettings::RecognizeAlgorithm::FisherFace;
+    }
+*/
     return settings;
 }
 

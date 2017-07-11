@@ -4,9 +4,9 @@
  * This file is a part of digiKam project
  * <a href="http://www.digikam.org">http://www.digikam.org</a>
  *
- * @date    2017-05-22
- * @brief   <a href="http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#eigenfaces">Face Recognition based on Eigenfaces</a>
- *          Turk, Matthew A and Pentland, Alex P. "Face recognition using eigenfaces." 
+ * @date    2017-06-10
+ * @brief   <a href="http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#Fisherfaces">Face Recognition based on Fisherfaces</a>
+ *          Turk, Matthew A and Pentland, Alex P. "Face recognition using Fisherfaces." 
  *          Computer Vision and Pattern Recognition, 1991. Proceedings {CVPR'91.},
  *          {IEEE} Computer Society Conference on 1991.
  *
@@ -48,21 +48,21 @@ namespace Digikam
 {
 
 #if OPENCV_TEST_VERSION(3,0,0)
-class EigenFaceRecognizer : public cv::FaceRecognizer
+class FisherFaceRecognizer : public cv::FaceRecognizer
 #else
-class EigenFaceRecognizer : public cv::face::FaceRecognizer
+class FisherFaceRecognizer : public cv::face::FaceRecognizer
 #endif
 {
 public:
 
-    // Initializes this Eigenfaces Model.
-    EigenFaceRecognizer(double threshold = DBL_MAX):
+    // Initializes this Fisherfaces Model.
+    FisherFaceRecognizer(double threshold = DBL_MAX):
     m_threshold(threshold), m_num_components(0)
     {
     }
 
-    // Initializes and computes this Eigenfaces Model.
-    EigenFaceRecognizer(cv::InputArrayOfArrays src,
+    // Initializes and computes this Fisherfaces Model.
+    FisherFaceRecognizer(cv::InputArrayOfArrays src,
                        cv::InputArray labels,
                        double threshold = DBL_MAX) :
         m_threshold(threshold), m_num_components(0)
@@ -70,7 +70,7 @@ public:
         train(src, labels);
     }
 
-    ~EigenFaceRecognizer() {}
+    ~FisherFaceRecognizer() {}
 
 #if OPENCV_TEST_VERSION(3,0,0)
     using cv::FaceRecognizer::save;
@@ -80,10 +80,10 @@ public:
     using cv::face::FaceRecognizer::load;
 #endif
 
-    static cv::Ptr<EigenFaceRecognizer> create(double threshold = DBL_MAX);
+    static cv::Ptr<FisherFaceRecognizer> create(double threshold = DBL_MAX);
 
     /**
-     * Computes a Eigenfaces model with images in src and
+     * Computes a Fisherfaces model with images in src and
      * corresponding labels in labels.
      */
 #if OPENCV_TEST_VERSION(3,1,0)
@@ -93,7 +93,7 @@ public:
 #endif
 
     /**
-     * Updates this Eigenfaces model with images in src and
+     * Updates this Fisherfaces model with images in src and
      * corresponding labels in labels.
      */
 #if OPENCV_TEST_VERSION(3,1,0)
@@ -166,7 +166,7 @@ public:
 
 private:
 
-    /** Computes a Eigenfaces model with images in src and
+    /** Computes a Fisherfaces model with images in src and
      *  corresponding labels in labels, possibly preserving
      *  old training data.
      */
@@ -175,8 +175,8 @@ private:
 private:
 
     // NOTE: Do not use a d private internal container, this will crash OpenCV in cv::Algorithm::set()
-    int m_num_components;
     double m_threshold;
+    int m_num_components;
 
     std::vector<cv::Mat> m_src;
     std::vector<cv::Mat> m_projections;
