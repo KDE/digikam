@@ -64,9 +64,9 @@ QMap<AdvPrintSettings::ImageFormat, QString> AdvPrintSettings::imageFormatNames(
 {
     QMap<ImageFormat, QString> frms;
 
-    frms[JPEG] = i18nc("Image format: JPEG", "Jpeg");
-    frms[PNG]  = i18nc("Image format: PNG",  "Png");
-    frms[TIFF] = i18nc("Image format: TIFF", "Tiff");
+    frms[JPEG] = i18nc("Image format: JPEG", "JPEG");
+    frms[PNG]  = i18nc("Image format: PNG",  "PNG");
+    frms[TIFF] = i18nc("Image format: TIFF", "TIFF");
 
     return frms;
 }
