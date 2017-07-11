@@ -116,13 +116,13 @@ AdvPrintWizard::AdvPrintWizard(QWidget* const parent, DInfoInterface* const ifac
     KConfigGroup group = config.group("PrintCreator");
     d->settings->readSettings(group);
 
-    d->introPage   = new AdvPrintIntroPage(this,   i18n(INTRO_PAGE_NAME));
+    d->introPage   = new AdvPrintIntroPage(this,   i18n("Welcome to Print Creator"));
     d->albumsPage  = new AdvPrintAlbumsPage(this,  i18n("Albums Selection"));
-    d->photoPage   = new AdvPrintPhotoPage(this,   i18n(PHOTO_PAGE_NAME));
-    d->captionPage = new AdvPrintCaptionPage(this, i18n(CAPTION_PAGE_NAME));
-    d->cropPage    = new AdvPrintCropPage(this,    i18n(CROP_PAGE_NAME));
-    d->outputPage  = new AdvPrintOutputPage(this,  i18n(OUTPUT_PAGE_NAME));
-    d->finalPage   = new AdvPrintFinalPage(this,   i18n(FINAL_PAGE_NAME));
+    d->photoPage   = new AdvPrintPhotoPage(this,   i18n("Select Page Layout"));
+    d->captionPage = new AdvPrintCaptionPage(this, i18n("Caption Settings"));
+    d->cropPage    = new AdvPrintCropPage(this,    i18n("Crop and Rotate Photos"));
+    d->outputPage  = new AdvPrintOutputPage(this,  i18n("Images Output Settings"));
+    d->finalPage   = new AdvPrintFinalPage(this,   i18n("Render Printing"));
 
     // -----------------------------------
 

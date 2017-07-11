@@ -55,6 +55,8 @@
 namespace Digikam
 {
 
+static const char* const CUSTOM_PAGE_LAYOUT_NAME = I18N_NOOP("Custom");
+
 class AdvPrintPhotoPage::Private
 {
 public:
