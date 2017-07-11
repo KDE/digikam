@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : Google-Maps-backend for GeoIface
+ * Description : Google-Maps-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -48,10 +48,10 @@
 #include "htmlwidget.h"
 #include "mapwidget.h"
 #include "abstractmarkertiler.h"
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class GMInternalWidgetInfo
@@ -66,11 +66,11 @@ public:
     HTMLWidget* htmlWidget;
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_METATYPE(GeoIface::GMInternalWidgetInfo)
+Q_DECLARE_METATYPE(Digikam::GMInternalWidgetInfo)
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendGoogleMaps::Private
@@ -241,8 +241,8 @@ QWidget* BackendGoogleMaps::mapWidget()
         connect(d->htmlWidget, SIGNAL(signalHTMLEvents(QStringList)),
                 this, SLOT(slotHTMLEvents(QStringList)));
 
-        connect(d->htmlWidget, SIGNAL(selectionHasBeenMade(GeoIface::GeoCoordinates::Pair)),
-                this, SLOT(slotSelectionHasBeenMade(GeoIface::GeoCoordinates::Pair)));
+        connect(d->htmlWidget, SIGNAL(selectionHasBeenMade(Digikam::GeoCoordinates::Pair)),
+                this, SLOT(slotSelectionHasBeenMade(Digikam::GeoCoordinates::Pair)));
 
         d->htmlWidget->setSharedGeoIfaceObject(s.data());
         d->htmlWidgetWrapper->installEventFilter(this);
@@ -408,23 +408,23 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
     if (mindex>s->ungroupedModels.count())
         return;
 
-    ModelHelper* const modelHelper = s->ungroupedModels.at(mindex);
+    GeoModelHelper* const modelHelper = s->ungroupedModels.at(mindex);
 
     if (!modelHelper)
         return;
 
-    if (!modelHelper->modelFlags().testFlag(ModelHelper::FlagVisible))
+    if (!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagVisible))
         return;
 
     QAbstractItemModel* const model = modelHelper->model();
 
     for (int row = 0; row < model->rowCount(); ++row)
     {
-        const QModelIndex currentIndex     = model->index(row, 0);
-        const ModelHelper::Flags itemFlags = modelHelper->itemFlags(currentIndex);
+        const QModelIndex currentIndex             = model->index(row, 0);
+        const GeoModelHelper::PropertyFlags itemFlags = modelHelper->itemFlags(currentIndex);
 
         // TODO: this is untested! We need to make sure the indices stay correct inside the JavaScript part!
-        if (!itemFlags.testFlag(ModelHelper::FlagVisible))
+        if (!itemFlags.testFlag(GeoModelHelper::FlagVisible))
             continue;
 
         GeoCoordinates currentCoordinates;
@@ -437,8 +437,8 @@ void BackendGoogleMaps::slotUngroupedModelChanged(const int mindex)
                 .arg(row)
                 .arg(currentCoordinates.latString())
                 .arg(currentCoordinates.lonString())
-                .arg(itemFlags.testFlag(ModelHelper::FlagMovable)?QLatin1String("true" ):QLatin1String("false"))
-                .arg(itemFlags.testFlag(ModelHelper::FlagSnaps)?QLatin1String("true" ):QLatin1String("false"))
+                .arg(itemFlags.testFlag(GeoModelHelper::FlagMovable)?QLatin1String("true" ):QLatin1String("false"))
+                .arg(itemFlags.testFlag(GeoModelHelper::FlagSnaps)?QLatin1String("true" ):QLatin1String("false"))
             );
 
         QPoint     markerCenterPoint;
@@ -584,7 +584,7 @@ void BackendGoogleMaps::slotHTMLEvents(const QStringList& events)
                 continue;
 
             /// @todo emit signal here or later?
-            ModelHelper* const modelHelper  = s->ungroupedModels.at(snapModelId);
+            GeoModelHelper* const modelHelper  = s->ungroupedModels.at(snapModelId);
             QAbstractItemModel* const model = modelHelper->model();
             QPair<int, QModelIndex> snapTargetIndex(snapModelId, model->index(snapMarkerId, 0));
             emit(signalClustersMoved(QIntList() << clusterIndex, snapTargetIndex));
@@ -1134,7 +1134,7 @@ void BackendGoogleMaps::mouseModeChanged()
     d->htmlWidget->mouseModeChanged(s->currentMouseMode);
 }
 
-void BackendGoogleMaps::slotSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& searchCoordinates)
+void BackendGoogleMaps::slotSelectionHasBeenMade(const Digikam::GeoCoordinates::Pair& searchCoordinates)
 {
     emit signalSelectionHasBeenMade(searchCoordinates);
 }
@@ -1212,8 +1212,8 @@ void BackendGoogleMaps::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
     disconnect(d->htmlWidget, SIGNAL(signalHTMLEvents(QStringList)),
                this, SLOT(slotHTMLEvents(QStringList)));
 
-    disconnect(d->htmlWidget, SIGNAL(selectionHasBeenMade(GeoIface::GeoCoordinates::Pair)),
-               this, SLOT(slotSelectionHasBeenMade(GeoIface::GeoCoordinates::Pair)));
+    disconnect(d->htmlWidget, SIGNAL(selectionHasBeenMade(Digikam::GeoCoordinates::Pair)),
+               this, SLOT(slotSelectionHasBeenMade(Digikam::GeoCoordinates::Pair)));
 
     d->htmlWidget->setSharedGeoIfaceObject(0);
     d->htmlWidgetWrapper->removeEventFilter(this);
@@ -1417,4 +1417,4 @@ void BackendGoogleMaps::slotTrackVisibilityChanged(const bool newState)
     }
 }
 
-} // namespace GeoIface
+} // namespace Digikam

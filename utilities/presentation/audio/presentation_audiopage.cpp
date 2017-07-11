@@ -28,7 +28,6 @@
 #include <QPointer>
 #include <QTime>
 #include <QIcon>
-#include <QFileDialog>
 #include <QMessageBox>
 #include <QDialogButtonBox>
 
@@ -38,6 +37,7 @@
 #include "presentation_mainpage.h"
 #include "presentationcontainer.h"
 #include "digikam_debug.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -349,7 +349,7 @@ void PresentationAudioPage::slotAddDropItems(const QList<QUrl>& filesUrl)
 
 void PresentationAudioPage::slotSoundFilesButtonAdd()
 {
-    QPointer<QFileDialog> dlg = new QFileDialog(this,
+    QPointer<DFileDialog> dlg = new DFileDialog(this,
                                                 i18n("Select sound files"),
                                                 d->sharedData->soundtrackPath.adjusted(QUrl::RemoveFilename).toLocalFile());
 
@@ -359,8 +359,8 @@ void PresentationAudioPage::slotSoundFilesButtonAdd()
     atm << QLatin1String("audio/ogg");
     atm << QLatin1String("audio/flac");
     dlg->setMimeTypeFilters(atm);
-    dlg->setAcceptMode(QFileDialog::AcceptOpen);
-    dlg->setFileMode(QFileDialog::ExistingFiles);
+    dlg->setAcceptMode(DFileDialog::AcceptOpen);
+    dlg->setFileMode(DFileDialog::ExistingFiles);
     dlg->exec();
 
     QList<QUrl> urls = dlg->selectedUrls();
@@ -471,10 +471,10 @@ void PresentationAudioPage::slotSoundFilesButtonDown()
 
 void PresentationAudioPage::slotSoundFilesButtonLoad()
 {
-    QPointer<QFileDialog> dlg = new QFileDialog(this, i18n("Load playlist"),
+    QPointer<DFileDialog> dlg = new DFileDialog(this, i18n("Load playlist"),
                                                 QString(), i18n("Playlist (*.m3u)"));
-    dlg->setAcceptMode(QFileDialog::AcceptOpen);
-    dlg->setFileMode(QFileDialog::ExistingFile);
+    dlg->setAcceptMode(DFileDialog::AcceptOpen);
+    dlg->setFileMode(DFileDialog::ExistingFile);
 
     if (dlg->exec() != QDialog::Accepted)
     {
@@ -523,10 +523,10 @@ void PresentationAudioPage::slotSoundFilesButtonLoad()
 
 void PresentationAudioPage::slotSoundFilesButtonSave()
 {
-    QPointer<QFileDialog> dlg = new QFileDialog(this, i18n("Save playlist"),
+    QPointer<DFileDialog> dlg = new DFileDialog(this, i18n("Save playlist"),
                                                 QString(), i18n("Playlist (*.m3u)"));
-    dlg->setAcceptMode(QFileDialog::AcceptSave);
-    dlg->setFileMode(QFileDialog::AnyFile);
+    dlg->setAcceptMode(DFileDialog::AcceptSave);
+    dlg->setFileMode(DFileDialog::AnyFile);
 
     if (dlg->exec() != QDialog::Accepted)
     {

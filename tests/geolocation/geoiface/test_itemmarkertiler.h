@@ -21,36 +21,39 @@
  *
  * ============================================================ */
 
-#ifndef TEST_ITEMMARKERTILER_H
-#define TEST_ITEMMARKERTILER_H
+#ifndef TEST_ITEM_MARKER_TILER_H
+#define TEST_ITEM_MARKER_TILER_H
 
 // Qt includes
 
 #include <QtTest>
 
-// local includes
+// Local includes
 
 #include "itemmarkertiler.h"
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
-class MarkerModelHelper : public ModelHelper
+class MarkerModelHelper : public GeoModelHelper
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
 
-    MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel);
+    explicit MarkerModelHelper(QAbstractItemModel* const itemModel,
+                               QItemSelectionModel* const itemSelectionModel);
     ~MarkerModelHelper();
 
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
+    virtual bool itemCoordinates(const QModelIndex& index,
+                                 GeoCoordinates* const coordinates) const;
 
 private Q_SLOTS:
 
-    void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    void slotDataChanged(const QModelIndex& topLeft,
+                         const QModelIndex& bottomRight);
 
 private:
 
@@ -82,4 +85,4 @@ private Q_SLOTS:
     void benchmarkIteratorWholeWorld();
 };
 
-#endif /* TEST_ITEMMARKERTILER_H */
+#endif // TEST_ITEM_MARKER_TILER_H

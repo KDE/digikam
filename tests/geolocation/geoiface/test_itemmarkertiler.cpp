@@ -30,14 +30,15 @@
 
 // Local includes
 
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 const int CoordinatesRole = Qt::UserRole + 0;
 
-MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel)
-    : ModelHelper(itemModel),
+MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel,
+                                     QItemSelectionModel* const itemSelectionModel)
+    : GeoModelHelper(itemModel),
       m_itemModel(itemModel),
       m_itemSelectionModel(itemSelectionModel)
 {
@@ -49,7 +50,8 @@ MarkerModelHelper::~MarkerModelHelper()
 {
 }
 
-void MarkerModelHelper::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+void MarkerModelHelper::slotDataChanged(const QModelIndex& topLeft,
+                                        const QModelIndex& bottomRight)
 {
     Q_UNUSED(topLeft)
     Q_UNUSED(bottomRight)
@@ -66,7 +68,8 @@ QItemSelectionModel* MarkerModelHelper::selectionModel() const
     return m_itemSelectionModel;
 }
 
-bool MarkerModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool MarkerModelHelper::itemCoordinates(const QModelIndex& index,
+                                        GeoCoordinates* const coordinates) const
 {
     if (!index.data(CoordinatesRole).canConvert<GeoCoordinates>())
         return false;

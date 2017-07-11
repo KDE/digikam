@@ -33,8 +33,6 @@
 
 #include "track_correlator.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 

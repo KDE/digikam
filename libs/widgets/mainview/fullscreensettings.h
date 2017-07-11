@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef FULLSCREENSETTINGS_H
-#define FULLSCREENSETTINGS_H
+#ifndef FULL_SCREEN_SETTINGS_H
+#define FULL_SCREEN_SETTINGS_H
 
 // Qt includes
 
@@ -58,4 +58,4 @@ private:
 
 } // namespace Digikam
 
-#endif // FULLSCREENSETTINGS_H
+#endif // FULL_SCREEN_SETTINGS_H

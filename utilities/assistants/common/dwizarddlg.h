@@ -40,8 +40,8 @@ class DIGIKAM_EXPORT DWizardDlg : public QWizard
 
 public:
 
-    DWizardDlg(QWidget* const parent, const QString& objName);
-    virtual ~DWizardDlg();
+    explicit DWizardDlg(QWidget* const parent, const QString& objName);
+    ~DWizardDlg();
 
 private:
 

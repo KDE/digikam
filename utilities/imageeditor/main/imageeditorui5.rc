@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="556" name="imageeditor" translationDomain="digikam" >
+<gui version="558" name="imageeditor" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -136,38 +136,40 @@
 
     <Menu name="Tools"><text>&amp;Tools</text>
         <Action name="import_scan" />
-        <Action name="metadata_edit"/>
-        <Action name="geolocation_edit"/>
+        <Action name="metadata_edit" />
+        <Action name="geolocation_edit" />
         <Separator/>
         <Action name="expoblending" />
         <Action name="panorama" />
         <Action name="htmlgallery" />
         <Action name="calendar" />
         <Action name="videoslideshow" />
+        <Action name="sendbymail" />
+        <Action name="printcreator" />
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>
         <Merge name="StandardToolBarMenuHandler" />
-        <Action name="options_show_menubar"/>
-        <Action name="options_show_statusbar"/>
-        <Action name="options_show_toolbar"/>
+        <Action name="options_show_menubar" />
+        <Action name="options_show_statusbar" />
+        <Action name="options_show_toolbar" />
         <Action name="editorwindow_showthumbs" />
         <Separator/>
         <Action name="theme_menu" />
-        <Action name="options_configure_keybinding"/>
-        <Action name="options_configure_toolbars"/>
-        <Action name="options_configure_notifications"/>
+        <Action name="options_configure_keybinding" />
+        <Action name="options_configure_toolbars" />
+        <Action name="options_configure_notifications" />
         <Action name="options_configure" />
     </Menu>
 
     <Menu name="help" ><text>&amp;Help</text>
-        <Action name="help_rawcameralist"/>
-        <Action name="help_librariesinfo"/>
-        <Action name="help_dbstat"/>
+        <Action name="help_rawcameralist" />
+        <Action name="help_librariesinfo" />
+        <Action name="help_dbstat" />
         <Separator/>
-        <Action name="help_donatemoney"/>
-        <Action name="help_contribute"/>
-        <Action name="help_handbook"/>
+        <Action name="help_donatemoney" />
+        <Action name="help_contribute" />
+        <Action name="help_handbook" />
     </Menu>
 
     <Merge/>
@@ -175,8 +177,8 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" ><text>Main Toolbar</text>
-     <Action name="imageview_tomainwindow"/>
-     <Action name="editorwindow_openversion"/>
+     <Action name="imageview_tomainwindow" />
+     <Action name="editorwindow_openversion" />
      <Action name="editorwindow_export" />
      <Separator/>
      <Action name="editorwindow_save" />

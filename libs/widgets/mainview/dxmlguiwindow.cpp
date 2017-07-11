@@ -41,7 +41,6 @@
 #include <QMenu>
 #include <QUrl>
 #include <QUrlQuery>
-#include <QDesktopServices>
 #include <QIcon>
 #include <QDir>
 #include <QFileInfo>
@@ -70,6 +69,7 @@
 #include "digikam_debug.h"
 #include "digikam_globals.h"
 #include "daboutdata.h"
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -166,7 +166,7 @@ public:
     QString                  configGroupName;
 };
 
-// --------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------
 
 DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
@@ -176,6 +176,8 @@ DXmlGuiWindow::DXmlGuiWindow(QWidget* const parent, Qt::WindowFlags f)
     m_panoramaAction        = 0;
     m_videoslideshowAction  = 0;
     m_htmlGalleryAction     = 0;
+    m_sendByMailAction      = 0;
+    m_printCreatorAction    = 0;
     m_calendarAction        = 0;
     m_presentationAction    = 0;
     m_metadataEditAction    = 0;
@@ -479,6 +481,28 @@ void DXmlGuiWindow::createCalendarAction()
 
     connect(m_calendarAction, SIGNAL(triggered(bool)),
             this, SLOT(slotCalendar()));
+}
+
+void DXmlGuiWindow::createSendByMailAction()
+{
+    m_sendByMailAction = new QAction(QIcon::fromTheme(QLatin1String("mail-send")),
+                                    i18nc("@action", "Send by Mail..."),
+                                    this);
+    actionCollection()->addAction(QLatin1String("sendbymail"), m_sendByMailAction);
+
+    connect(m_sendByMailAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotSendByMail()));
+}
+
+void DXmlGuiWindow::createPrintCreatorAction()
+{
+    m_printCreatorAction = new QAction(QIcon::fromTheme(QLatin1String("document-print")),
+                                    i18nc("@action", "Print Creator..."),
+                                    this);
+    actionCollection()->addAction(QLatin1String("printcreator"), m_printCreatorAction);
+
+    connect(m_printCreatorAction, SIGNAL(triggered(bool)),
+            this, SLOT(slotPrintCreator()));
 }
 
 void DXmlGuiWindow::createHtmlGalleryAction()
@@ -818,7 +842,8 @@ void DXmlGuiWindow::openHandbook()
     QUrl url = QUrl(QString::fromUtf8("https://docs.kde.org/trunk5/en/extragear-graphics/%1/index.html")
                .arg(QApplication::applicationName()));
 
-    QDesktopServices::openUrl(url);
+    WebBrowserDlg* const browser = new WebBrowserDlg(url, qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::restoreWindowSize(QWindow* const win, const KConfigGroup& group)
@@ -888,17 +913,26 @@ void DXmlGuiWindow::slotRawCameraList()
 
 void DXmlGuiWindow::slotDonateMoney()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=donation")));
+    WebBrowserDlg* const browser
+        = new WebBrowserDlg(QUrl(QLatin1String("https://www.digikam.org/donate/")),
+                            qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::slotRecipesBook()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/node/543")));
+    WebBrowserDlg* const browser
+        = new WebBrowserDlg(QUrl(QLatin1String("https://www.digikam.org/recipes_book/")),
+                            qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::slotContribute()
 {
-    QDesktopServices::openUrl(QUrl(QLatin1String("https://www.digikam.org/?q=contrib")));
+    WebBrowserDlg* const browser
+        = new WebBrowserDlg(QUrl(QLatin1String("https://www.digikam.org/contribute/")),
+                            qApp->activeWindow());
+    browser->show();
 }
 
 void DXmlGuiWindow::setupIconTheme()

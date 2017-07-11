@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-08
- * Description : Marble-backend for GeoIface
+ * Description : Marble-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -22,8 +22,6 @@
  * GNU General Public License for more details.
  *
  * ============================================================ */
-
-#define GEOIFACE_MARBLE_ADD_LAYER
 
 #include "backendmarble.h"
 
@@ -51,19 +49,14 @@
 
 // Local includes
 
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
-#    include "backendmarblelayer.h"
-#else
-#    include "backend_map_marble_subwidget.h"
-#endif // GEOIFACE_MARBLE_ADD_LAYER
-
+#include "backendmarblelayer.h"
 #include "abstractmarkertiler.h"
 #include "mapwidget.h"
-#include "modelhelper.h"
-#include "tracks.h"
+#include "geomodelhelper.h"
+#include "trackmanager.h"
 #include "digikam_debug.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BMInternalWidgetInfo
@@ -72,21 +65,17 @@ public:
 
     BMInternalWidgetInfo()
     {
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
         bmLayer = 0;
-#endif
     }
 
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
     BackendMarbleLayer* bmLayer;
-#endif
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-Q_DECLARE_METATYPE(GeoIface::BMInternalWidgetInfo)
+Q_DECLARE_METATYPE(Digikam::BMInternalWidgetInfo)
 
-namespace GeoIface
+namespace Digikam
 {
 
 class BackendMarble::Private
@@ -126,10 +115,8 @@ public:
         activeState(false),
         widgetIsDocked(false),
         blockingZoomWhileChangingTheme(false),
-        trackCache()
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
-        , bmLayer(0)
-#endif
+        trackCache(),
+        bmLayer(0)
     {
     }
 
@@ -173,14 +160,13 @@ public:
 
     QHash<quint64, Marble::GeoDataLineString> trackCache;
 
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
     BackendMarbleLayer*                       bmLayer;
-#endif
 };
 
 BackendMarble::BackendMarble(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
                              QObject* const parent)
-    : MapBackend(sharedData, parent), d(new Private())
+    : MapBackend(sharedData, parent),
+      d(new Private())
 {
     createActions();
 }
@@ -193,12 +179,9 @@ BackendMarble::~BackendMarble()
 
     if (d->marbleWidget)
     {
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
-
         d->marbleWidget->removeLayer(d->bmLayer);
 
         delete d->bmLayer;
-#endif
         delete d->marbleWidget;
     }
 
@@ -225,23 +208,17 @@ QWidget* BackendMarble::mapWidget()
 
         if (go->getInternalWidgetFromPool(this, &info))
         {
-            d->marbleWidget = qobject_cast<Marble::MarbleWidget*>(info.widget);
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
+            d->marbleWidget                    = qobject_cast<Marble::MarbleWidget*>(info.widget);
             const BMInternalWidgetInfo intInfo = info.backendData.value<BMInternalWidgetInfo>();
-            d->bmLayer = intInfo.bmLayer;
+            d->bmLayer                         = intInfo.bmLayer;
             d->bmLayer->setBackend(this);
-#endif
         }
         else
         {
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
             d->marbleWidget = new Marble::MarbleWidget();
             d->bmLayer      = new BackendMarbleLayer(this);
 
             d->marbleWidget->addLayer(d->bmLayer);
-#else
-            d->marbleWidget = new BMWidget(this);
-#endif
         }
 
         d->marbleWidget->installEventFilter(this);
@@ -263,25 +240,20 @@ void BackendMarble::releaseWidget(GeoIfaceInternalWidgetInfo* const info)
 {
     info->widget->removeEventFilter(this);
 
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
     BMInternalWidgetInfo intInfo = info->backendData.value<BMInternalWidgetInfo>();
 
     if (intInfo.bmLayer)
     {
         intInfo.bmLayer->setBackend(0);
     }
-#endif
 
     disconnect(d->marbleWidget, SIGNAL(zoomChanged(int)),
                this, SLOT(slotMarbleZoomChanged()));
 
     info->currentOwner = 0;
     info->state        = GeoIfaceInternalWidgetInfo::InternalWidgetReleased;
-
     d->marbleWidget    = 0;
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
     d->bmLayer         = 0;
-#endif /* GEOIFACE_MARBLE_ADD_LAYER */
 
     emit(signalBackendReadyChanged(backendName()));
 }
@@ -377,7 +349,8 @@ void BackendMarble::createActions()
     d->actionGroupFloatItems = new QActionGroup(this);
     d->actionGroupFloatItems->setExclusive(false);
 
-    connect(d->actionGroupFloatItems, &QActionGroup::triggered, this, &BackendMarble::slotFloatSettingsTriggered);
+    connect(d->actionGroupFloatItems, &QActionGroup::triggered,
+            this, &BackendMarble::slotFloatSettingsTriggered);
 
     d->actionShowCompass = new QAction(i18n("Show compass"), d->actionGroupFloatItems);
     d->actionShowCompass->setData(QLatin1String("showcompass"));
@@ -408,7 +381,7 @@ void BackendMarble::addActionsToConfigurationMenu(QMenu* const configurationMenu
 
     const QList<QAction*> mapThemeActions = d->actionGroupMapTheme->actions();
 
-    for (int i = 0; i < mapThemeActions.count(); ++i)
+    for (int i = 0 ; i < mapThemeActions.count() ; ++i)
     {
         configurationMenu->addAction(mapThemeActions.at(i));
     }
@@ -420,7 +393,7 @@ void BackendMarble::addActionsToConfigurationMenu(QMenu* const configurationMenu
     configurationMenu->addMenu(projectionSubMenu);
     const QList<QAction*> projectionActions = d->actionGroupProjection->actions();
 
-    for (int i = 0; i < projectionActions.count(); ++i)
+    for (int i = 0 ; i < projectionActions.count() ; ++i)
     {
         projectionSubMenu->addAction(projectionActions.at(i));
     }
@@ -429,7 +402,7 @@ void BackendMarble::addActionsToConfigurationMenu(QMenu* const configurationMenu
     configurationMenu->addMenu(floatItemsSubMenu);
     const QList<QAction*> floatActions = d->actionGroupFloatItems->actions();
 
-    for (int i = 0; i < floatActions.count(); ++i)
+    for (int i = 0 ; i < floatActions.count() ; ++i)
     {
         floatItemsSubMenu->addAction(floatActions.at(i));
     }
@@ -590,7 +563,9 @@ bool BackendMarble::geoCoordinates(const QPoint& point, GeoCoordinates* const co
     }
 
     qreal lat, lon;
-    const bool isVisible = d->marbleWidget->geoCoordinates(point.x(), point.y(), lon, lat, Marble::GeoDataCoordinates::Degree);
+    const bool isVisible = d->marbleWidget->geoCoordinates(point.x(), point.y(),
+                                                           lon, lat,
+                                                           Marble::GeoDataCoordinates::Degree);
 
     if (!isVisible)
     {
@@ -613,7 +588,10 @@ bool BackendMarble::geoCoordinates(const QPoint& point, GeoCoordinates* const co
  * @param coordinates GeoCoordinates where the image is to be drawn
  * @param offsetPoint Point in the @p pixmap which should be at @p coordinates
  */
-void BackendMarble::GeoPainter_drawPixmapAtCoordinates(Marble::GeoPainter* const painter, const QPixmap& pixmap, const GeoCoordinates& coordinates, const QPoint& offsetPoint)
+void BackendMarble::GeoPainter_drawPixmapAtCoordinates(Marble::GeoPainter* const painter,
+                                                       const QPixmap& pixmap,
+                                                       const GeoCoordinates& coordinates,
+                                                       const QPoint& offsetPoint)
 {
     // base point starts at the top left of the pixmap
 
@@ -626,8 +604,8 @@ void BackendMarble::GeoPainter_drawPixmapAtCoordinates(Marble::GeoPainter* const
     }
 
     // Marble::GeoPainter::drawPixmap(coordinates, pixmap) draws the pixmap centered on coordinates
-    // therefore we calculate the pixel position of the center of the image if its offsetPoint is to be
-    // at pointOnScreen:
+    // therefore we calculate the pixel position of the center of the image if its offsetPoint
+    // is to be at pointOnScreen:
     const QSize pixmapSize      = pixmap.size();
     const QPoint pixmapHalfSize = QPoint(pixmapSize.width()/2, pixmapSize.height()/2);
     const QPoint drawPoint      = pointOnScreen + pixmapHalfSize - offsetPoint;
@@ -657,7 +635,11 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         (d->clustersDirtyCacheLon        != d->marbleWidget->centerLongitude()) ||
         (d->clustersDirtyCacheProjection != d->marbleWidget->projection()))
     {
-//         qCDebug(DIGIKAM_GEOIFACE_LOG)<<d->marbleWidget->centerLatitude()<<d->marbleWidget->centerLongitude()<<d->marbleWidget->projection();
+/*
+        qCDebug(DIGIKAM_GEOIFACE_LOG) << d->marbleWidget->centerLatitude()
+                                         << d->marbleWidget->centerLongitude()
+                                         << d->marbleWidget->projection();
+*/
         d->clustersDirtyCacheLat        = d->marbleWidget->centerLatitude();
         d->clustersDirtyCacheLon        = d->marbleWidget->centerLongitude();
         d->clustersDirtyCacheProjection = d->marbleWidget->projection();
@@ -699,7 +681,7 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
                     d->trackCache.insert(track.id, lineString);
                 }
 
-                /// @TODO 5 looks a bit too thick IMHO when you zoom out.
+                /// @TODO looks a bit too thick IMHO when you zoom out.
                 ///       Maybe adjust to zoom level?
                 QColor trackColor = track.color;
                 trackColor.setAlpha(180);
@@ -709,17 +691,17 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         }
     }
 
-    for (int i = 0; i < s->ungroupedModels.count(); ++i)
+    for (int i = 0 ; i < s->ungroupedModels.count() ; ++i)
     {
-        ModelHelper* const modelHelper = s->ungroupedModels.at(i);
+        GeoModelHelper* const modelHelper = s->ungroupedModels.at(i);
 
-        if (!modelHelper->modelFlags().testFlag(ModelHelper::FlagVisible))
+        if (!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagVisible))
             continue;
 
-        QAbstractItemModel* const model = modelHelper->model();
+        QAbstractItemModel* const model   = modelHelper->model();
 
         // render all visible markers:
-        for (int row = 0; row < model->rowCount(); ++row)
+        for (int row = 0 ; row < model->rowCount() ; ++row)
         {
             const QModelIndex currentIndex = model->index(row, 0);
             GeoCoordinates markerCoordinates;
@@ -744,12 +726,14 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
 
             QPoint markerOffsetPoint;
             QPixmap markerPixmap;
-            const bool haveMarkerPixmap = modelHelper->itemIcon(currentIndex, &markerOffsetPoint, 0, &markerPixmap, 0);
+            const bool haveMarkerPixmap = modelHelper->itemIcon(currentIndex,
+                                                                &markerOffsetPoint, 0,
+                                                                &markerPixmap, 0);
 
             if (!haveMarkerPixmap || markerPixmap.isNull())
             {
                 markerPixmap      = GeoIfaceGlobalObject::instance()->getStandardMarkerPixmap();
-                markerOffsetPoint = QPoint(markerPixmap.width()/2, markerPixmap.height()-1);
+                markerOffsetPoint = QPoint(markerPixmap.width() / 2, markerPixmap.height() - 1);
             }
 
             GeoPainter_drawPixmapAtCoordinates(painter, markerPixmap, markerCoordinates, markerOffsetPoint);
@@ -763,16 +747,17 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         // now for the clusters:
         s->worldMapWidget->updateClusters();
 
-        for (int i = 0; i < s->clusterList.size(); ++i)
+        for (int i = 0 ; i < s->clusterList.size() ; ++i)
         {
-            const GeoIfaceCluster& cluster            = s->clusterList.at(i);
-            GeoCoordinates clusterCoordinates        = cluster.coordinates;
-            int markerCountOverride                  = cluster.markerCount;
-            GroupState selectionStateOverride = cluster.groupState;
+            const GeoIfaceCluster& cluster       = s->clusterList.at(i);
+            GeoCoordinates clusterCoordinates    = cluster.coordinates;
+            int markerCountOverride              = cluster.markerCount;
+            GeoGroupState selectionStateOverride = cluster.groupState;
 
             if (d->haveMouseMovingObject && (d->mouseMoveClusterIndex >= 0))
             {
-                bool movingSelectedMarkers = s->clusterList.at(d->mouseMoveClusterIndex).groupState != SelectedNone;
+                bool movingSelectedMarkers
+                    = s->clusterList.at(d->mouseMoveClusterIndex).groupState != SelectedNone;
 
                 if (movingSelectedMarkers)
                 {
@@ -799,19 +784,25 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             }
 
             QPoint clusterOffsetPoint;
-            const QPixmap clusterPixmap = s->worldMapWidget->getDecoratedPixmapForCluster(i, &selectionStateOverride, &markerCountOverride, &clusterOffsetPoint);
+            const QPixmap clusterPixmap = s->worldMapWidget->getDecoratedPixmapForCluster(i,
+                                                &selectionStateOverride,
+                                                &markerCountOverride,
+                                                &clusterOffsetPoint);
 
-            GeoPainter_drawPixmapAtCoordinates(painter, clusterPixmap, clusterCoordinates, clusterOffsetPoint);
+            GeoPainter_drawPixmapAtCoordinates(painter,
+                                               clusterPixmap,
+                                               clusterCoordinates,
+                                               clusterOffsetPoint);
         }
     }
 
     // now render the mouse-moving cluster, if there is one:
     if (d->haveMouseMovingObject && (d->mouseMoveClusterIndex >= 0))
     {
-        const GeoIfaceCluster& cluster            = s->clusterList.at(d->mouseMoveClusterIndex);
-        GeoCoordinates clusterCoordinates        = d->mouseMoveObjectCoordinates;
-        int markerCountOverride                  = (markersInMovingCluster>0)?markersInMovingCluster:cluster.markerCount;
-        GroupState selectionStateOverride = cluster.groupState;
+        const GeoIfaceCluster& cluster       = s->clusterList.at(d->mouseMoveClusterIndex);
+        GeoCoordinates clusterCoordinates    = d->mouseMoveObjectCoordinates;
+        int markerCountOverride              = (markersInMovingCluster>0)?markersInMovingCluster:cluster.markerCount;
+        GeoGroupState selectionStateOverride = cluster.groupState;
         QPoint clusterPoint;
 
         if (screenCoordinates(clusterCoordinates, &clusterPoint))
@@ -822,10 +813,11 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             Qt::PenStyle strokeStyle;
             QColor       labelColor;
             QString      labelText;
-            s->worldMapWidget->getColorInfos(d->mouseMoveClusterIndex, &fillColor, &strokeColor,
-                                &strokeStyle, &labelText, &labelColor,
-                                &selectionStateOverride,
-                                &markerCountOverride);
+            s->worldMapWidget->getColorInfos(d->mouseMoveClusterIndex,
+                                             &fillColor, &strokeColor,
+                                             &strokeStyle, &labelText,
+                                             &labelColor, &selectionStateOverride,
+                                             &markerCountOverride);
 
             QString pixmapName = fillColor.name().mid(1);
 
@@ -840,7 +832,9 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
             }
 
             const QPixmap& markerPixmap = GeoIfaceGlobalObject::instance()->getMarkerPixmap(pixmapName);
-            painter->drawPixmap(clusterPoint.x()-markerPixmap.width()/2, clusterPoint.y()-markerPixmap.height()-1, markerPixmap);
+            painter->drawPixmap(clusterPoint.x() - markerPixmap.width() / 2,
+                                clusterPoint.y() - markerPixmap.height() - 1,
+                                markerPixmap);
         }
     }
 
@@ -861,7 +855,9 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
         pixmapName                 += QLatin1String("-selected");
         const QPixmap& markerPixmap = GeoIfaceGlobalObject::instance()->getMarkerPixmap(pixmapName);
 
-        painter->drawPixmap(d->dragDropMarkerPos.x()-markerPixmap.width()/2, d->dragDropMarkerPos.y()-markerPixmap.height()-1, markerPixmap);
+        painter->drawPixmap(d->dragDropMarkerPos.x() - markerPixmap.width() / 2,
+                            d->dragDropMarkerPos.y() - markerPixmap.height() - 1,
+                            markerPixmap);
     }
 
     // here we draw the selection rectangle which is being made by the user right now
@@ -874,7 +870,8 @@ void BackendMarble::marbleCustomPaint(Marble::GeoPainter* painter)
     // draw the current or old search rectangle
     if (s->selectionRectangle.first.hasCoordinates())
     {
-        drawSearchRectangle(painter, s->selectionRectangle, d->intermediateSelectionPoint.hasCoordinates());
+        drawSearchRectangle(painter, s->selectionRectangle,
+                            d->intermediateSelectionPoint.hasCoordinates());
     }
 
     painter->restore();
@@ -921,7 +918,7 @@ void BackendMarble::setProjection(const QString& newProjection)
         {
             d->marbleWidget->setProjection(Marble::Mercator);
         }
-        else /*if (newProjection == "spherical")*/
+        else // "spherical"
         {
             d->marbleWidget->setProjection(Marble::Spherical);
         }
@@ -1061,10 +1058,11 @@ void BackendMarble::slotMarbleZoomChanged()
 void BackendMarble::setZoom(const QString& newZoom)
 {
     const QString myZoomString = s->worldMapWidget->convertZoomToBackendZoom(newZoom, QLatin1String("marble"));
+
     GEOIFACE_ASSERT(myZoomString.startsWith(QLatin1String("marble:")));
 
-    const int myZoom = myZoomString.mid(QString::fromLatin1("marble:").length()).toInt();
-    d->cacheZoom     = myZoom;
+    const int myZoom           = myZoomString.mid(QString::fromLatin1("marble:").length()).toInt();
+    d->cacheZoom               = myZoom;
     d->marbleWidget->zoomView(myZoom);
 }
 
@@ -1198,7 +1196,9 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
                 geoCoordinates(mouseEvent->pos(), &d->intermediateSelectionPoint);
                 d->intermediateSelectionScreenPoint = mouseEvent->pos();
 
-                qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint << QLatin1String(" ") << d->intermediateSelectionScreenPoint;
+                qCDebug(DIGIKAM_GEOIFACE_LOG) << d->firstSelectionScreenPoint
+                                              << " "
+                                              << d->intermediateSelectionScreenPoint;
 
                 qreal lonWest, latNorth, lonEast, latSouth;
 
@@ -1332,9 +1332,11 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
             if (/*s->inEditMode&&*/!doFilterEvent)
             {
                 // scan in reverse order of painting!
-                for (int clusterIndex = s->clusterList.count()-1; clusterIndex >= 0; --clusterIndex)
+                for (int clusterIndex = s->clusterList.count()-1 ;
+                     clusterIndex >= 0 ;
+                     --clusterIndex)
                 {
-                    const GeoIfaceCluster& cluster           = s->clusterList.at(clusterIndex);
+                    const GeoIfaceCluster& cluster          = s->clusterList.at(clusterIndex);
                     const GeoCoordinates currentCoordinates = cluster.coordinates;
                     QPoint clusterPoint;
 
@@ -1370,7 +1372,8 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
         else if ((event->type() == QEvent::MouseMove) &&
                  (d->havePotentiallyMouseMovingObject || d->haveMouseMovingObject))
         {
-            if ((!s->modificationsAllowed) || (!s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable)) ||
+            if ((!s->modificationsAllowed) ||
+                (!s->markerModel->tilerFlags().testFlag(AbstractMarkerTiler::FlagMovable)) ||
                 ((d->mouseMoveClusterIndex >= 0) && s->showThumbnails))
             {
                 // clusters only move in edit mode and when edit mode is enabled
@@ -1440,7 +1443,9 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
 
             QPair<int, QModelIndex> snapTargetIndex(-1, QModelIndex());
             GeoCoordinates newCoordinates;
-            bool haveValidPoint = findSnapPoint(dropMarkerPoint, 0, &newCoordinates, &snapTargetIndex);
+            bool haveValidPoint          = findSnapPoint(dropMarkerPoint, 0,
+                                                         &newCoordinates,
+                                                         &snapTargetIndex);
 
             if (!haveValidPoint)
             {
@@ -1451,7 +1456,8 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
             {
                 if (d->mouseMoveMarkerIndex.isValid())
                 {
-/*                  // the marker was dropped to valid coordinates
+/*
+                    // the marker was dropped to valid coordinates
                     s->specialMarkersModel->setData(d->mouseMoveMarkerIndex, QVariant::fromValue(newCoordinates), s->specialMarkersCoordinatesRole);
 
                     QList<QPersistentModelIndex> markerIndices;
@@ -1484,29 +1490,29 @@ bool BackendMarble::eventFilter(QObject *object, QEvent *event)
 
     return QObject::eventFilter(object, event);
 }
+/*
+void BackendMarble::updateDragDropMarker(const QPoint& pos, const GeoIfaceDragData* const dragData)
+{
+    if (!dragData)
+    {
+        d->dragDropMarkerCount = 0;
+    }
+    else
+    {
+        d->dragDropMarkerPos   = pos;
+        d->dragDropMarkerCount = dragData->itemCount;
+    }
+    d->marbleWidget->update();
 
-// void BackendMarble::updateDragDropMarker(const QPoint& pos, const GeoIfaceDragData* const dragData)
-// {
-//     if (!dragData)
-//     {
-//         d->dragDropMarkerCount = 0;
-//     }
-//     else
-//     {
-//         d->dragDropMarkerPos   = pos;
-//         d->dragDropMarkerCount = dragData->itemCount;
-//     }
-//     d->marbleWidget->update();
-//
-//     // TODO: hide dragged markers on the map
-// }
-//
-// void BackendMarble::updateDragDropMarkerPosition(const QPoint& pos)
-// {
-//     d->dragDropMarkerPos = pos;
-//     d->marbleWidget->update();
-// }
+    // TODO: hide dragged markers on the map
+}
 
+void BackendMarble::updateDragDropMarkerPosition(const QPoint& pos)
+{
+    d->dragDropMarkerPos = pos;
+    d->marbleWidget->update();
+}
+*/
 void BackendMarble::updateActionAvailability()
 {
     if ((!d->activeState) || (!d->marbleWidget))
@@ -1514,19 +1520,22 @@ void BackendMarble::updateActionAvailability()
         return;
     }
 
-    qCDebug(DIGIKAM_GEOIFACE_LOG) << d->cacheZoom << d->marbleWidget->maximumZoom() << d->marbleWidget->minimumZoom();
+    qCDebug(DIGIKAM_GEOIFACE_LOG) << d->cacheZoom
+                                  << d->marbleWidget->maximumZoom()
+                                  << d->marbleWidget->minimumZoom();
+
     s->worldMapWidget->getControlAction(QLatin1String("zoomin"))->setEnabled(d->cacheZoom<d->marbleWidget->maximumZoom());
     s->worldMapWidget->getControlAction(QLatin1String("zoomout"))->setEnabled(d->cacheZoom>d->marbleWidget->minimumZoom());
     const QList<QAction*> mapThemeActions = d->actionGroupMapTheme->actions();
 
-    for (int i = 0; i<mapThemeActions.size(); ++i)
+    for (int i = 0 ; i<mapThemeActions.size() ; ++i)
     {
         mapThemeActions.at(i)->setChecked(mapThemeActions.at(i)->data().toString() == getMapTheme());
     }
 
     const QList<QAction*> projectionActions = d->actionGroupProjection->actions();
 
-    for (int i = 0; i<projectionActions.size(); ++i)
+    for (int i = 0 ; i<projectionActions.size() ; ++i)
     {
         projectionActions.at(i)->setChecked(projectionActions.at(i)->data().toString() == d->cacheProjection);
     }
@@ -1554,7 +1563,8 @@ void BackendMarble::slotThumbnailAvailableForIndex(const QVariant& index, const 
     // TODO: properly reject pixmaps with the wrong size
     const int expectedThumbnailSize = s->worldMapWidget->getUndecoratedThumbnailSize();
 
-    if ((pixmap.size().height() > expectedThumbnailSize) || (pixmap.size().width() > expectedThumbnailSize))
+    if ((pixmap.size().height() > expectedThumbnailSize) ||
+        (pixmap.size().width() > expectedThumbnailSize))
     {
         return;
     }
@@ -1601,13 +1611,13 @@ bool BackendMarble::findSnapPoint(const QPoint& actualPoint, QPoint* const snapP
     int bestSnapUngroupedModel  = -1;
 
     // now handle snapping: is there any object close by?
-    for (int im = 0; im < s->ungroupedModels.count(); ++im)
+    for (int im = 0 ; im < s->ungroupedModels.count() ; ++im)
     {
-        ModelHelper* const modelHelper = s->ungroupedModels.at(im);
+        GeoModelHelper* const modelHelper = s->ungroupedModels.at(im);
 
         // TODO: test for active snapping
-        if ((!modelHelper->modelFlags().testFlag(ModelHelper::FlagVisible)) ||
-            (!modelHelper->modelFlags().testFlag(ModelHelper::FlagSnaps)))
+        if ((!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagVisible)) ||
+            (!modelHelper->modelFlags().testFlag(GeoModelHelper::FlagSnaps)))
         {
             continue;
         }
@@ -1616,7 +1626,7 @@ bool BackendMarble::findSnapPoint(const QPoint& actualPoint, QPoint* const snapP
         const int snapRadiusSquared         = 10*10;
         QAbstractItemModel* const itemModel = modelHelper->model();
 
-        for (int row = 0; row < itemModel->rowCount(); ++row)
+        for (int row = 0 ; row < itemModel->rowCount() ; ++row)
         {
             const QModelIndex currentIndex = itemModel->index(row, 0);
             GeoCoordinates currentCoordinates;
@@ -1701,9 +1711,10 @@ void BackendMarble::centerOn(const Marble::GeoDataLatLonBox& box, const bool use
     }
 
     /**
-     * @todo Boxes with very small width or height (<1e-6 or so) cause a deadlock in Marble in spherical projection.
-     *       So instead, we just center on the center of the box and go to maximum zoom. This does not
-     *       yet handle the case of only width or height being too small though.
+     * @todo Boxes with very small width or height (<1e-6 or so) cause a deadlock in Marble
+     * in spherical projection.
+     * So instead, we just center on the center of the box and go to maximum zoom.
+     * This does not yet handle the case of only width or height being too small though.
      */
     const bool boxTooSmall = qMin(box.width(), box.height()) < 0.000001;
 
@@ -1745,16 +1756,14 @@ void BackendMarble::setActive(const bool state)
         {
             // we should share our widget in the list of widgets in the global object
             GeoIfaceInternalWidgetInfo info;
-            info.deleteFunction = deleteInfoFunction;
-            info.widget         = d->marbleWidget;
-            info.currentOwner   = this;
-            info.backendName    = backendName();
-            info.state          = d->widgetIsDocked ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked;
+            info.deleteFunction            = deleteInfoFunction;
+            info.widget                    = d->marbleWidget;
+            info.currentOwner              = this;
+            info.backendName               = backendName();
+            info.state                     = d->widgetIsDocked ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked;
 
             BMInternalWidgetInfo intInfo;
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
-            intInfo.bmLayer     = d->bmLayer;
-#endif
+            intInfo.bmLayer                = d->bmLayer;
             info.backendData.setValue(intInfo);
 
             GeoIfaceGlobalObject* const go = GeoIfaceGlobalObject::instance();
@@ -1775,14 +1784,17 @@ void BackendMarble::mapWidgetDocked(const bool state)
     if (d->widgetIsDocked!=state)
     {
         GeoIfaceGlobalObject* const go = GeoIfaceGlobalObject::instance();
-        go->updatePooledWidgetState(d->marbleWidget, state ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked
-                                                           : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked);
+        go->updatePooledWidgetState(d->marbleWidget,
+                                    state ? GeoIfaceInternalWidgetInfo::InternalWidgetStillDocked
+                                          : GeoIfaceInternalWidgetInfo::InternalWidgetUndocked);
     }
 
     d->widgetIsDocked = state;
 }
 
-void BackendMarble::drawSearchRectangle(Marble::GeoPainter* const painter, const GeoCoordinates::Pair& searchRectangle, const bool isOldRectangle)
+void BackendMarble::drawSearchRectangle(Marble::GeoPainter* const painter,
+                                        const GeoCoordinates::Pair& searchRectangle,
+                                        const bool isOldRectangle)
 {
     const GeoCoordinates& topLeft     = searchRectangle.first;
     const GeoCoordinates& bottomRight = searchRectangle.second;
@@ -1826,14 +1838,12 @@ void BackendMarble::deleteInfoFunction(GeoIfaceInternalWidgetInfo* const info)
         qobject_cast<MapBackend*>(info->currentOwner.data())->releaseWidget(info);
     }
 
-#ifdef GEOIFACE_MARBLE_ADD_LAYER
     BMInternalWidgetInfo intInfo = info->backendData.value<BMInternalWidgetInfo>();
 
     if (intInfo.bmLayer)
     {
         delete intInfo.bmLayer;
     }
-#endif
 
     delete info->widget.data();
 }
@@ -1877,4 +1887,4 @@ void BackendMarble::slotScheduleUpdate()
     }
 }
 
-} // namespace GeoIface
+} // namespace Digikam

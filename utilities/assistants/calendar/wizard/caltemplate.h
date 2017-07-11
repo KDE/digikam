@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef CALTEMPLATE_H
-#define CALTEMPLATE_H
+#ifndef CAL_TEMPLATE_H
+#define CAL_TEMPLATE_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class CalTemplate : public QWidget
 
 public:
 
-    CalTemplate(const QList<QUrl>& urlList, QWidget* const parent);
+    explicit CalTemplate(const QList<QUrl>& urlList, QWidget* const parent);
     ~CalTemplate();
 
 private Q_SLOTS:
@@ -59,6 +59,6 @@ private:
     Private* const d;
 };
 
-}  // Namespace Digikam
+} // Namespace Digikam
 
-#endif // CALTEMPLATE_H
+#endif // CAL_TEMPLATE_H

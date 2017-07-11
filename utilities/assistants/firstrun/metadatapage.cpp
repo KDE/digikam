@@ -61,8 +61,8 @@ public:
     QButtonGroup* metadataStorage;
 };
 
-MetadataPage::MetadataPage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
+MetadataPage::MetadataPage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Configure Metadata Storage to Files</b>")),
       d(new Private)
 {
     const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
@@ -122,4 +122,4 @@ void MetadataPage::saveSettings()
     MetadataSettings::instance()->setSettings(settings);
 }
 
-}   // namespace Digikam
+} // namespace Digikam

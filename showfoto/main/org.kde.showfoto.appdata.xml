@@ -26,6 +26,7 @@
   <name xml:lang="sk">Showfoto</name>
   <name xml:lang="sl">Showfoto</name>
   <name xml:lang="sv">Showfoto</name>
+  <name xml:lang="tr">Showfoto</name>
   <name xml:lang="uk">Showfoto</name>
   <name xml:lang="x-test">xxShowfotoxx</name>
   <name xml:lang="zh-CN">Showfoto</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="pt">Editor de Imagem</summary>
   <summary xml:lang="sl">Urejevalnik slik</summary>
   <summary xml:lang="sv">Bildeditor</summary>
+  <summary xml:lang="tr">Resim Düzenleyici</summary>
   <summary xml:lang="uk">Редактор зображень</summary>
   <summary xml:lang="x-test">xxImage Editorxx</summary>
   <description>
@@ -69,6 +71,7 @@
     <p xml:lang="sk">Showfoto je rýchly editor obrázkov so silnými nástrojmi na editáciu obrázkov. Môžete ho použiť na prehliadanie vašich fotografií a zlepšiť ich. ShowFoto je samostatný editor obrázkov projektu digiKam.</p>
     <p xml:lang="sl">Showfoto je hiter urejevalnik slik z zmogljivimi orodji za urejanje slik. Uporabite ga lahko za ogled fotografij in njihovo izboljšavo. Showfoto je samostojen urejevalnik slik projekta digiKam.</p>
     <p xml:lang="sv">Showfoto är en snabb bildeditor med kraftfulla bildredigeringsverktyg. Den kan användas för att titta på fotografier och förbättra dem. Showfoto är Digikam-projektets  fristående bildeditor.</p>
+    <p xml:lang="tr">Showfoto, güçlü resim düzenleme araçları olan hızlı bir resim düzenleyicisidir. Resimlerinizi görüntüleyip, iyileştirebilirsiniz. Showfoto, digiKam projesinin bağımsız resim düzenleyicisidir.</p>
     <p xml:lang="uk">Showfoto — швидкий редактор зображень, у якому ви знайдете досить потужні інструменти редагування зображень. Ви можете скористатися ним для перегляду і удосконалення ваших фотографій. Showfoto — окрема програма для редагування зображень зі складу проекту digiKam.</p>
     <p xml:lang="x-test">xxShowfoto is a fast Image Editor with powerful image editing tools. You can use it to view your photographs and improve them. Showfoto is the standalone image editor of the digiKam project.xx</p>
   </description>
@@ -103,6 +106,7 @@
   <developer_name xml:lang="sk">Projekt digiKamu</developer_name>
   <developer_name xml:lang="sl">Projekt digiKam</developer_name>
   <developer_name xml:lang="sv">Digikam-projekt</developer_name>
+  <developer_name xml:lang="tr">digiKam Projesi</developer_name>
   <developer_name xml:lang="uk">Проект digiKam</developer_name>
   <developer_name xml:lang="x-test">xxdigiKam Projectxx</developer_name>
   <developer_name xml:lang="zh-CN">digiKam 项目</developer_name>

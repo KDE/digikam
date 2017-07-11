@@ -209,8 +209,9 @@ bool DFileOperations::runFiles(const QString& appCmd,
 {
     QRegExp split(QLatin1String(" +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
     QStringList cmdList = appCmd.split(split, QString::SkipEmptyParts);
+    QList<QUrl> urlList = urls;
 
-    if (cmdList.isEmpty() || urls.isEmpty())
+    if (cmdList.isEmpty() || urlList.isEmpty())
     {
         return false;
     }
@@ -226,11 +227,12 @@ bool DFileOperations::runFiles(const QString& appCmd,
     QStringList dirs;
     QStringList files;
     QStringList cmdArgs;
+    bool openNewRun = false;
 
     QProcess* const process = new QProcess();
     QProcessEnvironment env = adjustedEnvironmentForAppImage();
 
-    foreach(const QUrl& url, urls)
+    foreach(const QUrl& url, urlList)
     {
         dirs  << url.adjusted(QUrl::RemoveFilename).toLocalFile();
         files << url.toLocalFile();
@@ -267,15 +269,24 @@ bool DFileOperations::runFiles(const QString& appCmd,
         else if (cmd == QLatin1String("%i"))
             cmdArgs << icon;
         else if (cmd == QLatin1String("%f"))
+        {
             cmdArgs << files.first();
+            openNewRun = true;
+        }
         else if (cmd == QLatin1String("%F"))
             cmdArgs << files;
         else if (cmd == QLatin1String("%u"))
+        {
             cmdArgs << files.first();
+            openNewRun = true;
+        }
         else if (cmd == QLatin1String("%U"))
             cmdArgs << files;
         else if (cmd == QLatin1String("%d"))
+        {
             cmdArgs << dirs.first();
+            openNewRun = true;
+        }
         else if (cmd == QLatin1String("%D"))
             cmdArgs << dirs;
         else
@@ -285,7 +296,20 @@ bool DFileOperations::runFiles(const QString& appCmd,
     process->setProcessEnvironment(env);
     process->start(exec, cmdArgs);
 
-    return process->waitForStarted();
+    bool ret = true;
+    ret     &= process->waitForStarted();
+
+    if (openNewRun)
+    {
+        urlList.removeFirst();
+
+        if (!urlList.isEmpty())
+        {
+            ret &= runFiles(appCmd, urlList, name, icon);
+        }
+    }
+
+    return ret;
 }
 
 KService::List DFileOperations::servicesForOpenWith(const QList<QUrl>& urls)

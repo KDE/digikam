@@ -55,8 +55,6 @@
 #include "imagealbummodel.h"
 #include "imagefiltermodel.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 
@@ -87,8 +85,8 @@ public:
     virtual QVariant bestRepresentativeIndexFromList(const QList<QVariant>& indices, const int sortKey);
     virtual QPixmap pixmapFromRepresentativeIndex(const QVariant& index, const QSize& size);
     virtual bool indicesEqual(const QVariant& a, const QVariant& b) const;
-    virtual GroupState getTileGroupState(const TileIndex& tileIndex);
-    virtual GroupState getGlobalGroupState();
+    virtual GeoGroupState getTileGroupState(const TileIndex& tileIndex);
+    virtual GeoGroupState getGlobalGroupState();
 
     virtual void onIndicesClicked(const ClickInfo& clickInfo);
 
@@ -118,7 +116,7 @@ private Q_SLOTS:
 private:
 
     QList<qlonglong> getTileMarkerIds(const TileIndex& tileIndex);
-    GroupState getImageState(const qlonglong imageId);
+    GeoGroupState getImageState(const qlonglong imageId);
     void removeMarkerFromTileAndChildren(const qlonglong imageId, const TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel, MyTile* const parentTile);
     void addMarkerToTileAndChildren(const qlonglong imageId, const TileIndex& markerTileIndex, MyTile* const startTile, const int startTileLevel);
 

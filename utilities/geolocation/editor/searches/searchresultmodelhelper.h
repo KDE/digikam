@@ -31,13 +31,8 @@
 
 // Local includes
 
-#include "modelhelper.h"
-
-// local includes
-
+#include "geomodelhelper.h"
 #include "searchbackend.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {
@@ -45,7 +40,7 @@ namespace Digikam
 class SearchResultModel;
 class GPSUndoCommand;
 
-class SearchResultModelHelper : public ModelHelper
+class SearchResultModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
@@ -63,8 +58,8 @@ public:
     virtual QItemSelectionModel* selectionModel() const;
     virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
     virtual bool itemIcon(const QModelIndex& index, QPoint* const offset, QSize* const size, QPixmap* const pixmap, QUrl* const url) const;
-    virtual Flags modelFlags() const;
-    virtual Flags itemFlags(const QModelIndex& index) const;
+    virtual PropertyFlags modelFlags() const;
+    virtual PropertyFlags itemFlags(const QModelIndex& index) const;
     virtual void snapItemsTo(const QModelIndex& targetIndex, const QList<QModelIndex>& snappedIndices);
 
 Q_SIGNALS:

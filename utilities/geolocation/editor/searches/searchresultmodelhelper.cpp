@@ -46,14 +46,12 @@
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
 
-// local includes
+// Local includes
 
 #include "searchresultmodel.h"
 #include "gpscommon.h"
 #include "gpsundocommand.h"
 #include "gpsimagemodel.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {
@@ -80,7 +78,7 @@ SearchResultModelHelper::SearchResultModelHelper(SearchResultModel* const result
                                                  QItemSelectionModel* const selectionModel,
                                                  GPSImageModel* const imageModel,
                                                  QObject* const parent)
-    : ModelHelper(parent),
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->model          = resultModel;
@@ -127,14 +125,14 @@ bool SearchResultModelHelper::itemIcon(const QModelIndex& index,
     return d->model->getMarkerIcon(index, offset, size, pixmap, url);
 }
 
-ModelHelper::Flags SearchResultModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags SearchResultModelHelper::modelFlags() const
 {
-    return FlagSnaps|(d->visible?FlagVisible:FlagNull);
+    return FlagSnaps | (d->visible ? FlagVisible:FlagNull);
 }
 
-ModelHelper::Flags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
+GeoModelHelper::PropertyFlags SearchResultModelHelper::itemFlags(const QModelIndex& /*index*/) const
 {
-    return FlagVisible|FlagSnaps;
+    return FlagVisible | FlagSnaps;
 }
 
 void SearchResultModelHelper::snapItemsTo(const QModelIndex& targetIndex,

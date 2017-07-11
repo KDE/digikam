@@ -53,7 +53,6 @@ public:
 VidPlayerDlg::VidPlayerDlg(const QString& file, QWidget* const parent)
     : QDialog(parent),
       d(new Private)
-
 {
     setModal(false);
     setWindowTitle(file);

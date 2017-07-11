@@ -40,7 +40,6 @@
 
 // QtAv includes
 
-#include <QtAV/QtAV.h>
 #include <QtAV/VideoFrame.h>
 #include <QtAV/AudioFrame.h>
 #include <QtAV/VideoEncoder.h>

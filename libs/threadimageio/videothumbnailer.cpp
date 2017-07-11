@@ -24,6 +24,7 @@
 
 // Qt includes
 
+#include <QUrl>
 #include <QFile>
 #include <QImage>
 #include <QMimeDatabase>
@@ -283,4 +284,4 @@ void VideoThumbnailer::slotFrameExtracted(const QtAV::VideoFrame& frame)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

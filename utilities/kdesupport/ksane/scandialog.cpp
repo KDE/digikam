@@ -32,7 +32,6 @@
 #include <QUrl>
 #include <QMenu>
 #include <QApplication>
-#include <QFileDialog>
 #include <QMessageBox>
 #include <QImageWriter>
 
@@ -51,6 +50,7 @@
 #include "saveimgthread.h"
 #include "statusprogressbar.h"
 #include "dxmlguiwindow.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -173,8 +173,8 @@ void ScanDialog::slotSaveImage(QByteArray& ksane_data, int width, int height, in
     QLatin1String defaultMimeType("image/png");
     QLatin1String defaultFileName("image.png");
 
-    QPointer<QFileDialog> imageFileSaveDialog = new QFileDialog(0, i18n("New Image File Name"), d->targetDir);
-    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
+    QPointer<DFileDialog> imageFileSaveDialog = new DFileDialog(0, i18n("New Image File Name"), d->targetDir);
+    imageFileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
     imageFileSaveDialog->setMimeTypeFilters(writableMimetypes);
     imageFileSaveDialog->selectMimeTypeFilter(defaultMimeType);
     imageFileSaveDialog->selectFile(defaultFileName);

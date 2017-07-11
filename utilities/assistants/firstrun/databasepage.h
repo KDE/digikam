@@ -31,19 +31,19 @@
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 #include "dbengineparameters.h"
 
 namespace Digikam
 {
 
-class DatabasePage : public FirstRunDlgPage
+class DatabasePage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit DatabasePage(FirstRunDlg* const dlg);
+    explicit DatabasePage(QWizard* const dlg);
     ~DatabasePage();
 
     bool checkSettings();
@@ -63,6 +63,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* DATABASE_PAGE_H */
+#endif // DATABASE_PAGE_H

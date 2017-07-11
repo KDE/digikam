@@ -33,7 +33,6 @@
 #include <QTimer>
 #include <QWidget>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QStandardPaths>
 
 // KDE includes
@@ -46,6 +45,7 @@
 #include "daboutdata.h"
 #include "thememanager.h"
 #include "digikam_version.h"
+#include "webbrowserdlg.h"
 
 namespace Digikam
 {
@@ -60,8 +60,8 @@ WelcomePageView::WelcomePageView(QWidget* const parent)
 
     // ------------------------------------------------------------
 
-    connect(this,SIGNAL(linkClicked(QUrl)),
-            this,SLOT(slotUrlOpen(const QUrl&)));
+    connect(this, SIGNAL(linkClicked(const QUrl&)),
+            this, SLOT(slotUrlOpen(const QUrl&)));
 
     connect(ThemeManager::instance(), SIGNAL(signalThemeChanged()),
             this, SLOT(slotThemeChanged()));
@@ -75,7 +75,8 @@ WelcomePageView::~WelcomePageView()
 
 void WelcomePageView::slotUrlOpen(const QUrl& url)
 {
-    QDesktopServices::openUrl(url);
+    WebBrowserDlg* const browser = new WebBrowserDlg(url, this);
+    browser->show();
 }
 
 QStringList WelcomePageView::featuresTabContent() const
@@ -92,6 +93,7 @@ QStringList WelcomePageView::featuresTabContent() const
     newFeatures << i18n("Add a new batch queue manager tool to convert RAW files to DNG;");
     newFeatures << i18n("Add a new tool to export contents in html gallery;");
     newFeatures << i18n("Add a new tool to export contents as a video slideshow;");
+    newFeatures << i18n("Add a new tool to export contents by email;");
     newFeatures << i18n("Add a new batch queue manager tool to adjust time and date metadata;");
     newFeatures << i18n("Add a new batch queue manager tool to detect and fix red-eyes automatically;");
     newFeatures << i18n("Add a new option in editor and light table to import images from a digital scanner;");
@@ -132,7 +134,7 @@ QStringList WelcomePageView::aboutTabContent() const
              i18n("digiKam is an open source photo management program designed to import, organize, enhance, search and export your digital images to and from your computer."),
              i18n("Currently, you are in the Album view mode of digiKam. Albums are the places where your files are stored, and are identical to the folders on your hard disk."),
              i18n("<li>%1</li><li>%2</li>",
-                  i18n("digiKam has many powerful features which are described in the <a href=\"help:/digikam/index.html\">documentation</a>"),
+                  i18n("digiKam has many powerful features which are described in the <a href=\"https://docs.kde.org/trunk5/en/extragear-graphics/digikam/index.html\">documentation</a>"),
                   i18n("The <a href=\"http://www.digikam.org\">digiKam homepage</a> provides information about new versions of digiKam."))
             );
     return QStringList() << tabHeader << tabContent;
@@ -191,4 +193,4 @@ void WelcomePageView::slotThemeChanged()
     setHtml(content, QUrl::fromLocalFile(locationHtml));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

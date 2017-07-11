@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-18
- * Description : Drag-and-drop handler for GeoIface used in the demo
+ * Description : Drag-and-drop handler for geolocation interface used in the demo
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -28,12 +28,12 @@
 #include <QDropEvent>
 #include <QDebug>
 
-// local includes
+// Local includes
 
 #include "mytreewidget.h"
 
 MyDragDropHandler::MyDragDropHandler(QAbstractItemModel* const pModel, QObject* const parent)
-    : DragDropHandler(parent),
+    : GeoDragDropHandler(parent),
       model(pModel)
 {
 }
@@ -56,7 +56,7 @@ bool MyDragDropHandler::dropEvent(const QDropEvent* e, const GeoCoordinates& dro
 
     qDebug() << mimeData->draggedIndices.count();
 
-    for (int i = 0; i < mimeData->draggedIndices.count(); ++i)
+    for (int i = 0 ; i < mimeData->draggedIndices.count() ; ++i)
     {
         const QPersistentModelIndex itemIndex = mimeData->draggedIndices.at(i);
 

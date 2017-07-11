@@ -28,12 +28,11 @@
 
 #include <QWidget>
 #include <QUrl>
+#include <QEvent>
 
 // QtAV includes
 
-#include <QtAV/QtAV.h>
-
-class QEvent;
+#include <QtAV/AVError.h>
 
 namespace Digikam
 {

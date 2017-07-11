@@ -90,4 +90,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* DPREVIEW_MANAGER_H */
+#endif // DPREVIEW_MANAGER_H

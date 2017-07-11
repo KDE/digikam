@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef DZOOMBAR_H
-#define DZOOMBAR_H
+#ifndef DZOOM_BAR_H
+#define DZOOM_BAR_H
 
 // Qt includes
 
@@ -98,4 +98,4 @@ private:
 
 } // namespace Digikam
 
-#endif // DZOOMBAR_H
+#endif // DZOOM_BAR_H

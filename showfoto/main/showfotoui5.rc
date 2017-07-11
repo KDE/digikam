@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 <!-- NOTE: don't forget to increase version ID when this file is modified -->
-<gui version="556" name="showfoto" translationDomain="digikam" >
+<gui version="558" name="showfoto" translationDomain="digikam" >
 
 <MenuBar>
 
@@ -142,6 +142,8 @@
         <Action name="htmlgallery" />
         <Action name="calendar" />
         <Action name="videoslideshow" />
+        <Action name="sendbymail" />
+        <Action name="printcreator" />
     </Menu>
 
     <Menu name="settings" noMerge="1"><Text>&amp;Settings</Text>

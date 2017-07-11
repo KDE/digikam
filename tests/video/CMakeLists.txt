@@ -59,7 +59,6 @@ target_link_libraries(qtavcodecs
 
 set(player_SRCS player.cpp)
 add_executable(player ${player_SRCS})
-ecm_mark_nongui_executable(player)
 
 target_link_libraries(player
 

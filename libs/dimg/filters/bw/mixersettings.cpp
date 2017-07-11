@@ -38,7 +38,6 @@
 #include <QComboBox>
 #include <QMessageBox>
 #include <QUrl>
-#include <QFileDialog>
 #include <QFontDatabase>
 
 // KDE includes
@@ -48,10 +47,9 @@
 // Local includes
 
 #include "dnuminput.h"
+#include "dfiledialog.h"
 #include "dexpanderbox.h"
 #include "digikam_debug.h"
-
-
 
 namespace Digikam
 {
@@ -548,7 +546,7 @@ void MixerSettings::loadSettings()
     FILE*          fp = 0L;
     MixerContainer settings;
 
-    loadGainsFileUrl = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Gains Mixer File to Load"),
+    loadGainsFileUrl = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Gains Mixer File to Load"),
                                                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                    QLatin1String("*"));
 
@@ -630,7 +628,7 @@ void MixerSettings::saveAsSettings()
     QUrl  saveGainsFileUrl;
     FILE* fp = 0L;
 
-    saveGainsFileUrl = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Gains Mixer File to Save"),
+    saveGainsFileUrl = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Gains Mixer File to Save"),
                                                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                    QLatin1String("*"));
 

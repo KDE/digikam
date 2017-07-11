@@ -48,8 +48,6 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QComboBox>
-#include <QDesktopServices>
-#include <QFileDialog>
 #include <QStandardPaths>
 #include <QMessageBox>
 
@@ -66,6 +64,7 @@
 #include "imageiface.h"
 #include "imageguidewidget.h"
 #include "dactivelabel.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -466,7 +465,7 @@ void InPaintingTool::setFinalImage()
 
 void InPaintingTool::slotLoadSettings()
 {
-    QUrl loadInpaintingFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Load"),
+    QUrl loadInpaintingFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Load"),
                                                           QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                           QLatin1String("*"));
 
@@ -503,7 +502,7 @@ void InPaintingTool::slotLoadSettings()
 
 void InPaintingTool::slotSaveAsSettings()
 {
-    QUrl saveRestorationFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Save"),
+    QUrl saveRestorationFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph In-Painting Settings File to Save"),
                                                            QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                            QLatin1String("*"));
 

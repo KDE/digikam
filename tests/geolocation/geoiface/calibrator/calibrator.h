@@ -4,7 +4,8 @@
  * http://www.digikam.org
  *
  * Date        : 2010-09-18
- * Description : A tool to calibrate the tiling levels used in GeoIface
+ * Description : A tool to calibrate the tiling levels
+ *               used in geolocation interface
  *
  * Copyright (C) 2010 by Michael G. Hansen <mike at mghansen dot de>
  *
@@ -28,15 +29,15 @@
 
 #include <QMainWindow>
 
-// local includes
+// Local includes
 
-#include "modelhelper.h"
+#include "geomodelhelper.h"
 
 class QStandardItemModel;
 
-using namespace GeoIface;
+using namespace Digikam;
 
-class CalibratorModelHelper : public ModelHelper
+class CalibratorModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
@@ -50,7 +51,7 @@ public:
     // these are necessary for grouped and ungrouped models
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual Flags                modelFlags()     const;
+    virtual PropertyFlags        modelFlags()     const;
     virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
 
 private:
@@ -69,7 +70,7 @@ class Calibrator : public QMainWindow
 
 public:
 
-    Calibrator();
+    explicit Calibrator();
     ~Calibrator();
 
 private:
@@ -93,4 +94,4 @@ private:
     Q_DISABLE_COPY(Calibrator)
 };
 
-#endif /* CALIBRATOR_H */
+#endif // CALIBRATOR_H

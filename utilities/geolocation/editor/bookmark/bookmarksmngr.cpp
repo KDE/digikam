@@ -28,10 +28,8 @@
 #include <QBuffer>
 #include <QFile>
 #include <QMimeData>
-#include <QDesktopServices>
 #include <QDragEnterEvent>
 #include <QIcon>
-#include <QFileDialog>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QToolButton>
@@ -44,6 +42,7 @@
 
 // Local includes
 
+#include <dfiledialog.h>
 #include "bookmarknode.h"
 #include "digikam_debug.h"
 
@@ -804,7 +803,7 @@ QUndoStack* BookmarksManager::undoRedoStack() const
 
 void BookmarksManager::importBookmarks()
 {
-    QString fileName = QFileDialog::getOpenFileName(0, i18n("Open File"),
+    QString fileName = DFileDialog::getOpenFileName(0, i18n("Open File"),
                                                     QString(),
                                                     i18n("XBEL (*.xbel *.xml)"));
     if (fileName.isEmpty())
@@ -830,7 +829,7 @@ void BookmarksManager::importBookmarks()
 
 void BookmarksManager::exportBookmarks()
 {
-    QString fileName = QFileDialog::getSaveFileName(0, i18n("Save File"),
+    QString fileName = DFileDialog::getSaveFileName(0, i18n("Save File"),
                                                     i18n("%1 Bookmarks.xbel")
                                                     .arg(QCoreApplication::applicationName()),
                                                     i18n("XBEL (*.xbel *.xml)"));

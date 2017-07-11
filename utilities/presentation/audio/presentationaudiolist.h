@@ -39,7 +39,7 @@
 
 // QtAV includes
 
-#include <QtAV/QtAV.h>
+#include <QtAV/AVError.h>
 
 namespace Digikam
 {
@@ -103,6 +103,6 @@ protected:
     void dropEvent(QDropEvent*);
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* PRESENTATION_AUDIO_LIST_H */
+#endif // PRESENTATION_AUDIO_LIST_H

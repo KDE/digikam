@@ -22,12 +22,14 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESSIDEBAR_H
-#define IMAGEPROPERTIESSIDEBAR_H
+#ifndef IMAGE_PROPERTIES_SIDEBAR_H
+#define IMAGE_PROPERTIES_SIDEBAR_H
 
-// KDE includes
+// Qt includes
 
 #include <QUrl>
+#include <QWidget>
+#include <QRect>
 
 // Local includes
 
@@ -35,9 +37,6 @@
 #include "sidebar.h"
 #include "digikam_export.h"
 #include "searchtextbar.h"
-
-class QWidget;
-class QRect;
 
 namespace Digikam
 {
@@ -58,8 +57,10 @@ class DIGIKAM_EXPORT ImagePropertiesSideBar : public Sidebar
 
 public:
 
-    ImagePropertiesSideBar(QWidget* const parent, SidebarSplitter* const splitter,
-                           Qt::Edge side=Qt::LeftEdge, bool mimimizedDefault=false);
+    explicit ImagePropertiesSideBar(QWidget* const parent,
+                                    SidebarSplitter* const splitter,
+                                    Qt::Edge side=Qt::LeftEdge,
+                                    bool mimimizedDefault=false);
     ~ImagePropertiesSideBar();
 
     virtual void itemChanged(const QUrl& url, const QRect& rect = QRect(), DImg* const img = 0);
@@ -115,6 +116,6 @@ protected:
 #endif // HAVE_MARBLE
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif  // IMAGEPROPERTIESSIDEBAR_H
+#endif // IMAGE_PROPERTIES_SIDEBAR_H
