@@ -203,4 +203,5 @@ BUGFIXES FROM BUGZILLA:
 188 ==> 151604 - Print Wizard does not recognize raw images.
 189 ==> 202480 - PrintWizard doesn't add comments properly but shows them in the preview.
 190 ==> 146457 - Rotation is not done correctly exif.
-191 ==> 
+191 ==> 188426 - Add support for different size printwizard templates.
+192 ==> 
