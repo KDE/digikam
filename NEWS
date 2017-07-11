@@ -198,4 +198,6 @@ BUGFIXES FROM BUGZILLA:
 183 ==> 358843 - Add link to source code web interface to main menu.
 184 ==> 167281 - Replace the Konqueror as the default external webbrowser by a system call.
 185 ==> 118831 - First image from avi as icon.
-186 ==> 
+186 ==> 141132 - digiKam is hung reading a file avi.
+187 ==> 
+
