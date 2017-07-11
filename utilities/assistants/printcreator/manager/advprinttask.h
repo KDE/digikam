@@ -27,6 +27,11 @@
 // Qt includes
 
 #include <QString>
+#include <QStringList>
+#include <QPainter>
+#include <QList>
+#include <QRect>
+#include <QPrinter>
 
 // Local includes
 
@@ -51,9 +56,33 @@ Q_SIGNALS:
     void signalMessage(const QString&, bool);
     void signalDone(bool);
 
-protected:
+private:
 
     void run();
+
+    void printCaption(QPainter& p,
+                      AdvPrintPhoto* const photo,
+                      int captionW,
+                      int captionH,
+                      const QString& caption);
+
+    double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
+                     const QList<QRect*>& layouts,
+                     int current);
+
+    void printPhotos(const QList<AdvPrintPhoto*>& photos,
+                     const QList<QRect*>& layouts,
+                     QPrinter& printer);
+
+    QStringList printPhotosToFile(const QString& dir,
+                                  AdvPrintPhotoSize* const layouts);
+
+    bool paintOnePage(QPainter& p,
+                      const QList<AdvPrintPhoto*>& photos,
+                      const QList<QRect*>& layouts,
+                      int& current,
+                      bool cropDisabled,
+                      bool useThumbnails = false);
 
 private:
 
