@@ -46,10 +46,14 @@ public:
     void initializePage();
     bool validatePage();
 
+public Q_SLOTS:
+
+    void slotTransitionChanged();
+    void slotEffectChanged();
+
 private Q_SLOTS:
 
     void slotSlideDuration();
-    void slotTransitionChanged();
 
 private:
 

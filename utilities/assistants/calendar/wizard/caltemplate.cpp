@@ -191,4 +191,4 @@ void CalTemplate::yearChanged(int year)
     CalSettings::instance()->setYear(year);
 }
 
-}  // Namespace Digikam
+} // Namespace Digikam

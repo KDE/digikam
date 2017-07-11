@@ -23,6 +23,9 @@ set(libdialogs_SRCS
     dconfigdlgview.cpp
     dconfigdlgview_p.cpp
     dconfigdlgwidgets.cpp
+    dmessagebox.cpp
+    dsplashscreen.cpp
+    webbrowserdlg.cpp
 )
 
 set(libdeletedialog_SRCS
@@ -38,6 +41,7 @@ include_directories(
     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:Qt5::Core,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
 
     $<TARGET_PROPERTY:KF5::I18n,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:KF5::XmlGui,INTERFACE_INCLUDE_DIRECTORIES>

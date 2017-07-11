@@ -55,6 +55,7 @@ set(libfontstools_SRCS
 set(libfilestools_SRCS
     files/filesaveoptionsbox.cpp
     files/filesaveconflictbox.cpp
+    files/dfiledialog.cpp
     files/dfileselector.cpp
     files/dbinarysearch.cpp
     files/dbinaryiface.cpp
@@ -72,8 +73,6 @@ set(libmainview_SRCS
     mainview/thememanager.cpp
     mainview/schememanager.cpp
     mainview/sidebar.cpp
-    mainview/dmessagebox.cpp
-    mainview/dsplashscreen.cpp
     mainview/fullscreensettings.cpp
     ../../app/utils/digikam_globals.cpp
    )

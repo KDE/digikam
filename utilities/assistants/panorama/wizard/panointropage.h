@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef PANOINTRO_PAGE_H
-#define PANOINTRO_PAGE_H
+#ifndef PANO_INTRO_PAGE_H
+#define PANO_INTRO_PAGE_H
 
 // Qt includes
 
@@ -45,7 +45,7 @@ class PanoIntroPage : public DWizardPage
 
 public:
 
-    PanoIntroPage(PanoManager* const mngr, QWizard* const dlg);
+    explicit PanoIntroPage(PanoManager* const mngr, QWizard* const dlg);
     ~PanoIntroPage();
 
     bool binariesFound();
@@ -69,6 +69,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* PANOINTRO_PAGE_H */
+#endif // PANO_INTRO_PAGE_H

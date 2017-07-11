@@ -62,29 +62,29 @@ public:
     QButtonGroup* previewBehavior;
 };
 
-PreviewPage::PreviewPage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Configure Preview Behavior</b>")),
+PreviewPage::PreviewPage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Configure Preview Behavior</b>")),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing       = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
-    DVBox* const vbox    = new DVBox(this);
-    QLabel* const label1 = new QLabel(vbox);
+    DVBox* const vbox       = new DVBox(this);
+    QLabel* const label1    = new QLabel(vbox);
     label1->setWordWrap(true);
     label1->setText(i18n("<qt>"
                          "<p>Set here how images are displayed in preview mode and on the light table:</p>"
                          "</qt>"));
 
-    QWidget* const btns      = new QWidget(vbox);
-    QVBoxLayout* const vlay  = new QVBoxLayout(btns);
+    QWidget* const btns     = new QWidget(vbox);
+    QVBoxLayout* const vlay = new QVBoxLayout(btns);
 
-    d->previewBehavior = new QButtonGroup(btns);
-    d->loadReduced     = new QRadioButton(btns);
+    d->previewBehavior      = new QButtonGroup(btns);
+    d->loadReduced          = new QRadioButton(btns);
     d->loadReduced->setText(i18n("Load reduced version of image"));
     d->loadReduced->setChecked(true);
     d->previewBehavior->addButton(d->loadReduced);
 
-    d->loadimage = new QRadioButton(btns);
+    d->loadimage            = new QRadioButton(btns);
     d->loadimage->setText(i18n("Load image"));
     d->previewBehavior->addButton(d->loadimage);
 

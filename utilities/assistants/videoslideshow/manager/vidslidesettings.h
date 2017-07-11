@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef VIDSLIDE_SETTINGS_H
-#define VIDSLIDE_SETTINGS_H
+#ifndef VID_SLIDE_SETTINGS_H
+#define VID_SLIDE_SETTINGS_H
 
 // Qt includes
 
@@ -35,6 +35,7 @@
 
 #include "filesaveconflictbox.h"
 #include "transitionmngr.h"
+#include "effectmngr.h"
 #include "digikam_export.h"
 
 class KConfigGroup;
@@ -53,10 +54,18 @@ public:
         ALBUMS
     };
 
+    // Video player to use
+    enum VidPlayer
+    {
+        NOPLAYER = 0,
+        INTERNAL,
+        DESKTOP
+    };
+
     // Video Codecs
     enum VidCodec
     {
-        X264=0,      // https://en.wikipedia.org/wiki/X264
+        X264 = 0,    // https://en.wikipedia.org/wiki/X264
         MPEG4,       // https://en.wikipedia.org/wiki/MPEG-4
         MPEG2,       // https://en.wikipedia.org/wiki/MPEG-2
         MJPEG,       // https://en.wikipedia.org/wiki/Motion_JPEG
@@ -117,17 +126,10 @@ public:
     // Video Container Formats
     enum VidFormat
     {
-        AVI=0,      // https://en.wikipedia.org/wiki/Audio_Video_Interleave
+        AVI = 0,    // https://en.wikipedia.org/wiki/Audio_Video_Interleave
         MKV,        // https://en.wikipedia.org/wiki/Matroska
         MP4,        // https://en.wikipedia.org/wiki/MPEG-4_Part_14
         MPG         // https://en.wikipedia.org/wiki/MPEG-2
-    };
-
-    // Video Effects while displaying image contents
-    enum VidEffect
-    {
-        NONE=0,     // Static camera
-        KENBURNS    // https://en.wikipedia.org/wiki/Ken_Burns_effect
     };
 
 public:
@@ -151,7 +153,7 @@ public:
     static QMap<VidStd,     QString> videoStdNames();
     static QMap<VidCodec,   QString> videoCodecNames();
     static QMap<VidFormat,  QString> videoFormatNames();
-    static QMap<VidEffect,  QString> videoEffectNames();
+    static QMap<VidPlayer,  QString> videoPlayerNames();
 
 public:
 
@@ -173,18 +175,17 @@ public:
     VidType                           vType;         // Encoded video type.
     VidCodec                          vCodec;        // Encoded video codec.
     VidFormat                         vFormat;       // Encoded video container format.
-    VidEffect                         vEffect;       // Encoded video effect while displaying images.
+    EffectMngr::EffectType            vEffect;       // Encoded video effect while displaying images.
 
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule to follow if video file alreay exists.
     QUrl                              outputDir;     // Encoded video stream directory.
 
-    bool                              openInPlayer;  // Open video stream in desktop player at end.
-
     // ---------------------
 
     QString                           outputVideo;   // Target video file encoded at end.
+    VidPlayer                         outputPlayer;  // Open video stream in player at end.
 };
 
 } // namespace Digikam
 
-#endif // VIDSLIDE_SETTINGS_H
+#endif // VID_SLIDE_SETTINGS_H

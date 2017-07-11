@@ -35,7 +35,6 @@
 #include <QTabWidget>
 #include <QApplication>
 #include <QStyle>
-#include <QDesktopServices>
 #include <QStandardPaths>
 #include <QFontDatabase>
 

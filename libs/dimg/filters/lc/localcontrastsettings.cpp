@@ -42,7 +42,6 @@
 #include <QApplication>
 #include <QStyle>
 #include <QUrl>
-#include <QFileDialog>
 #include <QIcon>
 #include <QMessageBox>
 
@@ -53,6 +52,7 @@
 // Local includes
 
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "dnuminput.h"
 #include "digikam_debug.h"
 #include "dcombobox.h"
@@ -641,7 +641,7 @@ void LocalContrastSettings::writeSettings(KConfigGroup& group)
 
 void LocalContrastSettings::loadSettings()
 {
-    QUrl loadFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Local Contrast Settings File to Load"),
+    QUrl loadFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Photograph Local Contrast Settings File to Load"),
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                 QLatin1String("*"));
 
@@ -695,7 +695,7 @@ void LocalContrastSettings::loadSettings()
 
 void LocalContrastSettings::saveAsSettings()
 {
-    QUrl saveFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Local Contrast Settings File to Save"),
+    QUrl saveFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Photograph Local Contrast Settings File to Save"),
                                                 QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                 QLatin1String("*"));
 

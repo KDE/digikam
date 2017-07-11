@@ -44,12 +44,12 @@ VidSlideSettings::VidSlideSettings()
     vbitRate     = VBR12;
     vCodec       = X264;
     vFormat      = MP4;
-    vEffect      = NONE;
+    vEffect      = EffectMngr::None;
     transition   = TransitionMngr::None;
     abitRate     = 64000;
     conflictRule = FileSaveConflictBox::OVERWRITE;
     outputDir    = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
-    openInPlayer = true;
+    outputPlayer = INTERNAL;
 }
 
 VidSlideSettings::~VidSlideSettings()
@@ -60,7 +60,7 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
 {
     selMode      = (Selection)group.readEntry("SelMode",
                    (int)IMAGES);
-    imgFrames    = group.readEntry("AFrames",
+    imgFrames    = group.readEntry("ImgFrames",
                    125);
     vStandard    = (VidStd)group.readEntry("VStandard",
                    (int)PAL);
@@ -72,8 +72,8 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)BLUERAY);
     vFormat      = (VidFormat)group.readEntry("VFormat",
                    (int)MP4);
-    vEffect      = (VidEffect)group.readEntry("VEffect",
-                   (int)NONE);
+    vEffect      = (EffectMngr::EffectType)group.readEntry("VEffect",
+                   (int)EffectMngr::None);
     abitRate     = group.readEntry("ABitRate",
                    64000);
     transition   = (TransitionMngr::TransType)group.readEntry("Transition",
@@ -82,14 +82,14 @@ void VidSlideSettings::readSettings(KConfigGroup& group)
                    (int)FileSaveConflictBox::OVERWRITE);
     outputDir    = group.readEntry("OutputDir",
                    QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::MoviesLocation)));
-    openInPlayer = group.readEntry("OpenInPlayer",
-                   true);
+    outputPlayer = (VidPlayer)group.readEntry("OutputPlayer",
+                   (int)INTERNAL);
 }
 
 void VidSlideSettings::writeSettings(KConfigGroup& group)
 {
     group.writeEntry("SelMode",      (int)selMode);
-    group.writeEntry("AFrames",      imgFrames);
+    group.writeEntry("ImgFrames",    imgFrames);
     group.writeEntry("VStandard",    (int)vStandard);
     group.writeEntry("VBitRate",     (int)vbitRate);
     group.writeEntry("VCodec",       (int)vCodec);
@@ -100,7 +100,7 @@ void VidSlideSettings::writeSettings(KConfigGroup& group)
     group.writeEntry("ABitRate",     abitRate);
     group.writeEntry("ConflictRule", (int)conflictRule);
     group.writeEntry("OutputDir",    outputDir);
-    group.writeEntry("OpenInPlayer", openInPlayer);
+    group.writeEntry("OutputPlayer", (int)outputPlayer);
 }
 
 QSize VidSlideSettings::videoSize() const
@@ -233,7 +233,7 @@ int VidSlideSettings::videoBitRate() const
 
 qreal VidSlideSettings::videoFrameRate() const
 {
-    int fr;
+    qreal fr;
 
     switch(vStandard)
     {
@@ -411,14 +411,15 @@ QMap<VidSlideSettings::VidFormat, QString> VidSlideSettings::videoFormatNames()
     return frm;
 }
 
-QMap<VidSlideSettings::VidEffect, QString> VidSlideSettings::videoEffectNames()
+QMap<VidSlideSettings::VidPlayer, QString> VidSlideSettings::videoPlayerNames()
 {
-    QMap<VidEffect, QString> eff;
+    QMap<VidPlayer, QString> pla;
 
-    eff[NONE]     = i18nc("Video Effect NONE",       "None - Static Camera");
-    eff[KENBURNS] = i18nc("Video Standard KENBURNS", "Ken Burns - Camera Zoom In");
+    pla[NOPLAYER] = i18nc("Video Effect NOPLAYER",   "None");
+    pla[INTERNAL] = i18nc("Video Standard INTERNAL", "Internal");
+    pla[DESKTOP]  = i18nc("Video Standard DESKTOP",  "Default from Desktop");
 
-    return eff;
+    return pla;
 }
 
 } // namespace Digikam

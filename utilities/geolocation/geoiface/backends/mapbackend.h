@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : Base-class for backends for GeoIface
+ * Description : Base-class for backends for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef BACKEND_MAP_H
-#define BACKEND_MAP_H
+#ifndef MAP_BACKEND_H
+#define MAP_BACKEND_H
 
 // Qt includes
 
@@ -32,21 +32,20 @@
 
 // Local includes
 
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
 class QMenu;
 class QWidget;
+
 class KConfigGroup;
 
 namespace Marble
 {
-class GeoDataLatLonBox;
+    class GeoDataLatLonBox;
 }
 
-namespace GeoIface
+namespace Digikam
 {
-
-class GeoIfaceSharedData;
 
 class MapBackend : public QObject
 {
@@ -116,9 +115,9 @@ Q_SIGNALS:
     void signalClustersClicked(const QIntList& clusterIndices);
     void signalMarkersMoved(const QIntList& markerIndices);
     void signalZoomChanged(const QString& newZoom);
-    void signalSelectionHasBeenMade(const GeoIface::GeoCoordinates::Pair& coordinates);
+    void signalSelectionHasBeenMade(const Digikam::GeoCoordinates::Pair& coordinates);
 };
 
-} // namespace GeoIface
+} // namespace Digikam
 
-#endif // BACKEND_MAP_H
+#endif // MAP_BACKEND_H

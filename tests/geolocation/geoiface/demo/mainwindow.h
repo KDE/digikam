@@ -22,38 +22,42 @@
  *
  * ============================================================ */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 // Qt includes
 
 #include <QItemSelection>
 #include <QMainWindow>
 
-// geoiface includes
+// Local includes
 
-#include "geoiface_types.h"
-#include "modelhelper.h"
-#include "tracks.h"
+#include "geoifacetypes.h"
+#include "geomodelhelper.h"
+#include "trackmanager.h"
 
 class QCommandLineParser;
 
-using namespace GeoIface;
+using namespace Digikam;
 
-class MarkerModelHelper : public ModelHelper
+class MarkerModelHelper : public GeoModelHelper
 {
     Q_OBJECT
 
 public:
 
-    MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel);
+    explicit MarkerModelHelper(QAbstractItemModel* const itemModel,
+                               QItemSelectionModel* const itemSelectionModel);
     ~MarkerModelHelper();
 
     virtual QAbstractItemModel*  model()          const;
     virtual QItemSelectionModel* selectionModel() const;
-    virtual Flags                modelFlags()     const;
-    virtual bool itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const;
-    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex);
+    virtual PropertyFlags        modelFlags()     const;
+    virtual bool itemCoordinates(const QModelIndex& index,
+                                 GeoCoordinates* const coordinates) const;
+    virtual void onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
+                                const GeoCoordinates& targetCoordinates,
+                                const QPersistentModelIndex& targetSnapIndex);
 
 private:
 
@@ -128,4 +132,4 @@ private:
     Private* const d;
 };
 
-#endif /* MAINWINDOW_H */
+#endif // MAIN_WINDOW_H

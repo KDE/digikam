@@ -32,7 +32,6 @@
 #include <QMimeDatabase>
 #include <QStyle>
 #include <QLocale>
-#include <QFileDialog>
 #include <QPixmap>
 #include <QImage>
 
@@ -50,6 +49,7 @@
 #include "dmetadata.h"
 #include "loadingdescription.h"
 #include "thumbnailsize.h"
+#include "dfiledialog.h"
 
 namespace Digikam
 {
@@ -415,14 +415,14 @@ ImageDialog::ImageDialog(QWidget* const parent, const QUrl& url, bool singleSele
     qCDebug(DIGIKAM_GENERAL_LOG) << "file formats=" << d->fileFormats;
 
     DFileIconProvider* const provider = new DFileIconProvider();
-    QFileDialog* const dlg            = new QFileDialog(parent);
+    DFileDialog* const dlg            = new DFileDialog(parent);
     dlg->setWindowTitle(caption);
     dlg->setDirectoryUrl(url);
     dlg->setIconProvider(provider);
     dlg->setNameFilters(d->fileFormats);
     dlg->selectNameFilter(d->fileFormats.last());
-    dlg->setAcceptMode(QFileDialog::AcceptOpen);
-    dlg->setFileMode(singleSelect ? QFileDialog::ExistingFile : QFileDialog::ExistingFiles);
+    dlg->setAcceptMode(DFileDialog::AcceptOpen);
+    dlg->setFileMode(singleSelect ? DFileDialog::ExistingFile : DFileDialog::ExistingFiles);
 
     dlg->exec();
     d->urls = dlg->selectedUrls();

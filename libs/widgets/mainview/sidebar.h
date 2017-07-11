@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef SIDEBAR_H
-#define SIDEBAR_H
+#ifndef SIDE_BAR_H
+#define SIDE_BAR_H
 
 // Qt includes
 
@@ -274,7 +274,7 @@ class DMultiTabBarFrame: public QFrame
 
 public:
 
-    DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos);
+    explicit DMultiTabBarFrame(QWidget* const parent, Qt::Edge pos);
     virtual ~DMultiTabBarFrame();
 
     int appendTab(const QPixmap&, int = -1, const QString& = QString());
@@ -333,8 +333,8 @@ public:
                    Use Qt::LeftEdge or Qt::RightEdge.
      * @param minimizedDefault hide the sidebar when the program is started the first time.
      */
-    Sidebar(QWidget* const parent, SidebarSplitter* const sp, Qt::Edge side = Qt::LeftEdge,
-            bool minimizedDefault=false);
+    explicit Sidebar(QWidget* const parent, SidebarSplitter* const sp, Qt::Edge side = Qt::LeftEdge,
+                     bool minimizedDefault=false);
 
     virtual ~Sidebar();
 
@@ -527,4 +527,4 @@ private:
 
 } // namespace Digikam
 
-#endif // SIDEBAR_H
+#endif // SIDE_BAR_H

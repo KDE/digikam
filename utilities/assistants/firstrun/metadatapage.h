@@ -26,18 +26,18 @@
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class MetadataPage : public FirstRunDlgPage
+class MetadataPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit MetadataPage(FirstRunDlg* const dlg);
+    explicit MetadataPage(QWizard* const dlg);
     ~MetadataPage();
 
     void saveSettings();
@@ -48,6 +48,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* METADATA_PAGE_H */
+#endif // METADATA_PAGE_H

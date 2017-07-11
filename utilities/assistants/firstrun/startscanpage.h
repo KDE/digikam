@@ -21,24 +21,24 @@
  *
  * ============================================================ */
 
-#ifndef STARTSCANPAGE_H
-#define STARTSCANPAGE_H
+#ifndef START_SCAN_PAGE_H
+#define START_SCAN_PAGE_H
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class StartScanPage : public FirstRunDlgPage
+class StartScanPage : public DWizardPage
 {
 public:
 
-    explicit StartScanPage(FirstRunDlg* const dlg);
+    explicit StartScanPage(QWizard* const dlg);
     ~StartScanPage();
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* STARTSCANPAGE_H */
+#endif // START_SCAN_PAGE_H

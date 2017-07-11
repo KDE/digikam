@@ -107,7 +107,7 @@ void GPSBookmarkModelHelper::Private::addBookmarkGroupToModel(BookmarkNode* cons
 GPSBookmarkModelHelper::GPSBookmarkModelHelper(BookmarksManager* const bookmarkManager,
                                                GPSImageModel* const imageModel,
                                                QObject* const parent)
-    : ModelHelper(parent),
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->model           = new QStandardItemModel(this);
@@ -201,14 +201,14 @@ void GPSBookmarkModelHelper::setVisible(const bool state)
     emit(signalVisibilityChanged());
 }
 
-ModelHelper::Flags GPSBookmarkModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags GPSBookmarkModelHelper::modelFlags() const
 {
-    return FlagSnaps|(d->visible?FlagVisible:FlagNull);
+    return FlagSnaps | (d->visible ? FlagVisible : FlagNull);
 }
 
-ModelHelper::Flags GPSBookmarkModelHelper::itemFlags(const QModelIndex&) const
+GeoModelHelper::PropertyFlags GPSBookmarkModelHelper::itemFlags(const QModelIndex&) const
 {
-    return FlagVisible|FlagSnaps;
+    return FlagVisible | FlagSnaps;
 }
 
 void GPSBookmarkModelHelper::snapItemsTo(const QModelIndex& targetIndex,

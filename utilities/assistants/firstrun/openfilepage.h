@@ -21,23 +21,23 @@
  *
  * ============================================================ */
 
-#ifndef OPENFILE_PAGE_H
-#define OPENFILE_PAGE_H
+#ifndef OPEN_FILE_PAGE_H
+#define OPEN_FILE_PAGE_H
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class OpenFilePage : public FirstRunDlgPage
+class OpenFilePage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit OpenFilePage(FirstRunDlg* const dlg);
+    explicit OpenFilePage(QWizard* const dlg);
     ~OpenFilePage();
 
     void saveSettings();
@@ -48,6 +48,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* OPENFILE_PAGE_H */
+#endif // OPEN_FILE_PAGE_H

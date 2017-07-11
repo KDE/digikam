@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef CAMERAITEMPROPERTIESTAB_H
-#define CAMERAITEMPROPERTIESTAB_H
+#ifndef CAMERA_ITEM_PROPERTIES_TAB_H
+#define CAMERA_ITEM_PROPERTIES_TAB_H
 
 // Qt includes
 
@@ -57,6 +57,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* CAMERAITEMPROPERTIESTAB_H */
+#endif // CAMERA_ITEM_PROPERTIES_TAB_H

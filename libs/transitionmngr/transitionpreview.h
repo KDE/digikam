@@ -56,6 +56,7 @@ public:
 private Q_SLOTS:
 
     void slotProgressTransition();
+    void slotRestart();
 
 private:
 

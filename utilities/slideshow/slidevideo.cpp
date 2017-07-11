@@ -32,7 +32,6 @@
 #include <QSlider>
 #include <QStyle>
 #include <QLabel>
-//#include <QThread>
 
 // KDE includes
 
@@ -40,7 +39,6 @@
 
 // QtAV includes
 
-#include <QtAV/AVError.h>
 #include <QtAV/AVPlayer.h>
 #include <QtAVWidgets/WidgetRenderer.h>
 
@@ -275,4 +273,4 @@ void SlideVideo::slotHandlePlayerError(const QtAV::AVError& err)
     qCDebug(DIGIKAM_GENERAL_LOG) << "Error: " << err.string();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

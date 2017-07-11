@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef STATUSPROGRESSBAR_H
-#define STATUSPROGRESSBAR_H
+#ifndef STATUS_PROGRESS_BAR_H
+#define STATUS_PROGRESS_BAR_H
 
 // Qt includes
 
@@ -91,4 +91,4 @@ private:
 
 } // namespace Digikam
 
-#endif // STATUSPROGRESSBAR_H
+#endif // STATUS_PROGRESS_BAR_H

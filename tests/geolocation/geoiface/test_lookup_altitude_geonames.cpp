@@ -23,13 +23,13 @@
 
 #include "test_lookup_altitude_geonames.h"
 
-// local includes
+// Local includes
 
 #include "lookupaltitudegeonames.h"
 #include "lookupfactory.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 void TestLookupAltitudeGeonames::testNoOp()
 {

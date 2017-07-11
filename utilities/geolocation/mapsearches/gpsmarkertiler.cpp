@@ -45,7 +45,7 @@
 #include "dbjobsmanager.h"
 
 /// @todo Actually use this definition!
-typedef QPair<TileIndex, int> MapPair;
+typedef QPair<Digikam::TileIndex, int> MapPair;
 
 Q_DECLARE_METATYPE(MapPair)
 
@@ -128,7 +128,7 @@ public:
     ImageAlbumModel*                       imageAlbumModel;
     QItemSelectionModel*                   selectionModel;
     GeoCoordinates::Pair          currentRegionSelection;
-    GroupState                    mapGlobalGroupState;
+    GeoGroupState                    mapGlobalGroupState;
 };
 
 /**
@@ -383,12 +383,12 @@ QVariant GPSMarkerTiler::getTileRepresentativeMarker(const TileIndex& tileIndex,
     }
 
     GPSImageInfo bestMarkerInfo               = d->imagesHash.value(tile->imagesId.first());
-    GroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
+    GeoGroupState bestMarkerGroupState = getImageState(bestMarkerInfo.id);
 
     for (int i = 1 ; i < tile->imagesId.count() ; ++i)
     {
         const GPSImageInfo currentMarkerInfo               = d->imagesHash.value(tile->imagesId.at(i));
-        const GroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
+        const GeoGroupState currentMarkerGroupState = getImageState(currentMarkerInfo.id);
 
         if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
@@ -417,7 +417,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
 
     const QPair<TileIndex, int> firstIndex = indices.first().value<QPair<TileIndex, int> >();
     GPSImageInfo bestMarkerInfo                      = d->imagesHash.value(firstIndex.second);
-    GroupState bestMarkerGroupState        = getImageState(firstIndex.second);
+    GeoGroupState bestMarkerGroupState        = getImageState(firstIndex.second);
     TileIndex bestMarkerTileIndex          = firstIndex.first;
 
     for (int i = 1 ; i < indices.count() ; ++i)
@@ -425,7 +425,7 @@ QVariant GPSMarkerTiler::bestRepresentativeIndexFromList(const QList<QVariant>& 
         const QPair<TileIndex, int> currentIndex = indices.at(i).value<QPair<TileIndex, int> >();
 
         GPSImageInfo currentMarkerInfo                     = d->imagesHash.value(currentIndex.second);
-        GroupState currentMarkerGroupState       = getImageState(currentIndex.second);
+        GeoGroupState currentMarkerGroupState       = getImageState(currentIndex.second);
 
         if (GPSImageInfoSorter::fitsBetter(bestMarkerInfo, bestMarkerGroupState, currentMarkerInfo, currentMarkerGroupState, getGlobalGroupState(), GPSImageInfoSorter::SortOptions(sortKey)))
         {
@@ -456,7 +456,8 @@ QPixmap GPSMarkerTiler::pixmapFromRepresentativeIndex(const QVariant& index, con
 
     if (d->thumbnailLoadThread->find(info.thumbnailIdentifier(), thumbnail, qMax(size.width() + 2, size.height() + 2)))
     {
-        // digikam returns thumbnails with a border around them, but GeoIface expects them without a border
+        // digikam returns thumbnails with a border around them,
+        // but geolocation interface expects them without a border
         return thumbnail.copy(1, 1, thumbnail.size().width() - 2, thumbnail.size().height() - 2);
     }
     else
@@ -484,7 +485,7 @@ bool GPSMarkerTiler::indicesEqual(const QVariant& a, const QVariant& b) const
     return false;
 }
 
-GroupState GPSMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
+GeoGroupState GPSMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
 {
     const bool haveGlobalSelection = (d->mapGlobalGroupState & (FilteredPositiveMask | RegionSelectedMask));
 
@@ -499,7 +500,7 @@ GroupState GPSMarkerTiler::getTileGroupState(const TileIndex& tileIndex)
 
     for (int i = 0 ; i < tile->imagesId.count() ; ++i)
     {
-        const GroupState imageState = getImageState(tile->imagesId.at(i));
+        const GeoGroupState imageState = getImageState(tile->imagesId.at(i));
 
         tileStateComputer.addState(imageState);
     }
@@ -881,14 +882,14 @@ QList<qlonglong> GPSMarkerTiler::getTileMarkerIds(const TileIndex& tileIndex)
     return myTile->imagesId;
 }
 
-GroupState GPSMarkerTiler::getGlobalGroupState()
+GeoGroupState GPSMarkerTiler::getGlobalGroupState()
 {
     return d->mapGlobalGroupState;
 }
 
-GroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
+GeoGroupState GPSMarkerTiler::getImageState(const qlonglong imageId)
 {
-    GroupState imageState;
+    GeoGroupState imageState;
 
     // is the image inside the region selection?
     if (d->mapGlobalGroupState & RegionSelectedMask)

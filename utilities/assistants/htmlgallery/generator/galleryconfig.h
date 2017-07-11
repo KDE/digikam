@@ -62,6 +62,15 @@ public:
         };
     };
 
+    // Web Browser to use
+    enum EnumWebBrowser
+    {
+        NOBROWSER = 0,
+        INTERNAL,
+        DESKTOP,
+        COUNT
+    };
+
 public:
 
     explicit GalleryConfig();
@@ -103,28 +112,28 @@ public:
     void setDestUrl(const QUrl&);
     QUrl destUrl() const;
 
-    void setOpenInBrowser(bool);
-    bool openInBrowser() const;
+    void setOpenInBrowser(int);
+    int openInBrowser() const;
 
     void setImageSelectionTitle(const QString&);
     QString imageSelectionTitle() const;
 
 protected:
 
-    QString m_theme;
-    bool    m_useOriginalImageAsFullImage;
-    bool    m_fullResize;
-    int     m_fullSize;
-    int     m_fullFormat;
-    int     m_fullQuality;
-    bool    m_copyOriginalImage;
-    int     m_thumbnailSize;
-    int     m_thumbnailFormat;
-    int     m_thumbnailQuality;
-    bool    m_thumbnailSquare;
-    QUrl    m_destUrl;
-    bool    m_openInBrowser;
-    QString m_imageSelectionTitle; // Gallery title to use for GalleryInfo::ImageGetOption::IMAGES selection.
+    QString    m_theme;
+    bool       m_useOriginalImageAsFullImage;
+    bool       m_fullResize;
+    int        m_fullSize;
+    int        m_fullFormat;
+    int        m_fullQuality;
+    bool       m_copyOriginalImage;
+    int        m_thumbnailSize;
+    int        m_thumbnailFormat;
+    int        m_thumbnailQuality;
+    bool       m_thumbnailSquare;
+    QUrl       m_destUrl;
+    int        m_openInBrowser;
+    QString    m_imageSelectionTitle; // Gallery title to use for GalleryInfo::ImageGetOption::IMAGES selection.
 };
 
 } // namespace Digikam

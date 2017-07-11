@@ -62,11 +62,11 @@ public:
     QButtonGroup* tooltipsBehavior;
 };
 
-TooltipsPage::TooltipsPage(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("<b>Enabled Contextual Tooltips</b>")),
+TooltipsPage::TooltipsPage(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("<b>Enabled Contextual Tooltips</b>")),
       d(new Private)
 {
-    const int spacing = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacing    = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
 
     DVBox* const vbox    = new DVBox(this);
     QLabel* const label1 = new QLabel(vbox);

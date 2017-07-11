@@ -43,7 +43,6 @@
 #include <QtConcurrentMap>
 #include <QCommandLineParser>
 #include <QMenuBar>
-#include <QFileDialog>
 #include <QStatusBar>
 #include <QPointer>
 #include <QProgressBar>
@@ -62,19 +61,20 @@
 #include "lookupfactory.h"
 #include "mapwidget.h"
 #include "itemmarkertiler.h"
-#include "geoiface_common.h"
+#include "geoifacecommon.h"
 
-// local includes
+// Local includes
 
 #include "mydragdrophandler.h"
 #include "mytreewidget.h"
 #include "myimageitem.h"
+#include "dfiledialog.h"
 
 using namespace Digikam;
-using namespace GeoIface;
 
-MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel, QItemSelectionModel* const itemSelectionModel)
-    : ModelHelper(itemModel),
+MarkerModelHelper::MarkerModelHelper(QAbstractItemModel* const itemModel,
+                                     QItemSelectionModel* const itemSelectionModel)
+    : GeoModelHelper(itemModel),
       m_itemModel(itemModel),
       m_itemSelectionModel(itemSelectionModel)
 {
@@ -96,7 +96,8 @@ QItemSelectionModel* MarkerModelHelper::selectionModel() const
     return m_itemSelectionModel;
 }
 
-bool MarkerModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool MarkerModelHelper::itemCoordinates(const QModelIndex& index,
+                                        GeoCoordinates* const coordinates) const
 {
     if (!index.data(RoleCoordinates).canConvert<GeoCoordinates>())
         return false;
@@ -107,13 +108,16 @@ bool MarkerModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates
     return true;
 }
 
-void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices, const GeoCoordinates& targetCoordinates, const QPersistentModelIndex& targetSnapIndex)
+void MarkerModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& movedIndices,
+                                       const GeoCoordinates& targetCoordinates,
+                                       const QPersistentModelIndex& targetSnapIndex)
 {
     Q_UNUSED(targetSnapIndex);
 
     for (int i = 0; i < movedIndices.count(); ++i)
     {
-        m_itemModel->setData(movedIndices.at(i), QVariant::fromValue(targetCoordinates), RoleCoordinates);
+        m_itemModel->setData(movedIndices.at(i),
+                             QVariant::fromValue(targetCoordinates), RoleCoordinates);
     }
 
     emit(signalMarkersMoved(movedIndices));
@@ -240,9 +244,9 @@ MainWindow::MainWindow(QCommandLineParser* const cmdLineArgs, QWidget* const par
     ItemMarkerTiler* const mm = new ItemMarkerTiler(d->markerModelHelper, this);
 
     resize(512, 512);
-    setWindowTitle(i18n("GeoIface demo"));
+    setWindowTitle(i18n("Geolocation Interface demo"));
     setWindowIcon(QIcon::fromTheme(QString::fromLatin1("globe")));
-    setObjectName(QLatin1String("Demo-GeoIface" ));
+    setObjectName(QLatin1String("DemoGeoLocationInterface" ));
 
     d->cmdLineArgs = cmdLineArgs;
 
@@ -488,7 +492,7 @@ void MainWindow::slotScheduleImagesForLoading(const QList<QUrl> imagesToSchedule
 
 void MainWindow::slotImageLoadingBunchReady()
 {
-    qDebug()<<"slotImageLoadingBunchReady";
+    qDebug() << "slotImageLoadingBunchReady";
 
     for (int i = 0; i < d->imageLoadingBuncher.count(); ++i)
     {
@@ -587,12 +591,12 @@ void MainWindow::slotAltitudeLookupDone()
 
 void MainWindow::slotAddImages()
 {
-    const QList<QUrl> fileNames = QFileDialog::getOpenFileUrls(this, i18n("Add image files"), d->lastImageOpenDir, i18n("Images (*.jpg *.jpeg *.png *.tif *.tiff)"));
+    const QList<QUrl> fileNames = DFileDialog::getOpenFileUrls(this, i18n("Add image files"), d->lastImageOpenDir, i18n("Images (*.jpg *.jpeg *.png *.tif *.tiff)"));
 
     if (fileNames.isEmpty())
         return;
 
-    d->lastImageOpenDir        = fileNames.first().resolved(QUrl(QString::fromLatin1("../")));
+    d->lastImageOpenDir         = fileNames.first().resolved(QUrl(QString::fromLatin1("../")));
 
     slotScheduleImagesForLoading(fileNames);
 }
@@ -607,7 +611,7 @@ void MainWindow::createMenus()
             this, SLOT(slotAddImages()));
 }
 
-ModelHelper::Flags MarkerModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags MarkerModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

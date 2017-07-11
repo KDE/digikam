@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef WELCOMEPAGEVIEW_H
-#define WELCOMEPAGEVIEW_H
+#ifndef WELCOME_PAGE_VIEW_H
+#define WELCOME_PAGE_VIEW_H
 
 // Qt includes
 
@@ -62,6 +62,6 @@ private Q_SLOTS:
     void slotThemeChanged();
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* WELCOMEPAGEVIEW_H */
+#endif // WELCOME_PAGE_VIEW_H

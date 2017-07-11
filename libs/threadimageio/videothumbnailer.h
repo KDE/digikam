@@ -31,7 +31,6 @@
 
 // QtAV includes
 
-#include <QtAV/QtAV.h>
 #include <QtAV/VideoFrame.h>
 
 // Local includes

@@ -26,6 +26,7 @@
 #include "dinfointerface.h"
 #include "metaengine.h"
 #include "digikam_globals.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -94,6 +95,7 @@ bool DInfoInterface::supportAlbums() const
 DItemInfo::DItemInfo(const DInfoInterface::DInfoMap& info)
     : m_info(info)
 {
+    //qCDebug(DIGIKAM_GENERAL_LOG) << m_info;
 }
 
 DItemInfo::~DItemInfo()
@@ -135,6 +137,12 @@ int DItemInfo::orientation() const
 {
     QVariant val = parseInfoMap(QLatin1String("orientation"));
     return !val.isNull() ? val.toInt() : MetaEngine::ORIENTATION_UNSPECIFIED;
+}
+
+QSize DItemInfo::dimensions() const
+{
+    QVariant val = parseInfoMap(QLatin1String("dimensions"));
+    return !val.isNull() ? val.toSize() : QSize();
 }
 
 QDateTime DItemInfo::dateTime() const
@@ -221,6 +229,30 @@ QString DItemInfo::source() const
     return !val.isNull() ? val.toString() : QString();
 }
 
+QString DItemInfo::exposureTime() const
+{
+    QVariant val = parseInfoMap(QLatin1String("exposuretime"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::sensitivity() const
+{
+    QVariant val = parseInfoMap(QLatin1String("sensitivity"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::aperture() const
+{
+    QVariant val = parseInfoMap(QLatin1String("aperture"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
+QString DItemInfo::focalLength() const
+{
+    QVariant val = parseInfoMap(QLatin1String("focallength"));
+    return !val.isNull() ? val.toString() : QString();
+}
+
 // -----------------------------------------------------------------
 
 DAlbumInfo::DAlbumInfo(const DInfoInterface::DInfoMap& info)
@@ -271,4 +303,4 @@ QDate DAlbumInfo::date() const
     return ret;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

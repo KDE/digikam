@@ -32,9 +32,7 @@
 // Local includes
 
 #include "geocoordinates.h"
-#include "groupstate.h"
-
-using namespace GeoIface;
+#include "geogroupstate.h"
 
 namespace Digikam
 {
@@ -43,7 +41,7 @@ class GPSImageInfo
 {
 public:
 
-    GPSImageInfo();
+    explicit GPSImageInfo();
     ~GPSImageInfo();
 
 public:

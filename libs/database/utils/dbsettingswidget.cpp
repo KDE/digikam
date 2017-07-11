@@ -212,7 +212,7 @@ void DatabaseSettingsWidget::setupMainArea()
                                      "<p></p>"), dbConfigBox);
     d->dbPathLabel->setWordWrap(true);
     d->dbPathEdit  = new DFileSelector(dbConfigBox);
-    d->dbPathEdit->setFileDlgMode(QFileDialog::Directory);
+    d->dbPathEdit->setFileDlgMode(DFileDialog::Directory);
 
     // --------------------------------------------------------
 

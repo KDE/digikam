@@ -27,13 +27,13 @@
 #include <QtTest>
 #include <QDebug>
 
-// local includes
+// Local includes
 
 #include "test_tracks.h"
-#include "tracks.h"
+#include "trackmanager.h"
 #include "trackreader.h"
 
-using namespace GeoIface;
+using namespace Digikam;
 
 QTEST_GUILESS_MAIN(TestTracks)
 

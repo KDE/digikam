@@ -30,7 +30,6 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
-#include <QCheckBox>
 #include <QComboBox>
 #include <QGridLayout>
 
@@ -60,7 +59,7 @@ public:
     Private(QWizard* const dialog)
       : destUrl(0),
         conflictBox(0),
-        openInPlayer(0),
+        playerVal(0),
         formatVal(0),
         wizard(0),
         settings(0)
@@ -75,7 +74,7 @@ public:
 
     DFileSelector*       destUrl;
     FileSaveConflictBox* conflictBox;
-    QCheckBox*           openInPlayer;
+    QComboBox*           playerVal;
     QComboBox*           formatVal;
     VidSlideWizard*      wizard;
     VidSlideSettings*    settings;
@@ -124,8 +123,9 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     fileLabel->setText(i18n("Destination Folder:"));
 
     d->destUrl              = new DFileSelector(main);
-    d->destUrl->setFileDlgMode(QFileDialog::Directory);
+    d->destUrl->setFileDlgMode(DFileDialog::DirectoryOnly);
     d->destUrl->setFileDlgTitle(i18n("Destination Folder"));
+    d->destUrl->lineEdit()->setPlaceholderText(i18n("Output Destination Path"));
     fileLabel->setBuddy(d->destUrl);
 
     // --------------------
@@ -136,8 +136,22 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
 
     // --------------------
 
-    d->openInPlayer         = new QCheckBox(main);
-    d->openInPlayer->setText(i18n("Open in Video Player"));
+    QLabel* const playerLabel = new QLabel(main);
+    playerLabel->setWordWrap(false);
+    playerLabel->setText(i18n("Open in Player:"));
+    d->playerVal              = new QComboBox(main);
+    d->playerVal->setEditable(false);
+
+    QMap<VidSlideSettings::VidPlayer, QString> map2                = VidSlideSettings::videoPlayerNames();
+    QMap<VidSlideSettings::VidPlayer, QString>::const_iterator it2 = map2.constBegin();
+
+    while (it2 != map2.constEnd())
+    {
+        d->playerVal->addItem(it2.value(), (int)it2.key());
+        ++it2;
+    }
+
+    playerLabel->setBuddy(d->playerVal);
 
     // --------------------
 
@@ -149,7 +163,8 @@ VidSlideOutputPage::VidSlideOutputPage(QWizard* const dialog, const QString& tit
     grid->addWidget(d->destUrl,      1, 1, 1, 1);
     grid->addWidget(outputLbl,       2, 0, 1, 2);
     grid->addWidget(d->conflictBox,  3, 0, 1, 2);
-    grid->addWidget(d->openInPlayer, 4, 0, 1, 2);
+    grid->addWidget(playerLabel,     4, 0, 1, 1);
+    grid->addWidget(d->playerVal,    4, 1, 1, 1);
     grid->setRowStretch(5, 10);
 
     setPageWidget(main);
@@ -172,7 +187,7 @@ void VidSlideOutputPage::initializePage()
     d->formatVal->setCurrentIndex(d->settings->vFormat);
     d->destUrl->setFileDlgPath(d->settings->outputDir.toLocalFile());
     d->conflictBox->setConflictRule(d->settings->conflictRule);
-    d->openInPlayer->setChecked(d->settings->openInPlayer);
+    d->playerVal->setCurrentIndex(d->settings->outputPlayer);
 }
 
 bool VidSlideOutputPage::validatePage()
@@ -183,7 +198,7 @@ bool VidSlideOutputPage::validatePage()
     d->settings->vFormat      = (VidSlideSettings::VidFormat)d->formatVal->currentIndex();
     d->settings->outputDir    = QUrl::fromLocalFile(d->destUrl->fileDlgPath());
     d->settings->conflictRule = d->conflictBox->conflictRule();
-    d->settings->openInPlayer = d->openInPlayer->isChecked();
+    d->settings->outputPlayer = (VidSlideSettings::VidPlayer)d->playerVal->currentIndex();
 
     return true;
 }

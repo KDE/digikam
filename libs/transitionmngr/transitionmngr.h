@@ -25,11 +25,8 @@
 
 // Qt includes
 
-#include <QList>
 #include <QMap>
-#include <QPair>
 #include <QString>
-#include <QStringList>
 #include <QImage>
 
 // Local includes
@@ -41,7 +38,6 @@ namespace Digikam
 
 class DIGIKAM_EXPORT TransitionMngr
 {
-
 public:
 
     enum TransType
@@ -59,6 +55,21 @@ public:
         MultiCircleOut,
         SpiralIn,
         Blobs,
+        Fade,
+        SlideL2R,
+        SlideR2L,
+        SlideT2B,
+        SlideB2T,
+        PushL2R,
+        PushR2L,
+        PushT2B,
+        PushB2T,
+        SwapL2R,
+        SwapR2L,
+        SwapT2B,
+        SwapB2T,
+        BlurIn,
+        BlurOut,
         Random
     };
 
@@ -68,11 +79,11 @@ public:
     ~TransitionMngr();
 
     void setOutputSize(const QSize& size);
-    void setTransition(TransType eff);
+    void setTransition(TransType type);
     void setInImage(const QImage& iimg);
     void setOutImage(const QImage& oimg);
 
-    QImage currentframe(int& tmout);
+    QImage currentFrame(int& tmout);
 
     static QMap<TransType, QString> transitionNames();
 

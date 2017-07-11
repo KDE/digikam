@@ -58,7 +58,7 @@ public:
 };
 
 ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg)
-    : DWizardPage(dlg, i18nc("@title:window", "Welcome to Exposure Blending Tool")),
+    : DWizardPage(dlg, i18nc("@title:window", "Welcome to Stacked Images Tool")),
       d(new Private(mngr))
 {
     DVBox* const vbox   = new DVBox(this);
@@ -66,6 +66,7 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     title->setWordWrap(true);
     title->setOpenExternalLinks(true);
     title->setText(i18n("<qt>"
+                        "<p><h1><b>Welcome to Stacked Images Tool</b></h1></p>"
                         "<p>This tool fuses bracketed images with different exposure to make pseudo "
                         "<a href='http://en.wikipedia.org/wiki/High_dynamic_range_imaging'>HDR image</a>.</p>"
                         "<p>It can also be used to <a href='https://en.wikipedia.org/wiki/Focus_stacking'>merge focus bracketed stack</a> "
@@ -87,14 +88,23 @@ ExpoBlendingIntroPage::ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QW
     d->binariesWidget->addBinary(d->mngr->enfuseBinary());
 
 #ifdef Q_OS_OSX
-    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));    // Hugin bundle PKG install
-    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));                    // Std Macports install
-    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));                  // digiKam Bundle PKG install
+    // Hugin bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/HuginTools"));
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/Hugin.app/Contents/MacOS"));
+    d->binariesWidget->addDirectory(QLatin1String("/Applications/Hugin/tools_mac"));
+
+    // Std Macports install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/local/bin"));
+
+    // digiKam Bundle PKG install
+    d->binariesWidget->addDirectory(QLatin1String("/opt/digikam/bin"));
 #endif
 
 #ifdef Q_OS_WIN
     d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/Hugin/bin"));
     d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/Hugin/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files/GnuWin32/bin"));
+    d->binariesWidget->addDirectory(QLatin1String("C:/Program Files (x86)/GnuWin32/bin"));
 #endif
 
     connect(d->binariesWidget, SIGNAL(signalBinariesFound(bool)),

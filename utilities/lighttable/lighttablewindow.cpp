@@ -79,6 +79,8 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -583,6 +585,8 @@ void LightTableWindow::setupActions()
     createExpoBlendingAction();
     createCalendarAction();
     createVideoSlideshowAction();
+    createSendByMailAction();
+    createPrintCreatorAction();
 
     // Left Panel Zoom Actions
 
@@ -764,8 +768,9 @@ bool LightTableWindow::isEmpty() const
 void LightTableWindow::slotRefreshStatusBar()
 {
     d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                          i18np("%1 item on Light Table", "%1 items on Light Table",
-                                                d->thumbView->countItems()));
+                                             i18np("%1 item on Light Table",
+                                                   "%1 items on Light Table",
+                                             d->thumbView->countItems()));
 }
 
 void LightTableWindow::slotFileChanged(const QString& path)
@@ -1436,7 +1441,7 @@ void LightTableWindow::slotSlideShowAll()
    SlideShowBuilder* const builder = new SlideShowBuilder(d->thumbView->imageInfos());
 
    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                         i18n("Preparing slideshow. Please wait..."));
+                                            i18n("Preparing slideshow. Please wait..."));
 
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
@@ -1463,7 +1468,7 @@ void LightTableWindow::slotSlideShowManualFrom(const ImageInfo& info)
    builder->setAutoPlayEnabled(false);
 
    d->statusProgressBar->setProgressBarMode(StatusProgressBar::TextMode,
-                                         i18n("Preparing slideshow. Please wait..."));
+                                            i18n("Preparing slideshow. Please wait..."));
 
    connect(builder, SIGNAL(signalComplete(SlideShowSettings)),
            this, SLOT(slotSlideShowBuilderComplete(SlideShowSettings)));
@@ -1871,4 +1876,16 @@ void LightTableWindow::slotVideoSlideshow()
 #endif
 }
 
-}  // namespace Digikam
+void LightTableWindow::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
+}
+
+void LightTableWindow::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbView->urls()));
+    w.exec();
+}
+
+} // namespace Digikam

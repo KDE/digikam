@@ -31,7 +31,7 @@
 
 // Local includes
 
-#include "vidslidetask.h"
+#include "frameutils.h"
 #include "digikam_debug.h"
 
 namespace Digikam
@@ -45,10 +45,11 @@ public:
     {
         mngr          = 0;
         curTransition = TransitionMngr::None;
-        previewSize   = QSize(256, 192);
+        previewSize   = QSize(192, 144);
     }
 
-    QTimer                    timer;
+    QTimer                    restartTimer;
+    QTimer                    transTimer;
     TransitionMngr*           mngr;
     TransitionMngr::TransType curTransition;
     QSize                     previewSize;
@@ -68,8 +69,11 @@ TransitionPreview::TransitionPreview(QWidget* const parent)
     d->mngr = new TransitionMngr;
     d->mngr->setOutputSize(d->previewSize);
 
-    connect(&d->timer, SIGNAL(timeout()),
+    connect(&d->transTimer, SIGNAL(timeout()),
             this, SLOT(slotProgressTransition()));
+
+    connect(&d->restartTimer, SIGNAL(timeout()),
+            this, SLOT(slotRestart()));
 }
 
 TransitionPreview::~TransitionPreview()
@@ -81,16 +85,16 @@ void TransitionPreview::setImagesList(const QList<QUrl>& images)
 {
     if (!images.isEmpty())
     {
-        d->mngr->setInImage(VidSlideTask::makeFramedImage(images[0].toLocalFile(), d->previewSize));
+        d->mngr->setInImage(FrameUtils::makeFramedImage(images[0].toLocalFile(), d->previewSize));
 
         if (images.count() > 1)
         {
-            d->mngr->setOutImage(VidSlideTask::makeFramedImage(images[1].toLocalFile(), d->previewSize));
+            d->mngr->setOutImage(FrameUtils::makeFramedImage(images[1].toLocalFile(), d->previewSize));
         }
         else
         {
             QImage blank(d->previewSize, QImage::Format_ARGB32);
-            blank.fill(0);
+            blank.fill(Qt::black);
             d->mngr->setOutImage(blank);
         }
     }
@@ -98,24 +102,34 @@ void TransitionPreview::setImagesList(const QList<QUrl>& images)
 
 void TransitionPreview::startPreview(TransitionMngr::TransType eff)
 {
+    stopPreview();
     d->curTransition = eff;
     d->mngr->setTransition(eff);
-    d->timer.start(100);
+    d->transTimer.start(100);
 }
 
 void TransitionPreview::slotProgressTransition()
 {
     int tmout  = -1;
-    QImage img = d->mngr->currentframe(tmout);
+    QImage img = d->mngr->currentFrame(tmout);
     setPixmap(QPixmap::fromImage(img));
 
     if (tmout == -1)
-        startPreview(d->curTransition);
+    {
+        stopPreview();
+        d->restartTimer.start(1000);
+    }
 }
 
 void TransitionPreview::stopPreview()
 {
-    d->timer.stop();
+    d->transTimer.stop();
+    d->restartTimer.stop();
+}
+
+void TransitionPreview::slotRestart()
+{
+    startPreview(d->curTransition);
 }
 
 } // namespace Digikam

@@ -46,6 +46,7 @@
 #include "dprogresswdg.h"
 #include "dhistoryview.h"
 #include "vidslidethread.h"
+#include "vidplayerdlg.h"
 
 namespace Digikam
 {
@@ -196,11 +197,21 @@ void VidSlideFinalPage::slotDone(bool completed)
         d->progressView->addEntry(i18n("Video Slideshow completed."),
                                   DHistoryView::ProgressEntry);
 
-        if (d->settings->openInPlayer)
+        if (d->settings->outputPlayer != VidSlideSettings::NOPLAYER)
         {
-            QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings->outputVideo));
             d->progressView->addEntry(i18n("Opening video stream in player..."),
-                                    DHistoryView::ProgressEntry);
+                                      DHistoryView::ProgressEntry);
+
+            if (d->settings->outputPlayer == VidSlideSettings::INTERNAL)
+            {
+                VidPlayerDlg* const player = new VidPlayerDlg(d->settings->outputVideo, this);
+                player->show();
+                player->resize(800, 600);
+            }
+            else
+            {
+                QDesktopServices::openUrl(QUrl::fromLocalFile(d->settings->outputVideo));
+            }
         }
     }
 

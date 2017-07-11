@@ -32,6 +32,7 @@
 
 #include "vidslidesettings.h"
 #include "actionthreadbase.h"
+#include "digikam_export.h"
 
 namespace Digikam
 {
@@ -44,9 +45,6 @@ public:
 
     VidSlideTask(VidSlideSettings* const settings);
     ~VidSlideTask();
-
-    static QImage makeFramedImage(const QString& file, const QSize& outSize);
-    static QImage makeScaledImage(QImage& timg, const QSize& outSize);
 
 Q_SIGNALS:
 

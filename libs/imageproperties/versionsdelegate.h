@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef VERSIONSDELEGATE_H
-#define VERSIONSDELEGATE_H
+#ifndef VERSIONS_DELEGATE_H
+#define VERSIONS_DELEGATE_H
 
 // Qt includes
 
@@ -35,7 +35,6 @@
 
 namespace Digikam
 {
-
 
 class VersionsDelegate : public QStyledItemDelegate, public ImageDelegateOverlayContainer
 {
@@ -93,4 +92,4 @@ private:
 
 } // namespace Digikam
 
-#endif // VERSIONSDELEGATE_H
+#endif // VERSIONS_DELEGATE_H

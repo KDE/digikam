@@ -62,4 +62,4 @@ void VidSlideThread::processStream(VidSlideSettings* const settings)
     appendJobs(collection);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-01
- * Description : Base-class for backends for GeoIface
+ * Description : Base-class for backends for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2011 by Michael G. Hansen <mike at mghansen dot de>
@@ -24,11 +24,13 @@
 
 #include "mapbackend.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
-MapBackend::MapBackend(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData, QObject* const parent)
-    : QObject(parent), s(sharedData)
+MapBackend::MapBackend(const QExplicitlySharedDataPointer<GeoIfaceSharedData>& sharedData,
+                       QObject* const parent)
+    : QObject(parent),
+      s(sharedData)
 {
 }
 
@@ -46,4 +48,4 @@ void MapBackend::slotTrackManagerChanged()
 {
 }
 
-} // namespace GeoIface
+} // namespace Digikam

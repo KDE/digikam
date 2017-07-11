@@ -356,4 +356,4 @@ void DZoomBar::setBarMode(BarMode mode)
     }
 }
 
-}  // namespace Digikam
+} // namespace Digikam

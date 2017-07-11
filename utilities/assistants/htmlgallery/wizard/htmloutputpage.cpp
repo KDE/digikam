@@ -30,8 +30,9 @@
 #include <QWidget>
 #include <QApplication>
 #include <QStyle>
-#include <QCheckBox>
+#include <QComboBox>
 #include <QLineEdit>
+#include <QGridLayout>
 
 // KDE includes
 
@@ -42,7 +43,6 @@
 #include "htmlwizard.h"
 #include "galleryinfo.h"
 #include "dfileselector.h"
-#include "dlayoutbox.h"
 
 namespace Digikam
 {
@@ -53,15 +53,15 @@ public:
 
     Private()
       : destUrl(0),
-        titleBox(0),
         openInBrowser(0),
+        titleLabel(0),
         imageSelectionTitle(0)
     {
     }
 
     DFileSelector* destUrl;
-    DVBox*         titleBox;
-    QCheckBox*     openInBrowser;
+    QComboBox*     openInBrowser;
+    QLabel*        titleLabel;
     QLineEdit*     imageSelectionTitle;
 };
 
@@ -71,50 +71,55 @@ HTMLOutputPage::HTMLOutputPage(QWizard* const dialog, const QString& title)
 {
     setObjectName(QLatin1String("OutputPage"));
 
-    DVBox* const vbox        = new DVBox(this);
-    vbox->setContentsMargins(QMargins());
-    vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    QWidget* const main      = new QWidget(this);
 
     // --------------------
 
-    d->titleBox              = new DVBox(vbox);
-    d->titleBox->setContentsMargins(QMargins());
-    d->titleBox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->titleLabel = new QLabel(main);
+    d->titleLabel->setWordWrap(false);
+    d->titleLabel->setText(i18n("Gallery Title:"));
 
-    QLabel* const textLabel2 = new QLabel(d->titleBox);
-    textLabel2->setObjectName(QLatin1String("textLabel2"));
-    textLabel2->setWordWrap(false);
-    textLabel2->setText(i18n("Gallery Title:"));
-
-    d->imageSelectionTitle   = new QLineEdit(d->titleBox);
-    textLabel2->setBuddy(d->imageSelectionTitle);
+    d->imageSelectionTitle   = new QLineEdit(main);
+    d->titleLabel->setBuddy(d->imageSelectionTitle);
 
     // --------------------
 
-    DVBox* const hbox1       = new DVBox(vbox);
-    hbox1->setContentsMargins(QMargins());
-    hbox1->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-
-    QLabel* const textLabel1 = new QLabel(hbox1);
+    QLabel* const textLabel1 = new QLabel(main);
     textLabel1->setWordWrap(false);
     textLabel1->setText(i18n("Destination Folder:"));
 
-    d->destUrl = new DFileSelector(hbox1);
+    d->destUrl = new DFileSelector(main);
     d->destUrl->setFileDlgTitle(i18n("Destination Folder"));
-    d->destUrl->setFileDlgMode(QFileDialog::Directory);
+    d->destUrl->setFileDlgMode(DFileDialog::Directory);
     textLabel1->setBuddy(d->destUrl);
 
     // --------------------
 
-    d->openInBrowser         = new QCheckBox(vbox);
-    d->openInBrowser->setText(i18n("Open in Browser"));
+    QLabel* const browserLabel = new QLabel(main);
+    browserLabel->setWordWrap(false);
+    browserLabel->setText(i18n("Open in Browser:"));
+    d->openInBrowser           = new QComboBox(main);
+    d->openInBrowser->addItem(i18n("None"),                 GalleryConfig::NOBROWSER);
+    d->openInBrowser->addItem(i18n("Internal"),             GalleryConfig::INTERNAL);
+    d->openInBrowser->addItem(i18n("Default from Desktop"), GalleryConfig::DESKTOP);
+    d->openInBrowser->setEditable(false);
+    browserLabel->setBuddy(d->openInBrowser);
 
     // --------------------
 
-    QWidget* const spacer    = new QWidget(vbox);
-    vbox->setStretchFactor(spacer, 10);
+    QGridLayout* const grid = new QGridLayout(main);
+    grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    grid->addWidget(d->titleLabel,          0, 0, 1, 1);
+    grid->addWidget(d->imageSelectionTitle, 0, 1, 1, 1);
+    grid->addWidget(textLabel1,             1, 0, 1, 1);
+    grid->addWidget(d->destUrl,             1, 1, 1, 1);
+    grid->addWidget(browserLabel,           2, 0, 1, 1);
+    grid->addWidget(d->openInBrowser,       2, 1, 1, 1);
+    grid->setRowStretch(3, 10);
 
-    setPageWidget(vbox);
+    // --------------------
+
+    setPageWidget(main);
     setLeftBottomPix(QIcon::fromTheme(QLatin1String("folder-html")));
 
     connect(d->destUrl->lineEdit(), SIGNAL(textEdited(QString)),
@@ -142,10 +147,11 @@ void HTMLOutputPage::initializePage()
     GalleryInfo* const info  = wizard->galleryInfo();
 
     d->destUrl->setFileDlgPath(info->destUrl().toLocalFile());
-    d->openInBrowser->setChecked(info->openInBrowser());
+    d->openInBrowser->setCurrentIndex(info->openInBrowser());
     d->imageSelectionTitle->setText(info->imageSelectionTitle());
 
-    d->titleBox->setVisible(info->m_getOption == GalleryInfo::IMAGES);
+    d->titleLabel->setVisible(info->m_getOption == GalleryInfo::IMAGES);
+    d->imageSelectionTitle->setVisible(info->m_getOption == GalleryInfo::IMAGES);
 }
 
 bool HTMLOutputPage::validatePage()
@@ -164,7 +170,7 @@ bool HTMLOutputPage::validatePage()
         return false;
 
     info->setDestUrl(QUrl::fromLocalFile(d->destUrl->fileDlgPath()));
-    info->setOpenInBrowser(d->openInBrowser->isChecked());
+    info->setOpenInBrowser(d->openInBrowser->currentIndex());
     info->setImageSelectionTitle(d->imageSelectionTitle->text());
 
     return true;
