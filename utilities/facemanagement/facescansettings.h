@@ -60,7 +60,8 @@ public:
     {
         LBP,
         EigenFace,
-        FisherFace
+        FisherFace,
+        DNN
     };
 
 public:
