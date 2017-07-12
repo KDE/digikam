@@ -185,6 +185,7 @@ bool CameraList::save()
     stream << doc.toString();
     cfile.close();
 
+    d->modified = false;
     return true;
 }
 
@@ -242,6 +243,7 @@ void CameraList::clear()
 {
     while (!d->clist.isEmpty())
     {
+        d->modified = true;
         removePrivate(d->clist.first());
     }
 }
@@ -260,6 +262,7 @@ CameraType* CameraList::find(const QString& title) const
             return ctype;
         }
     }
+
     return 0;
 }
 

@@ -32,6 +32,7 @@
 
 #include "iofilesettings.h"
 #include "drawdecodersettings.h"
+#include "filesaveconflictbox.h"
 
 namespace Digikam
 {
@@ -41,12 +42,6 @@ namespace Digikam
 class QueueSettings
 {
 public:
-
-    enum ConflictRule
-    {
-        OVERWRITE = 0,
-        DIFFNAME
-    };
 
     enum RenamingRule
     {
@@ -68,34 +63,34 @@ public:
         useMultiCoreCPU    = false;
         exifSetOrientation = true;
         useOrgAlbum        = true;
-        conflictRule       = DIFFNAME;
+        conflictRule       = FileSaveConflictBox::DIFFNAME;
         renamingRule       = USEORIGINAL;
         rawLoadingRule     = DEMOSAICING;
     };
 
 public:
 
-    bool                useMultiCoreCPU;
+    bool                              useMultiCoreCPU;
 
     /// Setting managed through Metadata control panel.
-    bool                exifSetOrientation;
+    bool                              exifSetOrientation;
 
     /// If true, original file dir will be used to process queue items.
-    bool                useOrgAlbum;
+    bool                              useOrgAlbum;
 
-    QString             renamingParser;
+    QString                           renamingParser;
 
-    QUrl                workingUrl;
+    QUrl                              workingUrl;
 
-    ConflictRule        conflictRule;
-    RenamingRule        renamingRule;
-    RawLoadingRule      rawLoadingRule;
+    FileSaveConflictBox::ConflictRule conflictRule;
+    RenamingRule                      renamingRule;
+    RawLoadingRule                    rawLoadingRule;
 
-    DRawDecoderSettings rawDecodingSettings;
+    DRawDecoderSettings               rawDecodingSettings;
 
-    IOFileSettings      ioFileSettings;
+    IOFileSettings                    ioFileSettings;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* QUEUE_SETTINGS_H */
+#endif // QUEUE_SETTINGS_H

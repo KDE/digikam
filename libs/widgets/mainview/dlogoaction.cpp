@@ -35,7 +35,6 @@
 #include <QTimer>
 #include <QPainter>
 #include <QApplication>
-#include <QDesktopServices>
 #include <QStandardPaths>
 
 // KDE includes
@@ -74,7 +73,8 @@ public:
 };
 
 DLogoAction::DLogoAction(QObject* const parent, bool alignOnright)
-    : QWidgetAction(parent), d(new Private)
+    : QWidgetAction(parent),
+      d(new Private)
 {
     setText(QLatin1String("digikam.org"));
 

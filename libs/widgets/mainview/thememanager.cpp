@@ -319,4 +319,4 @@ void ThemeManager::slotSettingsChanged()
     slotChangePalette();
 }
 
-}  // namespace Digikam
+} // namespace Digikam

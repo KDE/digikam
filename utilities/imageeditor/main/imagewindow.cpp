@@ -82,7 +82,7 @@
 #include "dmetadata.h"
 #include "editorstackview.h"
 #include "fileactionmngr.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "digikam_globals.h"
 #include "iccsettingscontainer.h"
 #include "imageattributeswatch.h"
@@ -125,6 +125,8 @@
 #include "dbinfoiface.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -136,6 +138,10 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
 #endif
 
 namespace Digikam
@@ -1701,7 +1707,7 @@ void ImageWindow::slotAddedDropedItems(QDropEvent* e)
 
 void ImageWindow::slotFileWithDefaultApplication()
 {
-    FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->currentUrl());
+    DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->currentUrl());
 }
 
 void ImageWindow::addServicesMenu()
@@ -1818,6 +1824,14 @@ void ImageWindow::slotPanorama()
 #endif
 }
 
+void ImageWindow::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
+}
+
 void ImageWindow::slotExpoBlending()
 {
     ExpoBlendingManager::instance()->checkBinaries();
@@ -1825,4 +1839,16 @@ void ImageWindow::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-}  // namespace Digikam
+void ImageWindow::slotSendByMail()
+{
+    MailWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ImageWindow::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new DBInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+} // namespace Digikam

@@ -1,81 +1,216 @@
 *****************************************************************************************************
-digiKam 5.6.0 - Release date: 2017-06-11
+digiKam 5.7.0 - Release date: 2017-07-23
 
 NEW FEATURES:
 
-Database    : We activated database shrinking for MySQL as part of the maintenance since now we can test the affected tables for integrity.
-Searches    : Users can now restrict the results of fuzzy image/drop/sketch search to be in specific albums.
-Searches    : Users can now select both tags and albums in duplicates search and restrict the set of images in which duplicates are searched with logical operations (in selected albums or/and tags, in selected albums but not tags and vice versa and only in selected objects of current tab)
-Searches    : In extended search, the tags selection can also be restricted such that images must be either tagged with at least one of or with all selected tags.
-General     : New tool to export Albums to static HTML gallery.
-HTMLGallery : New "Elegant" theme using javascript to render image as slideshow in web browser.
-HTMLGallery : New "SimpleRounded" theme that uses flat shapes with rounded corners.
-HTMLGallery : New "BlueCurved" theme with a blue rubbon on the left and an area for navigation arrows.
-HTMLGallery : Add option to generate a Gallery from a selection of images instead an album list.
-ImageEditor : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
-Showfoto    : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
-LightTable  : Add HTMLGallery, Calendar, ExpoBlending, and Panorama tools support.
+General     : Add online handbook reader not dependant of desktop.
+General     : New tool to export albums by email.
+General     : New tool to create advance print layout.
+General     : Send by Mail tool can remove all metadata to attached items.
+PrintCreator: Add option to create printing from albums or images selection.
+PrintCreator: Add option to customize output image properties to render printing.
+ImageEditor : Add SendByMail and PrintCreator tools support.
+Showfoto    : Add SendByMail and PrintCreator tools support.
+LightTable  : Add SendByMail and PrintCreator tools support.
 
 BUGFIXES FROM BUGZILLA:
 
-001 ==> 377432 : Crash on browsing images.
-002 ==> 377565 - Problem importing Person tags which are also "normal" tags.
-003 ==> 218297 - SETUP : Database location under control panel doesn't match when using database-directory command line option.
-004 ==> 377638 - Database directory ignoring hidden and unnecessarily in migration-dialogue.
-005 ==> 378098 - Update meta data from selected images (generated outside digikam) does not work anymore.
-006 ==> 378219 - Optimize includes and polish.
-007 ==> 372972 - Find duplicates "search in drop down" only shows 1 item.
-008 ==> 378360 - digiKam 5.5 crashes on startup after update.
-009 ==> 378626 - Export menu empty.
-010 ==> 353331 - can’t limit fuzzy-search to albums [patch].
-011 ==> 300565 - When selecting folders, subfolders are not selected.
-012 ==> 183425 - Advanced search by tags : "any tags" option does not work.
-013 ==> 376621 - Cannot Enter Data In Geolocation Editor Details Tab.
-014 ==> 376049 - Any album appears empty on startup until I select another album to view.
-015 ==> 378836 - digiKam Crash when start searching for persons.
-016 ==> 378804 - lensfun uses only one core, pls. parallize [patch].
-017 ==> 378703 - Download page : add link to pre-version bundle repository from GDrive.
-018 ==> 379038 - Camera date Tool-Tip Option Appears Ineffective.
-019 ==> 378625 - Very slow start.
-020 ==> 379152 - Presentation mode cannot be exited/quitted.
-021 ==> 374838 - Advanced Search not finding "Not Tagged" images.
-022 ==> 379326 - Import-Tool doesn't rename properly.
-023 ==> 379442 - AppImage package does not find the files needed for panorama.
-024 ==> 379226 - digiKam Properties Metadata not shown in Editor Captions.
-025 ==> 216359 - New "floating cards" theme for html gallery [patch].
-026 ==> 319606 - New "SimpleRounded" theme for html gallery [patch].
-027 ==> 334589 - New "blue with curves" theme for html gallery [patch].
-028 ==> 379526 - Inconsistent separator use in mime setup.
-029 ==> 156900 - Allow to use selected images instead full album contents in html gallery.
-030 ==> 373247 - No chronological ordering of tags anymore.
-031 ==> 379675 - Geolocation feature links to Multimap.com and MSN Maps.
-032 ==> 140177 - HTML export plugin should autorotate images.
-033 ==> 378855 - Crashes on startup.
-034 ==> 379751 - I18N_ARGUMENT_MISSING in Edit Metadata.
-035 ==> 377197 - Customize grouping behaviour
-036 ==> 286609 - Allow to manage images group to stitch images in a panorama
-037 ==> 378552 - Problem with grouped images
-038 ==> 193232 - Add advanced input side-car files support (as .pto, .pp2, .pp3, .pano, thm, etc...)
-038 ==> 379806 - ShowFoto crashes when clicking Color Effects from menu.
-039 ==> 376407 - Edit Bookmarks... Doesn't Do Anything.
-040 ==> 376391 - Add geolocation favorites to menu and shortcuts.
-041 ==> 376687 - GPS tagging usability of bookmarks.
-042 ==> 374710 - No dialogue opening on edit bookmarks in geolocation editor.
-043 ==> 376074 - Display-bookmarked-positions-on-the-map button doesn't work.
-044 ==> 139692 - Include videos to slideshow.
-045 ==> 288113 - Bookmark a GPS position is impossible.
-046 ==> 374841 - Geolocation Editor Cannot Edit Bookmarks.
-047 ==> 376251 - Number of photos in gallery
-048 ==> 379833 - Sidecar files are not being created for some files.
-049 ==> 139693 - Include videos to slideshow.
-050 ==> 121422 - Do not open videos using external application.
-051 ==> 380260 - Sidecar files are not being created still.
-052 ==> 380342 - Add "Album sorting order" option.
-053 ==> 379956 - Can't open a file with a shell script from digiKam.
-054 ==> 375808 - Submit bug report is not working.
-055 ==> 377417 - Item - Open & Item - Open with Default Application not working for video files.
-056 ==> 376978 - The "right click->open with" does not work.
-057 ==> 361378 - Tags are not being removed from files metadata.
-058 ==> 375187 - Keywords under same tag in digikam do not match.
-059 ==> 380256 - digiKam crash when adding new collection.
-060 ==> 
+001 ==> 381143 - Camera not removed between invocations.
+002 ==> 381306 - Error with import from Fujifilm X-T10.
+003 ==> 379869 - Crash of digikam after ending digiam writing changed tags into photos.
+004 ==> 361047 - Wishlist: make grouped images more prominently visible [patch].
+005 ==> 381510 - "open with" on multiple images only passes first image.
+006 ==> 378475 - digiKam crashed after connecting a Camera.
+007 ==> 381697 - Cannot remove an image whose file has already been deleted by another application.
+008 ==> 380189 - digiKam Import Menu doesn't show all plugins.
+009 ==> 376422 - Rotate crashes.
+010 ==> 314089 - Tagging faces is not working.
+011 ==> 367692 - digiKam crashed trying to save an edited image.
+012 ==> 369636 - Batch time stamp adjusting causes digikam to crash and destroys photos.
+013 ==> 381762 - Crash on Windows installer.
+014 ==> 381766 - Problem compiling digikam from GIT repository.
+015 ==> 380359 - Shouldn't "Email Images" be in "Export" menu instead of "Tools" menu?
+016 ==> 281921 - Send Images by mail tool cannot process albums.
+017 ==> 114508 - Send images by mail tool does not delete its temporary files.
+018 ==> 151327 - Send Images by mail dialog is not resizable.
+019 ==> 108234 - Thunderbird will not open when sending emails in digiKam.
+020 ==> 149915 - Sending selected pictures makes PC hang for 15 minutes + crash.
+021 ==> 104918 - digiKam crashes while converting for email purposes.
+022 ==> 096507 - Bug in email client selection.
+023 ==> 280923 - The command Email messages does not attach the images to the email.
+024 ==> 228609 - Sending images with thunderbird from albums with spaces in the name failes.
+025 ==> 158585 - digiKam crashes after attempt to email pictures.
+026 ==> 126493 - Mozilla does not start when sending emailed images.
+027 ==> 139646 - "send by email" function does not work with Thunderbird 1.5.0.9 (it use to work before).
+028 ==> 158916 - Error with non ascii characters in album names when sending images.
+029 ==> 365733 - Tool «export by email» does not work properly.
+030 ==> 366086 - No attachment in mail when using resizing option.
+031 ==> 276428 - Send by emails fails for pgf pictures because they cannot be resized.
+032 ==> 191872 - Use the send image tool in showfoto.
+033 ==> 330274 - I downloaded showfoto photo program. Tried to open ShowFoto Handbook, got message could not find 'Khelpcenter'.
+034 ==> 240220 - Help button not working properly.
+035 ==> 110899 - All DigiKam ImagePlugins don't work in Showfoto.
+036 ==> 132162 - Load image plugins on demand.
+037 ==> 240222 - ShowFoto Handbook menu item not working.
+038 ==> 211117 - Showfoto no filters or decorate menu.
+039 ==> 252796 - "Save as" doesn't reuse previously selected dialog.
+040 ==> 190208 - Change image properties options should be grayed out when the check box is unchecked.
+041 ==> 147513 - It's non possible to send the file of photo because kmail don't start.
+042 ==> 144247 - No file attachment in thunderbird.
+043 ==> 134910 - Using email image tool (while having kontact open) results in a detachement of kmail from kontact.
+044 ==> 377306 - Optionally remove all metadata.
+045 ==> 204040 - Allow to share images by e-mail in message body instead as attachments.
+046 ==> 281269 - Allow to share a remote image by e-mail.
+047 ==> 346577 - digiKam does not show help when not running in KDE.
+048 ==> 256262 - "Help / digiKam Handbook" menu item is misleading.
+049 ==> 099497 - Please add a dummy handbook until there's a real one.
+050 ==> 147865 - Image>email image>add image dialog does not show most thumbnails - but does show some.
+051 ==> 172651 - Send image by email missing.
+052 ==> 244649 - Cannot load and use tool such as SendMail.
+053 ==> 132313 - Provide a simple way to email photos.
+054 ==> 108956 - Send image as email attachment from within the imageviewer.
+055 ==> 108949 - Send image as email attachment.
+056 ==> 297798 - digiKam crashed (Export-Email Images).
+057 ==> 337146 - Crash when exporting (to e-mail).
+058 ==> 094157 - Can't email images with special characters in file name.
+059 ==> 296776 - Crash while trying to send pictures via default email software.
+060 ==> 197341 - Html pages do not sort pictures as they are sorted in the album.
+061 ==> 116960 - Html Export tool appends ".jpg" to files who already has .jpg suffix.
+062 ==> 158083 - Html interface for camera raw images.
+063 ==> 164749 - background picture/logo for html.
+064 ==> 095115 - killer feature: recursive HTML gallery from a category.
+065 ==> 190293 - Export as html gallery has the forward button disabled before changing the selected folder.
+066 ==> 125002 - Tmp is deleted no html.
+067 ==> 127888 - Images not sorted in HTML Album Export.
+068 ==> 128125 - Album title from digiKam are not converted into html entities.
+069 ==> 113722 - Mpeg encoding fails.
+070 ==> 118343 - Mjpeg slide stops with error.
+071 ==> 125413 - "create MPEG slideshow" tool fails.
+072 ==> 127532 - Images to mpg wrong directory error.
+073 ==> 112558 - Mpeg plugin framerate adjustment.
+074 ==> 091547 - focus stealing when 'mpeg slideshow' is selected, but mp2enc is missing.
+075 ==> 131606 - Images 2 mpg with SVCD changes the proportion of the pictures.
+076 ==> 168266 - digiKam mpeg enconding failure.
+077 ==> 116040 - Merging MPEG flux. Unable to open file for reading.
+078 ==> 114515 - Verify the existence of the MPEG output file path and the existence of the audio input file before launching the encoding process.
+079 ==> 101110 - Cannot create MPEG from photos using transitions.
+080 ==> 119070 - Difficult behaviour of MPEG slide slide show.
+081 ==> 127219 - Creation of mpeg slide show fails.
+082 ==> 171242 - Encoding of mpeg slideshow does not work.
+083 ==> 145771 - Gnome Desktop crashes and restarts when select Cancel option for Mpeg Slideshow plugin.
+084 ==> 145536 - MPEG SlideShow creates color lines on the first image processed.
+085 ==> 119940 - Failed when trying to create MPEG Slide Show file from some jpg images.
+086 ==> 153962 - Dependency Error the package doesn't check for the presence of mpg123.
+087 ==> 138916 - Creating MPEG slideshow fails if previously attempted - background file not found.
+088 ==> 140507 - Create MPEG diagshow in HDV formats (720i/p, 1080i/p).
+089 ==> 162240 - The encoder start and finish imediately and there isn't any mpeg file.
+090 ==> 143979 - Create an mpeg slideshow fails after the encoding.
+091 ==> 121045 - Images 2 mpg.
+092 ==> 114514 - Do not delete the temporary folder after each encoding process.
+093 ==> 101656 - Image gallery use irretating filenames foo.jpeg.jpeg for images.
+094 ==> 098968 - Cannot encode to VCD, DVD, XVCD.
+095 ==> 109739 - Yuvscaler error in digiKam.
+096 ==> 154363 - Encoding MPEG file error.
+097 ==> 243531 - Mjpeg encoder.
+098 ==> 151115 - Error encoding image files; unable to open file.
+099 ==> 297287 - Remove metadata option when email exporting.
+100 ==> 112550 - Stopping encoding mjpegtools digiKam error.
+101 ==> 149971 - Encoding process finishes with unclear message.
+102 ==> 119425 - Works one time not twice.
+103 ==> 355509 - DNGkonverter crash when trying to convert raw file from Nikon D750.
+104 ==> 379884 - Item Metadata Editor doesn't save changes.
+105 ==> 381380 - Item Edit / Metadata doesn't work.
+106 ==> 381639 - Map filter (left side bar) doesn't show images anymore.
+107 ==> 149970 - MPEG slideshow : incorrect warrning about missing runtime files.
+108 ==> 381916 - digiKam crash when add person names.
+109 ==> 328848 - Print Assistant window not resizable nor scrollable.
+110 ==> 100311 - digikam crashes when using print wizard.
+112 ==> 162085 - digikam freezes while printing.
+113 ==> 160810 - digikam crop photos next button does not work.
+114 ==> 118868 - A recto-verso printing wizard.
+115 ==> 308963 - Add the ability to Export photos to a PDF file.
+116 ==> 260994 - Print error when print with "print assistant.
+117 ==> 155084 - Printing comments and EXIF tags.
+118 ==> 103153 - Add print icon to main toolbar of digiKam.
+119 ==> 178983 - next/back-buttons in print-assistant should be labeled.
+120 ==> 126863 - print thumbnails on A4 produces 210x297 pixel (instead of mm) image.
+121 ==> 195960 - Error printing A4 size miniatures.
+122 ==> 101495 - Raster effect on printout - using printwizard.
+123 ==> 171439 - Before printing more than 1 picture could be possible all of them cut to set size - only first can be.
+124 ==> 233970 - PrintWizard do not retaining settings.
+125 ==> 294563 - digiKam - DVD Slideshow.
+126 ==> 117073 - Album export to HTMLGallery would benefit from a treeview widget.
+128 ==> 251705 - Remove Red Eyes process wrong image regions, fill image parts with green color.
+129 ==> 222992 - Crash in digikam when correcting red eyes.
+130 ==> 342475 - Crash by open red Eyes correction tool.
+131 ==> 164916 - With RAWs the burning crashes.
+132 ==> 321879 - digiKam crash while viewing images.
+133 ==> 232957 - digikam crashes while importing images (about 60000 files).
+134 ==> 316994 - Crash with Red Eyes Correction tool.
+135 ==> 322558 - Crash when i click on Red Eyes tool.
+136 ==> 382133 - processing fails, caused by too long filename.
+137 ==> 294062 - digiKam crashes on HTML export.
+138 ==> 210228 - Next button is disabled in html gallery.
+139 ==> 311510 - HTML export crashing.
+140 ==> 342645 - Export button inoperable.
+141 ==> 219068 - Export items to html gallery using tags doesn't sort by date or file-name.
+142 ==> 140374 - HTML Gallery export fails to parse xml from non-UTF8 metadata in jpeg.
+143 ==> 194947 - Original Image link is 'hidden' by css colour setting.
+144 ==> 169952 - Pictures on nfs-drive crashes digikam when i send picture as mail.
+145 ==> 173203 - When sending images via email, tool fails to convert PNG to JPG.
+146 ==> 146487 - Export to email fails when email too large.
+147 ==> 128341 - Html export should not resize images if "resize target images" is not checked.
+148 ==> 089541 - Exporting to HTML from Digikam doesn't seem to work due to unsafe thread access.
+149 ==> 116605 - HTML Gallery crashing when exporting to an existing dir an choosing no to overwrite [Patch].
+150 ==> 090943 - Html export tool: add css functionality.
+151 ==> 089068 - Improvement for the HTML export tool.
+152 ==> 087188 - Send by mail tool attach empty comments for images even if photos have them.
+153 ==> 115850 - Remove all the Image tools menu entries when unchecking the tools in Settings->Configure ShowFoto.
+154 ==> 141362 - Get rid of any mention of core image tool.
+155 ==> 105514 - Some menu items are displayed twice when displaying/editing a picture. E.g. sharpen.
+156 ==> 103147 - digikam image tools appear multiple times in menus.
+157 ==> 110015 - digikam tools not found - error in config file.
+158 ==> 096853 - Tools from the digikam image editor are not available in the UI.
+159 ==> 176140 - Red eyes tool is not working fine.
+160 ==> 103644 - Red eyes remover make green eyes instead of blue eyes.
+161 ==> 293321 - Open Red Eyes tool crash.
+162 ==> 243186 - Crash when clicking on Red Eyes tool in menu list.
+163 ==> 103150 - Have print wizard tool replace default printing function.
+164 ==> 097187 - Calendar tool still messing with fonts and locales.
+165 ==> 318661 - Send by mail tool does not convert to sRGB and strips existing ICC profile.
+166 ==> 306993 - Crash with Edit all metadata.
+167 ==> 146293 - Metadata editor menu untranslated.
+168 ==> 167379 - Image selection or Album Selection for HTML Gallery tool.
+169 ==> 301688 - Crash while browsing.
+170 ==> 137014 - "Email Images" should be reached under "Album" > "Export".
+171 ==> 137392 - add "send images by email" to context menu.
+172 ==> 146601 - Error during renaming of images being sent via email.
+173 ==> 140319 - Filetype incorrectly added to pictures sent in email.
+174 ==> 163395 - digikam and encoding errors in mail attachments.
+175 ==> 091596 - Send images stopped working, telling me the path to firefox was wrong.
+176 ==> 096191 - "Email Images" feature requires Thunderbird.
+177 ==> 189984 - Impossible to email images if the path contains characters such as éèà.
+178 ==> 148186 - "send by email" function does not attach images in Thunderbird.
+179 ==> 335163 - Digikam crashing when exporting to html with theme "floating frames".
+180 ==> 101925 - HTML Export stop to work.
+181 ==> 150479 - Provide export to pdf file.
+182 ==> 121589 - Generate web-album from digiKam.
+183 ==> 358843 - Add link to source code web interface to main menu.
+184 ==> 167281 - Replace the Konqueror as the default external webbrowser by a system call.
+185 ==> 118831 - First image from avi as icon.
+186 ==> 141132 - digiKam is hung reading a file avi.
+187 ==> 362472 - Provide a way to install Digikam 4.14 in (K)Ubuntu 16.04 (Xenial).
+188 ==> 151604 - Print Wizard does not recognize raw images.
+189 ==> 202480 - PrintWizard doesn't add comments properly but shows them in the preview.
+190 ==> 146457 - Rotation is not done correctly exif.
+191 ==> 188426 - Add support for different size printwizard templates.
+192 ==> 100471 - Can't print the same image more than once on the same page.
+193 ==> 133730 - Tool to print images on photo paper.
+194 ==> 209165 - Print Assistant does not print svgz images.
+195 ==> 218312 - Make search results to exclude children's tags
+196 ==> 116149 - Possibility to quickly print an 'index print' from current album.
+197 ==> 117670 - Printing is awfully slow.
+198 ==> 127476 - Printing as very very slow.
+199 ==> 175077 - digiKam does not print.
+200 ==> 177137 - digiKam print assistant problems and ideas.
+201 ==> 

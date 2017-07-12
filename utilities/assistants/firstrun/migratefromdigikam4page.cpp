@@ -54,11 +54,25 @@
 namespace Digikam
 {
 
-MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
-    : FirstRunDlgPage(dlg, i18n("Migration from digiKam 4")),
-      m_migrateBehavior(0L),
-      m_migrate(0L),
-      m_createnew(0L)
+class MigrateFromDigikam4Page::Private
+{
+public:
+
+    Private() :
+        migrateBehavior(0),
+        migrate(0),
+        createnew(0)
+    {
+    }
+
+    QButtonGroup* migrateBehavior;
+    QRadioButton* migrate;
+    QRadioButton* createnew;
+};
+
+MigrateFromDigikam4Page::MigrateFromDigikam4Page(QWizard* const dlg)
+    : DWizardPage(dlg, i18n("Migration from digiKam 4")),
+      d(new Private)
 {
     const int spacing   = QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     DVBox* const vbox   = new DVBox(this);
@@ -79,26 +93,26 @@ MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
     QWidget* const btns     = new QWidget(vbox);
     QVBoxLayout* const vlay = new QVBoxLayout(btns);
 
-    m_migrateBehavior       = new QButtonGroup(btns);
-    m_migrate               = new QRadioButton(btns);
-    m_migrate->setText(i18n("Migrate configuration from digiKam 4"));
-    m_migrate->setChecked(true);
+    d->migrateBehavior       = new QButtonGroup(btns);
+    d->migrate               = new QRadioButton(btns);
+    d->migrate->setText(i18n("Migrate configuration from digiKam 4"));
+    d->migrate->setChecked(true);
 
-    connect(m_migrate, SIGNAL(toggled(bool)),
+    connect(d->migrate, SIGNAL(toggled(bool)),
             this, SLOT(migrationToggled(bool)));
 
-    m_migrateBehavior->addButton(m_migrate);
+    d->migrateBehavior->addButton(d->migrate);
 
-    m_createnew             = new QRadioButton(btns);
-    m_createnew->setText(i18n("Create a new configuration"));
-    m_migrateBehavior->addButton(m_createnew);
+    d->createnew             = new QRadioButton(btns);
+    d->createnew->setText(i18n("Create a new configuration"));
+    d->migrateBehavior->addButton(d->createnew);
 
-    vlay->addWidget(m_migrate);
-    vlay->addWidget(m_createnew);
+    vlay->addWidget(d->migrate);
+    vlay->addWidget(d->createnew);
     vlay->setContentsMargins(spacing, spacing, spacing, spacing);
     vlay->setSpacing(spacing);
 
-    connect(m_migrateBehavior, SIGNAL(buttonClicked(int)),
+    connect(d->migrateBehavior, SIGNAL(buttonClicked(int)),
             this, SIGNAL(completeChanged()));
 
     setPageWidget(vbox);
@@ -106,6 +120,7 @@ MigrateFromDigikam4Page::MigrateFromDigikam4Page(FirstRunDlg* const dlg)
 
 MigrateFromDigikam4Page::~MigrateFromDigikam4Page()
 {
+    delete d;
 }
 
 void MigrateFromDigikam4Page::doMigration()
@@ -219,7 +234,7 @@ void MigrateFromDigikam4Page::doMigration()
 
 bool MigrateFromDigikam4Page::isMigrationChecked() const
 {
-    return m_migrate->isChecked();
+    return d->migrate->isChecked();
 }
 
 void MigrateFromDigikam4Page::migrationToggled(bool b)
@@ -229,10 +244,10 @@ void MigrateFromDigikam4Page::migrationToggled(bool b)
 
 int MigrateFromDigikam4Page::nextId() const
 {
-    if (m_migrate->isChecked())
+    if (d->migrate->isChecked())
         return -1;
     else
         return QWizardPage::nextId();
 }
 
-}   // namespace Digikam
+} // namespace Digikam

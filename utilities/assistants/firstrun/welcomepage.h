@@ -26,19 +26,19 @@
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class WelcomePage : public FirstRunDlgPage
+class WelcomePage : public DWizardPage
 {
 public:
 
-    explicit WelcomePage(FirstRunDlg* const dlg);
-    virtual ~WelcomePage();
+    explicit WelcomePage(QWizard* const dlg);
+    ~WelcomePage();
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* WELCOME_PAGE_H */
+#endif // WELCOME_PAGE_H

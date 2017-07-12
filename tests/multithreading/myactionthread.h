@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef MYACTIONTHREAD_H
-#define MYACTIONTHREAD_H
+#ifndef MY_ACTION_THREAD_H
+#define MY_ACTION_THREAD_H
 
 // Qt includes
 
@@ -33,7 +33,6 @@
 
 #include "drawdecodersettings.h"
 #include "actionthreadbase.h"
-
 
 using namespace Digikam;
 
@@ -62,4 +61,4 @@ private Q_SLOTS:
     void slotJobStarted();
 };
 
-#endif /* MYACTIONTHREAD_H */
+#endif // MY_ACTION_THREAD_H

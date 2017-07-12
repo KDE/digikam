@@ -54,3 +54,22 @@ target_link_libraries(qtavcodecs
 
                       ${OpenCV_LIBRARIES}
 )
+
+# -------------------------------------------------
+
+set(player_SRCS player.cpp)
+add_executable(player ${player_SRCS})
+
+target_link_libraries(player
+
+                      digikamcore
+                      libdng
+
+                      Qt5::Core
+                      Qt5::Gui
+
+                      KF5::I18n
+                      KF5::XmlGui
+
+                      ${OpenCV_LIBRARIES}
+)

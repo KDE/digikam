@@ -21,23 +21,23 @@
  *
  * ============================================================ */
 
-#ifndef TOOLTIPS_PAGE_H
-#define TOOLTIPS_PAGE_H
+#ifndef TOOL_TIPS_PAGE_H
+#define TOOL_TIPS_PAGE_H
 
 // Local includes
 
-#include "firstrundlgpage.h"
+#include "dwizardpage.h"
 
 namespace Digikam
 {
 
-class TooltipsPage : public FirstRunDlgPage
+class TooltipsPage : public DWizardPage
 {
     Q_OBJECT
 
 public:
 
-    explicit TooltipsPage(FirstRunDlg* const dlg);
+    explicit TooltipsPage(QWizard* const dlg);
     ~TooltipsPage();
 
     void saveSettings();
@@ -48,6 +48,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* TOOLTIPS_PAGE_H */
+#endif // TOOL_TIPS_PAGE_H

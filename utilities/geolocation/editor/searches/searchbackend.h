@@ -32,13 +32,11 @@
 
 // Local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 
 // Local includes
 
 #include "rgwidget.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {

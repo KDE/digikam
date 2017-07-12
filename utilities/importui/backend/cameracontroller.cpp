@@ -54,7 +54,7 @@
 #include "gpcamera.h"
 #include "umscamera.h"
 #include "jpegutils.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 
 namespace Digikam
 {
@@ -849,7 +849,7 @@ void CameraController::slotCheckRename(const QString& folder, const QString& fil
     else if (d->conflictRule != SetupCamera::OVERWRITE)
     {
         bool newurl = false;
-        dest        = FileOperation::getUniqueFileUrl(QUrl::fromLocalFile(dest), &newurl).toLocalFile();
+        dest        = DFileOperations::getUniqueFileUrl(QUrl::fromLocalFile(dest), &newurl).toLocalFile();
         info        = QFileInfo(dest);
 
         if (newurl)

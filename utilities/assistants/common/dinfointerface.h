@@ -33,6 +33,7 @@
 #include <QObject>
 #include <QVariant>
 #include <QUrl>
+#include <QSize>
 #include <QList>
 #include <QDateTime>
 #include <QDate>
@@ -95,24 +96,29 @@ public:
 
 public:
 
-    QString     name()        const;
-    QString     comment()     const;
-    QString     title()       const;
-    int         orientation() const;
-    QDateTime   dateTime()    const;
-    QStringList tagsPath()    const;
-    QStringList keywords()    const;
-    int         rating()      const;
-    int         colorLabel()  const;
-    int         pickLabel()   const;
-    double      latitude()    const;
-    double      longitude()   const;
-    double      altitude()    const;
-    qlonglong   fileSize()    const;
-    QStringList creators()    const;
-    QString     credit()      const;
-    QString     rights()      const;
-    QString     source()      const;
+    QString            name()         const;
+    QString            comment()      const;
+    QString            title()        const;
+    int                orientation()  const;
+    QSize              dimensions()   const;
+    QDateTime          dateTime()     const;
+    QStringList        tagsPath()     const;
+    QStringList        keywords()     const;
+    int                rating()       const;
+    int                colorLabel()   const;
+    int                pickLabel()    const;
+    double             latitude()     const;
+    double             longitude()    const;
+    double             altitude()     const;
+    qlonglong          fileSize()     const;
+    QStringList        creators()     const;
+    QString            credit()       const;
+    QString            rights()       const;
+    QString            source()       const;
+    QString            exposureTime() const;
+    QString            sensitivity()  const;
+    QString            aperture()     const;
+    QString            focalLength()  const;
 
 private:
 

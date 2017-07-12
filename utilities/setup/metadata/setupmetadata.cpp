@@ -32,7 +32,6 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QDesktopServices>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>

@@ -32,7 +32,6 @@
 // Qt includes
 
 #include <QCursor>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -51,7 +50,6 @@
 #include <QKeySequence>
 #include <QApplication>
 #include <QAction>
-#include <QFileDialog>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMimeDatabase>
@@ -76,7 +74,7 @@
 #include "editorcore.h"
 #include "dmetadata.h"
 #include "editorstackview.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "iccsettingscontainer.h"
 #include "imagedialog.h"
 #include "imagepropertiessidebar.h"
@@ -104,8 +102,11 @@
 #include "showfotoinfoiface.h"
 #include "showfoto_p.h"
 #include "dexpanderbox.h"
+#include "dfiledialog.h"
 #include "calwizard.h"
 #include "expoblendingmanager.h"
+#include "mailwizard.h"
+#include "advprintwizard.h"
 
 #ifdef HAVE_MARBLE
 #   include "geolocationedit.h"
@@ -117,6 +118,10 @@
 
 #ifdef HAVE_PANORAMA
 #   include "panomanager.h"
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+#   include "vidslidewizard.h"
 #endif
 
 namespace ShowFoto
@@ -734,7 +739,7 @@ void ShowFoto::slotOpenFilesInFolder()
         return;
     }
 
-    QUrl url = QUrl::fromLocalFile(QFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
+    QUrl url = QUrl::fromLocalFile(DFileDialog::getExistingDirectory(this, i18n("Open Images From Folder"),
                                                                      d->lastOpenedDirectory.toLocalFile()));
     if (!url.isEmpty())
     {
@@ -1308,7 +1313,7 @@ void ShowFoto::slotAddedDropedItems(QDropEvent* e)
 
 void ShowFoto::slotFileWithDefaultApplication()
 {
-    Digikam::FileOperation::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
+    Digikam::DFileOperations::openFilesWithDefaultApplication(QList<QUrl>() << d->thumbBar->currentUrl());
 }
 
 void ShowFoto::addServicesMenu()
@@ -1421,6 +1426,26 @@ void ShowFoto::slotExpoBlending()
     ExpoBlendingManager::instance()->run();
 }
 
-}   // namespace ShowFoto
+void ShowFoto::slotVideoSlideshow()
+{
+#ifdef HAVE_MEDIAPLAYER
+    VidSlideWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+#endif
+}
+
+void ShowFoto::slotSendByMail()
+{
+    MailWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+void ShowFoto::slotPrintCreator()
+{
+    AdvPrintWizard w(this, new ShowfotoInfoIface(this, d->thumbBar->urls()));
+    w.exec();
+}
+
+} // namespace ShowFoto
 
 #include "moc_showfoto.cpp"

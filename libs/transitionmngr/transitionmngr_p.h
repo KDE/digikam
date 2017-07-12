@@ -20,10 +20,22 @@
  *
  * ============================================================ */
 
+// C++ includes
+
+#include <cmath>
+
+// Qt includes
+
+#include <QMatrix>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPolygon>
+
 // Local includes
 
 #include "transitionmngr.h"
 #include "digikam_config.h"
+#include "digikam_debug.h"
 
 namespace Digikam
 {
@@ -32,7 +44,7 @@ class TransitionMngr::Private
 {
 public:
 
-    typedef int (TransitionMngr::Private::*EffectMethod)(bool);
+    typedef int (TransitionMngr::Private::*TransMethod)(bool);
 
 public:
 
@@ -69,7 +81,7 @@ public:
         eff_psy              = 0;
         eff_pa               = QPolygon(4);
 
-        registerEffects();
+        registerTransitions();
     }
 
     ~Private()
@@ -78,7 +90,7 @@ public:
             delete [] eff_intArray;
     }
 
-    QMap<TransitionMngr::TransType, EffectMethod> eff_transList;
+    QMap<TransitionMngr::TransType, TransMethod>  eff_transList;
 
     QImage                                        eff_inImage;
     QImage                                        eff_outImage;
@@ -88,7 +100,7 @@ public:
     bool                                          eff_isRunning;
     TransitionMngr::TransType                     eff_curTransition;
 
-    // values for state of various effects:
+    // values for state of various transitions:
     int                                           eff_x;
     int                                           eff_y;
     int                                           eff_w;
@@ -123,24 +135,51 @@ public:
 
 public:
 
-    void registerEffects();
+    void registerTransitions();
 
-    TransitionMngr::TransType getRandomEffect() const;
+    TransitionMngr::TransType getRandomTransition() const;
 
-    int effectNone(bool);
-    int effectChessboard(bool doInit);
-    int effectMeltdown(bool doInit);
-    int effectSweep(bool doInit);
-    int effectMosaic(bool doInit);
-    int effectCubism(bool doInit);
-    int effectRandom(bool doInit);
-    int effectGrowing(bool doInit);
-    int effectHorizLines(bool doInit);
-    int effectVertLines(bool doInit);
-    int effectMultiCircleOut(bool doInit);
-    int effectSpiralIn(bool doInit);
-    int effectCircleOut(bool doInit);
-    int effectBlobs(bool doInit);
+private:
+
+    // Internal functions to render an effect frame.
+    // aInit is to true when effect is initialized (first call).
+    // The integer value is a tempo in ms to wait between frames,
+    // or -1 if the effect is completed.
+
+    int transitionNone(bool aInit);
+    int transitionChessboard(bool aInit);
+    int transitionMeltdown(bool aInit);
+    int transitionSweep(bool aInit);
+    int transitionMosaic(bool aInit);
+    int transitionCubism(bool aInit);
+    int transitionRandom(bool aInit);
+    int transitionGrowing(bool aInit);
+    int transitionHorizLines(bool aInit);
+    int transitionVertLines(bool aInit);
+    int transitionMultiCircleOut(bool aInit);
+    int transitionSpiralIn(bool aInit);
+    int transitionCircleOut(bool aInit);
+    int transitionBlobs(bool aInit);
+    int transitionFade(bool aInit);
+    int transitionSlideL2R(bool aInit);
+    int transitionSlideR2L(bool aInit);
+    int transitionSlideT2B(bool aInit);
+    int transitionSlideB2T(bool aInit);
+    int transitionPushL2R(bool aInit);
+    int transitionPushR2L(bool aInit);
+    int transitionPushT2B(bool aInit);
+    int transitionPushB2T(bool aInit);
+    int transitionSwapL2R(bool aInit);
+    int transitionSwapR2L(bool aInit);
+    int transitionSwapT2B(bool aInit);
+    int transitionSwapB2T(bool aInit);
+    int transitionBlurIn(bool aInit);
+    int transitionBlurOut(bool aInit);
+
+private:
+
+    QRgb   convertFromPremult(const QRgb& p) const;
+    QImage fastBlur(const QImage& img, int radius) const;
 };
 
 }  // namespace Digikam

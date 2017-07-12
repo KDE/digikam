@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * date        : 2014-09-12
- * Description : Simple helpher widgets collection
+ * Description : a file or folder selector widget
  *
  * Copyright (C) 2014-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  *
@@ -42,17 +42,17 @@ public:
     {
         edit      = 0;
         btn       = 0;
-        fdMode    = QFileDialog::ExistingFile;
-        fdOptions = -1;
+        fdMode    = DFileDialog::ExistingFile;
+        fdOptions = DFileDialog::Options();
     }
 
     QLineEdit*            edit;
     QPushButton*          btn;
 
-    QFileDialog::FileMode fdMode;
+    DFileDialog::FileMode fdMode;
     QString               fdFilter;
     QString               fdTitle;
-    int                   fdOptions;
+    DFileDialog::Options  fdOptions;
 };
 
 DFileSelector::DFileSelector(QWidget* const parent)
@@ -87,7 +87,7 @@ QString DFileSelector::fileDlgPath() const
     return QDir::fromNativeSeparators(d->edit->text());
 }
 
-void DFileSelector::setFileDlgMode(QFileDialog::FileMode mode)
+void DFileSelector::setFileDlgMode(DFileDialog::FileMode mode)
 {
     d->fdMode = mode;
 }
@@ -102,27 +102,24 @@ void DFileSelector::setFileDlgTitle(const QString& title)
     d->fdTitle = title;
 }
 
-void DFileSelector::setFileDlgOptions(QFileDialog::Options opts)
+void DFileSelector::setFileDlgOptions(DFileDialog::Options opts)
 {
-    d->fdOptions = (int)opts;
+    d->fdOptions = opts;
 }
 
 void DFileSelector::slotBtnClicked()
 {
-    if (d->fdMode == QFileDialog::ExistingFiles)
+    if (d->fdMode == DFileDialog::ExistingFiles)
     {
         qCDebug(DIGIKAM_WIDGETS_LOG) << "Multiple selection is not supported";
         return;
     }
 
-    QFileDialog* const fileDlg = new QFileDialog;
-
-    if (d->fdOptions != -1)
-    {
-        fileDlg->setOptions((QFileDialog::Options)d->fdOptions);
-    }
+    // Never pass a parent to File Dialog, else dupplicate dialogs will be shown
+    DFileDialog* const fileDlg = new DFileDialog;
 
     fileDlg->setDirectory(QFileInfo(fileDlgPath()).filePath());
+    fileDlg->setOptions(d->fdOptions);
     fileDlg->setFileMode(d->fdMode);
 
     if (!d->fdFilter.isNull())

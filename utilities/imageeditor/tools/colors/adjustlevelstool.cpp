@@ -41,7 +41,6 @@
 #include <QToolButton>
 #include <QIcon>
 #include <QStandardPaths>
-#include <QFileDialog>
 #include <QMessageBox>
 
 // KDE includes
@@ -53,6 +52,7 @@
 
 #include "dnuminput.h"
 #include "dgradientslider.h"
+#include "dfiledialog.h"
 #include "dimg.h"
 #include "editortoolsettings.h"
 #include "histogrambox.h"
@@ -888,7 +888,7 @@ void AdjustLevelsTool::slotLoadSettings()
 {
     QUrl loadLevelsFile;
 
-    loadLevelsFile = QFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Levels File to Load"),
+    loadLevelsFile = DFileDialog::getOpenFileUrl(qApp->activeWindow(), i18n("Select Gimp Levels File to Load"),
                                                  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                  QLatin1String("*"));
 
@@ -914,7 +914,7 @@ void AdjustLevelsTool::slotSaveAsSettings()
 {
     QUrl saveLevelsFile;
 
-    saveLevelsFile = QFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Levels File to Save"),
+    saveLevelsFile = DFileDialog::getSaveFileUrl(qApp->activeWindow(), i18n("Gimp Levels File to Save"),
                                                  QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)),
                                                  QLatin1String("*"));
 

@@ -1,0 +1,190 @@
+<templates>
+
+  <paper name="Letter" width="8.5" height="11.0" unit="inch" >
+
+    <template name="4_photos_3.5x5" dpi="0" autorotate="true">
+      <photo x="0.5" y="0.4" width="3.5" height="5.0" />
+      <photo x="4.5" y="0.4" width="3.5" height="5.0" />
+      <photo x="0.5" y="5.7" width="3.5" height="5.0" />
+      <photo x="4.5" y="5.7" width="3.5" height="5.0" />
+    </template>
+
+    <template name="3_photos_4x6" dpi="0" autorotate="true">
+      <photo x="0.225" y="0.5" width="4.0" height="6.0" />
+      <photo x="4.275" y="0.5" width="4.0" height="6.0" />
+      <photo x="1.250" y="6.6" width="6.0" height="4.0" />
+    </template>
+    
+    <template name="4x6Album" dpi="0" autorotate="true">
+      <photo x="1.250" y="1.0" width="6.0" height="4.0" />
+      <photo x="1.250" y="6.0" width="6.0" height="4.0" />
+    </template>
+    
+    <template name="2_photos_5x7" dpi="0" autorotate="true">
+      <photo x="0.75" y="0.50" width="7.0" height="5.0" />
+      <photo x="0.75" y="5.75" width="7.0" height="5.0" />
+    </template>
+    
+    <template name="1_photo_8x10" dpi="0" autorotate="true">
+      <photo x="0.25" y="0.5" width="8.0" height="10.0" />
+    </template>
+
+    <template name="Album-Collage" dpi="0" autorotate="false">
+      <photo x="2.750" y="3.250" width="3.000" height="4.500" />
+      <photo x="0.750" y="0.750" width="1.500" height="2.000" />
+      <photo x="3.500" y="0.750" width="1.500" height="2.000" />
+      <photo x="6.250" y="0.750" width="1.500" height="2.000" />
+      <photo x="6.250" y="4.500" width="1.500" height="2.000" />
+      <photo x="6.250" y="8.250" width="1.500" height="2.000" />
+      <photo x="3.500" y="8.250" width="1.500" height="2.000" />
+      <photo x="0.750" y="8.250" width="1.500" height="2.000" />
+      <photo x="0.750" y="4.500" width="1.500" height="2.000" />
+    </template>
+
+    <template name="Album-Collage1" dpi="0" autorotate="false">
+      <photo x="1.000" y="1.000" width="3.000" height="3.000" />
+      <photo x="5.000" y="1.000" width="2.500" height="1.250" />
+      <photo x="5.000" y="2.750" width="2.500" height="1.250" />
+      <photo x="1.000" y="5.000" width="1.500" height="2.000" />
+      <photo x="2.750" y="5.000" width="4.750" height="2.000" />
+      <photo x="1.000" y="8.000" width="6.500" height="2.000" />
+    </template>
+
+  </paper>
+
+  <paper name="A4" width="210.0" height="297.0" unit="mm" >
+
+    <template name="8_photos_6x9cm" dpi="0" autorotate="true">
+      <photo x="10"  y="10"  width="90" height="60" />
+      <photo x="110" y="10"  width="90" height="60" />
+      <photo x="10"  y="80"  width="90" height="60" />
+      <photo x="110" y="80"  width="90" height="60" />
+      <photo x="10"  y="150" width="90" height="60" />
+      <photo x="110" y="150" width="90" height="60" />
+      <photo x="10"  y="220" width="90" height="60" />
+      <photo x="110" y="220" width="90" height="60" />
+    </template>
+    
+    <template name="4_photos_9x13cm" dpi="0" autorotate="true">
+      <photo x="10"  y="10"  width="90" height="130" />
+      <photo x="110" y="10"  width="90" height="130" />
+      <photo x="10"  y="150" width="90" height="130" />
+      <photo x="110" y="150" width="90" height="130" />
+    </template>
+    
+    <template name="4_photos_10x13.33cm" dpi="0" autorotate="true">
+      <photo x="5"   y="10"  width="100" height="133.3" />
+      <photo x="106" y="10"  width="100" height="133.3" />
+      <photo x="5"   y="150" width="100" height="133.3" />
+      <photo x="106" y="150" width="100" height="133.3" />
+    </template>
+    
+    <template name="3_photos_10x15cm" dpi="0" autorotate="true">
+      <photo x="5"   y="15"  width="100" height="150" />
+      <photo x="106" y="15"  width="100" height="150" />
+      <photo x="30"  y="175" width="150" height="100" />
+    </template>
+    
+    <template name="2_photos_13x18cm" dpi="0" autorotate="true">
+      <photo x="15" y="15"  width="180" height="130" />
+      <photo x="15" y="152" width="180" height="130" />
+    </template>
+   
+    <template name="1_photo_20x25cm" dpi="0" autorotate="true">
+      <photo x="5" y="23" width="200" height="250" />
+    </template>
+    
+    <template name="Album_10x15cm" dpi="0" autorotate="true">
+      <photo x="30" y="35"  width="150" height="100" />
+      <photo x="30" y="162" width="150" height="100" />
+    </template>
+    
+    <template name="Album_11.5x15cm" dpi="0" autorotate="true">
+      <photo x="30" y="25"  width="150" height="110" />
+      <photo x="30" y="157" width="150" height="110" />
+    </template>
+        
+    <template name="Photoframe" dpi="0" autorotate="true">
+      <photo x="8"   y="8"   width="57"  height="44" />
+      <photo x="8"   y="66"  width="57"  height="44" />
+      <photo x="79"  y="8"   width="113" height="103" />
+      <photo x="8"   y="124" width="85"  height="93" />
+      <photo x="107" y="124" width="85"  height="93" />
+    </template>
+    
+  </paper>
+
+
+  <paper name="A6" width="105" height="148" unit="mm" >
+
+    <template name="1_photo_9x13cm" dpi="0" autorotate="true">
+      <photo x="5" y="10" width="90" height="130" />
+    </template>
+
+    <template name="1_photo_10.5x14.8cm" dpi="0" autorotate="true">
+      <photo x="0" y="0" width="105" height="148" />
+    </template>
+
+  </paper>
+
+  <paper name="passport-1" width="100" height="115" unit="mm" >
+
+    <template name="4_photos_4.5x5cm" dpi="0" autorotate="true">
+      <photo x="5"  y="5"  width="45" height="50" />
+      <photo x="55" y="5"  width="45" height="50" />
+      <photo x="5"  y="60" width="45" height="50" />
+      <photo x="55" y="60" width="45" height="50" />
+    </template>
+
+  </paper>
+
+  <paper name="passport-2" width="90" height="130" unit="mm" >
+
+    <template name="6_photos_3.5x4cm" dpi="0" autorotate="true">
+      <photo x="10" y="3"  width="35" height="40" />
+      <photo x="55" y="3"  width="35" height="40" />
+      <photo x="10" y="45" width="35" height="40" />
+      <photo x="55" y="45" width="35" height="40" />
+      <photo x="10" y="87" width="35" height="40" />
+      <photo x="55" y="87" width="35" height="40" />
+    </template>
+
+  </paper>
+  
+  <paper name="passport-uk" width="90" height="150" unit="mm" >
+    
+    <template name="6_photos_3.5x4.5cm" dpi="0" autorotate="true">
+        <photo x="10" y="3"  width="35" height="45" />
+        <photo x="55" y="3"  width="35" height="45" />
+        <photo x="10" y="53" width="35" height="45" />
+        <photo x="55" y="53" width="35" height="45" />
+        <photo x="10" y="103" width="35" height="45" />
+        <photo x="55" y="103" width="35" height="45" />
+    </template>
+  
+  </paper>
+  
+  <paper name="13x18cm" width="127" height="177.8" unit="mm" >
+
+    <template name="1_photo_10x15cm" dpi="0" autorotate="true">
+      <photo x="0" y="0" width="101.6" height="152.4" />
+    </template>
+
+  </paper>
+
+  <paper name="any" width="0" height="0" unit="" >
+
+    <template name="FullPage" dpi="0" autorotate="true">
+      <photo x="0" y="0" width="0" height="0" />
+    </template>
+
+    <template name="Thumbnails_5x4" dpi="100" autorotate="false">
+      <photogrid pageWidth="0" pageHeight="0" rows="5" columns="4" />
+    </template>
+
+    <template name="Thumbnails_6x5" dpi="100" autorotate="false">
+      <photogrid pageWidth="0" pageHeight="0" rows="6" columns="5" />
+    </template>
+  </paper>
+
+</templates>

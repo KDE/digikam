@@ -20,8 +20,8 @@
  *
  * ============================================================ */
 
-#ifndef EXPOBLENDINGINTRO_PAGE_H
-#define EXPOBLENDINGINTRO_PAGE_H
+#ifndef EXPO_BLENDING_INTRO_PAGE_H
+#define EXPO_BLENDING_INTRO_PAGE_H
 
 // Local includes
 
@@ -37,7 +37,7 @@ class ExpoBlendingIntroPage : public DWizardPage
 
 public:
 
-    ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
+    explicit ExpoBlendingIntroPage(ExpoBlendingManager* const mngr, QWizard* const dlg);
     ~ExpoBlendingIntroPage();
 
     bool binariesFound();
@@ -52,6 +52,6 @@ private:
     Private* const d;
 };
 
-}   // namespace Digikam
+} // namespace Digikam
 
-#endif /* EXPOBLENDINGINTRO_PAGE_H */
+#endif // EXPO_BLENDING_INTRO_PAGE_H

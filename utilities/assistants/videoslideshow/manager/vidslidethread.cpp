@@ -54,9 +54,12 @@ void VidSlideThread::processStream(VidSlideSettings* const settings)
     connect(t, SIGNAL(signalDone(bool)),
             this, SIGNAL(signalDone(bool)));
 
+    connect(t, SIGNAL(signalMessage(QString, bool)),
+            this, SIGNAL(signalMessage(QString, bool)));
+
     collection.insert(t, 0);
 
     appendJobs(collection);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

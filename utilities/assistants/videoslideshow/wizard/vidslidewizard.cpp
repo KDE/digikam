@@ -43,7 +43,8 @@
 #include "dwizardpage.h"
 #include "digikam_debug.h"
 #include "vidslideintropage.h"
-#include "vidslideselectionpage.h"
+#include "vidslidealbumspage.h"
+#include "vidslideimagespage.h"
 #include "vidslidevideopage.h"
 #include "vidslideoutputpage.h"
 #include "vidslidefinalpage.h"
@@ -58,7 +59,8 @@ public:
     Private()
       : iface(0),
         introPage(0),
-        selectionPage(0),
+        albumsPage(0),
+        imagesPage(0),
         videoPage(0),
         outputPage(0),
         finalPage(0),
@@ -68,7 +70,8 @@ public:
 
     DInfoInterface*         iface;
     VidSlideIntroPage*      introPage;
-    VidSlideSelectionPage*  selectionPage;
+    VidSlideAlbumsPage*     albumsPage;
+    VidSlideImagesPage*     imagesPage;
     VidSlideVideoPage*      videoPage;
     VidSlideOutputPage*     outputPage;
     VidSlideFinalPage*      finalPage;
@@ -86,14 +89,18 @@ VidSlideWizard::VidSlideWizard(QWidget* const parent, DInfoInterface* const ifac
     d->settings          = new VidSlideSettings;
 
     KConfig config;
-    KConfigGroup group = config.group("Video SlideShow Dialog Settings");
+    KConfigGroup group   = config.group("Video SlideShow Dialog Settings");
     d->settings->readSettings(group);
 
-    d->introPage         = new VidSlideIntroPage(this, i18n("Welcome to Video Slideshow Tool"));
-    d->selectionPage     = new VidSlideSelectionPage(this, i18n("Items Selection"));
-    d->videoPage         = new VidSlideVideoPage(this, i18n("Video Settings"));
+    d->introPage         = new VidSlideIntroPage(this,  i18n("Welcome to Video Slideshow Tool"));
+    d->albumsPage        = new VidSlideAlbumsPage(this, i18n("Albums Selection"));
+    d->imagesPage        = new VidSlideImagesPage(this, i18n("Images List"));
+    d->videoPage         = new VidSlideVideoPage(this,  i18n("Video Settings"));
     d->outputPage        = new VidSlideOutputPage(this, i18n("Output Settings"));
-    d->finalPage         = new VidSlideFinalPage(this, i18n("Generating Video Slideshow"));
+    d->finalPage         = new VidSlideFinalPage(this,  i18n("Generating Video Slideshow"));
+
+    connect(this, SIGNAL(currentIdChanged(int)),
+            this, SLOT(slotCurrentIdChanged(int)));
 }
 
 VidSlideWizard::~VidSlideWizard()
@@ -103,6 +110,11 @@ VidSlideWizard::~VidSlideWizard()
     d->settings->writeSettings(group);
 
     delete d;
+}
+
+void VidSlideWizard::setItemsList(const QList<QUrl>& urls)
+{
+    d->imagesPage->setItemsList(urls);
 }
 
 DInfoInterface* VidSlideWizard::iface() const
@@ -125,7 +137,27 @@ bool VidSlideWizard::validateCurrentPage()
 
 int VidSlideWizard::nextId() const
 {
+    if (d->settings->selMode == VidSlideSettings::ALBUMS)
+    {
+        if (currentPage() == d->introPage)
+            return d->albumsPage->id();
+    }
+    else
+    {
+        if (currentPage() == d->introPage)
+            return d->imagesPage->id();
+    }
+
     return DWizardDlg::nextId();
+}
+
+void VidSlideWizard::slotCurrentIdChanged(int id)
+{
+    if (page(id) == d->videoPage)
+    {
+        d->videoPage->slotTransitionChanged();
+        d->videoPage->slotEffectChanged();
+    }
 }
 
 } // namespace Digikam

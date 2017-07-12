@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef DIGIKAMAPPPRIVATE_H
-#define DIGIKAMAPPPRIVATE_H
+#ifndef DIGIKAM_APP_PRIVATE_H
+#define DIGIKAM_APP_PRIVATE_H
 
 // Qt includes
 
@@ -331,4 +331,4 @@ public:
 
 }  // namespace Digikam
 
-#endif // ALBUMICONVIEW_H
+#endif // DIGIKAM_APP_PRIVATE_H

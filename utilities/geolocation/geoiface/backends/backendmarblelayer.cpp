@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2009-12-08
- * Description : Internal part of the Marble-backend for GeoIface
+ * Description : Internal part of the Marble-backend for geolocation interface
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2009-2010 by Michael G. Hansen <mike at mghansen dot de>
@@ -32,7 +32,7 @@
 
 #include "backendmarble.h"
 
-namespace GeoIface
+namespace Digikam
 {
 
 BackendMarbleLayer::BackendMarbleLayer(BackendMarble* const pMarbleBackend)
@@ -70,4 +70,4 @@ void BackendMarbleLayer::setBackend(BackendMarble* const pMarbleBackend)
     marbleBackend = pMarbleBackend;
 }
 
-} // namespace GeoIface
+} // namespace Digikam

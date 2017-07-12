@@ -1,0 +1,135 @@
+# Print Creator Template Howto
+
+The Print Creator tool allows to add new templates to 
+manage new page layouts easily.
+This document explains how to create templates.
+
+## Getting started
+
+A template is at least one file with xml extension (for instance my-templates.xml),
+if you want it to be included however you need another file that allows translations,
+e.g. a desktop file (see below).
+
+When the tool is run it does the following:
+
+- Wait for you to choose page size
+- Look for files describing templates (xml files)
+- for file look for templates: 
+  - for each template:
+  - if layout fits into choosen page size add it and load desktop file if exists. 
+- show templates with a preview icon in a list box.
+
+## Presentation of the xml file
+
+The xml file is used to describe template layouts, once it was a 
+real page layout, but now you can add a fake page size to make it
+available for all those pages in which your new template fits.
+
+An example of template (already included into default templates.xml)
+is a layout containing six passport size photos (35x40mm) is the following:
+
+<templates>
+	<paper name="passport-photos" width="90" height="130" unit="mm" >
+		<template name="6_photos_3.5x4cm" dpi="0" autorotate="true">
+			<photo x="10" y="3"  width="35" height="40" />
+			<photo x="55" y="3"  width="35" height="40" />
+			<photo x="10" y="45" width="35" height="40" />
+			<photo x="55" y="45" width="35" height="40" />
+			<photo x="10" y="87" width="35" height="40" />
+			<photo x="55" y="87" width="35" height="40" />
+		</template>
+	</paper>
+</templates>
+
+- paper element
+  Represents the template layout, important attributes are width, height
+  and unit.
+  - width attribute
+    Represents the layout width
+  - height attribute
+    Represents the layout height
+  - unit attribute 
+    Explains in which units width and height are, it can be:
+    - inches or inch
+    - mm
+    - cm
+- template element
+  It is the real template definition and contains the photo positions  
+  - name attribute
+    It is the template's name, it is used to get translations to be used,
+    it is the desktop fileName, "6_photos_3.5x4cm.desktop" in the example. 
+    If the desktop fileName does not exist name attribute is shown.
+  - autorotate attribute
+    Explains if autorotation must be done.
+- photo element
+  Explains photo position (x and y attributes) and size (width and height attributes). 
+
+Another example for A6 page size:
+	<paper name="A6" width="105" height="148" unit="mm" >
+		<template name="1_photo_9x13cm" dpi="0" autorotate="true">
+			<photo x="5" y="10" width="90" height="130" />
+		</template>
+		<template name="1_photo_10.5x14.8cm" dpi="0" autorotate="true">
+			<photo x="0" y="0" width="105" height="148" />
+		</template>
+	</paper>
+
+
+## Presentation of the desktop file
+
+The desktop file is needed for translations. If you use your
+templates for your own, you don't really need it.
+
+It's a .ini-style file and looks like this (for instance 1_photo_9x13cm):
+
+	[Desktop Entry]
+	Name=9x13 cm (1 photo)
+	Name[da]=9x13 cm (1 foto)
+	Name[de]=9x13 cm (1 Foto)
+	Name[en_GB]=9x13 cm (1 photo)
+	Name[et]=9x13 cm (1 foto)
+	Name[gl]=9x13 cm (1 foto)
+	Name[it]=9×13 cm (1 foto)
+	Name[nb]=9x13 cm (1 bilde)
+	Name[nl]=9x13 cm (1 foto)
+	Name[pt]=9x13 cm (1 fotografia)
+	Name[pt_BR]=9x13 cm (1 foto)
+	Name[sv]=9 x 13 cm (1 foto)
+	Name[uk]=9x13 ?? (1 ??????????)
+	Name[x-test]=xx9x13 cm (1 photo)xx
+
+The nice thing is that when your layout get integrated into Print Creator
+tool default templates, translators will translate the desktop file for you.
+
+## Getting started: creating one theme from another
+
+The easiest way to get started is to copy templates.xml file and modify it. 
+Templates folder can be found in $KDEDIR/share/apps/digikam/templates/, 
+where $KDEDIR is the install folder of KDE on your machine (usually /usr under Linux).
+Writing in this folder requires root access, so we will not create our template
+there, instead do the following:
+
+Create a theme folder in your home:
+
+	mkdir -p ~/.config/share/apps/digikam/templates/
+
+Cd to it:
+
+	cd ~/.config/share/apps/digikam/templates/
+	
+Copy the templates.xml to my_templates.xml for instance:
+
+	cp -r $KDEDIR/share/apps/~/.config/share/apps/digikam/templates/templates.xml my_templates.xml
+	
+Remove all pages and add yours then create the desktop file accordingly.
+
+You are done, you can now open digikam and start the tool, your new templates should appear in the Layouts list (into "Select page layout" dialog).
+
+## Final words
+
+This is the end of this howto, now is the time for you to get creative and
+add new templates!
+
+When you are done, do not hesitate to contact the digiKam mailing
+list (<digikam-devel at kde dot org>). If you want to get your layout included in the
+official template list!

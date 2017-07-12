@@ -56,12 +56,11 @@
 #include "pngsettings.h"
 #include "pgfsettings.h"
 #include "drawdecoderwidget.h"
+#include "filesaveconflictbox.h"
 
 #ifdef HAVE_JASPER
-#include "jp2ksettings.h"
+#   include "jp2ksettings.h"
 #endif // HAVE_JASPER
-
-
 
 namespace Digikam
 {
@@ -82,19 +81,16 @@ public:
 public:
 
     Private() :
-        conflictLabel(0),
         rawLoadingLabel(0),
         renamingButtonGroup(0),
-        conflictButtonGroup(0),
         rawLoadingButtonGroup(0),
         renameOriginal(0),
         renameManual(0),
-        overwriteButton(0),
-        storeDiffButton(0),
         extractJPEGButton(0),
         demosaicingButton(0),
         useOrgAlbum(0),
         useMutiCoreCPU(0),
+        conflictBox(0),
         albumSel(0),
         advancedRenameManager(0),
         advancedRenameWidget(0),
@@ -109,23 +105,20 @@ public:
     {
     }
 
-    QLabel*                conflictLabel;
     QLabel*                rawLoadingLabel;
 
     QButtonGroup*          renamingButtonGroup;
-    QButtonGroup*          conflictButtonGroup;
     QButtonGroup*          rawLoadingButtonGroup;
 
     QRadioButton*          renameOriginal;
     QRadioButton*          renameManual;
-    QRadioButton*          overwriteButton;
-    QRadioButton*          storeDiffButton;
     QRadioButton*          extractJPEGButton;
     QRadioButton*          demosaicingButton;
 
     QCheckBox*             useOrgAlbum;
     QCheckBox*             useMutiCoreCPU;
 
+    FileSaveConflictBox*   conflictBox;
     AlbumSelectWidget*     albumSel;
 
     AdvancedRenameManager* advancedRenameManager;
@@ -221,31 +214,16 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
 
     // -------------
 
-    d->conflictLabel           = new QLabel(i18n("If Target File Exists:"), panel);
-    QWidget* const conflictBox = new QWidget(panel);
-    QVBoxLayout* const vlay    = new QVBoxLayout(conflictBox);
-    d->conflictButtonGroup     = new QButtonGroup(conflictBox);
-    d->storeDiffButton         = new QRadioButton(i18n("Store as a different name"), conflictBox);
-    d->overwriteButton         = new QRadioButton(i18n("Overwrite automatically"),   conflictBox);
-    d->conflictButtonGroup->addButton(d->overwriteButton, QueueSettings::OVERWRITE);
-    d->conflictButtonGroup->addButton(d->storeDiffButton, QueueSettings::DIFFNAME);
-    d->conflictButtonGroup->setExclusive(true);
-    d->storeDiffButton->setChecked(true);
+    d->conflictBox    = new FileSaveConflictBox(panel);
 
-    vlay->addWidget(d->storeDiffButton);
-    vlay->addWidget(d->overwriteButton);
-    vlay->setContentsMargins(QMargins());
-    vlay->setSpacing(0);
-
-    d->useMutiCoreCPU          = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), panel);
+    d->useMutiCoreCPU = new QCheckBox(i18nc("@option:check", "Work on all processor cores"), panel);
     d->useMutiCoreCPU->setWhatsThis(i18n("Turn on this option to use all CPU core from your computer "
                                          "to process more than one item from a queue at the same time."));
     // -------------
 
     layout->addWidget(d->rawLoadingLabel);
     layout->addWidget(rawLoadingBox);
-    layout->addWidget(d->conflictLabel);
-    layout->addWidget(conflictBox);
+    layout->addWidget(d->conflictBox);
     layout->addWidget(d->useMutiCoreCPU);
     layout->setContentsMargins(spacing, spacing, spacing, spacing);
     layout->setSpacing(spacing);
@@ -327,7 +305,7 @@ QueueSettingsView::QueueSettingsView(QWidget* const parent)
     connect(d->renamingButtonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(slotSettingsChanged()));
 
-    connect(d->conflictButtonGroup, SIGNAL(buttonClicked(int)),
+    connect(d->conflictBox, SIGNAL(signalConflictButtonChanged(int)),
             this, SLOT(slotSettingsChanged()));
 
     connect(d->rawLoadingButtonGroup, SIGNAL(buttonClicked(int)),
@@ -401,7 +379,7 @@ void QueueSettingsView::slotResetSettings()
     d->useMutiCoreCPU->setChecked(false);
     // TODO: reset d->albumSel
     d->renamingButtonGroup->button(QueueSettings::USEORIGINAL)->setChecked(true);
-    d->conflictButtonGroup->button(QueueSettings::DIFFNAME)->setChecked(true);
+    d->conflictBox->setConflictRule(FileSaveConflictBox::DIFFNAME);
     d->rawLoadingButtonGroup->button(QueueSettings::DEMOSAICING)->setChecked(true);
     d->advancedRenameWidget->clearParseString();
     d->rawSettings->resetToDefault();
@@ -429,8 +407,7 @@ void QueueSettingsView::slotQueueSelected(int, const QueueSettings& settings, co
     int btn = (int)settings.renamingRule;
     d->renamingButtonGroup->button(btn)->setChecked(true);
 
-    btn     = (int)settings.conflictRule;
-    d->conflictButtonGroup->button(btn)->setChecked(true);
+    d->conflictBox->setConflictRule(settings.conflictRule);
 
     btn     = (int)settings.rawLoadingRule;
     d->rawLoadingButtonGroup->button(btn)->setChecked(true);
@@ -464,7 +441,7 @@ void QueueSettingsView::slotSettingsChanged()
     settings.renamingParser      = d->advancedRenameWidget->parseString();
     d->advancedRenameWidget->setEnabled(settings.renamingRule == QueueSettings::CUSTOMIZE);
 
-    settings.conflictRule        = (QueueSettings::ConflictRule)d->conflictButtonGroup->checkedId();
+    settings.conflictRule        = d->conflictBox->conflictRule();
 
     settings.rawLoadingRule      = (QueueSettings::RawLoadingRule)d->rawLoadingButtonGroup->checkedId();
     setTabEnabled(Private::RAW, (settings.rawLoadingRule == QueueSettings::DEMOSAICING));
@@ -485,4 +462,4 @@ void QueueSettingsView::slotSettingsChanged()
     emit signalSettingsChanged(settings);
 }
 
-}  // namespace Digikam
+} // namespace Digikam

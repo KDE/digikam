@@ -28,7 +28,6 @@
 #include <QMenu>
 #include <QFile>
 #include <QIcon>
-#include <QFileDialog>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QToolButton>
@@ -59,8 +58,6 @@
 #include "dxmlguiwindow.h"
 #include "imagepropertiesgpstab.h"
 #include "gpsimageinfo.h"
-
-using namespace GeoIface;
 
 namespace Digikam
 {

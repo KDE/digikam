@@ -25,7 +25,9 @@ target_link_libraries(metareaderthread
 
 set(testTag_SRCS tagsreadwritetest.cpp)
 add_executable(tagsReadWriteTest ${testTag_SRCS})
-ecm_mark_nongui_executable(tagsReadWriteTest)
+add_test(tagsReadWriteTest tagsReadWriteTest)
+ecm_mark_as_test(tagsReadWriteTest)
+
 target_link_libraries(tagsReadWriteTest
                       digikamcore
                       libdng
@@ -38,7 +40,9 @@ target_link_libraries(tagsReadWriteTest
 
 set(testRating_SRCS ratingreadwritetest.cpp)
 add_executable(ratingReadWriteTest ${testRating_SRCS})
-ecm_mark_nongui_executable(ratingReadWriteTest)
+add_test(ratingReadWriteTest ratingReadWriteTest)
+ecm_mark_as_test(ratingReadWriteTest)
+
 target_link_libraries(ratingReadWriteTest
                       digikamcore
                       libdng
@@ -51,7 +55,9 @@ target_link_libraries(ratingReadWriteTest
 
 set(testComment_SRCS commentreadwritetest.cpp)
 add_executable(commentReadWriteTest ${testComment_SRCS})
-ecm_mark_nongui_executable(commentReadWriteTest)
+add_test(commentReadWriteTest commentReadWriteTest)
+ecm_mark_as_test(commentReadWriteTest)
+
 target_link_libraries(commentReadWriteTest
                       digikamcore
                       libdng

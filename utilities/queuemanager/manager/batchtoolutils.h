@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef BATCHTOOLUTILS_H
-#define BATCHTOOLUTILS_H
+#ifndef BATCH_TOOL_UTILS_H
+#define BATCH_TOOL_UTILS_H
 
 // Qt includes
 
@@ -51,8 +51,7 @@ class BatchToolSet
 {
 public:
 
-    BatchToolSet();
-
+    explicit BatchToolSet();
     virtual ~BatchToolSet();
 
     /** Equality operator which check index, version, name, and group data. Settings member is ignored.
@@ -87,7 +86,7 @@ class AssignedBatchTools
 {
 public:
 
-    AssignedBatchTools();
+    explicit AssignedBatchTools();
     ~AssignedBatchTools();
 
     QString targetSuffix(bool* const extSet = 0) const;
@@ -99,6 +98,6 @@ public:
     BatchSetList m_toolsList;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* BATCHTOOLUTILS_H */
+#endif // BATCHTOOLUTILS_H

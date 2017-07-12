@@ -421,7 +421,7 @@ bool WorkflowManager::load(QStringList& failed)
                 }
                 else if (name2 == QString::fromLatin1("conflictrule"))
                 {
-                    q.qSettings.conflictRule = (QueueSettings::ConflictRule)val2.toUInt(&ok);
+                    q.qSettings.conflictRule = (FileSaveConflictBox::ConflictRule)val2.toUInt(&ok);
                 }
                 else if (name2 == QString::fromLatin1("renamingrule"))
                 {
@@ -506,8 +506,10 @@ bool WorkflowManager::load(QStringList& failed)
                             QVariant var(val3);
                             var.convert(QVariant::nameToType(type.toLatin1().constData()));
 /*
-                            qCDebug(DIGIKAM_GENERAL_LOG) << "name=" << pname << " :: " << "type=" << type << " :: " << "value=" << val3
-                                    << " :: " << "QVariant=" << var;
+                            qCDebug(DIGIKAM_GENERAL_LOG) << "name=" << pname << " :: "
+                                                         << "type=" << type << " :: "
+                                                         << "value=" << val3 << " :: "
+                                                         << "QVariant=" << var;
 */
                             set.settings.insert(pname, var);
                         }

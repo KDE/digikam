@@ -4,10 +4,10 @@
  * http://www.digikam.org
  *
  * Date        : 2003-11-03
- * Description : main dialog.
+ * Description : a tool to create calendar.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006      by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2006      by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2011      by Andi Clemens <andi dot clemens at googlemail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
@@ -29,6 +29,7 @@
 
 // Qt includes
 
+#include <QIcon>
 #include <QDate>
 #include <QPrintDialog>
 #include <QPrinter>
@@ -44,6 +45,7 @@
 // Local includes
 
 #include "digikam_config.h"
+#include "calintropage.h"
 #include "calprinter.h"
 #include "calsettings.h"
 #include "calsystem.h"
@@ -61,6 +63,7 @@ public:
 
     Private()
     {
+        introPage     = 0;
         cSettings     = 0;
         wTemplate     = 0;
         wPrintLabel   = 0;
@@ -78,6 +81,7 @@ public:
         printThread   = 0;
     }
 
+    CalIntroPage*    introPage;
     CalSettings*     cSettings;
     CalTemplate*     wTemplate;
     Ui::CalEvents    calEventsUI;
@@ -108,13 +112,14 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
 {
     setWindowTitle(i18n("Create Calendar"));
     d->cSettings     = CalSettings::instance(this);
+    d->introPage     = new CalIntroPage(this, i18n("Welcome to Calendar Tool"));
 
     // ---------------------------------------------------------------
 
     d->wTemplate     = new CalTemplate(urlList, this);
     d->wTemplatePage = new DWizardPage(this, i18n("Create Template for Calendar"));
     d->wTemplatePage->setPageWidget(d->wTemplate);
-    d->wTemplatePage->setShowLeftView(false);
+    d->wTemplatePage->setLeftBottomPix(QIcon::fromTheme(QLatin1String("resource-calendar-insert")));
 
     // ---------------------------------------------------------------
 
@@ -123,7 +128,7 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
     d->calEventsUI.setupUi(d->wEvents);
     d->wEventsPage = new DWizardPage(this, i18n("Choose events to show on the Calendar"));
     d->wEventsPage->setPageWidget(d->wEvents);
-    d->wEventsPage->setShowLeftView(false);
+    d->wEventsPage->setLeftBottomPix(QIcon::fromTheme(QLatin1String("text-vcalendar")));
 #endif
 
     // ---------------------------------------------------------------
@@ -133,7 +138,7 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
     d->wPrintLabel->setWordWrap(true);
     d->wPrintPage  = new DWizardPage(this, i18n("Print Calendar"));
     d->wPrintPage->setPageWidget(d->wPrintLabel);
-    d->wPrintPage->setShowLeftView(false);
+    d->wPrintPage->setLeftBottomPix(QIcon::fromTheme(QLatin1String("document-print")));
 
     // ---------------------------------------------------------------
 
@@ -141,18 +146,18 @@ CalWizard::CalWizard(const QList<QUrl>& urlList, QWidget* const parent)
     d->calProgressUI.setupUi(d->wFinish);
     d->wFinishPage = new DWizardPage(this, i18n("Printing in Progress"));
     d->wFinishPage->setPageWidget(d->wFinish);
-    d->wFinishPage->setShowLeftView(false);
+    d->wFinishPage->setLeftBottomPix(QIcon::fromTheme(QLatin1String("system-run")));
 
     // ---------------------------------------------------------------
 
 #ifdef HAVE_KCALENDAR
     d->calEventsUI.ohUrlRequester->setFileDlgFilter(i18n("%1|Calendar Data File", QLatin1String("*.ics")));
     d->calEventsUI.ohUrlRequester->setFileDlgTitle(i18n("Select Calendar Data File"));
-    d->calEventsUI.ohUrlRequester->setFileDlgMode(QFileDialog::ExistingFile);
+    d->calEventsUI.ohUrlRequester->setFileDlgMode(DFileDialog::ExistingFile);
 
     d->calEventsUI.fhUrlRequester->setFileDlgFilter(i18n("%1|Calendar Data File", QLatin1String("*.ics")));
     d->calEventsUI.fhUrlRequester->setFileDlgTitle(i18n("Select Calendar Data File"));
-    d->calEventsUI.fhUrlRequester->setFileDlgMode(QFileDialog::ExistingFile);
+    d->calEventsUI.fhUrlRequester->setFileDlgMode(DFileDialog::ExistingFile);
 #endif
 
     // ------------------------------------------
@@ -352,4 +357,4 @@ void CalWizard::printComplete()
     d->calProgressUI.finishLabel->setText(i18n("Printing Complete"));
 }
 
-}  // Namespace Digikam
+} // Namespace Digikam

@@ -101,7 +101,7 @@
 #include "editortoolsettings.h"
 #include "editortooliface.h"
 #include "exposurecontainer.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "filereadwritelock.h"
 #include "filesaveoptionsbox.h"
 #include "filesaveoptionsdlg.h"
@@ -171,6 +171,7 @@
 #include "sheartool.h"
 #include "resizetool.h"
 #include "ratiocroptool.h"
+#include "dfiledialog.h"
 
 #ifdef HAVE_LIBLQR_1
 #   include "contentawareresizetool.h"
@@ -829,10 +830,15 @@ void EditorWindow::setupStandardActions()
     createPanoramaAction();
     createExpoBlendingAction();
     createCalendarAction();
+    createVideoSlideshowAction();
+    createSendByMailAction();
+    createPrintCreatorAction();
 
     m_metadataEditAction->setEnabled(false);
     m_expoBlendingAction->setEnabled(false);
     m_calendarAction->setEnabled(false);
+    m_sendByMailAction->setEnabled(false);
+    m_printCreatorAction->setEnabled(false);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(false);
@@ -848,6 +854,10 @@ void EditorWindow::setupStandardActions()
 
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(false);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction->setEnabled(false);
 #endif
 
     // --------------------------------------------------------
@@ -1413,6 +1423,8 @@ void EditorWindow::toggleStandardActions(bool val)
     m_presentationAction->setEnabled(val);
     m_calendarAction->setEnabled(val);
     m_expoBlendingAction->setEnabled(val);
+    m_sendByMailAction->setEnabled(val);
+    m_printCreatorAction->setEnabled(val);
 
 #ifdef HAVE_KSANE
     m_ksaneAction->setEnabled(val);
@@ -1428,6 +1440,10 @@ void EditorWindow::toggleStandardActions(bool val)
 
 #ifdef HAVE_PANORAMA
     m_panoramaAction->setEnabled(val);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    m_videoslideshowAction->setEnabled(val);
 #endif
 
     // these actions are special: They are turned off if val is false,
@@ -2221,11 +2237,11 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
 {
     QString all;
     QStringList list                       = supportedImageMimeTypes(QIODevice::WriteOnly, all);
-    QFileDialog* const imageFileSaveDialog = new QFileDialog(this);
+    DFileDialog* const imageFileSaveDialog = new DFileDialog(this);
     imageFileSaveDialog->setWindowTitle(i18n("New Image File Name"));
     imageFileSaveDialog->setDirectoryUrl(initialUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash));
-    imageFileSaveDialog->setAcceptMode(QFileDialog::AcceptSave);
-    imageFileSaveDialog->setFileMode(QFileDialog::AnyFile);
+    imageFileSaveDialog->setAcceptMode(DFileDialog::AcceptSave);
+    imageFileSaveDialog->setFileMode(DFileDialog::AnyFile);
     imageFileSaveDialog->setNameFilters(list);
 
     // restore old settings for the dialog
@@ -2275,7 +2291,7 @@ bool EditorWindow::showFileSaveDialog(const QUrl& initialUrl, QUrl& newURL)
         d->currentWindowModalDialog = 0;
     }
 
-    if (result != QFileDialog::Accepted || !imageFileSaveDialog)
+    if (result != DFileDialog::Accepted || !imageFileSaveDialog)
     {
         qCDebug(DIGIKAM_GENERAL_LOG) << "File Save Dialog rejected";
         return false;
@@ -2699,13 +2715,13 @@ bool EditorWindow::moveLocalFile(const QString& org, const QString& dst)
     {
         QString sidecarDst = DMetadata::sidecarFilePathForFile(dst);
 
-        if (!FileOperation::localFileRename(source, sidecarOrg, sidecarDst))
+        if (!DFileOperations::localFileRename(source, sidecarOrg, sidecarDst))
         {
             qCDebug(DIGIKAM_GENERAL_LOG) << "Failed to move sidecar file";
         }
     }
 
-    if (!FileOperation::localFileRename(source, org, dst))
+    if (!DFileOperations::localFileRename(source, org, dst))
     {
         QMessageBox::critical(this, i18n("Error Saving File"),
                               i18n("Failed to overwrite original file"));
@@ -3005,6 +3021,8 @@ void EditorWindow::setupSelectToolsAction()
     actionModel->addAction(m_metadataEditAction,          postCategory);
     actionModel->addAction(m_presentationAction,          postCategory);
     actionModel->addAction(m_expoBlendingAction,          postCategory);
+    actionModel->addAction(m_sendByMailAction,            postCategory);
+    actionModel->addAction(m_printCreatorAction,          postCategory);
 
 #ifdef HAVE_HTMLGALLERY
     actionModel->addAction(m_htmlGalleryAction,           postCategory);
@@ -3012,6 +3030,10 @@ void EditorWindow::setupSelectToolsAction()
 
 #ifdef HAVE_PANORAMA
     actionModel->addAction(m_panoramaAction,              postCategory);
+#endif
+
+#ifdef HAVE_MEDIAPLAYER
+    actionModel->addAction(m_videoslideshowAction,        postCategory);
 #endif
 
 #ifdef HAVE_MARBLE
@@ -3125,7 +3147,7 @@ void EditorWindow::customizedFullScreenMode(bool set)
 
 void EditorWindow::addServicesMenuForUrl(const QUrl& url)
 {
-    KService::List offers = FileOperation::servicesForOpenWith(QList<QUrl>() << url);
+    KService::List offers = DFileOperations::servicesForOpenWith(QList<QUrl>() << url);
 
     qCDebug(DIGIKAM_GENERAL_LOG) << offers.count() << " services found to open " << url;
 
@@ -3200,7 +3222,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
             // User entered a custom command
             if (!dlg->text().isEmpty())
             {
-                FileOperation::runFiles(dlg->text(), QList<QUrl>() << url);
+                DFileOperations::runFiles(dlg->text(), QList<QUrl>() << url);
             }
 
             delete dlg;
@@ -3215,7 +3237,7 @@ void EditorWindow::openWith(const QUrl& url, QAction* action)
         service = d->servicesMap[name];
     }
 
-    FileOperation::runFiles(*service, QList<QUrl>() << url);
+    DFileOperations::runFiles(*service, QList<QUrl>() << url);
 }
 
 void EditorWindow::loadTool(EditorTool* const tool)

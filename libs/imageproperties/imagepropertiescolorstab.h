@@ -21,8 +21,8 @@
  *
  * ============================================================ */
 
-#ifndef IMAGEPROPERTIESCOLORSTAB_H
-#define IMAGEPROPERTIESCOLORSTAB_H
+#ifndef IMAGE_PROPERTIES_COLORS_TAB_H
+#define IMAGE_PROPERTIES_COLORS_TAB_H
 
 // Qt includes
 
@@ -30,13 +30,12 @@
 #include <QByteArray>
 #include <QTabWidget>
 #include <QUrl>
+#include <QRect>
 
 // Local includes
 
 #include "dimg.h"
 #include "digikam_export.h"
-
-class QRect;
 
 class KConfigGroup;
 
@@ -93,6 +92,6 @@ private:
     Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* IMAGEPROPERTIESCOLORSTAB_H */
+#endif // IMAGE_PROPERTIES_COLORS_TAB_H

@@ -4,7 +4,7 @@
  * http://www.digikam.org
  *
  * Date        : 2010-03-22
- * Description : Drag-and-drop handler for GeoIface integration.
+ * Description : Drag-and-drop handler for geolocation interface integration.
  *
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
  * Copyright (C) 2010      by Michael G. Hansen <mike at mghansen dot de>
@@ -37,7 +37,7 @@ namespace Digikam
 
 MapDragDropHandler::MapDragDropHandler(QAbstractItemModel* const /*pModel*/,
                                        GPSGeoIfaceModelHelper* const parent)
-    : DragDropHandler(parent),
+    : GeoDragDropHandler(parent),
       gpsGeoIfaceModelHelper(parent)
 {
 }

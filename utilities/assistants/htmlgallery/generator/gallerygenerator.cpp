@@ -136,9 +136,7 @@ public:
 
         QUrl srcUrl  = QUrl::fromLocalFile(theme->directory());
         QUrl destUrl = info->destUrl().adjusted(QUrl::StripTrailingSlash);
-
-        destUrl.setPath(destUrl.path() + QLatin1Char('/') + srcUrl.fileName());
-        QDir themeDir(destUrl.toLocalFile());
+        QDir themeDir(destUrl.toLocalFile() + QLatin1Char('/') + srcUrl.fileName());
 
         if (themeDir.exists())
         {
@@ -164,7 +162,7 @@ public:
         if (!createDir(baseDestDir))
             return false;
 
-        xmlFileName        = baseDestDir + QLatin1String("/gallery.xml");
+        xmlFileName         = baseDestDir + QLatin1String("/gallery.xml");
         XMLWriter xmlWriter;
 
         if (!xmlWriter.open(xmlFileName))
@@ -265,8 +263,8 @@ public:
             if (info->m_iface)
                 inf = info->m_iface->itemInfo(url);
 
-            GalleryElement element        = GalleryElement(inf);
-            element.m_path                 = remoteUrlHash.value(url, url.toLocalFile());
+            GalleryElement element = GalleryElement(inf);
+            element.m_path         = remoteUrlHash.value(url, url.toLocalFile());
             imageElementList << element;
         }
 
@@ -577,7 +575,7 @@ GalleryGenerator::GalleryGenerator(GalleryInfo* const info)
     : QObject(),
       d(new Private)
 {
-    d->that      = this;
+    d->that     = this;
     d->info     = info;
     d->warnings = false;
 

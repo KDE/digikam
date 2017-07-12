@@ -51,8 +51,6 @@
 #include "gpsbookmarkowner.h"
 #include "digikam_debug.h"
 
-using namespace GeoIface;
-
 namespace Digikam
 {
 
@@ -747,7 +745,7 @@ void GPSImageListContextMenu::slotAltitudeLookupReady(const QList<int>& readyReq
 
 void GPSImageListContextMenu::slotAltitudeLookupDone()
 {
-    LookupAltitude::Status requestStatus = d->altitudeLookup->getStatus();
+    LookupAltitude::StatusAltitude requestStatus = d->altitudeLookup->getStatus();
 
     if (requestStatus == LookupAltitude::StatusError)
     {

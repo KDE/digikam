@@ -167,4 +167,4 @@ QWizard* DWizardPage::assistant() const
     return d->dlg;
 }
 
-}   // namespace Digikam
+} // namespace Digikam

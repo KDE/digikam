@@ -50,6 +50,8 @@ public:
     void setColor(const QColor& color);
     QColor color() const;
 
+    void setAlphaChannelEnabled(bool);
+
 Q_SIGNALS:
 
     void signalColorSelected(const QColor&);

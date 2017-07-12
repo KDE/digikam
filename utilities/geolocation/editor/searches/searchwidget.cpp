@@ -310,7 +310,7 @@ void SearchWidget::slotTriggerSearch()
     slotUpdateActionAvailability();
 }
 
-ModelHelper* SearchWidget::getModelHelper() const
+GeoModelHelper* SearchWidget::getModelHelper() const
 {
     return d->searchResultModelHelper;
 }

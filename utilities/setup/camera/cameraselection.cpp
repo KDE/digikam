@@ -206,7 +206,7 @@ CameraSelection::CameraSelection(QWidget* const parent)
 
     d->umsMountURL = new DFileSelector(umsMountBox);
     d->umsMountURL->setFileDlgPath(QLatin1String("/mnt/camera"));
-    d->umsMountURL->setFileDlgMode(QFileDialog::Directory);
+    d->umsMountURL->setFileDlgMode(DFileDialog::Directory);
     d->umsMountURL->setWhatsThis(i18n("<p>Set here the mount path to use on your computer. This "
                                       "option is only required if you use a <b>USB Mass Storage</b> "
                                       "camera.</p>"));

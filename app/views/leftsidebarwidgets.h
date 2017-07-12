@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2009-2010 by Johannes Wienke <languitar at semipol dot de>
  * Copyright (C) 2010-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
- * Copyright (C) 2014      by Moahmed Anwer <mohammed dot ahmed anwer at gmail dot com>
+ * Copyright (C) 2014      by Mohamed Anwer <mohammed dot ahmed anwer at gmail dot com>
  *
  * This program is free software; you can redistribute it
  * and/or modify it under the terms of the GNU General
@@ -23,8 +23,8 @@
  *
  * ============================================================ */
 
-#ifndef LEFTSIDEBARWIDGETS_H
-#define LEFTSIDEBARWIDGETS_H
+#ifndef LEFT_SIDEBAR_WIDGETS_H
+#define LEFT_SIDEBAR_WIDGETS_H
 
 // KDE includes
 
@@ -62,7 +62,8 @@ class AlbumFolderViewSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit AlbumFolderViewSideBarWidget(QWidget* const parent, AlbumModel* const model,
+    explicit AlbumFolderViewSideBarWidget(QWidget* const parent,
+                                          AlbumModel* const model,
                                           AlbumModificationHelper* const albumModificationHelper);
     virtual ~AlbumFolderViewSideBarWidget();
 
@@ -188,7 +189,8 @@ class DateFolderViewSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit DateFolderViewSideBarWidget(QWidget* const parent, DateAlbumModel* const model,
+    explicit DateFolderViewSideBarWidget(QWidget* const parent,
+                                         DateAlbumModel* const model,
                                          ImageAlbumFilterModel* const imageFilterModel);
     virtual ~DateFolderViewSideBarWidget();
 
@@ -223,7 +225,8 @@ class TimelineSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit TimelineSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+    explicit TimelineSideBarWidget(QWidget* const parent,
+                                   SearchModel* const searchModel,
                                    SearchModificationHelper* const searchModificationHelper);
     virtual ~TimelineSideBarWidget();
 
@@ -269,7 +272,8 @@ class SearchSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit SearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+    explicit SearchSideBarWidget(QWidget* const parent,
+                                 SearchModel* const searchModel,
                                  SearchModificationHelper* const searchModificationHelper);
     virtual ~SearchSideBarWidget();
 
@@ -303,7 +307,8 @@ class FuzzySearchSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit FuzzySearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+    explicit FuzzySearchSideBarWidget(QWidget* const parent,
+                                      SearchModel* const searchModel,
                                       SearchModificationHelper* const searchModificationHelper);
     virtual ~FuzzySearchSideBarWidget();
 
@@ -345,7 +350,8 @@ class GPSSearchSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit GPSSearchSideBarWidget(QWidget* const parent, SearchModel* const searchModel,
+    explicit GPSSearchSideBarWidget(QWidget* const parent,
+                                    SearchModel* const searchModel,
                                     SearchModificationHelper* const searchModificationHelper,
                                     ImageFilterModel* const imageFilterModel,
                                     QItemSelectionModel* const itemSelectionModel);
@@ -384,7 +390,8 @@ class PeopleSideBarWidget : public SidebarWidget
 
 public:
 
-    explicit PeopleSideBarWidget(QWidget* const parent, TagModel* const tagModel,
+    explicit PeopleSideBarWidget(QWidget* const parent,
+                                 TagModel* const tagModel,
                                  SearchModificationHelper* const searchModificationHelper);
     virtual ~PeopleSideBarWidget();
 
@@ -415,4 +422,4 @@ private:
 
 } // namespace Digikam
 
-#endif /* LEFTSIDEBARWIDGETS_H */
+#endif // LEFT_SIDEBAR_WIDGETS_H

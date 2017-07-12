@@ -31,9 +31,7 @@
 
 // Local includes
 
-#include "tracks.h"
-
-using namespace GeoIface;
+#include "trackmanager.h"
 
 namespace Digikam
 {

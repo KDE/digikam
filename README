@@ -1,4 +1,4 @@
-DIGIKAM - MANAGE YOUR PHOTOGRAPHS LIKE A PROFESSIONAL WITH THE POWER OF OPEN SOURCE
+digiKam - Professional Photo Management with the Power of Open Source
 
 -- ABOUT -------------------------------------------------------------
 
@@ -9,23 +9,15 @@ DIGIKAM - MANAGE YOUR PHOTOGRAPHS LIKE A PROFESSIONAL WITH THE POWER OF OPEN SOU
  and/or delete them.
 
  The digiKam built-in image editor makes the common photo correction
- a simple task. The image editor is extensible via plugins and,
- since the digikamimageplugins project has been merged to digiKam core
- since release 0.9.2, all useful image editor plugins are available
- in the base installation.
-
- digiKam can also make use of the KIPI image handling plugins to
+ a simple task. digiKam can also make use of the plugins to
  extend its capabilities even further for photo manipulations,
- import and export, etc. The kipi-plugins package contains many
- very useful extensions.
+ import and export, etc.
 
  digiKam is based in part on the work of the Independent JPEG Group.
-
 
 -- AUTHORS ------------------------------------------------------------
 
 See AUTHORS file for details.
-
 
 -- RELATED URLS -------------------------------------------------------
 
@@ -69,14 +61,17 @@ http://gphoto.org/bugs
 
 * Exiv2 library:
 
-http://dev.robotbattle.com/bugs/main_page.php
+http://dev.exiv2.org/projects/exiv2/issues
 
+* QtAV library:
+
+https://github.com/wang-bin/QtAV/issues
 
 -- DEPENDENCIES -------------------------------------------------------
 
 See the complete list of dependencies at this url:
 
-https://quickgit.kde.org/?p=digikam-software-compilation.git&a=blob&f=DEPENDENCIES 
+https://cgit.kde.org/digikam-software-compilation.git/tree/DEPENDENCIES 
 
 CMake compilation options to custom digiKam:
 
@@ -135,4 +130,4 @@ Note: To know KDE install path on your computer, use 'kf5-config --prefix' comma
 If you love digiKam, you can help developers to buy new photo devices to test
 and implement new features. Thanks in advance for your generous donations.
 
-For more information, look at this url : http://www.digikam.org/?q=donation
+For more information, look at this url : https://www.digikam.org/donate/

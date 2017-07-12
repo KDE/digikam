@@ -41,7 +41,6 @@
 
 // QtAV includes
 
-#include <QtAV/AVError.h>
 #include <QtAV/AVPlayer.h>
 #include <QtAV/Statistics.h>
 
@@ -241,4 +240,4 @@ QList<QUrl> PresentationAudioList::fileUrls()
     return files;
 }
 
-}  // namespace Digikam
+} // namespace Digikam

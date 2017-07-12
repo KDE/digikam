@@ -70,7 +70,7 @@ extern "C"
 #include "dpreviewmanager.h"
 #include "dsavesettingswidget.h"
 #include "expoblendingmanager.h"
-#include "fileoperation.h"
+#include "dfileoperations.h"
 #include "dxmlguiwindow.h"
 
 namespace Digikam
@@ -459,9 +459,9 @@ void ExpoBlendingDlg::saveItem(const QUrl& temp, const EnfuseSettings& settings)
 {
     QUrl newUrl = QUrl::fromLocalFile(temp.adjusted(QUrl::RemoveFilename).toLocalFile() + settings.targetFileName);
 
-    if (d->saveSettingsBox->conflictRule() != DSaveSettingsWidget::OVERWRITE)
+    if (d->saveSettingsBox->conflictRule() != FileSaveConflictBox::OVERWRITE)
     {
-        newUrl = FileOperation::getUniqueFileUrl(newUrl);
+        newUrl = DFileOperations::getUniqueFileUrl(newUrl);
     }
 
     qCDebug(DIGIKAM_GENERAL_LOG) << "Renaming " << temp << " to " << newUrl;

@@ -63,13 +63,15 @@ public:
         selectionModel = 0;
     }
 
-    GPSImageModel*       model;
-    QItemSelectionModel* selectionModel;
-    QList<ModelHelper*>  ungroupedModelHelpers;
+    GPSImageModel*         model;
+    QItemSelectionModel*   selectionModel;
+    QList<GeoModelHelper*> ungroupedModelHelpers;
 };
 
-GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model, QItemSelectionModel* const selectionModel, QObject* const parent)
-    : ModelHelper(parent),
+GPSGeoIfaceModelHelper::GPSGeoIfaceModelHelper(GPSImageModel* const model,
+                                               QItemSelectionModel* const selectionModel,
+                                               QObject* const parent)
+    : GeoModelHelper(parent),
       d(new Private())
 {
     d->model          = model;
@@ -92,7 +94,8 @@ QItemSelectionModel* GPSGeoIfaceModelHelper::selectionModel() const
     return d->selectionModel;
 }
 
-bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index, GeoCoordinates* const coordinates) const
+bool GPSGeoIfaceModelHelper::itemCoordinates(const QModelIndex& index,
+                                             GeoCoordinates* const coordinates) const
 {
     GPSImageItem* const item = d->model->itemFromIndex(index);
 
@@ -113,18 +116,20 @@ GPSGeoIfaceModelHelper::~GPSGeoIfaceModelHelper()
     delete d;
 }
 
-QPixmap GPSGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index, const QSize& size)
+QPixmap GPSGeoIfaceModelHelper::pixmapFromRepresentativeIndex(const QPersistentModelIndex& index,
+                                                              const QSize& size)
 {
     return d->model->getPixmapForIndex(index, qMax(size.width(), size.height()));
 }
 
-QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list, const int sortKey)
+QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(const QList<QPersistentModelIndex>& list,
+                                                                              const int sortKey)
 {
     const bool oldestFirst = sortKey & 1;
     QPersistentModelIndex bestIndex;
     QDateTime             bestTime;
 
-    for (int i = 0; i < list.count(); ++i)
+    for (int i = 0 ; i < list.count() ; ++i)
     {
         const QPersistentModelIndex currentIndex = list.at(i);
         const GPSImageItem* const currentItem   = static_cast<GPSImageItem*>(d->model->itemFromIndex(currentIndex));
@@ -153,7 +158,8 @@ QPersistentModelIndex GPSGeoIfaceModelHelper::bestRepresentativeIndexFromList(co
     return bestIndex;
 }
 
-void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index, const QPixmap& pixmap)
+void GPSGeoIfaceModelHelper::slotThumbnailFromModel(const QPersistentModelIndex& index,
+                                                    const QPixmap& pixmap)
 {
     emit(signalThumbnailAvailableForIndex(index, pixmap));
 }
@@ -168,9 +174,9 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
 
         for (int i = 0; i < d->ungroupedModelHelpers.count(); ++i)
         {
-            ModelHelper* const ungroupedHelper = d->ungroupedModelHelpers.at(i);
+            GeoModelHelper* const ungroupedHelper = d->ungroupedModelHelpers.at(i);
 
-            if (ungroupedHelper->model()==targetModel)
+            if (ungroupedHelper->model() == targetModel)
             {
                 QList<QModelIndex> iMovedMarkers;
 
@@ -208,12 +214,12 @@ void GPSGeoIfaceModelHelper::onIndicesMoved(const QList<QPersistentModelIndex>& 
     emit(signalUndoCommand(undoCommand));
 }
 
-void GPSGeoIfaceModelHelper::addUngroupedModelHelper(ModelHelper* const newModelHelper)
+void GPSGeoIfaceModelHelper::addUngroupedModelHelper(GeoModelHelper* const newModelHelper)
 {
     d->ungroupedModelHelpers << newModelHelper;
 }
 
-ModelHelper::Flags GPSGeoIfaceModelHelper::modelFlags() const
+GeoModelHelper::PropertyFlags GPSGeoIfaceModelHelper::modelFlags() const
 {
     return FlagMovable;
 }

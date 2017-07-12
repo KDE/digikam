@@ -52,7 +52,7 @@
 
 // local includes
 
-#include "geoiface_types.h"
+#include "geoifacetypes.h"
 #include "dlayoutbox.h"
 #include "gpsundocommand.h"
 #include "geolocationedit.h"
@@ -71,8 +71,6 @@
 #ifdef GPSSYNC_MODELTEST
 #   include <modeltest.h>
 #endif // GPSSYNC_MODELTEST
-
-using namespace GeoIface;
 
 namespace Digikam
 {

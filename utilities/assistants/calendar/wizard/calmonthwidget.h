@@ -7,7 +7,7 @@
  * Description : Calendar month image selection widget.
  *
  * Copyright (C) 2003-2005 by Renchi Raju <renchi dot raju at gmail dot com>
- * Copyright (C) 2006      by Tom Albers <tomalbers@kde.nl>
+ * Copyright (C) 2006      by Tom Albers <tomalbers at kde dot nl>
  * Copyright (C) 2007-2008 by Orgad Shaneh <orgads at gmail dot com>
  * Copyright (C) 2012      by Angelo Naselli <anaselli at linux dot it>
  * Copyright (C) 2012-2017 by Gilles Caulier <caulier dot gilles at gmail dot com>
@@ -24,8 +24,8 @@
  *
  * ============================================================ */
 
-#ifndef CALMONTHWIDGET_H
-#define CALMONTHWIDGET_H
+#ifndef CAL_MONTH_WIDGET_H
+#define CAL_MONTH_WIDGET_H
 
 // Qt includes
 
@@ -52,7 +52,7 @@ class CalMonthWidget : public QPushButton
 
 public:
 
-    CalMonthWidget(QWidget* const parent, int month);
+    explicit CalMonthWidget(QWidget* const parent, int month);
     ~CalMonthWidget();
 
     QUrl imagePath() const;
@@ -88,6 +88,6 @@ private:
     Private* const d;
 };
 
-}  // Namespace Digikam
+} // Namespace Digikam
 
-#endif // MONTHWIDGET_H
+#endif // CAL_MONTH_WIDGET_H

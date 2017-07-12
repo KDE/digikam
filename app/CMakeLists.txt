@@ -48,6 +48,8 @@ set(DIGIKAMCORE_OBJECTS
             $<TARGET_OBJECTS:digikamlibtransitionmngr_src>
             $<TARGET_OBJECTS:akonadiiface_src>  # NOTE: even if optional this code need to be compiled here.
             $<TARGET_OBJECTS:calendar_src>
+            $<TARGET_OBJECTS:sendbymail_src>
+            $<TARGET_OBJECTS:printcreator_src>
 
             utils/digikam_debug.cpp
 )
@@ -89,7 +91,8 @@ if(ENABLE_MEDIAPLAYER)
     )
 endif()
 
-include_directories($<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
+include_directories($<TARGET_PROPERTY:Qt5::PrintSupport,INTERFACE_INCLUDE_DIRECTORIES>
+                    $<TARGET_PROPERTY:Qt5::WebKitWidgets,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Gui,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Xml,INTERFACE_INCLUDE_DIRECTORIES>
                     $<TARGET_PROPERTY:Qt5::Widgets,INTERFACE_INCLUDE_DIRECTORIES>
@@ -348,13 +351,6 @@ set(libdigikamgui_SRCS
 
     ${digikamadaptor_SRCS}
 )
-
-if(ENABLE_MEDIAPLAYER)
-    set(libdigikamgui_SRCS
-        ${libdigikamgui_SRCS}
-        views/mediaplayerview.cpp
-       )
-endif()
 
 if(${MARBLE_FOUND})
     set(libdigikamgui_SRCS
