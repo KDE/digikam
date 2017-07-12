@@ -207,5 +207,5 @@ BUGFIXES FROM BUGZILLA:
 192 ==> 100471 - Can't print the same image more than once on the same page.
 193 ==> 133730 - Tool to print images on photo paper.
 194 ==> 209165 - Print Assistant does not print svgz images.
-195 ==> 
-
+195 ==> 218312 - Make search results to exclude children's tags
+196 ==> 
