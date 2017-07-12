@@ -208,4 +208,9 @@ BUGFIXES FROM BUGZILLA:
 193 ==> 133730 - Tool to print images on photo paper.
 194 ==> 209165 - Print Assistant does not print svgz images.
 195 ==> 218312 - Make search results to exclude children's tags
-196 ==> 
+196 ==> 116149 - Possibility to quickly print an 'index print' from current album.
+197 ==> 117670 - Printing is awfully slow.
+198 ==> 127476 - Printing as very very slow.
+199 ==> 175077 - digiKam does not print.
+200 ==> 177137 - digiKam print assistant problems and ideas.
+201 ==> 
