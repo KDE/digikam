@@ -40,6 +40,7 @@ public:
 public:
 
     explicit SimilarityDbSchemaUpdater(SimilarityDbAccess* const access);
+    ~SimilarityDbSchemaUpdater();
 
     bool update();
     void setObserver(InitializationObserver* const observer);

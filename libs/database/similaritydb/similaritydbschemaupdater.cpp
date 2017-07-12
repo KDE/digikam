@@ -79,8 +79,14 @@ public:
 };
 
 SimilarityDbSchemaUpdater::SimilarityDbSchemaUpdater(SimilarityDbAccess* const access)
+    : d(new Private)
 {
     d->access = access;
+}
+
+SimilarityDbSchemaUpdater::~SimilarityDbSchemaUpdater()
+{
+    delete d;
 }
 
 bool SimilarityDbSchemaUpdater::update()
