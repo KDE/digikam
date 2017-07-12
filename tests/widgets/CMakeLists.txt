@@ -35,7 +35,6 @@ target_link_libraries(searchtextbartest
 
 set(dimagelisttest_SRCS
     dimageslisttest.cpp
-    actionthread.cpp
 )
 
 add_executable(dimagelisttest ${dimagelisttest_SRCS})

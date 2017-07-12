@@ -65,15 +65,11 @@ public:
 
     int  nextId() const;
 
+    bool prepareToPrint();
+
     static int normalizedInt(double n);
 
-private Q_SLOTS:
-
-    void slotPageChanged(int);
-
 private:
-
-    void startPrinting();
 
     bool AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const;
 

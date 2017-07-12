@@ -32,6 +32,7 @@
 #include <QUrl>
 #include <QMap>
 #include <QColor>
+#include <QPrinter>
 #include <QFont>
 
 // KDE includes
@@ -106,27 +107,34 @@ public:
     QList<AdvPrintPhoto*>             photos;
     QList<AdvPrintPhotoSize*>         photosizes;
 
+    // Caption management.
     int                               captions;
     QColor                            captionColor;
     QFont                             captionFont;
     int                               captionSize;
     QString                           captionTxt;
 
+    // Crop management
+    int                               currentPreviewPage;
+    int                               currentCropPhoto;
+    bool                              disableCrop;
+
+    // For Print to Gimp only
     QString                           tempPath;
     QStringList                       gimpFiles;
     QString                           gimpPath;
     QString                           savedPhotoSize;
 
-    int                               currentPreviewPage;
-    int                               currentCropPhoto;
-
-    bool                              disableCrop;
-
+    // For print to image files only.
     ImageFormat                       imageFormat;
-
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule if output image files already exists.
     QUrl                              outputDir;     // Directory where to store output images.
     bool                              openInFileBrowser;
+
+    // Generic data used by printing thread.
+    AdvPrintPhotoSize*                outputLayouts;
+    QPrinter*                         outputPrinter;
+    QString                           outputPath;
 };
 
 } // namespace Digikam

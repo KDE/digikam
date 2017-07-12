@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QList>
 #include <QRect>
-#include <QPrinter>
 #include <QStringList>
 
 // Local includes
@@ -55,33 +54,13 @@ public:
     bool isComplete() const;
     void cleanupPage();
 
-    void printPhotos(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     QPrinter& printer);
-
-    QStringList printPhotosToFile(const QString& dir,
-                                  AdvPrintPhotoSize* const layouts);
-
-    bool paintOnePage(QPainter& p,
-                      const QList<AdvPrintPhoto*>& photos,
-                      const QList<QRect*>& layouts,
-                      int& current,
-                      bool cropDisabled,
-                      bool useThumbnails = false);
-
     void removeGimpFiles();
 
-private:
+private Q_SLOTS:
 
-    void printCaption(QPainter& p,
-                      AdvPrintPhoto* const photo,
-                      int captionW,
-                      int captionH,
-                      const QString& caption);
-
-    double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     int current);
+    void slotProcess();
+    void slotDone(bool);
+    void slotMessage(const QString&, bool);
 
 private:
 
