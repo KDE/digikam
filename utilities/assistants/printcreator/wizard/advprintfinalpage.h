@@ -29,7 +29,6 @@
 #include <QPainter>
 #include <QList>
 #include <QRect>
-#include <QPrinter>
 #include <QStringList>
 
 // Local includes
@@ -55,9 +54,8 @@ public:
     bool isComplete() const;
     void cleanupPage();
 
-    void printPhotos(QPrinter* const printer);
-
-    QStringList printPhotosToFile(const QString& dir);
+    void        printPhotos();
+    QStringList printPhotosToFile();
 
     bool paintOnePage(QPainter& p,
                       const QList<AdvPrintPhoto*>& photos,

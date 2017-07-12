@@ -49,6 +49,7 @@ AdvPrintSettings::AdvPrintSettings()
     captionFont        = QFont(QLatin1String("Sans Serif"));
     captionSize        = 4;
     outputLayouts      = 0;
+    outputPrinter      = 0;
 }
 
 AdvPrintSettings::~AdvPrintSettings()

@@ -31,7 +31,6 @@
 #include <QPainter>
 #include <QList>
 #include <QRect>
-#include <QPrinter>
 
 // Local includes
 
@@ -60,9 +59,8 @@ private:
 
     void run();
 
-    void printPhotos(QPrinter* const printer);
-
-    QStringList printPhotosToFile(const QString& dir);
+    void        printPhotos();
+    QStringList printPhotosToFile();
 
     void printCaption(QPainter& p,
                       AdvPrintPhoto* const photo,

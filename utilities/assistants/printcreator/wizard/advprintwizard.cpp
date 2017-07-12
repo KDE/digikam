@@ -465,7 +465,8 @@ void AdvPrintWizard::startPrinting()
                                      << " bottom "
                                      << bottom;
 
-        d->finalPage->printPhotos(d->photoPage->printer());
+        d->settings->outputPrinter = d->photoPage->printer();
+        d->finalPage->printPhotos();
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
     {
@@ -482,7 +483,8 @@ void AdvPrintWizard::startPrinting()
         }
 
         QStringList args;
-        d->settings->gimpFiles = d->finalPage->printPhotosToFile(d->settings->tempPath);
+        d->settings->outputPath = d->settings->tempPath;
+        d->settings->gimpFiles  = d->finalPage->printPhotosToFile();
 
         if (!d->settings->gimpFiles.isEmpty())
         {
@@ -509,7 +511,8 @@ void AdvPrintWizard::startPrinting()
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::FILES))
     {
-        QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile());
+        d->settings->outputPath = d->settings->outputDir.toLocalFile();
+        QStringList files       = d->finalPage->printPhotosToFile();
 
         if (d->settings->openInFileBrowser && !files.isEmpty())
         {

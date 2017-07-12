@@ -142,11 +142,13 @@ bool AdvPrintFinalPage::isComplete() const
     return d->complete;
 }
 
-void AdvPrintFinalPage::printPhotos(QPrinter* const printer)
+void AdvPrintFinalPage::printPhotos()
 {
     AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
+    QPrinter* const printer          = d->settings->outputPrinter;
 
     Q_ASSERT(layouts);
+    Q_ASSERT(printer);
     Q_ASSERT(layouts->layouts.count() > 1);
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
@@ -197,11 +199,13 @@ void AdvPrintFinalPage::printPhotos(QPrinter* const printer)
     emit completeChanged();
 }
 
-QStringList AdvPrintFinalPage::printPhotosToFile(const QString& dir)
+QStringList AdvPrintFinalPage::printPhotosToFile()
 {
     AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
+    QString dir                      = d->settings->outputPath;
 
     Q_ASSERT(layouts);
+    Q_ASSERT(!dir.isEmpty());
     Q_ASSERT(layouts->layouts.count() > 1);
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
