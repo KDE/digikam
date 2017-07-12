@@ -48,12 +48,15 @@ AdvPrintSettings::AdvPrintSettings()
     captionColor       = QColor(Qt::yellow);
     captionFont        = QFont(QLatin1String("Sans Serif"));
     captionSize        = 4;
+    outputLayouts      = 0;
 }
 
 AdvPrintSettings::~AdvPrintSettings()
 {
     for (int i = 0 ; i < photos.count() ; ++i)
+    {
         delete photos.at(i);
+    }
 
     photos.clear();
 }
@@ -114,7 +117,9 @@ QString AdvPrintSettings::outputName(Output out) const
     QMap<Output, QString> outputs = outputNames();
 
     if (outputs.contains(out))
+    {
         return outputs[out];
+    }
 
     return QString();
 }
@@ -133,9 +138,13 @@ QMap<AdvPrintSettings::Output, QString> AdvPrintSettings::outputNames()
 QString AdvPrintSettings::format() const
 {
     if (imageFormat == JPEG)
+    {
         return QLatin1String("JPEG");
+    }
     else if (imageFormat == TIFF)
+    {
         return QLatin1String("TIF");
+    }
 
     return QLatin1String("PNG");
 }

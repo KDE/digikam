@@ -60,11 +60,9 @@ private:
 
     void run();
 
-    void printPhotos(AdvPrintPhotoSize* const layouts,
-                     QPrinter& printer);
+    void printPhotos(QPrinter& printer);
 
-    QStringList printPhotosToFile(AdvPrintPhotoSize* const layouts,
-                                  const QString& dir);
+    QStringList printPhotosToFile(const QString& dir);
 
     void printCaption(QPainter& p,
                       AdvPrintPhoto* const photo,

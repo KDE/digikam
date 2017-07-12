@@ -55,11 +55,9 @@ public:
     bool isComplete() const;
     void cleanupPage();
 
-    void printPhotos(AdvPrintPhotoSize* const layouts,
-                     QPrinter& printer);
+    void printPhotos(QPrinter& printer);
 
-    QStringList printPhotosToFile(AdvPrintPhotoSize* const layouts,
-                                  const QString& dir);
+    QStringList printPhotosToFile(const QString& dir);
 
     bool paintOnePage(QPainter& p,
                       const QList<AdvPrintPhoto*>& photos,

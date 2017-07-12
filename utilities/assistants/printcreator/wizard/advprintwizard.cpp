@@ -377,20 +377,21 @@ void AdvPrintWizard::startPrinting()
     }
 
     // set the default crop regions if not already set
-    AdvPrintPhotoSize* const s = d->settings->photosizes.at(d->photoPage->ui()->ListPhotoSizes->currentRow());
+    d->settings->outputLayouts = d->settings->photosizes.at(
+                                    d->photoPage->ui()->ListPhotoSizes->currentRow());
     int i                      = 0;
 
     for (QList<AdvPrintPhoto*>::iterator it = d->settings->photos.begin() ;
          it != d->settings->photos.end() ; ++it)
     {
-        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto* >(*it);
+        AdvPrintPhoto* const photo = static_cast<AdvPrintPhoto*>(*it);
 
         if (photo && photo->m_cropRegion == QRect(-1, -1, -1, -1))
         {
             d->cropPage->ui()->cropFrame->init(photo,
                                                d->photoPage->getLayout(i)->width(),
                                                d->photoPage->getLayout(i)->height(),
-                                               s->autoRotate);
+                                               d->settings->outputLayouts->autoRotate);
         }
 
         i++;
@@ -464,7 +465,7 @@ void AdvPrintWizard::startPrinting()
                                      << " bottom "
                                      << bottom;
 
-        d->finalPage->printPhotos(s, *d->photoPage->printer());
+        d->finalPage->printPhotos(*d->photoPage->printer());
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
     {
@@ -481,7 +482,7 @@ void AdvPrintWizard::startPrinting()
         }
 
         QStringList args;
-        d->settings->gimpFiles = d->finalPage->printPhotosToFile(s, d->settings->tempPath);
+        d->settings->gimpFiles = d->finalPage->printPhotosToFile(d->settings->tempPath);
 
         if (!d->settings->gimpFiles.isEmpty())
         {
@@ -508,8 +509,7 @@ void AdvPrintWizard::startPrinting()
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::FILES))
     {
-        QStringList files = d->finalPage->printPhotosToFile(s,
-                                                            d->settings->outputDir.toLocalFile());
+        QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile());
 
         if (d->settings->openInFileBrowser && !files.isEmpty())
         {

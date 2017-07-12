@@ -122,8 +122,9 @@ public:
 
     bool                              disableCrop;
 
-    ImageFormat                       imageFormat;
+    AdvPrintPhotoSize*                outputLayouts;
 
+    ImageFormat                       imageFormat;
     FileSaveConflictBox::ConflictRule conflictRule;  // Rule if output image files already exists.
     QUrl                              outputDir;     // Directory where to store output images.
     bool                              openInFileBrowser;

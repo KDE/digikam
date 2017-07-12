@@ -87,9 +87,11 @@ void AdvPrintTask::run()
     emit signalDone(!m_cancel);
 }
 
-void AdvPrintTask::printPhotos(AdvPrintPhotoSize* const layouts,
-                               QPrinter& printer)
+void AdvPrintTask::printPhotos(QPrinter& printer)
 {
+    AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
+
+    Q_ASSERT(layouts);
     Q_ASSERT(layouts->layouts.count() > 1);
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
@@ -129,9 +131,11 @@ void AdvPrintTask::printPhotos(AdvPrintPhotoSize* const layouts,
     p.end();
 }
 
-QStringList AdvPrintTask::printPhotosToFile(AdvPrintPhotoSize* const layouts,
-                                            const QString& dir)
+QStringList AdvPrintTask::printPhotosToFile(const QString& dir)
 {
+    AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
+
+    Q_ASSERT(layouts);
     Q_ASSERT(layouts->layouts.count() > 1);
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
