@@ -464,23 +464,24 @@ void AdvPrintWizard::startPrinting()
                                      << " bottom "
                                      << bottom;
 
-        d->finalPage->printPhotos(d->settings->photos, s->layouts, *d->photoPage->printer());
+        d->finalPage->printPhotos(s, *d->photoPage->printer());
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
     {
         d->settings->imageFormat = AdvPrintSettings::JPEG;
 
-        // now output the items
-        QString path = d->settings->tempPath;
-
-        if (!AdvPrintCheckTempPath(this, path))
+        if (!AdvPrintCheckTempPath(this, d->settings->tempPath))
+        {
             return;
+        }
 
         if (d->settings->gimpFiles.count() > 0)
+        {
             d->finalPage->removeGimpFiles();
+        }
 
         QStringList args;
-        d->settings->gimpFiles = d->finalPage->printPhotosToFile(path, s);
+        d->settings->gimpFiles = d->finalPage->printPhotosToFile(s, d->settings->tempPath);
 
         if (!d->settings->gimpFiles.isEmpty())
         {
@@ -507,8 +508,8 @@ void AdvPrintWizard::startPrinting()
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::FILES))
     {
-        QStringList files = d->finalPage->printPhotosToFile(d->settings->outputDir.toLocalFile(),
-                                                            s);
+        QStringList files = d->finalPage->printPhotosToFile(s,
+                                                            d->settings->outputDir.toLocalFile());
 
         if (d->settings->openInFileBrowser && !files.isEmpty())
         {

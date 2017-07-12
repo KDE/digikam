@@ -87,10 +87,12 @@ void AdvPrintTask::run()
     emit signalDone(!m_cancel);
 }
 
-void AdvPrintTask::printPhotos(const QList<AdvPrintPhoto*>& photos,
-                               const QList<QRect*>& layouts,
+void AdvPrintTask::printPhotos(AdvPrintPhotoSize* const layouts,
                                QPrinter& printer)
 {
+    Q_ASSERT(layouts->layouts.count() > 1);
+
+    QList<AdvPrintPhoto*> photos = d->settings->photos;
     QPainter p;
     p.begin(&printer);
 
@@ -104,7 +106,7 @@ void AdvPrintTask::printPhotos(const QList<AdvPrintPhoto*>& photos,
 
         printing = paintOnePage(p,
                                 photos,
-                                layouts,
+                                layouts->layouts,
                                 current,
                                 d->settings->disableCrop);
 
@@ -127,8 +129,8 @@ void AdvPrintTask::printPhotos(const QList<AdvPrintPhoto*>& photos,
     p.end();
 }
 
-QStringList AdvPrintTask::printPhotosToFile(const QString& dir,
-                                            AdvPrintPhotoSize* const layouts)
+QStringList AdvPrintTask::printPhotosToFile(AdvPrintPhotoSize* const layouts,
+                                            const QString& dir)
 {
     Q_ASSERT(layouts->layouts.count() > 1);
 

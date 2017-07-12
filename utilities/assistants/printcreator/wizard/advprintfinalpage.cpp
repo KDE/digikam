@@ -142,11 +142,13 @@ bool AdvPrintFinalPage::isComplete() const
     return d->complete;
 }
 
-void AdvPrintFinalPage::printPhotos(const QList<AdvPrintPhoto*>& photos,
-                                    const QList<QRect*>& layouts,
+void AdvPrintFinalPage::printPhotos(AdvPrintPhotoSize* const layouts,
                                     QPrinter& printer)
 {
-    d->cancelPrinting = false;
+    Q_ASSERT(layouts->layouts.count() > 1);
+
+    QList<AdvPrintPhoto*> photos = d->settings->photos;
+    d->cancelPrinting            = false;
     d->progressBar->setRange(0, photos.count());
     QApplication::processEvents();
 
@@ -164,7 +166,7 @@ void AdvPrintFinalPage::printPhotos(const QList<AdvPrintPhoto*>& photos,
 
         printing = paintOnePage(p,
                                 photos,
-                                layouts,
+                                layouts->layouts,
                                 current,
                                 d->settings->disableCrop);
 
@@ -193,8 +195,8 @@ void AdvPrintFinalPage::printPhotos(const QList<AdvPrintPhoto*>& photos,
     emit completeChanged();
 }
 
-QStringList AdvPrintFinalPage::printPhotosToFile(const QString& dir,
-                                                 AdvPrintPhotoSize* const layouts)
+QStringList AdvPrintFinalPage::printPhotosToFile(AdvPrintPhotoSize* const layouts,
+                                                 const QString& dir)
 {
     Q_ASSERT(layouts->layouts.count() > 1);
 

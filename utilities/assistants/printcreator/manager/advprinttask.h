@@ -60,6 +60,12 @@ private:
 
     void run();
 
+    void printPhotos(AdvPrintPhotoSize* const layouts,
+                     QPrinter& printer);
+
+    QStringList printPhotosToFile(AdvPrintPhotoSize* const layouts,
+                                  const QString& dir);
+
     void printCaption(QPainter& p,
                       AdvPrintPhoto* const photo,
                       int captionW,
@@ -69,13 +75,6 @@ private:
     double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
                      int current);
-
-    void printPhotos(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     QPrinter& printer);
-
-    QStringList printPhotosToFile(const QString& dir,
-                                  AdvPrintPhotoSize* const layouts);
 
     bool paintOnePage(QPainter& p,
                       const QList<AdvPrintPhoto*>& photos,
