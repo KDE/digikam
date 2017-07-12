@@ -56,14 +56,12 @@ class AdvPrintTask::Private
 public:
 
     Private()
-      : FONT_HEIGHT_RATIO(0.8F),
-        settings(0)
+      : settings(0)
     {
     }
 
 public:
 
-    const float       FONT_HEIGHT_RATIO;
     AdvPrintSettings* settings;
 };
 
@@ -84,7 +82,17 @@ AdvPrintTask::~AdvPrintTask()
 
 void AdvPrintTask::run()
 {
-    emit signalDone(!m_cancel);
+    if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
+        d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
+    {
+        printPhotos();
+        emit signalDone(!m_cancel);
+    }
+    else
+    {
+        QStringList files = printPhotosToFile();
+        emit signalDone(!m_cancel && !files.isEmpty());
+    }
 }
 
 void AdvPrintTask::printPhotos()
@@ -567,7 +575,7 @@ void AdvPrintTask::printCaption(QPainter& p,
 
     QFont font(photo->m_pAdvPrintCaptionInfo->m_captionFont);
     font.setStyleHint(QFont::SansSerif);
-    font.setPixelSize((int)(captionH * d->FONT_HEIGHT_RATIO));
+    font.setPixelSize((int)(captionH * 0.8F)); // Font height ratio
     font.setWeight(QFont::Normal);
 
     QFontMetrics fm(font);

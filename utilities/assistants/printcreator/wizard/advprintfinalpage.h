@@ -54,29 +54,13 @@ public:
     bool isComplete() const;
     void cleanupPage();
 
-    void        printPhotos();
-    QStringList printPhotosToFile();
-
-    bool paintOnePage(QPainter& p,
-                      const QList<AdvPrintPhoto*>& photos,
-                      const QList<QRect*>& layouts,
-                      int& current,
-                      bool cropDisabled,
-                      bool useThumbnails = false);
-
     void removeGimpFiles();
 
-private:
+private Q_SLOTS:
 
-    void printCaption(QPainter& p,
-                      AdvPrintPhoto* const photo,
-                      int captionW,
-                      int captionH,
-                      const QString& caption);
-
-    double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
-                     const QList<QRect*>& layouts,
-                     int current);
+    void slotProcess();
+    void slotDone(bool);
+    void slotMessage(const QString&, bool);
 
 private:
 

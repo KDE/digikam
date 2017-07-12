@@ -50,6 +50,13 @@ public:
     AdvPrintTask(AdvPrintSettings* const settings);
     ~AdvPrintTask();
 
+    static bool paintOnePage(QPainter& p,
+                             const QList<AdvPrintPhoto*>& photos,
+                             const QList<QRect*>& layouts,
+                             int& current,
+                             bool cropDisabled,
+                             bool useThumbnails = false);
+
 Q_SIGNALS:
 
     void signalMessage(const QString&, bool);
@@ -62,22 +69,15 @@ private:
     void        printPhotos();
     QStringList printPhotosToFile();
 
-    void printCaption(QPainter& p,
-                      AdvPrintPhoto* const photo,
-                      int captionW,
-                      int captionH,
-                      const QString& caption);
-
     double getMaxDPI(const QList<AdvPrintPhoto*>& photos,
                      const QList<QRect*>& layouts,
                      int current);
 
-    bool paintOnePage(QPainter& p,
-                      const QList<AdvPrintPhoto*>& photos,
-                      const QList<QRect*>& layouts,
-                      int& current,
-                      bool cropDisabled,
-                      bool useThumbnails = false);
+    static void printCaption(QPainter& p,
+                             AdvPrintPhoto* const photo,
+                             int captionW,
+                             int captionH,
+                             const QString& caption);
 
 private:
 

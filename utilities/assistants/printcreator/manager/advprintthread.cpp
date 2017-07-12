@@ -42,7 +42,7 @@ AdvPrintThread::~AdvPrintThread()
     wait();
 }
 
-void AdvPrintThread::processStream(AdvPrintSettings* const settings)
+void AdvPrintThread::setSettings(AdvPrintSettings* const settings)
 {
     ActionJobCollection collection;
 
