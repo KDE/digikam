@@ -47,12 +47,12 @@ public:
      *  (some features stripped off).
      *  For documentation, see coredbaccess.h
      */
-    SimilarityDbAccess();
+    explicit SimilarityDbAccess();
     ~SimilarityDbAccess();
 
     SimilarityDb*        db()        const;
     SimilarityDbBackend* backend()   const;
-    QString          lastError() const;
+    QString              lastError() const;
 
     /**
      * Set the "last error" message. This method is not for public use.
@@ -76,6 +76,6 @@ private:
     static SimilarityDbAccessStaticPriv* d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
 #endif // SIMILARITY_DATABASE_ACCESS_H

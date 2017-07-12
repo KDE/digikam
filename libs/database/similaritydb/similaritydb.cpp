@@ -68,7 +68,7 @@ bool SimilarityDb::hasHaarFingerprints() const
     QList<QVariant> values;
 
     d->db->execSql(QString::fromUtf8("SELECT imageid FROM ImageHaarMatrix "
-                           "WHERE matrix IS NOT NULL LIMIT 1;"),
+                                     "WHERE matrix IS NOT NULL LIMIT 1;"),
                    &values);
 
     // return true if there is at least one fingerprint
@@ -81,11 +81,11 @@ QList<qlonglong> SimilarityDb::getDirtyOrMissingFingerprints()
     QList<QVariant>  values;
 
     d->db->execSql(QString::fromUtf8("SELECT id FROM Images "
-                           "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
-                           " WHERE Images.status=1 AND Images.category=1 AND "
-                           " ( ImageHaarMatrix.imageid IS NULL "
-                           "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
-                           "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
+                        "LEFT JOIN ImageHaarMatrix ON Images.id=ImageHaarMatrix.imageid "
+                        " WHERE Images.status=1 AND Images.category=1 AND "
+                        " ( ImageHaarMatrix.imageid IS NULL "
+                        "   OR Images.modificationDate != ImageHaarMatrix.modificationDate "
+                        "   OR Images.uniqueHash != ImageHaarMatrix.uniqueHash ); "),
                    &values);
 
     for (QList<QVariant>::const_iterator it = values.constBegin(); it != values.constEnd(); ++it)
@@ -116,9 +116,9 @@ QStringList SimilarityDb::getDirtyOrMissingFingerprintURLs()
     {
         albumRootPath = CollectionManager::instance()->albumRootPath((*it).toInt());
         ++it;
-        relativePath = (*it).toString();
+        relativePath  = (*it).toString();
         ++it;
-        name = (*it).toString();
+        name          = (*it).toString();
         ++it;
 
         if (relativePath == QLatin1String("/"))
@@ -139,9 +139,9 @@ void SimilarityDb::copySimilarityAttributes(qlonglong srcId, qlonglong dstId)
     // Go through ImageHaarMatrix table and copy the entries
 
     d->db->execSql(QString::fromUtf8("INSERT INTO ImageHaarMatrix "
-                           " (imageid, modificationDate, uniqueHash, matrix) "
-                           "SELECT ?, modificationDate, uniqueHash, matrix "
-                           "FROM ImageHaarMatrix WHERE imageid=?;"),
+                                     " (imageid, modificationDate, uniqueHash, matrix) "
+                                     "SELECT ?, modificationDate, uniqueHash, matrix "
+                                     "FROM ImageHaarMatrix WHERE imageid=?;"),
                    dstId, srcId);
 }
 
@@ -149,11 +149,13 @@ bool SimilarityDb::integrityCheck()
 {
     QList<QVariant> values;
     d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("checkSimilarityDbIntegrity")), &values);
+
     switch (d->db->databaseType())
     {
         case BdEngineBackend::DbType::SQLite:
             // For SQLite the integrity check returns a single row with one string column "ok" on success and multiple rows on error.
             return values.size() == 1 && values.first().toString().toLower().compare(QLatin1String("ok")) == 0;
+
         case BdEngineBackend::DbType::MySQL:
             // For MySQL, for every checked table, the table name, operation (check), message type (status) and the message text (ok on success)
             // are returned. So we check if there are four elements and if yes, whether the fourth element is "ok".
@@ -176,16 +178,22 @@ bool SimilarityDb::integrityCheck()
 
                 if (messageText.toLower().compare(QLatin1String("ok")) != 0)
                 {
-                    qCDebug(DIGIKAM_DATABASE_LOG) << "Failed integrity check for table " << tableName << ". Reason:" << messageText;
+                    qCDebug(DIGIKAM_DATABASE_LOG) << "Failed integrity check for table "
+                                                  << tableName << ". Reason:" << messageText;
                     return false;
                 }
                 else
                 {
-                    //qCDebug(DIGIKAM_DATABASE_LOG) << "Passed integrity check for table " << tableName;
+/*
+                    qCDebug(DIGIKAM_DATABASE_LOG) << "Passed integrity check for table "
+                                                  << tableName;
+*/
                 }
             }
+
             // No error conditions. Db passed the integrity check.
             return true;
+
         default:
             return false;
     }
@@ -196,4 +204,4 @@ void SimilarityDb::vacuum()
     d->db->execDBAction(d->db->getDBAction(QString::fromUtf8("vacuumSimilarityDB")));
 }
 
-}  // namespace Digikam
+} // namespace Digikam

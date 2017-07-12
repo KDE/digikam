@@ -22,8 +22,8 @@
  *
  * ============================================================ */
 
-#ifndef SIMILARITYDBCHEMAUPDATER_H
-#define SIMILARITYDBCHEMAUPDATER_H
+#ifndef SIMILARITY_DB_SCHEMA_UPDATER_H
+#define SIMILARITY_DB_SCHEMA_UPDATER_H
 
 namespace Digikam
 {
@@ -39,10 +39,10 @@ public:
 
 public:
 
-    explicit SimilarityDbSchemaUpdater(SimilarityDbAccess* access);
+    explicit SimilarityDbSchemaUpdater(SimilarityDbAccess* const access);
 
     bool update();
-    void setObserver(InitializationObserver* observer);
+    void setObserver(InitializationObserver* const observer);
 
 private:
 
@@ -51,20 +51,13 @@ private:
     bool createTables();
     bool createIndices();
     bool createTriggers();
-    
 
 private:
 
-    bool                     m_setError;
-
-    int                      m_currentVersion;
-    int                      m_currentRequiredVersion;
-
-    SimilarityDbAccess* m_access;
-
-    InitializationObserver*  m_observer;
+    class Private;
+    Private* const d;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif // SIMILARITYDBCHEMAUPDATER_H
+#endif // SIMILARITY_DB_SCHEMA_UPDATER_H

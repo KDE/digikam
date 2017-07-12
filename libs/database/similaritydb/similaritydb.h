@@ -55,7 +55,7 @@ public:
      * Returns false if the table is empty.
      */
     bool hasHaarFingerprints() const;
-    
+
     /**
      * Returns a list of all images where the Haar fingerprint has either not been generated
      * yet, or is outdated because the file is identified as changed since
@@ -63,8 +63,8 @@ public:
      * Return image ids or item URLs.
      */
     QList<qlonglong> getDirtyOrMissingFingerprints();
-    QStringList getDirtyOrMissingFingerprintURLs();
-    
+    QStringList      getDirtyOrMissingFingerprintURLs();
+
     /**
      * Copies all similarity-specific information, from image srcId to destId.
      */
@@ -95,6 +95,6 @@ private:
     friend class SimilarityDbAccess;
 };
 
-}  // namespace Digikam
+} // namespace Digikam
 
-#endif /* SIMILARITY_DATABASE_H */
+#endif // SIMILARITY_DATABASE_H

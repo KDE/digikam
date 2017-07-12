@@ -60,13 +60,13 @@ public:
     {
     };
 
-    SimilarityDbBackend*   backend;
-    SimilarityDb*          db;
-    DbEngineParameters     parameters;
-    DbEngineLocking        lock;
-    QString                lastError;
+    SimilarityDbBackend* backend;
+    SimilarityDb*        db;
+    DbEngineParameters   parameters;
+    DbEngineLocking      lock;
+    QString              lastError;
 
-    bool                   initializing;
+    bool                 initializing;
 };
 
 SimilarityDbAccessStaticPriv* SimilarityDbAccess::d = 0;
@@ -212,7 +212,7 @@ bool SimilarityDbAccess::checkReadyForUse(InitializationObserver* const observer
     if (!d->backend)
     {
         qCWarning(DIGIKAM_SIMILARITY_DB_LOG) << "Similarity database: no database backend available in checkReadyForUse. "
-                                           "Did you call setParameters before?";
+                                                "Did you call setParameters before?";
         return false;
     }
 
@@ -279,4 +279,4 @@ void SimilarityDbAccess::cleanUpDatabase()
     d = 0;
 }
 
-}  // namespace Digikam
+} // namespace Digikam
