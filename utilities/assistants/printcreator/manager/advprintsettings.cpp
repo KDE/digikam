@@ -50,6 +50,8 @@ AdvPrintSettings::AdvPrintSettings()
     captionSize        = 4;
     outputLayouts      = 0;
     outputPrinter      = 0;
+    conflictRule       = FileSaveConflictBox::OVERWRITE;
+    openInFileBrowser  = true;
 }
 
 AdvPrintSettings::~AdvPrintSettings()
