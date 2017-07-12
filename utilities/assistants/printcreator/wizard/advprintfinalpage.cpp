@@ -142,7 +142,7 @@ bool AdvPrintFinalPage::isComplete() const
     return d->complete;
 }
 
-void AdvPrintFinalPage::printPhotos(QPrinter& printer)
+void AdvPrintFinalPage::printPhotos(QPrinter* const printer)
 {
     AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
 
@@ -155,7 +155,7 @@ void AdvPrintFinalPage::printPhotos(QPrinter& printer)
     QApplication::processEvents();
 
     QPainter p;
-    p.begin(&printer);
+    p.begin(printer);
 
     int current   = 0;
     int pageCount = 1;
@@ -174,7 +174,7 @@ void AdvPrintFinalPage::printPhotos(QPrinter& printer)
 
         if (printing)
         {
-            printer.newPage();
+            printer->newPage();
         }
 
         pageCount++;
@@ -183,7 +183,7 @@ void AdvPrintFinalPage::printPhotos(QPrinter& printer)
 
         if (d->cancelPrinting)
         {
-            printer.abort();
+            printer->abort();
             d->progressView->addEntry(i18n("Printing canceled"),
                                       DHistoryView::WarningEntry);
 

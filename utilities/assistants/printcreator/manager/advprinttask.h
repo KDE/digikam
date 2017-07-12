@@ -60,7 +60,7 @@ private:
 
     void run();
 
-    void printPhotos(QPrinter& printer);
+    void printPhotos(QPrinter* const printer);
 
     QStringList printPhotosToFile(const QString& dir);
 

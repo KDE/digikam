@@ -55,7 +55,7 @@ public:
     bool isComplete() const;
     void cleanupPage();
 
-    void printPhotos(QPrinter& printer);
+    void printPhotos(QPrinter* const printer);
 
     QStringList printPhotosToFile(const QString& dir);
 

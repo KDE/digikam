@@ -465,7 +465,7 @@ void AdvPrintWizard::startPrinting()
                                      << " bottom "
                                      << bottom;
 
-        d->finalPage->printPhotos(*d->photoPage->printer());
+        d->finalPage->printPhotos(d->photoPage->printer());
     }
     else if (d->settings->printerName == d->settings->outputName(AdvPrintSettings::GIMP))
     {

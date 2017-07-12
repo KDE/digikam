@@ -87,7 +87,7 @@ void AdvPrintTask::run()
     emit signalDone(!m_cancel);
 }
 
-void AdvPrintTask::printPhotos(QPrinter& printer)
+void AdvPrintTask::printPhotos(QPrinter* const printer)
 {
     AdvPrintPhotoSize* const layouts = d->settings->outputLayouts;
 
@@ -96,7 +96,7 @@ void AdvPrintTask::printPhotos(QPrinter& printer)
 
     QList<AdvPrintPhoto*> photos = d->settings->photos;
     QPainter p;
-    p.begin(&printer);
+    p.begin(printer);
 
     int current   = 0;
     int pageCount = 1;
@@ -114,7 +114,7 @@ void AdvPrintTask::printPhotos(QPrinter& printer)
 
         if (printing)
         {
-            printer.newPage();
+            printer->newPage();
         }
 
         pageCount++;
@@ -122,7 +122,7 @@ void AdvPrintTask::printPhotos(QPrinter& printer)
 
         if (m_cancel)
         {
-            printer.abort();
+            printer->abort();
             signalMessage(i18n("Printing canceled"), true);
             return;
         }
