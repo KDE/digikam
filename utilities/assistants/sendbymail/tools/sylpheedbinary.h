@@ -40,7 +40,7 @@ public:
                        QLatin1String("Sylpheed"),
                        QLatin1String("http://sylpheed.sraoss.jp/en/"),
                        QLatin1String("SendByMail"),
-                       QStringList(QLatin1String("-v")),
+                       QStringList(QLatin1String("--version")),
                        i18n("GTK based Mail Client.")
                       )
         {
