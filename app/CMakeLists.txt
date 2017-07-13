@@ -158,7 +158,7 @@ target_link_libraries(digikamcore
                       ${LCMS2_LIBRARIES} # filters
 
                       ${TIFF_LIBRARIES}
-                      ${PNG_LIBRARIES}
+                      PNG::PNG
                       ${EXIV2_LIBRARIES}
 
                       libdng
