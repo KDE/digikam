@@ -265,6 +265,8 @@ void AdvPrintWizard::previewPhotos()
         return;
     }
 
+    d->previewThread->cancel();
+
     // get the selected layout
     int photoCount             = d->settings->photos.count();
     int curr                   = d->photoPage->ui()->ListPhotoSizes->currentRow();

@@ -870,14 +870,12 @@ void DImagesList::slotAddItems()
         grp.writeEntry("Last Image Path", urls.first().adjusted(QUrl::RemoveFilename).toLocalFile());
         config.sync();
     }
-
-//     emit signalImageListChanged();
 }
 
 void DImagesList::slotRemoveItems()
 {
     QList<QTreeWidgetItem*> selectedItemsList = d->listView->selectedItems();
-    QList<QUrl> urls;
+    QList<int> itemsIndex;
 
     for (QList<QTreeWidgetItem*>::const_iterator it = selectedItemsList.constBegin();
          it != selectedItemsList.constEnd(); ++it)
@@ -886,8 +884,7 @@ void DImagesList::slotRemoveItems()
 
         if (item)
         {
-            emit signalRemovingItem(d->listView->indexFromItem(item).row());
-            urls.append(item->url());
+            itemsIndex.append(d->listView->indexFromItem(item).row());
 
             if (d->processItems.contains(item->url()))
             {
@@ -899,7 +896,7 @@ void DImagesList::slotRemoveItems()
         }
     }
 
-    emit signalRemovedItems(urls);
+    emit signalRemovedItems(itemsIndex);
     emit signalImageListChanged();
 }
 
@@ -1108,6 +1105,7 @@ void DImagesList::slotSaveItems()
 void DImagesList::removeItemByUrl(const QUrl& url)
 {
     bool found;
+    QList<int> itemsIndex;
 
     do
     {
@@ -1120,7 +1118,7 @@ void DImagesList::removeItemByUrl(const QUrl& url)
 
             if (item && item->url() == url)
             {
-                emit signalRemovingItem(d->listView->indexFromItem(item).row());
+                itemsIndex.append(d->listView->indexFromItem(item).row());
 
                 if (d->processItems.contains(item->url()))
                 {
@@ -1137,6 +1135,7 @@ void DImagesList::removeItemByUrl(const QUrl& url)
     }
     while (found);
 
+    emit signalRemovedItems(itemsIndex);
     emit signalImageListChanged();
 }
 

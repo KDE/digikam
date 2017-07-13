@@ -185,8 +185,8 @@ AdvPrintPhotoPage::AdvPrintPhotoPage(QWizard* const wizard, const QString& title
     connect(d->photoUi->mPrintList, SIGNAL(signalAddItems(QList<QUrl>)),
             this, SLOT(slotAddItems(QList<QUrl>)));
 
-    connect(d->photoUi->mPrintList, SIGNAL(signalRemovingItem(int)),
-            this, SLOT(slotRemovingItem(int)));
+    connect(d->photoUi->mPrintList, SIGNAL(signalRemovedItems(QList<int>)),
+            this, SLOT(slotRemovingItems(QList<int>)));
 
     connect(d->photoUi->mPrintList, SIGNAL(signalContextMenuRequested()),
             this, SLOT(slotContextMenuRequested()));
@@ -598,78 +598,87 @@ void AdvPrintPhotoPage::slotAddItems(const QList<QUrl>& list)
     }
 }
 
-void AdvPrintPhotoPage::slotRemovingItem(int itemIndex)
+void AdvPrintPhotoPage::slotRemovingItems(const QList<int>& list)
 {
-    if (d->settings->photos.size() && itemIndex >= 0)
+    if (list.count() == 0)
     {
-        /// Debug data: found and copies
-        bool found = false;
-        int copies = 0;
+        return;
+    }
 
-        d->photoUi->mPrintList->blockSignals(true);
-        AdvPrintPhoto* const pPhotoToRemove = d->settings->photos.at(itemIndex);
+    d->photoUi->mPrintList->blockSignals(true);
 
-        // photo to be removed could be:
-        // 1) unique => just remove it
-        // 2) first of n, =>
-        //    search another with the same url
-        //    and set it a first and with a count to n-1 then remove it
-        // 3) one of n, search the first one and set count to n-1 then remove it
-        if (pPhotoToRemove && pPhotoToRemove->m_first)
+    foreach (int itemIndex, list)
+    {
+        if (d->settings->photos.size() && itemIndex >= 0)
         {
-            if (pPhotoToRemove->m_copies > 0)
+            /// Debug data: found and copies
+            bool found = false;
+            int copies = 0;
+
+            AdvPrintPhoto* const pPhotoToRemove = d->settings->photos.at(itemIndex);
+
+            // photo to be removed could be:
+            // 1) unique => just remove it
+            // 2) first of n, =>
+            //    search another with the same url
+            //    and set it a first and with a count to n-1 then remove it
+            // 3) one of n, search the first one and set count to n-1 then remove it
+            if (pPhotoToRemove && pPhotoToRemove->m_first)
+            {
+                if (pPhotoToRemove->m_copies > 0)
+                {
+                    for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+                    {
+                        AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
+
+                        if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
+                        {
+                            pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
+                            copies                  = pCurrentPhoto->m_copies;
+                            pCurrentPhoto->m_first  = true;
+                            found                   = true;
+                        }
+                    }
+                }
+                // otherwise it's unique
+            }
+            else if (pPhotoToRemove)
             {
                 for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
                 {
                     AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
 
-                    if (pCurrentPhoto && pCurrentPhoto->m_url == pPhotoToRemove->m_url)
+                    if (pCurrentPhoto &&
+                        pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
+                        pCurrentPhoto->m_first)
                     {
-                        pCurrentPhoto->m_copies = pPhotoToRemove->m_copies - 1;
-                        copies                  = pCurrentPhoto->m_copies;
-                        pCurrentPhoto->m_first  = true;
-                        found                   = true;
+                        pCurrentPhoto->m_copies--;
+                        copies = pCurrentPhoto->m_copies;
+                        found  = true;
                     }
                 }
             }
-            // otherwise it's unique
-        }
-        else if (pPhotoToRemove)
-        {
-            for (int i = 0 ; i < d->settings->photos.count() && !found ; ++i)
+            else
             {
-                AdvPrintPhoto* const pCurrentPhoto = d->settings->photos.at(i);
-
-                if (pCurrentPhoto &&
-                    pCurrentPhoto->m_url == pPhotoToRemove->m_url &&
-                    pCurrentPhoto->m_first)
-                {
-                    pCurrentPhoto->m_copies--;
-                    copies = pCurrentPhoto->m_copies;
-                    found  = true;
-                }
+                qCDebug(DIGIKAM_GENERAL_LOG) << " NULL AdvPrintPhoto object ";
+                return;
             }
-        }
-        else
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << " NULL AdvPrintPhoto object ";
-            return;
-        }
 
-        if (pPhotoToRemove)
-        {
-            qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
-                                         << pPhotoToRemove->m_url.fileName()
-                                         << " copy number "
-                                         << copies;
+            if (pPhotoToRemove)
+            {
+                qCDebug(DIGIKAM_GENERAL_LOG) << "Removed fileName: "
+                                            << pPhotoToRemove->m_url.fileName()
+                                            << " copy number "
+                                            << copies;
+            }
+
+            d->settings->photos.removeAt(itemIndex);
+            delete pPhotoToRemove;
         }
-
-        d->settings->photos.removeAt(itemIndex);
-        delete pPhotoToRemove;
-
-        d->photoUi->mPrintList->blockSignals(false);
-        d->wizard->previewPhotos();
     }
+
+    d->wizard->previewPhotos();
+    d->photoUi->mPrintList->blockSignals(false);
 
     if (d->settings->photos.empty())
     {

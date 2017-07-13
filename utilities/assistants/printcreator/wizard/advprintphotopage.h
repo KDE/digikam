@@ -110,7 +110,7 @@ private Q_SLOTS:
     void slotIncreaseCopies();
     void slotDecreaseCopies();
     void slotAddItems(const QList<QUrl>&);
-    void slotRemovingItem(int);
+    void slotRemovingItems(const QList<int>&);
     void slotBtnPrintOrderDownClicked();
     void slotBtnPrintOrderUpClicked();
     void slotBtnPreviewPageDownClicked();
