@@ -169,20 +169,8 @@ QImage& AdvPrintPhoto::thumbnail()
 
 QImage AdvPrintPhoto::loadPhoto()
 {
-    QImage photo;
-
-    if (m_iface)
-    {
-        photo = PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
-                .copyQImage();
-    }
-
-    if (photo.isNull())
-    {
-        photo.load(m_url.toLocalFile());
-    }
-
-    return photo;
+    return PreviewLoadThread::loadHighQualitySynchronously(m_url.toLocalFile())
+           .copyQImage();
 }
 
 QSize& AdvPrintPhoto::size()
