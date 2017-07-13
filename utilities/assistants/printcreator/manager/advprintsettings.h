@@ -114,8 +114,9 @@ public:
     int                               captionSize;
     QString                           captionTxt;
 
-    // Crop management
     int                               currentPreviewPage;
+
+    // Crop management
     int                               currentCropPhoto;
     bool                              disableCrop;
 

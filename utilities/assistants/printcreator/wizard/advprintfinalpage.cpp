@@ -111,6 +111,9 @@ AdvPrintFinalPage::AdvPrintFinalPage(QWizard* const dialog, const QString& title
 
 AdvPrintFinalPage::~AdvPrintFinalPage()
 {
+    if (d->printThread)
+        d->printThread->cancel();
+
     delete d;
 }
 

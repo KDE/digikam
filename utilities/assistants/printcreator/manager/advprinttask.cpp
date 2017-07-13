@@ -56,22 +56,30 @@ class AdvPrintTask::Private
 public:
 
     Private()
-      : settings(0)
+      : settings(0),
+        mode(AdvPrintTask::PRINT)
     {
     }
 
 public:
 
     AdvPrintSettings* settings;
+
+    PrintMode         mode;
+    QSize             size;
 };
 
 // -------------------------------------------------------
 
-AdvPrintTask::AdvPrintTask(AdvPrintSettings* const settings)
+AdvPrintTask::AdvPrintTask(AdvPrintSettings* const settings,
+                           PrintMode mode,
+                           const QSize& size)
     : ActionJob(),
       d(new Private)
 {
     d->settings = settings;
+    d->mode     = mode;
+    d->size     = size;
 }
 
 AdvPrintTask::~AdvPrintTask()
@@ -82,16 +90,45 @@ AdvPrintTask::~AdvPrintTask()
 
 void AdvPrintTask::run()
 {
-    if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
-        d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
+    switch (d->mode)
     {
-        printPhotos();
-        emit signalDone(!m_cancel);
-    }
-    else
-    {
-        QStringList files = printPhotosToFile();
-        emit signalDone(!m_cancel && !files.isEmpty());
+        case PRINT:
+            if (d->settings->printerName != d->settings->outputName(AdvPrintSettings::FILES) &&
+                d->settings->printerName != d->settings->outputName(AdvPrintSettings::GIMP))
+            {
+                printPhotos();
+                emit signalDone(!m_cancel);
+            }
+            else
+            {
+                QStringList files = printPhotosToFile();
+                emit signalDone(!m_cancel && !files.isEmpty());
+            }
+
+            break;
+        default:    // PREVIEW
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Start to compute preview";
+
+            QImage img(d->size, QImage::Format_ARGB32_Premultiplied);
+            QPainter p(&img);
+            p.setCompositionMode(QPainter::CompositionMode_Clear);
+            p.fillRect(img.rect(), Qt::color0);
+            p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+            paintOnePage(p,
+                         d->settings->photos,
+                         d->settings->outputLayouts->layouts,
+                         d->settings->currentPreviewPage,
+                         d->settings->disableCrop,
+                         true);
+            p.end();
+
+            if (!m_cancel)
+                emit signalPreview(img);
+
+            qCDebug(DIGIKAM_GENERAL_LOG) << "Preview computation is done";
+
+            break;
     }
 }
 
@@ -229,10 +266,15 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
                                 bool cropDisabled,
                                 bool useThumbnails)
 {
-    Q_ASSERT(layouts.count() > 1);
+    if (layouts.isEmpty())
+    {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "Invalid layout content";
+        return true;
+    }
 
     if (photos.count() == 0)
     {
+        qCWarning(DIGIKAM_GENERAL_LOG) << "no photo to print";
         // no photos => last photo
         return true;
     }
@@ -280,7 +322,7 @@ bool AdvPrintTask::paintOnePage(QPainter& p,
                 AdvPrintWizard::normalizedInt((double) srcPage->width()  * xRatio),
                 AdvPrintWizard::normalizedInt((double) srcPage->height() * yRatio));
 
-    for (; current < photos.count() ; ++current)
+    for (; (current < photos.count()) && !m_cancel ; ++current)
     {
         AdvPrintPhoto* const photo = photos.at(current);
         // crop

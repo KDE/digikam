@@ -65,7 +65,8 @@ TemplateIcon::TemplateIcon(int height, const QSize& template_size)
     : d(new Private)
 {
     d->paper_size         = template_size;
-    d->icon_size          = QSize(height-2*d->icon_margin, height-2*d->icon_margin);
+    d->icon_size          = QSize(height-2 * d->icon_margin,
+                                  height-2 * d->icon_margin);
 
     // remark: d->icon_size is the real size of the d->icon, in the combo-box there is no space
     // between the icons, therefore the variable d->icon_margin

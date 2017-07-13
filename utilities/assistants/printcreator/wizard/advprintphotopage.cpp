@@ -834,11 +834,15 @@ void AdvPrintPhotoPage::createPhotoGrid(AdvPrintPhotoSize* const p,
     int photoHeight = (pageHeight - (MARGIN * 2) - ((rows - 1)    * GAP)) / rows;
     int row         = 0;
 
-    for (int y = MARGIN ; row < rows && y < pageHeight - MARGIN ; y += photoHeight + GAP)
+    for (int y = MARGIN ;
+         (row < rows) && (y < (pageHeight - MARGIN)) ;
+         y += photoHeight + GAP)
     {
         int col = 0;
 
-        for (int x = MARGIN ; col < columns && x < pageWidth - MARGIN ; x += photoWidth + GAP)
+        for (int x = MARGIN ;
+             (col < columns) && (x < (pageWidth - MARGIN)) ;
+             x += photoWidth + GAP)
         {
             p->layouts.append(new QRect(x, y, photoWidth, photoHeight));
             iconpreview->fillRect(x, y, photoWidth, photoHeight, Qt::color1);

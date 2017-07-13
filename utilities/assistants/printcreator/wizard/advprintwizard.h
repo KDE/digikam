@@ -24,12 +24,9 @@
 #ifndef ADV_PRINT_WIZARD_H
 #define ADV_PRINT_WIZARD_H
 
-// QT incudes
+// Qt incudes
 
-#include <QPainter>
-#include <QIcon>
-#include <QPrinter>
-#include <QDialog>
+#include <QImage>
 
 // Local includes
 
@@ -72,6 +69,10 @@ public:
 private:
 
     bool AdvPrintCheckTempPath(QWidget* const parent, const QString& tempPath) const;
+
+private Q_SLOTS:
+
+    void slotPreview(const QImage&);
 
 private:
 

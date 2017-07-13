@@ -44,12 +44,14 @@ public:
     ~AdvPrintThread();
 
     void print(AdvPrintSettings* const settings);
+    void preview(AdvPrintSettings* const settings, const QSize& size);
 
 Q_SIGNALS:
 
     void signalProgress(int);
     void signalDone(bool);
     void signalMessage(const QString&, bool);
+    void signalPreview(const QImage&);
 };
 
 } // namespace Digikam
